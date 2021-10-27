@@ -2,91 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E60943D719
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 01:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEAF43D724
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 01:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbhJ0XFY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 19:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbhJ0XFX (ORCPT
+        id S229987AbhJ0XIO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 19:08:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25895 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229792AbhJ0XIN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 19:05:23 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AA0C061745
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 16:02:57 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id k7so6687474wrd.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 16:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DkNDhiEnUBFd5g6Q7nEnrcdTNYozC6sABi5j39jJUF8=;
-        b=O57Zy/hgeucXgevrTxtL8Wv4sU2LKVUiZQ68zd/yTuraAcKI9j4ZpvMgxRU2jfJF6L
-         1rh56ESO/dUOk7Wi2e+OpC3mrxyxrzVQ3TxRjLTzx0BGas/reMb9hVgpmFh0/khc2P7M
-         ZVa1qUPybjco2VRP7TiTOagAaCUc7QG7Z6dS648ZstOlb3HqJ/1O/gf/dVVyyNFdxNjv
-         DMi2hHGtTJb7hWtn3/Gpd3SaCtrTVdPE1jyicUQtktSj25G2XHfxb3claF160a41FPap
-         zLX4XtOTPFVRpDJ+NpZXkhKIdHPWjJXxFoVC/PywSnVjM55edlzrxbZ6U8OB7bhMkcGy
-         n/cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DkNDhiEnUBFd5g6Q7nEnrcdTNYozC6sABi5j39jJUF8=;
-        b=tou4F1UtkGopv8GnTXZ2b0/BeqsOJ2TzcXN9RGXX37wMfNOkyNNMmhXm1YOs/BfazO
-         ewnekAB0XGX0R7YO2ABYYZNDaZA530H256OZr6h72nFOnWWR1DlxjeodccNm1xZrG2YZ
-         16yrHx6ss+0tJwAxtBxy1veMBZQN/v++EtnRayZMe4mqXYWGZzTm6tjZ5QajobDKRRTC
-         GRxQx/vTu/LIsRb0cxkZNckvC8fA8ICZGAeGh283tlL1Ejm08w5EexSSIx2fFccF49Mz
-         QrQTpUzXYGxdNTH8RhIv/L1tL/geWHUevun5P5fl7G6UAxhfOZd0zPpKzcq5m2WoosgS
-         IWzQ==
-X-Gm-Message-State: AOAM531lNQcJEAbak/EomGIi1FO4/LRRp7JFyIIp6QvQC8hd9ZRo4JN7
-        QK4KjEUsuQFICgZ3D1RRHh3ajt5tzfXHS0GAU08+xA==
-X-Google-Smtp-Source: ABdhPJyO1vwvDrD3z/hjTZUkPwoCJGxlHZGp1P4reZ7iy0UtXE2yq8mDVVpaGENP60V2gmhuJF8PbiES4vM1e/WK3qE=
-X-Received: by 2002:adf:d0c3:: with SMTP id z3mr789158wrh.44.1635375776246;
- Wed, 27 Oct 2021 16:02:56 -0700 (PDT)
+        Wed, 27 Oct 2021 19:08:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635375947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fSEXEHxW0XKJ3A0RuRyJ3sw6tXP96RKh+PO7m5ry7Bs=;
+        b=G7NbejCAj3WseCpqOgnYXVVk1jjMOXl/6UZYwKbrM4CqJklU1oyDpCQOnPc8+GrU2FLMTq
+        Zggumjyv8XN00fZOOsZsv3+Ew/wc301Injz1EVe7YSjGzn4Gylwo8dnb1lvWvnNkItIeOv
+        S7ltcEogvj8dLY4Hi8cRjqkR7tTrz74=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-392-41idCAuGM4-fWbQACjNl8A-1; Wed, 27 Oct 2021 19:05:46 -0400
+X-MC-Unique: 41idCAuGM4-fWbQACjNl8A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 257C88026AD;
+        Wed, 27 Oct 2021 23:05:44 +0000 (UTC)
+Received: from llong.remote.csb (unknown [10.22.9.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E9FB15C1C5;
+        Wed, 27 Oct 2021 23:05:36 +0000 (UTC)
+Subject: Re: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
+ empty effecitve cpus
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20211018143619.205065-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+Message-ID: <55402d20-c23e-bb56-6a7a-6e208c08280a@redhat.com>
+Date:   Wed, 27 Oct 2021 19:05:36 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211027013702.2039566-1-davidgow@google.com> <CAGS_qxo2=NmXEnEnkg4E_1k-DXwniGK8xFZi08nKZZkb8otXzQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxo2=NmXEnEnkg4E_1k-DXwniGK8xFZi08nKZZkb8otXzQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 28 Oct 2021 07:02:45 +0800
-Message-ID: <CABVgOSnQ73ZqnF=Y7Wg-rO_wp-ttSbK8=p2EXUbh7ogGpDPUfA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] kunit: tool: Do not error on tests without test plans
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211018143619.205065-1-longman@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 6:13 AM Daniel Latypov <dlatypov@google.com> wrote:
+On 10/18/21 10:36 AM, Waiman Long wrote:
+> v8:
+>   - Reorganize the patch series and rationalize the features and
+>     constraints of a partition.
+>   - Update patch descriptions and documentation accordingly.
 >
-> On Tue, Oct 26, 2021 at 6:37 PM David Gow <davidgow@google.com> wrote:
-> >
-> > The (K)TAP spec encourages test output to begin with a 'test plan': a
-> > count of the number of tests being run of the form:
-> > 1..n
-> >
-> > However, some test suites might not know the number of subtests in
-> > advance (for example, KUnit's parameterised tests use a generator
-> > function). In this case, it's not possible to print the test plan in
-> > advance.
-> >
-> > kunit_tool already parses test output which doesn't contain a plan, but
-> > reports an error. Since we want to use nested subtests with KUnit
-> > paramterised tests, remove this error.
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
+> v7:
+>   - Simplify the documentation patch (patch 5) as suggested by Tejun.
+>   - Fix a typo in patch 2 and improper commit log in patch 3.
 >
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> v6:
+>   - Remove duplicated tmpmask from update_prstate() which should fix the
+>     frame size too large problem reported by kernel test robot.
 >
-> This looks to be unchanged from v1.
+> This patchset makes four enhancements to the cpuset v2 code.
+>
+>   Patch 1: Enable partition with no task to have empty cpuset.cpus.effective.
+>
+>   Patch 2: Refining the features and constraints of a cpuset partition
+>   clarifying what changes are allowed.
+>
+>   Patch 3: Add a new partition state "isolated" to create a partition
+>   root without load balancing. This is for handling intermitten workloads
+>   that have a strict low latency requirement.
+>
+>   Patch 4: Enable the "cpuset.cpus.partition" file to show the reason
+>   that causes invalid partition like "root invalid (No cpu available
+>   due to hotplug)".
+>
+> Patch 5 updates the cgroup-v2.rst file accordingly. Patch 6 adds a new
+> cpuset test to test the new cpuset partition code.
+>
+> Waiman Long (6):
+>    cgroup/cpuset: Allow no-task partition to have empty
+>      cpuset.cpus.effective
+>    cgroup/cpuset: Refining features and constraints of a partition
+>    cgroup/cpuset: Add a new isolated cpus.partition type
+>    cgroup/cpuset: Show invalid partition reason string
+>    cgroup/cpuset: Update description of cpuset.cpus.partition in
+>      cgroup-v2.rst
+>    kselftest/cgroup: Add cpuset v2 partition root state test
+>
+>   Documentation/admin-guide/cgroup-v2.rst       | 153 ++--
+>   kernel/cgroup/cpuset.c                        | 393 +++++++----
+>   tools/testing/selftests/cgroup/Makefile       |   5 +-
+>   .../selftests/cgroup/test_cpuset_prs.sh       | 664 ++++++++++++++++++
+>   tools/testing/selftests/cgroup/wait_inotify.c |  87 +++
+>   5 files changed, 1115 insertions(+), 187 deletions(-)
+>   create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>   create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
 
-Yeah, the changes in v2 were all in the new patches.
+Any feedback on this patch series?
 
--- David
+Thanks,
+Longman
+
