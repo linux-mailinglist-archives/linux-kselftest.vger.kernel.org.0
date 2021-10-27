@@ -2,187 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B3743C0D9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 05:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C9C43C120
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Oct 2021 06:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239073AbhJ0Diu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Oct 2021 23:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S229676AbhJ0EHG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 00:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239136AbhJ0Dir (ORCPT
+        with ESMTP id S229549AbhJ0EHG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 23:38:47 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256B3C061570;
-        Tue, 26 Oct 2021 20:36:22 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id s24so1077946plp.0;
-        Tue, 26 Oct 2021 20:36:22 -0700 (PDT)
+        Wed, 27 Oct 2021 00:07:06 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E3BC061570
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 21:04:41 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id m26so1497274pff.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Oct 2021 21:04:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pYPb2efyJzQDBhhqjROUGYTPzR3Jqq7+OMajb/dAad8=;
-        b=BFqWmCbqZlHgNOPOrWFoxIH+MCAyXjsTf1gje85IHA99GeViPO/+n6IvksCATFf3EF
-         WHVMKEoVzoJTWD1I1DEEmI3zyHjVnlR0XanbY+8BE2v5zobYZCOlyznK1Agdxhl6OjXs
-         weJCBEoCKmIii1TcJ7C2UPuWGKgnnXj2uU9inZ485KbllLudfmIhC5Hm3wSW+AiI/W1M
-         hl2SMlOSk7UeVIWUy9omaqj5aUWaBDMOf1ojHGdv2cSewVMumMeccyAJ6R0nwup7r6K3
-         fxO5gKqp/Z44/O04WbksAjVuhjZN8TkYp43ADld5CScJzaDrOnvGP2LKJrSKKMPd6ML+
-         gUpQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Izz2fSeyp7FglLJXkUAzOzwe9eczJwqGRtb97g7cQGw=;
+        b=NyISBRU3aODLArR4lea/SISpA7/zkEP9FG+wdnUmbXfTYwn+iY4lxF+u4WsnyaWcsE
+         EfK/OT4dk3HwYCy9gjZC4VwyzjQ9zmAhuutnXxJIpPAD/w3uVCtjWogL0sYgvLG74R+v
+         g6R5D7ncWinK5HCdKMsc6NiEeGrmqQoRWJFAQQAA77aRoza/R0cG29084cNFUn7f0aUm
+         VdmFFyGKLjWLIuGKycPA6pLy3hjB+XFt6+F3hUABK9tinH9C+Aa/rOkKwPQVM1WJZl+u
+         bow0zvjF7qRvdF3zi3kG4OxKHn1OHxdmRFNVC9hREC+r19Dom3frarwKheRIMqVPZ+FQ
+         /cng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pYPb2efyJzQDBhhqjROUGYTPzR3Jqq7+OMajb/dAad8=;
-        b=nk6tw/vEpaKob5R9/3mL794fZwi54KiyVAvzMnkzOqZj/BweiK7Teu+AunE8BIWd9R
-         E9DvlIQ4W94uUh6kzQnZUMt3TVvOB77KNnS3J82Kq/cfH0UZjxyFNtRmWZRAvBWv9Esi
-         Kk9CZiiTa91YqReuoFxWt9DpP1Dt7EqWwMOL//pObhR2YFMgRBUqkdI1VaoWA5l9chbM
-         uD//WXwoUUHRas688Ffr2mRMYeKs7YlE2gWnZ7/GQdbQqyhZ9qBwn2xrblIf4whbTd1B
-         wTMDzGtNkPcuES2rhz5t94dDZqwMCFnJUGCqXzzSEZ1+MwfAQut5SO3EUBLiyWqPt6WE
-         1n4Q==
-X-Gm-Message-State: AOAM5323xO/2iLD3o0Su/ANJ0AitFBs0AThtSGHObVpWp8ubpjIeZ62j
-        0suzFzV/9PyBCV0xRLF2VhSeVO+V6Cs=
-X-Google-Smtp-Source: ABdhPJxKchfPfShR0g8TsT8phBlwoKhort+IvGCE1nf3z9Uyj6JxGXFfShyH+MH7KTSL1iBbpPPsCw==
-X-Received: by 2002:a17:90b:4c4a:: with SMTP id np10mr3078589pjb.233.1635305781490;
-        Tue, 26 Oct 2021 20:36:21 -0700 (PDT)
-Received: from Laptop-X1.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id p1sm12080847pfo.143.2021.10.26.20.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 20:36:21 -0700 (PDT)
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Benc <jbenc@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH bpf 4/4] selftests/bpf/xdp_redirect_multi: limit the tests in netns
-Date:   Wed, 27 Oct 2021 11:35:53 +0800
-Message-Id: <20211027033553.962413-5-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211027033553.962413-1-liuhangbin@gmail.com>
-References: <20211027033553.962413-1-liuhangbin@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Izz2fSeyp7FglLJXkUAzOzwe9eczJwqGRtb97g7cQGw=;
+        b=S33MNgZIVPKH414I9NzhZjTZk8fwA0vyqAXFlgzehlE0tHZqSKOBOo5eI4cT50xIXv
+         Ru/H2aYp6c4KhrTwwKFlyCzMGSOxGveRzaBnCZ67RPbiyICmmBL5UmPtOM8eqrBJFsTu
+         YJxiQYmKVkd75T0IuxJh7kSsSkpD/ChFuSImYwf8SgyiT8798bE5hL90v9fYU92I2XxT
+         rALZINxE2a5B09ArSB6PNrcXMICpbdWfvpahf6IXS58pV1MYyDERa/gr0HBrk8+jrtv7
+         hvmYyKANnOQiVKFahwu6rw4NqHSkkAK/mkUGoszTBzRpSso7oOWVYcAxzwf3HqT290sm
+         +wDA==
+X-Gm-Message-State: AOAM533LSJNOdAMjl3PuikCu2sjdw615/UEZza/61QZ8NNRHwOPHWgGV
+        K/0pb+6rcltjE4pZ8YRjJxvn40M9w5fC+YtcSVA8wA==
+X-Google-Smtp-Source: ABdhPJz0w3mvn4TX+ptIQYahw35WumxHe6KDzRZcbPE7yRtG2MVa4Il8IeujEeZaRa+ai+C0+yqpV1LFJQgVSPxIohU=
+X-Received: by 2002:a65:6499:: with SMTP id e25mr21858529pgv.146.1635307480887;
+ Tue, 26 Oct 2021 21:04:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211025200852.3002369-1-kaleshsingh@google.com>
+ <20211025200852.3002369-7-kaleshsingh@google.com> <20211026151451.7f3e09a4@gandalf.local.home>
+ <CAC_TJveHgsPZw7p7BWOgQw6h8GNU_Pv_WUjNmw3AUq+wnSzk6Q@mail.gmail.com>
+ <20211026201846.08990d1d@rorschach.local.home> <CAC_TJve-mKSojaXtukdFeQKvPz-8TQtS=pgGD0Z18Wt6yJi7dg@mail.gmail.com>
+ <20211026211511.403d76ca@rorschach.local.home> <CAC_TJvdwqQAKrVs3w6NcQNBT+bAgdyqR+8Zt_An7R9AQSSthGA@mail.gmail.com>
+ <20211026222123.5e206fcf@rorschach.local.home> <20211026231557.1eedad9b@rorschach.local.home>
+In-Reply-To: <20211026231557.1eedad9b@rorschach.local.home>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Tue, 26 Oct 2021 21:04:29 -0700
+Message-ID: <CAC_TJveyKhZ3jyTZ33jbxSKTxxJ1WG+NUUUbf11pJ8Gqk7UeaQ@mail.gmail.com>
+Subject: Re: [PATCH v4 6/8] tracing/histogram: Optimize division by a power of 2
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As I want to test both DEVMAP and DEVMAP_HASH in XDP multicast redirect,
-I limited DEVMAP max entries to a small value for performace. When the
-test runs after amount of interface creating/deleting tests. The
-interface index will exceed the map max entries and xdp_redirect_multi
-will error out with "Get interfacesInterface index to large".
+On Tue, Oct 26, 2021 at 8:16 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Tue, 26 Oct 2021 22:21:23 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> > I'm sure there's an algorithm somewhere that can give as the real max.
+>
+> You got me playing with this more ;-)
+>
+> OK, I added the rounding in the wrong place. I found that we can make
+> the max_div to be the same as the shift! The bigger the shift, the
+> bigger the max!
 
-Fix this issue by limit the tests in netns and specify the ifindex when
-creating interfaces.
+Nice! :)
+>
+>         mult = (1 << shift) / div;
+>         max_div = (1 << shift)
+>
+> But the rounding needs to be with the mult / shift:
+>
+>         return (val * mult + ((1 << shift) - 1)) >> shift;
+>
+>
+> When val goes pass 1 << shift, then the error will be off by more than
+> one.
+Did you mean, val should be such that when we do the (val * mult) we
+only get rounding errors less than (1 << shift)?
 
-Reported-by: Jiri Benc <jbenc@redhat.com>
-Fixes: d23292476297 ("selftests/bpf: Add xdp_redirect_multi test")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../selftests/bpf/test_xdp_redirect_multi.sh  | 23 ++++++++++++-------
- .../selftests/bpf/xdp_redirect_multi.c        |  4 ++--
- 2 files changed, 17 insertions(+), 10 deletions(-)
+I think we also need to flip the delta now since we round down initially:
 
-diff --git a/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh b/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
-index 37e347159ab4..bedff7aa7023 100755
---- a/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
-@@ -2,11 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- #
- # Test topology:
--#     - - - - - - - - - - - - - - - - - - - - - - - - -
--#    | veth1         veth2         veth3 |  ... init net
-+#    - - - - - - - - - - - - - - - - - - -
-+#    | veth1         veth2         veth3 |  ns0
- #     - -| - - - - - - | - - - - - - | - -
- #    ---------     ---------     ---------
--#    | veth0 |     | veth0 |     | veth0 |  ...
-+#    | veth0 |     | veth0 |     | veth0 |
- #    ---------     ---------     ---------
- #       ns1           ns2           ns3
- #
-@@ -51,6 +51,7 @@ clean_up()
- 		ip link del veth$i 2> /dev/null
- 		ip netns del ns$i 2> /dev/null
- 	done
-+	ip netns del ns0 2> /dev/null
- }
- 
- # Kselftest framework requirement - SKIP code is 4.
-@@ -78,10 +79,12 @@ setup_ns()
- 		mode="xdpdrv"
- 	fi
- 
-+	ip netns add ns0
- 	for i in $(seq $NUM); do
- 	        ip netns add ns$i
--	        ip link add veth$i type veth peer name veth0 netns ns$i
--		ip link set veth$i up
-+		ip -n ns$i link add veth0 index 2 type veth \
-+			peer name veth$i netns ns0 index $((1 + $i))
-+		ip -n ns0 link set veth$i up
- 		ip -n ns$i link set veth0 up
- 
- 		ip -n ns$i addr add 192.0.2.$i/24 dev veth0
-@@ -92,7 +95,7 @@ setup_ns()
- 			xdp_dummy.o sec xdp_dummy &> /dev/null || \
- 			{ test_fail "Unable to load dummy xdp" && exit 1; }
- 		IFACES="$IFACES veth$i"
--		veth_mac[$i]=$(ip link show veth$i | awk '/link\/ether/ {print $2}')
-+		veth_mac[$i]=$(ip -n ns0 link show veth$i | awk '/link\/ether/ {print $2}')
- 	done
- }
- 
-@@ -177,9 +180,13 @@ do_tests()
- 		xdpgeneric) drv_p="-S";;
- 	esac
- 
--	./xdp_redirect_multi $drv_p $IFACES &> ${LOG_DIR}/xdp_redirect_${mode}.log &
-+	ip netns exec ns0 ./xdp_redirect_multi $drv_p $IFACES &> ${LOG_DIR}/xdp_redirect_${mode}.log &
- 	xdp_pid=$!
- 	sleep 1
-+	if ! ps -p $xdp_pid > /dev/null; then
-+		test_fail "$mode xdp_redirect_multi start failed"
-+		return 1
-+	fi
- 
- 	if [ "$mode" = "xdpegress" ]; then
- 		do_egress_tests $mode
-@@ -190,7 +197,7 @@ do_tests()
- 	kill $xdp_pid
- }
- 
--trap clean_up 0 2 3 6 9
-+trap clean_up EXIT
- 
- check_env
- 
-diff --git a/tools/testing/selftests/bpf/xdp_redirect_multi.c b/tools/testing/selftests/bpf/xdp_redirect_multi.c
-index 3696a8f32c23..f5ffba341c17 100644
---- a/tools/testing/selftests/bpf/xdp_redirect_multi.c
-+++ b/tools/testing/selftests/bpf/xdp_redirect_multi.c
-@@ -129,7 +129,7 @@ int main(int argc, char **argv)
- 		goto err_out;
- 	}
- 
--	printf("Get interfaces");
-+	printf("Get interfaces:");
- 	for (i = 0; i < MAX_IFACE_NUM && argv[optind + i]; i++) {
- 		ifaces[i] = if_nametoindex(argv[optind + i]);
- 		if (!ifaces[i])
-@@ -139,7 +139,7 @@ int main(int argc, char **argv)
- 			goto err_out;
- 		}
- 		if (ifaces[i] > MAX_INDEX_NUM) {
--			printf("Interface index to large\n");
-+			printf(" interface index too large\n");
- 			goto err_out;
- 		}
- 		printf(" %d", ifaces[i]);
--- 
-2.31.1
+    delta =  (1 << shift) - (mult * div)
 
+Thanks,
+Kalesh
+>
+> -- Steve
