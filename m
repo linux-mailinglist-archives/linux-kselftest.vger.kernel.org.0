@@ -2,197 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF0943E696
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 18:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E72E43E6AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 18:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbhJ1Quo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Oct 2021 12:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
+        id S230164AbhJ1Q6l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Oct 2021 12:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbhJ1Quo (ORCPT
+        with ESMTP id S229985AbhJ1Q6l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 12:50:44 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB76C061745
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 09:48:16 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id j21so4488028edt.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 09:48:16 -0700 (PDT)
+        Thu, 28 Oct 2021 12:58:41 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A83BC061745
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 09:56:13 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id l203so6579720pfd.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 09:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M8Jw/S2n3WB7bDRByTQGeQns0CvXOlde4kiN/IEV98o=;
-        b=PR8boEcK6RSO8eaafJJSJzKy+NQsdbysFi/aCXaszc/wOVJoO+mM0BaQ6dPPy9xKKq
-         XnNEfSSYf9NJ3digurFFHlOYis4fL1gGKHiQJHJIvXMQ4steyAzNeh+mP1AK2b9WWabC
-         f7D+pHU75jrNCG78NwUNk2dljTXfS61O+bxbPg2vKADcyExEWkmhVq0718tTQhcinK9w
-         TrDOa5w2oDLuEJVR/+IfpAsuAczb1VG+l8ewlLw6o7j3/dJvOJGZfmijAvwegEmqjENt
-         EWGl12GBnC3849MIoXM3qGsBe5i48hPnBsQsfxDsBgeZTAowHUX3drMfakwzmRW+aHTa
-         8HEQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2Rb6TWs/KzRCizpcXWCm00T2l0fidD3Q6hJh935Rq8o=;
+        b=jP7mbgHsLR7Qwq2NNCPO2eBOSTmnAp52w2Xgs+qssWxbI5Zf9AQrWnO/lw/ORlIxns
+         KugfZRtTPlRIKSoUZWY7o0ReHCwLgrFVQ1lQ/F0oyReNxdYnQn+vv3ecSjDPAnU4vWUS
+         eEWn3mB4cmMni/8Z2bCvjcOoTr1zJjW/jRt/4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M8Jw/S2n3WB7bDRByTQGeQns0CvXOlde4kiN/IEV98o=;
-        b=WlAgKUBFXm15KDazxl0V0ZzNb/NtotP20xDM7Qm6A0/661ti0ONr+2L7YB3+9HprVr
-         nsXO/n+shBPyhG6zkQkqpSTI2cyLrj6d5Ec4yIV5npZzf9hjba7zaeOcY13R0lpjB0JQ
-         oBXJOmsQAP92p5p34ka4RwdHHQIg7Wlxly/zlQsmCduc9dpWLa2LIhVtIsdhPQ9YR0s3
-         rpz/YoL1/VG+OcVDMO48STD7GqPV8OLOGr0POlFB0wl+P9qe0Ijy6Km+uF16vT9eMGXy
-         0RHzT7H786w4DuNu4VxSwL0gsTAd6RToLRvidE4mmn6lSuXKgj/jVVe3lztVeqz8nclt
-         v/4A==
-X-Gm-Message-State: AOAM531MVWm42Q3b5M/S6SoicWt4rm1aqgbdU//iw2HiHCxPGBtdZglC
-        pPyITPYPhbvFvjKxQ8bMXFzkOSZoLOhGiMT4Xg4QLw==
-X-Google-Smtp-Source: ABdhPJynXs15eI4J4h6dypN6+uIsPodjJBAXKeImKWkhEvpw9l+CnL5egYbTMYSOE5emSX15YsoKbBx+YIZPYkVvpPU=
-X-Received: by 2002:a50:e686:: with SMTP id z6mr7820251edm.311.1635439694998;
- Thu, 28 Oct 2021 09:48:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2Rb6TWs/KzRCizpcXWCm00T2l0fidD3Q6hJh935Rq8o=;
+        b=aCoFrPdu9j7Os6xlLqgN/gO+Y3hdGQXmdqQEZPGJTSygx/IDe+eb8zQBqaqOlXdZeU
+         fJ+/DvnE7VEkDSXT/xoVcUYvCUKT5HPmu2w3DcEsp4fzI9Z1k8Wi/nbh9v8Ko+EgK430
+         ReHijwiPkkGxOoKAOTEXJUBnAlGJZ0/ERS2BdZOxOoJy1h/z2zYTOYs3KRrm10Ft+1CW
+         v8Ceps6Z7Dhf4Qxc//pcxDPe4XmJXnJ+Ym/nmCC6LqQN0MZZ2rUY3nKikNui9lSowswb
+         QQN+E8NidFTISfSDT0b7EY2VH3x9bYmtbzgJ+rh6jCCNoGXzqx2rsOJb3SmnMKGWH6I2
+         83Dw==
+X-Gm-Message-State: AOAM531yTc0sVuqi4rh8o5Ic4fQeephqI9KoJtYGHi4zUL1xgZKBjzi2
+        4gSuFYMUsd7T2cydB1xdTVrgOA==
+X-Google-Smtp-Source: ABdhPJzrAKTQ3oQY2TuoRFynK4IDJfhLQxZHp4uyOoNvyae1N/FoJZmE84M12azNMiy9xnjVG7y7oQ==
+X-Received: by 2002:a65:530d:: with SMTP id m13mr4089830pgq.128.1635440173488;
+        Thu, 28 Oct 2021 09:56:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w7sm4316774pfu.147.2021.10.28.09.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 09:56:13 -0700 (PDT)
+Date:   Thu, 28 Oct 2021 09:56:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: selftests: seccomp_bpf failure on 5.15
+Message-ID: <202110280955.B18CB67@keescook>
+References: <YXrN+Hnl9pSOsWlA@arighi-desktop>
 MIME-Version: 1.0
-References: <20210926223322.848641-1-isabellabdoamaral@usp.br>
- <CABVgOSkG=J7TpuzZMW_RbGA9f4NRZxGXRS8wd-cBmrWHD97pRQ@mail.gmail.com> <CAFd5g47ECaw3CRH4MKzVPYmYhsiXR5hvha0ciadAFtEuUz6Xdw@mail.gmail.com>
-In-Reply-To: <CAFd5g47ECaw3CRH4MKzVPYmYhsiXR5hvha0ciadAFtEuUz6Xdw@mail.gmail.com>
-From:   Isabella B do Amaral <isabellabdoamaral@usp.br>
-Date:   Thu, 28 Oct 2021 13:48:03 -0300
-Message-ID: <CAAniXFTdQN3_BnRZeZLu-UHJPwyMkFZvTw7J4Sm4W+fRsuEC3w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] test_hash.c: refactor into KUnit
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Enzo Ferreira <ferreiraenzoa@gmail.com>,
-        =?UTF-8?Q?Augusto_Dur=C3=A3es_Camargo?= 
-        <augusto.duraes33@gmail.com>, Daniel Latypov <dlatypov@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        ~lkcamp/patches@lists.sr.ht,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YXrN+Hnl9pSOsWlA@arighi-desktop>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi all,
+On Thu, Oct 28, 2021 at 06:21:12PM +0200, Andrea Righi wrote:
+> The following sub-tests are failing in seccomp_bpf selftest:
+> 
+> 18:56:54 DEBUG| [stdout] # selftests: seccomp: seccomp_bpf
+> ...
+> 18:56:57 DEBUG| [stdout] # #  RUN           TRACE_syscall.ptrace.kill_after ...
+> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (1) == msg (0)
+> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (2) == msg (1)
+> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (1) == msg (2)
+> 18:56:57 DEBUG| [stdout] # # kill_after: Test exited normally instead of by signal (code: 12)
+> 18:56:57 DEBUG| [stdout] # #          FAIL  TRACE_syscall.ptrace.kill_after
+> ...
+> 18:56:57 DEBUG| [stdout] # #  RUN           TRACE_syscall.seccomp.kill_after ...
+> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:1547:kill_after:Expected !ptrace_syscall (1) == IS_SECCOMP_EVENT(status) (0)
+> 18:56:57 DEBUG| [stdout] # # kill_after: Test exited normally instead of by signal (code: 0)
+> 18:56:57 DEBUG| [stdout] # #          FAIL  TRACE_syscall.seccomp.kill_after
+> 18:56:57 DEBUG| [stdout] # not ok 80 TRACE_syscall.seccomp.kill_after
+> ...
+> 18:56:57 DEBUG| [stdout] # # FAILED: 85 / 87 tests passed.
+> 18:56:57 DEBUG| [stdout] # # Totals: pass:85 fail:2 xfail:0 xpass:0 skip:0 error:0
+> 18:56:57 DEBUG| [stdout] not ok 1 selftests: seccomp: seccomp_bpf # exit=1
+> 
+> I did some bisecting and found that the failures started to happen with:
+> 
+>  307d522f5eb8 ("signal/seccomp: Refactor seccomp signal and coredump generation")
+> 
+> Not sure if the test needs to be fixed after this commit, or if the
+> commit is actually introducing an issue. I'll investigate more, unless
+> someone knows already what's going on.
 
-On Tue, Oct 5, 2021 at 6:19 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> +Shuah Khan
->
-> On Sat, Oct 2, 2021 at 12:30 AM David Gow <davidgow@google.com> wrote:
-> >
-> > On Mon, Sep 27, 2021 at 6:33 AM Isabella Basso <isabellabdoamaral@usp.br> wrote:
-> > >
-> > > We refactored the lib/test_hash.c file into KUnit as part of the student
-> > > group LKCAMP [1] introductory hackathon for kernel development.
-> > >
-> > > This test was pointed to our group by Daniel Latypov [2], so its full
-> > > conversion into a pure KUnit test was our goal in this patch series, but
-> > > we ran into many problems relating to it not being split as unit tests,
-> > > which complicated matters a bit, as the reasoning behind the original
-> > > tests is quite cryptic for those unfamiliar with hash implementations.
-> > >
-> > > Some interesting developments we'd like to highlight are:
-> > >
-> > > - In patch 1/5 we noticed that there was an unused define directive that
-> > >   could be removed.
-> > > - In patch 4/5 we noticed how stringhash and hash tests are all under
-> > >   the lib/test_hash.c file, which might cause some confusion, and we
-> > >   also broke those kernel config entries up.
-> > >
-> > > Overall KUnit developments have been made in the other patches in this
-> > > series:
-> > >
-> > > In patches 2/5, 3/5 and 5/5 we refactored the lib/test_hash.c
-> > > file so as to make it more compatible with the KUnit style, whilst
-> > > preserving the original idea of the maintainer who designed it (i.e.
-> > > George Spelvin), which might be undesirable for unit tests, but we
-> > > assume it is enough for a first patch.
-> > >
-> > > This is our first patch series so we hope our contributions are
-> > > interesting and also hope to get some useful criticism from the
-> > > community. :)
-> > >
-> > > Changes since V1:
-> > > - Fixed compilation on parisc and m68k.
-> > > - Fixed whitespace mistakes.
-> > > - Renamed a few functions.
-> > > - Refactored globals into struct for test function params, thus removing
-> > >   a patch.
-> > > - Reworded some commit messages.
-> > >
-> > > [1] - https://lkcamp.dev/
-> > > [2] - https://lore.kernel.org/linux-kselftest/CAGS_qxojszgM19u=3HLwFgKX5bm5KhywvsSunuBAt5RtR+GyxQ@mail.gmail.com/
-> > >
-> >
-> > Thanks: I've gone through this new revision, and it still works fine,
-> > and my prior comments have been addressed. The commit messages in
-> > particular are much clearer, thank you! I've reviewed the various
-> > patches and left a few comments here and there, but there's nothing
-> > too drastic.
-> >
-> > I'm pretty happy with this from the KUnit side, but it would be ideal
-> > if someone with more knowledge of the hash functions looked over it.
-> > Unfortunately, George's email is bouncing, and no-one else has made
-> > any particularly major changes to this.
+Ah thanks for noticing; I will investigate...
 
-I'm glad to hear this :) I'd also like to point out that "George Spelvin" is a
-rather unusual figure [3] so we shouldn't be expecting much back from
-him, anyway. Maybe I should've looked that up before trying to tackle this
-patch, as I've no idea who might be able to properly review the hash part of
-it.
-
-> >
-> > My only remaining comment on the tests themselves is that it'd be nice
-> > to have them split up further into more, smaller tests. Given that
-> > it's a port of an existing test, though, I understand the desire not
-> > to change things too drastically.
-
-Thanks for your comprehension!
-
-> >
-> > We also need to work out how this is going to go upstream: does it go
-> > through the kunit branch (via Shuah's kselftest repo), or directly to
-> > Linus (who's handled most of the other recent-ish changes here.
-> > Brendan, any thoughts?
->
-> I think Shuah should take them in 5.16.
->
-> Shuah, let me know if you are OK taking these in 5.16 and I will
-> update the patch tracker.
->
-
-Thanks a lot for your interest in this patch :)
-
-We were a little worried about who might be able to get it upstream, so we
-appreciate that you also thought of this!
-
-> > Cheers,
-> > -- David
-> >
-> >
-> >
-> > > Isabella Basso (5):
-> > >   hash.h: remove unused define directive
-> > >   test_hash.c: split test_int_hash into arch-specific functions
-> > >   test_hash.c: split test_hash_init
-> > >   lib/Kconfig.debug: properly split hash test kernel entries
-> > >   test_hash.c: refactor into kunit
-> > >
-> > >  include/linux/hash.h       |   5 +-
-> > >  lib/Kconfig.debug          |  28 ++++-
-> > >  lib/Makefile               |   3 +-
-> > >  lib/test_hash.c            | 247 +++++++++++++++++--------------------
-> > >  tools/include/linux/hash.h |   5 +-
-> > >  5 files changed, 139 insertions(+), 149 deletions(-)
-> > >
-> > > --
-> > > 2.33.0
-> > >
-
-I'm sorry for the delay in my response, but I think I can send a V3 soon,
-probably until next week.
-
-[3] - https://lwn.net/Articles/688216/
-
-Cheers,
---
-Isabella Basso
+-- 
+Kees Cook
