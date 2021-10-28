@@ -2,97 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9769E43D82B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 02:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F14C43D838
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 02:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhJ1AhU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 20:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbhJ1AhU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 20:37:20 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD75C061570;
-        Wed, 27 Oct 2021 17:34:54 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id n36-20020a17090a5aa700b0019fa884ab85so6525298pji.5;
-        Wed, 27 Oct 2021 17:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0sIa1ZOan1HJMn9VErgSz3i/hhv+xzoYibTldJx4MsU=;
-        b=BX7k1nFwfzMbPy83sKVubBn8YhJeHNPBCZoS4NZWKY9zOKWqFG0wkRXOCNZUok0q51
-         5sy+LjcOnmuOMgF+Acj6k+oBFPnrfeceVRd6p+n5bRZk4LpPKpl+Nsrt2eHsAeqUMlFo
-         gKe72ikNOHeJ3zn3Hbfvjcev2R8njh1ju8f/y363/0AMjsENafLQDz6ARj8tgAOUPhbe
-         h8GT2zzPwP+qr03IJ4DmsXZX/EOSL/7UnCBfqlwMNB6gApf746+p0eQGrDFSt9RJhcRj
-         R4i6uuE98FjlDGsfrb6RuGBV6v5j6MP4UdfZHS9CU5nnVQOtRNx53ZQkhqNW1UpLWtFZ
-         SZUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0sIa1ZOan1HJMn9VErgSz3i/hhv+xzoYibTldJx4MsU=;
-        b=zy/8o/JWgw/gpXVFDTC6HgLmWA8UQVsMLnvLaLM02wAnDz3pl/nxjuw+stF+wVtpK9
-         R/cZWvbCZtS55U93CFpZlWTnq/Y6Xo8Cts6rGHfHuR50OAKmyFGL7rusMnzwLRvoBzZF
-         H9MWXo7/0Y9+qpJvbm2D/++G9rJEtVDKKp0rAeSf4/82ryM9pPPqouoRoogGHuLlCFjd
-         gmuaff6ECjgQ3qC4T4TOvXuXL4HdB048/vWguovbsrmnCmziYaK+gWoUb4jLXY3OgN/j
-         McHc9eFKiV6kGzHIit5URXIW+asGTFB1mNayePLfuKOafCE33y0lJmpC9dzb9/cwW+Tv
-         mhSA==
-X-Gm-Message-State: AOAM530fKQVpncO8s44XVPVAfpCxB/xHEOn0dR5nzlukgblwXGbzyd+6
-        7RIsVJpIJO3Er7ycUv2Xdqo=
-X-Google-Smtp-Source: ABdhPJyv4GCuYVbFnYeygYoIrjE67yxUSv1ATU6JLJU7IF8jy8zB0fGMETpY1xSKUHOFhJ5g0TbSFQ==
-X-Received: by 2002:a17:902:bf4b:b0:13f:bf61:3867 with SMTP id u11-20020a170902bf4b00b0013fbf613867mr991589pls.22.1635381293765;
-        Wed, 27 Oct 2021 17:34:53 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q18sm1157801pfj.46.2021.10.27.17.34.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 17:34:53 -0700 (PDT)
-From:   Yang Guang <cgel.zte@gmail.com>
-X-Google-Original-From: Yang Guang <yang.guang5@zte.com.cn>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, linux-sgx@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftest/sgx: use swap() to make code cleaner
-Date:   Thu, 28 Oct 2021 00:34:44 +0000
-Message-Id: <20211028003444.7046-1-yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229515AbhJ1AqW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Oct 2021 20:46:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229437AbhJ1AqV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 20:46:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2362610C7;
+        Thu, 28 Oct 2021 00:43:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635381835;
+        bh=ms2wN3CfuOl4f9invWVZz5Oi0ljrc8QJ5JepVWRQbhg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QPUO2GZkFT9Fw6KHOgTYYKPOgbUfk+os5J7JOoQqSytc6kmkKjgHR/G4zUv32Ff8b
+         dorZI0mYv56jvr/pnEMSIov/28+89Yc6TzKXJnj8g+nWMt5h+bU4fAEx+GvP0RLnsl
+         D2RLEgfoBOQPKabt4DMspD4k4DqKfZFuRtkSabVmuviBVW+OLyMY1nc56ajj2AHTfR
+         i+3PDedNHsVbX4fmAgaeYKb/kqh8fiHhJ0dVeKbb+nhA/9DOb5o8MlqKALUZ2HPjzu
+         4ExIWzRvBx7JbR6NO7TCVYPA0yq88GGtvbunfNyJvQ53G8NewV1ruIzpWcDYw7tkHi
+         P8pMuFNMbOBjA==
+Date:   Thu, 28 Oct 2021 09:43:51 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, surenb@google.com,
+        hridya@google.com, namhyung@kernel.org, kernel-team@android.com,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] tracing/kselftests: Remove triggers with references
+ before their definitions
+Message-Id: <20211028094351.617b7c2ea7c56055ee68d909@kernel.org>
+In-Reply-To: <20211027195454.60993c83@rorschach.local.home>
+References: <20211027205919.1648553-1-kaleshsingh@google.com>
+        <20211027205919.1648553-3-kaleshsingh@google.com>
+        <20211028065849.76b1bd7151e440881298b523@kernel.org>
+        <CAC_TJvdxEuqkzH+VDNQvWZbLjHj0BKfnCHn647Y9-Ve2UTftRg@mail.gmail.com>
+        <20211027195454.60993c83@rorschach.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Using swap() make it more readable.
+On Wed, 27 Oct 2021 19:54:54 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
----
- tools/testing/selftests/sgx/sigstruct.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+> On Wed, 27 Oct 2021 16:26:00 -0700
+> Kalesh Singh <kaleshsingh@google.com> wrote:
+> 
+> > > Why don't you use 'tac'? I love that idea :)
+> > > Did you find any issue?  
+> > 
+> > Hi Masami,
+> > 
+> > Thanks for the reviews. As with the first set of patches using tac
+> > gives a regression here, though I'm not sure why it doesn't work -- I
+> > also thought reversing the order would handle any dependencies
+> > correctly.
+> 
+> Right, because are triggers not added by list_add_rcu() which adds to
+> the head of the list.
 
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index 92bbc5a15c39..47eb0749dba4 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -59,13 +59,10 @@ static void reverse_bytes(void *data, int length)
- {
- 	int i = 0;
- 	int j = length - 1;
--	uint8_t temp;
- 	uint8_t *ptr = data;
- 
- 	while (i < j) {
--		temp = ptr[i];
--		ptr[i] = ptr[j];
--		ptr[j] = temp;
-+		swap(ptr[i], ptr[j]);
- 		i++;
- 		j--;
- 	}
+Oops, so are the triggers shown in the reverse order?
+(newer entry is top, older one is bottom)
+Then do we need this patch, because we don't care about the
+dependency.
+
+> If anything, shouldn't things be removed in order?
+
+Hmm, I think the trigger itself might better to be changed. If any dependency in
+the trigger list, it can not be restored from the copied file, like
+below may fail.
+
+cat events/foo/bar/trigger > /tmp/foo.bar.trigger
+cat /tmp/foo.bar.trigger > events/foo/bar/trigger
+
+(of course we can use 'tac' to restore it ...)
+
+This is 
+
+Thank you,
+
+
 -- 
-2.30.2
-
+Masami Hiramatsu <mhiramat@kernel.org>
