@@ -2,148 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF4443E0A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 14:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202B843E1BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 15:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbhJ1MQZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Oct 2021 08:16:25 -0400
-Received: from mga01.intel.com ([192.55.52.88]:9831 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230368AbhJ1MQV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 08:16:21 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="253961500"
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="253961500"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 05:13:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="466106596"
-Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
-  by orsmga002.jf.intel.com with ESMTP; 28 Oct 2021 05:13:51 -0700
-From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
-To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org, idosch@idosch.org,
-        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com
-Subject: [RFC v6 net-next 6/6] docs: net: Add description of SyncE interfaces
-Date:   Thu, 28 Oct 2021 13:58:32 +0200
-Message-Id: <20211028115832.1385376-7-maciej.machnikowski@intel.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20211028115832.1385376-1-maciej.machnikowski@intel.com>
-References: <20211028115832.1385376-1-maciej.machnikowski@intel.com>
+        id S230179AbhJ1NQN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Oct 2021 09:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230169AbhJ1NQM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Oct 2021 09:16:12 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176DCC061570
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 06:13:46 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id w193so8244726oie.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 06:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iOMRY+5EQlt3AMhlWcF2Jku3DStXtwx/KpJdGp0gI2c=;
+        b=Fs6zHdSI2uUASs/WQXD/oHus8l8cuQQ/q/FtJVBv4wUOpQD3iqU2AJP1/usYPkdkQm
+         reXDFApWQCOoSBOz6QNEWmoAwSUTRLtzLKbj/IroQlrViHO6w6uWRpgfIIce2/jLRwJr
+         6U6YczGQEuHf5UA2+jUTKbxhE/mPgG+s18xpw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iOMRY+5EQlt3AMhlWcF2Jku3DStXtwx/KpJdGp0gI2c=;
+        b=wtaCWgdlhRBYumcBtJqIn1kk3TYA/cxZ3WcWOB2iRRKFg0FIiq8w1I721HvHp+nTNR
+         eH2KIioWGDKtCsBBmTPbQFnsm7wzwAjbMO/BO19f5kbZPdvnkpXqGwDsxWCXz9G84tQN
+         yh5nGgM1VdzWjmdB1j/ZKiMW2SH3ripef81Eu4D5ho+Sdzg+UYx04LJ5kg1NgFABbW7m
+         OeNDEkqxGUpDi6JLVp2A7EU4yw0ERMJGSrzVrp9ERYmHc63JXB/CzpQWHkC47imDeZ1O
+         VQTKZvTptKoEEL3O/E7PqFkNYRbf/kNu/XCXo9Lohn/TctopB8Lfc08DUw6uG5mYxgND
+         ws7Q==
+X-Gm-Message-State: AOAM532DR9ydJTL4fDxWUkPeNli2WI2s25nONPVU09DlUJ03EmZJ7eMO
+        1r6f/lLB15tmxxKJCADsL9A68g==
+X-Google-Smtp-Source: ABdhPJxtHX+E8FMg+JPNf2ETnLpObNqAXNMo8H2E5oi3uH1xa7e2Pz3bAvrftKeKZx01BPrqlmoimw==
+X-Received: by 2002:a05:6808:1791:: with SMTP id bg17mr8378167oib.94.1635426825463;
+        Thu, 28 Oct 2021 06:13:45 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s5sm1111548ois.55.2021.10.28.06.13.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Oct 2021 06:13:44 -0700 (PDT)
+Subject: Re: [PATCH] userfaultfd/selftests: use swap() to make code cleaner
+To:     cgel.zte@gmail.com, akpm@linux-foundation.org
+Cc:     shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211028112331.16152-1-deng.changcheng@zte.com.cn>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f60560fe-ac6b-a48b-cc79-a3a42c22cc02@linuxfoundation.org>
+Date:   Thu, 28 Oct 2021 07:13:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211028112331.16152-1-deng.changcheng@zte.com.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add Documentation/networking/synce.rst describing new RTNL messages
-and respective NDO ops supporting SyncE (Synchronous Ethernet).
+On 10/28/21 5:23 AM, cgel.zte@gmail.com wrote:
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
+> Use swap() in order to make code cleaner. Issue found by coccinelle.
 
-Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
----
- Documentation/networking/synce.rst | 88 ++++++++++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
- create mode 100644 Documentation/networking/synce.rst
+Please include the coccinelle log.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> ---
+>   tools/testing/selftests/vm/userfaultfd.c | 10 ++--------
+>   1 file changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 8a09057d2f22..41dfe6f4ebfb 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -1413,7 +1413,6 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
+>   static int userfaultfd_stress(void)
+>   {
+>   	void *area;
+> -	char *tmp_area;
+>   	unsigned long nr;
+>   	struct uffdio_register uffdio_register;
+>   	struct uffd_stats uffd_stats[nr_cpus];
+> @@ -1524,13 +1523,8 @@ static int userfaultfd_stress(void)
+>   					    count_verify[nr], nr);
+>   
+>   		/* prepare next bounce */
+> -		tmp_area = area_src;
+> -		area_src = area_dst;
+> -		area_dst = tmp_area;
+> -
+> -		tmp_area = area_src_alias;
+> -		area_src_alias = area_dst_alias;
+> -		area_dst_alias = tmp_area;
+> +		swap(area_src, area_dst);
+> +		swap(area_src_alias, area_dst_alias);
+>   
+>   		uffd_stats_report(uffd_stats, nr_cpus);
+>   	}
+> 
 
-diff --git a/Documentation/networking/synce.rst b/Documentation/networking/synce.rst
-new file mode 100644
-index 000000000000..986b9e62809f
---- /dev/null
-+++ b/Documentation/networking/synce.rst
-@@ -0,0 +1,88 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+====================
-+Synchronous Ethernet
-+====================
-+
-+Synchronous Ethernet networks use a physical layer clock to syntonize
-+the frequency across different network elements.
-+
-+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
-+Equipment Clock (EEC) and can recover synchronization
-+from the synchronization inputs - either traffic interfaces or external
-+frequency sources.
-+The EEC can synchronize its frequency (syntonize) to any of those sources.
-+It is also able to select a synchronization source through priority tables
-+and synchronization status messaging. It also provides necessary
-+filtering and holdover capabilities.
-+
-+The following interface can be applicable to diffferent packet network types
-+following ITU-T G.8261/G.8262 recommendations.
-+
-+Interface
-+=========
-+
-+The following RTNL messages are used to read/configure SyncE recovered
-+clocks.
-+
-+RTM_GETRCLKRANGE
-+-----------------
-+Reads the allowed pin index range for the recovered clock outputs.
-+This can be aligned to PHY outputs or to EEC inputs, whichever is
-+better for a given application.
-+Will call the ndo_get_rclk_range function to read the allowed range
-+of output pin indexes.
-+Will call ndo_get_rclk_range to determine the allowed recovered clock
-+range and return them in the IFLA_RCLK_RANGE_MIN_PIN and the
-+IFLA_RCLK_RANGE_MAX_PIN attributes
-+
-+RTM_GETRCLKSTATE
-+-----------------
-+Read the state of recovered pins that output recovered clock from
-+a given port. The message will contain the number of assigned clocks
-+(IFLA_RCLK_STATE_COUNT) and an N pin indexes in IFLA_RCLK_STATE_OUT_IDX
-+To support multiple recovered clock outputs from the same port, this message
-+will return the IFLA_RCLK_STATE_COUNT attribute containing the number of
-+active recovered clock outputs (N) and N IFLA_RCLK_STATE_OUT_IDX attributes
-+listing the active output indexes.
-+This message will call the ndo_get_rclk_range to determine the allowed
-+recovered clock indexes and then will loop through them, calling
-+the ndo_get_rclk_state for each of them.
-+
-+RTM_SETRCLKSTATE
-+-----------------
-+Sets the redirection of the recovered clock for a given pin. This message
-+expects one attribute:
-+struct if_set_rclk_msg {
-+	__u32 ifindex; /* interface index */
-+	__u32 out_idx; /* output index (from a valid range)
-+	__u32 flags; /* configuration flags */
-+};
-+
-+Supported flags are:
-+SET_RCLK_FLAGS_ENA - if set in flags - the given output will be enabled,
-+		     if clear - the output will be disabled.
-+
-+RTM_GETEECSTATE
-+----------------
-+Reads the state of the EEC or equivalent physical clock synchronizer.
-+This message returns the following attributes:
-+IFLA_EEC_STATE - current state of the EEC or equivalent clock generator.
-+		 The states returned in this attribute are aligned to the
-+		 ITU-T G.781 and are:
-+		  IF_EEC_STATE_INVALID - state is not valid
-+		  IF_EEC_STATE_FREERUN - clock is free-running
-+		  IF_EEC_STATE_LOCKED - clock is locked to the reference,
-+		                        but the holdover memory is not valid
-+		  IF_EEC_STATE_LOCKED_HO_ACQ - clock is locked to the reference
-+		                               and holdover memory is valid
-+		  IF_EEC_STATE_HOLDOVER - clock is in holdover mode
-+State is read from the netdev calling the:
-+int (*ndo_get_eec_state)(struct net_device *dev, enum if_eec_state *state,
-+			 u32 *src_idx, struct netlink_ext_ack *extack);
-+
-+IFLA_EEC_SRC_IDX - optional attribute returning the index of the reference that
-+		   is used for the current IFLA_EEC_STATE, i.e., the index of
-+		   the pin that the EEC is locked to.
-+
-+Will be returned only if the ndo_get_eec_src is implemented.
-\ No newline at end of file
--- 
-2.26.3
-
+thanks,
+-- Shuah
