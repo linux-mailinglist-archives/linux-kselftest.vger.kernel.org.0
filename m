@@ -2,126 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4053E43D997
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 04:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF4143DA7C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 06:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbhJ1DB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Oct 2021 23:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S229488AbhJ1Epv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Oct 2021 00:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhJ1DB2 (ORCPT
+        with ESMTP id S229758AbhJ1Epu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 23:01:28 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5FFAC061745
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 19:59:02 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id l186so4957014pge.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 19:59:02 -0700 (PDT)
+        Thu, 28 Oct 2021 00:45:50 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C05C061570
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 21:43:24 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id z22so6814552uaq.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Oct 2021 21:43:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3qcGlXwseyhQvDxLjOR5ajAV6VxNHCsQF0+nodus9VQ=;
-        b=n911yFUNLpyC7fYO2MLdIAmD5pOTKRgjP3CUghSF3cxrpv4/jRNUHSilbGMZIYsQNa
-         okuTcxZnouwUvdFIeBYNtp7a0F4FSjufGY/c6YC8mDZYgv4fZAx6DWvBnQmcQiQ9scO6
-         1HZE90E/8AlrGD5cYqgV7ohdnzYCwMBrAVx2/0veOr0zQ6WIH5Elqmh6tNNAL1UdBPJG
-         vdS5jHxiIPem++trLFW+YqX9CV1Ed8u6qk5JGu6Vc5Pa7wmkt8BruyewYvHskbEHfA2s
-         Vt223zhuX/WlC6aRrr/hyHcuV/IqXMazlU/0hSwFrnvVIj4S+/eIQSIi6WLuU3KkRaeE
-         HrGQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=J64IZF9PVQr8R+mvV6ce9ekiJ1rmezsroOUDCf2tvvE=;
+        b=IKXwUu6eGfx9JN4o43k3hovL+zIS9+7CjYx/AwpgmJl+6bJDPdOFrz26BaXrC0JDBd
+         dqH2Y74XtQT+OQnykTZzH2i9fG+U5ZdBqbL7/KpTesb/59IoyKEMdij7nHzIZLHAEAW0
+         i99ygws5UGZzitG/nhd0z92ebXhuAXY1iNXpyrg/XN5oxI7TfBXcoMQggssSPUxP5pRp
+         tBhxMz+/lo4c8zxz7mf4x4bQ7ckmMKc6ldOwDEaVcZmOLMV/w6995dRtSlhtHj7FzB9X
+         +kpsYZS9q3n4jMrQ2KZq4TpVZR6jgNowmuLmrgWviL1OHqAje6Cys5r8wxttDX1XuVQ4
+         tAPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3qcGlXwseyhQvDxLjOR5ajAV6VxNHCsQF0+nodus9VQ=;
-        b=a1p1OA+0P3aMVSZrczjIZT/V98fbD9UgRdWr+0vKfxvov2x9/chwkcPqOcDXtMIhMP
-         Ax47Ct51pAlxkIh09QEyYwNSw1d0sX96Zx2N45gTR39JjSoZNSQYZLCZCL6yQkn3C86H
-         +5Sk20cuAeGmzUjud4AmeoI6vjhF1fGanetX/ddWOiBkTVscG18o7bqlZRLCC373PRz8
-         vgEV1ZegWiSXl72kmg7aipQIN+hTfjtV85D2wQjL++uY2scDQd0nTzu6Tf/KYwhoeY1U
-         YIfCOPX14o3n4sxBtM+o8/WRueLD9RnpMMXkGhoPJ/0AJcNFXw30Od/3jacBcfUB2SRn
-         8wNg==
-X-Gm-Message-State: AOAM530ZNXAdMtjrd6F9uDktoJCMxBPZKyuTZlCc3kxRLZE1ZaTB/sQa
-        mG6Hw9dhyrotnVCvn87IVjd2DLd1WuzA8dMHd+WH1g==
-X-Google-Smtp-Source: ABdhPJzu5KK1MQDGOIwEN7uCtY6OI9kdjFI43cChJxiLrJ6wWdf+kC9i+RjLlJX1ycTzqLzn986Ja3YtUQlKIopNPJ0=
-X-Received: by 2002:a63:618d:: with SMTP id v135mr1249184pgb.79.1635389941763;
- Wed, 27 Oct 2021 19:59:01 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=J64IZF9PVQr8R+mvV6ce9ekiJ1rmezsroOUDCf2tvvE=;
+        b=rJx87vxaVXyq6qEZYNjGtJ/Y3QpXH0Ma0CVit6Unz7MKN4vpB3B0BgvkYjW/ooRwCC
+         SyNZXsbz4ugqcLYxuW4kX7SAO9V8WBedrMnCH4p98ZIeFkSzu3TQAXFyZ8Kv6lJtQ9HM
+         eBP7HpPcFYT9ceiq5HFjVeIeUVz9CF0L19EVr6AkAXZQNJOyNAmKUKbehlzISLNRyIyd
+         QB59VaJhBOLOOLgmNk03Rvvx+wDALCGfszzehG297qSSwPtDvleDMTwHrftoC+YFGYmR
+         KewxiFLVq+E33UOTMYc4RJX1EisISJGqdWhmQP9xkTWwp8UauxXcqLIlAbfiZMjPIT7q
+         +Mbw==
+X-Gm-Message-State: AOAM532t1FqnjXuFD5dyDJ4aOk4Vjhm+H2LQHLorfeZd7Uqop9Jd2QZq
+        1brtFMT+4rgmJCb14TFy85A9Y23Typ0FkQmCPzg=
+X-Google-Smtp-Source: ABdhPJw5Av4Rj2Zs/hCtzCBeCO8XzfPus0HhqFTrLpkTPCdsti9oAF9tV6hsgpeXiINfzJTD4SSpzYj31b9bB5bRfYU=
+X-Received: by 2002:a05:6102:3a0e:: with SMTP id b14mr1717663vsu.41.1635396203411;
+ Wed, 27 Oct 2021 21:43:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211027205919.1648553-1-kaleshsingh@google.com>
- <20211027205919.1648553-3-kaleshsingh@google.com> <20211028065849.76b1bd7151e440881298b523@kernel.org>
- <CAC_TJvdxEuqkzH+VDNQvWZbLjHj0BKfnCHn647Y9-Ve2UTftRg@mail.gmail.com>
- <20211027195454.60993c83@rorschach.local.home> <20211028094351.617b7c2ea7c56055ee68d909@kernel.org>
-In-Reply-To: <20211028094351.617b7c2ea7c56055ee68d909@kernel.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 27 Oct 2021 19:58:50 -0700
-Message-ID: <CAC_TJveUiij8SQwfHVOYhQASq7bd0PUbyu7k0QLh-8S5ttC+wQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] tracing/kselftests: Remove triggers with references
- before their definitions
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, surenb@google.com,
-        hridya@google.com, namhyung@kernel.org, kernel-team@android.com,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Reply-To: josephmarks20201@gmail.com
+Sender: bintousawadogo4@gmail.com
+Received: by 2002:ab0:1567:0:0:0:0:0 with HTTP; Wed, 27 Oct 2021 21:43:23
+ -0700 (PDT)
+From:   "Dr. Joseph Mark" <josephmark00011@gmail.com>
+Date:   Thu, 28 Oct 2021 04:43:23 +0000
+X-Google-Sender-Auth: LZmngxbPCi0_6rfBtS3fvRlIvhk
+Message-ID: <CAMroiSMMui=9CCyosFqRsGgU+9hXCCo9UeB8HH_7sD6FH1Vjgg@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 5:43 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Wed, 27 Oct 2021 19:54:54 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > On Wed, 27 Oct 2021 16:26:00 -0700
-> > Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > > > Why don't you use 'tac'? I love that idea :)
-> > > > Did you find any issue?
-> > >
-> > > Hi Masami,
-> > >
-> > > Thanks for the reviews. As with the first set of patches using tac
-> > > gives a regression here, though I'm not sure why it doesn't work -- I
-> > > also thought reversing the order would handle any dependencies
-> > > correctly.
-> >
-> > Right, because are triggers not added by list_add_rcu() which adds to
-> > the head of the list.
->
-> Oops, so are the triggers shown in the reverse order?
-> (newer entry is top, older one is bottom)
-> Then do we need this patch, because we don't care about the
-> dependency.
+-- 
+Dear Friend,
 
-In the case of the hist expression tests. they create a variable:
-echo 'hist:keys=common_pid:x=1+2' >> trigger
+I am Dr. Joseph Mark Work in bank. I Discovered the sum of seven
+million, two hundred thousand dollars (usd7.2) belonging to a deceased
+customer of this bank the fund has been lying in a suspense account
+without anybody coming to put claim over the money since the account
+late owner from Lebanese who was involved in car crash.
 
-Then print its value in another histogram:
-echo 'hist:keys=common_pid:vals=$x' >> trigger
+Therefore, I am soliciting for your assistance to come forward as the
+next of kin. I have agreed that 40% of this money will be for you as
+the beneficiary respect of the provision of your account and service
+rendered, 60% will be for me. Then immediately the money transferred
+to your account from this bank, I will proceed to your country for the
+sharing of the fund.  If you think you are capable and will be
+committed to making this deal successes send me an email as soon as
+possible to confirm your interest.
 
-At least in this case, the triggers are listed from oldest (top) to
-newest (bottom):
-cat trigger
-hist:keys=common_pid:vals=hitcount:x=3:sort=hitcount:size=2048 [active]
-hist:keys=common_pid:vals=hitcount,$x:sort=hitcount:size=2048 [active]
-
-So we need to remove the trigger with the var ref first.
-
-- Kalesh
->
-> > If anything, shouldn't things be removed in order?
->
-> Hmm, I think the trigger itself might better to be changed. If any dependency in
-> the trigger list, it can not be restored from the copied file, like
-> below may fail.
->
-> cat events/foo/bar/trigger > /tmp/foo.bar.trigger
-> cat /tmp/foo.bar.trigger > events/foo/bar/trigger
->
-> (of course we can use 'tac' to restore it ...)
->
-> This is
->
-> Thank you,
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
+Yours faithful,
+Dr. Joseph Mark
