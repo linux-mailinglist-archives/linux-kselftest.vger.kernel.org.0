@@ -2,90 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D692E43DF81
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 12:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAE343DFEE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 13:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbhJ1KzC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Oct 2021 06:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S229868AbhJ1L0E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Oct 2021 07:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbhJ1Kyx (ORCPT
+        with ESMTP id S229578AbhJ1L0E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 06:54:53 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3E0C0432C8
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 03:52:23 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id eg18so6077236edb.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 03:52:23 -0700 (PDT)
+        Thu, 28 Oct 2021 07:26:04 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EF6C061570;
+        Thu, 28 Oct 2021 04:23:37 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id oa4so4445883pjb.2;
+        Thu, 28 Oct 2021 04:23:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TvnootBtDGVgLyDMhxKtt7j81OcPK/yRLbkFlYIzag8=;
+        b=E+fFVcTV7AN2DNE8DwXVmv1OniOy3ZL4cwkZIK6QM03yC6+AcEA+AOSVx0kfHyY48c
+         pKRShfobTaldoT1EzJaGCAkXh2rlwcV3xBb3VaOByoK0MKAXkfxiTdeACsvVo8kDa+PN
+         VKWVkdg06o0vpSxt9t/Mtr8k/4i2fQz2zXRxOGVC2Fse7J1zPUnQVFaWnQ9pyXgmRYxQ
+         2qAuVRGfO9Sx5qsSL7wyOhOEE4D2i3YdnQE2xRw+TnwXGyekz5cvjZ3nplhArQfCud9B
+         bdw1QwyWv1AhpGu27RPrj7llu8qI16NZJy2iRw3pfmpjxLDrWN6W8o5mrL58esrRop3l
+         b5uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=T/A8icJDlDZgG5zYNhry7NOWcWA9GHNTl9llJTpU1yLIr28VLCCe5VhhW3XNk9sQoX
-         6Xzi8rwfg9VHMn9dRjwL+xA5OTWbxfFOV/bzYazrX0YVcTpaFKXGIRJJsuC8nvKDI7bh
-         JXCDu3UEFgwyrUbm9KGFIfpfdUQAMDr84F+NcZ6BQ/WlljwWyTTfnaRNZULfZczo8JVB
-         hNbXJoFJnaB1TzhnpdwKk/qXIS5WpbeyGwp0kRC2d4PzjOdTuhEU4ha6FjV0133impZk
-         UYTfs8E+x9Qx/4/Gei4jbFeccWJj44aukqdmWYbSf8/ljtUQkk1qttSZ4ADhrWt7WYZZ
-         n4xQ==
-X-Gm-Message-State: AOAM533S41x0C2FzqsNCFVRGJr4MjQUrvOvyJRiz3nEKruTNTVUVfgZn
-        1YQzO6zSMhbehFNvdsp3ePJcSCDMsW+eAmVPXd50s7UhOLjAwDuG
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TvnootBtDGVgLyDMhxKtt7j81OcPK/yRLbkFlYIzag8=;
+        b=xV9wgLiD2EUTiCYrPXa9R1gpElYN1TB3WtcO4YyJJZyhOZ3hGcUXyRe25MfsLsDoho
+         5s9SOqBjSYsTWUk8WspM9Zd+gS+ntrRguoeVAT2o5Iz0Nfj2l2rgwsAXifQ24Tkx8oEY
+         4TJTgXeJWxUg+4fz3rQfbFxyi5bqtAlbgkngN9ZkahmZxvTZ/E9G7wwCDqyhj2KDv4o2
+         1v9zD4Ipi4/8z5IsuYaz1hG+pQWT2qIPYbqp+F122ouK4ppTOPhs73IAzmwW7HqugiFY
+         J82xWrhZQiksxHZuU7Wv8CsVHlr1AgEtKt9V2lFsS3+EvliGf9gg4vNtyqvpypAp2Uei
+         Zegg==
+X-Gm-Message-State: AOAM530dEnIx/gr29RRZLsqP2Tjc9psn+VnxzwA/NwYDUYvlHGw+LCvM
+        2uKyWWYVFb4umS5Ta0OslUIjeYFmfk8=
+X-Google-Smtp-Source: ABdhPJxcrr9mZ0anG9vgeQ1+PV0mOQX8OeiZ6bW53lFUNbMY7klUyxliQzquDXfFyqoiGpp9tgwa3Q==
+X-Received: by 2002:a17:902:6b4a:b0:13f:8e99:2149 with SMTP id g10-20020a1709026b4a00b0013f8e992149mr3340883plt.87.1635420217299;
+        Thu, 28 Oct 2021 04:23:37 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x26sm3142758pff.25.2021.10.28.04.23.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 04:23:37 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] userfaultfd/selftests: use swap() to make code cleaner
+Date:   Thu, 28 Oct 2021 11:23:31 +0000
+Message-Id: <20211028112331.16152-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
+
+Use swap() in order to make code cleaner. Issue found by coccinelle.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 8a09057d2f22..41dfe6f4ebfb 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -1413,7 +1413,6 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
+ static int userfaultfd_stress(void)
+ {
+ 	void *area;
+-	char *tmp_area;
+ 	unsigned long nr;
+ 	struct uffdio_register uffdio_register;
+ 	struct uffd_stats uffd_stats[nr_cpus];
+@@ -1524,13 +1523,8 @@ static int userfaultfd_stress(void)
+ 					    count_verify[nr], nr);
+ 
+ 		/* prepare next bounce */
+-		tmp_area = area_src;
+-		area_src = area_dst;
+-		area_dst = tmp_area;
+-
+-		tmp_area = area_src_alias;
+-		area_src_alias = area_dst_alias;
+-		area_dst_alias = tmp_area;
++		swap(area_src, area_dst);
++		swap(area_src_alias, area_dst_alias);
+ 
+ 		uffd_stats_report(uffd_stats, nr_cpus);
+ 	}
 -- 
-Greetings,
+2.25.1
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
-
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
-
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
-
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
-
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
-
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
