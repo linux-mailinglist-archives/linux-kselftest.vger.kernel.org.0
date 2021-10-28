@@ -2,572 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE5543EA03
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Oct 2021 23:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1F843F254
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 00:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbhJ1VM3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Oct 2021 17:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbhJ1VM3 (ORCPT
+        id S231235AbhJ1WJ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Oct 2021 18:09:57 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:53954 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230264AbhJ1WJ5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 17:12:29 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A303CC061745
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 14:10:01 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w15so30284006edc.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 14:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+v79ABorX21zivVUZmwE9yuTtKR/zIGT6wL3vVFvw2o=;
-        b=aPN5H7SfzmU0vYtv6PJCuMK7vi8nCiFSadf6TNVgyLaDcSzSqTEOcXw7CfzAirvLPW
-         SFdM50ZVszCcolppirEazftwEBLjMztm4v7dWKmNvPmhG09zY3DHpQPJszv+uYuPy7tx
-         rKJntB3ahskUJ+SQIz8Gl+pn+PzZuIc2pixim5P3vBDc2gLiAiL+HIC69MJwzTDPkspA
-         YAmRHusdpvlOT/eOO0i+mKrqNtIW/I+vaAcR26ccbMasTojhmapdTUoWc/33Vu+V3K35
-         YMO9oqZIrsmU7kLQNgeL9u/jIqiUSyP4Mktg7I5lVJrI1OzO0KZryEFamJBGg2ARf1ym
-         FCBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+v79ABorX21zivVUZmwE9yuTtKR/zIGT6wL3vVFvw2o=;
-        b=6unVCmHOtBtdnFMDOQd6nY4TykezAyjz9CKPa5OKeJxODTnMmxm5+D6jILvGDdDcFt
-         BEp3zn2KDNyj4j5OFn6h8g1hluK67bk179zpRF6Wp0XLRw83jxhpmbTI9v3n203+yK1A
-         x0jvf5qC6TuWIBZvoiddXvMotrFZ0Aq4dpoQ5LrcXjb3vJhEia5g5wm/U3hRda+51UDX
-         yj2dSsoFFzaB0f4K6HfYdQ79elTd5u+f/Hb/fW2RAMp4FG/aIBrpJrMVg/L3GOrHitlw
-         nlJLBsUmP+0uzl226Ot6Lw+VLxpziy6/bsJjFkcXuzE9Z+dcQ4LLRvsPNPp0cAIovp0e
-         lNKQ==
-X-Gm-Message-State: AOAM532dIL3f24a5ccAYHmiWB+Kswtkpxvmj5iLMC8as16cRLjUD+ID9
-        Q0UhuWFkG7ZkgTdgMLynLj9Wv0iw3d16apuHuZGCJw==
-X-Google-Smtp-Source: ABdhPJyPzMu3mlPpWtD04dSJ5F8pcEMragtno2JVczxg9dC50kjueuobo25SUQfSzpWCYxFbW5dBfIJ5favlPQbY3a4=
-X-Received: by 2002:a17:907:3f83:: with SMTP id hr3mr8316999ejc.555.1635455399676;
- Thu, 28 Oct 2021 14:09:59 -0700 (PDT)
+        Thu, 28 Oct 2021 18:09:57 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52]:41874)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mgDYW-001UqF-TD; Thu, 28 Oct 2021 16:07:28 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:53464 helo=email.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mgDYU-003102-Oy; Thu, 28 Oct 2021 16:07:28 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <YXrN+Hnl9pSOsWlA@arighi-desktop> <202110280955.B18CB67@keescook>
+        <878rydm56l.fsf@disp2133> <202110281136.5CE65399A7@keescook>
+Date:   Thu, 28 Oct 2021 17:06:53 -0500
+In-Reply-To: <202110281136.5CE65399A7@keescook> (Kees Cook's message of "Thu,
+        28 Oct 2021 11:47:48 -0700")
+Message-ID: <8735okls76.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20210926223322.848641-1-isabellabdoamaral@usp.br>
- <20210926223322.848641-6-isabellabdoamaral@usp.br> <CABVgOSn+_kB64+1VVkw_hqur==3fkunu81kjQczuSgm-Q8c_Hw@mail.gmail.com>
-In-Reply-To: <CABVgOSn+_kB64+1VVkw_hqur==3fkunu81kjQczuSgm-Q8c_Hw@mail.gmail.com>
-From:   Isabella B do Amaral <isabellabdoamaral@usp.br>
-Date:   Thu, 28 Oct 2021 18:09:48 -0300
-Message-ID: <CAAniXFTWEG-VhNBtx2mq7d6Pf5yKgNUCchpriBhjxAjuD8GKhg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] test_hash.c: refactor into kunit
-To:     David Gow <davidgow@google.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Enzo Ferreira <ferreiraenzoa@gmail.com>,
-        =?UTF-8?Q?Augusto_Dur=C3=A3es_Camargo?= 
-        <augusto.duraes33@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        ~lkcamp/patches@lists.sr.ht,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-XM-SPF: eid=1mgDYU-003102-Oy;;;mid=<8735okls76.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/GE8vE6FsfUV0q1XYNQ1Vhe88bv9TKu1Y=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.8 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_XMDrugObfuBody_08
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Kees Cook <keescook@chromium.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1552 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 10 (0.6%), b_tie_ro: 9 (0.6%), parse: 0.87 (0.1%),
+         extract_message_metadata: 13 (0.8%), get_uri_detail_list: 2.6 (0.2%),
+        tests_pri_-1000: 13 (0.8%), tests_pri_-950: 1.27 (0.1%),
+        tests_pri_-900: 1.01 (0.1%), tests_pri_-90: 96 (6.2%), check_bayes: 93
+        (6.0%), b_tokenize: 10 (0.7%), b_tok_get_all: 9 (0.6%), b_comp_prob:
+        2.9 (0.2%), b_tok_touch_all: 67 (4.3%), b_finish: 0.88 (0.1%),
+        tests_pri_0: 1403 (90.3%), check_dkim_signature: 0.54 (0.0%),
+        check_dkim_adsp: 2.8 (0.2%), poll_dns_idle: 0.55 (0.0%), tests_pri_10:
+        3.3 (0.2%), tests_pri_500: 9 (0.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: selftests: seccomp_bpf failure on 5.15
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, David,
+Kees Cook <keescook@chromium.org> writes:
 
-On Sat, Oct 2, 2021 at 4:22 AM David Gow <davidgow@google.com> wrote:
+> On Thu, Oct 28, 2021 at 12:26:26PM -0500, Eric W. Biederman wrote:
+>> Kees Cook <keescook@chromium.org> writes:
+>> 
+>> > On Thu, Oct 28, 2021 at 06:21:12PM +0200, Andrea Righi wrote:
+>> >> The following sub-tests are failing in seccomp_bpf selftest:
+>> >> 
+>> >> 18:56:54 DEBUG| [stdout] # selftests: seccomp: seccomp_bpf
+>> >> ...
+>> >> 18:56:57 DEBUG| [stdout] # #  RUN           TRACE_syscall.ptrace.kill_after ...
+>> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (1) == msg (0)
+>> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (2) == msg (1)
+>> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (1) == msg (2)
+>> >> 18:56:57 DEBUG| [stdout] # # kill_after: Test exited normally instead of by signal (code: 12)
+>> >> 18:56:57 DEBUG| [stdout] # #          FAIL  TRACE_syscall.ptrace.kill_after
+>> >> ...
+>> >> 18:56:57 DEBUG| [stdout] # #  RUN           TRACE_syscall.seccomp.kill_after ...
+>> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:1547:kill_after:Expected !ptrace_syscall (1) == IS_SECCOMP_EVENT(status) (0)
+>> >> 18:56:57 DEBUG| [stdout] # # kill_after: Test exited normally instead of by signal (code: 0)
+>> >> 18:56:57 DEBUG| [stdout] # #          FAIL  TRACE_syscall.seccomp.kill_after
+>> >> 18:56:57 DEBUG| [stdout] # not ok 80 TRACE_syscall.seccomp.kill_after
+>> >> ...
+>> >> 18:56:57 DEBUG| [stdout] # # FAILED: 85 / 87 tests passed.
+>> >> 18:56:57 DEBUG| [stdout] # # Totals: pass:85 fail:2 xfail:0 xpass:0 skip:0 error:0
+>> >> 18:56:57 DEBUG| [stdout] not ok 1 selftests: seccomp: seccomp_bpf # exit=1
+>> >> 
+>> >> I did some bisecting and found that the failures started to happen with:
+>> >> 
+>> >>  307d522f5eb8 ("signal/seccomp: Refactor seccomp signal and coredump generation")
+>> >> 
+>> >> Not sure if the test needs to be fixed after this commit, or if the
+>> >> commit is actually introducing an issue. I'll investigate more, unless
+>> >> someone knows already what's going on.
+>> >
+>> > Ah thanks for noticing; I will investigate...
+>> 
+>> 
+>> I just did a quick read through of the test and while
+>> I don't understand everything having a failure seems
+>> very weird.
+>> 
+>> I don't understand the comment:
+>> /* Tracer will redirect getpid to getppid, and we should die. */
+>> 
+>> As I think what happens is it the bpf programs loads the signal
+>> number.  Tests to see if the signal number if GETPPID and allows
+>> that system call and causes any other system call to be terminated.
 >
-> On Mon, Sep 27, 2021 at 6:33 AM Isabella Basso <isabellabdoamaral@usp.br>=
- wrote:
-> >
-> > Use KUnit framework to make tests more easily integrable with CIs. Even
-> > though these tests are not yet properly written as unit tests this
-> > change should help in debugging.
-> >
-> > Also remove kernel messages (i.e. through pr_info) as KUnit handles all
-> > debugging output and let it handle module init and exit details.
-> >
-> > Changes since v1:
-> > - As suggested by David Gow:
-> >   1. Keep module support.
-> >   2. Reword commit message.
-> > - As reported by the kernel test bot:
-> >   1. Fix compilation for m68k and parisc architectures.
-> >
+> The test suite runs a series of seccomp filter vs syscalls under tracing,
+> either with ptrace or with seccomp SECCOMP_RET_TRACE, to validate the
+> expected behavioral states. It seems that what's happened is that the
+> SIGSYS has suddenly become non-killing:
 >
-> It might be worth moving the changelog under the "---" here, so that
-> it's not a part of the final commit message.
+> #  RUN           TRACE_syscall.ptrace.kill_after ...
+> # seccomp_bpf.c:1555:kill_after:Expected WSTOPSIG(status) & 0x80 (0) == 0x80 (128)
+> # seccomp_bpf.c:1556:kill_after:WSTOPSIG: 31
+> # kill_after: Test exited normally instead of by signal (code: 12)
+> #          FAIL  TRACE_syscall.ptrace.kill_after
 >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Tested-by: David Gow <davidgow@google.com>
-> > Co-developed-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.co=
-m>
-> > Signed-off-by: Augusto Dur=C3=A3es Camargo <augusto.duraes33@gmail.com>
-> > Co-developed-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
-> > Signed-off-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
-> > Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
-> > ---
+> i.e. the ptracer no longer sees a dead tracee, which would pass through
+> here:
 >
-> I went through this in a little more detail, and I'm happy with it.
-> It'd still be nice if someone with more knowledge of the hashing code
-> looked over it, but since George's email bounced, I'm happy to give
-> this my reviewed-by.
+>                 if (WIFSIGNALED(status) || WIFEXITED(status))
+>                         /* Child is dead. Time to go. */
+>                         return;
 >
-> There are a few minor comments below (and above, I guess), which would
-> be worth doing as part of a v3.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> Thanks,
-> -- David
->
-> >  lib/Kconfig.debug |  28 ++++---
-> >  lib/Makefile      |   2 +-
-> >  lib/test_hash.c   | 187 ++++++++++++++--------------------------------
-> >  3 files changed, 78 insertions(+), 139 deletions(-)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index eb6c4daf5fcb..04eec87c2964 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2204,15 +2204,6 @@ config TEST_RHASHTABLE
-> >
-> >           If unsure, say N.
-> >
-> > -config TEST_HASH
-> > -       tristate "Perform selftest on hash functions"
-> > -       help
-> > -         Enable this option to test the kernel's integer (<linux/hash.=
-h>), and
-> > -         string (<linux/stringhash.h>) hash functions on boot (or modu=
-le load).
-> > -
-> > -         This is intended to help people writing architecture-specific
-> > -         optimized versions.  If unsure, say N.
-> > -
-> >  config TEST_SIPHASH
-> >         tristate "Perform selftest on siphash functions"
-> >         help
-> > @@ -2361,6 +2352,25 @@ config BITFIELD_KUNIT
-> >
-> >           If unsure, say N.
-> >
-> > +config HASH_KUNIT_TEST
-> > +       tristate "KUnit Test for integer hash functions" if !KUNIT_ALL_=
-TESTS
-> > +       depends on KUNIT
-> > +       default KUNIT_ALL_TESTS
-> > +       help
-> > +         Enable this option to test the kernel's string (<linux/string=
-hash.h>), and
-> > +         integer (<linux/hash.h>) hash functions on boot.
-> > +
-> > +         KUnit tests run during boot and output the results to the deb=
-ug log
-> > +         in TAP format (https://testanything.org/). Only useful for ke=
-rnel devs
-> > +         running the KUnit test harness, and not intended for inclusio=
-n into a
-> > +         production build.
-> > +
-> > +         For more information on KUnit and unit tests in general pleas=
-e refer
-> > +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> > +
-> > +         This is intended to help people writing architecture-specific
-> > +         optimized versions. If unsure, say N.
-> > +
-> >  config RESOURCE_KUNIT_TEST
-> >         tristate "KUnit test for resource API"
-> >         depends on KUNIT
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index c2e81d0eb31c..0bc336d9d036 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -62,7 +62,7 @@ obj-$(CONFIG_TEST_BITOPS) +=3D test_bitops.o
-> >  CFLAGS_test_bitops.o +=3D -Werror
-> >  obj-$(CONFIG_TEST_SYSCTL) +=3D test_sysctl.o
-> >  obj-$(CONFIG_TEST_SIPHASH) +=3D test_siphash.o
-> > -obj-$(CONFIG_TEST_HASH) +=3D test_hash.o
-> > +obj-$(CONFIG_HASH_KUNIT_TEST) +=3D test_hash.o
-> >  obj-$(CONFIG_TEST_IDA) +=3D test_ida.o
-> >  obj-$(CONFIG_KASAN_KUNIT_TEST) +=3D test_kasan.o
-> >  CFLAGS_test_kasan.o +=3D -fno-builtin
-> > diff --git a/lib/test_hash.c b/lib/test_hash.c
-> > index db9dd18b4e8b..9cb8b1d2ab06 100644
-> > --- a/lib/test_hash.c
-> > +++ b/lib/test_hash.c
-> > @@ -14,14 +14,12 @@
-> >   * and hash_64().
-> >   */
-> >
-> > -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt "\n"
-> > -
-> >  #include <linux/compiler.h>
-> >  #include <linux/types.h>
-> >  #include <linux/module.h>
-> >  #include <linux/hash.h>
-> >  #include <linux/stringhash.h>
-> > -#include <linux/printk.h>
-> > +#include <kunit/test.h>
-> >
-> >  /* 32-bit XORSHIFT generator.  Seed must not be zero. */
-> >  static u32 __init __attribute_const__
-> > @@ -66,40 +64,32 @@ struct test_hash_params {
-> >  };
-> >
-> >  #ifdef HAVE_ARCH__HASH_32
-> > -static bool __init
-> > -test_int__hash_32(struct test_hash_params *params)
-> > +static void __init
->
-> Let's get rid of the __init bits here: it's possible KUnit tests will
-> execute after kernel and/or module initialisation.
+> So the above saw a SIG_TRAP|SIGSYS rather than a killing SIGSYS. i.e.
+> instead of WIFSIGNALED(stauts) being true, it instead catches a
+> PTRACE_EVENT_STOP for SIGSYS, which should be impossible (the process
+> should be getting killed).
 
-That makes sense! I thought those were necessary for some reason, my bad.
+Oh.  This is being ptraced as part of the test?
 
->
-> > +test_int__hash_32(struct kunit *test, struct test_hash_params *params)
-> >  {
-> >         params->hash_or[1][0] |=3D params->h2 =3D __hash_32_generic(par=
-ams->h0);
-> >  #if HAVE_ARCH__HASH_32 =3D=3D 1
-> > -       if (params->h1 !=3D params->h2) {
-> > -               pr_err("__hash_32(%#x) =3D %#x !=3D __hash_32_generic()=
- =3D %#x",
-> > -                      params->h0, params->h1, params->h2);
-> > -               return false;
-> > -       }
-> > +       KUNIT_EXPECT_EQ_MSG(test, params->h1, params->h2,
-> > +                           "__hash_32(%#x) =3D %#x !=3D __hash_32_gene=
-ric() =3D %#x",
-> > +                           params->h0, params->h1, params->h2);
-> >  #endif
-> > -       return true;
-> >  }
-> >  #endif
-> >
-> >  #ifdef HAVE_ARCH_HASH_64
-> > -static bool __init
-> > -test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k=
-)
-> > +static void __init
->
-> Ditto for all other functions in this file: remove the __init.
->
-> > +test_int_hash_64(struct kunit *test, struct test_hash_params *params, =
-u32 const *m, int *k)
-> >  {
-> >         params->h2 =3D hash_64_generic(*params->h64, *k);
-> >  #if HAVE_ARCH_HASH_64 =3D=3D 1
-> > -       if (params->h1 !=3D params->h2) {
-> > -               pr_err("hash_64(%#llx, %d) =3D %#x !=3D hash_64_generic=
-() =3D %#x",
-> > -                      *params->h64, *k, params->h1, params->h2);
-> > -               return false;
-> > -       }
-> > +       KUNIT_EXPECT_EQ_MSG(test, params->h1, params->h2,
-> > +                           "hash_64(%#llx, %d) =3D %#x !=3D hash_64_ge=
-neric() =3D %#x",
-> > +                           *params->h64, *k, params->h1, params->h2);
-> >  #else
-> > -       if (params->h2 > *m) {
-> > -               pr_err("hash_64_generic(%#llx, %d) =3D %#x > %#x",
-> > -                      *params->h64, *k, params->h1, *m);
-> > -               return false;
-> > -       }
-> > +       KUNIT_EXPECT_LE_MSG(test, params->h1, params->h2,
-> > +                           "hash_64_generic(%#llx, %d) =3D %#x > %#x",
-> > +                           *params->h64, *k, params->h1, *m);
-> >  #endif
-> > -       return true;
-> >  }
-> >  #endif
-> >
-> > @@ -112,8 +102,8 @@ test_int_hash_64(struct test_hash_params *params, u=
-32 const *m, int *k)
-> >   * inline, the code being tested is actually in the module, and you ca=
-n
-> >   * recompile and re-test the module without rebooting.
-> >   */
-> > -static bool __init
-> > -test_int_hash(unsigned long long h64, u32 hash_or[2][33])
-> > +static void __init
-> > +test_int_hash(struct kunit *test, unsigned long long h64, u32 hash_or[=
-2][33])
-> >  {
-> >         int k;
-> >         struct test_hash_params params =3D { &h64, (u32)h64, 0, 0, hash=
-_or };
-> > @@ -121,8 +111,7 @@ test_int_hash(unsigned long long h64, u32 hash_or[2=
-][33])
-> >         /* Test __hash32 */
-> >         hash_or[0][0] |=3D params.h1 =3D __hash_32(params.h0);
-> >  #ifdef HAVE_ARCH__HASH_32
-> > -       if (!test_int__hash_32(&params))
-> > -               return false;
-> > +       test_int__hash_32(test, &params);
-> >  #endif
-> >
-> >         /* Test k =3D 1..32 bits */
-> > @@ -131,29 +120,24 @@ test_int_hash(unsigned long long h64, u32 hash_or=
-[2][33])
-> >
-> >                 /* Test hash_32 */
-> >                 hash_or[0][k] |=3D params.h1 =3D hash_32(params.h0, k);
-> > -               if (params.h1 > m) {
-> > -                       pr_err("hash_32(%#x, %d) =3D %#x > %#x", params=
-.h0, k, params.h1, m);
-> > -                       return false;
-> > -               }
-> > +               KUNIT_EXPECT_LE_MSG(test, params.h1, m,
-> > +                                   "hash_32(%#x, %d) =3D %#x > %#x",
-> > +                                   params.h0, k, params.h1, m);
-> >
-> >                 /* Test hash_64 */
-> >                 hash_or[1][k] |=3D params.h1 =3D hash_64(h64, k);
-> > -               if (params.h1 > m) {
-> > -                       pr_err("hash_64(%#llx, %d) =3D %#x > %#x", h64,=
- k, params.h1, m);
-> > -                       return false;
-> > -               }
-> > +               KUNIT_EXPECT_LE_MSG(test, params.h1, m,
-> > +                                   "hash_64(%#llx, %d) =3D %#x > %#x",
-> > +                                   h64, k, params.h1, m);
-> >  #ifdef HAVE_ARCH_HASH_64
-> > -               if (!test_int_hash_64(&params, &m, &k))
-> > -                       return false;
-> > +               test_int_hash_64(test, &params, &m, &k);
-> >  #endif
-> >         }
-> > -
-> > -       return true;
-> >  }
-> >
-> >  #define SIZE 256       /* Run time is cubic in SIZE */
-> >
-> > -static int __init test_string_or(void)
-> > +static void __init test_string_or(struct kunit *test)
-> >  {
-> >         char buf[SIZE+1];
-> >         u32 string_or =3D 0;
-> > @@ -173,20 +157,15 @@ static int __init test_string_or(void)
-> >         } /* j */
-> >
-> >         /* The OR of all the hash values should cover all the bits */
-> > -       if (~string_or) {
-> > -               pr_err("OR of all string hash results =3D %#x !=3D %#x"=
-,
-> > -                      string_or, -1u);
-> > -               return -EINVAL;
-> > -       }
-> > -
-> > -       return 0;
-> > +       KUNIT_EXPECT_FALSE_MSG(test, ~string_or,
-> > +                              "OR of all string hash results =3D %#x !=
-=3D %#x",
-> > +                              string_or, -1u);
->
-> It might be worth using KUNIT_EXPECT_EQ_MSG() instead of
-> EXPECT_FALSE(), as the real goal of this is to check if all bits are
-> set.
->
-> This'd look something like:
-> KUNIT_EXPECT_EQ_MSG(test, string_or, -1u, "OR of all string hash
-> results =3D %#x !=3D %#x", string_or, -1u);
+Yes.  The signal started being delivered.  As far as that goes that
+sounds correct.
 
-That makes a lot of sense to me. Thanks for the suggestion :)
+Ptrace is allowed to intercept even fatal signals.  Everything except
+SIGKILL.
 
->
-> If instead we checked if string_or =3D=3D -1u, I think it'd be clearer an=
-d
-> match the message better. (In fact, I think you could get away with
-> removing the message and using the non-_MSG variants if you really
-> wanted, though the extra text describing it as the OR of all string
-> results is better.)
+Is this a condition we don't want even ptrace to be able to catch?
 
-I like the text as well, as these tests are not really well separated I thi=
-nk
-it makes sense keeping them.
+I think we can arrange it so that even ptrace can't intercept this
+signal.  I need to sit this problem on the back burner for a few
+minutes.  It is an angle I had not considered.
 
->
-> >  }
-> >
-> > -static int __init test_hash_or(void)
-> > +static void __init test_hash_or(struct kunit *test)
-> >  {
-> >         char buf[SIZE+1];
-> >         u32 hash_or[2][33] =3D { { 0, } };
-> > -       unsigned tests =3D 0;
-> >         unsigned long long h64 =3D 0;
-> >         int i, j;
-> >
-> > @@ -201,39 +180,27 @@ static int __init test_hash_or(void)
-> >                         u32 h0 =3D full_name_hash(buf+i, buf+i, j-i);
-> >
-> >                         /* Check that hashlen_string gets the length ri=
-ght */
-> > -                       if (hashlen_len(hashlen) !=3D j-i) {
-> > -                               pr_err("hashlen_string(%d..%d) returned=
- length"
-> > -                                       " %u, expected %d",
-> > -                                       i, j, hashlen_len(hashlen), j-i=
-);
-> > -                               return -EINVAL;
-> > -                       }
-> > +                       KUNIT_EXPECT_EQ_MSG(test, hashlen_len(hashlen),=
- j-i,
-> > +                                           "hashlen_string(%d..%d) ret=
-urned length %u, expected %d",
-> > +                                           i, j, hashlen_len(hashlen),=
- j-i);
-> >                         /* Check that the hashes match */
-> > -                       if (hashlen_hash(hashlen) !=3D h0) {
-> > -                               pr_err("hashlen_string(%d..%d) =3D %08x=
- !=3D "
-> > -                                       "full_name_hash() =3D %08x",
-> > -                                       i, j, hashlen_hash(hashlen), h0=
-);
-> > -                               return -EINVAL;
-> > -                       }
-> > +                       KUNIT_EXPECT_EQ_MSG(test, hashlen_hash(hashlen)=
-, h0,
-> > +                                           "hashlen_string(%d..%d) =3D=
- %08x !=3D full_name_hash() =3D %08x",
-> > +                                           i, j, hashlen_hash(hashlen)=
-, h0);
-> >
-> >                         h64 =3D h64 << 32 | h0;   /* For use with hash_=
-64 */
-> > -                       if (!test_int_hash(h64, hash_or))
-> > -                               return -EINVAL;
-> > -                       tests++;
-> > +                       test_int_hash(test, h64, hash_or);
-> >                 } /* i */
-> >         } /* j */
-> >
-> > -       if (~hash_or[0][0]) {
-> > -               pr_err("OR of all __hash_32 results =3D %#x !=3D %#x",
-> > -                       hash_or[0][0], -1u);
-> > -               return -EINVAL;
-> > -       }
-> > +       KUNIT_EXPECT_FALSE_MSG(test, ~hash_or[0][0],
->
-> As above, maybe KUNIT_EXPECT_EQ_MSG() instead. (And ditto for all
-> similar checks against ~hash_or[...])?
->
->
-> > +                              "OR of all __hash_32 results =3D %#x !=
-=3D %#x",
-> > +                              hash_or[0][0], -1u);
-> >  #ifdef HAVE_ARCH__HASH_32
-> >  #if HAVE_ARCH__HASH_32 !=3D 1    /* Test is pointless if results match=
- */
-> > -       if (~hash_or[1][0]) {
-> > -               pr_err("OR of all __hash_32_generic results =3D %#x !=
-=3D %#x",
-> > -                       hash_or[1][0], -1u);
-> > -               return -EINVAL;
-> > -       }
-> > +       KUNIT_EXPECT_FALSE_MSG(test, ~hash_or[1][0],
-> > +                              "OR of all __hash_32_generic results =3D=
- %#x !=3D %#x",
-> > +                              hash_or[1][0], -1u);
-> >  #endif
-> >  #endif
-> >
-> > @@ -241,65 +208,27 @@ static int __init test_hash_or(void)
-> >         for (i =3D 1; i <=3D 32; i++) {
-> >                 u32 const m =3D ((u32)2 << (i-1)) - 1;    /* Low i bits=
- set */
-> >
-> > -               if (hash_or[0][i] !=3D m) {
-> > -                       pr_err("OR of all hash_32(%d) results =3D %#x "
-> > -                               "(%#x expected)", i, hash_or[0][i], m);
-> > -                       return -EINVAL;
-> > -               }
-> > -               if (hash_or[1][i] !=3D m) {
-> > -                       pr_err("OR of all hash_64(%d) results =3D %#x "
-> > -                               "(%#x expected)", i, hash_or[1][i], m);
-> > -                       return -EINVAL;
-> > -               }
-> > +               KUNIT_EXPECT_EQ_MSG(test, hash_or[0][i], m,
-> > +                                   "OR of all hash_32(%d) results =3D =
-%#x (%#x expected)",
-> > +                                   i, hash_or[0][i], m);
-> > +               KUNIT_EXPECT_EQ_MSG(test, hash_or[1][i], m,
-> > +                                   "OR of all hash_64(%d) results =3D =
-%#x (%#x expected)",
-> > +                                   i, hash_or[1][i], m);
-> >         }
-> > -
-> > -       pr_notice("%u tests passed.", tests);
-> > -
-> > -       return 0;
-> > -}
-> > -
-> > -static void __init notice_skipped_tests(void)
-> > -{
-> > -       /* Issue notices about skipped tests. */
-> > -#ifdef HAVE_ARCH__HASH_32
-> > -#if HAVE_ARCH__HASH_32 !=3D 1
-> > -       pr_info("__hash_32() is arch-specific; not compared to generic.=
-");
-> > -#endif
-> > -#else
-> > -       pr_info("__hash_32() has no arch implementation to test.");
-> > -#endif
-> > -#ifdef HAVE_ARCH_HASH_64
-> > -#if HAVE_ARCH_HASH_64 !=3D 1
-> > -       pr_info("hash_64() is arch-specific; not compared to generic.")=
-;
-> > -#endif
-> > -#else
-> > -       pr_info("hash_64() has no arch implementation to test.");
-> > -#endif
-> >  }
-> >
-> > -static int __init
-> > -test_hash_init(void)
-> > -{
-> > -       int ret;
-> > -
-> > -       ret =3D test_string_or();
-> > -       if (ret < 0)
-> > -               return ret;
-> > -
-> > -       ret =3D test_hash_or();
-> > -       if (ret < 0)
-> > -               return ret;
-> > -
-> > -       notice_skipped_tests();
-> > +static struct kunit_case hash_test_cases[] __refdata =3D {
-> > +       KUNIT_CASE(test_string_or),
-> > +       KUNIT_CASE(test_hash_or),
-> > +       {}
-> > +};
-> >
-> > -       return ret;
-> > -}
-> > +static struct kunit_suite hash_test_suite =3D {
-> > +       .name =3D "hash",
-> > +       .test_cases =3D hash_test_cases,
-> > +};
-> >
-> > -static void __exit test_hash_exit(void)
-> > -{
-> > -}
-> >
-> > -module_init(test_hash_init);   /* Does everything */
-> > -module_exit(test_hash_exit);   /* Does nothing */
-> > +kunit_test_suite(hash_test_suite);
-> >
-> >  MODULE_LICENSE("GPL");
-> > --
-> > 2.33.0
-> >
+Is it a problem that the debugger can see the signal if the process does
+not?
 
-Again, thanks for your review!
-
-Cheers,
---
-Isabella Basso
+Eric
