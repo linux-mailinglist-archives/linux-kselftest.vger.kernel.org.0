@@ -2,32 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DE944019B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 19:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4074401AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 20:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbhJ2SBf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Oct 2021 14:01:35 -0400
-Received: from mga01.intel.com ([192.55.52.88]:50849 "EHLO mga01.intel.com"
+        id S230216AbhJ2SJZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Oct 2021 14:09:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:29591 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhJ2SBf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 14:01:35 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10152"; a="254304157"
+        id S229826AbhJ2SJY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 29 Oct 2021 14:09:24 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10152"; a="217632528"
 X-IronPort-AV: E=Sophos;i="5.87,193,1631602800"; 
-   d="scan'208";a="254304157"
+   d="scan'208";a="217632528"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 10:59:06 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 11:06:55 -0700
 X-IronPort-AV: E=Sophos;i="5.87,193,1631602800"; 
-   d="scan'208";a="665914280"
+   d="scan'208";a="665916788"
 Received: from jongchoi-mobl.amr.corp.intel.com (HELO [10.212.201.61]) ([10.212.201.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 10:59:05 -0700
-Subject: Re: [PATCH V2 02/15] x86/sgx: Rename fallback labels in sgx_init()
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 11:06:54 -0700
+Subject: Re: [PATCH V2 03/15] x86/sgx: Add an attribute for the amount of SGX
+ memory in a NUMA node
 To:     Reinette Chatre <reinette.chatre@intel.com>, jarkko@kernel.org,
         linux-sgx@vger.kernel.org, shuah@kernel.org,
         dave.hansen@linux.intel.com
 Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <cover.1635447301.git.reinette.chatre@intel.com>
- <120d55cfe68883872cd13977fc8accfa6ef98ce2.1635447301.git.reinette.chatre@intel.com>
+ <6df03c54cc8b533de4389b663ec9e4803ced1beb.1635447301.git.reinette.chatre@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -72,12 +73,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <60e84dc2-0456-5db6-dd5c-250865fc061f@intel.com>
-Date:   Fri, 29 Oct 2021 10:59:03 -0700
+Message-ID: <eb41bbbe-8563-7b6d-3883-61ab43b0b10f@intel.com>
+Date:   Fri, 29 Oct 2021 11:06:52 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <120d55cfe68883872cd13977fc8accfa6ef98ce2.1635447301.git.reinette.chatre@intel.com>
+In-Reply-To: <6df03c54cc8b533de4389b663ec9e4803ced1beb.1635447301.git.reinette.chatre@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -86,34 +87,25 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 10/28/21 1:37 PM, Reinette Chatre wrote:
-> -err_provision:
-> +err_driver:
->  	misc_deregister(&sgx_dev_provision);
->  
-> -err_kthread:
-> +err_provision:
->  	kthread_stop(ksgxd_tsk);
->  
-> -err_page_cache:
-> +err_reclaimer:
->  	for (i = 0; i < sgx_nr_epc_sections; i++) {
->  		vfree(sgx_epc_sections[i].pages);
->  		memunmap(sgx_epc_sections[i].virt_addr);
+> The amount of SGX memory on the system is determined by the BIOS and it
+> varies wildly between systems.  It can be from dozens of MB's on desktops
+> or VM's, up to many GB's on servers.  Just like for regular memory, it is
+> sometimes useful to know the amount of usable SGX memory in the system.
+> 
+> Add an attribute for the amount of SGX memory in bytes to each NUMA
+> node. The path is /sys/devices/system/node/node[0-9]*/sgx/size.
+> Calculate these values by summing up EPC section sizes for each node
+> during the driver initalization.
 
-This isn't the normal pattern we use in the kernel.
+For now, can we just make the selftests read the SGX CPUID section
+leaves?  It's not as precise as knowing how much the kernel actually
+decided to use, but it's good enough for a selftest.  It also means we
+can merge something without having to worry about long-term ABI.
 
-Usually, we say what is being *DONE* at the label, almost like we are
-calling a function.  Here's a random example from one of the most
-prolific users of gotos in arch/x86:
+This is also why I once suggested that we first make the selftests
+depend on some debugfs file that would be short-lived.  But, if we use
+CPUID, we don't even need to mess with debugfs.
 
-        ret = kernfs_get_tree(fc);
-        if (ret < 0)
-                goto out_psl;
-...
-out_psl:
-        rdt_pseudo_lock_release();
+You can even just steal the code from sgx_page_cache_init() to do it.
 
-See?  The "psl" is doing a "pseudo lock release".
-
-I don't particularly like the labels as-is, but this patch makes them
-less clear, IMNHO.  Let's just drop this patch for now, please.
+Would that work, or am I missing something?
