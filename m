@@ -2,34 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132854400FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 19:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DE944019B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 19:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbhJ2RNg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Oct 2021 13:13:36 -0400
-Received: from mga03.intel.com ([134.134.136.65]:42240 "EHLO mga03.intel.com"
+        id S230126AbhJ2SBf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Oct 2021 14:01:35 -0400
+Received: from mga01.intel.com ([192.55.52.88]:50849 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229782AbhJ2RNg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 13:13:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10152"; a="230660096"
+        id S229489AbhJ2SBf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 29 Oct 2021 14:01:35 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10152"; a="254304157"
 X-IronPort-AV: E=Sophos;i="5.87,193,1631602800"; 
-   d="scan'208";a="230660096"
+   d="scan'208";a="254304157"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 10:11:07 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 10:59:06 -0700
 X-IronPort-AV: E=Sophos;i="5.87,193,1631602800"; 
-   d="scan'208";a="665899220"
+   d="scan'208";a="665914280"
 Received: from jongchoi-mobl.amr.corp.intel.com (HELO [10.212.201.61]) ([10.212.201.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 10:11:06 -0700
-Subject: Re: [PATCH V2 01/15] selftests/x86/sgx: Fix a benign linker warning
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2021 10:59:05 -0700
+Subject: Re: [PATCH V2 02/15] x86/sgx: Rename fallback labels in sgx_init()
 To:     Reinette Chatre <reinette.chatre@intel.com>, jarkko@kernel.org,
         linux-sgx@vger.kernel.org, shuah@kernel.org,
         dave.hansen@linux.intel.com
 Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <cover.1635447301.git.reinette.chatre@intel.com>
- <545aac243037bf5c2640929c4d8ff5c1edfe3ef8.1635447301.git.reinette.chatre@intel.com>
- <d382d0b0-15fb-5e96-accd-c3b59be72dd3@intel.com>
- <fc40dbf4-2b09-fc06-dcf6-3232ec037635@intel.com>
+ <120d55cfe68883872cd13977fc8accfa6ef98ce2.1635447301.git.reinette.chatre@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -74,12 +72,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <fae97935-9642-5aad-b786-b068dbc0cff9@intel.com>
-Date:   Fri, 29 Oct 2021 10:11:06 -0700
+Message-ID: <60e84dc2-0456-5db6-dd5c-250865fc061f@intel.com>
+Date:   Fri, 29 Oct 2021 10:59:03 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <fc40dbf4-2b09-fc06-dcf6-3232ec037635@intel.com>
+In-Reply-To: <120d55cfe68883872cd13977fc8accfa6ef98ce2.1635447301.git.reinette.chatre@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -87,43 +85,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/29/21 10:09 AM, Reinette Chatre wrote:
-> On 10/28/2021 5:26 PM, Dave Hansen wrote:
->> On 10/28/21 1:37 PM, Reinette Chatre wrote:
->>> From: Sean Christopherson <sean.j.christopherson@intel.com>
->>>
->>> Pass a build id of "none" to the linker to suppress a warning about the
->>> build id being ignored:
->>>
->>>    /usr/bin/ld: warning: .note.gnu.build-id section discarded,
->>> --build-id
->>>    ignored.
->>
->> Do we have a good grasp on why this is producing a warning in the first
->> place?  This seems like something that could get merged quickly with one
->> more sentence in the changelog.
->>
-> 
-> How about a new changelog as below:
-> 
-> The enclave binary (test_encl.elf) is built with only three sections
-> (tcs, text, and data) as controlled by its custom linker script.
-> 
-> If gcc is built with "--enable-linker-build-id" (this appears to be a
-> common configuration even if it is by default off) then gcc will pass
-> "--build-id" to the linker that will prompt it (the linker) to to write
-> unique bits identifying the linked file to a ".note.gnu.build-id" section.
-> 
-> The section ".note.gnu.build-id" does not exist in the test enclave
-> resulting in the following warning emitted by the linker:
-> 
-> /usr/bin/ld: warning: .note.gnu.build-id section discarded, --build-id
-> ignored
-> 
-> The test enclave does not use the build id within the binary so fix the
-> warning by passing a build id of "none" to the linker that will disable
-> the setting from any earlier "--build-id" options and thus disable the
-> attempt to write the build id to a ".note.gnu.build-id" section that
-> does not exist.
+On 10/28/21 1:37 PM, Reinette Chatre wrote:
+> -err_provision:
+> +err_driver:
+>  	misc_deregister(&sgx_dev_provision);
+>  
+> -err_kthread:
+> +err_provision:
+>  	kthread_stop(ksgxd_tsk);
+>  
+> -err_page_cache:
+> +err_reclaimer:
+>  	for (i = 0; i < sgx_nr_epc_sections; i++) {
+>  		vfree(sgx_epc_sections[i].pages);
+>  		memunmap(sgx_epc_sections[i].virt_addr);
 
-Looks great, thanks for putting that together!
+This isn't the normal pattern we use in the kernel.
+
+Usually, we say what is being *DONE* at the label, almost like we are
+calling a function.  Here's a random example from one of the most
+prolific users of gotos in arch/x86:
+
+        ret = kernfs_get_tree(fc);
+        if (ret < 0)
+                goto out_psl;
+...
+out_psl:
+        rdt_pseudo_lock_release();
+
+See?  The "psl" is doing a "pseudo lock release".
+
+I don't particularly like the labels as-is, but this patch makes them
+less clear, IMNHO.  Let's just drop this patch for now, please.
