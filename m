@@ -2,95 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372794401D0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 20:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740DE4401EE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 20:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbhJ2S1D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Oct 2021 14:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S230119AbhJ2SgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Oct 2021 14:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhJ2S1D (ORCPT
+        with ESMTP id S229873AbhJ2SgN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 14:27:03 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D28C061570;
-        Fri, 29 Oct 2021 11:24:34 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id o4so14552506oia.10;
-        Fri, 29 Oct 2021 11:24:34 -0700 (PDT)
+        Fri, 29 Oct 2021 14:36:13 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E70C061570
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 11:33:44 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id t7-20020a258387000000b005b6d7220c79so14988186ybk.16
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 11:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+Vc4iJace+i/FzL42dVlqrN2RKNqU6Za2ltRFYR17IY=;
-        b=dMO8w24jhk5d3vwbunyndZlMWm+nEqhkLEGDFP+B7Bd6CXNmenllkminC8agQXi9wB
-         xneTYClQnl8Yavp3tEkACuhhUvg84MbRCce2FboJNjgNdKhHa7WPih0pvPf7Y2czVywQ
-         UGzI07ZilOoneKg+DdQVTHCo+bV6nZY9n8IlgdkknGmIFDaZ8T7wPBqdo7751XOKpHtw
-         7xxPTlVkmfBFfdIVNM/tEzveFUpy0+jYr5fxBL9/G+jEoyZqMSSVAx5FTd7coNcLv46p
-         MR5lC0nFZ8jgB50C1DUhH+DQLav5EWJp3WepEhKyQ0rqm9IXS1yxdu/cYzGcWZdpD8Cm
-         RgVw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=f+Wd/uHd0tDpDpKgB2RrjDhKxBzjj44L//DvLwqhZG8=;
+        b=eW/VrmX89o7qeFzNZregrH+8+eMzUZ0U8SJjNBa/0yKup6Ythv07w0FyKOgbVEfzWR
+         JKtA6GrvkcPF3LMwNqVrtxvqOH5obrjYIAtNBYq3as/uUWdSMxmw13aN2LLPX+JiCIvT
+         A1iAXxdIEydpaN/K5mWYeXe2rR78QtgXAu2O1Pb5Vk+XSuQRSD/gsj2w2T7q0z/SsjB+
+         eCbT1NKFDAIaixWMxSA0MSDoPOG0THPByA/MKXQd05lQw4JE0I6es4XsANLf2L1QLtgf
+         dk91Rpczm8eP4X9N+Kt+EEUliNLNfxMgxXWpXAWzHJ82FuxhFPTQgrqhhzOqSpii+PE0
+         CMeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+Vc4iJace+i/FzL42dVlqrN2RKNqU6Za2ltRFYR17IY=;
-        b=W0aJ54Ch/TZObO7f+Lc3sL8/4g8I9wQ+Q5N4kOgkpj8/465wSz2l5ywElz78UdEjiV
-         d8J9bCYz1gdoRZqqzQQtseuKmxkDA8MItuxqi2EIoosDGakn7qZ2ep/s5SxXCkyyyoec
-         M3jtJFE/Nmk8JQqahCmnVkLBq16Png6TR2y1EfHV4Aa9yHBvvFt7f3mpnTdm5dG7qcPq
-         Ug+d51NMkSeBeQRU/eh+p5VMMpfix+aVYpMy07/zcyAoiTK2GTwMyeKoR4KmuHYMB/gF
-         +j0v1tzx/MnJfxqzdhWNEOMyqQthWOVWoRIeEa9zQdK6/m4PL7KUwE20f5ELyowcL+ES
-         HNfg==
-X-Gm-Message-State: AOAM530XjsRNFukVAPNYdV4nDdeOpN1uZu4fnCSyRt+gxmGl09xkXPpi
-        8bFQo/Ph4wa0kS2Z1RpTvb4=
-X-Google-Smtp-Source: ABdhPJzPuTygDsR+C2LhLewXnY2VnJ9eyAyQsmjF1zExA0KrCUoybSlxoS1bf9hxHOPtqEgV/3gpbQ==
-X-Received: by 2002:a05:6808:1a27:: with SMTP id bk39mr15235698oib.89.1635531874155;
-        Fri, 29 Oct 2021 11:24:34 -0700 (PDT)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id k4sm2034058oic.48.2021.10.29.11.24.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Oct 2021 11:24:33 -0700 (PDT)
-Message-ID: <9ec9011a-d240-e00a-38e2-51f8e2661a3d@gmail.com>
-Date:   Fri, 29 Oct 2021 12:24:32 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH net 2/2] selftests: udp: test for passing SO_MARK as cmsg
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        willemb@google.com
-Cc:     netdev@vger.kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20211029155135.468098-1-kuba@kernel.org>
- <20211029155135.468098-3-kuba@kernel.org>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20211029155135.468098-3-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=f+Wd/uHd0tDpDpKgB2RrjDhKxBzjj44L//DvLwqhZG8=;
+        b=qadmtEvXN2EJxUqjzbXvQzoHXv9B3mgzW6wrJF/94azLkgz1RR5bHyPWwlk6F1wTCy
+         1lZIvBiM0c2ltS9guJGHq2x5h4V015bag803riKzfTXIUuZ14pjUGjsVfTuaRDSDMwx3
+         kYOAOBgRCUQagzqChPPc9laS7mpmQ0WvseiK3OFIJz794Xg3J/66yVrVCm/6QZtggf03
+         t0nOl/kHjrNECYnd4XlEtN29vOqPrzFSlpBDplBJCtlkWv5NFI6W92CdTI2H0nJvjKV1
+         JiYjudBbg0O3hTbUPvSeg53G03WC0G1N/WHA3IepWaAz9m/tfy7+Ptih2R5eCiCVccdz
+         /ySQ==
+X-Gm-Message-State: AOAM532FApE3VRpXJf/HKoK3WAs4+wXI7P6nHtbx2dkMx7SVDtKZA6Xw
+        GRgP421TdjCkfz9A8lsak8r7+u8ASoqMPw7y+g==
+X-Google-Smtp-Source: ABdhPJy64tC7zgiLqGj9iAraiidsd9r20wqA5lUgPEIJEMAaZCArad3YsKwTU4oftDOVUW6lVN0tBZCa67yUYkwoWA==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:b03:1d88:1cf2:4973])
+ (user=kaleshsingh job=sendgmr) by 2002:a25:2c4d:: with SMTP id
+ s74mr12650592ybs.171.1635532424022; Fri, 29 Oct 2021 11:33:44 -0700 (PDT)
+Date:   Fri, 29 Oct 2021 11:33:26 -0700
+Message-Id: <20211029183339.3216491-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
+Subject: [PATCH 0/4] tracing/histogram: Division optimization and expression kselftests
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/29/21 9:51 AM, Jakub Kicinski wrote:
-> Before fix:
-> |  Case IPv6 rejection returned 0, expected 1
-> |FAIL - 1/4 cases failed
-> 
-> With the fix:
-> | OK
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> --
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/net/.gitignore      |  1 +
->  tools/testing/selftests/net/Makefile        |  2 +
->  tools/testing/selftests/net/cmsg_so_mark.c  | 67 +++++++++++++++++++++
->  tools/testing/selftests/net/cmsg_so_mark.sh | 61 +++++++++++++++++++
->  4 files changed, 131 insertions(+)
->  create mode 100644 tools/testing/selftests/net/cmsg_so_mark.c
->  create mode 100755 tools/testing/selftests/net/cmsg_so_mark.sh
->
-Reviewed-by: David Ahern <dsahern@kernel.org>
+This series adds optimiztion for division by constants and updates the
+histogram trigger expression kselftests and documentation.
+
+It is dependent on the series at [1] and the fix at [2]; and can be applied
+on top of those after dropping the patch 7 in [1].
+
+[1] https://lore.kernel.org/r/20211025200852.3002369-1-kaleshsingh@google.com/
+[2] https://lore.kernel.org/r/20211028170548.2597449-1-kaleshsingh@google.com/
+
+Kalesh Singh (4):
+  tracing/histogram: Optimize division by constants (v2)
+  tracing/histogram: Update division by 0 documentation (v1)
+  tracing/histogram: Document hist trigger variables (v3)
+  tracing/selftests: Add tests for hist trigger expression parsing (v7)
+
+ Documentation/trace/histogram.rst             |   3 +-
+ kernel/trace/trace.c                          |  11 ++
+ kernel/trace/trace_events_hist.c              | 117 +++++++++++++++++-
+ .../trigger/trigger-hist-expressions.tc       |  63 ++++++++++
+ 4 files changed, 192 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+
+-- 
+2.33.1.1089.g2158813163f-goog
 
