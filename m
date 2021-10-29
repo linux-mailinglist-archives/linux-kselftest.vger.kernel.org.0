@@ -2,70 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3185743FC2B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 14:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A907043FD26
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 15:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbhJ2MWh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Oct 2021 08:22:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41438 "EHLO mail.kernel.org"
+        id S231537AbhJ2NNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Oct 2021 09:13:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37190 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231561AbhJ2MWg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 08:22:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1FB1861166;
-        Fri, 29 Oct 2021 12:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635510008;
-        bh=+/MiXho13ttFALyUwOJ84SeSmvDVcnhe50qbDQfLPnk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Yrv4KCFIY0IOhmb4TlUnHFD7MLXU6hGAaFloJ20tQDLNpc7EElB/2NOhFqMw2uISG
-         fX6imeyLnBUOjrSANTbDZV8R00Ri1XZg1CFa1U+yCxB98mlekWMu7lqRml2Yo17ykh
-         lroIvw8GLLpvN7Mu8YamvA7CYFNpSxUOZNYf090E9go5+89UWGPFLw1K/iPfKT1e2i
-         9hYDpVEfAphBDAWjrAngNxvKvI2P7rkgNLs6aI4zaO75zxzcVP8ZHnYFArM5vrFnG7
-         cMJcVBSDGejh9DzSCe25wArBNhji1gc0BQTBJJlD/cah24MwDpqOqHwyymFak1Z6mQ
-         dkae/eaOeJ96Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 101D960A1B;
-        Fri, 29 Oct 2021 12:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231504AbhJ2NNY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 29 Oct 2021 09:13:24 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5B9D60FC4;
+        Fri, 29 Oct 2021 13:10:54 +0000 (UTC)
+Date:   Fri, 29 Oct 2021 09:10:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Kalesh Singh <kaleshsingh@google.com>, lkp@lists.01.org,
+        lkp@intel.com, surenb@google.com, hridya@google.com,
+        namhyung@kernel.org, kernel-team@android.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [tracing/selftests]  cfece71411:
+ kernel-selftests.ftrace.event_trigger_-_test_inter-event_histogram_trigger_onchange_action.fail
+Message-ID: <20211029091053.18cc2c25@gandalf.local.home>
+In-Reply-To: <20211029210056.6cd7796aea59cec3e9c1d7da@kernel.org>
+References: <20211025200852.3002369-8-kaleshsingh@google.com>
+        <20211029064818.GG737@xsang-OptiPlex-9020>
+        <20211029210056.6cd7796aea59cec3e9c1d7da@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/net: update .gitignore with newly added tests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163551000806.18872.10622502595024109424.git-patchwork-notify@kernel.org>
-Date:   Fri, 29 Oct 2021 12:20:08 +0000
-References: <20211027202846.26877-1-skhan@linuxfoundation.org>
-In-Reply-To: <20211027202846.26877-1-skhan@linuxfoundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Fri, 29 Oct 2021 21:00:56 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 27 Oct 2021 14:28:46 -0600 you wrote:
-> Update .gitignore with newly added tests:
-> 	tools/testing/selftests/net/af_unix/test_unix_oob
-> 	tools/testing/selftests/net/gro
-> 	tools/testing/selftests/net/ioam6_parser
-> 	tools/testing/selftests/net/toeplitz
+> > # # of passed:  85
+> > # # of failed:  26
+> > # # of unresolved:  1
+> > # # of untested:  0
+> > # # of unsupported:  0
+> > # # of xfailed:  1
+> > # # of undefined(test bug):  0
+> > not ok 1 selftests: ftrace: ftracetest # exit=1  
 > 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> [...]
+> Also, please configure your running environment correctly so that all
+> ftracetest passes. If you unsure how to do, please ask me.
 
-Here is the summary with links:
-  - selftests/net: update .gitignore with newly added tests
-    https://git.kernel.org/netdev/net/c/e300a85db1f1
+Although I think it's good to test with different configurations, where not
+all tests pass. Because then there's times when a test will fail when it
+should have been ignored, and that will let us know that there's a bug in
+the test.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Or, different configurations might make a test fail that should have
+passed, where a missing dependency was made.
 
+I had someone report a bug that I never caught because it only happened
+when something was configured off, and because I tested with everything on,
+I never hit that bug.
 
+-- Steve
