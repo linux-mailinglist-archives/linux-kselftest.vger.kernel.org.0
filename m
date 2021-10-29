@@ -2,166 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA5B440203
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 20:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE32440246
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 20:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbhJ2ShI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Oct 2021 14:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S230343AbhJ2Srk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Oct 2021 14:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbhJ2ShE (ORCPT
+        with ESMTP id S230044AbhJ2Sri (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 14:37:04 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47990C061203
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 11:34:35 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id r25-20020a63a019000000b002a20656994dso5550592pge.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 11:34:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=pIwkJUfmtLBNksnvSqi0P2Sms1nGm8KESnXHMvPX9Og=;
-        b=fJCpI/BWluL77Q7maCUxV2xrKIE+7MJas3Ods1U9PNA8EVVEg95yke8fKTcyY8b5H3
-         qPFp4lJHYBh4nWeGtYn5hserusYrCK1Br4zRywROqExEvOSB1g9ntzQDrKSIgOuZvLrJ
-         lm8Ddp8sI0mxV1VKh1SYYv0Ck5uYEBxH23e/iXASqfCQD1VkwFColi3LuL9hFOkxdqYb
-         htog9a+F6r88oqlvXkA8xpDdDLsYPoMCWfAPebfHfL5fNV/bGoVKbp7YFsmzaihDEHKY
-         E32M0jl5nylSJRI6SdPa7u35G0iPjLPdRwtqfUcv17P8yqXgx1hcX9tLDMC3dkD/lpBY
-         Yqsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=pIwkJUfmtLBNksnvSqi0P2Sms1nGm8KESnXHMvPX9Og=;
-        b=mGEA9up3ErvAjrMzGxcVkO1HdVQ1CSPuvt4ykNLF1U3ap/3CwoVCOLlaDL8zTYLSRc
-         CBu1orXXwQlTq/yaT+CM+iSWUxPluigvv622pXlCWkhJVMpZnPjM0CSiNOmV3c+hut0r
-         SDpCux1fskQYDxisCdWHA/DrQy2cn0uBjS10Pf0+Jp/a/Ho/ygusm6hGNSzG+g4kGYm9
-         WLEKUbQlLn4VRTmvJvnLeHpPRRhzHGs72P8xd155o92oH61rSmuzwpkjsnI7chvmauiD
-         h96xS3PWzf6yWhCaVnXSmdwF4LHXQYKsUzUmDv5/2nlW8Pf7yyJtmyYyLzZ7mPgJpXS8
-         U2/A==
-X-Gm-Message-State: AOAM531/eqrZqrsbUwBuIkhUvPOxYyYrxf+3YtJDkgYNf4a3D0s1QAmP
-        HtpsTZnk45JY55I5/pa88UMrNA3e6VB5kP8IDQ==
-X-Google-Smtp-Source: ABdhPJyz6W/gui/zwEmv5bNzGDfKp0W8dihkKOo9bnSi1OrzlXVkeu3uX3rua6U5CwSOAHKySI/G0Nydiq27fR+0dQ==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:b03:1d88:1cf2:4973])
- (user=kaleshsingh job=sendgmr) by 2002:a17:90b:4c4a:: with SMTP id
- np10mr13446930pjb.233.1635532474572; Fri, 29 Oct 2021 11:34:34 -0700 (PDT)
-Date:   Fri, 29 Oct 2021 11:33:30 -0700
-In-Reply-To: <20211029183339.3216491-1-kaleshsingh@google.com>
-Message-Id: <20211029183339.3216491-5-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20211029183339.3216491-1-kaleshsingh@google.com>
-X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH v7 4/4] tracing/selftests: Add tests for hist trigger
- expression parsing
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
-        kernel-team@android.com, rostedt@goodmis.org, mhiramat@kernel.org,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+        Fri, 29 Oct 2021 14:47:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0DCC061766;
+        Fri, 29 Oct 2021 11:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=eiqoJ/sT9tSkAQMOpJ5WDTuQjnGh8Wt2Zkw+2oSs1CA=; b=um+YvmgtYbJVDArMu18M/ab5/3
+        /HHXWIshZWdnhLpeVdILVapOVlGFL8kNlJjD3DbllVL1fIucru3dDk2A4KYvfuYX1FldHCX+G+Q9V
+        Z0Bx2XtzXJ5jJ2BTIMy371wj6EQzlfPmzUrWJ/k+YFZow6ZYh4X6uJ5rawUuAZcN93CJdBnkGji6f
+        k2jQ3HwMuUoETLKCZh2PSIqAt2SZQ46LxV3uFZpwbkJANgBuFHhM8GgMX7zDPD92PRN8mepSQwlNM
+        9i4GGeyKay/H6hFS2l+F3AuDpZDoTH8Xr1CcqNd4pHffLeQ//JN8cQrP4/NDWTHhMc3oR9f6gQV0f
+        tnKHSqjw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mgWsA-00Bq0K-16; Fri, 29 Oct 2021 18:45:02 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, jeyu@kernel.org, shuah@kernel.org
+Cc:     bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
+        rostedt@goodmis.org, minchan@kernel.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 0/6] test_sysfs: add new selftest for sysfs
+Date:   Fri, 29 Oct 2021 11:44:54 -0700
+Message-Id: <20211029184500.2821444-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests for the parsing of hist trigger expressions; and to
-validate expression evaluation.
+On this v9 I've dropped the generic sysfs deadlock fix given Ming Lei
+has provided alternative fixes for the zram driver without incurring
+a generic lock *and* we don't yet have full assessment of how wide
+spread the deadlock case might be in the kernel. A full assessment
+effort is still underway using Coccinelle with iteration support,
+however that effort will take a bit more time to complete. We can
+re-evaluate the value of a generic fix later after the assessment
+is complete.
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
----
-Changes in v7:
-  - Add error check test for divison by constant 0.
+This series now just adds the test_sysfs selftest and failure injection
+support for it on kernfs. The most valuable tests are those which
+confirm that once a kernfs active reference is obtained with
+kernfs_get_active() the pointers used there are still valid, and so
+using sysfs ops *are* safe if we race against module removal. Likewise
+it also confirms how module removal will *wait* for these ops to
+complete if a kernfs node is already active.
 
-Changes in v6:
-  - Read the expression result from the trigger file,
-    instead of creating a histogram to print the value.
+This v9 series also addresses feedback mostly provided by Kees Cook and Greg.
+I also made a few changes to the test_sysfs driver to account for changes in
+the block layer. I also improved the kernfs failure injection tests with
+documentation of how they work and to account for the real expected return
+value of a write before the kernfs active reference is obtained. Upstream
+commit 8e141f9eb803e ("block: drain file system I/O on del_gendisk") has
+revealed that small minor induced delays on del_gendisk() can make a few
+writes succeed if the delays used are small. So we clarify the logic of why
+writes could either fail or succeed before the kernfs active reference is taken.
 
-Changes in v5:
-  - Add README pattern to requires tag, per Masami
+These changes also availble on this tree:
 
-Changes in v3:
-  - Remove .sym-offset error check tests
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20211029-test-sysfs-v2
 
-Changes in v2:
-  - Add Namhyung's Reviewed-by
-  - Update comment to clarify err_pos in "Too many subexpressions" test
+v9:
+  * rebased onto linux-next tag next-20211029
+  * add Reviewed-by tags for the SPDX change, and the drivers which
+    get the tag for it
+  * drop the generic sysfs deadlock fix for now as the scope of how
+    wide spread the issue is still needs to be assessed
+  * drop the zram patches as they are replaced by Ming Lei's fixes
+  * drop already merged patches
+  * try_module_get() docs: enhanced using feedback from Kees Cook. I
+    extended the documention to make it clear that if proper care is not
+    taken the use of this routine could crash the kernel.
+  * kernfs: move failure injection knobs under /sys/kernel/debug/fail_kernfs
+    as suggested by Kees Cook
+  * kernfs: rename failure injection file to fault_inject.c as suggested
+    by Kees Cook
+  * kernfs: split up documentation of failure injection knobs as
+    suggested by Kees Cook
+  * kernfs: move the wait into debug call, and use a simple one liner
+    may_wait() calls to make the changes much less intrusive and more
+    readable  as suggested by Kees Cook 
+  * kernfs: drop __func__ uses as suggested by Kees Cook
+  * test_sysfs: use sizeof() instead of open coded 16 as suggested by
+    Kees Cook
+  * test_sysfs: use sysfs_emit as suggested by Kees Cook
+  * test_sysfs: drop boiler place license as suggested by Greg KH
+  * test_sysfs: use depends instead of select as suggested by Kees Cook
+  * test_sysfs: drop #ifdefery as suggested by Kees Cook
+  * test_sysfs: clarified that the use of a lock on rmmod which causes
+    a deadlock is something drivers should avoid, and its why we leave
+    the test disabled.
+  * test_sysfs: now that device_add_disk() returns an error, use the
+    new error return code, otherwise this is going to prevent us from
+    eventually embracing __must_check() on that call on the block layer.
+  * test_syfs: testdev_submit_bio() needed to change data types as now
+    it returns void.
+  * test_sysfs: enhance kernfs failure injection tests with documenation
+    and correct the expected return value for writes
 
+Luis Chamberlain (6):
+  LICENSES: Add the copyleft-next-0.3.1 license
+  testing: use the copyleft-next-0.3.1 SPDX tag
+  selftests: add tests_sysfs module
+  kernfs: add initial failure injection support
+  test_sysfs: add support to use kernfs failure injection
+  kernel/module: add documentation for try_module_get()
 
- .../trigger/trigger-hist-expressions.tc       | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+ .../fault-injection/fault-injection.rst       |   50 +
+ LICENSES/dual/copyleft-next-0.3.1             |  237 +++
+ MAINTAINERS                                   |    9 +-
+ fs/kernfs/Makefile                            |    1 +
+ fs/kernfs/fault_inject.c                      |   93 ++
+ fs/kernfs/file.c                              |    9 +
+ fs/kernfs/kernfs-internal.h                   |   70 +
+ include/linux/kernfs.h                        |    5 +
+ include/linux/module.h                        |   37 +-
+ lib/Kconfig.debug                             |   23 +
+ lib/Makefile                                  |    1 +
+ lib/test_kmod.c                               |   12 +-
+ lib/test_sysctl.c                             |   12 +-
+ lib/test_sysfs.c                              |  913 +++++++++++
+ tools/testing/selftests/kmod/kmod.sh          |   13 +-
+ tools/testing/selftests/sysctl/sysctl.sh      |   12 +-
+ tools/testing/selftests/sysfs/Makefile        |   12 +
+ tools/testing/selftests/sysfs/config          |    5 +
+ tools/testing/selftests/sysfs/settings        |    1 +
+ tools/testing/selftests/sysfs/sysfs.sh        | 1411 +++++++++++++++++
+ 20 files changed, 2878 insertions(+), 48 deletions(-)
+ create mode 100644 LICENSES/dual/copyleft-next-0.3.1
+ create mode 100644 fs/kernfs/fault_inject.c
+ create mode 100644 lib/test_sysfs.c
+ create mode 100644 tools/testing/selftests/sysfs/Makefile
+ create mode 100644 tools/testing/selftests/sysfs/config
+ create mode 100644 tools/testing/selftests/sysfs/settings
+ create mode 100755 tools/testing/selftests/sysfs/sysfs.sh
 
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-new file mode 100644
-index 000000000000..05ffba299dbf
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-@@ -0,0 +1,63 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event trigger - test histogram expression parsing
-+# requires: set_event events/sched/sched_process_fork/trigger events/sched/sched_process_fork/hist error_log "<var1>=<field|var_ref|numeric_literal>":README
-+
-+
-+fail() { #msg
-+    echo $1
-+    exit_fail
-+}
-+
-+test_hist_expr() { # test_name expression expected_val
-+    trigger="events/sched/sched_process_fork/trigger"
-+
-+    reset_trigger_file $trigger
-+
-+    echo "Test hist trigger expressions - $1"
-+
-+    echo "hist:keys=common_pid:x=$2" > $trigger
-+
-+    for i in `seq 1 10` ; do ( echo "forked" > /dev/null); done
-+
-+    actual=`grep -o 'x=[[:digit:]]*' $trigger | awk -F= '{ print $2 }'`
-+
-+    if [ $actual != $3 ]; then
-+        fail "Failed hist trigger expression evaluation: Expression: $2 Expected: $3, Actual: $actual"
-+    fi
-+
-+    reset_trigger_file $trigger
-+}
-+
-+check_error() { # test_name command-with-error-pos-by-^
-+    trigger="events/sched/sched_process_fork/trigger"
-+
-+    echo "Test hist trigger expressions - $1"
-+    ftrace_errlog_check 'hist:sched:sched_process_fork' "$2" $trigger
-+}
-+
-+test_hist_expr "Variable assignment" "123" "123"
-+
-+test_hist_expr "Subtraction not associative" "16-8-4-2" "2"
-+
-+test_hist_expr "Division not associative" "64/8/4/2" "1"
-+
-+test_hist_expr "Same precedence operators (+,-) evaluated left to right" "16-8+4+2" "14"
-+
-+test_hist_expr "Same precedence operators (*,/) evaluated left to right" "4*3/2*2" "12"
-+
-+test_hist_expr "Multiplication evaluated before addition/subtraction" "4+3*2-2" "8"
-+
-+test_hist_expr "Division evaluated before addition/subtraction" "4+6/2-2" "5"
-+
-+# err pos for "too many subexpressions" is dependent on where
-+# the last subexpression was detected. This can vary depending
-+# on how the expression tree was generated.
-+check_error "Too many subexpressions" 'hist:keys=common_pid:x=32+^10*3/20-4'
-+check_error "Too many subexpressions" 'hist:keys=common_pid:x=^1+2+3+4+5'
-+
-+check_error "Unary minus not supported in subexpression" 'hist:keys=common_pid:x=-(^1)+2'
-+
-+check_error "Division by zero" 'hist:keys=common_pid:x=3/^0'
-+
-+exit 0
 -- 
-2.33.1.1089.g2158813163f-goog
+2.30.2
 
