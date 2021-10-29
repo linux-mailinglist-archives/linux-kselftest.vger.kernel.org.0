@@ -2,89 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A6143FEC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 16:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E2A43FED0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Oct 2021 16:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbhJ2O6f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Oct 2021 10:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S229501AbhJ2PAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Oct 2021 11:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhJ2O6e (ORCPT
+        with ESMTP id S229636AbhJ2PAd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 10:58:34 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1155FC061766
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 07:56:06 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id a26so9437276pfr.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 07:56:06 -0700 (PDT)
+        Fri, 29 Oct 2021 11:00:33 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B90C061767
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 07:58:04 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id j1so500376plx.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 07:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=FjCjcYP+D3o8tv9NFpZxsW155sRvSDfbhIEl3Au16T8=;
-        b=fbhsEQHwwevdlsxfPYH0ZOMBGl0MBuTNZ7ZM/mtkL50sTixcSo0LP59DlAS7YgLIeH
-         bd5ffqgdd4NPwRRMPVUM41XFNfQEF4lyvY2qy9/Lhh5gdHAF/RlD3+DNaQeeAL7ckacF
-         uLBqY/pAqpEJF8p+CdGM/OdDjeEMUXe4vrNhRHmNXMw+kQ6GHr1j51B22WZ2cII8JYkY
-         Wtjvk1Ld27LsAm+eskBlsB4uzBEErJsNMfmyQH+nt1IU1CbDeSirNMVr0dGUw9inhgps
-         WU7jJ+CB46GNSD+JDiuUTGANWIGnAeQbKrRIJiJ1ISf8+QJDe1v34NYWmrK1yf14lhQk
-         8hSw==
+        bh=VEe/u6gPdZlKSr0M6oaNVpmJO6541YBOxFo1iZy9jxY=;
+        b=XgNVKerM9naMpOzlG/yHOv6MbIBkuVbdK2nh8u3B6CTSDzELhiTjOA/oXBPr38rHdb
+         4mKzpTPKz5GByJldq3UbYPi/RKcrp7ssrAvr/1T9GgQ0nRT/INmDXWhMBxNTT8pBD+4I
+         q+FxMmeVtJEHyaB6fFMKC8p/Q2AnAHCTUeqS0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FjCjcYP+D3o8tv9NFpZxsW155sRvSDfbhIEl3Au16T8=;
-        b=3x0sUO0YlUG7e/ENhR272/F6EyBDjAFVUtvtYJ9JC25yYtPk7+7rVZt/jaKAysCIcU
-         d85mWEN0JOKTt0CPtfESV6C4RuFr/6Ew5g1o4StT/Wb5N9Hd68lfPNMxRaZo3mT+3NOr
-         vCc4oSU0/EypMwFVosRtvLgEnopAdgJ/DlIbDQHWNHi3gbSJx8o+HWWkxFYvHUHolEpo
-         xLLjRWb/5v/BQ1aa8L9ub7jV9VNbW4Znpx9AD1eUB2ewYffsxJAp6HcdeFdGh7EASQKX
-         lFp4uGkY80s74X1zun/z9ku1+y5eRdEhwNk+JO/HmmRfzJX3jS/3g0/2GpIjX93N2Hsp
-         Eh7w==
-X-Gm-Message-State: AOAM532DUtNXnDPsLc+o8E5/ugTEc4eRHOwSx3Mvqd0aXvG2CtBpk80M
-        EelkiNTO6PT6QW/itmaFgVbREg==
-X-Google-Smtp-Source: ABdhPJw1r41vo9z6GWts/4z+DJNa7FX6eXkNXDzDgmec/E95Um8w49RuJ9Bh5EuGaGZRKpqNN8QPog==
-X-Received: by 2002:a63:9dc5:: with SMTP id i188mr8471251pgd.143.1635519365363;
-        Fri, 29 Oct 2021 07:56:05 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f8sm6253333pjq.29.2021.10.29.07.56.04
+        bh=VEe/u6gPdZlKSr0M6oaNVpmJO6541YBOxFo1iZy9jxY=;
+        b=s8rvRzpn/r9BNQFWSZt1B9maHjvETIILqN2Gla+2LfvGKydnEapb++nQwA01mzQFqg
+         eQPEti7KPtuyrurPPI3QpD0OjdFD8tGhxsCHnPev+v+H7d+RmWumMk1PVYg1nt9QesWU
+         bLfgGCtJJgrjjC56VjUwL5wm8ZWhCuinlmO6hRrNF7VN+4RyIsdP0sGArnpf8XjDxVY5
+         Ai8ApBRymJEV3hSTbcKbmdtVXIbj042/DqWRNZBQK4wAcqlOaq4FBM42CnVNDqMIhlkn
+         4P1tfIoBAxANlmoXqHs9PTdZmk7EJcELfx2snjp+eCzGomde9RCuWCSAhMAY34uTh2oq
+         rexQ==
+X-Gm-Message-State: AOAM533x/4piDao/9EBxLjZAennSa+CpkWbwO8WanhD87L35uPxBVNw3
+        UlkyiDsIHljOPnVkZuVtuu0caQ==
+X-Google-Smtp-Source: ABdhPJzb9u+2dMEcZaSXa+AiqxQ44lfYwbYDuIySZAxxQm6HTY4y7N4CneHSkWx0kEjeTZP1gPgvWA==
+X-Received: by 2002:a17:90a:8592:: with SMTP id m18mr5199470pjn.184.1635519484215;
+        Fri, 29 Oct 2021 07:58:04 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u11sm7009927pfk.151.2021.10.29.07.58.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Oct 2021 07:56:04 -0700 (PDT)
-Date:   Fri, 29 Oct 2021 14:56:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>, jarkko@kernel.org,
-        linux-sgx@vger.kernel.org, shuah@kernel.org,
-        dave.hansen@linux.intel.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 01/15] selftests/x86/sgx: Fix a benign linker warning
-Message-ID: <YXwLgAdOA1jlsSiq@google.com>
-References: <cover.1635447301.git.reinette.chatre@intel.com>
- <545aac243037bf5c2640929c4d8ff5c1edfe3ef8.1635447301.git.reinette.chatre@intel.com>
- <d382d0b0-15fb-5e96-accd-c3b59be72dd3@intel.com>
+        Fri, 29 Oct 2021 07:58:03 -0700 (PDT)
+Date:   Fri, 29 Oct 2021 07:58:02 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: selftests: seccomp_bpf failure on 5.15
+Message-ID: <202110290755.451B036CE9@keescook>
+References: <YXrN+Hnl9pSOsWlA@arighi-desktop>
+ <202110280955.B18CB67@keescook>
+ <878rydm56l.fsf@disp2133>
+ <202110281136.5CE65399A7@keescook>
+ <8735okls76.fsf@disp2133>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d382d0b0-15fb-5e96-accd-c3b59be72dd3@intel.com>
+In-Reply-To: <8735okls76.fsf@disp2133>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 28, 2021, Dave Hansen wrote:
-> On 10/28/21 1:37 PM, Reinette Chatre wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > 
-> > Pass a build id of "none" to the linker to suppress a warning about the
-> > build id being ignored:
-> > 
-> >   /usr/bin/ld: warning: .note.gnu.build-id section discarded, --build-id
-> >   ignored.
+On Thu, Oct 28, 2021 at 05:06:53PM -0500, Eric W. Biederman wrote:
+> Kees Cook <keescook@chromium.org> writes:
 > 
-> Do we have a good grasp on why this is producing a warning in the first
-> place?  This seems like something that could get merged quickly with one
-> more sentence in the changelog.
+> > On Thu, Oct 28, 2021 at 12:26:26PM -0500, Eric W. Biederman wrote:
+> >> Kees Cook <keescook@chromium.org> writes:
+> >> 
+> >> > On Thu, Oct 28, 2021 at 06:21:12PM +0200, Andrea Righi wrote:
+> >> >> The following sub-tests are failing in seccomp_bpf selftest:
+> >> >> 
+> >> >> 18:56:54 DEBUG| [stdout] # selftests: seccomp: seccomp_bpf
+> >> >> ...
+> >> >> 18:56:57 DEBUG| [stdout] # #  RUN           TRACE_syscall.ptrace.kill_after ...
+> >> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (1) == msg (0)
+> >> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (2) == msg (1)
+> >> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:2023:kill_after:Expected entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY : PTRACE_EVENTMSG_SYSCALL_EXIT (1) == msg (2)
+> >> >> 18:56:57 DEBUG| [stdout] # # kill_after: Test exited normally instead of by signal (code: 12)
+> >> >> 18:56:57 DEBUG| [stdout] # #          FAIL  TRACE_syscall.ptrace.kill_after
+> >> >> ...
+> >> >> 18:56:57 DEBUG| [stdout] # #  RUN           TRACE_syscall.seccomp.kill_after ...
+> >> >> 18:56:57 DEBUG| [stdout] # # seccomp_bpf.c:1547:kill_after:Expected !ptrace_syscall (1) == IS_SECCOMP_EVENT(status) (0)
+> >> >> 18:56:57 DEBUG| [stdout] # # kill_after: Test exited normally instead of by signal (code: 0)
+> >> >> 18:56:57 DEBUG| [stdout] # #          FAIL  TRACE_syscall.seccomp.kill_after
+> >> >> 18:56:57 DEBUG| [stdout] # not ok 80 TRACE_syscall.seccomp.kill_after
+> >> >> ...
+> >> >> 18:56:57 DEBUG| [stdout] # # FAILED: 85 / 87 tests passed.
+> >> >> 18:56:57 DEBUG| [stdout] # # Totals: pass:85 fail:2 xfail:0 xpass:0 skip:0 error:0
+> >> >> 18:56:57 DEBUG| [stdout] not ok 1 selftests: seccomp: seccomp_bpf # exit=1
+> >> >> 
+> >> >> I did some bisecting and found that the failures started to happen with:
+> >> >> 
+> >> >>  307d522f5eb8 ("signal/seccomp: Refactor seccomp signal and coredump generation")
+> >> >> 
+> >> >> Not sure if the test needs to be fixed after this commit, or if the
+> >> >> commit is actually introducing an issue. I'll investigate more, unless
+> >> >> someone knows already what's going on.
+> >> >
+> >> > Ah thanks for noticing; I will investigate...
+> >> 
+> >> 
+> >> I just did a quick read through of the test and while
+> >> I don't understand everything having a failure seems
+> >> very weird.
+> >> 
+> >> I don't understand the comment:
+> >> /* Tracer will redirect getpid to getppid, and we should die. */
+> >> 
+> >> As I think what happens is it the bpf programs loads the signal
+> >> number.  Tests to see if the signal number if GETPPID and allows
+> >> that system call and causes any other system call to be terminated.
+> >
+> > The test suite runs a series of seccomp filter vs syscalls under tracing,
+> > either with ptrace or with seccomp SECCOMP_RET_TRACE, to validate the
+> > expected behavioral states. It seems that what's happened is that the
+> > SIGSYS has suddenly become non-killing:
+> >
+> > #  RUN           TRACE_syscall.ptrace.kill_after ...
+> > # seccomp_bpf.c:1555:kill_after:Expected WSTOPSIG(status) & 0x80 (0) == 0x80 (128)
+> > # seccomp_bpf.c:1556:kill_after:WSTOPSIG: 31
+> > # kill_after: Test exited normally instead of by signal (code: 12)
+> > #          FAIL  TRACE_syscall.ptrace.kill_after
+> >
+> > i.e. the ptracer no longer sees a dead tracee, which would pass through
+> > here:
+> >
+> >                 if (WIFSIGNALED(status) || WIFEXITED(status))
+> >                         /* Child is dead. Time to go. */
+> >                         return;
+> >
+> > So the above saw a SIG_TRAP|SIGSYS rather than a killing SIGSYS. i.e.
+> > instead of WIFSIGNALED(stauts) being true, it instead catches a
+> > PTRACE_EVENT_STOP for SIGSYS, which should be impossible (the process
+> > should be getting killed).
+> 
+> Oh.  This is being ptraced as part of the test?
+> 
+> Yes.  The signal started being delivered.  As far as that goes that
+> sounds correct.
+> 
+> Ptrace is allowed to intercept even fatal signals.  Everything except
+> SIGKILL.
+> 
+> Is this a condition we don't want even ptrace to be able to catch?
+> 
+> I think we can arrange it so that even ptrace can't intercept this
+> signal.  I need to sit this problem on the back burner for a few
+> minutes.  It is an angle I had not considered.
+> 
+> Is it a problem that the debugger can see the signal if the process does
+> not?
 
-The SGX selftests use a custom linker script, tools/testing/selftests/sgx/test_encl.lds,
-to configure the resulting enclave binary so that it's loadable as an enclave
-more or less as-is.  One of the things the script does is drop sections the
-selftests doesn't want, .note* sections being in that category.  I don't recall
-exactly why the script drops sections; I assume it's to simply the loading process.
-Anyways, .note.gnu.build-id is collateral damage and the linker complains.
+Right, I'm trying to understand that too. However, my neighbor just lost
+power. :|
+
+What I was in the middle of checking was what ptrace "sees" going
+through a fatal SIGSYS; my initial debugging attempts were weird.
+
+-Kees
+
+-- 
+Kees Cook
