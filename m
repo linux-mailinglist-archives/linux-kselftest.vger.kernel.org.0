@@ -2,205 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8197441DEF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 17:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F1B441E10
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 17:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbhKAQV5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Nov 2021 12:21:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21797 "EHLO
+        id S232692AbhKAQYW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Nov 2021 12:24:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:49295 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232633AbhKAQV4 (ORCPT
+        by vger.kernel.org with ESMTP id S232676AbhKAQYU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Nov 2021 12:21:56 -0400
+        Mon, 1 Nov 2021 12:24:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635783562;
+        s=mimecast20190719; t=1635783706;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dO/4QsOfeW35SZcn1WG7FeeE85F7kQHGfg1XlWtfu7s=;
-        b=dGjxbARhmrqmSP2VMok+6FWlR5vfsJlCkA2ICczieAwQkB9r8jAuMlesyXmd6Ti7pHOYfw
-        jInSjckBY8/k3PkCV7oFnaMosuHx8uAurrVHuKpq+u0S5A6Xuj3mOqJXCLhEaKaUS7on6n
-        mO0qSPYfLrNhHSu7Y3NK6nHfZyTVUak=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-282-5OdkIJTLOe-Ds0UpIdB-uA-1; Mon, 01 Nov 2021 12:19:19 -0400
-X-MC-Unique: 5OdkIJTLOe-Ds0UpIdB-uA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB26E18125C4;
-        Mon,  1 Nov 2021 16:19:16 +0000 (UTC)
-Received: from starship (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 442D75D9DC;
-        Mon,  1 Nov 2021 16:19:10 +0000 (UTC)
-Message-ID: <b48210a35b3bc6d63beeb33c19b609b3014191dd.camel@redhat.com>
-Subject: Re: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Kieran Bingham <kbingham@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        bh=D0pDbHtTcR82UVCQHWAbgqpuu1KGubZnwzSQ8mPGn+I=;
+        b=i/02LgkUvloue5jfupZk1IncQ6Q8mOr5C6ymya0EbLkkFdRA5uH0OuJ0cxEZJhxtJQvBw2
+        N6qj0wLnyh0i4A6AMLnpNg+KdoMggs9DYcph0QJ7nOLfV4AusSCKYW2svQhKTSYG+Sk4fa
+        lZlSyJr9jWamWWYuNUtaCHlmpOOeE6o=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-569-Z4v8XXhrNwmucPUPSk_jFg-1; Mon, 01 Nov 2021 12:21:45 -0400
+X-MC-Unique: Z4v8XXhrNwmucPUPSk_jFg-1
+Received: by mail-wm1-f71.google.com with SMTP id j25-20020a05600c1c1900b00332372c252dso124962wms.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Nov 2021 09:21:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=D0pDbHtTcR82UVCQHWAbgqpuu1KGubZnwzSQ8mPGn+I=;
+        b=MGqr2No64Gp8l0TqSCrvKmimNjlnfwIAE72t1qN7wFc2cOt3ykN/iJIwI6qtIhIda5
+         2Yuj+ySKfvhfajmYtOlmkCzPJtTBXg7EU7ZbclRjn7uKaQjMp+WPlYfQIua4fnvCMxnm
+         SgG7C8r/OfpXsAi8LYaWwIRllgqH+H/w3rRRV34vIhndUb0TTz4rDYeAB4XXBkL1RkWL
+         bWZ5wf9Gn6ojyl17GYl9QnK3hLfIMxe09nomu/KogHoc9BueP7TiZeY29hOyjSqwaq5x
+         ze379R2NGydDc2bZD+2G2DL7Lm07i/qxIecw4alEKaWAiThMvir5GBWyheu5Py2ICzQn
+         jP9w==
+X-Gm-Message-State: AOAM531/XBM5AY2lswCAbg/Th1b0djMAzxSzHyAg2dQlIJ//99uHX09L
+        OJMvJu1zyy5JqaFOuDyRw+ib0mRAkTiO6shJtYaWMj3m9+JiqddPxCOotEbtpeQ+w2iuh4eaT7N
+        YUp1MMrsCa49BE0wQ/DyGa8XX628H
+X-Received: by 2002:a05:600c:35cb:: with SMTP id r11mr32964159wmq.76.1635783704383;
+        Mon, 01 Nov 2021 09:21:44 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzg54pONXTEoQJ+SUEIJ8W1KRheAbFXi6E/qkqBCPrstK3ffBjgfgu7fIfChSWRMD/80LyMAg==
+X-Received: by 2002:a05:600c:35cb:: with SMTP id r11mr32964133wmq.76.1635783704156;
+        Mon, 01 Nov 2021 09:21:44 -0700 (PDT)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id z8sm8283223wrh.54.2021.11.01.09.21.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 09:21:43 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Date:   Mon, 01 Nov 2021 18:19:09 +0200
-In-Reply-To: <87sfwfkhk5.fsf@vitty.brq.redhat.com>
-References: <20210811122927.900604-1-mlevitsk@redhat.com>
-         <20210811122927.900604-7-mlevitsk@redhat.com>
-         <137f2dcc-75d2-9d71-e259-dd66d43ad377@redhat.com>
-         <87sfwfkhk5.fsf@vitty.brq.redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        <linux-kselftest@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bandan Das <bsd@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86: SVM: add module param to control LBR
+ virtualization
+In-Reply-To: <20211101140324.197921-2-mlevitsk@redhat.com>
+References: <20211101140324.197921-1-mlevitsk@redhat.com>
+ <20211101140324.197921-2-mlevitsk@redhat.com>
+Date:   Mon, 01 Nov 2021 17:21:42 +0100
+Message-ID: <87pmrjkfs9.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2021-11-01 at 16:43 +0100, Vitaly Kuznetsov wrote:
-> Paolo Bonzini <pbonzini@redhat.com> writes:
-> 
-> > On 11/08/21 14:29, Maxim Levitsky wrote:
-> > > Modify debug_regs test to create a pending interrupt
-> > > and see that it is blocked when single stepping is done
-> > > with KVM_GUESTDBG_BLOCKIRQ
-> > > 
-> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > ---
-> > >   .../testing/selftests/kvm/x86_64/debug_regs.c | 24 ++++++++++++++++---
-> > >   1 file changed, 21 insertions(+), 3 deletions(-)
-> > 
-> > I haven't looked very much at this, but the test fails.
-> > 
-> 
-> Same here,
-> 
-> the test passes on AMD but fails consistently on Intel:
-> 
-> # ./x86_64/debug_regs 
-> ==== Test Assertion Failure ====
->   x86_64/debug_regs.c:179: run->exit_reason == KVM_EXIT_DEBUG && run->debug.arch.exception == DB_VECTOR && run->debug.arch.pc == target_rip && run->debug.arch.dr6 == target_dr6
->   pid=13434 tid=13434 errno=0 - Success
->      1	0x00000000004027c6: main at debug_regs.c:179
->      2	0x00007f65344cf554: ?? ??:0
->      3	0x000000000040294a: _start at ??:?
->   SINGLE_STEP[1]: exit 8 exception 1 rip 0x402a25 (should be 0x402a27) dr6 0xffff4ff0 (should be 0xffff4ff0)
-> 
-> (I know I'm late to the party).
+Maxim Levitsky <mlevitsk@redhat.com> writes:
 
-Well that is strange. It passes on my intel laptop. Just tested 
-(kvm/queue + qemu master, compiled today) :-(
+> This is useful for debug and also makes it consistent with
+> the rest of the SVM optional features.
+>
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 21bb81710e0f6..2b5f8e10d686d 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -186,12 +186,13 @@ module_param(vls, int, 0444);
+>  static int vgif = true;
+>  module_param(vgif, int, 0444);
+>  
+> +static int tsc_scaling = true;
+> +module_param(tsc_scaling, int, 0444);
+> +
+>  /* enable/disable LBR virtualization */
+>  static int lbrv = true;
+>  module_param(lbrv, int, 0444);
+>  
+> -static int tsc_scaling = true;
+> -module_param(tsc_scaling, int, 0444);
 
-It fails on iteration 1 (and there is iteration 0) which I think means that we
-start with RIP on sti, and get #DB on start of xor instruction first (correctly), 
-and then we get #DB again on start of xor instruction again?
+Subject line says "KVM: x86: SVM: add module param to control LBR
+virtualization" but the patch just moves 'tsc_scaling' param a couple
+lines up. Was this intended or is this a rebase artifact and the patch
+just needs to be dropped?
 
-Something very strange. My laptop has i7-7600U.
+>  
+>  /*
+>   * enable / disable AVIC.  Because the defaults differ for APICv
 
-Best regards,
-	Maxim Levitsky
-
-
-
-
-> 
-> > Paolo
-> > 
-> > > diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-> > > index 6097a8283377..5f078db1bcba 100644
-> > > --- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
-> > > +++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-> > > @@ -8,12 +8,15 @@
-> > >   #include <string.h>
-> > >   #include "kvm_util.h"
-> > >   #include "processor.h"
-> > > +#include "apic.h"
-> > >   
-> > >   #define VCPU_ID 0
-> > >   
-> > >   #define DR6_BD		(1 << 13)
-> > >   #define DR7_GD		(1 << 13)
-> > >   
-> > > +#define IRQ_VECTOR 0xAA
-> > > +
-> > >   /* For testing data access debug BP */
-> > >   uint32_t guest_value;
-> > >   
-> > > @@ -21,6 +24,11 @@ extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
-> > >   
-> > >   static void guest_code(void)
-> > >   {
-> > > +	/* Create a pending interrupt on current vCPU */
-> > > +	x2apic_enable();
-> > > +	x2apic_write_reg(APIC_ICR, APIC_DEST_SELF | APIC_INT_ASSERT |
-> > > +			 APIC_DM_FIXED | IRQ_VECTOR);
-> > > +
-> > >   	/*
-> > >   	 * Software BP tests.
-> > >   	 *
-> > > @@ -38,12 +46,19 @@ static void guest_code(void)
-> > >   		     "mov %%rax,%0;\n\t write_data:"
-> > >   		     : "=m" (guest_value) : : "rax");
-> > >   
-> > > -	/* Single step test, covers 2 basic instructions and 2 emulated */
-> > > +	/*
-> > > +	 * Single step test, covers 2 basic instructions and 2 emulated
-> > > +	 *
-> > > +	 * Enable interrupts during the single stepping to see that
-> > > +	 * pending interrupt we raised is not handled due to KVM_GUESTDBG_BLOCKIRQ
-> > > +	 */
-> > >   	asm volatile("ss_start: "
-> > > +		     "sti\n\t"
-> > >   		     "xor %%eax,%%eax\n\t"
-> > >   		     "cpuid\n\t"
-> > >   		     "movl $0x1a0,%%ecx\n\t"
-> > >   		     "rdmsr\n\t"
-> > > +		     "cli\n\t"
-> > >   		     : : : "eax", "ebx", "ecx", "edx");
-> > >   
-> > >   	/* DR6.BD test */
-> > > @@ -72,11 +87,13 @@ int main(void)
-> > >   	uint64_t cmd;
-> > >   	int i;
-> > >   	/* Instruction lengths starting at ss_start */
-> > > -	int ss_size[4] = {
-> > > +	int ss_size[6] = {
-> > > +		1,		/* sti*/
-> > >   		2,		/* xor */
-> > >   		2,		/* cpuid */
-> > >   		5,		/* mov */
-> > >   		2,		/* rdmsr */
-> > > +		1,		/* cli */
-> > >   	};
-> > >   
-> > >   	if (!kvm_check_cap(KVM_CAP_SET_GUEST_DEBUG)) {
-> > > @@ -154,7 +171,8 @@ int main(void)
-> > >   	for (i = 0; i < (sizeof(ss_size) / sizeof(ss_size[0])); i++) {
-> > >   		target_rip += ss_size[i];
-> > >   		CLEAR_DEBUG();
-> > > -		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP;
-> > > +		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP |
-> > > +				KVM_GUESTDBG_BLOCKIRQ;
-> > >   		debug.arch.debugreg[7] = 0x00000400;
-> > >   		APPLY_DEBUG();
-> > >   		vcpu_run(vm, VCPU_ID);
-> > > 
-
+-- 
+Vitaly
 
