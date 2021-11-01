@@ -2,130 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D668D44220E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 21:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7524422F7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 23:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbhKAU5Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Nov 2021 16:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S232024AbhKAWC6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Nov 2021 18:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbhKAU5Y (ORCPT
+        with ESMTP id S230460AbhKAWC5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Nov 2021 16:57:24 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D97C061764;
-        Mon,  1 Nov 2021 13:54:50 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id b4so11184112pgh.10;
-        Mon, 01 Nov 2021 13:54:50 -0700 (PDT)
+        Mon, 1 Nov 2021 18:02:57 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5CBC061714;
+        Mon,  1 Nov 2021 15:00:23 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id k4so3026106plx.8;
+        Mon, 01 Nov 2021 15:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pZqr5rTlcaug9563wNJYd77L6h7Hk2gF965+CXNB47w=;
-        b=Ni5w9wTyiPsaYcO7fKFpzBdoI1bm1lqTRPi/F3tDeEc9LRFV4vfZj0qxXTCUmeCbLA
-         X5/63FZkBpzBJWmg+ArJLti1r/FFv1BawCzOKfDmg5CgkL9mm0/sL61K1UJBa32+u/v3
-         HMifwPe2araTOCO8kjvrX1A/FhYW0AlqfwaqmXEKn23xVf+k41Ty+TKhXuN1N2ATRoqh
-         gODj2DgLpz6M2pO0REWlcfr6KahTMab1YX67/x7OWsZxZzZPBrJNYbKcdsJ8sTxnUW5Z
-         O2s2z8E13iE0kN/1SAc1xgFjPfVjj5T/Z5NOkAl+E1dszJzBkuMoRxYOceOfnJQayiq7
-         1iaw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lQidb9JCO2tS/0bSUKgi1+mcgxOacGZsvxUTQHhQVCo=;
+        b=clC7qZvzfmQnXJfsuJsBcm+xJ5bkWRiWPjWISgR24F4fyl3VUF5Ss5xuqotGo0zjXE
+         A3l9ic0D7evlfSTL405qR2G0i7kNJtjEXMOngR/bd6S0GgkGFob2ldX9y7ZDveNVx/ga
+         dgN6WcsoV19FXTc5KyT4G5Qun84rFPEZ+ovOqjqSC6AFp6IHz+l5K2gq3FgN4v9F7NHP
+         JH8y2s7euqOSP9tI1ZgimkiC6HxULTLCnnA4U658duNPprVcftZFSczvxFa4sdT+zmaY
+         hcpNSFqSP+6KZDHOKXlbNJji/kqI357JYXVyFmjrBlU8VNQd2uQIAXRMAau8PZH9HKLs
+         btcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pZqr5rTlcaug9563wNJYd77L6h7Hk2gF965+CXNB47w=;
-        b=UG1f2sR3yDmq+ptw1IeoFzVpronyGmxiU31HvKs5LKkhsyZYWsPSBf+CD9P9quMNVl
-         vt0++5Nx2Gl0AVmuxdbmNsSqKSTFzwdRSplMo+Ac+RGFeSgQJq41swQHQ65k8EaD08I/
-         VCLZS6VRK51EWdYwmzSGdMSSfLCFuZd0rWoN/1KH60otO/psdQPfD7ApLG0SKfs0myO5
-         wuV6RkJYJpMcMUgmtTNJ7BsZEtHX4gVFmTI/mkvjEBesIhPzMXfcbKwCmYv9E4AZcJze
-         E52cxBKT7YSJxXYb4Oo9KjrAglWF2uX8so5JTjQ0OIDMYgDiITngXrexT9xMeS2XmL/4
-         X0bg==
-X-Gm-Message-State: AOAM530bmg6kshv8aKfQCSoJ+icLhWmoIKjV1eCelsKQxLxhQ0kGw2Xj
-        KT3pMTvJCJuR+Zoed1qoUwa30UuWrqc=
-X-Google-Smtp-Source: ABdhPJyRqX1y8LIgmxGmLlN6ZqygsWwwckwgCo2+I1Hp5UFPHWWYdV0jTemV/m/Gw5TCgObqByhAQw==
-X-Received: by 2002:a05:6a00:244e:b0:47b:7dbf:e23d with SMTP id d14-20020a056a00244e00b0047b7dbfe23dmr31701851pfj.34.1635800089195;
-        Mon, 01 Nov 2021 13:54:49 -0700 (PDT)
-Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id o19sm11358069pfu.56.2021.11.01.13.54.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 13:54:48 -0700 (PDT)
-Subject: Re: [PATCH v2 11/25] tcp: authopt: Implement Sequence Number
- Extension
-To:     Leonard Crestez <cdleonard@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1635784253.git.cdleonard@gmail.com>
- <6097ec24d87efc55962a1bfac9441132f0fc4206.1635784253.git.cdleonard@gmail.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <07987e29-87a0-9a09-bdf0-b5e385d9c55f@gmail.com>
-Date:   Mon, 1 Nov 2021 13:54:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lQidb9JCO2tS/0bSUKgi1+mcgxOacGZsvxUTQHhQVCo=;
+        b=3epESxORpcRAXrN7FtbLkffYSWtxnUseupuLDZHFl7qJXk8iJu6T0NmQAZXWRNsYsm
+         eeVU8D20J4Ib6sX7LS8bvKD1FkcMdJUpdrGWmLzG6UXKY3RZJCp7AYBwk/tiPp+10xs/
+         F8rk7K1yVFBHtuS9KV/SNs/sXKj3CFRxyp4frfIuDgarcV32/1DWfrF4X9vFUC0ysTS+
+         rfsTGnRsVicUz9wQLDwu9f3FJa/rYfU55RdXkwP80QhIQmQTg1bRCdcnv+hGqnF+OxPC
+         +pxD1xiddap1wcH492/H+W2a90Ko/GGuzL2Y+gkXc2WRPGLii+EsZrukbVS7hYWNZubv
+         vubQ==
+X-Gm-Message-State: AOAM5320yIEHistRavJVZiT/nMt56hy9JvFEo2h0taim0vVIKD6R50iA
+        kSWG5JwBk06yAL+nsrDl8vJzc6D15zwH40nvuMU=
+X-Google-Smtp-Source: ABdhPJxsuUlznQMiJfwR4AYM4OltePlg0lfGOqzeFIiCgNE6YPQ0+SnbfkmsYDVcB6cHSBeVY91V0Lz+V3+X/0baJSQ=
+X-Received: by 2002:a17:902:7246:b0:138:a6ed:66cc with SMTP id
+ c6-20020a170902724600b00138a6ed66ccmr28298780pll.22.1635804022932; Mon, 01
+ Nov 2021 15:00:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <6097ec24d87efc55962a1bfac9441132f0fc4206.1635784253.git.cdleonard@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211101124310.3947887-1-yangyingliang@huawei.com>
+In-Reply-To: <20211101124310.3947887-1-yangyingliang@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 1 Nov 2021 15:00:11 -0700
+Message-ID: <CAADnVQJS_2St=iaqHU+zasy_0A0bidJN=STnkHrNcSNL5vO1Dg@mail.gmail.com>
+Subject: Re: [PATCH -next v2] bpf/benchs: Fix return value check of bpf_program__attach()
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        Joanne Koong <joannekoong@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 11/1/21 9:34 AM, Leonard Crestez wrote:
-> Add a compute_sne function which finds the value of SNE for a certain
-> SEQ given an already known "recent" SNE/SEQ. This is implemented using
-> the standard tcp before/after macro and will work for SEQ values that
-> are without 2^31 of the SEQ for which we know the SNE.
-
->  }
-> +void __tcp_authopt_update_rcv_sne(struct tcp_sock *tp, struct tcp_authopt_info *info, u32 seq);
-> +static inline void tcp_authopt_update_rcv_sne(struct tcp_sock *tp, u32 seq)
-> +{
-> +	struct tcp_authopt_info *info;
-> +
-> +	if (static_branch_unlikely(&tcp_authopt_needed)) {
-> +		rcu_read_lock();
-> +		info = rcu_dereference(tp->authopt_info);
-> +		if (info)
-> +			__tcp_authopt_update_rcv_sne(tp, info, seq);
-> +		rcu_read_unlock();
-> +	}
-> +}
-> +void __tcp_authopt_update_snd_sne(struct tcp_sock *tp, struct tcp_authopt_info *info, u32 seq);
-> +static inline void tcp_authopt_update_snd_sne(struct tcp_sock *tp, u32 seq)
-> +{
-> +	struct tcp_authopt_info *info;
-> +
-> +	if (static_branch_unlikely(&tcp_authopt_needed)) {
-> +		rcu_read_lock();
-> +		info = rcu_dereference(tp->authopt_info);
-> +		if (info)
-> +			__tcp_authopt_update_snd_sne(tp, info, seq);
-> +		rcu_read_unlock();
-> +	}
-> +}
+On Mon, Nov 1, 2021 at 5:35 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
 >
+> If bpf_program__attach() fails, it never returns NULL,
+> we should use libbpf_get_error() to check the return value.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> ---
+> v2:
+>   don't use 'int err'
+> ---
+>  .../selftests/bpf/benchs/bench_bloom_filter_map.c      | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+> index 6eeeed2913e6..4afaa4adb327 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+> @@ -304,7 +304,7 @@ static void bloom_lookup_setup(void)
+>         populate_maps();
+>
+>         link = bpf_program__attach(ctx.skel->progs.bloom_lookup);
+> -       if (!link) {
+> +       if (libbpf_get_error(link)) {
 
-I would think callers of these helpers own socket lock,
-so no rcu_read_lock()/unlock() should be needed.
-
-Perhaps instead
-rcu_dereference_protected(tp->authopt_info, lockdep_sock_is_held(sk)); 
-
-
+Please use ASSERT_OK_PTR() instead.
+See how other tests are doing it.
