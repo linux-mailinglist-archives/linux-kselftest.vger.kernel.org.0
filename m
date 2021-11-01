@@ -2,215 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F4E441C34
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 15:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46713441CE3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 15:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbhKAOHl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Nov 2021 10:07:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23617 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232487AbhKAOHi (ORCPT
+        id S231847AbhKAO42 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Nov 2021 10:56:28 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:58766
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229826AbhKAO41 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Nov 2021 10:07:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635775504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6B0VxLQI1vBxKxE4KBUueszbiUbdBit+lWmouyGJ5Us=;
-        b=HrQvaZ2bNdKmvrPJj1h9h7Msd9QQbVFiY6VcA5d+X8DFh0swaDe+O7KBr1KVE6/A6KSVgZ
-        7rlMtqB9CfoKvRSACKO8oo5CD/xpAbXtQaaXW1vEU+QVEFCaEdIBgQGv76Bwk8LKRQeCKn
-        n7eydd5ZNXnjwUtushvkVUXE0zCoQTs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-441-pi21nRj_OP6D9jtnT1FFjw-1; Mon, 01 Nov 2021 10:05:01 -0400
-X-MC-Unique: pi21nRj_OP6D9jtnT1FFjw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 1 Nov 2021 10:56:27 -0400
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C9DB1054F90;
-        Mon,  1 Nov 2021 14:04:59 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EBD54101E5AE;
-        Mon,  1 Nov 2021 14:04:42 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        Borislav Petkov <bp@alien8.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
-        64-BIT)), Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Bandan Das <bsd@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH v2 6/6] KVM: x86: SVM: implement nested vGIF
-Date:   Mon,  1 Nov 2021 16:03:24 +0200
-Message-Id: <20211101140324.197921-7-mlevitsk@redhat.com>
-In-Reply-To: <20211101140324.197921-1-mlevitsk@redhat.com>
-References: <20211101140324.197921-1-mlevitsk@redhat.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 19DB63F1AD
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Nov 2021 14:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1635778432;
+        bh=rmAXyW8JKxDq9r0r+1Hiw1y/OwyI9OGQCKHICCyfzlQ=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=k517EJmtWC2QNtixCLe84eqeLQgT6gpjIi13UuC1e/j4ks8G1fXVnu2ldBEsQRbwY
+         HBVI4f5SfbN/RDaQGHaiK04ETOvgTKttA0eqRKjv8YqAn5MwCKoeV0tmiWfzDmYqQm
+         81zOFIo7yMiQq+ScEyMMD30ut4y/+mj7ONSaVMmyl5W5JX7DqHgUzjHItr5nCNyTSK
+         tl6F2IO9mKEK5jLef8+NsPUyw4cXI/weL3sW0OXZCNmqtgxV8QKNopO5fQKEPweTYh
+         XiWHcETPS7jQ667FfK+yyU54iLQF7rS2JPlhPsMYkDGfsdMp4+gigO628CpD9m22lF
+         kpm9+Aoh3noEw==
+Received: by mail-wm1-f71.google.com with SMTP id 128-20020a1c0486000000b0030dcd45476aso6210662wme.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Nov 2021 07:53:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rmAXyW8JKxDq9r0r+1Hiw1y/OwyI9OGQCKHICCyfzlQ=;
+        b=rxWMm6D0bvqC2+8tCABiNTIv7Lu7H2uZhs9yDlGDs5ewX2/SXSw7RmyKDcyt4uRAkm
+         8i2hSeEL1km+vY5+G1Bw2dOvtGo+/VaKcwTDxFmHoFUWLcedidv69VOX/HK2PbuphoBy
+         qLCGjs4Kn32/S65oX3+aVpKj+CM1ocGxjhhPjW778gqG00NLgzrpy1+Qxn+Nc+ODx6fl
+         w+pdNXroeWHbKJ+kf03xKxq+kzPZss7jphGNl3WEmTggqMRbhpPiediU6XEnjjHV+uG4
+         Kbj47KlIFYKYg1yMVRr+yd8XzEFAXc9oftnSw045knjXgVS1kG+3czSWZZq7Oi8uzdFW
+         m+Yg==
+X-Gm-Message-State: AOAM5323kcjR9e6by72+F+Qgqul9/Mnhx9N35cSWZ8ALgqHwy1TFSuoZ
+        ES5wlODkkH3xMLAt2zyYE4zpG/QVH0bfhYhl9pSOcC3V5ozvhpYxFm6zDXH4mD2JGyH6o3mGT7F
+        KedjerERUCuli6K2MR0GSgMnjNo4VtjWyG1oE5gwB7Hv+mQ==
+X-Received: by 2002:a1c:29c6:: with SMTP id p189mr10765641wmp.129.1635778431804;
+        Mon, 01 Nov 2021 07:53:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzGiGBfWozkCP/mfa2+E7javYRR+SMfA/sCvASq0mdQDoSV2wdr7K7fwnlORgW5vU0HOn1y6g==
+X-Received: by 2002:a1c:29c6:: with SMTP id p189mr10765618wmp.129.1635778431616;
+        Mon, 01 Nov 2021 07:53:51 -0700 (PDT)
+Received: from localhost.localdomain (p579d859a.dip0.t-ipconnect.de. [87.157.133.154])
+        by smtp.gmail.com with ESMTPSA id x13sm10461694wrr.47.2021.11.01.07.53.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 07:53:51 -0700 (PDT)
+From:   Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+To:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH] selftests: net: reuseport_bpf_numa: skip nodes not available
+Date:   Mon,  1 Nov 2021 15:53:17 +0100
+Message-Id: <20211101145317.286118-1-kleber.souza@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In case L1 enables vGIF for L2, the L2 cannot affect L1's GIF, regardless
-of STGI/CLGI intercepts, and since VM entry enables GIF, this means
-that L1's GIF is always 1 while L2 is running.
+In some platforms the numa node numbers are not necessarily consecutive,
+meaning that not all nodes from 0 to the value returned by
+numa_max_node() are available on the system. Using node numbers which
+are not available results on errors from libnuma such as:
 
-Thus in this case leave L1's vGIF in vmcb01, while letting L2
-control the vGIF thus implementing nested vGIF.
+---- IPv4 UDP ----
+send node 0, receive socket 0
+libnuma: Warning: Cannot read node cpumask from sysfs
+./reuseport_bpf_numa: failed to pin to node: No such file or directory
 
-Also allow KVM to toggle L1's GIF during nested entry/exit
-by always using vmcb01.
+Fix it by checking if the node number bit is set on numa_nodes_ptr,
+which is defined on libnuma as "Set with all nodes the kernel has
+exposed to userspace".
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
 ---
- arch/x86/kvm/svm/nested.c | 17 +++++++++++++----
- arch/x86/kvm/svm/svm.c    |  5 +++++
- arch/x86/kvm/svm/svm.h    | 25 +++++++++++++++++++++----
- 3 files changed, 39 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/reuseport_bpf_numa.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 15be37368380d..4e4e3aea519be 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -384,6 +384,10 @@ void nested_sync_control_from_vmcb02(struct vcpu_svm *svm)
- 		 */
- 		mask &= ~V_IRQ_MASK;
- 	}
-+
-+	if (nested_vgif_enabled(svm))
-+		mask |= V_GIF_MASK;
-+
- 	svm->nested.ctl.int_ctl        &= ~mask;
- 	svm->nested.ctl.int_ctl        |= svm->vmcb->control.int_ctl & mask;
- }
-@@ -555,10 +559,8 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
+diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
+index c9f478b40996..b2eebf669b8c 100644
+--- a/tools/testing/selftests/net/reuseport_bpf_numa.c
++++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
+@@ -211,12 +211,16 @@ static void test(int *rcv_fd, int len, int family, int proto)
  
- static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
- {
--	const u32 int_ctl_vmcb01_bits =
--		V_INTR_MASKING_MASK | V_GIF_MASK | V_GIF_ENABLE_MASK;
--
--	const u32 int_ctl_vmcb12_bits = V_TPR_MASK | V_IRQ_INJECTION_BITS_MASK;
-+	u32 int_ctl_vmcb01_bits = V_INTR_MASKING_MASK;
-+	u32 int_ctl_vmcb12_bits = V_TPR_MASK | V_IRQ_INJECTION_BITS_MASK;
- 
- 	struct kvm_vcpu *vcpu = &svm->vcpu;
- 
-@@ -573,6 +575,13 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
- 	 */
- 	WARN_ON(kvm_apicv_activated(svm->vcpu.kvm));
- 
-+
-+
-+	if (svm->vgif_enabled && (svm->nested.ctl.int_ctl & V_GIF_ENABLE_MASK))
-+		int_ctl_vmcb12_bits |= (V_GIF_MASK | V_GIF_ENABLE_MASK);
-+	else
-+		int_ctl_vmcb01_bits |= (V_GIF_MASK | V_GIF_ENABLE_MASK);
-+
- 	/* Copied from vmcb01.  msrpm_base can be overwritten later.  */
- 	svm->vmcb->control.nested_ctl = svm->vmcb01.ptr->control.nested_ctl;
- 	svm->vmcb->control.iopm_base_pa = svm->vmcb01.ptr->control.iopm_base_pa;
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index ff1447a3551fc..0461a3430d529 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1032,6 +1032,9 @@ static __init void svm_set_cpu_caps(void)
- 		if (pause_filter_thresh)
- 			kvm_cpu_cap_set(X86_FEATURE_PFTHRESHOLD);
- 
-+		if (vgif)
-+			kvm_cpu_cap_set(X86_FEATURE_VGIF);
-+
- 		/* Nested VM can receive #VMEXIT instead of triggering #GP */
- 		kvm_cpu_cap_set(X86_FEATURE_SVME_ADDR_CHK);
- 	}
-@@ -4180,6 +4183,8 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 		svm->pause_threshold_enabled = false;
+ 	/* Forward iterate */
+ 	for (node = 0; node < len; ++node) {
++		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
  	}
  
-+	svm->vgif_enabled = vgif && guest_cpuid_has(vcpu, X86_FEATURE_VGIF);
-+
- 	svm_recalc_instruction_intercepts(vcpu, svm);
- 
- 	/* For sev guests, the memory encryption bit is not reserved in CR3.  */
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 75781d66cbd60..06e5c43ce18a8 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -168,6 +168,7 @@ struct vcpu_svm {
- 	bool v_vmload_vmsave_enabled      : 1;
- 	bool pause_filter_enabled         : 1;
- 	bool pause_threshold_enabled      : 1;
-+	bool vgif_enabled                 : 1;
- 
- 	u32 ldr_reg;
- 	u32 dfr_reg;
-@@ -386,31 +387,47 @@ static inline bool svm_is_intercept(struct vcpu_svm *svm, int bit)
- 	return vmcb_is_intercept(&svm->vmcb->control, bit);
- }
- 
-+static bool nested_vgif_enabled(struct vcpu_svm *svm)
-+{
-+	if (!is_guest_mode(&svm->vcpu) || !svm->vgif_enabled)
-+		return false;
-+	return svm->nested.ctl.int_ctl & V_GIF_ENABLE_MASK;
-+}
-+
- static inline bool vgif_enabled(struct vcpu_svm *svm)
- {
--	return !!(svm->vmcb->control.int_ctl & V_GIF_ENABLE_MASK);
-+	struct vmcb *vmcb = nested_vgif_enabled(svm) ? svm->vmcb01.ptr : svm->vmcb;
-+
-+	return !!(vmcb->control.int_ctl & V_GIF_ENABLE_MASK);
- }
- 
- static inline void enable_gif(struct vcpu_svm *svm)
- {
-+	struct vmcb *vmcb = nested_vgif_enabled(svm) ? svm->vmcb01.ptr : svm->vmcb;
-+
- 	if (vgif_enabled(svm))
--		svm->vmcb->control.int_ctl |= V_GIF_MASK;
-+		vmcb->control.int_ctl |= V_GIF_MASK;
- 	else
- 		svm->vcpu.arch.hflags |= HF_GIF_MASK;
- }
- 
- static inline void disable_gif(struct vcpu_svm *svm)
- {
-+	struct vmcb *vmcb = nested_vgif_enabled(svm) ? svm->vmcb01.ptr : svm->vmcb;
-+
- 	if (vgif_enabled(svm))
--		svm->vmcb->control.int_ctl &= ~V_GIF_MASK;
-+		vmcb->control.int_ctl &= ~V_GIF_MASK;
- 	else
- 		svm->vcpu.arch.hflags &= ~HF_GIF_MASK;
-+
- }
- 
- static inline bool gif_set(struct vcpu_svm *svm)
- {
-+	struct vmcb *vmcb = nested_vgif_enabled(svm) ? svm->vmcb01.ptr : svm->vmcb;
-+
- 	if (vgif_enabled(svm))
--		return !!(svm->vmcb->control.int_ctl & V_GIF_MASK);
-+		return !!(vmcb->control.int_ctl & V_GIF_MASK);
- 	else
- 		return !!(svm->vcpu.arch.hflags & HF_GIF_MASK);
- }
+ 	/* Reverse iterate */
+ 	for (node = len - 1; node >= 0; --node) {
++		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
 -- 
-2.26.3
+2.30.2
 
