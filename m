@@ -2,412 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 622BA441EB1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 17:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6DE441F7F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 18:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbhKAQlr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Nov 2021 12:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S230261AbhKARqf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Nov 2021 13:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbhKAQjg (ORCPT
+        with ESMTP id S230246AbhKARqe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Nov 2021 12:39:36 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E65C061195;
-        Mon,  1 Nov 2021 09:36:14 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id f8so44728761edy.4;
-        Mon, 01 Nov 2021 09:36:13 -0700 (PDT)
+        Mon, 1 Nov 2021 13:46:34 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75643C061766
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Nov 2021 10:44:01 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id v138so40983181ybb.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Nov 2021 10:44:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HssHsmqFjyLJ0KkJ+2YjhTVNGMWrkrdOlYcK+sJHwYg=;
-        b=oI2hz12aXhPIqcvQ0RKyFopXLh7UcLRN6cAS5imHDAZs8q79zA+qEwL+SITv7RLqQ4
-         4bguY3lPfFn7CtPLKTOlqtvbhTXdeCKQ98EOyG0FfOAEp62vzNESk8AM8X47TAV6M8bD
-         ZKbdTaZvpCWHvZmVfFcCXC4yGF2mdsvguzNe2qjPPgXeh8KYVxq0owMBocKvsooW4tKf
-         +P60Cz++r4APHyJGocq6+CfiP61g590IHFrsotmiya74PUkt3e/YGmk4PCcjRnTxnewG
-         ItUPf+ffjUdf8coedcE9XqQu2Zm5l3lahBCi4tY0Wd3yabBeSWUi+6SwcA4IjhCi9rUG
-         rsWQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Fmyu5Mn4i82cp8HMsdl33MAzo8mJP0Q39h/qUlCf0Q=;
+        b=ZGLIjb6VJaU8wer4pug6zS3Pp/Ya9KByddsZSsXhikN90vlK5Kns3+32lBZMa+bhOG
+         fqvbiUWC8nnj8k0LR7K7IEiuEpg1lLlGflHTVR7UGt+xZ1+lmdzZhgPDHgJojsBrR8/B
+         F0+KKHEXD7BtVvxGO5lH7Pvexp9z8qPpqE9MGQaQ/AE3oQw4+XlQi6vKHVO3CP8rJlGK
+         77mY/JwzORTKv+1glzTayTuswnAKEEjYhQRZl0VfmDq+sbuCfy66ohqVdsUspHBiAR/l
+         mIBEGCaP0g628RohfMcrErdtaO4fvTLObe+0N1Wjg4i3SyTylaOEt9Q+q1K/CZcEErO+
+         tJoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HssHsmqFjyLJ0KkJ+2YjhTVNGMWrkrdOlYcK+sJHwYg=;
-        b=vC4YsLork5niBKxxF9YBaCJvEkfPoFZQ/YaB7HCqAWpng3DM6ogGNN7X/uB6GE1rzi
-         BdqteC9iN2CTLxGlel2rRSyEKjB979IXezKGeS5Jz5Zw596IK8lTOlHqfDyPeCnPiWFx
-         6FDBnE9eav7zVRyrQ9n4m9FmhPL5+r3SIwIhKy2lUJL3+uju28hHTwtqwKkfopQonZeA
-         Fyo2vvLwCTH9WY5KjHeRnG6N6fupUhlltDJwIcQwVNsiDNrt5fgBAd9W5KwuePvMpXXg
-         UAeOQ+qpeKJztlc9tSudtEseMlhmz/cMTpNUz/u94vmWIvGOQgGi3HeAYppcOyIySK8I
-         K9Aw==
-X-Gm-Message-State: AOAM533bUjErpXADDU0dqygKwSXGy4LKtnJEajeHc7Dm6eikHZY0WSFY
-        pJpF3zrbTeX5tH4fCbarGb8=
-X-Google-Smtp-Source: ABdhPJy1P5Z25JkWfcjDz0lLAQbjII1Wm5RLiLHl8EW2i87fA8fqv6bZDiK73MRQ2Y/V0OcrFBwgkg==
-X-Received: by 2002:a17:907:2d20:: with SMTP id gs32mr38828929ejc.472.1635784572591;
-        Mon, 01 Nov 2021 09:36:12 -0700 (PDT)
-Received: from ponky.lan ([2a04:241e:501:3870:f5f:2085:7f25:17c])
-        by smtp.gmail.com with ESMTPSA id f25sm4124583edv.90.2021.11.01.09.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 09:36:12 -0700 (PDT)
-From:   Leonard Crestez <cdleonard@gmail.com>
-To:     David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 25/25] selftests: net/fcnal: Initial tcp_authopt support
-Date:   Mon,  1 Nov 2021 18:35:00 +0200
-Message-Id: <93440f1b9cebae08c1a4bc22f79941c2f4905e28.1635784253.git.cdleonard@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1635784253.git.cdleonard@gmail.com>
-References: <cover.1635784253.git.cdleonard@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Fmyu5Mn4i82cp8HMsdl33MAzo8mJP0Q39h/qUlCf0Q=;
+        b=aKROJiRRFfsvlK9xnYZLGd4pK7CtA+E5mjw8mi4xLvlp1GhXbggx7yv6/mKrM1+9vR
+         UP1xCu6BSCsmXrsLorc9SHrGk95O2NKlgQ58E1bfy1/JnewZYko1jnbsrwPNJa578wKs
+         7inwJMtEQioTP7+NVuWQpWQ/XJkUYqLvFA2p9JqcqV3+f/SX5Jz6f1QkOA6Sg5CZ4Ni3
+         Ho9f0upkcdSmIXMaPAcZD3A+Y2Ry5JtpOggqGtvRznKfgpU1OwIaKmu2onIMh4YfSLd5
+         zV92Ppk6HI5xlGu8hzY/W+qTAS+ddx5wRpqZbgwPGqnwW5pmTLzFIf+keIhQDLGhEiaJ
+         3m7Q==
+X-Gm-Message-State: AOAM530AqFKbBk/B/19S4qR6NYk1EQOOEwxLXeZD+CuxQDT2FgFnOFPO
+        Ep/n9jU31sFJZwjv05G93wpNHwthio3kw7Ptb/B/aw==
+X-Google-Smtp-Source: ABdhPJy8yTlLWG4HgdFtxqaTwCWYlCCin5bPaCJr6rTK2yhMkgh4cmx6q7WO1dC/nFaHckuJT6sw6Twf/PBBdFf/KfE=
+X-Received: by 2002:a25:3142:: with SMTP id x63mr31367323ybx.99.1635788639054;
+ Mon, 01 Nov 2021 10:43:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211005234459.430873-1-michael.roth@amd.com> <20211005234459.430873-2-michael.roth@amd.com>
+ <CAL715WK2toExGW7GGWGQyzhqBijMEhQfhamyb9_eZkrU=+LKnQ@mail.gmail.com>
+ <20211021034529.gwv3hz5xhomtvnu7@amd.com> <CAL715W+PE1hGmxZfMc4oOm6dyNzCBmStnJzp-OyW6DdhNAmwjQ@mail.gmail.com>
+In-Reply-To: <CAL715W+PE1hGmxZfMc4oOm6dyNzCBmStnJzp-OyW6DdhNAmwjQ@mail.gmail.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Mon, 1 Nov 2021 10:43:48 -0700
+Message-ID: <CAL715W+q1NuV6vWGoK=ef==zLv26mTqbft6F5r=wFF81E+72tA@mail.gmail.com>
+Subject: Re: [RFC 01/16] KVM: selftests: move vm_phy_pages_alloc() earlier in file
+To:     Michael Roth <Michael.Roth@amd.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Tests are mostly copied from tcp_md5 with minor changes.
+On Tue, Oct 26, 2021 at 8:52 AM Mingwei Zhang <mizhang@google.com> wrote:
+>
+> On Wed, Oct 20, 2021 at 8:47 PM Michael Roth <michael.roth@amd.com> wrote:
+> >
+> > On Mon, Oct 18, 2021 at 08:00:00AM -0700, Mingwei Zhang wrote:
+> > > On Tue, Oct 5, 2021 at 4:46 PM Michael Roth <michael.roth@amd.com> wrote:
+> > > >
+> > > > Subsequent patches will break some of this code out into file-local
+> > > > helper functions, which will be used by functions like vm_vaddr_alloc(),
+> > > > which currently are defined earlier in the file, so a forward
+> > > > declaration would be needed.
+> > > >
+> > > > Instead, move it earlier in the file, just above vm_vaddr_alloc() and
+> > > > and friends, which are the main users.
+> > > >
+> > > > Signed-off-by: Michael Roth <michael.roth@amd.com>
+> > > > ---
+> > > >  tools/testing/selftests/kvm/lib/kvm_util.c | 146 ++++++++++-----------
+> > > >  1 file changed, 73 insertions(+), 73 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > > index 10a8ed691c66..92f59adddebe 100644
+> > > > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > > @@ -1145,6 +1145,79 @@ void vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpuid)
+> > > >         list_add(&vcpu->list, &vm->vcpus);
+> > > >  }
+> > > >
+> > > > +/*
+> > > > + * Physical Contiguous Page Allocator
+> > > > + *
+> > > > + * Input Args:
+> > > > + *   vm - Virtual Machine
+> > > > + *   num - number of pages
+> > > > + *   paddr_min - Physical address minimum
+> > > > + *   memslot - Memory region to allocate page from
+> > > > + *
+> > > > + * Output Args: None
+> > > > + *
+> > > > + * Return:
+> > > > + *   Starting physical address
+> > > > + *
+> > > > + * Within the VM specified by vm, locates a range of available physical
+> > > > + * pages at or above paddr_min. If found, the pages are marked as in use
+> > > > + * and their base address is returned. A TEST_ASSERT failure occurs if
+> > > > + * not enough pages are available at or above paddr_min.
+> > > > + */
+> > > > +vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+> > > > +                             vm_paddr_t paddr_min, uint32_t memslot)
+> > > > +{
+> > > > +       struct userspace_mem_region *region;
+> > > > +       sparsebit_idx_t pg, base;
+> > > > +
+> > > > +       TEST_ASSERT(num > 0, "Must allocate at least one page");
+> > > > +
+> > > > +       TEST_ASSERT((paddr_min % vm->page_size) == 0, "Min physical address "
+> > > > +               "not divisible by page size.\n"
+> > > > +               "  paddr_min: 0x%lx page_size: 0x%x",
+> > > > +               paddr_min, vm->page_size);
+> > > > +
+> > > > +       region = memslot2region(vm, memslot);
+> > > > +       base = pg = paddr_min >> vm->page_shift;
+> > > > +
+> > > > +       do {
+> > > > +               for (; pg < base + num; ++pg) {
+> > > > +                       if (!sparsebit_is_set(region->unused_phy_pages, pg)) {
+> > > > +                               base = pg = sparsebit_next_set(region->unused_phy_pages, pg);
+> > > > +                               break;
+> > > > +                       }
+> > > > +               }
+> > > > +       } while (pg && pg != base + num);
+> > > > +
+> > > > +       if (pg == 0) {
+> > > > +               fprintf(stderr, "No guest physical page available, "
+> > > > +                       "paddr_min: 0x%lx page_size: 0x%x memslot: %u\n",
+> > > > +                       paddr_min, vm->page_size, memslot);
+> > > > +               fputs("---- vm dump ----\n", stderr);
+> > > > +               vm_dump(stderr, vm, 2);
+> > > > +               abort();
+> > > > +       }
+> > > > +
+> > > > +       for (pg = base; pg < base + num; ++pg)
+> > > > +               sparsebit_clear(region->unused_phy_pages, pg);
+> > > > +
+> > > > +       return base * vm->page_size;
+> > > > +}
+> > > > +
+> > > > +vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
+> > > > +                            uint32_t memslot)
+> > > > +{
+> > > > +       return vm_phy_pages_alloc(vm, 1, paddr_min, memslot);
+> > > > +}
+> > > > +
+> > > > +/* Arbitrary minimum physical address used for virtual translation tables. */
+> > > > +#define KVM_GUEST_PAGE_TABLE_MIN_PADDR 0x180000
+> > > > +
+> > > > +vm_paddr_t vm_alloc_page_table(struct kvm_vm *vm)
+> > > > +{
+> > > > +       return vm_phy_page_alloc(vm, KVM_GUEST_PAGE_TABLE_MIN_PADDR, 0);
+> > > > +}
+> > > > +
+> > > >  /*
+> > > >   * VM Virtual Address Unused Gap
+> > > >   *
+> > > > @@ -2149,79 +2222,6 @@ const char *exit_reason_str(unsigned int exit_reason)
+> > > >         return "Unknown";
+> > > >  }
+> > > >
+> > > > -/*
+> > > > - * Physical Contiguous Page Allocator
+> > > > - *
+> > > > - * Input Args:
+> > > > - *   vm - Virtual Machine
+> > > > - *   num - number of pages
+> > > > - *   paddr_min - Physical address minimum
+> > > > - *   memslot - Memory region to allocate page from
+> > > > - *
+> > > > - * Output Args: None
+> > > > - *
+> > > > - * Return:
+> > > > - *   Starting physical address
+> > > > - *
+> > > > - * Within the VM specified by vm, locates a range of available physical
+> > > > - * pages at or above paddr_min. If found, the pages are marked as in use
+> > > > - * and their base address is returned. A TEST_ASSERT failure occurs if
+> > > > - * not enough pages are available at or above paddr_min.
+> > > > - */
+> > > > -vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+> > > > -                             vm_paddr_t paddr_min, uint32_t memslot)
+> > > > -{
+> > > > -       struct userspace_mem_region *region;
+> > > > -       sparsebit_idx_t pg, base;
+> > > > -
+> > > > -       TEST_ASSERT(num > 0, "Must allocate at least one page");
+> > > > -
+> > > > -       TEST_ASSERT((paddr_min % vm->page_size) == 0, "Min physical address "
+> > > > -               "not divisible by page size.\n"
+> > > > -               "  paddr_min: 0x%lx page_size: 0x%x",
+> > > > -               paddr_min, vm->page_size);
+> > > > -
+> > > > -       region = memslot2region(vm, memslot);
+> > > > -       base = pg = paddr_min >> vm->page_shift;
+> > > > -
+> > > > -       do {
+> > > > -               for (; pg < base + num; ++pg) {
+> > > > -                       if (!sparsebit_is_set(region->unused_phy_pages, pg)) {
+> > > > -                               base = pg = sparsebit_next_set(region->unused_phy_pages, pg);
+> > > > -                               break;
+> > > > -                       }
+> > > > -               }
+> > > > -       } while (pg && pg != base + num);
+> > > > -
+> > > > -       if (pg == 0) {
+> > > > -               fprintf(stderr, "No guest physical page available, "
+> > > > -                       "paddr_min: 0x%lx page_size: 0x%x memslot: %u\n",
+> > > > -                       paddr_min, vm->page_size, memslot);
+> > > > -               fputs("---- vm dump ----\n", stderr);
+> > > > -               vm_dump(stderr, vm, 2);
+> > > > -               abort();
+> > > > -       }
+> > > > -
+> > > > -       for (pg = base; pg < base + num; ++pg)
+> > > > -               sparsebit_clear(region->unused_phy_pages, pg);
+> > > > -
+> > > > -       return base * vm->page_size;
+> > > > -}
+> > > > -
+> > > > -vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
+> > > > -                            uint32_t memslot)
+> > > > -{
+> > > > -       return vm_phy_pages_alloc(vm, 1, paddr_min, memslot);
+> > > > -}
+> > > > -
+> > > > -/* Arbitrary minimum physical address used for virtual translation tables. */
+> > > > -#define KVM_GUEST_PAGE_TABLE_MIN_PADDR 0x180000
+> > > > -
+> > > > -vm_paddr_t vm_alloc_page_table(struct kvm_vm *vm)
+> > > > -{
+> > > > -       return vm_phy_page_alloc(vm, KVM_GUEST_PAGE_TABLE_MIN_PADDR, 0);
+> > > > -}
+> > > > -
+> > > >  /*
+> > > >   * Address Guest Virtual to Host Virtual
+> > > >   *
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> > > Why move the function implementation? Maybe just adding a declaration
+> > > at the top of kvm_util.c should suffice.
+> >
+> > At least from working on other projects I'd gotten the impression that
+> > forward function declarations should be avoided if they can be solved by
+> > moving the function above the caller. Certainly don't mind taking your
+> > suggestion and dropping this patch if that's not the case here though.
+>
+> Understood. Yes, I think it would be better to follow your experience
+> then. I was thinking that if you move the code and then potentially
+> git blame on that function might point to you :)
+>
+> Thanks.
+> -Mingwei
 
-It covers VRF support but only based on binding multiple servers: not
-multiple keys bound to different interfaces.
 
-Also add a specific -t tcp_authopt to run only these tests specifically.
+Reviewed-by: Mingwei Zhang <mizhang@google.com>
 
-Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
----
- tools/testing/selftests/net/fcnal-test.sh | 249 ++++++++++++++++++++++
- 1 file changed, 249 insertions(+)
-
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 3313566ce906..d7afd9f40848 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -800,10 +800,252 @@ ipv4_ping()
- }
- 
- ################################################################################
- # IPv4 TCP
- 
-+#
-+# TCP Authentication Option Tests
-+#
-+
-+# try to enable tcp_authopt sysctl
-+enable_tcp_authopt()
-+{
-+	if [[ -e /proc/sys/net/ipv4/tcp_authopt ]]; then
-+		sysctl -w net.ipv4.tcp_authopt=1
-+	fi
-+}
-+
-+# check if tcp_authopt is compiled with a client-side bind test
-+has_tcp_authopt()
-+{
-+	run_cmd_nsb nettest -b -A ${MD5_PW} -r ${NSA_IP}
-+}
-+
-+ipv4_tcp_authopt_novrf()
-+{
-+	enable_tcp_authopt
-+	if ! has_tcp_authopt; then
-+		echo "TCP-AO appears to be missing, skip"
-+		return 0
-+	fi
-+
-+	log_start
-+	run_cmd nettest -s -A ${MD5_PW} -m ${NSB_IP} &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 0 "AO: Single address config"
-+
-+	log_start
-+	run_cmd nettest -s  &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 2 "AO: Server no config, client uses password"
-+
-+	log_start
-+	run_cmd nettest -s -A ${MD5_PW} -m ${NSB_IP} &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_WRONG_PW}
-+	log_test $? 2 "AO: Client uses wrong password"
-+
-+	log_start
-+	run_cmd nettest -s -A ${MD5_PW} -m ${NSB_LO_IP} &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 2 "AO: Client address does not match address configured on server"
-+
-+	# no prefixlen for AO yet
-+}
-+
-+ipv6_tcp_authopt_novrf()
-+{
-+	enable_tcp_authopt
-+	if ! has_tcp_authopt; then
-+		echo "TCP-AO appears to be missing, skip"
-+		return 0
-+	fi
-+
-+	log_start
-+	run_cmd nettest -6 -s -A ${MD5_PW} &
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_PW}
-+	log_test $? 0 "AO: Simple correct config"
-+
-+	log_start
-+	run_cmd nettest -6 -s
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_PW}
-+	log_test $? 2 "AO: Server no config, client uses password"
-+
-+	log_start
-+	run_cmd nettest -6 -s -A ${MD5_PW} -m ${NSB_IP6} &
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_WRONG_PW}
-+	log_test $? 2 "AO: Client uses wrong password"
-+
-+	log_start
-+	run_cmd nettest -6 -s -A ${MD5_PW} -m ${NSB_LO_IP6} &
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_PW}
-+	log_test $? 2 "AO: Client address does not match address configured on server"
-+
-+	# no prefixlen for AO yet
-+}
-+
-+ipv4_tcp_authopt_vrf()
-+{
-+	enable_tcp_authopt
-+	if ! has_tcp_authopt; then
-+		echo "TCP-AO appears to be missing, skip"
-+		return 0
-+	fi
-+
-+	log_start
-+	run_cmd nettest -s -I ${VRF} -A ${MD5_PW} &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Simple config"
-+
-+	#
-+	# duplicate config between default VRF and a VRF
-+	#
-+
-+	log_start
-+	run_cmd nettest -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP} &
-+	run_cmd nettest -s -A ${MD5_WRONG_PW} -m ${NSB_IP} &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Servers in default-VRF and VRF, client in VRF"
-+
-+	log_start
-+	run_cmd nettest -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP} &
-+	run_cmd nettest -s -A ${MD5_WRONG_PW} -m ${NSB_IP} &
-+	sleep 1
-+	run_cmd_nsc nettest -r ${NSA_IP} -A ${MD5_WRONG_PW}
-+	log_test $? 0 "AO: VRF: Servers in default-VRF and VRF, client in default-VRF"
-+
-+	log_start
-+	show_hint "Should timeout since client in default VRF uses VRF password"
-+	run_cmd nettest -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP} &
-+	run_cmd nettest -s -A ${MD5_WRONG_PW} -m ${NSB_IP} &
-+	sleep 1
-+	run_cmd_nsc nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 2 "AO: VRF: Servers in default VRF and VRF, conn in default-VRF with VRF pw"
-+
-+	log_start
-+	show_hint "Should timeout since client in VRF uses default VRF password"
-+	run_cmd nettest -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP} &
-+	run_cmd nettest -s -A ${MD5_WRONG_PW} -m ${NSB_IP} &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_WRONG_PW}
-+	log_test $? 2 "AO: VRF: Servers in default VRF and VRF, conn in VRF with default-VRF pw"
-+
-+	test_ipv4_tcp_authopt_vrf__global_server__bind_ifindex0
-+}
-+
-+test_ipv4_tcp_authopt_vrf__global_server__bind_ifindex0()
-+{
-+	# This particular test needs tcp_l3mdev_accept=1 for Global server to accept VRF connections
-+	local old_tcp_l3mdev_accept
-+	old_tcp_l3mdev_accept=$(get_sysctl net.ipv4.tcp_l3mdev_accept)
-+	set_sysctl net.ipv4.tcp_l3mdev_accept=1
-+
-+	log_start
-+	run_cmd nettest -s -A ${MD5_PW} --force-bind-key-ifindex &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 2 "AO: VRF: Global server, Key bound to ifindex=0 rejects VRF connection"
-+
-+	log_start
-+	run_cmd nettest -s -A ${MD5_PW} --force-bind-key-ifindex &
-+	sleep 1
-+	run_cmd_nsc nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Global server, key bound to ifindex=0 accepts non-VRF connection"
-+	log_start
-+
-+	run_cmd nettest -s -A ${MD5_PW} --no-bind-key-ifindex &
-+	sleep 1
-+	run_cmd_nsb nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Global server, key not bound to ifindex accepts VRF connection"
-+
-+	log_start
-+	run_cmd nettest -s -A ${MD5_PW} --no-bind-key-ifindex &
-+	sleep 1
-+	run_cmd_nsc nettest -r ${NSA_IP} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Global server, key not bound to ifindex accepts non-VRF connection"
-+
-+	# restore value
-+	set_sysctl net.ipv4.tcp_l3mdev_accept="$old_tcp_l3mdev_accept"
-+}
-+
-+ipv6_tcp_authopt_vrf()
-+{
-+	enable_tcp_authopt
-+	if ! has_tcp_authopt; then
-+		echo "TCP-AO appears to be missing, skip"
-+		return 0
-+	fi
-+
-+	log_start
-+	run_cmd nettest -6 -s -I ${VRF} -A ${MD5_PW} &
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Simple config"
-+
-+	#
-+	# duplicate config between default VRF and a VRF
-+	#
-+
-+	log_start
-+	run_cmd nettest -6 -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP6} &
-+	run_cmd nettest -6 -s -A ${MD5_WRONG_PW} -m ${NSB_IP6} &
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_PW}
-+	log_test $? 0 "AO: VRF: Servers in default-VRF and VRF, client in VRF"
-+
-+	log_start
-+	run_cmd nettest -6 -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP6} &
-+	run_cmd nettest -6 -s -A ${MD5_WRONG_PW} -m ${NSB_IP6} &
-+	sleep 1
-+	run_cmd_nsc nettest -6 -r ${NSA_IP6} -A ${MD5_WRONG_PW}
-+	log_test $? 0 "AO: VRF: Servers in default-VRF and VRF, client in default-VRF"
-+
-+	log_start
-+	show_hint "Should timeout since client in default VRF uses VRF password"
-+	run_cmd nettest -6 -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP6} &
-+	run_cmd nettest -6 -s -A ${MD5_WRONG_PW} -m ${NSB_IP6} &
-+	sleep 1
-+	run_cmd_nsc nettest -6 -r ${NSA_IP6} -A ${MD5_PW}
-+	log_test $? 2 "AO: VRF: Servers in default VRF and VRF, conn in default-VRF with VRF pw"
-+
-+	log_start
-+	show_hint "Should timeout since client in VRF uses default VRF password"
-+	run_cmd nettest -6 -s -I ${VRF} -A ${MD5_PW} -m ${NSB_IP6} &
-+	run_cmd nettest -6 -s -A ${MD5_WRONG_PW} -m ${NSB_IP6} &
-+	sleep 1
-+	run_cmd_nsb nettest -6 -r ${NSA_IP6} -A ${MD5_WRONG_PW}
-+	log_test $? 2 "AO: VRF: Servers in default VRF and VRF, conn in VRF with default-VRF pw"
-+}
-+
-+only_tcp_authopt()
-+{
-+	log_section "TCP Authentication Option"
-+
-+	setup
-+	set_sysctl net.ipv4.tcp_l3mdev_accept=0
-+	log_subsection "TCP-AO IPv4 no VRF"
-+	ipv4_tcp_authopt_novrf
-+	log_subsection "TCP-AO IPv6 no VRF"
-+	ipv6_tcp_authopt_novrf
-+
-+	setup "yes"
-+	set_sysctl net.ipv4.tcp_l3mdev_accept=0
-+	log_subsection "TCP-AO IPv4 VRF"
-+	ipv4_tcp_authopt_vrf
-+	log_subsection "TCP-AO IPv6 VRF"
-+	ipv6_tcp_authopt_vrf
-+}
-+
- #
- # MD5 tests without VRF
- #
- ipv4_tcp_md5_novrf()
- {
-@@ -1185,10 +1427,11 @@ ipv4_tcp_novrf()
- 	show_hint "Should fail 'Connection refused'"
- 	run_cmd nettest -d ${NSA_DEV} -r ${a}
- 	log_test_addr ${a} $? 1 "No server, device client, local conn"
- 
- 	ipv4_tcp_md5_novrf
-+	ipv4_tcp_authopt_novrf
- }
- 
- ipv4_tcp_vrf()
- {
- 	local a
-@@ -1239,10 +1482,12 @@ ipv4_tcp_vrf()
- 	run_cmd nettest -r ${a} -d ${NSA_DEV}
- 	log_test_addr ${a} $? 1 "Global server, local connection"
- 
- 	# run MD5 tests
- 	ipv4_tcp_md5
-+	# run AO tests
-+	ipv6_tcp_md5_vrf
- 
- 	#
- 	# enable VRF global server
- 	#
- 	log_subsection "VRF Global server enabled"
-@@ -2648,10 +2893,11 @@ ipv6_tcp_novrf()
- 		run_cmd nettest -6 -d ${NSA_DEV} -r ${a}
- 		log_test_addr ${a} $? 1 "No server, device client, local conn"
- 	done
- 
- 	ipv6_tcp_md5_novrf
-+	ipv6_tcp_authopt_novrf
- }
- 
- ipv6_tcp_vrf()
- {
- 	local a
-@@ -2718,10 +2964,12 @@ ipv6_tcp_vrf()
- 	run_cmd nettest -6 -r ${a} -d ${NSA_DEV}
- 	log_test_addr ${a} $? 1 "Global server, local connection"
- 
- 	# run MD5 tests
- 	ipv6_tcp_md5
-+	# run AO tests
-+	ipv6_tcp_authopt_vrf
- 
- 	#
- 	# enable VRF global server
- 	#
- 	log_subsection "VRF Global server enabled"
-@@ -4062,10 +4310,11 @@ do
- 	ipv6_bind|bind6) ipv6_addr_bind;;
- 	ipv6_runtime)    ipv6_runtime;;
- 	ipv6_netfilter)  ipv6_netfilter;;
- 
- 	use_cases)       use_cases;;
-+	tcp_authopt)     only_tcp_authopt;;
- 
- 	# setup namespaces and config, but do not run any tests
- 	setup)		 setup; exit 0;;
- 	vrf_setup)	 setup "yes"; exit 0;;
- 
--- 
-2.25.1
-
+Thanks.
+-Mingwei
