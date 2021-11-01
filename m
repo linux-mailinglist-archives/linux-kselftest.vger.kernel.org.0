@@ -2,59 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9944418FA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 10:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A12441B3E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Nov 2021 13:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbhKAJxz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Nov 2021 05:53:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234552AbhKAJvD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Nov 2021 05:51:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 44A9761503;
-        Mon,  1 Nov 2021 09:32:21 +0000 (UTC)
-Date:   Mon, 1 Nov 2021 10:32:18 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/core: fix conflicting types compile error for
- close_range()
-Message-ID: <20211101093218.2qxflsxch3slvp5y@wittgenstein>
-References: <20211027192619.21813-1-skhan@linuxfoundation.org>
+        id S232536AbhKAMiO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Nov 2021 08:38:14 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:13996 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232051AbhKAMiL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 1 Nov 2021 08:38:11 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HjXWb4WvzzZcj0;
+        Mon,  1 Nov 2021 20:33:31 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Mon, 1 Nov 2021 20:35:27 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Mon, 1 Nov
+ 2021 20:35:27 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
+        <ast@kernel.org>, <yhs@fb.com>
+Subject: [PATCH -next v2] bpf/benchs: Fix return value check of bpf_program__attach()
+Date:   Mon, 1 Nov 2021 20:43:10 +0800
+Message-ID: <20211101124310.3947887-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211027192619.21813-1-skhan@linuxfoundation.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 01:26:19PM -0600, Shuah Khan wrote:
-> close_range() test type conflicts with close_range() library call in
-> x86_64-linux-gnu/bits/unistd_ext.h. Fix it by changing the name to
-> core_close_range().
-> 
-> gcc -g -I../../../../usr/include/    close_range_test.c  -o ../tools/testing/selftests/core/close_range_test
-> In file included from close_range_test.c:16:
-> close_range_test.c:57:6: error: conflicting types for ‘close_range’; have ‘void(struct __test_metadata *)’
->    57 | TEST(close_range)
->       |      ^~~~~~~~~~~
-> ../kselftest_harness.h:181:21: note: in definition of macro ‘__TEST_IMPL’
->   181 |         static void test_name(struct __test_metadata *_metadata); \
->       |                     ^~~~~~~~~
-> close_range_test.c:57:1: note: in expansion of macro ‘TEST’
->    57 | TEST(close_range)
->       | ^~~~
-> In file included from /usr/include/unistd.h:1204,
->                  from close_range_test.c:13:
-> /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:56:12: note: previous declaration of ‘close_range’ with type ‘int(unsigned int,  unsigned int,  int)’
->    56 | extern int close_range (unsigned int __fd, unsigned int __max_fd,
->       |            ^~~~~~~~~~~
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
+If bpf_program__attach() fails, it never returns NULL,
+we should use libbpf_get_error() to check the return value.
 
-Looks good. thank you!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+v2:
+  don't use 'int err'
+---
+ .../selftests/bpf/benchs/bench_bloom_filter_map.c      | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+index 6eeeed2913e6..4afaa4adb327 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
++++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+@@ -304,7 +304,7 @@ static void bloom_lookup_setup(void)
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_lookup);
+-	if (!link) {
++	if (libbpf_get_error(link)) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -321,7 +321,7 @@ static void bloom_update_setup(void)
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_update);
+-	if (!link) {
++	if (libbpf_get_error(link)) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -340,7 +340,7 @@ static void false_positive_setup(void)
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+-	if (!link) {
++	if (libbpf_get_error(link)) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -358,7 +358,7 @@ static void hashmap_with_bloom_setup(void)
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+-	if (!link) {
++	if (libbpf_get_error(link)) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -375,7 +375,7 @@ static void hashmap_no_bloom_setup(void)
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+-	if (!link) {
++	if (libbpf_get_error(link)) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+-- 
+2.25.1
+
