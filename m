@@ -2,157 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEF4442B47
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 11:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B469E442BCB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 11:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbhKBKFv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Nov 2021 06:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbhKBKFv (ORCPT
+        id S230128AbhKBKtg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Nov 2021 06:49:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22898 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229800AbhKBKte (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 06:05:51 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC4AC061714;
-        Tue,  2 Nov 2021 03:03:16 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id g10so73679425edj.1;
-        Tue, 02 Nov 2021 03:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6stZNR+N9UoFJ7wUFFhv365ZVdV0HcQUPxcYE0rMeh8=;
-        b=dyCgkR/dlEMAM7uT9GuFEMR1amHp50THUKfdZjMtOrgLXXysnU16E9AcvvvlE4W67G
-         fG4ys65dW4beqjYJT/0XFs1bs8KTaLaY2VzDVVseSGjVfK2QEp2m+3CMUQpu7lXzVD5i
-         dhGFCc+z8HjQtCKoJj3LSU/29bQJsAdh7MuZzFa82g4MbWdlmJh0BcseB0yP/avGIcME
-         xn75mL98NudZqZDKi5xYUY0P3DYrV8PYFKltsDG2UAKdAf4DHHa4wiQah2kdjhDeguDO
-         bvqmpj7roh4xysfrzNu3yyVd0LI9RNOG2/yNB0jxSKQWHRxLAOk6SoDoP/IxGwO74LRi
-         YfJw==
+        Tue, 2 Nov 2021 06:49:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635850018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XFQHbIlafDzJEHgYX2vpeRXhMsdqgY8QKpgrZUogIu4=;
+        b=RzXimXP4vcU1SyFnsRwoZ3joxAjHjIupQhd5Vw0LNnNDbq2JYybPDoi3+U29Mi+VaKOaUT
+        QrBdycED55t+fnEiUUHyeByX3YOuI0Cwt+sJgSjuNIoMhyQU0fpw899cv/FuLF/aQk79KQ
+        /biB5tSYUtTHgxSv3rlpGThVLmnSkGs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-251-qB51gwTSNn-EY1JEL37wtQ-1; Tue, 02 Nov 2021 06:46:57 -0400
+X-MC-Unique: qB51gwTSNn-EY1JEL37wtQ-1
+Received: by mail-wm1-f72.google.com with SMTP id l4-20020a05600c1d0400b00332f47a0fa3so694025wms.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 03:46:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6stZNR+N9UoFJ7wUFFhv365ZVdV0HcQUPxcYE0rMeh8=;
-        b=bqgcg3DliM02y1dju6vZjFMrEio5Bsf2iGJv2w6zxpmMWBuJoFklRAdzjAzgy2tFjC
-         7bcA8tgSBTdoa1K0IkhGo91Luon/Yo4cvbRoL/rSRfx4NpE+PISfBnevPUw9laouiu+T
-         iNI50oZEe6yWYxhabhvxE5lTD7MUJu1q5IlKo/hmVErCfVsTFV1FgGQtnPpQI7tylZw8
-         aTVWY4RAtyeZIWehwHU+zqk590Mx3o+vi1D4lHLqXm1ILMYIT7coLSXSws/XkewGBgDd
-         OWPfOhZ7IvNqadzRQgrqRQxPMr0NK9ZkbHrGFuitKvj01jyjSlmJkYJAsjXT/cAll956
-         3tHQ==
-X-Gm-Message-State: AOAM5333N7fbU7F5jfp0O4Di9lYCuc1ydgPcX1CuPSeLahoDn/2jvymW
-        ntB2GD9ov2F5EIg+MLXc86mSeKmtjcEibQ4X
-X-Google-Smtp-Source: ABdhPJwWSNrs/OWPcip1lXzSLr2dq0oxL7qdJ+WZ8BePveyBXGFsyxZBjF2ZXYNuzoVfxOqDCnGShQ==
-X-Received: by 2002:a17:906:c186:: with SMTP id g6mr43095120ejz.259.1635847394748;
-        Tue, 02 Nov 2021 03:03:14 -0700 (PDT)
-Received: from ?IPv6:2a04:241e:501:3870:88ff:d1a0:a1c6:4b6a? ([2a04:241e:501:3870:88ff:d1a0:a1c6:4b6a])
-        by smtp.gmail.com with ESMTPSA id d3sm7927902ejb.35.2021.11.02.03.03.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Nov 2021 03:03:14 -0700 (PDT)
-Subject: Re: [PATCH v2 11/25] tcp: authopt: Implement Sequence Number
- Extension
-To:     Francesco Ruggeri <fruggeri@arista.com>
-Cc:     David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1635784253.git.cdleonard@gmail.com>
- <6097ec24d87efc55962a1bfac9441132f0fc4206.1635784253.git.cdleonard@gmail.com>
- <CA+HUmGgMAU235hMtTgucVb1GX_Ru83bngHg8-Jvy2g6BA7djsg@mail.gmail.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <876f0df1-894a-49bb-07dc-1b1137479f3f@gmail.com>
-Date:   Tue, 2 Nov 2021 12:03:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=XFQHbIlafDzJEHgYX2vpeRXhMsdqgY8QKpgrZUogIu4=;
+        b=4R/EKmQGSrps0fv4udq3KFExvPQA0LAPPYOF1vu8ZMbWw2MngfsaIx1fvBD025V1hJ
+         F2dqhEUWXYMzRTOi+xhXmg5mUmTsFAj2sRWhleH/QVUkIoR11fasYfWbi3JiatB5rQXh
+         483L78ywuWvOCuYPi+VoBtGQmzYInKzRHH8VkgaiH0JYbhfQHbr9yeHD9JwTJfjNZ1bk
+         FHMvuLfETC+ZFAs2/3I4R3/p9o3iOd0y7VHW2OMAzDF1jRrdU562mD07umjhI64L8cJZ
+         QbUfivM6xczL18YDVrWbIT+2lOsewtTl2mEQYkAtakzoze7GSOQTapoNEKMp1vu2rwOt
+         vFCg==
+X-Gm-Message-State: AOAM531fI1iuYNrwqxAzpQjU7347VY1jFB32Uj5B62h8RRGq2SdAP9tv
+        O6wU7UYU7XA0HLIL/99SMMbU1iwrobXsajw9IyEeMG7PeoJUnnBc1pkzNdBrg0IWLS+yw0XnjOQ
+        lCRpCriHb4cTZmk1uR8+1ilbSVq//
+X-Received: by 2002:a1c:c91a:: with SMTP id f26mr6013755wmb.89.1635850016682;
+        Tue, 02 Nov 2021 03:46:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJze0huHSIEw1nkLBwxtB5ocsTOvhFwt3G116/y2bZnfLuM0x5klgPLxC7Q+PMIFw0Gw4wG3lA==
+X-Received: by 2002:a1c:c91a:: with SMTP id f26mr6013730wmb.89.1635850016453;
+        Tue, 02 Nov 2021 03:46:56 -0700 (PDT)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id p2sm110903wmq.23.2021.11.02.03.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Nov 2021 03:46:55 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
+In-Reply-To: <YYB2l9bzFhKzobZB@google.com>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+ <20210811122927.900604-7-mlevitsk@redhat.com>
+ <137f2dcc-75d2-9d71-e259-dd66d43ad377@redhat.com>
+ <87sfwfkhk5.fsf@vitty.brq.redhat.com>
+ <b48210a35b3bc6d63beeb33c19b609b3014191dd.camel@redhat.com>
+ <YYB2l9bzFhKzobZB@google.com>
+Date:   Tue, 02 Nov 2021 11:46:54 +0100
+Message-ID: <87k0hqkf6p.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+HUmGgMAU235hMtTgucVb1GX_Ru83bngHg8-Jvy2g6BA7djsg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/1/21 9:22 PM, Francesco Ruggeri wrote:
->> +/* Compute SNE for a specific packet (by seq). */
->> +static int compute_packet_sne(struct sock *sk, struct tcp_authopt_info *info,
->> +                             u32 seq, bool input, __be32 *sne)
->> +{
->> +       u32 rcv_nxt, snd_nxt;
->> +
->> +       // We can't use normal SNE computation before reaching TCP_ESTABLISHED
->> +       // For TCP_SYN_SENT the dst_isn field is initialized only after we
->> +       // validate the remote SYN/ACK
->> +       // For TCP_NEW_SYN_RECV there is no tcp_authopt_info at all
->> +       if (sk->sk_state == TCP_SYN_SENT ||
->> +           sk->sk_state == TCP_NEW_SYN_RECV ||
->> +           sk->sk_state == TCP_LISTEN)
->> +               return 0;
->> +
-> 
-> In case of TCP_NEW_SYN_RECV, if our SYNACK had sequence number
-> 0xffffffff, we will receive an ACK sequence number of 0, which
-> should have sne = 1.
-> 
-> In a somewhat similar corner case, when we receive a SYNACK to
-> our SYN in tcp_rcv_synsent_state_process, if the SYNACK has
-> sequence number 0xffffffff, we set tp->rcv_nxt to 0, and we
-> should set sne to 1.
-> 
-> There may be more similar corner cases related to a wraparound
-> during the handshake.
-> 
-> Since as you pointed out all we need is "recent" valid <sne, seq>
-> pairs as reference, rather than relying on rcv_sne being paired
-> with tp->rcv_nxt (and similarly for snd_sne and tp->snd_nxt),
-> would it be easier to maintain reference <sne, seq> pairs for send
-> and receive in tcp_authopt_info, appropriately handle the different
-> handshake cases and initialize the pairs, and only then track them
-> in tcp_rcv_nxt_update and tcp_rcv_snd_update?
+Sean Christopherson <seanjc@google.com> writes:
 
-For TCP_NEW_SYN_RECV there is no struct tcp_authopt_info, only a request 
-minisock. I think those are deliberately kept small save resources on 
-SYN floods so I'd rather not increase their size.
+> On Mon, Nov 01, 2021, Maxim Levitsky wrote:
+>> On Mon, 2021-11-01 at 16:43 +0100, Vitaly Kuznetsov wrote:
+>> > Paolo Bonzini <pbonzini@redhat.com> writes:
+>> > 
+>> > > On 11/08/21 14:29, Maxim Levitsky wrote:
+>> > > > Modify debug_regs test to create a pending interrupt
+>> > > > and see that it is blocked when single stepping is done
+>> > > > with KVM_GUESTDBG_BLOCKIRQ
+>> > > > 
+>> > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+>> > > > ---
+>> > > >   .../testing/selftests/kvm/x86_64/debug_regs.c | 24 ++++++++++++++++---
+>> > > >   1 file changed, 21 insertions(+), 3 deletions(-)
+>> > > 
+>> > > I haven't looked very much at this, but the test fails.
+>> > > 
+>> > 
+>> > Same here,
+>> > 
+>> > the test passes on AMD but fails consistently on Intel:
+>> > 
+>> > # ./x86_64/debug_regs 
+>> > ==== Test Assertion Failure ====
+>> >   x86_64/debug_regs.c:179: run->exit_reason == KVM_EXIT_DEBUG && run->debug.arch.exception == DB_VECTOR && run->debug.arch.pc == target_rip && run->debug.arch.dr6 == target_dr6
+>> >   pid=13434 tid=13434 errno=0 - Success
+>> >      1	0x00000000004027c6: main at debug_regs.c:179
+>> >      2	0x00007f65344cf554: ?? ??:0
+>> >      3	0x000000000040294a: _start at ??:?
+>> >   SINGLE_STEP[1]: exit 8 exception 1 rip 0x402a25 (should be 0x402a27) dr6 0xffff4ff0 (should be 0xffff4ff0)
+>> > 
+>> > (I know I'm late to the party).
+>> 
+>> Well that is strange. It passes on my intel laptop. Just tested 
+>> (kvm/queue + qemu master, compiled today) :-(
+>> 
+>> It fails on iteration 1 (and there is iteration 0) which I think means that we
+>> start with RIP on sti, and get #DB on start of xor instruction first (correctly), 
+>> and then we get #DB again on start of xor instruction again?
+>> 
+>> Something very strange. My laptop has i7-7600U.
+>
+> I haven't verified on hardware, but my guess is that this code in vmx_vcpu_run()
+>
+> 	/* When single-stepping over STI and MOV SS, we must clear the
+> 	 * corresponding interruptibility bits in the guest state. Otherwise
+> 	 * vmentry fails as it then expects bit 14 (BS) in pending debug
+> 	 * exceptions being set, but that's not correct for the guest debugging
+> 	 * case. */
+> 	if (vcpu->guest_debug & KVM_GUESTDBG_SINGLESTEP)
+> 		vmx_set_interrupt_shadow(vcpu, 0);
+>
+> interacts badly with APICv=1.  It will kill the STI shadow and cause the IRQ in
+> vmcs.GUEST_RVI to be recognized when it (micro-)architecturally should not.  My
+> head is going in circles trying to sort out what would actually happen.  Maybe
+> comment out that and/or disable APICv to see if either one makes the test pass?
+>
 
-For all the handshake cases we can just rely on SNE=0 for ISN and we 
-already need to keep track of ISNs because they're part of the signature.
+Interestingly,
 
-I'll need to test handshake seq 0xFFFFFFFF deliberately, you're right 
-that it can fail.
+loading 'kvm-intel' with 'enable_apicv=0' makes the test pass, however,
+commenting out "vmx_set_interrupt_shadow()" as suggested gives a
+different result (with enable_apicv=1):
 
->>   static void tcp_rcv_nxt_update(struct tcp_sock *tp, u32 seq)
->>   {
->>          u32 delta = seq - tp->rcv_nxt;
->>
->>          sock_owned_by_me((struct sock *)tp);
->> +       tcp_authopt_update_rcv_sne(tp, seq);
->>          tp->bytes_received += delta;
->>          WRITE_ONCE(tp->rcv_nxt, seq);
->>   }
->>
-> 
-> Since rcv_sne and tp->rcv_nxt are not updated atomically, could
-> there ever be a case where a reader might use the new sne with
-> the old rcv_nxt?
+# ./x86_64/debug_regs 
+==== Test Assertion Failure ====
+  x86_64/debug_regs.c:179: run->exit_reason == KVM_EXIT_DEBUG && run->debug.arch.exception == DB_VECTOR && run->debug.arch.pc == target_rip && run->debug.arch.dr6 == target_dr6
+  pid=16352 tid=16352 errno=0 - Success
+     1	0x0000000000402b33: main at debug_regs.c:179 (discriminator 10)
+     2	0x00007f36401bd554: ?? ??:0
+     3	0x00000000004023a9: _start at ??:?
+  SINGLE_STEP[1]: exit 9 exception -2147483615 rip 0x1 (should be 0x4024d9) dr6 0xffff4ff0 (should be 0xffff4ff0)
 
-As far as I understand if all of the read and writes to SNE happen under 
-the socket lock it should be fine. I don't know why WRITE_ONCE is used 
-here, maybe somebody else wants to read rcv_nxt outside the socket lock? 
-That doesn't matter for SNE.
+this is a fairly old "Intel(R) Xeon(R) CPU E5-2603 v3".
 
-I think the only case would be sending ipv4 RSTs outside the socket.
+-- 
+Vitaly
 
---
-Regards,
-Leonard
