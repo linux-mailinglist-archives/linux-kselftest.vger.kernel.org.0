@@ -2,138 +2,185 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 780F544366D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 20:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B664F443672
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 20:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbhKBTYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Nov 2021 15:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbhKBTYY (ORCPT
+        id S230435AbhKBTZh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Nov 2021 15:25:37 -0400
+Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:34359 "EHLO
+        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230295AbhKBTZg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 15:24:24 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2FAC061203
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 12:21:49 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id bk22so97142qkb.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 12:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WBuZwnr+5bcLsCP355FoQ/4BAq59hOrIy0vTMjfrBb8=;
-        b=ALlpwX4Ukti+ianWKoWCIEQelRKQDPprVmMyF7bY3MLoaTiwrVTK5iB5Dj/dZaHq3W
-         KZV8OTzfuS/or+8PvImBgX4G6dn8bORZKLQieLhsR0VakaYdhiVDHPhqE0DAc6DgI3YP
-         qOUG2tDX/JOnvl9Fs5gLfeQrOTTSOwWxomvDyz5A1EYf5j/a4RtkxXLXKZ7lUnzZknTT
-         5KOSyYc907dONlMc0xlMGtReevrX7GYR1ReSD+XzKCg7O/fxvgDH2qzJ+0nVPEV/GhfQ
-         soNobREkXIq9xmUImY+ilfq91wSTK1/k0Vy+HjHldzm/1iR0gqxelWZNN2L5Z0Kc/FGn
-         z0VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WBuZwnr+5bcLsCP355FoQ/4BAq59hOrIy0vTMjfrBb8=;
-        b=EFT7adpQNY5WndQ0N0NXw+5PgwjwnXC+2kowRKONnw8wGH/O+2yS18rHwm3OTNpjF6
-         XUdcfPivKOVjxcSqOXK7Wp3jLFN+ulVIi6Y4iCc03GAevt+IVqek5A6H/tcN6Tnll9+f
-         lCPIaRZYZhvZshfOmdUU5THFkiksQobxigUWpY2xoL+bRSIoOKPKpFWyTQMdtJNcyS9q
-         2RgiFU3mnbykNYhVXE7b/Nb9+edE5q+mpHMV5YKrCw9/IxcDY5zonCbRrXa+Rz6Vae4N
-         DnoetY73vKkH+sCY9EKzPZyXOcNnIrclFjgL8EbmEfVq+6AbRTeXYGtVNcGDG9IsNcjk
-         WFpg==
-X-Gm-Message-State: AOAM533VMPO/JJMHHcvA97XJgnbRNWUVCznT4DWF1Hc3VZM6fBnBzvCa
-        IOungbtQPFmQdXkK5Fr/GanJOkoYcgYf04Dl92fiuQ==
-X-Google-Smtp-Source: ABdhPJyx7G/CA9C9oGEYGtlGn8S6R1B/EfiFUabVqEtFBOelrmJNlKgnzA8B8ZHYEjdpYUSsc60JjgULOPpcaJ5ICwM=
-X-Received: by 2002:ae9:edc6:: with SMTP id c189mr30616528qkg.183.1635880908773;
- Tue, 02 Nov 2021 12:21:48 -0700 (PDT)
+        Tue, 2 Nov 2021 15:25:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1635880980;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=8h9GI46I52yCBGQp3aEXgvqRkh0640YEZ/3uecX1HHE=;
+        b=aD0RqpvdmTo3VU2KNU+jspT195WGk7eyCIYHiKkVlVQP5uYajBQuH6pxS8kHhLVb
+        45viQcNiD8DaCbjNImOVDGXo0mxVzT1EHcmI0Iit+HxoqIK0pE528CR15Vu1R/db9a0
+        cx59OWn0m1fO4ZqwtYuAAMmRRunVdL2jWDbInKDU=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1635880980;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=8h9GI46I52yCBGQp3aEXgvqRkh0640YEZ/3uecX1HHE=;
+        b=bL2xLfuwlzIikkVSdHCJxKktSk95/VWiGtYzdquPZHnN0Ox8ZV9pnh9ooe27tvXV
+        yllJJ1CNdOtQ9jhJFHTPxVUYWKdIlFWzNuSy+nRc5eaTZQufPhKcCDry2AOjZPrJfG/
+        feRmD0wvC6xW0w5cjpXiS0lseiXeoyqXf7zHd5P8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211102
 MIME-Version: 1.0
-References: <cover.1635784253.git.cdleonard@gmail.com> <6097ec24d87efc55962a1bfac9441132f0fc4206.1635784253.git.cdleonard@gmail.com>
- <CA+HUmGgMAU235hMtTgucVb1GX_Ru83bngHg8-Jvy2g6BA7djsg@mail.gmail.com> <876f0df1-894a-49bb-07dc-1b1137479f3f@gmail.com>
-In-Reply-To: <876f0df1-894a-49bb-07dc-1b1137479f3f@gmail.com>
-From:   Francesco Ruggeri <fruggeri@arista.com>
-Date:   Tue, 2 Nov 2021 12:21:38 -0700
-Message-ID: <CA+HUmGguspEHZpH-WB4Qi9+xVpz3x3z3KqQVoQmhEJsn-w2q1w@mail.gmail.com>
-Subject: Re: [PATCH v2 11/25] tcp: authopt: Implement Sequence Number Extension
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017ce21ace17-3e98450a-ea8f-45b0-956a-3ceedbd0cc7e-000000@email.amazonses.com>
+Date:   Tue, 2 Nov 2021 19:23:00 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.02-54.240.8.73
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 3:03 AM Leonard Crestez <cdleonard@gmail.com> wrote:
->
-> On 11/1/21 9:22 PM, Francesco Ruggeri wrote:
-> >> +/* Compute SNE for a specific packet (by seq). */
-> >> +static int compute_packet_sne(struct sock *sk, struct tcp_authopt_info *info,
-> >> +                             u32 seq, bool input, __be32 *sne)
-> >> +{
-> >> +       u32 rcv_nxt, snd_nxt;
-> >> +
-> >> +       // We can't use normal SNE computation before reaching TCP_ESTABLISHED
-> >> +       // For TCP_SYN_SENT the dst_isn field is initialized only after we
-> >> +       // validate the remote SYN/ACK
-> >> +       // For TCP_NEW_SYN_RECV there is no tcp_authopt_info at all
-> >> +       if (sk->sk_state == TCP_SYN_SENT ||
-> >> +           sk->sk_state == TCP_NEW_SYN_RECV ||
-> >> +           sk->sk_state == TCP_LISTEN)
-> >> +               return 0;
-> >> +
-> >
-> > In case of TCP_NEW_SYN_RECV, if our SYNACK had sequence number
-> > 0xffffffff, we will receive an ACK sequence number of 0, which
-> > should have sne = 1.
-> >
-> > In a somewhat similar corner case, when we receive a SYNACK to
-> > our SYN in tcp_rcv_synsent_state_process, if the SYNACK has
-> > sequence number 0xffffffff, we set tp->rcv_nxt to 0, and we
-> > should set sne to 1.
-> >
-> > There may be more similar corner cases related to a wraparound
-> > during the handshake.
-> >
-> > Since as you pointed out all we need is "recent" valid <sne, seq>
-> > pairs as reference, rather than relying on rcv_sne being paired
-> > with tp->rcv_nxt (and similarly for snd_sne and tp->snd_nxt),
-> > would it be easier to maintain reference <sne, seq> pairs for send
-> > and receive in tcp_authopt_info, appropriately handle the different
-> > handshake cases and initialize the pairs, and only then track them
-> > in tcp_rcv_nxt_update and tcp_rcv_snd_update?
->
-> For TCP_NEW_SYN_RECV there is no struct tcp_authopt_info, only a request
-> minisock. I think those are deliberately kept small save resources on
-> SYN floods so I'd rather not increase their size.
->
-> For all the handshake cases we can just rely on SNE=0 for ISN and we
-> already need to keep track of ISNs because they're part of the signature.
->
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 9150de4aac1eb6e6441b2b086f6ca8132aaea040
+* git describe: next-20211102
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211102
 
-Exactly. But the current code, when setting rcv_sne and snd_sne,
-always compares the sequence number with the <info->rcv_sne, tp->rcv_nxt>
-(or <info->snd_sne, tp->snd_nxt>) pair, where info->rcv_sne and
-info->snd_sne are initialized to 0 at the time of info creation.
-In other words, the code assumes that rcv_sne always corresponds to
-tp->rcv_nxt, and snd_sne to tp->snd_nxt. But that may not be true
-when info is created, on account of rollovers during a handshake.
-So it is not just a matter of what to use for SNE before info is
-created and used, but also how SNEs are initialized in info.
-That is why I was suggesting of saving valid <sne, seq> pairs
-(initialized with <0, ISN>) in tcp_authopt_info rather than just SNEs,
-and then always compare seq to those pairs if info is available.
-The pairs could then be updated in tcp_rcv_nxt_update and
-tcp_snd_una_update.
+## Regressions (compared to next-20211029)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
 
-Regards,
-Francesco
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211029)
+* i386, kselftest-net
+  - net.so_txtime.sh
+
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* i386, kselftest-seccomp
+  - seccomp.seccomp_bpf.TRACE_syscall.ptrace.kill_after
+  - seccomp.seccomp_bpf.TRACE_syscall.seccomp.kill_after
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.TRACE_syscall.ptrace.kill_after
+  - seccomp.seccomp_bpf.TRACE_syscall.seccomp.kill_after
+
+* qemu_x86_64, kselftest-x86
+  - x86.iopl_64
+
+* x15, kselftest-rtc
+  - rtc.rtctest
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.alarm_wkalm_set_minute
+  - rtc.rtctest.rtc.date_read
+
+* x86, kselftest-seccomp
+  - seccomp.seccomp_bpf.TRACE_syscall.ptrace.kill_after
+  - seccomp.seccomp_bpf.TRACE_syscall.seccomp.kill_after
+
+* x86, kselftest-x86
+  - x86.iopl_64
+
+
+## Test result summary
+total: 2893, pass: 1766, fail: 200, skip: 927, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
