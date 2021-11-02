@@ -2,136 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A4E442868
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 08:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD09A442B0D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 10:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhKBHdD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Nov 2021 03:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S231666AbhKBJyV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Nov 2021 05:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbhKBHdC (ORCPT
+        with ESMTP id S231340AbhKBJxu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 03:33:02 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC65BC061764
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 00:30:27 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id f92-20020a25a465000000b005bea37bc0baso29939299ybi.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 00:30:27 -0700 (PDT)
+        Tue, 2 Nov 2021 05:53:50 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFA7C061239;
+        Tue,  2 Nov 2021 02:50:50 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w1so19941645edd.10;
+        Tue, 02 Nov 2021 02:50:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=ccic3rr4mdoxbdec06AcmZnoBxRewK3GJUdYuoNnen4=;
-        b=D1CekfftDJe+rtDY9HWYJwucEzP5l6K0C+HneWxHOD3zepmQR/GMV0yegg0KuY31Ji
-         GQXdWGwrGqstc0vOw6oclM/e2Xex53BWfvqSC3qZu13RsITXL2u30USINCOctSICRnX/
-         Cl/U8dMEvnAexLUEOQAPjxc6Tv3oI4UOkyqFNzC+FcnjUbZeP4/HE/Pr9Hq9YwRE3Jtt
-         IkEP9N2Km/wgmhb+F/FZgss/x1hI1+e/kZzUAjKMRIDZW2WeuAZGWc/VCgjNXajEhOiF
-         HOfzefb36NHsYW/KrKomnusQE9KBx+NcWAwlQb5Z1rwNWDJmkvrZ59Pes+sfYyGYu5Ia
-         DJxw==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=phT7BPlJVjW6ePMt+YURvMOEW4v6/gql/qbCudKf21c=;
+        b=hwYcMpbxOJBhA2H4xFMNy3YthlGe77+7VaHJwM1EcWGxP3zh3DPXERJfvVM+9nEGTP
+         wT6hfp5yDlP5tQqDd6MXzzIKx3qCOaygo0HDKxa9xkVFsCNe0f2OozONiorH/CuzBOc6
+         V1sTyYGPqu80ejeFHU5VVzEFbORQnDlRWiLwtRNDHq3JI3EyvuT3cjWYdlQZQSSewo0r
+         RmjvFviV4xe6vzCAKrLuKSQzCueeeOz9rWmgGama8XYWrQJdLRQIRAGVPfnRd4dm72m5
+         n6b9wxKQh/t/VGC3xBZaBt/tU+MGSlpNAhqS+TeXvbvDSusWbb+YNwVcsLajz6ED4Xf6
+         OqZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ccic3rr4mdoxbdec06AcmZnoBxRewK3GJUdYuoNnen4=;
-        b=xokNXmp6SJ9CcXFYyZgNPtrMzy6ytoa0zC/JjalkOEqk1htMXUiomQR7uOOnmGZj2I
-         5Kew7swUMghsnlA6fq4D8TaiYpGf3eA3XbHvcY+tKC/Vch0q3EIYrWt1BWKy1GZKuk+9
-         hPqWGuMd0jsYno6KX283WECZ6J+0WEa3ASc4/7GvfX4XM072HN/K1uqklJk6A373jysk
-         AJlNyenRKAHS5ZyTjXFCympZHDzvV8twBXmwt6WQ5NtWgB4MtoXC5iQ6jsP7D4plVRLt
-         TmjneET6e8eLls7+EcZlU/TR93gXWbCIFAI5ymJDy3Aqch8qWRgPzQw+0hb+vF4cD3hK
-         Cg+Q==
-X-Gm-Message-State: AOAM533ash8mLBdJFfYiiXRi/qlI+Tfr8pnLF0pPQIvLl2xMr3sg+VVp
-        fIDUJZh0GMu1dI88bjklQSyGdrXH8bM65g==
-X-Google-Smtp-Source: ABdhPJy1s2Yko/ka6XxoOb8uiAt2VfEYKhvlH9ZvKrjTWRKBwfamluyKBPgySQrqEVYvpT0H6OaQioq+vPtKwg==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:524f:74d8:b474:2517])
- (user=davidgow job=sendgmr) by 2002:a25:cc07:: with SMTP id
- l7mr26331915ybf.313.1635838226959; Tue, 02 Nov 2021 00:30:26 -0700 (PDT)
-Date:   Tue,  2 Nov 2021 00:30:14 -0700
-In-Reply-To: <20211102073014.2901870-1-davidgow@google.com>
-Message-Id: <20211102073014.2901870-4-davidgow@google.com>
-Mime-Version: 1.0
-References: <20211102073014.2901870-1-davidgow@google.com>
-X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH v4 4/4] kunit: Report test parameter results as (K)TAP subtests
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=phT7BPlJVjW6ePMt+YURvMOEW4v6/gql/qbCudKf21c=;
+        b=mD1uTaqr9hRkq12Di2H8mlhW6fJSao5x91+cQDrUrGGUJM0WY11WWIPRHHmwr9d0Av
+         FteQM31mkyY7BaMBihnvAeWj4HExfxEkCOfBPfLZUYh16NgzKO3vfFPFgfwkVm/kNErQ
+         +flCqC3IvH/gVa1sb84MgqP6UW6QraEfgh50YxZcnZghT0tlFWph89a4gM7puLKHwyYh
+         ipaVKjeE7c7v8dkkYoQOytB1XqbhwWG2JziEGM5uI6v30ptBVP0t1I+3Y/sJUxSpQKoo
+         W1/qDj/vNM5Gk3Z99GM3N/lIaTMLUxPQ/Wpabatsl/O4CTX/GnE5O49xlzOVJzNvM//O
+         8jHw==
+X-Gm-Message-State: AOAM532UqgVVAEHnItFw3QhUypZ4ev5KMN1LL1PCalU18Whzb11gXosF
+        g3e09FW5Wnr78j/BWywSAfE=
+X-Google-Smtp-Source: ABdhPJxnALGXIZMcJ/oN1CzPmiie5WA5VQewo2TvYMcnOMUt8YKU7kdHG07188Y1g11ACuVaMDZHBQ==
+X-Received: by 2002:a05:6402:280f:: with SMTP id h15mr17701049ede.286.1635846649084;
+        Tue, 02 Nov 2021 02:50:49 -0700 (PDT)
+Received: from ?IPv6:2a04:241e:501:3870:88ff:d1a0:a1c6:4b6a? ([2a04:241e:501:3870:88ff:d1a0:a1c6:4b6a])
+        by smtp.gmail.com with ESMTPSA id hc15sm7849472ejc.73.2021.11.02.02.50.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Nov 2021 02:50:48 -0700 (PDT)
+Subject: Re: [PATCH v2 11/25] tcp: authopt: Implement Sequence Number
+ Extension
+To:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        David Ahern <dsahern@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <cover.1635784253.git.cdleonard@gmail.com>
+ <6097ec24d87efc55962a1bfac9441132f0fc4206.1635784253.git.cdleonard@gmail.com>
+ <07987e29-87a0-9a09-bdf0-b5e385d9c55f@gmail.com>
+From:   Leonard Crestez <cdleonard@gmail.com>
+Message-ID: <344a6d47-3d4d-ee98-10ef-c710b8538f24@gmail.com>
+Date:   Tue, 2 Nov 2021 11:50:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <07987e29-87a0-9a09-bdf0-b5e385d9c55f@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, the results for individial parameters in a parameterised test
-are simply output as (K)TAP diagnostic lines.
+On 11/1/21 10:54 PM, Eric Dumazet wrote:
+> On 11/1/21 9:34 AM, Leonard Crestez wrote:
+>> Add a compute_sne function which finds the value of SNE for a certain
+>> SEQ given an already known "recent" SNE/SEQ. This is implemented using
+>> the standard tcp before/after macro and will work for SEQ values that
+>> are without 2^31 of the SEQ for which we know the SNE.
+> 
+>>   }
+>> +void __tcp_authopt_update_rcv_sne(struct tcp_sock *tp, struct tcp_authopt_info *info, u32 seq);
+>> +static inline void tcp_authopt_update_rcv_sne(struct tcp_sock *tp, u32 seq)
+>> +{
+>> +	struct tcp_authopt_info *info;
+>> +
+>> +	if (static_branch_unlikely(&tcp_authopt_needed)) {
+>> +		rcu_read_lock();
+>> +		info = rcu_dereference(tp->authopt_info);
+>> +		if (info)
+>> +			__tcp_authopt_update_rcv_sne(tp, info, seq);
+>> +		rcu_read_unlock();
+>> +	}
+>> +}
+>> +void __tcp_authopt_update_snd_sne(struct tcp_sock *tp, struct tcp_authopt_info *info, u32 seq);
+>> +static inline void tcp_authopt_update_snd_sne(struct tcp_sock *tp, u32 seq)
+>> +{
+>> +	struct tcp_authopt_info *info;
+>> +
+>> +	if (static_branch_unlikely(&tcp_authopt_needed)) {
+>> +		rcu_read_lock();
+>> +		info = rcu_dereference(tp->authopt_info);
+>> +		if (info)
+>> +			__tcp_authopt_update_snd_sne(tp, info, seq);
+>> +		rcu_read_unlock();
+>> +	}
+>> +}
+>>
+> 
+> I would think callers of these helpers own socket lock,
+> so no rcu_read_lock()/unlock() should be needed.
+> 
+> Perhaps instead
+> rcu_dereference_protected(tp->authopt_info, lockdep_sock_is_held(sk));
 
-As kunit_tool now supports nested subtests, report each parameter as its
-own subtest.
+Yes, all the callers hold the socket lock and replacing rcu_read_lock 
+doesn't trigger any RCU warnings.
 
-For example, here's what the output now looks like:
-	# Subtest: inode_test_xtimestamp_decoding
-	ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
-	ok 2 - 1969-12-31 Upper bound of 32bit < 0 timestamp, no extra bits
-	ok 3 - 1970-01-01 Lower bound of 32bit >=0 timestamp, no extra bits
-	ok 4 - 2038-01-19 Upper bound of 32bit >=0 timestamp, no extra bits
-	ok 5 - 2038-01-19 Lower bound of 32bit <0 timestamp, lo extra sec bit on
-	ok 6 - 2106-02-07 Upper bound of 32bit <0 timestamp, lo extra sec bit on
-	ok 7 - 2106-02-07 Lower bound of 32bit >=0 timestamp, lo extra sec bit on
-	ok 8 - 2174-02-25 Upper bound of 32bit >=0 timestamp, lo extra sec bit on
-	ok 9 - 2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on
-	ok 10 - 2242-03-16 Upper bound of 32bit <0 timestamp, hi extra sec bit on
-	ok 11 - 2242-03-16 Lower bound of 32bit >=0 timestamp, hi extra sec bit on
-	ok 12 - 2310-04-04 Upper bound of 32bit >=0 timestamp, hi extra sec bit on
-	ok 13 - 2310-04-04 Upper bound of 32bit>=0 timestamp, hi extra sec bit 1. 1 ns
-	ok 14 - 2378-04-22 Lower bound of 32bit>= timestamp. Extra sec bits 1. Max ns
-	ok 15 - 2378-04-22 Lower bound of 32bit >=0 timestamp. All extra sec bits on
-	ok 16 - 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra sec bits on
-	# inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
-	ok 1 - inode_test_xtimestamp_decoding
-
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
----
-
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20211028064154.2301049-4-davidgow@google.com/
-- Fix the missing log line which ended up in patch 3 by mistake.
-
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20211027013702.2039566-4-davidgow@google.com/
-- No changes to this patch.
-
-
- lib/kunit/test.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index f96498ede2cc..c7ed4aabec04 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -512,6 +512,8 @@ int kunit_run_tests(struct kunit_suite *suite)
- 			/* Get initial param. */
- 			param_desc[0] = '\0';
- 			test.param_value = test_case->generate_params(NULL, param_desc);
-+			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+				  "# Subtest: %s", test_case->name);
- 
- 			while (test.param_value) {
- 				kunit_run_case_catch_errors(suite, test_case, &test);
-@@ -522,9 +524,8 @@ int kunit_run_tests(struct kunit_suite *suite)
- 				}
- 
- 				kunit_log(KERN_INFO, &test,
--					  KUNIT_SUBTEST_INDENT
--					  "# %s: %s %d - %s",
--					  test_case->name,
-+					  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+					  "%s %d - %s",
- 					  kunit_status_to_ok_not_ok(test.status),
- 					  test.param_index + 1, param_desc);
- 
--- 
-2.33.1.1089.g2158813163f-goog
-
+--
+Regards,
+Leonard
