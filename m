@@ -2,136 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC45D443833
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Nov 2021 23:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01086443A2B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 00:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbhKBWHY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Nov 2021 18:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
+        id S230054AbhKCAAf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Nov 2021 20:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbhKBWHX (ORCPT
+        with ESMTP id S229960AbhKCAAd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 18:07:23 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24465C061203
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 15:04:48 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id o8so2450860edc.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 15:04:48 -0700 (PDT)
+        Tue, 2 Nov 2021 20:00:33 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3C1C061203
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 16:57:57 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id y18-20020a17090abd1200b001a4dcd1501cso39562pjr.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 16:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n4F13XQgVfHrFjDyFI3dMs7NsVDxr8/9oSk7fc0QDng=;
-        b=P4nJjt/fXf671D9eUvZ9+y2bS+QDywI1rCVkTQODwOQV83TwA4krXZ7DTRv5643PYu
-         nMXoWLhAOqQBTli5Xrp/KuciRht6NbwzCpTkhpKUxgRFTYGZqdUrZatUog5rJSs2lgfX
-         H6N6qANOFFyiXZvTthW1CuCVJ0KXY4zPBZuHt48oUWyz7Ayj3g9Ooc4FgS6CFJV6h5CY
-         Lbmoz5D1O8xBo+glIM6hvtuQctVF6/T2kHB1n8bmxK8tALLMaAH9NRZb2/MkJ+mLParS
-         RIDHAd2t3NPegMZM91FO1Zejd4HVII8jRLkmTu7iNKMf59bppokv5o2c09jEw+LX5pn8
-         v4Ng==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6xRUAwGEAvL2FLNG6Ew0dIktYeQXABiRZImi7UO46gg=;
+        b=CsFcRkCifq3Fsq6P3dEKCPtHEuEoIzbRM2MLLoxVkiKbXe3tvWN5WP7lkN/N2YBT9j
+         5oaDxmcYbH6b54zSmOpMLiW3UrD19aib4pbRYedyTYrednVpwdd41HohZsAfckvE+MJ0
+         E+BwWkp/+ti/DpZgBtNRemaaZ+EMAcHAF8/C95MajuFr9eu7AWw+g1M6JcfZ/sxfZ6en
+         dNZOP61uNtlGd0L3S+j/9InZUWEQ5DYsmw72ClpH2i2X+16j6NsQxf2GaszFrwBrTZdL
+         V7Y4DfxukazdbSTxmhQk41RnPF63TlrFUaVjvwvWPJ4kezk/uShmNQdgWFQKezmR5ZRT
+         qzIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n4F13XQgVfHrFjDyFI3dMs7NsVDxr8/9oSk7fc0QDng=;
-        b=J3dd1baEbKq6h0bh09ykqg2q1klzTWvjbdi5Si8fHhpxNtng5gbUESmOqWVtZ61ZJJ
-         5wNcbfQdI3SGoXof0+RvuZOwI7WCqCcemmMZGdfVOZV+lMC0LUdksytHAxzho1/1KZVr
-         7JpMJIL958c2KIxa3puCgSBBfxR9n4yGyeaNMWxhupMoUP7paBlfoHJBvCv441GKhlpR
-         ZfqCdvsF74fL/RlDlNCEdkZSROVk2Qcvn7ncjVuN/uq8q9BDAm77aMkQI2SiInMIRbJy
-         MXYwYlLouveOdHwUPnrzhp9a2uvUTQy/1/cNbLE7yqh1FVIY+RSU2cGifuCGzQV8WRRR
-         BFJw==
-X-Gm-Message-State: AOAM533WHu+5P+RG8rJ7yLYIoHvuuXOIcpDe7TV8UphLsiMgzFoThInB
-        parUrzJ6cDpnsSClRqE6Gh2YikGMItPGSZ6zuzb6Rg==
-X-Google-Smtp-Source: ABdhPJzTazRGBk5tHZ5IA/YT481aZrqOv2RHiiBDcFVRQOVYSiPeM5kCIsHtyEdCdFkGD1Yr28LrnfqmQq+gR6UCRoM=
-X-Received: by 2002:a05:6402:1e8e:: with SMTP id f14mr20147051edf.250.1635890686722;
- Tue, 02 Nov 2021 15:04:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211029114312.1921603-1-anders.roxell@linaro.org>
- <834d18b6-4106-045f-0264-20e54edf47bc@linuxfoundation.org> <CAKwvOdk8D5=AxzSpqjvXJc4XXL8CA7O=WY-LW0mZb3eQRK_EWg@mail.gmail.com>
-In-Reply-To: <CAKwvOdk8D5=AxzSpqjvXJc4XXL8CA7O=WY-LW0mZb3eQRK_EWg@mail.gmail.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 2 Nov 2021 23:04:35 +0100
-Message-ID: <CADYN=9+iueC3rJ4=32OM9rOUDLLmvcKY-y_By4hwAj1+9gxRiQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: kselftest.h: mark functions with 'noreturn'
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        fenghua.yu@intel.com, reinette.chatre@intel.com,
-        john.stultz@linaro.org, tglx@linutronix.de,
-        akpm@linux-foundation.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6xRUAwGEAvL2FLNG6Ew0dIktYeQXABiRZImi7UO46gg=;
+        b=bciPmeaBRHm73Nkn/igcUigGANED9H6+j/MZFltgHSQ6nFYsn3FgFrVz3nu4bxQw03
+         2Un3hO+jr4Pu5w/Bzsdg/9TXNjj3F3MscbYNt69d4rC6MC6QM1cJFApxP+67t7u4/hNj
+         yDv6t8oelDiV1fBpSzuWc0UE27XSjeTU3oq2twh0mGuP7TCytgQ2+ulSznuKr835Jerd
+         /5vwDD265NjQbIB/7E8GE3X6+hQyc0EcGbOOo10jRnWfwoBRwplMnpIKghyrDCF5u/q/
+         qgRti4nZuWchqYkdLr0MkVQDBUwsemvSubnCdPr2ptq5R2YN0mdMuat2GidPE1CXBZ7w
+         gMIQ==
+X-Gm-Message-State: AOAM532Z+dwN29yZnU5Jm7yyo4gayjh5lrkKOztAOJJGTYxtdTkPKvRn
+        JqZZ5OVt0Fz4gfojEZbZfqFeV3h4fjhe9w==
+X-Google-Smtp-Source: ABdhPJxWodAcytdPjc6Pqhtm4ixpFTyLDSQebOYq8Atv0Un99RQTw9uZ6nJvnq5y4XIvN6zorQ8TW2B2JW9xUw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:c525:894b:a510:93ff])
+ (user=dlatypov job=sendgmr) by 2002:a17:90b:380d:: with SMTP id
+ mq13mr10305132pjb.110.1635897476992; Tue, 02 Nov 2021 16:57:56 -0700 (PDT)
+Date:   Tue,  2 Nov 2021 16:57:34 -0700
+Message-Id: <20211102235734.497713-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
+Subject: [PATCH] kunit: add run_checks.py script to validate kunit changes
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 30 Oct 2021 at 00:08, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Fri, Oct 29, 2021 at 11:19 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >
-> > On 10/29/21 5:43 AM, Anders Roxell wrote:
-> > > When building kselftests/capabilities the following warning shows up:
-> > >
-> > > clang -O2 -g -std=gnu99 -Wall    test_execve.c -lcap-ng -lrt -ldl -o test_execve
-> > > test_execve.c:121:13: warning: variable 'have_outer_privilege' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> > >          } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
-> > >                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > test_execve.c:136:9: note: uninitialized use occurs here
-> > >          return have_outer_privilege;
-> > >                 ^~~~~~~~~~~~~~~~~~~~
-> > > test_execve.c:121:9: note: remove the 'if' if its condition is always true
-> > >          } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
-> > >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > test_execve.c:94:27: note: initialize the variable 'have_outer_privilege' to silence this warning
-> > >          bool have_outer_privilege;
-> > >                                   ^
-> > >                                    = false
-> > >
-> > > Rework so all the ksft_exit_*() functions have attribue
-> > > '__attribute__((noreturn))' so the compiler knows that there wont be
-> > > any return from the function. That said, without
-> > > '__attribute__((noreturn))' the compiler warns about the above issue
-> > > since it thinks that it will get back from the ksft_exit_skip()
-> > > function, which it wont.
-> > > Cleaning up the callers that rely on ksft_exit_*() return code, since
-> > > the functions ksft_exit_*() have never returned anything.
-> > >
-> > > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> >
-> > Lot of changes to fix this warning. Is this necessary? I would
-> > like to explore if there is an easier and localized change that
-> > can fix the problem.
->
-> via `man 3 exit`:
-> ```
-> The  exit() function causes normal process termination ...
-> ...
-> RETURN VALUE
->        The exit() function does not return.
-> ```
-> so seeing `ksft_exit_pass`, `ksft_exit_fail`, `ksft_exit_fail_msg`,
-> `ksft_exit_xfail`, `ksft_exit_xpass`, and `ksft_exit_skip` all
-> unconditional call `exit` yet return an `int` looks wrong to me on
-> first glance. So on that point this patch and its resulting diffstat
-> LGTM.
+This formalizes the checks KUnit maintainers have been running (or in
+other cases: forgetting to run).
 
-I'll respin the patch with these changes only.
+This script also runs them all in parallel to minimize friction (pytype
+can be fairly slow, but not slower than running kunit.py).
 
->
-> That said, there are many changes that explicitly call `ksft_exit`
-> with an expression; are those setting the correct exit code? Note that
-> ksft_exit_pass is calling exit with KSFT_PASS which is 0.  So some of
-> the negations don't look quite correct to me.  For example:
->
-> -       return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
-> +       ksft_exit(!ksft_get_fail_cnt());
->
-> so if ksft_get_fail_cnt() returns 0, then we were calling
-> ksft_exit_pass() which exited with 0. Now we'd be exiting with 1?
+Example output:
+$ ./tools/testing/kunit/run_checks.py
+Waiting on 4 checks (kunit_tool_test.py, kunit smoke test, pytype, mypy)...
+kunit_tool_test.py: PASSED
+mypy: PASSED
+pytype: PASSED
+kunit smoke test: PASSED
 
-oh, right, thank you for your review.
-I will drop all the 'ksft_exit()' changes, they should be fixed and go
-in as separete patches.
+On failure or timeout (5 minutes), it'll dump out the stdout/stderr.
+E.g. adding in a type-checking error:
+  mypy: FAILED
+  > kunit.py:54: error: Name 'nonexistent_function' is not defined
+  > Found 1 error in 1 file (checked 8 source files)
 
+mypy and pytype are two Python type-checkers and must be installed.
+This file treats them as optional and will mark them as SKIPPED if not
+installed.
 
-Cheers,
-Anders
+This tool also runs `kunit.py run --kunitconfig=lib/kunit` to run
+KUnit's own KUnit tests and to verify KUnit kernel code and kunit.py
+play nicely together.
+
+It uses --build_dir=kunit_run_checks so as not to clobber the default
+build_dir, which helps make it faster by reducing the need to rebuild,
+esp. if you're been passing in --arch instead of using UML.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/run_checks.py | 76 +++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100755 tools/testing/kunit/run_checks.py
+
+diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+new file mode 100755
+index 000000000000..d03ca3f84b91
+--- /dev/null
++++ b/tools/testing/kunit/run_checks.py
+@@ -0,0 +1,76 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++#
++# This file runs some basic checks to verify kunit works.
++# It is only of interest if you're making changes to KUnit itself.
++#
++# Copyright (C) 2021, Google LLC.
++# Author: Daniel Latypov <dlatypov@google.com.com>
++
++from concurrent import futures
++import datetime
++import os
++import shutil
++import subprocess
++import sys
++import textwrap
++from typing import Dict, List, Sequence, Tuple
++
++ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
++_TIMEOUT = datetime.timedelta(minutes=5).total_seconds()
++
++commands: Dict[str, Sequence[str]] = {
++	'kunit_tool_test.py': ['./kunit_tool_test.py'],
++	'kunit smoke test': ['./kunit.py', 'run', '--kunitconfig=lib/kunit', '--build_dir=kunit_run_checks'],
++	'pytype': ['/bin/sh', '-c', 'pytype *.py'],
++	'mypy': ['/bin/sh', '-c', 'mypy *.py'],
++}
++
++# The user might not have mypy or pytype installed, skip them if so.
++# Note: you can install both via `$ pip install mypy pytype`
++necessary_deps : Dict[str, str] = {
++	'pytype': 'pytype',
++	'mypy': 'mypy',
++}
++
++def main(argv: Sequence[str]) -> None:
++	if len(argv) > 1:
++		raise RuntimeError('Too many command-line arguments.')
++
++	future_to_name: Dict[futures.Future, str] = {}
++	executor = futures.ThreadPoolExecutor(max_workers=len(commands))
++	for name, argv in commands.items():
++		if name in necessary_deps and shutil.which(necessary_deps[name]) is None:
++			print(f'{name}: SKIPPED, {necessary_deps[name]} not in $PATH')
++			continue
++		f = executor.submit(run_cmd, argv)
++		future_to_name[f] = name
++
++	print(f'Waiting on {len(future_to_name)} checks ({", ".join(future_to_name.values())})...')
++	for f in  futures.as_completed(future_to_name.keys()):
++		name = future_to_name[f]
++		ex = f.exception()
++		if not ex:
++			print(f'{name}: PASSED')
++			continue
++
++		if isinstance(ex, subprocess.TimeoutExpired):
++			print(f'{name}: TIMED OUT')
++		elif isinstance(ex, subprocess.CalledProcessError):
++			print(f'{name}: FAILED')
++		else:
++			print('{name}: unexpected exception: {ex}')
++			continue
++
++		output = ex.output
++		if output:
++			print(textwrap.indent(output.decode(), '> '))
++	executor.shutdown()
++
++
++def run_cmd(argv: Sequence[str]):
++	subprocess.check_output(argv, stderr=subprocess.STDOUT, cwd=ABS_TOOL_PATH, timeout=_TIMEOUT)
++
++
++if __name__ == '__main__':
++	main(sys.argv[1:])
+
+base-commit: 52a5d80a2225e2d0b2a8f4656b76aead2a443b2a
+-- 
+2.33.1.1089.g2158813163f-goog
+
