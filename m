@@ -2,162 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFE4444AD3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 23:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC79A444AE0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 23:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhKCWZa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Nov 2021 18:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S230229AbhKCWdc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Nov 2021 18:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbhKCWZ3 (ORCPT
+        with ESMTP id S230210AbhKCWdc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Nov 2021 18:25:29 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8915C061714;
-        Wed,  3 Nov 2021 15:22:52 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id f8so14723073edy.4;
-        Wed, 03 Nov 2021 15:22:52 -0700 (PDT)
+        Wed, 3 Nov 2021 18:33:32 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E50BC06127A
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Nov 2021 15:30:55 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id n13-20020a170902d2cd00b0014228ffc40dso699665plc.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Nov 2021 15:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J2NdaQ8T+dt9p0jHQsB0InvqWOp8/QEv69XWnnosGBY=;
-        b=GzUMX9Jd1JqRALeydvQkd1EteV+LGofdP3599Qk4mjqzSesoDGjQdQcKoqGFR4aoDk
-         JsSLfMQxKvkEfaa+V4djLBHJg7gcSyqFtQvkkMJEbH9MofIg56bjXxLf+Vbfyf6NuNdZ
-         efy9VFnCdyjcQmueGYDvJv5cL8JcrhSDLQls9ycfzplAA8GWc8BwHVEAqTfPJQkWi5Ov
-         41UH+Cfvqw8ipreeDS/0Lo/dbZJuIAK2WVBsv7ekD1Rfdf/uNBVLkKM3v/YbFoTyqxWw
-         UwIxMgDH50zWAm2SzdskqS58ZW6oBLOos6zQQG4FhNXgtAMqfWXQXyuOg0AszvkWxh7i
-         Tr6g==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iebf2W2QZ+CT/VCZU+Hm1RFCYYPaaTgdO1Vs4vFVk/g=;
+        b=LJ5ydDCSfe34tiYb1rbrzNQ24lgoT6TOhnin7XQpu/6gmW1kRn4DkScXHuGgBkKCUq
+         BkXZucHIe02xQdeU++xd4kRBgeMgmboKM7fXSDejgRwRmzYYjGZqgmpNaw6uzOqP1bZZ
+         9tOuUWJ0axdnk88IW+OnOoVs8JaUOkAiOMMlwU6DRAqJuLIZ1NiEnpEsLhspJ/tdigaj
+         E9R76pVGNNLPwhEw0rhCfK9skILdmPhjSWWcANMJxS6sbUZHC3eOBJGFyUWQ1q2A6Ger
+         KMUfuh9T8BydYeUW+cjVSWIULMbeLTZba4zO5smWeyn88/aJcTURBZqw7C/X60OflDGY
+         XsLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J2NdaQ8T+dt9p0jHQsB0InvqWOp8/QEv69XWnnosGBY=;
-        b=yLj5H2Hk3FYmZ6a7Uta8ESfZ8EROBMuEhyp5ZT0kcyu1zudciX2HaTV5WrD4DL7bZO
-         ddxzjLUnZxrYCifmjsGOCGsUlvj/PmOf7QgprAdWjPdfrEDlldsmlP2SQB7wz8UHuaJd
-         R3bTuyVoBGKF5MQLP0Iqc8RGvKIsZ/qRP6JGfh2D8CzNy8VDCNU9B0lakmsgqYaf1EfZ
-         //NgvSKqcGEexR1HYNmewfUuzzvxJkX1LeukCqr+hm3ed00zjmaXtsck4A/gTvHbwaBK
-         YZ4LrgGhkdM91CAi8tNs+ZFsIQ1ilsujJy+Gscv+e6z3dw448k4iPnntJ6ysOEgHh6db
-         It8Q==
-X-Gm-Message-State: AOAM532wfw64ASo5iuz5H+QuXBYwaV4fzH5BxuAfadyurH7wKcjae6fn
-        LPnJ3/QaYQxTrkC9cwS54SKGJ/JOz91Tpg==
-X-Google-Smtp-Source: ABdhPJzV4/y5qTs4xQPrAXlnayDNX8Mrj7BkhVqpL8WzEHl/VS/hgdFLOpFJr0DwVrlp/gonwlrvsA==
-X-Received: by 2002:a17:907:1c85:: with SMTP id nb5mr23550781ejc.502.1635978171338;
-        Wed, 03 Nov 2021 15:22:51 -0700 (PDT)
-Received: from ?IPv6:2a04:241e:501:3800:dd98:1fb5:16b3:cb28? ([2a04:241e:501:3800:dd98:1fb5:16b3:cb28])
-        by smtp.gmail.com with ESMTPSA id p23sm2064759edw.94.2021.11.03.15.22.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Nov 2021 15:22:50 -0700 (PDT)
-Subject: Re: [PATCH v2] tcp: Initial support for RFC5925 auth option
-To:     David Ahern <dsahern@gmail.com>, David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1635784253.git.cdleonard@gmail.com>
- <832e6d49-8490-ab8b-479b-0420596d0aaa@gmail.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <9bcd27f0-e14e-ab89-88a4-f6cf6b4323b4@gmail.com>
-Date:   Thu, 4 Nov 2021 00:22:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <832e6d49-8490-ab8b-479b-0420596d0aaa@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iebf2W2QZ+CT/VCZU+Hm1RFCYYPaaTgdO1Vs4vFVk/g=;
+        b=ZDEueK7RmhDEyKOs3aRWmQV7hU1GDfn3x/dqZWbOLYrhE0fPWGhIT+WTQg4QxZwybL
+         twVI0PZlYCK1P3w/QHFulYMRvff9Cm6FSaxykGV1ABQbnnGiSpNEFkZp2SQipeE06Kqw
+         XpAW5cm6oDq1S8LBSauY/rSjKDkL0M/5muzH55ZYIdAOln9WE2L0MpeSa3t21DlX6e+5
+         wp6G9kS1sLRH2SyrNecGWZNb/8Ppzsh/mB6LR2NqF8MbIwcXZxHTNLkDdp0sJMbYZp5V
+         CKEfj9WV1Mj/AAADA73Rk1z1A8uzIerPyliUevoNuLO4pHtlnKE6sQs1DDF1Sr6K7jd8
+         o3+A==
+X-Gm-Message-State: AOAM530pUnQDrC+AUb0tRZWqG3iOA6uMrVouiVtBu3WYpJlrlvHKBo3z
+        k6giGjQYWMEREKRBMOoBhICguzi2CuTezA==
+X-Google-Smtp-Source: ABdhPJwJIgl2hN2/bAUrlr4B5wueJajXtbw28t25Dj1nuV54iYV8938avoAn2/Ie+qSj5LLmk2ycxbYhH8OMbQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8673:8d2f:d693:6af])
+ (user=dlatypov job=sendgmr) by 2002:a63:a319:: with SMTP id
+ s25mr35997164pge.305.1635978655060; Wed, 03 Nov 2021 15:30:55 -0700 (PDT)
+Date:   Wed,  3 Nov 2021 15:30:45 -0700
+Message-Id: <20211103223045.725140-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
+Subject: [PATCH] Documentation: kunit: fix path to .kunitconfig in start.rst
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Yifan Yuan <alpc_metic@live.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/3/21 5:18 AM, David Ahern wrote:
-> On 11/1/21 10:34 AM, Leonard Crestez wrote:
->> This is similar to TCP MD5 in functionality but it's sufficiently
->> different that wire formats are incompatible. Compared to TCP-MD5 more
->> algorithms are supported and multiple keys can be used on the same
->> connection but there is still no negotiation mechanism.
->>
->> Expected use-case is protecting long-duration BGP/LDP connections
->> between routers using pre-shared keys. The goal of this series is to
->> allow routers using the linux TCP stack to interoperate with vendors
->> such as Cisco and Juniper.
->>
->> Both algorithms described in RFC5926 are implemented but the code is not
->> very easily extensible beyond that. In particular there are several code
->> paths making stack allocations based on RFC5926 maximum, those would
->> have to be increased.
->>
->> This version implements SNE and l3mdev awareness and adds more tests.
->> Here are some known flaws and limitations:
->>
->> * Interaction with TCP-MD5 not tested in all corners
->> * Interaction with FASTOPEN not tested and unlikely to work because
->> sequence number assumptions for syn/ack.
->> * Not clear if crypto_shash_setkey might sleep. If some implementation
->> do that then maybe they could be excluded through alloc flags.
->> * Traffic key is not cached (reducing performance)
->> * User is responsible for ensuring keys do not overlap.
->> * There is no useful way to list keys, making userspace debug difficult.
->> * There is no prefixlen support equivalent to md5. This is used in
->> some complex FRR configs.
->>
->> Test suite was added to tools/selftests/tcp_authopt. Tests are written
->> in python using pytest and scapy and check the API in some detail and
->> validate packet captures. Python code is already used in linux and in
->> kselftests but virtualenvs not very much, this particular test suite
->> uses `pip` to create a private virtualenv and hide dependencies.
->>
->> This actually forms the bulk of the series by raw line-count. Since
->> there is a lot of code it was mostly split on "functional area" so most
->> files are only affected by a single code. A lot of those tests are
->> relevant to TCP-MD5 so perhaps it might help to split into a separate
->> series?
->>
->> Some testing support is included in nettest and fcnal-test.sh, similar
->> to the current level of tcp-md5 testing.
->>
->> SNE was tested by creating connections in a loop until a large SEQ is
->> randomly selected and then making it rollover. The "connect in a loop"
->> step ran into timewait overflow and connection failure on port reuse.
->> After spending some time on this issue and my conclusion is that AO
->> makes it impossible to kill remainders of old connections in a manner
->> similar to unsigned or md5sig, this is because signatures are dependent
->> on ISNs.  This means that if a timewait socket is closed improperly then
->> information required to RST the peer is lost.
->>
->> The fact that AO completely breaks all connection-less RSTs is
->> acknowledged in the RFC and the workaround of "respect timewait" seems
->> acceptable.
->>
->> Changes for frr (old): https://github.com/FRRouting/frr/pull/9442
->> That PR was made early for ABI feedback, it has many issues.
->>
-> 
-> overall looks ok to me. I did not wade through the protocol details.
-> 
-> I did see the comment about no prefixlen support in the tests. A lot of
-> patches to absorb, perhaps I missed it. Does AuthOpt support for
-> prefixes? If not, you should consider adding that as a quick follow on
-> (within the same dev cycle). MD5 added prefix support for scalability;
-> seems like AO should be concerned about the same.
+Commit ddbd60c779b4 ("kunit: use --build_dir=.kunit as default") changed
+the default --build_dir, which had the side effect of making
+`.kunitconfig` move to `.kunit/.kunitconfig`.
 
-I just skipped it because it's not required for core functionality.
+However, the first few lines of kunit/start.rst never got updated, oops.
 
-It's very straight forward so I will add it to the next version.
+Fix this by telling people to run kunit.py first, which will
+automatically generate the .kunit directory and .kunitconfig file, and
+then edit the file manually as desired.
 
---
-Regards,
-Leonard
+Reported-by: Yifan Yuan <alpc_metic@live.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ Documentation/dev-tools/kunit/start.rst | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 1e00f9226f74..65f4ef6c1f4c 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -31,14 +31,15 @@ This file essentially contains the regular Kernel config, with the specific
+ test targets as well. The ``.kunitconfig`` should also contain any other config
+ options required by the tests.
+ 
+-A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
++If you run KUnit, it'll generate one automatically for you.
+ 
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+-	cp tools/testing/kunit/configs/default.config .kunitconfig
++	./tools/testing/kunit/kunit.py run
++	cat .kunit/.kunitconfig
+ 
+-You can then add any other Kconfig options you wish, e.g.:
++You can then edit that file to add any other Kconfig options you wish, e.g.:
+ 
+ .. code-block:: none
+ 
+
+base-commit: 52a5d80a2225e2d0b2a8f4656b76aead2a443b2a
+-- 
+2.33.1.1089.g2158813163f-goog
+
