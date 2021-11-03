@@ -2,173 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AC04441D0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 13:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F914445A6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 17:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbhKCMrW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Nov 2021 08:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S232844AbhKCQR1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Nov 2021 12:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbhKCMrW (ORCPT
+        with ESMTP id S232829AbhKCQR0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Nov 2021 08:47:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352DBC061714;
-        Wed,  3 Nov 2021 05:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gpy0rb9TMQVhfKqmlvxAKW6M4Lhkal+b7lCoTi8Nt8k=; b=E1cD3yN9thIRR4H2Zt+eObWqVq
-        7AE8CKvZsp4k3hBWN+N7pomee5XyqYLM215Op3CzrjFH7WENkN2RPKyy1+fMKotg6zBkqRrDg7YEv
-        gL1aXKjsnkwiNlpL8Jk6DHd5iZ+EwQtNIhkJtzb0me8LnSkQq6lc2JolW2/84EGpd8kthuSvJeeUE
-        R0LMa6ssO94HE/OFkbjmaB4XU5vXVUIqyd4+vgcxZfDwF8fqj7+Ig1vMD67BdVW7/KKzssqIF43MS
-        kzKwv3tLWTgFYWd4aNLNwIqtpSKiupiSXufptm3u2ZtJl86ykpba2tNrktOJdW6TgGs045v4fR1pf
-        F0uYZayg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1miFcz-005EEC-6c; Wed, 03 Nov 2021 12:44:29 +0000
-Date:   Wed, 3 Nov 2021 05:44:29 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Petr Mladek <pmladek@suse.com>, Miroslav Benes <mbenes@suse.cz>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YYKELZsUW1Ko/bVa@bombadil.infradead.org>
-References: <YW/KEsfWJMIPnz76@T590>
- <alpine.LSU.2.21.2110201014400.26817@pobox.suse.cz>
- <YW/q70dLyF+YudyF@T590>
- <YXfA0jfazCPDTEBw@alley>
- <YXgguuAY5iEUIV0u@T590>
- <YXg0dFZ+6qHw7d0g@bombadil.infradead.org>
- <alpine.LSU.2.21.2110271343290.3655@pobox.suse.cz>
- <YYFYFrnhwPiyOtst@alley>
- <YYFmiAAYIA2X7Uv5@bombadil.infradead.org>
- <YYHRaYlglX84lxB6@T590>
+        Wed, 3 Nov 2021 12:17:26 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5AEC061208
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Nov 2021 09:14:49 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id u11so2837175plf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Nov 2021 09:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Gcc0EUM1EauKNq+43vPpaFdtVYVD7iAXZHWErocDtp0=;
+        b=GerNQsh9cv7fbDFjWov4KivBQdKjB2oHp6+hu5L0IzSuHrFf7yC9nsNjEK4mKa1thg
+         lIef1g1Q5waG3Bo27dyQD9IGceZ5FdA0UnVr/ZFrZRZrTE5L/cCOMJ3+Ap+sF3V9itpe
+         xd7YTDezqpu5NUNKOUXH5YXvAc+giJbRz+574=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Gcc0EUM1EauKNq+43vPpaFdtVYVD7iAXZHWErocDtp0=;
+        b=h5FO0931/2S4hU4lwQJlzf6aien1bRtB5lRAClMyot6PusjAt5UqLvM8OkHU+ovevx
+         9ClPTwD6k86EZjtHGLe2yUzgOFjZQr7q78+HJXGeu+Uu4G7NQ7ADGJTfmFJFE/PAZxGY
+         I8gqVaYAMUiqfCdEZlPdFZTSD5aknZQvJWATXXSERBbfgr66xOzcl0tQ+S9koc09hOzD
+         PIeR+dROTlVKc9GSiV0FX7JzPTLy/1W8t8zxN58+5hcw2KeuuRmVpUuYbj1xP1Lefaps
+         JtMv7P60wxo3cAftS667IOjP62Sr2hz3BqZvTLSY/00LEcfBZq3ihLUxdNblgpvg4jtZ
+         GM9A==
+X-Gm-Message-State: AOAM532IpxU+yP2ii56X0T7Mzcl30XDEOO4DzoiVBRCCZPni+HPSpk3v
+        8wyD7EUDm/igTIU1hsQa9RnHvg==
+X-Google-Smtp-Source: ABdhPJwfVfLAFqcLr/+fzW2AVuq4++yVTWfgk5KQYqUOGtMy5pycxzm1sypp4lVosI+3B8C3SbUzIg==
+X-Received: by 2002:a17:90b:124d:: with SMTP id gx13mr15668790pjb.106.1635956088496;
+        Wed, 03 Nov 2021 09:14:48 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u33sm3296082pfg.0.2021.11.03.09.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Nov 2021 09:14:48 -0700 (PDT)
+Date:   Wed, 3 Nov 2021 09:14:47 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: selftests: seccomp_bpf failure on 5.15
+Message-ID: <202111030838.CB201E4@keescook>
+References: <YXrN+Hnl9pSOsWlA@arighi-desktop>
+ <202110280955.B18CB67@keescook>
+ <878rydm56l.fsf@disp2133>
+ <202110281136.5CE65399A7@keescook>
+ <8735okls76.fsf@disp2133>
+ <202110290755.451B036CE9@keescook>
+ <87y2665sf8.fsf@disp2133>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YYHRaYlglX84lxB6@T590>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <87y2665sf8.fsf@disp2133>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 08:01:45AM +0800, Ming Lei wrote:
-> On Tue, Nov 02, 2021 at 09:25:44AM -0700, Luis Chamberlain wrote:
-> > On Tue, Nov 02, 2021 at 04:24:06PM +0100, Petr Mladek wrote:
-> > > On Wed 2021-10-27 13:57:40, Miroslav Benes wrote:
-> > > > >From my perspective, it is quite easy to get it wrong due to either a lack 
-> > > > of generic support, or missing rules/documentation. So if this thread 
-> > > > leads to "do not share locks between a module removal and a sysfs 
-> > > > operation" strict rule, it would be at least something. In the same 
-> > > > manner as Luis proposed to document try_module_get() expectations.
-> > > 
-> > > The rule "do not share locks between a module removal and a sysfs
-> > > operation" is not clear to me.
-> > 
-> > That's exactly it. It *is* not. The test_sysfs selftest will hopefully
-> > help with this. But I'll wait to take a final position on whether or not
-> > a generic fix should be merged until the Coccinelle patch which looks
-> > for all uses cases completes.
-> > 
-> > So I think that once that Coccinelle hunt is done for the deadlock, we
-> > should also remind folks of the potential deadlock and some of the rules
-> > you mentioned below so that if we take a position that we don't support
-> > this, we at least inform developers why and what to avoid. If Coccinelle
-> > finds quite a bit of cases, then perhaps evaluating the generic fix
-> > might be worth evaluating.
-> > 
-> > > IMHO, there are the following rules:
-> > > 
-> > > 1. rule: kobject_del() or kobject_put() must not be called under a lock that
-> > > 	 is used by store()/show() callbacks.
-> > > 
-> > >    reason: kobject_del() waits until the sysfs interface is destroyed.
-> > > 	 It has to wait until all store()/show() callbacks are finished.
-> > 
-> > Right, this is what actually started this entire conversation.
-> > 
-> > Note that as Ming pointed out, the generic kernfs fix I proposed would
-> > only cover the case when kobject_del() ends up being called on module
-> > exit, so it would not cover the cases where perhaps kobject_del() might
-> > be called outside of module exit, and so the cope of the possible
-> > deadlock then increases in scope.
-> > 
-> > Likewise, the Coccinelle hunt I'm trying would only cover the module
-> > exit case. I'm a bit of afraid of the complexity of a generic hunt
-> > as expresed in rule 1.
+On Tue, Nov 02, 2021 at 01:22:19PM -0500, Eric W. Biederman wrote:
+> Kees Cook <keescook@chromium.org> writes:
 > 
-> Question is that why one shared lock is required between kobject_del()
-> and its show()/store(), both zram and livepatch needn't that. Is it
-> one common usage?
-
-That is the question the coccinelle hunt is aimed at finding. Answering
-that in the context of module removal is easier than the generic case.
-
-But also note that I had mentioned before that we have semantics to
-check *when* we're in the module removal case, and as such can address
-that case. For the other cases we have no possible semantics to be able to
-address a generic fix. I tried though, refer to my reply in this
-thread and refer to the new kobject_being_removed() I'm adding:
-
-https://lkml.kernel.org/r/YWdMpv8lAFYtc18c@bombadil.infradead.org
-
-So we have semantics for knowing when about to remove a module but,
-my attempt with kobject_being_removed() isn't sufficient to address this
-generically.
-
-In either case, having a gauge of how common this is either on module
-removal of generally would be wonderful. It is easier to answer the
-question from a module removal perspective though.
-
-> > > 2. rule: kobject_del()/kobject_put() must not be called from the
-> > > 	related store() callbacks.
-> > > 
-> > >    reason: same as in 1st rule.
-> > 
-> > Sensible corollary.
-> > 
-> > Given tha the exact kobjet_del() / kobject_put() which must not be
-> > called from the respective sysfs ops depends on which kobject is
-> > underneath the device for which the sysfs ops is being created,
-> > it would make this hunt in Coccinelle a bit tricky. My current iteration
-> > of a coccinelle hunt cheats and looks at any sysfs looking op and
-> > ensures a module exit exists.
+> > On Thu, Oct 28, 2021 at 05:06:53PM -0500, Eric W. Biederman wrote:
+> >> Kees Cook <keescook@chromium.org> writes:
+> >> 
+> >> > On Thu, Oct 28, 2021 at 12:26:26PM -0500, Eric W. Biederman wrote:
+> >> 
+> >> Is it a problem that the debugger can see the signal if the process does
+> >> not?
+> >
+> > Right, I'm trying to understand that too. However, my neighbor just lost
+> > power. :|
+> >
+> > What I was in the middle of checking was what ptrace "sees" going
+> > through a fatal SIGSYS; my initial debugging attempts were weird.
 > 
-> Actually kernfs/sysfs provides interface for supporting deleting
-> kobject/attr from the attr's show()/store(), see example of
-> sdev_store_delete(), and the livepatch example:
-> 
-> https://lore.kernel.org/lkml/20211102145932.3623108-4-ming.lei@redhat.com/
+> Kees have you regained power and had a chance to see my SA_IMMUTABLE
+> patch?
 
-Imagine that.. is that the suicidal thing?
+Apologies; I got busy with other stuff, but I've tested this now. It's
+happy and I see the expected behaviors again. Note that I used the patch
+with this change:
 
-> > > 3. rule: module_exit() must wait until all release() callbacks are called
-> > > 	 when kobject are static.
-> > > 
-> > >    reason: kobject_put() must be called to clean up internal
-> > > 	dependencies. The clean up might be done asynchronously
-> > > 	and need access to the kobject structure.
-> > 
-> > This might be an easier rule to implement a respective Coccinelle rule
-> > for.
-> 
-> If kobject_del() is done in module_exit() or before module_exit(),
-> kobject should have been freed in module_exit() via kobject_put().
-> 
-> But yes, it can be asynchronously because of CONFIG_DEBUG_KOBJECT_RELEASE,
-> seems like one real issue.
+-#define SA_IMMUTABLE           0x008000000
++#define SA_IMMUTABLE           0x00800000
 
-Alright thanks for confirming.
+Tested-by: Kees Cook <keescook@chromium.org>
 
-  Luis
+Thanks!
+
+-Kees
+
+-- 
+Kees Cook
