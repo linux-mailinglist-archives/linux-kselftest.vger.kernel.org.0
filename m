@@ -2,161 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8C0443A30
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 01:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A41C443B5B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 03:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbhKCAEw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Nov 2021 20:04:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22407 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230054AbhKCAEv (ORCPT
+        id S230152AbhKCCb7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Nov 2021 22:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229650AbhKCCb6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 20:04:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635897735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cqJQisP1QPS+4wMPSGYJMWn3HlqeTze3DoRoDxtXcVY=;
-        b=HREh8hWlhCgMqnmW/rKxDYygvwAt8SSNUhm4H8YMAx63BGkzY6M+DiHyuytBICRUvXaJd7
-        wrlLV9KA407LrIwk5Lr2aSi9c6oYdSBIBORSW92Es0R9hZzRB/xlpF5E0e5+UD+VE261vK
-        p01/+OTvkf6cX0p9W7AgLS9JPVJzJ60=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-469-bzhDjEpxNyW8kBJ_BBDKpQ-1; Tue, 02 Nov 2021 20:02:14 -0400
-X-MC-Unique: bzhDjEpxNyW8kBJ_BBDKpQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E769A8066EB;
-        Wed,  3 Nov 2021 00:02:09 +0000 (UTC)
-Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9128C60C0F;
-        Wed,  3 Nov 2021 00:01:49 +0000 (UTC)
-Date:   Wed, 3 Nov 2021 08:01:45 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>, Miroslav Benes <mbenes@suse.cz>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, keescook@chromium.org, rostedt@goodmis.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, ming.lei@redhat.com
-Subject: Re: [PATCH v8 11/12] zram: fix crashes with cpu hotplug multistate
-Message-ID: <YYHRaYlglX84lxB6@T590>
-References: <alpine.LSU.2.21.2110200835490.26817@pobox.suse.cz>
- <YW/KEsfWJMIPnz76@T590>
- <alpine.LSU.2.21.2110201014400.26817@pobox.suse.cz>
- <YW/q70dLyF+YudyF@T590>
- <YXfA0jfazCPDTEBw@alley>
- <YXgguuAY5iEUIV0u@T590>
- <YXg0dFZ+6qHw7d0g@bombadil.infradead.org>
- <alpine.LSU.2.21.2110271343290.3655@pobox.suse.cz>
- <YYFYFrnhwPiyOtst@alley>
- <YYFmiAAYIA2X7Uv5@bombadil.infradead.org>
+        Tue, 2 Nov 2021 22:31:58 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A31C061714;
+        Tue,  2 Nov 2021 19:29:23 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id o10-20020a9d718a000000b00554a0fe7ba0so1511856otj.11;
+        Tue, 02 Nov 2021 19:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qh1t8cHvIxJkSuVFMWej9fhmrge5wN7IrBSDo7Kwx50=;
+        b=LrUNk3zmyt1WvH4YHdYpw3RuPT6eUK1iz6Q2gdAQn7AaQmaW4u0aS0NUZD1E8bJQ8K
+         ExuCnynMEmes6oHe3oHvg6fcJG+QQazEfBxlXA45Y13DDTqiRJkcpZdczE6a0aIavBJ2
+         c/9wMscfJrDRr1YzrPELZO4oy7AndvQxlAmFHpa4MyFcZmRMBECTtODLG8nDbTLJdFrB
+         Yex+n3LLBNGijjWFPjEL180u7I4Vidh6zQq2hOoBFpgmksSh7vRBikUuQVfF0bxKM3LK
+         PTLXI3pTaePl4Jn9kaDSuwfJxHv5AqAV5h1WYEbf4TK98riwMsi0JpYl0f+qA5a+eqjW
+         K8Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qh1t8cHvIxJkSuVFMWej9fhmrge5wN7IrBSDo7Kwx50=;
+        b=HzOx/FlM5ALhq6o9W52xOT0yqVQ3vnuDj1xraj1s7dOouq4zXsiSp8mbQkQo9LRz0y
+         yFg9JKXXT+mGgxtxlFUMQdAXS3EvBsj/Qbm2i9k5xD0hsUwKNu6JNGDqqeOFGdydMsKT
+         dJaC3PKXxu9RBrCl2JWsBkHg42arWNKaZZ9QGo79ubae50k6R1rq7le38LFqPttTPySs
+         PfGgeGD+mwO1tZTqOMBNuv2QAyGvgVqgsvlzRYxn0hl4eYTLVlf+iGOmJbrEG7Zn8mbh
+         fe+gveJ0YjmvbmVDkLd5ruCMWuVk4OcfMX/pXiLaW6pW5L0rRdFkG21GjVFggHPg+1uk
+         rcmQ==
+X-Gm-Message-State: AOAM531k3IPC37wWPK2GXcU7D1ILU7SCcNFiGs3MCXts/rfnm1+brabK
+        2PH2nnhM7gc6SK1MW2A42fc=
+X-Google-Smtp-Source: ABdhPJzje6z/g6P3WXMsf5dWpd1mfTtzSPs0L93o4FpmOSKLWJpREPfUyU/smtFJGWAj9WB6rqW30Q==
+X-Received: by 2002:a9d:a64:: with SMTP id 91mr23167682otg.198.1635906562337;
+        Tue, 02 Nov 2021 19:29:22 -0700 (PDT)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id e20sm234868oow.5.2021.11.02.19.29.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Nov 2021 19:29:21 -0700 (PDT)
+Message-ID: <54e31e3f-d6b3-2124-b57a-4e791938ff2f@gmail.com>
+Date:   Tue, 2 Nov 2021 20:29:19 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YYFmiAAYIA2X7Uv5@bombadil.infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH v2 01/25] tcp: authopt: Initial support and key management
+Content-Language: en-US
+To:     Leonard Crestez <cdleonard@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1635784253.git.cdleonard@gmail.com>
+ <51044c39f2e4331f2609484d28c756e2a9db5144.1635784253.git.cdleonard@gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <51044c39f2e4331f2609484d28c756e2a9db5144.1635784253.git.cdleonard@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 02, 2021 at 09:25:44AM -0700, Luis Chamberlain wrote:
-> On Tue, Nov 02, 2021 at 04:24:06PM +0100, Petr Mladek wrote:
-> > On Wed 2021-10-27 13:57:40, Miroslav Benes wrote:
-> > > >From my perspective, it is quite easy to get it wrong due to either a lack 
-> > > of generic support, or missing rules/documentation. So if this thread 
-> > > leads to "do not share locks between a module removal and a sysfs 
-> > > operation" strict rule, it would be at least something. In the same 
-> > > manner as Luis proposed to document try_module_get() expectations.
-> > 
-> > The rule "do not share locks between a module removal and a sysfs
-> > operation" is not clear to me.
-> 
-> That's exactly it. It *is* not. The test_sysfs selftest will hopefully
-> help with this. But I'll wait to take a final position on whether or not
-> a generic fix should be merged until the Coccinelle patch which looks
-> for all uses cases completes.
-> 
-> So I think that once that Coccinelle hunt is done for the deadlock, we
-> should also remind folks of the potential deadlock and some of the rules
-> you mentioned below so that if we take a position that we don't support
-> this, we at least inform developers why and what to avoid. If Coccinelle
-> finds quite a bit of cases, then perhaps evaluating the generic fix
-> might be worth evaluating.
-> 
-> > IMHO, there are the following rules:
-> > 
-> > 1. rule: kobject_del() or kobject_put() must not be called under a lock that
-> > 	 is used by store()/show() callbacks.
-> > 
-> >    reason: kobject_del() waits until the sysfs interface is destroyed.
-> > 	 It has to wait until all store()/show() callbacks are finished.
-> 
-> Right, this is what actually started this entire conversation.
-> 
-> Note that as Ming pointed out, the generic kernfs fix I proposed would
-> only cover the case when kobject_del() ends up being called on module
-> exit, so it would not cover the cases where perhaps kobject_del() might
-> be called outside of module exit, and so the cope of the possible
-> deadlock then increases in scope.
-> 
-> Likewise, the Coccinelle hunt I'm trying would only cover the module
-> exit case. I'm a bit of afraid of the complexity of a generic hunt
-> as expresed in rule 1.
+On 11/1/21 10:34 AM, Leonard Crestez wrote:
+> diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
+> new file mode 100644
+> index 000000000000..c412a712f229
+> --- /dev/null
+> +++ b/net/ipv4/tcp_authopt.c
+> @@ -0,0 +1,263 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#include <linux/kernel.h>
+> +#include <net/tcp.h>
+> +#include <net/tcp_authopt.h>
+> +#include <crypto/hash.h>
+> +
+> +/* checks that ipv4 or ipv6 addr matches. */
+> +static bool ipvx_addr_match(struct sockaddr_storage *a1,
+> +			    struct sockaddr_storage *a2)
+> +{
+> +	if (a1->ss_family != a2->ss_family)
+> +		return false;
+> +	if (a1->ss_family == AF_INET &&
+> +	    (((struct sockaddr_in *)a1)->sin_addr.s_addr !=
+> +	     ((struct sockaddr_in *)a2)->sin_addr.s_addr))
+> +		return false;
+> +	if (a1->ss_family == AF_INET6 &&
+> +	    !ipv6_addr_equal(&((struct sockaddr_in6 *)a1)->sin6_addr,
+> +			     &((struct sockaddr_in6 *)a2)->sin6_addr))
+> +		return false;
 
-Question is that why one shared lock is required between kobject_del()
-and its show()/store(), both zram and livepatch needn't that. Is it
-one common usage?
+The above 2 could just be
 
-> 
-> > 
-> > 2. rule: kobject_del()/kobject_put() must not be called from the
-> > 	related store() callbacks.
-> > 
-> >    reason: same as in 1st rule.
-> 
-> Sensible corollary.
-> 
-> Given tha the exact kobjet_del() / kobject_put() which must not be
-> called from the respective sysfs ops depends on which kobject is
-> underneath the device for which the sysfs ops is being created,
-> it would make this hunt in Coccinelle a bit tricky. My current iteration
-> of a coccinelle hunt cheats and looks at any sysfs looking op and
-> ensures a module exit exists.
-
-Actually kernfs/sysfs provides interface for supporting deleting
-kobject/attr from the attr's show()/store(), see example of
-sdev_store_delete(), and the livepatch example:
-
-https://lore.kernel.org/lkml/20211102145932.3623108-4-ming.lei@redhat.com/
-
-> 
-> > 3. rule: module_exit() must wait until all release() callbacks are called
-> > 	 when kobject are static.
-> > 
-> >    reason: kobject_put() must be called to clean up internal
-> > 	dependencies. The clean up might be done asynchronously
-> > 	and need access to the kobject structure.
-> 
-> This might be an easier rule to implement a respective Coccinelle rule
-> for.
-
-If kobject_del() is done in module_exit() or before module_exit(),
-kobject should have been freed in module_exit() via kobject_put().
-
-But yes, it can be asynchronously because of CONFIG_DEBUG_KOBJECT_RELEASE,
-seems like one real issue.
-
-
-Thanks,
-Ming
+	if (a1->ss_family == AF_INET)
+		return (((struct sockaddr_in *)a1)->sin_addr.s_addr ==
+			((struct sockaddr_in *)a2)->sin_addr.s_addr))
 
