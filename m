@@ -2,109 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260B7443C47
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 05:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB1D443CC8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 06:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhKCEvI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Nov 2021 00:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbhKCEvI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Nov 2021 00:51:08 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496FFC061203
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 21:48:32 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b12so1644471wrh.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 21:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=87974z5AtJmOln+zwYWiwSnZztUMWAZ2LkjaXiT2MxY=;
-        b=iW6iWKTWBYsCImYrih+6jD6BL6qW31QNIf1MhcIipNBV+T1/YZFlIJboDjw5Te6eEv
-         AjqSP/7df2OJv40xYMhcBJjaxnRAY6185jxwr+8r5OceIDKubIFFKIvbPT0N6xvbd8Up
-         scDnHGMmZ0ruwn+0zbjbUL/aQm3cGf1oIM6mrSubuYdvpy6ZHRWSJHn2NtKeMf7sawVW
-         T36xev27ocoy1r/Pzf31CK5sygwmQU2pbJ8B0BVOhaN5ikiGj0OsHGKpti7ziSdx0csk
-         9xlZ0Pvlt18omSGDD0Pct2+ks5+rpJvr2Nd/XcguE7x4YytT2FTds4es2HKftuHFdyWB
-         v61Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=87974z5AtJmOln+zwYWiwSnZztUMWAZ2LkjaXiT2MxY=;
-        b=PMrPJc2rehTmZ3i8HMZaw9exooijRxENVNJYZXZJ2furfrfI51aWq4zlijYd+afyiE
-         RXLWYDfC88khp5dCMp0CSPzupqWsMvTjsz2df0jqACk258Yr2a1T4nYEKgFVT8Ftps0S
-         UP4KtIuD3KjMtIHaO7yhUFd8UunY3YCpvmSh51iYXpAaN0IGoWEKmpp8WeboDd0Fps/A
-         Q4r2sTPmUIEh0/x9mmdkLy96Yc6mNAdFc3NqgfwjWStkwtBc64CKD+zUXVPp8YcLFj7I
-         Lsk8+7bCunOdeDaIlm+XNMbjQGoaAkcRYsY8vSAofs8fJpXx8c3bwqIWb6bepWojjgep
-         n3tA==
-X-Gm-Message-State: AOAM532CD1bBQpPtXLrT6aiZuNZCcQMOo50bXNpc3n+n4A+SRO0i7OYn
-        udbWFhYOIucNyHXaIa/79di82UVeT0OGgNGyst8CGw==
-X-Google-Smtp-Source: ABdhPJzgZcfUYgphAObDCJ7ZlKG/hkC2+JnD658GVFTfICkxiCG/wyerCejBDhWQm47ai/Fp8r7KayCwSI6hQpUuOes=
-X-Received: by 2002:a5d:4882:: with SMTP id g2mr51606109wrq.399.1635914910551;
- Tue, 02 Nov 2021 21:48:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211103042228.586967-1-dlatypov@google.com>
-In-Reply-To: <20211103042228.586967-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 3 Nov 2021 12:48:19 +0800
-Message-ID: <CABVgOSmivNm9=Zoq-1n4qpVwHbTkvTjW=chk-bEuJjt1SN6KEA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: add run_checks.py script to validate kunit changes
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S230471AbhKCFl1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Nov 2021 01:41:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36514 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230326AbhKCFlX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Nov 2021 01:41:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 55E5161108;
+        Wed,  3 Nov 2021 05:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635917927;
+        bh=YEe8g2H9+10wRJ6hkPSXljQ2IW5sFrabAYmc/8V4RtQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Bvb6BmatXzGPxaT7d9UUoESZHYvm9Bu3HGZf3f2OtVhytWVfdeV0pxbxA2txst7nJ
+         i5uEhIpsbUF/kD6eeelwFU74eO8wJagoIVBWfLNd6qvfBU8uHUT6178uh5x6WJlX3k
+         iO6dZE24WDrXDQ6BGIt9std4zYdBkZq+YHsx7qkI6w9AjhBCL3X2yuh3usRaHCPq38
+         a4qE43zsQBKSfOn02DawxbpaSCl+pfCXOO3Oax+NeSENqcyvsHMsgg1AhWbl7aDI/s
+         DYU86iIZew25vHH09tiiiP/dw5NRGHat2b73upwxOKsqMc8MYugrCz6Vs9voDQolUA
+         wH8PLsgsKdC2A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4D9FC60173;
+        Wed,  3 Nov 2021 05:38:47 +0000 (UTC)
+Subject: Re: [GIT PULL] Kselftest next update for Linux 5.16-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <5ee0a2b3-d5c1-5664-cb02-c24a7f4cdeaa@linuxfoundation.org>
+References: <5ee0a2b3-d5c1-5664-cb02-c24a7f4cdeaa@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <5ee0a2b3-d5c1-5664-cb02-c24a7f4cdeaa@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.16-rc1
+X-PR-Tracked-Commit-Id: f35dcaa0a8a29188ed61083d153df1454cf89d08
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 84924e2e620f4395466d772767313fff0de1dad7
+Message-Id: <163591792731.8140.6941329903411486649.pr-tracker-bot@kernel.org>
+Date:   Wed, 03 Nov 2021 05:38:47 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 3, 2021 at 12:22 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This formalizes the checks KUnit maintainers have been running (or in
-> other cases: forgetting to run).
->
-> This script also runs them all in parallel to minimize friction (pytype
-> can be fairly slow, but not slower than running kunit.py).
->
-> Example output:
-> $ ./tools/testing/kunit/run_checks.py
-> Waiting on 4 checks (kunit_tool_test.py, kunit smoke test, pytype, mypy)...
-> kunit_tool_test.py: PASSED
-> mypy: PASSED
-> pytype: PASSED
-> kunit smoke test: PASSED
->
-> On failure or timeout (5 minutes), it'll dump out the stdout/stderr.
-> E.g. adding in a type-checking error:
->   mypy: FAILED
->   > kunit.py:54: error: Name 'nonexistent_function' is not defined
->   > Found 1 error in 1 file (checked 8 source files)
->
-> mypy and pytype are two Python type-checkers and must be installed.
-> This file treats them as optional and will mark them as SKIPPED if not
-> installed.
->
-> This tool also runs `kunit.py run --kunitconfig=lib/kunit` to run
-> KUnit's own KUnit tests and to verify KUnit kernel code and kunit.py
-> play nicely together.
->
-> It uses --build_dir=kunit_run_checks so as not to clobber the default
-> build_dir, which helps make it faster by reducing the need to rebuild,
-> esp. if you're been passing in --arch instead of using UML.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
+The pull request you sent on Tue, 2 Nov 2021 11:56:07 -0600:
 
-Works a treat, thanks.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.16-rc1
 
-This is still
-Reviewed-by: David Gow <davidgow@google.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/84924e2e620f4395466d772767313fff0de1dad7
 
-Cheers,
--- David
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
