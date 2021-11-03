@@ -2,101 +2,216 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D28C443B67
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 03:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EA5443B6E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 03:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhKCCeV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Nov 2021 22:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S231240AbhKCClP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Nov 2021 22:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbhKCCeV (ORCPT
+        with ESMTP id S229650AbhKCClO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 22:34:21 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5231C061714;
-        Tue,  2 Nov 2021 19:31:45 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id v40-20020a056830092800b0055591caa9c6so1572517ott.4;
-        Tue, 02 Nov 2021 19:31:45 -0700 (PDT)
+        Tue, 2 Nov 2021 22:41:14 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA186C061203
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 19:38:38 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so758931wmd.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 19:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eWyMSzi2F1vTevHmGjTTEEqZIatQhxM0h+aLftMaVeQ=;
-        b=Xs8eAc3eUz3/7cZBD1GHXKyurmnQQ4x1k7JPTYJD2YMaKvd7ogaqHjRlqvAgNiyQ8h
-         s86g4x/ZpAlw1JWofIltbw5Y62s6pulSv+Q3sqXo6RIuktR87pm61tme4KGVLoM3wnKq
-         EJWlltHVxK7S8WdcsAsTWEuxgcRwwhcV7vJKn56eeY0tKi1Ly/2C0pAwosk65F5OAjAY
-         B25OggueMknjLxBE4YyiSs+rp6m4Tm4zksJO04L1uVdbkpzjEYNsggqoJrvH0XjVXFVP
-         TY8PAJPfcbD+yb5H31GqOKMJy29211HaauypIPUuyiJbxVyhcmeq4OeMf4OYfCz5fr39
-         Z4yA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aoES21mxO+BOpJ7aTYDTf55urvPoHFLyauMLbJwagys=;
+        b=ECjZR0MhaGyRFQMl2ayqi9WNq8eiXCQn6OpKvOXhpa08WZCUIkIZ/a/S4m4sNCCMeZ
+         g9z7EB95ToAgEWz0qWPT5Jfr8esIDLisciilU1hAopC0R14jGZVn5IkYP4VPuN7LH+0r
+         H4C03cpibOhauh/4gjNYKnr7S++rw+5fIhMPK4X61tScXXei3c0C83aFugog+mSnF8tU
+         BWuxbSV7KODvAv0FRL5oNMh/M9mgC23DFRgj2KdZaIB4vgRzHryP8WgGfeOv3MqVbi7H
+         YBS+2+lj3a3VeivZ72LZ1WMVzRSq/thIeR4iEIKuG40I6LELSliLTRsZYqGX4UkElgrn
+         disw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eWyMSzi2F1vTevHmGjTTEEqZIatQhxM0h+aLftMaVeQ=;
-        b=m+1HIJ6dd3rhx5rKRv5tRerUuKVPQC11G1Eac86DOaLavo/BRskmneUqT4kh6FAXKl
-         1Ckqmo3vma0hIAqM7Wmk+f0kfCP6bToTpWtpSNu9SgtBF0J/QICmpSW3zuvB50I7sTn5
-         8q9DuYzAXe0XbeFFi4+nnMdeJRQFfsCNmhv4X8EyBbgHoH70xAQG5FyaR1nmFVEq/oAc
-         j3TTvIkM4wyjSmh7ZkobA1255JvMJMLQNYPZ0/KqZklWpNrZVlIqCE8M6lcSlrIsYNEs
-         esVMXg97cXWppm8S9bUfN1S5lqOs2/ZWS7BKsi6QPm3bTUmfRs6cxtH8PD/0anPIXKOb
-         xtVQ==
-X-Gm-Message-State: AOAM533giOfvkOcmmPX3Dn3yoE1E8kvr4dnokCYwiPb9qXkAgRwYfFJd
-        T3GXCMsCamrWhWaBsz2fsaE=
-X-Google-Smtp-Source: ABdhPJxGEspg2Dx5iY6aNJ1hX8kUE9/73Q1Iu1YDGcF8bTFgAlGM9re4kH+M118mhVSW2W1QTPDMfw==
-X-Received: by 2002:a9d:6743:: with SMTP id w3mr20044539otm.120.1635906705036;
-        Tue, 02 Nov 2021 19:31:45 -0700 (PDT)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id v66sm236687oib.18.2021.11.02.19.31.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Nov 2021 19:31:44 -0700 (PDT)
-Message-ID: <79ab8aae-8a61-b279-a702-15f24b406044@gmail.com>
-Date:   Tue, 2 Nov 2021 20:31:42 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aoES21mxO+BOpJ7aTYDTf55urvPoHFLyauMLbJwagys=;
+        b=JeR6j6JHW0MHLNDzWyp4os9XBQ1gZIfl9k686X5sFXRrNVbVyLpvmEQ0gUUOdCahmA
+         N0gzDuQNyJHuP/ZfIxEHEyY56pX/PMzX1lxcaDGQxeubpw7PhniEIy+UC9i8xlbpLPvv
+         vw1LnxUPP8DuCTSoszieO5jM4TFY8TSaML1iDs2h1HDC+f+17qfTJ3DDzbRl2TvUGbIz
+         qEQVSJ15N3L+tEVG7NNozyMsHnWy4Oyn/f99qyiPAqpSQUip8zJwvqDE5a1VJsdTHADv
+         BdPhEIpmfZ4smPqq/ja+T86M3aHEmxqaYemw0Hcv0zCVwuCJrccriLkHEIe+kBGqSp3g
+         ugPw==
+X-Gm-Message-State: AOAM533MIeIQyvBqC8gLmp49GsKPnXg8QhFsGfys5FMGFTSndk9B+laI
+        9HL2MoCzcmqum5ZTKNHUxTKPSr0QngZERD7YdsSPZQ==
+X-Google-Smtp-Source: ABdhPJxgCrHXirHY7GDGQkTD/Me0GMkrZqEPOQ8BI6i/kiC+iZv3pERm5IzZCD26KYn71STw/D1cee7RognwoAFjvc8=
+X-Received: by 2002:a05:600c:253:: with SMTP id 19mr11627703wmj.179.1635907117141;
+ Tue, 02 Nov 2021 19:38:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH v2 07/25] tcp: Use BIT() for OPTION_* constants
-Content-Language: en-US
-To:     Leonard Crestez <cdleonard@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1635784253.git.cdleonard@gmail.com>
- <dc9dca0006fa1b586da44dcd54e29eb4300fe773.1635784253.git.cdleonard@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <dc9dca0006fa1b586da44dcd54e29eb4300fe773.1635784253.git.cdleonard@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211102235734.497713-1-dlatypov@google.com>
+In-Reply-To: <20211102235734.497713-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 3 Nov 2021 10:38:25 +0800
+Message-ID: <CABVgOSkGjL4J3jRfpSLkz70=HUccwRXmF-1mLdD-7FRWv+rNCQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: add run_checks.py script to validate kunit changes
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/1/21 10:34 AM, Leonard Crestez wrote:
-> Extending these flags using the existing (1 << x) pattern triggers
-> complaints from checkpatch.
-> 
-> Instead of ignoring checkpatch modify the existing values to use BIT(x)
-> style in a separate commit.
-> 
-> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-> ---
->  net/ipv4/tcp_output.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
+On Wed, Nov 3, 2021 at 7:57 AM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> This formalizes the checks KUnit maintainers have been running (or in
+> other cases: forgetting to run).
 
-This one could be sent outside of this patch set since you are not
-adding new values. Patch sets > 20 are generally frowned upon; sending
-this one separately helps get the number down.
+Guilty as charged. :-)
+>
+> This script also runs them all in parallel to minimize friction (pytype
+> can be fairly slow, but not slower than running kunit.py).
+>
+> Example output:
+> $ ./tools/testing/kunit/run_checks.py
+> Waiting on 4 checks (kunit_tool_test.py, kunit smoke test, pytype, mypy)...
+> kunit_tool_test.py: PASSED
+> mypy: PASSED
+> pytype: PASSED
+> kunit smoke test: PASSED
+>
+> On failure or timeout (5 minutes), it'll dump out the stdout/stderr.
+> E.g. adding in a type-checking error:
+>   mypy: FAILED
+>   > kunit.py:54: error: Name 'nonexistent_function' is not defined
+>   > Found 1 error in 1 file (checked 8 source files)
+>
+> mypy and pytype are two Python type-checkers and must be installed.
+> This file treats them as optional and will mark them as SKIPPED if not
+> installed.
+>
+> This tool also runs `kunit.py run --kunitconfig=lib/kunit` to run
+> KUnit's own KUnit tests and to verify KUnit kernel code and kunit.py
+> play nicely together.
+>
+> It uses --build_dir=kunit_run_checks so as not to clobber the default
+> build_dir, which helps make it faster by reducing the need to rebuild,
+> esp. if you're been passing in --arch instead of using UML.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+
+Thanks -- this is working well here. A couple of minor suggestions
+below, but even without them, this is very useful.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+>  tools/testing/kunit/run_checks.py | 76 +++++++++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100755 tools/testing/kunit/run_checks.py
+>
+> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+> new file mode 100755
+> index 000000000000..d03ca3f84b91
+> --- /dev/null
+> +++ b/tools/testing/kunit/run_checks.py
+> @@ -0,0 +1,76 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# This file runs some basic checks to verify kunit works.
+> +# It is only of interest if you're making changes to KUnit itself.
+> +#
+> +# Copyright (C) 2021, Google LLC.
+> +# Author: Daniel Latypov <dlatypov@google.com.com>
+> +
+> +from concurrent import futures
+> +import datetime
+> +import os
+> +import shutil
+> +import subprocess
+> +import sys
+> +import textwrap
+> +from typing import Dict, List, Sequence, Tuple
+> +
+> +ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
+> +_TIMEOUT = datetime.timedelta(minutes=5).total_seconds()
+> +
+> +commands: Dict[str, Sequence[str]] = {
+> +       'kunit_tool_test.py': ['./kunit_tool_test.py'],
+> +       'kunit smoke test': ['./kunit.py', 'run', '--kunitconfig=lib/kunit', '--build_dir=kunit_run_checks'],
+> +       'pytype': ['/bin/sh', '-c', 'pytype *.py'],
+> +       'mypy': ['/bin/sh', '-c', 'mypy *.py'],
+> +}
+> +
+> +# The user might not have mypy or pytype installed, skip them if so.
+> +# Note: you can install both via `$ pip install mypy pytype`
+> +necessary_deps : Dict[str, str] = {
+> +       'pytype': 'pytype',
+> +       'mypy': 'mypy',
+> +}
+> +
+> +def main(argv: Sequence[str]) -> None:
+> +       if len(argv) > 1:
+> +               raise RuntimeError('Too many command-line arguments.')
+
+What does the command-line argument here actually do? It looks like
+nothing, because the argv variable is shadowed below?
+
+Or was this supposed to check that there are no arguments, which
+doesn't work because argv[] is stripped of its first element in the
+'if __name__=='__main__'?
+
+> +
+> +       future_to_name: Dict[futures.Future, str] = {}
+> +       executor = futures.ThreadPoolExecutor(max_workers=len(commands))
+> +       for name, argv in commands.items():
+> +               if name in necessary_deps and shutil.which(necessary_deps[name]) is None:
+> +                       print(f'{name}: SKIPPED, {necessary_deps[name]} not in $PATH')
+> +                       continue
+> +               f = executor.submit(run_cmd, argv)
+> +               future_to_name[f] = name
+> +
+> +       print(f'Waiting on {len(future_to_name)} checks ({", ".join(future_to_name.values())})...')
+> +       for f in  futures.as_completed(future_to_name.keys()):
+> +               name = future_to_name[f]
+> +               ex = f.exception()
+> +               if not ex:
+> +                       print(f'{name}: PASSED')
+> +                       continue
+> +
+> +               if isinstance(ex, subprocess.TimeoutExpired):
+> +                       print(f'{name}: TIMED OUT')
+> +               elif isinstance(ex, subprocess.CalledProcessError):
+> +                       print(f'{name}: FAILED')
+> +               else:
+> +                       print('{name}: unexpected exception: {ex}')
+> +                       continue
+> +
+> +               output = ex.output
+> +               if output:
+> +                       print(textwrap.indent(output.decode(), '> '))
+> +       executor.shutdown()
+> +
+> +
+> +def run_cmd(argv: Sequence[str]):
+> +       subprocess.check_output(argv, stderr=subprocess.STDOUT, cwd=ABS_TOOL_PATH, timeout=_TIMEOUT)
+> +
+> +
+> +if __name__ == '__main__':
+> +       main(sys.argv[1:])
+
+Any chance we could get this to return a non-zero exit code if one of
+these checks fails?
+
+>
+> base-commit: 52a5d80a2225e2d0b2a8f4656b76aead2a443b2a
+> --
+> 2.33.1.1089.g2158813163f-goog
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20211102235734.497713-1-dlatypov%40google.com.
