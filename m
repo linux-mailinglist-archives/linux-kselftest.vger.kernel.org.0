@@ -2,186 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E6D4452EC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 13:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C9C445347
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 13:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbhKDM0M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 08:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbhKDM0M (ORCPT
+        id S229960AbhKDMtk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 08:49:40 -0400
+Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:38477 "EHLO
+        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229809AbhKDMtk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 08:26:12 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76FAC061203
-        for <linux-kselftest@vger.kernel.org>; Thu,  4 Nov 2021 05:23:32 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so4133631wmd.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Nov 2021 05:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DbdddvL3v1nKg0sWX7VozKa+Fy24SlndwT2dHYiunUc=;
-        b=Y1NZqfG2WZeoFgUOeBVL3uxtDdgUxoYu61tz/ya9iSTTtDPS/up2RrnH14i5S7soGP
-         XZKJWXhM7MLPtrbP0iTxmzw5SppG8O8RvuxZJG5oZtgQub/NM6IioDpuOdGSIvC8nfWH
-         91miaDB4lDiOA50K0Ai4pNr8Am7zM1VU9mcps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DbdddvL3v1nKg0sWX7VozKa+Fy24SlndwT2dHYiunUc=;
-        b=y1DvUc2UL3CgQz6fOtSyE8UZaF/NbN50KcUn5kU3D4YqHYazFq6USDg6COVdFmcGLP
-         nI+GBCNITkXZSIrPUI28Y2JeX4+H+DGgVjllvyRJwxH+5NHoasNqNpZ9Z9uNF1fQJa2J
-         yjqHsxiFHSq2uHLElrJjmKET8HyJ1TEOo38liqUl+Tjfv5tZ8DydSDAuEOa2Y4NnWJE4
-         Sw4dgBL5P/MIF10oEyXFG1/SajePSD4lGxO1nLBByTX485RHOxXzDWoy7Rgb4BENorJy
-         R8R2wKGnACl3e8GSk91Sa1+zEkuLhTGtkG9yZr5yje402iVsSqXbCIp0d8+JCRsPyo+Z
-         +VGA==
-X-Gm-Message-State: AOAM531oE55jI5pGFlLmbcI6eoFoG/LtI9B6Us2yGpabSan4jwC4Vfc8
-        DiUUBdfn8i06FWsB6w745zbC2qk6Z6tZVw==
-X-Google-Smtp-Source: ABdhPJyjdBYDj2sx912EDhl0izenDXlzZg7gy6atekwsa7xhY81ByQunOX+VtBvujXfBr8u1iCMuKQ==
-X-Received: by 2002:a1c:448b:: with SMTP id r133mr10372348wma.85.1636028611422;
-        Thu, 04 Nov 2021 05:23:31 -0700 (PDT)
-Received: from kharboze.dr-pashinator-m-d.gmail.com.beta.tailscale.net (cust97-dsl60.idnet.net. [212.69.60.97])
-        by smtp.gmail.com with ESMTPSA id a4sm4797535wmb.39.2021.11.04.05.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Nov 2021 05:23:31 -0700 (PDT)
-From:   Mark Pashmfouroush <markpash@cloudflare.com>
-To:     markpash@cloudflare.com, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     kernel-team@cloudflare.com, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add tests for accessing ifindex in bpf_sk_lookup
-Date:   Thu,  4 Nov 2021 12:23:04 +0000
-Message-Id: <20211104122304.962104-3-markpash@cloudflare.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211104122304.962104-1-markpash@cloudflare.com>
-References: <20211104122304.962104-1-markpash@cloudflare.com>
+        Thu, 4 Nov 2021 08:49:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636030021;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=VAa+sdJxFlonQMtUvSa0Idujxrgm3aZfDvU2spfOX+8=;
+        b=MUqcAo5PrvAw/eEmnJVketxQOaxKiZHQJoaM3r4afeb312A7FkWg2FTDlwcrqaMj
+        VyPLhsEdI/zvfMyjVrZOryYwUYzzRowTywbImP93SImE+BsUrSCHwKSpHC6CbLpXeWp
+        YqlD8kMMA5wD4LGOgIAv0Nb8M8PliKH9pr8UEdKg=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636030021;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=VAa+sdJxFlonQMtUvSa0Idujxrgm3aZfDvU2spfOX+8=;
+        b=M595huthKheJ2FtWqVWhFQjHSrEYqdIrmxTMRfcqkrQfgh1MQKsLtbdQGQOYQDPj
+        irxGzMeAbnjk7EHs3yzc+xgNTgOB4xCfFnXihliFp7/Q3m3PcEaudJIMqGYtwkdWcuN
+        MI3htZ5kJn4mz6o6CnzJQtohjl4oB0dEEUOYWZ5A=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211104
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017ceafcfeb6-58833ff5-aed0-468d-b7e1-fe892a804767-000000@email.amazonses.com>
+Date:   Thu, 4 Nov 2021 12:47:01 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.04-54.240.48.34
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A new field was added to the bpf_sk_lookup data that users can access.
-Add tests that validate that the new ifindex field contains the right
-data.
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 8a796a1dfca2780321755033a74bca2bbe651680
+* git describe: next-20211104
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211104
 
-Signed-off-by: Mark Pashmfouroush <markpash@cloudflare.com>
+## Regressions (compared to next-20211103)
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-index 6db07401bc49..57846cc7ce36 100644
---- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -937,6 +937,37 @@ static void test_drop_on_lookup(struct test_sk_lookup *skel)
- 			.connect_to	= { EXT_IP6, EXT_PORT },
- 			.listen_at	= { EXT_IP6, INT_PORT },
- 		},
-+		/* The program will drop on success, meaning that the ifindex
-+		 * was 1.
-+		 */
-+		{
-+			.desc		= "TCP IPv4 drop on valid ifindex",
-+			.lookup_prog	= skel->progs.check_ifindex,
-+			.sotype		= SOCK_STREAM,
-+			.connect_to	= { EXT_IP4, EXT_PORT },
-+			.listen_at	= { EXT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "TCP IPv6 drop on valid ifindex",
-+			.lookup_prog	= skel->progs.check_ifindex,
-+			.sotype		= SOCK_STREAM,
-+			.connect_to	= { EXT_IP6, EXT_PORT },
-+			.listen_at	= { EXT_IP6, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv4 drop on valid ifindex",
-+			.lookup_prog	= skel->progs.check_ifindex,
-+			.sotype		= SOCK_DGRAM,
-+			.connect_to	= { EXT_IP4, EXT_PORT },
-+			.listen_at	= { EXT_IP4, EXT_PORT },
-+		},
-+		{
-+			.desc		= "UDP IPv6 drop on valid ifindex",
-+			.lookup_prog	= skel->progs.check_ifindex,
-+			.sotype		= SOCK_DGRAM,
-+			.connect_to	= { EXT_IP6, EXT_PORT },
-+			.listen_at	= { EXT_IP6, EXT_PORT },
-+		},
- 	};
- 	const struct test *t;
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-index 19d2465d9442..0f3283bfe3b6 100644
---- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-+++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-@@ -84,6 +84,14 @@ int lookup_drop(struct bpf_sk_lookup *ctx)
- 	return SK_DROP;
- }
- 
-+SEC("sk_lookup")
-+int check_ifindex(struct bpf_sk_lookup *ctx)
-+{
-+	if (ctx->ifindex == 1)
-+		return SK_DROP;
-+	return SK_PASS;
-+}
-+
- SEC("sk_reuseport")
- int reuseport_pass(struct sk_reuseport_md *ctx)
- {
-diff --git a/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c b/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
-index d78627be060f..0b3088da1e89 100644
---- a/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
-+++ b/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
-@@ -229,6 +229,24 @@
- 		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
- 			    offsetof(struct bpf_sk_lookup, local_port)),
- 
-+		/* 1-byte read from ifindex field */
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex)),
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex) + 1),
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex) + 2),
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex) + 3),
-+		/* 2-byte read from ifindex field */
-+		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex)),
-+		BPF_LDX_MEM(BPF_H, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex) + 2),
-+		/* 4-byte read from ifindex field */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex)),
-+
- 		/* 8-byte read from sk field */
- 		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
- 			    offsetof(struct bpf_sk_lookup, sk)),
-@@ -351,6 +369,20 @@
- 	.expected_attach_type = BPF_SK_LOOKUP,
- 	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
- },
-+{
-+	"invalid 8-byte read from bpf_sk_lookup ifindex field",
-+	.insns = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
-+			    offsetof(struct bpf_sk_lookup, ifindex)),
-+		BPF_MOV32_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.errstr = "invalid bpf_context access",
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
-+	.expected_attach_type = BPF_SK_LOOKUP,
-+	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
-+},
- /* invalid 1,2,4-byte reads from 8-byte fields in bpf_sk_lookup */
- {
- 	"invalid 4-byte read from bpf_sk_lookup sk field",
--- 
-2.31.1
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211103)
+* i386, kselftest-net
+  - net.fib-onlink-tests.sh
+  - net.gro.sh
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* x86, kselftest-net
+  - net.gro.sh
+
+
+## Test result summary
+total: 2903, pass: 1719, fail: 259, skip: 925, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
