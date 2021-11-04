@@ -2,112 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27340444E56
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 06:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA17E44503A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 09:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbhKDF1x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 01:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbhKDF1w (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 01:27:52 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F77C061203
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Nov 2021 22:25:14 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id s186so11758991yba.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Nov 2021 22:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OtBceSJb428ILPrgAIwLW6HZ5uojQDi2g0yPmI7b2cQ=;
-        b=Eiqy/Mt0qrguQhqd0jsEW9qkY8Q25PX+ioLaqmK/8C29vQ+LJza+En5XMIJ7bDoVyY
-         8NMnIRI5x22mBTsLnbzkztCtAXHu+iZdfyZOwpY3p5D3XuynIc06r4BAkyl974AdBiF3
-         U0B9M3ryrOWnB8LBMvHx/jPsqmvFqW2jiBxkqXLJyonR4aR+SLkrzXL4spfXm5Gb7B1s
-         aV29j9wgXVbQX1pYaXpB8NTedUqDsM/fTNJvpLB5PhREhttxKffuERtfHXaIRnI8jh94
-         3xSvbfoirN1QLkcQzvBNLdQriNiN1JYDjHAE9j7GbsDv/xsot4wBC7SyE5Abrqmpy/73
-         +oNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OtBceSJb428ILPrgAIwLW6HZ5uojQDi2g0yPmI7b2cQ=;
-        b=khQsPZZZ/lu5EPf/f5fpPWri2bfkb7cx4nAyz6jxZ98xBk8So/TAd9Fmona33lOf1k
-         LNtH8R+V3HAo9JsWiQBZcHkAHBmCrxYgn7ZYN6MzKp3F8zVGWXqsflUwxBM5qpmwca/n
-         FqYlh4NR6YM/HUiXr3zKIP6eYw99CiGTh78/PAjU4ZZuXVXEtkDue7Wu1EFYHiMhobKV
-         gRM6fg+LoS9NBzCO+AwRmJvNb4KIaBvMi0rXNbztEZRAm8InsTvUPzorBbkuExyyIhbs
-         3aBzFx4Fhb4bF/ZdtXR7eThChyXLOgkCMkKmuf95TDVO62YB7J5FKlkeXnjYoLINR5Z1
-         xLEA==
-X-Gm-Message-State: AOAM533DcUrlu7NVR4eOO2cRsmHo63jHlK8w4/KAWUyOXWgXAEiqMppU
-        UCzaaFXBNU0Ra91E1oV1nVqyT2pj0klQtwVKasxXhQ==
-X-Google-Smtp-Source: ABdhPJzyZRyz+P/9gdUPVZ2JsSGreOqCWZF1woTxfMn3Tgx7LW6epzWNKfujPYCHXJKB/3LlgasNGr1WrHXIQcRH7GE=
-X-Received: by 2002:a25:d4d5:: with SMTP id m204mr19280771ybf.418.1636003513823;
- Wed, 03 Nov 2021 22:25:13 -0700 (PDT)
+        id S230334AbhKDIaK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 04:30:10 -0400
+Received: from mga02.intel.com ([134.134.136.20]:57728 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230202AbhKDIaJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Nov 2021 04:30:09 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10157"; a="218857384"
+X-IronPort-AV: E=Sophos;i="5.87,208,1631602800"; 
+   d="scan'208";a="218857384"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2021 01:27:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,208,1631602800"; 
+   d="scan'208";a="501438354"
+Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
+  by orsmga008.jf.intel.com with ESMTP; 04 Nov 2021 01:27:28 -0700
+From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
+To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org
+Cc:     richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com
+Subject: [PATCH net-next 0/6] Add RTNL interface for SyncE
+Date:   Thu,  4 Nov 2021 09:12:25 +0100
+Message-Id: <20211104081231.1982753-1-maciej.machnikowski@intel.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <20211005234459.430873-1-michael.roth@amd.com> <20211006203710.13326-1-michael.roth@amd.com>
- <CAA03e5EmnbpKOwfNJUV7fog-7UpJJNpu7mQYmCODpk=tYfXxig@mail.gmail.com> <20211012011537.q7dwebcistxddyyj@amd.com>
-In-Reply-To: <20211012011537.q7dwebcistxddyyj@amd.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Wed, 3 Nov 2021 22:25:02 -0700
-Message-ID: <CAL715WKBBXNpJFK-3254ox_GU=v04RdYC=uXu4S5kbf=1R9aYA@mail.gmail.com>
-Subject: Re: [RFC 06/16] KVM: selftests: add library for creating/interacting
- with SEV guests
-To:     Michael Roth <Michael.Roth@amd.com>
-Cc:     Marc Orr <marcorr@google.com>, linux-kselftest@vger.kernel.org,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Nathan Tempelman <natet@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->
-> >
-> > > +#define SEV_FW_REQ_VER_MAJOR   1
-> > > +#define SEV_FW_REQ_VER_MINOR   30
-> >
-> > Where does the requirement for this minimum version come from? Maybe
-> > add a comment?
-> >
-> > Edit: Is this for patches later on in the series that exercise SNP? If
-> > so, I think it would be better to add a check like this in the test
-> > itself, rather than globally. I happened to test this on a machine
-> > with a very old PSP FW, 0.22, and the SEV test added in patch #7 seems
-> > to work fine with this ancient PSP FW.
->
-> Ah, yes, this was mostly for SNP support. I'll implement a separate minimum
-> version for SEV/SEV-ES.
->
+Synchronous Ethernet networks use a physical layer clock to syntonize
+the frequency across different network elements.
 
-I want to ask the same thing, I tried to run the sev selftest today
-and I was blocked by this minimum version number... BTW: I suspect if
-I want to update the SEV firmware I have to update the BIOS myself?
-So, it would be good to know what is the actual minimum for SEV.
+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+Equipment Clock (EEC) and have the ability to recover synchronization
+from the synchronization inputs - either traffic interfaces or external
+frequency sources.
+The EEC can synchronize its frequency (syntonize) to any of those sources.
+It is also able to select synchronization source through priority tables
+and synchronization status messaging. It also provides neccessary
+filtering and holdover capabilities
 
-In addition, maybe that's side effect, I see a warning when building the kernel:
+This patch series introduces basic interface for reading the Ethernet
+Equipment Clock (EEC) state on a SyncE capable device. This state gives
+information about the source of the syntonization signal (ether my port,
+or any external one) and the state of EEC. This interface is required\
+to implement Synchronization Status Messaging on upper layers.
 
-"module ccp.ko requires firmware amd/amd_sev_fam19h_model0xh.sbin"
+RFC history:
+v2:
+- removed whitespace changes
+- fix issues reported by test robot
+v3:
+- Changed naming from SyncE to EEC
+- Clarify cover letter and commit message for patch 1
+v4:
+- Removed sync_source and pin_idx info
+- Changed one structure to attributes
+- Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
+  to the recovered clock of a port that returns the state
+v5:
+- add EEC source as an optiona attribute
+- implement support for recovered clocks
+- align states returned by EEC to ITU-T G.781
+v6:
+- fix EEC clock state reporting
+- add documentation
+- fix descriptions in code comments
 
-Maybe I need some hints from you? Or maybe it is just harmless. I did
-double checked and it looks like I was using either
-amd_sev_fam17h_model3xh.sbin or amd_sev_fam17h_model0xh.sbin
+Maciej Machnikowski (6):
+  ice: add support detecting features based on netlist
+  rtnetlink: Add new RTM_GETEECSTATE message to get SyncE status
+  ice: add support for reading SyncE DPLL state
+  rtnetlink: Add support for SyncE recovered clock configuration
+  ice: add support for SyncE recovered clocks
+  docs: net: Add description of SyncE interfaces
 
-Thanks.
--Mingwei
+ Documentation/networking/synce.rst            |  88 ++++++
+ drivers/net/ethernet/intel/ice/ice.h          |   7 +
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  94 ++++++-
+ drivers/net/ethernet/intel/ice/ice_common.c   | 224 ++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |  20 +-
+ drivers/net/ethernet/intel/ice/ice_devids.h   |   3 +
+ drivers/net/ethernet/intel/ice/ice_lib.c      |   6 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     | 138 ++++++++++
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  34 +++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  49 ++++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  22 ++
+ drivers/net/ethernet/intel/ice/ice_type.h     |   1 +
+ include/linux/netdevice.h                     |  33 +++
+ include/uapi/linux/if_link.h                  |  57 ++++
+ include/uapi/linux/rtnetlink.h                |  10 +
+ net/core/rtnetlink.c                          | 253 ++++++++++++++++++
+ security/selinux/nlmsgtab.c                   |   6 +-
+ 17 files changed, 1041 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/networking/synce.rst
+
+-- 
+2.26.3
+
