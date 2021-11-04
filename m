@@ -2,150 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C9C445347
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 13:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54A84453FC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 14:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbhKDMtk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 08:49:40 -0400
-Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:38477 "EHLO
-        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229809AbhKDMtk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 08:49:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636030021;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=VAa+sdJxFlonQMtUvSa0Idujxrgm3aZfDvU2spfOX+8=;
-        b=MUqcAo5PrvAw/eEmnJVketxQOaxKiZHQJoaM3r4afeb312A7FkWg2FTDlwcrqaMj
-        VyPLhsEdI/zvfMyjVrZOryYwUYzzRowTywbImP93SImE+BsUrSCHwKSpHC6CbLpXeWp
-        YqlD8kMMA5wD4LGOgIAv0Nb8M8PliKH9pr8UEdKg=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636030021;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=VAa+sdJxFlonQMtUvSa0Idujxrgm3aZfDvU2spfOX+8=;
-        b=M595huthKheJ2FtWqVWhFQjHSrEYqdIrmxTMRfcqkrQfgh1MQKsLtbdQGQOYQDPj
-        irxGzMeAbnjk7EHs3yzc+xgNTgOB4xCfFnXihliFp7/Q3m3PcEaudJIMqGYtwkdWcuN
-        MI3htZ5kJn4mz6o6CnzJQtohjl4oB0dEEUOYWZ5A=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211104
+        id S231426AbhKDNjP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 09:39:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38880 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231318AbhKDNjG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Nov 2021 09:39:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D3B5661183;
+        Thu,  4 Nov 2021 13:36:26 +0000 (UTC)
+Date:   Thu, 4 Nov 2021 14:36:23 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     christian@brauner.io, shuah@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests: clone3: clone3: add case CLONE3_ARGS_NO_TEST
+Message-ID: <20211104133623.dfey3ryavuelwygz@wittgenstein>
+References: <20211103201350.3866089-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017ceafcfeb6-58833ff5-aed0-468d-b7e1-fe892a804767-000000@email.amazonses.com>
-Date:   Thu, 4 Nov 2021 12:47:01 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.04-54.240.48.34
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211103201350.3866089-1-anders.roxell@linaro.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 8a796a1dfca2780321755033a74bca2bbe651680
-* git describe: next-20211104
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211104
+On Wed, Nov 03, 2021 at 09:13:50PM +0100, Anders Roxell wrote:
+> Building selftests/clone3 with clang warns about enumeration not handled
+> in switch case:
+> 
+> clone3.c:54:10: warning: enumeration value 'CLONE3_ARGS_NO_TEST' not handled in switch [-Wswitch]
+>         switch (test_mode) {
+>                 ^
+> 
+> Add the missing switch case with a comment.
+> 
+> Fixes: 17a810699c18 ("selftests: add tests for clone3()")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
 
-## Regressions (compared to next-20211103)
-* qemu_arm, kselftest-timers
-  - timers.rtcpie
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211103)
-* i386, kselftest-net
-  - net.fib-onlink-tests.sh
-  - net.gro.sh
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-net
-  - net.gro.sh
-
-
-## Test result summary
-total: 2903, pass: 1719, fail: 259, skip: 925, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Fine by me. Thanks!
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
