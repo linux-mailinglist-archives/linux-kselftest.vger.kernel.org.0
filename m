@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF9E445867
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 18:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F3644594F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 19:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbhKDRgs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 13:36:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47154 "EHLO mail.kernel.org"
+        id S234028AbhKDSLf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 14:11:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231667AbhKDRgs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 13:36:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A0CC61076;
-        Thu,  4 Nov 2021 17:34:09 +0000 (UTC)
+        id S231402AbhKDSLf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Nov 2021 14:11:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9208B611C3;
+        Thu,  4 Nov 2021 18:08:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636047249;
-        bh=A4238DQGmI4/bX7NYgaTJp0Z3vyq2cge8JI3yq/k/is=;
+        s=k20201202; t=1636049336;
+        bh=xnNcXcazwQwUlo5RPHBcBCT74SiT22kEneLRSZIj/FQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F3t4Lf/91ADp+gdchaR5vWv+XVWBJmN8N8HXm7dTA9thuaeYeofSt/jezew3jT5Iw
-         POTZMiBQKUl7NSwIbSFoFI9JGGMCMgwbRi0B6+klJldp6FeQMQ77H/QRABAaZ0M2vH
-         Al7FpW2MN9PpEHsNyW+QwpepFm+B0THTi1uwllVHEWkxi1ODMxQHUonvrh5WIaVLd3
-         km7ScP/l/DXV9ms4NXuwAVoZEodhBedivpT1s8bdbXOGfvxRVmqfzmEcHXyO7UmDr+
-         z2R3IbjSmFxqyfeUzY3/wjHtx7IQR8XSMtrkZ+9B/fMxbS3zn/owLNJmfHaomJ5tU5
-         MvcbB9ohfyFpw==
-Date:   Thu, 4 Nov 2021 10:34:08 -0700
+        b=Tba14w+sKLD/aZF8PYdg0l92q+C+lx5K1JeX0grlk3OxVCjy6x6x7mJRtWA94BiMm
+         vJen6WSh/YoC/2VRRSXlDRIzivYTN0/AVJCHUBOb1x60r6W+mZ3avmSizsuionzgva
+         2LI+YVnx+FaoLOarVK3iFJAVSAEzgVBWDz+M7ZKQdoLoEr4jW/8kF7R6vXjecFtxlc
+         4GwE507rYzZZ9CzXe3UzWYDVOfPA5NkZgvFb0Yt31vCpwVh/hEV+wAuUi/qyQXNgF+
+         XpKYtJGP5IBBpoJhMjlD/J5FMLO1JFA82knblenO2WNNFTubNCSf4tGjubWSIjW8rM
+         zVAtHaXBLWUNg==
+Date:   Thu, 4 Nov 2021 11:08:55 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Riccardo Paolo Bestetti <pbl@bestov.io>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] ipv4/raw: support binding to nonlocal addresses
-Message-ID: <20211104103346.29d82cb1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211102141921.197561-1-pbl@bestov.io>
-References: <20210321002045.23700-1-pbl@bestov.io>
-        <20211102141921.197561-1-pbl@bestov.io>
+To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
+Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com
+Subject: Re: [PATCH net-next 6/6] docs: net: Add description of SyncE
+ interfaces
+Message-ID: <20211104110855.3ead1642@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211104081231.1982753-7-maciej.machnikowski@intel.com>
+References: <20211104081231.1982753-1-maciej.machnikowski@intel.com>
+        <20211104081231.1982753-7-maciej.machnikowski@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -43,35 +44,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue,  2 Nov 2021 15:19:21 +0100 Riccardo Paolo Bestetti wrote:
-> Add support to inet v4 raw sockets for binding to nonlocal addresses
-> through the IP_FREEBIND and IP_TRANSPARENT socket options, as well as
-> the ipv4.ip_nonlocal_bind kernel parameter.
-> 
-> Add helper function to inet_sock.h to check for bind address validity on
-> the base of the address type and whether nonlocal address are enabled
-> for the socket via any of the sockopts/sysctl, deduplicating checks in
-> ipv4/ping.c, ipv4/af_inet.c, ipv6/af_inet6.c (for mapped v4->v6
-> addresses), and ipv4/raw.c.
-> 
-> Add test cases with IP[V6]_FREEBIND verifying that both v4 and v6 raw
-> sockets support binding to nonlocal addresses after the change. Add
-> necessary support for the test cases to nettest.
-> 
-> Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+On Thu,  4 Nov 2021 09:12:31 +0100 Maciej Machnikowski wrote:
+> +Synchronous Ethernet networks use a physical layer clock to syntonize
+> +the frequency across different network elements.
+> +
+> +Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+> +Equipment Clock (EEC) and can recover synchronization
+> +from the synchronization inputs - either traffic interfaces or external
+> +frequency sources.
+> +The EEC can synchronize its frequency (syntonize) to any of those sources.
+> +It is also able to select a synchronization source through priority tables
+> +and synchronization status messaging. It also provides necessary
+> +filtering and holdover capabilities.
+> +
+> +The following interface can be applicable to diffferent packet network types
+> +following ITU-T G.8261/G.8262 recommendations.
 
-Thanks for the patch, please keep Dave's review tag and repost 
-in ~2 weeks.
+Can we get a diagram in here in terms of how the port feeds its
+recovered Rx freq into EEC and that feeds freq of Tx on other ports?
 
+I'm still struggling to understand your reasoning around not making 
+EEC its own object. "We can do this later" seems like trading
+relatively little effort now for extra work for driver and application
+developers for ever.
 
-# Form letter - net-next is closed
-
-We have already sent the networking pull request for 5.16
-and therefore net-next is closed for new drivers, features,
-code refactoring and optimizations. We are currently accepting
-bug fixes only.
-
-Please repost when net-next reopens after 5.15-rc1 is cut.
-
-Look out for the announcement on the mailing list or check:
-http://vger.kernel.org/~davem/net-next.html
+Also patch 3 still has a kdoc warning.
