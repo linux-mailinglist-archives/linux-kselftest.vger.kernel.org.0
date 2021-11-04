@@ -2,72 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A99445657
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 16:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C57F4456AC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 16:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbhKDPcq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 11:32:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41466 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229970AbhKDPcq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 11:32:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C5AE7611C4;
-        Thu,  4 Nov 2021 15:30:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636039807;
-        bh=vjn1Lwm7oWdvDDcHq4GCLUqdhjQ7tGTX2vpcbSflNho=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CvmVtSmqYzJN+zppDD76m9LfNJI7kh0ckolbJALV1Fyjk7DH3wkNz1OEDLffbw6wX
-         e3W+bN6YHd1/33QuZMlY1SgLnB2yUCnbKGLAxmM7Q0E+Ue2dlNCUBIfekEVepeQA/D
-         PzEFVwQwwQDhzULmZGGYqDKTaXd47ml5fhOqZheJFjWhBHYmB/cMnEUOSr/JB4bqR+
-         zGVO6QAbBYeo91/QZXmbg4IUkjyjkVw84/lpFw7EpctceN7YJRCCsOXZl4llWQwoFo
-         MOlNtC4sGAcdry6zmEzTXObg/Vi70KxyL+NZE0hXWKcdO+wJSEmoDqZU8+z4xHTDiz
-         vB4u5Fzb54WHA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BA3AB609B8;
-        Thu,  4 Nov 2021 15:30:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231463AbhKDQCC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 12:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231240AbhKDQCB (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Nov 2021 12:02:01 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA11AC061714;
+        Thu,  4 Nov 2021 08:59:23 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id r10-20020a056830448a00b0055ac7767f5eso8893927otv.3;
+        Thu, 04 Nov 2021 08:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+DWga+L4ukHUCEsqSLIkNP4gRULHLBKXgraKCXcH83k=;
+        b=IyRG8ML45zPkZrb9Ey4t+9jJPcza2/TWEHCg+nrHeGAI7KDAUjIk2L06MTntVeODJb
+         YqsXJZ95FkU+U++mo87rxsam8aByv0w/rbL7iqux1amjU9NHdGSI/JJWwblsGPZC9K1a
+         2s6IqGipEFy35oVS6CkiQR9aAZ9201VfG+V93DWKSUS3pQvc5cO2J8k/P+KOfKc8C3/2
+         VGhl/x4owQwIzUZYD8Mms0M/FR8mwGgbUbUEPhFt5S8rGDKlr6Ic7mbS8I5L/DH8wVsu
+         c+wd8hqEWHbLd1r5PI29LNirjRzYoKQbPDOWw0kMakXt+fEgN9wVDqHuBbIAedKUXO8d
+         8/4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+DWga+L4ukHUCEsqSLIkNP4gRULHLBKXgraKCXcH83k=;
+        b=5+z9Bgit9Xs1/vSy5Muwad7zss6xDtlfBc6IVCPm+ZEcyHIaQ6D1eulqM0ku/NyQms
+         3tjWWhhtH1idCzNNZmw5TAtsv8NlAomjsSM60vGczZwnuj79WDTSqj2hNdfH2WfUI2T+
+         2tUdmAuJyEEsdz7fD8SMZhbyxlTjrN/X2edsDInzRRLeO/YOWcKWY3/9Ny1zgE/Dt+CC
+         hnnvipbiv6e7BFfpt9oItHnm6vbg+9rvrILF+f1Zj45F/gdsbF5wwEl91vrt8hU1quGn
+         mN5PzBzQ+DnAWI1pAtcZtN/ffWxBE+B9mX44aSV6kydVP3772sr6ACBNTryaznXfjAJq
+         9M3Q==
+X-Gm-Message-State: AOAM531ObNydYPJBIp6EJ1vYYclmtesHMHEQ90ynzR8ckfQjYXsEYEFu
+        IPoSr+GTmm2FCL7UVy31tEMmgkt1rd4=
+X-Google-Smtp-Source: ABdhPJwvan2UYqGozZ4ixz4iSDrhnJrkcHeLP7/F7Pn69DbBlbf933yALBOlRknquOcOd4gLzQ+Ltg==
+X-Received: by 2002:a9d:3a4:: with SMTP id f33mr13068470otf.131.1636041562964;
+        Thu, 04 Nov 2021 08:59:22 -0700 (PDT)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id 3sm1564261oif.12.2021.11.04.08.59.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Nov 2021 08:59:22 -0700 (PDT)
+Message-ID: <f0a0155c-6f4c-231f-dfbf-3239214f52ff@gmail.com>
+Date:   Thu, 4 Nov 2021 09:59:20 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net: reuseport_bpf_numa: skip nodes not available
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163603980775.7046.17291736320593809022.git-patchwork-notify@kernel.org>
-Date:   Thu, 04 Nov 2021 15:30:07 +0000
-References: <20211101145317.286118-1-kleber.souza@canonical.com>
-In-Reply-To: <20211101145317.286118-1-kleber.souza@canonical.com>
-To:     Kleber Sacilotto de Souza <kleber.souza@canonical.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        daniel@iogearbox.net, shuah@kernel.org, kuba@kernel.org
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH v2] ipv4/raw: support binding to nonlocal addresses
+Content-Language: en-US
+To:     Riccardo Paolo Bestetti <pbl@bestov.io>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20210321002045.23700-1-pbl@bestov.io>
+ <20211102141921.197561-1-pbl@bestov.io>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211102141921.197561-1-pbl@bestov.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Mon,  1 Nov 2021 15:53:17 +0100 you wrote:
-> In some platforms the numa node numbers are not necessarily consecutive,
-> meaning that not all nodes from 0 to the value returned by
-> numa_max_node() are available on the system. Using node numbers which
-> are not available results on errors from libnuma such as:
+On 11/2/21 8:19 AM, Riccardo Paolo Bestetti wrote:
+> Add support to inet v4 raw sockets for binding to nonlocal addresses
+> through the IP_FREEBIND and IP_TRANSPARENT socket options, as well as
+> the ipv4.ip_nonlocal_bind kernel parameter.
 > 
-> ---- IPv4 UDP ----
-> send node 0, receive socket 0
-> libnuma: Warning: Cannot read node cpumask from sysfs
-> ./reuseport_bpf_numa: failed to pin to node: No such file or directory
+> Add helper function to inet_sock.h to check for bind address validity on
+> the base of the address type and whether nonlocal address are enabled
+> for the socket via any of the sockopts/sysctl, deduplicating checks in
+> ipv4/ping.c, ipv4/af_inet.c, ipv6/af_inet6.c (for mapped v4->v6
+> addresses), and ipv4/raw.c.
 > 
-> [...]
+> Add test cases with IP[V6]_FREEBIND verifying that both v4 and v6 raw
+> sockets support binding to nonlocal addresses after the change. Add
+> necessary support for the test cases to nettest.
+> 
+> Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+> ---
 
-Here is the summary with links:
-  - selftests: net: reuseport_bpf_numa: skip nodes not available
-    https://git.kernel.org/bpf/bpf/c/a38bc45a08e9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
 
