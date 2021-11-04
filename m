@@ -2,104 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC79A444AE0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Nov 2021 23:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC19444CBC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 01:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhKCWdc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Nov 2021 18:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbhKCWdc (ORCPT
+        id S230361AbhKDA4E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Nov 2021 20:56:04 -0400
+Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:58765 "EHLO
+        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230030AbhKDA4E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Nov 2021 18:33:32 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E50BC06127A
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Nov 2021 15:30:55 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id n13-20020a170902d2cd00b0014228ffc40dso699665plc.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Nov 2021 15:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=iebf2W2QZ+CT/VCZU+Hm1RFCYYPaaTgdO1Vs4vFVk/g=;
-        b=LJ5ydDCSfe34tiYb1rbrzNQ24lgoT6TOhnin7XQpu/6gmW1kRn4DkScXHuGgBkKCUq
-         BkXZucHIe02xQdeU++xd4kRBgeMgmboKM7fXSDejgRwRmzYYjGZqgmpNaw6uzOqP1bZZ
-         9tOuUWJ0axdnk88IW+OnOoVs8JaUOkAiOMMlwU6DRAqJuLIZ1NiEnpEsLhspJ/tdigaj
-         E9R76pVGNNLPwhEw0rhCfK9skILdmPhjSWWcANMJxS6sbUZHC3eOBJGFyUWQ1q2A6Ger
-         KMUfuh9T8BydYeUW+cjVSWIULMbeLTZba4zO5smWeyn88/aJcTURBZqw7C/X60OflDGY
-         XsLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=iebf2W2QZ+CT/VCZU+Hm1RFCYYPaaTgdO1Vs4vFVk/g=;
-        b=ZDEueK7RmhDEyKOs3aRWmQV7hU1GDfn3x/dqZWbOLYrhE0fPWGhIT+WTQg4QxZwybL
-         twVI0PZlYCK1P3w/QHFulYMRvff9Cm6FSaxykGV1ABQbnnGiSpNEFkZp2SQipeE06Kqw
-         XpAW5cm6oDq1S8LBSauY/rSjKDkL0M/5muzH55ZYIdAOln9WE2L0MpeSa3t21DlX6e+5
-         wp6G9kS1sLRH2SyrNecGWZNb/8Ppzsh/mB6LR2NqF8MbIwcXZxHTNLkDdp0sJMbYZp5V
-         CKEfj9WV1Mj/AAADA73Rk1z1A8uzIerPyliUevoNuLO4pHtlnKE6sQs1DDF1Sr6K7jd8
-         o3+A==
-X-Gm-Message-State: AOAM530pUnQDrC+AUb0tRZWqG3iOA6uMrVouiVtBu3WYpJlrlvHKBo3z
-        k6giGjQYWMEREKRBMOoBhICguzi2CuTezA==
-X-Google-Smtp-Source: ABdhPJwJIgl2hN2/bAUrlr4B5wueJajXtbw28t25Dj1nuV54iYV8938avoAn2/Ie+qSj5LLmk2ycxbYhH8OMbQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8673:8d2f:d693:6af])
- (user=dlatypov job=sendgmr) by 2002:a63:a319:: with SMTP id
- s25mr35997164pge.305.1635978655060; Wed, 03 Nov 2021 15:30:55 -0700 (PDT)
-Date:   Wed,  3 Nov 2021 15:30:45 -0700
-Message-Id: <20211103223045.725140-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH] Documentation: kunit: fix path to .kunitconfig in start.rst
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Yifan Yuan <alpc_metic@live.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 3 Nov 2021 20:56:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1635987206;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=OeyNVKB2oPsrCOJr/qoLmmM933IBejt2LhFK8SiPmuE=;
+        b=Sk4FCRgXTlUzDcsXBTg/9ocoS8N9F61TV/1EUZPnYiX8kJYss5m6t/WmJ5sClSnj
+        WpdBblNUSyj80W2mfIjn2sejucmjeZgVmZsxsvKttvQrxhdgTyGa0hkhK0RdX5sWDdF
+        URzyLYA3tk8+C8kOGgEBJqUAzxu4nAw0189KQ2RA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1635987206;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=OeyNVKB2oPsrCOJr/qoLmmM933IBejt2LhFK8SiPmuE=;
+        b=MWdyRxqd5+HmAPAw3M7qjMjYUr55cthPS5lhoNZbD8lVzGsxBG/fhg90FYnqI5Dm
+        06/9FHcCAGi/nyMqJ2lsr21KIWgCF87agEmt3YH0Y43bVagUv4pORnX35VZOqWkpdKt
+        8xC5nBk+YJQxMukQXTb3tq1tsFnnpXiA3SP0/4nA=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211103
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017ce86faf18-05a6239b-4165-4743-bb85-4334d339aee6-000000@email.amazonses.com>
+Date:   Thu, 4 Nov 2021 00:53:26 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.04-54.240.8.81
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit ddbd60c779b4 ("kunit: use --build_dir=.kunit as default") changed
-the default --build_dir, which had the side effect of making
-`.kunitconfig` move to `.kunit/.kunitconfig`.
+## Build
+* kernel: 5.15.0
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 8ccbda2840b77bb6f029151df5ab92dd04e4f3f8
+* git describe: next-20211103
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211103
 
-However, the first few lines of kunit/start.rst never got updated, oops.
+## Regressions (compared to next-20211102)
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
 
-Fix this by telling people to run kunit.py first, which will
-automatically generate the .kunit directory and .kunitconfig file, and
-then edit the file manually as desired.
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
 
-Reported-by: Yifan Yuan <alpc_metic@live.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- Documentation/dev-tools/kunit/start.rst | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+* x15, kselftest-rtc
+  - rtc.rtctest
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.alarm_wkalm_set_minute
+  - rtc.rtctest.rtc.date_read
 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 1e00f9226f74..65f4ef6c1f4c 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -31,14 +31,15 @@ This file essentially contains the regular Kernel config, with the specific
- test targets as well. The ``.kunitconfig`` should also contain any other config
- options required by the tests.
- 
--A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
-+If you run KUnit, it'll generate one automatically for you.
- 
- .. code-block:: bash
- 
- 	cd $PATH_TO_LINUX_REPO
--	cp tools/testing/kunit/configs/default.config .kunitconfig
-+	./tools/testing/kunit/kunit.py run
-+	cat .kunit/.kunitconfig
- 
--You can then add any other Kconfig options you wish, e.g.:
-+You can then edit that file to add any other Kconfig options you wish, e.g.:
- 
- .. code-block:: none
- 
+* x86, kselftest-rtc
+  - rtc.rtctest
 
-base-commit: 52a5d80a2225e2d0b2a8f4656b76aead2a443b2a
--- 
-2.33.1.1089.g2158813163f-goog
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211102)
+* hi6220-hikey, kselftest-kvm
+  - kvm.rseq_test
+
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
+
+
+## Test result summary
+total: 3058, pass: 1898, fail: 241, skip: 919, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
