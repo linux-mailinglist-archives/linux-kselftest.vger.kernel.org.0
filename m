@@ -2,147 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17F0446A89
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 22:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D69446A9B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 22:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbhKEV3s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Nov 2021 17:29:48 -0400
-Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:36411 "EHLO
-        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229894AbhKEV3s (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Nov 2021 17:29:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636147627;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=nA5EcgBTrT0kHNVoUBhDgAUWVJ60y8pGdfCNhRpD5n4=;
-        b=KVXhGHCC8y3nVsEy3TBFQC5MQ0Pwhxrne0mCSoMDUMQDq2SEjDp4YSmnZgMpRCHx
-        QO5m/3xRjrg0b36StcVBs/rJtzc/YnzT5zAbohqb24GuoSqjFg65Va4CnU0aPPsaGp8
-        Vw/efZ+erMALbH8tzwgbri46nGOcZv49ohpgwOz4=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636147627;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=nA5EcgBTrT0kHNVoUBhDgAUWVJ60y8pGdfCNhRpD5n4=;
-        b=eTPyx6mGckK6AHqeKuQ4EfG3U0hD7DuLMYUou2Q9gB2ySn6JDDu84MZiy4buA01E
-        F8SEH/mbaz+aKAMylIp7H6nnt5tEXWPXCZ1ucBskY+pXNKuBZxdu7AelWSYDwoTyPiG
-        iq3+aR0fL0LJDiaq+t2L6KU4yVFyOPxLlV6K0o0g=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211105
+        id S231661AbhKEVcz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Nov 2021 17:32:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56860 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231547AbhKEVcy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Nov 2021 17:32:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47B3760F9E;
+        Fri,  5 Nov 2021 21:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636147814;
+        bh=oootQZeYYYplOWWYhY3tq5Fb/rwytVkcvr0prXYBCT8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G6vOWwVPGj5lzL5B77HFTUMsJFDBr5Yjfl+852/61PfiyBy4nL1K+9td4VaTqg88c
+         9dk4AiU3Hsc9UDIrVT85ZrkvoTDyHwGSfEyHk01wXaMiga+vgmDBqurCmq3TLOYqRn
+         lFzW5TeCu3V6q2J2dbF6Sbk9ADf+xOVtlMe1uqlMwqPDKBW2y9BxKcF9iE9RogYN+c
+         3bo1bCFUHkjw/6ioyTK8eksPSMASL62UVKFA01AFamByB2OLCYrewyklGLTm85FWh+
+         fmZJKTt4n2tk5ap8TuEyPB/hEFH9y3FZf8kZJOFIu2D3q/nQe85/dwA4jta6bRDpO5
+         WQQzLqmTxjnvA==
+Date:   Fri, 5 Nov 2021 14:30:13 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "idosch@idosch.org" <idosch@idosch.org>,
+        "mkubecek@suse.cz" <mkubecek@suse.cz>,
+        "saeed@kernel.org" <saeed@kernel.org>,
+        "michael.chan@broadcom.com" <michael.chan@broadcom.com>
+Subject: Re: [PATCH net-next 6/6] docs: net: Add description of SyncE
+ interfaces
+Message-ID: <20211105143013.2cded2f3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <MW5PR11MB5812FA6647FF189D368C75A5EA8E9@MW5PR11MB5812.namprd11.prod.outlook.com>
+References: <20211104081231.1982753-1-maciej.machnikowski@intel.com>
+        <20211104081231.1982753-7-maciej.machnikowski@intel.com>
+        <20211104110855.3ead1642@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <MW5PR11MB5812FA6647FF189D368C75A5EA8E9@MW5PR11MB5812.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017cf1ff84d4-d3b765bb-c7a4-4fa9-be76-f9a38b57fd3b-000000@email.amazonses.com>
-Date:   Fri, 5 Nov 2021 21:27:07 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.05-54.240.8.73
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: b477ae38e81579a32caca7f4fb428275cb6b46c1
-* git describe: next-20211105
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211105
+On Fri, 5 Nov 2021 11:51:48 +0000 Machnikowski, Maciej wrote:
+> > I'm still struggling to understand your reasoning around not making
+> > EEC its own object. "We can do this later" seems like trading
+> > relatively little effort now for extra work for driver and application
+> > developers for ever.  
+> 
+> That's not the case. We need EEC and the other subsystem we wanted
+> to make is the DPLL subsystem. While EEC can be a DPLL - it doesn't have
+> to, and it's also the other way round - the DPLL can have numerous different
+> usages.
 
-## Regressions (compared to next-20211104)
-* i386, kselftest-net
-  - net.fib-onlink-tests.sh
-  - net.so_txtime.sh
+We wanted to create a DPLL object to the extent that as a SW guy 
+I don't understand the difference between that and an EEC. Whatever
+category of *PLL etc. objects EEC is, that's what we want to model.
 
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
+> When we add the DPLL subsystem support the future work will be as simple 
+> as routing the EEC state read function to the DPLL subsystem. But if someone
+> decides to use a different HW implementation he will still be able to
+> implement his own version of API to handle it without a bigger DPLL block
 
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211104)
-* qemu_arm, kselftest-timers
-  - timers.rtcpie
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-
-## Test result summary
-total: 3111, pass: 1811, fail: 267, skip: 1033, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+All we want is something that's not a port to hang whatever attributes
+exist in RTM_GETEECSTATE.
