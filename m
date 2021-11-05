@@ -2,93 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C790445D6D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 02:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354B8445D79
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 02:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbhKEBo6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 21:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S231693AbhKEBsy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 21:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbhKEBo6 (ORCPT
+        with ESMTP id S231684AbhKEBsw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 21:44:58 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED2FC061714;
-        Thu,  4 Nov 2021 18:42:19 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id p17so6430820qkj.0;
-        Thu, 04 Nov 2021 18:42:19 -0700 (PDT)
+        Thu, 4 Nov 2021 21:48:52 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69978C061714;
+        Thu,  4 Nov 2021 18:46:13 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id j128-20020a1c2386000000b003301a98dd62so8507384wmj.5;
+        Thu, 04 Nov 2021 18:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ITrJUnw7rkfh2Wf9B9wfIDhx+P5qj5dAVCCwNnxlr+M=;
-        b=Kan0rv4WLr9CMltmC7lRAGKJNjz1BuvyghuANn2y/rrQLCKzNpJC/8ey8GHfsWIIVy
-         WvGWCu3PUEvohuQjtRHnySFx4A52q44e+znVdIluj6Z9WyOw+RKVoKvSnbW67ExofjWq
-         X994tlgR2F7qBi4HsdfO7w733EMAS2W0NPrKuuyBW9A+CCCB1crjCD97y731ZTOn8/yc
-         Vezcblpdc//g+jQ0hjepFYtpveVSMZ5r9i18RTi35LHE8cE1h2vxCUyH64NKXdOMkHPQ
-         2a3HiOu6B90rRlTcDSd6pmOuc8D96b5n4Q74rGgAMkRijH5RpHEY64SEvII6YRrMuK0B
-         1x1A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2xhc5oWpvO9Tk65WJtzZWw7fGB5wYEtIT3Aaq8xkviA=;
+        b=QuAX2YIVdOkDaBevFozERc6N4+YXFCkM0rdD+8v1wsW27UpiEFrzOZLoAZ2zyphUhw
+         mdqyTfRTOwmrAFlj42xOjNglqtwz52C4HJzcmZWKo9Pb5vdb6+dIUbPptCxM8yVwQR0f
+         ByzrW5CMcEi+FadkLPglRtZAfseBP3mSwYzl4JEWB6DEAj4gaGWIM5phN+LV1uCM44TC
+         4u1YMUMENa6aiA46E0VLlgm3mLqDTelZCHZrPrCcdIjlG9Lqax8bFIdyl+glE8o7k7nn
+         AspdrCFutJQh5GuT8immG08vNiBllBC1YhOQ2g6nEdBqJwtC7sfQg9mCJSc03jvYz2/2
+         5xGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ITrJUnw7rkfh2Wf9B9wfIDhx+P5qj5dAVCCwNnxlr+M=;
-        b=LoPIB1CUTaQQWGyAeIqfrBmdVUeMPdN1kUkQN51OaULMAn8L+D2lZfKkQcJk+2e/CH
-         eaIHR7UY9lnL3/A6QRMLB9TTBJfaT4lo7nDVDL/orJ5nm4oC5nnjeUHCzSfocehiQASy
-         FZLQvkz92um+FDyyxpFapsz1yzA5YYCbRagbGA9ZlYqO2RwkKtdxuXFa5ZX55o0OdrFl
-         EUWHAkca0+zym+xWMe61sPUZ7Ytw84VD4nv7Yp6uJ+DjohD4E2KtmCJOEC0WfTTOR8eo
-         xhh1oumazleuFp57TFXq4/3QPsbp5QqRpOBA7N65hN+gkG07s+Rtg9ACm6WFHkokraAX
-         JrcQ==
-X-Gm-Message-State: AOAM533yxewdDiczyFYnBC2Cm0QjbXqrd/npsMz7Ucjl9IPhiWBOzrTR
-        nmWy44wazpv0JCSQD7M4KEI=
-X-Google-Smtp-Source: ABdhPJzCz1SScO5K5WMk42sNNUHDduT151VVMmwmfrFLD06mb1OSOonxN18dxAhnMniTGouCFYIiqg==
-X-Received: by 2002:a05:620a:2234:: with SMTP id n20mr2018847qkh.89.1636076538393;
-        Thu, 04 Nov 2021 18:42:18 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y14sm1781124qta.86.2021.11.04.18.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Nov 2021 18:42:18 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: zhang.mingyu@zte.com.cn
-To:     john.stultz@linaro.org
-Cc:     tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Zhang Mingyu <zhang.mingyu@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] selftests: timers: Remove unneeded semicolon
-Date:   Fri,  5 Nov 2021 01:42:08 +0000
-Message-Id: <20211105014208.75204-1-zhang.mingyu@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=2xhc5oWpvO9Tk65WJtzZWw7fGB5wYEtIT3Aaq8xkviA=;
+        b=Kk35vLZeqKPU+sEIbNA6fHTI9kYWG4qCeR1gRQrxG27evNHlJrVoqZeklgOd81YQje
+         qUH7+ejG6wyA3ECKcF7pA5r4GBzCnLfLJ0RMRXr4MPMiiVRqYtT0El4ysd1FSg5anv0y
+         TVRI8H0D4xo+ZRzgAH3bm5QkBDLOy7+vhdHfKfJ0F4M7jdQXQGV2qEa0ZMQ+v0THi69p
+         U92ducPXFeIdMGqidNDzzknVsN6VnIpAUyEmOIoUBWbHmUtVreFHVMH3vAG5qlIAySPB
+         qT/98IPNFLbKvIazyY/gs7qD6ZIrF3RnDeIaA5MDv4YU9UHeXj3TGp91jmRvBj0rVBtU
+         6XRg==
+X-Gm-Message-State: AOAM532L6bNTuYRufGHzORr8LD3cvXWs/MhuyL+a09M6x58fEvqE6D+J
+        qtg8YmuOH+0krjrVgInBbVQ=
+X-Google-Smtp-Source: ABdhPJzX1mhMIpnvJbqUXJj+GamrvNa9AxYluUoas0Jjrg4lrIURGC3Xng1GrJ3DjAerE++vcN2/zw==
+X-Received: by 2002:a1c:a715:: with SMTP id q21mr27297533wme.23.1636076772108;
+        Thu, 04 Nov 2021 18:46:12 -0700 (PDT)
+Received: from ?IPV6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id 10sm8240762wrb.75.2021.11.04.18.46.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Nov 2021 18:46:11 -0700 (PDT)
+Message-ID: <cccdd347-57ee-62e5-2824-a3e7e2910395@gmail.com>
+Date:   Fri, 5 Nov 2021 01:46:10 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 09/25] tcp: authopt: Disable via sysctl by default
+Content-Language: en-US
+To:     Leonard Crestez <cdleonard@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1635784253.git.cdleonard@gmail.com>
+ <137399b962131c278acbfa5446a3b6d59aa0547b.1635784253.git.cdleonard@gmail.com>
+From:   Dmitry Safonov <0x7f454c46@gmail.com>
+In-Reply-To: <137399b962131c278acbfa5446a3b6d59aa0547b.1635784253.git.cdleonard@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zhang Mingyu <zhang.mingyu@zte.com.cn>
+On 11/1/21 16:34, Leonard Crestez wrote:
+> This is mainly intended to protect against local privilege escalations
+> through a rarely used feature so it is deliberately not namespaced.
+> 
+> Enforcement is only at the setsockopt level, this should be enough to
+> ensure that the tcp_authopt_needed static key never turns on.
+> 
+> No effort is made to handle disabling when the feature is already in
+> use.
+> 
+> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+> ---
+[..]
+> diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
+> index 5e80e5e5e36e..7c49dcce7d24 100644
+> --- a/net/ipv4/tcp_authopt.c
+> +++ b/net/ipv4/tcp_authopt.c
+> @@ -3,10 +3,15 @@
+>  #include <linux/kernel.h>
+>  #include <net/tcp.h>
+>  #include <net/tcp_authopt.h>
+>  #include <crypto/hash.h>
+>  
+> +/* This is mainly intended to protect against local privilege escalations through
+> + * a rarely used feature so it is deliberately not namespaced.
+> + */
+> +int sysctl_tcp_authopt;
 
-Eliminate the following coccinelle check warning:
-tools/testing/selftests/timers/inconsistency-check.c:75:2-3
+Could you add pr_warn_once() for setsockopt() without this set, so that
+it's visible in dmesg for a user that gets -EPERM.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Zhang Mingyu <zhang.mingyu@zte.com.cn>
----
- tools/testing/selftests/timers/inconsistency-check.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
-index 022d3ffe3fbf..e6756d9c60a7 100644
---- a/tools/testing/selftests/timers/inconsistency-check.c
-+++ b/tools/testing/selftests/timers/inconsistency-check.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
- 
--- 
-2.25.1
-
+Thanks,
+          Dmitry
