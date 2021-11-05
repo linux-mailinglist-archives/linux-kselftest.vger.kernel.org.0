@@ -2,178 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D238C446A5C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 22:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D17F0446A89
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 22:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbhKEVLj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Nov 2021 17:11:39 -0400
-Received: from mga06.intel.com ([134.134.136.31]:26218 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233867AbhKEVLi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Nov 2021 17:11:38 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10159"; a="292815933"
-X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
-   d="scan'208";a="292815933"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 14:08:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
-   d="scan'208";a="450720816"
-Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
-  by orsmga006.jf.intel.com with ESMTP; 05 Nov 2021 14:08:52 -0700
-From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
-To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org, idosch@idosch.org,
-        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com
-Subject: [PATCH v2 net-next 6/6] docs: net: Add description of SyncE interfaces
-Date:   Fri,  5 Nov 2021 21:53:31 +0100
-Message-Id: <20211105205331.2024623-7-maciej.machnikowski@intel.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
-References: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
+        id S231770AbhKEV3s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Nov 2021 17:29:48 -0400
+Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:36411 "EHLO
+        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229894AbhKEV3s (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Nov 2021 17:29:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636147627;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=nA5EcgBTrT0kHNVoUBhDgAUWVJ60y8pGdfCNhRpD5n4=;
+        b=KVXhGHCC8y3nVsEy3TBFQC5MQ0Pwhxrne0mCSoMDUMQDq2SEjDp4YSmnZgMpRCHx
+        QO5m/3xRjrg0b36StcVBs/rJtzc/YnzT5zAbohqb24GuoSqjFg65Va4CnU0aPPsaGp8
+        Vw/efZ+erMALbH8tzwgbri46nGOcZv49ohpgwOz4=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636147627;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=nA5EcgBTrT0kHNVoUBhDgAUWVJ60y8pGdfCNhRpD5n4=;
+        b=eTPyx6mGckK6AHqeKuQ4EfG3U0hD7DuLMYUou2Q9gB2ySn6JDDu84MZiy4buA01E
+        F8SEH/mbaz+aKAMylIp7H6nnt5tEXWPXCZ1ucBskY+pXNKuBZxdu7AelWSYDwoTyPiG
+        iq3+aR0fL0LJDiaq+t2L6KU4yVFyOPxLlV6K0o0g=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211105
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017cf1ff84d4-d3b765bb-c7a4-4fa9-be76-f9a38b57fd3b-000000@email.amazonses.com>
+Date:   Fri, 5 Nov 2021 21:27:07 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.05-54.240.8.73
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add Documentation/networking/synce.rst describing new RTNL messages
-and respective NDO ops supporting SyncE (Synchronous Ethernet).
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: b477ae38e81579a32caca7f4fb428275cb6b46c1
+* git describe: next-20211105
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211105
 
-Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
----
- Documentation/networking/synce.rst | 117 +++++++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
- create mode 100644 Documentation/networking/synce.rst
+## Regressions (compared to next-20211104)
+* i386, kselftest-net
+  - net.fib-onlink-tests.sh
+  - net.so_txtime.sh
 
-diff --git a/Documentation/networking/synce.rst b/Documentation/networking/synce.rst
-new file mode 100644
-index 000000000000..4ca41fb9a481
---- /dev/null
-+++ b/Documentation/networking/synce.rst
-@@ -0,0 +1,117 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+====================
-+Synchronous Ethernet
-+====================
-+
-+Synchronous Ethernet networks use a physical layer clock to syntonize
-+the frequency across different network elements.
-+
-+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
-+Equipment Clock (EEC) and a PHY that has dedicated outputs of recovered clocks
-+and a dedicated TX clock input that is used as to transmit data to other nodes.
-+
-+The SyncE capable PHY is able to recover the incomning frequency of the data
-+stream on RX lanes and redirect it (sometimes dividing it) to recovered
-+clock outputs. In SyncE PHY the TX frequency is directly dependent on the
-+input frequency - either on the PHY CLK input, or on a dedicated
-+TX clock input.
-+
-+      ┌───────────┬──────────┐
-+      │ RX        │ TX       │
-+  1   │ lanes     │ lanes    │ 1
-+  ───►├──────┐    │          ├─────►
-+  2   │      │    │          │ 2
-+  ───►├──┐   │    │          ├─────►
-+  3   │  │   │    │          │ 3
-+  ───►├─▼▼   ▼    │          ├─────►
-+      │ ──────    │          │
-+      │ \____/    │          │
-+      └──┼──┼─────┴──────────┘
-+        1│ 2│        ▲
-+ RCLK out│  │        │ TX CLK in
-+         ▼  ▼        │
-+       ┌─────────────┴───┐
-+       │                 │
-+       │       EEC       │
-+       │                 │
-+       └─────────────────┘
-+
-+The EEC can synchronize its frequency to one of the synchronization inputs
-+either clocks recovered on traffic interfaces or (in advanced deployments)
-+external frequency sources.
-+
-+Some EEC implementations can select synchronization source through
-+priority tables and synchronization status messaging and provide necessary
-+filtering and holdover capabilities.
-+
-+The following interface can be applicable to diffferent packet network types
-+following ITU-T G.8261/G.8262 recommendations.
-+
-+Interface
-+=========
-+
-+The following RTNL messages are used to read/configure SyncE recovered
-+clocks.
-+
-+RTM_GETRCLKRANGE
-+-----------------
-+Reads the allowed pin index range for the recovered clock outputs.
-+This can be aligned to PHY outputs or to EEC inputs, whichever is
-+better for a given application.
-+Will call the ndo_get_rclk_range function to read the allowed range
-+of output pin indexes.
-+Will call ndo_get_rclk_range to determine the allowed recovered clock
-+range and return them in the IFLA_RCLK_RANGE_MIN_PIN and the
-+IFLA_RCLK_RANGE_MAX_PIN attributes
-+
-+RTM_GETRCLKSTATE
-+-----------------
-+Read the state of recovered pins that output recovered clock from
-+a given port. The message will contain the number of assigned clocks
-+(IFLA_RCLK_STATE_COUNT) and an N pin indexes in IFLA_RCLK_STATE_OUT_IDX
-+To support multiple recovered clock outputs from the same port, this message
-+will return the IFLA_RCLK_STATE_COUNT attribute containing the number of
-+active recovered clock outputs (N) and N IFLA_RCLK_STATE_OUT_IDX attributes
-+listing the active output indexes.
-+This message will call the ndo_get_rclk_range to determine the allowed
-+recovered clock indexes and then will loop through them, calling
-+the ndo_get_rclk_state for each of them.
-+
-+RTM_SETRCLKSTATE
-+-----------------
-+Sets the redirection of the recovered clock for a given pin. This message
-+expects one attribute:
-+struct if_set_rclk_msg {
-+	__u32 ifindex; /* interface index */
-+	__u32 out_idx; /* output index (from a valid range)
-+	__u32 flags; /* configuration flags */
-+};
-+
-+Supported flags are:
-+SET_RCLK_FLAGS_ENA - if set in flags - the given output will be enabled,
-+		     if clear - the output will be disabled.
-+
-+RTM_GETEECSTATE
-+----------------
-+Reads the state of the EEC or equivalent physical clock synchronizer.
-+This message returns the following attributes:
-+IFLA_EEC_STATE - current state of the EEC or equivalent clock generator.
-+		 The states returned in this attribute are aligned to the
-+		 ITU-T G.781 and are:
-+		  IF_EEC_STATE_INVALID - state is not valid
-+		  IF_EEC_STATE_FREERUN - clock is free-running
-+		  IF_EEC_STATE_LOCKED - clock is locked to the reference,
-+		                        but the holdover memory is not valid
-+		  IF_EEC_STATE_LOCKED_HO_ACQ - clock is locked to the reference
-+		                               and holdover memory is valid
-+		  IF_EEC_STATE_HOLDOVER - clock is in holdover mode
-+State is read from the netdev calling the:
-+int (*ndo_get_eec_state)(struct net_device *dev, enum if_eec_state *state,
-+			 u32 *src_idx, struct netlink_ext_ack *extack);
-+
-+IFLA_EEC_SRC_IDX - optional attribute returning the index of the reference that
-+		   is used for the current IFLA_EEC_STATE, i.e., the index of
-+		   the pin that the EEC is locked to.
-+
-+Will be returned only if the ndo_get_eec_src is implemented.
-\ No newline at end of file
--- 
-2.26.3
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
 
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211104)
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+
+## Test result summary
+total: 3111, pass: 1811, fail: 267, skip: 1033, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
