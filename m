@@ -2,100 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85042446A2C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 21:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829B3446A48
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 22:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbhKEUxv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Nov 2021 16:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbhKEUxv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Nov 2021 16:53:51 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268BC061205
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Nov 2021 13:51:11 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id t11so16975885ljh.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Nov 2021 13:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IsqXxMPAEyayuWYNn2cn31F1D2jcff0K1QvBSthWMBM=;
-        b=qOxV+6+MFUFLS2PS7gWTFOb+5OBR+cqySkvjy3obIuGHjHYU2+OPa1v0oH5ar3Momb
-         1SfH9k7CtbWT3EoxFjVodUnvjUC7Sbd62Yd+tv89a35AM2Q477zcUc+DozAS/Lv/mS1y
-         lPjneQGIlCtLwO6x6p+kHAIBo8KsK7JvzjcYBekIJDr5SvANWAhocb6d403cSVlvN9QE
-         q691o0BWYl49mrnOtyAlBN8sa2c4x1HZTJezZCORUEHVarGNWj+9TGwDAqPQlnBVwyA9
-         YMAgDh4A6AkxZeDLvFZC4h+oDYaqFL2h+lf/eYcRrNHxUzwl7RsJ5sTteaxm4LXmEV+V
-         PFTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IsqXxMPAEyayuWYNn2cn31F1D2jcff0K1QvBSthWMBM=;
-        b=Rum5l13PNN6J+FCQauWEKvJZt2UdhHAzvxyux5Nkdg479ITvtA5Nbkw5kbQmO3RreJ
-         CvGy0aSeHCeSgQzdOULX0WP3TpMqmyjuOqrTdTvDbBUNkJ5wkl1eLnaYkL7O6KFTrcaT
-         PUEktPuvy2l0xAJK0lK0X+j48Kf/q7BKRF/XX3GuUN4JDmsBaY4qMPU40vrVNl1JGObI
-         5Ygkx25qTVAkNHJ+BZM7p0sy0q9K68fFqEPlEOFbJQNcnfQidihXmYnS39b5G3WME9i2
-         3bbEI+QIgFPay2kTrwrWyeDXjNZByi5BpSqtBpCdypWACvdc5+XjvXa+z/qLrEaxZCEV
-         GyNA==
-X-Gm-Message-State: AOAM533IvDzg7lSUFUGGHi1raQzsLjk6A4xPWGAlzP39D1CV919LUCLv
-        vjstscijjOAlH3YPGrAcH0F9NVCcTWngw2F91p40Kg==
-X-Google-Smtp-Source: ABdhPJyscGR2faQ3WY30fi9rHtfREOCPhjZDAaOuuO8TE7pOhp1KBS3rpUKQlf4rPXLm+5TIIpFu3wdMSSP1pETACTo=
-X-Received: by 2002:a2e:750e:: with SMTP id q14mr64510854ljc.338.1636145469249;
- Fri, 05 Nov 2021 13:51:09 -0700 (PDT)
+        id S233365AbhKEVLP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Nov 2021 17:11:15 -0400
+Received: from mga06.intel.com ([134.134.136.31]:26186 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230310AbhKEVLP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Nov 2021 17:11:15 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10159"; a="292815845"
+X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
+   d="scan'208";a="292815845"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2021 14:08:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,212,1631602800"; 
+   d="scan'208";a="450720615"
+Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
+  by orsmga006.jf.intel.com with ESMTP; 05 Nov 2021 14:08:30 -0700
+From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
+To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org
+Cc:     richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com
+Subject: [PATCH v2 net-next 0/6] Add RTNL interface for SyncE
+Date:   Fri,  5 Nov 2021 21:53:25 +0100
+Message-Id: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <20211105163137.3324344-1-anders.roxell@linaro.org>
- <20211105163137.3324344-2-anders.roxell@linaro.org> <CAKwvOd=rRntVgYdqEeb=JAYo2iC-wVB3dkQWNvwdZdrYgt2s7Q@mail.gmail.com>
- <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
-In-Reply-To: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 5 Nov 2021 13:50:58 -0700
-Message-ID: <CAKwvOdm=a7w0cQdynY2i5ST=xrfjzXVZcUniAoEyqC21oKPQsQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] selftests: timens: exec: use 'labs()' over 'abs()'
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 5, 2021 at 1:45 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Fri, Nov 5, 2021 at 9:35 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Fri, Nov 5, 2021 at 9:31 AM Anders Roxell <anders.roxell@linaro.org> wrote:
-> > >
-> > > When building selftests/timens with clang, the compiler warn about the
-> > > function abs() see below:
-> > >
-> > > exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
-> > >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
-> > >                             ^
-> > > exec.c:33:8: note: use function 'labs' instead
-> > >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
-> > >                             ^~~
-> > >                             labs
-> >
-> > Careful.
-> >
-> > Isn't the tv_sec member of `struct timespec` a `time_t` which is 32b
-> > on 32b hosts and 64b on 64b hosts? If I'm recalling that correctly,
-> > then this patch results in a harmless (though unnecessary) sign
-> > extension for 32b targets. That should be fine, but someone like Arnd
-> > should triple check if my concern is valid or not.
->
-> It could actually be 'int', 'long' or 'long long' depending on the architecture
-> and C library. Maybe we need a temporary variable of type 'long long'
-> to hold the difference, and pass that to llabs()?
+Synchronous Ethernet networks use a physical layer clock to syntonize
+the frequency across different network elements.
 
-Yeah, that SGTM. Thanks for the review!
+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+Equipment Clock (EEC) and have the ability to recover synchronization
+from the synchronization inputs - either traffic interfaces or external
+frequency sources.
+The EEC can synchronize its frequency (syntonize) to any of those sources.
+It is also able to select synchronization source through priority tables
+and synchronization status messaging. It also provides neccessary
+filtering and holdover capabilities
+
+This patch series introduces basic interface for reading the Ethernet
+Equipment Clock (EEC) state on a SyncE capable device. This state gives
+information about the source of the syntonization signal (ether my port,
+or any external one) and the state of EEC. This interface is required\
+to implement Synchronization Status Messaging on upper layers.
+
+v2:
+- improved documentation
+- fixed kdoc warning
+
+RFC history:
+v2:
+- removed whitespace changes
+- fix issues reported by test robot
+v3:
+- Changed naming from SyncE to EEC
+- Clarify cover letter and commit message for patch 1
+v4:
+- Removed sync_source and pin_idx info
+- Changed one structure to attributes
+- Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
+  to the recovered clock of a port that returns the state
+v5:
+- add EEC source as an optiona attribute
+- implement support for recovered clocks
+- align states returned by EEC to ITU-T G.781
+v6:
+- fix EEC clock state reporting
+- add documentation
+- fix descriptions in code comments
+
+Maciej Machnikowski (6):
+  ice: add support detecting features based on netlist
+  rtnetlink: Add new RTM_GETEECSTATE message to get SyncE status
+  ice: add support for reading SyncE DPLL state
+  rtnetlink: Add support for SyncE recovered clock configuration
+  ice: add support for SyncE recovered clocks
+  docs: net: Add description of SyncE interfaces
+
+ Documentation/networking/synce.rst            | 117 ++++++++
+ drivers/net/ethernet/intel/ice/ice.h          |   7 +
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  94 ++++++-
+ drivers/net/ethernet/intel/ice/ice_common.c   | 224 ++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |  20 +-
+ drivers/net/ethernet/intel/ice/ice_devids.h   |   3 +
+ drivers/net/ethernet/intel/ice/ice_lib.c      |   6 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     | 137 ++++++++++
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  34 +++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  49 ++++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  22 ++
+ drivers/net/ethernet/intel/ice/ice_type.h     |   1 +
+ include/linux/netdevice.h                     |  33 +++
+ include/uapi/linux/if_link.h                  |  57 ++++
+ include/uapi/linux/rtnetlink.h                |  10 +
+ net/core/rtnetlink.c                          | 253 ++++++++++++++++++
+ security/selinux/nlmsgtab.c                   |   6 +-
+ 17 files changed, 1069 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/networking/synce.rst
+
 -- 
-Thanks,
-~Nick Desaulniers
+2.26.3
+
