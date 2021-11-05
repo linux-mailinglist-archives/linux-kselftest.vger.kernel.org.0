@@ -2,81 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403444469F1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 21:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707CB446A10
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 21:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbhKEUsb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Nov 2021 16:48:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43492 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233705AbhKEUs2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Nov 2021 16:48:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4820F61372;
-        Fri,  5 Nov 2021 20:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636145148;
-        bh=mbkrqX49D8pvCsH1aYAfKqkgRYkCne50RDuP81HnW7k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X1QCIDMOpF/j4JsFMp9QbVW+hb765FKHzOPgW/k7AZIfQ6mQOmnfvVlcEZX24Sl/p
-         3lSwTJTnduXcZNtJcTxfJkTIKXIu4/TRYuqCSdbEZKjWHy/fYKyVlILbZmqV1E7XLq
-         wUhERcMGmrqRpIndKgMBr7XXEJogaTOdT8wYuIB+BW7Ey83+yr9wiE11HatmtCfiFr
-         VpHYVNBcTubzYdCBI7uAPipMbmRfThzFpvWynOik6cROL4fpJvPsUUWa5EA+XpBfuK
-         FQ4gOxbD5LMIDky9WLplrxla3ynOUMPvwHrGOAv1r8aI3AXp7TFWh3aawMkEC4TXFP
-         fQhRTddtd1MKg==
-Received: by mail-wr1-f54.google.com with SMTP id d24so15658407wra.0;
-        Fri, 05 Nov 2021 13:45:48 -0700 (PDT)
-X-Gm-Message-State: AOAM531TjcZZVftOmy5VcMznS68JLp6AFL23hymA32+v/iyTXAAYpDqm
-        tUtU39Z3S4D8Ev01O/RVfh/yAZ6T8p7eVKUx2OE=
-X-Google-Smtp-Source: ABdhPJwYYHCIQ5b6GvuGVOKrx9JsbQ4IGmE0F25KFAMebt371XDu28fdt4XzAsUVYK/ecp40hA94FfXPeSlX5tSrZv4=
-X-Received: by 2002:a05:6000:10cb:: with SMTP id b11mr64789976wrx.71.1636145146801;
- Fri, 05 Nov 2021 13:45:46 -0700 (PDT)
+        id S233826AbhKEUua (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Nov 2021 16:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233824AbhKEUu3 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Nov 2021 16:50:29 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9DEC061208
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Nov 2021 13:47:49 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j2so21161186lfg.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Nov 2021 13:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OzIUMIfi4RPXj+onsD2EV5D7RTPP5SubsnRhKU4PVU0=;
+        b=STcanu/5UsqXYQCqH+MMlwnQs3HYtefRvaVpdBadT4nknJx7xsOWcuWJFSNqH8EGcc
+         TdVh2U9BG0Ll8NqyhIpXa0bN5nKoC87pay5tODOXNsMRNr0+IAHXgi/TUmPGeXabbWhP
+         3+W8acnoow1uISKEeiZY5onD9DQjC9h+hXYXVghf1fjciY0IGQOfm6jMRGtZoVz1yu6Y
+         L66uVvPlhxO7g8ZOu5c/gQpvqJqjFxaOKvKl8fq51HYnF6uUxqtiYwl48HXw4GxD2nb3
+         IHjr6/nVPUUamL9GA8ojWKkwzsmX8F5+tQaSQbZsmisDmmu8wUMRL82zKCy74IC2jYCj
+         oeDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OzIUMIfi4RPXj+onsD2EV5D7RTPP5SubsnRhKU4PVU0=;
+        b=jK+OjXi/b3Q8sY/xJjor2vxpJWakz3nO9TQeJl5kFfillZn13I/+Svx7IUyqn3hC0c
+         6k/E02O9hsTln0kwCVHy5ygAbAdPl8YFb4uiYUCBjrwEdyDJJxNHknHocQwegSqRvy/U
+         CsHy3cq/z2oHAFfAZYsvaJkh7SC7p8+xHM7vRZUxAJWbBtfQJihewrIR4Gy1ZBBo8h37
+         WyIbCKBj7otVcIjwk4ITCCuJXemK7aJjwLPm/7KalCI+LsnUlKDyE6zucesMsfPR6Fwh
+         EqI9wTt62lDhRTHiuDti3gtZjnMMuVdPq2rwK+KZTMw2zFqXizGVtX7JyghyrM4BlyUC
+         cMFg==
+X-Gm-Message-State: AOAM530m/t6+uNsL1qqo+sj6hzNsl2PGyxP/iHhJa92fD+8lnmu2YF8d
+        9OHHlGSObk3AT5Aru+YPpHVly/AK8DHw7EhE9A2beA==
+X-Google-Smtp-Source: ABdhPJx6deQDCMojiHegS2mr4kysTeQUwWlnsyXo3BZVwZZ0CbYgJnSE8SDB61e07DBsybj27PrjCyFSpnlV/xbuQeU=
+X-Received: by 2002:a05:6512:228a:: with SMTP id f10mr56001997lfu.489.1636145267629;
+ Fri, 05 Nov 2021 13:47:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211105163137.3324344-1-anders.roxell@linaro.org>
- <20211105163137.3324344-2-anders.roxell@linaro.org> <CAKwvOd=rRntVgYdqEeb=JAYo2iC-wVB3dkQWNvwdZdrYgt2s7Q@mail.gmail.com>
-In-Reply-To: <CAKwvOd=rRntVgYdqEeb=JAYo2iC-wVB3dkQWNvwdZdrYgt2s7Q@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 5 Nov 2021 21:45:30 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
-Message-ID: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] selftests: timens: exec: use 'labs()' over 'abs()'
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20211105164511.3360473-1-anders.roxell@linaro.org>
+In-Reply-To: <20211105164511.3360473-1-anders.roxell@linaro.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 5 Nov 2021 13:47:35 -0700
+Message-ID: <CAKwvOdmj07NhhrLUqavJGHBgsBRrg6BvCFCzKbzt4wQJUv+M9A@mail.gmail.com>
+Subject: Re: [PATCH] selftests: net: tls: remove unused variable and code
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        nathan@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 5, 2021 at 9:35 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+On Fri, Nov 5, 2021 at 9:45 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> On Fri, Nov 5, 2021 at 9:31 AM Anders Roxell <anders.roxell@linaro.org> wrote:
-> >
-> > When building selftests/timens with clang, the compiler warn about the
-> > function abs() see below:
-> >
-> > exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
-> >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
-> >                             ^
-> > exec.c:33:8: note: use function 'labs' instead
-> >                         if (abs(tst.tv_sec - now.tv_sec) > 5)
-> >                             ^~~
-> >                             labs
+> When building selftests/net with clang, the compiler warn about the
+> function abs() see below:
 >
-> Careful.
+> tls.c:657:15: warning: variable 'len_compared' set but not used [-Wunused-but-set-variable]
+>         unsigned int len_compared = 0;
+>                      ^
 >
-> Isn't the tv_sec member of `struct timespec` a `time_t` which is 32b
-> on 32b hosts and 64b on 64b hosts? If I'm recalling that correctly,
-> then this patch results in a harmless (though unnecessary) sign
-> extension for 32b targets. That should be fine, but someone like Arnd
-> should triple check if my concern is valid or not.
+> Rework to remove the unused variable and the for-loop where the variable
+> 'len_compared' was assinged.
+>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-It could actually be 'int', 'long' or 'long long' depending on the architecture
-and C library. Maybe we need a temporary variable of type 'long long'
-to hold the difference, and pass that to llabs()?
+Thanks for the patch. Hard to say what the original intent was here.
 
-       Arnd
+Fixes: 7f657d5bf507 ("selftests: tls: add selftests for TLS sockets")
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>  tools/testing/selftests/net/tls.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+> index d3047e251fe9..e61fc4c32ba2 100644
+> --- a/tools/testing/selftests/net/tls.c
+> +++ b/tools/testing/selftests/net/tls.c
+> @@ -654,7 +654,6 @@ TEST_F(tls, recvmsg_single_max)
+>  TEST_F(tls, recvmsg_multiple)
+>  {
+>         unsigned int msg_iovlen = 1024;
+> -       unsigned int len_compared = 0;
+>         struct iovec vec[1024];
+>         char *iov_base[1024];
+>         unsigned int iov_len = 16;
+> @@ -675,8 +674,6 @@ TEST_F(tls, recvmsg_multiple)
+>         hdr.msg_iovlen = msg_iovlen;
+>         hdr.msg_iov = vec;
+>         EXPECT_NE(recvmsg(self->cfd, &hdr, 0), -1);
+> -       for (i = 0; i < msg_iovlen; i++)
+> -               len_compared += iov_len;
+>
+>         for (i = 0; i < msg_iovlen; i++)
+>                 free(iov_base[i]);
+> --
+> 2.33.0
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
