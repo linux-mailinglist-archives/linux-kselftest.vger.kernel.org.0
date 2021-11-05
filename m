@@ -2,113 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B170445AC7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Nov 2021 20:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DA1445D3F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 02:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbhKDUA2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 16:00:28 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:34958
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230438AbhKDUA1 (ORCPT
+        id S231154AbhKEBZL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 21:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhKEBZK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 16:00:27 -0400
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 689393F1D0
-        for <linux-kselftest@vger.kernel.org>; Thu,  4 Nov 2021 19:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636055867;
-        bh=0pnSsWOy8eqTzq7zuU561UzcloXsqaxFF9Ie3eNk/ec=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=YkTF8fHB1M9SCbTOEdwsp7T0ANeFuotRA0su04X8G4cLHlB9hpHfOGGxivujs8hdf
-         oG8fim1K+75OTL9NQx/3yEOfZV9EvVIRd0bmuht7ZogZRG/Gqd6GxdYDlCI0PzEQr1
-         ubKbU8/YSEN5uWNW0t8QiW4d5TQBZYG4vnN+UD9tLB8Hl/yNSx5+SO09lPh3rtYXoR
-         +XUfAwXf4FIfHoD7Wz/H/tS4/gRuFMWaFmgDxr+tB1u27MpaAiuOrubfcNTLa2TI1a
-         1Ai0LiYk8PTxxKAhSzGDUgj/WbV1TVYaCB88YLE4cnDiRkfYjyoMDkJ7hxWNNiGG9J
-         vAsuQhzD8hisQ==
-Received: by mail-pl1-f197.google.com with SMTP id y13-20020a1709029b8d00b0013dc7c668e2so3903820plp.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Nov 2021 12:57:47 -0700 (PDT)
+        Thu, 4 Nov 2021 21:25:10 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EC2C061714;
+        Thu,  4 Nov 2021 18:22:31 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id b184-20020a1c1bc1000000b0033140bf8dd5so5453326wmb.5;
+        Thu, 04 Nov 2021 18:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SLnnbrtMHtKbdTFjn0/cgFPnGOzXZjXisxXELw1s/tE=;
+        b=g/nx8bR6C1aHJgc2XPHBETGyeNH1xR6pC24lfysfM53iN2Przw8zztZAEyJ8LGv88T
+         NXAN/cBgKSIGHcwYPATtgiKaIv3e2WVdM3iNUaZhEfzDZ7AOwW5EJAfezG2ElCuDdULm
+         wMRnVIMpd3b3nf1Qm28n7u/OgQGkhP1ikkl+1ddFhwGtc9ODoYZmziS6MZWNC1WqjcMm
+         pmA3cuG6mdcgB1nLCqDt2d5aik5HVK0OYKQCMX9Xcs0tB4WdwmQv5L90z1HmYrYBTg1x
+         +7Gg4/UbqbPL8vMPkyl4GbWfTduOercmegg4WSSZgpzAmpEOG01WEtqNJCUrV9kzfxi+
+         o/FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=0pnSsWOy8eqTzq7zuU561UzcloXsqaxFF9Ie3eNk/ec=;
-        b=EuIcChweRbxionJulJ/DHquIjrknsS3ZFx/RB/UIdHZkxz55fgSHnXtWK4tRKhAMPP
-         ZshUiAVODOUC47YhseeBQUWn2ZNMtpl+zBAL7SfzO+EQh3r8HGBKlzCDUy9HnZEURMd2
-         mMlDamMTSzf/m6RJOxnUSXHIH1Yr5oLbxwywRS9z09d3JFmuja3PIY+Top+D75r9Yo7p
-         fBjTxWLfga61YimiqTgqU8DeZpPLG8RpbR5QfovXe6UoxqAImoHWXsths0gqV8GjKphE
-         aJvu1/r4Rh1FFhZcycvikQXJ/8fqm8VQDVykDL5KZs6vwHtLCW28iG4y4ImJMjHURToY
-         jXbg==
-X-Gm-Message-State: AOAM532Iyax0P6kjTlwOnHp29mALK27WxLEkR73Y4A0deX9JPqqDNsIt
-        3sZaGH9IiRBbUQ4HP05Sfa5ZqZRFlPXImNvk4Fsm6mFoVQkCi5EX4E6WOJndVYxClvSn2WRbgHg
-        QIk1tGgYcmdGe6p9SW7Ab1zoSsOo/2aqSVx2fCl9USeubDA==
-X-Received: by 2002:a17:90a:49:: with SMTP id 9mr24753812pjb.80.1636055865843;
-        Thu, 04 Nov 2021 12:57:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy7wB2r2Re/P/FePo0Awpnri6iPWwgGRRfBJT3nRIg5DxZhTBI+76ib7euJSTdTGOeNeMie6Q==
-X-Received: by 2002:a17:90a:49:: with SMTP id 9mr24753792pjb.80.1636055865666;
-        Thu, 04 Nov 2021 12:57:45 -0700 (PDT)
-Received: from luke-ubuntu.buildd (cpe-66-27-118-101.san.res.rr.com. [66.27.118.101])
-        by smtp.gmail.com with ESMTPSA id p3sm5458700pfb.205.2021.11.04.12.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Nov 2021 12:57:45 -0700 (PDT)
-From:   Luke Nowakowski-Krijger <luke.nowakowskikrijger@canonical.com>
-To:     shuah@kernel.org
-Cc:     keescook@chromium.org, luto@amacapital.net, wad@chromium.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/seccomp: Unconditionally define seccomp_metadata
-Date:   Thu,  4 Nov 2021 12:57:00 -0700
-Message-Id: <20211104195700.20724-1-luke.nowakowskikrijger@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        bh=SLnnbrtMHtKbdTFjn0/cgFPnGOzXZjXisxXELw1s/tE=;
+        b=j9pO8L633sl0Zg+6vJGx24KVYeNde3jv+9jMIg7OBuTCxs3CQ9EtOn34oG1qU2QiyV
+         66hldVI/3Vo841KYSw1mS+8xEW2sMTj3YrrFGxjQIiXm07CKLaEALaMx9rgnDVr8oSxY
+         SpD5B0wIbWcQlqAxVr9eS6+NCvzEKK7fEadBK0JGOle49I9WCL8ihRkI+EHwR7QCxAlm
+         Qy4N7ncfzyfJPcuW9377NTdGxfg6GD1t5m+qMro4AHP1aIYLhx6MLDxnV6JM/Zvw6PeP
+         MPMgEwBMsomSGPIDMi91CDY1vDwgNpOoRF1dMSWau+w4DLy6S+V+hHxeC/GfFakvBBx0
+         jdGw==
+X-Gm-Message-State: AOAM531k6o4CNfmchdvyvviI3JOxViI4Rk9akgOBv9pY8bNEo2g63/rv
+        BT9El7rcsnst0IRvwounbes=
+X-Google-Smtp-Source: ABdhPJzaHeSt9WmG5hywsdxM3iRAB7np2FMyH9cay7JfOOMPABFibQgtsFIowz4CW//+DCur9dY3EA==
+X-Received: by 2002:a1c:c91a:: with SMTP id f26mr27198007wmb.89.1636075350302;
+        Thu, 04 Nov 2021 18:22:30 -0700 (PDT)
+Received: from ?IPV6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id f18sm6519388wre.7.2021.11.04.18.22.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Nov 2021 18:22:29 -0700 (PDT)
+Message-ID: <e7f0449a-2bad-99ad-4737-016a0e6b8b84@gmail.com>
+Date:   Fri, 5 Nov 2021 01:22:28 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 01/25] tcp: authopt: Initial support and key management
+Content-Language: en-US
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
+References: <cover.1635784253.git.cdleonard@gmail.com>
+ <51044c39f2e4331f2609484d28c756e2a9db5144.1635784253.git.cdleonard@gmail.com>
+From:   Dmitry Safonov <0x7f454c46@gmail.com>
+In-Reply-To: <51044c39f2e4331f2609484d28c756e2a9db5144.1635784253.git.cdleonard@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are conflicts between glibc system headers sys/ptrace.h and
-linux/ptrace.h that can likely cause seccomp_metadata not be
-defined depending on what version versions are installed, leading
-to compile errors.
+Hi Leonard,
 
-A solution to make this test more resitant to these system header
-differences is to rely on defintions inside of the file by
-unconditionally defining seccomp_metadata and removing the
-linux/ptrace.h include where a defintion of seccomp_metadata
-exists for certain headers.
+On 11/1/21 16:34, Leonard Crestez wrote:
+[..]
+> +struct tcp_authopt_key {
+> +	/** @flags: Combination of &enum tcp_authopt_key_flag */
+> +	__u32	flags;
+> +	/** @send_id: keyid value for send */
+> +	__u8	send_id;
+> +	/** @recv_id: keyid value for receive */
+> +	__u8	recv_id;
+> +	/** @alg: One of &enum tcp_authopt_alg */
+> +	__u8	alg;
+> +	/** @keylen: Length of the key buffer */
+> +	__u8	keylen;
+> +	/** @key: Secret key */
+> +	__u8	key[TCP_AUTHOPT_MAXKEYLEN];
+> +	/**
+> +	 * @addr: Key is only valid for this address
+> +	 *
+> +	 * Ignored unless TCP_AUTHOPT_KEY_ADDR_BIND flag is set
+> +	 */
+> +	struct __kernel_sockaddr_storage addr;
+> +};
+[..]
+> +/* Free key nicely, for living sockets */
+> +static void tcp_authopt_key_del(struct sock *sk,
+> +				struct tcp_authopt_info *info,
+> +				struct tcp_authopt_key_info *key)
+> +{
+> +	sock_owned_by_me(sk);
+> +	hlist_del_rcu(&key->node);
+> +	atomic_sub(sizeof(*key), &sk->sk_omem_alloc);
+> +	kfree_rcu(key, rcu);
+> +}
+[..]
+> +#define TCP_AUTHOPT_KEY_KNOWN_FLAGS ( \
+> +	TCP_AUTHOPT_KEY_DEL | \
+> +	TCP_AUTHOPT_KEY_EXCLUDE_OPTS | \
+> +	TCP_AUTHOPT_KEY_ADDR_BIND)
+> +
+> +int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> +{
+[..]
+> +	/* Delete is a special case: */
+> +	if (opt.flags & TCP_AUTHOPT_KEY_DEL) {
+> +		info = rcu_dereference_check(tcp_sk(sk)->authopt_info, lockdep_sock_is_held(sk));
+> +		if (!info)
+> +			return -ENOENT;
+> +		key_info = tcp_authopt_key_lookup_exact(sk, info, &opt);
+> +		if (!key_info)
+> +			return -ENOENT;
+> +		tcp_authopt_key_del(sk, info, key_info);
+> +		return 0;
 
-Signed-off-by: Luke Nowakowski-Krijger <luke.nowakowskikrijger@canonical.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I remember we discussed it in RFC, that removing a key that's currently
+in use may result in random MKT to be used.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index d425688cf59c..67e2c3c001a0 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -26,7 +26,6 @@
- #include <sys/ptrace.h>
- #include <sys/user.h>
- #include <linux/prctl.h>
--#include <linux/ptrace.h>
- #include <linux/seccomp.h>
- #include <pthread.h>
- #include <semaphore.h>
-@@ -171,12 +170,12 @@ struct seccomp_data {
- 
- #ifndef PTRACE_SECCOMP_GET_METADATA
- #define PTRACE_SECCOMP_GET_METADATA	0x420d
-+#endif
- 
- struct seccomp_metadata {
- 	__u64 filter_off;       /* Input: which filter */
- 	__u64 flags;             /* Output: filter's flags */
- };
--#endif
- 
- #ifndef SECCOMP_FILTER_FLAG_NEW_LISTENER
- #define SECCOMP_FILTER_FLAG_NEW_LISTENER	(1UL << 3)
--- 
-2.32.0
+I think, it's possible to make this API a bit more predictable if:
+- DEL command fails to remove a key that is current/receive_next;
+- opt.flags has CURR/NEXT flag that has corresponding `u8 current_key`
+and `u8 receive_next` values. As socket lock is held - that makes
+current_key/receive_next change atomic with deletion of an existing key
+that might have been in use.
 
+In result user may remove a key that's not in use or has to set new
+current/next. Which avoids the issue with random MKT being used to sign
+segments.
+
+Thanks,
+          Dmitry
