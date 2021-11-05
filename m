@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FE84469A6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 21:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4404469C8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 21:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbhKEU3n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Nov 2021 16:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S232513AbhKEUid (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Nov 2021 16:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbhKEU3m (ORCPT
+        with ESMTP id S232269AbhKEUic (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Nov 2021 16:29:42 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C56C061205
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Nov 2021 13:27:02 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 1so16894698ljv.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Nov 2021 13:27:02 -0700 (PDT)
+        Fri, 5 Nov 2021 16:38:32 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FF6C061714
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Nov 2021 13:35:52 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id j5so16895699lja.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Nov 2021 13:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3wyUo/ZQtCQyVodL9pugyYugqUauw4Uj0CoamGRaoTo=;
-        b=jDVwGOof8/gm/IIUo7XhzEjXEtnollc06Ebj3pcM+qgJ3GUFaKtvAHx5MtjHxwLSh7
-         RqVxjAMaKz7jc3OnM33zlboH5YsD3D0dlSufzoc9KmJ4MCY0X7fu4xuo5UMJmmkWgA5X
-         jM+TNwOVDhcOmez5CXM0vck43rEdQQ5YLqx21u342gnRHhpvwiWbsBO8Vj82mBgrvl2m
-         Lq90Gxff2LKTw9L/BmpkKg21+Bp2ADNb9LhC1V2B7PWkp405StxP7Ax3XYodwwa9+O4s
-         iIq307MIXAeGJX2svn0y+u8SO4VVcF/SbR4oryd52a4pitv21E4htnP31gP9R25jU00A
-         rZJA==
+        bh=d9qbelhhsw3oFrUlIgF9/qeZ03Ntzp3KJEfhun8kseA=;
+        b=AusmWqPzUH3kaoEHyvmF0MYkCUsUGWRicOXc055M3GVFviwOU4QPIwlu9uVIDJaOQP
+         qvwAGqnVFgJ2mYDBj3nDfHUl1Rmq11m/Vq/NFprESDAKrSoJFtr8ftNZtpOzoHMnUR2p
+         cVVLYytSUHqmPQ8vkYLjbYEvMWjh0Ft/9lvYfyMsauOEdYy/Vy/xrnHS+7U8BHdrXnpr
+         1CyD14Qiw48hreUk94QwKKW5V3OkJjPuwAmobKm1QFRNYFWa69bo0Q3PLwRT3bqo9YIV
+         MUEHh9L9Dg/s0vb04siBjet2Xvjw9vOhdtK9tyrN4wr8JdlHG6Zsrbgq8lipIqKGzYeE
+         yTcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3wyUo/ZQtCQyVodL9pugyYugqUauw4Uj0CoamGRaoTo=;
-        b=E2n57KvZfZzS+iNfVTjc9DhInicgqk1MAiVQkDxtSOfWcp+w4qbV13L2NzWG9NEHes
-         b+Z4Agx5XArUH1I2AjogEZL6KsqLlHgxRoFjhbmk9NAMmBikQh6+ga9vU6P1liVw3HRw
-         MMFUGOE3Pxkt6pvXKbU/HfjQuLoW0gpub8N2/c79URvUK9+uwBfC68Sx8zI6B+G/Wys3
-         TuJayZZpof0dMzVpx9iJPOWGMda4QTmjUB1sHyYZreej2inJiqAL1tO0n/CMIphFhXB1
-         rJJ0jiQEQtNv+r15Wh8gZ8Z+6Sl1pqTDkGrBoCkmCLLwqziWoGCL0a1+K/PodL57gf7v
-         PPow==
-X-Gm-Message-State: AOAM530rKIPEfL6IdjYggoDuZrmsL9ay9IIq3MihGUwW2G2zO8Zj8Mox
-        jdbyBLkt4oZeo2cqYp2Dvd/Tfikz5g37b4BsoZRTBw==
-X-Google-Smtp-Source: ABdhPJyeR/MQfc6Wj3DYsKJsPEiSVQY5rZ/UIDydLAnjBCIuEikkBi11cb68jlY8MjNhmB8Vdb1+AQZeA2azlXDwqv8=
-X-Received: by 2002:a2e:750e:: with SMTP id q14mr64381888ljc.338.1636144020678;
- Fri, 05 Nov 2021 13:27:00 -0700 (PDT)
+        bh=d9qbelhhsw3oFrUlIgF9/qeZ03Ntzp3KJEfhun8kseA=;
+        b=GRh4sLqHinHs6id3Gv3l/MTWQhD6SQ/6GeyhyyEg9t3B88oglVEeCHzH8aDgdqzqnK
+         g8PiX7lTIgKvNOjN+PPvFSwk6A52IN3x8Yyl6j8cw57onuDe2ce2MiJEN3SSelPqroHw
+         e/Q3zbFiaVLx7/5LBgeaVsfCvB3976PYp1JA7MFQ5oRXWYISqoPUVTJ11adtP+LHb+4G
+         sqQhX4r85z8uS8n1apsEXGhCq5zcRxrK89v7q+40/uy2lIPOKwyaBDQwZCJLpxDTDGnR
+         o0xeV7lE5GovQjDa3K1f+dA7V5B3hHpCVMRq+goIqr/nH3ez2MQX8bcdoesq4uKUyXAB
+         2pXQ==
+X-Gm-Message-State: AOAM531iQBmjsQqnFKQZsXdGQ0aftjCxkj/r5vDg5z/Dt2WrygjXBV0W
+        CT5Z2Poy7Nnd5ewzEB9Y7aIzFInVI18dFTGj5Xdc1w==
+X-Google-Smtp-Source: ABdhPJySLtWybIH3YPm9dxDIImgkKHXCgX75l5eN7Z7plkjpTrw1p3bbL/SBU4FYmCJSNfLg2rH5/OiyjSAnEzLhgyo=
+X-Received: by 2002:a2e:87d5:: with SMTP id v21mr1807937ljj.128.1636144550723;
+ Fri, 05 Nov 2021 13:35:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211105163137.3324344-1-anders.roxell@linaro.org>
-In-Reply-To: <20211105163137.3324344-1-anders.roxell@linaro.org>
+References: <20211105163137.3324344-1-anders.roxell@linaro.org> <20211105163137.3324344-2-anders.roxell@linaro.org>
+In-Reply-To: <20211105163137.3324344-2-anders.roxell@linaro.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 5 Nov 2021 13:26:49 -0700
-Message-ID: <CAKwvOdnge-hBmoFH-CHZmbh7DTq8bQiyhbfEOWkBt447=e6QGA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests: timens: use 'llabs()' over 'abs()'
-To:     Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 5 Nov 2021 13:35:39 -0700
+Message-ID: <CAKwvOd=rRntVgYdqEeb=JAYo2iC-wVB3dkQWNvwdZdrYgt2s7Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: timens: exec: use 'labs()' over 'abs()'
+To:     Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@kernel.org>
 Cc:     shuah@kernel.org, nathan@kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
@@ -65,52 +66,64 @@ On Fri, Nov 5, 2021 at 9:31 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 > When building selftests/timens with clang, the compiler warn about the
 > function abs() see below:
 >
-> timerfd.c:64:7: error: absolute value function 'abs' given an argument of type 'long long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
->                 if (abs(elapsed - 3600) > 60) {
->                     ^
-> timerfd.c:64:7: note: use function 'llabs' instead
->                 if (abs(elapsed - 3600) > 60) {
->                     ^~~
->                     llabs
+> exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
+>                         if (abs(tst.tv_sec - now.tv_sec) > 5)
+>                             ^
+> exec.c:33:8: note: use function 'labs' instead
+>                         if (abs(tst.tv_sec - now.tv_sec) > 5)
+>                             ^~~
+>                             labs
+
+Careful.
+
+Isn't the tv_sec member of `struct timespec` a `time_t` which is 32b
+on 32b hosts and 64b on 64b hosts? If I'm recalling that correctly,
+then this patch results in a harmless (though unnecessary) sign
+extension for 32b targets. That should be fine, but someone like Arnd
+should triple check if my concern is valid or not.
+
+So I'm in favor of this patch (dispatching to abs or labs based on 64b
+host) would hurt readability.
+
 >
-> The note indicates what to do, Rework to use the function 'llabs()'.
+> The note indicates what to do, Rework to use the function 'labs()'.
 >
 > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
 > ---
->  tools/testing/selftests/timens/timer.c   | 2 +-
->  tools/testing/selftests/timens/timerfd.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/timens/exec.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-> index 5e7f0051bd7b..5b939f59dfa4 100644
-> --- a/tools/testing/selftests/timens/timer.c
-> +++ b/tools/testing/selftests/timens/timer.c
-> @@ -56,7 +56,7 @@ int run_test(int clockid, struct timespec now)
->                         return pr_perror("timerfd_gettime");
+> diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
+> index e40dc5be2f66..d12ff955de0d 100644
+> --- a/tools/testing/selftests/timens/exec.c
+> +++ b/tools/testing/selftests/timens/exec.c
+> @@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 >
->                 elapsed = new_value.it_value.tv_sec;
-> -               if (abs(elapsed - 3600) > 60) {
-> +               if (llabs(elapsed - 3600) > 60) {
->                         ksft_test_result_fail("clockid: %d elapsed: %lld\n",
->                                               clockid, elapsed);
->                         return 1;
-> diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
-> index 9edd43d6b2c1..a4196bbd6e33 100644
-> --- a/tools/testing/selftests/timens/timerfd.c
-> +++ b/tools/testing/selftests/timens/timerfd.c
-> @@ -61,7 +61,7 @@ int run_test(int clockid, struct timespec now)
->                         return pr_perror("timerfd_gettime(%d)", clockid);
+>                 for (i = 0; i < 2; i++) {
+>                         _gettime(CLOCK_MONOTONIC, &tst, i);
+> -                       if (abs(tst.tv_sec - now.tv_sec) > 5)
+> +                       if (labs(tst.tv_sec - now.tv_sec) > 5)
+>                                 return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
+>                 }
+>                 return 0;
+> @@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 >
->                 elapsed = new_value.it_value.tv_sec;
-> -               if (abs(elapsed - 3600) > 60) {
-> +               if (llabs(elapsed - 3600) > 60) {
->                         ksft_test_result_fail("clockid: %d elapsed: %lld\n",
->                                               clockid, elapsed);
->                         return 1;
+>         for (i = 0; i < 2; i++) {
+>                 _gettime(CLOCK_MONOTONIC, &tst, i);
+> -               if (abs(tst.tv_sec - now.tv_sec) > 5)
+> +               if (labs(tst.tv_sec - now.tv_sec) > 5)
+>                         return pr_fail("%ld %ld\n",
+>                                         now.tv_sec, tst.tv_sec);
+>         }
+> @@ -70,7 +70,7 @@ int main(int argc, char *argv[])
+>                 /* Check that a child process is in the new timens. */
+>                 for (i = 0; i < 2; i++) {
+>                         _gettime(CLOCK_MONOTONIC, &tst, i);
+> -                       if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
+> +                       if (labs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
+>                                 return pr_fail("%ld %ld\n",
+>                                                 now.tv_sec + OFFSET, tst.tv_sec);
+>                 }
 > --
 > 2.33.0
 >
