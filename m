@@ -2,153 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DA1445D3F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 02:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99884445D5D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Nov 2021 02:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbhKEBZL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Nov 2021 21:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S231236AbhKEBif (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Nov 2021 21:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhKEBZK (ORCPT
+        with ESMTP id S231234AbhKEBie (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Nov 2021 21:25:10 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EC2C061714;
-        Thu,  4 Nov 2021 18:22:31 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id b184-20020a1c1bc1000000b0033140bf8dd5so5453326wmb.5;
-        Thu, 04 Nov 2021 18:22:31 -0700 (PDT)
+        Thu, 4 Nov 2021 21:38:34 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2EDC061714;
+        Thu,  4 Nov 2021 18:35:56 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id az8so7535562qkb.2;
+        Thu, 04 Nov 2021 18:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SLnnbrtMHtKbdTFjn0/cgFPnGOzXZjXisxXELw1s/tE=;
-        b=g/nx8bR6C1aHJgc2XPHBETGyeNH1xR6pC24lfysfM53iN2Przw8zztZAEyJ8LGv88T
-         NXAN/cBgKSIGHcwYPATtgiKaIv3e2WVdM3iNUaZhEfzDZ7AOwW5EJAfezG2ElCuDdULm
-         wMRnVIMpd3b3nf1Qm28n7u/OgQGkhP1ikkl+1ddFhwGtc9ODoYZmziS6MZWNC1WqjcMm
-         pmA3cuG6mdcgB1nLCqDt2d5aik5HVK0OYKQCMX9Xcs0tB4WdwmQv5L90z1HmYrYBTg1x
-         +7Gg4/UbqbPL8vMPkyl4GbWfTduOercmegg4WSSZgpzAmpEOG01WEtqNJCUrV9kzfxi+
-         o/FA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wiaOGKq4FmlnzvPuVfHkcdLQnMCut1ocGVdyodYUkvU=;
+        b=foTH20+IWuvdIPU1jo5HDx577DWQ0Em/tVGo5imA9rHJ4Bx0na7IaYpA29FJdzUEN+
+         Z01zKxyM71E9VtOv9yQOGb8mnDegLAbJAeEgrj99UuSu8hHKv3krld5FQu7ABLHOHvVI
+         Jx9lz8AY8O7Gfarci1TYC+L/jnt9KDKk+N7HvJF9DfTLcSJInHYpZfbMDZcL8tj1JlBk
+         hwaobRMTM6lT8QaDGQYiJnde39TI5ezk3tXPCuBvpuwmSN4LCsjeG/dI2qLeWc3tpR2a
+         kpyARzEfTeyD1AdmqJKFK9bkwspbzqN4L2XUYUlF85SElMiOdEhCxlBO9hm4BnnyOCkY
+         OAjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SLnnbrtMHtKbdTFjn0/cgFPnGOzXZjXisxXELw1s/tE=;
-        b=j9pO8L633sl0Zg+6vJGx24KVYeNde3jv+9jMIg7OBuTCxs3CQ9EtOn34oG1qU2QiyV
-         66hldVI/3Vo841KYSw1mS+8xEW2sMTj3YrrFGxjQIiXm07CKLaEALaMx9rgnDVr8oSxY
-         SpD5B0wIbWcQlqAxVr9eS6+NCvzEKK7fEadBK0JGOle49I9WCL8ihRkI+EHwR7QCxAlm
-         Qy4N7ncfzyfJPcuW9377NTdGxfg6GD1t5m+qMro4AHP1aIYLhx6MLDxnV6JM/Zvw6PeP
-         MPMgEwBMsomSGPIDMi91CDY1vDwgNpOoRF1dMSWau+w4DLy6S+V+hHxeC/GfFakvBBx0
-         jdGw==
-X-Gm-Message-State: AOAM531k6o4CNfmchdvyvviI3JOxViI4Rk9akgOBv9pY8bNEo2g63/rv
-        BT9El7rcsnst0IRvwounbes=
-X-Google-Smtp-Source: ABdhPJzaHeSt9WmG5hywsdxM3iRAB7np2FMyH9cay7JfOOMPABFibQgtsFIowz4CW//+DCur9dY3EA==
-X-Received: by 2002:a1c:c91a:: with SMTP id f26mr27198007wmb.89.1636075350302;
-        Thu, 04 Nov 2021 18:22:30 -0700 (PDT)
-Received: from ?IPV6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id f18sm6519388wre.7.2021.11.04.18.22.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Nov 2021 18:22:29 -0700 (PDT)
-Message-ID: <e7f0449a-2bad-99ad-4737-016a0e6b8b84@gmail.com>
-Date:   Fri, 5 Nov 2021 01:22:28 +0000
+        bh=wiaOGKq4FmlnzvPuVfHkcdLQnMCut1ocGVdyodYUkvU=;
+        b=8G+GineGpjVXC4fIk+khj/bsmvdcoNyWimCclq9DxskzECyhufXsTMv1EC8ptmoYfY
+         HsXGFTSmCIQQL38G49a98dR6Cd/FcAC44xlYs7FqkNKjzEGbbzdCH7QrxSv3z0H5sikQ
+         H2jYIebQWSkRgbOuIi9Djc4fKORLppG9+Kqn4qFazYt1xLBNrwv8zMzQySF+etUvxO+9
+         Eczdkzv95hC0dxUDKem5UWYLJWxtpzf63QdjBWZj9UykZwqPAYKa24k16AocfkfdzAsx
+         AqUVDoP9t9AUytoaHpus8lZjMCJMLgm1Qx1cAucDsDCN0meP2j48IdXbuj7Hr1O5VFHA
+         aJcg==
+X-Gm-Message-State: AOAM530qqNngmnSH5+6iz8QLJCDjCr0uj98GvQr2sJxsoUPNCFRFPZXE
+        qZeCocC42hxm0wSL1Az0+Yo=
+X-Google-Smtp-Source: ABdhPJwsVZPqK7JetU/48F1kQvt56eFGAZT8NyBCqKHbgtA09EfZ6gWapJoqKoT07nlMhk/03evkQw==
+X-Received: by 2002:a05:620a:4312:: with SMTP id u18mr44551553qko.483.1636076155429;
+        Thu, 04 Nov 2021 18:35:55 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id u11sm4905341qko.119.2021.11.04.18.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Nov 2021 18:35:55 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: zhang.mingyu@zte.com.cn
+To:     john.stultz@linaro.org
+Cc:     tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Zhang Mingyu <zhang.mingyu@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] kselftests: timers:Remove unneeded semicolon
+Date:   Fri,  5 Nov 2021 01:35:47 +0000
+Message-Id: <20211105013547.74922-1-zhang.mingyu@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 01/25] tcp: authopt: Initial support and key management
-Content-Language: en-US
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
-References: <cover.1635784253.git.cdleonard@gmail.com>
- <51044c39f2e4331f2609484d28c756e2a9db5144.1635784253.git.cdleonard@gmail.com>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-In-Reply-To: <51044c39f2e4331f2609484d28c756e2a9db5144.1635784253.git.cdleonard@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Leonard,
+From: Zhang Mingyu <zhang.mingyu@zte.com.cn>
 
-On 11/1/21 16:34, Leonard Crestez wrote:
-[..]
-> +struct tcp_authopt_key {
-> +	/** @flags: Combination of &enum tcp_authopt_key_flag */
-> +	__u32	flags;
-> +	/** @send_id: keyid value for send */
-> +	__u8	send_id;
-> +	/** @recv_id: keyid value for receive */
-> +	__u8	recv_id;
-> +	/** @alg: One of &enum tcp_authopt_alg */
-> +	__u8	alg;
-> +	/** @keylen: Length of the key buffer */
-> +	__u8	keylen;
-> +	/** @key: Secret key */
-> +	__u8	key[TCP_AUTHOPT_MAXKEYLEN];
-> +	/**
-> +	 * @addr: Key is only valid for this address
-> +	 *
-> +	 * Ignored unless TCP_AUTHOPT_KEY_ADDR_BIND flag is set
-> +	 */
-> +	struct __kernel_sockaddr_storage addr;
-> +};
-[..]
-> +/* Free key nicely, for living sockets */
-> +static void tcp_authopt_key_del(struct sock *sk,
-> +				struct tcp_authopt_info *info,
-> +				struct tcp_authopt_key_info *key)
-> +{
-> +	sock_owned_by_me(sk);
-> +	hlist_del_rcu(&key->node);
-> +	atomic_sub(sizeof(*key), &sk->sk_omem_alloc);
-> +	kfree_rcu(key, rcu);
-> +}
-[..]
-> +#define TCP_AUTHOPT_KEY_KNOWN_FLAGS ( \
-> +	TCP_AUTHOPT_KEY_DEL | \
-> +	TCP_AUTHOPT_KEY_EXCLUDE_OPTS | \
-> +	TCP_AUTHOPT_KEY_ADDR_BIND)
-> +
-> +int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
-> +{
-[..]
-> +	/* Delete is a special case: */
-> +	if (opt.flags & TCP_AUTHOPT_KEY_DEL) {
-> +		info = rcu_dereference_check(tcp_sk(sk)->authopt_info, lockdep_sock_is_held(sk));
-> +		if (!info)
-> +			return -ENOENT;
-> +		key_info = tcp_authopt_key_lookup_exact(sk, info, &opt);
-> +		if (!key_info)
-> +			return -ENOENT;
-> +		tcp_authopt_key_del(sk, info, key_info);
-> +		return 0;
+Eliminate the following coccinelle check warning:
+tools/testing/selftests/timers/alarmtimer-suspend.c:82:2-3
 
-I remember we discussed it in RFC, that removing a key that's currently
-in use may result in random MKT to be used.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Zhang Mingyu <zhang.mingyu@zte.com.cn>
+---
+ tools/testing/selftests/timers/alarmtimer-suspend.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I think, it's possible to make this API a bit more predictable if:
-- DEL command fails to remove a key that is current/receive_next;
-- opt.flags has CURR/NEXT flag that has corresponding `u8 current_key`
-and `u8 receive_next` values. As socket lock is held - that makes
-current_key/receive_next change atomic with deletion of an existing key
-that might have been in use.
+diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
+index 4da09dbf83ba..54da4b088f4c 100644
+--- a/tools/testing/selftests/timers/alarmtimer-suspend.c
++++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
+@@ -79,7 +79,7 @@ char *clockstring(int clockid)
+ 		return "CLOCK_BOOTTIME_ALARM";
+ 	case CLOCK_TAI:
+ 		return "CLOCK_TAI";
+-	};
++	}
+ 	return "UNKNOWN_CLOCKID";
+ }
+ 
+-- 
+2.25.1
 
-In result user may remove a key that's not in use or has to set new
-current/next. Which avoids the issue with random MKT being used to sign
-segments.
-
-Thanks,
-          Dmitry
