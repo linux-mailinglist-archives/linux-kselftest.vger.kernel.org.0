@@ -2,231 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B32D7446C4C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Nov 2021 05:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72992446D6F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Nov 2021 11:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbhKFEJx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 6 Nov 2021 00:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S232907AbhKFKiU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 6 Nov 2021 06:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbhKFEJv (ORCPT
+        with ESMTP id S230219AbhKFKiT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 6 Nov 2021 00:09:51 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541D2C061570
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Nov 2021 21:07:10 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 133so8688194wme.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Nov 2021 21:07:10 -0700 (PDT)
+        Sat, 6 Nov 2021 06:38:19 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48F4C061570
+        for <linux-kselftest@vger.kernel.org>; Sat,  6 Nov 2021 03:35:38 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 1so19315317ljv.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 06 Nov 2021 03:35:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rzyrOrH95MGAa/Xb2wtK18TKgOiah8NZUk7288mGLbk=;
-        b=AjtsM3Dfda6lwb67+jWFgQj04f7+76UtqIxnYJUO8cY/vF3RuRn/W/5P/kABG3VHa7
-         aidAwrnPOZ4A2HUgBHiGPTXExCBlMsAJ8Ty2XSr02P1H2DcHdEEW+s8B0ByFrerGuLxQ
-         qkWgu7S9lAOd8+GirFVAvF+Avej32ES8mRFjs0oEbJYu49hLPR1U3n1/5OH0ovIOVl1n
-         Lyy2QPlLLOlGeTkUulhZ+P40oNbm+RYitd52a4lqdRBVgC88vyphyaJfZ7h8NnoQENxW
-         V81lVqVlHe5YuDE3+xgswef6Flm3ccI9OE0zVGP7GdGX5Q44YOa1Btob76FPQgl2Iddk
-         C08Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=EFS/qJJq2u3i9HcnYLVF3IVNVvcjNp8ZLU4zo+G1R0U=;
+        b=jPI5Y2ovKgnvpIxZxxNhhsQQvUHqwJky/69iEs+fioUsyBRrHiZBc5Hl9ejmq1kfEO
+         WhYiJYSL6hdQkpKcRaA5op63eOyy5+Doml5L53dNBUie/9YmqxgVMkROMnds54xvPBcO
+         8CAKgQLQO1+GjCdLNFzmGSlQpGGCc+6woocTPTJOyoamTjCp/VTOX/YORiC/OCmPzELU
+         oAkIqhu0hNditpZ149xmjuUqeZblnXh0aGTjLw2vc0f60wvYZ27x99SUCnFTB/gpUzd0
+         iPiV5SbaNWjNr5B49TOiFgLv8qNaj4hNBnB0iLHERkxQTt34cxbc7XC0qa4rgtjXCsGw
+         tpsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rzyrOrH95MGAa/Xb2wtK18TKgOiah8NZUk7288mGLbk=;
-        b=qb0ClppAEOrLNSfdtjUK3KEBy9RWAlsIFqN5BwlBos2T+E0XfrRTQRZ0RluS7kva4s
-         arMzfqnUnSgSDPyafSamwwoIHr3tVO4shVIcU8fW422jANON5JiFe4Vc4go1xIshHXuV
-         ojhBlQkZ5x/8PYhb8EoYG9FdEY1WQghcqjQwzlepqDGd6zz9q8DyFe9YWz+/2+flJOOc
-         V7B9wgqdJqQGtoCuXrzGHuf/YZ+VJuVS/U98kHgFxuona/uOsDf9mqz5Boc4WFpczRln
-         zMMGMkqLX+lVcPcT92fX6MNtZDEX4/cd34gClQ+RJPVc3K2RVHeRtcyCzShp07P/o9Bp
-         vkfA==
-X-Gm-Message-State: AOAM532JLJ5FGiZgx3JGQoqLcW3VZB6klSIVbFQ7nRVKogjhZ3AkhDIh
-        DJpZpbf8rf60RZ2nQaS1tWWRv+IEk6RPDDClPvo2MZYMK30=
-X-Google-Smtp-Source: ABdhPJw1yoX+ysGxdnypwYPWF0gLy1GCWIJim895Q3U5HbRv6csvaSJSKdZoBfJQ1MudTiYpxP11IyUpxvrbKk3JQOA=
-X-Received: by 2002:a05:600c:4ed2:: with SMTP id g18mr24191580wmq.18.1636171628680;
- Fri, 05 Nov 2021 21:07:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=EFS/qJJq2u3i9HcnYLVF3IVNVvcjNp8ZLU4zo+G1R0U=;
+        b=IrSEaO/f6Ad14j0lQ/1iEeSO2slCUPARG49k1KJxR/hq6xzyMX1B1HS6g9KUIDCMMZ
+         IrRwxn1PMTg/2oE8XJVhZG53seCE7Bh91V/TuLp02zosbt7AgFKBE0mtpxpqeY614Rt5
+         vltGcilS294h3a/E3EV2NRiGAiD6oxmsvbFSQY+vnAQhZXroGDXrEJjUbsY03WtwmLlF
+         v6LqQqETSHPqS3zVdhIMhsrzNWw0gJ9BhNa5xpUB9U/w5VfBxgZ8xpZdWTOSR8b4Dr3m
+         rT3NtqmnkwugHmvq7QQTisbuu6lvFzR0IVgeJHiKWWf3bwc8j6ipeI4rkIh/AM7Unjvw
+         VRVw==
+X-Gm-Message-State: AOAM532PPfhMkCjvpVZuNTAMraD6pU3LVYVSZg2WQhV0aF5SqMrOTHka
+        TxXGY6myqH9M69CWlBLWw7oKIQQxurvhIdVgmbU=
+X-Google-Smtp-Source: ABdhPJyGHyFjB+3Yf5J1YqtUVcrfxCD93OevnpRqorNoaU6pto71SkVCnLd/F0/ohv+wBQ/LZdt8bNCrq/5I2vaEKes=
+X-Received: by 2002:a2e:a791:: with SMTP id c17mr40614498ljf.304.1636194936725;
+ Sat, 06 Nov 2021 03:35:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211106013058.2621799-1-dlatypov@google.com> <20211106013058.2621799-2-dlatypov@google.com>
-In-Reply-To: <20211106013058.2621799-2-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 6 Nov 2021 12:06:57 +0800
-Message-ID: <CABVgOSnQ9qGtu0nEKePH+Zb1oR2osmVh791zyQ9P61SNznryrw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: tool: add --kconfig_add to allow easily
- tweaking kunitconfigs
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+Reply-To: godwinppter@gmail.com
+Sender: mrs.salimanikie@gmail.com
+Received: by 2002:a05:6512:1321:0:0:0:0 with HTTP; Sat, 6 Nov 2021 03:35:33
+ -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Sat, 6 Nov 2021 11:35:33 +0100
+X-Google-Sender-Auth: hDxXecFbbzd7CRcGgWMglnKifq8
+Message-ID: <CAF+Yd-1EfNoJ3-FCUBT-+BODXqnG5vtLS9Jo=caBtHRpLAycdQ@mail.gmail.com>
+Subject: =?UTF-8?B?w4kgdW0gcHJhemVyIGluZm9ybcOhLWxv?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Nov 6, 2021 at 9:31 AM 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> E.g. run tests but with KASAN
-> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
+Oi,
 
-This is very neat, thank you. I'm definitely going to use this quite a bit.
+Como voc=C3=AA est=C3=A1? Estou muito feliz em inform=C3=A1-lo sobre meu su=
+cesso. No
+momento, estou fora do pa=C3=ADs para fazer um investimento com parte da
+minha parte, ap=C3=B3s concluir a transfer=C3=AAncia com um empres=C3=A1rio=
+ indiano.
+Mas irei visitar o seu pa=C3=ADs, no pr=C3=B3ximo ano, ap=C3=B3s a conclus=
+=C3=A3o do meu
+projeto. Por favor, contacte a minha secret=C3=A1ria para enviar-lhe o
+cart=C3=A3o (multibanco) que j=C3=A1 creditei no valor de ($ 300.000,00). B=
+asta
+entrar em contato com ela para ajud=C3=A1-lo a receber o cart=C3=A3o (ATM).=
+ J=C3=A1
+expliquei tudo para ela antes da minha viagem. Isso =C3=A9 o que posso
+fazer por voc=C3=AA porque voc=C3=AA n=C3=A3o p=C3=B4de ajudar na transfer=
+=C3=AAncia, mas pelo
+fato de ser a pessoa com quem entrei em contato inicialmente para a
+transfer=C3=AAncia. Decidi dar este ($ 300.000,00) como compensa=C3=A7=C3=
+=A3o por ter
+sido contatado inicialmente para a transfer=C3=AAncia. Sempre procuro fazer
+a diferen=C3=A7a, no trato com as pessoas sempre que entro em contato com
+elas. Tamb=C3=A9m estou tentando mostrar que sou uma pessoa bem diferente
+das outras que podem ter um prop=C3=B3sito diferente dentro delas. Acredito
+que voc=C3=AA me prestar=C3=A1 alguma ajuda quando eu, visitar seu pa=C3=AD=
+s, para
+outro investimento l=C3=A1. Portanto, entre em contato com minha secret=C3=
+=A1ria
+para obter o cart=C3=A3o. Os contatos dela s=C3=A3o os seguintes,
 
-My only real note is that we'll need to add some documentation (but
-since the KUnit documentation is being reworked at the moment, I'm
-okay with doing that later to avoid merge conflicts).
+Nome completo: Sra., Jovita Dumuije,
+Pa=C3=ADs: Burkina Faso
+Email: jovitadumuije@gmail.com
 
-> This also works with --kunitconfig
-> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
+Obrigado e espero por uma boa empresa com voc=C3=AA no futuro.
 
-It's also worth noting that this can be appended multiple times to set
-multiple options, which is useful
-
-> This flag is inspired by TuxMake's --kconfig-add, see
-> https://gitlab.com/Linaro/tuxmake#examples.
->
-> Our version just uses "_" as the delimiter for consistency with
-> pre-existing flags like --build_dir, --make_options, --kernel_args, etc.
->
-> Note: this does make it easier to run into a pre-existing edge case:
-> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
-> $ ./tools/testing/kunit/kunit.py run --arch=x86_64
-> This second invocation ^ still has KASAN enabled!
-
-This behaviour is quite useful, and actually means we can turn on
-individual items with
-$ ./tools/testing/kunit/kunit.py config --kconfig_add=<option>
-
-> kunit.py won't call olddefconfig if our current .config is already a
-> superset of the provided kunitconfig.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-
-Looks good.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-
-> ---
->  tools/testing/kunit/kunit.py           |  8 ++++++++
->  tools/testing/kunit/kunit_kernel.py    |  5 +++++
->  tools/testing/kunit/kunit_tool_test.py | 18 ++++++++++++++++++
->  3 files changed, 31 insertions(+)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 68e6f461c758..be58f4c93806 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -280,6 +280,10 @@ def add_common_opts(parser) -> None:
->                              ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
->                              'will get  automatically appended.',
->                              metavar='kunitconfig')
-> +       parser.add_argument('--kconfig_add',
-> +                            help='Additional Kconfig options to append to the '
-> +                            '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
-> +                           action='append')
->
->         parser.add_argument('--arch',
->                             help=('Specifies the architecture to run tests under. '
-> @@ -398,6 +402,7 @@ def main(argv, linux=None):
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
->                                         kunitconfig_path=cli_args.kunitconfig,
-> +                                       kconfig_add=cli_args.kconfig_add,
->                                         arch=cli_args.arch,
->                                         cross_compile=cli_args.cross_compile,
->                                         qemu_config_path=cli_args.qemu_config)
-> @@ -423,6 +428,7 @@ def main(argv, linux=None):
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
->                                         kunitconfig_path=cli_args.kunitconfig,
-> +                                       kconfig_add=cli_args.kconfig_add,
->                                         arch=cli_args.arch,
->                                         cross_compile=cli_args.cross_compile,
->                                         qemu_config_path=cli_args.qemu_config)
-> @@ -439,6 +445,7 @@ def main(argv, linux=None):
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
->                                         kunitconfig_path=cli_args.kunitconfig,
-> +                                       kconfig_add=cli_args.kconfig_add,
->                                         arch=cli_args.arch,
->                                         cross_compile=cli_args.cross_compile,
->                                         qemu_config_path=cli_args.qemu_config)
-> @@ -457,6 +464,7 @@ def main(argv, linux=None):
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
->                                         kunitconfig_path=cli_args.kunitconfig,
-> +                                       kconfig_add=cli_args.kconfig_add,
->                                         arch=cli_args.arch,
->                                         cross_compile=cli_args.cross_compile,
->                                         qemu_config_path=cli_args.qemu_config)
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 51ee6e5dae91..7d459d6d6ff2 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -224,6 +224,7 @@ class LinuxSourceTree(object):
->               build_dir: str,
->               load_config=True,
->               kunitconfig_path='',
-> +             kconfig_add: Optional[List[str]]=None,
->               arch=None,
->               cross_compile=None,
->               qemu_config_path=None) -> None:
-> @@ -249,6 +250,10 @@ class LinuxSourceTree(object):
->                                 shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, kunitconfig_path)
->
->                 self._kconfig = kunit_config.parse_file(kunitconfig_path)
-> +               if kconfig_add:
-> +                       kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
-> +                       self._kconfig.merge_in_entries(kconfig)
-> +
->
->         def clean(self) -> bool:
->                 try:
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 4ec70e41ec5a..7e42a7c27987 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -334,6 +334,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                                 pass
->                         kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
->
-> +       def test_kconfig_add(self):
-> +               tree = kunit_kernel.LinuxSourceTree('', kconfig_add=['CONFIG_NOT_REAL=y'])
-> +               self.assertIn(kunit_config.KconfigEntry('NOT_REAL', 'y'), tree._kconfig.entries())
-> +
->         def test_invalid_arch(self):
->                 with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
->                         kunit_kernel.LinuxSourceTree('', arch='invalid')
-> @@ -540,6 +544,7 @@ class KUnitMainTest(unittest.TestCase):
->                 # Just verify that we parsed and initialized it correctly here.
->                 mock_linux_init.assert_called_once_with('.kunit',
->                                                         kunitconfig_path='mykunitconfig',
-> +                                                       kconfig_add=None,
->                                                         arch='um',
->                                                         cross_compile=None,
->                                                         qemu_config_path=None)
-> @@ -551,6 +556,19 @@ class KUnitMainTest(unittest.TestCase):
->                 # Just verify that we parsed and initialized it correctly here.
->                 mock_linux_init.assert_called_once_with('.kunit',
->                                                         kunitconfig_path='mykunitconfig',
-> +                                                       kconfig_add=None,
-> +                                                       arch='um',
-> +                                                       cross_compile=None,
-> +                                                       qemu_config_path=None)
-> +
-> +       @mock.patch.object(kunit_kernel, 'LinuxSourceTree')
-> +       def test_run_kconfig_add(self, mock_linux_init):
-> +               mock_linux_init.return_value = self.linux_source_mock
-> +               kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
-> +               # Just verify that we parsed and initialized it correctly here.
-> +               mock_linux_init.assert_called_once_with('.kunit',
-> +                                                       kunitconfig_path=None,
-> +                                                       kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
->                                                         arch='um',
->                                                         cross_compile=None,
->                                                         qemu_config_path=None)
-> --
-> 2.34.0.rc0.344.g81b53c2807-goog
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20211106013058.2621799-2-dlatypov%40google.com.
+Godwin Peter,
