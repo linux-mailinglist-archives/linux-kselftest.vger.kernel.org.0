@@ -2,143 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA73446EA4
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Nov 2021 16:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA00447319
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Nov 2021 14:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbhKFP2V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 6 Nov 2021 11:28:21 -0400
-Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:59921 "EHLO
-        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230023AbhKFP2V (ORCPT
+        id S233699AbhKGNrk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 7 Nov 2021 08:47:40 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:37591 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230128AbhKGNrj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 6 Nov 2021 11:28:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636212339;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=8nCcxBHhzg9WsjUmE0y5+36JS3vG9banP9aqtuh+Hbo=;
-        b=ShYuYL5QriZUhhxMupK2urNb7L8+GHT/OWlVHvXaAZ1SeY5QvCKOvQDBgSyUe16i
-        f7DRDWRbUSqlTcN/3heQDktUg6uzHlzNPS+GI8oDlKdFpnzirlrOHDeA5vZQdSE7Kzs
-        D4yJ9Wo/LCHovZuCErZoQkKb5hzOvGYzLxZ6XF3g=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636212339;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=8nCcxBHhzg9WsjUmE0y5+36JS3vG9banP9aqtuh+Hbo=;
-        b=HKtST18MUmnswRZXM9VvQnx3aXOL58nLh1hzG2zJaBbYCvMDL3AmrhJf1DJ9aSoV
-        +m0qOY9CNLumH1p+dJJSpUT++oOCVntrYQyTNKr9UxL7S1MlfgkYnIkf2ZHnRMl15UE
-        EZnpUsFPWHoKmLJ5woW5abyk9kOIpNa4vCZCIHpY=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211106
+        Sun, 7 Nov 2021 08:47:39 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 623235800BC;
+        Sun,  7 Nov 2021 08:44:56 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Sun, 07 Nov 2021 08:44:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=YYBzFB
+        LaqRjypaCTOnoGZ+5BHWOftMjIYoQeVeLxb5Y=; b=HjB4hVxvEaAvjjqDPcyJIa
+        5QrURh0Fua3tVbL77gFzPYJl4pH6s2U9GliabrhOxkp2y5J0FEA96r5VVEdFpkaf
+        ppoJszTvIXgG10O9nBRM5JzZ27P6eouEoZ6eVs894PRykt9mK31nyHiKjP3jknEd
+        rtyHdpVsSsw7MK7o0CnTXABl1uMKr4BLBbn3FT30z1RyOPGvMKUsuyWP05KHyYc7
+        x94o8mGy0cZ81sVR4UnLv+QjieF/7d318HgJ3EmhqNub5gNR6EvBCY5iDbL3PPIo
+        UG3hWa1Byc7EveD7+mWJhR+tCUXgQRptRkppbXn0RhP09Tjoe6ottP9H9nFByMUw
+        ==
+X-ME-Sender: <xms:V9iHYUdibIJ2ADw6i8_Krih-i-rH9sBz0OpmEkwYPmXGh8Y7NatbXA>
+    <xme:V9iHYWO-21u9fdmFgxBoPiiV6hDBnnXbHrhNG6il_i0-lyde3qhSvhVDGSI18hDw9
+    VBtVeaHuxwYKJM>
+X-ME-Received: <xmr:V9iHYVhaQd5tc2v7b1gHBLlFeHTGfcrdGUBAiJObYAwp79vxXu4gj-di9Ulh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtgdehhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepgfevgfevueduueffieffheeifffgjeelvedtteeuteeuffekvefggfdtudfgkeev
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:V9iHYZ_zATfsMXtbU-0UbyfQjXVVhOK0OlldF78Ji3cG4fcU5VUW7A>
+    <xmx:V9iHYQtZjeHSIB1h7H-jr3STB8LFdTRYTE150ZcBhVsm8b89gu-7bA>
+    <xmx:V9iHYQFoOShoIwWFpJAMmPI4tPgmjtD2OhUW6accm2Nb_n32O5eHHw>
+    <xmx:WNiHYSI6hxzOeY5nEuAMckML32XXM5t8J2vCk0UYOHbpRPqppjH9Ww>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 7 Nov 2021 08:44:55 -0500 (EST)
+Date:   Sun, 7 Nov 2021 15:44:52 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
+Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, mkubecek@suse.cz,
+        saeed@kernel.org, michael.chan@broadcom.com
+Subject: Re: [PATCH v2 net-next 2/6] rtnetlink: Add new RTM_GETEECSTATE
+ message to get SyncE status
+Message-ID: <YYfYVA9j6Dk2rkDD@shredder>
+References: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
+ <20211105205331.2024623-3-maciej.machnikowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017cf5daf04b-098268ca-2fd8-44a1-b3c4-588a1b7e36f5-000000@email.amazonses.com>
-Date:   Sat, 6 Nov 2021 15:25:38 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.06-54.240.48.34
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211105205331.2024623-3-maciej.machnikowski@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 6a37ebbe07bf72cd5fd791d67a664f37c8f17a13
-* git describe: next-20211106
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211106
+On Fri, Nov 05, 2021 at 09:53:27PM +0100, Maciej Machnikowski wrote:
+> +/* SyncE section */
+> +
+> +enum if_eec_state {
+> +	IF_EEC_STATE_INVALID = 0,	/* state is not valid */
+> +	IF_EEC_STATE_FREERUN,		/* clock is free-running */
+> +	IF_EEC_STATE_LOCKED,		/* clock is locked to the reference,
+> +					 * but the holdover memory is not valid
+> +					 */
+> +	IF_EEC_STATE_LOCKED_HO_ACQ,	/* clock is locked to the reference
+> +					 * and holdover memory is valid
+> +					 */
+> +	IF_EEC_STATE_HOLDOVER,		/* clock is in holdover mode */
+> +};
+> +
+> +#define EEC_SRC_PORT		(1 << 0) /* recovered clock from the port is
+> +					  * currently the source for the EEC
+> +					  */
 
-## Regressions (compared to next-20211105)
-* i386, kselftest-rtc
-  - rtc.rtctest
+Where is this used?
 
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
+Note that the merge window is open and that net-next is closed:
 
+http://vger.kernel.org/~davem/net-next.html
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211105)
-* i386, kselftest-net
-  - net.so_txtime.sh
-
-
-## Test result summary
-total: 2855, pass: 1688, fail: 254, skip: 913, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> +
+> +struct if_eec_state_msg {
+> +	__u32 ifindex;
+> +};
+> +
+> +enum {
+> +	IFLA_EEC_UNSPEC,
+> +	IFLA_EEC_STATE,
+> +	IFLA_EEC_SRC_IDX,
+> +	__IFLA_EEC_MAX,
+> +};
+> +
+> +#define IFLA_EEC_MAX (__IFLA_EEC_MAX - 1)
