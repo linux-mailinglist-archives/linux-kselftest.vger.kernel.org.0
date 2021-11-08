@@ -2,96 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BFD449F1A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Nov 2021 00:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8301944A08B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Nov 2021 02:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240930AbhKHXos (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Nov 2021 18:44:48 -0500
-Received: from mga03.intel.com ([134.134.136.65]:5566 "EHLO mga03.intel.com"
+        id S237261AbhKIBEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Nov 2021 20:04:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59938 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240902AbhKHXor (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Nov 2021 18:44:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10162"; a="232292396"
-X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
-   d="scan'208";a="232292396"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2021 15:42:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
-   d="scan'208";a="641642471"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Nov 2021 15:42:01 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com,
-        bp@alien8.de, mingo@redhat.com, yang.zhong@intel.com,
-        jing2.liu@intel.com, chang.seok.bae@intel.com,
+        id S241564AbhKIBDj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:03:39 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CBFCF61279;
+        Tue,  9 Nov 2021 01:00:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636419654;
+        bh=pKhH/t9S/manekTLD5/XhoBYKn7pRmMlwLKnyU9Itno=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mYXYiFHNjn0VOHuiSMct+HkSlLqLUQ0ORpUlQ/z3VtziRLnayHGvRLljMVWD3vfxq
+         06dBtjiowNNtozkzMs82Wo1LWjKRXqvX2GnX2W7cFCjdkCvcXZXn1rD8TLd3rzUG8R
+         JBSuJEPb+pWDivjhGXd3LF1dPgYTqgZ/HBXewASVDiEqldTxBtNSXNRD+lVwb5SkLL
+         Y5Fi2/tZvGOpRrTYTWGde2stnNryzTrpwBK+r3nLzcbvIkjpVTNrDRMynMkTSaVKY2
+         BPuZx4yo7WEkBI5/G58UO4Ia1HGPmoyJFGT9+5SMul7eHoDj6HKkPbIzkKAD3p3T4q
+         O0De1ZNDLiXYQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Petr Machata <petrm@nvidia.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, kuba@kernel.org,
+        shuah@kernel.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] selftests/x86/amx: Update the ARCH_REQ_XCOMP_PERM test
-Date:   Mon,  8 Nov 2021 15:35:01 -0800
-Message-Id: <20211108233501.11516-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211108233501.11516-1-chang.seok.bae@intel.com>
-References: <20211108233501.11516-1-chang.seok.bae@intel.com>
+Subject: [PATCH AUTOSEL 5.15 031/146] selftests: net: fib_nexthops: Wait before checking reported idle time
+Date:   Mon,  8 Nov 2021 12:42:58 -0500
+Message-Id: <20211108174453.1187052-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211108174453.1187052-1-sashal@kernel.org>
+References: <20211108174453.1187052-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update the arch_prctl test to check the permission bitmap whether the
-requested feature is added as expected or not.
+From: Petr Machata <petrm@nvidia.com>
 
-Every non-dynamic feature that is enabled is permitted already for use.
-TILECFG is not dynamic feature. Ensure the bit is always on from
-ARCH_GET_XCOMP_PERM.
+[ Upstream commit b69c99463d414cc263411462d52f25205657e9af ]
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
+The purpose of this test is to verify that after a short activity passes,
+the reported time is reasonable: not zero (which could be reported by
+mistake), and not something outrageous (which would be indicative of an
+issue in used units).
+
+However, the idle time is reported in units of clock_t, or hundredths of
+second. If the initial sequence of commands is very quick, it is possible
+that the idle time is reported as just flat-out zero. When this test was
+recently enabled in our nightly regression, we started seeing spurious
+failures for exactly this reason.
+
+Therefore buffer the delay leading up to the test with a sleep, to make
+sure there is no legitimate way of reporting 0.
+
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/x86/amx.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/fib_nexthops.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index 3615ef4a48bb..e1e2c8f3356f 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -368,9 +368,16 @@ static void req_xtiledata_perm(void)
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index 0d293391e9a44..b5a69ad191b07 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -2078,6 +2078,7 @@ basic_res()
+ 		"id 101 index 0 nhid 2 id 101 index 1 nhid 2 id 101 index 2 nhid 1 id 101 index 3 nhid 1"
+ 	log_test $? 0 "Dump all nexthop buckets in a group"
  
- static void validate_req_xcomp_perm(enum expected_result exp)
- {
--	unsigned long bitmask;
-+	unsigned long bitmask, expected_bitmask;
- 	long rc;
- 
-+	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
-+	if (rc) {
-+		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
-+	} else if (!(bitmask & XFEATURE_MASK_XTILECFG)) {
-+		fatal_error("ARCH_GET_XCOMP_PERM returns XFEATURE_XTILECFG off.");
-+	}
-+
- 	rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
- 	if (exp == FAIL_EXPECTED) {
- 		if (rc) {
-@@ -383,10 +390,15 @@ static void validate_req_xcomp_perm(enum expected_result exp)
- 		fatal_error("ARCH_REQ_XCOMP_PERM saw unexpected failure.\n");
- 	}
- 
-+	expected_bitmask = bitmask | XFEATURE_MASK_XTILEDATA;
-+
- 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
- 	if (rc) {
- 		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
--	} else if (bitmask & XFEATURE_MASK_XTILE) {
-+	} else if (bitmask != expected_bitmask) {
-+		fatal_error("ARCH_REQ_XCOMP_PERM saw a wrong bitmask: %lx, expected: %lx.\n",
-+			    bitmask, expected_bitmask);
-+	} else {
- 		printf("\tARCH_REQ_XCOMP_PERM is successful.\n");
- 	}
- }
++	sleep 0.1
+ 	(( $($IP -j nexthop bucket list id 101 |
+ 	     jq '[.[] | select(.bucket.idle_time > 0 and
+ 	                       .bucket.idle_time < 2)] | length') == 4 ))
 -- 
-2.17.1
+2.33.0
 
