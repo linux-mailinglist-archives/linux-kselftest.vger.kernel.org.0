@@ -2,91 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A94244784D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Nov 2021 02:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC2B447B14
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Nov 2021 08:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235805AbhKHBcd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Nov 2021 20:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
+        id S237912AbhKHHan (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Nov 2021 02:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235746AbhKHBcd (ORCPT
+        with ESMTP id S237827AbhKHHaT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Nov 2021 20:32:33 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C110C061570;
-        Sun,  7 Nov 2021 17:29:49 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id n8so14739449plf.4;
-        Sun, 07 Nov 2021 17:29:49 -0800 (PST)
+        Mon, 8 Nov 2021 02:30:19 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2271C061220
+        for <linux-kselftest@vger.kernel.org>; Sun,  7 Nov 2021 23:27:33 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x27so33990069lfu.5
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Nov 2021 23:27:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4vQkz8/qTxyaVcJnsKCjYn20bkfBzjk11/LAmMKs8G8=;
-        b=cVnOCLuY/4b5KleH6K15LMLmcjDuPBXCm2Je0e7arrPgllRLmyI8WPbC0tz27LU7qZ
-         WMIQEQEVpQFBucjcaNX83XUQkDJkk3PZ6Yv24CX1I4L+T92ik0oH11zTJ+PXg9lvGE6m
-         H/X/xZT/6vmCaQbYbzr+yNRuENNC94Z1f9TmXIU3YTh2xKwJi7+xHgGB6Ymtz1xo5bST
-         mCGPfBZ2lhwV6sI1tKZKtUAF0JwJYlnhN1d/0Z/aRLa8Nrdxt5KnOy8HOmmn6Xeufm25
-         2mnSMvexRyRK6fh+rvXVZrABq73NciZf/GkE39LrQZXlnvzhT5n/+Wh78PxAAO+bdteA
-         vo5A==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=lohGAXI96njXpZ5r6vgYlUkp2V68iRMzDV25uaLpmT1WmpX2h0YNNnPekuKOrJR7Hh
+         rCcmOUgGjsAkeHEvvQCkM6ux+TyqL0CqGbf0IPfL8V+eIKLF7r3X9QWFup/xVl2xV9qZ
+         NGc0LQ7JpvXhk+YTEHFaFd2QnuENE8mCWi0drmIQkANv1zf9DM6Bfjx/yF/A/b9RtJFU
+         CT2DuJeqJ7evq+rJKQgmUSCIg2GjkqvLZlnb0ekZ1/3u7apFf2k73Uqo2u8YZ8hKmOIw
+         ZGA3M8LZJFGSmW3P+nQyYMCLCtL13s+WCsnPOmCuuFd5xieMsN0vbLhindKIE3OfrP6U
+         BcYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4vQkz8/qTxyaVcJnsKCjYn20bkfBzjk11/LAmMKs8G8=;
-        b=iysn6Ok9yUr3cKoplJ6Dbm1Gmj3nVxRit+aVk8QBsmnXXYlH0tLShndtfmj/Ojb1UB
-         A+nflWfwBK3XFbpfADCEglJufOM3qewdKtvoObdQ7XWO7PKgwgs3MzGQsv0NoNenBdTo
-         wjOuWJWf/A3pfZ6sTWTh2bG+Y4uULyNhhQet806AR9sgB9Y9qjF+T0Bt8ybMYHVM4Mhd
-         U5eh3EpCGydlUOvW93oKEqNoJsNkXyqsoza7+KwIYVPJ+1IkWfEDt78WPtNJRMFSbjep
-         p19Dnv0zd27UtECW42GuWVYuIGz0EqjqtE/cGP4V4uv+FKsyF20cOaDR2B1BKfIUr6wa
-         c5KQ==
-X-Gm-Message-State: AOAM533zawj+c/vgITscU0n8tYNRxmjp4UjhzCGYIMtl6WZZddXVdE+T
-        NoymuQdkuABypNipRftzfdO/0NnRj3Yukw==
-X-Google-Smtp-Source: ABdhPJxxL7QOhLDR+/mBpUfVFdvYw0dHURcw0MPeWokwJlcuw3v16O0QJE3TTdDWyXxlaYnOihsfzQ==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr48208378pjb.10.1636334988748;
-        Sun, 07 Nov 2021 17:29:48 -0800 (PST)
-Received: from sol.lan (14-201-12-235.tpgi.com.au. [14.201.12.235])
-        by smtp.gmail.com with ESMTPSA id t4sm13800861pfj.166.2021.11.07.17.29.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Nov 2021 17:29:48 -0800 (PST)
-From:   Kent Gibson <warthog618@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, brgl@bgdev.pl,
-        linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com,
-        lizhijian@cn.fujitsu.com
-Cc:     Kent Gibson <warthog618@gmail.com>
-Subject: [PATCH 3/3] selftests: gpio: restore CFLAGS options
-Date:   Mon,  8 Nov 2021 09:28:51 +0800
-Message-Id: <20211108012851.7772-4-warthog618@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211108012851.7772-1-warthog618@gmail.com>
-References: <20211108012851.7772-1-warthog618@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=wwL6UDLKGFLa40N27n1uEzmzLxBx+6pHNthJjXTIpNIev1S76vFHcUhOYJ9R2S+Qew
+         tzh8WnQFaWz/p642nTgOzBaKZ7rI3QrAzDMpb/REFDKyMcNoO6hx1vCl2dDrWBhVuZMF
+         s87DqCrMq3dNVGYhPVE6M7E9Kf3AkjtksZU6GMZ1zgPGUk3zj8k8wk3raysLLNDCnMTF
+         qWC8pQ/Bh2PoVv+Vrqk4ocU72UoJwhQlJO2gFYA48yRNmVIDHJtYS3+J3SysTfZmrGui
+         g6Aw4S+cdyeKw+H5c3td+pSXJ6+7MPrlzOGFZpyHvdWCxyzqT/0LmaDMln18eBuKKB7I
+         dOgg==
+X-Gm-Message-State: AOAM5306ra1qgYP/J/Pz/2eX9wA4q9hn4o8Myu3sB+c7S7g/K2qzlDVW
+        blD+UeIxt0t28CIy++cPcESpsscE6VUzwYpobajhEhoqhJc=
+X-Google-Smtp-Source: ABdhPJwiROS9SRRNMvDLES4YHo6uT5d60ZUwIiFmBNAm9OxEfLgMU9cee9PqVQWim0XNVifN/Rk5vWcyMQ7rvBndYNE=
+X-Received: by 2002:a05:6402:557:: with SMTP id i23mr66769092edx.176.1636356441798;
+ Sun, 07 Nov 2021 23:27:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:27:21 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:27:21 +0000
+Message-ID: <CAJh0FjiFL7uihMBL6ckYO8FJ6tnzM+tBivU2c60yDbG14LZLeA@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All the CFLAGS options were incorrectly removed in the recent rework
-of the GPIO selftests.  While some of the flags were specific to the old
-implementation the remainder are still relevant.  Restore those options.
-
-Signed-off-by: Kent Gibson <warthog618@gmail.com>
----
- tools/testing/selftests/gpio/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 42ea7d2aa844..d7b312b44a62 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -3,6 +3,6 @@
- TEST_PROGS := gpio-mockup.sh
- TEST_FILES := gpio-mockup-sysfs.sh
- TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev
--CFLAGS += -I../../../../usr/include
-+CFLAGS += -O2 -g -Wall -I../../../../usr/include/
- 
- include ../lib.mk
--- 
-2.33.1
-
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
