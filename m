@@ -2,153 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2E9449BC8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Nov 2021 19:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BFD449F1A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Nov 2021 00:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbhKHSna (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Nov 2021 13:43:30 -0500
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:48965 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235876AbhKHSn3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Nov 2021 13:43:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636396842;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=zlgYv3PRuqihfmEq0tcYc2yH196N8NTvfbT/Leq3UpI=;
-        b=NcJq+M608myNGTFfAhi6s0zw311kQj85apY4k9JeeR6euunJvyU0zvzUXXV4Fzfj
-        gztUrqWP7DyAuI6dJTzLOtEWbrLfjMUSSCev674zt9htpwHG3YkHCwHnPfkrpLxCDuA
-        iaWEqr88m/k0NnCu43Yu/rSysrB1gTxopOfmntTY=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636396842;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=zlgYv3PRuqihfmEq0tcYc2yH196N8NTvfbT/Leq3UpI=;
-        b=jcNVWxwhcX9b6P+D1txkGcHYFndfufBqx+DHA15h8hyb3jFDg6PaoOH/+RrTjwh+
-        /Ug0asua3XerUJjHKXGprnnAdxvuvn/HfKdb+lLvVyvzErZSKFhxiILRwaDIIVhIjkK
-        5pyCq6DLdVsijIf6Og486WLYkij1m1n8rVOL+ePg=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211108
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017d00da3bdb-667be892-94a5-4fbb-9f7f-d2fd77eb11b0-000000@email.amazonses.com>
-Date:   Mon, 8 Nov 2021 18:40:42 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.08-54.240.8.29
+        id S240930AbhKHXos (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Nov 2021 18:44:48 -0500
+Received: from mga03.intel.com ([134.134.136.65]:5566 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240902AbhKHXor (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Nov 2021 18:44:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10162"; a="232292396"
+X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
+   d="scan'208";a="232292396"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2021 15:42:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
+   d="scan'208";a="641642471"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Nov 2021 15:42:01 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com,
+        bp@alien8.de, mingo@redhat.com, yang.zhong@intel.com,
+        jing2.liu@intel.com, chang.seok.bae@intel.com,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/2] selftests/x86/amx: Update the ARCH_REQ_XCOMP_PERM test
+Date:   Mon,  8 Nov 2021 15:35:01 -0800
+Message-Id: <20211108233501.11516-3-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211108233501.11516-1-chang.seok.bae@intel.com>
+References: <20211108233501.11516-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: e844ee04dee0cf1b6d97183c12266c7726d73636
-* git describe: next-20211108
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211108
+Update the arch_prctl test to check the permission bitmap whether the
+requested feature is added as expected or not.
 
-## Regressions (compared to next-20211106)
-* i386, kselftest-net
-  - net.tls
-  - net.tls.tls.12_aes_gcm.send_then_sendfile
-  - net.tls.tls.12_chacha.send_then_sendfile
-  - net.tls.tls.13_aes_gcm.send_then_sendfile
-  - net.tls.tls.13_chacha.send_then_sendfile
-  - net.tls.tls.13_sm4_ccm.send_then_sendfile
-  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+Every non-dynamic feature that is enabled is permitted already for use.
+TILECFG is not dynamic feature. Ensure the bit is always on from
+ARCH_GET_XCOMP_PERM.
 
-* qemu_x86_64, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ tools/testing/selftests/x86/amx.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index 3615ef4a48bb..e1e2c8f3356f 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -368,9 +368,16 @@ static void req_xtiledata_perm(void)
+ 
+ static void validate_req_xcomp_perm(enum expected_result exp)
+ {
+-	unsigned long bitmask;
++	unsigned long bitmask, expected_bitmask;
+ 	long rc;
+ 
++	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
++	if (rc) {
++		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
++	} else if (!(bitmask & XFEATURE_MASK_XTILECFG)) {
++		fatal_error("ARCH_GET_XCOMP_PERM returns XFEATURE_XTILECFG off.");
++	}
++
+ 	rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
+ 	if (exp == FAIL_EXPECTED) {
+ 		if (rc) {
+@@ -383,10 +390,15 @@ static void validate_req_xcomp_perm(enum expected_result exp)
+ 		fatal_error("ARCH_REQ_XCOMP_PERM saw unexpected failure.\n");
+ 	}
+ 
++	expected_bitmask = bitmask | XFEATURE_MASK_XTILEDATA;
++
+ 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
+ 	if (rc) {
+ 		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
+-	} else if (bitmask & XFEATURE_MASK_XTILE) {
++	} else if (bitmask != expected_bitmask) {
++		fatal_error("ARCH_REQ_XCOMP_PERM saw a wrong bitmask: %lx, expected: %lx.\n",
++			    bitmask, expected_bitmask);
++	} else {
+ 		printf("\tARCH_REQ_XCOMP_PERM is successful.\n");
+ 	}
+ }
+-- 
+2.17.1
 
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211106)
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
-
-
-## Test result summary
-total: 3085, pass: 1794, fail: 274, skip: 1017, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
