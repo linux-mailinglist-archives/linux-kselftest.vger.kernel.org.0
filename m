@@ -2,288 +2,316 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D40449AB2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Nov 2021 18:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31FA449B50
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Nov 2021 19:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239249AbhKHR0N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Nov 2021 12:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239244AbhKHR0M (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Nov 2021 12:26:12 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB05C061714
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Nov 2021 09:23:28 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id i12so17714119ila.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Nov 2021 09:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZPGKd4TGs0XA53ASidhzNrF2fiRX7U5gxFXqgn9DTGg=;
-        b=mmil4uIuW0TMFJfUrD8Awk1ufClyQY0B84wJmUVeU8dcqNzLmhiHK9a0H63pwIk8J6
-         SHGq4db3QsIywsTOr7SIjKJdT6gjKBvr70pW5PIt18rOxFb0DxfP8OIUbqr4gvUqALRt
-         GnwuUBXVKJ6SuOBxIamxE1lrg9o5LM87FdRjpT1IemhJa6UXXCPZFdjZ7i3yEVZmqXF0
-         cZleouHPFCdQei12sI4+6ks2t9JSIR9zVLp0RZVt/cHQ9k8bd+qPcXOH1HIQOqdJ9Cmf
-         707/4u6rBIKlFLUqBEO4kgeb/wW87bzFpktEuOdz3qUmkwp1Uuro+FzQcNkMJTZr+dBe
-         5ShA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZPGKd4TGs0XA53ASidhzNrF2fiRX7U5gxFXqgn9DTGg=;
-        b=1R53dy+H5ix4dlfR62ttdpR1k9KE2Xl18KEnaYhtQSCBOCR7WnfHeJ8S2fcOru1+2v
-         KeMGNsy51xTb0UMvX1zE7YyDDmGlm4TOkCVmDv7UmN57kMIZVmHg3HRECP/h6rqtkBNt
-         tjnE569nmb+kGDlaMTXdYP1c9DNa8eonHUriPG2QHtFgNNLhD4qGx7rPl9z2S9Rap6NS
-         KzMAzvKaxU0lXl82YnYKXwvFAHXvhnVmAF0MRxx93mFHPFP9lIiIi+AxtgvUYcrg9sUG
-         AG82/IlBL8DRDBj6A2W+SzHdYRb/jHXhYi5mEviivaE6oOTitDyLM417al4xvmixpfbl
-         LKVg==
-X-Gm-Message-State: AOAM532C90+KUZg3gPytqZm5FT9Z55DvrZ1+/PuppCTF0SlCSXHuP5dW
-        ZLV4NT9++Re/w8O+Fftk0stmUc8QS6UNKHvKWMI5k9h2Flw=
-X-Google-Smtp-Source: ABdhPJyq21dt4bsZMhivX/kONiVYXFOjQ5lZPDVxhT3N/tz/XXP/QLHoOjnYzwHNtmlH135DU+/ONIqIFBpneCSeAg4=
-X-Received: by 2002:a05:6e02:20ea:: with SMTP id q10mr515654ilv.10.1636392207384;
- Mon, 08 Nov 2021 09:23:27 -0800 (PST)
+        id S234513AbhKHSEG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Nov 2021 13:04:06 -0500
+Received: from mail-dm6nam11on2043.outbound.protection.outlook.com ([40.107.223.43]:15456
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234353AbhKHSEF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Nov 2021 13:04:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HwVlu/FKUbz4jFcwf3GBSDrwdc1MZjXSFB9PjrCrFi9oeAx707kSFGiYfo5oIEU01CbuoPdkvtxJWBJo5OzcyFyqitw+LHmNQDTRw0SUDR6sYyOZsErmfbfsqt3r7YElvwYFl1QwDEsuTW1hpXIa3qkfNDEU7bDcB9QyYRX3WXJ3DrqxA+X9n+R6fAqJyGmarVN/8ZkAjjv2CsXITu7r4XRuUQdb9/s855Sdp/3/OXscQUDOHGAEJt88Yf2eej+bo4iikwfsSi6T5Moz4GVfb2OfIImYdPRUa1NrBw28GB7kHmP21Uy80TshO5aXM+2SBlO534iowxEJpt/Xzlwy8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ASNxz1B54h66Ugm1xIAUiM253rD9IT3qyFa0b2zgC2Q=;
+ b=D5Pdm9H5iwZUNJeBFyOTH215JcI/18v4C9GGlvEEYj4L7wFj4Yj6XgkpT1Xz3An7pJEldWfTs/99Pfp+fmyAUS7RDWx3p/6c0kqR5SpVRmiFl87dhfeWHWTPcD1oLuWnybELNDMeJ0L2fmMnh/iTMcar0C+17xdNyYam1xBTgxdVGHQuCLq4jCoCqqMdYUYgYVjYFe7K+AwhltyLb/0Bmn/caIz9DLB1cLCYuekLZ6FIV0H/Ul41/l7Y3D53h8l02tu07fmWINZIyjRlSONG85JwrFQOe0p8j2ojGKk2gvHXT2WEuc+Rl5p/qqDMROxWT/5164ziIfyA0FvrB/cpQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ASNxz1B54h66Ugm1xIAUiM253rD9IT3qyFa0b2zgC2Q=;
+ b=P39QdYA/9IguLvmb0l5P9+Fug/0xqcxIMLyQulpimcnJ8B6xoY+wLkLKRT8raPl27qHly8p/u4zbTSyBnEYOhF76XRXZ9qr7vLQoAbQ1hThKyqVf9nq5GllLY5MEtDMH4Z+HpjUcpq38XOXH1Fh/L9gF7mlq181U+IAE3B8o7K+2wPPkIoMK2vQuQyMFi6clWaYNwOn3wiKbzrQ+PyUxA5hxGlouPqWybsGVY9qAk3Ma7+YxEKlEA8qtT7DNPNy8EtODddvpwzbGC8Wf6puYZeITYwhZVE04JrCPC4rE35EH/tB5mCgS2xhERjVRSUdx3BPSaQMb6iixOhI3IIyiDw==
+Received: from BN6PR11CA0066.namprd11.prod.outlook.com (2603:10b6:404:f7::28)
+ by SA0PR12MB4589.namprd12.prod.outlook.com (2603:10b6:806:92::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.13; Mon, 8 Nov
+ 2021 18:01:18 +0000
+Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:f7:cafe::ce) by BN6PR11CA0066.outlook.office365.com
+ (2603:10b6:404:f7::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.10 via Frontend
+ Transport; Mon, 8 Nov 2021 18:01:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4669.10 via Frontend Transport; Mon, 8 Nov 2021 18:01:18 +0000
+Received: from yaviefel (172.20.187.6) by HQMAIL107.nvidia.com (172.20.187.13)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 8 Nov 2021 18:00:22
+ +0000
+References: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
+ <20211105205331.2024623-7-maciej.machnikowski@intel.com>
+User-agent: mu4e 1.4.15; emacs 27.2
+From:   Petr Machata <petrm@nvidia.com>
+To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
+CC:     <netdev@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+        <richardcochran@gmail.com>, <abyagowi@fb.com>,
+        <anthony.l.nguyen@intel.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <idosch@idosch.org>, <mkubecek@suse.cz>, <saeed@kernel.org>,
+        <michael.chan@broadcom.com>
+Subject: Re: [PATCH v2 net-next 6/6] docs: net: Add description of SyncE
+ interfaces
+In-Reply-To: <20211105205331.2024623-7-maciej.machnikowski@intel.com>
+Date:   Mon, 8 Nov 2021 19:00:19 +0100
+Message-ID: <87r1bqcyto.fsf@nvidia.com>
 MIME-Version: 1.0
-References: <20211106013058.2621799-1-dlatypov@google.com> <20211106013058.2621799-2-dlatypov@google.com>
- <CABVgOSnQ9qGtu0nEKePH+Zb1oR2osmVh791zyQ9P61SNznryrw@mail.gmail.com>
-In-Reply-To: <CABVgOSnQ9qGtu0nEKePH+Zb1oR2osmVh791zyQ9P61SNznryrw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 8 Nov 2021 09:23:16 -0800
-Message-ID: <CAGS_qxr3qd4b=00B76qN5GpFBa9aYa4UBFPvR505F3PbF5HSmg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: tool: add --kconfig_add to allow easily
- tweaking kunitconfigs
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [172.20.187.6]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e2aed0e7-f0ea-4e3b-49e0-08d9a2e1c3b8
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4589:
+X-Microsoft-Antispam-PRVS: <SA0PR12MB458944C4DB91829970DACE40D6919@SA0PR12MB4589.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LFvYvUS7/LVEWKJQC8KEp842jp1TEHNtSPr3xvtuf5IfUJNeEmI437kRuf8xFg0JIjuw7zXgEgbbtf1Fwm7B8YKOytmjm+agbQECSgJ7UhTOEFfgSTkIHV5ez2HItJcASENTCBVLq/XwGbFaRn5PdsI+7S9tNu/48XM1CCe3tjynmR95+GWoQeZvqwRrk373lO8+ZS3fDjjVz0MQKuLFHKg+7W6Fs0whoDvIuSg5ltuT1CaRNN3SZIDqzHtuFurJ1KZv90mU7YK6gYM/aFIRXAKYQYqxgrQT7hTARXqy14o0tELb+WYJHcVL8B32HMCa0QVe5w6GmEVjFFOIXetU/I8Hp7LQCN3VEmbw4UjUAk/NRyJ4Fq0KmeGedKOVZxEXnKn8LjLO9GsDf0Fjn4c+HapronLml7Jxv3wYWNpelaK5wPiMh+ZOFVknwyvZEcEvfmdmW4kSkojw/tOhgpzjn/XDfZdNJNhB4IZU1zHfD3ckDPlxAQU5PuyowrwfBXVnJPvOxKKZ9uWlzxHfLzvMssKUp8EFr2wtBV+b6jFR+T3qs8EZXvMqFZlACBriOk60wzYStkHTuYtTyLop61IG3aCijjUbT9G3DlJ2kEcfFX1BWuQebLwBWVsJK9nqMDO2cRpK44Ne7ypYY7hf6lOZJeEf34hLyF0fPGW6D70hMbFF+mtB4wprd2U+ORI3PDuoc1W/uTLNxaw53mPru1WAmA==
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(7416002)(36756003)(26005)(8676002)(70206006)(336012)(5660300002)(7636003)(70586007)(316002)(16526019)(186003)(82310400003)(4326008)(54906003)(83380400001)(508600001)(86362001)(2906002)(6916009)(36860700001)(356005)(426003)(47076005)(6666004)(2616005)(8936002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2021 18:01:18.2602
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2aed0e7-f0ea-4e3b-49e0-08d9a2e1c3b8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4589
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 5, 2021 at 9:07 PM David Gow <davidgow@google.com> wrote:
+
+Maciej Machnikowski <maciej.machnikowski@intel.com> writes:
+
+> Add Documentation/networking/synce.rst describing new RTNL messages
+> and respective NDO ops supporting SyncE (Synchronous Ethernet).
 >
-> On Sat, Nov 6, 2021 at 9:31 AM 'Daniel Latypov' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > E.g. run tests but with KASAN
-> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
+> Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
+> ---
+>  Documentation/networking/synce.rst | 117 +++++++++++++++++++++++++++++
+>  1 file changed, 117 insertions(+)
+>  create mode 100644 Documentation/networking/synce.rst
 >
-> This is very neat, thank you. I'm definitely going to use this quite a bit.
->
-> My only real note is that we'll need to add some documentation (but
-> since the KUnit documentation is being reworked at the moment, I'm
-> okay with doing that later to avoid merge conflicts).
+> diff --git a/Documentation/networking/synce.rst b/Documentation/networkin=
+g/synce.rst
+> new file mode 100644
+> index 000000000000..4ca41fb9a481
+> --- /dev/null
+> +++ b/Documentation/networking/synce.rst
+> @@ -0,0 +1,117 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Synchronous Ethernet
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Synchronous Ethernet networks use a physical layer clock to syntonize
+> +the frequency across different network elements.
+> +
+> +Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+> +Equipment Clock (EEC) and a PHY that has dedicated outputs of recovered =
+clocks
+> +and a dedicated TX clock input that is used as to transmit data to other=
+ nodes.
+> +
+> +The SyncE capable PHY is able to recover the incomning frequency of the =
+data
+> +stream on RX lanes and redirect it (sometimes dividing it) to recovered
+> +clock outputs. In SyncE PHY the TX frequency is directly dependent on the
+> +input frequency - either on the PHY CLK input, or on a dedicated
+> +TX clock input.
+> +
+> +      =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90
+> +      =E2=94=82 RX        =E2=94=82 TX       =E2=94=82
+> +  1   =E2=94=82 lanes     =E2=94=82 lanes    =E2=94=82 1
+> +  =E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=9C=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90    =E2=94=82          =E2=94=9C=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA
+> +  2   =E2=94=82      =E2=94=82    =E2=94=82          =E2=94=82 2
+> +  =E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=9C=E2=94=80=E2=94=80=E2=94=
+=90   =E2=94=82    =E2=94=82          =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=96=BA
+> +  3   =E2=94=82  =E2=94=82   =E2=94=82    =E2=94=82          =E2=94=82 3
+> +  =E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=9C=E2=94=80=E2=96=BC=E2=96=
+=BC   =E2=96=BC    =E2=94=82          =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=96=BA
+> +      =E2=94=82 =E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80  =
+  =E2=94=82          =E2=94=82
+> +      =E2=94=82 \____/    =E2=94=82          =E2=94=82
+> +      =E2=94=94=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=BC=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98
+> +        1=E2=94=82 2=E2=94=82        =E2=96=B2
+> + RCLK out=E2=94=82  =E2=94=82        =E2=94=82 TX CLK in
+> +         =E2=96=BC  =E2=96=BC        =E2=94=82
+> +       =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=90
+> +       =E2=94=82                 =E2=94=82
+> +       =E2=94=82       EEC       =E2=94=82
+> +       =E2=94=82                 =E2=94=82
+> +       =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=98
+> +
+> +The EEC can synchronize its frequency to one of the synchronization inpu=
+ts
+> +either clocks recovered on traffic interfaces or (in advanced deployment=
+s)
+> +external frequency sources.
+> +
+> +Some EEC implementations can select synchronization source through
+> +priority tables and synchronization status messaging and provide necessa=
+ry
+> +filtering and holdover capabilities.
+> +
+> +The following interface can be applicable to diffferent packet network t=
+ypes
+> +following ITU-T G.8261/G.8262 recommendations.
+> +
+> +Interface
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The following RTNL messages are used to read/configure SyncE recovered
+> +clocks.
+> +
+> +RTM_GETRCLKRANGE
+> +-----------------
+> +Reads the allowed pin index range for the recovered clock outputs.
+> +This can be aligned to PHY outputs or to EEC inputs, whichever is
+> +better for a given application.
+> +Will call the ndo_get_rclk_range function to read the allowed range
+> +of output pin indexes.
+> +Will call ndo_get_rclk_range to determine the allowed recovered clock
+> +range and return them in the IFLA_RCLK_RANGE_MIN_PIN and the
+> +IFLA_RCLK_RANGE_MAX_PIN attributes
+> +
+> +RTM_GETRCLKSTATE
+> +-----------------
+> +Read the state of recovered pins that output recovered clock from
+> +a given port. The message will contain the number of assigned clocks
+> +(IFLA_RCLK_STATE_COUNT) and an N pin indexes in IFLA_RCLK_STATE_OUT_IDX
+> +To support multiple recovered clock outputs from the same port, this mes=
+sage
+> +will return the IFLA_RCLK_STATE_COUNT attribute containing the number of
+> +active recovered clock outputs (N) and N IFLA_RCLK_STATE_OUT_IDX attribu=
+tes
+> +listing the active output indexes.
+> +This message will call the ndo_get_rclk_range to determine the allowed
+> +recovered clock indexes and then will loop through them, calling
+> +the ndo_get_rclk_state for each of them.
 
-Yeah, there's that and I was also unsure where exactly to mention it.
-I'd also want there to be the caveat about how removing the option
-won't trigger a rebuild.
-The part where we have that right now is really early on and doesn't
-need more stuff added there:
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html#creating-a-kunitconfig
+Let me make sure I understand the model that you propose. Specifically
+from the point of view of a multi-port device, because that's my
+immediate use case.
 
->
-> > This also works with --kunitconfig
-> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
->
-> It's also worth noting that this can be appended multiple times to set
-> multiple options, which is useful
+RTM_GETRCLKRANGE would report number of "pins" that matches the number
+of lanes in the system. So e.g. a 32-port switch, where each port has 4
+lanes, would give a range of [1; 128], inclusive. (Or maybe [0; 128) or
+whatever.)
 
-Ah yeah, this could be called out in the commit desc if we want a v2.
-Checking the examples in the link down below, TuxMake doesn't actually
-include one with it being repeated.
-I had been banking on readers of this message assuming that it could
-be repeated either from previous familiarity with TuxMake or by
-clicking that link.
+RTM_GETRCLKSTATE would then return some subset of those pins, depending
+on which lanes actually managed to establish a connection and carry a
+valid clock signal. So, say, [1, 2, 3, 4] if the first port has e.g. a
+100Gbps established.
 
-But for tweaks that require multiple options, I'm personally going to
-stick with --kunitconfig and heredocs.
-E.g. coverage requires appending 3 kconfigs, so I'm sticking with
+> +
+> +RTM_SETRCLKSTATE
+> +-----------------
+> +Sets the redirection of the recovered clock for a given pin. This message
+> +expects one attribute:
+> +struct if_set_rclk_msg {
+> +	__u32 ifindex; /* interface index */
+> +	__u32 out_idx; /* output index (from a valid range)
+> +	__u32 flags; /* configuration flags */
+> +};
+> +
+> +Supported flags are:
+> +SET_RCLK_FLAGS_ENA - if set in flags - the given output will be enabled,
+> +		     if clear - the output will be disabled.
 
-./tools/testing/kunit/kunit.py run --make_options=CC=/usr/bin/gcc-6
---kunitconfig /dev/stdin <<EOF
-CONFIG_KUNIT=y
-CONFIG_KUNIT_ALL_TESTS=y
-CONFIG_DEBUG_KERNEL=y
-CONFIG_DEBUG_INFO=y
-CONFIG_GCOV=y
-EOF
-
->
-> > This flag is inspired by TuxMake's --kconfig-add, see
-> > https://gitlab.com/Linaro/tuxmake#examples.
-> >
-> > Our version just uses "_" as the delimiter for consistency with
-> > pre-existing flags like --build_dir, --make_options, --kernel_args, etc.
-> >
-> > Note: this does make it easier to run into a pre-existing edge case:
-> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64 --kconfig_add=CONFIG_KASAN=y
-> > $ ./tools/testing/kunit/kunit.py run --arch=x86_64
-> > This second invocation ^ still has KASAN enabled!
->
-> This behaviour is quite useful, and actually means we can turn on
-> individual items with
-> $ ./tools/testing/kunit/kunit.py config --kconfig_add=<option>
-
-Yes, that also works.
-I didn't really want to call that out, however.
-
-I ultimately would like this option to make it easier to have kunit
-commands be more declarative and less dependent on state.
-
-E.g. instead of
-$ cp fs/ext4/.kunitconfig .kunit/.kunitconfig
-$ echo "CONFIG_KASAN=y" >> .kunit/.kunitconfig
-$ ./tools/testing/kunit/kunit.py run --arch=x86_64
-
-it's now just one line and I'm less likely to miss a step, etc.
-$ ./tools/testing/kunit/kunit.py run --arch=x86_64
---kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
-
-A user could alternatively do this via
-$ ./tools/testing/kunit/kunit.py config --arch=x86_64
---kunitconfig=fs/ext4 --kconfig_add=CONFIG_KASAN=y
-$ ./tools/testing/kunit/kunit.py config --arch=x86_64
---kconfig_add=CONFIG_ANOTHER_OPTION=y
-$ ./tools/testing/kunit/kunit.py build
-$ ./tools/testing/kunit/kunit.py exec --arch=x86_64
+OK, so here I set up the tracking. ifindex tells me which EEC to
+configure, out_idx is the pin to track, flags tell me whether to set up
+the tracking or tear it down. Thus e.g. on port 2, track pin 2, because
+I somehow know that lane 2 has the best clock.
 
 
->
-> > kunit.py won't call olddefconfig if our current .config is already a
-> > superset of the provided kunitconfig.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
->
-> Looks good.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
->
-> > ---
-> >  tools/testing/kunit/kunit.py           |  8 ++++++++
-> >  tools/testing/kunit/kunit_kernel.py    |  5 +++++
-> >  tools/testing/kunit/kunit_tool_test.py | 18 ++++++++++++++++++
-> >  3 files changed, 31 insertions(+)
-> >
-> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > index 68e6f461c758..be58f4c93806 100755
-> > --- a/tools/testing/kunit/kunit.py
-> > +++ b/tools/testing/kunit/kunit.py
-> > @@ -280,6 +280,10 @@ def add_common_opts(parser) -> None:
-> >                              ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
-> >                              'will get  automatically appended.',
-> >                              metavar='kunitconfig')
-> > +       parser.add_argument('--kconfig_add',
-> > +                            help='Additional Kconfig options to append to the '
-> > +                            '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
-> > +                           action='append')
-> >
-> >         parser.add_argument('--arch',
-> >                             help=('Specifies the architecture to run tests under. '
-> > @@ -398,6 +402,7 @@ def main(argv, linux=None):
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
-> >                                         kunitconfig_path=cli_args.kunitconfig,
-> > +                                       kconfig_add=cli_args.kconfig_add,
-> >                                         arch=cli_args.arch,
-> >                                         cross_compile=cli_args.cross_compile,
-> >                                         qemu_config_path=cli_args.qemu_config)
-> > @@ -423,6 +428,7 @@ def main(argv, linux=None):
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
-> >                                         kunitconfig_path=cli_args.kunitconfig,
-> > +                                       kconfig_add=cli_args.kconfig_add,
-> >                                         arch=cli_args.arch,
-> >                                         cross_compile=cli_args.cross_compile,
-> >                                         qemu_config_path=cli_args.qemu_config)
-> > @@ -439,6 +445,7 @@ def main(argv, linux=None):
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
-> >                                         kunitconfig_path=cli_args.kunitconfig,
-> > +                                       kconfig_add=cli_args.kconfig_add,
-> >                                         arch=cli_args.arch,
-> >                                         cross_compile=cli_args.cross_compile,
-> >                                         qemu_config_path=cli_args.qemu_config)
-> > @@ -457,6 +464,7 @@ def main(argv, linux=None):
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
-> >                                         kunitconfig_path=cli_args.kunitconfig,
-> > +                                       kconfig_add=cli_args.kconfig_add,
-> >                                         arch=cli_args.arch,
-> >                                         cross_compile=cli_args.cross_compile,
-> >                                         qemu_config_path=cli_args.qemu_config)
-> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> > index 51ee6e5dae91..7d459d6d6ff2 100644
-> > --- a/tools/testing/kunit/kunit_kernel.py
-> > +++ b/tools/testing/kunit/kunit_kernel.py
-> > @@ -224,6 +224,7 @@ class LinuxSourceTree(object):
-> >               build_dir: str,
-> >               load_config=True,
-> >               kunitconfig_path='',
-> > +             kconfig_add: Optional[List[str]]=None,
-> >               arch=None,
-> >               cross_compile=None,
-> >               qemu_config_path=None) -> None:
-> > @@ -249,6 +250,10 @@ class LinuxSourceTree(object):
-> >                                 shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, kunitconfig_path)
-> >
-> >                 self._kconfig = kunit_config.parse_file(kunitconfig_path)
-> > +               if kconfig_add:
-> > +                       kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
-> > +                       self._kconfig.merge_in_entries(kconfig)
-> > +
-> >
-> >         def clean(self) -> bool:
-> >                 try:
-> > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> > index 4ec70e41ec5a..7e42a7c27987 100755
-> > --- a/tools/testing/kunit/kunit_tool_test.py
-> > +++ b/tools/testing/kunit/kunit_tool_test.py
-> > @@ -334,6 +334,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
-> >                                 pass
-> >                         kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
-> >
-> > +       def test_kconfig_add(self):
-> > +               tree = kunit_kernel.LinuxSourceTree('', kconfig_add=['CONFIG_NOT_REAL=y'])
-> > +               self.assertIn(kunit_config.KconfigEntry('NOT_REAL', 'y'), tree._kconfig.entries())
-> > +
-> >         def test_invalid_arch(self):
-> >                 with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
-> >                         kunit_kernel.LinuxSourceTree('', arch='invalid')
-> > @@ -540,6 +544,7 @@ class KUnitMainTest(unittest.TestCase):
-> >                 # Just verify that we parsed and initialized it correctly here.
-> >                 mock_linux_init.assert_called_once_with('.kunit',
-> >                                                         kunitconfig_path='mykunitconfig',
-> > +                                                       kconfig_add=None,
-> >                                                         arch='um',
-> >                                                         cross_compile=None,
-> >                                                         qemu_config_path=None)
-> > @@ -551,6 +556,19 @@ class KUnitMainTest(unittest.TestCase):
-> >                 # Just verify that we parsed and initialized it correctly here.
-> >                 mock_linux_init.assert_called_once_with('.kunit',
-> >                                                         kunitconfig_path='mykunitconfig',
-> > +                                                       kconfig_add=None,
-> > +                                                       arch='um',
-> > +                                                       cross_compile=None,
-> > +                                                       qemu_config_path=None)
-> > +
-> > +       @mock.patch.object(kunit_kernel, 'LinuxSourceTree')
-> > +       def test_run_kconfig_add(self, mock_linux_init):
-> > +               mock_linux_init.return_value = self.linux_source_mock
-> > +               kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
-> > +               # Just verify that we parsed and initialized it correctly here.
-> > +               mock_linux_init.assert_called_once_with('.kunit',
-> > +                                                       kunitconfig_path=None,
-> > +                                                       kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
-> >                                                         arch='um',
-> >                                                         cross_compile=None,
-> >                                                         qemu_config_path=None)
-> > --
-> > 2.34.0.rc0.344.g81b53c2807-goog
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20211106013058.2621799-2-dlatypov%40google.com.
+If the above is broadly correct, I've got some questions.
+
+First, what if more than one out_idx is set? What are drivers / HW meant
+to do with this? What is the expected behavior?
+
+Also GETRCLKSTATE and SETRCLKSTATE have a somewhat different scope: one
+reports which pins carry a clock signal, the other influences tracking.
+That seems wrong. There also does not seems to be an UAPI to retrieve
+the tracking settings.
+
+Second, as a user-space client, how do I know that if ports 1 and 2 both
+report pin range [A; B], that they both actually share the same
+underlying EEC? Is there some sort of coordination among the drivers,
+such that each pin in the system has a unique ID?
+
+Further, how do I actually know the mapping from ports to pins? E.g. as
+a user, I might know my master is behind swp1. How do I know what pins
+correspond to that port? As a user-space tool author, how do I help
+users to do something like "eec set clock eec0 track swp1"?
+
+Additionally, how would things like external GPSs or 1pps be modeled? I
+guess the driver would know about such interface, and would expose it as
+a "pin". When the GPS signal locks, the driver starts reporting the pin
+in the RCLK set. Then it is possible to set up tracking of that pin.
+
+
+It seems to me it would be easier to understand, and to write user-space
+tools and drivers for, a model that has EEC as an explicit first-class
+object. That's where the EEC state naturally belongs, that's where the
+pin range naturally belongs. Netdevs should have a reference to EEC and
+pins, not present this information as if they own it. A first-class EEC
+would also allow to later figure out how to hook up PHC and EEC.
+
+> +
+> +RTM_GETEECSTATE
+> +----------------
+> +Reads the state of the EEC or equivalent physical clock synchronizer.
+> +This message returns the following attributes:
+> +IFLA_EEC_STATE - current state of the EEC or equivalent clock generator.
+> +		 The states returned in this attribute are aligned to the
+> +		 ITU-T G.781 and are:
+> +		  IF_EEC_STATE_INVALID - state is not valid
+> +		  IF_EEC_STATE_FREERUN - clock is free-running
+> +		  IF_EEC_STATE_LOCKED - clock is locked to the reference,
+> +		                        but the holdover memory is not valid
+> +		  IF_EEC_STATE_LOCKED_HO_ACQ - clock is locked to the reference
+> +		                               and holdover memory is valid
+> +		  IF_EEC_STATE_HOLDOVER - clock is in holdover mode
+> +State is read from the netdev calling the:
+> +int (*ndo_get_eec_state)(struct net_device *dev, enum if_eec_state *stat=
+e,
+> +			 u32 *src_idx, struct netlink_ext_ack *extack);
+> +
+> +IFLA_EEC_SRC_IDX - optional attribute returning the index of the referen=
+ce that
+> +		   is used for the current IFLA_EEC_STATE, i.e., the index of
+> +		   the pin that the EEC is locked to.
+> +
+> +Will be returned only if the ndo_get_eec_src is implemented.
