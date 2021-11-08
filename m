@@ -2,70 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 484A144754B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Nov 2021 20:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1F4447844
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Nov 2021 02:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233703AbhKGTmw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Nov 2021 14:42:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233578AbhKGTmv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Nov 2021 14:42:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 226B261265;
-        Sun,  7 Nov 2021 19:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636314008;
-        bh=IRUCVWRed4jolBeSzyLEhMzJk8JPJsIBESOG/kEdXNQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JMhXoz59OVmWCM/svmqjgHKUG8HulaXNPzSWlk5HASFTi2c2+MZ29ps/vzfkEBABG
-         QJWcF6j3fr+aZr562Nsb/F6o2ob0rkQgtjOx1srGJAVZMAtnSfif61w3rEaNoNAZK5
-         DyGanFzPq8TFKFLvXJ+fzNrrm18tTIzNfJhOJ1TMkBy+1VucJnxVYAh8yEAxuKcHyT
-         ipeZuaySboZ859q2u5lBv/wQILWwgUzgPU3j4pEEjfgIo+yKXGOEFmNs3yWJjcJq+H
-         o2e5dZqP7kjs6R0ifUc3vpGg0dMiOmM+wroZCoGAzxdXzypKXOpwfdbeKavyhZF8X4
-         YRxrxmJ+6jdqg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0345A60AA2;
-        Sun,  7 Nov 2021 19:40:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235634AbhKHBcE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 7 Nov 2021 20:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235571AbhKHBcD (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 7 Nov 2021 20:32:03 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E475C061714;
+        Sun,  7 Nov 2021 17:29:20 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so3347666pjj.0;
+        Sun, 07 Nov 2021 17:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N2eiSTCEhkv2QL1WcuadqsLjGZwmJNxv+T2Gs1korUk=;
+        b=A6r4IiCMUR9X5EHkxzOU3Udir/aKoS5FQoclznj/pDJyjFkRccXYerbFQbawZIMSUD
+         HeFHCdk4OYs85ddtqWY87XZCjBHiqD+/AXELmBqmyMqII0b5yZZkvQYFcY5+3UGwgqBE
+         CGOkSOzrFsfDuNa+bcCgFfFKfkbkBEOrkjoParxBJB1G0guNwuY8eA702jLk2Pxfpy41
+         6WZ30eRbP+ygwm1UZASITd3Rhm5uXasBUw7nrUirLHgucsNz2MrN54cRoMJFoppalpjk
+         szfyWEQCt88sH4pkSiIIxwPHAXdVcoPH+wccBWP59GOG6e7sNyBtPfvt/V9FXQmFBvga
+         3j3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N2eiSTCEhkv2QL1WcuadqsLjGZwmJNxv+T2Gs1korUk=;
+        b=I7OCIK44RIVkw73ZoQymodMFctMgzqp39WyO2Cjs4NETtFUlth2IauZlBHmA0wRVx4
+         DLsMxJh9DjjVePf6jnABDZNk81lBjE2Q/oSOCjr46hVE7LiFdjb6EQNITsXQBFcNXMbG
+         mp0AISTVtBVAFdsn9SW7Kt/ME6EN9uAzsNY+0OlPB72dtsJMHm+CZqkRkUgrd+gPVmo3
+         1rNHBMYIqS7ioIWx3ku4o9N8x3+WwaI8kyMGDi0KIlPOqc4qE60qTdtsITp4YmZH/o9v
+         WuKKhawz32Z5ZmG5AN+2tYDHx8U4sUUtcHDHJERNced4MYXOrOhSsf8EongqqaJmnwld
+         6JKg==
+X-Gm-Message-State: AOAM530d664aXzJVviacidN+yd/7pMlifz+FLARdYicqK1uQvcIbJTIF
+        fFBrB4Bkq+Wfo0bQ7+xPD4VqPVGsWd9+fg==
+X-Google-Smtp-Source: ABdhPJzTC7IpmjZLd2gm/6K3047gJ3aJKHNiI1Y/2uveMTh3GiUZGrPoPgBjR6cpQk2CtlbuFRRrsw==
+X-Received: by 2002:a17:90b:4d84:: with SMTP id oj4mr43652154pjb.90.1636334959261;
+        Sun, 07 Nov 2021 17:29:19 -0800 (PST)
+Received: from sol.lan (14-201-12-235.tpgi.com.au. [14.201.12.235])
+        by smtp.gmail.com with ESMTPSA id t4sm13800861pfj.166.2021.11.07.17.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Nov 2021 17:29:18 -0800 (PST)
+From:   Kent Gibson <warthog618@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, brgl@bgdev.pl,
+        linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com,
+        lizhijian@cn.fujitsu.com
+Cc:     Kent Gibson <warthog618@gmail.com>
+Subject: [PATCH 0/3] selftests: gpio: fix minor build issues
+Date:   Mon,  8 Nov 2021 09:28:48 +0800
+Message-Id: <20211108012851.7772-1-warthog618@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net: tls: remove unused variable and code
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163631400800.18215.15713746586440850883.git-patchwork-notify@kernel.org>
-Date:   Sun, 07 Nov 2021 19:40:08 +0000
-References: <20211105164511.3360473-1-anders.roxell@linaro.org>
-In-Reply-To: <20211105164511.3360473-1-anders.roxell@linaro.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+This is a series of fixes for minor problems in the building of the GPIO
+selftests introduced by my rework of those tests.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+The first patch is from Li Zhijian and fixes a compiler error when
+building the selftests in environments with stale system includes.
+I have reworded the commit comment to make it more to the point in
+describing the root cause of the problem and the fix, as suggested by
+Shuah in his initial review of that patch.
 
-On Fri,  5 Nov 2021 17:45:11 +0100 you wrote:
-> When building selftests/net with clang, the compiler warn about the
-> function abs() see below:
-> 
-> tls.c:657:15: warning: variable 'len_compared' set but not used [-Wunused-but-set-variable]
->         unsigned int len_compared = 0;
->                      ^
-> 
-> [...]
+The second patch fixes a warning when the tests are compiled with -Wall,
+and the final patch restores the CFLAGS that should not have been removed
+in the rework, including the -Wall.
 
-Here is the summary with links:
-  - selftests: net: tls: remove unused variable and code
-    https://git.kernel.org/netdev/net/c/62b12ab5dff0
+Kent Gibson (2):
+  selftests: gpio: fix uninitialised variable warning
+  selftests: gpio: restore CFLAGS options
 
-You are awesome, thank you!
+Li Zhijian (1):
+  selftests: gpio: fix gpio compiling error
+
+ tools/testing/selftests/gpio/Makefile           | 1 +
+ tools/testing/selftests/gpio/gpio-mockup-cdev.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.33.1
 
