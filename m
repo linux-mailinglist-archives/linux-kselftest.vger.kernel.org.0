@@ -2,30 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2309644C6C7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Nov 2021 19:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D4344C6B2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Nov 2021 19:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbhKJScB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Nov 2021 13:32:01 -0500
-Received: from goliath.siemens.de ([192.35.17.28]:40995 "EHLO
-        goliath.siemens.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbhKJScA (ORCPT
+        id S231143AbhKJSSx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Nov 2021 13:18:53 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38906 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229781AbhKJSSx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Nov 2021 13:32:00 -0500
-X-Greylist: delayed 1446 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Nov 2021 13:31:59 EST
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by goliath.siemens.de (8.15.2/8.15.2) with ESMTPS id 1AAI4ckg023350
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Nov 2021 19:04:39 +0100
-Received: from [167.87.75.31] ([167.87.75.31])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 1AAI4ahw016947;
-        Wed, 10 Nov 2021 19:04:36 +0100
-Subject: Re: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
- empty effecitve cpus
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        "Moessbauer, Felix" <felix.moessbauer@siemens.com>,
-        "longman@redhat.com" <longman@redhat.com>,
+        Wed, 10 Nov 2021 13:18:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 01A821FD48;
+        Wed, 10 Nov 2021 18:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1636568164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WrfmgeAir/bcyFgACSGpgDgNuM+uhrNAmeRnW3A3QN0=;
+        b=CvbVadvRn6in1GwXmbxlxRhD5agTW4BW2HFq6oifyXHR2R6X4K9nvUrApT3LJ7EKkEzPiP
+        kEYCK/rJTOgzQxglqUQNTOwOVaUTJIVMQtXTo9PwTFj/u4ME10JU1UxVtcEYdjkbeyy4MU
+        X+3kR+EBq/NX4NNVl9w/zfUkh8/cVHQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF4B013C7D;
+        Wed, 10 Nov 2021 18:16:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TdXOLWMMjGF7OQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 10 Nov 2021 18:16:03 +0000
+Date:   Wed, 10 Nov 2021 19:15:58 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     "Moessbauer, Felix" <felix.moessbauer@siemens.com>
+Cc:     "longman@redhat.com" <longman@redhat.com>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
         "corbet@lwn.net" <corbet@lwn.net>,
@@ -37,50 +51,53 @@ Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "mtosatti@redhat.com" <mtosatti@redhat.com>,
         "pauld@redhat.com" <pauld@redhat.com>,
         "peterz@infradead.org" <peterz@infradead.org>,
         "shuah@kernel.org" <shuah@kernel.org>,
         "tj@kernel.org" <tj@kernel.org>,
+        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
         "henning.schild@siemens.com" <henning.schild@siemens.com>
+Subject: Re: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
+ empty effecitve cpus
+Message-ID: <20211110181558.GB51149@blackbody.suse.cz>
 References: <20211018143619.205065-1-longman@redhat.com>
  <20211110111357.17617-1-felix.moessbauer@siemens.com>
  <20211110135653.GD20566@blackbody.suse.cz>
  <AM9PR10MB4869C14EAE01B87C0037BF6A89939@AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM>
- <20211110161020.GA20101@fuller.cnet>
- <c1e94031-a179-dc72-e5ee-3f8197bea492@siemens.com>
- <20211110175201.GA51149@blackbody.suse.cz>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-Message-ID: <44a28cc4-f68f-6e2c-1b0a-18b6570edc5f@siemens.com>
-Date:   Wed, 10 Nov 2021 19:04:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211110175201.GA51149@blackbody.suse.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM9PR10MB4869C14EAE01B87C0037BF6A89939@AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10.11.21 18:52, Michal Koutný wrote:
-> On Wed, Nov 10, 2021 at 05:15:41PM +0100, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->> Is there pthread_attr_setcgroup_np()?
-> 
-> If I'm not mistaken the 'p' in pthreads stands for POSIX and cgroups are
-> Linux specific so you won't find that (unless you implement that
-> yourself). ¯\_(ツ)_/¯
-> 
+On Wed, Nov 10, 2021 at 03:21:54PM +0000, "Moessbauer, Felix" <felix.moessbauer@siemens.com> wrote:
+> 2. Threads can be started on non-rt CPUs and then bound to a specific rt CPU.
+> This binding can be specified before thread creation via pthread_create.
+> By that, you can make sure that at no point in time a thread has a
+> "forbidden" CPU in its affinities.
 
-I know what it stands for :). But I don't want to re-implement pthreads
-just to have a single creation-time configurable injected. Neither would
-developer of standard application, e.g. libvirt for the rt-kvm special
-case while most of their use cases are fine with regular pthread APIs. I
-think there is also a demand for a programming model that fits into
-existing ones.
+It should boil down to some clone$version(2) and sched_setaffinity(2)
+calls, so strictly speaking even with pthread_create(3) the thread is
+shortly running with the parent's affinity.
 
-Jan
+> With cgroup2, you cannot guarantee the second aspect, as thread
+> creation and moving to a cgroup is not an atomic operation.
 
--- 
-Siemens AG, T RDA IOT
-Corporate Competence Center Embedded Linux
+As suggested by others, CLONE_INTO_CGROUP (into cpuset cgroup) can
+actually "hide" the migration into the clone3() call.
+
+> At creation time, you cannot set the final affinity mask (as you
+> create it in the non-rt group and there the CPU is not in the
+> cpuset.cpus).
+> Once you move the thread to the rt cgroup, it has a default mask and
+> by that can be executed on other rt cores.
+
+Good point. Perhaps you could work this around by having another level
+of (non-root partition) cpuset cgroups for individual CPUs? (Maybe
+there's more clever approach, this is just first to come into my mind.)
+
+Michal
