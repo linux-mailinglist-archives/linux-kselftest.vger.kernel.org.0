@@ -2,224 +2,415 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1025544C44A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Nov 2021 16:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEFE44C4A4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Nov 2021 16:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbhKJPYp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Nov 2021 10:24:45 -0500
-Received: from mail-eopbgr40042.outbound.protection.outlook.com ([40.107.4.42]:16206
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231148AbhKJPYo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Nov 2021 10:24:44 -0500
+        id S232030AbhKJPxn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Nov 2021 10:53:43 -0500
+Received: from mga02.intel.com ([134.134.136.20]:25248 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231838AbhKJPxm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Nov 2021 10:53:42 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10164"; a="219899574"
+X-IronPort-AV: E=Sophos;i="5.87,224,1631602800"; 
+   d="scan'208";a="219899574"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2021 07:50:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,224,1631602800"; 
+   d="scan'208";a="452362621"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga006.jf.intel.com with ESMTP; 10 Nov 2021 07:50:52 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Wed, 10 Nov 2021 07:50:52 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12 via Frontend Transport; Wed, 10 Nov 2021 07:50:52 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.12; Wed, 10 Nov 2021 07:50:51 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TPCtVuVLPnr+oBYyW6P34IauVuvE1s4xEhNCsdyuRG8RhJwpkOtHNIjmVC7IV4GKGIrLIMkL1TmJQjQAOCnPalXX6bfG++m9iVdHXy+NW126aJHWE8/HCKUSPo+ItTEb+JVrCE7bfxhJKNVkDeSPcuwSq+NOLDV3TmtSH6qpvWekR/QhLxNeTKITO1jFNFG606w6lVI4tsGnJBeLh4/fa8ou2+aYUHFVTeLV1zCUgAfzXlXCenwrmL7Bca+g/3ISZu7VgRLpED/Yu4fm7PNoS/zi+/q8NmDTR+KQ5c+cq7gDfrEyEAKBx3qxCNr6HD5nzXkd8IYYGVlcdob5RaEkgA==
+ b=l+2Mof7KAHDYBAitStN+fYAYmn6soFlj0CTSLrC6CqBtQ1ro3+kHRhWm/bZ7nVORqC9pGze5MJCjGbLMtGSwRlgnbvep8NyLT/oA0OBjvdCgLZp/Y1oDj7975HakTrr2c3hgSqFioOX1DXND6Oe7oN9rKUtH4XIp+hcF655jApY7I5Vg3Mw61JlRgkUjjlwoMSdvsrLnOrVGwGZjBj6+6T6cD1rmpIlEfYqPg7QPzO4+ISjsFGxiPd6DNldx1qCXz6XtzC9VdwVXOM1tl6t73IWmUrTOK+XHtFpPz13XIZ0Qj936mC+cng+H2MxWXX3QCnwFNF+pmSlNxewVPTksBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U0qRMyI8auFOGLBDH0E8gQPrF0wZc8jAySp3hMZCv30=;
- b=bHY2HnAAgVHIsxhY6oDX41hQ6+Nf1KSJjFJru0tdnsR5FwuIntFQP/52yql+TUesTbwcXl2cSDR6RsyjhQINZUjj3zZ8tcpOZqqqiW5wXQW0eidXLfrsRxIFu4ueVH/sdE3Uo4kkvUpohY1g3XR36Y0x/mnwE9svZtFWP41NpZGJfE5MWGWu+bfczPCYFFfxcoJyzQfuctHwBoZeqBP3JtvsOfVasbHeJqB/rKEutTCziD8MJYqa96HcGD3ANAN2PnsixkMZKAN3Y8OBNE5J6I8SOM2mpdmOhO7qjEF+5FV1/Gr/71w4frDwacRFJFX78cC3QfRu5lCef4INeiLaBg==
+ bh=IbWxnQMP7LqqetXgu+c9q6uaexHqeRtsI08AzSOgGU8=;
+ b=IOLQd7uYlWpvakwxXoXEOfwajyqfmpX9Cbf+wDpSpcG225a1niXr4xDMVv2UMZBOLXWwH59WdPhLsTbtOo+lmoLyD1myaFMJsApt5gYd7tI0lV9FSoY3LM9KmRvi4ns/ACZYEwQf220HVyZwUm3x2rP+PMOAhx62UvGJsJfNfMeiIEX3Am1X/VMCzQ6Ljt7a8g6Mt5Vb0Hp/HPZ3AVbWjRTWJDxtJ4+gylryQeDNxJVZyftNRIwtgr7RbQJP1NILcbIdrFCw9bRGdCXPjuvJd+Q5h6lyJJnMsSIjMDoYKhePm5zdT1n3Rp9IX6Jvz9bAuPfl6QX67XgrmYyyMaW5Fw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U0qRMyI8auFOGLBDH0E8gQPrF0wZc8jAySp3hMZCv30=;
- b=zqkvKrLSA6rAcm8UPfhqrGtCGGT6A5B8l5AKmWNKhDn0RWRNEWSmi/qx+X6AZFKpMe9TgneUNkDcTB8EYuoPwTJQq8llXttBPb2jngI+yKW4yEBocICbYXdmbvE1zl4P1an5Q4qO2hteOTHsnHLp5pwuxwcn9aHK/8qk6MoDqGxfYG7Bw+kPrSg7s1uzk5cLxIVZFdklRhZifBaUCvvvjt/jxKjZAlKPFqkhRLbrCjpBO6KrtT2WZiNZ6i9/Dw9LWoU2uyMitGkduEUTv2DHa0mBuKmqL/Bj9h4A0+XeBXWZmU0t/XH6lVevBSQLVKNhceGK8ZQrVtdhp6ZjQqv3Hg==
-Received: from AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:418::19)
- by AM9PR10MB4824.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:413::23) with
+ bh=IbWxnQMP7LqqetXgu+c9q6uaexHqeRtsI08AzSOgGU8=;
+ b=CamuuWqDNqrR5TQCPsj1Kyq5drfZKqMvXlFllYcjHEYoOAn8UG+v+Zn3F77yavvFS6R0thjuq3kRy9hpI4Zu8tLrpNC9ljbILe9CVNKYFWZomsUPCm0gA05wz7K7PkF1KYEy04/hBSRcNAqvBJr9T49acGiEtM3ZzxWMAinD7OQ=
+Received: from MW5PR11MB5812.namprd11.prod.outlook.com (2603:10b6:303:193::14)
+ by MWHPR11MB1246.namprd11.prod.outlook.com (2603:10b6:300:29::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.15; Wed, 10 Nov
- 2021 15:21:54 +0000
-Received: from AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::6d66:e6b9:219c:48fb]) by AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::6d66:e6b9:219c:48fb%7]) with mapi id 15.20.4690.015; Wed, 10 Nov 2021
- 15:21:54 +0000
-From:   "Moessbauer, Felix" <felix.moessbauer@siemens.com>
-To:     =?iso-8859-1?Q?Michal_Koutn=FD?= <mkoutny@suse.com>
-CC:     "longman@redhat.com" <longman@redhat.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "guro@fb.com" <guro@fb.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.13; Wed, 10 Nov
+ 2021 15:50:50 +0000
+Received: from MW5PR11MB5812.namprd11.prod.outlook.com
+ ([fe80::b137:7318:a259:699e]) by MW5PR11MB5812.namprd11.prod.outlook.com
+ ([fe80::b137:7318:a259:699e%9]) with mapi id 15.20.4649.019; Wed, 10 Nov 2021
+ 15:50:50 +0000
+From:   "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
+To:     Petr Machata <petrm@nvidia.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        "pauld@redhat.com" <pauld@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
-        "henning.schild@siemens.com" <henning.schild@siemens.com>
-Subject: RE: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
- empty effecitve cpus
-Thread-Topic: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
- empty effecitve cpus
-Thread-Index: AQHX1iUJ+hEXYuVug0y1LdvFiDDLvqv8yVeAgAAS1aA=
-Date:   Wed, 10 Nov 2021 15:21:54 +0000
-Message-ID: <AM9PR10MB4869C14EAE01B87C0037BF6A89939@AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211110111357.17617-1-felix.moessbauer@siemens.com>
- <20211110135653.GD20566@blackbody.suse.cz>
-In-Reply-To: <20211110135653.GD20566@blackbody.suse.cz>
+        "idosch@idosch.org" <idosch@idosch.org>,
+        "mkubecek@suse.cz" <mkubecek@suse.cz>,
+        "saeed@kernel.org" <saeed@kernel.org>,
+        "michael.chan@broadcom.com" <michael.chan@broadcom.com>
+Subject: RE: [PATCH v2 net-next 6/6] docs: net: Add description of SyncE
+ interfaces
+Thread-Topic: [PATCH v2 net-next 6/6] docs: net: Add description of SyncE
+ interfaces
+Thread-Index: AQHX0oli6labJUcox0OLXoT9uSo8Gqv57+iAgAEU4LCAAEj/gIAAAf9ggAFGKoCAAAPsIIAATJIAgAACLYA=
+Date:   Wed, 10 Nov 2021 15:50:50 +0000
+Message-ID: <MW5PR11MB5812757CFF0ACED1D9CFC5A2EA939@MW5PR11MB5812.namprd11.prod.outlook.com>
+References: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
+ <20211105205331.2024623-7-maciej.machnikowski@intel.com>
+ <87r1bqcyto.fsf@nvidia.com>
+ <MW5PR11MB5812B0A4E6227C6896AC12B5EA929@MW5PR11MB5812.namprd11.prod.outlook.com>
+ <87mtmdcrf2.fsf@nvidia.com>
+ <MW5PR11MB5812D4A8419C37FE9C890D3AEA929@MW5PR11MB5812.namprd11.prod.outlook.com>
+ <87bl2scnly.fsf@nvidia.com>
+ <MW5PR11MB5812034EA5FC331FA5A2D37CEA939@MW5PR11MB5812.namprd11.prod.outlook.com>
+ <874k8kca9t.fsf@nvidia.com>
+In-Reply-To: <874k8kca9t.fsf@nvidia.com>
 Accept-Language: en-US
-Content-Language: de-DE
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Enabled=true;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SetDate=2021-11-10T15:21:52Z;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Method=Standard;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Name=restricted-default;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ActionId=e213f4a3-4e0f-4b21-92c7-8dd0b1e3037d;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ContentBits=0
-document_confidentiality: Restricted
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+authentication-results: nvidia.com; dkim=none (message not signed)
+ header.d=none;nvidia.com; dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5a666b28-71c2-4165-6b04-08d9a45dd407
-x-ms-traffictypediagnostic: AM9PR10MB4824:
-x-ld-processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-x-microsoft-antispam-prvs: <AM9PR10MB4824E49C86C8D8345D9ADF5B89939@AM9PR10MB4824.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-office365-filtering-correlation-id: f8723a0b-640f-43e1-de30-08d9a461ded8
+x-ms-traffictypediagnostic: MWHPR11MB1246:
+x-microsoft-antispam-prvs: <MWHPR11MB1246C57EF0B76FC9ECFC19EDEA939@MWHPR11MB1246.namprd11.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vSk9c4okLQz7eUQMi5Gf/hixIGZzd9H+z9mrnSYDyR3xXETLfWQsb4GtS5CZlEefiQtm72hiGng2tCjCXGtdoV1umyNflduLmEg9Eg+PWIXVYoHFfOjvR427yZtPrd3LW2WwgTFoTKry3AJv/RQGwI7k2Rx4I4WKQhqMrbLy1KBTINORHoRcCXFS48MOzO4bpF8hFfKEJZMuBQXFS32JAlK9EOcOy6xfGvA6Ae4inlnK16BhgwEiLBepEUzFYi7wYjp8OhB5N1JP6toLsGWPVSlLuS5E8w0dP3W93aSfmomWY0VJLNSOLMiNxQBr+99L6fq8iX8SBAb/ZeejJpFT7CAOd0ZrZCr+n7CMYJGSI8rXyiGz1byXe76OTIRrYhQ4wn2e4wyfRY4XV6zec747NCUSCOHD/46bLAeVh2l+BX9sQBsNlguzTERaHbT8XW/QZbHSyA58gfyC/Jb3oldBNq2U4jrYaryY89nBWCGiH2he3vv1XOYCb2OFDLTo88qRcq5HUoszzJLLTolfRmm5t66dNTECCYYmPQ2YWgFrrFvqZIqKjpBIWW6YCVpvpJjzUUWFC97enPLBdBbCYbKfVzEBKyomNpuIDZs4qZpVRdxHWLqcHu+kk2hJCAkJG6BA8pmQ31SJAy8A0G1fq909vwEIOlBKSphfVMniBPa6S0CmiMCMqK3bzOAQCdh8je5mciF5I7PCzvfXCEwgKCGKAw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(107886003)(9686003)(33656002)(26005)(5660300002)(66556008)(64756008)(66446008)(8936002)(8676002)(71200400001)(66476007)(86362001)(53546011)(54906003)(76116006)(7696005)(6916009)(82960400001)(122000001)(38100700002)(52536014)(2906002)(55016002)(186003)(4326008)(7416002)(38070700005)(508600001)(66946007)(6506007)(316002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: VogaVP9fCGLXM7ktzaLJAUXjSQ5GAe6vlyw9STgjsIeelQviBJ9o6w5qA1Ck+OPQ6D0n+fPSb0Rfgw/9k8rlUQlRudfICwHIXI18Ui1fhvUOtVE3VXSbgPl9tZJssrbq4kgozxSasemK1gq9gBObhj/u3Vr+dQbwhYqvjdbBdmGurzQax1wCPt7uBA+2cYK9zVGKQIymlcIcVnk6ebZ1tS9TqdOz0I75AtxgiRWEn3gOdH61fRnhKbIjHJevvsvfXTzr7It3LV3z4x9MIaJy1HiuNmigER+G6gB2WGqdTNRAtxJcXI0huABVr0/mrdSJipRpiimhDSkjSYFiY0z9/hYHXJgbHuZY/OFYhTAYlWDI4tnNUA0lwrU8sXE7e3XQ5xiEQYuB+uvuea0fDh70nXDvGGi/AZYzrUJoxqi5OxYBIjVyzt7QoTsVUuOwkfBXa5CkMva1eF8ZT/SQSFRARxhA7ZaOeVYDw0lr0bXaME/bBcFefIVaGsmbDKYRmg9k6EOgdJY1u6oTYYfJ/l3nFRbSqe5EsAWLMvL93G7VqdHsyjEFPMP8QqjvQS44pCn20OSXbEtchzu5d8cJ53jofh6I0/hsqVJnUjgiDGw7mk/yH4exXRKAadMPQ8+LmzNdrJOqvBXEyYdSadn90IXkkKfpXW/5R7+77UNCTauAeW7GjWC4jrkmiNwcx6vEAUugvQgt1eQMqWDtsUTJVsWqWg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5812.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(186003)(7696005)(86362001)(66556008)(5660300002)(2906002)(9686003)(38100700002)(76116006)(122000001)(316002)(52536014)(82960400001)(26005)(4326008)(83380400001)(66446008)(54906003)(38070700005)(71200400001)(64756008)(55016002)(66476007)(53546011)(6916009)(6506007)(8676002)(508600001)(30864003)(8936002)(7416002)(66946007)(33656002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?OMLGEi1vg2Ua1UiVRHP7JWEFrGITmioOymxvpL/u7RNQcObsvORFKbvzNB?=
- =?iso-8859-1?Q?vBtUQbE84+DZsNYgBZCUHuolT5dmx5Ln+oY4DhvudYAmD+Q6IC4Vze0kM9?=
- =?iso-8859-1?Q?lEpDjHzG4ERP8YRf11cM1P5IRmcGLqAGRGvj2fBEbTcJ/3o7gLnvwd40FH?=
- =?iso-8859-1?Q?/BJ4Vj2c+F0dWcr27EqZei+mvIqS50NkYC6sndRYooDfbSTl5sAioi+Ctq?=
- =?iso-8859-1?Q?FQSWkqqP69PZGRIMQr1yICWVSXatPCN8HNib3jBUcXcWM5UuzPQClb5W+c?=
- =?iso-8859-1?Q?LfntND5k89mkKcOIEAadha68MOMTF2W/+uPYv8YxllMbCxcolYH7g3FXmD?=
- =?iso-8859-1?Q?Kh//sNgC1iH0aTTPg+qg+qrMqUGTPlfwQg0KNKR1HWA+eAuCchoLv+Wrfi?=
- =?iso-8859-1?Q?1vu49MIAV+oa9Nbur2FCfH1xLPYJAfLLnNy95OGD/kBvgZgXKD2hNHTFPS?=
- =?iso-8859-1?Q?vLxPDIXYc6afAC0fyA0ly/2B4BOem4ER+Vk++Zj2rVAADWH1pWp47gmgEp?=
- =?iso-8859-1?Q?dN3B6qzsAYNJM0rB1mZQT/Q72OQ/pN7+UvUBMnPrSqmtJcFeck6+rM7MCS?=
- =?iso-8859-1?Q?srIwSDqYl/hGQ0u29tQJtfVMsA3IM7XXyyg8fKj8bjHjyb0TMtQxDpqC/U?=
- =?iso-8859-1?Q?TK2/R1VIab5Vielz7C7kBjehzWZxVoHXMIKRol0BF1A1yxzQGNGi7t3JwC?=
- =?iso-8859-1?Q?+r5C4uqeB9T0KlcLGBisfdD8lQbKi3Hav24VsH7NSbRk0R/Zd/DoTfCqjW?=
- =?iso-8859-1?Q?xqnVidSdBH5AC+tus3ngKd32p6XQ+QvVegmAYZ8Q1EkcUFeGbcnC+Pqph2?=
- =?iso-8859-1?Q?o28u7LY0pNETPUrjQzNh7vrPDiooVYFDx6EBRrE7s2zDmk8W+KZg93ZA/M?=
- =?iso-8859-1?Q?is9Tu2M7wU0pimlcUbh7MZkfJJVb84hRm/iuvOFMs6zVtL3XZ495Yo6F7f?=
- =?iso-8859-1?Q?P2deT25zbAqEfHaJEoUKUVpUUmoPtqBf1o87Hl4wRkgQDRKj2qgr8Obv9P?=
- =?iso-8859-1?Q?x6HYl7toe7iKyaI1LMnNmf51iiIOs0VP8+kHye7ooiBEZL51jFECVSWMAc?=
- =?iso-8859-1?Q?2SS4KGK0s2I6CYTNcyORJUkAYombNWwIr2tE7+hpM0Y3UDtAgs8jbFcB/R?=
- =?iso-8859-1?Q?mMA77nU+kP2FN7d75xt7iVi4TU9DARAMEvBgh6R1s2grsWj0FfPCZjODc1?=
- =?iso-8859-1?Q?vglRmF5FI/tluop6ootPtgVv2Rfq8dy5pn6dz5BfO2lJJJjDGU8Wtvx7RV?=
- =?iso-8859-1?Q?isd/krdPd08iQwmEGrHLdL54HVwOK4Z1+yzCeWb08RVaBUEdWh4iCwNCeA?=
- =?iso-8859-1?Q?hZ/ZlhhEVssLOkAtFPMc+vFGaBTkeANZ9ZF9oC2EFPtfvncCP1xLAO+WIi?=
- =?iso-8859-1?Q?pkhNk7EsrNiqLtmN7WnhfSGBF4qfUUjM6jFoqSz7WCJA7EAbl4x76N7Nhe?=
- =?iso-8859-1?Q?MELITK8EKBr5tcFrj9ASVaLlVCO6ZL3Pl5qe/RUJBvF3L8vsFtinGP7kdR?=
- =?iso-8859-1?Q?UI82QnH2NfNRu40rbyOb0LEMzr+RoiJcpgt78zpvRxzZgHWhWS79mOXU8w?=
- =?iso-8859-1?Q?l7aqHmSNms+cRjHENyDtP8yLuhHRyEVSh3BY50lAdFqbHDjdNS1CB5yb8M?=
- =?iso-8859-1?Q?45b3XrJFxPx+xVolFiJRz6A7Q9K3jMc6eDfZwaB5zLCgqKr8AgtDcRs6DT?=
- =?iso-8859-1?Q?hZ6AqDK/qakvb9BOUOO1bWYkmWHWvNOo6XFRx8+Dxuq8f7NU3KtzrHMWXT?=
- =?iso-8859-1?Q?hvyg=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fRKKN35yP3+ex6nquS5PF1yas9xTGMX8xHjuovu+tZi2b4RKgx16PFb7dOiR?=
+ =?us-ascii?Q?4QGmwOmscv+eu+XjsvfQLga7HlknvRbuLd969Nc12YMy22mcAmxeVslAWFm0?=
+ =?us-ascii?Q?HKJJ8mRZrt095uShXEsbw6wTHxKf5coH+dcs9yEegP8DE2reZbztSU5z7hnY?=
+ =?us-ascii?Q?zLKzdcTMR1hAhlkjYp7cODJydOFEVhPPP6pTppIAXHbLe0DLiaP4fTBeZx3v?=
+ =?us-ascii?Q?mw3TVRJ5bvV4e3oWuk6IW1jtNgtLGIcV20+3Nk+32kDHvDRc7RWC3A4zqQ1B?=
+ =?us-ascii?Q?fy72SGMG/fMo/xeLR6ULNPRg+M4a7Fhsj9TuHLCfIK9lzeEz1OxonqI1lrOe?=
+ =?us-ascii?Q?6URm5C4ZWxQjufmlHBA9fm2cAQ/WYxOHzzO9nKmFFez2Xcs3maCjX1Ovd/UE?=
+ =?us-ascii?Q?XMSQoA+ASl3jFoH9FCVkq6tinrdVaPClCMHNSNiYfYQL7jMrFyXV1Hkfsl5D?=
+ =?us-ascii?Q?2KLpwqhM6jWcytOUzl0jhPOLFfExjK3vWe/xwxw6gmTkLuDbXlg0R4JZmeUc?=
+ =?us-ascii?Q?2IoJ9n8Hcirz1QTjlLTn0CRSivvp2yM1SDaU298nBHAXo+CJvl8cOahO2OC8?=
+ =?us-ascii?Q?QcRI0071OhUkscc727THjfzagDLHKS+VDlZpWadfEkqHUoKKxcmq1V6lZ34J?=
+ =?us-ascii?Q?Yu7p3yWLZwLZcDR5Kc2GsaPevQDCECmogObA8IJfDfATmLOgnkixLm/1hEyc?=
+ =?us-ascii?Q?TWdvtTnviAOy0DUMn2EJBqpXXYjicEVBuAyuTP2AOlZPl/d5LxwtDdNUb490?=
+ =?us-ascii?Q?ofqpeEHALi+4p6E7O8VFS6WmiGiiSodAHZ8nVNwHwG+BUTyzdwOAos1f3p0e?=
+ =?us-ascii?Q?lxbLuPqBVrOx8DAlqGiEu1QvuiU1cwaHF93V/TdNKCsfwNzdPLs3AgMlPnjG?=
+ =?us-ascii?Q?HeCKjp3Y0c6NxuPMZgncqokuAwooRX0Q4NOMwcz4WBp2exI3jdeemFiPytev?=
+ =?us-ascii?Q?9WNperVPJ0ztoLCU0ONyFdOE9RBoIS1uwtLuZW1Z2UAsl5/KH/3isUo9iNqx?=
+ =?us-ascii?Q?jU1zZeyhEfpCrR/vWt8RZaqNW/OO5DOzx7Osw5r0J03C7/AT/bT6fo03P9kp?=
+ =?us-ascii?Q?VT54GwTVpjVcKJe1PVNkOcJ1M/JTefY/UonMKNz7OlgWcXxxv//n9fjaSaka?=
+ =?us-ascii?Q?XZgdEzv1i9YAV5G2163oq7WD1o3vxl0JeXwpNbo7afEGgr5Er4SablVOi0NA?=
+ =?us-ascii?Q?gtI8ecYiPoVxCdfQ8p1hzx3NB+Im+cM9yAQLf/GsI59Cc5rwT7/ezNfZq75C?=
+ =?us-ascii?Q?WNsalEkq6OrQbYReIyFXkZ36RQXrZ6tMmsuxeANzhKFYNPtCGFp+fq/TZx+o?=
+ =?us-ascii?Q?gVrQSMmMry7sM29wdpD+rkgu57onFnbL3CabJrswM5ngSSxs+Usy2Psd1eXJ?=
+ =?us-ascii?Q?z7YsVjUq9lDpBRA1/lykcTxVmmFhZuF7yrVTJ64YZGqzpc7o2rD+U3wvnsxa?=
+ =?us-ascii?Q?q1uWq34ylDVGiUtJybmBoE8BZ29OqigiRToxgVBjFaDzmUTX0T59UWdvXVUe?=
+ =?us-ascii?Q?jZS4gDKovUpK1MAG0QEemzAHDXtDAgSUFyjKuiz729wiq4aXoCuOu4dtenQM?=
+ =?us-ascii?Q?du9aX2I+Vd2rSbisF8a2sJPEOtZqav6EmKP78U3JwFF+rz1Ln7MnB6LWRP06?=
+ =?us-ascii?Q?k+zWCB+J20rBj8B1ytFlyXWA2uKfJKGJn8ed9boAn38gze4Hd1AtTo44gXKq?=
+ =?us-ascii?Q?W9KZrA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a666b28-71c2-4165-6b04-08d9a45dd407
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2021 15:21:54.4441
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5812.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8723a0b-640f-43e1-de30-08d9a461ded8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2021 15:50:50.5789
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4pT8+yiqRcL956oEMQQWdxLSJqEKGJv0jZX6PP6PWBf/MZVuuWNTD8wxy+L5uCoAwYLPaw3YRV9RNUKARMacadJxJXn5/1cTIDHZ3GaXdlU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4824
+X-MS-Exchange-CrossTenant-userprincipalname: mGm9ryUzVIChDsQd66IoxnpBLZX9UqjpSnr4FzwoCPoIyCRg/lTOH8VkMU0hE/xKDz7HIxZs4Wb6BHpT9i3DzALAY04fJVVEBw3uCVUDbPY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1246
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
 > -----Original Message-----
-> From: Michal Koutn=FD <mkoutny@suse.com>
-> Sent: Wednesday, November 10, 2021 2:57 PM
-> To: Moessbauer, Felix (T RDA IOT SES-DE) <felix.moessbauer@siemens.com>
-> Cc: longman@redhat.com; akpm@linux-foundation.org;
-> cgroups@vger.kernel.org; corbet@lwn.net; frederic@kernel.org; guro@fb.com=
-;
-> hannes@cmpxchg.org; juri.lelli@redhat.com; linux-doc@vger.kernel.org; lin=
-ux-
-> kernel@vger.kernel.org; linux-kselftest@vger.kernel.org;
-> lizefan.x@bytedance.com; mtosatti@redhat.com; pauld@redhat.com;
-> peterz@infradead.org; shuah@kernel.org; tj@kernel.org; Kiszka, Jan (T RDA
-> IOT) <jan.kiszka@siemens.com>; Schild, Henning (T RDA IOT SES-DE)
-> <henning.schild@siemens.com>
-> Subject: Re: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type =
-&
-> empty effecitve cpus
+> From: Petr Machata <petrm@nvidia.com>
+> Sent: Wednesday, November 10, 2021 4:15 PM
+> To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
+> Subject: Re: [PATCH v2 net-next 6/6] docs: net: Add description of SyncE
+> interfaces
 >=20
-> Hello.
 >=20
-> On Wed, Nov 10, 2021 at 12:13:57PM +0100, Felix Moessbauer
-> <felix.moessbauer@siemens.com> wrote:
-> > However, I was not able to see any latency improvements when using
-> > cpuset.cpus.partition=3Disolated.
+> >> >> >> First, what if more than one out_idx is set? What are drivers / =
+HW
+> >> >> >> meant to do with this? What is the expected behavior?
+> >> >> >
+> >> >> > Expected behavior is deployment specific. You can use different p=
+hy
+> >> >> > recovered clock outputs to implement active/passive mode of clock
+> >> >> > failover.
+> >> >>
+> >> >> How? Which one is primary and which one is backup? I just have two
+> >> >> enabled pins...
+> >> >
+> >> > With this API you only have ports and pins and set up the redirectio=
+n.
+> >>
+> >> Wait, so how do I do failover? Which of the set pins in primary and
+> >> which is backup? Should the backup be sticky, i.e. do primary and back=
+up
+> >> switch roles after primary goes into holdover? It looks like there are=
+ a
+> >> number of policy decisions that would be best served by a userspace
+> >> tool.
+> >
+> > The clock priority is configured in the SEC/EEC/DPLL. Recovered clock A=
+PI
+> > only configures the redirections (aka. Which clocks will be available t=
+o the
+> > DPLL as references). In some DPLLs the fallback is automatic as long as
+> > secondary clock is available when the primary goes away. Userspace tool
+> > can preconfigure that before the failure occurs.
 >=20
-> Interesting. What was the baseline against which you compared it (isolcpu=
-s, no
-> cpusets,...)?
+> OK, I see. It looks like this priority list implies which pins need to
+> be enabled. That makes the netdev interface redundant.
 
-For this test, I just compared both settings cpuset.cpus.partition=3Disolat=
-ed|root.
-There, I did not see a significant difference (but I know, RT tuning depend=
-s on a ton of things).
+Netdev owns the PHY, so it needs to enable/disable clock from a given
+port/lane - other than that it's EECs task. Technically - those subsystems
+are separate.
 
+> >> > The EEC part is out of picture and will be part of DPLL subsystem.
+> >>
+> >> So about that. I don't think it's contentious to claim that you need t=
+o
+> >> communicate EEC state somehow. This proposal does that through a
+> netdev
+> >> object. After the DPLL subsystem comes along, that will necessarily
+> >> provide the same information, and the netdev interface will become
+> >> redundant, but we will need to keep it around.
+> >>
+> >> That is a strong indication that a first-class DPLL object should be
+> >> part of the initial submission.
+> >
+> > That's why only a bare minimum is proposed in this patch - reading the
+> state
+> > and which signal is used as a reference.
 >=20
-> > The test was performed with jitterdebugger on CPUs 1-3 and the followin=
-g
-> cmdline:
-> > rcu_nocbs=3D1-4 nohz_full=3D1-4 irqaffinity=3D0,5-6,11 intel_pstate=3Dd=
-isable
-> > On the other cpus, stress-ng was executed to generate load.
-> > [...]
+> The proposal includes APIs that we know _right now_ will be historical
+> baggage by the time the DPLL object is added. That does not constitute
+> bare minimum.
 >=20
-> > This requires cgroup.type=3Dthreaded on both cgroups and changes to the
-> > application (threads have to be born in non-rt group and moved to rt-gr=
-oup).
+> >> >> >> Second, as a user-space client, how do I know that if ports 1 an=
+d
+> >> >> >> 2 both report pin range [A; B], that they both actually share th=
+e
+> >> >> >> same underlying EEC? Is there some sort of coordination among th=
+e
+> >> >> >> drivers, such that each pin in the system has a unique ID?
+> >> >> >
+> >> >> > For now we don't, as we don't have EEC subsystem. But that can be
+> >> >> > solved by a config file temporarily.
+> >> >>
+> >> >> I think it would be better to model this properly from day one.
+> >> >
+> >> > I want to propose the simplest API that will work for the simplest
+> >> > device, follow that with the userspace tool that will help everyone
+> >> > understand what we need in the DPLL subsystem, otherwise it'll be ha=
+rd
+> >> > to explain the requirements. The only change will be the addition of
+> >> > the DPLL index.
+> >>
+> >> That would be fine if there were a migration path to the more complete
+> >> API. But as DPLL object is introduced, even the APIs that are supersed=
+ed
+> >> by the DPLL APIs will need to stay in as a baggage.
+> >
+> > The migration paths are:
+> > A) when the DPLL API is there check if the DPLL object is linked to the=
+ given
+> netdev
+> >      in the rtnl_eec_state_get - if it is - get the state from the DPLL=
+ object
+> there
+> > or
+> > B) return the DPLL index linked to the given netdev and fail the
+> rtnl_eec_state_get
+> >      so that the userspace tool will need to switch to the new API
 >=20
-> But even with isolcpus the application would need to set affinity of thre=
-ads to
-> the selected CPUs (cf cgroup migrating). Do I miss anything?
-
-Yes, that's true. But there are two differences (given that you use isolcpu=
-s):
-1. the application only has to set the affinity for rt threads.
- Threads that do not explicitly set the affinity are automatically excluded=
- from the isolated cores.
- Even common rt test applications like jitterdebugger do not pin their non-=
-rt threads.
-2. Threads can be started on non-rt CPUs and then bound to a specific rt CP=
-U.
-This binding can be specified before thread creation via pthread_create.
-By that, you can make sure that at no point in time a thread has a "forbidd=
-en" CPU in its affinities.
-
-With cgroup2, you cannot guarantee the second aspect, as thread creation an=
-d moving to a cgroup is not an atomic operation.
-Also - please correct me if I'm wrong - you first have to create a thread b=
-efore moving it into a group.
-At creation time, you cannot set the final affinity mask (as you create it =
-in the non-rt group and there the CPU is not in the cpuset.cpus).
-Once you move the thread to the rt cgroup, it has a default mask and by tha=
-t can be executed on other rt cores.
-
-Best regards,
-Felix
-
+> Well, we call B) an API breakage, and it won't fly. That API is there to
+> stay, and operate like it operates now.
 >=20
-> Thanks,
-> Michal
+> That leaves us with A), where the API becomes a redundant wart that we
+> can never get rid of.
+>=20
+> > Also the rtnl_eec_state_get won't get obsolete in all cases once we get=
+ the
+> DPLL
+> > subsystem, as there are solutions where SyncE DPLL is embedded in the
+> PHY
+> > in which case the rtnl_eec_state_get will return all needed information
+> without
+> > the need to create a separate DPLL object.
+>=20
+> So the NIC or PHY driver will register the object. Easy peasy.
+>=20
+> Allowing the interface to go through a netdev sometimes, and through a
+> dedicated object other times, just makes everybody's life harder. It's
+> two cases that need to be handled in user documentation, in scripts, in
+> UAPI clients, when reviewing kernel code.
+>=20
+> This is a "hysterical raisins" sort of baggage, except we see up front
+> that's where it goes.
+>=20
+> > The DPLL object makes sense for advanced SyncE DPLLs that provide
+> > additional functionality, such as external reference/output pins.
+>=20
+> That does not need to be the case.
+>=20
+> >> >> >> Further, how do I actually know the mapping from ports to pins?
+> >> >> >> E.g. as a user, I might know my master is behind swp1. How do I
+> >> >> >> know what pins correspond to that port? As a user-space tool
+> >> >> >> author, how do I help users to do something like "eec set clock
+> >> >> >> eec0 track swp1"?
+> >> >> >
+> >> >> > That's why driver needs to be smart there and return indexes
+> >> >> > properly.
+> >> >>
+> >> >> What do you mean, properly? Up there you have
+> RTM_GETRCLKRANGE
+> >> that
+> >> >> just gives me a min and a max. Is there a policy about how to
+> >> >> correlate numbers in that range to... ifindices, netdevice names,
+> >> >> devlink port numbers, I don't know, something?
+> >> >
+> >> > The driver needs to know the underlying HW and report those ranges
+> >> > correctly.
+> >>
+> >> How do I know _as a user_ though? As a user I want to be able to say
+> >> something like "eec set dev swp1 track dev swp2". But the "eec" tool h=
+as
+> >> no way of knowing how to set that up.
+> >
+> > There's no such flexibility. It's more like timing pins in the PTP subs=
+ystem -
+> we
+> > expose the API to control them, but it's up to the final user to decide=
+ how
+> > to use them.
+>=20
+> As a user, say I know the signal coming from swp1 is freqency-locked.
+> How can I instruct the switch ASIC to propagate that signal to the other
+> ports? Well, I go through swp2..swpN, and issue RTM_SETRCLKSTATE or
+> whatever, with flags indicating I set up tracking, and pin number...
+> what exactly? How do I know which pin carries clock recovered from swp1?
+
+You send the RTM_SETRCLKSTATE to the port that has the best reference
+clock available.
+If you want to know which pin carries the clock you simply send the
+RTM_GETRCLKSTATE and it'll return the list of possible outputs with the fla=
+gs
+saying which of them are enabled (see the newer revision)
+
+> > If we index the PHY outputs in the same way as the DPLL subsystem will
+> > see them in the references part it should be sufficient to make sense
+> > out of them.
+>=20
+> What do you mean by indexing PHY outputs? Where are those indexed?
+
+That's what ndo_get_rclk_range does. It returns allowed range of pins for a=
+ given
+netdev.
+=20
+> >> >> How do several drivers coordinate this numbering among themselves?
+> >> >> Is there a core kernel authority that manages pin number
+> >> >> de/allocations?
+> >> >
+> >> > I believe the goal is to create something similar to the ptp
+> >> > subsystem. The driver will need to configure the relationship
+> >> > during initialization and the OS will manage the indexes.
+> >>
+> >> Can you point at the index management code, please?
+> >
+> > Look for the ptp_clock_register function in the kernel - it owns the
+> > registration of the ptp clock to the subsystem.
+>=20
+> But I'm talking about the SyncE code.
+
+PHY pins are indexed as the driver wishes, as they are board specific.=20
+You can index PHY pins 1,2,3 or 3,4,5 - whichever makes sense for=20
+a given application, as they are local for a netdev.
+I would suggest returning numbers that are tightly coupled to the EEC
+when that's known to make guessing game easier, but that's not mandatory.
+
+> >> >> >> Additionally, how would things like external GPSs or 1pps be
+> >> >> >> modeled? I guess the driver would know about such interface, and
+> >> >> >> would expose it as a "pin". When the GPS signal locks, the drive=
+r
+> >> >> >> starts reporting the pin in the RCLK set. Then it is possible to
+> >> >> >> set up tracking of that pin.
+> >> >> >
+> >> >> > That won't be enabled before we get the DPLL subsystem ready.
+> >> >>
+> >> >> It might prove challenging to retrofit an existing netdev-centric
+> >> >> interface into a more generic model. It would be better to model th=
+is
+> >> >> properly from day one, and OK, if we can carve out a subset of that
+> >> >> model to implement now, and leave the rest for later, fine. But the
+> >> >> current model does not strike me as having a natural migration path=
+ to
+> >> >> something more generic. E.g. reporting the EEC state through the
+> >> >> interfaces attached to that EEC... like, that will have to stay, ev=
+en at
+> >> >> a time when it is superseded by a better interface.
+> >> >
+> >> > The recovered clock API will not change - only EEC_STATE is in
+> >> > question. We can either redirect the call to the DPLL subsystem, or
+> >> > just add the DPLL IDX Into that call and return it.
+> >>
+> >> It would be better to have a first-class DPLL object, however vestigia=
+l,
+> >> in the initial submission.
+> >
+> > As stated above - DPLL subsystem won't render EEC state useless.
+>=20
+> Of course not, the state is still important. But it will render the API
+> useless, and worse, an extra baggage everyone needs to know about and
+> support.
+>=20
+> >> > More advanced functionality will be grown organically, as I also hav=
+e
+> >> > a limited view of SyncE and am not expert on switches.
+> >>
+> >> We are growing it organically _right now_. I am strongly advocating an
+> >> organic growth in the direction of a first-class DPLL object.
+> >
+> > If it helps - I can separate the PHY RCLK control patches and leave EEC=
+ state
+> > under review
+>=20
+> Not sure what you mean by that.
+
+Commit RTM_GETRCLKSTATE and RTM_SETRCLKSTATE now, wait with=20
+RTM_GETEECSTATE  till we clarify further direction of the DPLL subsystem
