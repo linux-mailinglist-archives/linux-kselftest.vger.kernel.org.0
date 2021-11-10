@@ -2,157 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E9544C2AD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Nov 2021 15:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E136844C291
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Nov 2021 14:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbhKJOFT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Nov 2021 09:05:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51549 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232099AbhKJOFS (ORCPT
+        id S232097AbhKJN5s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Nov 2021 08:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231743AbhKJN5r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Nov 2021 09:05:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636552950;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1TPGlDsYndtj+OjEFiCGDmUdaoybdwvNgP/PovWuwWE=;
-        b=EoMS89G2HO7NB47MGT27BmL6l8pg/WYnu9Xag5Z7OhG/zty4ZRUvASe5NxKN4MfJcT69gR
-        +Ijqaw9Qj33FNYDMNgP6xj6lBpomC5UcjGClWM0y2XHpAhObLaeXMKGxZHcXHWVVpwithf
-        x4FINSiz9nAnmQni1XLLE7MLiT/h63w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-495-MM8c5JeAMRmm1GLTfZmcJQ-1; Wed, 10 Nov 2021 09:02:24 -0500
-X-MC-Unique: MM8c5JeAMRmm1GLTfZmcJQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 18BFE871807;
-        Wed, 10 Nov 2021 14:02:22 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-5.gru2.redhat.com [10.97.112.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 437915D6B1;
-        Wed, 10 Nov 2021 14:01:58 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id A1A32416952E; Wed, 10 Nov 2021 10:21:59 -0300 (-03)
-Date:   Wed, 10 Nov 2021 10:21:59 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Felix Moessbauer <felix.moessbauer@siemens.com>
-Cc:     longman@redhat.com, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, corbet@lwn.net, frederic@kernel.org,
-        guro@fb.com, hannes@cmpxchg.org, juri.lelli@redhat.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lizefan.x@bytedance.com,
-        mkoutny@suse.com, pauld@redhat.com, peterz@infradead.org,
-        shuah@kernel.org, tj@kernel.org, jan.kiszka@siemens.com,
-        henning.schild@siemens.com
-Subject: Re: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
- empty effecitve cpus
-Message-ID: <20211110132159.GA12767@fuller.cnet>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211110111357.17617-1-felix.moessbauer@siemens.com>
+        Wed, 10 Nov 2021 08:57:47 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC545C061764;
+        Wed, 10 Nov 2021 05:54:59 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z21so10894472edb.5;
+        Wed, 10 Nov 2021 05:54:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=pnMFfXSIK0gOJzgv9P5Q3bFjh2yOHD/Py3xNzbx7liI=;
+        b=DaxEKeeveuNPHWXUsWLoMCZ8nmM+HOI2l1fjVKdlYWIXJuMEOW9uRYYwlOZGwIMOyI
+         hCb9fUe42nlb5hHD7orsrNzw/p/pOB4ktH9LcO4fUr9QQqqFGdp+P5+Z4E5+8LRjSbNl
+         kRqfYyozQ5ItH1rm0daNJh0WQJswbIa6BcVWWY3azBWgdkrhELwEz6qjdctqpw+zP035
+         zNrulUsTZXp3v/LQ3T4TtyVD4FxxqN6r6V8svZmSBAYMruH3kZGnm2ttr0ruae3Lto8t
+         BUEiil7G04L3g2e9g/ZSBe6dAtJI7KbQGqaZQdWDf7QXl/ePj8pCo9eKNX+yuhgme2H/
+         QFKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=pnMFfXSIK0gOJzgv9P5Q3bFjh2yOHD/Py3xNzbx7liI=;
+        b=Eaoy822zazT6IaohRcfm7qBZyFld4cwLLy+LCpUbOyuT0k+/moKSxEsFV+MV5fZUJC
+         TofsMAz0L/RGtSlN3niXoO3VkVvg5rjS4QxITIrf+Ez+e4CCEq4O7dyzAugAqmr9Xw6Z
+         ahD0ecWDDc80r/8tTPHKvXWmTKHAgwDGEWFaqUc6uqQei6P/LEIBOnJFg050kYBIJEBM
+         5ryNBjH1ktEy541AhJLHVuZvO3xXx2uaKrshVG9ksUPki/Ty0EIFp/G8n9JiSLSgJeQ5
+         7eMjbFT7wF19Zf0tgYw5jrZ+fMyLWcW5JBOiNDS+foqlttL/kXKyujoIJqqqvN5FqEdv
+         3kuA==
+X-Gm-Message-State: AOAM532bPj4vruYGBLKWXIGFVALeezZcn4ZK5DvGDBt8c5MPqc7uKKi9
+        DCw+tzk9o+EoKl3+nuBktF69JMmQt24=
+X-Google-Smtp-Source: ABdhPJwhIJzOJkK/C0bDxYm/p+QeitAzm+e4vWnx+JQV2GArHBogz96153yOdjZxIXlTTfuL7XheLA==
+X-Received: by 2002:a05:6402:280f:: with SMTP id h15mr22110633ede.286.1636552498156;
+        Wed, 10 Nov 2021 05:54:58 -0800 (PST)
+Received: from ?IPv6:2a04:241e:501:3870:96c9:d70f:c1d:e56? ([2a04:241e:501:3870:96c9:d70f:c1d:e56])
+        by smtp.gmail.com with ESMTPSA id hb36sm8983687ejc.73.2021.11.10.05.54.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Nov 2021 05:54:57 -0800 (PST)
+From:   Leonard Crestez <cdleonard@gmail.com>
+Subject: Re: [PATCH 08/11] selftests: net/fcnal: Replace sleep after server
+ start with -k
+To:     David Ahern <dsahern@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Seth David Schoen <schoen@loyalty.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        linux-kselftest@vger.kernel.org
+References: <cover.1633520807.git.cdleonard@gmail.com>
+ <ec40bd7128a30e93b90ba888f3468f394617a010.1633520807.git.cdleonard@gmail.com>
+ <43210038-b04b-3726-1355-d5f132f6c64e@gmail.com>
+ <d6882c3f-4ecf-4b4e-c20e-09b88da4fbd6@gmail.com>
+ <888962dc-8d55-4875-cf44-c0b8ebaa1978@gmail.com>
+Message-ID: <dfe10fec-b2d8-16c0-ae20-6839f47b2809@gmail.com>
+Date:   Wed, 10 Nov 2021 15:54:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110111357.17617-1-felix.moessbauer@siemens.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <888962dc-8d55-4875-cf44-c0b8ebaa1978@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 12:13:57PM +0100, Felix Moessbauer wrote:
-> Hi Weiman,
+On 10/7/21 4:22 AM, David Ahern wrote:
+> On 10/6/21 3:35 PM, Leonard Crestez wrote:
+>>
+>> I counted the [FAIL] or [ OK ] markers but not the output of nettest
+>> itself. I don't know what to look for, I guess I could diff the outputs?
+>>
+>> Shouldn't it be sufficient to compare the exit codes of the nettest client?
 > 
-> > v8:
-> >  - Reorganize the patch series and rationalize the features and
-> >    constraints of a partition.
-> >  - Update patch descriptions and documentation accordingly.
-> > 
-> > v7:
-> >  - Simplify the documentation patch (patch 5) as suggested by Tejun.
-> >  - Fix a typo in patch 2 and improper commit log in patch 3.
-> > 
-> > v6:
-> >  - Remove duplicated tmpmask from update_prstate() which should fix the
-> >    frame size too large problem reported by kernel test robot.
-> > 
-> > This patchset makes four enhancements to the cpuset v2 code.
-> > 
-> >  Patch 1: Enable partition with no task to have empty cpuset.cpus.effective.
-> > 
-> >  Patch 2: Refining the features and constraints of a cpuset partition
-> >  clarifying what changes are allowed.
-> >
-> >  Patch 3: Add a new partition state "isolated" to create a partition
-> >  root without load balancing. This is for handling intermitten workloads
-> >  that have a strict low latency requirement.
-> 
-> 
-> I just tested this patch-series and can confirm that it works on 5.15.0-rc7-rt15 (PREEMT_RT).
-> 
-> However, I was not able to see any latency improvements when using
-> cpuset.cpus.partition=isolated.
-> The test was performed with jitterdebugger on CPUs 1-3 and the following cmdline:
-> rcu_nocbs=1-4 nohz_full=1-4 irqaffinity=0,5-6,11 intel_pstate=disable
-> On the other cpus, stress-ng was executed to generate load.
+> mistakes happen. The 700+ tests that exist were verified by me when I
+> submitted the script - that each test passes when it should and fails
+> when it should. "FAIL" has many reasons. I tried to have separate exit
+> codes for nettest.c to capture the timeouts vs ECONNREFUSED, etc., but I
+> could easily have made a mistake. scanning the output is the best way.
+> Most of the 'supposed to fail' tests have a HINT saying why it should fail.
 
-enum hk_flags {
-        HK_FLAG_TIMER           = 1,
-        HK_FLAG_RCU             = (1 << 1),
-        HK_FLAG_MISC            = (1 << 2),
-        HK_FLAG_SCHED           = (1 << 3),
-        HK_FLAG_TICK            = (1 << 4),
-        HK_FLAG_DOMAIN          = (1 << 5),
-        HK_FLAG_WQ              = (1 << 6),
-        HK_FLAG_MANAGED_IRQ     = (1 << 7),
-        HK_FLAG_KTHREAD         = (1 << 8),
-};
+It is not good to have a test for which correctness is ambiguous to such 
+an extent, it makes reliable future changes difficult. In theory an 
+uniform TAP format is supposed to solve this but it is not applied 
+inside selftests/net.
 
-static int __init housekeeping_nohz_full_setup(char *str)
-{
-        unsigned int flags;
+I attempted to write a script to compare two logs in their current 
+format: https://gitlab.com/cdleonard/kselftest-parse-nettest-fcnal
 
-        flags = HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_RCU |
-                HK_FLAG_MISC | HK_FLAG_KTHREAD;
+It does a bunch of nasty scrubbing of irrelevant behavior and got it to 
+the point where no diffs are found between repeated runs on the same 
+machine.
 
-        return housekeeping_setup(str, flags);
-}
-__setup("nohz_full=", housekeeping_nohz_full_setup);
+One nasty issue was that many tests kill processes inside log_test so 
+relevant output may be shown either before or after the "TEST: " result 
+line. This was solved by associating output until the next ### with 
+previous test.
 
-So HK_FLAG_SCHED and HK_FLAG_MANAGED_IRQ are unset in your configuration.
-Perhaps they are affecting your latency numbers?
-
-This tool might be handy to see what is the reason for the latency source:
-
-https://github.com/xzpeter/rt-trace-bpf
-
-./rt-trace-bcc.py -c isolated-cpu
-
-> Just some more general notes:
+>> The output is also modified by a previous change to not capture server
+>> output separately and instead let it be combined with that of the
+>> client. That change is required for this one, doing out=$(nettest -k)
+>> does not return on fork unless the pipe is also closed.
+>>
+>> I did not look at your change, mine is relatively minimal because it
+>> only changes who decide when the server goes into the background: the
+>> shell script or the server itself. This makes it work very easily even
+>> for tests with multiple server instances.
 > 
-> Even with this new "isolated" type, it is still very tricky to get a similar
-> behavior as with isolcpus (as long as I don't miss something here):
-> 
-> Consider an RT application that consists of a non-rt thread that should be floating
-> and a rt-thread that should be placed in the isolated domain.
-> This requires cgroup.type=threaded on both cgroups and changes to the application
-> (threads have to be born in non-rt group and moved to rt-group).
-> 
-> Theoretically, this could be done externally, but in case the application sets the
-> affinity mask manually, you run into a timing issue (setting affinities to CPUs
-> outside the current cpuset.cpus results in EINVAL).
-> 
-> Best regards,
-> Felix Moessbauer
-> Siemens AG
-> 
-> > Patch 4: Enable the "cpuset.cpus.partition" file to show the reason
-> >  that causes invalid partition like "root invalid (No cpu available
-> >  due to hotplug)".
-> > 
-> > Patch 5 updates the cgroup-v2.rst file accordingly. Patch 6 adds a new
-> > cpuset test to test the new cpuset partition code.
-> 
-> 
+> The logging issue is why I went with 1 binary do both server and client
+> after nettest.c got support for changing namespaces.
 
+It's possible to just compare the "client" and "server" logs separately 
+by sorting them on their prefix.
+
+I think a decent approach would be to do a bulk replace for all 
+"run_cmd{,_nsb,_nsc} nettest" with a new "run_nettest" function that 
+passes all arguments to nettest itself. That run_nettest function could 
+include a leading common "-t" arg that is parsed at the top of 
+fcnal-test.sh.
+
+--
+Regards,
+Leonard
