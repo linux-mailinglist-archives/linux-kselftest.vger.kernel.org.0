@@ -2,71 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 457F844D71D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Nov 2021 14:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B29A44D91C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Nov 2021 16:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbhKKNYB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Nov 2021 08:24:01 -0500
-Received: from mga06.intel.com ([134.134.136.31]:55413 "EHLO mga06.intel.com"
+        id S232126AbhKKPXj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Nov 2021 10:23:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231739AbhKKNYA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Nov 2021 08:24:00 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10164"; a="293732425"
-X-IronPort-AV: E=Sophos;i="5.87,226,1631602800"; 
-   d="scan'208";a="293732425"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 05:21:11 -0800
-X-IronPort-AV: E=Sophos;i="5.87,226,1631602800"; 
-   d="scan'208";a="733179575"
-Received: from thrakatuluk.fi.intel.com (HELO thrakatuluk) ([10.237.72.185])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 05:21:06 -0800
-Received: from platvala by thrakatuluk with local (Exim 4.94)
-        (envelope-from <petri.latvala@intel.com>)
-        id 1ml9zh-0000wf-0i; Thu, 11 Nov 2021 15:19:57 +0200
-Date:   Thu, 11 Nov 2021 15:19:57 +0200
-From:   Petri Latvala <petri.latvala@intel.com>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        daniel@fooishbar.org, igt-dev@lists.freedesktop.org,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        ~lkcamp/discussion@lists.sr.ht, isabbasso@riseup.net,
-        maira.canal@usp.br, arthur.grillo@usp.br,
+        id S232033AbhKKPXi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 11 Nov 2021 10:23:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 722D8610D0;
+        Thu, 11 Nov 2021 15:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636644049;
+        bh=lHL5BysVR2OzwoaprjNGs9Nb/KHLN+fSl6riUkreLz8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MyPUIeFXfdYu6kuNx8Fxo7aEHkRawm8SefGJyNylOdvyokpXMYHuOhkxUxx+B4IG8
+         FiUs+vxz+eYACHIEUyqYBv+9cXOWPdXl6+scbmIrLc61GrWgUn52EbXI4qBVcs4zP8
+         Y5rmPRBy233IuPnVjAFkMcyzi0iBb2ZJUnXfCmAL5O/y5VZ2ntpvFcfEdCdCCtgIJj
+         nta3HwGn3hFIvCedzWWtDfDuePBdlrArcP3xsHCp2k+WTe+cpcqUjhdoHeY3jZAJqf
+         aaVIOJkebXToFIYp5uQqGPzcXbLkQH39TasdCyXFKZZ7Njwhl84QBwMpVfJ13JNfkA
+         tfCE5KtPXlV6w==
+Date:   Thu, 11 Nov 2021 07:20:48 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [igt-dev] [RFC PATCH 0/1] drm: selftest: Convert to KUnit
-Message-ID: <YY0YfV4WECXFMhYw@platvala-desk.ger.corp.intel.com>
-References: <20211111003453.209115-1-andrealmeid@collabora.com>
+Subject: Re: [PATCH] selftests: net: properly support IPv6 in GSO GRE test
+Message-ID: <20211111072048.00852448@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211104104613.17204-1-andrea.righi@canonical.com>
+References: <20211104104613.17204-1-andrea.righi@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211111003453.209115-1-andrealmeid@collabora.com>
-X-Patchwork-Hint: comment
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 09:34:52PM -0300, André Almeida wrote:
-> Hi,
+On Thu,  4 Nov 2021 11:46:13 +0100 Andrea Righi wrote:
+> Explicitly pass -6 to netcat when the test is using IPv6 to prevent
+> failures.
 > 
-> This RFC is a preview of the progress we made in the KUnit hackathon[0].
-> This patch, made by Maíra and Arthur, converts the damage helper test
-> from the original DRM selftest framework to use the KUnit framework.
+> Also make sure to pass "-N" to netcat to close the socket after EOF on
+> the client side, otherwise we would always hit the timeout and the test
+> would fail.
 > 
-> [0] https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
+> Without this fix applied:
 > 
-> The IGT part of this work can be found here:
-> https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/tree/introduce-kunit
+>  TEST: GREv6/v4 - copy file w/ TSO                                   [FAIL]
+>  TEST: GREv6/v4 - copy file w/ GSO                                   [FAIL]
+>  TEST: GREv6/v6 - copy file w/ TSO                                   [FAIL]
+>  TEST: GREv6/v6 - copy file w/ GSO                                   [FAIL]
+> 
+> With this fix applied:
+> 
+>  TEST: GREv6/v4 - copy file w/ TSO                                   [ OK ]
+>  TEST: GREv6/v4 - copy file w/ GSO                                   [ OK ]
+>  TEST: GREv6/v6 - copy file w/ TSO                                   [ OK ]
+>  TEST: GREv6/v6 - copy file w/ GSO                                   [ OK ]
+> 
+> Fixes: 025efa0a82df ("selftests: add simple GSO GRE test")
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 
-IGT side approach looks good. There's a couple of obscure bugs that I
-spotted but nothing that is unfixable when it's time to review in
-detail.
+This breaks the test for me on Fedora now :(
+
+nc: invalid option -- 'N'
+Ncat: Try `--help' or man(1) ncat for more information, usage options and help. QUITTING.
+    TEST: GREv6/v4 - copy file w/ TSO                                   [FAIL]
+nc: invalid option -- 'N'
+Ncat: Try `--help' or man(1) ncat for more information, usage options and help. QUITTING.
+    TEST: GREv6/v4 - copy file w/ GSO                                   [FAIL]
+nc: invalid option -- 'N'
+Ncat: Try `--help' or man(1) ncat for more information, usage options and help. QUITTING.
+    TEST: GREv6/v6 - copy file w/ TSO                                   [FAIL]
+nc: invalid option -- 'N'
+Ncat: Try `--help' or man(1) ncat for more information, usage options and help. QUITTING.
+    TEST: GREv6/v6 - copy file w/ GSO                                   [FAIL]
+
+Tests passed:   0
+Tests failed:   4
 
 
--- 
-Petri Latvala
+Can you please test this on your distro?
+
+--->8-----
+
+diff --git a/tools/testing/selftests/net/gre_gso.sh b/tools/testing/selftests/net/gre_gso.sh
+index fdeb44d621eb..3224651db97b 100755
+--- a/tools/testing/selftests/net/gre_gso.sh
++++ b/tools/testing/selftests/net/gre_gso.sh
+@@ -118,16 +118,18 @@ gre_gst_test_checks()
+ 	local addr=$2
+ 	local proto=$3
+ 
+-	$NS_EXEC nc $proto -kl $port >/dev/null &
++	[ "$proto" == 6 ] && addr="[$addr]"
++
++	$NS_EXEC socat - tcp${proto}-listen:$port,reuseaddr,fork >/dev/null &
+ 	PID=$!
+ 	while ! $NS_EXEC ss -ltn | grep -q $port; do ((i++)); sleep 0.01; done
+ 
+-	cat $TMPFILE | timeout 1 nc $proto -N $addr $port
++	cat $TMPFILE | timeout 1 socat -u STDIN TCP:$addr:$port
+ 	log_test $? 0 "$name - copy file w/ TSO"
+ 
+ 	ethtool -K veth0 tso off
+ 
+-	cat $TMPFILE | timeout 1 nc $proto -N $addr $port
++	cat $TMPFILE | timeout 1 socat -u STDIN TCP:$addr:$port
+ 	log_test $? 0 "$name - copy file w/ GSO"
+ 
+ 	ethtool -K veth0 tso on
+@@ -155,8 +157,8 @@ gre6_gso_test()
+ 
+ 	sleep 2
+ 
+-	gre_gst_test_checks GREv6/v4 172.16.2.2
+-	gre_gst_test_checks GREv6/v6 2001:db8:1::2 -6
++	gre_gst_test_checks GREv6/v4 172.16.2.2 4
++	gre_gst_test_checks GREv6/v6 2001:db8:1::2 6
+ 
+ 	cleanup
+ }
+@@ -212,8 +214,8 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
+-if [ ! -x "$(command -v nc)" ]; then
+-	echo "SKIP: Could not run test without nc tool"
++if [ ! -x "$(command -v socat)" ]; then
++	echo "SKIP: Could not run test without socat tool"
+ 	exit $ksft_skip
+ fi
+ 
