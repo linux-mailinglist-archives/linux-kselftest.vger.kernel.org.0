@@ -2,116 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B49FC44DBA4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Nov 2021 19:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6C244E0C9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Nov 2021 04:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbhKKSgw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Nov 2021 13:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbhKKSgw (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Nov 2021 13:36:52 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AC3C061767
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Nov 2021 10:34:02 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id h62-20020a25a544000000b005c5d9b06e57so10556001ybi.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Nov 2021 10:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=DESeEF7SdR9UNYveOTPLprv35taR3AHUVFjTWAt72+s=;
-        b=CanF6peffIh1bkeDS+6QZwFe/gVwt6sqLVD4E3sctTuUDeytoW8gei09i6qvDe/w5h
-         /BiyidEWMsr/9HOeW1umDg8GI+uO3wG321IU92JS6wnmCckJmyq3GQpoyaDc5HfV9qne
-         g/i9X8+npWWUDwP+aQBSJONS289xpO2ZTH8gu445SeA8O+7NgALvg2iC+WI/erolK0nx
-         k51CqxjQ5VZlDzU4cDyI2XVWWAo/MDSSiO7nzJwZBOdlzeMq55lVNLtDojAYZ66P1hgm
-         GbOrfftWCJMwXtxTX9nYvt7k8QY4y2HkIto7bjZzKE5qZSMz6/JhydWEBk83ehX13dtx
-         1nPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=DESeEF7SdR9UNYveOTPLprv35taR3AHUVFjTWAt72+s=;
-        b=MktoTGkffu69e/bLQEcay0TgY0ZPqFcP+8eMyFW3s90yJGsoMA4frE+gDEcnCwKBrl
-         dez/S7x4tayTw5pmV2uv4/1q4suMiBIk60YpMgCnsN2V1ClC88adeMOJADem3lAUuywg
-         sKCsnC60ekGW1ez2+FkXgZI2WqHMHNumumoMDpqs11nUx0dD4XBN7A3YgyakifDXf3WM
-         dc7yuTSORd7RNklfo/yLSKgyRkmCZmGVMwHcSRvDJZP/VTTa5pDsczacG8RMpyoEWpZR
-         qeX3S0W2XXaDfdsqAWiH/IuF62jrypTOXblk/OMpqZk4IAyJaPjiI39qjOEaNS5bNXAI
-         x9AA==
-X-Gm-Message-State: AOAM531UhpbOPZNUJcva6HFGZP3BFhGFNvGSS1QBOkiSe3IHKoKl4qmO
-        stLGXpdg8T4E+Baq3lhMorLtIfwDpr+u5w==
-X-Google-Smtp-Source: ABdhPJwXO3yPskee9ladbnf++H8/0IrZ+7Iv8PD1eTUA6DKosc6VIemY97pt4AkUvE1dOFlq2NyTasuPhgM8Vw==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:468f:6ab3:7243:11d5])
- (user=dlatypov job=sendgmr) by 2002:a25:bb8c:: with SMTP id
- y12mr10508240ybg.542.1636655642210; Thu, 11 Nov 2021 10:34:02 -0800 (PST)
-Date:   Thu, 11 Nov 2021 10:33:56 -0800
-Message-Id: <20211111183356.4073001-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.0.rc1.387.gb447b232ab-goog
-Subject: [PATCH] kunit: tool: revamp message for invalid kunitconfig
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S233920AbhKLDaN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Nov 2021 22:30:13 -0500
+Received: from mail-sgaapc01on2127.outbound.protection.outlook.com ([40.107.215.127]:22432
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229698AbhKLDaM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 11 Nov 2021 22:30:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZIqZD7R5yVXIlL2fVpLoL3e4UdH7dg480ugNwWj+BzbNAZE3CGcjdFsMA96/Zf1TXng4O0Dqm9CXJgjNPvZPNIvfLzmdOqGf42wGK8i6IEsUaaiOQfARCAJFnwvIWEuzIaRKlpKQgxTYuO61e/hkn1+YZyXTn8ZGBUsakV5NLAEjle84JFVZIFqppUPH66GD0hI1VVUC4noaAK6Z6IKzcCRgxI3iS7uceunxpRuJSaThcb3LSAOT5QhPkZJymDTyqdAw2zfdM6AC60YfdGsed5FVmTweVF+TMS5aysAFpp6sIRyGM7rbyBFjYvTDLCJu44GlNBtIFLS4lZ2g9PNZkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tXv6c9U5dSYZUqH1ylUdyj62X1MxCEep1Qo9ORwrJ90=;
+ b=UewZ0N/FS/AT8hvhtOJMHnCWfIXh0rKRKxId8Ms1qb3hUVW4LCf0Bjoqd2vzvUVDI23Fl/z1G+aGfFyLPyYgZKn5ujMdCu60OuuOsg3KjZvNdVjZ0CNTCDLVJxoYRsXfOxmWX848Bwgs8EKAm42XMhpbsnC6aZwTuQrAUzfSqKNPWh65R4SLZIPmQtiSlycIs442WU2W/cdGEs5ngSeP9aq+8miIK9yGPmEJA7WvvJc4i5miITJ9Ymt1Ja3F6yQCL0J88dyyRwktqgUPSc53N6c4BeMucpbP/BEtX8Q51AUt/ckZqNC0STrZlCgRfy0kuY8Prd7CqRs3T3vPMPvpAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tXv6c9U5dSYZUqH1ylUdyj62X1MxCEep1Qo9ORwrJ90=;
+ b=BVnFEL8pmUFUi6Dv64n+uo7U5qcQzJvBrNx36OjPp/clngrBsDXK0bLfhcA8mRvF/5L7pb7v4Rs0Be0bHcQIIWWIXAe/KEyFYDd6MA/ELQ5FOLVwQ/ePs+QpDhRd8QPEGuWEbOTF9bGp8XWyX2GLslbw3WCFu5vjLEMmjNWl984=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by TY2PR06MB3614.apcprd06.prod.outlook.com (2603:1096:404:107::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.13; Fri, 12 Nov
+ 2021 03:27:18 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::5e:78e1:eba3:7d0e]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::5e:78e1:eba3:7d0e%8]) with mapi id 15.20.4669.016; Fri, 12 Nov 2021
+ 03:27:18 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] selftests/bpf: use swap() to make code cleaner
+Date:   Thu, 11 Nov 2021 19:27:04 -0800
+Message-Id: <20211112032704.4658-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0148.apcprd02.prod.outlook.com
+ (2603:1096:202:16::32) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
+MIME-Version: 1.0
+Received: from ubuntu.localdomain (103.220.76.181) by HK2PR02CA0148.apcprd02.prod.outlook.com (2603:1096:202:16::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.15 via Frontend Transport; Fri, 12 Nov 2021 03:27:15 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dbfba109-8c89-4bb3-a900-08d9a58c543f
+X-MS-TrafficTypeDiagnostic: TY2PR06MB3614:
+X-Microsoft-Antispam-PRVS: <TY2PR06MB3614D9AEDD9DF7D2F0A7010DA2959@TY2PR06MB3614.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yLZZtMsnL831i02vKwA6WmraMD++po7p88mnEhU81GFFE6gQS7MumPSoGZRQNJcm2LONDRENe7YPUSUbp5QVBlGrHJfKODOpTarGUguRG1WkzPV3FhFqCZZl2vt/no0yq3dijh/sOCx0Oby1oBWn9EQwNWgSAcgx1zuXVxDGCUbx5FL+ZtNELU07/eWYeHkgoDiMjtVLLCdquHskYLE8me/iu+BouDfGyy8EirHLkp4yDQ0uAu9tTvcf1p/bAMDB/gp6auUXz5KRAL2hnKQAheeRyMK9wuJLx93hiPFii/xfdxfl00iGBoIqkP7t+gB1KaT6SOcqRrx9A5Y2LbA3zZ8NMj3io4ctNXmVuvLycqidjtcXaVIRGBP8mPtvyb+s0NlfK0KLXQzwOR1K4+OZY0bK0uIZK2TVBfcf1xOG+/bA8bkTRDhmGxJjNMdsvAQv89uCz6bhr/ol4uPeox9VXYyCVb5gCGYFVeFLf/XDpNux3kY4WWHfNX3d4JotlveVR6pBP9TsBxhnU3VEWLCZhuX2rEeB5uDQgYcqT/p9o+SLwmQmEzV6SxlDP0Y6ebco5tPk7rbTgD1Af6mVl/KAkMRBh8+Xhu+EhNVIxBPc2xjHuj7SCWlfhUbk/WIrpyfqahBfXQBGTVRBeyn7r9h+yrLVVCvxMaYEe5J/dPIkIq+PgiCKrWUORxd422/S/YCJsEezPJfkgUpS/HXwRRsYYIjNkvvQ7abB4BrElS29vHM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(316002)(66946007)(66556008)(83380400001)(956004)(66476007)(508600001)(2616005)(921005)(36756003)(38350700002)(6486002)(38100700002)(8676002)(7416002)(4326008)(6512007)(52116002)(186003)(6506007)(26005)(107886003)(110136005)(2906002)(6666004)(1076003)(8936002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YsGT45sooI1+NkxbbY0/MEmW9tWJ2XwWJBYoX88WlTvp2FTs9yhw12hPfF2l?=
+ =?us-ascii?Q?JMrFhn6IR2lp1uZzm1Spl+fz7ut521DbSfrSw+EXQj9h5bDZZQO3NACeuO4H?=
+ =?us-ascii?Q?k/WNt8LLrCRZPV6im2VXcHVdEkFcFgLAQNoOgrvGcJ8J753nUemOwnuz2BH9?=
+ =?us-ascii?Q?jKflA2o4WeS7URfinHsyz/OPe0eaotjLorx8LEBTtwegleBtBriVKMjAq32M?=
+ =?us-ascii?Q?6X7vqUi/5j9fpCjdmJ7be1bj2Cd+8uiB47qQ4DBolXmLb5kxoRUGwOjG4kM9?=
+ =?us-ascii?Q?Ht/TVzEUBziUQELX7n19lQGigtemz7ARN5katPlUm7C0/s/UE37hYrJ2rRhT?=
+ =?us-ascii?Q?Lj8Fo96RCF8Iw4JtekR0aPKJ4A21eKJY2nmqcJEKvUKkxQWKiDIWRpIhVcqU?=
+ =?us-ascii?Q?OFcttiaHosr+FRxkn2ZRVWTGj7HC0kG0aETw63vV8Crcz5JFZuS34HIHEZfU?=
+ =?us-ascii?Q?EuBilPhHvU+8xIjsPc9BHkb4fLRZ0RSZpLnrE1lC07Mzb8X/Zk9dZpjSMSJZ?=
+ =?us-ascii?Q?BkliQPC09IqoGDFNkyccOso6KzT3Yu2OtlU5XN4kCEhwW4QNr6kaBSDK2qJw?=
+ =?us-ascii?Q?emIAZFSVC9qHyJHkc8P+jVUvHm9nun8ebAsX9YGaf92rt2ZaOHi25F+KkE9P?=
+ =?us-ascii?Q?yak29PBIUO29OQzFXfM7GVav+IcpgAzov4CzysLQeF/oW5chpA1FLwfPRNaQ?=
+ =?us-ascii?Q?MaGIidNB7WCh1eL96sfhcpiUdSmAXKlei8dMch4KlWD9NP7Foe89ZQTgspmd?=
+ =?us-ascii?Q?j13X5etARHroZ+Ib54O7MNy+L31bAWMFMgkGZVXYsVUy616zl3OOSZe0eTzt?=
+ =?us-ascii?Q?fONVI77yczP2A4TnwEy5XRo0ulbdDoAjE7anAFok464rinLUNubSJ/0ayYKu?=
+ =?us-ascii?Q?yMnYnU+St1N1eI1xmmJav1disdUvuJ7yyubxT2FgHX/xI0iEmgbdaFGBN9Lq?=
+ =?us-ascii?Q?wydATx9GXrX8/DqZT7nJSjVs5/PfS6AiJnApLeiAkLhAAeDyrOnPifJtpwWZ?=
+ =?us-ascii?Q?pnlehZF43ucFfBgYsdzz553cIVuyp7jK/Ou6OV76iTVm7+vNloKHxu+e7+ed?=
+ =?us-ascii?Q?xgcFIuPHMTWys3rGSDyVWa+eOjBzP5gwsgmceGEVX1VArdv0Az4NuKOf162H?=
+ =?us-ascii?Q?S6SFOt9Z8fKPc039KhUwsBzlN0Px6iMDpKc+25rj2jIFSbBgsmeruSI9BL/W?=
+ =?us-ascii?Q?sDfdIE7Rx8iIltm9RpqrcVSo4gN36M4l/9oD8ukeZV/oddc1IDjb++JKk9fx?=
+ =?us-ascii?Q?ToTt9OuRmpKjF9QsJYnyWEQBQvNhzWq8+b1ywSeP/8dQPrKEQ7zKBkV4IBj9?=
+ =?us-ascii?Q?Ed/5ohzmJJadkt6ATMJs9w+/WSZcQ4e24wEXm/zM1lYG7IbmUIi6ItjwXyVa?=
+ =?us-ascii?Q?SebuzUJv60X7bCq2ClsYtRk01zmRw1yiwQ47nWWzyOE3/z8dzAy1FSBPOyg/?=
+ =?us-ascii?Q?6y4xo3ZxC0UGidUD0lJRR+DIkB5J3hcV5lhXpUwoCBW9SKH1NcdhSpdwh/8j?=
+ =?us-ascii?Q?8BHcMWdzms5w9Slu7Y+1jdTtE0Rn/O2ArAhjIoOwX3khgIIZxInHgpUf93yx?=
+ =?us-ascii?Q?LoueCQ+BtV/l/DUh72ap7vnmE0fqcSYO11XCBVJJ+JOwmWlmZ23SC8IZwW6q?=
+ =?us-ascii?Q?pr5mpJsIofVy8delUPkAw8M=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbfba109-8c89-4bb3-a900-08d9a58c543f
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2021 03:27:18.1220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lAJEP6HUhRxFTIDqJnk291JcVOkLEtbbHDDKHmhgImU8wo9TPW75bbSEbg5HPysPQwh3+Vh7PwPPNcRUNl74tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB3614
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current error message is precise, but not very clear if you don't
-already know what it's talking about, e.g.
+Use the macro 'swap()' defined in 'include/linux/minmax.h' to avoid
+opencoding it.
 
-> $ make ARCH=um olddefconfig O=.kunit
-> ERROR:root:Provided Kconfig is not contained in validated .config. Following fields found in kunitconfig, but not in .config: CONFIG_DRM=y
-
-Try to reword the error message so that it's
-* your missing options usually have unsatisified dependencies
-* if you're on UML, that might be the cause (it is, in this example)
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
 ---
+ tools/testing/selftests/bpf/progs/test_xdp_noinline.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Note: this is based on https://lore.kernel.org/linux-kselftest/20211106013058.2621799-1-dlatypov@google.com/
-There's a fairly trivial merge conflict between these two patches (that
-patch changes the line above where this diff starts).
-
----
- tools/testing/kunit/kunit_kernel.py | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 7d459d6d6ff2..350883672be0 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -266,15 +266,17 @@ class LinuxSourceTree(object):
- 	def validate_config(self, build_dir) -> bool:
- 		kconfig_path = get_kconfig_path(build_dir)
- 		validated_kconfig = kunit_config.parse_file(kconfig_path)
--		if not self._kconfig.is_subset_of(validated_kconfig):
--			invalid = self._kconfig.entries() - validated_kconfig.entries()
--			message = 'Provided Kconfig is not contained in validated .config. Following fields found in kunitconfig, ' \
--					  'but not in .config: %s' % (
--					', '.join([str(e) for e in invalid])
--			)
--			logging.error(message)
--			return False
--		return True
-+		if self._kconfig.is_subset_of(validated_kconfig):
-+			return True
-+		invalid = self._kconfig.entries() - validated_kconfig.entries()
-+		message = 'Not all Kconfig options selected in kunitconfig were in the generated .config.\n' \
-+			  'This is probably due to unsatisfied dependencies.\n' \
-+			  'Missing: ' + ', '.join([str(e) for e in invalid])
-+		if self._arch == 'um':
-+			message += '\nNote: many Kconfig options aren\'t available on UML. You can try running ' \
-+				   'on a different architecture with something like "--arch=x86_64".'
-+		logging.error(message)
-+		return False
- 
- 	def build_config(self, build_dir, make_options) -> bool:
- 		kconfig_path = get_kconfig_path(build_dir)
-
-base-commit: c949316af0a7c2103521aaa39be85392e2f02bab
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+index 596c4e71bf3a..6d9972168a7c 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+@@ -428,7 +428,6 @@ int send_icmp_reply(void *data, void *data_end)
+ {
+ 	struct icmphdr *icmp_hdr;
+ 	__u16 *next_iph_u16;
+-	__u32 tmp_addr = 0;
+ 	struct iphdr *iph;
+ 	__u32 csum1 = 0;
+ 	__u32 csum = 0;
+@@ -444,9 +443,7 @@ int send_icmp_reply(void *data, void *data_end)
+ 	icmp_hdr->type = 0;
+ 	icmp_hdr->checksum += 0x0007;
+ 	iph->ttl = 4;
+-	tmp_addr = iph->daddr;
+-	iph->daddr = iph->saddr;
+-	iph->saddr = tmp_addr;
++	swap(iph->daddr, iph->saddr);
+ 	iph->check = 0;
+ 	next_iph_u16 = (__u16 *) iph;
+ #pragma clang loop unroll(full)
 -- 
-2.34.0.rc1.387.gb447b232ab-goog
+2.17.1
 
