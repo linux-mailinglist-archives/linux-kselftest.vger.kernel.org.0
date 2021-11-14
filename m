@@ -2,141 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AFF44F092
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Nov 2021 02:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F6B44F77E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Nov 2021 12:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbhKMBaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Nov 2021 20:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S229908AbhKNLEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Nov 2021 06:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbhKMBaJ (ORCPT
+        with ESMTP id S229563AbhKNLEP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Nov 2021 20:30:09 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F45DC061766;
-        Fri, 12 Nov 2021 17:27:17 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id np3so8115192pjb.4;
-        Fri, 12 Nov 2021 17:27:17 -0800 (PST)
+        Sun, 14 Nov 2021 06:04:15 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B0FC061746
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Nov 2021 03:01:21 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id r12so58057128edt.6
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Nov 2021 03:01:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cpHelnxym1ZdzaK+IqqiuDWAYBCX9hEY4y5A2JWqrOM=;
-        b=mxoL5gHLYKVBpe2SOIVblh1WZx6+fNDRummF4BQepLO0bJleW4XdHlUXfd0W5IyiTO
-         Yc2aTw+YndP87tQoU9Ysibu/hcdtzMuNSFhej952uMy3ELmtAZRlUlkQICuscFmA8VBi
-         0SCatR2QKAtwet675yzV/5WqU9srmJKNnAK7uZbima7v8GHT8OyS0eiHaW5Yomj2ATBn
-         Do/TjFqzlXbeM1NCqu5VTvqrYy4RfA9m0oEP8TPB41POmSZRzaHhZGOuA56c/m32LenP
-         GhWHelx/NcosQ71Knt6THcRysk+2cOtnLZ+rS7NZD6yDxjDFWwdtgCvXvGtHJ9aXL5+J
-         dnig==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=OzsE1nfn1gS0mmAg3xqXaoYi52fHZuhdwhDuHQACPEA=;
+        b=iEyP2WjmTVmUXb8IdOiyJaugkJnBW0oF6jSeLwuMsk65rItd7JxEwazIL1mcnKT+Uc
+         J1QfD/s3QL5GUFg/O9xVD25+zmLVNGuUQcZZxOGo/dGh9s9a7VvyCH1Xl08EIENyyY7Q
+         AWqKhGvRvJrBpyEt5ARaE6XzkC8fTbGBAkpPUajfLF5jTSPNOoAHp1Iam2j9GOX5fGu3
+         V5TaD+7Q0bbW5mU8Dyg9wNxxXpfELHnHqfcounVf9ok1M8sew9Hq9+ksNJCPOIz0sEc9
+         cBJpVzp7WeYUoevBePOlMeUfBO0AqoxK/bxqY0krYVis8SKRS5xHSxDcyXDJBD2YHgTz
+         9T8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cpHelnxym1ZdzaK+IqqiuDWAYBCX9hEY4y5A2JWqrOM=;
-        b=DS4ilc10CnAUgHKA6OiCrGHTp9xJG8XiZxnPzJ2T+Vfe0ainMlY2jH5hgNYVtklWAH
-         umjceovk4c2n+S2QB4EoggMr8H8gC4qEq5/YUvK0Z0ZUmA4DHoKOaxMorO/9FluBh4tt
-         WJO4BC919hNYl9pW2Iqc34p2pV9BhcnXbQdYF3f0qLu7kzMhCEqjse6kZXxRzgz2E1XS
-         /Qu2Nb21HQlvsSzuzU+H+d7nGey/JVp/oF2fdR8IwHOW50SULI+3vOJxsuF/FGIKnAjm
-         YA8blO2pQzReuHiCtCO4FsL6kNBVLpn3PnRW/69HM2wSroQz9oOOeSTtD9wokbk0ZKMr
-         wD4A==
-X-Gm-Message-State: AOAM533lJWz8+YJ+ReEQuwJuFVfvQ+CkYzqpgMXl868zzpZQKBZf/WuO
-        e3711rSvx/ICyLYm5ClqfGPepDHL7BHNL5VV8K4=
-X-Google-Smtp-Source: ABdhPJyHwvS/jKW7DRlCUoys/2r2PYkL2HJJEPUsWZK0TMk4zkEsYzYwO0GghgPbqeR33/HUixUyHrQaxUYC0TF1Fzg=
-X-Received: by 2002:a17:903:2306:b0:141:e52e:457d with SMTP id
- d6-20020a170903230600b00141e52e457dmr13068957plh.3.1636766836907; Fri, 12 Nov
- 2021 17:27:16 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=OzsE1nfn1gS0mmAg3xqXaoYi52fHZuhdwhDuHQACPEA=;
+        b=1NHJg8yE8m0N8OQRSqr+zCxyhjpnUUTC6pBT6w6cRzmG4ITd6qM+0D1YTgp4lZuWSn
+         lV8ufugIzgLcRPisZCG5dpFYdqT6Jvn5TrZYLBh+FPlh3IfqT4VlIyHeRB377dqO2j6Q
+         Go4/rJ9MOZUgqYHjtJMFCqD0I+chpFw93IMDnxdcDtfOmzsZjFBO8+4A9kwG+eWvCOix
+         KUxDjbWZWKSzsU6gYAOoqYjnac2tDN5Trigys7/iv1ddZBFJUAOF7KUNms21YbseyyBj
+         pzmuuTp6uYtBeZ1Ltvf7xyDha6IhsCBbX8yM2RV7TVRwP/YAG2IL1aDc56N68Y4Bgn0x
+         Kvlw==
+X-Gm-Message-State: AOAM533t4hLeCYvQHrH+4EI4VsHnz6LB7ptMusTLOg33SAf0J5xKdCn+
+        KIJ1xnm1R/FagkgZaGkMv6UdwrDYq4OeP1wb1cs=
+X-Google-Smtp-Source: ABdhPJzIEON4Q7gm3CA+pTZ84ewatM/AmSBqbx3K8oME/JGvmulMVqMXz/15nuSW04R56DlsbpLVQiI+fuzeD/rp12w=
+X-Received: by 2002:a17:906:76d4:: with SMTP id q20mr38202688ejn.380.1636887680214;
+ Sun, 14 Nov 2021 03:01:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20211111161452.86864-1-lmb@cloudflare.com>
-In-Reply-To: <20211111161452.86864-1-lmb@cloudflare.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 12 Nov 2021 17:27:05 -0800
-Message-ID: <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Received: by 2002:a54:2950:0:0:0:0:0 with HTTP; Sun, 14 Nov 2021 03:01:19
+ -0800 (PST)
+Reply-To: plidiaherreros@gmail.com
+From:   LIDIA HERREROS PADILLA <jacobbarney57@gmail.com>
+Date:   Sun, 14 Nov 2021 14:01:19 +0300
+Message-ID: <CALM1g1PFJQSt00fndAg-vG+7t9Qhx_r7qBcF=tsuY2qFEEpYVA@mail.gmail.com>
+Subject: My Regards
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 8:16 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
->
-> Ensure that two registers with a map_value loaded from a nested
-> map are considered equivalent for the purpose of state pruning
-> and don't cause the verifier to revisit a pruning point.
->
-> This uses a rather crude match on the number of insns visited by
-> the verifier, which might change in the future. I've therefore
-> tried to keep the code as "unpruneable" as possible by having
-> the code paths only converge on the second to last instruction.
->
-> Should you require to adjust the test in the future, reducing the
-> number of processed instructions should always be safe. Increasing
-> them could cause another regression, so proceed with caution.
->
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> Link: https://lore.kernel.org/bpf/CACAyw99hVEJFoiBH_ZGyy=+oO-jyydoz6v1DeKPKs2HVsUH28w@mail.gmail.com/
-> ---
->  .../selftests/bpf/verifier/map_in_map.c       | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/verifier/map_in_map.c b/tools/testing/selftests/bpf/verifier/map_in_map.c
-> index 2798927ee9ff..f46c7121e216 100644
-> --- a/tools/testing/selftests/bpf/verifier/map_in_map.c
-> +++ b/tools/testing/selftests/bpf/verifier/map_in_map.c
-> @@ -18,6 +18,39 @@
->         .fixup_map_in_map = { 3 },
->         .result = ACCEPT,
->  },
-> +{
-> +       "map in map state pruning",
-> +       .insns = {
-> +       BPF_ST_MEM(0, BPF_REG_10, -4, 0),
-> +       BPF_MOV64_REG(BPF_REG_6, BPF_REG_10),
-> +       BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -4),
-> +       BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
-> +       BPF_LD_MAP_FD(BPF_REG_1, 0),
-> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-> +       BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-> +       BPF_EXIT_INSN(),
-> +       BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
-> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-> +       BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 11),
-> +       BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
-> +       BPF_LD_MAP_FD(BPF_REG_1, 0),
-> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-> +       BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-> +       BPF_EXIT_INSN(),
-> +       BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
-> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-> +       BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-> +       BPF_EXIT_INSN(),
-> +       BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0),
-> +       BPF_EXIT_INSN(),
-> +       },
-> +       .fixup_map_in_map = { 4, 14 },
-> +       .flags = BPF_F_TEST_STATE_FREQ,
-> +       .result = VERBOSE_ACCEPT,
-> +       .errstr = "processed 25 insns",
-> +},
+Greetings,
+I work for REPUTABLE BANK and my name is Mrs. Lidia Herreros Padilla.
+I'm excited to approach you and present you with a lucrative
+proposition that I've prepared for you. Please respond as soon as
+possible if you are interested in the details.
 
-Not sure how you've tested it, but it doesn't work in unpriv:
-$ test_verifier 789
-#789/u map in map state pruning FAIL
-processed 26 insns (limit 1000000) max_states_per_insn 0 total_states
-2 peak_states 2 mark_read 1
-#789/p map in map state pruning OK
+Please email me at (plidiaherreros@gmail.com) or fax me at (+34 932 71 56 35).
 
-I've added
-.prog_type = BPF_PROG_TYPE_XDP,
-and force pushed.
+Kind regards
+Mrs.Lidia Herreros Padilla
+Financial Management Consultant.
