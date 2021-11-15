@@ -2,118 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE662450A2D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 17:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30016451044
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 19:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbhKOQzm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Nov 2021 11:55:42 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:42444
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231767AbhKOQz3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 11:55:29 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 92A5C3F1AA
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Nov 2021 16:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636995150;
-        bh=PNH2v6es8O5TOQZzDLjEqkCgdBVGSVqHubwT7Cy+HTU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=CU4CBpfM4YuPt/teKruLLRKucAGjvddKhKs1PGKICag8ROjQ95O2lu1R3wvendmG9
-         +6b0rLoida6drtws2TQo+e8lRq7kVW9KuB0+FHMIaKX0cMI8WX+DzTKfOY9RQ4i5QI
-         p2D0PDEW56XVSyDXKovtpc88+ucxjDEXoUnpQ/tx15pwefANHx2R1/2dOKBKhYqyG3
-         8f+3R+0i91Gf5L1Fbi/Amg4Uo5Zt30PbRyffWdx73jLcGcsjgax+4FBzt0aScygyae
-         mRCm8d+lbfAljLXw+z9F2GdhkMWFMaor0ZiX84dJ8y1lSJyT8pVBL4olWV/GtIozQ5
-         UiyMdC2GLp+uA==
-Received: by mail-ed1-f72.google.com with SMTP id bx28-20020a0564020b5c00b003e7c42443dbso2579721edb.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Nov 2021 08:52:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PNH2v6es8O5TOQZzDLjEqkCgdBVGSVqHubwT7Cy+HTU=;
-        b=yag0FOfOYJn3E4CB7SA9Brkq0WJ0BroBET7qbEYnT09zRB53nnhHGIVYzoL7vim9Xy
-         WFvkKyCcI65jromae1l7/2x3qUr7m7ahgyEf6c4zqrqlCDngFerV8SVlvXctSlZVHDIR
-         +bg0bD9Kj+2yxLCav534EI+P1801OJiUnJRupdDQn8fdd4go2Tck3G8uh3y160K2g3p9
-         LqRZIplKvJRU8jeNrRfvn83oG+RBhnifRBDBLL/mI/AcqC/fnK/COe3D2DBwsi4x95F0
-         oOjQ8s6ihzCgdNJ3GrMQlYfoZ4NqFez7OnTzUkG3gxPzJfaG9/7uyklVEVHtVJY66icR
-         E8Iw==
-X-Gm-Message-State: AOAM533AxIAV9Tlv2fH6PoNkZ19OyW599enGJ154fmxJcQoEfFA46Sed
-        tMfcR52EJZJ2d8km5dyqjgBxQFE0ssKzXxz3TYWdz9vegTyp2IYeiv25YSD+5NyATQ1x7Fmscgh
-        +b+UNzxTQoYqs1tEoV9f/4DYpu0EhfvFTJuw6mh3UpQerww==
-X-Received: by 2002:a17:906:4099:: with SMTP id u25mr447157ejj.453.1636995150309;
-        Mon, 15 Nov 2021 08:52:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz1ddN8Ya6WZiEz3nrE5A7ROfH6GkWWKrtT46rgA6RW+xJPsLTeHGOQjE2zXjDLcd9AVi28lQ==
-X-Received: by 2002:a17:906:4099:: with SMTP id u25mr447122ejj.453.1636995150100;
-        Mon, 15 Nov 2021 08:52:30 -0800 (PST)
-Received: from arighi-desktop.homenet.telecomitalia.it ([2001:67c:1560:8007::aac:c1b6])
-        by smtp.gmail.com with ESMTPSA id o14sm7770903edj.15.2021.11.15.08.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 08:52:29 -0800 (PST)
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/seccomp: fix check of fds being assigned
-Date:   Mon, 15 Nov 2021 17:52:27 +0100
-Message-Id: <20211115165227.101124-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        id S236995AbhKOSpT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Nov 2021 13:45:19 -0500
+Received: from mga02.intel.com ([134.134.136.20]:59273 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242654AbhKOSnP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:43:15 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="220713089"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="220713089"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:35:37 -0800
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="454130649"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:35:37 -0800
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     jarkko@kernel.org, linux-sgx@vger.kernel.org, shuah@kernel.org,
+        dave.hansen@linux.intel.com
+Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 00/13] selftests/sgx: Oversubscription, page permission, thread entry
+Date:   Mon, 15 Nov 2021 10:35:13 -0800
+Message-Id: <cover.1636997631.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There might be an arbitrary free open fd slot when we run the addfd
-sub-test, so checking for progressive numbers of file descriptors
-starting from memfd is not always a reliable check and we could get the
-following failure:
+V2 available at:
+https://lore.kernel.org/lkml/cover.1635447301.git.reinette.chatre@intel.com/
 
-  #  RUN           global.user_notification_addfd ...
-  # seccomp_bpf.c:3989:user_notification_addfd:Expected listener (18) == nextfd++ (9)
-  # user_notification_addfd: Test terminated by assertion
+Changes since V2:
+- Remove the non-kselftest placeholder patches while also removing their
+  usage within the SGX selftests. Instead, the SGX selftests obtain needed
+  data from CPUID directly (Dave).
+- Rewrite commit message of "selftests/x86/sgx: Fix a benign linker
+  warning" (Dave).
+- Add Jarkko's signature to "selftests/sgx: Add page permission and
+  exception test" (Jarkko).
 
-Simply check if memfd and listener are valid file descriptors and start
-counting for progressive file checking with the listener fd.
+V1 available at:
+https://lore.kernel.org/lkml/cover.1631731214.git.reinette.chatre@intel.com/
 
-Fixes: 93e720d710df ("selftests/seccomp: More closely track fds being assigned")
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Changes since V1:
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index d425688cf59c..4f37153378a1 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3975,18 +3975,17 @@ TEST(user_notification_addfd)
- 	/* There may be arbitrary already-open fds at test start. */
- 	memfd = memfd_create("test", 0);
- 	ASSERT_GE(memfd, 0);
--	nextfd = memfd + 1;
- 
- 	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
- 	ASSERT_EQ(0, ret) {
- 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
- 	}
- 
--	/* fd: 4 */
- 	/* Check that the basic notification machinery works */
- 	listener = user_notif_syscall(__NR_getppid,
- 				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
--	ASSERT_EQ(listener, nextfd++);
-+	ASSERT_GE(listener, 0);
-+	nextfd = listener + 1;
- 
- 	pid = fork();
- 	ASSERT_GE(pid, 0);
+- Biggest change: The non-kselftest placeholder patches included in this series
+  that the kselftest work depends on are still being discussed elsewhere
+  (link below) but has changed significantly since the first submission,
+  warranting an update to the kselftest patches that depend on it.
+  Jarkko: I made significant modifications to your
+  "selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed"
+  that you may want to look at.
+- Improve cover letter and changelogs (Dave).
+- Add Jarkko and Dave's signatures where obtained (Jarkko and Dave).
+- Fix Cedric's signature in patch 1 (Jarkko and Cedric).
+- Improve the loop locating the data segment (Jarkko).
+- Update placeholder patches that makes the amount of SGX memory available to
+  latest version (v8). Previously this dependency consisted out of one
+  patch, now it spans two.
+
+Hi Everybody,
+
+This series consists out of outstanding SGX selftests changes, rebased
+and gathered in a single series that can easily be merged for testing
+and development, and a few more changes added to expand the existing tests.
+
+The outstanding SGX selftest changes included in this series that have already
+been submitted separately are:
+
+* A more than two year old patch fixing a benign linker warning that is still
+  present today:
+  https://lore.kernel.org/linux-sgx/20191017030340.18301-2-sean.j.christopherson@intel.com/
+  The original patch is added intact and not all email addresses
+  within are valid.
+
+* Latest (v4) of Jarkko Sakkinen's series to add an oversubscription test:
+  https://lore.kernel.org/linux-sgx/20210809093127.76264-1-jarkko@kernel.org/
+
+* Latest (v2) of Jarkko Sakkinen's patch that provides per-op
+  parameter structs for the test enclave:
+  https://lore.kernel.org/linux-sgx/20210812224645.90280-1-jarkko@kernel.org/
+
+The new changes introduced in this series builds on Jarkko's outstanding
+SGX selftest changes and adds new tests for page permissions, exception
+handling, and thread entry.
+
+Building and running enclaves is painful and traditionally requires a
+big software stack. This adds features like threads to the SGX selftests
+which are traditionally implemented in that big software stack. This
+helps test SGX kernel support with only code from the kernel tree.
+
+Reinette
+
+Jarkko Sakkinen (8):
+  selftests/sgx: Assign source for each segment
+  selftests/sgx: Make data measurement for an enclave segment optional
+  selftests/sgx: Create a heap for the test enclave
+  selftests/sgx: Dump segments and /proc/self/maps only on failure
+  selftests/sgx: Encpsulate the test enclave creation
+  selftests/sgx: Move setup_test_encl() to each TEST_F()
+  selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed
+  selftests/sgx: Provide per-op parameter structs for the test enclave
+
+Reinette Chatre (4):
+  selftests/sgx: Rename test properties in preparation for more enclave
+    tests
+  selftests/sgx: Add page permission and exception test
+  selftests/sgx: Enable multiple thread support
+  selftests/sgx: Add test for multiple TCS entry
+
+Sean Christopherson (1):
+  selftests/x86/sgx: Fix a benign linker warning
+
+ tools/testing/selftests/sgx/Makefile          |   2 +-
+ tools/testing/selftests/sgx/defines.h         |  33 +-
+ tools/testing/selftests/sgx/load.c            |  40 +-
+ tools/testing/selftests/sgx/main.c            | 357 +++++++++++++++---
+ tools/testing/selftests/sgx/main.h            |   6 +-
+ tools/testing/selftests/sgx/sigstruct.c       |  12 +-
+ tools/testing/selftests/sgx/test_encl.c       |  60 ++-
+ .../selftests/sgx/test_encl_bootstrap.S       |  21 +-
+ 8 files changed, 445 insertions(+), 86 deletions(-)
+
 -- 
-2.32.0
+2.25.1
 
