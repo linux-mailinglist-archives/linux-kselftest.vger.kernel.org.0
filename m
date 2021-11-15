@@ -2,90 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2069945192F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Nov 2021 00:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C2345240D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Nov 2021 02:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241558AbhKOXPq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Nov 2021 18:15:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45374 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345070AbhKOVbF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 16:31:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637011689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eB9LIJ8wftWZtVC2tmoTuif+x3rpeL1vcMWkA0vO7Oo=;
-        b=ixnw1mcTr19CdHQ0ch6Echv3BASAZnVEpZz0YjCPK9eKtIejvUoakitYWPPQVES4nM6EBK
-        lk3l1ex7YCZJpwRdstvJlmwg2ksU5s+O7cmnjibbHb+BPc0ydoK8s5MB0jLOLs5g8Ez81s
-        hrniOiO5d6CQB15ETzGKuLWEN0nELrU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-193-2Dn2_3U9N7eoU0qXDNUoVQ-1; Mon, 15 Nov 2021 16:28:06 -0500
-X-MC-Unique: 2Dn2_3U9N7eoU0qXDNUoVQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9300D87D545;
-        Mon, 15 Nov 2021 21:28:03 +0000 (UTC)
-Received: from [10.22.33.148] (unknown [10.22.33.148])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0769D10016FC;
-        Mon, 15 Nov 2021 21:27:57 +0000 (UTC)
-Message-ID: <1426905d-f93a-7500-177b-a8e0fae467ab@redhat.com>
-Date:   Mon, 15 Nov 2021 16:27:57 -0500
+        id S240457AbhKPBfz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Nov 2021 20:35:55 -0500
+Received: from mga02.intel.com ([134.134.136.20]:59122 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242891AbhKOSrU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:47:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="220713109"
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="220713109"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:35:38 -0800
+X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
+   d="scan'208";a="454130657"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:35:37 -0800
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     jarkko@kernel.org, linux-sgx@vger.kernel.org, shuah@kernel.org,
+        dave.hansen@linux.intel.com
+Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 07/13] selftests/sgx: Move setup_test_encl() to each TEST_F()
+Date:   Mon, 15 Nov 2021 10:35:20 -0800
+Message-Id: <70ca264535d2ca0dc8dcaf2281e7d6965f8d4a24.1636997631.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1636997631.git.reinette.chatre@intel.com>
+References: <cover.1636997631.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz> <YZK/A43T+zvu89dl@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YZK/A43T+zvu89dl@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Jarkko Sakkinen <jarkko@kernel.org>
 
-On 11/15/21 15:11, Tejun Heo wrote:
-> Hello,
->
-> On Mon, Nov 15, 2021 at 08:31:22PM +0100, Michal Koutný wrote:
->> Now to the constraints and partition setups. I think it's useful to have
->> a model with which the implementation can be compared with.
->> I tried to condense some "simple rules" from the descriptions you posted
->> in v8 plus your response to my remarks in v7 [2]. These should only be
->> the "validity conditions", not "transition conditions".
-> FWIW, my opinion is pretty much in line with Michal's in this regard. Other
-> than that, everything looks pretty good to me.
+Create the test enclave inside each TEST_F(), instead of FIXTURE_SETUP(),
+so that the heap size can be defined per test.
 
-Yes, I am going to streamline the documentation as suggested to make it 
-easier to understand.
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+Changes since V1:
+- Add signature from Dave.
 
-Coding-wise, do you have other changes you want me to make?
+ tools/testing/selftests/sgx/main.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-Thanks,
-Longman
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 5b3e49a36344..f41fba919d06 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -191,10 +191,6 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
+ 
+ FIXTURE_SETUP(enclave)
+ {
+-	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+-
+-	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
+ }
+ 
+ FIXTURE_TEARDOWN(enclave)
+@@ -226,6 +222,11 @@ TEST_F(enclave, unclobbered_vdso)
+ {
+ 	struct encl_op op;
+ 
++	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
++
++	memset(&self->run, 0, sizeof(self->run));
++	self->run.tcs = self->encl.encl_base;
++
+ 	op.type = ENCL_OP_PUT;
+ 	op.buffer = MAGIC;
+ 
+@@ -248,6 +249,11 @@ TEST_F(enclave, clobbered_vdso)
+ {
+ 	struct encl_op op;
+ 
++	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
++
++	memset(&self->run, 0, sizeof(self->run));
++	self->run.tcs = self->encl.encl_base;
++
+ 	op.type = ENCL_OP_PUT;
+ 	op.buffer = MAGIC;
+ 
+@@ -278,6 +284,11 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
+ {
+ 	struct encl_op op;
+ 
++	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
++
++	memset(&self->run, 0, sizeof(self->run));
++	self->run.tcs = self->encl.encl_base;
++
+ 	self->run.user_handler = (__u64)test_handler;
+ 	self->run.user_data = 0xdeadbeef;
+ 
+-- 
+2.25.1
 
