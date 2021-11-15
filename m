@@ -2,138 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DC9451072
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 19:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569F945163C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 22:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243002AbhKOSsi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Nov 2021 13:48:38 -0500
-Received: from mga14.intel.com ([192.55.52.115]:8147 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242682AbhKOSp1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:45:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10169"; a="233746839"
-X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="233746839"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:35:38 -0800
-X-IronPort-AV: E=Sophos;i="5.87,237,1631602800"; 
-   d="scan'208";a="454130664"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 10:35:37 -0800
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     jarkko@kernel.org, linux-sgx@vger.kernel.org, shuah@kernel.org,
-        dave.hansen@linux.intel.com
-Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 13/13] selftests/sgx: Add test for multiple TCS entry
-Date:   Mon, 15 Nov 2021 10:35:26 -0800
-Message-Id: <7be151a57b4c7959a2364753b995e0006efa3da1.1636997631.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1636997631.git.reinette.chatre@intel.com>
-References: <cover.1636997631.git.reinette.chatre@intel.com>
+        id S1345507AbhKOVRr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Nov 2021 16:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350422AbhKOUXt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 15:23:49 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2E5C079789;
+        Mon, 15 Nov 2021 12:11:50 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id x5so5340434pfr.0;
+        Mon, 15 Nov 2021 12:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=oBGYRkWYdG5WWKlBVnjVyKfV04QfW8RGDK164b+TnA4=;
+        b=LxH3FSerOz2L4FFx8lOOBlj5sDebiEU7bdQ78fpem8rYkFkIwKt5lahlCizi4TTF4P
+         VTs2qdZ7z5qxOaw7+EF9s5ZQDtxw/RGxj5lZY+KSMkC1AQd6K2EbCjmFhZ4ocqCGHGOb
+         9i8Mts523tK+s/SCBSnuYNuvroDWi4X/q2lI8nbpcoOjE9B7ggNCCCILmNcZAPRa8hER
+         pbwfvpEsASm/U5Qj6kF7DBMmZZe7YMxar375ZhNDdGQw9prl0zjDy9RFx5Bnolf1XIwP
+         e6BbZOgECPQK0GP30XfIgGS9IherX0cM+mOZZspbp1kcKU+dG0bkbBLPX4q+xOu4o1E5
+         PivA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=oBGYRkWYdG5WWKlBVnjVyKfV04QfW8RGDK164b+TnA4=;
+        b=Sg9nTRedHXbQlK9Q3sL+lFBSQA9/JNg+3+8ETlu7+0+Gb5uXfDAhUQi+yooLELJv1z
+         5L6PZjdet45+NbzvFukvliePysRkBXENgYN4c3EGqFyIIddc/h+OF9Q9Z7bkI2YJ95KQ
+         /FVm1F0tKi1yXbc3mlB+dXa9cME372NHpIZyFHXGhnvDI7jJ7tk09RPV4jV2P/RKbqqK
+         bFQWhNxhmtM4USEUWOCr0IWKW6EEwwzljPLlSCCqTVVQ9lPZ+aXLcDqk+KQxECdzTx9v
+         9+l4/zKY4fqAUFqnofyfw4N1wrMNInP65tacMvIJWLu+OnUvdkjySV7lSnQRLR7+harq
+         FSnw==
+X-Gm-Message-State: AOAM530idC/ktTb7NgFivtZRnxXSL/x9wMC8nz+HTtmm12LmbuCiY71h
+        ZW8cKY2aG+peGlJn+arOzgSgG/aK2hzZrFss
+X-Google-Smtp-Source: ABdhPJxlTbEBdEjhMkuMIfYCIEqv49Q4KcpOugleQP8lUeIT/H3234v7Woz9z6kgy+M8DFDHV2ERsQ==
+X-Received: by 2002:a63:b502:: with SMTP id y2mr1066503pge.214.1637007109631;
+        Mon, 15 Nov 2021 12:11:49 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id f3sm16180564pfg.167.2021.11.15.12.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 12:11:48 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 15 Nov 2021 10:11:47 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YZK/A43T+zvu89dl@slm.duckdns.org>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211115193122.GA16798@blackbody.suse.cz>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Each thread executing in an enclave is associated with a Thread Control
-Structure (TCS). The SGX test enclave contains two hardcoded TCS, thus
-supporting two threads in the enclave.
+Hello,
 
-Add a test to ensure it is possible to enter enclave at both entrypoints.
+On Mon, Nov 15, 2021 at 08:31:22PM +0100, Michal Koutný wrote:
+> Now to the constraints and partition setups. I think it's useful to have
+> a model with which the implementation can be compared with.
+> I tried to condense some "simple rules" from the descriptions you posted
+> in v8 plus your response to my remarks in v7 [2]. These should only be
+> the "validity conditions", not "transition conditions".
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changes since V1:
-- Add Jarkko and Dave's signatures.
+FWIW, my opinion is pretty much in line with Michal's in this regard. Other
+than that, everything looks pretty good to me.
 
- tools/testing/selftests/sgx/defines.h   |  1 +
- tools/testing/selftests/sgx/main.c      | 32 +++++++++++++++++++++++++
- tools/testing/selftests/sgx/test_encl.c |  6 +++++
- 3 files changed, 39 insertions(+)
+Thanks.
 
-diff --git a/tools/testing/selftests/sgx/defines.h b/tools/testing/selftests/sgx/defines.h
-index 0bbda6f0c7d3..02d775789ea7 100644
---- a/tools/testing/selftests/sgx/defines.h
-+++ b/tools/testing/selftests/sgx/defines.h
-@@ -23,6 +23,7 @@ enum encl_op_type {
- 	ENCL_OP_GET_FROM_BUFFER,
- 	ENCL_OP_PUT_TO_ADDRESS,
- 	ENCL_OP_GET_FROM_ADDRESS,
-+	ENCL_OP_NOP,
- 	ENCL_OP_MAX,
- };
- 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 1b4858f8ca4e..7e912db4c6c5 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -409,6 +409,38 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
- 	EXPECT_EQ(self->run.user_data, 0);
- }
- 
-+/*
-+ * Sanity check that it is possible to enter either of the two hardcoded TCS
-+ */
-+TEST_F(enclave, tcs_entry)
-+{
-+	struct encl_op_header op;
-+
-+	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	op.type = ENCL_OP_NOP;
-+
-+	EXPECT_EQ(ENCL_CALL(&op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	/* Move to the next TCS. */
-+	self->run.tcs = self->encl.encl_base + PAGE_SIZE;
-+
-+	EXPECT_EQ(ENCL_CALL(&op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+}
-+
- /*
-  * Second page of .data segment is used to test changing PTE permissions.
-  * This spans the local encl_buffer within the test enclave.
-diff --git a/tools/testing/selftests/sgx/test_encl.c b/tools/testing/selftests/sgx/test_encl.c
-index 5d86e3e6456a..4fca01cfd898 100644
---- a/tools/testing/selftests/sgx/test_encl.c
-+++ b/tools/testing/selftests/sgx/test_encl.c
-@@ -49,6 +49,11 @@ static void do_encl_op_get_from_addr(void *_op)
- 	memcpy(&op->value, (void *)op->addr, 8);
- }
- 
-+static void do_encl_op_nop(void *_op)
-+{
-+
-+}
-+
- void encl_body(void *rdi,  void *rsi)
- {
- 	const void (*encl_op_array[ENCL_OP_MAX])(void *) = {
-@@ -56,6 +61,7 @@ void encl_body(void *rdi,  void *rsi)
- 		do_encl_op_get_from_buf,
- 		do_encl_op_put_to_addr,
- 		do_encl_op_get_from_addr,
-+		do_encl_op_nop,
- 	};
- 
- 	struct encl_op_header *op = (struct encl_op_header *)rdi;
 -- 
-2.25.1
-
+tejun
