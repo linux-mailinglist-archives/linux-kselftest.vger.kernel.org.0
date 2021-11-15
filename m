@@ -2,56 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF1145038F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 12:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408564503CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 12:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbhKOLin (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Nov 2021 06:38:43 -0500
-Received: from mga11.intel.com ([192.55.52.93]:30043 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231383AbhKOLiL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 06:38:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="230884121"
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="230884121"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 03:34:18 -0800
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="671473514"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 03:34:16 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mmaFU-0072lE-Cb;
-        Mon, 15 Nov 2021 13:34:08 +0200
-Date:   Mon, 15 Nov 2021 13:34:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH v1 1/1] kunit: Replace kernel.h with the necessary
- inclusions
-Message-ID: <YZJFsFmvdyfblf/k@smile.fi.intel.com>
-References: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
+        id S231150AbhKOLyB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Nov 2021 06:54:01 -0500
+Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:36823 "EHLO
+        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230507AbhKOLxv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 06:53:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636977055;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=2sOxstCPxU8JYsUhjb8YwfmDiSauQSrcxs3m2oHBKz0=;
+        b=q2qAHaz0imLpwZOeEo4KYPW02wPHM3YLaKjDDQcuX0V4YAqdqwyS+YkId6O2wp4B
+        jyxqEVKjCteIyUVT1K+/Dlfc222nNi62W9NEhnHxri+Oc9lac5HaascPKzlLiXkxYlE
+        GKsFTNNw+nyZawg8n5Ngd93IkyyUHNVxFBKmTjRM=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636977055;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=2sOxstCPxU8JYsUhjb8YwfmDiSauQSrcxs3m2oHBKz0=;
+        b=jbMg+RP+v8imA6McXM/ZzcwDwv2UOsbXGZPpmHik+jnNTF7jknLEUx68cJ4OEy9J
+        3HoJmyEpMsXiHYL4OgkxG/qnejGqb6lVYQgFqWjYS1QR9INevGWC57MSsZD3Ls1k+lj
+        +Vs/oTSZhlXwUHrGlvsvwGDriNKj+pJTnIpjX0Iw=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211115
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d236f9420-9dd4f543-4071-4eec-98f0-2d4a0c0a1e73-000000@email.amazonses.com>
+Date:   Mon, 15 Nov 2021 11:50:54 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.15-54.240.8.73
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 12:35:52PM +0200, Andy Shevchenko wrote:
-> When kernel.h is used in the headers it adds a lot into dependency hell,
-> especially when there are circular dependencies are involved.
-> 
-> Replace kernel.h inclusion with the list of what is really being used.
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 09bd48c4acfa9069ca7517ea27fcc17689ad0f2e
+* git describe: next-20211115
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211115
 
-Can it be applied now?
+## Regressions (compared to next-20211112)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
 
--- 
-With Best Regards,
-Andy Shevchenko
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* x15, kselftest-rtc
+  - rtc.rtctest
+
+* x86, kselftest-net
+  - net.gro.sh
 
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211112)
+* i386, kselftest-net
+  - net.so_txtime.sh
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+* x86, kselftest-net
+  - net.ip_defrag.sh
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+## Test result summary
+total: 3250, pass: 1984, fail: 296, skip: 970, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
