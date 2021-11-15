@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B6F45084A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 16:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761EE450861
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Nov 2021 16:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbhKOPcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Nov 2021 10:32:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52082 "EHLO mail.kernel.org"
+        id S236539AbhKOPdv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Nov 2021 10:33:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235334AbhKOPbz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S236531AbhKOPbz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 15 Nov 2021 10:31:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E9608611BF;
-        Mon, 15 Nov 2021 15:28:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA7A663214;
+        Mon, 15 Nov 2021 15:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990137;
-        bh=e8KsjeULXIEQjMalNg3GWaCoTJ+Nm/YlFIk/oUByTL0=;
+        s=k20201202; t=1636990140;
+        bh=Ft/atRfkRMmtdUw6GzWg5UcvdauLRRjBMgFvM3KPpX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ESpBj8mlrrEgg9S6mpHlekACb4TwMuHWVLVak3XjaEc2M96GeleWRW3igoZ6FcKif
-         UNLvVupg0V/TYy6SI1LXIYp1MYwSRf5rbb5IPiI3HfzBGSDo2SD0J2Aall/HUBPolP
-         WBnlb8JPNYjRtBmSqr3qKN13s8yZBLQ+YINw3ByCEv4Bv18GN8ONrCE28eaLsl5oVb
-         RYXuG+90XrSuU4QM+X1fLgT6kM+cveXlo2MuHUQUsLboCAVS8xGqMZcoRqrp0uPtp7
-         e6xmFpH0UkhjdSIjGBc9DbY7VlpLO79wglWvkYpyvw7PxbWVh18Oc/EcnmmAvIzhhN
-         NxelFM37//6sA==
+        b=N+Vzg/luZht+bl17RBBsHYISrSw5MmorHAS/n7kJ/cqARRXK21Ehh8BCCjrY8/99V
+         w3STe3KMT2GumAZesS+yZN9yzzIEE9If6t6xQ2TtBXKjkZubP4+rVooc80rtGbQFiG
+         lPoMeDl7Zec4tMKcTocMQvNixwqIZZVpOY3VmjiXMweEImqaiWP/QeyerwhBKa3F27
+         VjyPaUNF0mr5p20mce/0dfCZQq7VYWzHqdlHc/432i8Zwct4nVjeny1omoatY8W4EP
+         HOkKSKGadSE+JNYO2xVdHYVJM5WQJWI8K9Kb0RUUDIFwYjGtnM6CoZc5be1cNdUIea
+         y6zKQcOdwCVGA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -35,88 +35,222 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 01/37] arm64/sve: Make sysctl interface for SVE reusable by SME
-Date:   Mon, 15 Nov 2021 15:27:59 +0000
-Message-Id: <20211115152835.3212149-2-broonie@kernel.org>
+Subject: [PATCH v6 02/37] arm64/sve: Generalise vector length configuration prctl() for SME
+Date:   Mon, 15 Nov 2021 15:28:00 +0000
+Message-Id: <20211115152835.3212149-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2423; h=from:subject; bh=e8KsjeULXIEQjMalNg3GWaCoTJ+Nm/YlFIk/oUByTL0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyFdaHKQYH9PW1ZLc3nfVVpR9DKLLsTrXpG3xmI e8pMB2mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8hQAKCRAk1otyXVSH0JTZB/ 426r5tVF5ROXMhj/mFRDQKiOPF6554FjUSqimbWfPG7+FvhrhJd5AhUM5Yx8kf2a84/wLgH8YFEqU1 f68iPsSFRP9rnO2ArRd/pj4E41gt8vNkV3fWuSukxH9k0QNLhipSCaq7zF2lz4e47idP2UPAspV1+c MvUwhEMQJreeJhsJ9/3c11M+NDIF7/PXh/UZny0IXOQfA79VaWMzk7a4m91hCYmfflv80wGs9zRTWd 2ACUTtud+caRE9upT+SeKbFbiqXgXEfdNUna1kt+xuVJUxYZuSmNew+rEiSqINB4iWFLK6nJY4PnP2 kGAcnbWSCwkv9rPWYHI30p/Y9Sdmcl
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7475; h=from:subject; bh=Ft/atRfkRMmtdUw6GzWg5UcvdauLRRjBMgFvM3KPpX4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyGOnautIP3FfL6qIenj1zyswpJyc/bxLuKeQfh 5ZGofK+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8hgAKCRAk1otyXVSH0KOzB/ 9nhpI3mmyvO/XyONKhoWIucI8SdtJkxmI9mkfVNW+rBJ/L0BQ1SSJ4wUPxNXVPRKU9EQGPrbMkdhQr j4cVF/rSj22zUdfmsoSgWQT+4XUsX4cEGmU5LSnQyVOGWGmv1RoQ9OZW59Kze64g9mOCRnIy6vdvnN N9DKGV0Xl3OhTkrIwnBpiEk94STsYrIBJVSNddnn8dJ2EAAp9gO6j1xH/FtbWWDbfZ2QIbLKpWxE2L FUgGapmys/ha9UiVUEBEeByxeuHCUMzSkA41oLpOrxqesm0C0z7iPpzDlRxSy+ZloMCY98xj19+Tu/ vtKlb5e+umXPSVe/yZUxhqdl762LNF
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The vector length configuration for SME is very similar to that for SVE
-so in order to allow reuse refactor the SVE configuration so that it takes
-the vector type from the struct ctl_table. Since there's no dedicated space
-for this we repurpose the extra1 field to store the vector type, this is
-otherwise unused for integer sysctls.
+In preparation for adding SME support update the bulk of the implementation
+for the vector length configuration prctl() calls to be independent of
+vector type.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ arch/arm64/include/asm/fpsimd.h |  6 ++---
+ arch/arm64/kernel/fpsimd.c      | 47 ++++++++++++++++++---------------
+ arch/arm64/kernel/ptrace.c      |  4 +--
+ arch/arm64/kvm/reset.c          |  8 +++---
+ 4 files changed, 34 insertions(+), 31 deletions(-)
 
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index dbb4b30a5648..cb24385e3632 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -51,8 +51,8 @@ extern void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *state,
+ extern void fpsimd_flush_task_state(struct task_struct *target);
+ extern void fpsimd_save_and_flush_cpu_state(void);
+ 
+-/* Maximum VL that SVE VL-agnostic software can transparently support */
+-#define SVE_VL_ARCH_MAX 0x100
++/* Maximum VL that SVE/SME VL-agnostic software can transparently support */
++#define VL_ARCH_MAX 0x100
+ 
+ /* Offset of FFR in the SVE register dump */
+ static inline size_t sve_ffr_offset(int vl)
+@@ -122,7 +122,7 @@ extern void fpsimd_sync_to_sve(struct task_struct *task);
+ extern void sve_sync_to_fpsimd(struct task_struct *task);
+ extern void sve_sync_from_fpsimd_zeropad(struct task_struct *task);
+ 
+-extern int sve_set_vector_length(struct task_struct *task,
++extern int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 				 unsigned long vl, unsigned long flags);
+ 
+ extern int sve_set_current_vl(unsigned long arg);
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index fa244c426f61..23e575c4e580 100644
+index 23e575c4e580..4a98cc3b1df1 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -15,6 +15,7 @@
- #include <linux/compiler.h>
- #include <linux/cpu.h>
- #include <linux/cpu_pm.h>
-+#include <linux/ctype.h>
- #include <linux/kernel.h>
- #include <linux/linkage.h>
- #include <linux/irqflags.h>
-@@ -406,12 +407,13 @@ static unsigned int find_supported_vector_length(enum vec_type type,
- 
- #if defined(CONFIG_ARM64_SVE) && defined(CONFIG_SYSCTL)
- 
--static int sve_proc_do_default_vl(struct ctl_table *table, int write,
-+static int vec_proc_do_default_vl(struct ctl_table *table, int write,
- 				  void *buffer, size_t *lenp, loff_t *ppos)
- {
--	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
-+	struct vl_info *info = table->extra1;
-+	enum vec_type type = info->type;
- 	int ret;
--	int vl = get_sve_default_vl();
-+	int vl = get_default_vl(type);
- 	struct ctl_table tmp_table = {
- 		.data = &vl,
- 		.maxlen = sizeof(vl),
-@@ -428,7 +430,7 @@ static int sve_proc_do_default_vl(struct ctl_table *table, int write,
- 	if (!sve_vl_valid(vl))
- 		return -EINVAL;
- 
--	set_sve_default_vl(find_supported_vector_length(ARM64_VEC_SVE, vl));
-+	set_default_vl(type, find_supported_vector_length(type, vl));
- 	return 0;
+@@ -632,7 +632,7 @@ void sve_sync_from_fpsimd_zeropad(struct task_struct *task)
+ 	__fpsimd_to_sve(sst, fst, vq);
  }
  
-@@ -436,7 +438,8 @@ static struct ctl_table sve_default_vl_table[] = {
- 	{
- 		.procname	= "sve_default_vector_length",
- 		.mode		= 0644,
--		.proc_handler	= sve_proc_do_default_vl,
-+		.proc_handler	= vec_proc_do_default_vl,
-+		.extra1		= &vl_info[ARM64_VEC_SVE],
- 	},
- 	{ }
- };
-@@ -1107,7 +1110,7 @@ static void fpsimd_flush_thread_vl(enum vec_type type)
- 		vl = get_default_vl(type);
+-int sve_set_vector_length(struct task_struct *task,
++int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 			  unsigned long vl, unsigned long flags)
+ {
+ 	if (flags & ~(unsigned long)(PR_SVE_VL_INHERIT |
+@@ -643,33 +643,35 @@ int sve_set_vector_length(struct task_struct *task,
+ 		return -EINVAL;
  
- 	if (WARN_ON(!sve_vl_valid(vl)))
--		vl = SVE_VL_MIN;
-+		vl = vl_info[type].min_vl;
+ 	/*
+-	 * Clamp to the maximum vector length that VL-agnostic SVE code can
+-	 * work with.  A flag may be assigned in the future to allow setting
+-	 * of larger vector lengths without confusing older software.
++	 * Clamp to the maximum vector length that VL-agnostic code
++	 * can work with.  A flag may be assigned in the future to
++	 * allow setting of larger vector lengths without confusing
++	 * older software.
+ 	 */
+-	if (vl > SVE_VL_ARCH_MAX)
+-		vl = SVE_VL_ARCH_MAX;
++	if (vl > VL_ARCH_MAX)
++		vl = VL_ARCH_MAX;
  
- 	supported_vl = find_supported_vector_length(type, vl);
- 	if (WARN_ON(supported_vl != vl))
+-	vl = find_supported_vector_length(ARM64_VEC_SVE, vl);
++	vl = find_supported_vector_length(type, vl);
+ 
+ 	if (flags & (PR_SVE_VL_INHERIT |
+ 		     PR_SVE_SET_VL_ONEXEC))
+-		task_set_sve_vl_onexec(task, vl);
++		task_set_vl_onexec(task, type, vl);
+ 	else
+ 		/* Reset VL to system default on next exec: */
+-		task_set_sve_vl_onexec(task, 0);
++		task_set_vl_onexec(task, type, 0);
+ 
+ 	/* Only actually set the VL if not deferred: */
+ 	if (flags & PR_SVE_SET_VL_ONEXEC)
+ 		goto out;
+ 
+-	if (vl == task_get_sve_vl(task))
++	if (vl == task_get_vl(task, type))
+ 		goto out;
+ 
+ 	/*
+ 	 * To ensure the FPSIMD bits of the SVE vector registers are preserved,
+ 	 * write any live register state back to task_struct, and convert to a
+-	 * non-SVE thread.
++	 * regular FPSIMD thread.  Since the vector length can only be changed
++	 * with a syscall we can't be in streaming mode while reconfiguring.
+ 	 */
+ 	if (task == current) {
+ 		get_cpu_fpsimd_context();
+@@ -690,10 +692,10 @@ int sve_set_vector_length(struct task_struct *task,
+ 	 */
+ 	sve_free(task);
+ 
+-	task_set_sve_vl(task, vl);
++	task_set_vl(task, type, vl);
+ 
+ out:
+-	update_tsk_thread_flag(task, TIF_SVE_VL_INHERIT,
++	update_tsk_thread_flag(task, vec_vl_inherit_flag(type),
+ 			       flags & PR_SVE_VL_INHERIT);
+ 
+ 	return 0;
+@@ -701,20 +703,21 @@ int sve_set_vector_length(struct task_struct *task,
+ 
+ /*
+  * Encode the current vector length and flags for return.
+- * This is only required for prctl(): ptrace has separate fields
++ * This is only required for prctl(): ptrace has separate fields.
++ * SVE and SME use the same bits for _ONEXEC and _INHERIT.
+  *
+- * flags are as for sve_set_vector_length().
++ * flags are as for vec_set_vector_length().
+  */
+-static int sve_prctl_status(unsigned long flags)
++static int vec_prctl_status(enum vec_type type, unsigned long flags)
+ {
+ 	int ret;
+ 
+ 	if (flags & PR_SVE_SET_VL_ONEXEC)
+-		ret = task_get_sve_vl_onexec(current);
++		ret = task_get_vl_onexec(current, type);
+ 	else
+-		ret = task_get_sve_vl(current);
++		ret = task_get_vl(current, type);
+ 
+-	if (test_thread_flag(TIF_SVE_VL_INHERIT))
++	if (test_thread_flag(vec_vl_inherit_flag(type)))
+ 		ret |= PR_SVE_VL_INHERIT;
+ 
+ 	return ret;
+@@ -732,11 +735,11 @@ int sve_set_current_vl(unsigned long arg)
+ 	if (!system_supports_sve() || is_compat_task())
+ 		return -EINVAL;
+ 
+-	ret = sve_set_vector_length(current, vl, flags);
++	ret = vec_set_vector_length(current, ARM64_VEC_SVE, vl, flags);
+ 	if (ret)
+ 		return ret;
+ 
+-	return sve_prctl_status(flags);
++	return vec_prctl_status(ARM64_VEC_SVE, flags);
+ }
+ 
+ /* PR_SVE_GET_VL */
+@@ -745,7 +748,7 @@ int sve_get_current_vl(void)
+ 	if (!system_supports_sve() || is_compat_task())
+ 		return -EINVAL;
+ 
+-	return sve_prctl_status(0);
++	return vec_prctl_status(ARM64_VEC_SVE, 0);
+ }
+ 
+ static void vec_probe_vqs(struct vl_info *info,
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 88a9034fb9b5..716dde289446 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -812,9 +812,9 @@ static int sve_set(struct task_struct *target,
+ 
+ 	/*
+ 	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
+-	 * sve_set_vector_length(), which will also validate them for us:
++	 * vec_set_vector_length(), which will also validate them for us:
+ 	 */
+-	ret = sve_set_vector_length(target, header.vl,
++	ret = vec_set_vector_length(target, ARM64_VEC_SVE, header.vl,
+ 		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
+ 	if (ret)
+ 		goto out;
+diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
+index 426bd7fbc3fd..27386f0d81e4 100644
+--- a/arch/arm64/kvm/reset.c
++++ b/arch/arm64/kvm/reset.c
+@@ -52,10 +52,10 @@ int kvm_arm_init_sve(void)
+ 		 * The get_sve_reg()/set_sve_reg() ioctl interface will need
+ 		 * to be extended with multiple register slice support in
+ 		 * order to support vector lengths greater than
+-		 * SVE_VL_ARCH_MAX:
++		 * VL_ARCH_MAX:
+ 		 */
+-		if (WARN_ON(kvm_sve_max_vl > SVE_VL_ARCH_MAX))
+-			kvm_sve_max_vl = SVE_VL_ARCH_MAX;
++		if (WARN_ON(kvm_sve_max_vl > VL_ARCH_MAX))
++			kvm_sve_max_vl = VL_ARCH_MAX;
+ 
+ 		/*
+ 		 * Don't even try to make use of vector lengths that
+@@ -103,7 +103,7 @@ static int kvm_vcpu_finalize_sve(struct kvm_vcpu *vcpu)
+ 	 * set_sve_vls().  Double-check here just to be sure:
+ 	 */
+ 	if (WARN_ON(!sve_vl_valid(vl) || vl > sve_max_virtualisable_vl() ||
+-		    vl > SVE_VL_ARCH_MAX))
++		    vl > VL_ARCH_MAX))
+ 		return -EIO;
+ 
+ 	buf = kzalloc(SVE_SIG_REGS_SIZE(sve_vq_from_vl(vl)), GFP_KERNEL_ACCOUNT);
 -- 
 2.30.2
 
