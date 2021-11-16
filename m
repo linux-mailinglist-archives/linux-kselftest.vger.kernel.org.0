@@ -2,126 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1174538E4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Nov 2021 18:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717944539BA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Nov 2021 20:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239151AbhKPR5O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Nov 2021 12:57:14 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:49476 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239144AbhKPR5M (ORCPT
+        id S239732AbhKPTGt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Nov 2021 14:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239422AbhKPTGt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Nov 2021 12:57:12 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E4F61212C3;
-        Tue, 16 Nov 2021 17:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1637085252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AQ4Vs3Ue9V/rPlPCCX2Ku26e9rOXlRcNGXZau4L0nns=;
-        b=WWKIaz/W38nsYFEg/zCDoNaH0kIwA0H6XZ/FTs4KYO6YXn8PB48U92vHHzY8eCaYtbXNAw
-        0bDRV5xqAZCLG+pNMxZJqK3emAMALV9Jw4J7trsryDzNOGA1ZVp1riAEmChz92M0DHw1cB
-        L/4UkS3yo+5VogH9yJjdHpqz3Sx7RAE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B374513BA0;
-        Tue, 16 Nov 2021 17:54:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JaE7K0Twk2G0cQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 16 Nov 2021 17:54:12 +0000
-Date:   Tue, 16 Nov 2021 18:54:11 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20211116175411.GA50019@blackbody.suse.cz>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+        Tue, 16 Nov 2021 14:06:49 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A5AC061570;
+        Tue, 16 Nov 2021 11:03:51 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id y68so55196289ybe.1;
+        Tue, 16 Nov 2021 11:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vNMHd0m7YSjAFUJ4/2Md5Ysd8NvQljw8TBpQtRS8+nE=;
+        b=bpI2osQtpaAIKgDvkCOHlFOIMewfPSKRSXQyeOpDbOS451zRGrWHP4I5JQtg5PqMhR
+         Wa8/lvTYyTVFWjxtBHXDtKWBWEHBYdnx9MwvM7vc/dJpJjM8C0uPcljFHpnmfJeqazka
+         WytZokJibQQqs3yPyEZ7CfvbKVf2vgWW8JBGv0icUjWcybgTkIGVczuoDp4QmFAkLzU9
+         672BPrxaB6bKjrbGmKHFYK4HoRlOc5g7NTZlHNmDVVvdaZnFfJdtRLPb2Rew7D34OGMH
+         GNW096odU/QAmqvIxXCH8olkOLCkqlfvXwaOhsuoY0MCcJD61VMRqyY0Y0toARsfQwmy
+         gdyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vNMHd0m7YSjAFUJ4/2Md5Ysd8NvQljw8TBpQtRS8+nE=;
+        b=qugNoZJX7VplJxYGa5fzsgFrhdJRaEHR4OBOUN5TI8+bhqVGJ2VOkq3sYlunN9LxOs
+         HprxlRIkFJuyzoC2wDdFlXjuGwBv33pgtI6NtMKyLeY0pyaOfUdKDltZ2b+ReTh2E4oW
+         Y09Ej+CcosMIN65c0XlbtPrWAucFa/XhEj+xNceA/QDgDvG6BNUTAiiwg24IHPwYTvIf
+         Qh068BDYVCWvAPn3aTZwYJmSiSEuHtQNGTHKo6Nue5Pu4Qnv3LtyQimuMtPKkn+A8SY0
+         36SDjugCY0cZi83Ks7sujFYvrklo8msAmaG6OGOiEr4jJsLUn6VHhLPV8JqdR4yzNYTv
+         u40Q==
+X-Gm-Message-State: AOAM533lbi7VpjwRfzKP+Z1XJ/TULPTfRxBRpcgg4iPKjCcB2KGDppL+
+        yLSx5hM3hmhJxKtcNTwMhfQfszaeZ74bfUKo7v8=
+X-Google-Smtp-Source: ABdhPJxoJMxbGLKsE/I2W9+DQ2IO1iiAZqV9793JzrMgVL9FNzbZU/MxYM5LlTnfVNdV1azhSlrJxcfZYVXroxx1ggw=
+X-Received: by 2002:a05:6902:1023:: with SMTP id x3mr10395367ybt.267.1637089431079;
+ Tue, 16 Nov 2021 11:03:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211112155128.565680-1-jean-philippe@linaro.org>
+ <d3a19501-01ee-a160-2275-c83fb0fb04b7@isovalent.com> <YY6WLDizLBxnhgnP@myrica>
+ <CAEf4BzbS-4sWORntzqh7qhEo=5cpzca0WA5ars70LxwzZwxgKA@mail.gmail.com> <YZNuWUEBG9Jbzerx@myrica>
+In-Reply-To: <YZNuWUEBG9Jbzerx@myrica>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 16 Nov 2021 11:03:40 -0800
+Message-ID: <CAEf4BzbkU87MX22w0-W8N4SV0hY=gkhYi8JcQZ4B5q6xjhfhXw@mail.gmail.com>
+Subject: Re: [PATCH bpf] tools/runqslower: Fix cross-build
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 04:10:29PM -0500, Waiman Long <longman@redhat.com> wrote:
-> > On Mon, Oct 18, 2021 at 10:36:18AM -0400, Waiman Long <longman@redhat.com> wrote:
-> > > +	scheduler.  Tasks in such a partition must be explicitly bound
-> > > +	to each individual CPU.
-> [...]
-> 
-> It can be a problem when one is trying to move from one cgroup to another
-> cgroup with non-overlapping cpus laterally. However, if a task is initially
-> from a parent cgroup with affinity mask that include cpus in the isolated
-> child cgroup, I believe it should be able to move to the isolated child
-> cgroup without problem. Otherwise, it is a bug that needs to be fixed.
+On Tue, Nov 16, 2021 at 12:40 AM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> On Mon, Nov 15, 2021 at 10:10:03PM -0800, Andrii Nakryiko wrote:
+> > On Fri, Nov 12, 2021 at 8:28 AM Jean-Philippe Brucker
+> > <jean-philippe@linaro.org> wrote:
+> > >
+> > > On Fri, Nov 12, 2021 at 04:17:21PM +0000, Quentin Monnet wrote:
+> > > > 2021-11-12 15:51 UTC+0000 ~ Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > > > > Commit be79505caf3f ("tools/runqslower: Install libbpf headers when
+> > > > > building") uses the target libbpf to build the host bpftool, which
+> > > > > doesn't work when cross-building:
+> > > > >
+> > > > >   make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C tools/bpf/runqslower O=/tmp/runqslower
+> > > > >   ...
+> > > > >     LINK    /tmp/runqslower/bpftool/bpftool
+> > > > >   /usr/bin/ld: /tmp/runqslower/libbpf/libbpf.a(libbpf-in.o): Relocations in generic ELF (EM: 183)
+> > > > >   /usr/bin/ld: /tmp/runqslower/libbpf/libbpf.a: error adding symbols: file in wrong format
+> > > > >   collect2: error: ld returned 1 exit status
+> > > > >
+> > > > > When cross-building, the target architecture differs from the host. The
+> > > > > bpftool used for building runqslower is executed on the host, and thus
+> > > > > must use a different libbpf than that used for runqslower itself.
+> > > > > Remove the LIBBPF_OUTPUT and LIBBPF_DESTDIR parameters, so the bpftool
+> > > > > build makes its own library if necessary.
+> > > > >
+> > > > > In the selftests, pass the host bpftool, already a prerequisite for the
+> > > > > runqslower recipe, as BPFTOOL_OUTPUT. The runqslower Makefile will use
+> > > > > the bpftool that's already built for selftests instead of making a new
+> > > > > one.
+> > > > >
+> > > > > Fixes: be79505caf3f ("tools/runqslower: Install libbpf headers when building")
+> > > > > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > > > Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+> > > >
+> > > > I realised too late I should have cc-ed you on those patches, apologies
+> > > > for not doing so. Thank you for the fix!
+> > >
+> > > No worries, I usually try to catch build issues in bpf-next but missed it
+> > > this time. I'm still slowly working towards getting automated testing on
+> > > Arm targets, which will catch regressions quicker.
+> >
+> > Are you planning to contribute it to BPF CI? Or you meant you have
+> > your own separate system?
+>
+> At the moment I'm looking at adding it to LKFT, which does regression
+> testing on various Arm boards (https://lkft.linaro.org/about/). The only
+> bit missing for that is support for cross-building tools with clang, which
+> I'll send shortly.
 
-app_root	cpuset.cpus=0-3
-`- non_rt	cpuset.cpus=0-1	cpuset.cpus.partition=member
-`- rt		cpuset.cpus=2-3	cpuset.cpus.partition=isolated
+Detecting regressions is good, but preventing regressions is even
+better. That's what we are doing with BPF CI. We create a Github PR
+and run BPF selftests before patches are applied (see [0] for the
+current list of patch sets being reviewed and thus tested). It would
+be good to have more support for various architectures there. We
+currently have x86-64 and s390x was added just recently. Regressions
+still happen, obviously (we don't also control all the other parts of
+the kernel so after tree merges things quite often are a bit unstable
+and broken, but the system has caught many issues already), but it's
+been a tremendous help and time saver. So consider contributing, if
+you care about those architectures.
 
-The app_root would have cpuset.cpus.effective=0-1 so even the task in
-app_root can't sched_setaffinity() to cpus 2-3.
-But AFAICS, the migration calls set_cpus_allowed_ptr() anyway, so the
-task in the isolated partition needn't to bind explicitly with
-sched_setaffinity(). (It'd have two cpus available, so one more
-sched_setaffinity() or migration into a single-cpu list is desirable.)
+  [0] https://github.com/kernel-patches/bpf/pulls
 
-All in all, I think the behavior is OK and the explicit binding of tasks
-in an isolated cpuset is optional (not a must as worded currently).
-
-
-> I think the wording may be confusing. What I meant is none of the requested
-> cpu can be granted. So if there is at least one granted, the effective cpus
-> won't be empty.
-
-Ack.
-
-> You currently cannot make change to cpuset.cpus that violates the cpu
-> exclusivity rule. The above constraints will not disallow you to make the
-> change. They just affect the validity of the partition root.
-
-Sibling exclusivity should be a validity condition regardless of whether
-transition is allowed or not. (At least it looks simpler to me.)
-
-
-> > > +        Changing a partition root to "member" is always allowed.
-> > > +        If there are child partition roots underneath it, however,
-> > > +        they will be forced to be switched back to "member" too and
-> > > +        lose their partitions. So care must be taken to double check
-> > > +        for this condition before disabling a partition root.
-> > (Or is this how delegation is intended?) However, AFAICS, parent still
-> > can't remove cpuset.cpus even when the child is a "member". Otherwise,
-> > I agree with the back-switch.
-> There are only 2 possibilities here. Either we force the child partitions to
-> be become members or invalid partition root.
-
-My point here was mostly about preempting the cpus (as a v2 specific
-feature). (I'm rather indifferent whether children turn into invalid
-roots or members.)
-
-Thanks,
-Michal
+>
+> Thanks,
+> Jean
