@@ -2,94 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBC745407D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Nov 2021 06:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4FB4542EB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Nov 2021 09:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbhKQF57 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Nov 2021 00:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        id S234596AbhKQIu4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Nov 2021 03:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbhKQF57 (ORCPT
+        with ESMTP id S234595AbhKQIu4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Nov 2021 00:57:59 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761F4C061570
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Nov 2021 21:55:01 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id p18so1161687plf.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Nov 2021 21:55:01 -0800 (PST)
+        Wed, 17 Nov 2021 03:50:56 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2293DC061766
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 00:47:58 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id y26so5272748lfa.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 00:47:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WfrXUgSFI8fX3poHZCXyurnfnlLvKC2xRaygUoraNRE=;
-        b=kEgrFcoh5ZGGZ5YXMMER2rUeoznQSWHL01uGj1IOG/46InerXy3Q9z+uSzUHHrODY1
-         19I1XmagMCm3MBo1Boxp7nfTszjvAgMsceP5ghLu29qKeOstSed5THfghkK+qfHGa8n/
-         pWRZZycVPga8gA5KaXk60mQo/gG9auGTTm7BbNZphAtKW2eEpp4Zo+xnmhacS6RFNbWh
-         YCGDc3YdjqMszZ0kRXri+87J9yKtFAic8fcoCGL9YALNHpFfJshikpCQ0rlZ2RKNgKSA
-         NCxN/0eThojNjbJLDTw4S5K0lMmasHDGda6QoQieSqkVLqj0E1mUkvOgEhCiPU7Bopc7
-         pI3Q==
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9yJIKBkP/hglrN2GamqzYCPrI09C09Ls8U6CmGp4m+U=;
+        b=moB0PXTl70rf/MyP3I0QeYk8t7ub0FlTGV1HzUVW4qwLq9Xj14xVXFtjVrLyw6BZHV
+         PTmyfSC619Hw0rOzwl0Gk8aRJOCpTa0zxRrY6sqOBykhpNz3XTKB0B6Z+9CNxkXOfpnG
+         TmJYkMRwdSN83eXS1M0KI1XKU441hSMu5dKP0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WfrXUgSFI8fX3poHZCXyurnfnlLvKC2xRaygUoraNRE=;
-        b=FWDujAR7+lPE6XezQaKFFPzDeGkS7kmXQtqxwn2ubf2GQtthjCq8dGnhf5k5ATuzqz
-         jWFBlwrkR2KrvxB7CPZN+WHfMQnWaspgOWjMmBPfXHAxywSNMHuwrgiBV11mwhtVCLN1
-         dgJVfTKiohvjrI113U2IBM20BI5rVXsmHhHs8hTvTyYNJS6U9Pzi7CShDOsaz4z1g2yn
-         it8MCi0phtLKym4GllMhR6uHjqL205MMmEzrzghi8IiVopdS219E0I3tMBKIz03dyye8
-         NXJ9hKUNFBI/yBX1T3gW/5me2l6Wjc+F8QtMGcpE7gsl6A/1r3J5v1ME4xEu3f/GLs5u
-         S41w==
-X-Gm-Message-State: AOAM533+F4gCMxyjcxSTlvA4Rv73e0NRhibVsx5w3F8Dt3mISfIkw3NJ
-        nNxvCFABfNytQ6XLGNwhS8KDZT9yIUa3a9A+WQg=
-X-Google-Smtp-Source: ABdhPJzsjs1I6WnJQgnSkKYx9hhTghYk54GwM4oxioc3yezNwwCaI0j+slysNaS45sY9kWyB1mVeTmB1iLMezuI3cKk=
-X-Received: by 2002:a17:90b:20d:: with SMTP id fy13mr6490869pjb.47.1637128500907;
- Tue, 16 Nov 2021 21:55:00 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9yJIKBkP/hglrN2GamqzYCPrI09C09Ls8U6CmGp4m+U=;
+        b=7SMM5cEOiL44hPtmEaT7+eMK5btwwUkGfrktmAGLKC+wHXozfFaDLFM7ujHRnblOun
+         Ef4rjDplVvOfnhZMBUPQvSymYzGj26zkG/jrJof03bf0dIdxC8IE9JqWkC86XsYaQ6UP
+         AAMTuB5yMNxJHmLfDZ69c0b/A9/CFxvTsW67OUgEp8UmR4f86DiJJfsp1uBryUhkolTr
+         9EX0N4NVX5LULo28BArqFlO9D6CRQhDdKgfGIh5CO5hW1rjNh7SSnOnAwf61456dtrsN
+         c/ief5pGeURAyLSyK4FN4x+d6kqSUrugVH8tr5Xtpwprj9rsOCYQbxQRLF9mrN/U9Oia
+         fy4Q==
+X-Gm-Message-State: AOAM531qhSfoUEV6TJZR2ly7FNBh525sCIPGbmA+rcXGirsM13lbE04C
+        1n+UZzu8IkKZQE00y2l/WrbePyaHZ5hJEgIrnipGngbREbQ=
+X-Google-Smtp-Source: ABdhPJyup6wdQP7lq2iQ9eWNfwCJm2OJVL9q/glWYOp3IJ6/yAujHKV3SscAIeCa4bAYjVrQ+AV3riR5SoORtlHBpM4=
+X-Received: by 2002:a05:6512:31d:: with SMTP id t29mr13381740lfp.331.1637138876438;
+ Wed, 17 Nov 2021 00:47:56 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:90a:1b64:0:0:0:0 with HTTP; Tue, 16 Nov 2021 21:55:00
- -0800 (PST)
-Reply-To: inforiaantim@planetmail.net
-From:   Riaan Samson <tawandajean@gmail.com>
-Date:   Wed, 17 Nov 2021 07:55:00 +0200
-Message-ID: <CAGZCLcg79+L7=da7mbebLjxnC-ahDTX8mjTvhttpqxGWUN2vpQ@mail.gmail.com>
-Subject: Inquiry
-To:     undisclosed-recipients:;
+References: <20211111161452.86864-1-lmb@cloudflare.com> <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
+In-Reply-To: <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Wed, 17 Nov 2021 08:47:45 +0000
+Message-ID: <CACAyw99EhJ8k4f3zeQMf3pRC+L=hQhK=Rb3UwSz19wt9gnMPrA@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Sat, 13 Nov 2021 at 01:27, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> Not sure how you've tested it, but it doesn't work in unpriv:
+> $ test_verifier 789
+> #789/u map in map state pruning FAIL
+> processed 26 insns (limit 1000000) max_states_per_insn 0 total_states
+> 2 peak_states 2 mark_read 1
+> #789/p map in map state pruning OK
 
-It is my pleasure to contact you discreetly as to discuss a mutually
-beneficial business; I will want to have your trust and to go into
-partnership investment with you which must be built on confidentiality
-between us.
+Strange, I have a script that I use for bisecting which uses a minimal
+.config + virtue to run a vm, plus I was debugging in gdb at the same
+time. I might have missed this, apologies.
 
-I am the Contract Award Director of with a South African Government
-Department; my office is in charge of awarding contracts to
-international contractors, building and handling of government
-contract throughout the country.
+I guess vmtest.sh is the canonical way to run tests now?
 
-I am in the position to transfer the sum of US$17M of which I have
-written a memo informing the Government that this fund belongs to a
-Contractor waiting to be paid his contract sum; I want to transfer and
-invest this fund into your company as an investment fund from South
-Africa to your country.
+-- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
-The fund will be shared on the ratio of 60-40%; 40% for you on the
-assistance rendered. Please note that this fund will not be
-investigated or recalled in the near feature as all document to move
-this fund to your account will be legally obtained. You are to send me
-your company's name and address with your banking details where you
-want the fund to be transferred to.
-
-As soon as you agree to my proposition, I will send you my number to
-reach me. I want you to keep this private to yourself. Be assured that
-this is a legitimate fund and will be transferred legitimately.
-
-Thanks for your anticipated cooperation.
-
-Yours
-
-Mr. Riaan Tim Samson
-
-Note: Reply me through my private/secure email: inforiaantim@planetmail.net
+www.cloudflare.com
