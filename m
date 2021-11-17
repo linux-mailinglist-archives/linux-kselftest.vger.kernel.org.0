@@ -2,119 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D2E454066
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFE6454065
 	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Nov 2021 06:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbhKQFvu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Nov 2021 00:51:50 -0500
+        id S233348AbhKQFvx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Nov 2021 00:51:53 -0500
 Received: from mga09.intel.com ([134.134.136.24]:56168 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232934AbhKQFvu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Nov 2021 00:51:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="233720248"
+        id S232934AbhKQFvx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Nov 2021 00:51:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="233720252"
 X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="233720248"
+   d="scan'208";a="233720252"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:48:51 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:48:55 -0800
 X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="604603854"
+   d="scan'208";a="604603859"
 Received: from xinshuob-mobl.ccr.corp.intel.com (HELO lkp-bingo.fnst-test.com) ([10.255.31.178])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:48:48 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:48:52 -0800
 From:   Li Zhijian <zhijianx.li@intel.com>
 To:     shuah@kernel.org, kuba@kernel.org, dcaratti@redhat.com,
         linux-kselftest@vger.kernel.org
 Cc:     lizhijian@cn.fujitsu.com, linux-kernel@vger.kernel.org,
         lkp@intel.com, philip.li@intel.com,
         Li Zhijian <zhijianx.li@intel.com>
-Subject: [PATCH v2 1/3] selftests/tc-testing: add exit code
-Date:   Wed, 17 Nov 2021 13:45:15 +0800
-Message-Id: <20211117054517.31847-1-zhijianx.li@intel.com>
+Subject: [PATCH v2 2/3] selftests/tc-testing: add missing config
+Date:   Wed, 17 Nov 2021 13:45:16 +0800
+Message-Id: <20211117054517.31847-2-zhijianx.li@intel.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211117054517.31847-1-zhijianx.li@intel.com>
+References: <20211117054517.31847-1-zhijianx.li@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Mark the summary result as FAIL to prevent from confusing the selftest
-framework if some of them are failed.
+qdiscs/fq_pie requires CONFIG_NET_SCH_FQ_PIE, otherwise tc will fail
+to create a fq_pie qdisc.
 
-Previously, the selftest framework always treats it as *ok* even though
-some of them are failed actually. That's because the script tdc.sh always
-return 0.
+It fixes following issue:
+ # not ok 57 83be - Create FQ-PIE with invalid number of flows
+ #       Command exited with 2, expected 0
+ # Error: Specified qdisc not found.
 
- # All test results:
- #
- # 1..97
- # ok 1 83be - Create FQ-PIE with invalid number of flows
- # ok 2 8b6e - Create RED with no flags
-[...snip]
- # ok 6 5f15 - Create RED with flags ECN, harddrop
- # ok 7 53e8 - Create RED with flags ECN, nodrop
- # ok 8 d091 - Fail to create RED with only nodrop flag
- # ok 9 af8e - Create RED with flags ECN, nodrop, harddrop
- # not ok 10 ce7d - Add mq Qdisc to multi-queue device (4 queues)
- #       Could not match regex pattern. Verify command output:
- # qdisc mq 1: root
- # qdisc fq_codel 0: parent 1:4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
- # qdisc fq_codel 0: parent 1:3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
-[...snip]
- # ok 96 6979 - Change quantum of a strict ETS band
- # ok 97 9a7d - Change ETS strict band without quantum
- #
- #
- #
- #
- ok 1 selftests: tc-testing: tdc.sh <<< summary result
-
-CC: Philip Li <philip.li@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
 ---
-V2: Fix missing ':'
----
- tools/testing/selftests/tc-testing/tdc.py | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ tools/testing/selftests/tc-testing/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
-index a3e43189d940..ee22e3447ec7 100755
---- a/tools/testing/selftests/tc-testing/tdc.py
-+++ b/tools/testing/selftests/tc-testing/tdc.py
-@@ -716,6 +716,7 @@ def set_operation_mode(pm, parser, args, remaining):
-         list_test_cases(alltests)
-         exit(0)
+diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
+index b71828df5a6d..b1cd7efa4512 100644
+--- a/tools/testing/selftests/tc-testing/config
++++ b/tools/testing/selftests/tc-testing/config
+@@ -60,6 +60,7 @@ CONFIG_NET_IFE_SKBTCINDEX=m
+ CONFIG_NET_SCH_FIFO=y
+ CONFIG_NET_SCH_ETS=m
+ CONFIG_NET_SCH_RED=m
++CONFIG_NET_SCH_FQ_PIE=m
  
-+    exit_code = 0 # KSFT_PASS
-     if len(alltests):
-         req_plugins = pm.get_required_plugins(alltests)
-         try:
-@@ -724,6 +725,8 @@ def set_operation_mode(pm, parser, args, remaining):
-             print('The following plugins were not found:')
-             print('{}'.format(pde.missing_pg))
-         catresults = test_runner(pm, args, alltests)
-+        if catresults.count_failures() != 0:
-+            exit_code = 1 # KSFT_FAIL
-         if args.format == 'none':
-             print('Test results output suppression requested\n')
-         else:
-@@ -748,6 +751,8 @@ def set_operation_mode(pm, parser, args, remaining):
-                         gid=int(os.getenv('SUDO_GID')))
-     else:
-         print('No tests found\n')
-+        exit_code = 4 # KSFT_SKIP
-+    exit(exit_code)
- 
- def main():
-     """
-@@ -767,8 +772,5 @@ def main():
- 
-     set_operation_mode(pm, parser, args, remaining)
- 
--    exit(0)
--
--
- if __name__ == "__main__":
-     main()
+ #
+ ## Network testing
 -- 
 2.32.0
 
