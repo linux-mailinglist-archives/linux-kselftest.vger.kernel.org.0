@@ -2,88 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99808454045
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Nov 2021 06:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6100454049
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Nov 2021 06:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbhKQFjX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Nov 2021 00:39:23 -0500
-Received: from mga05.intel.com ([192.55.52.43]:49649 "EHLO mga05.intel.com"
+        id S233233AbhKQFla (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Nov 2021 00:41:30 -0500
+Received: from mga12.intel.com ([192.55.52.136]:43269 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231596AbhKQFjX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Nov 2021 00:39:23 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="320098013"
+        id S229455AbhKQFla (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Nov 2021 00:41:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="213916872"
 X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="320098013"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:36:24 -0800
+   d="scan'208";a="213916872"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:38:32 -0800
 X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="506768996"
-Received: from xinshuob-mobl.ccr.corp.intel.com (HELO lkp-bingo.fnst-test.com) ([10.255.31.178])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:36:21 -0800
-From:   Li Zhijian <zhijianx.li@intel.com>
+   d="scan'208";a="454529752"
+Received: from xinshuob-mobl.ccr.corp.intel.com (HELO [10.167.226.45]) ([10.255.31.178])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:38:29 -0800
+Subject: Re: [PATCH 1/3] selftests/tc-testing: add exit code
 To:     shuah@kernel.org, kuba@kernel.org, dcaratti@redhat.com,
         linux-kselftest@vger.kernel.org
 Cc:     lizhijian@cn.fujitsu.com, linux-kernel@vger.kernel.org,
-        lkp@intel.com, philip.li@intel.com,
-        Li Zhijian <zhijianx.li@intel.com>
-Subject: [PATCH 3/3] selftests/tc-testing: Fix cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
-Date:   Wed, 17 Nov 2021 13:32:47 +0800
-Message-Id: <20211117053247.29052-3-zhijianx.li@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211117053247.29052-1-zhijianx.li@intel.com>
+        lkp@intel.com, philip.li@intel.com
 References: <20211117053247.29052-1-zhijianx.li@intel.com>
+From:   Li Zhijian <zhijianx.li@intel.com>
+Message-ID: <8201aa59-af0e-cb55-a45c-67e5098d961a@intel.com>
+Date:   Wed, 17 Nov 2021 13:38:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211117053247.29052-1-zhijianx.li@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Install netdevsim to provide /sys/bus/netdevsim/new_device interface.
+my bad, it's wrong version
 
-It helps to fix:
- # ok 97 9a7d - Change ETS strict band without quantum # skipped - skipped - previous setup failed 11 ce7d
- #
- #
- # -----> prepare stage *** Could not execute: "echo "1 1 4" > /sys/bus/netdevsim/new_device"
- #
- # -----> prepare stage *** Error message: "/bin/sh: 1: cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
- # "
- #
- # -----> prepare stage *** Aborting test run.
- #
- #
- # <_io.BufferedReader name=5> *** stdout ***
- #
 
-Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
----
- tools/testing/selftests/tc-testing/config | 1 +
- tools/testing/selftests/tc-testing/tdc.sh | 1 +
- 2 files changed, 2 insertions(+)
+On 17/11/2021 13:32, Li Zhijian wrote:
+> Mark the summary result as FAIL to prevent from confusing the selftest
+> framework if some of them are failed.
+>
+> Previously, the selftest framework always treats it as *ok* even though
+> some of them are failed actually. That's because the script tdc.sh always
+> return 0.
+>
+>   # All test results:
+>   #
+>   # 1..97
+>   # ok 1 83be - Create FQ-PIE with invalid number of flows
+>   # ok 2 8b6e - Create RED with no flags
+> [...snip]
+>   # ok 6 5f15 - Create RED with flags ECN, harddrop
+>   # ok 7 53e8 - Create RED with flags ECN, nodrop
+>   # ok 8 d091 - Fail to create RED with only nodrop flag
+>   # ok 9 af8e - Create RED with flags ECN, nodrop, harddrop
+>   # not ok 10 ce7d - Add mq Qdisc to multi-queue device (4 queues)
+>   #       Could not match regex pattern. Verify command output:
+>   # qdisc mq 1: root
+>   # qdisc fq_codel 0: parent 1:4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+>   # qdisc fq_codel 0: parent 1:3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+> [...snip]
+>   # ok 96 6979 - Change quantum of a strict ETS band
+>   # ok 97 9a7d - Change ETS strict band without quantum
+>   #
+>   #
+>   #
+>   #
+>   ok 1 selftests: tc-testing: tdc.sh <<< summary result
+>
+> CC: Philip Li <philip.li@intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
+> ---
+>   tools/testing/selftests/tc-testing/tdc.py | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
+> index a3e43189d940..29832fce66ac 100755
+> --- a/tools/testing/selftests/tc-testing/tdc.py
+> +++ b/tools/testing/selftests/tc-testing/tdc.py
+> @@ -716,6 +716,7 @@ def set_operation_mode(pm, parser, args, remaining):
+>           list_test_cases(alltests)
+>           exit(0)
+>   
+> +    exit_code = 0 # KSFT_PASS
+>       if len(alltests):
+>           req_plugins = pm.get_required_plugins(alltests)
+>           try:
+> @@ -724,6 +725,8 @@ def set_operation_mode(pm, parser, args, remaining):
+>               print('The following plugins were not found:')
+>               print('{}'.format(pde.missing_pg))
+>           catresults = test_runner(pm, args, alltests)
+> +        if catresults.count_failures() != 0
 
-diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
-index b1cd7efa4512..a3239d5e40c7 100644
---- a/tools/testing/selftests/tc-testing/config
-+++ b/tools/testing/selftests/tc-testing/config
-@@ -61,6 +61,7 @@ CONFIG_NET_SCH_FIFO=y
- CONFIG_NET_SCH_ETS=m
- CONFIG_NET_SCH_RED=m
- CONFIG_NET_SCH_FQ_PIE=m
-+CONFIG_NETDEVSIM=m
- 
- #
- ## Network testing
-diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-index 7fe38c76db44..afb0cd86fa3d 100755
---- a/tools/testing/selftests/tc-testing/tdc.sh
-+++ b/tools/testing/selftests/tc-testing/tdc.sh
-@@ -1,5 +1,6 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+modprobe netdevsim
- ./tdc.py -c actions --nobuildebpf
- ./tdc.py -c qdisc
--- 
-2.32.0
+my bad, it's wrong version, where i missed a ':' at the end.
+
+
+
+
+> +            exit_code = 1 # KSFT_FAIL
+>           if args.format == 'none':
+>               print('Test results output suppression requested\n')
+>           else:
+> @@ -748,6 +751,8 @@ def set_operation_mode(pm, parser, args, remaining):
+>                           gid=int(os.getenv('SUDO_GID')))
+>       else:
+>           print('No tests found\n')
+> +        exit_code = 4 # KSFT_SKIP
+> +    exit(exit_code)
+>   
+>   def main():
+>       """
+> @@ -767,8 +772,5 @@ def main():
+>   
+>       set_operation_mode(pm, parser, args, remaining)
+>   
+> -    exit(0)
+> -
+> -
+>   if __name__ == "__main__":
+>       main()
 
