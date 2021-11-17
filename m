@@ -2,102 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4A6453BC2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Nov 2021 22:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91967453F18
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Nov 2021 04:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbhKPVl6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Nov 2021 16:41:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32605 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229632AbhKPVl6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Nov 2021 16:41:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637098740;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iTjW19qZdyUqpVYPyw3O2e3LOsDvSyyIGNuakp97I8M=;
-        b=dQe2uZdxvvDobpzplqFRYPadkCpeBK6sLC8xyOj6pBEtx/JrTAt19AkJb+YAn++t/cvD7g
-        Sji9zJVsW2YrPq5GTgDM59r2hLb//d4BByaq3hVvbePBCqFfvvgJ8xRuQo0RoHHQGWduvc
-        hf3P0lUcXVsmj3LKcESMIJMRq4pqghg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-468-VIIy0NdwMbur5PwILq9BcQ-1; Tue, 16 Nov 2021 16:38:59 -0500
-X-MC-Unique: VIIy0NdwMbur5PwILq9BcQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6258C15721;
-        Tue, 16 Nov 2021 21:38:57 +0000 (UTC)
-Received: from starship (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1762760BF1;
-        Tue, 16 Nov 2021 21:38:48 +0000 (UTC)
-Message-ID: <f983e2e343f600ab5196aef8389d719bc2ab7308.camel@redhat.com>
-Subject: Re: [PATCH v2 0/6] nSVM optional features
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Bandan Das <bsd@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Tue, 16 Nov 2021 23:38:47 +0200
-In-Reply-To: <20211101140324.197921-1-mlevitsk@redhat.com>
-References: <20211101140324.197921-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S232679AbhKQDrM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Nov 2021 22:47:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48402 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229614AbhKQDrM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Nov 2021 22:47:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D6F09619EA;
+        Wed, 17 Nov 2021 03:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637120654;
+        bh=akLGag+9G8+X0Kz573PAyY2LHf6F1DS4rXYI7heQpX0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gV+gCWVVKrTTlihm3bKQV+kkaV8koY3WDsRrUGDM2+mnvZlw72BQI8ygfJs2jW2vT
+         JowRrX6oMPkqT15XqC02/BmdlecmSvMJ8TOiIzUYMMtvhoR17I0GuH0ueCQiwlzxwa
+         jliipKN4ixKS3K+olP0/nZiGja96MqoeGdxZThj4/srD608FgYxTCyUF4Te+sNC10I
+         ydmX22nosmWr2/+pCLn0BubOOIWitB4N9OTszm2PHgf+pxerV/lZtEJtnz9L6uZPxi
+         /4Bl8LuXoLYj8wju3F+UjTVzGy6etcFNn9RlPUb4UzWzjuNE5TWMPLc+Afx4JGL0GQ
+         zawwrjRrhjDNQ==
+Date:   Tue, 16 Nov 2021 19:44:13 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Riccardo Paolo Bestetti" <pbl@bestov.io>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "Hideaki YOSHIFUJI" <yoshfuji@linux-ipv6.org>,
+        "David Ahern" <dsahern@kernel.org>,
+        "Shuah Khan" <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2] ipv4/raw: support binding to nonlocal addresses
+Message-ID: <20211116194413.32c7f584@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CFPVQWNG02LG.3DHWUZ0JCAMVS@enhorning>
+References: <20210321002045.23700-1-pbl@bestov.io>
+        <CFPVQWNG02LG.3DHWUZ0JCAMVS@enhorning>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2021-11-01 at 16:03 +0200, Maxim Levitsky wrote:
-> This is a resend of a few patches that implement few
-> SVM's optional features for nesting.
-> 
-> I was testing these patches during last few weeks with various nested configurations
-> and I was unable to find any issues.
-> 
-> I also implemented support for nested vGIF in the last patch.
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> Maxim Levitsky (6):
->   KVM: x86: SVM: add module param to control LBR virtualization
->   KVM: x86: nSVM: correctly virtualize LBR msrs when L2 is running
->   KVM: x86: nSVM: implement nested LBR virtualization
->   KVM: x86: nSVM: implement nested VMLOAD/VMSAVE
->   KVM: x86: nSVM: support PAUSE filter threshold and count when
->     cpu_pm=on
->   KVM: x86: SVM: implement nested vGIF
-> 
->  arch/x86/kvm/svm/nested.c |  86 ++++++++++++++++++++---
->  arch/x86/kvm/svm/svm.c    | 140 ++++++++++++++++++++++++++++++++------
->  arch/x86/kvm/svm/svm.h    |  38 +++++++++--
->  3 files changed, 228 insertions(+), 36 deletions(-)
-> 
-> -- 
-> 2.26.3
-> 
-> 
-Kind ping on these patches.
+On Mon, 15 Nov 2021 00:09:44 +0100 Riccardo Paolo Bestetti wrote:
+> Add support to inet v4 raw sockets for binding to nonlocal addresses
+> through the IP_FREEBIND and IP_TRANSPARENT socket options, as well as
+> the ipv4.ip_nonlocal_bind kernel parameter.
 
-Best regards,
-	Maxim Levitsky
-
+FWIW this patch did not make it to patchwork or any of the mailing
+lists. Not immediately obvious why. Can you try re-sending?
