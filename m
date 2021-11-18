@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEB84562A7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 19:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAB74562BA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 19:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbhKRSoi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 13:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S233767AbhKRSqT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 13:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbhKRSoi (ORCPT
+        with ESMTP id S233908AbhKRSqP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 13:44:38 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F802C06173E
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 10:41:37 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bu18so30912865lfb.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 10:41:37 -0800 (PST)
+        Thu, 18 Nov 2021 13:46:15 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24E3C061748
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 10:43:15 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id bj13so16296886oib.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 10:43:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VvElXszLwjkIoRUsL1wZhCMOi1Cft0lEphidMFxQYiQ=;
-        b=tfhCkOcnElZBYRqGQUCSH+dme82Vpni11cDtKi3sPhbkkXAd4xCGYiujsK1sQhWSoq
-         ulNOeLM7vRuMSRokD7ZZvQ7O5gnP0N9lZEN9ysei3a0EkPz4mo09Dm3YdgRHgVuiyehn
-         YH8BPvQuYg7f7X2WYp1EjztWMGdgtNERicEr22IHuDMEEbPNc5jhkgujxXi7C8mJFaR/
-         E5yXBvJUT33JTk6RDh3W4m4jatPtG/XB9nTtluDfDSgnMHmeQfkw0QuvcFo/7AWWzSSN
-         O2cgAJGTW/7vF1RfNusft5yTt6hz4uo9+7LT+4cQTQYS3v0P6JJbSVO6/KFeN9Bwhzrv
-         iJDQ==
+        bh=dsHgrt3f1EilcZuTcpPj1Uibbk6NZSW0KCEvWuPSgaA=;
+        b=dfb4NHDvEkj3BC0fHWPSnJOucM9uBQPYun5TISX7bpUpB0jCAJwUVcP5N9FTAKhQe5
+         3bT/dFWcq+5RZJY8na+AdpyJt6bvMK3CAxHElXXCraHes83ilGYVcaIw0NRDLjZllGME
+         9rOj5iWZgQF1lvJ0+c/c2AgdOds4WnUYGL6/jE9MNLmiSKbBexf7yej741WRfqi/sHie
+         1ROChNXPDL1LLWq+RrR1gHEwwfTy1kh4+KGx1workcrW3ZpqK/gz5TTnrr2Y9dgVeLBo
+         +bUq6ZnYvYiMFnye2VqGFtkt+RF8fWOG6fE8xtDUWqe6OgLEhg6tMN6/GcBDZOoGwx5d
+         8Csg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VvElXszLwjkIoRUsL1wZhCMOi1Cft0lEphidMFxQYiQ=;
-        b=StHc/uVkc62Xv/R0aQtg0K+yvIX2mID5mUgFqGNQ5cKVHf9c+oxIWhoq39lKUweulA
-         MGcGHOkqYaGgCecvExp685HyOkx9lsPAMWV9tPyqJhyftVsMZuiUItdycOMZT/3XVcWg
-         Dz8iJ0nBnn+MGM29yk1lT5gvZKgnovves8wKsYO+K+Kog2PjOUyB9GLc73wntbwjjy39
-         ZVqJrTjfT8wBkTPxcFWE/rTGAgIR9deyiu/se1Bj66+slD/xQ44GLFptQ69cKRT/YQAB
-         g3a6HA7iEw5xXh3BRXX7kl4lV4sq0zLfURTx5Zc3eKLVQKySoLrDFp2NkeInrAcTcR5g
-         CHRg==
-X-Gm-Message-State: AOAM532FJ1o+iSM0qZpqCHqTscPtOxRmUbr5TPA+7UxiVkT55hDU1BGK
-        YtV8kAv0h9bGneLSzW9KJX1uV/DAys/2sovaUN5uhg==
-X-Google-Smtp-Source: ABdhPJxhAY1J1WZVxgqU7eTZK7w9CGyzR/q/+PV+sQbqi1Amt65GIAIMyXxlYmcPV99KaJPI6VtBYMiZD8WipHO60P4=
-X-Received: by 2002:a05:6512:3d16:: with SMTP id d22mr25399536lfv.523.1637260895491;
- Thu, 18 Nov 2021 10:41:35 -0800 (PST)
+        bh=dsHgrt3f1EilcZuTcpPj1Uibbk6NZSW0KCEvWuPSgaA=;
+        b=pL3RDWIPHiGXgLHu5/XmU75vVyNQQO76IXkOPlDBqJli4k39uLWSkIz8d5DEhEc7im
+         ywLX7m/buDqTamkg9ghnSY43Xiy34pjy7uE2qSjHnSjLnCYrJtpv8MCa9KXFRwtJXKsY
+         v1XqLwm5e4xExTXgSB5wgha23NqaSNnkb5wo7Fs1QuChnP+GheGTC1HZGxZFGXoH/ap8
+         cAndGqiUDh29UeSe3S8NRJA9zRwuAbg9cwVQVmw7IhujcBaO1YNOrARBvrTzhhLc06sS
+         L5lRMXNp2f4QJQ8Gu3ixQfVybN/hQ6LYEXhzFB4IyilX8AUBlrCyq6Hy35aCf2ZokEVi
+         PAAA==
+X-Gm-Message-State: AOAM531AtSRVmgcj8L+SHIrZbvx66M0gdrn1lU9sC0ZAReEqjYPXxuzv
+        ataGPtEic3UJnp/ukmkNwQhu2J32Y3RAZaNEkWnczw==
+X-Google-Smtp-Source: ABdhPJw6w0Zi8W9bt5228Ldv0ZCK8SRbrpkPWfvrUH89RTZAP9oilxdXqZv6iwBHs+Ol+3+gMO/PVdwFbqZjbjRk+f4=
+X-Received: by 2002:a05:6808:3012:: with SMTP id ay18mr10076246oib.88.1637260994768;
+ Thu, 18 Nov 2021 10:43:14 -0800 (PST)
 MIME-Version: 1.0
 References: <CADYN=9+_UU9qZX56uahGXxz00iayqJLRAaQrRXh1CMXTvwSbAg@mail.gmail.com>
- <20211118095852.616256-1-anders.roxell@linaro.org> <CAKwvOdkDVeoH8J1xFDeO5m_5EzNjDWucfyUewhgVSLWi5BN_QA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkDVeoH8J1xFDeO5m_5EzNjDWucfyUewhgVSLWi5BN_QA@mail.gmail.com>
+ <20211118095852.616256-1-anders.roxell@linaro.org> <20211118095852.616256-2-anders.roxell@linaro.org>
+ <CADYN=9+drOj6rVjBhB-jVQ+UXgw3ue0tz04ejHih7qRhL6Km1A@mail.gmail.com>
+In-Reply-To: <CADYN=9+drOj6rVjBhB-jVQ+UXgw3ue0tz04ejHih7qRhL6Km1A@mail.gmail.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 18 Nov 2021 10:41:23 -0800
-Message-ID: <CAKwvOdm9HuXyw64ECVVhROxc3R9LL-FT3KbO_e5XzfE4=Q-UoA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] selftests: kselftest.h: mark functions with 'noreturn'
+Date:   Thu, 18 Nov 2021 10:43:02 -0800
+Message-ID: <CAKwvOdmKebwN436byQd4FY=wCBmrHdE=R4g-y=1ENKV5Mdw7MA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] selftests: clone3: simplify return logic in clone3_set_tid()
 To:     Anders Roxell <anders.roxell@linaro.org>
 Cc:     shuah@kernel.org, fenghua.yu@intel.com, reinette.chatre@intel.com,
         john.stultz@linaro.org, tglx@linutronix.de,
@@ -63,120 +64,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 10:40 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Thu, Nov 18, 2021 at 2:03 AM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-> On Thu, Nov 18, 2021 at 1:58 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+> On Thu, 18 Nov 2021 at 10:58, Anders Roxell <anders.roxell@linaro.org> wrote:
 > >
-> > When building kselftests/capabilities the following warning shows up:
+> > Use ksft_exit_* and exit instead of using goto.
 > >
-> > clang -O2 -g -std=gnu99 -Wall    test_execve.c -lcap-ng -lrt -ldl -o test_execve
-> > test_execve.c:121:13: warning: variable 'have_outer_privilege' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >         } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
-> >                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > test_execve.c:136:9: note: uninitialized use occurs here
-> >         return have_outer_privilege;
-> >                ^~~~~~~~~~~~~~~~~~~~
-> > test_execve.c:121:9: note: remove the 'if' if its condition is always true
-> >         } else if (unshare(CLONE_NEWUSER | CLONE_NEWNS) == 0) {
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > test_execve.c:94:27: note: initialize the variable 'have_outer_privilege' to silence this warning
-> >         bool have_outer_privilege;
-> >                                  ^
-> >                                   = false
-> >
-> > Rework so all the ksft_exit_*() functions have attribue
-> > '__attribute__((noreturn))' so the compiler knows that there wont be
-> > any return from the function. That said, without
-> > '__attribute__((noreturn))' the compiler warns about the above issue
-> > since it thinks that it will get back from the ksft_exit_skip()
-> > function, which it wont.
-> > Cleaning up the callers that rely on ksft_exit_*() return code, since
-> > the functions ksft_exit_*() have never returned anything.
-> >
+>
+> I'm sorry, I should have added Nick to this patch, since he suggested it.
+>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Cheers,
+> Anders
+>
 > > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > > ---
-> >  tools/testing/selftests/clone3/clone3.c              |  4 +++-
-> >  .../testing/selftests/clone3/clone3_clear_sighand.c  |  2 +-
-> >  tools/testing/selftests/clone3/clone3_set_tid.c      |  4 +++-
-> >  tools/testing/selftests/ipc/msgque.c                 | 10 +++++-----
-> >  tools/testing/selftests/kcmp/kcmp_test.c             |  2 +-
-> >  tools/testing/selftests/kselftest.h                  | 12 ++++++------
-> >  .../membarrier/membarrier_test_multi_thread.c        |  2 +-
-> >  .../membarrier/membarrier_test_single_thread.c       |  2 +-
-> >  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c    |  2 +-
-> >  tools/testing/selftests/pidfd/pidfd_open_test.c      |  4 +++-
-> >  tools/testing/selftests/pidfd/pidfd_poll_test.c      |  2 +-
-> >  tools/testing/selftests/pidfd/pidfd_test.c           |  2 +-
-> >  tools/testing/selftests/resctrl/resctrl_tests.c      |  6 +++---
-> >  tools/testing/selftests/sync/sync_test.c             |  2 +-
-> >  tools/testing/selftests/timers/adjtick.c             |  4 ++--
-> >  tools/testing/selftests/timers/alarmtimer-suspend.c  |  4 ++--
-> >  tools/testing/selftests/timers/change_skew.c         |  4 ++--
-> >  tools/testing/selftests/timers/clocksource-switch.c  |  4 ++--
-> >  tools/testing/selftests/timers/freq-step.c           |  4 ++--
-> >  tools/testing/selftests/timers/inconsistency-check.c |  4 ++--
-> >  tools/testing/selftests/timers/leap-a-day.c          | 10 +++++-----
-> >  tools/testing/selftests/timers/leapcrash.c           |  4 ++--
-> >  tools/testing/selftests/timers/mqueue-lat.c          |  4 ++--
-> >  tools/testing/selftests/timers/nanosleep.c           |  4 ++--
-> >  tools/testing/selftests/timers/nsleep-lat.c          |  4 ++--
-> >  tools/testing/selftests/timers/posix_timers.c        | 12 ++++++------
-> >  tools/testing/selftests/timers/raw_skew.c            |  6 +++---
-> >  tools/testing/selftests/timers/set-2038.c            |  4 ++--
-> >  tools/testing/selftests/timers/set-tai.c             |  4 ++--
-> >  tools/testing/selftests/timers/set-timer-lat.c       |  4 ++--
-> >  tools/testing/selftests/timers/set-tz.c              |  4 ++--
-> >  tools/testing/selftests/timers/skew_consistency.c    |  4 ++--
-> >  tools/testing/selftests/timers/threadtest.c          |  2 +-
-> >  tools/testing/selftests/timers/valid-adjtimex.c      |  6 +++---
-> >  tools/testing/selftests/vm/madv_populate.c           |  2 +-
-> >  35 files changed, 80 insertions(+), 74 deletions(-)
+> >  tools/testing/selftests/clone3/clone3_set_tid.c | 11 +++--------
+> >  1 file changed, 3 insertions(+), 8 deletions(-)
 > >
-> > diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> > index 42be3b925830..ede5da0c67b4 100644
-> > --- a/tools/testing/selftests/clone3/clone3.c
-> > +++ b/tools/testing/selftests/clone3/clone3.c
-> > @@ -191,5 +191,7 @@ int main(int argc, char *argv[])
-> >         test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
-> >                         CLONE3_ARGS_NO_TEST);
-> >
-> > -       return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
-> > +       if (ksft_get_fail_cnt())
-> > +               ksft_exit_fail();
-> > +       ksft_exit_pass();
-> >  }
-> > diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-> > index 47a8c0fc3676..dcd9448eaeec 100644
-> > --- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
-> > +++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-> > @@ -124,5 +124,5 @@ int main(int argc, char **argv)
-> >
-> >         test_clone3_clear_sighand();
-> >
-> > -       return ksft_exit_pass();
-> > +       ksft_exit_pass();
-> >  }
 > > diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
-> > index 0229e9ebb995..a755fcd3af89 100644
+> > index a755fcd3af89..1b950c3c3b7c 100644
 > > --- a/tools/testing/selftests/clone3/clone3_set_tid.c
 > > +++ b/tools/testing/selftests/clone3/clone3_set_tid.c
-> > @@ -393,5 +393,7 @@ int main(int argc, char *argv[])
-> >  out:
-> >         ret = 0;
+> > @@ -250,7 +250,8 @@ int main(int argc, char *argv[])
+> >                  * that all those tests are skipped as non-root.
+> >                  */
+> >                 ksft_cnt.ksft_xskip += ksft_plan - ksft_test_num();
+> > -               goto out;
+> > +               ksft_exit_skip(
+> > +                       "Please run the remaining tests as root - Exiting.\n");
+> >         }
 > >
-> > -       return !ret ? ksft_exit_pass() : ksft_exit_fail();
-> > +       if (ret)
-> > +               ksft_exit_fail();
-> > +       ksft_exit_pass();
->
-> err...did you update clone3_set_tid as Shuah requested in v3?
-> Otherwise what changed from v2 -> v3?
+> >         /* Find the current active PID */
+> > @@ -371,9 +372,7 @@ int main(int argc, char *argv[])
+> >         close(pipe_2[1]);
+> >
+> >         if (waitpid(ns_pid, &status, 0) < 0) {
+> > -               ksft_print_msg("Child returned %s\n", strerror(errno));
+> > -               ret = -errno;
+> > -               goto out;
+> > +               ksft_exit_fail_msg("Child returned %s\n", strerror(errno));
+> >         }
+> >
+> >         if (!WIFEXITED(status))
+> > @@ -390,10 +389,6 @@ int main(int argc, char *argv[])
+> >                 ksft_test_result_fail(
+> >                         "PIDs in all namespaces not as expected (%d,%d,%d)\n",
+> >                         ns3, ns2, ns1);
+> > -out:
+> > -       ret = 0;
+> >
+> > -       if (ret)
+> > -               ksft_exit_fail();
+> >         ksft_exit_pass();
+> >  }
+> > --
+> > 2.33.0
+> >
 
-Ah, this was part of a series. Sorry I missed that; gmail keeps the
-original subject line when --in-reply-to is used even when the subject
-changes.
+
 
 -- 
 Thanks,
