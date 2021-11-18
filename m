@@ -2,166 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A25455F3F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 16:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4904F455FB1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 16:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbhKRPXr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 10:23:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33446 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229583AbhKRPXq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 10:23:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 93FBD6126A
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 15:20:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637248846;
-        bh=fDSaj4n747JDrUMPlz/uNu/yZWTaXEmTjYVO6855SdQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mBkZDfjzMRzfSMcNmqKbAooe07712jwjaiZCYt3eKcUEFNEIuGRAAgmOUtsiFhnlv
-         gl/po49mueHA4EB62rc4dGKzUWRu/11VbwlqCraQBDcyPZMhXF4BqjjZ6jwlyIq7rR
-         rW4MO+WnAFuc18X6nS3aQuXpSxKRxnsQdHrXDXcfRZnJ8PwdZHhrulndltVwrqgQcI
-         u0N62TsYA0vimtTzUpHRqbJ+lvb6d64/ZlFmCzCy8+cBWfZimDbBqV77YCVoZqaR6k
-         x3dr8a0/uKHjv2s9tEBAMYBoq/QjWVm3lDmntMQtNRFpxzqDrmsrz02NdCwnksnRA9
-         ANRNqzlfviwUw==
-Received: by mail-ed1-f49.google.com with SMTP id g14so28623562edz.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 07:20:46 -0800 (PST)
-X-Gm-Message-State: AOAM530eBzkgXGnYY3+CrzWrP57KJniEvCp2JRKScVILWMfs3C1FgxXA
-        mvKgb5V8+FzUfhBkwRPDCrpYi+mzFwuo3q6klN9dtw==
-X-Google-Smtp-Source: ABdhPJxrIyECmt0iA265eD0cyb9vvkwUMTacYpNtXPpnWBgJ7E+nmyeeG6x9UlEBQtDG163W9048JAyA5Hp/brmfTAE=
-X-Received: by 2002:a17:907:7f1a:: with SMTP id qf26mr34115379ejc.543.1637248845008;
- Thu, 18 Nov 2021 07:20:45 -0800 (PST)
+        id S232587AbhKRPk7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 10:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232596AbhKRPk6 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Nov 2021 10:40:58 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E976C061574;
+        Thu, 18 Nov 2021 07:37:58 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id n85so6386033pfd.10;
+        Thu, 18 Nov 2021 07:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H63tYC9VZirdHLdx/wP8j9KfA3u77nm8eK5aUwcmc7I=;
+        b=Ot44ei6RVgNJ5wnsuAEPY40LMWLWkuTl2NwglGZJNZuR/RWtL5KSG4zquBUqAGWHRG
+         YDlKNg1IDgejuR6glbKGB1/pmrtqvnwncEi49hvjMN8DI39LgpuhQHzzp9IRseu+9f6B
+         F0MERHdaZTbVfXmi7rtzVWLfzWP2YIE0dK3JIB9ZGgt0b6SulkIfJ/V/CxksY8gE7hGQ
+         D6glIFn5yKzH7q7Dh1VHuEWQFbCtvFYal4SVEr8P9nuHXp+ACGGnh6Y0UwDmH3Zx/U5S
+         TU5s6FWCLSDK0Q7X5r2sto8TNlqAb0WcI8gLyE8x62hL/v/0fUTM2n/1YgWINckDfhix
+         gOxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H63tYC9VZirdHLdx/wP8j9KfA3u77nm8eK5aUwcmc7I=;
+        b=qGnbwzLy5Mloh73+Nvu5B/VFuW4qomiabF3dDJlV/1sY8oskCPdFrqO+yRQupFAD0u
+         bk7XkhUoblbKoE7ZxUt5ohud49jt9+7RX0Ef1nEAtcapa/uExT3mF8SZUouH4BQ7y+Q1
+         7Eozw7JJU+ZpZAMRVPMgedrnAJU2cTS1UwxKkCiZvDqVspEOZbKyForKN90ig+mvIAWt
+         rTg6k54cYdM5yXLPiIr7hMnZ9W93m6wK/KNH4McQ+PWgMRuFqMHMy1KySbF9saXKLGWB
+         Q1EIrNQbPvB3uSLTRCpYbsSaJiYhBojf468+qmbclHLBq+fvJSxzjkKYK1AbmrGrDtzO
+         uJiA==
+X-Gm-Message-State: AOAM5322yX7BER87o66yIlePPyPKkhJyYy6fSc7obQYJG9aLGY6ZvXDl
+        XoRNdrKj1t7PhtJAk5zVcjb9y2IuQWmlIERKSYQ=
+X-Google-Smtp-Source: ABdhPJxIsnca/WuiwlgH8hsoVhfQYGtrxibEd8TAes0FdIYphIVtlfbpdo5+QCOP1kZOQYVCmDaitDtW5IBftZ0MXRs=
+X-Received: by 2002:a63:d00c:: with SMTP id z12mr11871225pgf.334.1637249877960;
+ Thu, 18 Nov 2021 07:37:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20211111161452.86864-1-lmb@cloudflare.com> <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
- <CACAyw99EhJ8k4f3zeQMf3pRC+L=hQhK=Rb3UwSz19wt9gnMPrA@mail.gmail.com>
- <20211118010059.c2mixoshcrcz4ywq@ast-mbp> <CAEf4Bza=ZipeiwhvUvLLs9r4dbOUQ6JQTAotmgF6tUr1DAc9pw@mail.gmail.com>
- <CAEf4BzZTiyyKLg2y_dSvEEgzjSsCRCeRgt99DmFAHJyGqht8tw@mail.gmail.com> <06aa2d62d09bcd0a39898f7dcc7fb2fcdc262081.camel@linux.ibm.com>
-In-Reply-To: <06aa2d62d09bcd0a39898f7dcc7fb2fcdc262081.camel@linux.ibm.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Thu, 18 Nov 2021 16:20:34 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5rTQH+NgxmNv+SYc+OdYKuOLHi=_8y1RVap+SjeQUAbw@mail.gmail.com>
-Message-ID: <CACYkzJ5rTQH+NgxmNv+SYc+OdYKuOLHi=_8y1RVap+SjeQUAbw@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
+References: <CA+3zgmtHdCE3TZn3Hc8+nsYc+mHHvACNgFY_Z_Z4nCAmhSnQPg@mail.gmail.com>
+ <CA+G9fYuFqFyYXkvGK8jVCZAiDZW_oNG4dNY_2q9BG__uXRR1DQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYuFqFyYXkvGK8jVCZAiDZW_oNG4dNY_2q9BG__uXRR1DQ@mail.gmail.com>
+From:   Tim Lewis <elatllat@gmail.com>
+Date:   Thu, 18 Nov 2021 10:37:46 -0500
+Message-ID: <CA+3zgmtwFQNc05why_bT1fXxPM2ShHtZ=MaB6QOmkYw81wKn6A@mail.gmail.com>
+Subject: Re: Re: [PATCH 5.10 000/578] 5.10.80-rc2 review
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        Anders Roxell <anders.roxell@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 12:56 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> On Wed, 2021-11-17 at 17:38 -0800, Andrii Nakryiko wrote:
-> > On Wed, Nov 17, 2021 at 5:29 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Nov 17, 2021 at 5:01 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Wed, Nov 17, 2021 at 08:47:45AM +0000, Lorenz Bauer wrote:
-> > > > > On Sat, 13 Nov 2021 at 01:27, Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > >
-> > > > > > Not sure how you've tested it, but it doesn't work in unpriv:
-> > > > > > $ test_verifier 789
-> > > > > > #789/u map in map state pruning FAIL
-> > > > > > processed 26 insns (limit 1000000) max_states_per_insn 0
-> > > > > > total_states
-> > > > > > 2 peak_states 2 mark_read 1
-> > > > > > #789/p map in map state pruning OK
-> > > > >
-> > > > > Strange, I have a script that I use for bisecting which uses a
-> > > > > minimal
-> > > > > .config + virtue to run a vm, plus I was debugging in gdb at the
-> > > > > same
-> > > > > time. I might have missed this, apologies.
-> > > > >
-> > > > > I guess vmtest.sh is the canonical way to run tests now?
-> > > >
-> > > > vmtest.sh runs test_progs only. That's the minimum bar that
-> > >
-> > > It runs test_progs by default, unless something else is requested.
-> > > You
-> > > can run anything inside it, e.g.:
-> > >
-> > > ./vmtest.sh -- ./test_maps
-> > >
-> > > BTW, we recently moved configs around in libbpf repo on Github, so
-> > > this script broke. I'm sending a fix in a few minutes, hopefully.
-> >
-> > ... and of course it's not that simple. [0] recently changed how we
-> > build qemu image and vmtest.sh had some assumptions. Some trivial
-> > things I fixed, but I'm not too familiar with the init scripts stuff.
-> > Adding Ilya and KP to hopefully help with this. Ilya, KP, can you
-> > please help restore vmtest.sh functionality?
-> >
-> > After fixing few paths:
-> >
-> > diff --git a/tools/testing/selftests/bpf/vmtest.sh
-> > b/tools/testing/selftests/bpf/vmtest.sh
-> > index 027198768fad..7ea40108b85d 100755
-> > --- a/tools/testing/selftests/bpf/vmtest.sh
-> > +++ b/tools/testing/selftests/bpf/vmtest.sh
-> > @@ -13,8 +13,8 @@ DEFAULT_COMMAND="./test_progs"
-> >  MOUNT_DIR="mnt"
-> >  ROOTFS_IMAGE="root.img"
-> >  OUTPUT_DIR="$HOME/.bpf_selftests"
-> > -
-> > KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config
-> > "
-> > -
-> > KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/latest.config
-> > "
-> > +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/config-latest.x86_64
-> > "
-> > +KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/config-latest.x86_64
-> > "
-> >  INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX
-> > "
-> >  NUM_COMPILE_JOBS="$(nproc)"
-> >  LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
-> > @@ -85,7 +85,7 @@ newest_rootfs_version()
-> >  {
-> >         {
-> >         for file in "${!URLS[@]}"; do
-> > -               if [[ $file =~ ^libbpf-vmtest-rootfs-(.*)\.tar\.zst$
-> > ]]; then
-> > +               if [[ $file =~
-> > ^x86_64/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
-> >                         echo "${BASH_REMATCH[1]}"
-> >                 fi
-> >         done
-> >
-> > ... the next problem is more severe. Script complains about missing
-> > /etc/rcS.d, if I just force-created it, when kernel boots we get:
-> >
-> >
-> > [    1.050803] ---[ end Kernel panic - not syncing: No working init
-> > found.  Try passing init= option to kernel. See Linux
-> > Documentation/admin-guide/init.rst for guidance. ]---
-> >
-> >
-> > Please help.
-> >
-> >   [0] https://github.com/libbpf/libbpf/pull/204
->
-> I've posted a fix, please give it a try:
->
-> https://lore.kernel.org/bpf/20211118115225.1349726-1-iii@linux.ibm.com/
->
-> Missing was the ${ARCH} prefix when downloading the image, so it ended
-> up being empty. Now your ~/.bpf_selftests is poisoned with it, so
-> you'll need to run vmtest.sh with -i switch once in order to remove the
-> bad image.
+On Thu, Nov 18, 2021 at 5:41 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+...
+> I have noticed intermittent failures on slow devices.
+...
+> When the test runs more than X time (45 sec i guess) the script will
+> be killed by the runner script.
 
-Thanks for taking a look and sending a fix.
+In my test environment proc-uptime-001 seems to be passing ~40% (N=10)
+of the time,
+and taking approximately 0.60 seconds  (~11 seconds / 18 tests).
+
+kselftest is not timing individual targets (maybe it should?),
+so I don't have a timing history but it used to pass 100% (N=60) of the time.
+
+> We will add this as known intermittent failure.
+
+Thanks, I'll remove it from my tests.
+
+Data for the numbers above:
+
+for X in $(seq 1 10) ; do echo $X && time make TARGETS="proc"
+kselftest | grep -P "ok.*proc-uptime-001" ; done
+1
+ok 10 selftests: proc: proc-uptime-001
+
+real    0m10.605s
+user    0m3.427s
+sys    0m7.239s
+2
+not ok 10 selftests: proc: proc-uptime-001 # exit=134
+
+real    0m10.808s
+user    0m3.237s
+sys    0m6.614s
+3
+ok 10 selftests: proc: proc-uptime-001
+
+real    0m10.577s
+user    0m3.377s
+sys    0m7.269s
+4
+ok 10 selftests: proc: proc-uptime-001
+
+real    0m12.424s
+user    0m3.215s
+sys    0m7.402s
+5
+not ok 10 selftests: proc: proc-uptime-001 # exit=134
+
+real    0m11.101s
+user    0m3.257s
+sys    0m6.883s
+6
+not ok 10 selftests: proc: proc-uptime-001 # exit=134
+
+real    0m10.797s
+user    0m3.199s
+sys    0m6.671s
+7
+not ok 10 selftests: proc: proc-uptime-001 # exit=134
+
+real    0m12.817s
+user    0m3.308s
+sys    0m7.177s
+8
+not ok 10 selftests: proc: proc-uptime-001 # exit=134
+
+real    0m10.816s
+user    0m3.201s
+sys    0m6.663s
+9
+not ok 10 selftests: proc: proc-uptime-001 # exit=134
+
+real    0m10.832s
+user    0m3.145s
+sys    0m6.721s
+10
+ok 10 selftests: proc: proc-uptime-001
+
+real    0m10.664s
+user    0m3.337s
+sys    0m7.375s
