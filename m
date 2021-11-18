@@ -2,205 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B71BD455B0B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 12:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF05455C7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 14:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344125AbhKRL75 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 06:59:57 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1144 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344232AbhKRL7z (ORCPT
+        id S230400AbhKRNXz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 08:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230359AbhKRNXs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 06:59:55 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AIBgk6F023416;
-        Thu, 18 Nov 2021 11:56:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=FenOA346W98FDSn8BoNiTZo+9+WTDEAKBpVat/VSevc=;
- b=gv+IxrHt+AgU+/wxXo1HdO2lK698p3NeQ2q3es8qGY4z8mc1Ph/Q2e3oDv/Zga0LzfFg
- 0avXKdLNBztP+sv3s1lAMUryfXAEfboDwX5pvmuowggP8uTke6jOMx493j/LaqmcvFfh
- LV07uSymzfAeNWl47vuW/aiLdjNg81RD52LLhKHjg8wsdWvTbQ8OJDdz733VhSMqMZ5Z
- Fp/dPyhqqtgR3Nqyy+4Z2L0P3ZR85t5dXCMFj9LDzOrkk0Jg8zXxSfuXDykWuiLxawuz
- s7phIaCk+utdRo+LJ/LIzPcVXrsY6ZwHYtegbokpcoAcI1S3KL1ViWfiGfvdkt3YzD5z nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cdns98upc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Nov 2021 11:56:42 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AIBItEZ001308;
-        Thu, 18 Nov 2021 11:56:41 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cdns98unx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Nov 2021 11:56:41 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AIBlZXc028180;
-        Thu, 18 Nov 2021 11:56:39 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ca50an60h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Nov 2021 11:56:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AIBndc158982760
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Nov 2021 11:49:39 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04F2CA404D;
-        Thu, 18 Nov 2021 11:56:37 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 648C6A405F;
-        Thu, 18 Nov 2021 11:56:36 +0000 (GMT)
-Received: from sig-9-145-38-29.uk.ibm.com (unknown [9.145.38.29])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Nov 2021 11:56:36 +0000 (GMT)
-Message-ID: <06aa2d62d09bcd0a39898f7dcc7fb2fcdc262081.camel@linux.ibm.com>
-Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 18 Nov 2021 12:56:36 +0100
-In-Reply-To: <CAEf4BzZTiyyKLg2y_dSvEEgzjSsCRCeRgt99DmFAHJyGqht8tw@mail.gmail.com>
-References: <20211111161452.86864-1-lmb@cloudflare.com>
-         <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
-         <CACAyw99EhJ8k4f3zeQMf3pRC+L=hQhK=Rb3UwSz19wt9gnMPrA@mail.gmail.com>
-         <20211118010059.c2mixoshcrcz4ywq@ast-mbp>
-         <CAEf4Bza=ZipeiwhvUvLLs9r4dbOUQ6JQTAotmgF6tUr1DAc9pw@mail.gmail.com>
-         <CAEf4BzZTiyyKLg2y_dSvEEgzjSsCRCeRgt99DmFAHJyGqht8tw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -8DdZLycEXqBpoCbV8D2IhZxJP9dCJAy
-X-Proofpoint-ORIG-GUID: eVsQqMjySa30KcufDoTJAdhDqfSSQhxa
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 18 Nov 2021 08:23:48 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A0C061767
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 05:20:48 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id z5so26978456edd.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 05:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=o/E5pVansUx3F/k2LuNW2doPkR1FpoTGrLH7703k+v4=;
+        b=ZJ8DLJeZdFHSfQ/25itsimLa50JkvpRX+SA81xN0i0Qv+AsP6Eei13Mf79E2myn1mY
+         QYDHIST3QNvUisYr/eke9EGEXN2J1kG0aQM0Z0vX/Aius2NkH5bV/aR+ARVVdW5JaFtR
+         7suYIqTqxnj7BgnMoy4Z+/3Z/hwCB26yJvMNGKTKi+FiEZ7riuufEttMQkNbay5l45x9
+         eIW8dnSBoIOa9iyu+kuC6t/u1Gm/uvHeJPSe9phrd/4S+7Dl0pax8v48toeDyjk4vqha
+         +OOtGBBBZ5HWWEBjs07V672LMXkdE/OUT3b7m8PetG9rA2KULK7O1bBxKc8SGuTpqlZ4
+         tUtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=o/E5pVansUx3F/k2LuNW2doPkR1FpoTGrLH7703k+v4=;
+        b=kl7SRXv9MiMJ7bTgXU/wOY/Ok5h5igmJZ7D13LOzobcoD+DTCHPoRGKzlOALS55k9Y
+         o0QatqzUDkKrgF8RcQU5wysJGOb93fi6s+H9Fn7zcxI3LSoWaStsvtbQFRLmyV0jfT1V
+         sX104eoPtZdIYktqZ/tRYYa2GH6My6D9+ato1+7k9B+NaWITUNcswRDXf5qAuYzm/QCp
+         uf1Kj0VW5YNeqjoeJvgsageGAXFeWMeWFSKAfOpZmbT/TJz9jC2bb8urmrSZcA+t3aaa
+         KeJU8fvRKAQrhCnqPpOrMQXfEsjhmspwLUVxR+qYWzt/nfiO6i1CyU7mGWm0FO0SRvo8
+         qonQ==
+X-Gm-Message-State: AOAM531x45japO9iPTWIHMNl93l49jIEDZNR+G4GnVXoCY8lVfYBwgVu
+        dYcJINRiXNpOnYlLrPGggT/Njj+puQzxGqU+DKVdLKNtQ85x5w==
+X-Google-Smtp-Source: ABdhPJx9isLSrkR5iF/wPCX0wzfwmwoVn6dWoYq8WCOMeBODGctMLS4FPoNPUNNA+tz+Ait67ILWAxcCLDQQbd81GHg=
+X-Received: by 2002:a17:907:6e16:: with SMTP id sd22mr32229395ejc.542.1637241636078;
+ Thu, 18 Nov 2021 05:20:36 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-18_05,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- phishscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111180067
+Received: by 2002:a50:cf0b:0:0:0:0:0 with HTTP; Thu, 18 Nov 2021 05:20:35
+ -0800 (PST)
+Reply-To: francoispetit113@outlook.com
+From:   Francois Petit <daphinemsparharmrhonda491@gmail.com>
+Date:   Thu, 18 Nov 2021 14:20:35 +0100
+Message-ID: <CAPd2WpdRibaOC7jU-E6BVEYPcea0W-LsjvXD5=TEuuqKgaaRAQ@mail.gmail.com>
+Subject: TREAT AS CONFIDENTIAL..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2021-11-17 at 17:38 -0800, Andrii Nakryiko wrote:
-> On Wed, Nov 17, 2021 at 5:29 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > 
-> > On Wed, Nov 17, 2021 at 5:01 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > 
-> > > On Wed, Nov 17, 2021 at 08:47:45AM +0000, Lorenz Bauer wrote:
-> > > > On Sat, 13 Nov 2021 at 01:27, Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > 
-> > > > > Not sure how you've tested it, but it doesn't work in unpriv:
-> > > > > $ test_verifier 789
-> > > > > #789/u map in map state pruning FAIL
-> > > > > processed 26 insns (limit 1000000) max_states_per_insn 0
-> > > > > total_states
-> > > > > 2 peak_states 2 mark_read 1
-> > > > > #789/p map in map state pruning OK
-> > > > 
-> > > > Strange, I have a script that I use for bisecting which uses a
-> > > > minimal
-> > > > .config + virtue to run a vm, plus I was debugging in gdb at the
-> > > > same
-> > > > time. I might have missed this, apologies.
-> > > > 
-> > > > I guess vmtest.sh is the canonical way to run tests now?
-> > > 
-> > > vmtest.sh runs test_progs only. That's the minimum bar that
-> > 
-> > It runs test_progs by default, unless something else is requested.
-> > You
-> > can run anything inside it, e.g.:
-> > 
-> > ./vmtest.sh -- ./test_maps
-> > 
-> > BTW, we recently moved configs around in libbpf repo on Github, so
-> > this script broke. I'm sending a fix in a few minutes, hopefully.
-> 
-> ... and of course it's not that simple. [0] recently changed how we
-> build qemu image and vmtest.sh had some assumptions. Some trivial
-> things I fixed, but I'm not too familiar with the init scripts stuff.
-> Adding Ilya and KP to hopefully help with this. Ilya, KP, can you
-> please help restore vmtest.sh functionality?
-> 
-> After fixing few paths:
-> 
-> diff --git a/tools/testing/selftests/bpf/vmtest.sh
-> b/tools/testing/selftests/bpf/vmtest.sh
-> index 027198768fad..7ea40108b85d 100755
-> --- a/tools/testing/selftests/bpf/vmtest.sh
-> +++ b/tools/testing/selftests/bpf/vmtest.sh
-> @@ -13,8 +13,8 @@ DEFAULT_COMMAND="./test_progs"
->  MOUNT_DIR="mnt"
->  ROOTFS_IMAGE="root.img"
->  OUTPUT_DIR="$HOME/.bpf_selftests"
-> -
-> KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config
-> "
-> -
-> KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/latest.config
-> "
-> +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/config-latest.x86_64
-> "
-> +KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/config-latest.x86_64
-> "
->  INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX
-> "
->  NUM_COMPILE_JOBS="$(nproc)"
->  LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
-> @@ -85,7 +85,7 @@ newest_rootfs_version()
->  {
->         {
->         for file in "${!URLS[@]}"; do
-> -               if [[ $file =~ ^libbpf-vmtest-rootfs-(.*)\.tar\.zst$
-> ]]; then
-> +               if [[ $file =~
-> ^x86_64/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
->                         echo "${BASH_REMATCH[1]}"
->                 fi
->         done
-> 
-> ... the next problem is more severe. Script complains about missing
-> /etc/rcS.d, if I just force-created it, when kernel boots we get:
-> 
-> 
-> [    1.050803] ---[ end Kernel panic - not syncing: No working init
-> found.  Try passing init= option to kernel. See Linux
-> Documentation/admin-guide/init.rst for guidance. ]---
-> 
-> 
-> Please help.
-> 
->   [0] https://github.com/libbpf/libbpf/pull/204
+Hello,
 
-I've posted a fix, please give it a try:
+I'm Francois Petit with Societe Generale Bank here in France. I
+sincerely seek to present you as the Next of Kin to a late client who
+left behind $145.5 million dollars in a fixed deposit account in my
+bank before his demise.
 
-https://lore.kernel.org/bpf/20211118115225.1349726-1-iii@linux.ibm.com/
+The British born client was into Diamond and Gold mining and died
+without a Next of Kin. I shall obtain the legal documents that will
+give you legal rights to make this claim legitimately. I am willing to
+share the funds 60/40 with you and this shall be completed within 72
+hours. With the legal documents, the bank will approve you as the Next
+of Kin and pay out this amount to you within three working days. I
+considered the funds would be of better use to both of us instead of
+letting the bank or some corrupt politician to confiscate the funds.
 
-Missing was the ${ARCH} prefix when downloading the image, so it ended
-up being empty. Now your ~/.bpf_selftests is poisoned with it, so
-you'll need to run vmtest.sh with -i switch once in order to remove the
-bad image.
+Kindly get back to me as soon as possible with your full name,
+address, direct contact number and occupation for the processing of
+the legal documents if you are interested and can be trusted to return
+my own share when you have received the funds in your bank account.
+More information shall be given to you once I hear from you. I put it
+to you that this is probably going to be the best decision you ever
+make in your life.
 
-Best regards,
-Ilya
+However, if you are not interested in the offer, kindly delete this
+message from your mailbox and pretend that I never contacted you. I'll
+continue my search for a reliable person that will help out.
 
+Best Wishes,
+Francois Petit
