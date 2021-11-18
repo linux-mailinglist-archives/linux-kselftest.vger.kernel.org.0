@@ -2,219 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EDE456524
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 22:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B0E45653B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 22:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbhKRVsF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 16:48:05 -0500
-Received: from mga01.intel.com ([192.55.52.88]:32957 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229777AbhKRVsF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 16:48:05 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10172"; a="258087215"
-X-IronPort-AV: E=Sophos;i="5.87,245,1631602800"; 
-   d="scan'208";a="258087215"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 13:45:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,245,1631602800"; 
-   d="scan'208";a="646955446"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Nov 2021 13:45:03 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 18 Nov 2021 13:45:02 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 18 Nov 2021 13:45:01 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Thu, 18 Nov 2021 13:45:01 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Thu, 18 Nov 2021 13:45:01 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQa8jZE/jpa+8lPKVomSGGcE/hzj9oDW4YQF6YpH2dxbHKIAGUmuJyOQXihV9u0DoBpRt6hdTW7eVExvcPRTuYepu36jLcP0xkfTyAkXyu7tvN4xXdSlditKwniZjQlsnV2Eun1t9APzqK5UArM8Yb8+7OkpPFjOdFOiEWpDxLP7doGWpH8A9ea7jHhc3/fSM1cPcFlTmC2EUsfjFUvbTiRH7ryFoYVBnnHVbqWRalkeLRqRBWP9B31GfX14NpjpC8UoOb/k04MaILqQyDVMA7Rs/dx46k81p8w84d2SNGBB/NmZxqd3/iTJ+pS7/teNfTxf9zkmONQYK8RmArbkYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6gtI7Y3NTcLebzxFLW133Xg43lDrHlNKDcCD98ybSvo=;
- b=n8fKVjG0cs6JdhBlm6qXh/Av6OOj5+YxDEFkpTqAsGP8MP2cmveXHUf+CEBui3ujEwJPzBwaXinabjOL5J/PaA2aeDqNQ2qjywlhbgtIRRjuSZ4IGsCm44LPHkG3Fwy2+ApugIuR8j9fhZ8jP1KIlVjF/cosFUEV4SDQrbizkgipsNTQCSCX+YOVcterEqBWtJtOHewJiRgBhovsVf5LntLrsKFUP2uXYhWDkbKKkey1pNcVhCSMeIViqSxL5qQbRR3BU7d9CsaNY9nZ2jnT4ExYeQyfi/qDgHsqmutl24n51MXevfTVycYBgKWNZ3IrdmjT5Soi2hfaL/MPcPVdoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6gtI7Y3NTcLebzxFLW133Xg43lDrHlNKDcCD98ybSvo=;
- b=dFN2ooGGztpTkTx5/zFNpF+eY//qZAqgjRWIhU4QAdxUAWiqutuyvmK/ZXqtQdJA5q0EqkF54VPWJsWs6t9iMp0dTTB8RGiQkwKE6+a9gzAdfGZS1CyGR5vzEkLinM/gWyUw5RKsosd22ja1fXhD8xftjJejEXXYW1f1vo3RrFY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BYAPR11MB3045.namprd11.prod.outlook.com (2603:10b6:a03:88::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.16; Thu, 18 Nov
- 2021 21:44:58 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::8c17:ca7:7fd3:ce7d]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::8c17:ca7:7fd3:ce7d%6]) with mapi id 15.20.4690.029; Thu, 18 Nov 2021
- 21:44:58 +0000
-Message-ID: <3918b4e8-d612-8394-dad3-78d13218b4cb@intel.com>
-Date:   Thu, 18 Nov 2021 13:44:55 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.1
-Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
-Content-Language: en-US
-To:     Prakash Sangappa <prakash.sangappa@oracle.com>
-CC:     "x86@kernel.org" <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <D4A544CE-15E8-4C9A-9245-8B0146E272F3@oracle.com>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <D4A544CE-15E8-4C9A-9245-8B0146E272F3@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR01CA0020.prod.exchangelabs.com (2603:10b6:a02:80::33)
- To BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
+        id S229687AbhKRWBS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 17:01:18 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:36338 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhKRWBM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Nov 2021 17:01:12 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:46794)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mnpQ2-00115C-O4; Thu, 18 Nov 2021 14:58:10 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:52636 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mnpQ1-0048Wm-LN; Thu, 18 Nov 2021 14:58:10 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     <linux-kernel@vger.kernel.org>
+Cc:     Kyle Huey <me@kylehuey.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Robert O'Callahan <rocallahan@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oliver Sang <oliver.sang@intel.com>, lkp@lists.01.org,
+        lkp@intel.com
+References: <CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com>
+        <202111171049.3F9C5F1@keescook>
+        <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
+        <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
+        <87k0h6334w.fsf@email.froward.int.ebiederm.org>
+        <202111171341.41053845C3@keescook>
+        <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
+        <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
+        <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
+        <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
+        <202111171728.D85A4E2571@keescook>
+Date:   Thu, 18 Nov 2021 15:58:02 -0600
+In-Reply-To: <202111171728.D85A4E2571@keescook> (Kees Cook's message of "Wed,
+        17 Nov 2021 17:32:20 -0800")
+Message-ID: <87h7c9qg7p.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Received: from [192.168.86.37] (73.222.31.188) by BYAPR01CA0020.prod.exchangelabs.com (2603:10b6:a02:80::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.16 via Frontend Transport; Thu, 18 Nov 2021 21:44:57 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4dbad686-aab4-4503-6233-08d9aadcaa54
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3045:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-X-Microsoft-Antispam-PRVS: <BYAPR11MB30453D154123036545F26D41E59B9@BYAPR11MB3045.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kMQIeoCUdoO2qwTv3MUCDy3lqynTV/MuI/0oy8ODCMzPH8qDUhm6bJMtJZUnjl6B6x2+3Bx//lr9sjPRpYIK9oxOfZb4XWReAaIrn0NF4ypbH5IA8BTsi4wLnkVAlZ/nJMT5TRxFRdzZ5fJtchQwlYbTVgxY8GZvliDjXXSroLFk5T5nViEFY1bN5vsR+e/4XrL4EUr4kGf6D9SGRZTcVNBmZFJ6V1GDOP3VDPr2O/6W3c6VnZ3ipJDwCRKcGghijflLZ6yKxWj2kUup6WM2g60gN9u1G7SsFEA3rSGNnBN8JzO4Lfop6bGWXtqiTlWyEQBOKzGhFE9tFcBN7EsCLilX9/k4v++C+2sPwQu8ZU6xFK+u5w5o9QQvu+WBJ9lRmA+GBLUqaEltjvoPTPfwa7G3RSjIM2TQmiItNzFBeYsbo8utTSmF8S2uRHKkl1IdjRD2W0RgAQdgyUbiV848gd5mLHyOeoN6jcX1DV3e6JaDxU/WImfKkdE4Guw93VH7Pm7zQAfnXDoeQu7H2DPTD01ZnHTRYFS93864T+73/Vz34GfocGznh366RpFQAnhn+Pk2dTFBAjXH6Dsm5+4GNzEttP4shrRpa/fGJA1cYfGsT6EgVtIFd7jdD6wstHEtp6ZuwV8VTnmltGbJcGFkUP+eeFY5KRlVBm/jdIsPF0ekpqgPj6nkzJnm1fY61ZAoC2qsphLgL5wZeb1JPQNXlQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(956004)(31696002)(5660300002)(2906002)(82960400001)(44832011)(16576012)(38100700002)(8936002)(86362001)(316002)(8676002)(31686004)(6486002)(83380400001)(53546011)(508600001)(186003)(7416002)(66556008)(66946007)(66476007)(6916009)(26005)(2616005)(4326008)(36756003)(54906003)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RmxhbW91MG1BOGxZZ0JiZkNub0lmcDhyMlZYUm1raUU0MjFsOXYwdit2SHVi?=
- =?utf-8?B?aUxzcWk5QlRYMjdvWktKL3o2NnF1blR4M0ZBY1A5bVNVM0M3ZmVIRDAyWXMw?=
- =?utf-8?B?azVkQy81cE1obFJrb2ZML0MxY1pja2JaeG95dXVZL0hnYjJPYnhMQkw5bW85?=
- =?utf-8?B?eVZGR1Foa3NJbElTOUZJMEJJL2hLalRTZ013UXJ3Z0ZMMk8ySzJ4OERkdG5K?=
- =?utf-8?B?eHJmOGRvckIzUGVsVjM0RGpYeWg3MmxoT2RqbGxwTkg3R0pRcjcxTjJDTE5o?=
- =?utf-8?B?RzlKMnphYU5PeW9RRjdBNnBXcnl1dWlDcUtoV3R3Mm5PSll2YndSUEtONjBo?=
- =?utf-8?B?a1VLUVNJQ3p6QUNHaEpjQ1BUS1NDTTR2dkVGWVEyQmpoMjVaZlo2a1VwQXJr?=
- =?utf-8?B?eTZYNC9TNlhydjlOblRNeDE4WjBZTll0RVJaaDA2bDNRYU52K1RJNGg4V28z?=
- =?utf-8?B?Q2hsYTJtOHd3YUNnU3BMdk5sOVdXVENNeEdDaEFCeHI0ZUwwb1RjN1dIQXl3?=
- =?utf-8?B?MFJtMlFnalhxN0lqelhlbmJ3ZHJTK01hQndjMTB6VWYzVlJmVHFMWGZEeEpt?=
- =?utf-8?B?NkQyNC9qV3pOMXl5TDV3NHN5L3hlMHVXNk91dHJVRGlhaTJSSDBDaWYyQXcr?=
- =?utf-8?B?M2lmbWhqQjZpLzdrVzliYmNxKzdMT1Q0WnB6V2JyWC9aenc3ajVpdjRZd0N3?=
- =?utf-8?B?ZDFUbTNKamtUazVFRE9YUkNwb0s4V3pDcFM4UDkvdVk3L05xaXlHVTg4UTVC?=
- =?utf-8?B?ZFA5N093cDBqT0xqa3hQbmVleDE4RmxHTGVXZ2VYZTJpajNnLzcrc3FlZ1lo?=
- =?utf-8?B?cFB3TXcxL3Ixb1NydGpxdkFPbTFWeUdWOStIb3oyeVJaVC9qVVRWZTZMV290?=
- =?utf-8?B?UUxDYUdialdkMTBJNFRlMVcwVnJrMzB4K3BRQXZvMmJUUnRWLzRNZGFidEhS?=
- =?utf-8?B?WmRFd3dlbGpMWldod2RXOWJYNjZPRzY3WExuek0xWHJkdmI3QjBTVDFycnUx?=
- =?utf-8?B?QkhMNXpDcStTMnpLdm1hbkIvOTlKNXQ2cGk1TjgyL2duT2VTRGpYajJSWWFP?=
- =?utf-8?B?Vkp3ZHhKUFE1dE9OR2Q5cnRSZVFPOUdYc1g2WWs5NGlnNVVtLzFvSHpvZkdk?=
- =?utf-8?B?c1NlU2dPelI3d255dERyV0VNRUFucmw1K0JPb0VPSFBoMWRYSGxTbHRSa0FW?=
- =?utf-8?B?UDZicDJwS1A3M1V0c201WUJBazYveFFLNVQ0V0Y3R0V1UkMzNDhpQ0dEQmxT?=
- =?utf-8?B?MkoyU2toa2tXcmY0bzRkZFhia0UvcHdPSWgyYlhLNVU5WkhVb1lRbGJRSEtH?=
- =?utf-8?B?T21qK0NEbSthb2JpN1RIZmduNVBjWTYrdzJMU05oMnFJVmJmSTZUK0IzQ3F0?=
- =?utf-8?B?NHFEVXg2cVBQazgyZnF6dDFtRjdVaHdXajE4dnAxOUdrSzFlNEZGdHRnMTVK?=
- =?utf-8?B?VUc3TDN3WWV2N2JGWVVGTkIxelZCNG9LZU5iTXdOV1ZGRVFqZ2VyUG1ud3BR?=
- =?utf-8?B?Rm9Vd2VKTXpGbGdNODE4clZhcTJhOGdwTnVRcUZEQ0Fsc3Jld0dPMkpHVnJK?=
- =?utf-8?B?bm9xR3lYaDQwTzlETmNXVkk4MVdWSU9FS25zWXQ5b3puTHNmK1lZWnRKeTZG?=
- =?utf-8?B?aklHV1FRcGhYTzBibFhGdUZFMWFBdE1KMm5sK2c4ZEVDTkJTbTdGTVlYT0hF?=
- =?utf-8?B?NHg1UE1YbWFWRExLa3llOGxHMWxvejNHaVB5Q20zamYvQkFhVGgwM29iWmU4?=
- =?utf-8?B?UHo4amxBcUNRTEJWb1hEZTArcUJTTElOanRwWHhpNDgzSlhYZkk0ZFVPTHFv?=
- =?utf-8?B?OXRWTWNnOC9zcCtyOUFkU0UxWk1PNHkrd2U2NFhPTHV5aU9Kd29mWDZoSVNp?=
- =?utf-8?B?YjRJZHVmWjR5ZzI3aklVWUlvdVJ3S0NaaWlVMkZUcGh6dklQZUg1Z1RERHMv?=
- =?utf-8?B?bWJBRnJHN0ZrV3hNZDhFK2hldXVyNjFNeWZmZVM3bzY1cU9tZXhjbEo1R1o4?=
- =?utf-8?B?OGdST2J6UER5K0NUdXMwY3RrWW9rUjVIeXFKVkJqaFpMc1QxTk9qVU5CZm13?=
- =?utf-8?B?UmZzUnZUMENjYlBJUnlwVU5xRldiWDVXL1VkSDh4RjJqNU9EYTR5eU92MHdQ?=
- =?utf-8?B?TnBMdmZ2M2lLR284R2ttMHR1anhjMUFzbGY2ZEthNjV6NFBZRlFOdnpkNFpH?=
- =?utf-8?Q?p9nXFu6qY+ka3NRYM16N9YQ=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dbad686-aab4-4503-6233-08d9aadcaa54
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 21:44:58.0047
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cjEmyCj/bKf81ljpQVpqTyBxAmsM5f0un9/yqzWydj2hmEacoqeuPEvlH0QpPhi6K5VVCZaQ+qGEy8GVftMvAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3045
-X-OriginatorOrg: intel.com
+Content-Type: text/plain
+X-XM-SPF: eid=1mnpQ1-0048Wm-LN;;;mid=<87h7c9qg7p.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX188U8Ali6pt3gI0MiWxDnFXisSnqx50bZA=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TooManySym_01,XMNoVowels autolearn=disabled
+        version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4859]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;<linux-kernel@vger.kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 441 ms - load_scoreonly_sql: 0.14 (0.0%),
+        signal_user_changed: 12 (2.8%), b_tie_ro: 10 (2.3%), parse: 1.67
+        (0.4%), extract_message_metadata: 5 (1.1%), get_uri_detail_list: 1.79
+        (0.4%), tests_pri_-1000: 6 (1.4%), tests_pri_-950: 1.74 (0.4%),
+        tests_pri_-900: 1.46 (0.3%), tests_pri_-90: 126 (28.5%), check_bayes:
+        124 (28.0%), b_tokenize: 14 (3.1%), b_tok_get_all: 9 (2.0%),
+        b_comp_prob: 3.7 (0.8%), b_tok_touch_all: 93 (21.0%), b_finish: 1.08
+        (0.2%), tests_pri_0: 264 (59.9%), check_dkim_signature: 0.62 (0.1%),
+        check_dkim_adsp: 3.1 (0.7%), poll_dns_idle: 1.14 (0.3%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 6 (1.5%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 0/2] SA_IMMUTABLE fixes
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/15/2021 7:49 PM, Prakash Sangappa wrote:
-> 
 
-> Here are some use cases received from our Databases(Oracle) group.
+SA_IMMUTABLE fixed issues with force_sig_seccomp and the introduction
+for force_sig_fatal where the exit previously could not be interrupted
+but now it can.  Unfortunately it added that behavior to all force_sig
+functions under the right conditions which debuggers usage of SIG_TRAP
+and debuggers handling of SIGSEGV.
 
-Thank you Prakash for providing the potential use cases. This would 
-really help with the design and validation of the UINTR APIs.
+Solve that by limiting SA_IMMUTABLE to just the cases that historically
+debuggers have not been able to intercept.
 
-> 
-> Aim is to use user interrupts as one mechanism, for fast IPC and to signal
-> target thread blocked in the kernel in a system call.
-> i.e replace use of signals with user interrupts.
-> 
+The first patch changes force_sig_info_to_task to take a flag
+that requests which behavior is desired.
 
-Mimicking this signal behavior would likely add some complexity to the 
-implementation. Since there is interest, we'll work on prototyping this 
-to evaluate tradeoffs and present them here.
+The second patch adds force_exit_sig which replaces force_fatal_sig
+in the cases where historically userspace would only find out about
+the ``signal'' after the process has exited.
 
-> Following enhancements with respect to sharing UITT table will be beneficial.
-> 
-> Oracle DB creates large number of multithreaded processes. A thread in a
-> process may need to communicate(using user interrupts) with another
-> thread in any other process. Current proposal of receiver sending an FD
-> per vector to each of the sender will be an overhead. Also every sender
-> process/thread allocating a sender table for storing same receiver UPIDs
-> will be duplication resulting in wasted memory.
-> > In addition to the current FD based registration approach, having a way
-> for a group of DB processes to share a sender(UITT) table and  allowing
-> each of the receiver threads to directly register itself in the shared UITT
-> table,  will be efficient. For this the receiver need not create an fd. The
-> receiver’s UPID index in UITT got from the registration will  be shared
-> with all senders via shared memory(IPC).
-> 
+The first one with the hunk changing force_fatal_sig removed should be
+suitable for backporting to v5.15. v5.15 does not implement
+force_fatal_sig.
 
-Sharing the UITT between tasks of the same process would be relatively 
-easier compared to the sharing the UITT across processes. We would need 
-a scalable mechanism to authenticate the sharing of this kernel resource 
-across the process boundary.
+This should be enough to fix the regressions.
 
-I am working on a proposal for this. I'll send it out once I have 
-something concrete.
+Kyle if you can double check me that I have properly fixed these issues
+that would be appreciated.
 
-> DB maintains a process table of all the DB processes/threads in the shared
-> memory. The receiver can register itself in the shared UITT table and store
-> its UPID index in the process table. Sender will lookup target process from
-> the process table to get the UITT index and send the user interrupt.
-> 
+Any other review or suggestions to improve the names would be
+appreciated.  I think I have named things reasonably well but I am very
+close to the code so it is easy for me to miss things.
 
-Thanks,
-Sohil
+Eric W. Biederman (2):
+      signal: Don't always set SA_IMMUTABLE for forced signals
+      signal: Replace force_fatal_sig with force_exit_sig when in doubt
 
+ arch/m68k/kernel/traps.c              |  2 +-
+ arch/powerpc/kernel/signal_32.c       |  2 +-
+ arch/powerpc/kernel/signal_64.c       |  4 ++--
+ arch/s390/kernel/traps.c              |  2 +-
+ arch/sparc/kernel/signal_32.c         |  4 ++--
+ arch/sparc/kernel/windows.c           |  2 +-
+ arch/x86/entry/vsyscall/vsyscall_64.c |  2 +-
+ arch/x86/kernel/vm86_32.c             |  2 +-
+ include/linux/sched/signal.h          |  1 +
+ kernel/entry/syscall_user_dispatch.c  |  4 ++--
+ kernel/signal.c                       | 36 ++++++++++++++++++++++++++++-------
+ 11 files changed, 42 insertions(+), 19 deletions(-)
+
+Eric
