@@ -2,391 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 498564551A4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 01:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359C5455190
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 01:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbhKRAb3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Nov 2021 19:31:29 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:44619 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbhKRAb3 (ORCPT
+        id S241846AbhKRASn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Nov 2021 19:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241842AbhKRASk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Nov 2021 19:31:29 -0500
-Received: (Authenticated sender: pbl@bestov.io)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 065FF1C0003;
-        Thu, 18 Nov 2021 00:28:25 +0000 (UTC)
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=UTF-8
-Subject: Re: [PATCH v2] ipv4/raw: support binding to nonlocal addresses
-From:   "Riccardo Paolo Bestetti" <pbl@bestov.io>
-To:     "Denis Kirjanov" <dkirjanov@suse.de>
-Cc:     "David Ahern" <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Hideaki YOSHIFUJI" <yoshfuji@linux-ipv6.org>,
-        "Shuah Khan" <shuah@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Date:   Thu, 18 Nov 2021 01:14:44 +0100
-Message-Id: <CFSH0AY7X60L.1KW9K4CV82NQG@enhorning>
-In-Reply-To: <1bbdd04b-26e6-9d02-6d8f-49bd4abedee4@suse.de>
+        Wed, 17 Nov 2021 19:18:40 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88500C061570
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 16:15:41 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id y13so18561647edd.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 16:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K+58f0SyQ3Lb12arfHudpznsJpM8EH8QJRhqC+3D+/o=;
+        b=GIK/XZDC7ZNVXEqtZ+tcRvrXQwqh/3lJY4yq2xqMR5g4v4WHdHdxBBddnKCXAxjOPb
+         D4LDriIwmMmUqzawd5iS2gHre59nN6Ls/L0plgWyRkjMH6wccNzKmXtgD3O8sgwqJg2Q
+         rLVrPCOoHEuMVi4eKbaeBXjnaPlOpyQXvrK0A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K+58f0SyQ3Lb12arfHudpznsJpM8EH8QJRhqC+3D+/o=;
+        b=Hso+G4vb0D2N/d6qqfyrnC2qUbgwgcsltU6xWzjAmmXaG6nIgMFWi56iWB8Zs/SH4s
+         yRrx22NV+DLiVL7MK0vhK+23bWjTWXlBauE/gEcOkqM0AMTpZCZ5FV/hYAnK6wiVw6BK
+         skf4CBSy7WJjYIE/Jwb8XLLab3xkx575UB+pT+CgC9H7IGd72EhaXWDFDRlB/6H33pPt
+         xDI/W/d3io28xZ1r2VvMjbXuk/FrAo54BAc/ItSZCbRzVID43smID/5rSItzH4MKqnim
+         8UMlpDss0sFIWdTBY5fh2sFhnw1l4sbxxVhe527Qb9e/UlkK+9mTI+IOr6tL18+JdcBc
+         rY5g==
+X-Gm-Message-State: AOAM531Zq68UkZ73l3xSx/l2SS5ZTFi48eIr7bZhTnFNSYoKOvJDfNpO
+        FvPp6njPVDeW4DmPaEAXEnm0h7ST48neGkTn
+X-Google-Smtp-Source: ABdhPJxAcK91JmEqCYvsnzZIwiR6QpYiQt6G0fpZwFbQRnjpvv2ItdzRkn3KH4JeXDWTqqtRVtsDug==
+X-Received: by 2002:a17:906:6a1a:: with SMTP id qw26mr25105501ejc.489.1637194539522;
+        Wed, 17 Nov 2021 16:15:39 -0800 (PST)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id hr17sm596895ejc.57.2021.11.17.16.15.37
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Nov 2021 16:15:38 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id b12so7931171wrh.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 16:15:37 -0800 (PST)
+X-Received: by 2002:adf:d082:: with SMTP id y2mr24843502wrh.214.1637194537139;
+ Wed, 17 Nov 2021 16:15:37 -0800 (PST)
+MIME-Version: 1.0
+References: <CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com>
+ <202111171049.3F9C5F1@keescook> <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
+ <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
+ <87k0h6334w.fsf@email.froward.int.ebiederm.org> <202111171341.41053845C3@keescook>
+ <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com> <202111171603.34F36D0E01@keescook>
+In-Reply-To: <202111171603.34F36D0E01@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 Nov 2021 16:15:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjsyDcohs=i0XGu0GRb6AkXUNyWCE_f6JMy0RY9wdXUXg@mail.gmail.com>
+Message-ID: <CAHk-=wjsyDcohs=i0XGu0GRb6AkXUNyWCE_f6JMy0RY9wdXUXg@mail.gmail.com>
+Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kyle Huey <me@kylehuey.com>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        "Robert O'Callahan" <rocallahan@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed Nov 17, 2021 at 4:14 PM CET, Denis Kirjanov wrote:
+On Wed, Nov 17, 2021 at 4:05 PM Kees Cook <keescook@chromium.org> wrote:
 >
->
-> 11/17/21 12:00 PM, Riccardo Paolo Bestetti пишет:
-> > Add support to inet v4 raw sockets for binding to nonlocal addresses
-> > through the IP_FREEBIND and IP_TRANSPARENT socket options, as well as
-> > the ipv4.ip_nonlocal_bind kernel parameter.
-> > 
-> > Add helper function to inet_sock.h to check for bind address validity on
-> > the base of the address type and whether nonlocal address are enabled
-> > for the socket via any of the sockopts/sysctl, deduplicating checks in
-> > ipv4/ping.c, ipv4/af_inet.c, ipv6/af_inet6.c (for mapped v4->v6
-> > addresses), and ipv4/raw.c.
-> > 
-> > Add test cases with IP[V6]_FREEBIND verifying that both v4 and v6 raw
-> > sockets support binding to nonlocal addresses after the change. Add
-> > necessary support for the test cases to nettest.
-> > 
-> > Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
-> > Reviewed-by: David Ahern <dsahern@kernel.org>
-> > ---
-> > 20211117: resending this, as Patchwork didn't pick it up last time
-> > 
-> > Responding to review by David Ahern (21 March 2021),
-> > 
-> > Thank you for your review.
-> > 
-> >> Please add test cases to ipv4_addr_bind and ipv6_addr_bind in
-> >> tools/testing/selftests/net/fcnal-test.sh. The latter will verify if
-> >> IPv6 works the same or needs a change.
-> > I have added the tests for both v4 and v6.  IPv6 raw sockets already
-> > supported the functionality (under the IPV6_* sockopts), and the (new)
-> > related tests pass, confirming this.
-> > 
-> > I have not added negative tests (i.e. checking that the same addresses
-> > /fail/ to bind without the necessary flags) because I haven't seen such
-> > tests for other features.  If you feel that's needed, I can look into
-> > it.
-> > 
-> >> Also, this check duplicates the ones in __inet_bind and __inet6_bind; it
-> >> would be good to use an inline helper to reduce the duplication.
-> > Done.  The same check was also duplicated in net/ipv4/ping.c, as
-> > detailed in the commit message.  I have also deduplicated that, if it
-> > should have been left alone I'll quickly fire up a v3 and revert that.
-> > 
-> > Sorry for the delay with v2, had a busy year.
-> > 
-> > 
-> >   include/net/inet_sock.h                   | 12 +++++++
-> >   net/ipv4/af_inet.c                        |  7 ++--
-> >   net/ipv4/ping.c                           | 14 +++-----
-> >   net/ipv4/raw.c                            | 13 ++++----
-> >   net/ipv6/af_inet6.c                       |  7 ++--
-> >   tools/testing/selftests/net/fcnal-test.sh | 40 +++++++++++++++++++++++
-> >   tools/testing/selftests/net/nettest.c     | 33 ++++++++++++++++++-
-> >   7 files changed, 100 insertions(+), 26 deletions(-)
-> > 
-> > diff --git a/include/net/inet_sock.h b/include/net/inet_sock.h
-> > index 89163ef8cf4b..13b05d116f6b 100644
-> > --- a/include/net/inet_sock.h
-> > +++ b/include/net/inet_sock.h
-> > @@ -373,4 +373,16 @@ static inline bool inet_can_nonlocal_bind(struct net *net,
-> >   		inet->freebind || inet->transparent;
-> >   }
-> >   
-> > +static inline bool inet_addr_valid_or_nonlocal(struct net *net,
-> > +					       struct inet_sock *inet,
-> > +					       __be32 addr,
-> > +					       int addr_type)
-> > +{
-> > +	return inet_can_nonlocal_bind(net, inet) ||
-> > +		addr == htonl(INADDR_ANY) ||
-> > +		addr_type == RTN_LOCAL ||
-> > +		addr_type == RTN_MULTICAST ||
-> > +		addr_type == RTN_BROADCAST;
-> > +}
-> > +
-> >   #endif	/* _INET_SOCK_H */
-> > diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> > index 1d816a5fd3eb..fb5cf3623e03 100644
-> > --- a/net/ipv4/af_inet.c
-> > +++ b/net/ipv4/af_inet.c
-> > @@ -492,11 +492,8 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
-> >   	 *  is temporarily down)
-> >   	 */
-> >   	err = -EADDRNOTAVAIL;
-> > -	if (!inet_can_nonlocal_bind(net, inet) &&
-> > -	    addr->sin_addr.s_addr != htonl(INADDR_ANY) &&
-> > -	    chk_addr_ret != RTN_LOCAL &&
-> > -	    chk_addr_ret != RTN_MULTICAST &&
-> > -	    chk_addr_ret != RTN_BROADCAST)
-> > +	if (!inet_addr_valid_or_nonlocal(net, inet, addr->sin_addr.s_addr,
-> > +	                                 chk_addr_ret))
-> >   		goto out;
-> >   
-> >   	snum = ntohs(addr->sin_port);
-> > diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
-> > index 1e44a43acfe2..e540b0dcf085 100644
-> > --- a/net/ipv4/ping.c
-> > +++ b/net/ipv4/ping.c
-> > @@ -311,15 +311,11 @@ static int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
-> >   		pr_debug("ping_check_bind_addr(sk=%p,addr=%pI4,port=%d)\n",
-> >   			 sk, &addr->sin_addr.s_addr, ntohs(addr->sin_port));
-> >   
-> > -		if (addr->sin_addr.s_addr == htonl(INADDR_ANY))
-> > -			chk_addr_ret = RTN_LOCAL;
-> > -		else
-> > -			chk_addr_ret = inet_addr_type(net, addr->sin_addr.s_addr);
->
-> That was done intentionally in commit 0ce779a9f501
->
+> (nit: should the "sigdfl" argument be renamed "immutable" for clarity
+> in this function?)
 
-Should I remove this from the patch? Is there a particular reason why
-this was done in ping.c but not in the other places?
+I don't think that would necessarily clarify anything. Neither
+"sigdfl" nor "immutable" makes at least me go "Ahh, that explains
+things".
 
-> > -
-> > -		if ((!inet_can_nonlocal_bind(net, isk) &&
-> > -		     chk_addr_ret != RTN_LOCAL) ||
-> > -		    chk_addr_ret == RTN_MULTICAST ||
-> > -		    chk_addr_ret == RTN_BROADCAST)
-> > +		chk_addr_ret = inet_addr_type(net, addr->sin_addr.s_addr);
-> > +
-> > +		if (!inet_addr_valid_or_nonlocal(net, inet_sk(sk),
-> > +					         addr->sin_addr.s_addr,
-> > +	                                         chk_addr_ret))
-> >   			return -EADDRNOTAVAIL;
-> >   
-> >   #if IS_ENABLED(CONFIG_IPV6)
-> > diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-> > index bb446e60cf58..fa60517372b5 100644
-> > --- a/net/ipv4/raw.c
-> > +++ b/net/ipv4/raw.c
-> > @@ -717,6 +717,7 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
-> >   {
-> >   	struct inet_sock *inet = inet_sk(sk);
-> >   	struct sockaddr_in *addr = (struct sockaddr_in *) uaddr;
-> > +	struct net *net = sock_net(sk);
-> >   	u32 tb_id = RT_TABLE_LOCAL;
-> >   	int ret = -EINVAL;
-> >   	int chk_addr_ret;
-> > @@ -725,16 +726,16 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
-> >   		goto out;
-> >   
-> >   	if (sk->sk_bound_dev_if)
-> > -		tb_id = l3mdev_fib_table_by_index(sock_net(sk),
-> > -						 sk->sk_bound_dev_if) ? : tb_id;
-> > +		tb_id = l3mdev_fib_table_by_index(net,
-> > +						  sk->sk_bound_dev_if) ? : tb_id;
-> >   
-> > -	chk_addr_ret = inet_addr_type_table(sock_net(sk), addr->sin_addr.s_addr,
-> > -					    tb_id);
-> > +	chk_addr_ret = inet_addr_type_table(net, addr->sin_addr.s_addr, tb_id);
-> >   
-> >   	ret = -EADDRNOTAVAIL;
-> > -	if (addr->sin_addr.s_addr && chk_addr_ret != RTN_LOCAL &&
-> > -	    chk_addr_ret != RTN_MULTICAST && chk_addr_ret != RTN_BROADCAST)
-> > +	if (!inet_addr_valid_or_nonlocal(net, inet, addr->sin_addr.s_addr,
-> > +					 chk_addr_ret))
-> >   		goto out;
-> > +
-> >   	inet->inet_rcv_saddr = inet->inet_saddr = addr->sin_addr.s_addr;
-> >   	if (chk_addr_ret == RTN_MULTICAST || chk_addr_ret == RTN_BROADCAST)
-> >   		inet->inet_saddr = 0;  /* Use device */
-> > diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> > index b5878bb8e419..0c557edbbd20 100644
-> > --- a/net/ipv6/af_inet6.c
-> > +++ b/net/ipv6/af_inet6.c
-> > @@ -337,11 +337,8 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
-> >   		chk_addr_ret = inet_addr_type_dev_table(net, dev, v4addr);
-> >   		rcu_read_unlock();
-> >   
-> > -		if (!inet_can_nonlocal_bind(net, inet) &&
-> > -		    v4addr != htonl(INADDR_ANY) &&
-> > -		    chk_addr_ret != RTN_LOCAL &&
-> > -		    chk_addr_ret != RTN_MULTICAST &&
-> > -		    chk_addr_ret != RTN_BROADCAST) {
-> > +		if (!inet_addr_valid_or_nonlocal(net, inet, v4addr,
-> > +						 chk_addr_ret)) {
-> >   			err = -EADDRNOTAVAIL;
-> >   			goto out;
-> >   		}
-> > diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-> > index 3313566ce906..7caa4f0e067d 100755
-> > --- a/tools/testing/selftests/net/fcnal-test.sh
-> > +++ b/tools/testing/selftests/net/fcnal-test.sh
-> > @@ -66,6 +66,10 @@ NSB_LO_IP=172.16.2.2
-> >   NSA_LO_IP6=2001:db8:2::1
-> >   NSB_LO_IP6=2001:db8:2::2
-> >   
-> > +# non-local addresses for freebind tests
-> > +NL_IP=172.17.1.1
-> > +NL_IP6=2001:db8:4::1
-> > +
-> >   MD5_PW=abc123
-> >   MD5_WRONG_PW=abc1234
-> >   
-> > @@ -316,6 +320,9 @@ addr2str()
-> >   	${NSB_LO_IP6})	echo "ns-B loopback IPv6";;
-> >   	${NSB_LINKIP6}|${NSB_LINKIP6}%*) echo "ns-B IPv6 LLA";;
-> >   
-> > +	${NL_IP})       echo "nonlocal IP";;
-> > +	${NL_IP6})      echo "nonlocal IPv6";;
-> > +
-> >   	${VRF_IP})	echo "VRF IP";;
-> >   	${VRF_IP6})	echo "VRF IPv6";;
-> >   
-> > @@ -1767,6 +1774,14 @@ ipv4_addr_bind_novrf()
-> >   		log_test_addr ${a} $? 0 "Raw socket bind to local address after device bind"
-> >   	done
-> >   
-> > +	#
-> > +	# raw socket with nonlocal bind
-> > +	#
-> > +	a=${NL_IP}
-> > +	log_start
-> > +	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
-> > +	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after device bind"
-> > +
-> >   	#
-> >   	# tcp sockets
-> >   	#
-> > @@ -1815,6 +1830,14 @@ ipv4_addr_bind_vrf()
-> >   	run_cmd nettest -s -R -P icmp -l ${a} -I ${VRF} -b
-> >   	log_test_addr ${a} $? 1 "Raw socket bind to out of scope address after VRF bind"
-> >   
-> > +	#
-> > +	# raw socket with nonlocal bind
-> > +	#
-> > +	a=${NL_IP}
-> > +	log_start
-> > +	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
-> > +	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
-> > +
-> >   	#
-> >   	# tcp sockets
-> >   	#
-> > @@ -1965,6 +1988,7 @@ ipv4_rt()
-> >   
-> >   	a=${NSA_IP}
-> >   	log_start
-> > +
-> >   	run_cmd nettest ${varg} -s &
-> >   	sleep 1
-> >   	run_cmd nettest ${varg} -d ${NSA_DEV} -r ${a} &
-> > @@ -3402,6 +3426,14 @@ ipv6_addr_bind_novrf()
-> >   		log_test_addr ${a} $? 0 "Raw socket bind to local address after device bind"
-> >   	done
-> >   
-> > +	#
-> > +	# raw socket with nonlocal bind
-> > +	#
-> > +	a=${NL_IP6}
-> > +	log_start
-> > +	run_cmd nettest -6 -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
-> > +	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address"
-> > +
-> >   	#
-> >   	# tcp sockets
-> >   	#
-> > @@ -3443,6 +3475,14 @@ ipv6_addr_bind_vrf()
-> >   	run_cmd nettest -6 -s -R -P ipv6-icmp -l ${a} -I ${VRF} -b
-> >   	log_test_addr ${a} $? 1 "Raw socket bind to invalid local address after vrf bind"
-> >   
-> > +	#
-> > +	# raw socket with nonlocal bind
-> > +	#
-> > +	a=${NL_IP6}
-> > +	log_start
-> > +	run_cmd nettest -6 -s -R -P icmp -f -l ${a} -I ${VRF} -b
-> > +	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
-> > +
-> >   	#
-> >   	# tcp sockets
-> >   	#
-> > diff --git a/tools/testing/selftests/net/nettest.c b/tools/testing/selftests/net/nettest.c
-> > index b599003eb5ba..d9a6fd2cd9d3 100644
-> > --- a/tools/testing/selftests/net/nettest.c
-> > +++ b/tools/testing/selftests/net/nettest.c
-> > @@ -85,6 +85,7 @@ struct sock_args {
-> >   	int version;   /* AF_INET/AF_INET6 */
-> >   
-> >   	int use_setsockopt;
-> > +	int use_freebind;
-> >   	int use_cmsg;
-> >   	const char *dev;
-> >   	const char *server_dev;
-> > @@ -514,6 +515,29 @@ static int set_membership(int sd, uint32_t grp, uint32_t addr, int ifindex)
-> >   	return 0;
-> >   }
-> >   
-> > +static int set_freebind(int sd, int version)
-> > +{
-> > +	unsigned int one = 1;
-> > +	int rc = 0;
-> > +
-> > +	switch (version) {
-> > +	case AF_INET:
-> > +		if (setsockopt(sd, SOL_IP, IP_FREEBIND, &one, sizeof(one))) {
-> > +			log_err_errno("setsockopt(IP_FREEBIND)");
-> > +			rc = -1;
-> > +		}
-> > +		break;
-> > +	case AF_INET6:
-> > +		if (setsockopt(sd, SOL_IPV6, IPV6_FREEBIND, &one, sizeof(one))) {
-> > +			log_err_errno("setsockopt(IPV6_FREEBIND");
-> > +			rc = -1;
-> > +		}
-> > +		break;
-> > +	}
-> > +
-> > +	return rc;
-> > +}
-> > +
-> >   static int set_broadcast(int sd)
-> >   {
-> >   	unsigned int one = 1;
-> > @@ -1419,6 +1443,9 @@ static int lsock_init(struct sock_args *args)
-> >   		 set_unicast_if(sd, args->ifindex, args->version))
-> >   		goto err;
-> >   
-> > +	if (args->use_freebind && set_freebind(sd, args->version))
-> > +		goto err;
-> > +
-> >   	if (bind_socket(sd, args))
-> >   		goto err;
-> >   
-> > @@ -1827,7 +1854,7 @@ static int ipc_parent(int cpid, int fd, struct sock_args *args)
-> >   	return client_status;
-> >   }
-> >   
-> > -#define GETOPT_STR  "sr:l:c:p:t:g:P:DRn:M:X:m:d:I:BN:O:SCi6xL:0:1:2:3:Fbq"
-> > +#define GETOPT_STR  "sr:l:c:p:t:g:P:DRn:M:X:m:d:I:BN:O:SCi6xL:0:1:2:3:Fbqf"
-> >   #define OPT_FORCE_BIND_KEY_IFINDEX 1001
-> >   #define OPT_NO_BIND_KEY_IFINDEX 1002
-> >   
-> > @@ -1864,6 +1891,7 @@ static void print_usage(char *prog)
-> >   	"    -I dev        bind socket to given device name - server mode\n"
-> >   	"    -S            use setsockopt (IP_UNICAST_IF or IP_MULTICAST_IF)\n"
-> >   	"                  to set device binding\n"
-> > +	"    -f            bind socket with the IP[V6]_FREEBIND option\n"
-> >   	"    -C            use cmsg and IP_PKTINFO to specify device binding\n"
-> >   	"\n"
-> >   	"    -L len        send random message of given length\n"
-> > @@ -1999,6 +2027,9 @@ int main(int argc, char *argv[])
-> >   		case 'S':
-> >   			args.use_setsockopt = 1;
-> >   			break;
-> > +		case 'f':
-> > +			args.use_freebind = 1;
-> > +			break;
-> >   		case 'C':
-> >   			args.use_cmsg = 1;
-> >   			break;
-> > 
+Both "sigdfl" and "immutable" are about random internal implementation
+choices ("force SIGDFL" and "set SA_IMMUTABLE" respectively).
 
+I think naming things by random internal implementation things is
+questionable in general, but it's particularly questionable when they
+aren't even some really fundamental thing.
+
+I think you generally want to name things not by how they do
+something, but by *WHAT* they do.
+
+So I think the proper name for it would be "fatal" or something like
+that. It's basically saying "This signal is fatal, even if you have a
+handler for it or not". That "set it to SIGDFL" just happens to be how
+we made it fatal.
+
+And then we should perhaps also make such a signal uncatchable by the
+debugger (rather than just "debugger cannot undo or modify it" like
+the SA_IMMUTABLE bit does).
+
+Anybody want to take on that renaming / uncatchable part? Please take
+my (now at least tested by Kees) patch and make it your own.
+
+              Linus
