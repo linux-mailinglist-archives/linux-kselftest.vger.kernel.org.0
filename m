@@ -2,134 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB6D45603C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 17:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A584560A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 17:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbhKRQP5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 11:15:57 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:52056 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbhKRQP4 (ORCPT
+        id S233444AbhKRQkP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 11:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232033AbhKRQkP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 11:15:56 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:38314)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mnk1u-000QC2-H2; Thu, 18 Nov 2021 09:12:54 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:43626 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mnk1t-009y16-0L; Thu, 18 Nov 2021 09:12:54 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Kyle Huey <me@kylehuey.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Robert O'Callahan <rocallahan@gmail.com>
-References: <CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com>
-        <202111171049.3F9C5F1@keescook>
-        <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
-        <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
-        <87k0h6334w.fsf@email.froward.int.ebiederm.org>
-        <202111171341.41053845C3@keescook>
-        <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
-        <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
-        <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
-        <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
-        <202111171728.D85A4E2571@keescook>
-Date:   Thu, 18 Nov 2021 10:10:18 -0600
-In-Reply-To: <202111171728.D85A4E2571@keescook> (Kees Cook's message of "Wed,
-        17 Nov 2021 17:32:20 -0800")
-Message-ID: <875ysp1m39.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 18 Nov 2021 11:40:15 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A470C06173E
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 08:37:14 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id t5so29959734edd.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 08:37:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9nlhrbPgH29BFhpgWXzGCQSpXI8GOTlHdkImc7F7jYg=;
+        b=SoCq7Kk1O7Nw3sKoNLGQOLs6eLDBWdRWhEbS0DUdg7XHZUw9jEEFHh1Mt4xoqvPoY5
+         Gt9uqfvfPmG1o6FO8DocQJXocuOb0dNc1YxEbgz8u1gSe7+iEfAmpl58ywtOnkqewW59
+         RXx9OlNBRVocqnHKeKcfU1fN//N5K0llL0FeZGSeMews+p5XYSO3WbrOaja7nk9LEWNU
+         ywk0uH59N0BvWp2YfKRSsIl6p2Tjl7SA+vK0ni6njw35tmLUc5QlQgeIAwoQ5mrJZ313
+         1nvTwpqbKh+OjqpNoQ9/o7gPTSXEGMVyostJECW4oBPGh8HFPZWIm9JsrUYG7/G/1y1h
+         g5tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9nlhrbPgH29BFhpgWXzGCQSpXI8GOTlHdkImc7F7jYg=;
+        b=iZ/bDsBdhM77p+QuSBN3g5F3pfQxd7aiZCyhRdOuWh9XZyQJcI6a1n98k9nUizIlFE
+         rUQwmWmJ1gbri8J6PH8ROhCANF21AmMYveYP02BtemAvDrM0fJ62bApIugvUZ0WfdQke
+         wMVIQ66ofbm4K/EsXaW4tNkD7yiGu4z6jbYub5Kj0HW/Hz5aHlFMNE2jZvJeHQrgHCoj
+         6REbgdFKybaC3wpsmEjUSMwieg3CIiFmD2ynaqjByBXp3nS7NXCdDplw4180vPBLjmZH
+         oNSto2dJWWdVv17mMZFKAz7LoJpBkvZnXmaKrIwqyw2U9CsDul6vONHLm8C+AIzA/SKA
+         29ug==
+X-Gm-Message-State: AOAM531iweP3sRYY6n+FjcoIJjJexD4SzcEH2b9AVuoZNXyX18tPt4c9
+        jL4du4QUQdxgiPrqbtG7M+W/giZNvwgacZ2HJAvHt86WMiUiAhax
+X-Google-Smtp-Source: ABdhPJzGgBsGXvytRkU8IvtGhSPpAlbfXoW8jOMd1HVqjYIYBaYAEF9qF7e4XUVvOz3bVBfsGrqCbT7dsxHsAL0NmAk=
+X-Received: by 2002:a05:6402:1e93:: with SMTP id f19mr13449689edf.60.1637253433120;
+ Thu, 18 Nov 2021 08:37:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mnk1t-009y16-0L;;;mid=<875ysp1m39.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19HyRikhcpll4xD3sce4HlUZw1iTZOuqps=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 424 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 11 (2.6%), b_tie_ro: 10 (2.3%), parse: 0.88
-        (0.2%), extract_message_metadata: 12 (2.8%), get_uri_detail_list: 1.32
-        (0.3%), tests_pri_-1000: 14 (3.2%), tests_pri_-950: 1.25 (0.3%),
-        tests_pri_-900: 1.04 (0.2%), tests_pri_-90: 127 (30.0%), check_bayes:
-        124 (29.3%), b_tokenize: 8 (1.8%), b_tok_get_all: 8 (1.9%),
-        b_comp_prob: 3.2 (0.8%), b_tok_touch_all: 101 (23.8%), b_finish: 1.05
-        (0.2%), tests_pri_0: 243 (57.4%), check_dkim_signature: 0.52 (0.1%),
-        check_dkim_adsp: 2.6 (0.6%), poll_dns_idle: 0.30 (0.1%), tests_pri_10:
-        2.2 (0.5%), tests_pri_500: 8 (1.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+References: <20211118145142.14519-1-brgl@bgdev.pl> <YZZ1cFWaexGlJL8C@smile.fi.intel.com>
+In-Reply-To: <YZZ1cFWaexGlJL8C@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 18 Nov 2021 17:37:02 +0100
+Message-ID: <CAMRc=MdeEiz+uKhAz5-1MX_KG5fmjshRtDXARPMEx8VwBKfXZQ@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] gpio-sim: configfs-based GPIO simulator
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-
-> On Wed, Nov 17, 2021 at 05:20:33PM -0800, Kyle Huey wrote:
->> Yeah that's one way to solve the problem. I think you're right that
->> fundamentally the problem here is that what SECCOMP_RET_KILL wants is
->> not really a signal. To the extent that it wants a signal, what it
->> really wants is SIGKILL, and the problem here is the code trying to
->> act like SIGKILL but call it SIGSYS. I assume the ship for fixing that
->> sailed years ago though.
+On Thu, Nov 18, 2021 at 4:50 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Yeah, this was IIRC, a specific design choice (to distinguish a seccomp
-> KILL from a SIGKILL), as desired by the sandboxing folks, and instead
-> of using two different signals (one for KILL and one for TRAP), both
-> used SIGSYS, with the KILL variant being uncatchable.
+> On Thu, Nov 18, 2021 at 03:51:38PM +0100, Bartosz Golaszewski wrote:
+> > This is another shot at the gpio-sim testing module. As there was no
+> > reasoning with configfs maintainers for many months, this time the whol=
+e
+> > concept of committable items has been dropped. Instead, each configfs
+> > chip item (or rather a group - more on that later) exposes a new
+> > attribute called 'live'. Writing 1 to it brings the chip on-line
+> > (registers the platform device) and writing 0 tears it down.
+> >
+> > There are some caveats to that approach - for example: we can't block
+> > the user-space from deleting chip items when chips are live but is just
+> > handled by silently destroying the chip device in the background.
+> >
+> > Andy (rightfully) pointed out that parsing of the lists of line names i=
+s
+> > awkward so in this iteration it's been replaced by a system that is mor=
+e
+> > elegant and will allow to easily extend configuration options for
+> > specific GPIO lines. This is achieved by turning the chip's configfs
+> > item into a configfs group and allowing the user-space to create
+> > additional items inside it. The items must be called line<offset> (e.g.
+> > line0, line12 etc.) where the offset part indicates to the module the
+> > offset for which given item stores the configuration for. Within each
+> > such line item, there are additional attributes that allow specifying
+> > configuration for specific lines. Currently we only support the 'name'
+> > attribute but I plan to extend that to support GPIO hogging too.
+>
+> One question here. Since you know how the driver looks like in both cases
+> (with and without committable items), would it be possible to modify what
+> you proposed here to the former one in case ConfigFS gains the feature?
+>
 
-I see a general consensus on how to fix the regression.  Linus patch
-plus some tweaks.  I will get to work on that today.
+This would completely change the user interface unfortunately. We
+could extend it but we would need to keep this one too most likely.
 
-For v5.15 I think all that needs to get fixed is what Linus fixed
-and the force_sigsegv case.  That is my priority.
+TBH I don't see the committable items merged anytime soon, and this is
+GoodEnough=C2=AE.
 
-
-
-For v5.16-rc1+ the instances that became force_fatal_signal need
-a careful review to figure out which semantics we want.
-
-
-Having a clear distinction between which forced signals we can let the
-debugger intercept and which ones we can not seems to be what needs to
-be added.
-
-
-Kyle thank you for your explanation of what breaks.  For future kernels
-I do need to do some work in this area and I will copy on the patches
-going forward.  In particular I strongly suspect that changing the
-sigaction and blocked state of the signal for these synchronous signals
-is the wrong thing to do, especially if the process is not killed.  I
-want to find another solution that does not break things but that also
-does not change the program state behind the programs back so things
-work differently under the debugger.
-
-Eric
-
+Bart
