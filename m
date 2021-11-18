@@ -2,211 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68ADA456585
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Nov 2021 23:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C4945668E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 00:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbhKRWWn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 17:22:43 -0500
-Received: from mga04.intel.com ([192.55.52.120]:21077 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229600AbhKRWWm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 17:22:42 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10172"; a="233025769"
-X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
-   d="scan'208";a="233025769"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 14:19:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
-   d="scan'208";a="495595727"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga007.jf.intel.com with ESMTP; 18 Nov 2021 14:19:41 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 18 Nov 2021 14:19:40 -0800
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 18 Nov 2021 14:19:40 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Thu, 18 Nov 2021 14:19:40 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Thu, 18 Nov 2021 14:19:38 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=clu1qEXmrkcVQ3OAkghV5NKxoEEdyS46Mvapc1IcqEz5dAAk+2PaFLXpAkUg0bza04Grp7Qb9IZymyhumBFWoaiN5fNuLEtzCy3L3hRoukPmu3kKV9CiJiBOhqbg15CNkbxaCxGdYT7wJd5xfdk3GapAHEt0WRdPteDc4azuxV/fsxLmuFlF7ow8gLjINKJyi6XIyy63KIyjQjxK93iWOZdUJHjF7UD9YQw6QQ0sUTTuBYieXWZvx5qYT3i7iBCd/I4oBJVoj1U4RooqdWI/FZ60kkMw1AZo6XWDK+OMeswDv90TZbLWEPgZfelCUqOKebgM6Cfa7lUFZER6KuE4ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EalPoB1/q15ZDrRmAdh5hcIhPS6flWR3h14khVLatX0=;
- b=dP9lXGgsTEE3vcbItNa/0c3UnsBBCO/ju5sb9DJtWy8DodyJ7Zjp7DKaI24JDHvez723s2jfMpDnG74WhQCVDE8noBxInWfdN3mHaRg9qJao3iq38GOiJGP0KQqT1DUsiCZw/MjnIkFApGbtGVyiH6BLEefaALPGYWOAOOccbFM8iHUBnnTciNXBCa5CFOTDtfpnVpxe0xYoJgw8y+Du9QbAK/btwguLmn6h1vGDnqZgsnsPURu6smrAyrkJrg48dtfFns1TS0Xq6ajkDpJVExsCKSGCXr73K73E58L6EBKP1XugZi3Qq0TLfAGOisXn4zPtT+oxAEkklxG/7yeWWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EalPoB1/q15ZDrRmAdh5hcIhPS6flWR3h14khVLatX0=;
- b=O9ZUCb2EIrdLlj0hygs+YPmtqb+NMHXhqUWAGWC+6oKLG1JBiktph+DLfFYyB+2FD6Grs0tnWPh19f9bgYuPX4dY+jiSlmUOhhKFSaVZBH3AnBOtJtSY6ll62fDxK8hFg33MzFpLzLjngq7bqOUQwWDrIkEk6Jop5BjbM2lqRA8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BYAPR11MB3382.namprd11.prod.outlook.com (2603:10b6:a03:7f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.16; Thu, 18 Nov
- 2021 22:19:34 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::8c17:ca7:7fd3:ce7d]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::8c17:ca7:7fd3:ce7d%6]) with mapi id 15.20.4690.029; Thu, 18 Nov 2021
- 22:19:34 +0000
-Message-ID: <97b12c99-60e4-e3d9-a728-e7d1a7c09e41@intel.com>
-Date:   Thu, 18 Nov 2021 14:19:31 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.1
-Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20211001081903.GA18962@amd>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20211001081903.GA18962@amd>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0014.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::27) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+        id S233330AbhKRXzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 18:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232949AbhKRXzX (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Nov 2021 18:55:23 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13074C061748
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 15:52:23 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so9595533pju.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 15:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5csrtvGfUTJpKF36Wio1zVqY+YzQi+hNlntFmMAP5yg=;
+        b=g2lurF0Wk+tsvpUW7wbChUs+KopNziAVGrGyEwWVUi1JL40npMY/P45frOYQltqlkN
+         HzbTpOa+CSf20GXvlzUwZ8r1nWk4P/Ny/5RI7MKoq5WedFas/awujDCP280w60AFULjw
+         YMWA+8q4b3wlhHjXQIyMkcJCsDB9rkL7L5vqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5csrtvGfUTJpKF36Wio1zVqY+YzQi+hNlntFmMAP5yg=;
+        b=Y8pI/v/bpYOTfE/kW/+EeBJ3wouw1F3A10JJprX5++L9dt9wx9/zVFJHjEUdKiIjSP
+         5ilx/iYGO2uVONL+5UpQ+NKFdKHjUBRi/X4mGG61qHLE39x8jCv6HrWefjfvuTt3hAU3
+         NBu1TzOoIPBiYx30kZCinMh3a6Y6Rgueg3aA8U1WEh4ldh6ckwo1wKk5LtGOUm6oj0lE
+         awNuTi+wrdhHPLxuYvJsqJ+dtPlMzoLjwR1IB6Wa8vAulF4Pwo3RlftSOsYoq2NJfmj1
+         KvGG8Osqz93StQeifneMCEHPGsMKHGZXdezFRumvVETBWDiE7mFqelyGzEFbre0+yqBR
+         wuGQ==
+X-Gm-Message-State: AOAM531C2RKi3awri3kCUb4PIgPve7iT3ihohR/Ybx+KiYlycZPoBKQ7
+        WhGaKauPSKAnTaGgRhIH2IJN6w==
+X-Google-Smtp-Source: ABdhPJyCkMcnVji2etMSb9tSf8G2lX6aXR4fLRsukFT9YdqZmATb5ELAUMXF/+B7nHJtvSt9Daa/CA==
+X-Received: by 2002:a17:903:1105:b0:143:a593:dc6e with SMTP id n5-20020a170903110500b00143a593dc6emr68520805plh.6.1637279542582;
+        Thu, 18 Nov 2021 15:52:22 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id oc10sm10128805pjb.26.2021.11.18.15.52.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Nov 2021 15:52:22 -0800 (PST)
+Date:   Thu, 18 Nov 2021 15:52:21 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, Kyle Huey <me@kylehuey.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        Robert O'Callahan <rocallahan@gmail.com>,
+        Oliver Sang <oliver.sang@intel.com>, lkp@lists.01.org,
+        lkp@intel.com
+Subject: Re: [PATCH 1/2] signal: Don't always set SA_IMMUTABLE for forced
+ signals
+Message-ID: <202111181551.FE7B4825B0@keescook>
+References: <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
+ <87k0h6334w.fsf@email.froward.int.ebiederm.org>
+ <202111171341.41053845C3@keescook>
+ <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
+ <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
+ <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
+ <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
+ <202111171728.D85A4E2571@keescook>
+ <87h7c9qg7p.fsf_-_@email.froward.int.ebiederm.org>
+ <877dd5qfw5.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Received: from [192.168.86.37] (73.222.31.188) by BYAPR05CA0014.namprd05.prod.outlook.com (2603:10b6:a03:c0::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.10 via Frontend Transport; Thu, 18 Nov 2021 22:19:33 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a8de9bac-1437-4aea-75f1-08d9aae17ffa
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3382:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-X-Microsoft-Antispam-PRVS: <BYAPR11MB33824FD801BB5920170D4E96E59B9@BYAPR11MB3382.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +EQLiK4WX9BVEHtr1bnE7tJnmZdOijoS3j4QGRk8QVC5hXs3rlpRrfiKDpvS19VIx8a6MtbkObuzZ8B7bYgtt+03b7C5JlZkwG1ojpiqvPQ2JjrHVFhMcUv/k75BE6cMefRlf50aMiUw+iK74/duLq6/0zNH3cLgKD2i0Ah5gnF/5bbM5C07T1LytXIw/DLrfI1W3HBL+2mchk+kc7exBLl7VCXR/LXNBOMcQzQhgbrwEargDND7kYacCyKZ/RDNoBf4//kFvNRGhMv2SrOYVKQI2QvHOydUduLGC//mqjRCnlqVZ3edBu3TxUXfSUnGytttk93IQgn4BVDQZYnaPDmlDNqXIUJbWk6lVAJqGlKWza9K45I+nbeAxKPn7ZCsp5wNVgWv98dGpZW8xn375tPU6go/a7UuGBgMY3MgS3jh1cKWnBR+gjZatNUICbxxrjL1MADovQrhinRTr8RRW33sQjdetmz6LNxRvRIdBbbDjf6+I0ijWMuy0Z3KirDi3rdphIor1yfzSemB8AFMLOK/JwsURq1xGhAYwYhB9d65It7/YvBH7+1WO7tNC6FFRTHNpYiqHzoRF9BMbGU13z2Kre1i770vf01ynHfoMYIZ0PevJmOrrgMeDdHfTpW/uQ79Hmvm/PL4EaOcI3Y9QGZWzaPpbLTkp5c2pgM8BN+XzLgaF/ctkLe9UDL0GbKMP5vdhcF1JWvv2LHANp+CFgu2xP+74U9qx/fyiDos1DLxc7jjUttIeMLsN+bsWOCx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4326008)(8936002)(508600001)(86362001)(66476007)(186003)(66946007)(54906003)(316002)(956004)(31696002)(7416002)(44832011)(16576012)(31686004)(38100700002)(2616005)(36756003)(8676002)(26005)(5660300002)(6916009)(66556008)(53546011)(82960400001)(2906002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmh3R2JRZTF6RWY2ajM3aFFhSy90eURsUDR5K2xGNlhSUzRpOGFKclU3RnBM?=
- =?utf-8?B?MEVtVnNCWkhTbjVqeHc2T0R0dnZGY0Nuc0Rybm5pUHF0c0NXdkFOZ1habU03?=
- =?utf-8?B?WUN1dzQ2bWJKVEJEWmtSbUg3S2ZPTHBKYkZ4RVhIZGZ2RGlWaDhrTFFGbGpW?=
- =?utf-8?B?LzgvSHh1UUhUTVNlLzBodXhRZU4rK0N1SlZKUUdrOVUrZUg2ZDkwL0RPdnp1?=
- =?utf-8?B?eFRZR01YQ0dRUkYyUmRkTnpubzFvT2lEd0hobDNQNTdZVFVON1FXUkNSNXRE?=
- =?utf-8?B?OTMwaHFWVHJNWHM5SjhKUG1reHRMQW9icDE4VVZMVXlUSGFNc25JM0dyQnVh?=
- =?utf-8?B?REYzSzlOTGRKSXFCallMUkxUUTBQdER2VVNxbmdmamx5cnp1dUpkSml3ZjM0?=
- =?utf-8?B?UmwyZFdpcWpXcEYzQ0NBNndyVFY2MHlGdk1iQTU3dGhNRHFIY2ptWEpTZXpl?=
- =?utf-8?B?a0x1M3A1VUFnU0Q5UGdZRGdxZ1FKd0dKZDcwQkVCWS95ditqcVh3VWdkejRF?=
- =?utf-8?B?QUNEUkF5MmNIM2FnQmJVOUU5WHI5eFhuVG05VnBDNWQ4U0o0YkprRTBuR2Jv?=
- =?utf-8?B?TGdzNnVIWFQ0ZVc0UFhSM2lPQlJZaVlHSVQwV0UzbXlhRmxXOW9sMHRpSTVX?=
- =?utf-8?B?d2RaMFBTZWl0cHVIR2tkSmVvUlg2OWE3QVRYeEpMbjkyc0FMb1VBbG1DQk81?=
- =?utf-8?B?TE51NStobGk3ZUNOZE4rbWVYcTExZTFtMDdhR2k2Q1Q5YXVrWmw4QjFreWlq?=
- =?utf-8?B?Yy9Xcjgzc01BNEVwWnU2cTBFbzdwaU16MFNXaGw3RkpmRXM4Y2IvdG11RmJk?=
- =?utf-8?B?Vlp1QjBYbFpuUkRtN04xYkg1YkphN2VNZkxzOEdKWHBaaVhKbFNYaGlhZWpG?=
- =?utf-8?B?ekV0Z1NOdUJVdkNpZ29mT0pNUE5wd2ppckY1U0lCbGRjT083c1hScXVvdFBa?=
- =?utf-8?B?Y1JXa0FMbVRZSUNhZ21vbmRzNVEvLzdObFV1UlhmaDNadjdGWm5OZ290WkdO?=
- =?utf-8?B?U0RjV2Fzeit2N2pJQktIaUtNNkx5SEYwcy9ldGhpdnRJSXMyZ3JBNkEvbWFM?=
- =?utf-8?B?VzROM0w2dlhvcjdwTis1OE9FbG9MRzNZSXNoZDB1UU5KdzFOSCtMSXozazFO?=
- =?utf-8?B?KzlrWWFlS2o1cTRGbWJXSC9hZnpkWmoxb1VYcVg3MWw2bUFkT0tUNFp5bXV3?=
- =?utf-8?B?TzdodC83YTFjck1sUEQwc0FBWkFHZ2cycUk2VHgrMW5DWXRwNHNiNWNWeEVO?=
- =?utf-8?B?REwzUDVOQzFYOEoraVhEZHd4UnZCbUx2MzhOdjdNcnZMaG90WnE3OVVvdmFk?=
- =?utf-8?B?c3lrYXBqQlp5TWZYSFlwdXo3QUZTbFNPRE9qOCs2blFacGRrbTQ1bVkxY2FT?=
- =?utf-8?B?WUJqY25ZMWlSekJ3aThGNTE3c0NobEszbGp1N0pKNjlvVlVYRjVaaU82NVd0?=
- =?utf-8?B?NloweWhCQ0F6SkYwOTg4cS96V01Dc01OVWpQaU02cHVNd2dGM2xZMjdkZmds?=
- =?utf-8?B?ZTNHK1VqWHlqNWpFWTgwUHJmaTRYN0VJSmNGKzRxN243L0RFdTZFMnhnVExh?=
- =?utf-8?B?UWlCR3ZMbklqUStyL2NvWVBoL0ttdUpFRHA3MEo4OG9Jb2N6MExRUVpVNFhh?=
- =?utf-8?B?SFVKcXZta21SejBCbjQwMjhWVTRZRW1RYkoxZS9INjA2Qmo1QTNSZVFxZ3BO?=
- =?utf-8?B?VDYxQ0R5UzIwcEhaVGVhY1VzTVhCSWVkYUl4U1dtZ2wrQjRZZVc4ajVKTSsv?=
- =?utf-8?B?MXViL1lNOWd0Q2JMKzRMRlZRNzIvS1Zaa2ZBSm4vVlVtQTgyOGw1VDFobG13?=
- =?utf-8?B?OS82VDFPVTA0NzY2cE43bDc3S0h3MUczR3d6VGlJZnRic29SRFhUOFJINDdK?=
- =?utf-8?B?WnRibTBVTzVBd01sMEdtM3VaVFVkSDZHL1l2clhoZnRGOFhxTUsxSlNHRVhj?=
- =?utf-8?B?TEpIdkhDVEgxaUhWTTN4ckZPV0lQQ3BVNWFzdW55Z3JyY3NMT1RUUGp5ZjI1?=
- =?utf-8?B?a0Qvb3ZBcmg5OS83dUU1SHBoTnhhZTgrK3oxVjVqSE0xRXZ4RjNSckVEVW1o?=
- =?utf-8?B?Zzk2Tzh4cHcrS0dnMWVUQWIrRTBCdE9zT29hcTAyby84Z2YwbXp1aEl5bnRJ?=
- =?utf-8?B?L3VzTVczdW15WWRKbEJoYUNjdmdnU1hiSUREQm1FeUg4bmxhOWdnWUt3RmFY?=
- =?utf-8?Q?XkpxW9Sy8yJvddA1UBRpCOU=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8de9bac-1437-4aea-75f1-08d9aae17ffa
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 22:19:34.3818
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V4rfJQ0qjnkbdku8cOnAfFZ6DmQxK6Pbh9ttf8Mjd3RMrbgM37Oh1jTjKgB0q7icY3f3ykSij7M+06A9isGFBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3382
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877dd5qfw5.fsf_-_@email.froward.int.ebiederm.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/1/2021 1:19 AM, Pavel Machek wrote:
-> Hi!
+On Thu, Nov 18, 2021 at 04:04:58PM -0600, Eric W. Biederman wrote:
 > 
-
-Thank you for reviewing the patches!
-
->> Instructions
->> ------------
->> senduipi <index> - send a user IPI to a target task based on the UITT index.
->>
->> clui - Mask user interrupts by clearing UIF (User Interrupt Flag).
->>
->> stui - Unmask user interrupts by setting UIF.
->>
->> testui - Test current value of UIF.
->>
->> uiret - return from a user interrupt handler.
+> Recently to prevent issues with SECCOMP_RET_KILL and similar signals
+> being changed before they are delivered SA_IMMUTABLE was added.
 > 
-> Are other CPU vendors allowed to implement compatible instructions?
+> Unfortunately this broke debuggers[1][2] which reasonably expect to be
+> able to trap synchronous SIGTRAP and SIGSEGV even when the target
+> process is not configured to handle those signals.
 > 
-> If not, we should probably have VDSO entries so kernel can abstract
-> differences between CPUs.
+> Update force_sig_to_task to support both the case when we can
+> allow the debugger to intercept and possibly ignore the
+> signal and the case when it is not safe to let userspace
+> known about the signal until the process has exited.
 > 
+> Reported-by: Kyle Huey <me@kylehuey.com>
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Cc: stable@vger.kernel.org
+> [1] https://lkml.kernel.org/r/CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com
+> [2] https://lkml.kernel.org/r/20211117150258.GB5403@xsang-OptiPlex-902
+> Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced siganls do not get changed")
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-Yes, we are evaluating VDSO support for this.
+Thanks! This passes the seccomp self-tests.
 
->> Untrusted processes
->> -------------------
->> The current implementation expects only trusted and cooperating processes to
->> communicate using user interrupts. Coordination is expected between processes
->> for a connection teardown. In situations where coordination doesn't happen
->> (say, due to abrupt process exit), the kernel would end up keeping shared
->> resources (like UPID) allocated to avoid faults.
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> ---
+>  kernel/signal.c | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
 > 
-> Keeping resources allocated after process exit is a no-no.
-> 
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 7c4b7ae714d4..02058c983bd6 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -1298,6 +1298,12 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
+>  	return ret;
+>  }
+>  
+> +enum sig_handler {
+> +	HANDLER_CURRENT, /* If reachable use the current handler */
+> +	HANDLER_SIG_DFL, /* Always use SIG_DFL handler semantics */
+> +	HANDLER_EXIT,	 /* Only visible as the proces exit code */
+> +};
+> +
+>  /*
+>   * Force a signal that the process can't ignore: if necessary
+>   * we unblock the signal and change any SIG_IGN to SIG_DFL.
+> @@ -1310,7 +1316,8 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
+>   * that is why we also clear SIGNAL_UNKILLABLE.
+>   */
+>  static int
+> -force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t, bool sigdfl)
+> +force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+> +	enum sig_handler handler)
+>  {
+>  	unsigned long int flags;
+>  	int ret, blocked, ignored;
+> @@ -1321,9 +1328,10 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t, bool
+>  	action = &t->sighand->action[sig-1];
+>  	ignored = action->sa.sa_handler == SIG_IGN;
+>  	blocked = sigismember(&t->blocked, sig);
+> -	if (blocked || ignored || sigdfl) {
+> +	if (blocked || ignored || (handler != HANDLER_CURRENT)) {
+>  		action->sa.sa_handler = SIG_DFL;
+> -		action->sa.sa_flags |= SA_IMMUTABLE;
+> +		if (handler == HANDLER_EXIT)
+> +			action->sa.sa_flags |= SA_IMMUTABLE;
+>  		if (blocked) {
+>  			sigdelset(&t->blocked, sig);
+>  			recalc_sigpending_and_wake(t);
+> @@ -1343,7 +1351,7 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t, bool
+>  
+>  int force_sig_info(struct kernel_siginfo *info)
+>  {
+> -	return force_sig_info_to_task(info, current, false);
+> +	return force_sig_info_to_task(info, current, HANDLER_CURRENT);
+>  }
+>  
+>  /*
+> @@ -1660,7 +1668,7 @@ void force_fatal_sig(int sig)
+>  	info.si_code = SI_KERNEL;
+>  	info.si_pid = 0;
+>  	info.si_uid = 0;
+> -	force_sig_info_to_task(&info, current, true);
+> +	force_sig_info_to_task(&info, current, HANDLER_SIG_DFL);
+>  }
+>  
+>  /*
+> @@ -1693,7 +1701,7 @@ int force_sig_fault_to_task(int sig, int code, void __user *addr
+>  	info.si_flags = flags;
+>  	info.si_isr = isr;
+>  #endif
+> -	return force_sig_info_to_task(&info, t, false);
+> +	return force_sig_info_to_task(&info, t, HANDLER_CURRENT);
+>  }
+>  
+>  int force_sig_fault(int sig, int code, void __user *addr
+> @@ -1813,7 +1821,8 @@ int force_sig_seccomp(int syscall, int reason, bool force_coredump)
+>  	info.si_errno = reason;
+>  	info.si_arch = syscall_get_arch(current);
+>  	info.si_syscall = syscall;
+> -	return force_sig_info_to_task(&info, current, force_coredump);
+> +	return force_sig_info_to_task(&info, current,
+> +		force_coredump ? HANDLER_EXIT : HANDLER_CURRENT);
+>  }
+>  
+>  /* For the crazy architectures that include trap information in
+> -- 
+> 2.20.1
 
-I meant the resource is still tracked via the shared file descriptor, so 
-it will eventually get freed when the FD release happens. I am planning 
-to include better documentation on lifetime rules of these shared 
-resources next time.
-
-Thanks,
-Sohil
+-- 
+Kees Cook
