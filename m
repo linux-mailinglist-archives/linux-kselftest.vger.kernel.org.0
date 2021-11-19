@@ -2,121 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 183294574DC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 17:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67123457649
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 19:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbhKSRBn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Nov 2021 12:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbhKSRBm (ORCPT
+        id S231279AbhKSSXN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Nov 2021 13:23:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47985 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234009AbhKSSXN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Nov 2021 12:01:42 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C98C06174A
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 08:58:40 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id g14so45308436edb.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 08:58:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ErEg5lH429+YsanJojZrUh0d3Z7cACpSQZvZBHsD9aM=;
-        b=gHr/2RgEtdOpErOyPDZJcCcSeofSSueWvK1Gfx8uT/hKpyS19T+uOdZRQndugSs/JL
-         KUgewbkMC1HIXARDMGn/NhLLyYOcArTvlm0XSfpZnx468ig2jb1/IwKczWH2d+MDGlvv
-         SbV4gwUgLZ4ZflXxnrD5a5v8CRg1Maib65SwwknmkSoOMLMGzQtaGyrqSbxacY7ZZGLY
-         LhSL2UK6eqbSa/NpDeESxZNHOxkKHgCWECMr7xpyIJ1+RnNTHOScEG36IeoaaiYFT28w
-         zyuiDH/3ReGX3xplGxCk/+zuQEwa9nIf46f6Kw5v/QhIjqHrJ1oWcm97n9ux2SYWpGQz
-         dA3w==
+        Fri, 19 Nov 2021 13:23:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637346010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XdcrdYD9xvWbUGPWMX7bjgUSsVwyTNyxmOGq1Ztij9c=;
+        b=FyAomhjH5ldOJMkSaTpEyTMhVD/D1+NFS8wsfcgF3SQzcfXOdSv706gidDcuIDa6lYt0+/
+        TvCbDXxr+ou3F6ShbYRMUHG7b/+G4s2q76lDwwuzMdDBnocJwzm9ZlK8M2dMVD0UH4Js0B
+        2eta2e4bJA5L7a4qH6MoM7w8cFqjBLE=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-388--cADU0ByPOS1Lz0VP2C6cg-1; Fri, 19 Nov 2021 13:20:09 -0500
+X-MC-Unique: -cADU0ByPOS1Lz0VP2C6cg-1
+Received: by mail-oo1-f71.google.com with SMTP id c7-20020a4ae247000000b002b8be729ccdso6649946oot.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 10:20:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ErEg5lH429+YsanJojZrUh0d3Z7cACpSQZvZBHsD9aM=;
-        b=xYwPZcESTtw+ulVaU4pedr31RXBBu1r+odict0ge2v5ETwVBLIBg9h4P3Wem/TM5us
-         tseffSlfHpkZS3CDxGCWJaC+uFyug5zeLgSMT/L4q2UOiPgEUvHAmCExl7KaIQJ3/JMV
-         XrSL5nALkguQSkvrRv0xsytkxAr159qCe/lbUGUPV3TsHBU1tCpoyPNhcTtqA21cA1mG
-         8qBY8icy4sNiZ+3ZTx7pefPfuzzglsS1RZlsGuo3be34GnPT8mwbtB+j3ugHdkS007ya
-         E4a0SMFpqhY+fkJhKGJ9U1T622H5P2epquJvWm/c+lSLwd8amqH7WeW2olpyIb4UTOZP
-         UxBw==
-X-Gm-Message-State: AOAM533/EIF7ph+vqQTPMVAKmZi3XISSYBu1NjT4SyOsHYyQ4G6rV9/m
-        IzX5n+6U9Q60yQblYhqHuKgwUSpBLwdjXYkYU1bo5Q==
-X-Google-Smtp-Source: ABdhPJwjwYFQF5TH1tiK/c/KeHtkYUZ2Q17dm1zRuaodp9PMZ8lS3WsNKveiq1lhKT/gzcOUbADx50wPsTEZO1po6ic=
-X-Received: by 2002:a17:906:4791:: with SMTP id cw17mr9656058ejc.493.1637341119226;
- Fri, 19 Nov 2021 08:58:39 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XdcrdYD9xvWbUGPWMX7bjgUSsVwyTNyxmOGq1Ztij9c=;
+        b=jJOiZMiqzD+FnMaWSXt8dwn5vOw84PwOWYFq2X5FqqLo29k+aNlbI/o58qKjLUeEnE
+         injRJaRnO7/VQ6eAMgkrMAixyBv2kN20+D35oiMhf7fDzwhWr9giNhC25pTCPf29pCgi
+         eWcDTsoMTZ6hlrq9iqANJY6wSeP0KjnYYImzxJ2ReIlsuKZ08WKHiYRppF+Qzz/Ge/Kx
+         CHgaaO32dalsgLitRsp2spHxl4uP+OcxVaFVNPibYJneGhSIj4W3wEDx8LLG92wPCwFR
+         W1T3FPsfvhoUfXVh/Tj0lZZaCqtPq3FTBvwyMGiRSi8FHwCZFoz34QZTEtdsI2lrAQqh
+         DwDQ==
+X-Gm-Message-State: AOAM5328iRY1E7j8vVDvN4YD4826skdrlLtUsyu4ZZ2x9lf1z64waq51
+        aL1AKpdUZ6OH4UaTrL9QRphmHiqQqaiFC57KMjNVDVQSebJNIEn5ciokmtadnl9kfhZL+qMYTqv
+        RuZIdUK3TIWJxGlIv6gXR0Oa/aLsZ
+X-Received: by 2002:a9d:6ac7:: with SMTP id m7mr6494042otq.306.1637346008895;
+        Fri, 19 Nov 2021 10:20:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXWrvXCyVmmPw41zaXwMQvDoNIZwprsge5LSnVZv3n13O9g0G8kwLR62belVexqxGn1q5CKg==
+X-Received: by 2002:a9d:6ac7:: with SMTP id m7mr6494000otq.306.1637346008634;
+        Fri, 19 Nov 2021 10:20:08 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id l27sm118214ota.26.2021.11.19.10.20.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Nov 2021 10:20:08 -0800 (PST)
+Date:   Fri, 19 Nov 2021 10:20:05 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
+ for on a stack
+Message-ID: <20211119182005.t3p5iyxyibzktrbj@treble>
+References: <20211119090327.12811-1-mbenes@suse.cz>
+ <20211119090327.12811-3-mbenes@suse.cz>
 MIME-Version: 1.0
-References: <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
- <87k0h6334w.fsf@email.froward.int.ebiederm.org> <202111171341.41053845C3@keescook>
- <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
- <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
- <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
- <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
- <202111171728.D85A4E2571@keescook> <875ysp1m39.fsf@email.froward.int.ebiederm.org>
- <CAP045Aq06LV_jbXVc85bYU62h5EoVQ=rD9pDn+nGaUJ+iWe62w@mail.gmail.com> <202111190829.C0B365D4@keescook>
-In-Reply-To: <202111190829.C0B365D4@keescook>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Fri, 19 Nov 2021 08:58:24 -0800
-Message-ID: <CAP045Aq6SvnBpOsTKkwprYSdae1eppJhbhkYrxn_-vcFvzoPgQ@mail.gmail.com>
-Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        "Robert O'Callahan" <rocallahan@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211119090327.12811-3-mbenes@suse.cz>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 8:36 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Nov 19, 2021 at 08:07:36AM -0800, Kyle Huey wrote:
-> > On Thu, Nov 18, 2021 at 8:12 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > Kyle thank you for your explanation of what breaks.  For future kernels
-> > > I do need to do some work in this area and I will copy on the patches
-> > > going forward.  In particular I strongly suspect that changing the
-> > > sigaction and blocked state of the signal for these synchronous signals
-> > > is the wrong thing to do, especially if the process is not killed.  I
-> > > want to find another solution that does not break things but that also
-> > > does not change the program state behind the programs back so things
-> > > work differently under the debugger.
-> >
-> > The heads up in the future is appreciated, thanks.
->
-> Yeah, I wonder if we could add you as a Reviewer in the MAINTAINERS file
-> for ptrace/signal stuff? Then anyone using scripts/get_maintainers.pl
-> would have a CC to you added.
+Thanks for doing this!  And at peterz-esque speed no less :-)
 
-I don't object to that. I guess we'll see how manageable the email load is.
+On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
+> livepatch's consistency model requires that no live patched function
+> must be found on any task's stack during a transition process after a
+> live patch is applied. It is achieved by walking through stacks of all
+> blocked tasks.
+> 
+> The user might also want to define more functions to search for without
+> them being patched at all. It may either help with preparing a live
+> patch, which would otherwise require additional touches to achieve the
+> consistency
 
-> Also, are there more instructions about running the rr tests? When the
-> execve refactoring was happening, I tried it[1], but the results were
-> unclear (there seemed to be a lot of warnings and it made me think I'd
-> done something wrong on my end).
+Do we have any examples of this situation we can add to the commit log?
 
-It's a standard cmake test suite. The easiest way to run it is just to
-run `make check`, wait a while, and see what gets printed out at the
-end as failing.  There's a couple thousand tests that run and they
-print all sorts of output ... some of them even crash intentionally to
-make sure we can record specific types of crashes, so the ctest
-pass/fail output at the very end is the only reliable indicator.
+> or it can be used to overcome deficiencies the stack
+> checking inherently has. For example, GCC may optimize a function so
+> that a part of it is moved to a different section and the function would
+> jump to it. This child function would not be found on a stack in this
+> case, but it may be important to search for it so that, again, the
+> consistency is achieved.
+> 
+> Allow the user to specify such functions on klp_object level.
+> 
+> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> ---
+>  include/linux/livepatch.h     | 11 +++++++++++
+>  kernel/livepatch/core.c       | 16 ++++++++++++++++
+>  kernel/livepatch/transition.c | 21 ++++++++++++++++-----
+>  3 files changed, 43 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
+> index 2614247a9781..89df578af8c3 100644
+> --- a/include/linux/livepatch.h
+> +++ b/include/linux/livepatch.h
+> @@ -106,9 +106,11 @@ struct klp_callbacks {
+>   * struct klp_object - kernel object structure for live patching
+>   * @name:	module name (or NULL for vmlinux)
+>   * @funcs:	function entries for functions to be patched in the object
+> + * @funcs_stack:	function entries for functions to be stack checked
 
-If you have specific issues you're seeing I'm happy to follow up here
-or off list.
+So there are two arrays/lists of 'klp_func', and two implied meanings of
+what a 'klp_func' is and how it's initialized.
 
-- Kyle
+Might it be simpler and more explicit to just add a new external field
+to 'klp_func' and continue to have a single 'funcs' array?  Similar to
+what we already do with the special-casing of 'nop', except it would be
+an external field, e.g. 'no_patch' or 'stack_only'.
 
-> -Kees
->
-> [1] https://github.com/rr-debugger/rr/wiki/Building-And-Installing#tests
->
-> --
-> Kees Cook
+Then instead of all the extra klp_for_each_func_stack_static()
+incantations, and the special cases in higher-level callers like
+klp_init_object() and klp_init_patch_early(), the lower-level functions
+like klp_init_func() and klp_init_func_early() can check the field to
+determine which initializations need to be made.  Which is kind of nice
+IMO as it pushes that detail down more where it belongs.  And makes the
+different types of 'klp_func' more explicit.
+
+-- 
+Josh
+
