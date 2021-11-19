@@ -2,53 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 887504566A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 00:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154A8456752
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 02:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbhKRX5F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Nov 2021 18:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S232747AbhKSBPh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Nov 2021 20:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbhKRX5F (ORCPT
+        with ESMTP id S232704AbhKSBPg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 18:57:05 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB67C06174A
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 15:54:04 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso9647445pji.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 15:54:04 -0800 (PST)
+        Thu, 18 Nov 2021 20:15:36 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF161C06174A
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 17:12:35 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id r11so35257197edd.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 17:12:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZwKIUkuJyjkmpEJDiI3rT9nP/nucv2Qu5EAF8Rqqq1Y=;
-        b=OW9EyW0SubYptcTcH8YTlAZhwhx7VV+j/MXj1IWjlOW5gggelRVD5LRYztbJILHNzm
-         wt1K6z1RA63WRiXeqZSKgAHpP7qh+wtt71uzl7NwsCIaYoR7q+16LGjjH6c9g6z98vTz
-         O4QWbC3INNPqKnKpRMY8bxzIfCJAGs0v+kymg=
+        d=kylehuey.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wK6B2URQKiioFYJXC3wE9DBQbAOigpHXbFKyVO8IlQQ=;
+        b=CMnubC1liyKFsF4BuJRRELgsahf4EFnmYx/5rfqjarwViMgTKogdGAuqvGirTScTFC
+         X89dngrDbB1iS4+Ayufls7UNs2Xaiu2xsh4n92JH/UWCkZJirUXTyRKPcMRNHGdjlQLY
+         JSxuobyyyZBnHUfL5x/t0TAznCCNdksF+0IOgXo6atgDV2Sbj3juB1WiRfhsNKFdLJIO
+         zi6++ueH7f4yd0Q7x6GBaqihSYUQ+fDRtjCRHGngZw74SbNa0ceAPn28hdTUCE9X/szE
+         s5X1qj5IglVC+EVbT51I2lJQ6hO2u3waIMQnyWm+jN50uxqzoDoB7n7qUd3mikHyttHa
+         +VAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZwKIUkuJyjkmpEJDiI3rT9nP/nucv2Qu5EAF8Rqqq1Y=;
-        b=BCyFSfbVTM9jhaotQFPtoACQbY+uub6IAj//6A/rKivbRZ63LSG4donOr9Dp+RhIx1
-         3044ANhlkQGR8HyMz930XmCuU+r33c6/M+piQt+84/aW8yJlw89lmlH6gyb2X5csNM9f
-         3UG81k9pG1o1bXvs8jvK28Jss2qeZhJaMdDLsmc8CbrAvlri2hlzl3DKulOViaQcKUdJ
-         C1OS9Z68sBGqb4h9CYv0ZedZzvxNWTe1rfnKAyIvYg6dRD7kyyyGaiQRERpMm9VqwSyb
-         ZM4dlRBeCMV8IUHj6Dr73dbSLTqzkmGuigbbqt1HoDO1f3a+EMm2K3AkTrjdpIRE50Rf
-         GA1w==
-X-Gm-Message-State: AOAM530bLI26+ALwYyuGVbs1xh+oXbEOxUcjVdHysdz7MfnMA/8CPOsd
-        0W6OfKFFUQq/hHdhLR5x55ur1g==
-X-Google-Smtp-Source: ABdhPJw1GONVXR9tdAKLV4BSBsXTfKktrcP8bxkeM65wyKeGr7Hy1J63j+5TgFCl+lgpqdq8i4nL+Q==
-X-Received: by 2002:a17:903:18b:b0:142:12ba:8513 with SMTP id z11-20020a170903018b00b0014212ba8513mr69977904plg.69.1637279643706;
-        Thu, 18 Nov 2021 15:54:03 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mg17sm602086pjb.17.2021.11.18.15.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 15:54:03 -0800 (PST)
-Date:   Thu, 18 Nov 2021 15:54:02 -0800
-From:   Kees Cook <keescook@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wK6B2URQKiioFYJXC3wE9DBQbAOigpHXbFKyVO8IlQQ=;
+        b=4ojwSTwIAcSJUB1WbeyyjvI8MFVfNF3o+CEjmuVIHnzfK20CgmIVJwCGl60otLrRc4
+         esIwXMDhMSe6n/NVIZYduVzc8JlStMyYS0m4n2KOMR3MQpTpLiKEuW0wGPiBX/UTiPOs
+         UAO9bVTOjVO7Xax3eatBa72RXj07eUqk92DxqaIW5IbGUmeXyHzLj3QsQdMGrbkm3g05
+         pZIQ3wHP+/28OBetEU4+9xvK+dl5iQtly+jEX58zgLqwYcZ/quvkMqV6uFqAFtU2qpO6
+         tZ095zq/U35xmvF97ehx4rP7UQXllvu2gokFbKrVgKCMFGB1CIAeKaRY++ZLzGcc5bdC
+         N7Aw==
+X-Gm-Message-State: AOAM533xxPSySR7YTxMo8H/w5utXN1Qg2OvRjyH2wZa60xIVj1+a3htB
+        J5e0/oRGp+oHWE1z8fgYe7N0W+T6Qcqu4yY/F6LnyA==
+X-Google-Smtp-Source: ABdhPJwSApuFMiEaAZ9GvVXe7oBeoItavBWlFOpqOtLkWC4On9DpcbKroIBsOHBEybKZYMbP19DQalCAbSM826hBDHA=
+X-Received: by 2002:a05:6402:3590:: with SMTP id y16mr18592508edc.343.1637284354160;
+ Thu, 18 Nov 2021 17:12:34 -0800 (PST)
+MIME-Version: 1.0
+References: <CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com>
+ <202111171049.3F9C5F1@keescook> <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
+ <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
+ <87k0h6334w.fsf@email.froward.int.ebiederm.org> <202111171341.41053845C3@keescook>
+ <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
+ <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
+ <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
+ <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
+ <202111171728.D85A4E2571@keescook> <87h7c9qg7p.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <87h7c9qg7p.fsf_-_@email.froward.int.ebiederm.org>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Thu, 18 Nov 2021 17:12:23 -0800
+Message-ID: <CAP045Ap=1U07er7Y2XO9wmiRtKLoKL4u8zek48ROU668=G9D3A@mail.gmail.com>
+Subject: Re: [PATCH 0/2] SA_IMMUTABLE fixes
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, Kyle Huey <me@kylehuey.com>,
+Cc:     open list <linux-kernel@vger.kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Andrea Righi <andrea.righi@canonical.com>,
         Shuah Khan <shuah@kernel.org>,
@@ -58,71 +70,68 @@ Cc:     linux-kernel@vger.kernel.org, Kyle Huey <me@kylehuey.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         linux-hardening@vger.kernel.org,
-        Robert O'Callahan <rocallahan@gmail.com>,
+        "Robert O'Callahan" <rocallahan@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
         Oliver Sang <oliver.sang@intel.com>, lkp@lists.01.org,
-        lkp@intel.com
-Subject: Re: [PATCH 1/2] signal: Don't always set SA_IMMUTABLE for forced
- signals
-Message-ID: <202111181553.A4FDEB1@keescook>
-References: <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
- <87k0h6334w.fsf@email.froward.int.ebiederm.org>
- <202111171341.41053845C3@keescook>
- <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
- <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
- <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
- <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
- <202111171728.D85A4E2571@keescook>
- <87h7c9qg7p.fsf_-_@email.froward.int.ebiederm.org>
- <877dd5qfw5.fsf_-_@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877dd5qfw5.fsf_-_@email.froward.int.ebiederm.org>
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 04:04:58PM -0600, Eric W. Biederman wrote:
-> 
-> Recently to prevent issues with SECCOMP_RET_KILL and similar signals
-> being changed before they are delivered SA_IMMUTABLE was added.
-> 
-> Unfortunately this broke debuggers[1][2] which reasonably expect to be
-> able to trap synchronous SIGTRAP and SIGSEGV even when the target
-> process is not configured to handle those signals.
-> 
-> Update force_sig_to_task to support both the case when we can
-> allow the debugger to intercept and possibly ignore the
-> signal and the case when it is not safe to let userspace
-> known about the signal until the process has exited.
-> 
-> Reported-by: Kyle Huey <me@kylehuey.com>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Cc: stable@vger.kernel.org
-> [1] https://lkml.kernel.org/r/CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com
-> [2] https://lkml.kernel.org/r/20211117150258.GB5403@xsang-OptiPlex-902
-> Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced siganls do not get changed")
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  kernel/signal.c | 23 ++++++++++++++++-------
->  1 file changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 7c4b7ae714d4..02058c983bd6 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1298,6 +1298,12 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
->  	return ret;
->  }
->  
-> +enum sig_handler {
-> +	HANDLER_CURRENT, /* If reachable use the current handler */
-> +	HANDLER_SIG_DFL, /* Always use SIG_DFL handler semantics */
-> +	HANDLER_EXIT,	 /* Only visible as the proces exit code */
+On Thu, Nov 18, 2021 at 1:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+>
+> SA_IMMUTABLE fixed issues with force_sig_seccomp and the introduction
+> for force_sig_fatal where the exit previously could not be interrupted
+> but now it can.  Unfortunately it added that behavior to all force_sig
+> functions under the right conditions which debuggers usage of SIG_TRAP
+> and debuggers handling of SIGSEGV.
+>
+> Solve that by limiting SA_IMMUTABLE to just the cases that historically
+> debuggers have not been able to intercept.
+>
+> The first patch changes force_sig_info_to_task to take a flag
+> that requests which behavior is desired.
+>
+> The second patch adds force_exit_sig which replaces force_fatal_sig
+> in the cases where historically userspace would only find out about
+> the ``signal'' after the process has exited.
+>
+> The first one with the hunk changing force_fatal_sig removed should be
+> suitable for backporting to v5.15. v5.15 does not implement
+> force_fatal_sig.
+>
+> This should be enough to fix the regressions.
+>
+> Kyle if you can double check me that I have properly fixed these issues
+> that would be appreciated.
+>
+> Any other review or suggestions to improve the names would be
+> appreciated.  I think I have named things reasonably well but I am very
+> close to the code so it is easy for me to miss things.
+>
+> Eric W. Biederman (2):
+>       signal: Don't always set SA_IMMUTABLE for forced signals
+>       signal: Replace force_fatal_sig with force_exit_sig when in doubt
+>
+>  arch/m68k/kernel/traps.c              |  2 +-
+>  arch/powerpc/kernel/signal_32.c       |  2 +-
+>  arch/powerpc/kernel/signal_64.c       |  4 ++--
+>  arch/s390/kernel/traps.c              |  2 +-
+>  arch/sparc/kernel/signal_32.c         |  4 ++--
+>  arch/sparc/kernel/windows.c           |  2 +-
+>  arch/x86/entry/vsyscall/vsyscall_64.c |  2 +-
+>  arch/x86/kernel/vm86_32.c             |  2 +-
+>  include/linux/sched/signal.h          |  1 +
+>  kernel/entry/syscall_user_dispatch.c  |  4 ++--
+>  kernel/signal.c                       | 36 ++++++++++++++++++++++++++++-------
+>  11 files changed, 42 insertions(+), 19 deletions(-)
+>
+> Eric
 
-Oh, I just noticed this typo "proces" -> "process"
+rr's test suite passes with both diffs applied
 
--Kees
+Tested-by: Kyle Huey <khuey@kylehuey.com>
 
--- 
-Kees Cook
+- Kyle
