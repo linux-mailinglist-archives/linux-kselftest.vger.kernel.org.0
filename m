@@ -2,79 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AB9456D17
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 11:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F318456DA2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 11:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbhKSKVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Nov 2021 05:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S229843AbhKSKi0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Nov 2021 05:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbhKSKVF (ORCPT
+        with ESMTP id S234875AbhKSKiN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Nov 2021 05:21:05 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4A9C061574;
-        Fri, 19 Nov 2021 02:18:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mU7CXYA7+Z8znZ6H/7El6odieLZp2FQkQXrbGlUHrow=; b=AN3WwQWp9tlGDluAti6I4VlegU
-        GJNtz4TQoreH/oOGY1wkiClDMTiTZxWAEadyO91SHM3iM2cQ7AD2zPIc5g6CuY4Jk33bXfF5mOMIZ
-        0ymOxNZMfQb0p16Rq/svxXUK52AH/eVS4f2hOpg6Gy9zcnZaXbyfz2tXaRn41/uoj5uq0c7BPYQkd
-        j5WmlCVOb2c4fmHmMUPIiiEyndLF5cB6Cs6QGtS22u0viSCBet7zSUW5yglsEP0Slodde5k0nw32f
-        7b59OVtTJZ6iytV0an7/OCwSFhRSneZakgyEp5jE/d83SVdjMXuHJcXnSZRtwrqaitXXkFLWA99ji
-        3jtyoJtA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mo0xm-00GsMZ-GU; Fri, 19 Nov 2021 10:17:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B555A300130;
-        Fri, 19 Nov 2021 11:17:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9F1E9265BA1EB; Fri, 19 Nov 2021 11:17:45 +0100 (CET)
-Date:   Fri, 19 Nov 2021 11:17:45 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        joe.lawrence@redhat.com, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
- for on a stack
-Message-ID: <YZd5yeql//37xSuw@hirez.programming.kicks-ass.net>
-References: <20211119090327.12811-1-mbenes@suse.cz>
- <20211119090327.12811-3-mbenes@suse.cz>
+        Fri, 19 Nov 2021 05:38:13 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A16C06173E
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 02:35:11 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id y12so40749566eda.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 02:35:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=da+/SogHXUMysaPRZgIDQxwiiCshPW/hd/yWA0YxHqQ=;
+        b=GlnHRBjOnK9LP3NMSvnd1QTOn+l5BYai+2V8bs6Qcctpizcmz21/SwZE+DgAftdQz4
+         sZ0mh1an60KYWHvgzkBfqZnEHVYFJ4X5QP08O7fZHPtnMcmus6hrBxGydj9+D7eTwb/I
+         i/wnMThnZdCe9HM+smJulD6MMgL90PZLQwK75EkUgaCrZ3eTWVGZesWleUnWgTQ6ZKMY
+         hJI0bGMDeQqp1sQkAkQHB+8zEkvcOgkdDmq9EPtpqe/xy6M0RU9mDyCwuIarT7PE/KPs
+         /taKqA5EREsQNFCOmr49J1E/7vIpjimYWENZqqvzXKZT2IdjaZ2edHJWp9PI+4ClEvlI
+         OpIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=da+/SogHXUMysaPRZgIDQxwiiCshPW/hd/yWA0YxHqQ=;
+        b=TgNEu5Z/V5B3IbE9/AIu5mvqkAtIm5ivzIlm0BZWf8FsLY5WV4BjV7U5WUVP62QlIO
+         YxD5rIwyHWDeYGBebZFgNWq4uSr2G+mH2q2LWLa3hi47roz0Z7OdUlUcVJopoOxL++nz
+         oEPI6YCISkSXbgVKc3LqCDX90DNNHHDfHhjZ/impVpkYhY+cZKpsoGYzgnSbzHQT6jkl
+         av9ywx1oRgVJh8VMN3wPk+4XgYsvPwUc5FWrB7qhXmeB9cfgLakblvu4vu224oJGHi2V
+         D9ArXlhuqZTi+l+9J+Al3goBztS6RgYIxp7m5Nk8LemQJ9+LE1qtfYKdgOTGfM2dNowc
+         M+Og==
+X-Gm-Message-State: AOAM531rosEC9pVm2dBNKwP0bOZRGX/nE01Q2h1eEevkQyFWaEPwblZF
+        TC/g3V+mo9Y5D62vQO1pBMYzVxn31sW5yv0yn8MgDw==
+X-Google-Smtp-Source: ABdhPJx3NBTcqINXsR8GAPT3k7d1gVnT5ZVIM4MMhSfBogJ3ihQymdnKbE/olQAjosYRl+tzEQxE8YBNvWdLez3iAYg=
+X-Received: by 2002:a05:6402:168a:: with SMTP id a10mr23446917edv.219.1637318110186;
+ Fri, 19 Nov 2021 02:35:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211119090327.12811-3-mbenes@suse.cz>
+References: <20211118145142.14519-1-brgl@bgdev.pl> <YZZ1cFWaexGlJL8C@smile.fi.intel.com>
+ <CAMRc=MdeEiz+uKhAz5-1MX_KG5fmjshRtDXARPMEx8VwBKfXZQ@mail.gmail.com> <YZaGa66iEFb6bJjK@smile.fi.intel.com>
+In-Reply-To: <YZaGa66iEFb6bJjK@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 19 Nov 2021 11:34:59 +0100
+Message-ID: <CAMRc=MeZrdgxMUxGQ0rFPkSXMto==WrMGPz0Zo8wfdCxM_0+=Q@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] gpio-sim: configfs-based GPIO simulator
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
-> livepatch's consistency model requires that no live patched function
-> must be found on any task's stack during a transition process after a
-> live patch is applied. It is achieved by walking through stacks of all
-> blocked tasks.
-> 
-> The user might also want to define more functions to search for without
-> them being patched at all. It may either help with preparing a live
-> patch, which would otherwise require additional touches to achieve the
-> consistency, or it can be used to overcome deficiencies the stack
-> checking inherently has. For example, GCC may optimize a function so
-> that a part of it is moved to a different section and the function would
-> jump to it. This child function would not be found on a stack in this
-> case, but it may be important to search for it so that, again, the
-> consistency is achieved.
-> 
-> Allow the user to specify such functions on klp_object level.
+On Thu, Nov 18, 2021 at 5:59 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Nov 18, 2021 at 05:37:02PM +0100, Bartosz Golaszewski wrote:
+> > On Thu, Nov 18, 2021 at 4:50 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > On Thu, Nov 18, 2021 at 03:51:38PM +0100, Bartosz Golaszewski wrote:
+> > > > This is another shot at the gpio-sim testing module. As there was n=
+o
+> > > > reasoning with configfs maintainers for many months, this time the =
+whole
+> > > > concept of committable items has been dropped. Instead, each config=
+fs
+> > > > chip item (or rather a group - more on that later) exposes a new
+> > > > attribute called 'live'. Writing 1 to it brings the chip on-line
+> > > > (registers the platform device) and writing 0 tears it down.
+> > > >
+> > > > There are some caveats to that approach - for example: we can't blo=
+ck
+> > > > the user-space from deleting chip items when chips are live but is =
+just
+> > > > handled by silently destroying the chip device in the background.
+> > > >
+> > > > Andy (rightfully) pointed out that parsing of the lists of line nam=
+es is
+> > > > awkward so in this iteration it's been replaced by a system that is=
+ more
+> > > > elegant and will allow to easily extend configuration options for
+> > > > specific GPIO lines. This is achieved by turning the chip's configf=
+s
+> > > > item into a configfs group and allowing the user-space to create
+> > > > additional items inside it. The items must be called line<offset> (=
+e.g.
+> > > > line0, line12 etc.) where the offset part indicates to the module t=
+he
+> > > > offset for which given item stores the configuration for. Within ea=
+ch
+> > > > such line item, there are additional attributes that allow specifyi=
+ng
+> > > > configuration for specific lines. Currently we only support the 'na=
+me'
+> > > > attribute but I plan to extend that to support GPIO hogging too.
+> > >
+> > > One question here. Since you know how the driver looks like in both c=
+ases
+> > > (with and without committable items), would it be possible to modify =
+what
+> > > you proposed here to the former one in case ConfigFS gains the featur=
+e?
+> >
+> > This would completely change the user interface unfortunately. We
+> > could extend it but we would need to keep this one too most likely.
+> >
+> > TBH I don't see the committable items merged anytime soon, and this is
+> > GoodEnough=C2=AE.
+>
+> Fine with me then!
+>
+> Thanks for doing this all, I know it's a bit delayed in terms of getting
+> into upstream.
+>
+> Btw, gpio-mockup testing scripts have an issue that the number of lines t=
+o
+> check overflow is hardcoded and since x86_64 switched to 1024 from 512 it
+> reveals the issue. Does gpio-sim solve this in a better way (like telling
+> to user space the ngpios, etc)?
+>
 
-Ok, so this relies on the patch generator to DTRT but then it should
-work.
+Yeah the selftests need fixing now.
 
-Thanks!
+No, there's no fix for that in gpio-sim - probe() will just fail.
+Which makes me think - maybe we should synchronously wait when writing
+to 'live' for the probe to return (for instance setup a notifier) so
+that we know if the chip probed correctly. Then we can notify the
+user-space about the error destroy the device too.
+
+Bart
