@@ -2,52 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F137F457322
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 17:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183294574DC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Nov 2021 17:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236567AbhKSQjC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Nov 2021 11:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S236352AbhKSRBn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Nov 2021 12:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236555AbhKSQjC (ORCPT
+        with ESMTP id S236012AbhKSRBm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Nov 2021 11:39:02 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C51C061756
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 08:36:00 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id o6-20020a17090a0a0600b001a64b9a11aeso9246025pjo.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 08:36:00 -0800 (PST)
+        Fri, 19 Nov 2021 12:01:42 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C98C06174A
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 08:58:40 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id g14so45308436edb.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 08:58:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mUA1Ik1IrEtjZziXrTIENZOvTLv8BEae3qCpSE+YCyM=;
-        b=HrLUCriF+D8Cvoif6PoPXuZ01iT7CVMXAmIoIU345nrBpdU8RCDZ+XDjy4aMpyqWxX
-         1mwslROiPVbi4rQFrNiFLaQRmGBi3X/LId8fpbBu1EBXodx74x0ejyq7NGD7dF6bmaCd
-         XHh44079HyOoO48w9cAB4WkzNpBCpXyILFZkU=
+        d=kylehuey.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ErEg5lH429+YsanJojZrUh0d3Z7cACpSQZvZBHsD9aM=;
+        b=gHr/2RgEtdOpErOyPDZJcCcSeofSSueWvK1Gfx8uT/hKpyS19T+uOdZRQndugSs/JL
+         KUgewbkMC1HIXARDMGn/NhLLyYOcArTvlm0XSfpZnx468ig2jb1/IwKczWH2d+MDGlvv
+         SbV4gwUgLZ4ZflXxnrD5a5v8CRg1Maib65SwwknmkSoOMLMGzQtaGyrqSbxacY7ZZGLY
+         LhSL2UK6eqbSa/NpDeESxZNHOxkKHgCWECMr7xpyIJ1+RnNTHOScEG36IeoaaiYFT28w
+         zyuiDH/3ReGX3xplGxCk/+zuQEwa9nIf46f6Kw5v/QhIjqHrJ1oWcm97n9ux2SYWpGQz
+         dA3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mUA1Ik1IrEtjZziXrTIENZOvTLv8BEae3qCpSE+YCyM=;
-        b=CYXJLg96mI4xBod64YVYrKmlGeoGqCWSKCzdMmDdqW72Y3EKQ2gM6E9mU/Z4TSYPna
-         qLQS4ExvpbVclVMR47wLNGiMKKvgvb9oNXM5YQeFTaF9zO7a5wSy3kidaX//ouSUN+0b
-         niSPaaUUMWoHse1pwm9Pda4WMm+tRv0Fny2Z2t/lzMZm82r7UdSLcuthWMt6Y0mxbWv9
-         PpCRnzGeyVj/WRUaTaXIVxsdkSYZNx53RXxcjy2um8L40aeTSWboDmPsP+OVZz+7ajjf
-         PuVVMU/h6RB4SR6JhJoIAYENnQmeRGtddvRcIYjx5e6L6qIgg4GPfAqgqr5ddtUmW5zy
-         /mNA==
-X-Gm-Message-State: AOAM5303dl5l+k83f/bTCYVBPfapjC8ZL1nbqsgvA1GO8kowahWL0B00
-        MxWcd8ctWDh5lmJk9CIEqlIc7A==
-X-Google-Smtp-Source: ABdhPJwVGtrRIcvhQKROwLYzVQy0XXGjw4lU4UVPO7uYFvU2N/IYecAtrr5pfHvRHECUwfWCqLA7aQ==
-X-Received: by 2002:a17:90a:e00c:: with SMTP id u12mr1072545pjy.139.1637339759754;
-        Fri, 19 Nov 2021 08:35:59 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w37sm184115pgk.87.2021.11.19.08.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 08:35:59 -0800 (PST)
-Date:   Fri, 19 Nov 2021 08:35:58 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Kyle Huey <me@kylehuey.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ErEg5lH429+YsanJojZrUh0d3Z7cACpSQZvZBHsD9aM=;
+        b=xYwPZcESTtw+ulVaU4pedr31RXBBu1r+odict0ge2v5ETwVBLIBg9h4P3Wem/TM5us
+         tseffSlfHpkZS3CDxGCWJaC+uFyug5zeLgSMT/L4q2UOiPgEUvHAmCExl7KaIQJ3/JMV
+         XrSL5nALkguQSkvrRv0xsytkxAr159qCe/lbUGUPV3TsHBU1tCpoyPNhcTtqA21cA1mG
+         8qBY8icy4sNiZ+3ZTx7pefPfuzzglsS1RZlsGuo3be34GnPT8mwbtB+j3ugHdkS007ya
+         E4a0SMFpqhY+fkJhKGJ9U1T622H5P2epquJvWm/c+lSLwd8amqH7WeW2olpyIb4UTOZP
+         UxBw==
+X-Gm-Message-State: AOAM533/EIF7ph+vqQTPMVAKmZi3XISSYBu1NjT4SyOsHYyQ4G6rV9/m
+        IzX5n+6U9Q60yQblYhqHuKgwUSpBLwdjXYkYU1bo5Q==
+X-Google-Smtp-Source: ABdhPJwjwYFQF5TH1tiK/c/KeHtkYUZ2Q17dm1zRuaodp9PMZ8lS3WsNKveiq1lhKT/gzcOUbADx50wPsTEZO1po6ic=
+X-Received: by 2002:a17:906:4791:: with SMTP id cw17mr9656058ejc.493.1637341119226;
+ Fri, 19 Nov 2021 08:58:39 -0800 (PST)
+MIME-Version: 1.0
+References: <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
+ <87k0h6334w.fsf@email.froward.int.ebiederm.org> <202111171341.41053845C3@keescook>
+ <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
+ <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
+ <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
+ <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
+ <202111171728.D85A4E2571@keescook> <875ysp1m39.fsf@email.froward.int.ebiederm.org>
+ <CAP045Aq06LV_jbXVc85bYU62h5EoVQ=rD9pDn+nGaUJ+iWe62w@mail.gmail.com> <202111190829.C0B365D4@keescook>
+In-Reply-To: <202111190829.C0B365D4@keescook>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Fri, 19 Nov 2021 08:58:24 -0800
+Message-ID: <CAP045Aq6SvnBpOsTKkwprYSdae1eppJhbhkYrxn_-vcFvzoPgQ@mail.gmail.com>
+Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
+To:     Kees Cook <keescook@chromium.org>
 Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Andrea Righi <andrea.righi@canonical.com>,
@@ -59,52 +70,53 @@ Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         linux-hardening@vger.kernel.org,
-        Robert O'Callahan <rocallahan@gmail.com>
-Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
-Message-ID: <202111190829.C0B365D4@keescook>
-References: <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
- <87k0h6334w.fsf@email.froward.int.ebiederm.org>
- <202111171341.41053845C3@keescook>
- <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
- <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
- <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
- <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
- <202111171728.D85A4E2571@keescook>
- <875ysp1m39.fsf@email.froward.int.ebiederm.org>
- <CAP045Aq06LV_jbXVc85bYU62h5EoVQ=rD9pDn+nGaUJ+iWe62w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP045Aq06LV_jbXVc85bYU62h5EoVQ=rD9pDn+nGaUJ+iWe62w@mail.gmail.com>
+        "Robert O'Callahan" <rocallahan@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 08:07:36AM -0800, Kyle Huey wrote:
-> On Thu, Nov 18, 2021 at 8:12 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > Kyle thank you for your explanation of what breaks.  For future kernels
-> > I do need to do some work in this area and I will copy on the patches
-> > going forward.  In particular I strongly suspect that changing the
-> > sigaction and blocked state of the signal for these synchronous signals
-> > is the wrong thing to do, especially if the process is not killed.  I
-> > want to find another solution that does not break things but that also
-> > does not change the program state behind the programs back so things
-> > work differently under the debugger.
-> 
-> The heads up in the future is appreciated, thanks.
+On Fri, Nov 19, 2021 at 8:36 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Nov 19, 2021 at 08:07:36AM -0800, Kyle Huey wrote:
+> > On Thu, Nov 18, 2021 at 8:12 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > Kyle thank you for your explanation of what breaks.  For future kernels
+> > > I do need to do some work in this area and I will copy on the patches
+> > > going forward.  In particular I strongly suspect that changing the
+> > > sigaction and blocked state of the signal for these synchronous signals
+> > > is the wrong thing to do, especially if the process is not killed.  I
+> > > want to find another solution that does not break things but that also
+> > > does not change the program state behind the programs back so things
+> > > work differently under the debugger.
+> >
+> > The heads up in the future is appreciated, thanks.
+>
+> Yeah, I wonder if we could add you as a Reviewer in the MAINTAINERS file
+> for ptrace/signal stuff? Then anyone using scripts/get_maintainers.pl
+> would have a CC to you added.
 
-Yeah, I wonder if we could add you as a Reviewer in the MAINTAINERS file
-for ptrace/signal stuff? Then anyone using scripts/get_maintainers.pl
-would have a CC to you added.
+I don't object to that. I guess we'll see how manageable the email load is.
 
-Also, are there more instructions about running the rr tests? When the
-execve refactoring was happening, I tried it[1], but the results were
-unclear (there seemed to be a lot of warnings and it made me think I'd
-done something wrong on my end).
+> Also, are there more instructions about running the rr tests? When the
+> execve refactoring was happening, I tried it[1], but the results were
+> unclear (there seemed to be a lot of warnings and it made me think I'd
+> done something wrong on my end).
 
--Kees
+It's a standard cmake test suite. The easiest way to run it is just to
+run `make check`, wait a while, and see what gets printed out at the
+end as failing.  There's a couple thousand tests that run and they
+print all sorts of output ... some of them even crash intentionally to
+make sure we can record specific types of crashes, so the ctest
+pass/fail output at the very end is the only reliable indicator.
 
-[1] https://github.com/rr-debugger/rr/wiki/Building-And-Installing#tests
+If you have specific issues you're seeing I'm happy to follow up here
+or off list.
 
--- 
-Kees Cook
+- Kyle
+
+> -Kees
+>
+> [1] https://github.com/rr-debugger/rr/wiki/Building-And-Installing#tests
+>
+> --
+> Kees Cook
