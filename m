@@ -2,65 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F43457A17
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Nov 2021 01:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7252457A1D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Nov 2021 01:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbhKTAVo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Nov 2021 19:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S233233AbhKTAZY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Nov 2021 19:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhKTAVo (ORCPT
+        with ESMTP id S231455AbhKTAZY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Nov 2021 19:21:44 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06220C06173E
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 16:18:42 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id f9so14815917ioo.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 16:18:42 -0800 (PST)
+        Fri, 19 Nov 2021 19:25:24 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAA1C061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 16:22:22 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id x10so14947117ioj.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 16:22:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=j4HsihesuWRn6Y6XmUNEckNuiN/kPKd9OIJTos8r0uI=;
-        b=NLLJA18B1Pvq1l2kHr0pA08D8bG8XKABcsHGET5ib4U6TRJCY5vco16fd8kKFa8yqn
-         IK56lQ7vlrPKQ9u9b73rdjR5fsi9/MFH8Y4jNqp20kwbBdsqIScp85ZhZquotuqu66Gf
-         DSQ5xfEzleUC2VUdZxZ1C08685XDALpR7tvB0=
+        bh=45aoiIXLNHX/rElliOua9/jn7RznBxUCcrDpMi0LV+8=;
+        b=JCbnJJdfHDf/Ck6Y9dH93bwkVp/YCaWqIXQ/G832da1Y4FRlbORIL/8Ro3C6PDwTnh
+         mTLCjDWV03dDzQH1K1sp9GXpu/xlrxYWAOqPi0AyJxfOv2u17vq4GhCBbbrD69neKC6/
+         nLDiTmjnO4xe8VRpEoF8jVBAKOYnes9qv+Ipc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=j4HsihesuWRn6Y6XmUNEckNuiN/kPKd9OIJTos8r0uI=;
-        b=Phx0+oHriIylZuBMPuMJ97yQCNnBKCotzNfW6GOSgtSyCFCpgygGhcFgWPEFRusTqA
-         4EKMQyryzF0mu+ZdtLrIx19Qy1wx8VbKB1v3T+dRa7xXwTS9fdPn3yMvWfuU2xnO/YXd
-         KG6cU6H/YJUNatPwF65gEBGiJjy3tRbdef7/WE66/2xq423QsqYe0hP/+gB84Ql9udM8
-         jdkJJdMa7itTShf3ogx11HtP5GIiSXa9ZsnvSOtWPsC1d9ixX+T5lWb0Q4R6i8oTEhNH
-         6tTWKVfYl5y/uJUSQhEtECqEzCJybGcfk0w/zDel/bWb2x7xG3svFw51ngsUMiqaoqjR
-         +CBA==
-X-Gm-Message-State: AOAM533eNFmMyBw7y5tZUlilc7gafnhR8skfmQj+1QP1zZ+9g6LkEtQF
-        LIg4g93O+rsNhz6UWZjoHAm3XQ==
-X-Google-Smtp-Source: ABdhPJzVuqx0rS8ssjTqrGq2F/gxOgBgc4ZNkzigizQCHP4xSFn+Gc83wKA0lrn5Ij4qOhx4lnYpZg==
-X-Received: by 2002:a05:6602:486:: with SMTP id y6mr8499566iov.104.1637367521461;
-        Fri, 19 Nov 2021 16:18:41 -0800 (PST)
+        bh=45aoiIXLNHX/rElliOua9/jn7RznBxUCcrDpMi0LV+8=;
+        b=TucOSms/5yMYLvo9T1tyMUx9NiNTMJhx+WrhL6GEN5CXnzlM3QfbZVheeFjWryAwp7
+         G2ucxJEJ8SxOpZWBHIc4ow12h6Q1nSB84kT9qheUvMgsbXyRy394YxeHwOKIrjIDcm0k
+         mUTvrSHEfToQesAYbX8OhR0hETmDmRym+Ms//yRh8eYJaaKv5Bgf2gj4/L2omt7dYE1D
+         Dcb1dl3i4gvTCXo0w3EMld1x+B4bQBp+ci7oHDpSDJKC8DjB/R2gc5oueFqsFts/XE81
+         Mc6sn9YUy2IMkgq7ehIdw1d4tFrYyGxM8Ec2mw4EEWH91Vs/Ds08zavvyrYHSm4D8vL4
+         /HBQ==
+X-Gm-Message-State: AOAM531Ui+jS/9VOdUFP00bmc06YLmNBoU66Anv9LJlKCWp+3lAiY7HD
+        UEIo84AK5jHtxC0yXx1hIflPxQ==
+X-Google-Smtp-Source: ABdhPJxaN5oCOmmGf4TnBvJnw+z3+nee3C+NVAWqPPJAD1cXa/QZx7wbZU4dlQ/jTRbiJcdPEhfJ7A==
+X-Received: by 2002:a05:6638:238b:: with SMTP id q11mr31249300jat.43.1637367741713;
+        Fri, 19 Nov 2021 16:22:21 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id ay13sm757870iob.37.2021.11.19.16.18.40
+        by smtp.gmail.com with ESMTPSA id k11sm1093497ilv.66.2021.11.19.16.22.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 16:18:41 -0800 (PST)
-Subject: Re: [PATCH 1/2] selftests: timens: use 'llabs()' over 'abs()'
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Cc:     shuah@kernel.org, nathan@kernel.org,
+        Fri, 19 Nov 2021 16:22:21 -0800 (PST)
+Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
+To:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        christian@brauner.io
+Cc:     nathan@kernel.org, ndesaulniers@google.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20211105163137.3324344-1-anders.roxell@linaro.org>
- <CAKwvOdnge-hBmoFH-CHZmbh7DTq8bQiyhbfEOWkBt447=e6QGA@mail.gmail.com>
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211105162530.3307666-1-anders.roxell@linaro.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4de8c09f-df5e-8d7e-a19e-98424e939b81@linuxfoundation.org>
-Date:   Fri, 19 Nov 2021 17:18:40 -0700
+Message-ID: <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
+Date:   Fri, 19 Nov 2021 17:22:20 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdnge-hBmoFH-CHZmbh7DTq8bQiyhbfEOWkBt447=e6QGA@mail.gmail.com>
+In-Reply-To: <20211105162530.3307666-1-anders.roxell@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,68 +68,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/5/21 2:26 PM, Nick Desaulniers wrote:
-> On Fri, Nov 5, 2021 at 9:31 AM Anders Roxell <anders.roxell@linaro.org> wrote:
->>
->> When building selftests/timens with clang, the compiler warn about the
->> function abs() see below:
->>
->> timerfd.c:64:7: error: absolute value function 'abs' given an argument of type 'long long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
->>                  if (abs(elapsed - 3600) > 60) {
->>                      ^
->> timerfd.c:64:7: note: use function 'llabs' instead
->>                  if (abs(elapsed - 3600) > 60) {
->>                      ^~~
->>                      llabs
->>
->> The note indicates what to do, Rework to use the function 'llabs()'.
->>
->> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+On 11/5/21 10:25 AM, Anders Roxell wrote:
+> When building selftests/cgroup: with clang the following error are seen:
 > 
-> Thanks for the patch!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
+> clang: error: cannot specify -o when generating multiple output files
+> make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
 > 
->> ---
->>   tools/testing/selftests/timens/timer.c   | 2 +-
->>   tools/testing/selftests/timens/timerfd.c | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
->> index 5e7f0051bd7b..5b939f59dfa4 100644
->> --- a/tools/testing/selftests/timens/timer.c
->> +++ b/tools/testing/selftests/timens/timer.c
->> @@ -56,7 +56,7 @@ int run_test(int clockid, struct timespec now)
->>                          return pr_perror("timerfd_gettime");
->>
->>                  elapsed = new_value.it_value.tv_sec;
->> -               if (abs(elapsed - 3600) > 60) {
->> +               if (llabs(elapsed - 3600) > 60) {
->>                          ksft_test_result_fail("clockid: %d elapsed: %lld\n",
->>                                                clockid, elapsed);
->>                          return 1;
->> diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
->> index 9edd43d6b2c1..a4196bbd6e33 100644
->> --- a/tools/testing/selftests/timens/timerfd.c
->> +++ b/tools/testing/selftests/timens/timerfd.c
->> @@ -61,7 +61,7 @@ int run_test(int clockid, struct timespec now)
->>                          return pr_perror("timerfd_gettime(%d)", clockid);
->>
->>                  elapsed = new_value.it_value.tv_sec;
->> -               if (abs(elapsed - 3600) > 60) {
->> +               if (llabs(elapsed - 3600) > 60) {
->>                          ksft_test_result_fail("clockid: %d elapsed: %lld\n",
->>                                                clockid, elapsed);
->>                          return 1;
->> --
->> 2.33.0
->>
+> Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+> since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+> file lib.mk.
 > 
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>   tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
+>   tools/testing/selftests/lib.mk          |  2 +-
+>   2 files changed, 8 insertions(+), 6 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+> index 59e222460581..745fe25fa0b9 100644
+> --- a/tools/testing/selftests/cgroup/Makefile
+> +++ b/tools/testing/selftests/cgroup/Makefile
+> @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
+>   TEST_GEN_PROGS += test_freezer
+>   TEST_GEN_PROGS += test_kill
+>   
+> +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+> +
 
-Same comment on llabs() define in stdlib.h made earlier in the context
-of timer test changes.
+This looks odd to me. Why are we introducing dependencies between tests?
+clone3 includes in cgroup? Looks odd to me.
 
 thanks,
 -- Shuah
-
-
