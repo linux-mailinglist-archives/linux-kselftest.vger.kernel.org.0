@@ -2,62 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78354579BF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Nov 2021 00:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6553F4579F8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Nov 2021 01:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236172AbhKSXzM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Nov 2021 18:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S231166AbhKTAKb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Nov 2021 19:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236167AbhKSXzL (ORCPT
+        with ESMTP id S236170AbhKTAKa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Nov 2021 18:55:11 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C7BC06173E
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 15:52:09 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id x9so11795654ilu.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 15:52:09 -0800 (PST)
+        Fri, 19 Nov 2021 19:10:30 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3503C061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 16:07:25 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id n66so24781349oia.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 16:07:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=so2gk/5AZEjMY3nWK7CNUI1iXSFuxuvDle8HcKAOX/c=;
-        b=LFTwklklzKMU7ZAjMtzjxKN/H0jszJdVrvqnFtPODlVaivynF//mjT8vRcxtKDK6hb
-         Wi3TMf9KCU9F2wGelPVxenjy9fgvLs4g88ao6Vv4UuhhODyhJOUiV3mSvlxLYGt3BlKG
-         cnsWFzZtf1pmbtSOMQikuVEENIfFN0aRPd9FQ=
+        bh=RvyWEdLax12+25Tnfs7BcEBxdL4WVjlZUdT7aE0GddA=;
+        b=LBu+jgvmJe89ZGCaOz+Q+2if7rlFVtigKC9FTLl4QZKpQqcyhlMJFWf/8ugKsgE5xa
+         81FpIba0C6Nm6mfJ9bcaS2PD9J/8KpWWkoK4svY0xnqGnwdxF/3x2KsDOPiyVO3dNlS8
+         V6myj9JMwUkgJzJeP5GQkEwhcoFDG2uzAwV/A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=so2gk/5AZEjMY3nWK7CNUI1iXSFuxuvDle8HcKAOX/c=;
-        b=V8ouvLFvwc8y5VnMBROPEbevKxHrkLVCRHI637EkOO4lOVMQmLihmQaKHBfd5TK1TK
-         QUInQdWFGx7U2fx+I2Q2TIc2aClH4bnltfSeyzNR2/V1/VX973nnHVWaoL/CtwT0i3Dp
-         6f1770nGWI7LhetUB23hgjH5UTt93Ng/QBj/N7TNQ0k7ZEY5GCLa1xkvKTXs/eqDFYu9
-         gRRe0/MQQAR70rqYWGLKOlLSpAnmEJ9JE72bJGrvu9fm8sYUOmc2hTdqWP5wZoFzkmFH
-         91+WvSwZ2w80qx/J4vIJKibfpK8CPBtFpEgVVoZ97vBcRWfE8M1xNnhPrJQOFlpvwEFd
-         PBJQ==
-X-Gm-Message-State: AOAM531zbdUeTJaoJaxW8Q0DkEEyi2tt1HI9OHAo21o8oKr4Vx0psPYP
-        yc0oqNSFW/7RH/JBpwjBt25t1Q==
-X-Google-Smtp-Source: ABdhPJwoq+KJT6B7ZpuMqzjqi1HYdWvG0G1UirLL4aK7CDqfywwZYaEdzqT9M+w/DD8fRIu3s7jd9Q==
-X-Received: by 2002:a05:6e02:12cc:: with SMTP id i12mr7469577ilm.110.1637365928839;
-        Fri, 19 Nov 2021 15:52:08 -0800 (PST)
+        bh=RvyWEdLax12+25Tnfs7BcEBxdL4WVjlZUdT7aE0GddA=;
+        b=KGiCHsa55hYMj8NatOQuaJTx9I9f+PgucPu6tlpogSzc3wWYq/i8iwzmU7Txj6QR+E
+         ToRtuSpTj5ul+ASdUB0NuUKzoKhuU5+sl8LNhb9bm7x3w1Nd+IRhpqm+qd02qB6XP2rU
+         VxN/3fRTIJadFhaNYUAdtYKaGImspqLWg7+WC+08+ZqMXmCm3IykU3FMVWIzsZ8ej/Cw
+         8bblUNsJYg+MCuojoNa1hNOcOSfzXJ5NPjszK/E0uqYVkyWaGrTIwT8IkFJVHA6FyJQt
+         ZPcfH2wUvEix+f8zX5d7oexeoYcHWXrf1M0ZrxKtQ5AqMqDQVME/R2UiN8Id0VJHIbHS
+         0Xlw==
+X-Gm-Message-State: AOAM533cIlfexECvApkOMfI2LFgjc374XKr/yPqTK1QdfBqirXMAopuF
+        918VK2Bymp35fdm7DlEMpwfnRg==
+X-Google-Smtp-Source: ABdhPJztKGeV04+obdTEcOPE5iO5kUrpDipowiee/rOrvNzRzKar6xWuiwFlO6Ui4vqOtBg1e2YhSA==
+X-Received: by 2002:a05:6808:259:: with SMTP id m25mr3870444oie.40.1637366845298;
+        Fri, 19 Nov 2021 16:07:25 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id i8sm917805ilu.84.2021.11.19.15.52.08
+        by smtp.gmail.com with ESMTPSA id o6sm251911oou.41.2021.11.19.16.07.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 15:52:08 -0800 (PST)
-Subject: Re: [PATCH] selftests: mqueue|vDSO: fix convert pointer warnings
-To:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fri, 19 Nov 2021 16:07:24 -0800 (PST)
+Subject: Re: [PATCH] selftests: timers: use 'llabs()' over 'abs()'
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Cc:     shuah@kernel.org, tglx@linutronix.de, john.stultz@linaro.org,
+        nathan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20211105162940.3319021-1-anders.roxell@linaro.org>
+References: <20211105163403.3330950-1-anders.roxell@linaro.org>
+ <CAKwvOdn0vEyj-EPJG0e39v-Vq+oLFptV0oXYfzfzuy=HPzSzOA@mail.gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7a002d31-589c-0e1d-3ea9-6c7fa4423ee5@linuxfoundation.org>
-Date:   Fri, 19 Nov 2021 16:52:07 -0700
+Message-ID: <59bd0880-475e-eb3b-6d2a-25589d5e3a8b@linuxfoundation.org>
+Date:   Fri, 19 Nov 2021 17:07:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20211105162940.3319021-1-anders.roxell@linaro.org>
+In-Reply-To: <CAKwvOdn0vEyj-EPJG0e39v-Vq+oLFptV0oXYfzfzuy=HPzSzOA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -65,24 +69,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/5/21 10:29 AM, Anders Roxell wrote:
-> When building selftests, mqueue and vDSO the following shows up:
+On 11/5/21 2:44 PM, Nick Desaulniers wrote:
+> On Fri, Nov 5, 2021 at 9:34 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+>>
+>> When building selftests/timers with clang, the compiler warn about the
+>> function abs() see below:
+>>
+>> posix_timers.c:69:6: warning: absolute value function 'abs' given an argument of type 'long long' but has parameter of type 'int' which may cause truncation of value [-Wabsolute-value]
+>>          if (abs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
+>>              ^
+>> posix_timers.c:69:6: note: use function 'llabs' instead
+>>          if (abs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
+>>              ^~~
+>>              llabs
+>>
+>> The note indicates what to do, Rework to use the function 'llabs()'.
+>>
+>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > 
-> warning: passing 'int *' to parameter of type 'unsigned int *' converts between pointers to integer types with different sign [-Wpointer-sign]
+> Thanks for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > 
-> warning: passing 'const char *' to parameter of type 'const unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-> 
-> The code looked OK so what normally are done are, adding the compiler
-> directive to hide the warnings '-Wno-pointer-sign'.
+> I wonder why tools/testing/selftests/timers/adjtick.c redefines llabs
+> when it already includes stdlib.h, and how that doesn't result in some
+> kind of compiler diagnostic.
 > 
 
-Would be nice to see the lines of code that are generating these warns.
+Hmm. The define in /usr/include/stdlib.h is under #ifdef __USE_ISOC99
+Maybe be that explains the reason for the definitions in the other two
+timers file?
 
-I don't want to see the warnings suppressed all together in the Makefile.
-I don't see any point in doing so and it will suppress real problems in
-the future.
-
-I won't be accepting this patch.
+Anders, I would like to understand this before I take this patch. I see
+you sent several patches to other tests as well. Would be useful at
+least understand why these defines exist.
 
 thanks,
 -- Shuah
+
+
