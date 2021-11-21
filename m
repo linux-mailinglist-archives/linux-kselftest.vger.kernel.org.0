@@ -2,172 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB3E4583A6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Nov 2021 13:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BAD45873F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 00:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235787AbhKUM7A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Nov 2021 07:59:00 -0500
-Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:38533 "EHLO
-        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234583AbhKUM67 (ORCPT
+        id S231778AbhKUX6s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Nov 2021 18:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229979AbhKUX6r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Nov 2021 07:58:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1637499353;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=TfsofMTL3hssDvTgVGJDRlR6gefrnvpC0LiVEsNdsgw=;
-        b=jiEv0CYjC+gjz/jtbtAfgTPP9fBU9xcPEkD0E1QlRDfZHtk5Wy5jntO/1HEEfBm2
-        sxOoqgxmXFq/ee0ChAu/uyQXAapwx5FYvmUShA5SXlB9GxKPixZZxPRM9aqkMPCBESX
-        Pw0X9HxHihkPyUqJWaR/4LWZGfSm69f1wh5oCCL4=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1637499353;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=TfsofMTL3hssDvTgVGJDRlR6gefrnvpC0LiVEsNdsgw=;
-        b=BvV1rtrs6wvegUrRJAcMrh7rviMxpDZAzWU5j35JG5L2QQshCSmvE9/X0A/eLUhH
-        0uRD2jEP6+frw4OLd+A0FkGUlaNaB2K/juumtYLXN5JLMKs9muZLb3GyEhDA1ikuAWD
-        WWcmfRku5reT8djRQ6gXhuqmAXeYk/JKtOckG8NI=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211116
+        Sun, 21 Nov 2021 18:58:47 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678FCC06173E
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 15:55:42 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id bj13so34410451oib.4
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 15:55:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=udpE3/zEru3Mj9IZ3w84u936favJ/D9k+WiEZ+0XTXc=;
+        b=xBZGeDl/Y929xwm6HBgZVrdBxoqRbALrFi4KfiYU1T6Ckuuse4pcZk7S+YYkwWBMnm
+         Xn07mwHcZgq/iKYstp4Xhrs81e/0wpnAsnJr7tUFLuUbiIWdlKtplzVvoFioaKsfZ3gu
+         qJw8PLLYxLQepRcebguJiTPCo5n6Z/EHy8Tie0BMjonDtBcEvpDqV8Fqop87bHYc8o59
+         Q0OagjwL1RxWGbQo+BwpYH7z2/U8OxjlH2a6I+B9NTVPFxbpX2GsfujVjBMPwvhxoQn+
+         DqmZ4MM91ubG96O94KyJXkHCzOH1hXJU3jJqNrfl3pM4HcZbQjFPPmGhgd/Us+GJPUb7
+         MVOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=udpE3/zEru3Mj9IZ3w84u936favJ/D9k+WiEZ+0XTXc=;
+        b=lcM2Kt5jA9T5FgLF85RG+V5cjvL9BgVzEO1Yie2bdMcN/CsUubgpqqtV5eNhs4GEAn
+         DmjX/ZE8c9NlMbitxuA90i3iVx0bFJ+beoIBcJCtrq2tiLcddXMzDwHti/KAL9b8n04+
+         Dm+42u5QIQ7P7FRnIzS6BmrLjL6cEVFrA+tD6UZIayy0qvuUqEFlEephWRzGnlQiQVhh
+         x7Uz6gd1HEjpl01f+JMKUCw9Ykj5Az1U3yv141+tcKMW6EC2qwcpRpvNDZdp1gI9sV95
+         eKRm/SMcatirvcoI9vWQCPZpIwlZE9ssMUR6SNVYFsw4kvZ37kMEBk5pMId+cGfjFcF9
+         l6kA==
+X-Gm-Message-State: AOAM532qTMvwRvCeX2gsYDO8rBXsZBSkD9ptHnrimB2rwBiTZOKFm8K9
+        ksmUp6qciyYRpdUbE7iaLSGiqiiwId9omFKXg+DHPQ==
+X-Google-Smtp-Source: ABdhPJwbOG5ndds+RoCXADWk+MVC3NLd2ex5UxdFPAfqd1zU+VvJcfpSeCgctGGvnF2DXrZZjLcnkFI82xOcZ/C6CpA=
+X-Received: by 2002:a54:4791:: with SMTP id o17mr18060160oic.114.1637538941705;
+ Sun, 21 Nov 2021 15:55:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017d429138b9-962c5181-88e3-4d1c-91e2-09726f744578-000000@email.amazonses.com>
-Date:   Sun, 21 Nov 2021 12:55:53 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.21-54.240.48.34
+References: <20211118145142.14519-1-brgl@bgdev.pl> <20211118145142.14519-2-brgl@bgdev.pl>
+In-Reply-To: <20211118145142.14519-2-brgl@bgdev.pl>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 22 Nov 2021 00:55:30 +0100
+Message-ID: <CACRpkdbu=6XGQjfg+59h167i3Buq5ikPAVpnu_H7m8YW7wLXGw@mail.gmail.com>
+Subject: Re: [PATCH v9 1/4] gpio: sim: new testing module
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.16.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: a2f3bb245883ba791e46be1f8415186dae346458
-* git describe: next-20211116
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211116
+On Thu, Nov 18, 2021 at 3:51 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-## Regressions (compared to next-20211115)
-* i386, kselftest-net
-  - net.gro.sh
+> Implement a new, modern GPIO testing module controlled by configfs
+> attributes instead of module parameters. The goal of this driver is
+> to provide a replacement for gpio-mockup that will be easily extensible
+> with new features and doesn't require reloading the module to change
+> the setup.
+>
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 
-* qemu_arm, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_migrate
+The series:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211115)
-* dragonboard-410c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_read
-
-* i386, kselftest-net
-  - net.tls
-  - net.tls.tls.12_aes_gcm.send_then_sendfile
-  - net.tls.tls.12_chacha.send_then_sendfile
-  - net.tls.tls.13_aes_gcm.send_then_sendfile
-  - net.tls.tls.13_chacha.send_then_sendfile
-  - net.tls.tls.13_sm4_ccm.send_then_sendfile
-  - net.tls.tls.13_sm4_gcm.send_then_sendfile
-
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
-
-* qemu_x86_64, kselftest-kvm
-  - kvm.rseq_test
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* x15, kselftest-net
-  - net.so_txtime.sh
-
-* x15, kselftest-rtc
-  - rtc.rtctest
-
-* x86, kselftest-net
-  - net.gro.sh
-
-
-## Test result summary
-total: 3204, pass: 1923, fail: 287, skip: 994, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Yours,
+Linus Walleij
