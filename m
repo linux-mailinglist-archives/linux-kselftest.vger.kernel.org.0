@@ -2,69 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78616457DF3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Nov 2021 13:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D5A4582C2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Nov 2021 10:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237543AbhKTMfi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 20 Nov 2021 07:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237526AbhKTMfh (ORCPT
+        id S231296AbhKUJbh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Nov 2021 04:31:37 -0500
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:57443 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230459AbhKUJbh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 20 Nov 2021 07:35:37 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59486C06175D
-        for <linux-kselftest@vger.kernel.org>; Sat, 20 Nov 2021 04:32:34 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id w29so23030135wra.12
-        for <linux-kselftest@vger.kernel.org>; Sat, 20 Nov 2021 04:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w2dLnl5hsLVKZTBAdcVFnDnMtM7+guW1LU+8LG4nir0=;
-        b=cQ4sa0RLmxPwPFn1iQHtDPNnu3wxt85tlCuJmDnpCjgmGMxx8i/oateruVYQAvti5I
-         A5qE92dvGm+x1YP+CbK5Tq5OhtXE6vNimcHv6le77OfesyWmtCYZNXHE5+IG0f8L2bT0
-         Lci51QRfH33/4FHSDCeiE4klj7YMLnup6Z9AxKwmd8q2vBCk3OtwmaYj1bSnn6G8m6GQ
-         mxOZ3RS8pA3iEAA55aU8/EBq9h3Po0DLytgYovDVsFfbT36OHdQaUGwPLJ3lG01hFOha
-         WpkBpT9gzq2iO8UbGhiS6xFhyGI26B7QXEWnQJX1hxeVH8W2rTVUYcpRy/W1U7h8dL8Y
-         peJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w2dLnl5hsLVKZTBAdcVFnDnMtM7+guW1LU+8LG4nir0=;
-        b=R//sslamJadD9ov2xOURlY9TK0xFgd3dajSV79C2taXoRFH567YgAbsgmIdIfSsfuA
-         4Fc+ARCxQMPafpM8vqsoa1fQzEtMWVUl26CmrVX6+E1Vvl+szwoX34wlYx50E8BhF/g5
-         8GSWkESoI3JI5nz6WEpJMeCovNHp6Wc0LVlSayd8oLp7/qBehcz+cTIETF4XvfL9uOOl
-         8+V1dP328LqzTIxf/08FqclYIhH8yYrgkIaTO7GIbiCJ0t1kCN6HAc9Ck3V/WTyX9NAh
-         kfsstf40c1MpSt8enLnJS20B97QBkGQOvFru2LAkSDrHh/3cy3ue1nr41lESil90DCEN
-         xH1g==
-X-Gm-Message-State: AOAM53286zenVSl+ZwQecvRhLQToAs4EZZyozV6c1hZp+avrV3wcs40A
-        VJiJ+5wfNOfjDzudCWo+wMmsuyMFkpmhYvJUE6I=
-X-Google-Smtp-Source: ABdhPJx6LRHkcC/2nzZUXHHyWAv8qwOLcVanyMaZO5SAGCaEWZSePdj6KgMnXbsAIfz8H/8CWMAmDV2d6TwcaPqmMOI=
-X-Received: by 2002:a05:6000:144a:: with SMTP id v10mr18155356wrx.315.1637411552709;
- Sat, 20 Nov 2021 04:32:32 -0800 (PST)
+        Sun, 21 Nov 2021 04:31:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1637486912;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=kKRWo32vrk+yuNlqww9gySJ3Rs3bcePnDdJspBNA7AQ=;
+        b=Xo2QtpGQwG+QpWsLLUZBfHkvhKxuyVAdl0N7/wNto1R2KfIJOkG6vXUwGd+60CCn
+        alK+XydtqPMiIxB/WHMt7TCeL2yCHbr/XeO64KLUzp7C9YNh0d3U/xggR6LcxbWhaIg
+        mEskzAskBTackHhD1NEaYN5B4EAl+vo1j/C+sCnY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1637486912;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=kKRWo32vrk+yuNlqww9gySJ3Rs3bcePnDdJspBNA7AQ=;
+        b=T8MTi8r8YYbFfd6j/xar6U4dOwNvxUVtqxXG4sm4tAG3eY0iai1GoH7ksdfAaAhQ
+        Kfe82wPWogWOG8wDfIEJ4wSIJjcJLq0fmMSdIl3ATLaYEjdwxW+G/bYJ+IMcoY4ytL5
+        icn6+7rtM3AMTMprjnIV+LgwtcIqB7Rb9b+MPHQE=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211117
 MIME-Version: 1.0
-Received: by 2002:adf:f989:0:0:0:0:0 with HTTP; Sat, 20 Nov 2021 04:32:32
- -0800 (PST)
-Reply-To: mitchellvivian01@gamil.com
-From:   Mitchell Vivian <duplanmartine36@gmail.com>
-Date:   Sat, 20 Nov 2021 12:32:32 +0000
-Message-ID: <CAO-XXH5BAMnqsibuyWBB1vSqWFvEU_Fm4N1zBDf2pLptoHQP0A@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d41d36138-496e8b33-5be4-4f63-9316-3e7be15c2fe2-000000@email.amazonses.com>
+Date:   Sun, 21 Nov 2021 09:28:31 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.21-54.240.48.37
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello
+## Build
+* kernel: 5.16.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: fd96a4057bd015d194a4b87e7c149fc2fef3c166
+* git describe: next-20211117
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211117
 
-My name is Miss Vivian Mitchell. I want to donate my fund $ 4.5
-million USD to you on a charity name to help the poor People.
+## Regressions (compared to next-20211115)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-As soon as I read from you I will give you more details on how to
-achieve this goal and get this fund transferred into your bank
-account.
+* i386, kselftest-net
+  - net.ip_defrag.sh
 
-Thanks have a nice day,
-Miss.vivian
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-timers
+  - timers.rtcpie
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211115)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* x15, kselftest-net
+  - net.so_txtime.sh
+
+
+## Test result summary
+total: 3399, pass: 2048, fail: 292, skip: 1059, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
