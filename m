@@ -2,99 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F35A745899B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 08:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545AB458A3B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 08:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbhKVHJd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Nov 2021 02:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbhKVHJd (ORCPT
+        id S232781AbhKVIBB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Nov 2021 03:01:01 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57590 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232560AbhKVIBB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Nov 2021 02:09:33 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B741C061748
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 23:06:27 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so16067111pjc.4
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 23:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rhg9TzsQGoRy8u1OLujkUnb4ClXkAMqCNEBp1eYj7W4=;
-        b=WKXNZRlrfWoEvbd3Mt43sBZcp9wgXb3skAh5izBElWBnr0tpnYwGDQC+yAADHI2lDp
-         guE2Q2gc52+yEiuMw1pHyyFssT+vqM8WQpQ1NipliQseEEXYaAPQ01jYM4WAzUkOM0Fy
-         uPH0xcHFEHECpzFVJUX5i8n7bSrSOiL8lQVRlWutemDwWH5VeL4Qvsxux45xeaPtw0Pz
-         /Dgi9MKBk5NBcCloWvcxKqtDvQExoEq4tsvTryTf6bUOzwEQAfkBGhoBtFN3i/mUTzgZ
-         difrDbraEYN5ybP1wVX4W+049BvzleSGzETJWQPx86KyvMwQZM73EYtZ47AJn8pT+L30
-         Oc9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rhg9TzsQGoRy8u1OLujkUnb4ClXkAMqCNEBp1eYj7W4=;
-        b=Ovj3Jmx9U1EtOKHHiWVaPSKdxm9YyE79MDX6tiSWj5YHueUuB1XcepNeMckDlBdhJX
-         vm31QaxH0iw0CmuqKRAVdzfktYx2SbZ+E0rHaeIAijxXY1V/mgZnFxbC7bdinZOryltk
-         ivNt7CleZllGlnQebOFARc1V5PN6y861LHbxzXK3R74F1mHN0TID2CXb9WfbzzuhOaKe
-         qBEWaRRyToLR3Uhb1kDoQo8e/eIbN+dq+1j8NRNuL/9+4TpLbOop4XLntIxXIwZKrdd0
-         1hFJjF9sGvLYttOVsSuXodQR2iKyhwR6JyRQeweuCcLlgL7XxKvsUklyR3MKyVVqmCx/
-         xCQQ==
-X-Gm-Message-State: AOAM531o8RNq4Mc7TUGwhkJ0fLK2xoH1nTV9Q/JeSz/OATUOyImDXeTG
-        yjmMBGwesfWon8WmszarozwcCA==
-X-Google-Smtp-Source: ABdhPJwAGuNBy2ut5ulgnJSYyO0MNQHn/zLEJfG36fGPimpq7gsDYUwwU4YvFRXGfyX0qYRyqpqKnQ==
-X-Received: by 2002:a17:90a:3009:: with SMTP id g9mr28516847pjb.205.1637564786708;
-        Sun, 21 Nov 2021 23:06:26 -0800 (PST)
-Received: from localhost.localdomain ([156.146.34.70])
-        by smtp.gmail.com with ESMTPSA id d9sm14281305pjs.2.2021.11.21.23.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Nov 2021 23:06:26 -0800 (PST)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Drew Fustini <dfustini@baylibre.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>
-Subject: [PATCH] selftests/bpf: Fix trivial typo
-Date:   Sun, 21 Nov 2021 23:05:30 -0800
-Message-Id: <20211122070528.837806-1-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 22 Nov 2021 03:01:01 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 037AF1FD26;
+        Mon, 22 Nov 2021 07:57:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1637567874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZF5xXw9zNtBvqTaQuY36tdMOnR4DggMupqhddvnpPwA=;
+        b=j6MkAuEHQYeK27pRuiuOjdstrnD3FzxHB5fBr3D2eMDWzgD71JKthyC+Id+HR0mtkH98Wp
+        jZFJh88Wps0ZAe5yxKAB6c6daZlbv+q+4pjayCarknveqWdr2iLeGLdI1hQS2cCjbGdAf6
+        BRsxMuVVinoRSkWTQVsFzIJMckdfoAk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1637567874;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZF5xXw9zNtBvqTaQuY36tdMOnR4DggMupqhddvnpPwA=;
+        b=ng6ohqnlMGGOjaM4BN4G2ohohxv11hIUZaZGSEkNt9sR2ZXEQc3PnkuS98/0ANrMX6sD3E
+        ysZcBrk1kY86PSBw==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DC895A3B84;
+        Mon, 22 Nov 2021 07:57:53 +0000 (UTC)
+Date:   Mon, 22 Nov 2021 08:57:53 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
+ for on a stack
+In-Reply-To: <20211119182005.t3p5iyxyibzktrbj@treble>
+Message-ID: <alpine.LSU.2.21.2111220853010.5064@pobox.suse.cz>
+References: <20211119090327.12811-1-mbenes@suse.cz> <20211119090327.12811-3-mbenes@suse.cz> <20211119182005.t3p5iyxyibzktrbj@treble>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix trivial typo in comment from 'oveflow' to 'overflow'.
+On Fri, 19 Nov 2021, Josh Poimboeuf wrote:
 
-Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Thanks for doing this!  And at peterz-esque speed no less :-)
+> 
+> On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
+> > livepatch's consistency model requires that no live patched function
+> > must be found on any task's stack during a transition process after a
+> > live patch is applied. It is achieved by walking through stacks of all
+> > blocked tasks.
+> > 
+> > The user might also want to define more functions to search for without
+> > them being patched at all. It may either help with preparing a live
+> > patch, which would otherwise require additional touches to achieve the
+> > consistency
+> 
+> Do we have any examples of this situation we can add to the commit log?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index aa76360d8f49..87e907add701 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -761,7 +761,7 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- 	/* overflow bpf_sock_ops struct with final element nonzero/zero.
- 	 * Regardless of the value of the final field, we don't have all the
- 	 * data we need to display it, so we should trigger an overflow.
--	 * In other words oveflow checking should trump "is field zero?"
-+	 * In other words overflow checking should trump "is field zero?"
- 	 * checks because if we've overflowed, it shouldn't matter what the
- 	 * field is - we can't trust its value so shouldn't display it.
- 	 */
--- 
-2.27.0
+I do not have anything at hand. Joe, do you remember the case you 
+mentioned previously about adding a nop to a function?
+ 
+> > or it can be used to overcome deficiencies the stack
+> > checking inherently has. For example, GCC may optimize a function so
+> > that a part of it is moved to a different section and the function would
+> > jump to it. This child function would not be found on a stack in this
+> > case, but it may be important to search for it so that, again, the
+> > consistency is achieved.
+> > 
+> > Allow the user to specify such functions on klp_object level.
+> > 
+> > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> > ---
+> >  include/linux/livepatch.h     | 11 +++++++++++
+> >  kernel/livepatch/core.c       | 16 ++++++++++++++++
+> >  kernel/livepatch/transition.c | 21 ++++++++++++++++-----
+> >  3 files changed, 43 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
+> > index 2614247a9781..89df578af8c3 100644
+> > --- a/include/linux/livepatch.h
+> > +++ b/include/linux/livepatch.h
+> > @@ -106,9 +106,11 @@ struct klp_callbacks {
+> >   * struct klp_object - kernel object structure for live patching
+> >   * @name:	module name (or NULL for vmlinux)
+> >   * @funcs:	function entries for functions to be patched in the object
+> > + * @funcs_stack:	function entries for functions to be stack checked
+> 
+> So there are two arrays/lists of 'klp_func', and two implied meanings of
+> what a 'klp_func' is and how it's initialized.
+> 
+> Might it be simpler and more explicit to just add a new external field
+> to 'klp_func' and continue to have a single 'funcs' array?  Similar to
+> what we already do with the special-casing of 'nop', except it would be
+> an external field, e.g. 'no_patch' or 'stack_only'.
+> 
+> Then instead of all the extra klp_for_each_func_stack_static()
+> incantations, and the special cases in higher-level callers like
+> klp_init_object() and klp_init_patch_early(), the lower-level functions
+> like klp_init_func() and klp_init_func_early() can check the field to
+> determine which initializations need to be made.  Which is kind of nice
+> IMO as it pushes that detail down more where it belongs.  And makes the
+> different types of 'klp_func' more explicit.
 
+I thought about doing this for a moment but then I was worried there would 
+be many places which would require special-casing, so I tried to keep it 
+separate. But yes, it would be cleaner, so definitely worth trying for v2.
+
+Thanks
+
+Miroslav
