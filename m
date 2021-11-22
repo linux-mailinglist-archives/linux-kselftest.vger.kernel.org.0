@@ -2,125 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 545AB458A3B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 08:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B397458BE4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 10:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232781AbhKVIBB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Nov 2021 03:01:01 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57590 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbhKVIBB (ORCPT
+        id S234451AbhKVKAT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Nov 2021 05:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232383AbhKVKAS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Nov 2021 03:01:01 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 037AF1FD26;
-        Mon, 22 Nov 2021 07:57:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1637567874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZF5xXw9zNtBvqTaQuY36tdMOnR4DggMupqhddvnpPwA=;
-        b=j6MkAuEHQYeK27pRuiuOjdstrnD3FzxHB5fBr3D2eMDWzgD71JKthyC+Id+HR0mtkH98Wp
-        jZFJh88Wps0ZAe5yxKAB6c6daZlbv+q+4pjayCarknveqWdr2iLeGLdI1hQS2cCjbGdAf6
-        BRsxMuVVinoRSkWTQVsFzIJMckdfoAk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1637567874;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZF5xXw9zNtBvqTaQuY36tdMOnR4DggMupqhddvnpPwA=;
-        b=ng6ohqnlMGGOjaM4BN4G2ohohxv11hIUZaZGSEkNt9sR2ZXEQc3PnkuS98/0ANrMX6sD3E
-        ysZcBrk1kY86PSBw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DC895A3B84;
-        Mon, 22 Nov 2021 07:57:53 +0000 (UTC)
-Date:   Mon, 22 Nov 2021 08:57:53 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
- for on a stack
-In-Reply-To: <20211119182005.t3p5iyxyibzktrbj@treble>
-Message-ID: <alpine.LSU.2.21.2111220853010.5064@pobox.suse.cz>
-References: <20211119090327.12811-1-mbenes@suse.cz> <20211119090327.12811-3-mbenes@suse.cz> <20211119182005.t3p5iyxyibzktrbj@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 22 Nov 2021 05:00:18 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB9DC061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Nov 2021 01:57:11 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x6so62484625edr.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Nov 2021 01:57:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pTSYVLeh/yXoJu2Zf4MZKwy5izFdU2MnMx2Yvekckkg=;
+        b=WYzfylaxM2cUnx+ATjtwY2j0ElBwvtd5QyE0/ztAl98zf0T+l7suWoxZQOPGqsVOOz
+         Ouf23dR0fBWTiAuWV+d9KFWphlpbN40dAQ2j9DVptkdLIQzkToWqTYUrvRx6qI1BWkze
+         ajuPNB6SgdICdKiM4VwSpJGio2UFjb2H65xoyyi6qPgU8bSXfaWF8h4Earrv7pOHYh67
+         brHBEqJCgSxnPzAIBRP3s9uhj5CmWDbmL1r6HFrfNUUBKOACDCbNdliXBl5bNKmjJ7KW
+         zAQMuJWXnY3czYb0xlUBBicgXjXye+f2PQXjikvQr+yXW5AlZvy3FbJFa9dVQQYcMvoc
+         Gg6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pTSYVLeh/yXoJu2Zf4MZKwy5izFdU2MnMx2Yvekckkg=;
+        b=qP+d9M3iyg7Itm4518bQiK8LZAOuWZZG6W5FwEv/RLfgh3wRd9BXEKlGKsF7sVUL8U
+         2McjKfk3hleCEA0KjLh4wWeIENEgIhUfr+h5odcO3/kzoSF7CGOiIBzfw9Hez09Bw0a0
+         89qSBOBoZUqPu56lo9E8yDnEYsNgmMdekZvxSVsTIg3cjtbvcDphiSi6cat9LrcxASmq
+         afxK9Ys6xclCxVofEaGgFBOB6KoKknqbc8SbB+FtvSefKos3ldo6zLqP5lvUonfTPgvJ
+         bp8aDW4DsMcMEE6OCfHmYXA28SwbAvPwGjQp5pqG0maNhFldvsQr2O/rF4UspI6qkbgq
+         2O5A==
+X-Gm-Message-State: AOAM5301qWTDufg/w6GggIxQC3yyhPBbrJ4QRogUEqC/ODyGHYPIOZEX
+        3GA+zd7jyCZ1r2uL6hwVRPwkB0WVmxXC1TLvJ514n95aLyuVow==
+X-Google-Smtp-Source: ABdhPJwTYtcGZ5yqcOmIyTe+ojQ5tNYK7OL2XSCnAAVWmc/tXIguj1fKYRNX2ETGv64xWB9ML3i7Mhl7Y3fbi/umBhE=
+X-Received: by 2002:a05:6402:50d4:: with SMTP id h20mr63158558edb.52.1637575029592;
+ Mon, 22 Nov 2021 01:57:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20211118145142.14519-1-brgl@bgdev.pl> <CACRpkdbn=govgPeiEEtVF_+bMYD1Oi1yC+diZ2-owO4O6-oCwg@mail.gmail.com>
+In-Reply-To: <CACRpkdbn=govgPeiEEtVF_+bMYD1Oi1yC+diZ2-owO4O6-oCwg@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 22 Nov 2021 10:56:58 +0100
+Message-ID: <CAMRc=MfRN_jcyEo0MFUyrxvyrsuMPf0a=fPfWh46+_9Hn0jxhw@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] gpio-sim: configfs-based GPIO simulator
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 19 Nov 2021, Josh Poimboeuf wrote:
+On Mon, Nov 22, 2021 at 1:02 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Thu, Nov 18, 2021 at 3:51 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> > v8 -> v9:
+> > - dropped the patches implementing committable-items and reworked the
+> >   driver to not use them
+> > - reworked the gpio-line-names property and configuring specific lines
+> >   in general
+> > - many smaller tweaks here and there
+>
+> The series:
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Let's go with this.
+>
+> Yours,
+> Linus Walleij
 
-> Thanks for doing this!  And at peterz-esque speed no less :-)
-> 
-> On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
-> > livepatch's consistency model requires that no live patched function
-> > must be found on any task's stack during a transition process after a
-> > live patch is applied. It is achieved by walking through stacks of all
-> > blocked tasks.
-> > 
-> > The user might also want to define more functions to search for without
-> > them being patched at all. It may either help with preparing a live
-> > patch, which would otherwise require additional touches to achieve the
-> > consistency
-> 
-> Do we have any examples of this situation we can add to the commit log?
+Thanks but Kent and Andy are right, I'm about to send another version
+that synchronously waits during `echo 1 > live` for the device to come
+on-line.
 
-I do not have anything at hand. Joe, do you remember the case you 
-mentioned previously about adding a nop to a function?
- 
-> > or it can be used to overcome deficiencies the stack
-> > checking inherently has. For example, GCC may optimize a function so
-> > that a part of it is moved to a different section and the function would
-> > jump to it. This child function would not be found on a stack in this
-> > case, but it may be important to search for it so that, again, the
-> > consistency is achieved.
-> > 
-> > Allow the user to specify such functions on klp_object level.
-> > 
-> > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> > ---
-> >  include/linux/livepatch.h     | 11 +++++++++++
-> >  kernel/livepatch/core.c       | 16 ++++++++++++++++
-> >  kernel/livepatch/transition.c | 21 ++++++++++++++++-----
-> >  3 files changed, 43 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-> > index 2614247a9781..89df578af8c3 100644
-> > --- a/include/linux/livepatch.h
-> > +++ b/include/linux/livepatch.h
-> > @@ -106,9 +106,11 @@ struct klp_callbacks {
-> >   * struct klp_object - kernel object structure for live patching
-> >   * @name:	module name (or NULL for vmlinux)
-> >   * @funcs:	function entries for functions to be patched in the object
-> > + * @funcs_stack:	function entries for functions to be stack checked
-> 
-> So there are two arrays/lists of 'klp_func', and two implied meanings of
-> what a 'klp_func' is and how it's initialized.
-> 
-> Might it be simpler and more explicit to just add a new external field
-> to 'klp_func' and continue to have a single 'funcs' array?  Similar to
-> what we already do with the special-casing of 'nop', except it would be
-> an external field, e.g. 'no_patch' or 'stack_only'.
-> 
-> Then instead of all the extra klp_for_each_func_stack_static()
-> incantations, and the special cases in higher-level callers like
-> klp_init_object() and klp_init_patch_early(), the lower-level functions
-> like klp_init_func() and klp_init_func_early() can check the field to
-> determine which initializations need to be made.  Which is kind of nice
-> IMO as it pushes that detail down more where it belongs.  And makes the
-> different types of 'klp_func' more explicit.
-
-I thought about doing this for a moment but then I was worried there would 
-be many places which would require special-casing, so I tried to keep it 
-separate. But yes, it would be cleaner, so definitely worth trying for v2.
-
-Thanks
-
-Miroslav
+Bart
