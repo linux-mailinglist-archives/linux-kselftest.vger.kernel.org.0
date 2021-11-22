@@ -2,79 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A389345874D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 01:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35A745899B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Nov 2021 08:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbhKVAF4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Nov 2021 19:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S231645AbhKVHJd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Nov 2021 02:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbhKVAFz (ORCPT
+        with ESMTP id S231514AbhKVHJd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Nov 2021 19:05:55 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC12C061714
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 16:02:50 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id u74so34280811oie.8
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 16:02:50 -0800 (PST)
+        Mon, 22 Nov 2021 02:09:33 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B741C061748
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 23:06:27 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so16067111pjc.4
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Nov 2021 23:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aQkLqKDE0H9YwXXJ1zrR6AA7PdcZT038DZZN0r6ZUUg=;
-        b=y5HQHAnTnKWTfXsXe9mqwk5iADXGSxEwzRRjYGT36sbAcW/153mT4BAOv+DGUrXZbz
-         8wg+4eyMS2oVD+r0aDy4m+UiYp2/RvPKVvqepdD96M3CKkYNDuzXVVwPs/j8s2u5dlN2
-         LDH89Y5B0xet6Nltj8JPBsskovYHEpKZCDRb2fnIEk3wbHCmJ217eyDSHEtdOicZMKVt
-         H/AthpcXKePE0em9nOHExd1+ZZQbVNzNtXmVbaKCeq9QyJz0k1KR5E8GLnx/FO00u9Xq
-         RF8zLYM3fiojHLF72FEpc4rH97WOIsGw5C9g6urec9EQCLwk+m42zJPZ+CFLs2puh0a0
-         4f3A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rhg9TzsQGoRy8u1OLujkUnb4ClXkAMqCNEBp1eYj7W4=;
+        b=WKXNZRlrfWoEvbd3Mt43sBZcp9wgXb3skAh5izBElWBnr0tpnYwGDQC+yAADHI2lDp
+         guE2Q2gc52+yEiuMw1pHyyFssT+vqM8WQpQ1NipliQseEEXYaAPQ01jYM4WAzUkOM0Fy
+         uPH0xcHFEHECpzFVJUX5i8n7bSrSOiL8lQVRlWutemDwWH5VeL4Qvsxux45xeaPtw0Pz
+         /Dgi9MKBk5NBcCloWvcxKqtDvQExoEq4tsvTryTf6bUOzwEQAfkBGhoBtFN3i/mUTzgZ
+         difrDbraEYN5ybP1wVX4W+049BvzleSGzETJWQPx86KyvMwQZM73EYtZ47AJn8pT+L30
+         Oc9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aQkLqKDE0H9YwXXJ1zrR6AA7PdcZT038DZZN0r6ZUUg=;
-        b=1OGymJB2c7vpMLwiWKCjY50E3f0c5e/MHFPEPV1zfNw1ITJzKHcwpX+/BH9I2dBzBL
-         tTh8LZKUPY0qc+KkLDuGar5+jvv3nSF6FrGjIL/ha9yfKrQZcBb3obKzJ2Zu/Ig5B3ep
-         QvS9R+k4BVVwIFlriPtn0FIfY2dgDdXq5cF6m3ChB3Ab24d44DvuMznGL5QP1ozllOGB
-         ts/TEdyAblHDBca8sLiDkkxeBqFy3/QcurUSZi4XtEB1gGTVqDFaGhf39Np+NZ3O8oPS
-         X4j5DlL2CovdTxoZgbcE5Vi7VaCtX72CgX9ce4V8bHtzaKdgFH4VTCEJVRT4dOYnzpzg
-         /WXA==
-X-Gm-Message-State: AOAM530F0WQFXs5nNKglNnsosTmw83xp9JrK4Q4eDi7BIuuDJNBGAlFT
-        BGByMa/EnKIVNvyFTy2jlr+ndhK1PZOJr1+L4HoS0A==
-X-Google-Smtp-Source: ABdhPJzqyDfm7zh4TSMLOwrStOYwp8ExgHvFYRGqaq6CkhtzWiqrOdIOfUWA9OGs8SLcwDpyhrmrq6BXCZ7f0RX/kSU=
-X-Received: by 2002:a54:4791:: with SMTP id o17mr18098001oic.114.1637539369551;
- Sun, 21 Nov 2021 16:02:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rhg9TzsQGoRy8u1OLujkUnb4ClXkAMqCNEBp1eYj7W4=;
+        b=Ovj3Jmx9U1EtOKHHiWVaPSKdxm9YyE79MDX6tiSWj5YHueUuB1XcepNeMckDlBdhJX
+         vm31QaxH0iw0CmuqKRAVdzfktYx2SbZ+E0rHaeIAijxXY1V/mgZnFxbC7bdinZOryltk
+         ivNt7CleZllGlnQebOFARc1V5PN6y861LHbxzXK3R74F1mHN0TID2CXb9WfbzzuhOaKe
+         qBEWaRRyToLR3Uhb1kDoQo8e/eIbN+dq+1j8NRNuL/9+4TpLbOop4XLntIxXIwZKrdd0
+         1hFJjF9sGvLYttOVsSuXodQR2iKyhwR6JyRQeweuCcLlgL7XxKvsUklyR3MKyVVqmCx/
+         xCQQ==
+X-Gm-Message-State: AOAM531o8RNq4Mc7TUGwhkJ0fLK2xoH1nTV9Q/JeSz/OATUOyImDXeTG
+        yjmMBGwesfWon8WmszarozwcCA==
+X-Google-Smtp-Source: ABdhPJwAGuNBy2ut5ulgnJSYyO0MNQHn/zLEJfG36fGPimpq7gsDYUwwU4YvFRXGfyX0qYRyqpqKnQ==
+X-Received: by 2002:a17:90a:3009:: with SMTP id g9mr28516847pjb.205.1637564786708;
+        Sun, 21 Nov 2021 23:06:26 -0800 (PST)
+Received: from localhost.localdomain ([156.146.34.70])
+        by smtp.gmail.com with ESMTPSA id d9sm14281305pjs.2.2021.11.21.23.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Nov 2021 23:06:26 -0800 (PST)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>
+Subject: [PATCH] selftests/bpf: Fix trivial typo
+Date:   Sun, 21 Nov 2021 23:05:30 -0800
+Message-Id: <20211122070528.837806-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20211118145142.14519-1-brgl@bgdev.pl>
-In-Reply-To: <20211118145142.14519-1-brgl@bgdev.pl>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Nov 2021 01:02:38 +0100
-Message-ID: <CACRpkdbn=govgPeiEEtVF_+bMYD1Oi1yC+diZ2-owO4O6-oCwg@mail.gmail.com>
-Subject: Re: [PATCH v9 0/4] gpio-sim: configfs-based GPIO simulator
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 3:51 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+Fix trivial typo in comment from 'oveflow' to 'overflow'.
 
-> v8 -> v9:
-> - dropped the patches implementing committable-items and reworked the
->   driver to not use them
-> - reworked the gpio-line-names property and configuring specific lines
->   in general
-> - many smaller tweaks here and there
+Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+---
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The series:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Let's go with this.
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index aa76360d8f49..87e907add701 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -761,7 +761,7 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
+ 	/* overflow bpf_sock_ops struct with final element nonzero/zero.
+ 	 * Regardless of the value of the final field, we don't have all the
+ 	 * data we need to display it, so we should trigger an overflow.
+-	 * In other words oveflow checking should trump "is field zero?"
++	 * In other words overflow checking should trump "is field zero?"
+ 	 * checks because if we've overflowed, it shouldn't matter what the
+ 	 * field is - we can't trust its value so shouldn't display it.
+ 	 */
+-- 
+2.27.0
 
-Yours,
-Linus Walleij
