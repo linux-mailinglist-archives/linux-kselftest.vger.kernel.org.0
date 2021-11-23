@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9E045A84E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Nov 2021 17:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3026F45A863
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Nov 2021 17:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239186AbhKWQks (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Nov 2021 11:40:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45492 "EHLO mail.kernel.org"
+        id S238822AbhKWQlH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Nov 2021 11:41:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45664 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236534AbhKWQkR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:40:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E584760FC2;
-        Tue, 23 Nov 2021 16:37:07 +0000 (UTC)
+        id S239247AbhKWQk0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Nov 2021 11:40:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A27060F6F;
+        Tue, 23 Nov 2021 16:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637685428;
-        bh=GTsqPZ0KZ4QxfjrArqqqt8ebc2uWsk+VrvLJSfu7Eeg=;
+        s=k20201202; t=1637685437;
+        bh=fHpZ3rcMX2LjOJ2r/vANQx7fiGUw8T6W4YFAWK0L8Zw=;
         h=From:To:Cc:Subject:Date:From;
-        b=sOEuTfW0vYN9mBME3SvobWkIEMtvD/6wnecL7gfHlcXfzVWJeVMww/2skklntGLl6
-         CXVnFjeeupycSi7eyqeusiHV9L1clZvkPUEfk3Xjxy3KXR8621tO03l6QO7sUUXNP3
-         O+asYHvuOp7KmfIAEWkpTghmr9EHg6ki83wre0FGdjmTSiFFJRWVP85aVRqXSw+IBY
-         Moz8SMDhJzrnoTx2IRRbY7hgW41ph2Bj11fKWnNeQAkKZGI36TtcW5Mz1CMk6Hhqw3
-         nhEaGU/aGd9DI9tqc7B20CMfcS1herV2nB1icXwerNAGpEJdtrkgMVbCmGucv8BmB5
-         A6OSMAT09l/pw==
+        b=kX9P419j5Fx85za0VbuA/4xZPX5F1GD32dUVWPK5Ha6DcgNTyTj0Slz7xcL1spT8p
+         II0kjzF4mgmHJt+w7x0teCieF0mQNPQYwUvTUD1Zug2THA85LtvpT4GfWgwTg3YdW5
+         4bDgt+PiAoYyHM/GVUjk4CpVVM5/3DTrnQnHssJQnQ0DDhg75T4O3w482QJ+SEPoB6
+         iW4heQls+IdDhVxIBGpPfq/9ZNTB17YbdUZvKZrVWN4yVY2g6BHACNwmHJviAcvuSc
+         cxI+umFmxjW16WqTCbUhUP0xif4LN1NsA9n7BMnVdguCmdpZZPA4JEbcTGFjPfnDkX
+         Y7IMOoBnpNbzQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Thomas Huth <thuth@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH MANUALSEL 5.4 1/4] KVM: selftests: Fix kvm_vm_free() in cr4_cpuid_sync and vmx_tsc_adjust tests
-Date:   Tue, 23 Nov 2021 11:37:00 -0500
-Message-Id: <20211123163706.289562-1-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 4.19 1/4] KVM: selftests: Fix kvm_vm_free() in cr4_cpuid_sync and vmx_tsc_adjust tests
+Date:   Tue, 23 Nov 2021 11:37:12 -0500
+Message-Id: <20211123163715.289631-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 X-stable: review
@@ -55,15 +55,15 @@ Message-Id: <20210826074928.240942-1-thuth@redhat.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c | 3 +--
- tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c | 2 +-
+ tools/testing/selftests/kvm/cr4_cpuid_sync_test.c | 3 +--
+ tools/testing/selftests/kvm/vmx_tsc_adjust_test.c | 2 +-
  2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
-index 63cc9c3f5ab67..6da030b173514 100644
---- a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
-@@ -110,8 +110,7 @@ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/kvm/cr4_cpuid_sync_test.c b/tools/testing/selftests/kvm/cr4_cpuid_sync_test.c
+index 11ec358bf9690..8806ada996b60 100644
+--- a/tools/testing/selftests/kvm/cr4_cpuid_sync_test.c
++++ b/tools/testing/selftests/kvm/cr4_cpuid_sync_test.c
+@@ -106,8 +106,7 @@ int main(int argc, char *argv[])
  		}
  	}
  
@@ -73,11 +73,11 @@ index 63cc9c3f5ab67..6da030b173514 100644
 +	kvm_vm_free(vm);
  	return 0;
  }
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-index 5590fd2bcf87d..00e268b9ef4cd 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
+index 49bcc68b02350..bae7e9072382c 100644
+--- a/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
++++ b/tools/testing/selftests/kvm/vmx_tsc_adjust_test.c
+@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
  		}
  	}
  
