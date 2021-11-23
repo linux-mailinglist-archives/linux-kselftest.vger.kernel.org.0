@@ -2,60 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADFA45A7AF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Nov 2021 17:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D1945A824
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Nov 2021 17:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbhKWQd2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Nov 2021 11:33:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:38175 "EHLO mga11.intel.com"
+        id S233389AbhKWQjy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Nov 2021 11:39:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44996 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233425AbhKWQd1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:33:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10176"; a="232547348"
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="232547348"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:30:18 -0800
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="606866089"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:30:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mpYgN-009ptR-H8;
-        Tue, 23 Nov 2021 18:30:11 +0200
-Date:   Tue, 23 Nov 2021 18:30:11 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH v1 1/1] kunit: Replace kernel.h with the necessary
- inclusions
-Message-ID: <YZ0XE9rdudT0DOPl@smile.fi.intel.com>
-References: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
- <YZJFsFmvdyfblf/k@smile.fi.intel.com>
+        id S235635AbhKWQjt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Nov 2021 11:39:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D38B60F5B;
+        Tue, 23 Nov 2021 16:36:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637685401;
+        bh=t4/zS9EALiqTaAb4F8IW40rN8Jv7H6eywALNBHC7/6Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KBuTLo+EatmicXAx6awZLzALtBBi/q7d3pGaRtdL5qfleYV/ag/7lZJLNHtViAQos
+         4RVyxwGibvToE6wkDCpLyvj/iFEOn+j7bClhqErlHH1QwrK7Yi0pqqkWUHULCSueUu
+         6MaYg68xXsJMMuKExyyNvUFXUgi1FJAmXoLC5HbUhqHFquqVHN1nSwdJzXmBjMhlDe
+         C34i4Xg1LZXlOSnzm+HSIUtgsMcrwQDYKCs8xyCWP/FAUnvpXTC4GYF7eo7EA/5ib/
+         N8gzGzf/yFTW3jKaZXjmJxbl5x0eT2auSvoxItuYCJ2ppY79F7ORz1RFeQehGvEIqi
+         w5yIHX8JEyJOQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Thomas Huth <thuth@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH MANUALSEL 5.15 4/8] KVM: selftests: Fix kvm_vm_free() in cr4_cpuid_sync and vmx_tsc_adjust tests
+Date:   Tue, 23 Nov 2021 11:36:26 -0500
+Message-Id: <20211123163630.289306-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211123163630.289306-1-sashal@kernel.org>
+References: <20211123163630.289306-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZJFsFmvdyfblf/k@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 01:34:08PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 10, 2021 at 12:35:52PM +0200, Andy Shevchenko wrote:
-> > When kernel.h is used in the headers it adds a lot into dependency hell,
-> > especially when there are circular dependencies are involved.
-> > 
-> > Replace kernel.h inclusion with the list of what is really being used.
-> 
-> Can it be applied now?
+From: Thomas Huth <thuth@redhat.com>
 
-Any news so far? Should I do anything about this patch?
+[ Upstream commit 22d7108ce47290d47e1ea83a28fbfc85e0ecf97e ]
 
+The kvm_vm_free() statement here is currently dead code, since the loop
+in front of it can only be left with the "goto done" that jumps right
+after the kvm_vm_free(). Fix it by swapping the locations of the "done"
+label and the kvm_vm_free().
+
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+Message-Id: <20210826074928.240942-1-thuth@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c | 3 +--
+ tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
+index f40fd097cb359..6f6fd189dda3f 100644
+--- a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
++++ b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
+@@ -109,8 +109,7 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	kvm_vm_free(vm);
+-
+ done:
++	kvm_vm_free(vm);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
+index 7e33a350b053a..e683d0ac3e45e 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
+@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	kvm_vm_free(vm);
+ done:
++	kvm_vm_free(vm);
+ 	return 0;
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 
