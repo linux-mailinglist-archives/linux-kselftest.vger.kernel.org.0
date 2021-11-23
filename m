@@ -2,59 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 042454598A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Nov 2021 00:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F256B459A07
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Nov 2021 03:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbhKVXze (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Nov 2021 18:55:34 -0500
-Received: from mx08-00227901.pphosted.com ([91.207.212.184]:59606 "EHLO
-        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232101AbhKVXzX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Nov 2021 18:55:23 -0500
-Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
-        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixe018132;
-        Fri, 19 Nov 2021 10:27:12 +0100
-Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
-        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Fri, 19 Nov 2021 10:27:11 +0100
-Received: from ZBW2K16EX01.bardusch.net (172.25.1.1) by
- ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
- Fri, 19 Nov 2021 10:27:10 +0100
-Received: from User (172.25.1.131) by ZBW2K16EX01.bardusch.net (172.25.1.1)
- with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
- Nov 2021 10:26:59 +0100
-Reply-To: <josechoondak@gmail.com>
-From:   Joseph Choondak <info@ndd.co.mz>
-Subject: I hope this email finds you well.
-Date:   Fri, 19 Nov 2021 01:27:13 -0800
+        id S230057AbhKWCXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Nov 2021 21:23:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33874 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229678AbhKWCXQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Nov 2021 21:23:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 128FC60FBF;
+        Tue, 23 Nov 2021 02:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637634009;
+        bh=CkmVHf7r6GXoGTzRujXL3XgDNQ3Y9Vu1bpjEELMYAfs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=R5nH+wN6xS8DpqD9V3JSUh3hoi35NAOKE+JDiN4FNCAqQDJZ/6neRdIXL+jdnwd2A
+         x1CVxMXO97XYA7sXWgazAgFLHei6OqgVUmULzseRJWddkeiE1Eubdcks2S46BXNiau
+         uxVZrLUFny8C5wfPD2/MISr+U3F5ej7O438A4PUQl3JpE+0TaxgmucPq6ZwJByRKFA
+         /fSZ9/QRJ1XjjGkw9y1+8KjgR6yeyJ9dTUtXu5okBjCFllKdVF5d0sezxfpxq6gvJd
+         oDqUj1++P4xrPZiMuGgxiWHPIj8SXTTILXbePOt0V/20rMWN3OiZ6VVE9eG9CnFrTH
+         +d78B0H1s+LIw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 04C2B60A50;
+        Tue, 23 Nov 2021 02:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <e7a31752-8681-4042-9ad5-c01248965c5f@ZBW2K16EX01.bardusch.net>
-To:     Undisclosed recipients:;
-X-Proofpoint-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
-X-Proofpoint-ORIG-GUID: CmkypoSbrhIOZjoh10HOlF5xTX1kBMKq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Reason: orgsafe
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/bpf: Fix trivial typo
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163763400901.23287.10698315968549925390.git-patchwork-notify@kernel.org>
+Date:   Tue, 23 Nov 2021 02:20:09 +0000
+References: <20211122070528.837806-1-dfustini@baylibre.com>
+In-Reply-To: <20211122070528.837806-1-dfustini@baylibre.com>
+To:     Drew Fustini <dfustini@baylibre.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, trivial@kernel.org,
+        alan.maguire@oracle.com, toke@redhat.com, hengqi.chen@gmail.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gustavoars@kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-May I please ask with considerable urgency for your kind assistance with the following matter.
-I'm a financial person, I think  I have something huge you might be interested in.
+Hello:
 
-Looking forward to hearing from you.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Sun, 21 Nov 2021 23:05:30 -0800 you wrote:
+> Fix trivial typo in comment from 'oveflow' to 'overflow'.
+> 
+> Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/btf_dump.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - selftests/bpf: Fix trivial typo
+    https://git.kernel.org/bpf/bpf-next/c/fa721d4f0b91
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Respectfully!!
-Joseph Choondak
-Account Executive.
