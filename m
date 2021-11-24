@@ -2,121 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 839B645D132
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 00:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4F645D167
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 00:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348773AbhKXXaI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Nov 2021 18:30:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59994 "EHLO mail.kernel.org"
+        id S237087AbhKXX5z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Nov 2021 18:57:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345916AbhKXXaE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 18:30:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F2549610A7;
-        Wed, 24 Nov 2021 23:26:53 +0000 (UTC)
+        id S236890AbhKXX5z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Nov 2021 18:57:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9A0E761039;
+        Wed, 24 Nov 2021 23:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637796414;
-        bh=7OtvmjUvwYPy3KI1TG3qdnDVOgZhIE0uqV48p/JiD9k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o9TbOMo1eEqC64c+ZjmNy7JfPdcr9cZurpdQLn5wBl7kkVzUwMgZbf90OIk73L5z+
-         HY1om2oYcEpEgDeLPbd7DytRf+u+iS2BTC1QQj5J3J1Nar6f1MZNhMyRawkEF6/cZi
-         6oKmUMao+78PPfpZOaElIcKVmLs1gTnfT2kXd773se74iMbDb7qzYSL2Jm8RLqSsvU
-         WrTNRAjOM0koEmZ97ai2Tkic5IQEsWA+5IN+VA+CsaKL8GC5u3sp6V2uGf+4BRP6zv
-         2z5p7J5ehwaXZ6rcgNhTPwXJJaqtuiop4Ea/qpbj8caZcIWAsa1BLLGoPwb/A81Z3e
-         akHTvJNdvrwBA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, davejwatson@fb.com,
-        borisp@nvidia.com, john.fastabend@gmail.com, daniel@iogearbox.net,
-        vakul.garg@nxp.com, willemb@google.com, vfedorenko@novek.ru,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net 9/9] selftests: tls: test for correct proto_ops
-Date:   Wed, 24 Nov 2021 15:25:57 -0800
-Message-Id: <20211124232557.2039757-10-kuba@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211124232557.2039757-1-kuba@kernel.org>
-References: <20211124232557.2039757-1-kuba@kernel.org>
+        s=k20201202; t=1637798085;
+        bh=ZZiBkfeRF6d5nKEh6At4F30WYpDHpX8KwYXyNUcaaqw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=klYJBVoHGlHtDRlNehYQp9FUaUeyBiL6JsecJz1zwPl/1BJOMdwER0j/esqgHuZc/
+         N2e6Hb/Vg56ZiTPmz+bSKWSICeUJCqhO2oHhUyjkZ9Fr7/XH576HULx+BW3qdBI6HN
+         RDk0l3ZUdFUifBrOjSFJyEAoplAHVqHMO3cAv70hJtvEKdrX97oAPdxw4yfsoISiKx
+         DcYIkIYFqDzgZnj8mLlqEX1dzIb6xv9xJcEh45xTkUsVxY8ARUQ7TD6uQTSHX5YoWS
+         kwDWBdbXLoqTfcGPD7DL7LuMyMDmqa9rU0T+cXMTWhZux+DjdF7zFBAZSRBNmyAKhe
+         oYxtrtYeCXkmQ==
+Date:   Thu, 25 Nov 2021 01:54:42 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Subject: Re: [PATCH v2 1/3] selftests: tpm2: Probe for available PCR bank
+Message-ID: <YZ7QwlZ77b4A/ZbR@iki.fi>
+References: <20211124141314.1356338-1-stefanb@linux.ibm.com>
+ <20211124141314.1356338-2-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124141314.1356338-2-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previous patch fixes overriding callbacks incorrectly. Triggering
-the crash in sendpage_locked would be more spectacular but it's
-hard to get to, so take the easier path of proving this is broken
-and call getname. We're currently getting IPv4 socket info on an
-IPv6 socket.
+On Wed, Nov 24, 2021 at 09:13:12AM -0500, Stefan Berger wrote:
+> Probe for an available PCR bank to accommodate devices that do not have a
+> SHA-1 PCR bank or whose SHA-1 bank is deactivated. Use the bank that can
+> be used in the TPM2 commands. Assert on the probing function to not
+> return None.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/net/tls.c | 55 +++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+What is *the bank* that can be used?
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 6e78d7207cc1..8a22db0cca49 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -1617,4 +1617,59 @@ TEST(keysizes) {
- 	close(cfd);
- }
- 
-+TEST(tls_v6ops) {
-+	struct tls_crypto_info_keys tls12;
-+	struct sockaddr_in6 addr, addr2;
-+	int sfd, ret, fd;
-+	socklen_t len, len2;
-+
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12);
-+
-+	addr.sin6_family = AF_INET6;
-+	addr.sin6_addr = in6addr_any;
-+	addr.sin6_port = 0;
-+
-+	fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	sfd = socket(AF_INET6, SOCK_STREAM, 0);
-+
-+	ret = bind(sfd, &addr, sizeof(addr));
-+	ASSERT_EQ(ret, 0);
-+	ret = listen(sfd, 10);
-+	ASSERT_EQ(ret, 0);
-+
-+	len = sizeof(addr);
-+	ret = getsockname(sfd, &addr, &len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = connect(fd, &addr, sizeof(addr));
-+	ASSERT_EQ(ret, 0);
-+
-+	len = sizeof(addr);
-+	ret = getsockname(fd, &addr, &len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
-+	if (ret) {
-+		ASSERT_EQ(errno, ENOENT);
-+		SKIP(return, "no TLS support");
-+	}
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(fd, SOL_TLS, TLS_TX, &tls12, tls12.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(fd, SOL_TLS, TLS_RX, &tls12, tls12.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	len2 = sizeof(addr2);
-+	ret = getsockname(fd, &addr2, &len2);
-+	ASSERT_EQ(ret, 0);
-+
-+	EXPECT_EQ(len2, len);
-+	EXPECT_EQ(memcmp(&addr, &addr2, len), 0);
-+
-+	close(fd);
-+	close(sfd);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.31.1
+In addition, I don't understand the last sentence.
 
+/Jarkko
+
+
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  tools/testing/selftests/tpm2/tpm2_tests.py | 35 +++++++++++++++++-----
+>  1 file changed, 27 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+> index 9d764306887b..6b88ff0e47b9 100644
+> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+> @@ -27,7 +27,23 @@ class SmokeTest(unittest.TestCase):
+>          result = self.client.unseal(self.root_key, blob, auth, None)
+>          self.assertEqual(data, result)
+>  
+> +    def determine_bank_alg(self):
+> +        # Probe for available PCR bank
+> +        for bank_alg in [tpm2.TPM2_ALG_SHA1, tpm2.TPM2_ALG_SHA256]:
+> +            try:
+> +                handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+> +                self.client.policy_pcr(handle, [17], bank_alg=bank_alg)
+> +                return bank_alg
+> +            except tpm2.UnknownPCRBankError:
+> +                pass
+> +            finally:
+> +                self.client.flush_context(handle)
+> +        return None
+> +
+>      def test_seal_with_policy(self):
+> +        bank_alg = self.determine_bank_alg()
+> +        self.assertIsNotNone(bank_alg)
+> +
+>          handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+>  
+>          data = ('X' * 64).encode()
+> @@ -35,7 +51,7 @@ class SmokeTest(unittest.TestCase):
+>          pcrs = [16]
+>  
+>          try:
+> -            self.client.policy_pcr(handle, pcrs)
+> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>              self.client.policy_password(handle)
+>  
+>              policy_dig = self.client.get_policy_digest(handle)
+> @@ -47,7 +63,7 @@ class SmokeTest(unittest.TestCase):
+>          handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
+>  
+>          try:
+> -            self.client.policy_pcr(handle, pcrs)
+> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>              self.client.policy_password(handle)
+>  
+>              result = self.client.unseal(self.root_key, blob, auth, handle)
+> @@ -72,6 +88,9 @@ class SmokeTest(unittest.TestCase):
+>          self.assertEqual(rc, tpm2.TPM2_RC_AUTH_FAIL)
+>  
+>      def test_unseal_with_wrong_policy(self):
+> +        bank_alg = self.determine_bank_alg()
+> +        self.assertIsNotNone(bank_alg)
+> +
+>          handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+>  
+>          data = ('X' * 64).encode()
+> @@ -79,7 +98,7 @@ class SmokeTest(unittest.TestCase):
+>          pcrs = [16]
+>  
+>          try:
+> -            self.client.policy_pcr(handle, pcrs)
+> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>              self.client.policy_password(handle)
+>  
+>              policy_dig = self.client.get_policy_digest(handle)
+> @@ -91,13 +110,13 @@ class SmokeTest(unittest.TestCase):
+>          # Extend first a PCR that is not part of the policy and try to unseal.
+>          # This should succeed.
+>  
+> -        ds = tpm2.get_digest_size(tpm2.TPM2_ALG_SHA1)
+> -        self.client.extend_pcr(1, ('X' * ds).encode())
+> +        ds = tpm2.get_digest_size(bank_alg)
+> +        self.client.extend_pcr(1, ('X' * ds).encode(), bank_alg=bank_alg)
+>  
+>          handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
+>  
+>          try:
+> -            self.client.policy_pcr(handle, pcrs)
+> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>              self.client.policy_password(handle)
+>  
+>              result = self.client.unseal(self.root_key, blob, auth, handle)
+> @@ -109,14 +128,14 @@ class SmokeTest(unittest.TestCase):
+>  
+>          # Then, extend a PCR that is part of the policy and try to unseal.
+>          # This should fail.
+> -        self.client.extend_pcr(16, ('X' * ds).encode())
+> +        self.client.extend_pcr(16, ('X' * ds).encode(), bank_alg=bank_alg)
+>  
+>          handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
+>  
+>          rc = 0
+>  
+>          try:
+> -            self.client.policy_pcr(handle, pcrs)
+> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>              self.client.policy_password(handle)
+>  
+>              result = self.client.unseal(self.root_key, blob, auth, handle)
+> -- 
+> 2.31.1
+> 
