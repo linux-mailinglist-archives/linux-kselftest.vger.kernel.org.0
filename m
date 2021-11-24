@@ -2,32 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78DA45BA42
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Nov 2021 13:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D669945BEE2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Nov 2021 13:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242375AbhKXMJS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Nov 2021 07:09:18 -0500
-Received: from mail.jv-coder.de ([5.9.79.73]:46308 "EHLO mail.jv-coder.de"
+        id S245640AbhKXMvg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Nov 2021 07:51:36 -0500
+Received: from mail.jv-coder.de ([5.9.79.73]:48472 "EHLO mail.jv-coder.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241539AbhKXMHi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 07:07:38 -0500
-X-Greylist: delayed 315 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Nov 2021 07:07:37 EST
+        id S243067AbhKXMtt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Nov 2021 07:49:49 -0500
 Received: from ubuntu.localdomain (unknown [188.192.64.76])
-        by mail.jv-coder.de (Postfix) with ESMTPSA id 11B609FBCD;
-        Wed, 24 Nov 2021 11:59:11 +0000 (UTC)
+        by mail.jv-coder.de (Postfix) with ESMTPSA id 39F509FBCD;
+        Wed, 24 Nov 2021 12:46:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jv-coder.de; s=dkim;
-        t=1637755151; bh=nk79e0vtWG5vI5W6jbeeDTH7jdjOKA8eHaJw9BLhy7c=;
+        t=1637757996; bh=Gde/gmP4ABEEVNfVXLFQW6FUK9g0BKuPOGBVWeJkN6k=;
         h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=l8HJP1PqqOeL13co0fnbRlmAPGiHa6lvpIGR6E08xuWA7JOF18LP7zL2WTsxitsxt
-         ScjzbANczh/TBR+PkHbf8GYmzgMRpFIti7v2Yx7EK3nX+HaFfeu9wYBr9FxY+Ti1fc
-         EO92CSi7LyVVah54D6f5NtSlvMhmXpBUNBf0/4lY=
+        b=LFZvUfyFaZEWizJfEXzn+v6cDa6uHpBPJCFY5X7AzU4k0wEvvqRozKFFxHQbajdcJ
+         Bfp36PTniTYiB0xaPlGrYh5ogi6BvyMdlGHdBTOWUZDNqWnwM2hzUqLEJx5K8nDOY0
+         ZQz3vjFbiuwBe0bT/e38tkYmzbEq/kkSlU1ILcgo=
 From:   Joerg Vehlow <lkml@jv-coder.de>
 To:     linux-kselftest@vger.kernel.org, keescook@chromium.org,
         shuah@kernel.org
 Cc:     Joerg Vehlow <joerg.vehlow@aox-tech.de>
-Subject: [PATCH] selftests/exec: Fix build
-Date:   Wed, 24 Nov 2021 12:59:03 +0100
-Message-Id: <20211124115903.1197830-1-lkml@jv-coder.de>
+Subject: [PATCH] selftests/exec: Fix build for non-regular
+Date:   Wed, 24 Nov 2021 13:46:29 +0100
+Message-Id: <20211124124629.1506208-1-lkml@jv-coder.de>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -41,39 +40,43 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Joerg Vehlow <joerg.vehlow@aox-tech.de>
 
-This fixes
-make: *** No rule to make target 'tools/testing/selftests/exec/pipe', needed by 'all'. Stop.
+The non-regular binary was not built at all and make install failed with
+rsync: link_stat "tools/testing/selftests/exec/non-regular" failed: No such file or directory (2)
+rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1207) [sender=3.1.3]
 
-Targets defined in TEST_DEN_FILES must exist as targets in the makefile,
-but pipe is only created by the test at runtime, so it should be cleaned only.
+TEST_PROGS should only be used for shell scripts, not for binaries
 
-Fixes: 61016db15b8e ("selftests/exec: Verify execve of non-regular files fail")
+Fixes: 0f71241a8e32 ("selftests/exec: add file type errno tests")
 Signed-off-by: Joerg Vehlow <joerg.vehlow@aox-tech.de>
 ---
- tools/testing/selftests/exec/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/exec/.gitignore | 1 +
+ tools/testing/selftests/exec/Makefile   | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index 9e2f00343f15..9141262d14c1 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -12,3 +12,4 @@ execveat.denatured
+ xxxxxxxx*
+ pipe
+ S_I*.test
++non-regular
 diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index dd61118df66e..ac8acca7a942 100644
+index dd61118df66e..46a12d6bd06f 100644
 --- a/tools/testing/selftests/exec/Makefile
 +++ b/tools/testing/selftests/exec/Makefile
-@@ -5,14 +5,14 @@ CFLAGS += -D_GNU_SOURCE
+@@ -3,8 +3,8 @@ CFLAGS = -Wall
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
  
- TEST_PROGS := binfmt_script non-regular
- TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
--TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
-+TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+-TEST_PROGS := binfmt_script non-regular
+-TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
++TEST_PROGS := binfmt_script
++TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
  # Makefile is a run-time dependency, since it's accessed by the execveat test
  TEST_FILES := Makefile
- 
- TEST_GEN_PROGS += recursion-depth
- 
- EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*	\
--	       $(OUTPUT)/S_I*.test
-+	       $(OUTPUT)/S_I*.test $(OUTPUT)/pipe
- 
- include ../lib.mk
- 
 -- 
 2.25.1
 
