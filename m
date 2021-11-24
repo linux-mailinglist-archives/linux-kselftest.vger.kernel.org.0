@@ -2,81 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D669945BEE2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Nov 2021 13:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C25045C6F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Nov 2021 15:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245640AbhKXMvg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Nov 2021 07:51:36 -0500
-Received: from mail.jv-coder.de ([5.9.79.73]:48472 "EHLO mail.jv-coder.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243067AbhKXMtt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 07:49:49 -0500
-Received: from ubuntu.localdomain (unknown [188.192.64.76])
-        by mail.jv-coder.de (Postfix) with ESMTPSA id 39F509FBCD;
-        Wed, 24 Nov 2021 12:46:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jv-coder.de; s=dkim;
-        t=1637757996; bh=Gde/gmP4ABEEVNfVXLFQW6FUK9g0BKuPOGBVWeJkN6k=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=LFZvUfyFaZEWizJfEXzn+v6cDa6uHpBPJCFY5X7AzU4k0wEvvqRozKFFxHQbajdcJ
-         Bfp36PTniTYiB0xaPlGrYh5ogi6BvyMdlGHdBTOWUZDNqWnwM2hzUqLEJx5K8nDOY0
-         ZQz3vjFbiuwBe0bT/e38tkYmzbEq/kkSlU1ILcgo=
-From:   Joerg Vehlow <lkml@jv-coder.de>
-To:     linux-kselftest@vger.kernel.org, keescook@chromium.org,
-        shuah@kernel.org
-Cc:     Joerg Vehlow <joerg.vehlow@aox-tech.de>
-Subject: [PATCH] selftests/exec: Fix build for non-regular
-Date:   Wed, 24 Nov 2021 13:46:29 +0100
-Message-Id: <20211124124629.1506208-1-lkml@jv-coder.de>
-X-Mailer: git-send-email 2.25.1
+        id S1352626AbhKXOQy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Nov 2021 09:16:54 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19298 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349180AbhKXOQd (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Nov 2021 09:16:33 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AOCr4uT022008;
+        Wed, 24 Nov 2021 14:13:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=+SSRMsz4kkkwnuz+VydatvUJKjZaijHf7IB5EPMPlbM=;
+ b=c+W/mp8BUhI59sePLLlihqTMuuTPe0KQkemS+46dtTn5Q7/60OrlQx9IBmO+mrhE0O6x
+ nludzdV8eJAYeLD6Yr4DHy5LxCvizsmVmWZUyiLG3/oNXsc3d68hWNuNa1u71Y/VwMZR
+ 0VBfBdvTed30xSIv4RZ6NFvloz1KYLg+wMNaNuZW1NJc24LdhfjPETillx5040jDwuKB
+ q+s8pfe+fDzWhfggTEFNJy7LfROk37/+0ozQbMKOT3eNcj50J5u2D4ODLeDWcIeDMhL6
+ IKuXnl2CJ4Lohk+dAa8F9Oe3Udy9PSualQIDhJ8+fSv9HOVGkUssaZ3PoUavTIGmkJl3 5Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3chnsjhs4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Nov 2021 14:13:22 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AODhDVU003781;
+        Wed, 24 Nov 2021 14:13:22 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3chnsjhs41-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Nov 2021 14:13:22 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AOE812p024030;
+        Wed, 24 Nov 2021 14:13:20 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01wdc.us.ibm.com with ESMTP id 3cernatg3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Nov 2021 14:13:20 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AOEDKnb54067494
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Nov 2021 14:13:20 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69C22B2067;
+        Wed, 24 Nov 2021 14:13:20 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F759B2065;
+        Wed, 24 Nov 2021 14:13:20 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Nov 2021 14:13:20 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v2 0/3] selftests: tpm2: Probe for available PCR bank
+Date:   Wed, 24 Nov 2021 09:13:11 -0500
+Message-Id: <20211124141314.1356338-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.5
-X-Spam-Checker-Version: SpamAssassin 3.4.5 (2021-03-20) on mail.jv-coder.de
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: XiU5eXjSRVEDVwTZ6PhJUeuCxN6_3Zmw
+X-Proofpoint-GUID: aHwRlNDvJc2wed15c-g0PB_3p29ZSrzs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-24_04,2021-11-24_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111240079
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Joerg Vehlow <joerg.vehlow@aox-tech.de>
+This series of patches fixes two issues with TPM2 selftest.
+- Probes for available PCR banks
+- Resets DA lock on TPM2 to avoid subsequent test failures
 
-The non-regular binary was not built at all and make install failed with
-rsync: link_stat "tools/testing/selftests/exec/non-regular" failed: No such file or directory (2)
-rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1207) [sender=3.1.3]
+It also extends the test cases with support for SHA-384 and SHA-512
+PCR banks.
 
-TEST_PROGS should only be used for shell scripts, not for binaries
+  Stefan
 
-Fixes: 0f71241a8e32 ("selftests/exec: add file type errno tests")
-Signed-off-by: Joerg Vehlow <joerg.vehlow@aox-tech.de>
----
- tools/testing/selftests/exec/.gitignore | 1 +
- tools/testing/selftests/exec/Makefile   | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+v2:
+ - Clarified patch 1 description 
+ - Added patch 3 with support for SHA-384 and SHA-512
 
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index 9e2f00343f15..9141262d14c1 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -12,3 +12,4 @@ execveat.denatured
- xxxxxxxx*
- pipe
- S_I*.test
-+non-regular
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index dd61118df66e..46a12d6bd06f 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -3,8 +3,8 @@ CFLAGS = -Wall
- CFLAGS += -Wno-nonnull
- CFLAGS += -D_GNU_SOURCE
- 
--TEST_PROGS := binfmt_script non-regular
--TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
-+TEST_PROGS := binfmt_script
-+TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
- TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
- # Makefile is a run-time dependency, since it's accessed by the execveat test
- TEST_FILES := Makefile
+Stefan Berger (3):
+  selftests: tpm2: Probe for available PCR bank
+  selftests: tpm2: Reset the dictionary attack lock
+  selftests: tpm2: Add support for SHA-384 and SHA-512
+
+ tools/testing/selftests/tpm2/tpm2.py       | 12 ++++++-
+ tools/testing/selftests/tpm2/tpm2_tests.py | 37 +++++++++++++++++-----
+ 2 files changed, 40 insertions(+), 9 deletions(-)
+
 -- 
-2.25.1
+2.31.1
 
