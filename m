@@ -2,34 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2356445D024
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Nov 2021 23:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781BB45D120
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 00:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242545AbhKXWme (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Nov 2021 17:42:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44282 "EHLO mail.kernel.org"
+        id S1344853AbhKXX37 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Nov 2021 18:29:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59742 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345462AbhKXWmd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 17:42:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 14ED960E08;
-        Wed, 24 Nov 2021 22:39:23 +0000 (UTC)
+        id S1344629AbhKXX37 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Nov 2021 18:29:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D819B6052B;
+        Wed, 24 Nov 2021 23:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637793563;
-        bh=XMwCeHatEbKSFC9Dm+1fAj6kyfi8jEJ/4m1DGJkp0D4=;
+        s=k20201202; t=1637796409;
+        bh=ExMikSjcQW3Y1ITiVzQmyeIkXXwc8f1LxOM+/YDeuJg=;
         h=From:To:Cc:Subject:Date:From;
-        b=gCksG1y4ST4rJ/0FvxMZHaS9icoYAYGLikkuA6jDr2PWBpyQyZFSomyVwEt2NwgTr
-         v9usg0gdKmRPIS46uduhfoGzto9wOacf2bpLSg3pUsXipAOsS8G/bF0bWhW8zfM1UE
-         TNTnHHe19yLRiSsr9/mRJ+0pXEcLv+NGtzqw2RzClfscRAhXa4gmpLmpRnvFgujcia
-         867Qm3/y3BCF4GZTd3DBWsubmJKtUkSRTmq7TiXxMsShPyDRD4ADeZASHgxLohuFFu
-         TwDTS2Ndarsdp2FbSSlv8YNd0Q1CRSzePE51ZMuVccQMBR021zi85ONRAzdAJ5+odZ
-         /w99q+UxNi/zw==
+        b=WY25gDyrLzS21U2/5oQnoXUrOS0WM0dK+ZM6SxfTuqr4nnQnqq/J19imKC9Bjxqrs
+         cas55MRtmumwueZ1iwhXgc6hihF833hnxEayUwY+M5iOtnBtdwO/XIiu+eHDuunEp1
+         ObYA3oea267fO/JkZZjyd7djGKlv4Qr34u2sL7flIW43gOf1raVwvSMsXJUPnKvRqM
+         rjONzDoTdyFilvpZmV+eCpvukg6FP7qP/MZbCTnt5MbGyr8vs4YFkp3ixMreNFcCf6
+         blZNSQ8T4npqa7FfL3qfFyeEARueAEYyh194TnHFLkQ4T5N8HgcCvvVyMvry6YV+qv
+         pZiu6qyq0fnWw==
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     keescook@chromium.org, shuah@kernel.org
-Cc:     mic@digikod.net, linux-kselftest@vger.kernel.org,
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, davejwatson@fb.com,
+        borisp@nvidia.com, john.fastabend@gmail.com, daniel@iogearbox.net,
+        vakul.garg@nxp.com, willemb@google.com, vfedorenko@novek.ru,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH selftests] selftests: harness: avoid false negatives if test has no ASSERTs
-Date:   Wed, 24 Nov 2021 14:39:16 -0800
-Message-Id: <20211124223916.1986279-1-kuba@kernel.org>
+Subject: [PATCH net 0/9] tls: splice_read fixes
+Date:   Wed, 24 Nov 2021 15:25:48 -0800
+Message-Id: <20211124232557.2039757-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -37,32 +40,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test can fail either immediately when ASSERT() failed or at the
-end if one or more EXPECT() was not met. The exact return code
-is decided based on the number of successful ASSERT()s.
+As I work my way to unlocked and zero-copy TLS Rx the obvious bugs
+in the splice_read implementation get harder and harder to ignore.
+This is to say the fixes here are discovered by code inspection,
+I'm not aware of anyone actually using splice_read.
 
-If test has no ASSERT()s, however, the return code will be 0,
-as if the test did not fail. Start counting ASSERT()s from 1.
+Jakub Kicinski (9):
+  selftests: tls: add helper for creating sock pairs
+  selftests: tls: factor out cmsg send/receive
+  selftests: tls: add tests for handling of bad records
+  tls: splice_read: fix record type check
+  selftests: tls: test splicing cmsgs
+  tls: splice_read: fix accessing pre-processed records
+  selftests: tls: test splicing decrypted records
+  tls: fix replacing proto_ops
+  selftests: tls: test for correct proto_ops
 
-Fixes: 369130b63178 ("selftests: Enhance kselftest_harness.h to print which assert failed")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/tls/tls_main.c                |  47 ++-
+ net/tls/tls_sw.c                  |  40 ++-
+ tools/testing/selftests/net/tls.c | 521 ++++++++++++++++++++++--------
+ 3 files changed, 456 insertions(+), 152 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index ae0f0f33b2a6..79a182cfa43a 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -969,7 +969,7 @@ void __run_test(struct __fixture_metadata *f,
- 	t->passed = 1;
- 	t->skip = 0;
- 	t->trigger = 0;
--	t->step = 0;
-+	t->step = 1;
- 	t->no_print = 0;
- 	memset(t->results->reason, 0, sizeof(t->results->reason));
- 
 -- 
 2.31.1
 
