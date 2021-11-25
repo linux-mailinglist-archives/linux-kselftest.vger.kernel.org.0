@@ -2,149 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A1745F777
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Nov 2021 01:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6F545FBAD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Nov 2021 03:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343558AbhK0AeV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Nov 2021 19:34:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59400 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343715AbhK0AcU (ORCPT
+        id S1348435AbhK0CPq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Nov 2021 21:15:46 -0500
+Received: from mail.daesangagung.co.id ([117.54.218.101]:44800 "EHLO
+        mail.daesangagung.co.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241891AbhK0CNq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Nov 2021 19:32:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE8A0B82948;
-        Sat, 27 Nov 2021 00:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7921C004E1;
-        Sat, 27 Nov 2021 00:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637972943;
-        bh=o+em8kfwsqJ2QupMLLADRCTDh/5vnvuG3Lnujj+swS4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ChuKe1a/qvSV0k6OZM6tgpE9pKM2SQwFskak0EsRWaRtIwmjFTGmFd9E5R/mClm85
-         bsRrHknhjIGwuKOOHsWQBLhFB3b74n21Jzy5M9FwmtCpwWTgWE34lZeUWhOWYhiJ6m
-         BxkD90PQqWMhLr5YAtddIU/3+QLQ3j/WdNsivPX5pCYgo0sHSghbqtkJD38Yh/1ZNu
-         aI1VjDqP5XUUq4wIuyW14raEB58BbW9WSp/pHWFCOKggbeab+qiMWQVXu5jY0VXV7F
-         vMsoIghKFknfP3JpUOkFspI89yyrTXB0TfKg8eRUgTTHfbK7GpQKjJjC9fJV1OGjmX
-         8iP/jK8oSW9qw==
-Message-ID: <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
-Subject: Re: [PATCH v3 1/3] selftests: tpm2: Probe for available PCR bank
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Sat, 27 Nov 2021 02:29:00 +0200
-In-Reply-To: <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
-References: <20211125003827.1360432-1-stefanb@linux.vnet.ibm.com>
-         <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.40.4-1 
+        Fri, 26 Nov 2021 21:13:46 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.daesangagung.co.id (Postfix) with ESMTP id B11F180BC8355;
+        Fri, 26 Nov 2021 00:25:04 +0700 (WIB)
+Received: from mail.daesangagung.co.id ([127.0.0.1])
+        by localhost (mail.daesangagung.co.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id KP-98jJa8OIL; Fri, 26 Nov 2021 00:25:04 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.daesangagung.co.id (Postfix) with ESMTP id 9CAE7809F6432;
+        Thu, 25 Nov 2021 20:16:56 +0700 (WIB)
+X-Virus-Scanned: amavisd-new at daesangagung.co.id
+Received: from mail.daesangagung.co.id ([127.0.0.1])
+        by localhost (mail.daesangagung.co.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wLAkd3Q9MCXI; Thu, 25 Nov 2021 20:16:56 +0700 (WIB)
+Received: from User (_gateway [10.0.22.111])
+        by mail.daesangagung.co.id (Postfix) with SMTP id 335C4809F6434;
+        Thu, 25 Nov 2021 11:25:13 +0700 (WIB)
+Reply-To: <sarb_bnk086@meta.ua>
+From:   "Hsbc Bank London" <info@daesangagung.co.id>
+Subject: Your Approved Payment !
+Date:   Wed, 24 Nov 2021 20:25:30 -0800
 MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20211125042513.335C4809F6434@mail.daesangagung.co.id>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-T24gV2VkLCAyMDIxLTExLTI0IGF0IDE5OjM4IC0wNTAwLCBTdGVmYW4gQmVyZ2VyIHdyb3RlOgo+
-IEZyb206IFN0ZWZhbiBCZXJnZXIgPHN0ZWZhbmJAbGludXguaWJtLmNvbT4KPiAKPiBQcm9iZSBm
-b3IgYW4gYXZhaWxhYmxlIFBDUiBiYW5rIHRvIGFjY29tbW9kYXRlIGRldmljZXMgdGhhdCBkbyBu
-b3QgaGF2ZSBhCgpXaGF0IGRvZXMgInByb2JpbmcgZm9yIGFuIHZhaWxhYmxlIFBDUiBiYW5rIiBl
-dmVuIG1lYW4/Cgo+IFNIQS0xIFBDUiBiYW5rIG9yIHdob3NlIFNIQS0xIGJhbmsgaXMgZGVhY3Rp
-dmF0ZWQuIFVzZSB0aGUgYmFuayB0aGF0IGNhbgo+IGJlIHVzZWQgZm9yIHRoZSBUUE0yIGNvbW1h
-bmRzLCBzdWNoIGFzIHRoZSBTSEEtMjU2IGJhbmsuCgpUaGlzIGlzIGluY29ycmVjdCwgYXMgdGhl
-IHBhdGNoIGRvZXMgbm90IGhhdmUgY29kZSB0byBxdWVyeQphdmFpbGFibGUgaGFzaCBhbGdvcml0
-aG1zLgoKV2hhdCB0aGUgY29kZSBkb2VzLCBhbmQgb25seSBkb2VzIHRoYXQsIGlzIHRvIHVzZSBT
-SEEtMjU2IGFzwqAKYSBmYWxsYmFjayB3aGVuIFNIQS0xIGlzIG5vdCBlbmFibGVkLgoKL0phcmtr
-bwoKCj4gCj4gU2lnbmVkLW9mZi1ieTogU3RlZmFuIEJlcmdlciA8c3RlZmFuYkBsaW51eC5pYm0u
-Y29tPgo+IC0tLQo+IMKgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdHBtMi90cG0yX3Rlc3RzLnB5
-IHwgMzUgKysrKysrKysrKysrKysrKystLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDI3IGluc2Vy
-dGlvbnMoKyksIDggZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Rw
-bTIvdHBtMl90ZXN0cy5weQo+IGluZGV4IDlkNzY0MzA2ODg3Yi4uNmI4OGZmMGU0N2I5IDEwMDY0
-NAo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weQo+ICsr
-KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weQo+IEBAIC0yNyw3
-ICsyNywyMyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKgwqDCoMKg
-wqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYucm9vdF9rZXksIGJsb2Is
-IGF1dGgsIE5vbmUpCj4gwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmFzc2VydEVxdWFsKGRhdGEsIHJl
-c3VsdCkKPiDCoAo+ICvCoMKgwqAgZGVmIGRldGVybWluZV9iYW5rX2FsZyhzZWxmKToKPiArwqDC
-oMKgwqDCoMKgwqAgIyBQcm9iZSBmb3IgYXZhaWxhYmxlIFBDUiBiYW5rCj4gK8KgwqDCoMKgwqDC
-oMKgIGZvciBiYW5rX2FsZyBpbiBbdHBtMi5UUE0yX0FMR19TSEExLCB0cG0yLlRQTTJfQUxHX1NI
-QTI1Nl06Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgaGFuZGxlID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRw
-bTIuVFBNMl9TRV9UUklBTCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYu
-Y2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBbMTddLCBiYW5rX2FsZz1iYW5rX2FsZykKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBiYW5rX2FsZwo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGV4Y2VwdCB0cG0yLlVua25vd25QQ1JCYW5rRXJyb3I6Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwYXNzCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZmlu
-YWxseToKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LmZsdXNo
-X2NvbnRleHQoaGFuZGxlKQo+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gTm9uZQo+ICsKPiDCoMKg
-wqDCoCBkZWYgdGVzdF9zZWFsX3dpdGhfcG9saWN5KHNlbGYpOgo+ICvCoMKgwqDCoMKgwqDCoCBi
-YW5rX2FsZyA9IHNlbGYuZGV0ZXJtaW5lX2JhbmtfYWxnKCkKPiArwqDCoMKgwqDCoMKgwqAgc2Vs
-Zi5hc3NlcnRJc05vdE5vbmUoYmFua19hbGcpCj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAgaGFuZGxl
-ID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9UUklBTCkKPiDC
-oAo+IMKgwqDCoMKgwqDCoMKgwqAgZGF0YSA9ICgnWCcgKiA2NCkuZW5jb2RlKCkKPiBAQCAtMzUs
-NyArNTEsNyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKgwqDCoMKg
-wqDCoMKgwqAgcGNycyA9IFsxNl0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwY3JzKQo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBw
-Y3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5j
-bGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBwb2xpY3lfZGlnID0gc2VsZi5jbGllbnQuZ2V0X3BvbGljeV9kaWdlc3QoaGFuZGxlKQo+
-IEBAIC00Nyw3ICs2Myw3IEBAIGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0Q2FzZSk6Cj4g
-wqDCoMKgwqDCoMKgwqDCoCBoYW5kbGUgPSBzZWxmLmNsaWVudC5zdGFydF9hdXRoX3Nlc3Npb24o
-dHBtMi5UUE0yX1NFX1BPTElDWSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwIlVzZSBT
-SEEtMjU2IGFzIGEgZmFsbGJhY2sgY3JzKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYu
-Y2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwY3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5jbGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXN1bHQgPSBzZWxmLmNsaWVudC51bnNl
-YWwoc2VsZi5yb290X2tleSwgYmxvYiwgYXV0aCwgaGFuZGxlKQo+IEBAIC03Miw2ICs4OCw5IEBA
-IGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0Q2FzZSk6Cj4gwqDCoMKgwqDCoMKgwqDCoCBz
-ZWxmLmFzc2VydEVxdWFsKHJjLCB0cG0yLlRQTTJfUkNfQVVUSF9GQUlMKQo+IMKgCj4gwqDCoMKg
-wqAgZGVmIHRlc3RfdW5zZWFsX3dpdGhfd3JvbmdfcG9saWN5KHNlbGYpOgo+ICvCoMKgwqDCoMKg
-wqDCoCBiYW5rX2FsZyA9IHNlbGYuZGV0ZXJtaW5lX2JhbmtfYWxnKCkKPiArwqDCoMKgwqDCoMKg
-wqAgc2VsZi5hc3NlcnRJc05vdE5vbmUoYmFua19hbGcpCj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAg
-aGFuZGxlID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9UUklB
-TCkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgZGF0YSA9ICgnWCcgKiA2NCkuZW5jb2RlKCkKPiBA
-QCAtNzksNyArOTgsNyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKg
-wqDCoMKgwqDCoMKgwqAgcGNycyA9IFsxNl0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBw
-Y3JzKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFu
-ZGxlLCBwY3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-c2VsZi5jbGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBwb2xpY3lfZGlnID0gc2VsZi5jbGllbnQuZ2V0X3BvbGljeV9kaWdlc3QoaGFu
-ZGxlKQo+IEBAIC05MSwxMyArMTEwLDEzIEBAIGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0
-Q2FzZSk6Cj4gwqDCoMKgwqDCoMKgwqDCoCAjIEV4dGVuZCBmaXJzdCBhIFBDUiB0aGF0IGlzIG5v
-dCBwYXJ0IG9mIHRoZSBwb2xpY3kgYW5kIHRyeSB0byB1bnNlYWwuCj4gwqDCoMKgwqDCoMKgwqDC
-oCAjIFRoaXMgc2hvdWxkIHN1Y2NlZWQuCj4gwqAKPiAtwqDCoMKgwqDCoMKgwqAgZHMgPSB0cG0y
-LmdldF9kaWdlc3Rfc2l6ZSh0cG0yLlRQTTJfQUxHX1NIQTEpCj4gLcKgwqDCoMKgwqDCoMKgIHNl
-bGYuY2xpZW50LmV4dGVuZF9wY3IoMSwgKCdYJyAqIGRzKS5lbmNvZGUoKSkKPiArwqDCoMKgwqDC
-oMKgwqAgZHMgPSB0cG0yLmdldF9kaWdlc3Rfc2l6ZShiYW5rX2FsZykKPiArwqDCoMKgwqDCoMKg
-wqAgc2VsZi5jbGllbnQuZXh0ZW5kX3BjcigxLCAoJ1gnICogZHMpLmVuY29kZSgpLCBiYW5rX2Fs
-Zz1iYW5rX2FsZykKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgaGFuZGxlID0gc2VsZi5jbGllbnQu
-c3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9QT0xJQ1kpCj4gwqAKPiDCoMKgwqDCoMKg
-wqDCoMKgIHRyeToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lf
-cGNyKGhhbmRsZSwgcGNycykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5w
-b2xpY3lfcGNyKGhhbmRsZSwgcGNycywgYmFua19hbGc9YmFua19hbGcpCj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wYXNzd29yZChoYW5kbGUpCj4gwqAKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYu
-cm9vdF9rZXksIGJsb2IsIGF1dGgsIGhhbmRsZSkKPiBAQCAtMTA5LDE0ICsxMjgsMTQgQEAgY2xh
-c3MgU21va2VUZXN0KHVuaXR0ZXN0LlRlc3RDYXNlKToKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAg
-IyBUaGVuLCBleHRlbmQgYSBQQ1IgdGhhdCBpcyBwYXJ0IG9mIHRoZSBwb2xpY3kgYW5kIHRyeSB0
-byB1bnNlYWwuCj4gwqDCoMKgwqDCoMKgwqDCoCAjIFRoaXMgc2hvdWxkIGZhaWwuCj4gLcKgwqDC
-oMKgwqDCoMKgIHNlbGYuY2xpZW50LmV4dGVuZF9wY3IoMTYsICgnWCcgKiBkcykuZW5jb2RlKCkp
-Cj4gK8KgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LmV4dGVuZF9wY3IoMTYsICgnWCcgKiBkcyku
-ZW5jb2RlKCksIGJhbmtfYWxnPWJhbmtfYWxnKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoCBoYW5k
-bGUgPSBzZWxmLmNsaWVudC5zdGFydF9hdXRoX3Nlc3Npb24odHBtMi5UUE0yX1NFX1BPTElDWSkK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgcmMgPSAwCj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgIHRy
-eToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lfcGNyKGhhbmRs
-ZSwgcGNycykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lfcGNy
-KGhhbmRsZSwgcGNycywgYmFua19hbGc9YmFua19hbGcpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHNlbGYuY2xpZW50LnBvbGljeV9wYXNzd29yZChoYW5kbGUpCj4gwqAKPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYucm9vdF9rZXks
-IGJsb2IsIGF1dGgsIGhhbmRsZSkKCg==
+THE WORLDS LOCAL BANK
+International Banking
+FOREIGN EXCHANGE UNIT
 
+RE: MANDATORY RELEASE ORDER OF YOUR OVERDUE FUND
+
+Dear Valued Beneficiary:
+
+We are pleased to inform you that we have finally concluded arrangement towards your refund/lottery pay out which has been delayed for a Long Period of time because of your Cooperation and Dealings with Wrong Officials and importers of banks as your fund returned back to us on the 4th of Jan 2021 when we confirmed the rate of delays and questionable activities that has been related by the previous administrative banks alongside with others that collaborated in delaying the release of your fund after all charges and payments demanded were paid.
+
+Recently, the Ministry of Finance of United Kingdom, Bank of England, HSBC Bank Plc UK and United Kingdom Inland Revenue Services held a meeting on how this fund will be released to the beneficiaries to their designated bank accounts in their country without further delay since we are in the first half of the economic year 2021 and it is now overdue to be released as the said funds belongs to them.
+
+We apologize for the delay of the payment and all the inconveniences that this might have caused you during this period of time. However we have instructed all the banks in the globe which we previously asked to help us pay out this fund to the general public to STOP the process of the release of the fund due to their incompetence and negligence of duty towards the release of this fund. After our findings, some were arrested and charged for theft according to Section 1 of the Theft Act 1978, as amended by the Theft (Amendment) Act 1996 law of the United Kingdom.
+
+The Bank of England Governor (Mr Andrew Bailey) has given serious warning and Instructions and ordered the Inland Revenue Services Department of England to quickly release all on hold funds which are in their escrow account to the sole beneficiaries which you are among those who will receive their Inheritance funds.
+
+Please contact ONLY the Executive member of the Monetary Policy Committee of South African Reserve Bank (Dr Rashad Cassim) on his email: sarb_bnk086@meta.ua to advise you on how to procure the certificate of claim as the law of South Africa demands that without it there will not be any payment whether pending loan amount, lottery fund, inheritance funds or whatsoever fund locally or internationally perhaps you have not yet received it.
+
+Provide below details to Dr Rashad Cassim for his clarification:
+
+Full Name....... Tel.................
+
+Address......... Amount..............
+
+City............ Country.............
+
+Copies of documents pertaining to the fund.
+
+Best Regards,
+Mr.James Emmett.
+Chief Executive Officer, HSBC Bank plc.
+United Kingdom
