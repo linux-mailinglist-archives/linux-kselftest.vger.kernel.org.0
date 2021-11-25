@@ -2,166 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF8A45D829
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 11:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647AB45DA30
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 13:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354492AbhKYKZS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Nov 2021 05:25:18 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58636 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354371AbhKYKXQ (ORCPT
+        id S1354876AbhKYMk5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Nov 2021 07:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353292AbhKYMi5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Nov 2021 05:23:16 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B53131FDF1;
-        Thu, 25 Nov 2021 10:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1637835604; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v8y1Z8l+5H9ro6ZVY0cIqzUQoY7K3Ii5PzPw9rqgiog=;
-        b=Oz4Tou4rY7D3CRTHB/8XRcvrxXYWXjXgRs+MlRJv8eam6yROSItADJ8Xv0KmxRytSxyAX0
-        3M/6XOhxuq02Y0d8VvAHUHISl6HkqK6+Q3KvUDjtxR1ah8AujLyW3NTaOclufcBtjBIlt2
-        BAW9HzDIXIx50FZcDKEYPcm4Y3FKP1E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1637835604;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v8y1Z8l+5H9ro6ZVY0cIqzUQoY7K3Ii5PzPw9rqgiog=;
-        b=vCBayQ62J4CWmGJvUSjxsyVXXq8fnWA4wL4Ins9My+sbokGjinxAFCllutZKr/gM7S+UZQ
-        0oze1KIHLc34pWBw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9D32AA3B83;
-        Thu, 25 Nov 2021 10:20:04 +0000 (UTC)
-Date:   Thu, 25 Nov 2021 11:20:04 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Petr Mladek <pmladek@suse.com>
-cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
- for on a stack
-In-Reply-To: <YZ9gfPuCTmDmOj9h@alley>
-Message-ID: <alpine.LSU.2.21.2111251110130.28836@pobox.suse.cz>
-References: <YZ9gfPuCTmDmOj9h@alley>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 25 Nov 2021 07:38:57 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB0C061574;
+        Thu, 25 Nov 2021 04:34:34 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id l190so5118046pge.7;
+        Thu, 25 Nov 2021 04:34:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0eAV0QCSYY59EfhYYGwBRd+u8b18m2Ztdaw86lrALGo=;
+        b=LbIS6sfQbR7fqoUkZOLPzKEM4vW/6AVOeUj6EtJCuvOGCkevZx04B0ZK5wHKeN5+EO
+         jNQ2xJsCyzfwE6iYGIeypC9+6edPYMpDvF1ty1u13S8lgV1HAmPRLWt62UTJyEMr2TPt
+         dRwMyHNQwkT6FiEADnEd3k2q13CS7l4MLg+17ZaoargK+4QB8DBvtBHR2j3th/INXGrC
+         zhuiWiRkFb6NgeaKCrHfleTOk4LEQuI1jFO4gdU5K3J38H3BM3xZVlQw2AuaDtL9dbjY
+         8bqWDCG0AkUDXu2UMsee5uKh1XwQuHZgFlXA5qgBofn7aNe4oHiglbVAzW5mqJSSxT69
+         Xq+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0eAV0QCSYY59EfhYYGwBRd+u8b18m2Ztdaw86lrALGo=;
+        b=WspoN9kmzOntqEPUsKkmQa5ImrytQYLVqR3FZIdhEcPCFfst6Ce1gLU+6IguZ9YT45
+         GqtuECXzNFCR0YtGYQ7lvEReelGZMzLFdVMsXG4aEHHeDwtST+AjPW+eSz4nJeQnjH3i
+         Xl2IEwqciPS43CMzThcmh0oza+Z/IYa68Wk70ycV3fHjYG20xlr8cy/WkmO/Ukkhm/7a
+         jgLkdxEQMfiMd42rsREpQcizL54GqvOX1Qf9TISj6lhUdqw7iC4pZXhKgU1h7vozbaYM
+         GunnPi6D5y7EtOCMmjKOsjotkXGrHgW0/PTjdmfTUe1FauIrPVkjyRppDhP4TD7Au3Nd
+         tNPQ==
+X-Gm-Message-State: AOAM530V9LqzRipSFxWssXCNs53txkLVALf6Uhjk4hJX0ezM3B6gvCXf
+        iwcuQI1BbAHoM4GZDhlRwTxs1ZISHH0=
+X-Google-Smtp-Source: ABdhPJwJjoRLjGJFIoyzqBMwPXueRu0hLtMHlkWRVw7D9yc9QIuLxqm8pMij0y6F3VMyns6g1SUmQQ==
+X-Received: by 2002:a05:6a00:8c6:b0:4a2:d762:8b42 with SMTP id s6-20020a056a0008c600b004a2d7628b42mr13732350pfu.28.1637843674170;
+        Thu, 25 Nov 2021 04:34:34 -0800 (PST)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h13sm2373135pgg.16.2021.11.25.04.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Nov 2021 04:34:33 -0800 (PST)
+Date:   Thu, 25 Nov 2021 20:34:28 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        WireGuard mailing list <wireguard@lists.zx2c4.com>,
+        Netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH wireguard] wireguard: selftests: refactor the test
+ structure
+Message-ID: <YZ+C1MWdWQvd66ic@Laptop-X1>
+References: <20211116081359.975655-1-liuhangbin@gmail.com>
+ <CAHmME9pNFe7grqhW7=YQgRq10g4K5bqVuJrq0HonEVNbQSRuYg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9pNFe7grqhW7=YQgRq10g4K5bqVuJrq0HonEVNbQSRuYg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 25 Nov 2021, Petr Mladek wrote:
-
-> On Mon 2021-11-22 10:53:21, Joe Lawrence wrote:
-> > On 11/22/21 2:57 AM, Miroslav Benes wrote:
-> > > On Fri, 19 Nov 2021, Josh Poimboeuf wrote:
-> > > 
-> > >> Thanks for doing this!  And at peterz-esque speed no less :-)
-> > >>
-> > >> On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
-> > >>> livepatch's consistency model requires that no live patched function
-> > >>> must be found on any task's stack during a transition process after a
-> > >>> live patch is applied. It is achieved by walking through stacks of all
-> > >>> blocked tasks.
-> > >>>
-> > >>> The user might also want to define more functions to search for without
-> > >>> them being patched at all. It may either help with preparing a live
-> > >>> patch, which would otherwise require additional touches to achieve the
-> > >>> consistency
-> > >>
-> > >> Do we have any examples of this situation we can add to the commit log?
-> > > 
-> > > I do not have anything at hand. Joe, do you remember the case you 
-> > > mentioned previously about adding a nop to a function?
-> > 
-> > Maybe adding a hypothetical scenario to the commit log would suffice?
+On Tue, Nov 16, 2021 at 03:35:40PM +0100, Jason A. Donenfeld wrote:
+> Hi Hangbin,
 > 
-> I wonder if we could describe a scenario based on the thread about
-> .cold code variants, see
-> https://lore.kernel.org/all/20211112015003.pefl656m3zmir6ov@treble/
+> I don't know how interested in this I am. Splitting things into two
+> files means more confusing maintenance, and categorizing sections
+> strictly into functions means there's more overhead when adding tests
+> (e.g. "where do they fit?"), because the categories you've chosen are
+> fairly broad, rather than being functions for each specific test. I'd
+> be more amenable to something _entirely_ granular, because that'd be
+> consistent, or what we have now, which is just linear. Full
+> granularity, though, has its own downsides, of increased clutter.
+> Alternatively, if you'd like to add some comments around the different
+> areas to better document what's happening, perhaps that'd accomplish
+> the same thing as this patch.
 > 
-> This feature would allow to safely livepatch already released
-> kernels where the unwinder is not able to reliably detect
-> a newly discovered problems.
 
-and is described (well, without actually using .cold suffix) a few lines 
-below. I'll try to improve the changelog.
- 
-> > >>> or it can be used to overcome deficiencies the stack
-> > >>> checking inherently has. For example, GCC may optimize a function so
-> > >>> that a part of it is moved to a different section and the function would
-> > >>> jump to it. This child function would not be found on a stack in this
-> > >>> case, but it may be important to search for it so that, again, the
-> > >>> consistency is achieved.
-> > >>>
-> > >>> Allow the user to specify such functions on klp_object level.
-> > >>>
-> > >>> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> > >>> ---
-> > >>>  include/linux/livepatch.h     | 11 +++++++++++
-> > >>>  kernel/livepatch/core.c       | 16 ++++++++++++++++
-> > >>>  kernel/livepatch/transition.c | 21 ++++++++++++++++-----
-> > >>>  3 files changed, 43 insertions(+), 5 deletions(-)
-> > >>>
-> > >>> diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-> > >>> index 2614247a9781..89df578af8c3 100644
-> > >>> --- a/include/linux/livepatch.h
-> > >>> +++ b/include/linux/livepatch.h
-> > >>> @@ -106,9 +106,11 @@ struct klp_callbacks {
-> > >>>   * struct klp_object - kernel object structure for live patching
-> > >>>   * @name:	module name (or NULL for vmlinux)
-> > >>>   * @funcs:	function entries for functions to be patched in the object
-> > >>> + * @funcs_stack:	function entries for functions to be stack checked
-> > >>
-> > >> So there are two arrays/lists of 'klp_func', and two implied meanings of
-> > >> what a 'klp_func' is and how it's initialized.
-> > >>
-> > >> Might it be simpler and more explicit to just add a new external field
-> > >> to 'klp_func' and continue to have a single 'funcs' array?  Similar to
-> > >> what we already do with the special-casing of 'nop', except it would be
-> > >> an external field, e.g. 'no_patch' or 'stack_only'.
-> > 
-> > I'll add that the first thing that came to mind when you raised this
-> > feature idea in the other thread was to support existing klp_funcs array
-> > with NULL new_func's.
-> 
-> Please, solve this with the extra flag, e.g. .stack_only, as
-> already suggested. It will help to distinguish mistakes and
-> intentions. Also it will allow to find these symbols by grep.
+Hi Jason,
 
-Indeed, that is what I did for v2. I used new_func being NULL fact even in 
-v1, but I do not like it much. Extra flag is definitely more robust.
- 
-> > I didn't go look to see how invasive it would be,
-> > but it will be interesting to see if a single list approach turns out
-> > any simpler for v2.
-> 
-> I am not sure either. But I expect that it will be easier than
-> the extra array.
+May be my timezone is not very fit for yours. So I will copy my IRC replies
+in the mail to moving on our kselftest topic.
 
-So, extra flag and one array makes certain things (initialization) 
-definitely easier. On the other hand, there are suddenly more problems to 
-think about (and I haven't solved them yet):
+The reason I did this patch is because I want to make the test more clear
+and able to run each test case separately. My though is to make the
+wireguard test looks like tools/testing/selftests/net/fib_tests.sh.(Of course
+this could be discussed).
 
-  - I need to make it work with nops functions. Especially if we allow a 
-    scenario where there could be klp_object instance with just stack_only 
-    functions. Would that be useful? For example, to patch something in a 
-    module and add a stack_only for a function in vmlinux.
- 
-    If yes, then the interaction with nops is not completely 
-    straightforward and also some parts of the code would have to be 
-    changed (for example how obj->patched flag is handled).
+Because the linear structure makes reader hard to find out what test it does.
+The function name in my current patch is also a little broad to look, which
+could to be updated. After updating, I'd like to make the test has 2 parts,
+functional tests and regression test. Functional tests for big part of function
+tests and regression test for small specific issues.
 
-  - klp_func instances are directly mirrored in sysfs. Do we want to keep 
-    stack_only functions there too? If not, it makes the whole thing 
-    slighly more difficult given how we manage kobjects.
+BTW, one downside about current linear structure I think is that when someone
+want to add a new test, he need to read through the whole test to know that
+kind of topology at last. But with function structure, when we want to add a
+new test. We can just do like:
+1. set up basic topology
+2. configure to specific topo for testing, or just skip the first step and
+   configure to specific topo directly.
+3. Do test
+4. Clean up environment or reset to basic topology
 
-Nothing really difficult to implement if we come up with answers.
+I think this would make adding new test case easier. What do you think?
 
-Miroslav
+Thanks
+Hangbin
