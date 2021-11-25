@@ -2,96 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C6B45D294
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 02:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BC045D7FB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Nov 2021 11:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353263AbhKYBvu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Nov 2021 20:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346395AbhKYBtt (ORCPT
+        id S1354573AbhKYKNJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Nov 2021 05:13:09 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:46158 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354382AbhKYKLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 20:49:49 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2860AC07E5E1;
-        Wed, 24 Nov 2021 16:58:21 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id n8so3256789plf.4;
-        Wed, 24 Nov 2021 16:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YzIxUYIqkQOMo9SX2v8OF7Y8+z3ebsgKCPCZNs6Su4k=;
-        b=bgkSczEDoMzlDJJ7SKa7gQVPKboIiNIfeCaj1JFlrssCRQw5rsodZXKh4ZZEdmJaAe
-         hU3gzPL1oU3e+U2xXG7xWjzmQg6q7ZhyB1duovGIwU6bP7/D72zsD8UCcEf5qFf/AFCW
-         ylHIVAqv5bpG5aLJg+s3Jo5bTC+NpmsmMmBaXvUVdeLwfyDHGva5IjOYCfkeMAAeNNuJ
-         uUxXFhBKpDXT/U+HhkvgYq8Paz1AiTZEKjn3wyrdw6n6tvg+qn1LXPk8XIspMnggbFP5
-         yCJevEeZKgYmwzTV9jnDZ5f4eYcRiYVfC7zq5eGAqTOiNfyTmaDMENn2dvKMqtt/XkcT
-         VkPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YzIxUYIqkQOMo9SX2v8OF7Y8+z3ebsgKCPCZNs6Su4k=;
-        b=3WHXy3v3WNN2AJQGjrTRH2LekyMyrakvOyZGsBFyo2qHQon6hql/yCFFr8zwJOsmkl
-         GnBCgFBD/JXNh1h6eA3XN/fgMz+ly4H1LghJ08zyYj9ClVRx21rtmzGeL8XFyolZzlTF
-         TSW4RKC2zE8zRpisp3RhiCphB8lZhP3P3QSClWGjLTc+k2jJi9U2pYXuQ5M2nigF8v+7
-         KFBBuIL3mYw0FioZ0wpz4w0kBzV2+O80d4N5TxTyoFRt+4WrXQsVmJ8w1mI0r2zrXjAa
-         w2eZK7S5PQhotLsOjhTpqW0n3u1jq+82Lf5abhpnMAYCOmHb+mhN4QQMyBipZGVhcn+p
-         aPPg==
-X-Gm-Message-State: AOAM533Vzu5c11Bu8jI/hkVlqv6dXwabYVLcSWm99jeFF5M9gHqv5NIL
-        ykLe0lQoGCrrW2cxjZssfc4=
-X-Google-Smtp-Source: ABdhPJz8xeRoRvyefgULIBOU3wStHCHI/T1ERhp68O412PGD/a18RIkyOaFsJjG2Q/743nuYa9C6cA==
-X-Received: by 2002:a17:902:6b47:b0:142:82e1:6cf5 with SMTP id g7-20020a1709026b4700b0014282e16cf5mr24710050plt.28.1637801900772;
-        Wed, 24 Nov 2021 16:58:20 -0800 (PST)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id lx15sm759594pjb.44.2021.11.24.16.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 16:58:20 -0800 (PST)
-From:   davidcomponentone@gmail.com
-X-Google-Original-From: yang.guang5@zte.com.cn
-To:     shuah@kernel.org
-Cc:     davidcomponentone@gmail.com, christian.brauner@ubuntu.com,
-        ptikhomirov@virtuozzo.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] tests: remove unneeded conversion to bool
-Date:   Thu, 25 Nov 2021 08:58:07 +0800
-Message-Id: <f1fe5f6b00e62a6f70c47f1d8b4c41d5d7d03d7d.1637736469.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        Thu, 25 Nov 2021 05:11:09 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4061C21954;
+        Thu, 25 Nov 2021 10:07:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1637834877; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:  in-reply-to:in-reply-to;
+        bh=egtWqavi5e/lfcU1EU6RtNwK3p+JN+8aD5azguEUeug=;
+        b=REFfTzIV3E0wOzzjQtFOEGHXsaIphgNxvLU9bbyeVGnlbREatZU8UDHRxdp5IuQQxqP95N
+        5WRWrQcLVEW6NLPaw1hlSPyJCeLhI9fnoiFdYfGwj/uZ8i1KcZq/5qTt1q+qJPgQyzT5mj
+        urpqX3tK/gT12mR81Q2/J3fu+vJqWKc=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 26641A3B81;
+        Thu, 25 Nov 2021 10:07:57 +0000 (UTC)
+Date:   Thu, 25 Nov 2021 11:07:56 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, jikos@kernel.org,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
+ for on a stack
+Message-ID: <YZ9gfPuCTmDmOj9h@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40edd48c-6f45-29e3-4749-be37fb61afba@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+On Mon 2021-11-22 10:53:21, Joe Lawrence wrote:
+> On 11/22/21 2:57 AM, Miroslav Benes wrote:
+> > On Fri, 19 Nov 2021, Josh Poimboeuf wrote:
+> > 
+> >> Thanks for doing this!  And at peterz-esque speed no less :-)
+> >>
+> >> On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
+> >>> livepatch's consistency model requires that no live patched function
+> >>> must be found on any task's stack during a transition process after a
+> >>> live patch is applied. It is achieved by walking through stacks of all
+> >>> blocked tasks.
+> >>>
+> >>> The user might also want to define more functions to search for without
+> >>> them being patched at all. It may either help with preparing a live
+> >>> patch, which would otherwise require additional touches to achieve the
+> >>> consistency
+> >>
+> >> Do we have any examples of this situation we can add to the commit log?
+> > 
+> > I do not have anything at hand. Joe, do you remember the case you 
+> > mentioned previously about adding a nop to a function?
+> 
+> Maybe adding a hypothetical scenario to the commit log would suffice?
 
-The coccinelle report
-./tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c:225:18-23:
-WARNING: conversion to bool not needed here
-Relational and logical operators evaluate to bool,
-explicit conversion is overly verbose and unneeded.
+I wonder if we could describe a scenario based on the thread about
+.cold code variants, see
+https://lore.kernel.org/all/20211112015003.pefl656m3zmir6ov@treble/
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
----
- .../selftests/move_mount_set_group/move_mount_set_group_test.c  | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This feature would allow to safely livepatch already released
+kernels where the unwinder is not able to reliably detect
+a newly discovered problems.
 
-diff --git a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-index 860198f83a53..80ff0b692486 100644
---- a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-+++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-@@ -222,7 +222,7 @@ static int move_mount_set_group_supported(void)
- 		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
- 	umount2("/tmp", MNT_DETACH);
- 
--	return ret < 0 ? false : true;
-+	return ret >= 0;
- }
- 
- FIXTURE(move_mount_set_group) {
--- 
-2.30.2
+> >>> or it can be used to overcome deficiencies the stack
+> >>> checking inherently has. For example, GCC may optimize a function so
+> >>> that a part of it is moved to a different section and the function would
+> >>> jump to it. This child function would not be found on a stack in this
+> >>> case, but it may be important to search for it so that, again, the
+> >>> consistency is achieved.
+> >>>
+> >>> Allow the user to specify such functions on klp_object level.
+> >>>
+> >>> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> >>> ---
+> >>>  include/linux/livepatch.h     | 11 +++++++++++
+> >>>  kernel/livepatch/core.c       | 16 ++++++++++++++++
+> >>>  kernel/livepatch/transition.c | 21 ++++++++++++++++-----
+> >>>  3 files changed, 43 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
+> >>> index 2614247a9781..89df578af8c3 100644
+> >>> --- a/include/linux/livepatch.h
+> >>> +++ b/include/linux/livepatch.h
+> >>> @@ -106,9 +106,11 @@ struct klp_callbacks {
+> >>>   * struct klp_object - kernel object structure for live patching
+> >>>   * @name:	module name (or NULL for vmlinux)
+> >>>   * @funcs:	function entries for functions to be patched in the object
+> >>> + * @funcs_stack:	function entries for functions to be stack checked
+> >>
+> >> So there are two arrays/lists of 'klp_func', and two implied meanings of
+> >> what a 'klp_func' is and how it's initialized.
+> >>
+> >> Might it be simpler and more explicit to just add a new external field
+> >> to 'klp_func' and continue to have a single 'funcs' array?  Similar to
+> >> what we already do with the special-casing of 'nop', except it would be
+> >> an external field, e.g. 'no_patch' or 'stack_only'.
+> 
+> I'll add that the first thing that came to mind when you raised this
+> feature idea in the other thread was to support existing klp_funcs array
+> with NULL new_func's.
 
+Please, solve this with the extra flag, e.g. .stack_only, as
+already suggested. It will help to distinguish mistakes and
+intentions. Also it will allow to find these symbols by grep.
+
+> I didn't go look to see how invasive it would be,
+> but it will be interesting to see if a single list approach turns out
+> any simpler for v2.
+
+I am not sure either. But I expect that it will be easier than
+the extra array.
+
+Best Regards,
+Petr
