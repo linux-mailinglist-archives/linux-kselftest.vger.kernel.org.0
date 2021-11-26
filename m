@@ -2,89 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BD345EBAF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Nov 2021 11:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56D145EF95
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Nov 2021 15:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376722AbhKZKgl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Nov 2021 05:36:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34517 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1377124AbhKZKel (ORCPT
+        id S240968AbhKZOML (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Nov 2021 09:12:11 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:51284 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236190AbhKZOKL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Nov 2021 05:34:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637922688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 26 Nov 2021 09:10:11 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7BE081FD38;
+        Fri, 26 Nov 2021 14:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1637935617; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lfDWgoSwBK/MbRVa0hEi5B9pRdTSSilaYnNnpfFZZdo=;
-        b=RFJ+KsXjXt0SclGaHzoDCIa0VfFA7vk7B3ranDCJNHNfbL0+Ee8r7BJrOWYtMTiM+76DSP
-        mNnFn3qvhR2Cq3JlBw4r8XKtxHq3rZQddcK3KPsZpPL1iNH23dOm9w2kXrz6xVva9dPNkV
-        UKOb2qyfy+iCwvNfFT/dUuZpX2cabzs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-atf-egpfOHGIpfERul5uyg-1; Fri, 26 Nov 2021 05:31:25 -0500
-X-MC-Unique: atf-egpfOHGIpfERul5uyg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=sJa//bALhDjnLcw9oy0p5+f1aMnGtgYvTAX2/sbsreo=;
+        b=VrpzrAqvkXgaWsuCy1q3R2dJ66OyEj/8vUiOovjbL36hCUOWxE9BBio59XlN0W6VQOMMpT
+        3fXbhA4JHQJ66f+RaC3+1fMsAPb02bB3yZF6YZeIYfVUN6puAvoy79zi8+a9xTXGRl6GCv
+        1g9+msZ+19T4OYmv05W3cDJKdI4T7Yw=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D68BC2F22;
-        Fri, 26 Nov 2021 10:31:23 +0000 (UTC)
-Received: from [10.39.195.16] (unknown [10.39.195.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0DCD25D740;
-        Fri, 26 Nov 2021 10:31:18 +0000 (UTC)
-Message-ID: <48dc971d-e5ee-0024-e539-89a050e7cf5e@redhat.com>
-Date:   Fri, 26 Nov 2021 11:31:17 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 61A82A3B83;
+        Fri, 26 Nov 2021 14:06:57 +0000 (UTC)
+Date:   Fri, 26 Nov 2021 15:06:54 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     jpoimboe@redhat.com, jikos@kernel.org, joe.lawrence@redhat.com,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/3] selftests/livepatch: Test of the API for specifying
+ functions to search for on a stack
+Message-ID: <YaDp/uVdBuIAIs71@alley>
+References: <20211119090327.12811-1-mbenes@suse.cz>
+ <20211119090327.12811-4-mbenes@suse.cz>
+ <YZ+gIa4dG2uPvSlY@alley>
+ <alpine.LSU.2.21.2111261010010.6268@pobox.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: selftests: use ARRAY_SIZE
-Content-Language: en-US
-To:     Greg KH <greg@kroah.com>, cgel.zte@gmail.com
-Cc:     shuah@kernel.org, deng.changcheng@zte.com.cn, mlevitsk@redhat.com,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-References: <20211124092256.37966-1-deng.changcheng@zte.com.cn>
- <YZ4J23oFTTDpjSa8@kroah.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YZ4J23oFTTDpjSa8@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2111261010010.6268@pobox.suse.cz>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/24/21 10:46, Greg KH wrote:
->> From: Changcheng Deng<deng.changcheng@zte.com.cn>
->>
->> Use ARRAY_SIZE instead of dividing sizeof array with sizeof an element.
->>
->> Reported-by: Zeal Robot<zealci@zte.com.cn>
->> Signed-off-by: Changcheng Deng<deng.changcheng@zte.com.cn>
-> Your email address does not match these here, you need to provide a
-> signed-off-by as well.
+On Fri 2021-11-26 10:20:54, Miroslav Benes wrote:
+> On Thu, 25 Nov 2021, Petr Mladek wrote:
 > 
-> And are you_SURE_  that you can use kernel #defines in userspace testing
-> code?
+> > On Fri 2021-11-19 10:03:27, Miroslav Benes wrote:
+> > > Add a test for the API which allows the user to specify functions which
+> > > are then searched for on any tasks's stack during a transition process.
+> > > 
+> > The approach with debugfs is an interesting trick. Though, I slightly
+> > prefer using the scheduled work. The workqueue API looks less tricky
+> > to me than sysfs/debugfs API. Also it does not block the module
+> > in the init() callback[*]. But I might be biased.
+> 
+> It seemed to me that debugfs gave us more control over the process than 
+> workqueues, but I do not really care. Could you explain the blocking in 
+> the init callback? I do not follow.
 
-Dpeends on which, but ARRAY_SIZE is among those that can be used:
+Good question about the blocking! Please, forget it. I am not sure
+why I thought that the module might get blocked in the module_init()
+script.
 
-$ git grep '#define ARRAY_SIZE' 'tools/*.h'
-tools/gpio/gpio-utils.h:#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-tools/iio/iio_utils.h:#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
-tools/include/linux/kernel.h:#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-tools/testing/selftests/bpf/progs/profiler.inc.h:#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
-tools/testing/selftests/cgroup/cgroup_util.h:#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-tools/testing/selftests/kselftest_harness.h:#define ARRAY_SIZE(a)	(sizeof(a) / sizeof(a[0]))
-tools/testing/selftests/landlock/common.h:#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-tools/testing/selftests/vm/pkey-helpers.h:#define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
-tools/virtio/linux/kernel.h:#define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
-In particular, most KVM tests already include linux/kernel.h
-indirectly via linux/list.h.
+> > Anyway, it might make sense to use the same trick in both situations.
+> > It would make it easier to maintain the test modules.
+> 
+> True. So I will rewrite it to workqueues as you are proposing below.
+> 
+> > [*] There is actually a race in the workqueue approach. The module
+> > init() callback should wait until the work is really scheduled
+> > and sleeping. It might be achieved by similar hand-shake like
+> > with @block_transition variable. Or completion API might be
+> > even more elegant.
+> > 
+> > 
+> > > +	pr_info("%s exit\n", __func__);
+> > > +}
+> > > +
+> > > +static noinline void child2_function(void)
+> > > +{
+> > > +	pr_info("%s\n", __func__);
+> > > +}
+> > > +
+> > > +static noinline void parent_function(void)
+> > > +{
+> > > +	pr_info("%s enter\n", __func__);
+> > > +	child_function();
+> > > +	child2_function();
+> > 
+> > This would deserve some explanation what we try to simulate here
+> > and how it is achieved. It is not easy for me even with the background
+> > that I have freshly in my mind.
+> > 
+> > Also I think about more descriptive names ;-)
+> 
+> Hey, I thought it was self-explaining :). So, yes, I started with the 
+> example given in the .fixup thread, but it is not really tied to .cold 
+> section, jumps or whatever. The setup is just used to test a new API. 
+> Moreover, the .fixup example is just a one scenario the new API tries to 
+> solve.
 
-Paolo
+OK, single child() function should be enough for testing the behavior.
+We might sleep/wait in the parent().
 
+I think that I was confused by the two child() functions. It looked
+like sleeping in a child function was important. And the "same"
+name of the two children did not help much to understand and
+distinguish the purpose.
+
+> What you propose below, that is function names and comments, is a bit 
+> confusing for me. Especially if I did not know anything about the original 
+> issue (which will be the case in a couple of weeks when I forget 
+> everything).
+> 
+> So I think it I will stick to brevity unless you or someone else really 
+> insist.
+
+No, I do not resist on the complicated exmaple. When thinking about
+it, the easier test case the better. It should be enough to describe
+the real-life purpose of the API in the patch that introduces the API.
+
+> I can improve tests description in 
+> tools/testing/selftests/livepatch/test-func-stack.sh if it helps anything.
+
+Yes, please. I miss some top-level descriptions of the tested
+functionality, something like:
+
+# Tests for "bla bla" feature.
+# It allows to block transition of a process when it is running
+# parent() function and only the child() function is livepatched.
+
+# This test does not use the feature. The transition finishes even
+# before parent() exits.
+
+# In this test case, the livepatch is instructed to check also
+# parent() on stack. The transition must not finish before
+# parent() exists.
+
+It would be nice to have these high-level descriptions even in
+the test modules.
+
+Best Regards,
+Petr
