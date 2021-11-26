@@ -2,95 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB55A45E69A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Nov 2021 04:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1E545E826
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Nov 2021 07:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357906AbhKZDpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Nov 2021 22:45:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235958AbhKZDnW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Nov 2021 22:43:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1EDA861058;
-        Fri, 26 Nov 2021 03:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637898010;
-        bh=/aPaDeQeDopk0whcvWBRjljNt9uMKg7tQtfoKe+NwA0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SOw5BImxJblHvbP/efI4jfiNL0JyumV94rh1H6a6MtCUQ59QFnNbwupcYMoflzLGH
-         3rXD5dW4ky3ch8GqacVywj0X4ihCE1kWbnXsDdmPxN+VoAezIOFB9FspOeA90e4h6X
-         E5T2zr5f830brGnzGhE/nIxxFca4t7EBTIoqDX3oONfeCkoEvprHd3R91mbt/5MtF1
-         ED40Vw/nisrbJBDL1ksEeWZsV6yeLxwL4JONtc3cOl5N+EgAMLw8yDV7E3bvvvoPiX
-         OFHNLkvK9l23wEY3dnBsNjqgEGxDE7PaUF5FRdRXdR4iUt9cLHufV7dUNhrD/VZlFz
-         uoTrFEQ51X37A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0F379609B9;
-        Fri, 26 Nov 2021 03:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S237362AbhKZHAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Nov 2021 02:00:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39177 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232938AbhKZG6s (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 26 Nov 2021 01:58:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637909736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zISC7zdL90TAjqxUC3DjVYlJwtWD93wRpENuKgM6xtw=;
+        b=A9nk9uOyGolclK4qRMZTDwoGM6hwW/FJjFdIeggiFPut4Vvt+Pp4NlTVHW7w9aM1O+9oDx
+        mtOXuccnNt1phKXvyRIb0g++QCUG6i2afq4wS5j2oGFV5nacc+Y104AKgAJ6hyfkjetIAo
+        laVjb4sToLKBKNuHq8sl7Zhht/j2gkk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-Xw97vxp3MauIUam8ZlwUQA-1; Fri, 26 Nov 2021 01:55:32 -0500
+X-MC-Unique: Xw97vxp3MauIUam8ZlwUQA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 003DC344AF;
+        Fri, 26 Nov 2021 06:55:30 +0000 (UTC)
+Received: from starship (unknown [10.40.192.131])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D3E2D57CA5;
+        Fri, 26 Nov 2021 06:55:13 +0000 (UTC)
+Message-ID: <a33c5f6fb887973fc69a0586c615aea6461cad6e.camel@redhat.com>
+Subject: Re: [PATCH v2 0/6] nSVM optional features
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Bandan Das <bsd@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+Date:   Fri, 26 Nov 2021 08:55:12 +0200
+In-Reply-To: <f983e2e343f600ab5196aef8389d719bc2ab7308.camel@redhat.com>
+References: <20211101140324.197921-1-mlevitsk@redhat.com>
+         <f983e2e343f600ab5196aef8389d719bc2ab7308.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/9] tls: splice_read fixes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163789801005.11827.6777069980777661670.git-patchwork-notify@kernel.org>
-Date:   Fri, 26 Nov 2021 03:40:10 +0000
-References: <20211124232557.2039757-1-kuba@kernel.org>
-In-Reply-To: <20211124232557.2039757-1-kuba@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, davejwatson@fb.com,
-        borisp@nvidia.com, john.fastabend@gmail.com, daniel@iogearbox.net,
-        vakul.garg@nxp.com, willemb@google.com, vfedorenko@novek.ru
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Tue, 2021-11-16 at 23:38 +0200, Maxim Levitsky wrote:
+> On Mon, 2021-11-01 at 16:03 +0200, Maxim Levitsky wrote:
+> > This is a resend of a few patches that implement few
+> > SVM's optional features for nesting.
+> > 
+> > I was testing these patches during last few weeks with various nested configurations
+> > and I was unable to find any issues.
+> > 
+> > I also implemented support for nested vGIF in the last patch.
+> > 
+> > Best regards,
+> > 	Maxim Levitsky
+> > 
+> > Maxim Levitsky (6):
+> >   KVM: x86: SVM: add module param to control LBR virtualization
+> >   KVM: x86: nSVM: correctly virtualize LBR msrs when L2 is running
+> >   KVM: x86: nSVM: implement nested LBR virtualization
+> >   KVM: x86: nSVM: implement nested VMLOAD/VMSAVE
+> >   KVM: x86: nSVM: support PAUSE filter threshold and count when
+> >     cpu_pm=on
+> >   KVM: x86: SVM: implement nested vGIF
+> > 
+> >  arch/x86/kvm/svm/nested.c |  86 ++++++++++++++++++++---
+> >  arch/x86/kvm/svm/svm.c    | 140 ++++++++++++++++++++++++++++++++------
+> >  arch/x86/kvm/svm/svm.h    |  38 +++++++++--
+> >  3 files changed, 228 insertions(+), 36 deletions(-)
+> > 
+> > -- 
+> > 2.26.3
+> > 
+> > 
+> Kind ping on these patches.
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Another kind ping on these patches.
 
-On Wed, 24 Nov 2021 15:25:48 -0800 you wrote:
-> As I work my way to unlocked and zero-copy TLS Rx the obvious bugs
-> in the splice_read implementation get harder and harder to ignore.
-> This is to say the fixes here are discovered by code inspection,
-> I'm not aware of anyone actually using splice_read.
+Best regards,
+	Maxim Levitsky
 > 
-> Jakub Kicinski (9):
->   selftests: tls: add helper for creating sock pairs
->   selftests: tls: factor out cmsg send/receive
->   selftests: tls: add tests for handling of bad records
->   tls: splice_read: fix record type check
->   selftests: tls: test splicing cmsgs
->   tls: splice_read: fix accessing pre-processed records
->   selftests: tls: test splicing decrypted records
->   tls: fix replacing proto_ops
->   selftests: tls: test for correct proto_ops
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/9] selftests: tls: add helper for creating sock pairs
-    https://git.kernel.org/netdev/net/c/a125f91fe783
-  - [net,2/9] selftests: tls: factor out cmsg send/receive
-    https://git.kernel.org/netdev/net/c/31180adb0bed
-  - [net,3/9] selftests: tls: add tests for handling of bad records
-    https://git.kernel.org/netdev/net/c/ef0fc0b3cc2b
-  - [net,4/9] tls: splice_read: fix record type check
-    https://git.kernel.org/netdev/net/c/520493f66f68
-  - [net,5/9] selftests: tls: test splicing cmsgs
-    https://git.kernel.org/netdev/net/c/d87d67fd61ef
-  - [net,6/9] tls: splice_read: fix accessing pre-processed records
-    https://git.kernel.org/netdev/net/c/e062fe99cccd
-  - [net,7/9] selftests: tls: test splicing decrypted records
-    https://git.kernel.org/netdev/net/c/274af0f9e279
-  - [net,8/9] tls: fix replacing proto_ops
-    https://git.kernel.org/netdev/net/c/f3911f73f51d
-  - [net,9/9] selftests: tls: test for correct proto_ops
-    https://git.kernel.org/netdev/net/c/f884a3426291
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Best regards,
+> 	Maxim Levitsky
 
 
