@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F39460FC7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Nov 2021 09:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A06460FCA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Nov 2021 09:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242196AbhK2IPY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Nov 2021 03:15:24 -0500
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:2047 "EHLO
+        id S242563AbhK2IPa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Nov 2021 03:15:30 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:2070 "EHLO
         esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbhK2INX (ORCPT
+        with ESMTP id S229815AbhK2IN3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:13:23 -0500
+        Mon, 29 Nov 2021 03:13:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1638173406; x=1669709406;
-  h=from:to:cc:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=T67MY6GR8X13j2v+9AJiXYhJEpPEH5eeMLKeBlhYYvw=;
-  b=KYwXO+otQvP5KSGfENNO3iSxZKxanDtjPmtQ+9yztQMiLyxfS4MViPrg
-   DX92LUamUNujOgTuJz2m8n2eS2JpGx7pAxItxT1F5jlFaLEyjSCIpP1QZ
-   QOZVP60gNgJezFMVgpvPPTQe99isNGfImfx1qSvr0RcfljYwZCbeKVzf9
-   3yVQfRho+PniDw6EC8eOgRntt52cqSmL+aSjqv3ul3KoQmqa1eH8navex
-   fzIoYDfmBp945gfsrDAf+E1Dmbo6lvQRjQ3l/Szkpw6bX+l7DM+LFYPys
-   el9xv5RdHYhLhJt7wouTMdZ/ywBGtouJBMW6tKvIiJDIkHoKuvDg/XwD9
-   g==;
+  t=1638173412; x=1669709412;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=uhSrUriLbyFQbTAeFs43ljEXTuTcyrvJpOMir/ZgVhs=;
+  b=keUs9SnIxgV8qeuv9YBcGrBbn89HwQnSv20qiaw9uRUb/gKyxfj1w5Sq
+   ji+H1/r1FLx9mbMN6m0tdbyjkSo9Dbv2wWrRXBy7lIHVKoUeC9re1c3ZS
+   iJlsEnx92c/ooxGKdy+sB+td1NZVW+UiddBB4Q5KoSB0XbRQanp+mKNl2
+   MCLONTpqnKDzUbXiXBA4LmBruxjzabKz9m3ujFGbh4ZL1CmpO4jploqZq
+   r40bmsCEKmRwQY/gcotLMunqEXiFCLFH7ZgmzgY0RkL/3fQHvSMs6Jz8P
+   wQWD2SgJ9vnAr0+Q1i0rNFZ3zWtH2ooUbW+FSSjlLIrtZZjRH9KK0oIJZ
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.87,272,1631548800"; 
-   d="scan'208";a="290889279"
-Received: from mail-dm3nam07lp2045.outbound.protection.outlook.com (HELO NAM02-DM3-obe.outbound.protection.outlook.com) ([104.47.56.45])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Nov 2021 16:10:04 +0800
+   d="scan'208";a="290889291"
+Received: from mail-bn7nam10lp2102.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.102])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Nov 2021 16:10:10 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ezdO7McVhfdAtXR6EtvqBvDDgIxj5CKtcH9Jn2hA70BrTi+hCsEgrTkQ91ZWr3C4XKRfAhDw5/JNvIXlAxcuGZFif2H6HR/TgKTyHbAmOft2MEEFGDzZFnxDwT3kN7S1Wq7Jm9ngz1Y5kNDqr5CiQqYR9azMLnw/IGyWlYBfVzEHz/eiqbujfyPGOrhkYiFKaF2GiXPrVN9OXaTR9WfbxGvqAb5vd4U6u2IJ34a+GlHiy508k8ErKW1Z6pw6ZSNWt3X/M2tL/okYAfbsV28Er0V91Dyv0igchBdLLUE7dfxwzBqYeCkzPYO2RG0pAuQAfAudb2WYe/La6KeXVtnaYw==
+ b=aFS4CgAaKOAsCZ3qwpbqWGHz1vjskk6It48ZCnvqx2uBF3jxNmBbAocqvQHpcBHcBTJdOYhDecszYny4VX2LVaY7l9zadH2K1Z4uDLCPEXxxHCSQFFVrvCw1DMfvc7L/j10Unsopu1HXQRYjRAMI+eEJX35Kq1r+S5DD7xPYxDg3D+88L9Q5kKpHtvuB+u1CSf9Tym7Qg3WnHs5DYNrqaQZ8JkQeEFMV/qcIYoWKKsWCvqDIgG3EU+Hp99tPmci3djooXAjH6gT/tfk09ZZZNw88azSlfTbjnoavHjG9uqPO7QCZAOT5WRpr8oOhn0kpzrrtKjlENS/30GxMY18dNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YT+Fbugsqq70YZkmiMf9tAQrLPwIVM1ElImwgpu/DQI=;
- b=dlIl2sRx9jsPdKB/6vKYa1dbMS785ndUe3hgAoBzmCKRjjBWbpsoy8u89q5oiX1Q0EjqlPchx6fZwaNBoy2Up4tf3X9hbBNorRfh+3kpTbflg9oIs5mB9nXdf7Re3AVLHZEydEyEFE5cVW7kBtyFZFpjEGNdWTR5gRg72osVwb1NS4Px1k2wk9gizZEGxiR8Sfj18IXsGQ4tl7PLFfKP42ePXIw3e7U4Av6mG7QRmYtZdYiqRYr90ZnXMqWEiedWGKz0S0sIMpv5LRIrnpjs95ZIxTrBXs/i5kAaHnBINMQVIS1ljXJ2Q2T693ZoWbHCUVhFT4klA8HAWLrUDBCDbg==
+ bh=e60AYznLdB7JPUqnWxw5ZdvosivO16WCESDdcX2+DYo=;
+ b=OEPHbmuBPIa/Z+cGw+CpiBWfWMpkL55nKlM8yOb65AdwLC9hGuiTiUk+HLBf0kJUR5/6b7py9kDWsrwQrfWI6jZ7Niqz8Bu8SFHTA9xeVQ+S8i07liOQcLFHiFTt+KsyMA/YDQFfryWHKJn0m5hy5l/UCYfdwQbT+gatBpog7RxBLu2+arrcSCv8rKzD+78ohFp163eU/cfnVddTRFZjUrvfmDH9F7N8RTxbWD6+k5OHlRo9a4E9Myh3ST417glVKEYuRLMh5vaQNiNgJXrsz47nKURaN/RYh/AXQMzMW7d3vtLN/5jy1e1td92VqBemd5ibFR5kaUj2Ex2MSSjyUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
  header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YT+Fbugsqq70YZkmiMf9tAQrLPwIVM1ElImwgpu/DQI=;
- b=qZtWOANoE/db+QlGQyMb5GtRnlEemdUcuVcml8QMhX8WIgAl65CZPNO+rqo04y12LEkSPZtbYNwMqGaFZTxc2GDMBN6m7Kcikph6FxPEBtSUNeadAUxkEb72HGCShH8Qu1f/RejKSVMTPzQptpqgO6zD8u9BzSJHyXPo+izHseY=
+ bh=e60AYznLdB7JPUqnWxw5ZdvosivO16WCESDdcX2+DYo=;
+ b=e2qOiA5vDFcuDgQ5If61IRWhZZpfirTstw/oXRvWwRfpdPL/syKA1gVo3Rhp/UMv0oPt5Xyw3narJV3MaIVPKy5PjeBUvL+QGDoZVCS41COSYqvNG1AbuNresnqaeVVoz64/Q9ipoQ+vwrUXSp99FLe5BrqgQn6yT6EK2reFs4A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wdc.com;
 Received: from CO6PR04MB7812.namprd04.prod.outlook.com (2603:10b6:303:138::6)
- by CO6PR04MB8380.namprd04.prod.outlook.com (2603:10b6:303:143::6) with
+ by CO6PR04MB7796.namprd04.prod.outlook.com (2603:10b6:303:13b::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Mon, 29 Nov
- 2021 08:10:03 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Mon, 29 Nov
+ 2021 08:10:07 +0000
 Received: from CO6PR04MB7812.namprd04.prod.outlook.com
  ([fe80::8100:4308:5b21:8d97]) by CO6PR04MB7812.namprd04.prod.outlook.com
  ([fe80::8100:4308:5b21:8d97%9]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 08:10:03 +0000
+ 08:10:07 +0000
 From:   Anup Patel <anup.patel@wdc.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Atish Patra <atishp@atishpatra.org>
@@ -66,110 +66,142 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Anup Patel <anup.patel@wdc.com>
-Subject: [PATCH v2 0/4] KVM RISC-V 64-bit selftests support
-Date:   Mon, 29 Nov 2021 13:24:47 +0530
-Message-Id: <20211129075451.418122-1-anup.patel@wdc.com>
+Subject: [PATCH v2 1/4] RISC-V: KVM: Forward SBI experimental and vendor extensions
+Date:   Mon, 29 Nov 2021 13:24:48 +0530
+Message-Id: <20211129075451.418122-2-anup.patel@wdc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211129075451.418122-1-anup.patel@wdc.com>
+References: <20211129075451.418122-1-anup.patel@wdc.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: MA1PR0101CA0024.INDPRD01.PROD.OUTLOOK.COM
  (2603:1096:a00:21::34) To CO6PR04MB7812.namprd04.prod.outlook.com
  (2603:10b6:303:138::6)
 MIME-Version: 1.0
-Received: from wdc.com (122.167.150.114) by MA1PR0101CA0024.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:21::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend Transport; Mon, 29 Nov 2021 08:09:59 +0000
+Received: from wdc.com (122.167.150.114) by MA1PR0101CA0024.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:21::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend Transport; Mon, 29 Nov 2021 08:10:03 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5fe9c7b8-94e2-46c3-f545-08d9b30fa54d
-X-MS-TrafficTypeDiagnostic: CO6PR04MB8380:
-X-Microsoft-Antispam-PRVS: <CO6PR04MB8380CA8DBD69728C85CB7BE58D669@CO6PR04MB8380.namprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: dc3ddd44-703a-48d4-3feb-08d9b30fa7c6
+X-MS-TrafficTypeDiagnostic: CO6PR04MB7796:
+X-Microsoft-Antispam-PRVS: <CO6PR04MB7796BE9C693664F275454A088D669@CO6PR04MB7796.namprd04.prod.outlook.com>
 WDCIPOUTBOUND: EOP-TRUE
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3jhzQlMx/QoQjZ5ZuRv0x/3DqAAzxPpg7heINfJj9UBkZ+hbLpCVkLTNfjRNxgDtOhebP8w9fMNBASQUioHMeezTGrhkUjrR2xDPnfaZ3v64RWLAeYUei42SCSAfgK2IVspdIBiF5QnYE6lz14WX3A3ipMnhl0HgNB4zeTLWTzxuxvzb5i/A5OCyW4bU8JxOmIgCRa3BTd7g7hgzElw+XZWlXAx9ib3B44vCrin5KbMsqyZVvmYH0N6woKOo2+wbgq7U2uH0XWxFEPy02uDBxsIoIe9mZsrpGrBR6ktQsaq74I7AjB68EwGUbe4NlnKLTvnNRfjtK3IHPp1dhlHaURIJBFkhrOGBm4RRioYcjfbpt4HlPfVp27BnPj+BiaNxE5EXSKLQtmHhjO1k7XGLaLGJyDWyXbRSoFoek9nY8rV4sO8mKM7jfkNgWO9MBnp8I2/4+TypjwNih4VnHUePRG4jtbFaD13O8AwFKpy2SxbqqygLe+vBaBSdu9doodtBQTbX59ma/T1vPA2eTv+xmrRdPp7jOHwZxOPUzXwi+qlsQ9sYVSskVuTFgPVQXs0Lifdpp8Yhok5Ckn82umAZ0MqQRDoZApaV+wiouLiOUnBo7r0ICbzSJo8rsWb8jjgUKtctDiblwVu3JBfFm1hnR2Sj1dNrSvN6xzTLEn2adM3MZyGk0dZ2BsJL1zYbBVBTn9oQ2BQeOFhj+ioNReNABWRFaUZpgJmWTeRfofgcZLobErGP91Hjj19cllmNTTuJyBI5TYgekqKkTkqDLVwF6bb4FiqqUhlR6hbet6GcD5E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR04MB7812.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(55016003)(52116002)(6666004)(966005)(8676002)(186003)(316002)(82960400001)(38350700002)(7696005)(508600001)(66946007)(66476007)(8886007)(66556008)(38100700002)(8936002)(1076003)(110136005)(4326008)(83380400001)(5660300002)(26005)(2906002)(86362001)(44832011)(7416002)(36756003)(956004)(54906003)(2616005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 5/wtt+0sUp/+arNw+wT44uRy4QcK8bj3KVpn8NiVIZv9zTgxliuEjUz6rxrHF6WV14bC4VAwLPqAAEhGjk5mZ2/Pngso0eUXy8IwGdwrekQGdZLk5xOf0gT6zBnSOHprLuKgV+Fq96pw1XIfYtB0wqaJ8yxvnkpy0osSb2rd8QG6sbCqIfoiWDKlHGoUj+STblWqd9g+ACtyQ5fa9mIbnOKJnW5Ml2xMIJ9FuKLkBFrPf9axXF5U/QhXhlp/Yl9qdZUwISsWty62Aos1ForzjBoWX+jch9zmUv7VkSr1jMc5S4qTmxAMWU/M4+NVgJeBeXwVYMewirAVU1F4c0pqhbUyKoRA9OpZPmyfSQFTIv6bLAx4+NHwy3xglS2/lRBPMlFw57J5x962QJFtYbuWTmokvHLBVGHCbl3B5OA/LZjHbirDVwYpVJfNZtd+BHIUviQcUYHSnPPYmLS3Y4JG4qFiS09Q2KBY7FN19+DvR85aQ2gFVHr9B/kPEP7y8zeCq5c9ZPaMY40ZFVhQ3RUTnrmBAEMuWxd7flipNdAmJAZPs2BjMT3FXzI+QEuJRS6hj3xH1nd9ch7CTWSwrgF1cj7aV3uwXeeugD6qNtk6TjWT2vUF+9HD3fHddWFLxbGhGFoDwXK1Nw72Mg2TkN1IkdDYY+PmuJ8BOA2Gw1eyIfoVVM5xpIta2tDo22H0XxfGZO0wO738tsupTgor+3X+Ew==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR04MB7812.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(2906002)(52116002)(66946007)(7416002)(508600001)(54906003)(55016003)(4326008)(36756003)(1076003)(44832011)(956004)(2616005)(8936002)(8676002)(7696005)(186003)(110136005)(316002)(8886007)(66556008)(66476007)(5660300002)(38350700002)(38100700002)(6666004)(82960400001)(26005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4d1wMmJuVFHV9BOPYS5RmmcGJFwpO08GFh36M8+Sp4ljPi26ggo8jN0kawvP?=
- =?us-ascii?Q?YS+XhAfeBvpcItwE7lD2bgBBzsmQMtt1a4/R8CaEU09yST3DWrTYyl8j4jP2?=
- =?us-ascii?Q?iG7KsK+mbgYjVWoM5XM2FrVurdTCcr4tzQBmdpeOXl/In6YMQxCXBPEpJUxV?=
- =?us-ascii?Q?vOJxCFYXKgIX2IPQXH71/j09NRHcpRIUvjMgqYCGVeJFEOT2eBB9K5mZktxM?=
- =?us-ascii?Q?b+0VPGlfjAS5Rabj57Y2Qf9bjZAsDCKkNfGZKDwiyHQSJVqjqPVdzfYdB7KY?=
- =?us-ascii?Q?vyhgOejEqUiWdQ8kdMJw2USa8nJhmlDvRfdz0vCJvtypmPsS+yI/spTOeoWz?=
- =?us-ascii?Q?gq3+e8yMjl+Evm0FZyKSo3gMF87FAR/Ied2DmwuqLq4TNugi7kfXooubb/CI?=
- =?us-ascii?Q?60tIbQ3fwthSc5dX20lwOrWHXkLjGGpikjTocYaxhBUl2NI98Bz53NjRJpbW?=
- =?us-ascii?Q?UqYGI7meEO5Kp39ct6liAk9LuBVRp6BuslHcbyTyWTYbNhoidEU+p4jS4Mx5?=
- =?us-ascii?Q?b5Lx6zoAetGq2tto7sdhUM4pKonYV3pST/PkU7A6sql0/98hwlJ8UvfnKIqu?=
- =?us-ascii?Q?bn4C3iLNxN1e6oCrVj0t8b0xpwCFeP1jhu9ZuJdj497k8gro+uSeVnCBfS4+?=
- =?us-ascii?Q?S9SWkv17n7Pa6g0WlV6VxHl//nTY/fvizKNLdN+NM3XYVbCsM5uUNXdIHQIf?=
- =?us-ascii?Q?3qMGIM+gLMcWH2mzFFozBM+TLTd3OO8HD4xhA1+LWet7Is+vZoFYodI1xm9K?=
- =?us-ascii?Q?5anG2lYIuiHZckDzpdRyNqR8kcUXeWwCLDY+0tI3FOTqugLMTgfCvtGoyUXP?=
- =?us-ascii?Q?Z9ARr7F4ALHvP7YtlHT6Q5BQ9/ocgdtjfg/0Vljc62fQy+4PR43UOCEI/5R9?=
- =?us-ascii?Q?kVxJvf8v3P8+wL0JvFM8QVXGGIlJt/Cobha//dhwztgFTJN4GmM4goJM+eRB?=
- =?us-ascii?Q?Ikz15x21vwbhyFm5T+M9FywoQJqtwrwoblsTOSgLjWKcsQ1D5mxU3zM7JohG?=
- =?us-ascii?Q?HRLPC05G+4D7F8PxeluQtEXhIzi06mU1/Dyn/KWmB7sc6Dk6K1OsXbVHRyPD?=
- =?us-ascii?Q?mKrW99F53qv6XFzRvVqR2E+f17cODsTbCKkLY5GhcUmcvCf+sC9D+iiEY+e7?=
- =?us-ascii?Q?pPInHGfS6XZdyxxup1POPaQ6J2rpeKy6O/Z6mJQFXZuLGnYLHKwHD6XFDFDD?=
- =?us-ascii?Q?IbMTMGfsG/qai374mhJ/n0pdfFsyV5wZYzSJSNTVaOBHOF4zkU2oTRiZM5kd?=
- =?us-ascii?Q?AcBFW357ZZV2RTYNvRp8QGmjHDdd0jm40KyhpF0XvRL5fvAEb12eKiWM3wM6?=
- =?us-ascii?Q?xfxbybyOs12lIqNitC1zus84xRL0GhafX1aaoueO7Ea/cTo4HdaBT2WLz2hh?=
- =?us-ascii?Q?GlBSOgUpmZUo/k7Xc3lrDZgukJgi/phD2697CCasq3NGgfyYDgBp3hjqY1sb?=
- =?us-ascii?Q?g0Eaf9Mb7VQD5pVOQBPm8gI26s523spfvxvQSACs3RopNEfXkbEK1b6ebvvY?=
- =?us-ascii?Q?KkPf8NwgAcy9v0H2gjEaDuEKkIzzuLPFpxBg8UZeaaqG7UlOZa1uD0vAyD3U?=
- =?us-ascii?Q?tgEKzIfjFD1xJ1MPVp+4PsNwvoGKl1SnfXF1kJISTzZBuZwWBbKwy1Jm6ENT?=
- =?us-ascii?Q?AfHcMgScpIfIIgMLX5ra+M0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yCJIgHoaGIyIZqbxCgdmaKK9Xz8ZFxR2KVMH6Gq0KoUimjftG0pKMkO0yL3A?=
+ =?us-ascii?Q?t/dc8ZljLuOx3mu0cOgzQ1ehS8rtx4qAHFTp7veSPw50aGI7v+cIr1J14Zk0?=
+ =?us-ascii?Q?YFg4s2disxl1m4vDBfu/qg5fnapoLNlmHPOxnCiIMAdQdZVLQm0U3A/QLTz9?=
+ =?us-ascii?Q?GAoyuhAfIucE6PQlLXq+9Da6XsPpKI9+rMhyLDWOrPDBXvoRM2vxT5MpMGll?=
+ =?us-ascii?Q?lrCuUv11a/ZeFXg+av5FML+TvZp6/5XLCcaMCksGxrf5jwt1dE1pMnwn5nRf?=
+ =?us-ascii?Q?F6q0T2t9lqMIbBX038XMn3X+yELVtMpCw27r7dIb3OpS2MSDqqjD5Ga8fITZ?=
+ =?us-ascii?Q?3ujLXkuIUL8BaCYfeMIldBF4tR96Ea9QbAliJiy1U3m3+J4cVfrJl8ACCFWR?=
+ =?us-ascii?Q?8/uuvnPkynKeMCstClU7sAQQL2LHDvYEeMZ62XRN1VxrB7pOxYLtIQ30p9JG?=
+ =?us-ascii?Q?X1LtzQ9ghSAtHAczth9hGc4975XfyMMO5qTekgWY0yOEZ4FjRoE/cfRj6Wdu?=
+ =?us-ascii?Q?9HT46YwHAkJSbNw7k0eff9Y0k92tkqWqY1TjXPfE8QFhoMiIiY03HtDAq3am?=
+ =?us-ascii?Q?vTDYcKDlJHctpFHEVGZ3Bb+MhtYbab8yWivFNiaugrCLWVS9vJhNqQ2eIsgy?=
+ =?us-ascii?Q?O/0hKixAi1z4PbLdOEoGCv+lxDTqKWxM3qSJDgJbcd61VaW6c1FfO2w8dHI/?=
+ =?us-ascii?Q?15DfRMfAbbvLju1hnknE7xmuJ9ZOLWGgLoxvwoVwrCltTqpaaSBsTCVwXhXV?=
+ =?us-ascii?Q?1b8YGLWOC7Rbc2CsxIvw4x31QDd0sahCQS2wXgLMbofTaqvMu/kyE4blqmnj?=
+ =?us-ascii?Q?LYB0RMdTlJ+Qlnd9jy5KcErjSfgS2uyIb/VfRn+qpaTgkd3JL5bwke4L+AUH?=
+ =?us-ascii?Q?uwXUzZwfSU+7CU9PwS7yzMV2uiDv0doXI3WndrN6W7n4Qse16i0Z89dSncFH?=
+ =?us-ascii?Q?f2Nloa3nR97J6HZ4Hg1aD/23fu39qEmzMgmf5NNGV0uXe8j0d8cNqjcb7UzY?=
+ =?us-ascii?Q?EW4hgVNqvkk8yDe4Zsxku4J70Y4zc1omg7l5Pr1Bu7qYc7vzdbZMHaO//2O1?=
+ =?us-ascii?Q?NR43LNnCBq+yMa+OXWX6uOzXnjvRVfgE5WNVoVhaKj/WaD6kQvwVgRYz4ENf?=
+ =?us-ascii?Q?KudW1y5PL2yeetFwII59pqhTSBnOMULDk2TSfZTUsn85g5FkjmhZXhwMb9Ub?=
+ =?us-ascii?Q?1EB4XyLXAqbY4zu2I2IhjMt530aQcYNzbTl8ERrnLL65+hsBgq6XmqN1XCpA?=
+ =?us-ascii?Q?Q9kUgh65p1aM94jfdEc9iZrN2LLN6uHv1GwG/4Ox+vNAXMDyW0tllT2XUeT9?=
+ =?us-ascii?Q?ktlM1/F11n7Nkuc1eMPymtPRlWgN3WvlYbRPcmED437l4tTnY0r4JgLJgE7a?=
+ =?us-ascii?Q?DtSBsPRp5A6vq7GN2pBAwvgyAiWWhYzPQYkw4indjQAiIQqTuODvVsWzvRXj?=
+ =?us-ascii?Q?2Z5VRIcZtO/njaZHHvhKQas7yh5nySJ5MepbTsiBqS6y7KF7wMA88RHa99Qy?=
+ =?us-ascii?Q?jLH938KsflxIAhyEnyyCpDYzxbgVdqCHNdg422HwIaFJuP1nlz7l2noLVh4U?=
+ =?us-ascii?Q?UqTolEt3w6q5KGYomX3zaa7/QCufogn06Ej4i7Z6EwWN/2mOQ6sybAj+QITt?=
+ =?us-ascii?Q?u/7ht37Kd9NDdDxWCINc+1Q=3D?=
 X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fe9c7b8-94e2-46c3-f545-08d9b30fa54d
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc3ddd44-703a-48d4-3feb-08d9b30fa7c6
 X-MS-Exchange-CrossTenant-AuthSource: CO6PR04MB7812.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 08:10:03.2072
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 08:10:07.3490
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b61c8803-16f3-4c35-9b17-6f65f441df86
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EbV1J521NpwmV6DfkhkVvwix8YpgaFZ1WRKL0c3Tc0J5Wmz7xhh5/pxmoaOmNrEHUfLOTVBw+OoyHtANEFjUTA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB8380
+X-MS-Exchange-CrossTenant-UserPrincipalName: vlsX1Nmw2qXQvwYzzFSU2qWPEPAYX1QjEd25UTod7vhjyI3I7yZvTxalTbPSbkDQo4zUjJNjZ2rV+hkajrr1Zg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB7796
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series adds initial support for testing KVM RISC-V 64-bit using
-kernel selftests framework. The PATCH1 & PATCH2 of this series does
-some ground work in KVM RISC-V to implement RISC-V support in the KVM
-selftests whereas remaining patches does required changes in the KVM
-selftests.
+The SBI experimental extension space is for temporary (or experimental)
+stuff whereas SBI vendor extension space is for hardware vendor specific
+stuff. Both these SBI extension spaces won't be standardized by the SBI
+specification so let's blindly forward such SBI calls to the userspace.
 
-These patches can be found in riscv_kvm_selftests_v2 branch at:
-https://github.com/avpatel/linux.git
+Signed-off-by: Anup Patel <anup.patel@wdc.com>
+---
+ arch/riscv/kvm/vcpu_sbi.c      |  4 ++++
+ arch/riscv/kvm/vcpu_sbi_base.c | 27 +++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-Changes since v1:
- - Renamed kvm_sbi_ext_expevend_handler() to kvm_sbi_ext_forward_handler()
-   in PATCH1
- - Renamed KVM_CAP_RISCV_VM_GPA_SIZE to KVM_CAP_VM_GPA_BITS in PATCH2
-   and PATCH4
-
-Anup Patel (4):
-  RISC-V: KVM: Forward SBI experimental and vendor extensions
-  RISC-V: KVM: Add VM capability to allow userspace get GPA bits
-  KVM: selftests: Add EXTRA_CFLAGS in top-level Makefile
-  KVM: selftests: Add initial support for RISC-V 64-bit
-
- arch/riscv/include/asm/kvm_host.h             |   1 +
- arch/riscv/kvm/mmu.c                          |   5 +
- arch/riscv/kvm/vcpu_sbi.c                     |   4 +
- arch/riscv/kvm/vcpu_sbi_base.c                |  27 ++
- arch/riscv/kvm/vm.c                           |   3 +
- include/uapi/linux/kvm.h                      |   1 +
- tools/testing/selftests/kvm/Makefile          |  14 +-
- .../testing/selftests/kvm/include/kvm_util.h  |  10 +
- .../selftests/kvm/include/riscv/processor.h   | 135 +++++++
- tools/testing/selftests/kvm/lib/guest_modes.c |  10 +
- .../selftests/kvm/lib/riscv/processor.c       | 362 ++++++++++++++++++
- tools/testing/selftests/kvm/lib/riscv/ucall.c |  87 +++++
- 12 files changed, 658 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/include/riscv/processor.h
- create mode 100644 tools/testing/selftests/kvm/lib/riscv/processor.c
- create mode 100644 tools/testing/selftests/kvm/lib/riscv/ucall.c
-
+diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+index f62d25bc9733..78aa3db76225 100644
+--- a/arch/riscv/kvm/vcpu_sbi.c
++++ b/arch/riscv/kvm/vcpu_sbi.c
+@@ -46,6 +46,8 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
++extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
++extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+ 
+ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+ 	&vcpu_sbi_ext_v01,
+@@ -54,6 +56,8 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+ 	&vcpu_sbi_ext_ipi,
+ 	&vcpu_sbi_ext_rfence,
+ 	&vcpu_sbi_ext_hsm,
++	&vcpu_sbi_ext_experimental,
++	&vcpu_sbi_ext_vendor,
+ };
+ 
+ void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
+diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+index 641015549d12..ac0537d479d8 100644
+--- a/arch/riscv/kvm/vcpu_sbi_base.c
++++ b/arch/riscv/kvm/vcpu_sbi_base.c
+@@ -68,3 +68,30 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
+ 	.extid_end = SBI_EXT_BASE,
+ 	.handler = kvm_sbi_ext_base_handler,
+ };
++
++static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
++					struct kvm_run *run,
++					unsigned long *out_val,
++					struct kvm_cpu_trap *utrap,
++					bool *exit)
++{
++	/*
++	 * Both SBI experimental and vendor extensions are
++	 * unconditionally forwarded to userspace.
++	 */
++	kvm_riscv_vcpu_sbi_forward(vcpu, run);
++	*exit = true;
++	return 0;
++}
++
++const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
++	.extid_start = SBI_EXT_EXPERIMENTAL_START,
++	.extid_end = SBI_EXT_EXPERIMENTAL_END,
++	.handler = kvm_sbi_ext_forward_handler,
++};
++
++const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
++	.extid_start = SBI_EXT_VENDOR_START,
++	.extid_end = SBI_EXT_VENDOR_END,
++	.handler = kvm_sbi_ext_forward_handler,
++};
 -- 
 2.25.1
 
