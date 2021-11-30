@@ -2,91 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7D0462BF1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Nov 2021 06:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E793646327A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Nov 2021 12:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235765AbhK3FQr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Nov 2021 00:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S240779AbhK3Lh1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Nov 2021 06:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbhK3FQq (ORCPT
+        with ESMTP id S236883AbhK3Lh1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:16:46 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809FDC061574;
-        Mon, 29 Nov 2021 21:13:27 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id p4so25510630qkm.7;
-        Mon, 29 Nov 2021 21:13:27 -0800 (PST)
+        Tue, 30 Nov 2021 06:37:27 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0101DC061574;
+        Tue, 30 Nov 2021 03:34:08 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x6so85054978edr.5;
+        Tue, 30 Nov 2021 03:34:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xT3OJBmBSLdDKQA0pF/Eep+RHgJNEz3TGcshjvO7yNM=;
-        b=MVeA5cD2hTTZmfLu3F2ocne4+g4w6KTcjFFyyOBO4tV+EFfu7KyGNKSIwIElhefpTH
-         NW7pWcA+P/9L9mKTlopbnOjTbZmwrGQ+Jd+e615NJljYeHwjYRXFj9qhmDaYdSq4me84
-         n4QOwhih703FmTwCXhQH8BnfNm7B3m+eCmh6d5ZLWe8pmlO2AteNIRm1I737FqlT54Dc
-         RliTSjySiOB9qx+ZVIsdstbNrLe0F8NQtlrb8T27HJC+xtETVqoacAV3B0aES3n5vVXw
-         342hH5l8qWX9daltZgvhKYAr96bKYTEHX98MS5AiGaoKabB+pOo/8aRt1KSqnE0WEIbN
-         sNmg==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jxt0KjOu/rGxEDPUA6mfD10PFiJuYOjmgF4D2VnmVSA=;
+        b=kVae02EA/ehz8I2Qxvst2hM9e07Eo/Z/dPCPyzKZPHjS9sSIeaWfE7dx4iXtTmzkvi
+         J3ANW78Tesn3AzDGWLLoV1Xr90TM6nIxrwRwWafLzkxaOq+mTp/vy6aIsQDFGGDajGVB
+         Bz1ujetZ6cQXHZBIFIaf/idAiKAtYLJzSCQLndSU6mtRNuDoHGfD4XaHeh6MWIrIObXK
+         Usa8WhRn2ZSj1HI10GYw9hFXqGzHWO4TemYiCf77pmlt6rgvNzv7MOtSYdhNfQIdQPOO
+         3Sbp7eYU/D19NDK2cAbYo838h+ZkmYzuFz9rHrsKqcmqNUKxo7rYws/f90B792bOv+ju
+         WzKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xT3OJBmBSLdDKQA0pF/Eep+RHgJNEz3TGcshjvO7yNM=;
-        b=jNndvgtflS3xJUT6i44phW0J1jtnwBVfefMxlQBY0TeyVULKL++vmKYEOiLKOochaf
-         58OTfVZILcfyLUbpkCX1QcBwihoOX1czi09y1Xr0RU3ATbwoeAjEMLiA/AGaWRv2CQEz
-         OA7k3FXxPKAAO3sOQzy4x3z6hD/UPvb2LzHOJUzYX4ibxtIY+5ROJIztvMD8Z7/DACRH
-         /9athpPcVoYznN/NSqnI8kYN45JK/VNBiYcF1Qe4rsS48bTVr6tDfN1csWamS4HV2d3L
-         HK/siSw6hxJkC0xYZ+GWBQ23tZyeigbiTKLFx+ERyWrr642gFfZMfo4Ejr8Ng+jgMZ61
-         M1uQ==
-X-Gm-Message-State: AOAM530tVY8fOhVKnUWqcGp3/YkQz9jyviarkH+eaAIyaruitArrJJ9l
-        uFbr7KjxUQh87enIdlc9QQ==
-X-Google-Smtp-Source: ABdhPJxwR6z4vFjYRZTUewtGwlCIjV891UP5pTH35Ox/xk+CLMCyyFjIQbwieGXaVrlS7N8cwWX9IQ==
-X-Received: by 2002:a05:620a:2955:: with SMTP id n21mr34627497qkp.581.1638249206710;
-        Mon, 29 Nov 2021 21:13:26 -0800 (PST)
-Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
-        by smtp.gmail.com with ESMTPSA id e13sm10104176qte.56.2021.11.29.21.13.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 21:13:26 -0800 (PST)
-Date:   Mon, 29 Nov 2021 21:13:22 -0800
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     David Ahern <dsahern@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] selftests/fib_tests: ping from dummy0 in
- fib_rp_filter_test()
-Message-ID: <20211130051322.GA4450@bytedance>
-References: <20211129225230.3668-1-yepeilin.cs@gmail.com>
- <20211130004905.4146-1-yepeilin.cs@gmail.com>
- <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jxt0KjOu/rGxEDPUA6mfD10PFiJuYOjmgF4D2VnmVSA=;
+        b=YHlzmVZKBXnpO4YXjUE1EbZ+HvsegyvElco8quykF7IRYsPBR4anIDJb3UYlTphkOz
+         aJCh0c/S9HyEhqn69MI9XOvGMGWrSz93siKXUMkLMxqXGub1ZgZ1IO59xTmZOixpaBin
+         CQwnJNtIqOJddh3EUi057xC/3QhMGJmMncd/+75tgF4AkdT5knI9hfVtuhzIufFin1qL
+         sBzHVrwavzDgI6JykM0RGUMuouNry6+dyBB617ISuQC++8/Z7ijROD/UFtQnExzfiF1K
+         iLXi4CumaE1OGgdJE6KGD8MTFNtiDM7+rv3XJgO1ww1xZiW6b7e3p5hP7lWIkqXHyZu8
+         VvVw==
+X-Gm-Message-State: AOAM533D7xLFWiphAy1YjNuVZV4yQX0B2uCOwPz1OVDi5l/stDtMHvOB
+        Y7Q80uK3ZA50I9MUtrMfSx4=
+X-Google-Smtp-Source: ABdhPJxaGlaVoYm9BcjetagPoKMwxpkKa8ohhVTHyyksYAiJBo0ftDe4DXuUi5OQVtNjrh9epnDaAg==
+X-Received: by 2002:a17:906:dc90:: with SMTP id cs16mr66150919ejc.432.1638272046645;
+        Tue, 30 Nov 2021 03:34:06 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id dp16sm10025444ejc.34.2021.11.30.03.34.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 03:34:06 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <76b1bb76-3f2e-2443-124b-2e7a7a6e4543@redhat.com>
+Date:   Tue, 30 Nov 2021 12:34:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 0/6] nSVM optional features
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Bandan Das <bsd@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wei Huang <wei.huang2@amd.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <20211101140324.197921-1-mlevitsk@redhat.com>
+ <f983e2e343f600ab5196aef8389d719bc2ab7308.camel@redhat.com>
+ <a33c5f6fb887973fc69a0586c615aea6461cad6e.camel@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <a33c5f6fb887973fc69a0586c615aea6461cad6e.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+On 11/26/21 07:55, Maxim Levitsky wrote:
+>> Kind ping on these patches.
+> Another kind ping on these patches.
 
-On Mon, Nov 29, 2021 at 06:16:48PM -0700, David Ahern wrote:
-> On 11/29/21 5:49 PM, Peilin Ye wrote:
-> > -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
-> > +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 198.51.100.1"
-> >  	log_test $? 0 "rp_filter passes local packets"
-> 
-> confused by the point of this test if you are going to change dummy1 to
-> dummy0. dummy0 has 198.51.100.1 assigned to it, so the ping should
-> always work.
+I'm first flushing the fixes, and then will be back to new features.
 
-Ah...  Thanks for pointing this out, I'll try to figure out a different
-way to test it in v3.
-
-Thanks,
-Peilin Ye
-
+Paolo
