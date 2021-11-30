@@ -2,107 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC450462984
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Nov 2021 02:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7D0462BF1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Nov 2021 06:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbhK3BUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Nov 2021 20:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S235765AbhK3FQr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Nov 2021 00:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhK3BUJ (ORCPT
+        with ESMTP id S235269AbhK3FQq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:20:09 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C88C061574;
-        Mon, 29 Nov 2021 17:16:51 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso27994990ots.6;
-        Mon, 29 Nov 2021 17:16:51 -0800 (PST)
+        Tue, 30 Nov 2021 00:16:46 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809FDC061574;
+        Mon, 29 Nov 2021 21:13:27 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id p4so25510630qkm.7;
+        Mon, 29 Nov 2021 21:13:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1ZEmtCcFbx9RGf9eWexeNci8XqT+MY8xIxIUzBU+qPY=;
-        b=kPJn/KGyUqhDtgvrcieRooin88XOS9kdXOFSBFGS0TfmK3qD9wT02IrojDfa2N0Pza
-         MmzQTK6P2Lx1EWb+CZPdSWYP10oXmpeqQ7QL1uPkHMi94gDlrBX21XRgQZmxfB9DBPbm
-         Pw197b0CmFwvB5gP6mBKe+Kw+YEUxutl6cHqSZQHgdXDCw+seLQb1tLzqJcYVIIdt9c+
-         2P+KxJ5DVfRPc3sIo7QB6gR5voXKv7m2rJD8Qi9fEqtBNU9NH1080P9mMX96Erg29PI+
-         ppyCkroOWbGig3dJraXTa5QSiWNiL5QnkuKkHlrP+Ugdx7Ur2Tzy0iSTk88t8iqU09iz
-         dFpA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xT3OJBmBSLdDKQA0pF/Eep+RHgJNEz3TGcshjvO7yNM=;
+        b=MVeA5cD2hTTZmfLu3F2ocne4+g4w6KTcjFFyyOBO4tV+EFfu7KyGNKSIwIElhefpTH
+         NW7pWcA+P/9L9mKTlopbnOjTbZmwrGQ+Jd+e615NJljYeHwjYRXFj9qhmDaYdSq4me84
+         n4QOwhih703FmTwCXhQH8BnfNm7B3m+eCmh6d5ZLWe8pmlO2AteNIRm1I737FqlT54Dc
+         RliTSjySiOB9qx+ZVIsdstbNrLe0F8NQtlrb8T27HJC+xtETVqoacAV3B0aES3n5vVXw
+         342hH5l8qWX9daltZgvhKYAr96bKYTEHX98MS5AiGaoKabB+pOo/8aRt1KSqnE0WEIbN
+         sNmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1ZEmtCcFbx9RGf9eWexeNci8XqT+MY8xIxIUzBU+qPY=;
-        b=AtnhJ7WTHt+CdK9Gv/FkCGenGurmmAqio9FngupiYhnMjwUz+bsp0UIqeuOLGPaiJh
-         3A/bc0t+2rutrynyg0WqeEqZjrPTrIP0vZMbEUqTQu/8QNMXnbqyfjA8uzMF18oLhvVt
-         +I3rMzq8eTpdG32I+/R5hHHefyIVkBCTYrsMMV+m5/kuY1rjc5PL0bFnFmnUCuBQG2Gi
-         LoAhtNXyvtA5xRr76ht/9RsE3zkdNc9N4qRIVqQ6iYPpwTGctS4CJoBF7NZ0Glwb0ooV
-         Fi1KyUggNzXOghwiNgKsE3QdskmSa4meIKh5ZHe9r8Jc8x1rCR7XBYAcSMItiuQN+Ub1
-         HqhQ==
-X-Gm-Message-State: AOAM5325WMdeLHYTP/lEshiMkYHh+r7KsGa/e8zt8ztjGwH67G1Cf6Vj
-        jEvdhjKUXsFeuSGc/j/J1YM=
-X-Google-Smtp-Source: ABdhPJzzokVnyg4AooF1Lp7IY1QG9zSS1syyGl9CzTYszpvRgzHYJA5UIPw+otUO2SxTZ8fYAE0IGw==
-X-Received: by 2002:a9d:798d:: with SMTP id h13mr46205333otm.132.1638235010442;
-        Mon, 29 Nov 2021 17:16:50 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id i3sm2501566ooq.39.2021.11.29.17.16.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 17:16:50 -0800 (PST)
-Message-ID: <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
-Date:   Mon, 29 Nov 2021 18:16:48 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [PATCH net v2] selftests/fib_tests: ping from dummy0 in
- fib_rp_filter_test()
-Content-Language: en-US
-To:     Peilin Ye <yepeilin.cs@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xT3OJBmBSLdDKQA0pF/Eep+RHgJNEz3TGcshjvO7yNM=;
+        b=jNndvgtflS3xJUT6i44phW0J1jtnwBVfefMxlQBY0TeyVULKL++vmKYEOiLKOochaf
+         58OTfVZILcfyLUbpkCX1QcBwihoOX1czi09y1Xr0RU3ATbwoeAjEMLiA/AGaWRv2CQEz
+         OA7k3FXxPKAAO3sOQzy4x3z6hD/UPvb2LzHOJUzYX4ibxtIY+5ROJIztvMD8Z7/DACRH
+         /9athpPcVoYznN/NSqnI8kYN45JK/VNBiYcF1Qe4rsS48bTVr6tDfN1csWamS4HV2d3L
+         HK/siSw6hxJkC0xYZ+GWBQ23tZyeigbiTKLFx+ERyWrr642gFfZMfo4Ejr8Ng+jgMZ61
+         M1uQ==
+X-Gm-Message-State: AOAM530tVY8fOhVKnUWqcGp3/YkQz9jyviarkH+eaAIyaruitArrJJ9l
+        uFbr7KjxUQh87enIdlc9QQ==
+X-Google-Smtp-Source: ABdhPJxwR6z4vFjYRZTUewtGwlCIjV891UP5pTH35Ox/xk+CLMCyyFjIQbwieGXaVrlS7N8cwWX9IQ==
+X-Received: by 2002:a05:620a:2955:: with SMTP id n21mr34627497qkp.581.1638249206710;
+        Mon, 29 Nov 2021 21:13:26 -0800 (PST)
+Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id e13sm10104176qte.56.2021.11.29.21.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 21:13:26 -0800 (PST)
+Date:   Mon, 29 Nov 2021 21:13:22 -0800
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     David Ahern <dsahern@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Peilin Ye <peilin.ye@bytedance.com>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] selftests/fib_tests: ping from dummy0 in
+ fib_rp_filter_test()
+Message-ID: <20211130051322.GA4450@bytedance>
 References: <20211129225230.3668-1-yepeilin.cs@gmail.com>
  <20211130004905.4146-1-yepeilin.cs@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20211130004905.4146-1-yepeilin.cs@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/29/21 5:49 PM, Peilin Ye wrote:
-> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-> index 5abe92d55b69..b8bceae00f8e 100755
-> --- a/tools/testing/selftests/net/fib_tests.sh
-> +++ b/tools/testing/selftests/net/fib_tests.sh
-> @@ -453,15 +453,19 @@ fib_rp_filter_test()
->  	$NS_EXEC sysctl -qw net.ipv4.conf.all.accept_local=1
->  	$NS_EXEC sysctl -qw net.ipv4.conf.all.route_localnet=1
->  
-> +	$NS_EXEC tc qd add dev dummy0 parent root handle 1: fq_codel
-> +	$NS_EXEC tc filter add dev dummy0 parent 1: protocol arp basic action mirred egress redirect dev dummy1
-> +	$NS_EXEC tc filter add dev dummy0 parent 1: protocol ip basic action mirred egress redirect dev dummy1
-> +
->  	$NS_EXEC tc qd add dev dummy1 parent root handle 1: fq_codel
->  	$NS_EXEC tc filter add dev dummy1 parent 1: protocol arp basic action mirred egress redirect dev lo
->  	$NS_EXEC tc filter add dev dummy1 parent 1: protocol ip basic action mirred egress redirect dev lo
->  	set +e
->  
-> -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
-> +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 198.51.100.1"
->  	log_test $? 0 "rp_filter passes local packets"
->  
-> -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 127.0.0.1"
-> +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 127.0.0.1"
->  	log_test $? 0 "rp_filter passes loopback packets"
->  
->  	cleanup
-> 
+Hi David,
 
-confused by the point of this test if you are going to change dummy1 to
-dummy0. dummy0 has 198.51.100.1 assigned to it, so the ping should
-always work.
+On Mon, Nov 29, 2021 at 06:16:48PM -0700, David Ahern wrote:
+> On 11/29/21 5:49 PM, Peilin Ye wrote:
+> > -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
+> > +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 198.51.100.1"
+> >  	log_test $? 0 "rp_filter passes local packets"
+> 
+> confused by the point of this test if you are going to change dummy1 to
+> dummy0. dummy0 has 198.51.100.1 assigned to it, so the ping should
+> always work.
+
+Ah...  Thanks for pointing this out, I'll try to figure out a different
+way to test it in v3.
+
+Thanks,
+Peilin Ye
+
