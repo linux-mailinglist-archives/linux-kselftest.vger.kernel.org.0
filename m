@@ -2,36 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 874D9463777
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Nov 2021 15:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEE3463821
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Nov 2021 15:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243060AbhK3Oxx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Nov 2021 09:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237625AbhK3Owj (ORCPT
+        id S243695AbhK3O6V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Nov 2021 09:58:21 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58722 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242880AbhK3O4X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:52:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7558EC0613FB;
-        Tue, 30 Nov 2021 06:48:42 -0800 (PST)
+        Tue, 30 Nov 2021 09:56:23 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EC92B81A27;
-        Tue, 30 Nov 2021 14:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A717C5832D;
-        Tue, 30 Nov 2021 14:48:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 717A2CE1A70;
+        Tue, 30 Nov 2021 14:53:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42599C53FC7;
+        Tue, 30 Nov 2021 14:52:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283719;
-        bh=QU6ElOIC9JTMbdY03CovcZaX0EF7e5BTCajILyq6Ywk=;
+        s=k20201202; t=1638283980;
+        bh=y8sSD1M0rmRs8aa71ZeIsNb3AxdnPDLqgJeWwCEXq7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S78F7rtin+k3ZKk57eQGglFbB0CElVqVkItzbCuG/j3gPsRo15/a6hqYEan/gT+fD
-         rv6iwzYxYEdPPkJHGrIkAdjlR72yN/ybANP4B1BAzongw1segpzJqqY5I8Uh/weOwA
-         P+4PCg8SliN/xlFPICorsKzFhLkGv4Z+gruyIoQnOP5ybbOjxYzUK6SWaA0pMK7EbY
-         x9Uk3poWYG7JVIBI3635Ab6Oh3qHFGmkCAB09nz6be51rWnqPA2qXgEqu3KJ96frF7
-         omJxnTsV0ll4TUsB1Dq+ie1iluXtM3WcrEk49glKgkowhafnzQb37Kpb1LW9tUHeJt
-         VBCblr3jGzO7g==
+        b=q83jGDYnNRXge6TYofA5qtA+/CSZPmkWrR9Qs/niXywqPiPVWOn5ojPFqFVGylq/y
+         6Mv8FQDwWx4RlGHPZD22CLIuMNOFU6l4aoPGGKldfMfMpJu9ZON9NndPhV/76oAEk2
+         09VZYs9HG/Kg2d4scE0b3zzVSPfXcb2V3FvLXKxoNXLguNg4OPD3XVhACFfy7/WYmR
+         HB4NsRrPNdRfjAa+I0ZTYgssSmVQ0Zem4/T2S917758CaLnu5XxT1aN1goTvWlzwLq
+         NqDP4yBUhG5Zn+O5K43C7XFz+53gvLuTr9yejp36DefLVAbBiiBI8Oqmd0T5rIIRPT
+         OM87ScZLGvAuQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Li Zhijian <zhijianx.li@intel.com>,
@@ -41,12 +38,12 @@ Cc:     Li Zhijian <zhijianx.li@intel.com>,
         ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 31/68] selftests/tc-testings: Be compatible with newer tc output
-Date:   Tue, 30 Nov 2021 09:46:27 -0500
-Message-Id: <20211130144707.944580-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 08/17] selftests/tc-testings: Be compatible with newer tc output
+Date:   Tue, 30 Nov 2021 09:52:32 -0500
+Message-Id: <20211130145243.946407-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
-References: <20211130144707.944580-1-sashal@kernel.org>
+In-Reply-To: <20211130145243.946407-1-sashal@kernel.org>
+References: <20211130145243.946407-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/bpf.json b/tools/testing/selftests/tc-testing/tc-tests/actions/bpf.json
-index 503982b8f295b..91832400ddbdb 100644
+index 1a9b282dd0be2..7590f883d7edf 100644
 --- a/tools/testing/selftests/tc-testing/tc-tests/actions/bpf.json
 +++ b/tools/testing/selftests/tc-testing/tc-tests/actions/bpf.json
-@@ -68,7 +68,7 @@
+@@ -66,7 +66,7 @@
          "cmdUnderTest": "$TC action add action bpf object-file $EBPFDIR/action.o section action-ok index 667",
          "expExitCode": "0",
          "verifyCmd": "$TC action get action bpf index 667",
@@ -92,7 +89,7 @@ index 503982b8f295b..91832400ddbdb 100644
 +        "matchPattern": "action order [0-9]*: bpf action.o:\\[action-ok\\] id [0-9].* tag [0-9a-f]{16}( jited)? default-action pipe.*index 667 ref",
          "matchCount": "1",
          "teardown": [
-             "$TC action flush action bpf"
+             "$TC action flush action bpf",
 -- 
 2.33.0
 
