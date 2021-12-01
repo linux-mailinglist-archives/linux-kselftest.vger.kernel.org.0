@@ -2,331 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD88465517
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 19:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0814654BA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 19:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352175AbhLASUr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 13:20:47 -0500
-Received: from mga04.intel.com ([192.55.52.120]:40353 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352207AbhLASUo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:20:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="235250540"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="235250540"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 10:17:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="460124693"
-Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
-  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2021 10:17:20 -0800
-From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
-To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, arkadiusz.kubalewski@intel.com
-Cc:     richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org, idosch@idosch.org,
-        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
-        petrm@nvidia.com
-Subject: [PATCH v4 net-next 4/4] ice: add support for SyncE recovered clocks
-Date:   Wed,  1 Dec 2021 19:02:08 +0100
-Message-Id: <20211201180208.640179-5-maciej.machnikowski@intel.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20211201180208.640179-1-maciej.machnikowski@intel.com>
-References: <20211201180208.640179-1-maciej.machnikowski@intel.com>
+        id S232828AbhLASJ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 13:09:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53925 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234928AbhLASJ1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:09:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638381965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nL9jEjCjXMQ2Hi/cW7zIosXzbREOuqBP0onxXEUO1oE=;
+        b=KgWcAPN04AjhIHgwoZYmKDl39i3gUbQ1GrJWAJWrHaDrjZXGlXu2jwnOTFUFc4xSbvSXvk
+        Dr2JQXQPKnHttp/AgcOXXkLs+nH6R5riTRrLBNouBqS3QT8EonxBECYzNsoIDAXd08p2Ty
+        Np3pfEbPvVxWNMQ2oDBICnfI6oj0nfo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-597-EIqUcEKVNQ6Va99TdOtV3w-1; Wed, 01 Dec 2021 13:06:02 -0500
+X-MC-Unique: EIqUcEKVNQ6Va99TdOtV3w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D2561006AA0;
+        Wed,  1 Dec 2021 18:05:59 +0000 (UTC)
+Received: from [10.22.10.179] (unknown [10.22.10.179])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AF03845D71;
+        Wed,  1 Dec 2021 18:05:49 +0000 (UTC)
+Message-ID: <4a021678-1896-2d16-4075-f626c7ab8513@redhat.com>
+Date:   Wed, 1 Dec 2021 13:05:44 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
+ <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+ <20211116175411.GA50019@blackbody.suse.cz>
+ <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
+ <YaZbXArNIMNvwJD/@slm.duckdns.org>
+ <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
+ <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implement ethtool netlink functions for handling SyncE recovered clocks
-configuration on ice driver:
-- ETHTOOL_MSG_RCLK_SET
-- ETHTOOL_MSG_RCLK_GET
 
-Co-developed-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
----
- .../net/ethernet/intel/ice/ice_adminq_cmd.h   | 29 ++++++
- drivers/net/ethernet/intel/ice/ice_common.c   | 65 +++++++++++++
- drivers/net/ethernet/intel/ice/ice_common.h   |  6 ++
- drivers/net/ethernet/intel/ice/ice_ethtool.c  | 97 +++++++++++++++++++
- drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  2 +
- 5 files changed, 199 insertions(+)
+On 12/1/21 11:46, Tejun Heo wrote:
+> Hello, Waiman.
+>
+> On Tue, Nov 30, 2021 at 10:56:34PM -0500, Waiman Long wrote:
+>>> What happens if an isolated domain becomes invalid and then valid again due
+>>> to cpu hotplug? Does it go "root invalid" and then back to "isolated"?
+>> Yes, the current code allow recovering from an invalid state. In this
+>> particular case, the transition will be "isolated" --> "root invalid" -->
+>> "isolated".
+> Wouldn't it be clearer if it became "isolated invalid"?
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-index 11226af7a9a4..aed03200bb99 100644
---- a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-+++ b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-@@ -1281,6 +1281,31 @@ struct ice_aqc_set_mac_lb {
- 	u8 reserved[15];
- };
- 
-+/* Set PHY recovered clock output (direct 0x0630) */
-+struct ice_aqc_set_phy_rec_clk_out {
-+	u8 phy_output;
-+	u8 port_num;
-+	u8 flags;
-+#define ICE_AQC_SET_PHY_REC_CLK_OUT_OUT_EN	BIT(0)
-+#define ICE_AQC_SET_PHY_REC_CLK_OUT_CURR_PORT	0xFF
-+	u8 rsvd;
-+	__le32 freq;
-+	u8 rsvd2[6];
-+	__le16 node_handle;
-+};
-+
-+/* Get PHY recovered clock output (direct 0x0631) */
-+struct ice_aqc_get_phy_rec_clk_out {
-+	u8 phy_output;
-+	u8 port_num;
-+	u8 flags;
-+#define ICE_AQC_GET_PHY_REC_CLK_OUT_OUT_EN	BIT(0)
-+	u8 rsvd;
-+	__le32 freq;
-+	u8 rsvd2[6];
-+	__le16 node_handle;
-+};
-+
- struct ice_aqc_link_topo_params {
- 	u8 lport_num;
- 	u8 lport_num_valid;
-@@ -2033,6 +2058,8 @@ struct ice_aq_desc {
- 		struct ice_aqc_get_phy_caps get_phy;
- 		struct ice_aqc_set_phy_cfg set_phy;
- 		struct ice_aqc_restart_an restart_an;
-+		struct ice_aqc_set_phy_rec_clk_out set_phy_rec_clk_out;
-+		struct ice_aqc_get_phy_rec_clk_out get_phy_rec_clk_out;
- 		struct ice_aqc_gpio read_write_gpio;
- 		struct ice_aqc_sff_eeprom read_write_sff_param;
- 		struct ice_aqc_set_port_id_led set_port_id_led;
-@@ -2188,6 +2215,8 @@ enum ice_adminq_opc {
- 	ice_aqc_opc_get_link_status			= 0x0607,
- 	ice_aqc_opc_set_event_mask			= 0x0613,
- 	ice_aqc_opc_set_mac_lb				= 0x0620,
-+	ice_aqc_opc_set_phy_rec_clk_out			= 0x0630,
-+	ice_aqc_opc_get_phy_rec_clk_out			= 0x0631,
- 	ice_aqc_opc_get_link_topo			= 0x06E0,
- 	ice_aqc_opc_set_port_id_led			= 0x06E9,
- 	ice_aqc_opc_set_gpio				= 0x06EC,
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.c b/drivers/net/ethernet/intel/ice/ice_common.c
-index 8069141ac105..29d302ea1e56 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.c
-+++ b/drivers/net/ethernet/intel/ice/ice_common.c
-@@ -5242,3 +5242,68 @@ bool ice_is_clock_mux_present_e810t(struct ice_hw *hw)
- 	return true;
- }
- 
-+/**
-+ * ice_aq_set_phy_rec_clk_out - set RCLK phy out
-+ * @hw: pointer to the HW struct
-+ * @phy_output: PHY reference clock output pin
-+ * @enable: GPIO state to be applied
-+ * @freq: PHY output frequency
-+ *
-+ * Set CGU reference priority (0x0630)
-+ * Return 0 on success or negative value on failure.
-+ */
-+enum ice_status
-+ice_aq_set_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, bool enable,
-+			   u32 *freq)
-+{
-+	struct ice_aqc_set_phy_rec_clk_out *cmd;
-+	struct ice_aq_desc desc;
-+	enum ice_status status;
-+
-+	ice_fill_dflt_direct_cmd_desc(&desc, ice_aqc_opc_set_phy_rec_clk_out);
-+	cmd = &desc.params.set_phy_rec_clk_out;
-+	cmd->phy_output = phy_output;
-+	cmd->port_num = ICE_AQC_SET_PHY_REC_CLK_OUT_CURR_PORT;
-+	cmd->flags = enable & ICE_AQC_SET_PHY_REC_CLK_OUT_OUT_EN;
-+	cmd->freq = cpu_to_le32(*freq);
-+
-+	status = ice_aq_send_cmd(hw, &desc, NULL, 0, NULL);
-+	if (!status)
-+		*freq = le32_to_cpu(cmd->freq);
-+
-+	return status;
-+}
-+
-+/**
-+ * ice_aq_get_phy_rec_clk_out
-+ * @hw: pointer to the HW struct
-+ * @phy_output: PHY reference clock output pin
-+ * @port_num: Port number
-+ * @flags: PHY flags
-+ * @freq: PHY output frequency
-+ *
-+ * Get PHY recovered clock output (0x0631)
-+ */
-+enum ice_status
-+ice_aq_get_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, u8 *port_num,
-+			   u8 *flags, u32 *freq)
-+{
-+	struct ice_aqc_get_phy_rec_clk_out *cmd;
-+	struct ice_aq_desc desc;
-+	enum ice_status status;
-+
-+	ice_fill_dflt_direct_cmd_desc(&desc, ice_aqc_opc_get_phy_rec_clk_out);
-+	cmd = &desc.params.get_phy_rec_clk_out;
-+	cmd->phy_output = phy_output;
-+	cmd->port_num = *port_num;
-+
-+	status = ice_aq_send_cmd(hw, &desc, NULL, 0, NULL);
-+	if (!status) {
-+		*port_num = cmd->port_num;
-+		*flags = cmd->flags;
-+		*freq = le32_to_cpu(cmd->freq);
-+	}
-+
-+	return status;
-+}
-+
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.h b/drivers/net/ethernet/intel/ice/ice_common.h
-index aaed388a40a8..8a99c8364173 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.h
-+++ b/drivers/net/ethernet/intel/ice/ice_common.h
-@@ -166,6 +166,12 @@ ice_ena_vsi_rdma_qset(struct ice_port_info *pi, u16 vsi_handle, u8 tc,
- enum ice_status
- ice_aq_get_cgu_dpll_status(struct ice_hw *hw, u8 dpll_num, u8 *ref_state,
- 			   u16 *dpll_state, u64 *phase_offset, u8 *eec_mode);
-+enum ice_status
-+ice_aq_set_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, bool enable,
-+			   u32 *freq);
-+enum ice_status
-+ice_aq_get_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, u8 *port_num,
-+			   u8 *flags, u32 *freq);
- int
- ice_dis_vsi_rdma_qset(struct ice_port_info *pi, u16 count, u32 *qset_teid,
- 		      u16 *q_id);
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index 5af2faaa21e1..c9e16bb9470e 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -4076,6 +4076,100 @@ ice_get_module_eeprom(struct net_device *netdev,
- 	return 0;
- }
- 
-+/**
-+ * ice_get_rclk_range - get range of recovered clock indices
-+ * @netdev: network interface device structure
-+ * @min_idx: min rclk index
-+ * @max_idx: max rclk index
-+ * @ena_mask: bitmask of pin states
-+ * @extack: netlink extended ack
-+ */
-+static int
-+ice_get_rclk_range(struct net_device *netdev, u32 *min_idx, u32 *max_idx,
-+		   struct netlink_ext_ack *extack)
-+{
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
-+
-+	if (!ice_is_feature_supported(pf, ICE_F_CGU))
-+		return -EOPNOTSUPP;
-+
-+	*min_idx = 0;
-+	*max_idx = ICE_RCLK_PIN_MAX;
-+
-+	return 0;
-+}
-+
-+/**
-+ * ice_get_rclk_state - get state of a recovered frequency output pin
-+ * @netdev: network interface device structure
-+ * @out_idx: index of a questioned pin
-+ * @ena: returned state of a pin
-+ * @extack: netlink extended ack
-+ */
-+static int
-+ice_get_rclk_state(struct net_device *netdev, u32 out_idx,
-+		   bool *ena, struct netlink_ext_ack *extack)
-+{
-+	u8 port_num = ICE_AQC_SET_PHY_REC_CLK_OUT_CURR_PORT, flags;
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
-+	u32 freq;
-+	int ret;
-+
-+	if (!ice_is_feature_supported(pf, ICE_F_CGU))
-+		return -EOPNOTSUPP;
-+
-+	if (out_idx > ICE_RCLK_PIN_MAX)
-+		return -EINVAL;
-+
-+	ret = ice_aq_get_phy_rec_clk_out(&pf->hw, out_idx,
-+					 &port_num, &flags, &freq);
-+	if (ret)
-+		return ret;
-+
-+	if (flags & ICE_AQC_GET_PHY_REC_CLK_OUT_OUT_EN)
-+		*ena = true;
-+	else
-+		*ena = false;
-+
-+	return ret;
-+}
-+
-+/**
-+ * ice_set_rclk_out - enable/disable recovered clock redirection to the
-+ * output pin
-+ * @netdev: network interface device structure
-+ * @out_idx: index of pin being configured
-+ * @ena: requested state of a pin
-+ * @extack: netlink extended ack
-+ */
-+static int
-+ice_set_rclk_out(struct net_device *netdev, u32 out_idx, bool ena,
-+		 struct netlink_ext_ack *extack)
-+{
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
-+	enum ice_status ret;
-+	u32 freq;
-+
-+	if (!ice_is_feature_supported(pf, ICE_F_CGU))
-+		return -EOPNOTSUPP;
-+
-+	if (out_idx > ICE_RCLK_PIN_MAX)
-+		return -EINVAL;
-+
-+	ret = ice_aq_set_phy_rec_clk_out(&pf->hw, out_idx,
-+					 ena, &freq);
-+	if (ret)
-+		return ret;
-+
-+	return ret;
-+}
-+
- static const struct ethtool_ops ice_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_USECS |
- 				     ETHTOOL_COALESCE_USE_ADAPTIVE |
-@@ -4121,6 +4215,9 @@ static const struct ethtool_ops ice_ethtool_ops = {
- 	.set_fecparam		= ice_set_fecparam,
- 	.get_module_info	= ice_get_module_info,
- 	.get_module_eeprom	= ice_get_module_eeprom,
-+	.get_rclk_range		= ice_get_rclk_range,
-+	.get_rclk_state		= ice_get_rclk_state,
-+	.set_rclk_out		= ice_set_rclk_out,
- };
- 
- static const struct ethtool_ops ice_ethtool_safe_mode_ops = {
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp_hw.h b/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-index 28b04ec40bae..865ca680b62e 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-@@ -132,4 +132,6 @@ enum ice_e810t_cgu_pins {
- 	NUM_E810T_CGU_PINS
- };
- 
-+#define ICE_RCLK_PIN_MAX	(REF1N - REF1P)
-+
- #endif /* _ICE_PTP_HW_H_ */
--- 
-2.26.3
+You are right. I have overlooked that. Will make the change.
+
+
+>
+>>> While it isn't necessarily tied to this series, it's a big no-no to restrict
+>>> what a parent can do depending on what its descendants are doing. A cgroup
+>>> higher up in the hierarchy should be able to change configuration however it
+>>> sees fit as deligation breaks down otherwise.
+>>>
+>>> Maybe you can argue that cpuset is special and shouldn't be subject to such
+>>> convention but I can't see strong enough justifications especially given
+>>> that most of these restrictions can be broken by hotplug operations anyway
+>>> and thus need code to handle those situations.
+>> These are all pre-existing restrictions before the introduction of
+>> partition. These are checks done in validate_change(). I am just saying out
+>> loud the existing behavior. If you think that needs to be changed, I am fine
+>> with that. However, it will be a separate patch as it is not a behavior that
+>> is introduced by this series.
+> I see. It looks more problematic now with the addtion of the state
+> transition error reporting, more possible state transitions and, well,
+> actual documentation.
+
+I am going to add a patch to take out the child superset limitation for 
+the default hierarchy as I believe it is probably an oversight that we 
+were not aware of before. I would like to keep the exclusivity rule 
+though as I think it makes sense.
+
+>
+>> Once an invalid partition is changed to "member", there is no way for a
+>> child invalid partition root to recover and become valid again. There is why
+>> I force them to become "member" also. I am OK if you believe it is better to
+>> keep them in the invalid state forever until we explicitly changed them to
+>> "member" eventually.
+> That's because we don't allow turning a cgroup with descendants into a
+> partition, right?
+Yes, that is a major part of it.
+>
+> So, when we were first adding the partition support, the thinking was that
+> as it's pretty niche anyway, we can take some aberrations and restrictions,
+> but I don't think it's a good direction to be building up on top of those
+> like this and would much prefer to clean up the rules and restrictions. I
+> know that this has been going on for quite a while and am sorry that am
+> coming back to the same issue repeatedly which isn't necessarily caused by
+> the proposed change. What do you think?
+
+I think I can relax some of the restrictions, but probably not all of 
+them at this time. We can certainly working on removing as much 
+restriction and limitations as possible in future update to the 
+partition code.
+
+Cheers,
+Longman
 
