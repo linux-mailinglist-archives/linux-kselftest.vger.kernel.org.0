@@ -2,78 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 464DD464CFE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 12:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA56464E7A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 14:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349069AbhLALh7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 06:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S1349474AbhLANKK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 08:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349005AbhLALhi (ORCPT
+        with ESMTP id S1349469AbhLANKJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:37:38 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B81EC061792
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id gu12so21235819qvb.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
-         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
-         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
-         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
-         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
-         Af5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=tCxKaNR/3o7SrXGI3UyPNZffOJhXphNRkU0313gkrYUSfunxnL/j5FnKT5JifnDIEV
-         nhDwxKSv+Ct212hSpArCid9nT+vDPbkS9x5sD2jEmG8IX4U8lgjmY+GFOMIKnwDzVrz7
-         KoskK0iaNnsAX49BzbHvy1gIw5GPcfDK7OOA+8j/q5UDSBz59rGgnq4DGIgejh7Ew2Xf
-         GESYa+42+OCEdwZMVIE6xSfxX7hUdqGrskjvr1g17+/HJkzBx5KX13j0A93jokC4bZtU
-         P2XKGLV+W1zGA14DNBwKkDTcDVa2e3HDImd1CNM21bvunDBmTwqeugwpJl2ZAG8TPUbw
-         8hhQ==
-X-Gm-Message-State: AOAM5302PzWTobuwyNMDRBHXjOC/ovjDeSFurpLpeHyr9Jdo7yQvjMsA
-        frt/UmLx6Sqazr/aNaDCh481K6tJHDWB0dYmUw49DudI2Yo=
-X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
-X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
- Wed, 01 Dec 2021 03:33:59 -0800 (PST)
+        Wed, 1 Dec 2021 08:10:09 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436C9C061574;
+        Wed,  1 Dec 2021 05:06:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8EA2BCE1C56;
+        Wed,  1 Dec 2021 13:06:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD2DC53FAD;
+        Wed,  1 Dec 2021 13:06:40 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 14:06:37 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
+Message-ID: <20211201130637.phskqu7rkl5ty2xq@wittgenstein>
+References: <20211105162530.3307666-1-anders.roxell@linaro.org>
+ <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
+ <20211123142600.r5d52iwhbqhujiux@wittgenstein>
+ <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
 MIME-Version: 1.0
-Sender: unitednationawardwinner@gmail.com
-Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
-From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
-Date:   Wed, 1 Dec 2021 03:33:58 -0800
-X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
-Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
-Subject: Your long awaited part payment of $2.5.000.00Usd
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attention: Beneficiary, Your long awaited part payment of
-$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
-Dollars) is ready for immediate release to you, and it was
-electronically credited into an ATM Visa Card for easy delivery.
+On Tue, Nov 30, 2021 at 09:41:49AM -0700, Shuah Khan wrote:
+> On 11/23/21 7:26 AM, Christian Brauner wrote:
+> > On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
+> > > On 11/5/21 10:25 AM, Anders Roxell wrote:
+> > > > When building selftests/cgroup: with clang the following error are seen:
+> > > > 
+> > > > clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
+> > > > clang: error: cannot specify -o when generating multiple output files
+> > > > make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
+> > > > 
+> > > > Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+> > > > since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+> > > > file lib.mk.
+> > > > 
+> > > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > > > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> > > > ---
+> > > >    tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
+> > > >    tools/testing/selftests/lib.mk          |  2 +-
+> > > >    2 files changed, 8 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+> > > > index 59e222460581..745fe25fa0b9 100644
+> > > > --- a/tools/testing/selftests/cgroup/Makefile
+> > > > +++ b/tools/testing/selftests/cgroup/Makefile
+> > > > @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
+> > > >    TEST_GEN_PROGS += test_freezer
+> > > >    TEST_GEN_PROGS += test_kill
+> > > > +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+> > > > +
+> > > 
+> > > This looks odd to me. Why are we introducing dependencies between tests?
+> > > clone3 includes in cgroup? Looks odd to me.
+> > 
+> > The cgroup tests need access to clone3() functionality in order to test
+> > CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
+> > tests. There are a few other tests that include the clone3 header.
+> > 
+> 
+> If other tests are also including this header, we could move it up under
+> selftests level. Might have to add include directory.
 
-Your new Payment Reference No.- 6363836,
-Pin Code No: 1787
-Your Certificate of Merit Payment No: 05872,
+No objection from me if that's useful. I won't have time for that in the
+near future. (This might be of interest for one of the LF programs that
+help get new folks interested in kernel development started.)
 
-Your Names: |
-Address: |
-
-Person to Contact:MR KELLY HALL the Director of the International
-Audit unit ATM Payment Center,
-
-Email: uba-bf@e-ubabf.com
-TELEPHONE: +226 64865611 You can whatsApp the bank
-
-Regards.
-Mrs ORGIL BAATAR
+Christian
