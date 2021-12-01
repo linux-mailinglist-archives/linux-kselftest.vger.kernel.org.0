@@ -2,121 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CC6464B7B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 11:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD22464C5C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 12:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348597AbhLAKWf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 05:22:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59530 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLAKWe (ORCPT
+        id S242684AbhLALO1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 06:14:27 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:13691 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230407AbhLALO1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:22:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B08AB81E17;
-        Wed,  1 Dec 2021 10:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 387F8C53FCC;
-        Wed,  1 Dec 2021 10:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638353951;
-        bh=1DD6yb8AndnxLz2+3Nk3lf/qwuXp3fDEiH6kGOpOszU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tlzh7bhavcuJL1JqvmDk1Pm+IxQe6SWnZS0YSsrgT245Kv02NKGibqzXW+dF0KFef
-         EroXPB0P923FZ4+JNasEbAzQV8X3YHuNN1Bse4uKZiylQlDC/krndQMHr8N+nF4yHf
-         SWEmU24CovYm7TBosS6Fl9pXUR4FeXRvg2IPbrwhaKl3MW5Z2IMTa6ONG0HsdTRImU
-         T+f5GcwZ/FZ2Itdc9JhMSYPhnRIEYWnsNfTPU3NPY7yMR6M1LOhI5Jl7PyU7jvZdH9
-         tPetaLPCgDyhV8wkvirXtXDRx/fWpEgMlAK0Vmt2QxS1t0H3bgWSXLbJvCIM21K065
-         cgBC+oTl0H+zw==
-Date:   Wed, 1 Dec 2021 12:19:09 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
-Message-ID: <YadMHU0scgKvCTMV@iki.fi>
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
- <YaVljk1vLRZ/TDJ/@iki.fi>
- <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
- <YadLaHB0oJZYTMbh@iki.fi>
+        Wed, 1 Dec 2021 06:14:27 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AJ3L3raN2ZYdhVTvvrR0AlcFynXyQoLVcMsFnjC/?=
+ =?us-ascii?q?WdQft029w1TJSyGAdUW+HMvveZWrzL9tya4/j8kwE6MLdm99gGjLY11k3ESsS9?=
+ =?us-ascii?q?pCt6fd1j6vIF3rLaJWFFSqL1u1GAjX7BJ1yHiC0SiuFaOC79CAmjfjQH9IQNca?=
+ =?us-ascii?q?fUsxPbV49IMseoUI78wIJqtYAbemRW2thi/uryyHsEAPNNwpPD44hw/nrRCWDE?=
+ =?us-ascii?q?xjFkGhwUlQWPZintbJF/pUfJMp3yaqZdxMUTmTId9NWSdovzJnhlo/Y1xwrTN2?=
+ =?us-ascii?q?4kLfnaVBMSbnXVeSMoiMOHfH83V4Z/Wpvuko4HKN0hUN/jzSbn9FzydxLnZKtS?=
+ =?us-ascii?q?wY1JbCKk+MYO/VdO3gnbfcZpe6eeRBTtuTWlSUqaUDEz/xwAUQeMYQG9+NzBm9?=
+ =?us-ascii?q?Ss/oVNFglYguKh++sxpq0T+BtgoIoK8yDFIACsHhIzjzDC/siB5fZTM3i/t9F1?=
+ =?us-ascii?q?TcYhc1UG/vaIc0DZlJHaBXGfg0KOVoNDp86tPmni2O5cDBCrl+R460t7AD7yA1?=
+ =?us-ascii?q?3zaioM8HYftKWSN5JtliXq3iA/GnjBBwectuFxlKt9H+wiuLRtT30VZhUF7Ci8?=
+ =?us-ascii?q?PNuxlqJyQQu5Lc+PbegiaDhzBfgBJQEcApJkhfCZJMarCSDJuQRlTXhyJJcgiM?=
+ =?us-ascii?q?hZg=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AAHC/kqHeofe77q3qpLqEhseALOsnbusQ8zAX?=
+ =?us-ascii?q?PiFKKCC9Hfb1qynDpp8mPHzP5gr5OktOpTnoAsDpfZq2z/NICOcqV4ufYA=3D?=
+ =?us-ascii?q?=3D?=
+X-IronPort-AV: E=Sophos;i="5.87,278,1631548800"; 
+   d="scan'208";a="118275910"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 01 Dec 2021 19:11:04 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 96A7F4D139FF;
+        Wed,  1 Dec 2021 19:11:03 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 1 Dec 2021 19:11:02 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 1 Dec 2021 19:11:03 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
+        <dsahern@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Subject: [PATCH 1/3] selftest: net: Correct case name
+Date:   Wed, 1 Dec 2021 19:10:23 +0800
+Message-ID: <20211201111025.13834-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YadLaHB0oJZYTMbh@iki.fi>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 96A7F4D139FF.AFE2A
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 12:16:11PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Nov 29, 2021 at 07:26:12PM -0500, Stefan Berger wrote:
-> > 
-> > On 11/29/21 18:43, Jarkko Sakkinen wrote:
-> > > On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
-> > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > 
-> > > > Reset the dictionary attack lock to avoid the following types of test
-> > > > failures after running the test 2 times:
-> > > > 
-> > > > ======================================================================
-> > > > ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
-> > > > ----------------------------------------------------------------------
-> > > > Traceback (most recent call last):
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
-> > > >      blob = self.client.seal(self.root_key, data, auth, policy_dig)
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
-> > > >      rsp = self.send_cmd(cmd)
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
-> > > >      raise ProtocolError(cc, rc)
-> > > > tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
-> > > > 
-> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > ---
-> > > >   tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
-> > > >   1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > index e63a37819978..ad6f54c01adf 100644
-> > > > --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
-> > > >           except:
-> > > >               self.client.flush_context(handle)
-> > > >               raise
-> > > > +        finally:
-> > > > +            self.client.reset_da_lock()
-> > > >           self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
-> > > > -- 
-> > > > 2.31.1
-> > > > 
-> > > I don't agree with this as a DA lock has legit use. This would be adequate
-> > > for systems dedicated for kernel testing only.
-> > 
-> > The problem is this particular test case I am patching here causes the above
-> > test failures upon rerun. We are testing the driver here presumably and not
-> > the TPM2, so I think we should leave the TPM2 as cleaned up as possible,
-> > thus my suggestion is to reset the DA lock and we won't hear any complaints
-> > after that.
-> 
-> Ok.
-> 
-> > > We could make this available in the folder where TPM2 tests are:
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
-> > 
-> > 
-> > The tss packages also have command line tools to reset the DA lock, but it
-> > shouldn't be necessary to use them after running a **driver** test case.
-> 
-> If you speak about TSS, please alway say which one :-)
-> 
-> Adding non-volatile state changes explicitly is to a test case is both
+ipv6_addr_bind/ipv4_addr_bind are function name.
 
-A typo, should be:
+Fixes: 34d0302ab86 ("selftests: Add ipv6 address bind tests to fcnal-test")
+Fixes: 75b2b2b3db4 ("selftests: Add ipv4 address bind tests to fcnal-test")
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ tools/testing/selftests/net/fcnal-test.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-"Adding non-volatile state changes explicitly to a test case is both"
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 3313566ce906..7f5b265fcb90 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -4002,8 +4002,8 @@ EOF
+ ################################################################################
+ # main
+ 
+-TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_addr_bind ipv4_runtime ipv4_netfilter"
+-TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_addr_bind ipv6_runtime ipv6_netfilter"
++TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
++TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
+ TESTS_OTHER="use_cases"
+ 
+ PAUSE_ON_FAIL=no
+-- 
+2.32.0
 
-/Jarkko
+
+
