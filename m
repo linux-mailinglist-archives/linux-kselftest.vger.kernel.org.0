@@ -2,103 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFCF4650A0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 15:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8E04650C8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 16:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243151AbhLAPAc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 10:00:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52507 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232627AbhLAPAb (ORCPT
+        id S238322AbhLAPIW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 10:08:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59458 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234320AbhLAPIW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:00:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638370630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nD9oVnkdNcgwBlZTLCOet/WJtrrHTgH+O1SlF9BlPpQ=;
-        b=Hez8sG9JJQUueKmjZ8arfbIRbGBrmnNIAI8DOfChKDmy+yxRyim0nC5LcsKGmh7+Pc2Y3+
-        tRxaG4R8ZK7UMkvBTQXGpxI3jh9w/zqzRGxZFxZ04ZY0ktT/p+ejXCgef3cC26o+ApgLUz
-        kg07m+0Cio9PcjCMa1zzAlNlYdFd+h8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-3u8mdrDTOn6rm3VialThZg-1; Wed, 01 Dec 2021 09:57:09 -0500
-X-MC-Unique: 3u8mdrDTOn6rm3VialThZg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 1 Dec 2021 10:08:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 094FF8042F6;
-        Wed,  1 Dec 2021 14:56:24 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C07760C05;
-        Wed,  1 Dec 2021 14:56:21 +0000 (UTC)
-Message-ID: <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
-Date:   Wed, 1 Dec 2021 09:56:21 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <20211201141350.GA54766@blackbody.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211201141350.GA54766@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B8B8B81DE4;
+        Wed,  1 Dec 2021 15:05:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6986AC53FAD;
+        Wed,  1 Dec 2021 15:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638371099;
+        bh=2rXA7LdErl+8+nyOvssms5c1pTevqPeS6Aq7VNyiOuA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xl8JHR/JDs0hMe0Yt/ylVbk9eT6Kf3yMJYObm3aMd8nUYNf3h97ncCVa2wdy6uLcs
+         ilvMOAC6FDYXMUz7T3fdvXb1wzfZzD1+J1avMuEFEkLGVUbVEIsL+XJTinq1NIrgxH
+         Ha9qGclJZHoBIVbsjHp2gHhxfqDKtJk+3TFyf+tuHob8dj+FffPd8N3mLEX0gJ6zxJ
+         MnlSyF/A3oxbJR0bL+971fH0ceWQzdQDG1hAddWE4YNLqPrgaiOimUNQNSYeyyckjQ
+         8kV5Db2jYY6IRYHCF1vytpFVHFebuG5CDCqiMSUeGAhM6bMZs0UiZj2RNsOZN3TS/J
+         ZZsPYQ5fBFUEw==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: [PATCH 00/11] mm/damon: Trivial fixups and improvements
+Date:   Wed,  1 Dec 2021 15:04:29 +0000
+Message-Id: <20211201150440.1088-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/1/21 09:13, Michal Koutný wrote:
-> On Tue, Nov 30, 2021 at 10:56:34PM -0500, Waiman Long <longman@redhat.com> wrote:
->>>>       A valid parent partition may distribute out all its CPUs to
->>>>       its child partitions as long as it is not the root cgroup and
->>>>       there is no task associated with it.
->>> A valid parent partition which isn't root never has tasks in them to begin
->>> with.
->> I believe there is some corner cases where it is possible to put task in an
->> intermediate partition. That is why I put down this statement.
-> Just mind the threads -- cpuset controller is threaded and having tasks
-> in inner cgroup nodes is a real scenario. I wouldn't consider it a
-> corner case.
->
-> [ Actually, the paragraph could IMO be simplified:
-Right, I shouldn't say corner cases. Having task in an intermediate 
-partition is possible depending on event sequence. I am aware that there 
-are code in the cpuset code to prevent that, but it didn't block all cases.
->> A valid parent partition may distribute out all its CPUs to
->>   its child partitions as long as there is no task associated with it.
-> Assuming there's always at least one kernel thread in the root cgroup
-> that can't be migrated anyway.]
+This patchset contains trivial fixups and improvements for DAMON and its
+kunit/kselftest tests.
 
-I am aware of that. That is why I said root cgroup must have at least 
-one cpu in its "cpuset.cpus.effective".
+SeongJae Park (11):
+  mm/damon/core: Use better timer mechanisms selection threshold
+  mm/damon/dbgfs: Remove an unnecessary error message
+  mm/damon/core: Remove unnecessary error messages
+  mm/damon/vaddr: Remove an unnecessary warning message
+  mm/damon/vaddr-test: Split a test function having >1024 bytes frame
+    size
+  mm/damon/vaddr-test: Remove unnecessary variables
+  selftests/damon: Skip test if DAMON is running
+  selftests/damon: Test DAMON enabling with empty target_ids case
+  selftests/damon: Test wrong DAMOS condition ranges input
+  selftests/damon: Test debugfs file reads/writes with huge count
+  selftests/damon: Split test cases
 
-Cheers,
-Longman
+ mm/damon/core.c                               | 14 +---
+ mm/damon/dbgfs.c                              |  4 +-
+ mm/damon/vaddr-test.h                         | 79 +++++++++----------
+ mm/damon/vaddr.c                              |  1 -
+ tools/testing/selftests/damon/.gitignore      |  2 +
+ tools/testing/selftests/damon/Makefile        |  7 +-
+ .../selftests/damon/_debugfs_common.sh        | 52 ++++++++++++
+ .../testing/selftests/damon/debugfs_attrs.sh  | 73 +----------------
+ .../selftests/damon/debugfs_empty_targets.sh  | 13 +++
+ .../damon/debugfs_huge_count_read_write.sh    | 22 ++++++
+ .../selftests/damon/debugfs_schemes.sh        | 19 +++++
+ .../selftests/damon/debugfs_target_ids.sh     | 19 +++++
+ .../selftests/damon/huge_count_read_write.c   | 39 +++++++++
+ 13 files changed, 214 insertions(+), 130 deletions(-)
+ create mode 100644 tools/testing/selftests/damon/.gitignore
+ create mode 100644 tools/testing/selftests/damon/_debugfs_common.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_empty_targets.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_schemes.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_target_ids.sh
+ create mode 100644 tools/testing/selftests/damon/huge_count_read_write.c
+
+-- 
+2.17.1
 
