@@ -2,366 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 303E94650DA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 16:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E16F4652ED
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 17:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350447AbhLAPId (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 10:08:33 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52774 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350365AbhLAPIb (ORCPT
+        id S238165AbhLAQm7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 11:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238010AbhLAQm6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:08:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 74F5ECE1F4E;
-        Wed,  1 Dec 2021 15:05:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1776BC53FD2;
-        Wed,  1 Dec 2021 15:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638371107;
-        bh=12Gg2gHRZzGJmTMNLn1vki+uItnZBSKL2VYrvKMNfGM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZTgr4ULb6pFVZFpgxoQEHrShkKMnZQGR46jEYJ9kb+BHip2uED09gDT/gdaVoAtZ1
-         hSOraBh03SCjQBb64aGanRGXBbKfoommXFDkwVThNIfpVWbUQxMiaGMm89launsYHq
-         PxoNEdbqLWQS58HwgTON2691Q0bj68zt2E0x2PsdupxmkKrWlB0uNUjhzhxjjkVTV9
-         m/4btsLCFQYtiruLsCSuSy7pSXKz7jisUzZ99VEB+n9TRvMNAOH3So63ZAsEb1ubg6
-         JgO0biZL6HIT6jhisQA2SkOLVfRFgnuLi9LoXCNJxaIWkIegJPeLMgfdlS1tprB9m9
-         iGFXCjijHE0Xg==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH 11/11] selftests/damon: Split test cases
-Date:   Wed,  1 Dec 2021 15:04:40 +0000
-Message-Id: <20211201150440.1088-12-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211201150440.1088-1-sj@kernel.org>
-References: <20211201150440.1088-1-sj@kernel.org>
+        Wed, 1 Dec 2021 11:42:58 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8285FC061574;
+        Wed,  1 Dec 2021 08:39:37 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id iq11so18430509pjb.3;
+        Wed, 01 Dec 2021 08:39:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1EkC39adlEEsimMF8WAtkbLkh0JLAwJ99PUzWQZRq4M=;
+        b=S4K6E60fowwK12pVSXDSezUToCQTbvMryZ9jCQjZdt8YBwTBgNsYvIktXGYED/SMI3
+         VgJF3XTd8qW6MKe9OMmyat1BHCQiLqnkvcPtTavJrnjPTjO6h4yQ8goQdWB22s3zocqK
+         Wl5E8OgrGvetUa6XHhgvfrYB+vbkzprmjM4Gs6VW1+5q5391x/rHz6T8kzBfnj9MHpc8
+         hOVO7aI27QXPDn6ABgwCkknX8xtE+H4KWIbm9ae6e9+4ddYjSkRirXz6ZDYR+ylg0/9q
+         g9MJbO+Gy1BPaqtpOKsrNe9CzPYLfINyLm/U/Hayo9rNcrY1urCnq00+/Vl+Z/Sl93bS
+         nVvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=1EkC39adlEEsimMF8WAtkbLkh0JLAwJ99PUzWQZRq4M=;
+        b=glrF1TPqxEh579FXLqgcuS1E5TXEUvgI8p/+EXqeBn4s+zy0Fwxz2/NowGle64ven6
+         fIblZaW/kvVZf3CMM1/+9WgWczSBFNoixPlsVBTAqwZTO5IWwU99KSpr29841GfJctUz
+         7GBaBHyQqNGe1ZoV0tJ5+QKobK8bd6BBw73SIeROeOpV4iqxfloDtOmqjq3BRmrLjifw
+         Z0VYbhHwUt2ezepVv8Au9YxfsAFsjemJ9NlFEe+eK+4n8xfBHZJLHETe24PgYBKJ9LH6
+         a3ivV8bPZvm1pV+3FmkVNo56Oyc7FgBPgetrkRm+nnNoJVxRnpHwLO7LhdZbpb1sWJhl
+         cHpA==
+X-Gm-Message-State: AOAM530r/OsftmAqLxoQt3Amy+dG8yoiv07L5FOXJUiLpQ2s9XPKA9sz
+        uFLBVVjSaLMDFFByykt653w=
+X-Google-Smtp-Source: ABdhPJyNOPfPh8zj6bnvNceMnYfdsseo9B1V0hecoqWUwEoaGEAx0BGKmSABKZNaOG9F+xme3mz4Uw==
+X-Received: by 2002:a17:903:4043:b0:142:4f21:6976 with SMTP id n3-20020a170903404300b001424f216976mr8767312pla.62.1638376776834;
+        Wed, 01 Dec 2021 08:39:36 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id g21sm358416pfc.95.2021.12.01.08.39.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 08:39:36 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 1 Dec 2021 06:39:34 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YaelRiqWOIzT5uRs@slm.duckdns.org>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
+ <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+ <20211116175411.GA50019@blackbody.suse.cz>
+ <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
+ <YaZbXArNIMNvwJD/@slm.duckdns.org>
+ <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
+ <20211201141350.GA54766@blackbody.suse.cz>
+ <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, the single test program, debugfs.sh, contains all test cases
-for DAMON.  When one of the cases is failed, finding which case is
-failed from the test log is not so easy, and all remaining test will be
-skipped.  To improve the situation, this commit splits the single
-program into small test programs having their own names.
+On Wed, Dec 01, 2021 at 09:56:21AM -0500, Waiman Long wrote:
+> Right, I shouldn't say corner cases. Having task in an intermediate
+> partition is possible depending on event sequence. I am aware that there are
+> code in the cpuset code to prevent that, but it didn't block all cases.
+> > > A valid parent partition may distribute out all its CPUs to
+> > >   its child partitions as long as there is no task associated with it.
+> > Assuming there's always at least one kernel thread in the root cgroup
+> > that can't be migrated anyway.]
+> 
+> I am aware of that. That is why I said root cgroup must have at least one
+> cpu in its "cpuset.cpus.effective".
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/Makefile        |   5 +-
- .../selftests/damon/_debugfs_common.sh        |  52 ++++++++
- .../testing/selftests/damon/debugfs_attrs.sh  | 111 +-----------------
- .../selftests/damon/debugfs_empty_targets.sh  |  13 ++
- .../damon/debugfs_huge_count_read_write.sh    |  22 ++++
- .../selftests/damon/debugfs_schemes.sh        |  19 +++
- .../selftests/damon/debugfs_target_ids.sh     |  19 +++
- 7 files changed, 129 insertions(+), 112 deletions(-)
- create mode 100644 tools/testing/selftests/damon/_debugfs_common.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_empty_targets.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_schemes.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_target_ids.sh
+In that case, let's explicitly describe that condition.
 
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index f0aa954b5d13..937d36ae9a69 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -3,7 +3,8 @@
- 
- TEST_GEN_FILES += huge_count_read_write
- 
--TEST_FILES = _chk_dependency.sh
--TEST_PROGS = debugfs_attrs.sh
-+TEST_FILES = _chk_dependency.sh _debugfs_common.sh
-+TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
-+TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/damon/_debugfs_common.sh b/tools/testing/selftests/damon/_debugfs_common.sh
-new file mode 100644
-index 000000000000..48989d4813ae
---- /dev/null
-+++ b/tools/testing/selftests/damon/_debugfs_common.sh
-@@ -0,0 +1,52 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+test_write_result() {
-+	file=$1
-+	content=$2
-+	orig_content=$3
-+	expect_reason=$4
-+	expected=$5
-+
-+	echo "$content" > "$file"
-+	if [ $? -ne "$expected" ]
-+	then
-+		echo "writing $content to $file doesn't return $expected"
-+		echo "expected because: $expect_reason"
-+		echo "$orig_content" > "$file"
-+		exit 1
-+	fi
-+}
-+
-+test_write_succ() {
-+	test_write_result "$1" "$2" "$3" "$4" 0
-+}
-+
-+test_write_fail() {
-+	test_write_result "$1" "$2" "$3" "$4" 1
-+}
-+
-+test_content() {
-+	file=$1
-+	orig_content=$2
-+	expected=$3
-+	expect_reason=$4
-+
-+	content=$(cat "$file")
-+	if [ "$content" != "$expected" ]
-+	then
-+		echo "reading $file expected $expected but $content"
-+		echo "expected because: $expect_reason"
-+		echo "$orig_content" > "$file"
-+		exit 1
-+	fi
-+}
-+
-+source ./_chk_dependency.sh
-+
-+damon_onoff="$DBGFS/monitor_on"
-+if [ $(cat "$damon_onoff") = "on" ]
-+then
-+	echo "monitoring is on"
-+	exit $ksft_skip
-+fi
-diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-index 23a7b48ca7d3..902e312bca89 100644
---- a/tools/testing/selftests/damon/debugfs_attrs.sh
-+++ b/tools/testing/selftests/damon/debugfs_attrs.sh
-@@ -1,57 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--test_write_result() {
--	file=$1
--	content=$2
--	orig_content=$3
--	expect_reason=$4
--	expected=$5
--
--	echo "$content" > "$file"
--	if [ $? -ne "$expected" ]
--	then
--		echo "writing $content to $file doesn't return $expected"
--		echo "expected because: $expect_reason"
--		echo "$orig_content" > "$file"
--		exit 1
--	fi
--}
--
--test_write_succ() {
--	test_write_result "$1" "$2" "$3" "$4" 0
--}
--
--test_write_fail() {
--	test_write_result "$1" "$2" "$3" "$4" 1
--}
--
--test_content() {
--	file=$1
--	orig_content=$2
--	expected=$3
--	expect_reason=$4
--
--	content=$(cat "$file")
--	if [ "$content" != "$expected" ]
--	then
--		echo "reading $file expected $expected but $content"
--		echo "expected because: $expect_reason"
--		echo "$orig_content" > "$file"
--		exit 1
--	fi
--}
--
--source ./_chk_dependency.sh
--
--ksft_skip=4
--
--damon_onoff="$DBGFS/monitor_on"
--if [ $(cat "$damon_onoff") = "on" ]
--then
--	echo "monitoring is on"
--	exit $ksft_skip
--fi
-+source _debugfs_common.sh
- 
- # Test attrs file
- # ===============
-@@ -65,62 +15,3 @@ test_write_fail "$file" "1 2 3 5 4" "$orig_content" \
- 	"min_nr_regions > max_nr_regions"
- test_content "$file" "$orig_content" "1 2 3 4 5" "successfully written"
- echo "$orig_content" > "$file"
--
--# Test schemes file
--# =================
--
--file="$DBGFS/schemes"
--orig_content=$(cat "$file")
--
--test_write_succ "$file" "1 2 3 4 5 6 4 0 0 0 1 2 3 1 100 3 2 1" \
--	"$orig_content" "valid input"
--test_write_fail "$file" "1 2
--3 4 5 6 3 0 0 0 1 2 3 1 100 3 2 1" "$orig_content" "multi lines"
--test_write_succ "$file" "" "$orig_content" "disabling"
--test_write_fail "$file" "2 1 2 1 10 1 3 10 1 1 1 1 1 1 1 1 2 3" \
--	"$orig_content" "wrong condition ranges"
--echo "$orig_content" > "$file"
--
--# Test target_ids file
--# ====================
--
--file="$DBGFS/target_ids"
--orig_content=$(cat "$file")
--
--test_write_succ "$file" "1 2 3 4" "$orig_content" "valid input"
--test_write_succ "$file" "1 2 abc 4" "$orig_content" "still valid input"
--test_content "$file" "$orig_content" "1 2" "non-integer was there"
--test_write_succ "$file" "abc 2 3" "$orig_content" "the file allows wrong input"
--test_content "$file" "$orig_content" "" "wrong input written"
--test_write_succ "$file" "" "$orig_content" "empty input"
--test_content "$file" "$orig_content" "" "empty input written"
--echo "$orig_content" > "$file"
--
--# Test empty targets case
--# =======================
--
--orig_target_ids=$(cat "$DBGFS/target_ids")
--echo "" > "$DBGFS/target_ids"
--orig_monitor_on=$(cat "$DBGFS/monitor_on")
--test_write_fail "$DBGFS/monitor_on" "on" "orig_monitor_on" "empty target ids"
--echo "$orig_target_ids" > "$DBGFS/target_ids"
--
--# Test huge count read write
--# ==========================
--
--dmesg -C
--
--for file in "$DBGFS/"*
--do
--	./huge_count_read_write "$file"
--done
--
--if dmesg | grep -q WARNING
--then
--	dmesg
--	exit 1
--else
--	exit 0
--fi
--
--echo "PASS"
-diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-new file mode 100644
-index 000000000000..87aff8083822
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-@@ -0,0 +1,13 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test empty targets case
-+# =======================
-+
-+orig_target_ids=$(cat "$DBGFS/target_ids")
-+echo "" > "$DBGFS/target_ids"
-+orig_monitor_on=$(cat "$DBGFS/monitor_on")
-+test_write_fail "$DBGFS/monitor_on" "on" "orig_monitor_on" "empty target ids"
-+echo "$orig_target_ids" > "$DBGFS/target_ids"
-diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-new file mode 100644
-index 000000000000..922cadac2950
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-@@ -0,0 +1,22 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test huge count read write
-+# ==========================
-+
-+dmesg -C
-+
-+for file in "$DBGFS/"*
-+do
-+	./huge_count_read_write "$file"
-+done
-+
-+if dmesg | grep -q WARNING
-+then
-+	dmesg
-+	exit 1
-+else
-+	exit 0
-+fi
-diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
-new file mode 100644
-index 000000000000..5b39ab44731c
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_schemes.sh
-@@ -0,0 +1,19 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test schemes file
-+# =================
-+
-+file="$DBGFS/schemes"
-+orig_content=$(cat "$file")
-+
-+test_write_succ "$file" "1 2 3 4 5 6 4 0 0 0 1 2 3 1 100 3 2 1" \
-+	"$orig_content" "valid input"
-+test_write_fail "$file" "1 2
-+3 4 5 6 3 0 0 0 1 2 3 1 100 3 2 1" "$orig_content" "multi lines"
-+test_write_succ "$file" "" "$orig_content" "disabling"
-+test_write_fail "$file" "2 1 2 1 10 1 3 10 1 1 1 1 1 1 1 1 2 3" \
-+	"$orig_content" "wrong condition ranges"
-+echo "$orig_content" > "$file"
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
-new file mode 100644
-index 000000000000..49aeabdb0aae
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_target_ids.sh
-@@ -0,0 +1,19 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test target_ids file
-+# ====================
-+
-+file="$DBGFS/target_ids"
-+orig_content=$(cat "$file")
-+
-+test_write_succ "$file" "1 2 3 4" "$orig_content" "valid input"
-+test_write_succ "$file" "1 2 abc 4" "$orig_content" "still valid input"
-+test_content "$file" "$orig_content" "1 2" "non-integer was there"
-+test_write_succ "$file" "abc 2 3" "$orig_content" "the file allows wrong input"
-+test_content "$file" "$orig_content" "" "wrong input written"
-+test_write_succ "$file" "" "$orig_content" "empty input"
-+test_content "$file" "$orig_content" "" "empty input written"
-+echo "$orig_content" > "$file"
+Thanks.
+
 -- 
-2.17.1
-
+tejun
