@@ -2,147 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64791464F69
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 15:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30D5464F6B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 15:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243146AbhLAORE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 09:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238769AbhLAORD (ORCPT
+        id S238769AbhLAORP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 09:17:15 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48494 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233413AbhLAORO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:17:03 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A01FC061574
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Dec 2021 06:13:42 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v11so52607470wrw.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Dec 2021 06:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lwGtcWrExmKriF2wN+zvnNRfBCutx0hyLfQNb4LTKdk=;
-        b=li1UHffcpoEWxzpIhxE5KP4K/GRG9hAvhh0mdqBkjxQdJXHOl1Wn+CMiTpKOz1GNHB
-         s7NQKCLTLQHTv9JppDD6Va6ptPCEddQxicuTsT8HvLugBKkI3jAFdALpmZqnZfSQAfSM
-         U2x3/7EA/qdTqPgh0AyiVEkxR5mtfrsnvRY9A5pC37Q+WYeFvNQQ6Vtek4yaNf9Baldd
-         O6FpxTtBZqBT9dcxyVw82IITrbtzHhsFER+wo/c4UIpQWmM8w5R/PKTx49dM7uSLCxIp
-         hgHqDH54WHf82li0EcnbXGMa7uK+NfRkfWwDUgEZmmkNkUTciRiClx6oGe1od6Wys+2Z
-         SZdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lwGtcWrExmKriF2wN+zvnNRfBCutx0hyLfQNb4LTKdk=;
-        b=xZC99R9PPkd+FQAlDJHRnH8f5X9EDf7G+ssRY/TgwIdltRcJk/KflpGOTuFIHs6C2H
-         TihcJ/PEKN+Xt93CpTOihyapmshsObRROi+5OKOKi3GfZrpDKUZueTlDhsgxL6wwLQNc
-         KHzwJScbezCJp15rkCRg4UPSupdOQrzd14km7qV/3skQDPx/ZdVrjD+fyIdx4od+sO1a
-         DI09ykM/xs5fOTlqwUC+2cv/hKya2KsA8u+sjuzeTPQOTs4CefQ5Z8zSR7UUmVTuy00o
-         GIFLjs3kEtNUJIv3hDrXcGh8hAWf1mSvOYsUy71vhnsWLMqiEfAlOdHfw8CYPk8nw8dE
-         latA==
-X-Gm-Message-State: AOAM530tJ4V7B3tjr+FCcFBi2mPFq4i48Ywiq5ItAlXSa7NGtCZFYWZ/
-        GpPE2vDc8/Hf0jChuCi4xZpaig==
-X-Google-Smtp-Source: ABdhPJw8xpFALfdBRCYOtz6hwodjBBsrNs6Fiji/NmyNWWuuexwyZ/+ppQfip3DrFSPJko65CTzD/A==
-X-Received: by 2002:adf:f44c:: with SMTP id f12mr6878614wrp.620.1638368020895;
-        Wed, 01 Dec 2021 06:13:40 -0800 (PST)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id r83sm1147358wma.22.2021.12.01.06.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 06:13:40 -0800 (PST)
-Date:   Wed, 1 Dec 2021 14:13:18 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Build testing_helpers.o out of
- tree
-Message-ID: <YaeC/mu5CiUohu27@myrica>
-References: <20211129111508.404367-1-jean-philippe@linaro.org>
- <CAEf4BzZqyiGC-941FwOxRJZPVHn38vkyEp479nfchKZnZ=kehw@mail.gmail.com>
+        Wed, 1 Dec 2021 09:17:14 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 266491FD5A;
+        Wed,  1 Dec 2021 14:13:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638368032; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fOp73N+RHazrUHrc9GoZ30ZU9IWHl5ZMpNXXLtab7Ck=;
+        b=lOHMSLqwKO+hgmrKd7CP5mHIPjlZyI7Yhk3rECaCnHJucYwQY1IISq5BFNr5YqK8OCiDtx
+        UnLW2QK4RtUKX76MkQl45OMKHugvm4ZRw70Ao4+17ONC1TViG+SsGNtrqDvdZXELnr2Y/A
+        zUsTJ5dJQYy+Av+smN+1VCWSjjlwxkQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFAB113D0B;
+        Wed,  1 Dec 2021 14:13:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iNmeNR+Dp2H6WQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 01 Dec 2021 14:13:51 +0000
+Date:   Wed, 1 Dec 2021 15:13:50 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <20211201141350.GA54766@blackbody.suse.cz>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
+ <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+ <20211116175411.GA50019@blackbody.suse.cz>
+ <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
+ <YaZbXArNIMNvwJD/@slm.duckdns.org>
+ <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzZqyiGC-941FwOxRJZPVHn38vkyEp479nfchKZnZ=kehw@mail.gmail.com>
+In-Reply-To: <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 03:23:02PM -0800, Andrii Nakryiko wrote:
-> On Mon, Nov 29, 2021 at 3:17 AM Jean-Philippe Brucker
-> <jean-philippe@linaro.org> wrote:
-> >
-> > Add $(OUTPUT) prefix to testing_helpers.o, so it can be built out of
-> > tree when necessary. At the moment, in addition to being built in-tree
-> > even when out-of-tree is required, testing_helpers.o is not built with
-> > the right recipe when cross-building.
-> >
-> > Fixes: f87c1930ac29 ("selftests/bpf: Merge test_stub.c into testing_helpers.c")
-> > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile | 32 ++++++++++++++--------------
-> >  1 file changed, 16 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 35684d61aaeb..082f6aeec1d9 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -192,22 +192,22 @@ TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
-> >
-> >  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
-> >
-> > -$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c testing_helpers.o
-> 
-> one of cgroup_helper.c (C source code) or testing_helper.o (object
-> file) is wrong, let's ensure that the dependencies are correct while
-> at it?
 
-Sure, I'll change this to object files
+--VbJkn9YxBvnuCH5J
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Jean
+On Tue, Nov 30, 2021 at 10:56:34PM -0500, Waiman Long <longman@redhat.com> =
+wrote:
+> > >  =A0=A0 =A0A valid parent partition may distribute out all its CPUs to
+> > >  =A0=A0 =A0its child partitions as long as it is not the root cgroup =
+and
+> > >  =A0=A0 =A0there is no task associated with it.
+> > A valid parent partition which isn't root never has tasks in them to be=
+gin
+> > with.
+> I believe there is some corner cases where it is possible to put task in =
+an
+> intermediate partition. That is why I put down this statement.
 
-> 
-> 
-> > -$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_sock: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_sock_addr: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_sockmap: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c testing_helpers.o
-> > -$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_sock_fields: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_sysctl: cgroup_helpers.c testing_helpers.o
-> > -$(OUTPUT)/test_tag: testing_helpers.o
-> > -$(OUTPUT)/test_lirc_mode2_user: testing_helpers.o
-> > -$(OUTPUT)/xdping: testing_helpers.o
-> > -$(OUTPUT)/flow_dissector_load: testing_helpers.o
-> > -$(OUTPUT)/test_maps: testing_helpers.o
-> > -$(OUTPUT)/test_verifier: testing_helpers.o
-> > +$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_sock: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_sock_addr: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_sockmap: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_sock_fields: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_sysctl: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_tag: $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_lirc_mode2_user: $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/xdping: $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/flow_dissector_load: $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_maps: $(OUTPUT)/testing_helpers.o
-> > +$(OUTPUT)/test_verifier: $(OUTPUT)/testing_helpers.o
-> >
-> >  BPFTOOL ?= $(DEFAULT_BPFTOOL)
-> >  $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
-> > --
-> > 2.34.0
-> >
+Just mind the threads -- cpuset controller is threaded and having tasks
+in inner cgroup nodes is a real scenario. I wouldn't consider it a
+corner case.
+
+[ Actually, the paragraph could IMO be simplified:
+
+> A valid parent partition may distribute out all its CPUs to
+>=A0its child partitions as long as there is no task associated with it.
+
+Assuming there's always at least one kernel thread in the root cgroup
+that can't be migrated anyway.]
+
+
+Michal
+
+--VbJkn9YxBvnuCH5J
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYaeDFQAKCRAiXqxkP0Jk
+RwNCAP97/71glMvylTDowYwhdI5KleBFVwxoUX0JYOli5Z1++gD/VWelsoQUVWOo
+1YdBl5Ei0UknFyqYHDcKnBbttGx1hQM=
+=h6LI
+-----END PGP SIGNATURE-----
+
+--VbJkn9YxBvnuCH5J--
