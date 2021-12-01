@@ -2,98 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF6F465441
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 18:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F07646549D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 19:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242495AbhLARwv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 12:52:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23599 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238830AbhLARwt (ORCPT
+        id S244562AbhLASD6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 13:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244442AbhLASDy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:52:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638380964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d3IYU06NP1ap6vKovk21hhbdlMoBPkQcBNAwBXt/XDY=;
-        b=OhsUsVUD/48gfapf93JSJAouyUgzw2OWmvoLlUFNw6aOSnxyRTb8xKVN6Dnd82y0xp0hjx
-        hHtmQ4T5WSM6uKra4LWimh89MVXCMZU6Qyg92mqFWLNfg0K1mCUFzJkYN9tJI9hB1oAJyK
-        IyMKtILcANm4LTh5mrnqYQR+kFkLfKM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-583-_2o-w0GJO-SM_8Zn7NCLfw-1; Wed, 01 Dec 2021 12:49:21 -0500
-X-MC-Unique: _2o-w0GJO-SM_8Zn7NCLfw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 07DEA8F51F;
-        Wed,  1 Dec 2021 17:49:19 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B5C279459;
-        Wed,  1 Dec 2021 17:49:16 +0000 (UTC)
-Message-ID: <e16ccf4f-7302-8891-d9f6-081e0bc41c04@redhat.com>
-Date:   Wed, 1 Dec 2021 12:49:15 -0500
+        Wed, 1 Dec 2021 13:03:54 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0C6C06175A;
+        Wed,  1 Dec 2021 10:00:28 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso36330463otf.12;
+        Wed, 01 Dec 2021 10:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nNVvEOq93JWamao+YcMq3xOX4iABQzAW3EEbbTihUNM=;
+        b=VH7t2cbohM97lC3HGUQUJ817xIGaAfG2iELCzfbTbuOqaz/TmthSdNbW4quNai1twf
+         w7m+dj7tn2ct3BM3wBi84n3EnKJoxy67iFmsfLE2nHRs+FHPBpa2rpQd0btc759YeglG
+         J9FAkCoiQgSOIyFU5tGV7Qh68U4KcLsseGxCG3XBpN31Stj/J9i7OTgMTfmVzEqUdqHR
+         MI4SzLH18Ad+QAZuYwup5gNIlorvUK4rjfT+m8ipl2igcJ+yN6iJ3mbLcgvXnDu9iD5u
+         +61xMmkN9dSjqzdpXjOSErGIDURdGldKNcV12ZU6OppNYVGXOHtINTHmaPMl4+4e5gei
+         BEFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nNVvEOq93JWamao+YcMq3xOX4iABQzAW3EEbbTihUNM=;
+        b=P5A+weGNE4Y6cXY5i2pflWoYyuCxzyjdwBNG5MXArnzA7k61BhFN+b131Qrrgcodqx
+         j9J0SZQ0y3Ov/VIKEcBCi10VMrKRl3yNTNEJNQAgjBpqkYvUE7pMrjpuiXY1In5QM/JJ
+         ZefDcim02yJVN8rOp8WiN8bS4NuOdwkM8hVTfmkwR6kf7FAFKT6gFHkYHFaeH0BYnAQn
+         35nT4Q/a+uAAH0+cDWwb62c+N6O0geFHHmDA5DP6YguOiHcY0W39nBSCN/dIv2DNCva+
+         x2nHbeFM7BX8cBECVAQ7lGL/8avlC5LjJ3/mLnKwP2qx78XDO1iCz0FYjBd1w2XjEdIv
+         Ro/w==
+X-Gm-Message-State: AOAM533b689KbneUw89CfsR7UJPT8raG4KSgvrmvMWtnAeib8iw93MsR
+        nalfN7tVtSLLqXo9G+KZYL0=
+X-Google-Smtp-Source: ABdhPJz9EYrKK0WLxoTC42FdvhUK7xBT4nj/WMOlpSca1NcyLdWBMq2Qi93lN43PUxYRX2w7EER9cg==
+X-Received: by 2002:a9d:2243:: with SMTP id o61mr7032643ota.126.1638381628140;
+        Wed, 01 Dec 2021 10:00:28 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id j10sm139420ooq.5.2021.12.01.10.00.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 10:00:27 -0800 (PST)
+Message-ID: <42b5ebde-2a36-3956-d6dd-bd50e18ff6dc@gmail.com>
+Date:   Wed, 1 Dec 2021 11:00:26 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.1
+Subject: Re: [PATCH net v3] selftests/fib_tests: Rework fib_rp_filter_test()
 Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <20211201141350.GA54766@blackbody.suse.cz>
- <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
- <YaelRiqWOIzT5uRs@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YaelRiqWOIzT5uRs@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130004905.4146-1-yepeilin.cs@gmail.com>
+ <20211201004720.6357-1-yepeilin.cs@gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211201004720.6357-1-yepeilin.cs@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 11/30/21 5:47 PM, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> Currently rp_filter tests in fib_tests.sh:fib_rp_filter_test() are
+> failing.  ping sockets are bound to dummy1 using the "-I" option
+> (SO_BINDTODEVICE), but socket lookup is failing when receiving ping
+> replies, since the routing table thinks they belong to dummy0.
+> 
+> For example, suppose ping is using a SOCK_RAW socket for ICMP messages.
+> When receiving ping replies, in __raw_v4_lookup(), sk->sk_bound_dev_if
+> is 3 (dummy1), but dif (skb_rtable(skb)->rt_iif) says 2 (dummy0), so the
+> raw_sk_bound_dev_eq() check fails.  Similar things happen in
+> ping_lookup() for SOCK_DGRAM sockets.
+> 
+> These tests used to pass due to a bug [1] in iputils, where "ping -I"
+> actually did not bind ICMP message sockets to device.  The bug has been
+> fixed by iputils commit f455fee41c07 ("ping: also bind the ICMP socket
+> to the specific device") in 2016, which is why our rp_filter tests
+> started to fail.  See [2] .
+> 
+> Fixing the tests while keeping everything in one netns turns out to be
+> nontrivial.  Rework the tests and build the following topology:
+> 
+>  ┌─────────────────────────────┐    ┌─────────────────────────────┐
+>  │  network namespace 1 (ns1)  │    │  network namespace 2 (ns2)  │
+>  │                             │    │                             │
+>  │  ┌────┐     ┌─────┐         │    │  ┌─────┐            ┌────┐  │
+>  │  │ lo │<───>│veth1│<────────┼────┼─>│veth2│<──────────>│ lo │  │
+>  │  └────┘     ├─────┴──────┐  │    │  ├─────┴──────┐     └────┘  │
+>  │             │192.0.2.1/24│  │    │  │192.0.2.1/24│             │
+>  │             └────────────┘  │    │  └────────────┘             │
+>  └─────────────────────────────┘    └─────────────────────────────┘
+> 
 
-On 12/1/21 11:39, Tejun Heo wrote:
-> On Wed, Dec 01, 2021 at 09:56:21AM -0500, Waiman Long wrote:
->> Right, I shouldn't say corner cases. Having task in an intermediate
->> partition is possible depending on event sequence. I am aware that there are
->> code in the cpuset code to prevent that, but it didn't block all cases.
->>>> A valid parent partition may distribute out all its CPUs to
->>>>    its child partitions as long as there is no task associated with it.
->>> Assuming there's always at least one kernel thread in the root cgroup
->>> that can't be migrated anyway.]
->> I am aware of that. That is why I said root cgroup must have at least one
->> cpu in its "cpuset.cpus.effective".
-> In that case, let's explicitly describe that condition.
-
-Yes, I will. Only non-root cgroup can distribute out all its CPUs. I 
-thought I said that in the documentation, maybe it is very clear.
-
-Cheers,
-Longman
-
+if the intention of the tests is to validate that rp_filter = 1 works as
+designed, then I suggest a simpler test. 2 namespaces, 2 veth pairs.
+Request goes through one interface, and the response comes in the other
+via routing in ns2. ns1 would see the response coming in the 'wrong'
+interface and drops it.
