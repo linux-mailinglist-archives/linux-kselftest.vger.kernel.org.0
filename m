@@ -2,177 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A33464F35
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 14:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64791464F69
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 15:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbhLAN5r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 08:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S243146AbhLAORE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 09:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244303AbhLAN5Q (ORCPT
+        with ESMTP id S238769AbhLAORD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:57:16 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A04C06175A
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Dec 2021 05:53:54 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id w1so102274162edc.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Dec 2021 05:53:54 -0800 (PST)
+        Wed, 1 Dec 2021 09:17:03 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A01FC061574
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Dec 2021 06:13:42 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id v11so52607470wrw.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Dec 2021 06:13:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4deMsVbOnJ3WN8CLL6wclTeFqPAZPUEWcJx/Fop1Tyo=;
-        b=1l3lnEtuA8NrfBhwXmTUJrdk7Oemc/pyml50HxaN70UALtlVNqS/FBDnUVC7ONlL/U
-         0mkYW5ZoouJf3JnG/o77BM4sfzCkQLxpP1Fi8occwNuQ64wWZeounUscVrblhDB2cJkS
-         OFqk323TvUF4e4TQ7bV5Fd6U76FH2Vh4WytR9Os5ZKcPC0HC7aHuKRMsSg7rukyfHluk
-         fBH/c7u7YnxTFx/oL4sHzXNjIcNftnTaAKpFZLVtGaahBiderqY+hbB4owgEMwzoIpUd
-         XInsHlVVxSgyGQ5qE1QNrFRlZLtycXhguSdZNUopMhFBYnY2Gw7Ge3aQaia4wGVlnb1l
-         b7Jw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lwGtcWrExmKriF2wN+zvnNRfBCutx0hyLfQNb4LTKdk=;
+        b=li1UHffcpoEWxzpIhxE5KP4K/GRG9hAvhh0mdqBkjxQdJXHOl1Wn+CMiTpKOz1GNHB
+         s7NQKCLTLQHTv9JppDD6Va6ptPCEddQxicuTsT8HvLugBKkI3jAFdALpmZqnZfSQAfSM
+         U2x3/7EA/qdTqPgh0AyiVEkxR5mtfrsnvRY9A5pC37Q+WYeFvNQQ6Vtek4yaNf9Baldd
+         O6FpxTtBZqBT9dcxyVw82IITrbtzHhsFER+wo/c4UIpQWmM8w5R/PKTx49dM7uSLCxIp
+         hgHqDH54WHf82li0EcnbXGMa7uK+NfRkfWwDUgEZmmkNkUTciRiClx6oGe1od6Wys+2Z
+         SZdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4deMsVbOnJ3WN8CLL6wclTeFqPAZPUEWcJx/Fop1Tyo=;
-        b=BwuGwHX36btT3yBtt0gOoebnVRN0Qh2eeXxh1Hgkno10NUP3NeSUL2du6hOZUPCpo4
-         Qo2QAh+Zjt8IUl+tuD8xoxzcrdAGgHRSiLh1wcHvQTr4csjy5efrKoph/pznp8jqxCTm
-         vLS1rxqU3sSUHvY+g6GTA3M8D6EPann1MwUU12syPWMprTVBXWEwnR2Ccpxa5WExQtpe
-         id1oRTTGrMH/vJO3IfEI5Jj4kEdMba7Yu5uFjmfYbka8qlUTJ92Lmf9LZdsIgOyY9nxH
-         Ea8dm/3ixOYprd3oz5r7WCONr5O0D5rHylFd/N2sefvM/z4WQZTOV6cmJLIVWvj+Xw77
-         GHig==
-X-Gm-Message-State: AOAM5302agso/QZzAAQsb4cAtS1EF3m8kIdFO2OBILYxDCO/uGQ8vM9m
-        vnURdZAZLUaS/aHcA9wfUCbg425kn2grt3lqlL+rrQ==
-X-Google-Smtp-Source: ABdhPJyqZibQyod4rRaPKH46bY4KCTTr61Gqj21JVMYOSoBhV1RUk41ThnrGC0919q5EKf6+TNKmvWK5ti4obl53xsk=
-X-Received: by 2002:a05:6402:2744:: with SMTP id z4mr8861558edd.310.1638366832980;
- Wed, 01 Dec 2021 05:53:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lwGtcWrExmKriF2wN+zvnNRfBCutx0hyLfQNb4LTKdk=;
+        b=xZC99R9PPkd+FQAlDJHRnH8f5X9EDf7G+ssRY/TgwIdltRcJk/KflpGOTuFIHs6C2H
+         TihcJ/PEKN+Xt93CpTOihyapmshsObRROi+5OKOKi3GfZrpDKUZueTlDhsgxL6wwLQNc
+         KHzwJScbezCJp15rkCRg4UPSupdOQrzd14km7qV/3skQDPx/ZdVrjD+fyIdx4od+sO1a
+         DI09ykM/xs5fOTlqwUC+2cv/hKya2KsA8u+sjuzeTPQOTs4CefQ5Z8zSR7UUmVTuy00o
+         GIFLjs3kEtNUJIv3hDrXcGh8hAWf1mSvOYsUy71vhnsWLMqiEfAlOdHfw8CYPk8nw8dE
+         latA==
+X-Gm-Message-State: AOAM530tJ4V7B3tjr+FCcFBi2mPFq4i48Ywiq5ItAlXSa7NGtCZFYWZ/
+        GpPE2vDc8/Hf0jChuCi4xZpaig==
+X-Google-Smtp-Source: ABdhPJw8xpFALfdBRCYOtz6hwodjBBsrNs6Fiji/NmyNWWuuexwyZ/+ppQfip3DrFSPJko65CTzD/A==
+X-Received: by 2002:adf:f44c:: with SMTP id f12mr6878614wrp.620.1638368020895;
+        Wed, 01 Dec 2021 06:13:40 -0800 (PST)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id r83sm1147358wma.22.2021.12.01.06.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 06:13:40 -0800 (PST)
+Date:   Wed, 1 Dec 2021 14:13:18 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Build testing_helpers.o out of
+ tree
+Message-ID: <YaeC/mu5CiUohu27@myrica>
+References: <20211129111508.404367-1-jean-philippe@linaro.org>
+ <CAEf4BzZqyiGC-941FwOxRJZPVHn38vkyEp479nfchKZnZ=kehw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211130154127.12272-1-brgl@bgdev.pl> <20211130154127.12272-3-brgl@bgdev.pl>
- <YaZNyMV5gX5cZpar@smile.fi.intel.com> <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
- <YaaQp2rq7N71dm1l@smile.fi.intel.com> <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
- <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com> <Yad7IQwXDc8gS2Ne@smile.fi.intel.com>
-In-Reply-To: <Yad7IQwXDc8gS2Ne@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 1 Dec 2021 14:53:42 +0100
-Message-ID: <CAMRc=MeScPA=764xoi9Leu7LayEbhMCuA3u_g5NJjLyc8sJ-vg@mail.gmail.com>
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZqyiGC-941FwOxRJZPVHn38vkyEp479nfchKZnZ=kehw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 2:40 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
-> > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > >
-> > > On Tue, Nov 30, 2021 at 10:00 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > On Tue, Nov 30, 2021 at 09:25:35PM +0100, Bartosz Golaszewski wrote:
-> > > > > On Tue, Nov 30, 2021 at 5:15 PM Andy Shevchenko
-> > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > >
-> > > > > > On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
-> > > > > > > Software nodes allow us to represent hierarchies for device components
-> > > > > > > that don't have their struct device representation yet - for instance:
-> > > > > > > banks of GPIOs under a common GPIO expander. The core gpiolib core
-> > > > > >
-> > > > > > core .. core ?!
-> > > > > >
-> > > > > > > however doesn't offer any way of passing this information from the
-> > > > > > > drivers.
-> > > > > > >
-> > > > > > > This extends struct gpio_chip with a pointer to fwnode that can be set
-> > > > > > > by the driver and used to pass device properties for child nodes.
-> > > > > > >
-> > > > > > > This is similar to how we handle device-tree sub-nodes with
-> > > > > > > CONFIG_OF_GPIO enabled.
-> > > > > >
-> > > > > > Not sure I understand the proposal. Can you provide couple of (simplest)
-> > > > > > examples?
-> > > > > >
-> > > > > > And also it sounds like reinventing a wheel. What problem do you have that you
-> > > > > > need to solve this way?
-> > > > > >
-> > > > > > ...
-> > > > > >
-> > > > > > > +#if IS_ENABLED(CONFIG_OF_GPIO)
-> > > > > > > +     if (gc->of_node && gc->fwnode) {
-> > > > > > > +             pr_err("%s: tried to set both the of_node and fwnode in gpio_chip\n",
-> > > > > > > +                    __func__);
-> > > > > > > +             return -EINVAL;
-> > > > > > > +     }
-> > > > > > > +#endif /* CONFIG_OF_GPIO */
-> > > > > >
-> > > > > > I don't like this. It seems like a hack right now.
-> > > > > >
-> > > > > > Is it possible to convert all GPIO controller drivers to provide an fwnode
-> > > > > > rather than doing this? (I believe in most of the drivers we can drop
-> > > > > > completely the of_node assignment).
-> > > > > >
-> > > > >
-> > > > > Yes, it's definitely a good idea but I would be careful with just
-> > > > > dropping the of_node assignments as callbacks may depend on them
-> > > > > later.
-> > > >
-> > > > GPIO library does it for us among these lines:
-> > > >
-> > > >         struct fwnode_handle *fwnode = gc->parent ? dev_fwnode(gc->parent) : NULL;
-> > > >
-> > > >         of_gpio_dev_init(gc, gdev); <<< HERE!
-> > > >         acpi_gpio_dev_init(gc, gdev);
-> > > >
-> > > >         /*
-> > > >          * Assign fwnode depending on the result of the previous calls,
-> > > >          * if none of them succeed, assign it to the parent's one.
-> > > >          */
-> > > >         gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
-> > > >
-> > >
-> > > Except that it doesn't and I noticed that when working on the
-> > > subsequent patch. The child gpiochipX devices all had the parent's
-> > > fwnode assigned as their primary fwnode and no secondary fwnode.
-> > >
-> > > Note that this driver doesn't use neither OF nor ACPI in which case
-> > > gdev->dev has no fwnode and the parent's one is used. This patch
-> > > addresses it. If you have a better idea, let me know.
-> > >
-> > > Bart
+On Mon, Nov 29, 2021 at 03:23:02PM -0800, Andrii Nakryiko wrote:
+> On Mon, Nov 29, 2021 at 3:17 AM Jean-Philippe Brucker
+> <jean-philippe@linaro.org> wrote:
 > >
-> > Let me maybe rephrase the problem: currently, for GPIO devices
-> > instantiating multiple banks created outside of the OF or ACPI
-> > frameworks (e.g. instantiated manually and configured using a
-> > hierarchy of software nodes with a single parent swnode and a number
-> > of child swnodes representing the children), it is impossible to
-> > assign firmware nodes other than the one representing the top GPIO
-> > device to the gpiochip child devices.
+> > Add $(OUTPUT) prefix to testing_helpers.o, so it can be built out of
+> > tree when necessary. At the moment, in addition to being built in-tree
+> > even when out-of-tree is required, testing_helpers.o is not built with
+> > the right recipe when cross-building.
 > >
-> > In fact if we want to drop the OF APIs entirely from gpiolib - this
-> > would be the right first step as for gpio-sim it actually replaces the
-> > gc->of_node = some_of_node; assignment that OF-based drivers do for
-> > sub-nodes defining banks and it does work with device-tree (I verified
-> > that too) thanks to the fwnode abstraction layer.
->
-> I still don't see how you set up hierarchy of primary/secondary fwnodes.
->
-> And I don't like this change. It seems it band-aids some issue with fwnode
-> usage. What the easiest way to reproduce the issue with your series applied
-> (without this change)?
->
+> > Fixes: f87c1930ac29 ("selftests/bpf: Merge test_stub.c into testing_helpers.c")
+> > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > ---
+> >  tools/testing/selftests/bpf/Makefile | 32 ++++++++++++++--------------
+> >  1 file changed, 16 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index 35684d61aaeb..082f6aeec1d9 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -192,22 +192,22 @@ TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
+> >
+> >  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
+> >
+> > -$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c testing_helpers.o
+> 
+> one of cgroup_helper.c (C source code) or testing_helper.o (object
+> file) is wrong, let's ensure that the dependencies are correct while
+> at it?
 
-Drop this patch and drop the line where the fwnode is assigned in
-gpio-sim.c. Then probe the device and print the addresses of the
-parent and child swnodes. See how they are the same and don't match
-the swnode hierarchy we created. You can then apply this patch and see
-how it becomes correct.
+Sure, I'll change this to object files
 
-Bart
+Thanks,
+Jean
+
+> 
+> 
+> > -$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_sock: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_sock_addr: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_sockmap: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c testing_helpers.o
+> > -$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_sock_fields: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_sysctl: cgroup_helpers.c testing_helpers.o
+> > -$(OUTPUT)/test_tag: testing_helpers.o
+> > -$(OUTPUT)/test_lirc_mode2_user: testing_helpers.o
+> > -$(OUTPUT)/xdping: testing_helpers.o
+> > -$(OUTPUT)/flow_dissector_load: testing_helpers.o
+> > -$(OUTPUT)/test_maps: testing_helpers.o
+> > -$(OUTPUT)/test_verifier: testing_helpers.o
+> > +$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_sock: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_sock_addr: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_sockmap: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_sock_fields: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_sysctl: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_tag: $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_lirc_mode2_user: $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/xdping: $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/flow_dissector_load: $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_maps: $(OUTPUT)/testing_helpers.o
+> > +$(OUTPUT)/test_verifier: $(OUTPUT)/testing_helpers.o
+> >
+> >  BPFTOOL ?= $(DEFAULT_BPFTOOL)
+> >  $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+> > --
+> > 2.34.0
+> >
