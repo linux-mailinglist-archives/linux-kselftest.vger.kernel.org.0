@@ -2,220 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8EF464479
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 02:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713284644F3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 03:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbhLABaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Nov 2021 20:30:09 -0500
-Received: from mga18.intel.com ([134.134.136.126]:44379 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230476AbhLABaI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Nov 2021 20:30:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="223237262"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="223237262"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 17:26:48 -0800
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="459066859"
-Received: from liweilv-mobl.ccr.corp.intel.com (HELO [10.167.226.45]) ([10.255.30.243])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 17:26:45 -0800
-From:   Li Zhijian <zhijianx.li@intel.com>
-Subject: ww_mutex.sh hangs since v5.16-rc1
-To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>
-Message-ID: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
-Date:   Wed, 1 Dec 2021 09:26:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1346198AbhLACkY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Nov 2021 21:40:24 -0500
+Received: from esa15.fujitsucc.c3s2.iphmx.com ([68.232.156.107]:51218 "EHLO
+        esa15.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346180AbhLACkT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Nov 2021 21:40:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1638326219; x=1669862219;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=lEwYCBvEOMcHmUmKbS7HZzzO9onSY7T5m5q0Vk3BSWA=;
+  b=sJfzu5tHDIWfcsPC5AzGYPZ5L2Omd0vOfWqcx/izYDgHaL/y6hF5vBK/
+   Mh3gjkqnGoUeIiu5ZTf1XjyQKQW/UO2I6UEVjNSPVdRZ0NnXJwhwPVB7c
+   TwwZCW01GyHPYFBaEWfXtCNouX9CnZm4lT1bh7ZIfOy+rKksiv2kPtW1P
+   PX4nwEGluAaQzdm+2osdvrJ1Ija4y0jl4LV33yAe7VFIJ6YYYdK4I6L8I
+   STCfUrwV2cl5oPG7wJC5eQTUl58gzYpJ65WRF3EB0L0/LwuWgruVnxr+H
+   wNuNjiV446Bvhg+U0lakJ1lXCGj8TjXQvcHmEq+WsYzWKdIm7WLNqlH70
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="44870535"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631545200"; 
+   d="scan'208";a="44870535"
+Received: from mail-os0jpn01lp2106.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.106])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 11:36:56 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WUX3TKBXELsb3Inyp2ymy4EZhv1vBNlFTqJxP7BgDvJRrgRV9iK9cFiTbxAEmppP7RzOu1q9DEWWMWeBwx3Vl97IY1UDEOCL2FRdqBGY56B/ymgZnJdCACHld6BgBN1cFefIK04Rtswf694dDgv6oMrNHcfRHwR3qZLdGHJATTVVzHdT8DmYhZUecW1SxmOVnzeh25QdC7u+/lQm27XtizQXcJSN+UWHd1uE3NMeYuVSQlGIrbz0y8WVYgYU28KGyLF8qE/DaGaVWHbf2bdrnwcPkFXhGoV5keBhNRCUWFK9yVyKpz7okKT+y5xZxilOvFEdVbWhNr8m7hunrOCBFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lEwYCBvEOMcHmUmKbS7HZzzO9onSY7T5m5q0Vk3BSWA=;
+ b=m7mUVfXWwc29pYDjtuDeVtIqusL6Lc5agJyPUCOmSLNnBjgvyIJksOButKQYCgSBeZWDXrhyZoJhJJA10zaIte5KGW92zLc0bUgkVlbdz3wGTTeRAbAv+U9r9mfk04MnbYcRHBPkqYI55oopL+1Zpr7ck0s7DEMZJ/FsGyw+WdU7Kh0rcvZRvdpEdWkUC+mSCZqzCsm159BbkrBNxazQlh3t2349hs8JGcPIcYTfK37Rmq6g1xJpJHY9m0v8x3Np2LhJH34Ek3LEHvkWCpyE5Sail8dOrUiIc4ZQPc6tdY2ShFAmaER/Qrn8wGx6gYDSar5C4HJaCkYP7bnfXB8iVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lEwYCBvEOMcHmUmKbS7HZzzO9onSY7T5m5q0Vk3BSWA=;
+ b=cfA22YNg1P/RreFzWD1yE/XMPUhhqo8pKI+cx39mjVXWdGBHvDzaJzil/Ak6rpUyqAVTHdNv03jHw6KRaJTHjNELHvN15k5K2MvMlNWio1XuafoMNCppvxm2+VQsxfNLS/OEnTTtMSHiABVh5fSr7tX/FZ8XY/GhNiDgJ8+6F6s=
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
+ by TYYPR01MB6990.jpnprd01.prod.outlook.com (2603:1096:400:d7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 1 Dec
+ 2021 02:36:52 +0000
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::b839:7029:4084:48dd]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::b839:7029:4084:48dd%5]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
+ 02:36:52 +0000
+From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
+To:     'Reinette Chatre' <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH 2/3] selftests/resctrl: Return KSFT_SKIP(4) if resctrl
+ filessystem is not supported or resctrl is not run as root
+Thread-Topic: [PATCH 2/3] selftests/resctrl: Return KSFT_SKIP(4) if resctrl
+ filessystem is not supported or resctrl is not run as root
+Thread-Index: AQHX1hYXKOECrwtKoUyX3PcsxviheqwbAhWAgAICyeA=
+Date:   Wed, 1 Dec 2021 02:36:51 +0000
+Message-ID: <TYAPR01MB63303777416D1D3C0EF066278B689@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+References: <20211110093315.3219191-1-tan.shaopeng@jp.fujitsu.com>
+ <20211110093315.3219191-3-tan.shaopeng@jp.fujitsu.com>
+ <6b9ed425-cadb-15df-4c4f-eb1dc0b814dd@intel.com>
+In-Reply-To: <6b9ed425-cadb-15df-4c4f-eb1dc0b814dd@intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
+ =?utf-8?B?NTBfQWN0aW9uSWQ9ZTEyZDg1ZTEtNTRhMS00MzQ3LTllNDUtNjk0ZTk4ZjNi?=
+ =?utf-8?B?ODlmO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
+ =?utf-8?B?ZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5?=
+ =?utf-8?B?LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxlZD10cnVlO01TSVBfTGFi?=
+ =?utf-8?B?ZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX01ldGhv?=
+ =?utf-8?B?ZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
+ =?utf-8?B?LTNiMGY0ZmVjZTA1MF9OYW1lPUZVSklUU1UtUkVTVFJJQ1RFRO+/ou++gA==?=
+ =?utf-8?B?776LO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
+ =?utf-8?B?ZWNlMDUwX1NldERhdGU9MjAyMS0xMi0wMVQwMjowOTo0OVo7TVNJUF9MYWJl?=
+ =?utf-8?B?bF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfU2l0ZUlk?=
+ =?utf-8?Q?=3Da19f121d-81e1-4858-a9d8-736e267fd4c7;?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 54b10e3f-3ad7-4ba0-9a87-08d9b4736eac
+x-ms-traffictypediagnostic: TYYPR01MB6990:
+x-microsoft-antispam-prvs: <TYYPR01MB6990280076D51BC19B459D528B689@TYYPR01MB6990.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5g+8jxWxgwZA7ocxkW536/AMJwa3vvH4hKuxOdQKaFiI53SejQoZLzcZSoF8kWZMRbkzgHc/mv05+kfOUCniZ/DZSroJN/pHPOATMfTC+qtZEpcDybqTqOU6PfCD4R+7Mpeaeyzq9MGGLRcGDIsLhV0Sg8j6VQLT2R6nITFXSG5Mkdk3e8MNkXCKhPzrO9GyhwHwxgPRjg9Pl5DEWf8QulX7ykCYiPeucx/GC39IEc2vm3pFgMycKYlZ8Jzn0xcsNlfreAOv9KOlDxT2iD6+KjM34c3UGxubLQGkPwCpCgklAzDpP+LRrleaEhvZLM0GfXYFDrpW95TsBFI1NyTxoRrBeR4da0qn5pfzDB20HcoJ59gDPu3hX3X836kTgo73Xdi1PV4aI93HkjiQODkaPsfPmO6LQf+GhegV7iDSlyycfoczT0rhwbjBS8+Z+5loSrdqzzfJ2fN+Akpzwi9QIsK69YzRB205mH4ECUu2AJRYc60N/+ooHrZY+LqaAlj5Z42zt+urs8gz/qn9Ctx+gYA2fBDM8Rm+lUsYbwUYmMqFID60lvW5WtrRElYj+TYnJIG3A8HhAr2nmw7r5h2sp7eAOEwme/Snc7GIdcjz08G89NPJKiIdct4q31mdull0NXUW2iFVh/vk3SVsy6kReeyM2J8niVwz7iS6Jud3Jms27XIrbglXxw+O+XotWdQRehc1tBsLPqKvrY9Pk0cL0w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(26005)(122000001)(83380400001)(38070700005)(33656002)(7696005)(8936002)(5660300002)(6506007)(186003)(85182001)(9686003)(55016003)(2906002)(82960400001)(86362001)(66946007)(64756008)(110136005)(508600001)(53546011)(66446008)(316002)(66556008)(66476007)(8676002)(52536014)(71200400001)(38100700002)(54906003)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OVhVZnN1NVJqdnF5cklIWVRqWFJzNkRLY3VrVXNWZUp4S0ZnOW1hLzZXMzU5?=
+ =?utf-8?B?YjluSkxpbW9HYUM1dEZjdWJMWElmMFk0bnBYVGVoK1F4SlJjb016SkRzOEMx?=
+ =?utf-8?B?SVJiNGwwU1ZqTE9VcS8veUVLMXJxd05PTTRjYy83alU1dUxqQmRIdE9wdmVy?=
+ =?utf-8?B?ZVorWXFjNmhJdi9STExIY0pqUWw3Zi9rWS9SVFNTL0tKYmUyeGQ2ckJHcmRl?=
+ =?utf-8?B?WkQ2R2RTNzQ4VXRtK1lpODRVS04vNUo0TzBEL21VMXFGUGZHMy9wcGpPQ0pM?=
+ =?utf-8?B?MjI1RkZKa2xXMUZrVVFZWmh0aU5haWxrd2w3Nll0QS9MaXErVlpTQ29sQUl5?=
+ =?utf-8?B?Z1M5bytac3JYSTBmTUJMakswN1lVRlVoNEFYNUxtc0tEMXFRUkJCdXN2dmtq?=
+ =?utf-8?B?bytyRkR2MTEyT1VJWG0rc3M4UGV3b1BVQjYyT2YxTFcxL29OME40cmVBNXEw?=
+ =?utf-8?B?ZXRpQmh5ZnZ2aEFRdUdBUUdUMy91cEFyS1RlNi9qTk1vTHpTWGFCUEtBVW9w?=
+ =?utf-8?B?WDV5ODlITVNvb20venk1U2h1L0diaUlWOFM3bkVaVVdvem16d1BwQmVnYzFR?=
+ =?utf-8?B?RTNkbGhyREViUVRpL1cwS3g1Nk43Rmo3VlZHL3owWFhLUm10RHFvVVd6Wk80?=
+ =?utf-8?B?cG5acWtEM3YwcEtobHZMaXFvL3A3bWVyK1RKSlhIbnc0MkhxbXNnZFhyRkVW?=
+ =?utf-8?B?ZjdIRDlnbXBvTkFGWUcrWEpjRW96RlBTb08vWjlQY01XQVFndW5zcjAyVmFn?=
+ =?utf-8?B?ZHNJTE83YWU5NXNZVjN6R0NWQlpaRkZsS1lFS0pzeXJpWnBYUDd4QmlnWm1s?=
+ =?utf-8?B?MDU2S0MxRlRPQW5kZWEzdUROMjgxT2N4YkE5eVNtbjJIcm4wNWVyUHhBMUw3?=
+ =?utf-8?B?UWRuazRzOU5TOFpiY0UxMmVYUXVNSUh0bjVIYVhya0RhS2kzdUdTa0ZoRVU3?=
+ =?utf-8?B?NUhHYUpOZWpTWWRUNUp0MDYrcjk0VTRPSWUrMDN0dGJuVlBBM2VLUXBCMERu?=
+ =?utf-8?B?VXlINDc5bUo1QWMrU0NxdWNsWGpyTDZnVGJYaTR4MW1SMllLWlY2N3p0WHNO?=
+ =?utf-8?B?UHYwdHJWM1AwVms3bG5WSlJtbS9XMDVqdFR3aHZtR3Z4NHVqcDk4NS9PSS9N?=
+ =?utf-8?B?dWZqYTg1QThId21zdHZKQmEwNlhPV1dxVEcwWEdHZTZIemdVL1QxMEdLYVBm?=
+ =?utf-8?B?Z25BcWp3VGx2N2Rlb0VLKzVDVDl3WXV3NHgyOTA0cjRxVmt2YUNuUTlockt0?=
+ =?utf-8?B?YmFEbnBlenU2cGQ0cTNhVjNWOWVLN2sxdFcwalIwYUU1bG5qN0ZLRWRDNlIv?=
+ =?utf-8?B?S3A4YVBXT1hkNFJvdHE3OWt6SWhkUHFXU2RJYnVVbkg3eGZ5RFl5d2tKWUJ5?=
+ =?utf-8?B?anZTOFBKMzJjcldlSDJhSllPclRZdUFXd283V2NtbURockl6Mk1ZSUN0K3p5?=
+ =?utf-8?B?bE0vTjNZY00zMFNBVTNpUTEzY254cVNycHJEZ2NRM2VwV1hBVnRyMk9TaDNP?=
+ =?utf-8?B?T0JXb0Z1UjdDSyt6OFM0aCtlbmlXVkpTQUVWSFNPb2c0ZEV2VmNwQmNMTVRH?=
+ =?utf-8?B?Tjljd3FKM01WWDhmR1VMazl3cFkyNGRBNVlab3MvdEVXNFVQQThrSHJqTnF1?=
+ =?utf-8?B?QkY3akdOMFI5L2dWRDJ6MFkvMncrdGNFWVdwVldLL3FrM2wvNjd0S2FPR2l2?=
+ =?utf-8?B?d2tzSXRmbGFwa2VNN1Yyem5lNXI3Q1BlOTFCVW1qZnZCUjFLbitlZzhQZjRD?=
+ =?utf-8?B?dWxqSmVtS1VHeEhvQmVYZFhLY2dMUGEydkVvenFpZ0NUQ21wQ3ZuRnFDY2dx?=
+ =?utf-8?B?UjV6UmFlWjNoL2hpanZPaHZSZ3pzeFplZkx0Q2svVkFQcyszOFBFUnhYelNO?=
+ =?utf-8?B?emFON25WcXpEbm5jUnVMT3RVbUY3M0VFRVJBUUF1NENtWnAvcDVCOVdiZzlv?=
+ =?utf-8?B?QnBrT3M1Sk1pU3E1RHU1QWlWS0o3dHR4T284NDNkOWVLSzhPZ2pLYVBkcjVO?=
+ =?utf-8?B?THZlOVNWMllMUnRuZndhMTB2dzVVNU96dThZbHpHU04wTWNFb2ovZzZQdjNI?=
+ =?utf-8?B?bVR3eko4aWh6TzREWTJ0dWxIaXV0MUlQVGkyVFZtWi95Zzk1eFdMVmphUWxC?=
+ =?utf-8?B?VXFheXByWGUybVArL3p6cnRWaFdDdS9wbStiU1BUMVdneGNYN25NSGVCdXdk?=
+ =?utf-8?B?bXpVMi93ODZROUZndEowUnZJakJwa2tuRkRXL2Z2WEdQa2pQU2pZbXdQSjUr?=
+ =?utf-8?B?OXhyTWJIbjZXL3VHeXQvQjlOQ0FRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54b10e3f-3ad7-4ba0-9a87-08d9b4736eac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 02:36:52.0132
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gw7Cdv0S2HtiqmKnVsJ9xoRbWiLATm0YF9Dgwtyt92uJJEBA/pL90JDoUf4UTFc244u4ycsU01IRMANGhlF0KQaGboO7RQZqkxz3BYsyLXE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB6990
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Folks
-
-
-LKP/0Day found that ww_mutex.sh cannot complete since v5.16-rc1, but
-I'm pretty sorry that we failed to bisect the FBC, instead, the bisection pointed
-to a/below merge commit(91e1c99e17) finally.
-
-Due to this hang, other tests in the same group are also blocked in 0Day, we
-hope we can fix this hang ASAP.
-
-So if you have any idea about this, or need more debug information, feel free to let me know :)
-
-BTW, ww_mutex.sh was failed in v5.15 without hang, and looks it cannot reproduce on a vm.
-
-Our box:
-root@lkp-knm01 ~# lscpu
-Architecture:        x86_64
-CPU op-mode(s):      32-bit, 64-bit
-Byte Order:          Little Endian
-Address sizes:       46 bits physical, 48 bits virtual
-CPU(s):              288
-On-line CPU(s) list: 0-287
-Thread(s) per core:  4
-Core(s) per socket:  72
-Socket(s):           1
-NUMA node(s):        2
-Vendor ID:           GenuineIntel
-CPU family:          6
-Model:               133
-Model name:          Intel(R) Xeon Phi(TM) CPU 7295 @ 1.50GHz
-Stepping:            0
-CPU MHz:             1385.255
-CPU max MHz:         1600.0000
-CPU min MHz:         1000.0000
-BogoMIPS:            2992.76
-Virtualization:      VT-x
-L1d cache:           32K
-L1i cache:           32K
-L2 cache:            1024K
-NUMA node0 CPU(s):   0-287
-NUMA node1 CPU(s):
-Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch ring3mwait cpuid_fault epb pti tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms avx512f rdseed adx avx512pf avx512er avx512cd xsaveopt dtherm ida arat pln pts avx512_vpopcntdq avx512_4vnniw avx512_4fmaps
-
-Below the call stack in v5.16-rc2
-
-[ 1000.374954][ T2713] make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-136057256686de39cc3a07c2e39ef6bc43003ff6/tools/testing/selftests/locking'
-[ 1000.375030][ T2713]
-[ 1000.428791][ T2713] 2021-11-22 22:21:27 make run_tests -C locking
-[ 1000.428864][ T2713]
-[ 1000.491043][ T2713] make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-136057256686de39cc3a07c2e39ef6bc43003ff6/tools/testing/selftests/locking'
-[ 1000.491121][ T2713]
-[ 1000.540807][ T2713] TAP version 13
-[ 1000.540882][ T2713]
-[ 1000.576050][ T2713] 1..1
-[ 1000.576282][ T2713]
-[ 1000.612980][ T2713] # selftests: locking: ww_mutex.sh
-[ 1000.613288][ T2713]
-[ 1495.201324][ T1577] INFO: task kworker/u576:16:1470 blocked for more than 491 seconds.
-[ 1495.220059][ T1577]       Tainted: G    B             5.16.0-rc2 #1
-[ 1495.240902][ T1577] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[ 1495.265617][ T1577] task:kworker/u576:16 state:D stack:    0 pid: 1470 ppid:     2 flags:0x00004000
-[ 1495.289054][ T1577] Workqueue: test-ww_mutex test_cycle_work [test_ww_mutex]
-[ 1495.310936][ T1577] Call Trace:
-[ 1495.327809][ T1577] <TASK>
-[ 1495.344735][ T1577] __schedule+0xdb0/0x25c0
-[ 1495.362764][ T1577]  ? io_schedule_timeout+0x180/0x180
-[ 1495.382013][ T1577]  ? lock_downgrade+0x680/0x680
-[ 1495.400894][ T1577]  ? do_raw_spin_lock+0x125/0x2c0
-[ 1495.418866][ T1577] schedule+0xe4/0x280
-[ 1495.435597][ T1577] schedule_preempt_disabled+0x18/0x40
-[ 1495.454588][ T1577] __ww_mutex_lock+0x1248/0x34c0
-[ 1495.476189][ T1577]  ? test_cycle_work+0x1bb/0x500 [test_ww_mutex]
-[ 1495.497763][ T1577]  ? mutex_lock_interruptible_nested+0x40/0x40
-[ 1495.518959][ T1577]  ? lock_downgrade+0x680/0x680
-[ 1495.536861][ T1577]  ? wait_for_completion_interruptible+0x340/0x340
-[ 1495.556253][ T1577]  ? ww_mutex_lock+0x3e/0x380
-[ 1495.574003][ T1577] ww_mutex_lock+0x3e/0x380
-[ 1495.591958][ T1577]  test_cycle_work+0x1bb/0x500 [test_ww_mutex]
-[ 1495.612260][ T1577]  ? stress_reorder_work+0xa00/0xa00 [test_ww_mutex]
-[ 1495.632857][ T1577]  ? 0xffffffff81000000
-[ 1495.649027][ T1577]  ? rcu_read_lock_sched_held+0x5f/0x100
-[ 1495.668211][ T1577]  ? rcu_read_lock_bh_held+0xc0/0xc0
-[ 1495.687010][ T1577] process_one_work+0x817/0x13c0
-[ 1495.704991][ T1577]  ? rcu_read_unlock+0x40/0x40
-[ 1495.723024][ T1577]  ? pwq_dec_nr_in_flight+0x280/0x280
-[ 1495.740211][ T1577]  ? rwlock_bug+0xc0/0xc0
-[ 1495.758038][ T1577] worker_thread+0x8b/0xd80
-[ 1495.775008][ T1577]  ? process_one_work+0x13c0/0x13c0
-[ 1495.793017][ T1577] kthread+0x3b9/0x4c0
-[ 1495.810782][ T1577]  ? set_kthread_struct+0x100/0x100
-[ 1495.829988][ T1577] ret_from_fork+0x22/0x30
-[ 1495.845811][ T1577] </TASK>
-[ 1495.859087][ T1577] INFO: task kworker/u576:36:1490 blocked for more than 492 seconds.
-[ 1495.879048][ T1577]       Tainted: G    B             5.16.0-rc2 #1
-[ 1495.897879][ T1577] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[ 1495.919582][ T1577] task:kworker/u576:36 state:D stack:    0 pid: 1490 ppid:     2 flags:0x00004000
-[ 1495.941865][ T1577] Workqueue: test-ww_mutex test_cycle_work [test_ww_mutex]
-[ 1495.959889][ T1577] Call Trace:
-[ 1495.974816][ T1577] <TASK>
-[ 1495.988759][ T1577] __schedule+0xdb0/0x25c0
-[ 1495.988759][ T1577] __schedule+0xdb0/0x25c0
-[ 1496.003849][ T1577]  ? io_schedule_timeout+0x180/0x180
-[ 1496.020839][ T1577]  ? lock_downgrade+0x680/0x680
-[ 1496.036854][ T1577]  ? do_raw_spin_lock+0x125/0x2c0
-[ 1496.051976][ T1577] schedule+0xe4/0x280
-[ 1496.067780][ T1577] schedule_preempt_disabled+0x18/0x40
-[ 1496.085004][ T1577] __ww_mutex_lock+0x1248/0x34c0
-[ 1496.101895][ T1577]  ? test_cycle_work+0x1bb/0x500 [test_ww_mutex]
-[ 1496.119889][ T1577]  ? mutex_lock_interruptible_nested+0x40/0x40
-[ 1496.137873][ T1577]  ? lock_downgrade+0x680/0x680
-[ 1496.152657][ T1577]  ? wait_for_completion_interruptible+0x340/0x340
-[ 1496.168773][ T1577]  ? ww_mutex_lock+0x3e/0x380
-[ 1496.184862][ T1577] ww_mutex_lock+0x3e/0x380
-[ 1496.199979][ T1577]  test_cycle_work+0x1bb/0x500 [test_ww_mutex]
-[ 1496.216277][ T1577]  ? stress_reorder_work+0xa00/0xa00 [test_ww_mutex]
-[ 1496.234904][ T1577]  ? 0xffffffff81000000
-[ 1496.249856][ T1577]  ? rcu_read_lock_sched_held+0x5f/0x100
-[ 1496.265951][ T1577]  ? rcu_read_lock_bh_held+0xc0/0xc0
-[ 1496.282815][ T1577] process_one_work+0x817/0x13c0
-[ 1496.299791][ T1577]  ? rcu_read_unlock+0x40/0x40
-[ 1496.314754][ T1577]  ? pwq_dec_nr_in_flight+0x280/0x280
-[ 1496.331779][ T1577]  ? rwlock_bug+0xc0/0xc0
-[ 1496.348007][ T1577] worker_thread+0x8b/0xd80
-[ 1496.362905][ T1577]  ? process_one_work+0x13c0/0x13c0
-[ 1496.378975][ T1577] kthread+0x3b9/0x4c0
-[ 1496.393866][ T1577]  ? set_kthread_struct+0x100/0x100
-[ 1496.408827][ T1577] ret_from_fork+0x22/0x30
-[ 1496.423901][ T1577] </TASK>
-[ 1496.437994][ T1577] INFO: task kworker/u576:0:15113 blocked for more than 492 seconds.
-[ 1496.455862][ T1577]       Tainted: G    B             5.16.0-rc2 #1
-[ 1496.473759][ T1577] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[ 1496.494808][ T1577] task:kworker/u576:0  state:D stack:    0 pid:15113 ppid:     2 flags:0x00004000
-[ 1496.517000][ T1577] Workqueue: test-ww_mutex test_cycle_work [test_ww_mutex]
-[ 1496.537035][ T1577] Call Trace:
-[ 1496.551187][ T1577] <TASK>
-[ 1496.566405][ T1577] __schedule+0xdb0/0x25c0
-[ 1496.582012][ T1577]  ? io_schedule_timeout+0x180/0x180
-[ 1496.598049][ T1577]  ? lock_downgrade+0x680/0x680
-[ 1496.615360][ T1577]  ? do_raw_spin_lock+0x125/0x2c0
-[ 1496.631835][ T1577] schedule+0xe4/0x280
-[ 1496.645972][ T1577] schedule_preempt_disabled+0x18/0x40
-[ 1496.663774][ T1577] __ww_mutex_lock+0x1248/0x34c0
-[ 1496.681795][ T1577]  ? test_cycle_work+0x1bb/0x500 [test_ww_mutex]
-[ 1496.698731][ T1577]  ? mutex_lock_interruptible_nested+0x40/0x40
-[ 1496.714996][ T1577]  ? lock_downgrade+0x680/0x680
-[ 1496.730888][ T1577]  ? wait_for_completion_interruptible+0x340/0x340
-[ 1496.747926][ T1577]  ? ww_mutex_lock+0x3e/0x380
-[ 1496.762482][ T1577] ww_mutex_lock+0x3e/0x380
-[ 1496.778844][ T1577]  test_cycle_work+0x1bb/0x500 [test_ww_mutex]
-
-
-And, we found that it  occasionally hangs on v5.16-rc3 (1/3 runs), below is a good dmesg.
-[  962.136756][ T2950] make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-d58071a8a76d779eedab38033ae4c821c30295a5/tools/testing/selftests/locking'
-[  962.136831][ T2950]-
-[  962.205036][ T2950] TAP version 13
-[  962.206003][ T2950]-
-[  962.298458][ T2950] 1..1
-[  962.299657][ T2950]-
-[  962.345588][ T2950] # selftests: locking: ww_mutex.sh
-[  962.345657][ T2950]-
-[  973.641869][T25509] All ww mutex selftests passed
-[  973.773996][ T2950] # locking/ww_mutex: ok
-[  973.774068][ T2950]-
-[  973.774236][ T2960] # locking/ww_mutex: ok
-[  973.802355][ T2960]-
-[  973.829966][ T2950] ok 1 selftests: locking: ww_mutex.sh
-[  973.834748][ T2950]-
-[  973.838302][ T2960] ok 1 selftests: locking: ww_mutex.sh
-[  973.899815][ T2960]-
-[  973.921431][ T2950] make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-d58071a8a76d779eedab38033ae4c821c30295a5/tools/testing/selftests/locking'
-[  973.932312][ T2950]-
-[  973.957345][ T2960] make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-d58071a8a76d779eedab38033ae4c821c30295a5/tools/testing/selftests/locking'
-
-
-
-Thanks
-Zhijian@0Day
-
-
-
+SGkgUmVpbmV0dGUNCiANCj4gKHN1YmplY3QgbGluZSBhbmQgY29tbWl0IG1lc3NhZ2U6IGZpbGVz
+c3lzdGVtIC0+IGZpbGUgc3lzdGVtKQ0KVGhhbmtzLg0KIA0KPiBPbiAxMS8xMC8yMDIxIDE6MzMg
+QU0sIFNoYW9wZW5nIFRhbiB3cm90ZToNCj4gPiBGcm9tOiAiVGFuLCBTaGFvcGVuZyIgPHRhbi5z
+aGFvcGVuZ0BqcC5mdWppdHN1LmNvbT4NCj4gPg0KPiA+IFRvIHVuaWZ5IHRoZSByZXR1cm4gY29k
+ZSBvZiByZXNjdHJsX3Rlc3RzIHdpdGggdGhlIHJldHVybiBjb2RlIG9mDQo+ID4gc2VsZnRlc3Qg
+c2V0LCByZXR1cm4gS1NGVF9TS0lQICg0KSBpZiByZXNjdHJsIGZpbGVzc3lzdGVtIGlzIG5vdA0K
+PiA+IHN1cHBvcnRlZCBvciByZXNjdHJsIGlzIG5vdCBydW4gYXMgcm9vdC4NCj4gDQo+IENvdWxk
+IHlvdSBwbGVhc2UgZWxhYm9yYXRlIGhvdyBjaGFuZ2luZyBrc2Z0X2V4aXRfZmFpbF9tc2coKSB0
+bw0KPiBrc2Z0X2V4aXRfc2tpcCgpIGFjY29tcGxpc2hlcyB0aGUgZ29hbCBvZiB1bmlmeWluZyB0
+aGUgcmV0dXJuIGNvZGU/DQo+IFdoYXQgaXMgd3Jvbmcgd2l0aCB1c2luZyBrc2Z0X2V4aXRfZmFp
+bF9tc2coKT8NCg0KSW4gc2VsZnRlc3QgZnJhbXdvcmssIA0KaWYgYSB0ZXN0IG5lZWQgcm9vdCBw
+cml2aWxlZ2VzLCBidXQgaXQgaXMgcnVuIGFzIHVzZXIgcHJpdmlsZWdlcywNCnRoZSB0ZXN0IHJl
+c3VsdCB3aWxsIGNvdW50ZWQgYXMgYSBTS0lQIGl0ZW0sIGluc3RlYWQgb2YgYSBGQUlMIGl0ZW0u
+DQoNCkZvciBleGFtcGxlLCANCigxKXRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21xdWV1ZS9tcV9v
+cGVuX3Rlc3RzLmMNCjI2NyAgICAgICAgIGlmIChnZXR1aWQoKSAhPSAwKSANCjI2OCAgICAgICAg
+ICAgICAgICAga3NmdF9leGl0X3NraXAoIk5vdCBydW5uaW5nIGFzIHJvb3QsIGJ1dCBhbG1vc3Qg
+YWxsIHRlc3RzICINCjI2OSAgICAgICAgICAgICAgICAgICAgICAgICAicmVxdWlyZSByb290IGlu
+IG9yZGVyIHRvIG1vZGlmeVxuc3lzdGVtIHNldHRpbmdzLiAgIg0KMjcwICAgICAgICAgICAgICAg
+ICAgICAgICAgICJFeGl0aW5nLlxuIik7IA0KDQooMil0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
+cGYvdGVzdF9rbW9kLnNoDQogIDUga3NmdF9za2lwPTQNCiAgNiANCiAgNyBtc2c9InNraXAgYWxs
+IHRlc3RzOiINCiAgOCBpZiBbICIkKGlkIC11KSIgIT0gIjAiIF07IHRoZW4NCiAgOSAgICAgICAg
+IGVjaG8gJG1zZyBwbGVhc2UgcnVuIHRoaXMgYXMgcm9vdCA+JjINCiAxMCAgICAgICAgIGV4aXQg
+JGtzZnRfc2tpcA0KIDExIGZpDQoNClJlZ2FyZHMsIA0KU2hhb3BlbmcgVGFuDQo=
