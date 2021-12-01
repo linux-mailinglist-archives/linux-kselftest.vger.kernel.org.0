@@ -2,141 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0814654BA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 19:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9C0465687
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 20:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbhLASJ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 13:09:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53925 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234928AbhLASJ1 (ORCPT
+        id S239741AbhLATiw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 14:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234430AbhLATiv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:09:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638381965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nL9jEjCjXMQ2Hi/cW7zIosXzbREOuqBP0onxXEUO1oE=;
-        b=KgWcAPN04AjhIHgwoZYmKDl39i3gUbQ1GrJWAJWrHaDrjZXGlXu2jwnOTFUFc4xSbvSXvk
-        Dr2JQXQPKnHttp/AgcOXXkLs+nH6R5riTRrLBNouBqS3QT8EonxBECYzNsoIDAXd08p2Ty
-        Np3pfEbPvVxWNMQ2oDBICnfI6oj0nfo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-597-EIqUcEKVNQ6Va99TdOtV3w-1; Wed, 01 Dec 2021 13:06:02 -0500
-X-MC-Unique: EIqUcEKVNQ6Va99TdOtV3w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D2561006AA0;
-        Wed,  1 Dec 2021 18:05:59 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AF03845D71;
-        Wed,  1 Dec 2021 18:05:49 +0000 (UTC)
-Message-ID: <4a021678-1896-2d16-4075-f626c7ab8513@redhat.com>
-Date:   Wed, 1 Dec 2021 13:05:44 -0500
+        Wed, 1 Dec 2021 14:38:51 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1A3C061574;
+        Wed,  1 Dec 2021 11:35:30 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id u11so18515679plf.3;
+        Wed, 01 Dec 2021 11:35:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=VSsVFWntTE7c4RiAbESHCx0AGg9CBW9/QGJqS0X9jIQ=;
+        b=koR/F2dhOFSTeQfeKCRb86Y+ZSFgu6AJc8p8GQi6UkmfL+ZT6AluQY1VEusXrdet0z
+         Nun9QcGUEiCVo7BKXL6CBLPaLEXZPzH4/N159MCHyTuCCASGIp0krtr7js+CBJ8t+G5S
+         QjwLGXsiRepAP/dKpgS3/ZFtlfm5zTvC3E2KGsRagvA7XvPVjhGMF/BuFd4bG2+nGQDb
+         1UlvJvMggbCLZEZGPbGgrI0EjHILEr0GzHrTXsPeLbZ37VXqvmzH5IvHUbwQLb02qzVh
+         CuuuRhOZWD40Sugsp9GuppQcRjhvVhWkXQc1FjHMoEoYEkJ3UdKxLPIOM6TNj5Py51/Q
+         VEZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VSsVFWntTE7c4RiAbESHCx0AGg9CBW9/QGJqS0X9jIQ=;
+        b=uyuYxfzlYNVtT0uTTnQ6d4s0BNB2OlkcJupxDIvpcFQyTW6r518znKFborRr0O/Ojw
+         NJjQfAyXVyD9JG/fat/IDzT3h6Nwjb8CdWkh5ZOwGBidQoUEy+fO8ySSbiDlx5tnkMwF
+         +fPPuF4OCeC0TzNrYNjoVseROfUgWVJNWFq13+M6bNWiJTElLXIwCoJKKixfEfXx5V0x
+         VjhjcZE+ZF8BwVDEHqpOb74vnQuIfC16qFLJXFlHbKdydAZduasTytT+aMja8/GV+GKg
+         FWcrWqv6V3W44PrP18DBKX/N4l8eNDaC/tpEnUCgQ1bbslFo0LnRx5yDP1lz0cMegWhG
+         oaPw==
+X-Gm-Message-State: AOAM530/HuI9Q2UhIlhkqVYJj1P3j9SII6n5gRST9iz07RGVK5/U6gEH
+        ei3E6pmMe4IWpDEoea2JpuD01dgbaw==
+X-Google-Smtp-Source: ABdhPJwPzikQOQSO9fQi5ca2JZqe56DT2SwLlF1BD5JP5rLc18v8yM4tJTVpoZIPrPt/XggjAHNV5w==
+X-Received: by 2002:a17:90b:4c0f:: with SMTP id na15mr294164pjb.222.1638387330094;
+        Wed, 01 Dec 2021 11:35:30 -0800 (PST)
+Received: from bytedance ([4.7.18.210])
+        by smtp.gmail.com with ESMTPSA id k8sm600474pfc.197.2021.12.01.11.35.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 11:35:29 -0800 (PST)
+Date:   Wed, 1 Dec 2021 11:35:27 -0800
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     David Ahern <dsahern@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v3] selftests/fib_tests: Rework fib_rp_filter_test()
+Message-ID: <20211201193527.GA27000@bytedance>
+References: <20211130004905.4146-1-yepeilin.cs@gmail.com>
+ <20211201004720.6357-1-yepeilin.cs@gmail.com>
+ <42b5ebde-2a36-3956-d6dd-bd50e18ff6dc@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <42b5ebde-2a36-3956-d6dd-bd50e18ff6dc@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi David,
 
-On 12/1/21 11:46, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Tue, Nov 30, 2021 at 10:56:34PM -0500, Waiman Long wrote:
->>> What happens if an isolated domain becomes invalid and then valid again due
->>> to cpu hotplug? Does it go "root invalid" and then back to "isolated"?
->> Yes, the current code allow recovering from an invalid state. In this
->> particular case, the transition will be "isolated" --> "root invalid" -->
->> "isolated".
-> Wouldn't it be clearer if it became "isolated invalid"?
+On Wed, Dec 01, 2021 at 11:00:26AM -0700, David Ahern wrote:
+> On 11/30/21 5:47 PM, Peilin Ye wrote:
+> >  ┌─────────────────────────────┐    ┌─────────────────────────────┐
+> >  │  network namespace 1 (ns1)  │    │  network namespace 2 (ns2)  │
+> >  │                             │    │                             │
+> >  │  ┌────┐     ┌─────┐         │    │  ┌─────┐            ┌────┐  │
+> >  │  │ lo │<───>│veth1│<────────┼────┼─>│veth2│<──────────>│ lo │  │
+> >  │  └────┘     ├─────┴──────┐  │    │  ├─────┴──────┐     └────┘  │
+> >  │             │192.0.2.1/24│  │    │  │192.0.2.1/24│             │
+> >  │             └────────────┘  │    │  └────────────┘             │
+> >  └─────────────────────────────┘    └─────────────────────────────┘
+> 
+> if the intention of the tests is to validate that rp_filter = 1 works as
+> designed, then I suggest a simpler test. 2 namespaces, 2 veth pairs.
+> Request goes through one interface, and the response comes in the other
+> via routing in ns2. ns1 would see the response coming in the 'wrong'
+> interface and drops it.
 
-You are right. I have overlooked that. Will make the change.
+Quite the opposite - the goal is to make sure that commit 66f8209547cc
+("fib: relax source validation check for loopback packets") _prevents_
+packets from being dropped when rp_filter = 1 in this corner case, as I
+mentioned in the commit message.
 
+In order to test this corner case, I need a packet that:
 
->
->>> While it isn't necessarily tied to this series, it's a big no-no to restrict
->>> what a parent can do depending on what its descendants are doing. A cgroup
->>> higher up in the hierarchy should be able to change configuration however it
->>> sees fit as deligation breaks down otherwise.
->>>
->>> Maybe you can argue that cpuset is special and shouldn't be subject to such
->>> convention but I can't see strong enough justifications especially given
->>> that most of these restrictions can be broken by hotplug operations anyway
->>> and thus need code to handle those situations.
->> These are all pre-existing restrictions before the introduction of
->> partition. These are checks done in validate_change(). I am just saying out
->> loud the existing behavior. If you think that needs to be changed, I am fine
->> with that. However, it will be a separate patch as it is not a behavior that
->> is introduced by this series.
-> I see. It looks more problematic now with the addtion of the state
-> transition error reporting, more possible state transitions and, well,
-> actual documentation.
+  1. was received on lo;
+  2. has a local source IP address (other than lo's 127.0.0.1/8, which
+     is 192.0.2.1 in this case);
+  3. has no dst attached to it (in this case since it was redirected
+     from veth).
 
-I am going to add a patch to take out the child superset limitation for 
-the default hierarchy as I believe it is probably an oversight that we 
-were not aware of before. I would like to keep the exclusivity rule 
-though as I think it makes sense.
+See __fib_validate_source():
 
->
->> Once an invalid partition is changed to "member", there is no way for a
->> child invalid partition root to recover and become valid again. There is why
->> I force them to become "member" also. I am OK if you believe it is better to
->> keep them in the invalid state forever until we explicitly changed them to
->> "member" eventually.
-> That's because we don't allow turning a cgroup with descendants into a
-> partition, right?
-Yes, that is a major part of it.
->
-> So, when we were first adding the partition support, the thinking was that
-> as it's pretty niche anyway, we can take some aberrations and restrictions,
-> but I don't think it's a good direction to be building up on top of those
-> like this and would much prefer to clean up the rules and restrictions. I
-> know that this has been going on for quite a while and am sorry that am
-> coming back to the same issue repeatedly which isn't necessarily caused by
-> the proposed change. What do you think?
++       dev_match = dev_match || (res.type == RTN_LOCAL &&
++                                 dev == net->loopback_dev);
+					      ^^^^^^^^^^^^
+This relaxed check only applies to lo, and I do need to redirect packets
+from veth ingress to lo ingress in order to trigger this.
 
-I think I can relax some of the restrictions, but probably not all of 
-them at this time. We can certainly working on removing as much 
-restriction and limitations as possible in future update to the 
-partition code.
-
-Cheers,
-Longman
+Thanks,
+Peilin Ye
 
