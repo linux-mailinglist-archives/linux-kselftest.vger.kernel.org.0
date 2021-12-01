@@ -2,142 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CD9464F9E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 15:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07168464FA9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Dec 2021 15:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349923AbhLAObC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 09:31:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60621 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349922AbhLAOae (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:30:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638368827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aXrqNOrDvSgD387N15SkHeYtKspYajLx2tWsnOoBWmw=;
-        b=XFjjfA/qsAGgmpeK12okClbS5nnO648FvGoqH22hqbT5RfUaPFqbEDgmzKArObZljJw1DU
-        kWFZH+hKH0efhNQoe7ZR7tvOU2GdsTE9mCvvUH/N4fah0WrNvloLESh6YwWDaBtS2MPUXd
-        OIV/QNYNJnfHkfeD3pkn3boyMroDXvU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-228--osOsuLxOqizeWeuns8tUA-1; Wed, 01 Dec 2021 09:27:04 -0500
-X-MC-Unique: -osOsuLxOqizeWeuns8tUA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C18801023F4F;
-        Wed,  1 Dec 2021 14:27:01 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4A63910016F7;
-        Wed,  1 Dec 2021 14:26:44 +0000 (UTC)
-Message-ID: <0bdfb7f2-61ee-7b2a-fdb2-3c41f6d6ade0@redhat.com>
-Date:   Wed, 1 Dec 2021 09:26:43 -0500
+        id S1349890AbhLAOc7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Dec 2021 09:32:59 -0500
+Received: from mga18.intel.com ([134.134.136.126]:41418 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239486AbhLAOc6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 Dec 2021 09:32:58 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="223344499"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="223344499"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 06:29:25 -0800
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="677276223"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 06:29:23 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1msQap-0010ho-M4;
+        Wed, 01 Dec 2021 16:28:19 +0200
+Date:   Wed, 1 Dec 2021 16:28:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <YaeGg34Log9dExYX@smile.fi.intel.com>
+References: <20211130154127.12272-1-brgl@bgdev.pl>
+ <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com>
+ <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com>
+ <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+ <Yad7IQwXDc8gS2Ne@smile.fi.intel.com>
+ <CAMRc=MeScPA=764xoi9Leu7LayEbhMCuA3u_g5NJjLyc8sJ-vg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
-In-Reply-To: <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MeScPA=764xoi9Leu7LayEbhMCuA3u_g5NJjLyc8sJ-vg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/30/21 22:56, Waiman Long wrote:
-> On 11/30/21 12:11, Tejun Heo wrote:
->
->
->>>      Once becoming a partition root, the following two rules restrict
->>>      what changes can be made to "cpuset.cpus".
->>>
->>>      1) The value must be exclusive.
->>>      2) If child cpusets exist, the value must be a superset of what
->>>         are defined in the child cpusets.
->>>
->>>      The second rule applies even for "member". Other changes to
->>>      "cpuset.cpus" that do not violate the above rules are always
->>>      allowed.
->> While it isn't necessarily tied to this series, it's a big no-no to 
->> restrict
->> what a parent can do depending on what its descendants are doing. A 
->> cgroup
->> higher up in the hierarchy should be able to change configuration 
->> however it
->> sees fit as deligation breaks down otherwise.
->>
->> Maybe you can argue that cpuset is special and shouldn't be subject 
->> to such
->> convention but I can't see strong enough justifications especially given
->> that most of these restrictions can be broken by hotplug operations 
->> anyway
->> and thus need code to handle those situations.
->
-> These are all pre-existing restrictions before the introduction of 
-> partition. These are checks done in validate_change(). I am just 
-> saying out loud the existing behavior. If you think that needs to be 
-> changed, I am fine with that. However, it will be a separate patch as 
-> it is not a behavior that is introduced by this series.
+On Wed, Dec 01, 2021 at 02:53:42PM +0100, Bartosz Golaszewski wrote:
+> On Wed, Dec 1, 2021 at 2:40 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Of the 2 restrictions listed above, the exclusivity rule is due to the 
-use of CS_CPU_EXCLUSIVE flag. I think it is reasonable as it affects 
-only siblings, not the parent.
+...
 
-The second restriction was found during my testing. It is caused by the 
-following code in validate_change():
+> > > Let me maybe rephrase the problem: currently, for GPIO devices
+> > > instantiating multiple banks created outside of the OF or ACPI
+> > > frameworks (e.g. instantiated manually and configured using a
+> > > hierarchy of software nodes with a single parent swnode and a number
+> > > of child swnodes representing the children), it is impossible to
+> > > assign firmware nodes other than the one representing the top GPIO
+> > > device to the gpiochip child devices.
+> > >
+> > > In fact if we want to drop the OF APIs entirely from gpiolib - this
+> > > would be the right first step as for gpio-sim it actually replaces the
+> > > gc->of_node = some_of_node; assignment that OF-based drivers do for
+> > > sub-nodes defining banks and it does work with device-tree (I verified
+> > > that too) thanks to the fwnode abstraction layer.
+> >
+> > I still don't see how you set up hierarchy of primary/secondary fwnodes.
+> >
+> > And I don't like this change. It seems it band-aids some issue with fwnode
+> > usage. What the easiest way to reproduce the issue with your series applied
+> > (without this change)?
+> 
+> Drop this patch and drop the line where the fwnode is assigned in
+> gpio-sim.c. Then probe the device and print the addresses of the
+> parent and child swnodes. See how they are the same and don't match
+> the swnode hierarchy we created. You can then apply this patch and see
+> how it becomes correct.
 
-         /* Each of our child cpusets must be a subset of us */
-         ret = -EBUSY;
-         cpuset_for_each_child(c, css, cur)
-                 if (!is_cpuset_subset(c, trial))
-                         goto out;
+Thanks. I will give a spin.
 
-It seems that this code was there since v2.6.12 (the beginning of the 
-git era). Later in function, we have
+Note, it seems I have to revert your older code first...
 
-         /* On legacy hierarchy, we must be a subset of our parent 
-cpuset. */
-         ret = -EACCES;
-         if (!is_in_v2_mode() && !is_cpuset_subset(trial, par))
-                 goto out;
+-- 
+With Best Regards,
+Andy Shevchenko
 
-This is actually a duplicate in the case of legacy hierarchy.
-
-I can add a patch to take out the first code block above which I think 
-is where most of your objections are. Then I can remove the 2nd 
-restriction in my documentation. I would like to emphasize that this is 
-a pre-existing behavior which I just happen to document.
-
-Cheers,
-Longman
 
