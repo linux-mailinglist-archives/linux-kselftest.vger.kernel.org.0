@@ -2,145 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BAE466B92
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Dec 2021 22:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE4B466D5B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Dec 2021 23:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377079AbhLBVWm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Dec 2021 16:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S243340AbhLBXAq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Dec 2021 18:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243039AbhLBVV7 (ORCPT
+        with ESMTP id S236694AbhLBXAq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:21:59 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6877C06174A
-        for <linux-kselftest@vger.kernel.org>; Thu,  2 Dec 2021 13:18:36 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id x7so770410pjn.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Dec 2021 13:18:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EBP/wA0riUq0Ehh4ikwK9vvTmgH1MK1/7+RgvBguglo=;
-        b=N2aH43V+EmEkAYBQ4ZU8oiQjZUj0ZtxyuKwGaI0XsO5N0jm3Hds3g9qzxVdaTCCKOg
-         DIpXFOI5A3QvIoQ0lLFtzAivfMxNAJaUOv/+59P3nvJtyQybbxuK7mTZM5Xh71yxRzrA
-         zhEm0+g0xv1BGJOmyXQv54+vOqV8Jhrx40iVM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EBP/wA0riUq0Ehh4ikwK9vvTmgH1MK1/7+RgvBguglo=;
-        b=nmAyRL3hBBNtKLO1NLb6Ub/TmVoOY09kt3ARZbhXSKdkBBuz1pIZk1LVLvbMkrA9BY
-         UXPTyyJaP4bA9UKJbKewpyb4v4LEA/OBpoOQJ+CEkyFUsBt22z8Gmou4+VbfZgv3GMPM
-         SA3yxsD4H8rjInl6Lpdtqvvw/xqyQxIu+MZEzrlyjG4VDBb728byWkB+aEuclKL24iJT
-         /Xi4zngAt72Xo5xIECPme++8JsXQTkaUa+PFAmvXBeSHl+w5hxG2wDu0GrTqFrjDqVhR
-         JCvCir617YPPbhOUv2nWfKCbfa2kl8Lmxjqhl9NT+sNKiJC0ONboUFwziLyBdWbY+Ih9
-         JCdA==
-X-Gm-Message-State: AOAM530pETMVVAi3T1ZaZSeo01jaKf6obzt3t0e2DvXbw4CNpoxZCQNi
-        JpD09Iy3QxpfBHiolt65t+OX9Q==
-X-Google-Smtp-Source: ABdhPJy/eTiQgIc3gFRh0X9gTiqG+h8JNywQwRwj9tzI/4pP6ptAyEFgnqcH7Bd2XKPJ9nIag3LPcg==
-X-Received: by 2002:a17:90b:4a89:: with SMTP id lp9mr8971160pjb.6.1638479916404;
-        Thu, 02 Dec 2021 13:18:36 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o1sm3274138pjs.30.2021.12.02.13.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 13:18:36 -0800 (PST)
-Date:   Thu, 2 Dec 2021 13:18:35 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sjpark@amazon.de, shuah@kernel.org
-Subject: Re: [PATCH] selftests/kselftest/runner.sh: Add optional command
- parameters in settings
-Message-ID: <202112021310.E1B3208@keescook>
-References: <20211202142056.17386-1-cristian.marussi@arm.com>
+        Thu, 2 Dec 2021 18:00:46 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD7AC06174A;
+        Thu,  2 Dec 2021 14:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jimhSqp4ui/rEJFWw/TifB3e5eXU06bdFyt7nU5nKTE=; b=mwh3+s7+fsAReiSF8tnvnUGhKG
+        ETaJwBnnXSeAic5naongGgL8r+yzXJhA8o3hyG1nXXLRieznY8KYWFc8w8yXbIuWUKW2RZWCF4jC2
+        Eu23Pct0FY/6OBTWcZabScASYr+SJwpc2hb4LFFMpvBA+FKFpXh19tukcjJj57UnQMXXP3ggCEMCK
+        NnXTLCwXsyaM77D1TF2UuYLnWFmdZYsQM0ZvJAJNToyl6YBoOhq8Ij/AW54DD+ZWSWinwmsdJj7L2
+        4eKHZ7yCNP06enGlESvgOAnmuZ5AEmqbTR8FxKdRGR7+f4h8tQfvaI2FoB5eEOJyOPSKeDDHxX4gB
+        1IPVNyQA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1msv0q-005ygo-Pv; Thu, 02 Dec 2021 22:57:13 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC23B9810D4; Thu,  2 Dec 2021 23:57:12 +0100 (CET)
+Date:   Thu, 2 Dec 2021 23:57:12 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Li Zhijian <zhijianx.li@intel.com>
+Cc:     mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, open list <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>
+Subject: Re: ww_mutex.sh hangs since v5.16-rc1
+Message-ID: <20211202225712.GG16608@worktop.programming.kicks-ass.net>
+References: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202142056.17386-1-cristian.marussi@arm.com>
+In-Reply-To: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 02:20:56PM +0000, Cristian Marussi wrote:
-> Some testcases allow for optional commandline parameters but as of now
-> there is now way to provide such arguments to the runner script.
+On Wed, Dec 01, 2021 at 09:26:18AM +0800, Li Zhijian wrote:
+> Hi Folks
 > 
-> Add support to the per-test-directory "settings" file to provide such
-> optional arguments; two new optional fields can now be defined in
-> "settings":
 > 
->  - args="<options>": general arguments common to all testcase commands in
->    the test directory
+> LKP/0Day found that ww_mutex.sh cannot complete since v5.16-rc1, but
+> I'm pretty sorry that we failed to bisect the FBC, instead, the bisection pointed
+> to a/below merge commit(91e1c99e17) finally.
 > 
->  - <BASENAME_TEST>_args="<options>": custom arguments specific to only one
->    specific testcase command
+> Due to this hang, other tests in the same group are also blocked in 0Day, we
+> hope we can fix this hang ASAP.
 > 
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
-> Used to configure the use of a specific rtc device on CI systems with:
->  tools/testing/selftests/rtc/settings:
->    timeout=90
->    rtctest_args="/dev/rtc1"
-
-I like this idea generally, but I have some concern that this is
-muddling the test's settings ("do not expect me to finish before
-timeout=90") vs the local system's settings ("here is where to find the
-rtc to test"). I can't, however, think of a better way to handle this
-currently. :P
-
-Is this case common enough that a given test shouldn't, instead, just
-take config from environment variables set by the CI?
-
-(Also, will we need to worry in the future about running the same test
-multiple times with different system settings? ("try each of these /dev
-nodes...")
-
-Is there a patch for the changes to the RTC test?
-
-> ---
->  tools/testing/selftests/kselftest/runner.sh | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+> So if you have any idea about this, or need more debug information, feel free to let me know :)
 > 
-> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> index a9ba782d8ca0..f877a8571927 100644
-> --- a/tools/testing/selftests/kselftest/runner.sh
-> +++ b/tools/testing/selftests/kselftest/runner.sh
-> @@ -49,6 +49,15 @@ run_one()
->  
->  	# Reset any "settings"-file variables.
->  	export kselftest_timeout="$kselftest_default_timeout"
-> +
-> +	# Optional arguments for any command, possibly defined in settings
-> +	# as args="<options>"
-> +	kselftest_args=""
-> +
-> +	# Optional arguments for this command, possibly defined in settings
-> +	# as <$BASENAME_TEST>_args="<options>"
-> +	kselftest_cmd_args_ref="kselftest_${BASENAME_TEST}_args"
-> +
->  	# Load per-test-directory kselftest "settings" file.
->  	settings="$BASE_DIR/$DIR/settings"
->  	if [ -r "$settings" ] ; then
-> @@ -69,7 +78,8 @@ run_one()
->  		echo "# Warning: file $TEST is missing!"
->  		echo "not ok $test_num $TEST_HDR_MSG"
->  	else
-> -		cmd="./$BASENAME_TEST"
-> +		eval kselftest_cmd_args="\$$kselftest_cmd_args_ref"
+> BTW, ww_mutex.sh was failed in v5.15 without hang, and looks it cannot reproduce on a vm.
 
-nitpit: Just to avoid tripping any future work to gracefully handle
-unset variables, maybe this could specify an empty-string default:
+On real hardware:
 
-		eval kselftest_cmd_args="\${$kselftest_cmd_args_ref:-}"
+root@ivb-ep:/usr/src/linux-2.6/tools/testing/selftests/locking# uname -a
+Linux ivb-ep 5.16.0-rc3-00284-g68601c558556 #1 SMP PREEMPT Thu Dec 2 23:03:29 CET 2021 x86_64 GNU/Linux
+root@ivb-ep:/usr/src/linux-2.6/tools/testing/selftests/locking# ./ww_mutex.sh
+locking/ww_mutex: ok
 
-> +		cmd="./$BASENAME_TEST $kselftest_cmd_args $kselftest_args"
->  		if [ ! -x "$TEST" ]; then
->  			echo "# Warning: file $TEST is not executable"
->  
-> -- 
-> 2.17.1
-> 
+[ 1907.907801] Beginning ww mutex selftests
+[ 1915.700077] All ww mutex selftests passed
 
--- 
-Kees Cook
+
+What else do I try?
