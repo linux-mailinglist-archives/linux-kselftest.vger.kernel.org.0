@@ -2,297 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BE646686E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Dec 2021 17:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABF04668A9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Dec 2021 17:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348040AbhLBQjM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Dec 2021 11:39:12 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:42813 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242448AbhLBQjM (ORCPT
+        id S241944AbhLBQzI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Dec 2021 11:55:08 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57288 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241758AbhLBQzI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:39:12 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 57355580341;
-        Thu,  2 Dec 2021 11:35:49 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 02 Dec 2021 11:35:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=qO5TWxz0VslvcOPL4PWFP816jxX9utC+/FimQIERU
-        oE=; b=DvpkVY4eNf/ISg9YT7lCd2aobYCRqQiD7VaWgVEwTOrDLgJg/RsCVl9kR
-        sgb2lmGWZIWsU8WfQnCJFATzzzT7Mu5CgGSonU7A561T7ib5noFGuAsTzmJl8kJL
-        qpvdIv0prOhQ+6yzhnNz0ix7szhlWqY/3eeBNfFc1efjLljZwmuAx22XwnSgLHKl
-        CRsYep934PXyCY7TblM5W1R8yMaFVDTUUIo5xYQY2PYZrJHcUsId8mKQL3M5srHp
-        iT93plcXQd9iwwwOGL3qYCiTwrueTO+L+094r40oN6MHqds9AOMDqkHz4CwQMjO5
-        jhboK8QuzfexHcuXSbeqN4r7tQLlA==
-X-ME-Sender: <xms:5PWoYXaqOPyybGbY5I3Zb_oCog9pe3AhEUUYReJn05L61kdPJwjGMA>
-    <xme:5PWoYWa0BA4bjelgU2Se6lF9SZcP8i9FAowAKxH9MrlBgBl-Xvt0C7VsvuDdQ3ZlM
-    rkIWSkk5LhFl7s>
-X-ME-Received: <xmr:5PWoYZ_LfOu10llXNK7sCW28cLN69Oo7pPcIHvL_YIcLTbMahD6kecWlHzYs-By_NrePUNShOfTG88NbnBh0mkgJGwmzRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieehgdeltdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeefheethffhhfdvueevkeffffefjeejffefuedtfedvgfettdetkedtgfejtdeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:5PWoYdr4ikClrFN0UvQNPm_Y5eE5-c5o_3QUTXh3XOSmAARhxRwZ5w>
-    <xmx:5PWoYSqV-wd9DCF_9KQhJGiu1n2SybsYCB0K0-J5BeYIe5IriFRQeQ>
-    <xmx:5PWoYTTbwN3opt7JNHRXOrIpWpeZpa2ES6EcOaAh8C_ZiSQShAYa7g>
-    <xmx:5fWoYfQi1OGKqDll9M4pqZzdy6oYdmikVu9XJEgYTIpX_97nlRzK5Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Dec 2021 11:35:47 -0500 (EST)
-Date:   Thu, 2 Dec 2021 18:35:42 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mkubecek@suse.cz" <mkubecek@suse.cz>,
-        "saeed@kernel.org" <saeed@kernel.org>,
-        "michael.chan@broadcom.com" <michael.chan@broadcom.com>,
-        "petrm@nvidia.com" <petrm@nvidia.com>
-Subject: Re: [PATCH v4 net-next 2/4] ethtool: Add ability to configure
- recovered clock for SyncE feature
-Message-ID: <Yaj13pwDKrG78W5Y@shredder>
-References: <20211201180208.640179-1-maciej.machnikowski@intel.com>
- <20211201180208.640179-3-maciej.machnikowski@intel.com>
- <Yai/e5jz3NZAg0pm@shredder>
- <MW5PR11MB5812455176BC656BABCFF1B0EA699@MW5PR11MB5812.namprd11.prod.outlook.com>
+        Thu, 2 Dec 2021 11:55:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A0DBB82429
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Dec 2021 16:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B02C00446;
+        Thu,  2 Dec 2021 16:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638463903;
+        bh=oG+PegkSkunMX4uoxAPSZN8kXoQS/wjKGXQGpltcYT4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Dq94d0inwnPb7npPVYT3v3+4CRbfPYxeWQJioWiJn/JEWnQ54HUckluqdq6xiDa6Y
+         8XHVKrvwHYVh7Zq1bLmpTja6PS15wHeB0qdgngd1Z9PChGo48i8dQaC5ei45YtwR5k
+         vpIlBMT7vS1IMhjNlstsedb6qrC3+8njAu75M3B3ssIz+TwDSjHZMaf9Xr5NwVXeLn
+         pAVfR3bM8Z3X2uv7VKcYiDujt9Zt/7XEnDEH4IYDi7SyxM48wyZIq4GEBSRChCzOVZ
+         cO4GD/3HXhUSqrIwhGt4N3vjQswsplHTA/DejyM0c8/TkdWn1n34F8jzSot4wF7i+L
+         RlMgKnfgr4Npw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] kselftest/arm64: Add pidbench for floating point syscall cases
+Date:   Thu,  2 Dec 2021 16:51:07 +0000
+Message-Id: <20211202165107.1075259-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4114; h=from:subject; bh=oG+PegkSkunMX4uoxAPSZN8kXoQS/wjKGXQGpltcYT4=; b=owGbwMvMwMWocq27KDak/QLjabUkhsQVP1YdFtOr7e5NUszfJbTfSmUra76hynTOzbdr7rz4meT7 I2N3J6MxCwMjF4OsmCLL2mcZq9LDJbbOfzT/FcwgViaQKQxcnAIwkamB7P/rzbRWztm11sdydWvB7v 0vW8SOsr93f8ggIdZxuiMoti7vDjP/pnzZ9SVb92osNUor+u9+5tQR2X1R0xdaflmoc+OTTPb//Dqj mQ07q3I3lE35WFXbbGwRy7tHok/Nc8aeJzvWZ194l6FitrraUS3wQJCdVmb5qSmiM6aGLOvQj3tQa7 9pIpfY14dbdK661oqK28Rlv+dht0pV2dNUNV0imfvGpaLz3nu/Zb2K2/z/gvPU9XM3Bmy7W1BbXXB2 XrlPsfdLq4KcV2Gf2c1TCjk2aBfxFU/8llmX4jp/v1l2jlF13617XnVl/jy5BmKdhj3e4oUtXhyb7y hsrbd0EZgWfrOdI/yS1dk/9hmMAA==
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <MW5PR11MB5812455176BC656BABCFF1B0EA699@MW5PR11MB5812.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 03:17:06PM +0000, Machnikowski, Maciej wrote:
-> > -----Original Message-----
-> > From: Ido Schimmel <idosch@idosch.org>
-> > Sent: Thursday, December 2, 2021 1:44 PM
-> > To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
-> > Subject: Re: [PATCH v4 net-next 2/4] ethtool: Add ability to configure
-> > recovered clock for SyncE feature
-> > 
-> > On Wed, Dec 01, 2021 at 07:02:06PM +0100, Maciej Machnikowski wrote:
-> > > +RCLK_GET
-> > > +========
-> > > +
-> > > +Get status of an output pin for PHY recovered frequency clock.
-> > > +
-> > > +Request contents:
-> > > +
-> > > +  ======================================  ======
-> > ==========================
-> > > +  ``ETHTOOL_A_RCLK_HEADER``               nested  request header
-> > > +  ``ETHTOOL_A_RCLK_OUT_PIN_IDX``          u32     index of a pin
-> > > +  ======================================  ======
-> > ==========================
-> > > +
-> > > +Kernel response contents:
-> > > +
-> > > +  ======================================  ======
-> > ==========================
-> > > +  ``ETHTOOL_A_RCLK_OUT_PIN_IDX``          u32     index of a pin
-> > > +  ``ETHTOOL_A_RCLK_PIN_FLAGS``            u32     state of a pin
-> > > +  ``ETHTOOL_A_RCLK_RANGE_MIN_PIN``        u32     min index of RCLK pins
-> > > +  ``ETHTOOL_A_RCLK_RANGE_MAX_PIN``        u32     max index of RCLK
-> > pins
-> > > +  ======================================  ======
-> > ==========================
-> > > +
-> > > +Supported device can have mulitple reference recover clock pins available
-> > 
-> > s/mulitple/multiple/
-> > 
-> > > +to be used as source of frequency for a DPLL.
-> > > +Once a pin on given port is enabled. The PHY recovered frequency is being
-> > > +fed onto that pin, and can be used by DPLL to synchonize with its signal.
-> > 
-> > s/synchonize/synchronize/
-> > 
-> > Please run a spell checker on documentation
-> > 
-> > > +Pins don't have to start with index equal 0 - device can also have different
-> > > +external sources pins.
-> > > +
-> > > +The ``ETHTOOL_A_RCLK_OUT_PIN_IDX`` is optional parameter. If present
-> > in
-> > > +the RCLK_GET request, the ``ETHTOOL_A_RCLK_PIN_ENABLED`` is
-> > provided in a
-> > 
-> > The `ETHTOOL_A_RCLK_PIN_ENABLED` attribute is no where to be found in
-> > this submission
-> > 
-> > > +response, it contatins state of the pin pointed by the index. Values are:
-> > 
-> > s/contatins/contains/
-> > 
-> > > +
-> > > +.. kernel-doc:: include/uapi/linux/ethtool.h
-> > > +    :identifiers: ethtool_rclk_pin_state
-> > 
-> > This structure is also no where to be found
-> > 
-> > > +
-> > > +If ``ETHTOOL_A_RCLK_OUT_PIN_IDX`` is not present in the RCLK_GET
-> > request,
-> > > +the range of available pins is returned:
-> > > +``ETHTOOL_A_RCLK_RANGE_MIN_PIN`` is lowest possible index of a pin
-> > available
-> > > +for recovering frequency from PHY.
-> > > +``ETHTOOL_A_RCLK_RANGE_MAX_PIN`` is highest possible index of a pin
-> > available
-> > > +for recovering frequency from PHY.
-> > > +
-> > > +RCLK_SET
-> > > +==========
-> > > +
-> > > +Set status of an output pin for PHY recovered frequency clock.
-> > > +
-> > > +Request contents:
-> > > +
-> > > +  ======================================  ======
-> > ========================
-> > > +  ``ETHTOOL_A_RCLK_HEADER``               nested  request header
-> > > +  ``ETHTOOL_A_RCLK_OUT_PIN_IDX``          u32     index of a pin
-> > > +  ``ETHTOOL_A_RCLK_PIN_FLAGS``            u32      requested state
-> > > +  ======================================  ======
-> > ========================
-> > > +
-> > > +``ETHTOOL_A_RCLK_OUT_PIN_IDX`` is a index of a pin for which the
-> > change of
-> > > +state is requested. Values of ``ETHTOOL_A_RCLK_PIN_ENABLED`` are:
-> > > +
-> > > +.. kernel-doc:: include/uapi/linux/ethtool.h
-> > > +    :identifiers: ethtool_rclk_pin_state
-> > 
-> > Same.
-> 
-> Done - rewritten the manual
-> 
-> > Looking at the diagram from the previous submission [1]:
-> > 
-> >       ┌──────────┬──────────┐
-> >       │ RX       │ TX       │
-> >   1   │ ports    │ ports    │ 1
-> >   ───►├─────┐    │          ├─────►
-> >   2   │     │    │          │ 2
-> >   ───►├───┐ │    │          ├─────►
-> >   3   │   │ │    │          │ 3
-> >   ───►├─┐ │ │    │          ├─────►
-> >       │ ▼ ▼ ▼    │          │
-> >       │ ──────   │          │
-> >       │ \____/   │          │
-> >       └──┼──┼────┴──────────┘
-> >         1│ 2│        ▲
-> >  RCLK out│  │        │ TX CLK in
-> >          ▼  ▼        │
-> >        ┌─────────────┴───┐
-> >        │                 │
-> >        │       SEC       │
-> >        │                 │
-> >        └─────────────────┘
-> > 
-> > Given a netdev (1, 2 or 3 in the diagram), the RCLK_SET message allows
-> > me to redirect the frequency recovered from this netdev to the EEC via
-> > either pin 1, pin 2 or both.
-> > 
-> > Given a netdev, the RCLK_GET message allows me to query the range of
-> > pins (RCLK out 1-2 in the diagram) through which the frequency can be
-> > fed into the EEC.
-> > 
-> > Questions:
-> > 
-> > 1. The query for all the above netdevs will return the same range of
-> > pins. How does user space know that these are the same pins? That is,
-> > how does user space know that RCLK_SET message to redirect the frequency
-> > recovered from netdev 1 to pin 1 will be overridden by the same message
-> > but for netdev 2?
-> 
-> We don't have a way to do so right now. When we have EEC subsystem in place
-> the right thing to do will be to add EEC input index and EEC index as additional
-> arguments
-> 
-> > 2. How does user space know the mapping between a netdev and an EEC?
-> > That is, how does user space know that RCLK_SET message for netdev 1
-> > will cause the Tx frequency of netdev 2 to change according to the
-> > frequency recovered from netdev 1?
-> 
-> Ditto - currently we don't have any entity to link the pins to ATM,
-> but we can address that in userspace just like PTP pins are used now
-> 
-> > 3. If user space sends two RCLK_SET messages to redirect the frequency
-> > recovered from netdev 1 to RCLK out 1 and from netdev 2 to RCLK out 2,
-> > how does it know which recovered frequency is actually used an input to
-> > the EEC?
+Since it's likely to be useful for performance work with SVE let's have a
+pidbench that gives us some numbers for consideration. In order to ensure
+that we test exactly the scenario we want this is written in assembly - if
+system libraries use SVE this would stop us exercising the case where the
+process has never used SVE.
 
-User space doesn't know this as well?
+We exercise three cases:
 
-> >
-> > 4. Why these pins are represented as attributes of a netdev and not as
-> > attributes of the EEC? That is, why are they represented as output pins
-> > of the PHY as opposed to input pins of the EEC?
-> 
-> They are 2 separate beings. Recovered clock outputs are controlled
-> separately from EEC inputs. 
+ - Never having used SVE.
+ - Having used SVE once.
+ - Using SVE after each syscall.
 
-Separate how? What does it mean that they are controlled separately? In
-which sense? That redirection of recovered frequency to pin is
-controlled via PHY registers whereas priority setting between EEC inputs
-is controlled via EEC registers? If so, this is an implementation detail
-of a specific design. It is not of any importance to user space.
+by spinning running getpid() for a fixed number of iterations with the
+time measured using CNTVCT_EL0 reported on the console. This is obviously
+a totally unrealistic benchmark which will show the extremes of any
+performance variation but equally given the potential gotchas with use of
+FP instructions by system libraries it's good to have some concrete code
+shared to make it easier to compare notes on results.
 
-> If we mix them it'll be hard to control everything especially that a
-> single EEC can support multiple devices.
+Testing over multiple SVE vector lengths will need to be done with vlset
+currently, the test could be extended to iterate over all of them if
+desired.
 
-Hard how? Please provide concrete examples.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/.gitignore   |  1 +
+ tools/testing/selftests/arm64/fp/Makefile     |  4 +-
+ .../testing/selftests/arm64/fp/fp-pidbench.S  | 71 +++++++++++++++++++
+ 3 files changed, 75 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/fp-pidbench.S
 
-What do you mean by "multiple devices"? A multi-port adapter with a
-single EEC or something else?
+diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+index b67395903b9b..c50d86331ed2 100644
+--- a/tools/testing/selftests/arm64/fp/.gitignore
++++ b/tools/testing/selftests/arm64/fp/.gitignore
+@@ -1,3 +1,4 @@
++fp-pidbench
+ fpsimd-test
+ rdvl-sve
+ sve-probe-vls
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index ba1488c7c315..95f0b877a060 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -2,13 +2,15 @@
+ 
+ CFLAGS += -I../../../../../usr/include/
+ TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
+-TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
++TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
+ 	rdvl-sve \
+ 	sve-test sve-stress \
+ 	vlset
+ 
+ all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
+ 
++fp-pidbench: fp-pidbench.S asm-utils.o
++	$(CC) -nostdlib $^ -o $@
+ fpsimd-test: fpsimd-test.o asm-utils.o
+ 	$(CC) -nostdlib $^ -o $@
+ rdvl-sve: rdvl-sve.o rdvl.o
+diff --git a/tools/testing/selftests/arm64/fp/fp-pidbench.S b/tools/testing/selftests/arm64/fp/fp-pidbench.S
+new file mode 100644
+index 000000000000..16a436389bfc
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/fp-pidbench.S
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021 ARM Limited.
++// Original author: Mark Brown <broonie@kernel.org>
++//
++// Trivial syscall overhead benchmark.
++//
++// This is implemented in asm to ensure that we don't have any issues with
++// system libraries using instructions that disrupt the test.
++
++#include <asm/unistd.h>
++#include "assembler.h"
++
++.arch_extension sve
++
++.macro test_loop per_loop
++	mov	x10, x20
++	mov	x8, #__NR_getpid
++	mrs	x11, CNTVCT_EL0
++1:
++	\per_loop
++	svc	#0
++	sub	x10, x10, #1
++	cbnz	x10, 1b
++
++	mrs	x12, CNTVCT_EL0
++	sub	x0, x12, x11
++	bl	putdec
++	puts	"\n"
++.endm
++
++// Main program entry point
++.globl _start
++function _start
++_start:
++	puts	"Iterations per test: "
++	mov	x20, #10000
++	lsl	x20, x20, #8
++	mov	x0, x20
++	bl	putdec
++	puts	"\n"
++
++	// Test having never used SVE
++	puts	"No SVE: "
++	test_loop
++
++	// Check for SVE support - should use hwcap but that's hard in asm
++	mrs	x0, ID_AA64PFR0_EL1
++	ubfx	x0, x0, #32, #4
++	cbnz	x0, 1f
++	puts	"System does not support SVE\n"
++	b	out
++1:
++
++	// Execute a SVE instruction
++	puts	"SVE VL: "
++	rdvl	x0, #8
++	bl	putdec
++	puts	"\n"
++
++	puts	"SVE used once: "
++	test_loop
++
++	// Use SVE per syscall
++	puts	"SVE used per syscall: "
++	test_loop "rdvl x0, #8"
++
++	//  And we're done
++out:
++	mov	x0, #0
++	mov	x8, #__NR_exit
++	svc	#0
+-- 
+2.30.2
 
-> Also if we make those pins attributes of the EEC it'll become extremally hard
-> to map them to netdevs and control them from the userspace app that will
-> receive the ESMC message with a given QL level on netdev X.
-
-Hard how? What is the problem with something like:
-
-# eec set source 1 type netdev dev swp1
-
-The EEC object should be registered by the same entity that registers
-the netdevs whose Tx frequency is controlled by the EEC, the MAC driver.
-
->  
-> > 5. What is the problem with the following model?
-> > 
-> > - The EEC is a separate object with following attributes:
-> >   * State: Invalid / Freerun / Locked / etc
-> >   * Sources: Netdev / external / etc
-> >   * Potentially more
-> > 
-> > - Notifications are emitted to user space when the state of the EEC
-> >   changes. Drivers will either poll the state from the device or get
-> >   interrupts
-> > 
-> > - The mapping from netdev to EEC is queried via ethtool
-> 
-> Yep - that will be part of the EEC (DPLL) subsystem
-
-This model avoids all the problems I pointed out in the current
-proposal.
-
-> 
-> > [1] https://lore.kernel.org/netdev/20211110114448.2792314-1-
-> > maciej.machnikowski@intel.com/
