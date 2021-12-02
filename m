@@ -2,117 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51536465C2A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Dec 2021 03:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B194661D9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Dec 2021 11:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349884AbhLBCdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Dec 2021 21:33:49 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:38602 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1348605AbhLBCds (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:33:48 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AfmFwEK8PV/iXO2rP7mm0DrUDJXyTJUtcMsCJ2f8?=
- =?us-ascii?q?bfWQNrUok0TUPy2NLWzvSbKyCZTP1c9x/Otuy90MD7JOGmodjTVdlrnsFo1Bi8?=
- =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4EfyWlTdhSMkj/jRHOKlULW?=
- =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
- =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
- =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt9Rw2tVMt525T?=
- =?us-ascii?q?y8nI6/NhP8AFRJfFkmSOIUfoe+ceSPk7Jf7I0ruNiGEL+9VJE0/I4Ad0up+H2x?=
- =?us-ascii?q?L8fsWNHYLYwzrr+6tybK2UO9EicEqLc2tN4Qa0llj0DvQJfUrW5bOR+PN/9Aw9?=
- =?us-ascii?q?Cwwm8lONfXTfcwUbXxodhuoSxlOPEoHTZEzhuGlglHhfDBC7lGYv6w65y7U1gM?=
- =?us-ascii?q?Z+LzsNsfFP9+RSMFbgkuDukrY8GnjRBIXLtqSzXyC6H3ErunCgS/2RqoMG7Cis?=
- =?us-ascii?q?P1nmluewioUEhJ+aLcRiZFVkWbnA5QGdRNSoXFo8MAPGIWQZoGVd3WFTLSs53b?=
- =?us-ascii?q?wg+ZtLtA=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A6NrPAazyMCwUc9Z3eKy0KrPwEL1zdoMgy1kn?=
- =?us-ascii?q?xilNoH1uA6ilfqWV8cjzuiWbtN9vYhsdcLy7WZVoIkmskKKdg7NhXotKNTOO0A?=
- =?us-ascii?q?SVxepZnOnfKlPbexHWx6p00KdMV+xEAsTsMF4St63HyTj9P9E+4NTvysyVuds?=
- =?us-ascii?q?=3D?=
-X-IronPort-AV: E=Sophos;i="5.87,280,1631548800"; 
-   d="scan'208";a="118303353"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 02 Dec 2021 10:30:25 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id 9EDD94D13BC1;
-        Thu,  2 Dec 2021 10:30:24 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 2 Dec 2021 10:30:25 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Thu, 2 Dec 2021 10:30:24 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
-        <dsahern@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH v2 2/2] selftests: add option to list all available tests
-Date:   Thu, 2 Dec 2021 10:29:54 +0800
-Message-ID: <20211202022954.23545-2-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211202022954.23545-1-lizhijian@cn.fujitsu.com>
-References: <20211202022954.23545-1-lizhijian@cn.fujitsu.com>
+        id S1357094AbhLBLCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Dec 2021 06:02:24 -0500
+Received: from mga14.intel.com ([192.55.52.115]:57432 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357088AbhLBLCU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 Dec 2021 06:02:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236913759"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="236913759"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:58:58 -0800
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="677622974"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:58:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1msjmU-001Me9-H0;
+        Thu, 02 Dec 2021 12:57:38 +0200
+Date:   Thu, 2 Dec 2021 12:57:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <YaimotqSgHzS2wdA@smile.fi.intel.com>
+References: <20211130154127.12272-1-brgl@bgdev.pl>
+ <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com>
+ <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com>
+ <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 9EDD94D13BC1.AE47F
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-$ ./fcnal-test.sh -l
-Test names: ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter
-ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter
-use_cases
+On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/net/fcnal-test.sh | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+...
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 5cb59947eed2..7e78be99aa4c 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -3993,6 +3993,7 @@ usage: ${0##*/} OPTS
- 	-4          IPv4 tests only
- 	-6          IPv6 tests only
- 	-t <test>   Test name/set to run
-+	-l          List all available tests
- 	-p          Pause on fail
- 	-P          Pause after each test
- 	-v          Be verbose
-@@ -4006,10 +4007,15 @@ TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
- TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
- TESTS_OTHER="use_cases"
- 
-+list()
-+{
-+	echo "Test names: $TESTS_IPV4 $TESTS_IPV6 $TESTS_OTHER"
-+}
-+
- PAUSE_ON_FAIL=no
- PAUSE=no
- 
--while getopts :46t:pPvh o
-+while getopts :46lt:pPvh o
- do
- 	case $o in
- 		4) TESTS=ipv4;;
-@@ -4018,6 +4024,7 @@ do
- 		p) PAUSE_ON_FAIL=yes;;
- 		P) PAUSE=yes;;
- 		v) VERBOSE=1;;
-+		l) list; exit 0;;
- 		h) usage; exit 0;;
- 		*) usage; exit 1;;
- 	esac
+> Let me maybe rephrase the problem: currently, for GPIO devices
+> instantiating multiple banks created outside of the OF or ACPI
+> frameworks (e.g. instantiated manually and configured using a
+> hierarchy of software nodes with a single parent swnode and a number
+> of child swnodes representing the children), it is impossible to
+> assign firmware nodes other than the one representing the top GPIO
+> device to the gpiochip child devices.
+> 
+> In fact if we want to drop the OF APIs entirely from gpiolib - this
+> would be the right first step as for gpio-sim it actually replaces the
+> gc->of_node = some_of_node; assignment that OF-based drivers do for
+> sub-nodes defining banks and it does work with device-tree (I verified
+> that too) thanks to the fwnode abstraction layer.
+
+In exchange of acknowledgements I confirm that I understood the issue
+you are describing. What I still don't like is this band-aid:ish approach.
+What we really need is to replace of_node by fwnode in GPIO library once
+for all. But it can be done later after your simulation series (or before,
+i.o.w. independently), hence I propose to update TODO and do it separately.
+
 -- 
-2.33.0
-
+With Best Regards,
+Andy Shevchenko
 
 
