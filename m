@@ -2,232 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931BC467C2E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 18:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7B9467C36
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 18:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbhLCRHY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Dec 2021 12:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S1353056AbhLCRML (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Dec 2021 12:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235527AbhLCRHX (ORCPT
+        with ESMTP id S1353038AbhLCRMK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:07:23 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E967C061353
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 09:03:59 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id p65so4584872iof.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 09:03:59 -0800 (PST)
+        Fri, 3 Dec 2021 12:12:10 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDCEC061353
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 09:08:46 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id a11so3366548ilj.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 09:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TlPFrOk6MERhWO1KSrrrpuKf1yEuOrFo3WlmkfEQpz4=;
-        b=UFXfJUx2bcqDMfvOs/tUy/3wRobTk4rAqO6c5j58dm/r+dQt5aN7D9yX+KODL1IYA2
-         sLMv0S7T1GBQP7rElZhRKSDRiG6LtwqpoXdt0dLOATnoQrIASulWz3AUX0MX0T5vTMeI
-         NgCXVO9H8FrT08A/bObUXy83p4OaiExDLpU/k=
+        bh=1RDvbrYOX+dfwz42a6cMLN1shF07/G7vOPaQYwXhXQ4=;
+        b=UOOJS0iIGifCWj8ZQ9itfcgA2SGqCaE6OL6GZSdYz/PhJD4HHWeDk9Sqna5QJq1vJ+
+         gLo4apTwfTkF9S6yGyrflLRlQiIfvtpfKNFL6dxmkMAIlmDG+dn84QsOnnCsmWiSGVa6
+         mberxGs3zV6chnvGoL8LQT8jggX0ln44F217Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=TlPFrOk6MERhWO1KSrrrpuKf1yEuOrFo3WlmkfEQpz4=;
-        b=mXjUAiu7pAy9zXyovNUQ7MwxTmlfLEr5P9zyXEjsh+H1MxaU77qjZjo8JsmhGoDL5Q
-         oM4hYKIEBxY40Vp2cHCuHjOocREMoSsLo+pArThQWGH2dykbfoObaW8TCelNh7Dtog8f
-         rFFDOuSIvCCW9tdgp1uNSt33JEoN0g3nOs9HK/trI48VYBoTrlqjhu8w+q5G/+5g21is
-         A9TWStl+JhfjqGpS3Dv8UIU32+nsQOQ47pMHjDMkXn5SSZEzvIwPGJIABWd58c5qDMUQ
-         4tVzJNWqukUsg0kUnUc1O6aDadIc7fBv8WmzL5fT+9HOxUX1I/A2JVGr8gqWzZSG7NBx
-         VVPQ==
-X-Gm-Message-State: AOAM532QYjs9vXyLAsBxQ7JhCYimWyC9R6mCGSzR2kutC9eNLb1sgKBz
-        fuchJkmkfoxyhWsl2uKX5U+9zA==
-X-Google-Smtp-Source: ABdhPJwPNoJ1k52S2PrTxYSZy5+/TdIZRmvwFG5HM1hljgeBFQNF9WmyqLvv5bLKewF7gM6QHixW0w==
-X-Received: by 2002:a05:6638:140c:: with SMTP id k12mr25085276jad.89.1638551038913;
-        Fri, 03 Dec 2021 09:03:58 -0800 (PST)
+        bh=1RDvbrYOX+dfwz42a6cMLN1shF07/G7vOPaQYwXhXQ4=;
+        b=QPxkDluNwrDAvnSoQ0YEF8aWBqrMwELOz+HLZxr9Ibx1DruBjryO6/sMSaLGgXsriE
+         Vs4qLTlNeJp3ULIXx/moosU1oB7kHfV/4fezWCNoELvdXf23DWfgnzsEQ4VZYId4rV/P
+         lXt8HXw9++pBbL8QpuaAAQEtqMXWxEtEXF/Hst2VXH5yY3vYDdo1KwgLYku2we/FcZiu
+         2a8Wl2I4UidmcBABQQpLyO5YigqX7DZ66Deaplq/+mUK3oH/eJ14IL5McmRcEDLSj/Tk
+         2OVwOHKCZ2k4d6iMPRx2BG/L1CcsjExXYBFxWIEv1lmfeH4Dq+AoXxoF46KYotRXXMXH
+         JtEA==
+X-Gm-Message-State: AOAM532z3sQ8bDBPtoyyG4zmIdPQadr5ss1HrhL38COtQzuDGh64J4Sk
+        m+RHtPBRrK3Gy5+BxM5irowmfK+QXKfhQA==
+X-Google-Smtp-Source: ABdhPJxGd5YO1gtYaBYMSdBs1JnsaybLx9cKTocrYXdbPPzNQo2azTR4LN8EAx9i28ftujoaAXt0Jw==
+X-Received: by 2002:a05:6e02:12c2:: with SMTP id i2mr18518681ilm.155.1638551325638;
+        Fri, 03 Dec 2021 09:08:45 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s20sm1907448iog.25.2021.12.03.09.03.58
+        by smtp.gmail.com with ESMTPSA id b8sm2098487iow.2.2021.12.03.09.08.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 09:03:58 -0800 (PST)
-Subject: Re: [PATCH 1/2] kselftest: signal all child processes
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        Philip Li <philip.li@intel.com>,
-        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
+        Fri, 03 Dec 2021 09:08:45 -0800 (PST)
+Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20211029024528.8086-1-lizhijian@cn.fujitsu.com>
- <20211029083110.syhqfc3ivaj53ygl@wittgenstein>
- <0f856b34-1464-6309-8235-a26b6c3d1c9f@fujitsu.com>
+References: <20211105162530.3307666-1-anders.roxell@linaro.org>
+ <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
+ <20211123142600.r5d52iwhbqhujiux@wittgenstein>
+ <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
+ <20211201130637.phskqu7rkl5ty2xq@wittgenstein>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b217b838-884e-192c-f980-6971efb19f5d@linuxfoundation.org>
-Date:   Fri, 3 Dec 2021 10:03:57 -0700
+Message-ID: <6c8ef410-479a-a218-81ef-2131cd9a3663@linuxfoundation.org>
+Date:   Fri, 3 Dec 2021 10:08:44 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <0f856b34-1464-6309-8235-a26b6c3d1c9f@fujitsu.com>
+In-Reply-To: <20211201130637.phskqu7rkl5ty2xq@wittgenstein>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-T24gMTIvMi8yMSA4OjA1IFBNLCBsaXpoaWppYW5AZnVqaXRzdS5jb20gd3JvdGU6DQo+IGtp
-bmRseSBwaW5nDQo+IA0KPiANCj4gT24gMjkvMTAvMjAyMSAxNjozMSwgQ2hyaXN0aWFuIEJy
-YXVuZXIgd3JvdGU6DQo+PiBPbiBGcmksIE9jdCAyOSwgMjAyMSBhdCAxMDo0NToyN0FNICsw
-ODAwLCBMaSBaaGlqaWFuIHdyb3RlOg0KPj4+IFdlIGhhdmUgc29tZSBtYW55IGNhc2VzIHRo
-YXQgd2lsbCBjcmVhdGUgY2hpbGQgcHJvY2VzcyBhcyB3ZWxsLCBzdWNoIGFzDQo+Pj4gcGlk
-ZmRfd2FpdC4gUHJldmlvdXNseSwgd2Ugd2lsbCBzaWduYWwva2lsbCB0aGUgcGFyZW50IHBy
-b2Nlc3Mgd2hlbiBpdA0KPj4+IGlzIHRpbWUgb3V0LCBidXQgdGhpcyBzaWduYWwgd2lsbCBu
-b3QgYmUgc2VudCB0byBpdHMgY2hpbGQgcHJvY2Vzcy4gSW4NCj4+PiBzdWNoIGNhc2UsIGlm
-IGNoaWxkIHByb2Nlc3MgZG9lc24ndCB0ZXJtaW5hdGUgaXRzZWxmLCBrc2VmbHRlc3QgZnJh
-bWV3b3JrDQo+Pj4gd2lsbCBoYW5nIGZvcmV2ZXIuDQo+Pj4NCj4+PiBiZWxvdyBwcyB0cmVl
-IHNob3cgdGhlIHNpdHVhdGlvbiB3aGVuIGtzZWZsdGVzdCBpcyBibG9ja2luZzoNCj4+PiBy
-b290ICAgICAgMTE3MiAgMC4wICAwLjAgICA1OTk2ICAyNTAwID8gICAgICAgIFMgICAgMDc6
-MDMgICAwOjAwICBcXyAvYmluL2Jhc2ggL2xrcC9sa3Avc3JjL3Rlc3RzL2tlcm5lbC1zZWxm
-dGVzdHMNCj4+PiByb290ICAgICAgMTIxNiAgMC4wICAwLjAgICA0MzkyICAxOTc2ID8gICAg
-ICAgIFMgICAgMDc6MDMgICAwOjAwICAgICAgXF8gbWFrZSBydW5fdGVzdHMgLUMgcGlkZmQN
-Cj4+PiByb290ICAgICAgMTIxOCAgMC4wICAwLjAgICAyMzk2ICAxNjUyID8gICAgICAgIFMg
-ICAgMDc6MDMgICAwOjAwICAgICAgICAgIFxfIC9iaW4vc2ggLWMgQkFTRV9ESVI9Ii91c3Iv
-c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1
-NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMiOyAuIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRl
-c3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaDsgaWYgWyAiWCIgIT0gIlgiIF07
-IHRoZW4gcGVyX3Rlc3RfbG9nZ2luZz0xOyBmaTsgcnVuX21hbnkgIC91c3Ivc3JjL3BlcmZf
-c2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0
-MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQv
-cGlkZmRfdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3Nl
-bGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX2ZkaW5mb190ZXN0IC91c3Ivc3JjL3Bl
-cmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3
-YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlk
-ZmQvcGlkZmRfb3Blbl90ZXN0IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVs
-LTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1
-YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvcGlkZmRfcG9sbF90ZXN0IC91c3Iv
-c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguDQo+Pj4gcm9vdCAgICAgMTI0OTEg
-IDAuMCAgMC4wICAgMjM5NiAgIDEzMiA/ICAgICAgICBTICAgIDA3OjAzICAgMDowMCAgICAg
-ICAgICAgICAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0iL3Vzci9zcmMvcGVyZl9zZWxmdGVz
-dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNh
-ZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyI7IC4gL3Vzci9zcmMv
-cGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUy
-NzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9r
-c2VsZnRlc3QvcnVubmVyLnNoOyBpZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJfdGVzdF9s
-b2dnaW5nPTE7IGZpOyBydW5fbWFueSAgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0
-LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAz
-YzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0IC91c3Iv
-c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1
-NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvcGlkZmQvcGlkZmRfZmRpbmZvX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2
-XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0
-NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9vcGVuX3Rl
-c3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMt
-NTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9wb2xsX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVz
-dHMteDg2XzY0LXJoZQ0KPj4+IHJvb3QgICAgIDEyNDkyICAwLjAgIDAuMCAgIDIzOTYgICAx
-MzIgPyAgICAgICAgUyAgICAwNzowMyAgIDA6MDAgICAgICAgICAgICAgICAgICBcXyAvYmlu
-L3NoIC1jIEJBU0VfRElSPSIvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04
-LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJh
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIjsgLiAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14
-ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIx
-NTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdC9ydW5uZXIu
-c2g7IGlmIFsgIlgiICE9ICJYIiBdOyB0aGVuIHBlcl90ZXN0X2xvZ2dpbmc9MTsgZmk7IHJ1
-bl9tYW55ICAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0
-ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVz
-dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNh
-ZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9m
-ZGluZm9fdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3Nl
-bGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX29wZW5fdGVzdCAvdXNyL3NyYy9wZXJm
-X3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0
-NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZk
-L3BpZGZkX3BvbGxfdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQNCj4+PiBy
-b290ICAgICAxMjQ5MyAgMC4wICAwLjAgICAyMzk2ICAgMTMyID8gICAgICAgIFMgICAgMDc6
-MDMgICAwOjAwICAgICAgICAgICAgICAgICAgICAgIFxfIC9iaW4vc2ggLWMgQkFTRV9ESVI9
-Ii91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUx
-OWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMiOyAuIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1r
-c2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaDsgaWYgWyAiWCIgIT0g
-IlgiIF07IHRoZW4gcGVyX3Rlc3RfbG9nZ2luZz0xOyBmaTsgcnVuX21hbnkgIC91c3Ivc3Jj
-L3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVl
-Mjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
-cGlkZmQvcGlkZmRfdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04
-LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJh
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX2ZkaW5mb190ZXN0IC91c3Iv
-c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1
-NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvcGlkZmQvcGlkZmRfb3Blbl90ZXN0IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82
-NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYw
-M2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvcGlkZmRfcG9sbF90ZXN0
-IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4DQo+Pj4gcm9vdCAgICAgMTI0OTYgIDAuMCAg
-MC4wICAgMjM5NiAgIDEzMiA/ICAgICAgICBTICAgIDA3OjAzICAgMDowMCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0iL3Vzci9zcmMvcGVyZl9z
-ZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQx
-OWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyI7IC4gL3Vz
-ci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgx
-OTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoOyBpZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJf
-dGVzdF9sb2dnaW5nPTE7IGZpOyBydW5fbWFueSAgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMt
-eDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZi
-MTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0
-IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUx
-OWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvcGlkZmQvcGlkZmRfZmRpbmZvX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVz
-dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNh
-ZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9v
-cGVuX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxm
-dGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9wb2xsX3Rlc3QgL3Vzci9zcmMvcGVyZl9z
-ZWxmdGVzdA0KPj4+IHJvb3QgICAgIDEyNDk4ICAwLjAgIDAuMCAgMTA1NjQgIDYxMTYgPyAg
-ICAgICAgUyAgICAwNzowMyAgIDA6MDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBc
-XyBwZXJsIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRl
-c3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3ByZWZpeC5wbA0KPj4+IHJvb3QgICAgIDEyNTAz
-ICAwLjAgIDAuMCAgIDI0NTIgICAxMTIgPyAgICAgICAgVCAgICAwNzowMyAgIDA6MDAgLi9w
-aWRmZF93YWl0DQo+Pj4gcm9vdCAgICAgMTI2MjEgIDAuMCAgMC4wICAgMjM3MiAgMTYwMCA/
-ICAgICAgICBTTHMgIDA3OjA0ICAgMDowMCAvdXNyL3NiaW4vd2F0Y2hkb2cNCj4+PiByb290
-ICAgICAxOTQzOCAgMC4wICAwLjAgICAgOTkyICAgIDYwID8gICAgICAgIFNzICAgMDc6Mzkg
-ICAwOjAwIC9sa3AvbGtwL3NyYy9iaW4vZXZlbnQvd2FrZXVwIGFjdGl2YXRlLW1vbml0b3IN
-Cj4+Pg0KPj4+IEhlcmUgd2UgZ3JvdXAgYWxsIGl0cyBjaGlsZCBwcm9jZXNzZXMgc28gdGhh
-dCBraWxsKCkgY2FuIHNpZ25hbCBhbGwgb2YNCj4+PiB0aGVtIGluIHRpbWVvdXQuDQo+Pj4N
-Cj4+PiBDQzogS2VlcyBDb29rIDxrZWVzY29va0BjaHJvbWl1bS5vcmc+DQo+Pj4gQ0M6IEFu
-ZHkgTHV0b21pcnNraSA8bHV0b0BhbWFjYXBpdGFsLm5ldD4NCj4+PiBDQzogV2lsbCBEcmV3
-cnkgPHdhZEBjaHJvbWl1bS5vcmc+DQo+Pj4gQ0M6IFNodWFoIEtoYW4gPHNodWFoQGtlcm5l
-bC5vcmc+DQo+Pj4gQ0M6IENocmlzdGlhbiBCcmF1bmVyIDxjaHJpc3RpYW5AYnJhdW5lci5p
-bz4NCj4+PiBDQzogUGhpbGlwIExpIDxwaGlsaXAubGlAaW50ZWwuY29tPg0KPj4+IFN1Z2dl
-c3RlZC1ieTogeWFuZyB4dSA8eHV5YW5nMjAxOC5qeUBjbi5mdWppdHN1LmNvbT4NCj4+PiBT
-aWduZWQtb2ZmLWJ5OiBMaSBaaGlqaWFuIDxsaXpoaWppYW5AY24uZnVqaXRzdS5jb20+DQo+
-Pj4gLS0tDQo+PiBTZWVtcyBzZW5zaWJsZS4gSXMgaXQgZ3VhcmFudGVlZCB0aGF0IHQtPnBp
-ZCBpcyBuZWl0aGVyIDAgbm9yIDE/IElmIG5vdA0KPj4gdGhlbiBtYXliZSBzYW5pdHkgY2hl
-Y2sgdC0+cGlkIGF0IGxlYXN0IGZvciBub3QgYmVpbmcgMSBhcyBuZWdhdGluZyB0aGF0DQo+
-PiB3b3VsZCBtZWFuICJzaWduYWwgZXZlcnl0aGluZyB0aGF0IHlvdSBoYXZlIHBlcm1pc3Np
-b24gdG8gc2lnbmFsIi4gOikNCj4+DQo+PiBPdGhlcndpc2UsDQo+PiBBY2tlZC1ieTogQ2hy
-aXN0aWFuIEJyYXVuZXIgPGNocmlzdGlhbi5icmF1bmVyQHVidW50dS5jb20+DQo+Pg0KPj4+
-ICAgIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdF9oYXJuZXNzLmggfCA0ICsr
-Ky0NCj4+PiAgICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
-KC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3Nl
-bGZ0ZXN0X2hhcm5lc3MuaCBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdF9o
-YXJuZXNzLmgNCj4+PiBpbmRleCBhZTBmMGYzM2IyYTYuLmM3MjUxMzk2ZTdlZSAxMDA2NDQN
-Cj4+PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3RfaGFybmVzcy5o
-DQo+Pj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0X2hhcm5lc3Mu
-aA0KPj4+IEBAIC04NzUsNyArODc1LDggQEAgc3RhdGljIHZvaWQgX190aW1lb3V0X2hhbmRs
-ZXIoaW50IHNpZywgc2lnaW5mb190ICppbmZvLCB2b2lkICp1Y29udGV4dCkNCj4+PiAgICAJ
-fQ0KPj4+ICAgIA0KPj4+ICAgIAl0LT50aW1lZF9vdXQgPSB0cnVlOw0KPj4+IC0Ja2lsbCh0
-LT5waWQsIFNJR0tJTEwpOw0KPj4+ICsJLy8gc2lnbmFsIHByb2Nlc3MgZ3JvdXANCj4+PiAr
-CWtpbGwoLSh0LT5waWQpLCBTSUdLSUxMKTsNCj4+PiAgICB9DQo+Pj4gICAgDQo+Pj4gICAg
-dm9pZCBfX3dhaXRfZm9yX3Rlc3Qoc3RydWN0IF9fdGVzdF9tZXRhZGF0YSAqdCkNCj4+PiBA
-QCAtOTg1LDYgKzk4Niw3IEBAIHZvaWQgX19ydW5fdGVzdChzdHJ1Y3QgX19maXh0dXJlX21l
-dGFkYXRhICpmLA0KPj4+ICAgIAkJa3NmdF9wcmludF9tc2coIkVSUk9SIFNQQVdOSU5HIFRF
-U1QgQ0hJTERcbiIpOw0KPj4+ICAgIAkJdC0+cGFzc2VkID0gMDsNCj4+PiAgICAJfSBlbHNl
-IGlmICh0LT5waWQgPT0gMCkgew0KPj4+ICsJCXNldHBncnAoKTsNCj4+PiAgICAJCXQtPmZu
-KHQsIHZhcmlhbnQpOw0KPj4+ICAgIAkJaWYgKHQtPnNraXApDQo+Pj4gICAgCQkJX2V4aXQo
-MjU1KTsNCj4+PiAtLSANCj4+PiAyLjMzLjANCj4+Pg0KPj4+DQo+Pj4NCj4+DQo+IA0KDQpL
-ZWVzLA0KDQpXaWxsIHlvdSBiZSBhYmxlIHRvIHRha2UgYSBsb29rIGF0IHRoaXMgZml4PyBU
-aGlzIGlzIGluIHRoZSBrc2VsZnRlc3RfaGFybmVzcw0KDQp0aGFua3MsDQotLSBTaHVhaA0K
+On 12/1/21 6:06 AM, Christian Brauner wrote:
+> On Tue, Nov 30, 2021 at 09:41:49AM -0700, Shuah Khan wrote:
+>> On 11/23/21 7:26 AM, Christian Brauner wrote:
+>>> On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
+>>>> On 11/5/21 10:25 AM, Anders Roxell wrote:
+>>>>> When building selftests/cgroup: with clang the following error are seen:
+>>>>>
+>>>>> clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
+>>>>> clang: error: cannot specify -o when generating multiple output files
+>>>>> make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
+>>>>>
+>>>>> Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+>>>>> since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+>>>>> file lib.mk.
+>>>>>
+>>>>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>>>>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+>>>>> ---
+>>>>>     tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
+>>>>>     tools/testing/selftests/lib.mk          |  2 +-
+>>>>>     2 files changed, 8 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+>>>>> index 59e222460581..745fe25fa0b9 100644
+>>>>> --- a/tools/testing/selftests/cgroup/Makefile
+>>>>> +++ b/tools/testing/selftests/cgroup/Makefile
+>>>>> @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
+>>>>>     TEST_GEN_PROGS += test_freezer
+>>>>>     TEST_GEN_PROGS += test_kill
+>>>>> +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+>>>>> +
+>>>>
+>>>> This looks odd to me. Why are we introducing dependencies between tests?
+>>>> clone3 includes in cgroup? Looks odd to me.
+>>>
+>>> The cgroup tests need access to clone3() functionality in order to test
+>>> CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
+>>> tests. There are a few other tests that include the clone3 header.
+>>>
+>>
+>> If other tests are also including this header, we could move it up under
+>> selftests level. Might have to add include directory.
+> 
+> No objection from me if that's useful. I won't have time for that in the
+> near future. (This might be of interest for one of the LF programs that
+> help get new folks interested in kernel development started.)
+> 
+> Christian
+> 
 
+Thanks. I will apply this fix for now.
+
+thanks,
+-- Shuah
