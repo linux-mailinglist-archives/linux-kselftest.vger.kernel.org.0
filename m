@@ -2,76 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93030466F92
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 03:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B10466FB2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 03:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377998AbhLCCNf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Dec 2021 21:13:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58176 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377995AbhLCCNf (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:13:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3A60B825A3;
-        Fri,  3 Dec 2021 02:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 49BA7C00446;
-        Fri,  3 Dec 2021 02:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638497409;
-        bh=Z1NjbXF27Ti8Cp9950HNlAibJmnKbkep1SMqXxRjCHM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JGB89Uj5pfT2tIFjra73LApGap73vgHEk7AvmStfzuitiFTpY8+kNfDt3CVTFZRB/
-         0rYCgOddkbNroazAqlKdBJjy0LrgGSG7Ac6o9+g0sSgAg35AvJBhTVv8j8b5aKrOPF
-         iLk687VF4L4xowEvDDXLN5VpwM3wNejDqJdIMdh16zFJSEzZtUaj3uK+x8tFB4YvPH
-         OpdO8OZGOl8xYZyLgPFVxftaylqhekbxBWxZAawWNOGaq4DtJl8ya/zcpzCU7SlTRY
-         WtX6OQ24PZpqEwncg9fnpDrvaVlCxbPRZ4c0ooiWgxxjvYD+qEAg8yej6NO15dfozD
-         mrcMmY7XlP8LQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2937F60BE3;
-        Fri,  3 Dec 2021 02:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1349986AbhLCCZ1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Dec 2021 21:25:27 -0500
+Received: from mga01.intel.com ([192.55.52.88]:54788 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240146AbhLCCZ0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 Dec 2021 21:25:26 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="260897580"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="260897580"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:22:03 -0800
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="459894360"
+Received: from liweilv-mobl.ccr.corp.intel.com (HELO [10.167.226.45]) ([10.255.30.243])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:22:00 -0800
+Subject: Re: [PATCH v2 1/3] selftests/tc-testing: add exit code
+To:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Davide Caratti <dcaratti@redhat.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, lizhijian@cn.fujitsu.com,
+        linux-kernel@vger.kernel.org, lkp@intel.com, philip.li@intel.com,
+        Networking <netdev@vger.kernel.org>
+References: <20211117054517.31847-1-zhijianx.li@intel.com>
+ <YZTDcjv4ZPXv8Oaz@dcaratti.users.ipa.redhat.com>
+ <20211117060535.1d47295a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <4ed23cd5-f4a1-aa70-183f-fbea407c19ee@mojatatu.com>
+ <20211117084854.0d44d64b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <d0c32c34-b0a4-ce1e-35d6-1894222e825a@mojatatu.com>
+From:   Li Zhijian <zhijianx.li@intel.com>
+Message-ID: <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
+Date:   Fri, 3 Dec 2021 10:21:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] selftests/fib_tests: Rework fib_rp_filter_test()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163849740916.2738.7046909132205232442.git-patchwork-notify@kernel.org>
-Date:   Fri, 03 Dec 2021 02:10:09 +0000
-References: <20211201004720.6357-1-yepeilin.cs@gmail.com>
-In-Reply-To: <20211201004720.6357-1-yepeilin.cs@gmail.com>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        peilin.ye@bytedance.com, xiyou.wangcong@gmail.com,
-        liuhangbin@gmail.com, dsahern@gmail.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <d0c32c34-b0a4-ce1e-35d6-1894222e825a@mojatatu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+CCed netdev
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Kindly ping
 
-On Tue, 30 Nov 2021 16:47:20 -0800 you wrote:
-> From: Peilin Ye <peilin.ye@bytedance.com>
-> 
-> Currently rp_filter tests in fib_tests.sh:fib_rp_filter_test() are
-> failing.  ping sockets are bound to dummy1 using the "-I" option
-> (SO_BINDTODEVICE), but socket lookup is failing when receiving ping
-> replies, since the routing table thinks they belong to dummy0.
-> 
-> [...]
 
-Here is the summary with links:
-  - [net,v3] selftests/fib_tests: Rework fib_rp_filter_test()
-    https://git.kernel.org/netdev/net/c/f6071e5e3961
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+On 18/11/2021 00:51, Jamal Hadi Salim wrote:
+> On 2021-11-17 11:48, Jakub Kicinski wrote:
+>> On Wed, 17 Nov 2021 11:41:18 -0500 Jamal Hadi Salim wrote:
+>>> Did you mean adding a maintainer for tdc or just generally point
+>>> who/what to involve when making changes? Typically the mailing list
+>>> should be sufficient. Outside the list, at the moment, any outstanding
+>>> issues on tdc are discussed/resolved in the monthly TC meetups (where
+>>> all the stake holders show up)...
+>>
+>> I'm mostly interested in the code review and merging part.
+>>
+>> Would be great to have a MAINTAINERS entry with a set of folks
+>> who can review patches, so that get_maintainers.pl can do its job.
+>>
+>> At the very least to make sure netdev is CCed.
+>
+> ACK.
+>
+> cheers,
+> jamal
+>
 
