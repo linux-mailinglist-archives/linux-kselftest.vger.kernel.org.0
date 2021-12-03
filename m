@@ -2,103 +2,232 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7218467C2A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 18:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931BC467C2E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 18:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240127AbhLCRGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Dec 2021 12:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S239612AbhLCRHY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Dec 2021 12:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbhLCRGq (ORCPT
+        with ESMTP id S235527AbhLCRHX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:06:46 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C77C061353
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 09:03:22 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id i6so3411728ila.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 09:03:22 -0800 (PST)
+        Fri, 3 Dec 2021 12:07:23 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E967C061353
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 09:03:59 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id p65so4584872iof.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 09:03:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cwxHCbenFCripjeUjs6tCpolH4DmLSPfSlC/W5NUvwU=;
-        b=UnNTzVNfryaWbpSuR2ZXK+nlsa2MZJTa4qw0dhixOeol5VA8qCTVeaBL85KrdIkL2M
-         Twn1uyUZc5mZ2z0osmLwcC8yI6DdCR2LM1V3n6rLOK9EK/g58rCAYcvnTYgsFgS1s+gW
-         FkN7AC9w7HL1CzaP2wTyZdFSEU3Qp7dpU12f0=
+        bh=TlPFrOk6MERhWO1KSrrrpuKf1yEuOrFo3WlmkfEQpz4=;
+        b=UFXfJUx2bcqDMfvOs/tUy/3wRobTk4rAqO6c5j58dm/r+dQt5aN7D9yX+KODL1IYA2
+         sLMv0S7T1GBQP7rElZhRKSDRiG6LtwqpoXdt0dLOATnoQrIASulWz3AUX0MX0T5vTMeI
+         NgCXVO9H8FrT08A/bObUXy83p4OaiExDLpU/k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=cwxHCbenFCripjeUjs6tCpolH4DmLSPfSlC/W5NUvwU=;
-        b=3CDAl5c9VJe5JSlMHJFzF0u+clQkbcUB/IdZ9AfWs3rPnHvgq66SMozTEaw1c3dyEB
-         JdsHL58J9i/pMgUlFrxdydH/3Tzxv2undFzvzUB2O1pBPo43MmSNl/8O9/OfVcCcbjZb
-         rrwrCfP2yyyHkPgiB88M68BbRi0ZWxIv91d0Qr8tHGLRfJAvi9hVEbsVflK6uVyMznV7
-         ZScKbNK4KcSjuunPRuAmeP4ouHdkSf6h/aQFuhQVBfjBlBPp8u1eiVnx7YUgwHw7awg6
-         SalG6bdqfnYJaXpAd4JJ+ap4Co+IeOXYRXbjz1JoDLfIft/EWrrFV2w/3Qg5cupe4soL
-         eSvw==
-X-Gm-Message-State: AOAM532/uBlxmd1EMxVYBmj9XWCM3Xs1St8whLeX5ytyahEf45eCjI1r
-        qAAuavcqC9tM1rrz8wmEvRe95g==
-X-Google-Smtp-Source: ABdhPJyZpS6sg5hnDg8ut0BnNoPlbIah10gQ/bDD44Dxcz9yDYWQ02+U2Hjt9Wnr7/U6Hb7nYednLA==
-X-Received: by 2002:a92:c244:: with SMTP id k4mr18431483ilo.169.1638551001558;
-        Fri, 03 Dec 2021 09:03:21 -0800 (PST)
+        bh=TlPFrOk6MERhWO1KSrrrpuKf1yEuOrFo3WlmkfEQpz4=;
+        b=mXjUAiu7pAy9zXyovNUQ7MwxTmlfLEr5P9zyXEjsh+H1MxaU77qjZjo8JsmhGoDL5Q
+         oM4hYKIEBxY40Vp2cHCuHjOocREMoSsLo+pArThQWGH2dykbfoObaW8TCelNh7Dtog8f
+         rFFDOuSIvCCW9tdgp1uNSt33JEoN0g3nOs9HK/trI48VYBoTrlqjhu8w+q5G/+5g21is
+         A9TWStl+JhfjqGpS3Dv8UIU32+nsQOQ47pMHjDMkXn5SSZEzvIwPGJIABWd58c5qDMUQ
+         4tVzJNWqukUsg0kUnUc1O6aDadIc7fBv8WmzL5fT+9HOxUX1I/A2JVGr8gqWzZSG7NBx
+         VVPQ==
+X-Gm-Message-State: AOAM532QYjs9vXyLAsBxQ7JhCYimWyC9R6mCGSzR2kutC9eNLb1sgKBz
+        fuchJkmkfoxyhWsl2uKX5U+9zA==
+X-Google-Smtp-Source: ABdhPJwPNoJ1k52S2PrTxYSZy5+/TdIZRmvwFG5HM1hljgeBFQNF9WmyqLvv5bLKewF7gM6QHixW0w==
+X-Received: by 2002:a05:6638:140c:: with SMTP id k12mr25085276jad.89.1638551038913;
+        Fri, 03 Dec 2021 09:03:58 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a25sm1811479ioa.24.2021.12.03.09.03.20
+        by smtp.gmail.com with ESMTPSA id s20sm1907448iog.25.2021.12.03.09.03.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 09:03:21 -0800 (PST)
-Subject: Re: [PATCH 2/2] ksefltest: pidfd: Fix wait_states: Test terminated by
- timeout
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Cc:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org,
+        Fri, 03 Dec 2021 09:03:58 -0800 (PST)
+Subject: Re: [PATCH 1/2] kselftest: signal all child processes
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
         Christian Brauner <christian@brauner.io>,
         Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>,
+        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20211029024528.8086-1-lizhijian@cn.fujitsu.com>
- <20211029024528.8086-2-lizhijian@cn.fujitsu.com>
- <20211029083248.7vttuxbwbtdylrnq@wittgenstein>
+ <20211029083110.syhqfc3ivaj53ygl@wittgenstein>
+ <0f856b34-1464-6309-8235-a26b6c3d1c9f@fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e5567974-42ba-0864-4340-c435db6ad0c1@linuxfoundation.org>
-Date:   Fri, 3 Dec 2021 10:03:20 -0700
+Message-ID: <b217b838-884e-192c-f980-6971efb19f5d@linuxfoundation.org>
+Date:   Fri, 3 Dec 2021 10:03:57 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20211029083248.7vttuxbwbtdylrnq@wittgenstein>
+In-Reply-To: <0f856b34-1464-6309-8235-a26b6c3d1c9f@fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/29/21 2:32 AM, Christian Brauner wrote:
-> On Fri, Oct 29, 2021 at 10:45:28AM +0800, Li Zhijian wrote:
->> 0Day/LKP observed that the kselftest blocks foever since one of the
->> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
->> the source, we found that it blocks at:
->> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
->>
->> we can reproduce it by:
->> $ while true; do make run_tests -C pidfd; done
->>
->> a delay to ensure that the parent can see child process WCONTINUED.
->>
->> CC: Christian Brauner <christian@brauner.io>
->> CC: Shuah Khan <shuah@kernel.org>
->> CC: Philip Li <philip.li@intel.com>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
->> ---
-> 
-> Not a fan of the usleep() solution but if it fixes it it's fine for
-> a test, I think.
-> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-> 
+T24gMTIvMi8yMSA4OjA1IFBNLCBsaXpoaWppYW5AZnVqaXRzdS5jb20gd3JvdGU6DQo+IGtp
+bmRseSBwaW5nDQo+IA0KPiANCj4gT24gMjkvMTAvMjAyMSAxNjozMSwgQ2hyaXN0aWFuIEJy
+YXVuZXIgd3JvdGU6DQo+PiBPbiBGcmksIE9jdCAyOSwgMjAyMSBhdCAxMDo0NToyN0FNICsw
+ODAwLCBMaSBaaGlqaWFuIHdyb3RlOg0KPj4+IFdlIGhhdmUgc29tZSBtYW55IGNhc2VzIHRo
+YXQgd2lsbCBjcmVhdGUgY2hpbGQgcHJvY2VzcyBhcyB3ZWxsLCBzdWNoIGFzDQo+Pj4gcGlk
+ZmRfd2FpdC4gUHJldmlvdXNseSwgd2Ugd2lsbCBzaWduYWwva2lsbCB0aGUgcGFyZW50IHBy
+b2Nlc3Mgd2hlbiBpdA0KPj4+IGlzIHRpbWUgb3V0LCBidXQgdGhpcyBzaWduYWwgd2lsbCBu
+b3QgYmUgc2VudCB0byBpdHMgY2hpbGQgcHJvY2Vzcy4gSW4NCj4+PiBzdWNoIGNhc2UsIGlm
+IGNoaWxkIHByb2Nlc3MgZG9lc24ndCB0ZXJtaW5hdGUgaXRzZWxmLCBrc2VmbHRlc3QgZnJh
+bWV3b3JrDQo+Pj4gd2lsbCBoYW5nIGZvcmV2ZXIuDQo+Pj4NCj4+PiBiZWxvdyBwcyB0cmVl
+IHNob3cgdGhlIHNpdHVhdGlvbiB3aGVuIGtzZWZsdGVzdCBpcyBibG9ja2luZzoNCj4+PiBy
+b290ICAgICAgMTE3MiAgMC4wICAwLjAgICA1OTk2ICAyNTAwID8gICAgICAgIFMgICAgMDc6
+MDMgICAwOjAwICBcXyAvYmluL2Jhc2ggL2xrcC9sa3Avc3JjL3Rlc3RzL2tlcm5lbC1zZWxm
+dGVzdHMNCj4+PiByb290ICAgICAgMTIxNiAgMC4wICAwLjAgICA0MzkyICAxOTc2ID8gICAg
+ICAgIFMgICAgMDc6MDMgICAwOjAwICAgICAgXF8gbWFrZSBydW5fdGVzdHMgLUMgcGlkZmQN
+Cj4+PiByb290ICAgICAgMTIxOCAgMC4wICAwLjAgICAyMzk2ICAxNjUyID8gICAgICAgIFMg
+ICAgMDc6MDMgICAwOjAwICAgICAgICAgIFxfIC9iaW4vc2ggLWMgQkFTRV9ESVI9Ii91c3Iv
+c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1
+NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMiOyAuIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRl
+c3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaDsgaWYgWyAiWCIgIT0gIlgiIF07
+IHRoZW4gcGVyX3Rlc3RfbG9nZ2luZz0xOyBmaTsgcnVuX21hbnkgIC91c3Ivc3JjL3BlcmZf
+c2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0
+MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQv
+cGlkZmRfdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3Nl
+bGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX2ZkaW5mb190ZXN0IC91c3Ivc3JjL3Bl
+cmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3
+YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlk
+ZmQvcGlkZmRfb3Blbl90ZXN0IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVs
+LTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1
+YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvcGlkZmRfcG9sbF90ZXN0IC91c3Iv
+c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguDQo+Pj4gcm9vdCAgICAgMTI0OTEg
+IDAuMCAgMC4wICAgMjM5NiAgIDEzMiA/ICAgICAgICBTICAgIDA3OjAzICAgMDowMCAgICAg
+ICAgICAgICAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0iL3Vzci9zcmMvcGVyZl9zZWxmdGVz
+dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNh
+ZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyI7IC4gL3Vzci9zcmMv
+cGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUy
+NzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9r
+c2VsZnRlc3QvcnVubmVyLnNoOyBpZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJfdGVzdF9s
+b2dnaW5nPTE7IGZpOyBydW5fbWFueSAgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0
+LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAz
+YzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0IC91c3Iv
+c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1
+NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvcGlkZmQvcGlkZmRfZmRpbmZvX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2
+XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0
+NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9vcGVuX3Rl
+c3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMt
+NTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9wb2xsX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVz
+dHMteDg2XzY0LXJoZQ0KPj4+IHJvb3QgICAgIDEyNDkyICAwLjAgIDAuMCAgIDIzOTYgICAx
+MzIgPyAgICAgICAgUyAgICAwNzowMyAgIDA6MDAgICAgICAgICAgICAgICAgICBcXyAvYmlu
+L3NoIC1jIEJBU0VfRElSPSIvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04
+LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJh
+L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzIjsgLiAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14
+ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIx
+NTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdC9ydW5uZXIu
+c2g7IGlmIFsgIlgiICE9ICJYIiBdOyB0aGVuIHBlcl90ZXN0X2xvZ2dpbmc9MTsgZmk7IHJ1
+bl9tYW55ICAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0
+ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rl
+c3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVz
+dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNh
+ZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9m
+ZGluZm9fdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3Nl
+bGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX29wZW5fdGVzdCAvdXNyL3NyYy9wZXJm
+X3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0
+NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZk
+L3BpZGZkX3BvbGxfdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQNCj4+PiBy
+b290ICAgICAxMjQ5MyAgMC4wICAwLjAgICAyMzk2ICAgMTMyID8gICAgICAgIFMgICAgMDc6
+MDMgICAwOjAwICAgICAgICAgICAgICAgICAgICAgIFxfIC9iaW4vc2ggLWMgQkFTRV9ESVI9
+Ii91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUx
+OWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMiOyAuIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1r
+c2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaDsgaWYgWyAiWCIgIT0g
+IlgiIF07IHRoZW4gcGVyX3Rlc3RfbG9nZ2luZz0xOyBmaTsgcnVuX21hbnkgIC91c3Ivc3Jj
+L3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVl
+Mjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
+cGlkZmQvcGlkZmRfdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04
+LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJh
+L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX2ZkaW5mb190ZXN0IC91c3Iv
+c3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1
+NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvcGlkZmQvcGlkZmRfb3Blbl90ZXN0IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82
+NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYw
+M2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvcGlkZmRfcG9sbF90ZXN0
+IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4DQo+Pj4gcm9vdCAgICAgMTI0OTYgIDAuMCAg
+MC4wICAgMjM5NiAgIDEzMiA/ICAgICAgICBTICAgIDA3OjAzICAgMDowMCAgICAgICAgICAg
+ICAgICAgICAgICAgICAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0iL3Vzci9zcmMvcGVyZl9z
+ZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQx
+OWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyI7IC4gL3Vz
+ci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgx
+OTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoOyBpZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJf
+dGVzdF9sb2dnaW5nPTE7IGZpOyBydW5fbWFueSAgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMt
+eDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZi
+MTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0
+IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUx
+OWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvcGlkZmQvcGlkZmRfZmRpbmZvX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVz
+dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNh
+ZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9v
+cGVuX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxm
+dGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9wb2xsX3Rlc3QgL3Vzci9zcmMvcGVyZl9z
+ZWxmdGVzdA0KPj4+IHJvb3QgICAgIDEyNDk4ICAwLjAgIDAuMCAgMTA1NjQgIDYxMTYgPyAg
+ICAgICAgUyAgICAwNzowMyAgIDA6MDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBc
+XyBwZXJsIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRl
+c3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3ByZWZpeC5wbA0KPj4+IHJvb3QgICAgIDEyNTAz
+ICAwLjAgIDAuMCAgIDI0NTIgICAxMTIgPyAgICAgICAgVCAgICAwNzowMyAgIDA6MDAgLi9w
+aWRmZF93YWl0DQo+Pj4gcm9vdCAgICAgMTI2MjEgIDAuMCAgMC4wICAgMjM3MiAgMTYwMCA/
+ICAgICAgICBTTHMgIDA3OjA0ICAgMDowMCAvdXNyL3NiaW4vd2F0Y2hkb2cNCj4+PiByb290
+ICAgICAxOTQzOCAgMC4wICAwLjAgICAgOTkyICAgIDYwID8gICAgICAgIFNzICAgMDc6Mzkg
+ICAwOjAwIC9sa3AvbGtwL3NyYy9iaW4vZXZlbnQvd2FrZXVwIGFjdGl2YXRlLW1vbml0b3IN
+Cj4+Pg0KPj4+IEhlcmUgd2UgZ3JvdXAgYWxsIGl0cyBjaGlsZCBwcm9jZXNzZXMgc28gdGhh
+dCBraWxsKCkgY2FuIHNpZ25hbCBhbGwgb2YNCj4+PiB0aGVtIGluIHRpbWVvdXQuDQo+Pj4N
+Cj4+PiBDQzogS2VlcyBDb29rIDxrZWVzY29va0BjaHJvbWl1bS5vcmc+DQo+Pj4gQ0M6IEFu
+ZHkgTHV0b21pcnNraSA8bHV0b0BhbWFjYXBpdGFsLm5ldD4NCj4+PiBDQzogV2lsbCBEcmV3
+cnkgPHdhZEBjaHJvbWl1bS5vcmc+DQo+Pj4gQ0M6IFNodWFoIEtoYW4gPHNodWFoQGtlcm5l
+bC5vcmc+DQo+Pj4gQ0M6IENocmlzdGlhbiBCcmF1bmVyIDxjaHJpc3RpYW5AYnJhdW5lci5p
+bz4NCj4+PiBDQzogUGhpbGlwIExpIDxwaGlsaXAubGlAaW50ZWwuY29tPg0KPj4+IFN1Z2dl
+c3RlZC1ieTogeWFuZyB4dSA8eHV5YW5nMjAxOC5qeUBjbi5mdWppdHN1LmNvbT4NCj4+PiBT
+aWduZWQtb2ZmLWJ5OiBMaSBaaGlqaWFuIDxsaXpoaWppYW5AY24uZnVqaXRzdS5jb20+DQo+
+Pj4gLS0tDQo+PiBTZWVtcyBzZW5zaWJsZS4gSXMgaXQgZ3VhcmFudGVlZCB0aGF0IHQtPnBp
+ZCBpcyBuZWl0aGVyIDAgbm9yIDE/IElmIG5vdA0KPj4gdGhlbiBtYXliZSBzYW5pdHkgY2hl
+Y2sgdC0+cGlkIGF0IGxlYXN0IGZvciBub3QgYmVpbmcgMSBhcyBuZWdhdGluZyB0aGF0DQo+
+PiB3b3VsZCBtZWFuICJzaWduYWwgZXZlcnl0aGluZyB0aGF0IHlvdSBoYXZlIHBlcm1pc3Np
+b24gdG8gc2lnbmFsIi4gOikNCj4+DQo+PiBPdGhlcndpc2UsDQo+PiBBY2tlZC1ieTogQ2hy
+aXN0aWFuIEJyYXVuZXIgPGNocmlzdGlhbi5icmF1bmVyQHVidW50dS5jb20+DQo+Pg0KPj4+
+ICAgIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdF9oYXJuZXNzLmggfCA0ICsr
+Ky0NCj4+PiAgICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
+KC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3Nl
+bGZ0ZXN0X2hhcm5lc3MuaCBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdF9o
+YXJuZXNzLmgNCj4+PiBpbmRleCBhZTBmMGYzM2IyYTYuLmM3MjUxMzk2ZTdlZSAxMDA2NDQN
+Cj4+PiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3RfaGFybmVzcy5o
+DQo+Pj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0X2hhcm5lc3Mu
+aA0KPj4+IEBAIC04NzUsNyArODc1LDggQEAgc3RhdGljIHZvaWQgX190aW1lb3V0X2hhbmRs
+ZXIoaW50IHNpZywgc2lnaW5mb190ICppbmZvLCB2b2lkICp1Y29udGV4dCkNCj4+PiAgICAJ
+fQ0KPj4+ICAgIA0KPj4+ICAgIAl0LT50aW1lZF9vdXQgPSB0cnVlOw0KPj4+IC0Ja2lsbCh0
+LT5waWQsIFNJR0tJTEwpOw0KPj4+ICsJLy8gc2lnbmFsIHByb2Nlc3MgZ3JvdXANCj4+PiAr
+CWtpbGwoLSh0LT5waWQpLCBTSUdLSUxMKTsNCj4+PiAgICB9DQo+Pj4gICAgDQo+Pj4gICAg
+dm9pZCBfX3dhaXRfZm9yX3Rlc3Qoc3RydWN0IF9fdGVzdF9tZXRhZGF0YSAqdCkNCj4+PiBA
+QCAtOTg1LDYgKzk4Niw3IEBAIHZvaWQgX19ydW5fdGVzdChzdHJ1Y3QgX19maXh0dXJlX21l
+dGFkYXRhICpmLA0KPj4+ICAgIAkJa3NmdF9wcmludF9tc2coIkVSUk9SIFNQQVdOSU5HIFRF
+U1QgQ0hJTERcbiIpOw0KPj4+ICAgIAkJdC0+cGFzc2VkID0gMDsNCj4+PiAgICAJfSBlbHNl
+IGlmICh0LT5waWQgPT0gMCkgew0KPj4+ICsJCXNldHBncnAoKTsNCj4+PiAgICAJCXQtPmZu
+KHQsIHZhcmlhbnQpOw0KPj4+ICAgIAkJaWYgKHQtPnNraXApDQo+Pj4gICAgCQkJX2V4aXQo
+MjU1KTsNCj4+PiAtLSANCj4+PiAyLjMzLjANCj4+Pg0KPj4+DQo+Pj4NCj4+DQo+IA0KDQpL
+ZWVzLA0KDQpXaWxsIHlvdSBiZSBhYmxlIHRvIHRha2UgYSBsb29rIGF0IHRoaXMgZml4PyBU
+aGlzIGlzIGluIHRoZSBrc2VsZnRlc3RfaGFybmVzcw0KDQp0aGFua3MsDQotLSBTaHVhaA0K
 
-I don't like introducing usleep() which will increase the kselftest
-run-time. Every little bit adds up if we allow usleep() in tests.
-
-thanks,
--- Shuah
