@@ -2,88 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D33467063
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 03:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A1146706A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 04:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378281AbhLCDCm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Dec 2021 22:02:42 -0500
-Received: from mga01.intel.com ([192.55.52.88]:57249 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347836AbhLCDCk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:02:40 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="260901968"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="260901968"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:59:16 -0800
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="501015283"
-Received: from liweilv-mobl.ccr.corp.intel.com (HELO lkp-bingo.fnst-test.com) ([10.255.30.243])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:59:13 -0800
-From:   Li Zhijian <zhijianx.li@intel.com>
-To:     kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lizhijian@cn.fujitsu.com,
-        Li Zhijian <zhijianx.li@intel.com>
-Subject: [PATCH v3 3/3] selftests/tc-testing: Fix cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
-Date:   Fri,  3 Dec 2021 10:53:23 +0800
-Message-Id: <20211203025323.6052-3-zhijianx.li@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211203025323.6052-1-zhijianx.li@intel.com>
-References: <20211203025323.6052-1-zhijianx.li@intel.com>
+        id S1350432AbhLCDFj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Dec 2021 22:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350360AbhLCDFi (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 Dec 2021 22:05:38 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B298AC06174A
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Dec 2021 19:02:15 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id v203so5183621ybe.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Dec 2021 19:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K7PaP8tSfENa0iq44ql6ZAlEC/JeVO3TL0+8pVjJNAs=;
+        b=kWNAEBAC02bV50QGF/i0k6/BGpUVnovxXt7Bdh8Oi+xN+Cl3Uwf7n4tservsKdy+Ye
+         vu/gZaHuSQxlZk3MLBc7WtJXHNIzyb4FIlN2oN11jTmKj8bmQwTY2N3nCLMBd/UUQgwT
+         UfQyhrogfhvFyNwleewGOVMhbVdN8vqCoGXAy6iFf9hWuamq2HCcupXgIUi+z/6miFkI
+         bvOc7pXXlK/0ERZSxLOys2Ppkz8s+HBWfQ1WHXGKuu0Q72tHUPIEpwKqnwfjZc3g52uI
+         bjg0Kp3i+IASjSyTh/HdIL+5VuNOPEWUwdpzqOtWsDFvEHEdAmqmMX9IU74496f4opvP
+         OE+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K7PaP8tSfENa0iq44ql6ZAlEC/JeVO3TL0+8pVjJNAs=;
+        b=kKN//0v3b39wrEnvHGZNdXBZmvB/2JIyHw/xG/SZYsl98h1J29gaFC/9fRQKon1STr
+         NTq2YM4vCKSBs0dSvAoXwMhjDdY62OxmMdDEzFRAFg3ebQceGPci2EFxctuBojaWNcgo
+         r3NQ/Xwl67FwhNrWrnBA8cPJ5vA/Smkbb+YjysanG6Zc8VnLQbwtsfuqg2A1ftXknBg1
+         Fac3hz4ThnMkzh5zB18j8t07pmJWr7mz3xiKREwTPajq948SVlPw+zo2lalOeaqqnse6
+         mWd/JoBP+tNXD0lb7mOwQwPuhL6e3zc85NGskXgNrQ785hTbBI7l2qmGnICfrewSOVyD
+         02xQ==
+X-Gm-Message-State: AOAM532hke8nFUoOrQRW0JraXH5VlbsVQw3fzkzBl976P5rXiG1Dl+ti
+        Ig4KmaII0S82d+9XDaMTChV33NK18gZfNG6DqB1YqZ7sTYJZZrD4
+X-Google-Smtp-Source: ABdhPJz99Yxf8WWAJww+VYX8V78U0MvyH5Oy353Ttz5ekTrjiy9CNWit3BY/k9oGR+/J9ggrpG6DX2xplKmKqkZ/V/U=
+X-Received: by 2002:a25:b285:: with SMTP id k5mr19708197ybj.132.1638500535048;
+ Thu, 02 Dec 2021 19:02:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211201150440.1088-1-sj@kernel.org> <20211201150440.1088-5-sj@kernel.org>
+In-Reply-To: <20211201150440.1088-5-sj@kernel.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 3 Dec 2021 11:01:36 +0800
+Message-ID: <CAMZfGtUPSmquyMd70HtqFVvxU68kbTdYN1fJU8g35zeXHMJHVA@mail.gmail.com>
+Subject: Re: [PATCH 04/11] mm/damon/vaddr: Remove an unnecessary warning message
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, brendanhiggins@google.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Install netdevsim to provide /sys/bus/netdevsim/new_device interface.
+On Wed, Dec 1, 2021 at 11:05 PM SeongJae Park <sj@kernel.org> wrote:
+>
+> The DAMON virtual address space monitoring primitive prints a warning
+> message for wrong DAMOS action.  However, it is not essential as the
+> code returns appropriate failure in the case.  This commit removes the
+> message to make the log clean.
+>
+> Fixes: 6dea8add4d28 ("mm/damon/vaddr: support DAMON-based Operation Schemes")
 
-It helps to fix:
- # ok 97 9a7d - Change ETS strict band without quantum # skipped - skipped - previous setup failed 11 ce7d
- #
- #
- # -----> prepare stage *** Could not execute: "echo "1 1 4" > /sys/bus/netdevsim/new_device"
- #
- # -----> prepare stage *** Error message: "/bin/sh: 1: cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
- # "
- #
- # -----> prepare stage *** Aborting test run.
- #
- #
- # <_io.BufferedReader name=5> *** stdout ***
- #
+I don't think there should be a Fixes tag since it's not a serious bug.
 
-Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
----
- tools/testing/selftests/tc-testing/config | 1 +
- tools/testing/selftests/tc-testing/tdc.sh | 1 +
- 2 files changed, 2 insertions(+)
+Without this:
 
-diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
-index b1cd7efa4512..a3239d5e40c7 100644
---- a/tools/testing/selftests/tc-testing/config
-+++ b/tools/testing/selftests/tc-testing/config
-@@ -61,6 +61,7 @@ CONFIG_NET_SCH_FIFO=y
- CONFIG_NET_SCH_ETS=m
- CONFIG_NET_SCH_RED=m
- CONFIG_NET_SCH_FQ_PIE=m
-+CONFIG_NETDEVSIM=m
- 
- #
- ## Network testing
-diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-index 7fe38c76db44..afb0cd86fa3d 100755
---- a/tools/testing/selftests/tc-testing/tdc.sh
-+++ b/tools/testing/selftests/tc-testing/tdc.sh
-@@ -1,5 +1,6 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+modprobe netdevsim
- ./tdc.py -c actions --nobuildebpf
- ./tdc.py -c qdisc
--- 
-2.32.0
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
+Thanks.
