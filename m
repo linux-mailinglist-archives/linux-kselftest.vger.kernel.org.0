@@ -2,63 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EC546702D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 03:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F26346705D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 03:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378222AbhLCCul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Dec 2021 21:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378218AbhLCCuk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:50:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ED7C06174A;
-        Thu,  2 Dec 2021 18:47:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 119CC62775;
-        Fri,  3 Dec 2021 02:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00388C00446;
-        Fri,  3 Dec 2021 02:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638499635;
-        bh=SzRDDa9c6PtEphb+1OK8jXRhKNO0W+uy+jB5FALjy6s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WmL8NC3Vg10qxWLWiF/ifRzdihaVcrnNTO7/vShEitsh/zSubrafXYRx/KsBCh2o3
-         y1YhLY//eDCk3FmjP1ly8bRU3FliuUtn/RueyXlAySU+v2NNcFXRenly5EXr6FHS1m
-         b9NBzsn9bNKI2gtXbLIB3Wz5sw9LtnynTmmoTfC5OkTzSq2YNT7bcF+OVASMR8BEaY
-         VaVVBCrpxggqIZnI90EtYIzbf5KN02fjAyhZLPYlQx5LsQZyNqR1tm6KJHgu8IHiHC
-         XosUjntUqUc4NIeHhDiL7mpqa22uGGAmUbc2Qwb6hEMH6HhMBldyvDowE6tGV2Ejad
-         AUuHGufpvCq9A==
-Date:   Thu, 2 Dec 2021 18:47:13 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Li Zhijian <zhijianx.li@intel.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Davide Caratti <dcaratti@redhat.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, lizhijian@cn.fujitsu.com,
-        linux-kernel@vger.kernel.org, lkp@intel.com, philip.li@intel.com,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] selftests/tc-testing: add exit code
-Message-ID: <20211202184713.4afbdf26@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
-References: <20211117054517.31847-1-zhijianx.li@intel.com>
-        <YZTDcjv4ZPXv8Oaz@dcaratti.users.ipa.redhat.com>
-        <20211117060535.1d47295a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <4ed23cd5-f4a1-aa70-183f-fbea407c19ee@mojatatu.com>
-        <20211117084854.0d44d64b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <d0c32c34-b0a4-ce1e-35d6-1894222e825a@mojatatu.com>
-        <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
+        id S1350580AbhLCDCf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Dec 2021 22:02:35 -0500
+Received: from mga01.intel.com ([192.55.52.88]:57249 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347836AbhLCDCf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 Dec 2021 22:02:35 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="260901961"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="260901961"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:59:11 -0800
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="501015253"
+Received: from liweilv-mobl.ccr.corp.intel.com (HELO lkp-bingo.fnst-test.com) ([10.255.30.243])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:59:05 -0800
+From:   Li Zhijian <zhijianx.li@intel.com>
+To:     kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lizhijian@cn.fujitsu.com,
+        Li Zhijian <zhijianx.li@intel.com>,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Davide Caratti <dcaratti@redhat.com>
+Subject: [PATCH v3 1/3] selftests/tc-testing: add exit code
+Date:   Fri,  3 Dec 2021 10:53:21 +0800
+Message-Id: <20211203025323.6052-1-zhijianx.li@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 3 Dec 2021 10:21:31 +0800 Li Zhijian wrote:
-> CCed netdev
+Mark the summary result as FAIL to prevent from confusing the selftest
+framework if some of them are failed.
 
-Please repost the patches.
+Previously, the selftest framework always treats it as *ok* even though
+some of them are failed actually. That's because the script tdc.sh always
+return 0.
+
+ # All test results:
+ #
+ # 1..97
+ # ok 1 83be - Create FQ-PIE with invalid number of flows
+ # ok 2 8b6e - Create RED with no flags
+[...snip]
+ # ok 6 5f15 - Create RED with flags ECN, harddrop
+ # ok 7 53e8 - Create RED with flags ECN, nodrop
+ # ok 8 d091 - Fail to create RED with only nodrop flag
+ # ok 9 af8e - Create RED with flags ECN, nodrop, harddrop
+ # not ok 10 ce7d - Add mq Qdisc to multi-queue device (4 queues)
+ #       Could not match regex pattern. Verify command output:
+ # qdisc mq 1: root
+ # qdisc fq_codel 0: parent 1:4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+ # qdisc fq_codel 0: parent 1:3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+[...snip]
+ # ok 96 6979 - Change quantum of a strict ETS band
+ # ok 97 9a7d - Change ETS strict band without quantum
+ #
+ #
+ #
+ #
+ ok 1 selftests: tc-testing: tdc.sh <<< summary result
+
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
+Acked-by: Davide Caratti <dcaratti@redhat.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+V3: repost to netdev
+V2: Fix missing ':'
+---
+ tools/testing/selftests/tc-testing/tdc.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
+index a3e43189d940..ee22e3447ec7 100755
+--- a/tools/testing/selftests/tc-testing/tdc.py
++++ b/tools/testing/selftests/tc-testing/tdc.py
+@@ -716,6 +716,7 @@ def set_operation_mode(pm, parser, args, remaining):
+         list_test_cases(alltests)
+         exit(0)
+ 
++    exit_code = 0 # KSFT_PASS
+     if len(alltests):
+         req_plugins = pm.get_required_plugins(alltests)
+         try:
+@@ -724,6 +725,8 @@ def set_operation_mode(pm, parser, args, remaining):
+             print('The following plugins were not found:')
+             print('{}'.format(pde.missing_pg))
+         catresults = test_runner(pm, args, alltests)
++        if catresults.count_failures() != 0:
++            exit_code = 1 # KSFT_FAIL
+         if args.format == 'none':
+             print('Test results output suppression requested\n')
+         else:
+@@ -748,6 +751,8 @@ def set_operation_mode(pm, parser, args, remaining):
+                         gid=int(os.getenv('SUDO_GID')))
+     else:
+         print('No tests found\n')
++        exit_code = 4 # KSFT_SKIP
++    exit(exit_code)
+ 
+ def main():
+     """
+@@ -767,8 +772,5 @@ def main():
+ 
+     set_operation_mode(pm, parser, args, remaining)
+ 
+-    exit(0)
+-
+-
+ if __name__ == "__main__":
+     main()
+-- 
+2.32.0
 
