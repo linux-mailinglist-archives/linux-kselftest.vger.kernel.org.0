@@ -2,70 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C1E467EEA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 21:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E994C468024
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Dec 2021 00:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245055AbhLCUsA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Dec 2021 15:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S1354058AbhLCXDe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Dec 2021 18:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239909AbhLCUsA (ORCPT
+        with ESMTP id S233523AbhLCXDe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 15:48:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3937C061751;
-        Fri,  3 Dec 2021 12:44:35 -0800 (PST)
-Received: from mail.kernel.org (unknown [198.145.29.99])
+        Fri, 3 Dec 2021 18:03:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1582FC061751;
+        Fri,  3 Dec 2021 15:00:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04710B82949;
-        Fri,  3 Dec 2021 20:44:34 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5BC0F60E0C;
-        Fri,  3 Dec 2021 20:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1638564272;
-        bh=xlny09940e6Z3BkMmLz5Nzw7SvRddCWfs0zmtslxYGg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BbYF/l5Ma6YhWbIH8kIPgBrhESjTUAyDktuYhS5yM+4agmxI2I4NLUGfKdbOwzMf7
-         I7G3GMyKJOrnLaA+qv4EA3X1PFehZXZnfozkf46TLWsbMpCXuDgwso65ugqfExtBT1
-         vvUhRrVslz35Cxmn8vVshWXxRoG48muoMPa+TbFs=
-Date:   Fri, 3 Dec 2021 12:44:30 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        brendanhiggins@google.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 04/11] mm/damon/vaddr: Remove an unnecessary warning
- message
-Message-Id: <20211203124430.bd1879d382010270f4112324@linux-foundation.org>
-In-Reply-To: <CAMZfGtUPSmquyMd70HtqFVvxU68kbTdYN1fJU8g35zeXHMJHVA@mail.gmail.com>
-References: <20211201150440.1088-1-sj@kernel.org>
-        <20211201150440.1088-5-sj@kernel.org>
-        <CAMZfGtUPSmquyMd70HtqFVvxU68kbTdYN1fJU8g35zeXHMJHVA@mail.gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C6C862D36;
+        Fri,  3 Dec 2021 23:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05A46C53FCD;
+        Fri,  3 Dec 2021 23:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638572409;
+        bh=PRIzoZduL+FH2eXDCg1xVMlQjUQQpSiAYkeeKFxrpbU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mBpLFAQsly/O4ZH1amCQV5Hr/n+l/qXbg52aY4XnmjvSGv8VfDeHa0R5YLDcvPt1H
+         smeLLjD102JA28V/dtlikF9Zmr2w91pnroqr4esKpLdinsIM2KqKbw8uyWErK0wgr0
+         Zegc3nKuKU9HhxbMyP/mo89RqI/Y89mgwzLFOLF5bunZ6YqC5FVXsdKmSJmHPoruAq
+         vwzbqHV0CbQH1I5BnTmgRyB7sfsaXLzvrRT0KojOqlyZ8+YTaO0IXFkIIR1qYaD4SI
+         iUfAfnoH7x8lxo7Uf3iW6vJfrfDsoSzJEd/FEo/m/OttLOcKK9+hze+OQFZeA+ZhIU
+         FyP19AC07opPA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D83E360A50;
+        Fri,  3 Dec 2021 23:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf: Fix the test_task_vma selftest to support output
+ shorter than 1 kB
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163857240888.22727.1341673704180599136.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Dec 2021 23:00:08 +0000
+References: <20211130181811.594220-1-maximmi@nvidia.com>
+In-Reply-To: <20211130181811.594220-1-maximmi@nvidia.com>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        revest@chromium.org, davemarchevsky@fb.com,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 3 Dec 2021 11:01:36 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+Hello:
 
-> On Wed, Dec 1, 2021 at 11:05 PM SeongJae Park <sj@kernel.org> wrote:
-> >
-> > The DAMON virtual address space monitoring primitive prints a warning
-> > message for wrong DAMOS action.  However, it is not essential as the
-> > code returns appropriate failure in the case.  This commit removes the
-> > message to make the log clean.
-> >
-> > Fixes: 6dea8add4d28 ("mm/damon/vaddr: support DAMON-based Operation Schemes")
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue, 30 Nov 2021 20:18:11 +0200 you wrote:
+> The test for bpf_iter_task_vma assumes that the output will be longer
+> than 1 kB, as the comment above the loop says. Due to this assumption,
+> the loop becomes infinite if the output turns to be shorter than 1 kB.
+> The return value of read_fd_into_buffer is 0 when the end of file was
+> reached, and len isn't being increased any more.
 > 
-> I don't think there should be a Fixes tag since it's not a serious bug.
+> This commit adds a break on EOF to handle short output correctly. For
+> the reference, this is the contents that I get when running test_progs
+> under vmtest.sh, and it's shorter than 1 kB:
+> 
+> [...]
 
-"Fixes:" doesn't mean "backport to stable".  At least, not for MM
-patches.  Other subsystems do get their Fixes:-tagged patches
-automatically backported.
+Here is the summary with links:
+  - [bpf] bpf: Fix the test_task_vma selftest to support output shorter than 1 kB
+    https://git.kernel.org/bpf/bpf-next/c/da54ab14953c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
