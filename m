@@ -2,88 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5464672AC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 08:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9618D4676B7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Dec 2021 12:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbhLCHjn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Dec 2021 02:39:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49221 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243710AbhLCHjl (ORCPT
+        id S1351905AbhLCLxg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Dec 2021 06:53:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35414 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231944AbhLCLxg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:39:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638516977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eQYyhredCKvJvtuWlGf1vBWT69o93MUm/9UVItQcKys=;
-        b=DCZQXj/27ShKsC7yP09GPFoueMNzwc3GyLYQ44wXQ5PJnt6dD77yrEvVHNrGbWe/K01P4V
-        51W8JSorgWDzJ5VRwbcApKlBFsIZ1RN1ZYfOjqckmsDnGaf08p2lBDnlc8RtUgjPgs77Fj
-        Wp21ULTTrximlprPKvryhMWzFWe7f70=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-6nthxne1P6yKLiOSWUleTQ-1; Fri, 03 Dec 2021 02:36:14 -0500
-X-MC-Unique: 6nthxne1P6yKLiOSWUleTQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 3 Dec 2021 06:53:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B528A190D342;
-        Fri,  3 Dec 2021 07:36:13 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A15E210016FE;
-        Fri,  3 Dec 2021 07:36:11 +0000 (UTC)
-Message-ID: <c77e17b70f420b6ba1d7ccf092c439f35456ccd8.camel@redhat.com>
-Subject: Re: [PATCH] KVM: x86: selftests: svm_int_ctl_test: fix intercept
- calculation
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 03 Dec 2021 09:36:09 +0200
-In-Reply-To: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
-References: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77879B825B7;
+        Fri,  3 Dec 2021 11:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0CBB9C53FCB;
+        Fri,  3 Dec 2021 11:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638532210;
+        bh=nz1rdy8mTg+6h44HhRn77M8064IfHx4IJ0EH7ACo3zc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=D3Aa0f5NDP/obRqGxWrChpkcOw3pT7MyCABvZqWfjMqvshretW5FJb/QJzZ5NCZ01
+         bOEDUtdF9z2niz6nsInvEkugtByfLU+A37avqx2XYU3oGW/CSU4sByX4XTFHx4TIui
+         3oveAAYTJEQDAVBfes3MM03uF5p4h/0FS0FXr4bNzMDNmY70vnIoPfsPUlHnnwsxLr
+         y0VNjCZ27rG8YM31pzMau/vV+GoVUdrMvteewjvQEnMQ4svRPDoF37L/o1yQfjXVXF
+         8C/4zR8UDOTtA7/CRwzBYvCmSJXtm30t/jbb4gbdPilNuUzdAACGJIq96fR4NyRx1x
+         HNalByG6p9mMw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E8D0E60A5A;
+        Fri,  3 Dec 2021 11:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 1/3] selftests/tc-testing: add exit code
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163853220994.27545.12950451952422618579.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Dec 2021 11:50:09 +0000
+References: <20211203025323.6052-1-zhijianx.li@intel.com>
+In-Reply-To: <20211203025323.6052-1-zhijianx.li@intel.com>
+To:     Li Zhijian <zhijianx.li@intel.com>
+Cc:     kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lizhijian@cn.fujitsu.com, philip.li@intel.com, lkp@intel.com,
+        dcaratti@redhat.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2021-12-03 at 00:10 +0100, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> INTERCEPT_x are bit positions, but the code was using the raw value of
-> INTERCEPT_VINTR (4) instead of BIT(INTERCEPT_VINTR).
-> This resulted in masking of bit 2 - that is, SMI instead of VINTR.
-> 
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> index df04f56ce859..30a81038df46 100644
-> --- a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> @@ -75,7 +75,7 @@ static void l1_guest_code(struct svm_test_data *svm)
->  	vmcb->control.int_ctl &= ~V_INTR_MASKING_MASK;
->  
->  	/* No intercepts for real and virtual interrupts */
-> -	vmcb->control.intercept &= ~(1ULL << INTERCEPT_INTR | INTERCEPT_VINTR);
-> +	vmcb->control.intercept &= ~(BIT(INTERCEPT_INTR) | BIT(INTERCEPT_VINTR));
->  
->  	/* Make a virtual interrupt VINTR_IRQ_NUMBER pending */
->  	vmcb->control.int_ctl |= V_IRQ_MASK | (0x1 << V_INTR_PRIO_SHIFT);
-> 
-Sorry about that.
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Hello:
 
-Best regards,
-	Maxim Levitsky
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri,  3 Dec 2021 10:53:21 +0800 you wrote:
+> Mark the summary result as FAIL to prevent from confusing the selftest
+> framework if some of them are failed.
+> 
+> Previously, the selftest framework always treats it as *ok* even though
+> some of them are failed actually. That's because the script tdc.sh always
+> return 0.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3,1/3] selftests/tc-testing: add exit code
+    https://git.kernel.org/netdev/net/c/96f389678015
+  - [v3,2/3] selftests/tc-testing: add missing config
+    https://git.kernel.org/netdev/net/c/a8c9505c53c5
+  - [v3,3/3] selftests/tc-testing: Fix cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
+    https://git.kernel.org/netdev/net/c/db925bca33a9
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
