@@ -2,116 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E013346821A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Dec 2021 04:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93079468772
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Dec 2021 21:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384127AbhLDDRZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Dec 2021 22:17:25 -0500
-Received: from relay038.a.hostedemail.com ([64.99.140.38]:26511 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1384126AbhLDDRZ (ORCPT
+        id S233427AbhLDU1a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 Dec 2021 15:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231348AbhLDU1a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 22:17:25 -0500
-X-Greylist: delayed 377 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Dec 2021 22:17:25 EST
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id 5B693203FE;
-        Sat,  4 Dec 2021 03:07:42 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 078B52002F;
-        Sat,  4 Dec 2021 03:06:40 +0000 (UTC)
-Message-ID: <2236458d6a4e77bd09afb13bba65747a3416f293.camel@perches.com>
-Subject: Re: [PATCH] mnt: remove unneeded conversion to bool
-From:   Joe Perches <joe@perches.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        davidcomponentone@gmail.com, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Fri, 03 Dec 2021 19:06:40 -0800
-In-Reply-To: <eef8e264-7cf7-8747-867e-b40c9f180d0d@linuxfoundation.org>
-References: <3a7435c9e7e7aa8f24d22fd576ce912eb0540272.1637737086.git.yang.guang5@zte.com.cn>
-         <07f4ba23-cf4c-6817-f7a4-5428f35d966c@linuxfoundation.org>
-         <983ee57718a6e5838f79be96b7f7efc638177f76.camel@perches.com>
-         <eef8e264-7cf7-8747-867e-b40c9f180d0d@linuxfoundation.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 4 Dec 2021 15:27:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C19C061751;
+        Sat,  4 Dec 2021 12:24:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCFC2B80D9B;
+        Sat,  4 Dec 2021 20:24:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B123C341C2;
+        Sat,  4 Dec 2021 20:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638649441;
+        bh=5WZVVH3bfq4ugkAOV2uy7mIqMkhjOZgQDqG+Ih4lMGw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qL2AepS940NgOk+UoSD9Jh3+BSO4JOLGBA6BKS1zwW+X9OfGGLWUc1k5+Alck+Lsr
+         Zg4sv51ofm6O1rFx/6xu4cRJkr6n6ewGiEc1lvylcEox8Gl4XN4f7NO+FfnppDKSIH
+         OkSm6rljI6/IJnzaDdJsAiaJ/D3QdxxpXDG3tQh+ElyfiYbfKBqfxT4NX52YAgYjyj
+         LrRMxqMeqFECtx3JADYjCxusX2bqERPpCbMMY6TDr9S4+tE6ppWEwk76F129JebNOS
+         3YXud3Reuh4lDWM1bpMWVJVCIb8dgP3qyDwNgaemhUz1hkLYq7miClQr/YUtl0NcWG
+         HpXAHL23UOQJw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH] selftests/sgx: Fix corrupted cpuid macro invocation
+Date:   Sat,  4 Dec 2021 22:23:55 +0200
+Message-Id: <20211204202355.23005-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: smr71dzt7ndresc7qrttbw7o6ocaxgfd
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 078B52002F
-X-Spam-Status: No, score=-4.90
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/gRbVzh7w/1ujJibE/Phog2pI4ecg335U=
-X-HE-Tag: 1638587200-314246
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2021-12-03 at 17:24 -0700, Shuah Khan wrote:
-> On 12/3/21 12:50 PM, Joe Perches wrote:
-> > On Fri, 2021-12-03 at 11:26 -0700, Shuah Khan wrote:
-> > > On 11/24/21 5:56 PM, davidcomponentone@gmail.com wrote:
-> > > > From: Yang Guang <yang.guang5@zte.com.cn>
-> > > > 
-> > > > The coccinelle report
-> > > > ./tools/testing/selftests/mount/unprivileged-remount-test.c:285:54-59:
-> > > > WARNING: conversion to bool not needed here
-> > > > ./tools/testing/selftests/mount/unprivileged-remount-test.c:207:54-59:
-> > > > WARNING: conversion to bool not needed here
-> > > > Relational and logical operators evaluate to bool,
-> > > > explicit conversion is overly verbose and unneeded.
-> > > > 
-> > > > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > > > Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-> > > > ---
-> > > >    tools/testing/selftests/mount/unprivileged-remount-test.c | 4 ++--
-> > > >    1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/mount/unprivileged-remount-test.c b/tools/testing/selftests/mount/unprivileged-remount-test.c
-> > > > index 584dc6bc3b06..d2917054fe3a 100644
-> > > > --- a/tools/testing/selftests/mount/unprivileged-remount-test.c
-> > > > +++ b/tools/testing/selftests/mount/unprivileged-remount-test.c
-> > > > @@ -204,7 +204,7 @@ bool test_unpriv_remount(const char *fstype, const char *mount_options,
-> > > >    		if (!WIFEXITED(status)) {
-> > > >    			die("child did not terminate cleanly\n");
-> > > >    		}
-> > > > -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
-> > > > +		return WEXITSTATUS(status) == EXIT_SUCCESS;
-> > > >    	}
-> > > >    
-> > > >    	create_and_enter_userns();
-> > > > @@ -282,7 +282,7 @@ static bool test_priv_mount_unpriv_remount(void)
-> > > >    		if (!WIFEXITED(status)) {
-> > > >    			die("child did not terminate cleanly\n");
-> > > >    		}
-> > > > -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
-> > > > +		return WEXITSTATUS(status) == EXIT_SUCCESS;
-> > > >    	}
-> > > >    
-> > > >    	orig_mnt_flags = read_mnt_flags(orig_path);
-> > > > 
-> > > 
-> > > This change doesn't look right. WEXITSTATUS(status) return could be
-> > > > 1 or 0 or negative.
-> > 
-> > The change is at least logically correct.
-> > 
-> > And isn't WEXITSTATUS range limited from 0->255 ?
-> > 
-> > https://www.gnu.org/software/libc/manual/html_node/Exit-Status.html
-> > 
-> 
-> You are right. In any case, I don't see any value in changing the current
-> logic. The way it is coded is cryptic enough :)
+Compilation results:
 
-Well, it'd be more like the rest of the kernel when changed.
+$ make -C tools/testing/selftests/sgx/
+make: Entering directory '/home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx'
+gcc -Wall -Werror -g -I../../../../tools/include -fPIC -z noexecstack -c main.c -o /home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx/main.o
+main.c: In function ‘get_total_epc_mem’:
+main.c:296:17: error: implicit declaration of function ‘__cpuid’ [-Werror=implicit-function-declaration]
+  296 |                 __cpuid(&eax, &ebx, &ecx, &edx);
+      |                 ^~~~~~~
+cc1: all warnings being treated as errors
+make: *** [Makefile:33: /home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx/main.o] Error 1
+make: Leaving directory '/home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx'
 
-bool function()
-{
-	...
-	return <foo> ? true : false;
-}
+Include to cpuid.h is missing and the macro usage is incorrect.
 
-is pretty redundant.
+Include cpuid.h and use __cpuid_count() macro in order to fix the
+compilation issue.
 
+Fixes: f0ff2447b861 ("selftests/sgx: Add a new kselftest: Unclobbered_vdso_oversubscribed")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ tools/testing/selftests/sgx/main.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 7e912db4c6c5..370c4995f7c4 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*  Copyright(c) 2016-20 Intel Corporation. */
+ 
++#include <cpuid.h>
+ #include <elf.h>
+ #include <errno.h>
+ #include <fcntl.h>
+@@ -291,9 +292,7 @@ static unsigned long get_total_epc_mem(void)
+ 	int section = 0;
+ 
+ 	while (true) {
+-		eax = SGX_CPUID;
+-		ecx = section + SGX_CPUID_EPC;
+-		__cpuid(&eax, &ebx, &ecx, &edx);
++		__cpuid_count(SGX_CPUID, section + SGX_CPUID_EPC, eax, ebx, ecx, edx);
+ 
+ 		type = eax & SGX_CPUID_EPC_MASK;
+ 		if (type == SGX_CPUID_EPC_INVALID)
+-- 
+2.32.0
 
