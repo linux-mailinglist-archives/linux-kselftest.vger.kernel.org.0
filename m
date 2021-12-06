@@ -2,131 +2,785 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCB34691AB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 09:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE09469225
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 10:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239643AbhLFIpR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Dec 2021 03:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239637AbhLFIpQ (ORCPT
+        id S239468AbhLFJSi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Dec 2021 04:18:38 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52166 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239396AbhLFJSh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:45:16 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC76CC061746
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 00:41:47 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id r25so39511694edq.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Dec 2021 00:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kYsv0I6A6o5uFK+UPY8fyAiz1zz4uJD9KLB+ITvNrnU=;
-        b=Na9oLGTjiwHYKrfq7A9Qz4LGmlnRJjcpjIOYPpDh/3BPi9g5o1X8rpVW4mP/sxLFWM
-         hAuDGpKChArD8g+AXlU3xZp/f/CHbnKk1crqS++1O4gK3JoooqAizE3HZFSUN9B+eaqK
-         3CZjCwIC5WElGg5rbsUrL1k4xBeKlcgQZLyMBwKuYvrHfsbaL1C8bahRh0XklvAoVPZF
-         VQN9nFEdammFsIlCeEssLeM5W9x/+5bmPw/SKWrmpagzgxdh6Q8E3taxBMV46/WvALY1
-         E6lPsbdWc7CDV7BKSnBtiGSzkK0b0Sk7YbTI4crokMt+UXLf3a/071HEN/2Woe91yaGy
-         O2nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kYsv0I6A6o5uFK+UPY8fyAiz1zz4uJD9KLB+ITvNrnU=;
-        b=hXOwq9Yzlbm96luAmCz/Ac8rjxwFZG7djOvwAKi/tTOG+FZCm1q+ovgJG8d3EYdTUT
-         D4XDfv0iXRmmpE0qFTBkC/7ImOFY+/BN1va2mjnkvBfNHt+ni4Z8vi23UQgPGaeNtm+n
-         XbB1l5RBPCeBD9LRTUr/yLYGrj07dlphOGGliYjM/dCuWdu3KIUVTB6RKNwquB4aJjWF
-         4tYkt7+jHFLPXHdWu81vk/Tv1/VUTAFsbIR9prJ07aXbFhZ+EpLgjJB8Jo+B3wIm/r/X
-         cpsiOlKyqnAGKXbWRkjV5az9nSMfYrl1E2fXsYvHe5fmJ6kv4gz1FSmurrwOsK5fpLhL
-         5oPw==
-X-Gm-Message-State: AOAM533K3h1hy1STw4sC5xyk94LYw1keFe+rm7EtbPp4oqTB+xdedAM0
-        JDwg6elKK4uf3dAyL6Nu5PVolYzFz+ob8j0TGp+0RA==
-X-Google-Smtp-Source: ABdhPJwaXHvLPRG0pSMIzqzjXufeL6J34ZTE554GDIxU4BWMdqMOHmcM0b1i3AQuocmn3XKeV23g6rGKxx5cN6iGC/8=
-X-Received: by 2002:a17:907:c15:: with SMTP id ga21mr43076617ejc.349.1638780104294;
- Mon, 06 Dec 2021 00:41:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-4-brgl@bgdev.pl>
- <YapnTHQZyNCZXrgp@smile.fi.intel.com> <YapoW+DL4jPo69u8@smile.fi.intel.com>
- <Yapp4vakFxH7JV5B@smile.fi.intel.com> <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
- <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
-In-Reply-To: <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Dec 2021 09:41:33 +0100
-Message-ID: <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
-Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 6 Dec 2021 04:18:37 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4FB5221958;
+        Mon,  6 Dec 2021 09:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638782108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PAXDMrBHKcj19qzCz2WytB9mQPCtAYAhvkQk3xSQ5o=;
+        b=L0t+yQ+aWKqjUYUhUldu2PnnjHoef3XKo4ogOKZMHv6cgTODI+zXqmwbfxbTH9WjJyAe14
+        RMHmMUw4KQCvbUAmyKwiF4ajG4a9X55XniCeABzizzxtDibaQDFgjeARKNAPVb7OSCEQaq
+        sU4VGqLmZyxUtj3R8Y/pOgS7qbcYQTY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638782108;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8PAXDMrBHKcj19qzCz2WytB9mQPCtAYAhvkQk3xSQ5o=;
+        b=25tiOoRzYDDGgrWmWiqIJBQVEhUxC3rhiJp2ZwZnlogyRNkhl9S3FG5zKeHWdFiayQOAsm
+        8IEL7FWsRJjNXwBw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 444B1A3B81;
+        Mon,  6 Dec 2021 09:15:08 +0000 (UTC)
+Date:   Mon, 06 Dec 2021 10:15:08 +0100
+Message-ID: <s5hlf0yqelf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kselftest@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] kselftest: alsa: Add simplistic test for ALSA mixer controls kselftest
+In-Reply-To: <20211203193311.211400-1-broonie@kernel.org>
+References: <20211203193311.211400-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Dec 03, 2021 at 08:28:34PM +0100, Bartosz Golaszewski wrote:
-> > On Fri, Dec 3, 2021 at 8:04 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Fri, Dec 03, 2021 at 08:56:27PM +0200, Andy Shevchenko wrote:
-> > > > On Fri, Dec 03, 2021 at 08:51:56PM +0200, Andy Shevchenko wrote:
-> > > > > On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
->
-> ...
->
-> > > > > >   if (gc->parent)
-> > > > > >           gdev->dev.of_node = gc->parent->of_node;
-> > > > > >
-> > > > > > + if (gc->fwnode)
-> > > > > > +         gc->of_node = to_of_node(gc->fwnode);
-> > > > > > +
-> > > > > >   /* If the gpiochip has an assigned OF node this takes precedence */
-> > > > > >   if (gc->of_node)
-> > > > > >           gdev->dev.of_node = gc->of_node;
-> > > > >
-> > > > > Similar should be done in acpi_gpio_dev_init():
->
->
-> ^^^^^^ (1)
->
-> ...
->
-> > > If we have parent device for several GPIO devices, this won't work right now
-> > > due to limitations of fwnode regarding to the sturct device.
-> > >
-> > > So, it means we may not have shared primary with different secondary fwnodes.
-> > >
-> > > So, come back to the initial suggestion (overwrite it for now):
-> > >
-> > >         /*
-> > >          * If custom fwnode provided, use it. Currently we may not
-> > >          * handle the case where shared primary node has different
-> > >          * secondary ones. Ideally we have to use
-> > >          * set_secondary_fwnode() here.
-> > >          */
-> > >         if (gc->fwnode)
-> > >                 device_set_node(&gdev->dev, gc->fwnode);
-> > >
-> >
-> > Other parts of gpiolib-of depend on the of_node being there.
-> > Converting it to fwnode is a whole other task so for now I suggest we
-> > just convert the fwnode to of_node in struct gpio_chip as per my
-> > patch.
->
-> But this is about ACPI counterpart. If you do this, do this in both cases.
-> Above code for ACPI (1).
->
+On Fri, 03 Dec 2021 20:33:11 +0100,
+Mark Brown wrote:
+> 
+> Add a basic test for the mixer control interface. For every control on
+> every sound card in the system it checks that it can read and write the
+> default value where the control supports that and for writeable controls
+> attempts to write all valid values, restoring the default values after
+> each test to minimise disruption for users.
+> 
+> There are quite a few areas for improvement - currently no coverage of the
+> generation of notifications, several of the control types don't have any
+> coverage for the values and we don't have any testing of error handling
+> when we attempt to write out of range values - but this provides some basic
+> coverage.
+> 
+> This is added as a kselftest since unlike other ALSA test programs it does
+> not require either physical setup of the device or interactive monitoring
+> by users and kselftest is one of the test suites that is frequently run by
+> people doing general automated testing so should increase coverage. It is
+> written in terms of alsa-lib since tinyalsa is not generally packaged for
+> distributions which makes things harder for general users interested in
+> kselftest as a whole but it will be a barrier to people with Android.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-This series concerns the gpio-sim driver and it only uses configfs
-(with manually created platform devices) or device-tree. I would
-prefer to do ACPI separately and I'd like you to lead that because I
-neither have any HW to test nor claim to understand it. :)
+Thanks for the patch!  That's one of my long-standing TODO, and you
+solved it :)
 
-Bart
+Through a quick glance, the code looks fine.  But a general question
+is how to deal with the external library setup for kselftest.  Ideally
+speaking, the include and the library paths should be managed via
+pkgconfig, but it'll make things a bit more complicated, of course.
+And what if the system has no libasound?  Will we make it mandatory?
+
+
+Takashi
+
+> ---
+>  MAINTAINERS                               |   7 +
+>  tools/testing/selftests/Makefile          |   3 +-
+>  tools/testing/selftests/alsa/.gitignore   |   1 +
+>  tools/testing/selftests/alsa/Makefile     |   8 +
+>  tools/testing/selftests/alsa/mixer-test.c | 616 ++++++++++++++++++++++
+>  5 files changed, 634 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/alsa/.gitignore
+>  create mode 100644 tools/testing/selftests/alsa/Makefile
+>  create mode 100644 tools/testing/selftests/alsa/mixer-test.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5b1e79f8e3d8..92deb9a83b8c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17934,6 +17934,7 @@ F:	Documentation/sound/
+>  F:	include/sound/
+>  F:	include/uapi/sound/
+>  F:	sound/
+> +F:	tools/testing/selftests/alsa
+>  
+>  SOUND - COMPRESSED AUDIO
+>  M:	Vinod Koul <vkoul@kernel.org>
+> @@ -17953,6 +17954,12 @@ F:	include/sound/dmaengine_pcm.h
+>  F:	sound/core/pcm_dmaengine.c
+>  F:	sound/soc/soc-generic-dmaengine-pcm.c
+>  
+> +SOUND - ALSA SELFTESTS
+> +M:	Mark Brown <broonie@kernel.org>
+> +L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+> +S:	Supported
+> +F:	tools/testing/selftests/alsa
+> +
+>  SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEMENT (ASoC)
+>  M:	Liam Girdwood <lgirdwood@gmail.com>
+>  M:	Mark Brown <broonie@kernel.org>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index c852eb40c4f7..d08fe4cfe811 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -TARGETS = arm64
+> +TARGETS += alsa
+> +TARGETS += arm64
+>  TARGETS += bpf
+>  TARGETS += breakpoints
+>  TARGETS += capabilities
+> diff --git a/tools/testing/selftests/alsa/.gitignore b/tools/testing/selftests/alsa/.gitignore
+> new file mode 100644
+> index 000000000000..3bb7c41266a8
+> --- /dev/null
+> +++ b/tools/testing/selftests/alsa/.gitignore
+> @@ -0,0 +1 @@
+> +mixer-test
+> diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
+> new file mode 100644
+> index 000000000000..e62f227ce02c
+> --- /dev/null
+> +++ b/tools/testing/selftests/alsa/Makefile
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +
+> +LDLIBS += -lasound
+> +
+> +TEST_GEN_PROGS := mixer-test
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+> new file mode 100644
+> index 000000000000..6082efa0b426
+> --- /dev/null
+> +++ b/tools/testing/selftests/alsa/mixer-test.c
+> @@ -0,0 +1,616 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// kselftest for the ALSA mixer API
+> +//
+> +// Original author: Mark Brown <broonie@kernel.org>
+> +// Copyright (c) 2021 Arm Limited
+> +
+> +// This test will iterate over all cards detected in the system, exercising
+> +// every mixer control it can find.  This may conflict with other system
+> +// software if there is audio activity so is best run on a system with a
+> +// minimal active userspace.
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <stdbool.h>
+> +#include <string.h>
+> +#include <getopt.h>
+> +#include <stdarg.h>
+> +#include <ctype.h>
+> +#include <math.h>
+> +#include <errno.h>
+> +#include <assert.h>
+> +#include <alsa/asoundlib.h>
+> +#include <poll.h>
+> +#include <stdint.h>
+> +
+> +#include "../kselftest.h"
+> +
+> +#define TESTS_PER_CONTROL 3
+> +
+> +struct card_data {
+> +	snd_ctl_t *handle;
+> +	int card;
+> +	int num_ctls;
+> +	snd_ctl_elem_list_t *ctls;
+> +	struct card_data *next;
+> +};
+> +
+> +struct ctl_data {
+> +	const char *name;
+> +	snd_ctl_elem_id_t *id;
+> +	snd_ctl_elem_info_t *info;
+> +	snd_ctl_elem_value_t *def_val;
+> +	int elem;
+> +	struct card_data *card;
+> +	struct ctl_data *next;
+> +};
+> +
+> +int num_cards = 0;
+> +int num_controls = 0;
+> +struct card_data *card_list = NULL;
+> +struct ctl_data *ctl_list = NULL;
+> +
+> +void find_controls(void)
+> +{
+> +	char name[32];
+> +	int card, ctl, err;
+> +	struct card_data *card_data;
+> +	struct ctl_data *ctl_data;
+> +
+> +	card = -1;
+> +	if (snd_card_next(&card) < 0 || card < 0)
+> +		return;
+> +
+> +	while (card >= 0) {
+> +		sprintf(name, "hw:%d", card);
+> +
+> +		card_data = malloc(sizeof(*card_data));
+> +		if (!card_data) {
+> +			ksft_print_msg("Out of memory\n");
+> +			ksft_exit_fail();
+> +		}
+> +
+> +		err = snd_ctl_open(&card_data->handle, name, 0);
+> +		if (err < 0) {
+> +			ksft_print_msg("Failed to get hctl for card %d: %s\n",
+> +				       card, snd_strerror(err));
+> +			goto next_card;
+> +		}
+> +
+> +		/* Count controls */
+> +		snd_ctl_elem_list_malloc(&card_data->ctls);
+> +		snd_ctl_elem_list(card_data->handle, card_data->ctls);
+> +		card_data->num_ctls = snd_ctl_elem_list_get_count(card_data->ctls);
+> +
+> +		/* Enumerate control information */
+> +		snd_ctl_elem_list_alloc_space(card_data->ctls, card_data->num_ctls);
+> +		snd_ctl_elem_list(card_data->handle, card_data->ctls);
+> +
+> +		card_data->card = num_cards++;
+> +		card_data->next = card_list;
+> +		card_list = card_data;
+> +
+> +		num_controls += card_data->num_ctls;
+> +
+> +		for (ctl = 0; ctl < card_data->num_ctls; ctl++) {
+> +			ctl_data = malloc(sizeof(*ctl_data));
+> +			if (!ctl_data) {
+> +				ksft_print_msg("Out of memory\n");
+> +				ksft_exit_fail();
+> +			}
+> +
+> +			ctl_data->card = card_data;
+> +			ctl_data->elem = ctl;
+> +			ctl_data->name = snd_ctl_elem_list_get_name(card_data->ctls,
+> +								    ctl);
+> +
+> +			err = snd_ctl_elem_id_malloc(&ctl_data->id);
+> +			if (err < 0) {
+> +				ksft_print_msg("Out of memory\n");
+> +				ksft_exit_fail();
+> +			}
+> +
+> +			err = snd_ctl_elem_info_malloc(&ctl_data->info);
+> +			if (err < 0) {
+> +				ksft_print_msg("Out of memory\n");
+> +				ksft_exit_fail();
+> +			}
+> +
+> +			err = snd_ctl_elem_value_malloc(&ctl_data->def_val);
+> +			if (err < 0) {
+> +				ksft_print_msg("Out of memory\n");
+> +				ksft_exit_fail();
+> +			}
+> +
+> +			snd_ctl_elem_list_get_id(card_data->ctls, ctl,
+> +						 ctl_data->id);
+> +			snd_ctl_elem_info_set_id(ctl_data->info, ctl_data->id);
+> +			err = snd_ctl_elem_info(card_data->handle,
+> +						ctl_data->info);
+> +			if (err < 0) {
+> +				ksft_print_msg("%s getting info for %d\n",
+> +					       snd_strerror(err),
+> +					       ctl_data->name);
+> +			}
+> +
+> +			snd_ctl_elem_value_set_id(ctl_data->def_val,
+> +						  ctl_data->id);
+> +
+> +			ctl_data->next = ctl_list;
+> +			ctl_list = ctl_data;
+> +		}
+> +
+> +	next_card:
+> +		if (snd_card_next(&card) < 0) {
+> +			ksft_print_msg("snd_card_next");
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+> +/*
+> + * Check that we can read the default value and it is valid. Write
+> + * tests use the read value to restore the default.
+> + */
+> +void test_ctl_get_value(struct ctl_data *ctl)
+> +{
+> +	int err;
+> +	long int_val;
+> +	long long int64_val;
+> +
+> +	/* If the control is turned off let's be polite */
+> +	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> +		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_test_result_skip("get_value.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	/* Can't test reading on an unreadable control */
+> +	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+> +		ksft_print_msg("%s is not readable\n", ctl->name);
+> +		ksft_test_result_skip("get_value.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	err = snd_ctl_elem_read(ctl->card->handle, ctl->def_val);
+> +	if (err < 0) {
+> +		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +			       snd_strerror(err));
+> +		goto out;
+> +	}
+> +
+> +	switch (snd_ctl_elem_info_get_type(ctl->info)) {
+> +	case SND_CTL_ELEM_TYPE_NONE:
+> +		ksft_print_msg("%s Invalid control type NONE\n", ctl->name);
+> +		err = -1;
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_BOOLEAN:
+> +		int_val = snd_ctl_elem_value_get_boolean(ctl->def_val, 0);
+> +		switch (int_val) {
+> +		case 0:
+> +		case 1:
+> +			break;
+> +		default:
+> +			ksft_print_msg("%s Invalid boolean value %ld\n",
+> +				       ctl->name, int_val);
+> +			err = -1;
+> +			break;
+> +		}
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_INTEGER:
+> +		int_val = snd_ctl_elem_value_get_integer(ctl->def_val, 0);
+> +
+> +		if (int_val < snd_ctl_elem_info_get_min(ctl->info)) {
+> +			ksft_print_msg("%s value %ld less than minimum %ld\n",
+> +				       ctl->name, int_val,
+> +				       snd_ctl_elem_info_get_min(ctl->info));
+> +			err = -1;
+> +		}
+> +
+> +		if (int_val > snd_ctl_elem_info_get_max(ctl->info)) {
+> +			ksft_print_msg("%s value %ld more than maximum %ld\n",
+> +				       ctl->name, int_val,
+> +				       snd_ctl_elem_info_get_max(ctl->info));
+> +			err = -1;
+> +		}
+> +
+> +		/* Only check step size if there is one and we're in bounds */
+> +		if (err >= 0 && snd_ctl_elem_info_get_step(ctl->info) &&
+> +		    (int_val - snd_ctl_elem_info_get_min(ctl->info) %
+> +		     snd_ctl_elem_info_get_step(ctl->info))) {
+> +			ksft_print_msg("%s value %ld invalid for step %ld minimum %ld\n",
+> +				       ctl->name, int_val,
+> +				       snd_ctl_elem_info_get_step(ctl->info),
+> +				       snd_ctl_elem_info_get_min(ctl->info));
+> +			err = -1;
+> +		}
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_INTEGER64:
+> +		int64_val = snd_ctl_elem_value_get_integer64(ctl->def_val, 0);
+> +
+> +		if (int64_val < snd_ctl_elem_info_get_min64(ctl->info)) {
+> +			ksft_print_msg("%s value %lld less than minimum %lld\n",
+> +				       ctl->name, int64_val,
+> +				       snd_ctl_elem_info_get_min64(ctl->info));
+> +			err = -1;
+> +		}
+> +
+> +		if (int64_val > snd_ctl_elem_info_get_max64(ctl->info)) {
+> +			ksft_print_msg("%s value %lld more than maximum %lld\n",
+> +				       ctl->name, int64_val,
+> +				       snd_ctl_elem_info_get_max(ctl->info));
+> +			err = -1;
+> +		}
+> +
+> +		/* Only check step size if there is one and we're in bounds */
+> +		if (err >= 0 && snd_ctl_elem_info_get_step64(ctl->info) &&
+> +		    (int64_val - snd_ctl_elem_info_get_min64(ctl->info)) %
+> +		    snd_ctl_elem_info_get_step64(ctl->info)) {
+> +			ksft_print_msg("%s value %lld invalid for step %lld minimum %lld\n",
+> +				       ctl->name, int64_val,
+> +				       snd_ctl_elem_info_get_step64(ctl->info),
+> +				       snd_ctl_elem_info_get_min64(ctl->info));
+> +			err = -1;
+> +		}
+> +		break;
+> +
+> +	default:
+> +		/* No tests for other types */
+> +		ksft_test_result_skip("get_value.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +out:
+> +	ksft_test_result(err >= 0, "get_value.%d.%d\n",
+> +			 ctl->card->card, ctl->elem);
+> +}
+> +
+> +bool show_mismatch(struct ctl_data *ctl, int index,
+> +		   snd_ctl_elem_value_t *read_val,
+> +		   snd_ctl_elem_value_t *expected_val)
+> +{
+> +	long long expected_int, read_int;
+> +
+> +	/*
+> +	 * We factor out the code to compare values representable as
+> +	 * integers, ensure that check doesn't log otherwise.
+> +	 */
+> +	expected_int = 0;
+> +	read_int = 0;
+> +
+> +	switch (snd_ctl_elem_info_get_type(ctl->info)) {
+> +	case SND_CTL_ELEM_TYPE_BOOLEAN:
+> +		expected_int = snd_ctl_elem_value_get_boolean(expected_val,
+> +							      index);
+> +		read_int = snd_ctl_elem_value_get_boolean(read_val, index);
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_INTEGER:
+> +		expected_int = snd_ctl_elem_value_get_integer(expected_val,
+> +							      index);
+> +		read_int = snd_ctl_elem_value_get_integer(read_val, index);
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_INTEGER64:
+> +		expected_int = snd_ctl_elem_value_get_integer64(expected_val,
+> +								index);
+> +		read_int = snd_ctl_elem_value_get_integer64(read_val,
+> +							    index);
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_ENUMERATED:
+> +		expected_int = snd_ctl_elem_value_get_enumerated(expected_val,
+> +								 index);
+> +		read_int = snd_ctl_elem_value_get_enumerated(read_val,
+> +							     index);
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if (expected_int != read_int) {
+> +		ksft_print_msg("%s.%d expected %lld but read %lld\n",
+> +			       ctl->name, index, expected_int, read_int);
+> +		return true;
+> +	} else {
+> +		return false;
+> +	}
+> +}
+> +
+> +/*
+> + * Write a value then if possible verify that we get the expected
+> + * result.  An optional expected value can be provided if we expect
+> + * the write to fail, for verifying that invalid writes don't corrupt
+> + * anything.
+> + */
+> +int write_and_verify(struct ctl_data *ctl,
+> +		     snd_ctl_elem_value_t *write_val,
+> +		     snd_ctl_elem_value_t *expected_val)
+> +{
+> +	int err, i;
+> +	bool error_expected, mismatch_shown;
+> +	snd_ctl_elem_value_t *read_val, *w_val;
+> +	snd_ctl_elem_value_alloca(&read_val);
+> +	snd_ctl_elem_value_alloca(&w_val);
+> +
+> +	/*
+> +	 * We need to copy the write value since writing can modify
+> +	 * the value which causes surprises, and allocate an expected
+> +	 * value if we expect to read back what we wrote.
+> +	 */
+> +	snd_ctl_elem_value_copy(w_val, write_val);
+> +	if (expected_val) {
+> +		error_expected = true;
+> +	} else {
+> +		error_expected = false;
+> +		snd_ctl_elem_value_alloca(&expected_val);
+> +		snd_ctl_elem_value_copy(expected_val, write_val);
+> +	}
+> +
+> +	/*
+> +	 * Do the write, if we have an expected value ignore the error
+> +	 * and carry on to validate the expected value.
+> +	 */
+> +	err = snd_ctl_elem_write(ctl->card->handle, w_val);
+> +	if (err < 0 && !error_expected) {
+> +		ksft_print_msg("snd_ctl_elem_write() failed: %s\n",
+> +			       snd_strerror(err));
+> +		return err;
+> +	}
+> +
+> +	/* Can we do the verification part? */
+> +	if (!snd_ctl_elem_info_is_readable(ctl->info))
+> +		return err;
+> +
+> +	snd_ctl_elem_value_set_id(read_val, ctl->id);
+> +
+> +	err = snd_ctl_elem_read(ctl->card->handle, read_val);
+> +	if (err < 0) {
+> +		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +			       snd_strerror(err));
+> +		return err;
+> +	}
+> +
+> +	/*
+> +	 * Use the libray to compare values, if there's a mismatch
+> +	 * carry on and try to provide a more useful diagnostic than
+> +	 * just "mismatch".
+> +	 */
+> +	if (!snd_ctl_elem_value_compare(expected_val, read_val))
+> +		return 0;
+> +
+> +	mismatch_shown = false;
+> +	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++)
+> +		if (show_mismatch(ctl, i, read_val, expected_val))
+> +			mismatch_shown = true;
+> +
+> +	if (!mismatch_shown)
+> +		ksft_print_msg("%s read and written values differ\n",
+> +			       ctl->name);
+> +
+> +	return -1;
+> +}
+> +
+> +/*
+> + * Make sure we can write the default value back to the control, this
+> + * should validate that at least some write works.
+> + */
+> +void test_ctl_write_default(struct ctl_data *ctl)
+> +{
+> +	int err;
+> +
+> +	/* If the control is turned off let's be polite */
+> +	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> +		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_test_result_skip("write_default.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> +		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_test_result_skip("write_default.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	/* No idea what the default was for unreadable controls */
+> +	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+> +		ksft_print_msg("%s couldn't read default\n", ctl->name);
+> +		ksft_test_result_skip("write_default.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	err = write_and_verify(ctl, ctl->def_val, NULL);
+> +
+> +	ksft_test_result(err >= 0, "write_default.%d.%d\n",
+> +			 ctl->card->card, ctl->elem);
+> +}
+> +
+> +bool test_ctl_write_valid_boolean(struct ctl_data *ctl)
+> +{
+> +	int err, i, j;
+> +	bool fail = false;
+> +	snd_ctl_elem_value_t *val;
+> +	snd_ctl_elem_value_alloca(&val);
+> +
+> +	snd_ctl_elem_value_set_id(val, ctl->id);
+> +
+> +	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
+> +		for (j = 0; j < 2; j++) {
+> +			snd_ctl_elem_value_set_boolean(val, i, j);
+> +			err = write_and_verify(ctl, val, NULL);
+> +			if (err != 0)
+> +				fail = true;
+> +		}
+> +	}
+> +
+> +	return !fail;
+> +}
+> +
+> +bool test_ctl_write_valid_integer(struct ctl_data *ctl)
+> +{
+> +	int err;
+> +	int i;
+> +	long j, step;
+> +	bool fail = false;
+> +	snd_ctl_elem_value_t *val;
+> +	snd_ctl_elem_value_alloca(&val);
+> +
+> +	snd_ctl_elem_value_set_id(val, ctl->id);
+> +
+> +	step = snd_ctl_elem_info_get_step(ctl->info);
+> +	if (!step)
+> +		step = 1;
+> +
+> +	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
+> +		for (j = snd_ctl_elem_info_get_min(ctl->info);
+> +		     j <= snd_ctl_elem_info_get_max(ctl->info); j += step) {
+> +
+> +			snd_ctl_elem_value_set_integer(val, i, j);
+> +			err = write_and_verify(ctl, val, NULL);
+> +			if (err != 0)
+> +				fail = true;
+> +		}
+> +	}
+> +
+> +
+> +	return !fail;
+> +}
+> +
+> +bool test_ctl_write_valid_integer64(struct ctl_data *ctl)
+> +{
+> +	int err, i;
+> +	long long j, step;
+> +	bool fail = false;
+> +	snd_ctl_elem_value_t *val;
+> +	snd_ctl_elem_value_alloca(&val);
+> +
+> +	snd_ctl_elem_value_set_id(val, ctl->id);
+> +
+> +	step = snd_ctl_elem_info_get_step64(ctl->info);
+> +	if (!step)
+> +		step = 1;
+> +
+> +	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
+> +		for (j = snd_ctl_elem_info_get_min64(ctl->info);
+> +		     j <= snd_ctl_elem_info_get_max64(ctl->info); j += step) {
+> +
+> +			snd_ctl_elem_value_set_integer64(val, i, j);
+> +			err = write_and_verify(ctl, val, NULL);
+> +			if (err != 0)
+> +				fail = true;
+> +		}
+> +	}
+> +
+> +
+> +	return !fail;
+> +}
+> +
+> +bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
+> +{
+> +	int err, i, j;
+> +	bool fail = false;
+> +	snd_ctl_elem_value_t *val;
+> +	snd_ctl_elem_value_alloca(&val);
+> +
+> +	snd_ctl_elem_value_set_id(val, ctl->id);
+> +
+> +	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
+> +		for (j = 0; j < snd_ctl_elem_info_get_items(ctl->info); j++) {
+> +			snd_ctl_elem_value_set_enumerated(val, i, j);
+> +			err = write_and_verify(ctl, val, NULL);
+> +			if (err != 0)
+> +				fail = true;
+> +		}
+> +	}
+> +
+> +	return !fail;
+> +}
+> +
+> +void test_ctl_write_valid(struct ctl_data *ctl)
+> +{
+> +	bool pass;
+> +	int err;
+> +
+> +	/* If the control is turned off let's be polite */
+> +	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> +		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_test_result_skip("write_valid.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> +		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_test_result_skip("write_valid.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	switch (snd_ctl_elem_info_get_type(ctl->info)) {
+> +	case SND_CTL_ELEM_TYPE_BOOLEAN:
+> +		pass = test_ctl_write_valid_boolean(ctl);
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_INTEGER:
+> +		pass = test_ctl_write_valid_integer(ctl);
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_INTEGER64:
+> +		pass = test_ctl_write_valid_integer64(ctl);
+> +		break;
+> +
+> +	case SND_CTL_ELEM_TYPE_ENUMERATED:
+> +		pass = test_ctl_write_valid_enumerated(ctl);
+> +		break;
+> +
+> +	default:
+> +		/* No tests for this yet */
+> +		ksft_test_result_skip("write_valid.%d.%d\n",
+> +				      ctl->card->card, ctl->elem);
+> +		return;
+> +	}
+> +
+> +	/* Restore the default value to minimise disruption */
+> +	err = write_and_verify(ctl, ctl->def_val, NULL);
+> +	if (err < 0)
+> +		pass = false;
+> +
+> +	ksft_test_result(pass, "write_valid.%d.%d\n",
+> +			 ctl->card->card, ctl->elem);
+> +}
+> +
+> +int main(void)
+> +{
+> +	struct ctl_data *ctl;
+> +
+> +	ksft_print_header();
+> +
+> +	find_controls();
+> +
+> +	ksft_set_plan(num_controls * TESTS_PER_CONTROL);
+> +
+> +	for (ctl = ctl_list; ctl != NULL; ctl = ctl->next) {
+> +		/* 
+> +		 * Must test get_value() before we write anything, the
+> +		 * test stores the default value for later cleanup.
+> +		 */
+> +		test_ctl_get_value(ctl);
+> +		test_ctl_write_default(ctl);
+> +		test_ctl_write_valid(ctl);
+> +	}
+> +
+> +	ksft_exit_pass();
+> +
+> +	return 0;
+> +}
+> -- 
+> 2.30.2
+> 
