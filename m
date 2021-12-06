@@ -2,100 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AA34693EE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 11:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22D646972D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 14:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237318AbhLFKdO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Dec 2021 05:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhLFKdO (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:33:14 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA88C061746
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 02:29:44 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id u3so24165707lfl.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Dec 2021 02:29:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y/aEdQXaORv8l8iP33+Ms57TgKkJAnc4HC3EItYSgUw=;
-        b=mxmcxFnHOjLMmFokTw2XUgQVR5hYlqz7gpK5NdCwDT/Og37kuC7I8sAI31JDQ4pxNP
-         wQEgf6Veq4K9bGEMtvMAQL7SJlqnUV2c8cRbzdHZ1lNgL381nat2ZFeczfI+zivOp0wE
-         U6VqFkBSisSVzWDDRWaIWZ3mKjBEr1MI9G3DozJCfis93f1zNo1krQEel5b7gakSafr9
-         a0AIaKcLDtzEbKLxNP7B9bSIv+Pwet0ymg8owabic3CcS7bGL21hTEqaf1pGKcsx0+Up
-         hgmnDd7Zab7HCPTg0ptNg3ldIogFkKC3ZAj62yCaMHd/wizDTAWXMlV9MyHeHXBrWRGs
-         UU7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y/aEdQXaORv8l8iP33+Ms57TgKkJAnc4HC3EItYSgUw=;
-        b=qGPV+PCGo+Wlxt0q4YXAiJqqyqq+hyTO4f8bau5wvG17H7Sxfa+HENNfPwR7Oq2hRF
-         muhbZvt8TqBsKf+U4K3fKXZNHJgfMIgrYDAjDUtYLbzhou3qCOfIc1hdh98n3A6rjBie
-         4JRWMXRYLNYaKiAWRSuoDaaiwCKmyUdPBRaANUwxFxopVsO9YZsImUXxlie+wjEZkxK5
-         E/8Q6dWOw5xHipIaBSL+U6doXrHgVHvyYdjGgnSdnHXxtiU0ZWUezUN9pPyCOObadWaK
-         ONlcdTSUn5rNSIVkOJqTGigpFux9tuG73J82GevKF5vEopKaeG//C2ZXAKSZm/rcJCJF
-         tvBg==
-X-Gm-Message-State: AOAM532kP9n4UqHdrvRN7EbAUFo2UPGgvZMnbCkkpeq0GTZCTU4/048V
-        9gD6NYFdalhV8GxoUpMbnyBsBg==
-X-Google-Smtp-Source: ABdhPJz//+sU+FT9yaz5d8hL56MAE1by66Yalv6F4erw1ZQq4HM1mGHiw3GIRqhqoT71z6aied+vLg==
-X-Received: by 2002:a05:6512:693:: with SMTP id t19mr34292201lfe.647.1638786583113;
-        Mon, 06 Dec 2021 02:29:43 -0800 (PST)
-Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id u10sm1312802lfb.209.2021.12.06.02.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 02:29:42 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     shuah@kernel.org
-Cc:     nathan@kernel.org, ndesaulniers@google.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v2] selftests: vDSO: parse: warning: fix assignment as a condition
-Date:   Mon,  6 Dec 2021 11:29:31 +0100
-Message-Id: <20211206102931.1433871-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.33.0
+        id S244567AbhLFNhD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Dec 2021 08:37:03 -0500
+Received: from mga18.intel.com ([134.134.136.126]:61750 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244021AbhLFNhC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:37:02 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224179962"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="224179962"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:33:34 -0800
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="611237903"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:33:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muE6Y-002nGv-G0;
+        Mon, 06 Dec 2021 15:32:30 +0200
+Date:   Mon, 6 Dec 2021 15:32:30 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v12 4/7] gpio: sim: new testing module
+Message-ID: <Ya4Q7s9sbk2UHNA3@smile.fi.intel.com>
+References: <20211203133003.31786-1-brgl@bgdev.pl>
+ <20211203133003.31786-5-brgl@bgdev.pl>
+ <Yap4/VshDPNxLfOt@smile.fi.intel.com>
+ <CAMRc=MegnF-VZswJym7np4sBMyFf0=gqeFGdKS0xytnmQOhUpw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MegnF-VZswJym7np4sBMyFf0=gqeFGdKS0xytnmQOhUpw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When building selftests/vDSO with clang the following warning shows up:
+On Mon, Dec 06, 2021 at 10:48:00AM +0100, Bartosz Golaszewski wrote:
+> On Fri, Dec 3, 2021 at 9:08 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Fri, Dec 03, 2021 at 02:30:00PM +0100, Bartosz Golaszewski wrote:
 
-clang -std=gnu99 -Wno-pointer-sign vdso_test_gettimeofday.c parse_vdso.c \
-      -o /tmp/kselftest/vDSO/vdso_test_gettimeofday
-parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
-                if (g = h & 0xf0000000)
-                    ~~^~~~~~~~~~~~~~~~
+...
 
-Rework to a parentheses before doing the check.
+> > > +#include <linux/gpio/driver.h>
+> > > +#include <linux/gpio/machine.h>
+> >
+> > I would rather move this group below to emphasize that this is closer to GPIO
+> > then to other APIs.
+> >
+> > > +#include <linux/sysfs.h>
+> > > +
+> >
+> > ...here.
+> >
+> 
+> With the number of headers in this file, I'd stick with alphabetical order.
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
----
+I understand that and agree, but my point is orthogonal to this. The idea is to
+emphasize that "hey. this driver has tough relations with the GPIO subsystem".
+This is the way, for example, IIO does and I like it.
 
-v1 -> v2: fixed checkpatch warnings
+> > > +#include "gpiolib.h"
 
- tools/testing/selftests/vDSO/parse_vdso.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+...
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 413f75620a35..fdd38f7e0e43 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -62,7 +62,8 @@ static unsigned long elf_hash(const unsigned char *name)
- 	while (*name)
- 	{
- 		h = (h << 4) + *name++;
--		if (g = h & 0xf0000000)
-+		g = h & 0xf0000000;
-+		if (g)
- 			h ^= g >> 24;
- 		h &= ~g;
- 	}
+> > > +static int gpio_sim_apply_pull(struct gpio_sim_chip *chip,
+> > > +                            unsigned int offset, int value)
+> >
+> > I would use up to 100 here...
+> >
+> > > +     if (test_bit(FLAG_REQUESTED, &desc->flags) &&
+> > > +         !test_bit(FLAG_IS_OUT, &desc->flags)) {
+> >
+> > ...here and so on.
+> >
+> > But it's up to you.
+> >
+> 
+> Nah, the lines are broken just fine. Let's not overuse the limit.
+
+Yes, but I would consider to join back those which are up to ~83 characters
+(I already pointed out at least to one example like this).
+
+...
+
+> > > +     if (sysfs_streq(buf, "pull-down"))
+> > > +             pull = 0;
+> > > +     else if (sysfs_streq(buf, "pull-up"))
+> > > +             pull = 1;
+> > > +     else
+> > > +             return -EINVAL;
+> >
+> > sysfs_match_string() and use the very same string array in the above function
+> > to print them?
+
+I suppose you agree on this?
+
+...
+
+> > > +     /* Default to input mode. */
+> > > +     bitmap_fill(chip->direction_map, num_lines);
+> >
+> > More accurate is to use bitmap_set(). If we ever debug this it also helpful.
+> 
+> I'm not sure what you mean, this sets all bits to 1.
+
+Nope, it may set _more_ than all bits. That's why bitmap_set() is more
+accurate, because it will do exact setting.
+
+...
+
+> > > +     if (strcmp(trimmed, "input") == 0)
+> > > +             dir = GPIOD_IN;
+> > > +     else if (strcmp(trimmed, "output-high") == 0)
+> > > +             dir = GPIOD_OUT_HIGH;
+> > > +     else if (strcmp(trimmed, "output-low") == 0)
+> > > +             dir = GPIOD_OUT_LOW;
+> > > +     else
+> > > +             dir = -EINVAL;
+> >
+> > Same idea, i.e. static string array and use it above and here with help
+> > of match_string().
+> 
+> It would be great but GPIOD_IN etc. are bit flags and not sequence enums.
+
+Ah, okay, it will make rather sparse array.
+
 -- 
-2.33.0
+With Best Regards,
+Andy Shevchenko
+
 
