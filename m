@@ -2,256 +2,769 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 006E946A097
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 17:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9A546A0E8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 17:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388774AbhLFQGP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Dec 2021 11:06:15 -0500
-Received: from mail-bn7nam10on2079.outbound.protection.outlook.com ([40.107.92.79]:63645
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1388526AbhLFQEN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:04:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cgCYRpeS11HuwIKZiiR5PTSQrYCPxRCnWsNnGuvNiKs1Dq0M6rkhq0wdgDzkMaLaex7CknYFup3XI5xf4wlk6El9uFho+m5xhumTk9gUmO/NqJ4tZQ6bAPe+3Wn525oNwn1Y25Li9w/l8Zj1YoQ1tN3wKaVlt6poqesAcN13potOnnqYlhVUsYQrGJRGQa+9uDdozZIm7Pyjjr8paeKLBy1wRdC3O0JPBgr76BzztzqoBLtbSE4NGXKEgjGSUh3FADX+x3Ke01b1IkwN77VSVFfTRHsHnx5ujXyFlV0oBdvaCXIXxTr3GSrf19jfhd2raW4GcuN06gp1ydXg3S3S6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1+T/E5P7m0zbVhcNjfbD5ONbqQspYl+6rSaqUTA3L/E=;
- b=nJy8j7OL31JKdFVMpveGnbWfcXR807Ofnk0kJs0csYZD0pw61kLoy+1ZxzeJtoYB/z2TTcXk4+MunJd2/LSvBXCu4RgwAom8mQwNo/DOujEMcqVCEXPvk5Q7nMwAW5PqZ2mc9XWB6LCdQST9G2ShDwyt+AVgreSr1/RjlG6FF2VZAKYalIgb2SbQ82qzig1s2ZZnyEjR9Gi0llZbyAy47nAFCURB9+PC5qKcME/WISzH0vwqwfLTNBmO+lWIFvp0JQC4IX9zbR/01AAPup4wwHvj1NVBX54YoYO20o87mNRS5LfUgWrHL/VTdqQeU2pKn4xxWmW0yHeygywTFItr7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.32) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1+T/E5P7m0zbVhcNjfbD5ONbqQspYl+6rSaqUTA3L/E=;
- b=p3GW4P2AQ2uhlZn/jl+FpytFyxETlJ9HQgTY0ZVBbmCkd2YgrVP8UmJbSetktUWaqn1z2F92jVaOudgAjNKxz/e+LAwr/B3fsMz2Dr9nmHrYgUnYqmMzymgasRjxeCAqvBjRWeRcxZlh/OlKdnDE1YV4NqA4esLnSwWWTWkXd290jYFgE1CiTWJHT8y7Z9OBzo53shhN6KGnD7Uj22Vj8ffcR8/DoTBVzdfmOagmqBQwRC7kKUaKsaTGfpGvOb0+3g4hLg81TGE3V3C7ztGqv5ge8K0zH+mYigZHdjoP9Xz6++SkEJM+mxJA+yYuR/w4XZggPnJs313tXU/C+yFohw==
-Received: from MW4PR04CA0215.namprd04.prod.outlook.com (2603:10b6:303:87::10)
- by BN9PR12MB5305.namprd12.prod.outlook.com (2603:10b6:408:102::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
- 2021 16:00:41 +0000
-Received: from CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:87:cafe::52) by MW4PR04CA0215.outlook.office365.com
- (2603:10b6:303:87::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.22 via Frontend
- Transport; Mon, 6 Dec 2021 16:00:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.32)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.32 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.32; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.32) by
- CO1NAM11FT055.mail.protection.outlook.com (10.13.175.129) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4755.13 via Frontend Transport; Mon, 6 Dec 2021 16:00:41 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 6 Dec
- 2021 08:00:33 -0800
-Received: from yaviefel (172.20.187.5) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Mon, 6 Dec 2021
- 08:00:28 -0800
-References: <20211201180208.640179-1-maciej.machnikowski@intel.com>
- <20211201180208.640179-3-maciej.machnikowski@intel.com>
- <Yai/e5jz3NZAg0pm@shredder>
- <MW5PR11MB5812455176BC656BABCFF1B0EA699@MW5PR11MB5812.namprd11.prod.outlook.com>
- <Yaj13pwDKrG78W5Y@shredder>
- <PH0PR11MB583105F8678665253A362797EA699@PH0PR11MB5831.namprd11.prod.outlook.com>
- <87pmqdojby.fsf@nvidia.com>
- <MW5PR11MB581202E2A601D34E30F1E5AEEA6A9@MW5PR11MB5812.namprd11.prod.outlook.com>
- <87lf11odsv.fsf@nvidia.com>
- <MW5PR11MB5812A86416E3100444894879EA6A9@MW5PR11MB5812.namprd11.prod.outlook.com>
- <87fsr9o7di.fsf@nvidia.com>
- <MW5PR11MB5812AA2C625AC00616F94A2AEA6A9@MW5PR11MB5812.namprd11.prod.outlook.com>
- <87czm9okyc.fsf@nvidia.com>
- <MW5PR11MB58121BF596AB9C501F900887EA6D9@MW5PR11MB5812.namprd11.prod.outlook.com>
-User-agent: mu4e 1.4.15; emacs 27.2
-From:   Petr Machata <petrm@nvidia.com>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
-CC:     Petr Machata <petrm@nvidia.com>, Ido Schimmel <idosch@idosch.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mkubecek@suse.cz" <mkubecek@suse.cz>,
-        "saeed@kernel.org" <saeed@kernel.org>,
-        "michael.chan@broadcom.com" <michael.chan@broadcom.com>
-Subject: Re: [PATCH v4 net-next 2/4] ethtool: Add ability to configure
- recovered clock for SyncE feature
-In-Reply-To: <MW5PR11MB58121BF596AB9C501F900887EA6D9@MW5PR11MB5812.namprd11.prod.outlook.com>
-Date:   Mon, 6 Dec 2021 17:00:26 +0100
-Message-ID: <877dchoh9h.fsf@nvidia.com>
+        id S1380310AbhLFQR0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Dec 2021 11:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386142AbhLFQQ4 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:16:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253C6C09B131
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 08:03:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C004CB8101C
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 16:03:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DFBC341C2;
+        Mon,  6 Dec 2021 16:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638806623;
+        bh=bhFd61Mdn4FusoON8dLdpmZdxu6jifN5jlCKLuosM0o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ogd1yXh7Y9uY4F3tqtw2HxvoL9UkxBD1N/yAqUifM+FofYsni0QA0ON5rx/roLQpH
+         bhxjwsSDQMJy1IBbw0aWvpoRJV5bH6VHIfy3zTSUC/BZt3C21zXz7MoyzRvekZ+xVy
+         tltVlu0Uygi6zrYnmqoB3N6e9HuTQpWBo11bkHXlb7J0q3z9RPlfz6HnGTPS7MibIk
+         QM3D8Ez+Eb+j2YhxgqkSX0TbLumW+7vUUtbOjyoky30WsPya+lUb4fkaQdyLD0KW4C
+         LV1Y1cP5RLMvRvUWodZzGaF4+pUgta2TTH5I02hDBSMdyrR+vmaUSgHpeLw4idzthM
+         jKBNTd3+A5bUA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>
+Cc:     linux-kselftest@vger.kernel.org, alsa-devel@alsa-project.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2] kselftest: alsa: Add simplistic test for ALSA mixer controls kselftest
+Date:   Mon,  6 Dec 2021 16:03:05 +0000
+Message-Id: <20211206160305.194011-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.20.187.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 484bc8b9-a266-4e05-d442-08d9b8d18d91
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5305:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB5305C95E42D7A5EBD64CE2DED66D9@BN9PR12MB5305.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UQKir9eYDm1EwJJQkpbXGse5X27u3dC9a09PEYW4eMAOWdUK0PRhvOmDqSlXT88O3XkiDqNiC/vbQ/kw+dO09GLVMFwGcT80FSBzWNHdl9IzKgPy4iHDJGZ7XcJLEGmFAGQptQYNVzRm+3Jhbs76fm8CUoU2azHEgJyTxbpJJLhFP47F8uqwJ6SA107CYsIpL0C0fVW8R9kg9LTSB0+1V1hxAcKRdwb3Ql3b5JzZ/REESVrHShgb/9euTzjlk9kb04TLnEQj3OwbiLcsp6nQt0z50nP//rPCGKdrT8cvjcZwcePaOZaCEqzYxeisLuWUoWKPf6RVdmV+ZwJH1+DZIpiykoWNK8Y2p5AGZ2EmVEOw2jcoN5lHrI+4S0RRONGtRtwFBjs5Is3azOkDtlIj9FKHV407AW49Yn16X4LFbl41G0E0oQq+n0UWP1cSNfxkz86k7D8dBTD41eitqxWOihQLVbZWHRmhbC5Ylt9OwHQWwseZ02raStJxFd5pU8z5CG0+9UgCP/Yy1TDNIJbYRinw7n0BSD/DV1idk6xiTnzum1tHtyatNlfFO9BGL72XrrTu5XWam8c8uhH/HuzDybEEWScuaATbAhx4ORmBsSaT87stNrIdjlFjj6SwpyevzD3/6prMavd4UJLsZXuSjywBv7JFl6UNncG3G4WQ2giG67k61tKIU6ljpQ9Ee+zlTpz8XVu1XxuaHLiVs15PdyOT+r/p65BLj9uB6Xpt93p/Z+LX/jdZcnDC/2Tn7zMYrv3QTVOvCOBR39+D10lPjA==
-X-Forefront-Antispam-Report: CIP:216.228.112.32;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(36860700001)(54906003)(53546011)(316002)(86362001)(7416002)(70586007)(70206006)(5660300002)(2906002)(508600001)(7636003)(8936002)(4326008)(8676002)(40460700001)(186003)(82310400004)(16526019)(47076005)(336012)(356005)(2616005)(83380400001)(426003)(26005)(6916009)(36756003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 16:00:41.0268
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 484bc8b9-a266-4e05-d442-08d9b8d18d91
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.32];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5305
+X-Developer-Signature: v=1; a=openpgp-sha256; l=20571; h=from:subject; bh=bhFd61Mdn4FusoON8dLdpmZdxu6jifN5jlCKLuosM0o=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhrjNlSW5ptuD9Xu4IW9TZUcJ4ruD2oxtnXPqPBUlA sN5GJweJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYa4zZQAKCRAk1otyXVSH0COFB/ 9kwF6TLSxJ4uonul3uhKVJ/XS6oce97iouiwQHZy7aMPGu0QqheKWNP7SirH3jIxsNpR+XZmrmhB5B IwFAaCenST9ZckWbBu3y/wn56uMSfGIhTMWH279Vo1Y6OL15hZqOnR9bdr/ypjR3Y00cyV//Hjp7p2 h8pEkrqND/k/K3rE8HBVMi3xHpORTd6mX1hZDjimxeawbfknjDovsBUEO/eEk0Y2FrzVQxMibYhfGr 00eYMvT750uspgtwRl1wQ4MGscmeRN5avmcUbhkinEXVoKeHftImhBL1rXmco29BfPJYTQuUmdwBX5 6BkxSLnKQBNt3UnercQj5fKu3oar6+
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add a basic test for the mixer control interface. For every control on
+every sound card in the system it checks that it can read and write the
+default value where the control supports that and for writeable controls
+attempts to write all valid values, restoring the default values after
+each test to minimise disruption for users.
 
-Machnikowski, Maciej <maciej.machnikowski@intel.com> writes:
+There are quite a few areas for improvement - currently no coverage of the
+generation of notifications, several of the control types don't have any
+coverage for the values and we don't have any testing of error handling
+when we attempt to write out of range values - but this provides some basic
+coverage.
 
->> -----Original Message-----
->> From: Petr Machata <petrm@nvidia.com>
->> Sent: Monday, December 6, 2021 3:41 PM
->> To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
->> Subject: Re: [PATCH v4 net-next 2/4] ethtool: Add ability to configure
->> recovered clock for SyncE feature
->> 
->> 
->> Machnikowski, Maciej <maciej.machnikowski@intel.com> writes:
->> 
->> >> -----Original Message-----
->> >> From: Petr Machata <petrm@nvidia.com>
->> >>
->> >> Machnikowski, Maciej <maciej.machnikowski@intel.com> writes:
->> >>
->> >> > Additionally, the EEC device may be instantiated by a totally
->> >> > different driver, in which case the relation between its pins
->> >> > and netdevs may not even be known.
->> >>
->> >> Like an EEC, some PHYs, but the MAC driver does not know about
->> >> both pieces? Who sets up the connection between the two? The box
->> >> admin through some cabling? SoC designer?
->> >>
->> >> Also, what does the external EEC actually do with the signal from
->> >> the PHY? Tune to it and forward to the other PHYs in the complex?
->> >
->> > Yes - it can also apply HW filters to it.
->> 
->> Sounds like this device should have an EEC instance of its own then.
->> 
->> Maybe we need to call it something else than "EEC". PLL? Something
->> that does not have the standardization connotations, because several
->> instances would be present in a system with several NICs.
->
-> There will be no EEC/EEC subsystem, but the DPLL. Every driver would
-> be able to create a DPLL object so that we can easily use it from
-> non-netdev devices as well. See the other mail for more details.
+This is added as a kselftest since unlike other ALSA test programs it does
+not require either physical setup of the device or interactive monitoring
+by users and kselftest is one of the test suites that is frequently run by
+people doing general automated testing so should increase coverage. It is
+written in terms of alsa-lib since tinyalsa is not generally packaged for
+distributions which makes things harder for general users interested in
+kselftest as a whole but it will be a barrier to people with Android.
 
-Yes, this makes sense to me.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
 
->> > The EEC model will not work when you have the following system:
->> > SoC with some ethernet ports with driver A
->> > Switch chip with N ports with driver B
->> > EEC/DPLL with driver C
->> > Both SoC and Switch ASIC can recover clock and use the cleaned
->> > clock from the DPLL.
->> >
->> > In that case you can't create any relation between EEC and recover
->> > clock pins that would enable the EEC subsystem to control
->> > recovered clocks, because you have 3 independent drivers.
->> 
->> I think that in that case you have several EEC instances. Those are
->> connected by some wiring that is external to the devices themselves. I
->> am not sure who should be in charge of describing the wiring. Device
->> tree? Config file?
->
-> In some complex systems you'll need to create a relation between
-> netdevs and DPLLs in a config file, so it is the only way to describe
-> all possible scenarios. We can't assume any connections between them,
-> as that's design specific, just like PTP pins are. They have labels,
-> but it's up to the system integrator to define how they are used. We
-> can consider creating some of them if they are known to the driver and
-> belong to the same driver.
+v2: Use pkg-config to get CFLAGS and LDLIBS for alsa-lib.
 
-Agreed.
+ MAINTAINERS                               |   7 +
+ tools/testing/selftests/Makefile          |   3 +-
+ tools/testing/selftests/alsa/.gitignore   |   1 +
+ tools/testing/selftests/alsa/Makefile     |   9 +
+ tools/testing/selftests/alsa/mixer-test.c | 616 ++++++++++++++++++++++
+ 5 files changed, 635 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/alsa/.gitignore
+ create mode 100644 tools/testing/selftests/alsa/Makefile
+ create mode 100644 tools/testing/selftests/alsa/mixer-test.c
 
->> > The model you proposed assumes that the MAC/Switch is in
->> > charge of the DPLL, but that's not always true.
->> 
->> The EEC-centric model does not in fact assume that. It lets anyone to
->> set up an EEC object.
->> 
->> The netdev-centric UAPI assumes that the driver behind the netdev
->> knows about how many RCLK out pins there are. So it can certainly
->> instantiate a DPLL object instead, with those pins as external pins,
->> and leave the connection of the external pins to the EEC proper
->> implicit.
->
-> Netdev will know how many RCLK outputs are there, as that's the
-> function of a given MAC/PHY/Retimer.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 79ef55bf2ca7..ba25b33e2f96 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17946,6 +17946,7 @@ F:	Documentation/sound/
+ F:	include/sound/
+ F:	include/uapi/sound/
+ F:	sound/
++F:	tools/testing/selftests/alsa
+ 
+ SOUND - COMPRESSED AUDIO
+ M:	Vinod Koul <vkoul@kernel.org>
+@@ -17965,6 +17966,12 @@ F:	include/sound/dmaengine_pcm.h
+ F:	sound/core/pcm_dmaengine.c
+ F:	sound/soc/soc-generic-dmaengine-pcm.c
+ 
++SOUND - ALSA SELFTESTS
++M:	Mark Brown <broonie@kernel.org>
++L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
++S:	Supported
++F:	tools/testing/selftests/alsa
++
+ SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEMENT (ASoC)
+ M:	Liam Girdwood <lgirdwood@gmail.com>
+ M:	Mark Brown <broonie@kernel.org>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c852eb40c4f7..d08fe4cfe811 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-TARGETS = arm64
++TARGETS += alsa
++TARGETS += arm64
+ TARGETS += bpf
+ TARGETS += breakpoints
+ TARGETS += capabilities
+diff --git a/tools/testing/selftests/alsa/.gitignore b/tools/testing/selftests/alsa/.gitignore
+new file mode 100644
+index 000000000000..3bb7c41266a8
+--- /dev/null
++++ b/tools/testing/selftests/alsa/.gitignore
+@@ -0,0 +1 @@
++mixer-test
+diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
+new file mode 100644
+index 000000000000..f64d9090426d
+--- /dev/null
++++ b/tools/testing/selftests/alsa/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++
++CFLAGS += $(shell pkg-config --cflags alsa)
++LDLIBS += $(shell pkg-config --libs alsa)
++
++TEST_GEN_PROGS := mixer-test
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+new file mode 100644
+index 000000000000..6082efa0b426
+--- /dev/null
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -0,0 +1,616 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// kselftest for the ALSA mixer API
++//
++// Original author: Mark Brown <broonie@kernel.org>
++// Copyright (c) 2021 Arm Limited
++
++// This test will iterate over all cards detected in the system, exercising
++// every mixer control it can find.  This may conflict with other system
++// software if there is audio activity so is best run on a system with a
++// minimal active userspace.
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdbool.h>
++#include <string.h>
++#include <getopt.h>
++#include <stdarg.h>
++#include <ctype.h>
++#include <math.h>
++#include <errno.h>
++#include <assert.h>
++#include <alsa/asoundlib.h>
++#include <poll.h>
++#include <stdint.h>
++
++#include "../kselftest.h"
++
++#define TESTS_PER_CONTROL 3
++
++struct card_data {
++	snd_ctl_t *handle;
++	int card;
++	int num_ctls;
++	snd_ctl_elem_list_t *ctls;
++	struct card_data *next;
++};
++
++struct ctl_data {
++	const char *name;
++	snd_ctl_elem_id_t *id;
++	snd_ctl_elem_info_t *info;
++	snd_ctl_elem_value_t *def_val;
++	int elem;
++	struct card_data *card;
++	struct ctl_data *next;
++};
++
++int num_cards = 0;
++int num_controls = 0;
++struct card_data *card_list = NULL;
++struct ctl_data *ctl_list = NULL;
++
++void find_controls(void)
++{
++	char name[32];
++	int card, ctl, err;
++	struct card_data *card_data;
++	struct ctl_data *ctl_data;
++
++	card = -1;
++	if (snd_card_next(&card) < 0 || card < 0)
++		return;
++
++	while (card >= 0) {
++		sprintf(name, "hw:%d", card);
++
++		card_data = malloc(sizeof(*card_data));
++		if (!card_data) {
++			ksft_print_msg("Out of memory\n");
++			ksft_exit_fail();
++		}
++
++		err = snd_ctl_open(&card_data->handle, name, 0);
++		if (err < 0) {
++			ksft_print_msg("Failed to get hctl for card %d: %s\n",
++				       card, snd_strerror(err));
++			goto next_card;
++		}
++
++		/* Count controls */
++		snd_ctl_elem_list_malloc(&card_data->ctls);
++		snd_ctl_elem_list(card_data->handle, card_data->ctls);
++		card_data->num_ctls = snd_ctl_elem_list_get_count(card_data->ctls);
++
++		/* Enumerate control information */
++		snd_ctl_elem_list_alloc_space(card_data->ctls, card_data->num_ctls);
++		snd_ctl_elem_list(card_data->handle, card_data->ctls);
++
++		card_data->card = num_cards++;
++		card_data->next = card_list;
++		card_list = card_data;
++
++		num_controls += card_data->num_ctls;
++
++		for (ctl = 0; ctl < card_data->num_ctls; ctl++) {
++			ctl_data = malloc(sizeof(*ctl_data));
++			if (!ctl_data) {
++				ksft_print_msg("Out of memory\n");
++				ksft_exit_fail();
++			}
++
++			ctl_data->card = card_data;
++			ctl_data->elem = ctl;
++			ctl_data->name = snd_ctl_elem_list_get_name(card_data->ctls,
++								    ctl);
++
++			err = snd_ctl_elem_id_malloc(&ctl_data->id);
++			if (err < 0) {
++				ksft_print_msg("Out of memory\n");
++				ksft_exit_fail();
++			}
++
++			err = snd_ctl_elem_info_malloc(&ctl_data->info);
++			if (err < 0) {
++				ksft_print_msg("Out of memory\n");
++				ksft_exit_fail();
++			}
++
++			err = snd_ctl_elem_value_malloc(&ctl_data->def_val);
++			if (err < 0) {
++				ksft_print_msg("Out of memory\n");
++				ksft_exit_fail();
++			}
++
++			snd_ctl_elem_list_get_id(card_data->ctls, ctl,
++						 ctl_data->id);
++			snd_ctl_elem_info_set_id(ctl_data->info, ctl_data->id);
++			err = snd_ctl_elem_info(card_data->handle,
++						ctl_data->info);
++			if (err < 0) {
++				ksft_print_msg("%s getting info for %d\n",
++					       snd_strerror(err),
++					       ctl_data->name);
++			}
++
++			snd_ctl_elem_value_set_id(ctl_data->def_val,
++						  ctl_data->id);
++
++			ctl_data->next = ctl_list;
++			ctl_list = ctl_data;
++		}
++
++	next_card:
++		if (snd_card_next(&card) < 0) {
++			ksft_print_msg("snd_card_next");
++			break;
++		}
++	}
++}
++
++/*
++ * Check that we can read the default value and it is valid. Write
++ * tests use the read value to restore the default.
++ */
++void test_ctl_get_value(struct ctl_data *ctl)
++{
++	int err;
++	long int_val;
++	long long int64_val;
++
++	/* If the control is turned off let's be polite */
++	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
++		ksft_print_msg("%s is inactive\n", ctl->name);
++		ksft_test_result_skip("get_value.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	/* Can't test reading on an unreadable control */
++	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
++		ksft_print_msg("%s is not readable\n", ctl->name);
++		ksft_test_result_skip("get_value.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	err = snd_ctl_elem_read(ctl->card->handle, ctl->def_val);
++	if (err < 0) {
++		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
++			       snd_strerror(err));
++		goto out;
++	}
++
++	switch (snd_ctl_elem_info_get_type(ctl->info)) {
++	case SND_CTL_ELEM_TYPE_NONE:
++		ksft_print_msg("%s Invalid control type NONE\n", ctl->name);
++		err = -1;
++		break;
++
++	case SND_CTL_ELEM_TYPE_BOOLEAN:
++		int_val = snd_ctl_elem_value_get_boolean(ctl->def_val, 0);
++		switch (int_val) {
++		case 0:
++		case 1:
++			break;
++		default:
++			ksft_print_msg("%s Invalid boolean value %ld\n",
++				       ctl->name, int_val);
++			err = -1;
++			break;
++		}
++		break;
++
++	case SND_CTL_ELEM_TYPE_INTEGER:
++		int_val = snd_ctl_elem_value_get_integer(ctl->def_val, 0);
++
++		if (int_val < snd_ctl_elem_info_get_min(ctl->info)) {
++			ksft_print_msg("%s value %ld less than minimum %ld\n",
++				       ctl->name, int_val,
++				       snd_ctl_elem_info_get_min(ctl->info));
++			err = -1;
++		}
++
++		if (int_val > snd_ctl_elem_info_get_max(ctl->info)) {
++			ksft_print_msg("%s value %ld more than maximum %ld\n",
++				       ctl->name, int_val,
++				       snd_ctl_elem_info_get_max(ctl->info));
++			err = -1;
++		}
++
++		/* Only check step size if there is one and we're in bounds */
++		if (err >= 0 && snd_ctl_elem_info_get_step(ctl->info) &&
++		    (int_val - snd_ctl_elem_info_get_min(ctl->info) %
++		     snd_ctl_elem_info_get_step(ctl->info))) {
++			ksft_print_msg("%s value %ld invalid for step %ld minimum %ld\n",
++				       ctl->name, int_val,
++				       snd_ctl_elem_info_get_step(ctl->info),
++				       snd_ctl_elem_info_get_min(ctl->info));
++			err = -1;
++		}
++		break;
++
++	case SND_CTL_ELEM_TYPE_INTEGER64:
++		int64_val = snd_ctl_elem_value_get_integer64(ctl->def_val, 0);
++
++		if (int64_val < snd_ctl_elem_info_get_min64(ctl->info)) {
++			ksft_print_msg("%s value %lld less than minimum %lld\n",
++				       ctl->name, int64_val,
++				       snd_ctl_elem_info_get_min64(ctl->info));
++			err = -1;
++		}
++
++		if (int64_val > snd_ctl_elem_info_get_max64(ctl->info)) {
++			ksft_print_msg("%s value %lld more than maximum %lld\n",
++				       ctl->name, int64_val,
++				       snd_ctl_elem_info_get_max(ctl->info));
++			err = -1;
++		}
++
++		/* Only check step size if there is one and we're in bounds */
++		if (err >= 0 && snd_ctl_elem_info_get_step64(ctl->info) &&
++		    (int64_val - snd_ctl_elem_info_get_min64(ctl->info)) %
++		    snd_ctl_elem_info_get_step64(ctl->info)) {
++			ksft_print_msg("%s value %lld invalid for step %lld minimum %lld\n",
++				       ctl->name, int64_val,
++				       snd_ctl_elem_info_get_step64(ctl->info),
++				       snd_ctl_elem_info_get_min64(ctl->info));
++			err = -1;
++		}
++		break;
++
++	default:
++		/* No tests for other types */
++		ksft_test_result_skip("get_value.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++out:
++	ksft_test_result(err >= 0, "get_value.%d.%d\n",
++			 ctl->card->card, ctl->elem);
++}
++
++bool show_mismatch(struct ctl_data *ctl, int index,
++		   snd_ctl_elem_value_t *read_val,
++		   snd_ctl_elem_value_t *expected_val)
++{
++	long long expected_int, read_int;
++
++	/*
++	 * We factor out the code to compare values representable as
++	 * integers, ensure that check doesn't log otherwise.
++	 */
++	expected_int = 0;
++	read_int = 0;
++
++	switch (snd_ctl_elem_info_get_type(ctl->info)) {
++	case SND_CTL_ELEM_TYPE_BOOLEAN:
++		expected_int = snd_ctl_elem_value_get_boolean(expected_val,
++							      index);
++		read_int = snd_ctl_elem_value_get_boolean(read_val, index);
++		break;
++
++	case SND_CTL_ELEM_TYPE_INTEGER:
++		expected_int = snd_ctl_elem_value_get_integer(expected_val,
++							      index);
++		read_int = snd_ctl_elem_value_get_integer(read_val, index);
++		break;
++
++	case SND_CTL_ELEM_TYPE_INTEGER64:
++		expected_int = snd_ctl_elem_value_get_integer64(expected_val,
++								index);
++		read_int = snd_ctl_elem_value_get_integer64(read_val,
++							    index);
++		break;
++
++	case SND_CTL_ELEM_TYPE_ENUMERATED:
++		expected_int = snd_ctl_elem_value_get_enumerated(expected_val,
++								 index);
++		read_int = snd_ctl_elem_value_get_enumerated(read_val,
++							     index);
++		break;
++
++	default:
++		break;
++	}
++
++	if (expected_int != read_int) {
++		ksft_print_msg("%s.%d expected %lld but read %lld\n",
++			       ctl->name, index, expected_int, read_int);
++		return true;
++	} else {
++		return false;
++	}
++}
++
++/*
++ * Write a value then if possible verify that we get the expected
++ * result.  An optional expected value can be provided if we expect
++ * the write to fail, for verifying that invalid writes don't corrupt
++ * anything.
++ */
++int write_and_verify(struct ctl_data *ctl,
++		     snd_ctl_elem_value_t *write_val,
++		     snd_ctl_elem_value_t *expected_val)
++{
++	int err, i;
++	bool error_expected, mismatch_shown;
++	snd_ctl_elem_value_t *read_val, *w_val;
++	snd_ctl_elem_value_alloca(&read_val);
++	snd_ctl_elem_value_alloca(&w_val);
++
++	/*
++	 * We need to copy the write value since writing can modify
++	 * the value which causes surprises, and allocate an expected
++	 * value if we expect to read back what we wrote.
++	 */
++	snd_ctl_elem_value_copy(w_val, write_val);
++	if (expected_val) {
++		error_expected = true;
++	} else {
++		error_expected = false;
++		snd_ctl_elem_value_alloca(&expected_val);
++		snd_ctl_elem_value_copy(expected_val, write_val);
++	}
++
++	/*
++	 * Do the write, if we have an expected value ignore the error
++	 * and carry on to validate the expected value.
++	 */
++	err = snd_ctl_elem_write(ctl->card->handle, w_val);
++	if (err < 0 && !error_expected) {
++		ksft_print_msg("snd_ctl_elem_write() failed: %s\n",
++			       snd_strerror(err));
++		return err;
++	}
++
++	/* Can we do the verification part? */
++	if (!snd_ctl_elem_info_is_readable(ctl->info))
++		return err;
++
++	snd_ctl_elem_value_set_id(read_val, ctl->id);
++
++	err = snd_ctl_elem_read(ctl->card->handle, read_val);
++	if (err < 0) {
++		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
++			       snd_strerror(err));
++		return err;
++	}
++
++	/*
++	 * Use the libray to compare values, if there's a mismatch
++	 * carry on and try to provide a more useful diagnostic than
++	 * just "mismatch".
++	 */
++	if (!snd_ctl_elem_value_compare(expected_val, read_val))
++		return 0;
++
++	mismatch_shown = false;
++	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++)
++		if (show_mismatch(ctl, i, read_val, expected_val))
++			mismatch_shown = true;
++
++	if (!mismatch_shown)
++		ksft_print_msg("%s read and written values differ\n",
++			       ctl->name);
++
++	return -1;
++}
++
++/*
++ * Make sure we can write the default value back to the control, this
++ * should validate that at least some write works.
++ */
++void test_ctl_write_default(struct ctl_data *ctl)
++{
++	int err;
++
++	/* If the control is turned off let's be polite */
++	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
++		ksft_print_msg("%s is inactive\n", ctl->name);
++		ksft_test_result_skip("write_default.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
++		ksft_print_msg("%s is not writeable\n", ctl->name);
++		ksft_test_result_skip("write_default.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	/* No idea what the default was for unreadable controls */
++	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
++		ksft_print_msg("%s couldn't read default\n", ctl->name);
++		ksft_test_result_skip("write_default.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	err = write_and_verify(ctl, ctl->def_val, NULL);
++
++	ksft_test_result(err >= 0, "write_default.%d.%d\n",
++			 ctl->card->card, ctl->elem);
++}
++
++bool test_ctl_write_valid_boolean(struct ctl_data *ctl)
++{
++	int err, i, j;
++	bool fail = false;
++	snd_ctl_elem_value_t *val;
++	snd_ctl_elem_value_alloca(&val);
++
++	snd_ctl_elem_value_set_id(val, ctl->id);
++
++	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
++		for (j = 0; j < 2; j++) {
++			snd_ctl_elem_value_set_boolean(val, i, j);
++			err = write_and_verify(ctl, val, NULL);
++			if (err != 0)
++				fail = true;
++		}
++	}
++
++	return !fail;
++}
++
++bool test_ctl_write_valid_integer(struct ctl_data *ctl)
++{
++	int err;
++	int i;
++	long j, step;
++	bool fail = false;
++	snd_ctl_elem_value_t *val;
++	snd_ctl_elem_value_alloca(&val);
++
++	snd_ctl_elem_value_set_id(val, ctl->id);
++
++	step = snd_ctl_elem_info_get_step(ctl->info);
++	if (!step)
++		step = 1;
++
++	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
++		for (j = snd_ctl_elem_info_get_min(ctl->info);
++		     j <= snd_ctl_elem_info_get_max(ctl->info); j += step) {
++
++			snd_ctl_elem_value_set_integer(val, i, j);
++			err = write_and_verify(ctl, val, NULL);
++			if (err != 0)
++				fail = true;
++		}
++	}
++
++
++	return !fail;
++}
++
++bool test_ctl_write_valid_integer64(struct ctl_data *ctl)
++{
++	int err, i;
++	long long j, step;
++	bool fail = false;
++	snd_ctl_elem_value_t *val;
++	snd_ctl_elem_value_alloca(&val);
++
++	snd_ctl_elem_value_set_id(val, ctl->id);
++
++	step = snd_ctl_elem_info_get_step64(ctl->info);
++	if (!step)
++		step = 1;
++
++	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
++		for (j = snd_ctl_elem_info_get_min64(ctl->info);
++		     j <= snd_ctl_elem_info_get_max64(ctl->info); j += step) {
++
++			snd_ctl_elem_value_set_integer64(val, i, j);
++			err = write_and_verify(ctl, val, NULL);
++			if (err != 0)
++				fail = true;
++		}
++	}
++
++
++	return !fail;
++}
++
++bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
++{
++	int err, i, j;
++	bool fail = false;
++	snd_ctl_elem_value_t *val;
++	snd_ctl_elem_value_alloca(&val);
++
++	snd_ctl_elem_value_set_id(val, ctl->id);
++
++	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
++		for (j = 0; j < snd_ctl_elem_info_get_items(ctl->info); j++) {
++			snd_ctl_elem_value_set_enumerated(val, i, j);
++			err = write_and_verify(ctl, val, NULL);
++			if (err != 0)
++				fail = true;
++		}
++	}
++
++	return !fail;
++}
++
++void test_ctl_write_valid(struct ctl_data *ctl)
++{
++	bool pass;
++	int err;
++
++	/* If the control is turned off let's be polite */
++	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
++		ksft_print_msg("%s is inactive\n", ctl->name);
++		ksft_test_result_skip("write_valid.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
++		ksft_print_msg("%s is not writeable\n", ctl->name);
++		ksft_test_result_skip("write_valid.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	switch (snd_ctl_elem_info_get_type(ctl->info)) {
++	case SND_CTL_ELEM_TYPE_BOOLEAN:
++		pass = test_ctl_write_valid_boolean(ctl);
++		break;
++
++	case SND_CTL_ELEM_TYPE_INTEGER:
++		pass = test_ctl_write_valid_integer(ctl);
++		break;
++
++	case SND_CTL_ELEM_TYPE_INTEGER64:
++		pass = test_ctl_write_valid_integer64(ctl);
++		break;
++
++	case SND_CTL_ELEM_TYPE_ENUMERATED:
++		pass = test_ctl_write_valid_enumerated(ctl);
++		break;
++
++	default:
++		/* No tests for this yet */
++		ksft_test_result_skip("write_valid.%d.%d\n",
++				      ctl->card->card, ctl->elem);
++		return;
++	}
++
++	/* Restore the default value to minimise disruption */
++	err = write_and_verify(ctl, ctl->def_val, NULL);
++	if (err < 0)
++		pass = false;
++
++	ksft_test_result(pass, "write_valid.%d.%d\n",
++			 ctl->card->card, ctl->elem);
++}
++
++int main(void)
++{
++	struct ctl_data *ctl;
++
++	ksft_print_header();
++
++	find_controls();
++
++	ksft_set_plan(num_controls * TESTS_PER_CONTROL);
++
++	for (ctl = ctl_list; ctl != NULL; ctl = ctl->next) {
++		/* 
++		 * Must test get_value() before we write anything, the
++		 * test stores the default value for later cleanup.
++		 */
++		test_ctl_get_value(ctl);
++		test_ctl_write_default(ctl);
++		test_ctl_write_valid(ctl);
++	}
++
++	ksft_exit_pass();
++
++	return 0;
++}
+-- 
+2.30.2
 
-So... spawn a DPLL with that number of virtual pins?
-
->> That gives userspace exactly the same information as the
->> netdev-centric UAPI, but now userspace doesn't need to know about
->> netdevs, and synchronously-spinning drives, and GPS receivers, each
->> of which is handled through a dedicated set of netlink messages /
->> sysctls / what have you. The userspace needs to know about EEC
->> subsystem, and that's it.
->
-> I believe the direction is to make the connection between a netdev and
-> its related DPLL that's serving as EEC in a similar way the link to a
-> PTP device is created. Userspace app will need to go to DPLL subsystem
-> to understand what's the current frequency source for a given netdev.
-
-But the way PTP and netdevs are linked is that PTP clock is instantiated
-independently, and then this clock is referenced by the netdevice. I do
-not object to that at all, in fact I believe I mentioned this a couple
-times already.
-
-I'm objecting to accessing the PTP clock _through_ the netdev UAPI.
-Because, how will non-NIC-bound DPLLs be represented? Well, through some
-other UAPI, obviously. So userspace will need to know about all classes
-of devices that can carry frequency signal.
-
-Alternatively, both NIC drivers and other drivers can instantiate some
-common type of DPLL-related object. Then any userspace tool that knows
-how to work with objects of that type automatically knows how to handle
-NICs, and GPSs, and whatever craziness someone dreams up.
-
-> That's still independent uAPI from the one defined by those patches.
->
->> > The model where recovered clock outputs are controlled independently
->> > can support both models and is more flexible. It can also address the
->> 
->> - Anyone can instantiate EEC objects
->> - Only things with ports instantiate netdevs
->> 
->> How is the latter one more flexible?
->
-> - Everything can instantiate DPLL object,
-> - Only a netdev can instantiate recovered clock outputs, which can be
->   connected to any other part of the system - not only a DPLL.
-
-If the frequency source devices are truly so different from the general
-DPLL circuits that thay cannot possibly be expressed as the same type of
-object, then by all means, represent them as something else. DPLL
-frequency source, whatever.
-
-But don't hide the API behind netdevs just because some NICs carry
-DPLLs. Non-NIC frequency sources do exist, and the subsystem should
-support them _in the same way_ as the NIC ones.
