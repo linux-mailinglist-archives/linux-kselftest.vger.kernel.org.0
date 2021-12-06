@@ -2,106 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2002469763
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 14:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FF4469781
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Dec 2021 14:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244720AbhLFNr4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Dec 2021 08:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244726AbhLFNrz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:47:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08194C061746
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 05:44:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5BBEB810BC
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 13:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126ABC341C1;
-        Mon,  6 Dec 2021 13:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638798264;
-        bh=DH/1E2aEG+DDCn10mi2ptuhKAVdBQHO6wYJ3zjF+k+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S9Iu9ds9WgpqIffhqbQmtsvewqlLWpG+Vcxp3BtCsKJoh7MIgb4nujTnIL56gpiho
-         l4Us0fI/Q7bElG/D2aQP9kzrTduP1XGxjea5MCwcOjv+VZCNRJMGl7XVJh+wKCTF2R
-         7TC7mHyxWGvicYC4sYa4STZdav9wTU6JFpRU+PxCckja88RbbJAHuxE4f7n1ruGumR
-         4a/DjOdzCH2GIInEI56gk9XODHrsvr42Al+12TLiBtKK2Djrk6G+BnGzZ41o8Jjjfg
-         LhSee6xn/jbOEtUcDEkTpf2ZNUSquQvhMvxZTpIu350zAosrqZqJPr/D+aWjFjAp7t
-         GJVn74iXvVo5w==
-Date:   Mon, 6 Dec 2021 13:44:19 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Shuah Khan <shuah@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kselftest@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH] kselftest: alsa: Add simplistic test for ALSA mixer
- controls kselftest
-Message-ID: <Ya4Ts7t2xFbgkvJq@sirena.org.uk>
-References: <20211203193311.211400-1-broonie@kernel.org>
- <s5hlf0yqelf.wl-tiwai@suse.de>
+        id S244842AbhLFNxM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Dec 2021 08:53:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:26242 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244804AbhLFNxM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:53:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="300699248"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="300699248"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:49:43 -0800
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="678988796"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:49:40 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muEMB-002nVh-Ul;
+        Mon, 06 Dec 2021 15:48:39 +0200
+Date:   Mon, 6 Dec 2021 15:48:39 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
+ struct gpio_chip
+Message-ID: <Ya4Ut9ECbYhBkke5@smile.fi.intel.com>
+References: <20211203133003.31786-1-brgl@bgdev.pl>
+ <20211203133003.31786-4-brgl@bgdev.pl>
+ <YapnTHQZyNCZXrgp@smile.fi.intel.com>
+ <YapoW+DL4jPo69u8@smile.fi.intel.com>
+ <Yapp4vakFxH7JV5B@smile.fi.intel.com>
+ <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
+ <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
+ <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
+ <Ya4RHA91Ow9frP8t@smile.fi.intel.com>
+ <CAMRc=MeqGuVsydk4ZKiEKPUv32FdaOUHg7Ee3efUda==RhjXdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iAbjRbCp6ILDN069"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <s5hlf0yqelf.wl-tiwai@suse.de>
-X-Cookie: You will soon forget this.
+In-Reply-To: <CAMRc=MeqGuVsydk4ZKiEKPUv32FdaOUHg7Ee3efUda==RhjXdg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Dec 06, 2021 at 02:40:36PM +0100, Bartosz Golaszewski wrote:
+> On Mon, Dec 6, 2021 at 2:34 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Mon, Dec 06, 2021 at 09:41:33AM +0100, Bartosz Golaszewski wrote:
+> > > On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > ...
+> >
+> > > This series concerns the gpio-sim driver and it only uses configfs
+> > > (with manually created platform devices) or device-tree. I would
+> > > prefer to do ACPI separately and I'd like you to lead that because I
+> > > neither have any HW to test nor claim to understand it. :)
+> >
+> > Please, mention this in the commit message that ACPI is not covered (yet).
+> 
+> But the commit message says: "gpiolib: of: make fwnode take precedence
+> in struct gpio_chip" - it says OF right here. :)
 
---iAbjRbCp6ILDN069
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It implies that reader should have a 6th sense to know about ACPI and what
+else? Please, be explicit over implicit.
 
-On Mon, Dec 06, 2021 at 10:15:08AM +0100, Takashi Iwai wrote:
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> Thanks for the patch!  That's one of my long-standing TODO, and you
-> solved it :)
 
-Well, not quite scratched my own itch yet - testing that events are
-generated would do most of that for me, the events just aren't used for
-a lot of users so easy to miss.
-
-> Through a quick glance, the code looks fine.  But a general question
-> is how to deal with the external library setup for kselftest.  Ideally
-> speaking, the include and the library paths should be managed via
-> pkgconfig, but it'll make things a bit more complicated, of course.
-> And what if the system has no libasound?  Will we make it mandatory?
-
-This is already an issue for other kselftests - the expectation is that
-the users will figure out how to install whatever the dependencies are,
-or if they don't want to build a given kselftest for whatever reason
-will skip it (there's options for that in the kselftest build setup
-stuff, it skips BPF since it requires really bleeding edge stuff so it's
-not like you can install a distro package).  From that point of view
-it's probably better to error out so people see that there's a test they
-could be running.  Unlike with Kconfig symbols there's no way to
-programatically specify what's needed (I didn't add any Kconfig
-dependency since alsa-lib works fine on systems without ALSA and really
-it's a system specific driver that's needed for this to be useful).
-
-I can add pkg-config usage in there easily enough, though I'm not sure
-I've ever seen alsa-lib installed anywhere other than the default system
-path.
-
---iAbjRbCp6ILDN069
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGuE7MACgkQJNaLcl1U
-h9DR5gf9H2EprYp+yVwhbVQYrj3tEJiN2ghTbXYDXR3i4izpwYkVTigu0bqdqEU3
-Woa0cQo/Ds/19IR8f5FVPJJ5jSSUrT0Kd9UKBgm/ww0SEhjGXMhL1XJUAkeuhG3E
-c9M3vePuMbyZfQya40wTLFRy/kuX1L4yjc2iYYJawudzTbojULcTH26XTGqpz4uU
-pa6QrAArwBLkoy5qPFEJn0BzdiQzJ0FWOyyFkEAaydzGyQ2yV9xZeCTUq8aURZXW
-6QjYc2xT3ZZs/lNDJ8DAwF8UTw36oSFzeYUqsmayUD87vN7MchR3GD1qD1z5q1Ny
-pwK9Le8zmIhyWKNVlngXA2BZ+5Uj4w==
-=T1Af
------END PGP SIGNATURE-----
-
---iAbjRbCp6ILDN069--
