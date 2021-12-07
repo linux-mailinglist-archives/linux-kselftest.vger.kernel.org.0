@@ -2,90 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C8446C3C1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 20:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635FF46C419
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 21:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbhLGTnl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 14:43:41 -0500
-Received: from mga17.intel.com ([192.55.52.151]:65345 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231629AbhLGTnl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 14:43:41 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="218351324"
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="218351324"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 11:40:10 -0800
-X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="611804406"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 11:40:10 -0800
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     dave.hansen@linux.intel.com, jarkko@kernel.org,
-        linux-sgx@vger.kernel.org, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/sgx: Fix build error caused by missing dependency
-Date:   Tue,  7 Dec 2021 11:40:05 -0800
-Message-Id: <797ff1331cfe540fc378fcc4a4a7b00ff5099fbe.1638905135.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S241025AbhLGUGp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 15:06:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240987AbhLGUGo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Dec 2021 15:06:44 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2AFC061574
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Dec 2021 12:03:13 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id g16so82828pgi.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 12:03:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SPlDrqxX9glsFDNE5urmxcji6mmh27t1zhykSBzc3+4=;
+        b=DwYKDw7mrISzgN6YcNSbjtcTvRqlGK4z7W8Abkgm4r+GH4t4tWUekayNyjAjqTigGX
+         cAkH+JYp1lEZYn7hAmn9qWqg9Q/Rdc2r2QNtNbJdRk6ftjCjY/hdlc1LzCF6V40YwF3o
+         5o2+DFXg8rqVm4RhZ3Z8srZkDBWW8MpsJZNDEzkTuy8D6YtLg+2RPKdH17UwXMBGW/AK
+         Rpm7lNXYVEaJFICxargBMVPWw5zrkWH5KAKyGjPeEJu02a1i4bRquWVH5xyRFymBkI+x
+         1tbTdP4bAYapQAS15k/TBfgYY8lEZt+YukA1TOXAqBH/AZoBEbIgdJ9i0UvqFJJH8Z2S
+         rCxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SPlDrqxX9glsFDNE5urmxcji6mmh27t1zhykSBzc3+4=;
+        b=Iz3ItHTXrDkcsOde1c2zrFK/SUO1SHwh3hawCSqmIkBI/EU21oLr9Nq+VsDFS5LIIO
+         O9M3ZdswSrqH7utPejbSFTepV7iXncVVpogQOOUYF0/b+b1aulUYErvmAWyvRo7/k+Ru
+         1p//HnZnJ5QWLWMzkYOxjdMRfX60t82EUeFv6qa3ck7nS5L4BafhyilsgXw+On2hS4PN
+         lcks7L1KPe+YNc2f4Rlj25B+q4/YekDdlaLnc2ZnCZRIiFRiGIaKNIokJg3llVTEwmyB
+         8i9jPCPYT6AO38s45SUNH0ZORy80rdU+M0gmkYXKhW+Jx0r7pR55MZE3NAS7//wOb5uF
+         yoTA==
+X-Gm-Message-State: AOAM531u4oTrRwiMi9kgeXCDi0gyGr0qnVfVcUEte3Iqj1YIIRYNb0uv
+        3st2d3ZvYvX4FXi2bDpDLsQzFF0LCACmD8oytq0Vmg==
+X-Google-Smtp-Source: ABdhPJyrqyvDyR8ElGMsnU8zJbfhfxnOetzt8CQ7ogfrSz4HwYRUxG/SEdosfDHN9tpGr24CjLFOVjCW/8O3KZbSatE=
+X-Received: by 2002:a63:3fcb:: with SMTP id m194mr17010266pga.407.1638907391992;
+ Tue, 07 Dec 2021 12:03:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211008232421.1264857-1-dlatypov@google.com>
+In-Reply-To: <20211008232421.1264857-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 15:03:00 -0500
+Message-ID: <CAFd5g45o4B=qxsLqrcSWfs19JBBFVhwYUxYMET7NoL9zFBaNxQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix --json output for skipped tests
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit f0ff2447b861 ("selftests/sgx: Add a new kselftest:
-Unclobbered_vdso_oversubscribed") depends on __cpuid() without
-providing the dependency and thus introduces a build error:
+On Fri, Oct 8, 2021 at 7:24 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Currently, KUnit will report SKIPPED tests as having failed if one uses
+> --json.
+>
+> Add the missing if statement to set the appropriate status ("SKIP").
+> See https://api.kernelci.org/schema-test-case.html:
+>   "status": {
+>       "type": "string",
+>       "description": "The status of the execution of this test case",
+>       "enum": ["PASS", "FAIL", "SKIP", "ERROR"],
+>       "default": "PASS"
+>   },
+> with this, we now can properly produce all four of the statuses.
+>
+> Fixes: 5acaf6031f53 ("kunit: tool: Support skipped tests in kunit_tool")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-$ make
-gcc -Wall -Werror -g -I../../../../tools/include -fPIC -z noexecstack -c main.c -o /path/linux/tools/testing/selftests/sgx/main.o
-main.c: In function ‘get_total_epc_mem’:
-main.c:296:3: error: implicit declaration of function ‘__cpuid’ [-Werror=implicit-function-declaration]
-  296 |   __cpuid(&eax, &ebx, &ecx, &edx);
-      |   ^~~~~~~
-cc1: all warnings being treated as errors
-make: *** [Makefile:33: /path/linux/tools/testing/selftests/sgx/main.o] Error 1
-$
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-Make the kernel's __cpuid() available locally in support of the
-test's usage.
-
-Fixes: f0ff2447b861 ("selftests/sgx: Add a new kselftest: Unclobbered_vdso_oversubscribed")
-Reported-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
-
-The commit introducing the issue can be found on
-the x86/sgx branch of tip.git.
-
- tools/testing/selftests/sgx/main.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 7e912db4c6c5..6dead57a3121 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -73,6 +73,18 @@ static bool vdso_get_symtab(void *addr, struct vdso_symtab *symtab)
- 	return true;
- }
- 
-+static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
-+			   unsigned int *ecx, unsigned int *edx)
-+{
-+	asm volatile("cpuid"
-+	    : "=a" (*eax),
-+	      "=b" (*ebx),
-+	      "=c" (*ecx),
-+	      "=d" (*edx)
-+	    : "0" (*eax), "2" (*ecx)
-+	    : "memory");
-+}
-+
- static unsigned long elf_sym_hash(const char *name)
- {
- 	unsigned long h = 0, high;
--- 
-2.25.1
-
+Thanks!
