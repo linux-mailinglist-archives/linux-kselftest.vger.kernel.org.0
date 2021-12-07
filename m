@@ -2,463 +2,267 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E94A846B2A3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 06:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B438D46B2C1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 07:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbhLGF5C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 00:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbhLGF5B (ORCPT
+        id S231865AbhLGGQq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 01:16:46 -0500
+Received: from esa8.fujitsucc.c3s2.iphmx.com ([68.232.159.88]:14834 "EHLO
+        esa8.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229846AbhLGGQp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:57:01 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC854C061746
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Dec 2021 21:53:31 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id l24so24449243uak.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Dec 2021 21:53:31 -0800 (PST)
+        Tue, 7 Dec 2021 01:16:45 -0500
+X-Greylist: delayed 430 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Dec 2021 01:16:44 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1638857596; x=1670393596;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=XyKC1/lDYCgh2yrEk8oRxM0bLpfAdiDZEvRv7jUkAHg=;
+  b=HXT7TqhqAnptaS0x8/m/dWsZRuRQJwyMN9OuMfrdgct5XXylGGRTV6HK
+   ie6RaMAglf1O192IIYZTWIU5YEyJ46Odw8QCRI5lkJcsfJD7y7x1adtnw
+   u3HyyFXzoOPAhhFtZv4rzkZqfIjq7l7wVNXLe83UTfdUJN2d+dxuEURbv
+   R7jQGQR71fe+wEvz/9gY8nkNgYxbV2eqTDycH//FBojxTANcfdEDC6Kdc
+   Pr5kMsNpWyAPjr0hbbg/zkT+yaYRkgDHAzEEc+jcn47oMGQ78MCiiI1mQ
+   zPPt3+8VHwPqnxu/yf9SAWhVBWlzeU8x/m0NAIAPt7I7V7FcPICOf+c28
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="45304676"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631545200"; 
+   d="scan'208";a="45304676"
+Received: from mail-os0jpn01lp2113.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.113])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 15:06:02 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jv8uOhwPZORQPJwyOpzq4Xt9QjXNrBSTkWuMNMcZW2csbNLMWsTTRxS/jdfmtFqltXKlhKIJ7Ie+C9oMijbrwn5NLc+jMWEp54PwittC5MIB+U+oAM2CtRa9qWGreGigL8Vi9lZMO9nSr+q2muPfKfuyAi7XxVyDvTZ8Pp6TrTydqQb2VlX8CSX6b5x7p/BhvNP/jiTKbthuRzebSnlMlMjjI3k7Z3Ud03jzaFkD5vxXnxa80OzbnYJ+5Al5pnyVMpFPnQOfVGETEcYxjQP5/nKUO1agUA9G2FquqLehL082+7FNVSpzR8xkilwNoJZY4Cp8ruO3/kDHXlpMjRfVFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XyKC1/lDYCgh2yrEk8oRxM0bLpfAdiDZEvRv7jUkAHg=;
+ b=IX7irfqUQJXQE6LOs4pqfCHkD2kSIpFO5Ua6Oza8ZPaJj2Ry5YBreEs104MYw5zu3oWogZ+wxJFrnjUkFcz5+6jIagAlr0Vr3ik1e0EhHDfKYPP/tCITYlDUHpHCe1g5ZI7qSbBLfH9FqudJpG+Xj+4FDWyrWInLw7+uBhVn9Mkzd0YhXwTrtLSdzuBMyFxdWlLxrqFjBwMC5iPTtvh8lWpUiveqqF04IEqO9Dv2vbVSiWvznmoRplmtlGBth576EfNj7i965hs16cvZrfB+ivPSt0Xw/kIrgTgzkh8afcUM9Kk/F5oyW0OY2s5zpqh8GpGJ6DzHOMA4obnavqVxVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aqHDZyVf7fgTG+ga4HpiYWXkGhE03mIlODLJWPiIug8=;
-        b=J2Jkd1scsl/Ir3tRrbckF2npsOaQqjjAW/UmvV0ujnObQrY1FjXxwDKXiAKRGKxzeY
-         HXiJjSIHsvffAy3OvO8RIS0a8m7E7a6GaW7K3UU+n75FP2/aJD9Uk85fbaxrOL5hwMbi
-         5qnUenhP/SQZDN5H1b3Q7OHd2i8y2/DLRjQ5NOULxwugwP3iV/48n4IJJtDqBsq0vA2n
-         wIi5Ngwcm8aenTWCS72CcjSGw6hRaLz2NSx6EGIKnhKQsR/WnD/4rfwMbiCSgAOhG6qF
-         FlgRN2t2VQ8ge8ABMiChNed0a5Z3uZhjmgFxXwrRaIkzaT4mfrccOhscyaEDXAumKCvg
-         NQcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aqHDZyVf7fgTG+ga4HpiYWXkGhE03mIlODLJWPiIug8=;
-        b=BhwHhm4cpCsabz3BOUTRm/5M0l2N9qq5S8npEw/npKF3akmVzwYJt9x3Q3X1GroVR+
-         Gadvb2WJMF6KbmjaJ1c2W/PEIzwKnEj/c7laG19jH3QS4lOaDwEcbB2AfhryP51nXE+j
-         6BLHrJ7uy3l1zInL8nIZzesa1e/MGfGC8dgeFYz7ByHTbg4gq4C1ShuN/4IH6mS9Y8xR
-         2OzJpb/n6ruJnF8+pneB123TaUJR48sYPJYvzNHJUbUetnF/Zy4FpiXhvYASBriXZmKJ
-         HHd8nYPWhEGM0/lOrUstLxHgWgMDSX9vIY7tvBwBHfW/S4FBfO7C70+IyPIQOsrfjlwn
-         7v7A==
-X-Gm-Message-State: AOAM532LBbOlPmTgir4VwNOQOb006K48zMBaljqx2ZgYtja23niQsgEu
-        55MEC+H9Rxa07kPr7f3uIgbVE182ed3j74f66M9jwOexI9l6NVHO
-X-Google-Smtp-Source: ABdhPJx5tzzHjJaJCjXh6SUaHfrTZx90R4esWq2ZOoRDdPHClFW0Ma69W24nkEyg16IBMm0PQWepsiaB2BRjQzWVc8I=
-X-Received: by 2002:a05:6102:a4a:: with SMTP id i10mr42041933vss.47.1638856410752;
- Mon, 06 Dec 2021 21:53:30 -0800 (PST)
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XyKC1/lDYCgh2yrEk8oRxM0bLpfAdiDZEvRv7jUkAHg=;
+ b=iI3v2Zhro5YHujUwDAliDWNPj3kgV170vqTIrox9+0ofo307Xd2raKbgsy7TE+0Usw2zoYNOw/vYissojMeWEjLbl5pX+D2KNmEr3OIpuFjEEgXeW/b2QNg7RpHhb3Y+MRYY6C5hq6BL1EmnUgnqWxne+axUf2btwDvc2uaV8Sw=
+Received: from OS3PR01MB7706.jpnprd01.prod.outlook.com (2603:1096:604:17b::10)
+ by OS3PR01MB7996.jpnprd01.prod.outlook.com (2603:1096:604:1be::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Tue, 7 Dec
+ 2021 06:05:58 +0000
+Received: from OS3PR01MB7706.jpnprd01.prod.outlook.com
+ ([fe80::d088:ce41:512c:df24]) by OS3PR01MB7706.jpnprd01.prod.outlook.com
+ ([fe80::d088:ce41:512c:df24%9]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 06:05:58 +0000
+From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "dsahern@gmail.com" <dsahern@gmail.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jie2x Zhou <jie2x.zhou@intel.com>,
+        "Li Zhijian(intel)" <zhijianx.li@intel.com>
+Subject: Re: [PATCH v2] selftests: net: Correct case name
+Thread-Topic: [PATCH v2] selftests: net: Correct case name
+Thread-Index: AQHX5yRnUK/BJh/89kydkZMBcbubD6wmkpQA
+Date:   Tue, 7 Dec 2021 06:05:58 +0000
+Message-ID: <bbb91e78-018f-c09c-47db-119010c810c2@fujitsu.com>
+References: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
+In-Reply-To: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a46bd1db-462d-453f-09fe-08d9b947a386
+x-ms-traffictypediagnostic: OS3PR01MB7996:EE_
+x-microsoft-antispam-prvs: <OS3PR01MB7996D541EBA37D01C830C7FCA56E9@OS3PR01MB7996.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1091;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ytL+JwMUzc0nnG50iR4vYTyTaUDd6xNOxY50ezyWRHQeiRGYveFUceDi2ozIk4wZf7fVXVrcezp48PpagmVgGkryLusq3KxHKMvtB+g3aHUO3tNpYSW2mW5r5rmSW0hCIIMhcxbiuwUicaJ2t5Kr+A4XT4PBtYfgqX+rJuLU1lswHe63Lc5rwK8p8/gJ93NvearejOlliE7m/cdnyGrqGMHVXFw74LqXB6mARUPtRiCWLFDekSKV7vpaG+QsansEWwK0KSyGyY71dxl7cSfcmgy0LLBeoZf2Z8AhBtTgb7qcL41lJO+qpoFqU/E+HRHhO55T4L+FGLONpOofe4iFt7i5smkMM5vn2RVE5rFJX2Wb3nb82jWPqXEqB2bb0L0sCyuQohdU5z9vDea0F5obzvsreaQHg5ReJZ9IsITIj//eoQKNc3u9cbGZa73Goq5Nm60f3lJckCLp3JplBaIrbL/HfAZDDs9SQxy49+4bCEPvt3ATlO1hzaH9U+S5BEQ9pHppFuUJe7avRcQrpzzs4RrXsH1UzFBzJjKVl+Aw8+zaIYZdPW+B0YMXqqu7PrZ7rk0HcztTkueRzx+amGPWBhIVMaygUvtW4ITK4Vg92c1+mRkTynWrbejp6r8gzntu20Ox9gAgQYGHY476hDSXSDzouqHq5wq7umacluAsZynh18gyH0fzfS/gMd+ANhj7av54Im9YAIDMQstd/VormwBFCFpduy2LWVTI8iQkvd2/6Gal0EpiZFD0pcWTimsDPRFKWr038oWsEN9xII5MZw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB7706.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(53546011)(26005)(66476007)(66556008)(8936002)(76116006)(66446008)(36756003)(31696002)(91956017)(6486002)(316002)(71200400001)(38070700005)(66946007)(508600001)(38100700002)(122000001)(186003)(8676002)(6512007)(2906002)(31686004)(6506007)(83380400001)(5660300002)(64756008)(85182001)(110136005)(2616005)(4326008)(86362001)(54906003)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QkxDVGk0UU54K2REWnA1d0NVZkN0eE9oVEVBRkphbnNNcVVEMFJ3TklKMWtr?=
+ =?utf-8?B?N21aN2g5dWQwOEtnVjVzekZ6WWxKYm9kNUZYMGFBczdLc0JyZldpSDQrL0li?=
+ =?utf-8?B?TllmWUNOcWlZT1R6Si91dWpOaXNSdVlRcEYveUZ1bVp1NTVWdnphdS8wOGc0?=
+ =?utf-8?B?b0dwUURXZUlIL1FwSFVGZlgzUUxJQjBCU1U3MXFSVGdaZlZTVXI2a25UV2lj?=
+ =?utf-8?B?T1NQbllHQjg4ck94YzV2dkhUaE9icXN2SzFXaHF2dUc1OVVtQTE5cjk3UlNv?=
+ =?utf-8?B?QkNFUFJmWkRIL0lPS25FVlVreE9XNXhJRmZZTDZ0bTNBSTZ1WnJKbE9qYTlt?=
+ =?utf-8?B?YSthVm1vYURFK20vZ1ljamV2U0dISXhOeFFOc0tzR1pkaE14TkR5RHp4Slc0?=
+ =?utf-8?B?czRaR09CTTQzcFovQm5uYVFXQ2xWL2ZXVS9xSFV4RXh2dU9WWG9pTUdzclky?=
+ =?utf-8?B?c3JBM1BGdXRNYzZsQlU4M3psN1pXTlk3Rko0aDlQUlZ0RDlEb0d6NEVYZ2FR?=
+ =?utf-8?B?K0xtSkNXK2Jzako5MFdyZnNxNlZNb25DbzRRMnJOT3V5emxoNnNLZkJRcnha?=
+ =?utf-8?B?OEViZ09lUDhLYzdvVDRFZFA0cElqd1IrQjk1UlhsTzJhSXU4VjI4NUZnSUdL?=
+ =?utf-8?B?RTF2RmZBZmVkVnFyUy9hY21HUmVzYmhySmdiZkp5SDlPU3VtTEVnTHdHcmlH?=
+ =?utf-8?B?U1NzcjFENTlKK0s2d2VoajlFQUFscUttWG1VMUNUVVh4VmZsanlWcWNLcG5Q?=
+ =?utf-8?B?WC80RDQxZW9GNkxxRmZuUmlTQTE4dGc3Y2pORVN4dGJYbU9nYzlJNVlYbHBL?=
+ =?utf-8?B?UTYxNjhoRVRaSzJ0REszbDNkend4eFIwMUNzWGdSSFhCalNzUjE0UUN1Sitt?=
+ =?utf-8?B?RnRHSW1QNExucGZWNGlYVmRLaVpYcHJ0d3NoNjFTV29waHAvMGhsOHlObVRm?=
+ =?utf-8?B?aVkvV282OXFnOUlEek5ZNTIyY1Y0OS9nOWdVeC93WENUT056Z1djbWc4aDBk?=
+ =?utf-8?B?a0ZJbFFaMk1BcWJHUGFtV3c2SzVma2NjWUdhbFBLMFB4bS9NOFNhdTNrNnd0?=
+ =?utf-8?B?aUVFK3A4eWg3Z1dDcWpsWEQzalI5VldJMFFIZEIvd1BaejQzMXg4YTVyQWJj?=
+ =?utf-8?B?Zks3Vkt5elRmRUZjZ0tXOXBBUmZUNnRjeEpDR2ZuNjFzeGtmTjR1NmRNWmdS?=
+ =?utf-8?B?VXE5OFRQYVQxTUZYVHFRdmdQNDFBL1VMUFdDY1MvVVNRcWo0ZzBKRktFNG4x?=
+ =?utf-8?B?bGxuTTFBMWVSWkxBWWFUMTdDOC83Zno5MnNTNmRLRXVHUXBLZUNMM0ZoL0xh?=
+ =?utf-8?B?RlhTSXQ5dXBQeTBTNm1mWkZGTmZLVWJQWThTa2xFMWlSa2dST0lwTWhQRU5Z?=
+ =?utf-8?B?aWwvKzJaTi9rbnRIVUhCZFl6R0JmalUxaDdsY1NRUFVRTENENVVmcE5aSkRO?=
+ =?utf-8?B?UVlVamZnbjlsUzQzcXZEMm1nMXlrSjRyTklYelhVV01ma0Nud3J3WUg2WTRV?=
+ =?utf-8?B?Ym9UaDE4dFE0aGx0b1MxNHhzZmFPUnpsdEtnOTFGUG5obXRQWEdoRmxrcTkz?=
+ =?utf-8?B?ODRkbFhNWFdtcDN3ZTdMZkdXTUJERUJHL3dZbi9pSmpmakJ3QWFVa2loVHNm?=
+ =?utf-8?B?d2pGemovZTd3YTkrZXk0T2V0R1V0WUd5Z3ZhMHZTS3ZmaFN0cHdFZWhnNS9L?=
+ =?utf-8?B?MXRXZm9uZ1RVUEtoMG5BbDlIbHdmc0crM3ZWcm4zTG9zcVhOUW05ZUFRZ1Za?=
+ =?utf-8?B?d0taWVUzdXBiZnlxUGFKQXNkRFVSWXpBSDloQmw1Lys3b25Lb2lLcHAyMFNx?=
+ =?utf-8?B?VkQzVy8rZnNZcmw0bVpPNGU2ZWk0dW16NWNodkh3bzV4QjJJYjlYSStaSDRL?=
+ =?utf-8?B?Z2k0QnFJbDJXVFFQMG9qSFdQeFliM3FyNGZtMFh1VSt1Yk1KWDJ2UTVickFH?=
+ =?utf-8?B?c3gxenRQaHY4aVJvM2k3SWtBWitRdk0wY2dFcHBDOFQ0NnF2c2RweFErMFVn?=
+ =?utf-8?B?cmZUa2xrZ3UyMUJpaVY3K2N6RnFVelMxa0w0ZmhTOUthdXl2WGNkTTBNTVVZ?=
+ =?utf-8?B?NHVybFh2azRuVDNHaUMwTzdKVWYrZkNNeHFKY3p5Q05VeC8rUTB6QkZScWh0?=
+ =?utf-8?B?bTZLN2ptVlgrRVhJdGROdFBpN3ZidE01WFR3RHNHVVpsbVp4UG41dDlSejd3?=
+ =?utf-8?Q?tpq5c9CVGsRxgyWWMZtHsJk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <73A65F71F64BBE48997DC917C9B0F9C8@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211203042437.740255-1-sharinder@google.com> <20211203042437.740255-3-sharinder@google.com>
- <BYAPR13MB25033EC6C480D74E59D6DE75FD6A9@BYAPR13MB2503.namprd13.prod.outlook.com>
-In-Reply-To: <BYAPR13MB25033EC6C480D74E59D6DE75FD6A9@BYAPR13MB2503.namprd13.prod.outlook.com>
-From:   Harinder Singh <sharinder@google.com>
-Date:   Tue, 7 Dec 2021 11:23:20 +0530
-Message-ID: <CAHLZCaEqr-0OipzKhDRXgtqrYqxNT6rNWpk5orFY0m5mYFdb2Q@mail.gmail.com>
-Subject: Re: [PATCH v1 2/7] Documentation: KUnit: Rewrite getting started
-To:     tim.bird@sony.com
-Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
-        corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB7706.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a46bd1db-462d-453f-09fe-08d9b947a386
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 06:05:58.5867
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W5w4I0QeFpAxBfgZEfmiyp4CYm4bt23cEMNFqgTlb1Us1Dd8t2SSeAAFWFrZ0K+xXmJRjND7k214xSmgjgUYng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB7996
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Tim,
-
-Thanks for the review comments.
-
-I incorporated your comments in v2 here:
-https://lore.kernel.org/linux-kselftest/20211207054019.1455054-3-sharinder@google.com/
-
-Please see my comments below.
-
-On Sat, Dec 4, 2021 at 12:04 AM <Tim.Bird@sony.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Harinder Singh <sharinder@google.com>
-> > Sent: Thursday, December 2, 2021 9:25 PM
-> > To: davidgow@google.com; brendanhiggins@google.com; shuah@kernel.org; corbet@lwn.net
-> > Cc: linux-kselftest@vger.kernel.org; kunit-dev@googlegroups.com; linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; Harinder
-> > Singh <sharinder@google.com>
-> > Subject: [PATCH v1 2/7] Documentation: KUnit: Rewrite getting started
-> >
-> > Clarify the purpose of kunit_tool and fixed consistency issues
-> >
-> > Signed-off-by: Harinder Singh <sharinder@google.com>
-> > ---
-> >  Documentation/dev-tools/kunit/start.rst | 192 ++++++++++++------------
-> >  1 file changed, 98 insertions(+), 94 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> > index 1e00f9226f74..04b6b6a37488 100644
-> > --- a/Documentation/dev-tools/kunit/start.rst
-> > +++ b/Documentation/dev-tools/kunit/start.rst
-> > @@ -4,132 +4,131 @@
-> >  Getting Started
-> >  ===============
-> >
-> > -Installing dependencies
-> > +Installing Dependencies
-> >  =======================
-> > -KUnit has the same dependencies as the Linux kernel. As long as you can build
-> > -the kernel, you can run KUnit.
-> > +KUnit has the same dependencies as the Linux kernel. As long as you can
-> > +build the kernel, you can run KUnit.
-> >
-> > -Running tests with the KUnit Wrapper
-> > -====================================
-> > -Included with KUnit is a simple Python wrapper which runs tests under User Mode
-> > -Linux, and formats the test results.
-> > -
-> > -The wrapper can be run with:
-> > +Running tests with kunit_tool
-> > +=============================
-> > +kunit_tool is a Python script, which configures and build a kernel, runs
->
-> build -> builds
-
-Done
-
-> > +tests, and formats the test results. From the kernel repository, you
-> > +can run kunit_tool:
-> >
-> >  .. code-block:: bash
-> >
-> >       ./tools/testing/kunit/kunit.py run
-> >
-> > -For more information on this wrapper (also called kunit_tool) check out the
-> > -Documentation/dev-tools/kunit/kunit-tool.rst page.
-> > +For more information on this wrapper, see:
-> > +Documentation/dev-tools/kunit/kunit-tool.rst.
-> > +
-> > +Creating a ``.kunitconfig``
-> > +---------------------------
-> > +If you want to run a specific set of tests (rather than those listed in
-> > +the KUnit ``defconfig``), you can provide Kconfig options in the
-> > +``.kunitconfig`` file.
->
-> I know you didn't change this sentence, but it never made sense to me.
-> If we're in here changing the format, can we rewrite this to be more clear?
->
-> What is the purpose of .kunitconfig?
->
-> Here's an alternative wording (which I'm not sure is correct):
->
-> By default, KUnit provides a ``defconfig`` which runs all of the unit
-> tests.  However, you can control which set of unit tests to run by creating
-> a ``.kunitconfig`` file with kernel config options that enable only a specific
-> set of tests and their dependencies.
-
-Rewrote the paragraph.
-
-> > This file contains the regular
-> > +Kernel config with the specific test targets. The
->
-> What does "This file contains the regular Kernel config" mean?
-> Does it have all the entries from a standard .config file?
-
-Rewrote the paragraph.
-
-> My kunit default.config looks like this:
-> CONFIG_KUNIT=y
-> CONFIG_KUNIT_EXAMPLE_TEST=y
-> CONFIG_KUNIT_ALL_TESTS=y
->
-> I think it would be better to say something like:
-> "This file contains the default configuration for KUnit, which is to run an example
-> test and all unit tests"
-
-I am not sure what you mean. This part is not talking about the
-default.config. We reworded the section in the next version. If it is
-not clear please elaborate.
-
-> > +``.kunitconfig`` also contains any other test specific config options,
-> > +such as test dependencies. For
-> > +example: the ``FAT_FS`` tests - ``FAT_KUNIT_TEST``, depends on
-> > +``FAT_FS``. ``FAT_FS`` can be enabled by selecting either ``MSDOS_FS``
-> > +or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
-> > +
-> > +.. code-block:: none
-> >
-> > -Creating a .kunitconfig
-> > ------------------------
-> > -If you want to run a specific set of tests (rather than those listed in the
-> > -KUnit defconfig), you can provide Kconfig options in the ``.kunitconfig`` file.
-> > -This file essentially contains the regular Kernel config, with the specific
-> > -test targets as well. The ``.kunitconfig`` should also contain any other config
-> > -options required by the tests.
-> > +     CONFIG_KUNIT=y
-> > +     CONFIG_MSDOS_FS=y
-> > +     CONFIG_FAT_KUNIT_TEST=y
-> >
-> > -A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
-> > +1. A good starting point for the ``.kunitconfig``, is the KUnit default
-> > +   config. Run the command:
-> >
-> >  .. code-block:: bash
-> >
-> >       cd $PATH_TO_LINUX_REPO
-> >       cp tools/testing/kunit/configs/default.config .kunitconfig
-> >
-> > -You can then add any other Kconfig options you wish, e.g.:
-> > +2. You can then add any other Kconfig options, for example:
->
-> Don't you also need to also remove CONFIG_KUNIT_ALL_TESTS?
-
-Added a note in version 2. Also removing an option for .kunitconfig
-would take effect immediately without this patch:
-https://lore.kernel.org/linux-kselftest/20211119232316.2246034-1-dlatypov@google.com/
-
-> >
-> >  .. code-block:: none
-> >
-> >       CONFIG_LIST_KUNIT_TEST=y
-> >
-> > -:doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
-> > -``.kunitconfig`` are set in the kernel ``.config`` before running the tests.
-> > -It'll warn you if you haven't included the dependencies of the options you're
-> > -using.
-> > -
-> > -.. note::
-> > -   Note that removing something from the ``.kunitconfig`` will not trigger a
-> > -   rebuild of the ``.config`` file: the configuration is only updated if the
-> > -   ``.kunitconfig`` is not a subset of ``.config``. This means that you can use
-> > -   other tools (such as make menuconfig) to adjust other config options.
-> > -
-> > +Before running the tests, kunit_tool ensures that all config options
-> > +set in ``.kunitconfig`` are set in the kernel ``.config``. It will warn
-> > +you if you have not included dependencies for the options used.
-> >
-> > -Running the tests (KUnit Wrapper)
-> > ----------------------------------
-> > +.. note ::
-> > +   The configuration is only updated if the ``.kunitconfig`` is not a
-> > +   subset of ``.config``. You can use tools (for example:
-> > +   make menuconfig) to adjust other config options.
-> >
-> > -To make sure that everything is set up correctly, simply invoke the Python
-> > -wrapper from your kernel repo:
-> > +Running Tests (KUnit Wrapper)
-> > +-----------------------------
-> > +1. To make sure that everything is set up correctly, invoke the Python
-> > +   wrapper from your kernel repository:
-> >
-> >  .. code-block:: bash
-> >
-> >       ./tools/testing/kunit/kunit.py run
-> >
-> > -.. note::
-> > -   You may want to run ``make mrproper`` first.
-> > -
-> >  If everything worked correctly, you should see the following:
-> >
-> > -.. code-block:: bash
-> > +.. code-block::
-> >
-> >       Generating .config ...
-> >       Building KUnit Kernel ...
-> >       Starting KUnit Kernel ...
-> >
-> > -followed by a list of tests that are run. All of them should be passing.
-> > +The tests will pass or fail.
-> >
-> > -.. note::
-> > -     Because it is building a lot of sources for the first time, the
-> > -     ``Building KUnit kernel`` step may take a while.
-> > +.. note ::
-> > +   Because it is building a lot of sources for the first time, the
-> > +   ``Building KUnit kernel`` may take a while.
-> >
-> > -Running tests without the KUnit Wrapper
-> > +Running Tests without the KUnit Wrapper
-> >  =======================================
-> > -
-> > -If you'd rather not use the KUnit Wrapper (if, for example, you need to
-> > -integrate with other systems, or use an architecture other than UML), KUnit can
-> > -be included in any kernel, and the results read out and parsed manually.
-> > -
-> > -.. note::
-> > -   KUnit is not designed for use in a production system, and it's possible that
-> > -   tests may reduce the stability or security of the system.
-> > -
-> > -
-> > -
-> > -Configuring the kernel
-> > +If you do not want to use the KUnit Wrapper (for example: you want code
-> > +under test to integrate with other systems, or use a different/
-> > +unsupported architecture or configuration), KUnit can be included in
-> > +any kernel, and the results are read out and parsed manually.
-> > +
-> > +.. note ::
-> > +   ``CONFIG_KUNIT`` should not be enabled in a production environment.
-> > +   Enabling KUnit disables Kernel Address-Space Layout Randomization
-> > +   (KASLR), and tests may affect the state of the kernel not
->
-> kernel not -> kernel in ways not
-
-Done.
-
-> > +   suitable for production.
-> > +
-> > +Configuring the Kernel
-> >  ----------------------
-> > +To enable KUnit itself, you need to enable the ``CONFIG_KUNIT`` Kconfig
-> > +option (under Kernel Hacking/Kernel Testing and Coverage in
-> > +``menuconfig``). From there, you can enable any KUnit tests. They
-> > +usually have config options ending in ``_KUNIT_TEST``.
-> >
-> > -In order to enable KUnit itself, you simply need to enable the ``CONFIG_KUNIT``
-> > -Kconfig option (it's under Kernel Hacking/Kernel Testing and Coverage in
-> > -menuconfig). From there, you can enable any KUnit tests you want: they usually
-> > -have config options ending in ``_KUNIT_TEST``.
-> > -
-> > -KUnit and KUnit tests can be compiled as modules: in this case the tests in a
-> > -module will be run when the module is loaded.
-> > -
-> > +KUnit and KUnit tests can be compiled as modules. The tests in a module
-> > +will run when the module is loaded.
-> >
-> > -Running the tests (w/o KUnit Wrapper)
-> > +Running Tests (without KUnit Wrapper)
-> >  -------------------------------------
-> > +Build and run your kernel. In the kernel log, the test output is printed
-> > +out in the TAP format. This will only happen by default if KUnit/tests
-> > +are built-in. Otherwise the module will need to be loaded.
-> >
-> > -Build and run your kernel as usual. Test output will be written to the kernel
-> > -log in `TAP <https://testanything.org/>`_ format.
-> > +.. note ::
-> > +   Some lines and/or data may get interspersed in the TAP output.
-> >
-> > -.. note::
-> > -   It's possible that there will be other lines and/or data interspersed in the
-> > -   TAP output.
-> > -
-> > -
-> > -Writing your first test
-> > +Writing Your First Test
-> >  =======================
-> > +In your kernel repository, let's add some code that we can test.
-> >
-> > -In your kernel repo let's add some code that we can test. Create a file
-> > -``drivers/misc/example.h`` with the contents:
-> > +1. Create a file ``drivers/misc/example.h``, which includes:
-> >
-> >  .. code-block:: c
-> >
-> >       int misc_example_add(int left, int right);
-> >
-> > -create a file ``drivers/misc/example.c``:
-> > +2. Create a file ``drivers/misc/example.c``, which includes:
-> >
-> >  .. code-block:: c
-> >
-> > @@ -142,21 +141,22 @@ create a file ``drivers/misc/example.c``:
-> >               return left + right;
-> >       }
-> >
-> > -Now add the following lines to ``drivers/misc/Kconfig``:
-> > +3. Add the following lines to ``drivers/misc/Kconfig``:
-> >
-> >  .. code-block:: kconfig
-> >
-> >       config MISC_EXAMPLE
-> >               bool "My example"
-> >
-> > -and the following lines to ``drivers/misc/Makefile``:
-> > +4. Add the following lines to ``drivers/misc/Makefile``:
-> >
-> >  .. code-block:: make
-> >
-> >       obj-$(CONFIG_MISC_EXAMPLE) += example.o
-> >
-> > -Now we are ready to write the test. The test will be in
-> > -``drivers/misc/example-test.c``:
-> > +Now we are ready to write the test cases.
-> > +
-> > +1. Add the below test case in ``drivers/misc/example_test.c``:
-> >
-> >  .. code-block:: c
-> >
-> > @@ -191,7 +191,7 @@ Now we are ready to write the test. The test will be in
-> >       };
-> >       kunit_test_suite(misc_example_test_suite);
-> >
-> > -Now add the following to ``drivers/misc/Kconfig``:
-> > +2. Add the following lines to ``drivers/misc/Kconfig``:
-> >
-> >  .. code-block:: kconfig
-> >
-> > @@ -200,26 +200,26 @@ Now add the following to ``drivers/misc/Kconfig``:
-> >               depends on MISC_EXAMPLE && KUNIT=y
-> >               default KUNIT_ALL_TESTS
-> >
-> > -and the following to ``drivers/misc/Makefile``:
-> > +3. Add the following lines to ``drivers/misc/Makefile``:
-> >
-> >  .. code-block:: make
-> >
-> > -     obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
-> > +     obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
-> >
-> > -Now add it to your ``.kunitconfig``:
-> > +4. Add the following lines to ``.kunitconfig``:
-> >
-> >  .. code-block:: none
-> >
-> >       CONFIG_MISC_EXAMPLE=y
-> >       CONFIG_MISC_EXAMPLE_TEST=y
-> >
-> > -Now you can run the test:
-> > +5. Run the test:
-> >
-> >  .. code-block:: bash
-> >
-> >       ./tools/testing/kunit/kunit.py run
-> >
-> > -You should see the following failure:
-> > +You should see the following failiure:
->
-> failiure -> failure
-
-Done.
-
-
-> >
-> >  .. code-block:: none
-> >
-> > @@ -227,16 +227,20 @@ You should see the following failure:
-> >       [16:08:57] [PASSED] misc-example:misc_example_add_test_basic
-> >       [16:08:57] [FAILED] misc-example:misc_example_test_failure
-> >       [16:08:57] EXPECTATION FAILED at drivers/misc/example-test.c:17
-> > -     [16:08:57]      This test never passes.
-> > +     [16:08:57]      This test never passes.
-> >       ...
-> >
-> > -Congrats! You just wrote your first KUnit test!
-> > +Congrats! You just wrote your first KUnit test.
-> >
-> >  Next Steps
-> >  ==========
-> > -*   Check out the Documentation/dev-tools/kunit/tips.rst page for tips on
-> > -    writing idiomatic KUnit tests.
-> > -*   Check out the :doc:`running_tips` page for tips on
-> > -    how to make running KUnit tests easier.
-> > -*   Optional: see the :doc:`usage` page for a more
-> > -    in-depth explanation of KUnit.
-> > +
-> > +*   Documentation/dev-tools/kunit/usage.rst - KUnit features.
-> > +*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> > +    examples.
-> > +*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> > +    used for testing.
-> > +*   Documentation/dev-tools/kunit/kunit-tool.rst - kunit_tool helper
-> > +    script.
-> > +*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> > +    answers.
-> > --
-> > 2.34.0.384.gca35af8252-goog
->
-Regards,
-Harinder Singh
+SGkgZm9sa3MNCg0KQ3VycmVudGx5LMKgIExLUC8wRGF5IHdpbGwgY292ZXIgYmluZCB0ZXN0cywg
+YnV0IExLUC8wREFZIG9ic2VydmVyZWQgMyBmYWlsdXJlcy4NCg0KPiAjIFRFU1RTPWJpbmQgLi9m
+Y25hbC10ZXN0LnNoDQo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIw0KPiBJUHY0IGFkZHJlc3MgYmluZHMN
+Cj4gIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjDQo+DQo+DQo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjDQo+IE5vIFZSRg0KPg0KPiBU
+RVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyAtIG5zLUEgSVDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0K
+PiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyBhZnRlciBkZXZpY2UgYmlu
+ZCAtIG5zLUEgSVDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBSYXcgc29j
+a2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyAtIG5zLUEgbG9vcGJhY2sgSVDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBSYXcgc29ja2V0IGJp
+bmQgdG8gbG9jYWwgYWRkcmVzcyBhZnRlciBkZXZpY2UgYmluZCAtIG5zLUEgbG9vcGJhY2sgSVDC
+oMKgIFsgT0sgXQ0KPiBURVNUOiBUQ1Agc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyAtIG5z
+LUEgSVDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBUQ1Agc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyBh
+ZnRlciBkZXZpY2UgYmluZCAtIG5zLUEgSVDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0K
+Pg0KPiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIw0KPiBXaXRoIFZSRg0KPg0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8g
+bG9jYWwgYWRkcmVzcyAtIG5zLUEgSVDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQg
+dG8gbG9jYWwgYWRkcmVzcyBhZnRlciBkZXZpY2UgYmluZCAtIG5zLUEgSVDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVz
+cyBhZnRlciBWUkYgYmluZCAtIG5zLUEgSVDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsg
+T0sgXQ0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyAtIFZSRiBJUMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBbRkFJTF0NCj4NCg0KaSBmb3VuZCB0aGF0IGFib3ZlIGNhc2UgZmFpbGVkIHdpdGggInNlcnZl
+cjogZXJyb3IgYmluZGluZyBzb2NrZXQ6IDk5OiBDYW5ub3QgYXNzaWduIHJlcXVlc3RlZCBhZGRy
+ZXNzIg0KaSBoYXZlIG1hbnVhbGx5IGNoZWNrIGl0IHdpdGggYmVsb3cgY29tbWFuZCBhZnRlciBz
+ZXR1cCgpLCBzYW1lIGVycm9yczoNCg0KIyBpcCBuZXRucyBleGVjIG5zLUEgbmV0dGVzdCAtcyAt
+UiAtUCBpY21wIC1sIDE3Mi4xNi4zLjEgLWINCjA1OjU1OjExIHNlcnZlcjogZXJyb3IgYmluZGlu
+ZyBzb2NrZXQ6IDk5OiBDYW5ub3QgYXNzaWduIHJlcXVlc3RlZCBhZGRyZXNzDQoNCkJ1dCB3aGVu
+IGkgc3BlY2lmaWVkIHNwZWNpZmljIG5ldHdvcmsgaW50ZXJmYWNlLCBpdCB3b3Jrcw0KIyBpcCBu
+ZXRucyBleGVjIG5zLUEgbmV0dGVzdCAtcyAtUiAtUCBpY21wIC1sIDE3Mi4xNi4zLjEgLWIgLUkg
+cmVkDQojIGVjaG8gJD8NCjANCiMgaXAgbmV0bnMgZXhlYyBucy1BIG5ldHRlc3QgLXMgLVIgLVAg
+aWNtcCAtbCAxNzIuMTYuMy4xIC1iDQowNjowMTo1NSBzZXJ2ZXI6IGVycm9yIGJpbmRpbmcgc29j
+a2V0OiA5OTogQ2Fubm90IGFzc2lnbiByZXF1ZXN0ZWQgYWRkcmVzcw0KIyBlY2hvICQ/DQoxDQoN
+Cg0KU28gaSB3b25kZXIgaWYgaSBtaXNzZWQgc29tZXRoaW5nID8NCg0KDQoNCg0KPg0KPiBURVNU
+OiBSYXcgc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyBhZnRlciBkZXZpY2UgYmluZCAtIFZS
+RiBJUMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBbIE9LIF0NCj4gVEVTVDogUmF3IHNvY2tldCBi
+aW5kIHRvIGxvY2FsIGFkZHJlc3MgYWZ0ZXIgVlJGIGJpbmQgLSBWUkYgSVDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgWyBPSyBdDQo+IFRFU1Q6IFJhdyBzb2NrZXQgYmluZCB0byBvdXQg
+b2Ygc2NvcGUgYWRkcmVzcyBhZnRlciBWUkYgYmluZCAtIG5zLUEgbG9vcGJhY2sgSVDCoCBbIE9L
+IF0NCj4gVEVTVDogVENQIHNvY2tldCBiaW5kIHRvIGxvY2FsIGFkZHJlc3MgLSBucy1BIElQwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBb
+IE9LIF0NCj4gVEVTVDogVENQIHNvY2tldCBiaW5kIHRvIGxvY2FsIGFkZHJlc3MgYWZ0ZXIgZGV2
+aWNlIGJpbmQgLSBucy1BIElQwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBbIE9LIF0NCj4gVEVTVDog
+VENQIHNvY2tldCBiaW5kIHRvIGxvY2FsIGFkZHJlc3MgLSBWUkYgSVDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgWyBPSyBdDQo+IFRF
+U1Q6IFRDUCBzb2NrZXQgYmluZCB0byBsb2NhbCBhZGRyZXNzIGFmdGVyIGRldmljZSBiaW5kIC0g
+VlJGIElQwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBUQ1Agc29ja2V0
+IGJpbmQgdG8gaW52YWxpZCBsb2NhbCBhZGRyZXNzIGZvciBWUkYgLSBucy1BIGxvb3BiYWNrIElQ
+wqDCoMKgwqAgWyBPSyBdDQo+IFRFU1Q6IFRDUCBzb2NrZXQgYmluZCB0byBpbnZhbGlkIGxvY2Fs
+IGFkZHJlc3MgZm9yIGRldmljZSBiaW5kIC0gbnMtQSBsb29wYmFjayBJUMKgIFsgT0sgXQ0KPg0K
+Pg0KPg0KPiAjIFRFU1RTPWJpbmQ2IC4vZmNuYWwtdGVzdC5zaA0KPg0KPiAjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMNCj4gSVB2NiBhZGRyZXNzIGJpbmRzDQo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIw0KPg0KPg0K
+PiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIw0KPiBObyBWUkYNCj4NCj4gVEVTVDogUmF3IHNvY2tldCBiaW5kIHRvIGxvY2Fs
+IGFkZHJlc3MgLSBucy1BIElQdjbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgW0ZBSUxdDQo+IFRFU1Q6IFJhdyBzb2NrZXQgYmluZCB0byBsb2Nh
+bCBhZGRyZXNzIGFmdGVyIGRldmljZSBiaW5kIC0gbnMtQSBJUHY2wqDCoMKgwqDCoMKgwqDCoMKg
+IFsgT0sgXQ0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gbG9jYWwgYWRkcmVzcyAtIG5zLUEg
+bG9vcGJhY2sgSVB2NsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBbIE9LIF0N
+Cj4gVEVTVDogUmF3IHNvY2tldCBiaW5kIHRvIGxvY2FsIGFkZHJlc3MgYWZ0ZXIgZGV2aWNlIGJp
+bmQgLSBucy1BIGxvb3BiYWNrIElQdjbCoCBbIE9LIF0NCj4gVEVTVDogVENQIHNvY2tldCBiaW5k
+IHRvIGxvY2FsIGFkZHJlc3MgLSBucy1BIElQdjbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgWyBPSyBdDQo+IFRFU1Q6IFRDUCBzb2NrZXQgYmlu
+ZCB0byBsb2NhbCBhZGRyZXNzIGFmdGVyIGRldmljZSBiaW5kIC0gbnMtQSBJUHY2wqDCoMKgwqDC
+oMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBUQ1Agc29ja2V0IGJpbmQgdG8gb3V0IG9mIHNjb3Bl
+IGxvY2FsIGFkZHJlc3MgLSBucy1BIGxvb3BiYWNrIElQdjbCoMKgwqDCoMKgIFtGQUlMXQ0KPg0K
+PiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIw0KPiBXaXRoIFZSRg0KPg0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gbG9j
+YWwgYWRkcmVzcyBhZnRlciB2cmYgYmluZCAtIG5zLUEgSVB2NsKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCBbIE9LIF0NCj4gVEVTVDogUmF3IHNvY2tldCBiaW5kIHRvIGxvY2FsIGFkZHJlc3MgYWZ0
+ZXIgZGV2aWNlIGJpbmQgLSBucy1BIElQdjbCoMKgwqDCoMKgwqDCoMKgwqAgWyBPSyBdDQo+IFRF
+U1Q6IFJhdyBzb2NrZXQgYmluZCB0byBsb2NhbCBhZGRyZXNzIGFmdGVyIHZyZiBiaW5kIC0gVlJG
+IElQdjbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBbIE9LIF0NCj4gVEVTVDogUmF3IHNvY2tl
+dCBiaW5kIHRvIGxvY2FsIGFkZHJlc3MgYWZ0ZXIgZGV2aWNlIGJpbmQgLSBWUkYgSVB2NsKgwqDC
+oMKgwqDCoMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBSYXcgc29ja2V0IGJpbmQgdG8gaW52YWxp
+ZCBsb2NhbCBhZGRyZXNzIGFmdGVyIHZyZiBiaW5kIC0gbnMtQSBsb29wYmFjayBJUHY2wqAgWyBP
+SyBdDQo+IFRFU1Q6IFRDUCBzb2NrZXQgYmluZCB0byBsb2NhbCBhZGRyZXNzIHdpdGggVlJGIGJp
+bmQgLSBucy1BIElQdjbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBbIE9LIF0NCj4gVEVTVDog
+VENQIHNvY2tldCBiaW5kIHRvIGxvY2FsIGFkZHJlc3Mgd2l0aCBWUkYgYmluZCAtIFZSRiBJUHY2
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBbIE9LIF0NCj4gVEVTVDogVENQIHNvY2tldCBi
+aW5kIHRvIGxvY2FsIGFkZHJlc3Mgd2l0aCBkZXZpY2UgYmluZCAtIG5zLUEgSVB2NsKgwqDCoMKg
+wqDCoMKgwqDCoMKgIFsgT0sgXQ0KPiBURVNUOiBUQ1Agc29ja2V0IGJpbmQgdG8gVlJGIGFkZHJl
+c3Mgd2l0aCBkZXZpY2UgYmluZCAtIFZSRiBJUHY2wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+W0ZBSUxdDQo+IFRFU1Q6IFRDUCBzb2NrZXQgYmluZCB0byBpbnZhbGlkIGxvY2FsIGFkZHJlc3Mg
+Zm9yIFZSRiAtIG5zLUEgbG9vcGJhY2sgSVB2NsKgwqAgWyBPSyBdDQo+IFRFU1Q6IFRDUCBzb2Nr
+ZXQgYmluZCB0byBpbnZhbGlkIGxvY2FsIGFkZHJlc3MgZm9yIGRldmljZSBiaW5kIC0gbnMtQSBs
+b29wYmFjayBJUHY2wqAgWyBPSyBdDQoNCg0KVGhhbmtzDQpaaGlqaWFuDQoNCg0KT24gMDIvMTIv
+MjAyMSAxMDoyOCwgTGkgWmhpamlhbiB3cm90ZToNCj4gaXB2Nl9hZGRyX2JpbmQvaXB2NF9hZGRy
+X2JpbmQgYXJlIGZ1bmN0aW9uIG5hbWVzLiBQcmV2aW91c2x5LCBiaW5kIHRlc3QNCj4gd291bGQg
+bm90IGJlIHJ1biBieSBkZWZhdWx0IGR1ZSB0byB0aGUgd3JvbmcgY2FzZSBuYW1lcw0KPg0KPiBG
+aXhlczogMzRkMDMwMmFiODYxICgic2VsZnRlc3RzOiBBZGQgaXB2NiBhZGRyZXNzIGJpbmQgdGVz
+dHMgdG8gZmNuYWwtdGVzdCIpDQo+IEZpeGVzOiA3NWIyYjJiM2RiNGMgKCJzZWxmdGVzdHM6IEFk
+ZCBpcHY0IGFkZHJlc3MgYmluZCB0ZXN0cyB0byBmY25hbC10ZXN0IikNCj4gU2lnbmVkLW9mZi1i
+eTogTGkgWmhpamlhbiA8bGl6aGlqaWFuQGNuLmZ1aml0c3UuY29tPg0KPiAtLS0NCj4gICB0b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvZmNuYWwtdGVzdC5zaCB8IDQgKystLQ0KPiAgIDEgZmls
+ZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+DQo+IGRpZmYgLS1n
+aXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvZmNuYWwtdGVzdC5zaCBiL3Rvb2xzL3Rl
+c3Rpbmcvc2VsZnRlc3RzL25ldC9mY25hbC10ZXN0LnNoDQo+IGluZGV4IDMzMTM1NjZjZTkwNi4u
+N2Y1YjI2NWZjYjkwIDEwMDc1NQ0KPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQv
+ZmNuYWwtdGVzdC5zaA0KPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvZmNuYWwt
+dGVzdC5zaA0KPiBAQCAtNDAwMiw4ICs0MDAyLDggQEAgRU9GDQo+ICAgIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMNCj4gICAjIG1haW4NCj4gICANCj4gLVRFU1RTX0lQVjQ9ImlwdjRfcGluZyBpcHY0
+X3RjcCBpcHY0X3VkcCBpcHY0X2FkZHJfYmluZCBpcHY0X3J1bnRpbWUgaXB2NF9uZXRmaWx0ZXIi
+DQo+IC1URVNUU19JUFY2PSJpcHY2X3BpbmcgaXB2Nl90Y3AgaXB2Nl91ZHAgaXB2Nl9hZGRyX2Jp
+bmQgaXB2Nl9ydW50aW1lIGlwdjZfbmV0ZmlsdGVyIg0KPiArVEVTVFNfSVBWND0iaXB2NF9waW5n
+IGlwdjRfdGNwIGlwdjRfdWRwIGlwdjRfYmluZCBpcHY0X3J1bnRpbWUgaXB2NF9uZXRmaWx0ZXIi
+DQo+ICtURVNUU19JUFY2PSJpcHY2X3BpbmcgaXB2Nl90Y3AgaXB2Nl91ZHAgaXB2Nl9iaW5kIGlw
+djZfcnVudGltZSBpcHY2X25ldGZpbHRlciINCj4gICBURVNUU19PVEhFUj0idXNlX2Nhc2VzIg0K
+PiAgIA0KPiAgIFBBVVNFX09OX0ZBSUw9bm8NCg==
