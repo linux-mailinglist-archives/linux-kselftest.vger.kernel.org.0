@@ -2,187 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A1A46B16B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 04:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDA246B1D4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 05:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbhLGDYG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Dec 2021 22:24:06 -0500
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:39643 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233757AbhLGDYG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:24:06 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9CA995C021C;
-        Mon,  6 Dec 2021 22:20:36 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 06 Dec 2021 22:20:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=COJgtQxbcEHsuKRODGvEtP2enfi
-        iNLvOC6Ia22XOOyU=; b=XedFAg0vxFhiRpFZAavEyxcJtF+hrZfb2rOfOzKBg9b
-        UguO7aNV9Olf70BaoFmcbs+eNNVErPa8VFxdzxvhLNOs9xWSpQ+fWMG8Z79gb1/D
-        unJhE2h53n5Tmk4z2RgwX9FTicy/3EJgJ5yfaW9rympKjoWJjdIpqZe2dhtTetuS
-        bC9s31AS7tsI6yJJz4U7bR99yUBKL1A24EuIh+8EQz7yIWKAJrIxDKD/k25M9jfJ
-        X6z01KAv7cXjPXJ7RwgOHItczxlUwTlrZOiQWuSLhx6KfaFdalaYKftX+2lm97Fd
-        f4JMPqOf+eekDemJbUgI/QVsWupeWWZxGV5CTOnSyNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=COJgtQ
-        xbcEHsuKRODGvEtP2enfiiNLvOC6Ia22XOOyU=; b=QwKYbGswyrA3RgV4xryQ2W
-        2KOZYSsWWJ/ZztX+0G8coCFcN/ZPbbF/URYtW12blglTmaoDXDcbKMtHDV4l0VNv
-        J0H2vDUaSpe001Hb8WksIFCBB0hjArFOXD3STXPiXrtYOqARwipS3x+oeyo7laNI
-        m2Rs11wlOIM8K4orpcGCel2BsZXru3BJUN9IAmqdAWvf0j1csd55J058c8BClBAA
-        PRYFdNRfmhz8bIvaXmOsxEIJUIxUOA1HvyFasWXippGqWCpMwf6MKyT4/GpmPEtY
-        YmR3ii31tK5BZx5mJTTEynZugnm8WMqAncJStrJzBZPlBdgzAyqoHxV2Src5yH+Q
-        ==
-X-ME-Sender: <xms:BNOuYUhHrscGmb2Kst92t28v1vCb2NYtUPsinI8YQZ4z3yWlSH8VRQ>
-    <xme:BNOuYdAllQfMXWurkan99qFGjQxjuEUeyDzvrbmu4a-DJ-XTEfYcI1cOZLotcd5P1
-    EaKlme2Qzj5BG4wFUk>
-X-ME-Received: <xmr:BNOuYcFRmm11CHUAQJRrdHsm99Y6BS9uHnYbOuOeXy-TehED2WIWQiHqcS8HNEIGpIhCZXHyeiJBA-reN18byqzRbb6Y5oGLtw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeeggdehjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgrshhh
-    ihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-    eqnecuggftrfgrthhtvghrnheplefhueegvdejgfejgfdukeefudetvddtuddtueeivedt
-    tdegteejkedvfeegfefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:BNOuYVSh91CUkrmqlDM8bDIQmlY7HNq0EvjJBcvOKeceIJ_YSaFOwQ>
-    <xmx:BNOuYRztFMJyM7GWicI8e1UWl6g57gfNn_VEUFYkY4j1jzMM7gismQ>
-    <xmx:BNOuYT65ps7Ics_lPiUE5Vgz9zqB4X2ZPL4RzFjGlAHBLMQf3J0-cg>
-    <xmx:BNOuYTvlME9IgazwMtKfy3Q3mCpakZnGlLZ2yTEG6iUTSSpImI5Dzg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 22:20:34 -0500 (EST)
-Date:   Tue, 7 Dec 2021 12:20:32 +0900
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] kselftest: alsa: Add simplistic test for ALSA mixer
- controls kselftest
-Message-ID: <Ya7TAHdMe9i41bsC@workstation>
-Mail-Followup-To: Mark Brown <broonie@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org
-References: <20211206160305.194011-1-broonie@kernel.org>
+        id S235234AbhLGEbN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Dec 2021 23:31:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:18578 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233659AbhLGEbM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Dec 2021 23:31:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298288408"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="298288408"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 20:27:42 -0800
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="461106554"
+Received: from hanyu1-mobl.ccr.corp.intel.com (HELO [10.167.226.45]) ([10.255.29.181])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 20:27:39 -0800
+Subject: Re: ww_mutex.sh hangs since v5.16-rc1
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        boqun.feng@gmail.com, open list <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>
+References: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
+ <20211202225712.GG16608@worktop.programming.kicks-ass.net>
+From:   Li Zhijian <zhijianx.li@intel.com>
+Message-ID: <5249edf6-5b28-a8da-ca68-f1ea68c3637e@intel.com>
+Date:   Tue, 7 Dec 2021 12:27:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206160305.194011-1-broonie@kernel.org>
+In-Reply-To: <20211202225712.GG16608@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mark,
-
-On Mon, Dec 06, 2021 at 04:03:05PM +0000, Mark Brown wrote:
-> Add a basic test for the mixer control interface. For every control on
-> every sound card in the system it checks that it can read and write the
-> default value where the control supports that and for writeable controls
-> attempts to write all valid values, restoring the default values after
-> each test to minimise disruption for users.
-> 
-> There are quite a few areas for improvement - currently no coverage of the
-> generation of notifications, several of the control types don't have any
-> coverage for the values and we don't have any testing of error handling
-> when we attempt to write out of range values - but this provides some basic
-> coverage.
-> 
-> This is added as a kselftest since unlike other ALSA test programs it does
-> not require either physical setup of the device or interactive monitoring
-> by users and kselftest is one of the test suites that is frequently run by
-> people doing general automated testing so should increase coverage. It is
-> written in terms of alsa-lib since tinyalsa is not generally packaged for
-> distributions which makes things harder for general users interested in
-> kselftest as a whole but it will be a barrier to people with Android.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> 
-> v2: Use pkg-config to get CFLAGS and LDLIBS for alsa-lib.
-> 
->  MAINTAINERS                               |   7 +
->  tools/testing/selftests/Makefile          |   3 +-
->  tools/testing/selftests/alsa/.gitignore   |   1 +
->  tools/testing/selftests/alsa/Makefile     |   9 +
->  tools/testing/selftests/alsa/mixer-test.c | 616 ++++++++++++++++++++++
->  5 files changed, 635 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/alsa/.gitignore
->  create mode 100644 tools/testing/selftests/alsa/Makefile
->  create mode 100644 tools/testing/selftests/alsa/mixer-test.c
-
-I think it safer to take care of volatile attribute when comparing read
-value to written value. I'm glad if you review below patch.
-
-As another topic, the runtime of alsa-lib application largely differs
-between process user due to the result of parsing text files for
-configuration space. I can easily imagine that developers unfamiliar to
-alsa-lib carelessly adds invalid or inadequate configurations to files
-under target path of alsa-lib configuration space, and they are puzzled
-since they are unaware of the fact that the kselftest is affected by
-userspace stuffs for the runtime.
-
-If we respect the basic theory of test (idempotence), we can use ioctl(2)
-with requests for ALSA control interface since it's not so complicated
-(at least it is easier than ALSA PCM interface). The purpose of
-kselftest is to test kernel stuffs, not to test userspace stuffs
-including alsa-lib implementation and variety of plugins.
-
-======== 8< --------
-
-From 0052f48a931d93b993e406ffaf4c8fbecac15e84 Mon Sep 17 00:00:00 2001
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Date: Tue, 7 Dec 2021 11:43:56 +0900
-Subject: [PATCH] kselftest: alsa: optimization for
- SNDRV_CTL_ELEM_ACCESS_VOLATILE
-
-The volatile attribute of control element means that the hardware can
-voluntarily change the state of control element independent of any
-operation by software. ALSA control core necessarily sends notification
-to userspace subscribers for any change from userspace application, while
-it doesn't for the hardware's voluntary change.
-
-This commit adds optimization for the attribute. Even if read value is
-different from written value, the test reports success as long as the
-target control element has the attribute. On the other hand, the
-difference is itself reported for developers' convenience.
-
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
----
- tools/testing/selftests/alsa/mixer-test.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index 6082efa0b426..b87475fb7372 100644
---- a/tools/testing/selftests/alsa/mixer-test.c
-+++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -317,9 +317,13 @@ bool show_mismatch(struct ctl_data *ctl, int index,
- 	}
- 
- 	if (expected_int != read_int) {
--		ksft_print_msg("%s.%d expected %lld but read %lld\n",
--			       ctl->name, index, expected_int, read_int);
--		return true;
-+		// NOTE: The volatile attribute means that the hardware can voluntarily change the
-+		// state of control element independent of any operation by software.
-+		bool is_volatile = snd_ctl_elem_info_is_volatile(ctl->info);
-+
-+		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
-+			       ctl->name, index, expected_int, read_int, is_volatile);
-+		return !is_volatile;
- 	} else {
- 		return false;
- 	}
--- 
-2.32.0
-
-======== 8< --------
 
 
-Cheers
+On 03/12/2021 06:57, Peter Zijlstra wrote:
+> On Wed, Dec 01, 2021 at 09:26:18AM +0800, Li Zhijian wrote:
+>> Hi Folks
+>>
+>>
+>> LKP/0Day found that ww_mutex.sh cannot complete since v5.16-rc1, but
+>> I'm pretty sorry that we failed to bisect the FBC, instead, the bisection pointed
+>> to a/below merge commit(91e1c99e17) finally.
+>>
+>> Due to this hang, other tests in the same group are also blocked in 0Day, we
+>> hope we can fix this hang ASAP.
+>>
+>> So if you have any idea about this, or need more debug information, feel free to let me know :)
+>>
+>> BTW, ww_mutex.sh was failed in v5.15 without hang, and looks it cannot reproduce on a vm.
+> On real hardware:
+>
+> root@ivb-ep:/usr/src/linux-2.6/tools/testing/selftests/locking# uname -a
+> Linux ivb-ep 5.16.0-rc3-00284-g68601c558556 #1 SMP PREEMPT Thu Dec 2 23:03:29 CET 2021 x86_64 GNU/Linux
+> root@ivb-ep:/usr/src/linux-2.6/tools/testing/selftests/locking# ./ww_mutex.sh
+> locking/ww_mutex: ok
+>
+> [ 1907.907801] Beginning ww mutex selftests
+> [ 1915.700077] All ww mutex selftests passed
+>
+>
+> What else do I try?
+I have no idea that, not sure below message is helpful
 
-Takashi Sakamoto
+root@lkp-knm01 /opt/rootfs# pgrep test-ww_mutex | wc -l
+256
+root@lkp-knm01 /opt/rootfs# pgrep test-ww_mutex -l | head -n 3
+1492 kworker/u576:38+test-ww_mutex
+1497 kworker/u576:43+test-ww_mutex
+1513 kworker/u576:59+test-ww_mutex
+
+root@lkp-knm01 /opt/rootfs# lscpu
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+Address sizes:       46 bits physical, 48 bits virtual
+CPU(s):              288
+On-line CPU(s) list: 0-287
+Thread(s) per core:  4
+Core(s) per socket:  72
+Socket(s):           1
+NUMA node(s):        2
+Vendor ID:           GenuineIntel
+CPU family:          6
+Model:               133
+Model name:          Intel(R) Xeon Phi(TM) CPU 7295 @ 1.50GHz
+Stepping:            0
+CPU MHz:             1600.000
+CPU max MHz:         1600.0000
+CPU min MHz:         1000.0000
+BogoMIPS:            2992.92
+Virtualization:      VT-x
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            1024K
+NUMA node0 CPU(s):   0-287
+NUMA node1 CPU(s):
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch ring3mwait cpuid_fault epb pti tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms avx512f rdseed adx avx512pf avx512er avx512cd xsaveopt dtherm ida arat pln pts avx512_vpopcntdq avx512_4vnniw avx512_4fmaps
+root@lkp-knm01 /opt/rootfs#
+
+
+[ 1500.848024] INFO: task kworker/u576:5:12395 blocked for more than 496 seconds.
+[ 1500.866920]       Not tainted 5.16.0-rc4 #1
+[ 1500.882898] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[ 1500.903997] task:kworker/u576:5  state:D stack:    0 pid:12395 ppid:     2 flags:0x00004000
+[ 1500.926047] Workqueue: test-ww_mutex test_cycle_work [test_ww_mutex]
+[ 1500.945916] Call Trace:
+[ 1500.959042] <TASK>
+[ 1500.972977] __schedule+0xdb0/0x25c0
+[ 1500.987868]  ? io_schedule_timeout+0x180/0x180
+[ 1501.004971]  ? lock_downgrade+0x680/0x680
+[ 1501.021975] schedule+0xe4/0x280
+[ 1501.036896] schedule_preempt_disabled+0x18/0x40
+[ 1501.053967] __ww_mutex_lock.constprop.0+0x1248/0x34c0
+[ 1501.072020]  ? test_cycle_work+0x1bb/0x500 [test_ww_mutex]
+[ 1501.088903]  ? mutex_lock_interruptible_nested+0x40/0x40
+[ 1501.106256]  ? lock_is_held_type+0xd7/0x140
+[ 1501.123083]  ? ww_mutex_lock+0x3e/0x380
+[ 1501.138803] ww_mutex_lock+0x3e/0x380
+[ 1501.154637]  test_cycle_work+0x1bb/0x500 [test_ww_mutex]
+[ 1501.172498]  ? stress_reorder_work+0xa00/0xa00 [test_ww_mutex]
+[ 1501.189955]  ? rcu_read_lock_sched_held+0xa1/0x100
+[ 1501.205827]  ? rcu_read_lock_bh_held+0xc0/0xc0
+[ 1501.221996] process_one_work+0x817/0x13c0
+[ 1501.236500]  ? rcu_read_unlock+0x40/0x40
+[ 1501.252896]  ? pwq_dec_nr_in_flight+0x280/0x280
+[ 1501.269914]  ? rwlock_bug.part.0+0xc0/0xc0
+[ 1501.285008] worker_thread+0x8b/0xd80
+[ 1501.301083]  ? process_one_work+0x13c0/0x13c0
+[ 1501.318071] kthread+0x3b9/0x4c0
+[ 1501.331953]  ? set_kthread_struct+0x100/0x100
+[ 1501.348374] ret_from_fork+0x22/0x30
+[ 1501.363834] </TASK>
+[ 1501.377565]
+[ 1501.377565]
+                Showing all locks held in the system:
+[ 1501.407817] 4 locks held by kworker/u576:38/1492:
+[ 1501.424053]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1501.447970]  #1: ffffc9000db6fdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1501.472031]  #2: ffffc9000db6fc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1501.495016]  #3: ffff8882688935c0 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1501.519059] 4 locks held by kworker/u576:43/1497:
+[ 1501.535821]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1501.558931]  #1: ffffc9000dbbfdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1501.582978]  #2: ffffc9000dbbfc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1501.604950]  #3: ffff88826888e520 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1501.628905] 4 locks held by kworker/u576:59/1513:
+[ 1501.646947]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1501.672947]  #1: ffffc9000dcbfdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1501.698754]  #2: ffffc9000dcbfc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1501.723030]  #3: ffff888268880208 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1501.748891] 1 lock held by khungtaskd/1650:
+[ 1501.767506]  #0: ffffffff855d5060 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire.constprop.0+0x0/0x40
+[ 1501.794899] 4 locks held by kworker/192:2/2053:
+[ 1501.814535] 1 lock held by in:imklog/3102:
+[ 1501.831982]  #0: ffff88828ca12170 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xa1/0xc0
+[ 1501.855919] 1 lock held by dmesg/3826:
+[ 1501.873472]  #0: ffff88821e5c80d0 (&user->lock){+.+.}-{3:3}, at: new_sync_write+0x4cc/0x640
+[ 1501.897875] 4 locks held by kworker/u576:0/7921:
+[ 1501.918442]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1501.946235]  #1: ffffc9000abcfdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1501.972770]  #2: ffffc9000abcfc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1501.998071]  #3: ffff888268884130 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1502.025008] 4 locks held by kworker/u576:1/12391:
+[ 1502.045611]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1502.072864]  #1: ffffc900078dfdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1502.100181]  #2: ffffc900078dfc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1502.126541]  #3: ffff888268888460 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1502.154874] 4 locks held by kworker/u576:2/12392:
+[ 1502.175873]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1502.203986]  #1: ffffc90007937dd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1502.232522]  #2: ffffc90007937c98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1502.260005]  #3: ffff88826888b4c0 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1502.289015] 4 locks held by kworker/u576:3/12393:
+[ 1502.311079]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1502.340862]  #1: ffffc9000798fdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1502.369950]  #2: ffffc9000798fc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1502.398992]  #3: ffff8882688931b8 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1502.429018] 4 locks held by kworker/u576:4/12394:
+[ 1502.452516]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1502.482907]  #1: ffffc900079e7dd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1502.513932]  #2: ffffc900079e7c98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1502.544097]  #3: ffff88826888a1f0 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1502.575802] 4 locks held by kworker/u576:5/12395:
+[ 1502.600046]  #0: ffff888262e50138 ((wq_completion)test-ww_mutex){+.+.}-{0:0}, at: process_one_work+0x740/0x13c0
+[ 1502.630939]  #1: ffffc90007a3fdd0 ((work_completion)(&cycle->work)){+.+.}-{0:0}, at: process_one_work+0x76d/0x13c0
+[ 1502.662034]  #2: ffffc90007a3fc98 (ww_class_acquire){+.+.}-{0:0}, at: process_one_work+0x817/0x13c0
+[ 1502.691957]  #3: ffff88826888d908 (ww_class_mutex){+.+.}-{3:3}, at: test_cycle_work+0x14c/0x500 [test_ww_mutex]
+[ 1502.723051] 4 locks held by kworker/u576:6/12396:
+
+
