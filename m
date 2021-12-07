@@ -2,90 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FF646C710
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 23:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 292DA46C74E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 23:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241695AbhLGWGP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 17:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S233625AbhLGWVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 17:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbhLGWGP (ORCPT
+        with ESMTP id S233459AbhLGWVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:06:15 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A1C061574
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Dec 2021 14:02:44 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id m15so273886pgu.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 14:02:44 -0800 (PST)
+        Tue, 7 Dec 2021 17:21:05 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C24C061746
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Dec 2021 14:17:34 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u11so225770plf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 14:17:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oPOb3f+PP/CHPVEnLCL92r7rMcYux8sb+4mgL/0JGVI=;
-        b=PPcAt0tBYiv+3kpXjHp2R3I0b6eJegphbebcm2P7Hr67N2X5T+mztEofzXyVu51h1k
-         t0BJ28BSSqf9tl1T3fhJPcst131aRakF0zHd0BahoDIQMHjr4cWLGUveEK6KB6hB9VGU
-         kCPFl+eBoyS5a1WHDoGLvexVy04sGZdIt1+5Y=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kOpXkc9EXimdPGYt70xvcmH708qI3DPqksqt+BSsfRQ=;
+        b=NX6n5x+djHsx9J6TTYMLLYcRFQhs5oC5zU0qPZucEN8U3/RjYWnOOH15rvRl4LMe/0
+         fs4NSvh8WYBdT5RAnR2h9FMqV/s8G3prT3BcNYri+/7GmtlVNNJRBSbpDXmEbJ8ntmlr
+         X9JIf87sScHB8MX1v9FaNAL9O7svaTx8SAlBFVA1WKENcbecGsz4yp1H4bsoF0tsN/J6
+         8fnm/AzmKrp5/TvG300lAO3V6mjvvZJ+ljZZKrzmMp6au+hYW4JQW8GZI6NgY/Robf2+
+         3834Rp78S+dQaeNWZfMrxjd2jYgeRzymZXYeYI5IQHSpCmJzVdCLF/TXr5KN0pfuq1vT
+         R2Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oPOb3f+PP/CHPVEnLCL92r7rMcYux8sb+4mgL/0JGVI=;
-        b=KrE3wZCaE+yscsLMMzKu3INpIDE/epz2cLH/oVIboKf+3phGnO3nCk3/KUcWnQHjsw
-         U3GlTkOa3g2+ImfgKBoD4ZamBii0R0h5+gRDZUJrOmI3dkDAw8Etf1efp7WDDPAy2con
-         wD8WBtfhBvj0IeLAFBQ5vsMH8eDiGVwmEs/R7ywm35IPtuGssOce8FVsAN0xha4+F6Kq
-         Qi7rQMnC7K/uvH5ncHMyOANhwwOL2L0fxq0ad7ItwRVOA8whOOxuoon19AMup4H5qXmw
-         zZdztExOVEg42sqEioiLKQFxuCLN422s5HGIbwU/a5qosE3FDHFV2bzwoxkP3ivmLeqB
-         KypA==
-X-Gm-Message-State: AOAM532nyvePcaPsnu32zHtEsmTMX1GoVSxi8cc4hnfecrmbkhMmpOI8
-        mR/GpzOmKyPEckeYlH7ID6xKzQ==
-X-Google-Smtp-Source: ABdhPJyieJsFvJIUtI3UUujSEkSuweH6m8DhvucVGJ4MtGyTBtnbKHDZjmLyION4bnAfmtZDQBGW3w==
-X-Received: by 2002:a05:6a00:23c7:b0:4a2:ca32:9a27 with SMTP id g7-20020a056a0023c700b004a2ca329a27mr1920629pfc.71.1638914563951;
-        Tue, 07 Dec 2021 14:02:43 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l13sm774009pfu.149.2021.12.07.14.02.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 14:02:43 -0800 (PST)
-Date:   Tue, 7 Dec 2021 14:02:42 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
-        shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
-Message-ID: <202112071358.E8E6812D@keescook>
-References: <20211207190251.18426-1-davidgow@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kOpXkc9EXimdPGYt70xvcmH708qI3DPqksqt+BSsfRQ=;
+        b=eYqqUohBW0K+OuSCRbCmaOK7WJoQu30GgEkO13AXEkk/w44eXyXW4dYHTB5ZrKKOJX
+         3tpNMY/5sohtO3J06hpBzQW7PD466qh+fp04DEqYWfpLFVLcnz8ms+BizWItu1YrXpXb
+         OSJ45ecHnw1X0uz1p6sjVsVdFhb9U9Ib6szSyQ7TlO4nu9gVMg5wmzpbHII11bFvrLe/
+         Ih6DSS7z8GRZFO5yEf8gMQS8+3F848Krie7o4ffoFuhUOv6+8eK9E5KxLQttY70ObrTZ
+         i8WyfZ2pzTiBzKHwB9+YXv51IU73sHh4Ak7MxreIqhaqvUY0nE+Mv20Lcd2tMqnz+cbf
+         64dQ==
+X-Gm-Message-State: AOAM530zweBpm3lNwcWTHX+Qy28aUCWDMp2hzuvFPEjHlTWVZ9HdaAWk
+        G336CEx7qswyb9reWwvigxaKKV6NK7uxZ3bUisP0YA==
+X-Google-Smtp-Source: ABdhPJxh2wyWO2gv41Gh3us0oW0BzBpeqCeN6WzQ8/yTrYDnmsCvUCo1XGee3pIcO2G48wGVL+kDbh8wXqNXlBB/Pa4=
+X-Received: by 2002:a17:902:cb8a:b0:141:f601:d5f1 with SMTP id
+ d10-20020a170902cb8a00b00141f601d5f1mr55260210ply.77.1638915453486; Tue, 07
+ Dec 2021 14:17:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207190251.18426-1-davidgow@google.com>
+References: <20211009015406.1311319-1-dlatypov@google.com>
+In-Reply-To: <20211009015406.1311319-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Dec 2021 17:17:22 -0500
+Message-ID: <CAFd5g44+jfgdP47sQwENBXpb0Tf6LdwTJB-H72dNB5HUNZoTZA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: use dataclass instead of collections.namedtuple
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
-> From: Rae Moar <rmoar@google.com>
-> 
-> It does not make any significant additions or changes other than those
-> already in use in the kernel: additional features can be added as they
-> become necessary and used.
-> 
-> [1]: https://testanything.org/tap-version-13-specification.html
-> 
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Co-developed-by: David Gow <davidgow@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
+On Fri, Oct 8, 2021 at 9:54 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> namedtuple is a terse way of defining a collection of fields.
+> However, it does not allow us to annotate the type of these fields.
+> It also doesn't let us have any sort of inheritance between types.
+>
+> Since commit df4b0807ca1a ("kunit: tool: Assert the version
+> requirement"), kunit.py has asserted that it's running on python >=3.7.
+>
+> So in that case use a 3.7 feature, dataclasses, to replace these.
+>
+> Changes in detail:
+> * Make KunitExecRequest contain all the fields needed for exec_tests
+> * Use inheritance to dedupe fields
+>   * also allows us to e.g. pass a KUnitRequest in as a KUnitParseRequest
+>   * this has changed around the order of some fields
+> * Use named arguments when constructing all request objects in kunit.py
+>   * This is to prevent accidentally mixing up fields, etc.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-I like it! Thank you so much for suffering through my earlier reviews.
-:)
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-The only concern I have is wonder what'll be needed to kselftest to
-deal with indentation changes. As long as this can be implemented
-without a subtest knowing it is a subtest, we're good.
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Sorry for taking so long to review this!
