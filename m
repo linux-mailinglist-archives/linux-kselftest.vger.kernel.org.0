@@ -2,495 +2,273 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2B546C17E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 18:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BC746C1AF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 18:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239877AbhLGRUM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 12:20:12 -0500
-Received: from mga04.intel.com ([192.55.52.120]:10252 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229971AbhLGRUL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:20:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="236367537"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="236367537"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:14:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="748857003"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Dec 2021 09:14:50 -0800
-Received: from debox1-desk4.hsd1.or.comcast.net (unknown [10.251.18.198])
-        by linux.intel.com (Postfix) with ESMTP id 4D3A9580641;
-        Tue,  7 Dec 2021 09:14:50 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     lee.jones@linaro.org, hdegoede@redhat.com,
-        david.e.box@linux.intel.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [V2 5/6] sample/sdsi: Sample of SDSi provisiong using sysfs
-Date:   Tue,  7 Dec 2021 09:14:47 -0800
-Message-Id: <20211207171448.799376-6-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211207171448.799376-1-david.e.box@linux.intel.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+        id S231251AbhLGR2e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 12:28:34 -0500
+Received: from mx07-001d1705.pphosted.com ([185.132.183.11]:39916 "EHLO
+        mx07-001d1705.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229800AbhLGR2e (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:28:34 -0500
+Received: from pps.filterd (m0209327.ppops.net [127.0.0.1])
+        by mx08-001d1705.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7Ga6Wc023496;
+        Tue, 7 Dec 2021 17:24:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=S1;
+ bh=VynsfQKiQPMNyE3R2DXGAuZ5tjg3p/W/UcH7nTS85uI=;
+ b=i1u+Wylxj5E/GXtsDuTHcDFMHJI4+wF8lhNQbdfZFedMvQ3YnqjTes77lOIlCyueqqyU
+ ijXUFrpau5twS8M0LUretkFtIFVbl7MOBV3vLyU8aFRD26CsgiJdeeUvy7ldjmzarDui
+ hIgb+Iuq5kWiI+huKxrJmNHtUjJtRDjenghCGL7CEvyeB2lFwKXE64nhKZAOZK9vGBZ8
+ HfYkT2l0H+Zgx66QZ55Ct5Xk6pDuFum4+5YElg7u0j5wgP06m/B9eQW4KJ9BtbFzNsGZ
+ s/rTU+APd7yTje5+td31np+u65/cKyccME2z5YIgWT52AktiJo1FiAj31LfHfQLA8B2F PA== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by mx08-001d1705.pphosted.com with ESMTP id 3cqy711yvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Dec 2021 17:24:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Deq/ki8kltl5UFVrsPv/Z9pZ5uo6ovHFADbWaKTuYzM0GTdEYPuLIK8dUwIJalS9pb91A+hpCBCDVbtZ3FXu8MRFBVuPdRc5lJmjWtxBjwTu95xDr0ikDH3QFUAlQLVbCgkcu6bZu5/lIK/UIrNqfvyIzxw9s+XfrNF84fXARedg/UuZrOq6HAW+JzVSrkrBYgiI0qRWW7QcvSaGNrQ4iC2tXgC8qGZ84Wlm+dVRXhEd3408cgFLEEoPWB4JOLhKrlli+eOmjzAghEXDvNW0x2X1ijm7ihclm+3bsKULLladhQpKzFC+D3e302XhRJkeQ887fhN9g7ErOQS88W12zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VynsfQKiQPMNyE3R2DXGAuZ5tjg3p/W/UcH7nTS85uI=;
+ b=F2gva0TycUIUGAomnQbex8zSyan1E28HfKhks5vDGrLmWf0tIY5eC1utad97R0jyrD0Y4pd6CAQL3OVNQgvINAOvJ9zdvzria1FLeZJaci36Cz3jyJvkvNP9yi206hrO4hCPK95u6At9qGjK7y+9ysHo4JFOn/yZpOA8PSwUEXhJq5Coi8k8APbwuJ8Y5d/DezUDirpfnF9SgXZYuDBQtXeZUbggnVNHgi48VheC24ERnYtPK2Ng710vDE0/PdhZnbgCt8jwJevw15r6j1MYnjJbSJLFSG67K0+l7K/6JLuITwxzwn5yQ2+mT1lvs78D6ywNdHqyd4xMCBAeaozRcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+Received: from BYAPR13MB2503.namprd13.prod.outlook.com (2603:10b6:a02:cd::33)
+ by BYAPR13MB2551.namprd13.prod.outlook.com (2603:10b6:a02:c1::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.10; Tue, 7 Dec
+ 2021 17:24:49 +0000
+Received: from BYAPR13MB2503.namprd13.prod.outlook.com
+ ([fe80::88c2:9770:40f:4f8]) by BYAPR13MB2503.namprd13.prod.outlook.com
+ ([fe80::88c2:9770:40f:4f8%7]) with mapi id 15.20.4778.007; Tue, 7 Dec 2021
+ 17:24:49 +0000
+From:   <Tim.Bird@sony.com>
+To:     <sharinder@google.com>, <davidgow@google.com>,
+        <brendanhiggins@google.com>, <shuah@kernel.org>, <corbet@lwn.net>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 3/7] Documentation: KUnit: Added KUnit Architecture
+Thread-Topic: [PATCH v2 3/7] Documentation: KUnit: Added KUnit Architecture
+Thread-Index: AQHX6y0Ajbz1WvajSEerwMfcISQtsqwnRoNA
+Date:   Tue, 7 Dec 2021 17:24:49 +0000
+Message-ID: <BYAPR13MB2503D5A5E52D5645C5CA3C3AFD6E9@BYAPR13MB2503.namprd13.prod.outlook.com>
+References: <20211207054019.1455054-1-sharinder@google.com>
+ <20211207054019.1455054-4-sharinder@google.com>
+In-Reply-To: <20211207054019.1455054-4-sharinder@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 915f9610-bd61-4e58-68a9-08d9b9a678ff
+x-ms-traffictypediagnostic: BYAPR13MB2551:EE_
+x-microsoft-antispam-prvs: <BYAPR13MB25515CE5CD8ACAF104E2ACF7FD6E9@BYAPR13MB2551.namprd13.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AXG+zCkrFgxIWU7rGNmUYGe5tG4a9TNHBBePNItJuAwy7H4C2xA3XLDi363XWjQovl4FWHNU9t6TePxUmO3zuR7jkl4so/xEJzFqp9F2kRNq7b6OVh8fjD1xsQIKxIRy1JutMjyBuw7qenyzjecaCPPpLrgUM4xr+H43l5u/dj/AcZcFNYi4EKsxgywNffPZgVuGiJGdN6E4zZfsBtF2yFSdBTE4P4ObnHfRmWP7oRVvObT+dfRQgeUwHw/V08grGayFEp9OYWk5bBekSBooLEwdRzpRZACwqoPRsvbKfSxZNC4ctFagTi+06CvUyLkWCtonFN6ynp5WgbB9K7d81Byeyuk565WXWqg1n6RqP/SdTfTEKCZ3zR8tFfkjrZWxUsvmTuyg67HxfCIxhj7zQ10pglpsYQT9hDeEVtzgGp/+HnKz70AvE2/zJYiLt2vhwBplkmRsI9UzzRk8hWTEu9yi9dodaF6fzM58T9hnqK0n8Bc1Yj2CoglAqaAii7+TAlPz/AQQqYs1rErioqvf2c+AMsIuebyFUgRF+60OcyY9u1u30x/z0FgxdIokx8xJORmSBdbEYqmYYDIpezDyFiD1MVwYtl7n9RkKCZ3MrIH9hd0acOXMB72wFmQmBqMW/41hR0Q854OXhm9ts51DinCoSpd4EvNG2H3qA6FKyK4yveUIedQrZkkI8gbeNsgLa0hWXbfZweF3cbLKr0vals2+/KBI8H1ACMX+uoUlRosVr+nr1uPm3E4nxlAfHWBY6dZjs3DCOmC+NKHza8LCsllY2sgiFTThyZm8Y1lVrdsbojCzp44KrbD5NrupzAl6pVt71uT7OvbUC3SCpenuuA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR13MB2503.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(64756008)(38070700005)(110136005)(5660300002)(82960400001)(54906003)(508600001)(83380400001)(316002)(66446008)(6506007)(55016003)(122000001)(4326008)(71200400001)(9686003)(33656002)(66556008)(186003)(2906002)(26005)(86362001)(8936002)(66946007)(8676002)(7696005)(76116006)(66476007)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MVA4b01YbDVPa0g4MzhBMkxkTEhBNGtNY1NVT0E5L1UxMU5pczh4ZEROdnhG?=
+ =?utf-8?B?dE9YL0NGZE9wY0E4WndTT3VJOGdVNkk3OGhBOFM1NzRWR0hKU1MvZVBFNFpB?=
+ =?utf-8?B?TloyVWl2MWRQNmlsYVhadnNtYzJONzBNaTFvSElyUWN5VUpDMHVHWnovaU90?=
+ =?utf-8?B?SjZwZUNjTk8ySjNtaWw2Ti94dERiVmlhK200UmJzUDVkTWtIdVlMQk1tL1lT?=
+ =?utf-8?B?YlRTSVgwREYvUmpWQjRXUjk1T3lsM0JXWXZ6QkpYMENoNk5mdDNYa0M4cjI3?=
+ =?utf-8?B?cFp2UXFGUjR6SVByR2NhVVJ2V0pKY3ZYZFcxdG1RWnY0SnZvSSt1bzJOQzg1?=
+ =?utf-8?B?STNEd3ErZGlmYSt1WWJ3WHVCK2pzRDNGNkNNdG95eG1yM1l0d1lQTkhjRUdO?=
+ =?utf-8?B?TlZjZkhZMzdIYnVvVlFDVUg0RlArSGNwR0hrLzB1N1Z6eHJHZW5HUm9HdDhP?=
+ =?utf-8?B?Q2x4ZjE5QTE5WTBCTVovcENpQ2ZOL2RsamFqZEVVSENhNU1mSVN0bExYTXBM?=
+ =?utf-8?B?QWpSdmxjcytwbFhOQUNwdkZaVmRLOW5wNlNpTTZnWStuVFRmS3hycHJ4aFBV?=
+ =?utf-8?B?djZHK2VsZ3ROWkVQWmUxeVk1czZRd1l1NEZPTTFMVHY4Y05tdTlXRjd2aFNn?=
+ =?utf-8?B?WDczcDdWNlpHU0pVbllET0tLTmp5SzJiT3RMWklnY3EvZ0xYTC9mbkV4aUZX?=
+ =?utf-8?B?Q3NwWHJKMFB3dk0xVjNzZFNVdGREamxDRUUxeTJrWEFrblpoTldOcEZSMmov?=
+ =?utf-8?B?bWVJYWp2TFNCcU1IdjBrSE1lZFVZb3l4TWxPMnRSK0FoVjBIeHB2ejd2bWtB?=
+ =?utf-8?B?a3BxanF6K2s4aHJZSFJTUUdySjBHYW9wWmxSV3NLeElPelo0eFNJNU9DOUI3?=
+ =?utf-8?B?aE40NUpoNktVbEplZlFGVlNKeVhKMWNRc2pnczBRT0pJZUM1Q2ZPUTlIV25Y?=
+ =?utf-8?B?V2RyT3RhanF2MW16SjcrL1RXOG56eTZuSXpJdS9DTC9jallmVXhkSGwxTk4x?=
+ =?utf-8?B?TlI0djlCOXFQenBUZDBOSjFnemRtazRmcnZTd0FwUHNEUmdibTQ4REZFZGxE?=
+ =?utf-8?B?Z00wNExjRE8yS21zOTcwc2tPcDIzTGhFQmZ4WTNMSzQ3emx6VERWUVVoZTkv?=
+ =?utf-8?B?MHpYSlhrNDFhNVR5NmlSVW5mTHlGYi9JTzI2K1U5L0pGdFFUd2JtNFE2R0Rq?=
+ =?utf-8?B?WnRWSWJFbXBOWE1SL1ZQV3I3L25zdTFWU3lVUWRxR3BSQUJXczVHUVltWFVX?=
+ =?utf-8?B?NTBLYSt3eUZGVTlBamczV0lZYmc1TmZmY3N1VW1CR0Q3cTN4SGwyYisrVW1J?=
+ =?utf-8?B?N0lCYmpLSjFkSUJBMDJYZzEzMTBESTlSZVcxVTB3SHFDV1VJajVCV1A2bHBj?=
+ =?utf-8?B?TThKSmlpSkJkZ2VkMmVha003UXpKK1AvVUQxTGZkWng3Rmg3UXhZUGpLckhq?=
+ =?utf-8?B?NGJQLzBCN2JXbUl2Z2tMYVZpSUJnWG5tenRWZExkTERPYWJaZmE5RjhkUjRV?=
+ =?utf-8?B?V0NlYjNZY2JEQkhTeWZxdG8rNmErSnlhWjVSRmRLSnBuWUVGTit4V3Uxejha?=
+ =?utf-8?B?bkZVekltdEpjNmM5czM2amE5WjhYdXAya3FZeUVvM2RiQzBnd2J4aWlRclVr?=
+ =?utf-8?B?NmJhbEovYmhlUGg5QTNIMWxMcTZuUTIyaHVRMWw1WVNvY1lIMkZnVGJzMFp0?=
+ =?utf-8?B?dzQ1aWNWY2JjWDhVemZvckR2L2tVeFBIM1lONDRxQml1T3F0K0RVTklTUzV0?=
+ =?utf-8?B?YmkvZW5TODQvWVJRTTZuaVpGVlVkOVRYdDJYNzZOZzl4amVNcjJITUx3WWox?=
+ =?utf-8?B?WThrcXNmWnBSNVNpYlM2eXQ1OElmK3FhUEVWRHFLc3d2VnhNaVY5dW9wT0pj?=
+ =?utf-8?B?UDUzRWljb3dUcTZnLzJrVmdDNjFuTS9DQmlxT0RuaVdiWUN5eG9QZVJMVEVh?=
+ =?utf-8?B?OVlOQUpCT2RuWi9GdHkvZ1EydzFoZk4xczlqaEZyeXdKdXNaY0NsUlFGZE41?=
+ =?utf-8?B?SVpPMzFkWnhhdGxZZUNWY0ZyZlM1SjZHN1NrOVo3a1YzTWxlamcySExPMmQz?=
+ =?utf-8?B?ZW5CY2ZJS2tzMDhzclc5VlRhRzMrK2xoV2xnNFhLVkk4Z05yV0FqRkFIb2ts?=
+ =?utf-8?B?Z3k1NGxVdUhoWjltZ2RsUHU1WFMzNUFOY1BlVlppeG1FM1c0K3BWRFNGak9G?=
+ =?utf-8?Q?EzJ7+VNFQz+z7W6b82qWS8s=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR13MB2503.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 915f9610-bd61-4e58-68a9-08d9b9a678ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 17:24:49.3441
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lQdcGPnqOXNemVbYRBXlmVCkjlCS/ZTVXU3PSjLfcjbO1shmtk5k4sZ+l7O2zBW9BzAUWNPZVE+Mzyketi8Jnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR13MB2551
+X-Proofpoint-GUID: iREYNJMWlqiMYH3FIzGcY7xAsrUJMOKM
+X-Proofpoint-ORIG-GUID: iREYNJMWlqiMYH3FIzGcY7xAsrUJMOKM
+X-Sony-Outbound-GUID: iREYNJMWlqiMYH3FIzGcY7xAsrUJMOKM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_07,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070108
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sample application showing usage of Intel Software Defined Silicon
-sysfs ABI.
-
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
-V2
-  - New patch
-
- MAINTAINERS                |   1 +
- samples/sdsi/Makefile      |   9 +
- samples/sdsi/sdsi-sample.c | 399 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 409 insertions(+)
- create mode 100644 samples/sdsi/Makefile
- create mode 100644 samples/sdsi/sdsi-sample.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index af7f17e7400f..ba9603fb7f62 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9787,6 +9787,7 @@ INTEL SDSI DRIVER
- M:	David E. Box <david.e.box@linux.intel.com>
- S:	Supported
- F:	drivers/platform/x86/intel/sdsi.c
-+F:	samples/sdsi/
- 
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
-diff --git a/samples/sdsi/Makefile b/samples/sdsi/Makefile
-new file mode 100644
-index 000000000000..17ac82a5623d
---- /dev/null
-+++ b/samples/sdsi/Makefile
-@@ -0,0 +1,9 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+.PHONY: sdsi-sample
-+
-+sdsi-sample: sdsi-sample.o
-+	$(CC) -Wall $^ -o $@
-+
-+clean:
-+	rm *.o sdsi-sample
-diff --git a/samples/sdsi/sdsi-sample.c b/samples/sdsi/sdsi-sample.c
-new file mode 100644
-index 000000000000..6b3b48359aa0
---- /dev/null
-+++ b/samples/sdsi/sdsi-sample.c
-@@ -0,0 +1,399 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * sdsi_test: Example program using the sysfs interface of the
-+ * Intel Software Defined Silicon Linux driver.
-+ *
-+ * See https://github.com/intel/intel-sdsi/blob/master/os-interface.rst
-+ * for register descriptions.
-+ *
-+ * Copyright (C) 2021 Intel Corporation. All rights reserved.
-+ */
-+
-+#include <dirent.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+#define SDSI_DIR		"/sys/bus/auxiliary/devices/intel_vsec.sdsi"
-+#define GUID			"0x6dd191"
-+#define REGISTERS_MIN_SIZE	72
-+
-+struct enabled_features {
-+	uint64_t reserved:3;
-+	uint64_t sdsi:1;
-+	uint64_t reserved1:60;
-+};
-+
-+struct auth_fail_count {
-+	uint64_t key_failure_count:3;
-+	uint64_t key_failure_threshold:3;
-+	uint64_t auth_failure_count:3;
-+	uint64_t auth_failure_threshold:3;
-+	uint64_t reserved:52;
-+};
-+
-+struct availability {
-+	uint64_t reserved:58;
-+	uint64_t updates_available:3;
-+	uint64_t updates_threshold:3;
-+};
-+
-+struct sdsi_reg_6dd191 {
-+	uint64_t ppin;
-+	uint64_t reserved;
-+	struct enabled_features en_features;
-+	uint64_t reserved1;
-+	struct auth_fail_count auth_fail_count;
-+	struct availability prov_avail;
-+	uint64_t reserved2;
-+	uint64_t reserved3;
-+	uint64_t socket_id;
-+};
-+
-+enum command {
-+	CMD_NONE,
-+	CMD_READ_LIC,
-+	CMD_READ_REG,
-+	CMD_PROV_AKC,
-+	CMD_PROV_CAP,
-+};
-+
-+static int get_file_size(FILE *stream, char *name)
-+{
-+	long size;
-+	int ret;
-+
-+	ret = fseek(stream, 0L, SEEK_END);
-+	if (ret == -1) {
-+		fprintf(stderr, "...Could not seek to EOF %s: %s\n", name, strerror(errno));
-+		return ret;
-+	}
-+
-+	size = ftell(stream);
-+	if (size == -1) {
-+		fprintf(stderr, "...Could not get size of file %s: %s\n", name, strerror(errno));
-+		return size;
-+	}
-+
-+	rewind(stream);
-+
-+	return size;
-+}
-+
-+static int sdsi_read_reg(char *socket)
-+{
-+	FILE *regs_ptr, *guid_ptr;
-+	struct sdsi_reg_6dd191 registers;
-+	char guid_val[20], *buf;
-+	char regs_file[70];
-+	char guid_file[70];
-+	int ret, i;
-+	long size;
-+
-+	snprintf(regs_file, sizeof(regs_file), "%s%s%s%s",
-+		 SDSI_DIR, ".", socket, "/registers");
-+
-+	snprintf(guid_file, sizeof(guid_file), "%s%s%s%s",
-+		 SDSI_DIR, ".", socket, "/guid");
-+
-+	memset(&registers, 0, sizeof(registers));
-+
-+	/* Open the guid file */
-+	guid_ptr = fopen(guid_file, "r");
-+	if (!guid_ptr) {
-+		fprintf(stderr, "...Could not open file %s: %s\n", guid_file, strerror(errno));
-+		return -1;
-+	}
-+
-+	fscanf(guid_ptr, "%20s", guid_val);
-+	fclose(guid_ptr);
-+
-+	/* Open the registers file */
-+	regs_ptr = fopen(regs_file, "r");
-+	if (!regs_ptr) {
-+		fprintf(stderr, "...Could not open file %s: %s\n", regs_file, strerror(errno));
-+		return -1;
-+	}
-+
-+	/* Get size of the registers file */
-+	size = get_file_size(regs_ptr, regs_file);
-+	if (size < 0) {
-+		ret = size;
-+		goto close_regs_ptr;
-+	}
-+
-+	/* Unknown guid. Just dump raw data */
-+	if (strcmp(GUID, guid_val)) {
-+		printf("Unrecognized guid, %s\n", guid_val);
-+
-+		buf = (char *)malloc(sizeof(char) * size);
-+		if (!buf) {
-+			perror("malloc");
-+			goto close_regs_ptr;
-+		}
-+
-+		ret = fread(buf, sizeof(uint8_t), size, regs_ptr);
-+		if (!ret) {
-+			fprintf(stderr, "...Could not read file %s: %s\n", regs_file,
-+				strerror(errno));
-+			free(buf);
-+			goto close_regs_ptr;
-+		}
-+
-+		for (i = 0; i < size; i += sizeof(uint64_t))
-+			printf("%3d: 0x%lx\n", i, *(uint64_t *)&buf[i]);
-+
-+		free(buf);
-+		goto close_regs_ptr;
-+	}
-+
-+	/* Print register info for this guid */
-+	ret = fread(&registers, sizeof(uint8_t), sizeof(registers), regs_ptr);
-+	if (!ret) {
-+		fprintf(stderr, "...Could not read file %s: %s\n", regs_file, strerror(errno));
-+		goto close_regs_ptr;
-+	}
-+
-+	printf("\n");
-+	printf("Info for device %s.%s\n", "intel_vsec.sdsi", socket);
-+	printf("\n");
-+	printf("PPIN:                           0x%lx\n", registers.ppin);
-+	printf("Enabled Features\n");
-+	printf("    SDSi:                       %s\n", !!registers.en_features.sdsi ? "Enabled" : "Disabled");
-+	printf("Authorization Failure Count\n");
-+	printf("    Key Failure Count:          %d\n", registers.auth_fail_count.key_failure_count);
-+	printf("    Key Failure Count:          %d\n", registers.auth_fail_count.key_failure_threshold);
-+	printf("    Auth Failure Count:         %d\n", registers.auth_fail_count.auth_failure_count);
-+	printf("    Auth Failure Count:         %d\n", registers.auth_fail_count.key_failure_threshold);
-+	printf("Provisioning Availability\n");
-+	printf("    Updates Available:          %d\n", registers.prov_avail.updates_available);
-+	printf("    Updates Threshold:          %d\n", registers.prov_avail.updates_threshold);
-+	printf("Socket ID:                      0x%lx\n", registers.socket_id);
-+
-+close_regs_ptr:
-+	fclose(regs_ptr);
-+
-+	return 0;
-+}
-+
-+static int sdsi_certificate_dump(char *socket)
-+{
-+	uint64_t state_certificate[512] = {0};
-+	bool first_instance;
-+	char cert_file[70];
-+	uint64_t previous;
-+	FILE *cert_ptr;
-+	int i, ret;
-+
-+	snprintf(cert_file, sizeof(cert_file), "%s%s%s%s",
-+		 SDSI_DIR, ".", socket, "/state_certificate");
-+
-+	/* Open the registers file */
-+	cert_ptr = fopen(cert_file, "r");
-+	if (!cert_ptr) {
-+		fprintf(stderr, "...Could not open file %s: %s\n", cert_file, strerror(errno));
-+		return -1;
-+	}
-+
-+	/* Read registers */
-+	ret = fread(state_certificate, sizeof(uint8_t), sizeof(state_certificate), cert_ptr);
-+	if (!ret) {
-+		fprintf(stderr, "...Could not read file %s: %s\n", cert_file, strerror(errno));
-+		goto close_cert_ptr;
-+	}
-+
-+	printf("%3d: 0x%lx\n", 0, state_certificate[0]);
-+	previous = state_certificate[0];
-+	first_instance = true;
-+
-+	for (i = 1; i < (sizeof(state_certificate)/sizeof(uint64_t)); i++) {
-+		if (state_certificate[i] == previous) {
-+			if (first_instance) {
-+				puts("*");
-+				first_instance = false;
-+			}
-+			continue;
-+		}
-+		printf("%3d: 0x%lx\n", i, state_certificate[i]);
-+		previous = state_certificate[i];
-+		first_instance = true;
-+	}
-+	printf("%3d\n", i);
-+
-+close_cert_ptr:
-+	fclose(cert_ptr);
-+
-+	return 0;
-+}
-+
-+static int sdsi_provision(char *prov_file, char *bin_file)
-+{
-+	char buf[4096] = { 0 };
-+	int bin_fd, prov_fd, size, ret = 0;
-+
-+	if (!bin_file) {
-+		fprintf(stderr, "...No binary file provided\n");
-+		return -1;
-+	}
-+
-+	/* Open the provision file */
-+	prov_fd = open(prov_file, O_WRONLY);
-+	if (prov_fd == -1) {
-+		fprintf(stderr, "...Could not open file %s: %s\n", prov_file, strerror(errno));
-+		return prov_fd;
-+	}
-+
-+	/* Open the binary */
-+	bin_fd = open(bin_file, O_RDONLY);
-+	if (bin_fd == -1) {
-+		fprintf(stderr, "...Could not open file %s: %s\n", bin_file, strerror(errno));
-+		ret = bin_fd;
-+		goto close_provision_fd;
-+	}
-+
-+	/* Read the binary file into the buffer */
-+	ret = read(bin_fd, buf, 4096);
-+	if (ret == -1)
-+		goto close_bin_fd;
-+
-+	size = ret;
-+	ret = write(prov_fd, buf, size);
-+	if (ret < size) {
-+		fprintf(stderr, "...Could not write file %s: %s\n", prov_file, strerror(errno));
-+		goto close_bin_fd;
-+	}
-+
-+	printf("Provisioned %s file %s successfully\n", prov_file, bin_file);
-+
-+close_bin_fd:
-+	close(bin_fd);
-+close_provision_fd:
-+	close(prov_fd);
-+
-+	return ret;
-+}
-+
-+static int sdsi_provision_akc(char *socket, char *bin_file)
-+{
-+	char akc_file[70];
-+
-+	snprintf(akc_file, sizeof(akc_file), "%s%s%s%s",
-+		 SDSI_DIR, ".", socket, "/provision_akc");
-+
-+	return sdsi_provision(akc_file, bin_file);
-+}
-+
-+static int sdsi_provision_cap(char *socket, char *bin_file)
-+{
-+	char cap_file[70];
-+
-+	snprintf(cap_file, sizeof(cap_file), "%s%s%s%s",
-+		 SDSI_DIR, ".", socket, "/provision_cap");
-+
-+	return sdsi_provision(cap_file, bin_file);
-+}
-+
-+static void print_help(char *prog)
-+{
-+	printf("Usage:\n");
-+
-+	printf("\t%s -s socket [-r [lic] [reg]] [-a file] [-c file]\n", prog);
-+
-+	printf("Options:\n");
-+	printf("%-13s\t%s\n", "-s <socket>", "socket number to open");
-+	printf("%-13s\t%s\n", "-r lic", "read licence data");
-+	printf("%-13s\t%s\n", "-r reg", "read SDSi register data");
-+	printf("%-13s\t%s\n", "-a <file>", "provision socket with AKC file");
-+	printf("%-13s\t%s\n", "-c <file>", "provision socket with CAP file");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	char *bin_file = NULL, *socket = NULL;
-+	enum command command = CMD_NONE;
-+	int ret, opt, cmd_count = 0;
-+
-+	while ((opt = getopt(argc, argv, "hs:ra:c:t:")) != -1) {
-+		switch (opt) {
-+		case 's':
-+			socket = optarg;
-+			break;
-+		case 'r':
-+			if (!argv[optind]) {
-+				print_help(argv[0]);
-+				return -1;
-+			}
-+
-+			if (strlen(argv[optind]) != strlen("lic")) {
-+				print_help(argv[0]);
-+				return -1;
-+			}
-+
-+			if (!strcmp(argv[optind], "lic")) {
-+				command = CMD_READ_LIC;
-+				++cmd_count;
-+				break;
-+			} else if (!strcmp(argv[optind], "reg")) {
-+				command = CMD_READ_REG;
-+				++cmd_count;
-+				break;
-+			}
-+
-+			print_help(argv[0]);
-+			return -1;
-+		case 'a':
-+			command = CMD_PROV_AKC;
-+			bin_file = optarg;
-+			++cmd_count;
-+			break;
-+		case 'c':
-+			command = CMD_PROV_CAP;
-+			bin_file = optarg;
-+			++cmd_count;
-+			break;
-+		case 'h':
-+			print_help(argv[0]);
-+			break;
-+		default:
-+			print_help(argv[0]);
-+			return 0;
-+		}
-+	}
-+
-+	if (!socket) {
-+		fprintf(stderr, "socket is required\n");
-+		print_help(argv[0]);
-+		return -1;
-+	}
-+
-+	if (!cmd_count) {
-+		fprintf(stderr, "need to specify a command\n");
-+		print_help(argv[0]);
-+		return -1;
-+	}
-+
-+	/* If applicable, check file exists */
-+	if (bin_file) {
-+		if (!access(bin_file, F_OK) == 0) {
-+			fprintf(stderr, "...Could not open file %s: %s\n", bin_file, strerror(errno));
-+			return -1;
-+		}
-+	}
-+
-+	/* Run the command */
-+	if (command == CMD_READ_LIC)
-+		ret = sdsi_certificate_dump(socket);
-+	else if (command == CMD_READ_REG)
-+		ret = sdsi_read_reg(socket);
-+	else if (command == CMD_PROV_AKC)
-+		ret = sdsi_provision_akc(socket, bin_file);
-+	else
-+		ret = sdsi_provision_cap(socket, bin_file);
-+
-+	return ret;
-+}
--- 
-2.25.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBIYXJpbmRlciBTaW5naCA8c2hh
+cmluZGVyQGdvb2dsZS5jb20+DQo+IA0KPiBEZXNjcmliZSB0aGUgY29tcG9uZW50cyBvZiBLVW5p
+dCBhbmQgaG93IHRoZSBrZXJuZWwgbW9kZSBwYXJ0cw0KPiBpbnRlcmFjdCB3aXRoIGt1bml0X3Rv
+b2wuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBIYXJpbmRlciBTaW5naCA8c2hhcmluZGVyQGdvb2ds
+ZS5jb20+DQo+IC0tLQ0KPiAgLi4uL2Rldi10b29scy9rdW5pdC9hcmNoaXRlY3R1cmUucnN0ICAg
+ICAgICAgIHwgMjA2ICsrKysrKysrKysrKysrKysrKw0KPiAgRG9jdW1lbnRhdGlvbi9kZXYtdG9v
+bHMva3VuaXQvaW5kZXgucnN0ICAgICAgIHwgICAyICsNCj4gIC4uLi9rdW5pdC9rdW5pdF9zdWl0
+ZW1lbW9yeWRpYWdyYW0ucG5nICAgICAgICB8IEJpbiAwIC0+IDI0MTc0IGJ5dGVzDQo+ICBEb2N1
+bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC9zdGFydC5yc3QgICAgICAgfCAgIDEgKw0KPiAgNCBm
+aWxlcyBjaGFuZ2VkLCAyMDkgaW5zZXJ0aW9ucygrKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERv
+Y3VtZW50YXRpb24vZGV2LXRvb2xzL2t1bml0L2FyY2hpdGVjdHVyZS5yc3QNCj4gIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC9rdW5pdF9zdWl0ZW1lbW9y
+eWRpYWdyYW0ucG5nDQo+IA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMv
+a3VuaXQvYXJjaGl0ZWN0dXJlLnJzdCBiL0RvY3VtZW50YXRpb24vZGV2LXRvb2xzL2t1bml0L2Fy
+Y2hpdGVjdHVyZS5yc3QNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMDAw
+MDAwLi5iYjBmYjNlM2VkMDENCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9Eb2N1bWVudGF0aW9u
+L2Rldi10b29scy9rdW5pdC9hcmNoaXRlY3R1cmUucnN0DQo+IEBAIC0wLDAgKzEsMjA2IEBADQo+
+ICsuLiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiArDQo+ICs9PT09PT09PT09
+PT09PT09PT0NCj4gK0tVbml0IEFyY2hpdGVjdHVyZQ0KPiArPT09PT09PT09PT09PT09PT09DQo+
+ICsNCj4gK1RoZSBLVW5pdCBhcmNoaXRlY3R1cmUgY2FuIGJlIGRpdmlkZWQgaW50byB0d28gcGFy
+dHM6DQo+ICsNCj4gKy0gS2VybmVsIHRlc3RpbmcgbGlicmFyeQ0KPiArLSBrdW5pdF90b29sIChD
+b21tYW5kIGxpbmUgdGVzdCBoYXJuZXNzKQ0KPiArDQo+ICtJbi1LZXJuZWwgVGVzdGluZyBGcmFt
+ZXdvcmsNCj4gKz09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiArDQo+ICtUaGUga2VybmVs
+IHRlc3RpbmcgbGlicmFyeSBzdXBwb3J0cyBLVW5pdCB0ZXN0cyB3cml0dGVuIGluIEMgdXNpbmcN
+Cj4gK0tVbml0LiBLVW5pdCB0ZXN0cyBhcmUga2VybmVsIGNvZGUuIEtVbml0IGRvZXMgc2V2ZXJh
+bCB0aGluZ3M6DQo+ICsNCj4gKy0gT3JnYW5pemVzIHRlc3RzDQo+ICstIFJlcG9ydHMgdGVzdCBy
+ZXN1bHRzDQo+ICstIFByb3ZpZGVzIHRlc3QgdXRpbGl0aWVzDQo+ICsNCj4gK1Rlc3QgQ2FzZXMN
+Cj4gKy0tLS0tLS0tLS0NCj4gKw0KPiArVGhlIGZ1bmRhbWVudGFsIHVuaXQgaW4gS1VuaXQgaXMg
+dGhlIHRlc3QgY2FzZS4gVGhlIEtVbml0IHRlc3QgY2FzZXMgYXJlDQo+ICtncm91cGVkIGludG8g
+S1VuaXQgc3VpdGVzLiBBIEtVbml0IHRlc3QgY2FzZSBpcyBhIGZ1bmN0aW9uIHdpdGggdHlwZQ0K
+PiArc2lnbmF0dXJlIGBgdm9pZCAoKikoc3RydWN0IGt1bml0ICp0ZXN0KWBgLg0KPiArVGhlc2Ug
+dGVzdCBjYXNlIGZ1bmN0aW9ucyBhcmUgd3JhcHBlZCBpbiBhIHN0cnVjdCBjYWxsZWQNCj4gK2Bg
+c3RydWN0IGt1bml0X2Nhc2VgYC4gRm9yIGNvZGUsIHNlZToNCj4gK2h0dHBzOi8vZWxpeGlyLmJv
+b3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvaW5jbHVkZS9rdW5pdC90ZXN0LmgjTDE0NQ0K
+PiArDQo+ICtJdCBpbmNsdWRlczoNCj4gKw0KPiArLSBgYHJ1bl9jYXNlYGA6IHRoZSBmdW5jdGlv
+biBpbXBsZW1lbnRpbmcgdGhlIGFjdHVhbCB0ZXN0IGNhc2UuDQo+ICstIGBgbmFtZWBgOiB0aGUg
+dGVzdCBjYXNlIG5hbWUuDQo+ICstIGBgZ2VuZXJhdGVfcGFyYW1zYGA6IHRoZSBwYXJhbWV0ZXJp
+emVkIHRlc3RzIGdlbmVyYXRvciBmdW5jdGlvbi4gVGhpcw0KPiArICBpcyBvcHRpb25hbCBmb3Ig
+bm9uLXBhcmFtZXRlcml6ZWQgdGVzdHMuDQo+ICsNCj4gK0VhY2ggS1VuaXQgdGVzdCBjYXNlIGdl
+dHMgYSBgYHN0cnVjdCBrdW5pdGBgIGNvbnRleHQNCj4gK29iamVjdCBwYXNzZWQgdG8gaXQgdGhh
+dCB0cmFja3MgYSBydW5uaW5nIHRlc3QuIFRoZSBLVW5pdCBhc3NlcnRpb24NCj4gK21hY3JvcyBh
+bmQgb3RoZXIgS1VuaXQgdXRpbGl0aWVzIHVzZSB0aGUgYGBzdHJ1Y3Qga3VuaXRgYCBjb250ZXh0
+DQo+ICtvYmplY3QuIEFzIGFuIGV4Y2VwdGlvbiwgdGhlcmUgYXJlIHR3byBmaWVsZHM6DQo+ICsN
+Cj4gKy0gYGAtPnByaXZgYDogVGhlIHNldHVwIGZ1bmN0aW9ucyBjYW4gdXNlIGl0IHRvIHN0b3Jl
+IGFyYml0cmFyeSB0ZXN0DQo+ICsgIHVzZXIgZGF0YS4NCj4gKw0KPiArLSBgYC0+cGFyYW1fdmFs
+dWVgYDogSXQgY29udGFpbnMgdGhlIHBhcmFtZXRlciB2YWx1ZSB3aGljaCBjYW4gYmUNCj4gKyAg
+cmV0cmlldmVkIGluIHRoZSBwYXJhbWV0ZXJpemVkIHRlc3RzLg0KPiArDQo+ICtUZXN0IFN1aXRl
+cw0KPiArLS0tLS0tLS0tLS0NCj4gKw0KPiArQSBLVW5pdCBzdWl0ZSBpbmNsdWRlcyBhIGNvbGxl
+Y3Rpb24gb2YgdGVzdCBjYXNlcy4gVGhlIEtVbml0IHN1aXRlcw0KPiArYXJlIHJlcHJlc2VudGVk
+IGJ5IHRoZSBgYHN0cnVjdCBrdW5pdF9zdWl0ZWBgLiBGb3IgZXhhbXBsZToNCj4gKw0KPiArLi4g
+Y29kZS1ibG9jazo6IGMNCj4gKw0KPiArCXN0YXRpYyBzdHJ1Y3Qga3VuaXRfY2FzZSBleGFtcGxl
+X3Rlc3RfY2FzZXNbXSA9IHsNCj4gKwkJS1VOSVRfQ0FTRShleGFtcGxlX3Rlc3RfZm9vKSwNCj4g
+KwkJS1VOSVRfQ0FTRShleGFtcGxlX3Rlc3RfYmFyKSwNCj4gKwkJS1VOSVRfQ0FTRShleGFtcGxl
+X3Rlc3RfYmF6KSwNCj4gKwkJe30NCj4gKwl9Ow0KPiArDQo+ICsJc3RhdGljIHN0cnVjdCBrdW5p
+dF9zdWl0ZSBleGFtcGxlX3Rlc3Rfc3VpdGUgPSB7DQo+ICsJCS5uYW1lID0gImV4YW1wbGUiLA0K
+PiArCQkuaW5pdCA9IGV4YW1wbGVfdGVzdF9pbml0LA0KPiArCQkuZXhpdCA9IGV4YW1wbGVfdGVz
+dF9leGl0LA0KPiArCQkudGVzdF9jYXNlcyA9IGV4YW1wbGVfdGVzdF9jYXNlcywNCj4gKwl9Ow0K
+PiArCWt1bml0X3Rlc3Rfc3VpdGUoZXhhbXBsZV90ZXN0X3N1aXRlKTsNCj4gKw0KPiArSW4gdGhl
+IGFib3ZlIGV4YW1wbGUsIHRoZSB0ZXN0IHN1aXRlIGBgZXhhbXBsZV90ZXN0X3N1aXRlYGAsIHJ1
+bnMgdGhlDQo+ICt0ZXN0IGNhc2VzIGBgZXhhbXBsZV90ZXN0X2Zvb2BgLCBgYGV4YW1wbGVfdGVz
+dF9iYXJgYCwgYW5kDQo+ICtgYGV4YW1wbGVfdGVzdF9iYXpgYC4gQmVmb3JlIHJ1bm5pbmcgdGhl
+IHRlc3QsIHRoZSBgYGV4YW1wbGVfdGVzdF9pbml0YGANCj4gK2lzIGNhbGxlZCBhbmQgYWZ0ZXIg
+cnVubmluZyB0aGUgdGVzdCwgYGBleGFtcGxlX3Rlc3RfZXhpdGBgIGlzIGNhbGxlZC4NCj4gK1Ro
+ZSBgYGt1bml0X3Rlc3Rfc3VpdGUoZXhhbXBsZV90ZXN0X3N1aXRlKWBgIHJlZ2lzdGVycyB0aGUg
+dGVzdCBzdWl0ZQ0KPiArd2l0aCB0aGUgS1VuaXQgdGVzdCBmcmFtZXdvcmsuDQo+ICsNCj4gK0V4
+ZWN1dG9yDQo+ICstLS0tLS0tLQ0KPiArDQo+ICtUaGUgS1VuaXQgZXhlY3V0b3IgY2FuIGxpc3Qg
+YW5kIHJ1biBidWlsdC1pbiBLVW5pdCB0ZXN0cyBvbiBib290Lg0KPiArVGhlIFRlc3Qgc3VpdGVz
+IGFyZSBzdG9yZWQgaW4gYSBsaW5rZXIgc2VjdGlvbg0KPiArY2FsbGVkIGBgLmt1bml0X3Rlc3Rf
+c3VpdGVzYGAuIEZvciBjb2RlLCBzZWU6DQo+ICtodHRwczovL2VsaXhpci5ib290bGluLmNvbS9s
+aW51eC92NS4xMi9zb3VyY2UvaW5jbHVkZS9hc20tZ2VuZXJpYy92bWxpbnV4Lmxkcy5oI0w5MTgu
+DQo+ICtUaGUgbGlua2VyIHNlY3Rpb24gY29uc2lzdHMgb2YgYW4gYXJyYXkgb2YgcG9pbnRlcnMg
+dG8NCj4gK2Bgc3RydWN0IGt1bml0X3N1aXRlYGAsIGFuZCBpcyBwb3B1bGF0ZWQgYnkgdGhlIGBg
+a3VuaXRfdGVzdF9zdWl0ZXMoKWBgDQo+ICttYWNyby4gVG8gcnVuIGFsbCB0ZXN0cyBjb21waWxl
+ZCBpbnRvIHRoZSBrZXJuZWwsIHRoZSBLVW5pdCBleGVjdXRvcg0KPiAraXRlcmF0ZXMgb3ZlciB0
+aGUgbGlua2VyIHNlY3Rpb24gYXJyYXkuDQo+ICsNCj4gKy4uIGtlcm5lbC1maWd1cmU6OiBrdW5p
+dF9zdWl0ZW1lbW9yeWRpYWdyYW0ucG5nDQo+ICsJOmFsdDoJS1VuaXQgU3VpdGUgTWVtb3J5DQo+
+ICsNCj4gKwlLVW5pdCBTdWl0ZSBNZW1vcnkgRGlhZ3JhbQ0KPiArDQo+ICtPbiB0aGUga2VybmVs
+IGJvb3QsIHRoZSBLVW5pdCBleGVjdXRvciB1c2VzIHRoZSBzdGFydCBhbmQgZW5kIGFkZHJlc3Nl
+cw0KPiArb2YgdGhpcyBzZWN0aW9uIHRvIGl0ZXJhdGUgb3ZlciBhbmQgcnVuIGFsbCB0ZXN0cy4g
+Rm9yIGNvZGUsIHNlZToNCj4gK2h0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVz
+dC9zb3VyY2UvbGliL2t1bml0L2V4ZWN1dG9yLmMNCj4gKw0KPiArV2hlbiBidWlsdCBhcyBhIG1v
+ZHVsZSwgdGhlIGBga3VuaXRfdGVzdF9zdWl0ZXMoKWBgIG1hY3JvIGRlZmluZXMgYQ0KPiArYGBt
+b2R1bGVfaW5pdCgpYGAgZnVuY3Rpb24sIHdoaWNoIHJ1bnMgYWxsIHRoZSB0ZXN0cyBpbiB0aGUg
+Y29tcGlsYXRpb24NCj4gK3VuaXQgaW5zdGVhZCBvZiB1dGlsaXppbmcgdGhlIGV4ZWN1dG9yLg0K
+PiArDQo+ICtJbiBLVW5pdCB0ZXN0cywgc29tZSBlcnJvciBjbGFzc2VzIGRvIG5vdCBhZmZlY3Qg
+b3RoZXIgdGVzdHMNCj4gK29yIHBhcnRzIG9mIHRoZSBrZXJuZWwsIGVhY2ggS1VuaXQgY2FzZSBl
+eGVjdXRlcyBpbiBhIHNlcGFyYXRlIHRocmVhZA0KPiArY29udGV4dC4gRm9yIGNvZGUsIHNlZToN
+Cj4gK2h0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvbGliL2t1
+bml0L3RyeS1jYXRjaC5jI0w1OA0KPiArDQo+ICtBc3NlcnRpb24gTWFjcm9zDQo+ICstLS0tLS0t
+LS0tLS0tLS0tDQo+ICsNCj4gK0tVbml0IHRlc3RzIHZlcmlmeSBzdGF0ZSB1c2luZyBleHBlY3Rh
+dGlvbnMvYXNzZXJ0aW9ucy4NCj4gK0FsbCBleHBlY3RhdGlvbnMvYXNzZXJ0aW9ucyBhcmUgZm9y
+bWF0dGVkIGFzOg0KPiArYGBLVU5JVF97RVhQRUNUfEFTU0VSVH1fPG9wPltfTVNHXShrdW5pdCwg
+cHJvcGVydHlbLCBtZXNzYWdlXSlgYA0KPiArDQo+ICstIGBge0VYUEVDVHxBU1NFUlR9YGAgZGV0
+ZXJtaW5lcyB3aGV0aGVyIHRoZSBjaGVjayBpcyBhbiBhc3NlcnRpb24gb3IgYW4NCj4gKyAgZXhw
+ZWN0YXRpb24uDQo+ICsNCj4gKwktIEZvciBhbiBleHBlY3RhdGlvbiwgaWYgdGhlIGNoZWNrIGZh
+aWxzLCBtYXJrcyB0aGUgdGVzdCBhcyBmYWlsZWQNCj4gKwkgIGFuZCBsb2dzIHRoZSBmYWlsdXJl
+Lg0KPiArDQo+ICsJLSBBbiBhc3NlcnRpb24sIG9uIGZhaWx1cmUsIGNhdXNlcyB0aGUgdGVzdCBj
+YXNlIHRvIHRlcm1pbmF0ZQ0KPiArCSAgaW1tZWRpYXRlbHkuDQo+ICsNCj4gKwkJLSBBc3NlcnRp
+b25zIGNhbGwgZnVuY3Rpb246DQo+ICsJCSAgYGB2b2lkIF9fbm9yZXR1cm4ga3VuaXRfYWJvcnQo
+c3RydWN0IGt1bml0ICopYGAuDQo+ICsNCj4gKwkJLSBgYGt1bml0X2Fib3J0YGAgY2FsbHMgZnVu
+Y3Rpb246DQo+ICsJCSAgYGB2b2lkIF9fbm9yZXR1cm4ga3VuaXRfdHJ5X2NhdGNoX3Rocm93KHN0
+cnVjdCBrdW5pdF90cnlfY2F0Y2ggKnRyeV9jYXRjaClgYC4NCj4gKw0KPiArCQktIGBga3VuaXRf
+dHJ5X2NhdGNoX3Rocm93YGAgY2FsbHMgZnVuY3Rpb246DQo+ICsJCSAgYGB2b2lkIGNvbXBsZXRl
+X2FuZF9leGl0KHN0cnVjdCBjb21wbGV0aW9uICosIGxvbmcpIF9fbm9yZXR1cm47YGANCj4gKwkJ
+ICBhbmQgdGVybWluYXRlcyB0aGUgc3BlY2lhbCB0aHJlYWQgY29udGV4dC4NCj4gKw0KPiArLSBg
+YDxvcD5gYCBkZW5vdGVzIGEgY2hlY2sgd2l0aCBvcHRpb25zOiBgYFRSVUVgYCAoc3VwcGxpZWQg
+cHJvcGVydHkNCj4gKyAgaGFzIHRoZSBib29sZWFuIHZhbHVlIOKAnHRydWXigJ0pLCBgYEVRYGAg
+KHR3byBzdXBwbGllZCBwcm9wZXJ0aWVzIGFyZQ0KPiArICBlcXVhbCksIGBgTk9UX0VSUl9PUl9O
+VUxMYGAgKHN1cHBsaWVkIHBvaW50ZXIgaXMgbm90IG51bGwgYW5kIGRvZXMgbm90DQo+ICsgIGNv
+bnRhaW4gYW4g4oCcZXJy4oCdIHZhbHVlKS4NCj4gKw0KPiArLSBgYFtfTVNHXWBgIHByaW50cyBh
+IGN1c3RvbSBtZXNzYWdlIG9uIGZhaWx1cmUuDQo+ICsNCj4gK1Rlc3QgUmVzdWx0IFJlcG9ydGlu
+Zw0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICtLVW5pdCBwcmludHMgdGVzdCByZXN1bHRz
+IGluIEtUQVAgZm9ybWF0LiBLVEFQIGlzIGJhc2VkIG9uIFRBUDE0LCBzZWU6DQo+ICtodHRwczov
+L2dpdGh1Yi5jb20vaXNhYWNzL3Rlc3Rhbnl0aGluZy5naXRodWIuaW8vYmxvYi90YXAxNC90YXAt
+dmVyc2lvbi0xNC1zcGVjaWZpY2F0aW9uLm1kLg0KPiArS1RBUCAoeWV0IHRvIGJlIHN0YW5kYXJk
+aXplZCBmb3JtYXQpIHdvcmtzIHdpdGggS1VuaXQgYW5kIEtzZWxmdGVzdC4NCj4gK1RoZSBLVW5p
+dCBleGVjdXRvciBwcmludHMgS1RBUCByZXN1bHRzIHRvIGRtZXNnLCBhbmQgZGVidWdmcw0KPiAr
+KGlmIGNvbmZpZ3VyZWQpLg0KPiArDQo+ICtQYXJhbWV0ZXJpemVkIFRlc3RzDQo+ICstLS0tLS0t
+LS0tLS0tLS0tLS0tDQo+ICsNCj4gK0VhY2ggS1VuaXQgcGFyYW1ldGVyaXplZCB0ZXN0IGlzIGFz
+c29jaWF0ZWQgd2l0aCBhIGNvbGxlY3Rpb24gb2YNCj4gK3BhcmFtZXRlcnMuIFRoZSB0ZXN0IGlz
+IGludm9rZWQgbXVsdGlwbGUgdGltZXMsIG9uY2UgZm9yIGVhY2ggcGFyYW1ldGVyDQo+ICt2YWx1
+ZSBhbmQgdGhlIHBhcmFtZXRlciBpcyBzdG9yZWQgaW4gdGhlIGBgcGFyYW1fdmFsdWVgYCBmaWVs
+ZC4NCj4gK1RoZSB0ZXN0IGNhc2UgaW5jbHVkZXMgYSBgYEtVTklUX0NBU0VfUEFSQU0oKWBgIG1h
+Y3JvIHRoYXQgYWNjZXB0cyBhDQo+ICtnZW5lcmF0b3IgZnVuY3Rpb24uDQo+ICtUaGUgZ2VuZXJh
+dG9yIGZ1bmN0aW9uIHJldHVybnMgdGhlIG5leHQgcGFyYW1ldGVyIGdpdmVuIHRvIHRoZQ0KDQpn
+aXZlbiB0byB0aGUgLT4gZ2l2ZW4gdGhlDQoNCj4gK3ByZXZpb3VzIHBhcmFtZXRlciBpbiBwYXJh
+bWV0ZXJpemVkIHRlc3RzLiBJdCBhbHNvIHByb3ZpZGVzIGEgbWFjcm8gdG8NCj4gK2dlbmVyYXRl
+IGNvbW1vbi1jYXNlIGdlbmVyYXRvcnMgYmFzZWQgb24gYXJyYXlzLg0KPiArDQo+ICtGb3IgY29k
+ZSwgc2VlOg0KPiAraHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTIvc291cmNl
+L2luY2x1ZGUva3VuaXQvdGVzdC5oI0wxNzgzDQoNClRoZSByZXN0IGxvb2tzIE9LLCBhcyBmYXIg
+YXMgSSBjYW4gdGVsbC4NCiAtLSBUaW0NCg0K
