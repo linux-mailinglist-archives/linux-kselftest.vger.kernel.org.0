@@ -2,55 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC2646C75E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 23:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B3746C767
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 23:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237929AbhLGWYk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 17:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S238024AbhLGW33 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 17:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbhLGWYj (ORCPT
+        with ESMTP id S241997AbhLGW33 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:24:39 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6E9C061746
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Dec 2021 14:21:09 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id o14so223276plg.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 14:21:09 -0800 (PST)
+        Tue, 7 Dec 2021 17:29:29 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B5CC061574
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Dec 2021 14:25:58 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 133so312753pgc.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 14:25:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0U14AlJmwfB+e/RVYOfwirVVU1ISVmq48sy+HOK9HUU=;
-        b=L1FSJ/KwaTmbswiwLO5H3JAbe6EdsY605iXcH//Ll1DUiWACcbZLD8gaKzKbuhgCer
-         o1p8PSf9Duc/6nNpfRi/Gd85Hft199FDAdT04hIYp+cczigwoPyeRIHGzHEhWNkXv057
-         qjc03gIBBYyeiEUtur/r6KPD9ZgOigsPkuYUC0M8ntHMeQzDQxEgEtZc6c7QDmDVOXdX
-         5fPSGwfNNDoqJQd8RETKbvrQM8sWQFl44KA4sWrNkMBH8VCQeM7mPnPLQ/vbvdr3PyBJ
-         PJWhkofV0im2TyuZ+AhmoQz2DJNBEAxC+2xvNR3kUOsC5fLdwT2Slq0dRt3lfX5JSocT
-         NRqA==
+        bh=xuH82+ew3+yPVR9xOzW+SMm8iqzMQQtfOT6/YUqMGeA=;
+        b=kkpZwYns3974F+bLnTR6ILVo1es+v+akrRSHuTsgisePDZuGX0G25M3ZEnkse5rxOG
+         fYYVxU/f5i8ttBIUNAoAvmLw0r/HTbJBtWlbgd9mHd9J9p/5VXceWvFIPBSJmUDw9ct3
+         wp1LngdHK/7VDlxBSrGKeFSCsjQTWrbVH+1hjos4obJO1iTPMs2JaCkbmrDbnxwUm7Kc
+         ftlJFoObGB4pDq/FYPJSczsoF04fL04JzknxdRAn0YA4tCTEVMzqWYmzrv1iqjd/+h1n
+         W1dagniRX5PD1vMdej8TWUYyaA0ECMuKk/znTEXtBBw2UmRf7FcZfmjk8KIWOxQ1z6is
+         rMeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0U14AlJmwfB+e/RVYOfwirVVU1ISVmq48sy+HOK9HUU=;
-        b=e2zBpuK/QpXpVOgJziJMDhqKigDo/BWz20FfHbOuj2iV9dASmWZ3P+7v/oUj/xTHcM
-         AFBMYwLnaPooV5u5GrGLQ8a55HBzxsA07bpjTe3CUJXUZig8JYTunPd4DKNx7gJsPJZU
-         Xv7dlkXDYX/VYmzDrYNrSMdnfUbDKHZR2qiufRnufnVdJ3GRHnFEt4Czv3OEkvY2IdCH
-         TBUTQDM+WRLOUkD56XFPBNu9aRv2CE0KAKZTgzxpIO0bS4C+7Gj3ydwR8BOwU6/Bulsr
-         vHR3QEKeUCBL7I/vOKIflehSdRhQcY4Jw2Inqzdlaozuw8+HhkapdDj317IdROY/JK4r
-         XIgg==
-X-Gm-Message-State: AOAM533KPvdz+45LJLCv7VHoHgqzoEJnfpd6HKayXWzeWEhZZW/KVkQM
-        uB8WYBA2tBzVaoZPyREsUr/AzJ4AyhMG8rDdgj44uQ==
-X-Google-Smtp-Source: ABdhPJxdZxxEERlxR9HetbGs+nmDuevgLWgjNa/dJICW8sAh/CIABDON8aM6odojPC8knmmLBCz5Is1zHgk1l9i0HKE=
-X-Received: by 2002:a17:90b:230c:: with SMTP id mt12mr2394253pjb.63.1638915668434;
- Tue, 07 Dec 2021 14:21:08 -0800 (PST)
+        bh=xuH82+ew3+yPVR9xOzW+SMm8iqzMQQtfOT6/YUqMGeA=;
+        b=uI+M3UPC+oZNp0A2yZGeeQm1d4auQakRPp6As2H6o0eRw9lxzlos37hF27FWyNZLte
+         J9dDjhueZrYmIYelfQT8jCAKA7DIz9OFe7zVImWxuP4/JUfsz4Jz/2QbhwJESygg4RHO
+         rgrOXq3Y23EeiW/1Bsw8EUBVa9howa6WzwEhZOtjJbqn9W8a3drqVixpmbX73iPMJPxb
+         +icNjJSvValrh58CDMZBhpWS+iPHR7AWBGrfF7FSpvrfitfbTPmC9AU0C+PFD0MAOAqN
+         G9FtK9IdQEXfQ2surOo+gx4AC+wkUeQ4S408IhPgTLB8e1xHcrbun0ZZCcA0iJ1H9GNl
+         N7WA==
+X-Gm-Message-State: AOAM531bqB3obwqv7mVhvuIsP0AMSLOfqqhpiVOyk0VmCzxw0aEgFY5n
+        EL9zjuiiY3/69kRB8rv80o4YoKaT+nDN+kKlpty6Bw0enc9jiw==
+X-Google-Smtp-Source: ABdhPJym4dUs9mLJvXhYatZ40eFah3Dfu8FvKlJ1ZajQ32OBu5WswZmU4UkYRkhYQrPZNoc+QtVpUSbrCJnCnm37rK8=
+X-Received: by 2002:a63:3fcb:: with SMTP id m194mr17504499pga.407.1638915958124;
+ Tue, 07 Dec 2021 14:25:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20211009015406.1311319-1-dlatypov@google.com> <20211009015406.1311319-2-dlatypov@google.com>
-In-Reply-To: <20211009015406.1311319-2-dlatypov@google.com>
+References: <20211106013058.2621799-1-dlatypov@google.com>
+In-Reply-To: <20211106013058.2621799-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 7 Dec 2021 17:20:57 -0500
-Message-ID: <CAFd5g44yXaVG+w+G3EXLkbgHvxSQ3baE_=wTD7EQAK+sroaEkw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: tool: delete kunit_parser.TestResult type
+Date:   Tue, 7 Dec 2021 17:25:46 -0500
+Message-ID: <CAFd5g47Bm6v=HWZuHTHokAHFL98JLE-949BQbcf47ckGfa1rSQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: move Kconfig read_from_file/parse_from_string
+ to package-level
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
@@ -60,16 +61,21 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 8, 2021 at 9:54 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Nov 5, 2021 at 9:31 PM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> The `log` field is unused, and the `status` field is accessible via
-> `test.status`.
+> read_from_file() clears its `self` Kconfig object and parses a config
+> file.
 >
-> So it's simpler to just return the main `Test` object directly.
+> It is a way to construct Kconfig objects more so than an operation on
+> Kconfig objects. This is reflected in the fact its only ever used as:
+>   kconfig = kunit_config.Kconfig()
+>   kconfig.read_from_file(path)
 >
-> And since we're no longer returning a namedtuple, which has no type
-> annotations, this hopefully means typecheckers are better equipped to
-> find any errors.
+> So clean this up and simplify callers by replacing it with
+>   kconfig = kunit_config.parse_file(path)
+>
+> Do the same thing for the related parse_from_string() function as well.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
