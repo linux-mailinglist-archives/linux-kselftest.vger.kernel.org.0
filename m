@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C96946C193
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 18:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C446C198
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Dec 2021 18:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239950AbhLGRUs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 12:20:48 -0500
-Received: from mga11.intel.com ([192.55.52.93]:34970 "EHLO mga11.intel.com"
+        id S239974AbhLGRVC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 12:21:02 -0500
+Received: from mga06.intel.com ([134.134.136.31]:52283 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239905AbhLGRUq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:20:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="235143473"
+        id S239966AbhLGRVB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:21:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298425598"
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="235143473"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:14:50 -0800
+   d="scan'208";a="298425598"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:14:50 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="679523738"
+   d="scan'208";a="605790103"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2021 09:14:50 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 07 Dec 2021 09:14:50 -0800
 Received: from debox1-desk4.hsd1.or.comcast.net (unknown [10.251.18.198])
-        by linux.intel.com (Postfix) with ESMTP id 9923E580641;
-        Tue,  7 Dec 2021 09:14:49 -0800 (PST)
+        by linux.intel.com (Postfix) with ESMTP id 0844C5805EC;
+        Tue,  7 Dec 2021 09:14:50 -0800 (PST)
 From:   "David E. Box" <david.e.box@linux.intel.com>
 To:     lee.jones@linaro.org, hdegoede@redhat.com,
         david.e.box@linux.intel.com, bhelgaas@google.com,
@@ -32,9 +32,9 @@ To:     lee.jones@linaro.org, hdegoede@redhat.com,
         mgross@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [V2 3/6] platform/x86/intel: Move intel_pmt from MFD to Auxiliary Bus
-Date:   Tue,  7 Dec 2021 09:14:45 -0800
-Message-Id: <20211207171448.799376-4-david.e.box@linux.intel.com>
+Subject: [V2 4/6] platform/x86: Add Intel Software Defined Silicon driver
+Date:   Tue,  7 Dec 2021 09:14:46 -0800
+Message-Id: <20211207171448.799376-5-david.e.box@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211207171448.799376-1-david.e.box@linux.intel.com>
 References: <20211207171448.799376-1-david.e.box@linux.intel.com>
@@ -44,1213 +44,812 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Intel Platform Monitoring Technology (PMT) support is indicated by presence
-of an Intel defined PCIe Designated Vendor Specific Extended Capabilities
-(DVSEC) structure with a PMT specific ID. The current MFD implementation
-creates child devices for each PMT feature, currently telemetry, watcher,
-and crashlog. However DVSEC structures may also be used by Intel to
-indicate support for other features. The Out Of Band Management Services
-Module (OOBMSM) uses DVSEC to enumerate several features, including PMT.
-In order to support them it is necessary to modify the intel_pmt driver to
-handle the creation of the child devices more generically. To that end,
-modify the driver to create child devices for any VSEC/DVSEC features on
-supported devices (indicated by PCI ID).  Additionally, move the
-implementation from MFD to the Auxiliary bus.  VSEC/DVSEC features are
-really multifunctional PCI devices, not platform devices as MFD was
-designed for. Auxiliary bus gives more flexibility by allowing the
-definition of custom structures that can be shared between associated
-auxiliary devices and the parent device. Also, rename the driver from
-intel_pmt to intel_vsec to better reflect the purpose.
+Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
+activating additional silicon features. Features are enabled through a
+license activation process.  The SDSi driver provides a per socket, sysfs
+attribute interface for applications to perform 3 main provisioning
+functions:
 
-This series also removes the current runtime pm support which was not
-complete to begin with. None of the current devices require runtime pm.
-However the support will be replaced when a device is added that requires
-it.
+1. Provision an Authentication Key Certificate (AKC), a key written to
+   internal NVRAM that is used to authenticate a capability specific
+   activation payload.
 
+2. Provision a Capability Activation Payload (CAP), a token authenticated
+   using the AKC and applied to the CPU configuration to activate a new
+   feature.
+
+3. Read the SDSi State Certificate, containing the CPU configuration
+   state.
+
+The operations perform function specific mailbox commands that forward the
+requests to SDSi hardware to perform authentication of the payloads and
+enable the silicon configuration (to be made available after power
+cycling).
+
+The SDSi device itself is enumerated as an auxiliary device from the
+intel_vsec driver and as such has a build dependency on CONFIG_INTEL_VSEC.
+
+Link: https://github.com/intel/intel-sdsi
 Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 Reviewed-by: Mark Gross <markgross@kernel.org>
 ---
 V2
-  - Clarify status of missing pm support in commit message
-  - Clarify why auxiliary bus is preferred in commit message
+  - Use sysfs_emit() in guid_show()
+  - Fix language in ABI, suggested by Bjorn
+  - Fix wrong directory name in ABI doc
 
- MAINTAINERS                                |  12 +-
- drivers/mfd/Kconfig                        |  10 -
- drivers/mfd/Makefile                       |   1 -
- drivers/mfd/intel_pmt.c                    | 261 -------------
- drivers/platform/x86/intel/Kconfig         |  11 +
- drivers/platform/x86/intel/Makefile        |   2 +
- drivers/platform/x86/intel/pmt/Kconfig     |   4 +-
- drivers/platform/x86/intel/pmt/class.c     |  21 +-
- drivers/platform/x86/intel/pmt/class.h     |   5 +-
- drivers/platform/x86/intel/pmt/crashlog.c  |  47 +--
- drivers/platform/x86/intel/pmt/telemetry.c |  46 +--
- drivers/platform/x86/intel/vsec.c          | 408 +++++++++++++++++++++
- drivers/platform/x86/intel/vsec.h          |  43 +++
- 13 files changed, 536 insertions(+), 335 deletions(-)
- delete mode 100644 drivers/mfd/intel_pmt.c
- create mode 100644 drivers/platform/x86/intel/vsec.c
- create mode 100644 drivers/platform/x86/intel/vsec.h
+ .../ABI/testing/sysfs-driver-intel_sdsi       |  77 +++
+ MAINTAINERS                                   |   5 +
+ drivers/platform/x86/intel/Kconfig            |  12 +
+ drivers/platform/x86/intel/Makefile           |   2 +
+ drivers/platform/x86/intel/sdsi.c             | 571 ++++++++++++++++++
+ drivers/platform/x86/intel/vsec.c             |  12 +-
+ 6 files changed, 678 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel_sdsi
+ create mode 100644 drivers/platform/x86/intel/sdsi.c
 
+diff --git a/Documentation/ABI/testing/sysfs-driver-intel_sdsi b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+new file mode 100644
+index 000000000000..6544f35abb98
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+@@ -0,0 +1,77 @@
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X
++Date:		Dec 2021
++KernelVersion:	5.17
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		This folder contains interface files for accessing Intel
++		Software Defined Silicon (SDSi) features on a CPU. X
++		represents the socket instance (though not the socket ID).
++		The socket ID is determined by reading the registers file
++		and decoding it per the specification.
++
++		Some files communicate with SDSi hardware through a mailbox.
++		Should the operation fail, one of the following error codes
++		may be returned:
++
++		Error Code	Cause
++	        ----------	-----
++	        EIO		General mailbox failure. Log may indicate cause.
++	        EBUSY		Mailbox is owned by another agent.
++	        EPERM		SDSI capability is not enabled in hardware.
++	        EPROTO		Failure in mailbox protocol detected by driver.
++				See log for details.
++	        EOVERFLOW	For provision commands, the size of the data
++				exceeds what may be written.
++	        ESPIPE		Seeking is not allowed.
++	        ETIMEDOUT	Failure to complete mailbox transaction in time.
++
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/guid
++Date:		Dec 2021
++KernelVersion:	5.17
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		(RO) The GUID for the registers file. The GUID identifies
++		the layout of the registers file in this folder.
++		Information about the register layouts for a particular GUID
++		is available at http://github.com/intel/intel-sdsi
++
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/registers
++Date:		Dec 2021
++KernelVersion:	5.17
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		(RO) Contains information needed by applications to provision
++		a CPU and monitor status information. The layout of this file
++		is determined by the GUID in this folder. Information about the
++		layout for a particular GUID is available at
++		http://github.com/intel/intel-sdsi
++
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/provision_akc
++Date:		Dec 2021
++KernelVersion:	5.17
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		(WO) Used to write an Authentication Key Certificate (AKC) to
++		the SDSi NVRAM for the CPU. The AKC is used to authenticate a
++		Capability Activation Payload. Mailbox command.
++
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/provision_cap
++Date:		Dec 2021
++KernelVersion:	5.17
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		(WO) Used to write a Capability Activation Payload (CAP) to the
++		SDSi NVRAM for the CPU. CAPs are used to activate a given CPU
++		feature. A CAP is validated by SDSi hardware using a previously
++		provisioned AKC file. Upon successful authentication, the CPU
++		configuration is updated. A cold reboot is required to fully
++		activate the feature. Mailbox command.
++
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/state_certificate
++Date:		Dec 2021
++KernelVersion:	5.17
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		(RO) Used to read back the current State Certificate for the CPU
++		from SDSi hardware. The State Certificate contains information
++		about the current licenses on the CPU. Mailbox command.
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 43007f2d29e0..cd2b10a86f09 100644
+index cd2b10a86f09..af7f17e7400f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -9752,10 +9752,9 @@ S:	Maintained
- F:	drivers/mfd/intel_soc_pmic*
- F:	include/linux/mfd/intel_soc_pmic*
+@@ -9783,6 +9783,11 @@ S:	Maintained
+ F:	arch/x86/include/asm/intel_scu_ipc.h
+ F:	drivers/platform/x86/intel_scu_*
  
--INTEL PMT DRIVER
--M:	"David E. Box" <david.e.box@linux.intel.com>
--S:	Maintained
--F:	drivers/mfd/intel_pmt.c
-+INTEL PMT DRIVERS
++INTEL SDSI DRIVER
 +M:	David E. Box <david.e.box@linux.intel.com>
 +S:	Supported
- F:	drivers/platform/x86/intel/pmt/
- 
- INTEL PRO/WIRELESS 2100, 2200BG, 2915ABG NETWORK CONNECTION SUPPORT
-@@ -9822,6 +9821,11 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/intel/uncore-frequency.c
- 
-+INTEL VENDOR SPECIFIC EXTENDED CAPABILITIES DRIVER
-+M:	David E. Box <david.e.box@linux.intel.com>
-+S:	Supported
-+F:	drivers/platform/x86/intel/vsec.*
++F:	drivers/platform/x86/intel/sdsi.c
 +
- INTEL VIRTUAL BUTTON DRIVER
- M:	AceLan Kao <acelan.kao@canonical.com>
- L:	platform-driver-x86@vger.kernel.org
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 3fb480818599..ac7b23eb62c2 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -692,16 +692,6 @@ config MFD_INTEL_PMC_BXT
- 	  Register and P-unit access. In addition this creates devices
- 	  for iTCO watchdog and telemetry that are part of the PMC.
- 
--config MFD_INTEL_PMT
--	tristate "Intel Platform Monitoring Technology (PMT) support"
--	depends on X86 && PCI
--	select MFD_CORE
--	help
--	  The Intel Platform Monitoring Technology (PMT) is an interface that
--	  provides access to hardware monitor registers. This driver supports
--	  Telemetry, Watcher, and Crashlog PMT capabilities/devices for
--	  platforms starting from Tiger Lake.
--
- config MFD_IPAQ_MICRO
- 	bool "Atmel Micro ASIC (iPAQ h3100/h3600/h3700) Support"
- 	depends on SA1100_H3100 || SA1100_H3600
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 0b1b629aef3e..31734d9318e2 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -211,7 +211,6 @@ obj-$(CONFIG_MFD_INTEL_LPSS)	+= intel-lpss.o
- obj-$(CONFIG_MFD_INTEL_LPSS_PCI)	+= intel-lpss-pci.o
- obj-$(CONFIG_MFD_INTEL_LPSS_ACPI)	+= intel-lpss-acpi.o
- obj-$(CONFIG_MFD_INTEL_PMC_BXT)	+= intel_pmc_bxt.o
--obj-$(CONFIG_MFD_INTEL_PMT)	+= intel_pmt.o
- obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
- obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
- obj-$(CONFIG_MFD_NTXEC)		+= ntxec.o
-diff --git a/drivers/mfd/intel_pmt.c b/drivers/mfd/intel_pmt.c
-deleted file mode 100644
-index dd7eb614c28e..000000000000
---- a/drivers/mfd/intel_pmt.c
-+++ /dev/null
-@@ -1,261 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Intel Platform Monitoring Technology PMT driver
-- *
-- * Copyright (c) 2020, Intel Corporation.
-- * All Rights Reserved.
-- *
-- * Author: David E. Box <david.e.box@linux.intel.com>
-- */
--
--#include <linux/bits.h>
--#include <linux/kernel.h>
--#include <linux/mfd/core.h>
--#include <linux/module.h>
--#include <linux/pci.h>
--#include <linux/platform_device.h>
--#include <linux/pm.h>
--#include <linux/pm_runtime.h>
--#include <linux/types.h>
--
--/* Intel DVSEC capability vendor space offsets */
--#define INTEL_DVSEC_ENTRIES		0xA
--#define INTEL_DVSEC_SIZE		0xB
--#define INTEL_DVSEC_TABLE		0xC
--#define INTEL_DVSEC_TABLE_BAR(x)	((x) & GENMASK(2, 0))
--#define INTEL_DVSEC_TABLE_OFFSET(x)	((x) & GENMASK(31, 3))
--#define INTEL_DVSEC_ENTRY_SIZE		4
--
--/* PMT capabilities */
--#define DVSEC_INTEL_ID_TELEMETRY	2
--#define DVSEC_INTEL_ID_WATCHER		3
--#define DVSEC_INTEL_ID_CRASHLOG		4
--
--struct intel_dvsec_header {
--	u16	length;
--	u16	id;
--	u8	num_entries;
--	u8	entry_size;
--	u8	tbir;
--	u32	offset;
--};
--
--enum pmt_quirks {
--	/* Watcher capability not supported */
--	PMT_QUIRK_NO_WATCHER	= BIT(0),
--
--	/* Crashlog capability not supported */
--	PMT_QUIRK_NO_CRASHLOG	= BIT(1),
--
--	/* Use shift instead of mask to read discovery table offset */
--	PMT_QUIRK_TABLE_SHIFT	= BIT(2),
--
--	/* DVSEC not present (provided in driver data) */
--	PMT_QUIRK_NO_DVSEC	= BIT(3),
--};
--
--struct pmt_platform_info {
--	unsigned long quirks;
--	struct intel_dvsec_header **capabilities;
--};
--
--static const struct pmt_platform_info tgl_info = {
--	.quirks = PMT_QUIRK_NO_WATCHER | PMT_QUIRK_NO_CRASHLOG |
--		  PMT_QUIRK_TABLE_SHIFT,
--};
--
--/* DG1 Platform with DVSEC quirk*/
--static struct intel_dvsec_header dg1_telemetry = {
--	.length = 0x10,
--	.id = 2,
--	.num_entries = 1,
--	.entry_size = 3,
--	.tbir = 0,
--	.offset = 0x466000,
--};
--
--static struct intel_dvsec_header *dg1_capabilities[] = {
--	&dg1_telemetry,
--	NULL
--};
--
--static const struct pmt_platform_info dg1_info = {
--	.quirks = PMT_QUIRK_NO_DVSEC,
--	.capabilities = dg1_capabilities,
--};
--
--static int pmt_add_dev(struct pci_dev *pdev, struct intel_dvsec_header *header,
--		       unsigned long quirks)
--{
--	struct device *dev = &pdev->dev;
--	struct resource *res, *tmp;
--	struct mfd_cell *cell;
--	const char *name;
--	int count = header->num_entries;
--	int size = header->entry_size;
--	int id = header->id;
--	int i;
--
--	switch (id) {
--	case DVSEC_INTEL_ID_TELEMETRY:
--		name = "pmt_telemetry";
--		break;
--	case DVSEC_INTEL_ID_WATCHER:
--		if (quirks & PMT_QUIRK_NO_WATCHER) {
--			dev_info(dev, "Watcher not supported\n");
--			return -EINVAL;
--		}
--		name = "pmt_watcher";
--		break;
--	case DVSEC_INTEL_ID_CRASHLOG:
--		if (quirks & PMT_QUIRK_NO_CRASHLOG) {
--			dev_info(dev, "Crashlog not supported\n");
--			return -EINVAL;
--		}
--		name = "pmt_crashlog";
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	if (!header->num_entries || !header->entry_size) {
--		dev_err(dev, "Invalid count or size for %s header\n", name);
--		return -EINVAL;
--	}
--
--	cell = devm_kzalloc(dev, sizeof(*cell), GFP_KERNEL);
--	if (!cell)
--		return -ENOMEM;
--
--	res = devm_kcalloc(dev, count, sizeof(*res), GFP_KERNEL);
--	if (!res)
--		return -ENOMEM;
--
--	if (quirks & PMT_QUIRK_TABLE_SHIFT)
--		header->offset >>= 3;
--
--	/*
--	 * The PMT DVSEC contains the starting offset and count for a block of
--	 * discovery tables, each providing access to monitoring facilities for
--	 * a section of the device. Create a resource list of these tables to
--	 * provide to the driver.
--	 */
--	for (i = 0, tmp = res; i < count; i++, tmp++) {
--		tmp->start = pdev->resource[header->tbir].start +
--			     header->offset + i * (size << 2);
--		tmp->end = tmp->start + (size << 2) - 1;
--		tmp->flags = IORESOURCE_MEM;
--	}
--
--	cell->resources = res;
--	cell->num_resources = count;
--	cell->name = name;
--
--	return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cell, 1, NULL, 0,
--				    NULL);
--}
--
--static int pmt_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
--{
--	struct pmt_platform_info *info;
--	unsigned long quirks = 0;
--	bool found_devices = false;
--	int ret, pos = 0;
--
--	ret = pcim_enable_device(pdev);
--	if (ret)
--		return ret;
--
--	info = (struct pmt_platform_info *)id->driver_data;
--
--	if (info)
--		quirks = info->quirks;
--
--	if (info && (info->quirks & PMT_QUIRK_NO_DVSEC)) {
--		struct intel_dvsec_header **header;
--
--		header = info->capabilities;
--		while (*header) {
--			ret = pmt_add_dev(pdev, *header, quirks);
--			if (ret)
--				dev_warn(&pdev->dev,
--					 "Failed to add device for DVSEC id %d\n",
--					 (*header)->id);
--			else
--				found_devices = true;
--
--			++header;
--		}
--	} else {
--		do {
--			struct intel_dvsec_header header;
--			u32 table;
--			u16 vid;
--
--			pos = pci_find_next_ext_capability(pdev, pos, PCI_EXT_CAP_ID_DVSEC);
--			if (!pos)
--				break;
--
--			pci_read_config_word(pdev, pos + PCI_DVSEC_HEADER1, &vid);
--			if (vid != PCI_VENDOR_ID_INTEL)
--				continue;
--
--			pci_read_config_word(pdev, pos + PCI_DVSEC_HEADER2,
--					     &header.id);
--			pci_read_config_byte(pdev, pos + INTEL_DVSEC_ENTRIES,
--					     &header.num_entries);
--			pci_read_config_byte(pdev, pos + INTEL_DVSEC_SIZE,
--					     &header.entry_size);
--			pci_read_config_dword(pdev, pos + INTEL_DVSEC_TABLE,
--					      &table);
--
--			header.tbir = INTEL_DVSEC_TABLE_BAR(table);
--			header.offset = INTEL_DVSEC_TABLE_OFFSET(table);
--
--			ret = pmt_add_dev(pdev, &header, quirks);
--			if (ret)
--				continue;
--
--			found_devices = true;
--		} while (true);
--	}
--
--	if (!found_devices)
--		return -ENODEV;
--
--	pm_runtime_put(&pdev->dev);
--	pm_runtime_allow(&pdev->dev);
--
--	return 0;
--}
--
--static void pmt_pci_remove(struct pci_dev *pdev)
--{
--	pm_runtime_forbid(&pdev->dev);
--	pm_runtime_get_sync(&pdev->dev);
--}
--
--#define PCI_DEVICE_ID_INTEL_PMT_ADL	0x467d
--#define PCI_DEVICE_ID_INTEL_PMT_DG1	0x490e
--#define PCI_DEVICE_ID_INTEL_PMT_OOBMSM	0x09a7
--#define PCI_DEVICE_ID_INTEL_PMT_TGL	0x9a0d
--static const struct pci_device_id pmt_pci_ids[] = {
--	{ PCI_DEVICE_DATA(INTEL, PMT_ADL, &tgl_info) },
--	{ PCI_DEVICE_DATA(INTEL, PMT_DG1, &dg1_info) },
--	{ PCI_DEVICE_DATA(INTEL, PMT_OOBMSM, NULL) },
--	{ PCI_DEVICE_DATA(INTEL, PMT_TGL, &tgl_info) },
--	{ }
--};
--MODULE_DEVICE_TABLE(pci, pmt_pci_ids);
--
--static struct pci_driver pmt_pci_driver = {
--	.name = "intel-pmt",
--	.id_table = pmt_pci_ids,
--	.probe = pmt_pci_probe,
--	.remove = pmt_pci_remove,
--};
--module_pci_driver(pmt_pci_driver);
--
--MODULE_AUTHOR("David E. Box <david.e.box@linux.intel.com>");
--MODULE_DESCRIPTION("Intel Platform Monitoring Technology PMT driver");
--MODULE_LICENSE("GPL v2");
+ INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
+ M:	Daniel Scally <djrscally@gmail.com>
+ S:	Maintained
 diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
-index 38ce3e344589..35a5d1a5eba8 100644
+index 35a5d1a5eba8..0c24b626c6ed 100644
 --- a/drivers/platform/x86/intel/Kconfig
 +++ b/drivers/platform/x86/intel/Kconfig
-@@ -184,4 +184,15 @@ config INTEL_UNCORE_FREQ_CONTROL
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called intel-uncore-frequency.
+@@ -147,6 +147,18 @@ config INTEL_RST
+ 	  firmware will copy the memory contents back to RAM and resume the OS
+ 	  as usual.
  
-+config INTEL_VSEC
-+	tristate "Intel Vendor Specific Extended Capabilities Driver"
-+	depends on PCI
-+	select AUXILIARY_BUS
++config INTEL_SDSI
++	tristate "Intel Software Defined Silicon Driver"
++	depends on INTEL_VSEC
++	depends on X86_64
 +	help
-+	  Adds support for feature drivers exposed using Intel PCIe VSEC and
-+	  DVSEC.
++	  This driver enables access to the Intel Software Defined Silicon
++	  interface used to provision silicon features with an authentication
++	  certificate and capability license.
 +
 +	  To compile this driver as a module, choose M here: the module will
-+	  be called intel_vsec.
++	  be called intel_sdsi.
 +
- endif # X86_PLATFORM_DRIVERS_INTEL
+ config INTEL_SMARTCONNECT
+ 	tristate "Intel Smart Connect disabling driver"
+ 	depends on ACPI
 diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
-index 7c24be2423d8..8ecdf709fb17 100644
+index 8ecdf709fb17..6a3a4510d89a 100644
 --- a/drivers/platform/x86/intel/Makefile
 +++ b/drivers/platform/x86/intel/Makefile
 @@ -26,6 +26,8 @@ intel_int0002_vgpio-y			:= int0002_vgpio.o
  obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
  intel_oaktrail-y			:= oaktrail.o
  obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
-+intel_vsec-y				:= vsec.o
-+obj-$(CONFIG_INTEL_VSEC)		+= intel_vsec.o
++intel_sdsi-y				:= sdsi.o
++obj-$(CONFIG_INTEL_SDSI)		+= intel_sdsi.o
+ intel_vsec-y				:= vsec.o
+ obj-$(CONFIG_INTEL_VSEC)		+= intel_vsec.o
  
- # Intel PMIC / PMC / P-Unit drivers
- intel_bxtwc_tmu-y			:= bxtwc_tmu.o
-diff --git a/drivers/platform/x86/intel/pmt/Kconfig b/drivers/platform/x86/intel/pmt/Kconfig
-index d630f883a717..e916fc966221 100644
---- a/drivers/platform/x86/intel/pmt/Kconfig
-+++ b/drivers/platform/x86/intel/pmt/Kconfig
-@@ -17,7 +17,7 @@ config INTEL_PMT_CLASS
- 
- config INTEL_PMT_TELEMETRY
- 	tristate "Intel Platform Monitoring Technology (PMT) Telemetry driver"
--	depends on MFD_INTEL_PMT
-+	depends on INTEL_VSEC
- 	select INTEL_PMT_CLASS
- 	help
- 	  The Intel Platform Monitory Technology (PMT) Telemetry driver provides
-@@ -29,7 +29,7 @@ config INTEL_PMT_TELEMETRY
- 
- config INTEL_PMT_CRASHLOG
- 	tristate "Intel Platform Monitoring Technology (PMT) Crashlog driver"
--	depends on MFD_INTEL_PMT
-+	depends on INTEL_VSEC
- 	select INTEL_PMT_CLASS
- 	help
- 	  The Intel Platform Monitoring Technology (PMT) crashlog driver provides
-diff --git a/drivers/platform/x86/intel/pmt/class.c b/drivers/platform/x86/intel/pmt/class.c
-index 659b1073033c..1c9e3f3ea41c 100644
---- a/drivers/platform/x86/intel/pmt/class.c
-+++ b/drivers/platform/x86/intel/pmt/class.c
-@@ -13,6 +13,7 @@
- #include <linux/mm.h>
- #include <linux/pci.h>
- 
-+#include "../vsec.h"
- #include "class.h"
- 
- #define PMT_XA_START		0
-@@ -281,31 +282,29 @@ static int intel_pmt_dev_register(struct intel_pmt_entry *entry,
- 	return ret;
- }
- 
--int intel_pmt_dev_create(struct intel_pmt_entry *entry,
--			 struct intel_pmt_namespace *ns,
--			 struct platform_device *pdev, int idx)
-+int intel_pmt_dev_create(struct intel_pmt_entry *entry, struct intel_pmt_namespace *ns,
-+			 struct intel_vsec_device *intel_vsec_dev, int idx)
- {
-+	struct device *dev = &intel_vsec_dev->auxdev.dev;
- 	struct intel_pmt_header header;
- 	struct resource	*disc_res;
--	int ret = -ENODEV;
-+	int ret;
- 
--	disc_res = platform_get_resource(pdev, IORESOURCE_MEM, idx);
--	if (!disc_res)
--		return ret;
-+	disc_res = &intel_vsec_dev->resource[idx];
- 
--	entry->disc_table = devm_platform_ioremap_resource(pdev, idx);
-+	entry->disc_table = devm_ioremap_resource(dev, disc_res);
- 	if (IS_ERR(entry->disc_table))
- 		return PTR_ERR(entry->disc_table);
- 
--	ret = ns->pmt_header_decode(entry, &header, &pdev->dev);
-+	ret = ns->pmt_header_decode(entry, &header, dev);
- 	if (ret)
- 		return ret;
- 
--	ret = intel_pmt_populate_entry(entry, &header, &pdev->dev, disc_res);
-+	ret = intel_pmt_populate_entry(entry, &header, dev, disc_res);
- 	if (ret)
- 		return ret;
- 
--	return intel_pmt_dev_register(entry, ns, &pdev->dev);
-+	return intel_pmt_dev_register(entry, ns, dev);
- 
- }
- EXPORT_SYMBOL_GPL(intel_pmt_dev_create);
-diff --git a/drivers/platform/x86/intel/pmt/class.h b/drivers/platform/x86/intel/pmt/class.h
-index 1337019c2873..db11d58867ce 100644
---- a/drivers/platform/x86/intel/pmt/class.h
-+++ b/drivers/platform/x86/intel/pmt/class.h
-@@ -2,13 +2,14 @@
- #ifndef _INTEL_PMT_CLASS_H
- #define _INTEL_PMT_CLASS_H
- 
--#include <linux/platform_device.h>
- #include <linux/xarray.h>
- #include <linux/types.h>
- #include <linux/bits.h>
- #include <linux/err.h>
- #include <linux/io.h>
- 
-+#include "../vsec.h"
-+
- /* PMT access types */
- #define ACCESS_BARID		2
- #define ACCESS_LOCAL		3
-@@ -47,7 +48,7 @@ struct intel_pmt_namespace {
- bool intel_pmt_is_early_client_hw(struct device *dev);
- int intel_pmt_dev_create(struct intel_pmt_entry *entry,
- 			 struct intel_pmt_namespace *ns,
--			 struct platform_device *pdev, int idx);
-+			 struct intel_vsec_device *dev, int idx);
- void intel_pmt_dev_destroy(struct intel_pmt_entry *entry,
- 			   struct intel_pmt_namespace *ns);
- #endif
-diff --git a/drivers/platform/x86/intel/pmt/crashlog.c b/drivers/platform/x86/intel/pmt/crashlog.c
-index 1c1021f04d3c..34daf9df168b 100644
---- a/drivers/platform/x86/intel/pmt/crashlog.c
-+++ b/drivers/platform/x86/intel/pmt/crashlog.c
-@@ -8,6 +8,7 @@
-  * Author: "Alexander Duyck" <alexander.h.duyck@linux.intel.com>
-  */
- 
-+#include <linux/auxiliary_bus.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -15,10 +16,9 @@
- #include <linux/uaccess.h>
- #include <linux/overflow.h>
- 
-+#include "../vsec.h"
- #include "class.h"
- 
--#define DRV_NAME		"pmt_crashlog"
--
- /* Crashlog discovery header types */
- #define CRASH_TYPE_OOBMSM	1
- 
-@@ -257,34 +257,34 @@ static struct intel_pmt_namespace pmt_crashlog_ns = {
- /*
-  * initialization
-  */
--static int pmt_crashlog_remove(struct platform_device *pdev)
-+static void pmt_crashlog_remove(struct auxiliary_device *auxdev)
- {
--	struct pmt_crashlog_priv *priv = platform_get_drvdata(pdev);
-+	struct pmt_crashlog_priv *priv = auxiliary_get_drvdata(auxdev);
- 	int i;
- 
- 	for (i = 0; i < priv->num_entries; i++)
- 		intel_pmt_dev_destroy(&priv->entry[i].entry, &pmt_crashlog_ns);
--
--	return 0;
- }
- 
--static int pmt_crashlog_probe(struct platform_device *pdev)
-+static int pmt_crashlog_probe(struct auxiliary_device *auxdev,
-+			      const struct auxiliary_device_id *id)
- {
-+	struct intel_vsec_device *intel_vsec_dev = auxdev_to_ivdev(auxdev);
- 	struct pmt_crashlog_priv *priv;
- 	size_t size;
- 	int i, ret;
- 
--	size = struct_size(priv, entry, pdev->num_resources);
--	priv = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	size = struct_size(priv, entry, intel_vsec_dev->num_resources);
-+	priv = devm_kzalloc(&auxdev->dev, size, GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
--	platform_set_drvdata(pdev, priv);
-+	auxiliary_set_drvdata(auxdev, priv);
- 
--	for (i = 0; i < pdev->num_resources; i++) {
-+	for (i = 0; i < intel_vsec_dev->num_resources; i++) {
- 		struct intel_pmt_entry *entry = &priv->entry[i].entry;
- 
--		ret = intel_pmt_dev_create(entry, &pmt_crashlog_ns, pdev, i);
-+		ret = intel_pmt_dev_create(entry, &pmt_crashlog_ns, intel_vsec_dev, i);
- 		if (ret < 0)
- 			goto abort_probe;
- 		if (ret)
-@@ -295,26 +295,30 @@ static int pmt_crashlog_probe(struct platform_device *pdev)
- 
- 	return 0;
- abort_probe:
--	pmt_crashlog_remove(pdev);
-+	pmt_crashlog_remove(auxdev);
- 	return ret;
- }
- 
--static struct platform_driver pmt_crashlog_driver = {
--	.driver = {
--		.name   = DRV_NAME,
--	},
--	.remove = pmt_crashlog_remove,
--	.probe  = pmt_crashlog_probe,
-+static const struct auxiliary_device_id pmt_crashlog_id_table[] = {
-+	{ .name = "intel_vsec.crashlog" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, pmt_crashlog_id_table);
-+
-+static struct auxiliary_driver pmt_crashlog_aux_driver = {
-+	.id_table	= pmt_crashlog_id_table,
-+	.remove		= pmt_crashlog_remove,
-+	.probe		= pmt_crashlog_probe,
- };
- 
- static int __init pmt_crashlog_init(void)
- {
--	return platform_driver_register(&pmt_crashlog_driver);
-+	return auxiliary_driver_register(&pmt_crashlog_aux_driver);
- }
- 
- static void __exit pmt_crashlog_exit(void)
- {
--	platform_driver_unregister(&pmt_crashlog_driver);
-+	auxiliary_driver_unregister(&pmt_crashlog_aux_driver);
- 	xa_destroy(&crashlog_array);
- }
- 
-@@ -323,5 +327,4 @@ module_exit(pmt_crashlog_exit);
- 
- MODULE_AUTHOR("Alexander Duyck <alexander.h.duyck@linux.intel.com>");
- MODULE_DESCRIPTION("Intel PMT Crashlog driver");
--MODULE_ALIAS("platform:" DRV_NAME);
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/platform/x86/intel/pmt/telemetry.c b/drivers/platform/x86/intel/pmt/telemetry.c
-index 38d52651c572..6b6f3e2a617a 100644
---- a/drivers/platform/x86/intel/pmt/telemetry.c
-+++ b/drivers/platform/x86/intel/pmt/telemetry.c
-@@ -8,6 +8,7 @@
-  * Author: "David E. Box" <david.e.box@linux.intel.com>
-  */
- 
-+#include <linux/auxiliary_bus.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -15,10 +16,9 @@
- #include <linux/uaccess.h>
- #include <linux/overflow.h>
- 
-+#include "../vsec.h"
- #include "class.h"
- 
--#define TELEM_DEV_NAME		"pmt_telemetry"
--
- #define TELEM_SIZE_OFFSET	0x0
- #define TELEM_GUID_OFFSET	0x4
- #define TELEM_BASE_OFFSET	0x8
-@@ -79,34 +79,33 @@ static struct intel_pmt_namespace pmt_telem_ns = {
- 	.pmt_header_decode = pmt_telem_header_decode,
- };
- 
--static int pmt_telem_remove(struct platform_device *pdev)
-+static void pmt_telem_remove(struct auxiliary_device *auxdev)
- {
--	struct pmt_telem_priv *priv = platform_get_drvdata(pdev);
-+	struct pmt_telem_priv *priv = auxiliary_get_drvdata(auxdev);
- 	int i;
- 
- 	for (i = 0; i < priv->num_entries; i++)
- 		intel_pmt_dev_destroy(&priv->entry[i], &pmt_telem_ns);
--
--	return 0;
- }
- 
--static int pmt_telem_probe(struct platform_device *pdev)
-+static int pmt_telem_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
- {
-+	struct intel_vsec_device *intel_vsec_dev = auxdev_to_ivdev(auxdev);
- 	struct pmt_telem_priv *priv;
- 	size_t size;
- 	int i, ret;
- 
--	size = struct_size(priv, entry, pdev->num_resources);
--	priv = devm_kzalloc(&pdev->dev, size, GFP_KERNEL);
-+	size = struct_size(priv, entry, intel_vsec_dev->num_resources);
-+	priv = devm_kzalloc(&auxdev->dev, size, GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
--	platform_set_drvdata(pdev, priv);
-+	auxiliary_set_drvdata(auxdev, priv);
- 
--	for (i = 0; i < pdev->num_resources; i++) {
-+	for (i = 0; i < intel_vsec_dev->num_resources; i++) {
- 		struct intel_pmt_entry *entry = &priv->entry[i];
- 
--		ret = intel_pmt_dev_create(entry, &pmt_telem_ns, pdev, i);
-+		ret = intel_pmt_dev_create(entry, &pmt_telem_ns, intel_vsec_dev, i);
- 		if (ret < 0)
- 			goto abort_probe;
- 		if (ret)
-@@ -117,32 +116,35 @@ static int pmt_telem_probe(struct platform_device *pdev)
- 
- 	return 0;
- abort_probe:
--	pmt_telem_remove(pdev);
-+	pmt_telem_remove(auxdev);
- 	return ret;
- }
- 
--static struct platform_driver pmt_telem_driver = {
--	.driver = {
--		.name   = TELEM_DEV_NAME,
--	},
--	.remove = pmt_telem_remove,
--	.probe  = pmt_telem_probe,
-+static const struct auxiliary_device_id pmt_telem_id_table[] = {
-+	{ .name = "intel_vsec.telemetry" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, pmt_telem_id_table);
-+
-+static struct auxiliary_driver pmt_telem_aux_driver = {
-+	.id_table	= pmt_telem_id_table,
-+	.remove		= pmt_telem_remove,
-+	.probe		= pmt_telem_probe,
- };
- 
- static int __init pmt_telem_init(void)
- {
--	return platform_driver_register(&pmt_telem_driver);
-+	return auxiliary_driver_register(&pmt_telem_aux_driver);
- }
- module_init(pmt_telem_init);
- 
- static void __exit pmt_telem_exit(void)
- {
--	platform_driver_unregister(&pmt_telem_driver);
-+	auxiliary_driver_unregister(&pmt_telem_aux_driver);
- 	xa_destroy(&telem_array);
- }
- module_exit(pmt_telem_exit);
- 
- MODULE_AUTHOR("David E. Box <david.e.box@linux.intel.com>");
- MODULE_DESCRIPTION("Intel PMT Telemetry driver");
--MODULE_ALIAS("platform:" TELEM_DEV_NAME);
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
+diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
 new file mode 100644
-index 000000000000..c3bdd75ed690
+index 000000000000..626fe9558bee
 --- /dev/null
-+++ b/drivers/platform/x86/intel/vsec.c
-@@ -0,0 +1,408 @@
++++ b/drivers/platform/x86/intel/sdsi.c
+@@ -0,0 +1,571 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Intel Vendor Specific Extended Capabilities auxiliary bus driver
++ * Intel Software Defined Silicon driver
 + *
 + * Copyright (c) 2021, Intel Corporation.
 + * All Rights Reserved.
 + *
-+ * Author: David E. Box <david.e.box@linux.intel.com>
-+ *
-+ * This driver discovers and creates auxiliary devices for Intel defined PCIe
-+ * "Vendor Specific" and "Designated Vendor Specific" Extended Capabilities,
-+ * VSEC and DVSEC respectively. The driver supports features on specific PCIe
-+ * endpoints that exist primarily to expose them.
++ * Author: "David E. Box" <david.e.box@linux.intel.com>
 + */
 +
 +#include <linux/auxiliary_bus.h>
 +#include <linux/bits.h>
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/iopoll.h>
 +#include <linux/kernel.h>
-+#include <linux/idr.h>
 +#include <linux/module.h>
 +#include <linux/pci.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
 +#include <linux/types.h>
++#include <linux/uaccess.h>
 +
 +#include "vsec.h"
 +
-+/* Intel DVSEC offsets */
-+#define INTEL_DVSEC_ENTRIES		0xA
-+#define INTEL_DVSEC_SIZE		0xB
-+#define INTEL_DVSEC_TABLE		0xC
-+#define INTEL_DVSEC_TABLE_BAR(x)	((x) & GENMASK(2, 0))
-+#define INTEL_DVSEC_TABLE_OFFSET(x)	((x) & GENMASK(31, 3))
-+#define TABLE_OFFSET_SHIFT		3
++#define ACCESS_TYPE_BARID		2
++#define ACCESS_TYPE_LOCAL		3
 +
-+static DEFINE_IDA(intel_vsec_ida);
++#define SDSI_MIN_SIZE_DWORDS		276
++#define SDSI_SIZE_CONTROL		8
++#define SDSI_SIZE_MAILBOX		1024
++#define SDSI_SIZE_REGS			72
++#define SDSI_SIZE_CMD			sizeof(u64)
 +
-+/**
-+ * struct intel_vsec_header - Common fields of Intel VSEC and DVSEC registers.
-+ * @rev:         Revision ID of the VSEC/DVSEC register space
-+ * @length:      Length of the VSEC/DVSEC register space
-+ * @id:          ID of the feature
-+ * @num_entries: Number of instances of the feature
-+ * @entry_size:  Size of the discovery table for each feature
-+ * @tbir:        BAR containing the discovery tables
-+ * @offset:      BAR offset of start of the first discovery table
++/*
++ * Write messages are currently up to the size of the mailbox
++ * while read messages are up to 4 times the size of the
++ * mailbox, sent in packets
 + */
-+struct intel_vsec_header {
-+	u8	rev;
-+	u16	length;
-+	u16	id;
-+	u8	num_entries;
-+	u8	entry_size;
-+	u8	tbir;
++#define SDSI_SIZE_WRITE_MSG		SDSI_SIZE_MAILBOX
++#define SDSI_SIZE_READ_MSG		(SDSI_SIZE_MAILBOX * 4)
++
++#define SDSI_ENABLED_FEATURES_OFFSET	16
++#define SDSI_ENABLED			BIT(3)
++#define SDSI_SOCKET_ID_OFFSET		64
++#define SDSI_SOCKET_ID			GENMASK(3, 0)
++
++#define SDSI_MBOX_CMD_SUCCESS		0x40
++#define SDSI_MBOX_CMD_TIMEOUT		0x80
++
++#define MBOX_TIMEOUT_US			2000
++#define MBOX_TIMEOUT_ACQUIRE_US		1000
++#define MBOX_POLLING_PERIOD_US		100
++#define MBOX_MAX_PACKETS		4
++
++#define MBOX_OWNER_NONE			0x00
++#define MBOX_OWNER_INBAND		0x01
++
++#define CTRL_RUN_BUSY			BIT(0)
++#define CTRL_READ_WRITE			BIT(1)
++#define CTRL_SOM			BIT(2)
++#define CTRL_EOM			BIT(3)
++#define CTRL_OWNER			GENMASK(5, 4)
++#define CTRL_COMPLETE			BIT(6)
++#define CTRL_READY			BIT(7)
++#define CTRL_STATUS			GENMASK(15, 8)
++#define CTRL_PACKET_SIZE		GENMASK(31, 16)
++#define CTRL_MSG_SIZE			GENMASK(63, 48)
++
++#define DISC_TABLE_SIZE			12
++#define DT_ACCESS_TYPE			GENMASK(3, 0)
++#define DT_SIZE				GENMASK(27, 12)
++#define DT_TBIR				GENMASK(2, 0)
++#define DT_OFFSET(v)			((v) & GENMASK(31, 3))
++
++enum sdsi_command {
++	SDSI_CMD_PROVISION_AKC		= 0x04,
++	SDSI_CMD_PROVISION_CAP		= 0x08,
++	SDSI_CMD_READ_STATE		= 0x10,
++};
++
++struct sdsi_mbox_info {
++	u64	*payload;
++	u64	*buffer;
++	int	size;
++};
++
++struct disc_table {
++	u32	access_info;
++	u32	guid;
 +	u32	offset;
 +};
 +
-+/* Platform specific data */
-+struct intel_vsec_platform_info {
-+	struct intel_vsec_header **capabilities;
-+	unsigned long quirks;
++struct sdsi_priv {
++	struct mutex		mb_lock;	/* Mailbox access lock */
++	struct device		*dev;
++	void __iomem		*control_addr;
++	void __iomem		*mbox_addr;
++	void __iomem		*regs_addr;
++	u32			guid;
++	bool			sdsi_enabled;
 +};
 +
-+enum intel_vsec_id {
-+	VSEC_ID_TELEMETRY	= 2,
-+	VSEC_ID_WATCHER		= 3,
-+	VSEC_ID_CRASHLOG	= 4,
-+};
++static struct bin_attribute bin_attr_provision_akc;
++static struct bin_attribute bin_attr_provision_cap;
 +
-+static enum intel_vsec_id intel_vsec_allow_list[] = {
-+	VSEC_ID_TELEMETRY,
-+	VSEC_ID_WATCHER,
-+	VSEC_ID_CRASHLOG,
-+};
-+
-+static const char *intel_vsec_name(enum intel_vsec_id id)
++/* SDSi mailbox operations must be performed using 64bit mov instructions */
++static __always_inline void
++sdsi_memcpy64_toio(u64 __iomem *to, const u64 *from, size_t count_bytes)
 +{
-+	switch (id) {
-+	case VSEC_ID_TELEMETRY:
-+		return "telemetry";
-+
-+	case VSEC_ID_WATCHER:
-+		return "watcher";
-+
-+	case VSEC_ID_CRASHLOG:
-+		return "crashlog";
-+
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static bool intel_vsec_allowed(u16 id)
-+{
++	size_t count = count_bytes / sizeof(*to);
 +	int i;
 +
-+	for (i = 0; i < ARRAY_SIZE(intel_vsec_allow_list); i++)
-+		if (intel_vsec_allow_list[i] == id)
-+			return true;
-+
-+	return false;
++	for (i = 0; i < count; i++)
++		writeq(from[i], &to[i]);
 +}
 +
-+static bool intel_vsec_disabled(u16 id, unsigned long quirks)
++static __always_inline void
++sdsi_memcpy64_fromio(u64 *to, const u64 __iomem *from, size_t count_bytes)
 +{
-+	switch (id) {
-+	case VSEC_ID_WATCHER:
-+		return !!(quirks & VSEC_QUIRK_NO_WATCHER);
-+
-+	case VSEC_ID_CRASHLOG:
-+		return !!(quirks & VSEC_QUIRK_NO_CRASHLOG);
-+
-+	default:
-+		return false;
-+	}
-+}
-+
-+static void intel_vsec_remove_aux(void *data)
-+{
-+	auxiliary_device_delete(data);
-+	auxiliary_device_uninit(data);
-+}
-+
-+static void intel_vsec_dev_release(struct device *dev)
-+{
-+	struct intel_vsec_device *intel_vsec_dev = dev_to_ivdev(dev);
-+
-+	ida_free(intel_vsec_dev->ida, intel_vsec_dev->auxdev.id);
-+	kfree(intel_vsec_dev->resource);
-+	kfree(intel_vsec_dev);
-+}
-+
-+static int intel_vsec_add_aux(struct pci_dev *pdev, struct intel_vsec_device *intel_vsec_dev,
-+			      const char *name)
-+{
-+	struct auxiliary_device *auxdev = &intel_vsec_dev->auxdev;
-+	int ret;
-+
-+	ret = ida_alloc(intel_vsec_dev->ida, GFP_KERNEL);
-+	if (ret < 0) {
-+		kfree(intel_vsec_dev);
-+		return ret;
-+	}
-+
-+	auxdev->id = ret;
-+	auxdev->name = name;
-+	auxdev->dev.parent = &pdev->dev;
-+	auxdev->dev.release = intel_vsec_dev_release;
-+
-+	ret = auxiliary_device_init(auxdev);
-+	if (ret < 0) {
-+		ida_free(intel_vsec_dev->ida, auxdev->id);
-+		kfree(intel_vsec_dev->resource);
-+		kfree(intel_vsec_dev);
-+		return ret;
-+	}
-+
-+	ret = auxiliary_device_add(auxdev);
-+	if (ret < 0) {
-+		auxiliary_device_uninit(auxdev);
-+		return ret;
-+	}
-+
-+	return devm_add_action_or_reset(&pdev->dev, intel_vsec_remove_aux, auxdev);
-+}
-+
-+static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *header,
-+			   unsigned long quirks)
-+{
-+	struct intel_vsec_device *intel_vsec_dev;
-+	struct resource *res, *tmp;
++	size_t count = count_bytes / sizeof(*to);
 +	int i;
 +
-+	if (!intel_vsec_allowed(header->id) || intel_vsec_disabled(header->id, quirks))
-+		return -EINVAL;
-+
-+	if (!header->num_entries) {
-+		dev_dbg(&pdev->dev, "Invalid 0 entry count for header id %d\n", header->id);
-+		return -EINVAL;
-+	}
-+
-+	if (!header->entry_size) {
-+		dev_dbg(&pdev->dev, "Invalid 0 entry size for header id %d\n", header->id);
-+		return -EINVAL;
-+	}
-+
-+	intel_vsec_dev = kzalloc(sizeof(*intel_vsec_dev), GFP_KERNEL);
-+	if (!intel_vsec_dev)
-+		return -ENOMEM;
-+
-+	res = kcalloc(header->num_entries, sizeof(*res), GFP_KERNEL);
-+	if (!res) {
-+		kfree(intel_vsec_dev);
-+		return -ENOMEM;
-+	}
-+
-+	if (quirks & VSEC_QUIRK_TABLE_SHIFT)
-+		header->offset >>= TABLE_OFFSET_SHIFT;
-+
-+	/*
-+	 * The DVSEC/VSEC contains the starting offset and count for a block of
-+	 * discovery tables. Create a resource array of these tables to the
-+	 * auxiliary device driver.
-+	 */
-+	for (i = 0, tmp = res; i < header->num_entries; i++, tmp++) {
-+		tmp->start = pdev->resource[header->tbir].start +
-+			     header->offset + i * (header->entry_size * sizeof(u32));
-+		tmp->end = tmp->start + (header->entry_size * sizeof(u32)) - 1;
-+		tmp->flags = IORESOURCE_MEM;
-+	}
-+
-+	intel_vsec_dev->pcidev = pdev;
-+	intel_vsec_dev->resource = res;
-+	intel_vsec_dev->num_resources = header->num_entries;
-+	intel_vsec_dev->quirks = quirks;
-+	intel_vsec_dev->ida = &intel_vsec_ida;
-+
-+	return intel_vsec_add_aux(pdev, intel_vsec_dev, intel_vsec_name(header->id));
++	for (i = 0; i < count; i++)
++		to[i] = readq(&from[i]);
 +}
 +
-+static bool intel_vsec_walk_header(struct pci_dev *pdev, unsigned long quirks,
-+				struct intel_vsec_header **header)
++static inline void sdsi_complete_transaction(struct sdsi_priv *priv)
 +{
-+	bool have_devices = false;
++	u64 control = FIELD_PREP(CTRL_COMPLETE, 1);
++
++	lockdep_assert_held(&priv->mb_lock);
++	writeq(control, priv->control_addr);
++}
++
++static int sdsi_status_to_errno(u32 status)
++{
++	switch (status) {
++	case SDSI_MBOX_CMD_SUCCESS:
++		return 0;
++	case SDSI_MBOX_CMD_TIMEOUT:
++		return -ETIMEDOUT;
++	default:
++		return -EIO;
++	}
++}
++
++static int sdsi_mbox_cmd_read(struct sdsi_priv *priv, struct sdsi_mbox_info *info, int *data_size)
++{
++	struct device *dev = priv->dev;
++	u32 total, loop, eom, status, message_size;
++	u64 control;
 +	int ret;
 +
-+	for ( ; *header; header++) {
-+		ret = intel_vsec_add_dev(pdev, *header, quirks);
-+		if (ret)
-+			dev_info(&pdev->dev, "Could not add device for DVSEC id %d\n",
-+				 (*header)->id);
-+		else
-+			have_devices = true;
-+	}
++	lockdep_assert_held(&priv->mb_lock);
 +
-+	return have_devices;
-+}
++	/* Format and send the read command */
++	control = FIELD_PREP(CTRL_EOM, 1) |
++		  FIELD_PREP(CTRL_SOM, 1) |
++		  FIELD_PREP(CTRL_RUN_BUSY, 1) |
++		  FIELD_PREP(CTRL_PACKET_SIZE, info->size);
++	writeq(control, priv->control_addr);
 +
-+static bool intel_vsec_walk_dvsec(struct pci_dev *pdev, unsigned long quirks)
-+{
-+	bool have_devices = false;
-+	int pos = 0;
-+
++	/* For reads, data sizes that are larger than the mailbox size are read in packets. */
++	total = 0;
++	loop = 0;
 +	do {
-+		struct intel_vsec_header header;
-+		u32 table, hdr;
-+		u16 vid;
-+		int ret;
++		int offset = SDSI_SIZE_MAILBOX * loop;
++		void __iomem *addr = priv->mbox_addr + offset;
++		u64 *buf = info->buffer + offset / SDSI_SIZE_CMD;
++		u32 packet_size;
 +
-+		pos = pci_find_next_ext_capability(pdev, pos, PCI_EXT_CAP_ID_DVSEC);
-+		if (!pos)
++		/* Poll on ready bit */
++		ret = readq_poll_timeout(priv->control_addr, control, control & CTRL_READY,
++					 MBOX_POLLING_PERIOD_US, MBOX_TIMEOUT_US);
++		if (ret)
 +			break;
 +
-+		pci_read_config_dword(pdev, pos + PCI_DVSEC_HEADER1, &hdr);
-+		vid = PCI_DVSEC_HEADER1_VID(hdr);
-+		if (vid != PCI_VENDOR_ID_INTEL)
-+			continue;
++		eom = FIELD_GET(CTRL_EOM, control);
++		status = FIELD_GET(CTRL_STATUS, control);
++		packet_size = FIELD_GET(CTRL_PACKET_SIZE, control);
++		message_size = FIELD_GET(CTRL_MSG_SIZE, control);
 +
-+		/* Support only revision 1 */
-+		header.rev = PCI_DVSEC_HEADER1_REV(hdr);
-+		if (header.rev != 1) {
-+			dev_info(&pdev->dev, "Unsupported DVSEC revision %d\n", header.rev);
-+			continue;
-+		}
-+
-+		header.length = PCI_DVSEC_HEADER1_LEN(hdr);
-+
-+		pci_read_config_byte(pdev, pos + INTEL_DVSEC_ENTRIES, &header.num_entries);
-+		pci_read_config_byte(pdev, pos + INTEL_DVSEC_SIZE, &header.entry_size);
-+		pci_read_config_dword(pdev, pos + INTEL_DVSEC_TABLE, &table);
-+
-+		header.tbir = INTEL_DVSEC_TABLE_BAR(table);
-+		header.offset = INTEL_DVSEC_TABLE_OFFSET(table);
-+
-+		pci_read_config_dword(pdev, pos + PCI_DVSEC_HEADER2, &hdr);
-+		header.id = PCI_DVSEC_HEADER2_ID(hdr);
-+
-+		ret = intel_vsec_add_dev(pdev, &header, quirks);
++		ret = sdsi_status_to_errno(status);
 +		if (ret)
-+			continue;
-+
-+		have_devices = true;
-+	} while (true);
-+
-+	return have_devices;
-+}
-+
-+static bool intel_vsec_walk_vsec(struct pci_dev *pdev, unsigned long quirks)
-+{
-+	bool have_devices = false;
-+	int pos = 0;
-+
-+	do {
-+		struct intel_vsec_header header;
-+		u32 table, hdr;
-+		int ret;
-+
-+		pos = pci_find_next_ext_capability(pdev, pos, PCI_EXT_CAP_ID_VNDR);
-+		if (!pos)
 +			break;
 +
-+		pci_read_config_dword(pdev, pos + PCI_VNDR_HEADER, &hdr);
-+
-+		/* Support only revision 1 */
-+		header.rev = PCI_VNDR_HEADER_REV(hdr);
-+		if (header.rev != 1) {
-+			dev_info(&pdev->dev, "Unsupported VSEC revision %d\n", header.rev);
-+			continue;
++		/* Only the last packet can be less than the mailbox size. */
++		if (!eom && packet_size != SDSI_SIZE_MAILBOX) {
++			dev_err(dev, "Invalid packet size\n");
++			ret = -EPROTO;
++			break;
 +		}
 +
-+		header.id = PCI_VNDR_HEADER_ID(hdr);
-+		header.length = PCI_VNDR_HEADER_LEN(hdr);
++		if (packet_size > SDSI_SIZE_MAILBOX) {
++			dev_err(dev, "Packet size to large\n");
++			ret = -EPROTO;
++			break;
++		}
 +
-+		/* entry, size, and table offset are the same as DVSEC */
-+		pci_read_config_byte(pdev, pos + INTEL_DVSEC_ENTRIES, &header.num_entries);
-+		pci_read_config_byte(pdev, pos + INTEL_DVSEC_SIZE, &header.entry_size);
-+		pci_read_config_dword(pdev, pos + INTEL_DVSEC_TABLE, &table);
++		sdsi_memcpy64_fromio(buf, addr, round_up(packet_size, SDSI_SIZE_CMD));
 +
-+		header.tbir = INTEL_DVSEC_TABLE_BAR(table);
-+		header.offset = INTEL_DVSEC_TABLE_OFFSET(table);
++		total += packet_size;
 +
-+		ret = intel_vsec_add_dev(pdev, &header, quirks);
-+		if (ret)
-+			continue;
++		sdsi_complete_transaction(priv);
++	} while (!eom && ++loop < MBOX_MAX_PACKETS);
 +
-+		have_devices = true;
-+	} while (true);
-+
-+	return have_devices;
-+}
-+
-+static int intel_vsec_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+{
-+	struct intel_vsec_platform_info *info;
-+	bool have_devices = false;
-+	unsigned long quirks = 0;
-+	int ret;
-+
-+	ret = pcim_enable_device(pdev);
-+	if (ret)
++	if (ret) {
++		sdsi_complete_transaction(priv);
 +		return ret;
++	}
 +
-+	info = (struct intel_vsec_platform_info *)id->driver_data;
-+	if (info)
-+		quirks = info->quirks;
++	if (!eom) {
++		dev_err(dev, "Exceeded read attempts\n");
++		return -EPROTO;
++	}
 +
-+	if (intel_vsec_walk_dvsec(pdev, quirks))
-+		have_devices = true;
++	/* Message size check is only valid for multi-packet transfers */
++	if (loop && total != message_size)
++		dev_warn(dev, "Read count %d differs from expected count %d\n",
++			 total, message_size);
 +
-+	if (intel_vsec_walk_vsec(pdev, quirks))
-+		have_devices = true;
-+
-+	if (info && (info->quirks & VSEC_QUIRK_NO_DVSEC) &&
-+	    intel_vsec_walk_header(pdev, quirks, info->capabilities))
-+		have_devices = true;
-+
-+	if (!have_devices)
-+		return -ENODEV;
++	*data_size = total;
 +
 +	return 0;
 +}
 +
-+/* TGL info */
-+static const struct intel_vsec_platform_info tgl_info = {
-+	.quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG | VSEC_QUIRK_TABLE_SHIFT,
-+};
++static int sdsi_mbox_cmd_write(struct sdsi_priv *priv, struct sdsi_mbox_info *info)
++{
++	u64 control;
++	u32 status;
++	int ret;
 +
-+/* DG1 info */
-+static struct intel_vsec_header dg1_telemetry = {
-+	.length = 0x10,
-+	.id = 2,
-+	.num_entries = 1,
-+	.entry_size = 3,
-+	.tbir = 0,
-+	.offset = 0x466000,
-+};
++	lockdep_assert_held(&priv->mb_lock);
 +
-+static struct intel_vsec_header *dg1_capabilities[] = {
-+	&dg1_telemetry,
++	/* Write rest of the payload */
++	sdsi_memcpy64_toio(priv->mbox_addr + SDSI_SIZE_CMD, info->payload + 1,
++			   info->size - SDSI_SIZE_CMD);
++
++	/* Format and send the write command */
++	control = FIELD_PREP(CTRL_EOM, 1) |
++		  FIELD_PREP(CTRL_SOM, 1) |
++		  FIELD_PREP(CTRL_RUN_BUSY, 1) |
++		  FIELD_PREP(CTRL_READ_WRITE, 1) |
++		  FIELD_PREP(CTRL_PACKET_SIZE, info->size);
++	writeq(control, priv->control_addr);
++
++	/* Poll on run_busy bit */
++	ret = readq_poll_timeout(priv->control_addr, control, !(control & CTRL_RUN_BUSY),
++				 MBOX_POLLING_PERIOD_US, MBOX_TIMEOUT_US);
++
++	if (ret)
++		goto release_mbox;
++
++	status = FIELD_GET(CTRL_STATUS, control);
++	ret = sdsi_status_to_errno(status);
++
++release_mbox:
++	sdsi_complete_transaction(priv);
++
++	return ret;
++}
++
++static int sdsi_mbox_acquire(struct sdsi_priv *priv, struct sdsi_mbox_info *info)
++{
++	u64 control;
++	u32 owner;
++	int ret;
++
++	lockdep_assert_held(&priv->mb_lock);
++
++	/* Check mailbox is available */
++	control = readq(priv->control_addr);
++	owner = FIELD_GET(CTRL_OWNER, control);
++	if (owner != MBOX_OWNER_NONE)
++		return -EBUSY;
++
++	/* Write first qword of payload */
++	writeq(info->payload[0], priv->mbox_addr);
++
++	/* Check for ownership */
++	ret = readq_poll_timeout(priv->control_addr, control,
++				 FIELD_GET(CTRL_OWNER, control) & MBOX_OWNER_INBAND,
++				 MBOX_POLLING_PERIOD_US, MBOX_TIMEOUT_ACQUIRE_US);
++
++	return ret;
++}
++
++static int sdsi_mbox_write(struct sdsi_priv *priv, struct sdsi_mbox_info *info)
++{
++	int ret;
++
++	lockdep_assert_held(&priv->mb_lock);
++
++	ret = sdsi_mbox_acquire(priv, info);
++	if (ret)
++		return ret;
++
++	return sdsi_mbox_cmd_write(priv, info);
++}
++
++static int sdsi_mbox_read(struct sdsi_priv *priv, struct sdsi_mbox_info *info, int *data_size)
++{
++	int ret;
++
++	lockdep_assert_held(&priv->mb_lock);
++
++	ret = sdsi_mbox_acquire(priv, info);
++	if (ret)
++		return ret;
++
++	return sdsi_mbox_cmd_read(priv, info, data_size);
++}
++
++static ssize_t sdsi_provision(struct sdsi_priv *priv, char *buf, size_t count,
++			      enum sdsi_command command)
++{
++	struct sdsi_mbox_info info;
++	int ret;
++
++	if (!priv->sdsi_enabled)
++		return -EPERM;
++
++	if (count > (SDSI_SIZE_WRITE_MSG - SDSI_SIZE_CMD))
++		return -EOVERFLOW;
++
++	/* Qword aligned message + command qword */
++	info.size = round_up(count, SDSI_SIZE_CMD) + SDSI_SIZE_CMD;
++
++	info.payload = kzalloc(info.size, GFP_KERNEL);
++	if (!info.payload)
++		return -ENOMEM;
++
++	/* Copy message to payload buffer */
++	memcpy(info.payload, buf, count);
++
++	/* Command is last qword of payload buffer */
++	info.payload[(info.size - SDSI_SIZE_CMD) / SDSI_SIZE_CMD] = command;
++
++	ret = mutex_lock_interruptible(&priv->mb_lock);
++	if (ret)
++		goto free_payload;
++	ret = sdsi_mbox_write(priv, &info);
++	mutex_unlock(&priv->mb_lock);
++
++free_payload:
++	kfree(info.payload);
++
++	return (ret < 0) ? ret : count;
++}
++
++static ssize_t provision_akc_write(struct file *filp, struct kobject *kobj,
++				   struct bin_attribute *attr, char *buf, loff_t off,
++				   size_t count)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++
++	if (off)
++		return -ESPIPE;
++
++	return sdsi_provision(priv, buf, count, SDSI_CMD_PROVISION_AKC);
++}
++static BIN_ATTR_WO(provision_akc, SDSI_SIZE_WRITE_MSG);
++
++static ssize_t provision_cap_write(struct file *filp, struct kobject *kobj,
++				   struct bin_attribute *attr, char *buf, loff_t off,
++				   size_t count)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++
++	if (off)
++		return -ESPIPE;
++
++	return sdsi_provision(priv, buf, count, SDSI_CMD_PROVISION_CAP);
++}
++static BIN_ATTR_WO(provision_cap, SDSI_SIZE_WRITE_MSG);
++
++static long state_certificate_read(struct file *filp, struct kobject *kobj,
++				   struct bin_attribute *attr, char *buf, loff_t off,
++				   size_t count)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++	u64 command = SDSI_CMD_READ_STATE;
++	struct sdsi_mbox_info info;
++	u32 size;
++	int ret;
++
++	if (!priv->sdsi_enabled)
++		return -EPERM;
++
++	if (off)
++		return -ESPIPE;
++
++	/* Buffer for return data */
++	info.buffer = kmalloc(SDSI_SIZE_READ_MSG, GFP_KERNEL);
++	if (!info.buffer)
++		return -ENOMEM;
++
++	info.payload = &command;
++	info.size = sizeof(command);
++
++	ret = mutex_lock_interruptible(&priv->mb_lock);
++	if (ret)
++		goto free_buffer;
++	ret = sdsi_mbox_read(priv, &info, &size);
++	mutex_unlock(&priv->mb_lock);
++	if (ret < 0)
++		goto free_buffer;
++
++	if (size > count)
++		size = count;
++	else
++		memset(buf, 0, count);
++
++	memcpy(buf, info.buffer, size);
++
++free_buffer:
++	kfree(info.buffer);
++
++	return (ret < 0) ? ret : count;
++}
++static BIN_ATTR(state_certificate, 0400, state_certificate_read, NULL, SDSI_SIZE_READ_MSG);
++
++static ssize_t registers_read(struct file *filp, struct kobject *kobj,
++			      struct bin_attribute *attr, char *buf, loff_t off,
++			      size_t count)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++	void __iomem *addr = priv->regs_addr;
++
++	memcpy_fromio(buf, addr + off, count);
++
++	return count;
++}
++static BIN_ATTR(registers, 0400, registers_read, NULL, SDSI_SIZE_REGS);
++
++static struct bin_attribute *sdsi_bin_attrs[] = {
++	&bin_attr_registers,
++	&bin_attr_state_certificate,
++	&bin_attr_provision_akc,
++	&bin_attr_provision_cap,
 +	NULL
 +};
 +
-+static const struct intel_vsec_platform_info dg1_info = {
-+	.capabilities = dg1_capabilities,
-+	.quirks = VSEC_QUIRK_NO_DVSEC,
++static ssize_t guid_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "0x%x\n", priv->guid);
++}
++static DEVICE_ATTR_RO(guid);
++
++static struct attribute *sdsi_attrs[] = {
++	&dev_attr_guid.attr,
++	NULL
 +};
 +
-+#define PCI_DEVICE_ID_INTEL_VSEC_ADL		0x467d
-+#define PCI_DEVICE_ID_INTEL_VSEC_DG1		0x490e
-+#define PCI_DEVICE_ID_INTEL_VSEC_OOBMSM		0x09a7
-+#define PCI_DEVICE_ID_INTEL_VSEC_TGL		0x9a0d
-+static const struct pci_device_id intel_vsec_pci_ids[] = {
-+	{ PCI_DEVICE_DATA(INTEL, VSEC_ADL, &tgl_info) },
-+	{ PCI_DEVICE_DATA(INTEL, VSEC_DG1, &dg1_info) },
-+	{ PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, NULL) },
-+	{ PCI_DEVICE_DATA(INTEL, VSEC_TGL, &tgl_info) },
-+	{ }
++static const struct attribute_group sdsi_group = {
++	.attrs = sdsi_attrs,
++	.bin_attrs = sdsi_bin_attrs,
 +};
-+MODULE_DEVICE_TABLE(pci, intel_vsec_pci_ids);
++__ATTRIBUTE_GROUPS(sdsi);
 +
-+static struct pci_driver intel_vsec_pci_driver = {
-+	.name = "intel_vsec",
-+	.id_table = intel_vsec_pci_ids,
-+	.probe = intel_vsec_pci_probe,
++static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *parent,
++				   struct disc_table *disc_table, struct resource *disc_res)
++{
++	u32 access_type = FIELD_GET(DT_ACCESS_TYPE, disc_table->access_info);
++	u32 size = FIELD_GET(DT_SIZE, disc_table->access_info);
++	u32 tbir = FIELD_GET(DT_TBIR, disc_table->offset);
++	u32 offset = DT_OFFSET(disc_table->offset);
++	u32 features_offset;
++	struct resource res = {};
++
++	/* Starting location of SDSi MMIO region based on access type */
++	switch (access_type) {
++	case ACCESS_TYPE_LOCAL:
++		if (tbir) {
++			dev_err(priv->dev, "Unsupported BAR index %d for access type %d\n",
++				tbir, access_type);
++			return -EINVAL;
++		}
++
++		/*
++		 * For access_type LOCAL, the base address is as follows:
++		 * base address = end of discovery region + base offset + 1
++		 */
++		res.start = disc_res->end + offset + 1;
++		break;
++
++	case ACCESS_TYPE_BARID:
++		res.start = pci_resource_start(parent, tbir) + offset;
++		break;
++
++	default:
++		dev_err(priv->dev, "Unrecognized access_type %d\n", access_type);
++		return -EINVAL;
++	}
++
++	res.end = res.start + size * sizeof(u32) - 1;
++	res.flags = IORESOURCE_MEM;
++
++	priv->control_addr = devm_ioremap_resource(priv->dev, &res);
++	if (IS_ERR(priv->control_addr))
++		return PTR_ERR(priv->control_addr);
++
++	priv->mbox_addr = priv->control_addr + SDSI_SIZE_CONTROL;
++	priv->regs_addr = priv->mbox_addr + SDSI_SIZE_MAILBOX;
++
++	features_offset = readq(priv->regs_addr + SDSI_ENABLED_FEATURES_OFFSET);
++	priv->sdsi_enabled = !!(features_offset & SDSI_ENABLED);
++
++	return 0;
++}
++
++static int sdsi_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
++{
++	struct intel_vsec_device *intel_cap_dev = auxdev_to_ivdev(auxdev);
++	struct disc_table disc_table;
++	struct resource *disc_res;
++	void __iomem *disc_addr;
++	struct sdsi_priv *priv;
++	int ret;
++
++	priv = devm_kzalloc(&auxdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->dev = &auxdev->dev;
++	mutex_init(&priv->mb_lock);
++	auxiliary_set_drvdata(auxdev, priv);
++
++	/* Get the SDSi discovery table */
++	disc_res = &intel_cap_dev->resource[0];
++	disc_addr = devm_ioremap_resource(&auxdev->dev, disc_res);
++	if (IS_ERR(disc_addr))
++		return PTR_ERR(disc_addr);
++
++	memcpy_fromio(&disc_table, disc_addr, DISC_TABLE_SIZE);
++
++	priv->guid = disc_table.guid;
++
++	/* Map the SDSi mailbox registers */
++	ret = sdsi_map_mbox_registers(priv, intel_cap_dev->pcidev, &disc_table, disc_res);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static const struct auxiliary_device_id sdsi_aux_id_table[] = {
++	{ .name = "intel_vsec.sdsi" },
++	{}
 +};
-+module_pci_driver(intel_vsec_pci_driver);
++MODULE_DEVICE_TABLE(auxiliary, sdsi_aux_id_table);
++
++static struct auxiliary_driver sdsi_aux_driver = {
++	.driver = {
++		.dev_groups = sdsi_groups,
++	},
++	.id_table	= sdsi_aux_id_table,
++	.probe		= sdsi_probe,
++};
++module_auxiliary_driver(sdsi_aux_driver);
 +
 +MODULE_AUTHOR("David E. Box <david.e.box@linux.intel.com>");
-+MODULE_DESCRIPTION("Intel Extended Capabilities auxiliary bus driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/platform/x86/intel/vsec.h b/drivers/platform/x86/intel/vsec.h
-new file mode 100644
-index 000000000000..4cc36678e8c5
---- /dev/null
-+++ b/drivers/platform/x86/intel/vsec.h
-@@ -0,0 +1,43 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _VSEC_H
-+#define _VSEC_H
++MODULE_DESCRIPTION("Intel Software Defined Silicon driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
+index c3bdd75ed690..bed436bf181f 100644
+--- a/drivers/platform/x86/intel/vsec.c
++++ b/drivers/platform/x86/intel/vsec.c
+@@ -32,6 +32,7 @@
+ #define TABLE_OFFSET_SHIFT		3
+ 
+ static DEFINE_IDA(intel_vsec_ida);
++static DEFINE_IDA(intel_vsec_sdsi_ida);
+ 
+ /**
+  * struct intel_vsec_header - Common fields of Intel VSEC and DVSEC registers.
+@@ -63,12 +64,14 @@ enum intel_vsec_id {
+ 	VSEC_ID_TELEMETRY	= 2,
+ 	VSEC_ID_WATCHER		= 3,
+ 	VSEC_ID_CRASHLOG	= 4,
++	VSEC_ID_SDSI		= 65,
+ };
+ 
+ static enum intel_vsec_id intel_vsec_allow_list[] = {
+ 	VSEC_ID_TELEMETRY,
+ 	VSEC_ID_WATCHER,
+ 	VSEC_ID_CRASHLOG,
++	VSEC_ID_SDSI,
+ };
+ 
+ static const char *intel_vsec_name(enum intel_vsec_id id)
+@@ -83,6 +86,9 @@ static const char *intel_vsec_name(enum intel_vsec_id id)
+ 	case VSEC_ID_CRASHLOG:
+ 		return "crashlog";
+ 
++	case VSEC_ID_SDSI:
++		return "sdsi";
 +
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bits.h>
+ 	default:
+ 		return NULL;
+ 	}
+@@ -211,7 +217,11 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+ 	intel_vsec_dev->resource = res;
+ 	intel_vsec_dev->num_resources = header->num_entries;
+ 	intel_vsec_dev->quirks = quirks;
+-	intel_vsec_dev->ida = &intel_vsec_ida;
 +
-+struct pci_dev;
-+struct resource;
-+
-+enum intel_vsec_quirks {
-+	/* Watcher feature not supported */
-+	VSEC_QUIRK_NO_WATCHER	= BIT(0),
-+
-+	/* Crashlog feature not supported */
-+	VSEC_QUIRK_NO_CRASHLOG	= BIT(1),
-+
-+	/* Use shift instead of mask to read discovery table offset */
-+	VSEC_QUIRK_TABLE_SHIFT	= BIT(2),
-+
-+	/* DVSEC not present (provided in driver data) */
-+	VSEC_QUIRK_NO_DVSEC	= BIT(3),
-+};
-+
-+struct intel_vsec_device {
-+	struct auxiliary_device auxdev;
-+	struct pci_dev *pcidev;
-+	struct resource *resource;
-+	struct ida *ida;
-+	unsigned long quirks;
-+	int num_resources;
-+};
-+
-+static inline struct intel_vsec_device *dev_to_ivdev(struct device *dev)
-+{
-+	return container_of(dev, struct intel_vsec_device, auxdev.dev);
-+}
-+
-+static inline struct intel_vsec_device *auxdev_to_ivdev(struct auxiliary_device *auxdev)
-+{
-+	return container_of(auxdev, struct intel_vsec_device, auxdev);
-+}
-+#endif
++	if (header->id == VSEC_ID_SDSI)
++		intel_vsec_dev->ida = &intel_vsec_sdsi_ida;
++	else
++		intel_vsec_dev->ida = &intel_vsec_ida;
+ 
+ 	return intel_vsec_add_aux(pdev, intel_vsec_dev, intel_vsec_name(header->id));
+ }
 -- 
 2.25.1
 
