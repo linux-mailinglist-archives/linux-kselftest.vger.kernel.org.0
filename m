@@ -2,75 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF8C46CE1A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 08:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25E446CE2A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 08:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240100AbhLHHLW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 02:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240004AbhLHHLW (ORCPT
+        id S244464AbhLHHPw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 02:15:52 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53104
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240517AbhLHHPv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 02:11:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8855C061574;
-        Tue,  7 Dec 2021 23:07:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 8 Dec 2021 02:15:51 -0500
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D51BECE19BA;
-        Wed,  8 Dec 2021 07:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D66C00446;
-        Wed,  8 Dec 2021 07:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638947266;
-        bh=wutgiMs0XujmMpHmW7BVLnhSE5vS+yA9SLyoA4H4HTg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ha6e/BylqojqulxgeZ3IZZdpIXApJ9PUhLZCE0M7CwCIF3SECNq2FiTtUtQM/nb3u
-         zKGmy6YofGX+RDBwmWzXh7xp2rn6ajTnyOQv1hpNivdYBAH74FYaJeC28WQTn1M4xd
-         HFXzfUkAeGFUWsLbFNN3XgHIW7l8X7MMwPz6Ypqg=
-Date:   Wed, 8 Dec 2021 08:07:39 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     "David E. Box" <david.e.box@linux.intel.com>, lee.jones@linaro.org,
-        hdegoede@redhat.com, bhelgaas@google.com,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com,
-        shuah@kernel.org, mgross@linux.intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbBZuwXZWMV9uRXI@kroah.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-3-david.e.box@linux.intel.com>
- <YbBYtJFQ47UH2h/k@unreal>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6B5F940058
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 07:12:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638947538;
+        bh=HnHitcAxy5IK/OBfpwXFwbcANQpnXZnDkjq+md2LzKU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=f4P02E83eUUCRKAdM4e689RYuwEhZr6ixCcUv5HbrpqgZKx6n27Eta9GSJEkfdtuR
+         53/lso+bOkynV20+u7pC7WcmbSFIxl/w6jRlpVJaAXAFuWM+2AJ8K8cHCEBUUE7aS5
+         b4pONqyoJpJT1Crjzq/7IaSwJ8jx5FhSjUnCtlShNeipnBYK3t8W4nAZmX20H4FJao
+         kia1Ev9dNZWqfnAyg3k7GR9ZnUN0JxmnkvMhXAsYbg9/domooFVDqY1xb8T9jzU1h6
+         cualjG2hLnmBBLgohMsqIS/5/HrcD3dx2ZjNvlhfELcGFhn8CGR05zfzX5zdty069+
+         tctAjlMYGMXlw==
+Received: by mail-pg1-f199.google.com with SMTP id u22-20020a632356000000b003308cbcefb0so845994pgm.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 23:12:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HnHitcAxy5IK/OBfpwXFwbcANQpnXZnDkjq+md2LzKU=;
+        b=HnqIwGjeDoWBAwBaIREdtNNh3ns9b86tyfAgkKjBl8QhEyCNU+OTBs543iLbJ9zp3+
+         uV/1tHKzxLQs5sm7IprJS7UEbIimOl17RLEgyEpFua6OGreHiLQ/4RH7/vFMeEgDVkcC
+         80rRLdix5r4Ka1EGKStofawUH3RvBTDNzL0UqdgyjIlcFei6dOra3p8QgGIu1uXydYJJ
+         HogOnUX3Lz8bbFyKdm6UT9wDoi1rG+KSZ+YBct1a8ikOV0Yx371Q019hxjCPHtgvbNZu
+         Py1EjL3c5MsMGGA4mVEMGyppqdmgpq8U1HXYih/gEMXfvlm+jIXlcAf3L8m+2siEtuBB
+         iGlg==
+X-Gm-Message-State: AOAM5319v/xMr0xgkVn/oowxhP1XzJJyeFj47O0DE0NhNGFw/9PSFmuT
+        fQQxXaJIVXwZO6oD0ZilpebAJNwQtU+BH8ZukBLDnzCxmH4tfjCfZ3yC6ADpa+RA+naH8P9FuSS
+        melnI8fzmA/3nyj/9kgVOvPMHSAKsFVKtLby2xw7uhhlt
+X-Received: by 2002:a17:90b:1d0b:: with SMTP id on11mr4926232pjb.163.1638947536663;
+        Tue, 07 Dec 2021 23:12:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwl/Wa5GJglcK7GX5ZcWjy7TK24G/ysS+nwdSmTg8a2IuruvhOXnZZNFhsAR+v08zrhmczRfg==
+X-Received: by 2002:a17:90b:1d0b:: with SMTP id on11mr4926217pjb.163.1638947536421;
+        Tue, 07 Dec 2021 23:12:16 -0800 (PST)
+Received: from localhost.localdomain (223-140-212-111.emome-ip.hinet.net. [223.140.212.111])
+        by smtp.gmail.com with ESMTPSA id y190sm1946116pfb.203.2021.12.07.23.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 23:12:15 -0800 (PST)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     po-hsu.lin@canonical.com, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, skhan@linuxfoundation.org
+Subject: [PATCH] selftests: icmp_redirect: pass xfail=0 to log_test() for non-xfail cases
+Date:   Wed,  8 Dec 2021 15:11:51 +0800
+Message-Id: <20211208071151.63971-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbBYtJFQ47UH2h/k@unreal>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > Adds get/set driver data helpers for auxiliary devices.
-> > 
-> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > ---
-> > V2
-> >   - No changes
-> > 
-> >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> 
-> I would really like to see an explanation why such obfuscation is really
-> needed. dev_*_drvdata() is a standard way to access driver data.
+If any sub-test in this icmp_redirect.sh is failing but not expected
+to fail. The script will complain:
+    ./icmp_redirect.sh: line 72: [: 1: unary operator expected
 
-Lots of busses have this helper.  This is nothing new at all, and is
-nice to have.  Look at all of the calls to dev_get_drvdata() in
-include/linux/ for the examples.
+This is because when the sub-test is not expected to fail, we won't
+pass any value for the xfail local variable in log_test() and thus
+it's empty. Fix this by passing 0 as the 4th variable to log_test()
+for non-xfail cases.
 
-thanks,
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/icmp_redirect.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/net/icmp_redirect.sh b/tools/testing/selftests/net/icmp_redirect.sh
+index ecbf57f..7b9d6e3 100755
+--- a/tools/testing/selftests/net/icmp_redirect.sh
++++ b/tools/testing/selftests/net/icmp_redirect.sh
+@@ -311,7 +311,7 @@ check_exception()
+ 		ip -netns h1 ro get ${H1_VRF_ARG} ${H2_N2_IP} | \
+ 		grep -E -v 'mtu|redirected' | grep -q "cache"
+ 	fi
+-	log_test $? 0 "IPv4: ${desc}"
++	log_test $? 0 "IPv4: ${desc}" 0
+ 
+ 	# No PMTU info for test "redirect" and "mtu exception plus redirect"
+ 	if [ "$with_redirect" = "yes" ] && [ "$desc" != "redirect exception plus mtu" ]; then
+-- 
+2.7.4
+
