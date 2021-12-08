@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A23C846CB3D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 04:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE5C46CB70
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 04:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239548AbhLHDE5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 22:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S243427AbhLHDSK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Dec 2021 22:18:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbhLHDEz (ORCPT
+        with ESMTP id S232839AbhLHDSJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 22:04:55 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A62C061574;
-        Tue,  7 Dec 2021 19:01:24 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id t19so2217965oij.1;
-        Tue, 07 Dec 2021 19:01:24 -0800 (PST)
+        Tue, 7 Dec 2021 22:18:09 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDFCC061574;
+        Tue,  7 Dec 2021 19:14:38 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso1341528ota.5;
+        Tue, 07 Dec 2021 19:14:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aESiVO6Qu9V5g79b5unLwF9L8lrVbWO7t1bif/3ir2s=;
-        b=Hz9suid567cwCYwBsKaZLSbD+BMALATLBVyWF47Fsd3eMgwTn38thpNpqhKrKULavK
-         YMYvVeXHrrbd85OuR/j/VmSmOFEw/sl0cnx49dtuOVN/Mcw4kRsCVUBzwOVdBKBWxI2A
-         MaQeUEoBvDWcTu5HNoOvRLg++U+UeA8aiqKvRwJIOmHiJBGaJF9zTGwaNCvY/mAGse7W
-         vgz7zhbUvS1BEapdSYoumC2/b+lziL0G7A0++qcDofEOKm2TC4du3m1rh+1k8zYLgt/o
-         QzTqxrxawp8AoVEoPEa2IyzDEfFsHSs176eAJa0dZZQ8fLccodQ48n2bJJYVdRSGvH9H
-         zp4A==
+        bh=329pizNCH1ZkgEomsqbDzFQr/D0jbhcoaCg4ZLi5oTI=;
+        b=HM76PKAZ6OvvFbM4N7jwgmOKGcTgB8Sy9i0CT1q+OJmLmKedpkNqIcbvXIf/iJO80H
+         JQFVZ7NWazZQDQqE+8r1whRknq3UtW3SwTd23GXsUhu8yl1T4tbc3dtDCJg9lghDcS/7
+         o+HkOMarbJ/iyWuR7L2eO5githjH+5u/xFcfkSzTjvMQP15bPiQfvGlDJuw0UfFNYYD1
+         tL4hMhpgw5ERbGIaqIKEkipSKmBP9YLWXwmfhq0L3n2xzOFMp+Gu1kDAu9tQuCzBUrvS
+         3ZdRNCIWdqcY8SL5cTsBvMV8K79hfn1ojb5hbRoVA6s5wjItHtjlKuSklw8ATt2EpnbN
+         NwkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=aESiVO6Qu9V5g79b5unLwF9L8lrVbWO7t1bif/3ir2s=;
-        b=yOe48JMulPozu7xnhZSInW3durMhV2g4zD4Zd378FTFzbaQ+DufQNSS37KCPT6keLL
-         vAK+uDFVemMfFoWnwf8eTZmSr2y1xUxsaY7gyCqWomveEAyVM2z+btEgDEVXPuOK9fA5
-         U+6IyzoZRdK7e0BBcVW988nJATY4jXfoKaoBLr6feV2iM6sXgflU0ANgokwHok6OFEy7
-         /uHGpgWo8AApm3Je7BnLJp4q1JMjqkLu6Ws+UvUmrAarb+7UdldaI2rabQvOZGkjO9cX
-         kAyGauRgm5ZitoCZuzw8VDHdgqncq7PvqxlFQo2ml6lLCn8GKsOL1D7pgsaHltnYq+yF
-         dFtw==
-X-Gm-Message-State: AOAM5315y3CNq1uRO/xfYewpUem5zFUeKCG28sFLyEH49+Gfu/KxvcKN
-        tjMwb9jQ6x9/cWzJkO0h1QQ=
-X-Google-Smtp-Source: ABdhPJwOKuKpAVys+s2DOgsy0wllei85Qsz4kDWl8z9giZhoWunNCSTpc/K6TL2MuE3Mm6+KS/oD6A==
-X-Received: by 2002:a54:4f94:: with SMTP id g20mr9133464oiy.10.1638932479416;
-        Tue, 07 Dec 2021 19:01:19 -0800 (PST)
+        bh=329pizNCH1ZkgEomsqbDzFQr/D0jbhcoaCg4ZLi5oTI=;
+        b=k9BfIHAYmXvaGbuqLfZmj5OeWCLjeEESdtJNmnzYcdtT1ec2fr5w/fq9gUTYpRGIbo
+         Exl3mLNhm1ztusV7HMBjqIznwb/KkzvXdOK1repXIu2Wa30Rmo2nQoNcjsQrYuEl4EWP
+         1oTNxvXqriI13fHJOAnNCc1sT23TjcmgAfkkvwSAoMNrPlgvknxsix+eXnRWBT14wEMD
+         CYedWUna8hpa3NVpCK/QLDBSh2DbRVytKQUm5a0phzST+gh4PV7e4rRrQvFg8UIUuiia
+         UyTskp4EiLpfu8cVP2TlYstuuxxFWMNWlE9cld73Ecv88zUo+EDOd4a5owcVV+Atn01r
+         sIJw==
+X-Gm-Message-State: AOAM532nLErLZSpwuS80up8KPJG7iDD2R9TmQdD7VJEie8TEygAave8A
+        Ts1a3awr21nIaEzJx5sfyL0=
+X-Google-Smtp-Source: ABdhPJy8wCuAbQNhdLmlL5kBWdbR4KYfaf+COvXc2VVciuWQDXVEehPxogVUROlgnaarnCzR5Lq/qA==
+X-Received: by 2002:a05:6830:280d:: with SMTP id w13mr38026526otu.101.1638933278033;
+        Tue, 07 Dec 2021 19:14:38 -0800 (PST)
 Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id e21sm279660ote.72.2021.12.07.19.01.17
+        by smtp.googlemail.com with ESMTPSA id bj8sm424307oib.51.2021.12.07.19.14.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 19:01:18 -0800 (PST)
-Message-ID: <230a5b4f-2cbf-4911-5231-b05bf6a44571@gmail.com>
-Date:   Tue, 7 Dec 2021 20:01:16 -0700
+        Tue, 07 Dec 2021 19:14:37 -0800 (PST)
+Message-ID: <41a78a37-6136-ba45-d8fa-c7af4ee772b9@gmail.com>
+Date:   Tue, 7 Dec 2021 20:14:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.3.2
@@ -76,37 +76,64 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 12/6/21 11:05 PM, lizhijian@fujitsu.com wrote:
+>> # TESTS=bind6 ./fcnal-test.sh
+>>
+>> ###########################################################################
+>> IPv6 address binds
+>> ###########################################################################
+>>
+>>
+>> #################################################################
+>> No VRF
+>>
+>> TEST: Raw socket bind to local address - ns-A IPv6                            [FAIL]
+
+This one passes for me.
+
+Can you run the test with '-v -p'? -v will give you the command line
+that is failing. -p will pause the tests at the failure. From there you
+can do:
+
+ip netns exec ns-A bash
+
+Look at the routing - no VRF is involved so the address should be local
+to the device and the loopback. Run the test manually to see if it
+really is failing.
+
+
+>> TEST: Raw socket bind to local address after device bind - ns-A IPv6          [ OK ]
+>> TEST: Raw socket bind to local address - ns-A loopback IPv6                   [ OK ]
+>> TEST: Raw socket bind to local address after device bind - ns-A loopback IPv6  [ OK ]
+>> TEST: TCP socket bind to local address - ns-A IPv6                            [ OK ]
+>> TEST: TCP socket bind to local address after device bind - ns-A IPv6          [ OK ]
+>> TEST: TCP socket bind to out of scope local address - ns-A loopback IPv6      [FAIL]
+
+This one seems to be a new problem. The socket is bound to eth1 and the
+address bind is to an address on loopback. That should not be working.
+
+>>
 >> #################################################################
 >> With VRF
 >>
->> TEST: Raw socket bind to local address - ns-A IP                              [ OK ]
->> TEST: Raw socket bind to local address after device bind - ns-A IP            [ OK ]
->> TEST: Raw socket bind to local address after VRF bind - ns-A IP               [ OK ]
->> TEST: Raw socket bind to local address - VRF IP                               [FAIL]
->>
-> 
-> i found that above case failed with "server: error binding socket: 99: Cannot assign requested address"
-> i have manually check it with below command after setup(), same errors:
-> 
-> # ip netns exec ns-A nettest -s -R -P icmp -l 172.16.3.1 -b
-> 05:55:11 server: error binding socket: 99: Cannot assign requested address
-> 
-> But when i specified specific network interface, it works
-> # ip netns exec ns-A nettest -s -R -P icmp -l 172.16.3.1 -b -I red
-> # echo $?
-> 0
-> # ip netns exec ns-A nettest -s -R -P icmp -l 172.16.3.1 -b
-> 06:01:55 server: error binding socket: 99: Cannot assign requested address
-> # echo $?
-> 1
-> 
-> 
-> So i wonder if i missed something ?
-> 
+>> TEST: Raw socket bind to local address after vrf bind - ns-A IPv6             [ OK ]
+>> TEST: Raw socket bind to local address after device bind - ns-A IPv6          [ OK ]
+>> TEST: Raw socket bind to local address after vrf bind - VRF IPv6              [ OK ]
+>> TEST: Raw socket bind to local address after device bind - VRF IPv6           [ OK ]
+>> TEST: Raw socket bind to invalid local address after vrf bind - ns-A loopback IPv6  [ OK ]
+>> TEST: TCP socket bind to local address with VRF bind - ns-A IPv6              [ OK ]
+>> TEST: TCP socket bind to local address with VRF bind - VRF IPv6               [ OK ]
+>> TEST: TCP socket bind to local address with device bind - ns-A IPv6           [ OK ]
+>> TEST: TCP socket bind to VRF address with device bind - VRF IPv6              [FAIL]
 
-That test should be a negative test as is the first one in that group -
-in both cases the address bind should fail since the socket is not in
-the VRF but the address is. The first on currently shows "OK" but that
-is because of 5cad8bce26e01 that made changes to the config to validate
-MD5 changes. Will send a patch to fix.
+This failure is similar to the last one. Need to see if a recent commit
+changed something.
 
+
+>> TEST: TCP socket bind to invalid local address for VRF - ns-A loopback IPv6   [ OK ]
+>> TEST: TCP socket bind to invalid local address for device bind - ns-A loopback IPv6  [ OK ]
+> 
+> 
+> Thanks
+> Zhijian
+> 
+> 
