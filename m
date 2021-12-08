@@ -2,99 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA09246CDC2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 07:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F3946CE05
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 08:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240139AbhLHGdR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 01:33:17 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:55684 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239648AbhLHGdP (ORCPT
+        id S231582AbhLHHG4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 02:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231351AbhLHHG4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 01:33:15 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UzquZvA_1638944981;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0UzquZvA_1638944981)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 08 Dec 2021 14:29:42 +0800
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH 02/11] mm/damon/dbgfs: Remove an unnecessary error message
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211201150440.1088-1-sj@kernel.org>
- <20211201150440.1088-3-sj@kernel.org>
-From:   Xin Hao <xhao@linux.alibaba.com>
-Message-ID: <71535f68-4086-45df-2d4b-36a1802c9475@linux.alibaba.com>
-Date:   Wed, 8 Dec 2021 14:29:40 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Wed, 8 Dec 2021 02:06:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFC9C061574;
+        Tue,  7 Dec 2021 23:03:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCBB7B8168C;
+        Wed,  8 Dec 2021 07:03:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A29C00446;
+        Wed,  8 Dec 2021 07:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638947001;
+        bh=61BDRbqt72/j21ziiTqfJ4Zxtxfeh5eTASuLWQWiX9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rBLQ9znpA6Vsm3QxkJ7FTcBcO+mwm7o09IppTNlj6AKHyU3uQ9X/9RQ8ZhdUK/iox
+         cxzsdGTxQ3hwwGFDxNsUgzbzZWBSMlAwupBsLSxhRNQzJImMI+RMe+KTpZP0KyGrUo
+         HM4QvZelLppsRlja/K7oKXFGLL6Z/6Wu9PZX66eCtvxlHLvD+3nGfObCcX9kxhmLXg
+         3LxWM6KYr7DRGDMEEOCbo3TBVs+9I7+O2jEXiG/q1mtsLk7z43TJyu3NUuE1xd7uBu
+         co3Uv55lA+LBt7frm/uVLj9sFzYnTMrIIi/5eU9zqSCI9DI5dnZS2rYg+9KKU1t6aF
+         5L6/JkRJ2bGCQ==
+Date:   Wed, 8 Dec 2021 09:03:16 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <YbBYtJFQ47UH2h/k@unreal>
+References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+ <20211207171448.799376-3-david.e.box@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20211201150440.1088-3-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207171448.799376-3-david.e.box@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-Hi park:
-
-On 12/1/21 11:04 PM, SeongJae Park wrote:
-> When wrong scheme action is requested via the debugfs interface, DAMON
-> prints an error message.  Because the function returns error code, this
-> is not really needed.  Because the code path is triggered by the user
-> specified input, this can result in kernel log mistakenly being messy.
-
-Completely correct, but there will also be a problem that users can’t 
-quickly locate where the problem is,
-
-Especially too many parameters need to be written into the interface.
-
-I think it is necessary to add some debugging methods to help users find 
-the error without polluting the kernel log.
-
-And i have an idea, like this:
-
-in dbgfs, add a last_cmd_stat interface.
-
-     # echo "1 2 1 2 1 2  1 2 1 2 100 ..."  > schemes
-
-     #  cat last_cmd_stat
-
-     #  wrong action 100
-
-In this way, on the one hand, it will not pollute the kernel log, on the 
-other hand, it will help users find  the cause of the operation 
-interface error.
-
-Park, how do you think of about this idea, if ok, i will send a patch.
-
-> To avoid the case, this commit removes the message
->
-> Fixes: af122dd8f3c0 ("mm/damon/dbgfs: support DAMON-based Operation Schemes")
-> Signed-off-by: SeongJae Park <sj@kernel.org>
+On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
+> Adds get/set driver data helpers for auxiliary devices.
+> 
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> Reviewed-by: Mark Gross <markgross@kernel.org>
 > ---
->   mm/damon/dbgfs.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-> index 4bf4204444ab..5b628990ae6e 100644
-> --- a/mm/damon/dbgfs.c
-> +++ b/mm/damon/dbgfs.c
-> @@ -210,10 +210,8 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
->   				&wmarks.low, &parsed);
->   		if (ret != 18)
->   			break;
-> -		if (!damos_action_valid(action)) {
-> -			pr_err("wrong action %d\n", action);
-> +		if (!damos_action_valid(action))
->   			goto fail;
-> -		}
->   
->   		if (min_sz > max_sz || min_nr_a > max_nr_a || min_age > max_age)
->   			goto fail;
+> V2
+>   - No changes
+> 
+>  include/linux/auxiliary_bus.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
--- 
-Best Regards!
-Xin Hao
+I would really like to see an explanation why such obfuscation is really
+needed. dev_*_drvdata() is a standard way to access driver data.
 
+Thanks
+
+> 
+> diff --git a/include/linux/auxiliary_bus.h b/include/linux/auxiliary_bus.h
+> index fc51d45f106b..a8338d456e81 100644
+> --- a/include/linux/auxiliary_bus.h
+> +++ b/include/linux/auxiliary_bus.h
+> @@ -28,6 +28,16 @@ struct auxiliary_driver {
+>  	const struct auxiliary_device_id *id_table;
+>  };
+>  
+> +static inline void *auxiliary_get_drvdata(struct auxiliary_device *auxdev)
+> +{
+> +	return dev_get_drvdata(&auxdev->dev);
+> +}
+> +
+> +static inline void auxiliary_set_drvdata(struct auxiliary_device *auxdev, void *data)
+> +{
+> +	dev_set_drvdata(&auxdev->dev, data);
+> +}
+> +
+>  static inline struct auxiliary_device *to_auxiliary_dev(struct device *dev)
+>  {
+>  	return container_of(dev, struct auxiliary_device, dev);
+> -- 
+> 2.25.1
+> 
