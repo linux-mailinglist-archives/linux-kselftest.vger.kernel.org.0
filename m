@@ -2,119 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E60546DD78
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 22:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FD146DD7C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 22:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbhLHVSN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 16:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S237033AbhLHVV0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 16:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbhLHVSN (ORCPT
+        with ESMTP id S231419AbhLHVV0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 16:18:13 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BF8C061746
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 13:14:40 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id w1so3416502ilh.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Dec 2021 13:14:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8ryZ1w0c8Aj/WW7+0em9KmWOSOY1s/jaKp4hTYC9QsQ=;
-        b=EVNwBxgQOuoMQUYnwj5gMOldcJnqQfZ6TrJpizobhcirfVHLG6WyblU28pYX+Stdt+
-         At95sZd4WdUxBPuIC0lZiTRR8+mwQU4Yqzvn5ML5ZKXyZG1V7cJ0XLbmoeoelJxYmOoR
-         2iw4w9HTlYQLAySsjRd2DceDDMq3tW3zJAqkY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8ryZ1w0c8Aj/WW7+0em9KmWOSOY1s/jaKp4hTYC9QsQ=;
-        b=tESqR7af7zBIIlPfNW1SML/UX6huvZzbS0VZnuST0kUi3WEaZ4pao78JM4fZRB7uQZ
-         nmJtI6xRGGjDnoaP5kiaiFbhaxfGt0y44jyPTo3ozV3tbuOy5wc5Lo7HFPXAzYZ5LCan
-         pLIlrBbM90gP+GIsM5zpFy0Ef0NLh7hETlNQ/paaiEfNJ7mBGeAem4b20k3h52+IwA8x
-         zxk/u1vHIxuKF33QmJsiwKPYpMAaYqzXT2+UsVNRFEjnMkxaa//0Xw/gpBui5x9oJLz5
-         MXybpLP6jXFKa4W5dLyrFlLYj7E5rpcv7S545K621hssY+fTAc4U+HAQ3J9P35LzNjK3
-         3Tlg==
-X-Gm-Message-State: AOAM531DCCiF4+IC/sSo09VTL5TB27wBbj1TO+b16Ne8QwZhzZrlk94e
-        33+KTY5HI4v8fB2XXMQRCW1+Yw==
-X-Google-Smtp-Source: ABdhPJzqBvRkuxbtSleJynpQuoNdEXo758C/5IbACtreWQ+T5Hr+sGPcYbPH1rQ0f00rRkCM0f1tTw==
-X-Received: by 2002:a05:6e02:154c:: with SMTP id j12mr9719269ilu.51.1638998080338;
-        Wed, 08 Dec 2021 13:14:40 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id b3sm2612084ile.26.2021.12.08.13.14.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 13:14:39 -0800 (PST)
-Subject: Re: [PATCH v2] kselftest: alsa: Add simplistic test for ALSA mixer
- controls kselftest
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        linux-kselftest@vger.kernel.org, alsa-devel@alsa-project.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211206160305.194011-1-broonie@kernel.org>
- <de0c5677-c2cf-d1ab-68c5-2f410d17b66c@linuxfoundation.org>
- <YbD7+C74DFlZEokt@sirena.org.uk>
- <37f87d39-b5a9-46f6-2667-c0b7aafb731a@linuxfoundation.org>
- <YbERo5FxA6Rm3bhd@sirena.org.uk>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f18f28f8-fb78-3ddd-153e-40675e5e6e8e@linuxfoundation.org>
-Date:   Wed, 8 Dec 2021 14:14:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 8 Dec 2021 16:21:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43931C061746
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 13:17:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AFC1B822DD
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 21:17:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18597C00446;
+        Wed,  8 Dec 2021 21:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638998270;
+        bh=2FpH5VoXr9ueY5bDrwm6B2Tr7onF5v+ChxxrbUuG+c4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yrr3NmueTLsshhKaA0OTAVsBNNaEOqI0SplQLGafRKHlZV9Rg+BWlODz5fkO2qZjx
+         shKfp5iTSQ2TrZX0UGSYFvTyexHp2L1p7BaWbxHrmcuoEJpcqo7YBVWCnmZQpfMmO4
+         vnyv3Qyipi42SA/NgHxhaI1GYa5X1rP3jY8ycfzuaFYHrUF10+c7QQTnVzS5GzZ/uJ
+         Z1F4yc0ORMJY4sJrTwO2p/Aur0yshIJ3awaQoHiIznCs8ca0/NCCvA4np26Ifu5l6A
+         hp7dEt4KnenPx8I75oRwlbSi/f+sfRrxEP01AMh7Yb4aMDKyuH4vjO9bOzL8szol+d
+         FeNoL9z7fmN5g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 0/3] kselftest: alsa: Add basic mixer selftest
+Date:   Wed,  8 Dec 2021 21:17:42 +0000
+Message-Id: <20211208211745.533603-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YbERo5FxA6Rm3bhd@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1333; h=from:subject; bh=2FpH5VoXr9ueY5bDrwm6B2Tr7onF5v+ChxxrbUuG+c4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhsSD1HVS5LAtgAeA5KjgYRZbZjE0afMZo56TjpTcw pW5Bls2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbEg9QAKCRAk1otyXVSH0KBeB/ 0dZ+rG5/EXHfvNPwe4qrkUcWql9pkBALACyp40hoSflqojOri1+5Xn+Mmk92m4uau3QlGZLU/+bxG2 QngGXfYMsBBDF89jj3pxn7fG5mIeCRjnqxx3xxSPy/pPowa/c2IwBGJPsQd/mn1VP144SbkB+Q5Fn5 ov9DQUTEbI5E5M7vv6JqcD0grTwVhdL/tNkUSjKTPrYoZzo0yeB67HPSbltxUW5g/xpSskX5MDqq9G NI+WGJwRqhfrA6KJRkSjl0UfgRjDpkRQJqDL2BcWGZDqpOkFdOuzQ6YXBxNvKVFUOBYeF0N7hs7vKO trA9xVBFAia3mhLmB9fxrMTAovH4WN
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/8/21 1:12 PM, Mark Brown wrote:
-> On Wed, Dec 08, 2021 at 11:59:18AM -0700, Shuah Khan wrote:
->> On 12/8/21 11:39 AM, Mark Brown wrote:
->>> On Wed, Dec 08, 2021 at 10:42:35AM -0700, Shuah Khan wrote:
-> 
->>>>> +	snd_ctl_elem_value_alloca(&val);
-> 
->>> This is idiomatic for alsa-lib code.
-> 
->> This is kernel code that is going into kernel sources. Why follow
->> alsa-lib convention?
-> 
-> Well, the kernel doesn't generally use alloca() as a pattern given the
-> relatively small stack sizes we have and doesn't define helpers like
-> these for it...  it's a toss up here between the conventions for use of
-> the library we're using and the conventions of the kernel.
-> 
->>>>> +	ksft_print_header();
-> 
->>>> Add a check for root and skil the test.
-> 
->>> There is no need for this test to run as root in most configurations,
->>> it is common to provide direct access to the sound cards to some or all
->>> users - for example with desktop distros the entire userspace audio
->>> subsystem normally runs as the logged in user by default.  alsa-lib's
-> 
->> On my system, I don't see any output if run as root. Are there some tests
->> that work as non-root?
-> 
-> All of them work as non-root if the user they're running as has access
-> to a card, if they do or not is system dependent - there may not be any
-> cards at all in a given system to find.  Running as root will punch
-> through most permission problems but it's not a requirement and a system
-> could use a security module like SELinux to restrict what root can do.
-> The sound devices are usually in /dev/snd, though userspace can place
-> them where it wants - if run as a user that can access the relevant
-> devices for the mixer interface (usually /dev/snd/controlC* though again
-> userspace can rename them) then the tests will run on those devices.
-> 
+This series adds a basic selftest for the mixer interface, as discussed
+in the cover letter for the main patch there's plenty of additional
+coverage that could be added but this is a good starting point.
 
-Sounds good to me.
+v3:
+ - Pull in incremental updates adding a fixed library configuration from
+   Jaroslav and support for volatile controls from Takashi Sakamoto.
+ - Stylistic updates suggested by Shuah.
+v2:
+ - Use pkg-config to get CFLAGS and LDLIBS for alsa-lib.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Jaroslav Kysela (1):
+  kselftest: alsa: Use private alsa-lib configuration in mixer test
 
-thanks,
--- Shuah
+Mark Brown (1):
+  kselftest: alsa: Add simplistic test for ALSA mixer controls kselftest
+
+Takashi Sakamoto (1):
+  kselftest: alsa: optimization for SNDRV_CTL_ELEM_ACCESS_VOLATILE
+
+ MAINTAINERS                               |   8 +
+ tools/testing/selftests/Makefile          |   3 +-
+ tools/testing/selftests/alsa/.gitignore   |   1 +
+ tools/testing/selftests/alsa/Makefile     |   9 +
+ tools/testing/selftests/alsa/mixer-test.c | 663 ++++++++++++++++++++++
+ 5 files changed, 683 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/alsa/.gitignore
+ create mode 100644 tools/testing/selftests/alsa/Makefile
+ create mode 100644 tools/testing/selftests/alsa/mixer-test.c
+
+
+base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+-- 
+2.30.2
+
