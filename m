@@ -2,103 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E04B46D4FD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 15:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCA946D562
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 15:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234591AbhLHOHx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 09:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        id S231710AbhLHOSP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 09:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbhLHOHx (ORCPT
+        with ESMTP id S231618AbhLHOSO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 09:07:53 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57148C0617A1;
-        Wed,  8 Dec 2021 06:04:21 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r25so8677021edq.7;
-        Wed, 08 Dec 2021 06:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TBUtI121OAYubHou6K+iGseMAQxpxuvDIj0cwDzNJqI=;
-        b=XDQoWKFfZPYKzdXWBFgZEyaaeck29w5cQxaeXX4rc0gfQs5YayoyqELY2PHCEdGmec
-         2/nQEGtosBLPuTR6/3UhXDXfQ0nJlBJ4eOqKGAF9IBgw/yKAs3mvDd/MI/+QJm7+Juve
-         Ag0GYsr/yQKjTjhlY4mYB/iXJ80Y8MzD+Vk3m7d/7BySn5F3KcZbHGhELfgdlwIc2LdQ
-         xuJdNHtb6k5yOfCbrObR6FAnlsDSeTpsiKyBX8sQIjRUXaZcCsABt5+bSIrx90L4w452
-         N4pprP86c8Z2FhkB7s2WQ6ot5TemC4zMgCPNCs6raJU2Wm2UOyVofvUqp2V0xCEFtkxq
-         aZJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TBUtI121OAYubHou6K+iGseMAQxpxuvDIj0cwDzNJqI=;
-        b=VpBabHT7iv8pfJn3gdzXti4qgQyAQ+Mfx30555LFN1Xfwtdfyf+q2isHTB12mo2pPE
-         EboMJ3sONdDIx7KoF8yza4zbXx+dnAwHBIOAD5ZZbRyBumkK72Dzp5gyPlQW1Ovhggtw
-         GrzPE9dWqcodDfElGgBL7ITNi3XCEY8xUGZGqIrJnBtNtPFBbQVZuLlXgKdqnXZWp6j3
-         bqCpyS+oq5jj4O5wc1+q7tzHiyyUk61qEB4hYW9kUJWiIKtUE6golpJ6UFhmGyRUAvuJ
-         +fJURGr2FS5kjOcdPFUpH1J2Kkj8SbHAZLhV+gtLyfYEI8OKm9uzciOSfHYbjQD1/lmy
-         +Uxg==
-X-Gm-Message-State: AOAM532kfwfdCRZqz3wuSPODK8Wo6CfLIM6vaqGHT6S9WVXcphOuXJ1t
-        77j6fEBjrqVI0WV3TwCfA8c=
-X-Google-Smtp-Source: ABdhPJzxxlC2sYuxVCXO3ljUM6bUbtDlrhVV5jS4H2NT8K4TCYMvtjT595/ZiKCqpu1ImdiaJ1vN/w==
-X-Received: by 2002:a17:907:9802:: with SMTP id ji2mr7921534ejc.418.1638972259854;
-        Wed, 08 Dec 2021 06:04:19 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id jg32sm1817512ejc.43.2021.12.08.06.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 06:04:19 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <111d46ba-0a9b-fdb2-d8c4-fe8045edc092@redhat.com>
-Date:   Wed, 8 Dec 2021 15:04:16 +0100
+        Wed, 8 Dec 2021 09:18:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5077C061746
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 06:14:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7DB1B82107
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 14:14:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF211C00446;
+        Wed,  8 Dec 2021 14:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638972880;
+        bh=7z26PP8HWRt0fOrNVLCcjPbHQ+P6Gq9iCx6EvNvW9uE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GRcSQ5WBM6hJOzvvxxdbxN1DlvZVQMwISH1hzyyD49pWpAi+5YLUCfbPbCJhV8V0a
+         4wFR16pPbbEKWupPJ9tw5rgaYc0/oLTQ6VCCsE4ub/SoP2E0JYzvfe+eL1wu6QNyP1
+         UQpy2W4KTwoDDJoUYCvmSD+8sjtIzJD9Zja3KBYk10QRj+G+/pAxOWizFztqjh2JCQ
+         8xZp4tC/o5EbX8XHzJcWrydLyJGeeFOB7DUb1AOXoJrgTVW8p7tyHXuMmb7rmg+Cf8
+         Y+MP1XtSWAUWkesDrXmCEt5Lh3ujHQrlzuSojit0OaYT/9WD12BjLzK8MZnzLIsHxn
+         k9XM3rU+LWANA==
+Date:   Wed, 8 Dec 2021 14:14:35 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc:     Jaroslav Kysela <perex@perex.cz>,
+        ALSA development <alsa-devel@alsa-project.org>,
+        Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest: alsa: Use private alsa-lib configuration in
+ mixer test
+Message-ID: <YbC9yxBeYdcQ9j9d@sirena.org.uk>
+References: <20211208095209.1772296-1-perex@perex.cz>
+ <76f28e78-0e9d-45ce-96a3-5c36f880ea6b@www.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] KVM: x86: selftests: svm_int_ctl_test: fix intercept
- calculation
-Content-Language: en-US
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Y6EQkDWcLeAjBQmy"
+Content-Disposition: inline
+In-Reply-To: <76f28e78-0e9d-45ce-96a3-5c36f880ea6b@www.fastmail.com>
+X-Cookie: Alex Haley was adopted!
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/3/21 00:10, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> INTERCEPT_x are bit positions, but the code was using the raw value of
-> INTERCEPT_VINTR (4) instead of BIT(INTERCEPT_VINTR).
-> This resulted in masking of bit 2 - that is, SMI instead of VINTR.
-> 
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> ---
->   tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> index df04f56ce859..30a81038df46 100644
-> --- a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> @@ -75,7 +75,7 @@ static void l1_guest_code(struct svm_test_data *svm)
->   	vmcb->control.int_ctl &= ~V_INTR_MASKING_MASK;
->   
->   	/* No intercepts for real and virtual interrupts */
-> -	vmcb->control.intercept &= ~(1ULL << INTERCEPT_INTR | INTERCEPT_VINTR);
-> +	vmcb->control.intercept &= ~(BIT(INTERCEPT_INTR) | BIT(INTERCEPT_VINTR));
->   
->   	/* Make a virtual interrupt VINTR_IRQ_NUMBER pending */
->   	vmcb->control.int_ctl |= V_IRQ_MASK | (0x1 << V_INTR_PRIO_SHIFT);
-> 
 
-Queued, thanks.
+--Y6EQkDWcLeAjBQmy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Paolo
+On Wed, Dec 08, 2021 at 10:55:41PM +0900, Takashi Sakamoto wrote:
+
+> I'm not positively for the patch since it can take developers puzzled due=
+ to
+> the symbol dependency newly introduced in unreleased version of alsa-lib.
+
+Shouldn't the version check and local definition avoid that issue - if
+the version of alsa-lib doesn't have snd_config_load_string() then we'll
+use a locally defined version of snd_config_load_string() and not depend
+on the alsa-lib symbol?
+
+> It's better to check the version of alsa-lib in Makefile to avoid develop=
+ers=E2=80=99dole
+> if we have enough respect to embedded developers, especially forced to wo=
+rk
+> with legacy userspace. (and it often occurs).
+
+Or just avoid using fancy new library features - if we need to limit the
+test to only building with bleeding edge versions that gets restrictive.
+TBH this is probably even more painful for people working with
+enterprise distros than embedded systems, if you're building everything
+for your target it's not usually too bad to drop in an updated version
+of something like alsa-lib but if you're using disro binaries it's less
+idiomatic.  Either way it's a barrier though.
+
+--Y6EQkDWcLeAjBQmy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGwvcsACgkQJNaLcl1U
+h9CFZAf/XW0hzolZYnySr7GSN/hpeVNw7U7OKtr+UuctxVrwP5IfoKXYC904Exi0
+ysElgzTGbSlLNEHplU7xFncFtbxD3u9Fjo9xnHjX5WImozSXB/d0FeeeV4p8ZOqV
+AWgtPtc32Xu8q8LOGyKSz8KTCjQ3N+4qM6Y0Of4wMFMdiBbUcd70MWwPcbqaZGWo
+XA1eRj0DwVZA8+j87QXeab2gYcFMexW0bHN0i6k/v+sQDinivAA/M5xrBvThLTC1
+eCCuAHgh/6ljblVDnK0DZ2VLqMrfDDf5CKxe5XYGxND/39tiUgAy3EpV2HNYUHWA
+ZDokZipm9yQWSCOOHl9pn9cS8xgBrw==
+=uxt+
+-----END PGP SIGNATURE-----
+
+--Y6EQkDWcLeAjBQmy--
