@@ -2,105 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AC646D7B5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 17:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A32E46D7ED
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 17:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236525AbhLHQKz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 11:10:55 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41986 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbhLHQKz (ORCPT
+        id S236698AbhLHQV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 11:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233548AbhLHQV3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 11:10:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5AD0ACE2206
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 16:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23AD4C00446;
-        Wed,  8 Dec 2021 16:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638979640;
-        bh=ucd29oGSTKXWWFO3cCmFVHP7SHwSna+LAEgaxzI8ATg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mOY6FnjiHNkbQ76spg+A5AWKfn7V1kaSbtUIV6yyNMIdGdLU1Ulw/ADcN0Pa5zS7c
-         XSWj90Py3VFh4j+BSq9Jh50ODgzD/xqt0Dzg1J6BGFN/yutTjGK6VC7MRJk94XYaUZ
-         uPEsy3HWKTOTqW+KXaG1mwdQnA25hXzR2fI1P9GrwkXXY/WNwD7/1my3o9CHIhQHkH
-         sl3W2dqxtxVzqjdaA11ye1huA69U41dR4nAUL94rNU8/XT0TQGzEWXcU5hHiGpqfI3
-         VRZzVHDSxuui+q8xmo//zqUVZRTT+hXcvz3sI3a9L4vbupW0OOpMdcUzgI8p20rRPZ
-         lBrf5GsvGMg4A==
-Date:   Wed, 8 Dec 2021 16:07:15 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Cc:     Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] kselftest: alsa: Add simplistic test for ALSA mixer
- controls kselftest
-Message-ID: <YbDYM084JDKQn0Jv@sirena.org.uk>
-References: <20211206160305.194011-1-broonie@kernel.org>
- <Ya7TAHdMe9i41bsC@workstation>
- <Ya9uvPx37AcOdwLK@sirena.org.uk>
- <85e0af0d-6f7e-47b0-b09c-c6006ee50662@www.fastmail.com>
+        Wed, 8 Dec 2021 11:21:29 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A49C0617A1
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 08:17:57 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id u1so4913437wru.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Dec 2021 08:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XudR5QwbKwmMIdTWdxeMrD6caTZkAvE0b72zbhBzI50=;
+        b=MSBoGk02QOdIPAonhp7MBQGtOMs2d2pLeUFrw4sx2zVj78Bot2Pu++a9IQ9arYfGc+
+         XBXI4f/Zh+MZNarXEN078pbHRx064kH5PbQMqirEVgBVhWjZE55etYdEMbK1EopO8bLT
+         5TFLKAhgu5X9i7CgutroZC2MttxWAx5ClOnsj2rLHGqZpP51P4sEZeqE6+CGtFBq8Tgt
+         rq2MvtXZuN0roGIkYcsl3xtV5/j2m4U2GRQdoN0cTq8v81064ncaR/qlyR0kI0z7JkMz
+         qufogI/Gskc7FW1oLPAiv/ogkRcx7jn4cT64D7xQnmuSjBcQdj02gxQVo9UYL+bYgKNh
+         8H7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XudR5QwbKwmMIdTWdxeMrD6caTZkAvE0b72zbhBzI50=;
+        b=YZi3ELNLlXuCxJhPhqDrDLWX5y2wC4a/tFKY8adA/Hp/fk+XcKoIAeuYYnOoZCgDTL
+         qsqmvKH3y8h6vHmYYrB0H26o0bBimQvPIDTKPKZZAgDsz/ainEouZMwc+1xCAtkDt3Xz
+         9JE5JbZ8cFpZ5JBK1WgpcGLbu/rD/tjjfSspjQpIL8oNkKtgniFBU72sAF3JoicMtnrz
+         l+SHAvdfih3+RZCRrkcJc17PJrRjjE7RuizJbHtffPcb4V/LL8hmRyxxXWi4B1KBBwNF
+         NcYpt9KL470e3qhSXEo1Y+GIVih651XBexCxq90fuxwexFTlYa1DZ0K24Pm1hqhwvhRB
+         Es9w==
+X-Gm-Message-State: AOAM532OszAukNrrLW7LKhSRYpdfEKmvp6cBLBEfjUGFBrXO+xoUsCb7
+        dobAh8YNPoqZdokrnF18R84IxejTxre6nloaJVT/gA==
+X-Google-Smtp-Source: ABdhPJzIfb/G70ZKYOvkfAgLKJkiT/YbzYOh5Qus7tyAWqMTM7hM4m+uKUW+pRNOkcUNRxjIcWaEEm6BCa+fhZnKSfg=
+X-Received: by 2002:adf:f209:: with SMTP id p9mr58643982wro.191.1638980275764;
+ Wed, 08 Dec 2021 08:17:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ySXaIdAa5skuYhCk"
-Content-Disposition: inline
-In-Reply-To: <85e0af0d-6f7e-47b0-b09c-c6006ee50662@www.fastmail.com>
-X-Cookie: Alex Haley was adopted!
+References: <20211207190251.18426-1-davidgow@google.com> <202112071358.E8E6812D@keescook>
+In-Reply-To: <202112071358.E8E6812D@keescook>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 9 Dec 2021 00:17:44 +0800
+Message-ID: <CABVgOSm68xfwCrnobKJkt_Qhh95JCP6kTXrUXoDwe_pBxWWt-w@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
+        shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        rmr167@gmail.com, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, Dec 8, 2021 at 6:02 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
+> > From: Rae Moar <rmoar@google.com>
+> >
+> > It does not make any significant additions or changes other than those
+> > already in use in the kernel: additional features can be added as they
+> > become necessary and used.
+> >
+> > [1]: https://testanything.org/tap-version-13-specification.html
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > Co-developed-by: David Gow <davidgow@google.com>
+> > Signed-off-by: David Gow <davidgow@google.com>
+>
+> I like it! Thank you so much for suffering through my earlier reviews.
+> :)
+>
+> The only concern I have is wonder what'll be needed to kselftest to
+> deal with indentation changes. As long as this can be implemented
+> without a subtest knowing it is a subtest, we're good.
 
---ySXaIdAa5skuYhCk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I'd think a minor tweak to the prefix.pl script should handle it for most tests:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/tools/testing/selftests/kselftest/prefix.pl
 
-On Wed, Dec 08, 2021 at 11:26:59PM +0900, Takashi Sakamoto wrote:
-> On Tue, Dec 7, 2021, at 23:25, Mark Brown wrote:
+Certainly the indent should be the only difference between a top-level
+test result and a subtest now.
 
-> > I do think there's an advantage for test comprehensibility in having the
-> > test written in terms of similar APIs to a normal userspace application
-> > - it makes it easier to relate what the test is doing to normal usage
-> > which is helpful when trying to understand what the test is trying to
-> > tell you.
+And, if the results do use test plans (i.e., state how many tests are
+expected beforehand) it's possible to parse the results even without
+indentation. It it looks like it would be a problem, we could
+explicitly state that indentation is optional if a test plan is
+present (or provide some other mechanism for detecting the end of the
+subtests: just checking the test number has some corner cases which'd
+fail, but doing something akin to the "Subtest:" header TAP14 used
+makes this pretty robust). Things like that would overcomplicate it a
+bit, though, and might end up verging back on "tests need to know
+they're subtests" territory, depending on the exact implementation, so
+I think things are probably better as-is.
 
-> In my opinion, test is merely test. It's not a sample program.
-
-> What important is what is tested. and how to assist developers if failed.
-> If more suitable for the direction, we should do it, even if using raw ioctl
-> in the case.
-
-Sure, but it's also important that if someone sees a test failure they
-can figure out what was being tested and if the test makes sense - there
-are plenty of testsuites out there with tests where what the problems
-are in the test, or it's hard to tell what the test is even supposed to
-be verifying.  Putting barriers in the way of understanding the test
-means it's that bit harder to get people to put in the work required to
-figure out what the test is trying to tell them and pay attention to it.
-
-> For your information, `check_event()` in `test/user-ctl-element-set.c`, my
-> rough implementation of test for event triggered by tlv operation, might
-> be helpful to you or start point t to discuss about event check.
-
-Thanks.  The main issue here is finding time to look at stuff rather
-than figuring out the APIs, they're reasonably easy to work with
-fortunately.
-
---ySXaIdAa5skuYhCk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGw2DIACgkQJNaLcl1U
-h9C+Zgf/S8f4rY4+y4WmFzac9ggepM8sxPn8GNOzVK28R2Y5SnY6vUEOV1RNyypC
-mu5e1oWtP1B3GqlUsDW91y4n1DPUHiQS9N+SQrHaEFB6xdjTs2h8U672HrChTcJ7
-qCwVnBK+rM8CAFDocEUkXlRDCKsdrihIpA8cXT6N+Iemx4gvLGb9w1ndUtXe9N3h
-JX02o9JGMR0zAKtU5ESELYD5tPs7g+CqMhCnLT+Oy3fyeiMGte6mK6uz2aD4IPqj
-EdqbY/2Q213UQIiDfY0Gi0PtLCadBI8o+O1gZVIbls8dLWGisKxnMEMBWnPDokSf
-tmcHOXNXWCD9WyzUxgcsFf6rQXjYJA==
-=4MfK
------END PGP SIGNATURE-----
-
---ySXaIdAa5skuYhCk--
+Cheers,
+-- David
