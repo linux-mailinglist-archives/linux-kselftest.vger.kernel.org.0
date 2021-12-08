@@ -2,89 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334CA46CFEB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 10:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF1746D05F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 10:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbhLHJWM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 04:22:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbhLHJWM (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:22:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DAFC061746;
-        Wed,  8 Dec 2021 01:18:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S229601AbhLHJ5F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 04:57:05 -0500
+Received: from mail1.perex.cz ([77.48.224.245]:59486 "EHLO mail1.perex.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230129AbhLHJ5E (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Dec 2021 04:57:04 -0500
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 9FE12A0040;
+        Wed,  8 Dec 2021 10:53:29 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 9FE12A0040
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1638957209; bh=JuYu2EwltgvZDeWCVSX3GmeTuEgcMK1XbrXNAuDm4x0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bHlthd0MPRQWoAbc6dM879KDexslkbjSW5Y34jFzMG/3p3uiCp4LSxstzyiVHD+B3
+         JG164HoH0HRErXgUMf1RpE8nrnlrj4vHD0I4CaiYQiDd2IXjOvgAYGqoaiMGG0UVrB
+         ltJKs8Bb6pvLRDYkm+h/Ij6gwYqpn+EbpexNEePM=
+Received: from p1gen2.perex-int.cz (unknown [192.168.100.98])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AE7BB8200D;
-        Wed,  8 Dec 2021 09:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1332C341C3;
-        Wed,  8 Dec 2021 09:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638955117;
-        bh=rdVg3VWa1um6V8JdDhtynquK+COZiesUPvhcitWSMP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hiSpUKqH4tMcBEBYlETNrzFsj29YqW8Lagp1h/wmrAgmhuUykdKHGt+IFomcoWRjv
-         OLVqFmTsBUJgq+FneRJ9j1z8srKV/bfiFi+qJQwquD8KNKjCCUmJJ6jXmHSpOAY0V3
-         9X3e2xcJiAMPkAJN8VYj8jEFcCVZgAoX6WVIuc9NJsF51/aDH1HChMj4snRID2lzDd
-         tb4W+sIk3z4tifR1lzEpk9ZdQnfvL2csMffsokvZUlu4KYgdUdfsJm3O2yf6jpuRf2
-         DIkucb/lcfJF9NpZtiHOrdG1pikkuF64bYTG6a3SGzZaZR1UptUEV92u9Z0okU5NIK
-         PP+KHBJxr4r+A==
-Date:   Wed, 8 Dec 2021 11:18:33 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
-        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
-Message-ID: <YbB4aYK4fOESbbMl@unreal>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
- <20211207171448.799376-3-david.e.box@linux.intel.com>
- <YbBYtJFQ47UH2h/k@unreal>
- <YbBZuwXZWMV9uRXI@kroah.com>
- <YbBwSV2IwDHNUrFH@google.com>
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Wed,  8 Dec 2021 10:53:21 +0100 (CET)
+From:   Jaroslav Kysela <perex@perex.cz>
+To:     ALSA development <alsa-devel@alsa-project.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] kselftest: alsa: Use private alsa-lib configuration in mixer test
+Date:   Wed,  8 Dec 2021 10:52:09 +0100
+Message-Id: <20211208095209.1772296-1-perex@perex.cz>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbBwSV2IwDHNUrFH@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
-> On Wed, 08 Dec 2021, Greg KH wrote:
-> 
-> > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
-> > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
-> > > > Adds get/set driver data helpers for auxiliary devices.
-> > > > 
-> > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > > > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > > > ---
-> > > > V2
-> > > >   - No changes
-> > > > 
-> > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
-> > > >  1 file changed, 10 insertions(+)
-> > > 
-> > > I would really like to see an explanation why such obfuscation is really
-> > > needed. dev_*_drvdata() is a standard way to access driver data.
-> 
-> I wouldn't call it obfuscation, but it does looks like abstraction for
-> the sake of abstraction, which I usually push back on.  What are the
-> technical benefits over using the dev_*() variant?
+As mentined by Takashi Sakamoto, the system-wide alsa-lib configuration
+may override the standard device declarations. This patch use the private
+alsa-lib configuration to set the predictable environment.
 
-You can see it in Greg's answer, there is no technical benefits in any
-variant. It is simple copy/paste pattern from other buses.
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Link: https://lore.kernel.org/alsa-devel/Ya7TAHdMe9i41bsC@workstation/
+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
+---
+ tools/testing/selftests/alsa/mixer-test.c | 50 ++++++++++++++++++++++-
+ 1 file changed, 49 insertions(+), 1 deletion(-)
 
-Maybe it is not clear from my response, I don't care if this patch is
-going to be applied or not, but I would like to hear someone explains
-to me what are the benefits of such one liners.
-
-Thanks
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index b87475fb7372..0f533707484c 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -46,22 +46,68 @@ struct ctl_data {
+ 	struct ctl_data *next;
+ };
+ 
++static const char *alsa_config =
++"ctl.hw {\n"
++"	@args [ CARD ]\n"
++"	@args.CARD.type string\n"
++"	type hw\n"
++"	card $CARD\n"
++"}\n"
++;
++
+ int num_cards = 0;
+ int num_controls = 0;
+ struct card_data *card_list = NULL;
+ struct ctl_data *ctl_list = NULL;
+ 
++#if !defined(SND_LIB_VER) || SND_LIB_VERSION < SND_LIB_VER(1, 2, 6)
++int snd_config_load_string(snd_config_t **config, const char *s, size_t size)
++{
++	snd_input_t *input;
++	snd_config_t *dst;
++	int err;
++
++	assert(config && s);
++	if (size == 0)
++		size = strlen(s);
++	err = snd_input_buffer_open(&input, s, size);
++	if (err < 0)
++		return err;
++	err = snd_config_top(&dst);
++	if (err < 0) {
++		snd_input_close(input);
++		return err;
++	}
++	err = snd_config_load(dst, input);
++	snd_input_close(input);
++	if (err < 0) {
++		snd_config_delete(dst);
++		return err;
++	}
++	*config = dst;
++	return 0;
++}
++#endif
++
+ void find_controls(void)
+ {
+ 	char name[32];
+ 	int card, ctl, err;
+ 	struct card_data *card_data;
+ 	struct ctl_data *ctl_data;
++	snd_config_t *config;
+ 
+ 	card = -1;
+ 	if (snd_card_next(&card) < 0 || card < 0)
+ 		return;
+ 
++	err = snd_config_load_string(&config, alsa_config, strlen(alsa_config));
++	if (err < 0) {
++		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
++			       snd_strerror(err));
++		ksft_exit_fail();
++	}
++
+ 	while (card >= 0) {
+ 		sprintf(name, "hw:%d", card);
+ 
+@@ -71,7 +117,7 @@ void find_controls(void)
+ 			ksft_exit_fail();
+ 		}
+ 
+-		err = snd_ctl_open(&card_data->handle, name, 0);
++		err = snd_ctl_open_lconf(&card_data->handle, name, 0, config);
+ 		if (err < 0) {
+ 			ksft_print_msg("Failed to get hctl for card %d: %s\n",
+ 				       card, snd_strerror(err));
+@@ -147,6 +193,8 @@ void find_controls(void)
+ 			break;
+ 		}
+ 	}
++
++	snd_config_delete(config);
+ }
+ 
+ /*
+-- 
+2.31.1
