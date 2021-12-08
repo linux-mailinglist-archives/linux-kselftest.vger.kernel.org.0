@@ -2,112 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB4946D4E3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 14:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E04B46D4FD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 15:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbhLHN7f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 08:59:35 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:46905 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229490AbhLHN7f (ORCPT
+        id S234591AbhLHOHx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 09:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234558AbhLHOHx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 08:59:35 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 2A3A83200708;
-        Wed,  8 Dec 2021 08:56:02 -0500 (EST)
-Received: from imap41 ([10.202.2.91])
-  by compute3.internal (MEProxy); Wed, 08 Dec 2021 08:56:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type:content-transfer-encoding; s=fm3; bh=SR
-        cSXUjguzugv++L6GbsNqJ1cl64FxRyK9PgzZ60HBQ=; b=alpZsAThkgEkTMR3O0
-        4G9NiSO38e4DC6UhRVWQhHZKXVxZgATVGebcJHEGrA+rHSJsPBDfEtcFCO2exWb2
-        ln6aU5uq3NTkOOORSxr3CrkyTsp63q+uas4ipRukM5lOvWG8u/MCkz8vMOkcdzCI
-        fXUesKMsejvu2dxjT8+7BBWsiF75Lzps3R59FUKdmkLS+ucxOoZgYlNSPnLmWezJ
-        PDNCYI0USr0Vc1fqGvDtfzAGhV4HLq39gyMs2Xckfqv4WGdZiouKPOvJHe4nupmc
-        Mw8GuDle4oiqfxffXwLpCZDGMeBibiAfp4K0wyqBr0yIagNwL/VGjdxlwarRRKxH
-        o2Dg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=SRcSXUjguzugv++L6GbsNqJ1cl64FxRyK9PgzZ60H
-        BQ=; b=FuEjgipcDHx5TO9jF1dJki87fmzUMTYG/G2qzicKtTsJ5+7TsUuvq+PQv
-        nAr7ZohaC9jBY9sj8aiG5m1amRRt41n48bNeTeevXSaqjSNpn1WCBguupmzeUbNb
-        mudCQIAwF+bH/dnraxC7/aJ7wIswA4DexE7S0zU/MEd+rRu3VJda/1Y1bIAoaSSZ
-        GZIWkgLrdnzvGEFnu40xlh+nazE18xVt6uJ0KWuHVHiBZSWo9teNUuAQxkyCeI98
-        7oBuqcT0ht2Bf6IhHknOiPDpBhIf3yaPUtinGLBHSJEvlDUXE4yh8fcmygODLEzq
-        JjaVXEVBh7ZNxem+LMrIeAFX5g1TQ==
-X-ME-Sender: <xms:cLmwYWaW8GFUudzXy8aQY32mACU8tfhAVc-SA-6Chc8ir14DuztiSg>
-    <xme:cLmwYZbJjTymqljcdb9dHSOug-4tkxEwEz1HhJGZ77N0QGxHDq9NjJyqGWiaejEqP
-    z2sSLd3R8Cb-M49mlo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeekgdehjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdfvrghk
-    rghshhhiucfurghkrghmohhtohdfuceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthh
-    hirdhjpheqnecuggftrfgrthhtvghrnheptdefhedvkedtteevueefhedukeegudehheeh
-    tdeujeeukedvteettddtheeiuedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghk
-    rghshhhisehsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:cLmwYQ_xIw1OI6jM2vSgmdky2HIc1w4u0BvOeIjPJM4mUjTQCwWOWw>
-    <xmx:cLmwYYqJmGNfMIFvCLaNJ9iRhSWlUqnx65Yyh1jiVd2q1TChRBDJWA>
-    <xmx:cLmwYRpQACcFSMYvsVFqwYYQOB0AG9ZbjUrvayouLjXTJyQGyDu8YA>
-    <xmx:cbmwYSnDB5OAwsKqsdT54XKMDSatKOtkXkcmRs6go2RJvAtp1JczDA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 36E443C031B; Wed,  8 Dec 2021 08:56:00 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4492-g121c2470aa-fm-20211206.001-g121c2470
-Mime-Version: 1.0
-Message-Id: <76f28e78-0e9d-45ce-96a3-5c36f880ea6b@www.fastmail.com>
-In-Reply-To: <20211208095209.1772296-1-perex@perex.cz>
-References: <20211208095209.1772296-1-perex@perex.cz>
-Date:   Wed, 08 Dec 2021 22:55:41 +0900
-From:   "Takashi Sakamoto" <o-takashi@sakamocchi.jp>
-To:     "Jaroslav Kysela" <perex@perex.cz>,
-        "ALSA development" <alsa-devel@alsa-project.org>
-Cc:     "Takashi Iwai" <tiwai@suse.de>, "Mark Brown" <broonie@kernel.org>,
-        "Shuah Khan" <shuah@kernel.org>,
-        "Pierre-Louis Bossart" <pierre-louis.bossart@linux.intel.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest: alsa: Use private alsa-lib configuration in mixer test
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Wed, 8 Dec 2021 09:07:53 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57148C0617A1;
+        Wed,  8 Dec 2021 06:04:21 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id r25so8677021edq.7;
+        Wed, 08 Dec 2021 06:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TBUtI121OAYubHou6K+iGseMAQxpxuvDIj0cwDzNJqI=;
+        b=XDQoWKFfZPYKzdXWBFgZEyaaeck29w5cQxaeXX4rc0gfQs5YayoyqELY2PHCEdGmec
+         2/nQEGtosBLPuTR6/3UhXDXfQ0nJlBJ4eOqKGAF9IBgw/yKAs3mvDd/MI/+QJm7+Juve
+         Ag0GYsr/yQKjTjhlY4mYB/iXJ80Y8MzD+Vk3m7d/7BySn5F3KcZbHGhELfgdlwIc2LdQ
+         xuJdNHtb6k5yOfCbrObR6FAnlsDSeTpsiKyBX8sQIjRUXaZcCsABt5+bSIrx90L4w452
+         N4pprP86c8Z2FhkB7s2WQ6ot5TemC4zMgCPNCs6raJU2Wm2UOyVofvUqp2V0xCEFtkxq
+         aZJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TBUtI121OAYubHou6K+iGseMAQxpxuvDIj0cwDzNJqI=;
+        b=VpBabHT7iv8pfJn3gdzXti4qgQyAQ+Mfx30555LFN1Xfwtdfyf+q2isHTB12mo2pPE
+         EboMJ3sONdDIx7KoF8yza4zbXx+dnAwHBIOAD5ZZbRyBumkK72Dzp5gyPlQW1Ovhggtw
+         GrzPE9dWqcodDfElGgBL7ITNi3XCEY8xUGZGqIrJnBtNtPFBbQVZuLlXgKdqnXZWp6j3
+         bqCpyS+oq5jj4O5wc1+q7tzHiyyUk61qEB4hYW9kUJWiIKtUE6golpJ6UFhmGyRUAvuJ
+         +fJURGr2FS5kjOcdPFUpH1J2Kkj8SbHAZLhV+gtLyfYEI8OKm9uzciOSfHYbjQD1/lmy
+         +Uxg==
+X-Gm-Message-State: AOAM532kfwfdCRZqz3wuSPODK8Wo6CfLIM6vaqGHT6S9WVXcphOuXJ1t
+        77j6fEBjrqVI0WV3TwCfA8c=
+X-Google-Smtp-Source: ABdhPJzxxlC2sYuxVCXO3ljUM6bUbtDlrhVV5jS4H2NT8K4TCYMvtjT595/ZiKCqpu1ImdiaJ1vN/w==
+X-Received: by 2002:a17:907:9802:: with SMTP id ji2mr7921534ejc.418.1638972259854;
+        Wed, 08 Dec 2021 06:04:19 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id jg32sm1817512ejc.43.2021.12.08.06.04.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Dec 2021 06:04:19 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <111d46ba-0a9b-fdb2-d8c4-fe8045edc092@redhat.com>
+Date:   Wed, 8 Dec 2021 15:04:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: x86: selftests: svm_int_ctl_test: fix intercept
+ calculation
+Content-Language: en-US
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <49b9571d25588870db5380b0be1a41df4bbaaf93.1638486479.git.maciej.szmigiero@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 8, 2021, at 18:52, Jaroslav Kysela wrote:
-> As mentined by Takashi Sakamoto, the system-wide alsa-lib configuration
-> may override the standard device declarations. This patch use the priv=
-ate
-> alsa-lib configuration to set the predictable environment.
->
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Link: https://lore.kernel.org/alsa-devel/Ya7TAHdMe9i41bsC@workstation/
-> Signed-off-by: Jaroslav Kysela <perex@perex.cz>
+On 12/3/21 00:10, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> INTERCEPT_x are bit positions, but the code was using the raw value of
+> INTERCEPT_VINTR (4) instead of BIT(INTERCEPT_VINTR).
+> This resulted in masking of bit 2 - that is, SMI instead of VINTR.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 > ---
->  tools/testing/selftests/alsa/mixer-test.c | 50 ++++++++++++++++++++++-
->  1 file changed, 49 insertions(+), 1 deletion(-)
+>   tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
+> index df04f56ce859..30a81038df46 100644
+> --- a/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
+> @@ -75,7 +75,7 @@ static void l1_guest_code(struct svm_test_data *svm)
+>   	vmcb->control.int_ctl &= ~V_INTR_MASKING_MASK;
+>   
+>   	/* No intercepts for real and virtual interrupts */
+> -	vmcb->control.intercept &= ~(1ULL << INTERCEPT_INTR | INTERCEPT_VINTR);
+> +	vmcb->control.intercept &= ~(BIT(INTERCEPT_INTR) | BIT(INTERCEPT_VINTR));
+>   
+>   	/* Make a virtual interrupt VINTR_IRQ_NUMBER pending */
+>   	vmcb->control.int_ctl |= V_IRQ_MASK | (0x1 << V_INTR_PRIO_SHIFT);
+> 
 
-I'm not positively for the patch since it can take developers puzzled du=
-e to
-the symbol dependency newly introduced in unreleased version of alsa-lib.
-It's better to check the version of alsa-lib in Makefile to avoid develo=
-pers=E2=80=99dole
-if we have enough respect to embedded developers, especially forced to w=
-ork
-with legacy userspace. (and it often occurs).
+Queued, thanks.
 
-As a side note, I think it better to change symbol table (alsa-lib/src/V=
-ersions.in)
-if introducing new public symbol of c library.
-
-
-Regards
-
-Takashi Sakamoto
+Paolo
