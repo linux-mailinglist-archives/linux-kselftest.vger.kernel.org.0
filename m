@@ -2,119 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D082346D133
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 11:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DD946D158
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 11:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbhLHKqQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 05:46:16 -0500
-Received: from mga02.intel.com ([134.134.136.20]:61605 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229481AbhLHKqP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 05:46:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="225063546"
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="225063546"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 02:42:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,297,1631602800"; 
-   d="scan'208";a="600594517"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Dec 2021 02:42:43 -0800
-Received: from MahaWorkThinkPad.amr.corp.intel.com (MahaWorkThinkPad.amr.corp.intel.com [10.252.128.137])
-        by linux.intel.com (Postfix) with ESMTP id A39B95806D1;
-        Wed,  8 Dec 2021 02:42:42 -0800 (PST)
-Message-ID: <e4bbeeec741c186090dc3da4fecfab034dde8d0f.camel@linux.intel.com>
-Subject: Re: [V2 4/6] platform/x86: Add Intel Software Defined Silicon driver
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     lee.jones@linaro.org, hdegoede@redhat.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        id S231883AbhLHKwQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 05:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229475AbhLHKwQ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Dec 2021 05:52:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEB4C061746;
+        Wed,  8 Dec 2021 02:48:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2936B82089;
+        Wed,  8 Dec 2021 10:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54905C00446;
+        Wed,  8 Dec 2021 10:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638960521;
+        bh=aZCHSWMXNx/yJOGQvjgTK6Bw1r7H5PDORW4SOKvg2oA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XXS2a4SQPk7Vq/PRar4BbPA+s9HBID1MewzdG9Fgimuc6blGehYijv+j05LMYLj8D
+         fV1+pxfH1xA8EC93p5HYq2+00NJBzGtj+0Ew4Uvu9SajDp5AWEvpxhNXju2VEKG0ve
+         o1LnHkuNaArHN5gSa8wEbCXIhuvERe9CbbIAlGizGNmV9R2qlbHDiHYvMtqiMCySvF
+         LIAWt1YrvHoLi5vjfO2kBDu20EL9yOBo2uMOgCuCT9Od9zjVixqBn6BQYBDZ917d6X
+         AKv26JZzFtx+5QKSQ6t31tcALyIBUJvIjGwGRMG7fqfY90Zi/9QAh/9t3pn18KjoLZ
+         AexSGNgcVAxqA==
+Date:   Wed, 8 Dec 2021 12:48:36 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "David E. Box" <david.e.box@linux.intel.com>, lee.jones@linaro.org,
+        hdegoede@redhat.com, bhelgaas@google.com,
         srinivas.pandruvada@intel.com, shuah@kernel.org,
         mgross@linux.intel.com, linux-kernel@vger.kernel.org,
         platform-driver-x86@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Date:   Wed, 08 Dec 2021 02:42:42 -0800
-In-Reply-To: <YbBbZ+JMk9eEgNKl@unreal>
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <YbCNhAtiueFZ/hkJ@unreal>
 References: <20211207171448.799376-1-david.e.box@linux.intel.com>
-         <20211207171448.799376-5-david.e.box@linux.intel.com>
-         <YbBbZ+JMk9eEgNKl@unreal>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+ <20211207171448.799376-3-david.e.box@linux.intel.com>
+ <YbBYtJFQ47UH2h/k@unreal>
+ <YbBZuwXZWMV9uRXI@kroah.com>
+ <YbBtjSNz8z34czeN@unreal>
+ <YbBwOb6JvWkT3JWI@kroah.com>
+ <YbB29BaOWibImGf5@unreal>
+ <YbCFkQZvIDLtPJTR@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbCFkQZvIDLtPJTR@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2021-12-08 at 09:14 +0200, Leon Romanovsky wrote:
-> On Tue, Dec 07, 2021 at 09:14:46AM -0800, David E. Box wrote:
-> > Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
-> > activating additional silicon features. Features are enabled through a
-> > license activation process.  The SDSi driver provides a per socket, sysfs
-> > attribute interface for applications to perform 3 main provisioning
-> > functions:
+On Wed, Dec 08, 2021 at 12:14:41PM +0200, Andy Shevchenko wrote:
+> On Wed, Dec 08, 2021 at 11:12:20AM +0200, Leon Romanovsky wrote:
+> > On Wed, Dec 08, 2021 at 09:43:37AM +0100, Greg KH wrote:
+> 
+> ...
+> 
+> > The idea that you have two APIs which do the same thing, one is
+> > obfuscated version of another.
 > > 
-> > 1. Provision an Authentication Key Certificate (AKC), a key written to
-> >    internal NVRAM that is used to authenticate a capability specific
-> >    activation payload.
-> > 
-> > 2. Provision a Capability Activation Payload (CAP), a token authenticated
-> >    using the AKC and applied to the CPU configuration to activate a new
-> >    feature.
-> > 
-> > 3. Read the SDSi State Certificate, containing the CPU configuration
-> >    state.
-> > 
-> > The operations perform function specific mailbox commands that forward the
-> > requests to SDSi hardware to perform authentication of the payloads and
-> > enable the silicon configuration (to be made available after power
-> > cycling).
-> > 
-> > The SDSi device itself is enumerated as an auxiliary device from the
-> > intel_vsec driver and as such has a build dependency on CONFIG_INTEL_VSEC.
-> > 
-> > Link: https://github.com/intel/intel-sdsi
-> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> > Reviewed-by: Mark Gross <markgross@kernel.org>
-> > ---
-> > V2
-> >   - Use sysfs_emit() in guid_show()
-> >   - Fix language in ABI, suggested by Bjorn
-> >   - Fix wrong directory name in ABI doc
+> > If you don't want from people to use driver core function and structures,
+> > you shouldn't expose them in global headers.
 > 
-> <...>
+> For all these APIs the rationale is very simple. If you have callback that
+> takes a pointer to the container (*), you better use the APIs related to
+> this container (no need to have an explicit dereferencing). Otherwise you
+> use dev_*() APIs (when it's pointer to the pure struct device).
 > 
-> > @@ -0,0 +1,77 @@
-> > +What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X
+> The value is to have coherent APIs around struct device containers.
 > 
-> <...>
-> 
-> > +static const struct auxiliary_device_id sdsi_aux_id_table[] = {
-> > +	{ .name = "intel_vsec.sdsi" },
-> 
-> Are you sure that this sysfs is correct?
-> 
-> Auxiliary bus set device name as a combination of module name plus suffix.
-> 
->   172 int __auxiliary_device_add(struct auxiliary_device *auxdev, const char
-> *modname)
->   173 {
->   174         struct device *dev = &auxdev->dev;
->   175         int ret;
->  ....
->   181
->   182         ret = dev_set_name(dev, "%s.%s.%d", modname, auxdev->name,
-> auxdev->id);
-> 
-> Thanks
-
-Yes. 'intel_vsec' is the module name, 'sdsi' is the suffix, and 'X' is meant to
-indicate the unique id. Will change to '*' instead of 'X'.
+> *) under container here I assume the data structure that has the embedded
+>    struct device in it.
 
 Thanks
 
-David
-
+> 
+ -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
