@@ -2,165 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8B146CBF5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 05:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4704946CD92
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 07:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbhLHEKj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Dec 2021 23:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbhLHEKi (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:10:38 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52ABDC061746;
-        Tue,  7 Dec 2021 20:07:07 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso1520769otf.0;
-        Tue, 07 Dec 2021 20:07:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J1Cas4poEz1Mrdo4InZGCavY0d12rgjaEauykbzPkok=;
-        b=YCkDBbWf67pMleWLVuIen/Zr+LpsjyrRgQ/6A/xDIowIiNNGtFgZM95/+AiuX7j/i6
-         ClGbspx4jl2Y7EugAYuX7NIJbzorIYpVBKKjG0hFQ3KMBiTkbOQcgvTPv1+0MK6Wz72u
-         B5gLbqyAlwb4AFoMG+rhxgsmz5QVXThGvZCrT9BtmV7PeVI8j3Xrd4VlmFYN+OyYTKLs
-         fHdyaijwo8SP9HWsF7Yv6Zh1K6IfkX8F6fo/c0g0hLGSCmdXeS8PDebFbna4kpQiZBss
-         8yjHEMxgDo7lT6aiFpiZnrgIbHCfcwvfsMYNq4gd+pYdpwk6yiBnQNuiUAehlBTt4cHG
-         ZSsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J1Cas4poEz1Mrdo4InZGCavY0d12rgjaEauykbzPkok=;
-        b=qF64iM0WcxvGtlXvS4fZtlVnwgXTWeIugmwaDDH5NeGjQj3ejo1OueQVzRoqrWJnMV
-         nAmlRLodfWWWfvmtIaUfIQH3tQAEjFrDkBdbqlMLuTkBgRoe/W2UnylQyHPFWRAkzDFg
-         nWvdhcs2UBBNCjf2VHCtHXD7rQHqA9/SA8CZSttgavnThGNjb7TjBYQHHrit4uKs5T15
-         tBg3q+RVzLuay1jQfF5qPAXZ8tYhL5mqw8ew8ULpU+1bhZ+FgOdFeUW6GHXWeG07Jox1
-         I7A5/0ZHmEVBiI5+A1Q4muXkNsedE0TZA2vGBPNOJ+zqknmSzzlB1yQCxSeSQXhUy4mk
-         hBjA==
-X-Gm-Message-State: AOAM531V0Cxc/tJchbq+0I2TfMIg9wj51tEANgThnFaavhFpjjwJjIpo
-        Ry5+P12eTNG787Ooullx3ls=
-X-Google-Smtp-Source: ABdhPJxHIf9QDS8tU0ZqQ6vjrWGOzD878CLx/Vneend68ixdAvJcbizcGAQJ8wTpGgMnEVR/qd0D6g==
-X-Received: by 2002:a05:6830:1447:: with SMTP id w7mr38520417otp.199.1638936426673;
-        Tue, 07 Dec 2021 20:07:06 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id i3sm314651ooq.39.2021.12.07.20.07.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 20:07:06 -0800 (PST)
-Message-ID: <8e3bb197-3f56-a9a7-b75d-4a6343276ec7@gmail.com>
-Date:   Tue, 7 Dec 2021 21:07:04 -0700
+        id S237770AbhLHGT5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 01:19:57 -0500
+Received: from mga17.intel.com ([192.55.52.151]:61251 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237627AbhLHGT4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Dec 2021 01:19:56 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="218448458"
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="218448458"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 22:16:24 -0800
+X-IronPort-AV: E=Sophos;i="5.87,296,1631602800"; 
+   d="scan'208";a="462645326"
+Received: from cxia1-mobl.ccr.corp.intel.com (HELO lkp-zhoujie.ccr.corp.intel.com) ([10.255.28.13])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 22:16:20 -0800
+From:   Jie2x Zhou <jie2x.zhou@intel.com>
+To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        dsahern@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com, xinjianx.ma@intel.com,
+        zhijianx.li@intel.com, Philip Li <philip.li@intel.com>,
+        zhoujie <zhoujie2011@fujitsu.com>,
+        Jie2x Zhou <jie2x.zhou@intel.com>
+Subject: [PATCH] selftests: net: Correct ping6 expected rc from 2 to 1
+Date:   Wed,  8 Dec 2021 14:15:18 +0800
+Message-Id: <20211208061518.61668-1-jie2x.zhou@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v2] selftests: net: Correct case name
-Content-Language: en-US
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jie2x Zhou <jie2x.zhou@intel.com>,
-        "Li Zhijian(intel)" <zhijianx.li@intel.com>
-References: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
- <bbb91e78-018f-c09c-47db-119010c810c2@fujitsu.com>
- <41a78a37-6136-ba45-d8fa-c7af4ee772b9@gmail.com>
- <4d92af7d-5a84-4a5d-fd98-37f969ac4c23@fujitsu.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <4d92af7d-5a84-4a5d-fd98-37f969ac4c23@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/7/21 8:38 PM, lizhijian@fujitsu.com wrote:
-> 
-> 
-> On 08/12/2021 11:14, David Ahern wrote:
->> On 12/6/21 11:05 PM, lizhijian@fujitsu.com wrote:
->>>> # TESTS=bind6 ./fcnal-test.sh
->>>>
->>>> ###########################################################################
->>>> IPv6 address binds
->>>> ###########################################################################
->>>>
->>>>
->>>> #################################################################
->>>> No VRF
->>>>
->>>> TEST: Raw socket bind to local address - ns-A IPv6                            [FAIL]
->> This one passes for me.
-> Err, i didn't notice this one when i sent this mail. Since it was passed too in my
-> previous multiple runs.
-> 
-> 
-> 
-> 
->>
->> Can you run the test with '-v -p'? -v will give you the command line
->> that is failing. -p will pause the tests at the failure. From there you
->> can do:
->>
->> ip netns exec ns-A bash
->>
->> Look at the routing - no VRF is involved so the address should be local
->> to the device and the loopback. Run the test manually to see if it
->> really is failing.
-> 
-> thanks for your advice, i will take a look if it appears again.
-> 
-> 
-> 
->>
->>
->>>> TEST: Raw socket bind to local address after device bind - ns-A IPv6          [ OK ]
->>>> TEST: Raw socket bind to local address - ns-A loopback IPv6                   [ OK ]
->>>> TEST: Raw socket bind to local address after device bind - ns-A loopback IPv6  [ OK ]
->>>> TEST: TCP socket bind to local address - ns-A IPv6                            [ OK ]
->>>> TEST: TCP socket bind to local address after device bind - ns-A IPv6          [ OK ]
->>>> TEST: TCP socket bind to out of scope local address - ns-A loopback IPv6      [FAIL]
->> This one seems to be a new problem. The socket is bound to eth1 and the
->> address bind is to an address on loopback. That should not be working.
+From: zhoujie <zhoujie2011@fujitsu.com>
 
-actually that one should be commented out similar to the test at the end
-of ipv4_addr_bind_novrf. It documents unexpected behavior - binding to a
-device should limit the addresses it can bind to but the kernel does
-not. Legacy behavior.
+./fcnal-test.sh -v -t ipv6_ping
+TEST: ping out, VRF bind - ns-B IPv6 LLA                                      [FAIL]
+TEST: ping out, VRF bind - multicast IP                                       [FAIL]
 
-> 
-> My colleague had another thread with the verbose detailed message
-> https://lore.kernel.org/netdev/PH0PR11MB4792DC680F7E383D72C2E8C5C56E9@PH0PR11MB4792.namprd11.prod.outlook.com/
-> 
-> 
-> 
->>
->>>> #################################################################
->>>> With VRF
->>>>
->>>> TEST: Raw socket bind to local address after vrf bind - ns-A IPv6             [ OK ]
->>>> TEST: Raw socket bind to local address after device bind - ns-A IPv6          [ OK ]
->>>> TEST: Raw socket bind to local address after vrf bind - VRF IPv6              [ OK ]
->>>> TEST: Raw socket bind to local address after device bind - VRF IPv6           [ OK ]
->>>> TEST: Raw socket bind to invalid local address after vrf bind - ns-A loopback IPv6  [ OK ]
->>>> TEST: TCP socket bind to local address with VRF bind - ns-A IPv6              [ OK ]
->>>> TEST: TCP socket bind to local address with VRF bind - VRF IPv6               [ OK ]
->>>> TEST: TCP socket bind to local address with device bind - ns-A IPv6           [ OK ]
->>>> TEST: TCP socket bind to VRF address with device bind - VRF IPv6              [FAIL]
->> This failure is similar to the last one. Need to see if a recent commit
->> changed something.
-> 
+ping6 is failing as it should.
+COMMAND: ip netns exec ns-A /bin/ping6 -c1 -w1 fe80::7c4c:bcff:fe66:a63a%red
+strace of ping6 shows it is failing with '1',
+so change the expected rc from 2 to 1.
 
-similarly here. Want to send a patch that comments them out with the
-same explanation as in ipv4_addr_bind_novrf?
+Fixes: c0644e71df33 ("selftests: Add ipv6 ping tests to fcnal-test")
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: David Ahern <dsahern@gmail.com>
+Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+---
+ tools/testing/selftests/net/fcnal-test.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both fail on v5.8 so I do not believe a recent change affected either
-test. I guess these bind tests slipped through the cracks with the
-misname in the TESTS variable. Thanks for the patch to fix that.
-
-Also, make sure you always cc the author of the Fixes tag when sending
-patches.
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 7f5b265fcb90..966787c2f9f0 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -2191,7 +2191,7 @@ ipv6_ping_vrf()
+ 		log_start
+ 		show_hint "Fails since VRF device does not support linklocal or multicast"
+ 		run_cmd ${ping6} -c1 -w1 ${a}
+-		log_test_addr ${a} $? 2 "ping out, VRF bind"
++		log_test_addr ${a} $? 1 "ping out, VRF bind"
+ 	done
+ 
+ 	for a in ${NSB_IP6} ${NSB_LO_IP6} ${NSB_LINKIP6}%${NSA_DEV} ${MCAST}%${NSA_DEV}
+-- 
+2.31.1
 
