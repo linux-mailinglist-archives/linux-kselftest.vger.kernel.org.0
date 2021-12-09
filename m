@@ -2,71 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4AB46E0AC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 03:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFBD46E870
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 13:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbhLICGw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 21:06:52 -0500
-Received: from mga17.intel.com ([192.55.52.151]:9219 "EHLO mga17.intel.com"
+        id S229862AbhLIMbI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Dec 2021 07:31:08 -0500
+Received: from mga18.intel.com ([134.134.136.126]:16894 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229534AbhLICGw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:06:52 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218682638"
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="218682638"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:03:11 -0800
-X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="503306622"
-Received: from cxia1-mobl.ccr.corp.intel.com (HELO lkp-zhoujie.ccr.corp.intel.com) ([10.255.28.13])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:03:06 -0800
-From:   Jie2x Zhou <jie2x.zhou@intel.com>
-To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        dsahern@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com, xinjianx.ma@intel.com,
-        zhijianx.li@intel.com, Philip Li <philip.li@intel.com>,
-        Jie2x Zhou <jie2x.zhou@intel.com>
-Subject: [PATCH v3] selftests: net: Correct ping6 expected rc from 2 to 1
-Date:   Thu,  9 Dec 2021 10:02:30 +0800
-Message-Id: <20211209020230.37270-1-jie2x.zhou@intel.com>
-X-Mailer: git-send-email 2.20.1
+        id S229919AbhLIMbI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Dec 2021 07:31:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224953760"
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="224953760"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:27:35 -0800
+X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
+   d="scan'208";a="463213461"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 04:27:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mvIVO-0045Cv-SP;
+        Thu, 09 Dec 2021 14:26:34 +0200
+Date:   Thu, 9 Dec 2021 14:26:34 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: [PATCH v1 1/1] kunit: Replace kernel.h with the necessary
+ inclusions
+Message-ID: <YbH1+gYYh3/s+KAp@smile.fi.intel.com>
+References: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211110103552.60181-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-./fcnal-test.sh -v -t ipv6_ping
-TEST: ping out, VRF bind - ns-B IPv6 LLA                                      [FAIL]
-TEST: ping out, VRF bind - multicast IP                                       [FAIL]
+On Wed, Nov 10, 2021 at 12:35:52PM +0200, Andy Shevchenko wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+> 
+> Replace kernel.h inclusion with the list of what is really being used.
 
-ping6 is failing as it should.
-COMMAND: ip netns exec ns-A /bin/ping6 -c1 -w1 fe80::7c4c:bcff:fe66:a63a%red
-strace of ping6 shows it is failing with '1',
-so change the expected rc from 2 to 1.
+Folks, this patch is dated month ago and nothing in return.
 
-Fixes: c0644e71df33 ("selftests: Add ipv6 ping tests to fcnal-test")
-Reported-by: kernel test robot <lkp@intel.com>
-Suggested-by: David Ahern <dsahern@gmail.com>
-Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
----
- tools/testing/selftests/net/fcnal-test.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Does the Kunit subsystem abandoned / orphaned? Should I send and update
+to MAINTAINERS? Should I escalate this?
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 7f5b265fcb90..966787c2f9f0 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -2191,7 +2191,7 @@ ipv6_ping_vrf()
- 		log_start
- 		show_hint "Fails since VRF device does not support linklocal or multicast"
- 		run_cmd ${ping6} -c1 -w1 ${a}
--		log_test_addr ${a} $? 2 "ping out, VRF bind"
-+		log_test_addr ${a} $? 1 "ping out, VRF bind"
- 	done
- 
- 	for a in ${NSB_IP6} ${NSB_LO_IP6} ${NSB_LINKIP6}%${NSA_DEV} ${MCAST}%${NSA_DEV}
 -- 
-2.31.1
+With Best Regards,
+Andy Shevchenko
+
 
