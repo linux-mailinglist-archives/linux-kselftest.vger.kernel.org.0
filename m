@@ -2,108 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1466946DE00
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Dec 2021 23:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EAD46DFCF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 01:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239989AbhLHWKE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 17:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S241627AbhLIA6R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 19:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbhLHWKD (ORCPT
+        with ESMTP id S241622AbhLIA6R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 17:10:03 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1485C061746
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 14:06:31 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id j21so3563329ila.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Dec 2021 14:06:31 -0800 (PST)
+        Wed, 8 Dec 2021 19:58:17 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8185AC061746
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 16:54:44 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so4583582otj.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Dec 2021 16:54:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Qgjw9+9lL3xAImaF5HZygUwNAxWz9liV5VfwAbG8uCY=;
-        b=MWbxU3nAgs6ZlUx4tYXOELJZcOwF2SnWET+yXIKrCX65kEZtmOSyQCnLEYUeilNT7m
-         ZEXecdERmWP6pyDmPOb3hgpWXSz5afwXSa9MVG4Om1rw5BDjcDQfq4RVxK3PGrIV3mXb
-         IaZfTdk2CgX3Ollv/iXsuxUH4lcOsI9bYKuqg=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oayw19YcubpFrAM2rcGj+T1Oq/bzfF0MfoBjvEgDhvY=;
+        b=DrC9twi4Lta/weWbKj7I1tdRFQUzvZcDA4bRPMXw/xdzUC5w/r7G4HputChGNvDqDi
+         H761KnA9rgUpg32HJOuMzcbMRLV3n/Dl0ekGuVRBniHdYULujTaZ7DtTn9Y6F5AUZ4cU
+         XPTEIPo7Nssr618Oxgciyvxi1LGYYHvWGJ3yPZR1yvp4aQWx8wm8pn5O6RwwRY/oePTH
+         lUdzs4Xoq+plOyFsgXSXHQv0Ef6BRemc4znW09nkfnZQLRCmX8miDDZQJ0N1XcXXddQM
+         iFY9ss/q7GfZe1N+dB7WdlAS37UecYu5sCRGWGCEM/b7/f3plB8jTT2oK86tWZVGStmA
+         Tb0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Qgjw9+9lL3xAImaF5HZygUwNAxWz9liV5VfwAbG8uCY=;
-        b=Tp/8arLuvvzNCFF8CzS1tyZntKPB0Ppl1qUnDbybzBep+lWpC9QmjcaSRsd3ozBxKr
-         wg96wDQ0RlMxn17p4Akk4KvXdYoCYlgg3DJtDOpsj5/n1s1am925vTKvaipBhg4/RT+8
-         DoJ5QeWj3CDCyWM9Ie8wJXPoiP6NVOHNiUn7/HV6f00Y5iE5S3Wq7TAeSmo837W/Abhp
-         hraGINpeJqZ2mMwdQMRWK8oshFBO/EHDXSXx0f0ewRthhn242K0ntNaMBNEn7DGRxviI
-         7SNERA7euLm/wUIrLOVz6pXzsyA3MaBPCvtTGTGYrDCm/E6CNidlO1EQsQivCGEyXsZW
-         KSfA==
-X-Gm-Message-State: AOAM532DJtIVD/bzc3O2Oy6KB9rexLxveNKFlc+F17MbplMytRbZ1wO1
-        X7KOFSPmJJ2DQzXINh37OrzzdA==
-X-Google-Smtp-Source: ABdhPJy54p0dG794taCZs5Slo3XmDWJqbp6em0OEz64G9t5tSEJdZS44LKPnAN2BvXgvhGjK9JtqNw==
-X-Received: by 2002:a05:6e02:1090:: with SMTP id r16mr10336398ilj.208.1639001191140;
-        Wed, 08 Dec 2021 14:06:31 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id r18sm2417986ilh.59.2021.12.08.14.06.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Dec 2021 14:06:30 -0800 (PST)
-Subject: Re: [PATCH v3 3/3] kselftest: alsa: Use private alsa-lib
- configuration in mixer test
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211208211745.533603-1-broonie@kernel.org>
- <20211208211745.533603-4-broonie@kernel.org>
- <b76dd5e0-56ba-79f4-21c2-ac5455d7fd65@linuxfoundation.org>
- <YbEnPzSO0HKHd8uX@sirena.org.uk>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <806397d0-894a-0f86-bf73-30deb3d3c0d5@linuxfoundation.org>
-Date:   Wed, 8 Dec 2021 15:06:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oayw19YcubpFrAM2rcGj+T1Oq/bzfF0MfoBjvEgDhvY=;
+        b=peeQNDUfITSgl582iWtoh0YvdSFD6I7+nLUzL+z1eQKo/MIZKqM1VWY02slkq46G9O
+         y2SlChV/NjbyN4mCe7DT+02QdvmUvUcom93XcPwBbxX2e5xZt4NBeJCZbvFEBfXBe5Gv
+         asdZlU2TEFRYLnnGv8sENJT/jgBK3DHKocvXcoYPRVASVmJFnuMTmqH8rhZXq9JkdMxX
+         C6z8gJqfNkulSquIZv3nFh4eUoqdGaJiTaDbmxW+ZQ7yXTk7pVt67MKCb+rCCU5OGXCL
+         4m4gsOmTMfbxM5RmfBlddO3IfRT014UkdFfn7f6Qmty7WaddYJd8rJ7hz0GU6gJya6Za
+         +U9g==
+X-Gm-Message-State: AOAM5316Uvr7bkW7RYLznhPVNrYrGVKIOs8oWJPc20fcoG2Vk9Po+Psb
+        OCvkRCqrJUqAky649smFk9C6Y5ogk/8uL2As6D7Enw==
+X-Google-Smtp-Source: ABdhPJzGomSzkekQE828bfIUo/WHIX1ZFsfqM14FCi2GjwhNdEgjuJeCXj0n+HSC4lxJQZf70dA/USaOLKrkkQOCskw=
+X-Received: by 2002:a9d:74d0:: with SMTP id a16mr2615930otl.237.1639011283934;
+ Wed, 08 Dec 2021 16:54:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YbEnPzSO0HKHd8uX@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211207093412.27833-1-brgl@bgdev.pl>
+In-Reply-To: <20211207093412.27833-1-brgl@bgdev.pl>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 9 Dec 2021 01:54:32 +0100
+Message-ID: <CACRpkdbAs+ZpU_uQziXmz2inPG7VHD=746MmjmR8iY3szfy9+w@mail.gmail.com>
+Subject: Re: [PATCH v13 0/7] gpio-sim: configfs-based GPIO simulator
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/8/21 2:44 PM, Mark Brown wrote:
-> On Wed, Dec 08, 2021 at 02:27:34PM -0700, Shuah Khan wrote:
-> 
->>>    		}
->>>    	}
->>> +
->>> +	snd_config_delete(config);
->>>    }
->>>    /*
-> 
->> This open comment at the end of the patch looks odd. Does this compile?
-> 
-> Yes, it's the start of the comment describing the next function, more
-> complete context is:
-> 
-> 		}
-> 
-> 		snd_config_delete(config);
-> 	}
-> 
-> 	/*
-> 	 * Check that we can read the default value and it is valid. Write
-> 	 * tests use the read value to restore the default.
-> 	 */
-> 	void test_ctl_get_value(struct ctl_data *ctl)
-> 	{
-> 
+On Tue, Dec 7, 2021 at 10:34 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Yes my bad :)
+> Hopefully this will be the last iteration of this series. Just some
+> minor changes requested by Andy in this one.
+>
+> Tested both with configfs as well as device-tree.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+This patch set:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-thanks,
--- Shuah
+Thanks for your perseverance!!
+
+Yours,
+Linus Walleij
