@@ -2,116 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EE246F2F0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 19:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B932246F34C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 19:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243272AbhLIS0Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Dec 2021 13:26:24 -0500
-Received: from mga07.intel.com ([134.134.136.100]:30383 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243261AbhLIS0R (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Dec 2021 13:26:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639074163; x=1670610163;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=ENil27vacgSzqQke9zCeMru1KV8VKz8lWQWNM7TAIts=;
-  b=JH+jYV1eeiXh1+KB3jzgU/3MVnTxOSVW9mzayR+7Sq90oT46SqEiHgRi
-   OnW6fufzU6T78CU2YQZdR1YjjFpLOPVLCCCquOLPWRO0K8AqtmmRY5YWw
-   yrGhVCAjXUxAcRYRoO7vUv75nKPwMsSTrVmq6UR4n4D/GnuyplKOikOX+
-   nqsUb4JWQhC2F9Y4mRzJoVWnNfusVGuoRbS9vsrP6PzO9o13FHOe8Rl63
-   zXmjcpmLmDevo/q5+G6NdwULeFMtLLx5tIDVwxlLEuxDNdMxN1rotxMgn
-   pDyCwQdVGTLKPZ0W7Yd1NZRheb2/Q5tga7cLS70PA6o+Qcgieaou05OEz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="301558539"
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="301558539"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:22:43 -0800
-X-IronPort-AV: E=Sophos;i="5.88,193,1635231600"; 
-   d="scan'208";a="606994929"
-Received: from ygopalx-mobl2.amr.corp.intel.com (HELO [10.209.34.80]) ([10.209.34.80])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 10:22:42 -0800
-Subject: Re: [RFC PATCH v5 1/2] selftests/x86: add xsave test during and after
- signal handling
-To:     Pengfei Xu <pengfei.xu@intel.com>,
+        id S229529AbhLISpM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Dec 2021 13:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229487AbhLISpM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Dec 2021 13:45:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C776C061746
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 10:41:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3DD42CE27AF
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 18:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91CC0C004DD;
+        Thu,  9 Dec 2021 18:41:31 +0000 (UTC)
+Date:   Thu, 9 Dec 2021 18:41:26 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Heng Su <heng.su@intel.com>, Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-References: <cover.1638513720.git.pengfei.xu@intel.com>
- <3f02d300118abfb581d85519b733a2db2bb44b10.1638513720.git.pengfei.xu@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <3f59a9d9-27e6-e6b2-98ff-c18924979cc4@intel.com>
-Date:   Thu, 9 Dec 2021 10:22:42 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 13/37] arm64/sme: Basic enumeration support
+Message-ID: <YbJN1ujpDP1RG1Ll@arm.com>
+References: <20211115152835.3212149-1-broonie@kernel.org>
+ <20211115152835.3212149-14-broonie@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <3f02d300118abfb581d85519b733a2db2bb44b10.1638513720.git.pengfei.xu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115152835.3212149-14-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/2/21 11:32 PM, Pengfei Xu wrote:
-> +void populate_xstate_regs(void)
-> +{
-> +	set_fpu_reg();
-> +	set_avx2_ymm();
-> +	set_avx512_opmask();
-> +	set_pkru_xstate();
-> +}
+On Mon, Nov 15, 2021 at 03:28:11PM +0000, Mark Brown wrote:
+> diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
+> index 7b23b16f21ce..6f8ca04b6566 100644
+> --- a/arch/arm64/include/uapi/asm/hwcap.h
+> +++ b/arch/arm64/include/uapi/asm/hwcap.h
+> @@ -76,5 +76,13 @@
+>  #define HWCAP2_BTI		(1 << 17)
+>  #define HWCAP2_MTE		(1 << 18)
+>  #define HWCAP2_ECV		(1 << 19)
+> +#define HWCAP2_SME		(1 << 20)
+> +#define HWCAP2_SME_I16I64	(1 << 21)
+> +#define HWCAP2_SME_F64F64	(1 << 22)
+> +#define HWCAP2_SME_I8I32	(1 << 23)
+> +#define HWCAP2_SME_F16F32	(1 << 24)
+> +#define HWCAP2_SME_B16F32	(1 << 25)
+> +#define HWCAP2_SME_F32F32	(1 << 26)
+> +#define HWCAP2_SME_FA64		(1 << 27)
 
-Pengfei, as I mentioned several times, XMM and YMM registers are not
-preserved across function calls.  This only works by chance.  The
-compiler is free to clobber them at basically any time between when they
-are populated and the XSAVE happens.
+At this pace we'll need HWCAP3 pretty soon (since we only allocated
+32-bit in each). I wonder whether we could instead not bother at all and
+just provide user-space emulation for ID_AA64SMFR0_EL1.
+
+>  #endif /* _UAPI__ASM_HWCAP_H */
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 81824c7ea74f..3cf60819c354 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -246,6 +246,7 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
+>  };
+>  
+>  static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
+> +	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_SME_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_MPAMFRAC_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_RASFRAC_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_MTE),
+> @@ -278,6 +279,24 @@ static const struct arm64_ftr_bits ftr_id_aa64zfr0[] = {
+>  	ARM64_FTR_END,
+>  };
+>  
+> +static const struct arm64_ftr_bits ftr_id_aa64smfr0[] = {
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_FA64_SHIFT, 1, 0),
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_I16I64_SHIFT, 4, 0),
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F64F64_SHIFT, 1, 0),
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_I8I32_SHIFT, 4, 0),
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F16F32_SHIFT, 1, 0),
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_B16F32_SHIFT, 1, 0),
+> +	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+> +		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F32F32_SHIFT, 1, 0),
+> +	ARM64_FTR_END,
+> +};
+> +
+>  static const struct arm64_ftr_bits ftr_id_aa64mmfr0[] = {
+>  	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR0_ECV_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR0_FGT_SHIFT, 4, 0),
+> @@ -628,6 +647,7 @@ static const struct __ftr_reg_entry {
+>  	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64PFR1_EL1, ftr_id_aa64pfr1,
+>  			       &id_aa64pfr1_override),
+>  	ARM64_FTR_REG(SYS_ID_AA64ZFR0_EL1, ftr_id_aa64zfr0),
+> +	ARM64_FTR_REG(SYS_ID_AA64SMFR0_EL1, ftr_id_aa64smfr0),
+>  
+>  	/* Op1 = 0, CRn = 0, CRm = 5 */
+>  	ARM64_FTR_REG(SYS_ID_AA64DFR0_EL1, ftr_id_aa64dfr0),
+> @@ -939,6 +959,7 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+>  	init_cpu_ftr_reg(SYS_ID_AA64PFR0_EL1, info->reg_id_aa64pfr0);
+>  	init_cpu_ftr_reg(SYS_ID_AA64PFR1_EL1, info->reg_id_aa64pfr1);
+>  	init_cpu_ftr_reg(SYS_ID_AA64ZFR0_EL1, info->reg_id_aa64zfr0);
+> +	init_cpu_ftr_reg(SYS_ID_AA64SMFR0_EL1, info->reg_id_aa64smfr0);
+>  
+>  	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
+>  		init_32bit_cpu_features(&info->aarch32);
+> @@ -2370,6 +2391,30 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+>  		.matches = has_cpuid_feature,
+>  		.min_field_value = 1,
+>  	},
+> +#ifdef CONFIG_ARM64_SME
+> +	{
+> +		.desc = "Scalable Matrix Extension",
+> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> +		.capability = ARM64_SME,
+> +		.sys_reg = SYS_ID_AA64PFR1_EL1,
+> +		.sign = FTR_UNSIGNED,
+> +		.field_pos = ID_AA64PFR1_SME_SHIFT,
+> +		.min_field_value = ID_AA64PFR1_SME,
+> +		.matches = has_cpuid_feature,
+> +		.cpu_enable = sme_kernel_enable,
+> +	},
+> +	{
+> +		.desc = "FA64",
+> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+> +		.capability = ARM64_SME_FA64,
+> +		.sys_reg = SYS_ID_AA64SMFR0_EL1,
+> +		.sign = FTR_UNSIGNED,
+> +		.field_pos = ID_AA64SMFR0_FA64_SHIFT,
+> +		.min_field_value = ID_AA64SMFR0_FA64,
+> +		.matches = has_feature_flag,
+> +		.cpu_enable = fa64_kernel_enable,
+> +	},
+
+I'll comment here rather than the patch introducing has_feature_flag():
+an alternative would be to add a .field_width option and in
+feature_matches() use cpuid_feature_extract_field_width() directly. All
+the arm64_ftr_bits entries already have a width, so just generalise it
+for arm64_cpu_capabilities.
+
+-- 
+Catalin
