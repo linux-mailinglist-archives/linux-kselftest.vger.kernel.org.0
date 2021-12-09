@@ -2,79 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EAD46DFCF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 01:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA7446E037
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 02:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241627AbhLIA6R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 19:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S230349AbhLIB0m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 20:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241622AbhLIA6R (ORCPT
+        with ESMTP id S229520AbhLIB0m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 19:58:17 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8185AC061746
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Dec 2021 16:54:44 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so4583582otj.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Dec 2021 16:54:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oayw19YcubpFrAM2rcGj+T1Oq/bzfF0MfoBjvEgDhvY=;
-        b=DrC9twi4Lta/weWbKj7I1tdRFQUzvZcDA4bRPMXw/xdzUC5w/r7G4HputChGNvDqDi
-         H761KnA9rgUpg32HJOuMzcbMRLV3n/Dl0ekGuVRBniHdYULujTaZ7DtTn9Y6F5AUZ4cU
-         XPTEIPo7Nssr618Oxgciyvxi1LGYYHvWGJ3yPZR1yvp4aQWx8wm8pn5O6RwwRY/oePTH
-         lUdzs4Xoq+plOyFsgXSXHQv0Ef6BRemc4znW09nkfnZQLRCmX8miDDZQJ0N1XcXXddQM
-         iFY9ss/q7GfZe1N+dB7WdlAS37UecYu5sCRGWGCEM/b7/f3plB8jTT2oK86tWZVGStmA
-         Tb0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oayw19YcubpFrAM2rcGj+T1Oq/bzfF0MfoBjvEgDhvY=;
-        b=peeQNDUfITSgl582iWtoh0YvdSFD6I7+nLUzL+z1eQKo/MIZKqM1VWY02slkq46G9O
-         y2SlChV/NjbyN4mCe7DT+02QdvmUvUcom93XcPwBbxX2e5xZt4NBeJCZbvFEBfXBe5Gv
-         asdZlU2TEFRYLnnGv8sENJT/jgBK3DHKocvXcoYPRVASVmJFnuMTmqH8rhZXq9JkdMxX
-         C6z8gJqfNkulSquIZv3nFh4eUoqdGaJiTaDbmxW+ZQ7yXTk7pVt67MKCb+rCCU5OGXCL
-         4m4gsOmTMfbxM5RmfBlddO3IfRT014UkdFfn7f6Qmty7WaddYJd8rJ7hz0GU6gJya6Za
-         +U9g==
-X-Gm-Message-State: AOAM5316Uvr7bkW7RYLznhPVNrYrGVKIOs8oWJPc20fcoG2Vk9Po+Psb
-        OCvkRCqrJUqAky649smFk9C6Y5ogk/8uL2As6D7Enw==
-X-Google-Smtp-Source: ABdhPJzGomSzkekQE828bfIUo/WHIX1ZFsfqM14FCi2GjwhNdEgjuJeCXj0n+HSC4lxJQZf70dA/USaOLKrkkQOCskw=
-X-Received: by 2002:a9d:74d0:: with SMTP id a16mr2615930otl.237.1639011283934;
- Wed, 08 Dec 2021 16:54:43 -0800 (PST)
+        Wed, 8 Dec 2021 20:26:42 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720D7C061746;
+        Wed,  8 Dec 2021 17:23:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BCB4ACE2331;
+        Thu,  9 Dec 2021 01:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E04AC00446;
+        Thu,  9 Dec 2021 01:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639012985;
+        bh=EGS1FaDteRYlhuhWyVYrG25WcZzElFOzCSjsr/Y8ipE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qFW65xA2LuO0ZVGFZstwcZRcKox4eimF8P7HV2lstZUnhhrAuV/ln4zVBCadRemKY
+         ojtY3yBMct6lTugdFczFvaKTLim4eNQbOcRmy48MAks4ZRN69UqpGTkJkTsX1nN04z
+         j8HtYZ/RsPK7xrCVr4nqfTy1mWto+/TzYjQEOJIVMkwU2Q0uYnyqu41d0Pfgccno0W
+         2djurTPGytNfutBbKFcWVAkuR1s0gfz0vaVqBvT4MoLpL+OTkGxwuaHdnZJc2N6TeK
+         DJyk+obaAfwEkRuRYPSrRnI/H40gyNodXqSVP1UB8l3zOhw24onFRR7L/ASoH88P+S
+         eTHYoJN484Vng==
+Date:   Wed, 8 Dec 2021 17:23:03 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jie2x Zhou <jie2x.zhou@intel.com>
+Cc:     davem@davemloft.net, shuah@kernel.org, dsahern@gmail.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com, xinjianx.ma@intel.com,
+        zhijianx.li@intel.com, Philip Li <philip.li@intel.com>,
+        zhoujie <zhoujie2011@fujitsu.com>
+Subject: Re: [PATCH] selftests: net: Correct ping6 expected rc from 2 to 1
+Message-ID: <20211208172303.58ca2706@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211208061518.61668-1-jie2x.zhou@intel.com>
+References: <20211208061518.61668-1-jie2x.zhou@intel.com>
 MIME-Version: 1.0
-References: <20211207093412.27833-1-brgl@bgdev.pl>
-In-Reply-To: <20211207093412.27833-1-brgl@bgdev.pl>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Dec 2021 01:54:32 +0100
-Message-ID: <CACRpkdbAs+ZpU_uQziXmz2inPG7VHD=746MmjmR8iY3szfy9+w@mail.gmail.com>
-Subject: Re: [PATCH v13 0/7] gpio-sim: configfs-based GPIO simulator
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 10:34 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+On Wed,  8 Dec 2021 14:15:18 +0800 Jie2x Zhou wrote:
+> From: zhoujie <zhoujie2011@fujitsu.com>
 
-> Hopefully this will be the last iteration of this series. Just some
-> minor changes requested by Andy in this one.
->
-> Tested both with configfs as well as device-tree.
+> Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
 
-This patch set:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Ah, so you are the same person, I was wondering :)
 
-Thanks for your perseverance!!
-
-Yours,
-Linus Walleij
+You need to either drop the From: with the fujitsu address (git commit
+--amend --reset-autor) or sign off the patch with the Intel address.
+Right now both your name is spelled differently and the address is
+different so the patch will trigger warnings.
