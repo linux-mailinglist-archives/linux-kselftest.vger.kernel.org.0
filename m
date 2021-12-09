@@ -2,137 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C4E46EBF1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 16:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0546846ED19
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 17:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbhLIPnh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Dec 2021 10:43:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57145 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232694AbhLIPnh (ORCPT
+        id S235260AbhLIQgY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Dec 2021 11:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234595AbhLIQgX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Dec 2021 10:43:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639064403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QT9+Eto76AQyhw6YgaOC53MIX23XQDyrz/FUT+QNKSA=;
-        b=IYxRplC0bArMAOMadTUm5zF+8/tdQueCnyrn2PuYt/SP/vDu8DaQ4is6LRvryLfhy9A9qc
-        OkHV6zvcIp+f7ri151eoiVYcpm4gUuUaV4n0FWvMO/R9yAxAgcQAh7OXWqDXELF9JV0pPh
-        Ki031gXXs6hf8MvECegAyBdBsDANY4U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-aqBLroqWND6umz035CDTRg-1; Thu, 09 Dec 2021 10:40:00 -0500
-X-MC-Unique: aqBLroqWND6umz035CDTRg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 9 Dec 2021 11:36:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF305C061746;
+        Thu,  9 Dec 2021 08:32:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6AE9A100CCCB;
-        Thu,  9 Dec 2021 15:39:58 +0000 (UTC)
-Received: from [10.22.10.109] (unknown [10.22.10.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AE0E04ABB5;
-        Thu,  9 Dec 2021 15:39:55 +0000 (UTC)
-Message-ID: <f74efd4a-eee8-3927-f975-92b4c457cb9c@redhat.com>
-Date:   Thu, 9 Dec 2021 10:39:55 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07D43B8253D;
+        Thu,  9 Dec 2021 16:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D9EC004DD;
+        Thu,  9 Dec 2021 16:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639067566;
+        bh=Hfp5b3v+XA/5IbK5LdC4TC8Lj3uCVLepSRSC6eo2XOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BD7+YWxCPnrx0AevCZXoBB0cD13QqzwkZV3TzG/yNMIBNdKtBTvKPnGo6liXV6rBr
+         Dk4mlyxC2FjLh2RTb90SjL7D5O4efldrfDOh2Hx6zOw/Muvmt6HCNKpY72FyxyRDoq
+         uHEr+aLYBPf2PSVsG6CJ0bVnHkeDpzyi4svZNXZZI0lUjgMjOebtKkR83tV0z1g41U
+         xMw+O4aj6ZsN9Y6yW/j7fi+YAJwG+59WG1hyXvCU0kT9WaUa+JjvkoBiHbCA59rNu8
+         0VfayzowRRDBB7cr5Lu/Ll7nN4jYvc+pVyMn4IQ/wKMJH7iZl/D/MgzVprihiUDodK
+         sjPemY3cJFpLA==
+Date:   Thu, 9 Dec 2021 10:32:45 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
+        bhelgaas@google.com, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, shuah@kernel.org,
+        mgross@linux.intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [V2 2/6] driver core: auxiliary bus: Add driver data helpers
+Message-ID: <20211209163245.GA245119@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 0/7] cgroup/cpuset: Add new cpuset partition type &
- empty effecitve cpus
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20211205183220.818872-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211205183220.818872-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbBxPPPaQwlcgz/c@kroah.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/5/21 13:32, Waiman Long wrote:
-> v9:
->   - Add a new patch 1 to remove the child cpuset restriction on parent's
->     "cpuset.cpus".
->   - Relax initial root partition entry limitation to allow cpuset.cpus to
->     overlap that of parent's.
->   - An "isolated invalid" displayed type is added to
->     cpuset.cpus.partition.
->   - Resetting partition root to "member" will leave child partition root
->     as invalid.
->   - Update documentation and test accordingly.
->
-> v8:
->   - Reorganize the patch series and rationalize the features and
->     constraints of a partition.
->   - Update patch descriptions and documentation accordingly.
->
-> v7:
->   - Simplify the documentation patch (patch 5) as suggested by Tejun.
->   - Fix a typo in patch 2 and improper commit log in patch 3.
->
-> This patchset includes one bug fix and four enhancements to the cpuset v2 code.
->
->   Patch 1: Allow parent to set "cpuset.cpus" that may not be a superset
->   of children's "cpuset.cpus" for default hierarchy.
->
->   Patch 2: Enable partition with no task to have empty cpuset.cpus.effective.
->
->   Patch 3: Refining the features and constraints of a cpuset partition
->   clarifying what changes are allowed.
->
->   Patch 4: Add a new partition state "isolated" to create a partition
->   root without load balancing. This is for handling intermitten workloads
->   that have a strict low latency requirement.
->
->   Patch 5: Enable the "cpuset.cpus.partition" file to show the reason
->   that causes invalid partition like "root invalid (No cpu available
->   due to hotplug)".
->
-> Patch 6 updates the cgroup-v2.rst file accordingly. Patch 7 adds a new
-> cpuset test to test the new cpuset partition code.
->
-> Waiman Long (7):
->    cgroup/cpuset: Don't let child cpusets restrict parent in default
->      hierarchy
->    cgroup/cpuset: Allow no-task partition to have empty
->      cpuset.cpus.effective
->    cgroup/cpuset: Refining features and constraints of a partition
->    cgroup/cpuset: Add a new isolated cpus.partition type
->    cgroup/cpuset: Show invalid partition reason string
->    cgroup/cpuset: Update description of cpuset.cpus.partition in
->      cgroup-v2.rst
->    kselftest/cgroup: Add cpuset v2 partition root state test
->
->   Documentation/admin-guide/cgroup-v2.rst       | 168 +++--
->   kernel/cgroup/cpuset.c                        | 440 +++++++-----
->   tools/testing/selftests/cgroup/Makefile       |   5 +-
->   .../selftests/cgroup/test_cpuset_prs.sh       | 667 ++++++++++++++++++
->   tools/testing/selftests/cgroup/wait_inotify.c |  87 +++
->   5 files changed, 1142 insertions(+), 225 deletions(-)
->   create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
->   create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
->
-Hi,
+[+cc Rafael, since I used generic PM as an example]
 
-Is this patch series good enough or is there other changes you would 
-still like to make in this series?
+On Wed, Dec 08, 2021 at 09:47:56AM +0100, Greg KH wrote:
+> On Wed, Dec 08, 2021 at 08:43:53AM +0000, Lee Jones wrote:
+> > On Wed, 08 Dec 2021, Greg KH wrote:
+> > > On Wed, Dec 08, 2021 at 09:03:16AM +0200, Leon Romanovsky wrote:
+> > > > On Tue, Dec 07, 2021 at 09:14:44AM -0800, David E. Box wrote:
+> > > > > Adds get/set driver data helpers for auxiliary devices.
+> > > > > 
+> > > > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > > > Reviewed-by: Mark Gross <markgross@kernel.org>
+> > > > > ---
+> > > > > V2
+> > > > >   - No changes
+> > > > > 
+> > > > >  include/linux/auxiliary_bus.h | 10 ++++++++++
+> > > > >  1 file changed, 10 insertions(+)
+> > > > 
+> > > > I would really like to see an explanation why such obfuscation is really
+> > > > needed. dev_*_drvdata() is a standard way to access driver data.
+> > 
+> > I wouldn't call it obfuscation, but it does looks like abstraction for
+> > the sake of abstraction, which I usually push back on.  What are the
+> > technical benefits over using the dev_*() variant?
+> 
+> See my response at:
+> 	https://lore.kernel.org/r/YbBwOb6JvWkT3JWI@kroah.com
+> for why it is a good thing to do.
+> 
+> In short, driver authors should not have to worry about mixing
+> bus-specific and low-level driver core functions.
 
-Cheers,
-Longman
+In the very common situation of PCI drivers that use generic power
+management, authors *do* have to use both (example from [1]):
 
+  ioh_gpio_probe(struct pci_dev *pdev)   # pci_driver.probe()
+    pci_set_drvdata(pdev, chip);
+
+  ioh_gpio_remove(struct pci_dev *pdev)  # pci_driver.remove()
+    struct ioh_gpio *chip = pci_get_drvdata(pdev);
+
+  ioh_gpio_suspend(struct device *dev)   # pci_driver.driver.pm.suspend()
+    struct ioh_gpio *chip = dev_get_drvdata(dev);   <--
+
+The pci_driver methods receive a struct pci_dev and use the
+pci_get_drvdata() wrapper.
+
+The generic power management methods receive a struct device and use
+the underlying dev_get_drvdata().
+
+It's kind of ugly that readers have to know that pci_get_drvdata()
+gives you the same thing as dev_get_drvdata().
+
+I guess the generic PM methods could do something like:
+
+  pci_get_drvdata(to_pci_dev(dev));
+
+but that seems a little bit circuitous.  It's slightly wordier, but I
+might prefer to just use this everywhere and skip the pci_* wrappers:
+
+  dev_get_drvdata(&pdev->dev);
+
+Bjorn
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpio/gpio-ml-ioh.c?id=v5.15#n505
