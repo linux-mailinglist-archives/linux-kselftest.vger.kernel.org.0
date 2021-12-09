@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AE746F3F1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 20:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8B146F40E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 20:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbhLITb7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Dec 2021 14:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S231290AbhLITkN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Dec 2021 14:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhLITb7 (ORCPT
+        with ESMTP id S231280AbhLITkM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:31:59 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A27C061746
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 11:28:25 -0800 (PST)
+        Thu, 9 Dec 2021 14:40:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DD1C061746
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 11:36:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D9FA8CE27F2
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 19:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E3AC004DD;
-        Thu,  9 Dec 2021 19:28:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A17D8B82614
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 19:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DF2C004DD;
+        Thu,  9 Dec 2021 19:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639078102;
-        bh=XDJxsKXSoiTbmMVVRrqvD1Ng5C6CIWMttahzKBLDMRY=;
+        s=k20201202; t=1639078596;
+        bh=qnW/0fZKZPLZGRENdVqRUeULxK089W6WEiNlSncEHRg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CHQ6qchWy2n2YgeFy5DoZ5Dj+YeUcWoDQIZpY1/nHQSaI5pWoqKGM3hNlxOnjVdVR
-         mD3/WeQ89YxLbgDlFHFIeYA6vQA5ve6mJDDYrseQSqAdzpz3aXpJzYtVW25TvN4/2Z
-         LWIhn7uX1BBdQ1M+Df+znhlaakn5JWtACA6+VJfJbTq/H707bkuypJi87Oa0m84w77
-         jgA2+qBP/difBQ5GBaTFb0smUmybyDCWewdFlpmT1y3PP40mmlTttMWrFM7QqyRL5D
-         4tesMvbo0ZhA3Fkoi93UH2Sh2TZud99VvMuMqvRJG2Nfdrqe8C3R8yfmS6ZpIbg1ys
-         rK3NylOHYa7ew==
-Date:   Thu, 9 Dec 2021 19:28:16 +0000
+        b=AcQU2hSXY3fGRiajjJIYdM9Z0esO8tCko6D9mNqZA+6DaOdyqDUl34uGUEx7xysVU
+         XfJYBtSZBUfJ2Coni5c9QFEN+ZziCHIDWgY3OcURtY7XG0K7WFWFYgITOCxTux9CM8
+         bWL5/5Za6C2DXjkUR2MZ9JYHBoQz6jEojYDt8CewpiBr39QZyMPJTEBUNmP1eo4InP
+         8OwtDkXViDRwMauKNefkVTk8hPXPseTotiSLX8x3oFVlP2AuCRb6HVMmGDwJS/hD4W
+         r7Q1v7wsA8sj6tCQ5PuWnq2yj3zzaYotPEsx29LPzykmEcK43/oH1kNai3blTekOTo
+         C7OybkGsWCxgA==
+Date:   Thu, 9 Dec 2021 19:36:31 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Will Deacon <will@kernel.org>,
@@ -45,83 +45,50 @@ Cc:     Will Deacon <will@kernel.org>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 13/37] arm64/sme: Basic enumeration support
-Message-ID: <YbJY0P1KZjSFfwtY@sirena.org.uk>
+Subject: Re: [PATCH v6 00/37] arm64/sme: Initial support for the Scalable
+ Matrix Extension
+Message-ID: <YbJav0ffe+GCs9p1@sirena.org.uk>
 References: <20211115152835.3212149-1-broonie@kernel.org>
- <20211115152835.3212149-14-broonie@kernel.org>
- <YbJN1ujpDP1RG1Ll@arm.com>
+ <YbJQG/V7wHohpX2x@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GGbbXJy03eDuEJ9w"
+        protocol="application/pgp-signature"; boundary="ALhnXHHprfpEjnfj"
 Content-Disposition: inline
-In-Reply-To: <YbJN1ujpDP1RG1Ll@arm.com>
+In-Reply-To: <YbJQG/V7wHohpX2x@arm.com>
 X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---GGbbXJy03eDuEJ9w
+--ALhnXHHprfpEjnfj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Dec 09, 2021 at 06:41:26PM +0000, Catalin Marinas wrote:
-> On Mon, Nov 15, 2021 at 03:28:11PM +0000, Mark Brown wrote:
+On Thu, Dec 09, 2021 at 06:51:07PM +0000, Catalin Marinas wrote:
 
-> > +#define HWCAP2_SME		(1 << 20)
-> > +#define HWCAP2_SME_I16I64	(1 << 21)
-> > +#define HWCAP2_SME_F64F64	(1 << 22)
-> > +#define HWCAP2_SME_I8I32	(1 << 23)
-> > +#define HWCAP2_SME_F16F32	(1 << 24)
-> > +#define HWCAP2_SME_B16F32	(1 << 25)
-> > +#define HWCAP2_SME_F32F32	(1 << 26)
-> > +#define HWCAP2_SME_FA64		(1 << 27)
+> I had a quick look through this series and made some minor comments but
+> I need to dig deeper into the SME ABI. Ideally someone (Szabolcs?) from
+> the toolchain/libc side should confirm that they are happy with it. In
+> the meantime I can queue the first 6 patches once updated.
 
-> At this pace we'll need HWCAP3 pretty soon (since we only allocated
-> 32-bit in each). I wonder whether we could instead not bother at all and
-> just provide user-space emulation for ID_AA64SMFR0_EL1.
+It'd also be good to get confirmation from someone like Luis or Alan
+that the ptrace interface looks OK for debuggers, I think I've addressed
+all the issues they found on earlier versions.
 
-I think so if people are willing to go along with just having userspace
-check the ID register (IIRC access to it already does the right thing
-but I need to confirm).  We'll also need to think about how we handle
-any new SVE features, that's got a similar thing going on and is most of
-the existing usage of HWCAP2.
-
-> > +	{
-> > +		.desc = "FA64",
-> > +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> > +		.capability = ARM64_SME_FA64,
-> > +		.sys_reg = SYS_ID_AA64SMFR0_EL1,
-> > +		.sign = FTR_UNSIGNED,
-> > +		.field_pos = ID_AA64SMFR0_FA64_SHIFT,
-> > +		.min_field_value = ID_AA64SMFR0_FA64,
-> > +		.matches = has_feature_flag,
-> > +		.cpu_enable = fa64_kernel_enable,
-> > +	},
-
-> I'll comment here rather than the patch introducing has_feature_flag():
-> an alternative would be to add a .field_width option and in
-> feature_matches() use cpuid_feature_extract_field_width() directly. All
-> the arm64_ftr_bits entries already have a width, so just generalise it
-> for arm64_cpu_capabilities.
-
-Sure, if people are happy with that - it's a more invasive change since
-we don't currently set the widths, I wasn't clear if that was a case of
-not needing it right now or a design decision.
-
---GGbbXJy03eDuEJ9w
+--ALhnXHHprfpEjnfj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGyWM8ACgkQJNaLcl1U
-h9DprAf+I3P42AVkZkoHGputx7rkt78j6cUFk/N4PZxwhxsdOsKI08tnKA/bc7vP
-PihZixbo4yTh0Da15N90qlOn+RRdyrX9+p6te2DmW7aMQ4R0hqOPg54/nLZhOQei
-8qgGdBF2eOeCYZ6zzk6eEMwY1aLe6jAv2ILiOvOTU9qvKxsfE7TK0QXheSCsAHUH
-RYR4UJzsu2baT+VZ+LWo4cgjL1eS6B0YMCkQ76QFixXlYyd/ndmQLvE+4uLpDPVq
-waRDVQdIw9UgiDNyAebv3UrhBB0Qy6T36RvcpkAQYbfWIA988/1BZDtaMZgIfBnR
-MpLrvRtwNhNuIWu/YWequ0NdJhn2TA==
-=+vPe
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGyWr4ACgkQJNaLcl1U
+h9BSvAf/V9L0woOJ5RWNfNVWteEw1C4cfUJ9YZWXaIG6yauB9jw18AmO9+Fj9tiH
+Ngug5vObAXwaI3spsUs7gPjUlgBOgkHPgi3MImhDm+eFvFaM2GSgG122Sh0PTmxI
+evQwz6XBddObUUBuTjAG/FrMsSg+5f/KeGUIe4i8lFp9VhEqMr3iNDLDOQ/hkEw5
+caW9Duz0Ehb5pwzGkMYMLo7X6hhVanEFdZBTdeiZo2yy5OHTWhIoit22fyF/icyy
+93Q9wV1oIbtk6bCgvEfzb8zs7DU8TNSltj99PI+k/z9fjB82vs9Q+lPhieZflaN0
+HsB7b1aEnxwyO6ykZwyCSATv6RkMQA==
+=D+Lp
 -----END PGP SIGNATURE-----
 
---GGbbXJy03eDuEJ9w--
+--ALhnXHHprfpEjnfj--
