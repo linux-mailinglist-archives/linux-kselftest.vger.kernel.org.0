@@ -2,42 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F51146E095
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 02:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4AB46E0AC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Dec 2021 03:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbhLICCe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Dec 2021 21:02:34 -0500
-Received: from mga17.intel.com ([192.55.52.151]:8732 "EHLO mga17.intel.com"
+        id S229758AbhLICGw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Dec 2021 21:06:52 -0500
+Received: from mga17.intel.com ([192.55.52.151]:9219 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229634AbhLICCe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Dec 2021 21:02:34 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218681897"
+        id S229534AbhLICGw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Dec 2021 21:06:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218682638"
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="218681897"
+   d="scan'208";a="218682638"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 17:58:59 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:03:11 -0800
 X-IronPort-AV: E=Sophos;i="5.88,190,1635231600"; 
-   d="scan'208";a="503305391"
+   d="scan'208";a="503306622"
 Received: from cxia1-mobl.ccr.corp.intel.com (HELO lkp-zhoujie.ccr.corp.intel.com) ([10.255.28.13])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 17:58:54 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 18:03:06 -0800
 From:   Jie2x Zhou <jie2x.zhou@intel.com>
 To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
         dsahern@gmail.com
 Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, lkp@intel.com, xinjianx.ma@intel.com,
         zhijianx.li@intel.com, Philip Li <philip.li@intel.com>,
-        zhoujie <jie2x.zhou@intel.com>
-Subject: [PATCH v2] selftests: net: Correct ping6 expected rc from 2 to 1
-Date:   Thu,  9 Dec 2021 09:58:17 +0800
-Message-Id: <20211209015817.37041-1-jie2x.zhou@intel.com>
+        Jie2x Zhou <jie2x.zhou@intel.com>
+Subject: [PATCH v3] selftests: net: Correct ping6 expected rc from 2 to 1
+Date:   Thu,  9 Dec 2021 10:02:30 +0800
+Message-Id: <20211209020230.37270-1-jie2x.zhou@intel.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
-
-From: zhoujie <jie2x.zhou@intel.com>
 
 ./fcnal-test.sh -v -t ipv6_ping
 TEST: ping out, VRF bind - ns-B IPv6 LLA                                      [FAIL]
