@@ -2,36 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94081470979
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 19:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B11C47097A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 19:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245661AbhLJS6C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 13:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245670AbhLJS6B (ORCPT
+        id S245673AbhLJS6D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 13:58:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54134 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245672AbhLJS6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:58:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1D5C0617A1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:54:25 -0800 (PST)
+        Fri, 10 Dec 2021 13:58:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66EA8B8298E
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 18:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E3AC341C7;
-        Fri, 10 Dec 2021 18:54:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE825B829A5
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 18:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8938CC341D9;
+        Fri, 10 Dec 2021 18:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639162463;
-        bh=rohsPdVVVR9EdevsE/V/GrFKcu2ngPnD5UWW/wpylE0=;
+        s=k20201202; t=1639162465;
+        bh=Fc/bw/unbr6pnYpOf0Jjsuop4bTiapC8pJ+EK6pHeBw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BzIxwZk+DITCW30wfmUKbqOGJX4HTafUAe3dHGKFLZJAvt6O4ZStY0P7gyk1yoWhA
-         0CvcLzLfd7biSWv27oOLKUeOUbbCjAsG0wXcQtjk1viMjoHPu/rbQ7GS5nkvD8HOyw
-         IKtX80G5oz34e87DN3PGn52lhN5FsY3BnFkwlRmv89+/gHsHSWXZmy1HQvAcfpKuA2
-         pqMY19Q9Xu2yIpMOsiPEMHYGN1t3PGzivDq+IjQEmdPXe4xXR/KEc3KvsGCTiEfz+C
-         cl1v4CAiqUuMDN8Z8moeC7MTZEl+Y7uVIDh0D+BCKD95TUFZveMXVKzhlDelg3aH9v
-         CZ11besCOGCvg==
+        b=CLrz6r9nnoGmXoe762JzfsWRLttaOjz8jhUOX6/2ux6uJSslbWvRZWHXfhHgqJE8U
+         vbUIvMh0n0AWzj5h+lApetcoLu9ZEoOlnnxP7jOXfbgxB+WppnOYOXWDiflvm/235h
+         NWUO7RuqIdHtfK0jFPndDQhZNcQ/f6/COL+MF2ThKuP0LeksbDGfU8Z7tHH0RVqMdD
+         vaio32ASwWfCJBOySTAQNUhcZQ4rzguUihEj91lZ4tnx6cFSpBKYRWWKB5l2G3TQsA
+         HROo0xcG9W89+m0DObWkibJ7r0vI+SNpRRI59Lr4p98OJLEQldz8hkTzx+q13K6Rls
+         59QHqmVo7R24g==
 From:   Mark Brown <broonie@kernel.org>
 To:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
         Shuah Khan <shuah@kernel.org>
@@ -40,65 +37,132 @@ Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v4 2/3] kselftest: alsa: optimization for SNDRV_CTL_ELEM_ACCESS_VOLATILE
-Date:   Fri, 10 Dec 2021 18:54:09 +0000
-Message-Id: <20211210185410.740009-3-broonie@kernel.org>
+Subject: [PATCH v4 3/3] kselftest: alsa: Use private alsa-lib configuration in mixer test
+Date:   Fri, 10 Dec 2021 18:54:10 +0000
+Message-Id: <20211210185410.740009-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211210185410.740009-1-broonie@kernel.org>
 References: <20211210185410.740009-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1955; i=broonie@kernel.org; h=from:subject; bh=KiZKlxbVF1zb5VsBrhgN0JQrdG+LGi2hP5TTfQ4nqY8=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhs6JP/y/vzqH2TrApPXd/uop9W8pDfPqPgrnVZMps G136DteJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbOiTwAKCRAk1otyXVSH0CYCB/ 9BPfCV7GbUpSfjWK21CuxoL+a5B8lj5rwFHdSO9HVoorkax3/yAbvQSWkmnAiNIIBUZFmDGkwPlMpv TulNRwQl1PxTOz1GFLLItnSMvbih9Pbsj7cmeRuNPpaOiIs+o0eMr9L5qMY5IwdE+uZDlE1CgPkuYO 1rVvWvUUAt3t0AY1QDJAQgbhZNuCy2Sw1dk5OU42qWmPrwaoXguIV2IbU1D/WCyuTH9fKRSHFxSmio J4rMgd2ajrzTYK+SS9NoVhTrq/N6upBw+TKIAYjKOaA13gDHBDMoO8RxcYcFFTyZkD/0qsuOvxdGbo 7Jtm117Znt+RkZwUBqwotvJJ7ML5V0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2934; i=broonie@kernel.org; h=from:subject; bh=f0TLcCAP2UDRiRjGIjxFa6TawJKyod1pyghrkAWhsyI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhs6JQRGy7DfGWwaa5gkm3hK5ZpTPZcayNQSK9hRu8 3R99H7mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbOiUAAKCRAk1otyXVSH0AK9B/ 4ox4tAKU+y2cWKJQacX1fqP+lKoo+yZNo84EoHIvJMNsQjsRYbJO6weIqo9PytnHOOuohL1Ahx3zv4 vjuagkWYSH51P/cRQ0PLHcJhowJa3jmzvQJNKzFy20A3028qMy/L8XhXp2vLjHR9Gr+wCPnNGeAcns X3/zHqGjbK7jWubucjKC9pV0D1okiJFOvvg+ro1MIn54JkAjcVK3lkdkO9GUjwf1FYsvAngnqHn3Ni xB5G5RlqSTG9XoBlAPwigrGKzTgKUCVesBJevU0tn6AmW9t0mrp3tXmP7G9cX8/u2RQxBJuIRrdU6o FEwx5h9rG5ZTW5/kla+hVM7e65EMjh
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+From: Jaroslav Kysela <perex@perex.cz>
 
-The volatile attribute of control element means that the hardware can
-voluntarily change the state of control element independent of any
-operation by software. ALSA control core necessarily sends notification
-to userspace subscribers for any change from userspace application, while
-it doesn't for the hardware's voluntary change.
+As mentined by Takashi Sakamoto, the system-wide alsa-lib configuration
+may override the standard device declarations. This patch use the private
+alsa-lib configuration to set the predictable environment.
 
-This commit adds optimization for the attribute. Even if read value is
-different from written value, the test reports success as long as the
-target control element has the attribute. On the other hand, the
-difference is itself reported for developers' convenience.
-
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Link: https://lore.kernel.org/r/Ya7TAHdMe9i41bsC@workstation
-[Fix comment style as suggested by Shuah -- broonie]
+Signed-off-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20211208095209.1772296-1-perex@perex.cz
+[Restructure version test to keep the preprocessor happy -- broonie]
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/alsa/mixer-test.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ tools/testing/selftests/alsa/mixer-test.c | 56 ++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index ab51cf7b9e03..f65a9046e708 100644
+index f65a9046e708..b798a76f6825 100644
 --- a/tools/testing/selftests/alsa/mixer-test.c
 +++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -307,9 +307,15 @@ bool show_mismatch(struct ctl_data *ctl, int index,
- 	}
+@@ -46,22 +46,74 @@ struct ctl_data {
+ 	struct ctl_data *next;
+ };
  
- 	if (expected_int != read_int) {
--		ksft_print_msg("%s.%d expected %lld but read %lld\n",
--			       ctl->name, index, expected_int, read_int);
--		return true;
-+		/*
-+		 * NOTE: The volatile attribute means that the hardware
-+		 * can voluntarily change the state of control element
-+		 * independent of any operation by software.  
-+		 */
-+		bool is_volatile = snd_ctl_elem_info_is_volatile(ctl->info);
-+		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
-+			       ctl->name, index, expected_int, read_int, is_volatile);
-+		return !is_volatile;
- 	} else {
- 		return false;
++static const char *alsa_config =
++"ctl.hw {\n"
++"	@args [ CARD ]\n"
++"	@args.CARD.type string\n"
++"	type hw\n"
++"	card $CARD\n"
++"}\n"
++;
++
+ int num_cards = 0;
+ int num_controls = 0;
+ struct card_data *card_list = NULL;
+ struct ctl_data *ctl_list = NULL;
+ 
++#ifdef SND_LIB_VER
++#if SND_LIB_VERSION >= SND_LIB_VER(1, 2, 6)
++#define LIB_HAS_LOAD_STRING
++#endif
++#endif
++
++#ifndef LIB_HAS_LOAD_STRING
++int snd_config_load_string(snd_config_t **config, const char *s, size_t size)
++{
++	snd_input_t *input;
++	snd_config_t *dst;
++	int err;
++
++	assert(config && s);
++	if (size == 0)
++		size = strlen(s);
++	err = snd_input_buffer_open(&input, s, size);
++	if (err < 0)
++		return err;
++	err = snd_config_top(&dst);
++	if (err < 0) {
++		snd_input_close(input);
++		return err;
++	}
++	err = snd_config_load(dst, input);
++	snd_input_close(input);
++	if (err < 0) {
++		snd_config_delete(dst);
++		return err;
++	}
++	*config = dst;
++	return 0;
++}
++#endif
++
+ void find_controls(void)
+ {
+ 	char name[32];
+ 	int card, ctl, err;
+ 	struct card_data *card_data;
+ 	struct ctl_data *ctl_data;
++	snd_config_t *config;
+ 
+ 	card = -1;
+ 	if (snd_card_next(&card) < 0 || card < 0)
+ 		return;
+ 
++	err = snd_config_load_string(&config, alsa_config, strlen(alsa_config));
++	if (err < 0) {
++		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
++			       snd_strerror(err));
++		ksft_exit_fail();
++	}
++
+ 	while (card >= 0) {
+ 		sprintf(name, "hw:%d", card);
+ 
+@@ -69,7 +121,7 @@ void find_controls(void)
+ 		if (!card_data)
+ 			ksft_exit_fail_msg("Out of memory\n");
+ 
+-		err = snd_ctl_open(&card_data->handle, name, 0);
++		err = snd_ctl_open_lconf(&card_data->handle, name, 0, config);
+ 		if (err < 0) {
+ 			ksft_print_msg("Failed to get hctl for card %d: %s\n",
+ 				       card, snd_strerror(err));
+@@ -137,6 +189,8 @@ void find_controls(void)
+ 			break;
+ 		}
  	}
++
++	snd_config_delete(config);
+ }
+ 
+ /*
 -- 
 2.30.2
 
