@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CCB47065C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 17:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A26F247061A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 17:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240790AbhLJQyS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 11:54:18 -0500
-Received: from mail-bn8nam12on2075.outbound.protection.outlook.com ([40.107.237.75]:5313
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S240638AbhLJQur (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 11:50:47 -0500
+Received: from mail-dm6nam11on2066.outbound.protection.outlook.com ([40.107.223.66]:4192
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234977AbhLJQyR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:54:17 -0500
+        id S243893AbhLJQuq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:50:46 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pcc0qPPnFHNYGo0RFNpPROJ9c59/biHwO2CgTKLr/6NWofnq/jAbLK860zckQUCNggaxk1cUkHBaD7qqi3neLE0VwPxvnnxkbevaEUpBIjyDzTNrS1WgKvjzVeVD5DIODMtOPtECBAeoMXw9tXz6NKB5c9vDRv/6IILO8KlGHOB+88SSDQ7+IkZK2hER68dutVPGtN92zfDBUnwtauzOBikD0ESnD5sEm3LyYkeUKuAUIFClTd4O41GyWv24QwcgHsljQ7uv2ySTXMqAQVW2lhEgaaJQo+RwjlCFPGe9el69OOyI3kx0HKPooPHW9PEGIkJGvLDo0l839iZNJ8Zqxw==
+ b=JarbS9qgcRge4szO27zP6B/HrlJ2ziphX4nJlfKbN+9sWqEv8rMa9K4OO66PrBjc2SJi7Ylq4BygYO07gSftFHA8J0xRxJhRhh0Xnm03yuRb+rFCT/a/cpVRs5P6RZG856cMpUD6G7XBUkqBF3yQxexQfZIQ2I++p45fB5x3djT614gi8nAFYeWRSigk15RnZ+IY31jtGZq3wKahLCS8JCLN/x9/B+tGMwDWgTlxTyoEfvMHy7QbKYl6OesgX2lVVA2eA03+ExvUL1NYr1mwSCmYeszga3zGzVFP/AzRFABpvhQ8VHYttmSrraXrlERh0v95gEat6NSX4LgzvjJeBA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rggfAyljN28bFCpAoefDdna3xuZYIfL7ltTJS7WGYQE=;
- b=NCKd8pBCDQL/XrBLoyWnUUAhw6JTXJX0+a/Ct177NSpjBKdmdqiUYxq75kDZk6XCh7SkimQ5xqh6uxRxPy2wDIzPJhsK+vEjs2AQYT9qf2XfOd3bVXCXK9+v2ILk4h0bE5856OQP9TnD+Z3qFPzLwibJYQQOcnKbC2W/CDEx5QA46PnZm5nav7ovC/0LEiqdkFIDKv4z5Q4PFEYATzzBYwr+gsSwNrHKKN6kMyxBhG81Xnr7EfN096cXy4/fE3keY/M8Wtc0rYZaU5uxL5hFX9C/BTCrIzHZW5oc447r/dIe9ej2P0wiTAo0nRl2aMduBAMA1yDg7z4AlSYyRk5ZqQ==
+ bh=wFQMga+ozr4yriDnVn5+bwhC0iqbIN5kaimzahgvsgI=;
+ b=YUd7Q1iROxpbZJz3HkemFNiNJq+xi8ByP/BDVleos7zjhWog2WzqIJpq0qvbvRgLLlu6+k6sdzN5Trw5a/5VL8Axgrs3/UG/xGlBkds0tDQSu66uVhN0Qvjc0iv06CpepxN1Z3oRK7nlr9kCTJMzBixWzEAfEaSBDmjyPitePVd3AqXYS6V4dh4bVIO26gE3uM6Ahina603g5lkFXFmg98zY/UhhtJ2+K3Z8FEZ5TREgJysHDB0b2RmlLCVyJrfSHzSpXOtPByAlmlU4aKVx1nqI8VjIubDg9oP54BrgNvFqRjBfl9qVBzAXFFeMHE6X1VXpdh/UV4hkMihOcwrYNA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rggfAyljN28bFCpAoefDdna3xuZYIfL7ltTJS7WGYQE=;
- b=UJgC6JypO8/erQKlpJJA8xCGENbSlNE7gKjFYTuyWsM1WBPyu77DGn8HkAb7MEKS0LRZF93JY1Lt6W2NGLTRKREOdM7gjgnkpFBFLz/EHokcarW073g6QyjOrob3VyGItIPZCO01jxlLpaHNYOBP4psvQTDeEtb+q3TZd8EymLQ=
-Received: from DM5PR21CA0007.namprd21.prod.outlook.com (2603:10b6:3:ac::17) by
- MWHPR12MB1485.namprd12.prod.outlook.com (2603:10b6:301:4::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.13; Fri, 10 Dec 2021 16:50:38 +0000
-Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:ac:cafe::c0) by DM5PR21CA0007.outlook.office365.com
- (2603:10b6:3:ac::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.7 via Frontend
- Transport; Fri, 10 Dec 2021 16:50:38 +0000
+ bh=wFQMga+ozr4yriDnVn5+bwhC0iqbIN5kaimzahgvsgI=;
+ b=ESBDpsfcNbOUM1BUKfniC5H6cJXBlPJH6y6LduJ0dQlFxzE4E3N/Z/bHe70ob2JsNEUkr87CALLc/Z90ziaa1ZLrizANzWfKrVbTyF9KARlV0sQpEfEQbZv4AIeBlMsfmy0wyLvpmqSGkwHErY07B0VlEkCFiZGs4E27eekmf94=
+Received: from DM6PR02CA0078.namprd02.prod.outlook.com (2603:10b6:5:1f4::19)
+ by SN1PR12MB2352.namprd12.prod.outlook.com (2603:10b6:802:25::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12; Fri, 10 Dec
+ 2021 16:47:08 +0000
+Received: from DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1f4:cafe::cc) by DM6PR02CA0078.outlook.office365.com
+ (2603:10b6:5:1f4::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.11 via Frontend
+ Transport; Fri, 10 Dec 2021 16:47:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -43,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ DM6NAM11FT042.mail.protection.outlook.com (10.13.173.165) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Fri, 10 Dec 2021 16:50:38 +0000
+ 15.20.4778.13 via Frontend Transport; Fri, 10 Dec 2021 16:47:08 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 10 Dec
- 2021 10:50:37 -0600
+ 2021 10:47:07 -0600
 From:   Michael Roth <michael.roth@amd.com>
 To:     <linux-kselftest@vger.kernel.org>
 CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -80,9 +81,9 @@ CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         "Suzuki K Poulose" <suzuki.poulose@arm.com>,
         <kvmarm@lists.cs.columbia.edu>
-Subject: [PATCH RFC 08/10] kvm: selftests: introduce ucall implementation based on halt instructions
-Date:   Fri, 10 Dec 2021 10:46:18 -0600
-Message-ID: <20211210164620.11636-9-michael.roth@amd.com>
+Subject: [PATCH RFC 09/10] kvm: selftests: add GUEST_SHARED_* macros for shared ucall implementations
+Date:   Fri, 10 Dec 2021 10:46:19 -0600
+Message-ID: <20211210164620.11636-10-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211210164620.11636-1-michael.roth@amd.com>
 References: <20211210164620.11636-1-michael.roth@amd.com>
@@ -94,86 +95,126 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b3f90c2-7619-47a2-1dc0-08d9bbfd31ac
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1485:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB148551B1EAA6684F3451E4EA95719@MWHPR12MB1485.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Office365-Filtering-Correlation-Id: b25bd00d-6fb9-44e6-01b0-08d9bbfcb45c
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2352:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB235247FB7B6BD4293A8E004495719@SN1PR12MB2352.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:901;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vNYjccCML4ZqmPid9lPWaSyu1GJ6fxsD+/5Eh3WZpWCuPzTOsh4Ulj9KaLRc8HkYAdyFKl/oAxi/TeNiBv6XafX8WsCjX4U0XWd0q0baPskPFzJDlqvr7rxgvFLJU+DvGkf0jRbobH01dT6S84yGbghfBLX7FVk+Ts9LAC8Z6BkbtqItZX8EuhtGJ/MVJvMPTP720KyXEJBuZuRfKqYavv65l/bxeZV+7jersnmJKwcYf7sLcmAhIcz6yZ/SQ7NX6yXC9X4NQbpisV8I/7brEpRwo+ru/2Y+SgdI+9tYzfF2R0y6F0NoIrtjTn70rfQmdCDIogqFBCAX4L5oE+SNLBdESMfkqs9C/96iyugOI6w5jWH2FnQMAJVeifwTFVQtXxuSAjlvf15zOWWhlCshvtIQjaBR0bRiEjEVHCBoQq7zLN+Q9bRYq9kY/zfoFC3pCMsm6FMfYAhNzQ0x2AujdStP2Of8cvegL5G5XvFvVrgVi6gxZ2gJUuXeoU6TOkBNW0BCGWxewdUAPR1lzeqEm+xWRnh8SRkaQ9cXWrOF1+LBx1DSpeCD1NmUivw4wTyvnZgRdl2NSAMuWmSrOFEJf8anD1mLgjP1+bbbllcSiEH9qis23vTlCvaYTIj4JdiWZOMA6SHRn5s1epz6tJPipakaTj/up1K7uRiFTkh/7Nkjglfn0pRgDAQdihOHd458r28FuAXvx11K69pW2/dtMX5MNjhiSVh2xpvhSNm1gQ+ub4Un/W3YlD/91+pfaUW0mscjxmfP6yJVdDzIRkfqhK2EPML2KmUFqMtR3YqBlZ0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(44832011)(86362001)(26005)(2616005)(8676002)(16526019)(316002)(186003)(5660300002)(1076003)(508600001)(54906003)(6666004)(336012)(426003)(4326008)(356005)(70586007)(70206006)(2906002)(47076005)(81166007)(36860700001)(36756003)(7416002)(82310400004)(6916009)(40460700001)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: hs8lobdZJsdc6++dNhKS9nUnDyFZtT2DMFyGh1C6hDj7Lc6MBJ07GELq+/2Ca4uLDZ35HkW90xIbK79KbLdEmvwxsBXTODwr4Jwa7cJ+wfyUW45bpjpDpwmahGwzw/qQUODc9m1dw+cHEGkkdAenSxheKxylgo9by1rQOQtNWhjR2Ulyv4VYbkzZ5I6gM3ULto0xuDkzP0jCxT9F3DTgHLWa36vihoNg8FUFQtARnveRyT2dsuwfVMErcUphE9aCWFQDVm5Q1jpKFUpAixQRAT9rASDiOxgNIBpbUUisohLD1YyBVPKTk/n+NSTPUnhvxa5mp7CzL4VWJyNzd0HpyIeinslxCWgiNQCAnNnxpFCzPHi651uDW8WmkMgSfQlELAjfSTk5uIf8T5Sf4pE8sZ3Pulv2cuYoOF8sY0EbjfSStqZwa1beOpJezF7n7/x1ajLom98CReFuZmHOU+ya7rebVBRuB9T8plfQgHPwvEtIRhRidxjFPJYIUfogutlLb1I66/344vhMosF9PEaohzHuHWeg7RQQVJipyHshjROOGvwTjzdk0GPk/1Jc3jABMQViiEtQcQS2uDJvdEgtxdlweJxceGSxLIxYSQlDfhppSoI1s+M3G68Ed/IPvepPu5zbyUIMPMN9t0aE7BR7CqIDkbRFA05Oj85LRt7KbMdWG0pGjqqqckw9b78/b9bk1oQDx2Tsy4PrsIvw5RdNB0Ew1MTCOvHevgwM8MLaePAoymZQbDhC0y0b4acmV2lgzwp9O0Wgha89lFki6FDNKFmeNBi140f5Z4ZijDpsaZI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(2906002)(54906003)(16526019)(316002)(6916009)(186003)(336012)(4326008)(47076005)(8676002)(26005)(7416002)(36860700001)(508600001)(8936002)(36756003)(44832011)(2616005)(86362001)(81166007)(356005)(40460700001)(70206006)(1076003)(5660300002)(426003)(82310400004)(70586007)(6666004)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 16:50:38.3280
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 16:47:08.0311
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3f90c2-7619-47a2-1dc0-08d9bbfd31ac
+X-MS-Exchange-CrossTenant-Network-Message-Id: b25bd00d-6fb9-44e6-01b0-08d9bbfcb45c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1485
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2352
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With the shared ucall interfaces the only thing the ucall
-implementation really needs to do is generate an exit to host userspace
-so that the shared ucall struct can be examined. This implementation
-uses a 'halt' instruction to generate such an exit, and is suitable for
-use with SEV guests, and potentially other confidential guest
-implementations.
+Introduce GUEST_SHARED_* macros, which are mostly analogous to existing
+GUEST_SYNC/GUEST_ASSERT/etc macros used to simplify guest code that
+uses ucall for host/guest synchronization.
+
+There are also some new CHECK_GUEST_SHARED_* macros intended to provide
+similar helpers in the host code that can pair directly with the guest
+versions.
 
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- .../selftests/kvm/include/x86_64/ucall.h      |  1 +
- .../testing/selftests/kvm/lib/x86_64/ucall.c  | 23 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ .../selftests/kvm/include/ucall_common.h      | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/ucall.h b/tools/testing/selftests/kvm/include/x86_64/ucall.h
-index 8366bdc9c04e..457fc1406746 100644
---- a/tools/testing/selftests/kvm/include/x86_64/ucall.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/ucall.h
-@@ -12,6 +12,7 @@
- #include "ucall_common.h"
+diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+index ae0e8eec9734..b9b220dbd6c3 100644
+--- a/tools/testing/selftests/kvm/include/ucall_common.h
++++ b/tools/testing/selftests/kvm/include/ucall_common.h
+@@ -48,6 +48,7 @@ vm_vaddr_t ucall_shared_alloc(struct kvm_vm *vm, int count);
+ void ucall_shared(struct ucall *uc, uint64_t cmd, int nargs, ...);
+ uint64_t get_ucall_shared(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
  
- extern const struct ucall_ops ucall_ops_pio;
-+extern const struct ucall_ops ucall_ops_halt;
++/* Helpers for host/guest synchronization using ucall_shared */
+ #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
+ 				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
+ #define GUEST_SYNC(stage)	ucall(UCALL_SYNC, 2, "hello", stage)
+@@ -76,4 +77,71 @@ uint64_t get_ucall_shared(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
  
- extern const struct ucall_ops ucall_ops_default;
+ #define GUEST_ASSERT_EQ(a, b) __GUEST_ASSERT((a) == (b), #a " == " #b, 2, a, b)
  
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-index 157d2a102547..4dfb12881434 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-@@ -57,4 +57,27 @@ const struct ucall_ops ucall_ops_pio = {
- 	.recv_cmd_shared = ucall_ops_pio_recv_cmd_shared,
- };
- 
-+static void ucall_ops_halt_send_cmd_shared(struct ucall *uc)
-+{
-+	asm volatile("hlt" : : : "memory");
-+}
++/* Helper macros for ucall synchronization via shared memory/ucall struct. */
++#define GUEST_SHARED_SYNC_ARGS(uc, stage, arg1, arg2, arg3, arg4) \
++	ucall_shared(uc, UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
++#define GUEST_SHARED_SYNC(uc, stage) \
++	ucall_shared(uc, UCALL_SYNC, 2, "hello", stage)
++#define GUEST_SHARED_DONE(uc) \
++	ucall_shared(uc, UCALL_DONE, 0)
++#define __GUEST_SHARED_ASSERT(uc, _condition, _condstr, _nargs, _args...) do {    \
++	if (!(_condition))                                                        \
++		ucall_shared(uc, UCALL_ABORT, 2 + _nargs,                         \
++			"Failed guest assert: "                                   \
++			_condstr, __LINE__, _args);                               \
++} while (0)
 +
-+static uint64_t ucall_ops_halt_recv_cmd_shared(struct kvm_vm *vm, uint32_t vcpu_id,
-+					       struct ucall *uc)
-+{
-+	struct kvm_run *run = vcpu_state(vm, vcpu_id);
++#define GUEST_SHARED_ASSERT(uc, _condition) \
++	__GUEST_SHARED_ASSERT(uc, _condition, #_condition, 0, 0)
 +
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_HLT,
-+		    "unexpected exit reason: %u (%s)",
-+		    run->exit_reason, exit_reason_str(run->exit_reason));
++#define GUEST_SHARED_ASSERT_1(uc, _condition, arg1) \
++	__GUEST_SHARED_ASSERT(uc, _condition, #_condition, 1, (arg1))
 +
-+	return uc->cmd;
-+}
++#define GUEST_SHARED_ASSERT_2(uc, _condition, arg1, arg2) \
++	__GUEST_SHARED_ASSERT(uc, _condition, #_condition, 2, (arg1), (arg2))
 +
-+const struct ucall_ops ucall_ops_halt = {
-+	.name = "halt",
-+	.send_cmd_shared = ucall_ops_halt_send_cmd_shared,
-+	.recv_cmd_shared = ucall_ops_halt_recv_cmd_shared,
-+};
++#define GUEST_SHARED_ASSERT_3(uc, _condition, arg1, arg2, arg3) \
++	__GUEST_SHARED_ASSERT(uc, _condition, #_condition, 3, (arg1), (arg2), (arg3))
 +
- const struct ucall_ops ucall_ops_default = ucall_ops_pio;
++#define GUEST_SHARED_ASSERT_4(uc, _condition, arg1, arg2, arg3, arg4) \
++	__GUEST_SHARED_ASSERT(uc, _condition, #_condition, 4, (arg1), (arg2), (arg3), (arg4))
++
++#define GUEST_SHARED_ASSERT_EQ(uc, a, b) \
++	__GUEST_SHARED_ASSERT(uc, (a) == (b), #a " == " #b, 2, a, b)
++
++#define __CHECK_SHARED_STATE(uc, uc_cmd, uc_cmd_expected) do {			\
++	if (uc_cmd != uc_cmd_expected) {					\
++		if (uc_cmd == UCALL_ABORT)					\
++			TEST_FAIL("Unexpected guest abort: \"%s\" at %s:%ld",	\
++				  (const char *)uc->args[0], __FILE__,		\
++				  uc->args[1]);					\
++		else								\
++		    TEST_FAIL("Unexpected ucall command/state: %" PRIu64,	\
++			      uc_cmd);						\
++	}									\
++} while (0)
++
++#define CHECK_SHARED_SYNC(vm, vcpu_id, uc, stage) do {				\
++	uint64_t uc_cmd = get_ucall_shared(vm, vcpu_id, uc);			\
++	TEST_ASSERT(uc_cmd == UCALL_SYNC,					\
++		    "Unexpected ucall command/state: %" PRIu64, uc_cmd);	\
++	TEST_ASSERT(!strcmp((char *)uc->args[0], "hello"),			\
++		    "Invalid ucall signature argument."); 			\
++	TEST_ASSERT(uc->args[1] == stage,					\
++		    "Invalid ucall sync stage: %" PRIu64, uc->args[1]);		\
++} while (0)
++
++#define CHECK_SHARED_DONE(vm, vcpu_id, uc) do {					\
++	uint64_t uc_cmd = get_ucall_shared(vm, vcpu_id, uc);			\
++	__CHECK_SHARED_STATE(uc, uc_cmd, UCALL_DONE);				\
++	TEST_ASSERT(uc_cmd == UCALL_DONE,					\
++		    "Unexpected ucall command/state: %" PRIu64, uc_cmd);	\
++} while (0)
++
++#define CHECK_SHARED_ABORT(vm, vcpu_id, uc) do {				\
++	uint64_t uc_cmd = get_ucall_shared(vm, vcpu_id, uc);			\
++	TEST_ASSERT(uc_cmd == UCALL_ABORT,					\
++		    "Unexpected ucall command/state: %" PRIu64, uc_cmd);	\
++} while (0)
++
+ #endif /* SELFTEST_KVM_UCALL_COMMON_H */
 -- 
 2.25.1
 
