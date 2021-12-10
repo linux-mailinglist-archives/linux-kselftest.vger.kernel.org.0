@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F07A6470748
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 18:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95068470751
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 18:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241424AbhLJRhR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 12:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S244492AbhLJRhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 12:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241476AbhLJRhI (ORCPT
+        with ESMTP id S241059AbhLJRhM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:37:08 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F503C061A32
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:33 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso10280549otf.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:33 -0800 (PST)
+        Fri, 10 Dec 2021 12:37:12 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35809C061B38
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:34 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso10287710otj.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/nnwsniEu8uqYxjrwTyGxxsdhf651m9rl/Wv8zBibbw=;
-        b=SmXM3bXqM0gP1T/ezve3OJ9V/UwR0HRmCygo4+nqyzJjP1gF+zR7fge5vblTzlNrCX
-         w04iFxqxd77ZVX79QZ2Zt1uJoQN9tDojIGVstIdl1Ce1fS/SMZQYXDALiC1835irYpPi
-         EhPQEF96/sDzUgJbQgTPDroDn8RrRbvtb3geQ=
+        bh=4WzsD+UFVzLiH0Fp9HCyUMze55/PXfN1Fv5h1c0wwoc=;
+        b=Qchokgi1K6EjNENIB16rZTHkLbnhJuZXljqbd4G55iiZmPcNdBVkeVbMowdmC9q4qj
+         uM+vvJsP1r/+NUFhjZ04YGOlvj7dYAlIu5fXxMAi7Vp8riHsOdb9yTNfCIZhxOzmilUN
+         fYlr3CYWkIhW0u0R7l+00dYGvA8bO+xcWIlrg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/nnwsniEu8uqYxjrwTyGxxsdhf651m9rl/Wv8zBibbw=;
-        b=HUCfwLmtlVOd0E8e/OcDxI/TyaraikPtl4g5UOaKu+pZC3k7+WJGg/iMaM/JSAkDMN
-         IBvITzGfrNlPUsBuSrPhGyBmL//+L2cOcVI5A+yIzhVzjWQYKPUSX059OPkYCyM57qE+
-         IOHm1v54NL3JGm+nNyA4hQI+WxeIZZRp9L4dPLbsekFZTlpGV1eEO5o2fyinHGNUklBL
-         1qOQpnWMwOcC7BkmEHpJB2rahHXEvTsaivhoZOICgEbE5r0EelFAB0Q2+tSXveZDDEAS
-         U9ofn+fD0qw0+akb2duR1gT2k9k8mttUczCQwP1nkcWqILsvpNfheAC2Wwd6lPkMBwKA
-         TaJg==
-X-Gm-Message-State: AOAM531TpcUPAzMg0NSL7E0OH7q8Jxe/IYgbo0soMtFn3qiERU7Vz0YA
-        AIhxaqzfGE+JSo6rJNgU8CdNKw==
-X-Google-Smtp-Source: ABdhPJw9KMAr8iR7/gO1NKMOwvgOgpBIMplkuY0P/9SLX80+FALZ7l62v8z8IlRFbsoMk0FcxwUIOQ==
-X-Received: by 2002:a9d:ea6:: with SMTP id 35mr11764702otj.304.1639157612590;
-        Fri, 10 Dec 2021 09:33:32 -0800 (PST)
+        bh=4WzsD+UFVzLiH0Fp9HCyUMze55/PXfN1Fv5h1c0wwoc=;
+        b=aZ9E7zf/u8m6Qw618aMisGx4A8rTY9PQK9e2Qinp1mlCax3uFKpczM5tfLm/jtyFKz
+         UmsFUIlq3ylG+gkNzYSjh6+LNggACX/dq4IVttA+M5siPMsRXljHqMguqA9hgfzD5dno
+         7lhD3+W1gt1/5KvKIkwx4jR/wNSVapSpL2nR5VBV2OWzwweEMWzbIuT0r3T+mij++Y2P
+         R9KK/p/vLJnHLZhw3TpuQi5M9bjEwNUF1pJZQK+iMEffQqOjPMNLJ6E55OT2Ys5y8P9X
+         MRYWghf3/V1WagO+Er+DGkZEfr76yLp0tSdL+bEpR0jfhtvzZvxknMyEyayO7yi1bOnk
+         b9xg==
+X-Gm-Message-State: AOAM530118te+dz93yuSzSiKom40yy9dqqAc4r2ULVdPNHCriUYY3XkU
+        vGKsMD2ZRPU/FkAFv7ttQ37Xuw==
+X-Google-Smtp-Source: ABdhPJyxsZn85HCQXDC0NYZWNPCIdku6oxp+hW2STbG5C8HyB1dqb+FYA6EOrK7FlkRbQQsZUFS6ug==
+X-Received: by 2002:a9d:373:: with SMTP id 106mr12125638otv.127.1639157613531;
+        Fri, 10 Dec 2021 09:33:33 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.31
+        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:33:32 -0800 (PST)
+        Fri, 10 Dec 2021 09:33:33 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
         keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
@@ -54,9 +54,9 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 07/12] selftests/net: remove ARRAY_SIZE define from individual tests
-Date:   Fri, 10 Dec 2021 10:33:17 -0700
-Message-Id: <1356c830b8155ddd37a6330c1f5d4df7a1bdb86a.1639156389.git.skhan@linuxfoundation.org>
+Subject: [PATCH 08/12] selftests/rseq: remove ARRAY_SIZE define from individual tests
+Date:   Fri, 10 Dec 2021 10:33:18 -0700
+Message-Id: <f81e953716b03e9eb2392298b914b703dcfdace8.1639156389.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1639156389.git.skhan@linuxfoundation.org>
 References: <cover.1639156389.git.skhan@linuxfoundation.org>
@@ -71,121 +71,47 @@ individual test files and include header file for the define instead.
 ARRAY_SIZE define is added in a separate patch to prepare for this
 change.
 
-Remove ARRAY_SIZE from net tests and pickup the one defined in
+Remove ARRAY_SIZE from rseq tests and pickup the one defined in
 kselftest.h.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/net/gro.c                     | 3 ++-
- tools/testing/selftests/net/ipsec.c                   | 1 -
- tools/testing/selftests/net/reuseport_bpf.c           | 4 +---
- tools/testing/selftests/net/rxtimestamp.c             | 2 +-
- tools/testing/selftests/net/socket.c                  | 3 ++-
- tools/testing/selftests/net/tcp_fastopen_backup_key.c | 6 ++----
- 6 files changed, 8 insertions(+), 11 deletions(-)
+ tools/testing/selftests/rseq/basic_percpu_ops_test.c | 3 +--
+ tools/testing/selftests/rseq/rseq.c                  | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-index cf37ce86b0fd..221525ccbe1d 100644
---- a/tools/testing/selftests/net/gro.c
-+++ b/tools/testing/selftests/net/gro.c
-@@ -57,10 +57,11 @@
+diff --git a/tools/testing/selftests/rseq/basic_percpu_ops_test.c b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
+index eb3f6db36d36..b953a52ff706 100644
+--- a/tools/testing/selftests/rseq/basic_percpu_ops_test.c
++++ b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
+@@ -9,10 +9,9 @@
  #include <string.h>
- #include <unistd.h>
+ #include <stddef.h>
  
 +#include "../kselftest.h"
-+
- #define DPORT 8000
- #define SPORT 1500
- #define PAYLOAD_LEN 100
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
- #define NUM_PACKETS 4
- #define START_SEQ 100
- #define START_ACK 100
-diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
-index 3d7dde2c321b..cc10c10c5ed9 100644
---- a/tools/testing/selftests/net/ipsec.c
-+++ b/tools/testing/selftests/net/ipsec.c
-@@ -41,7 +41,6 @@
+ #include "rseq.h"
  
- #define pr_err(fmt, ...)	printk(fmt ": %m", ##__VA_ARGS__)
- 
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
- #define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)]))
- 
- #define IPV4_STR_SZ	16	/* xxx.xxx.xxx.xxx is longest + \0 */
-diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-index b5277106df1f..072d709c96b4 100644
---- a/tools/testing/selftests/net/reuseport_bpf.c
-+++ b/tools/testing/selftests/net/reuseport_bpf.c
-@@ -24,9 +24,7 @@
- #include <sys/resource.h>
- #include <unistd.h>
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
--#endif
-+#include "../kselftest.h"
- 
- struct test_params {
- 	int recv_family;
-diff --git a/tools/testing/selftests/net/rxtimestamp.c b/tools/testing/selftests/net/rxtimestamp.c
-index e4613ce4ed69..9eb42570294d 100644
---- a/tools/testing/selftests/net/rxtimestamp.c
-+++ b/tools/testing/selftests/net/rxtimestamp.c
-@@ -18,7 +18,7 @@
- #include <linux/net_tstamp.h>
- #include <linux/errqueue.h>
- 
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+#include "../kselftest.h"
- 
- struct options {
- 	int so_timestamp;
-diff --git a/tools/testing/selftests/net/socket.c b/tools/testing/selftests/net/socket.c
-index afca1ead677f..db1aeb8c5d1e 100644
---- a/tools/testing/selftests/net/socket.c
-+++ b/tools/testing/selftests/net/socket.c
-@@ -7,6 +7,8 @@
- #include <sys/socket.h>
- #include <netinet/in.h>
- 
-+#include "../kselftest.h"
-+
- struct socket_testcase {
- 	int	domain;
- 	int	type;
-@@ -31,7 +33,6 @@ static struct socket_testcase tests[] = {
- 	{ AF_INET, SOCK_STREAM, IPPROTO_UDP, -EPROTONOSUPPORT, 1  },
- };
- 
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
- #define ERR_STRING_SZ	64
- 
- static int run_tests(void)
-diff --git a/tools/testing/selftests/net/tcp_fastopen_backup_key.c b/tools/testing/selftests/net/tcp_fastopen_backup_key.c
-index 9c55ec44fc43..c1cb0c75156a 100644
---- a/tools/testing/selftests/net/tcp_fastopen_backup_key.c
-+++ b/tools/testing/selftests/net/tcp_fastopen_backup_key.c
-@@ -26,6 +26,8 @@
- #include <fcntl.h>
- #include <time.h>
- 
-+#include "../kselftest.h"
-+
- #ifndef TCP_FASTOPEN_KEY
- #define TCP_FASTOPEN_KEY 33
- #endif
-@@ -34,10 +36,6 @@
- #define PROC_FASTOPEN_KEY "/proc/sys/net/ipv4/tcp_fastopen_key"
- #define KEY_LENGTH 16
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
--#endif
+-#define ARRAY_SIZE(arr)	(sizeof(arr) / sizeof((arr)[0]))
 -
- static bool do_ipv6;
- static bool do_sockopt;
- static bool do_rotate;
+ struct percpu_lock_entry {
+ 	intptr_t v;
+ } __attribute__((aligned(128)));
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index 7159eb777fd3..fb440dfca158 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -27,10 +27,9 @@
+ #include <signal.h>
+ #include <limits.h>
+ 
++#include "../kselftest.h"
+ #include "rseq.h"
+ 
+-#define ARRAY_SIZE(arr)	(sizeof(arr) / sizeof((arr)[0]))
+-
+ __thread volatile struct rseq __rseq_abi = {
+ 	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
+ };
 -- 
 2.32.0
 
