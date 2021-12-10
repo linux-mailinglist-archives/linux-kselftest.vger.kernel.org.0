@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF81470643
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 17:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DEC47064E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 17:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237502AbhLJQwg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 11:52:36 -0500
-Received: from mail-bn8nam12on2042.outbound.protection.outlook.com ([40.107.237.42]:11440
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S240582AbhLJQxE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 11:53:04 -0500
+Received: from mail-co1nam11on2047.outbound.protection.outlook.com ([40.107.220.47]:55264
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240511AbhLJQwb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:52:31 -0500
+        id S240602AbhLJQxD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:53:03 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bMO0F8awZsJ+thSBhfY1bDtLgYjZrbCHhII2KMZZ43TthcBag9ojQIWl/GLrYSFfMl92dl60E8NcM1PWcOWGG6CjROTRunLKpJJ7sNmfygOHmRcpp1Lt1hYhOdfOADLm2mxIQgZ8Dt5tQeXhBrkbuC9plzwX+34BgE9fZVQIa6TpRo15O6Fqr5naLwXMalnwME4FmJhhX3i5bfQBi5HxKKR4OjzR9ymOAjsAnGSlXcuDrKoTAtEI9gkgy1cm1b9eTO0YF0/xRV6ai5D2UYD+m2Jx9HWfZCnmFX++Sb0LdfptuC/fv+ZtdiHSI+3zNnvB02lDv9pgwb6u9SBuR/q2cw==
+ b=U3HgOkNgov8C1PVqHuhbgScCdJsuI/9/nXc8bjhzJGwb/7ARuJgsP99bqpT9kUfGVj/Z2ulinWUGVILhEI6QCK5Anld5AOwgzNKWJKAlXY9ZXcaGXlD7zX3TzWkTdjVIJDZJN9FN8DdA4I4Lt1b/Gjlwp/QfrMnJNWushdYKMSx/++Oedao08OWlyeUaS5vRkbfJ5I7qS8vPhfohq1XVHRiC4U/mTP91WNtruYuf0KKCxtOuq/CSKL6WGVIVGTkxVKNkl+8LkfAqNiF49KiPIBBT3Y9FXoI6BZX4lTUx6vhNLkgGY3dczxgRtKf5aOKKRO8aD144oly8IRQ0qxB5Gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3/12okhrmrB4xuQZH192RDbXC9BoT/Vvu/pMTiY+30Y=;
- b=QZrtbnyxR26x7vVx24at5jQxc2qRzXMR/yIcGtUBqG+qQLASwbpfNAIc4Uw8Vqc26bnsWOgQ3cA5IOAPAPUqIT3Doaft4aG8sLy0sT4yTXb0K33PKTLoO9X5VGktFWYXAXZsbDlOw8pq6VOojjTtlzbI2d1BiyQb8XRU9IKsxeHHbj77QaI0ugNegvuMyMUN88Qd0ppv1We7NFFCIMZPKkZ1nsIffActAQ/+Doz+nhESsIV2+P1oBxSAT3C6oCNp/pTgjf6w6gEFNZMhFA4zrLhvN+iVLlj41jDRXMMZrOyQ+WpG64H3gLVYesSRoXyyZwKzm64FhCGrsNP/6EA2ww==
+ bh=PSmM4s+hqJTlbhoYmw6xwaMc+NBXHAQkNw3bSCMrj1Y=;
+ b=JWoD61SIrHAdjH5N3GG3+GQipxm9Wj49qgPJiO+4I0Be9rjsKaCW+i6Bqy3DPrdWJBPzyTKZlAToVRjvu0m2SYU9DvsLwlWcCVCFz7/cBnDqM4WpGt/QZg7CoEjqUknTLxGDLrq3ZtXeMOr4loX+oWtW9tv3t1zFgag42KswUqD4g/i7FzIWNPzOqImYdGAvTEk5lGheLDKA8yGleGSV3UqVgPo1GdL5cs5Wt6PkY5m6269Sc4DKQPdGjPjA4xg19yPan6CanBaW1RbuKeI4rlkf6GGbLe+71H9P8Tav691yeaLYdlniSm2Hhu66++DvT8Mdui9vu+1yAdXdhoEseA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3/12okhrmrB4xuQZH192RDbXC9BoT/Vvu/pMTiY+30Y=;
- b=GB4lBojFgrvFCU4umO5yvq5PmEIsELcf3WVmtaR2zWqbMa/0zu5v3/vaHha8qMjpx+tKYMUR4faNlQI2GB213WYQPbfMktlmGiwjsTk4nrMGt09t/nkJ0iXdQ1t1B2m/DNSRqpQL39HivaIrs1kYqptECDtFeuC2+fwzV27uBMg=
-Received: from DS7PR03CA0304.namprd03.prod.outlook.com (2603:10b6:8:2b::16) by
- DM5PR12MB1626.namprd12.prod.outlook.com (2603:10b6:4:d::17) with Microsoft
+ bh=PSmM4s+hqJTlbhoYmw6xwaMc+NBXHAQkNw3bSCMrj1Y=;
+ b=rpHf1+j0JHP+w39UmPOl8uWvECEE4boiUpw48bHiWr7NFdDgJuAueiWcfz+CSPlDQu9mcbervS30tp/ulIIGlFiBtheyd71gfvFJlaFcCVkWETfh8P5Asme2WjmOL8YWCy12W3UrbbqiEMoj3eGItLEMLEyLzQhrqvCrtEgqLOk=
+Received: from DM5PR21CA0006.namprd21.prod.outlook.com (2603:10b6:3:ac::16) by
+ MWHPR12MB1277.namprd12.prod.outlook.com (2603:10b6:300:f::16) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.21; Fri, 10 Dec 2021 16:48:53 +0000
-Received: from DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2b:cafe::be) by DS7PR03CA0304.outlook.office365.com
- (2603:10b6:8:2b::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
- Transport; Fri, 10 Dec 2021 16:48:53 +0000
+ 15.20.4755.21; Fri, 10 Dec 2021 16:49:22 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:ac:cafe::29) by DM5PR21CA0006.outlook.office365.com
+ (2603:10b6:3:ac::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.8 via Frontend
+ Transport; Fri, 10 Dec 2021 16:49:22 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -43,13 +43,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT055.mail.protection.outlook.com (10.13.173.103) with Microsoft SMTP
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Fri, 10 Dec 2021 16:48:53 +0000
+ 15.20.4778.13 via Frontend Transport; Fri, 10 Dec 2021 16:49:22 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 10 Dec
- 2021 10:48:52 -0600
+ 2021 10:49:13 -0600
 From:   Michael Roth <michael.roth@amd.com>
 To:     <linux-kselftest@vger.kernel.org>
 CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -80,9 +80,9 @@ CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         "Suzuki K Poulose" <suzuki.poulose@arm.com>,
         <kvmarm@lists.cs.columbia.edu>
-Subject: [PATCH RFC 03/10] kvm: selftests: introduce ucall_ops for test/arch-specific ucall implementations
-Date:   Fri, 10 Dec 2021 10:46:13 -0600
-Message-ID: <20211210164620.11636-4-michael.roth@amd.com>
+Subject: [PATCH RFC 04/10] kvm: arm64: selftests: use ucall_ops to define default ucall implementation
+Date:   Fri, 10 Dec 2021 10:46:14 -0600
+Message-ID: <20211210164620.11636-5-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211210164620.11636-1-michael.roth@amd.com>
 References: <20211210164620.11636-1-michael.roth@amd.com>
@@ -94,140 +94,61 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 58d97c4d-9f90-4a7e-3916-08d9bbfcf308
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1626:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1626029E5CE7FB41321066D695719@DM5PR12MB1626.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Office365-Filtering-Correlation-Id: b5ce928b-2e96-4ca1-8d77-08d9bbfd045b
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1277:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1277BBFECD3DF3EE8B18F7FA95719@MWHPR12MB1277.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b/9kUOMpO0HEO5aE0Pvzp19pLHnOnsS1Z6mY5SEPWQVCBWkIo8LYcV7MlVI0Rvhfipm9TVeQjOX77bNfQwGn6JOEKSXvNIi4EADFKvXNrwFco0dil0ier5z6YUi3sWYXDhdwkt8AavsdfKnBdJqqii3v+Cq8L/Ue0a1sq+yCdC6N/xBiCZNiSz7u4O8Vwo5j3doEUvPaUMh2S8J6oeK0ulic29CJtTpygWSx3DuvQn+p7xPmy+Qz8EcZSpEbEufvf2vCYTkIlNfc9S7H9iZOD7m4ZehPAT3QMhmYgCSF8OuzdHji72fHkgJ6wqnU53K/lkYeBstJrQj2zyfy5RfTgVtu8tP09cXEizjGRNeWqlljTs0iWfPgiafYT51H1XIHVJLUU7yyy6snEy0rS624M/ziOGRUJ42mriEokGSj5qZW9GDP+wk6r1ZGcjAivAJXO5vTadiYBAvDqyX1LzlRFckaPvx6qXQg5knv9NQTbdv7KjgycejzysawdwlccToEm9LzCGWrjAZI/PcpS+I4WEwzbaoLFepgal0OZp3IBg1MGB0C8g+3Xttq7hM86ogZDR+ldnVJ3WP+Hm9BlQzqlXYIVvOw/Vr3STWMSLBfJgMXuVMRs4NCILwAD3bUXnWCtRJEetgSlOQjmNI/ytf+lvIRajNbVmllVTx8w27B1zXc7NPnfviuoylBB7W9Kl9pGgSRXwAJcH5Sig2tV8hFuYfkLN4OEVPk2rHJ4WfL7W/v8afJ2zayN/d8eNjM9La1GbM0ELAiKBnadFk8Op1s06Sfbonxkskbd/XFxbrPIZg=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(7416002)(5660300002)(70206006)(426003)(6916009)(6666004)(26005)(83380400001)(4326008)(47076005)(336012)(86362001)(8936002)(81166007)(44832011)(2616005)(16526019)(36860700001)(356005)(82310400004)(54906003)(36756003)(508600001)(70586007)(316002)(40460700001)(8676002)(1076003)(2906002)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: cpZw4FezY8Pj0kOl2dow7P1rgRmDU62Gb9dZswx6yfcCRgIlteAInvooU5zRulzucxnqtImgvRN8nLRO5tTzLyM/nRYUAgd+rZXQHCcKKqQuRp5iRTAA2Cj5jfj+DdUedA6CZ6oKFMg32BJwjtU74vnkBIX5fv6gv4oNNcWzskv2AosY+2Pae3IumtGo3u7cTSJD821qFYMGxlTWoQo3hQaYW85LqaI1ZU4AWs+P1LIp1q6CGAc+FT1Ci6YTTv49g1UR1RgFTuzxrYZ4yiaCNrDpKe2TI8USz5Vd924LUhCnP/aZE5yMUf8QJvLX7cTgdcvpErSwRjYRWcoVmghaq577yNECJ374asMWl63eBxWsdzaaAHgga3P3Hp0LbAA2TtUfSNYoAZQzvcplpOrNRygJ8F4us9FgYW4PY8tvs0NIHwfgJGYtJK10ri7DhqGBR96p/yeI95RK2ynCvVgy/PGR8VUNHHRRAp1XAP1THiNpt5W2ZTemBuJK3TUNVanBHukaGdOnLJ8uyguM1iWT7lQ1U41pGjrido0x8l5KFVcRftwCTATzNL4gTYMx760X5/AQedbLViNU1m5+tEraLf1+x3aG5qRAklIQfFaTstm75eVXwglzjbSGNGx77tggld5nr+RlYvfIgbsisUyYz+VG6wPyBzK3uew0Z7+dsnQct1FoQoSMyrIATxlgKouelcKcOElivlcL0VcO/2GRMzj/RHBPK/r3hYd13Fqx+usM5BljfMWXRnq/dqYCJxurvqGr9uC9GgKphBnORQrjZUH40F7vbpOwFulWA5EuKy8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(2906002)(70586007)(316002)(70206006)(83380400001)(7416002)(40460700001)(82310400004)(8936002)(356005)(508600001)(81166007)(26005)(8676002)(86362001)(6916009)(36860700001)(47076005)(426003)(336012)(4326008)(44832011)(2616005)(5660300002)(16526019)(186003)(54906003)(1076003)(36756003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 16:48:53.2253
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 16:49:22.2971
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58d97c4d-9f90-4a7e-3916-08d9bbfcf308
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5ce928b-2e96-4ca1-8d77-08d9bbfd045b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1626
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1277
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To support SEV, x86 tests will need an alternative to using PIO
-instructions to handle ucall-related functionality since ucall structs
-are currently allocated on the guest stack, which will generally be
-encrypted memory that can't be accessed by tests through the normal
-mechanisms (along with some other complications which will requires
-some new ucall interfaces as well).
-
-To prepare for this, introduce a ucall_ops struct and supporting
-interfaces that can be used to define multiple ucall implementations
-that can be selected on a per-test basis, and re-work the existing
-PIO-based ucall implementation to make use of these changes. Subsequent
-patches will do the same for other archs as well, and then extend this
-ops interface to address complications when dealing with
-encrypted/private guest memory.
+As with x86, switch the default ucall implementation to using the new
+ucall_ops infrastructure. With this change ucall_init/ucall_uninit are
+no longer arch-specific and can now be dropped in favor of the ones in
+ucall_common.c.
 
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
  tools/testing/selftests/kvm/Makefile          |  2 +-
- .../testing/selftests/kvm/include/kvm_util.h  | 10 ++
- .../selftests/kvm/include/ucall_common.h      | 17 +++-
- .../selftests/kvm/include/x86_64/ucall.h      | 18 ++++
- .../testing/selftests/kvm/lib/ucall_common.c  | 95 +++++++++++++++++++
- .../testing/selftests/kvm/lib/x86_64/ucall.c  | 46 ++++-----
- 6 files changed, 157 insertions(+), 31 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/ucall.h
- create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
+ .../selftests/kvm/include/aarch64/ucall.h     | 18 ++++++++
+ .../testing/selftests/kvm/include/kvm_util.h  |  2 +-
+ .../testing/selftests/kvm/lib/aarch64/ucall.c | 43 +++++++++----------
+ 4 files changed, 40 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/aarch64/ucall.h
 
 diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index c4e34717826a..05bff4039890 100644
+index 05bff4039890..2d4299961d0e 100644
 --- a/tools/testing/selftests/kvm/Makefile
 +++ b/tools/testing/selftests/kvm/Makefile
-@@ -34,7 +34,7 @@ ifeq ($(ARCH),s390)
- endif
+@@ -35,7 +35,7 @@ endif
  
  LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/rbtree.c lib/sparsebit.c lib/test_util.c lib/guest_modes.c lib/perf_test_util.c
--LIBKVM_x86_64 = lib/x86_64/apic.c lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S
-+LIBKVM_x86_64 = lib/x86_64/apic.c lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S lib/ucall_common.c
- LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c lib/aarch64/handlers.S lib/aarch64/spinlock.c lib/aarch64/gic.c lib/aarch64/gic_v3.c lib/aarch64/vgic.c
+ LIBKVM_x86_64 = lib/x86_64/apic.c lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S lib/ucall_common.c
+-LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c lib/aarch64/handlers.S lib/aarch64/spinlock.c lib/aarch64/gic.c lib/aarch64/gic_v3.c lib/aarch64/vgic.c
++LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c lib/aarch64/handlers.S lib/aarch64/spinlock.c lib/aarch64/gic.c lib/aarch64/gic_v3.c lib/aarch64/vgic.c lib/ucall_common.c
  LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
  
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index c9286811a4cb..2701bf98c0db 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -8,6 +8,16 @@
- #define SELFTEST_KVM_UTIL_H
- 
- #include "kvm_util_base.h"
-+/*
-+ * TODO: ucall.h contains arch-specific declarations along with
-+ * ucall_common.h. For now only a subset of archs provide the
-+ * new header. Once all archs implement the new header the #include for
-+ * ucall_common.h can be dropped.
-+ */
-+#ifdef __x86_64__
-+#include "ucall.h"
-+#else
- #include "ucall_common.h"
-+#endif
- 
- #endif /* SELFTEST_KVM_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
-index 9eecc9d40b79..fcd32607dcff 100644
---- a/tools/testing/selftests/kvm/include/ucall_common.h
-+++ b/tools/testing/selftests/kvm/include/ucall_common.h
-@@ -1,8 +1,12 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * tools/testing/selftests/kvm/include/kvm_util.h
-+ * Common interfaces related to ucall support.
-+ *
-+ * A ucall is a hypercall to userspace.
-  *
-  * Copyright (C) 2018, Google LLC.
-+ * Copyright (C) 2018, Red Hat, Inc.
-+ * Copyright (C) 2021, Advanced Micro Devices, Inc.
-  */
- #ifndef SELFTEST_KVM_UCALL_COMMON_H
- #define SELFTEST_KVM_UCALL_COMMON_H
-@@ -14,6 +18,7 @@ enum {
- 	UCALL_ABORT,
- 	UCALL_DONE,
- 	UCALL_UNHANDLED,
-+	UCALL_NOT_IMPLEMENTED,
- };
- 
- #define UCALL_MAX_ARGS 6
-@@ -23,8 +28,18 @@ struct ucall {
- 	uint64_t args[UCALL_MAX_ARGS];
- };
- 
-+struct ucall_ops {
-+	const char *name;
-+	void (*init)(struct kvm_vm *vm, void *arg);
-+	void (*uninit)(struct kvm_vm *vm);
-+	void (*send_cmd)(struct ucall *uc);
-+	uint64_t (*recv_cmd)(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
-+};
-+
- void ucall_init(struct kvm_vm *vm, void *arg);
- void ucall_uninit(struct kvm_vm *vm);
-+void ucall_init_ops(struct kvm_vm *vm, void *arg, const struct ucall_ops *ops);
-+void ucall_uninit_ops(struct kvm_vm *vm);
- void ucall(uint64_t cmd, int nargs, ...);
- uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
- 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/ucall.h b/tools/testing/selftests/kvm/include/x86_64/ucall.h
+ TEST_GEN_PROGS_x86_64 = x86_64/cr4_cpuid_sync_test
+diff --git a/tools/testing/selftests/kvm/include/aarch64/ucall.h b/tools/testing/selftests/kvm/include/aarch64/ucall.h
 new file mode 100644
-index 000000000000..8366bdc9c04e
+index 000000000000..d3189d0a4d68
 --- /dev/null
-+++ b/tools/testing/selftests/kvm/include/x86_64/ucall.h
++++ b/tools/testing/selftests/kvm/include/aarch64/ucall.h
 @@ -0,0 +1,18 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
@@ -242,117 +163,29 @@ index 000000000000..8366bdc9c04e
 +
 +#include "ucall_common.h"
 +
-+extern const struct ucall_ops ucall_ops_pio;
++extern const struct ucall_ops ucall_ops_mmio;
 +
 +extern const struct ucall_ops ucall_ops_default;
 +
 +#endif /* SELFTEST_KVM_UCALL_H */
-diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-new file mode 100644
-index 000000000000..db0129edcbc1
---- /dev/null
-+++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Common interfaces related to ucall support. A ucall is a hypercall to
-+ * userspace.
-+ *
-+ * Copyright (C) 2018, Red Hat, Inc.
-+ * Copyright (C) 2021, Advanced Micro Devices, Inc.
-+ */
-+#include "kvm_util_base.h"
-+#include "ucall_common.h"
-+
-+extern const struct ucall_ops ucall_ops_default;
-+
-+/* Some archs rely on a default that is available even without ucall_init(). */
-+#if defined(__x86_64__) || defined(__s390x__)
-+static const struct ucall_ops *ucall_ops = &ucall_ops_default;
-+#else
-+static const struct ucall_ops *ucall_ops;
-+#endif
-+
-+void ucall_init_ops(struct kvm_vm *vm, void *arg, const struct ucall_ops *ops)
-+{
-+	TEST_ASSERT(ops, "ucall ops must be specified");
-+	ucall_ops = ops;
-+	sync_global_to_guest(vm, ucall_ops);
-+
-+	if (ucall_ops->init)
-+		ucall_ops->init(vm, arg);
-+}
-+
-+void ucall_init(struct kvm_vm *vm, void *arg)
-+{
-+	ucall_init_ops(vm, arg, &ucall_ops_default);
-+}
-+
-+void ucall_uninit_ops(struct kvm_vm *vm)
-+{
-+	if (ucall_ops && ucall_ops->uninit)
-+		ucall_ops->uninit(vm);
-+
-+	ucall_ops = NULL;
-+	sync_global_to_guest(vm, ucall_ops);
-+}
-+
-+void ucall_uninit(struct kvm_vm *vm)
-+{
-+	ucall_uninit_ops(vm);
-+}
-+
-+static void ucall_process_args(struct ucall *uc, uint64_t cmd, int nargs, va_list va_args)
-+{
-+	int i;
-+
-+	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-+	uc->cmd = cmd;
-+
-+	for (i = 0; i < nargs; ++i)
-+		uc->args[i] = va_arg(va_args, uint64_t);
-+}
-+
-+/*
-+ * Allocate/populate a ucall buffer from the guest's stack and then generate an
-+ * exit to host userspace. ucall_ops->send_cmd should have some way of
-+ * communicating the address of the ucall buffer to the host.
-+ */
-+void ucall(uint64_t cmd, int nargs, ...)
-+{
-+	struct ucall uc;
-+	va_list va;
-+
-+	if (!ucall_ops->send_cmd)
-+		return;
-+
-+	va_start(va, nargs);
-+	ucall_process_args(&uc, cmd, nargs, va);
-+	va_end(va);
-+
-+	ucall_ops->send_cmd(&uc);
-+}
-+
-+/*
-+ * Parse the ucall buffer allocated by the guest via ucall() to determine what
-+ * ucall message/command was sent by the guest. If 'uc' is provided, copy the
-+ * contents of the guest's ucall buffer into it.
-+ */
-+uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
-+{
-+	if (!ucall_ops->recv_cmd)
-+		return UCALL_NOT_IMPLEMENTED;
-+
-+	if (uc)
-+		memset(uc, 0, sizeof(*uc));
-+
-+	return ucall_ops->recv_cmd(vm, vcpu_id, uc);
-+}
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-index a3489973e290..f5d9aba0d803 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-@@ -1,48 +1,28 @@
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 2701bf98c0db..16ec8c53cd81 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -14,7 +14,7 @@
+  * new header. Once all archs implement the new header the #include for
+  * ucall_common.h can be dropped.
+  */
+-#ifdef __x86_64__
++#if defined(__x86_64__) || defined (__aarch64__)
+ #include "ucall.h"
+ #else
+ #include "ucall_common.h"
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+index e0b0164e9af8..ab052ab5d5de 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+@@ -1,11 +1,14 @@
  // SPDX-License-Identifier: GPL-2.0
  /*
 - * ucall support. A ucall is a "hypercall to userspace".
@@ -364,20 +197,33 @@ index a3489973e290..f5d9aba0d803 100644
   */
 -#include "kvm_util.h"
 +#include "kvm_util_base.h"
+ #include "../kvm_util_internal.h"
 +#include "ucall.h"
  
- #define UCALL_PIO_PORT ((uint16_t)0x1000)
+ static vm_vaddr_t *ucall_exit_mmio_addr;
+ 
+@@ -22,7 +25,7 @@ static bool ucall_mmio_init(struct kvm_vm *vm, vm_paddr_t gpa)
+ 	return true;
+ }
  
 -void ucall_init(struct kvm_vm *vm, void *arg)
--{
--}
--
++static void ucall_ops_mmio_init(struct kvm_vm *vm, void *arg)
+ {
+ 	vm_paddr_t gpa, start, end, step, offset;
+ 	unsigned int bits;
+@@ -65,38 +68,22 @@ void ucall_init(struct kvm_vm *vm, void *arg)
+ 	TEST_FAIL("Can't find a ucall mmio address");
+ }
+ 
 -void ucall_uninit(struct kvm_vm *vm)
--{
--}
--
++static void ucall_ops_mmio_uninit(struct kvm_vm *vm)
+ {
+ 	ucall_exit_mmio_addr = 0;
+ 	sync_global_to_guest(vm, ucall_exit_mmio_addr);
+ }
+ 
 -void ucall(uint64_t cmd, int nargs, ...)
-+static void ucall_ops_pio_send_cmd(struct ucall *uc)
++static void ucall_ops_mmio_send_cmd(struct ucall *uc)
  {
 -	struct ucall uc = {
 -		.cmd = cmd,
@@ -392,14 +238,12 @@ index a3489973e290..f5d9aba0d803 100644
 -		uc.args[i] = va_arg(va, uint64_t);
 -	va_end(va);
 -
- 	asm volatile("in %[port], %%al"
--		: : [port] "d" (UCALL_PIO_PORT), "D" (&uc) : "rax", "memory");
-+		: : [port] "d" (UCALL_PIO_PORT), "D" (uc) : "rax", "memory");
+-	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
++	*ucall_exit_mmio_addr = (vm_vaddr_t)uc;
  }
  
 -uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
-+static uint64_t ucall_ops_pio_recv_cmd(struct kvm_vm *vm, uint32_t vcpu_id,
-+				       struct ucall *uc)
++static uint64_t ucall_ops_mmio_recv_cmd(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
  {
  	struct kvm_run *run = vcpu_state(vm, vcpu_id);
  	struct ucall ucall = {};
@@ -407,21 +251,23 @@ index a3489973e290..f5d9aba0d803 100644
 -	if (uc)
 -		memset(uc, 0, sizeof(*uc));
 -
- 	if (run->exit_reason == KVM_EXIT_IO && run->io.port == UCALL_PIO_PORT) {
- 		struct kvm_regs regs;
- 
-@@ -57,3 +37,11 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
+ 	if (run->exit_reason == KVM_EXIT_MMIO &&
+ 	    run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
+ 		vm_vaddr_t gva;
+@@ -113,3 +100,13 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
  
  	return ucall.cmd;
  }
 +
-+const struct ucall_ops ucall_ops_pio = {
-+	.name = "PIO",
-+	.send_cmd = ucall_ops_pio_send_cmd,
-+	.recv_cmd = ucall_ops_pio_recv_cmd,
++const struct ucall_ops ucall_ops_mmio = {
++	.name = "MMIO",
++	.init = ucall_ops_mmio_init,
++	.uninit = ucall_ops_mmio_uninit,
++	.send_cmd = ucall_ops_mmio_send_cmd,
++	.recv_cmd = ucall_ops_mmio_recv_cmd,
 +};
 +
-+const struct ucall_ops ucall_ops_default = ucall_ops_pio;
++const struct ucall_ops ucall_ops_default = ucall_ops_mmio;
 -- 
 2.25.1
 
