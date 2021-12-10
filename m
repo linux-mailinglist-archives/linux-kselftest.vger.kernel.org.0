@@ -2,77 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7314B4709E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 20:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422C2470C39
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 22:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242008AbhLJTNs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 14:13:48 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58300 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbhLJTNr (ORCPT
+        id S232064AbhLJVJT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 16:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231983AbhLJVJS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:13:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 10 Dec 2021 16:09:18 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3080DC061746;
+        Fri, 10 Dec 2021 13:05:43 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 12C64CE2D10;
-        Fri, 10 Dec 2021 19:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F1F1C341C7;
-        Fri, 10 Dec 2021 19:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639163409;
-        bh=onkZt4WSnmivAmB5shwxiD1wBJliWxV3mAJnF9YpnIk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ptGQiYwLMs4ZFccaCXxpK46msXPCmcvx/eESqL5lUX/pU19SNzhPfnC/3bDYA+Zf8
-         VszEL1MBGI+VU6If9Nz6Ds0pI5Xb2Y5IAGcqaotlfRYvSYuzgteGQiEehlDy1RMAhL
-         3I6bn+oKTKfa9amI2ai14oHFpO7qg8k9IqJZG+1J1o9m0LSuJStLFcMhSUrmSOe7gQ
-         tt4m0L6sUkNee1GV/zRsubN4DAHpzCicR0bWTX3YswZi6AdGKst1SZajwEke0tpCbz
-         nIR3A0LnyMGqXvHZEgL66Fsu32eqWErDS9gQcziOQGD8PNRau/YEmP3eZwyVHhLR5j
-         ENmBsifNNl22g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 204B9609EB;
-        Fri, 10 Dec 2021 19:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ms.lwn.net (Postfix) with ESMTPSA id 07F072CC;
+        Fri, 10 Dec 2021 21:05:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 07F072CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1639170342; bh=ah7X2p+x7eNXWfUxiAvcbLc+vL4B4rK2KSitJdGSWbg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Fai/J8PJVDqw32kJ4cgP/LATbXRW+UiaCL+9qJPIwrP5RmYT0b5ePsEipAPcCGQXk
+         /7Hvl20oYYmuubX92kmN4qoTogIK3HXj98Xrosm/8LWjSa33MmPIO57YDW+97ajJAf
+         FMnapIP5MoM+jCyoN+Kg3x9gmwnT6KCUX00L6zW0i20tnOMEUo29zEXNxGNQ+ji2pl
+         2h3pTmjZH+aT98NjkfEsTMnbUOC/SScLW6VRoFTjIytBCmDTazm9OZr1qW0dyTP0d4
+         W44NEIk/6oCFQKqOsiuFg5cZnhgfTNLarJN5+thlnWwi0kU3Fil2B895w719rBIGjP
+         xhnwmNblr8gQA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, Tim.Bird@sony.com,
+        shuah@kernel.org, rmr167@gmail.com, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH v2] Documentation: dev-tools: Add KTAP specification
+In-Reply-To: <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
+References: <20211207190251.18426-1-davidgow@google.com>
+ <202112071358.E8E6812D@keescook>
+ <8c06e715-a83e-e8c6-74c3-836831b85cdf@linuxfoundation.org>
+Date:   Fri, 10 Dec 2021 14:05:41 -0700
+Message-ID: <87mtl8qifu.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in mptcp_inq.c
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163916340912.5890.11767270768201667330.git-patchwork-notify@kernel.org>
-Date:   Fri, 10 Dec 2021 19:10:09 +0000
-References: <20211210071424.425773-1-ye.guojin@zte.com.cn>
-In-Reply-To: <20211210071424.425773-1-ye.guojin@zte.com.cn>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
-        davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ye.guojin@zte.com.cn, zealci@zte.com.cn
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> On 12/7/21 3:02 PM, Kees Cook wrote:
+>> On Tue, Dec 07, 2021 at 11:02:51AM -0800, David Gow wrote:
+>>> From: Rae Moar <rmoar@google.com>
+>>>
+>>> It does not make any significant additions or changes other than those
+>>> already in use in the kernel: additional features can be added as they
+>>> become necessary and used.
+>>>
+>>> [1]: https://testanything.org/tap-version-13-specification.html
+>>>
+>>> Signed-off-by: Rae Moar <rmoar@google.com>
+>>> Co-developed-by: David Gow <davidgow@google.com>
+>>> Signed-off-by: David Gow <davidgow@google.com>
+>> 
+>> I like it! Thank you so much for suffering through my earlier reviews.
+>> :)
+>> 
+>> The only concern I have is wonder what'll be needed to kselftest to
+>> deal with indentation changes. As long as this can be implemented
+>> without a subtest knowing it is a subtest, we're good.
+>> 
+>
+> A lot of this TAP output is in the wrappers - hopefully it will be okay.
+> Fingers crossed. :)
+>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>> 
+>
+> Looks good to me as well. Thanks for doing this work.
+>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-On Fri, 10 Dec 2021 07:14:24 +0000 you wrote:
-> From: Ye Guojin <ye.guojin@zte.com.cn>
-> 
-> 'sys/ioctl.h' included in 'mptcp_inq.c' is duplicated.
-> 
-> Reported-by: ZealRobot <zealci@zte.com.cn>
-> Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
-> 
-> [...]
+Would you like me to take this through the docs tree, or do you have
+other plans for merging?
 
-Here is the summary with links:
-  - selftests: mptcp: remove duplicate include in mptcp_inq.c
-    https://git.kernel.org/netdev/net-next/c/db1041544815
+Thanks,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+jon
