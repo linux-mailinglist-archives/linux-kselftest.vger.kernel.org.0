@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD826470921
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 19:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB512470922
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 19:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245496AbhLJSsE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 13:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S238751AbhLJSsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 13:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238751AbhLJSsE (ORCPT
+        with ESMTP id S245518AbhLJSsI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:48:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBC5C061746
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:44:28 -0800 (PST)
+        Fri, 10 Dec 2021 13:48:08 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5486C061746
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:44:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67114B8295A
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 18:44:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4EC7C341C7;
-        Fri, 10 Dec 2021 18:44:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F0ADECE2C78
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 18:44:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA864C341CC;
+        Fri, 10 Dec 2021 18:44:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639161866;
-        bh=5MdMiRt1aG0yuVgkBRRqIp6k6u5Uzij6IN3vmsTjwlI=;
+        s=k20201202; t=1639161869;
+        bh=Iz1TB8HTnr7e9Ekco1erA6sCTxhOFwnd1nCY4980Kgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oiQz+eOTLsdfjhsaeFQVARPsQcVjXFhKnbDHgIBhDCMPYXbSGW5ZwW0QcK4Mls+uK
-         Yg3i0n1+8TMTAGoeOT4LaVTJpnyig/7Hw0zR8Sj3o4yiSOg1hVt+hrg4U7YWvj7rHe
-         wfJ4J9LU78aKBXHjzXGDFnplLpYUDGGAcZDL4RZ2xuofqKciEjbWneLUEcmeuAiOHq
-         xHf7qfytZ3wzOo68R6/+8IkZdpPasvj913a4hElFAS7B6kaJ835yOJi3jIjyjl0P0d
-         ++3lTOy3SKgzksg07CvhMLi1A9gqo7+FLFxkIIqMnhx0v4mj8RH71Vve5yzD0hhPST
-         4Tmt66ACBlsRQ==
+        b=MyOW7jZwroKWJSGV7mRuDauFftIuZ78vXqA8qw/soEwa4neaAZZeu3D5JRW3o7qke
+         DBkCKlj386B4wKuqBCYzbwZyYFz886nFld/mPCm/07f/dZEveCrO/yl/MjAUUOh3ht
+         jsqnRSs0a61QwDn5ApiqG/wGmKqdLsNkCy+lQZMJIZkR6bnQXKaQW0mE/HMNQ/hpLZ
+         MghhlPeXn9NnZ+GTU/YQhvp8xRPNJOE5j94UVPZ1sjV+K8dcWPqkWkmXR9hvPFIx4A
+         D4z627lZMDdjw+e+AR3qcTRIy2kn0MNxm45cKTBaBOB5RI1WcC+JAdhL8lXqFRnSg2
+         nV0FENwpn1R3Q==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -44,136 +44,112 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v7 17/37] arm64/sme: Implement support for TPIDR2
-Date:   Fri, 10 Dec 2021 18:41:13 +0000
-Message-Id: <20211210184133.320748-18-broonie@kernel.org>
+Subject: [PATCH v7 18/37] arm64/sme: Implement SVCR context switching
+Date:   Fri, 10 Dec 2021 18:41:14 +0000
+Message-Id: <20211210184133.320748-19-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211210184133.320748-1-broonie@kernel.org>
 References: <20211210184133.320748-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4258; h=from:subject; bh=5MdMiRt1aG0yuVgkBRRqIp6k6u5Uzij6IN3vmsTjwlI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhs59LUzRCbuFpBGd7mTmJ+uPWg2NB4idlaoI1IbKj CYBsrnGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbOfSwAKCRAk1otyXVSH0ATyB/ 9vnldr8J0RhVvz583auyEWAmz2VeU+tGDvISD4F/ZMiOzsbgPUsIQIM9+kzRVIxNd6Uqijx4z2xlK5 SrLyHdHy+1KHdi5dXdx2F3MxFH1uik9x/e1tvpjaIQhK0DVdGxmeDgFhRfXPW8vNZoY/UlrtdCTDXr pla4tpmhQi+1wQTsGXjv0QrdblP3LZCF1YWuNM/JVoAS7AbVnV/PS2BIq6aWqCfvNTjM32lhY51mBS i5pvaWoNVFLBclQio/9yyBSrScdYrGktJmma4+zwiWcPp0ZEUpzaNStnHQUhCJerWsSYoUoG+tCf0+ 6/cWCyw+ZjKfBuxNs09NxskWGDO+kQ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3708; h=from:subject; bh=Iz1TB8HTnr7e9Ekco1erA6sCTxhOFwnd1nCY4980Kgc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhs59Mlraut7rom3l+pQGzMjle5o9o8GsYbmgcTDV7 lQfMBxWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbOfTAAKCRAk1otyXVSH0EQfCA CC4BHjXz/Yot4Xa16aYgKcefvW2qBxJ72+tcooFvjhIU/B0QtvT0kyLLvG0GyZ1zL4uxl6O5b/BPpq Kvb4rs4YkXjXz5pbpXq3a0vwDHykOO/lOT2F5f8FPNDjMJgl+0X10t/mfiwINrhx6oFC8C4jBs7h6g +4DsHBTPqQEhM3QuS96hNZ6b/+TKWF0KVvcvls6O7EkQ2MFyZPTtkmBiCCdmDH5Atsbuto34eFybDo 3wTEVwgsJeqh68PWCtr/tfbK4Jgu/6w61WnFA/llqgN3Nu7s/BbEHACSnA9x01drQD9R+mlYGkBX8q GKv7cNjV9J6Y8a2M0ZNVLaNLvTeiIj
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The Scalable Matrix Extension introduces support for a new thread specific
-data register TPIDR2 intended for use by libc. The kernel must save the
-value of TPIDR2 on context switch and should ensure that all new threads
-start off with a default value of 0. Add a field to the thread_struct to
-store TPIDR2 and context switch it with the other thread specific data.
+In SME the use of both streaming SVE mode and ZA are tracked through
+PSTATE.SM and PSTATE.ZA, visible through the system register SVCR.  In
+order to context switch the floating point state for SME we need to
+context switch the contents of this register as part of context
+switching the floating point state.
 
-In case there are future extensions which also use TPIDR2 we introduce
-system_supports_tpidr2() and use that rather than system_supports_sme()
-for TPIDR2 handling.
+Since changing the vector length exits streaming SVE mode and disables
+ZA we also make sure we update SVCR appropriately when setting vector
+length, and similarly ensure that new threads have streaming SVE mode
+and ZA disabled.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/cpufeature.h |  5 +++++
- arch/arm64/include/asm/processor.h  |  1 +
- arch/arm64/kernel/fpsimd.c          |  4 ++++
- arch/arm64/kernel/process.c         | 14 ++++++++++++--
- 4 files changed, 22 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/processor.h   |  1 +
+ arch/arm64/include/asm/thread_info.h |  1 +
+ arch/arm64/kernel/fpsimd.c           | 11 +++++++++++
+ arch/arm64/kernel/process.c          |  2 ++
+ 4 files changed, 15 insertions(+)
 
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index 9d36035acce3..12252352d2ee 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -747,6 +747,11 @@ static __always_inline bool system_supports_fa64(void)
- 		cpus_have_const_cap(ARM64_SME_FA64);
- }
- 
-+static __always_inline bool system_supports_tpidr2(void)
-+{
-+	return system_supports_sme();
-+}
-+
- static __always_inline bool system_supports_cnp(void)
- {
- 	return IS_ENABLED(CONFIG_ARM64_CNP) &&
 diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index f2c2ebd440e2..008a1767ebff 100644
+index 008a1767ebff..7e08a4d48c24 100644
 --- a/arch/arm64/include/asm/processor.h
 +++ b/arch/arm64/include/asm/processor.h
 @@ -168,6 +168,7 @@ struct thread_struct {
  	u64			mte_ctrl;
  #endif
  	u64			sctlr_user;
-+	u64			tpidr2_el0;
++	u64			svcr;
+ 	u64			tpidr2_el0;
  };
  
- static inline unsigned int thread_get_vl(struct thread_struct *thread,
+diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+index 4e6b58dcd6f9..848739c15de8 100644
+--- a/arch/arm64/include/asm/thread_info.h
++++ b/arch/arm64/include/asm/thread_info.h
+@@ -82,6 +82,7 @@ int arch_dup_task_struct(struct task_struct *dst,
+ #define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
+ #define TIF_SSBD		25	/* Wants SSB mitigation */
+ #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
++#define TIF_SME			27	/* SME in use */
+ #define TIF_SME_VL_INHERIT	28	/* Inherit SME vl_onexec across exec */
+ 
+ #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 20c889487193..0af82c518979 100644
+index 0af82c518979..d6e6bec6b490 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -1098,6 +1098,10 @@ void sme_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
- 	/* Allow SME in kernel */
- 	write_sysreg(read_sysreg(CPACR_EL1) | CPACR_EL1_SMEN_EL1EN, CPACR_EL1);
- 	isb();
-+
-+	/* Allow EL0 to access TPIDR2 */
-+	write_sysreg(read_sysreg(SCTLR_EL1) | SCTLR_ELx_ENTP2, SCTLR_EL1);
-+	isb();
- }
+@@ -355,6 +355,9 @@ static void task_fpsimd_load(void)
+ 	WARN_ON(!system_supports_fpsimd());
+ 	WARN_ON(!have_cpu_fpsimd_context());
  
- /*
++	if (IS_ENABLED(CONFIG_ARM64_SME) && test_thread_flag(TIF_SME))
++		write_sysreg_s(current->thread.svcr, SYS_SVCR_EL0);
++
+ 	if (IS_ENABLED(CONFIG_ARM64_SVE) && test_thread_flag(TIF_SVE)) {
+ 		sve_set_vq(sve_vq_from_vl(task_get_sve_vl(current)) - 1);
+ 		sve_load_state(sve_pffr(&current->thread),
+@@ -380,6 +383,10 @@ static void fpsimd_save(void)
+ 	if (test_thread_flag(TIF_FOREIGN_FPSTATE))
+ 		return;
+ 
++	if (IS_ENABLED(CONFIG_ARM64_SME) &&
++	    test_thread_flag(TIF_SME))
++		current->thread.svcr = read_sysreg_s(SYS_SVCR_EL0);
++
+ 	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
+ 	    test_thread_flag(TIF_SVE)) {
+ 		if (WARN_ON(sve_get_vl() != last->sve_vl)) {
+@@ -731,6 +738,10 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 	if (test_and_clear_tsk_thread_flag(task, TIF_SVE))
+ 		sve_to_fpsimd(task);
+ 
++	if (system_supports_sme() && type == ARM64_VEC_SME)
++		task->thread.svcr &= ~(SYS_SVCR_EL0_SM_MASK |
++				       SYS_SVCR_EL0_ZA_MASK);
++
+ 	if (task == current)
+ 		put_cpu_fpsimd_context();
+ 
 diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index aacf2f5559a8..3adca0123943 100644
+index 3adca0123943..eff50e02b4e2 100644
 --- a/arch/arm64/kernel/process.c
 +++ b/arch/arm64/kernel/process.c
-@@ -249,6 +249,8 @@ void show_regs(struct pt_regs *regs)
- static void tls_thread_flush(void)
- {
- 	write_sysreg(0, tpidr_el0);
-+	if (system_supports_tpidr2())
-+		write_sysreg_s(0, SYS_TPIDR2_EL0);
+@@ -309,6 +309,8 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ 	dst->thread.sve_state = NULL;
+ 	clear_tsk_thread_flag(dst, TIF_SVE);
  
- 	if (is_compat_task()) {
- 		current->thread.uw.tp_value = 0;
-@@ -342,6 +344,8 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
- 		 * out-of-sync with the saved value.
- 		 */
- 		*task_user_tls(p) = read_sysreg(tpidr_el0);
-+		if (system_supports_tpidr2())
-+			p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
++	dst->thread.svcr = 0;
++
+ 	/* clear any pending asynchronous tag fault raised by the parent */
+ 	clear_tsk_thread_flag(dst, TIF_MTE_ASYNC_FAULT);
  
- 		if (stack_start) {
- 			if (is_compat_thread(task_thread_info(p)))
-@@ -352,10 +356,12 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
- 
- 		/*
- 		 * If a TLS pointer was passed to clone, use it for the new
--		 * thread.
-+		 * thread.  We also reset TPIDR2 if it's in use.
- 		 */
--		if (clone_flags & CLONE_SETTLS)
-+		if (clone_flags & CLONE_SETTLS) {
- 			p->thread.uw.tp_value = tls;
-+			p->thread.tpidr2_el0 = 0;
-+		}
- 	} else {
- 		/*
- 		 * A kthread has no context to ERET to, so ensure any buggy
-@@ -386,6 +392,8 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
- void tls_preserve_current_state(void)
- {
- 	*task_user_tls(current) = read_sysreg(tpidr_el0);
-+	if (system_supports_tpidr2() && !is_compat_task())
-+		current->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
- }
- 
- static void tls_thread_switch(struct task_struct *next)
-@@ -398,6 +406,8 @@ static void tls_thread_switch(struct task_struct *next)
- 		write_sysreg(0, tpidrro_el0);
- 
- 	write_sysreg(*task_user_tls(next), tpidr_el0);
-+	if (system_supports_tpidr2())
-+		write_sysreg_s(next->thread.tpidr2_el0, SYS_TPIDR2_EL0);
- }
- 
- /*
 -- 
 2.30.2
 
