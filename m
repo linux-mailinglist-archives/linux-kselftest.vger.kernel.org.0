@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 887A547092F
+	by mail.lfdr.de (Postfix) with ESMTP id D1508470930
 	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 19:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbhLJSsh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 13:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S233992AbhLJSsi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 13:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245562AbhLJSse (ORCPT
+        with ESMTP id S245544AbhLJSsg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 13:48:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F4CC061B38
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:44:59 -0800 (PST)
+        Fri, 10 Dec 2021 13:48:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D209C061746
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:45:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A3D49CE2C90
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 18:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589FDC341CB;
-        Fri, 10 Dec 2021 18:44:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 076D6B82959
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 18:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5475DC341CC;
+        Fri, 10 Dec 2021 18:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639161895;
-        bh=jLrKauMo97jhxOy35VKRzK15Vz0tTJowtBEC7D/upGc=;
+        s=k20201202; t=1639161898;
+        bh=TMip3u/Q/XCtOvE5SwU4TNF3b2fGyeSOVzwfivsGdlo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F2B9KUeOUjztaYL9fNQ0Uf9+lwmhOp3MC1hDCCWHToTERxRbILq+WTDIeIDfCVvnz
-         CsLAEb6Bvnd91MjtjocOqEdx+bjjqaPfXaObH8CW3NTC5ZAWZW3coumncM0lBP5yOi
-         P4w5/twX3EP1E9RoIqH5Iw1gaZd1jV4aUHIaklNogcLpVWj9jftp0t9lsxq2JRG4Nv
-         0dbxt623P+mTqMtaw0pXMovcyUPvh2awHd/NRvnwOBy1YsALul9fPEm+nKelB/DesP
-         QCX+YLgVtKsA6qLHBWOYU+YlwkOOS3sxChnKEAVzZBfbU+FNutJvdl9hUZaNzvF1nJ
-         bCAgmDbSdvy5w==
+        b=cTbsTfpb2KpNIXoeBE+j5Hg63qwDjeA7FmXtaMAkKZeOCzRB3LfVq1lUunQ/uWWys
+         IWJIDm4YGm1GeEPdxLnr6eDQia/eJVy5thB4J9dRNUXeK3qQwp7JZtEHZebmQbhHIj
+         kDYaXcW69wFwOVj7lXCmEzNU6UG+Aj6nbh3gX33rotocWf0cLp4l76Na/TWV0zsUYM
+         3ZCn5oUWsr+/DhHyspedY+2gW9lzCORNjB+uqE4UO/7nhGzJPneM48ZcoM61KWXnZs
+         EKB9TUYsd3M84YlI/PF/2Eeg84ueUtwJyIcNTfjzQKCDnr+TQpDuWKNEiv3bBVIdcb
+         3pSUGwmbgBOuA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -44,133 +44,56 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v7 27/37] arm64/sme: Save and restore streaming mode over EFI runtime calls
-Date:   Fri, 10 Dec 2021 18:41:23 +0000
-Message-Id: <20211210184133.320748-28-broonie@kernel.org>
+Subject: [PATCH v7 28/37] arm64/sme: Provide Kconfig for SME
+Date:   Fri, 10 Dec 2021 18:41:24 +0000
+Message-Id: <20211210184133.320748-29-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211210184133.320748-1-broonie@kernel.org>
 References: <20211210184133.320748-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3623; h=from:subject; bh=jLrKauMo97jhxOy35VKRzK15Vz0tTJowtBEC7D/upGc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhs59T75M88oFp3XXYCMLvzif+Fo9rFzcyfxpqLgB8 f5GkBE2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbOfUwAKCRAk1otyXVSH0FwQB/ sFsOBrna4IMO0mnHkGKhYz07vLkBSrM8omRT3WQpCMpNUBOBzElsO8kBL/xItu/WrIzen2G7YyzqKV kFcSYopuIclUuccLyE/QqZQonb7gvwJ/kh9JzK6BEaJUzu+1wUV8NGsZ/Kc1IN72yeHpYImavqzpJW nGnPDza6syB+nDVBzgL6KeOySlMbunCxh8C6SPKTlyMZiKs8FqEUmGBMrpeLls/jmeepp6L/Yjlqsc 9TAsfXSrm/FZRe8XoODq4HhB+tGqkiM0+YVl05RqaJvUnT7IApZ2UQEUjGlkv8QgM8qtNx17twy1hX I1/vSF0VSpkDn7gX5vlZgLUzd/R0Bz
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1520; h=from:subject; bh=TMip3u/Q/XCtOvE5SwU4TNF3b2fGyeSOVzwfivsGdlo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhs59UKdl7VTDf8YoM1bMRWgMic3HucvsRQjUJYNTR hQVoYumJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYbOfVAAKCRAk1otyXVSH0E4TB/ 9dxImWYi8b/JXXXXeCHSg6Kj3gegV6L91ey0BaYf4wY2R4iPov33PP3uPZjtobi/3Z9Bxr/9q8jVEx 8stcNbyLI5b2RSWBAutBYo52PS+PWTy98FxLIvZD1wd3bMy8n+hyXrH/Zv+5pj43AdsvCTCzDGuLcm ZsewKocUkQ069HaF4+zYm6GMzGHY69u5qi7dsIIH2NebPCy452yyI4NEs98XpfxtQDklG8Ij5EjPSm mt3a0ittKqTKlPj2Ntbzcwzvf3AgSF436l+ZiLNqmSfv4Vx6P9WZ3hCmBf+DVI9Vu0uiBeReyNlhnI vZ6oSiu3OVh73eAJWXSQzT7GEjvLjJ
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When saving and restoring the floating point state over an EFI runtime
-call ensure that we handle streaming mode, only handling FFR if we are not
-in streaming mode and ensuring that we are in normal mode over the call
-into runtime services.
+Now that basline support for the Scalable Matrix Extension (SME) is present
+introduce the Kconfig option allowing it to be built. While there is no
+requirement for a system with SME to support SVE at runtime the support for
+streaming mode SVE is mostly shared with normal SVE so depend on SVE.
 
-We currently assume that ZA will not be modified by runtime services, the
-specification is not yet finalised so this may need updating if that
-changes.
+Since there is currently no support for KVM and no handling of either
+streaming mode or ZA with KVM the option the feature is marked as being
+incompatible with KVM and not enabled by default.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 47 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 41 insertions(+), 6 deletions(-)
+ arch/arm64/Kconfig | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index bb174c1b8ae0..7ad55fa54d03 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -1061,21 +1061,25 @@ int vec_verify_vq_map(enum vec_type type)
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index c4207cf9bb17..486f614638d5 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1845,6 +1845,17 @@ config ARM64_SVE
+ 	  booting the kernel.  If unsure and you are not observing these
+ 	  symptoms, you should assume that it is safe to say Y.
  
- static void __init sve_efi_setup(void)
- {
--	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
-+	int max_vl = 0;
-+	int i;
- 
- 	if (!IS_ENABLED(CONFIG_EFI))
- 		return;
- 
-+	for (i = 0; i < ARRAY_SIZE(vl_info); i++)
-+		max_vl = max(vl_info[i].max_vl, max_vl);
++config ARM64_SME
++	bool "ARM Scalable Matrix Extension support"
++	depends on ARM64_SVE
++	depends on !KVM
++	help
++	  The Scalable Matrix Extension (SME) is an extension to the AArch64
++	  execution state which utilises a substantial subset of the SVE
++	  instruction set, together with the addition of new architectural
++	  register state capable of holding two dimensional matrix tiles to
++	  enable various matrix operations.
 +
- 	/*
- 	 * alloc_percpu() warns and prints a backtrace if this goes wrong.
- 	 * This is evidence of a crippled system and we are returning void,
- 	 * so no attempt is made to handle this situation here.
- 	 */
--	if (!sve_vl_valid(info->max_vl))
-+	if (!sve_vl_valid(max_vl))
- 		goto fail;
- 
- 	efi_sve_state = __alloc_percpu(
--		SVE_SIG_REGS_SIZE(sve_vq_from_vl(info->max_vl)), SVE_VQ_BYTES);
-+		SVE_SIG_REGS_SIZE(sve_vq_from_vl(max_vl)), SVE_VQ_BYTES);
- 	if (!efi_sve_state)
- 		goto fail;
- 
-@@ -1857,6 +1861,7 @@ EXPORT_SYMBOL(kernel_neon_end);
- static DEFINE_PER_CPU(struct user_fpsimd_state, efi_fpsimd_state);
- static DEFINE_PER_CPU(bool, efi_fpsimd_state_used);
- static DEFINE_PER_CPU(bool, efi_sve_state_used);
-+static DEFINE_PER_CPU(bool, efi_sm_state);
- 
- /*
-  * EFI runtime services support functions
-@@ -1891,12 +1896,28 @@ void __efi_fpsimd_begin(void)
- 		 */
- 		if (system_supports_sve() && likely(efi_sve_state)) {
- 			char *sve_state = this_cpu_ptr(efi_sve_state);
-+			bool ffr = true;
-+			u64 svcr;
- 
- 			__this_cpu_write(efi_sve_state_used, true);
- 
-+			/* If we are in streaming mode don't touch FFR */
-+			if (system_supports_sme()) {
-+				svcr = read_sysreg_s(SYS_SVCR_EL0);
-+
-+				ffr = svcr & SYS_SVCR_EL0_SM_MASK;
-+
-+				__this_cpu_write(efi_sm_state, ffr);
-+			}
-+
- 			sve_save_state(sve_state + sve_ffr_offset(sve_max_vl()),
- 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
--				       true);
-+				       ffr);
-+
-+			if (system_supports_sme())
-+				sysreg_clear_set_s(SYS_SVCR_EL0,
-+						   SYS_SVCR_EL0_SM_MASK, 0);
-+
- 		} else {
- 			fpsimd_save_state(this_cpu_ptr(&efi_fpsimd_state));
- 		}
-@@ -1919,11 +1940,25 @@ void __efi_fpsimd_end(void)
- 		if (system_supports_sve() &&
- 		    likely(__this_cpu_read(efi_sve_state_used))) {
- 			char const *sve_state = this_cpu_ptr(efi_sve_state);
-+			bool ffr = true;
-+
-+			/*
-+			 * Restore streaming mode; EFI calls are
-+			 * normal function calls so should not return in
-+			 * streaming mode.
-+			 */
-+			if (system_supports_sme()) {
-+				if (__this_cpu_read(efi_sm_state)) {
-+					sysreg_clear_set_s(SYS_SVCR_EL0,
-+							   0,
-+							   SYS_SVCR_EL0_SM_MASK);
-+					ffr = false;
-+				}
-+			}
- 
--			sve_set_vq(sve_vq_from_vl(sve_get_vl()) - 1);
- 			sve_load_state(sve_state + sve_ffr_offset(sve_max_vl()),
- 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
--				       true);
-+				       ffr);
- 
- 			__this_cpu_write(efi_sve_state_used, false);
- 		} else {
+ config ARM64_MODULE_PLTS
+ 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
+ 	depends on MODULES
 -- 
 2.30.2
 
