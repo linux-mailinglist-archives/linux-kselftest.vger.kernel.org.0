@@ -2,50 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFD7470503
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 16:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5095A47056A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 17:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236851AbhLJQAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 11:00:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59462 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbhLJQAk (ORCPT
+        id S240690AbhLJQUf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 11:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240634AbhLJQUe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:00:40 -0500
+        Fri, 10 Dec 2021 11:20:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868A9C0617A2;
+        Fri, 10 Dec 2021 08:16:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 250B4B828AA;
-        Fri, 10 Dec 2021 15:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B21C341CA;
-        Fri, 10 Dec 2021 15:57:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BB4C0CE2BEB;
+        Fri, 10 Dec 2021 16:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DEADC00446;
+        Fri, 10 Dec 2021 16:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639151822;
-        bh=zna+FdXtD3DNZdBDoBjRxKaQkeMOafWH2JTKGF9XsBQ=;
+        s=k20201202; t=1639153015;
+        bh=3ifJrSFjNhly+TY2+b6L86AuUb/oef45UACm9ExPytk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lj/SfNHyPF/MWAAndG9Lz+JjRfmd6zbLChKSaoIGQBJGSaZckdRuVQJAJ27P26GOC
-         OtGUz37HLzHdCUC7mPkYGgTFlJeIh+YbTOpym8nWXNGMxlVZSQvCG4AtuzP7i7O5VV
-         McYROey8uC6/QZZ8e20fXJlETo77LeF7yZD3ZlvNgtTcShWC9lMgprVjVWkfF4csh+
-         JvvLoR6/zo4k3AuY2rnz5Heam4iziOftTkKMDtHS28Q1azKQOA8n6fC6hGKIeGkbH5
-         YxXMtxzW+nApPvuq8H/QXGbeTOUo57hpEqU+axaZSe2kQdmnWIAQQ4R0VI31DLcC7n
-         8cbLqVPS4WbzQ==
-Date:   Fri, 10 Dec 2021 07:57:01 -0800
+        b=hi78EGlVGdyLvNLR0hbzVr0GKRJWWcmA9R2nonRI7O2dCpOwjXmjAjtk4NNY5woVE
+         Kel8PeqN5d+7iaJOB6aZXoZgEeSv/U0ScV4VU2X6W0PZq6UWdeDWZ2tvBiy5yvtxNG
+         ldC9dx/ZpqE2WTSGycY9bxhpLV5/DHD52pCCTQiwCtmAThLndj+lkbYwXaLCEXFuqC
+         NWDsjL2Qi6sKUgarJWHiRASkE172hze5EJqJZnrvDmMPyDVUE/wlNv1K/7XcI4RvS7
+         0jRxRFjld06t27TL+8J9SZ5kojYJfHL9/WkxHhIJscx2hZENMijLDOqeg/d7+MFO5q
+         5oR84vEJkQKeA==
+Date:   Fri, 10 Dec 2021 08:16:54 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     cgel.zte@gmail.com, mathew.j.martineau@linux.intel.com,
-        davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ye Guojin <ye.guojin@zte.com.cn>,
-        ZealRobot <zealci@zte.com.cn>
-Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in
- mptcp_inq.c
-Message-ID: <20211210075701.06bfced2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <b6c19c9c-de6c-225c-5899-789dfd8e7ae8@tessares.net>
-References: <20211210071424.425773-1-ye.guojin@zte.com.cn>
-        <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net>
-        <20211210065437.27c8fe23@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <b6c19c9c-de6c-225c-5899-789dfd8e7ae8@tessares.net>
+To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
+Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        arkadiusz.kubalewski@intel.com, richardcochran@gmail.com,
+        abyagowi@fb.com, anthony.l.nguyen@intel.com, davem@davemloft.net,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
+        petrm@nvidia.com, Vadim Fedorenko <vfedorenko@novek.ru>
+Subject: Re: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
+Message-ID: <20211210081654.233a41b6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
+References: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -53,24 +52,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 10 Dec 2021 16:36:06 +0100 Matthieu Baerts wrote:
-> > Actually, I take that back, let's hear from Mat, he may want to take
-> > the patch via his tree.  
+On Fri, 10 Dec 2021 14:45:46 +0100 Maciej Machnikowski wrote:
+> Synchronous Ethernet networks use a physical layer clock to syntonize
+> the frequency across different network elements.
 > 
-> We "rebase" our tree on top of net-next every night. I think for such
-> small patches with no behaviour change and sent directly to netdev ML,
-> it is probably best to apply them directly. I can check with Mat if it
-> is an issue if you prefer.
-
-Please do, I'm happy to apply the patch but Mat usually prefers to take
-things thru MPTCP tree.
-
-> I would have applied it in our MPTCP tree if we were sending PR, not to
-> bother you for such patches but I guess it is best not to have us
-> sending this patch a second time later :)
+> Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+> Equipment Clock (EEC) and have the ability to synchronize to reference
+> frequency sources.
 > 
-> BTW, if you prefer us sending PR over batches of patches, please tell us!
+> This patch series is a prerequisite for EEC object and adds ability
+> to enable recovered clocks in the physical layer of the netdev object.
+> Recovered clocks can be used as one of the reference signal by the EEC.
+> 
+> Further work is required to add the DPLL subsystem, link it to the
+> netdev object and create API to read the EEC DPLL state.
 
-Small preference for patches. It's good to have the code on the ML for
-everyone to look at and mixed PR + patches are a tiny bit more clicking
-for me.
+You missed CCing Vadim. I guess Ccing the right people may be right up
+there with naming things as the hardest things in SW development..
+
+Anyway, Vadim - do you have an ETA on the first chunk of the PLL work?
