@@ -2,181 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE78470760
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 18:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13FB4707FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 19:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241575AbhLJRiO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 12:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238003AbhLJRiN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:38:13 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD36C0617A2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id o4so14157938oia.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
-        b=H84W+u8ZuMN5VRT4atnpiZFWjKwGaSqbEQHfol1liXDySnPSsLnLZeqUiIQgXscWrM
-         xC1B49/NW0FYtKotyCwHSl/Nl4z6cHFf6levmetWtX6CoCWhK9T/zDV5sHl8XI+cXGea
-         pkesln0SPt0yZWLC1pN+i0nG5pezdpC2c2oiA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
-        b=ytW4NWXuuA+nDLrjpGhp/q+vUpYvJFYnSYjlg9pxhhPei+UHoCb9wvUGxfQ6rXLVLK
-         LWIiWXtqwBQyelPsYlcvapKIvB0GCFFCoLpamvkBXfNdrlmLcHS/pNrcQm9EtCD9DekG
-         sVxUkoIcGATmhMdm5BAdIsQ06CrtpLH6G4buHTnOHerz+sqMLO4R+8Zoz3/vYo2SeMa2
-         /Ggt54oa+qF2LoFAzfuivgo5M76JCyZ+2FUDbpTW0MpZG0joUYigpydRot+AzWiRMBXs
-         Oy5y6RzUiX/8yFsxZkIxHtww62ANJf2RL8S3ByrvOpcEhREVZu7AHDnflKVwKMtXA4RP
-         HaaA==
-X-Gm-Message-State: AOAM530SwV7ZIHsWc6F3yMHBXeo9dR93NK5ow9UsVI1ZKa2K3QNHqwql
-        z+4YkYP9QSykdJJCeKnp3nbE5Q==
-X-Google-Smtp-Source: ABdhPJy15Gc8S3I8657EioGcfpK4uWVD6XI1GMbZgcAgsTrTw4LKvABQ+oBtRdzT3LF81vLPKkbljg==
-X-Received: by 2002:aca:61c6:: with SMTP id v189mr13118314oib.103.1639157677771;
-        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id ay40sm808342oib.1.2021.12.10.09.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
-Date:   Fri, 10 Dec 2021 10:34:33 -0700
-Message-Id: <20211210173433.13247-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        id S244999AbhLJSEM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 13:04:12 -0500
+Received: from mga12.intel.com ([192.55.52.136]:54156 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235392AbhLJSEM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:04:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="218425838"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="218425838"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:00:36 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="544054225"
+Received: from dmales-mobl.amr.corp.intel.com ([10.251.4.94])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:00:36 -0800
+Date:   Fri, 10 Dec 2021 10:00:35 -0800 (PST)
+From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+cc:     Matthieu Baerts <matthieu.baerts@tessares.net>, cgel.zte@gmail.com,
+        davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ye Guojin <ye.guojin@zte.com.cn>,
+        ZealRobot <zealci@zte.com.cn>
+Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in
+ mptcp_inq.c
+In-Reply-To: <20211210075701.06bfced2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Message-ID: <7041cc47-3728-c033-bc97-49d86a1938b9@linux.intel.com>
+References: <20211210071424.425773-1-ye.guojin@zte.com.cn> <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net> <20211210065437.27c8fe23@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <b6c19c9c-de6c-225c-5899-789dfd8e7ae8@tessares.net> <20211210075701.06bfced2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; format=flowed; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ARRAY_SIZE is defined in multiple test files. Remove the definitions
-and include header file for the define instead.
+On Fri, 10 Dec 2021, Jakub Kicinski wrote:
 
-Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
-define.
+> On Fri, 10 Dec 2021 16:36:06 +0100 Matthieu Baerts wrote:
+>>> Actually, I take that back, let's hear from Mat, he may want to take
+>>> the patch via his tree.
+>>
+>> We "rebase" our tree on top of net-next every night. I think for such
+>> small patches with no behaviour change and sent directly to netdev ML,
+>> it is probably best to apply them directly. I can check with Mat if it
+>> is an issue if you prefer.
+>
+> Please do, I'm happy to apply the patch but Mat usually prefers to take
+> things thru MPTCP tree.
+>
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
- tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
- tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
- tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
- tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
- 5 files changed, 5 insertions(+), 19 deletions(-)
+Jakub -
 
-diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-index 1d8918dfbd3f..7a5ebd330689 100644
---- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-+++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_util.h>
- 
- #include <errno.h>
- 
-@@ -23,10 +24,6 @@ bool skip = false;
- #define BADPTR			0
- #endif
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
--#endif
--
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 4896fdf816f7..aad30994ecd7 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -4,6 +4,7 @@
- #include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_util.h>
- 
- #include "profiler.h"
- 
-@@ -132,10 +133,6 @@ struct {
- 	__uint(max_entries, 16);
- } disallowed_exec_inodes SEC(".maps");
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
--#endif
--
- static INLINE bool IS_ERR(const void* ptr)
- {
- 	return IS_ERR_VALUE((unsigned long)ptr);
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-index 553a282d816a..c7c512e0af79 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-@@ -8,10 +8,7 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
--
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
-+#include <bpf/bpf_util.h>
- 
- /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
- #define TCP_MEM_LOOPS 28  /* because 30 doesn't fit into 512 bytes of stack */
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-index 2b64bc563a12..57cda15d0032 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-@@ -8,10 +8,8 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_util.h>
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
- 
- /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
- #define TCP_MEM_LOOPS 20  /* because 30 doesn't fit into 512 bytes of stack */
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-index 5489823c83fc..6047c39eb457 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-@@ -8,6 +8,7 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_util.h>
- 
- /* Max supported length of a string with unsigned long in base 10 (pow2 - 1). */
- #define MAX_ULONG_STR_LEN 0xF
-@@ -15,10 +16,6 @@
- /* Max supported length of sysctl value string (pow2). */
- #define MAX_VALUE_STR_LEN 0x40
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
--
- const char tcp_mem_name[] = "net/ipv4/tcp_mem";
- static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
- {
--- 
-2.32.0
+It is ok with me if you apply this now, for the reasons Matthieu cited.
 
+The usual division of labor between Matthieu and I as MPTCP co-maintainers 
+usually has me upstreaming the patches to netdev, but I do trust 
+Matthieu's judgement on sending out Reviewed-by tags and advising direct 
+appliction to the netdev trees! Also, much like you & David, having offset 
+timezones can be helpful.
+
+Also appreciate your awareness of the normal patch flow for MPTCP, and 
+that you're checking that we're all on the same page.
+
+
+>> I would have applied it in our MPTCP tree if we were sending PR, not to
+>> bother you for such patches but I guess it is best not to have us
+>> sending this patch a second time later :)
+>>
+>> BTW, if you prefer us sending PR over batches of patches, please tell us!
+>
+> Small preference for patches. It's good to have the code on the ML for
+> everyone to look at and mixed PR + patches are a tiny bit more clicking
+> for me.
+>
+
+Good to know.
+
+
+Thanks!
+
+--
+Mat Martineau
+Intel
