@@ -2,57 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F05A946FA71
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 06:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A0546FA74
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 06:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbhLJFek (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 00:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
+        id S234627AbhLJFfE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 00:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbhLJFei (ORCPT
+        with ESMTP id S234578AbhLJFfE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 00:34:38 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4537BC0617A1
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 21:31:04 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id o1so14904261uap.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Dec 2021 21:31:04 -0800 (PST)
+        Fri, 10 Dec 2021 00:35:04 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DD8C0617A1
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 21:31:29 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id i6so14870762uae.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Dec 2021 21:31:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=5dnO6DoTldo672Bf4IZ/drE5RJPde5/hd0z5hMy6L28=;
-        b=aCKX4nwQ/MXNNsNbWzOxyRBTFHk2DlkW9q6VLl5Gc0zvetOKzcDoCmDf4oFO79bWPF
-         98G+X9VC6xAHklLkd4BeIbV/rHaO4NquWc3xyepuVSFOFzjEsk3woWPsa7SGUXIjGS6H
-         0Mw5/K0pnGVFayRhCcdtG2geIzvoSbR1lsE8kROWbYfTen8pt5+/TmOHwbnLpw64ivia
-         USQIu+usNPE89mFHbqCt9RcmDeXYWHZPBtUUXSINnS1w5R5T3r2MJgnvylKWVc8S+QtD
-         vjN0/CIeD0tNxChY9vIL2B7UdwIbw9LrLPd09B57C1Dl/y9guiJgS0imQ6tlnxEmG/Py
-         9gxQ==
+        bh=xpJdKJy0M6hLcNFoEH5Ayyap4q3VzL88+z05qgZFvMg=;
+        b=VvYNcHPIlSY6yu1V3U/LjpskGtgyvRn/c1YmEuzZTOSOHaF49DAxg0+uV7rjy0RIOy
+         vguDZd1N8K24mXkokHSvTEp8q8rP6U0zV1XrWyTOhA/ZQ3YdJZxUu++jqytXs0KQypyJ
+         5SwSojcbTLVc19+ZIB8qZSShInA7vxUnMQFCL93R7h38DlUYn1AIeLMFm9SAe2mNaWsk
+         EPOSZ6xXZNp95UiJ3ivcBiZEf2ChK54aEZtknbAWjbImhlOheslLhK6WfheGbjeLPUfC
+         5M3xkb+musbeoUGj4R3QIPxCV1St6PuOMHpiQlW82sk67TMYg5emS4y0M1wW55JTFdM8
+         iWJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5dnO6DoTldo672Bf4IZ/drE5RJPde5/hd0z5hMy6L28=;
-        b=YLMpB4H/yB02gXAQqUtUONbacXilYM+rN1x/slNogIaA5igzUpc9JHJ4GA7Bqojo65
-         4OmvMHE/WOFOaFp/4ZRoeTaYHfgpziNeQ6WkwRAK7z6n7UbAeBLSwgI/MSVL5M7eEc+Y
-         2gFRqw62sCWiDLUIEX2jiCQym253NoBEZeamlmkV2AC9D6KMW5+iHvPXNifsuXTi/TJ5
-         54qmW9t/96NQX0dZQzGD0gHxCcbKgBpIxfz8wrlIWW2A0/xW2X/76lVNheJVk2SKKrjg
-         3fxw3RMjGRYfajg1inhFhnK8Mh/WKHb5VWt39HcshHJXCJ8y+jBUcKc3qUks07JRPoSn
-         xJxA==
-X-Gm-Message-State: AOAM533RKlaeR80CCiTej94OR2c5pe78xyjuIS5rNiQGnEz4f3kc7TNh
-        QrJjBpHE0X/dxHjvikk6iZTxTBHtRBCy8v87S+MM2g==
-X-Google-Smtp-Source: ABdhPJzi3yDl30ztxkI28CVrQ1UOHAY9MibnEmrEH84NijnbK3dfnMnizRD2BbqexGQccLoo4Lk6HjpcpC7imFRPKeY=
-X-Received: by 2002:a05:6102:a4a:: with SMTP id i10mr13549047vss.47.1639114262943;
- Thu, 09 Dec 2021 21:31:02 -0800 (PST)
+        bh=xpJdKJy0M6hLcNFoEH5Ayyap4q3VzL88+z05qgZFvMg=;
+        b=vtW2GE6pKBvBxhCCKvmaYhtJ+Zfl8DEIGoo4g9oDdygq9uwSGty2/T7EOB/lFye+19
+         tIAKhHRYhg/0x3uty6o4R++WgOeRoZLYhuNJ9IxmT/oxF78muNM56iRPAxOYADf2T1e/
+         pQAjjaB/fxUERKMf8x7BWhECGTsYpNPVSL70lkLt7rXrcrJ+PpLK2sX/qbwXtQYhxXSk
+         La5Ot1wkwQYUWkD4pf4vW/zsYpZRF1YRYKzhcM9ezG2eEK4F7JyK3qnvqDgJ4/gsekYv
+         LZbzmza6390PRTlFK5z+hOBFDgY27DW/cSdOQnSm27g2CEIUYoj7dee3mi9iKSAkqGvT
+         ZJLg==
+X-Gm-Message-State: AOAM532lYxSTmRL+XJHxKiBq/YiOR/ZnQhgOLx0TWGZhYXt6+MqKEpWp
+        DoakDJt1fdhTkBfNRgL6MLlBwScqx+yveeAz9nqEMg==
+X-Google-Smtp-Source: ABdhPJxOGpGuk+y33tEpLvFGU7fkwHLwxH08J/Bt3EjAeWTOMF88g+Il/pi5N3TuB6oKmp5c1Mhiyu9Flspl/FZsXCY=
+X-Received: by 2002:ab0:6f47:: with SMTP id r7mr26118086uat.85.1639114288848;
+ Thu, 09 Dec 2021 21:31:28 -0800 (PST)
 MIME-Version: 1.0
 References: <20211207054019.1455054-1-sharinder@google.com>
- <20211207054019.1455054-7-sharinder@google.com> <BYAPR13MB2503578CE24525BEABEEB325FD6E9@BYAPR13MB2503.namprd13.prod.outlook.com>
-In-Reply-To: <BYAPR13MB2503578CE24525BEABEEB325FD6E9@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <20211207054019.1455054-4-sharinder@google.com> <BYAPR13MB2503D5A5E52D5645C5CA3C3AFD6E9@BYAPR13MB2503.namprd13.prod.outlook.com>
+In-Reply-To: <BYAPR13MB2503D5A5E52D5645C5CA3C3AFD6E9@BYAPR13MB2503.namprd13.prod.outlook.com>
 From:   Harinder Singh <sharinder@google.com>
-Date:   Fri, 10 Dec 2021 11:00:51 +0530
-Message-ID: <CAHLZCaFbzuGoiFjY3jgaYORTtNdhNZh0ho=8EEfYOzEbQRX-Pg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] Documentation: KUnit: Restyle Test Style and
- Nomenclature page
+Date:   Fri, 10 Dec 2021 11:01:17 +0530
+Message-ID: <CAHLZCaHMpNz97wQa8aOKQ7qORKe3Bt=dVzmf8ykkPE2DVhXOXA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] Documentation: KUnit: Added KUnit Architecture
 To:     tim.bird@sony.com
 Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
         corbet@lwn.net, linux-kselftest@vger.kernel.org,
@@ -66,374 +65,229 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hello Tim,
 
-Thanks for the review comments.
+Thanks for your review.
 
-Please see my comments below.
+See my comments below.
 
-On Wed, Dec 8, 2021 at 12:16 AM <Tim.Bird@sony.com> wrote:
->
->
+On Tue, Dec 7, 2021 at 10:54 PM <Tim.Bird@sony.com> wrote:
 >
 > > -----Original Message-----
 > > From: Harinder Singh <sharinder@google.com>
 > >
-> > Rewrite page to enhance content consistency.
+> > Describe the components of KUnit and how the kernel mode parts
+> > interact with kunit_tool.
 > >
 > > Signed-off-by: Harinder Singh <sharinder@google.com>
 > > ---
-> >  Documentation/dev-tools/kunit/style.rst | 101 ++++++++++++------------
-> >  1 file changed, 49 insertions(+), 52 deletions(-)
+> >  .../dev-tools/kunit/architecture.rst          | 206 ++++++++++++++++++
+> >  Documentation/dev-tools/kunit/index.rst       |   2 +
+> >  .../kunit/kunit_suitememorydiagram.png        | Bin 0 -> 24174 bytes
+> >  Documentation/dev-tools/kunit/start.rst       |   1 +
+> >  4 files changed, 209 insertions(+)
+> >  create mode 100644 Documentation/dev-tools/kunit/architecture.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiag=
+ram.png
 > >
-> > diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/de=
-v-tools/kunit/style.rst
-> > index 8dbcdc552606..8fae192cae28 100644
-> > --- a/Documentation/dev-tools/kunit/style.rst
-> > +++ b/Documentation/dev-tools/kunit/style.rst
-> > @@ -4,37 +4,36 @@
-> >  Test Style and Nomenclature
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+> > diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documenta=
+tion/dev-tools/kunit/architecture.rst
+> > new file mode 100644
+> > index 000000000000..bb0fb3e3ed01
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kunit/architecture.rst
+> > @@ -0,0 +1,206 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +KUnit Architecture
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +The KUnit architecture can be divided into two parts:
+> > +
+> > +- Kernel testing library
+> > +- kunit_tool (Command line test harness)
+> > +
+> > +In-Kernel Testing Framework
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D
-> >
-> > -To make finding, writing, and using KUnit tests as simple as possible,=
- it's
-> > +To make finding, writing, and using KUnit tests as simple as possible,=
- it is
-> >  strongly encouraged that they are named and written according to the g=
-uidelines
-> > -below. While it's possible to write KUnit tests which do not follow th=
-ese rules,
-> > +below. While it is possible to write KUnit tests which do not follow t=
-hese rules,
-> >  they may break some tooling, may conflict with other tests, and may no=
-t be run
-> >  automatically by testing systems.
-> >
-> > -It's recommended that you only deviate from these guidelines when:
-> > +It is recommended that you only deviate from these guidelines when:
-> >
-> > -1. Porting tests to KUnit which are already known with an existing nam=
-e, or
-> > -2. Writing tests which would cause serious problems if automatically r=
-un (e.g.,
-> > -   non-deterministically producing false positives or negatives, or ta=
-king an
-> > -   extremely long time to run).
-> > +1. Porting tests to KUnit which are already known with an existing nam=
-e.
-> > +2. Writing tests which would cause serious problems if automatically r=
-un. For
-> > +   example, non-deterministically producing false positives or negativ=
-es, or
-> > +   taking a long time to run.
-> >
-> >  Subsystems, Suites, and Tests
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> >
-> > -In order to make tests as easy to find as possible, they're grouped in=
-to suites
-> > -and subsystems. A test suite is a group of tests which test a related =
-area of
-> > -the kernel, and a subsystem is a set of test suites which test differe=
-nt parts
-> > -of the same kernel subsystem or driver.
-> > +To make tests easy to find, they are grouped into suites and subsystem=
-s. A test
-> > +suite is a group of tests which test a related area of the kernel. A s=
-ubsystem
-> > +is a set of test suites which test different parts of a kernel subsyst=
-em
-> > +or a driver.
-> >
-> >  Subsystems
-> >  ----------
-> >
-> >  Every test suite must belong to a subsystem. A subsystem is a collecti=
-on of one
-> >  or more KUnit test suites which test the same driver or part of the ke=
-rnel. A
-> > -rule of thumb is that a test subsystem should match a single kernel mo=
-dule. If
-> > -the code being tested can't be compiled as a module, in many cases the=
- subsystem
-> > -should correspond to a directory in the source tree or an entry in the
-> > -MAINTAINERS file. If unsure, follow the conventions set by tests in si=
-milar
-> > -areas.
-> > +test subsystem should match a single kernel module. If the code being =
-tested
-> > +cannot be compiled as a module, in many cases the subsystem should cor=
-respond to
-> > +a directory in the source tree or an entry in the ``MAINTAINERS`` file=
-. If
-> > +unsure, follow the conventions set by tests in similar areas.
-> >
-> >  Test subsystems should be named after the code being tested, either af=
-ter the
-> >  module (wherever possible), or after the directory or files being test=
-ed. Test
-> > @@ -42,9 +41,8 @@ subsystems should be named to avoid ambiguity where n=
-ecessary.
-> >
-> >  If a test subsystem name has multiple components, they should be separ=
-ated by
-> >  underscores. *Do not* include "test" or "kunit" directly in the subsys=
-tem name
-> > -unless you are actually testing other tests or the kunit framework its=
-elf.
-> > -
-> > -Example subsystems could be:
-> > +unless we are actually testing other tests or the kunit framework itse=
-lf. For
-> > +example, subsystems could be called:
-> >
-> >  ``ext4``
-> >    Matches the module and filesystem name.
-> > @@ -56,13 +54,13 @@ Example subsystems could be:
-> >    Has several components (``snd``, ``hda``, ``codec``, ``hdmi``) separ=
-ated by
-> >    underscores. Matches the module name.
-> >
-> > -Avoid names like these:
-> > +Avoid names as shown in examples below:
-> >
-> >  ``linear-ranges``
-> >    Names should use underscores, not dashes, to separate words. Prefer
-> >    ``linear_ranges``.
-> >  ``qos-kunit-test``
-> > -  As well as using underscores, this name should not have "kunit-test"=
- as a
-> > +  This name should not use underscores, not have "kunit-test" as a
->
-> This contradicts the preceding sentence.  I believe you have changed the =
-sense
-> of the recommendation.
->
-> This name should not use underscores, not have ->
->    This name should use underscores, and not have
->
-
-Done
-
-> >    suffix, and ``qos`` is ambiguous as a subsystem name. ``power_qos`` =
-would be a
->
-> suffix, and ``qos`` -> suffix.  Also ``qos``
->
-> (The way this sentence was originally structured was quite awkward.  I th=
-ink it's
-> better to split into two sentences)
->
-
-Done
-
-> >    better name.
-> >  ``pc_parallel_port``
-> > @@ -70,34 +68,32 @@ Avoid names like these:
-> >    be named ``parport_pc``.
-> >
-> >  .. note::
-> > -        The KUnit API and tools do not explicitly know about subsystem=
-s. They're
-> > -        simply a way of categorising test suites and naming modules wh=
-ich
-> > -        provides a simple, consistent way for humans to find and run t=
-ests. This
-> > -        may change in the future, though.
-> > +        The KUnit API and tools do not explicitly know about subsystem=
-s. They are
-> > +        a way of categorising test suites and naming modules which pro=
-vides a
-> > +        simple, consistent way for humans to find and run tests. This =
-may change
-> > +        in the future.
-> >
-> >  Suites
-> >  ------
-> >
-> >  KUnit tests are grouped into test suites, which cover a specific area =
-of
-> >  functionality being tested. Test suites can have shared initialisation=
- and
->
-> 'initialization' seems to be preferred to 'initialisation' in most other
-> kernel documentation.  (557 instances of 'initialization' to 58 of 'initi=
-alisation')
->
-> (I know this isn't part of your patch, but since this is a cleanup and co=
-nsistency
-> patch, maybe change this as well?)
->
-
-Done
-
-> > -shutdown code which is run for all tests in the suite.
-> > -Not all subsystems will need to be split into multiple test suites (e.=
-g. simple drivers).
-> > +shutdown code which is run for all tests in the suite. Not all subsyst=
-ems need
-> > +to be split into multiple test suites (for example, simple drivers).
-> >
-> >  Test suites are named after the subsystem they are part of. If a subsy=
-stem
-> >  contains several suites, the specific area under test should be append=
-ed to the
-> >  subsystem name, separated by an underscore.
-> >
-> >  In the event that there are multiple types of test using KUnit within =
-a
-> > -subsystem (e.g., both unit tests and integration tests), they should b=
-e put into
-> > -separate suites, with the type of test as the last element in the suit=
-e name.
-> > -Unless these tests are actually present, avoid using ``_test``, ``_uni=
-ttest`` or
-> > -similar in the suite name.
-> > +subsystem (for example, both unit tests and integration tests), they s=
-hould be
-> > +put into separate suites, with the type of test as the last element in=
- the suite
-> > +name. Unless these tests are actually present, avoid using ``_test``, =
-``_unittest``
-> > +or similar in the suite name.
-> >
-> >  The full test suite name (including the subsystem name) should be spec=
-ified as
-> >  the ``.name`` member of the ``kunit_suite`` struct, and forms the base=
- for the
-> > -module name (see below).
-> > -
-> > -Example test suites could include:
-> > +module name. For example, test suites could include:
-> >
-> >  ``ext4_inode``
-> >    Part of the ``ext4`` subsystem, testing the ``inode`` area.
-> > @@ -109,26 +105,27 @@ Example test suites could include:
-> >    The ``kasan`` subsystem has only one suite, so the suite name is the=
- same as
-> >    the subsystem name.
-> >
-> > -Avoid names like:
-> > +Avoid names, for example:
-> >
-> >  ``ext4_ext4_inode``
-> > -  There's no reason to state the subsystem twice.
-> > +  There is no reason to state the subsystem twice.
-> >  ``property_entry``
-> >    The suite name is ambiguous without the subsystem name.
-> >  ``kasan_integration_test``
-> >    Because there is only one suite in the ``kasan`` subsystem, the suit=
-e should
-> > -  just be called ``kasan``. There's no need to redundantly add
-> > -  ``integration_test``. Should a separate test suite with, for example=
-, unit
-> > -  tests be added, then that suite could be named ``kasan_unittest`` or=
- similar.
-> > +  just be called as ``kasan``. Do not redundantly add
-> > +  ``integration_test``. It should be a separate test suite. For exampl=
-e, if the
-> > +  unit tests are added, then that suite could be named as ``kasan_unit=
-test`` or
-> > +  similar.
-> >
-> >  Test Cases
-> >  ----------
-> >
-> >  Individual tests consist of a single function which tests a constraine=
+> > +
+> > +The kernel testing library supports KUnit tests written in C using
+> > +KUnit. KUnit tests are kernel code. KUnit does several things:
+> > +
+> > +- Organizes tests
+> > +- Reports test results
+> > +- Provides test utilities
+> > +
+> > +Test Cases
+> > +----------
+> > +
+> > +The fundamental unit in KUnit is the test case. The KUnit test cases a=
+re
+> > +grouped into KUnit suites. A KUnit test case is a function with type
+> > +signature ``void (*)(struct kunit *test)``.
+> > +These test case functions are wrapped in a struct called
+> > +``struct kunit_case``. For code, see:
+> > +https://elixir.bootlin.com/linux/latest/source/include/kunit/test.h#L1=
+45
+> > +
+> > +It includes:
+> > +
+> > +- ``run_case``: the function implementing the actual test case.
+> > +- ``name``: the test case name.
+> > +- ``generate_params``: the parameterized tests generator function. Thi=
+s
+> > +  is optional for non-parameterized tests.
+> > +
+> > +Each KUnit test case gets a ``struct kunit`` context
+> > +object passed to it that tracks a running test. The KUnit assertion
+> > +macros and other KUnit utilities use the ``struct kunit`` context
+> > +object. As an exception, there are two fields:
+> > +
+> > +- ``->priv``: The setup functions can use it to store arbitrary test
+> > +  user data.
+> > +
+> > +- ``->param_value``: It contains the parameter value which can be
+> > +  retrieved in the parameterized tests.
+> > +
+> > +Test Suites
+> > +-----------
+> > +
+> > +A KUnit suite includes a collection of test cases. The KUnit suites
+> > +are represented by the ``struct kunit_suite``. For example:
+> > +
+> > +.. code-block:: c
+> > +
+> > +     static struct kunit_case example_test_cases[] =3D {
+> > +             KUNIT_CASE(example_test_foo),
+> > +             KUNIT_CASE(example_test_bar),
+> > +             KUNIT_CASE(example_test_baz),
+> > +             {}
+> > +     };
+> > +
+> > +     static struct kunit_suite example_test_suite =3D {
+> > +             .name =3D "example",
+> > +             .init =3D example_test_init,
+> > +             .exit =3D example_test_exit,
+> > +             .test_cases =3D example_test_cases,
+> > +     };
+> > +     kunit_test_suite(example_test_suite);
+> > +
+> > +In the above example, the test suite ``example_test_suite``, runs the
+> > +test cases ``example_test_foo``, ``example_test_bar``, and
+> > +``example_test_baz``. Before running the test, the ``example_test_init=
+``
+> > +is called and after running the test, ``example_test_exit`` is called.
+> > +The ``kunit_test_suite(example_test_suite)`` registers the test suite
+> > +with the KUnit test framework.
+> > +
+> > +Executor
+> > +--------
+> > +
+> > +The KUnit executor can list and run built-in KUnit tests on boot.
+> > +The Test suites are stored in a linker section
+> > +called ``.kunit_test_suites``. For code, see:
+> > +https://elixir.bootlin.com/linux/v5.12/source/include/asm-generic/vmli=
+nux.lds.h#L918.
+> > +The linker section consists of an array of pointers to
+> > +``struct kunit_suite``, and is populated by the ``kunit_test_suites()`=
+`
+> > +macro. To run all tests compiled into the kernel, the KUnit executor
+> > +iterates over the linker section array.
+> > +
+> > +.. kernel-figure:: kunit_suitememorydiagram.png
+> > +     :alt:   KUnit Suite Memory
+> > +
+> > +     KUnit Suite Memory Diagram
+> > +
+> > +On the kernel boot, the KUnit executor uses the start and end addresse=
+s
+> > +of this section to iterate over and run all tests. For code, see:
+> > +https://elixir.bootlin.com/linux/latest/source/lib/kunit/executor.c
+> > +
+> > +When built as a module, the ``kunit_test_suites()`` macro defines a
+> > +``module_init()`` function, which runs all the tests in the compilatio=
+n
+> > +unit instead of utilizing the executor.
+> > +
+> > +In KUnit tests, some error classes do not affect other tests
+> > +or parts of the kernel, each KUnit case executes in a separate thread
+> > +context. For code, see:
+> > +https://elixir.bootlin.com/linux/latest/source/lib/kunit/try-catch.c#L=
+58
+> > +
+> > +Assertion Macros
+> > +----------------
+> > +
+> > +KUnit tests verify state using expectations/assertions.
+> > +All expectations/assertions are formatted as:
+> > +``KUNIT_{EXPECT|ASSERT}_<op>[_MSG](kunit, property[, message])``
+> > +
+> > +- ``{EXPECT|ASSERT}`` determines whether the check is an assertion or =
+an
+> > +  expectation.
+> > +
+> > +     - For an expectation, if the check fails, marks the test as faile=
 d
-> > -codepath, property, or function. In the test output, individual tests'=
- results
-> > -will show up as subtests of the suite's results.
-> > +codepath, property, or function. In the test output, an individual tes=
-t's
-> > +results will show up as subtests of the suite's results.
-> >
-> > -Tests should be named after what they're testing. This is often the na=
-me of the
-> > +Tests should be named after what they are testing. This is often the n=
-ame of the
-> >  function being tested, with a description of the input or codepath bei=
-ng tested.
-> >  As tests are C functions, they should be named and written in accordan=
-ce with
-> >  the kernel coding style.
-> > @@ -136,7 +133,7 @@ the kernel coding style.
-> >  .. note::
-> >          As tests are themselves functions, their names cannot conflict=
- with
-> >          other C identifiers in the kernel. This may require some creat=
-ive
-> > -        naming. It's a good idea to make your test functions `static` =
-to avoid
-> > +        naming. It is a good idea to make your test functions `static`=
- to avoid
-> >          polluting the global namespace.
-> >
-> >  Example test names include:
-> > @@ -150,7 +147,7 @@ Example test names include:
-> >
-> >  Should it be necessary to refer to a test outside the context of its t=
-est suite,
-> >  the *fully-qualified* name of a test should be the suite name followed=
- by the
-> > -test name, separated by a colon (i.e. ``suite:test``).
-> > +test name, separated by a colon (``suite:test``).
+> > +       and logs the failure.
+> > +
+> > +     - An assertion, on failure, causes the test case to terminate
+> > +       immediately.
+> > +
+> > +             - Assertions call function:
+> > +               ``void __noreturn kunit_abort(struct kunit *)``.
+> > +
+> > +             - ``kunit_abort`` calls function:
+> > +               ``void __noreturn kunit_try_catch_throw(struct kunit_tr=
+y_catch *try_catch)``.
+> > +
+> > +             - ``kunit_try_catch_throw`` calls function:
+> > +               ``void complete_and_exit(struct completion *, long) __n=
+oreturn;``
+> > +               and terminates the special thread context.
+> > +
+> > +- ``<op>`` denotes a check with options: ``TRUE`` (supplied property
+> > +  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied =
+properties are
+> > +  equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does n=
+ot
+> > +  contain an =E2=80=9Cerr=E2=80=9D value).
+> > +
+> > +- ``[_MSG]`` prints a custom message on failure.
+> > +
+> > +Test Result Reporting
+> > +---------------------
+> > +KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
+> > +https://github.com/isaacs/testanything.github.io/blob/tap14/tap-versio=
+n-14-specification.md.
+> > +KTAP (yet to be standardized format) works with KUnit and Kselftest.
+> > +The KUnit executor prints KTAP results to dmesg, and debugfs
+> > +(if configured).
+> > +
+> > +Parameterized Tests
+> > +-------------------
+> > +
+> > +Each KUnit parameterized test is associated with a collection of
+> > +parameters. The test is invoked multiple times, once for each paramete=
+r
+> > +value and the parameter is stored in the ``param_value`` field.
+> > +The test case includes a ``KUNIT_CASE_PARAM()`` macro that accepts a
+> > +generator function.
+> > +The generator function returns the next parameter given to the
 >
-> Please leave the 'i.e.'
+> given to the -> given the
 >
 
-Done
+Reworded the sentence as "The generator function is passed the
+previous parameter and returns the next
+parameter".
 
-> >
-> >  Test Kconfig Entries
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > @@ -162,16 +159,16 @@ This Kconfig entry must:
-> >  * be named ``CONFIG_<name>_KUNIT_TEST``: where <name> is the name of t=
-he test
-> >    suite.
-> >  * be listed either alongside the config entries for the driver/subsyst=
-em being
-> > -  tested, or be under [Kernel Hacking]=E2=86=92[Kernel Testing and Cov=
-erage]
-> > -* depend on ``CONFIG_KUNIT``
-> > +  tested, or be under [Kernel Hacking]->[Kernel Testing and Coverage]
-> > +* depend on ``CONFIG_KUNIT``.
-> >  * be visible only if ``CONFIG_KUNIT_ALL_TESTS`` is not enabled.
-> >  * have a default value of ``CONFIG_KUNIT_ALL_TESTS``.
-> > -* have a brief description of KUnit in the help text
-> > +* have a brief description of KUnit in the help text.
-> >
-> > -Unless there's a specific reason not to (e.g. the test is unable to be=
- built as
-> > -a module), Kconfig entries for tests should be tristate.
-> > +If we are not able to meet above conditions (for example, the test is =
-unable to
-> > +be built as a module), Kconfig entries for tests should be tristate.
-> >
-> > -An example Kconfig entry:
-> > +For example, a Kconfig entry might look like:
-> >
-> >  .. code-block:: none
-> >
-> > @@ -182,8 +179,8 @@ An example Kconfig entry:
-> >               help
-> >                 This builds unit tests for foo.
-> >
-> > -               For more information on KUnit and unit tests in general=
-, please refer
-> > -               to the KUnit documentation in Documentation/dev-tools/k=
-unit/.
-> > +               For more information on KUnit and unit tests in general=
-,
-> > +               please refer to the KUnit documentation in Documentatio=
-n/dev-tools/kunit/.
-> >
-> >                 If unsure, say N.
-> >
-> > --
-> > 2.34.1.400.ga245620fadb-goog
+> > +previous parameter in parameterized tests. It also provides a macro to
+> > +generate common-case generators based on arrays.
+> > +
+> > +For code, see:
+> > +https://elixir.bootlin.com/linux/v5.12/source/include/kunit/test.h#L17=
+83
 >
-> Thanks for the cleanups.
+> The rest looks OK, as far as I can tell.
 >  -- Tim
 >
 
