@@ -2,110 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAB546FEDA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 11:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C20D4700ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 13:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbhLJKpC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 05:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbhLJKpB (ORCPT
+        id S241234AbhLJMs0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 07:48:26 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:53742 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231806AbhLJMs0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:45:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F41C061746
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 02:41:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B50B8275F
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:41:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F408C00446;
-        Fri, 10 Dec 2021 10:41:22 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 10:41:18 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 13/37] arm64/sme: Basic enumeration support
-Message-ID: <YbMuzjU/MSTwBDLY@arm.com>
-References: <20211115152835.3212149-1-broonie@kernel.org>
- <20211115152835.3212149-14-broonie@kernel.org>
- <YbJN1ujpDP1RG1Ll@arm.com>
- <YbJY0P1KZjSFfwtY@sirena.org.uk>
+        Fri, 10 Dec 2021 07:48:26 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A9A471F3A4;
+        Fri, 10 Dec 2021 12:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1639140290; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=tyX8eHsv4yca+5dS0yCodfRUS2p5U199cbE1aYVQ0Wg=;
+        b=Cv28ulr/lKQan3KXTIgXATo+HdBWkQceu7FZll5tz055xqFR362vkmXUQYabQZtrB14L+2
+        yaOSr5zgOllyqgvh5IDNy64Fr/DUFpZ3hxCvjFZWatug/6Gjl7+6M8jjUFIGEh1slgHNB6
+        VG9Hm7mKkLEzk1WYcUN4BtxGu2aT0mM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1639140290;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=tyX8eHsv4yca+5dS0yCodfRUS2p5U199cbE1aYVQ0Wg=;
+        b=7SLV04/4WceaOB32q+JlkftEbMnnyos3ooZfjqPswX4UcnJy5CoM6cwd8B86kGcyuBqJ7g
+        MVbLSjPZVu7BFVDw==
+Received: from san.suse.cz (san.suse.cz [10.100.12.79])
+        by relay2.suse.de (Postfix) with ESMTP id 8E193A3B81;
+        Fri, 10 Dec 2021 12:44:50 +0000 (UTC)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
+        joe.lawrence@redhat.com
+Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
+Subject: [PATCH v2 0/2] livepatch: Allow user to specify functions to search for on a stack
+Date:   Fri, 10 Dec 2021 13:44:47 +0100
+Message-Id: <20211210124449.21537-1-mbenes@suse.cz>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbJY0P1KZjSFfwtY@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 07:28:16PM +0000, Mark Brown wrote:
-> On Thu, Dec 09, 2021 at 06:41:26PM +0000, Catalin Marinas wrote:
-> > On Mon, Nov 15, 2021 at 03:28:11PM +0000, Mark Brown wrote:
-> > > +#define HWCAP2_SME		(1 << 20)
-> > > +#define HWCAP2_SME_I16I64	(1 << 21)
-> > > +#define HWCAP2_SME_F64F64	(1 << 22)
-> > > +#define HWCAP2_SME_I8I32	(1 << 23)
-> > > +#define HWCAP2_SME_F16F32	(1 << 24)
-> > > +#define HWCAP2_SME_B16F32	(1 << 25)
-> > > +#define HWCAP2_SME_F32F32	(1 << 26)
-> > > +#define HWCAP2_SME_FA64		(1 << 27)
-> 
-> > At this pace we'll need HWCAP3 pretty soon (since we only allocated
-> > 32-bit in each). I wonder whether we could instead not bother at all and
-> > just provide user-space emulation for ID_AA64SMFR0_EL1.
-> 
-> I think so if people are willing to go along with just having userspace
-> check the ID register (IIRC access to it already does the right thing
-> but I need to confirm).  We'll also need to think about how we handle
-> any new SVE features, that's got a similar thing going on and is most of
-> the existing usage of HWCAP2.
+livepatch's consistency model requires that no live patched function
+must be found on any task's stack during a transition process after a
+live patch is applied. It is achieved by walking through stacks of all
+blocked tasks.
 
-It would be good to get feedback from the libc people. IIRC the ifunc
-resolver relies currently on the HWCAP bits. Could this be adapted to
-use the MRS instruction? We'd still keep the main HWCAP2_SME but without
-the finer-grained bits.
+The user might also want to define more functions to search for without
+them being patched at all. It may either help with preparing a live
+patch, which would otherwise require adding more functions just to
+achieve the consistency, or it can be used to overcome deficiencies the
+stack checking inherently has.
 
-The other option is to start going into the upper 32-bit of the
-elf_hwcap. We tried to avoid this some time back when we were still
-having doubts about merging ILP32.
+Consider the following example, in which GCC may optimize function
+parent() so that a part of it is moved to a different section
+(child.cold()) and parent() jumps to it. If both parent() and child2()
+are to patching targets, things can break easily if a task sleeps in
+child.cold() and new patched child2() changes ABI. parent() is not found
+on the stack, child.cold() jumps back to parent() eventually and new
+child2() is called.
 
-> > > +	{
-> > > +		.desc = "FA64",
-> > > +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> > > +		.capability = ARM64_SME_FA64,
-> > > +		.sys_reg = SYS_ID_AA64SMFR0_EL1,
-> > > +		.sign = FTR_UNSIGNED,
-> > > +		.field_pos = ID_AA64SMFR0_FA64_SHIFT,
-> > > +		.min_field_value = ID_AA64SMFR0_FA64,
-> > > +		.matches = has_feature_flag,
-> > > +		.cpu_enable = fa64_kernel_enable,
-> > > +	},
-> 
-> > I'll comment here rather than the patch introducing has_feature_flag():
-> > an alternative would be to add a .field_width option and in
-> > feature_matches() use cpuid_feature_extract_field_width() directly. All
-> > the arm64_ftr_bits entries already have a width, so just generalise it
-> > for arm64_cpu_capabilities.
-> 
-> Sure, if people are happy with that - it's a more invasive change since
-> we don't currently set the widths, I wasn't clear if that was a case of
-> not needing it right now or a design decision.
+  parent():             /* to-be-patched */
+    ...
+    jmp child.cold()    /* cannot be patched */
+      ...
+      schedule()
+      ...
+      jmp <back>
+    ...
+    call child2()       /* to-be-patched */
+    ...
 
-We didn't have a field_width since they were all 4 bits until SVE. If
-you don't want to touch all the entries in the array, we can say that a
-0 value (i.e. not explicitly initialised) means default 4 and update it
-during init_cpu_features().
+The patch set adds a new API which allows the user to specify such
+functions.
+
+v1: https://lore.kernel.org/all/20211119090327.12811-1-mbenes@suse.cz/
+
+Changes:
+--------
+v2:
+  - no separate klp_funcs, stack_only attribute is defined
+  - tests rewritten
+
+Miroslav Benes (2):
+  livepatch: Allow user to specify functions to search for on a stack
+  selftests/livepatch: Test of the API for specifying functions to
+    search for on a stack
+
+ include/linux/livepatch.h                     |   3 +
+ kernel/livepatch/core.c                       |  28 ++-
+ kernel/livepatch/patch.c                      |   6 +
+ kernel/livepatch/transition.c                 |   5 +-
+ lib/livepatch/Makefile                        |   5 +-
+ lib/livepatch/test_klp_func_stack_only_demo.c |  66 ++++++++
+ .../test_klp_func_stack_only_demo2.c          |  61 +++++++
+ lib/livepatch/test_klp_func_stack_only_mod.c  |  70 ++++++++
+ tools/testing/selftests/livepatch/Makefile    |   3 +-
+ .../livepatch/test-func-stack-only.sh         | 159 ++++++++++++++++++
+ 10 files changed, 402 insertions(+), 4 deletions(-)
+ create mode 100644 lib/livepatch/test_klp_func_stack_only_demo.c
+ create mode 100644 lib/livepatch/test_klp_func_stack_only_demo2.c
+ create mode 100644 lib/livepatch/test_klp_func_stack_only_mod.c
+ create mode 100755 tools/testing/selftests/livepatch/test-func-stack-only.sh
 
 -- 
-Catalin
+2.34.1
+
