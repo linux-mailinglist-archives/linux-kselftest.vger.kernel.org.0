@@ -2,105 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D5846FE4C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 10:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BFB46FE9C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 11:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239787AbhLJKCG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 05:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49408 "EHLO
+        id S239631AbhLJKW3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 05:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239765AbhLJKCF (ORCPT
+        with ESMTP id S236599AbhLJKW3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 05:02:05 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4B7C0617A2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 01:58:30 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id l25so28370101eda.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 01:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nduhBFxPbxmifYpnO0eOOP3C7nxBPTbeIwjsdCqiSCo=;
-        b=ojvvj0K+k6NKnozWLW2tDWy91766MZb9YsUkZZD84yq8yaH1DnzCgRGc4zW9CR+Z3E
-         2vs+BSinUml6Qjyb0MbBrOgsHOui0a02cPy0cqrIUgGcPho1kK21Vv6AOKU4syfzyGr6
-         ZSM2KKARJ2O3WXBsrc+VrUfgJgi8GAHaVHe2HKB+OvOoTqxMHIykUz6SEjjyVYLDofUT
-         4tkWQHYJ8a7xdoQKOL1TGvS9bCMzyhfSxCNiEPqsSQMJYT0YND2DBanJfy4thrcjQpsv
-         NGVyKnbVO76+lE4LNwOMA8eTPqYUhFTsWhY12krSk4lNc2nU/54euf2N4eePg1MzmHYj
-         PSKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nduhBFxPbxmifYpnO0eOOP3C7nxBPTbeIwjsdCqiSCo=;
-        b=10Id6XYh//2AcnQG+wjsk3vBtIdQ2lSwT2v3p9aOB6+af9y4X64H3HCxU0ThFAZLnu
-         q7sonEBxx0VeVQiySK5rVzOlc2NahUiEcSWuXtIn4VxYdt2iYM1jzN8CIAp/kVIKPela
-         EG6Xo6+FdhGi1SjpDlC8QdW3AsmAzvac5NUD+H8c/b1aDB6ordXDUeasm9qys5UBFbV9
-         8GPBqukQx6s3VZ2OUjy7givo4YHF+4tuqi9warv9J70/7UeJxJMFVo+QFR6yGZzfkHvH
-         Qt6sl6kMNGyBuwY0PVq92cFiLiklM6/eJFbLhsOXYSQWdV0MsVudcEWTJRLnvMvvb4wX
-         XCCA==
-X-Gm-Message-State: AOAM531tFfa/dKTdM41+cGKnHP1iNUVfL/uvVQfCvNNlIVPzZs0rbFnm
-        EcyvYZWYPZJyBlsPDlgB2Tq76A==
-X-Google-Smtp-Source: ABdhPJylHws71T7EEEhue6UdCGoV/k4VWRPPxYHA0zXkEHzMN0zoHH6zuGQNrntdBPyvVA4MsSkOUQ==
-X-Received: by 2002:a17:907:7f2a:: with SMTP id qf42mr23268059ejc.388.1639130308873;
-        Fri, 10 Dec 2021 01:58:28 -0800 (PST)
-Received: from [192.168.178.33] (94.105.100.208.dyn.edpnet.net. [94.105.100.208])
-        by smtp.gmail.com with ESMTPSA id co10sm1129754edb.83.2021.12.10.01.58.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 01:58:28 -0800 (PST)
-Message-ID: <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net>
-Date:   Fri, 10 Dec 2021 10:58:27 +0100
+        Fri, 10 Dec 2021 05:22:29 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3214C061746
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 02:18:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 33252CE29DE
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 10:18:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B60C00446;
+        Fri, 10 Dec 2021 10:18:47 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 10:18:44 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v6 06/37] kselftest/arm64: Add a test program to exercise
+ the syscall ABI
+Message-ID: <YbMphO6wwXz54yjB@arm.com>
+References: <20211115152835.3212149-1-broonie@kernel.org>
+ <20211115152835.3212149-7-broonie@kernel.org>
+ <YbI3ZfhOO+M5L/9V@arm.com>
+ <YbJVPGqADH/cadaU@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in mptcp_inq.c
-Content-Language: en-GB
-To:     cgel.zte@gmail.com, mathew.j.martineau@linux.intel.com
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ye Guojin <ye.guojin@zte.com.cn>, ZealRobot <zealci@zte.com.cn>
-References: <20211210071424.425773-1-ye.guojin@zte.com.cn>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20211210071424.425773-1-ye.guojin@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbJVPGqADH/cadaU@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ye,
-
-On 10/12/2021 08:14, cgel.zte@gmail.com wrote:
-> From: Ye Guojin <ye.guojin@zte.com.cn>
+On Thu, Dec 09, 2021 at 07:13:00PM +0000, Mark Brown wrote:
+> On Thu, Dec 09, 2021 at 05:05:41PM +0000, Catalin Marinas wrote:
+> > On Mon, Nov 15, 2021 at 03:28:04PM +0000, Mark Brown wrote:
 > 
-> 'sys/ioctl.h' included in 'mptcp_inq.c' is duplicated.
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> 
+> > Nitpick: I think GPL-2.0 is sufficient (i.e. no '-only' suffix), though
+> > about a quarter seem to use the -only variant.
+> 
+> Yeah, it's that because it's the default for kernel stuff.  Easier to
+> make it restrictive and then relax later?
 
-Good catch, the modification looks good to me:
+My point was that IIUC GPL-2.0 is equivalent to GPL-2.0-only (not to be
+confused with GPL-2.0+). Anyway, it's fine by me to keep the -only if
+you want. It seems that we have nearly the same amount of both
+throughout the kernel.
 
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> > > +	/*
+> > > +	 * After a syscall the low 128 bits of the Z registers should
+> > > +	 * be preserved and the rest be zeroed.
+> > > +	 */
+> 
+> > That's the current behaviour I think but the sve.rst doc states the
+> > values after syscall are 'unspecified' (same for the P regs). Should we
+> > tighten the doc as well?
+> 
+> I think so if this goes in as is.  There was some debate at the time
+> that SVE was originally merged, with a strong desire from some people to
+> make sure that this behaves consistently on every syscall.  I've copied
+> in Mark Rutland and Marc Zyngier who I think have opinions here.
+> 
+> > A downside with forcing zero is that it may prevent us from some
+> > optimisations in the future. Currently we do an sve_user_discard() on
+> > the syscall entry path and disable SVE but we could instead do this only
+> > on context switch or when the kernel used Neon.
+> 
+> Yes, this is limiting our options for performance work since we need to
+> at least take the cost of zeroing the non-shared state on every syscall,
+> though there's still options for choosing not to disable SVE all the
+> time (I've got a patch already I need to do a bit more work on). 
 
+Some people seem to be pretty sensitive to the syscall latency, so I'd
+like to keep the option to optimise this path if it bites us.
 
-This patch is for "net-next" tree as it fixes an issue introduced by a
-patch only in this tree:
+> The
+> currently documented behaviour is in line with AAPCS here so you do have
+> to wonder how likely it is that someone will rely on the zeroing.  On
+> the other hand anything like only zeroing the state on context switch
+> would mean that it's more likely that userspace bugs with something
+> forgetting that the state might be cleared will be intermittent and most
+> likely hard to reproduce which will make people miserable.  There's a
+> good chance that bugs will be wrong answers rather than something more
+> immediate like a fault which really doesn't help there.
 
-Fixes: b51880568f20 ("selftests: mptcp: add inq test case")
+If we eventually optimise this path, we could add an option to
+force-zero the SVE regs on syscall for debugging purposes. But even
+without this, such software may run into problems. By AAPCS, if the
+callee doesn't take any SVE arguments, it doesn't need to preserve any
+of the registers, though it may choose to. Let's take a gettimeofday
+libc call, it may or may not end up in the kernel. When it's handled by
+the vDSO, all the SVE regs are preserved but not when doing the syscall.
+Something like a futex call would be even less predictable.
 
-Regarding the commit message, please next time include the Fixes tag and
-mention for which tree it is for in the FAQ [1], e.g. [PATCH net-next].
+In an optimised kernel, the context switch indeed adds to the entropy
+but the user can already hit such problems with the current more
+consistent behaviour.
 
-
-@David/Jakub: do you prefer a v2 with these modifications or is it fine
-to apply this small patch directly in net-next tree?
-
-
-Cheers,
-Matt
-
-[1] https://www.kernel.org/doc/html/latest/networking/netdev-FAQ.html
-Please check the "How do I indicate which tree (net vs. net-next) my
-patch should be in?" section.
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Catalin
