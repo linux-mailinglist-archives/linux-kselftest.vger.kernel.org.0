@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A98D470765
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 18:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5F8470737
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Dec 2021 18:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbhLJRiz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Dec 2021 12:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S244756AbhLJRhF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Dec 2021 12:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244608AbhLJRhB (ORCPT
+        with ESMTP id S244663AbhLJRhC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:37:01 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62765C0617A1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:26 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id t23so14198105oiw.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:26 -0800 (PST)
+        Fri, 10 Dec 2021 12:37:02 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887FAC061746
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:27 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso10394586otf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N5piJeGroEj5EK/nl0Pv9Gmn3OrmZFhy1pHRTuf94YA=;
-        b=g9+QdAKDtcUtq15KKC71Ntw+2MfOqG+XUAQDqkyK7Jg0EbL9dU9e9fXhNMoyUMDS5G
-         SnEWEn5JGFiH1/nSNkFCTpxAiKtRKqutdPjBo0jWoagYZ398eZrrSfq7jzPEDfvmoJ99
-         VuMh+A1ngJiI8532kLDIzoUxuLCkV+f6nJptA=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MYhfIoJvlZ3UvjgjTfCOCi8477KYN3hMlQaW6RBS+ig=;
+        b=af9yfAM2vzCaX+swy2klbMoSrH2tkjLgvNjPp0zQZByY6sB9n0hkrMVuGwo8y7p4sl
+         iEWkYM32+PBDmuzOdK0fJYMVX7YbtQRe7QOqh9iRvdW29YJVTnwap6Ilz1qoldCsQCyH
+         0rote55FZD2B/vSw6df149TN+E2Br2fgnwzyc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N5piJeGroEj5EK/nl0Pv9Gmn3OrmZFhy1pHRTuf94YA=;
-        b=4jEcY4yu38jfXyyzwOQsq9iOoWAkIAz1sugGb6GoSIjF/boVqQf3WhvApMQhqaLjPu
-         gl3sWFqm4tgZbwOYQVDcoNta2M0SJMBPp4NvTuCJA3vOftgMTMMBMv6PRHie1dNwmMRr
-         pTTmACX0Z6J0APg3aMhEhzO3PzrJ9eltglhzJWN7G40fHC9p4cNbP+ssiCx77CLeEavv
-         sworudRLX+HBg/DQsP6EgxxN83dJvSLuDKmaWx9zMQNi/CgKYEsN2f2RqGZYOr88M06V
-         KAKWITHGhiSQOeKd9cQ+5MPqp7Ji75b3vXdl9LezQZ+r9WYPExAtIf3dkJA0JaUDfp/b
-         iJXw==
-X-Gm-Message-State: AOAM530xB7EHHuARkfwVEA4ETpm0h4ofPJn7/FqbFwOX5b9eYNSbEooU
-        fi18E8p7+3HoUw2/K60A+1fLAA==
-X-Google-Smtp-Source: ABdhPJwpegtHSTsU291UpONzkrU9vfCDqPTNb+9w5/E07tR0hubuohplY3DJy4sIWD9rkj30iZEy5g==
-X-Received: by 2002:a05:6808:485:: with SMTP id z5mr13675532oid.96.1639157605614;
-        Fri, 10 Dec 2021 09:33:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MYhfIoJvlZ3UvjgjTfCOCi8477KYN3hMlQaW6RBS+ig=;
+        b=VR9YEIW16OVDRNbE7KT3vWoR1sj8qIK9LbdETw8Fxd6EnPZhM22DY7LQ1bc3aL1BGU
+         d3kAdpoIK6dIajXow/AqobiopyO5xch48/2iTDgVhpTs3lUVLoPHSy9luduSImr3hIVr
+         MFI9jEPQMmnyJrPObE3a8tDcd7etnLMc7vinGKPq9LW+kIy5HfYxoK5+qm2gTnN+hOTh
+         K6r4cG/y/AMITufeUljLRZ3XXziV+5Zlg3VOxQNigu0TkGvbXlaUb+OwryfHt7wzdmW3
+         YzCeQAcAEUsDbgw9zYhaIpGWOFP3EyuOeaGavdIa1fy/4Pvzst8PI0uZZNpvrWOrrQAr
+         QmnA==
+X-Gm-Message-State: AOAM531coFVfidOHr/aL6AlgNx3y3paX89Za2DhvEbAla+6tUFHiyg1F
+        4lnWRFHH1Fp5UE5+YYXiogkRCA==
+X-Google-Smtp-Source: ABdhPJz+fdxZhcaBb0aXL1/U4YYsysQrmZmbnuOBIm+WLfQTPZbTuKYEVakW8zy1Ps1nYPL431Nd1w==
+X-Received: by 2002:a9d:69ce:: with SMTP id v14mr12130459oto.312.1639157606779;
+        Fri, 10 Dec 2021 09:33:26 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.24
+        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:33:25 -0800 (PST)
+        Fri, 10 Dec 2021 09:33:26 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
         keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
@@ -54,73 +54,79 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 00/12] selftests: Remove ARRAY_SIZE duplicate defines
-Date:   Fri, 10 Dec 2021 10:33:10 -0700
-Message-Id: <cover.1639156389.git.skhan@linuxfoundation.org>
+Subject: [PATCH 01/12] tools: fix ARRAY_SIZE defines in tools and selftests hdrs
+Date:   Fri, 10 Dec 2021 10:33:11 -0700
+Message-Id: <30585e0f0acfb523c6f7a93e0b916ae756e0c7e7.1639156389.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <cover.1639156389.git.skhan@linuxfoundation.org>
+References: <cover.1639156389.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+tools/include/linux/kernel.h and kselftest_harness.h are missing
+ifndef guard around ARRAY_SIZE define. Fix them to avoid duplicate
+define errors during compile when another file defines it. This
+problem was found when compiling selftests that include a header
+with ARRAY_SIZE define.
+
 ARRAY_SIZE is defined in several selftests. There are about 25+
 duplicate defines in various selftests source and header files.
-This patch series removes the duplicated defines.
+Add ARRAY_SIZE to kselftest.h in preparation for removing duplicate
+ARRAY_SIZE defines from individual test files.
 
-Several tests that define ARRAY_SIZE also include kselftest.h or
-kselftest_harness.h. Remove ARRAY_SIZE defines from them.
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/include/linux/kernel.h                | 2 ++
+ tools/testing/selftests/kselftest.h         | 4 ++++
+ tools/testing/selftests/kselftest_harness.h | 2 ++
+ 3 files changed, 8 insertions(+)
 
-Some tests that define ARRAY_SIZE don't include headers that define
-it. Remove ARRAY_SIZE define and include kselftest.h
-
-The first patch in this series:
-
-- Adds ARRAY_SIZE define to kselftest.h
-- Adds ifndef guard around ARRAY_SIZE define in
-  tools/include/linux/kernel.h and kselftest_harness.h
-- Patches 2-12 do the cleanup and depend on patch 1, hence
-  will have to go through kselftest tree.
-
-Shuah Khan (12):
-  tools: fix ARRAY_SIZE defines in tools and selftests hdrs
-  selftests/arm64: remove ARRAY_SIZE define from vec-syscfg.c
-  selftests/cgroup: remove ARRAY_SIZE define from cgroup_util.h
-  selftests/core: remove ARRAY_SIZE define from close_range_test.c
-  selftests/ir: remove ARRAY_SIZE define from ir_loopback.c
-  selftests/landlock: remove ARRAY_SIZE define from common.h
-  selftests/net: remove ARRAY_SIZE define from individual tests
-  selftests/rseq: remove ARRAY_SIZE define from individual tests
-  selftests/seccomp: remove ARRAY_SIZE define from seccomp_benchmark
-  selftests/sparc64: remove ARRAY_SIZE define from adi-test
-  selftests/timens: remove ARRAY_SIZE define from individual tests
-  selftests/vm: remove ARRAY_SIZE define from individual tests
-
- tools/include/linux/kernel.h                          | 2 ++
- tools/testing/selftests/arm64/fp/vec-syscfg.c         | 2 --
- tools/testing/selftests/cgroup/cgroup_util.h          | 4 ++--
- tools/testing/selftests/core/close_range_test.c       | 4 ----
- tools/testing/selftests/ir/ir_loopback.c              | 1 -
- tools/testing/selftests/kselftest.h                   | 4 ++++
- tools/testing/selftests/kselftest_harness.h           | 2 ++
- tools/testing/selftests/landlock/common.h             | 4 ----
- tools/testing/selftests/net/gro.c                     | 3 ++-
- tools/testing/selftests/net/ipsec.c                   | 1 -
- tools/testing/selftests/net/reuseport_bpf.c           | 4 +---
- tools/testing/selftests/net/rxtimestamp.c             | 2 +-
- tools/testing/selftests/net/socket.c                  | 3 ++-
- tools/testing/selftests/net/tcp_fastopen_backup_key.c | 6 ++----
- tools/testing/selftests/rseq/basic_percpu_ops_test.c  | 3 +--
- tools/testing/selftests/rseq/rseq.c                   | 3 +--
- tools/testing/selftests/seccomp/seccomp_benchmark.c   | 2 +-
- tools/testing/selftests/sparc64/drivers/adi-test.c    | 4 ----
- tools/testing/selftests/timens/procfs.c               | 2 --
- tools/testing/selftests/timens/timens.c               | 2 --
- tools/testing/selftests/vm/mremap_test.c              | 1 -
- tools/testing/selftests/vm/pkey-helpers.h             | 3 ++-
- tools/testing/selftests/vm/va_128TBswitch.c           | 2 +-
- 23 files changed, 24 insertions(+), 40 deletions(-)
-
+diff --git a/tools/include/linux/kernel.h b/tools/include/linux/kernel.h
+index 3e8df500cfbd..9701e8307db0 100644
+--- a/tools/include/linux/kernel.h
++++ b/tools/include/linux/kernel.h
+@@ -92,7 +92,9 @@ int vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
+ int scnprintf(char * buf, size_t size, const char * fmt, ...);
+ int scnprintf_pad(char * buf, size_t size, const char * fmt, ...);
+ 
++#ifndef ARRAY_SIZE
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
++#endif
+ 
+ #define current_gfp_context(k) 0
+ #define synchronize_rcu()
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 8d50483fe204..f1180987492c 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -48,6 +48,10 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ 
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++#endif
++
+ /* define kselftest exit codes */
+ #define KSFT_PASS  0
+ #define KSFT_FAIL  1
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index ae0f0f33b2a6..75164e23f036 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -671,7 +671,9 @@
+ #define EXPECT_STRNE(expected, seen) \
+ 	__EXPECT_STR(expected, seen, !=, 0)
+ 
++#ifndef ARRAY_SIZE
+ #define ARRAY_SIZE(a)	(sizeof(a) / sizeof(a[0]))
++#endif
+ 
+ /* Support an optional handler after and ASSERT_* or EXPECT_*.  The approach is
+  * not thread-safe, but it should be fine in most sane test scenarios.
 -- 
 2.32.0
 
