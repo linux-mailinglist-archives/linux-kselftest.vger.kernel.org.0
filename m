@@ -2,176 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C02FD4719D9
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Dec 2021 12:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7552471A3F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Dec 2021 14:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbhLLLrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Dec 2021 06:47:47 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:48763 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229464AbhLLLrq (ORCPT
+        id S230484AbhLLNAM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 Dec 2021 08:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhLLNAM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Dec 2021 06:47:46 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DC49F5801BD;
-        Sun, 12 Dec 2021 06:47:45 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 12 Dec 2021 06:47:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=i68MDK
-        OYZX2L9llnoC4vHRarKh+UThKV0LjDM1g07oQ=; b=WWTaJ1GlXONzJOmCl9jtBJ
-        UlLm8ZGJPtay2MOsaLg//hvfIixS1FkreC9+VQ0iq9N5hTqrSI7GMtcAmhDYdXk9
-        hceH7qVeRdKj+sv5bKJEJx6S0Cxvmg7VCYZSOPe/Hhmytu8Ihx+sibjZ4s/MMj7i
-        /YPRcTpWLnj8c6ca6LtZkSmJLzwTnGTNzZUirQbu0fQUKkGelmwfxh2L916hRR06
-        t46mXPLEEKPoHeW7k4drW5wCNyeB281aMEkmqbuU1Y3pMPm8DjvJwgYBNG5QkhjU
-        sOXgC2PdM0g2qzZZwI6mQHO6Ab6mDW542+hqaTOf5yUkCIa3SNckaAxtFtUEV7xQ
-        ==
-X-ME-Sender: <xms:YeG1YXMNwpUn57dofbEG3zB1q9TrtLHCfDxRk-K2iXBbMgCuocvP3Q>
-    <xme:YeG1YR8or4MOq2d2C9voM3k_pJEA0ax5TtoL5lAYUTamOve54j1GByn1SCWnsxTsM
-    OAh6-C4GDFDOBU>
-X-ME-Received: <xmr:YeG1YWRHlEVLA5oG5jsbsOXIqFAu86wryeUEIW-8LD_g7OrZxbR0zzzvSXS5>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrkeeigdefvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
-    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
-    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
-    hstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:YeG1YbupWaUEWO5JIPN-b0TeibR3tR5Uz348pnFfO9CfOmzz7NQIsg>
-    <xmx:YeG1YfcKU9RsVJgV3uyS03dG5K9jTJtOyQruSb5foxxK5KGxBhvmEw>
-    <xmx:YeG1YX0x0NGiyJIecJpgR-XfMirfwFNDGdQ2e5pGVFEWeQjuwFcK5w>
-    <xmx:YeG1YX2deXHOhMO9tPxp92PslBPfQo2ZNObbxto-p3njfMb96p0yhg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 12 Dec 2021 06:47:44 -0500 (EST)
-Date:   Sun, 12 Dec 2021 13:47:42 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
-Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        arkadiusz.kubalewski@intel.com, richardcochran@gmail.com,
-        abyagowi@fb.com, anthony.l.nguyen@intel.com, davem@davemloft.net,
-        kuba@kernel.org, linux-kselftest@vger.kernel.org, mkubecek@suse.cz,
-        saeed@kernel.org, michael.chan@broadcom.com, petrm@nvidia.com
-Subject: Re: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
-Message-ID: <YbXhXstRpzpQRBR8@shredder>
-References: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
+        Sun, 12 Dec 2021 08:00:12 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC76C061714;
+        Sun, 12 Dec 2021 05:00:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50506CE0B53;
+        Sun, 12 Dec 2021 13:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70EC5C341CA;
+        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639314008;
+        bh=H2l+xf2WeTwJXBbO9SZOz0IoqXaav2fWOq4Wutvwjek=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SA7iwLgW36Yr5tI+gDE/hkdzXECmcQgyFIUKd2wMcR9jlfZBxtL6O/xoVHPCNbMcT
+         d7+iIFDtPrXrjpTLDyoQNmTimw64ntwY7LskdWmRofeWAL+Q7vFJrJx3SPWz55Nurx
+         v8x9DeagZJojjAmyjJANOAfbIDzj+iqG1FU8mQJnFf6VtVz7KQR3K4P2+DhKBylQxY
+         Ck2++zEQkwMbQz44AE/f9I4udVoIGMQ63vK/V5U5jEuMn5CNDKuVt8u7LN774ds1i0
+         Z9apXVO2bYiv5y6PoypwQy55VKNFKEEG1qXH9tXCfrP6YF3ieZCqNF5tcBJCIFomNd
+         XZZ/ZF/RCPk7g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 507DC60BD0;
+        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163931400832.17396.4075834071106906036.git-patchwork-notify@kernel.org>
+Date:   Sun, 12 Dec 2021 13:00:08 +0000
+References: <20211210072523.38886-1-po-hsu.lin@canonical.com>
+In-Reply-To: <20211210072523.38886-1-po-hsu.lin@canonical.com>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        skhan@linuxfoundation.org, andrea.righi@canonical.com,
+        dsahern@kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 02:45:46PM +0100, Maciej Machnikowski wrote:
-> Synchronous Ethernet networks use a physical layer clock to syntonize
-> the frequency across different network elements.
-> 
-> Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
-> Equipment Clock (EEC) and have the ability to synchronize to reference
-> frequency sources.
-> 
-> This patch series is a prerequisite for EEC object and adds ability
-> to enable recovered clocks in the physical layer of the netdev object.
-> Recovered clocks can be used as one of the reference signal by the EEC.
+Hello:
 
-The dependency is the other way around. It doesn't make sense to add
-APIs to configure the inputs of an object that doesn't exist. First add
-the EEC object, then we can talk about APIs to configure its inputs from
-netdevs.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-With these four patches alone, user space doesn't know how many EECs
-there are in the system, it doesn't know the mapping from netdev to EEC,
-it doesn't know the state of the EEC, it doesn't know which source is
-chosen in case more than one source is enabled. Patch #3 tries to work
-around it by having ice print to kernel log, when the information should
-really be exposed via the EEC object.
+On Fri, 10 Dec 2021 15:25:23 +0800 you wrote:
+> If any sub-test in this icmp_redirect.sh is failing but not expected
+> to fail. The script will complain:
+>     ./icmp_redirect.sh: line 72: [: 1: unary operator expected
+> 
+> This is because when the sub-test is not expected to fail, we won't
+> pass any value for the xfail local variable in log_test() and thus
+> it's empty. Fix this by passing 0 as the 4th variable to log_test()
+> for non-xfail cases.
+> 
+> [...]
 
-+		dev_warn(ice_pf_to_dev(pf),
-+			 "<DPLL%i> state changed to: %d, pin %d",
-+			 ICE_CGU_DPLL_SYNCE,
-+			 pf->synce_dpll_state,
-+			 pin);
+Here is the summary with links:
+  - [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
+    https://git.kernel.org/netdev/net/c/3748939bce3f
 
-> 
-> Further work is required to add the DPLL subsystem, link it to the
-> netdev object and create API to read the EEC DPLL state.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-When the EEC object materializes, we might find out that this API needs
-to be changed / reworked / removed, but we won't be able to do that
-given it's uAPI. I don't know where the confidence that it won't happen
-stems from when there are so many question marks around this new
-object.
 
-> 
-> v5:
-> - rewritten the documentation
-> - fixed doxygen headers
-> 
-> v4:
-> - Dropped EEC_STATE reporting (TBD: DPLL subsystem)
-> - moved recovered clock configuration to ethtool netlink
-> 
-> v3:
-> - remove RTM_GETRCLKRANGE
-> - return state of all possible pins in the RTM_GETRCLKSTATE
-> - clarify documentation
-> 
-> v2:
-> - improved documentation
-> - fixed kdoc warning
-> 
-> RFC history:
-> v2:
-> - removed whitespace changes
-> - fix issues reported by test robot
-> v3:
-> - Changed naming from SyncE to EEC
-> - Clarify cover letter and commit message for patch 1
-> v4:
-> - Removed sync_source and pin_idx info
-> - Changed one structure to attributes
-> - Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
->   to the recovered clock of a port that returns the state
-> v5:
-> - add EEC source as an optiona attribute
-> - implement support for recovered clocks
-> - align states returned by EEC to ITU-T G.781
-> v6:
-> - fix EEC clock state reporting
-> - add documentation
-> - fix descriptions in code comments
-> 
-> 
-> Maciej Machnikowski (4):
->   ice: add support detecting features based on netlist
->   ethtool: Add ability to configure recovered clock for SyncE feature
->   ice: add support for monitoring SyncE DPLL state
->   ice: add support for recovered clocks
-> 
->  Documentation/networking/ethtool-netlink.rst  |  62 ++++
->  drivers/net/ethernet/intel/ice/ice.h          |   7 +
->  .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  70 ++++-
->  drivers/net/ethernet/intel/ice/ice_common.c   | 224 +++++++++++++++
->  drivers/net/ethernet/intel/ice/ice_common.h   |  20 +-
->  drivers/net/ethernet/intel/ice/ice_devids.h   |   3 +
->  drivers/net/ethernet/intel/ice/ice_ethtool.c  |  96 +++++++
->  drivers/net/ethernet/intel/ice/ice_lib.c      |   6 +-
->  drivers/net/ethernet/intel/ice/ice_ptp.c      |  35 +++
->  drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  49 ++++
->  drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  36 +++
->  drivers/net/ethernet/intel/ice/ice_type.h     |   1 +
->  include/linux/ethtool.h                       |   9 +
->  include/uapi/linux/ethtool_netlink.h          |  21 ++
->  net/ethtool/Makefile                          |   3 +-
->  net/ethtool/netlink.c                         |  20 ++
->  net/ethtool/netlink.h                         |   4 +
->  net/ethtool/synce.c                           | 267 ++++++++++++++++++
->  18 files changed, 929 insertions(+), 4 deletions(-)
->  create mode 100644 net/ethtool/synce.c
-> 
-> -- 
-> 2.26.3
-> 
