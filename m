@@ -2,81 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7552471A3F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Dec 2021 14:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052BD471CD0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Dec 2021 20:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbhLLNAM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Dec 2021 08:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhLLNAM (ORCPT
+        id S230127AbhLLT4J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 Dec 2021 14:56:09 -0500
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:41900 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230318AbhLLT4J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Dec 2021 08:00:12 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC76C061714;
-        Sun, 12 Dec 2021 05:00:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50506CE0B53;
-        Sun, 12 Dec 2021 13:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70EC5C341CA;
-        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639314008;
-        bh=H2l+xf2WeTwJXBbO9SZOz0IoqXaav2fWOq4Wutvwjek=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SA7iwLgW36Yr5tI+gDE/hkdzXECmcQgyFIUKd2wMcR9jlfZBxtL6O/xoVHPCNbMcT
-         d7+iIFDtPrXrjpTLDyoQNmTimw64ntwY7LskdWmRofeWAL+Q7vFJrJx3SPWz55Nurx
-         v8x9DeagZJojjAmyjJANOAfbIDzj+iqG1FU8mQJnFf6VtVz7KQR3K4P2+DhKBylQxY
-         Ck2++zEQkwMbQz44AE/f9I4udVoIGMQ63vK/V5U5jEuMn5CNDKuVt8u7LN774ds1i0
-         Z9apXVO2bYiv5y6PoypwQy55VKNFKEEG1qXH9tXCfrP6YF3ieZCqNF5tcBJCIFomNd
-         XZZ/ZF/RCPk7g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 507DC60BD0;
-        Sun, 12 Dec 2021 13:00:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 12 Dec 2021 14:56:09 -0500
+Received: by mail-yb1-f175.google.com with SMTP id v138so33701778ybb.8
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Dec 2021 11:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=VetXEvCPxcinVQOcBQE60QAokzWfglcU8SENq8pHmu4=;
+        b=VUV6Xb7TuPWFMio5FWQ7ljb5oo+gDYrJZ/IjGPzGxMwrzqNN3iePajuWrOMRhJCz3c
+         RDx7i+QxIB3VMk40m8IbrQp/FDs/3wAPDHlXBsSf3fwU4leKqZVGolraL9BcuZHYmFu5
+         jcymlriiyKtR6rS0qJxuaaD9UGilFLb5jGhXz3LX5pQ2oA2ubzOqR6yiOSjlyLlIS+c2
+         +ht69SC+7DBLOomM1D+xgpjNIiaNyuRRfRtugfVZuB/kc8v9vIffjwNRaTCFKS3rrV38
+         nni/UKBpbdMdeumexurAYS2ogFrXHI0V5PmQcBmV94GTq1VLb38SfXRtlNuT0mvFI5U7
+         b/8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=VetXEvCPxcinVQOcBQE60QAokzWfglcU8SENq8pHmu4=;
+        b=UspvdwpH5ZKPs97p2srx+p5KNc+HM+3u3TZxhgWuHJJWBMEN+2DZzsxEipiSvxyWt+
+         HX1pOcTt/+/zYPXf1z5WM2XURNYy3Qo4Bld9rKm/2glpeclIu4mUTzn6zNUwpGIJCkQo
+         YJJENfWG4NJZ7rEn4wzCTABMsbMNpZMqzW2hWfd3s3udUoU+TUaBrUbN955rn/wv5KpR
+         2jVSaH4OkfSCuOpEW2v5eN9zSY9lfxwGN4T0p7xyI/44V6qiqaAyO1Px2PM42ITydq6w
+         h1biI1dYlcPsotegH3GLbugOWrYIIcgs7O6Zs9O/7m41k+5/wHd8+lf4+BO0QFzh6AQ8
+         8oiQ==
+X-Gm-Message-State: AOAM533wZTywfuBBRFErikjoYpgnfZlqOl49MSoD5jbfYrEH/mItFu95
+        PhgFPHDkzrEaC/fFNEb2tD6eyTEytZNElTZ8l9Q=
+X-Google-Smtp-Source: ABdhPJwtXepGc2LSUfsKfPyAr3/ptJk3r8kFGFCHrr6iBN2R1DZTP09ulOj9WMe/jn4cMCx7PVhgWfdTdPDxRKMC3LM=
+X-Received: by 2002:a25:6402:: with SMTP id y2mr29825605ybb.673.1639338908767;
+ Sun, 12 Dec 2021 11:55:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163931400832.17396.4075834071106906036.git-patchwork-notify@kernel.org>
-Date:   Sun, 12 Dec 2021 13:00:08 +0000
-References: <20211210072523.38886-1-po-hsu.lin@canonical.com>
-In-Reply-To: <20211210072523.38886-1-po-hsu.lin@canonical.com>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        skhan@linuxfoundation.org, andrea.righi@canonical.com,
-        dsahern@kernel.org
+Received: by 2002:a05:6900:38a2:0:0:0:0 with HTTP; Sun, 12 Dec 2021 11:55:08
+ -0800 (PST)
+From:   Kevin James <barca4life30001@gmail.com>
+Date:   Sun, 12 Dec 2021 11:55:08 -0800
+Message-ID: <CACijf9jEyk0WEAfmxV3k-+ez0ettwyF==i3QX7p_Za6NqEdwkw@mail.gmail.com>
+Subject: Attn E-mail Address Owner,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 10 Dec 2021 15:25:23 +0800 you wrote:
-> If any sub-test in this icmp_redirect.sh is failing but not expected
-> to fail. The script will complain:
->     ./icmp_redirect.sh: line 72: [: 1: unary operator expected
-> 
-> This is because when the sub-test is not expected to fail, we won't
-> pass any value for the xfail local variable in log_test() and thus
-> it's empty. Fix this by passing 0 as the 4th variable to log_test()
-> for non-xfail cases.
-> 
-> [...]
-
-Here is the summary with links:
-  - [PATCHv2] selftests: icmp_redirect: pass xfail=0 to log_test()
-    https://git.kernel.org/netdev/net/c/3748939bce3f
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+
+Email: westernwesternunion293@gmail.com
 
 
+We have concluded to effect your own payment through Western Union
+Money Transfer, $5000 daily until the total sum of your compensation
+fund is transferred to you.
+
+https://www.westernunion.com/global-service/track-transfer
+
+MTCN#::8267439026
+
+Amount Programmed: $5000
+
+You are advised to get back to the contact person trough the email
+below for more direction on how to be receiving your payment
+
+Contact person: . . Dr. Eng. Bright Sam
+Email: westernwesternunion293@gmail.com
+
+Thanks,
