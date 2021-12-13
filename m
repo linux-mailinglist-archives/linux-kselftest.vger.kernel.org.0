@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3CA473639
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 21:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF5D473652
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 22:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242356AbhLMUph (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 15:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S238489AbhLMVAU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 16:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbhLMUpg (ORCPT
+        with ESMTP id S233931AbhLMVAT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:45:36 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235D1C061574;
-        Mon, 13 Dec 2021 12:45:36 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id b11so12015002pld.12;
-        Mon, 13 Dec 2021 12:45:36 -0800 (PST)
+        Mon, 13 Dec 2021 16:00:19 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68499C061574;
+        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id q17so12034203plr.11;
+        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+kGkjmCClJZHQUuipZquM0wxRHxRZ1CYDc4rEqsGfmo=;
-        b=Dc24nUO7obHKfEHi+3eu4hhPs6pC5ekbvfg6/fWWuMendLFNP/aD3vLwBMsHt2VawN
-         65DTUGFRXitGu39c94BMAfKQsI8UfXTySofOZ9aBfUJoCQ9p7VFDtSa15skRYg7omKr5
-         KdjwUjY8khI+bAkd1TXtrpsH4ElcQnOCyRGAJ3dzrakcKEw34dsnGuUSxxDFeLak/iq8
-         IlvW99cvvRUK7Ok1QKBqJuceEQliZ/A3W1EJEpQYq5lxAljWkERflfsUEhAysxqJMY54
-         /zwdsdRHMRP45MEbZ/kXiGH03I5m2CLNYauI4avPu3xs9iECZgOtDZxfKxkl039E39XL
-         eLZg==
+        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
+        b=f9xizRMo/j3PXqOZs5juMJcQ37RJ5hWQLM+DY21WpJeu9oIwrszgkESzp+5lzfcPu/
+         S1xClURBIc1R5ZVu5ZUI/+iUkArHUMLGwuCCKqUaRzYwg5Avh7YpSAokVvTPS2Fl4yej
+         QEpPj8HkBkveAgjGp1Uwvd74RkiIpvriZ0fL7nvbYk0KnZrMlg7CSDEyu3KP1tz1BuDs
+         QfTGyB7tn/01WVnR0Fwv8cm0i1q2j9i7t0OAAPsgRMy/+EsZTeFoyqT/4Xo1TuvOAomL
+         rtOobYElaG+HmdQnvhuS2kPRXEJ534YqBFGguvlzK1LZO2run0kelOEKRf4Yj3qIeeoE
+         ar2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=+kGkjmCClJZHQUuipZquM0wxRHxRZ1CYDc4rEqsGfmo=;
-        b=meyl3JoZQNULpNL/Vtmc9ERSTrvHMTOlCLD2CcbwWIRQEZ1V9hERTCF0+RbdstMZm3
-         5Tbw/yTM3ykWawlDrO5+o9VdNcQDoi7FtAkY+wiCJUVQF1dhcddw1KOFU/3dqrfgFdM4
-         CnwwCzIqIeWCLuDscMs3jl+a5R/A4OW1ofmwRBYxptQZ1/JAkoSAA0XQQpm5DbJS4hbg
-         jV7cM9xB/gQH8sUaSMzUgfw0tT3PE7V7Dm9eG95FSrsskuDDqQtpcSOmOFCvX9/0Bshn
-         vAKK4r6KMn0nrUJ+AnEECs2jr6J44HgBt3U+7YWK8WX5HtmpCXPNl0oaFqfa/ho/vuvt
-         NkLQ==
-X-Gm-Message-State: AOAM533gHo+jKrPIblLC6dNDS0bEwSatiAmdvt3d2j9+c3XmC+vWiYUt
-        oCTZXSczMgAN8HbUC5fsbAU=
-X-Google-Smtp-Source: ABdhPJw9GayFUyCxKUmosgEbKO7MgPcj9+3Aq5Ipt6SL1z0lwWdIaqqlLpt5puwnDyVjjNQgx7Zr5Q==
-X-Received: by 2002:a17:90b:4b09:: with SMTP id lx9mr739899pjb.100.1639428335323;
-        Mon, 13 Dec 2021 12:45:35 -0800 (PST)
+        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
+        b=rLqvmML42zYIc28M9XqybmOXqbLcZaJ2cwnE7KpKMp7TkZkVTFIIQuj7MdPuAg834P
+         O4QXtXJLpdIHdtdPV6VfW4yVRFYiNOOZohcDjfACVrfoZeCtvlIgWJWesOEqafY0yFtz
+         FgOpVyPmTPdAqvT54SEtevub+Sex6pdFETEPd+dbBLJmSy9p79C3WZM6tO1GeHPaqvFK
+         UyQ7u35kp80hIVa93CKIzjw2fTOTLDn0aqi+fD81j5wFC0zK2J1wfN78VFdAb7eVn9Sf
+         tZERx/rQpHBfZpT344yekkzEagXcjlbXj7ScN08UvyB2WlWXymE4Np7UfKFTxYDHofwR
+         /FGA==
+X-Gm-Message-State: AOAM531g4rQ3Xe736AgMrafvK5YGlYoJdzB2eW2rvsgGgmqNokC0jafh
+        daca8DO93wgv+FXfDM1b75I=
+X-Google-Smtp-Source: ABdhPJz081wudgrw0mrWIs2FAxS1rWp5wOiKfQbqpkYviU3rS8iu9dWtDsDEnN9Q6qUkBrtVzexdhQ==
+X-Received: by 2002:a17:902:b110:b0:142:7621:aecb with SMTP id q16-20020a170902b11000b001427621aecbmr481454plr.55.1639429218693;
+        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id f185sm13272776pfg.39.2021.12.13.12.45.34
+        by smtp.gmail.com with ESMTPSA id ot1sm36852pjb.6.2021.12.13.13.00.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 12:45:34 -0800 (PST)
+        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Dec 2021 10:45:33 -1000
+Date:   Mon, 13 Dec 2021 11:00:17 -1000
 From:   Tejun Heo <tj@kernel.org>
 To:     Waiman Long <longman@redhat.com>
 Cc:     Zefan Li <lizefan.x@bytedance.com>,
@@ -65,51 +65,48 @@ Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v9 2/7] cgroup/cpuset: Allow no-task partition to have
- empty cpuset.cpus.effective
-Message-ID: <Ybew7d2oE2gLcLNO@slm.duckdns.org>
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
 References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-3-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211205183220.818872-3-longman@redhat.com>
+In-Reply-To: <20211205183220.818872-7-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 01:32:15PM -0500, Waiman Long wrote:
->  	adding = deleting = false;
->  	old_prs = new_prs = cpuset->partition_root_state;
->  	if (cmd == partcmd_enable) {
-> +		/*
-> +		 * Enabling partition root is not allowed if not all the CPUs
-> +		 * can be granted from parent's effective_cpus.
-> +		 */
-> +		if (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus))
-> +			return -EINVAL;
+Hello,
+
+On Sun, Dec 05, 2021 at 01:32:19PM -0500, Waiman Long wrote:
+> +	In the case of an invalid partition root, a descriptive string on
+> +	why the partition is invalid is included within parentheses.
 > +
-> +		/*
-> +		 * A parent can be left with no CPU as long as there is no
-> +		 * task directly associated with the parent partition. For
-> +		 * such a parent, no new task can be moved into it.
-> +		 */
-> +		if (partition_is_populated(parent, cpuset) &&
-> +		    cpumask_equal(cpuset->cpus_allowed, parent->effective_cpus))
-> +			return -EINVAL;
+> +	Almost all possible state transitions among "member", valid
+> +	and invalid partition roots are allowed except from "member"
+> +	to invalid partition root.
 
-So, given that this only happens with threaded domains, can we just not
-allow partitions within threaded domains? The combination doesn't make whole
-lot of sense to me anyway.
+So, this part still bothers me for the following two reasons that I brought
+up earlier:
 
-> +	/*
-> +	 * On default hierarchy, task cannot be moved to a cpuset with empty
-> +	 * effective cpus.
-> +	 */
-> +	if (is_in_v2_mode() && cpumask_empty(cs->effective_cpus))
-> +		goto out_unlock;
+* When a valid partition turns invalid, now we have a reliable way of
+  discovering what exactly caused the transition. However, when a user now
+  fails to turn a member into partition, all they get is -EINVAL and there's
+  no way to discover why it failed and the failure conditions that -EINVAL
+  represents aren't simple.
 
-And then we can avoid this extra restriction too, right?
+* In an automated configuration scenarios, this operation mode may be
+  difficult to make reliable and lead to sporadic failures which can be
+  tricky to track down. The core problem is that whether a given operation
+  succeeds or not may depend on external states (CPU on/offline) which may
+  change asynchronously in a way that the configuring entity doesn't have
+  any control over.
+
+It's true that both are existing problems with the current partition
+interface and given that this is a pretty spcialized feature, this can be
+okay. Michal, what are your thoughts?
 
 Thanks.
 
