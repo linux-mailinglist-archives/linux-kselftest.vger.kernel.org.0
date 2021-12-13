@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 915F9472EED
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 15:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E58472EF6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 15:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbhLMOWQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 09:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S239099AbhLMOW3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 09:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239144AbhLMOWK (ORCPT
+        with ESMTP id S239108AbhLMOWV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:22:10 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9FEC061A32;
-        Mon, 13 Dec 2021 06:22:08 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y12so51857915eda.12;
-        Mon, 13 Dec 2021 06:22:08 -0800 (PST)
+        Mon, 13 Dec 2021 09:22:21 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93295C061756;
+        Mon, 13 Dec 2021 06:22:20 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id t5so52347091edd.0;
+        Mon, 13 Dec 2021 06:22:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=laxE5jN2bHJG4Yo8WVS4mx5VPDFX4vkop6go8zl/3cQ=;
-        b=lzIwCzNJvV86Boup6xgN3osyOJCZ5s9f7wssi8eyqby4QFK6mgh5w3tsozKTsJ3T59
-         HVIqizJ9ZFY64dJp6KfX+cGRLOQJEUW1bzqXZGPlZkMjcWmDT+x4qJOaaQciaOAaqqaj
-         HJrg2wpVesDIDnNnXE47hF9u2zKK0yR9ZEIGagxI6LOf8wbifVoIpR3Fzosc7syqYuLg
-         JXWkIw+L3dFwO2b6bI896aMnKTfjnchtLGFfA5Q2ryaFoOBCw6IZ3EdA9NVzgftFprLF
-         ozWGX0Iit8K1FK6gIfGRc+GIN4B5+EySkEsCFz5L1EEVwZq4JtYAomtfuyIuiB/U9+tJ
-         P/7w==
+        bh=2LITpO1CYGTluV5sVoz+T9RYcObziHlm+lKM2Eu5E+c=;
+        b=Eq3H1cEm/k+bfdM9rk2YyzTzEGwPKBbj0dUcfS5mMe3hoBmyzvFLKH2b2cmUlNMTiI
+         y6ZbWPrGfBbCeuHMlZWrxqgMuPVUGyOTQu52qnjH3dMiE/DEZo9xDGd859a6QbR2SyPT
+         eJ6jm/UU4fSi+HSPhrNyvPvKkGhc729C4StcL9I9Kau6Uo++Ge4isc0m2JrzI7KzApPl
+         HJtcgWGDAmiOu/Um0yJsU3MIIHj7Tu20nNWVgJrs2hJw8CdOgs9du3zxIRhC0Dq3QFlf
+         QmtrTogKloaz8ctntvHcwLjVnLGB16UTsTqI6nECsXym94pbksd2JfGqYBO6XoR4z5KQ
+         8vvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=laxE5jN2bHJG4Yo8WVS4mx5VPDFX4vkop6go8zl/3cQ=;
-        b=7IiiVqeBS/ZVreZhSNvqqYo6G0cqrAe7nz07I4adOtYzRN69/VtWG71RqUPEJoyr35
-         4ZF6GSjXE5G5OU1LcyDtFvvBaKdjCfYnuXmXPzxD+6eD2KvLA2iNIeJ47THX/hWmq4nX
-         rf5vT+YFT/BmCStmoFCjyu8r3CO21hTN3V8iPKUXLg0i2YTKG0pIWJVEnHObywAql1ch
-         FsIcE6eNIhRkuNxyYnR3Jo6z2cBGM1UTjFEGNKV+v+SieS9d6jk/e4qIqRUcPZ3mxmLG
-         JmAyqG2JBR+4Can3Whz4iINBf9Z3ETPrLQAtSBdTERm7ZcFgxZRGIWECpYplDPon8KJa
-         1row==
-X-Gm-Message-State: AOAM530BJIZzKjfZmytkfgLLi1eJp0qb4gHXEn3+pPcwTc57teXSbHoc
-        pQirwkOVmJJt9x71x0bkNZo=
-X-Google-Smtp-Source: ABdhPJxNFRV6Oi2yANoqjyUMFO8hhvfktf+ywIKoyHutx2WmfJhwBnQg2syM5e7/uYTFHwNnzVsp7g==
-X-Received: by 2002:a50:d543:: with SMTP id f3mr62764539edj.56.1639405324197;
-        Mon, 13 Dec 2021 06:22:04 -0800 (PST)
+        bh=2LITpO1CYGTluV5sVoz+T9RYcObziHlm+lKM2Eu5E+c=;
+        b=UZB6YGCP24SU28bOUM1WMR9T/frEL/PATUf4iFtjwcVJY1Y37Evt2WSB4Zsd+zF85n
+         YhPPJlf7Mnr1mu/pcCTcsX0oNxLUokionDgaDlr80YnFpojI5Wn+MRHb4+sH/qDHR8l3
+         e3iXYGKf4QZWXSZlf1as2ehsKbCZG92u2SGvJNFxhWdgCXwzGirj6IvJCQAMhMzAZUip
+         brorZaWyGMjJSmMfBb28Lr5r/aZ9j2OkGdTIb6TBKUh1N5chzAig0nyS+RGp8v30PDHZ
+         K9dUX69NpZsmz+subfjLGwyB9lkPoDbuRUkN1tNDAAqUqsdoYgRhqpjV52LkEcYj6JeV
+         Tlrg==
+X-Gm-Message-State: AOAM531a2XnbXW5aPfoWMVixRkStcWwFgvjm/e1L8ns1VzjlNR4S6+jL
+        n85rayPDoDQnkhGFK7dQnsjS9ALhA7s=
+X-Google-Smtp-Source: ABdhPJxTuP3Dx15KI5NRtZQaCeAHAW3heXsW4nEwMxbLEhnuhRzr59vvT7O8wepJff+3yTRhUvhx4g==
+X-Received: by 2002:a05:6402:26d4:: with SMTP id x20mr65921399edd.119.1639405338958;
+        Mon, 13 Dec 2021 06:22:18 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id 12sm147884eja.187.2021.12.13.06.22.01
+        by smtp.googlemail.com with ESMTPSA id g15sm6009639ejt.10.2021.12.13.06.22.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 06:22:03 -0800 (PST)
+        Mon, 13 Dec 2021 06:22:18 -0800 (PST)
 Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <72a3fabf-bb1d-002f-caaf-2656559aa2a8@redhat.com>
-Date:   Mon, 13 Dec 2021 15:22:01 +0100
+Message-ID: <12be6cce-8e56-d69d-3338-3662b1fee12d@redhat.com>
+Date:   Mon, 13 Dec 2021 15:22:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH MANUALSEL 5.10 3/4] KVM: selftests: Make sure
+Subject: Re: [PATCH MANUALSEL 5.4 2/2] KVM: selftests: Make sure
  kvm_create_max_vcpus test won't hit RLIMIT_NOFILE
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
@@ -64,10 +64,10 @@ To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
 Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Sean Christopherson <seanjc@google.com>, shuah@kernel.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20211213142020.352376-1-sashal@kernel.org>
- <20211213142020.352376-3-sashal@kernel.org>
+References: <20211213142028.352438-1-sashal@kernel.org>
+ <20211213142028.352438-2-sashal@kernel.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211213142020.352376-3-sashal@kernel.org>
+In-Reply-To: <20211213142028.352438-2-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -105,7 +105,7 @@ On 12/13/21 15:20, Sasha Levin wrote:
 >   1 file changed, 30 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
-> index 0299cd81b8ba2..aa3795cd7bd3d 100644
+> index 231d79e57774e..cfe75536d8a55 100644
 > --- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
 > +++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
 > @@ -12,6 +12,7 @@
@@ -116,7 +116,7 @@ On 12/13/21 15:20, Sasha Levin wrote:
 >   
 >   #include "test_util.h"
 >   
-> @@ -40,10 +41,39 @@ int main(int argc, char *argv[])
+> @@ -43,10 +44,39 @@ int main(int argc, char *argv[])
 >   {
 >   	int kvm_max_vcpu_id = kvm_check_cap(KVM_CAP_MAX_VCPU_ID);
 >   	int kvm_max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
@@ -127,8 +127,8 @@ On 12/13/21 15:20, Sasha Levin wrote:
 > +	int nr_fds_wanted = kvm_max_vcpus + 100;
 > +	struct rlimit rl;
 >   
->   	pr_info("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
->   	pr_info("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
+>   	printf("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
+>   	printf("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
 >   
 > +	/*
 > +	 * Check that we're allowed to open nr_fds_wanted file descriptors and
