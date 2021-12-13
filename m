@@ -2,123 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E384730FD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 16:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36834731AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 17:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbhLMP6x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 10:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S240718AbhLMQ03 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 11:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbhLMP6w (ORCPT
+        with ESMTP id S240706AbhLMQ03 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 10:58:52 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7D3C061574;
-        Mon, 13 Dec 2021 07:58:52 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id n66so23678494oia.9;
-        Mon, 13 Dec 2021 07:58:52 -0800 (PST)
+        Mon, 13 Dec 2021 11:26:29 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57FDC061748
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 08:26:28 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so11938865wmc.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 08:26:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yGfzyDYwTUBRIBWmk787nJHKxOhWCaJ2ogedCtBIFp0=;
-        b=dWBgYGE+1jy15pU/SA8uESGrurPXMg+geN1MMCYoc0j6kMP23Hn9RK2A3u4Tpnm73p
-         u3JxCPByl9oqKh+iIncJyQ9zdnU43V6bM9YI++TvIQgp8UMJtoPh2CCWGKBvnSiWb32X
-         gHfazgNz8J+9MK2/WzmdsGQelYrXeBi3dmj6bbjOfviSc1SYz5SP7mZcqxSeSVw+v5Is
-         qfMg+xiQZIIxa/eGmZerqWezZmYHINHKp+a+YKgd8hOCSoim2KtwA7GMo0bhZjHmIQZW
-         74SYZL6ibpW4UprvE7ibe/aMBOX2wsUMs+G7ivknL2T7Efr+ZEQNq1Ene11whY8lNhWs
-         hw1g==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1AzvuCR6Z7F8eWXwnKYsYP5qAfi0qAAwDYxmJxh11GA=;
+        b=kP0MdMHDZOVdBWXvz8yFlKiVvcY55bWueHxr6gc1O5yBHS0FvggzvJ7ccXwQkp9wY+
+         Kf4Yi6V/a/z1GiyIBA7Or/rmDjb8k6pvo0WFUEajMQIzEAbH5hccB042iybhOngB3ssa
+         hax12ybb/fQLi+THkLJewf03772zKqtH7M4ASN5BjZiacAu8duaYqn1icM3sZ6OSRSKs
+         uj7ihi3hqrvxN/Xs3qQfrPkIMpD6Ra9/5g4otyyORENEAshYi/Ay55mzNzK60Hecfofi
+         vZ66gQ8cWC0YMmsJ0w5WQx5s/DJCVDd7R5cCHGS5LrxwyG/Xn1+ToA5G6BGuZuPhvxCF
+         VfeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yGfzyDYwTUBRIBWmk787nJHKxOhWCaJ2ogedCtBIFp0=;
-        b=PKvruxMFu/Do6L56Btpsp32A+NkRFHeLRmjqczNOb3Q6RqUsPgb2UUQDOk3qCwtFqC
-         OC6o+RD6+MkfrDzeGNvOd/mAlxmGCcvsOZF38C89kJVo7wEcFYULIiUofyDnQNJAECt+
-         iWMLrE0CSXzloGWIsS3VFbzOF3V2yIQJyemfLYbRG5/hijYhTgPdLsbbVg9Uld/P6xcS
-         VdhFWpgS3jMxJebRY8Ex8hJmQrFVVgYLnvRObRl7zGaJf/IksrcZS4/CmWkFxdSOHsWV
-         QUqTmI3qrVCIuU38PnRyuT7NdyG16ApwJoRNgU6IBKj/y6KtYSkXU6hfH8G5P2d8S7VB
-         GOSg==
-X-Gm-Message-State: AOAM532nF5AtKEJMzqCpp90c4Jy/rBvw+tPK4qozMpj5/afRhEYpVK6e
-        I6hJunDMjeWktkHIGMxzk8V2cI2qLGg=
-X-Google-Smtp-Source: ABdhPJxdEgNEluuOP+Mg+WGZz5WdDvYAl977/wITRh82fIbG32cqCCawD3aMXBeZ346805JYBy1fjA==
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr28062103oiw.154.1639411132077;
-        Mon, 13 Dec 2021 07:58:52 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id e14sm2306709oow.3.2021.12.13.07.58.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Dec 2021 07:58:51 -0800 (PST)
-Message-ID: <56ae3614-f666-4eed-cfee-e2dc7b7eb169@gmail.com>
-Date:   Mon, 13 Dec 2021 08:58:50 -0700
+        bh=1AzvuCR6Z7F8eWXwnKYsYP5qAfi0qAAwDYxmJxh11GA=;
+        b=OH8lup5+xXUmlWtgrh5BgzrYHMRYr0dldbOuL4jw0o62/518mtxRI5ZTVu8jBHayXE
+         PJETUYpr7wUke6bp6lx0DIxyePS6rmvg56W26/mWZH3AjQEDrt1clL3w+ZABIcXWdOo6
+         aZ/6I5XkI3ae3UVYFJ4N8NMYda7huAO3fJBdoJ/glWr8Aytz/pfRI2kjXcw4YTSV6UIN
+         vR3KxNPMeQGSCx7jRV+8aLeJGPncfCOuyPqXAMXA4UrS9U6awJOLdAI0DxUr+Hh5WxNk
+         T7GQ6YJIpmMvhnM54hTmw4CT7wlSA6vtuW8GPYwDM51o+ocZl5PsW5N3DW2XPIKklml6
+         /AiQ==
+X-Gm-Message-State: AOAM530MFCZkfjh3atlRsYLgDjAeDgWLzTTVp6Q7RYi4i39MjOierJhB
+        ZtVkfxDcli1UjYPq0ZFpBHVFng==
+X-Google-Smtp-Source: ABdhPJxQmDBJHKFiivMEItpeQKi5UEquLrsRjPIhOf8fp4Du6AOuUbLldxE2uMtO9/E5ff9cK/6apg==
+X-Received: by 2002:a05:600c:1548:: with SMTP id f8mr39961494wmg.20.1639412787495;
+        Mon, 13 Dec 2021 08:26:27 -0800 (PST)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id j17sm9958789wmq.41.2021.12.13.08.26.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 08:26:27 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH -next] selftests: gpio: gpio-sim: remove bashisms
+Date:   Mon, 13 Dec 2021 17:26:25 +0100
+Message-Id: <20211213162625.18081-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v2] selftests: net: Correct case name
-Content-Language: en-US
-To:     "Zhou, Jie2X" <jie2x.zhou@intel.com>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Li, ZhijianX" <zhijianx.li@intel.com>,
-        "Li, Philip" <philip.li@intel.com>,
-        "Ma, XinjianX" <xinjianx.ma@intel.com>
-References: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
- <bbb91e78-018f-c09c-47db-119010c810c2@fujitsu.com>
- <41a78a37-6136-ba45-d8fa-c7af4ee772b9@gmail.com>
- <4d92af7d-5a84-4a5d-fd98-37f969ac4c23@fujitsu.com>
- <8e3bb197-3f56-a9a7-b75d-4a6343276ec7@gmail.com>
- <PH0PR11MB47925643B3A60192AAD18D7AC5749@PH0PR11MB4792.namprd11.prod.outlook.com>
- <65ca2349-5d11-93fb-d9d3-22ff87fe7533@gmail.com>
- <PH0PR11MB4792C379D6C64BE6BA0ECED8C5749@PH0PR11MB4792.namprd11.prod.outlook.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <PH0PR11MB4792C379D6C64BE6BA0ECED8C5749@PH0PR11MB4792.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/13/21 2:44 AM, Zhou, Jie2X wrote:
-> hi,
-> 
->> After the last round of patches all tests but 2 pass with the 5.16.0-rc3
->> kernel (net-next based) and ubuntu 20.04 OS.
->> The 2 failures are due local pings and to bugs in 'ping' - it removes
->> the device bind by calling setsockopt with an "" arg.
-> 
-> The failed testcase command is nettest not ping.
-> COMMAND: ip netns exec ns-A nettest -s -R -P icmp -l 172.16.1.1 -b
-> TEST: Raw socket bind to local address - ns-A IP                              [FAIL]
-> 
-> It failed because it return 0.
-> But the patch expected return 1.
-> 
-> May be the patch should expected 0 return value for  ${NSA_IP}.
-> And expected 1 return value for  ${VRF_IP}.
-> 
-> diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-> index dd7437dd2680b..4340477863d36 100755
-> --- a/tools/testing/selftests/net/fcnal-test.sh
-> +++ b/tools/testing/selftests/net/fcnal-test.sh
-> @@ -1810,8 +1810,9 @@ ipv4_addr_bind_vrf()
->         for a in ${NSA_IP} ${VRF_IP}
->         do
->                 log_start
-> +               show_hint "Socket not bound to VRF, but address is in VRF"
->                 run_cmd nettest -s -R -P icmp -l ${a} -b
-> -               log_test_addr ${a} $? 0 "Raw socket bind to local address"
-> +               log_test_addr ${a} $? 1 "Raw socket bind to local address"
-> 
->                 log_start
->                 run_cmd nettest -s -R -P icmp -l ${a} -I ${NSA_DEV} -b
-> 
+'==' is a bashisms and not understood by POSIX shell. Drop it from
+gpio-sim selftests.
 
-apply *all* patches.
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+I ran the newly applied patches on a different system and noticed the
+tests now fail. I missed '==' operators for string comparison I used in
+some places.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=0f108ae44520
+ tools/testing/selftests/gpio/gpio-sim.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
+index d335a975890c..c913d5aec768 100755
+--- a/tools/testing/selftests/gpio/gpio-sim.sh
++++ b/tools/testing/selftests/gpio/gpio-sim.sh
+@@ -23,12 +23,12 @@ remove_chip() {
+ 
+ 	for FILE in $CONFIGFS_DIR/$CHIP/*; do
+ 		BANK=`basename $FILE`
+-		if [ "$BANK" == "live" ] || [ "$BANK" == "dev_name" ]; then
++		if [ "$BANK" = "live" ] || [ "$BANK" = "dev_name" ]; then
+ 			continue
+ 		fi
+ 
+ 		LINES=`ls $CONFIGFS_DIR/$CHIP/$BANK/ | egrep ^line`
+-		if [ "$?" == 0 ]; then
++		if [ "$?" = 0 ]; then
+ 			for LINE in $LINES; do
+ 				if [ -e $CONFIGFS_DIR/$CHIP/$BANK/$LINE/hog ]; then
+ 					rmdir $CONFIGFS_DIR/$CHIP/$BANK/$LINE/hog || \
+-- 
+2.30.1
 
