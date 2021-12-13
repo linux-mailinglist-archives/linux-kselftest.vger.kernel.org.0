@@ -2,113 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF5D473652
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 22:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6F047369F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 22:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbhLMVAU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 16:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S240205AbhLMVkN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 16:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbhLMVAT (ORCPT
+        with ESMTP id S238212AbhLMVkM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:00:19 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68499C061574;
-        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q17so12034203plr.11;
-        Mon, 13 Dec 2021 13:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
-        b=f9xizRMo/j3PXqOZs5juMJcQ37RJ5hWQLM+DY21WpJeu9oIwrszgkESzp+5lzfcPu/
-         S1xClURBIc1R5ZVu5ZUI/+iUkArHUMLGwuCCKqUaRzYwg5Avh7YpSAokVvTPS2Fl4yej
-         QEpPj8HkBkveAgjGp1Uwvd74RkiIpvriZ0fL7nvbYk0KnZrMlg7CSDEyu3KP1tz1BuDs
-         QfTGyB7tn/01WVnR0Fwv8cm0i1q2j9i7t0OAAPsgRMy/+EsZTeFoyqT/4Xo1TuvOAomL
-         rtOobYElaG+HmdQnvhuS2kPRXEJ534YqBFGguvlzK1LZO2run0kelOEKRf4Yj3qIeeoE
-         ar2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=WMxjO0tx6t02AbcQby54NPy8RyK3yOypDjZIab8vXh4=;
-        b=rLqvmML42zYIc28M9XqybmOXqbLcZaJ2cwnE7KpKMp7TkZkVTFIIQuj7MdPuAg834P
-         O4QXtXJLpdIHdtdPV6VfW4yVRFYiNOOZohcDjfACVrfoZeCtvlIgWJWesOEqafY0yFtz
-         FgOpVyPmTPdAqvT54SEtevub+Sex6pdFETEPd+dbBLJmSy9p79C3WZM6tO1GeHPaqvFK
-         UyQ7u35kp80hIVa93CKIzjw2fTOTLDn0aqi+fD81j5wFC0zK2J1wfN78VFdAb7eVn9Sf
-         tZERx/rQpHBfZpT344yekkzEagXcjlbXj7ScN08UvyB2WlWXymE4Np7UfKFTxYDHofwR
-         /FGA==
-X-Gm-Message-State: AOAM531g4rQ3Xe736AgMrafvK5YGlYoJdzB2eW2rvsgGgmqNokC0jafh
-        daca8DO93wgv+FXfDM1b75I=
-X-Google-Smtp-Source: ABdhPJz081wudgrw0mrWIs2FAxS1rWp5wOiKfQbqpkYviU3rS8iu9dWtDsDEnN9Q6qUkBrtVzexdhQ==
-X-Received: by 2002:a17:902:b110:b0:142:7621:aecb with SMTP id q16-20020a170902b11000b001427621aecbmr481454plr.55.1639429218693;
-        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id ot1sm36852pjb.6.2021.12.13.13.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 13:00:18 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Dec 2021 11:00:17 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-7-longman@redhat.com>
+        Mon, 13 Dec 2021 16:40:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FB6C061574;
+        Mon, 13 Dec 2021 13:40:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12E96B815C6;
+        Mon, 13 Dec 2021 21:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B4EAC34604;
+        Mon, 13 Dec 2021 21:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639431609;
+        bh=6GG03xYfqeKBcEiDmd57oo4h550St5h3jFpkVt0yeZk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=R2CiaiS53ybI42ewHM/NvbIlhP0Q654PFhRRvca/8r/FmVWlC35nio9fUDMl+13xq
+         XMpgLrJ5tCEtFprNe6GWu66DLqaJ1SO+kziUcRUTxQGE5PdB1cj2LhecZ3wlirAChw
+         5VuJvfPfPEKZNX+0PbQualMAWPdoNtVOJZ35p28xXRjIYax/zA+qBad0v/gEURHxaS
+         Axmkq9xG+ukK3OHyk2LexoqpJjN02vU5Xeg0F5CeWtuEjPdjEmPYIQP+ldCnY17jmd
+         3ln0YDB+G4KUUCzWEHeGTsznkbZXPSR7z6PROPRQHdI/id/CII1tQ5fVOWLI7DnAK+
+         cPMw2yulTtjWg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6B650609CD;
+        Mon, 13 Dec 2021 21:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205183220.818872-7-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix segfault in bpf_tcp_ca
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163943160943.5662.15434893142890658156.git-patchwork-notify@kernel.org>
+Date:   Mon, 13 Dec 2021 21:40:09 +0000
+References: <20211213183058.346066-1-jean-philippe@linaro.org>
+In-Reply-To: <20211213183058.346066-1-jean-philippe@linaro.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     shuah@kernel.org, andrii@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+Hello:
 
-On Sun, Dec 05, 2021 at 01:32:19PM -0500, Waiman Long wrote:
-> +	In the case of an invalid partition root, a descriptive string on
-> +	why the partition is invalid is included within parentheses.
-> +
-> +	Almost all possible state transitions among "member", valid
-> +	and invalid partition roots are allowed except from "member"
-> +	to invalid partition root.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-So, this part still bothers me for the following two reasons that I brought
-up earlier:
+On Mon, 13 Dec 2021 18:30:59 +0000 you wrote:
+> Since commit ad9a7f96445b ("libbpf: Improve logging around BPF program
+> loading"), libbpf_debug_print() gets an additional prog_name parameter
+> but doesn't pass it to printf(). Since the format string now expects two
+> arguments, printf() may read uninitialized data and segfault. Pass
+> prog_name through.
+> 
+> Fixes: ad9a7f96445b ("libbpf: Improve logging around BPF program loading")
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> 
+> [...]
 
-* When a valid partition turns invalid, now we have a reliable way of
-  discovering what exactly caused the transition. However, when a user now
-  fails to turn a member into partition, all they get is -EINVAL and there's
-  no way to discover why it failed and the failure conditions that -EINVAL
-  represents aren't simple.
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Fix segfault in bpf_tcp_ca
+    https://git.kernel.org/bpf/bpf-next/c/acd143eefb82
 
-* In an automated configuration scenarios, this operation mode may be
-  difficult to make reliable and lead to sporadic failures which can be
-  tricky to track down. The core problem is that whether a given operation
-  succeeds or not may depend on external states (CPU on/offline) which may
-  change asynchronously in a way that the configuring entity doesn't have
-  any control over.
-
-It's true that both are existing problems with the current partition
-interface and given that this is a pretty spcialized feature, this can be
-okay. Michal, what are your thoughts?
-
-Thanks.
-
+You are awesome, thank you!
 -- 
-tejun
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
