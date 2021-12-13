@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A15F473619
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 21:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098FC47361C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 21:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242981AbhLMUiM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 15:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
+        id S242218AbhLMUi1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 15:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242411AbhLMUiL (ORCPT
+        with ESMTP id S242076AbhLMUi0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 15:38:11 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEB5C06173F
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 12:38:11 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id k64so15951972pfd.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 12:38:11 -0800 (PST)
+        Mon, 13 Dec 2021 15:38:26 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D1CC06173F
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 12:38:26 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so13245969pjj.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 12:38:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=FKvkyPX1bDE2h0Q01c3iENOpP3uB49QbVTU9+BOOcRY=;
-        b=S6eeDQjmjCkWwGcRkWpNMj0zQMC14q6RphCvU5khCboVMxxVucmJWzH8rEPdPQuoUx
-         emxL2yMlxrGaIm2o4duCve98uwxkUkIFKY+noBGkwk7wlXepcp96rQfJHVx5Q1XplX73
-         W10VDY3Sr/UhdFzGxWJluZrc8VPW7ilyoXbWc=
+        bh=GwERbAEJEYetlBmVr24GKF6wnmy9fFMxfSPteuwkvvo=;
+        b=QkmtBO5ecCKOZ1yTEfXFCCEy2xRBZ4PtTMSi0hv/hRUjHqGSEs7j1w2ic+7SFt5May
+         Z6QlP2HDNFJGAXp4Sj6V6jqVJ/2J6gWF+PMnxAsDKRPokuVfAc6hAQvtXz4C87td4OYC
+         wcFhxBziORrdQgWQZiOCK3QXH3RFOIDx9XLv0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FKvkyPX1bDE2h0Q01c3iENOpP3uB49QbVTU9+BOOcRY=;
-        b=Up15bsAvbKiFezFw79tlTv0dWr2jLjMVvJjiaTknDTo4X49mr2anL8waCi31uQjTTw
-         OWqeJg7W8Oo5xiTP6w0+QM2lyQnPmrQoRdiE1au4Fj1TxrG2KBxGaDjlyUS76Qx3DphG
-         uVOkF+RzPInkXVKJDVfxn0eqSatqi1gL6bY/FahIFCMIlA+a1rA0Ti4d/dAHzHBwHjKP
-         cqB94Vad5xov5JG/r+l2ubyH9Dzp6djYy6cud++0DDzDDchO5yFQFTg+sow2zMJaHi5o
-         HsKqBdHdaKes+Pk+vFeg/2w6pvCPgTo5TUgHufOr1H4uSdsBDCiKgOrJMdjlUTVVw/v9
-         9ewA==
-X-Gm-Message-State: AOAM532ZUveQPtWEeSa/Nr0CFnJn2LoHQSjatrDEdNMpfhwa05MSaLZw
-        ZdUQ7ojZp8nyVWmS33S+isrV2A==
-X-Google-Smtp-Source: ABdhPJzTOk2cB0BO46AZlrjTU/JytY7dpEktlEQmTICo+f5zFSYYE2twDKDHZYe0PBqaQ8Rpa3MDww==
-X-Received: by 2002:a62:88c3:0:b0:4a2:b2d2:7082 with SMTP id l186-20020a6288c3000000b004a2b2d27082mr425147pfd.48.1639427890914;
-        Mon, 13 Dec 2021 12:38:10 -0800 (PST)
+        bh=GwERbAEJEYetlBmVr24GKF6wnmy9fFMxfSPteuwkvvo=;
+        b=baJ1IgZSxGeOAqaTRzKd44qM+/phIIF6h6B+u0f0Ixobed0jMFJ4endRY19yBnFNYl
+         sckgr0Rw26uatJyCtvQVmGWNVJBpCWiVHGZYE21gD8otRataCWxMCZW2f89wLw0EQtym
+         74Et9t2QHNEgYa3948Ia+oJ8kdCJFFc7m2cckJND/rwE1LsKx3GHL7uhU7zhZ+41AAaa
+         ajS7uGaJZU7pXPrPJSUeUFJhVkzEP65OUPZDPeEutuGkRAJIp6ywNmQEaOHhMePeM9wW
+         zBEUxlWQBacu8xU3y+guve5bGRXZzkkxBHTWRdE5O2Wh04anJhsu7gGoKI5t9+fzuEfS
+         40Hw==
+X-Gm-Message-State: AOAM530QtH3uxJtv4ZB5i6m2whPFpzeAao60Gy5rK7cfrtzMPQyjTqPk
+        K83TAEayljDC0RpRhokhOnlfnA==
+X-Google-Smtp-Source: ABdhPJwo2Nr0F37opgJzEGzkcrZjV2E64UleT9NH5LxGOFMvGsMYzel84/SkNj6ItbHIGzS/d3PWtA==
+X-Received: by 2002:a17:90a:c257:: with SMTP id d23mr611796pjx.42.1639427905929;
+        Mon, 13 Dec 2021 12:38:25 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z13sm926069pfj.160.2021.12.13.12.38.10
+        by smtp.gmail.com with ESMTPSA id q1sm14244472pfu.33.2021.12.13.12.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 12:38:10 -0800 (PST)
-Date:   Mon, 13 Dec 2021 12:38:10 -0800
+        Mon, 13 Dec 2021 12:38:25 -0800 (PST)
+Date:   Mon, 13 Dec 2021 12:38:25 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
@@ -54,32 +54,31 @@ Cc:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
         akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
         linux-mm@kvack.org
-Subject: Re: [PATCH 01/12] tools: fix ARRAY_SIZE defines in tools and
- selftests hdrs
-Message-ID: <202112131238.24E1713A0@keescook>
+Subject: Re: [PATCH 09/12] selftests/seccomp: remove ARRAY_SIZE define from
+ seccomp_benchmark
+Message-ID: <202112131238.245527E@keescook>
 References: <cover.1639156389.git.skhan@linuxfoundation.org>
- <30585e0f0acfb523c6f7a93e0b916ae756e0c7e7.1639156389.git.skhan@linuxfoundation.org>
+ <80fa7078e0645649b6e31be4844a3cffbe67a79b.1639156389.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <30585e0f0acfb523c6f7a93e0b916ae756e0c7e7.1639156389.git.skhan@linuxfoundation.org>
+In-Reply-To: <80fa7078e0645649b6e31be4844a3cffbe67a79b.1639156389.git.skhan@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 10:33:11AM -0700, Shuah Khan wrote:
-> tools/include/linux/kernel.h and kselftest_harness.h are missing
-> ifndef guard around ARRAY_SIZE define. Fix them to avoid duplicate
-> define errors during compile when another file defines it. This
-> problem was found when compiling selftests that include a header
-> with ARRAY_SIZE define.
+On Fri, Dec 10, 2021 at 10:33:19AM -0700, Shuah Khan wrote:
+> ARRAY_SIZE is defined in several selftests. Remove definitions from
+> individual test files and include header file for the define instead.
+> ARRAY_SIZE define is added in a separate patch to prepare for this
+> change.
 > 
-> ARRAY_SIZE is defined in several selftests. There are about 25+
-> duplicate defines in various selftests source and header files.
-> Add ARRAY_SIZE to kselftest.h in preparation for removing duplicate
-> ARRAY_SIZE defines from individual test files.
+> Remove ARRAY_SIZE from seccomp_benchmark and pickup the one defined in
+> kselftest.h.
 > 
 > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Good idea to clean these up; thanks!
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
