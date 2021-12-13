@@ -2,46 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6042A472ECA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 15:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B239C472ED4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 15:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238961AbhLMOUV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 09:20:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41806 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238937AbhLMOUQ (ORCPT
+        id S238991AbhLMOUa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 09:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239019AbhLMOU2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:20:16 -0500
+        Mon, 13 Dec 2021 09:20:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E65C061748;
+        Mon, 13 Dec 2021 06:20:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCDA561033;
-        Mon, 13 Dec 2021 14:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA4FC34602;
-        Mon, 13 Dec 2021 14:20:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F660B8106C;
+        Mon, 13 Dec 2021 14:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F3CC34601;
+        Mon, 13 Dec 2021 14:20:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639405215;
-        bh=LtaLxXGopc0Aawl4z26TPr7ZksGgNHr/nNvVDzX3I8M=;
+        s=k20201202; t=1639405225;
+        bh=IgLSsDXku+1K9pPQ4iBiwNQcjZ7/ZAaYJa2R7oEqRzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J4sQXVd9fCnraUK/0ZIOpfKPLu3dZZ7fZPECdwOuCPlAB7ClC8sW8n3fXARreASMN
-         1s14uoHXraD0SoBP10jfV2Y6CWu4KZTorNx5/MGs/MslsNRF3cMbGIlBT6T2g9dRvl
-         pehuMXkGufIUon3jrfQ86pBQ91QQBnvPl86fX8R5PzsW1jVi/T6In3rk4raLqJbpnr
-         BENSXLX/jI18pxR291IHVPhqPUhlqe4+SlI+LbQqmSA4CZEdovyJpo2r59j1uj4Cen
-         56X/ApguJM85IpUm4j2shCTpTnmnApqfVwAwTa5NIwsUUCeiNoH6KxXB0ciRqAu9Ar
-         3mny701no51Bw==
+        b=QCiphQO6FYNXmIlqL6TwgbGgQz5MXFJzXHbseETkb/ZXsJWyuYfo6rJPpgscmDVoo
+         N7QokX9/kMkGs5oayoJw12UD2ABVNP/seYv5WU2sbwJlyUrEWiOl9bLfcNb07uYHqd
+         bQ3WmVVC1HquyD1nJGhb4qXVI0hBv/fu6cnt6DrsuZETPKJ9bBTqAx56Gi/acw5g+G
+         bQRFh5GNZqYqcUdqHawp4/+6x8brhGqmgD36MaWsNdrcHBeI0qtn5F7n0GMmsqJ+N/
+         qKlGAmmSsh6Sd4pLJrwg9jdTvRWEaYPHtSB97UEO+9OgI5RwLNpAPHIii2+m+FqHcL
+         3hHz/RI5hf/Hg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        seanjc@google.com, ricarkol@google.com, maz@kernel.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH MANUALSEL 5.15 7/9] KVM: selftests: Avoid KVM_SET_CPUID2 after KVM_RUN in hyperv_features test
-Date:   Mon, 13 Dec 2021 09:19:40 -0500
-Message-Id: <20211213141944.352249-7-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 5.10 3/4] KVM: selftests: Make sure kvm_create_max_vcpus test won't hit RLIMIT_NOFILE
+Date:   Mon, 13 Dec 2021 09:20:17 -0500
+Message-Id: <20211213142020.352376-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211213141944.352249-1-sashal@kernel.org>
-References: <20211213141944.352249-1-sashal@kernel.org>
+In-Reply-To: <20211213142020.352376-1-sashal@kernel.org>
+References: <20211213142020.352376-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,238 +55,85 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit 6c1186430a808f97e2052bd5d9eff12c5d5defb0 ]
+[ Upstream commit 908fa88e420f30dde6d80f092795a18ec72ca6d3 ]
 
-hyperv_features's sole purpose is to test access to various Hyper-V MSRs
-and hypercalls with different CPUID data. As KVM_SET_CPUID2 after KVM_RUN
-is deprecated and soon-to-be forbidden, avoid it by re-creating test VM
-for each sub-test.
+With the elevated 'KVM_CAP_MAX_VCPUS' value kvm_create_max_vcpus test
+may hit RLIMIT_NOFILE limits:
+
+ # ./kvm_create_max_vcpus
+ KVM_CAP_MAX_VCPU_ID: 4096
+ KVM_CAP_MAX_VCPUS: 1024
+ Testing creating 1024 vCPUs, with IDs 0...1023.
+ /dev/kvm not available (errno: 24), skipping test
+
+Adjust RLIMIT_NOFILE limits to make sure KVM_CAP_MAX_VCPUS fds can be
+opened. Note, raising hard limit ('rlim_max') requires CAP_SYS_RESOURCE
+capability which is generally not needed to run kvm selftests (but without
+raising the limit the test is doomed to fail anyway).
 
 Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20211122175818.608220-2-vkuznets@redhat.com>
+Message-Id: <20211123135953.667434-1-vkuznets@redhat.com>
+[Skip the test if the hard limit can be raised. - Paolo]
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Tested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/kvm/x86_64/hyperv_features.c    | 140 +++++++++---------
- 1 file changed, 71 insertions(+), 69 deletions(-)
+ .../selftests/kvm/kvm_create_max_vcpus.c      | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index 91d88aaa98992..672915ce73d8f 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -165,10 +165,10 @@ static void hv_set_cpuid(struct kvm_vm *vm, struct kvm_cpuid2 *cpuid,
- 	vcpu_set_cpuid(vm, VCPU_ID, cpuid);
- }
+diff --git a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+index 0299cd81b8ba2..aa3795cd7bd3d 100644
+--- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
++++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+@@ -12,6 +12,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <sys/resource.h>
  
--static void guest_test_msrs_access(struct kvm_vm *vm, struct msr_data *msr,
--				   struct kvm_cpuid2 *best)
-+static void guest_test_msrs_access(void)
+ #include "test_util.h"
+ 
+@@ -40,10 +41,39 @@ int main(int argc, char *argv[])
  {
- 	struct kvm_run *run;
-+	struct kvm_vm *vm;
- 	struct ucall uc;
- 	int stage = 0, r;
- 	struct kvm_cpuid_entry2 feat = {
-@@ -180,11 +180,34 @@ static void guest_test_msrs_access(struct kvm_vm *vm, struct msr_data *msr,
- 	struct kvm_cpuid_entry2 dbg = {
- 		.function = HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES
- 	};
--	struct kvm_enable_cap cap = {0};
--
--	run = vcpu_state(vm, VCPU_ID);
-+	struct kvm_cpuid2 *best;
-+	vm_vaddr_t msr_gva;
-+	struct kvm_enable_cap cap = {
-+		.cap = KVM_CAP_HYPERV_ENFORCE_CPUID,
-+		.args = {1}
-+	};
-+	struct msr_data *msr;
+ 	int kvm_max_vcpu_id = kvm_check_cap(KVM_CAP_MAX_VCPU_ID);
+ 	int kvm_max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
++	/*
++	 * Number of file descriptors reqired, KVM_CAP_MAX_VCPUS for vCPU fds +
++	 * an arbitrary number for everything else.
++	 */
++	int nr_fds_wanted = kvm_max_vcpus + 100;
++	struct rlimit rl;
  
- 	while (true) {
-+		vm = vm_create_default(VCPU_ID, 0, guest_msr);
-+
-+		msr_gva = vm_vaddr_alloc_page(vm);
-+		memset(addr_gva2hva(vm, msr_gva), 0x0, getpagesize());
-+		msr = addr_gva2hva(vm, msr_gva);
-+
-+		vcpu_args_set(vm, VCPU_ID, 1, msr_gva);
-+		vcpu_enable_cap(vm, VCPU_ID, &cap);
-+
-+		vcpu_set_hv_cpuid(vm, VCPU_ID);
-+
-+		best = kvm_get_supported_hv_cpuid();
-+
-+		vm_init_descriptor_tables(vm);
-+		vcpu_init_descriptor_tables(vm, VCPU_ID);
-+		vm_install_exception_handler(vm, GP_VECTOR, guest_gp_handler);
-+
-+		run = vcpu_state(vm, VCPU_ID);
-+
- 		switch (stage) {
- 		case 0:
- 			/*
-@@ -315,6 +338,7 @@ static void guest_test_msrs_access(struct kvm_vm *vm, struct msr_data *msr,
- 			 * capability enabled and guest visible CPUID bit unset.
- 			 */
- 			cap.cap = KVM_CAP_HYPERV_SYNIC2;
-+			cap.args[0] = 0;
- 			vcpu_enable_cap(vm, VCPU_ID, &cap);
- 			break;
- 		case 22:
-@@ -461,9 +485,9 @@ static void guest_test_msrs_access(struct kvm_vm *vm, struct msr_data *msr,
+ 	pr_info("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
+ 	pr_info("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
  
- 		switch (get_ucall(vm, VCPU_ID, &uc)) {
- 		case UCALL_SYNC:
--			TEST_ASSERT(uc.args[1] == stage,
--				    "Unexpected stage: %ld (%d expected)\n",
--				    uc.args[1], stage);
-+			TEST_ASSERT(uc.args[1] == 0,
-+				    "Unexpected stage: %ld (0 expected)\n",
-+				    uc.args[1]);
- 			break;
- 		case UCALL_ABORT:
- 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
-@@ -474,13 +498,14 @@ static void guest_test_msrs_access(struct kvm_vm *vm, struct msr_data *msr,
- 		}
- 
- 		stage++;
-+		kvm_vm_free(vm);
- 	}
- }
- 
--static void guest_test_hcalls_access(struct kvm_vm *vm, struct hcall_data *hcall,
--				     void *input, void *output, struct kvm_cpuid2 *best)
-+static void guest_test_hcalls_access(void)
- {
- 	struct kvm_run *run;
-+	struct kvm_vm *vm;
- 	struct ucall uc;
- 	int stage = 0, r;
- 	struct kvm_cpuid_entry2 feat = {
-@@ -493,10 +518,38 @@ static void guest_test_hcalls_access(struct kvm_vm *vm, struct hcall_data *hcall
- 	struct kvm_cpuid_entry2 dbg = {
- 		.function = HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES
- 	};
--
--	run = vcpu_state(vm, VCPU_ID);
-+	struct kvm_enable_cap cap = {
-+		.cap = KVM_CAP_HYPERV_ENFORCE_CPUID,
-+		.args = {1}
-+	};
-+	vm_vaddr_t hcall_page, hcall_params;
-+	struct hcall_data *hcall;
-+	struct kvm_cpuid2 *best;
- 
- 	while (true) {
-+		vm = vm_create_default(VCPU_ID, 0, guest_hcall);
++	/*
++	 * Check that we're allowed to open nr_fds_wanted file descriptors and
++	 * try raising the limits if needed.
++	 */
++	TEST_ASSERT(!getrlimit(RLIMIT_NOFILE, &rl), "getrlimit() failed!");
 +
-+		vm_init_descriptor_tables(vm);
-+		vcpu_init_descriptor_tables(vm, VCPU_ID);
-+		vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
++	if (rl.rlim_cur < nr_fds_wanted) {
++		rl.rlim_cur = nr_fds_wanted;
++		if (rl.rlim_max < nr_fds_wanted) {
++			int old_rlim_max = rl.rlim_max;
++			rl.rlim_max = nr_fds_wanted;
 +
-+		/* Hypercall input/output */
-+		hcall_page = vm_vaddr_alloc_pages(vm, 2);
-+		hcall = addr_gva2hva(vm, hcall_page);
-+		memset(addr_gva2hva(vm, hcall_page), 0x0, 2 * getpagesize());
++			int r = setrlimit(RLIMIT_NOFILE, &rl);
++			if (r < 0) {
++				printf("RLIMIT_NOFILE hard limit is too low (%d, wanted %d)\n",
++				       old_rlim_max, nr_fds_wanted);
++				exit(KSFT_SKIP);
++			}
++		} else {
++			TEST_ASSERT(!setrlimit(RLIMIT_NOFILE, &rl), "setrlimit() failed!");
++		}
++	}
 +
-+		hcall_params = vm_vaddr_alloc_page(vm);
-+		memset(addr_gva2hva(vm, hcall_params), 0x0, getpagesize());
-+
-+		vcpu_args_set(vm, VCPU_ID, 2, addr_gva2gpa(vm, hcall_page), hcall_params);
-+		vcpu_enable_cap(vm, VCPU_ID, &cap);
-+
-+		vcpu_set_hv_cpuid(vm, VCPU_ID);
-+
-+		best = kvm_get_supported_hv_cpuid();
-+
-+		run = vcpu_state(vm, VCPU_ID);
-+
- 		switch (stage) {
- 		case 0:
- 			hcall->control = 0xdeadbeef;
-@@ -606,9 +659,9 @@ static void guest_test_hcalls_access(struct kvm_vm *vm, struct hcall_data *hcall
- 
- 		switch (get_ucall(vm, VCPU_ID, &uc)) {
- 		case UCALL_SYNC:
--			TEST_ASSERT(uc.args[1] == stage,
--				    "Unexpected stage: %ld (%d expected)\n",
--				    uc.args[1], stage);
-+			TEST_ASSERT(uc.args[1] == 0,
-+				    "Unexpected stage: %ld (0 expected)\n",
-+				    uc.args[1]);
- 			break;
- 		case UCALL_ABORT:
- 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
-@@ -619,66 +672,15 @@ static void guest_test_hcalls_access(struct kvm_vm *vm, struct hcall_data *hcall
- 		}
- 
- 		stage++;
-+		kvm_vm_free(vm);
- 	}
- }
- 
- int main(void)
- {
--	struct kvm_cpuid2 *best;
--	struct kvm_vm *vm;
--	vm_vaddr_t msr_gva, hcall_page, hcall_params;
--	struct kvm_enable_cap cap = {
--		.cap = KVM_CAP_HYPERV_ENFORCE_CPUID,
--		.args = {1}
--	};
--
--	/* Test MSRs */
--	vm = vm_create_default(VCPU_ID, 0, guest_msr);
--
--	msr_gva = vm_vaddr_alloc_page(vm);
--	memset(addr_gva2hva(vm, msr_gva), 0x0, getpagesize());
--	vcpu_args_set(vm, VCPU_ID, 1, msr_gva);
--	vcpu_enable_cap(vm, VCPU_ID, &cap);
--
--	vcpu_set_hv_cpuid(vm, VCPU_ID);
--
--	best = kvm_get_supported_hv_cpuid();
--
--	vm_init_descriptor_tables(vm);
--	vcpu_init_descriptor_tables(vm, VCPU_ID);
--	vm_install_exception_handler(vm, GP_VECTOR, guest_gp_handler);
--
- 	pr_info("Testing access to Hyper-V specific MSRs\n");
--	guest_test_msrs_access(vm, addr_gva2hva(vm, msr_gva),
--			       best);
--	kvm_vm_free(vm);
--
--	/* Test hypercalls */
--	vm = vm_create_default(VCPU_ID, 0, guest_hcall);
--
--	vm_init_descriptor_tables(vm);
--	vcpu_init_descriptor_tables(vm, VCPU_ID);
--	vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
--
--	/* Hypercall input/output */
--	hcall_page = vm_vaddr_alloc_pages(vm, 2);
--	memset(addr_gva2hva(vm, hcall_page), 0x0, 2 * getpagesize());
--
--	hcall_params = vm_vaddr_alloc_page(vm);
--	memset(addr_gva2hva(vm, hcall_params), 0x0, getpagesize());
--
--	vcpu_args_set(vm, VCPU_ID, 2, addr_gva2gpa(vm, hcall_page), hcall_params);
--	vcpu_enable_cap(vm, VCPU_ID, &cap);
--
--	vcpu_set_hv_cpuid(vm, VCPU_ID);
--
--	best = kvm_get_supported_hv_cpuid();
-+	guest_test_msrs_access();
- 
- 	pr_info("Testing access to Hyper-V hypercalls\n");
--	guest_test_hcalls_access(vm, addr_gva2hva(vm, hcall_params),
--				 addr_gva2hva(vm, hcall_page),
--				 addr_gva2hva(vm, hcall_page) + getpagesize(),
--				 best);
--
--	kvm_vm_free(vm);
-+	guest_test_hcalls_access();
- }
+ 	/*
+ 	 * Upstream KVM prior to 4.8 does not support KVM_CAP_MAX_VCPU_ID.
+ 	 * Userspace is supposed to use KVM_CAP_MAX_VCPUS as the maximum ID
 -- 
 2.33.0
 
