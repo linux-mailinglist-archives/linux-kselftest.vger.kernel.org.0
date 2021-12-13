@@ -2,205 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB5A4736A9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 22:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D45A47376C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Dec 2021 23:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237818AbhLMVov (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Dec 2021 16:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S243550AbhLMWYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Dec 2021 17:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbhLMVov (ORCPT
+        with ESMTP id S234623AbhLMWYy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 16:44:51 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A34C061574;
-        Mon, 13 Dec 2021 13:44:50 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id j2so41552830ybg.9;
-        Mon, 13 Dec 2021 13:44:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HF6bhg1hkm0Kvolzcm7W4L5IX7hq3GMJC+dyll0cGz4=;
-        b=WJ8CN807+oSKnh1CQ2U1is3GObc5yQkapOGdoE1kd+7u4OqmKkgJgQMByFxjKzfxNG
-         dehxifgfXFGBIC+4D9nmkSVTVnYcqiuH/GBG1aLf46BR19DaaVe1GHJEYrnM4wuLNjMe
-         tJKtdG/nmqu0acnM1UkCZA5JjAgCd+ONPHQ34raf7teUotC27f+oWNBcIVLavJj/w3oR
-         1ooJCvW4VwCJ0yqC5gIwcCRtHq9PuipzTrWZh0DnvfxFJVfGYw6q2/r2Z2HSp1mDPXmB
-         CXrI24ClxivbS/EKGfsH22dr6TB5WMaf0NnTOrr+6pBFCbpRdl90tFLVqrdvDbA828yH
-         Mydw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HF6bhg1hkm0Kvolzcm7W4L5IX7hq3GMJC+dyll0cGz4=;
-        b=KppEbRurpg/X7tQW3B3lUFx4kEo0AhjT5Q0VTGukc65r3kyxvs3UBwMEA+5E/6l8wi
-         pjpe6MLv2AUY8bVVIbi2BzaY4+K/QvLVn9jOXqxvuY8qUmUnukSFwLDcmZ7w+Mo1OB9+
-         gmK9mbXKSKDEMYUQYLMVses51TxQZHMiBZZIRjq9qrLExvo0xTCqXbOzh7MpTwplo+ux
-         Mr9tIL/TPh296WB9LyNl5ZkSBxiBajW/AKUBDvxcWU6TQRkkey+4S2hncFD4J6RCH5IS
-         3S4iUeJq1cv+ddoCHhzAEwkJRbhAbdfWDnsPVaAGg0G3PahWnqkRSTDNVM6OqXTVxldM
-         uHyQ==
-X-Gm-Message-State: AOAM5338tZ6E5mmMXrDhbuk3P/9UFSvSBLAndD6Wmklo2pg9z5rfYhUh
-        SlTbdJ8uYGEOL3crEt3FlG7clRutAvKkBePUmak=
-X-Google-Smtp-Source: ABdhPJxPdD4DH04/IPRHbMukA1WGoWSqPjU1QxqziFpt+1jyvuI9v2o8+HEO316a8wZi01ujDwgNNlFEKkZdGKhFrO8=
-X-Received: by 2002:a25:e406:: with SMTP id b6mr1302125ybh.529.1639431889604;
- Mon, 13 Dec 2021 13:44:49 -0800 (PST)
+        Mon, 13 Dec 2021 17:24:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC470C061574;
+        Mon, 13 Dec 2021 14:24:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEA25B81221;
+        Mon, 13 Dec 2021 22:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C28C34601;
+        Mon, 13 Dec 2021 22:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639434290;
+        bh=JUsgj2dUHiE2WEeeCOTaDYRuKLPv+1NRbP0xBFDvqeU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SBKSM7XRoPfNQAQO76Hn/3KlDIXxsCnN9OcKVsYSyBUpipZtLRNtXYTAdeJVPTuVh
+         KwuvNSFHczoR0cdB50J7VEm6455+2aumDjBYV/qe5tLwcMrFl3fUY6lhLtm5sxU3QT
+         /QS6ISFCz89sgS7XPUH8X2cWnc+rso0Qu1m8grrAfdU2NsRgM0NFc929Lwg28vLURC
+         xiuZg3wWSWHwQqtb0E7TvXOHYlfjsRDKgMLeNjqaA21gPci9kF9Ixc2SvhnwUovz9o
+         y35+sQ2J2p6AuQ9uv58jDulihxEtrqvt8s9uEEaEwA5BCOz10dZ+6TpVbDJeGNTelT
+         kTe9uiiwa8iXA==
+From:   broonie@kernel.org
+To:     Matthew Wilcox <willy@infradead.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: linux-next: manual merge of the xarray tree with the kselftest tree
+Date:   Mon, 13 Dec 2021 22:24:43 +0000
+Message-Id: <20211213222443.474487-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211207225635.113904-1-mathjadin@gmail.com> <20211207225635.113904-2-mathjadin@gmail.com>
-In-Reply-To: <20211207225635.113904-2-mathjadin@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 13 Dec 2021 13:44:38 -0800
-Message-ID: <CAEf4BzakcfoYT6KfP0mHFLHiLeZmfdmxgbRJTXBfjXtXnjVaxg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Test for IPv6 ext header parsing
-To:     Mathieu Jadin <mathjadin@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Networking <netdev@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 7, 2021 at 2:58 PM Mathieu Jadin <mathjadin@gmail.com> wrote:
->
-> This test creates a client and a server exchanging a single byte
-> with a Segment Routing Header and the eBPF program saves
-> the inner segment in a sk_storage. The test program checks that
-> the segment is correct.
->
-> Signed-off-by: Mathieu Jadin <mathjadin@gmail.com>
-> ---
->  .../bpf/prog_tests/tcp_ipv6_exthdr_srh.c      | 171 ++++++++++++++++++
->  .../selftests/bpf/progs/tcp_ipv6_exthdr_srh.c |  78 ++++++++
->  2 files changed, 249 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/tcp_ipv6_exthdr_srh.c
->  create mode 100644 tools/testing/selftests/bpf/progs/tcp_ipv6_exthdr_srh.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_ipv6_exthdr_srh.c b/tools/testing/selftests/bpf/prog_tests/tcp_ipv6_exthdr_srh.c
-> new file mode 100644
-> index 000000000000..70f7ee230975
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_ipv6_exthdr_srh.c
-> @@ -0,0 +1,171 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <linux/seg6.h>
-> +#include "cgroup_helpers.h"
-> +#include "network_helpers.h"
-> +
-> +struct tcp_srh_storage {
-> +       struct in6_addr inner_segment;
-> +};
-> +
-> +static void send_byte(int fd)
-> +{
-> +       char b = 0x55;
-> +
-> +       if (CHECK_FAIL(send(fd, &b, sizeof(b), 0) != 1))
-> +               perror("Failed to send single byte");
-> +}
-> +
-> +static int verify_srh(int map_fd, int server_fd, struct ipv6_sr_hdr *client_srh)
-> +{
-> +       int err = 0;
-> +       struct tcp_srh_storage val;
-> +
-> +       if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &server_fd, &val) < 0)) {
+Hi all,
 
-please use ASSERT_XXX() macros instead of CHECK and especially instead
-of CHECK_FAIL
+Today's linux-next merge of the xarray tree got a conflict in:
 
-> +               perror("Failed to read socket storage");
-> +               return -1;
-> +       }
-> +
-> +       if (memcmp(&val.inner_segment, &client_srh->segments[1],
-> +                  sizeof(struct in6_addr))) {
-> +               log_err("The inner segment of the received SRH differs from the sent one");
-> +               err++;
-> +       }
-> +
-> +       return err;
-> +}
-> +
-> +static int run_test(int cgroup_fd, int listen_fd)
-> +{
-> +       struct bpf_prog_load_attr attr = {
-> +               .prog_type = BPF_PROG_TYPE_SOCK_OPS,
-> +               .file = "./tcp_ipv6_exthdr_srh.o",
-> +               .expected_attach_type = BPF_CGROUP_SOCK_OPS,
-> +       };
-> +       size_t srh_size = sizeof(struct ipv6_sr_hdr) +
-> +               2 * sizeof(struct in6_addr);
-> +       struct ipv6_sr_hdr *client_srh;
-> +       struct bpf_object *obj;
-> +       struct bpf_map *map;
-> +       struct timeval tv;
-> +       int client_fd;
-> +       int server_fd;
-> +       int prog_fd;
-> +       int map_fd;
-> +       char byte;
-> +       int err;
-> +
-> +       err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
+  tools/include/linux/kernel.h
 
-bpf_prog_load_xattr() is deprecated, please use BPF skeleton for the test
+between commits:
 
-> +       if (err) {
-> +               log_err("Failed to load BPF object");
-> +               return -1;
-> +       }
-> +
-> +       map = bpf_object__next_map(obj, NULL);
-> +       map_fd = bpf_map__fd(map);
-> +
+  d6e6a27d960f9 ("tools: Fix math.h breakage")
+  066b34aa5461f ("tools: fix ARRAY_SIZE defines in tools and selftests hdrs")
 
-[...]
+from the kselftest and origin trees and commit:
 
-> +
-> +void test_tcp_ipv6_exthdr_srh(void)
-> +{
-> +       int server_fd, cgroup_fd;
-> +
-> +       cgroup_fd = test__join_cgroup("/tcp_ipv6_exthdr_srh");
-> +       if (CHECK_FAIL(cgroup_fd < 0))
-> +               return;
-> +
-> +       server_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-> +       if (CHECK_FAIL(server_fd < 0))
-> +               goto close_cgroup_fd;
-> +
-> +       if (CHECK_FAIL(system("sysctl net.ipv6.conf.all.seg6_enabled=1")))
-> +               goto close_server;
-> +
-> +       if (CHECK_FAIL(system("sysctl net.ipv6.conf.lo.seg6_enabled=1")))
-> +               goto reset_sysctl;
-> +
-> +       CHECK_FAIL(run_test(cgroup_fd, server_fd));
-> +
-> +       if (CHECK_FAIL(system("sysctl net.ipv6.conf.lo.seg6_enabled=0")))
-> +               log_err("Cannot reset sysctl net.ipv6.conf.lo.seg6_enabled to 0");
-> +
-> +reset_sysctl:
-> +       if (CHECK_FAIL(system("sysctl net.ipv6.conf.all.seg6_enabled=0")))
-> +               log_err("Cannot reset sysctl net.ipv6.conf.all.seg6_enabled to 0");
-> +
+  f2aa11fd51440 ("tools: Fix math.h breakage")
 
-same here, please no CHECK_FAIL()s
+from the xarray tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-> +close_server:
-> +       close(server_fd);
-> +close_cgroup_fd:
-> +       close(cgroup_fd);
-> +}
-
-[...]
+diff --cc tools/include/linux/kernel.h
+index 9701e8307db02,3e8df500cfbd4..0000000000000
+--- a/tools/include/linux/kernel.h
++++ b/tools/include/linux/kernel.h
