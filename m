@@ -2,128 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DAD474BE5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Dec 2021 20:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC5A474BF1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Dec 2021 20:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237419AbhLNTaP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Dec 2021 14:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S237443AbhLNTcB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Dec 2021 14:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237414AbhLNTaP (ORCPT
+        with ESMTP id S237437AbhLNTcA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:30:15 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A62C06173E
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 11:30:14 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j18-20020a258152000000b006000d292a42so38580490ybm.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 11:30:14 -0800 (PST)
+        Tue, 14 Dec 2021 14:32:00 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B31C061747
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 11:31:59 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id m6so27043634lfu.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 11:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=xA9ZRDld2H7cpZwQWYc0HcmPZG4csb1ONfd+ykfascA=;
-        b=DSfGI8UT02mPuL1C9GmsKqwJR9Ygm/IPzVQUBpsFDvpn53S2CRNAMxqxgVu0YS2q7m
-         D8RN1Uk8eDa2+j/kndZjoQBUtqN4Mt1ON27JsvYrFukOm9RWfnrUICexhc65aT+hcgrB
-         WMDTL/G32AKt9KqpWI/GLNMSLU7yKN3JAZhN45L+QsrPPOvL9+GPqt9mF04C4nj7t1/t
-         Qu3Im7d9CQC5dJ8JQwyJ4dyIPihg7Ae6DdjvTa42FCjE5m/q+XQoXNyv4IFvDuMHfHLK
-         mmox3Usy3QGegxmrGf+Me6M5a+qY/cJOBwQrsm5dBD1gwUGLgTCnY/wKrti57fHBiMcn
-         Cd1A==
+        d=sharpeleven-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CSsQizS2Alccn09uVVHMhRrxYpQSyu5zyJjpNQE3tlI=;
+        b=sf8PduFp6j+NjHLIpIDvQ4RC318EDH6SD3pXBY8xfLup36IkrZVN9oQ+iwUc+uldQE
+         XfARii3Mm4ENAJDWhQ2aqollunGkuGZQqDuyEhBie3Qzb4qdcwLZmMc5+0CKeFL3NiRr
+         Lm9gGApSYH53GjDTMQcbbMXqwjFAbIQtPHvpL3uo4xNqUgXY6zdIzQIl8iie1hfdPqwZ
+         lLgv3NrQA9H1tLpvfl/Ti7SwOb/pzX3wIhn6gZfUmExuxM4eZI/omnNoTvAHKthYywNU
+         s8LcP8l8Ye4ax2Vru+5+asaMOfzIr3AXQpo3D2mWkeb6a36bIyJTNPo5LqHk0KI09ETS
+         /fMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=xA9ZRDld2H7cpZwQWYc0HcmPZG4csb1ONfd+ykfascA=;
-        b=QrkUQtCQe4Ug8Y0nxymtsuk/sNxZTN7RN/cWky0HDqXAQPhsY9PGGlW2RSeJGGiSJA
-         Z/HsYQu4bNqZnVLUBWac3HGko0ZVJDJBp2EXSYVMZecCEaKnVyp1/uX3+wF4kvnZFEib
-         TLvVZ9I0VlG7i1teQVFaP4fqf5RtrYMNNvxxLOPR6l9n9Lq5nhzzENZc94h5aa4ZGy0D
-         FeE9kSss/CZ5jH58GBmfYcrHvi248VAuLd5kgBCbVdyhd2QLcQ3YZTByDRt/2Xd1XM7e
-         qqVrYBfD5t5Xqh3ZgLH6IpVCNPAXw+ZYA4j7nh1RzyKU9tkdr3uJ2coIBOtOb+O2O7bg
-         hv7Q==
-X-Gm-Message-State: AOAM530J/xyQKynJGuv0IXIM1Skl8YB5WSJ7cYqB+o+1fOvL8EUBXAUm
-        a23mSsudrTgv4J7BZNjRAqMbmIAmUFD1Jw==
-X-Google-Smtp-Source: ABdhPJw5igwMsciDdHmsV7ZDp+IrFr3EUJbzzIsMlzPLmw8vnwMAypHTENvD7Zr+iHWe7UHIc/uJnYzRdyTQcA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1a10:bb1b:63e:864a])
- (user=dlatypov job=sendgmr) by 2002:a25:2405:: with SMTP id
- k5mr1025330ybk.593.1639510214155; Tue, 14 Dec 2021 11:30:14 -0800 (PST)
-Date:   Tue, 14 Dec 2021 11:30:10 -0800
-Message-Id: <20211214193010.138458-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v2] kunit: tool: make `build` subcommand also reconfigure if needed
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CSsQizS2Alccn09uVVHMhRrxYpQSyu5zyJjpNQE3tlI=;
+        b=cTv3yzCr5Kfj9lDNROlpacRhJhPDg36s5KSWXOik7FiUUviyxMQxSup9qkoxM7qJCp
+         ZRTfrmhJsl3Wh3k6rJRB4/cdpDFmJZaSiH/2NRbU2evmNML2kFeNIHRuzM9NH30U8j4I
+         TyV4WZ5u1ZVhv2gAoWV2MHeajZI0Nij7RVdRfJI2UdWePdw06c66VYZIhuPzWbncYPy5
+         9HfhSqPa2hjZqYHR4iK+zlPcViTrOL4HTQ+WSasNZPnBT3YkVHXH2wm8C9ao0UcKXpmB
+         Ny5j3ebFBUKUfIaHbLBvgVmuj+/hwGH/pUcVvYxhRvGk7gGBHiAt5RpHpViAdC6wBKdp
+         1OXg==
+X-Gm-Message-State: AOAM5333G98TNcs2W4Jt9ptKKqqQTzwV5ZNPpIc/j724y2wcdV0DZJIG
+        kWuR/EDZq0uLaZWwy+njAd9K1yhVy/gpGZ0otEZXog==
+X-Google-Smtp-Source: ABdhPJzLUx4mda4fQ7H0Ga9lBWntpZB7VpWdQX2o1dcRwm3prFV7nNv/EX6mBWmoe0www35mz1g39dVYV3eVfxoc5SQ=
+X-Received: by 2002:ac2:5499:: with SMTP id t25mr6633200lfk.674.1639510317616;
+ Tue, 14 Dec 2021 11:31:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20211029184500.2821444-1-mcgrof@kernel.org> <20211029184500.2821444-4-mcgrof@kernel.org>
+ <Yao3vtSKBKLyQY1E@kroah.com> <YbFgaSPPw4Y3pJoB@bombadil.infradead.org>
+In-Reply-To: <YbFgaSPPw4Y3pJoB@bombadil.infradead.org>
+From:   Richard Fontana <fontana@sharpeleven.org>
+Date:   Tue, 14 Dec 2021 14:31:46 -0500
+Message-ID: <CAGT84B35yEjPxtu=cShoxCNzi8kaYDBbHDsu9-g0UhdFrCS6Lg@mail.gmail.com>
+Subject: Re: [copyleft-next] Re: [PATCH v9 3/6] selftests: add tests_sysfs module
+To:     Discussion and development of copyleft-next 
+        <copyleft-next@lists.fedorahosted.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>, akpm@linux-foundation.org,
+        jeyu@kernel.org, tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        rostedt@goodmis.org, shuah@kernel.org, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-spdx@vger.kernel.org,
+        tj@kernel.org, dan.j.williams@intel.com, bvanassche@acm.org,
+        linux-kselftest@vger.kernel.org, joe@perches.com,
+        linux-doc@vger.kernel.org, linux-block@vger.kernel.org,
+        minchan@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If I created a kunitconfig file that was incomplete, then
-$ ./tools/testing/kunit/kunit.py build --kunitconfig=my_kunitconfig
-would silently drop all the options with unmet dependencies!
+ On Wed, Dec 8, 2021 at 8:52 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Fri, Dec 03, 2021 at 04:29:02PM +0100, Greg KH wrote:
+> > On Fri, Oct 29, 2021 at 11:44:57AM -0700, Luis Chamberlain wrote:
 
-This is because it doesn't do the config check that `kunit.py config`
-does.
+> > > diff --git a/lib/test_sysfs.c b/lib/test_sysfs.c
+> > > new file mode 100644
+> > > index 000000000000..2a6ec072da60
+> > > --- /dev/null
+> > > +++ b/lib/test_sysfs.c
+> > > @@ -0,0 +1,894 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
+> >
+> > Again, sorry, but no, I am going to object to this license as you are
+> > only accessing a GPL-v2-only api.  Any other license on a file that
+> > interacts with that, especially for core stuff like testing the
+> > functionality of this code, needs to have that same license.  Sorry.
+>
+> Huh? The license is GPL-v2 compatible, and when used in the kernel the
+> GPLv2 applies.
+>
+> Likewise, are you taking the position that permissively licensed code,
+> say BSD or ISC licensed code, cannot use EXPORT_SYMBOL_GPL() symbols?
 
-So if I want to safely build a kernel for testing, I have to do
-$ ./tools/testing/kunit/kunit.py config <flags>
-$ ./tools/testing/kunit/kunit.py build <flags, again>
+Just chiming in here, not really because of any association with the
+copyleft-next license (or GPLv2 for that matter) but because of
+general personal immersion in open source licensing. I would think
+that code interacting with a GPLv2-only api could be under any
+GPLv2-only-compatible license, such as ISC, GPLv2-or-later, or
+copyleft-next. That said, of course kernel maintainers can establish
+stricter policies around acceptable forms of licensing.
 
-It seems unlikely that any user of kunit.py would want the current
-`build` semantics.
-So make it effectively do `kunit.py config` + `kunit.py build`.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-v1 -> v2: rebase on top of v2 of dependency:
-https://lore.kernel.org/linux-kselftest/20211214192612.134306-1-dlatypov@google.com/
----
- tools/testing/kunit/kunit.py           | 10 +++++++++-
- tools/testing/kunit/kunit_tool_test.py |  2 +-
- 2 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 417dc2d11f4f..f1be71811369 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -110,6 +110,14 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 			   'built kernel successfully',
- 			   build_end - build_start)
- 
-+def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
-+			   request: KunitBuildRequest) -> KunitResult:
-+	config_result = config_tests(linux, request)
-+	if config_result.status != KunitStatus.SUCCESS:
-+		return config_result
-+
-+	return build_tests(linux, request)
-+
- def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
- 	args = ['kunit.action=list']
- 	if request.kernel_args:
-@@ -464,7 +472,7 @@ def main(argv, linux=None):
- 					    make_options=cli_args.make_options,
- 					    jobs=cli_args.jobs,
- 					    alltests=cli_args.alltests)
--		result = build_tests(linux, request)
-+		result = config_and_build_tests(linux, request)
- 		kunit_parser.print_with_timestamp((
- 			'Elapsed time: %.3fs\n') % (
- 				result.elapsed_time))
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 1f6b177ca5c2..b80e333a20cb 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -526,7 +526,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 	def test_build_passes_args_pass(self):
- 		kunit.main(['build'], self.linux_source_mock)
--		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
- 		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
- 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
- 
--- 
-2.34.1.173.g76aa8bc2d0-goog
-
+Richard
