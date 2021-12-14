@@ -2,144 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 904E0474C80
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Dec 2021 21:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94216474C9E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Dec 2021 21:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237589AbhLNUK6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Dec 2021 15:10:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S237627AbhLNU1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Dec 2021 15:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbhLNUK6 (ORCPT
+        with ESMTP id S237624AbhLNU1P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Dec 2021 15:10:58 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C8C061574
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 12:10:58 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id p23so26307405iod.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 12:10:58 -0800 (PST)
+        Tue, 14 Dec 2021 15:27:15 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E186EC061401
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 12:27:14 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so22256494otl.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Dec 2021 12:27:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=aafqAbN1umCKsy+eoUr3Ub+q/hrUYaM2Oh/sRwwhJr8=;
-        b=A3b3Melkvt0PCYRbdzuFHHduWmt+ur9YqPTbtAMv72E+6BSN1IaA/vsMwzHxfr/RnB
-         AD/vFl1ujmbKZvNPw+zmBTWg4OcPcPI1zCW1zgFPlkCMDR68IwqW+cCJT9lkNDxFJL1Y
-         PjB0Qhs+ejxqe5nrYjFf2EsxkoVtfj/uJz74A=
+        bh=5v5jiPKMVhoKa9oPktbJep7rYj1bDC4+fDKLLWPkAzg=;
+        b=NtguBbLsXAqG+7WZN7V7gbYjnQ6wkdNPtH9rrzOx5/n8JxhzwtdlfqbHEkHoz3P3IV
+         FJFgmp6VQ0XGbAAgXeC7kOwaOeXnllIgaiQTKcFG7nFqzcKGB4OK2YSJh4rIgmD0eLGJ
+         QAwc6Wcfy35dEJCzVLdCHqKOTJ2z9wZdSEbZE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=aafqAbN1umCKsy+eoUr3Ub+q/hrUYaM2Oh/sRwwhJr8=;
-        b=cdnwRrL/fbM4pUwVg1PvLrGrpaxAn2y8WyW/ZSpsiZ8xSVz9ddVOmYPPqOHAfiHXAZ
-         OmbdCqR2pV70xAdg8NBsfLPMlbywhNrjGPs2UrFunMYo8PUnyyJmE1FU46TpoRlOSs9V
-         KILcD5td0b0BoE9dUecyN40nQt0EgtiJeho1knh5vgN8kFBh/52EPMEbwHOzwBr/YOWQ
-         DsiT2Xzq+UOAL29kQXAdxI9gf8n8t8Z6JMNGUNlzF7UM53+hsOAaqzj6kCug8PiIiq8n
-         1niisYLQOZl4Y1Z3bQECMnN4NFu0ODyMp9XGcLgcp6T6I/LwcY1SOsuy8QjX1M9uVaG1
-         UADQ==
-X-Gm-Message-State: AOAM531E6N76LNN9ZBX2IXU0PMxZP0jfrDtdAuvJZ9HOko9pek/NfhAf
-        B8n4A2yneADNoUbQ3W51UWntdQ==
-X-Google-Smtp-Source: ABdhPJwNO/Sithe2Kktml/StLgHLdP/RJb+RQrKfKSIlt+H/eA7OYRCpr+N8hUj+cmnL7Uzkz1hi5g==
-X-Received: by 2002:a05:6602:2acc:: with SMTP id m12mr5020000iov.107.1639512657258;
-        Tue, 14 Dec 2021 12:10:57 -0800 (PST)
+        bh=5v5jiPKMVhoKa9oPktbJep7rYj1bDC4+fDKLLWPkAzg=;
+        b=LVHzvhdS7/RYZVjO3Botx39DF+9kQxaV2SF+4l6brehcptM30NU1K9HQ+ovO0CYMSV
+         HTHFDygzhReVQMdn2EVq9fUnxyYxeXjg4RQifGdyjARA85R1YTubUxICfGu8NV8ot4o1
+         9V6JCoXtWHFqH5NsvSgAbJSvpZMI1HoVDSBOvP6YI5k3O+HbBMNWmzNYjMIyIj4rGgq7
+         Fx0KQuEg66znkeMKoG3blxRqjq5DVZiEhEbTjlnONpHM7YO0JYk3fke1fhVQijGwfMMD
+         qsRG9Ul0snivC0zxtz2lDY3dU7oNToAH7LoDBjc51JbY0B3jJ+6HorrLXa+ox4R6E8Vf
+         BfCQ==
+X-Gm-Message-State: AOAM531/V7rAhBUikd6jFcNQC5sShfErVa/hKSh6121xQ6UYsHdpbJKb
+        lS3ULjSLuYo1jyeKyGV2hkbsRQ==
+X-Google-Smtp-Source: ABdhPJyv4fW5I+F9FWYzifWvOIE6BGPtrx9w3YSbp9hwRop2Lq8hW4DweFB5hVyt2vg/P9gCk9nOuw==
+X-Received: by 2002:a05:6830:2aa7:: with SMTP id s39mr6194227otu.151.1639513634160;
+        Tue, 14 Dec 2021 12:27:14 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g7sm406692iln.67.2021.12.14.12.10.56
+        by smtp.gmail.com with ESMTPSA id p23sm173635otf.37.2021.12.14.12.27.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 12:10:56 -0800 (PST)
-Subject: Re: [PATCH V2] selftests/sgx: Fix build error caused by missing
- dependency
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, jarkko@kernel.org,
-        linux-sgx@vger.kernel.org, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org,
+        Tue, 14 Dec 2021 12:27:13 -0800 (PST)
+Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <de2a262e97e7b173548b909a608e9e99aab38e9d.1639509500.git.reinette.chatre@intel.com>
+References: <20211210173433.13247-1-skhan@linuxfoundation.org>
+ <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8b7c98f4-f050-bc1c-5699-fa598ecc66a2@linuxfoundation.org>
-Date:   Tue, 14 Dec 2021 13:10:56 -0700
+Message-ID: <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
+Date:   Tue, 14 Dec 2021 13:27:12 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <de2a262e97e7b173548b909a608e9e99aab38e9d.1639509500.git.reinette.chatre@intel.com>
+In-Reply-To: <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/14/21 12:26 PM, Reinette Chatre wrote:
-> Commit f0ff2447b861 ("selftests/sgx: Add a new kselftest:
-> Unclobbered_vdso_oversubscribed") depends on __cpuid() without
-> providing the dependency and thus introduces a build error:
+On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
+> On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> ARRAY_SIZE is defined in multiple test files. Remove the definitions
+>> and include header file for the define instead.
+>>
+>> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
+>> define.
+>>
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>>   tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
+>>   tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
+>>   tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
+>>   tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
+>>   tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
+>>   5 files changed, 5 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+>> index 1d8918dfbd3f..7a5ebd330689 100644
+>> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+>> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+>> @@ -5,6 +5,7 @@
+>>   #include <bpf/bpf_helpers.h>
+>>   #include <bpf/bpf_tracing.h>
+>>   #include <bpf/bpf_core_read.h>
+>> +#include <bpf/bpf_util.h>
 > 
-> $ make
-> gcc -Wall -Werror -g -I../../../../tools/include -fPIC -z noexecstack -c main.c -o ../linux/tools/testing/selftests/sgx/main.o
-> main.c: In function ‘get_total_epc_mem’:
-> main.c:296:3: error: implicit declaration of function ‘__cpuid’ [-Werror=implicit-function-declaration]
->    296 |   __cpuid(&eax, &ebx, &ecx, &edx);
->        |   ^~~~~~~
-> cc1: all warnings being treated as errors
-> make: *** [Makefile:33: ../linux/tools/testing/selftests/sgx/main.o] Error 1
-> $
+> It doesn't look like you've built it.
 > 
-> Clone kernel's __cpuid() implementation to the self-test in order
-> to make it available to the EPC enumeration code.
-> 
-> Fixes: f0ff2447b861 ("selftests/sgx: Add a new kselftest: Unclobbered_vdso_oversubscribed")
-> Reported-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
-> 
-> The commit introducing the issue can be found on
-> the x86/sgx branch of tip.git.
-> 
-> Changes since V1:
-> - V1: https://lore.kernel.org/linux-sgx/797ff1331cfe540fc378fcc4a4a7b00ff5099fbe.1638905135.git.reinette.chatre@intel.com/
-> - Improve commit message. (Jarkko)
-> 
->   tools/testing/selftests/sgx/main.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> index 7e912db4c6c5..6dead57a3121 100644
-> --- a/tools/testing/selftests/sgx/main.c
-> +++ b/tools/testing/selftests/sgx/main.c
-> @@ -73,6 +73,18 @@ static bool vdso_get_symtab(void *addr, struct vdso_symtab *symtab)
->   	return true;
->   }
->   
-> +static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
-> +			   unsigned int *ecx, unsigned int *edx)
-> +{
-> +	asm volatile("cpuid"
-> +	    : "=a" (*eax),
-> +	      "=b" (*ebx),
-> +	      "=c" (*ecx),
-> +	      "=d" (*edx)
-> +	    : "0" (*eax), "2" (*ecx)
-> +	    : "memory");
-> +}
-> +
->   static unsigned long elf_sym_hash(const char *name)
->   {
->   	unsigned long h = 0, high;
+> progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
+> #include <bpf/bpf_util.h>
+>           ^~~~~~~~~~~~~~~~
+>    CLNG-BPF [test_maps] socket_cookie_prog.o
+> progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
+> #include <bpf/bpf_util.h>
+>           ^~~~~~~~~~~~~~~~
+> 1 error generated.
+> In file included from progs/profiler2.c:6:
+> progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
+> #include <bpf/bpf_util.h>
+>           ^~~~~~~~~~~~~~~~
 > 
 
-Let's not add one more __cpuid() define to the individual tests.
-We so far have:
+Sorry about that. I built it - I think something is wrong in my env. Build
+fails complaining about not finding vmlinux - I overlooked that the failure
+happened before it got to progs.
 
-tools/testing/selftests/vm/pkey-x86.h
-selftests/x86/corrupt_xstate_header.c
+Error: failed to load BTF from .../vmlinux: No such file or directory
 
-Let's move the defines to kselftest.h and remove all these duplicate
-defines.
+I do have the kernel built with gcc. Is there a clang dependency?
 
-For now you could include vm/pkey-x86.h just to fix the build error
-and do the proper cleanup.
-
-There has been a proliferation of defines in tools and selftests.
-I just fixed/remove 25+ ARRAY_SIZE duplicate define in selftests.
-  
 thanks,
 -- Shuah
+
