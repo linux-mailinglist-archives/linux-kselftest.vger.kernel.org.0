@@ -2,216 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A418476100
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 19:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D19E4476136
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 19:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343946AbhLOSrO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Dec 2021 13:47:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25575 "EHLO
+        id S1344091AbhLOSzm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Dec 2021 13:55:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21853 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343943AbhLOSrN (ORCPT
+        by vger.kernel.org with ESMTP id S1344099AbhLOSz0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:47:13 -0500
+        Wed, 15 Dec 2021 13:55:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639594033;
+        s=mimecast20190719; t=1639594526;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lKY7EwD35q6WS2L2MqJxnfYmiBbs4WYU4qRfF0IbNkc=;
-        b=Vp0XOFjz9cK2+YHTlfOzIzGPl+7K8lEBbDAIFrtwmGQahyDY3KMJp4fX37gCG3uxP+1Ljw
-        9nz/5meNtz3AtwE/BUudFh6BL5dQpFRLy1U9AhCN4UIDlxzQVoG/pOo2fr0kHAtS/VKxJo
-        xZtPHNpctblFynW4Cpqxzjr+VpHBMI8=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=6p2PMg3IHKSv9HJVSyU/jUSPqlHttS0kc0XgSmw+DTI=;
+        b=hL68iMe+KCaaI1o1gbB/otOqyD42/yMUP8SToQcoga6xKNfBkcjm2VsyC2cf8uFLNVEj6f
+        2a5cVdiVaY8xqOZR1Tx0M3p8ddtQJYZWKexlmSkCGSZOxnegGU0WxbbFhpy/Bq4YR/IHPd
+        zvB/hCxaKLzINdCKAjLm3a0QQtsLT20=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-rT85dNE1N4umqGbqyBLE8w-1; Wed, 15 Dec 2021 13:47:12 -0500
-X-MC-Unique: rT85dNE1N4umqGbqyBLE8w-1
-Received: by mail-ot1-f72.google.com with SMTP id f3-20020a9d6c03000000b0055c9d337de8so10243267otq.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Dec 2021 10:47:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lKY7EwD35q6WS2L2MqJxnfYmiBbs4WYU4qRfF0IbNkc=;
-        b=BBOrwF385c5jTr9/mzDBMHCWTh7WftVBK8nqMOBv5IUPk1xcNeuCJ0vYv49pQs3OAQ
-         /VAPSfJ0sChwtGoBRu0G8Cn2TMP0YL6kE6OXQHFsCoMAye6Dz37xf60/kW+SbVbinWyP
-         uSljkFeEwxKCfZq9iAEcF+cHBJyEwVhiOC9CVO3u/foB3FHRS/CLH/dUNywKriTyvug5
-         lWmJN75C7wq/9t0GKNL3shgdcebpBpqbtyOmWp1l/EZvogS4BJjSbhUFM3L0ik2TShLp
-         yi4y/x23V3HUQM4QTyaCiTWg19n3ioEVG4CWs3anr34DvkZhw9Q8xj9OjN/Q2aBsQX0b
-         3qlA==
-X-Gm-Message-State: AOAM530vjdB2bfrLK78V4UambYgHzZVpOvmxdSX+vzWnOLEYgdx5I6Gr
-        BeRqK8hmFebpRUnTUWEqAZExxAEG8uwud6bmO0AXnIkL14Cr3ZodrDiUsHpEEI3D+wwhWOXRb00
-        zRSkA+15xuI3PKK0pv6woSTRVCNA6
-X-Received: by 2002:a05:6830:442a:: with SMTP id q42mr9979383otv.385.1639594030936;
-        Wed, 15 Dec 2021 10:47:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7tdoVycqReg+zBeRcXonNSCNGRuHqvtLWZQ7ha4DQnH/9nu6QOECMTd84iAOMu7T+0jBsgg==
-X-Received: by 2002:a05:6830:442a:: with SMTP id q42mr9979356otv.385.1639594030598;
-        Wed, 15 Dec 2021 10:47:10 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::49])
-        by smtp.gmail.com with ESMTPSA id l6sm565290otu.12.2021.12.15.10.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 10:47:10 -0800 (PST)
-Date:   Wed, 15 Dec 2021 10:47:07 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, jikos@kernel.org,
-        joe.lawrence@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-Message-ID: <20211215184707.e3iagidkvnpx2fb4@treble>
-References: <20211210124449.21537-1-mbenes@suse.cz>
- <20211210124449.21537-2-mbenes@suse.cz>
- <20211213190008.r4rjeytfz5ycbstb@treble>
- <alpine.LSU.2.21.2112140857570.20187@pobox.suse.cz>
- <YbiNsVfoCPCJmOKj@alley>
- <Ybi6252hKwUM4KrP@alley>
- <20211214234836.3x3clp45ut6gtol6@treble>
- <Ybn9piT9Z83SKaCK@alley>
+ us-mta-45-eLARbfoFMtubSfuCb0DIwQ-1; Wed, 15 Dec 2021 13:55:21 -0500
+X-MC-Unique: eLARbfoFMtubSfuCb0DIwQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 65A3C92502;
+        Wed, 15 Dec 2021 18:55:18 +0000 (UTC)
+Received: from [10.22.10.54] (unknown [10.22.10.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1357A19D9B;
+        Wed, 15 Dec 2021 18:55:05 +0000 (UTC)
+Message-ID: <58c06961-ffc4-27d7-01d2-4c91b0c9161d@redhat.com>
+Date:   Wed, 15 Dec 2021 13:55:05 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ybn9piT9Z83SKaCK@alley>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
+ <Ybe0YWEo7Wp7wib9@slm.duckdns.org> <20211215144450.GC25459@blackbody.suse.cz>
+ <96018978-6b7f-1e7f-1012-9df7f7996ec5@redhat.com>
+ <Ybo1jmNvM6sblcJq@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Ybo1jmNvM6sblcJq@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 03:37:26PM +0100, Petr Mladek wrote:
-> > Hm, this is different than how I understand it.
-> > 
-> > In the past I referred to the "parent" as the function which jumps to
-> > the cold ("child") function.  So maybe we're getting confused by
-> > different terminology.  But here I'll go with the naming from your
-> > example.
-> 
-> I think that I was primary confused by the selftest where "child"
-> function is livepatched and "parent" is defined as stack_only.
-
-Ah, I guess I didn't look too closely at the selftest.
-
-> Miroslav told me yesterday that the function that jumps into
-> the .cold child needs to get livepatched. It makes sense
-> because .cold child does not have well defined functionality.
-> It depends on the compiler what code is put there.
-> Hence I added one more level...
-> 
-> > If parent_func() is stack_only, that could create some false positive
-> > scenarios where patching stalls unnecessarily.
-> 
-> Yes, it won't be optimal.
-> 
-> 
-> > Also, wouldn't all of child_func()'s callers have to be made
-> > stack_only?
-> 
-> Well, we already do this when handling compiler optimizations,
-> for example, inlining.
-> 
-> 
-> > How would you definitively find all the callers?
-> 
-> Good question. The best solution would be to get support from
-> the compiler like we already get for another optimizations.
-> 
-> We always have these problems how to find functions that need
-> special handling for livepatching.
-
-But inlining and isra are inherently different from this.  They affect
-static functions, which the compiler knows all the callers and is free
-to (and does) tweak the ABI.  The compiler (and the patch author)
-definitively know all the callers.
-
-If child_func() happens to be a global function, it could be called from
-anywhere.  Even from another klp_object.  If there are a lot of callers
-across the kernel, there would be a proliferation of corresponding
-stack_only funcs.
-
-It could also be called from a function pointer, which levels up the
-difficulty.
-
-> > Instead I was thinking child_func.cold() should be stack_only.
-> > 
-> > e.g.:
-> > 
-> > static struct klp_func funcs[] = {
-> > 	{
-> > 		.old_name = "child_func",
-> > 		.new_func = livepatch_child_func,
-> > 	},
-> > 	{
-> > 		.old_name = "child_func.cold",
-> > 		.new_name = "livepatch_child_func.cold",
-> > 		.stack_only = true,
-> > 	},
-> > 
-> > Any reason why that wouldn't work?
-> 
-> Yes, it should work in the given example. I am just curious how this
-> would work in practice:
-> 
-> 
->   1. The compiler might optimize the new code another way and there
->      need not be 1:1 relation.
+On 12/15/21 13:35, Tejun Heo wrote:
+> Hello, Waiman.
 >
->      We might need another set of stack_only functions checked when
->      the livepatch is enabled. And another set of functions checked
->      when the livepatch gets disabled.
+> On Wed, Dec 15, 2021 at 01:16:43PM -0500, Waiman Long wrote:
+>> Allowing direct transition from member to invalid partition doesn't feel
+>> right for me. A casual user may assume a partition is correctly formed
+>> without double checking the "cpuset.partition" value. Returning an error
+>> will prevent this kind of issue. If returning more information about the
+>> failure is the main reason for allowing the invalid partition transition, we
+>> can extend the "cpuset.partition" read syntax to also show the reason for
+>> the previous failure.
+> I don't think it's a good idea to display error messages without a way to
+> link the error to the one who triggered it. This is the same problem we had
+> with resettable counters. It only works for scenarios where one guy is
+> sitting in front of the computer but gets nastry for more complex scnearios
+> and automation.
+Yes, I agree it is not a good way to handle this issue.
+>
+> I understand that allowing transitions to invalid state can feel jarring.
+> There are pros and cons to both approaches. It's similar dynamics tho.
+> Erroring out may be more intuitive for a casual user but makes it harder for
+> more complex scenarios because whether a given operation errors or not is
+> dependent on external asynchronous states, there's no good way of reporting
+> the exact nature of the error or detecting when the operation would succeed
+> in the future, and the error conditions are rather arbitrary.
 
-Regardless I'm thinking the above approach should be flexible enough.
+Thanks for the explanation. Yes, there are always pros and cons for 
+different approach to a problem. I am not totally against allowing 
+member to invalid partition transition. In that case, reading back 
+"cpuset.partition" is a must to verify that it is really a success.
 
-If the patched child_func no longer has .cold, set 'new_name' to NULL in
-the stack_only entry.
+How about we allow transition to an invalid partition state but still 
+return an error?
 
-If the original child_func doesn't have .cold, but patched child_func
-does, set 'old_name' to NULL in the stack_only entry.
-
-If there were ever more than one of such "sub-functions" (which I
-believe currently doesn't happen), the author could create multiple
-stack_only entries.
-
->   2. The names of "child_func.cold" functions are generated by
->      the compiler. I mean that the names are "strange" ;-)
-> 
->      It is likely easier with the kPatch approach that creates glue
->      around already compiled symbols. It is more tricky when preparing
->      the livepatch from sources. Well, it is doable.
-
-kpatch-build has checks for symbols with ".cold" substring.  I'm
-thinking it would be easy enough for you to do something similar since
-you're already checking for other compiler optimizations.
-
-> BTW: livepatch_child_func.cold function must be checked on the stack
->      also when the livepatch is replaced by another livepatch.
-> 
->      I mean that we need to check two sets of stack only functions
->      when replacing one livepatch with another one:
-> 
-> 	+ "new_name" functions from to-be-replaced livepatch (like when disabling)
-> 	+ "old_name" functions from new livepatch (like when enabling)
-
-Urgh, this is starting to give me a headache.
-
-Could we put the cold funcs in a klp_ops func_stack to make this work
-automatically?
-
-Alternatively we could link the .cold functions to their non-cold
-counterparts somehow.  So when checking a function's stack, also check
-it's linked counterpart.  It could even be part of the original
-function's klp_func struct somehow, rather than having a dedicated
-klp_func struct for the stack_only thing.
-
-Or we could just give up trying to abstract this entirely, and go back
-to Peter's suggestion to just always look for a ".cold" version of every
-function in klp_check_stack_func() :-)
-
-I dunno...
-
-> Note that I do not have any strong opinion about any approach at the
-> moment. I primary want to be sure that I understand the problem correctly :-)
-
-Same here.
-
--- 
-Josh
+Regards,
+Longman
 
