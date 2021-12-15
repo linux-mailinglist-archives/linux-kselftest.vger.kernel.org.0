@@ -2,191 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C77475ABE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 15:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DCF475AF0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 15:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbhLOOhb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Dec 2021 09:37:31 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39990 "EHLO
+        id S230481AbhLOOoy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Dec 2021 09:44:54 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:41970 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbhLOOhb (ORCPT
+        with ESMTP id S229878AbhLOOox (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:37:31 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A83BE1F3A3;
-        Wed, 15 Dec 2021 14:37:29 +0000 (UTC)
+        Wed, 15 Dec 2021 09:44:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 868EF1F3CB;
+        Wed, 15 Dec 2021 14:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639579049; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639579492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=AqBRO/NIE3ZileUsayjziVQapZwhk+Tq0b/E/cvn/ng=;
-        b=PY8PJ53frcTOAtDVC1yD5gzsDepo7ctC0J5IDL/nsb08PurypnC2bMah8Rkl6q5KeAI0mL
-        utuh2KouFWhVWypn7Rb+N9ADIlw2jpdloFRrJi4LkqItzi5SDQn5y0PzdLntZEqPX8tDX3
-        nWqsErkr57JurBNRKpx0xN+AnHDWEGc=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=L+FwlFr7sookecjc9+Z4KJH3P8puADKn4avrNKuh3fg=;
+        b=V2YNGn1ryxEnaOg+uqD0czIqum5A+yvyyOQF3/o+zFpawFNR+AbAXZhquxTqZxu3w7E5n2
+        F0ottN2Pw6JXwcZNGP9VFmAgQ2j6z7rsoVTVmkKucdC1IAv+nbmrE/aj9oaCO4INsLri9u
+        /mi/m484fVNsR3E1xOvslXFMEQJcp6I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 84C6BA3B81;
-        Wed, 15 Dec 2021 14:37:29 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 15:37:26 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, jikos@kernel.org,
-        joe.lawrence@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-Message-ID: <Ybn9piT9Z83SKaCK@alley>
-References: <20211210124449.21537-1-mbenes@suse.cz>
- <20211210124449.21537-2-mbenes@suse.cz>
- <20211213190008.r4rjeytfz5ycbstb@treble>
- <alpine.LSU.2.21.2112140857570.20187@pobox.suse.cz>
- <YbiNsVfoCPCJmOKj@alley>
- <Ybi6252hKwUM4KrP@alley>
- <20211214234836.3x3clp45ut6gtol6@treble>
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4FE231330B;
+        Wed, 15 Dec 2021 14:44:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JkXhEmT/uWHWcAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 15 Dec 2021 14:44:52 +0000
+Date:   Wed, 15 Dec 2021 15:44:51 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <20211215144450.GC25459@blackbody.suse.cz>
+References: <20211205183220.818872-1-longman@redhat.com>
+ <20211205183220.818872-7-longman@redhat.com>
+ <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214234836.3x3clp45ut6gtol6@treble>
+In-Reply-To: <Ybe0YWEo7Wp7wib9@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 2021-12-14 15:48:36, Josh Poimboeuf wrote:
-> On Tue, Dec 14, 2021 at 04:40:11PM +0100, Petr Mladek wrote:
-> > > > > Hm, what does this mean for the unpatching case?  What if the new
-> > > > > function's .cold child is on the stack when we're trying to unpatch?
-> > > > 
-> > > > Good question. I did not realize it worked both ways. Of course it does.
-> > > > 
-> > > > > Would it make sense to allow the user specify a 'new_func' for
-> > > > > stack_only, which is a func to check on the stack when unpatching?  Then
-> > > > > new_func could point to the new .cold child.  And then
-> > > > > klp_check_stack_func() wouldn't need a special case.
-> > > 
-> > > I am confused. My understanding is that .cold child is explicitly
-> > > livepatched to the new .cold child like it is done in the selftest:
-> > > 
-> > > static struct klp_func funcs_stack_only[] = {
-> > > 	{
-> > > 		.old_name = "child_function",
-> > > 		.new_func = livepatch_child_function,
-> > > 	}, {
-> > > 
-> > > We should not need anything special to check it on stack.
-> > > We only need to make sure that we check all .stack_only functions of
-> > > the to-be-disabled livepatch.
-> > 
-> > We have discussed this with Miroslav and it seems to be even more
-> > complicated. My current understanding is that we actually have
-> > three functions involved:
-> > 
-> >   parent_func()
-> >     call child_func()
-> >       jmp child_func.cold
-> > 
-> > We livepatch child_func() that uses jmp and need not be on stack.
-> > This is why we want to check parent_func() on stack.
-> > For this, we define something like:
-> > 
-> > static struct klp_func funcs[] = {
-> > 	{
-> > 		.old_name = "child_func",
-> > 		.new_func = livepatch_child_func,   // livepatched func
-> > 	},
-> > 	{
-> > 		.old_name = "parent_func",
-> > 		.stack_only = true,		    // stack only
-> > 	},
+On Mon, Dec 13, 2021 at 11:00:17AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> * When a valid partition turns invalid, now we have a reliable way of
+>   discovering what exactly caused the transition. However, when a user now
+>   fails to turn a member into partition, all they get is -EINVAL and there's
+>   no way to discover why it failed and the failure conditions that -EINVAL
+>   represents aren't simple.
 > 
-> Hm, this is different than how I understand it.
+> * In an automated configuration scenarios, this operation mode may be
+>   difficult to make reliable and lead to sporadic failures which can be
+>   tricky to track down. The core problem is that whether a given operation
+>   succeeds or not may depend on external states (CPU on/offline) which may
+>   change asynchronously in a way that the configuring entity doesn't have
+>   any control over.
 > 
-> In the past I referred to the "parent" as the function which jumps to
-> the cold ("child") function.  So maybe we're getting confused by
-> different terminology.  But here I'll go with the naming from your
-> example.
+> It's true that both are existing problems with the current partition
+> interface and given that this is a pretty spcialized feature, this can be
+> okay. Michal, what are your thoughts?
 
-I think that I was primary confused by the selftest where "child"
-function is livepatched and "parent" is defined as stack_only.
+Because of asynchronous changes, the return value should not be that
+important and the user should watch cpuset.partitions for the result
+(end state) anyway.
+Furthermore, the reasons should be IMO just informative (i.e. I like
+they're not explicitly documented) and not API.
 
-Miroslav told me yesterday that the function that jumps into
-the .cold child needs to get livepatched. It makes sense
-because .cold child does not have well defined functionality.
-It depends on the compiler what code is put there.
-Hence I added one more level...
+But I see there could be a distinction between -EINVAL (the supplied
+input makes no sense) and -EAGAIN(?) denoting that the switch to
+partition root could not happen (due to outer constraints).
 
-> If parent_func() is stack_only, that could create some false positive
-> scenarios where patching stalls unnecessarily.
-
-Yes, it won't be optimal.
-
-
-> Also, wouldn't all of child_func()'s callers have to be made
-> stack_only?
-
-Well, we already do this when handling compiler optimizations,
-for example, inlining.
+You seem to propose to replace the -EAGAIN above with a success code and
+allow the switch to an invalid root.
+The action of the configuring entity would be different: retry (when?)
+vs wait till transition happens (notification) (although the immediate
+effect (the change did not happen) is same).
+I considered the two variants equal but the clear information about when
+the change can happen I'd favor the variant allowing the switch to
+invalid root now.
 
 
-> How would you definitively find all the callers?
-
-Good question. The best solution would be to get support from
-the compiler like we already get for another optimizations.
-
-We always have these problems how to find functions that need
-special handling for livepatching.
-
-
-> Instead I was thinking child_func.cold() should be stack_only.
-> 
-> e.g.:
-> 
-> static struct klp_func funcs[] = {
-> 	{
-> 		.old_name = "child_func",
-> 		.new_func = livepatch_child_func,
-> 	},
-> 	{
-> 		.old_name = "child_func.cold",
-> 		.new_name = "livepatch_child_func.cold",
-> 		.stack_only = true,
-> 	},
-> 
-> Any reason why that wouldn't work?
-
-Yes, it should work in the given example. I am just curious how this
-would work in practice:
-
-
-  1. The compiler might optimize the new code another way and there
-     need not be 1:1 relation.
-
-     We might need another set of stack_only functions checked when
-     the livepatch is enabled. And another set of functions checked
-     when the livepatch gets disabled.
-
-
-  2. The names of "child_func.cold" functions are generated by
-     the compiler. I mean that the names are "strange" ;-)
-
-     It is likely easier with the kPatch approach that creates glue
-     around already compiled symbols. It is more tricky when preparing
-     the livepatch from sources. Well, it is doable.
-
-
-BTW: livepatch_child_func.cold function must be checked on the stack
-     also when the livepatch is replaced by another livepatch.
-
-     I mean that we need to check two sets of stack only functions
-     when replacing one livepatch with another one:
-
-	+ "new_name" functions from to-be-replaced livepatch (like when disabling)
-	+ "old_name" functions from new livepatch (like when enabling)
-
-
-Note that I do not have any strong opinion about any approach at the
-moment. I primary want to be sure that I understand the problem correctly :-)
-
-Best Regards,
-Petr
+Michal
