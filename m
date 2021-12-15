@@ -2,109 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D19E4476136
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 19:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A94476379
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 21:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344091AbhLOSzm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Dec 2021 13:55:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21853 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344099AbhLOSz0 (ORCPT
+        id S236241AbhLOUjc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Dec 2021 15:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236226AbhLOUj1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:55:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639594526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6p2PMg3IHKSv9HJVSyU/jUSPqlHttS0kc0XgSmw+DTI=;
-        b=hL68iMe+KCaaI1o1gbB/otOqyD42/yMUP8SToQcoga6xKNfBkcjm2VsyC2cf8uFLNVEj6f
-        2a5cVdiVaY8xqOZR1Tx0M3p8ddtQJYZWKexlmSkCGSZOxnegGU0WxbbFhpy/Bq4YR/IHPd
-        zvB/hCxaKLzINdCKAjLm3a0QQtsLT20=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-eLARbfoFMtubSfuCb0DIwQ-1; Wed, 15 Dec 2021 13:55:21 -0500
-X-MC-Unique: eLARbfoFMtubSfuCb0DIwQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 65A3C92502;
-        Wed, 15 Dec 2021 18:55:18 +0000 (UTC)
-Received: from [10.22.10.54] (unknown [10.22.10.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1357A19D9B;
-        Wed, 15 Dec 2021 18:55:05 +0000 (UTC)
-Message-ID: <58c06961-ffc4-27d7-01d2-4c91b0c9161d@redhat.com>
-Date:   Wed, 15 Dec 2021 13:55:05 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 6/7] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-7-longman@redhat.com>
- <Ybe0YWEo7Wp7wib9@slm.duckdns.org> <20211215144450.GC25459@blackbody.suse.cz>
- <96018978-6b7f-1e7f-1012-9df7f7996ec5@redhat.com>
- <Ybo1jmNvM6sblcJq@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Ybo1jmNvM6sblcJq@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Wed, 15 Dec 2021 15:39:27 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D5EC061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Dec 2021 12:39:27 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id w5-20020a25ac05000000b005c55592df4dso45635504ybi.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Dec 2021 12:39:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=sfllunMFpDuZT34Po6N/Y75gCsaWiTA2hy3SEI5N8aU=;
+        b=qk+p3k7Lpw2nRf9F2QCp2ERW/hT5HhXf8vtNNmX+DZLYw55Z//nvdsjj2XxBs4Mt4Y
+         AHlCUeRruUUifsaB06a04U6HmpGE2laD4f8/VWhj7Vfwc3x3FmuJI2F4X5gdBLcAzfeU
+         QjQtSRVm3x6k2qSM2KezijUSLpgTWzDPzdAF9hyvm2w16jn8ZpvD5DI7fEDTqpHFCPdA
+         vfSRMD3/K7+BG7SXRVj7uEeS6wa1TGTvwCMa8X7DUayUniQtLGzmluoiwhCgqWU07JmV
+         u3e/zJ8fIBlUPr0JrVfdh+mpaBQuc0sVc3ayT1DDy83RlqQ0DpzWKUkeM0jH7zz2memI
+         F+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=sfllunMFpDuZT34Po6N/Y75gCsaWiTA2hy3SEI5N8aU=;
+        b=AWB+6aQ2yiLThqVe45d56E3BXKOxMhl1/EOCR3bUlhwYlePWfYfqX1+/NMH2t02jc5
+         HdRK+Uhq4bD1G7XDeti2J165CMUABvdZua2/aFSpZ590bXYKI7YtRDjXD3O6PCrmN5+L
+         rHpM3ZQyWkE5S8wUkgHskKimbUp/91MPjo123sZP7jIpw2cYAL6QQZaqS3XX3YGc7Yvb
+         5igrkfb9Hnn7BN8uIr9sIW0hQ6Wm69IxFA4jLDQFO8kc+xewgYrzPhw72tyx9ai2ReXZ
+         mrxGLV8h13730JHuMcFm06qD8QsnMZTytRhFyFR4/C7DfXwA7nCIQWkQWggxdKC/Zc77
+         GpvA==
+X-Gm-Message-State: AOAM533h+CIeXOUertO56kaWY1BNmHEvwotPwLcdCmFh9TUt6dbP9l9O
+        pRd+JRCtM5u8cD6bHd0YvPmlQHMSqfCSuA==
+X-Google-Smtp-Source: ABdhPJwmSfd229bx3CvEKZL0Rnq5k1dzQeOCkX50InTNnISDRej1puPzT8POL8bzmS3A/sjiVGNjXBr4/+vT9g==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1bef:2d92:9c3e:f258])
+ (user=dlatypov job=sendgmr) by 2002:a25:bb49:: with SMTP id
+ b9mr8724144ybk.0.1639600766944; Wed, 15 Dec 2021 12:39:26 -0800 (PST)
+Date:   Wed, 15 Dec 2021 12:39:23 -0800
+Message-Id: <20211215203923.390608-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH v2] kunit: tool: fix newly introduced typechecker errors
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/15/21 13:35, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Wed, Dec 15, 2021 at 01:16:43PM -0500, Waiman Long wrote:
->> Allowing direct transition from member to invalid partition doesn't feel
->> right for me. A casual user may assume a partition is correctly formed
->> without double checking the "cpuset.partition" value. Returning an error
->> will prevent this kind of issue. If returning more information about the
->> failure is the main reason for allowing the invalid partition transition, we
->> can extend the "cpuset.partition" read syntax to also show the reason for
->> the previous failure.
-> I don't think it's a good idea to display error messages without a way to
-> link the error to the one who triggered it. This is the same problem we had
-> with resettable counters. It only works for scenarios where one guy is
-> sitting in front of the computer but gets nastry for more complex scnearios
-> and automation.
-Yes, I agree it is not a good way to handle this issue.
->
-> I understand that allowing transitions to invalid state can feel jarring.
-> There are pros and cons to both approaches. It's similar dynamics tho.
-> Erroring out may be more intuitive for a casual user but makes it harder for
-> more complex scenarios because whether a given operation errors or not is
-> dependent on external asynchronous states, there's no good way of reporting
-> the exact nature of the error or detecting when the operation would succeed
-> in the future, and the error conditions are rather arbitrary.
+After upgrading mypy and pytype from pip, we see 2 new errors when
+running ./tools/testing/kunit/run_checks.py.
 
-Thanks for the explanation. Yes, there are always pros and cons for 
-different approach to a problem. I am not totally against allowing 
-member to invalid partition transition. In that case, reading back 
-"cpuset.partition" is a must to verify that it is really a success.
+Error #1: mypy and pytype
+They now deduce that importlib.util.spec_from_file_location() can return
+None and note that we're not checking for this.
 
-How about we allow transition to an invalid partition state but still 
-return an error?
+We validate that the arch is valid (i.e. the file exists) beforehand.
+Add in an `asssert spec is not None` to appease the checkers.
 
-Regards,
-Longman
+Error #2: pytype bug https://github.com/google/pytype/issues/1057
+It doesn't like `from datetime import datetime`, specifically that a
+type shares a name with a module.
+
+We can workaround this by either
+* renaming the import or just using `import datetime`
+* passing the new `--fix-module-collisions` flag to pytype.
+
+We pick the first option for now because
+* the flag is quite new, only in the 2021.11.29 release.
+* I'd prefer if people can just run `pytype <file>`
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v1 -> v2: rebase on top of linx-kselftest kunit branch.
+Only conflict was a deleted import in kunit_parser.py
+---
+ tools/testing/kunit/kunit_kernel.py | 1 +
+ tools/testing/kunit/kunit_parser.py | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 12085e04a80c..44bbe54f25f1 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -209,6 +209,7 @@ def get_source_tree_ops_from_qemu_config(config_path: str,
+ 	# exists as a file.
+ 	module_path = '.' + os.path.join(os.path.basename(QEMU_CONFIGS_DIR), os.path.basename(config_path))
+ 	spec = importlib.util.spec_from_file_location(module_path, config_path)
++	assert spec is not None
+ 	config = importlib.util.module_from_spec(spec)
+ 	# See https://github.com/python/typeshed/pull/2626 for context.
+ 	assert isinstance(spec.loader, importlib.abc.Loader)
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 66a7f2fb314a..05ff334761dd 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -12,7 +12,7 @@
+ from __future__ import annotations
+ import re
+ 
+-from datetime import datetime
++import datetime
+ from enum import Enum, auto
+ from functools import reduce
+ from typing import Iterable, Iterator, List, Optional, Tuple
+@@ -517,7 +517,7 @@ ANSI_LEN = len(red(''))
+ 
+ def print_with_timestamp(message: str) -> None:
+ 	"""Prints message with timestamp at beginning."""
+-	print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), message))
++	print('[%s] %s' % (datetime.datetime.now().strftime('%H:%M:%S'), message))
+ 
+ def format_test_divider(message: str, len_message: int) -> str:
+ 	"""
+
+base-commit: 1ee2ba89bea86d6389509e426583b49ac19b86f2
+-- 
+2.34.1.173.g76aa8bc2d0-goog
 
