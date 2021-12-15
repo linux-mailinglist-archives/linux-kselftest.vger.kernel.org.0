@@ -2,49 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF20475D67
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 17:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE0D476007
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 18:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244805AbhLOQ3v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Dec 2021 11:29:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26118 "EHLO
+        id S238553AbhLOR7p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Dec 2021 12:59:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45825 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244804AbhLOQ3u (ORCPT
+        by vger.kernel.org with ESMTP id S233039AbhLOR7p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Dec 2021 11:29:50 -0500
+        Wed, 15 Dec 2021 12:59:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639585790;
+        s=mimecast20190719; t=1639591184;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Yxhcniv4Juf9tUgebwGdqHHxd7keYoCASjyNhDtoduY=;
-        b=gI8ESY4cyiR0X5xovd+kC+eahAE9gNGGgKypPnjGw/X97357HLoNhD9zIeEqcUDVKmD7o/
-        DxjAbPE7sMkmdS4nuZvuMOkGAZ4fQ5u8bM9tCeF07r6hGn5MfLDNQSV30yJ8/23s0JFM2V
-        55CBFUnAmP6GkLLH/PEJ0UXLqXT2pn8=
+        bh=7T9baihxbZOtsdtJTZ7JWcmVJu0+eN6bqcVUWyieaoA=;
+        b=dOTUmmac0K6To55+DjDP8R+fSkNFCxkVZOGg2BqGNWmeSTGeFYYBLS+6HjcCWjGF6UZhl7
+        VgLN8niVzH/QHwqrPzT6LTt2X1QXa/HnZFsvT1ck/PFSYugwpSL/wPvWzRt8+nKeEGGJXx
+        OyC/z+wbzV0sldcRSEodQMRX8hB0ugg=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-uDIz6gbyNhGd3lqcz7KQxQ-1; Wed, 15 Dec 2021 11:29:46 -0500
-X-MC-Unique: uDIz6gbyNhGd3lqcz7KQxQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-258-eoxD2mjwOxWsfYcVfNC3hA-1; Wed, 15 Dec 2021 12:59:41 -0500
+X-MC-Unique: eoxD2mjwOxWsfYcVfNC3hA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5CAD4185302B;
-        Wed, 15 Dec 2021 16:29:44 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 45CEA2F4B;
+        Wed, 15 Dec 2021 17:59:39 +0000 (UTC)
 Received: from [10.22.10.54] (unknown [10.22.10.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F2AE15BE0B;
-        Wed, 15 Dec 2021 16:29:41 +0000 (UTC)
-Message-ID: <98887e63-51de-f5ad-8fb8-56269aaf4bcf@redhat.com>
-Date:   Wed, 15 Dec 2021 11:29:41 -0500
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 53BC578C26;
+        Wed, 15 Dec 2021 17:59:20 +0000 (UTC)
+Message-ID: <8d73dc26-74e1-d763-d897-6e03cdac3c8c@redhat.com>
+Date:   Wed, 15 Dec 2021 12:59:19 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH v9 3/7] cgroup/cpuset: Refining features and constraints
- of a partition
+Subject: Re: [PATCH v9 1/7] cgroup/cpuset: Don't let child cpusets restrict
+ parent in default hierarchy
 Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
@@ -57,59 +58,112 @@ Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Marcelo Tosatti <mtosatti@redhat.com>
 References: <20211205183220.818872-1-longman@redhat.com>
- <20211205183220.818872-4-longman@redhat.com>
- <20211215144944.GE16798@blackbody.suse.cz>
+ <20211205183220.818872-2-longman@redhat.com>
+ <Ybev80+h4JArgMDz@slm.duckdns.org> <20211215122336.GB25459@blackbody.suse.cz>
 From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211215144944.GE16798@blackbody.suse.cz>
+In-Reply-To: <20211215122336.GB25459@blackbody.suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-On 12/15/21 09:49, Michal Koutný wrote:
-> On Sun, Dec 05, 2021 at 01:32:16PM -0500, Waiman Long <longman@redhat.com> wrote:
->> @@ -1455,34 +1450,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
->>   			switch (parent->partition_root_state) {
->> [...]
->> -
->>   			case PRS_ENABLED:
->> -				if (update_parent_subparts_cpumask(cp, partcmd_update, NULL, tmp))
->> -					update_tasks_cpumask(parent);
->> +				update_parent = true;
->> [...]
->> +		if (update_parent) {
->> +			if (update_parent_subparts_cpumask(cp, partcmd_update, NULL, tmp))
->> +				update_tasks_cpumask(parent);
->> +			/*
->> +			 * The cpuset partition_root_state may be changed
->> +			 * to PRS_ERROR. Capture it.
->> +			 */
->> +			new_prs = cp->partition_root_state;
->> +		}
-> IIUC, this ensures that when a parent becomes partition root again, this
-> would propagate downwards to invalidated children.
+On 12/15/21 07:23, Michal Koutný wrote:
+> On Mon, Dec 13, 2021 at 10:41:23AM -1000, Tejun Heo <tj@kernel.org> wrote:
+>>> To address this issue, the check is now removed for the default hierarchy
+>>> to free parent cpusets from being restricted by child cpusets. The
+>>> check will still apply for legacy hierarchy.
+> I'm trying to find whether something in update_cpumasks_hier() ensures
+> the constraint is checkd on the legacy hierarchy but it seems to me this
+> baby was thrown out with the bathwater. How is the legacy check still
+> applied?
+Yes, you are right. I did remove the check for legacy hierarchy too.
+>> Applied to cgroup/for-5.17.
+> It comes out a bit more complex if I want to achieve both variants in
+> the below followup:
 >
-> However, the documentation says:
->
->> +       Changing a partition root (valid or invalid) to "member" is
->> +       always allowed.  If there are child partition roots underneath
->> +       it, they will become invalid and unrecoverable.  So care must
->> +       be taken to double check for this condition before disabling
->> +       a partition root.
-> I.e. it suggests a child can be trapped in the unrecoverable state (i.e.
-> not fixable by writing into cpuset.cpus.partition).
-> But this does not happen, right?
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 0dd7d853ed17..8b6e06f504f6 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -590,6 +590,35 @@ static inline void free_cpuset(struct cpuset *cs)
+>   	kfree(cs);
+>   }
+>   
+> +/*
+> + * validate_change_legacy() - Validate conditions specific to legacy (v1)
+> + *                            behavior.
+> + */
+> +static int validate_change_legacy(struct cpuset *cur, struct cpuset *trial)
+> +{
+> +	struct cgroup_subsys_state *css;
+> +	struct cpuset *c, *par;
+> +	int ret;
+> +
+> +	WARN_ON_ONCE(!rcu_read_lock_held());
+> +
+> +	/* Each of our child cpusets must be a subset of us */
+> +	ret = -EBUSY;
+> +	cpuset_for_each_child(c, css, cur)
+> +		if (!is_cpuset_subset(c, trial))
+> +			goto out;
+> +
+> +	/* On legacy hierarchy, we must be a subset of our parent cpuset. */
+> +	ret = -EACCES;
+> +	par = parent_cs(cur);
+> +	if (par && !is_cpuset_subset(trial, par))
+> +		goto out;
+> +
+> +	ret = 0;
+> +out:
+> +	return ret;
+> +}
+> +
+>   /*
+>    * validate_change() - Used to validate that any proposed cpuset change
+>    *		       follows the structural rules for cpusets.
+> @@ -614,20 +643,21 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
+>   {
+>   	struct cgroup_subsys_state *css;
+>   	struct cpuset *c, *par;
+> -	int ret;
+> -
+> -	/* The checks don't apply to root cpuset */
+> -	if (cur == &top_cpuset)
+> -		return 0;
+> +	int ret = 0;
+>   
+>   	rcu_read_lock();
+> -	par = parent_cs(cur);
+>   
+> -	/* On legacy hierarchy, we must be a subset of our parent cpuset. */
+> -	ret = -EACCES;
+> -	if (!is_in_v2_mode() && !is_cpuset_subset(trial, par))
 
-There are additional checks for the member to partition transition which 
-requires that the target cpuset shouldn't have child cpuset. That 
-prevents the recovering of a invalid partition root under a member 
-cpuset. We could certainly remove that restriction by adding additional 
-code as well as additional tests to verify it works. I haven't done that 
-simply to avoid adding more complexity to the current code.
+I think you still need to guard it with "!is_in_v2_mode()".
 
+         if (!is_in_v2_mode()) {
+                 ret = validate_change_legacy(cur, trial);
+                 if (ret)
+                         goto out;
+         }
+
+> +	ret = validate_change_legacy(cur, trial);
+> +	if (ret)
+> +		goto out;
+> +
+> +	/* Remaining checks don't apply to root cpuset */
+> +	ret = 0;
+> +	if (cur == &top_cpuset)
+>   		goto out;
+>   
+> +	par = parent_cs(cur);
+> +
+>   	/*
+>   	 * If either I or some sibling (!= me) is exclusive, we can't
+>   	 * overlap
 Cheers,
 Longman
 
