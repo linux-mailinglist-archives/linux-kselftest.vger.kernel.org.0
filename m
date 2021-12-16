@@ -2,188 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94ABA477D6D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 21:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01829477DA7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 21:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241401AbhLPUWm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Dec 2021 15:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241357AbhLPUWm (ORCPT
+        id S241446AbhLPUcO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Dec 2021 15:32:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40088 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241439AbhLPUcO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 15:22:42 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD02C061401
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 12:22:41 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id x10so36861891ioj.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 12:22:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0T7rNo/e5FufAn3aYgt2vkQlK/clnujdeot+jLE4neo=;
-        b=R3fD55lzr+nGW9I4G2Q7OmwsZ+A3tOZS3nNWyUt4DDRohhTcHOGwBZaR5+dTtgB3RP
-         JwiI2x2Ov6TOBcYmmAw9/s/ZNAS2ksyLrtY3/nTQ+e9lYRC7RAqLDfknh1LBKzrqWLCk
-         MGHm6d3KlBOq9+K7js8SEmq+LXxwGyzPSEPVU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0T7rNo/e5FufAn3aYgt2vkQlK/clnujdeot+jLE4neo=;
-        b=abtgwHEX0uLA0etsmPUZ0s1v9j7VO7f8fW9mt/ARNNR8uA99S1OEzlTJe4/tH5fsL/
-         F2Xq1M2YnpSqZFk0hzlyf/jSdi3wnPBjXUpkBW98C01HWv2eNut6lolkeSuWB1xGgYvk
-         fjfP33K9u4EQLeKlZi7hUsEZoqopcyhKyv34RCG9gpRF/vjlmgRljoFb1pkr4lUN0gDj
-         y1/wRSwFxMV9SH7JrIUQUOEsqs4pIG44gVwY4HDygjUvyY3MqQVuRLEdjNKUWXsmpKVI
-         fTAdo+XwtbkXlw/VrlyzZ1Pqtnk6kcBCooVJibDGJqeJ4arQDusn8r7d8+a7UPvi1tNG
-         bwyw==
-X-Gm-Message-State: AOAM531GZWR1zZMCC/pv7F0Ue2Dwn9yVcfhdRIV75YQrmIbIDtNIewtW
-        gKLo3MJMjC6pNyjgJvjyDMraSA==
-X-Google-Smtp-Source: ABdhPJyYLL5VRNmwQRNtyvoUJxEz7Sp5J+zYsWkhlRjtgxziInjf10CL8GKwN06nI/UybFNDuc2VmA==
-X-Received: by 2002:a05:6638:248d:: with SMTP id x13mr10930244jat.249.1639686161219;
-        Thu, 16 Dec 2021 12:22:41 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id u4sm3388717ilv.66.2021.12.16.12.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 12:22:40 -0800 (PST)
-Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211210173433.13247-1-skhan@linuxfoundation.org>
- <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
- <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
- <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com>
- <d3c1b7f4-5363-c23e-4837-5eaf07f63ebc@linuxfoundation.org>
- <CAEf4BzYKnoD_x7fZ4Fwp0Kg-wT6HMXOG0CMRSG4U+qQ0R27yzQ@mail.gmail.com>
- <53490dba-b7fd-a3f8-6574-5736c83aa90d@linuxfoundation.org>
- <CAEf4BzYA1h2kVF3945hxdcR8gf08GFpLiN1OwjedzTrzaAparA@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <cc4d6562-3d2e-2c0a-cb31-2733d2189f5c@linuxfoundation.org>
-Date:   Thu, 16 Dec 2021 13:22:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 16 Dec 2021 15:32:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D21EB82624;
+        Thu, 16 Dec 2021 20:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DE18EC36AE9;
+        Thu, 16 Dec 2021 20:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639686731;
+        bh=zT9WV47/0e2xRPX0gLcyz8Kq/cN7/ZubHmNCQS8JMOQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WfI02qypBzDkJBqKZ4AHzzCD1uK+ub+p5VaHOXmP+GBc1qbo99/3rqJd9tt905G4x
+         nBBww+EZ+R4wS20yZaYof1Ax8R8fWx9/8zwJ8wqFO0kKlrwj8Ptz7xFG6SXEMY66U7
+         ubqnjCHIj34XRUa/NnXLVml7VpNWPgoZgdl3r0pyW9I6/44qIqN8iSjVnlDbva6ylc
+         +/s4+T5Jtsm8rDi+riE1PTwfjsAWsjIr0U6uEth8Av3D5fGi40YrVvnHb7hpqHabge
+         yI3U6W5qrAD8G1RNSwc5nmzU2C6x0L42bGqWssXljoDNb2Am/62m57qwqL8MntYLzu
+         RVWvVhcz3LZOA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C053060A39;
+        Thu, 16 Dec 2021 20:32:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzYA1h2kVF3945hxdcR8gf08GFpLiN1OwjedzTrzaAparA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/6] tools/bpf: Enable cross-building with clang
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163968673178.4272.6690035910193012947.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Dec 2021 20:32:11 +0000
+References: <20211216163842.829836-1-jean-philippe@linaro.org>
+In-Reply-To: <20211216163842.829836-1-jean-philippe@linaro.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        quentin@isovalent.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/16/21 1:03 PM, Andrii Nakryiko wrote:
-> On Thu, Dec 16, 2021 at 11:51 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 12/16/21 12:30 PM, Andrii Nakryiko wrote:
->>> On Thu, Dec 16, 2021 at 6:42 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>>
->>>> On 12/15/21 9:04 PM, Andrii Nakryiko wrote:
->>>>> On Tue, Dec 14, 2021 at 12:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>>>>
->>>>>> On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
->>>>>>> On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>>>>>>
->>>>>>>> ARRAY_SIZE is defined in multiple test files. Remove the definitions
->>>>>>>> and include header file for the define instead.
->>>>>>>>
->>>>>>>> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
->>>>>>>> define.
->>>>>>>>
->>>>>>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->>>>>>>> ---
->>>>>>>>      tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
->>>>>>>>      tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
->>>>>>>>      tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
->>>>>>>>      tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
->>>>>>>>      tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
->>>>>>>>      5 files changed, 5 insertions(+), 19 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
->>>>>>>> index 1d8918dfbd3f..7a5ebd330689 100644
->>>>>>>> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
->>>>>>>> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
->>>>>>>> @@ -5,6 +5,7 @@
->>>>>>>>      #include <bpf/bpf_helpers.h>
->>>>>>>>      #include <bpf/bpf_tracing.h>
->>>>>>>>      #include <bpf/bpf_core_read.h>
->>>>>>>> +#include <bpf/bpf_util.h>
->>>>>>>
->>>>>>> It doesn't look like you've built it.
->>>>>>>
->>>>>>> progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
->>>>>>> #include <bpf/bpf_util.h>
->>>>>>>              ^~~~~~~~~~~~~~~~
->>>>>>>       CLNG-BPF [test_maps] socket_cookie_prog.o
->>>>>>> progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
->>>>>>> #include <bpf/bpf_util.h>
->>>>>>>              ^~~~~~~~~~~~~~~~
->>>>>>> 1 error generated.
->>>>>>> In file included from progs/profiler2.c:6:
->>>>>>> progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
->>>>>>> #include <bpf/bpf_util.h>
->>>>>>>              ^~~~~~~~~~~~~~~~
->>>>>>>
->>>>>>
->>>>>> Sorry about that. I built it - I think something is wrong in my env. Build
->>>>>> fails complaining about not finding vmlinux - I overlooked that the failure
->>>>>> happened before it got to progs.
->>>>>>
->>>>>> Error: failed to load BTF from .../vmlinux: No such file or directory
->>>>>
->>>>> Please make sure that you build vmlinux before you build selftests,
->>>>> BPF selftests use vmlinux to generate vmlinux.h with all kernel types
->>>>> (among other things). So please also make sure that all the setting in
->>>>> selftests/bpf/config were used in your Kconfig.
->>>>>
->>>>>>
->>>>
->>>> The problem in my env. is that I don't have CONFIG_DEBUG_INFO_BTF in
->>>> my config and then don't have the dwarves and llvm-strip on my system.
->>>> Pains of upgrading.
->>>>
->>>> I am all set now. On the other hand the vmlinux.h is a mess. It has
->>>> no guards for defines and including stdio.h and this generated
->>>> vmlinux.h causes all sorts of problems.
->>>
->>> It does have
->>>
->>> #ifndef __VMLINUX_H__
->>> #define __VMLINUX_H__
->>>
->>> Are we talking about the same vmlinux.h here?
->>>
->>
->> Yes we are. The guard it has works when vmlinux.h is included
->> twice. It defines a lot of common defines which are the problem.
->> Unless you add guards around each one of them, including vmlinux.h
->> is problematic if you also include other standard includes.
->>
->> You can try to include bpf_util.h for example from one of the
->> test in progs to see the problem.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Thu, 16 Dec 2021 16:38:37 +0000 you wrote:
+> Since v1 [1], I added Quentin's acks and applied Andrii's suggestions:
+> * Pass CFLAGS to libbpf link in patch 3
+> * Substitute CLANG_CROSS_FLAGS whole in HOST_CFLAGS to avoid accidents,
+>   patch 4
 > 
-> bpf_util.h is a user-space header, it's not going to work from the BPF
-> program side. If you look at any of progs/*.c (all of which are BPF
-> program-side source code), not a single one is including bpf_util.h.
+> Add support for cross-building BPF tools and selftests with clang, by
+> passing LLVM=1 or CC=clang to make, as well as CROSS_COMPILE. A single
+> clang toolchain can generate binaries for multiple architectures, so
+> instead of having prefixes such as aarch64-linux-gnu-gcc, clang uses the
+> -target parameter: `clang -target aarch64-linux-gnu'.
 > 
+> [...]
 
-Whether bpf_util.h can be included from progs isn't the main thing here.
-progs/test*.c including vmlinux.h (most of them seem to) can,'t include
-any standard .h files.
+Here is the summary with links:
+  - [bpf-next,v2,1/6] tools: Help cross-building with clang
+    https://git.kernel.org/bpf/bpf-next/c/cebdb7374577
+  - [bpf-next,v2,2/6] tools/resolve_btfids: Support cross-building the kernel with clang
+    https://git.kernel.org/bpf/bpf-next/c/bf1be903461a
+  - [bpf-next,v2,3/6] tools/libbpf: Enable cross-building with clang
+    https://git.kernel.org/bpf/bpf-next/c/4980beb4cda2
+  - [bpf-next,v2,4/6] bpftool: Enable cross-building with clang
+    https://git.kernel.org/bpf/bpf-next/c/bdadbb44c90a
+  - [bpf-next,v2,5/6] tools/runqslower: Enable cross-building with clang
+    https://git.kernel.org/bpf/bpf-next/c/bb7b75e860ee
+  - [bpf-next,v2,6/6] selftests/bpf: Enable cross-building with clang
+    https://git.kernel.org/bpf/bpf-next/c/ea79020a2d9e
 
-"including vmlinux.h is problematic if a test also had to include other
-  standard includes."
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-This makes this header file restrictive and works in one case and one
-case only when no other standard headers aren't included.
 
-thanks,
--- Shuah
