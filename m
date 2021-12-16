@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE968477A59
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 18:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9870477A5C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 18:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239880AbhLPRRY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Dec 2021 12:17:24 -0500
-Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:43624
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S235577AbhLPRRz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Dec 2021 12:17:55 -0500
+Received: from mail-mw2nam08on2077.outbound.protection.outlook.com ([40.107.101.77]:20673
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235577AbhLPRRX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:17:23 -0500
+        id S233283AbhLPRRz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:17:55 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=go85IwwwBVGi0dEuRWs5l89QM3fPqu/ehOu3YbkG5Rdf6TyZFwt88yNVhQnVXecrkboqoFjc+zsRaVqxfLbWI0pG9rRaiH3xSfEGh5KG0ha9xgLJiS5Db7pevf8RF2cJoyy2I1r+BZFoj8PJX1QgODCGi3V6zP4TmI4Bm6toI5+zGPdEYAtGLOsvJt0e9u7sqagrmEK1PhraPpRneycIWgwL+FnA1aem80LsQGwDbExRa7hj9Ec7LjP4id19ONKxj6CFdygn2JmN47S6NulTXKPJiOAdF3OjlAukdSzaBADFIAy82gcZ/eYy7SQpW128DDdRrzD37GuXesY8xV8KeA==
+ b=fi3HsjOjolUKsJTDZgYBXUc1YOhDX0wTsnQLvDCVV3R27tFrCG8UDhVOsH7JC0frD1BIsRHWP+xe7XyEy6TIDUVSevMHLXJXou0yy7eEgHW6V8SGJcMoZrQ2ZNPblT94oH2UiAzm6e3mZb2SZL2WZnp1CqK3wUOZWuFlBNtwEVerwz+zY7ErSN1QQS4pQfBux6gclFrAXl1uC3stJghr49JCYcNqwJgcCNEKZIv5kRFKxeS4tQUQuN8uioRDWQ2NMmgVjaow6WAVTEAgzAJO48ILx/vsV+8iBJF39tZhn+pR+hGkN8BPv0WyOG6Jak9a8EPD5j4iOdX1YAID4Zd0WA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k8Ct4cXEKJf82YgjFKUlhGwkdp6eG/BfpKBkyRdkKXg=;
- b=fY56NNVsix7XcGn/Crb87SOB4MIFpAOJcbFktuhcJImqPkUJHAbozW69ZU+Am1RxKxB+WKibyDG8KphilB27WmAA42bw4kw2BMCe+/He+pWiZQIr67ZBjT9CJ7hj5uZbSZvsrySuPVRzAiS1pOAHz/XdwRCq+Mzm7WPx5MXEEm2hucgWcIXU5HJt9BxHEL117fTcLRAQo1DRCtWCEs/Q9WPLAI8J2RKRfiUfkBpjy+ATQDGmOGdtd2F/jp5sXRcRTYYsCMcrUIky8/SMZ9VcEauBUQwyIiRCb/fDEbUZ/k8zgACSW1EYR4jJPExFR/49vinaQ1d1QmouBZBtIW1iYw==
+ bh=nwkCJV5Xk6eoK4V21lSuyxRo+ySGxbX5zj3DamCXA2k=;
+ b=ftPf+vK2glsQBXjsBvf1H4ObZ5ZUgzuWZ/FCSeLK4Y/3koQlF7eK0FwjTknNPzoFlrRQUBK3wlD17QT6irsqONYZzYjSFThUxDVy29HxgCr5lT7cfPEAjTlumJPctRy1pXbhD9QFzT/6mWh+QIT8CHwidiGrvBYarBPmIWXlCKYZqXfSILPtDJXDREIpoFLWzQnmJi+yWuF0fNkRSAnGs0LIerPHMrY2b24c5Twwk1DkMUj+taF6RtFWKQs4O/ZsAVy4L67SFYpI9hJq1Rxo0F0mw68l71HtyCIvxn9lMiAi6TdR3U9Y7doWEfhrOsitl/lDxtvaT2XomIUfsysg8A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k8Ct4cXEKJf82YgjFKUlhGwkdp6eG/BfpKBkyRdkKXg=;
- b=A9sUWx8isGcTOvj0Z2XGevo9XIJzrDHRDkO+e5ZJmrj5rrHlwsX03XkAqdj2Lb1jl3pduaBP7hvbXcZ18BrZx0nBzoNuhhybhKlASMFh9Aa/WeAoJKD2RdqSk86gAHKAt9jzLYxUgKab96wDu8+R+hePHdZApCQEj/RkJs7nVvA=
-Received: from MWHPR2201CA0060.namprd22.prod.outlook.com
- (2603:10b6:301:16::34) by DM4PR12MB5040.namprd12.prod.outlook.com
- (2603:10b6:5:38b::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Thu, 16 Dec
- 2021 17:17:21 +0000
-Received: from CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
- (2603:10b6:301:16:cafe::95) by MWHPR2201CA0060.outlook.office365.com
- (2603:10b6:301:16::34) with Microsoft SMTP Server (version=TLS1_2,
+ bh=nwkCJV5Xk6eoK4V21lSuyxRo+ySGxbX5zj3DamCXA2k=;
+ b=gS37Tc64PqVF1ZCyLEi5Tj3zgtFpWYT+coiRxj06pgRqIRgx9wjm4S4gaWDlo2JmSySl3uLG2lx8GpIaZF5iUKgX7CTNt5SW9Bpbm3RY+CGG/5kKXmBXHmfZ7Id+EPlVxhKA134AS+Epx07tilr6rvJgOrVbwoVRKMSJYX2MwzY=
+Received: from CO2PR04CA0125.namprd04.prod.outlook.com (2603:10b6:104:7::27)
+ by SN1PR12MB2462.namprd12.prod.outlook.com (2603:10b6:802:28::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Thu, 16 Dec
+ 2021 17:17:43 +0000
+Received: from CO1NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:104:7:cafe::db) by CO2PR04CA0125.outlook.office365.com
+ (2603:10b6:104:7::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17 via Frontend
- Transport; Thu, 16 Dec 2021 17:17:21 +0000
+ Transport; Thu, 16 Dec 2021 17:17:42 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -44,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT035.mail.protection.outlook.com (10.13.175.36) with Microsoft SMTP
+ CO1NAM11FT049.mail.protection.outlook.com (10.13.175.50) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:17:21 +0000
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:17:42 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
- 2021 11:17:20 -0600
+ 2021 11:17:41 -0600
 From:   Michael Roth <michael.roth@amd.com>
 To:     <linux-kselftest@vger.kernel.org>
 CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -74,9 +74,9 @@ CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Peter Gonda <pgonda@google.com>
-Subject: [PATCH v2 03/13] KVM: selftests: add hooks for managing encrypted guest memory
-Date:   Thu, 16 Dec 2021 11:13:48 -0600
-Message-ID: <20211216171358.61140-4-michael.roth@amd.com>
+Subject: [PATCH v2 04/13] KVM: selftests: handle encryption bits in page tables
+Date:   Thu, 16 Dec 2021 11:13:49 -0600
+Message-ID: <20211216171358.61140-5-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211216171358.61140-1-michael.roth@amd.com>
 References: <20211216171358.61140-1-michael.roth@amd.com>
@@ -88,205 +88,191 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4c73d17f-5117-4bb2-bed0-08d9c0b7ebc1
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB50407855D7AE722AB16CD1EB95779@DM4PR12MB5040.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
+X-MS-Office365-Filtering-Correlation-Id: cb94c27c-c8c9-45f5-aec3-08d9c0b7f85d
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2462:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB2462664FC1F83D5A6746104095779@SN1PR12MB2462.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PzVijF7XjZscgWFAfUf8FPuw1/XWgcYCwZTzTEktYbzjD5/vA5JPYT7kzdFjzRjn/jwNtwPvWqzOdbGV3hHw73aMlw2OewmKu/4+nyx3r4Qy0Q3bNiQbCiUE+dAV/79+0GWU6AKRQRnAyyALPwGHI5jnguW8RAYQLbFInIc6c3hU5cDlMJsXb6y4DOHFLHZP+DM04nAcY2+UQSXpE4eiBfhMzwntZm3Bc01kMtZTjN1Mbc3/8YProx1Dujh8RgVeJJLcy93lP6XmHCmimfW31Kn+UP9jd2mJjC8V+VglWoYoAuHLOVWYx2JlgxBikXwetxBmKp8TNU/PYh/BPWuMTHRSEGujMRztgJqbC5hddl0WLQVUGyS61HHm7pF/G6B4M4SixoRETx5aGdWdPZ02GERS34Zq1GPmcT6brHz7A5Pz0bwHZbg1sQfUl7RjOj4OI5k5VHUGfgggtLkzZK+TqIIMQHlUraiJCVZR+4jeGffwpd3gmlCqo3IaR3zxooz/XquU1GBd5qvXzNGyaEisfnbxwYFacyLJRyfsZAik3JYUo8DONKhbcmh1uTi9ure55SproM1N2/vOCYaWRLVhNou6K3JHQfA0eDqoJj03OM7MlvTOIRmU2jL9kq2HiKwmhXspWy+Z8CM4Zpq20Ffgfc9I3w4WXC4bYYjidbwL9aV5zATo7xeO/2iEs7S9gdKKdrZKLzQNP6HievScx6Awe/nKgKCUtRhwT+dVGJMCsCjNAm0GAqRS1iYebs1H7BHW52qF3QAUzHTojhNxOMIHxqaxzMHEQeAZv9qi32GGOZE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(16526019)(186003)(8936002)(26005)(6666004)(83380400001)(316002)(81166007)(336012)(70586007)(4326008)(47076005)(2906002)(6916009)(356005)(36756003)(54906003)(1076003)(426003)(508600001)(7416002)(40460700001)(36860700001)(8676002)(82310400004)(44832011)(70206006)(86362001)(2616005)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: x4R4H31goaCIb3lcy0VlgXIvio60qbLab7LIujHW9/Hgiaf1ecyB96ptHVCDJO9tR70JbM2Ew3utvbLewwCqnJqFJX50cIsoga7M0JTGMeh5oTxTwJkoKYtXYITWCv9AQc0X8LeJnvNd/AfrqNrbGT3rARsYRjAspuFrWLO471/dZK6qGLc98DH+WSGZ3uc8xd0mI4wM/WH5vrkX+5A7yt5PAk5IRmQ/YNpeN8G5lIgWyKNHeE0RPfKTr+DJnJqg4pmMaqXs6Qrt7C9egK2pK/MPM+QtEssbzrCP+aZFJiEVUvtzqq7EIQJQXyW4Ixopn+HNOL6SaBWi8ucgwh8aymFBzZikUIcEP7oMt8UO+m/fAhKisxxeSehxZO/kgpCEMtWNIngf/h5YQ/BbBi5p7qHyUs4MGaQzxMxb0Ors4t+hifrM886Qadnu2t2HX7lbcWspxcqR+vXc2TTmTLqbTsLd7tNtKfFpOU0LxYt/jFut2OyczylkaVq2bEau5kebnhFz/4gwmWhuUnrdyd5savJRAoDCuCCuvViEGWihubEMBwKTFNffQIkYxp3Etz0wegimsKUqLXpoybEZ7VWgMAZ4TYYFESw8NoELYeHI1VUluJvezyfDEFo5cJJp7YwvmJRBaR1eQxQVcvo1apP9aMxIo8Lqj8ysy9w+O8wjFeY29cXBWJVSKSVQA9JR4s9BJ7yIrBdBLDRRxW9X6zmJ36P/lVkdUAEtb7OifJXRkd2OYfNMX0df/6nG4atELt8WPzYGB6SORgxEPQAaIKgzzBuqV2+ifs9sHPn46wd0U5g=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(81166007)(1076003)(8676002)(7416002)(26005)(40460700001)(82310400004)(54906003)(4326008)(36860700001)(186003)(47076005)(5660300002)(2906002)(70206006)(16526019)(36756003)(8936002)(336012)(356005)(508600001)(83380400001)(70586007)(426003)(6916009)(86362001)(316002)(44832011)(2616005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:17:21.4808
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:17:42.6510
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c73d17f-5117-4bb2-bed0-08d9c0b7ebc1
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb94c27c-c8c9-45f5-aec3-08d9c0b7f85d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT049.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5040
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2462
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-VM implementations that make use of encrypted memory need a way to
-configure things like the encryption/shared bit position for page
-table handling, the default encryption policy for internal allocations
-made by the core library, and a way to fetch the list/bitmap of
-encrypted pages to do the actual memory encryption. Add an interface to
-configure these parameters. Also introduce a sparsebit map to track
-allocations/mappings that should be treated as encrypted, and provide
-a way for VM implementations to retrieve it to handle operations
-related memory encryption.
+SEV guests rely on an encyption bit which resides within the range that
+current code treats as address bits. Guest code will expect these bits
+to be set appropriately in their page tables, whereas the rest of the
+kvm_util functions will generally expect these bits to not be present.
+Introduce addr_gpa2raw()/addr_raw2gpa() to add/remove these bits, then
+use them where appropriate.
 
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h     |  7 +++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 52 +++++++++++++++++--
- .../selftests/kvm/lib/kvm_util_internal.h     | 10 ++++
- 3 files changed, 66 insertions(+), 3 deletions(-)
+ .../selftests/kvm/include/kvm_util_base.h     |  2 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 55 ++++++++++++++++++-
+ .../selftests/kvm/lib/x86_64/processor.c      | 16 +++---
+ 3 files changed, 65 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 4e2946ba3ff7..58856339210a 100644
+index 58856339210a..005755837aa2 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -365,4 +365,11 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
+@@ -155,6 +155,8 @@ void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa);
+ void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva);
+ vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva);
+ void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa);
++vm_paddr_t addr_raw2gpa(struct kvm_vm *vm, vm_vaddr_t gpa_raw);
++vm_paddr_t addr_gpa2raw(struct kvm_vm *vm, vm_vaddr_t gpa);
  
- uint32_t guest_get_vcpuid(void);
- 
-+void vm_set_memory_encryption(struct kvm_vm *vm, bool enc_by_default, bool has_enc_bit,
-+			      uint8_t enc_bit);
-+
-+const struct sparsebit *vm_get_encrypted_phy_pages(struct kvm_vm *vm, int slot,
-+						   vm_paddr_t *gpa_start,
-+						   uint64_t *size);
-+
- #endif /* SELFTEST_KVM_UTIL_BASE_H */
+ /*
+  * Address Guest Virtual to Guest Physical
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index f0f0250847f3..dfedf82207e1 100644
+index dfedf82207e1..5dd36cc15420 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -626,6 +626,7 @@ static void __vm_mem_region_delete(struct kvm_vm *vm,
- 		    "rc: %i errno: %i", ret, errno);
- 
- 	sparsebit_free(&region->unused_phy_pages);
-+	sparsebit_free(&region->encrypted_phy_pages);
- 	ret = munmap(region->mmap_start, region->mmap_size);
- 	TEST_ASSERT(ret == 0, "munmap failed, rc: %i errno: %i", ret, errno);
- 
-@@ -932,6 +933,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+@@ -1445,6 +1445,58 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
  	}
- 
- 	region->unused_phy_pages = sparsebit_alloc();
-+	region->encrypted_phy_pages = sparsebit_alloc();
- 	sparsebit_set_num(region->unused_phy_pages,
- 		guest_paddr >> vm->page_shift, npages);
- 	region->region.slot = slot;
-@@ -1161,6 +1163,7 @@ void vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpuid)
-  *   num - number of pages
-  *   paddr_min - Physical address minimum
-  *   memslot - Memory region to allocate page from
-+ *   encrypt - Whether to treat the pages as encrypted
-  *
-  * Output Args: None
-  *
-@@ -1172,8 +1175,9 @@ void vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpuid)
-  * and their base address is returned. A TEST_ASSERT failure occurs if
-  * not enough pages are available at or above paddr_min.
-  */
--vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
--			      vm_paddr_t paddr_min, uint32_t memslot)
-+static vm_paddr_t
-+_vm_phy_pages_alloc(struct kvm_vm *vm, size_t num, vm_paddr_t paddr_min,
-+		    uint32_t memslot, bool encrypt)
- {
- 	struct userspace_mem_region *region;
- 	sparsebit_idx_t pg, base;
-@@ -1206,12 +1210,22 @@ vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
- 		abort();
- 	}
- 
--	for (pg = base; pg < base + num; ++pg)
-+	for (pg = base; pg < base + num; ++pg) {
- 		sparsebit_clear(region->unused_phy_pages, pg);
-+		if (encrypt)
-+			sparsebit_set(region->encrypted_phy_pages, pg);
-+	}
- 
- 	return base * vm->page_size;
  }
  
-+vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
-+			      vm_paddr_t paddr_min, uint32_t memslot)
++/*
++ * Mask off any special bits from raw GPA
++ *
++ * Input Args:
++ *   vm - Virtual Machine
++ *   gpa_raw - Raw VM physical address
++ *
++ * Output Args: None
++ *
++ * Return:
++ *   GPA with special bits (e.g. shared/encrypted) masked off.
++ */
++vm_paddr_t addr_raw2gpa(struct kvm_vm *vm, vm_paddr_t gpa_raw)
 +{
-+	return _vm_phy_pages_alloc(vm, num, paddr_min, memslot,
-+				   vm->memcrypt.enc_by_default);
++	if (!vm->memcrypt.has_enc_bit)
++		return gpa_raw;
++
++	return gpa_raw & ~(1ULL << vm->memcrypt.enc_bit);
 +}
 +
- vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
- 			     uint32_t memslot)
- {
-@@ -2192,6 +2206,10 @@ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
- 			region->host_mem);
- 		fprintf(stream, "%*sunused_phy_pages: ", indent + 2, "");
- 		sparsebit_dump(stream, region->unused_phy_pages, 0);
-+		if (vm->memcrypt.enabled) {
-+			fprintf(stream, "%*sencrypted_phy_pages: ", indent + 2, "");
-+			sparsebit_dump(stream, region->encrypted_phy_pages, 0);
-+		}
- 	}
- 	fprintf(stream, "%*sMapped Virtual Pages:\n", indent, "");
- 	sparsebit_dump(stream, vm->vpages_mapped, indent + 2);
-@@ -2389,3 +2407,31 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
- 
- 	return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
- }
-+
-+void vm_set_memory_encryption(struct kvm_vm *vm, bool enc_by_default, bool has_enc_bit,
-+			      uint8_t enc_bit)
-+{
-+	vm->memcrypt.enabled = true;
-+	vm->memcrypt.enc_by_default = enc_by_default;
-+	vm->memcrypt.has_enc_bit = has_enc_bit;
-+	vm->memcrypt.enc_bit = enc_bit;
-+}
-+
-+const struct sparsebit *
-+vm_get_encrypted_phy_pages(struct kvm_vm *vm, int slot, vm_paddr_t *gpa_start,
-+			   uint64_t *size)
++/*
++ * Add special/encryption bits to a GPA based on encryption bitmap.
++ *
++ * Input Args:
++ *   vm - Virtual Machine
++ *   gpa - VM physical address
++ *
++ * Output Args: None
++ *
++ * Return:
++ *   GPA with special bits (e.g. shared/encrypted) added in.
++ */
++vm_paddr_t addr_gpa2raw(struct kvm_vm *vm, vm_paddr_t gpa)
 +{
 +	struct userspace_mem_region *region;
++	sparsebit_idx_t pg;
++	vm_paddr_t gpa_raw = gpa;
 +
-+	if (!vm->memcrypt.enabled)
-+		return NULL;
++	TEST_ASSERT(addr_raw2gpa(vm, gpa) == gpa, "Unexpected bits in GPA: %lx",
++		    gpa);
 +
-+	region = memslot2region(vm, slot);
-+	if (!region)
-+		return NULL;
++	if (!vm->memcrypt.has_enc_bit)
++		return gpa;
 +
-+	*size = region->region.memory_size;
-+	*gpa_start = region->region.guest_phys_addr;
++	region = userspace_mem_region_find(vm, gpa, gpa);
++	pg = gpa >> vm->page_shift;
++	if (sparsebit_is_set(region->encrypted_phy_pages, pg))
++		gpa_raw |= (1ULL << vm->memcrypt.enc_bit);
 +
-+	return region->encrypted_phy_pages;
++	return gpa_raw;
 +}
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util_internal.h b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
-index a03febc24ba6..99ccab86115c 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util_internal.h
-+++ b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
-@@ -16,6 +16,7 @@
- struct userspace_mem_region {
- 	struct kvm_userspace_memory_region region;
- 	struct sparsebit *unused_phy_pages;
-+	struct sparsebit *encrypted_phy_pages;
- 	int fd;
- 	off_t offset;
- 	void *host_mem;
-@@ -44,6 +45,14 @@ struct userspace_mem_regions {
- 	DECLARE_HASHTABLE(slot_hash, 9);
- };
- 
-+/* Memory encryption policy/configuration. */
-+struct vm_memcrypt {
-+	bool enabled;
-+	int8_t enc_by_default;
-+	bool has_enc_bit;
-+	int8_t enc_bit;
-+};
 +
- struct kvm_vm {
- 	int mode;
- 	unsigned long type;
-@@ -67,6 +76,7 @@ struct kvm_vm {
- 	vm_vaddr_t idt;
- 	vm_vaddr_t handlers;
- 	uint32_t dirty_ring_size;
-+	struct vm_memcrypt memcrypt;
- };
+ /*
+  * Address VM Physical to Host Virtual
+  *
+@@ -1462,9 +1514,10 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+  * address providing the memory to the vm physical address is returned.
+  * A TEST_ASSERT failure occurs if no region containing gpa exists.
+  */
+-void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa)
++void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa_raw)
+ {
+ 	struct userspace_mem_region *region;
++	vm_paddr_t gpa = addr_raw2gpa(vm, gpa_raw);
  
- struct vcpu *vcpu_find(struct kvm_vm *vm, uint32_t vcpuid);
+ 	region = userspace_mem_region_find(vm, gpa, gpa);
+ 	if (!region) {
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 82c39db91369..41aeb34c6d5d 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -181,7 +181,7 @@ void virt_pgd_alloc(struct kvm_vm *vm)
+ 
+ 	/* If needed, create page map l4 table. */
+ 	if (!vm->pgd_created) {
+-		vm->pgd = vm_alloc_page_table(vm);
++		vm->pgd = addr_gpa2raw(vm, vm_alloc_page_table(vm));
+ 		vm->pgd_created = true;
+ 	}
+ }
+@@ -203,15 +203,15 @@ static struct pageUpperEntry *virt_create_upper_pte(struct kvm_vm *vm,
+ 						    enum x86_page_size page_size)
+ {
+ 	struct pageUpperEntry *pte = virt_get_pte(vm, pt_pfn, vaddr, level);
++	uint64_t paddr_raw = addr_gpa2raw(vm, paddr);
+ 
+ 	if (!pte->present) {
+ 		pte->writable = true;
+ 		pte->present = true;
+ 		pte->page_size = (level == page_size);
+-		if (pte->page_size)
+-			pte->pfn = paddr >> vm->page_shift;
+-		else
+-			pte->pfn = vm_alloc_page_table(vm) >> vm->page_shift;
++		if (!pte->page_size)
++			paddr_raw = addr_gpa2raw(vm, vm_alloc_page_table(vm));
++		pte->pfn = paddr_raw >> vm->page_shift;
+ 	} else {
+ 		/*
+ 		 * Entry already present.  Assert that the caller doesn't want
+@@ -250,6 +250,8 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+ 		    "Physical address beyond maximum supported,\n"
+ 		    "  paddr: 0x%lx vm->max_gfn: 0x%lx vm->page_size: 0x%x",
+ 		    paddr, vm->max_gfn, vm->page_size);
++	TEST_ASSERT(addr_raw2gpa(vm, paddr) == paddr,
++		    "Unexpected bits in paddr: %lx", paddr);
+ 
+ 	/*
+ 	 * Allocate upper level page tables, if not already present.  Return
+@@ -272,7 +274,7 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+ 	pte = virt_get_pte(vm, pde->pfn, vaddr, 0);
+ 	TEST_ASSERT(!pte->present,
+ 		    "PTE already present for 4k page at vaddr: 0x%lx\n", vaddr);
+-	pte->pfn = paddr >> vm->page_shift;
++	pte->pfn = addr_gpa2raw(vm, paddr) >> vm->page_shift;
+ 	pte->writable = true;
+ 	pte->present = 1;
+ }
+@@ -587,7 +589,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+ 	if (!pte[index[0]].present)
+ 		goto unmapped_gva;
+ 
+-	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
++	return addr_raw2gpa(vm, ((uint64_t)pte[index[0]].pfn * vm->page_size)) + (gva & 0xfffu);
+ 
+ unmapped_gva:
+ 	TEST_FAIL("No mapping for vm virtual address, gva: 0x%lx", gva);
 -- 
 2.25.1
 
