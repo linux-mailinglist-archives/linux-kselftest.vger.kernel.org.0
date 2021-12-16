@@ -2,123 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CBD4765F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Dec 2021 23:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDC14768ED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 05:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbhLOWfC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Dec 2021 17:35:02 -0500
-Received: from novek.ru ([213.148.174.62]:41824 "EHLO novek.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230453AbhLOWfC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Dec 2021 17:35:02 -0500
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 17:35:01 EST
-Received: from [192.168.0.18] (unknown [37.228.234.253])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by novek.ru (Postfix) with ESMTPSA id 3B79D500BEE;
-        Thu, 16 Dec 2021 01:22:56 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru 3B79D500BEE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
-        t=1639606979; bh=YkDbJkp27QqRkjGNY8MALJg6qOp+4IEyT1J+LvT8rrc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JfKble2SnD0FLtu/Tyno4t6cDZ+Fg4afY/Z+RSlQQAOFpA5TnSQnnOEzlKZLPsGuV
-         mRAC1Yh11FIABB4TqJFyXVV0TxZ7i4gOjXg8kfbNMxT8t/5cGKkolb5vnnSvGglFtu
-         IvSlbF2oDHsuiJ0/vV14pdMs5sH6ywc28Zl14GSM=
-Subject: Re: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
-To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "Byagowi, Ahmad" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "idosch@idosch.org" <idosch@idosch.org>,
-        "mkubecek@suse.cz" <mkubecek@suse.cz>,
-        "saeed@kernel.org" <saeed@kernel.org>,
-        "michael.chan@broadcom.com" <michael.chan@broadcom.com>,
-        "petrm@nvidia.com" <petrm@nvidia.com>
-References: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
- <20211210081654.233a41b6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <MW5PR11MB58126A8F6466A8EAD1293D5EEA749@MW5PR11MB5812.namprd11.prod.outlook.com>
- <DM6PR11MB4657CE134223B65B5F2EF5F29B769@DM6PR11MB4657.namprd11.prod.outlook.com>
-From:   Vadim Fedorenko <vfedorenko@novek.ru>
-Message-ID: <4d4f5c27-90a3-c411-ea2f-e6f44ec74148@novek.ru>
-Date:   Wed, 15 Dec 2021 22:27:46 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231401AbhLPEEv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Dec 2021 23:04:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231309AbhLPEEv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Dec 2021 23:04:51 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A72C061574;
+        Wed, 15 Dec 2021 20:04:50 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 131so60926112ybc.7;
+        Wed, 15 Dec 2021 20:04:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M5hd03nfR2iBOHfB3tDlcvjjCHo3CH/+wbQDgx81RYY=;
+        b=K3rgGhVTVos+g/w1iD9fZq9xwYQ9WkQIUJydeTgOnicasY3rlqQ0cXEbvS1pKHBXMT
+         vZsHQQ2eNPWJwjbdze+LyOD7DJHN4+0RjOYhv+//BYW5BHT7hgIxHOnD8hn7r1Vub0IT
+         sRbfzrt0P/+CiT9g9GihznyzH2/9b7DTuH54xJefwNT4D9MHXVGGpdkjUz729bDf4bak
+         rPbGuV509xe6N7ElDwiw4CJpVACWOpz+MCtb9ByUmCQ1zjynqAo56HN7Ksy2mn8Z56Ok
+         wwIHMNOzyFq4Bik0kkiQSbvlZFx262wa/BOqXdAc3LBPWtIQ8MEj+j1OrAc1Cminyq3N
+         x5uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M5hd03nfR2iBOHfB3tDlcvjjCHo3CH/+wbQDgx81RYY=;
+        b=4reYgR8fC1doyF+3OnU35TV0v78mxMh3IWoII5XQc72NSBvV1ENxN5YSxBwQcHqPCJ
+         QHRUIdmVgRZHxADaPGKR+PiCeGEtHNv9JQ1SbejEl/uIbB6eLphO66H21AenTlwcXTxi
+         MbqTSDFNpkYgTSgKaNnDh0WdoZ+aGXulaC1nLHzAQLkDzMNcEsTr7U8AIsB8A2NEKgoQ
+         kXuYe+XYQ4H2VEfmuelXpiI1PJxfbZKBODRD0bJoWa6ZHAvPK0EoEmB2zue15Lwq8ilc
+         MO45U8UdkuZBKhHNTomlJMsN+qZfZaElsE3ud7HWHyapNJOViIpIw3s/ytmDJn1vBbLE
+         iStQ==
+X-Gm-Message-State: AOAM532eFcB8RoEYGsQDdbvxajEbCX34SOGJRYnb2CVaAPVBVfDKdwO/
+        Ycu+tfyLgFHPkrvcPa1n1TzhY5Wr70BPy7mrTdUGZr2ANi8=
+X-Google-Smtp-Source: ABdhPJw2qFftLQX+HGUz0zp8VC9JMlFEuHxdrxULCH34QjNd3jPjLUuzcGgQ/hSPi/B290KANWj2o/3rcHqab1V1PL8=
+X-Received: by 2002:a25:2a89:: with SMTP id q131mr11702009ybq.436.1639627489988;
+ Wed, 15 Dec 2021 20:04:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB4657CE134223B65B5F2EF5F29B769@DM6PR11MB4657.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=ALL_TRUSTED,NICE_REPLY_A
-        autolearn=ham autolearn_force=no version=3.4.1
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on gate.novek.ru
+References: <20211210173433.13247-1-skhan@linuxfoundation.org>
+ <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com> <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
+In-Reply-To: <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 15 Dec 2021 20:04:38 -0800
+Message-ID: <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15.12.2021 12:14, Kubalewski, Arkadiusz wrote:
->> -----Original Message-----
->> From: Machnikowski, Maciej <maciej.machnikowski@intel.com>
->> Sent: poniedzia³ek, 13 grudnia 2021 09:54
->> To: Jakub Kicinski <kuba@kernel.org>
->> Cc: netdev@vger.kernel.org; intel-wired-lan@lists.osuosl.org; Kubalewski, Arkadiusz <arkadiusz.kubalewski@intel.com>; richardcochran@gmail.com; Byagowi, Ahmad <abyagowi@fb.com>; Nguyen, Anthony L <anthony.l.nguyen@intel.com>; davem@davemloft.net; linux-kselftest@vger.kernel.org; idosch@idosch.org; mkubecek@suse.cz; saeed@kernel.org; michael.chan@broadcom.com; petrm@nvidia.com; Vadim Fedorenko <vfedorenko@novek.ru>
->> Subject: RE: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
->>
->>> -----Original Message-----
->>> From: Jakub Kicinski <kuba@kernel.org>
->>> Sent: Friday, December 10, 2021 5:17 PM
->>> To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
->>> Cc: netdev@vger.kernel.org; intel-wired-lan@lists.osuosl.org;
->>> Kubalewski, Arkadiusz <arkadiusz.kubalewski@intel.com>;
->>> richardcochran@gmail.com; Byagowi, Ahmad <abyagowi@fb.com>; Nguyen,
->>> Anthony L <anthony.l.nguyen@intel.com>; davem@davemloft.net; linux-
->>> kselftest@vger.kernel.org; idosch@idosch.org; mkubecek@suse.cz;
->>> saeed@kernel.org; michael.chan@broadcom.com; petrm@nvidia.com; Vadim
->>> Fedorenko <vfedorenko@novek.ru>
->>> Subject: Re: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
->>>
->>> On Fri, 10 Dec 2021 14:45:46 +0100 Maciej Machnikowski wrote:
->>>> Synchronous Ethernet networks use a physical layer clock to
->>>> syntonize the frequency across different network elements.
->>>>
->>>> Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
->>>> Equipment Clock (EEC) and have the ability to synchronize to
->>>> reference frequency sources.
->>>>
->>>> This patch series is a prerequisite for EEC object and adds ability
->>>> to enable recovered clocks in the physical layer of the netdev object.
->>>> Recovered clocks can be used as one of the reference signal by the EEC.
->>>>
->>>> Further work is required to add the DPLL subsystem, link it to the
->>>> netdev object and create API to read the EEC DPLL state.
->>>
->>> You missed CCing Vadim. I guess Ccing the right people may be right up
->>> there with naming things as the hardest things in SW development..
->>>
->>> Anyway, Vadim - do you have an ETA on the first chunk of the PLL work?
->>
->> Sounds about right :) thanks for adding Vadim!
->>
-> 
-> Good day Vadim,
-> 
-> Can we help on the new PLL interfaces?
-> I can start some works related to that, although would need a guidance
-> from the expert.
-> Where to place it?
-> What in-kernel interfaces to use?
-> Any other high level tips that could be useful?
-> Or if you already started some work, could you please share some
-> information?
-> 
-Hi!
+On Tue, Dec 14, 2021 at 12:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
+> > On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>
+> >> ARRAY_SIZE is defined in multiple test files. Remove the definitions
+> >> and include header file for the define instead.
+> >>
+> >> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
+> >> define.
+> >>
+> >> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> >> ---
+> >>   tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
+> >>   tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
+> >>   tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
+> >>   tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
+> >>   tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
+> >>   5 files changed, 5 insertions(+), 19 deletions(-)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> >> index 1d8918dfbd3f..7a5ebd330689 100644
+> >> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> >> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> >> @@ -5,6 +5,7 @@
+> >>   #include <bpf/bpf_helpers.h>
+> >>   #include <bpf/bpf_tracing.h>
+> >>   #include <bpf/bpf_core_read.h>
+> >> +#include <bpf/bpf_util.h>
+> >
+> > It doesn't look like you've built it.
+> >
+> > progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
+> > #include <bpf/bpf_util.h>
+> >           ^~~~~~~~~~~~~~~~
+> >    CLNG-BPF [test_maps] socket_cookie_prog.o
+> > progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
+> > #include <bpf/bpf_util.h>
+> >           ^~~~~~~~~~~~~~~~
+> > 1 error generated.
+> > In file included from progs/profiler2.c:6:
+> > progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
+> > #include <bpf/bpf_util.h>
+> >           ^~~~~~~~~~~~~~~~
+> >
+>
+> Sorry about that. I built it - I think something is wrong in my env. Build
+> fails complaining about not finding vmlinux - I overlooked that the failure
+> happened before it got to progs.
+>
+> Error: failed to load BTF from .../vmlinux: No such file or directory
 
-I'm going to publish RFC till the end of the week and we will be able to
-continue discussion via this mailing list. I think that netlink is a good
-option for in-kernel interface and is easy to implement.
+Please make sure that you build vmlinux before you build selftests,
+BPF selftests use vmlinux to generate vmlinux.h with all kernel types
+(among other things). So please also make sure that all the setting in
+selftests/bpf/config were used in your Kconfig.
 
+>
+> I do have the kernel built with gcc. Is there a clang dependency?
+
+Yes, you'll need recent enough Clang. Probably the easiest is to get
+one of the latest nightly packages.
+
+>
+> thanks,
+> -- Shuah
+>
