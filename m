@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 055F1477A44
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 18:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08FC477A4A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 18:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbhLPRP6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Dec 2021 12:15:58 -0500
-Received: from mail-sn1anam02on2057.outbound.protection.outlook.com ([40.107.96.57]:14052
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        id S233371AbhLPRQU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Dec 2021 12:16:20 -0500
+Received: from mail-mw2nam10on2041.outbound.protection.outlook.com ([40.107.94.41]:52736
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233283AbhLPRP5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:15:57 -0500
+        id S233283AbhLPRQT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:16:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bbA6Enz/HIzp7BWRZTeKJJhxeNBZEAtFlbCcl+HfqwY/S4/SzSq5G9r026S0xBlcyr2jzKZXWmf8OVbn9CbP78lrU/W9CxVN9xA/lvuKgiXnao5PypR24pGf1ZzJ1GXKLzC7ovPh7fBhtDLK1SZcwzjnXOnNo/aVh56iKrK20KhPujkzn24wZSYQhLO2/NMnMgrg9R3A4U9BMzlU6Pxv28OPtsIr9QYlkVut7MJHR1PfIxmg++nAKuvjklpXDjaiSLKA6glZnW75uVegBWMaIwagkt5fuPR+SKeFQvGTVTPXDJT2nwf43SqGR8xsNYTTGjnct8nLqHklqum0F31A6w==
+ b=obggnHIhebieTxF2mUnBso+GCpRAbTpgctpwiaXWN2uBI7jZND99KGb4X3OqJjgtPtn9qtIbTuvjkD1K3BrYOWboKDxKMFvdKXw0ZzsWZyy+yD24nQKeGcFXCGaebz9f3Hb2+i0jwh/tJ8ShW30Jo+NxoGl7AZKnRKEp/5Wy8XxCdmAfv/cRacwPt7lPoJZXGFBW5K6dhDtG+xTafPR2qXT4D7VLnvDstOFBT4H0pvp4hxefL+JV/s3xuAz93CZpIrRIBkm0+XjHPmtCnell6MGuA3R8KZuMl87zcXbOU1Fr5b83qcWsjyK2TloPdldZfodELWMxvLsKkFxRRR/wNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QVMTkYEAox+dDIbBbUL9XGo8YCMwRLxKN+fL96RQ+P0=;
- b=O0pv1wfOTe+ENmMC8VpZRXeimjjtp2zn0W964+sy6Ei0MSaDpQRpwgKMeVVVt92uYEfxVUYqEvkKbipeZkJuc5AQ80Wsvfz4fLGa5MOUTsYB6Q0OVdWn9Sg5jfKzQvMquwc66zX4P+6QDoTsu2+ZVPA3rKfWQA2G4oloBNT7XSINoKcBsBaew0oridTqisLwVr7HLxs9G/wdVeUe31J9WdzUfSg5xkZvyKDBwQbYNYJ4ADcsLqWv9vnoG6Q2NEZFAIdDVdis/fdXfEo+7WAxjHYa3KoFpmZQ2S2L4Ofd2ZSDGQvrKtCAUA4VJGxoPYsx6xjTuKvy62KE31ZXG+jTgw==
+ bh=Z7IwfmF6j7lQ5dhDs/7vSnzQXC+YLYmxazWjCC/ZqA4=;
+ b=gw39GLmvLD5g7Ql/pkZdfHo6CQ2itl/kkCD1vdubz5c+nD2tZ8L37+W4KkSxgAIdCpuC70kwXI8W1mW8MaHkA1fAdOhShgkc+u6kHOGyOl2E4+STdGJeK1Izn9XJwbIF04zc+tedkUz8pJlxEC/A4O3jKQ8L5vFaUF07ymf3qoJJLPEdZdrXU7lWf8uEK0bgkqyagIzOanZSyNHLInp76p2t1mJsf/fRyKR35kmdvat3/WUGiZyA+23WFlmQ8bKrmkeJ3V5meTx5T1/hpeE+O73n0zbJNSr3pxi20xyP+2SD3NbJsWCc7A/emgddKDyDBrxnk5KPZPoQQRrsC4dfXQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QVMTkYEAox+dDIbBbUL9XGo8YCMwRLxKN+fL96RQ+P0=;
- b=E2VgXbj1NAFz48uwS/SsBRy45pL2cARft6aDgjuJy8sPgeKQXO7BFxbd000dDjDJuKngPR7iR2elk/z4b7lKpdkMrzEScpkTJ84fy8d20tvPalzv4sRHP83MLrZUtWk1x6Inp96BaxBzK9ljDi7kVOt4q1R1riubJEyrv4kdRlM=
-Received: from DM3PR12CA0047.namprd12.prod.outlook.com (2603:10b6:0:56::15) by
- BN9PR12MB5383.namprd12.prod.outlook.com (2603:10b6:408:104::7) with Microsoft
+ bh=Z7IwfmF6j7lQ5dhDs/7vSnzQXC+YLYmxazWjCC/ZqA4=;
+ b=h9BKUpYuZQnG2Y2m+yO7kQjqCnhztb/YOuFkZVDkf7ZaiWdWXt5o81ybyClj562SYpVY2p+I8pCX/7RjCeVQ6BJzpZ938u5jC/Unzq1DRo1t0cgPNMTCTzIcSXp0AWU1+99XgmyR5Y4hOKRW7+5bJulDIfhpOcgQpRfNBUItWhc=
+Received: from MWHPR10CA0017.namprd10.prod.outlook.com (2603:10b6:301::27) by
+ BN8PR12MB3555.namprd12.prod.outlook.com (2603:10b6:408:48::28) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4778.17; Thu, 16 Dec 2021 17:15:55 +0000
-Received: from DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:56:cafe::4f) by DM3PR12CA0047.outlook.office365.com
- (2603:10b6:0:56::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16 via Frontend
- Transport; Thu, 16 Dec 2021 17:15:55 +0000
+ 15.20.4778.17; Thu, 16 Dec 2021 17:16:17 +0000
+Received: from CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:301:0:cafe::fd) by MWHPR10CA0017.outlook.office365.com
+ (2603:10b6:301::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14 via Frontend
+ Transport; Thu, 16 Dec 2021 17:16:17 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -43,13 +43,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT048.mail.protection.outlook.com (10.13.173.114) with Microsoft SMTP
+ CO1NAM11FT053.mail.protection.outlook.com (10.13.175.63) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:15:55 +0000
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:16:16 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
- 2021 11:15:54 -0600
+ 2021 11:16:15 -0600
 From:   Michael Roth <michael.roth@amd.com>
 To:     <linux-kselftest@vger.kernel.org>
 CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -73,9 +73,9 @@ CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Peter Gonda <pgonda@google.com>
-Subject: [PATCH v2 12/13] KVM: selftests: add library for handling SEV-ES-related exits
-Date:   Thu, 16 Dec 2021 11:13:57 -0600
-Message-ID: <20211216171358.61140-13-michael.roth@amd.com>
+Subject: [PATCH v2 13/13] KVM: selftests: add SEV-ES boot tests
+Date:   Thu, 16 Dec 2021 11:13:58 -0600
+Message-ID: <20211216171358.61140-14-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211216171358.61140-1-michael.roth@amd.com>
 References: <20211216171358.61140-1-michael.roth@amd.com>
@@ -87,403 +87,139 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14f8176a-387b-4740-8866-08d9c0b7b84d
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5383:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB5383024668EC9BFD4609378895779@BN9PR12MB5383.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Office365-Filtering-Correlation-Id: 30dd5f56-8945-4d35-2419-08d9c0b7c548
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3555:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB355580D845CBDBAB4C4985DF95779@BN8PR12MB3555.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dclHwDGxTZVeNx52NQ+OV+M4onP1hyLsRPV19r6ctPd1newv4NwVGe3Z+KgL5J+HS5rQ9Y12z/kB2mN8W7oQ6/stOXvCYXXAPGOY/sfWxGZ+fUf844ep3ayrFeZcMcAS1DhYfpC1MyhIgmmXDHlSXvBCRo/Q/4mJ6PpAn42IgkVrdFxssO0XIidG3oVpYCWIqJnJP9n9wLdpqfHhqpt9/E5/0b3n3ACMpCpEO2ZvQw+EH0l+CytcPKjVkAyrTUYn8FGomwWaRAs6z0flTomvUJTnLt2ruNdMAiPA34qDN+Km7zELpV6ruXTQ/HnOxSw5LvEw1XjIBBIMbOZ0NI5wYUmhrnj6hpQt/jzFzEmhKNHjX5W3T8baoW4FWyX6lNo1IP9jZYOYAmGL3dYIx+TtOLM9cvattnwsM07CBEcSIB216L1PLTQJJY6ob1m7LQL8LBE5q49kZIBlwc3XQuBgEP6+VRT1UGByzE0uOQt0sVAadmrgYXmv5hbCkvoHdGHxLaeMqrf3nSilrxkA780t5rOs5CFt00Spr7hXdG0DUzidPWb12F1nm4izryxX4IPghmgjorgoca3HtoEhwhzRXKaYDMzj2CximmxhIKRaUs4FosOwJpzEMnqu+g7Y/dFIiI2foH1GRubArQ6/B4Lcx8nIb9mX650bXsZSGRQ2EYphSQgDLGlzU2GP04YPRALynx/9CHFRWs+ybRA8Af2xXtaGpryICctzaXJLkWYE/jXzO9yrhSWuwvXBfjp/aib2aNkIMxHnti+et3Dx9tEo1ov7wokoBRGbrhIcswVEmG0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(5660300002)(26005)(81166007)(356005)(83380400001)(44832011)(426003)(86362001)(70586007)(4326008)(82310400004)(2616005)(336012)(40460700001)(70206006)(508600001)(186003)(36860700001)(7416002)(6916009)(47076005)(36756003)(1076003)(30864003)(316002)(8676002)(8936002)(2906002)(54906003)(16526019)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nBHPrwZ0a85m+nRpLntjWt3ab3GjharpkPmv2m0eoMzi72MDNYKFsxEyYxZPyWhQBBHs82nn/69PRFpbosAUkz/1GDC7eLOK7Lwr/FoF3gyVqGmOLAyly7SXKkZdCPzZH/At3nnWzHkQ9DnabO39GHq4SxCmNguTyMXI1SbhbGfNhS8aftnyKCUSzjcieTqBDTrqCj6Lm6pTn0ZFe6Z0LudAL+USKrX1pAmZq24rFmMn27sGuHzPNNsg0Lv50YYtg8MtEVEJ9PF9uGNF0ZaHEXwfzqcTpxQbGQo2A8o76mOEN+X43w/SK9qUZBDl9ti75cDfjiKTTWhMZZjgIISB2Ki8NJ8rwYdtAx+1AZ32yaHwOmVvDYn9PKHJJbqLjEkjuT2dFqKPfm6GBOwtjiBv8KJTjPN2iVbv7kQkIU97ReDYp4QstPkkePe1Efnl1KZOuSJ/f7OQtgV/n9fxVer6UknQLUH02X9e6MXqD0E4tnyazHUYC/vzHO/ZtbLopF1RAQx4jypVUILFJy7hixZQLe99la1MhDo9XM7tgUq14zILaya4Kw7wcLO0cowZaDTD1eqO9n9vHMFBrRe6RclJl1/anyR3cgRKGVhWHaj53XYO827fO6/BfZW3TULYN4m4RYsPMWBQy1SINzp1yGV8usc/vHoQTQ3HcdBkR4ew3VYU9G4nFH+j4K3HfuS//OmfJT4YnAhCV+lM7cx+2t5sZg106xhCy0NzfrafoHe+nqzhuFTwtyceyowrlMI8tAcgy3D7p22558m5DXbj+mVg+FPhxBu4zYtUF1cgvhjpevk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(54906003)(36756003)(2906002)(83380400001)(356005)(36860700001)(70586007)(336012)(7416002)(1076003)(86362001)(4326008)(2616005)(6666004)(70206006)(6916009)(316002)(82310400004)(8936002)(81166007)(44832011)(5660300002)(426003)(16526019)(40460700001)(26005)(508600001)(186003)(8676002)(47076005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:15:55.2491
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:16:16.9461
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14f8176a-387b-4740-8866-08d9c0b7b84d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30dd5f56-8945-4d35-2419-08d9c0b7c548
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5383
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3555
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add (or copy from kernel) routines related to handling #VC exceptions
-(only for cpuid currently) or issuing vmgexits. These will be used
-mostly by guest code.
-
-Some of this copied code, like DEFINE_GHCB_ACCESSORS, generate
-GCC/clang warnings due to -Waddress-of-packed-member, so compile with
--Wno-address-of-packed-member like the kernel does.
+Extend the existing SEV boot tests to also cover SEV-ES guests. Also
+add some tests for handling #VC exceptions for cpuid instructions using
+both MSR-based and GHCB-based vmgexits.
 
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- tools/testing/selftests/kvm/Makefile          |   4 +-
- .../kvm/include/x86_64/sev_exitlib.h          |  14 +
- .../selftests/kvm/include/x86_64/svm.h        |  35 +++
- .../selftests/kvm/include/x86_64/svm_util.h   |   1 +
- .../selftests/kvm/lib/x86_64/sev_exitlib.c    | 249 ++++++++++++++++++
- 5 files changed, 301 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
+ .../selftests/kvm/x86_64/sev_all_boot_test.c  | 63 ++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 6f250e190fde..56f845523a03 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -40,7 +40,7 @@ SEV_PATH=/dev/sev
- 
- LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/rbtree.c lib/sparsebit.c lib/test_util.c lib/guest_modes.c lib/perf_test_util.c lib/ucall_common.c
- LIBKVM_x86_64 = lib/x86_64/apic.c lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S
--LIBKVM_x86_64 += lib/x86_64/sev.c
-+LIBKVM_x86_64 += lib/x86_64/sev.c lib/x86_64/sev_exitlib.c
- LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c lib/aarch64/handlers.S lib/aarch64/spinlock.c lib/aarch64/gic.c lib/aarch64/gic_v3.c lib/aarch64/vgic.c
- LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
- 
-@@ -142,7 +142,7 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
- 	-I$(<D) -Iinclude/$(UNAME_M) -I.. \
--	-DSEV_DEV_PATH=\"$(SEV_PATH)\"
-+	-DSEV_DEV_PATH=\"$(SEV_PATH)\" -Wno-address-of-packed-member
- 
- no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
-         $(CC) -Werror -no-pie -x c - -o "$$TMP", -no-pie)
-diff --git a/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h b/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
-new file mode 100644
-index 000000000000..4b67b4004dfa
---- /dev/null
-+++ b/tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * VC/vmgexit/GHCB-related helpers for SEV-ES/SEV-SNP guests.
-+ *
-+ * Copyright (C) 2021 Advanced Micro Devices
-+ */
-+
-+#ifndef SELFTEST_KVM_SEV_EXITLIB_H
-+#define SELFTEST_KVM_SEV_EXITLIB_H
-+
-+int sev_es_handle_vc(void *ghcb, u64 ghcb_gpa, struct ex_regs *regs);
-+void sev_es_terminate(int reason);
-+
-+#endif /* SELFTEST_KVM_SEV_EXITLIB_H */
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm.h b/tools/testing/selftests/kvm/include/x86_64/svm.h
-index f4ea2355dbc2..d633caea4b7d 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm.h
-@@ -204,6 +204,41 @@ struct __attribute__ ((__packed__)) vmcb_save_area {
- 	u64 br_to;
- 	u64 last_excp_from;
- 	u64 last_excp_to;
-+
-+	/*
-+	 * The following part of the save area is valid only for
-+	 * SEV-ES guests when referenced through the GHCB or for
-+	 * saving to the host save area.
-+	 */
-+	u8 reserved_7[80];
-+	u32 pkru;
-+	u8 reserved_7a[20];
-+	u64 reserved_8;		/* rax already available at 0x01f8 */
-+	u64 rcx;
-+	u64 rdx;
-+	u64 rbx;
-+	u64 reserved_9;		/* rsp already available at 0x01d8 */
-+	u64 rbp;
-+	u64 rsi;
-+	u64 rdi;
-+	u64 r8;
-+	u64 r9;
-+	u64 r10;
-+	u64 r11;
-+	u64 r12;
-+	u64 r13;
-+	u64 r14;
-+	u64 r15;
-+	u8 reserved_10[16];
-+	u64 sw_exit_code;
-+	u64 sw_exit_info_1;
-+	u64 sw_exit_info_2;
-+	u64 sw_scratch;
-+	u64 sev_features;
-+	u8 reserved_11[48];
-+	u64 xcr0;
-+	u8 valid_bitmap[16];
-+	u64 x87_state_gpa;
- };
- 
- struct __attribute__ ((__packed__)) vmcb {
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm_util.h b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-index 587fbe408b99..29f586775c86 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-@@ -16,6 +16,7 @@
- #define CPUID_SVM_BIT		2
- #define CPUID_SVM		BIT_ULL(CPUID_SVM_BIT)
- 
-+#define SVM_EXIT_CPUID		0x072
- #define SVM_EXIT_VMMCALL	0x081
- 
- struct svm_test_data {
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c b/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
-new file mode 100644
-index 000000000000..b3f7b0297e5b
---- /dev/null
-+++ b/tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
-@@ -0,0 +1,249 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * GHCB/#VC/instruction helpers for use with SEV-ES/SEV-SNP guests.
-+ *
-+ * Partially copied from arch/x86/kernel/sev*.c
-+ *
-+ * Copyright (C) 2021 Advanced Micro Devices
-+ */
-+
-+#include <linux/bitops.h>
-+#include <kvm_util.h>			/* needed by kvm_util_internal.h */
-+#include "../kvm_util_internal.h"	/* needed by processor.h */
-+#include "processor.h"			/* for struct ex_regs */
-+#include "svm_util.h"			/* for additional SVM_EXIT_* definitions */
-+#include "svm.h"			/* for VMCB/VMSA layout */
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+index 329a740a7cb2..63c26bf4ecb6 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+@@ -18,6 +18,7 @@
+ #include "svm_util.h"
+ #include "linux/psp-sev.h"
+ #include "sev.h"
 +#include "sev_exitlib.h"
+ 
+ #define VCPU_ID			2
+ #define PAGE_SIZE		4096
+@@ -31,6 +32,10 @@
+ 
+ #define TOTAL_PAGES		(512 + SHARED_PAGES + PRIVATE_PAGES)
+ 
++/* Globals for use by #VC handler. */
++static void *ghcb0_gva;
++static vm_paddr_t ghcb0_gpa;
 +
-+#define PAGE_SHIFT 12
+ static void fill_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
+ {
+ 	int i, j;
+@@ -165,6 +170,47 @@ guest_sev_code(struct ucall *uc, uint8_t *shared_buf, uint8_t *private_buf)
+ 	guest_test_done(uc);
+ }
+ 
++static void vc_handler(struct ex_regs *regs)
++{
++	sev_es_handle_vc(ghcb0_gva, ghcb0_gpa, regs);
++}
 +
-+#define MSR_SEV_ES_GHCB 0xc0010130
++static void __attribute__((__flatten__))
++guest_sev_es_code(struct ucall *uc, uint8_t *shared_buf,
++		  uint8_t *private_buf, uint64_t ghcb_gpa, void *ghcb_gva)
++{
++	uint32_t eax, ebx, ecx, edx;
++	uint64_t sev_status;
 +
-+#define VMGEXIT() { asm volatile("rep; vmmcall\n\r"); }
++	guest_test_start(uc);
 +
-+#define GHCB_PROTOCOL_MAX	1
-+#define GHCB_DEFAULT_USAGE	0
++again:
++	/* Check CPUID values via GHCB MSR protocol. */
++	eax = 0x8000001f;
++	ecx = 0;
++	cpuid(&eax, &ebx, &ecx, &edx);
 +
-+/* Guest-requested termination codes */
-+#define GHCB_TERMINATE 0x100UL
-+#define GHCB_TERMINATE_REASON(reason_set, reason_val)	\
-+	(((((u64)reason_set) &  0x7) << 12) |			\
-+	 ((((u64)reason_val) & 0xff) << 16))
++	/* Check SEV bit. */
++	GUEST_SHARED_ASSERT(uc, eax & (1 << 1));
++	/* Check SEV-ES bit. */
++	GUEST_SHARED_ASSERT(uc, eax & (1 << 3));
 +
-+#define GHCB_TERMINATE_REASON_UNSPEC 0
-+
-+/* GHCB MSR protocol for CPUID */
-+#define GHCB_CPUID_REQ_EAX 0
-+#define GHCB_CPUID_REQ_EBX 1
-+#define GHCB_CPUID_REQ_ECX 2
-+#define GHCB_CPUID_REQ_EDX 3
-+#define GHCB_CPUID_REQ_CODE 0x4UL
-+#define GHCB_CPUID_REQ(fn, reg) \
-+	(GHCB_CPUID_REQ_CODE | (((uint64_t)reg & 3) << 30) | (((uint64_t)fn) << 32))
-+#define GHCB_CPUID_RESP_CODE 0x5UL
-+#define GHCB_CPUID_RESP(resp) ((resp) & 0xfff)
-+
-+/* GHCB MSR protocol for GHCB registration */
-+#define GHCB_REG_GPA_REQ_CODE 0x12UL
-+#define GHCB_REG_GPA_REQ(gfn) \
-+	(((unsigned long)((gfn) & GENMASK_ULL(51, 0)) << 12) | GHCB_REG_GPA_REQ_CODE)
-+#define GHCB_REG_GPA_RESP_CODE 0x13UL
-+#define GHCB_REG_GPA_RESP(resp) ((resp) & GENMASK_ULL(11, 0))
-+#define GHCB_REG_GPA_RESP_VAL(resp) ((resp) >> 12)
-+
-+/* GHCB format/accessors */
-+
-+struct ghcb {
-+	struct vmcb_save_area save;
-+	u8 reserved_save[2048 - sizeof(struct vmcb_save_area)];
-+	u8 shared_buffer[2032];
-+	u8 reserved_1[10];
-+	u16 protocol_version;
-+	u32 ghcb_usage;
-+};
-+
-+#define GHCB_BITMAP_IDX(field)							\
-+	(offsetof(struct vmcb_save_area, field) / sizeof(u64))
-+
-+#define DEFINE_GHCB_ACCESSORS(field)						\
-+	static inline bool ghcb_##field##_is_valid(const struct ghcb *ghcb)	\
-+	{									\
-+		return test_bit(GHCB_BITMAP_IDX(field),				\
-+				(unsigned long *)&ghcb->save.valid_bitmap);	\
-+	}									\
-+										\
-+	static inline u64 ghcb_get_##field(struct ghcb *ghcb)			\
-+	{									\
-+		return ghcb->save.field;					\
-+	}									\
-+										\
-+	static inline u64 ghcb_get_##field##_if_valid(struct ghcb *ghcb)	\
-+	{									\
-+		return ghcb_##field##_is_valid(ghcb) ? ghcb->save.field : 0;	\
-+	}									\
-+										\
-+	static inline void ghcb_set_##field(struct ghcb *ghcb, u64 value)	\
-+	{									\
-+		__set_bit(GHCB_BITMAP_IDX(field),				\
-+			  (unsigned long *)&ghcb->save.valid_bitmap);		\
-+		ghcb->save.field = value;					\
++	if (!ghcb0_gva) {
++		ghcb0_gva = ghcb_gva;
++		ghcb0_gpa = ghcb_gpa;
++		/* Check CPUID bits again using GHCB-based protocol. */
++		goto again;
 +	}
 +
-+DEFINE_GHCB_ACCESSORS(cpl)
-+DEFINE_GHCB_ACCESSORS(rip)
-+DEFINE_GHCB_ACCESSORS(rsp)
-+DEFINE_GHCB_ACCESSORS(rax)
-+DEFINE_GHCB_ACCESSORS(rcx)
-+DEFINE_GHCB_ACCESSORS(rdx)
-+DEFINE_GHCB_ACCESSORS(rbx)
-+DEFINE_GHCB_ACCESSORS(rbp)
-+DEFINE_GHCB_ACCESSORS(rsi)
-+DEFINE_GHCB_ACCESSORS(rdi)
-+DEFINE_GHCB_ACCESSORS(r8)
-+DEFINE_GHCB_ACCESSORS(r9)
-+DEFINE_GHCB_ACCESSORS(r10)
-+DEFINE_GHCB_ACCESSORS(r11)
-+DEFINE_GHCB_ACCESSORS(r12)
-+DEFINE_GHCB_ACCESSORS(r13)
-+DEFINE_GHCB_ACCESSORS(r14)
-+DEFINE_GHCB_ACCESSORS(r15)
-+DEFINE_GHCB_ACCESSORS(sw_exit_code)
-+DEFINE_GHCB_ACCESSORS(sw_exit_info_1)
-+DEFINE_GHCB_ACCESSORS(sw_exit_info_2)
-+DEFINE_GHCB_ACCESSORS(sw_scratch)
-+DEFINE_GHCB_ACCESSORS(xcr0)
++	/* Check SEV and SEV-ES enabled bits (bits 0 and 1, respectively). */
++	sev_status = rdmsr(MSR_AMD64_SEV);
++	GUEST_SHARED_ASSERT(uc, (sev_status & 0x3) == 3);
 +
-+static uint64_t sev_es_rdmsr_ghcb(void)
-+{
-+	uint64_t lo, hi;
++	guest_test_common(uc, shared_buf, private_buf);
 +
-+	asm volatile("rdmsr"
-+		     : "=a" (lo), "=d" (hi)
-+		     : "c" (MSR_SEV_ES_GHCB));
-+
-+	return ((hi << 32) | lo);
++	guest_test_done(uc);
 +}
 +
-+static void sev_es_wrmsr_ghcb(uint64_t val)
-+{
-+	uint64_t lo, hi;
+ static struct sev_vm *
+ setup_test_common(void *guest_code, uint64_t policy, struct ucall **uc,
+ 		  uint8_t **shared_buf, uint8_t **private_buf)
+@@ -200,7 +246,18 @@ setup_test_common(void *guest_code, uint64_t policy, struct ucall **uc,
+ 	fill_buf(*private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
+ 
+ 	/* Set up guest params. */
+-	vcpu_args_set(vm, VCPU_ID, 4, uc_vaddr, shared_vaddr, private_vaddr);
++	if (policy & SEV_POLICY_ES) {
++		vm_vaddr_t ghcb_vaddr = vm_vaddr_alloc_shared(vm, PAGE_SIZE, PAGE_SIZE);
 +
-+	lo = val & 0xFFFFFFFF;
-+	hi = val >> 32;
++		vcpu_args_set(vm, VCPU_ID, 6, uc_vaddr, shared_vaddr, private_vaddr,
++			      addr_gva2gpa(vm, ghcb_vaddr), ghcb_vaddr);
++		/* Set up VC handler. */
++		vm_init_descriptor_tables(vm);
++		vm_install_exception_handler(vm, 29, vc_handler);
++		vcpu_init_descriptor_tables(vm, VCPU_ID);
++	} else {
++		vcpu_args_set(vm, VCPU_ID, 4, uc_vaddr, shared_vaddr, private_vaddr);
++	}
+ 
+ 	/*
+ 	 * Hand these back to test harness, translation is needed now since page
+@@ -251,5 +308,9 @@ int main(int argc, char *argv[])
+ 	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
+ 	test_sev(guest_sev_code, 0);
+ 
++	/* SEV-ES tests */
++	test_sev(guest_sev_es_code, SEV_POLICY_ES | SEV_POLICY_NO_DBG);
++	test_sev(guest_sev_es_code, SEV_POLICY_ES);
 +
-+	asm volatile("wrmsr"
-+		     :: "c" (MSR_SEV_ES_GHCB), "a" (lo), "d" (hi)
-+		     : "memory");
-+}
-+
-+void sev_es_terminate(int reason)
-+{
-+	uint64_t val = GHCB_TERMINATE;
-+
-+	val |= GHCB_TERMINATE_REASON(2, reason);
-+
-+	sev_es_wrmsr_ghcb(val);
-+	VMGEXIT();
-+
-+	while (true)
-+		asm volatile("hlt" : : : "memory");
-+}
-+
-+static int sev_es_ghcb_hv_call(struct ghcb *ghcb, u64 ghcb_gpa, u64 exit_code)
-+{
-+	ghcb->protocol_version = GHCB_PROTOCOL_MAX;
-+	ghcb->ghcb_usage = GHCB_DEFAULT_USAGE;
-+
-+	ghcb_set_sw_exit_code(ghcb, exit_code);
-+	ghcb_set_sw_exit_info_1(ghcb, 0);
-+	ghcb_set_sw_exit_info_2(ghcb, 0);
-+
-+	sev_es_wrmsr_ghcb(ghcb_gpa);
-+
-+	VMGEXIT();
-+
-+	/* Only #VC exceptions are currently handled. */
-+	if ((ghcb->save.sw_exit_info_1 & 0xffffffff) == 1)
-+		sev_es_terminate(GHCB_TERMINATE_REASON_UNSPEC);
-+
-+	return 0;
-+}
-+
-+static int handle_vc_cpuid(struct ghcb *ghcb, u64 ghcb_gpa, struct ex_regs *regs)
-+{
-+	int ret;
-+
-+	ghcb_set_rax(ghcb, regs->rax);
-+	ghcb_set_rcx(ghcb, regs->rcx);
-+
-+	/* ignore additional XSAVE states for now */
-+	ghcb_set_xcr0(ghcb, 1);
-+
-+	ret = sev_es_ghcb_hv_call(ghcb, ghcb_gpa, SVM_EXIT_CPUID);
-+	if (ret)
-+		return ret;
-+
-+	if (!(ghcb_rax_is_valid(ghcb) &&
-+	      ghcb_rbx_is_valid(ghcb) &&
-+	      ghcb_rcx_is_valid(ghcb) &&
-+	      ghcb_rdx_is_valid(ghcb)))
-+		return 1;
-+
-+	regs->rax = ghcb->save.rax;
-+	regs->rbx = ghcb->save.rbx;
-+	regs->rcx = ghcb->save.rcx;
-+	regs->rdx = ghcb->save.rdx;
-+
-+	regs->rip += 2;
-+
-+	return 0;
-+}
-+
-+static int handle_msr_vc_cpuid(struct ex_regs *regs)
-+{
-+	uint32_t fn = regs->rax & 0xFFFFFFFF;
-+	uint64_t resp;
-+
-+	sev_es_wrmsr_ghcb(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_EAX));
-+	VMGEXIT();
-+	resp = sev_es_rdmsr_ghcb();
-+	if (GHCB_CPUID_RESP(resp) != GHCB_CPUID_RESP_CODE)
-+		return 1;
-+	regs->rax = resp >> 32;
-+
-+	sev_es_wrmsr_ghcb(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_EBX));
-+	VMGEXIT();
-+	resp = sev_es_rdmsr_ghcb();
-+	if (GHCB_CPUID_RESP(resp) != GHCB_CPUID_RESP_CODE)
-+		return 1;
-+	regs->rbx = resp >> 32;
-+
-+	sev_es_wrmsr_ghcb(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_ECX));
-+	VMGEXIT();
-+	resp = sev_es_rdmsr_ghcb();
-+	if (GHCB_CPUID_RESP(resp) != GHCB_CPUID_RESP_CODE)
-+		return 1;
-+	regs->rcx = resp >> 32;
-+
-+	sev_es_wrmsr_ghcb(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_EDX));
-+	VMGEXIT();
-+	resp = sev_es_rdmsr_ghcb();
-+	if (GHCB_CPUID_RESP(resp) != GHCB_CPUID_RESP_CODE)
-+		return 1;
-+	regs->rdx = resp >> 32;
-+
-+	regs->rip += 2;
-+
-+	return 0;
-+}
-+
-+int sev_es_handle_vc(void *ghcb, u64 ghcb_gpa, struct ex_regs *regs)
-+{
-+	if (regs->error_code != SVM_EXIT_CPUID)
-+		return 1;
-+
-+	if (!ghcb)
-+		return handle_msr_vc_cpuid(regs);
-+
-+	return handle_vc_cpuid(ghcb, ghcb_gpa, regs);
-+}
+ 	return 0;
+ }
 -- 
 2.25.1
 
