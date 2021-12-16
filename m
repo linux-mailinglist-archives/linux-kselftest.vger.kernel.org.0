@@ -2,41 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBE8477A6C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 18:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6229C477A2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Dec 2021 18:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240189AbhLPRTT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Dec 2021 12:19:19 -0500
-Received: from mail-bn7nam10on2057.outbound.protection.outlook.com ([40.107.92.57]:61504
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S235874AbhLPROe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Dec 2021 12:14:34 -0500
+Received: from mail-sn1anam02on2062.outbound.protection.outlook.com ([40.107.96.62]:11649
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240193AbhLPRTK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:19:10 -0500
+        id S235503AbhLPROc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:14:32 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O+Qrho3d1C2vTNHi4L7J30vAK2NjchWqnlNYbIiDmZ0PpoIq/ygxAxhsnV/TftrUWVFAvsZYPZ8BIcG/e8MVsJfPa9QSqRjHOqvTQDaDM4rOnIpyDLJRjb/3sk8s1I80JUfVMccXwHFlraN0xQn88kLky3jjOwDfg/nfmfZIhUPjDcFteFn5QnSH4C9QptwXRAYowUAMzODtJidq3RB94jzPgfcGkIG+8dwemSKe3ukdI6FT8ALiULqZ3qZ9Bd0cRdVczzRBF8Y8r5h0wddXgua+nMxWOT6agKjK15fnl6qnB2xdR7k+3n5l8BLMg9IFzcy3Fl+jJ2xwjfMF/SSVuw==
+ b=BxYnu5v+TUo9N+9ZMkqh4ugm4kWMv66TkrUmxudUHWM8dJFNCg9ZLBVumRLvLy0O+EY8CAnoMS1jOQLNwtC+cxkxIBiEo1OKesjoupjgyVNX1eVc0bGE+XmrQkldOVrFBGGSkjkJgheffXLF51hh7SlAnPHKenjEc3F/KH02gGg/xPnPAv3vAy5gXHxbYBfju2yactjQQiL/pZqI/d5Uf0HxjroNJdSBWQIx/V+VNYN0LE4fpkihorLzi2tfpJuXjgfX4yhkATWWgVtOvbvIco2MJT5Euf2gSWjVtuKQhgMltx2R+Dp8R382M7iU6IRAO/kj6zBzBkxu0Ak4hM1/Rw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qKcUBU4zbAu0FvRRdq6cBfs8I35aNIMc2lVXVRAXHwY=;
- b=Ofq878hPFgs06DFrUvEMCTL86DDqOPb4hjDo9H++FvF8HmifAC6eNJNMfJPhywH5XcNczeMTbhhxcRr5d2jZNaZ4vIegfOoaRuyRr/32gM4p2iJperZH/lTY8dktLbCTM8BwJ8DTwdUVaGI7VxyTVaXlRW8E3rRUkEaeluJuYnpFmf/lg46ph3q0FAVdgIpWQ6WvdkZVciR1vWwHTJZzb+4meQl/+YbN9nxh67shExRKNicghWbU6YRSZh6O62/yPIb74Mg0XbSi3FGD2cmIyzhzjezpZm3TzZH+WxutKUJacL4vIex8/tsnslrgMHBKae+X2q+679/1NzZVWGs9hA==
+ bh=qN113x5UlCSYnOdhMTV0BYu1NhwIpLHyGzI3j+MAErA=;
+ b=F+HuKD9LSrWKfKD+hr7MHU5/hGNsgm5zvHUIvnl2tFkcsqYbW8CrZDX8/hKwBUVp2Z4T/lZ0T5GI/1PPt8CzHV172MmlZ/sYJPNY6K/zYcdhoTdKeco/KuVe7XeeFnFPHjgs8XofHqzq9rhLwVsMvUfkoD5+vMcVTnKPANtCpu5LQ+itlrDIL/Q/NO3QbtjbSpadMbav4Mbt/iTQkzPCqP87v+LypxQBkXg30DdZ9f1gYE2uq9aeaw0W9SAfRb8ykbShrk7ovcVy8Nizie1g0FXhahP6Y7bALICGGhqJsPSY2ON5BI99VXegWUlrg5IDo22kmHHWLDMvFxyEq5oP+Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qKcUBU4zbAu0FvRRdq6cBfs8I35aNIMc2lVXVRAXHwY=;
- b=2oeUOdlkOjO2fPKo5npUWSoBoH5LKTmn0dlThSqJYSMIZ+LvQhbP8ozLqt8iS7YkJXcSpdj46kYF2IYMNZ4An6MzdE/YkoPJSnF2y94zDpxbLtbPMuaukYumPXUwuKFD/9KrcgE7Qn9MMsE1KwKVfVViMxSevtUJSODX4WQJHeU=
-Received: from MWHPR17CA0051.namprd17.prod.outlook.com (2603:10b6:300:93::13)
- by MWHPR1201MB0144.namprd12.prod.outlook.com (2603:10b6:301:5a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Thu, 16 Dec
- 2021 17:19:07 +0000
-Received: from CO1NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:93:cafe::d2) by MWHPR17CA0051.outlook.office365.com
- (2603:10b6:300:93::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.16 via Frontend
- Transport; Thu, 16 Dec 2021 17:19:07 +0000
+ bh=qN113x5UlCSYnOdhMTV0BYu1NhwIpLHyGzI3j+MAErA=;
+ b=Ks9fhENm5ADLlKGy8iaq9bcWSIczpyo7fZc7FqsolpfwpLDOci0ecn/u0+rKo1KYC3lSQYX2pHQ8R57z/n0uHEowxnsyHkPAHoX2YHXY1IePDjR1ksOzfrKk9gtdkZ7IutzoWpF9fb0I1P2BaekThaikCbTCScOTIpK/T2cyz8A=
+Received: from DM5PR20CA0015.namprd20.prod.outlook.com (2603:10b6:3:93::25) by
+ CH2PR12MB3813.namprd12.prod.outlook.com (2603:10b6:610:2c::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.17; Thu, 16 Dec 2021 17:14:29 +0000
+Received: from DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:93:cafe::d5) by DM5PR20CA0015.outlook.office365.com
+ (2603:10b6:3:93::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.15 via Frontend
+ Transport; Thu, 16 Dec 2021 17:14:29 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -44,13 +43,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT004.mail.protection.outlook.com (10.13.175.89) with Microsoft SMTP
+ DM6NAM11FT031.mail.protection.outlook.com (10.13.172.203) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.16 via Frontend Transport; Thu, 16 Dec 2021 17:19:07 +0000
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:14:29 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
- 2021 11:19:05 -0600
+ 2021 11:14:28 -0600
 From:   Michael Roth <michael.roth@amd.com>
 To:     <linux-kselftest@vger.kernel.org>
 CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -74,9 +73,9 @@ CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Peter Gonda <pgonda@google.com>
-Subject: [PATCH v2 08/13] KVM: selftests: add SEV boot tests
-Date:   Thu, 16 Dec 2021 11:13:53 -0600
-Message-ID: <20211216171358.61140-9-michael.roth@amd.com>
+Subject: [PATCH v2 09/13] KVM: SVM: include CR3 in initial VMSA state for SEV-ES guests
+Date:   Thu, 16 Dec 2021 11:13:54 -0600
+Message-ID: <20211216171358.61140-10-michael.roth@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211216171358.61140-1-michael.roth@amd.com>
 References: <20211216171358.61140-1-michael.roth@amd.com>
@@ -88,329 +87,150 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
  (10.181.40.144)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: edeac225-2507-4158-eb5f-08d9c0b82abb
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0144:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB0144A38A13063E3161D24C8495779@MWHPR1201MB0144.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Office365-Filtering-Correlation-Id: 9d040d2e-840d-4752-12c7-08d9c0b7853b
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3813:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3813DA729C6FA19C80B2737595779@CH2PR12MB3813.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YsMJrNdXAj+GG4V6casFtPULtHQvd2JVy+lRnlHCLIM+vWGrlFdl/Q7b3fF9g/yTGsuodScif7pkwNzGXJXL7+OzKl5cv+61ICVY666H8/VA3aJzQgr+WvFltB39USGCM741unxRXq2TwGmZNlwkx5JDVMXITKqF+DTSWDeZUIcjzwu841aC0FzqRqz+b4+Z/UIaxpBByUc9d68vObeg5JbbTVulrk7QRN5LbWsfKDrSRZla8NM0klpI78ayqI6bs7BaFNl+V3taAtMPoF0a/rGAYUx6Bp1dgvGEBxyhepH+ZAiEufMIA0BkeUmIIqV3LIYFzyqFFjQRGm4R0g2qdJNey/vfF+WOJrz+MX7j7gvzsX6fUgr+FrbdLJPVG250GAT94RWovwx/U2KsOxy0BQGcnOoOWWhfFRtLi9amFwYHr6B4bV5PNm4NpyLCtEsyuGmcGnwHxMMTJEtiQ84AJbmULmawfEgHTbUYx1VwIKlryyAL4xrHBypUPKsDSTrIlAskQ8g7eg1ezTDau7a7TzKcdWxnhso0p+mnjUqYOYB98GNPt/oNsmwcxNg0HiPkVS4msTk3wZovnQ6Y97wiq5OjBpkRKRWq1EK7io5Dw2g6U6ZBzZCLT6VuTjf1vyHy/WgjAO/lOg3WvT3qNtk0Hnt3D/tMaZ9GR+fn4+w4FwpAja/R87JlTefUFhyiESGQamdHe8fg+jAFbyRm5NdbOql/9NiQA3wuVnWFiRWePRiHAKsi3wo2juxBDxnl70qgHhGuIT4a0GOHULgPLok4x0BdXePQiH2pQRPE8cerklQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(7416002)(81166007)(6916009)(70206006)(70586007)(8936002)(8676002)(356005)(5660300002)(47076005)(1076003)(83380400001)(426003)(316002)(2906002)(4326008)(86362001)(36860700001)(2616005)(82310400004)(336012)(40460700001)(186003)(54906003)(508600001)(16526019)(44832011)(36756003)(26005)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: TKkTYg9HzcnhxhPeLnXWwpAvLLiebeOX1TD6aXvfkO9Vpqzv6sR9RSncO4i6Q8+Ff9Y6I+Qhp4vNza1KjtBzjTIwsl+vXTgNKskcW6vWXO6f5+ERfEI43gw37asNkRX+z+J4fyukxejy5Zf5H8PsD3rPUmWTB8N8j2mE40ICSrZwJLRU0V5JI5PyqFNYfW6bAoAPmqQMn+s8cGHGJQghsO8TJQ3t5RgED/+EnoePYNjS+F7W1VLPcFFPRfd3BM5n/PoSUMMfrSs5ROsDlLA3oO3SoDuC6RtFwbzI7BHrBdSLT4KSce01O1YW+b0OWc4GXg8+SFVQZ7Gmrq3+oH5nko3qOApGRR46V0Uj8vqHtRxq+4e3KQfnXb4yz7kPJ1Uc/pX6HdKHs9/AHlL+PGDc1b7tkW0H9OwolaBnEeKHGD+9zHzL6VfK6xBemLI/+a1l9iP+1IMXsgEo27T6FbbDINDNvQj15u++/4j5YLGQIYzVJVm5mEdB+XWw3NevM1eNYWo8q2y9GTY6r73tMqFgMtWLaZo6Ad0pb0bXgfNym/hI9ecM7b9vsE9ad2hy9fojTtmm2UQVLz8IKkLTxPkIuRyh1lfnISVFei/M0PXVHmWh69WdGW/NpWNE9KxnvZ4pkCNwSJjSA6HrzD4oUhW6mEk9V8ZXmjY0dTDAVAiRPzS90jVYBP1rTcNyaz2b347S4QOx1yDb3VyXOfAy9fe5Nc/KjdMF+k6gFu3jffuLi9E3J7Uxq8yzv5iZ/1cUDpb0W/dx6NyGR1WFTcph5soLEWTwjpZms8AgCr7k60WnG7w=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(5660300002)(356005)(6916009)(426003)(336012)(82310400004)(83380400001)(40460700001)(8936002)(36860700001)(70206006)(6666004)(4326008)(81166007)(186003)(16526019)(508600001)(7416002)(8676002)(2616005)(47076005)(86362001)(2906002)(70586007)(26005)(1076003)(54906003)(44832011)(316002)(36756003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:19:07.1547
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:14:29.5643
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: edeac225-2507-4158-eb5f-08d9c0b82abb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d040d2e-840d-4752-12c7-08d9c0b7853b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0144
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3813
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A common aspect of booting SEV guests is checking related CPUID/MSR
-bits and accessing shared/private memory. Add a basic test to cover
-this.
+Normally guests will set up CR3 themselves, but some guests, such as
+kselftests, and potentially CONFIG_PVH guests, rely on being booted
+with paging enabled and CR3 initialized to a pre-allocated page table.
 
-This test will be expanded to cover basic boot of SEV-ES and SEV-SNP in
-subsequent patches.
+Currently CR3 updates via KVM_SET_SREGS* are not loaded into the guest
+VMCB until just prior to entering the guest. For SEV-ES/SEV-SNP, this
+is too late, since it will have switched over to using the VMSA page
+prior to that point, with the VMSA CR3 copied from the VMCB initial
+CR3 value: 0.
 
+Address this by sync'ing the CR3 value into the VMCB save area
+immediately when KVM_SET_SREGS* is issued so it will find it's way into
+the initial VMSA.
+
+Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/x86_64/sev_all_boot_test.c  | 255 ++++++++++++++++++
- 3 files changed, 257 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  1 +
+ arch/x86/kvm/svm/svm.c             | 19 +++++++++++++++++++
+ arch/x86/kvm/vmx/vmx.c             |  6 ++++++
+ arch/x86/kvm/x86.c                 |  1 +
+ 5 files changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 4a801cba9c62..cc73de938a2a 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -43,6 +43,7 @@
- /x86_64/xen_vmcall_test
- /x86_64/xss_msr_test
- /x86_64/vmx_pmu_msrs_test
-+/x86_64/sev_all_boot_test
- /access_tracking_perf_test
- /demand_paging_test
- /dirty_log_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index ccc382a827f1..6f250e190fde 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -81,6 +81,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_pi_mmio_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
-+TEST_GEN_PROGS_x86_64 += x86_64/sev_all_boot_test
- TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += dirty_log_perf_test
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-new file mode 100644
-index 000000000000..329a740a7cb2
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-@@ -0,0 +1,255 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Basic SEV boot tests.
-+ *
-+ * Copyright (C) 2021 Advanced Micro Devices
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "linux/psp-sev.h"
-+#include "sev.h"
-+
-+#define VCPU_ID			2
-+#define PAGE_SIZE		4096
-+#define PAGE_STRIDE		32
-+
-+#define SHARED_PAGES		8192
-+#define SHARED_VADDR_MIN	0x1000000
-+
-+#define PRIVATE_PAGES		2048
-+#define PRIVATE_VADDR_MIN	(SHARED_VADDR_MIN + SHARED_PAGES * PAGE_SIZE)
-+
-+#define TOTAL_PAGES		(512 + SHARED_PAGES + PRIVATE_PAGES)
-+
-+static void fill_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index cefe1d81e2e8..a3172bd59690 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -35,6 +35,7 @@ KVM_X86_OP(get_cpl)
+ KVM_X86_OP(set_segment)
+ KVM_X86_OP_NULL(get_cs_db_l_bits)
+ KVM_X86_OP(set_cr0)
++KVM_X86_OP(post_set_cr3)
+ KVM_X86_OP(is_valid_cr4)
+ KVM_X86_OP(set_cr4)
+ KVM_X86_OP(set_efer)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index d5fede05eb5f..22f384320ed1 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1342,6 +1342,7 @@ struct kvm_x86_ops {
+ 			    struct kvm_segment *var, int seg);
+ 	void (*get_cs_db_l_bits)(struct kvm_vcpu *vcpu, int *db, int *l);
+ 	void (*set_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
++	void (*post_set_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+ 	bool (*is_valid_cr4)(struct kvm_vcpu *vcpu, unsigned long cr0);
+ 	void (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+ 	int (*set_efer)(struct kvm_vcpu *vcpu, u64 efer);
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 208566f63bce..76e906d83a84 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1792,6 +1792,24 @@ static void svm_set_gdt(struct kvm_vcpu *vcpu, struct desc_ptr *dt)
+ 	vmcb_mark_dirty(svm->vmcb, VMCB_DT);
+ }
+ 
++static void svm_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
 +{
-+	int i, j;
-+
-+	for (i = 0; i < pages; i++)
-+		for (j = 0; j < PAGE_SIZE; j += stride)
-+			buf[i * PAGE_SIZE + j] = val;
-+}
-+
-+static bool check_buf(uint8_t *buf, size_t pages, size_t stride, uint8_t val)
-+{
-+	int i, j;
-+
-+	for (i = 0; i < pages; i++)
-+		for (j = 0; j < PAGE_SIZE; j += stride)
-+			if (buf[i * PAGE_SIZE + j] != val)
-+				return false;
-+
-+	return true;
-+}
-+
-+static void guest_test_start(struct ucall *uc)
-+{
-+	/* Initial guest check-in. */
-+	GUEST_SHARED_SYNC(uc, 1);
-+}
-+
-+static void test_start(struct kvm_vm *vm, struct ucall *uc)
-+{
-+	vcpu_run(vm, VCPU_ID);
-+
-+	/* Initial guest check-in. */
-+	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 1);
-+}
-+
-+static void
-+guest_test_common(struct ucall *uc, uint8_t *shared_buf, uint8_t *private_buf)
-+{
-+	bool success;
-+
-+	/* Initial check-in for common. */
-+	GUEST_SHARED_SYNC(uc, 100);
-+
-+	/* Ensure initial shared pages are intact. */
-+	success = check_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x41);
-+	GUEST_SHARED_ASSERT(uc, success);
-+
-+	/* Ensure initial private pages are intact/encrypted. */
-+	success = check_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
-+	GUEST_SHARED_ASSERT(uc, success);
-+
-+	/* Ensure host userspace can't read newly-written encrypted data. */
-+	fill_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x43);
-+
-+	GUEST_SHARED_SYNC(uc, 101);
-+
-+	/* Ensure guest can read newly-written shared data from host. */
-+	success = check_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x44);
-+	GUEST_SHARED_ASSERT(uc, success);
-+
-+	/* Ensure host can read newly-written shared data from guest. */
-+	fill_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x45);
-+
-+	GUEST_SHARED_SYNC(uc, 102);
-+}
-+
-+static void
-+test_common(struct kvm_vm *vm, struct ucall *uc,
-+		  uint8_t *shared_buf, uint8_t *private_buf)
-+{
-+	bool success;
-+
-+	/* Initial guest check-in. */
-+	vcpu_run(vm, VCPU_ID);
-+	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 100);
-+
-+	/* Ensure initial private pages are intact/encrypted. */
-+	success = check_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
-+	TEST_ASSERT(!success, "Initial guest memory not encrypted!");
-+
-+	vcpu_run(vm, VCPU_ID);
-+	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 101);
-+
-+	/* Ensure host userspace can't read newly-written encrypted data. */
-+	success = check_buf(private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x43);
-+	TEST_ASSERT(!success, "Modified guest memory not encrypted!");
-+
-+	/* Ensure guest can read newly-written shared data from host. */
-+	fill_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x44);
-+
-+	vcpu_run(vm, VCPU_ID);
-+	CHECK_SHARED_SYNC(vm, VCPU_ID, uc, 102);
-+
-+	/* Ensure host can read newly-written shared data from guest. */
-+	success = check_buf(shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x45);
-+	TEST_ASSERT(success, "Host can't read shared guest memory!");
-+}
-+
-+static void
-+guest_test_done(struct ucall *uc)
-+{
-+	GUEST_SHARED_DONE(uc);
-+}
-+
-+static void
-+test_done(struct kvm_vm *vm, struct ucall *uc)
-+{
-+	vcpu_run(vm, VCPU_ID);
-+	CHECK_SHARED_DONE(vm, VCPU_ID, uc);
-+}
-+
-+static void __attribute__((__flatten__))
-+guest_sev_code(struct ucall *uc, uint8_t *shared_buf, uint8_t *private_buf)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+	uint64_t sev_status;
-+
-+	guest_test_start(uc);
-+
-+	/* Check SEV CPUID bit. */
-+	eax = 0x8000001f;
-+	ecx = 0;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	GUEST_SHARED_ASSERT(uc, eax & (1 << 1));
-+
-+	/* Check SEV MSR bit. */
-+	sev_status = rdmsr(MSR_AMD64_SEV);
-+	GUEST_SHARED_ASSERT(uc, (sev_status & 0x1) == 1);
-+
-+	guest_test_common(uc, shared_buf, private_buf);
-+
-+	guest_test_done(uc);
-+}
-+
-+static struct sev_vm *
-+setup_test_common(void *guest_code, uint64_t policy, struct ucall **uc,
-+		  uint8_t **shared_buf, uint8_t **private_buf)
-+{
-+	vm_vaddr_t uc_vaddr, shared_vaddr, private_vaddr;
-+	uint8_t measurement[512];
-+	struct sev_vm *sev;
-+	struct kvm_vm *vm;
-+	int i;
-+
-+	sev = sev_vm_create(policy, TOTAL_PAGES);
-+	if (!sev)
-+		return NULL;
-+	vm = sev_get_vm(sev);
-+
-+	/* Set up VCPU and initial guest kernel. */
-+	vm_vcpu_add_default(vm, VCPU_ID, guest_code);
-+	kvm_vm_elf_load(vm, program_invocation_name);
-+
-+	/* Set up shared ucall buffer. */
-+	uc_vaddr = ucall_shared_alloc(vm, 1);
-+
-+	/* Set up buffer for reserved shared memory. */
-+	shared_vaddr = vm_vaddr_alloc_shared(vm, SHARED_PAGES * PAGE_SIZE,
-+					     SHARED_VADDR_MIN);
-+	*shared_buf = addr_gva2hva(vm, shared_vaddr);
-+	fill_buf(*shared_buf, SHARED_PAGES, PAGE_STRIDE, 0x41);
-+
-+	/* Set up buffer for reserved private memory. */
-+	private_vaddr = vm_vaddr_alloc(vm, PRIVATE_PAGES * PAGE_SIZE,
-+				       PRIVATE_VADDR_MIN);
-+	*private_buf = addr_gva2hva(vm, private_vaddr);
-+	fill_buf(*private_buf, PRIVATE_PAGES, PAGE_STRIDE, 0x42);
-+
-+	/* Set up guest params. */
-+	vcpu_args_set(vm, VCPU_ID, 4, uc_vaddr, shared_vaddr, private_vaddr);
++	struct vcpu_svm *svm = to_svm(vcpu);
 +
 +	/*
-+	 * Hand these back to test harness, translation is needed now since page
-+	 * table will be encrypted after SEV VM launch.
++	 * For guests that don't set guest_state_protected, the cr3 update is
++	 * handled via kvm_mmu_load() while entering the guest. For guests
++	 * that do (SEV-ES/SEV-SNP), the cr3 update needs to be written to
++	 * VMCB save area now, since the save area will become the initial
++	 * contents of the VMSA, and future VMCB save area updates won't be
++	 * seen.
 +	 */
-+	*uc = addr_gva2hva(vm, uc_vaddr);
-+	*shared_buf = addr_gva2hva(vm, shared_vaddr);
-+	*private_buf = addr_gva2hva(vm, private_vaddr);
-+
-+	/* Allocations/setup done. Encrypt initial guest payload. */
-+	sev_vm_launch(sev);
-+
-+	/* Dump the initial measurement. A test to actually verify it would be nice. */
-+	sev_vm_launch_measure(sev, measurement);
-+	pr_info("guest measurement: ");
-+	for (i = 0; i < 32; ++i)
-+		pr_info("%02x", measurement[i]);
-+	pr_info("\n");
-+
-+	sev_vm_launch_finish(sev);
-+
-+	return sev;
++	if (sev_es_guest(vcpu->kvm)) {
++		svm->vmcb->save.cr3 = cr3;
++		vmcb_mark_dirty(svm->vmcb, VMCB_CR);
++	}
 +}
 +
-+static void test_sev(void *guest_code, uint64_t policy)
+ void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -4622,6 +4640,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.get_cpl = svm_get_cpl,
+ 	.get_cs_db_l_bits = kvm_get_cs_db_l_bits,
+ 	.set_cr0 = svm_set_cr0,
++	.post_set_cr3 = svm_post_set_cr3,
+ 	.is_valid_cr4 = svm_is_valid_cr4,
+ 	.set_cr4 = svm_set_cr4,
+ 	.set_efer = svm_set_efer,
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 63615d242bdf..075107c1b3f5 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3124,6 +3124,11 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+ 		vmcs_writel(GUEST_CR3, guest_cr3);
+ }
+ 
++
++void vmx_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
 +{
-+	uint8_t *shared_buf, *private_buf;
-+	struct sev_vm *sev;
-+	struct kvm_vm *vm;
-+	struct ucall *uc;
-+
-+	sev = setup_test_common(guest_code, policy, &uc, &shared_buf, &private_buf);
-+	if (!sev)
-+		return;
-+	vm = sev_get_vm(sev);
-+
-+	/* Guest is ready to run. Do the tests. */
-+	test_start(vm, uc);
-+	test_common(vm, uc, shared_buf, private_buf);
-+	test_done(vm, uc);
-+
-+	sev_vm_free(sev);
 +}
 +
-+int main(int argc, char *argv[])
-+{
-+	/* SEV tests */
-+	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
-+	test_sev(guest_sev_code, 0);
-+
-+	return 0;
-+}
+ static bool vmx_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+ {
+ 	/*
+@@ -7597,6 +7602,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+ 	.get_cpl = vmx_get_cpl,
+ 	.get_cs_db_l_bits = vmx_get_cs_db_l_bits,
+ 	.set_cr0 = vmx_set_cr0,
++	.post_set_cr3 = vmx_post_set_cr3,
+ 	.is_valid_cr4 = vmx_is_valid_cr4,
+ 	.set_cr4 = vmx_set_cr4,
+ 	.set_efer = vmx_set_efer,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 26cb3a4cd0e9..c0d84a4c8049 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10609,6 +10609,7 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+ 	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
+ 	vcpu->arch.cr3 = sregs->cr3;
+ 	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
++	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
+ 
+ 	kvm_set_cr8(vcpu, sregs->cr8);
+ 
 -- 
 2.25.1
 
