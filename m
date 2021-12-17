@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A807D478417
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 05:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445A7478419
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 05:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbhLQEhw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Dec 2021 23:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S232736AbhLQEh5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Dec 2021 23:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbhLQEhw (ORCPT
+        with ESMTP id S232634AbhLQEh4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 23:37:52 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F30C061401
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 20:37:51 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id t24-20020a252d18000000b005c225ae9e16so2438750ybt.15
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 20:37:51 -0800 (PST)
+        Thu, 16 Dec 2021 23:37:56 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD02FC06173F
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 20:37:56 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id l28-20020a25b31c000000b005c27dd4987bso2439817ybj.18
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 20:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=FgvhjAy2U9ZMb/cMiyQmvKherI8tilVgiwLz3YqJS2k=;
-        b=lVT4Wwt1od8mrUmPfzNAKQD1TrLG3RYn5+kD+ZYwwYoPZmGapa+mDiGDUiLR5O5Iff
-         8VSBLiJtaXF8HPnvb+2xI2sBn/s7FIS3kzN+qKWaXfag14tThIvJDiqH4yU/Ee1PJ7Jf
-         FInqbLjpBYnD1gvokiGwmdIr4w5ReKch8azr832qzLIIZGpfhNQQYDiRobDylPusD7t2
-         DTMv2cUzh7z8qF+SpaargZ1l96f3QsLg1/xvQH05cgEtHkiXXbkiMcj/Vm767c9G3H4t
-         eQj6l2FPRDQff7Vvd5eGlIyFeQrmYmf3m5UK0jOoQcOagKleq5tHycKjmZlmKDmadLYn
-         gjJw==
+         :cc;
+        bh=Zr32vRf61UZFH6hZpGjG1QCJKVeFmDuobe731qgvIyQ=;
+        b=OYYGBcmVMIMB5a0rQA9rNoKnYoqunv+KEdCj56VbJuN/t6BzNS/lsYozW+4/RIV0wr
+         I6MG0hwXQs1m1DstzwyiQ7OJttrLrAh5vAD5kjnxs2qsvM8MXqeqQWfBZ7TWkS97nGyY
+         1nH0jNXdTAvHhv4vzitQBX3xwxxtJ92N9ESXkEJR1lhQit6E8gwsiUNBJlDJxf5gHwSr
+         Ims1VGo0Fw0IG+bUo3eIhJKRkfYn3QPdOOfvbSckG2t5zVFMLzBMLiMG+hTq05H28cPz
+         W/xNr9/NqWNZjIu5goy6ehCYDLQdCRBqX+nRkTv6v2WwEOwmZMS6PRB6/JojTJ4Cukcn
+         +BZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=FgvhjAy2U9ZMb/cMiyQmvKherI8tilVgiwLz3YqJS2k=;
-        b=fMEShLL3C1NOywO71STZt/Xta3CqABDE7T+OKrOU+2oXMotyqFR6H/R7bCPpDNMBm0
-         cy4QzFcaK+j252JFB5S7KbbNTCGUpNfyRVzO80iuLkCR8dyA8+nkFgW0B1PwZbFOEhOJ
-         0AtJw4lo0ohany7uau433WTP6wnTLxSF6W3g3JJq2IiqYPYi7OcEe61beBfOUxI+P0QY
-         oAeLxIQS0RonDngvzUrWt71djJUN1Uwn3aGwpP6UImaCeM8ODfjnOcQjzrdgzIs5Wb+r
-         kZkM/6e5n2yL4K5g2D0TwKpYGo8c9mtvWSdVrwli8WwAIlGxkvFtA2nRDdj3+mlOWEzG
-         /WAw==
-X-Gm-Message-State: AOAM533x8s8wk3nxDJwcOzLsI2WOXvbrV7m7o/H3PZAuUq2RLFt8xQHB
-        V4qUHD63bECAGy8sG8SyaDzw6IXId3Suqd4=
-X-Google-Smtp-Source: ABdhPJxHs2f/yJGlFIXsfUb4V699/lbzH0qg35gOTk2BYKrMYiNq46buXjFPYM3qvfo8C5Zi75QEG96+9wTJ7fc=
+         :references:subject:from:to:cc;
+        bh=Zr32vRf61UZFH6hZpGjG1QCJKVeFmDuobe731qgvIyQ=;
+        b=E575eMRzLGJ3QsdC16wtPtjtsyBtv2K4eW+5TBcJCAJnKP0BI2w28kw8g1fFWMQp26
+         RC6YLwVbUA2zN3LXP5XMiG8U7eXuR7dp2+2dL8i6DP5eNUIPbuuNr3qLdUqyVkz9UFin
+         3aWgLJvX4+jJZr/14WPjAqr9sdxae+uZk739KOFb8scb4PHaAhJg3oUA7zDpIVE/eIeM
+         cvarTWhqBbBY4uVHQ2z/T4RdEQJUzuXZvPimbPeY7JHK7dImfV+yo38FPCrn2JSw6j7x
+         ti9qaT+HpSI22P7WIWK+lqEQLgcZsWgsJbb9FHzScrre9qoK5giVVTbBcnaFyHBgSKCT
+         3Zdw==
+X-Gm-Message-State: AOAM531VMN6mR14zN89qeDcU0csKCUYue1ZL9fTJUkZwBGb8PsZ13qjS
+        yx7fzgqngudtxQafdJ7JL+la6M1ctrzavWQ=
+X-Google-Smtp-Source: ABdhPJw/ZRrYxrGznUu58JvQL9LX5blG9T7YNBBtxSVp60C0jbP6SQt4hkdSEGHzBJqs9WG52CfCK5Voag2Pgq8=
 X-Received: from sharinder.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:c73])
- (user=sharinder job=sendgmr) by 2002:a05:6902:1007:: with SMTP id
- w7mr2101192ybt.718.1639715870851; Thu, 16 Dec 2021 20:37:50 -0800 (PST)
-Date:   Fri, 17 Dec 2021 04:37:10 +0000
+ (user=sharinder job=sendgmr) by 2002:a25:ad45:: with SMTP id
+ l5mr2066696ybe.198.1639715875996; Thu, 16 Dec 2021 20:37:55 -0800 (PST)
+Date:   Fri, 17 Dec 2021 04:37:11 +0000
 In-Reply-To: <20211217043716.794289-1-sharinder@google.com>
-Message-Id: <20211217043716.794289-2-sharinder@google.com>
+Message-Id: <20211217043716.794289-3-sharinder@google.com>
 Mime-Version: 1.0
 References: <20211217043716.794289-1-sharinder@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v5 1/7] Documentation: KUnit: Rewrite main page
+Subject: [PATCH v5 2/7] Documentation: KUnit: Rewrite getting started
 From:   Harinder Singh <sharinder@google.com>
 To:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
         corbet@lwn.net
@@ -60,246 +60,315 @@ Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         tim.bird@sony.com, elver@google.com,
         Harinder Singh <sharinder@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a section on advantages of unit testing, how to write unit tests,
-KUnit features and Prerequisites.
+Clarify the purpose of kunit_tool and fixed consistency issues
 
 Signed-off-by: Harinder Singh <sharinder@google.com>
 ---
- Documentation/dev-tools/kunit/index.rst | 166 +++++++++++++-----------
- 1 file changed, 88 insertions(+), 78 deletions(-)
+ Documentation/dev-tools/kunit/start.rst | 195 +++++++++++++-----------
+ 1 file changed, 102 insertions(+), 93 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-to=
-ols/kunit/index.rst
-index cacb35ec658d..55d2444b0745 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -1,11 +1,12 @@
- .. SPDX-License-Identifier: GPL-2.0
-=20
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--KUnit - Unit Testing for the Linux Kernel
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+KUnit - Linux Kernel Unit Testing
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- .. toctree::
- 	:maxdepth: 2
-+	:caption: Contents:
-=20
- 	start
- 	usage
-@@ -16,82 +17,91 @@ KUnit - Unit Testing for the Linux Kernel
- 	tips
- 	running_tips
-=20
--What is KUnit?
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 1e00f9226f74..55f8df1abd40 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -4,132 +4,136 @@
+ Getting Started
+ ===============
+ 
+-Installing dependencies
++Installing Dependencies
+ =======================
+-KUnit has the same dependencies as the Linux kernel. As long as you can build
+-the kernel, you can run KUnit.
++KUnit has the same dependencies as the Linux kernel. As long as you can
++build the kernel, you can run KUnit.
+ 
+-Running tests with the KUnit Wrapper
+-====================================
+-Included with KUnit is a simple Python wrapper which runs tests under User Mode
+-Linux, and formats the test results.
 -
--KUnit is a lightweight unit testing and mocking framework for the Linux ke=
-rnel.
+-The wrapper can be run with:
++Running tests with kunit_tool
++=============================
++kunit_tool is a Python script, which configures and builds a kernel, runs
++tests, and formats the test results. From the kernel repository, you
++can run kunit_tool:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run
+ 
+-For more information on this wrapper (also called kunit_tool) check out the
+-Documentation/dev-tools/kunit/kunit-tool.rst page.
++For more information on this wrapper, see:
++Documentation/dev-tools/kunit/kunit-tool.rst.
++
++Creating a ``.kunitconfig``
++---------------------------
++
++By default, kunit_tool runs a selection of tests. However, you can specify which
++unit tests to run by creating a ``.kunitconfig`` file with kernel config options
++that enable only a specific set of tests and their dependencies.
++The ``.kunitconfig`` file contains a list of kconfig options which are required
++to run the desired targets. The ``.kunitconfig`` also contains any other test
++specific config options, such as test dependencies. For example: the
++``FAT_FS`` tests - ``FAT_KUNIT_TEST``, depends on
++``FAT_FS``. ``FAT_FS`` can be enabled by selecting either ``MSDOS_FS``
++or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
+ 
+-Creating a .kunitconfig
+------------------------
+-If you want to run a specific set of tests (rather than those listed in the
+-KUnit defconfig), you can provide Kconfig options in the ``.kunitconfig`` file.
+-This file essentially contains the regular Kernel config, with the specific
+-test targets as well. The ``.kunitconfig`` should also contain any other config
+-options required by the tests.
++.. code-block:: none
++
++	CONFIG_KUNIT=y
++	CONFIG_MSDOS_FS=y
++	CONFIG_FAT_KUNIT_TEST=y
+ 
+-A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
++1. A good starting point for the ``.kunitconfig``, is the KUnit default
++   config. Run the command:
+ 
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+ 	cp tools/testing/kunit/configs/default.config .kunitconfig
+ 
+-You can then add any other Kconfig options you wish, e.g.:
++.. note ::
++   You may want to remove CONFIG_KUNIT_ALL_TESTS from the ``.kunitconfig`` as
++   it will enable a number of additional tests that you may not want.
++
++2. You can then add any other Kconfig options, for example:
+ 
+ .. code-block:: none
+ 
+ 	CONFIG_LIST_KUNIT_TEST=y
+ 
+-:doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
+-``.kunitconfig`` are set in the kernel ``.config`` before running the tests.
+-It'll warn you if you haven't included the dependencies of the options you're
+-using.
++Before running the tests, kunit_tool ensures that all config options
++set in ``.kunitconfig`` are set in the kernel ``.config``. It will warn
++you if you have not included dependencies for the options used.
+ 
+-.. note::
+-   Note that removing something from the ``.kunitconfig`` will not trigger a
+-   rebuild of the ``.config`` file: the configuration is only updated if the
+-   ``.kunitconfig`` is not a subset of ``.config``. This means that you can use
+-   other tools (such as make menuconfig) to adjust other config options.
++.. note ::
++   The configuration is only updated if the ``.kunitconfig`` is not a
++   subset of ``.config``. You can use tools (for example:
++   make menuconfig) to adjust other config options.
+ 
 -
--KUnit is heavily inspired by JUnit, Python's unittest.mock, and
--Googletest/Googlemock for C++. KUnit provides facilities for defining unit=
- test
--cases, grouping related test cases into test suites, providing common
--infrastructure for running tests, and much more.
+-Running the tests (KUnit Wrapper)
+----------------------------------
 -
--KUnit consists of a kernel component, which provides a set of macros for e=
-asily
--writing unit tests. Tests written against KUnit will run on kernel boot if
--built-in, or when loaded if built as a module. These tests write out resul=
-ts to
--the kernel log in `TAP <https://testanything.org/>`_ format.
+-To make sure that everything is set up correctly, simply invoke the Python
+-wrapper from your kernel repo:
++Running Tests (KUnit Wrapper)
++-----------------------------
++1. To make sure that everything is set up correctly, invoke the Python
++   wrapper from your kernel repository:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run
+ 
+-.. note::
+-   You may want to run ``make mrproper`` first.
 -
--To make running these tests (and reading the results) easier, KUnit offers
--:doc:`kunit_tool <kunit-tool>`, which builds a `User Mode Linux
--<http://user-mode-linux.sourceforge.net>`_ kernel, runs it, and parses the=
- test
--results. This provides a quick way of running KUnit tests during developme=
-nt,
--without requiring a virtual machine or separate hardware.
+ If everything worked correctly, you should see the following:
+ 
+-.. code-block:: bash
++.. code-block::
+ 
+ 	Generating .config ...
+ 	Building KUnit Kernel ...
+ 	Starting KUnit Kernel ...
+ 
+-followed by a list of tests that are run. All of them should be passing.
++The tests will pass or fail.
+ 
+-.. note::
+-	Because it is building a lot of sources for the first time, the
+-	``Building KUnit kernel`` step may take a while.
++.. note ::
++   Because it is building a lot of sources for the first time, the
++   ``Building KUnit kernel`` may take a while.
+ 
+-Running tests without the KUnit Wrapper
++Running Tests without the KUnit Wrapper
+ =======================================
 -
--Get started now: Documentation/dev-tools/kunit/start.rst
--
--Why KUnit?
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--
--A unit test is supposed to test a single unit of code in isolation, hence =
-the
--name. A unit test should be the finest granularity of testing and as such =
-should
--allow all possible code paths to be tested in the code under test; this is=
- only
--possible if the code under test is very small and does not have any extern=
-al
--dependencies outside of the test's control like hardware.
--
--KUnit provides a common framework for unit tests within the kernel.
--
--KUnit tests can be run on most architectures, and most tests are architect=
-ure
--independent. All built-in KUnit tests run on kernel startup.  Alternativel=
-y,
--KUnit and KUnit tests can be built as modules and tests will run when the =
-test
--module is loaded.
+-If you'd rather not use the KUnit Wrapper (if, for example, you need to
+-integrate with other systems, or use an architecture other than UML), KUnit can
+-be included in any kernel, and the results read out and parsed manually.
 -
 -.. note::
+-   KUnit is not designed for use in a production system, and it's possible that
+-   tests may reduce the stability or security of the system.
 -
--        KUnit can also run tests without needing a virtual machine or actu=
-al
--        hardware under User Mode Linux. User Mode Linux is a Linux archite=
-cture,
--        like ARM or x86, which compiles the kernel as a Linux executable. =
-KUnit
--        can be used with UML either by building with ``ARCH=3Dum`` (like a=
-ny other
--        architecture), or by using :doc:`kunit_tool <kunit-tool>`.
 -
--KUnit is fast. Excluding build time, from invocation to completion KUnit c=
-an run
--several dozen tests in only 10 to 20 seconds; this might not sound like a =
-big
--deal to some people, but having such fast and easy to run tests fundamenta=
-lly
--changes the way you go about testing and even writing code in the first pl=
-ace.
--Linus himself said in his `git talk at Google
--<https://gist.github.com/lorn/1272686/revisions#diff-53c65572127855f1b003d=
-b4064a94573R874>`_:
 -
--	"... a lot of people seem to think that performance is about doing the
--	same thing, just doing it faster, and that is not true. That is not what
--	performance is all about. If you can do something really fast, really
--	well, people will start using it differently."
+-Configuring the kernel
++If you do not want to use the KUnit Wrapper (for example: you want code
++under test to integrate with other systems, or use a different/
++unsupported architecture or configuration), KUnit can be included in
++any kernel, and the results are read out and parsed manually.
++
++.. note ::
++   ``CONFIG_KUNIT`` should not be enabled in a production environment.
++   Enabling KUnit disables Kernel Address-Space Layout Randomization
++   (KASLR), and tests may affect the state of the kernel in ways not
++   suitable for production.
++
++Configuring the Kernel
+ ----------------------
++To enable KUnit itself, you need to enable the ``CONFIG_KUNIT`` Kconfig
++option (under Kernel Hacking/Kernel Testing and Coverage in
++``menuconfig``). From there, you can enable any KUnit tests. They
++usually have config options ending in ``_KUNIT_TEST``.
+ 
+-In order to enable KUnit itself, you simply need to enable the ``CONFIG_KUNIT``
+-Kconfig option (it's under Kernel Hacking/Kernel Testing and Coverage in
+-menuconfig). From there, you can enable any KUnit tests you want: they usually
+-have config options ending in ``_KUNIT_TEST``.
 -
--In this context Linus was talking about branching and merging,
--but this point also applies to testing. If your tests are slow, unreliable=
-, are
--difficult to write, and require a special setup or special hardware to run=
-,
--then you wait a lot longer to write tests, and you wait a lot longer to ru=
-n
--tests; this means that tests are likely to break, unlikely to test a lot o=
-f
--things, and are unlikely to be rerun once they pass. If your tests are rea=
-lly
--fast, you run them all the time, every time you make a change, and every t=
-ime
--someone sends you some code. Why trust that someone ran all their tests
--correctly on every change when you can just run them yourself in less time=
- than
--it takes to read their test log?
-+This section details the kernel unit testing framework.
+-KUnit and KUnit tests can be compiled as modules: in this case the tests in a
+-module will be run when the module is loaded.
++KUnit and KUnit tests can be compiled as modules. The tests in a module
++will run when the module is loaded.
+ 
+-
+-Running the tests (w/o KUnit Wrapper)
++Running Tests (without KUnit Wrapper)
+ -------------------------------------
++Build and run your kernel. In the kernel log, the test output is printed
++out in the TAP format. This will only happen by default if KUnit/tests
++are built-in. Otherwise the module will need to be loaded.
+ 
+-Build and run your kernel as usual. Test output will be written to the kernel
+-log in `TAP <https://testanything.org/>`_ format.
+-
+-.. note::
+-   It's possible that there will be other lines and/or data interspersed in the
+-   TAP output.
+-
++.. note ::
++   Some lines and/or data may get interspersed in the TAP output.
+ 
+-Writing your first test
++Writing Your First Test
+ =======================
++In your kernel repository, let's add some code that we can test.
+ 
+-In your kernel repo let's add some code that we can test. Create a file
+-``drivers/misc/example.h`` with the contents:
++1. Create a file ``drivers/misc/example.h``, which includes:
+ 
+ .. code-block:: c
+ 
+ 	int misc_example_add(int left, int right);
+ 
+-create a file ``drivers/misc/example.c``:
++2. Create a file ``drivers/misc/example.c``, which includes:
+ 
+ .. code-block:: c
+ 
+@@ -142,21 +146,22 @@ create a file ``drivers/misc/example.c``:
+ 		return left + right;
+ 	}
+ 
+-Now add the following lines to ``drivers/misc/Kconfig``:
++3. Add the following lines to ``drivers/misc/Kconfig``:
+ 
+ .. code-block:: kconfig
+ 
+ 	config MISC_EXAMPLE
+ 		bool "My example"
+ 
+-and the following lines to ``drivers/misc/Makefile``:
++4. Add the following lines to ``drivers/misc/Makefile``:
+ 
+ .. code-block:: make
+ 
+ 	obj-$(CONFIG_MISC_EXAMPLE) += example.o
+ 
+-Now we are ready to write the test. The test will be in
+-``drivers/misc/example-test.c``:
++Now we are ready to write the test cases.
 +
-+Introduction
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++1. Add the below test case in ``drivers/misc/example_test.c``:
+ 
+ .. code-block:: c
+ 
+@@ -191,7 +196,7 @@ Now we are ready to write the test. The test will be in
+ 	};
+ 	kunit_test_suite(misc_example_test_suite);
+ 
+-Now add the following to ``drivers/misc/Kconfig``:
++2. Add the following lines to ``drivers/misc/Kconfig``:
+ 
+ .. code-block:: kconfig
+ 
+@@ -200,20 +205,20 @@ Now add the following to ``drivers/misc/Kconfig``:
+ 		depends on MISC_EXAMPLE && KUNIT=y
+ 		default KUNIT_ALL_TESTS
+ 
+-and the following to ``drivers/misc/Makefile``:
++3. Add the following lines to ``drivers/misc/Makefile``:
+ 
+ .. code-block:: make
+ 
+-	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
++	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
+ 
+-Now add it to your ``.kunitconfig``:
++4. Add the following lines to ``.kunitconfig``:
+ 
+ .. code-block:: none
+ 
+ 	CONFIG_MISC_EXAMPLE=y
+ 	CONFIG_MISC_EXAMPLE_TEST=y
+ 
+-Now you can run the test:
++5. Run the test:
+ 
+ .. code-block:: bash
+ 
+@@ -227,16 +232,20 @@ You should see the following failure:
+ 	[16:08:57] [PASSED] misc-example:misc_example_add_test_basic
+ 	[16:08:57] [FAILED] misc-example:misc_example_test_failure
+ 	[16:08:57] EXPECTATION FAILED at drivers/misc/example-test.c:17
+-	[16:08:57] 	This test never passes.
++	[16:08:57]      This test never passes.
+ 	...
+ 
+-Congrats! You just wrote your first KUnit test!
++Congrats! You just wrote your first KUnit test.
+ 
+ Next Steps
+ ==========
+-*   Check out the Documentation/dev-tools/kunit/tips.rst page for tips on
+-    writing idiomatic KUnit tests.
+-*   Check out the :doc:`running_tips` page for tips on
+-    how to make running KUnit tests easier.
+-*   Optional: see the :doc:`usage` page for a more
+-    in-depth explanation of KUnit.
 +
-+KUnit (Kernel unit testing framework) provides a common framework for
-+unit tests within the Linux kernel. Using KUnit, you can define groups
-+of test cases called test suites. The tests either run on kernel boot
-+if built-in, or load as a module. KUnit automatically flags and reports
-+failed test cases in the kernel log. The test results appear in `TAP
-+(Test Anything Protocol) format <https://testanything.org/>`_. It is inspi=
-red by
-+JUnit, Python=E2=80=99s unittest.mock, and GoogleTest/GoogleMock (C++ unit=
- testing
-+framework).
-+
-+KUnit tests are part of the kernel, written in the C (programming)
-+language, and test parts of the Kernel implementation (example: a C
-+language function). Excluding build time, from invocation to
-+completion, KUnit can run around 100 tests in less than 10 seconds.
-+KUnit can test any kernel component, for example: file system, system
-+calls, memory management, device drivers and so on.
-+
-+KUnit follows the white-box testing approach. The test has access to
-+internal system functionality. KUnit runs in kernel space and is not
-+restricted to things exposed to user-space.
-+
-+In addition, KUnit has kunit_tool, a script (``tools/testing/kunit/kunit.p=
-y``)
-+that configures the Linux kernel, runs KUnit tests under QEMU or UML (`Use=
-r Mode
-+Linux <http://user-mode-linux.sourceforge.net/>`_), parses the test result=
-s and
-+displays them in a user friendly manner.
-+
-+Features
-+--------
-+
-+- Provides a framework for writing unit tests.
-+- Runs tests on any kernel architecture.
-+- Runs a test in milliseconds.
-+
-+Prerequisites
-+-------------
-+
-+- Any Linux kernel compatible hardware.
-+- For Kernel under test, Linux kernel version 5.5 or greater.
-+
-+Unit Testing
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+A unit test tests a single unit of code in isolation. A unit test is the f=
-inest
-+granularity of testing and allows all possible code paths to be tested in =
-the
-+code under test. This is possible if the code under test is small and does=
- not
-+have any external dependencies outside of the test's control like hardware=
-.
-+
-+
-+Write Unit Tests
-+----------------
-+
-+To write good unit tests, there is a simple but powerful pattern:
-+Arrange-Act-Assert. This is a great way to structure test cases and
-+defines an order of operations.
-+
-+- Arrange inputs and targets: At the start of the test, arrange the data
-+  that allows a function to work. Example: initialize a statement or
-+  object.
-+- Act on the target behavior: Call your function/code under test.
-+- Assert expected outcome: Verify that the result (or resulting state) is =
-as
-+  expected.
-+
-+Unit Testing Advantages
-+-----------------------
-+
-+- Increases testing speed and development in the long run.
-+- Detects bugs at initial stage and therefore decreases bug fix cost
-+  compared to acceptance testing.
-+- Improves code quality.
-+- Encourages writing testable code.
-=20
- How do I use it?
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--*   Documentation/dev-tools/kunit/start.rst - for new users of KUnit
--*   Documentation/dev-tools/kunit/tips.rst - for short examples of best pr=
-actices
--*   Documentation/dev-tools/kunit/usage.rst - for a more detailed explanat=
-ion of KUnit features
--*   Documentation/dev-tools/kunit/api/index.rst - for the list of KUnit AP=
-Is used for testing
--*   Documentation/dev-tools/kunit/kunit-tool.rst - for more information on=
- the kunit_tool helper script
--*   Documentation/dev-tools/kunit/faq.rst - for answers to some common que=
-stions about KUnit
-+*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
 +*   Documentation/dev-tools/kunit/usage.rst - KUnit features.
 +*   Documentation/dev-tools/kunit/tips.rst - best practices with
 +    examples.
@@ -309,6 +378,6 @@ stions about KUnit
 +    script.
 +*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
 +    answers.
---=20
+-- 
 2.34.1.173.g76aa8bc2d0-goog
 
