@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3FC479493
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 20:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236C64794A6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 20:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240563AbhLQTIH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 14:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S240601AbhLQTMc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 14:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbhLQTIG (ORCPT
+        with ESMTP id S240596AbhLQTMb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:08:06 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4D4C061574;
-        Fri, 17 Dec 2021 11:08:06 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z29so11539949edl.7;
-        Fri, 17 Dec 2021 11:08:06 -0800 (PST)
+        Fri, 17 Dec 2021 14:12:31 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07072C061574;
+        Fri, 17 Dec 2021 11:12:31 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id o20so11544333eds.10;
+        Fri, 17 Dec 2021 11:12:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WK+ToRqRpjFtq55fzYiMQ1E3tNzI8dYyryjt+FG5VtA=;
-        b=e3QOqhJFnWNU33dn6TdBmexF6Tj1Ak7tnkpcMVyJfCT0u0P8ryrezyUiXLZfV3VbJ0
-         2G9O9DuPHQ6udecssDn3Tk2EFn6tJHwYNPrDaW9+4R/QAg5nBeUVngPwmhyBRzWvnLRY
-         TtVzMMJfYcm5sdj9uORbLvFDR1UOT7LFi0EOAtYyXmFoxTN3xsgtl6VNVyYdYbiPshd2
-         YBBapDFxpVF6HY/m8xNCYiOg1tvdqhtus9Ql8+kS3jBIY9fQvswUAn2acIY6CMDaEYLR
-         JZ+Mb+0Tp/SdWbk6XyNv5K8lJXQbQm8ULUIxB6VGbgfvxLPTDNrDVOFcZRANVR2S8YKs
-         KBvQ==
+        bh=mtA+D/GKcXkmGS81BrQab99wr1YM7atdDJaaJPs4yd4=;
+        b=OAE3NSrqY7N8TDFAl/ZfWhdiOltwuyGlstIhlKoag/+sDbeTKXt5kLlhoISXOnLPPe
+         6ZKiOTpWvOO3kWFSrmahXXY+DYJu2x8h543xRPfRXGVSj236yIYD1Rv+SrWfwGV5wpjb
+         haWDNTdHnAY/NbqrAdJ+ur356PVG+dAWH7pxJde5bwKXpv2UtjYUvqRTpOvCUXGOjx/l
+         ddwPPT0O6CtClv59mBd4YZRSYZC5EJL9EXdshNhmSaDaDM8lypbIdmQNWBYuwNL3kkz+
+         JPGewUnb71vTWDNiNouWe4tOllZNmaPHxGLFqXc9XkjhwuzzagUN0FG98sVXM2CDQDmE
+         tDbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WK+ToRqRpjFtq55fzYiMQ1E3tNzI8dYyryjt+FG5VtA=;
-        b=QJnS/xqi1y41k3BnefSxN8yZGA3pp3DSUszg3zMW41uQ9gUSQ/UX3IbOwbDETdGM1N
-         bTzUrzozMTok4v2UJqtzW+TFHlbDCB2fM299ZAmQPkx6JX8+Ny0AFC0XQKhv5e3IBdqo
-         8Hr4cJEZHGRGtX8DKOTCA8rsRyS7O7LyE39GzJmZTkk3GpL8mD/XyMD8lSv5DDuYcqlh
-         73grLJsgpmHY01yDaheczPc6lII4vGjY1si7yMuGVkIGSy5txrx4r9X81DNRnGACx9p2
-         A6ocSmyfi4KLZgjCM3Am/6vIQf3TGgoUJ/0NlVJtnioxGoi5XqIgOeSpzkcZPchqqWym
-         kMOg==
-X-Gm-Message-State: AOAM533mGBlZZ6R0CneUNfLPTtIlzIzPV4oxf/4n4Eg0TCXB5ZoRQscu
-        vaxpOJpHv6qhM3eGeugOeGFKS+jWQiQO7hl86wA=
-X-Google-Smtp-Source: ABdhPJxmvZsapI9CGh3nUlgNVxMedtvtv3rAtu/K2ti94lr2XS6pUN4PkGiaeOCycRylTjivSImbajYp/8Nj+gol7G4=
-X-Received: by 2002:a05:6402:430e:: with SMTP id m14mr4102234edc.93.1639768084985;
- Fri, 17 Dec 2021 11:08:04 -0800 (PST)
+        bh=mtA+D/GKcXkmGS81BrQab99wr1YM7atdDJaaJPs4yd4=;
+        b=kYOePxtLPQRulut2wlOnFneYLFMXjVYxdZi/Jp6fqA0KTNvs23OtXWDouByV5SdE00
+         0KN1PUmsnPcaijcMcXvo6IQqgikJXH3w0/uFSeLriJY+6aDeRpw1TdoEhAkduEOf5Upg
+         cSa5tQ+jjMpytb22+dTznFkdj2DXwqD5VavpesSXhjIRlEpYhnDBOJDV9uKgrIchgspV
+         8Qk1/cTV2QyQZk+Um55UXO7W7hSrkQihmkMa9BAeYjZmp9usDBVQ2P63vMhSb8ugV7sQ
+         2YtRZojGvnMj9yvyujxUf+3OeSYEqH8S9tMG8eepiO8FXz9eiZ4D6kSQk8BWbbKdtmnN
+         VybA==
+X-Gm-Message-State: AOAM531FpP1gVvhx4ivtsbv0FDSSaEIjq3nMDFC7rswhAjnHBg6UPLhT
+        nR4NxUreB2PWS6ntuEW/YioVbogkIJaLbV2QCuI=
+X-Google-Smtp-Source: ABdhPJyrymEFaHUqSzfHGmo/atDOMQ/Ei62r4vaOWyPsPrS5v/f+Cp5Matsz3dCoqYC/uuCPuteamxm5V9/Jx/4Yt6U=
+X-Received: by 2002:aa7:c641:: with SMTP id z1mr742013edr.84.1639768349688;
+ Fri, 17 Dec 2021 11:12:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-4-david@redhat.com>
-In-Reply-To: <20211217113049.23850-4-david@redhat.com>
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-5-david@redhat.com>
+In-Reply-To: <20211217113049.23850-5-david@redhat.com>
 From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 17 Dec 2021 11:07:52 -0800
-Message-ID: <CAHbLzkpgqu0HWtxRqf7vhVBmeMAP0OxXdidHeM8NRjC_uUwo=A@mail.gmail.com>
-Subject: Re: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in __page_mapcount()
+Date:   Fri, 17 Dec 2021 11:12:17 -0800
+Message-ID: <CAHbLzkrY3MBsr+xKp_6zr8jwe=d1ua_5tpgVHjBgU90srW2Srw@mail.gmail.com>
+Subject: Re: [PATCH v1 04/11] mm: thp: simlify total_mapcount()
 To:     David Hildenbrand <david@redhat.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -82,10 +82,11 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, Dec 17, 2021 at 3:33 AM David Hildenbrand <david@redhat.com> wrote:
 >
-> Let's return early for hugetlb, which really only relies on the compound
-> mapcount so far and does not support PageDoubleMap() yet. Use the chance
-> to cleanup the file-THP case to make it easier to grasp. While at it, use
-> head_compound_mapcount().
+> Let's simplify a bit, returning for PageHuge() early and using
+> head_compound_page() as we are only getting called for HEAD pages.
+>
+> Note the VM_BUG_ON_PAGE(PageTail(page), page) check at the beginning of
+> total_mapcount().
 >
 > This is a preparation for further changes.
 >
@@ -95,36 +96,29 @@ On Fri, Dec 17, 2021 at 3:33 AM David Hildenbrand <david@redhat.com> wrote:
 Reviewed-by: Yang Shi <shy828301@gmail.com>
 
 > ---
->  mm/util.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  mm/huge_memory.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 >
-> diff --git a/mm/util.c b/mm/util.c
-> index 741ba32a43ac..3239e75c148d 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -732,15 +732,18 @@ int __page_mapcount(struct page *page)
->  {
->         int ret;
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 4751d03947da..826cabcad11a 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2506,12 +2506,11 @@ int total_mapcount(struct page *page)
 >
-> -       ret = atomic_read(&page->_mapcount) + 1;
+>         if (likely(!PageCompound(page)))
+>                 return atomic_read(&page->_mapcount) + 1;
 > +       if (PageHuge(page))
-> +               return compound_mapcount(page);
->         /*
->          * For file THP page->_mapcount contains total number of mapping
->          * of the page: no need to look into compound_mapcount.
->          */
-> -       if (!PageAnon(page) && !PageHuge(page))
-> -               return ret;
-> +       if (!PageAnon(page))
-> +               return atomic_read(&page->_mapcount) + 1;
-> +
-> +       ret = atomic_read(&page->_mapcount) + 1;
->         page = compound_head(page);
-> -       ret += atomic_read(compound_mapcount_ptr(page)) + 1;
-> +       ret += head_compound_mapcount(page);
->         if (PageDoubleMap(page))
->                 ret--;
->         return ret;
+> +               return head_compound_mapcount(page);
+>
+> -       compound = compound_mapcount(page);
+>         nr = compound_nr(page);
+> -       if (PageHuge(page))
+> -               return compound;
+> -       ret = compound;
+> +       ret = compound = head_compound_mapcount(page);
+>         for (i = 0; i < nr; i++)
+>                 ret += atomic_read(&page[i]._mapcount) + 1;
+>         /* File pages has compound_mapcount included in _mapcount */
 > --
 > 2.31.1
 >
