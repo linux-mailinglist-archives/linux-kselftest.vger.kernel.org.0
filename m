@@ -2,313 +2,537 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FCF4787CE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 10:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E2147893B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 11:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbhLQJfj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 04:35:39 -0500
-Received: from esa9.fujitsucc.c3s2.iphmx.com ([68.232.159.90]:33356 "EHLO
-        esa9.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232870AbhLQJfh (ORCPT
+        id S235100AbhLQKuQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 05:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235037AbhLQKuQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:35:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1639733737; x=1671269737;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=onv9DkPLYRPpXt8CQnpxKSX83nlmRK5wkfij27/2/Iw=;
-  b=A8UecKCV7GzWM+C4Wg4CDlo/ABvGBH4fxQHmUfJOagqcYJmr2eU7Cz4b
-   WUd8JfeioDnQLjO9SBjx/AkrkpB8MFI/W3fKCvhX9julPzgjbJXPg6sqW
-   fbxEy53bAEDgXQ6tB002M3IvozQ5iQzVPf26tSarDVU9BVlqwcUo4KFyy
-   QhcgIW+nrhEgFJWRq1q3YWo9fJfVA3CslqKpApeY0Fm5W7k1ie/ZoESzV
-   mO7iMqBIPehiEPamVRxYHE6GhfskZuV6pn0JxgHuRpelY1xORGnYTJIiG
-   1AdtdQqK2rNpAyR7dO3yu8eeztEqMT2pYi8p6VDUOOKsnN7+/c8sHMAw7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="46224191"
-X-IronPort-AV: E=Sophos;i="5.88,213,1635174000"; 
-   d="scan'208";a="46224191"
-Received: from mail-tycjpn01lp2170.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.170])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 18:35:24 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aogX2bNmAmA1WuLYnfl53WhZ0Go2/OBeQvzgEo24XIKtkDWdZrsNpa9k0tf/mOKix7qIwntAOh7kfXVBRTbk6HH896J8PgfUUu5LJtCKZ81/XK7dv5Uw9gvNt4OiGg0So7RLvLUqG2sE8bkz851AKQP9xVU8U6kIS6spzPHIWcqwaUsDJZ6bL7SUVXOM5jfMppNbf9gsPU15SUf1MY84sQ8tA1xs/YgNXPtX36n/Ia/4n4qrjGvqe7bBrsp7pVBzQNtD+lM+uXS/pI/26nukiBEKBXDtVjvvsV+1PNkAZ7AASbrUwG7NYprkOHLqm01AGm2b8Yzbxlmj0sWsFVRjXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=onv9DkPLYRPpXt8CQnpxKSX83nlmRK5wkfij27/2/Iw=;
- b=ZfdUi2PvurW5zpeKZ859JPF7qeg9p1YivbRINYYrkmn3kKG0B0N9N61xxLN1KoYyoaH2KdkO611uwkMka5Ue6KGK48gFbp3Ele6S/L4vOB5Rc8HhHtqKvU/Whr6xltweg5UsFdwIt0nl0LMpv89U9Jj5Nmz5/7ANYD6vp8VqtWsJUyJElGLVa1yWJlQ6ZR9tvHFjxBt+adcFxPsIBGkXF+vtAR7givEhmbWNOo1Xh6OEFcKAfuvw+k2Dsm6JqpgrWSMIyPvC1FrWx+AdIdvK6oAsZlTM+4Umw3oKZvBs84Ts59ZrZjw3Glq0SjeXwZoHcmHfRP6TIkcc6USLqBud8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
+        Fri, 17 Dec 2021 05:50:16 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB26C06173F
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 02:50:15 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so2347269otu.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 02:50:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=onv9DkPLYRPpXt8CQnpxKSX83nlmRK5wkfij27/2/Iw=;
- b=cFgepnu/4EAW+3m6vPjAZcgbdhMphoHtXVNSbVY6R1qSnXYmvK992x++MSH/gGpqAPyNWzDSWDF9elFw8134VskFTSGyiQ9W1bB6NzheKfocxgGtVMTw+gq8S03/0licDNz8WWQmL+gojsMd7kJgNri2PdLjg4/ftAIOk9ou5gg=
-Received: from OS3PR01MB7706.jpnprd01.prod.outlook.com (2603:1096:604:17b::10)
- by OSZPR01MB8419.jpnprd01.prod.outlook.com (2603:1096:604:188::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Fri, 17 Dec
- 2021 09:35:21 +0000
-Received: from OS3PR01MB7706.jpnprd01.prod.outlook.com
- ([fe80::e93c:fa4b:dda5:ff26]) by OS3PR01MB7706.jpnprd01.prod.outlook.com
- ([fe80::e93c:fa4b:dda5:ff26%6]) with mapi id 15.20.4778.019; Fri, 17 Dec 2021
- 09:35:21 +0000
-From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Kees Cook <keescook@chromium.org>
-CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        Philip Li <philip.li@intel.com>,
-        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>
-Subject: Re: [PATCH 1/2] kselftest: signal all child processes
-Thread-Topic: [PATCH 1/2] kselftest: signal all child processes
-Thread-Index: AQHXzG8g79EzGPVTtE6/G8DUP/IG3KvppcgAgDambYCAAOpxgIAVgx8A
-Date:   Fri, 17 Dec 2021 09:35:21 +0000
-Message-ID: <d3a6c5ad-bca4-1a33-9e02-0985b708eb4a@fujitsu.com>
-References: <20211029024528.8086-1-lizhijian@cn.fujitsu.com>
- <20211029083110.syhqfc3ivaj53ygl@wittgenstein>
- <0f856b34-1464-6309-8235-a26b6c3d1c9f@fujitsu.com>
- <b217b838-884e-192c-f980-6971efb19f5d@linuxfoundation.org>
-In-Reply-To: <b217b838-884e-192c-f980-6971efb19f5d@linuxfoundation.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2ca2fe62-268f-4d3f-2938-08d9c1408bd1
-x-ms-traffictypediagnostic: OSZPR01MB8419:EE_
-x-microsoft-antispam-prvs: <OSZPR01MB84191D1ED868AD55E900C192A5789@OSZPR01MB8419.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HL8sApNJlvBhITSwoG65FaqNWYuyYfG33UQdffU+OkNIguTsVEkmFLg/REwqa6YihkGzcNrWiHZJrw8KsrkF9c5+v/z6dnQj8YYTH1oIVXpfljgXKc/Z1OoZ9oHzi5xN0DvueC5a3EXVPmwICjC+qxAc8r8v/69GKtPZ1gRAZHNJEShxcoFAFkWopQvGSqxiiDH9+HngQ54q1rpnUH3WVBwTltNd+6KgfuXnUrhN++F+JqBC4nv436uweWl//KHQQFKYJ9Z0ZTgvSSM6+HWAh0XGP3eeGPR+hE1msSfW2BUwYbDaUFZfFxZF1H+5zM5DDA2IFv4ATLGrrhXhoyh2e5taSlPfgp24vZ7d23Qymd5Z2Onz1uj65+zcp/cdLJk0WsbZU26IT6APlTm1ZR21Pes/vE4C/GkTnEWUXrmdPz+bd/RKS154X56dgei58EyI+rydqQwDOp6FEeSzUJQN2JpF1iqXb8hVGI6QJPw1GQ2NAvDCt9ma14mOV+HczbnvzNggU66qK1kdVBInSCgWSG6NvLKXNrTgI+ps8bHogMEjT7TEbwq211/2xC6H7XCa+hstxDNbUhLTNT5S0+guPcdxg5zwrdtdCTYvHq86OE6IpZp3xmzENC7BwsBVPuNqH8fssQYEmEeTXZKL5w6akwTwWcPo71v/nRAPUa70YrHjWGlaAdhV6PTknNoNkJ/z4WEB4MTK3oHAoLBcIORZ30NPK8rfCyqid5bNAu7oUQlWEhd5Ih0yJXdwfnV0REq4oinrxu6dcvVLoVGnhR7Ovw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB7706.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(6512007)(82960400001)(66946007)(76116006)(53546011)(83380400001)(38100700002)(508600001)(91956017)(31686004)(7416002)(66446008)(71200400001)(26005)(66476007)(4326008)(54906003)(64756008)(5660300002)(6506007)(8676002)(36756003)(85182001)(316002)(6486002)(122000001)(186003)(31696002)(66556008)(2906002)(38070700005)(110136005)(86362001)(107886003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a3hFSHJJL3lJeHBGaG1CeHlPa0c2SHlVeU9DY1NvQWJNSEd6Mkd5OHlJdHlV?=
- =?utf-8?B?Y0dGUS82MW02aXZPUGZCblhEZHYrVEgyYjBEMXdPK2JSOG5zL0NnWTBzSC9S?=
- =?utf-8?B?STBMMXE3L0YzbGsvcDNCbmxTdHZDOWhMcGZVNEJMYW5mcVp6T1NuYnRQWU1r?=
- =?utf-8?B?bkgxMForc3hKRUhtanYyQkhCRFpBa1k0R3U3bGxkT3ZUditWL0IydHc5YVNZ?=
- =?utf-8?B?V3JOMUZKc2xOaDdMc2t0Y290Si9nWHhmSklMN2tobU5ZWFdNRzNuUEg2aWdt?=
- =?utf-8?B?dlRpTXhHUUZTWnhhbzE0SVpQK1RwOUp4VUd3RkZVdkxzUThHQ2UzYkVqK2hP?=
- =?utf-8?B?ZXViek52dVo4TnJDQ2ptVFM1bk94SEZVcm10bXZtVUMzY3hJcGhQWFNrUCt5?=
- =?utf-8?B?R0VWZUs0MHBOeUF5TGRWY3BodGV6UkV4VHRnbEpPY0ZwSk91OW1qUlltSU9L?=
- =?utf-8?B?NkZ2a2d4bXVLQ2s2MVB2ekhvVWtSQTV1elFVUGFhOUJDMU1iMmlpV0tNdnhK?=
- =?utf-8?B?THBYM1NvZGRzNDBVTGFZZCtCb0hqcGI5VUZPTjZPb2g4MWE3QTg4NmVTQnpO?=
- =?utf-8?B?R0lMWTJWMGFXRVZCbVhMS2MxVzEzakJoRG1CSFJ1dm5MbHJwYnRUQ0EwN1pV?=
- =?utf-8?B?TzVpaGtYRDQ3UVlJWTdyRlB2bVV5SzlnRER1NnBPanJCcWxlMWh2cHFNTExk?=
- =?utf-8?B?YVNjczcwNklvM3hQaWI3d0tXOHRDdzJtWWEwNTdrUkZWN2dLYkRzb0Fkcm1w?=
- =?utf-8?B?SzdHKy9mcUhTRHB3enBaZHRvWTU2a0lMYVc5RVovenJxYi9Va0pNbzlmYm9y?=
- =?utf-8?B?VTMvMWhza0d6aEJpZHFGdXByY3lGUUkxUkE2emNqT0daT2VMTmtUMEVrbDk3?=
- =?utf-8?B?VEJRelo4K1l3VThUZVQybVFkVEpxeEFpUk9Gd3ZqUmplZVZFTFdqTlRVL3F6?=
- =?utf-8?B?MGVmSGd6SHJBK0I4S1dyUG16elFjTE5qcFFBMTd3bUZzUWN0ZXAwTSswU0w3?=
- =?utf-8?B?OWVvL3E3dFRnRjZjODAzY3Fnbi9vTkhLUHZheTAvNGZGdGtHQnMySlpuV0pJ?=
- =?utf-8?B?SEJXSEZqM1c3cEs5RGV1YWY0UjFMYk1KcXM3NWFVNkF2NEJoeHFQcTcxb2hM?=
- =?utf-8?B?am5xbHltdHZHS0loSWU2RDBtK1NVNE85OGg4QTRzallTODFYZTd2RGNERWww?=
- =?utf-8?B?TUtrcHdwenVQUnhISE5RRUN2WGpTZUFWN1VKb29VUEpkd3F1dkhoUkhpUGd3?=
- =?utf-8?B?RHpWek1wWEkzdVhaemNJSVR0djkrU0V4aHFJTHlKTEF6RGY0Wkl6N0h1b0hh?=
- =?utf-8?B?aFBjUFd6cm9KUEtyMzQzclZhZ0MwT3JKTHFZNGdGdU0zMEs5RWZOTUtzNHdW?=
- =?utf-8?B?dzNUUm9pUjBmVXcxRUNaRmpoTHZiSiszNnYxZms5Tk9yZU5TVG5HVGVZdDZN?=
- =?utf-8?B?dEd0SEpOZmduNXJhZGlEUFdTenJ6MTZhOXVLL0VNMGIxOFVmS28xUG02UzZV?=
- =?utf-8?B?NzFESWtQamxWUE1EdHJOSW1XTmpCZnhRbzJvUjFMR1ZoenJGVloxTEFGTnhm?=
- =?utf-8?B?N3pWaFZISGRxTlNQdkVSMDFLYW80OTJ2SXp5ajFOMXErSlBOcVRBTldDdGVi?=
- =?utf-8?B?QzltV3FKcU5saENza1Q4N1Z2L1hHNjltTitWN1FvM2RmMlBnWmREZ3FhSHJJ?=
- =?utf-8?B?YnN1N2Y5WTFGNVV1SmxYUndzZ0JZeU44ZmdIUzMyamlqY0lEb3U3MnVQNXNY?=
- =?utf-8?B?eXFEa25xa3U1QjFXMlYvMjl1WFZ2MVZpbU9KREJiTWorSG5hL2R3bHJSQXN1?=
- =?utf-8?B?WXlxcm0yTjFJeHE0WitqTjdsdHBFbGhraENZeGF1anVQSHAvSG1pbThEOUZT?=
- =?utf-8?B?dms0RExVMHlWTGl5bmpNU3FIbFhsSnF1ZVdFYlBlZDEya21KekswRk9pcEJh?=
- =?utf-8?B?czFFN2d6WmZaQXJHZy9VVFNWOVpodWdCWmFkUE1pdjM5bGFBQlFrRll3Vkcx?=
- =?utf-8?B?NkJydFByeUFOcTZpaFdOOTBjbWJLOGZBdGdTNVFiTmdkWDVtREEzc1VHYURP?=
- =?utf-8?B?WlZCRnJMVS9iUjBmMXg5K2x5VUQ0Z0JMNGZJUzlwM2dsNmtyVFRodnZsNW1k?=
- =?utf-8?B?aU9PSGNOTVo2bVdVRlZLZ0UwcU53dXVPaVBwRThJdXg4dWN5ZmN5OGF1cHdt?=
- =?utf-8?Q?OFGb3gdpmuCMMzcbCaj6cVQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7223E06B6E7A9A47A59837374D0563BF@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ChAQgQ67R/IfTiZcoWSnAH60LCShrosGvHLHIofQtOY=;
+        b=lKx/LadyuNCtf5NKPeaK3K7P5iBR/KAPy+3eeZjSalLRBIwj80hClAAY6lLEWAhved
+         0JjsHBi/tS9IeSMq+DTKYahwJrauEh28Q/C5K1lsTBPBuXKFTG6qzNbtxdEXZtyaQpbT
+         8TOyQS/wozWpqfdKz7O2JExRaFoWuUu34Kndj9fV3X5VSC0Bo3BXVPLGc4ZcTKMS+XtZ
+         1H7s+Iu4bW2L72eQxsVarLcPfbdlKARqrOdQ4qNGJcUiIVug0J2A5BG6XqUAeOKgl2Y3
+         7Y7lynvjjqM5Bfbyl6nS49utzOF8gPS/gItmtO7srHNhdmYLuoAQIqIqZCrROaIfPFsx
+         4SIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ChAQgQ67R/IfTiZcoWSnAH60LCShrosGvHLHIofQtOY=;
+        b=1Q6WnFXZFUbC0XfHlbvBAP0HiF/Yl5XhEeLbaKr3AgaFDMgPzgfLQTTcUfFNlmdYwe
+         tuC/mOn6FM4Fo8Ej7nHepuwZ2ezWeBEY3TP+eZCl57yyk7pa/yVYSV0f/lcMxiSt9Buv
+         vhnGXM+lAVd+mp/wtnr0THpF/4U4g4DKY6W5u35t1McpeRS1cWwDmqDRHdWSHT91uq/D
+         Fwq4rmm6KiygqNtLL5msIOK0FKWx7MSSKSyDDt96ofiW8U1miq1EDnvc259LC0EfFRg7
+         mx2M+QgYuOVsVn95CpfjNUQLQMkL2UZMSHmYlJ5wni5LPyowh9m5HXsU/dPjI77kkylu
+         mnwg==
+X-Gm-Message-State: AOAM532oZOuvPgX5me+9+OuiY5fg4yU5m646RvtVcvTyVVDC6KUT7nof
+        A+O7qDDFSbY7D1sy28PxFQbXgtSD6NTA8ShK4uUQdA==
+X-Google-Smtp-Source: ABdhPJwRnAonVZjGqTFN2dX7KGtpy2hYHKmh7cmpGhv6LaIh4vcm44N2JaaCFdzONE8hQi/51peHk29GxHVDQms7x1w=
+X-Received: by 2002:a9d:77d1:: with SMTP id w17mr1674722otl.329.1639738214883;
+ Fri, 17 Dec 2021 02:50:14 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB7706.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ca2fe62-268f-4d3f-2938-08d9c1408bd1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 09:35:21.6763
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SG1nFF4cfyGwkX/TS7gTafrsq7btge78k3bEHRTrPoF/JrptULNaVMCbp9kHCmCoCvBwwYUBkCZLCglAj5YAww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8419
+References: <20211217044911.798817-1-sharinder@google.com> <20211217044911.798817-4-sharinder@google.com>
+In-Reply-To: <20211217044911.798817-4-sharinder@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 17 Dec 2021 11:50:03 +0100
+Message-ID: <CANpmjNMz7nh7Eo97p-ikdE6cyTu_Vge_RJktj68BpC9QHqE7iw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] Documentation: KUnit: Added KUnit Architecture
+To:     Harinder Singh <sharinder@google.com>
+Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
+        corbet@lwn.net, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tim.Bird@sony.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SSBqdXN0IHBvc3QgVjIgd2hpY2ggc3BsaXQgdGhlc2UgMiBwYXRjaGVzIHN0YW5kYWxvbmUgZm9y
-IHJldmlld2luZyBlYXNpbHkuDQpBbmQgcmV3cml0ZSAyLzIgd2l0aCBwaXBlKCkNCg0KUFRBTA0K
-DQoNClRoYW5rcw0KWmhpamlhbg0KDQoNCk9uIDA0LzEyLzIwMjEgMDE6MDMsIFNodWFoIEtoYW4g
-d3JvdGU6DQo+IE9uIDEyLzIvMjEgODowNSBQTSwgbGl6aGlqaWFuQGZ1aml0c3UuY29tIHdyb3Rl
-Og0KPj4ga2luZGx5IHBpbmcNCj4+DQo+Pg0KPj4gT24gMjkvMTAvMjAyMSAxNjozMSwgQ2hyaXN0
-aWFuIEJyYXVuZXIgd3JvdGU6DQo+Pj4gT24gRnJpLCBPY3QgMjksIDIwMjEgYXQgMTA6NDU6MjdB
-TSArMDgwMCwgTGkgWmhpamlhbiB3cm90ZToNCj4+Pj4gV2UgaGF2ZSBzb21lIG1hbnkgY2FzZXMg
-dGhhdCB3aWxsIGNyZWF0ZSBjaGlsZCBwcm9jZXNzIGFzIHdlbGwsIHN1Y2ggYXMNCj4+Pj4gcGlk
-ZmRfd2FpdC4gUHJldmlvdXNseSwgd2Ugd2lsbCBzaWduYWwva2lsbCB0aGUgcGFyZW50IHByb2Nl
-c3Mgd2hlbiBpdA0KPj4+PiBpcyB0aW1lIG91dCwgYnV0IHRoaXMgc2lnbmFsIHdpbGwgbm90IGJl
-IHNlbnQgdG8gaXRzIGNoaWxkIHByb2Nlc3MuIEluDQo+Pj4+IHN1Y2ggY2FzZSwgaWYgY2hpbGQg
-cHJvY2VzcyBkb2Vzbid0IHRlcm1pbmF0ZSBpdHNlbGYsIGtzZWZsdGVzdCBmcmFtZXdvcmsNCj4+
-Pj4gd2lsbCBoYW5nIGZvcmV2ZXIuDQo+Pj4+DQo+Pj4+IGJlbG93IHBzIHRyZWUgc2hvdyB0aGUg
-c2l0dWF0aW9uIHdoZW4ga3NlZmx0ZXN0IGlzIGJsb2NraW5nOg0KPj4+PiByb290wqDCoMKgwqDC
-oCAxMTcywqAgMC4wwqAgMC4wwqDCoCA1OTk2wqAgMjUwMCA/wqDCoMKgwqDCoMKgwqAgU8KgwqDC
-oCAwNzowMyAwOjAwwqAgXF8gL2Jpbi9iYXNoIC9sa3AvbGtwL3NyYy90ZXN0cy9rZXJuZWwtc2Vs
-ZnRlc3RzDQo+Pj4+IHJvb3TCoMKgwqDCoMKgIDEyMTbCoCAwLjDCoCAwLjDCoMKgIDQzOTLCoCAx
-OTc2ID/CoMKgwqDCoMKgwqDCoCBTwqDCoMKgIDA3OjAzIDA6MDDCoMKgwqDCoMKgIFxfIG1ha2Ug
-cnVuX3Rlc3RzIC1DIHBpZGZkDQo+Pj4+IHJvb3TCoMKgwqDCoMKgIDEyMTjCoCAwLjDCoCAwLjDC
-oMKgIDIzOTbCoCAxNjUyID/CoMKgwqDCoMKgwqDCoCBTwqDCoMKgIDA3OjAzIDA6MDDCoMKgwqDC
-oMKgwqDCoMKgwqAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0iL3Vzci9zcmMvcGVyZl9zZWxmdGVz
-dHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZi
-MTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyI7IC4gL3Vzci9zcmMvcGVyZl9z
-ZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3
-MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3QvcnVu
-bmVyLnNoOyBpZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJfdGVzdF9sb2dnaW5nPTE7IGZpOyBy
-dW5fbWFueSAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0
-cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0
-LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1
-NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9mZGluZm9fdGVzdCAvdXNy
-L3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZl
-ZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Bp
-ZGZkL3BpZGZkX29wZW5fdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04
-LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3BvbGxfdGVzdCANCj4+Pj4gL3Vzci9z
-cmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4NCj4+Pj4gcm9vdMKgwqDCoMKgIDEyNDkx
-wqAgMC4wwqAgMC4wwqDCoCAyMzk2wqDCoCAxMzIgP8KgwqDCoMKgwqDCoMKgIFPCoMKgwqAgMDc6
-MDMgMDowMMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFxfIC9iaW4vc2ggLWMgQkFTRV9ESVI9
-Ii91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4
-MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMiOyAuIC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3Rz
-LTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaDsgaWYgWyAiWCIgIT0gIlgiIF07IHRoZW4gcGVy
-X3Rlc3RfbG9nZ2luZz0xOyBmaTsgcnVuX21hbnkgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2
-XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAz
-YzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0IC91c3Ivc3Jj
-L3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3
-YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQv
-cGlkZmRfZmRpbmZvX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4z
-LWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9vcGVuX3Rlc3QgL3Vzci9zcmMvcGVyZl9z
-ZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3
-MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9w
-b2xsX3Rlc3QgDQo+Pj4+IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1yaGUNCj4+Pj4g
-cm9vdMKgwqDCoMKgIDEyNDkywqAgMC4wwqAgMC4wwqDCoCAyMzk2wqDCoCAxMzIgP8KgwqDCoMKg
-wqDCoMKgIFPCoMKgwqAgMDc6MDMgMDowMMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0iL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0
-LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1
-NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cyI7IC4gL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMt
-eDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0
-NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoOyBp
-ZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJfdGVzdF9sb2dnaW5nPTE7IGZpOyBydW5fbWFueSAv
-dXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5
-NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L3BpZGZkL3BpZGZkX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4z
-LWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9mZGluZm9fdGVzdCAvdXNyL3NyYy9wZXJm
-X3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5
-YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZk
-X29wZW5fdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0
-ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3BvbGxfdGVzdCANCj4+Pj4gL3Vzci9zcmMvcGVyZl9z
-ZWxmdGVzdHMteDg2XzY0DQo+Pj4+IHJvb3TCoMKgwqDCoCAxMjQ5M8KgIDAuMMKgIDAuMMKgwqAg
-MjM5NsKgwqAgMTMyID/CoMKgwqDCoMKgwqDCoCBTwqDCoMKgIDA3OjAzIDA6MDDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXF8gL2Jpbi9zaCAtYyBCQVNFX0RJUj0i
-L3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgx
-OTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cyI7IC4gL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMt
-NTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoOyBpZiBbICJYIiAhPSAiWCIgXTsgdGhlbiBwZXJf
-dGVzdF9sb2dnaW5nPTE7IGZpOyBydW5fbWFueSAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZf
-NjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNj
-MjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Rlc3QgL3Vzci9zcmMv
-cGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdi
-NDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9w
-aWRmZF9mZGluZm9fdGVzdCAvdXNyL3NyYy9wZXJmX3NlbGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMt
-a3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5YzcyM2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX29wZW5fdGVzdCAvdXNyL3NyYy9wZXJmX3Nl
-bGZ0ZXN0cy14ODZfNjQtcmhlbC04LjMta3NlbGZ0ZXN0cy01MTlkODE5NTZlZTI3N2I0NDE5Yzcy
-M2FkZmIxNTQ2MDNjMjU2NWJhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Bv
-bGxfdGVzdCANCj4+Pj4gL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDgNCj4+Pj4gcm9vdMKgwqDC
-oMKgIDEyNDk2wqAgMC4wwqAgMC4wwqDCoCAyMzk2wqDCoCAxMzIgP8KgwqDCoMKgwqDCoMKgIFPC
-oMKgwqAgMDc6MDMgMDowMMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIFxfIC9iaW4vc2ggLWMgQkFTRV9ESVI9Ii91c3Ivc3JjL3BlcmZfc2VsZnRlc3Rz
-LXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1
-NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMiOyAuIC91c3Ivc3JjL3BlcmZfc2Vs
-ZnRlc3RzLXg4Nl82NC1yaGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIz
-YWRmYjE1NDYwM2MyNTY1YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5l
-ci5zaDsgaWYgWyAiWCIgIT0gIlgiIF07IHRoZW4gcGVyX3Rlc3RfbG9nZ2luZz0xOyBmaTsgcnVu
-X21hbnkgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMt
-NTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0IC91c3Ivc3JjL3BlcmZfc2VsZnRlc3RzLXg4Nl82NC1y
-aGVsLTguMy1rc2VsZnRlc3RzLTUxOWQ4MTk1NmVlMjc3YjQ0MTljNzIzYWRmYjE1NDYwM2MyNTY1
-YmEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvcGlkZmRfZmRpbmZvX3Rlc3QgL3Vzci9z
-cmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUy
-NzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRm
-ZC9waWRmZF9vcGVuX3Rlc3QgL3Vzci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4z
-LWtzZWxmdGVzdHMtNTE5ZDgxOTU2ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF9wb2xsX3Rlc3QgDQo+Pj4+IC91c3Ivc3Jj
-L3BlcmZfc2VsZnRlc3QNCj4+Pj4gcm9vdMKgwqDCoMKgIDEyNDk4wqAgMC4wwqAgMC4wwqAgMTA1
-NjTCoCA2MTE2ID/CoMKgwqDCoMKgwqDCoCBTwqDCoMKgIDA3OjAzIDA6MDDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFxfIHBlcmwgL3Vz
-ci9zcmMvcGVyZl9zZWxmdGVzdHMteDg2XzY0LXJoZWwtOC4zLWtzZWxmdGVzdHMtNTE5ZDgxOTU2
-ZWUyNzdiNDQxOWM3MjNhZGZiMTU0NjAzYzI1NjViYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9r
-c2VsZnRlc3QvcHJlZml4LnBsDQo+Pj4+IHJvb3TCoMKgwqDCoCAxMjUwM8KgIDAuMMKgIDAuMMKg
-wqAgMjQ1MsKgwqAgMTEyID/CoMKgwqDCoMKgwqDCoCBUwqDCoMKgIDA3OjAzIDA6MDAgLi9waWRm
-ZF93YWl0DQo+Pj4+IHJvb3TCoMKgwqDCoCAxMjYyMcKgIDAuMMKgIDAuMMKgwqAgMjM3MsKgIDE2
-MDAgP8KgwqDCoMKgwqDCoMKgIFNMc8KgIDA3OjA0IDA6MDAgL3Vzci9zYmluL3dhdGNoZG9nDQo+
-Pj4+IHJvb3TCoMKgwqDCoCAxOTQzOMKgIDAuMMKgIDAuMMKgwqDCoCA5OTLCoMKgwqAgNjAgP8Kg
-wqDCoMKgwqDCoMKgIFNzwqDCoCAwNzozOSAwOjAwIC9sa3AvbGtwL3NyYy9iaW4vZXZlbnQvd2Fr
-ZXVwIGFjdGl2YXRlLW1vbml0b3INCj4+Pj4NCj4+Pj4gSGVyZSB3ZSBncm91cCBhbGwgaXRzIGNo
-aWxkIHByb2Nlc3NlcyBzbyB0aGF0IGtpbGwoKSBjYW4gc2lnbmFsIGFsbCBvZg0KPj4+PiB0aGVt
-IGluIHRpbWVvdXQuDQo+Pj4+DQo+Pj4+IENDOiBLZWVzIENvb2sgPGtlZXNjb29rQGNocm9taXVt
-Lm9yZz4NCj4+Pj4gQ0M6IEFuZHkgTHV0b21pcnNraSA8bHV0b0BhbWFjYXBpdGFsLm5ldD4NCj4+
-Pj4gQ0M6IFdpbGwgRHJld3J5IDx3YWRAY2hyb21pdW0ub3JnPg0KPj4+PiBDQzogU2h1YWggS2hh
-biA8c2h1YWhAa2VybmVsLm9yZz4NCj4+Pj4gQ0M6IENocmlzdGlhbiBCcmF1bmVyIDxjaHJpc3Rp
-YW5AYnJhdW5lci5pbz4NCj4+Pj4gQ0M6IFBoaWxpcCBMaSA8cGhpbGlwLmxpQGludGVsLmNvbT4N
-Cj4+Pj4gU3VnZ2VzdGVkLWJ5OiB5YW5nIHh1IDx4dXlhbmcyMDE4Lmp5QGNuLmZ1aml0c3UuY29t
-Pg0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBMaSBaaGlqaWFuIDxsaXpoaWppYW5AY24uZnVqaXRzdS5j
-b20+DQo+Pj4+IC0tLQ0KPj4+IFNlZW1zIHNlbnNpYmxlLiBJcyBpdCBndWFyYW50ZWVkIHRoYXQg
-dC0+cGlkIGlzIG5laXRoZXIgMCBub3IgMT8gSWYgbm90DQo+Pj4gdGhlbiBtYXliZSBzYW5pdHkg
-Y2hlY2sgdC0+cGlkIGF0IGxlYXN0IGZvciBub3QgYmVpbmcgMSBhcyBuZWdhdGluZyB0aGF0DQo+
-Pj4gd291bGQgbWVhbiAic2lnbmFsIGV2ZXJ5dGhpbmcgdGhhdCB5b3UgaGF2ZSBwZXJtaXNzaW9u
-IHRvIHNpZ25hbCIuIDopDQo+Pj4NCj4+PiBPdGhlcndpc2UsDQo+Pj4gQWNrZWQtYnk6IENocmlz
-dGlhbiBCcmF1bmVyIDxjaHJpc3RpYW4uYnJhdW5lckB1YnVudHUuY29tPg0KPj4+DQo+Pj4+IHRv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdF9oYXJuZXNzLmggfCA0ICsrKy0NCj4+Pj4g
-wqDCoCAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4+
-DQo+Pj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3RfaGFy
-bmVzcy5oIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0X2hhcm5lc3MuaA0KPj4+
-PiBpbmRleCBhZTBmMGYzM2IyYTYuLmM3MjUxMzk2ZTdlZSAxMDA2NDQNCj4+Pj4gLS0tIGEvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0X2hhcm5lc3MuaA0KPj4+PiArKysgYi90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3RfaGFybmVzcy5oDQo+Pj4+IEBAIC04NzUsNyAr
-ODc1LDggQEAgc3RhdGljIHZvaWQgX190aW1lb3V0X2hhbmRsZXIoaW50IHNpZywgc2lnaW5mb190
-ICppbmZvLCB2b2lkICp1Y29udGV4dCkNCj4+Pj4gwqDCoMKgwqDCoMKgIH0NCj4+Pj4gwqDCoCDC
-oMKgwqDCoMKgwqAgdC0+dGltZWRfb3V0ID0gdHJ1ZTsNCj4+Pj4gLcKgwqDCoCBraWxsKHQtPnBp
-ZCwgU0lHS0lMTCk7DQo+Pj4+ICvCoMKgwqAgLy8gc2lnbmFsIHByb2Nlc3MgZ3JvdXANCj4+Pj4g
-K8KgwqDCoCBraWxsKC0odC0+cGlkKSwgU0lHS0lMTCk7DQo+Pj4+IMKgwqAgfQ0KPj4+PiDCoMKg
-IMKgwqAgdm9pZCBfX3dhaXRfZm9yX3Rlc3Qoc3RydWN0IF9fdGVzdF9tZXRhZGF0YSAqdCkNCj4+
-Pj4gQEAgLTk4NSw2ICs5ODYsNyBAQCB2b2lkIF9fcnVuX3Rlc3Qoc3RydWN0IF9fZml4dHVyZV9t
-ZXRhZGF0YSAqZiwNCj4+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAga3NmdF9wcmludF9tc2coIkVS
-Uk9SIFNQQVdOSU5HIFRFU1QgQ0hJTERcbiIpOw0KPj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0
-LT5wYXNzZWQgPSAwOw0KPj4+PiDCoMKgwqDCoMKgwqAgfSBlbHNlIGlmICh0LT5waWQgPT0gMCkg
-ew0KPj4+PiArwqDCoMKgwqDCoMKgwqAgc2V0cGdycCgpOw0KPj4+PiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCB0LT5mbih0LCB2YXJpYW50KTsNCj4+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHQt
-PnNraXApDQo+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgX2V4aXQoMjU1KTsNCj4+
-Pj4gLS0gDQo+Pj4+IDIuMzMuMA0KPj4+Pg0KPj4+Pg0KPj4+Pg0KPj4+DQo+Pg0KPg0KPiBLZWVz
-LA0KPg0KPiBXaWxsIHlvdSBiZSBhYmxlIHRvIHRha2UgYSBsb29rIGF0IHRoaXMgZml4PyBUaGlz
-IGlzIGluIHRoZSBrc2VsZnRlc3RfaGFybmVzcw0KPg0KPiB0aGFua3MsDQo+IC0tIFNodWFoDQoN
-Cg==
+On Fri, 17 Dec 2021 at 05:49, Harinder Singh <sharinder@google.com> wrote:
+>
+> Describe the components of KUnit and how the kernel mode parts
+> interact with kunit_tool.
+>
+> Signed-off-by: Harinder Singh <sharinder@google.com>
+
+Acked-by: Marco Elver <elver@google.com>
+
+For the .svg file, I think per
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign=
+-your-work-the-developer-s-certificate-of-origin
+at least my Signed-off-by is required, but probably also my
+Co-developed-by? In any case my SOB for kunit_suitememorydiagram.svg
+is hereby given:
+
+Signed-off-by: Marco Elver <elver@google.com>
+
+Thanks,
+-- Marco
+
+> ---
+>  .../dev-tools/kunit/architecture.rst          | 204 ++++++++++++++++++
+>  Documentation/dev-tools/kunit/index.rst       |   2 +
+>  .../kunit/kunit_suitememorydiagram.svg        |  81 +++++++
+>  Documentation/dev-tools/kunit/start.rst       |   1 +
+>  4 files changed, 288 insertions(+)
+>  create mode 100644 Documentation/dev-tools/kunit/architecture.rst
+>  create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiagra=
+m.svg
+>
+> diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentati=
+on/dev-tools/kunit/architecture.rst
+> new file mode 100644
+> index 000000000000..aa2cea821e25
+> --- /dev/null
+> +++ b/Documentation/dev-tools/kunit/architecture.rst
+> @@ -0,0 +1,204 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +KUnit Architecture
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The KUnit architecture can be divided into two parts:
+> +
+> +- Kernel testing library
+> +- kunit_tool (Command line test harness)
+> +
+> +In-Kernel Testing Framework
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +
+> +The kernel testing library supports KUnit tests written in C using
+> +KUnit. KUnit tests are kernel code. KUnit does several things:
+> +
+> +- Organizes tests
+> +- Reports test results
+> +- Provides test utilities
+> +
+> +Test Cases
+> +----------
+> +
+> +The fundamental unit in KUnit is the test case. The KUnit test cases are
+> +grouped into KUnit suites. A KUnit test case is a function with type
+> +signature ``void (*)(struct kunit *test)``.
+> +These test case functions are wrapped in a struct called
+> +``struct kunit_case``. For code, see:
+> +
+> +.. kernel-doc:: include/kunit/test.h
+> +       :identifiers: kunit_case
+> +
+> +.. note:
+> +       ``generate_params`` is optional for non-parameterized tests.
+> +
+> +Each KUnit test case gets a ``struct kunit`` context
+> +object passed to it that tracks a running test. The KUnit assertion
+> +macros and other KUnit utilities use the ``struct kunit`` context
+> +object. As an exception, there are two fields:
+> +
+> +- ``->priv``: The setup functions can use it to store arbitrary test
+> +  user data.
+> +
+> +- ``->param_value``: It contains the parameter value which can be
+> +  retrieved in the parameterized tests.
+> +
+> +Test Suites
+> +-----------
+> +
+> +A KUnit suite includes a collection of test cases. The KUnit suites
+> +are represented by the ``struct kunit_suite``. For example:
+> +
+> +.. code-block:: c
+> +
+> +       static struct kunit_case example_test_cases[] =3D {
+> +               KUNIT_CASE(example_test_foo),
+> +               KUNIT_CASE(example_test_bar),
+> +               KUNIT_CASE(example_test_baz),
+> +               {}
+> +       };
+> +
+> +       static struct kunit_suite example_test_suite =3D {
+> +               .name =3D "example",
+> +               .init =3D example_test_init,
+> +               .exit =3D example_test_exit,
+> +               .test_cases =3D example_test_cases,
+> +       };
+> +       kunit_test_suite(example_test_suite);
+> +
+> +In the above example, the test suite ``example_test_suite``, runs the
+> +test cases ``example_test_foo``, ``example_test_bar``, and
+> +``example_test_baz``. Before running the test, the ``example_test_init``
+> +is called and after running the test, ``example_test_exit`` is called.
+> +The ``kunit_test_suite(example_test_suite)`` registers the test suite
+> +with the KUnit test framework.
+> +
+> +Executor
+> +--------
+> +
+> +The KUnit executor can list and run built-in KUnit tests on boot.
+> +The Test suites are stored in a linker section
+> +called ``.kunit_test_suites``. For code, see:
+> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+include/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
+> +The linker section consists of an array of pointers to
+> +``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
+> +macro. To run all tests compiled into the kernel, the KUnit executor
+> +iterates over the linker section array.
+> +
+> +.. kernel-figure:: kunit_suitememorydiagram.svg
+> +       :alt:   KUnit Suite Memory
+> +
+> +       KUnit Suite Memory Diagram
+> +
+> +On the kernel boot, the KUnit executor uses the start and end addresses
+> +of this section to iterate over and run all tests. For code, see:
+> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+lib/kunit/executor.c
+> +
+> +When built as a module, the ``kunit_test_suites()`` macro defines a
+> +``module_init()`` function, which runs all the tests in the compilation
+> +unit instead of utilizing the executor.
+> +
+> +In KUnit tests, some error classes do not affect other tests
+> +or parts of the kernel, each KUnit case executes in a separate thread
+> +context. For code, see:
+> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+lib/kunit/try-catch.c?h=3Dv5.15#n58
+> +
+> +Assertion Macros
+> +----------------
+> +
+> +KUnit tests verify state using expectations/assertions.
+> +All expectations/assertions are formatted as:
+> +``KUNIT_{EXPECT|ASSERT}_<op>[_MSG](kunit, property[, message])``
+> +
+> +- ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
+> +  expectation.
+> +
+> +       - For an expectation, if the check fails, marks the test as faile=
+d
+> +         and logs the failure.
+> +
+> +       - An assertion, on failure, causes the test case to terminate
+> +         immediately.
+> +
+> +               - Assertions call function:
+> +                 ``void __noreturn kunit_abort(struct kunit *)``.
+> +
+> +               - ``kunit_abort`` calls function:
+> +                 ``void __noreturn kunit_try_catch_throw(struct kunit_tr=
+y_catch *try_catch)``.
+> +
+> +               - ``kunit_try_catch_throw`` calls function:
+> +                 ``void complete_and_exit(struct completion *, long) __n=
+oreturn;``
+> +                 and terminates the special thread context.
+> +
+> +- ``<op>`` denotes a check with options: ``TRUE`` (supplied property
+> +  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied pr=
+operties are
+> +  equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
+> +  contain an =E2=80=9Cerr=E2=80=9D value).
+> +
+> +- ``[_MSG]`` prints a custom message on failure.
+> +
+> +Test Result Reporting
+> +---------------------
+> +KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
+> +https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-=
+14-specification.md.
+> +KTAP (yet to be standardized format) works with KUnit and Kselftest.
+> +The KUnit executor prints KTAP results to dmesg, and debugfs
+> +(if configured).
+> +
+> +Parameterized Tests
+> +-------------------
+> +
+> +Each KUnit parameterized test is associated with a collection of
+> +parameters. The test is invoked multiple times, once for each parameter
+> +value and the parameter is stored in the ``param_value`` field.
+> +The test case includes a ``KUNIT_CASE_PARAM()`` macro that accepts a
+> +generator function.
+> +The generator function is passed the previous parameter and returns the =
+next
+> +parameter. It also provides a macro to generate common-case generators b=
+ased on
+> +arrays.
+> +
+> +For code, see:
+> +
+> +.. kernel-doc:: include/kunit/test.h
+> +       :identifiers: KUNIT_ARRAY_PARAM
+> +
+> +
+> +kunit_tool (Command Line Test Harness)
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
+> +that can be used to configure, build, exec, parse and run (runs other
+> +commands in order) test results. You can either run KUnit tests using
+> +kunit_tool or can include KUnit in kernel and parse manually.
+> +
+> +- ``configure`` command generates the kernel ``.config`` from a
+> +  ``.kunitconfig`` file (and any architecture-specific options).
+> +  For some architectures, additional config options are specified in the
+> +  ``qemu_config`` Python script
+> +  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
+> +  It parses both the existing ``.config`` and the ``.kunitconfig`` files
+> +  and ensures that ``.config`` is a superset of ``.kunitconfig``.
+> +  If this is not the case, it will combine the two and run
+> +  ``make olddefconfig`` to regenerate the ``.config`` file. It then
+> +  verifies that ``.config`` is now a superset. This checks if all
+> +  Kconfig dependencies are correctly specified in ``.kunitconfig``.
+> +  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
+> +  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
+> +  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
+> +  generate a ``.config`` file.
+> +- ``build`` runs ``make`` on the kernel tree with required options
+> +  (depends on the architecture and some options, for example: build_dir)
+> +  and reports any errors.
+> +  To build a KUnit kernel from the current ``.config``, you can use the
+> +  ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
+> +- ``exec`` command executes kernel results either directly (using
+> +  User-mode Linux configuration), or via an emulator such
+> +  as QEMU. It reads results from the log via standard
+> +  output (stdout), and passes them to ``parse`` to be parsed.
+> +  If you already have built a kernel with built-in KUnit tests,
+> +  you can run the kernel and display the test results with the ``exec``
+> +  argument: ``./tools/testing/kunit/kunit.py exec``.
+> +- ``parse`` extracts the KTAP output from a kernel log, parses
+> +  the test results, and prints a summary. For failed tests, any
+> +  diagnostic output will be included.
+> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-=
+tools/kunit/index.rst
+> index 55d2444b0745..50d3ef9359dd 100644
+> --- a/Documentation/dev-tools/kunit/index.rst
+> +++ b/Documentation/dev-tools/kunit/index.rst
+> @@ -9,6 +9,7 @@ KUnit - Linux Kernel Unit Testing
+>         :caption: Contents:
+>
+>         start
+> +       architecture
+>         usage
+>         kunit-tool
+>         api/index
+> @@ -96,6 +97,7 @@ How do I use it?
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  *   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
+> +*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+>  *   Documentation/dev-tools/kunit/usage.rst - KUnit features.
+>  *   Documentation/dev-tools/kunit/tips.rst - best practices with
+>      examples.
+> diff --git a/Documentation/dev-tools/kunit/kunit_suitememorydiagram.svg b=
+/Documentation/dev-tools/kunit/kunit_suitememorydiagram.svg
+> new file mode 100644
+> index 000000000000..cf8fddc27500
+> --- /dev/null
+> +++ b/Documentation/dev-tools/kunit/kunit_suitememorydiagram.svg
+> @@ -0,0 +1,81 @@
+> +<?xml version=3D"1.0" encoding=3D"UTF-8"?>
+> +<svg width=3D"796.93" height=3D"555.73" version=3D"1.1" viewBox=3D"0 0 7=
+96.93 555.73" xmlns=3D"http://www.w3.org/2000/svg">
+> +       <g transform=3D"translate(-13.724 -17.943)">
+> +               <g fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a=
+1a1a">
+> +                       <rect x=3D"323.56" y=3D"18.443" width=3D"115.75" =
+height=3D"41.331"/>
+> +                       <rect x=3D"323.56" y=3D"463.09" width=3D"115.75" =
+height=3D"41.331"/>
+> +                       <rect x=3D"323.56" y=3D"531.84" width=3D"115.75" =
+height=3D"41.331"/>
+> +                       <rect x=3D"323.56" y=3D"88.931" width=3D"115.75" =
+height=3D"74.231"/>
+> +               </g>
+> +               <g>
+> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
+height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
+> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
+0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
+25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
+ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(0 -258.6)">
+> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
+height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
+> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
+0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
+25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
+ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(0 -217.27)">
+> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
+height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
+> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
+0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
+25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
+ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(0 -175.94)">
+> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
+height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
+> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
+0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
+25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
+ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(0 -134.61)">
+> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
+height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
+> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
+0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
+25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
+ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(0 -41.331)">
+> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
+height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
+> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
+0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
+25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
+ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(3.4459e-5 -.71088)">
+> +                       <rect x=3D"502.19" y=3D"143.16" width=3D"201.13" =
+height=3D"41.331" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1=
+a"/>
+> +                       <text x=3D"512.02319" y=3D"168.02026" font-family=
+=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.25" xml:space=3D"=
+preserve"><tspan x=3D"512.02319" y=3D"168.02026" font-family=3D"monospace">=
+_kunit_suites_start</tspan></text>
+> +               </g>
+> +               <g transform=3D"translate(3.0518e-5 -3.1753)">
+> +                       <rect x=3D"502.19" y=3D"445.69" width=3D"201.13" =
+height=3D"41.331" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1=
+a"/>
+> +                       <text x=3D"521.61694" y=3D"470.54846" font-family=
+=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.25" xml:space=3D"=
+preserve"><tspan x=3D"521.61694" y=3D"470.54846" font-family=3D"monospace">=
+_kunit_suites_end</tspan></text>
+> +               </g>
+> +               <rect x=3D"14.224" y=3D"277.78" width=3D"134.47" height=
+=3D"41.331" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1a"/>
+> +               <text x=3D"32.062176" y=3D"304.41287" font-family=3D"sans=
+-serif" font-size=3D"16px" style=3D"line-height:1.25" xml:space=3D"preserve=
+"><tspan x=3D"32.062176" y=3D"304.41287" font-family=3D"monospace">.init.da=
+ta</tspan></text>
+> +               <g transform=3D"translate(217.98 145.12)" stroke=3D"#1a1a=
+1a">
+> +                       <circle cx=3D"149.97" cy=3D"373.01" r=3D"3.4012"/=
+>
+> +                       <circle cx=3D"163.46" cy=3D"373.01" r=3D"3.4012"/=
+>
+> +                       <circle cx=3D"176.95" cy=3D"373.01" r=3D"3.4012"/=
+>
+> +               </g>
+> +               <g transform=3D"translate(217.98 -298.66)" stroke=3D"#1a1=
+a1a">
+> +                       <circle cx=3D"149.97" cy=3D"373.01" r=3D"3.4012"/=
+>
+> +                       <circle cx=3D"163.46" cy=3D"373.01" r=3D"3.4012"/=
+>
+> +                       <circle cx=3D"176.95" cy=3D"373.01" r=3D"3.4012"/=
+>
+> +               </g>
+> +               <g stroke=3D"#1a1a1a">
+> +                       <rect x=3D"323.56" y=3D"328.49" width=3D"115.75" =
+height=3D"51.549" fill=3D"#b9dbc6"/>
+> +                       <g transform=3D"translate(217.98 -18.75)">
+> +                               <circle cx=3D"149.97" cy=3D"373.01" r=3D"=
+3.4012"/>
+> +                               <circle cx=3D"163.46" cy=3D"373.01" r=3D"=
+3.4012"/>
+> +                               <circle cx=3D"176.95" cy=3D"373.01" r=3D"=
+3.4012"/>
+> +                       </g>
+> +               </g>
+> +               <g transform=3D"scale(1.0933 .9147)" stroke-width=3D"32.9=
+37" aria-label=3D"{">
+> +                       <path d=3D"m275.49 545.57c-35.836-8.432-47.43-24.=
+769-47.957-64.821v-88.536c-0.527-44.795-10.54-57.97-49.538-67.456 38.998-10=
+.013 49.011-23.715 49.538-67.983v-88.536c0.527-40.052 12.121-56.389 47.957-=
+64.821v-5.797c-65.348 0-85.901 17.391-86.955 73.253v93.806c-0.527 36.89-10.=
+013 50.065-44.795 59.551 34.782 10.013 44.268 23.188 44.795 60.078v93.279c1=
+.581 56.389 21.607 73.78 86.955 73.78z"/>
+> +               </g>
+> +               <g transform=3D"scale(1.1071 .90325)" stroke-width=3D"14.=
+44" aria-label=3D"{">
+> +                       <path d=3D"m461.46 443.55c-15.711-3.6967-20.794-1=
+0.859-21.025-28.418v-38.815c-0.23104-19.639-4.6209-25.415-21.718-29.574 17.=
+097-4.3898 21.487-10.397 21.718-29.805v-38.815c0.23105-17.559 5.314-24.722 =
+21.025-28.418v-2.5415c-28.649 0-37.66 7.6244-38.122 32.115v41.126c-0.23105 =
+16.173-4.3898 21.949-19.639 26.108 15.249 4.3898 19.408 10.166 19.639 26.33=
+9v40.895c0.69313 24.722 9.4728 32.346 38.122 32.346z"/>
+> +               </g>
+> +               <path d=3D"m449.55 161.84v2.5h49.504v-2.5z" color=3D"#000=
+000" style=3D"-inkscape-stroke:none"/>
+> +               <g fill-rule=3D"evenodd">
+> +                       <path d=3D"m443.78 163.09 8.65-5v10z" color=3D"#0=
+00000" stroke-width=3D"1pt" style=3D"-inkscape-stroke:none"/>
+> +                       <path d=3D"m453.1 156.94-10.648 6.1543 0.99804 0.=
+57812 9.6504 5.5781zm-1.334 2.3125v7.6856l-6.6504-3.8438z" color=3D"#000000=
+" style=3D"-inkscape-stroke:none"/>
+> +               </g>
+> +               <path d=3D"m449.55 461.91v2.5h49.504v-2.5z" color=3D"#000=
+000" style=3D"-inkscape-stroke:none"/>
+> +               <g fill-rule=3D"evenodd">
+> +                       <path d=3D"m443.78 463.16 8.65-5v10z" color=3D"#0=
+00000" stroke-width=3D"1pt" style=3D"-inkscape-stroke:none"/>
+> +                       <path d=3D"m453.1 457-10.648 6.1562 0.99804 0.576=
+17 9.6504 5.5781zm-1.334 2.3125v7.6856l-6.6504-3.8438z" color=3D"#000000" s=
+tyle=3D"-inkscape-stroke:none"/>
+> +               </g>
+> +               <rect x=3D"515.64" y=3D"223.9" width=3D"294.52" height=3D=
+"178.49" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1a"/>
+> +               <text x=3D"523.33319" y=3D"262.52542" font-family=3D"mono=
+space" font-size=3D"14.667px" style=3D"line-height:1.25" xml:space=3D"prese=
+rve"><tspan x=3D"523.33319" y=3D"262.52542"><tspan fill=3D"#008000" font-fa=
+mily=3D"monospace" font-size=3D"14.667px" font-weight=3D"bold">struct</tspa=
+n> kunit_suite {</tspan><tspan x=3D"523.33319" y=3D"280.8588"><tspan fill=
+=3D"#008000" font-family=3D"monospace" font-size=3D"14.667px" font-weight=
+=3D"bold">  const char</tspan> name[<tspan fill=3D"#ff00ff" font-size=3D"14=
+.667px">256</tspan>];</tspan><tspan x=3D"523.33319" y=3D"299.19217">  <tspa=
+n fill=3D"#008000" font-family=3D"monospace" font-size=3D"14.667px" font-we=
+ight=3D"bold">int</tspan> (*init)(<tspan fill=3D"#008000" font-family=3D"mo=
+nospace" font-size=3D"14.667px" font-weight=3D"bold">struct</tspan> kunit *=
+);</tspan><tspan x=3D"523.33319" y=3D"317.52554">  <tspan fill=3D"#008000" =
+font-family=3D"monospace" font-size=3D"14.667px" font-weight=3D"bold">void<=
+/tspan> (*exit)(<tspan fill=3D"#008000" font-family=3D"monospace" font-size=
+=3D"14.667px" font-weight=3D"bold">struct</tspan> kunit *);</tspan><tspan x=
+=3D"523.33319" y=3D"335.85892">  <tspan fill=3D"#008000" font-family=3D"mon=
+ospace" font-size=3D"14.667px" font-weight=3D"bold">struct</tspan> kunit_ca=
+se *test_cases;</tspan><tspan x=3D"523.33319" y=3D"354.19229">  ...</tspan>=
+<tspan x=3D"523.33319" y=3D"372.52567">};</tspan></text>
+> +       </g>
+> +</svg>
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-=
+tools/kunit/start.rst
+> index 55f8df1abd40..5dd2c88fa2bd 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -240,6 +240,7 @@ Congrats! You just wrote your first KUnit test.
+>  Next Steps
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> +*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+>  *   Documentation/dev-tools/kunit/usage.rst - KUnit features.
+>  *   Documentation/dev-tools/kunit/tips.rst - best practices with
+>      examples.
+> --
+> 2.34.1.173.g76aa8bc2d0-goog
+>
