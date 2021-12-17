@@ -2,194 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EE34781DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 02:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8673478313
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 03:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbhLQBDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Dec 2021 20:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbhLQBDw (ORCPT
+        id S230425AbhLQCUB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Dec 2021 21:20:01 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15749 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230416AbhLQCUB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 20:03:52 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72237C061574;
-        Thu, 16 Dec 2021 17:03:52 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id q74so1752291ybq.11;
-        Thu, 16 Dec 2021 17:03:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=esp5q/yMslV4XhtOkSMlOozHd3IJiE7INI35/+PGDPo=;
-        b=pMLpNZFo5PgsMaYgd/8fgoPkD5dUOEMb81W63b8U4WVoqtNMOyseQ7DoGimtHnMMnV
-         Qd+ksiTOMBVNHPkzpfG+lPA7R37XTrQwAdC7qxdKbhuMbCKkiNEHSBv+9sUt8tPU5Cam
-         sDnBWKo6Ugs2JyJDytDcCYnPApIRrHtQ113/clIvX+U9Mw/UdUF4NWcr0+8ePKByYE+W
-         1kq8HGmsOZtFgqwSy70ebDweE6WImC6lZFv0Gz4d04k+U5jwkliL0F2zRTyJ5K+7b4rd
-         mxRtDg77ZE/3LnlNamIDq0zFavbsOyJwHF769pKW5gh9SvxfnsBJWVU7XiGhmKzO2p6r
-         pMYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=esp5q/yMslV4XhtOkSMlOozHd3IJiE7INI35/+PGDPo=;
-        b=kkaP4TS3xpLhmqf7QitQL8sZMj1KupGVLzqRIjLRtWuhmzU6M2yR3mBjQC3SjQD+FB
-         W9F/PviHwta0HtxT4GjRLFBDXGkfXKHHuimPPlLdSfyr8v6H0QPJIfg7fOeCPKGoldzJ
-         6O7uDSejiyzXiBGV8NLAzPbAe0k9mL+mZk9tPU9fFWHOEBSFbxl7Fe+Sn9ijCKi9FdW8
-         CYwCLaozlFHXMzPDxCQnhOPz4kcpjZvSEacoOA7F5JJM++eWz0lCk9sdVkeBP0V5j7jN
-         K0cVOMx4RpZEH5HuVofScd5fdgNJXME8eGdgl74FOeFZJ5x4DqmLf9TWh1tft/KfyYsY
-         uKpg==
-X-Gm-Message-State: AOAM532g+lePPJdNa7Rbx9mfU9sSrNwqEbItcFneFFVDoV4tSVX6j1Ww
-        1dWinwt/YscKAwoqoi8Kzv7/oNa8aLDGv0rhTH4=
-X-Google-Smtp-Source: ABdhPJwWkFRTrpXiBRSyqwIlsAo7elgTEuvCMvdSSw06QmN1c7fQw6DfCVYGfXXISiEbvVjSOot+NY2Zn+eXVj5s1s0=
-X-Received: by 2002:a5b:1c2:: with SMTP id f2mr1160509ybp.150.1639703031653;
- Thu, 16 Dec 2021 17:03:51 -0800 (PST)
+        Thu, 16 Dec 2021 21:20:01 -0500
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JFXfw3mcKzZdjG;
+        Fri, 17 Dec 2021 10:16:56 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 17 Dec 2021 10:19:51 +0800
+Received: from [10.67.109.184] (10.67.109.184) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 17 Dec 2021 10:19:51 +0800
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
+ userspace pt_regs
+From:   Pu Lehui <pulehui@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>, <ast@kernel.org>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211214135555.125348-1-pulehui@huawei.com>
+ <9063be69-fbd9-c0a5-9271-c6d4281c71ef@iogearbox.net>
+ <30aa8ea2-3752-d711-50f8-4b3d49cad56f@huawei.com>
+Message-ID: <5525a45e-0f4a-f686-bfa9-c269321a8b86@huawei.com>
+Date:   Fri, 17 Dec 2021 10:19:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20211210173433.13247-1-skhan@linuxfoundation.org>
- <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
- <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
- <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com>
- <d3c1b7f4-5363-c23e-4837-5eaf07f63ebc@linuxfoundation.org>
- <CAEf4BzYKnoD_x7fZ4Fwp0Kg-wT6HMXOG0CMRSG4U+qQ0R27yzQ@mail.gmail.com>
- <53490dba-b7fd-a3f8-6574-5736c83aa90d@linuxfoundation.org>
- <CAEf4BzYA1h2kVF3945hxdcR8gf08GFpLiN1OwjedzTrzaAparA@mail.gmail.com> <cc4d6562-3d2e-2c0a-cb31-2733d2189f5c@linuxfoundation.org>
-In-Reply-To: <cc4d6562-3d2e-2c0a-cb31-2733d2189f5c@linuxfoundation.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 16 Dec 2021 17:03:40 -0800
-Message-ID: <CAEf4BzZ1K9uQ-K1Q2BCSBesR3RUj_NW8uHu6NduoX7uLBdfukQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <30aa8ea2-3752-d711-50f8-4b3d49cad56f@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:22 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 12/16/21 1:03 PM, Andrii Nakryiko wrote:
-> > On Thu, Dec 16, 2021 at 11:51 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>
-> >> On 12/16/21 12:30 PM, Andrii Nakryiko wrote:
-> >>> On Thu, Dec 16, 2021 at 6:42 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>>>
-> >>>> On 12/15/21 9:04 PM, Andrii Nakryiko wrote:
-> >>>>> On Tue, Dec 14, 2021 at 12:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>>>>>
-> >>>>>> On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
-> >>>>>>> On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>>>>>>>
-> >>>>>>>> ARRAY_SIZE is defined in multiple test files. Remove the definitions
-> >>>>>>>> and include header file for the define instead.
-> >>>>>>>>
-> >>>>>>>> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
-> >>>>>>>> define.
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> >>>>>>>> ---
-> >>>>>>>>      tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
-> >>>>>>>>      tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
-> >>>>>>>>      tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
-> >>>>>>>>      tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
-> >>>>>>>>      tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
-> >>>>>>>>      5 files changed, 5 insertions(+), 19 deletions(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> >>>>>>>> index 1d8918dfbd3f..7a5ebd330689 100644
-> >>>>>>>> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> >>>>>>>> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> >>>>>>>> @@ -5,6 +5,7 @@
-> >>>>>>>>      #include <bpf/bpf_helpers.h>
-> >>>>>>>>      #include <bpf/bpf_tracing.h>
-> >>>>>>>>      #include <bpf/bpf_core_read.h>
-> >>>>>>>> +#include <bpf/bpf_util.h>
-> >>>>>>>
-> >>>>>>> It doesn't look like you've built it.
-> >>>>>>>
-> >>>>>>> progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
-> >>>>>>> #include <bpf/bpf_util.h>
-> >>>>>>>              ^~~~~~~~~~~~~~~~
-> >>>>>>>       CLNG-BPF [test_maps] socket_cookie_prog.o
-> >>>>>>> progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
-> >>>>>>> #include <bpf/bpf_util.h>
-> >>>>>>>              ^~~~~~~~~~~~~~~~
-> >>>>>>> 1 error generated.
-> >>>>>>> In file included from progs/profiler2.c:6:
-> >>>>>>> progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
-> >>>>>>> #include <bpf/bpf_util.h>
-> >>>>>>>              ^~~~~~~~~~~~~~~~
-> >>>>>>>
-> >>>>>>
-> >>>>>> Sorry about that. I built it - I think something is wrong in my env. Build
-> >>>>>> fails complaining about not finding vmlinux - I overlooked that the failure
-> >>>>>> happened before it got to progs.
-> >>>>>>
-> >>>>>> Error: failed to load BTF from .../vmlinux: No such file or directory
-> >>>>>
-> >>>>> Please make sure that you build vmlinux before you build selftests,
-> >>>>> BPF selftests use vmlinux to generate vmlinux.h with all kernel types
-> >>>>> (among other things). So please also make sure that all the setting in
-> >>>>> selftests/bpf/config were used in your Kconfig.
-> >>>>>
-> >>>>>>
-> >>>>
-> >>>> The problem in my env. is that I don't have CONFIG_DEBUG_INFO_BTF in
-> >>>> my config and then don't have the dwarves and llvm-strip on my system.
-> >>>> Pains of upgrading.
-> >>>>
-> >>>> I am all set now. On the other hand the vmlinux.h is a mess. It has
-> >>>> no guards for defines and including stdio.h and this generated
-> >>>> vmlinux.h causes all sorts of problems.
-> >>>
-> >>> It does have
-> >>>
-> >>> #ifndef __VMLINUX_H__
-> >>> #define __VMLINUX_H__
-> >>>
-> >>> Are we talking about the same vmlinux.h here?
-> >>>
-> >>
-> >> Yes we are. The guard it has works when vmlinux.h is included
-> >> twice. It defines a lot of common defines which are the problem.
-> >> Unless you add guards around each one of them, including vmlinux.h
-> >> is problematic if you also include other standard includes.
-> >>
-> >> You can try to include bpf_util.h for example from one of the
-> >> test in progs to see the problem.
-> >
-> > bpf_util.h is a user-space header, it's not going to work from the BPF
-> > program side. If you look at any of progs/*.c (all of which are BPF
-> > program-side source code), not a single one is including bpf_util.h.
-> >
->
-> Whether bpf_util.h can be included from progs isn't the main thing here.
-> progs/test*.c including vmlinux.h (most of them seem to) can,'t include
-> any standard .h files.
->
-> "including vmlinux.h is problematic if a test also had to include other
->   standard includes."
->
-> This makes this header file restrictive and works in one case and one
-> case only when no other standard headers aren't included.
->
 
-It does work with other BPF-side headers that libbpf provides:
-bpf_tracing.h, bpf_core_read.h, etc. Yes, it doesn't work with other
-kernel or non-kernel headers. We are well aware of this limitation and
-are currently trying to convince the Clang community to let us fix
-that with a new attribute for Clang.
 
-But I'm not sure what we are discussing at this point. I think we
-established that bpf_util.h is a user-space header and can't be used
-from the BPF side.
+On 2021/12/15 9:20, Pu Lehui wrote:
+> On 2021/12/15 4:01, Daniel Borkmann wrote:
+>> On 12/14/21 2:55 PM, Pu Lehui wrote:
+>>> When building bpf selftests on arm64, the following error will occur:
+>>>
+>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
+>>> user_pt_regs'
+>>>
+>>> Some archs, like arm64 and riscv, use userspace pt_regs in
+>>> bpf_tracing.h, which causes build failure when bpf prog use
+>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
+>>>
+>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>
+>> Looks like this lets CI fail, did you run the selftests also with 
+>> vmtest.sh to
+>> double check?
+>>
+>> https://github.com/kernel-patches/bpf/runs/4521708490?check_suite_focus=true 
+>> :
+>>
+>> [...]
+>> #189 verif_scale_loop6:FAIL
+>> libbpf: prog 'trace_virtqueue_add_sgs': BPF program load failed: 
+>> Argument list too long
+>> libbpf: prog 'trace_virtqueue_add_sgs': -- BEGIN PROG LOAD LOG --
+>> R1 type=ctx expected=fp
+>> BPF program is too large. Processed 1000001 insn
+>> verification time 12250995 usec
+>> stack depth 88
+>> processed 1000001 insns (limit 1000000) max_states_per_insn 107 
+>> total_states 21739 peak_states 2271 mark_read 6
+>> -- END PROG LOAD LOG --
+>> libbpf: failed to load program 'trace_virtqueue_add_sgs'
+>> libbpf: failed to load object 'loop6.o'
+>> scale_test:FAIL:expect_success unexpected error: -7 (errno 7)
+>> Summary: 221/986 PASSED, 8 SKIPPED, 1 FAILED
+>> [...]
+>>
+>> Please take a look and fix in your patch, thanks!
+>> .
+> Sorry for my negligence, I'll take a look and fix it.
+> .
+It seems strange that verifier think the loop can execute up to u64_max 
+while I just replace the header file.
+This looks very similar to the previous llvm issue, 
+https://github.com/iovisor/bcc/pull/3270, but I have no idea how to locate.
 
-> thanks,
-> -- Shuah
+Back to arm64 bpf selftest compiling problem, we can use header file 
+directory generated by "make headers_install" to fix it.
+
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -294,7 +294,8 @@ MENDIAN=$(if 
+$(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+  CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+  BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
+  	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
+-	     -I$(abspath $(OUTPUT)/../usr/include)
++	     -I$(abspath $(OUTPUT)/../usr/include) \
++	     -I../../../../usr/include
