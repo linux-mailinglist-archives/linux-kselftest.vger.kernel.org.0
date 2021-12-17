@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A925C478A00
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 12:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38823478A03
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 12:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbhLQLeG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 06:34:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24482 "EHLO
+        id S235532AbhLQLeS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 06:34:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50542 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235495AbhLQLeF (ORCPT
+        by vger.kernel.org with ESMTP id S235517AbhLQLeL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:34:05 -0500
+        Fri, 17 Dec 2021 06:34:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639740845;
+        s=mimecast20190719; t=1639740851;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MstCAevuD1qvpTctpkyVpFQ9Km+HVMM2bhgtFFKdRTg=;
-        b=KluuusnFWw+Z/Xq5jPOnT7RaRVL9rhjD1ckWWkKjoxEyqatG9W3nwg3cVeAFYgifaShvLk
-        w0Ge+Nne2LrgoZPuoFnJjJoZXoEKwxH/GcIsK+J1Gf0aE8D7OA3Zuhn29b0mXHuvetmTji
-        SX6FaqAYJSYqDbIGz7dG+XQv7BeH24A=
+        bh=GcIVNk9FqOqzjRi5JqPcDJ4wYU12HMN6l6PoOYX4XeU=;
+        b=SloD0UewO5ZzG3HL4trjWPnYfYz09MR+lAclOXDuhQmeQ9JJVt2eaZjxyP3uUjFojzaeug
+        sm1V9XK6JLq+6Vz25daVoFkVZppARDympxcZSoy5is09VQxrv01yZzPeQeyjy4VPLJXx+K
+        5cLWf5lYJsaaF7knmu4N5vLgS9jWDow=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-marQ5KkgObO5qIOHzCa4PA-1; Fri, 17 Dec 2021 06:34:01 -0500
-X-MC-Unique: marQ5KkgObO5qIOHzCa4PA-1
+ us-mta-540-oSDSQLLFP4mmgy0batSDew-1; Fri, 17 Dec 2021 06:34:07 -0500
+X-MC-Unique: oSDSQLLFP4mmgy0batSDew-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C784C101AFAB;
-        Fri, 17 Dec 2021 11:33:58 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4FC52101AFAC;
+        Fri, 17 Dec 2021 11:34:05 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.193.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 735F48D5B6;
-        Fri, 17 Dec 2021 11:33:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 307788ACF7;
+        Fri, 17 Dec 2021 11:33:59 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -60,9 +60,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: [PATCH v1 06/11] mm: support GUP-triggered unsharing via FAULT_FLAG_UNSHARE (!hugetlb)
-Date:   Fri, 17 Dec 2021 12:30:44 +0100
-Message-Id: <20211217113049.23850-7-david@redhat.com>
+Subject: [PATCH v1 07/11] mm: gup: trigger unsharing via FAULT_FLAG_UNSHARE when required (!hugetlb)
+Date:   Fri, 17 Dec 2021 12:30:45 +0100
+Message-Id: <20211217113049.23850-8-david@redhat.com>
 In-Reply-To: <20211217113049.23850-1-david@redhat.com>
 References: <20211217113049.23850-1-david@redhat.com>
 MIME-Version: 1.0
@@ -72,334 +72,325 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-FAULT_FLAG_UNSHARE is a new type of page fault applicable to COW-able
-anonymous memory (including hugetlb but excluding KSM) and its purpose is
-to allow for unsharing of shared anonymous pages on selected GUP *read*
-access, in comparison to the traditional COW on *write* access.
+It is currently possible for a child process to observe modifications of
+anonymous pages by the parent process after fork() in some cases, which is
+not only a userspace visible violation of the POSIX semantics of
+MAP_PRIVATE, but more importantly a real security issue.
 
-In contrast to a COW, GUP-triggered unsharing will still maintain the write
-protection. It will be triggered by GUP to properly prevent a child process
-from finding ways via GUP to observe memory modifications of anonymous
-memory of the parent process after fork().
+This issue, including other related COW issues, has been summarized in [1]:
+"
+  1. Observing Memory Modifications of Private Pages From A Child Process
 
-Rename the relevant functions to make it clear whether we're dealing
-with unsharing, cow, or both.
+  Long story short: process-private memory might not be as private as you
+  think once you fork(): successive modifications of private memory
+  regions in the parent process can still be observed by the child
+  process, for example, by smart use of vmsplice()+munmap().
 
-The hugetlb part will be added separately.
+  The core problem is that pinning pages readable in a child process, such
+  as done via the vmsplice system call, can result in a child process
+  observing memory modifications done in the parent process the child is
+  not supposed to observe. [1] contains an excellent summary and [2]
+  contains further details. This issue was assigned CVE-2020-29374 [9].
+
+  For this to trigger, it's required to use a fork() without subsequent
+  exec(), for example, as used under Android zygote. Without further
+  details about an application that forks less-privileged child processes,
+  one cannot really say what's actually affected and what's not -- see the
+  details section the end of this mail for a short sshd/openssh analysis.
+
+  While commit 17839856fd58 ("gup: document and work around "COW can break
+  either way" issue") fixed this issue and resulted in other problems
+  (e.g., ptrace on pmem), commit 09854ba94c6a ("mm: do_wp_page()
+  simplification") re-introduced part of the problem unfortunately.
+
+  The original reproducer can be modified quite easily to use THP [3] and
+  make the issue appear again on upstream kernels. I modified it to use
+  hugetlb [4] and it triggers as well. The problem is certainly less
+  severe with hugetlb than with THP; it merely highlights that we still
+  have plenty of open holes we should be closing/fixing.
+
+  Regarding vmsplice(), the only known workaround is to disallow the
+  vmsplice() system call ... or disable THP and hugetlb. But who knows
+  what else is affected (RDMA? O_DIRECT?) to achieve the same goal -- in
+  the end, it's a more generic issue.
+"
+
+This security issue / MAP_PRIVATE POSIX violation was first reported by
+Jann Horn on 27 May 2020 and it currently affects anonymous THP and
+hugetlb.
+
+Ordinary anonymous pages are currently not affected, because the COW logic
+was changed in commit 09854ba94c6a ("mm: do_wp_page() simplification")
+for them to COW on "page_count() != 1" instead of "mapcount > 1", which
+unfortunately results in other COW issues, some of them documented in [1]
+as well.
+
+To fix this COW issue once and for all, introduce GUP-triggered unsharing
+that can be conditionally triggered via FAULT_FLAG_UNSHARE. In contrast to
+traditional COW, unsharing will leave the copied page mapped
+write-protected in the page table, not having the semantics of a write
+fault.
+
+Logically, unsharing is triggered "early", as soon as GUP performs the
+action that could result in a COW getting missed later and the security
+issue triggering: however, unsharing is not triggered as before via a
+write fault with undesired side effects.
+
+GUP triggers unsharing if all of the following conditions are met:
+* The page is mapped R/O
+* We have an anonymous page, excluding KSM
+* We want to read (!FOLL_WRITE)
+* Unsharing is not disabled (!FOLL_NOUNSHARE)
+* We want to take a reference (FOLL_GET or FOLL_PIN)
+* The page is a shared anonymous page: mapcount > 1
+
+As this patch introduces the same unsharing logic also for ordinary
+PTE-mapped anonymous pages, it also paves the way to fix the other known
+COW related issues documented in [1] without reintroducing the security
+issue or reintroducing other issues we observed in the past (e.g., broken
+ptrace on pmem).
+
+We better leave the follow_page() API alone: it's an internal API and
+its users don't actually allow for user space to read page content and they
+don't expect to get "NULL" for actually present pages -- because they
+usually don't trigger faults. Introduce and use FOLL_NOUNSHARE for that
+purpose. We could also think about using it for other corner cases, such
+as get_dump_page().
+
+Note: GUP users that use memory notifiers to synchronize with the MM
+      don't have to bother about unsharing: they don't actually take
+      a reference on the pages and are properly synchronized against MM
+      changes to never result in consistency issues.
+
+Add a TODO item that the mechanism should be extended to improve GUP
+long-term as a whole, avoiding the requirement for FOLL_WRITE|FOLL_FORCE.
+
+hugetlb case will be handled separately.
 
 This commit is based on prototype patches by Andrea.
+
+[1] https://lore.kernel.org/r/3ae33b08-d9ef-f846-56fb-645e3b9b4c66@redhat.com
 
 Co-developed-by: Andrea Arcangeli <aarcange@redhat.com>
 Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
 Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/mm.h |   4 ++
- mm/memory.c        | 136 ++++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 119 insertions(+), 21 deletions(-)
+ include/linux/mm.h | 10 ++++++
+ mm/gup.c           | 90 ++++++++++++++++++++++++++++++++++++++++++++--
+ mm/huge_memory.c   |  7 ++++
+ 3 files changed, 104 insertions(+), 3 deletions(-)
 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a7e4a9e7d807..37d1fb2f865e 100644
+index 37d1fb2f865e..ebcdaed60701 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -436,6 +436,9 @@ extern pgprot_t protection_map[16];
-  * @FAULT_FLAG_REMOTE: The fault is not for current task/mm.
-  * @FAULT_FLAG_INSTRUCTION: The fault was during an instruction fetch.
-  * @FAULT_FLAG_INTERRUPTIBLE: The fault can be interrupted by non-fatal signals.
-+ * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare a
-+ *                      shared anonymous page (-> mapped R/O). Does not apply
-+ *                      to KSM.
+@@ -2975,6 +2975,7 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+ #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
+ #define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
+ #define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
++#define FOLL_NOUNSHARE	0x100000 /* don't trigger unsharing on shared anon pages */
+ 
+ /*
+  * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
+@@ -3029,6 +3030,12 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+  * releasing pages: get_user_pages*() pages must be released via put_page(),
+  * while pin_user_pages*() pages must be released via unpin_user_page().
   *
-  * About @FAULT_FLAG_ALLOW_RETRY and @FAULT_FLAG_TRIED: we can specify
-  * whether we would allow page faults to retry by specifying these two
-@@ -467,6 +470,7 @@ enum fault_flag {
- 	FAULT_FLAG_REMOTE =		1 << 7,
- 	FAULT_FLAG_INSTRUCTION =	1 << 8,
- 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
-+	FAULT_FLAG_UNSHARE =		1 << 10,
++ * FOLL_NOUNSHARE should be set when no unsharing should be triggered when
++ * eventually taking a read-only reference on a shared anonymous page, because
++ * we are sure that user space cannot use that reference for reading the page
++ * after eventually unmapping the page. FOLL_NOUNSHARE is implicitly set for the
++ * follow_page() API.
++ *
+  * Please see Documentation/core-api/pin_user_pages.rst for more information.
+  */
+ 
+@@ -3043,6 +3050,9 @@ static inline int vm_fault_to_errno(vm_fault_t vm_fault, int foll_flags)
+ 	return 0;
+ }
+ 
++extern bool gup_must_unshare(unsigned int flags, struct page *page,
++			     bool is_head);
++
+ typedef int (*pte_fn_t)(pte_t *pte, unsigned long addr, void *data);
+ extern int apply_to_page_range(struct mm_struct *mm, unsigned long address,
+ 			       unsigned long size, pte_fn_t fn, void *data);
+diff --git a/mm/gup.c b/mm/gup.c
+index 2c51e9748a6a..2a83388c3fb4 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -29,6 +29,53 @@ struct follow_page_context {
+ 	unsigned int page_mask;
  };
  
- /*
-diff --git a/mm/memory.c b/mm/memory.c
-index 8f1de811a1dc..7253a2ad4320 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2707,8 +2707,9 @@ EXPORT_SYMBOL_GPL(apply_to_existing_page_range);
-  * read non-atomically.  Before making any commitment, on those architectures
-  * or configurations (e.g. i386 with PAE) which might give a mix of unmatched
-  * parts, do_swap_page must check under lock before unmapping the pte and
-- * proceeding (but do_wp_page is only called after already making such a check;
-- * and do_anonymous_page can safely check later on).
-+ * proceeding (but do_wp_page_cow/do_wp_page_unshare is only called after
-+ * already making such a check; and do_anonymous_page can safely check later
-+ * on).
-  */
- static inline int pte_unmap_same(struct vm_fault *vmf)
++/*
++ * Indicates for which pages that are write-protected in the page table,
++ * whether GUP has to trigger unsharing via FAULT_FLAG_UNSHARE such that the
++ * GUP pin will remain consistent with the pages mapped into the page tables
++ * of the MM.
++ *
++ * This handling is required to guarantee that a child process that triggered
++ * a read-only GUP before unmapping the page of interest cannot observe
++ * modifications of shared anonymous pages with COW semantics in the parent
++ * after fork().
++ *
++ * TODO: although the security issue described does no longer apply in any case,
++ * the full consistency between the pinned pages and the pages mapped into the
++ * page tables of the MM only apply to short-term pinnings only. For
++ * FOLL_LONGTERM, FOLL_WRITE|FOLL_FORCE is required for now, which can be
++ * inefficient and still result in some consistency issues. Extend this
++ * mechanism to also provide full synchronicity to FOLL_LONGTERM, avoiding
++ * FOLL_WRITE|FOLL_FORCE.
++ *
++ * This function is safe to be called in IRQ context.
++ */
++bool gup_must_unshare(unsigned int flags, struct page *page, bool is_head)
++{
++	/* We only care about read faults where unsharing is desired. */
++	if (flags & (FOLL_WRITE | FOLL_NOUNSHARE))
++		return false;
++	/*
++	 * We only care when the reference count of the page is to get
++	 * increased. In particular, GUP users that rely on memory notifiers
++	 * instead don't have to trigger unsharing.
++	 */
++	if (!(flags & (FOLL_GET|FOLL_PIN)))
++		return false;
++	if (!PageAnon(page))
++		return false;
++	if (PageKsm(page))
++		return false;
++	if (PageHuge(page))
++		/* TODO: handle hugetlb as well. */
++		return false;
++	if (is_head) {
++		VM_BUG_ON(!PageTransHuge(page));
++		return page_trans_huge_mapcount(page, NULL) > 1;
++	}
++	return page_mapcount(page) > 1;
++}
++
+ static void hpage_pincount_add(struct page *page, int refs)
  {
-@@ -2726,8 +2727,8 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
- 	return same;
- }
+ 	VM_BUG_ON_PAGE(!hpage_pincount_available(page), page);
+@@ -543,6 +590,14 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 		}
+ 	}
  
--static inline bool cow_user_page(struct page *dst, struct page *src,
--				 struct vm_fault *vmf)
-+static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
-+				       struct vm_fault *vmf)
- {
- 	bool ret;
- 	void *kaddr;
-@@ -2952,7 +2953,8 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
- }
- 
- /*
-- * Handle the case of a page which we actually need to copy to a new page.
-+ * Handle the case of a page which we actually need to copy to a new page,
-+ * either due to COW or unsharing.
++	/*
++	 * If unsharing is required, keep retrying to unshare until the
++	 * page becomes exclusive.
++	 */
++	if (!pte_write(pte) && gup_must_unshare(flags, page, false)) {
++		page = ERR_PTR(-EMLINK);
++		goto out;
++	}
+ 	/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
+ 	if (unlikely(!try_grab_page(page, flags))) {
+ 		page = ERR_PTR(-ENOMEM);
+@@ -790,6 +845,11 @@ static struct page *follow_p4d_mask(struct vm_area_struct *vma,
+  * When getting pages from ZONE_DEVICE memory, the @ctx->pgmap caches
+  * the device's dev_pagemap metadata to avoid repeating expensive lookups.
   *
-  * Called with mmap_lock locked and the old page referenced, but
-  * without the ptl held.
-@@ -2967,7 +2969,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
-  *   held to the old page, as well as updating the rmap.
-  * - In any case, unlock the PTL and drop the reference we took to the old page.
-  */
--static vm_fault_t wp_page_copy(struct vm_fault *vmf)
-+static vm_fault_t wp_page_copy(struct vm_fault *vmf, bool unshare)
- {
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct mm_struct *mm = vma->vm_mm;
-@@ -2991,7 +2993,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		if (!new_page)
- 			goto oom;
++ * When getting an anonymous page and the caller has to trigger unsharing
++ * of a shared anonymous page first, -EMLINK is returned. The caller should
++ * trigger a fault with FAULT_FLAG_UNSHARE set. With FOLL_NOUNSHARE set, will
++ * never require unsharing and consequently not return -EMLINK.
++ *
+  * On output, the @ctx->page_mask is set according to the size of the page.
+  *
+  * Return: the mapped (struct page *), %NULL if no mapping exists, or
+@@ -845,6 +905,12 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+ 	if (vma_is_secretmem(vma))
+ 		return NULL;
  
--		if (!cow_user_page(new_page, old_page, vmf)) {
-+		if (!__wp_page_copy_user(new_page, old_page, vmf)) {
- 			/*
- 			 * COW failed, if the fault was solved by other,
- 			 * it's fine. If not, userspace would re-fault on
-@@ -3033,7 +3035,14 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
- 		entry = mk_pte(new_page, vma->vm_page_prot);
- 		entry = pte_sw_mkyoung(entry);
--		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-+		if (unlikely(unshare)) {
-+			if (pte_soft_dirty(vmf->orig_pte))
-+				entry = pte_mksoft_dirty(entry);
-+			if (pte_uffd_wp(vmf->orig_pte))
-+				entry = pte_mkuffd_wp(entry);
-+		} else {
-+			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
++	/*
++	 * Don't require unsharing in case we stumble over a read-only mapped,
++	 * shared anonymous page: this is an internal API only and callers don't
++	 * actually use it for exposing page content to user space.
++	 */
++	foll_flags |= FOLL_NOUNSHARE;
+ 	page = follow_page_mask(vma, address, foll_flags, &ctx);
+ 	if (ctx.pgmap)
+ 		put_dev_pagemap(ctx.pgmap);
+@@ -910,7 +976,8 @@ static int get_gate_page(struct mm_struct *mm, unsigned long address,
+  * is, *@locked will be set to 0 and -EBUSY returned.
+  */
+ static int faultin_page(struct vm_area_struct *vma,
+-		unsigned long address, unsigned int *flags, int *locked)
++		unsigned long address, unsigned int *flags, bool unshare,
++		int *locked)
+ {
+ 	unsigned int fault_flags = 0;
+ 	vm_fault_t ret;
+@@ -935,6 +1002,12 @@ static int faultin_page(struct vm_area_struct *vma,
+ 		 */
+ 		fault_flags |= FAULT_FLAG_TRIED;
+ 	}
++	if (unshare) {
++		VM_BUG_ON(unshare && *flags & FOLL_NOUNSHARE);
++		fault_flags |= FAULT_FLAG_UNSHARE;
++		/* FAULT_FLAG_WRITE and FAULT_FLAG_UNSHARE are incompatible */
++		VM_BUG_ON(fault_flags & FAULT_FLAG_WRITE);
++	}
+ 
+ 	ret = handle_mm_fault(vma, address, fault_flags, NULL);
+ 	if (ret & VM_FAULT_ERROR) {
+@@ -1156,8 +1229,9 @@ static long __get_user_pages(struct mm_struct *mm,
+ 		cond_resched();
+ 
+ 		page = follow_page_mask(vma, start, foll_flags, &ctx);
+-		if (!page) {
+-			ret = faultin_page(vma, start, &foll_flags, locked);
++		if (!page || PTR_ERR(page) == -EMLINK) {
++			ret = faultin_page(vma, start, &foll_flags,
++					   PTR_ERR(page) == -EMLINK, locked);
+ 			switch (ret) {
+ 			case 0:
+ 				goto retry;
+@@ -2311,6 +2385,11 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+ 			goto pte_unmap;
+ 		}
+ 
++		if (!pte_write(pte) && gup_must_unshare(flags, page, false)) {
++			put_compound_head(head, 1, flags);
++			goto pte_unmap;
 +		}
++
+ 		VM_BUG_ON_PAGE(compound_head(page) != head, page);
  
  		/*
- 		 * Clear the pte entry and flush it first, before updating the
-@@ -3050,6 +3059,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 		 * mmu page tables (such as kvm shadow page tables), we want the
- 		 * new page to be mapped directly into the secondary page table.
- 		 */
-+		BUG_ON(unshare && pte_write(entry));
- 		set_pte_at_notify(mm, vmf->address, vmf->pte, entry);
- 		update_mmu_cache(vma, vmf->address, vmf->pte);
- 		if (old_page) {
-@@ -3109,6 +3119,8 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 			free_swap_cache(old_page);
- 		put_page(old_page);
- 	}
-+	if (unlikely(unshare))
-+		return 0;
- 	return page_copied ? VM_FAULT_WRITE : 0;
- oom_free_new:
- 	put_page(new_page);
-@@ -3118,6 +3130,70 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 	return VM_FAULT_OOM;
- }
- 
-+static __always_inline vm_fault_t wp_page_cow(struct vm_fault *vmf)
-+{
-+	return wp_page_copy(vmf, false);
-+}
-+
-+static __always_inline vm_fault_t wp_page_unshare(struct vm_fault *vmf)
-+{
-+	return wp_page_copy(vmf, true);
-+}
-+
-+/*
-+ * This routine handles present pages, when GUP tries to take a read-only
-+ * pin on a shared anonymous page. It's similar to do_wp_page_cow(), except that
-+ * it keeps the pages mapped read-only and doesn't apply to KSM pages.
-+ *
-+ * If a parent process forks a child process, we share anonymous pages between
-+ * both processes with COW semantics. Both processes will map these now shared
-+ * anonymous pages read-only, and any write access triggers unsharing via COW.
-+ *
-+ * If the child takes a read-only pin on such a page (i.e., FOLL_WRITE is not
-+ * set) and then unmaps the target page, we have:
-+ *
-+ * * page has mapcount == 1 and refcount > 1
-+ * * page is mapped read-only into the parent
-+ * * page is pinned by the child and can still be read
-+ *
-+ * For now, we rely on refcount > 1 to perform the COW and trigger unsharing.
-+ * However, that leads to other hard-to fix issues.
-+ *
-+ * GUP-triggered unsharing provides a parallel approach to trigger unsharing
-+ * early, still allowing for relying on mapcount > 1 in COW code instead of on
-+ * imprecise refcount > 1. Note that when we don't actually take a reference
-+ * on the target page but instead use memory notifiers to synchronize to changes
-+ * in the process page tables, unsharing is not required.
-+ *
-+ * Note that in the above scenario, it's impossible to distinguish during the
-+ * write fault between:
-+ *
-+ * a) The parent process performed the pin and the child no longer has access
-+ *    to the page.
-+ *
-+ * b) The child process performed the pin and the child still has access to the
-+ *    page.
-+ *
-+ * In case of a), if we're dealing with a long-term read-only pin, the COW
-+ * in the parent will result the pinned page differing from the page actually
-+ * mapped into the process page tables in the parent: loss of synchronicity.
-+ * Therefore, we really want to perform the copy when the read-only pin happens.
-+ */
-+static vm_fault_t do_wp_page_unshare(struct vm_fault *vmf)
-+	__releases(vmf->ptl)
-+{
-+	vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
-+	if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
-+	    page_mapcount(vmf->page) > 1) {
-+		get_page(vmf->page);
-+		pte_unmap_unlock(vmf->pte, vmf->ptl);
-+		return wp_page_unshare(vmf);
-+	}
-+	vmf->page = NULL;
-+	pte_unmap_unlock(vmf->pte, vmf->ptl);
-+	return 0;
-+}
-+
- /**
-  * finish_mkwrite_fault - finish page fault for a shared mapping, making PTE
-  *			  writeable once the page is prepared
-@@ -3226,7 +3302,7 @@ static vm_fault_t wp_page_shared(struct vm_fault *vmf)
-  * but allow concurrent faults), with pte both mapped and locked.
-  * We return with mmap_lock still held, but pte unmapped and unlocked.
-  */
--static vm_fault_t do_wp_page(struct vm_fault *vmf)
-+static vm_fault_t do_wp_page_cow(struct vm_fault *vmf)
- 	__releases(vmf->ptl)
- {
- 	struct vm_area_struct *vma = vmf->vma;
-@@ -3258,7 +3334,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 			return wp_pfn_shared(vmf);
- 
- 		pte_unmap_unlock(vmf->pte, vmf->ptl);
--		return wp_page_copy(vmf);
-+		return wp_page_cow(vmf);
+@@ -2554,6 +2633,11 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+ 		return 0;
  	}
  
- 	/*
-@@ -3296,7 +3372,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 	get_page(vmf->page);
- 
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
--	return wp_page_copy(vmf);
-+	return wp_page_cow(vmf);
- }
- 
- static void unmap_mapping_range_vma(struct vm_area_struct *vma,
-@@ -3670,7 +3746,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	}
- 
- 	if (vmf->flags & FAULT_FLAG_WRITE) {
--		ret |= do_wp_page(vmf);
-+		ret |= do_wp_page_cow(vmf);
- 		if (ret & VM_FAULT_ERROR)
- 			ret &= VM_FAULT_ERROR;
- 		goto out;
-@@ -4428,6 +4504,16 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
- /* `inline' is required to avoid gcc 4.1.2 build error */
- static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- {
-+	if (vmf->flags & FAULT_FLAG_UNSHARE) {
-+		/*
-+		 * We'll simply split the THP and handle unsharing on the
-+		 * PTE level. Unsharing only applies to anon THPs and we
-+		 * shouldn't ever find them inside shared mappings.
-+		 */
-+		if (WARN_ON_ONCE(vmf->vma->vm_flags & VM_SHARED))
-+			return 0;
-+		goto split_fallback;
-+	}
- 	if (vma_is_anonymous(vmf->vma)) {
- 		if (userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
- 			return handle_userfault(vmf, VM_UFFD_WP);
-@@ -4440,7 +4526,8 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- 			return ret;
- 	}
- 
--	/* COW or write-notify handled on pte level: split pmd. */
-+split_fallback:
-+	/* COW, unsharing or write-notify handled on pte level: split pmd. */
- 	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
- 
- 	return VM_FAULT_FALLBACK;
-@@ -4551,8 +4638,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
- 			return do_fault(vmf);
- 	}
- 
--	if (!pte_present(vmf->orig_pte))
--		return do_swap_page(vmf);
-+	if (!pte_present(vmf->orig_pte)) {
-+		if (likely(!(vmf->flags & FAULT_FLAG_UNSHARE)))
-+			return do_swap_page(vmf);
++	if (!pmd_write(orig) && gup_must_unshare(flags, head, true)) {
++		put_compound_head(head, refs, flags);
 +		return 0;
 +	}
++
+ 	*nr += refs;
+ 	SetPageReferenced(head);
+ 	return 1;
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1685821525e8..57842e8b13d4 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1375,6 +1375,13 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 	page = pmd_page(*pmd);
+ 	VM_BUG_ON_PAGE(!PageHead(page) && !is_zone_device_page(page), page);
  
- 	if (pte_protnone(vmf->orig_pte) && vma_is_accessible(vmf->vma))
- 		return do_numa_page(vmf);
-@@ -4564,9 +4654,13 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
- 		update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
- 		goto unlock;
- 	}
--	if (vmf->flags & FAULT_FLAG_WRITE) {
--		if (!pte_write(entry))
--			return do_wp_page(vmf);
-+	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
-+		if (!pte_write(entry)) {
-+			if (vmf->flags & FAULT_FLAG_WRITE)
-+				return do_wp_page_cow(vmf);
-+			else
-+				return do_wp_page_unshare(vmf);
-+		}
- 		entry = pte_mkdirty(entry);
- 	}
- 	entry = pte_mkyoung(entry);
-@@ -4607,7 +4701,6 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
- 		.pgoff = linear_page_index(vma, address),
- 		.gfp_mask = __get_fault_gfp_mask(vma),
- 	};
--	unsigned int dirty = flags & FAULT_FLAG_WRITE;
- 	struct mm_struct *mm = vma->vm_mm;
- 	pgd_t *pgd;
- 	p4d_t *p4d;
-@@ -4634,7 +4727,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
++	/*
++	 * If unsharing is required, keep retrying to unshare until the
++	 * page becomes exclusive.
++	 */
++	if (!pmd_write(*pmd) && gup_must_unshare(flags, page, true))
++		return ERR_PTR(-EMLINK);
++
+ 	if (!try_grab_page(page, flags))
+ 		return ERR_PTR(-ENOMEM);
  
- 			/* NUMA case for anonymous PUDs would go here */
- 
--			if (dirty && !pud_write(orig_pud)) {
-+			if ((flags & FAULT_FLAG_WRITE) && !pud_write(orig_pud)) {
- 				ret = wp_huge_pud(&vmf, orig_pud);
- 				if (!(ret & VM_FAULT_FALLBACK))
- 					return ret;
-@@ -4672,7 +4765,8 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
- 			if (pmd_protnone(vmf.orig_pmd) && vma_is_accessible(vma))
- 				return do_huge_pmd_numa_page(&vmf);
- 
--			if (dirty && !pmd_write(vmf.orig_pmd)) {
-+			if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
-+			    !pmd_write(vmf.orig_pmd)) {
- 				ret = wp_huge_pmd(&vmf);
- 				if (!(ret & VM_FAULT_FALLBACK))
- 					return ret;
 -- 
 2.31.1
 
