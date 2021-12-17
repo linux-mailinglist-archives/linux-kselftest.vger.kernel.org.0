@@ -2,537 +2,253 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E2147893B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 11:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13354789ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 12:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbhLQKuQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 05:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbhLQKuQ (ORCPT
+        id S235324AbhLQLcK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 06:32:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50518 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229771AbhLQLcK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 05:50:16 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB26C06173F
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 02:50:15 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so2347269otu.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 02:50:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ChAQgQ67R/IfTiZcoWSnAH60LCShrosGvHLHIofQtOY=;
-        b=lKx/LadyuNCtf5NKPeaK3K7P5iBR/KAPy+3eeZjSalLRBIwj80hClAAY6lLEWAhved
-         0JjsHBi/tS9IeSMq+DTKYahwJrauEh28Q/C5K1lsTBPBuXKFTG6qzNbtxdEXZtyaQpbT
-         8TOyQS/wozWpqfdKz7O2JExRaFoWuUu34Kndj9fV3X5VSC0Bo3BXVPLGc4ZcTKMS+XtZ
-         1H7s+Iu4bW2L72eQxsVarLcPfbdlKARqrOdQ4qNGJcUiIVug0J2A5BG6XqUAeOKgl2Y3
-         7Y7lynvjjqM5Bfbyl6nS49utzOF8gPS/gItmtO7srHNhdmYLuoAQIqIqZCrROaIfPFsx
-         4SIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ChAQgQ67R/IfTiZcoWSnAH60LCShrosGvHLHIofQtOY=;
-        b=1Q6WnFXZFUbC0XfHlbvBAP0HiF/Yl5XhEeLbaKr3AgaFDMgPzgfLQTTcUfFNlmdYwe
-         tuC/mOn6FM4Fo8Ej7nHepuwZ2ezWeBEY3TP+eZCl57yyk7pa/yVYSV0f/lcMxiSt9Buv
-         vhnGXM+lAVd+mp/wtnr0THpF/4U4g4DKY6W5u35t1McpeRS1cWwDmqDRHdWSHT91uq/D
-         Fwq4rmm6KiygqNtLL5msIOK0FKWx7MSSKSyDDt96ofiW8U1miq1EDnvc259LC0EfFRg7
-         mx2M+QgYuOVsVn95CpfjNUQLQMkL2UZMSHmYlJ5wni5LPyowh9m5HXsU/dPjI77kkylu
-         mnwg==
-X-Gm-Message-State: AOAM532oZOuvPgX5me+9+OuiY5fg4yU5m646RvtVcvTyVVDC6KUT7nof
-        A+O7qDDFSbY7D1sy28PxFQbXgtSD6NTA8ShK4uUQdA==
-X-Google-Smtp-Source: ABdhPJwRnAonVZjGqTFN2dX7KGtpy2hYHKmh7cmpGhv6LaIh4vcm44N2JaaCFdzONE8hQi/51peHk29GxHVDQms7x1w=
-X-Received: by 2002:a9d:77d1:: with SMTP id w17mr1674722otl.329.1639738214883;
- Fri, 17 Dec 2021 02:50:14 -0800 (PST)
+        Fri, 17 Dec 2021 06:32:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639740729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ojr8pILBieJPmYrEJ8OpH4OqC9kBZPEcUzsnw4SNZEQ=;
+        b=TRpQzDCflbtBwOsJLSqEgPQEz+PhjZlGfXUFYLKs9yhr/Cct7U1o5R/cNhjVdCjtWR5qbP
+        7iKPMTYH4qKb91Cl6l+4EFc20XUPgmMiyt1aPyBbuaHKR76EulB6M62QBX6CM8GtdEtvW9
+        7mmCYGz/nZJxVuxxgnAO2ggZs/iC5Ek=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-609-fJjbPIw_Nougc3pPp5Um4w-1; Fri, 17 Dec 2021 06:32:06 -0500
+X-MC-Unique: fJjbPIw_Nougc3pPp5Um4w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4713881CCB5;
+        Fri, 17 Dec 2021 11:32:02 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.193.204])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F307792FA7;
+        Fri, 17 Dec 2021 11:30:50 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: [PATCH v1 00/11] mm: COW fixes part 1: fix the COW security issue for THP and hugetlb
+Date:   Fri, 17 Dec 2021 12:30:38 +0100
+Message-Id: <20211217113049.23850-1-david@redhat.com>
 MIME-Version: 1.0
-References: <20211217044911.798817-1-sharinder@google.com> <20211217044911.798817-4-sharinder@google.com>
-In-Reply-To: <20211217044911.798817-4-sharinder@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 17 Dec 2021 11:50:03 +0100
-Message-ID: <CANpmjNMz7nh7Eo97p-ikdE6cyTu_Vge_RJktj68BpC9QHqE7iw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] Documentation: KUnit: Added KUnit Architecture
-To:     Harinder Singh <sharinder@google.com>
-Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
-        corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tim.Bird@sony.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 17 Dec 2021 at 05:49, Harinder Singh <sharinder@google.com> wrote:
->
-> Describe the components of KUnit and how the kernel mode parts
-> interact with kunit_tool.
->
-> Signed-off-by: Harinder Singh <sharinder@google.com>
+Hi everybody,
 
-Acked-by: Marco Elver <elver@google.com>
+as discussed in the linux-mm alignment session on Wednesday, this is part 1
+of the COW fixes: fix the COW security issue using GUP-triggered
+unsharing of shared anonymous pages (ordinary, THP, hugetlb). In the
+meeting slides, this approach was referred to as "Copy On Read". If anybody
+wants to have access to the slides, please feel free to reach out.
 
-For the .svg file, I think per
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign=
--your-work-the-developer-s-certificate-of-origin
-at least my Signed-off-by is required, but probably also my
-Co-developed-by? In any case my SOB for kunit_suitememorydiagram.svg
-is hereby given:
 
-Signed-off-by: Marco Elver <elver@google.com>
+The patches are based on v5.16-rc5 and available at:
+  https://github.com/davidhildenbrand/linux/pull/new/unshare_v1
 
-Thanks,
--- Marco
 
-> ---
->  .../dev-tools/kunit/architecture.rst          | 204 ++++++++++++++++++
->  Documentation/dev-tools/kunit/index.rst       |   2 +
->  .../kunit/kunit_suitememorydiagram.svg        |  81 +++++++
->  Documentation/dev-tools/kunit/start.rst       |   1 +
->  4 files changed, 288 insertions(+)
->  create mode 100644 Documentation/dev-tools/kunit/architecture.rst
->  create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiagra=
-m.svg
->
-> diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentati=
-on/dev-tools/kunit/architecture.rst
-> new file mode 100644
-> index 000000000000..aa2cea821e25
-> --- /dev/null
-> +++ b/Documentation/dev-tools/kunit/architecture.rst
-> @@ -0,0 +1,204 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +KUnit Architecture
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +The KUnit architecture can be divided into two parts:
-> +
-> +- Kernel testing library
-> +- kunit_tool (Command line test harness)
-> +
-> +In-Kernel Testing Framework
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +
-> +The kernel testing library supports KUnit tests written in C using
-> +KUnit. KUnit tests are kernel code. KUnit does several things:
-> +
-> +- Organizes tests
-> +- Reports test results
-> +- Provides test utilities
-> +
-> +Test Cases
-> +----------
-> +
-> +The fundamental unit in KUnit is the test case. The KUnit test cases are
-> +grouped into KUnit suites. A KUnit test case is a function with type
-> +signature ``void (*)(struct kunit *test)``.
-> +These test case functions are wrapped in a struct called
-> +``struct kunit_case``. For code, see:
-> +
-> +.. kernel-doc:: include/kunit/test.h
-> +       :identifiers: kunit_case
-> +
-> +.. note:
-> +       ``generate_params`` is optional for non-parameterized tests.
-> +
-> +Each KUnit test case gets a ``struct kunit`` context
-> +object passed to it that tracks a running test. The KUnit assertion
-> +macros and other KUnit utilities use the ``struct kunit`` context
-> +object. As an exception, there are two fields:
-> +
-> +- ``->priv``: The setup functions can use it to store arbitrary test
-> +  user data.
-> +
-> +- ``->param_value``: It contains the parameter value which can be
-> +  retrieved in the parameterized tests.
-> +
-> +Test Suites
-> +-----------
-> +
-> +A KUnit suite includes a collection of test cases. The KUnit suites
-> +are represented by the ``struct kunit_suite``. For example:
-> +
-> +.. code-block:: c
-> +
-> +       static struct kunit_case example_test_cases[] =3D {
-> +               KUNIT_CASE(example_test_foo),
-> +               KUNIT_CASE(example_test_bar),
-> +               KUNIT_CASE(example_test_baz),
-> +               {}
-> +       };
-> +
-> +       static struct kunit_suite example_test_suite =3D {
-> +               .name =3D "example",
-> +               .init =3D example_test_init,
-> +               .exit =3D example_test_exit,
-> +               .test_cases =3D example_test_cases,
-> +       };
-> +       kunit_test_suite(example_test_suite);
-> +
-> +In the above example, the test suite ``example_test_suite``, runs the
-> +test cases ``example_test_foo``, ``example_test_bar``, and
-> +``example_test_baz``. Before running the test, the ``example_test_init``
-> +is called and after running the test, ``example_test_exit`` is called.
-> +The ``kunit_test_suite(example_test_suite)`` registers the test suite
-> +with the KUnit test framework.
-> +
-> +Executor
-> +--------
-> +
-> +The KUnit executor can list and run built-in KUnit tests on boot.
-> +The Test suites are stored in a linker section
-> +called ``.kunit_test_suites``. For code, see:
-> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-include/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
-> +The linker section consists of an array of pointers to
-> +``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
-> +macro. To run all tests compiled into the kernel, the KUnit executor
-> +iterates over the linker section array.
-> +
-> +.. kernel-figure:: kunit_suitememorydiagram.svg
-> +       :alt:   KUnit Suite Memory
-> +
-> +       KUnit Suite Memory Diagram
-> +
-> +On the kernel boot, the KUnit executor uses the start and end addresses
-> +of this section to iterate over and run all tests. For code, see:
-> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-lib/kunit/executor.c
-> +
-> +When built as a module, the ``kunit_test_suites()`` macro defines a
-> +``module_init()`` function, which runs all the tests in the compilation
-> +unit instead of utilizing the executor.
-> +
-> +In KUnit tests, some error classes do not affect other tests
-> +or parts of the kernel, each KUnit case executes in a separate thread
-> +context. For code, see:
-> +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-lib/kunit/try-catch.c?h=3Dv5.15#n58
-> +
-> +Assertion Macros
-> +----------------
-> +
-> +KUnit tests verify state using expectations/assertions.
-> +All expectations/assertions are formatted as:
-> +``KUNIT_{EXPECT|ASSERT}_<op>[_MSG](kunit, property[, message])``
-> +
-> +- ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
-> +  expectation.
-> +
-> +       - For an expectation, if the check fails, marks the test as faile=
-d
-> +         and logs the failure.
-> +
-> +       - An assertion, on failure, causes the test case to terminate
-> +         immediately.
-> +
-> +               - Assertions call function:
-> +                 ``void __noreturn kunit_abort(struct kunit *)``.
-> +
-> +               - ``kunit_abort`` calls function:
-> +                 ``void __noreturn kunit_try_catch_throw(struct kunit_tr=
-y_catch *try_catch)``.
-> +
-> +               - ``kunit_try_catch_throw`` calls function:
-> +                 ``void complete_and_exit(struct completion *, long) __n=
-oreturn;``
-> +                 and terminates the special thread context.
-> +
-> +- ``<op>`` denotes a check with options: ``TRUE`` (supplied property
-> +  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied pr=
-operties are
-> +  equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
-> +  contain an =E2=80=9Cerr=E2=80=9D value).
-> +
-> +- ``[_MSG]`` prints a custom message on failure.
-> +
-> +Test Result Reporting
-> +---------------------
-> +KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
-> +https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-=
-14-specification.md.
-> +KTAP (yet to be standardized format) works with KUnit and Kselftest.
-> +The KUnit executor prints KTAP results to dmesg, and debugfs
-> +(if configured).
-> +
-> +Parameterized Tests
-> +-------------------
-> +
-> +Each KUnit parameterized test is associated with a collection of
-> +parameters. The test is invoked multiple times, once for each parameter
-> +value and the parameter is stored in the ``param_value`` field.
-> +The test case includes a ``KUNIT_CASE_PARAM()`` macro that accepts a
-> +generator function.
-> +The generator function is passed the previous parameter and returns the =
-next
-> +parameter. It also provides a macro to generate common-case generators b=
-ased on
-> +arrays.
-> +
-> +For code, see:
-> +
-> +.. kernel-doc:: include/kunit/test.h
-> +       :identifiers: KUNIT_ARRAY_PARAM
-> +
-> +
-> +kunit_tool (Command Line Test Harness)
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
-> +that can be used to configure, build, exec, parse and run (runs other
-> +commands in order) test results. You can either run KUnit tests using
-> +kunit_tool or can include KUnit in kernel and parse manually.
-> +
-> +- ``configure`` command generates the kernel ``.config`` from a
-> +  ``.kunitconfig`` file (and any architecture-specific options).
-> +  For some architectures, additional config options are specified in the
-> +  ``qemu_config`` Python script
-> +  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-> +  It parses both the existing ``.config`` and the ``.kunitconfig`` files
-> +  and ensures that ``.config`` is a superset of ``.kunitconfig``.
-> +  If this is not the case, it will combine the two and run
-> +  ``make olddefconfig`` to regenerate the ``.config`` file. It then
-> +  verifies that ``.config`` is now a superset. This checks if all
-> +  Kconfig dependencies are correctly specified in ``.kunitconfig``.
-> +  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
-> +  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
-> +  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-> +  generate a ``.config`` file.
-> +- ``build`` runs ``make`` on the kernel tree with required options
-> +  (depends on the architecture and some options, for example: build_dir)
-> +  and reports any errors.
-> +  To build a KUnit kernel from the current ``.config``, you can use the
-> +  ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
-> +- ``exec`` command executes kernel results either directly (using
-> +  User-mode Linux configuration), or via an emulator such
-> +  as QEMU. It reads results from the log via standard
-> +  output (stdout), and passes them to ``parse`` to be parsed.
-> +  If you already have built a kernel with built-in KUnit tests,
-> +  you can run the kernel and display the test results with the ``exec``
-> +  argument: ``./tools/testing/kunit/kunit.py exec``.
-> +- ``parse`` extracts the KTAP output from a kernel log, parses
-> +  the test results, and prints a summary. For failed tests, any
-> +  diagnostic output will be included.
-> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-=
-tools/kunit/index.rst
-> index 55d2444b0745..50d3ef9359dd 100644
-> --- a/Documentation/dev-tools/kunit/index.rst
-> +++ b/Documentation/dev-tools/kunit/index.rst
-> @@ -9,6 +9,7 @@ KUnit - Linux Kernel Unit Testing
->         :caption: Contents:
->
->         start
-> +       architecture
->         usage
->         kunit-tool
->         api/index
-> @@ -96,6 +97,7 @@ How do I use it?
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  *   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
-> +*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
->  *   Documentation/dev-tools/kunit/usage.rst - KUnit features.
->  *   Documentation/dev-tools/kunit/tips.rst - best practices with
->      examples.
-> diff --git a/Documentation/dev-tools/kunit/kunit_suitememorydiagram.svg b=
-/Documentation/dev-tools/kunit/kunit_suitememorydiagram.svg
-> new file mode 100644
-> index 000000000000..cf8fddc27500
-> --- /dev/null
-> +++ b/Documentation/dev-tools/kunit/kunit_suitememorydiagram.svg
-> @@ -0,0 +1,81 @@
-> +<?xml version=3D"1.0" encoding=3D"UTF-8"?>
-> +<svg width=3D"796.93" height=3D"555.73" version=3D"1.1" viewBox=3D"0 0 7=
-96.93 555.73" xmlns=3D"http://www.w3.org/2000/svg">
-> +       <g transform=3D"translate(-13.724 -17.943)">
-> +               <g fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a=
-1a1a">
-> +                       <rect x=3D"323.56" y=3D"18.443" width=3D"115.75" =
-height=3D"41.331"/>
-> +                       <rect x=3D"323.56" y=3D"463.09" width=3D"115.75" =
-height=3D"41.331"/>
-> +                       <rect x=3D"323.56" y=3D"531.84" width=3D"115.75" =
-height=3D"41.331"/>
-> +                       <rect x=3D"323.56" y=3D"88.931" width=3D"115.75" =
-height=3D"74.231"/>
-> +               </g>
-> +               <g>
-> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
-height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
-> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
-0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
-25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
-ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(0 -258.6)">
-> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
-height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
-> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
-0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
-25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
-ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(0 -217.27)">
-> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
-height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
-> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
-0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
-25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
-ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(0 -175.94)">
-> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
-height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
-> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
-0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
-25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
-ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(0 -134.61)">
-> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
-height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
-> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
-0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
-25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
-ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(0 -41.331)">
-> +                       <rect x=3D"323.56" y=3D"421.76" width=3D"115.75" =
-height=3D"41.331" fill=3D"#b9dbc6" stroke=3D"#1a1a1a"/>
-> +                       <text x=3D"328.00888" y=3D"446.61826" fill=3D"#00=
-0000" font-family=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.=
-25" xml:space=3D"preserve"><tspan x=3D"328.00888" y=3D"446.61826" font-fami=
-ly=3D"monospace" font-size=3D"16px">kunit_suite</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(3.4459e-5 -.71088)">
-> +                       <rect x=3D"502.19" y=3D"143.16" width=3D"201.13" =
-height=3D"41.331" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1=
-a"/>
-> +                       <text x=3D"512.02319" y=3D"168.02026" font-family=
-=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.25" xml:space=3D"=
-preserve"><tspan x=3D"512.02319" y=3D"168.02026" font-family=3D"monospace">=
-_kunit_suites_start</tspan></text>
-> +               </g>
-> +               <g transform=3D"translate(3.0518e-5 -3.1753)">
-> +                       <rect x=3D"502.19" y=3D"445.69" width=3D"201.13" =
-height=3D"41.331" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1=
-a"/>
-> +                       <text x=3D"521.61694" y=3D"470.54846" font-family=
-=3D"sans-serif" font-size=3D"16px" style=3D"line-height:1.25" xml:space=3D"=
-preserve"><tspan x=3D"521.61694" y=3D"470.54846" font-family=3D"monospace">=
-_kunit_suites_end</tspan></text>
-> +               </g>
-> +               <rect x=3D"14.224" y=3D"277.78" width=3D"134.47" height=
-=3D"41.331" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1a"/>
-> +               <text x=3D"32.062176" y=3D"304.41287" font-family=3D"sans=
--serif" font-size=3D"16px" style=3D"line-height:1.25" xml:space=3D"preserve=
-"><tspan x=3D"32.062176" y=3D"304.41287" font-family=3D"monospace">.init.da=
-ta</tspan></text>
-> +               <g transform=3D"translate(217.98 145.12)" stroke=3D"#1a1a=
-1a">
-> +                       <circle cx=3D"149.97" cy=3D"373.01" r=3D"3.4012"/=
->
-> +                       <circle cx=3D"163.46" cy=3D"373.01" r=3D"3.4012"/=
->
-> +                       <circle cx=3D"176.95" cy=3D"373.01" r=3D"3.4012"/=
->
-> +               </g>
-> +               <g transform=3D"translate(217.98 -298.66)" stroke=3D"#1a1=
-a1a">
-> +                       <circle cx=3D"149.97" cy=3D"373.01" r=3D"3.4012"/=
->
-> +                       <circle cx=3D"163.46" cy=3D"373.01" r=3D"3.4012"/=
->
-> +                       <circle cx=3D"176.95" cy=3D"373.01" r=3D"3.4012"/=
->
-> +               </g>
-> +               <g stroke=3D"#1a1a1a">
-> +                       <rect x=3D"323.56" y=3D"328.49" width=3D"115.75" =
-height=3D"51.549" fill=3D"#b9dbc6"/>
-> +                       <g transform=3D"translate(217.98 -18.75)">
-> +                               <circle cx=3D"149.97" cy=3D"373.01" r=3D"=
-3.4012"/>
-> +                               <circle cx=3D"163.46" cy=3D"373.01" r=3D"=
-3.4012"/>
-> +                               <circle cx=3D"176.95" cy=3D"373.01" r=3D"=
-3.4012"/>
-> +                       </g>
-> +               </g>
-> +               <g transform=3D"scale(1.0933 .9147)" stroke-width=3D"32.9=
-37" aria-label=3D"{">
-> +                       <path d=3D"m275.49 545.57c-35.836-8.432-47.43-24.=
-769-47.957-64.821v-88.536c-0.527-44.795-10.54-57.97-49.538-67.456 38.998-10=
-.013 49.011-23.715 49.538-67.983v-88.536c0.527-40.052 12.121-56.389 47.957-=
-64.821v-5.797c-65.348 0-85.901 17.391-86.955 73.253v93.806c-0.527 36.89-10.=
-013 50.065-44.795 59.551 34.782 10.013 44.268 23.188 44.795 60.078v93.279c1=
-.581 56.389 21.607 73.78 86.955 73.78z"/>
-> +               </g>
-> +               <g transform=3D"scale(1.1071 .90325)" stroke-width=3D"14.=
-44" aria-label=3D"{">
-> +                       <path d=3D"m461.46 443.55c-15.711-3.6967-20.794-1=
-0.859-21.025-28.418v-38.815c-0.23104-19.639-4.6209-25.415-21.718-29.574 17.=
-097-4.3898 21.487-10.397 21.718-29.805v-38.815c0.23105-17.559 5.314-24.722 =
-21.025-28.418v-2.5415c-28.649 0-37.66 7.6244-38.122 32.115v41.126c-0.23105 =
-16.173-4.3898 21.949-19.639 26.108 15.249 4.3898 19.408 10.166 19.639 26.33=
-9v40.895c0.69313 24.722 9.4728 32.346 38.122 32.346z"/>
-> +               </g>
-> +               <path d=3D"m449.55 161.84v2.5h49.504v-2.5z" color=3D"#000=
-000" style=3D"-inkscape-stroke:none"/>
-> +               <g fill-rule=3D"evenodd">
-> +                       <path d=3D"m443.78 163.09 8.65-5v10z" color=3D"#0=
-00000" stroke-width=3D"1pt" style=3D"-inkscape-stroke:none"/>
-> +                       <path d=3D"m453.1 156.94-10.648 6.1543 0.99804 0.=
-57812 9.6504 5.5781zm-1.334 2.3125v7.6856l-6.6504-3.8438z" color=3D"#000000=
-" style=3D"-inkscape-stroke:none"/>
-> +               </g>
-> +               <path d=3D"m449.55 461.91v2.5h49.504v-2.5z" color=3D"#000=
-000" style=3D"-inkscape-stroke:none"/>
-> +               <g fill-rule=3D"evenodd">
-> +                       <path d=3D"m443.78 463.16 8.65-5v10z" color=3D"#0=
-00000" stroke-width=3D"1pt" style=3D"-inkscape-stroke:none"/>
-> +                       <path d=3D"m453.1 457-10.648 6.1562 0.99804 0.576=
-17 9.6504 5.5781zm-1.334 2.3125v7.6856l-6.6504-3.8438z" color=3D"#000000" s=
-tyle=3D"-inkscape-stroke:none"/>
-> +               </g>
-> +               <rect x=3D"515.64" y=3D"223.9" width=3D"294.52" height=3D=
-"178.49" fill=3D"#dad4d4" fill-opacity=3D".91765" stroke=3D"#1a1a1a"/>
-> +               <text x=3D"523.33319" y=3D"262.52542" font-family=3D"mono=
-space" font-size=3D"14.667px" style=3D"line-height:1.25" xml:space=3D"prese=
-rve"><tspan x=3D"523.33319" y=3D"262.52542"><tspan fill=3D"#008000" font-fa=
-mily=3D"monospace" font-size=3D"14.667px" font-weight=3D"bold">struct</tspa=
-n> kunit_suite {</tspan><tspan x=3D"523.33319" y=3D"280.8588"><tspan fill=
-=3D"#008000" font-family=3D"monospace" font-size=3D"14.667px" font-weight=
-=3D"bold">  const char</tspan> name[<tspan fill=3D"#ff00ff" font-size=3D"14=
-.667px">256</tspan>];</tspan><tspan x=3D"523.33319" y=3D"299.19217">  <tspa=
-n fill=3D"#008000" font-family=3D"monospace" font-size=3D"14.667px" font-we=
-ight=3D"bold">int</tspan> (*init)(<tspan fill=3D"#008000" font-family=3D"mo=
-nospace" font-size=3D"14.667px" font-weight=3D"bold">struct</tspan> kunit *=
-);</tspan><tspan x=3D"523.33319" y=3D"317.52554">  <tspan fill=3D"#008000" =
-font-family=3D"monospace" font-size=3D"14.667px" font-weight=3D"bold">void<=
-/tspan> (*exit)(<tspan fill=3D"#008000" font-family=3D"monospace" font-size=
-=3D"14.667px" font-weight=3D"bold">struct</tspan> kunit *);</tspan><tspan x=
-=3D"523.33319" y=3D"335.85892">  <tspan fill=3D"#008000" font-family=3D"mon=
-ospace" font-size=3D"14.667px" font-weight=3D"bold">struct</tspan> kunit_ca=
-se *test_cases;</tspan><tspan x=3D"523.33319" y=3D"354.19229">  ...</tspan>=
-<tspan x=3D"523.33319" y=3D"372.52567">};</tspan></text>
-> +       </g>
-> +</svg>
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-=
-tools/kunit/start.rst
-> index 55f8df1abd40..5dd2c88fa2bd 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -240,6 +240,7 @@ Congrats! You just wrote your first KUnit test.
->  Next Steps
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> +*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
->  *   Documentation/dev-tools/kunit/usage.rst - KUnit features.
->  *   Documentation/dev-tools/kunit/tips.rst - best practices with
->      examples.
-> --
-> 2.34.1.173.g76aa8bc2d0-goog
->
+It is currently again possible for a child process to observe modifications
+of anonymous pages performed by the parent process after fork() in some
+cases, which is not only a violation of the POSIX semantics of MAP_PRIVATE,
+but more importantly a real security issue.
+
+This issue, including other related COW issues, has been summarized at [1]:
+"
+  1. Observing Memory Modifications of Private Pages From A Child Process
+  
+  Long story short: process-private memory might not be as private as you
+  think once you fork(): successive modifications of private memory
+  regions in the parent process can still be observed by the child
+  process, for example, by smart use of vmsplice()+munmap().
+  
+  The core problem is that pinning pages readable in a child process, such
+  as done via the vmsplice system call, can result in a child process
+  observing memory modifications done in the parent process the child is
+  not supposed to observe. [1] contains an excellent summary and [2]
+  contains further details. This issue was assigned CVE-2020-29374 [9].
+  
+  For this to trigger, it's required to use a fork() without subsequent
+  exec(), for example, as used under Android zygote. Without further
+  details about an application that forks less-privileged child processes,
+  one cannot really say what's actually affected and what's not -- see the
+  details section the end of this mail for a short sshd/openssh analysis.
+  
+  While commit 17839856fd58 ("gup: document and work around "COW can break
+  either way" issue") fixed this issue and resulted in other problems
+  (e.g., ptrace on pmem), commit 09854ba94c6a ("mm: do_wp_page()
+  simplification") re-introduced part of the problem unfortunately.
+  
+  The original reproducer can be modified quite easily to use THP [3] and
+  make the issue appear again on upstream kernels. I modified it to use
+  hugetlb [4] and it triggers as well. The problem is certainly less
+  severe with hugetlb than with THP; it merely highlights that we still
+  have plenty of open holes we should be closing/fixing.
+  
+  Regarding vmsplice(), the only known workaround is to disallow the
+  vmsplice() system call ... or disable THP and hugetlb. But who knows
+  what else is affected (RDMA? O_DIRECT?) to achieve the same goal -- in
+  the end, it's a more generic issue.
+"
+
+This security issue was first reported by Jann Horn on 27 May 2020 and it
+currently affects anonymous THP and hugetlb again. The "security issue"
+part for hugetlb might be less important than for THP. However, with this
+approach it's just easy to get the MAP_PRIVATE semantics of any anonymous
+pages in that regard and avoid any such information leaks without much
+added complexity.
+
+Ordinary anonymous pages are currently not affected, because the COW logic
+was changed in commit 09854ba94c6a ("mm: do_wp_page() simplification")
+for them to COW on "page_count() != 1" instead of "mapcount > 1", which
+unfortunately results in other COW issues, some of them documented in [1]
+as well.
+
+To fix this COW issue once and for all, introduce GUP-triggered unsharing
+that can be conditionally triggered via FAULT_FLAG_UNSHARE. In contrast to
+traditional COW, unsharing will leave the copied page mapped
+write-protected in the page table, not having the semantics of a write
+fault.
+
+Logically, unsharing is triggered "early", as soon as GUP performs the
+action that could result in a COW getting missed later and the security
+issue triggering: however, unsharing is not triggered as before via a
+write fault with undesired side effects.
+
+Long story short, GUP triggers unsharing if all of the following conditions
+are met:
+* The page is mapped R/O
+* We have an anonymous page, excluding KSM
+* We want to read (!FOLL_WRITE)
+* Unsharing is not disabled (!FOLL_NOUNSHARE)
+* We want to take a reference (FOLL_GET or FOLL_PIN)
+* The page is a shared anonymous page: mapcount > 1
+
+To reliably detect shared anonymous THP without heavy locking, introduce
+a mapcount_seqcount seqlock that protects the mapcount of a THP and can
+be used to read an atomic mapcount value. The mapcount_seqlock is stored
+inside the memmap of the compound page -- to keep it simple, factor out
+a raw_seqlock_t from the seqlock_t.
+
+As this patch series introduces the same unsharing logic for any
+anonymous pages, it also paves the way to fix other COW issues, e.g.,
+documented in [1], without reintroducing the security issue or
+reintroducing other issues we observed in the past (e.g., broken ptrace on
+pmem).
+
+All reproducers for this COW issue have been consolidated in the selftest
+included in this series. Hopefully we'll get this fixed for good.
+
+Future work:
+
+* get_user_pages_fast_only() can currently spin on the mapcount_seqcount
+  when reading the mapcount, which might be a rare event. While this is
+  fine even when done from get_user_pages_fast_only() in IRQ context, we
+  might want to just fail fast in get_user_pages_fast_only(). We already
+  have patches prepared that add page_anon_maybe_shared() and
+  page_trans_huge_anon_maybe_shared() that will return "true" in case
+  spinning would be required and make get_user_pages_fast_only() fail fast.
+  I'm excluding them for simplicity.
+
+  ... even better would be finding a way to just not need the
+  mapcount_seqcount, but THP splitting and PageDoubleMap() gives us a
+  hard time -- but maybe we'll eventually find a way someday :)
+
+* Part 2 will tackle the other user-space visible breakages / COW issues
+  raised in [1]. This series is the basis for adjusting the COW logic once
+  again without re-introducing the COW issue fixed in this series and
+  without reintroducing the issues we saw with the original CVE fix
+  (e.g., breaking ptrace on pmem). There might be further parts to improve
+  the GUP long-term <-> MM synchronicity and to optimize some things
+  around that.
+
+
+The idea is by Andrea and some patches are rewritten versions of prototype
+patches by Andrea. I cross-compiled and tested as good as possible.
+
+I'll CC locking+selftest folks only on the relevant patch and the cover
+letter to minimze the noise. I'll put everyone on CC who was either
+involved with the COW issues in the past or attended the linux-mm alignment
+session on Wednesday. Appologies if I forget anyone :)
+
+[1] https://lore.kernel.org/r/3ae33b08-d9ef-f846-56fb-645e3b9b4c66@redhat.com
+
+
+David Hildenbrand (11):
+  seqlock: provide lockdep-free raw_seqcount_t variant
+  mm: thp: consolidate mapcount logic on THP split
+  mm: simplify hugetlb and file-THP handling in __page_mapcount()
+  mm: thp: simlify total_mapcount()
+  mm: thp: allow for reading the THP mapcount atomically via a
+    raw_seqlock_t
+  mm: support GUP-triggered unsharing via FAULT_FLAG_UNSHARE (!hugetlb)
+  mm: gup: trigger unsharing via FAULT_FLAG_UNSHARE when required
+    (!hugetlb)
+  mm: hugetlb: support GUP-triggered unsharing via FAULT_FLAG_UNSHARE
+  mm: gup: trigger unsharing via FAULT_FLAG_UNSHARE when required
+    (hugetlb)
+  mm: thp: introduce and use page_trans_huge_anon_shared()
+  selftests/vm: add tests for the known COW security issues
+
+ Documentation/locking/seqlock.rst         |  50 ++++
+ include/linux/huge_mm.h                   |  72 +++++
+ include/linux/mm.h                        |  14 +
+ include/linux/mm_types.h                  |   9 +
+ include/linux/seqlock.h                   | 145 +++++++---
+ mm/gup.c                                  |  89 +++++-
+ mm/huge_memory.c                          | 120 +++++++--
+ mm/hugetlb.c                              | 129 +++++++--
+ mm/memory.c                               | 136 ++++++++--
+ mm/rmap.c                                 |  40 +--
+ mm/swapfile.c                             |  35 ++-
+ mm/util.c                                 |  24 +-
+ tools/testing/selftests/vm/Makefile       |   1 +
+ tools/testing/selftests/vm/gup_cow.c      | 312 ++++++++++++++++++++++
+ tools/testing/selftests/vm/run_vmtests.sh |  16 ++
+ 15 files changed, 1044 insertions(+), 148 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/gup_cow.c
+
+-- 
+2.31.1
+
