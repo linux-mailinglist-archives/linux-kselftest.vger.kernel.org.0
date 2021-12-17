@@ -2,73 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C657A4795DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 21:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708564795DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 21:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240919AbhLQUzk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 15:55:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56635 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240907AbhLQUzk (ORCPT
+        id S237048AbhLQU47 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 15:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240934AbhLQU4v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 15:55:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639774539;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gt0DtLTTM3E0C5XUm2JmJz4pNU1PDieeF6+dQqYh0XM=;
-        b=fxL/3KU80an27dPD4irGlzchE2t4TBIvi9s7G77nI9Zct+l8TuaSC9+2ftOG6v0GUi1qm/
-        3Kbrok7PxhXZfLkVa/j0Mk0DySw6xa7rlY9yqlX4qgUdQwwQpKHDM5P/1cq3G096m4cOoN
-        fpap1bPb0iuWHu4/AHskVfRxERPoRYk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-269-moYzeQNqMDCycUwRWepVrw-1; Fri, 17 Dec 2021 15:55:38 -0500
-X-MC-Unique: moYzeQNqMDCycUwRWepVrw-1
-Received: by mail-wm1-f69.google.com with SMTP id az35-20020a05600c602300b00345812649ddso20989wmb.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 12:55:37 -0800 (PST)
+        Fri, 17 Dec 2021 15:56:51 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6025C06173F
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 12:56:50 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z5so12590095edd.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 12:56:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WIi3YNtCblZ4jVB4/T4i8TvZe8jCT7lhPE8MEkAn6qA=;
+        b=KweCUE5QrDRl499PLxNb1SW4WvC7F+yYs+lq1TXYVhwnCNr/xHbEr85r6Nh4D30the
+         6ZcPcSZ/y3xXiqcADRzs1V4A6WOdZU0S5jheyQb63bFhnnpkhr1bRNaXAtN6df5SvQnE
+         6g9p5Hkcw8U4Rcyd7Bbo8gbeTEYt9wRBqPCBA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=gt0DtLTTM3E0C5XUm2JmJz4pNU1PDieeF6+dQqYh0XM=;
-        b=STmfMIQZC7U87EfB5k+X37OFQ539UwGM+OD8rvtMnfElrdcpL+QcAEDpKp4+ank+8q
-         bh37k2m7K5ZB7v4sKxR/3UsSq7gz4gcI4uGlLMqsKS1Udy2Gxk3tLe+/oSsKtXCwe+/t
-         XvGWvVb21QI99TGZTFRsypA+rkhT4zW2iOAh1GqwVhzXDOfGZSgh3T855IH1+Xsi35RV
-         k/+GUywFZWaHelp1c53iCphE7YliN2DRziItM8wHewsYBH/eUcYPY51TbiXxMc2ZZTnr
-         yoEvFUGRS8y0pWyW5KnRFptu88XtDzIeYjKPPaQjAx9uA7/8f2xEY8efydLh/n4sN9JJ
-         aRuA==
-X-Gm-Message-State: AOAM531FSnDw2TtGAyGRUeFCpd/Af4wJEngEtFUR2myJzxok4Uv7ILO5
-        OLH7JxI4fbZ8e/QJQ7eE8aOg1tiEnMq8+BCM6MeI0qhibnRRcqTdeX27TNSo1E4mdAa8Afcfzsv
-        WwsbLwL73+3ut/r2pKvLtCf976t2A
-X-Received: by 2002:a1c:9d55:: with SMTP id g82mr9035998wme.58.1639774536973;
-        Fri, 17 Dec 2021 12:55:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy2VIGy81gYhcxxwp937rzdgjfMqRdg6hjw0UIMF9SiLBF1P2rxY4ZqXf8403kKG7hOqOFIcw==
-X-Received: by 2002:a1c:9d55:: with SMTP id g82mr9035975wme.58.1639774536777;
-        Fri, 17 Dec 2021 12:55:36 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id s189sm9283243wme.0.2021.12.17.12.55.34
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WIi3YNtCblZ4jVB4/T4i8TvZe8jCT7lhPE8MEkAn6qA=;
+        b=hgQtyC+FnUGNZdxtOmGSoVXbvHF7l3sWv5F6P+u72mwcAE5Qz47O+sY80FrHCTfNcz
+         bqlIV90/HuagOusEi9jUtFw7b1FCLD3fprGX0hnIIqrYgP6tALuB3tqDryR7BW7gsyOT
+         Q6Ny0Fq7q0Axtj3V6p4D52S9KaZ2+il6O60hOWBKN1ZyLn8iG5MAl5Df+9jF5AOLprlR
+         iHHtdcvkxop2NyzHOeHPs61dZ2H7X5R3jopylwtG2CW3Fuq+h8tOpe66YqB7gbTM0Nrv
+         avqZJgCHx66nx7I1yV3B76ok9A9PFMU1/RIlWqtKn6Oo64J+Dy7z7fGfVPFNgGLtTP/t
+         tKBA==
+X-Gm-Message-State: AOAM533p5i5hl4gwh+XwrhWztcwX8Tg3HwQpyXg3YdnczesqBxZsfxNc
+        bKcpEmdm4K2dT6WwwiXoT6Vi480fYomcaJMPFGo=
+X-Google-Smtp-Source: ABdhPJy2KClsw9VY7n2mEGKgwIuYFe06hYZWRgD0YAqnBLFo83wIAlHnDOIXD82kVDqYztg7a8mEEQ==
+X-Received: by 2002:aa7:dc15:: with SMTP id b21mr4444761edu.237.1639774609258;
+        Fri, 17 Dec 2021 12:56:49 -0800 (PST)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id e2sm3131613ejm.210.2021.12.17.12.56.48
+        for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 12:55:36 -0800 (PST)
-Message-ID: <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
-Date:   Fri, 17 Dec 2021 21:55:33 +0100
+        Fri, 17 Dec 2021 12:56:49 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id t18so6271313wrg.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 12:56:48 -0800 (PST)
+X-Received: by 2002:adf:d1a6:: with SMTP id w6mr3777696wrc.274.1639774597825;
+ Fri, 17 Dec 2021 12:56:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com>
+In-Reply-To: <20211217204705.GF6385@nvidia.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 12:56:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgO9Zmc3S+cG=xFuUAgkZ3Ti9fOdUr4Q72EPwrxX67YAA@mail.gmail.com>
+Message-ID: <CAHk-=wgO9Zmc3S+cG=xFuUAgkZ3Ti9fOdUr4Q72EPwrxX67YAA@mail.gmail.com>
 Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
  FAULT_FLAG_UNSHARE (!hugetlb)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
         David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
@@ -87,52 +89,40 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com>
- <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17.12.21 21:51, Linus Torvalds wrote:
-> On Fri, Dec 17, 2021 at 12:45 PM David Hildenbrand <david@redhat.com> wrote:
->>
->> If a page is mapped exactly once, page_mapcount(page) == 1 and there is
->> nothing to do.
-> 
-> Why?
-> 
-> You state that, but you stating that doesn't magically make it so.
-> 
-> What makes "mapcount==1" stable and special? Your "it's an
-> atomic_read()" argument is nonsense - it implies that the count can be
-> changing, but you will get _one_ answer.
+On Fri, Dec 17, 2021 at 12:47 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> To remind all, the GUP users, like RDMA, VFIO use
+> FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
+> COW breaking the coherence. In these case 'r/o pin' does not mean
+> "snapshot the data", but its only a promise not to write to the pages
+> and still desires coherence with the memory map.
+>
+> Eg in RDMA we know of apps asking for a R/O pin of something in .bss
+> then filling that something with data finally doing the actual
+> DMA. Breaking COW after pin breaks those apps.
 
-And I explained how it can not increment. And the only way is via
-fork(), which cannot run concurrently.
+I agree.
 
-> 
-> What makes that one answer of a changing count special?
-> 
-> What if there are other references to that same page, gotten with
-> vmsplice(), and just about to be mapped into another address space?
+And my argument is that those kinds of things that ask for a R/O pin
+are broken, and should just make sure to use the shared pins.
 
-If we have a shared anonymous page we cannot have GUP references, not
-even R/O ones. Because GUP would have unshared and copied the page,
-resulting in a R/O mapped anonymous page.
+If the page was already writable, you can just re-use the page
+directly (marking it pinned, so that any subsequent fork() does the
+right pre-cow thing)
 
-What am I missing?
+And if the page was *NOT* already writable, you do a COW - which might
+be sharing the page directly too, if it has no other references.
 
+What's the downside of just doing this properly?
 
--- 
-Thanks,
+Again: if a DMA user wants coherent memory, then it should use the
+coherent pinning. Not some kind of "read-only sharing that looks at
+crazy mapcounts that have absolutely zero relevance to whether the
+page is coherent or not".
 
-David / dhildenb
-
+                   Linus
