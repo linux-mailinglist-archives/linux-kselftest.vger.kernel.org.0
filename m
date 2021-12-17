@@ -2,93 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B063E479409
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 19:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E93F479484
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 20:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240274AbhLQSYE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 13:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S240547AbhLQTFR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 14:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbhLQSYD (ORCPT
+        with ESMTP id S240551AbhLQTFQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:24:03 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4DFC061574;
-        Fri, 17 Dec 2021 10:24:03 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r17so5336274wrc.3;
-        Fri, 17 Dec 2021 10:24:02 -0800 (PST)
+        Fri, 17 Dec 2021 14:05:16 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680AC061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 11:05:16 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id y12so11438842eda.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 11:05:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1DaKXL8orHozQmF64Lx5P0LmTQ5Gm5T6HjA9h/tMGP8=;
-        b=BsipFRerfGIbeJTeuRbVUn3UqG+64FCNItkHw9vUN1xUtYkwmFpROX+fv9Eilq+qp7
-         gns9xBw9nZZrqh/+sdZN6fmr1lxvZIl4N/UHYog9gLv54yldzSWj4a0K/MfIB622DQKx
-         2H4lemRpOOukPWNQST9JYB+Q0m871UzMN+AFEXHqfDWegjIxX2PWf0fRexRDcX8D3SKG
-         sWu/Kx+g05AUpBzeAWXvV3l/KOclFVpJyxto2ZExTDggkwBVYMkjZq+8tqqptamPspX9
-         KqieSXOyC7KmwoV3WnRNmN+d9kMmGhlRZ84w7HVVNOZslGEpScfBsZk/5C394TMGPjuy
-         bk5g==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7F2aHCSe8IzO12Nz4RyfBAXoLOfk6p6JbZVcFiKHrQg=;
+        b=ZjQ4/n3jpC4K+CjIh7Q22vd534RgwvYHtS9nR1P4Lv9P3PuipIG4Ky5i+x88FHfNU+
+         COO7Q+1L2Wl2VME7dDHc3akKiuLmeIvlviUDhdeTrCBSljMxVDX7hZf2YhkozKnphVFk
+         YaiCt3VRfbmQic5ajEaNqa5Otx58kYxFTYkgk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1DaKXL8orHozQmF64Lx5P0LmTQ5Gm5T6HjA9h/tMGP8=;
-        b=bbypZdo5ZVAHi5FIoC9kHzE6hS2v9sTgmIV+8+8dC6dc3UBfh3ABLsNiK9dypxlD3P
-         OF7zrDG4VcDwKoyY3+G8sRxr0G0hPF/uAqKztfaBJswRyJvyQgpRzfXmEHXLm56brUjH
-         +rfWDQSSn5nSWtnlDMWkDFX66BId3oCmrtqvcdxmzcMu8IaGcTUJtHqERBXs5O+KbdJw
-         IJP80A49TCXeUO+SZKplqjF7fAg0KrlPhFDzzgIjYdH5oAHUCaKzSCBMJvExMXZ2Gnth
-         upYkyADIHKEuG3l28cLZ36jFPFoboqmbmf6wH2g7d7+ka2DhixZ4il6H3RO0GpjEIOjo
-         uZJA==
-X-Gm-Message-State: AOAM531UXoU9E5n3XlSbsNAvWmJIIewC++KTu72Uu0j0EE6boiZmdPTt
-        u1AzvWi8e4cHMkZFUJxFWWM=
-X-Google-Smtp-Source: ABdhPJwzAPXhWGTvt6MEl6bjCoE4AGsG11ijHe8AsJObT74ax5zenkB6BRkQI/+L4y18/l4UW6Gh6Q==
-X-Received: by 2002:adf:9146:: with SMTP id j64mr3540685wrj.487.1639765441644;
-        Fri, 17 Dec 2021 10:24:01 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id q123sm10860191wma.30.2021.12.17.10.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 10:24:01 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] bpf, selftests: Fix spelling mistake "tained" -> "tainted"
-Date:   Fri, 17 Dec 2021 18:24:00 +0000
-Message-Id: <20211217182400.39296-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7F2aHCSe8IzO12Nz4RyfBAXoLOfk6p6JbZVcFiKHrQg=;
+        b=sF3OmUDs+Dx8mcWjPdLKCxZMUX09V9rUYOXuE6y8C33I4GyP0D2DceujoFIw71JFqy
+         a66pd2SVhzYWgdIyhJAQ6ciMuM12j3273qONcJRUqrkYSU4HFnNGRrCeH9guZgm5GtVX
+         BDqCTMjK+SG1XnaslqnbHKl6m+j4R3N7YHS1cfYz2V6zl1jC0yMPVxcf2tcT0lTiotD5
+         tLumc6k43R+GmKk2ue0t5EdVgGchySTbzeFtbFUFa764ELpTyFi6YJG6MPxtFmDAuNq4
+         qXJnXYtvkFCNwL72FCVvUda5p85YRxVzp0iOXWrulql/XrLeV0x398DUYZkA1H/Y/gaZ
+         rrUQ==
+X-Gm-Message-State: AOAM530g3jX4F74rMVp2JR3P/6x9K3hcYOpzSO9X6dBLvywDhOnEyh1q
+        Utz43o9cVKb7MlBvLyM1zpJaxZsnMtH+F1kul2c=
+X-Google-Smtp-Source: ABdhPJyo/tAfv+Dj6EEo2/nXOk/g9ZFrZGa5DkFqNfeVlSwoqCoLluu/cMpZHc6CD0pMt2eGSs430Q==
+X-Received: by 2002:a17:906:2788:: with SMTP id j8mr3646848ejc.203.1639767914521;
+        Fri, 17 Dec 2021 11:05:14 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id o21sm3162004ejy.181.2021.12.17.11.05.14
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 11:05:14 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id y83-20020a1c7d56000000b003456dfe7c5cso3793044wmc.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 11:05:14 -0800 (PST)
+X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr1762683wmb.152.1639767903770;
+ Fri, 17 Dec 2021 11:05:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+In-Reply-To: <20211217113049.23850-7-david@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 11:04:47 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+Message-ID: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There appears to be a spelling mistake in a bpf test message. Fix it.
+On Fri, Dec 17, 2021 at 3:34 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> + * If the child takes a read-only pin on such a page (i.e., FOLL_WRITE is not
+> + * set) and then unmaps the target page, we have:
+> + *
+> + * * page has mapcount == 1 and refcount > 1
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/bpf/verifier/value_ptr_arith.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+All these games with mapcount makes me think this is still broken.
 
-diff --git a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
-index 4d347bc53aa2..359f3e8f8b60 100644
---- a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
-+++ b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
-@@ -1078,7 +1078,7 @@
- 	.errstr_unpriv = "R0 pointer -= pointer prohibited",
- },
- {
--	"map access: trying to leak tained dst reg",
-+	"map access: trying to leak tainted dst reg",
- 	.insns = {
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--- 
-2.33.1
+mapcount has been a horribly broken thing in the past, and I'm not
+convinced it's not a broken thing now.
 
+> +       vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
+> +       if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
+> +           page_mapcount(vmf->page) > 1) {
+
+What keeps the mapcount stable in here?
+
+And I still believe that the whole notion that "COW should use
+mapcount" is pure and utter garbage.
+
+If we are doing a COW, we need an *exclusive* access to the page. That
+is not mapcount, that is the page ref.
+
+mapcount is insane, and I think this is making this worse again.
+
+                Linus
