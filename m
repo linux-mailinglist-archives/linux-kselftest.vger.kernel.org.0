@@ -2,132 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7A3479397
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 19:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B063E479409
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 19:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239644AbhLQSLW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 13:11:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46357 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237272AbhLQSLU (ORCPT
+        id S240274AbhLQSYE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 13:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbhLQSYD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:11:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639764679;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hdfHxUnq6Oqm9XHwzWNrUsr9UOXdYQoaq+fiSudykl8=;
-        b=cMahuuQyeJoHgl+KgkCr/Uap0t59SoFqpFJHZ4VAUwILPIPQe7nqSwC9neBrdAC0Tn8hB6
-        BeG2k7JoaU2ygffFVZh+GkhvOIxMDLrDd/8d0NXGBUKyA6Fi0GgCJYF0T1rW8hX6ZvxojS
-        O3irI4SyrozSL0qvQwXD7Cx6yPBLBu4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-YXvWLkPCOF2LSQcvOkI8UA-1; Fri, 17 Dec 2021 13:11:18 -0500
-X-MC-Unique: YXvWLkPCOF2LSQcvOkI8UA-1
-Received: by mail-wr1-f71.google.com with SMTP id l13-20020adfbd8d000000b001a23a990dbfso872701wrh.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 10:11:18 -0800 (PST)
+        Fri, 17 Dec 2021 13:24:03 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4DFC061574;
+        Fri, 17 Dec 2021 10:24:03 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r17so5336274wrc.3;
+        Fri, 17 Dec 2021 10:24:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1DaKXL8orHozQmF64Lx5P0LmTQ5Gm5T6HjA9h/tMGP8=;
+        b=BsipFRerfGIbeJTeuRbVUn3UqG+64FCNItkHw9vUN1xUtYkwmFpROX+fv9Eilq+qp7
+         gns9xBw9nZZrqh/+sdZN6fmr1lxvZIl4N/UHYog9gLv54yldzSWj4a0K/MfIB622DQKx
+         2H4lemRpOOukPWNQST9JYB+Q0m871UzMN+AFEXHqfDWegjIxX2PWf0fRexRDcX8D3SKG
+         sWu/Kx+g05AUpBzeAWXvV3l/KOclFVpJyxto2ZExTDggkwBVYMkjZq+8tqqptamPspX9
+         KqieSXOyC7KmwoV3WnRNmN+d9kMmGhlRZ84w7HVVNOZslGEpScfBsZk/5C394TMGPjuy
+         bk5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=hdfHxUnq6Oqm9XHwzWNrUsr9UOXdYQoaq+fiSudykl8=;
-        b=kBykingSrhe8ywyFCSFcyH9HzGh8xYNxwPw0Jw4atrtCYBkgqBFo1HOnkjzOWaHDrX
-         pUN64G/peXWMLihKHAuIqfQjkxJIyxsrqwSPZZchg2nOSbTtBLT7ikiuURkcBqlBSdEB
-         ifngzKE3CeNWBkoLceogAW+XeugBPHXCUxtgsXCH/xDqVVfgX9bBHcI5fGeGrVb7kYJV
-         mzjd4O9CE9Y/MXN0mwjRcsWzsmgst1Km8GPrLWpjX3YdwUVP4n7n7nhqKbxD2sI7Geol
-         121PyXYVMaklpLSzPcuPUDwruew7Th2SQ1jWJfYmtPrTTBkuo5uR0CTH44hQS6sxRlEh
-         P98w==
-X-Gm-Message-State: AOAM532EU+indY9bnvh/hWvD7rJ5vXX23VUnEeRxzU/8jbfuSWxWkAye
-        0AipeMqGXO9je2GwD7PBfQHXmkzcD6gfv7drDk3q/R9TIxCktGI7Y6K+hWldvkIYy0kdVjh7VwF
-        rH5R1WJ9/2xmWKh40NoghEpy84pzC
-X-Received: by 2002:a05:6000:178a:: with SMTP id e10mr3479605wrg.373.1639764677179;
-        Fri, 17 Dec 2021 10:11:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwLgy4aZOFKjfg55PAvd6AQPyzQU9oTMWCfs9cPWTUhUrmiyEGJg84XCeuZydB2K04JHLv4EA==
-X-Received: by 2002:a05:6000:178a:: with SMTP id e10mr3479574wrg.373.1639764676913;
-        Fri, 17 Dec 2021 10:11:16 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id n1sm9827003wrc.54.2021.12.17.10.11.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 10:11:16 -0800 (PST)
-Message-ID: <7f35b4a3-8a31-d74c-fcc0-ecc87071d9a5@redhat.com>
-Date:   Fri, 17 Dec 2021 19:11:15 +0100
+        bh=1DaKXL8orHozQmF64Lx5P0LmTQ5Gm5T6HjA9h/tMGP8=;
+        b=bbypZdo5ZVAHi5FIoC9kHzE6hS2v9sTgmIV+8+8dC6dc3UBfh3ABLsNiK9dypxlD3P
+         OF7zrDG4VcDwKoyY3+G8sRxr0G0hPF/uAqKztfaBJswRyJvyQgpRzfXmEHXLm56brUjH
+         +rfWDQSSn5nSWtnlDMWkDFX66BId3oCmrtqvcdxmzcMu8IaGcTUJtHqERBXs5O+KbdJw
+         IJP80A49TCXeUO+SZKplqjF7fAg0KrlPhFDzzgIjYdH5oAHUCaKzSCBMJvExMXZ2Gnth
+         upYkyADIHKEuG3l28cLZ36jFPFoboqmbmf6wH2g7d7+ka2DhixZ4il6H3RO0GpjEIOjo
+         uZJA==
+X-Gm-Message-State: AOAM531UXoU9E5n3XlSbsNAvWmJIIewC++KTu72Uu0j0EE6boiZmdPTt
+        u1AzvWi8e4cHMkZFUJxFWWM=
+X-Google-Smtp-Source: ABdhPJwzAPXhWGTvt6MEl6bjCoE4AGsG11ijHe8AsJObT74ax5zenkB6BRkQI/+L4y18/l4UW6Gh6Q==
+X-Received: by 2002:adf:9146:: with SMTP id j64mr3540685wrj.487.1639765441644;
+        Fri, 17 Dec 2021 10:24:01 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id q123sm10860191wma.30.2021.12.17.10.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Dec 2021 10:24:01 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] bpf, selftests: Fix spelling mistake "tained" -> "tainted"
+Date:   Fri, 17 Dec 2021 18:24:00 +0000
+Message-Id: <20211217182400.39296-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in
- __page_mapcount()
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-4-david@redhat.com>
- <0b0007b3-bf6f-ccd7-96cf-3dd861abf224@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <0b0007b3-bf6f-ccd7-96cf-3dd861abf224@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17.12.21 19:06, Mike Kravetz wrote:
-> On 12/17/21 03:30, David Hildenbrand wrote:
->> Let's return early for hugetlb, which really only relies on the compound
->> mapcount so far and does not support PageDoubleMap() yet. Use the chance
-> 
-> It is too early to say if hugetlb double mapping will use PageDoubleMap().
-> I do not think (hope) it will be necessary.  So, I think you can drop mention
-> of it here.
+There appears to be a spelling mistake in a bpf test message. Fix it.
 
-Desires have most certainly been expressed from a couple of parties --
-to PTE map huge pages :) Hopefully we'll find a way to avoid
-PageDoubleMap, I agree.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/bpf/verifier/value_ptr_arith.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dropping the comment!
-
-> 
->> to cleanup the file-THP case to make it easier to grasp. While at it, use
->> head_compound_mapcount().
->>
->> This is a preparation for further changes.
->>
->> Reviewed-by: Peter Xu <peterx@redhat.com>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
-> 
-> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-> 
-
-Thanks!
-
+diff --git a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+index 4d347bc53aa2..359f3e8f8b60 100644
+--- a/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
++++ b/tools/testing/selftests/bpf/verifier/value_ptr_arith.c
+@@ -1078,7 +1078,7 @@
+ 	.errstr_unpriv = "R0 pointer -= pointer prohibited",
+ },
+ {
+-	"map access: trying to leak tained dst reg",
++	"map access: trying to leak tainted dst reg",
+ 	.insns = {
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
 -- 
-Thanks,
-
-David / dhildenb
+2.33.1
 
