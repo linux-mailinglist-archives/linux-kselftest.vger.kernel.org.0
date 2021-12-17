@@ -2,169 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 751BB479188
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 17:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C4C4791C5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 17:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239151AbhLQQeg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 11:34:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47264 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239150AbhLQQef (ORCPT
+        id S235850AbhLQQp1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 11:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232266AbhLQQpZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:34:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639758875;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iHsgYvtM2VbxZhXYtiIDslv8uvAy3OgBfsyPMPqyKfY=;
-        b=HHGDPMO8Ws2pvIFJBbV0rJxZec5XFD2w3PyG/tTncoxRMuL4g27/lzynPwhcJN/CjBj4aZ
-        yIxhu/6eE6cRlL0U/pkAk/HPC12TkMvhyfQFiPXKGbOx+pX1HQP+b45hbIM7JaAKClxA56
-        KlvrRv0qxdT6ZY2Q6l2T7+f1ohoZJBM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-JQdpYZzfMw-6gjsTIJXbyQ-1; Fri, 17 Dec 2021 11:34:31 -0500
-X-MC-Unique: JQdpYZzfMw-6gjsTIJXbyQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74C6910168C6;
-        Fri, 17 Dec 2021 16:34:29 +0000 (UTC)
-Received: from [10.22.10.138] (unknown [10.22.10.138])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F4BD4E2A2;
-        Fri, 17 Dec 2021 16:34:10 +0000 (UTC)
-Message-ID: <a7c9aaa1-b813-fccc-6623-0c6409642b6b@redhat.com>
-Date:   Fri, 17 Dec 2021 11:34:09 -0500
+        Fri, 17 Dec 2021 11:45:25 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F590C061574;
+        Fri, 17 Dec 2021 08:45:25 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id g17so7998546ybe.13;
+        Fri, 17 Dec 2021 08:45:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m7Y7ckw+IgW4yU6GDHbrZEnkRBsrFfzHCVFkQQiHxak=;
+        b=kcyeSOnDd9J0q0McHdlTwt2+/AaFjyYI8vm8T3n5p7L2MFKyooEiDZXin00Vkh2QHA
+         gln30x7Ctw47OckybLamsXsvHYyt02zS89/Z1cMj9XqHqu2igcYveTXj7nikEKn+TOFN
+         8nMbon5bb/PxrXi7WxNId9RXz+YrBRxzqjsW/IcwVym7CGhE+sgcHXt1d5fwJ3086H5u
+         SBV6vpaVm6D5wvf9v1V6BSUCLmaqsWbpq2TRgwGMQ1XN/Tluu2qQVw2c0suY143k727i
+         qCLnLwrAJ6YMRQhYz0dl9FYkE4xUuQxAbUS4+qghM+lH6goboXo7USCaZeu1RzdUxE8J
+         WF1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m7Y7ckw+IgW4yU6GDHbrZEnkRBsrFfzHCVFkQQiHxak=;
+        b=YvxsYW715qbaHGxUBtpsAtk6nAIN8Hh2s1z0gGWrwLoSEUUJ83uQ34mklslrLRIYr1
+         o+y7nvT03j2AiCV6XyDdFhdOzd3BM3pDtkyEbLkSRXiNTHZBl6D36rKz9jXapV742pHt
+         G4iC7usjPmWvvyN6be/yEulW7nJRbIO5whVSqiOc8+nGEJB8Ri7rWSECCaCA/6Kmghep
+         cazk6gMuM3CNeK8DQndAuSxd90gnd5yk6gth0Lm8PJHQLNKEYNsNXjFTeTz+FcaldksB
+         XqiWQsD1lmaSmWY3gCIjQ8tQOaATfAM/ublZXGQG5xFRi9VhUaR52CmTdS3IenMqzvx1
+         CMqw==
+X-Gm-Message-State: AOAM533+DxwTUOojaYOjNRAprIZNd9f1/ACR6++N0fmNpaBl2WM9S8VM
+        ZSZs8ylucBk2vTwZdWrZCEQ7XpWAJjOpGwPaWG4=
+X-Google-Smtp-Source: ABdhPJzfKY1BO8ehGRFdS69WpfFRf+Rny7uieyPckkgvNhRP9CTEpoL1kfBsBWCeBrYRSpnHy6RCQHVZuZ/MXgnkvwg=
+X-Received: by 2002:a25:3c9:: with SMTP id 192mr5496379ybd.766.1639759524593;
+ Fri, 17 Dec 2021 08:45:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] cgroup/cpuset: Make child cpusets restrict parents on v1
- hierarchy
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>, tj@kernel.org
-Cc:     akpm@linux-foundation.org, cgroups@vger.kernel.org, corbet@lwn.net,
-        frederic@kernel.org, guro@fb.com, hannes@cmpxchg.org,
-        juri.lelli@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        lizefan.x@bytedance.com, mtosatti@redhat.com, pauld@redhat.com,
-        peterz@infradead.org, shuah@kernel.org
-References: <8d73dc26-74e1-d763-d897-6e03cdac3c8c@redhat.com>
- <20211217154854.41409-1-mkoutny@suse.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211217154854.41409-1-mkoutny@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20211214135555.125348-1-pulehui@huawei.com> <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
+ <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
+In-Reply-To: <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 17 Dec 2021 08:45:13 -0800
+Message-ID: <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
+ userspace pt_regs
+To:     Pu Lehui <pulehui@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/17/21 10:48, Michal Koutný wrote:
-> The commit 1f1562fcd04a ("cgroup/cpuset: Don't let child cpusets
-> restrict parent in default hierarchy") inteded to relax the check only
-> on the default hierarchy (or v2 mode) but it dropped the check in v1
-> too.
+On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
 >
-> This patch returns and separates the legacy-only validations so that
-> they can be considered only in the v1 mode, which should enforce the old
-> constraints for the sake of compatibility.
 >
-> Fixes: 1f1562fcd04a ("cgroup/cpuset: Don't let child cpusets restrict parent in default hierarchy")
-> Suggested-by: Waiman Long <longman@redhat.com>
-> Signed-off-by: Michal Koutný <mkoutny@suse.com>
-> ---
->   kernel/cgroup/cpuset.c | 52 ++++++++++++++++++++++++++++++++----------
->   1 file changed, 40 insertions(+), 12 deletions(-)
 >
-> This is formatted as a separate patch fixing the already queued change in
-> for-5.17 but it can be eventually squashed into the referenced commit AFAIAC.
->
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 0dd7d853ed17..ce6929ddc0b0 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -590,6 +590,35 @@ static inline void free_cpuset(struct cpuset *cs)
->   	kfree(cs);
->   }
->   
-> +/*
-> + * validate_change_legacy() - Validate conditions specific to legacy (v1)
-> + *                            behavior.
-> + */
-> +static int validate_change_legacy(struct cpuset *cur, struct cpuset *trial)
-> +{
-> +	struct cgroup_subsys_state *css;
-> +	struct cpuset *c, *par;
-> +	int ret;
-> +
-> +	WARN_ON_ONCE(!rcu_read_lock_held());
-> +
-> +	/* Each of our child cpusets must be a subset of us */
-> +	ret = -EBUSY;
-> +	cpuset_for_each_child(c, css, cur)
-> +		if (!is_cpuset_subset(c, trial))
-> +			goto out;
-> +
-> +	/* On legacy hierarchy, we must be a subset of our parent cpuset. */
-> +	ret = -EACCES;
-> +	par = parent_cs(cur);
-> +	if (par && !is_cpuset_subset(trial, par))
-> +		goto out;
-> +
-> +	ret = 0;
-> +out:
-> +	return ret;
-> +}
-> +
->   /*
->    * validate_change() - Used to validate that any proposed cpuset change
->    *		       follows the structural rules for cpusets.
-> @@ -614,20 +643,21 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
->   {
->   	struct cgroup_subsys_state *css;
->   	struct cpuset *c, *par;
-> -	int ret;
-> -
-> -	/* The checks don't apply to root cpuset */
-> -	if (cur == &top_cpuset)
-> -		return 0;
-> +	int ret = 0;
->   
->   	rcu_read_lock();
-> -	par = parent_cs(cur);
->   
-> -	/* On legacy hierarchy, we must be a subset of our parent cpuset. */
-> -	ret = -EACCES;
-> -	if (!is_in_v2_mode() && !is_cpuset_subset(trial, par))
-> +	if (!is_in_v2_mode())
-> +		ret = validate_change_legacy(cur, trial);
-> +	if (ret)
-> +		goto out;
-> +
-> +	/* Remaining checks don't apply to root cpuset */
-> +	if (cur == &top_cpuset)
->   		goto out;
->   
-> +	par = parent_cs(cur);
-> +
->   	/*
->   	 * If either I or some sibling (!= me) is exclusive, we can't
->   	 * overlap
-> @@ -1175,9 +1205,7 @@ enum subparts_cmd {
->    *
->    * Because of the implicit cpu exclusive nature of a partition root,
->    * cpumask changes that violates the cpu exclusivity rule will not be
-> - * permitted when checked by validate_change(). The validate_change()
-> - * function will also prevent any changes to the cpu list if it is not
-> - * a superset of children's cpu lists.
-> + * permitted when checked by validate_change().
->    */
->   static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
->   					  struct cpumask *newmask,
+> On 2021/12/16 12:06, Andrii Nakryiko wrote:
+> > On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
+> >>
+> >> When building bpf selftests on arm64, the following error will occur:
+> >>
+> >> progs/loop2.c:20:7: error: incomplete definition of type 'struct
+> >> user_pt_regs'
+> >>
+> >> Some archs, like arm64 and riscv, use userspace pt_regs in
+> >> bpf_tracing.h, which causes build failure when bpf prog use
+> >> macro in bpf_tracing.h. So let's use vmlinux.h directly.
+> >
+> > We could probably also extend bpf_tracing.h to work with
+> > kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
+> > __VMLINUX_H__ checks). It's more work, but will benefit other end
+> > users, not just selftests.
+> >
+> It might change a lot. We can use header file directory generated by
+> "make headers_install" to fix it.
 
-Thanks for addressing this issue.
+We don't have dependency on "make headers_install" and I'd rather not add it.
 
-Reviewed-by: Waiman Long <longman@redhat.com>
+What do you mean by "change a lot"?
 
+>
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -294,7 +294,8 @@ MENDIAN=$(if
+> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+>   BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
+>              -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
+> -            -I$(abspath $(OUTPUT)/../usr/include)
+> +            -I$(abspath $(OUTPUT)/../usr/include) \
+> +            -I../../../../usr/include
+> >>
+> >> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> >> ---
+> >>   tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
+> >>   tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
+> >>   tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
+> >>   tools/testing/selftests/bpf/progs/loop6.c     | 20 ++++++-------------
+> >>   .../selftests/bpf/progs/test_overhead.c       |  8 ++------
+> >>   .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
+> >>   6 files changed, 15 insertions(+), 43 deletions(-)
+> >>
+> >
+> > [...]
+> > .
+> >
