@@ -2,77 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ADB47845E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 06:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A2A47849C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 06:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbhLQFJl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 00:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S233018AbhLQFms (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 00:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbhLQFJk (ORCPT
+        with ESMTP id S233015AbhLQFmr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 00:09:40 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECD9C06173E
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 21:09:40 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id z6so870436plk.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 21:09:40 -0800 (PST)
+        Fri, 17 Dec 2021 00:42:47 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7212EC06173F
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 21:42:47 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v64so3291094ybi.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 21:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=atishpatra.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5W/bzSegDtUSc7k5vwSKDN1FXvdIqhDrrjznRYisGn4=;
-        b=fZLDIXhJVef2Z1hy/ndF0dlu4HSaUi1iW5nk2bY9o8ImRzFTrPTpamqbr5GIm0q8Q9
-         tUcD62tef/aGPGby7voFS2Q4O9znqtZC/dlM9iaxGmwtb/R2eP6YWbyrzMEgN/pn8tNb
-         cZSUxTfTx49X31uuAc32d+RaZnez/sRMNgZWw3Hx/a9cWjIC7ZWpTak9H2I/+MNAeT8Z
-         mFhMwoQgcS3zY8AQ/hEQNiqsm+9yVFEzT5aNz8vL0Lp9LbV2k9I4/ifJbb0nFQPSnB8L
-         t4hsDHVqv9nYsL0s9rLLzFmjoOHmTTB41YmATNlKZKfTH2JYujVG8vbJqo3etSTBgXb+
-         qA2g==
+        bh=NSzRgyKxQMByJDnhlFllsd6YBcOS/JIx8Ap+A3lLZVg=;
+        b=IRPPeiVShrf2EHVF/zr+4wNVsvaB3yZ09DlCKxTDHT/IYnuRNWSJspvOYQqf6SQW32
+         TergXgX2aWeH6nRMclgctg1HXcpL4ABn2DGUFSWbhgYU3MPCf13INK4Q9x9DYFFf+H4S
+         pYuqEWXwrJ4PkMuareW6NigdpZhNmcTCB9e0w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5W/bzSegDtUSc7k5vwSKDN1FXvdIqhDrrjznRYisGn4=;
-        b=xJDd5cnh0MVcCpDs/WMvLP9TK/UQBHb8JrRUQLpXMzToJE9rOKOPMTGdZaiDAvgzZQ
-         C7DXth7tcPNzH/W6U5BBW0VdL7mmNUEJuY3BJj8wNuRSI8Miej17cxjjmJ1jCC3nvD82
-         V7tBJwcPunGri8AKg1OnnDqeE1+6Yk9hOBKffNk9sJEfqvD5Yb8dm98WNHRXR+ER+F9A
-         2rb15wEK9NC1HqaZRQlQw+PyiTGzK5L9z3zHzpF4M4e0Y0c1UV5yg7nEeAQogrsU2Rh8
-         GNS07UAxyzQtRk690ZEQ4KE32CrtE/J/ABSX5sdxtkN1+006o8EYdat4zMItCQ0JRmcj
-         ghtw==
-X-Gm-Message-State: AOAM5305VNhlKu7dDx4+fr8/Z+p7/rWuUYUbjD8oty6iTmFgSTcGvxdZ
-        ht2j3KTJbgVqS/M4ksTizVyIOi/zfOPBxeKky0m/lg==
-X-Google-Smtp-Source: ABdhPJyqJJLzM+AwEpjT5+YuXTNw45sYnJ1rOAs2JyCLtKmVCOv6nZdUpQdI0UOsjb5oyYBeB3Y59xD1nuBqwDvddq4=
-X-Received: by 2002:a17:90b:4a0a:: with SMTP id kk10mr10274235pjb.198.1639717779421;
- Thu, 16 Dec 2021 21:09:39 -0800 (PST)
+        bh=NSzRgyKxQMByJDnhlFllsd6YBcOS/JIx8Ap+A3lLZVg=;
+        b=nZYv+mhIGH2/oA5dasIzzR8l1VHF0MZraOtlGYCAqKqBP9OjqQgI10APMUxmTtaXfW
+         +XVCh8Qj4prSwVvGhBzg0z24LNUbd+VU6u2Js2OXd2q11Dv4NL1zY/vAwYGBzbrpBqrq
+         mD/OBVhslHf/+gFh69EAJPxyyF/RIAAVXOYk/we2nyjtoO2Y3uMdfCbkf4m3VZDxWQfR
+         FYfn7LYt5EYEEW/Ij+Wilyv14zcQ2JijDPTr0+Xm4GA1KxYF94LusXso2E7TwSneOSwP
+         yrw6Kr7Q/KDMw6rrwD+yjWiSzMWigVg3BIx4J7oX/ZJPBIMOApeSn2S4wNt0YSVqSE5q
+         nH+w==
+X-Gm-Message-State: AOAM533E8jk8ire2w6eaiRBTw42S7/SKa5e1aha+qwMVXJLShEvQN8hy
+        5c1TpGhGQVIPIVQ1uf9eqKgIIH/C1SDyzWAYK/WQ
+X-Google-Smtp-Source: ABdhPJzmQEGSsZWBthsTvOSELeG8VS6EgUDmAeiuIV8vOPQMT9GShkXgjRb8/dyL69PldIEwTWjMSAxbclT2NqOHX4w=
+X-Received: by 2002:a05:6902:568:: with SMTP id a8mr2394655ybt.472.1639719766471;
+ Thu, 16 Dec 2021 21:42:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217044911.798817-1-sharinder@google.com>
-In-Reply-To: <20211217044911.798817-1-sharinder@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 17 Dec 2021 00:09:28 -0500
-Message-ID: <CAFd5g45qZjD33dBQtpqD3btNBNL6gL38=8YBBUGCAr9-ohgdpg@mail.gmail.com>
-Subject: Re: [PATCH v6 0/7] Documentation: KUnit: Rework KUnit documentation
-To:     Harinder Singh <sharinder@google.com>
-Cc:     davidgow@google.com, shuah@kernel.org, corbet@lwn.net,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim.Bird@sony.com, elver@google.com
+References: <20211129075451.418122-1-anup.patel@wdc.com> <20211129075451.418122-2-anup.patel@wdc.com>
+In-Reply-To: <20211129075451.418122-2-anup.patel@wdc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 16 Dec 2021 21:42:35 -0800
+Message-ID: <CAOnJCU+=SfN0e-prQsrR8BHfcs7hP9Ab61cnD-yOEZZQ2Gh9cA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] RISC-V: KVM: Forward SBI experimental and vendor extensions
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:49 PM Harinder Singh <sharinder@google.com> wrote:
+On Mon, Nov 29, 2021 at 12:10 AM Anup Patel <anup.patel@wdc.com> wrote:
 >
-> The KUnit documentation was not very organized. There was little
-> information related to KUnit architecture and the importance of unit
-> testing.
+> The SBI experimental extension space is for temporary (or experimental)
+> stuff whereas SBI vendor extension space is for hardware vendor specific
+> stuff. Both these SBI extension spaces won't be standardized by the SBI
+> specification so let's blindly forward such SBI calls to the userspace.
 >
-> Add some new pages, expand and reorganize the existing documentation.
-> Reword pages to make information and style more consistent.
+> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> ---
+>  arch/riscv/kvm/vcpu_sbi.c      |  4 ++++
+>  arch/riscv/kvm/vcpu_sbi_base.c | 27 +++++++++++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+>
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index f62d25bc9733..78aa3db76225 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -46,6 +46,8 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time;
+>  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi;
+>  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence;
+>  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
+> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
+> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+>
+>  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+>         &vcpu_sbi_ext_v01,
+> @@ -54,6 +56,8 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+>         &vcpu_sbi_ext_ipi,
+>         &vcpu_sbi_ext_rfence,
+>         &vcpu_sbi_ext_hsm,
+> +       &vcpu_sbi_ext_experimental,
+> +       &vcpu_sbi_ext_vendor,
+>  };
+>
+>  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
+> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> index 641015549d12..ac0537d479d8 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> @@ -68,3 +68,30 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
+>         .extid_end = SBI_EXT_BASE,
+>         .handler = kvm_sbi_ext_base_handler,
+>  };
+> +
+> +static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
+> +                                       struct kvm_run *run,
+> +                                       unsigned long *out_val,
+> +                                       struct kvm_cpu_trap *utrap,
+> +                                       bool *exit)
+> +{
+> +       /*
+> +        * Both SBI experimental and vendor extensions are
+> +        * unconditionally forwarded to userspace.
+> +        */
+> +       kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> +       *exit = true;
+> +       return 0;
+> +}
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
+> +       .extid_start = SBI_EXT_EXPERIMENTAL_START,
+> +       .extid_end = SBI_EXT_EXPERIMENTAL_END,
+> +       .handler = kvm_sbi_ext_forward_handler,
+> +};
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
+> +       .extid_start = SBI_EXT_VENDOR_START,
+> +       .extid_end = SBI_EXT_VENDOR_END,
+> +       .handler = kvm_sbi_ext_forward_handler,
+> +};
+> --
+> 2.25.1
+>
 
-Thanks for all your hard work on this Harinder!
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-And thanks to everyone else (Tim, Marco, and David) for all of your
-help on this!
+--
+Regards,
+Atish
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+-- 
+Regards,
+Atish
