@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E651E47924B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 18:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEF8479298
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 18:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbhLQRCa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 12:02:30 -0500
-Received: from mail-dm6nam11lp2168.outbound.protection.outlook.com ([104.47.57.168]:33847
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        id S239451AbhLQRQD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 12:16:03 -0500
+Received: from mail-sn1anam02lp2040.outbound.protection.outlook.com ([104.47.57.40]:6458
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229474AbhLQRCZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:02:25 -0500
+        id S239419AbhLQRQC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Dec 2021 12:16:02 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FvYZMD+RttNY2LmXXMd0QY7AoYLTPQ2e6UqIsdesa373IAIBSJDKjkIzSGjqokjel2ZGCWpS6hyNsGlTUj3e9DQwyFNy2lYjriEOUNfja5PJT3VBNHJ1l1RGMmgwvVNCHLFSE+CS3x65gogTDkQTiq/awmDnkvqrFML+erHooyYVqGwJvs9W93LWBSYcZtbKb0UL4EEjF9XtfgTz0ya7awUUjovNXRiVXzv9O1iHhrziOKSP2IwDDOwF5pc2ZR8SCWk7WYbNakY7VmEoAaT+W3WOratj48XxhtwCNeHU+nsUNB7kIaLFnOpgEvHtXHGq0jV2OLxinqDH7AbWGRlquw==
+ b=DOS180MjKI/E6uJ2y8X7ckqfgAeawUYZJ61w0YZORtq/n3YlN6Wd+iqk0L8bEAQthodmzPNTqpPKu+PuA3uM1fwfU62GZMw4M9w+aOTHNVmrMig2fS65CnViGmVMOIZHv9ns8c42U8de1fHEOVI5QGcGwpGVE37RIcsiVmf+L/i5TFHaq1p1r95uVPymEe/NIjC+VEOpwmz815KCstDLOzx41M6tislKIWcyMJtR7Klh6kIrH513Y1QHz7b4wKTKIWBP7V6N4+1LyF0GszAMwMZNcU3548Vk6Bde+Seg/K659U6rmKZ8jHizcbyMyYV/jc8IbIaZI2xCx+Vo65saCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9KYr9yyqmT9WH4BbHpommzdvYScqfie8tP/yK/nI8IY=;
- b=b7f4GwXrg1+jzohUhujRvQzOiiuD6LTzcVNYvj6Twm2OC2vL/BJTuUWgos3250kk5jIt6viuOYOSmhR6on9KCCRgxc/xU4ECOcJa+KA4f3UetkiGZI85JqTd0lSHdhRmNm97HmEKA3OC3jk4j5BMHZwax0wm4Ddq+75NdQ3Xv4Fxxsiq4dSWGPPXtLSHYJ3FKL3g9n8DhdbvYpagz76/uk+CntanLZ7Cde7iYnJ1B0qXxDR5oTnd7KuWPEHYAbjB+htWKWSxj3HinhZoRO0rou/zE5UQNYCb1BPBjdSqtUynAPrJbcdg4Riok7a0ulsH3Hhx+17A+9uvQW0ysqNmOA==
+ bh=eCBV+JN/pJSwd+uZwX6WooY/ckJkXmvt3aYmFjKGyeI=;
+ b=Eg6jC4+7MOa4PqPjDLfNBZ6kZmAJyRV/dKYqk8OXn9Zhpuw+RUArXQYncqKoK0DDflzhA82fg3JvjF3wV0y8bkntDWFwsTiav4U6/fpJG/ju1NYvHjchRc/kOd+cney29YWtemmWqGw1TZxS1+Cqu6SOnfHSVWeEyzbD2Q1fOURNhIA9qCQ2WQ5nU/aAy/zcw9NPTrNDnqR5BjGZrWJGi2VwwwEtZlHFzxXI1wSow0XbueRyR9TvvIOvTZUnLgi78Cym6K8GniqQ0iPJnKcsKUeA0qdYBceOXCHx+exN1oSLI+XTwDA5+dJTRr318oCAWfasSCfwBmEHgGsIvjp1wQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9KYr9yyqmT9WH4BbHpommzdvYScqfie8tP/yK/nI8IY=;
- b=Pos1IVaKQtETesLg74mllNJ0dgac7VlO7a+vTPJX3urgetgjKjZ6N6VsowpMqAKneQC7RL/FFdmy3u4SznT22kws2/jqDItL9pfybin1GshwJ8ogWgp29smJyu7Z+N2Dx727JYgLB2VQviXXBSH26/+5panlDxIZW1JTkd0zTcU=
+ bh=eCBV+JN/pJSwd+uZwX6WooY/ckJkXmvt3aYmFjKGyeI=;
+ b=t5OEyv9DqLz3/fegrNj5rGNmbm9XRe8YlNgN8wRWY/t9EM+nteYwxXVeZe5m3LBltdseKHpZKzeza8XthT6Lb5WSmhs1XbI0kvEGcqabq34mvkv92PRUBI8P+9xNvGbhwIeyhqyK71ZAzxFrjLgm1N0SvmYf30b1CBcBqbE4GTs=
 Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by BYAPR05MB5608.namprd05.prod.outlook.com (2603:10b6:a03:75::31) with
+ by SN7PR05MB7582.namprd05.prod.outlook.com (2603:10b6:806:f7::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.8; Fri, 17 Dec
- 2021 17:02:23 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.7; Fri, 17 Dec
+ 2021 17:16:00 +0000
 Received: from BY3PR05MB8531.namprd05.prod.outlook.com
  ([fe80::f4f8:9fc8:59d9:3345]) by BY3PR05MB8531.namprd05.prod.outlook.com
  ([fe80::f4f8:9fc8:59d9:3345%3]) with mapi id 15.20.4823.009; Fri, 17 Dec 2021
- 17:02:23 +0000
+ 17:16:00 +0000
 From:   Nadav Amit <namit@vmware.com>
 To:     David Hildenbrand <david@redhat.com>
 CC:     LKML <linux-kernel@vger.kernel.org>,
@@ -62,22 +62,17 @@ CC:     LKML <linux-kernel@vger.kernel.org>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
- variant
-Thread-Topic: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
- variant
-Thread-Index: AQHX8znaqyMNBisG2UGD/gNtIc+9Gqw26UMA
-Date:   Fri, 17 Dec 2021 17:02:22 +0000
-Message-ID: <38BCB153-7E7C-4AAD-8657-E5C6F9E1EF9B@vmware.com>
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in
+ __page_mapcount()
+Thread-Topic: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in
+ __page_mapcount()
+Thread-Index: AQHX8zn3v2IqnN3pZUarNh3bmsL556w27RCA
+Date:   Fri, 17 Dec 2021 17:16:00 +0000
+Message-ID: <10A6B16D-3570-4010-83B9-41A38B50C8A4@vmware.com>
 References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-2-david@redhat.com>
-In-Reply-To: <20211217113049.23850-2-david@redhat.com>
+ <20211217113049.23850-4-david@redhat.com>
+In-Reply-To: <20211217113049.23850-4-david@redhat.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -86,124 +81,91 @@ x-mailer: Apple Mail (2.3654.120.0.1.13)
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vmware.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f21ca664-67bb-4c3f-47ce-08d9c17efe97
-x-ms-traffictypediagnostic: BYAPR05MB5608:EE_
-x-microsoft-antispam-prvs: <BYAPR05MB5608F555ED928469BF65CB4DD0789@BYAPR05MB5608.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1265;
+x-ms-office365-filtering-correlation-id: 40cdcbd9-c3cc-42e0-7bdf-08d9c180e5b5
+x-ms-traffictypediagnostic: SN7PR05MB7582:EE_
+x-microsoft-antispam-prvs: <SN7PR05MB75828324737AA89A59BB89E5D0789@SN7PR05MB7582.namprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2958;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vlsNYwhGAUhjlH96yyHBjiuu9BhA9E0Om+8S0y8uq0kTvY7N60FU0Z/cnwBGDPxC+fxIHncivxKiWGFigrpox+o3juo/rUkwT01gonsrHm1a1VMtZ8D5MF4RlN56r+uR848QSd1Dt1aChHPaHhAUoJOaVQeNsFIST1VsF54lTXZ82k/rvQBowUzROySsgnt6Kq+lnqvd4OWRadLipb2ExKK5tVmtmIeAx2XyjsUCBxQGc59K2Z1t0lGZK/L6r4GtPZBWfKD+HAnfUy3Kg56DRDiTBu/6161GdkWwzfglfFLjx0GyKUZWfSk9+gFbQfTfipV6ao5EOt1lli99rTigh2jgCII2R/GL3Q8bb+So4DoE8+gmlQuiywQQ8RHDsPLGKtwCh5s//IWFF+7+elC92O9OYwDRo3uhU9UEWrbMuMwHcDmMGVJueS6YqoGR2MNTOeq6mHPCbUbnwARNlk4L6Fpfwvz48kD+g8S8Ii8m3c7egUF4nMyLF/7jophnA6yPpT6rSBdv4u1THZFgYiiswOUUCqkEV7Af0+v/toPzTnmljj/p6Fr5lKVazGIAY8c2jSucHGXNkwpGl+bNkaHxg3emEoOgyjWx5vRnDQ4c6Biq7ZuOpV4m9vIY/w7ucbtxylcrpfHbmgaSDQxRFJ2udqYsmd6qrPIObx5Uva3R97wHIcHIvEaBnxv3KwVAxhWsQn2Yg5tFQuTBBgGjO8e/D2Af8vwEhIKKpnieSmVmVVg9QuTHgD+TseHKcc6hxXeJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(64756008)(66476007)(38070700005)(86362001)(36756003)(66556008)(66446008)(71200400001)(8676002)(316002)(66946007)(83380400001)(33656002)(38100700002)(4326008)(508600001)(122000001)(54906003)(76116006)(53546011)(6512007)(2616005)(6506007)(6486002)(26005)(186003)(7416002)(5660300002)(7406005)(8936002)(6916009)(45980500001)(20210929001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 7v7rA1jkAFxF571e5+ehX9RMcwKBSmXYjxChI7xQlxi7t4lBdNNDwJPZ2EvVnAbYWBqdRP39FrcVgfTS0o+0vLRr3PRPk433GfKmgVf8fSg6qCBrC2MM9LtWhY1BNbWrDModDAjWRV7ueq4Z5+SuEvzppm9qBV2bfi3mJa/ZVEYffgThe4QssFysR2JajC9QV3+9P8oqCo7x1kn0rRpBX9l/FIcK5F1N62aG08Qt0uZo+QC0eXe6z/og+OlIeiG9VZQ0I01ffEP+flWhZvL7Ly3RUmE4P2S8HM1S67iwy2qZ/a0VSFcne8nMOGh2TMtateEs6kfxR47VM3wPw1IFoNE/nHOASFfEndN0vAS/G4fNvbao6GmLsDaxS6EpPgN/LmbKW40ZH4YjlS34AY+DtcTDMgTRXnYwjEoMEd032RmSXncCj87GYP8Fl8gKbvduUBLUJXRR/IoSUw/OzuJ1M4kVeBmkaIxPT1RtLbLG8pJF8uxvDIUgSi47Iv5yvvWhMlTRiSNCcxfVFanjRiaRnRB0/xsMi3kFGQ0pLXW8usiWQxVjFyMjJ47EE7K0JltqrBnH4a/aqBNKfdrcpMfcf0ewCj/6LD/a2tFqSBv/JhYZN13lRJefxKJmzdTJHqVoJYrs/Gj2/Po4Q7bxTYWzicRQpbjJszdztIYu8o1IbjZxCS9RbwaMfHEeN0W00pxsbKqkr7Ds5rn0k9kh/Gv2Behq+OHLtCSDa1nXivvDWFYRAGQcsJAjwnV/ydzgwPaNSfjsri+xur070nFvRuU5P+LiFAq6iEMv2wQLXvD/1y4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(2616005)(76116006)(508600001)(53546011)(316002)(66946007)(66556008)(83380400001)(38100700002)(86362001)(4326008)(64756008)(6916009)(54906003)(66476007)(66446008)(8936002)(8676002)(122000001)(26005)(186003)(6512007)(6486002)(6506007)(2906002)(36756003)(71200400001)(33656002)(7416002)(38070700005)(45980500001)(20210929001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?y7R1t6vXtXQ/0nrGhpGzhNuAwjxfeHccGQB0wxyxSho/NZPFQoNzshGrQ3aa?=
- =?us-ascii?Q?8oN/ayPurslA952LG4gpmCnUIwy59mU1mw2Fa2glQtLAqUZp2usnvMNuZ9xp?=
- =?us-ascii?Q?Og4T1Wn31qaIweTCSNDjydjSjT3CVNzQ6jHN4gpq/X3lfmxNVhWNn4EXEVQV?=
- =?us-ascii?Q?F2YOnCcmpZSoiXMOJCzslRSTRYe9PwIsQKGXZ2kvvJm0zc56hdfqkAvWIJH5?=
- =?us-ascii?Q?uVCzEu3rwnqAGQRgpWwiXv2jugEVsVp4yt5MY+EXpR6vp2itYQTHpqWDwji0?=
- =?us-ascii?Q?+ZIIZEcQfGyDgUC/Jtp9k+SpudGUSuCT+FBsgBBnAIAk6Qahw7qdeujQz1Jy?=
- =?us-ascii?Q?VHwVBXTUikWPYSZfwZsWHNbd5vj87AbMfmkvwDutiNirq5sUvzDDfsunw+EO?=
- =?us-ascii?Q?wMymiSqCJYJWHwCThDJA3qzwXs/FlhihfAmm+AG7N5x59xy+9ny0PFaWbvab?=
- =?us-ascii?Q?Cq1huVfk1tT6zohXycwCxuDWW1LnM6D1lQy0HTnUFDij5/WlavpD1e4kLTeq?=
- =?us-ascii?Q?Wo51xBE6bTNxh1SshoI9x9KNRobZDm0p5h2RtLIoWptMFV4araxpi4uqyap0?=
- =?us-ascii?Q?vucxslUUpGhj4Jje186BMAeOeAFv0RrLFZu+tUNvMHz4+2bIA5C/5OtPb05w?=
- =?us-ascii?Q?G28mFd7XRiIEuC+CIr2JE9/bw/VIgwrl/gzSH+g2HXY/4C0YR7h+1knnfym2?=
- =?us-ascii?Q?LL6vQZr9Kr/Iqh10xGOOqsoGGMhAvZsmC+iwUxhlfxTO/QkGir3CdEtp1J7V?=
- =?us-ascii?Q?fJ3h69QHyYkYO5Jt2MjhOdGatxjr3XD9KxPTpxbY/h4WgAclPAkSeedqLVRN?=
- =?us-ascii?Q?93Jn1gH3o5S5lpvHUM2azPdnfHJxRqzFOELM1d1Uaj4F8Km/tReOhpiEkbJF?=
- =?us-ascii?Q?Ddlx8sUVEY74zFUQUtQaWt3RNwPJHHcrh7JmF96/44e+TkrV6OF94djPC0mL?=
- =?us-ascii?Q?bMl1oZiaOM2jSh0EXrp5t7sITEr4VoAuUawAAUU5owTbc1OLU0K9a+So5QTn?=
- =?us-ascii?Q?dcVhrtFIa6c7Mtf1CYKeDKA1qJDlll3zFc389ErMPkeHhYx1Ju6Unr5mmpnJ?=
- =?us-ascii?Q?lsd5VL0W61k/xAsxmFF6cjeN1t/hd0WsTQ4gO2rTOsbP9/x3wzz9YK7cPKyq?=
- =?us-ascii?Q?yR71rOq9Mmm15iG9ge35kgOTfh7Mk0AHe+M0jlWHa1ljdiraMfgrXFoqmEMF?=
- =?us-ascii?Q?pzJFu39L7t2b4amJaCINwQ/DdKKBvE3G6mvOUvjCxiUaAObJi2+1vEpZfYt4?=
- =?us-ascii?Q?ptnlOcPLyTBNE2CPp5vw8o2dVVITe6hzyWXToDX4SkXoLLjkaFLAcqVplkg6?=
- =?us-ascii?Q?/3O+CsyYb0B364K+fyn29vfikIQtM+UbVYL0wBQdUwSnoXGIIViwCFs7VzuR?=
- =?us-ascii?Q?gHdrli0Cnj5Syy2N1S5OSjXbIsxYW5XQmB9JLwDTwT6KGBo/LVKxL13JbNfg?=
- =?us-ascii?Q?zP++7AEJauokt3FbW9qLHwsV5qFEOvcvmyQ4fO0rZCeoVBEV4tlNO3e17D84?=
- =?us-ascii?Q?z1ryiXhBRdARgcYnK5fZWO8ZsiifvH5AYf6zO7N+Ogpy6UZpPJQvFaqyY3o2?=
- =?us-ascii?Q?lTbkaZSKHnvwFGnFl0Zxt7VbyVZgv8mYkFPZ+RDTMDSfOV6bzAmHexq/GhWG?=
- =?us-ascii?Q?cMKcZcpzU2ld1oM/o87mjkU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F8D0078498047040838514DD039A94A5@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TXFYUWFZYWZWVEVBT3B1bmlOeEFKeXNxYnNkVld2VFVjaDVqYkNRK3cyQkl4?=
+ =?utf-8?B?MkJhQ2xNVmdRQUxsYkY2OThSWTZNUnA2Y2xCTWxIa3FIb29VTmF4d0IxMElU?=
+ =?utf-8?B?UEJQR1BuZEVuVjJTTlR3b2o5dVdVTkQzbEx6QUNOb2laQTl5djVGbUxPdXBo?=
+ =?utf-8?B?cnQ2WDlURXpIQmZQVWxqZlhZcjRPazg4bDhseFQzZEVJSjVlbDZ4SlRoSy8r?=
+ =?utf-8?B?UnQ3TnkydkdUYkFRQXhTcFZFUkpueDZhOG0wNHU1TEVBaHlvckg2UFU3Z1d2?=
+ =?utf-8?B?UjFVQS9raThYbDlpUUtsQnVLNEVicnh1RGRWYWtla3BVRjlEREU4cGZHVFU0?=
+ =?utf-8?B?RGFHV0JrVC93VVZCaEZ1NWlJSldxajQyMGdlRkpHT3cxdWtOZGFib1pGOXNs?=
+ =?utf-8?B?VmNhMVVXWnVRTkNkdEJ5ZHZpRVpVZHNObzh3V2l3dXhWMHZhR2FqWWIvRHBJ?=
+ =?utf-8?B?MTJpbW0xcnlxNHUzMEI5WmpteGx4a3ZVbnl5WUlybG1FMkFTWm4rZWtEZnVU?=
+ =?utf-8?B?d2kvdXVRWGd5dnlOa05TMHFnUkU2RW5Nalg5RWg3dithVThKNzRPRFZqUk03?=
+ =?utf-8?B?N1dlaHhTM09LOE1vK1N5VlhreURaMDBHRTkzRTJKT0ltMkppNUkzZmxtNGs2?=
+ =?utf-8?B?bUttZU9FS0JUZ0srejE2YjlSNGp5RjA2K3dKZGxCY3huUy9aaGxLT2J0cVlG?=
+ =?utf-8?B?NEw0VXNPaWh4dkUyWkpBZ201aFNVSGFJYUk5Z1JsUXBRRGdBU1BWTEhZOHB4?=
+ =?utf-8?B?T1pCNHBwWVp1ZlFaSnZJRFVLVTRPQUhKdHE0SngwUWdubWw4cGd1MUtaQnNF?=
+ =?utf-8?B?ZWZkOGVKZFE2dUJwYWxJRGxwMkxMVVc0dXNNNmJPTzluY3g5bFRHNHRyOXFj?=
+ =?utf-8?B?V1VqY1BVZkU5SlFacE52eUZoL1dWWDJPNVUwell1c1ZTZFdRNSthb0ZqeVdM?=
+ =?utf-8?B?WVBEeE93RDloVXFnbmNqMmFFeFRrVGlKdkYxZVl1cS8zUzB2WkFTbEIwTm5F?=
+ =?utf-8?B?UlArR2lSMkZFL3Vyb3JvSUROdFpFemtSY0JGanI1Nm1CWUlwWVY2QUlVRFVB?=
+ =?utf-8?B?ZnVBS042eDhqaktPUmRoQ3BqTUpGNVBzOGhhMGMyWTY1VG9FOG9RakZrZUl4?=
+ =?utf-8?B?dXAxekt5aEZxNm9pNjFBOGdOVFdrRzJvZHZaVTNsalNZUHBqaHpxRDcwQVRu?=
+ =?utf-8?B?YlZ2TnZ2UDJNZmhMVmtUSTFxWW1vdnlDRlBsb2xIRUVKQUV4UzhEU1J6ZzRl?=
+ =?utf-8?B?OElJQXVvV1FscFlEazR1Y0J6bU9LZ2E0OEZFdXdtY0E2Myt4TkgzY3VXTkVk?=
+ =?utf-8?B?c052cXR1UEU3eVVXa21hSk1jNmx2RkhleFFNaStaRUlVRzJvU2FCRmE1aEc5?=
+ =?utf-8?B?Y0hJaHpTNkhZV1RTUS9rY2t0K3J5ZlFPaTlnbTdBVFUzeGJRQzFSYnFsYVd3?=
+ =?utf-8?B?U21EbWtlbmVhR1BsSlN3WFlQYVF1ZE96NnB2bGxJNkZMdzRJMHkxajJWWGlM?=
+ =?utf-8?B?UmpHTnAwV1dUWXQrZXQ0VlgxcFZuYUFmUEU3Rk1lRXdiU1cxemRNSnF5eWhN?=
+ =?utf-8?B?VGJBZkRvTXErSWd1eWNTbGlHMklQTkNnTklnejdtaG9Na3NYRHhiaWhHYUFs?=
+ =?utf-8?B?b0k0S3llUjJDczlqRHBZSGNSd2E4Mi90N3RoOVM5SWg4OUFONVp3TGlIZTBp?=
+ =?utf-8?B?cW5CeG5aNXcyMjFKME93c1pPT1RtK21ZSVlzSloxd3pLMmN1UzY5MFpBLzFH?=
+ =?utf-8?B?N2d6VjVWV3lGTUpMeVpzeXB0OHptUGtwWG9zNHJDRFlBZDlFZ2RSMUcvTFli?=
+ =?utf-8?B?TE9aaE9CZnkwelhwcy8xc3ZDT0JUZUM0azNmZS9EYTMwZFk0Y3JNY3ptejNN?=
+ =?utf-8?B?TmxnZklwa3JpM1N5c2RSdUkxaXExYUhFWm1IK3pBbTBic0cvSHR2ZXlrV2sy?=
+ =?utf-8?B?VDRZTXIrREJBS1RxOXZ1YVRIazh4b0g2VnVxZ0pNTDlJTjluandJSkNiUjhW?=
+ =?utf-8?B?SkVBTlIyTy9reWRRM0d3N3kvc05YSTdsZkJSRmRKYUNNUncwdGJiUjV5em1i?=
+ =?utf-8?B?UlIyZDJsWEdoekZVaGFPMGhtdEk5L3JFMHY4ZkJNcWUvbkN1Z09TdllDZHBW?=
+ =?utf-8?B?eHN1c3o0OG9tTXdJMWtGK3RFUGM4clE0bldyNmhBQjJQdzZLazQrdHYvRWpq?=
+ =?utf-8?Q?2vINFwfxrhKEK6xjlmrsWK4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <689ABB4EE2F32E4B8FEDD7E0E0CCCFEC@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: vmware.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f21ca664-67bb-4c3f-47ce-08d9c17efe97
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 17:02:22.9597
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40cdcbd9-c3cc-42e0-7bdf-08d9c180e5b5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 17:16:00.1299
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aDfWsOHcGTZUovcA8EBxUIoeaPhj+KlS2MqvaYUcClGHiizAuiYLMpiA9wbnjx1vmGKUpbMwkAD4FrxRT7bVNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR05MB5608
+X-MS-Exchange-CrossTenant-userprincipalname: WOVHP0r0yx5OjpechBWxoBUtmNFQnUkP2zqSFcXTDQr2MDST11Va5aMx7USPRzAnaxlH5S1gU3u6mWLcIp48kQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR05MB7582
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-> On Dec 17, 2021, at 3:30 AM, David Hildenbrand <david@redhat.com> wrote:
->=20
-> Sometimes it is required to have a seqcount implementation that uses
-> a structure with a fixed and minimal size -- just a bare unsigned int --
-> independent of the kernel configuration. This is especially valuable, whe=
-n
-> the raw_ variants of the seqlock function will be used and the additional
-> lockdep part of the seqcount_t structure remains essentially unused.
->=20
-> Let's provide a lockdep-free raw_seqcount_t variant that can be used via
-> the raw functions to have a basic seqlock.
->=20
-> The target use case is embedding a raw_seqcount_t in the "struct page",
-> where we really want a minimal size and cannot tolerate a sudden grow of
-> the seqcount_t structure resulting in a significant "struct page"
-> increase or even a layout change.
->=20
-> Provide raw_read_seqcount_retry(), to make it easy to match to
-> raw_read_seqcount_begin() in the code.
->=20
-> Let's add a short documentation as well.
->=20
-> Note: There might be other possible users for raw_seqcount_t where the
->      lockdep part might be completely unused and just wastes memory --
->      essentially any users that only use the raw_ function variants.
->=20
-
-Is it possible to force some policy when raw_seqcount_t is used to
-prevent its abuse? For instance not to allow to acquire other (certain?)
-locks when it is held?
-
-[ snip ]
-
-> +/**
-> + * raw_seqcount_init() - runtime initializer for raw_seqcount_t
-> + * @s: Pointer to the raw_seqcount_t instance
-> + */
-> +# define raw_seqcount_init(s) __raw_seqcount_init(s)
-> +
-> #ifdef CONFIG_DEBUG_LOCK_ALLOC
->=20
-> # define SEQCOUNT_DEP_MAP_INIT(lockname)				\
-> @@ -111,11 +129,16 @@ static inline void seqcount_lockdep_reader_access(c=
-onst seqcount_t *s)
-> # define seqcount_lockdep_reader_access(x)
-> #endif
->=20
-> +/**
-> + * RAW_SEQCNT_ZERO() - static initializer for raw_seqcount_t
-> + */
-> +#define RAW_SEQCNT_ZERO() 0
-
-I am not sure why RAW_SWQCNT_ZERO() should be a function-like macro.
-
-Moreover, the documentation showed:
-
-+	/* static */
-+	static raw_seqcount_t foo_seqcount =3D RAW_SEQCNT_ZERO(foo_seqcount);
-+
-
-But RAW_SEQCNT_ZERO does not have an argument?
-
+DQo+IE9uIERlYyAxNywgMjAyMSwgYXQgMzozMCBBTSwgRGF2aWQgSGlsZGVuYnJhbmQgPGRhdmlk
+QHJlZGhhdC5jb20+IHdyb3RlOg0KPiANCj4gTGV0J3MgcmV0dXJuIGVhcmx5IGZvciBodWdldGxi
+LCB3aGljaCByZWFsbHkgb25seSByZWxpZXMgb24gdGhlIGNvbXBvdW5kDQo+IG1hcGNvdW50IHNv
+IGZhciBhbmQgZG9lcyBub3Qgc3VwcG9ydCBQYWdlRG91YmxlTWFwKCkgeWV0LiBVc2UgdGhlIGNo
+YW5jZQ0KPiB0byBjbGVhbnVwIHRoZSBmaWxlLVRIUCBjYXNlIHRvIG1ha2UgaXQgZWFzaWVyIHRv
+IGdyYXNwLiBXaGlsZSBhdCBpdCwgdXNlDQo+IGhlYWRfY29tcG91bmRfbWFwY291bnQoKS4NCj4g
+DQo+IFRoaXMgaXMgYSBwcmVwYXJhdGlvbiBmb3IgZnVydGhlciBjaGFuZ2VzLg0KDQpJdCB3b3Vs
+ZCBiZSB1c2VmdWwgdG8gYWRkIOKAnG5vIGZ1bmN0aW9uYWwgY2hhbmdlIGludGVuZGVk4oCdIG9y
+IHNvbWV0aGluZy4NCg0KPiANCj4gUmV2aWV3ZWQtYnk6IFBldGVyIFh1IDxwZXRlcnhAcmVkaGF0
+LmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogRGF2aWQgSGlsZGVuYnJhbmQgPGRhdmlkQHJlZGhhdC5j
+b20+DQo+IC0tLQ0KPiBtbS91dGlsLmMgfCAxMSArKysrKysrLS0tLQ0KPiAxIGZpbGUgY2hhbmdl
+ZCwgNyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL21t
+L3V0aWwuYyBiL21tL3V0aWwuYw0KPiBpbmRleCA3NDFiYTMyYTQzYWMuLjMyMzllNzVjMTQ4ZCAx
+MDA2NDQNCj4gLS0tIGEvbW0vdXRpbC5jDQo+ICsrKyBiL21tL3V0aWwuYw0KPiBAQCAtNzMyLDE1
+ICs3MzIsMTggQEAgaW50IF9fcGFnZV9tYXBjb3VudChzdHJ1Y3QgcGFnZSAqcGFnZSkNCj4gew0K
+PiAJaW50IHJldDsNCj4gDQo+IC0JcmV0ID0gYXRvbWljX3JlYWQoJnBhZ2UtPl9tYXBjb3VudCkg
+KyAxOw0KPiArCWlmIChQYWdlSHVnZShwYWdlKSkNCj4gKwkJcmV0dXJuIGNvbXBvdW5kX21hcGNv
+dW50KHBhZ2UpOw0KDQpCZWZvcmUgeW91IHJldHVybiwgcGVyaGFwcyB5b3UgY2FuIGFkZCBhbiBh
+c3NlcnRpb24gbGlrZToNCg0KCVZNX0JVR19PTihQYWdlRG91YmxlTWFwKHBhZ2UpKTsNCg0KVGhp
+cyB3b3VsZCBiZSBtYWtlIHRoZSBjb2RlIGNsZWFyZXIgYW5kIHdvdWxkIGVhc2UgZGVidWdnaW5n
+IGluIHRoZQ0KZnV0dXJlIChpZiBzdXBwb3J0IGZvciBkb3VibGUtbWFwIGlzIGV4cGFuZGVkKS4N
+Cg0K
