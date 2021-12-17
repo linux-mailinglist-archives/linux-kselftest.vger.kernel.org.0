@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A974789FC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 12:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A925C478A00
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 12:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235478AbhLQLd7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 06:33:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30841 "EHLO
+        id S235507AbhLQLeG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 06:34:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24482 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235464AbhLQLd7 (ORCPT
+        by vger.kernel.org with ESMTP id S235495AbhLQLeF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:33:59 -0500
+        Fri, 17 Dec 2021 06:34:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639740838;
+        s=mimecast20190719; t=1639740845;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H/7mUTo+iv3R8B8oSdwI4pdW6+nsiLEWXHYLzjN+rhg=;
-        b=Vg8NjjABQtzo0/RSFWut12mEYfhQxExh0EhV1xhrqZjD5Rd/dv+C7gAT7zkgVRhMLuFOcY
-        rU7ncKGG/EzlTHbPZHfnJj+NF9CJ1DHfhpoYOCxvZ2oNQOhcVIQUDCBCep9Fa1O5ir/dR3
-        6RjR3hWHvNAdicAh8TWp5INzbN3PJ1Y=
+        bh=MstCAevuD1qvpTctpkyVpFQ9Km+HVMM2bhgtFFKdRTg=;
+        b=KluuusnFWw+Z/Xq5jPOnT7RaRVL9rhjD1ckWWkKjoxEyqatG9W3nwg3cVeAFYgifaShvLk
+        w0Ge+Nne2LrgoZPuoFnJjJoZXoEKwxH/GcIsK+J1Gf0aE8D7OA3Zuhn29b0mXHuvetmTji
+        SX6FaqAYJSYqDbIGz7dG+XQv7BeH24A=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-139-2ztkeZRXPsGpaJ5xK1c3YQ-1; Fri, 17 Dec 2021 06:33:55 -0500
-X-MC-Unique: 2ztkeZRXPsGpaJ5xK1c3YQ-1
+ us-mta-631-marQ5KkgObO5qIOHzCa4PA-1; Fri, 17 Dec 2021 06:34:01 -0500
+X-MC-Unique: marQ5KkgObO5qIOHzCa4PA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1E2F91853026;
-        Fri, 17 Dec 2021 11:33:52 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C784C101AFAB;
+        Fri, 17 Dec 2021 11:33:58 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.193.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 81FA58ACF7;
-        Fri, 17 Dec 2021 11:33:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 735F48D5B6;
+        Fri, 17 Dec 2021 11:33:52 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -59,11 +59,10 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Subject: [PATCH v1 05/11] mm: thp: allow for reading the THP mapcount atomically via a raw_seqlock_t
-Date:   Fri, 17 Dec 2021 12:30:43 +0100
-Message-Id: <20211217113049.23850-6-david@redhat.com>
+        linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: [PATCH v1 06/11] mm: support GUP-triggered unsharing via FAULT_FLAG_UNSHARE (!hugetlb)
+Date:   Fri, 17 Dec 2021 12:30:44 +0100
+Message-Id: <20211217113049.23850-7-david@redhat.com>
 In-Reply-To: <20211217113049.23850-1-david@redhat.com>
 References: <20211217113049.23850-1-david@redhat.com>
 MIME-Version: 1.0
@@ -73,469 +72,334 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, we are not able to read the mapcount of a THP atomically
-without expensive locking, for example, if the THP is getting split
-concurrently.
+FAULT_FLAG_UNSHARE is a new type of page fault applicable to COW-able
+anonymous memory (including hugetlb but excluding KSM) and its purpose is
+to allow for unsharing of shared anonymous pages on selected GUP *read*
+access, in comparison to the traditional COW on *write* access.
 
-Also, we don't want mapcount readers to observe jitter on concurrent GUP
-and unmapping like:
-	2 -> 1 -> 2 -> 1
-Instead, we want to avoid such jitter and want the mapcount of a THP to
-move into one direction only instead.
+In contrast to a COW, GUP-triggered unsharing will still maintain the write
+protection. It will be triggered by GUP to properly prevent a child process
+from finding ways via GUP to observe memory modifications of anonymous
+memory of the parent process after fork().
 
-The main challenge to avoid such jitter is PageDoubleMap. If the
-compound_mapcount and the tail mapcounts move in the same direction,
-there is no problem. However when the compound_mapcount is decreased and
-reaches zero, the reader will see initially a decrease in the THP mapcount
-that will then be followed by the PageDoubleMap being cleared and the
-mapcount getting increased again. The act of clearing PageDoubleMap will
-lead readers to overestimate the mapcount until all tail mapcounts (that
-the PageDoubleMap flag kept artificially elevated) are finally released.
+Rename the relevant functions to make it clear whether we're dealing
+with unsharing, cow, or both.
 
-Introduce a raw_seqlock_t in the THP subpage at index 1 to allow reading
-the THP mapcount atomically without grabbing the page lock, avoiding racing
-with THP splitting or PageDoubleMap processing. For now, we only require
-the seqlock for anonymous THP.
-
-We use a PG_lock-based spinlock to synchronize the writer side. Note
-that the PG_lock is located on the THP subpage at index 1, which is
-unused so far.
-
-To make especially page_mapcount() safe to be called from IRQ context, as
-required by GUP via get_user_pages_fast_only() in the context of
-GUP-triggered unsharing of shared anonymous pages soon, make sure the
-reader side cannot deadlock if the writer side would be interrupted:
-disable local interrupts on the writer side. Note that they are already
-disabled during lock_page_memcg() in some configurations.
-
-Fortunately, we do have as of now (mm/Kconfig)
-	config TRANSPARENT_HUGEPAGE
-		bool "Transparent Hugepage Support"
-		depends on HAVE_ARCH_TRANSPARENT_HUGEPAGE && !PREEMPT_RT
-so the disabling of interrupts in our case in particular has no effect
-on PREEMPT_RT, which is good.
-
-We don't need this type of locking on the THP freeing path: Once the
-compound_mapcount of an anonymous THP drops to 0, it won't suddenly
-increase again, so PageDoubleMap cannot be cleared concurrently and
-consequently the seqlock only needs to be taken if the PageDoubleMap
-flag is found set.
-
-Note: In the future, we could avoid disabling local interrupts on the
-      writer side by providing alternative functions that can be called
-      from IRQ context without deadlocking: These functions must not spin
-      but instead have to signal that locking failed. OR maybe we'll find
-      a way to just simplify that whole mapcount handling logic for
-      anonymous THP, but for now none has been identified.
-      Let's keep it simple for now.
+The hugetlb part will be added separately.
 
 This commit is based on prototype patches by Andrea.
 
-Reported-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Reported-by: Hugh Dickins <hughd@google.com>
-Fixes: c444eb564fb1 ("mm: thp: make the THP mapcount atomic against __split_huge_pmd_locked()")
 Co-developed-by: Andrea Arcangeli <aarcange@redhat.com>
 Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
 Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/huge_mm.h  | 65 ++++++++++++++++++++++++++++++++++++++++
- include/linux/mm_types.h |  9 ++++++
- mm/huge_memory.c         | 56 +++++++++++++++++++++++-----------
- mm/rmap.c                | 40 +++++++++++++++----------
- mm/swapfile.c            | 35 +++++++++++++---------
- mm/util.c                | 17 +++++++----
- 6 files changed, 170 insertions(+), 52 deletions(-)
+ include/linux/mm.h |   4 ++
+ mm/memory.c        | 136 ++++++++++++++++++++++++++++++++++++++-------
+ 2 files changed, 119 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index f280f33ff223..44e02d47c65a 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -318,6 +318,49 @@ static inline struct list_head *page_deferred_list(struct page *page)
- 	return &page[2].deferred_list;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index a7e4a9e7d807..37d1fb2f865e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -436,6 +436,9 @@ extern pgprot_t protection_map[16];
+  * @FAULT_FLAG_REMOTE: The fault is not for current task/mm.
+  * @FAULT_FLAG_INSTRUCTION: The fault was during an instruction fetch.
+  * @FAULT_FLAG_INTERRUPTIBLE: The fault can be interrupted by non-fatal signals.
++ * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare a
++ *                      shared anonymous page (-> mapped R/O). Does not apply
++ *                      to KSM.
+  *
+  * About @FAULT_FLAG_ALLOW_RETRY and @FAULT_FLAG_TRIED: we can specify
+  * whether we would allow page faults to retry by specifying these two
+@@ -467,6 +470,7 @@ enum fault_flag {
+ 	FAULT_FLAG_REMOTE =		1 << 7,
+ 	FAULT_FLAG_INSTRUCTION =	1 << 8,
+ 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
++	FAULT_FLAG_UNSHARE =		1 << 10,
+ };
+ 
+ /*
+diff --git a/mm/memory.c b/mm/memory.c
+index 8f1de811a1dc..7253a2ad4320 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2707,8 +2707,9 @@ EXPORT_SYMBOL_GPL(apply_to_existing_page_range);
+  * read non-atomically.  Before making any commitment, on those architectures
+  * or configurations (e.g. i386 with PAE) which might give a mix of unmatched
+  * parts, do_swap_page must check under lock before unmapping the pte and
+- * proceeding (but do_wp_page is only called after already making such a check;
+- * and do_anonymous_page can safely check later on).
++ * proceeding (but do_wp_page_cow/do_wp_page_unshare is only called after
++ * already making such a check; and do_anonymous_page can safely check later
++ * on).
+  */
+ static inline int pte_unmap_same(struct vm_fault *vmf)
+ {
+@@ -2726,8 +2727,8 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
+ 	return same;
  }
  
-+static inline void thp_mapcount_seqcount_init(struct page *page)
-+{
-+	raw_seqcount_init(&page[1].mapcount_seqcount);
-+}
-+
-+static inline unsigned int thp_mapcount_read_begin(struct page *page)
-+{
-+	VM_BUG_ON_PAGE(PageTail(page), page);
-+	return raw_read_seqcount_begin(&page[1].mapcount_seqcount);
-+}
-+
-+static inline bool thp_mapcount_read_retry(struct page *page,
-+					   unsigned int seqcount)
-+{
-+	VM_BUG_ON_PAGE(PageTail(page), page);
-+	if (!raw_read_seqcount_retry(&page[1].mapcount_seqcount, seqcount))
-+		return false;
-+	cpu_relax();
-+	return true;
-+}
-+
-+static inline void thp_mapcount_lock(struct page *page,
-+				     unsigned long *irq_flags)
-+{
-+	VM_BUG_ON_PAGE(PageTail(page), page);
-+	/*
-+	 * Prevent deadlocks in thp_mapcount_read_begin() if it is called in IRQ
-+	 * context.
-+	 */
-+	local_irq_save(*irq_flags);
-+	bit_spin_lock(PG_locked, &page[1].flags);
-+	raw_write_seqcount_begin(&page[1].mapcount_seqcount);
-+}
-+
-+static inline void thp_mapcount_unlock(struct page *page,
-+				       unsigned long irq_flags)
-+{
-+	VM_BUG_ON_PAGE(PageTail(page), page);
-+	raw_write_seqcount_end(&page[1].mapcount_seqcount);
-+	bit_spin_unlock(PG_locked, &page[1].flags);
-+	local_irq_restore(irq_flags);
-+}
-+
- #else /* CONFIG_TRANSPARENT_HUGEPAGE */
- #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
- #define HPAGE_PMD_MASK ({ BUILD_BUG(); 0; })
-@@ -467,6 +510,28 @@ static inline bool thp_migration_supported(void)
+-static inline bool cow_user_page(struct page *dst, struct page *src,
+-				 struct vm_fault *vmf)
++static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
++				       struct vm_fault *vmf)
  {
- 	return false;
+ 	bool ret;
+ 	void *kaddr;
+@@ -2952,7 +2953,8 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
  }
-+
-+static inline unsigned int thp_mapcount_read_begin(struct page *page)
+ 
+ /*
+- * Handle the case of a page which we actually need to copy to a new page.
++ * Handle the case of a page which we actually need to copy to a new page,
++ * either due to COW or unsharing.
+  *
+  * Called with mmap_lock locked and the old page referenced, but
+  * without the ptl held.
+@@ -2967,7 +2969,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
+  *   held to the old page, as well as updating the rmap.
+  * - In any case, unlock the PTL and drop the reference we took to the old page.
+  */
+-static vm_fault_t wp_page_copy(struct vm_fault *vmf)
++static vm_fault_t wp_page_copy(struct vm_fault *vmf, bool unshare)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct mm_struct *mm = vma->vm_mm;
+@@ -2991,7 +2993,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		if (!new_page)
+ 			goto oom;
+ 
+-		if (!cow_user_page(new_page, old_page, vmf)) {
++		if (!__wp_page_copy_user(new_page, old_page, vmf)) {
+ 			/*
+ 			 * COW failed, if the fault was solved by other,
+ 			 * it's fine. If not, userspace would re-fault on
+@@ -3033,7 +3035,14 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+ 		entry = pte_sw_mkyoung(entry);
+-		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
++		if (unlikely(unshare)) {
++			if (pte_soft_dirty(vmf->orig_pte))
++				entry = pte_mksoft_dirty(entry);
++			if (pte_uffd_wp(vmf->orig_pte))
++				entry = pte_mkuffd_wp(entry);
++		} else {
++			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
++		}
+ 
+ 		/*
+ 		 * Clear the pte entry and flush it first, before updating the
+@@ -3050,6 +3059,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		 * mmu page tables (such as kvm shadow page tables), we want the
+ 		 * new page to be mapped directly into the secondary page table.
+ 		 */
++		BUG_ON(unshare && pte_write(entry));
+ 		set_pte_at_notify(mm, vmf->address, vmf->pte, entry);
+ 		update_mmu_cache(vma, vmf->address, vmf->pte);
+ 		if (old_page) {
+@@ -3109,6 +3119,8 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 			free_swap_cache(old_page);
+ 		put_page(old_page);
+ 	}
++	if (unlikely(unshare))
++		return 0;
+ 	return page_copied ? VM_FAULT_WRITE : 0;
+ oom_free_new:
+ 	put_page(new_page);
+@@ -3118,6 +3130,70 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 	return VM_FAULT_OOM;
+ }
+ 
++static __always_inline vm_fault_t wp_page_cow(struct vm_fault *vmf)
 +{
++	return wp_page_copy(vmf, false);
++}
++
++static __always_inline vm_fault_t wp_page_unshare(struct vm_fault *vmf)
++{
++	return wp_page_copy(vmf, true);
++}
++
++/*
++ * This routine handles present pages, when GUP tries to take a read-only
++ * pin on a shared anonymous page. It's similar to do_wp_page_cow(), except that
++ * it keeps the pages mapped read-only and doesn't apply to KSM pages.
++ *
++ * If a parent process forks a child process, we share anonymous pages between
++ * both processes with COW semantics. Both processes will map these now shared
++ * anonymous pages read-only, and any write access triggers unsharing via COW.
++ *
++ * If the child takes a read-only pin on such a page (i.e., FOLL_WRITE is not
++ * set) and then unmaps the target page, we have:
++ *
++ * * page has mapcount == 1 and refcount > 1
++ * * page is mapped read-only into the parent
++ * * page is pinned by the child and can still be read
++ *
++ * For now, we rely on refcount > 1 to perform the COW and trigger unsharing.
++ * However, that leads to other hard-to fix issues.
++ *
++ * GUP-triggered unsharing provides a parallel approach to trigger unsharing
++ * early, still allowing for relying on mapcount > 1 in COW code instead of on
++ * imprecise refcount > 1. Note that when we don't actually take a reference
++ * on the target page but instead use memory notifiers to synchronize to changes
++ * in the process page tables, unsharing is not required.
++ *
++ * Note that in the above scenario, it's impossible to distinguish during the
++ * write fault between:
++ *
++ * a) The parent process performed the pin and the child no longer has access
++ *    to the page.
++ *
++ * b) The child process performed the pin and the child still has access to the
++ *    page.
++ *
++ * In case of a), if we're dealing with a long-term read-only pin, the COW
++ * in the parent will result the pinned page differing from the page actually
++ * mapped into the process page tables in the parent: loss of synchronicity.
++ * Therefore, we really want to perform the copy when the read-only pin happens.
++ */
++static vm_fault_t do_wp_page_unshare(struct vm_fault *vmf)
++	__releases(vmf->ptl)
++{
++	vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
++	if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
++	    page_mapcount(vmf->page) > 1) {
++		get_page(vmf->page);
++		pte_unmap_unlock(vmf->pte, vmf->ptl);
++		return wp_page_unshare(vmf);
++	}
++	vmf->page = NULL;
++	pte_unmap_unlock(vmf->pte, vmf->ptl);
 +	return 0;
 +}
 +
-+static inline bool thp_mapcount_read_retry(struct page *page,
-+					   unsigned int seqcount)
-+{
-+	return false;
-+}
-+
-+static inline void thp_mapcount_lock(struct page *page,
-+				     unsigned long *irq_flags)
-+{
-+}
-+
-+static inline void thp_mapcount_unlock(struct page *page,
-+				       unsigned long irq_flags)
-+{
-+}
-+
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- 
  /**
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index c3a6e6209600..a85a2a75d4ff 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -151,6 +151,15 @@ struct page {
- 			unsigned char compound_order;
- 			atomic_t compound_mapcount;
- 			unsigned int compound_nr; /* 1 << compound_order */
-+			/*
-+			 * THP only: allow for atomic reading of the mapcount,
-+			 * for example when we might be racing with a concurrent
-+			 * THP split. Initialized for all THP but locking is
-+			 * so far only required for anon THP where such races
-+			 * apply. Write access is serialized via the
-+			 * PG_locked-based spinlock in the first tail page.
-+			 */
-+			raw_seqcount_t mapcount_seqcount;
- 		};
- 		struct {	/* Second tail page of compound page */
- 			unsigned long _compound_pad_1;	/* compound_head */
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 826cabcad11a..1685821525e8 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -527,6 +527,7 @@ void prep_transhuge_page(struct page *page)
+  * finish_mkwrite_fault - finish page fault for a shared mapping, making PTE
+  *			  writeable once the page is prepared
+@@ -3226,7 +3302,7 @@ static vm_fault_t wp_page_shared(struct vm_fault *vmf)
+  * but allow concurrent faults), with pte both mapped and locked.
+  * We return with mmap_lock still held, but pte unmapped and unlocked.
+  */
+-static vm_fault_t do_wp_page(struct vm_fault *vmf)
++static vm_fault_t do_wp_page_cow(struct vm_fault *vmf)
+ 	__releases(vmf->ptl)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+@@ -3258,7 +3334,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 			return wp_pfn_shared(vmf);
  
- 	INIT_LIST_HEAD(page_deferred_list(page));
- 	set_compound_page_dtor(page, TRANSHUGE_PAGE_DTOR);
-+	thp_mapcount_seqcount_init(page);
+ 		pte_unmap_unlock(vmf->pte, vmf->ptl);
+-		return wp_page_copy(vmf);
++		return wp_page_cow(vmf);
+ 	}
+ 
+ 	/*
+@@ -3296,7 +3372,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 	get_page(vmf->page);
+ 
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
+-	return wp_page_copy(vmf);
++	return wp_page_cow(vmf);
  }
  
- bool is_transparent_hugepage(struct page *page)
-@@ -1959,11 +1960,11 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		unsigned long haddr, bool freeze)
+ static void unmap_mapping_range_vma(struct vm_area_struct *vma,
+@@ -3670,7 +3746,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 	}
+ 
+ 	if (vmf->flags & FAULT_FLAG_WRITE) {
+-		ret |= do_wp_page(vmf);
++		ret |= do_wp_page_cow(vmf);
+ 		if (ret & VM_FAULT_ERROR)
+ 			ret &= VM_FAULT_ERROR;
+ 		goto out;
+@@ -4428,6 +4504,16 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
+ /* `inline' is required to avoid gcc 4.1.2 build error */
+ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
  {
- 	struct mm_struct *mm = vma->vm_mm;
-+	unsigned long addr, irq_flags;
- 	struct page *page;
- 	pgtable_t pgtable;
- 	pmd_t old_pmd, _pmd;
- 	bool young, write, soft_dirty, pmd_migration = false, uffd_wp = false;
--	unsigned long addr;
- 	int i;
- 
- 	VM_BUG_ON(haddr & ~HPAGE_PMD_MASK);
-@@ -2108,6 +2109,13 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		/* Sub-page mapcount accounting for above small mappings. */
- 		int val = 1;
- 
++	if (vmf->flags & FAULT_FLAG_UNSHARE) {
 +		/*
-+		 * lock_page_memcg() is taken before thp_mapcount_lock() in
-+		 * page_remove_anon_compound_rmap(), respect the same locking
-+		 * order.
++		 * We'll simply split the THP and handle unsharing on the
++		 * PTE level. Unsharing only applies to anon THPs and we
++		 * shouldn't ever find them inside shared mappings.
 +		 */
-+		lock_page_memcg(page);
-+		thp_mapcount_lock(page, &irq_flags);
- 		/*
- 		 * Set PG_double_map before dropping compound_mapcount to avoid
- 		 * false-negative page_mapped().
-@@ -2121,7 +2129,6 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 		for (i = 0; i < HPAGE_PMD_NR; i++)
- 			atomic_add(val, &page[i]._mapcount);
- 
--		lock_page_memcg(page);
- 		if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
- 			/* Last compound_mapcount is gone. */
- 			__mod_lruvec_page_state(page, NR_ANON_THPS,
-@@ -2132,6 +2139,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 					atomic_dec(&page[i]._mapcount);
- 			}
- 		}
-+		thp_mapcount_unlock(page, irq_flags);
- 		unlock_page_memcg(page);
++		if (WARN_ON_ONCE(vmf->vma->vm_flags & VM_SHARED))
++			return 0;
++		goto split_fallback;
++	}
+ 	if (vma_is_anonymous(vmf->vma)) {
+ 		if (userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+ 			return handle_userfault(vmf, VM_UFFD_WP);
+@@ -4440,7 +4526,8 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+ 			return ret;
  	}
  
-@@ -2501,6 +2509,8 @@ static void __split_huge_page(struct page *page, struct list_head *list,
- int total_mapcount(struct page *page)
- {
- 	int i, compound, nr, ret;
-+	unsigned int seqcount;
-+	bool double_map;
+-	/* COW or write-notify handled on pte level: split pmd. */
++split_fallback:
++	/* COW, unsharing or write-notify handled on pte level: split pmd. */
+ 	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
  
- 	VM_BUG_ON_PAGE(PageTail(page), page);
- 
-@@ -2510,13 +2520,19 @@ int total_mapcount(struct page *page)
- 		return head_compound_mapcount(page);
- 
- 	nr = compound_nr(page);
--	ret = compound = head_compound_mapcount(page);
--	for (i = 0; i < nr; i++)
--		ret += atomic_read(&page[i]._mapcount) + 1;
-+
-+	do {
-+		seqcount = thp_mapcount_read_begin(page);
-+		ret = compound = head_compound_mapcount(page);
-+		for (i = 0; i < nr; i++)
-+			ret += atomic_read(&page[i]._mapcount) + 1;
-+		double_map = PageDoubleMap(page);
-+	} while (thp_mapcount_read_retry(page, seqcount));
-+
- 	/* File pages has compound_mapcount included in _mapcount */
- 	if (!PageAnon(page))
- 		return ret - compound * nr;
--	if (PageDoubleMap(page))
-+	if (double_map)
- 		ret -= nr;
- 	return ret;
- }
-@@ -2548,6 +2564,7 @@ int total_mapcount(struct page *page)
- int page_trans_huge_mapcount(struct page *page, int *total_mapcount)
- {
- 	int i, ret, _total_mapcount, mapcount;
-+	unsigned int seqcount;
- 
- 	/* hugetlbfs shouldn't call it */
- 	VM_BUG_ON_PAGE(PageHuge(page), page);
-@@ -2561,17 +2578,22 @@ int page_trans_huge_mapcount(struct page *page, int *total_mapcount)
- 
- 	page = compound_head(page);
- 
--	_total_mapcount = ret = 0;
--	for (i = 0; i < thp_nr_pages(page); i++) {
--		mapcount = atomic_read(&page[i]._mapcount) + 1;
--		ret = max(ret, mapcount);
--		_total_mapcount += mapcount;
--	}
--	if (PageDoubleMap(page)) {
--		ret -= 1;
--		_total_mapcount -= thp_nr_pages(page);
--	}
--	mapcount = compound_mapcount(page);
-+	do {
-+		_total_mapcount = ret = 0;
-+
-+		seqcount = thp_mapcount_read_begin(page);
-+		for (i = 0; i < thp_nr_pages(page); i++) {
-+			mapcount = atomic_read(&page[i]._mapcount) + 1;
-+			ret = max(ret, mapcount);
-+			_total_mapcount += mapcount;
-+		}
-+		if (PageDoubleMap(page)) {
-+			ret -= 1;
-+			_total_mapcount -= thp_nr_pages(page);
-+		}
-+		mapcount = compound_mapcount(page);
-+	} while (thp_mapcount_read_retry(page, seqcount));
-+
- 	ret += mapcount;
- 	_total_mapcount += mapcount;
- 	if (total_mapcount)
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 163ac4e6bcee..0218052586e7 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1294,6 +1294,7 @@ static void page_remove_file_rmap(struct page *page, bool compound)
- 
- static void page_remove_anon_compound_rmap(struct page *page)
- {
-+	unsigned long irq_flags;
- 	int i, nr;
- 
- 	if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
-@@ -1308,23 +1309,30 @@ static void page_remove_anon_compound_rmap(struct page *page)
- 
- 	__mod_lruvec_page_state(page, NR_ANON_THPS, -thp_nr_pages(page));
- 
--	if (TestClearPageDoubleMap(page)) {
--		/*
--		 * Subpages can be mapped with PTEs too. Check how many of
--		 * them are still mapped.
--		 */
--		for (i = 0, nr = 0; i < thp_nr_pages(page); i++) {
--			if (atomic_add_negative(-1, &page[i]._mapcount))
--				nr++;
--		}
-+	if (PageDoubleMap(page)) {
-+		thp_mapcount_lock(page, &irq_flags);
-+		if (TestClearPageDoubleMap(page)) {
-+			/*
-+			 * Subpages can be mapped with PTEs too. Check how many
-+			 * of them are still mapped.
-+			 */
-+			for (i = 0, nr = 0; i < thp_nr_pages(page); i++) {
-+				if (atomic_add_negative(-1, &page[i]._mapcount))
-+					nr++;
-+			}
-+			thp_mapcount_unlock(page, irq_flags);
- 
--		/*
--		 * Queue the page for deferred split if at least one small
--		 * page of the compound page is unmapped, but at least one
--		 * small page is still mapped.
--		 */
--		if (nr && nr < thp_nr_pages(page))
--			deferred_split_huge_page(page);
-+			/*
-+			 * Queue the page for deferred split if at least one
-+			 * small page of the compound page is unmapped, but at
-+			 * least one small page is still mapped.
-+			 */
-+			if (nr && nr < thp_nr_pages(page))
-+				deferred_split_huge_page(page);
-+		} else {
-+			thp_mapcount_unlock(page, irq_flags);
-+			nr = thp_nr_pages(page);
-+		}
- 	} else {
- 		nr = thp_nr_pages(page);
+ 	return VM_FAULT_FALLBACK;
+@@ -4551,8 +4638,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 			return do_fault(vmf);
  	}
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index e59e08ef46e1..82aeb927a7ba 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1610,6 +1610,7 @@ static int page_trans_huge_map_swapcount(struct page *page, int *total_mapcount,
- 	struct swap_cluster_info *ci = NULL;
- 	unsigned char *map = NULL;
- 	int mapcount, swapcount = 0;
-+	unsigned int seqcount;
  
- 	/* hugetlbfs shouldn't call it */
- 	VM_BUG_ON_PAGE(PageHuge(page), page);
-@@ -1625,7 +1626,6 @@ static int page_trans_huge_map_swapcount(struct page *page, int *total_mapcount,
+-	if (!pte_present(vmf->orig_pte))
+-		return do_swap_page(vmf);
++	if (!pte_present(vmf->orig_pte)) {
++		if (likely(!(vmf->flags & FAULT_FLAG_UNSHARE)))
++			return do_swap_page(vmf);
++		return 0;
++	}
  
- 	page = compound_head(page);
- 
--	_total_mapcount = _total_swapcount = map_swapcount = 0;
- 	if (PageSwapCache(page)) {
- 		swp_entry_t entry;
- 
-@@ -1638,21 +1638,28 @@ static int page_trans_huge_map_swapcount(struct page *page, int *total_mapcount,
+ 	if (pte_protnone(vmf->orig_pte) && vma_is_accessible(vmf->vma))
+ 		return do_numa_page(vmf);
+@@ -4564,9 +4654,13 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 		update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
+ 		goto unlock;
  	}
- 	if (map)
- 		ci = lock_cluster(si, offset);
--	for (i = 0; i < HPAGE_PMD_NR; i++) {
--		mapcount = atomic_read(&page[i]._mapcount) + 1;
--		_total_mapcount += mapcount;
--		if (map) {
--			swapcount = swap_count(map[offset + i]);
--			_total_swapcount += swapcount;
-+
-+	do {
-+		_total_mapcount = _total_swapcount = map_swapcount = 0;
-+
-+		seqcount = thp_mapcount_read_begin(page);
-+		for (i = 0; i < HPAGE_PMD_NR; i++) {
-+			mapcount = atomic_read(&page[i]._mapcount) + 1;
-+			_total_mapcount += mapcount;
-+			if (map) {
-+				swapcount = swap_count(map[offset + i]);
-+				_total_swapcount += swapcount;
-+			}
-+			map_swapcount = max(map_swapcount, mapcount + swapcount);
- 		}
--		map_swapcount = max(map_swapcount, mapcount + swapcount);
--	}
-+		if (PageDoubleMap(page)) {
-+			map_swapcount -= 1;
-+			_total_mapcount -= HPAGE_PMD_NR;
+-	if (vmf->flags & FAULT_FLAG_WRITE) {
+-		if (!pte_write(entry))
+-			return do_wp_page(vmf);
++	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
++		if (!pte_write(entry)) {
++			if (vmf->flags & FAULT_FLAG_WRITE)
++				return do_wp_page_cow(vmf);
++			else
++				return do_wp_page_unshare(vmf);
 +		}
-+		mapcount = compound_mapcount(page);
-+	} while (thp_mapcount_read_retry(page, seqcount));
-+
- 	unlock_cluster(ci);
--	if (PageDoubleMap(page)) {
--		map_swapcount -= 1;
--		_total_mapcount -= HPAGE_PMD_NR;
--	}
--	mapcount = compound_mapcount(page);
- 	map_swapcount += mapcount;
- 	_total_mapcount += mapcount;
- 	if (total_mapcount)
-diff --git a/mm/util.c b/mm/util.c
-index 3239e75c148d..f4b81c794da1 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -730,6 +730,8 @@ EXPORT_SYMBOL(folio_mapping);
- /* Slow path of page_mapcount() for compound pages */
- int __page_mapcount(struct page *page)
- {
-+	struct page *head_page;
-+	unsigned int seqcount;
- 	int ret;
+ 		entry = pte_mkdirty(entry);
+ 	}
+ 	entry = pte_mkyoung(entry);
+@@ -4607,7 +4701,6 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 		.pgoff = linear_page_index(vma, address),
+ 		.gfp_mask = __get_fault_gfp_mask(vma),
+ 	};
+-	unsigned int dirty = flags & FAULT_FLAG_WRITE;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	pgd_t *pgd;
+ 	p4d_t *p4d;
+@@ -4634,7 +4727,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
  
- 	if (PageHuge(page))
-@@ -741,11 +743,16 @@ int __page_mapcount(struct page *page)
- 	if (!PageAnon(page))
- 		return atomic_read(&page->_mapcount) + 1;
+ 			/* NUMA case for anonymous PUDs would go here */
  
--	ret = atomic_read(&page->_mapcount) + 1;
--	page = compound_head(page);
--	ret += head_compound_mapcount(page);
--	if (PageDoubleMap(page))
--		ret--;
-+	/* The mapcount_seqlock is so far only required for anonymous THP. */
-+	head_page = compound_head(page);
-+	do {
-+		seqcount = thp_mapcount_read_begin(head_page);
-+		ret = atomic_read(&page->_mapcount) + 1;
-+		ret += head_compound_mapcount(head_page);
-+		if (PageDoubleMap(head_page))
-+			ret--;
-+	} while (thp_mapcount_read_retry(head_page, seqcount));
-+
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(__page_mapcount);
+-			if (dirty && !pud_write(orig_pud)) {
++			if ((flags & FAULT_FLAG_WRITE) && !pud_write(orig_pud)) {
+ 				ret = wp_huge_pud(&vmf, orig_pud);
+ 				if (!(ret & VM_FAULT_FALLBACK))
+ 					return ret;
+@@ -4672,7 +4765,8 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 			if (pmd_protnone(vmf.orig_pmd) && vma_is_accessible(vma))
+ 				return do_huge_pmd_numa_page(&vmf);
+ 
+-			if (dirty && !pmd_write(vmf.orig_pmd)) {
++			if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
++			    !pmd_write(vmf.orig_pmd)) {
+ 				ret = wp_huge_pmd(&vmf);
+ 				if (!(ret & VM_FAULT_FALLBACK))
+ 					return ret;
 -- 
 2.31.1
 
