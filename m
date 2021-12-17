@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D6F479763
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 23:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E9C479778
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Dec 2021 00:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbhLQW70 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 17:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S229754AbhLQXUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 18:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbhLQW70 (ORCPT
+        with ESMTP id S229512AbhLQXUy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 17:59:26 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDE9C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 14:59:25 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id bm14so565216edb.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 14:59:25 -0800 (PST)
+        Fri, 17 Dec 2021 18:20:54 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1785FC061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 15:20:54 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id b19so5608514ljr.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 15:20:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rs3RPGk851m6kBvnTkDZNuCHS7bqxE4YiPXPeOnsMec=;
-        b=WSqIxUtqn5jcmA6NC9BVpsfsO/6YYpI4P+quaDiBpik06F329fj372+mpAs6nkU6hi
-         UgKtVq/JNx9O5+tUI1FaDEc9lAWL66/z1RpLwMtAJZ086ni6cHm+R02sIgHA08fo/qlY
-         ertG4Ei0o7WJ3lUoVgGOz1iW744OYt4w3zD7E=
+        bh=WST3wy6+xYPOuwZfmt2/JLJvcXf3cy26kl3RLbkPveE=;
+        b=VXGkS6mNdOeYceL24plAqQedawFCC8HX6+aSsCsVUhO2s6J2TZ1wsFmTez6n6ZomIG
+         5YBwdy2IW3gUrcz7i1tItWl9dq+k4ECH2BsU3alhEJ8YHr5HifsTOO3nAPkUG8bB06jL
+         ahLbuER/HW4tHaC0gLpnI/AXbWLi6gpSl3ka0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rs3RPGk851m6kBvnTkDZNuCHS7bqxE4YiPXPeOnsMec=;
-        b=tilRsi95Mz0uRQGY7Eo50SwwrYwyFC2LuivUlDDPMiO1rUcUZSSVsL+WJUBJDV9Dtc
-         SwBGhmrWS4tLC0TjvYkBcml55YuO18MGUe8Ej94lIw2XxOC/GmLw/D6Jzi9KIcsDGhGe
-         0RtRsSmiKV79v5eLpHcua/OPXVjvZ/0Lxo64YcvMuCavSLl2/ouDiHU7lXzGrUu4EiMp
-         zK83tD2PwDlMSXEU3+GdgFWFF9e6PcAdtNLGkzwXQAtABs1iGn+C4mLA8+pLS1ZkNxxp
-         hO7LPCGoGJGVZDXZ66rd3GfJd4GIWJJqpQLhsIki1TkvBlbBN6Nq+7XHsfW2bchu/Nrk
-         Q+WA==
-X-Gm-Message-State: AOAM531zflpHoeMi5AMYVb7KFtI7+AOr2qB2UhFghNMYLYCGfk4gZz7g
-        QnvuRE8Zscf5M8PnlL6/rpjOF00dwD16AeWkd0A=
-X-Google-Smtp-Source: ABdhPJyT2Ek19rf25X/e7sd1hO2XiLyguTM5PNlVs/fH3wRJjnniq5tO3QxN/aooCTaaQSoTkBKMfQ==
-X-Received: by 2002:a17:907:4cd:: with SMTP id vz13mr3990808ejb.145.1639781964115;
-        Fri, 17 Dec 2021 14:59:24 -0800 (PST)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id sh8sm2248212ejc.175.2021.12.17.14.59.23
+        bh=WST3wy6+xYPOuwZfmt2/JLJvcXf3cy26kl3RLbkPveE=;
+        b=ZrpJX4hLx4KV2eROdgVI45sxUuGZSjQ0SXXb/XCfkY5oHFf7ZCgV5wRctirUd07b+E
+         tK1eVqEgoJfFCEGM8nzDfj6bDT14Ws3xoqfrRKCLgGPRX74DZQDX5JfflyELzExaEQ4q
+         GFVvBNEVKwjXHsnY5oYS8JO7ssYCJKRvj7SedNLJ5iOczVcmgHEz3WP+NcvdDa3dAkfk
+         tSZ213XWoSyF/dDAt6ayTz2SENy4I+DUI+VU+zpZZelvBZF/qioCGPbzIZnyisL3mVwR
+         tmMgPvOm/my079gVTWTQPg1/C4gfvh9rVSpXKWOdwLRS0js+MGAyASiFgl8IHQVK2v9F
+         bVWw==
+X-Gm-Message-State: AOAM530IUAWkhfIiErCPGvDpFPx5VO9DAk3FD7nzOnSFGPLOKb9/kabm
+        TLgy7Cq0qgcTu3eytLWUuGeedBT8wFm+c1BX7NQ=
+X-Google-Smtp-Source: ABdhPJzlUGJOEBICRvzOi9MD7s2Z9UwqgMeyH8L9qUe8vWOLUpL2RkmUIygug9QgFMpyGRMj10pSFg==
+X-Received: by 2002:a2e:a451:: with SMTP id v17mr4649651ljn.85.1639783252146;
+        Fri, 17 Dec 2021 15:20:52 -0800 (PST)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id o15sm1543473lfk.175.2021.12.17.15.20.51
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 14:59:23 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id g14so13368107edb.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 14:59:23 -0800 (PST)
-X-Received: by 2002:adf:f54e:: with SMTP id j14mr4140437wrp.442.1639781952748;
- Fri, 17 Dec 2021 14:59:12 -0800 (PST)
+        Fri, 17 Dec 2021 15:20:52 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id b22so7648004lfb.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 15:20:51 -0800 (PST)
+X-Received: by 2002:a5d:6211:: with SMTP id y17mr4203233wru.97.1639783240817;
+ Fri, 17 Dec 2021 15:20:40 -0800 (PST)
 MIME-Version: 1.0
 References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
  <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
  <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com> <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
  <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com> <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
- <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiR2Q5TQn_Vy10esOOshAego4wTCxgfDtVCxAw74hP5hg@mail.gmail.com>
- <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
-In-Reply-To: <0aa27d7d-0db6-94ee-ca16-91d19997286b@redhat.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com> <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+ <f271bb98-dfdd-1126-d9b9-3103e4398e00@redhat.com>
+In-Reply-To: <f271bb98-dfdd-1126-d9b9-3103e4398e00@redhat.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 14:58:56 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
-Message-ID: <CAHk-=wgKACiq4sygvRwvJ7bE+dnbMVftoudEVvcbyws6G_FDyw@mail.gmail.com>
+Date:   Fri, 17 Dec 2021 15:20:24 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjvoTRSb87R-D50yOXqX4mshjiiAyurAKCsdW0_J+sf7A@mail.gmail.com>
+Message-ID: <CAHk-=wjvoTRSb87R-D50yOXqX4mshjiiAyurAKCsdW0_J+sf7A@mail.gmail.com>
 Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
  FAULT_FLAG_UNSHARE (!hugetlb)
 To:     David Hildenbrand <david@redhat.com>
@@ -95,61 +95,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 2:29 PM David Hildenbrand <david@redhat.com> wrote:
+On Fri, Dec 17, 2021 at 2:43 PM David Hildenbrand <david@redhat.com> wrote:
 >
-> While I do care about future use cases, I cannot possibly see fork() not
-> requiring the mmap_lock in the foreseeable future. Just so much depends
-> on it as of now.
+> The pages stay PageAnon(). swap-backed pages simply set a bit IIRC.
+> mapcount still applies.
 
-It's not that *fork()* depends on it.
+Our code-base is too large for me to remember all the details, but if
+we still end up having PageAnon for swapbacked pages, then mapcount
+can increase from another process faulting in an pte with that swap
+entry.
 
-Of course fork() takes the mmap_sem.
+And mmap_sem doesn't protect against that. Again, page_lock() does.
 
-It's that fast-gup really really doesn't want it, and can't take it.
+And taking the page lock was a big performance issue.
 
-So any fast-gup user fundamentally cannot look at mapcount(), because
-that would be fundamentally wrong and racy, and could race with fork.
+One of the reasons that new COW handling is so nice is that you can do
+things like
 
-And yet, as far as I can tell, that's *exactly* what your gup patches
-do, with gup_pte_range() adding
+                if (!trylock_page(page))
+                        goto copy;
 
-+               if (!pte_write(pte) && gup_must_unshare(flags, page, false)) {
-+                       put_compound_head(head, 1, flags);
-+                       goto pte_unmap;
-+               }
+exactly because in the a/b world order, the copy case is always safe.
 
-which looks at the page mapcount without holding the mmap sem at all.
+In your model, as far as I can tell, you leave the page read-only and
+a subsequent COW fault _can_ happen, which means that now the
+subsequent COW needs to b every very careful, because if it ever
+copies a page that was GUP'ed, you just broke the rules.
 
-And see my other email - I think there are other examples of your
-patches looking at data that isn't stable because you don't hold the
-right locks.
+So COWing too much is a bug (because it breaks the page from the GUP),
+but COWing too little is an even worse problem (because it measn that
+now the GUP user can see data it shouldn't have seen).
 
-And you can't even do the optimistic case without taking the lock,
-because in your world, a COW that optimistically copies in the case of
-a race condition is fundamentally *wrong* and buggy. Because in your
-world-view, GUP and COW are very different and have different rules,
-but you need things to be *exact*, and they aren't.
+Our old code literally COWed too  little. It's why all those changes
+happened in the first place.
 
-And none of this is anything at least I can think about, because I
-don't see what the "design" is.
+This is why I'm pushing that whole story line of
 
-I really have a hard time following what the rules actually are. You
-seem to think that "page_mapcount()" is a really simple rule, and I
-fundamentally disagree. It's a _very_ complicated thing indeed, with
-locking issues, AND YOU ACTIVELY VIOLATE THE LOCKING RULES!
+ (1) COW is based purely on refcounting, because that's the only thing
+that obviously can never COW too little.
 
-See why I'm so unhappy?
+ (2) GUP pre-COWs (the thing I called the "(a)" rule earlier) and then
+makes sure to not mark pinned pages COW again (that "(b)" rule).
 
-We *did* do the page_mapcount() thing. It was bad. It forced COW to
-always take the page lock. There's a very real reason why I'm pushing
-my "let's have a _design_ here", instead of your "let's look at
-page_mapcount without even doing the locking".
+and here "don't use page_mapcount()" really is about that (1).
 
-And yes, I *know* that fork() takes the mmap_sem, and likely always
-will. That really isn't the problem here. The problem is that your
-page_mapcount() paths DO NOT take that lock.
+You do seem to have kept (1) in that your COW rules don't seem to
+change (but maybe I missed it), but because your GUP-vs-COW semantics
+are very different indeed, I'm not at all convinced about (2).
 
-Btw, maybe I'm misreading things. I looked at the individual patches,
-I didn't apply them, maybe I missed something. But I don't think I am.
-
-             Linus
+            Linus
