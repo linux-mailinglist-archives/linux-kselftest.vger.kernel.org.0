@@ -2,73 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 965DB479621
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 22:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC86479640
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 22:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhLQVUe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 16:20:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28109 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229513AbhLQVUe (ORCPT
+        id S229607AbhLQV27 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 16:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhLQV26 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 16:20:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639776033;
+        Fri, 17 Dec 2021 16:28:58 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E472C061574;
+        Fri, 17 Dec 2021 13:28:58 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639776536;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8IJZxPgG4L44oWGcui35r4UlNG5572tZdi98rWwaG8g=;
-        b=ApO3o05P6MqO26v8j8WB3M6RGAzbCRgLobY6g7jDdqUVDfAWFH7yaRlmexJmH4E8fMkwcS
-        jAvXcwNga9DOdXVhVrdURF5fT7SG1IUmVrA+OAr1mEydM00tP5uyvP9z4Gi19AkvMn7mDp
-        b2GFnC9RvS6poGkBaDrcQN/pNT1d1EE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-crbjqcz5MAaNFaVA2zlbCg-1; Fri, 17 Dec 2021 16:20:32 -0500
-X-MC-Unique: crbjqcz5MAaNFaVA2zlbCg-1
-Received: by mail-wm1-f71.google.com with SMTP id k25-20020a05600c1c9900b00332f798ba1dso3503578wms.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 13:20:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=8IJZxPgG4L44oWGcui35r4UlNG5572tZdi98rWwaG8g=;
-        b=b2Vmab39BUnmRQSYGD+WvUgL4YXxyrJuvJz3w/wzu/1Ct3Qpktn6VExf0dnoCNNlSP
-         9XNuSb+BujxblAtrVNgMZXICahU/a111D+VB2ddBQO4YoGjmanwp2E1Mtl7LwkkIxDRV
-         bgSuFL+rmpGv0+2oXK/ohM+4s26sKzlvmBkSpDlB8r4ILZhCal8m4A0xctY2s8z0zRPg
-         7YRbGjf4ZzxNTWlty5igsXfMvn0foUMXLMu7lphCqH5fIZFZZkTc+1xAUhMNPpYhUtRU
-         wabC0plobnpgZpLdWc2ifuirjiZsdDLGUy0bbTCOWj03LRMPlIo51+kzspKxK2NkVutb
-         mxdg==
-X-Gm-Message-State: AOAM5329Z1PFq+jOsc/WllT1cXiPnqAEvg1lSEqS1KfQu59+9jm7AcUg
-        6kR4huJNhO6oMjfJFBgqWPKG9/pRVgSlUGIKs1dtQFEaIhspgYxYAgnXvNFXNGEppXFAYmLRov8
-        9qBl3EMwdNF8eMn9CK/sIcSeVE7Ud
-X-Received: by 2002:a5d:47ab:: with SMTP id 11mr3927158wrb.148.1639776031459;
-        Fri, 17 Dec 2021 13:20:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJynyrJqHzLIVQ/5dOHLdUALTS3GVx082kmC3nUnoCPPI43f3cBoGLl7cQzviQKhtACK6Zxaeg==
-X-Received: by 2002:a5d:47ab:: with SMTP id 11mr3927144wrb.148.1639776031272;
-        Fri, 17 Dec 2021 13:20:31 -0800 (PST)
-Received: from [192.168.3.132] (p4ff234b8.dip0.t-ipconnect.de. [79.242.52.184])
-        by smtp.gmail.com with ESMTPSA id b13sm8544391wrh.32.2021.12.17.13.20.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 13:20:30 -0800 (PST)
-Message-ID: <0d96835d-bcf4-1192-536c-0af314405880@redhat.com>
-Date:   Fri, 17 Dec 2021 22:20:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        bh=OFrA0YAB5NqcgCSPrjgoGq4+oWDLHK3CbDZuQ3ZUUlE=;
+        b=23WkD2MrN4FWPZMZ815HQRHb8Kn8Kwz/g45LGgLFfTVELNZuOt8QSHnnqk2GaK6fg1+LbS
+        HidnYXMpCYVouy+xx6UoXFeSEFpd6E4BfpTx2cnolJ2GYNYKzvg4RSBkoosy6FQ+dflAUq
+        qnvV1480A6xKYqRuOYH2RqiZyjUDbRCWHNLLScfwiL1DSulAD77f2QH3hjrrtj6azIbHmM
+        Q3DZIx9rpawA03rEbF7dz1kfPemGvD0HVcudSiW+JfFOWAQZfK3wTvn707G6ntdFK3jzYS
+        Ie5+SpYngYEEMbxMSgWVnGxSqlmr3VLbZU8kl7f1DOW5whlq/4tsn1JZ9GHqcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639776536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OFrA0YAB5NqcgCSPrjgoGq4+oWDLHK3CbDZuQ3ZUUlE=;
+        b=CYGLcg86LFFqXWSljdKogfuduSWHPRdtVdDrKbtUpbxJmEqwqDghCeDcV1Kuus79KaN+Sa
+        Kr87YulrrMba1dAQ==
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
@@ -76,99 +50,106 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
         Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
         Roman Gushchin <guro@fb.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Peter Xu <peterx@redhat.com>,
         Donald Dutile <ddutile@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
+ variant
+In-Reply-To: <20211217113049.23850-2-david@redhat.com>
 References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20211217113049.23850-2-david@redhat.com>
+Date:   Fri, 17 Dec 2021 22:28:55 +0100
+Message-ID: <87h7b6c44o.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17.12.21 22:15, Nadav Amit wrote:
-> 
-> 
->> On Dec 17, 2021, at 12:47 PM, Jason Gunthorpe <jgg@nvidia.com> wrote:
->>
->> On Fri, Dec 17, 2021 at 12:36:43PM -0800, Linus Torvalds wrote:
->>
->>>> 5. Take a R/O pin (RDMA, VFIO, ...)
->>>> -> refcount > 1
->>>>
->>>> 6. memset(mem, 0xff, pagesize);
->>>> -> Write fault -> COW
->>>
->>> I do not believe this is actually a bug.
->>>
->>> You asked for a R/O pin, and you got one.
->>>
->>> Then somebody else modified that page, and you got exactly what you
->>> asked for - a COW event. The original R/O pin has the original page
->>> that it asked for, and can read it just fine.
->>
->> To remind all, the GUP users, like RDMA, VFIO use
->> FOLL_FORCE|FOLL_WRITE to get a 'r/o pin' specifically because of the
->> COW breaking the coherence. In these case 'r/o pin' does not mean
->> "snapshot the data", but its only a promise not to write to the pages
->> and still desires coherence with the memory map.
->>
->> Eg in RDMA we know of apps asking for a R/O pin of something in .bss
->> then filling that something with data finally doing the actual
->> DMA. Breaking COW after pin breaks those apps.
->>
->> The above #5 can occur for O_DIRECT read and in that case the
->> 'snapshot the data' is perfectly fine as racing the COW with the
->> O_DIRECT read just resolves the race toward the read() direction.
->>
->> IIRC there is some other scenario that motivated this patch?
-> 
-> I think that there is an assumption that once a page is COW-broken,
-> it would never have another write-fault that might lead to COW
-> breaking later.
-> 
-> AFAIK at least after userfaultfd-WP followed by
-> userfaultfd-write-unprotect a page might be write-protected and
-> go through do_wp_page() a second time to be COW-broken again. In
-> such case, I think the FOLL_FORCE|FOLL_WRITE would not help.
-> 
-> I suspect (not sure) that this might even happen with mprotect()
-> since I do not see all code-paths preserving whether the page
-> was writable.
-> 
+On Fri, Dec 17 2021 at 12:30, David Hildenbrand wrote:
+> Sometimes it is required to have a seqcount implementation that uses
+> a structure with a fixed and minimal size -- just a bare unsigned int --
+> independent of the kernel configuration. This is especially valuable, when
+> the raw_ variants of the seqlock function will be used and the additional
+> lockdep part of the seqcount_t structure remains essentially unused.
+>
+> Let's provide a lockdep-free raw_seqcount_t variant that can be used via
+> the raw functions to have a basic seqlock.
+>
+> The target use case is embedding a raw_seqcount_t in the "struct page",
+> where we really want a minimal size and cannot tolerate a sudden grow of
+> the seqcount_t structure resulting in a significant "struct page"
+> increase or even a layout change.
 
-uffd-wp and mprotect() are broken as well, yes. But the easiest example
-is just swap + read fault.
+Cannot tolerate? Could you please provide a reason and not just a
+statement?
 
-Section 2 and 3 in [1], along with reproducers.
+> Provide raw_read_seqcount_retry(), to make it easy to match to
+> raw_read_seqcount_begin() in the code.
+>
+> Let's add a short documentation as well.
+>
+> Note: There might be other possible users for raw_seqcount_t where the
+>       lockdep part might be completely unused and just wastes memory --
+>       essentially any users that only use the raw_ function variants.
 
-Note that I didn't mention uffd-wp and mprotect(), because these require
-"manual intervention". With swap, it's not your application doing
-something "special".
+Even when the reader side uses raw_seqcount_begin/retry() the writer
+side still can use the non-raw variant which validates that the
+associated lock is held on write.
 
-[1]
-https://lore.kernel.org/r/3ae33b08-d9ef-f846-56fb-645e3b9b4c66@redhat.com
+Aside of that your proposed extra raw sequence count needs extra care
+vs. PREEMPT_RT and this want's to be very clearly documented. Why?
 
--- 
+The lock association has two purposes:
+
+    1) Lockdep coverage which unearthed bugs already
+
+    2) PREEMPT_RT livelock prevention
+
+       Assume the following:
+
+       spin_lock(wrlock);
+       write_seqcount_begin(seq);
+
+       ---> preemption by a high priority reader
+
+       seqcount_begin(seq); <-- live lock
+
+       The RT substitution does:
+
+       seqcount_begin(seq)
+           cnt = READ_ONCE(seq->sequence);
+
+           if (cnt & 1) {
+           	lock(s->lock);
+                unlock(s->lock);
+           }
+
+       which prevents the deadlock because it makes the reader block on
+       the associated lock, which allows the preempted writer to make
+       progress.
+
+       This applies to raw_seqcount_begin() as well.
+
+I have no objections against the construct itself, but this has to be
+properly documented vs. the restriction this imposes.
+
+As you can see above the writer side therefore has to ensure that it
+cannot preempted on PREEMPT_RT, which limits the possibilities what you
+can do inside a preemption (or interrupt) disabled section on RT enabled
+kernels. See Documentation/locking/locktypes.rst for further information.
+
 Thanks,
 
-David / dhildenb
-
+        tglx
