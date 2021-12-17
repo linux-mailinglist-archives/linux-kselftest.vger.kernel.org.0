@@ -2,74 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E93F479484
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 20:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BD147948A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 20:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240547AbhLQTFR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 14:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S240553AbhLQTGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 14:06:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240551AbhLQTFQ (ORCPT
+        with ESMTP id S231704AbhLQTGq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:05:16 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680AC061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 11:05:16 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id y12so11438842eda.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 11:05:16 -0800 (PST)
+        Fri, 17 Dec 2021 14:06:46 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD936C061574;
+        Fri, 17 Dec 2021 11:06:45 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z5so11625841edd.3;
+        Fri, 17 Dec 2021 11:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7F2aHCSe8IzO12Nz4RyfBAXoLOfk6p6JbZVcFiKHrQg=;
-        b=ZjQ4/n3jpC4K+CjIh7Q22vd534RgwvYHtS9nR1P4Lv9P3PuipIG4Ky5i+x88FHfNU+
-         COO7Q+1L2Wl2VME7dDHc3akKiuLmeIvlviUDhdeTrCBSljMxVDX7hZf2YhkozKnphVFk
-         YaiCt3VRfbmQic5ajEaNqa5Otx58kYxFTYkgk=
+        bh=CdWa3VZPKatai3gF8Z+Urkz4ghMCS8ZDk6ZieZNqaIs=;
+        b=ZIJEwmc3dUjMQ8EZETYRFKYSgxnB7pGz8xLptALl9BU9T00ihDHDK5FDNa1lYMJvjN
+         MezA8fFtv3wu7YNOlCqI1D6Xa330lfBp1fRlHGc32VBxQcXb7/QN1MngCijkXmAK9K4f
+         IowAITb4zD445Ivb0clvo+Fdia78+IZV9ZhBAIm9gxxL/jJAjzAtK4xRBVu0xKjGg9mN
+         vNwY41BUKpZBiaGNxBoTXyWQIHN8xWofKrbQGG+dSAcD/S4srVPrX+fFafoa3Y7Z8qo7
+         o3HJSdrU23xhXC0txymOh02wxJhmZEgWKAdYqxmnvXwBqAYOmDBa1Fd0cRhL+OEHOtU2
+         EQvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7F2aHCSe8IzO12Nz4RyfBAXoLOfk6p6JbZVcFiKHrQg=;
-        b=sF3OmUDs+Dx8mcWjPdLKCxZMUX09V9rUYOXuE6y8C33I4GyP0D2DceujoFIw71JFqy
-         a66pd2SVhzYWgdIyhJAQ6ciMuM12j3273qONcJRUqrkYSU4HFnNGRrCeH9guZgm5GtVX
-         BDqCTMjK+SG1XnaslqnbHKl6m+j4R3N7YHS1cfYz2V6zl1jC0yMPVxcf2tcT0lTiotD5
-         tLumc6k43R+GmKk2ue0t5EdVgGchySTbzeFtbFUFa764ELpTyFi6YJG6MPxtFmDAuNq4
-         qXJnXYtvkFCNwL72FCVvUda5p85YRxVzp0iOXWrulql/XrLeV0x398DUYZkA1H/Y/gaZ
-         rrUQ==
-X-Gm-Message-State: AOAM530g3jX4F74rMVp2JR3P/6x9K3hcYOpzSO9X6dBLvywDhOnEyh1q
-        Utz43o9cVKb7MlBvLyM1zpJaxZsnMtH+F1kul2c=
-X-Google-Smtp-Source: ABdhPJyo/tAfv+Dj6EEo2/nXOk/g9ZFrZGa5DkFqNfeVlSwoqCoLluu/cMpZHc6CD0pMt2eGSs430Q==
-X-Received: by 2002:a17:906:2788:: with SMTP id j8mr3646848ejc.203.1639767914521;
-        Fri, 17 Dec 2021 11:05:14 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id o21sm3162004ejy.181.2021.12.17.11.05.14
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 11:05:14 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id y83-20020a1c7d56000000b003456dfe7c5cso3793044wmc.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 11:05:14 -0800 (PST)
-X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr1762683wmb.152.1639767903770;
- Fri, 17 Dec 2021 11:05:03 -0800 (PST)
+        bh=CdWa3VZPKatai3gF8Z+Urkz4ghMCS8ZDk6ZieZNqaIs=;
+        b=HW8+q5cUAZ6qn0DrM0pm11wqzOLugel334yqS8PNuCekMklMk3sEi/GRmRdnxPX5oi
+         Ggwcwkyf2CpKbgXqyJu6Ya01Bsv8Qe2l5GSqFTPWhTZgbA755gW6wN1SKSXzYDi5+byh
+         jhIDKJU9xLk8RMum/RFqNDhvaPihMlYM6GNSs7S8a6ZwwPK1A/OgiKs/0Vdczk8QIww+
+         F6Luq7CEU6zK2Rr1zxtpo7sKdU5hxSeGe1LhkBLjd4yjjWHECIz+gvH4Voucv4HldYCa
+         mzX832iyXGqo1BJa0wWWCxS/ZMEpGKnrZHivcY7yV9dpIVet4Vqds7LUd1NSdZm7n6nD
+         ueRg==
+X-Gm-Message-State: AOAM532fSLBfosn3pAhgGz7rzq2ntGZwn1tUIlJTzKzDv4ebacXR5r14
+        vb5nwBgLCB8ZnbBalbP1rWaB+/iqLqVMfkc/XUg=
+X-Google-Smtp-Source: ABdhPJwxDib3+r9/gWzmhjMAr3HWYlGtU2PoZVL15X+h8JOVYHxqutwxRbVQVuEYBvrj86uySi9x5gAUnGZyFvklEQY=
+X-Received: by 2002:a50:c38c:: with SMTP id h12mr4189423edf.72.1639768004419;
+ Fri, 17 Dec 2021 11:06:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
-In-Reply-To: <20211217113049.23850-7-david@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 17 Dec 2021 11:04:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
-Message-ID: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-3-david@redhat.com>
+In-Reply-To: <20211217113049.23850-3-david@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 17 Dec 2021 11:06:31 -0800
+Message-ID: <CAHbLzkp8B8zPSE-jdObqLJ=YxST8=J58FaiHxRq_ESgOG_LjCg@mail.gmail.com>
+Subject: Re: [PATCH v1 02/11] mm: thp: consolidate mapcount logic on THP split
 To:     David Hildenbrand <david@redhat.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Matthew Wilcox <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
@@ -81,39 +73,64 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Donald Dutile <ddutile@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 3:34 AM David Hildenbrand <david@redhat.com> wrote:
+On Fri, Dec 17, 2021 at 3:33 AM David Hildenbrand <david@redhat.com> wrote:
 >
-> + * If the child takes a read-only pin on such a page (i.e., FOLL_WRITE is not
-> + * set) and then unmaps the target page, we have:
-> + *
-> + * * page has mapcount == 1 and refcount > 1
+> Let's consolidate the mapcount logic to make it easier to understand and
+> to prepare for further changes.
+>
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-All these games with mapcount makes me think this is still broken.
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-mapcount has been a horribly broken thing in the past, and I'm not
-convinced it's not a broken thing now.
-
-> +       vmf->page = vm_normal_page(vmf->vma, vmf->address, vmf->orig_pte);
-> +       if (vmf->page && PageAnon(vmf->page) && !PageKsm(vmf->page) &&
-> +           page_mapcount(vmf->page) > 1) {
-
-What keeps the mapcount stable in here?
-
-And I still believe that the whole notion that "COW should use
-mapcount" is pure and utter garbage.
-
-If we are doing a COW, we need an *exclusive* access to the page. That
-is not mapcount, that is the page ref.
-
-mapcount is insane, and I think this is making this worse again.
-
-                Linus
+> ---
+>  mm/huge_memory.c | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index e5483347291c..4751d03947da 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2101,21 +2101,25 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+>                 pte = pte_offset_map(&_pmd, addr);
+>                 BUG_ON(!pte_none(*pte));
+>                 set_pte_at(mm, addr, pte, entry);
+> -               if (!pmd_migration)
+> -                       atomic_inc(&page[i]._mapcount);
+>                 pte_unmap(pte);
+>         }
+>
+>         if (!pmd_migration) {
+> +               /* Sub-page mapcount accounting for above small mappings. */
+> +               int val = 1;
+> +
+>                 /*
+>                  * Set PG_double_map before dropping compound_mapcount to avoid
+>                  * false-negative page_mapped().
+> +                *
+> +                * The first to set PageDoubleMap() has to increment all
+> +                * sub-page mapcounts by one.
+>                  */
+> -               if (compound_mapcount(page) > 1 &&
+> -                   !TestSetPageDoubleMap(page)) {
+> -                       for (i = 0; i < HPAGE_PMD_NR; i++)
+> -                               atomic_inc(&page[i]._mapcount);
+> -               }
+> +               if (compound_mapcount(page) > 1 && !TestSetPageDoubleMap(page))
+> +                       val++;
+> +
+> +               for (i = 0; i < HPAGE_PMD_NR; i++)
+> +                       atomic_add(val, &page[i]._mapcount);
+>
+>                 lock_page_memcg(page);
+>                 if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
+> --
+> 2.31.1
+>
