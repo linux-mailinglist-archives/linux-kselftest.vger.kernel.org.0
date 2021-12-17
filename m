@@ -2,155 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1C347862D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 09:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD61E478712
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 10:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbhLQI2K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 03:28:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56989 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230396AbhLQI2K (ORCPT
+        id S234122AbhLQJav convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 04:30:51 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:42936 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230497AbhLQJav (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 03:28:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639729689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=26LIJ1YdIsB73eNvPXzazi/kBaf5btKN6tb7Yo1wgdw=;
-        b=JBxtAYgGuUkzX5/aPUX9JZHyWd3Cnj1pT1D/NEMY93AaBBhCLh4k7tQYb4gUFzUK4SPOqD
-        EU6k2mi6nSyeuzgs7olQ9uGmzJZihheUeY2w5wji1TMkPztbyRaxKACylKoukE1HnseL23
-        qZTuRpPBbOOv5w90yscu3Y/CsjCkaUA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-xhjuxEotOTeFaqiS9ROY_Q-1; Fri, 17 Dec 2021 03:28:08 -0500
-X-MC-Unique: xhjuxEotOTeFaqiS9ROY_Q-1
-Received: by mail-wm1-f71.google.com with SMTP id a203-20020a1c7fd4000000b0034574187420so1684577wmd.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 00:28:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=26LIJ1YdIsB73eNvPXzazi/kBaf5btKN6tb7Yo1wgdw=;
-        b=vGzS/SIqbVhXPOS9k2tQQoR7EW9UBMymZNoXh+Dwx6vKObUjDiUCz1Qkqz96ZLT1jO
-         Oqp07MNvtPsuljSAUCUG9qMidszrt+mOpunMEFoB0oMU62vfKd42saHPtlf0dKWFzw/3
-         IUM4Hux6lihPvwml2LrEBtujh7rwPLNQitU7Yx0HKfo+SysWr5w1JpKjwRMYkSNHandk
-         8ETWcGSd2LcU7ewf0fUvjPVgoZ7eEj5rOc7WUt6gK+3YBY8GKWX3wfGJVPY/l4tt73HB
-         iecqdfsQ4bUsMBdQd51e17NiDU0KfAYmS5SDXCMKtVZP35aI2dZ9oDu4Ka/1s/Eckz/k
-         Tn0Q==
-X-Gm-Message-State: AOAM533HOx8xPFl3WZ9yYxLgki9VqZQriIQMJ5cM+MoZtB54m9GViZIR
-        uW/NNvedGPK4DwMjrtb79iqzJoGVhcSgbs+5L1/bQDqk2G+JLgdG+MA9i5KyKmvzLofeMc8LVA8
-        gZpMYqJOs4DWp9AJChNDU/BR31xyO
-X-Received: by 2002:adf:f10f:: with SMTP id r15mr1465019wro.553.1639729687526;
-        Fri, 17 Dec 2021 00:28:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyqmD+ti2U+gXLkJIXbA6dH/cRko3HnTprM5FpnCFB+dff8kIv2MHRCc7cqlV3ofyjCfG18KQ==
-X-Received: by 2002:adf:f10f:: with SMTP id r15mr1464998wro.553.1639729687242;
-        Fri, 17 Dec 2021 00:28:07 -0800 (PST)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id m6sm8866287wrp.34.2021.12.17.00.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 00:28:06 -0800 (PST)
-Message-ID: <3c5472f4-44ce-9ba8-4dbc-967ea377ae10@redhat.com>
-Date:   Fri, 17 Dec 2021 09:28:00 +0100
+        Fri, 17 Dec 2021 04:30:51 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3Ajw9E5a9ry87+gneBHn9gDrUDxH+TJUtcMsCJ2f8?=
+ =?us-ascii?q?bfWQNrUoi0GcDy2ZKDDiGO/uPYGr0c4x/a4S0ox8B7JLUzdM3QVdlrnsFo1Bi8?=
+ =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4Ef9WlTdhSMkj/jRHOOjULe?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt9Rw2tVMt525T?=
+ =?us-ascii?q?y8nI6/NhP8AFRJfFkmSOIUfoe6ffCfm75b7I0ruNiGEL+9VJEUrIYow8+N+Cmh?=
+ =?us-ascii?q?W9OARLHYLYwzrr+m22rOgVuhlgOwpNsD2Oo4F/HBnpRnaAPs9SpfEQI3B5cVf2?=
+ =?us-ascii?q?TYtg4ZJB/m2T9UQZRJkbA7HZhxSPxEQEp1WtPyom3D/Wz5VslSYoeww+We75Ad?=
+ =?us-ascii?q?xyrn2LNvcfJqAX8xImEuCjn/M4mLlH1cRM9n34T6E9G+8w+zChyX2XKoMG7Cis?=
+ =?us-ascii?q?P1nmluewioUEhJ+fV+6p+Spz02lVtZRN0EP5gIwoqUosk+mVN/wW1u/unHsg/K?=
+ =?us-ascii?q?2c7K8CMVjsEfUlPWSuF3fWwA5ovd6QIROnKcLqfYCijdlR+/UOAE=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AMiVVXaMf1ElnF8BcTv2jsMiBIKoaSvp037BL?=
+ =?us-ascii?q?7TEUdfUxSKGlfq+V8sjzqiWftN98YhAdcLO7Scy9qBHnhP1ICOAqVN/MYOCMgh?=
+ =?us-ascii?q?rLEGgN1+vf6gylMyj/28oY7q14bpV5YeeaMXFKyer8/ym0euxN/OW6?=
+X-IronPort-AV: E=Sophos;i="5.88,213,1635177600"; 
+   d="scan'208";a="119057162"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 17 Dec 2021 17:30:49 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 8AB7C4D146D7;
+        Fri, 17 Dec 2021 17:30:45 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 17 Dec 2021 17:30:44 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Fri, 17 Dec 2021 17:30:46 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <keescook@chromium.org>, <luto@amacapital.net>, <shuah@kernel.org>,
+        <christian@brauner.io>
+CC:     <wad@chromium.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        "yang xu" <xuyang2018.jy@cn.fujitsu.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v2] kselftest: signal all child processes
+Date:   Fri, 17 Dec 2021 17:29:55 +0800
+Message-ID: <20211217092955.9472-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 2/4] RISC-V: KVM: Add VM capability to allow userspace
- get GPA bits
-Content-Language: en-US
-To:     Anup Patel <anup.patel@wdc.com>, Shuah Khan <shuah@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20211129075451.418122-1-anup.patel@wdc.com>
- <20211129075451.418122-3-anup.patel@wdc.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211129075451.418122-3-anup.patel@wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-yoursite-MailScanner-ID: 8AB7C4D146D7.A1546
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/29/21 08:54, Anup Patel wrote:
-> The number of GPA bits supported for a RISC-V Guest/VM is based on the
-> MMU mode used by the G-stage translation. The KVM RISC-V will detect and
-> use the best possible MMU mode for the G-stage in kvm_arch_init().
-> 
-> We add a generic VM capability KVM_CAP_VM_GPA_BITS which can be used by
-> the KVM userspace to get the number of GPA (guest physical address) bits
-> supported for a Guest/VM.
-> 
-> Signed-off-by: Anup Patel <anup.patel@wdc.com>
-> ---
->   arch/riscv/include/asm/kvm_host.h | 1 +
->   arch/riscv/kvm/mmu.c              | 5 +++++
->   arch/riscv/kvm/vm.c               | 3 +++
->   include/uapi/linux/kvm.h          | 1 +
->   4 files changed, 10 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 37589b953bcb..ae5d238607fe 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -221,6 +221,7 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm);
->   void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu);
->   void kvm_riscv_stage2_mode_detect(void);
->   unsigned long kvm_riscv_stage2_mode(void);
-> +int kvm_riscv_stage2_gpa_size(void);
->   
->   void kvm_riscv_stage2_vmid_detect(void);
->   unsigned long kvm_riscv_stage2_vmid_bits(void);
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 9ffd0255af43..9b6d6465094f 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -760,3 +760,8 @@ unsigned long kvm_riscv_stage2_mode(void)
->   {
->   	return stage2_mode >> HGATP_MODE_SHIFT;
->   }
-> +
-> +int kvm_riscv_stage2_gpa_size(void)
-> +{
-> +	return stage2_gpa_bits;
-> +}
-> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> index fb18af34a4b5..6f959639ec45 100644
-> --- a/arch/riscv/kvm/vm.c
-> +++ b/arch/riscv/kvm/vm.c
-> @@ -82,6 +82,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_NR_MEMSLOTS:
->   		r = KVM_USER_MEM_SLOTS;
->   		break;
-> +	case KVM_CAP_VM_GPA_BITS:
-> +		r = kvm_riscv_stage2_gpa_size();
-> +		break;
->   	default:
->   		r = 0;
->   		break;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 1daa45268de2..469f05d69c8d 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
->   #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
->   #define KVM_CAP_ARM_MTE 205
->   #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
-> +#define KVM_CAP_VM_GPA_BITS 207
->   
->   #ifdef KVM_CAP_IRQ_ROUTING
->   
-> 
+We have some many cases that will create child process as well, such as
+pidfd_wait. Previously, we will signal/kill the parent process when it
+is time out, but this signal will not be sent to its child process. In
+such case, if child process doesn't terminate itself, ksefltest framework
+will hang forever.
 
-This is nice and other architectures could support it.
+below ps tree show the situation when ksefltest is blocking:
+root      1172  0.0  0.0   5996  2500 ?        S    07:03   0:00  \_ /bin/bash /lkp/lkp/src/tests/kernel-selftests
+root      1216  0.0  0.0   4392  1976 ?        S    07:03   0:00      \_ make run_tests -C pidfd
+root      1218  0.0  0.0   2396  1652 ?        S    07:03   0:00          \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x86_64-rhel-8.
+root     12491  0.0  0.0   2396   132 ?        S    07:03   0:00              \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x86_64-rhe
+root     12492  0.0  0.0   2396   132 ?        S    07:03   0:00                  \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x86_64
+root     12493  0.0  0.0   2396   132 ?        S    07:03   0:00                      \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftests-x8
+root     12496  0.0  0.0   2396   132 ?        S    07:03   0:00                          \_ /bin/sh -c BASE_DIR="/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests"; . /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/runner.sh; if [ "X" != "X" ]; then per_test_logging=1; fi; run_many  /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_fdinfo_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_open_test /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/pidfd/pidfd_poll_test /usr/src/perf_selftest
+root     12498  0.0  0.0  10564  6116 ?        S    07:03   0:00                              \_ perl /usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-519d81956ee277b4419c723adfb154603c2565ba/tools/testing/selftests/kselftest/prefix.pl
+root     12503  0.0  0.0   2452   112 ?        T    07:03   0:00 ./pidfd_wait
+root     12621  0.0  0.0   2372  1600 ?        SLs  07:04   0:00 /usr/sbin/watchdog
+root     19438  0.0  0.0    992    60 ?        Ss   07:39   0:00 /lkp/lkp/src/bin/event/wakeup activate-monitor
 
-Paolo
+Here we group all its child processes so that kill() can signal all of
+them in timeout.
+
+Suggested-by: yang xu <xuyang2018.jy@cn.fujitsu.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+V2: add acked tag
+---
+ tools/testing/selftests/kselftest_harness.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index ae0f0f33b2a6..c7251396e7ee 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -875,7 +875,8 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
+ 	}
+ 
+ 	t->timed_out = true;
+-	kill(t->pid, SIGKILL);
++	// signal process group
++	kill(-(t->pid), SIGKILL);
+ }
+ 
+ void __wait_for_test(struct __test_metadata *t)
+@@ -985,6 +986,7 @@ void __run_test(struct __fixture_metadata *f,
+ 		ksft_print_msg("ERROR SPAWNING TEST CHILD\n");
+ 		t->passed = 0;
+ 	} else if (t->pid == 0) {
++		setpgrp();
+ 		t->fn(t, variant);
+ 		if (t->skip)
+ 			_exit(255);
+-- 
+2.33.0
+
+
 
