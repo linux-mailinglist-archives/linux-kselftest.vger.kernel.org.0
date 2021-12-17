@@ -2,215 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 190A447936C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 19:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794D14793A9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Dec 2021 19:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbhLQSBW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 13:01:22 -0500
-Received: from mail-sn1anam02lp2042.outbound.protection.outlook.com ([104.47.57.42]:7121
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230432AbhLQSBV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:01:21 -0500
+        id S240106AbhLQSQM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 13:16:12 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:53456 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240112AbhLQSQJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:16:09 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BHGXpOi005184;
+        Fri, 17 Dec 2021 18:06:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=+SIc1aHO1Z6S87T/YjsHWPZsW3NLz0Wxug+gM+9UDEc=;
+ b=ATgH5rjnSHjqFTm/Ohxf2SxukCqgFOQZ/F8RxzrBEaMOjEUEyQMFiYu8KjC9GL5S78DV
+ XzYEXPf38RobUlL78DY+nkGN3Lqv6AHJEZSqOIevUQ3O+A8x7NvVUmMVSbl42gozmmb1
+ 9WRZ9D8sWXP31SF+TgECdPW18DSueSbHuLXICA7TGcDNhjC/R67goHkWKfJTakRnk0/I
+ sACcd/eH4JLGMvgn0/t+hjglFi4do9eImQGJ5rHh51oV1ROaty/GOJc/vxEg8MfDUWOW
+ WqufPdIt+poNSDzJUarE2oQZFvzAff0QWVuqCVDEMOfZh6MPdjUKGAJjZcnSjxeUOU4r 1g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cyknc6eph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 18:06:34 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BHI0Jos024168;
+        Fri, 17 Dec 2021 18:06:33 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2104.outbound.protection.outlook.com [104.47.70.104])
+        by aserp3030.oracle.com with ESMTP id 3cyjubq0a1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 18:06:33 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gd2gW2/CCK+jdfJcUi4GMKENhdTtTmAIAVF8Cx8qGwvXJrt1mYBtNgteuKKbABYqfrEis/sA8GRqUmFGY8EPAfpujcpeAj9CK7464dK7L8UPe6Nbbez59S7iuNUecEWkSSlKnuIBT+JPIpV75lRTjELRjaVa9RO0WVnoCT5x73EYaImto146susvrPrIzVfypL54sKAOoBzvBF+tkDHewxT3P//p0Fx9E2FAQHIeZF4gJmXjB1zBQPoifbMHFj9GzVfBs/kt+SmX2r8Te+E8NsJOFNy3BUyPbWWlUFZBx/DZsDZusrIPnalRAlMQvtzZsdCcSAvRGhXn8hREHWKMeg==
+ b=EF0E9DLCa6CCZchucG9EU0GibWq1QhTnpxIgefY22UMgLYhzZtr+JCZm80gB+QxlG55SGKEAgMTbTJkr1se9xZ5Q+VynRSOFLm2I+uCmfzLJ4oW9m0iIKcuVxNj2EUo7i8664sojrmhyGHE2gLiyC+VvdEsXEhFDGjJk93sBhtbpaogjwblAx7d2ZMVBegP+rM4utK+phENlRmn6f3QDooKHnYNiqyQak/dQYeQgLYH70wljFtf7MpQiNVFjsgZs3hy1b+fD+94EpTfj1oixUxj2snLaFKDABTq0QMwDIhP17Xclrn9DJUujSjCrKFQ9acQOl2k4enkjWgM7dIhOjw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yCXHB2tKprwWILUuPpBGqZik93yfVOfH3s1IvFDddkk=;
- b=OZIYX/PhundqfgqZue2eO60rI86LafRb9pbRDYoXwHNAnY0+V8PRr9FViMb6pMaTpCzL+H25BNXBlW+fnmn9/yu+TKXdIRmibf7Lki0Ek1IsOCPl/RkCIZ8ejNC2y3N2tC9ojkn9yXJzlMNh84lCiqY1gxFaV/J0KqYtg0qlBuKYdvpi8OA2du2BG+hgSgiLLKSzMUPLsIVL7bIbeyEgurFGno4NlhJypab+NmXUxvaQaJbfwt2jG0mDuZcz0YAzqKT/YNMplbac9pnwyQnfcgUJGwGMJ4336I4veMgGR6GW7xjJtFUKAOmiYDJFu9TYov4L3D9f3TI7YecsRIUgtw==
+ bh=+SIc1aHO1Z6S87T/YjsHWPZsW3NLz0Wxug+gM+9UDEc=;
+ b=YInsWLdHH95GEIFHldS0Htr7UGt4P+JAP8irtaU7/d/sd4G7jeaLkKoRmCcaoIFCVZAV1bZk0jRUj3bdf+MA6i1KCGhOyWsp8rwBMbdzEHnhIRJ+pt4hk6u067Sp3Ic6mLQ0HaCrMMlytH+hZb1L1bYHevLVrUmUyZYL1rJPRXT44sYpFJo6AXr7vWx3zZoR+OXVKArKgu+MqVUoWGp3X6T7Rhf7RvVYwjNKSKOkOAGm3bdQNJO3bC2iE+P//4aYKnoz2yZJ1BuPy9rj5uzv8Zl7pUmbeolVdWxFQcSOU2E3xe0++KCMemoYm5MLnSwc2U2oEgPrjN5UsXlX2hqVTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yCXHB2tKprwWILUuPpBGqZik93yfVOfH3s1IvFDddkk=;
- b=xb9SBD0FqRsqLhJA+6/nT0H6ka0wIDcM/DXGebMHEhUQ9YPNSi3eFKma1kP1ZTXiy8HtAkxlNb4XhiQ+etPCtEdM+WZGGP/Wp6TvfhHgePAtKSpeFtyitgx4iIYOG7JpDpPEVI/UC5LdFGFKKOtAuPGlW2xMFMap4lrERMWV6YY=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by CH2PR05MB7143.namprd05.prod.outlook.com (2603:10b6:610:47::25) with
+ bh=+SIc1aHO1Z6S87T/YjsHWPZsW3NLz0Wxug+gM+9UDEc=;
+ b=uMU5XoMkXH/VSkAx1R9DKtLeI84ZwDmSrsDdEqW8UbcngDclooiBeJ199nDgXgPiggowForY+cSDidi+4KXsmGi+O2pmCMWUCq0eCqud6BSmUX+HjzGrIQ06c80qZRLxiVgi85PR0p8k+il5zKvucB4FzGm3/dHdOXCxDTvWzG8=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SJ0PR10MB4541.namprd10.prod.outlook.com (2603:10b6:a03:2db::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.13; Fri, 17 Dec
- 2021 18:01:17 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f4f8:9fc8:59d9:3345]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::f4f8:9fc8:59d9:3345%3]) with mapi id 15.20.4823.009; Fri, 17 Dec 2021
- 18:01:17 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     David Hildenbrand <david@redhat.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Fri, 17 Dec
+ 2021 18:06:31 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::5d0a:ae15:7255:722c]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::5d0a:ae15:7255:722c%6]) with mapi id 15.20.4778.018; Fri, 17 Dec 2021
+ 18:06:31 +0000
+Message-ID: <0b0007b3-bf6f-ccd7-96cf-3dd861abf224@oracle.com>
+Date:   Fri, 17 Dec 2021 10:06:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v1 03/11] mm: simplify hugetlb and file-THP handling in
+ __page_mapcount()
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Matthew Wilcox <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
         Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
         Roman Gushchin <guro@fb.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Peter Xu <peterx@redhat.com>,
         Donald Dutile <ddutile@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
- variant
-Thread-Topic: [PATCH v1 01/11] seqlock: provide lockdep-free raw_seqcount_t
- variant
-Thread-Index: AQHX8znaqyMNBisG2UGD/gNtIc+9Gqw26UMAgAAHdICAAAXPAIAAAzIA
-Date:   Fri, 17 Dec 2021 18:01:17 +0000
-Message-ID: <3F35C81D-34DB-4EA0-BC5C-A13EB71524A4@vmware.com>
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
 References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-2-david@redhat.com>
- <38BCB153-7E7C-4AAD-8657-E5C6F9E1EF9B@vmware.com>
- <058e97eb-1489-3d59-c6ee-94175dc13134@redhat.com>
- <a832ca37-b078-6f62-f99f-b2703674c1d8@redhat.com>
-In-Reply-To: <a832ca37-b078-6f62-f99f-b2703674c1d8@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.120.0.1.13)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b9517d1e-b9b4-41a3-11cd-08d9c1873927
-x-ms-traffictypediagnostic: CH2PR05MB7143:EE_
-x-microsoft-antispam-prvs: <CH2PR05MB714315DFE9FB5309A2EAC302D0789@CH2PR05MB7143.namprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xkm08M6/r11uQ3quYuV2Ne+kIXZsk6JQpfWkSAgElLHmez5zu3qdf5hSH019ZBT+TPS6bbHP+ntMUa5Vrxe4LniaPkbjulzD7HMy3tY8m4Mi7y2lgGNsrpdBe5Av1a1KgtGmtc04DPEjxWCTVqdvmz/TPGw2gtzLrwkhFS/sPyxmyQQiLFNpf5wvrEbwEtxUrvUJIwIqcEm0hJ4S8Bg3XYSd97sZYOLp6hDN4WdQDhh0PYXZKuXItNGeFx9lKgi+zOiLevptaEN/6UCYs3xstKvKMv2lCsbHY142/+4UFQmYOMuGFEFcFuAOERgXLVTPYIOSZPVXCFbtrUhO78GdG/nsHKPtPk2vqdUaOC5FNHjB0JxLebX6YWaG0uKeFtdCtyqk9eUpblQpH50kaywt1eYFSqJViH4JhTqK+AflGLPS8oT+nvZ65pfPPT4MkhOPN5JjWMrgIH542AgJKgTv8XpQ3KnhdsW9x068RT6vpN/uFabsrV18N39GHnPKVAZEO+nuWD/dOy1+J4W15281t1NX4JpE9wdzhP2vLfE6V8qdOq18jJXIDcwW2XuM+mwUigcnL6huxUK49ZRYTpu2qtaD9L77yejTGHWNuAWe0yH/yf270Y5t0XsLaIi9TiAL15EsoxNz8TN/UOb5fEkVJCXgl4bLSdjqzm1cgnJNBjV+yiUol0R4gQzv5MO9SpYNOZSZ0S4TuqwybxiC5x7a9+78gxPsljuRKFxo0maTVNR4GSWeNmPHTjWr92hWjl/k
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(7406005)(7416002)(36756003)(6486002)(33656002)(6512007)(38100700002)(53546011)(122000001)(6506007)(186003)(2906002)(66446008)(26005)(5660300002)(71200400001)(66476007)(83380400001)(2616005)(38070700005)(8676002)(86362001)(64756008)(66556008)(54906003)(316002)(4326008)(66946007)(6916009)(76116006)(8936002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uUkr+tp1UF1Ml4Fb7o277H9r/A3kdNwE7dXk4tH0tRD22HKX12jku0pdQ2uG?=
- =?us-ascii?Q?6QuLFF5OTCygisXRpR9Z0KfGTubA4mX0P4cKqpjRxGlEURJ45QG0lYuKUQtD?=
- =?us-ascii?Q?4mmH9c9H9r7hIeuLpj5yI8Fqd5DJmwvzSHmRzRGJLxHO+UoDP448OdFtdzNt?=
- =?us-ascii?Q?StGG1Ct7/J+2g2B2e8hGHTMIIH7CgVGGkFjpRkB8iKvgrROD0xVyny9x69TR?=
- =?us-ascii?Q?8IFz0n6Iu4u/7yIro3y4zj2nQTiLlyN5CNSqJQmlAZo61nv/h6bUQouuiXdB?=
- =?us-ascii?Q?JaVGjw6yUqzYVxMNqnu7NZw8imgJfoV0hDtOWq+vauOBN3nYV0Csby4r36Ob?=
- =?us-ascii?Q?NIXA5Xlw03y1mH/i/JD/ltMvnA4XAOw2uzymQ26LOHo5kYp9QLDKTeaPzQLN?=
- =?us-ascii?Q?EzpSIlCwEmJOJdix6XpsvloKi1C9OmI+R0ktVYTMsrwdhhZ+xTyjD1obgf22?=
- =?us-ascii?Q?nXKxHaXSTDUg1z6+rkAhNpBr+SYnGEnyZR4n9Xw22kHpsHWkm5087uu0oMt/?=
- =?us-ascii?Q?gp0OzDdhmIA0SrE0azr48HArbM6LdrNgHc9OX4VkR/RsGsHpPDFo7PgitCJh?=
- =?us-ascii?Q?HPlxrBD0UuHgIhnIJhP4m/liXMKTdEsWPHzx4/LshZ6ehuyWeLxQA1YrSMLe?=
- =?us-ascii?Q?dcsh9Y9R9I/xvRE8HsnfHT4LnSFgzx59Rs3x6fmDbi61fGSPyXSnIEyKpxXi?=
- =?us-ascii?Q?adYRXZlnpyQ6QssqeG0BLupYQS9zb9LDH9cPSViR89lJ8yskm7o0eI7QEz3n?=
- =?us-ascii?Q?Ll9P4e44rX+DdKI7FBGwggFb6MS9ircVKhq5F0K97jiNtrxu5fT3/X+RcNDT?=
- =?us-ascii?Q?QGrWy3M5RNcJSqDOqiR7nTSHM4UrgQYXkyx7l9NfccrGOiYpwcT9Sv29Yx3w?=
- =?us-ascii?Q?ZaGlbAdKU+MYqu8iTB7m5NHIj80rhEQlPJC9WNKJjPAK7JpOZYnc5T2X0iqo?=
- =?us-ascii?Q?sXZOo1fmbwc2S9/OelbIBg3DdtxJKMeYV2LsqM55paCOTY06qe22X2pkIzHa?=
- =?us-ascii?Q?t1J2Tpw37MSZbLR/W0+bf0KhHw2lB5krcGkvEakF2M1X1ngZ+vdNwDoFx13V?=
- =?us-ascii?Q?yjrL6sYst3mS5J0+1YUlerqKqxOJb83C1kC2qSOEeVypZJb3HYb/thLZjJN8?=
- =?us-ascii?Q?YDCnQe41dfBLgFu2urHdaApFt9at8SHxhD5RA0jObS91JggElSzd0afsD810?=
- =?us-ascii?Q?50l7J8WHuZ3BcD45V8UBaXEcI/5YVToLbnI/oDKJkjTG17EZq4BfVEsdO+2g?=
- =?us-ascii?Q?txah4QU0+MSis6LTTuqiSFjEcd3MvL0svjYuoapszeMYbI5qWQ2LXRlOW2X6?=
- =?us-ascii?Q?4tHFOGSMiV6CdLVM9HhhQ1xDjq2qoHhOUJASLQpC0zqGCZ2oMzQK/xjcnIPh?=
- =?us-ascii?Q?NvSx+CT0qpK7ywmweydZsR8XZdlLYfaZl1/4F8kLEEjhfldDSwEfnvVdgvAt?=
- =?us-ascii?Q?DFPuk/uF9Kbp5/qOkR8eapNTu245sN5n7o2CFi74HCYDo45jqzMOQ/r7BPEA?=
- =?us-ascii?Q?3TGM1mqZrfsSFPS/rVGGR+KTW4kVJHPdg1WlyJ7A9XPQuov1yHEWXxvyT0i/?=
- =?us-ascii?Q?sJihZmAXel/Jj7kivJIcO5eK/AZY21K9CJ1Uq8Z8gPl54yjnOG+O/iU5fvDl?=
- =?us-ascii?Q?iRWFlHKhGBUb+4DzHcpNXs4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <AB8CBBD046C30343883FC8B66FBA3B49@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ <20211217113049.23850-4-david@redhat.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <20211217113049.23850-4-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR04CA0037.namprd04.prod.outlook.com
+ (2603:10b6:300:ee::23) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2075be1-56b6-4664-3800-08d9c187f3fc
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB4541:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR10MB454115671CAEF1183BF4076AE2789@SJ0PR10MB4541.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9YnOdaj/1xzoqAdfOJdXAWl3aT4bgdjirZDHTerEGR1s4VEzUVvDAs2GJ4ktYVTc6/RayqbaGhKt3PUfpDiqfOwcmp9oPRhoEwHi2+oXKIWfNIO5mn3r3GGD79p4xGvp7sBopES0Y+HEEH9z6oLj/Hy5mT3yTuniGde9xiVfuZtgwVPdOU+zskMKVGDaV/1WNBUdcQdsqyEPrtwdsaN3od6AWsK9CFxclB+TZgSu9xFo6KulVsuQveTYsGISJMCwSao+OBBUAJI95niCRhN6+f2I0nf09YoS6l5PFkEP8ar529/bgJEozmQxUnZWH2yfXiWKXbMf90mrBlo4HArKtkf+wvdTmW+KJ+33oQvTshs5qaWatUj25c4SkW6fwfZqr78sca+3cwlICWBNyy/sZwBqimixrRE9jobOdbYoq4/ZN10VTyyTFCvKRapLzlP0JpalQtbAIJwQmkn98DXKgH2OsId/GkLmR/l/Bn3IZaJ3qgQEtCovyyubvsN/9rBqrMtXsbEVp3f9aApM9PcuhaQ2TCSWFWVyLuVHVzF0SNbrnKuu0izlGDkhlEHFi56P1uvMxsHRoiyDx3316kinyiwCIan4Q5JLv3xnq6ihRDFNmS/y5cpb3W10FIY8KSaaG4OxxTyZXUXFx9pVVwWBf4CveM2E0Q/KYKE3QKFPCXghC+VhxQx9tmE4dMpWpd/FoYbOdIFJ2HpuHKFZFIHJTvAGrhLQIyuc0rxTjGxXxijDyUYN+M5HiLbB3xA1TIV+XEpcTLvB8eSSck+oEXeccQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(44832011)(36756003)(86362001)(6666004)(316002)(4326008)(2616005)(66946007)(186003)(26005)(508600001)(8936002)(66476007)(83380400001)(7416002)(2906002)(66556008)(5660300002)(52116002)(53546011)(31686004)(38350700002)(6506007)(38100700002)(8676002)(6486002)(54906003)(6512007)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RSt5bGRMT1RGRFZ6cGlPTStISmJBRHorOXJXaU8yZnM4NGZhN25UNlJQbUgw?=
+ =?utf-8?B?cGFWL204b0FKSElRbFFZY0JPSGl1dGlYMUNwQXFyWkFOd1VXekRCTjZvZ3ND?=
+ =?utf-8?B?UDVMcU5HNGtOUjl6RDBnZklyM3k4d2xhZmkzZVF0NktMbFZOYnZ5OWNNUXJw?=
+ =?utf-8?B?bnlSMWR4Z1FjUnNrQVdvdkpadGVGRnNRR2tpRlpZbVVNZHpzZmFvY3g2dDd6?=
+ =?utf-8?B?cTZ4WHhpMVFDa3lZa2djUHBrSk5ENldMUUs3SGpoa2szNVhSbjFLeTJxUEYy?=
+ =?utf-8?B?aEdZajBTWXRkM25RSFNZcE5EYVk1cVVpanE0a1NuTXd6QkMycTlQZDQyVkds?=
+ =?utf-8?B?aUtlK1hGR0UyOHNNTUJQNlRoS25ENlhwUEMwbGtLTUNhZHp5MEU3Y3ViYWwr?=
+ =?utf-8?B?dXpqaDQ2bTh4aTMxa281UzRWRE1SekszM2xDNTFZYmhwNys5Z3lBcFlWM0ZJ?=
+ =?utf-8?B?NEJTZitmWFNPQ21BUk1zTVNUbzlVY3F3aFpvMHJvb1lnOXlzZVNicHJVNGRT?=
+ =?utf-8?B?Syt3NG1EQmFnY3lMOFk2M3lKL2ZTRWRzMUhjRjlWTWpOZVB3S3F2WjRzMnNy?=
+ =?utf-8?B?VEJGUEptb3ZETm8vbTVvQXlJQXYxV0lXcnh3NWgzMnBscnNyVGtycVp5YW1u?=
+ =?utf-8?B?SzREN2ZtMVVqTy94V0krZCtBTFVyODZMMS9vM1BqVUEzelFYcms1Q29xaTE1?=
+ =?utf-8?B?U1VlcVpQeWErTFZURnhhdk93eFNoeUZyTXZqaE5ESW1XZVVMckRvL3VNN1l0?=
+ =?utf-8?B?VkZjZEpOcGp5elNzWHlKVndtcVRQWHFBcU5GQ3E2UTU0a21EZzJnUzZVTE5B?=
+ =?utf-8?B?eGhZWHNGYlFiR2hnSkpUczV0eThPa1poWktXOGVWNE5VRWV1ZjZhUnJoaUxC?=
+ =?utf-8?B?L1krRXg1L2xsK2RaclJGZU12dnQwdVdKc2ZyaHBYRnZLbnB0V0tjR1F4ckRJ?=
+ =?utf-8?B?NUEwOXdxOU96REZzSXNmL2s2eG0wWnVOVFFwbkg0NlFkQ00rbExjQy9Wa3Ir?=
+ =?utf-8?B?ZW5TN2RRUHFaT0FzT1p0c1ZXM0wrSXJmZUVuaXZRaXYwVHhDbFFwbUtURm56?=
+ =?utf-8?B?QnliL0tnSnNqaU80a2lraHI5d3AweDhNc2FsZWV3akpidzcxMzYxN0dhTG9u?=
+ =?utf-8?B?OXphL214ZTdFUjlXc2ZEanQ0K3NaOWZabzl1L1ZVclpRUVlWR3ZaZzVwV0wv?=
+ =?utf-8?B?NnR0MFV1MHhXY2Z0WU14aW1TZVdkMDhLcjh4dU9oc1pmNVk4QXNDV3lzV1Zu?=
+ =?utf-8?B?RFEzcEpSZmh4K1AzMHY2Vy9xZ0NZbFZrTlRaQ0dSdnRSdTQ5dElrSEpqMW5K?=
+ =?utf-8?B?WUJ5bnZEcUhGMkdJQ255b2VtZ0dVREIzL1JvOFFSWTlMMkIrV2lhYzduUDBr?=
+ =?utf-8?B?UW1PM3MxblBNTzJtdHZjWGMyZ016T0xDaXVZTk5oNjZxVFlndXByWHRqa2hy?=
+ =?utf-8?B?QStvdWVTMEI5QzJUOE9NeHFmanViVzN1RFdqdFhkVzNCRC8rUVBNbHdPYnBx?=
+ =?utf-8?B?NThCMGRGQlZSTThHTTBJelJ3VFpNUjd1eC9ieTZ5NXloY1I2eUJ5UjY1WVlX?=
+ =?utf-8?B?MkJZYWNOeUEzQlgvVzJnVHIreE9CMlpHTkIvMVcyNHpjUEJBZEdibGs0VEVX?=
+ =?utf-8?B?MmNkR1R2c0MzeE13ZEhvYTY2Z0VwUWdRcFNlYW1oOGs1ZFAxa3FtZmcyVTla?=
+ =?utf-8?B?L1kxbXlUUUhFUldJVm8yNm8yZlJSQVNSNi82cjQrZFB6SDN1T1ZpQ1VnS1RF?=
+ =?utf-8?B?aGZla3F4eDBrVjE5a0lNd3hUZWdsS2t4aDZROHlRaE9sbHE0aTB2QzlrQnVr?=
+ =?utf-8?B?Z2VMRzdPTXFBQkQzVCt0VElCWEtSQ2p3Y0R5dzJLbUFFMStwSFpmMWY3QVkz?=
+ =?utf-8?B?eEJwQnBFOCtvUFNQS0tIbGxZV0lnWDFFMVV2cWJmT3lmNVNwRjQyN2U2ZjVJ?=
+ =?utf-8?B?UGxnM1cyN2h1eUlJZU1zYlBLa3pveTNhZkN2TkNjaGRIallzaHBXalZWbjJ3?=
+ =?utf-8?B?Y1E3UWhxT0FOckw4aDZxM3JmNlhOZ0t3NVBXa3dyL1h5Ky8rTENlYXBlcm9k?=
+ =?utf-8?B?UzZaS252V3N3YUo1K1dkWHR1eC8zN0dldjRtSDRTNmovSXQ1UWZCdlh1bkN5?=
+ =?utf-8?B?RkY3Ukg5aUE2WWxBSkttZzgySHNpaVNRb0oyalAwVm1Pa21DWjZvZ1p0Z2wv?=
+ =?utf-8?Q?5afXCiBdgguFFu2x8lwke8I=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2075be1-56b6-4664-3800-08d9c187f3fc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9517d1e-b9b4-41a3-11cd-08d9c1873927
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 18:01:17.2049
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 18:06:30.9492
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X2feokE6j3vrUkD/rI1ednpjxGke2ycTmsRkI0Ov5/Qxszj8RsSWZXP4d1mDI4DlKsRZiZ5ZSy/n+ty1TaHA4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR05MB7143
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HNaHec1SaLMRsFAc4c1rxzHEiFGDhqmlyCFF36feCZTL+Z4fAE93VL5l/5oeY5gyLCSF6g1dWfLtj0kqa7bJcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4541
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10201 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112170102
+X-Proofpoint-ORIG-GUID: kYZHRfk0ePyuGTbK3nImEKwSs3KYWAEj
+X-Proofpoint-GUID: kYZHRfk0ePyuGTbK3nImEKwSs3KYWAEj
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 12/17/21 03:30, David Hildenbrand wrote:
+> Let's return early for hugetlb, which really only relies on the compound
+> mapcount so far and does not support PageDoubleMap() yet. Use the chance
+
+It is too early to say if hugetlb double mapping will use PageDoubleMap().
+I do not think (hope) it will be necessary.  So, I think you can drop mention
+of it here.
+
+> to cleanup the file-THP case to make it easier to grasp. While at it, use
+> head_compound_mapcount().
+> 
+> This is a preparation for further changes.
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+
+Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
+-- 
+Mike Kravetz
+
+> ---
+>  mm/util.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/util.c b/mm/util.c
+> index 741ba32a43ac..3239e75c148d 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -732,15 +732,18 @@ int __page_mapcount(struct page *page)
+>  {
+>  	int ret;
+>  
+> -	ret = atomic_read(&page->_mapcount) + 1;
+> +	if (PageHuge(page))
+> +		return compound_mapcount(page);
+>  	/*
+>  	 * For file THP page->_mapcount contains total number of mapping
+>  	 * of the page: no need to look into compound_mapcount.
+>  	 */
+> -	if (!PageAnon(page) && !PageHuge(page))
+> -		return ret;
+> +	if (!PageAnon(page))
+> +		return atomic_read(&page->_mapcount) + 1;
+> +
+> +	ret = atomic_read(&page->_mapcount) + 1;
+>  	page = compound_head(page);
+> -	ret += atomic_read(compound_mapcount_ptr(page)) + 1;
+> +	ret += head_compound_mapcount(page);
+>  	if (PageDoubleMap(page))
+>  		ret--;
+>  	return ret;
+> 
 
 
-> On Dec 17, 2021, at 9:49 AM, David Hildenbrand <david@redhat.com> wrote:
->=20
-> On 17.12.21 18:29, David Hildenbrand wrote:
->> On 17.12.21 18:02, Nadav Amit wrote:
->>>=20
->>>=20
->>>> On Dec 17, 2021, at 3:30 AM, David Hildenbrand <david@redhat.com> wrot=
-e:
->>>>=20
->>>> Sometimes it is required to have a seqcount implementation that uses
->>>> a structure with a fixed and minimal size -- just a bare unsigned int =
---
->>>> independent of the kernel configuration. This is especially valuable, =
-when
->>>> the raw_ variants of the seqlock function will be used and the additio=
-nal
->>>> lockdep part of the seqcount_t structure remains essentially unused.
->>>>=20
->>>> Let's provide a lockdep-free raw_seqcount_t variant that can be used v=
-ia
->>>> the raw functions to have a basic seqlock.
->>>>=20
->>>> The target use case is embedding a raw_seqcount_t in the "struct page"=
-,
->>>> where we really want a minimal size and cannot tolerate a sudden grow =
-of
->>>> the seqcount_t structure resulting in a significant "struct page"
->>>> increase or even a layout change.
->>>>=20
->>>> Provide raw_read_seqcount_retry(), to make it easy to match to
->>>> raw_read_seqcount_begin() in the code.
->>>>=20
->>>> Let's add a short documentation as well.
->>>>=20
->>>> Note: There might be other possible users for raw_seqcount_t where the
->>>>     lockdep part might be completely unused and just wastes memory --
->>>>     essentially any users that only use the raw_ function variants.
->>>>=20
->>>=20
->>> Is it possible to force some policy when raw_seqcount_t is used to
->>> prevent its abuse? For instance not to allow to acquire other (certain?=
-)
->>> locks when it is held?
->>>=20
->>=20
->> Good question ... in this series we won't be taking additional locks on
->> the reader or the writer side. Something like lockdep_forbid() /
->> lockdep_allow() to disallow any kind of locking. I haven't heard of
->> anything like that, maybe someone reading along has a clue?
->>=20
->> The writer side might be easy to handle, but some seqcount operations
->> that don't do the full read()->retry() cycle are problematic
->> (->raw_read_seqcount).
->=20
-> Sorry, I forgot to mention an important point: the raw_seqcount_t
-> doesn't give you any additional "power" to abuse.
->=20
-> You can just use the ordinary seqcount_t with the raw_ functions. One
-> example is mm->write_protect_seq . So whatever we would want to "invent"
-> should also apply to the raw_ functions in general --  which might be
-> undesired or impossible (IIRC IRQ context).
->=20
-
-Thanks for the clarification. I was unfamiliar with
-raw_read_seqcount_begin() (and friends). Indeed it is very very rarely
-used.=
