@@ -2,79 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C913479E0F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Dec 2021 23:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00087479E14
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Dec 2021 00:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbhLRWyI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Dec 2021 17:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S231799AbhLRXGY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Dec 2021 18:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbhLRWyI (ORCPT
+        with ESMTP id S231351AbhLRXGY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Dec 2021 17:54:08 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD31FC061574
-        for <linux-kselftest@vger.kernel.org>; Sat, 18 Dec 2021 14:54:07 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id b7so22383682edd.6
-        for <linux-kselftest@vger.kernel.org>; Sat, 18 Dec 2021 14:54:07 -0800 (PST)
+        Sat, 18 Dec 2021 18:06:24 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A787C061574
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Dec 2021 15:06:24 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id b7so22450319edd.6
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Dec 2021 15:06:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mJf35OulebkWfKFhXCfv+327LAJ4W2k8OGIoJTIXfIo=;
-        b=dG1V9TzLGCecXWNdRV5Ieb7V7jx4XXm42+n2J/149xEOJE5Tg0NmZ+cfF1j3OVD1dv
-         4/abdSFzcm6W1ZofMPLzp3kY7w8JfzzYfQK7mjkdLbDcoe+KW25lfWOyG0w7OTq2no74
-         0E+b/2RDV5qKx9L2+ASDLVxYRIEppRhgOV7FQ=
+        bh=GyKRP/I6esBlhYrEjQLh8BM6N5zOayyRIq/pW8rIAMo=;
+        b=fsSA+hM1gQ3dj9V0r6PVdcqg8GIMnU0H2LArYw6UfIkmSDWA7xyVG7fNKpz/dEkoEQ
+         SxpEjrlIEqHKNjkl7T6pCX2g5eSPHmzbO0hZDxnUt0UDbVn1IlADDl8KoulkmMpTXprj
+         XC5VDGy1beoXsKOs8RdX7NwWeePSeaw8DuiSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mJf35OulebkWfKFhXCfv+327LAJ4W2k8OGIoJTIXfIo=;
-        b=Z6chjM7s+bx0UK4fX5qWjYQQCWVUajam3otWs7vfe2EQ4K0lmN+HmgJFqml5b6Vdml
-         jYqQES0X6KBoDVddInoZz3oRRPbaLQBk40LRWKYj5HioRmdXfLiSMi3LJ90XIo4EUFYo
-         xh8/BhNiVVKBcBOoF6vdfeBOG/6WPOAr8WielwdW6lAhthoa48/cfKst486pKg0wUpM2
-         ENEfD2MgCc9W36mycizH5i9YgtnPUq40Zr7ZSercQ3J8kW4pdx0dKVutMRFCLem7rMHY
-         hh6mr0Ts1tk1r3aPC98BV7nzWtVLsvOYFPP1by+TK7GcZUaJSQqzZPXXrqPbp/SwTE+j
-         bP8g==
-X-Gm-Message-State: AOAM530u0/NNs2FjQdbJiFhKlt5eeL77F4oMNR9UH1Pl4LbN//9HVzUM
-        2Uuyh7oexcm+DvkopxQlu+fqU7cbDYOKlnbzwLM=
-X-Google-Smtp-Source: ABdhPJxczE5WTTClhSMO3O1OP8u7J+6Hp3ioY3NwIriJiXz28vlrf9SHzVd4mAkEdKK0qxYwo3fPBg==
-X-Received: by 2002:a17:906:aca:: with SMTP id z10mr7306208ejf.535.1639868046307;
-        Sat, 18 Dec 2021 14:54:06 -0800 (PST)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id f27sm3912811ejj.193.2021.12.18.14.54.06
+        bh=GyKRP/I6esBlhYrEjQLh8BM6N5zOayyRIq/pW8rIAMo=;
+        b=E4RP2dS8YQcYBsEufgTOQ7SOehMx/hSQ+s47j6Ot6brsyiyfeCAuXQON7uffvS4Dmf
+         /705J9KWmRnktFdpNnx/agWDIhJXMc1eiBL1s/4/m/iqjlfZpLz3Lgp+vJIWCzebNYtV
+         goE6tGq2tN4VQxTf1RerFWhhvgpAu5spuDTNZ94x4k7nowjVSUcwX3OrxmPCh9OD/oII
+         N7/bfWVB5ZrrZUP9GysYFWOkYmAH143/iBUD/iKlAlOPf+cI579iayhIgXV3j6/fvbrA
+         tbpPEu7ZVr8kvp/eqCUabcvWxCiFpaKtBoNw6bY99QKTxOrWd4NMJBpGOhs6lUjywiHp
+         ymMg==
+X-Gm-Message-State: AOAM5302xC7WKS455MPA+u1p7+1QOQ3WEIoifjTIXW3CfmBnhV9ClsaO
+        csEA5fbQPFR5RnmBKDwEcnVxyQWA4v4p0NM4ebM=
+X-Google-Smtp-Source: ABdhPJyiboUGap/ftwXEE3DVxch25VGIZXhKUnufV4/Pka9o/EwOKm3VPPuVMYrL5ZGwr0hvHjELxw==
+X-Received: by 2002:a05:6402:1008:: with SMTP id c8mr9001121edu.114.1639868782677;
+        Sat, 18 Dec 2021 15:06:22 -0800 (PST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id o12sm1455837edz.71.2021.12.18.15.06.22
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Dec 2021 14:54:06 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so3955031wmc.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 18 Dec 2021 14:54:06 -0800 (PST)
-X-Received: by 2002:a05:600c:1e01:: with SMTP id ay1mr6056643wmb.152.1639868034874;
- Sat, 18 Dec 2021 14:53:54 -0800 (PST)
+        Sat, 18 Dec 2021 15:06:22 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id j6so1892013edw.12
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Dec 2021 15:06:22 -0800 (PST)
+X-Received: by 2002:adf:f54e:: with SMTP id j14mr7529281wrp.442.1639868771784;
+ Sat, 18 Dec 2021 15:06:11 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
  <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
  <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com> <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
- <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <20211218030509.GA1432915@nvidia.com> <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
- <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com> <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
-In-Reply-To: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <17bfb2fd-da51-1264-513f-f9e928ec36c6@redhat.com> <CAHk-=wir5fG_OGe_38nhJZegw0uL5+0oH3k48xWQLcAwc4W0Rg@mail.gmail.com>
+ <20211218225211.epa4u6mtjnvgkw4x@box.shutemov.name>
+In-Reply-To: <20211218225211.epa4u6mtjnvgkw4x@box.shutemov.name>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 18 Dec 2021 14:53:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
-Message-ID: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+Date:   Sat, 18 Dec 2021 15:05:55 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whJWmj70d6yCzYPvrC-6V-6jwkJ4mrVc_p3toy4Lz_nhg@mail.gmail.com>
+Message-ID: <CAHk-=whJWmj70d6yCzYPvrC-6V-6jwkJ4mrVc_p3toy4Lz_nhg@mail.gmail.com>
 Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
  FAULT_FLAG_UNSHARE (!hugetlb)
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     David Hildenbrand <david@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
         David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
@@ -82,7 +80,7 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         Matthew Wilcox <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
         Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
         Roman Gushchin <guro@fb.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Peter Xu <peterx@redhat.com>,
@@ -98,57 +96,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 1:49 PM Nadav Amit <namit@vmware.com> wrote:
+On Sat, Dec 18, 2021 at 2:52 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
 >
-> Yes, I guess that you pin the pages early for RDMA registration, which
-> is also something you may do for IO-uring buffers. This would render
-> userfaultfd unusable.
+> So you are saying that if a GUP user wants to see changes made by
+> userspace to the page after the GUP it must ask for FOLL_WRITE, even if it
+> doesn't have intend to write to the page?
 
-I think this is all on usefaultfd.
+Yup. Put the onus very clearly on GUP.
 
-That code literally stole two of the bits from the page table layout -
-bits that we could have used for better things.
+It's a very special operation, and it's one of the operations that
+cause a lot of problems for the VM code. It's by no means the _only_
+one - we've got a lot of other things that cause issues - but I think
+it's very clear that GUP is very very special, and nobody should say
+"I want GUP to do whatever".
 
-And guess what? Because it required those two bits in the page tables,
-and because that's non-portable, it turns out that UFFD_WP can only be
-enabled and only works on x86-64 in the first place.
+There are two cases for GUP:
 
-So UFFS_WP is fundamentally non-portable. Don't use it.
+ - look up the page as it is *NOW*
 
-Anyway, the good news is that I think that exactly because uffd_wp
-stole two bits from the page table layout, it already has all the
-knowledge it needs to handle this entirely on its own. It's just too
-lazy to do so now.
+ - look up the page in order to see any future state on it (and
+possibly modify it)
 
-In particular, it has that special UFFD_WP bit that basically says
-"this page is actually writable, but I've made it read-only just to
-get the fault for soft-dirty".
+that "any future state" is a fundamentally much heavier operation.
+It's the one that really *has* to get rid of any sharing, and it has
+to make sure no sharing happens in the future either.
 
-And the hint here is that if the page truly *was* writable, then COW
-just shouldn't happen, and all that the page fault code should do is
-set soft-dirty and return with the page set writable.
+So ii it is an anonymous page, it basically needs to act like a write.
+Even if that page is then used only for reading.
 
-And if the page was *not* writable, then UFFD_WP wasn't actually
-needed in the first place, but the uffd code just sets it blindly.
+Note that here that "if it's anonymous" is kind of a big deal. If it's
+a shared file-mapped page, at that point it's "just another
+reference". It's potentially problematic even in that case (think of
+"truncate()" that tries to force-unmap all pages from VM's), but for
+the shared case the answer is "if you truncate it and disassociate the
+page from the mapping, it's _your_ problem.
 
-Notice? It _should_ be just an operation based purely on the page
-table contents, never even looking at the page AT ALL. Not even the
-page count, much less some mapcount thing.
+And once it acts as a write, and once it does that COW and we have
+exclusive access to it, it might as well be just writable and dirty.
+You've done the expensive part already. You've forced it to be private
+to that VM.
 
-Done right, that soft-dirty thing could work even with no page backing
-at all, I think.
+And this was all triggered by the user doing something very special,
+so no amount of "but POSIX" or whatever matters.
 
-But as far as I know, we've actually never seen a workload that does
-all this, so.. Does anybody even have a test-case?
+GUP is not great. If you use GUP, you get to deal with the downsides.
 
-Because I do think that UFFD_WP really should never really look at the
-page, and this issue is actually independent of the "page_count() vs
-page_mapcount()" discussion.
-
-(Somewhat related aside: Looking up the page is actually one of the
-more expensive operations of a page fault and a lot of other page
-table manipulation functions - it's where most of the cache misses
-happen. That's true on the page fault side, but it's also true for
-things like copy_page_range() etc)
-
-                 Linus
+               Linus
