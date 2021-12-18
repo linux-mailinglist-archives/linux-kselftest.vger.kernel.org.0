@@ -2,46 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 723DE4797EA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Dec 2021 01:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FCB479811
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Dec 2021 02:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbhLRAuo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Dec 2021 19:50:44 -0500
-Received: from mail-bn8nam11on2051.outbound.protection.outlook.com ([40.107.236.51]:18480
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231367AbhLRAuo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Dec 2021 19:50:44 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P44dC8CJyAySUMn+k9YbMqyPTiVQR19uc0DNu+JVsyr8Tm4C5Z6b9FGx1nssxkK0VA4nd6Y4wopfb4BoEfDWpPZ1HbRS7xDuG81gjwOtEMBMfIP9Z3ueG6PL+Mzv0N5RPWF1FTUpfX4V3Kmh4bs6E12tpa+1XU1HNrHCgwZPOl9RGqhJGYQGaE6LWeyEpO1vfiYcJ27Yjol5qxEAL3OY6vufxfw29AUEYzxhuxG1l/BFoCXVL/hEwZHF8GVPiqUknWJhsmhkpv7lbWkLAQ9nTu+rW1TH7TG/bt4vpEZbINgA6n9izjcx2c1NcQE/jBXcNgCmAvLfqiiG8B91hlOMvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LmYKBd0P78iopJhb/YhO1w2zGNzDWa8yGXtSRxHurjQ=;
- b=TmiMu6EJ1DDe2qRRQcjw9zpd6ls4R+AGyRnK2m2z7yUXZ6QttPi66nYIL6I9f34YxSPCFNwT4hxBhHYEQCBrwLqsVta2eGI1buf4DdOpZynFZpetw/hYeOt09BV5MKd36urKJ/FWe7v9UFzsnze7ZygYR2A0PEN9DkfTmkOjE25ddSjSIewzNZTGvAYvHIezzPsnQmLeD+scfebvlpKfJv+qeGZh0wUZNCEUyGQ9C0+QTUdm1ahpxBXlYGgfT2674uqtSlZG2WZQV9A4m3eFzvgVXwVB2kfvsgwl2EIn4lwX3UG44r2dKlNsY7LNbKBgLi5fD55BvOU81KlJjm0vaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LmYKBd0P78iopJhb/YhO1w2zGNzDWa8yGXtSRxHurjQ=;
- b=ZKxiP7jGuaAVxQlPpLFR6sKa1ycLlexheWdsd5IMGfRNsiNGwD6Tj+rZRnifimMOMbQRhJlbkN3HNvVdhN+XqfpgkcSt4ExnOUkp+xGA7dSG4mK9EfMxjYfQbkTieqs/wHEeRUaajAa7+aTkm8OboOQLlR+9bAU+2YSn/EocK/7J/e4iPeHuuT7D+/Jz/30ZsMDntAnnze2MAk5/gZWUda0M3GE/GZbj0z7ryEMsTWBrsrwCaZM2yhbmVhWKq1yiyIHEH+ZvEzxI2/WEBc3CLYXIQylUEOQ4iqBUE2m/J1E6zl5hFXQDEInGb5GoY/RforvnzNbZ/qK5YAYI2xgjcw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5206.namprd12.prod.outlook.com (2603:10b6:208:31c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Sat, 18 Dec
- 2021 00:50:42 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%8]) with mapi id 15.20.4801.017; Sat, 18 Dec 2021
- 00:50:42 +0000
-Date:   Fri, 17 Dec 2021 20:50:41 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
+        id S231616AbhLRByQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Dec 2021 20:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229718AbhLRByP (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Dec 2021 20:54:15 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A69C061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 17:54:15 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id k37so8234404lfv.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 17:54:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dTrxVAtwDNxhFPmosFFlt9H6t41hXU+6IxlHAslUllg=;
+        b=O6XfYNdscSUNLQjZoscLmlmMkKSNijulCuTb4Q2B3XsFA/h3vGu6jHAV244eaLTQvy
+         GT8/tCMwpxagvHqj2STHyeIgCPUE4XWMdxwbC8cqaUaik8OpMW26B4HMkzJprc5CisjR
+         3B7w6JIGSGDhfKhsb55bYBk2eovn1g5toVtHc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dTrxVAtwDNxhFPmosFFlt9H6t41hXU+6IxlHAslUllg=;
+        b=J6rZAivBsc/Dk71BRFV2lAGaFNsQQ/LmyghD8TmU/NOu9SydR3e0F9SjwszGIp7OzS
+         m3LYRHZXbTxFec+tDP2tvc/VxFMGPz3tGnsRP7mwGuU1Qj/enp+4DEuUTZAwm9WqMIAk
+         2QoBMqtB8gqltyrh9wwFxJ+u1B+MzvsAskhRZkaG5SbhXyfvdERYYNAm6uXAz3hL43u2
+         Ezg9saimm3E+BQJdfkYiBKGi6lBgRxCUg2Vr0uI181SeYI/voX2B80FixANLKBz3QSdB
+         2THWrnbqSLbAjMUelBWpM7C5I/Gr8CP18Kc+fLhJqZ/HwQATn4n3ZrXiS/p+eliPcp7n
+         fQ4g==
+X-Gm-Message-State: AOAM5321ovoTH/ibU144eT/rFH7VvD4GME3AdY8BR+bf6wbOuWHsqwEh
+        SAKcdlodekI05C+m+X6hEN6fDHQrCy4Uh4FbFyc=
+X-Google-Smtp-Source: ABdhPJxau0DIbONYGVlfl+WZ/n8eJSEXNkCP7exugQ6HitOyiZoVdj4+DjEn2CWCs7TLxp8vbHsRNw==
+X-Received: by 2002:a05:6512:3d17:: with SMTP id d23mr1395605lfv.523.1639792453171;
+        Fri, 17 Dec 2021 17:54:13 -0800 (PST)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id t23sm1572718lfg.63.2021.12.17.17.54.12
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 17:54:12 -0800 (PST)
+Received: by mail-lj1-f181.google.com with SMTP id i63so6032167lji.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Dec 2021 17:54:12 -0800 (PST)
+X-Received: by 2002:adf:d1a6:: with SMTP id w6mr4363313wrc.274.1639792441589;
+ Fri, 17 Dec 2021 17:54:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20211217113049.23850-1-david@redhat.com> <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
+ <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com> <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
+ <20211217204705.GF6385@nvidia.com> <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+In-Reply-To: <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Dec 2021 17:53:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
+Message-ID: <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
 To:     Nadav Amit <namit@vmware.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         David Hildenbrand <david@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -67,92 +90,58 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <20211218005041.GA1425904@nvidia.com>
-References: <20211217113049.23850-1-david@redhat.com>
- <20211217113049.23850-7-david@redhat.com>
- <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
-X-ClientProxiedBy: MN2PR16CA0062.namprd16.prod.outlook.com
- (2603:10b6:208:234::31) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f8ab3268-5d3e-4389-a0ed-08d9c1c06af8
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5206:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB520691BBCCF1522A7DE62C4EC2799@BL1PR12MB5206.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Pgq6+H9v/SM12VPEcw8Q3rG+PQ++zQildSMNSj54ErpZ59NoSc2tFD4EKoGkhCwVNpLV/RX0/eu3cb7Aed30nOShTBydJJHKbs4lUl6NJZS9A/HCuzRXY906jvjVA6h07pznniK2IO5hacO2MCyn0rqkSLhNissG/zAHbkxROEhhTnXH17wavr3xWBGk/lit7MVBtod7YfpG4ebV3K+wvhmQ8cir8SrOmQgOj2JMdviO6B9DQ5Y1n71GQfWuv9+Onad4e+2VmDAqXhRaMi5StpkARG6FMBC0Vlvp8lNGdDU0f6KcxTjLBRleczmQVIu84h+MSI2dEbMXV7wVNNyQ67uJ4kXZH4cXLFegZ67kxPchTzInTYf9j1qyb/264lXpz/C7A7jBl+KHwX9SZDfiHZWj4pMKlSiEUJFHX+T/iYiJ6CKDEczzoCRgCTbRHQlePT2wEs3aGai18t/8ROrQj7vNuVjgOZQf2D5p189FlgbO2VGmxsqPAJ+cuhACPXXvnD4u/NsfBGoalVhU0SCpMbZyE5Xsy8ZWvzTIh9pyn9QvmQyRUb06tnuA8AZD+CCanK5JT349PLpDXwA6BggY4uA+WJLaBcoarNfwpA/omtxT9gV7An/9naJd7/BLjAMUm+j/4j0ALvtICvEy2gE3iGJyRYu+iYXBuo7UMuBrZKrD1nQo7YiLy4FdpINBq9PSLX17mnj4xSHIsM9U5FSXfg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(66476007)(86362001)(2906002)(508600001)(8936002)(7416002)(6916009)(38100700002)(54906003)(4744005)(316002)(1076003)(36756003)(33656002)(66556008)(66946007)(186003)(26005)(6512007)(6506007)(4326008)(5660300002)(2616005)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6MR2ktUzPKzRW7NV2ORzK90N/nn6T/311ni3es0Q19uyOjfJVHvpKSNNHKgS?=
- =?us-ascii?Q?aE1Os4+dNQvht2W1+utGN2GeKj87QLKKVYRhb2v5VOBIYT+NTPmATpFep47P?=
- =?us-ascii?Q?g8BzTukmIi6IsC+HnRp6CCayClKZSoP1ImXDOWnnGBdtfRvDTZtRlw5YFdu2?=
- =?us-ascii?Q?TcJFbwURR29hrCbvCADZMzwYXKlLeKaXNQcli9DLKWvh8xegzqZ36AQN1RlH?=
- =?us-ascii?Q?3oXOh2m8HF4r+rdKwPf3PcgnpDTKor+leeSYZ/Fqh2S0AJ9JiFdfiig33p8J?=
- =?us-ascii?Q?Awk8XRVLaZkXWSiZDJKC/1zB594iAOiAUMsYBklPa3W9+m8Xm/UySvd61CPj?=
- =?us-ascii?Q?q07E7ee0kqMcrvZpPX22w9RAS5vqyUpnlW4kvljzmsFAb69gBLSXw7Vk6nGp?=
- =?us-ascii?Q?lG015HpAKh1em9d21cps3OD42t/KKDkYKdGGqSbKADcl/VXci5x7O1NPu1bU?=
- =?us-ascii?Q?R22yDBHmm/VDKCXZ6TJwA6XkTTfF4VW827OKGP2CIn9OnWCXiYg3WcpgSJoU?=
- =?us-ascii?Q?w4OiL6Vop8UXXPwbuFh0vu75dyE8h5KpfTVIMhRluImAN1JPNo5nC+6HYhxU?=
- =?us-ascii?Q?I4vR2pNIe7VYMhLqp2olj20cF7F1LtrE9lmRxFBMgz7T2TYcKtP14e1vGu3r?=
- =?us-ascii?Q?IdajxllQsb1aw61M+MmT63FUbmdbJf1hJTQaomgntMXoZmzuamLD9+0mflM7?=
- =?us-ascii?Q?boINKXJVqaDCOmNPbpjSzJT2RJNSzO1JbWLWB7pYsW0h39aYkcLJ0BbnGCfj?=
- =?us-ascii?Q?9BFB5xs4iU96GCUyE6YVYp/hkI3qnpQbarT5DTHyHiYJIROHR/ihShOg1cDl?=
- =?us-ascii?Q?+4O67GDhRsSdXu1zwhYB6EMroPzhb/qAQ+PUKMzudFzz3LrDGaCkWnzRoLFj?=
- =?us-ascii?Q?3bOQWwGiE5FM/jC0etP1OWYwVvdrne5DmjkOcqEqB0crORhwsnvcyRv7LyZm?=
- =?us-ascii?Q?wR9w8sdu2gTL3lWx/zbgRHA8kBFXJ9ravQGc8suWNNcku1ZSzwzjpZQcFOVK?=
- =?us-ascii?Q?h7lrwsbi9u/FPndN9gfqnlUuJ6v4WFb8UJnRdja8grOsgN7bMbXEAA2zGFD4?=
- =?us-ascii?Q?18KgSEJGj+oBTtPWVyyhyZqvl984JYO7gqwbWjNlX8CsYqgkGF0qIaItzV1E?=
- =?us-ascii?Q?RyCU5lb2XgmG93+rKgSaPaPkqde8XijdKQDsU4LzpfH+vqjVcVzRliGHDSZ6?=
- =?us-ascii?Q?fJuLNqMQMfQeEsLRKdRhnOboBWsLHiQNEkdd3+w5HvbuilUZ4tooKvrv6YjL?=
- =?us-ascii?Q?Vl6tF5QEXrpr4LYyGh6lTQow970anpIUt8A5S2MsmcnycgQ3qEPbF2edGfTN?=
- =?us-ascii?Q?rZXGUzfjQpZPiAIsdjMpRmGFkhdg+hqR2FpYC4O9zgwd0VzkixZvOwHZ1AWI?=
- =?us-ascii?Q?YBb/G3KWgwbUzFF+kaW291301Hvik7082BTRjy5DUkAV8MyUS1yjJLYcanyb?=
- =?us-ascii?Q?TMLwpNNQOnmgChdNOK6b4vrKgzNlYel0SIMhGqGvdtirJiP8J+caV1GlAKis?=
- =?us-ascii?Q?rU7HxzFTUbKxkIcftGFC5Drd28STZXUnNugvL9/ckr3uijWwupkYxB+JTZGV?=
- =?us-ascii?Q?9o3AYY97jkYgThq2wKQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8ab3268-5d3e-4389-a0ed-08d9c1c06af8
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2021 00:50:42.3914
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V+NLH4OFfjuZN8VoaunwN+5JqXO3FnnmNIZxrgPvhU1V+djWAoi+DwSBEdn9ol79
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5206
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 09:15:45PM +0000, Nadav Amit wrote:
+[ Going back in the thread to this one ]
 
+On Fri, Dec 17, 2021 at 1:15 PM Nadav Amit <namit@vmware.com> wrote:
+>
 > I think that there is an assumption that once a page is COW-broken,
 > it would never have another write-fault that might lead to COW
 > breaking later.
 
-Yes, that is what Linus has been explaining, AFAICT
+Right. I do think there are problems in the current code, I just think
+that the patches are a step back.
 
-> AFAIK at least after userfaultfd-WP followed by
-> userfaultfd-write-unprotect a page might be write-protected and
-> go through do_wp_page() a second time to be COW-broken again. In
-> such case, I think the FOLL_FORCE|FOLL_WRITE would not help.
+The problems with the current code are of two kinds:
 
-Right, and this is a good reason why refcount is running into trouble,
-it COW's too much in cases like that because userfaultfd-WP doesn't
-align to the first assumption.
+ - I think the largepage code (either THP or explicit hugetlb) doesn't
+do as good a job of this whole COW handling as the regular pages do
 
-Jason
+ - some of the "you can make pages read-only again explicitly" kinds of loads.
+
+But honestly, at least for the second case, if somebody does a GUP,
+and then starts playing mprotect games on the same virtual memory area
+that they did a GUP on, and are surprised when they get another COW
+fault that breaks their own connection with a page they did a GUP on
+earlier, that's their own fault.
+
+So I think there's some of "If you broke it, you get to keep both
+pieces". Literally, in this case. You have your GUP page that you
+looked up, and you have your virtual address page that you caused COW
+on with mprotect() by making it read-only and then read-write again,
+then you have two different pages, and at some point it really is just
+"Well, don't do that then".
+
+But yes, there's also some of "some code probably didn't get fully
+converted to the new world order".  So if VFIO only uses
+FOLL_LONGTERM, and didn't ask for the COW breaking, then yes, VFIO
+will see page incoherencies. But that should be an issue of "VFIO
+should do the right thing".
+
+So part of it is a combination of "if you do crazy things, you'll get
+crazy results". And some of it is some kernel pinning code that
+doesn't do the right thing to actually make sure it gets a shared page
+to be pinned.
+
+And then there's THP and HUGETLB, that I do think needs fixing and
+aren't about those two kinds of cases.
+
+I think we never got around to just doing the same thing we did for
+regular pages. I think the hugepage code simply doesn't follow that
+"COW on GUP, mark to not COW later" pattern.
+
+           Linus
