@@ -2,58 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E07C479FDA
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Dec 2021 09:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7E7479FEC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Dec 2021 09:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbhLSICE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Dec 2021 03:02:04 -0500
-Received: from mail-bn7nam10on2059.outbound.protection.outlook.com ([40.107.92.59]:37120
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231314AbhLSICE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Dec 2021 03:02:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LINLM5o+um24Ts8yRdhBeQvLozDCvfVamP4KRF9TnUCQakcezEEnMyp19oWITbM40kiFg5gE20eujZx+DPAFnL2UIkgzvZgh34A24Ia1hrq5x832Y65JPXvyQ6iwMhMLUhvCrR7FPd7KNvjyyeYV/NsyQTy/5a3uPOqPbkuQwi+FTq3t4+Jgz+fNlgl32AofBILTDQn2DqzD3RLOPcbGrn1j7gs2/C5wtsRB9ND238NR8OeyE4lPbdLsoalc56w+09EYS6qX6uPV9A7s+jwUpziuZxPQXx++E+v0MxRncBSAMmLsIqNdS5R4+UwClnJN9b18yllV/3LTV6CazAQDCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LeKhCefrT+uS6J4YqyJzpI7GW9rFfNOOpw3vgRLwqVk=;
- b=W3DMmSD2Im74LIoiLel60l6fsHpxihWT0N57i/gDoAa53DG86o+28dVKnAky3Ez/UOmgLwGwwHTir9Me2PKHFIyTmiMvnWGFl4YDQ4J4mtfkOVtPbwLi0LYgQJ5swOWev+qqOePp5TbINvS2/61Zuhy4tg9E799o4wTzan3elFs9pqeYkqQK/722vXhJCJ010gc62mdbTR2iIh38F1YrPRx/yVMzmjI69AcF6N+qwDILHcZcFKRfjr/6G4xbubuaEy5xP8lsryXApQYgzLWT4zSJEM+7NlDygXAzqf0OI4i6LI/DET42VIco+MAFA31eGtAvtNd1jgquNByzZA+jBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeKhCefrT+uS6J4YqyJzpI7GW9rFfNOOpw3vgRLwqVk=;
- b=S+t3cZys/v1ROzpsD/uath57hZbzWOBdX9H6c7SPKvVjJi3qamia7kKJ4OdSm+iR0dXxH2NTPGQ1cInwgfjm2fpSih8pCiFlQ5NFpGwkfuN+M5rwvMm67i6h4xVj+AnUfrgzUlSG0Z0nv1ib2OE4Q16u4dQCEwhGSeKyLQBOnDM+Hvj/mKxSwDw45ODyFz23WEnlxCg+GBsAkkMwNC3QNQzkJI7ZpKnoIGtnO3b5iEmYhCSwxijIm7bWk6KixnVQlrX3Fcmce1qz6CeSAg4wK3ylJZ1iIoHGD3gDZTZMfcQlLae2Rlf5ULPSMq+2D/G0QfjzRdYQmczia3CGPSoyxQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BY5PR12MB4049.namprd12.prod.outlook.com (2603:10b6:a03:201::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.16; Sun, 19 Dec
- 2021 08:02:01 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8844:5a42:b1a6:c541]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8844:5a42:b1a6:c541%3]) with mapi id 15.20.4801.015; Sun, 19 Dec 2021
- 08:02:01 +0000
-Message-ID: <341cf567-468e-b5cf-6813-b26c49e851b5@nvidia.com>
-Date:   Sun, 19 Dec 2021 00:01:59 -0800
+        id S235412AbhLSIne (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Dec 2021 03:43:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50470 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235395AbhLSInd (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 19 Dec 2021 03:43:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639903411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y5OW/lDvTpbrYgLzJr47rwZgzIFEUQ9ppLjvNC//jJI=;
+        b=QP9PMZelvEEI2XHACq6iQzlzgNps7DeTMBPKFtKNaCCpPjOj+/zi9o/HF+MeGjJEjzTroI
+        bdS6kJ4ZA62CH4y7o8mV2e/bujD1SylFkC17cv5awu6vmyF7/fOwgqNyAjoCrYC5mUxs70
+        ENglxif4OfKZYwWqnaNCoQPfqHcYhBs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-627-VLIGCoczP1SBhiGxXGyU9w-1; Sun, 19 Dec 2021 03:43:30 -0500
+X-MC-Unique: VLIGCoczP1SBhiGxXGyU9w-1
+Received: by mail-wr1-f71.google.com with SMTP id d6-20020adfa346000000b001a262748c6fso1442107wrb.12
+        for <linux-kselftest@vger.kernel.org>; Sun, 19 Dec 2021 00:43:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=y5OW/lDvTpbrYgLzJr47rwZgzIFEUQ9ppLjvNC//jJI=;
+        b=OunrUwWJpo6UbN/EdEgodkkRo89MIRQysh/+hFasvuaWe+5Nzfx76tzNJx+ipggEvU
+         oLlPYZkX49TJlcPTAIHy9B/9pPxqMUtRpabH/1P19oxsh7u26fDYIpF91zX+3koq2iJF
+         Xtm33I15bLk+lKAM3EQ110TTK0B4GyDKlYKoH0uAOPAqiID8bILv+3AO/uy5hiPCiwXU
+         q3RcGystgbYwpyD66Z4mhLYRKzhtQ2b+ZVPzpGbuCXjJKmo1JKrx1fJuIGeMNi+SOVN8
+         Ymwun6bs8eHlvG3+mxShxgvVjoO8zWKP4VfOe7lMxF9iEuLGKrZ8ay27ckZI3UJ/P6Yu
+         jktg==
+X-Gm-Message-State: AOAM530Hl2/cfxEh3hA6MhXvphbQE4+/2mM8quRavpvyOOf4ux/FkRRO
+        kWjApzpTdqBHrCIBrWHTCvkO34B9a5AgjDrUzc7d92LBTSxalzP14DoVPbWhHC9qGn96i6xRd3n
+        0c0vvrQThXCJMQQP0NK9r9yWgNYnW
+X-Received: by 2002:a05:6000:1864:: with SMTP id d4mr9071210wri.703.1639903409097;
+        Sun, 19 Dec 2021 00:43:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzSRv9WH6xityKG1zDVhBM2CBMFkYSNisYcxl5/Av88JuAcsaXz7mBub0wJBPV5yClBbktv9Q==
+X-Received: by 2002:a05:6000:1864:: with SMTP id d4mr9071174wri.703.1639903408802;
+        Sun, 19 Dec 2021 00:43:28 -0800 (PST)
+Received: from [192.168.3.132] (p4ff23c6f.dip0.t-ipconnect.de. [79.242.60.111])
+        by smtp.gmail.com with ESMTPSA id f8sm6035014wry.16.2021.12.19.00.43.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Dec 2021 00:43:28 -0800 (PST)
+Message-ID: <b8297279-594f-9294-4482-dcac7463091b@redhat.com>
+Date:   Sun, 19 Dec 2021 09:43:27 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
+ Thunderbird/91.2.0
 Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
         David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
@@ -61,7 +74,7 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         Matthew Wilcox <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
         Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
         Roman Gushchin <guro@fb.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Peter Xu <peterx@redhat.com>,
@@ -72,237 +85,167 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
- <CAHk-=wgKft6E_EeLA1GnEXcQBA9vu8m2B-M-U7PuiNa0+9gpHA@mail.gmail.com>
- <54c492d7-ddcd-dcd0-7209-efb2847adf7c@redhat.com>
- <CAHk-=wgjOsHAXttQa=csLG10Cp2hh8Dk8CnNC3_WDpBpTzBESQ@mail.gmail.com>
- <20211217204705.GF6385@nvidia.com>
- <2E28C79D-F79C-45BE-A16C-43678AD165E9@vmware.com>
- <CAHk-=wgw5bEe8+qifra-aY9fAOf2Pscp1vuXX=f4hESyCK_xLg@mail.gmail.com>
- <20211218030509.GA1432915@nvidia.com>
- <5C0A673F-8326-4484-B976-DA844298DB29@vmware.com>
- <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com>
- <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY3PR10CA0013.namprd10.prod.outlook.com
- (2603:10b6:a03:255::18) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 362baad7-4a4c-4d2e-b26b-08d9c2c5d63c
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4049:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB404906B716B4A34602BCF1B7A87A9@BY5PR12MB4049.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ql4/zuB4AaCmOepUbjJPLvOu8kanKh9Hfs96BKBAJ+/Xe06cCc+zl73owMUpmEZzfpYOMsziD8V6Swwn5Bj6dtj3SeJ6TchK2ymrm5zCyouB6qh40hYqlBX36O+AFRpsxuwjiH1cR3KqA9wsI1hTPn8vkgwO8ne1oRn5RHWq5XA7ulOa0V9Uqz04xasAZzv8lbjIagOUdK/t0jJep0hdaKNrCK4a5kVXR6TA1a1GtyUN+EiU8cBkodpOqzzTZDVkOAcodh0aASY+xdNWwYRTcFglkmynHAn1K2HvzDndNe8jChKasa6uLa3pR9zI2i7A29thRl0JI79wvMFokLOIm8B9putl6jx+oAJJTVjQMcScl4Pm02AhtzzrZCWBoOZ297dPjR8YZwAb25crmESujrHOzmC+Gd7SdjdlnrJnnpOeecbRDJEglB3KeLF3HqGlK9VB868td7CrrVJH7DpnvF8C2k7pvsaQUcdWg30O986Ok9Dqz7upYhRALOCxkS2FoLmz5J9WJcGqKfMMhMcQzdbpz1cM4W83bJoUc+Rn+CnXb3PyRqJkgNb8cvRZjO7vkjb5t352HSI5lMWraG8SZofRLNO20OqsUpOyrlZcMSk8QyxMedK9+y0fvpYRb3E/qF0Hy/Y12axKvuynJhWXjMkKinhit2+4X+HRV8Q1jcohhFYnulcQfdxh08BEn9kRfgiRNwLF/MALGMy8rEzbRDibprKzPTu+3ZQWURfJUlDwTSKJhx7jWdeSif+XF2Gt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(186003)(7416002)(26005)(508600001)(2906002)(86362001)(8676002)(6512007)(66476007)(66946007)(2616005)(66556008)(6506007)(31686004)(110136005)(4326008)(53546011)(6486002)(5660300002)(8936002)(83380400001)(31696002)(36756003)(54906003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aEZxR1ZCM25TSVpoakFBWS8zcUpxb3lsSU9GQ3lhTDl2TWZFNG5tS0VUVjRQ?=
- =?utf-8?B?T20yTGMwWjAxSm4vNFNzcytBeVNtcXlEcFpLaWduemM0anhBbWQ3eHprbHZy?=
- =?utf-8?B?d3I5WGhFd0xDSXdDd0VTRmx0UjdLQmpjeGZ6ZUtxZFRZNEx0ZCtVOG9HcWxq?=
- =?utf-8?B?aDJsMjlLT2wyMXAxZlY3MGtjam1ibWVMeURQNVRIS2RhT3BSR3Vsck5TZ3Qv?=
- =?utf-8?B?NUxNN2EyTFk1UWNrUGU0VnhzakU4Q21FRmhnaXd5cTFTUFd5NDZBc0VLMzVk?=
- =?utf-8?B?dU14SEd1c2t4dDZPN25WVU05eUY5dzdwVlV4TFgwYmQwVzRHZHJISEd5SVBV?=
- =?utf-8?B?K3Nmc3RBUlg0ZHI4U3RmTmEwSEZJMG9VK0ZsVjNHVFBudmV2dGwveUJPMG8z?=
- =?utf-8?B?M3VpRUZhSXBucWxUK05yb0RUM2lQUHdJQ0FKVXVzZXZxZDdKeE1RVjNFYVpP?=
- =?utf-8?B?K0ljRGFVYXpyd25UZEdVNlVzays3U1Y1aHVVQ3B5ZUp2THE0TGs4Y0NzZDdN?=
- =?utf-8?B?Y3A3dDdUcEhQRFNsWHEvWU1nU1lxODJ0TzNtQzJzQmRVNC9DbFV3OG5xaDIv?=
- =?utf-8?B?WlpiUm01dWRaOWhwdE1VU2J6ejZaVlllcllvUUFzZi91YmhwTkhxZkRJMGVB?=
- =?utf-8?B?a1ZJa1BCSGltYVRLaHpDM0l0enEzcG96aHlxcDdiREVqZHUvbjkzSFZDTTVF?=
- =?utf-8?B?dG5DMEhVdlhxbkRIZ1Q3ZS83RzV4TWxBdVUzVkNHTjVnMmsybXlXeXR1SjRO?=
- =?utf-8?B?SmhIUDBnS2N1cENBeHNGa0dOci93Q0t3UTNwY1dUMjBNblBSNUFqcW5VRWRU?=
- =?utf-8?B?QitWMTBmYUJmRTgrSFBsaEkwQVRPRkdHbEh2WjI0ZXdxVEdDN0k3N0FaVklm?=
- =?utf-8?B?WVNId0o5WnMzUmRvMExpWG5UOWdDYXRxZnlVeDN4ZG0vdnc4RFNhREY1SXI3?=
- =?utf-8?B?Y2xUeVdWM21hTEtRbnBhYUlHWmNZVGdFZmNNNFdKVnhuTkF5WGRGd0lkc00v?=
- =?utf-8?B?a1JBWFQ1c2FnWHJEM29pRzhRbGhZS2IrcEhTS2doMVdaQzJFazFrTWUybmds?=
- =?utf-8?B?Y3gyN3NibXhjKzhPNXE5REdadlF6NkE4dnNZZmNnMGpzQ21ndUZ2Z0JnRjhN?=
- =?utf-8?B?QkZmRlBockVRdzB4ZDh4NHc3Vm5HdGZrRkYxbGQ4dUdRQmQ2cGR5MmcweDVo?=
- =?utf-8?B?cUR3ZEVBUEd4ODhHbmNZN082cGhVbVIwTE54empJTmtFb3lFZHcyTElBZWwy?=
- =?utf-8?B?cjhDT0NGTU1XZkdJQTZkT0g1aHgwclhMRmVCYW1KQXRSaUxhWFRZSWx0bmlI?=
- =?utf-8?B?VFNYcVpseVl3QW93VXJwcUNFUkdHaytVTTl2cndwR0ExN0JZQ3VXZlU3OEtZ?=
- =?utf-8?B?RUh0ampyRG9GWG1GK1ZkZU5LNm9LbHB2c29OWVpaY0lrODRDRXB6ck96K1dn?=
- =?utf-8?B?bHFHOWhHQ08vR3FZOVpSSGhabkh3SjZFekZVL0tZRUY2VDBQUDVOVWVBQXNl?=
- =?utf-8?B?STUvWkV5aS8vZGw3cHpzT2lzS3BZMHdEbHQ1dkFGSXJvY3kzeG8yUG9Pa2NO?=
- =?utf-8?B?SjJWaU1FTEV5cll4WFZ3MFFwcGZtMHB1cmZSckltNUwzNm52ZjNaL2RHcVhS?=
- =?utf-8?B?ZUEyb0Zubm1BQ2tJbE9sOU9vMFNJSzNsSUZ2ajAxMFBTYjg2TllqR1p2eXFH?=
- =?utf-8?B?MUlOYy9mcjB4UHFIQVNIcENDVWhUY2NNYTY2YUZtMFRtRExWMUtDVGdQSGpP?=
- =?utf-8?B?MHRTQjhKcXJ6Mi9rM2NrZStxY3ZtRXE4YTlGeExtK3pteHVjSml4WVM1T0JH?=
- =?utf-8?B?M2JEMGZUbW4wdnUrKzR0RExRYnJSTDBraWhjcmYxN21lVGNKOC9QL2N2WEs1?=
- =?utf-8?B?L1ZMN1VubFZhV3Q3ZGd1M1Z3eFJRckY3M1pwMldOTmxuSUViUlErNDRwK0x6?=
- =?utf-8?B?SVNCcVFveGZGUzBxYjlTWmF4SUpEWEw4bkErM01IdG9oS0RHeGFGb0RVcVVj?=
- =?utf-8?B?eEw1TmNoOVhTTmplbWxTUVdYNHh3cXdlT1NTWUhDS3BHVHB2Tnh4Y1cvNDZ5?=
- =?utf-8?B?SE5KMWZxSk5YSzZsZFRuQVk0RFltSWRFbGs3MURBNk4zUVhZMWViOG55WjVs?=
- =?utf-8?B?OFc1a29IRkduVkRGbnRPMUYySkN2WlZ0dGZONjNZZ3UwbnB3NE9vODBpWWtN?=
- =?utf-8?Q?J4RoTZPeJenZwvT35JZIQVg=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 362baad7-4a4c-4d2e-b26b-08d9c2c5d63c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2021 08:02:00.9845
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EJJH/ECbjJFwEtajUMADefTf7Mb92WxyJmtayasklVjH/SOQn2ogdRNuslCyWnb2asNN/Pz35OKBlMdXohKkgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4049
+References: <20211217113049.23850-1-david@redhat.com>
+ <20211217113049.23850-7-david@redhat.com>
+ <CAHk-=wgL5u3XMgfUN6BOqVO0OvPx3-LEri1ju-1TW4dFhHQO4g@mail.gmail.com>
+ <9c3ba92e-9e36-75a9-9572-a08694048c1d@redhat.com>
+ <CAHk-=wghsZByyzCqb5EbKzZtAbrFvQCViD+jK9HQL4viqUb6Ow@mail.gmail.com>
+ <e93f3fc9-00fd-5404-83f9-136b372e4867@redhat.com>
+ <CAHk-=wiFhVXZH_ht_dYQ_g2WNuhvWVrv8MjZ8B8_g6Kz2cZrHw@mail.gmail.com>
+ <02cf4dcf-74e8-9cbd-ffbf-8888f18a9e8a@redhat.com>
+ <CAHk-=wiujJLsLdGQho8oSbEe2-B1k1tJg6pzePkbqZBqEZL56A@mail.gmail.com>
+ <f271bb98-dfdd-1126-d9b9-3103e4398e00@redhat.com>
+ <CAHk-=wjvoTRSb87R-D50yOXqX4mshjiiAyurAKCsdW0_J+sf7A@mail.gmail.com>
+ <40e7e0ab-0828-b2e7-339f-35f68a228b3d@redhat.com>
+ <CAHk-=wg95CiyT45ZOxtnWQ7cdKmejXcOydEyJcTTNnp5-nd+xg@mail.gmail.com>
+ <CAHk-=wjevjeL44qafYd8=cJHZgNUOUuWVJ28vkS4U4v_Af-xaQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+In-Reply-To: <CAHk-=wjevjeL44qafYd8=cJHZgNUOUuWVJ28vkS4U4v_Af-xaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/18/21 22:02, Nadav Amit wrote:
-> 
->> On Dec 18, 2021, at 4:35 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On 18.12.21 20:52, Linus Torvalds wrote:
+> On Sat, Dec 18, 2021 at 11:21 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 >>
->> (I have only ever seen the kernel side of uffd, not the actual user
->> side, so I'm not sure about the use patterns).
-> 
-> I use it in a very fine granularity, and I suspect QEMU and CRIU do so
-> too.
-> 
+>> To recap:
+>>  (1) is important, and page_count() is the only thing that guarantees
+>> "you get full access to a page only when it's *obviously* exclusively
+>> yours".
+>>  (2) is NOT important, but could be a performance issue, but we have
+>> real data from the past year that it isn't.
+>>  (3) is important, and has a really spectacularly simple conceptual
+>> fix with quite simple code too.
 >>
->> That said, your suggestion of a shadow sw page table bit thing would
->> also work. And it would solve some problems we have in core areas
->> (notably "page_special()" which right now has that
->> ARCH_HAS_PTE_SPECIAL thing).
->>
->> It would make it really easy to have that "this page table entry is
->> pinned" flag too.
+>> In contrast, with the "mapcount" games you can't even explain why they
+>> should work, and the patches I see are actively buggy because
+>> everything is so subtle.
 > 
-> I found my old messy code for the software-PTE thing.
+> So to challenge you, please explain exactly how mapcount works to
+> solve (1) and (3), and how it incidentally guarantees that (2) doesn't
+> happen.
+
+Oh, there is no need for additional challenges, I've been challenged
+with this problem for way too long already ;)
+
+And again, I appreciate this discussion and your feedback. I want to get
+all of this fixed ASAP, even if it's not going to be the way I propose
+as I raised. Any input is appreciated (as long as people don't scream at
+me).
+
+
+To get to your point: I thought about your remarks with the swapcount
+and it makes sense. The mapcount itself is not expressive enough to
+catch macpount == 1 vs mapcount > 1.
+
+What *would* work to have precise COW I think is having the active and
+inactive count instead of just the active (mapcount) part, whereby:
+
+active: page tables mapping this page -> mapcount
+inactive: page tables referencing this page via swap/migration entry
+
+An alternative would be to just know that there are inactive users. We'd
+have to read both values atomically in one shot.
+
+There would be ways to store that information in the _mapcount but it
+certainly adds a lot of complexity, and ...
+
 > 
-> I see that eventually I decided to hold a pointer to the “extra PTEs”
-> of each page in the PMD-page-struct. [ I also implemented the 2-adjacent
-> pages approach but this code is long gone. ]
+> And that really involves explaining the actual code too. I can explain
+> the high-level concepts in literally a couple of sentences.
 > 
-> My rationale was that:
+> For (1), "the page_count()==1 guarantees you are the only owner, so a
+> COW event can re-use the page" really explains it. And the code is
+> pretty simple too. There's nothing subtle about "goto copy" when
+> pagecount is not 1. And even the locking is simple: "we hold the page
+> table lock, we found a page, it has only one ref to it, we own it"
 > 
-> 1. It does not bound you to have the same size for PTE and “extra-PTE”
-> 2. The PMD-page struct is anyhow hot (since you acquired the PTL)
-> 3. Allocating “extra-PTE” dynamically does not require to rewire the
->     page-tables, which requires a TLB flush.
+> Our VM is *incredibly* complicated. There really are serious
+> advantages to having simple rules in place.
+
+... you have a point here.
+
+Having that said, I hope we can agree that the "page_count" is not the
+perfect solution. I hope we can at least tweak it for now to get rid of
+3) Wrong COW.
+
 > 
-> I think there is a place to hold a pointer in the PMD-page-struct
-> (_pt_pad_1, we just need to keep the lowest bit clear so the kernel
-> won’t mistaken it to be a compound page).
+> And for (2), the simple rule is "yeah, we can cause spurious cow
+> events". That's not only simple to explain, it's simple to code for.
+> Suddenly you don't need to worry. "Copying the page is always safe".
+> That's a really really powerful statement.
 > 
-> I still don’t know what exactly you have in mind for making use
-> out of it for the COW issue. Keeping a pin-count (which requires
-> internal API changes for unpin_user_page() and friends?) or having
-> “was ever pinned” sticky bit? And then changing
-> page_needs_cow_for_dma() to look at the PTE so copy_present_pte()
-> would break the COW eagerly?
+> Now, admittedly (3) is the one that ends up being more complicated,
+> but the *concept* sure is simple. "If you don't want to COW this page,
+> then don't mark it for COW".
 > 
-> Anyhow, I can clean it up and send (although it is rather simple
-> and I ignored many thing, such as THP, remap, etc), but I am not
-> sure I have the time now to fully address the COW problem. I will
-> wait for Monday for David’s response.
+> The *code* for (3) is admittedly a bit more complicated. The "don't
+> mark it for COW" is simple to say, but we do have that fairly odd
+> locking thing with fork() doing a seqcount_write_begin/end, and then
+> GIP does the read-seqcount thing with retry. So it's a bit unusual,
+> and I don't think we have that particular pattern anywhere else, but
+> it's one well-defined lock and while unusual it's not *complicated* as
+> far as kernel locking rules go. It's unusual and perhaps not trivial,
+> but in the end those seqcount code sequences are maybe 10 lines total,
+> and they don't interact with anything else.
+> 
+> And yes, the "don't mark it for COW" means that write-protecting
+> something is special, mainly because we sadly do not have extra bits
+> in the page tables. It would be *really* easy if we could just hide
+> this "don't COW this page" in the page table. Truly trivial. We don't,
+> because of portability across different architectures ;(
+> 
+> So I'll freely give you that my (3) is somewhat painful, but it's
+> painful with a really simple concept.
+
+Thanks for admitting that!
+
+I might have had an idea yesterday on how to fix most of the issues
+without relying on the mapcount, doing it similar (but slightly
+different) as you propose here. Let's call it a mixture of the unsharing
+approach and your approach. I cannot promise anything, so ...
+
+... I'll go playing with it and share some details ASAP. At least it
+sounds comparatively simple in my head.
+
+> 
+> And the places that get (3) wrong are generally places that nobody has
+> been able to care about. I didn't realize the problem with creating a
+> swap page after the fact for a while, so that commit feb889fb40fa
+> ("mm: don't put pinned pages into the swap cache") came later, but
+> it's literally a very simple two-liner.
 > 
 
-Hi Nadav,
-
-A couple of thoughts about this part of the design:
-
-a) The PMD-page-struct approach won't help as much, because (assuming
-that we're using it in an attempt to get a true, perfect pin count), you
-are combining the pin counts of a PMD's worth of pages. OTOH...maybe
-that actually *is* OK, assuming you don't overflow--except that you can
-only answer the "is it dma-pinned?" question at a PMD level. That's a
-contradiction of your stated desire above to have very granular control.
-
-Also, because of not having bit 0 available in page._pt_pad_1, I think
-the count would have to be implemented as adding and subtracting 2,
-instead of 1 (in order to keep the value even), further reducing the
-counter range.
-
-b) If, instead, you used your older 2-adjacent pages approach, then
-Linus' comment makes more sense here: we could use the additional struct
-page to hold an exact pin count, per page. That way, you can actually
-build a wrapper function such as:
-
-     page_really_is_dma_pinned()
-
-...and/or simply get a stronger "maybe" for page_maybe_dma_pinned().
-
-Furthermore, this direction is extensible and supports solving other "I
-am out of space in struct page" problems, at the cost of more pages, of
-course.
-
-As an aside, I find it instructive that we're talking about this
-approach, instead of extending struct page. The lesson I'm taking away
-is: allocating more space for some cases (2x pages) is better than
-having *all* struct pages be larger than they are now.
-
-Anyway, the pin count implementation would look somewhat like the
-existing hpage_pincount, which similarly has ample space for a separate,
-exact pin count. In other words, this sort of thing (mostly-pseudo
-code):
+Just to give you my perspective:
 
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index a7e4a9e7d807..646761388025 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -938,6 +938,16 @@ static inline bool hpage_pincount_available(struct page *page)
-  	return PageCompound(page) && compound_order(page) > 1;
-  }
+Personally I don't care too much about 2). The only reason why I somehow
+care about "Unnecessary COW" are
+* Challenging for hugetlb use as I explained. We might still want to use
+  the mapcount there.
+* It's mostly a symptom of our eventually too simple COW logic that
+  effectively leads to 3).
 
-+static inline bool shadow_page_pincount_available(struct page *page)
-+{
-+	/*
-+	 * TODO: Nadav: connect this up with the shadow page table
-+	 * implementation, and return an appropriate answer.
-+	 */
-+
-+	return false; // hardcoded for now, for compile testing
-+}
-+
-  static inline int head_compound_pincount(struct page *head)
-  {
-  	return atomic_read(compound_pincount_ptr(head));
-@@ -950,6 +960,13 @@ static inline int compound_pincount(struct page *page)
-  	return head_compound_pincount(page);
-  }
+While I do care about 1) (Missed CoW) for our customers, I *especially*
+care about 3) (Wrong Cow) simply because silent memory corruptions in
+user space are not acceptable.
 
-+static inline int shadow_page_pincount(struct page *page)
-+{
-+	VM_BUG_ON_PAGE(!shadow_page_pincount_available(page), page);
-+
-+	return atomic_read(shadow_page_pincount_ptr(page));
-+}
-+
-  static inline void set_compound_order(struct page *page, unsigned int order)
-  {
-  	page[1].compound_order = order;
-@@ -1326,6 +1343,9 @@ static inline bool page_maybe_dma_pinned(struct page *page)
-  	if (hpage_pincount_available(page))
-  		return compound_pincount(page) > 0;
+As you say, fixing 1) the "page_count" way might be easy, at least for THP.
 
-+	if (shadow_page_pincount_available(page))
-+		return shadow_page_pincount(page) > 0;
-+
-  	/*
-  	 * page_ref_count() is signed. If that refcount overflows, then
-  	 * page_ref_count() returns a negative value, and callers will avoid
+Simple example: Have swapping enabled and register a fixed io_uring
+buffer at the wrong time. Fixed io_uring buffers are no a commodity
+feature for unprivileged users space ...
 
-c) The "was it ever pinned" sticky bit is not a workable concept, at the
-struct page level. A counter is required, in order to allow pages to
-live out their normal lives to their fullest potential. The only time we
-even temporarily got away with this kind of stickiness was at a higher
-level, and only per-process, not per-physical-page. Processes come and
-go, but the struct pages are more or less forever, so once you mark one
-sticky like this, it's out of play.
+So that's why I so deeply care about all of this.
 
-thanks,
 -- 
-John Hubbard
-NVIDIA
+Thanks,
+
+David / dhildenb
+
