@@ -2,147 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B9047AADA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 15:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9C347B04F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 16:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233386AbhLTOCW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Dec 2021 09:02:22 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29270 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbhLTOCW (ORCPT
+        id S238378AbhLTPbG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Dec 2021 10:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234881AbhLTPar (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Dec 2021 09:02:22 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHh915hwyzbjWh;
-        Mon, 20 Dec 2021 22:01:57 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 22:02:19 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 20 Dec 2021 22:02:19 +0800
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20211214135555.125348-1-pulehui@huawei.com>
- <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
- <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
- <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com>
-Date:   Mon, 20 Dec 2021 22:02:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 20 Dec 2021 10:30:47 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE040C0698C6
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 07:27:05 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id j6so19070001edw.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 07:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=elastic.co; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AXpj1vp629gSs0ATSB+0fWXF2SHKFQXC0D6SE9fulsc=;
+        b=HV5k2bEXzHRsIEW2knQNwXLdcLEhJ7QCZyTOHKHwiHLU7Vr1frm0j/3ct7MEi+TbAL
+         auzpm+V+ijQ9uQ+CB1nDGDbzcGhhw62IBfOKo+yPFvQbucPjdnD01hYN1nKlHJxp+PI/
+         hdDyhdzeOvVKxDZ8NAddL4hv3hlTzbzTn9ckM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=AXpj1vp629gSs0ATSB+0fWXF2SHKFQXC0D6SE9fulsc=;
+        b=k2KIczASvIpFJrSfUyz/SprrlQammOZqTu9dhxp0xCgb+MEJ3+6lJFBEpJZzk1RIR/
+         xN3bXKM3wnluzWQ87LqSqa100kP1paEG+8e5zkDk2t+ND5C4M3lZn+NhLoEcetfzAfNy
+         BrYJ91vQG2AHm+YtDFvWjSH2UbYg35rBlT1J4rWm4Ad7ZP0EpJA8pDTExb6i8+F/5qT4
+         CIu3+XLSU3J2LPunz/yU6kaE2R+JwTC5KgGRs/mK7pakCH2VZpblKe1NwFxmSOOrI6vp
+         FsbrfBBYL6mZ9F+nMGJJ2VjvgeLbA3HWtPttLn9DcXKTvb+KMNvf7p5Y/Ggk//NlL2H6
+         Rpvg==
+X-Gm-Message-State: AOAM530iCC28tjPxSx4zhV6ueCjGhH51IH8zR/FWBJB9KDItqjCtzBJz
+        vOm/J7ur6InyoBURtJYpo8tNQQ==
+X-Google-Smtp-Source: ABdhPJwJGOV7KbK/D+HPi6v2dyWHGDUeD4dpoDpmquJ7tdFLpPw4IowXj6TxuLKTZEH04k2nSfcoEw==
+X-Received: by 2002:a17:907:1c9c:: with SMTP id nb28mr13152129ejc.184.1640014024301;
+        Mon, 20 Dec 2021 07:27:04 -0800 (PST)
+Received: from localhost (host-82-50-106-104.retail.telecomitalia.it. [82.50.106.104])
+        by smtp.gmail.com with ESMTPSA id f5sm5597778edu.38.2021.12.20.07.27.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 07:27:03 -0800 (PST)
+Date:   Mon, 20 Dec 2021 16:27:01 +0100
+From:   Lorenzo Fontana <lorenzo.fontana@elastic.co>
+To:     Pu Lehui <pulehui@huawei.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Correct the INDEX address in
+ vmtest.sh
+Message-ID: <YcCgxQiEGLOd130m@workstation>
+Mail-Followup-To: Lorenzo Fontana <lorenzo.fontana@elastic.co>,
+        Pu Lehui <pulehui@huawei.com>, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211220050803.2670677-1-pulehui@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220050803.2670677-1-pulehui@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 2021/12/18 0:45, Andrii Nakryiko wrote:
-> On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
->>
->>
->>
->> On 2021/12/16 12:06, Andrii Nakryiko wrote:
->>> On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
->>>>
->>>> When building bpf selftests on arm64, the following error will occur:
->>>>
->>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
->>>> user_pt_regs'
->>>>
->>>> Some archs, like arm64 and riscv, use userspace pt_regs in
->>>> bpf_tracing.h, which causes build failure when bpf prog use
->>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
->>>
->>> We could probably also extend bpf_tracing.h to work with
->>> kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
->>> __VMLINUX_H__ checks). It's more work, but will benefit other end
->>> users, not just selftests.
->>>
->> It might change a lot. We can use header file directory generated by
->> "make headers_install" to fix it.
+On Mon, Dec 20, 2021 at 05:08:03AM +0000, Pu Lehui wrote:
+> Migration of vmtest to libbpf/ci will change the address
+> of INDEX in vmtest.sh, which will cause vmtest.sh to not
+> work due to the failure of rootfs fetching.
 > 
-> We don't have dependency on "make headers_install" and I'd rather not add it.
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>  tools/testing/selftests/bpf/vmtest.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> What do you mean by "change a lot"?
+> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+> index 5e43c79ddc6e..b3afd43549fa 100755
+> --- a/tools/testing/selftests/bpf/vmtest.sh
+> +++ b/tools/testing/selftests/bpf/vmtest.sh
+> @@ -32,7 +32,7 @@ ROOTFS_IMAGE="root.img"
+>  OUTPUT_DIR="$HOME/.bpf_selftests"
+>  KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/config-latest.${ARCH}"
+>  KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/config-latest.${ARCH}"
+> -INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX"
+> +INDEX_URL="https://raw.githubusercontent.com/libbpf/ci/master/INDEX"
+>  NUM_COMPILE_JOBS="$(nproc)"
+>  LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
+>  LOG_FILE="${LOG_FILE_BASE}.log"
+> -- 
+> 2.25.1
 > 
-Maybe I misunderstood your advice. Your suggestion might be to extend 
-bpf_tracing.h to kernel-space pt_regs, while some archs, like arm64, 
-only support user-space. So the patch might be like this:
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index db05a5937105..2c3cb8e9ae92 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -195,9 +195,13 @@ struct pt_regs;
+I was testing some failures with another patch and was about to do the
+same.
 
-  #elif defined(bpf_target_arm64)
+Tested this in my environment.
 
--struct pt_regs;
-+#if defined(__KERNEL__)
-+#define PT_REGS_ARM64 const volatile struct pt_regs
-+#else
-  /* arm64 provides struct user_pt_regs instead of struct pt_regs to 
-userspace */
-  #define PT_REGS_ARM64 const volatile struct user_pt_regs
-+#endif
-+
-  #define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
-  #define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
-  #define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
+Tested-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 
->>
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -294,7 +294,8 @@ MENDIAN=$(if
->> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->>    CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
->>    BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
->>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
->> -            -I$(abspath $(OUTPUT)/../usr/include)
->> +            -I$(abspath $(OUTPUT)/../usr/include) \
->> +            -I../../../../usr/include
->>>>
->>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->>>> ---
->>>>    tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
->>>>    tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
->>>>    tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
->>>>    tools/testing/selftests/bpf/progs/loop6.c     | 20 ++++++-------------
->>>>    .../selftests/bpf/progs/test_overhead.c       |  8 ++------
->>>>    .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
->>>>    6 files changed, 15 insertions(+), 43 deletions(-)
->>>>
->>>
->>> [...]
->>> .
->>>
-> .
-> 
+Thanks!
+
+-Lore
