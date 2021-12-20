@@ -2,106 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A402E47B4F8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 22:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B07547B530
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 22:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbhLTVRp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Dec 2021 16:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S231299AbhLTV2L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Dec 2021 16:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbhLTVRp (ORCPT
+        with ESMTP id S231256AbhLTV2H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:17:45 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D76AC061574;
-        Mon, 20 Dec 2021 13:17:45 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id x1-20020a17090a2b0100b001b103e48cfaso610385pjc.0;
-        Mon, 20 Dec 2021 13:17:45 -0800 (PST)
+        Mon, 20 Dec 2021 16:28:07 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3D0C06173E
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 13:28:07 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so15185196edd.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 13:28:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vjCLCTLgRl+VxxTbnOcpXTd3N8VppC1kQAYRqG5dHQQ=;
-        b=ac8IzJYL9fsZrjnp07aRRuwJarw9CpkxnWRgt2gsLN7+YZtxatgnFrhEmmdVTSygvU
-         fYSUmsF5xfNln8Ak9ZQNfx5FYacSPsgscEfQ/+cKjqm1cEtaXbt+z2eLIm4geBu0WKep
-         JkqjufwFbMZfEzf+X+oXhle36as4bY6B77qqu4FSR/V7lWdKxrGpJhL59sHgDCwkJHG5
-         OPx/VbopCZd1V+asL/Fqp+96f+2BRpwYKQi9JD6Xshq2BInrCn74A2xSdCV6QBEHrsW4
-         d5owDfiIEsPQVFeDxBi0gPt+5KIZvrFJEFL8Abm6X795yK+eAi36RVTbydrYcgowtbwo
-         kOFw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=03tftiEYhqRnEnhYGSXfRSnQjXKVu8uhIKmeLcivayo=;
+        b=BlcnCZc5c1t5Dfig8sDq8+kwYqCC5UxX6TKvoHp42AdOCuhs3rMbspFkuXfJmAXJmn
+         AGLGLo8y6eS/99X7esXkovRQFwuKpXpaeZOFoeiIWJJaZBHwkF0L6FJ8hQr5zCDB00D4
+         Pgj1fWZ4XRAjJ+KB5ZQMvjvAc+FPYlGHucNEs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vjCLCTLgRl+VxxTbnOcpXTd3N8VppC1kQAYRqG5dHQQ=;
-        b=A0Qe6b+57khKiss7v21mZ9v38URK/tCbLxO09zJKKyscGK9ZYnq1gs72pu6bEUFfwM
-         f81PGkGalX9N3PyfSPipde1kURZzy887QydB19w8VjjebdblUn1/bT+wxv4eXBe0W09i
-         gT9siwqLUqm1jI+Le9SgvfqrbWueMBfUItY1E19aXkmJp0RuM8W9WBVmGBTp1Ehv7M9I
-         dIVxgFXXNJJHjQd7ndaFbMPPvr1CMOsKr7ojEHea1SscqJDXkX/WgX/4XnfS/rIM3WJE
-         bUeqFRgS+N5y5M6xDdjiFhinJb8vZDFvoZdmG2K1LLUuCh85N7eTw4qxdL7SHqKCVH1I
-         NKtA==
-X-Gm-Message-State: AOAM533Y0l7DR6CeQorHb/tCYY4h/Zl8v8cGOmuDP2RUQdTPyiInF/q8
-        ++JyT139ol6QRCdAD8VWpA4=
-X-Google-Smtp-Source: ABdhPJxSz2UePJw+WwNPOXMCXdtfr7R/Dc+IAmsXkeM/vXTRvkUJnFzOC74SfJsVzXxa8C0JK4iVNg==
-X-Received: by 2002:a17:90b:3889:: with SMTP id mu9mr77979pjb.160.1640035064527;
-        Mon, 20 Dec 2021 13:17:44 -0800 (PST)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id ot6sm301975pjb.32.2021.12.20.13.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 13:17:44 -0800 (PST)
-From:   Tadeusz Struk <tstruk@gmail.com>
-To:     jarkko@kernel.org
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: tpm: add async space test with noneexisting handle
-Date:   Mon, 20 Dec 2021 13:17:00 -0800
-Message-Id: <20211220211700.5772-2-tstruk@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211220211700.5772-1-tstruk@gmail.com>
-References: <20211220211700.5772-1-tstruk@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=03tftiEYhqRnEnhYGSXfRSnQjXKVu8uhIKmeLcivayo=;
+        b=Ghhe+pwaEKv7eP82HOFwYJMqXYfHdNKUgjoOEU1TROVgIZx6xMvECsCa5wm1TvsSOr
+         QYJrAFXaLywUpHXiWg+8Z5+tIISOwCUXR4tG0bgCF5HLwhv6aiqPNH/8YgjHhXdXORil
+         ujkty4m/nHH+jJ7TmQYmfsTPb6AarSNRCud5UIiuNYV74n0RCvtmU4q4J1jeSC+dtK0E
+         RmjPmV5vFGQoMxOoPoKy5rUMKTfSZ/6r7aKcwIQquzjqi5+FTLj7/hdF5csbztRMQssH
+         HwIkjmpzCaWcJfAPFuYLMgGVQ15inz3SAOQuNrquQpbOEP3mM+PY358SaCR0GO01Fwcw
+         e1Og==
+X-Gm-Message-State: AOAM533GEi7nyxS0zW7icVB6mXvfrnbWrBm3R6CsNhN3yT0+VSCmVjJ0
+        Qch8KaDZP4p9PjffW47g+8jadHIlk7Gh1xCRPqY=
+X-Google-Smtp-Source: ABdhPJxM6AQTBANYOJRxnGmaiP5w7Ia2OBBCptz6bpEiPetMMyezmpZItztALyYYoHsFJqpYCXiC9g==
+X-Received: by 2002:a05:6402:524d:: with SMTP id t13mr37515edd.356.1640035685767;
+        Mon, 20 Dec 2021 13:28:05 -0800 (PST)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id o13sm5755830ejy.192.2021.12.20.13.28.05
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 13:28:05 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id bm14so30895153edb.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 13:28:05 -0800 (PST)
+X-Received: by 2002:adf:d1a6:: with SMTP id w6mr35633wrc.274.1640035674847;
+ Mon, 20 Dec 2021 13:27:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <YcDNaoGcGS6ypucg@casper.infradead.org> <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
+ <YcDvTMUF3XWKWgSW@casper.infradead.org>
+In-Reply-To: <YcDvTMUF3XWKWgSW@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Dec 2021 13:27:38 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgyRg+H6PJkDRr7H0=-GNiNZ+yJ7XEWnue5+Nh6SOyXVQ@mail.gmail.com>
+Message-ID: <CAHk-=wgyRg+H6PJkDRr7H0=-GNiNZ+yJ7XEWnue5+Nh6SOyXVQ@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <namit@vmware.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test for tpm2 spaces in async mode that checks if
-the code handles invalid handles correctly.
+On Mon, Dec 20, 2021 at 1:02 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> Hah, that was actually how I did it originally (without actually
+> committing at each step, and with a few "Oh, hang on, now we can avoid
+> calculating this too" stops and restarts along the way), but I thought
+> it all hung together logically as a single change.  It's hard to see
+> things from the other person's perspective at times.
 
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>
-Cc: <linux-kselftest@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
----
- tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+In just about any other area, I wouldn't mind one bigger patch that
+just removes code that isn't used.
 
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index 9d764306887b..b373b0936e40 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
-         log.debug("Calling get_cap in a NON_BLOCKING mode")
-         async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
-         async_client.close()
-+
-+    def test_flush_invlid_context(self):
-+        log = logging.getLogger(__name__)
-+        log.debug(sys._getframe().f_code.co_name)
-+
-+        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
-+        log.debug("Calling flush_context passing in an invalid handle ")
-+        handle = 0x80123456
-+        rc = 0
-+        try:
-+            async_client.flush_context(handle)
-+        except OSError as e:
-+            rc = e.errno
-+
-+        self.assertEqual(rc, 22)
-+        async_client.close()
--- 
-2.30.2
+But when it's in the vm code, and it's pretty grotty, I do prefer
+seeing three patches that individually are much easier to see that
+"yeah, this doesn't actually change anything at all".
 
+The combined patch may be exactly the same thing, it's just much
+harder to see that "oh, now it's not used any more".
+
+That was perhaps especially true since a number of the changes also
+ended up doing statement simplification when the old layout made no
+sense any more with part of the results not used.
+
+So your 3-patch series was much easier to look at and go "Yeah, I
+believe each of these patches is a no-op".
+
+So ACK on all those patches.
+
+          Linus
