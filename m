@@ -2,111 +2,200 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9C347B04F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 16:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B404347B101
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 17:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbhLTPbG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Dec 2021 10:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbhLTPar (ORCPT
+        id S236167AbhLTQWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Dec 2021 11:22:53 -0500
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:59375 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232820AbhLTQWx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:30:47 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE040C0698C6
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 07:27:05 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id j6so19070001edw.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 07:27:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=elastic.co; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AXpj1vp629gSs0ATSB+0fWXF2SHKFQXC0D6SE9fulsc=;
-        b=HV5k2bEXzHRsIEW2knQNwXLdcLEhJ7QCZyTOHKHwiHLU7Vr1frm0j/3ct7MEi+TbAL
-         auzpm+V+ijQ9uQ+CB1nDGDbzcGhhw62IBfOKo+yPFvQbucPjdnD01hYN1nKlHJxp+PI/
-         hdDyhdzeOvVKxDZ8NAddL4hv3hlTzbzTn9ckM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=AXpj1vp629gSs0ATSB+0fWXF2SHKFQXC0D6SE9fulsc=;
-        b=k2KIczASvIpFJrSfUyz/SprrlQammOZqTu9dhxp0xCgb+MEJ3+6lJFBEpJZzk1RIR/
-         xN3bXKM3wnluzWQ87LqSqa100kP1paEG+8e5zkDk2t+ND5C4M3lZn+NhLoEcetfzAfNy
-         BrYJ91vQG2AHm+YtDFvWjSH2UbYg35rBlT1J4rWm4Ad7ZP0EpJA8pDTExb6i8+F/5qT4
-         CIu3+XLSU3J2LPunz/yU6kaE2R+JwTC5KgGRs/mK7pakCH2VZpblKe1NwFxmSOOrI6vp
-         FsbrfBBYL6mZ9F+nMGJJ2VjvgeLbA3HWtPttLn9DcXKTvb+KMNvf7p5Y/Ggk//NlL2H6
-         Rpvg==
-X-Gm-Message-State: AOAM530iCC28tjPxSx4zhV6ueCjGhH51IH8zR/FWBJB9KDItqjCtzBJz
-        vOm/J7ur6InyoBURtJYpo8tNQQ==
-X-Google-Smtp-Source: ABdhPJwJGOV7KbK/D+HPi6v2dyWHGDUeD4dpoDpmquJ7tdFLpPw4IowXj6TxuLKTZEH04k2nSfcoEw==
-X-Received: by 2002:a17:907:1c9c:: with SMTP id nb28mr13152129ejc.184.1640014024301;
-        Mon, 20 Dec 2021 07:27:04 -0800 (PST)
-Received: from localhost (host-82-50-106-104.retail.telecomitalia.it. [82.50.106.104])
-        by smtp.gmail.com with ESMTPSA id f5sm5597778edu.38.2021.12.20.07.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 07:27:03 -0800 (PST)
-Date:   Mon, 20 Dec 2021 16:27:01 +0100
-From:   Lorenzo Fontana <lorenzo.fontana@elastic.co>
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Correct the INDEX address in
- vmtest.sh
-Message-ID: <YcCgxQiEGLOd130m@workstation>
-Mail-Followup-To: Lorenzo Fontana <lorenzo.fontana@elastic.co>,
-        Pu Lehui <pulehui@huawei.com>, shuah@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211220050803.2670677-1-pulehui@huawei.com>
+        Mon, 20 Dec 2021 11:22:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640017372;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=JEibR2tevGf4+wxE+0v+q5WRwxA0usSlpDkfWdVeEdY=;
+        b=mL0per0Jfw7K9rEuohZYZ/YAle2NSNPol/quXl/2ng2vMx/luxlxYSjEuiLDjxij
+        N+/BcgKXhPpNsVemRiPU9bbeY3gQgYogVhslY+Q99e6n27J2SjKgp6i10K4naFkRzVb
+        +PBpc5RJ0huMhxm5qyS1PY6zhrMF0uiHz8dwW9TA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640017372;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=JEibR2tevGf4+wxE+0v+q5WRwxA0usSlpDkfWdVeEdY=;
+        b=dxAtyveO1wVElqkP/gnQTVs8plZ/M2uAKe6OIwoRzTBYlNILDGzAUYnS9s5t/YdL
+        Ulx+z9a+HIALeoZynfte5CYj8/XotrR0WiRD/10UGWqt3taa2syW11n689E09/QIEFs
+        5K5W/u3YEmtmGk8L8DRo9OluQkcRlt2alqozToXk=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211206
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220050803.2670677-1-pulehui@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017dd8a72405-291bc4f0-f8da-42a1-9460-f51514c369fe-000000@email.amazonses.com>
+Date:   Mon, 20 Dec 2021 16:22:52 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.12.20-54.240.48.37
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 05:08:03AM +0000, Pu Lehui wrote:
-> Migration of vmtest to libbpf/ci will change the address
-> of INDEX in vmtest.sh, which will cause vmtest.sh to not
-> work due to the failure of rootfs fetching.
-> 
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
->  tools/testing/selftests/bpf/vmtest.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-> index 5e43c79ddc6e..b3afd43549fa 100755
-> --- a/tools/testing/selftests/bpf/vmtest.sh
-> +++ b/tools/testing/selftests/bpf/vmtest.sh
-> @@ -32,7 +32,7 @@ ROOTFS_IMAGE="root.img"
->  OUTPUT_DIR="$HOME/.bpf_selftests"
->  KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/config-latest.${ARCH}"
->  KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/config-latest.${ARCH}"
-> -INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX"
-> +INDEX_URL="https://raw.githubusercontent.com/libbpf/ci/master/INDEX"
->  NUM_COMPILE_JOBS="$(nproc)"
->  LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
->  LOG_FILE="${LOG_FILE_BASE}.log"
-> -- 
-> 2.25.1
-> 
+## Build
+* kernel: 5.16.0-rc4
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 5d02ef4b57f6e7d4dcba14d40cf05373a146a605
+* git describe: next-20211206
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211206
 
-I was testing some failures with another patch and was about to do the
-same.
+## Test Regressions (compared to next-20211117)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
 
-Tested this in my environment.
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
 
-Tested-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
+* dragonboard-410c, kselftest-timers
+  - timers.set-timer-lat
 
-Thanks!
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
 
--Lore
+* qemu_i386, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
+
+* x15, kselftest-timers
+  - timers.nsleep-lat
+  - timers.rtcpie
+
+* x86, kselftest-kvm
+  - kvm.vmx_pmu_msrs_test
+
+
+## Metric Regressions (compared to next-20211117)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211117)
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-timers
+  - timers.rtcpie
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-sync
+  - sync.sync_test
+
+
+## Metric Fixes (compared to next-20211117)
+No metric fixes found.
+
+## Test result summary
+total: 3574, pass: 1837, fail: 405, skip: 1332, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
