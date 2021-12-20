@@ -2,154 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3180747B3D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 20:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A58747B3E6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 20:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbhLTTjt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Dec 2021 14:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S232156AbhLTTpH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Dec 2021 14:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbhLTTje (ORCPT
+        with ESMTP id S232024AbhLTTpG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:39:34 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31406C061757
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:39:24 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id i31so8812375lfv.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:39:24 -0800 (PST)
+        Mon, 20 Dec 2021 14:45:06 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84250C06173F
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:45:06 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so946051pjp.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:45:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0HEIGasiDjlyDxa0Yi+2EmuRxngp8FedzY8QNTfhikI=;
-        b=X/tYG9QpqUmW6+H6ZYV0nRa4/njzoyToFNJ9zOYVkDvcTiybU29zVqv9btuh6Q6Zb+
-         ZU8bp6ncsBiJHAlMaETRxIEeO1W44QSEarGybDoySgE1Kihe9Znw3ZOsf+trnjzPi50n
-         9dzynaN+Ov3/Bl4U4xx2HsvgbBFtRQJeRiMJI=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9utNYtF7nbB+ny8Zz1Q0qxMiDuM46joQzQmvzzrN56I=;
+        b=MKzIkQMyFLCHcVjCyhCE9CFcyp/GFZNhZKLrRFLpauudskVD6/M4E35pj8N/k6PFWq
+         dxzXbCQNLTbgHOaUo9lyEe52DhZrMqSOpSbWSiC3rmhawnW3Vhcd2ofHg460QmU1S3+6
+         Juc6MueHrzIezVNQDFi0ziywbIuQMp2GUfwUM2IDndVk4h12Ttlu0y1YuL+IIAAcClpH
+         pcO8b38Rxyzdn0ExdcWur3WTwjX7Xj4O2VV6xFK0tTaLgKrNfzqA6KUAKKatpBvJalGh
+         h3U2EwBSR65pEIIFRkNWtLWYO7wI53W6Sn9vUZ+8PVeJS+fOejo7KJmGMt0hzTumzmS5
+         JlPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0HEIGasiDjlyDxa0Yi+2EmuRxngp8FedzY8QNTfhikI=;
-        b=XIRQdl5NWiBjtz34bG10P3GSrc2lzH8UH7Cbj4L3TsiRhnq91Xdbn8FTQkN5t4CV6P
-         r21W4rR6vrDNdu5pm71xm4iQ5f3uIIMfXo6WeUax6fU4EyeA1Jkr3xINbS30DwkwxMSi
-         11PXloFO4P9QlsEGdspiPapKmGJu5u91TgtJXNRsghU+fN9NvjwMyTbFyuATxPUDscBb
-         PFPomlP48M8IF/smDmqrkwAXs1xC2dHAp0CWLwVKvYOcE2B0hsEht1l6If94FjIEfeWt
-         fVDgTZ80bZZetA1p8MDLmZjXmXzQtPYFgNOUAHQGkhCScim4RPQUF4m6Gw0rguy04Ado
-         xiPA==
-X-Gm-Message-State: AOAM530Uyxrdp5M8FiLymOOFED0fQD5ZbUFsKXWb22MwCzNmAYymJvlt
-        m/5QSXuCk3y6YznYo/AVevVBbuJm7tSwDRyLJjQ=
-X-Google-Smtp-Source: ABdhPJztY8Bg6snOqgtTNdHj5zWUKg9LMqQgGnRYL7Ntd0oaclBx0xZNzzGRucuKOuovvLFo3nMGXA==
-X-Received: by 2002:a05:6512:22c7:: with SMTP id g7mr17754301lfu.668.1640029162290;
-        Mon, 20 Dec 2021 11:39:22 -0800 (PST)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id w8sm2454119lfa.206.2021.12.20.11.39.21
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 11:39:22 -0800 (PST)
-Received: by mail-lf1-f54.google.com with SMTP id cf39so24050708lfb.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:39:21 -0800 (PST)
-X-Received: by 2002:a5d:6211:: with SMTP id y17mr2559324wru.97.1640029151469;
- Mon, 20 Dec 2021 11:39:11 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9utNYtF7nbB+ny8Zz1Q0qxMiDuM46joQzQmvzzrN56I=;
+        b=49vuY2DNYfUQXS5ET6N/lnli9zUwhWIpnEnja2SmMg6HFWdqMmB8jIkZaFg8bTaru8
+         1ljXmUIdn3228yLQh2vxqjbsv08jcpHgIh7WAzCFsRvlkbqZ8nZysmvlLrotBNnbByq/
+         FzV3XM+4yTSVUK3efsr4/95Fe5LF8uvJnk5u27h5IUzrzKm198V2VSDT5jEOAP1KxwD+
+         1fxvUgmJSXNdYfpqPywGuXEEQunVTdP6lu/wtOxmGI5ZonBA4HWle3BuLznl/hD533sg
+         mod+o9FMwoNgRFpRungq7hQb8xFP4IVobM65B4w5usRYUc4PAoQ0ARmRHXLNu7tFjSPa
+         zQlw==
+X-Gm-Message-State: AOAM531hN2MT5nqvBQzej5RCoudGNZm9VXsHQVqzeM4euHenU9XcK5Kv
+        66LdG4QCYw+fpuK+pOaMVizfew==
+X-Google-Smtp-Source: ABdhPJz9fxZPk5z4s+GXQitXrpsy8xcsqun69MNxnSpmZ5tOYABVgyfGrAXKFYzahDOFlitumpiksw==
+X-Received: by 2002:a17:90a:a083:: with SMTP id r3mr601594pjp.55.1640029505867;
+        Mon, 20 Dec 2021 11:45:05 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t8sm19386929pfj.26.2021.12.20.11.45.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 11:45:05 -0800 (PST)
+Date:   Mon, 20 Dec 2021 19:45:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] KVM: selftests: Add EXTRA_CFLAGS in top-level
+ Makefile
+Message-ID: <YcDdPUn9bAVnxb/2@google.com>
+References: <20211129075451.418122-1-anup.patel@wdc.com>
+ <20211129075451.418122-4-anup.patel@wdc.com>
 MIME-Version: 1.0
-References: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
- <YcDNaoGcGS6ypucg@casper.infradead.org> <YcDRC7e0fNAMYi3m@casper.infradead.org>
-In-Reply-To: <YcDRC7e0fNAMYi3m@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Dec 2021 11:38:55 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whUE9RdzXcsQ6VrD5fNU3BtXWjhSa4XPy7bZQTHhdr3Rg@mail.gmail.com>
-Message-ID: <CAHk-=whUE9RdzXcsQ6VrD5fNU3BtXWjhSa4XPy7bZQTHhdr3Rg@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Nadav Amit <namit@vmware.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129075451.418122-4-anup.patel@wdc.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 10:53 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> It makes me wonder if reuse_swap_page() can also be based on refcount
-> instead of mapcount?
+On Mon, Nov 29, 2021, Anup Patel wrote:
+> We add EXTRA_CFLAGS to the common CFLAGS of top-level Makefile
 
-I suspect it doesn't even need refcount.
+Nit, wrap closer to 75 chars.
 
-For regular pages, after we've copied the page, all we do right now is
+> which will allow users to pass additional compile-time flags such
+> as "-static".
 
-                if (page_copied)
-                        free_swap_cache(old_page);
+In case there's any hesitation in applying this (Paolo asked if this was just for
+debugging in v1), being able to pass "-static" is helpful for our environment as
+our test systems have a funky and minimal configuration (no gcc, and the interpreter
+is in a weird location).  Running selftests either requires building them with
+-static or creating a symbolic link for /lib64/ld-linux-x86-64.so.2.  It's generally
+easier to just tell people to compile with -static.
 
-which is basically just an optimistic trylock_page() followed by
-try_to_free_swap().
+> Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> ---
 
-And that then pretty much simply checks "are there any swap users
-left" and deletes it from the swap cache if not.
-
-The "free_swap_cache()" thing is actually just an optimization to
-avoid having memory pressure do it later.  So it doesn't have to be
-exact.
-
-In fact, I thought that swap is so unusual that it's not even needed
-at all, but I was wrong. See how this was re-introduced in commit
-f4c4a3f48480 ("mm: free idle swap cache page after COW") because yes,
-some loads still have swap space allocated.
-
-In theory, it would probably be a good idea at COW time to see if the
-page ref is 2, and if it's a swap cache page, and try to do that swap
-cache removal even earlier, so that the page actually gets re-used
-(instead of copied and then the swap entry removed).
-
-But swap is such a non-issue these days that I doubt it matters, and
-it's probably better to keep the swap handling in the unusual path.
-
-So mapcount and refcount aren't what matters for the swap cache.
-
-The swap count obviously *does* matter - because it means that some
-mapping has a reference to this swap entry (not as a page, but as an
-actual swap pointer).
-
-But the mapcount is irrelevant -  any users that have the swap page
-actually mapped, don't actually need to be a swapcache page.
-
-Even the refcount doesn't really matter, afaik. The only "refcount" we
-care about is that swapcount - that's what actually reference counts
-the swap cases.
-
-try_to_free_swap() does check for one particular kind of reference: it
-does a check for PageWriteback(). We don't want to remove the thing
-from the swap cache if it's under active IO.
-
-(This codepath does need the page lock, though, thus all those
-"page_trylock()" things).
-
-                   Linus
+Reviewed-and-tested-by: Sean Christopherson <seanjc@google.com>
