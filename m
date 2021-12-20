@@ -2,35 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E118D47B33E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 19:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD7047B38D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 20:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbhLTSxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Dec 2021 13:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S240743AbhLTTPq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Dec 2021 14:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240001AbhLTSxG (ORCPT
+        with ESMTP id S240760AbhLTTPo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Dec 2021 13:53:06 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A4BC061574;
-        Mon, 20 Dec 2021 10:53:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kj2QTGmFgV7Djw7LNhrL5ROHsmbIWJF49HXpYPf8/UU=; b=G4W2D+AlLdNiv8olc5agr0Mi+h
-        4GfDiEqN4qlk9+PrawUwlcprCA++0YwRh7IkFF33ev1js3rxkRRs5EfJO1Jy51/cd01bRVDGPvjwb
-        c1RmwtI/BekNVLw3rqWV31vOCyGklOEVfVNiI8ZnBDNj6xWAHoSW3q/oRxOX7eC6dt5IZicxOSWAA
-        /mJZunkex8i0f4L0kJAa5NAX2OvM5np6uCth6gukXAxux9NprSalVJHYB6XHGxBH4QUuf26j/3oeq
-        1VwjhLn5rUVmgwqXZT8mAQ0MGDZX/RpLVFkOGxx4wUJGzxxJsjRHWI1m4YaH0Mvd0284zlXSbPbpc
-        zfTlnE1Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzNmN-001psh-7z; Mon, 20 Dec 2021 18:52:59 +0000
-Date:   Mon, 20 Dec 2021 18:52:59 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mon, 20 Dec 2021 14:15:44 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9FCC061574
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:15:43 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id z8so17569943ljz.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XOYpkeAZ4lS3WnEUy/1la113N2UrQqSbbd4SmFdrc3c=;
+        b=VFuYtAogQUUW1la4HqjicPNsqrgCWU4/5xCFL72zEN7r69TP/+ggb7YvA4E4nU7A0V
+         PG6BDVDx9pa0XqFL6wSv9je24PF6AL3JtvSqJZAgHX9NpbG1f/CgePslYfGcEk8jq04L
+         M+drnq/DXH4piOVaDEvFA5qWefrgkDK6VCuZY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XOYpkeAZ4lS3WnEUy/1la113N2UrQqSbbd4SmFdrc3c=;
+        b=LYJyqmry8G1KgXni8xUfIL5WNHbVVE5PBHxg3HWeQmBnuk83CRO50gYKokOD12gciw
+         7Ik4OZJu47tBukmr2IjHBkymaJUDbtS1rhi1kl/Sw30YqCqW86gnC+Hi70ife7a+VZdg
+         uxHOnjw/VAT4gSwRLYao1lqrcF0k2aUlEkoaoYarXDYVrZTiCPqFLN4z7F0esgL06j/3
+         gbiOEqMvttE4wsBScVs5423uQNrobbDpq7SPYqtSw3rwtLe6qNtXGidYS7Xq4Ab+H6se
+         9FxyFSuVVfKhM6rK4PyhNk1AC9Q53x6jTf941f/UWjbS6hV/92/P8BlOdWQP9WqoMsea
+         SWMw==
+X-Gm-Message-State: AOAM533OIxYCSOp+XuSAFAHZfeBUz1n4LufqZjJBRR59k5V7TxKlBZ30
+        mFsWF04JKIeScbRcQji9OJS5O9ujlYw91DsmogI=
+X-Google-Smtp-Source: ABdhPJxAFvUPUZCUBmuPC5DBewshWcFkpM1VNxj2W1EsRYwgbgtMNLwSqTt+kTW44JaoZVw00Ec9Cw==
+X-Received: by 2002:a2e:b711:: with SMTP id j17mr16263190ljo.39.1640027741475;
+        Mon, 20 Dec 2021 11:15:41 -0800 (PST)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id v125sm704086lfa.109.2021.12.20.11.15.41
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Dec 2021 11:15:41 -0800 (PST)
+Received: by mail-lj1-f176.google.com with SMTP id l7so17601172lja.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 11:15:41 -0800 (PST)
+X-Received: by 2002:a5d:6211:: with SMTP id y17mr2491550wru.97.1640027730630;
+ Mon, 20 Dec 2021 11:15:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20211218184233.GB1432915@nvidia.com> <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
+ <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
+ <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
+ <YcDNaoGcGS6ypucg@casper.infradead.org>
+In-Reply-To: <YcDNaoGcGS6ypucg@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Dec 2021 11:15:14 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
+Message-ID: <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>,
         Nadav Amit <namit@vmware.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -56,60 +92,38 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <YcDRC7e0fNAMYi3m@casper.infradead.org>
-References: <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <Yb+gId/gXocrlJYD@casper.infradead.org>
- <YcDNaoGcGS6ypucg@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcDNaoGcGS6ypucg@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 06:37:30PM +0000, Matthew Wilcox wrote:
-> +++ b/mm/memory.c
-> @@ -3626,7 +3626,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  	inc_mm_counter_fast(vma->vm_mm, MM_ANONPAGES);
->  	dec_mm_counter_fast(vma->vm_mm, MM_SWAPENTS);
->  	pte = mk_pte(page, vma->vm_page_prot);
-> -	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page, NULL)) {
-> +	if ((vmf->flags & FAULT_FLAG_WRITE) && reuse_swap_page(page)) {
->  		pte = maybe_mkwrite(pte_mkdirty(pte), vma);
->  		vmf->flags &= ~FAULT_FLAG_WRITE;
->  		ret |= VM_FAULT_WRITE;
-[...]
-> @@ -1673,17 +1665,14 @@ static int page_trans_huge_map_swapcount(struct page *page, int *total_mapcount,
->   * reuse_swap_page() returns false, but it may be always overwritten
->   * (see the other implementation for CONFIG_SWAP=n).
->   */
-> -bool reuse_swap_page(struct page *page, int *total_map_swapcount)
-> +bool reuse_swap_page(struct page *page)
->  {
-> -	int count, total_mapcount, total_swapcount;
-> +	int count, total_swapcount;
->  
->  	VM_BUG_ON_PAGE(!PageLocked(page), page);
->  	if (unlikely(PageKsm(page)))
->  		return false;
-> -	count = page_trans_huge_map_swapcount(page, &total_mapcount,
-> -					      &total_swapcount);
-> -	if (total_map_swapcount)
-> -		*total_map_swapcount = total_mapcount + total_swapcount;
-> +	count = page_trans_huge_map_swapcount(page, &total_swapcount);
->  	if (count == 1 && PageSwapCache(page) &&
->  	    (likely(!PageTransCompound(page)) ||
->  	     /* The remaining swap count will be freed soon */
+On Mon, Dec 20, 2021 at 10:37 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> This might be a step in the right direction?
+>
+> Subject: [PATCH] mm: reuse_swap_page() no longer needs to return map_swapcount
 
-It makes me wonder if reuse_swap_page() can also be based on refcount
-instead of mapcount?
+Well, that patch seems to be a no-op removal of dead code, so absolutely yes.
+
+That said, I think it would be good to split it up. I looked at that
+patch and went "is that really a no-op" to the point of recreating it.
+
+I think it would be good to make it multiple patches that are each
+individally trivial. IOW, start with
+
+ (1) remove second argument to reuse_swap_page() that is always NULL,
+without making any other changes
+
+ (2) that now made 'total_mapcount' unused in reuse_swap_page(),
+remove it as an argument from page_trans_huge_map_swapcount()
+
+ (3) that now made 'total_mapcount' unused in
+page_trans_huge_mapcount(), remove it as an argument there too.
+
+because as it stands, that patch of yours looks like it is changing a
+lot of things, and I think it would be clearer to remove one thign at
+a time as it becomes obviously not used.
+
+Hmm?
+
+           Linus
