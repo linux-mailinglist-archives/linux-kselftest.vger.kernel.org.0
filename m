@@ -2,256 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714B547C5AC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 19:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A5C47C5B1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 19:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240807AbhLUSFF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Dec 2021 13:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240805AbhLUSFE (ORCPT
+        id S240822AbhLUSHO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Dec 2021 13:07:14 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:46312 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232659AbhLUSHN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:05:04 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B528CC06173F
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Dec 2021 10:05:04 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id k21so18808957ioh.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Dec 2021 10:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2KBUDdoRqlu/SZ5CeTfBXhMozIYnYHZYo4dC8l6msck=;
-        b=H2g7WDpsJDPm+DpELquDvVCm8MtFH9QEtGg2H6S2lTituJcZvARPS2IbaS9n+fKSGB
-         UXTOhFOg+HgZzn9EpXywm16u4tvaI9cqRIuPTQCWTrCMQebGLoxkS1vikpKhEP4fX6Le
-         bmiap7Sge2P691gD25AE1PLNRfiMMdAJMUvwA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2KBUDdoRqlu/SZ5CeTfBXhMozIYnYHZYo4dC8l6msck=;
-        b=ZT+8X95LYCDd8EQCr1qOrv18zZwtiayanSZWlDmV3Xsb88Y5GF3Nm4H/ysPguHPkjH
-         b+4mEdB4/VQVZM39cGLVAT5nbfzVgDez/4Ma0YmkQ/A7MI3k9RsRul3PSU7PnhHWieOA
-         BhmsQ8+au5bY1LG7yGBekI/SGu0tgZ1iTnqtnFRKdeYY25PNpcJFPsUXp3bJEInPgtLR
-         JgfjcqgK7VDXJ03y7KEA7EmensSWncdhRjT6JG+siiD/QBSy+42ifixYcxgRrBLncFzk
-         Z+vNbg53PzUotSM+TWjxB62UkzZxUUCqSFjcek05Noc7Obh7aaYGUN+MeHljcZaNBgK0
-         2CrA==
-X-Gm-Message-State: AOAM5329BURAlUtTxjSBaM/VlyUvVv5WrRP0P5HjPgkENmLlBmpuXyIc
-        QirK2GO5f1HlVi7qzMtwtffiEw==
-X-Google-Smtp-Source: ABdhPJxDxgaIHaPk7eoRUKMTGlgNHAWouZT0xScus+U4LOLGngCKhdGYDYBzOwtCYXwoP5eOBOTkfA==
-X-Received: by 2002:a05:6638:24c6:: with SMTP id y6mr2608375jat.98.1640109904044;
-        Tue, 21 Dec 2021 10:05:04 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id q8sm12867059iow.47.2021.12.21.10.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 10:05:03 -0800 (PST)
-Subject: Re: [RFC PATCH v6 2/2] selftests/x86: add xsave test related to
- process switching
-To:     Pengfei Xu <pengfei.xu@intel.com>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Heng Su <heng.su@intel.com>, Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1640052713.git.pengfei.xu@intel.com>
- <153cbbb0279d99d454b06393c19e541fba44d4cd.1640052713.git.pengfei.xu@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <302d8316-20f4-a18d-ca04-d797b7d8be88@linuxfoundation.org>
-Date:   Tue, 21 Dec 2021 11:05:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 21 Dec 2021 13:07:13 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id EAE401F388;
+        Tue, 21 Dec 2021 18:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640110031; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+aHVar+NDv9LhVgPKkE8yVeRcY+l7hvW45ogGvLvZqI=;
+        b=NrRBSTtBkpGrNyBZf9DmkNb9e8BDxusII75XYLrNqgQo1pb7pJ5w6SCGU0UgXF7iumVT0p
+        m0l5ry5Bgl7ncB2YD4osjIjL2RryHzgFtxxDtCVY5im5GJ8V97iouma+3xLsty74dAlf9g
+        c8Likz9rmpEzqcH1Uj/tFeBhgXrgqrM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640110031;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+aHVar+NDv9LhVgPKkE8yVeRcY+l7hvW45ogGvLvZqI=;
+        b=EQvIag3QDEARwfFqVfScA9TyRwLYYQtJ5j4IJSahIATSGzZfSZtnNNoBXqS5gebwGEhAk8
+        g8Hpif72xjDR3vDQ==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 8550EA3B8A;
+        Tue, 21 Dec 2021 18:07:11 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id DBFFE1F2CEA; Tue, 21 Dec 2021 19:07:05 +0100 (CET)
+Date:   Tue, 21 Dec 2021 19:07:05 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <20211221180705.GA32603@quack2.suse.cz>
+References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <153cbbb0279d99d454b06393c19e541fba44d4cd.1640052713.git.pengfei.xu@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/20/21 8:22 PM, Pengfei Xu wrote:
-> It will change FPU, SSE(XMM), AVX2(YMM), AVX512, PKRU xstates before process
-> switching test to ensure that these xstates have been tested.
-> In order to ensure that the content of xstates is not affected across process
-> switching, this case tests that:
-> 1. The xstates content of the child process should be the same as that of the
->     parent process.
-> 2. The xstates content of the process should be the same across process
->     switching.
+On Tue 21-12-21 18:40:30, David Hildenbrand wrote:
+> On 21.12.21 18:05, Linus Torvalds wrote:
+> > On Tue, Dec 21, 2021 at 12:58 AM David Hildenbrand <david@redhat.com> wrote:
+> >> Note that I am trying to make also any kind of R/O pins on an anonymous
+> >> page work as expected as well, to fix any kind of GUP after fork() and
+> >> GUP before fork(). So taking a R/O pin on an !PageAnonExclusive() page
+> >> similarly has to make sure that the page is exclusive -- even if it's
+> >> mapped R/O (!).
+> > 
+> > I do think the existing "maybe_pinned()" logic is fine for that. The
+> > "exclusive to this VM" bit can be used to *help* that decision -
+> > because only an exclusive page can be pinned - bit I don't think it
+> > should _replace_ that logic.
 > 
-> Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
-> ---
->   tools/testing/selftests/x86/Makefile          |   3 +-
->   tools/testing/selftests/x86/xsave_fork_test.c | 117 ++++++++++++++++++
->   2 files changed, 119 insertions(+), 1 deletion(-)
->   create mode 100644 tools/testing/selftests/x86/xsave_fork_test.c
+> The issue is that O_DIRECT uses FOLL_GET and cannot easily be changed to
+> FOLL_PIN unfortunately. So I'm *trying* to make it more generic such
+> that such corner cases can be handled as well correctly. But yeah, I'll
+> see where this goes ... O_DIRECT has to be fixed one way or the other.
 > 
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index a9e452b65ba2..049f8ffb2742 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
->   			test_FCMOV test_FCOMI test_FISTTP \
->   			vdso_restorer
->   TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
-> -			corrupt_xstate_header amx xsave_signal_handle
-> +			corrupt_xstate_header amx xsave_signal_handle xsave_fork_test
->   # Some selftests require 32bit support enabled also on 64bit systems
->   TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
->   
-> @@ -106,3 +106,4 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
->   $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
->   $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
->   $(OUTPUT)/xsave_signal_handle_64: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
-> +$(OUTPUT)/xsave_fork_test_64: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
-> diff --git a/tools/testing/selftests/x86/xsave_fork_test.c b/tools/testing/selftests/x86/xsave_fork_test.c
-> new file mode 100644
-> index 000000000000..507334e25eba
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/xsave_fork_test.c
-> @@ -0,0 +1,117 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * It's used for XSAVE test with process switching.
+> John H. mentioned that he wants to look into converting that to
+> FOLL_PIN. So maybe that will work eventually.
 
-Add text from your change log here - more details on what this test
-for will be helpful.
+For record we always intended (and still intend) to make O_DIRECT use
+FOLL_PIN. Just it is tricky because some users mix pages pinned with GUP
+and pages acquired through get_page() in a single bio (such as zero page)
+and thus it is non-trivial to do the right thing on IO completion (unpin or
+just put_page).
 
-> + */
-> +
-> +#define _GNU_SOURCE
-> +
-> +#include <stdio.h>
-> +#include <stdint.h>
-> +#include <string.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +#include <sched.h>
-> +#include <sys/syscall.h>
-> +
-> +#include "xsave_common.h"
-> +
-> +void *aligned_alloc(size_t alignment, size_t size);
-> +static unsigned char *xsave_buf0, *xsave_buf1, *xsave_buf2;
-> +static int xsave_size;
-> +
-> +void prepare_environment(void)
-> +{
-> +	xsave_size = get_xsave_size();
-> +	printf("XSAVE_TEST_MASK:0x%x, xsave size:0x%x\n",
-> +		XSAVE_TEST_MASK, xsave_size);
-> +	check_cpu_capability();
-> +
-> +	/* SDM XSAVE: misalignment to a 64-byte boundary will result in #GP */
-> +	xsave_buf0 = aligned_alloc(64, xsave_size);
-> +	if (!xsave_buf0)
-> +		execution_failed("aligned_alloc xsave_buf0 failed\n");
-> +	xsave_buf1 = aligned_alloc(64, xsave_size);
-> +	if (!xsave_buf1)
-> +		execution_failed("aligned_alloc xsave_buf1 failed\n");
-> +	xsave_buf2 = aligned_alloc(64, xsave_size);
-> +	if (!xsave_buf2)
-> +		execution_failed("aligned_alloc xsave_buf2 failed\n");
-> +}
-> +
-> +/* Use fork to create pid and trigger process switch test */
-> +int test_xsave_fork(void)
-> +{
-> +	pid_t child, grandchild;
-> +	int status, result[2];
-> +	const char *test_xsave_child = "Child xstate was same as parent";
-> +	const char *test_process_switch = "Xstate after the process switch didn't change";
-> +	uint32_t ui32_change = 0xffff0000;
-> +
-> +	populate_xstate_regs();
-> +	xsave(xsave_buf0, XSAVE_TEST_MASK);
-> +	child = syscall(SYS_fork);
-> +	if (child < 0)
-> +		execution_failed("fork failed\n");
-
-Please use strerr() instead so we know why fork() failed?
-Same comment on all other error messages. Use strerror() so
-we know why syscalls failed.
-
-So this would be the change you would make to execution_failed()
-and pass in the strerror()
-
-
-> +	if (child == 0) {
-> +		xsave(xsave_buf1, XSAVE_TEST_MASK);
-> +		result[0] = compare_xsave_buf(xsave_buf0, xsave_buf1, xsave_size,
-> +			test_xsave_child, NO_CHANGE);
-> +
-> +		/*
-> +		 * If above case is failed and prints some failed reason, in
-
-NIT: "If the above case fails, print reason for failure
-> +		 * order to avoid libc printf change and clean up some xstates,
-> +		 * populate xstates again for next test
-
-This is not very clear. Is this for avoiding cleanup? What are "some xstates"?
-
-> +		 */
-> +		populate_xstate_regs();
-> +		xsave(xsave_buf1, XSAVE_TEST_MASK);
-> +
-> +		/* fork grandchild will trigger process switching in child */
-> +		grandchild = syscall(SYS_fork);
-> +		if (grandchild == 0) {
-> +			printf("Grandchild pid:%d change it's own xstates\n", getpid());
-> +			change_xstate(ui32_change);
-> +			return 0;
-> +		}
-> +		if (grandchild) {
-> +			if (waitpid(grandchild, &status, 0) != grandchild || !WIFEXITED(status))
-> +				printf("[FAIL]:Grandchild exit with error, status:0x%x\n",
-> +					status);
-> +		}
-> +		/* After switch back to child process and check xstate */
-> +		xsave(xsave_buf2, XSAVE_TEST_MASK);
-> +		result[1] = compare_xsave_buf(xsave_buf1, xsave_buf2, xsave_size,
-> +			test_process_switch, NO_CHANGE);
-> +		printf("Child pid:%d check xstate after swtich back\n",
-> +			getpid());
-> +
-> +		check_result(result[0], test_xsave_child);
-> +		check_result(result[1], test_process_switch);
-> +		printf("Xstate in process switch test pass[%d/%d], err_num:%d\n",
-> +			pass_num, case_num, err_num);
-> +
-> +		return 0;
-> +	}
-> +
-> +	if (child) {
-> +		if (waitpid(child, &status, 0) != child || !WIFEXITED(status))
-> +			printf("[FAIL]:Child exit with error, status:0x%x\n",
-> +				status);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int main(void)
-> +{
-> +	cpu_set_t set;
-> +
-> +	case_num = 2;
-> +	CPU_ZERO(&set);
-> +	CPU_SET(0, &set);
-> +	sched_setaffinity(getpid(), sizeof(set), &set);
-> +
-> +	prepare_environment();
-> +	test_xsave_fork();
-> +
-> +	return 0;
-> +}
-> 
-
-thanks,
--- Shuah
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
