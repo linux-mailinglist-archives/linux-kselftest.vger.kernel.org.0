@@ -2,196 +2,365 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8302A47C8B3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 22:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2936147C917
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 23:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236191AbhLUVQ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Dec 2021 16:16:28 -0500
-Received: from mail-mw2nam12on2057.outbound.protection.outlook.com ([40.107.244.57]:32595
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230326AbhLUVQ2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Dec 2021 16:16:28 -0500
+        id S237666AbhLUWMt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Dec 2021 17:12:49 -0500
+Received: from mga05.intel.com ([192.55.52.43]:58751 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232284AbhLUWMs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 Dec 2021 17:12:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640124768; x=1671660768;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=PGpVodvSvN5Hx9lUskfr95r0t+L9Lp8asddDZFd2OBE=;
+  b=MTeoreBch1WspNvVfo0p1zj+vvobiajRUz3At3VqXj8m3vuoWFuTQH/i
+   849CSU1i2fXy0QNSEf8EBYSM4rJr5KbuYwTEYGMWK+M2OM5uzW/aGTTTY
+   Ef23jpMuKlkDkO6QcwkPaU47qTzncnVltmAbhr1c4HQragVtHHn6uGC5P
+   p3hbSJXgVYjKlHDZKifqmDJMKqvbbi8TzHlN0KLD7Sm4KjiWu7aqaUtOv
+   ZSWjHpdQCjvuP9H8EZcz0afWZTPbor8QzjWsAnfWo01nKr567TXsvaMvr
+   E0VwGhiDR8RcMVG5dM3CSmVmkzeHqrrmT4Nsiq5bShBGpsAqjj9wDgYsY
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="326802815"
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="326802815"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 14:12:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
+   d="scan'208";a="755994681"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Dec 2021 14:12:47 -0800
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 14:12:47 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 14:12:47 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 21 Dec 2021 14:12:47 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Tue, 21 Dec 2021 14:12:46 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UgFQQvzkNFk36+yio/wcu8EJmEU2PdayHEVMEDXP8Cz5PZuIg1jW91xsf5fUJ8WcR1uFBJyh62+KyM/SE8hxV5hmjJEtr/8hmdiT9El6pmGai84/EdN7lj5Lqn17pBMt5lnvwarpjQ0jYBwWdGQPrukWHWPPDjVi8aaJYO8RXTMYUul4WHGvXzlO1ppPOywJCFKLOTnRIM+DjTsz+938zVFKA4gsLjcdaJ2PekxOIJJOm3Ks3R/P2j/pSSvuNCto+KnJLJ3hwOez1f5MoE6zOhldXrM7IN6KXRFsippXyQEfrfs4s3IIEDN70CfJO/NhDk6FjuSTWdzafTXQavmrqw==
+ b=PGe2r9ZgWXpahqZgKZYcjx0mN3rM6KtDhMvOgQa4HIqZWcrIdXl4swiIg+7jAKWDAR0Gc7C/GQ9SUhUXm7adxPEFIiQFCgcYSHrprEziT0+trBRgnPq8qjHc9sGznYXDWF/WCl5EqKHtAwfjzg0oitScl38pZ9GybG2HG7g+XX5RWMG3mals7iFaPIlkuy6hbmEBMrQa+uVbGt/hIWZpHvQFxb3WMqOKqHmX65AsFsycsygqu+vDFnAPbzE3WC46PUUOAD0JT6nvKToHbJBjMN+oB4oyv4YXdpn/7i4onNzvnoqhFZTrWqaFDUjGaE4xJTucaCL6PMC3mDgqx7Pgtw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7O6QFM/eAnnv9JABI2QoenOGX46iZGipaGRZDeAaOFQ=;
- b=Xj+fOJn/ypqiGSQjFRy/hYyJWLm40G4f8/oA9ZtelTocD3uxTTHt0iSh38KhKqh9aT+T8qMLgMF9AyMVFCAKnk/7EJXtOfkV6fWt/56bcotTBWnVzpPVbLUuSPm/eADRo4ku74u6ozCkcK7XqVFrYGhPdWRGpKVLyqIufei3aoVeN6pc89TwzN/UyxPIHryZCn+YMWr0ymM3ZMOc4lnAkhcd4tbSheAl0t0MzPy2aiWxvxqQDVQ1dBZ1RlhsiVLeG7gFWtEwk/a9085sDJ/TaRZNY56xpirzn/2WL0qUK44sVleW4uRuNTxEm+rbzXMMxncTNRS2XbaDazZpeCTryA==
+ bh=EgTKrrq9V1C6sFng8Pzy3M3oV94uEZVCl7Z+qCEdbjA=;
+ b=Q3eGdtvXZvJqU6JdzON1grDDZ3DrpjPT5mUNaIVhbMk1ZoLFAHH6rh9/S5smzSfaJjeUiOyk3A/dQ7ZZVkfSV3pkOlggjytCiGXsu8CsPJxOwH734x1mBZz69VDZM/VfVCk4oARRIW5L8C/8IAlpnH04Luz/6t6dl2GlZSRguv2xK+nRBkdwRxfy3yKJFU0DNr1jxb0xwfSyE27J/S8vSNXVs+IVTvnuwiMNdTHqGrLkcZ4Qr/1D7nRm+Pr1jgGTbe5F4QwWfquVflTeYwYRAqel3Oi0h6Gg/KohsjhH1mOmO5l5mRlbt520Auv+Lqh7K6b+dIoOkqFOrt1h0KrJBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7O6QFM/eAnnv9JABI2QoenOGX46iZGipaGRZDeAaOFQ=;
- b=JOAkEZnt6352IEI0B6gZpMLZePlnpyLK/KeOKKO8zdAwwR9I65jCKsj8ZTEDjTM4ZYL4bkNCLYN/HNxHKTsZkz8qqycBZCo62J/HZqKB/ev0nXhnelz0U5xSL01P3G499rY0T/dzEaONhsAws6IOo6VQDoZGQAUvmejDZbZS+sbu/wD0kZ5zX3epuYrWAvqwJLnpLh/LNHSeDCHkn2xDer7KygdgnGBFkR7dlVL3EANeyDmEtD+++bgC6gK+dMthjz+yI62caZx+aEdzUrLQL/QYf+/J97XpEt4ERW4SVTDaydr9kkN6BED/LYvEutI+JqOCPlO7iR1wRSy++g6vAg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by BYAPR12MB3142.namprd12.prod.outlook.com (2603:10b6:a03:de::19) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW5PR11MB5812.namprd11.prod.outlook.com (2603:10b6:303:193::14)
+ by CO1PR11MB5090.namprd11.prod.outlook.com (2603:10b6:303:96::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Tue, 21 Dec
- 2021 21:16:25 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8844:5a42:b1a6:c541]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::8844:5a42:b1a6:c541%3]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
- 21:16:25 +0000
-Message-ID: <3eb81a1d-a5fd-eb76-d23e-0f6998c647e9@nvidia.com>
-Date:   Tue, 21 Dec 2021 13:16:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.14; Tue, 21 Dec
+ 2021 22:12:44 +0000
+Received: from MW5PR11MB5812.namprd11.prod.outlook.com
+ ([fe80::1ca9:6778:2b2f:7de9]) by MW5PR11MB5812.namprd11.prod.outlook.com
+ ([fe80::1ca9:6778:2b2f:7de9%5]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
+ 22:12:44 +0000
+From:   "Machnikowski, Maciej" <maciej.machnikowski@intel.com>
+To:     Ido Schimmel <idosch@idosch.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "Byagowi, Ahmad" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "mkubecek@suse.cz" <mkubecek@suse.cz>,
+        "saeed@kernel.org" <saeed@kernel.org>,
+        "michael.chan@broadcom.com" <michael.chan@broadcom.com>,
+        "petrm@nvidia.com" <petrm@nvidia.com>,
+        "Vadim Fedorenko" <vfedorenko@novek.ru>
+Subject: RE: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
+Thread-Topic: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
+Thread-Index: AQHX7c5gIm8QXL1ZEECyYOKvL6PbZKwuwIcAgAFiCYCAC1L2AIACGiOw
+Date:   Tue, 21 Dec 2021 22:12:44 +0000
+Message-ID: <MW5PR11MB58127387AC887DFF43140697EA7C9@MW5PR11MB5812.namprd11.prod.outlook.com>
+References: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
+ <YbXhXstRpzpQRBR8@shredder>
+ <MW5PR11MB5812E5A30C05E2F1EAB2D9D5EA769@MW5PR11MB5812.namprd11.prod.outlook.com>
+ <YcCKLnrvbu9RBlR8@shredder>
+In-Reply-To: <YcCKLnrvbu9RBlR8@shredder>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221180705.GA32603@quack2.suse.cz>
- <CAHk-=wiyxQ==vnHFHW99S_OPwA=u1Qrfg2OGr_6zPcBAuhQY2w@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAHk-=wiyxQ==vnHFHW99S_OPwA=u1Qrfg2OGr_6zPcBAuhQY2w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0122.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::7) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d40f6213-3f13-4191-1227-08d9c4cf038b
+x-ms-traffictypediagnostic: CO1PR11MB5090:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <CO1PR11MB509077BB953F8E482EFAD758EA7C9@CO1PR11MB5090.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7LPpaGamSOeBRqt/Mx4jQS4K1IK4U4jD4v2QjjHRtnL9/Ona0kpEW9n2l8udL1fe18BjzRCiuJJr8AzxIFTnd0h4jacyo5WnMZ5/iCyGRioNcDcnIUkk0buSivwSHk1170irTJX/OPH0MHC1RzM24JAx+nfgjR72gef9BJedEaW0Gp7WJogksv6IVpMawDAhFipzXycucF0/575PPNbt5YVYBPT96SGci0NORa8XIR5Phng/9+2/AZSOveFLDbIkypEyC/Mw+1rpUKQXX4RozMYD2MiE1+1puQj18GG/no+HpSqt+0QDz3tCSZ3gj42Qnngg5T5PEXgRh7fEZODFHChBnhR11OtuQs3dk3h5TUIF6VLFAS/ItgCOiK5GOwMfKRugGkYzntUVLOmz5ReORgo6jDij8JLdwSH1rwF63wXiaanzMp1D8MsVhKTdyXUiIDQVvjMas5I/2tfQos7ypLj+fD0REdYa/fxbygSON4jWEiHilJog41rNBwFXY8wHZoWEe5L59+KLj1Nm4ArbBfj4QZmO4ghgx8nrJL+2cCrkNy7qlOS+CSPwXgJ0NKkUxPRP1JEUJZ9p0XlzYBfbHWcyowlXlouJgL2Hjj9AiVhIfmNJTa0PYuSMIH0biVqsf6eiNDxP9CueQAsWkjzyrjEO09K1b735aLig8+I+Md41bNEL3SCFKkp15fmqw2Bnip0l61xOBLSeMsp9GxWiYQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5812.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4326008)(38070700005)(8936002)(82960400001)(7696005)(52536014)(66946007)(66556008)(508600001)(64756008)(316002)(54906003)(9686003)(76116006)(66446008)(55016003)(66476007)(5660300002)(71200400001)(86362001)(8676002)(7416002)(53546011)(6506007)(83380400001)(26005)(38100700002)(122000001)(2906002)(186003)(33656002)(6916009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dHwVIh/fPyk/xfmIeXoPr6nyi9L7hVYQC9+Bi9lrIglUJgrnvsT51Ycf7ToG?=
+ =?us-ascii?Q?tazqWTLP02/+hNeoywu1TNgav4mwPkdhm3d/fIhVUdva1KN0NzQMHETEC+oT?=
+ =?us-ascii?Q?11mridI9lTndm016Lj8/Fo69JnhyrsRu03TjR1F4YegHq1Nhri/0uZ15UMCk?=
+ =?us-ascii?Q?sjsWWPk4eOR5Auarn39WvH4zcWJEo/iOlkXCKP/L0JlFHfK7i2dmjMZTO83z?=
+ =?us-ascii?Q?DsSlGWG6PsWcvKCAH+CtoQ84FA88poTZXdxVywUOe9Q02pk7SZIbTJgnQXUi?=
+ =?us-ascii?Q?0LJ/82bu7qn92v0wOS4gOBMIRWVtwppltqnDLfZ2T50zhf5VItKcLDfwBeJo?=
+ =?us-ascii?Q?4dv0GWMAqCY3go1V/xcFM7nDIEToZ1KLWUHOi0XkQ6y5A7jmYY2PA5WQ8z0s?=
+ =?us-ascii?Q?XCXc+70aN6C9JSDGkDuFKPYjfeOwpqmO1tksV1ymPwjv9Y7zBjVBSorZT8nU?=
+ =?us-ascii?Q?aY40zZLk4NfIw7YMqsLwiJmeTb4hZJSANdgyVTaHluglWfeM0CIzqeuvT+HK?=
+ =?us-ascii?Q?49qJQehWV5KuXBfsMikuYF6JzPGAuPaU2s9mZcPGKg4EXgXbPsnRt7PN7573?=
+ =?us-ascii?Q?MAeOkw9R/ltnvWjkTdvJVsiV0DZfL/MRh/NDiW1eW9qm2Eyj6oqekuLQA4b5?=
+ =?us-ascii?Q?SM9OlPMvZlDf8qQ2ypupTmGKa16ZvXxauQVpGVqdPwrSYT9MprwuNX8AfVoz?=
+ =?us-ascii?Q?dVQq2K+eRRGICVRYQlimOwMuSpezXuXl3mUpnT06DcWq8dh1OyDFkSnW0wew?=
+ =?us-ascii?Q?Ih5XPtLhhEfGcZaxV06LqJF9ZSZQtN2Jn+jb0n1CQhUtL24nl1RJOO2NphL+?=
+ =?us-ascii?Q?7qut3vYWLAZw7E4tKl4lANb3xtSAxHim7l+8LmfapLYoVbPuGyx8+Dzo6McU?=
+ =?us-ascii?Q?kljsfboo6PVrscCX19a3wBAHWxn6lZEmTMwhk2Qa63K04GygA+SPjRski5Lw?=
+ =?us-ascii?Q?fa56DGEQD5rm7kR64o8RwY6uzjX8xMSNBV9RctjGmUzSQFVidNukJGWwqsl9?=
+ =?us-ascii?Q?1h0O6BehwUwOh9zwczBWG9RJVM3ADsc3A120HqgYl+SRvk1cdcL2TqrNTyyj?=
+ =?us-ascii?Q?ZbiU3CQYeqwwvdUEexxyIGQVwNAzAw6a64a9hCVe2CnDXcAcQdA6dfw54YbV?=
+ =?us-ascii?Q?fW0BvPzUbokD5UZjQX2LxDe0cZhYNwqpCLjnU7Y7vTJ8amEL8EqbCkMv9Jra?=
+ =?us-ascii?Q?qzAoFCzgRpMh1DPOAMhu+TuG63qDjYxkdF/0O6OOJGGS5Yf6bg87e6xEHCoM?=
+ =?us-ascii?Q?bdUyr5O6nP0BSQXTpDZXrXvi/Q6VdGR5P3fwVVRaF4oatMWUvbJwunA/4Zap?=
+ =?us-ascii?Q?KkHU7cpVSzFPRTKoD9pjTkIak+fA/QHa56mIGx+wjeeTcBoCdZ3HM4S7WDFN?=
+ =?us-ascii?Q?IZN2NyWGmxOTniYk1BbHB9aKIfh97zKADbCfjL5Npfe0YRRH/rmOZEw9ARth?=
+ =?us-ascii?Q?2+DU76PlzduvOuQCLFQ57hRiV3W3aPHFrECBsQR50nDxZTK963D58zFE+OD0?=
+ =?us-ascii?Q?ePAoWmcyTBsTJgJN9nR7GGZofAoDdRkzo6B2xMvRcIkD4UsTmat4WofhMpJR?=
+ =?us-ascii?Q?ZpG7TELggd3OaQRyn7yCkzd/PGwM7Fp5g52ROun96IW4uX58/qAYk7C8iiDz?=
+ =?us-ascii?Q?+B2PLG8L4S5Zc/ZmYgg9up+Y5B24H+fkCe7ya5+Qn6F2+bLcwBBF/WU4Mzx7?=
+ =?us-ascii?Q?nbn0yg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3f96fa1e-d0ad-4506-5048-08d9c4c7255b
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3142:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3142C94A6F8AA266D8987991A87C9@BYAPR12MB3142.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fZ+2YWVX2kZUsT/K9l28iv7C7/1RKdWKkrrfCWqIq7ZFfT1ERspofq3s5sng9dimKwRGrtmXC+S2TrGEk5/dl3c0gv1j2sOB673gelobjFcNkSlIXqxyo3iEPjbVT22ktdM1TZEM4bUpgEwQEqrvYzuEp0IRMmgD63qYXZYKkSCEeFcpKYXTj/xoqdfCcvyn8VW4SUK6PfCK1w64+N//+biQSnkOC/P1M9fvWoQgLRCcXlfpHMBDdDa7k5LOhMNL2Pm+nLlD224zoMldPxqCTUONqcQe1o/OEli4ZA/vCezQ4wdRiNqKxb4f3G1ByoB7Df5ZhGLbgYcFz3abjkRNv/3dPC1Zsw0qawTVpaxDVXxuqAyrAhgEjIcdAyvcVuNB9Y6dQVJonQrlcHO189p+77En4CkHBwTU11i1E9WFGRi8GC9cwaL8wGeCm1hPmXy02Y4/YH/Aubtr2S7fPEywXOIwAjMPvHzyueeB8qnzG34Bf2VfeOygD9x3j3Mk8gbIcVoH68UBkAIFhEovgCrFexPMOpx8kC0VNWr/S1En3LPRZCwbQ0Kcv4HVv/I3U1Hkn7jhzdwle78gipUkc58UgMIfPnwwqADa6H4PM2uKkvNGNu2pgEt+VpCzl6JrWKgYc9yxn/YBsrnIE8TbdcmDnf611b+PZCgknzys0PDGjwUec7dJ68VF08wrNF7+lSyAxX7IaaFGLVOoJdjQhQNdU6K0vakUAFhpMrK8OIXm0SkPMjVNs+tL3GOXpKiVnpLyE4suY0NOXNGqsbUmcFLW3Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6512007)(5660300002)(53546011)(2616005)(110136005)(54906003)(86362001)(66946007)(8676002)(31686004)(6486002)(66556008)(36756003)(6506007)(4326008)(31696002)(66476007)(186003)(26005)(508600001)(316002)(7416002)(2906002)(8936002)(38100700002)(60764002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkVFYmF0eU5mT3ArK3hFdkwxQzdaRG44TVdpMEo0cGhNVGhGKzVPT21MdU1L?=
- =?utf-8?B?ZnBza3Y0RmVyenU1VlJrNWVnaFRVbGFwWkM0TVpXcDVXTDhmWXY3V3krOGZB?=
- =?utf-8?B?OEZzVjUxSjNCWExsT0E1UmNIdUdoTXBKQWFJbkdKTlZYNnNLM09kdzNjeFFl?=
- =?utf-8?B?cW0zMlQ0Y3A1ZWNyU25hQlowcytPMnFwdmRwTUlFbDJUSWRTTmFqeHRqdUl3?=
- =?utf-8?B?aE5SWmYxbVl6eUFnZXFoYWZycjdvZXRuaXRGQngxeW1BcE1lZlNNc2p5dlVW?=
- =?utf-8?B?N0tJWXBlbCtaQnRCcjNQWXVqMFNCQUhMbWU0dzRVNlJCcVd0THlBRnNCZmtO?=
- =?utf-8?B?MStXTTROL2NxY3dONVBveXc0L3B3MkJSb1dqendwdHV0czFDbnFud0pIUUtB?=
- =?utf-8?B?eTBWRkhOVDY1SHhiR1RKVy9BbjU4RW81SkJkSGxETXZyemllYnhjcFZnVENi?=
- =?utf-8?B?Qm9qSlM4ODZhQUlNM0JodElESVR2RWN3MkZKaXNFckhRa2hYaDZ1aVlrTW1l?=
- =?utf-8?B?VG9pdE5YaDQzTUFTWmdXTFhaSkFNOUl4ZTJvRUg4cWlETlRyZUNFQjhFVlNv?=
- =?utf-8?B?QkswMXZncFI0cWcwclBGSWZTbnBmQ1N1eTAyL1dlNjdvS3pwUk9GUkhyRGZ5?=
- =?utf-8?B?RVAzM2I1S0YxbGJmcHVkWG1FaHNMaE5SWnZxZ3F6VnMwbEhnZEZGUzhqbCtG?=
- =?utf-8?B?Y0JZWGwwWEM1WE1JN0Y2U05KdHU4YncrdWQzZ2ZCOEN1RTRaN000bWJkZUlh?=
- =?utf-8?B?Z1Z0SDdlbkpwN2cvZSsvcmw1QnJVd25DT25VN1ZCU1JRVkZjRVhURGNWTmwv?=
- =?utf-8?B?UHRlWlN5MFRMd2tVdjBYSEo4WE5TR0xMNjhaU2Yxak5zN2hSTUFHNTlkNXZi?=
- =?utf-8?B?M0lNcHRCNnZ4d003ODB6QlJsOWp6YmE0eERGZ2dqK1lDM25KU1VBTDBpVmdV?=
- =?utf-8?B?TEUrMGhOQlFmTGhGeVpqK2RaY0lxVVQyTEJkSzlFSTNHUlNaY3lacUowd2FZ?=
- =?utf-8?B?RGZpbjdUejllVUQzSnRuYy85aFdEalNOQkd6NUt2VTN5S1JpZW5WYnhQQzVo?=
- =?utf-8?B?TUllc1dVSGFJTnEyclZKbmNrWEFidFhSVDJnOHBFQVc4SFRIK1oxZEpPc2FM?=
- =?utf-8?B?RTU4OExudjNuVGJpcTNwNm1kMmh6NUpjUXFoYTErZUFJa2JrVjJIenFsRFRM?=
- =?utf-8?B?SW5kMW1iWDUzR3Y5N2dabUtoNSt6Zkp4MHRkSG80aW4xNlNEZGtXeXFXaXFv?=
- =?utf-8?B?SHByY28zcW81MVdGYkZWZ3Y0YStOZnU3YWhCOTZMdmFXZGwwNTFtbm1PcXNx?=
- =?utf-8?B?b29NaXNWLytKeHBkbzVzLzE0S2dReXRZbGJCZE56V01FWVQwcGRybUhFT2NF?=
- =?utf-8?B?aG9td21ZQzBwelV0cEdyMVU3MjhJV0ZDWjR4OXZqUzdxUm1JbGZ4MTEvQlQ5?=
- =?utf-8?B?TGIyaDRtS0o2Zm80dG5Bd2pCb1J5SVdEVklSVERIOEhscDIxNGJVWVRGZnZ0?=
- =?utf-8?B?a1Flc3lVcnVJS0tpUmpLZlNVMDFuaEY0aVU2aXNjYk5YMEdVKzU3SWlJdFRM?=
- =?utf-8?B?MnpET2lmM2QzRktsV1AxdjEyeFNrNDlUR3pnZ3NQdCsyQzJZOS95dmxPcWY3?=
- =?utf-8?B?Q3IzczBzQStkczM5cVJkWUFNQkthVm8zOS96cVBEcW4zbXdRK0tTR3VNWUZE?=
- =?utf-8?B?aGo3ZTJaWUtWY0w1U2t1ZmtxZWljSmt5Nm1MbmRCK0cwZXp6UDczcXhCRjNV?=
- =?utf-8?B?RFZlSVVFMHl5SWRzNmVLbFNTUWhHdVV2ZmRxS1ZNNHM3d2tyS3duTE4xZEhw?=
- =?utf-8?B?dC9OeEUzU2JyYzBEaTQ4N1k2MjhhdlFNTDY4RGNhV0RSOUVGZ3o5N21BWjEw?=
- =?utf-8?B?WDFPbWJYWE5MTFVNRWxKaTZZMlJwRTFEWlJsRmNOd3lXMWVPbWlYeUJ2TFN5?=
- =?utf-8?B?WHZNT0RoZDRWaC9zK05Xd0g4akxUZXliWSswNnhjekgyZi9CeXhkeVBkdkYr?=
- =?utf-8?B?TDkrbmhaVUozeE1BdFpYRUh0M0hYdTZrWTE0S1pJNktFdFNKZXNJMXZpbkJZ?=
- =?utf-8?B?U25qbURLdHRoZlVLU1ZSelNjaEdyWTV3NTNCYURPZ1NGZXlqOWVYOXdNRWQw?=
- =?utf-8?B?enlFK3Zvb3dNeVhFdndIdXEvM0JCdHdBWnl5V1d6bEU1Tk90aERSWXN1RWJV?=
- =?utf-8?Q?Fbj4mpWtvYIFezRMZLrsreo=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f96fa1e-d0ad-4506-5048-08d9c4c7255b
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 21:16:25.5475
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5812.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d40f6213-3f13-4191-1227-08d9c4cf038b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 22:12:44.4928
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZDMw3ZWODariuZnbhwvzTvJolrey7ccuo1bdv1mbhxvgD88Ns/RDW51fyu9xpy37ZYz576ItIix63XPj13gtpA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3142
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Y11VOeVzI4bcvFOdLCnqiekMXv44hNDie2u57xKQWD9iyQ58t1ysxKLDZsNQ41wfxn0Q9s0FShg4zmZYoYcsZf8Vhp4cNCxV3wD/uUzvJ1E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5090
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/21/21 10:30, Linus Torvalds wrote:
-> On Tue, Dec 21, 2021 at 10:07 AM Jan Kara <jack@suse.cz> wrote:
->>
->> For record we always intended (and still intend) to make O_DIRECT use
->> FOLL_PIN. Just it is tricky because some users mix pages pinned with GUP
->> and pages acquired through get_page() in a single bio (such as zero page)
->> and thus it is non-trivial to do the right thing on IO completion (unpin or
->> just put_page).
-> 
-> Side note: the new "exclusive VM" bit wouldn't _solve_ this issue, but
-> it might make it much easier to debug and catch.
-> 
-> If we only set the exclusive VM bit on pages that get mapped into user
-> space, and we guarantee that GUP only looks up such pages, then we can
-> also add a debug test to the "unpin" case that the bit is still set.
-> 
-> And that would catch anybody who ends up using other pages for
-> unpin(), and you could have a WARN_ON() for it (obviously also trigger
-> on the page count being too small to unpin).
-> 
-> That way, at least from a kernel debugging and development standpoint
-> it would make it easy to see "ok, this unpinning got a page that
-> wasn't pinned", and it would help find these cases where some
-> situation had used just a get_page() rather than a pin to get a page
-> pointer.
-> 
-> No?
-> 
->                    Linus
+> -----Original Message-----
+> From: Ido Schimmel <idosch@idosch.org>
+> Sent: Monday, December 20, 2021 2:51 PM
+> To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
+> Subject: Re: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
+>=20
+> On Wed, Dec 15, 2021 at 12:13:47PM +0000, Machnikowski, Maciej wrote:
+> > > -----Original Message-----
+> > > From: Ido Schimmel <idosch@idosch.org>
+> > > Sent: Sunday, December 12, 2021 12:48 PM
+> > > To: Machnikowski, Maciej <maciej.machnikowski@intel.com>
+> > > Subject: Re: [PATCH v5 net-next 0/4] Add ethtool interface for RClock=
+s
+> > >
+> > > On Fri, Dec 10, 2021 at 02:45:46PM +0100, Maciej Machnikowski wrote:
+> > > > Synchronous Ethernet networks use a physical layer clock to syntoni=
+ze
+> > > > the frequency across different network elements.
+> > > >
+> > > > Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+> > > > Equipment Clock (EEC) and have the ability to synchronize to refere=
+nce
+> > > > frequency sources.
+> > > >
+> > > > This patch series is a prerequisite for EEC object and adds ability
+> > > > to enable recovered clocks in the physical layer of the netdev obje=
+ct.
+> > > > Recovered clocks can be used as one of the reference signal by the =
+EEC.
+> > >
+> > > The dependency is the other way around. It doesn't make sense to add
+> > > APIs to configure the inputs of an object that doesn't exist. First a=
+dd
+> > > the EEC object, then we can talk about APIs to configure its inputs f=
+rom
+> > > netdevs.
+> >
+> > This API configures frequency outputs of the PTY layer of
+> > a PHY/integrated MAC. It does not configure any inputs nor it interacts
+> > with the EEC. The goal of it is to expose the clock to the piece that
+> > requires it as a reference one (a DPLL/FPGA/anything else).
+>=20
+> My fundamental issue with these patches is that instead of abstracting
+> the hardware from user space they give user space direct control over
+> it.
 
-Yes, this is especially welcome, because it means that after enough time
-sitting in the -mm tree, we can reasonably expect to catch the most important
-cases, if any were missed. That makes it a whole other level of useful, as
-compared to local testing hacks.
+Unfortunately, I don't see any other way to address the use cases that I li=
+sted
+otherwise. I'm a big fan of simple solutions, but only when they address
+all use cases that are known at the time of defining them.
 
+> This approach has the advantage of keeping the kernel relatively simple
+> and fitting more use cases than just EEC, but these are also its
+> disadvantages. Complexity needs to live somewhere and if this complexity
+> is related to the abstraction of hardware, then it should live in the
+> kernel and not in user space. We should strive to come up with an API
+> that does the same thing regardless of the underlying hardware
+> implementation.
+>=20
+> Look at the proposed API, it basically says "Make the clock recovered
+> from eth0 available on pin 1". If user space issues this command on
+> different systems, it will mean different things, based on the
+> underlying design of the hardware and the connection of the pin: To
+> "DPLL/FPGA/anything else".
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+The link to the right DPLL input can be easily added later by adding
+the new attribute to those commands. This has a big advantage
+over the other model, as it is scalable to multiple different devices
+serviced by different drivers, as it doesn't have the issue we have with
+linking objects in kernel...
+
+> Contrast that with an API that says "Set the source of EEC X to the
+> clock recovered from eth0". This API is well defined and does the same
+> thing across different systems.
+>=20
+> Lets assume that these patches are merged as-is and tomorrow we get
+> another implementation of these two ethtool operations in a different
+> driver. We can't tell if these are used to feed the recovered clock into
+> an EEC like ice does or enable some other use case that we never
+> intended to enable.
+
+...that issue is caused by the randomness and scalability of that=20
+infrastructure. At the time system boots it enumerates devices and
+initializes them in  "random" order depending on the current system=20
+configuration which makes it impossible to code any co-driver=20
+dependencies, as it's impossible to guess what identifier the kernel
+assigned to the other device that's connected to the same DPLL.
+
+> Even if all the implementations use this API to feed the EEC, consider
+> how difficult it is going to be for user space to use it. Ideally, user
+> space should be able to query the state of the EEC and its source via an
+> EEC object in a single command. With the current approach in which we
+> have some amorphic object called "DPLL" that is only aware of pins and
+> not netdevs, it's going to be very hard. User space will see that the
+> DPLL is locked to the clock fed via pin 1. How user space is supposed to
+> understand what is the source of this clock? Issue RCLK_GET dump and
+> check for matching pin index that is enabled? User space has no reason
+> to do it given that it doesn't even know that the source is a netdev.
+
+Userspace tool will always know what ports it works with - it will come
+from the config file, as - even if you have a dozen ports linked to a singl=
+e
+DPLL you may decide that you don't want to send ESMC messages
+on some of them - just like we do with ptp4l.
+
+The amorphic DPLL device has much more uses that a dedicated EEC
+object and if we know what pin the DPLL uses and what is the link
+between the RCLK output and the DPLL input it'll be very easy to
+figure out what's going on.
+
+The dump will also not be needed, as we know who we set as the best
+source after receiving the ESMC packets from neighbors.
+
+> >
+> > I don't agree with the statement that we must have EEC object first,
+> > as we can already configure different frequency sources using different
+> > subsystems.
+>=20
+> Regardless of all the above technical arguments, I think that these
+> patches should not be merged now based on common sense alone. Not only
+> these patches are of very limited use without an EEC object, they also
+> prevent us from making changes to the API when such an object is
+> introduced.
+
+And I see a big value of merging them in as that would enable upstreaming
+of the userspace tools that will explain a lot and close many gaps.
+
+> > The source of signal should be separated from its consumer.
+>=20
+> If it is completely separated (despite being hardwired on the board),
+> then user space does not know how the signal is used when it issues the
+> command. Is this signal fed into an EEC that controls that transmission
+> rate of other netdev? Is this signal fed into an FPGA that blinks a led?
+
+It's the same thing with frequency pins of the PTP subsystem. Userspace
+tool can enable them, but has no idea what's on the other end of them.
+
+> >
+> > > With these four patches alone, user space doesn't know how many EECs
+> > > there are in the system, it doesn't know the mapping from netdev to E=
+EC,
+> > > it doesn't know the state of the EEC, it doesn't know which source is
+> > > chosen in case more than one source is enabled. Patch #3 tries to wor=
+k
+> > > around it by having ice print to kernel log, when the information sho=
+uld
+> > > really be exposed via the EEC object.
+> >
+> > The goal of them is to add API for recovered clocks - not for EECs.
+>=20
+> What do you mean by "not for EECs"? The file is called
+> "net/ethtool/synce.c", if the signal is not being fed into an EEC then
+> into what? It is unclear what kind of back doors this API will open.
+
+Can be a DPLL of the radio part of the device, or different devices that
+expects frequency reference.
+If it makes it better we can move that to net/ethtool/rclk.c.
+
+> > This part is there for observability and will still be there when EEC
+> > is in place.  Those will need to be addressed by the DPLL subsystem.
+>=20
+> If it is it only meant for observability, then why these messages are
+> emitted as warnings to the kernel log? Regardless, the user API should
+> be designed with observability in mind so that you wouldn't need to rely
+> on prints to the kernel log.
+
+You're right - need to change that to dev_info.
+And yes - in the final form userspace tools will pull EEC's info from the D=
+PLL
+subsystem - this prints the state of 2 DPLLs and is designed for debuggabil=
+ity.
+
+> >
+> > > +		dev_warn(ice_pf_to_dev(pf),
+> > > +			 "<DPLL%i> state changed to: %d, pin %d",
+> > > +			 ICE_CGU_DPLL_SYNCE,
+> > > +			 pf->synce_dpll_state,
+> > > +			 pin);
+> > >
+> > > >
+> > > > Further work is required to add the DPLL subsystem, link it to the
+> > > > netdev object and create API to read the EEC DPLL state.
+> > >
+> > > When the EEC object materializes, we might find out that this API nee=
+ds
+> > > to be changed / reworked / removed, but we won't be able to do that
+> > > given it's uAPI. I don't know where the confidence that it won't happ=
+en
+> > > stems from when there are so many question marks around this new
+> > > object.
+> >
+> > This API follows the functionality of other frequency outputs that exis=
+t
+> > in the kernel, like PTP period file for frequency output of PTP clock
+> > or other GPIOs. I highly doubt it'll change - we may extend it to add
+> mapping
+> > between pins, but like I indicated - this will not always be known to S=
+W.
+> >
+> > Regards
+> > Maciek
