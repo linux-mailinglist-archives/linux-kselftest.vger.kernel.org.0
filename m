@@ -2,126 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B07547B530
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Dec 2021 22:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADAB47B69F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 01:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbhLTV2L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Dec 2021 16:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbhLTV2H (ORCPT
+        id S233435AbhLUA6h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Dec 2021 19:58:37 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16840 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231254AbhLUA6h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Dec 2021 16:28:07 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3D0C06173E
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 13:28:07 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id b13so15185196edd.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 13:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=03tftiEYhqRnEnhYGSXfRSnQjXKVu8uhIKmeLcivayo=;
-        b=BlcnCZc5c1t5Dfig8sDq8+kwYqCC5UxX6TKvoHp42AdOCuhs3rMbspFkuXfJmAXJmn
-         AGLGLo8y6eS/99X7esXkovRQFwuKpXpaeZOFoeiIWJJaZBHwkF0L6FJ8hQr5zCDB00D4
-         Pgj1fWZ4XRAjJ+KB5ZQMvjvAc+FPYlGHucNEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=03tftiEYhqRnEnhYGSXfRSnQjXKVu8uhIKmeLcivayo=;
-        b=Ghhe+pwaEKv7eP82HOFwYJMqXYfHdNKUgjoOEU1TROVgIZx6xMvECsCa5wm1TvsSOr
-         QYJrAFXaLywUpHXiWg+8Z5+tIISOwCUXR4tG0bgCF5HLwhv6aiqPNH/8YgjHhXdXORil
-         ujkty4m/nHH+jJ7TmQYmfsTPb6AarSNRCud5UIiuNYV74n0RCvtmU4q4J1jeSC+dtK0E
-         RmjPmV5vFGQoMxOoPoKy5rUMKTfSZ/6r7aKcwIQquzjqi5+FTLj7/hdF5csbztRMQssH
-         HwIkjmpzCaWcJfAPFuYLMgGVQ15inz3SAOQuNrquQpbOEP3mM+PY358SaCR0GO01Fwcw
-         e1Og==
-X-Gm-Message-State: AOAM533GEi7nyxS0zW7icVB6mXvfrnbWrBm3R6CsNhN3yT0+VSCmVjJ0
-        Qch8KaDZP4p9PjffW47g+8jadHIlk7Gh1xCRPqY=
-X-Google-Smtp-Source: ABdhPJxM6AQTBANYOJRxnGmaiP5w7Ia2OBBCptz6bpEiPetMMyezmpZItztALyYYoHsFJqpYCXiC9g==
-X-Received: by 2002:a05:6402:524d:: with SMTP id t13mr37515edd.356.1640035685767;
-        Mon, 20 Dec 2021 13:28:05 -0800 (PST)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id o13sm5755830ejy.192.2021.12.20.13.28.05
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Dec 2021 13:28:05 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id bm14so30895153edb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Dec 2021 13:28:05 -0800 (PST)
-X-Received: by 2002:adf:d1a6:: with SMTP id w6mr35633wrc.274.1640035674847;
- Mon, 20 Dec 2021 13:27:54 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com> <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <Yb+gId/gXocrlJYD@casper.infradead.org>
- <YcDNaoGcGS6ypucg@casper.infradead.org> <CAHk-=wj+HbN0Ai+M2ABBvWnNKd2+J97kYPOsjwJC6o9xRF9jHw@mail.gmail.com>
- <YcDvTMUF3XWKWgSW@casper.infradead.org>
-In-Reply-To: <YcDvTMUF3XWKWgSW@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 20 Dec 2021 13:27:38 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgyRg+H6PJkDRr7H0=-GNiNZ+yJ7XEWnue5+Nh6SOyXVQ@mail.gmail.com>
-Message-ID: <CAHk-=wgyRg+H6PJkDRr7H0=-GNiNZ+yJ7XEWnue5+Nh6SOyXVQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Nadav Amit <namit@vmware.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
+        Mon, 20 Dec 2021 19:58:37 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHyjj34Gbz91r0;
+        Tue, 21 Dec 2021 08:57:45 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 08:58:34 +0800
+Received: from [10.67.109.184] (10.67.109.184) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 08:58:34 +0800
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
+ userspace pt_regs
+From:   Pu Lehui <pulehui@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211214135555.125348-1-pulehui@huawei.com>
+ <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
+ <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
+ <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
+ <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com>
+Message-ID: <88aa98df-b566-d031-b9f9-2b88a437a810@huawei.com>
+Date:   Tue, 21 Dec 2021 08:58:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 1:02 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> Hah, that was actually how I did it originally (without actually
-> committing at each step, and with a few "Oh, hang on, now we can avoid
-> calculating this too" stops and restarts along the way), but I thought
-> it all hung together logically as a single change.  It's hard to see
-> things from the other person's perspective at times.
 
-In just about any other area, I wouldn't mind one bigger patch that
-just removes code that isn't used.
 
-But when it's in the vm code, and it's pretty grotty, I do prefer
-seeing three patches that individually are much easier to see that
-"yeah, this doesn't actually change anything at all".
-
-The combined patch may be exactly the same thing, it's just much
-harder to see that "oh, now it's not used any more".
-
-That was perhaps especially true since a number of the changes also
-ended up doing statement simplification when the old layout made no
-sense any more with part of the results not used.
-
-So your 3-patch series was much easier to look at and go "Yeah, I
-believe each of these patches is a no-op".
-
-So ACK on all those patches.
-
-          Linus
+On 2021/12/20 22:02, Pu Lehui wrote:
+> 
+> 
+> On 2021/12/18 0:45, Andrii Nakryiko wrote:
+>> On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
+>>>
+>>>
+>>>
+>>> On 2021/12/16 12:06, Andrii Nakryiko wrote:
+>>>> On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
+>>>>>
+>>>>> When building bpf selftests on arm64, the following error will occur:
+>>>>>
+>>>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
+>>>>> user_pt_regs'
+>>>>>
+>>>>> Some archs, like arm64 and riscv, use userspace pt_regs in
+>>>>> bpf_tracing.h, which causes build failure when bpf prog use
+>>>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
+>>>>
+>>>> We could probably also extend bpf_tracing.h to work with
+>>>> kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
+>>>> __VMLINUX_H__ checks). It's more work, but will benefit other end
+>>>> users, not just selftests.
+>>>>
+>>> It might change a lot. We can use header file directory generated by
+>>> "make headers_install" to fix it.
+>>
+>> We don't have dependency on "make headers_install" and I'd rather not 
+>> add it.
+>>
+>> What do you mean by "change a lot"?
+>>
+> Maybe I misunderstood your advice. Your suggestion might be to extend 
+> bpf_tracing.h to kernel-space pt_regs, while some archs, like arm64, 
+> only support user-space. So the patch might be like this:
+> 
+> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> index db05a5937105..2c3cb8e9ae92 100644
+> --- a/tools/lib/bpf/bpf_tracing.h
+> +++ b/tools/lib/bpf/bpf_tracing.h
+> @@ -195,9 +195,13 @@ struct pt_regs;
+> 
+>   #elif defined(bpf_target_arm64)
+> 
+> -struct pt_regs;
+> +#if defined(__KERNEL__)
+> +#define PT_REGS_ARM64 const volatile struct pt_regs
+> +#else
+>   /* arm64 provides struct user_pt_regs instead of struct pt_regs to 
+> userspace */
+>   #define PT_REGS_ARM64 const volatile struct user_pt_regs
+> +#endif
+> +
+>   #define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
+>   #define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
+>   #define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
+> 
+Please ignore the last reply. User-space pt_regs of arm64/s390 is the 
+first part of the kernel-space's, it should has covered both kernel and 
+userspace.
+>>>
+>>> --- a/tools/testing/selftests/bpf/Makefile
+>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>> @@ -294,7 +294,8 @@ MENDIAN=$(if
+>>> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+>>>    CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+>>>    BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
+>>>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
+>>> -            -I$(abspath $(OUTPUT)/../usr/include)
+>>> +            -I$(abspath $(OUTPUT)/../usr/include) \
+>>> +            -I../../../../usr/include
+>>>>>
+>>>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>>>> ---
+>>>>>    tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
+>>>>>    tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
+>>>>>    tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
+>>>>>    tools/testing/selftests/bpf/progs/loop6.c     | 20 
+>>>>> ++++++-------------
+>>>>>    .../selftests/bpf/progs/test_overhead.c       |  8 ++------
+>>>>>    .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
+>>>>>    6 files changed, 15 insertions(+), 43 deletions(-)
+>>>>>
+>>>>
+>>>> [...]
+>>>> .
+>>>>
+>> .
+>>
+> .
