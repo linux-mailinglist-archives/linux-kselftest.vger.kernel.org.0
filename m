@@ -2,65 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B3947C696
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 19:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B969147C6A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Dec 2021 19:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241357AbhLUS2t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Dec 2021 13:28:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52701 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241379AbhLUS2s (ORCPT
+        id S237159AbhLUSb3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Dec 2021 13:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237146AbhLUSb3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Dec 2021 13:28:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640111327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NtSOKjHL5xLetWImuyMHWnGACFYDBlyV6QMnr6bSdxg=;
-        b=KhUXtSQ6fECMU/5ju5c5l5ms9AyeZFOv09A2g92GOWc221wIn1/UN6LcILhrnQ5eYt3wO6
-        N8gyrQeDF/lRBMp/Kg3vO9jujkKC1T/DFYEgKlWisp2y3u7DU+nBU4txfJLWWPW9pz9cGJ
-        cIGFHTEpCm4Uh1BcutMvtCwMJ8mv+m0=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-50ZwZ_HwM9qAtyaRil5gcA-1; Tue, 21 Dec 2021 13:28:46 -0500
-X-MC-Unique: 50ZwZ_HwM9qAtyaRil5gcA-1
-Received: by mail-wr1-f72.google.com with SMTP id r9-20020adfb1c9000000b001a2981d9356so1120742wra.20
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Dec 2021 10:28:46 -0800 (PST)
+        Tue, 21 Dec 2021 13:31:29 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA42C06173F
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Dec 2021 10:31:28 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x7so6773150lfu.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Dec 2021 10:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kr2TxL6wnne8Q9bYsPk7XLye7r5BDis7uMpH40CjpuM=;
+        b=UMZi0Hx4yN8uS8EBWgD+gNYmL13lzK1vKaY6zW2PFGKQwwgxzxKbuKQjiUmhtbIulS
+         rmztzOpTqtEghOW6rMW16mKk1ILe+hsFn7rh5L+vQygm5jShj6QoCzImZ8AR3odal/hZ
+         X3poz6NiOlDdXIa9nYc39Mc7M1gNl6Suze1pw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=NtSOKjHL5xLetWImuyMHWnGACFYDBlyV6QMnr6bSdxg=;
-        b=1VawIoD5LDmSgzVD4sU3uQWHIQzhD9FNVunFbWsUNuEAd4LVX9xf2ug0YQzuHYBwB0
-         0W+AGYTa6Jm1ds2gxO+MvQ0SZZdITkmDmZCph9OZb1Pmygo82w6WCzPOj8sqvTgm4T2t
-         kEN44wzzCj9iz1Jn0h88zwr4V98irOOWsTW3MVCIhHrbpGwU0G97mKerAHnKNdXG+rgs
-         KwaSRhOpcpcPGWCaTnWp+VPUIqZGbXE2a+MJMBUpzEDMkImOt01pfzfutErDHpgSTQzs
-         ekdUe9/hXApn30PMMiR/GxjF4fy4FnqRX67SYq+AoV4YmPiSdsslzgb+re2dwBkqH0rk
-         RlCQ==
-X-Gm-Message-State: AOAM532KuMFOOqyo+RYXtcMXGlo75l3l7d9S/IxSREch1QoSA6uiQ5SS
-        tfkFVJsyN64Zf8/nI3+Po44b6PppUcdfZ0oGR7dSTz3HbR+Uge6Ss4SpsFe0zQkxUiTu+KgBkjr
-        fTG7jK7yg8jhr6SQiknax8mbfRShV
-X-Received: by 2002:a05:6000:144c:: with SMTP id v12mr3571372wrx.266.1640111325112;
-        Tue, 21 Dec 2021 10:28:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwz4R0LUDyW9KEiVeNRITaI4SKFHU55LagiK5twVirj2yo/Q6yNnWnJ9xrKESiQeF8/jrJCBQ==
-X-Received: by 2002:a05:6000:144c:: with SMTP id v12mr3571343wrx.266.1640111324857;
-        Tue, 21 Dec 2021 10:28:44 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c64a4.dip0.t-ipconnect.de. [91.12.100.164])
-        by smtp.gmail.com with ESMTPSA id u9sm2953335wmm.7.2021.12.21.10.28.42
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kr2TxL6wnne8Q9bYsPk7XLye7r5BDis7uMpH40CjpuM=;
+        b=yqt/gETGMwiFUhU5xM0+v+x8wBxOOqRkfu2YcYnEWImgJh4uF3eyYVBVUqURYch1DI
+         QKqM8fPGniMud7MgywzZbSY37TQgVO5/ulatJwHz9rkvhWT8Sx5dV8VBx1l+yNusCf8N
+         BpV0koP2Rq0bA95XONVzdrXdOsj+Seu/iF7Lz39jB42S0272ok4zOextYvWrrK81uYSv
+         1lonKr7y/LrLFjp+iCvkntjYVWGyARgDtw6MzRmV4GN3tSW5TV7sK2aroVso1fN1dck6
+         l7ciBRDvOlrRxA7bSEm6NgFvCHUfjevqF1xcY4VDNJHvzywLwz+vcqnRnCy4UZdAjaFw
+         9N1g==
+X-Gm-Message-State: AOAM5309iq3aUlGjGNr9p1A9gik9LcovLjdCdHVBg14wLjBt9EsZmuOe
+        TYAG0DjqfFqRK7MyII39ELP4HnfigeNC/8MrCKs=
+X-Google-Smtp-Source: ABdhPJzCYfWWR2bFRO77XxqhNwXDFSRk/7Kf0P4yxn2P1axGpBZHtsanHuBFwTYeY0whv3LFfKsyjQ==
+X-Received: by 2002:ac2:5f55:: with SMTP id 21mr4207314lfz.283.1640111487032;
+        Tue, 21 Dec 2021 10:31:27 -0800 (PST)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id n17sm2791030ljg.128.2021.12.21.10.31.26
+        for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Dec 2021 10:28:44 -0800 (PST)
-Message-ID: <dda021c8-69ec-c660-46be-793ae345a5bb@redhat.com>
-Date:   Tue, 21 Dec 2021 19:28:42 +0100
+        Tue, 21 Dec 2021 10:31:26 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id b22so31290782lfb.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Dec 2021 10:31:26 -0800 (PST)
+X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr3617856wrx.193.1640111475384;
+ Tue, 21 Dec 2021 10:31:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Nadav Amit <namit@vmware.com>,
+References: <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
+ <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com> <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com> <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com> <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com> <20211221180705.GA32603@quack2.suse.cz>
+In-Reply-To: <20211221180705.GA32603@quack2.suse.cz>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Dec 2021 10:30:59 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiyxQ==vnHFHW99S_OPwA=u1Qrfg2OGr_6zPcBAuhQY2w@mail.gmail.com>
+Message-ID: <CAHk-=wiyxQ==vnHFHW99S_OPwA=u1Qrfg2OGr_6zPcBAuhQY2w@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Jan Kara <jack@suse.cz>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Nadav Amit <namit@vmware.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>,
@@ -80,107 +88,40 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>, Nadav Amit <namit@vmware.com>,
         Peter Xu <peterx@redhat.com>,
         Donald Dutile <ddutile@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Jan Kara <jack@suse.cz>
-References: <CAHk-=wj7eSOhbWDeADL_BJKLzdDF5s_5R9v7d-4P3L6v1T3mpQ@mail.gmail.com>
- <20211218184233.GB1432915@nvidia.com>
- <5CA1D89F-9DDB-4F91-8929-FE29BB79A653@vmware.com>
- <CAHk-=wh-ETqwd6EC2PR6JJzCFHVxJgdbUcMpW5MS7gCa76EDsQ@mail.gmail.com>
- <4D97206A-3B32-4818-9980-8F24BC57E289@vmware.com>
- <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
- <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
- <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
- <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
- <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
- <20211221010312.GC1432915@nvidia.com>
- <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <CAHk-=wi191H+U0TNJhL7Jf7VAA+mA6y8MUQLy9DkkaS+tNgp+w@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-In-Reply-To: <CAHk-=wi191H+U0TNJhL7Jf7VAA+mA6y8MUQLy9DkkaS+tNgp+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 21.12.21 19:00, Linus Torvalds wrote:
-> On Tue, Dec 21, 2021 at 9:40 AM David Hildenbrand <david@redhat.com> wrote:
->>
->>> I do think the existing "maybe_pinned()" logic is fine for that. The
->>> "exclusive to this VM" bit can be used to *help* that decision -
->>> because only an exclusive page can be pinned - bit I don't think it
->>> should _replace_ that logic.
->>
->> The issue is that O_DIRECT uses FOLL_GET and cannot easily be changed to
->> FOLL_PIN unfortunately. So I'm *trying* to make it more generic such
->> that such corner cases can be handled as well correctly. But yeah, I'll
->> see where this goes ... O_DIRECT has to be fixed one way or the other.
->>
->> John H. mentioned that he wants to look into converting that to
->> FOLL_PIN. So maybe that will work eventually.
-> 
-> I'd really prefer that as the plan.
-> 
-> What exactly is the issue with O_DIRECT? Is it purely that it uses
-> "put_page()" instead of "unpin", or what?
-> 
-> I really think that if people look up pages and expect those pages to
-> stay coherent with the VM they looked it up for, they _have_ to
-> actively tell the VM layer - which means using FOLL_PIN.
-> 
-> Note that this is in absolutely no way a "new" issue. It has *always*
-> been true. If some O_DIORECT path depends on pinning behavior, it has
-> never worked correctly, and it is entirely on O_DIRECT, and not at all
-> a VM issue. We've had people doing GUP games forever, and being burnt
-> by those games not working reliably.
-> 
-> GUP (before we even had the notion of pinning) would always just take
-> a reference to the page, but it would not guarantee that that exact
-> page then kept an association with the VM.
-> 
-> Now, in *practice* this all works if:
-> 
->  (a) the GUP user had always written to the page since the fork
-> (either explicitly, or with FOLL_WRITE obviously acting as such)
-> 
->  (b) the GUP user never forks afterwards until the IO is done
-> 
->  (c) the GUP user plays no other VM games on that address
-> 
-> and it's also very possible that it has worked by pure luck (ie we've
-> had a lot of random code that actively mis-used things and it would
-> work in practice just because COW would happen to cut the right
-> direction etc).
-> 
-> Is there some particular GUP user you happen to care about more than
-> others? I think it's a valid option to try to fix things up one by
-> one, even if you don't perhaps fix _all_ cases.
+On Tue, Dec 21, 2021 at 10:07 AM Jan Kara <jack@suse.cz> wrote:
+>
+> For record we always intended (and still intend) to make O_DIRECT use
+> FOLL_PIN. Just it is tricky because some users mix pages pinned with GUP
+> and pages acquired through get_page() in a single bio (such as zero page)
+> and thus it is non-trivial to do the right thing on IO completion (unpin or
+> just put_page).
 
-Yes, of course. The important part for me is to have a rough idea in how
-to tackle all pieces and have a reliable design/approach. Besides the
-security issue, highest priority is getting R/W pins (FOLL_WRITE) right,
-including O_DIRECT, because that can silently break existing use cases.
+Side note: the new "exclusive VM" bit wouldn't _solve_ this issue, but
+it might make it much easier to debug and catch.
 
-Lower priority is getting R/O pins on anonymous memory right, because
-that never worked reliably. Lowest priority is getting R/O pins on
-MAP_PRIVATE file memory right.
+If we only set the exclusive VM bit on pages that get mapped into user
+space, and we guarantee that GUP only looks up such pages, then we can
+also add a debug test to the "unpin" case that the bit is still set.
 
-I'd appreciate if someone could work on the O_DIRECT FOLL_PIN conversion
-while I struggle with PageAnonExclusive() and R/W pins :)
+And that would catch anybody who ends up using other pages for
+unpin(), and you could have a WARN_ON() for it (obviously also trigger
+on the page count being too small to unpin).
 
-[noting that I'll not get too much done within the next 2 weeks]
+That way, at least from a kernel debugging and development standpoint
+it would make it easy to see "ok, this unpinning got a page that
+wasn't pinned", and it would help find these cases where some
+situation had used just a get_page() rather than a pin to get a page
+pointer.
 
--- 
-Thanks,
+No?
 
-David / dhildenb
-
+                  Linus
