@@ -2,116 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFC247CA7A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Dec 2021 01:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A7F47CACD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Dec 2021 02:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238364AbhLVAkI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Dec 2021 19:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbhLVAkI (ORCPT
+        id S235193AbhLVBda (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Dec 2021 20:33:30 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:30157 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233887AbhLVBda (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Dec 2021 19:40:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D983BC061574;
-        Tue, 21 Dec 2021 16:40:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98C7CB81A27;
-        Wed, 22 Dec 2021 00:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E929CC36AEA;
-        Wed, 22 Dec 2021 00:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640133605;
-        bh=j4fxKQ/pouRbRKesqGWj6oRpvgQjCFuPocDWspHDWpk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CRC3wHdIBRa9zy6jEt4GCTd215IEdJ/k4UtFLWcIj2jlorNj6GVId8YsRxmMGNGmN
-         YyMt1XPuejBfKSGlrrm3izZpwt/Iy2gRCgVoLpRM41gh3arsmDEiGbq93SAQrzTf+8
-         UZnOVYj6t8QxTdcqCXiQRCaHayo32eN5y0EvAtpA4eSzwk0EJkplxDk6i2DTivuYpj
-         PfH8nv4g94XPwhss/aQC1oorYc4niFtTVjkKCVjZF8SoT/T+qSl8gZew9XH+h48jo6
-         TkosmWaF1zZ3Us/kTR3ka/WaqlNiBui/hl/isRseDkYayWhVM1k+gddIpOsJQemsLc
-         Xmyn4tE8XX66w==
-Date:   Wed, 22 Dec 2021 02:40:04 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org
-Subject: Re: [PATCH] selftests/sgx: Fix corrupted cpuid macro invocation
-Message-ID: <YcJz5HScqjAiWUBk@iki.fi>
-References: <20211204202355.23005-1-jarkko@kernel.org>
- <1eefe8b4-feec-3f2a-7eae-c10e49fbedf0@intel.com>
+        Tue, 21 Dec 2021 20:33:30 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JJbPl4d1lz8vyq;
+        Wed, 22 Dec 2021 09:31:07 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 09:33:27 +0800
+Received: from [10.67.109.184] (10.67.109.184) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 22 Dec 2021 09:33:27 +0800
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
+ userspace pt_regs
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211214135555.125348-1-pulehui@huawei.com>
+ <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
+ <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
+ <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
+ <50d81d9c-2b5f-9dfd-a284-9778e6273725@huawei.com>
+ <88aa98df-b566-d031-b9f9-2b88a437a810@huawei.com>
+ <CAEf4BzbJsmKiZHrnEZUZxCL_7PP2w3K5-VabP1bcsoyKogiypw@mail.gmail.com>
+From:   Pu Lehui <pulehui@huawei.com>
+Message-ID: <bd0a5dff-7ada-4ff3-8fda-89e69254c2c4@huawei.com>
+Date:   Wed, 22 Dec 2021 09:33:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1eefe8b4-feec-3f2a-7eae-c10e49fbedf0@intel.com>
+In-Reply-To: <CAEf4BzbJsmKiZHrnEZUZxCL_7PP2w3K5-VabP1bcsoyKogiypw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.184]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 04:19:24PM -0800, Reinette Chatre wrote:
-> Hi Dave and Jarkko,
-> 
-> On 12/4/2021 12:23 PM, Jarkko Sakkinen wrote:
-> > Compilation results:
-> > 
-> > $ make -C tools/testing/selftests/sgx/
-> > make: Entering directory '/home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx'
-> > gcc -Wall -Werror -g -I../../../../tools/include -fPIC -z noexecstack -c main.c -o /home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx/main.o
-> > main.c: In function ‘get_total_epc_mem’:
-> > main.c:296:17: error: implicit declaration of function ‘__cpuid’ [-Werror=implicit-function-declaration]
-> >    296 |                 __cpuid(&eax, &ebx, &ecx, &edx);
-> >        |                 ^~~~~~~
-> > cc1: all warnings being treated as errors
-> > make: *** [Makefile:33: /home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx/main.o] Error 1
-> > make: Leaving directory '/home/jarkko/Projects/linux-sgx/tools/testing/selftests/sgx'
-> > 
-> > Include to cpuid.h is missing and the macro usage is incorrect.
-> > 
-> > Include cpuid.h and use __cpuid_count() macro in order to fix the
-> > compilation issue.
-> > 
-> > Fixes: f0ff2447b861 ("selftests/sgx: Add a new kselftest: Unclobbered_vdso_oversubscribed")
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> >   tools/testing/selftests/sgx/main.c | 5 ++---
-> >   1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> > index 7e912db4c6c5..370c4995f7c4 100644
-> > --- a/tools/testing/selftests/sgx/main.c
-> > +++ b/tools/testing/selftests/sgx/main.c
-> > @@ -1,6 +1,7 @@
-> >   // SPDX-License-Identifier: GPL-2.0
-> >   /*  Copyright(c) 2016-20 Intel Corporation. */
-> > +#include <cpuid.h>
-> >   #include <elf.h>
-> >   #include <errno.h>
-> >   #include <fcntl.h>
-> > @@ -291,9 +292,7 @@ static unsigned long get_total_epc_mem(void)
-> >   	int section = 0;
-> >   	while (true) {
-> > -		eax = SGX_CPUID;
-> > -		ecx = section + SGX_CPUID_EPC;
-> > -		__cpuid(&eax, &ebx, &ecx, &edx);
-> > +		__cpuid_count(SGX_CPUID, section + SGX_CPUID_EPC, eax, ebx, ecx, edx);
-> >   		type = eax & SGX_CPUID_EPC_MASK;
-> >   		if (type == SGX_CPUID_EPC_INVALID)
-> 
-> 
-> Shuah confirmed ([1]) that there is no problem including cpuid.h and that
-> this is the preferred fix.
-> 
-> Thank you very much Jarkko.
-> 
-> Acked-by: Reinette Chatre <reinette.chatre@intel.com>
-> 
-> Reinette
-> 
-> [1] https://lore.kernel.org/linux-kselftest/63293c72-55ca-9446-35eb-74aff4c8ba5d@linuxfoundation.org/
 
-OK, cool, thanks!
 
-/Jarkko
+On 2021/12/22 7:52, Andrii Nakryiko wrote:
+> On Mon, Dec 20, 2021 at 4:58 PM Pu Lehui <pulehui@huawei.com> wrote:
+>>
+>>
+>>
+>> On 2021/12/20 22:02, Pu Lehui wrote:
+>>>
+>>>
+>>> On 2021/12/18 0:45, Andrii Nakryiko wrote:
+>>>> On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 2021/12/16 12:06, Andrii Nakryiko wrote:
+>>>>>> On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
+>>>>>>>
+>>>>>>> When building bpf selftests on arm64, the following error will occur:
+>>>>>>>
+>>>>>>> progs/loop2.c:20:7: error: incomplete definition of type 'struct
+>>>>>>> user_pt_regs'
+>>>>>>>
+>>>>>>> Some archs, like arm64 and riscv, use userspace pt_regs in
+>>>>>>> bpf_tracing.h, which causes build failure when bpf prog use
+>>>>>>> macro in bpf_tracing.h. So let's use vmlinux.h directly.
+>>>>>>
+>>>>>> We could probably also extend bpf_tracing.h to work with
+>>>>>> kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
+>>>>>> __VMLINUX_H__ checks). It's more work, but will benefit other end
+>>>>>> users, not just selftests.
+>>>>>>
+>>>>> It might change a lot. We can use header file directory generated by
+>>>>> "make headers_install" to fix it.
+>>>>
+>>>> We don't have dependency on "make headers_install" and I'd rather not
+>>>> add it.
+>>>>
+>>>> What do you mean by "change a lot"?
+>>>>
+>>> Maybe I misunderstood your advice. Your suggestion might be to extend
+>>> bpf_tracing.h to kernel-space pt_regs, while some archs, like arm64,
+> 
+> yes
+> 
+>>> only support user-space. So the patch might be like this:
+>>>
+>>> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+>>> index db05a5937105..2c3cb8e9ae92 100644
+>>> --- a/tools/lib/bpf/bpf_tracing.h
+>>> +++ b/tools/lib/bpf/bpf_tracing.h
+>>> @@ -195,9 +195,13 @@ struct pt_regs;
+>>>
+>>>    #elif defined(bpf_target_arm64)
+>>>
+>>> -struct pt_regs;
+>>> +#if defined(__KERNEL__)
+>>> +#define PT_REGS_ARM64 const volatile struct pt_regs
+>>> +#else
+>>>    /* arm64 provides struct user_pt_regs instead of struct pt_regs to
+>>> userspace */
+>>>    #define PT_REGS_ARM64 const volatile struct user_pt_regs
+>>> +#endif
+>>> +
+>>>    #define PT_REGS_PARM1(x) (((PT_REGS_ARM64 *)(x))->regs[0])
+>>>    #define PT_REGS_PARM2(x) (((PT_REGS_ARM64 *)(x))->regs[1])
+>>>    #define PT_REGS_PARM3(x) (((PT_REGS_ARM64 *)(x))->regs[2])
+>>>
+>> Please ignore the last reply. User-space pt_regs of arm64/s390 is the
+>> first part of the kernel-space's, it should has covered both kernel and
+>> userspace.
+> 
+> Alright, so is there still a problem or not? Looking at the definition
+> of struct pt_regs for arm64, just casting struct pt_regs to struct
+> user_pt_regs will indeed just work. So in that case, what was your
+> original issue?
+> 
+Thanks for your reply. The original issue is, when arm64 bpf selftests 
+cross compiling in x86_64 host, clang cannot find the arch specific uapi 
+ptrace.h, and then the above error occur. Of course it works when 
+compiling in arm64 host for it owns the corresponding uapi ptrace.h. So 
+my suggestion is to add arch specific use header file directory 
+generated by "make headers_install" for the cross compiling issue.
+>>>>>
+>>>>> --- a/tools/testing/selftests/bpf/Makefile
+>>>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>>>> @@ -294,7 +294,8 @@ MENDIAN=$(if
+>>>>> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+>>>>>     CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+>>>>>     BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
+>>>>>                -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
+>>>>> -            -I$(abspath $(OUTPUT)/../usr/include)
+>>>>> +            -I$(abspath $(OUTPUT)/../usr/include) \
+>>>>> +            -I../../../../usr/include
+>>>>>>>
+>>>>>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>>>>>> ---
+>>>>>>>     tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
+>>>>>>>     tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
+>>>>>>>     tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
+>>>>>>>     tools/testing/selftests/bpf/progs/loop6.c     | 20
+>>>>>>> ++++++-------------
+>>>>>>>     .../selftests/bpf/progs/test_overhead.c       |  8 ++------
+>>>>>>>     .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
+>>>>>>>     6 files changed, 15 insertions(+), 43 deletions(-)
+>>>>>>>
+>>>>>>
+>>>>>> [...]
+>>>>>> .
+>>>>>>
+>>>> .
+>>>>
+>>> .
+> .
+> 
