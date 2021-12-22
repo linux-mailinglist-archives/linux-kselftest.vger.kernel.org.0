@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA7047D201
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Dec 2021 13:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2F447D1FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Dec 2021 13:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245185AbhLVMlX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Dec 2021 07:41:23 -0500
-Received: from mga14.intel.com ([192.55.52.115]:11439 "EHLO mga14.intel.com"
+        id S245174AbhLVMlW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Dec 2021 07:41:22 -0500
+Received: from mga14.intel.com ([192.55.52.115]:11440 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245025AbhLVMlH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S245036AbhLVMlH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 22 Dec 2021 07:41:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1640176867; x=1671712867;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EpMl6feuqDrwEOO80GiNvACH9UVk+M+dGZGqnHBD8m8=;
-  b=B6MGbHKgp8EQ3kTFwdX7H9bQv4wKpqrWEJpVafKuTRBmtp+CJOMWp3/L
-   FZaAJEvuZDunUmVp0FgeABn+X/qO5NPnxvHX9r2cgXbT0ji1iJJfjGJLZ
-   8ce45tgl1rdEIaYdpig49pSeYS1PcQKpIltiHArnxULUGgcU/VLwjVpQZ
-   x65i201NesAQON0QhYJnceGbajAG2TVf6r2E56TxF0GFDHQ3B0i+8JW/z
-   NTYsk8oISJ8DDAxOWYvUFpsL9DRJl1U/eyyiBGeenosU06UgLH1JjiWcJ
-   PeAJ4sLqTnsIv1rsBUEVuyTKtGRDn2r5ugWcnq3VNPNBlIj+bW/Ug9YFj
+  bh=PXq6/YEFmL7fuafodWXOL+G8jefqhvh1JXMT3eAUNEI=;
+  b=fOiqHG8PZRDT6TpSeRFg9DtuGVi9sUSceFhgd80SSBHHzfN5fIEr5dZB
+   ZPynlJ7qIoZKWwKHWsWkhngeLwLtrLqbksvBui88OsKLPtFh/PLRsLS5U
+   aDx+GZdpBIBnMK9XIqkQHZAa6FKypwNH2Kxd+gxINH8fS3vPtl8ZNMhxr
+   8pl2dnG+0LPAfw4QxwzqACfM+S+Pq06LhmbjByaRBGjfzvyZfofocXrf9
+   z/HKCpHAtWZ1NZuuh0ne4YBzN0nUHQTa+co9EZtUvA33cscNVlX5dK95S
+   VGP0p2wFNpXTNDeFKwZ5b7Q0MY0PKw+YlUOlxC8wfvB7DTeFTSMfMwGyr
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833417"
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833421"
 X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240833417"
+   d="scan'208";a="240833421"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:41:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="587002742"
+   d="scan'208";a="587002748"
 Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:41:01 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:41:02 -0800
 From:   Jing Liu <jing2.liu@intel.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -43,9 +43,9 @@ To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v3 11/22] kvm: x86: Add emulation for IA32_XFD
-Date:   Wed, 22 Dec 2021 04:40:41 -0800
-Message-Id: <20211222124052.644626-12-jing2.liu@intel.com>
+Subject: [PATCH v3 12/22] x86/fpu: Prepare xfd_err in struct fpu_guest
+Date:   Wed, 22 Dec 2021 04:40:42 -0800
+Message-Id: <20211222124052.644626-13-jing2.liu@intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
 References: <20211222124052.644626-1-jing2.liu@intel.com>
@@ -55,82 +55,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Intel's eXtended Feature Disable (XFD) feature allows the software
-to dynamically adjust fpstate buffer size for XSAVE features which
-have large state.
+When XFD causes an instruction to generate #NM, IA32_XFD_ERR
+contains information about which disabled state components are
+being accessed. The #NM handler is expected to check this
+information and then enable the state components by clearing
+IA32_XFD for the faulting task (if having permission).
 
-Because fpstate has been expanded for all possible dynamic xstates
-at KVM_SET_CPUID2, emulation of the IA32_XFD MSR is straightforward.
-For write just call fpu_update_guest_xfd() to update the guest fpu
-container once all the sanity checks are passed. For read then
-return the cached value in the container.
+If the XFD_ERR value generated in guest is consumed/clobbered
+by the host before the guest itself doing so. This may lead to
+non-XFD-related #NM treated as XFD #NM in host (due to non-zero
+value in XFD_ERR), or XFD-related #NM treated as non-XFD #NM in
+guest (XFD_ERR cleared by the host #NM handler).
 
-Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+Introduce a new field in fpu_guest to save the guest xfd_err value.
+KVM is expected to save guest xfd_err before preemption is enabled
+and restore it right before entering the guest (with preemption
+disabled).
+
+Signed-off-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Jing Liu <jing2.liu@intel.com>
 ---
- arch/x86/kvm/x86.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ arch/x86/include/asm/fpu/types.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e50e97ac4408..36677b754ac9 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1359,6 +1359,7 @@ static const u32 msrs_to_save_all[] = {
- 	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
- 	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
- 	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
-+	MSR_IA32_XFD,
- };
+diff --git a/arch/x86/include/asm/fpu/types.h b/arch/x86/include/asm/fpu/types.h
+index c752d0aa23a4..3795d0573773 100644
+--- a/arch/x86/include/asm/fpu/types.h
++++ b/arch/x86/include/asm/fpu/types.h
+@@ -517,6 +517,11 @@ struct fpu_guest {
+ 	 */
+ 	u64				perm;
  
- static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_all)];
-@@ -3669,6 +3670,19 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			return 1;
- 		vcpu->arch.msr_misc_features_enables = data;
- 		break;
-+#ifdef CONFIG_X86_64
-+	case MSR_IA32_XFD:
-+		if (!msr_info->host_initiated &&
-+		    !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
-+			return 1;
++	/*
++	 * @xfd_err:			Save the guest value.
++	 */
++	u64				xfd_err;
 +
-+		if (data & ~(XFEATURE_MASK_USER_DYNAMIC &
-+			     vcpu->arch.guest_supported_xcr0))
-+			return 1;
-+
-+		fpu_update_guest_xfd(&vcpu->arch.guest_fpu, data);
-+		break;
-+#endif
- 	default:
- 		if (kvm_pmu_is_valid_msr(vcpu, msr))
- 			return kvm_pmu_set_msr(vcpu, msr_info);
-@@ -3989,6 +4003,15 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_K7_HWCR:
- 		msr_info->data = vcpu->arch.msr_hwcr;
- 		break;
-+#ifdef CONFIG_X86_64
-+	case MSR_IA32_XFD:
-+		if (!msr_info->host_initiated &&
-+		    !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
-+			return 1;
-+
-+		msr_info->data = vcpu->arch.guest_fpu.fpstate->xfd;
-+		break;
-+#endif
- 	default:
- 		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
- 			return kvm_pmu_get_msr(vcpu, msr_info);
-@@ -6422,6 +6445,10 @@ static void kvm_init_msr_list(void)
- 			    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
- 				continue;
- 			break;
-+		case MSR_IA32_XFD:
-+			if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-+				continue;
-+			break;
- 		default:
- 			break;
- 		}
+ 	/*
+ 	 * @fpstate:			Pointer to the allocated guest fpstate
+ 	 */
 -- 
 2.27.0
 
