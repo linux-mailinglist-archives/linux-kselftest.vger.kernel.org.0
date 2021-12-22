@@ -2,242 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA4647D3E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Dec 2021 15:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5176047D3F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Dec 2021 15:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343561AbhLVOq3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Dec 2021 09:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343545AbhLVOq2 (ORCPT
+        id S241426AbhLVOsj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Dec 2021 09:48:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24614 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231224AbhLVOsi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:46:28 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86EC061574;
-        Wed, 22 Dec 2021 06:46:27 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id o6so9659937edc.4;
-        Wed, 22 Dec 2021 06:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5iP0cwT3bhm1wv/SCJZNX3eXAec5s+GXcjileA9F27Q=;
-        b=j+iLD08U4k29OZOTR400HLmz2obEtO7D3ChDq2ufdQRwoSee564zTXYkax3kXedW5x
-         iYSAkPWnWh0HmsGCYxgqB6v6rjq1J6RfbA6vdp4LqBhOQgTHCW8SJqXMQZoJdZnduOpd
-         +biLV62u++nkpKm3GHt3Wazm+d406xWf+r6xfrPIs3XFT6PdOANhi9NTNXW2pBEPseDs
-         O8fmCGSqVVXdUxHi/8Yd1osnSYTPPotOKVL37Mpw78cL+ilGurCLByJKVrMSZBrLHbP1
-         yF62XgDREqMBjMkc8HOrWcV5QL4YTGRgWxUVtLVW7P80eWy5Am70dRmng4BwwqDAhZJW
-         LUUQ==
+        Wed, 22 Dec 2021 09:48:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640184518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3ysFZc3PcwsKiLv7/T8kvp9irIa0KaTSGauHVtOY+NM=;
+        b=ZiKMCDq4pgpTPpp0PZRAfJTflWBVmxB2O/cF5wFtSgpVaGs22m/BAHP8VBkl/HdwxxORe8
+        SNXZeAkQhKSKQaNPjXDfhe4QUyinqB7DUCbgcYRfvSfS7S2AsCLROD6T5cBl7+4lwuf8se
+        NalmzmuH+DTOXjJCl6Pr7Ffbo4bs7Oc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-267-1YKPCjk_PX2P9kawc7Oz5w-1; Wed, 22 Dec 2021 09:48:37 -0500
+X-MC-Unique: 1YKPCjk_PX2P9kawc7Oz5w-1
+Received: by mail-wm1-f71.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so1254210wmq.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Dec 2021 06:48:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=5iP0cwT3bhm1wv/SCJZNX3eXAec5s+GXcjileA9F27Q=;
-        b=5r7nDF4uv+8CtZmEedbF3kZoM1/QCp0xFxDPgYf+WqUQtHOzq5/L9+msdIk5TlIQfp
-         2ChvsaJZxFm5+v+bAHCo733S1e6IhP9YrOX12fitG75C1JZWKxQFuKKaGU3YXkT4s63M
-         yiU2xUL/BjEPLFYc4CsXNOHrWGQ36K2TN3jY9RpnhdW1hrvzaS0Cp6ZP1RNkVRdWmSPh
-         td7HYKx7I6pZ/aFvx0aLSaU4mRRXxT1222/Y1muDyYNHOfW73QxYeyWhXVQnRYo8no6N
-         G/MG+0lqj7+KhNMBg4YxWkZ8gIXYVP2zf+RXnRdRIjqn98AOQA8K5pboiPeuOL7RNNCm
-         fkYw==
-X-Gm-Message-State: AOAM531JFApLXFIhGenfEx7B93itg0sMz3qkrZyDqN4//BiPHd4mb/Kh
-        L1o/Yppa53r1seUPimEB62k=
-X-Google-Smtp-Source: ABdhPJyI+1PK2apwf17miH9QRLuhsilpq9fl9aPP5UQVakVob9Glo6g/RHpSyvLUZIsAbgPzbGdAww==
-X-Received: by 2002:a17:906:1d58:: with SMTP id o24mr2586115ejh.121.1640184386450;
-        Wed, 22 Dec 2021 06:46:26 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::4fa? ([2001:b07:6468:f312::4fa])
-        by smtp.googlemail.com with ESMTPSA id l16sm864404edb.3.2021.12.22.06.46.24
+        bh=3ysFZc3PcwsKiLv7/T8kvp9irIa0KaTSGauHVtOY+NM=;
+        b=OHffS29bgqtZcxpz1uTRoQr8oJ7eToGfPd295G3HKYGYncyx02iQ76/ydwdNvhMdUY
+         jUUW6CJnbkYSmghIQVzqFPDrla328ytiylqrBsEOQQIOGhq9ArpeJQW+4DcX/gBxqKyV
+         WlfiPMUoIJYeZ9vY/iB5E/l4j8DwS4Le5VbABo2W3mMawIcMqeljDN5mhmotXyzKUIL7
+         TPvw7p4vql7W3PZnMZGma7aCHhngqTUW0GtwsQljGeefTOaeZM57wF/MWgvq9k1awFPm
+         XPPg2po3wsvjiv+WJw34HcWl4adXECx2baVBvHxCjYfzvL0OxAbmFH2LCLTG0vppc7Ol
+         UjSQ==
+X-Gm-Message-State: AOAM530JHvNa9/zSFK9RvPL1T1HAAzOuKUe9/gSohyK6vEPTJhxDjydm
+        Aj8jNhqHPf+qV29kpu9yfgxU648QTOzv/kgDjTzECId3Z3MOOEUb7HoqbDLErIyxhPjqNR/DSXc
+        G0xRTSQJtMpnaL88OTQa9w2Y6HLe+
+X-Received: by 2002:a5d:59af:: with SMTP id p15mr2400748wrr.422.1640184516091;
+        Wed, 22 Dec 2021 06:48:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzs94LbEOPQ0orxF56DEs0Qlsxjs3+SD5a8O6tpjufwOywHmGl7SQSLlNxvlgdUF3zjoLVEEA==
+X-Received: by 2002:a5d:59af:: with SMTP id p15mr2400735wrr.422.1640184515809;
+        Wed, 22 Dec 2021 06:48:35 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c646a.dip0.t-ipconnect.de. [91.12.100.106])
+        by smtp.gmail.com with ESMTPSA id l2sm2250738wrs.43.2021.12.22.06.48.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Dec 2021 06:46:26 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <b651b14f-9ad2-811d-0d16-21d23a65eba4@redhat.com>
-Date:   Wed, 22 Dec 2021 15:46:24 +0100
+        Wed, 22 Dec 2021 06:48:35 -0800 (PST)
+Message-ID: <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
+Date:   Wed, 22 Dec 2021 15:48:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for test-selectable
- ucall implementations
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
 Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvmarm@lists.cs.columbia.edu
-References: <20211210164620.11636-1-michael.roth@amd.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211210164620.11636-1-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jan Kara <jack@suse.cz>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+ <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz>
+ <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+ <20211222144255.GE685@quack2.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20211222144255.GE685@quack2.suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/10/21 17:46, Michael Roth wrote:
-> These patches are based on kvm/next, and are also available at:
+On 22.12.21 15:42, Jan Kara wrote:
+> On Wed 22-12-21 14:09:41, David Hildenbrand wrote:
+>>>> IIUC, our COW logic makes sure that a shared anonymous page that might
+>>>> still be used by a R/O FOLL_GET cannot be modified, because any attempt
+>>>> to modify it would result in a copy.
+>>>
+>>> Well, we defined FOLL_PIN to mean the intent that the caller wants to access
+>>> not only page state (for which is enough FOLL_GET and there are some users
+>>> - mostly inside mm - who need this) but also page data. Eventually, we even
+>>> wanted to make FOLL_GET unavailable to broad areas of kernel (and keep it
+>>> internal to only MM for its dirty deeds ;)) to reduce the misuse of GUP.
+>>>
+>>> For file pages we need this data vs no-data access distinction so that
+>>> filesystems can detect when someone can be accessing page data although the
+>>> page is unmapped.  Practically, filesystems care most about when someone
+>>> can be *modifying* page data (we need to make sure data is stable e.g. when
+>>> writing back data to disk or doing data checksumming or other operations)
+>>> so using FOLL_GET when wanting to only read page data should be OK for
+>>> filesystems but honestly I would be reluctant to break the rule of "use
+>>> FOLL_PIN when wanting to access page data" to keep things simple and
+>>> reasonably easy to understand for parties such as filesystem developers or
+>>> driver developers who all need to interact with pinned pages...
+>>
+>> Right, from an API perspective we really want people to use FOLL_PIN.
+>>
+>> To optimize this case in particular it would help if we would have the
+>> FOLL flags on the unpin path. Then we could just decide internally
+>> "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
+>> this like a FOLL_GET instead". And we would need that as well if we were
+>> to keep different counters for R/O vs. R/W pinned.
 > 
->    https://github.com/mdroth/linux/commits/sev-selftests-ucall-rfc1
+> Well, I guess the question here is: Which GUP user needs only R/O access to
+> page data and is so performance critical that it would be worth it to
+> sacrifice API clarity for speed? I'm not aware of any but I was not looking
+> really hard...
 
-Thanks, this is a nice implementation of the concept.  I'll check s390 
-before the next merge window, as I intend to merge this and the SEV 
-tests (which I have already confirmed to work; I haven't yet checked 
-SEV-ES because it's a bit harder for me to install new kernels on the 
-SEV-ES machine I have access to).
+I'd be interested in examples as well. Maybe databases that use O_DIRECT
+after fork()?
 
-Paolo
 
-> == BACKGROUND ==
-> 
-> These patches are a prerequisite for adding selftest support for SEV guests
-> and possibly other confidential computing implementations in the future.
-> They were motivated by a suggestion Paolo made in response to the initial
-> SEV selftest RFC:
-> 
->    https://lore.kernel.org/lkml/20211025035833.yqphcnf5u3lk4zgg@amd.com/T/#m959b56f9fb4ae6ab973f6ab50fe3ddfacd7c5617
-> 
-> Since the changes touch multiple archs and ended up creating a bit more churn
-> than expected, I thought it would be a good idea to carve this out into a
-> separate standalone series for reviewers who may be more interested in the
-> ucall changes than anything SEV-related.
-> 
-> To summarize, x86 relies on a ucall based on using PIO intructions to generate
-> an exit to userspace and provide the GVA of a dynamically-allocated ucall
-> struct that resides in guest memory and contains information about how to
-> handle/interpret the exit. This doesn't work for SEV guests for 3 main reasons:
-> 
->    1) The guest memory is generally encrypted during run-time, so the guest
->       needs to ensure the ucall struct is allocated in shared memory.
->    2) The guest page table is also encrypted, so the address would need to be a
->       GPA instead of a GVA.
->    3) The guest vCPU register may also be encrypted in the case of
->       SEV-ES/SEV-SNP, so the approach of examining vCPU register state has
->       additional requirements such as requiring guest code to implement a #VC
->       handler that can provide the appropriate registers via a vmgexit.
-> 
-> To address these issues, the SEV selftest RFC1 patchset introduced a set of new
-> SEV-specific interfaces that closely mirrored the functionality of
-> ucall()/get_ucall(), but relied on a pre-allocated/static ucall buffer in
-> shared guest memory so it that guest code could pass messages/state to the host
-> by simply writing to this pre-arranged shared memory region and then generating
-> an exit to userspace (via a halt instruction).
-> 
-> Paolo suggested instead implementing support for test/guest-specific ucall
-> implementations that could be used as an alternative to the default PIO-based
-> ucall implementations as-needed based on test/guest requirements, while still
-> allowing for tests to use a common set interfaces like ucall()/get_ucall().
-> 
-> == OVERVIEW ==
-> 
-> This series implements the above functionality by introducing a new ucall_ops
-> struct that can be used to register a particular ucall implementation as need,
-> then re-implements x86/arm64/s390x in terms of the ucall_ops.
-> 
-> But for the purposes of introducing a new ucall_ops implementation appropriate
-> for SEV, there are a couple issues that resulted in the need for some additional
-> ucall interfaces as well:
-> 
->    a) ucall() doesn't take a pointer to the ucall struct it modifies, so to make
->       it work in the case of an implementation that relies a pre-allocated ucall
->       struct in shared guest memory some sort of global lookup functionality
->       would be needed to locate the appropriate ucall struct for a particular
->       VM/vcpu combination, and this would need to be made accessible for use by
->       the guest as well. guests would then need some way of determining what
->       VM/vcpu identifiers they need to use to do the lookup, which to do reliably
->       would likely require seeding the guest with those identifiers in advance,
->       which is possible, but much more easily achievable by simply adding a
->       ucall() alternative that accepts a pointer to the ucall struct for that
->       particular VM/vcpu.
-> 
->    b) get_ucall() *does* take a pointer to a ucall struct, but currently zeroes
->       it out and uses it to copy the guest's ucall struct into. It *could* be
->       re-purposed to handle the case where the pointer is an actual pointer to
->       the ucall struct in shared guest memory, but that could cause problems
->       since callers would need some idea of what the underlying ucall
->       implementation expects. Ideally the interfaces would be agnostic to the
->       ucall implementation.
-> 
-> So to address those issues, this series also allows ucall implementations to
-> optionally be extended to support a set of 'shared' ops that are used in the
-> following manner:
-> 
->    host:
->      uc_gva = ucall_shared_alloc()
->      setup_vm_args(vm, uc_gva)
-> 
->    guest:
->      ucall_shared(uc_gva, ...)
-> 
->    host:
->      uget_ucall_shared(uc_gva, ...)
-> 
-> and then implements a new ucall implementation, ucall_ops_halt, based around
-> these shared interfaces and halt instructions.
-> 
-> While this doesn't really meet the initial goal of re-using the existing
-> ucall interfaces as-is, the hope is that these *_shared interfaces are
-> general enough to be re-usable things other than SEV, or at least improve on
-> code readability over the initial SEV-specific interfaces.
-> 
-> Any review/comments are greatly appreciated!
-> 
-> ----------------------------------------------------------------
-> Michael Roth (10):
->        kvm: selftests: move base kvm_util.h declarations to kvm_util_base.h
->        kvm: selftests: move ucall declarations into ucall_common.h
->        kvm: selftests: introduce ucall_ops for test/arch-specific ucall implementations
->        kvm: arm64: selftests: use ucall_ops to define default ucall implementation
->        (COMPILE-TESTED ONLY) kvm: s390: selftests: use ucall_ops to define default ucall implementation
->        kvm: selftests: add ucall interfaces based around shared memory
->        kvm: selftests: add ucall_shared ops for PIO
->        kvm: selftests: introduce ucall implementation based on halt instructions
->        kvm: selftests: add GUEST_SHARED_* macros for shared ucall implementations
->        kvm: selftests: add ucall_test to test various ucall functionality
-> 
->   tools/testing/selftests/kvm/.gitignore             |   1 +
->   tools/testing/selftests/kvm/Makefile               |   5 +-
->   .../testing/selftests/kvm/include/aarch64/ucall.h  |  18 +
->   tools/testing/selftests/kvm/include/kvm_util.h     | 408 +--------------------
->   .../testing/selftests/kvm/include/kvm_util_base.h  | 368 +++++++++++++++++++
->   tools/testing/selftests/kvm/include/s390x/ucall.h  |  18 +
->   tools/testing/selftests/kvm/include/ucall_common.h | 147 ++++++++
->   tools/testing/selftests/kvm/include/x86_64/ucall.h |  19 +
->   tools/testing/selftests/kvm/lib/aarch64/ucall.c    |  43 +--
->   tools/testing/selftests/kvm/lib/s390x/ucall.c      |  45 +--
->   tools/testing/selftests/kvm/lib/ucall_common.c     | 133 +++++++
->   tools/testing/selftests/kvm/lib/x86_64/ucall.c     |  82 +++--
->   tools/testing/selftests/kvm/ucall_test.c           | 182 +++++++++
->   13 files changed, 982 insertions(+), 487 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/include/aarch64/ucall.h
->   create mode 100644 tools/testing/selftests/kvm/include/kvm_util_base.h
->   create mode 100644 tools/testing/selftests/kvm/include/s390x/ucall.h
->   create mode 100644 tools/testing/selftests/kvm/include/ucall_common.h
->   create mode 100644 tools/testing/selftests/kvm/include/x86_64/ucall.h
->   create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
->   create mode 100644 tools/testing/selftests/kvm/ucall_test.c
-> 
-> 
+-- 
+Thanks,
+
+David / dhildenb
 
