@@ -2,90 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 700A447DE66
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Dec 2021 05:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A94147E018
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Dec 2021 08:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238804AbhLWE4M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Dec 2021 23:56:12 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:33904 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbhLWE4M (ORCPT
+        id S242678AbhLWH5T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Dec 2021 02:57:19 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59220 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242720AbhLWH5T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 23:56:12 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JKHvQ36DQzXtLt;
-        Thu, 23 Dec 2021 12:55:46 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 23 Dec 2021 12:56:10 +0800
-Received: from k04.huawei.com (10.67.174.115) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 23 Dec 2021 12:56:09 +0800
-From:   Pu Lehui <pulehui@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>
-CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH bpf-next v2] selftests/bpf: Fix cross compiling error when using userspace pt_regs
-Date:   Thu, 23 Dec 2021 05:20:07 +0000
-Message-ID: <20211223052007.4111674-1-pulehui@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 23 Dec 2021 02:57:19 -0500
+X-Greylist: delayed 598 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:57:19 EST
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id C26ED827F6; Thu, 23 Dec 2021 02:45:58 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1640245625; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=x5MgxcEOQPX1eFLmgV50S6QybFI7Zbfh7zzXlHFyWo2U8d7LJpi6OBn3nOqjFwG4F
+         9lpVdAsGyArbLPTv71FdRxpUtaDltb3cwVjtTRI56OV58LmZjeXoUyl4la127g7ozy
+         Mj3dwahlmanFrAw+ahCl7Ixp+atSoh1RjC2YQ+V8m8Q7Ob6XTBL4QiZQn7tj2DWGi4
+         fXwRxUTiqk7TM0NhG3iPzOzl9jDOVRRLLoFR9etn/NVsfMzrRP5VElA1Ri3X0ZwMX4
+         FGQEsZ4UNVF8JE0HHc6NuPGEE+e/MnH19ilCjOuu5tP22xleqNyjaUPcVH3Ws3sCCy
+         8oYPML5EYunaw==
+Received: by mail.betterbiz.pl for <linux-kselftest@vger.kernel.org>; Thu, 23 Dec 2021 07:45:53 GMT
+Message-ID: <20211223024500-0.1.f.10jp.0.fb7nrrof7j@betterbiz.pl>
+Date:   Thu, 23 Dec 2021 07:45:53 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.115]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When cross compiling arm64 bpf selftests in x86_64 host, the following
-error occur:
+Dzie=C5=84 dobry,
 
-progs/loop2.c:20:7: error: incomplete definition of type 'struct
-user_pt_regs'
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Some archs, like arm64 and riscv, use userspace pt_regs in bpf_tracing.h.
-When arm64 bpf selftests cross compiling in x86_64 host, clang cannot
-find the arch specific uapi ptrace.h. We can add arch specific header
-file directory to fix this issue.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
-v1->v2:
-- use vmlinux.h directly might lead to verifier fail.
-- use source arch header file directory suggested by Andrii Nakryiko.
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
- tools/testing/selftests/bpf/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 42ffc24e9e71..1ecb6d192953 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -12,6 +12,7 @@ BPFDIR := $(LIBDIR)/bpf
- TOOLSINCDIR := $(TOOLSDIR)/include
- BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
- APIDIR := $(TOOLSINCDIR)/uapi
-+ARCH_APIDIR := $(abspath ../../../../arch/$(SRCARCH)/include/uapi)
- GENDIR := $(abspath ../../../../include/generated)
- GENHDR := $(GENDIR)/autoconf.h
- 
-@@ -294,7 +295,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
- BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
- 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
--	     -I$(abspath $(OUTPUT)/../usr/include)
-+	     -I$(abspath $(OUTPUT)/../usr/include)			\
-+	     -I$(ARCH_APIDIR)
- 
- CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
- 	       -Wno-compare-distinct-pointer-types
--- 
-2.25.1
-
+Pozdrawiam,
+Jakub Daroch
