@@ -2,116 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6104C47EA1A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Dec 2021 02:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EC147EAA9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Dec 2021 03:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbhLXBMd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Dec 2021 20:12:33 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46424 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229995AbhLXBMd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:12:33 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BO175Xw018647;
-        Fri, 24 Dec 2021 01:12:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=NcT3ysjtJESuIVVpCtisdKBE1Dd2aThqk8vQduNnOpA=;
- b=QShAs9+1a8eNTcuItKQaEIKesHAbL8beH9Gn77oPlPW+jW+6RoWAR2zhw3CephuGIRZ/
- EfPYPamTUBaykFtvR2hVvx6otkXmVLD/1nxKOmHNktxe6VqEGCBry2hr690x1c6svVP2
- w+RVIXVRdDmMDMTypUgv6+ikWjMSHGc4k0tJPhOs0sauKj3yRBrwhnkQDguXPPes1aT4
- liULvGDFODaXsAJmYZdzGDGdeybrfAxFEdO6IjyKge5j1//qDRMkQ8xLUXaJfyh3slUr
- yxsZRbbZGZG/Ic7QoHEY4W/cQBqV3lvVK8F2Bu7a0TDph7QbwMMVPSGYxNbPJa+srkNL 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:25 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BO1COLx016349;
-        Fri, 24 Dec 2021 01:12:24 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:24 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BO18Oc8017357;
-        Fri, 24 Dec 2021 01:12:23 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma05wdc.us.ibm.com with ESMTP id 3d179cjftt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:23 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BO1CMSQ32899514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Dec 2021 01:12:22 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 857DE136055;
-        Fri, 24 Dec 2021 01:12:22 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18B81136051;
-        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
-Message-ID: <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-Date:   Thu, 23 Dec 2021 20:12:21 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
- <YaVkw5dnCewnFybR@iki.fi>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YaVkw5dnCewnFybR@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xyxYc-MQo0TGsoyoLjdFQZLRiKq0NiLA
-X-Proofpoint-GUID: 0dFsPYYrfZ2EI2Db5bbTYP74_AHKPmQg
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S1351015AbhLXCxO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Dec 2021 21:53:14 -0500
+Received: from mail-bn1nam07on2074.outbound.protection.outlook.com ([40.107.212.74]:57886
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1351000AbhLXCxN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:53:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ak3VBsdF0MKZFCUcbnqPONAPBbgxgYWaSA497DogHi/rGW6iLbJNMtIcdRIVFLmJljuuIpKGL5EyKuPG5M/oTdSRC/zNgBRjyUq5aed0HDqdHUScBa+zBa0bfp+wMLUnlRmk++kg7YWBEugPj7oF0w4Jp0TyMK3xj22WKwkTzjnUuktiHlx6mFL8VoE7VoiRYRtEDuDVtxClH8xDrOcHtD0jTZkgdc6RFNqKay14MBeAxr0YUrJy562W2P4+o2te5KtB6fd6rJgV9uNuDD2CtJQ6oYHoByA5+SS1uyLWfSbDqbuiekIOXloodBgursb12RMfvpCuFRK+W64cDn8UrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fdwDZg1OhQE6G7jYa+z0WpxpblpG57nS9h5ObE3/uKU=;
+ b=VVbxG0TyuX5pPmPqvlPoPz97SjYVMhNctwxzEgW6VN0r9k+4kDRTLxBgWp9vyHTzHmaKGnNzQXmWGzNY3vdOQ1qSg8g7fV9NmtGx816X9QixubUrEkfqHFNua45vzvyVDYaZbDABOMcm4XkKE48y/DXGBFzp+IiHRE3R8dGkPmGIlxdmSpGptFHKqMOZAbb0JNBTKbX67AL3I2KZC2feZ3iKFs+qdPWPJKlJI3zVca3U8hsC/t5AQTVNsG88RiMtW/GVxhG3+PWwGzvtwtimxrxq/ffB/iSwzC5xL9nCnzaUECkYKoKoN4ZBaAPXV/WpAZgn16HZF9rCK8qbw6ZxpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fdwDZg1OhQE6G7jYa+z0WpxpblpG57nS9h5ObE3/uKU=;
+ b=ujWmdVKR49jCXpl9C6gsBXI0ob0dsj1S9wrtyF0T8xPUQbEjsUir5JLWrR4q5t+XiLl6YfHVjrIcT8dFrkLckX70RLexPLleAq4Nf1kCrRd0kR9hu8DgJn9ujlZBdKQv3unX273c6TIpb8SqO2jxDbUq/h3ooveaPP/sNA+l20PntNSZ0KU5scSbDuTm+b8NZzSPy3WAdF7CcMWofGHs9JBuXfRSwA133Jdl+cPuR/rrH2ZCK/6tYHojp7N6+nmTHRtD7WyeeHHyqKojx37vRp0H+Mgp9G0z6jwOFfkvKX+m9BxholTwYjucmtMf4qvITAIhfAeZ3/DeEaxi2sFXZA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5336.namprd12.prod.outlook.com (2603:10b6:208:314::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Fri, 24 Dec
+ 2021 02:53:11 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4823.019; Fri, 24 Dec 2021
+ 02:53:11 +0000
+Date:   Thu, 23 Dec 2021 22:53:09 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <20211224025309.GF1779224@nvidia.com>
+References: <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
+ <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz>
+ <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+ <YcPA8gJ0OBPTdCdB@casper.infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcPA8gJ0OBPTdCdB@casper.infradead.org>
+X-ClientProxiedBy: BL0PR05CA0015.namprd05.prod.outlook.com
+ (2603:10b6:208:91::25) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-23_04,2021-12-22_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 bulkscore=0
- adultscore=0 spamscore=0 mlxlogscore=826 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112240003
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 30cc9cc4-0480-48e4-e109-08d9c68885bf
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5336:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5336E6FDBEDB0E251EC9F9BDC27F9@BL1PR12MB5336.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tmFHhragQu+5ONrVnySpdVWhWz5Dbu/RD8meC8ke1YR7iRB12OjcPuX5CYK+QIi+KXaPQe9VJf+TC1++JDP+H0Er0esQLABHUjKQAZBUq/zolc3ovmZ/P9znE5IFYdYrQlBeCAJ3m5yC3IY/ESlB1cF+zojTM8NrWfOB3nat/m1ylQHADxn5ZSbjLu12f1HLflZBmQFx8EDjPxpvt12HJh3rHQUCcViaOSBnBv9gl7O3FRiE8+piN3pHgz8RnJ1NhSaJMXj2J6AUOYVE+/EI0Lg4ZaTQQEq0KHH3udEJqpDOBP37wMaDBertzhBqLf/+ZuhAwQ4VAk43rS5H1XIrnmzB+FcB9uN7ih7igM/XIC2K/y3Ncuhxt2zF6ejrejbbPpSmZypNO+sZxs7oMwvPBSLGax53X+zwvB5xSVyx3741hBo/fS8f28cfTI6IQYCCUeJxVgQMjKTbK9zsK5TTVIuDikN0JkvDScn8lL2SjwoK0EMyftDd6ywz5jNePqtpEgZweZLb0obNVKw62+QeltGrIN2s8bq2h1AqWA++a6T/Yn9b1ThsBqEHj5/e1Z0kyKHmzztcIm48gbZl32D7Q+3jaTmL4DZkNFT/rFmMoKoKKXqf6/RapPd3cSnud4A7GPXy4tgGAexXi+bYaIPR+g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(8676002)(186003)(2616005)(26005)(508600001)(5660300002)(6512007)(6486002)(33656002)(8936002)(66476007)(38100700002)(7416002)(6916009)(66946007)(2906002)(6506007)(54906003)(316002)(4326008)(66556008)(1076003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iiryEynWNRGh53dUX7gmKuFGPdi0UAJu5f0/zaLVoB81GUsgnPpb+7+f4Br6?=
+ =?us-ascii?Q?VyJBYg/KzdGSt5iQALpVFMU1eLah8tprXheGvXyruFDviONNjx+XvGk0svJ5?=
+ =?us-ascii?Q?6GvI5G/wa8gEJqLDfWlQ9yAfr4xy6NRhQMkl0w42DND+ehNvY10X4gKrjfj9?=
+ =?us-ascii?Q?yxsR/7gwVtG/6RtxxW7clmKBE7xpd5oofpQfyNkpcHknc2PoIaPn4vmY65xC?=
+ =?us-ascii?Q?9Ka/aMRpyy7bYlBkBS3Ld513N0kl1KkCbWw/32FIVHbKaEk9eAMu9YAb9SSN?=
+ =?us-ascii?Q?hjdT1juq4OLJDNs+qT9NSxTX0RNjIPr50w83NtLQtdQE+qKEAskUGqCDfkHY?=
+ =?us-ascii?Q?eYQ3nt3NLpBpf8NoKRl3jVfHFg3jGAnSw69gv+Qmrh94hwGpFocenvqLp/7N?=
+ =?us-ascii?Q?c7YxRycjIudZTZPh4+hAR9VEqRstXreIjJV8QVA80/R+/6GxGIplnwnVcJqT?=
+ =?us-ascii?Q?kALymyrg5nKek+PcIkj93jXOsxyMZx2EPXu6vDu1jr88lOlDZ9izLtg7wPyN?=
+ =?us-ascii?Q?nYVzgidxJGjr1rkb+CzENSD58g6xqhepcWzV0NV+8H7s2kfddhvFy8c6ob0O?=
+ =?us-ascii?Q?xUmX3IWRLL7KnPv+HEZg1qycNsHD24/VBQN67tWHTdFJwou+qqarKxCau4oI?=
+ =?us-ascii?Q?VIZ5u2YFdUv/6PEg/8vHdLwyy5mSe7PHhmO37w3DsnZRSHsaoinYkBYonwpx?=
+ =?us-ascii?Q?bfQMPQnKi1Q12dQ3b0kKwO+WyW3adrQwqJ69JTjNUX45zKeLI/HpE7P/8//0?=
+ =?us-ascii?Q?4zyZLSBe6mW7BY0Xzg8/rGDaGyQApXV35D0hfTBylxulE5ijIOg90ovbNhQP?=
+ =?us-ascii?Q?DNzRWigbUduAv5wL09s8/xmuovhETkMdyq1o+WCAcrKFxCcWeriD75Y2bPeH?=
+ =?us-ascii?Q?Oe7Oxvet1gDigq+c0yfrJdzKmY/Iuzvzfdif0OcC2WN02yZD+4Snt643cuff?=
+ =?us-ascii?Q?q8SOMF2H+tcdiOcSexLcU+4oGXHWd2gPp4JEEY0/Cpc5TS1Oca5h2/92Kmq7?=
+ =?us-ascii?Q?55cyhkHRYJA+HeiN8yodY5lY8zBRiEis1Rkq4FucHl9HcVhqmZNLA77I+c91?=
+ =?us-ascii?Q?ifyoMlRengjrGv+m7jMcjK9H0ZTpxyKjxS6WhO8Jv8XEUJAwOa3NhgIxXcM8?=
+ =?us-ascii?Q?Uxj5SQyUymcoo7gK7r/+Ssj7vfG3QvoEwtwEzkAXUSXhPlLHDH+efzUiYSf5?=
+ =?us-ascii?Q?4Yufc3Bu0AA7UOaO/D2Y0tN6OdwpzeV4Pgaxfvx5OYZm2Azl7/7SMwPGj/Yr?=
+ =?us-ascii?Q?6ttG1A+skW0CrpkeAqj9vJ9urAl3RQaqpglJnzX9OKP01A9vutP9kvqxczmB?=
+ =?us-ascii?Q?kH727aGlhYr9yVXTBEr5pAJ7JKE5m/8m1HaCNpZd/aWc50KI1W8uAwO5icpk?=
+ =?us-ascii?Q?o9GNtpM1ZmSQjeONTzevc3pCQBaQdromK3j0NIzOa7kZD80fd5vG6j/4eq6w?=
+ =?us-ascii?Q?fvslGu75wYf1rADsG1sR0+qwznrNKigP0DZOoCt49SMMouggSGEykShpEOvE?=
+ =?us-ascii?Q?MOhyXB2h7gFjdeZhM+Tqz0KgUHua2uNWDCcEKEHLQ4r46j8MYoVY6jT8Hn/5?=
+ =?us-ascii?Q?yZGznm8e89w8EK7WvFo=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30cc9cc4-0480-48e4-e109-08d9c68885bf
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2021 02:53:11.3151
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f7gG7kcACLTISje4DDTaIgl5qagVsL8VHLN7Ws+bf/dsWqfeCmb9FiavwlgBah0A
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5336
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah,
+On Thu, Dec 23, 2021 at 12:21:06AM +0000, Matthew Wilcox wrote:
+> On Wed, Dec 22, 2021 at 02:09:41PM +0100, David Hildenbrand wrote:
+> > Right, from an API perspective we really want people to use FOLL_PIN.
+> > 
+> > To optimize this case in particular it would help if we would have the
+> > FOLL flags on the unpin path. Then we could just decide internally
+> > "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
+> > this like a FOLL_GET instead". And we would need that as well if we were
+> > to keep different counters for R/O vs. R/W pinned.
+> 
+> FYI, in my current tree, there's a gup_put_folio() which replaces
+> put_compound_head:
+> 
+> static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
+> {
+>         if (flags & FOLL_PIN) {
+>                 node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
+>                 if (hpage_pincount_available(&folio->page))
+>                         hpage_pincount_sub(&folio->page, refs);
+>                 else
+>                         refs *= GUP_PIN_COUNTING_BIAS;
+>         }
+> 
+>         folio_put_refs(folio, refs);
+> }
+> 
+> That can become non-static if it's needed.  I'm still working on that
+> series, because I'd like to get it to a point where we return one
+> folio pointer instead of N page pointers.  Not quite there yet.
 
-   are you going to take this fix here - only 1/2 ?
+I'm keen to see what that looks like, every driver I'm working on that
+calls PUP goes through gyrations to recover contiguous pages, so this
+is most welcomed!
 
-https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
-
-   Stefan
-
-On 11/29/21 18:39, Jarkko Sakkinen wrote:
-> On Sat, Nov 27, 2021 at 11:10:51PM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Determine an available PCR bank to be used by a test case by querying the
->> capability TPM2_GET_CAP. The TPM2 returns TPML_PCR_SELECTIONS that
->> contains an array of TPMS_PCR_SELECTIONs indicating available PCR banks
->> and the bitmasks that show which PCRs are enabled in each bank. Collect
->> the data in a dictionary. From the dictionary determine the PCR bank that
->> has the PCRs enabled that the test needs. This avoids test failures with
->> TPM2's that either to not have a SHA-1 bank or whose SHA-1 bank is
->> disabled.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> /Jarkko
+Jason
