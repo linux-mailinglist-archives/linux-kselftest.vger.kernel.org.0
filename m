@@ -2,149 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C51D47EB76
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Dec 2021 05:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D01D747ECB6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Dec 2021 08:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237890AbhLXExz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Dec 2021 23:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236525AbhLXExz (ORCPT
+        id S1351837AbhLXHgi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Dec 2021 02:36:38 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:38711 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351823AbhLXHgh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Dec 2021 23:53:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1F4C061401;
-        Thu, 23 Dec 2021 20:53:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q8w6vJlPkDbS/DrH5IOenXLh3tsJgjfSoA1ZgPxsyRg=; b=RLa6CpDWsILp5BM50R2uDaFxLY
-        kckmBXACDfFG18rbWU451uZgJf2XJ6YxtUUeNLNZmEWFd0bzKnYVXpCPc6tGF8TT52vEyvbQIf5bD
-        MdWiWj22xuFFnEWraqZZlU5OFHtDMSJkSyl6WS/CqP+8NzAmJFq/crbD3+u0ycPbxtg6alM7OQAS7
-        0rxKqIjEMrapCBDpChh+XaNVK9bFLaUjZ6T/wbs741J9fKkComlKwv/7xxFAxg3wgl4AVqgrDGBfm
-        fec1iv69kA5NXlRg5KuUaX0Cvdkji5gnIC+RedwkG4oWu9cxd2swHojNuY5D5/rDqLghNmFwOcEx9
-        o/OObrqg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n0caI-004px5-1k; Fri, 24 Dec 2021 04:53:38 +0000
-Date:   Fri, 24 Dec 2021 04:53:38 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <YcVSUmfzTrhjZapc@casper.infradead.org>
-References: <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
- <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221190706.GG1432915@nvidia.com>
- <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
- <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
- <20211222124141.GA685@quack2.suse.cz>
- <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
- <YcPA8gJ0OBPTdCdB@casper.infradead.org>
- <20211224025309.GF1779224@nvidia.com>
+        Fri, 24 Dec 2021 02:36:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1640331397; x=1671867397;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=okWixbzXzUx9k4JoQsJrKqF0jfluDWANxV1M9uKke4c=;
+  b=KFeGbNOXz/CwjHY08b7z1KcX+1aAC393UIPV8yD+RMdTE4yl3ff9Rq0Z
+   Qt5q7NKouOoxs61OZNA5IPxRsRAX6nDu10BZyZrIupPRLoDc9rFieHMh+
+   wvmfCO7YlbKODxsKZj3z97u9+7kEL2GM7cIA5XPS0DVhJBZBVv3Zu2H4K
+   ZeJg6TbUuiftikJW+4hY6LA4Z5RPCHbeZl/iB5IGfn4BAb4yP8ndnyBMw
+   WGhsaoJEQhO11/u75iF0H4s4HxVD9LOnnuCyKOtj+GuTF67TArZvewJoe
+   7ABVU4ywQJ+ZvD8ilXWf7z7alEckW8Dsev5+sA7gO7j92VyuM0om1kPe1
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,231,1635177600"; 
+   d="scan'208";a="293035137"
+Received: from mail-co1nam11lp2170.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.170])
+  by ob1.hgst.iphmx.com with ESMTP; 24 Dec 2021 15:36:36 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DEUb5PnQnoK//EjD+E9uoWACUaeKJlW/JQDdcHv/U++Ekad4iX+jejzkGfaIWrLnJPQ8WBRgU2kp5CSUctuuXFIhCS3eIN+JNg/zDhIJR/pgU7WaG5dgEHYs/41NoI3pBJ1NXx7gcDDLuH3OsEIGf1Zc/KKD26X8i4daUCDQBfVPGY9BsrDzwaEdEWRcdJdMd4pmFWsKn9KNsI4bb435yKWjyoebSPUiHtmr+h+D8HNL7IFCejstlQ6PJ459d5Ai8FTlizdkduygjjF14MdNaS2kMPtbQNLNDdDevSGZeKoapDr+lvrBvnvzJ6uX7DB4VGq402qJHjjOFbzSz1Dx1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4fCwtv3XMmxGmZinL3C3KePJkBFVnovVhTrtuAIW6jE=;
+ b=ElqRFD+JO9n54RGkDsyCOQ3qM2HDnEqyVJk+xqUVYiO/9tma01o0hkz2cUOPtvAVMmCcy2ZnFhA0NCkNtddHVE5TFHaXqhX1eHtASP11v/elh+iysRhnvT0HwGN29yEEH1XyvxieMW6Ewlml6A4QhMUFlPb0P16dgjUrpT8I2kcbHXD31HYNwdxUKsOhaQjEwAd/GSzIn5394awlRiTy2E4qOIu5Yd/6K8q4hQWfd4r0yArA74z2vZU86MQdZi+O0CzNY1OsvNtrJHtx/yUfn5havlXUMJvzP9506pPPXvt1TLfzXzMvwMivEW1sEF62CU2rqynrC/PceftOQ67nyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4fCwtv3XMmxGmZinL3C3KePJkBFVnovVhTrtuAIW6jE=;
+ b=IUv4jVetTI5zzorI2DCGX5QWSMgkwB6qOBc/2GbNuPZxyZnD3esD9/oKuYOAvNvFTxAfDL7zwo3ixHbOj4lg2sdV2sBVywd3x/sei/5qSFxw6oQWn/syLSIAnfdrrAjp8qUzJTHlY9Cc09ixLQwyoL8hMst/ZZbwNGaGWUF/q7k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+Received: from CO6PR04MB7812.namprd04.prod.outlook.com (2603:10b6:303:138::6)
+ by CO6PR04MB7859.namprd04.prod.outlook.com (2603:10b6:5:35e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.17; Fri, 24 Dec
+ 2021 07:36:35 +0000
+Received: from CO6PR04MB7812.namprd04.prod.outlook.com
+ ([fe80::f14c:5516:7743:932c]) by CO6PR04MB7812.namprd04.prod.outlook.com
+ ([fe80::f14c:5516:7743:932c%4]) with mapi id 15.20.4823.021; Fri, 24 Dec 2021
+ 07:36:35 +0000
+From:   Anup Patel <anup.patel@wdc.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Anup Patel <anup.patel@wdc.com>
+Subject: [PATCH v4 0/4] KVM RISC-V 64-bit selftests support
+Date:   Fri, 24 Dec 2021 13:06:00 +0530
+Message-Id: <20211224073604.1085464-1-anup.patel@wdc.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAXPR01CA0117.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:5d::35) To CO6PR04MB7812.namprd04.prod.outlook.com
+ (2603:10b6:303:138::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211224025309.GF1779224@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f596ff20-7fca-4414-8a4f-08d9c6b01cd6
+X-MS-TrafficTypeDiagnostic: CO6PR04MB7859:EE_
+X-Microsoft-Antispam-PRVS: <CO6PR04MB7859A6303EEAAE51668182498D7F9@CO6PR04MB7859.namprd04.prod.outlook.com>
+WDCIPOUTBOUND: EOP-TRUE
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vYhwLARY1JBLX4oo02uVBI0YKkqyY5P9at49gf1HgMRJkf4V5VIQnb55Tgwqr5RzlC2/2HTZDxxLy5MEM7VaSmrtL1PJmq//N/qD46b6PD2uwhc6suJWUU02FBbRQ5z78er+uSNSOueTLEUitqfkbgMMAD+ly4N0apKKQATkusLRP/jN5YyVwwC2mYQdkQHHj/CsycUdjgGMzuu9ZJpP8ypV7z3VxQv8L/2M0nziNpZ8/f/RekUHQVbruYLt0LIBlLNatdla0kDHw6rWREca9VmvoxVO9LSBjQ6weV4D7uW1PiOQ3PTkt07IUuRrI1bLGksn5YxVlB8rss5MP6wCumW/477T/yv8TrxuUUGMUzc0resZ3tJ5jwHWC+837w9QWIosznbsj7LGdmYWNCGZgH8caZMhuH4emKQkDjeoQjuUMHfcg652QSzFNSJtcW9xuENu+UUOecMnXOSVnbSvQRUso/KawzwguVB+sSbIaGXu9Pto8V7DjD+YdnulByZhR3d0r9pkTkKNFk4oFqait89D3RNDdXANVsPLhrc/bzyuQLf2uVcDXAd2aAFD0CYK1uGt4DLVXV4dFUzitD2L+UAmO5zgLsu0CSlZgRRNYST9w1QFz3ypBDhIcoTeP8eQjVP4QRS785GSmVMNxz9Pi3aYMUz4/u8jmI+WQQd5fgOVJ877J37GtAFeqHGWiJjRfXG4MWHVehcUHPHxy4V+iBlf4AqkJg+ZcP/CQzp96fOv5DCPytUloy1KVHRPXUf5ubu4NXXtrsImJJDFlQ+YI/ugNfagQh2o+sDjMEI7YTo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR04MB7812.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52116002)(6512007)(7416002)(86362001)(966005)(186003)(5660300002)(2616005)(4326008)(82960400001)(8676002)(26005)(44832011)(2906002)(8936002)(6506007)(508600001)(316002)(83380400001)(38100700002)(110136005)(38350700002)(54906003)(6666004)(66946007)(6486002)(66476007)(1076003)(66556008)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8VqP15YdBhF3pBQ2ZcCD3lxnD8bK64H0VWhknSmoW6ucZ0plZRsKr1V2U6Lb?=
+ =?us-ascii?Q?OhheEQRgiHJHcZtdixMu5HgI/VozC86pDiRzzE6+H3fKNb1HIcTgZWyl2URe?=
+ =?us-ascii?Q?KkLGozSAK2lbvNToycHAep0cbcXkw9qJDIQjjbkvZJ00OTZIsnY2+j3FkVPk?=
+ =?us-ascii?Q?lliL77sZxd3Tj2RtgeK6p8vnnMqv5SIyBXhSvgeyQlaXFlmreEXeaI9nsx9U?=
+ =?us-ascii?Q?00KKw7L97fBf4nyTDjJYfnvOlMHrgadlH3FrMSSCMhw7arsNJ8L6SU5EbVf+?=
+ =?us-ascii?Q?Ub2VbeVnhYjvrlwE3D8I9LmrVw1swHzm4Pm8iUqPrL1U98blACqpUHMp7q6T?=
+ =?us-ascii?Q?7I4mRCTHxt0jrVbBurOYHiF1N1wCZpaQ0HYACMJjxp9QO6Rh8frVTWFfgMP1?=
+ =?us-ascii?Q?B54Ptl4VV+H6xBoPR4s9jLqou2iITte0S+ePxlBJKfDYLyILiVJh4thzpFhv?=
+ =?us-ascii?Q?x6qVvVEfvADR5cXdKUEnk+eYbYHsvachEB3SjJeEeSx+H4AuXToOvHUEOPsW?=
+ =?us-ascii?Q?aB+zrD/VUsVfEY0KbYXvga3Kcmr9J7gXd9ysgdvthRgMLsvgVso4E9tuxOGf?=
+ =?us-ascii?Q?V4ggYzst1K3lrQM3cS87RnANmS/mYGTS0fsvUE1+KxRMt/7RGVanAelEzvo/?=
+ =?us-ascii?Q?3kA6AMnXq+5pliDPPwpxZZ7FlqZ4WPIm3PY+TcoRbDQjA4lBkdmHdU8gMBJm?=
+ =?us-ascii?Q?4DZVmF63vcsmoGUrGZnYyK8KALnmSMj2RUhxLNlclBth+CiJA+MBcYi38hZz?=
+ =?us-ascii?Q?h3VE5FMcaQQvlDlpzdt6oocUgHEuHba6U0iqjFomUYP9KiUMaDdz7SPAYmpy?=
+ =?us-ascii?Q?+b9KeGqkpXjLDKv1E8gbiKPz33jpJ1ntIDFSWWveuAQquoyt4uC2g4cm4KA3?=
+ =?us-ascii?Q?tr/frNMUt/Xfe6qF8PfjdjWRj/U0bbsAqWGO6y64efEtoPxUiFoPC+5VQjfO?=
+ =?us-ascii?Q?r2O+LXeux5C3JTaoNylZJeqYiXLQr3vbE/j/QCuq94ivVGTJkeMegb1Ls4wN?=
+ =?us-ascii?Q?ReOaXxq4cIev9JfduCMnWVMqITYnXayvnxIWMkDXP1OuyE1Vt0yWnHqBb7ob?=
+ =?us-ascii?Q?pCjLAe3B75pgAWOVpu8BSrEgErMf4W40NzGohZgpSOfoKVa339jFjMUU7clW?=
+ =?us-ascii?Q?PDcydUHU3XnlTLJzBcyMd3NPblmIjup2gbBPv3MHrcWQ+vXDtomdi2Hpjbmp?=
+ =?us-ascii?Q?7JaIP3N86u6nsX/sMYDvdIXpHrfDZf3obtU9y3B/bfF6sD7j+4ym5dxbYz+H?=
+ =?us-ascii?Q?Cx3x9pKnW8eV/u9RKUI8qXDGML7hPaBE/0OOoxO1+ZXvHuz3OT4yHn0G0M5P?=
+ =?us-ascii?Q?2fJg2sLcASw/ztEZgBddJNh4VOCyPQM8y0rV8siahnzLmCC0JZRWihJgPr/3?=
+ =?us-ascii?Q?5fCVZHqHO2qcarpi8bvea1ybUejwUlV+uzo4mZA8s7RFTncYAB4Ra+4RIL+l?=
+ =?us-ascii?Q?9G0pm3B7A7Fq5+nJi06AKOjX9hbd7u2Egfbpq9elQZ0KkzJ/7eans8pcLf1Q?=
+ =?us-ascii?Q?yVAYIMkiaz2qe2Qw+DrgkkTPuTvE6NOBAo/1QV4kXoR527meCKJFTQWIh7i7?=
+ =?us-ascii?Q?xLv4n8FiQ9pIXQ0nUm8kg0YBUzmmCRSonnzFgsysTkHnL/ZZpAjn1D3v9PoP?=
+ =?us-ascii?Q?nQoe6ZAiR2eN9UBjLIOeJS4=3D?=
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f596ff20-7fca-4414-8a4f-08d9c6b01cd6
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR04MB7812.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2021 07:36:35.3595
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w7M0fW8bYyvsSnuSI8NrUk7CggTRKeGXIXIjvBmm+2HnLKu75oUPmXwDJX4+VWExyhLoQebOQvqrWdj7tjiWyg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR04MB7859
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 10:53:09PM -0400, Jason Gunthorpe wrote:
-> On Thu, Dec 23, 2021 at 12:21:06AM +0000, Matthew Wilcox wrote:
-> > On Wed, Dec 22, 2021 at 02:09:41PM +0100, David Hildenbrand wrote:
-> > > Right, from an API perspective we really want people to use FOLL_PIN.
-> > > 
-> > > To optimize this case in particular it would help if we would have the
-> > > FOLL flags on the unpin path. Then we could just decide internally
-> > > "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
-> > > this like a FOLL_GET instead". And we would need that as well if we were
-> > > to keep different counters for R/O vs. R/W pinned.
-> > 
-> > FYI, in my current tree, there's a gup_put_folio() which replaces
-> > put_compound_head:
-> > 
-> > static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
-> > {
-> >         if (flags & FOLL_PIN) {
-> >                 node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
-> >                 if (hpage_pincount_available(&folio->page))
-> >                         hpage_pincount_sub(&folio->page, refs);
-> >                 else
-> >                         refs *= GUP_PIN_COUNTING_BIAS;
-> >         }
-> > 
-> >         folio_put_refs(folio, refs);
-> > }
-> > 
-> > That can become non-static if it's needed.  I'm still working on that
-> > series, because I'd like to get it to a point where we return one
-> > folio pointer instead of N page pointers.  Not quite there yet.
-> 
-> I'm keen to see what that looks like, every driver I'm working on that
-> calls PUP goes through gyrations to recover contiguous pages, so this
-> is most welcomed!
+This series adds initial support for testing KVM RISC-V 64-bit using
+kernel selftests framework. The PATCH1 & PATCH2 of this series does
+some ground work in KVM RISC-V to implement RISC-V support in the KVM
+selftests whereas remaining patches does required changes in the KVM
+selftests.
 
-I'm about to take some time off, so alas, you won't see it any time
-soon.  It'd be good to talk with some of the interested users because
-it's actually a pretty tricky problem.  We can't just return an array
-of the struct folios because the actual memory you want to access
-might be anywhere in that folio, and you don't want to have to redo
-the lookup just to find out which subpages of the folio are meant.
+These patches can be found in riscv_kvm_selftests_v3 branch at:
+https://github.com/avpatel/linux.git
 
-So I'm currently thinking about returning a bio_vec:
+Changes since v2:
+ - Rebased series on Linux-5.16-rc6
+ - Renamed kvm_riscv_stage2_gpa_size() to kvm_riscv_stage2_gpa_bits()
+   in PATCH2
 
-struct bio_vec {
-        struct page     *bv_page;
-        unsigned int    bv_len;
-        unsigned int    bv_offset;
-};
+Changes since v1:
+ - Renamed kvm_sbi_ext_expevend_handler() to kvm_sbi_ext_forward_handler()
+   in PATCH1
+ - Renamed KVM_CAP_RISCV_VM_GPA_SIZE to KVM_CAP_VM_GPA_BITS in PATCH2
+   and PATCH4
 
-In the iomap patchset which should go upstream in the next merge window,
-you can iterate over a bio like this:
+Anup Patel (4):
+  RISC-V: KVM: Forward SBI experimental and vendor extensions
+  RISC-V: KVM: Add VM capability to allow userspace get GPA bits
+  KVM: selftests: Add EXTRA_CFLAGS in top-level Makefile
+  KVM: selftests: Add initial support for RISC-V 64-bit
 
-        struct folio_iter fi;
+ arch/riscv/include/asm/kvm_host.h             |   1 +
+ arch/riscv/kvm/mmu.c                          |   5 +
+ arch/riscv/kvm/vcpu_sbi.c                     |   4 +
+ arch/riscv/kvm/vcpu_sbi_base.c                |  27 ++
+ arch/riscv/kvm/vm.c                           |   3 +
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/testing/selftests/kvm/Makefile          |  14 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |  10 +
+ .../selftests/kvm/include/riscv/processor.h   | 135 +++++++
+ tools/testing/selftests/kvm/lib/guest_modes.c |  10 +
+ .../selftests/kvm/lib/riscv/processor.c       | 362 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |  87 +++++
+ 12 files changed, 658 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/include/riscv/processor.h
+ create mode 100644 tools/testing/selftests/kvm/lib/riscv/processor.c
+ create mode 100644 tools/testing/selftests/kvm/lib/riscv/ucall.c
 
-        bio_for_each_folio_all(fi, bio)
-                iomap_finish_folio_read(fi.folio, fi.offset, fi.length, error);
+-- 
+2.25.1
 
-There aren't any equivalent helpers for a bvec yet, but obviously we can
-add them so that you can iterate over each folio in a contiguous range.
-
-But now that each component in it is variable length, the caller can't
-know how large an array of bio_vecs to allocate.
-
-1. The callee can allocate the array and let the caller free it when it's
-   finished
-2. The caller passes in a (small, fixed-size, on-stack) array of bio_vecs
-   over (potentially) multiple calls.
-3. The caller can overallocate and ignore that most of the array isn't
-   used.
-
-Any preferences?  I don't like #3.
