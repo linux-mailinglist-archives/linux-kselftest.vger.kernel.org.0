@@ -2,51 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CFD47F643
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Dec 2021 10:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2735D47FB21
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Dec 2021 09:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbhLZJmj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Dec 2021 04:42:39 -0500
-Received: from slot0.jllresort.com ([62.197.136.5]:52242 "EHLO
-        slot0.jllresort.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbhLZJmj (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Dec 2021 04:42:39 -0500
-X-Greylist: delayed 732 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Dec 2021 04:42:38 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jllresort.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ele.mon@jllresort.com;
- bh=9pIH7KQtaWfLjPJe3cdbLodJQlQ=;
- b=Pl5AO6qkhezZYUlVWQQS1AlVHjTxySuvikWBhl7z3AtcTL1ceeuXH4nhtepJA+Vvi7wZSQmV8WOP
-   CwzGiuu42gDBek+XH7xPbFhJgux0qvP7VJijSe8pHq+cYqYZZlWXaBOnihfiKpRmYtm17w3iVpf2
-   QUt8u/F+C1SE7HlsBW0emBXXWx9chywoJ4gQhoMmj0Hd+juGBrUMiQ2qMGreMuew1VTXjk2VXuNj
-   cbJVzs8KEbs7Fv7VddKre7gw5F1z+SpdiR6hf+ZTldOzL1WpEGsgwYRS/S80xcHtLEUWSZ/d2sJx
-   E5LBS+xN7YoAshgHnv7nJsBdscfvudAG52JLUA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jllresort.com;
- b=DFTV48/lSfHs0octcRoVUTNeJkhj5Ld3yfPYnQnTsl4doyxVNYHRlcNGyWa8RlEhII6SGdQgYAqM
-   WdDQEcL4jpV88H2PWieFOas+erlQuWngl1R0QUCa+2vQqNsxXGXs3odrHPAj3q/miTrt+AIfsNmk
-   WIiDCr8YE0WCLqflEyfVwDWH4ul6HDKubBpQ74aBBkKoKVDxRhyNxlDc+A28G6uhgoSnMPKj+W/j
-   Tj8GKz/kWZusaIdiubD96tvMX7/BYSo+8k9MU+rrgWsBjkVjYcQT8nv0JOXsIfdSZgyeOHCgf5M5
-   Z9sVaOd08qgGqdS7zKLKZ/tE0w1C1MoOEG1zyQ==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   ele.mon@jllresort.com
-To:     linux-kselftest@vger.kernel.org
-Subject: Happy Weekend:
-Date:   26 Dec 2021 10:29:32 +0100
-Message-ID: <20211226102855.ACE44034E173281C@jllresort.com>
+        id S232733AbhL0Ipw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Dec 2021 03:45:52 -0500
+Received: from mail.portyid.pl ([192.36.61.58]:34136 "EHLO mail.portyid.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231521AbhL0Ipv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Dec 2021 03:45:51 -0500
+X-Greylist: delayed 310 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Dec 2021 03:45:51 EST
+Received: by mail.portyid.pl (Postfix, from userid 1001)
+        id F02A340D6E; Mon, 27 Dec 2021 09:40:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=portyid.pl; s=mail;
+        t=1640594439; bh=RZjfFpT9KGSFHXuIOzTjcb+Gwkun4EXriv7y2I0PG0A=;
+        h=Date:From:To:Subject:From;
+        b=oYj0Jhli1O1OzOe+mCQBL2pbQo5a/SlfYflFjncAHfP0fxz3yNbo1kuuu42ewGjsn
+         sljLf18FgEz6Goc+4dPR+MXEAuUbTo0WuhbWDBC3caBbbcJPud5TM6RpH+RCJFCeZX
+         isSBtVhI1mpG/EbbyCxZX2LFJK+Ete1E9xD612cLWPvUFAMscce8B0JimiCd5DfhSD
+         2Hcf3IOQ+2B0Mgd6lGCcQE7MqsUDiUsoq/1tkgPmd15M1CNlsODvyVrI2N9Q9TnITY
+         pPD7Fif7nLwjJ5dbpzyBpHnYFFbZMwZPHG+bhl3F1E61v8NHyyj2GidkJtgLLCpVQP
+         WjTi6a0Ev0i/g==
+Received: by mail.portyid.pl for <linux-kselftest@vger.kernel.org>; Mon, 27 Dec 2021 08:40:16 GMT
+Message-ID: <20211227084500-0.1.u.2h4i.0.tabrq34lxt@portyid.pl>
+Date:   Mon, 27 Dec 2021 08:40:16 GMT
+From:   =?UTF-8?Q? "Pawe=C5=82_Jasi=C5=84ski" ?= 
+        <pawel.jasinski@portyid.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.portyid.pl
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Greetings to you linux-kselftest,
+Dzie=C5=84 dobry,
 
-I was wondering if you got my previous email? I have been trying=20
-to reach you by email linux-kselftest@vger.kernel.org, kindly get=20
-back to me swiftly, it is very important and urgent.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Thanks
-Mustafa Ayvaz
-Email: mustafa.ayvaz@ayvazburosu.com
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam
+Pawe=C5=82 Jasi=C5=84ski
