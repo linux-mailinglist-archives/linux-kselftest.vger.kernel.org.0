@@ -2,69 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F17480F20
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Dec 2021 04:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 902A0480F4D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Dec 2021 04:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238448AbhL2DBY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Dec 2021 22:01:24 -0500
-Received: from mga12.intel.com ([192.55.52.136]:23167 "EHLO mga12.intel.com"
+        id S233439AbhL2Dfi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Dec 2021 22:35:38 -0500
+Received: from mga11.intel.com ([192.55.52.93]:41294 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231184AbhL2DBY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Dec 2021 22:01:24 -0500
+        id S233058AbhL2Dfh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 Dec 2021 22:35:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640746884; x=1672282884;
+  t=1640748937; x=1672284937;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=2tVw15A7V+NjMEtwqMLZ5/md2a/SodLKHfBi7NQ1xMk=;
-  b=ALnePv4XLwtHGUdCLBhb19kE469aTa4aD9xEuMqU6ExYZANAAILslU2/
-   kT6eHjmrBvy380/lgEFbSM+v4NTY3b444pIqej+Lvi7FrwalXYUaoWy4+
-   K88rehbse12U/Zg7b4oKj/XUKqbul904yUfaeX+iMWBqXFyUKE44U/HJ/
-   BgxVUFwVovTH+iJ9fG4zF1BKvPAhvXWcxU9lMnv3N0Xne4ArDeOMWXbkg
-   uK8JCkfCQhuPG9KNkBfgUMTQIXESQg9kRd5JfPMJLNFDuY1S8AcIL005m
-   YxbJLdzjcVFxAKNgfQArL19eWJNQBPf+Ez3cBbkaL/FyPXpTVc87ZIWVP
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="221449817"
+  bh=PWHrdcWhO9svLojTTxn8Ax2zcyImZKh7bg+j0cnZmb8=;
+  b=AuUnki8hXtYBWX6rzOx/urEhpmMDlKPHTutpiDKqRz7D76dW99H/2MrF
+   Yd7u3AwSTileeLr7qraqcbMnw5dn+uK5XaIZ+nC7ovmTvAZlLDkYPuupH
+   lP+facqV9nyKPbPsEZek7zaZJwVQLlYIqEcwlsMKq29rGCVKf0BLi/Teq
+   Ap2JyYCkqzYiQlszSHcmQJUglNkfwfRFj0E83SnrcUduXXSSH0ZgDo5fJ
+   z/PIz5gMtkBx+deQmEa73ZeswvkpUsSNmqK4uAMjUg8guEx1Ju+HDsK6V
+   CGO1aZyhcSFRcZtCL6pQaN+IMBQq7fEG5+cvQvSkNiKEkZSxcU62EYt/o
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="238999921"
 X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="221449817"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 19:01:23 -0800
+   d="scan'208";a="238999921"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 19:35:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,244,1635231600"; 
-   d="scan'208";a="470194562"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga006.jf.intel.com with ESMTP; 28 Dec 2021 19:01:23 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+   d="scan'208";a="615822092"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Dec 2021 19:35:36 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 28 Dec 2021 19:01:22 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ 15.1.2308.20; Tue, 28 Dec 2021 19:35:36 -0800
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 28 Dec 2021 19:01:22 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2308.20; Tue, 28 Dec 2021 19:35:35 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 28 Dec 2021 19:35:35 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 28 Dec 2021 19:01:22 -0800
+ 15.1.2308.20; Tue, 28 Dec 2021 19:35:35 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J9XrQhpf3pknBs0z702nyKkAAW+mH/g8bQlyqbWnqFnfQQvr+UCYlfPYdCgMHdj3+06Z3POZu+nwpkdWeZOip8mA3JsEIrwmbUMhoSahtrW46nUHgVsNxavQInEysdFDK9VOnmzi5ja/r5MdfCNe8123I4X820zR0LSAp06S06fc0qeFzxlTl5GTg/vZ7J186kuFiItGk1TToZWZ2ZxbqoXJRUUNaSc6sCqAviM8SDvk/4l7ybjG1q9KGQy9iNbvlar71L+elwxXZh55fmEXyyC2vAjgkjg3V87YjaU/r3pNysii+Kk7rPmlpoteK8I/v05Qy9e8wNn/24cbPvW8qg==
+ b=RX4Et2VvxiF5Wu7HkdpjWxwYHZSkQ46rk+gVU36sbQs/eLf1Y0w1G5fN7GrWdYZ+fZ9/f1R3RnQ40YlfZkadt2HEOQfQfzzIle46xhbbWzglvAh2fzDmVSQuziJ7uyBBJK3UwAi0ZP/jju2VfSXzEfPXbNkOESyWze99lBSNGzY1KrKN0M9G/GEcRoCvM7jtan813VFBtq4eLYjQylq8d+l/4dUUjF2GBdzWeoXEspk5RXwO9xnFEGL9CEAUlksSC+axwryCj3UxkjkHqU1wkb86/VYW2R6uWgpzm10M9mtLYIlxw17CLzAFd1qsD4QNcdwzOxCdPSf/kD4tGDbAOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cC4FbQMFdChHh81wJY7Q8VqnQ3zxx7uv77UI8AX2qRE=;
- b=KliCtidTyQIJnOUAHHFLVkiYQ334jQCTntgkRwbbx5laJe7+GQwSgFXQVpZBw1kcO2YLFknPdoeU+ljuGubFzq6BRugDyLkc3qRkianun+G9/lCR7uKGd6K5wpW26D8a2eWwtSE3Yi3aj5/Eyl7ZCptQrAbw7ntYxmmL1sabz4W06x0zENWVn8JAMqvMu9gTg0doUebVREOEN8hHAqQ390K+pnN+W7O9euNQ99uZRv3n1zJvnAguF1sM7PI9c5lhnq9qEhIYOVCNoRv9A8gDWNOqHRzhG8zFqcerFEQDxsAbNDM6o3QYUdHugopHdk8B0OrmPkCB4RXd7PVDGTMNpw==
+ bh=Wu5Jh476T4HcBktEjCQnmlxhsvbyvZ7NP+sVjXD3tyY=;
+ b=ObJVNJBth8kvXq1kOyZEfX5+4CQ6/+7OJWupgCulUufcGOQhTlIFL/xFOriYghM5N652IxavTb06Y/55s/d2oL5HyN+D6Wcn0XJ7gwLyIDWBiqAJGs28uqYL+nOyaeh2n5OBISEXGhQ+xmG8jNAI/6ju+8M2PIguJ8Mo/st8LHy7aHl9CIvkbY3I+2RN7wBztGdFNaeFYdlS298kkIZZdCfG9M47yczEridN9KJ6xH7v0nZodlgXraSE+I0dJDwHCJafV0KCtLgiPb0ThnAHLem23QjK6RfNn92xOIi0taV9x6OjWKEF4a1pWcokLAe3o1HSs+6eM0f2kGftEZwd3Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN6PR11MB1857.namprd11.prod.outlook.com (2603:10b6:404:103::21) with
+ by BN6PR11MB1858.namprd11.prod.outlook.com (2603:10b6:404:100::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.19; Wed, 29 Dec
- 2021 03:01:19 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.21; Wed, 29 Dec
+ 2021 03:35:27 +0000
 Received: from BN9PR11MB5276.namprd11.prod.outlook.com
  ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
  ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4844.014; Wed, 29 Dec 2021
- 03:01:19 +0000
+ 03:35:27 +0000
 From:   "Tian, Kevin" <kevin.tian@intel.com>
 To:     "Christopherson,, Sean" <seanjc@google.com>,
         "Liu, Jing2" <jing2.liu@intel.com>
@@ -85,14 +89,16 @@ CC:     "x86@kernel.org" <x86@kernel.org>,
         "Zeng, Guang" <guang.zeng@intel.com>,
         "Wang, Wei W" <wei.w.wang@intel.com>,
         "Zhong, Yang" <yang.zhong@intel.com>
-Subject: RE: [PATCH v3 16/22] kvm: x86: Add XCR0 support for Intel AMX
-Thread-Topic: [PATCH v3 16/22] kvm: x86: Add XCR0 support for Intel AMX
-Thread-Index: AQHX9zE1CDJu9TXQlki+g1y/a9bZPqxIpY4AgAAqVMA=
-Date:   Wed, 29 Dec 2021 03:01:18 +0000
-Message-ID: <BN9PR11MB52767A662EE36412B166244B8C449@BN9PR11MB5276.namprd11.prod.outlook.com>
+Subject: RE: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Thread-Topic: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Thread-Index: AQHX9zE4gQJMQm2XFEKlfvGX4m1Fn6xIsbuAgAAjG3A=
+Date:   Wed, 29 Dec 2021 03:35:27 +0000
+Message-ID: <BN9PR11MB527653AF0BEC5BBA007B72408C449@BN9PR11MB5276.namprd11.prod.outlook.com>
 References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-17-jing2.liu@intel.com> <Ycup8opdHrjCIy1V@google.com>
-In-Reply-To: <Ycup8opdHrjCIy1V@google.com>
+ <20211222124052.644626-23-jing2.liu@intel.com> <Ycu0KVq9PfuygKKx@google.com>
+In-Reply-To: <Ycu0KVq9PfuygKKx@google.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -100,144 +106,196 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7175855a-0afb-4e52-3cd4-08d9ca777cab
-x-ms-traffictypediagnostic: BN6PR11MB1857:EE_
+x-ms-office365-filtering-correlation-id: b6690ee2-1d1d-47e0-554c-08d9ca7c41bf
+x-ms-traffictypediagnostic: BN6PR11MB1858:EE_
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN6PR11MB18571F333B159E2DC6DCC6F68C449@BN6PR11MB1857.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-microsoft-antispam-prvs: <BN6PR11MB1858B8DB8A25598BA96848F88C449@BN6PR11MB1858.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tQs/sO18emGoUlAcP7k2YxMDCfS8hwENl0XbDlgtuEd/6EFmsGRNizlfXpBMDWF0yYXX0ZCbG6+aAbW6s/87yDlI0mB5QOOUkzjuDkkIE4+Kfo9m0pcMLFrc7sVgHU0ZUUFr6k4V874gr+TPm2uXDb7v0ieQkLxVxzR/Fe5A9oWX3mqlnm7yvEL5X8Bd+0MKelE3LeKIg2DZ8iFjdnSZu5cdtX78+c5IHp4SroFhqBHc9jOuGdqjhoVqfmJmj+apockNo5m7qeK9446ctO1XuEothZbUNM2AwHySslDVUaus0FGzsJw0xDg+AUR/iu0QviyZRD2mY3GjKhHWlFF5bDsekyZCQ9k4ZgJ8Uha/xcp1HEZPdaIen3AQBGcXqpRGHrRxfT19HeVemQWfaErewqf3z0qK2nNLqkxSqQRRb+yqRFWW2XbFYe9RYOaH8zyQZRNQbuT2SqGVf12FQdo20MF6Ma3FpVERvgwzXigm5H1b5IQS7SouR3V9babgB6wyegwJF5PQDNQ0+VrMRPDnHYNssJuL4d7aC3C6Fk6yXkbdb/AyalA7HkdBaQPoZ/SWf4HVhD0irDmx2uv5XnJ+MJ7wtAjHNHRNNlAaAKrCIakU/5QcD9Bq6ZHsRUhLL2nv0RlI4Zd1Gry/Bf0aoyjYR1xOaOKsRXOXukeP8CGe+bSpk0QG0/kxgIK/NxkAb9U+YL9/XndeA5XPQn2Uk/hPUA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(122000001)(8676002)(9686003)(6636002)(33656002)(7696005)(38070700005)(55016003)(6506007)(54906003)(71200400001)(5660300002)(316002)(7416002)(508600001)(110136005)(83380400001)(186003)(2906002)(52536014)(86362001)(66556008)(66446008)(64756008)(66946007)(82960400001)(4326008)(76116006)(8936002)(26005)(38100700002)(66476007);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: IW8W+J8E/V4Uv8YtZsG7V+eX167jpWoeDrJIutc5tJl8biW/U1JCBios+fh8d2gubcJNUT3iVpnS8lEbD48xomvYqQs4u8Lr8hbNbcG02H6ts9h6ptxGCb+cjcO/NGQlHIADzOPOPVtuhrfG74PGza1d0yj2fszZJskeinhNP6hCCx4V482+rRWkq8iwPziSMc1gLZ/bm4ModO+fICv5QU7OXd960YEvwU74T209qsDBvi/oO+WMBY3P9YOJlHzwq5c2pMUdm7cKUxkiD7kM3PrCtj+rIDmTZIARHMUVzxygLltpbv5pNv/gCSa674Qef85eWKKC6oyR73RKjPV/iPGhRirzXQ2UA07Glp/7EcZDPWlCvkPdSKjviJ+XEec5p+Ql2MXpeEbZCFpuO0ATJScRQXgIw85ZyHBNf52uKm0OTQ4l/qdUI6u4+BLpaafvhXckCae/6X3OWUqyJWEhyWVwiE310plRw0anITLMW5NwNPKwy/HPrDPHcQM42zRf9PZHyzJTVKe7MzI6V4ZZFeLQtHCIZGD4xrFmGnKtXURLFs7EMrvjHlkLf2JUos3Cb+ecQehgWr99/dU8a9ofTNfhXEb5xnt5rPFQ5WeU1KgylwJe1tX75HW7E02pPmaoujxplW4bEHSaTscf2kOJHo0TwD64zUbS6u5TpBP5qGiknuEWeDh6KOvkhmXTOtvGo/7u539igiQhVSmsZF+tPA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(55016003)(122000001)(6636002)(82960400001)(9686003)(66476007)(4326008)(66446008)(7696005)(6506007)(83380400001)(5660300002)(2906002)(8676002)(8936002)(66946007)(7416002)(33656002)(76116006)(66556008)(64756008)(38070700005)(54906003)(316002)(26005)(186003)(52536014)(508600001)(110136005)(71200400001)(38100700002)(86362001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/ga222Meoz7bPpRQ6XFfGW30+6tqXkzR+2b9TXsJzf0ogmz+RaI0t/NujDyS?=
- =?us-ascii?Q?t93JOXSdh+aN00/DWIiEUZ6tWxCBtJfGi58u1tLewAVPzIAHyGprrcaNbLMn?=
- =?us-ascii?Q?WuITKxfXh0vsR4STRYlptZI5QENaWGYlsAtBviZi52MAWBb9eHqiFMf6Q5ay?=
- =?us-ascii?Q?U0rIo1h9n7EWg1CGMR6YPq0gpzzUsgIa8oVnPXjO1zsZBYXI0n+8tl3FEbkm?=
- =?us-ascii?Q?7KsJBN+D1HNPu/dHy/o7ygfleTKD+dELxZdpokXBFHvcWJfGYgm4HP9nS11K?=
- =?us-ascii?Q?7FYUhZ8Dh5yBDHgKiwqnh809one/TikPSVCYsQ3QK1/glpqbXWzNJGpbNGFt?=
- =?us-ascii?Q?drmcVypi/ll8R6J1yDi+OhtB9q7Vd94LDd2zzVUos7RVFPdcmaGeHQ9pe1Ml?=
- =?us-ascii?Q?DRSNdoUz2kBM48hSDiUM79dJVE07atbtHdK6I/ONpFitmoRuIL44AJU8lsIC?=
- =?us-ascii?Q?ZcDRAKNna52J4pmPTAj3/ywbV1vf+K8mww6xaAylWENKVXb293DemzX50Cpc?=
- =?us-ascii?Q?aB4iIm2IUALQUfYV5v1VCujFgL7Pb1Cc/rAPacv//TMB67VvQ+cZ1OBSZqqp?=
- =?us-ascii?Q?hSFDds3Ov7EUM79K5Ihm32rwEsPicPFL8Eb8wz/D2GAwXpoUpb0XCDXT5OX+?=
- =?us-ascii?Q?0hGSZWczxrvztYQZjm/xiNZyZ0zInn+g/K7vtWELEfCpHlsyx5z4QabRSPAR?=
- =?us-ascii?Q?I8CZHa78ekGpJ/aK45hoWDZ8Inx8d6gcWpDNYBJgmsWiB1+0GQDIm9QP4kXT?=
- =?us-ascii?Q?zPwXE5cPrP4aFgqoExRLn2E5mmPDE8x4+Z4fkG4Z2DtAQ6sGN64DbMXD98S9?=
- =?us-ascii?Q?HIiTaCoaI0XxxBYHqZHOXHjLYR4H63v6DR0AO97V/Pz8530Pkm5cUFqLxR6c?=
- =?us-ascii?Q?/jgd09dqiSHFxSOMzLZAUrF289ZNs9Z3K6UpNbuRY/hL19TYuRHaLb1+L0KT?=
- =?us-ascii?Q?ZnzhwZ9grlV5vQ+ze6I8Zqr06d3iTomSp0P8C44WGCMMQgnf4tGeJFdrs1um?=
- =?us-ascii?Q?CcLyeD1DWXu3JFOWvEXo81jRZfrLVQe7z3PNu9yJ7aOH5iNsWBJbSG6S0YI2?=
- =?us-ascii?Q?rAoeWOt6VrYjP+zfDMunCZr7ZtDQpjflh8G8zryoNkgxQP7FwlrcH0Ywwn9T?=
- =?us-ascii?Q?0mRTZ6XVEWvpg36Jmtfr3pCRtEMGiuA/PieJ+Kx0QnjKc9DXGwbc8XH0ogZl?=
- =?us-ascii?Q?41nichJ7t4MtEyVOAWDkH62Ml1Xf0+U4hqNtA/5IxVQxEihDofsfvx9mNvQi?=
- =?us-ascii?Q?WpfDYDX0yUv9eSyPaJMx+wgxeVhZ4XJTuanmT2ztQ7jA/e6zlQfNJMSZBShS?=
- =?us-ascii?Q?DX6IALhr4gyjnvkdzOcgb4kxi2LO/GH2UFBtIMjezuANh+oP76Rd+qrvMnGJ?=
- =?us-ascii?Q?YI5+LeKdVbnee7dP8OAy0K4bpTVrjb64qjhQDdm9uGqh1XzwF9uMLv2GbPJV?=
- =?us-ascii?Q?dBGecyUn8qBNA9nwFhzHeN107dHI5gXcLcoDwkXMgL1CBIAvf8j++XklmeaN?=
- =?us-ascii?Q?vGX9HDlsaB79bvV/APz2ZYekKVkNWwifcPnGDeP0IXlXKIrY9oLqb9KZiY6Z?=
- =?us-ascii?Q?iHRd3S2au8qVqgVUxZLYYquTl//PXe2KaIKHk3u6hXLAXl4HA00Te54amyvf?=
- =?us-ascii?Q?51v+dfAEv5ADVdbN550ZHuM=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iV1e/AUrx8SucTIhI0zT5pGzjUL8WdfTqvUYvVHcI/YdkIyUqsolU0Zj9rFc?=
+ =?us-ascii?Q?uzOD3/+Bkn/MZAk2A+H88HIW0q7AN2KOKYwsREvRHb/wMJf6+Mb/Vma2k1tC?=
+ =?us-ascii?Q?nfkO7tumz3fyeBV4x3tM276/SEugXLmI5tRRK6B0GuBrAmPJdfFlLjklgNQQ?=
+ =?us-ascii?Q?los+NMXCGYYCFo8HFsEVV++FOkNK3xlkRDvr/KUSUZMGjibU9XHvp27pO+RT?=
+ =?us-ascii?Q?xT9d5CAU+gqETTM7Y69XlZ50o5jn9bUzlJ2olhzog4aJrDEstFVTYmQx0lYE?=
+ =?us-ascii?Q?EvmSZhH4fxyJLVNWliBmort30Ape/P/ojSwn4grpGG5EV9o4qf/slyqW7LUk?=
+ =?us-ascii?Q?uCQWco0HC55xmGiUeq7YoAXBDtvCSwauTOzGvmXTsMtdRuTfYNnrzLpBg77E?=
+ =?us-ascii?Q?0/d9cNN0R+6GQLrIQBM6Qga+X2jCVQ4xxFGTNqBiEXVVHTEeQ2yp/fq/Kc98?=
+ =?us-ascii?Q?UKQGVsyt70J0CwQd4AUWu1Go6FPfnq7cBy15T6dndPt10WNHL7MqX35ioKVv?=
+ =?us-ascii?Q?bxQkDciltvWa5I7uI590CNRr9hA+me3wGC5CHywunmkC1KoXqSL2miAgK7O0?=
+ =?us-ascii?Q?JJcDYcqCH+Cxb9w/hYF9CLW/RX0sKW3YxGdRxIt20czB0+uzsF59u9mN3PrG?=
+ =?us-ascii?Q?H8ohO8OwZbYr44g7Btn+K0LWGi4ID+DcdCCBhNZd6rgkP+GB2QaNFC7CrgUc?=
+ =?us-ascii?Q?9xVu9Bl87RhQbpeI76UFuI1XwKdverUPFnRlxCi6oclvKJpablGV/MjpIv++?=
+ =?us-ascii?Q?adfN52u5l7KALj6vaLCYzZezI+T7FPIZCV4+ZASkzLFAYdQq2nert9b79OaY?=
+ =?us-ascii?Q?f4WGOCQFA6Hwr4gWz0OXENdw+qxRNGVHB3633/Er+qI5EalWQKFSnvOIYT51?=
+ =?us-ascii?Q?fuFrF707YieegSMJM5QEjJ2xzkAgw2kQi/Tev6bHpGPSYm2j0/bSGI8QvjWc?=
+ =?us-ascii?Q?oND/opX3kYhm/GcURtb+MQGshWV6M4183e3T/76QwVSu7tiyo31r9X7K4KHp?=
+ =?us-ascii?Q?W7nSZBXvxOm68nYdbHFlGC5n4KZKbUbXfyr9iRMeAwyFT6FuzEyM8jcGcFJt?=
+ =?us-ascii?Q?c3cm592cSuPTibDjbpbtp4i2ewT4PD28ajeADPpJKouYedREiar5gGbDIQB8?=
+ =?us-ascii?Q?LnCgmXyHjHUSr7rGuff6QIW3pdz15dBtYpVsyFnhLcTk7nLYe+Nb/2jMcBzW?=
+ =?us-ascii?Q?7Zk6+oTP9Pawhq0Y0Iub8P47ONsCjDMXCxNn+0Qgyg3jXaYCx1RQuci9j4wB?=
+ =?us-ascii?Q?O1iFgfs0aVd5Ges1V0o8vljxQ7jLMfPv9MraXRNj9MTI191HllqWoN1NM86G?=
+ =?us-ascii?Q?qnOczP/l46rpPIHeWS6iExB8VvItRNBmjapJmxsDrcTKS0sueFTpmdAIj1kD?=
+ =?us-ascii?Q?CICim3whw7dQPAS9lVrV+IVnb5VjbOyXTA/4pjhRNF0pBQMfoOcRrYxdKn3Y?=
+ =?us-ascii?Q?G+WjqfOJ1QwzmW9joJ4z1/HSYztPct0jUJiY8yAphDaS9Sc7WgkUUhbzx/Ov?=
+ =?us-ascii?Q?5TJIgPDrh1fod3ixCnOZDbDgyYJoH/PZRXUFWs2rVVFESYYec/xtPKXWOWEw?=
+ =?us-ascii?Q?8TyqdvZpPfLSJNBQQcOjQhFjPcQf4oYJZtJJ/tSdO0h8TU+po7ohtxLCf5gF?=
+ =?us-ascii?Q?+iuGrRfCXJL47baDFynJQtE=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7175855a-0afb-4e52-3cd4-08d9ca777cab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2021 03:01:18.9399
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6690ee2-1d1d-47e0-554c-08d9ca7c41bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2021 03:35:27.6324
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PNa3wkvcgBcUNbJCj8MooQbKlM4MK9QMWTjGK9bKKsd2PCLX9ZR5gqLFf51XcfI5PGx9JNyOD2J8ORFR5JAfbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1857
+X-MS-Exchange-CrossTenant-userprincipalname: C/Ncz1nAu0lk43koeKR+wbWkAnAXMsz4/WnrnpyY9cDYaSMwExguHc8pkjnqESk5fdw1NOiQcIdqggb3D6wnuQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1858
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 > From: Sean Christopherson <seanjc@google.com>
-> Sent: Wednesday, December 29, 2021 8:21 AM
+> Sent: Wednesday, December 29, 2021 9:05 AM
 >=20
 > On Wed, Dec 22, 2021, Jing Liu wrote:
-> > Two XCR0 bits are defined for AMX to support XSAVE mechanism. Bit 17
-> > is for tilecfg and bit 18 is for tiledata.
+> > @@ -1968,6 +1969,9 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu,
+> struct msr_data *msr_info)
+> >  	case MSR_IA32_XFD:
+> >  		ret =3D kvm_set_msr_common(vcpu, msr_info);
+> >  		if (!ret && data) {
+> > +			vmx_disable_intercept_for_msr(vcpu,
+> MSR_IA32_XFD, MSR_TYPE_RW);
+> > +			vcpu->arch.xfd_out_of_sync =3D true;
+>=20
+> xfd_out_of_sync is a poor name, as XFD _may_ be out of sync, or it may no=
+t.
+> It's
+> also confusing that it's kept set after XFD is explicitly synchronized in
+> vcpu_enter_guest().
+
+yes, sync_xfd_after_exit might be more accurate.
+
+>=20
+> > +
+> >  			vcpu->arch.trap_nm =3D true;
+> >  			vmx_update_exception_bitmap(vcpu);
+>=20
+> Ah, this is why #NM interception was made sticky many patches ago.  More
+> at the end.
+>=20
+> >  		}
+> > diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> > index bf9d3051cd6c..0a00242a91e7 100644
+> > --- a/arch/x86/kvm/vmx/vmx.h
+> > +++ b/arch/x86/kvm/vmx/vmx.h
+> > @@ -340,7 +340,7 @@ struct vcpu_vmx {
+> >  	struct lbr_desc lbr_desc;
 > >
-> > The value of XCR0[17:18] is always either 00b or 11b.
->=20
-> Is that an SDM requirement, or an arbitrary Linux/KVM requirement?
-
-SDM requirement
-
->=20
-> > Also, SDM
-> > recommends that only 64-bit operating systems enable Intel AMX by
-> > setting XCR0[18:17]. If a 32-bit guest tries to set dynamic bits, it
->=20
-> This is wrong.  It has nothing to do with 32-bit guests.  The restriction=
- is on
-> 32-bit _host kernels_, which I'm guessing never set the tile bits in _hos=
-t_
-> XCR0.
-
-make sense.
-
->=20
-> > fails to pass vcpu->arch.guest_supported_xcr0 check and gets a #GP.
-> >
-> > Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-> > Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> > ---
-> >  arch/x86/kvm/x86.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
+> >  	/* Save desired MSR intercept (read: pass-through) state */
+> > -#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
+> > +#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
+> >  	struct {
+> >  		DECLARE_BITMAP(read,
+> MAX_POSSIBLE_PASSTHROUGH_MSRS);
+> >  		DECLARE_BITMAP(write,
+> MAX_POSSIBLE_PASSTHROUGH_MSRS);
 > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index a48a89f73027..c558c098979a 100644
+> > index 3b756ff13103..10a08aa2aa45 100644
 > > --- a/arch/x86/kvm/x86.c
 > > +++ b/arch/x86/kvm/x86.c
-> > @@ -210,7 +210,7 @@ static struct kvm_user_return_msrs __percpu
-> *user_return_msrs;
-> >  #define KVM_SUPPORTED_XCR0     (XFEATURE_MASK_FP |
-> XFEATURE_MASK_SSE \
-> >  				| XFEATURE_MASK_YMM |
-> XFEATURE_MASK_BNDREGS \
-> >  				| XFEATURE_MASK_BNDCSR |
-> XFEATURE_MASK_AVX512 \
-> > -				| XFEATURE_MASK_PKRU)
-> > +				| XFEATURE_MASK_PKRU |
-> XFEATURE_MASK_XTILE)
+> > @@ -10024,6 +10024,9 @@ static int vcpu_enter_guest(struct kvm_vcpu
+> *vcpu)
+> >  	if (vcpu->arch.guest_fpu.xfd_err)
+> >  		wrmsrl(MSR_IA32_XFD_ERR, 0);
 > >
-> >  u64 __read_mostly host_efer;
-> >  EXPORT_SYMBOL_GPL(host_efer);
-> > @@ -990,6 +990,12 @@ static int __kvm_set_xcr(struct kvm_vcpu *vcpu,
-> u32 index, u64 xcr)
-> >  		if ((xcr0 & XFEATURE_MASK_AVX512) !=3D
-> XFEATURE_MASK_AVX512)
-> >  			return 1;
-> >  	}
+> > +	if (vcpu->arch.xfd_out_of_sync)
+>=20
+> Rather than adding a flag that tracks whether or not the MSR can be writt=
+en
+> by
+> the guest, can't this be:
+>=20
+> 	if (!vmx_test_msr_bitmap_write(vcpu->loaded_vmcs->msr_bitmap))
+> 		fpu_sync_guest_vmexit_xfd_state();
+>=20
+
+We can use this
+
+> That might be marginally slower than checking a dedicated flag?  But is h=
+as
+> the
+> advantage of doing the correct thing for nested guests instead of penaliz=
+ing
+> them
+> with an unnecessary sync on every exit.  If performance of the check is a=
+n
+> issue,
+> we could add a static key to skip the code unless at least one vCPU has
+> triggered
+> the XFD crud, a la kvm_has_noapic_vcpu (which may or may not provide any
+> real
+> performance benefits).
+>=20
+> Speaking of nested, interception of #NM in vmx_update_exception_bitmap()
+> is wrong
+> with respect to nested guests.  Until XFD is supported for L2, which I di=
+dn't
+> see
+> in this series, #NM should not be intercepted while L2 is running.
+
+Can you remind what additional thing is required to support XFD for L2?
+If only about performance I prefer to the current conservative approach
+as the first step. As explained earlier, #NM should be rare if the guest=20
+doesn't run AMX applications at all. Adding nested into this picture doesn'=
+t=20
+make things a lot worser.
+
+>=20
+> For the earlier patch that introduced arch.trap_nm, if it's not too gross=
+ and
+> not
+> racy, the code could be:
+>=20
+> 	if (is_guest_mode(vcpu))
+> 		eb |=3D get_vmcs12(vcpu)->exception_bitmap;
+>         else {
+> 		...
+>=20
+> 		if (vcpu->arch.guest_fpu.fpstate.xfd)
+> 			eb |=3D (1u << NM_VECTOR);
+> 	}
+>=20
+> Though I'm ok with a semi-temporary flag if that's gross/racy.
+>=20
+> Then this patch can change it to:
+>=20
+> 	if (is_guest_mode(vcpu))
+> 		eb |=3D get_vmcs12(vcpu)->exception_bitmap;
+>         else {
+> 		...
+>=20
+> 		if (!vmx_test_msr_bitmap_write(vcpu->vmcs01.msr_bitmap))
+> 			eb |=3D (1u << NM_VECTOR);
+> 	}
+>=20
+> > +		fpu_sync_guest_vmexit_xfd_state();
 > > +
-> > +#ifdef CONFIG_X86_64
->=20
-> Drop the #ifdef, it adds no meaningful value and requires the reader to t=
-hink
-> far harder than they should have.  Yes, it's technically dead code for 32=
--bit
-> KVM,
-> but no one cares about performance of 32-bit KVM, and in any case it's
-> extremely
-> unlikely this will be anything but noise.
-
-ok
-
->=20
-> > +	if ((xcr0 & XFEATURE_MASK_XTILE) &&
-> > +	    ((xcr0 & XFEATURE_MASK_XTILE) !=3D XFEATURE_MASK_XTILE))
-> > +		return 1;
-> > +#endif
-> >  	vcpu->arch.xcr0 =3D xcr0;
-> >
-> >  	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
+> >  	/*
+> >  	 * Consume any pending interrupts, including the possible source of
+> >  	 * VM-Exit on SVM and any ticks that occur between VM-Exit and
+> now.
 > > --
 > > 2.27.0
 > >
+
+Thanks
+Kevin
