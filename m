@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F95480E36
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Dec 2021 01:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B4A480E45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Dec 2021 01:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbhL2AVM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Dec 2021 19:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        id S238033AbhL2Aii (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Dec 2021 19:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbhL2AVL (ORCPT
+        with ESMTP id S238015AbhL2Aih (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:21:11 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A89C061574
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Dec 2021 16:21:11 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id m15so17104301pgu.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Dec 2021 16:21:11 -0800 (PST)
+        Tue, 28 Dec 2021 19:38:37 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDBAC06173E
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Dec 2021 16:38:36 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id l16so2591681plg.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Dec 2021 16:38:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=aD2wzsbm+sT+Pa4K7JTUkCGSHzkUiwnjJcSKkt8ynjg=;
-        b=M3O6/+qXF1dvEZ248mAgk9TWEITaeZ3wSCPJ6C10EMsVO+UnjNVAKJcYJscAQS5AQQ
-         bZusvI0Gu9PJ86nOvionMunXs+5nHy5h1hpnJBUs5YrxLNxarviPh/R8tuh+qGUn7ZFq
-         pdxLhPGzqLeh3FDNtg78Dq2PeHrJUzOiCdUW9wQxWuFm32jUYfGNgOAc/xOCTDCzUbWd
-         1tCIPF1jNObf9fs0DZEbGBhrSxiTpXbmFNPN+AzLi40Zl+YXHbJq0D6YMf4wEV+w7cAy
-         MzfVcfsnzb1lg6EXsq+ljgKNRchsdkuljdwWSuY70TC9rPBaTdtcL+vZqu754xxNOylZ
-         frAA==
+        bh=hjUAN9+iAYchoekHcAxgltTkGjYeMuzObvv9td4+9a4=;
+        b=C+GxiYcVqyCWYFi9nIBdcAjF5+71YdP+ddRsA4ncIdJ+2un/4sai3g+KS2Qs93clRx
+         941Bg8yzaXMHrVBE/brgwXy6fKRjpKWHD9oomOCPvmO278PTUViUIQc6Uq5EPSz6JFVA
+         4umrBnTGni6cHaybpagiMTbiL/aWQ3/zpc9a50p+wJuBWV7UA+zVxENyCdTtNuE+lYCt
+         t8FUkDx3+VlDJfPw5CoppaOsA6vOjg6SEdh60X6+P4/zcex0fwf57eTLymwRRhWFGBlU
+         rTkfWrMHXAAYgoJMQKy3vujnOjDQwJXqV8jWYi8smuvhhKDvdG72dcInT4J5lUIfAPYQ
+         c+QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=aD2wzsbm+sT+Pa4K7JTUkCGSHzkUiwnjJcSKkt8ynjg=;
-        b=3b+sid0mzC7a9TA1Y+AWIlOZlugbjOusR4lYDjqnjtbFgI8b4IaT2DOLEArTFCs7zE
-         Gs+pQX+GJqOsixHjHdg9omQaBpKGD/UsIK9MiD8H8cjAxkO26S00YOiS3tdYBrOnSsem
-         Md2X5IVAmqQCCf3+NqspWnEEST9shAT+3ZjdKl88uTcmqCZpMZkNDkTYjKYuJ19ozn0t
-         C6MYTwEkw0X3aGSm1H872C1d7lYt0tgWNKKoiOOH6gz4mEo8EEyTEX1hvUhlLDQPIExf
-         b62jwE9ob2EgaeACD5byM8ThHLvlv/uBsN5lCsrbn2O6SINx5TMpS/0wnGG8JTglco98
-         DUWg==
-X-Gm-Message-State: AOAM531D47BjUCvpfuVnCY+qdA25rQ2ePVSFJ3vTWTHoFmOwRAioCepY
-        G2M+748sLuitnJre3BrP6b5djg==
-X-Google-Smtp-Source: ABdhPJzlkjKWY+MvibfWkquu9G315yJkccaVhTBEilXVPiunaBfLgrCsBANyxjYVuAuXX4tcjw7hnw==
-X-Received: by 2002:a62:6dc4:0:b0:4ac:fd66:b746 with SMTP id i187-20020a626dc4000000b004acfd66b746mr24382311pfc.17.1640737270757;
-        Tue, 28 Dec 2021 16:21:10 -0800 (PST)
+        bh=hjUAN9+iAYchoekHcAxgltTkGjYeMuzObvv9td4+9a4=;
+        b=x4hrw0wmifLUii4rmbiveEkrED8gigopCidM7AKyCG8SIAApilBsfcO+djIGETF7aQ
+         bLTxjiRdf9dQQ9eM7EjSKO5M/By6FMbUjfc9zlfNcYZ+PbyhzObsCA/O5L4pvvrM1WzB
+         GBso1+yTm7+nzTc4k27AcmGcFpbevjhN7Mx8UDGEZWWC2WivbrAW/kQKjd2sGUaiN7RD
+         EeN8+ywvzIHMDTvmT7cITfJh3w+GhW91I+votDvFYKZ9zrR8T5q+WU4pTKgVkg4O4JgP
+         0kG0xqkFhBbj3dPvpV2JWUW9gBak5g7/gZtwyiz8Y3mnAaMmq7EuZlOgTxiP1bhFjkYj
+         CZ3w==
+X-Gm-Message-State: AOAM530YaA/RPm4KyoIcVL5o4u+bSOve5mOfq1gaFPh19l8ajrJVe+C/
+        GwbcI/13yzVqCj/bzX6vc6y7tw==
+X-Google-Smtp-Source: ABdhPJzyxzL1SmeyMHBKiG3Hok/7s0LwyPr5oMw7ZZmLDNjluQeMElELTXAK75NFNqjmZtHM6KzE6w==
+X-Received: by 2002:a17:903:41c5:b0:148:a658:8d33 with SMTP id u5-20020a17090341c500b00148a6588d33mr24150162ple.153.1640738316228;
+        Tue, 28 Dec 2021 16:38:36 -0800 (PST)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v16sm19267142pjh.57.2021.12.28.16.21.09
+        by smtp.gmail.com with ESMTPSA id p1sm13586433pgj.46.2021.12.28.16.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Dec 2021 16:21:10 -0800 (PST)
-Date:   Wed, 29 Dec 2021 00:21:06 +0000
+        Tue, 28 Dec 2021 16:38:35 -0800 (PST)
+Date:   Wed, 29 Dec 2021 00:38:32 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Jing Liu <jing2.liu@intel.com>
 Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -58,73 +58,137 @@ Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, guang.zeng@intel.com,
         wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: Re: [PATCH v3 16/22] kvm: x86: Add XCR0 support for Intel AMX
-Message-ID: <Ycup8opdHrjCIy1V@google.com>
+Subject: Re: [PATCH v3 19/22] kvm: x86: Get/set expanded xstate buffer
+Message-ID: <YcuuCMCQryzUFoAZ@google.com>
 References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-17-jing2.liu@intel.com>
+ <20211222124052.644626-20-jing2.liu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211222124052.644626-17-jing2.liu@intel.com>
+In-Reply-To: <20211222124052.644626-20-jing2.liu@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Shortlog needs to have a verb somewhere.
+
 On Wed, Dec 22, 2021, Jing Liu wrote:
-> Two XCR0 bits are defined for AMX to support XSAVE mechanism. Bit 17
-> is for tilecfg and bit 18 is for tiledata.
+> From: Guang Zeng <guang.zeng@intel.com>
 > 
-> The value of XCR0[17:18] is always either 00b or 11b.
+> When AMX is enabled it requires a larger xstate buffer than
+> the legacy hardcoded 4KB one. Exising kvm ioctls
 
-Is that an SDM requirement, or an arbitrary Linux/KVM requirement?
+Existing
 
-> Also, SDM
-> recommends that only 64-bit operating systems enable Intel AMX by
-> setting XCR0[18:17]. If a 32-bit guest tries to set dynamic bits, it
+> (KVM_[G|S]ET_XSAVE under KVM_CAP_XSAVE) are not suitable for
+> this purpose.
 
-This is wrong.  It has nothing to do with 32-bit guests.  The restriction is on
-32-bit _host kernels_, which I'm guessing never set the tile bits in _host_ XCR0.
+...
 
-> fails to pass vcpu->arch.guest_supported_xcr0 check and gets a #GP.
-> 
-> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> ---
->  arch/x86/kvm/x86.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index a48a89f73027..c558c098979a 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -210,7 +210,7 @@ static struct kvm_user_return_msrs __percpu *user_return_msrs;
->  #define KVM_SUPPORTED_XCR0     (XFEATURE_MASK_FP | XFEATURE_MASK_SSE \
->  				| XFEATURE_MASK_YMM | XFEATURE_MASK_BNDREGS \
->  				| XFEATURE_MASK_BNDCSR | XFEATURE_MASK_AVX512 \
-> -				| XFEATURE_MASK_PKRU)
-> +				| XFEATURE_MASK_PKRU | XFEATURE_MASK_XTILE)
->  
->  u64 __read_mostly host_efer;
->  EXPORT_SYMBOL_GPL(host_efer);
-> @@ -990,6 +990,12 @@ static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
->  		if ((xcr0 & XFEATURE_MASK_AVX512) != XFEATURE_MASK_AVX512)
->  			return 1;
+> Reuse KVM_SET_XSAVE for both old/new formats by reimplementing it to
+> do properly-sized memdup_user() based on the guest fpu container.
+
+I'm confused, the first sentence says KVM_SET_XSAVE isn't suitable, the second
+says it can be reused with minimal effort.
+
+> Also, update the api doc with the new KVM_GET_XSAVE2 ioctl.
+
+...
+
+> @@ -5367,7 +5382,9 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>  		break;
+>  	}
+>  	case KVM_SET_XSAVE: {
+> -		u.xsave = memdup_user(argp, sizeof(*u.xsave));
+> +		int size = vcpu->arch.guest_fpu.uabi_size;
+
+IIUC, reusing KVM_SET_XSAVE works by requiring that userspace use KVM_GET_XSAVE2
+if userspace has expanded the guest FPU size by exposing relevant features to
+the guest via guest CPUID.  If so, then that needs to be enforced in KVM_GET_XSAVE,
+otherwise userspace will get subtle corruption by invoking the wrong ioctl, e.g.
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 2c9606380bca..5d2acbd52df5 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -5386,6 +5386,10 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+                break;
+        }
+        case KVM_GET_XSAVE: {
++               r -EINVAL;
++               if (vcpu->arch.guest_fpu.uabi_size > sizeof(struct kvm_xsave))
++                       break;
++
+                u.xsave = kzalloc(sizeof(struct kvm_xsave), GFP_KERNEL_ACCOUNT);
+                r = -ENOMEM;
+                if (!u.xsave)
+
+> +
+> +		u.xsave = memdup_user(argp, size);
+>  		if (IS_ERR(u.xsave)) {
+>  			r = PTR_ERR(u.xsave);
+>  			goto out_nofree;
+> @@ -5376,6 +5393,26 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>  		r = kvm_vcpu_ioctl_x86_set_xsave(vcpu, u.xsave);
+>  		break;
 >  	}
 > +
-> +#ifdef CONFIG_X86_64
+> +	case KVM_GET_XSAVE2: {
+> +		int size = vcpu->arch.guest_fpu.uabi_size;
+> +
+> +		u.xsave = kzalloc(size, GFP_KERNEL_ACCOUNT);
+> +		if (!u.xsave) {
+> +			r = -ENOMEM;
 
-Drop the #ifdef, it adds no meaningful value and requires the reader to think
-far harder than they should have.  Yes, it's technically dead code for 32-bit KVM,
-but no one cares about performance of 32-bit KVM, and in any case it's extremely
-unlikely this will be anything but noise.
+I hate the odd patterns in this code as much as anyone, but for better or worse
+the style throughout is:
 
-> +	if ((xcr0 & XFEATURE_MASK_XTILE) &&
-> +	    ((xcr0 & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE))
-> +		return 1;
-> +#endif
->  	vcpu->arch.xcr0 = xcr0;
+		r = -ENOMEM;
+		u.xsave = kzalloc(size, GFP_KERNEL_ACCOUNT);
+		if (u.xsave)
+			break;
+
+> +			break;
+> +		}
+> +
+> +		kvm_vcpu_ioctl_x86_get_xsave2(vcpu, u.buffer, size);
+> +
+> +		if (copy_to_user(argp, u.xsave, size)) {
+> +			r = -EFAULT;
+> +			break;
+
+Same style thing here.
+
+> +		}
+> +		r = 0;
+> +		break;
+> +	}
+> +
+>  	case KVM_GET_XCRS: {
+>  		u.xcrs = kzalloc(sizeof(struct kvm_xcrs), GFP_KERNEL_ACCOUNT);
+>  		r = -ENOMEM;
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 1daa45268de2..9d1c01669560 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1131,6 +1131,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_EXIT_ON_EMULATION_FAILURE 204
+>  #define KVM_CAP_ARM_MTE 205
+>  #define KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM 206
+> +#define KVM_CAP_XSAVE2 207
 >  
->  	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>  
+> @@ -1610,6 +1611,9 @@ struct kvm_enc_region {
+>  #define KVM_S390_NORMAL_RESET	_IO(KVMIO,   0xc3)
+>  #define KVM_S390_CLEAR_RESET	_IO(KVMIO,   0xc4)
+>  
+> +/* Available with KVM_CAP_XSAVE2 */
+> +#define KVM_GET_XSAVE2		  _IOR(KVMIO,  0xcf, struct kvm_xsave)
+> +
+>  struct kvm_s390_pv_sec_parm {
+>  	__u64 origin;
+>  	__u64 length;
 > -- 
 > 2.27.0
 > 
