@@ -2,219 +2,238 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9158481ACF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Dec 2021 09:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4A848205C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Dec 2021 22:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237840AbhL3Iqx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Dec 2021 03:46:53 -0500
-Received: from mga11.intel.com ([192.55.52.93]:22573 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230472AbhL3Iqw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Dec 2021 03:46:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640854012; x=1672390012;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=KlvrENUv3HUKG/oL9Ygn92IfVfsCg+fy6Hs3P3RgLjY=;
-  b=KoRV+tnKOgshnbKf6Ih3xYN2aKYShXWHiqxRz5drG/psGPTNc6v6BM2S
-   e4rfkBPk7falXJujgVamPgOfWnhi1JetgwU5tKM+/rSWODGTW1lgFTiCI
-   IkDA0H9KDoocKTACANX+8qBD/0Tqc18XOcgvpAKWlQj19KQvJIaIxwfba
-   Vt5oCuU7PxDRkwR6EWROiLAX47l2BoFN26NH22yPOC5c9aVHtk9aFBmLk
-   ozIFBVMzOOfHfLtSOfq8/M8HCOPfVeg6UxMutZCZ33yJQbGaLvV4yxJ7J
-   GBgzAVnG1mUtkEk0Bkbmj9AwtqYSHp58iwrX+zJ0RdJLyxwW7tlUh+L8e
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="239183598"
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="239183598"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 00:46:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="687157541"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga005.jf.intel.com with ESMTP; 30 Dec 2021 00:46:47 -0800
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 30 Dec 2021 00:46:47 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 30 Dec 2021 00:46:46 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Thu, 30 Dec 2021 00:46:46 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Thu, 30 Dec 2021 00:46:45 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cwWL6ajWNGWbr0Ouk+jb44+dJvNme20ItJoXJxAzuXRzpE0oi/+tYqhRxTqDIM0Vn8bbeEY/L59M9TrhwED9fxW2WSMtm33yqY5JWCEZkviKiqWfjttIKpgfixb1idxbqEBminHwT1s8nWpkffb+P24iZAhGjgvsQ7GK2QjxmMuFKsKh3W+jjJrCGzfrcHQKMwmmwQ9DYC9Tz0DLaW3GTyk8bTey/tehRsismlqRlQwfqi/fPOkKNTQS5q4kZ8dmJ24/KY7Y6chDArG76YfciWO/3wq4rG9HVC6Towj399s1dH22CxZ+JEUMLSqHquNUKPYO3QbJPNtau3DecP2rAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A5K2cCuZph2BjDV+8KU7BgXVYw035SGdC37Oz5quq9k=;
- b=i0v8tVY++C2YRR+Pwlf7kIprSHODYPI44W1AqVAF9+Pq5nwAf/Yu2zP9LQgMxNrS/ZAEuDIZo/f1Qt1l2sGJW9s7sfjFvrKryiB0hsBWGXz4aYH7BZ1o7sRo3BBIBcGkp58h4VNQYRWOBya2JhHLmKvhvo3Y7liyb3+6yYxkuU5/gcopK1RZ00OJoO91orw6foMcR5uRHu2rl5bmLOy4RJKNYR94UPA5/xhnE61nQGF40E6N6ncbvewn2vpMlt+XuKbKl7EukpmPP9xCYu+hJqI3waQVFDYkRF8BcdrjSInJwg2RJ+jppWmVJ/0D9qOJB28O/sF21sF1Os77656gMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN9PR11MB5275.namprd11.prod.outlook.com (2603:10b6:408:134::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Thu, 30 Dec
- 2021 08:46:42 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4844.014; Thu, 30 Dec 2021
- 08:46:42 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "Christopherson,, Sean" <seanjc@google.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>
-Subject: RE: [PATCH v4 00/21] AMX Support in KVM
-Thread-Topic: [PATCH v4 00/21] AMX Support in KVM
-Thread-Index: AQHX/LXk0wxp7FYH3EiGHHPzVpo8CaxKslpw
-Date:   Thu, 30 Dec 2021 08:46:42 +0000
-Message-ID: <BN9PR11MB527605F94C336B49584328278C459@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20211229131328.12283-1-yang.zhong@intel.com>
-In-Reply-To: <20211229131328.12283-1-yang.zhong@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8cbbce89-61cb-46c3-431d-08d9cb70e72e
-x-ms-traffictypediagnostic: BN9PR11MB5275:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN9PR11MB527546A854BAE668114ECCAC8C459@BN9PR11MB5275.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ApgIccjVh9bMnnm7gtQ7QKHK/kWWiLxiOz8ivXQ2TncXVWFJZ132Z9hajO8yQai0cwOPiqJkQjBJXCz1kqHN/LcMj3R0veZgncIpLEO178ZNLBpCKNUhMjd6jErsd02WXjvoh9pkSlvFdKGFns8NglUBIyftEeBUJ9bp2DRg3A3qXiAKOFU66I+KX3wenmUxKblPLqChtqCqFEcicHfrNLOy5z9/KuiMOdun/AS2pirJU9lYwSo/J9e/i0WexxpewImMi74JtlmmwUJF0c7KU+NHQPl28Pj/sAd2OlTM4a/BSPKttPs77YXsKRXClZgMv84Ze+v/GhPh9tWpFceIwmlue7cC6e51NZS/5wzb6n4abSAXuchgMfaD635+84176ronEbE/9mgVS7HyFtE5tFbaOGybA3/iFH7gdq39zUeBY1JDwNYzpiCxqIxDGWDd9UvWoPjt6I1+0uvT9i8Ui7ZNCrrkcHiLU7ENX3lVD5DYHxf2suM5ex0VhJRD8KhkmJKa7I1kex5qjSLhDJC4kbYT4I76F8qEyPYKGNtalqtZ1lOHJake++jwWTDJyK6vm7Jr7ooo5HQgqYqXzPY5H4AAxmHAqX/k08ke7rdFr9/naFftY3liOV5nM0oAv8er51CVdvvDFvRJo7ZvmQLwN/Cy0eyG61ngtX12xHz+vsNHxkkwwCColF1k7d7HLIkIEB3Cqgz0n7wkOh6O8QG4prolBR6rj7cKf4g+wn+bj9otFC0BMxwwlBDbea04CzK0+gIGOUVIppX7TLqTpKnkEC8SAHi8naXFDregtdjOQ4630s2swAEwNK54cIzbhiXD
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(71200400001)(2906002)(66476007)(64756008)(66446008)(66556008)(7416002)(9686003)(966005)(6506007)(921005)(82960400001)(316002)(26005)(33656002)(7696005)(54906003)(186003)(76116006)(52536014)(66946007)(38070700005)(110136005)(5660300002)(4326008)(38100700002)(8676002)(122000001)(86362001)(508600001)(8936002)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CZVIbKvOLgISEyXeYwiUZ7x2Tler0eJ9nrigm1T2NjzX5mkJwRArBgX5RjdG?=
- =?us-ascii?Q?EqGJJe/R39zcmIuMslAmICbmGNuxc0rjIIULnacMkLo+vNJOMxPYb9pPyKaC?=
- =?us-ascii?Q?M1Fs9oPfDm1KPm1c5GBT2Bi5TI/Q6Vc13eZ0+QK8tvM29eubqdNEubC9/SBR?=
- =?us-ascii?Q?Tm5o8ys3IV8LNnvyoFcynIhnWbv14N9R3BuWwmKJpOConrgx7gSuuc3cvpBa?=
- =?us-ascii?Q?9iQo5WC8vk6i1TgsjC4fy0F8Z4paoV67vai099DNzm9HlYaMBawH10Pw4Fo0?=
- =?us-ascii?Q?IjdDnzxslLcC/uVoq9L8+JwscuB8C749dUBp6PZvrlC5mjOT8L2IK0sRORs6?=
- =?us-ascii?Q?YZWqllOfc+JwdW2gX1rQu0V8/7HrFSu0s8FYDLVjldGFapGn6vheTCCkAnsD?=
- =?us-ascii?Q?S6sBlXZv/wGxk0q6F3mlGfSmXAY2HWZd0RwC23K5WDyjy4hkqWgAZG+z+v9t?=
- =?us-ascii?Q?4fIKTLq9CYDGK8jKPZgHcFyXoT4V+CMApr8agBzKb7cSPbIxu9eggSAfrevB?=
- =?us-ascii?Q?128L1XhNFct6OXcq6k7lIBXbG8b9Hvu1T1DPKddVHGIz6+hVKEvsHXw/hnVQ?=
- =?us-ascii?Q?55EDHqtIC9eWpDRinbJ+nKRlg7haSfr14lcLN3qg8Tf6Y5+dr8COWKfo9t8t?=
- =?us-ascii?Q?wsSECIXUvK5yLB4R4TQTVEwNUij14lx7daXS9ChHNSstGo6ZnTuTtmaQfhss?=
- =?us-ascii?Q?qnKWPTKBO91x+FmVMdXQRr7sK3d1k/hg9u3wbpkfl7EDkjvvUFywcp3FMU1o?=
- =?us-ascii?Q?+ElBQHmCo7Y7wPyRO4B/YrO/C6KHXn+6a1r4BL5LTcSUEL8WK1K7rtvSNOm8?=
- =?us-ascii?Q?JkFbtHU6jnEp1WeiVVBaL1iM1KXRWvprqIrLM3w1P7AxA15morwNl9blQ9yD?=
- =?us-ascii?Q?ma7DOWU3tTZAjYa8IMjLqFG5e7HhauNIRpdjIYrvbHIIwmgB2tNzHcF/LOXM?=
- =?us-ascii?Q?vtIfzqHhaQZVaEr5GBM2Pitbvb65HOc0ocVfeaKEWJhH74ZesYPO8MU8VkgT?=
- =?us-ascii?Q?EEfEV7Y7UIJHKMSLQ+ydTPdzkvwDuVAUQ36tVHbUsfF0WnPae4EkYKI3yTMy?=
- =?us-ascii?Q?spXH0hMgX9f0gPwZZijN1SRwZyT3CwfSqucCJ6yegRDVRzsNjZ4Z9YNN6l65?=
- =?us-ascii?Q?HnBkUEa7TJoUg/7oSDeuTDsm5iV3l/kChAVVtESzKkIZO1IC1CG+yKdxXwWx?=
- =?us-ascii?Q?28vtblU3nxsPIHORoV5K+3uwFVylTMoViAE5DEkTOPlP2Jdfvjl9XKIciuLE?=
- =?us-ascii?Q?8PagDcHxXIRAEUOyzjWeINP0ueleJGqkkwPXkO3EAOqNxzTSO1JSSdVXs/0+?=
- =?us-ascii?Q?nIf7KaFUPR5mjdqhEXyybh62JDxfiZjgcjiJxN1ECEIvj4lQVlZocq8ztI/I?=
- =?us-ascii?Q?kXvSnsaHZ0cOib/5NraRZ2ys8VzDesyDwf4cqQdA7HV0jlehIawJ3CFBzrWu?=
- =?us-ascii?Q?SH2kFfQJIqvzcas0SHh2Oe9MliJDHhYowA3HHQzT+gStLsLZpo0ut/SRMo8C?=
- =?us-ascii?Q?twnqURY44ApAazZP4axBr8U03IBxaQCiJ71p1UK4ZU4apJvfV4JuQuInWDb4?=
- =?us-ascii?Q?vPKxMK/BBHdW1p1t8gcONl5OsWFjIK5xDQlYkz69mwWkgMNDvlA18vdeWPTp?=
- =?us-ascii?Q?SwL4Tzg0FfMPo1sGA9a7PJQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S242142AbhL3VLR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Dec 2021 16:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242141AbhL3VLR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Dec 2021 16:11:17 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157D6C06173F
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Dec 2021 13:11:17 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id v16so22076084pjn.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Dec 2021 13:11:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O9uAq6UJmnKzmV+AWu/IPUz6QsaX0JwW2QgMuru4++U=;
+        b=CR4zvhEs4RsBKFZ7BYEUqjel7zmQtmB3npeTQLUP+BfmXKQ9xRKBBkzRMgmgwKiF9D
+         oh7vh5kiHIlthNs5NuhIt8S+Tuv5Cktq6JLPKx6+QJKOpe9m2uOjqkBS+4Xpn7epigC3
+         llMpxjWOr/MAiNBbpJu1FHx0yh+t0b1sITMewEYFI+Q323OnWlHiozlj/tIGiEdSDaQ/
+         mcJTC/DEXV2Gp1IHgYvVEYb6R5lB87OMRV65kKvBIjh0c7rRAe1yozPo/Snp+/Ajru+i
+         DhFUAbKoTz7iUm12rOYwWetKdrT2yJun3970QXsteW/DuWUwtFRKOuPRgIJ/U958N1s/
+         8ZhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O9uAq6UJmnKzmV+AWu/IPUz6QsaX0JwW2QgMuru4++U=;
+        b=w92PVSb6z3QAYOJDJmMFvf6swOo27GJlCcXKdPHH3P36Cm7nUefs02PsIpkcgrZA5C
+         Te4hudcUnpqWZ1spxaOZazfrYm5V+juk/2RQ60Pagq/ll1WNZMhD7cZy+k5dJSDtnEk9
+         2fidsHsQUQxjoE9x/f1R0pScXZk+g3qB7Y+366G+puxcMsUjctMS7ejCbZNLtclACJOj
+         FibBewrDJXA00tnKLpp7EQEZs/k17mCsUGbNteKJ9RrXU8ULwAVbcLFHXMEjSihp1EEb
+         OEv+yMbINNnTNJFtdqF/b7IWM9LImgri3cMdyDBkwH/rBBdVTCaifUsIxKegHVCOh5BA
+         +ugw==
+X-Gm-Message-State: AOAM532Z0Hp9cUmeMHlrrk8yQea0wYAgcVd/1FvJoixRM8LWndClS+e2
+        1YrfkECnCEpSn4hrZcXxInMa6Q==
+X-Google-Smtp-Source: ABdhPJx+cx79RAtXdUYF67GlhN1QHB5cXYw3p1t/cfWfSRpNCjl5aI0OKLoaNRWR8P1NzXt24TTVdA==
+X-Received: by 2002:a17:902:bc82:b0:148:eb68:f6dd with SMTP id bb2-20020a170902bc8200b00148eb68f6ddmr32472643plb.98.1640898676281;
+        Thu, 30 Dec 2021 13:11:16 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id e7sm7345204pfv.9.2021.12.30.13.11.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 13:11:15 -0800 (PST)
+Date:   Thu, 30 Dec 2021 21:11:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for
+ test-selectable ucall implementations
+Message-ID: <Yc4gcJdhxthBKUUd@google.com>
+References: <20211210164620.11636-1-michael.roth@amd.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cbbce89-61cb-46c3-431d-08d9cb70e72e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Dec 2021 08:46:42.3725
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lc6mn6j/veRKMVuoKu1bs38M4SFXmv4CjZ4CBlsGheG3BAPjFWmAzQH+DLt1ukTbVrTXaaRLcIkvBvZRl5cCzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5275
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210164620.11636-1-michael.roth@amd.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Zhong, Yang <yang.zhong@intel.com>
-> Sent: Wednesday, December 29, 2021 9:13 PM
->=20
-> Highly appreciate for your review. This version mostly addressed the
-> comments
-> from Sean. Most comments are adopted except three which are not closed
-> and
-> need more discussions:
->=20
->   - Move the entire xfd write emulation code to x86.c. Doing so requires
->     introducing a new kvm_x86_ops callback to disable msr write bitmap.
->     According to Paolo's earlier comment he prefers to handle it in vmx.c=
-.
->=20
->   - Directly check msr_bitmap in update_exception_bitmap() (for
->     trapping #NM) and vcpu_enter_guest() (for syncing guest xfd after
->     vm-exit) instead of introducing an extra flag in the last patch. Howe=
-ver,
->     doing so requires another new kvm_x86_ops callback for checking
->     msr_bitmap since vcpu_enter_guest() is x86 common code. Having an
->     extra flag sounds simpler here (at least for the initial AMX support)=
-.
->     It does penalize nested guest with one xfd sync per exit, but it's no=
-t
->     worse than a normal guest which initializes xfd but doesn't run
->     AMX applications at all. Those could be improved afterwards.
+On Fri, Dec 10, 2021, Michael Roth wrote:
+> To summarize, x86 relies on a ucall based on using PIO intructions to generate
+> an exit to userspace and provide the GVA of a dynamically-allocated ucall
+> struct that resides in guest memory and contains information about how to
+> handle/interpret the exit. This doesn't work for SEV guests for 3 main reasons:
+> 
+>   1) The guest memory is generally encrypted during run-time, so the guest
+>      needs to ensure the ucall struct is allocated in shared memory.
+>   2) The guest page table is also encrypted, so the address would need to be a
+>      GPA instead of a GVA.
+>   3) The guest vCPU register may also be encrypted in the case of
+>      SEV-ES/SEV-SNP, so the approach of examining vCPU register state has
+>      additional requirements such as requiring guest code to implement a #VC
+>      handler that can provide the appropriate registers via a vmgexit.
+> 
+> To address these issues, the SEV selftest RFC1 patchset introduced a set of new
+> SEV-specific interfaces that closely mirrored the functionality of
+> ucall()/get_ucall(), but relied on a pre-allocated/static ucall buffer in
+> shared guest memory so it that guest code could pass messages/state to the host
+> by simply writing to this pre-arranged shared memory region and then generating
+> an exit to userspace (via a halt instruction).
+> 
+> Paolo suggested instead implementing support for test/guest-specific ucall
+> implementations that could be used as an alternative to the default PIO-based
+> ucall implementations as-needed based on test/guest requirements, while still
+> allowing for tests to use a common set interfaces like ucall()/get_ucall().
 
-Another option is to move xfd sync into vmx_vcpu_run(), given that
-disabling xfd interception is vmx specific code thus it makes some
-sense to also handle related side-effect in vmx.c. If this can be agreed
-then yes there is no need of an extra flag and just checking msr_bitmap
-is sufficient (and more accurate).
+This all seems way more complicated than it needs to be.  HLT is _worse_ than
+PIO on x86 because it triggers a userspace exit if and only if the local APIC is
+not in-kernel.  That is bound to bite someone.  The only issue with SEV is the
+address, not the VM-Exit mechanism.  That doesn't change with SEV-ES, SEV-SNP,
+or TDX, as PIO and HLT will both get reflected as #VC/#VE, i.e. the guest side
+needs to be updated to use VMGEXIT/TDCALL no matter what, at which point having
+the hypercall request PIO emulation is just as easy as requesting HLT.
 
-Paolo, how is your opinion?
+I also don't like having to differentiate between a "shared" and "regular" ucall.
+I kind of like having to explicitly pass the ucall object being used, but that
+puts undue burden on simple single-vCPU tests.
 
->=20
->   - Disable #NM trap for nested guest. This version still chooses to alwa=
-ys
->     trap #NM (regardless in L1 or L2) as long as xfd write interception i=
-s
-> disabled.
->     In reality #NM is rare if nested guest doesn't intend to run AMX
-> applications
->     and always-trap is safer than dynamic trap for the basic support in c=
-ase
->     of any oversight here.
->=20
+The inability to read guest private memory is really the only issue, and that can
+be easily solved without completely revamping the ucall framework, and without
+having to update a huge pile of tests to make them place nice with private memory.
 
-Sean just pointed out some potential issues in current logic, about handlin=
-g
-#NM raised in L2 guest (could happen just due to L1 interception).
+This would also be a good opportunity to clean up the stupidity of tests having to
+manually call ucall_init(), drop the unused/pointless @arg from ucall_init(), and
+maybe even fix arm64's lurking landmine of not being SMP safe (the address is shared
+by all vCPUs).
 
-It's being discussed here:
+To reduce the burden on tests and avoid ordering issues with creating vCPUs,
+allocate a ucall struct for every possible vCPU when the VM is created and stuff
+the GPA of the struct in the struct itself so that the guest can communicate the
+GPA instead of the GVA.  Then confidential VMs just need to make all structs shared.
 
-	https://lore.kernel.org/all/YcyaN7V4wwGI7wDV@google.com/
+If all architectures have a way to access a vCPU ID, the ucall structs could be
+stored as a simple array.  If not, a list based allocator would probably suffice.
 
-Thanks
-Kevin
+E.g. something like this, except the list management is in common code instead of
+x86, and also delete all the per-test ucall_init() calls.
+
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+index a3489973e290..9aab6407bd42 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+@@ -8,19 +8,59 @@
+
+ #define UCALL_PIO_PORT ((uint16_t)0x1000)
+
+-void ucall_init(struct kvm_vm *vm, void *arg)
++static struct list_head *ucall_list;
++
++void ucall_init(struct kvm_vm *vm)
+ {
++       struct ucall *ucalls;
++       int nr_cpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
++       int i;
++
++       TEST_ASSERT(!ucall_list, "ucall() can only be used by one VM at a time");
++
++       INIT_LIST_HEAD(&vm->ucall_list);
++
++       ucalls = vm_vaddr_alloc(nr_cpus * sizeof(struct ucall));
++       ucall_make_shared(ucall_list, <size>);
++
++       for (i = 0; i < nr_cpus; i++) {
++               ucalls[i].gpa = addr_gva2gpa(vm, &ucalls[i]);
++
++               list_add(&vm->ucall_list, &ucalls[i].list)
++       }
++
++       ucall_list = &vm->ucall_list;
++       sync_global_to_guest(vm, ucall_list);
+ }
+
+ void ucall_uninit(struct kvm_vm *vm)
+ {
++       ucall_list =  NULL;
++       sync_global_to_guest(vm, ucall_list);
++}
++
++static struct ucall *ucall_alloc(void)
++{
++       struct ucall *uc;
++
++       /* Is there a lock primitive for the guest? */
++       lock_something(&ucall_lock);
++       uc = list_first_entry(ucall_list, struct ucall, list);
++
++       list_del(&uc->list);
++       unlock_something(&ucall_lock);
++}
++
++static void ucall_free(struct ucall *uc)
++{
++       lock_something(&ucall_lock);
++       list_add(&uc->list, ucall_list);
++       unlock_something(&ucall_lock);
+ }
+
+ void ucall(uint64_t cmd, int nargs, ...)
+ {
+-       struct ucall uc = {
+-               .cmd = cmd,
+-       };
++       struct ucall *uc = ucall_alloc();
+        va_list va;
+        int i;
+
+@@ -32,7 +72,9 @@ void ucall(uint64_t cmd, int nargs, ...)
+        va_end(va);
+
+        asm volatile("in %[port], %%al"
+-               : : [port] "d" (UCALL_PIO_PORT), "D" (&uc) : "rax", "memory");
++               : : [port] "d" (UCALL_PIO_PORT), "D" (uc->gpa) : "rax", "memory");
++
++       ucall_free(uc);
+ }
+
+ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
+@@ -47,7 +89,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
+                struct kvm_regs regs;
+
+                vcpu_regs_get(vm, vcpu_id, &regs);
+-               memcpy(&ucall, addr_gva2hva(vm, (vm_vaddr_t)regs.rdi),
++               memcpy(&ucall, addr_gpa2hva(vm, (vm_paddr_t)regs.rdi),
+                       sizeof(ucall));
+
+                vcpu_run_complete_io(vm, vcpu_id);
