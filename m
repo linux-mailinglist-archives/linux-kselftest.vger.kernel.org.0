@@ -2,94 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA43484910
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jan 2022 21:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCA5484969
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jan 2022 21:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiADUBc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Jan 2022 15:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiADUBb (ORCPT
+        id S232994AbiADUpt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jan 2022 15:45:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34595 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233207AbiADUps (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:01:31 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CADC061785
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jan 2022 12:01:31 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id h1so24563469pls.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jan 2022 12:01:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P38x3udDv7VccpZiXoJefyN8u/f+VmXSebvIF1IMJ9Y=;
-        b=qw2oIUC6W97Gros4OgiOyM9i+7wnsvMfbBO23Bw18z3JsaKNq/k2XsNKJCHIs+uVhy
-         LmQ2DH+PIflhbQyURRzOlqUVA/dYVzQ12LkZXFq45gUQaxupOlYHXeyYVsxaSjASGl3S
-         I3smWKwTp3QwUj7mR7TBDxgbLSUUQaBE7x1YudiYEl9vOXxoPnFxMLlNGowaNoUtOsY7
-         oWzeA6Ag6CFEl7bhn8kaTJBmd9SsR0da/cCl2HOmLeD/c6hgdl1K8Vbn+irjyJggrDLD
-         G7gxVyMzrcBVJdVBE13VgLzQVG1NPt9Ca/2mS6l4lsOJ1jvBpH4jMbyliEsT9CTHaVRi
-         UB/g==
+        Tue, 4 Jan 2022 15:45:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641329147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PYrqbdtdF3TH5qv2dr8q46HQl1ZSosdbS+NCJ8IVZW0=;
+        b=J9QwNro22DyUx7nTglcV6kUtyj0b4q6NAwQVlzkZRGxw5OUFcm0cUx2MWPllVt97mU5mEX
+        QNOHDj05qaRKtyCRumk+NMOTXAAALSOGjGG+7wXXupAdQLFoE+lIoY2dyW9VQwmQvp8hzm
+        o/k1N+D6szo17GZNsU0MZa7e+6XV+ks=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-ZAJsKgilNLqe1_EANUzv4Q-1; Tue, 04 Jan 2022 15:45:46 -0500
+X-MC-Unique: ZAJsKgilNLqe1_EANUzv4Q-1
+Received: by mail-ed1-f69.google.com with SMTP id o20-20020a056402439400b003f83cf1e472so26233559edc.18
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jan 2022 12:45:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P38x3udDv7VccpZiXoJefyN8u/f+VmXSebvIF1IMJ9Y=;
-        b=cAN/Yt6jk8+CQuW5nj8/uaAvrWBPJhXzm8+F1rjEBFffYnJJ2p+++3TUTW//NuuqjL
-         Cb9Rb7luw+4eXs966oRUT+L3eTcUgQuzN79pu7+EJxvsktY6mpZD5PXkntu/0fKndGWw
-         G9qiZIEBLHPDKOYCrTTH3SHlV4QrVGITMT+Fy3iESwP4fSRQV3y7ZGAY2YxxpQ2Ar0S8
-         MFgA21lEb7c5ZTHao62xQs+xc61+pDxNS/BO9MjK3L6SuuHuikk/jFbRQTr6zCh8pj0Z
-         IBj0J9w6iMQiE4dLL7R3gcYDpYZZ5WSjvkg9W4FF2js1BQ5cGVm0uQBhAqJ/aqYjnMTh
-         9QjQ==
-X-Gm-Message-State: AOAM533V/9LnQA7o+g0BflKcyRP9UK7veKXat5J3MpVM6MPQBBKoKTKV
-        lvd0354KJKDxtjGxyIsTtvcbNQ==
-X-Google-Smtp-Source: ABdhPJwBn8VJJJbQjgdjK3BL5ElqCtvbbHY3YHVoqOGEuLZPAF39gjygq4zF9vcYOMP1k5rlARtrIQ==
-X-Received: by 2002:a17:902:c94b:b0:149:22af:ed1c with SMTP id i11-20020a170902c94b00b0014922afed1cmr49705852pla.78.1641326490792;
-        Tue, 04 Jan 2022 12:01:30 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id nu18sm160918pjb.15.2022.01.04.12.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 12:01:30 -0800 (PST)
-Date:   Tue, 4 Jan 2022 20:01:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Zhong <yang.zhong@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PYrqbdtdF3TH5qv2dr8q46HQl1ZSosdbS+NCJ8IVZW0=;
+        b=OeTOWPNPC9/QGi+vrk/WgoK02umpDimhTjJ2KXRnDEFlJE7onN0QJU2IjZjILwgtjg
+         DGEt/Qvrxw2CI9aIB/nEesZDvcRZWV7pTv1+Nxg1kfXpfiXwvU9V4sfPOjPaVsqyI4vy
+         KEahZCMQvfro1ucE6gCtxfqmWlvF9z2ltIiz/QUyOZumvg+EyN5Rmn1L7pNRti1VTP1m
+         uZAjB8WcD9eDmWhwwO09Bt+4iGmH0g6lIvWlDRkR416PMVMq6vCq2nmwR40xS7PMs+AB
+         pgbBiN0w+MI0VrH1YcLGy8nnWpXJQIqnUENCMZgb7Yt0HLWuR5yBZ1noHuVGd2YZPy+s
+         cGuQ==
+X-Gm-Message-State: AOAM5339mb/iy11m6ZZHHJ3SWDDB0Rf/HA/auD+YRe75kp0XsC7+/hDv
+        qx8UcCmJJkHr53FSflt4ZRByX/TAT2rNYkQLcCuhpkk+UcpPUJ8bumDy/tvB0Ff715Pkvws6vNJ
+        fyUs5H76uYPHjggZHvBjrPg59kt93
+X-Received: by 2002:a17:906:9746:: with SMTP id o6mr3103292ejy.112.1641329143959;
+        Tue, 04 Jan 2022 12:45:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwMBe92plviw0jlSVwnEa2kU3pf6epuXjoKR1YY7Y5SakD1MSKrYxN09nCveIinmPB1gzQR0w==
+X-Received: by 2002:a17:906:9746:: with SMTP id o6mr3103286ejy.112.1641329143795;
+        Tue, 04 Jan 2022 12:45:43 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id f5sm15075159edu.38.2022.01.04.12.45.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 12:45:43 -0800 (PST)
+Message-ID: <c41a0458-1bfa-9dc6-71ce-f0433cd400e7@redhat.com>
+Date:   Tue, 4 Jan 2022 21:45:41 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 18/21] kvm: x86: Add support for getting/setting
+ expanded xstate buffer
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Yang Zhong <yang.zhong@intel.com>
 Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
+        jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v4 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Message-ID: <YdSnlmO4dUnwRxxc@google.com>
 References: <20211229131328.12283-1-yang.zhong@intel.com>
- <20211229131328.12283-13-yang.zhong@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211229131328.12283-13-yang.zhong@intel.com>
+ <20211229131328.12283-19-yang.zhong@intel.com> <YdSkDAruycpXhNUT@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YdSkDAruycpXhNUT@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 29, 2021, Yang Zhong wrote:
-> +static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-> +{
-> +	rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-> +	kvm_queue_exception(vcpu, NM_VECTOR);
+On 1/4/22 20:46, Sean Christopherson wrote:
+> On Wed, Dec 29, 2021, Yang Zhong wrote:
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index bdf89c28d2ce..76e1941db223 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -4296,6 +4296,11 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>>   		else
+>>   			r = 0;
+>>   		break;
+>> +	case KVM_CAP_XSAVE2:
+>> +		r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+> 
+> a) This does not compile against kvm/queue.
+> 
+>     arch/x86/kvm/x86.c: In function ‘kvm_vm_ioctl_check_extension’:
+>     arch/x86/kvm/x86.c:4317:24: error: ‘struct kvm’ has no member named ‘vcpus’
+>      4317 |                 r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+> 
+> b) vcpu0 is not guaranteed to be non-NULL at this point.
 
-This is still wrong, even though no additional supported is needed to support
-nested XFD.  If L1 wants to intercept #NM, then KVM must not inject the #NM and
-must not read XFD_ERR.
+Yang, you can post an incremental patch for this.  You can use the 
+highest bit of the guest-permitted xcr0 (i.e. the OR of KVM's supported 
+XCR0 an the guest-permitted dynamic features) and pass it to cpuid(0xD).
 
-That this was posted multiple times is disturbing, because kvm-unit-tests has a
-test for exactly this, and running it against this series on a host without XFD
-yields:
+Paolo
 
-  unchecked MSR access error: RDMSR from 0x1c5 at rIP: 0xffffffffa02478ee (vmx_handle_exit_irqoff+0x1de/0x240 [kvm_intel])
-  Call Trace:
-   <TASK>
-   kvm_arch_vcpu_ioctl_run+0x11a0/0x1fb0 [kvm]
-   kvm_vcpu_ioctl+0x279/0x690 [kvm]
-   __x64_sys_ioctl+0x83/0xb0
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
