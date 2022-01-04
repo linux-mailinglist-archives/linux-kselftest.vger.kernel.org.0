@@ -2,262 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF96483979
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jan 2022 01:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5656D483F50
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jan 2022 10:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiADAd5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jan 2022 19:33:57 -0500
-Received: from mail-bn8nam08on2054.outbound.protection.outlook.com ([40.107.100.54]:48448
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229527AbiADAd4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jan 2022 19:33:56 -0500
+        id S229535AbiADJms (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jan 2022 04:42:48 -0500
+Received: from esa8.fujitsucc.c3s2.iphmx.com ([68.232.159.88]:7130 "EHLO
+        esa8.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229473AbiADJmr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 4 Jan 2022 04:42:47 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 04:42:46 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1641289367; x=1672825367;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JW7aP5GUmFOPyTToC8cRyG53ODet/0bs/OCqKTjY4UE=;
+  b=fubY9U5mlTBzEF0pw8CFGJtLopwNGR7IIIinlrGFFpwIVMw10RS7MLUF
+   mrfVZ3QJwOBwbb8vj39eoDAnPIaKyskgRz3+L7kEqceRgHyscEL5pCTie
+   WEwnx5UFtjViMBnCtVvaLSyHHuXrFnet+xl/e4MlLaAhFiHuPJvDREXfJ
+   piHLNMyLivBlMPd/NYgr39Moc5x7B2xamwEL3cIM8L347oKlFnrwhbHio
+   97c4BWQlk7uKzXJXnk6zaqbhsEeEc1bKfzI5A3w4LVL0VbDiXBNxpU0Wz
+   tQ8Z+rhrw04g9mw64cM9mXO8GjcSs2g4fuX0R2HC6RF33qpKa/0EXESa7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="46950566"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635174000"; 
+   d="scan'208";a="46950566"
+Received: from mail-tycjpn01lp2171.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.171])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 18:35:37 +0900
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NJI78bNNpn/OG0J7JOoYDQTocfWUdkI5Luav43NjAWo+txI/ElqzSizCeeM6pP2v0edKdhDQ3jEQ9Xm2fjt6auqNi36j8ZUpkhghThCOCAKKjyEmcH/QZVl5rqcoAXPe3HfP/KdGuAdrsTah2e9GygWOzwjcHlEAos8R3mHQcji8Bjuq6osC1e9FvBV5ZiVzclomG8mY1VprLl0FNB/RvBQ9Y3gfH354S1TRLr4/HDjAX+/P359U94mXlXVDT+YwHf+KnUGJr26olsTGdlOuPrF4RSOqzUSV660/I1rwHeQvN//KpIM6Rdi2K41/xXqUll2D8HnAEQldv0HMJzjc2g==
+ b=GIe3j7rsuAOwGUcHuHmeeGc4UGfsf/JQZFDI5GmEWtfzl9rXcpjxBwHTiIdfF0gOThvwgAECHosChOIacWYUbRy3tkYUInUdYYNn6k8KtUo2P/mTW8WDQtEr0e9H4W+JaxSYqzXoh4dWsTT6QfsxQS4uQGF9YJ81DcLmpb9hDKK3pbjLfQxCvdc7Ab7cBUsYvYILp76mE9Z+7AefkiJZynPznrYJZtj2IcGLkKvMHiRfYgjFWrVh5/8rmpPTdhIknfTL4cbRxRnXcSq5JexruSXFhUKxLFzzw/HdDoEzD5EcbasP/AKqXTkSCzrreA69xn1y8YoTmTG+tVIK4TeXLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kRzq7pas1JcEhIhHmqQ0JMTJkC0nNrBSXS9x5hFS4KY=;
- b=cFtiDkG7fKyU+YilSGomO07Emt7USYkjba5p4xfGNotAQsfzxIFVGotzI2IFRQdv/N2H+fXxjrMzRy049Bx1IcEqTybKCFHwx2+vOf2Uq2V/ZAlE0B4iP1uzZBa5UGlV22nHdRP1USw7u/k0rkcLVGi+UzmOCKxmoVVX9X1uwaCbanrNcsrzXr9J86AFUQvmSGx29X2luDcmh/0DdD7EB+aPCaIDKGplLBtbYxFAC7UrIDl8pZcVcqp+IdHb6CiMKem5BGdoV5HiCuOKfJp9PetxZC5eCgSvPx78Wjb9i4EL4VZeUIX3FQe5mc0/A0UHes1WVX3VNczy6EeyyMdkcA==
+ bh=cjBtxrsTot7ZFy9sDe6AG0cGAUSWX0tO/6Lyt+gWjyw=;
+ b=CvzaX93ELhCrMmSczX8XhR6IEaYNYv6C1+rXXhWwVRn3fluDx0agl+G0Fl/QC7vR0M3N5/EiflTjfusZVmUinhr88dFVszvznYTUSSTgYCIGu4j3rOcIjvBVEEQ/9XKcSkAy+cw8y3RLnRLW+MAqSPnPnuwiB3FN69jG8PmsbdsRShde3Af7+EILfgV4rmBmHlPvYQGMpDkuRgTeUHXdfKLBlVhGobimILgW0/GH31f/vgJsbRhemyRJv3qAFMqjAqUybV+6jT6Q7Z7Q1137XfzMif5ZrY5yw+etzoSBTNTH+iS4mIjYWR1jYme5g+duKcNUMPgFgrL4l7N37ZnCKw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kRzq7pas1JcEhIhHmqQ0JMTJkC0nNrBSXS9x5hFS4KY=;
- b=Ktq880fMVGBeHiLVnFWnaS/acF+z5dR65M91QomMIPrfBQ00eSg94kXLsyhd6EksgBZ0rAkc/TOsWIwOT8XwPceZtylMZTRuf6xGzrWNMgH2RHz+nY/6tXYSFZg6aUXechP3IGP8M8Yd78QOTzGwN3FiRkFiL4a75Mzn6CLpqa2gQtkrpg2NUdO7IUw/P/Vf0odCDz7H496rlu4ne/2ALRiJni8nCclv75l2e+A+WHKgYdm9gcvKYKIA85H3elCpcwqnEZMQZbRVLok3eeJ2rQlRU2g7jz9tkGyVyqf67xbu/Sz8Al/IX0lzjI4pqupGGEv3GAEzXRg8PNZhKYrv9g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15) with
+ bh=cjBtxrsTot7ZFy9sDe6AG0cGAUSWX0tO/6Lyt+gWjyw=;
+ b=O+Ra6GUdWExiiBglYhJ2SCi/0U1X7s/ZNqoGsEBmZpPLhjWP7EpYQiaBWTaDtXI8IqQfbcDNnyrUWNLQfWHN8UcZCgUddyDPKjk+BLlBNg3H1JmjWtTf+Yr+WRUixG1g84anlTfpdK9HXIE/EWcqDxVO6i6e/xvPU439Idb7yLw=
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
+ by TYAPR01MB1967.jpnprd01.prod.outlook.com (2603:1096:404:7::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Tue, 4 Jan
- 2022 00:33:55 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
- 00:33:55 +0000
-Date:   Mon, 3 Jan 2022 20:33:52 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <20220104003352.GD2328285@nvidia.com>
-References: <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221190706.GG1432915@nvidia.com>
- <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
- <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
- <20211222124141.GA685@quack2.suse.cz>
- <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
- <YcPA8gJ0OBPTdCdB@casper.infradead.org>
- <20211224025309.GF1779224@nvidia.com>
- <YcVSUmfzTrhjZapc@casper.infradead.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcVSUmfzTrhjZapc@casper.infradead.org>
-X-ClientProxiedBy: MN2PR10CA0029.namprd10.prod.outlook.com
- (2603:10b6:208:120::42) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
+ 2022 09:35:34 +0000
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::1c9c:6e45:49b:757c]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::1c9c:6e45:49b:757c%5]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
+ 09:35:34 +0000
+From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
+To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH v2 0/5] selftests/resctrl: Add resctrl_tests into
+ kselftest set
+Thread-Topic: [PATCH v2 0/5] selftests/resctrl: Add resctrl_tests into
+ kselftest set
+Thread-Index: AQHX8Ai8jQFzlVX2+Umsv+Svcky506xSuzAQ
+Date:   Tue, 4 Jan 2022 09:35:33 +0000
+Message-ID: <TYAPR01MB6330A02E7877CCC71F5BBD9A8B4A9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+References: <20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com>
+In-Reply-To: <20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
+ =?iso-2022-jp?B?Y2UwNTBfQWN0aW9uSWQ9ZDM5NDdlOWQtZjNkMy00NzcxLTk3MzAtZjIy?=
+ =?iso-2022-jp?B?YjM3ODY4NjRiO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFi?=
+ =?iso-2022-jp?B?NGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9h?=
+ =?iso-2022-jp?B?NzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxl?=
+ =?iso-2022-jp?B?ZD10cnVlO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQt?=
+ =?iso-2022-jp?B?M2IwZjRmZWNlMDUwX01ldGhvZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9OYW1lPUZV?=
+ =?iso-2022-jp?B?SklUU1UtUkVTVFJJQ1RFRBskQiJMJT8lUhsoQjtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRl?=
+ =?iso-2022-jp?B?PTIwMjItMDEtMDRUMDk6Mjk6NTNaO01TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?iso-2022-jp?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX1NpdGVJZD1hMTlmMTIx?=
+ =?iso-2022-jp?B?ZC04MWUxLTQ4NTgtYTlkOC03MzZlMjY3ZmQ0Yzc7?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e0522b7c-26be-4395-868e-08d9cf658e99
+x-ms-traffictypediagnostic: TYAPR01MB1967:EE_
+x-microsoft-antispam-prvs: <TYAPR01MB1967BB04C250E45ADD32345E8B4A9@TYAPR01MB1967.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: U8KK4QI/jL0qFqvvV6X9FRxvTs2P2tAby6kaiayaxUEZ0T2IJ8J15J5txRV9gnh2RRKLtifB/HNoxX8lfB3qxJj3/O150V21FzKBys4oRLbsUYJbnhcobonMZOuPShigUVtYoSH+0nP3sVx0MbBVxLDU/ifXvA1DZifaAFOtQVGCTSkvHzdYC/TSoQyx3vzuxbtlYUJeG2xXl6lKlSqpEUm5ngokF5IKRfHIBRrscXYPTTm5QiSbm8jY3mIHR/pCOOiWCB8IL0yg1AckV6YA/sILD6kctI7643CLjrOdEAKpb5goAT2ZKoLE3/gVIcWbkcJl+X09uOChkph5MQXgSYxVK4lZXaQ2ipn3gTvlg8aoz4SMBehbqhih8XvOBy65LIYOj8E//EOwRjQyg/BK3B5s5OwSLyXBL+aVry7q4EmDVW6Ujp20CdQsdk1/f8fzdCLQiASEiKQ3KacZqVPPHj15ymk2UlOfXGo4ECCmGFY0aFsNOLFJqcQxHnACpmw0bMVl0IQW7LEYd/HJIRoKktFYy9sXLa2n/X7TSRkkgWo2KeWm9QH1X+7kD+abJl3gUaNpsV0XeFA5Wegf1IdRgaWlwhaPOl3UJEZY7tuwumfBH17KODryS9XKfTCn7+rY/c0KOeUNHsabjSXTn4mYs6HaiWEp/2WgKJlDCv8taw+KdncYfM9oApuk4tiEAdjPpKrecCp2G2BTbvmtWZ3tW93zenVz3nvaS5OOCrnUIXY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(110136005)(4326008)(5660300002)(82960400001)(66946007)(6506007)(55016003)(85182001)(9686003)(83380400001)(54906003)(186003)(86362001)(66446008)(52536014)(38100700002)(8676002)(8936002)(33656002)(64756008)(38070700005)(7696005)(76116006)(26005)(316002)(122000001)(66556008)(71200400001)(66476007)(2906002)(485434002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?eURNWWlPbVhFbEJYRm1zUWJqUEIxSnJvZlc3dlhhM3FBM1JUTDk0MnpT?=
+ =?iso-2022-jp?B?TDVZTzhuaDZLeFdzS2h4N0x1T3dQbXRWMElPaTgzL2tDL1hsM3l5UmtL?=
+ =?iso-2022-jp?B?TEtiNDN1bzQyYy9wZ1VWUUU2UmVlWk9ITkJuOTFlZFJuM2pvaUJENGMz?=
+ =?iso-2022-jp?B?QUtCQTJNTGEyWXU1bW9OV3R0Z0gyREF6eUp1UlZNZGg4a1BWdzNlbmxa?=
+ =?iso-2022-jp?B?UURvdUFmU0E3akZlL3ROUStTRkRlSFdHY2xYY1B5em1zdHJ2LzQwOWtw?=
+ =?iso-2022-jp?B?RitPbzBpS1MySmtncjZlc3VkUWFVUk13THl1RUQ1aHlrMDRGd1JBTW5k?=
+ =?iso-2022-jp?B?KzIwWlVuOVlMc2hWTXZMbnJRcmdHU0tGbStwUzZJYmordXJLdk9iQzFp?=
+ =?iso-2022-jp?B?bkRJYmQ5cnMyYWFYT1FYWFJ1R2ZCMlRmZm5YSkN2bnduZEptOHZRL3Zq?=
+ =?iso-2022-jp?B?OTFyR2VFNEZiaFo3alMyYm0xMnJLUXl0dHcrdmV5T0Nxb0xTUVNOMlpa?=
+ =?iso-2022-jp?B?WGRtOGkyTEJETmhIeHNYWDhFYUVJUHFNVk5jRE1rV1gyU0RSbTkzS0Zu?=
+ =?iso-2022-jp?B?S0YwSVFTQXV4UUM2SkJHcUFhanBoUE8rZ1ZNbG55eGtjYlVDb3UwK1Nz?=
+ =?iso-2022-jp?B?dHF6a3hoQWlXWE5YZ3NySkJuZ2NRTkNZalRKWTI2RE5DakpjWDZoeHJT?=
+ =?iso-2022-jp?B?RVFQQ1Z2M1UzWG9GcWorM0E4UUtOdjk0Vkl5VkxmcDgwQm1EWERiWWpl?=
+ =?iso-2022-jp?B?ZjRHWjdJbW01OUJLQnY2d2VnWDV1THk5WEFHT2hwRS9kRFF5QVh2VHAz?=
+ =?iso-2022-jp?B?VjF0MHFGUlRZQTM1dXZ1RHc1K1VGWE8vNnVMSkI2L0JZTjJBZFRkZTJl?=
+ =?iso-2022-jp?B?UnNpaHIvaG1odTNCMXMwVURrZjFkZ2h6S2ZaakZhWE4rOTYxY1ZyUnpE?=
+ =?iso-2022-jp?B?SC9JVDJNRjVWOTN2N3hoWTNwOHdIYVh2ZThuSE1TYXAxMkR0d3lyVFEz?=
+ =?iso-2022-jp?B?K0Z5NExiYmRTUmJ2eE04MWQ3YWxDa3dENFNCRnlkWHNCeElrYnRzWEpm?=
+ =?iso-2022-jp?B?SGNnMnN2OHluZ1FNbVZkMHMvT094ZEJqNTRYRTJ2cVFRQ29yOEREN3Y0?=
+ =?iso-2022-jp?B?ZWw1VnM2TzJYU241bFNTTTBlZThtcWVxMmxrZXhJQ0JkL2VJSFZnVDhQ?=
+ =?iso-2022-jp?B?WGh6MTZ5am5KdjVhWjFGQjV3eno5WmZ1a3c4Mnh2Z3grcVB0VnpzRjZS?=
+ =?iso-2022-jp?B?cU9NdHM3MkwwNVowSFV6SlhqTW9xcW4zekxsOGFyZUVWZkk4S0t5RWJ0?=
+ =?iso-2022-jp?B?VnVONm5KMmczc3pCa2VEM01YV052Z3l3RjNkb0VtM2w3Smo5NmIvUUxu?=
+ =?iso-2022-jp?B?Z1hNQTNDcmc1MHhweVdmWUM4c0htc2ZMeFltUFYrMlZ2TE9kaU1EaTZM?=
+ =?iso-2022-jp?B?TVplL1UxNE9wOEpwUk1DYWZZQ3VrdDl4eFF6MnN0eTFhS2h2RUkya0Rw?=
+ =?iso-2022-jp?B?ZXByTUl4Y3lxdXV0VkNsT25WWHY2Qi8rTnJKSHNaUmJrUXJUcGdQZ2Zt?=
+ =?iso-2022-jp?B?Q3Z3dnB5YXBPcnoyNmNyME1IYnM3VHNsZ0tFa1E4MlhndThCMWxLaGZt?=
+ =?iso-2022-jp?B?cXNxMEZRSitDY3VjNC9MdDZNOGNlcTRtR2tyNmh2bDg1dDF4WWJoMWhS?=
+ =?iso-2022-jp?B?N2NpcXE3b0N6Q05JMXg3b0hoN29hTm4wZDNuVmVPbkFTMkZKbEJFZnpE?=
+ =?iso-2022-jp?B?WlJUamR3amhBMXRERGYzV1d5ZXJnMGpzb2pqc1lPY0xjYjdvdkxTanpC?=
+ =?iso-2022-jp?B?RkJLc3BPY1hYWmVVYjEyVGVnZXY3Z2IzcDhsK3pHRWxiazJWMFZIbU51?=
+ =?iso-2022-jp?B?L2RpaElxSU9Tdy82cERXRFBXZmFrQlV4QTRROVhYTDJVUE9ubUlSR21C?=
+ =?iso-2022-jp?B?MUxGSXJENUlXckhrdFE5aHNMMUJkZCs5ZFM2emVrbGZXa0FmbGgyQmln?=
+ =?iso-2022-jp?B?MU15Q2M0ekYyWStFbHluL1VXL2FSU1gwMDN6amVBVG03a2pEQ0d4V0Vy?=
+ =?iso-2022-jp?B?VjdOcmg3blU1eGx5WEszVHZWbzRiZStQbnp3TzdTQ09WZEF6WFczdGZh?=
+ =?iso-2022-jp?B?a3owUks0cUJUQ29QaDFsaUFWMTlnNUxZVUFjeXRBQ2lKeWNDQlFMSFBa?=
+ =?iso-2022-jp?B?dkNpc28zOUhPcTViSEhSOEZOWndCcWpKUnkxbEVHUGZvZ3lyY3gwTGhx?=
+ =?iso-2022-jp?B?dEk1Y3dlWVljZXpWc3JJb3hkVDRGT2VDV3BKc2pTRE9qeWU4K3IxNlZJ?=
+ =?iso-2022-jp?B?L3UwVVNrN1A4djBpckJwSVJUZXRWcjd5VTVRdkt1STROYlpibnBDK3NL?=
+ =?iso-2022-jp?B?bDJvbnVxY21EVlYxc0VxN3lHRXptcHdVYWdHQlZoVVVzeXlBUk9rcm03?=
+ =?iso-2022-jp?B?czBWdTRBPT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ab21c687-1319-4bc7-530c-08d9cf19e339
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5157:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB515734AD4CEBBAECE44062CBC24A9@BL1PR12MB5157.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VUyrUe9LncZ6E5Un3GU5S4qb4FKlAeR8LTRYvahnjzv1xpTLCh8FrCKdIOCB0GfmlcbdXaYlQqK9D37mnNLkgbj/HaKW+zRbAnfNrwdQLkMY29YG5GfLefTtyfkl6NxfRgwNS+fDBkGuJBMKmu/9Pf/ppmN2cYBlbv3Zj9jJEsLv6Eav1a2PSCJ6eX+f7pQ0pkFOJAQ5EAzZnM1hw1LzHW06O6K22Z2unIoinhyN0HqjGh4S8DDzMpG1TVl/VI/9BNneEwoL4Jw2WdIe1WU7R8IF5RGtvL3495NUqK1bFNvD4crsrblUbq8c8tI+WZtpUwdKu89EkLe0zslMo+7JsJVGsvCe6CQaAO5WaR1E9f1z35YrRcx4kp0buiJC8Kuiv6vxTGQoMWs3M8Xt3VtuNdpcAjf5pexrLg0uKspwgoPsrMiZRCucCzviiuqcGc7iV7IjZwudjE5JhD780Jx2W9EieFc5gECzMiOpyUPckOfqXIcBLwqF1Y1zH+xdGXIrkjNOzAO/MAHFvhNXfZupmcinID9mkCJlfcIWZGMV6/pwszFB8BKwfAHHTYrY6KEEqX3nboZ+duSyHrvJm8uFiXYJ/PqfyLLJnxDhEjwltvKfouIZ/XsOEM9qbqxVX/fQMvpGPDNYiX8VP6FRBGQ9pA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(36756003)(86362001)(508600001)(186003)(66946007)(66556008)(26005)(4326008)(33656002)(1076003)(2906002)(6486002)(8936002)(6512007)(6916009)(83380400001)(54906003)(5660300002)(8676002)(316002)(66476007)(6506007)(6666004)(7416002)(2616005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jVyzjEXUKmhVG0H9sdahBSW5VsIj6kaJGdiB+U6H2+0mk98Yz9jsZOoY5tfD?=
- =?us-ascii?Q?6TKvAoiHhZppzPGT2ppj4g6tZ/wsfmikRBHgl7tDR8Jq9kGejHy8E37i39wq?=
- =?us-ascii?Q?YkqOHsyQnTvFLmkfauvOuri9c1Y1pxzX7WOgBTTI2oYYwYth4NuQYIU5L+Xr?=
- =?us-ascii?Q?rENrzPfLIAruWlKWwd7AOXdbugTIsDW7sI2zKJA9p0m4pI4iDyl6Zuuh/aRg?=
- =?us-ascii?Q?IyX6eaW8r47FjYQKuWsN8oItj0m/QSduxnf95Sy/b0hHhb3YP4GPy3UaPFOJ?=
- =?us-ascii?Q?KjHtAOIse8TdRHO4ApxqLskNDABuslsugkZz0HNiVes8N3LDEafo5XWfOmu2?=
- =?us-ascii?Q?XarZAMGfOggaQ9Urym961YsaL9A9h8fg5ZZqT32jRwZ2V1yWi1OSQ9jdyNKf?=
- =?us-ascii?Q?7V11EkD+DSnLjF/QqtnxTPGWJfwVexnHhY07Bmvk9E8UhAX9RKaE7NFpi1vR?=
- =?us-ascii?Q?yAlGRcBjIg2Tt91nHB8IR3yPhnK9IK3fV65WvLaQ+UjabJGr1vsSy7QTUE3g?=
- =?us-ascii?Q?tQBYyX8xpA3Def+xQ94OA6yjFkCJuffZH+5GVqn+GHPMlOpMPpCL/Z0WeV8W?=
- =?us-ascii?Q?tZtUj4MFszFFUkJ1DIxsf2mJFiaukxMjdwaLkSwr3nfcgOnPgKNzOHi8ru6I?=
- =?us-ascii?Q?VGu41NpJHpB4CWh0o7nbhwtp5tWT+RW3OHiRkeu9/odmHFyQGtHzGNu+xJ+a?=
- =?us-ascii?Q?UK79bSs5zT7AC+7Mtw9bLla80HzVvJ1vAd8s6T005+6Fji26AJHcT7BafeyF?=
- =?us-ascii?Q?XXt1Ep/926/PO0V+jwRnek6nGF+NJktq+x19xA2zxJf5xygyXBL4JVbsFPlz?=
- =?us-ascii?Q?Wzrf/gLUtPTudDpP6JjYx7Eml1mABUFc/h6KzlrjPT/DHyyHJJz1wwkXx2uA?=
- =?us-ascii?Q?/OWrrhQmf1iZH5/GVJ1ePAZxKMIl6IcnqkHIkGsvN2mB7cKKmZx4NFSNbzKg?=
- =?us-ascii?Q?SNQTFMR3Qas/VRBKgyESm5fzZEYfBkz/u2xNS2/55F4NxKdlNyAzYcHYlyeE?=
- =?us-ascii?Q?oxzPBUviYPK4FtJ1lI6OuzeiGII7lQg7b6RH6ohfXBhZFylEWOf1xvuaFRGd?=
- =?us-ascii?Q?LBYHa/qQrDLDhec2+YIJj6+U12ExbGWJv0SURLxZoyRKUdWLp9ucTO2sQDqL?=
- =?us-ascii?Q?Fstx4c4HvoW9H3d1S00yh6aTALQWSbh48gBl1HLseVNiv5LNp2ye9zat2oVo?=
- =?us-ascii?Q?jKqptR9VJ32giBnxShjykWiJ0GntUSgxC1BmC/uFYUP5Gi5VgGyPz9YPgy0E?=
- =?us-ascii?Q?EYsCuN4CVIhrb0LR8SAR6s4UvE/dgLbxeeZ0pzsQcBymrPbuavxaCCfsLTN9?=
- =?us-ascii?Q?ozLNC+02LKrd2cDIiAYHyj9bHiseavesfAgcYvZP1sKCrn49A+s7XDlk1p9O?=
- =?us-ascii?Q?OPr4zOJq9EQrx9jBmVU6irG5jpqzDonRUN5uSXoiiMCzbapE1QLyxCpmG7YB?=
- =?us-ascii?Q?BUBEnZ36Iz6LJynYN7jsqJ7uohpnORosWPYmx7DfszAV7M+2vDfJqMjip/o8?=
- =?us-ascii?Q?vAQhM+/5TBOPRizq60BBveT72rOoXfQ13FKW6WTjq13ahIM9gfqJMc9E5XU5?=
- =?us-ascii?Q?gBbCd1T3pXq8E96aIio=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab21c687-1319-4bc7-530c-08d9cf19e339
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-OriginatorOrg: fujitsu.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 00:33:54.8264
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0522b7c-26be-4395-868e-08d9cf658e99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2022 09:35:34.0240
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H2VKtoBPylbbAAZBsil6R1UMmm1LBmUTw8cSqco252DWG2KJWt0Tiu+yxKEs0rSb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5157
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9qKRVPCJ6JhMJE3pKzlAe99UacMtIjrORKzJ/HkKSud3uhf/huopq7MDDuDIAG3dEuEf8k9NzvbyJ3rlow+2tyWmu8hQGpXRvRT95WwqvmE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB1967
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 04:53:38AM +0000, Matthew Wilcox wrote:
-> On Thu, Dec 23, 2021 at 10:53:09PM -0400, Jason Gunthorpe wrote:
-> > On Thu, Dec 23, 2021 at 12:21:06AM +0000, Matthew Wilcox wrote:
-> > > On Wed, Dec 22, 2021 at 02:09:41PM +0100, David Hildenbrand wrote:
-> > > > Right, from an API perspective we really want people to use FOLL_PIN.
-> > > > 
-> > > > To optimize this case in particular it would help if we would have the
-> > > > FOLL flags on the unpin path. Then we could just decide internally
-> > > > "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
-> > > > this like a FOLL_GET instead". And we would need that as well if we were
-> > > > to keep different counters for R/O vs. R/W pinned.
-> > > 
-> > > FYI, in my current tree, there's a gup_put_folio() which replaces
-> > > put_compound_head:
-> > > 
-> > > static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
-> > > {
-> > >         if (flags & FOLL_PIN) {
-> > >                 node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
-> > >                 if (hpage_pincount_available(&folio->page))
-> > >                         hpage_pincount_sub(&folio->page, refs);
-> > >                 else
-> > >                         refs *= GUP_PIN_COUNTING_BIAS;
-> > >         }
-> > > 
-> > >         folio_put_refs(folio, refs);
-> > > }
-> > > 
-> > > That can become non-static if it's needed.  I'm still working on that
-> > > series, because I'd like to get it to a point where we return one
-> > > folio pointer instead of N page pointers.  Not quite there yet.
-> > 
-> > I'm keen to see what that looks like, every driver I'm working on that
-> > calls PUP goes through gyrations to recover contiguous pages, so this
-> > is most welcomed!
-> 
-> I'm about to take some time off, so alas, you won't see it any time
-> soon.  It'd be good to talk with some of the interested users because
-> it's actually a pretty tricky problem.
+Hi,
 
-Sure, it is a good idea
+Friendly ping for a review.
 
-> We can't just return an array of the struct folios because the
-> actual memory you want to access might be anywhere in that folio,
-> and you don't want to have to redo the lookup just to find out which
-> subpages of the folio are meant.
+>
+> Hello,
+>=20
+> The aim of this series is to make resctrl_tests run by using kselftest fr=
+amework.
+> - I modify Makefile of resctrl_test and Makefile of selftest, to
+>   build/run resctrl_tests by using kselftest framework.
+> - I set the limited time for resctrl_tests to 120 seconds, to ensure the
+>   resctrl_tests finish in limited time.
+> - When resctrl file system is not supported or resctrl_tests is not run
+>   as root, return skip code of kselftest.
+> - If it is not finish in limited time, terminate resctrl_tests same as
+>   executing ctrl+c.
+>=20
+> Difference from v1:
+> - I change the order of patches according to Reinette's review.
+> - "LDLIBS + =3D -lnuma" has no dependencies on this patch series, delete
+>   it from [PATCH v2 2/5].
+> - I separate the license info of Makefile into a new patch [PATCH v2
+>   3/5].
+> - I separate "limited time" into a new patch [PATCH v2 4/5].
+> (There is no change in [PATCH v2 1/5] and [PATCH v2 5/5]) In addition, I =
+think
+> 120s is not a problem since some tests have longer timeout (e.g. net test=
+ is
+> 300s), please let me know if this is wrong
+>=20
+> Thanks,
+>=20
+> Shaopeng Tan (5):
+>   selftests/resctrl: Kill the child process created by fork() when the
+>     SIGTERM signal comes
+>   selftests/resctrl: Make resctrl_tests run using kselftest framework
+>   selftests/resctrl: Add license to resctrl_test Makefile
+>   selftests/resctrl: Change default limited time to 120 seconds for
+>     resctrl_tests
+>   selftests/resctrl: Return KSFT_SKIP(4) if resctrlfile system is not
+>     supported or resctrl is not run as root
+>=20
+>  tools/testing/selftests/Makefile              |  1 +
+>  tools/testing/selftests/resctrl/Makefile      | 20 +++++++------------
+>  .../testing/selftests/resctrl/resctrl_tests.c |  4 ++--
+> tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+>  tools/testing/selftests/resctrl/settings      |  1 +
+>  5 files changed, 12 insertions(+), 15 deletions(-)  create mode 100644
+> tools/testing/selftests/resctrl/settings
+>=20
+> --
+> 2.27.0
 
-Yep
-
-> So I'm currently thinking about returning a bio_vec:
-> 
-> struct bio_vec {
->         struct page     *bv_page;
->         unsigned int    bv_len;
->         unsigned int    bv_offset;
-> };
-
-The cases I'm looking at basically want an efficient list of physical
-addresses + lengths. They don't care about pages or folios, eg often
-the next step is to build a SGL and DMA map it which largely ignores
-all of that.
-
-As the memory used to hold the output of pin_user_pages() is all
-temporary there is a sensitivity to allocate the memory quicky, but
-also to have enough of it so that we don't have to do redundant work
-in pin_user_pages() - eg traversing to the same PMD table again and
-again.
-
-> But now that each component in it is variable length, the caller can't
-> know how large an array of bio_vecs to allocate.
-
-And the array entry is now 2x the size and there is no way to scatter
-the array to 4k segments?
-
-> 1. The callee can allocate the array and let the caller free it when it's
->    finished
-
-It is not bad, but a bit tricky, alot of the GUP code executes in an
-IRQ disabled state, so it has to use a pre-allocating scheme. We also
-can't scan everything twice and hope it didn't change, so exact
-preallocation doesn't seem likely either.
-
-> 2. The caller passes in a (small, fixed-size, on-stack) array of bio_vecs
->    over (potentially) multiple calls.
-
-It is slow, because we do redundant work traversing the same locks and
-page tables again and again..
-
-> 3. The caller can overallocate and ignore that most of the array isn't
->    used.
-> 
-> Any preferences?  I don't like #3.
-
-#3 is OK for my applications because we immediately turn around and
-copy the output to something else and free the memory anyhow...
-
-However, being an array means we can't reliably allocate more than 4k
-and with 16 bytes per entry that isn't even able to store a full PTE
-table.
-
-What would be nice for these cases is if the caller can supply an
-array of 4k pages and GUP will fill them in. In many cases we'd
-probably pass in up to 2M worth of pages or something.
-
-There is some batching balance here where we want to minimize the
-temporary memory consumed by GUP's output (and the time to allocate
-it!) but also minimize the redundant work inside GUP repeatedly
-walking the same tables and locks. 
-
-eg ideally GUP would stop at some natural alignment boundary if it
-could tell it can't fully fill the buffer. Then the next iteration
-would not redo the same locks.
-
-I was once thinking about something like storing an array of PFNs and
-using the high bits to encode that the PFN is not 4k. It would allow
-efficient packing of the common fragmented cases. To make it work
-you'd need to have each 4k page grow the pfn list up from the start
-and the pfn sizes down from the end. A size entry is only consumed if
-the pfn bits can't encode the size directly so the packing can be a
-perfect 8 bytes per PFN for the common 4k and 2M aligned cases.
-
-Jason
