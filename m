@@ -2,232 +2,243 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 419F3484B47
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jan 2022 00:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083B0484B84
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jan 2022 01:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236554AbiADXme (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Jan 2022 18:42:34 -0500
-Received: from mail-mw2nam12on2051.outbound.protection.outlook.com ([40.107.244.51]:48374
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236541AbiADXmd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jan 2022 18:42:33 -0500
+        id S234260AbiAEAKq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jan 2022 19:10:46 -0500
+Received: from mga02.intel.com ([134.134.136.20]:28795 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231153AbiAEAKp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 4 Jan 2022 19:10:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641341445; x=1672877445;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=DwsWjk4ZQCVQMpcffQUBdFmNt6ZNKm6PQ6uBvVLZIbw=;
+  b=JJh//a8tLJnSXfw+B4dLyLluRG7VcJJL/7vwVw8ROexuYl1sTUpMTYXO
+   T7cpd/jbXhKTOGsrOKK7aAmVqaPKnxGRc7jrwyfl5ksJdHePIJ0v279Wx
+   6P4K0gFZBxpffzRgQQUSW2MQtUuYeaIzQthcsj7WmrN0PWiOmxQhZVgEx
+   mdfZawI1rxsdIo5xwOJE6U/K/xONv3FLMDIdCdBgOQGlO0OxKc68tAaLU
+   DhI4AofD/eAy6M+RFic2UvE42vd44028CC5eTA1Yo1mb9Mjkum2jW6PYK
+   KghxwPr/ImlAekf2QQNLBVxOn6Rr9i9GKe3Xa1fVNJwlz38f6FlBrrIZk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229649496"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="229649496"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:10:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="688772634"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga005.jf.intel.com with ESMTP; 04 Jan 2022 16:10:44 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 4 Jan 2022 16:10:44 -0800
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 4 Jan 2022 16:10:43 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Tue, 4 Jan 2022 16:10:43 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Tue, 4 Jan 2022 16:10:43 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JaFOLw9sX5cYwcq3Su3ordrTKslR5DpnUT1oD/y3+o3+8v6WCyddf586keTsGqRaf7Ce+GuRUAaiMCqg9Ovww8+bAOaFXjiey0gaKme5FuCA10ZZ8IdiJVPrrpn5hj9KRP97T5eS4eEspwWIkdQHOvzfiyR+iCtmIp9aMTNPMqtC0d42dq9U6lnxSbsiOyvZKej1WlIrMcWYsGhuWMjrDAxHSFxJ/nQ+UYDgKQdSA/eNn55L1xz1Dupiqgb4BsfTxg6oVgFon2VBc+sHppONxNJuJfgBtQGcd3B1lXI4rjkUh1aiRS3h6XKi0P6CZN52HoXqzuCAFs7ps/SI7HxFrQ==
+ b=bQLiaWbG2uXt4gXT0e8EosDN3eJAF4uIWpz2pdr04WWjkdYlXXMMon3oMHRwgc3z49trJFH08XKvKjWpXs7RNg1IFDe5lK1meH5sn2heO8SyzPgTK4M41LirXbbk68dXvtFaU9EnmQT6fQ8U47QqVXcCBRiiJgeQp++w5Zuna0kXks3csREG9S/QSKQyA4EFko1TfqZ3KRNUtbv9gUvKM2ghk7KuLYwShgBIY7dTSjU018+74GVuebJ1+WbVvUOYpT0YItHieh1ex9wU3447JNgzhM3EVrjRXLDXXNToT1a3N2ks41jg6fO7u1VSpUos5ocuRwGu4q4lD1o+ZWxWRw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z+bSWmoDV0jFhXma4w+i2bFpjbuDW0zv5cMptByc5n4=;
- b=WmyrhOWpZ5T62mU5H4L1M52Yga8g0NaKf87RrEwUyUGVUviz/kfwCLZPWRXvfAEeLn25xygko1K5LnLxIjOXswnehWBOVU4YDaC9YROAMQSSO//e5QCpnrdanzah+2baXx2nmX39IZoUseq8KfpydHVV5QbKNVNnEPlBgH4kXIL+FpjWlUFtMMZjDZJudn/Q8XG0ciHFLcSrdvVNBVxP5PCYblGU2ZJbTHOOPZ+GH4hirW+t+99fJWEaxPzglpO+vwidIJwaSc/jDmK4FBTmQWfhqXGASZW/ZUQZ/kUY5zn2vOfRcmBd7pZeYE8NLtksH8vcWvhdkA+nAjjbYM/FMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z+bSWmoDV0jFhXma4w+i2bFpjbuDW0zv5cMptByc5n4=;
- b=Bi/O6cCI6koQXZMaMvGo2Ccf/IEX/hQ5V1gyICZWy1SQbggqZK8EPAfn7d1TG2OQC9TfZFvUtdVh0SRkabeqmG1yZHIgWbcQ1cXMVNNZOY+PcNfGNgUcuqMxHiyutfAg0eFs8TpY4lA63FGgxUrANmmP3dBx3wrDm7l7GuODf5E=
-Received: from DM6PR13CA0043.namprd13.prod.outlook.com (2603:10b6:5:134::20)
- by MWHPR1201MB2542.namprd12.prod.outlook.com (2603:10b6:300:e8::20) with
+ bh=l5iaMNfrOF4K149XFY18mnsZEwIVyk+sUSvwSe9wyXA=;
+ b=f/xHsdXoSvs9oJWM57bQAiyWfRNGS1EOMFPl1TClExlG+8GWhz/9O/xBqGnRdocBRQn54yLn427WFzpK3IC9eZlhJFM1Fkz/8HqlLa9e/BcrZ8wTYyTseguFXI5Qtxu9SJYtlKUb6cJVpwMutxy/7OrypP2RGMkxCq01GVGvrUO2EeN7l9i0JRKTRaxxMiSgN8MTtFUJtk/zqEDV36JwrTCMpmq6OxBSvbAFCr3d5e7KFOLCQKPxiewjgM57TynEoqMU25sVWyXjetgK8lp6nfHs985YqK5G3fboDKmO3yCfjDtbnlP4ZKO97Wc2vHQnbIwzbGz3zRoOv9mxgQYu8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN6PR11MB1316.namprd11.prod.outlook.com (2603:10b6:404:3c::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 23:42:28 +0000
-Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:134:cafe::e) by DM6PR13CA0043.outlook.office365.com
- (2603:10b6:5:134::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.6 via Frontend
- Transport; Tue, 4 Jan 2022 23:42:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4844.14 via Frontend Transport; Tue, 4 Jan 2022 23:42:28 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 4 Jan
- 2022 17:42:27 -0600
-Date:   Tue, 4 Jan 2022 17:41:29 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Mingwei Zhang" <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "Tom Lendacky" <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "David Woodhouse" <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Peter Gonda <pgonda@google.com>
-Subject: Re: [PATCH v2 00/13] KVM: selftests: Add tests for SEV and SEV-ES
- guests
-Message-ID: <20220104234129.dvpv3o3tihvzsqcr@amd.com>
-References: <20211216171358.61140-1-michael.roth@amd.com>
- <c01b0592-9d7b-601d-035b-fa2c308690aa@redhat.com>
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Wed, 5 Jan
+ 2022 00:10:38 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4844.016; Wed, 5 Jan 2022
+ 00:10:38 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+CC:     "Zhong, Yang" <yang.zhong@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Zeng, Guang" <guang.zeng@intel.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>
+Subject: RE: [PATCH v4 00/21] AMX Support in KVM
+Thread-Topic: [PATCH v4 00/21] AMX Support in KVM
+Thread-Index: AQHX/LXk0wxp7FYH3EiGHHPzVpo8CaxTOqQAgAAE9ACAAFcC8A==
+Date:   Wed, 5 Jan 2022 00:10:38 +0000
+Message-ID: <BN9PR11MB5276900E6C273485C59B65608C4B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20211229131328.12283-1-yang.zhong@intel.com>
+ <d43887b6-630c-446e-caee-dcbaa72f2466@redhat.com>
+ <YdSX6NANtx0SXjfK@google.com>
+In-Reply-To: <YdSX6NANtx0SXjfK@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e3d3cc71-a956-4e5e-be84-08d9cfdfcd92
+x-ms-traffictypediagnostic: BN6PR11MB1316:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <BN6PR11MB13163D832F6212E9D6551F208C4B9@BN6PR11MB1316.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: k9ZHGy0Bsryq9soVhWp49CRpo3aWCBONUzcuwmh1guBAnqxSO9dgOh60xMYxDt5J9nEAHcdVngoyjfQHlnvAmRYWnU5+t4uAK3ij/tT0ZvxrG+BdnxZRmauiM3scSFxaOzMLiYFrW+w4s+nG3AqlQBCCybujn3uBlpwgP4ZmOKWnrF7aeEQhRONbPnODFkAFzTTzz/Z2FU2nUmyQbKV78H9Tj89EPPrtdUBKR5S0SLUBSPCMVzFE+/H8BPKmIRNdFvMPdplx7XM8lNAO21+GfqlcdBl/s5AI2oKzUxbKQPnCqNYo5pcMWbYDJn1jFXlwMGyrms8hEt69X8qf+IzaefxidDaZYWwuVGc8Zl9NNHCMeNimRgT8gJiW1RHH2Mms7SseM2oNFNbMCvkeZYYTEl35Ut2L894Q9sU3rBK2T7lO67+M8XTqPB1HENqMfuG+KOXQXczipvQd2ot96KNBFnZwxYCOo1O3rUOy10R17mmZ3hp3kYrVh5y/Cwj7zRm6+MDdHcPYZaDNHi87sVHODaKpk43oTg6f2wQKxUnoPejpaVTBqIyWMhA5RFCA94TESrrK5ne6sfo5FTHxDiw+M+c7i6E+1Uy/axcq2tUmS0K41MWgZIDq/i5ta2lHhuwl3TYVL/d0w1e1tA0nGVmJOH77a8A3VsAu2NEdO1NyC01wZiJsAONB4mpHvEWXljPURPwrP5J7s4gnZB6C38kdXw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8676002)(8936002)(38100700002)(26005)(508600001)(55016003)(86362001)(186003)(2906002)(71200400001)(7696005)(7416002)(54906003)(6506007)(4326008)(66446008)(38070700005)(316002)(53546011)(33656002)(83380400001)(9686003)(66556008)(66476007)(64756008)(5660300002)(82960400001)(110136005)(52536014)(76116006)(122000001)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xzPB7hBj59bNSfIP2RuG9LAhteQ5fAGvVJqr3RtjAXhykZCR61mRJiM05f1M?=
+ =?us-ascii?Q?vA+UCU/Y+4xDsnbE5KxmoS/Lf29/NfaslOXhV8FlIxOWfQq15uEO2r87Q6pk?=
+ =?us-ascii?Q?XyZN/hJ/20GDjHRiJjSscTd3Rv2WIKpMJ8pbJCNhU8fd+dSXtyRee9MfVXAE?=
+ =?us-ascii?Q?bHaBvi5S01HZgDb9yTTvB/sHiQM5djerp1bt1/2/NlOgUDBhjkv2Jfns28qD?=
+ =?us-ascii?Q?cllPz0kBYx909+Pc/msMkIUAoe3f+Y+1tMwvXaRw1RAQNnoCV4hCA4aYeT+Y?=
+ =?us-ascii?Q?SfwG0JJ0GfYxKjnJxByT4j/rKYdcLggikZQmce0+tYuWksZ7oedGu8yAcbFq?=
+ =?us-ascii?Q?6VlFKi47qLLgohB6WK5cDF+9U9QeEy//WKs6TT60Obwvsz0zB5ZiijmVmUWM?=
+ =?us-ascii?Q?yHxmf3TgGALWynDwdv1V1CgHwwXbtCJ5HrwKNVbHQuHSm/Pxs3ayd9+4vgCs?=
+ =?us-ascii?Q?6x7OBovf5UtqFUj+u6XcsbuiZlUZp12AXQe8HJR6QUYMR4MuWhiQYUYdkGJR?=
+ =?us-ascii?Q?WCpFMPQDa3B4AlcFhIQqTxsedA9oOQK63ufqgI7wjSiI3T/dEw/oVVReXpgr?=
+ =?us-ascii?Q?qKZwKTjQHOQBLdf9qWUgoP5dnXU8A3zNV2vjKpxn7Q2JaP+va/ZF8voyKWak?=
+ =?us-ascii?Q?01GnRElmxZ/DC2W+3W+GvfXN0hHucKwVqED3ctArCy5hVhmxTA1/2ZRTwV0C?=
+ =?us-ascii?Q?Z7Cfsdk+Ud6SfHj7hzCpbWCLwpalYudTmL2TgRtgNQDKDj8dBlbviJkchIKz?=
+ =?us-ascii?Q?3eun900uOkvuwU6PyrcZq6WOiBpbJePjNcEgOAD74jn0CWL0nfzLcNbgR+3b?=
+ =?us-ascii?Q?Do2Dl6wlKfHh75Dw6RXn1ewJfBkVl1LuKu13KzG/bEsBmIO+xjPi4Akhs1xT?=
+ =?us-ascii?Q?8/tD56sYdx8+LgaKicTlm0I7h39oCIo200R7K9h2prHTq7NImJ5OgWGQelHv?=
+ =?us-ascii?Q?6Ge9frZk6YIIWHkSnjC9MvEu9sv/vfkmX1gDRQikbvAO3CB750G9IEuaWx6l?=
+ =?us-ascii?Q?3ddCpZelxCJUE0/7eTBl3mANdDVLGU+ybmRjpVIMv6PnJocVMoAE1gf3pg2e?=
+ =?us-ascii?Q?R7vgNfQqSxsDHNm9nxa84J9xUxobjpdjqjJlF09OnNLrRIRAPODPYRH4gdmq?=
+ =?us-ascii?Q?HC0/tdzwr8Aa3hMHSdaFM+VtAUWf7pQixtRPOxNgXvdyeWjiig2801BTaptN?=
+ =?us-ascii?Q?2M29xMAyVIDvft5UU9aNk6KXrxQpkgtBLvpOCchaW9XvlP3PaEDjT9+rZI6Y?=
+ =?us-ascii?Q?8ctP+8qKA/Vei92Qsn7SP7J/sEwzIfT6/ftxlkyQ1Q0P8+8IgkXlX/6AW0or?=
+ =?us-ascii?Q?2cnDxwQH8HoaFJANVekxlZFcAB5XY8bGEcZrH5QQM8MJPG5b/9Ok73wcNa3e?=
+ =?us-ascii?Q?hzOOBzHnGIJJzLlt2WVjYHFn0L9bV+3Z0LlRL90QjabsyaNBTa921TV7IlH/?=
+ =?us-ascii?Q?19EPbbUaq85a2mCXJ2LI87btXvY9ik0yiO9SZhNRvaHFID9l2Bqp3v8bfMv4?=
+ =?us-ascii?Q?kkigoDKyBUT2iDoIxFHUg4AOqHP0brvHY3YYuGRQlylrin1XE60+Uo35+4lS?=
+ =?us-ascii?Q?9KXiHux7npuI4w/dv+MAUW1g0J4kQ4qW5J1zSDSLf/K/ena2DuN4j42grWul?=
+ =?us-ascii?Q?YsAY6UHpr5/+XG+g8Bh5IDA=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <c01b0592-9d7b-601d-035b-fa2c308690aa@redhat.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7aa3311c-8dce-4fcc-cb7e-08d9cfdbde30
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB2542:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB254270414B9B54F59142CC80954A9@MWHPR1201MB2542.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5c8zdhCRAWqe1vKHmGUnDX9qaIJ7CWpJNgbwh81uBs0R36SCpSqQMojLTelijNKhkwdxV0Vba3Iv3sP6rqR6MgbuBNfcXpD5Y6cMdWo01p2giIpWnFuwwGaF13qp7uBTTxYuW02w36c2Wwt9RRN4E35JwcOezkt2LEbD0Ld8ETJiPG6kV+x59SPaHzp4HhphOy7IhB/SFk/2ue+12o3CNmEBhHURhD212eajAZeyYxX1fiVeFqVypDNRC8CvTR3ndmnZNIP/Kv4v4lgVBti72QBzQ9IcFntmo83i0RvIy9wGLaKYIgqmqaE58P8eC9kevjeEn0PznAVXhzOaOfK8zYF1kaX0Bv8EY39tbKLvsngy9tIMK6qoEu8xUk7fOaDVzgrfMDULUpOJzwiH1QyaCkA2DBcjHnCzaHjSoQNlU4XEeoDsI5fFIsTim5MR41/K3VZ1T1dmn7WfNdjlYnm8gcKNlgZoCyMoC/0YIWBNYTnss+n/N7FClgDKpmdH6MqPI/VFUweSuucqNhXug5BakjuyDivu6mN7Ogilw8LtV4FTWX9YoKaQW5XP91hxjZijrPLYRFn09AF+osZNPv5Q0Su9ySBS11bZp7rwC4g7rAZCq/++mMhcIYgEYGNnjM3UyXcVrjSku8YO4Zyj0/fFJETxet6R6MVbwCWRUfmCGuqWOPxaKsxeflEd68ghEGbmqXcTZZ4zMafbAe31sLcDXrzn5h3aY7vyPXSsN1I9R0jabJEHL6xFn+hu7+H13exMrW22+RdVukAU/1bB2E9ouUAIFtvSlMHBEOlPTDDbePSMHdtszFAXU171a6JU5eUEr/F2UTgCHFErgHQMd4x4aXOHXcyChtbfZD1BIOvtRr+UCCQAr6fUu9AHseyX5M5nSRGXuMK/lVzmkVD5qPbv832+cU0eaA/0KYsQ1E8tC60=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700002)(8936002)(36860700001)(36756003)(4001150100001)(83380400001)(2906002)(45080400002)(508600001)(966005)(8676002)(6916009)(7416002)(70586007)(426003)(70206006)(5660300002)(356005)(40460700001)(81166007)(336012)(53546011)(186003)(47076005)(26005)(54906003)(86362001)(2616005)(1076003)(316002)(44832011)(4326008)(82310400004)(16526019)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 23:42:28.1069
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3d3cc71-a956-4e5e-be84-08d9cfdfcd92
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2022 00:10:38.1586
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa3311c-8dce-4fcc-cb7e-08d9cfdbde30
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2542
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HBJjmfXJAQaHI2xfE+JJylf5qQR0tU3I19VUgI0uXveRpDbF766TsvoQ00UUkTxXCF44YheZbl2t2cLQa4/Oiw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1316
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 03:56:23PM +0100, Paolo Bonzini wrote:
-> On 12/16/21 18:13, Michael Roth wrote:
-> > These patches and are also available at:
-> > 
-> >    https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommits%2Fsev-selftests-v2&amp;data=04%7C01%7Cmichael.roth%40amd.com%7C749cb23438484cede3bc08d9c55b3c4e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637757817978399009%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=8F%2BcL%2F9FcCx4I2QXJUmBwGGxdHymP6l%2BoRKQO7%2BVj1Y%3D&amp;reserved=0
-> > 
-> > They are based on top of the recent RFC:
-> > 
-> >    "KVM: selftests: Add support for test-selectable ucall implementations"
-> >    https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20211210164620.11636-1-michael.roth%40amd.com%2FT%2F&amp;data=04%7C01%7Cmichael.roth%40amd.com%7C749cb23438484cede3bc08d9c55b3c4e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637757817978399009%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=BZu%2BqGCqpHEHlkL%2B5zFELdOaERRrUdznCFO%2FzPaQ4v8%3D&amp;reserved=0
-> > 
-> >    https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommits%2Fsev-selftests-ucall-rfc1&amp;data=04%7C01%7Cmichael.roth%40amd.com%7C749cb23438484cede3bc08d9c55b3c4e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637757817978399009%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=DkCRww6ifTrnavR9XvmWwX1wkKHK172iuivTaqEfu6o%3D&amp;reserved=0
-> > 
-> > which provides a new ucall implementation that this series relies on.
-> > Those patches were in turn based on kvm/next as of 2021-12-10.
-> 
-> Looks good, apart from the cleanups that Peter pointed out in patch 7.
-> 
-> When you send the next version, you can keep it based on the same ucall RFC,
-> even if I haven't yet pushed them (which I'll do only after testing on
-> s390).
+> From: Sean Christopherson <seanjc@google.com>
+> Sent: Wednesday, January 5, 2022 2:55 AM
+>=20
+> On Tue, Jan 04, 2022, Paolo Bonzini wrote:
+> > On 12/29/21 14:13, Yang Zhong wrote:
+> > > Highly appreciate for your review. This version mostly addressed the
+> comments
+> > > from Sean. Most comments are adopted except three which are not
+> closed and
+> > > need more discussions:
+> > >
+> > >    - Move the entire xfd write emulation code to x86.c. Doing so requ=
+ires
+> > >      introducing a new kvm_x86_ops callback to disable msr write bitm=
+ap.
+> > >      According to Paolo's earlier comment he prefers to handle it in =
+vmx.c.
+> >
+> > Yes, I do.
+>=20
+> No objection, my comments were prior to seeing the patches that
+> manipulated the
+> bitmap, e.g. in the earlier patches, having anything in vmx.c is unnecess=
+ary.
+>=20
+> > >    - Directly check msr_bitmap in update_exception_bitmap() (for
+> > >      trapping #NM) and vcpu_enter_guest() (for syncing guest xfd afte=
+r
+> > >      vm-exit) instead of introducing an extra flag in the last patch.=
+ However,
+> > >      doing so requires another new kvm_x86_ops callback for checking
+> > >      msr_bitmap since vcpu_enter_guest() is x86 common code. Having a=
+n
+> > >      extra flag sounds simpler here (at least for the initial AMX sup=
+port).
+> > >      It does penalize nested guest with one xfd sync per exit, but it=
+'s not
+> > >      worse than a normal guest which initializes xfd but doesn't run
+> > >      AMX applications at all. Those could be improved afterwards.
+> >
+> > The thing to do here would be to move
+> > MAX_POSSIBLE_PASSTHROUGH_MSRS/MAX_DIRECT_ACCESS_MSRS from
+> VMX/SVM to core
+> > code.  For now we can keep the flag.
 
-Hi Paolo,
+sounds good.
 
-Didn't manage to get these out before going on break, but back in office now
-and will get an updated version out as soon as we figure out a plan for
-implementing some of Sean's recent suggestions for the ucall side of things.
+> >
+> > >    - Disable #NM trap for nested guest. This version still chooses to=
+ always
+> > >      trap #NM (regardless in L1 or L2) as long as xfd write intercept=
+ion is
+> disabled.
+> > >      In reality #NM is rare if nested guest doesn't intend to run AMX
+> applications
+> > >      and always-trap is safer than dynamic trap for the basic support=
+ in
+> case
+> > >      of any oversight here.
+> >
+> > Sean was justifying this with lack of support for nested AMX, but I'm n=
+ot
+> > sure actually what is missing at all.  That is, an L1 hypervisor could
+> > expose AMX to L2, and then an L2->L0->L2 exit/reentry would have to tra=
+p
+> > #NM.  Otherwise it would miss an XFD_ERR update.
+>=20
+> Ya, I was assuming there was something L0 needed to do to supported
+> nested AMX,
+> but as Paolo pointed out there are no VMCS bits, so L0 just needs to corr=
+ectly
+> handle #NM and MSR interceptions according to vmcs12.
 
-Thanks,
+btw Sean still made a good point on exception queuing part. Current=20
+version blindly queues a #NM even when L1 wants to intercept #NM
+itself. We had that fixed internally and will send out a new version
+very soon.
 
-Mike
-
-> 
-> Thanks,
-> 
-> Paolo
-> 
-> > == OVERVIEW ==
-> > 
-> > This series introduces a set of memory encryption-related parameter/hooks
-> > in the core kselftest library, then uses the hooks to implement a small
-> > library for creating/managing SEV, SEV-ES, and (eventually) SEV-SNP guests.
-> > This library is then used to implement a basic boot/memory test that's run
-> > for variants of SEV/SEV-ES guests.
-> > 
-> > - Patches 1-8 implement SEV boot tests and should run against existing
-> >    kernels
-> > - Patch 9 is a KVM changes that's required to allow SEV-ES/SEV-SNP
-> >    guests to boot with an externally generated page table, and is a
-> >    host kernel prequisite for the remaining patches in the series.
-> > - Patches 10-13 extend the boot tests to cover SEV-ES
-> > 
-> > Any review/comments are greatly appreciated!
-> > 
-> > v2:
-> > - rebased on ucall_ops patchset (which is based on kvm/next 2021-12-10)
-> > - remove SEV-SNP support for now
-> > - provide encryption bitmap as const* to original rather than as a copy
-> >    (Mingwei, Paolo)
-> > - drop SEV-specific synchronization helpers in favor of ucall_ops_halt (Paolo)
-> > - don't pass around addresses with c-bit included, add them as-needed via
-> >    addr_gpa2raw() (e.g. when adding PTEs, or initializing initial
-> >    cr3/vm->pgd) (Paolo)
-> > - rename lib/sev.c functions for better consistency (Krish)
-> > - move more test setup code out of main test function and into
-> >    setup_test_common() (Krish)
-> > - suppress compiler warnings due to -Waddress-of-packed-member like kernel
-> >    does
-> > - don't require SNP support in minimum firmware version detection (Marc)
-> > - allow SEV device path to be configured via make SEV_PATH= (Marc)
-> > 
-> > ----------------------------------------------------------------
-> > Michael Roth (13):
-> >        KVM: selftests: move vm_phy_pages_alloc() earlier in file
-> >        KVM: selftests: sparsebit: add const where appropriate
-> >        KVM: selftests: add hooks for managing encrypted guest memory
-> >        KVM: selftests: handle encryption bits in page tables
-> >        KVM: selftests: add support for encrypted vm_vaddr_* allocations
-> >        KVM: selftests: ensure ucall_shared_alloc() allocates shared memory
-> >        KVM: selftests: add library for creating/interacting with SEV guests
-> >        KVM: selftests: add SEV boot tests
-> >        KVM: SVM: include CR3 in initial VMSA state for SEV-ES guests
-> >        KVM: selftests: account for error code in #VC exception frame
-> >        KVM: selftests: add support for creating SEV-ES guests
-> >        KVM: selftests: add library for handling SEV-ES-related exits
-> >        KVM: selftests: add SEV-ES boot tests
-> > 
-> >   arch/x86/include/asm/kvm-x86-ops.h                 |   1 +
-> >   arch/x86/include/asm/kvm_host.h                    |   1 +
-> >   arch/x86/kvm/svm/svm.c                             |  19 ++
-> >   arch/x86/kvm/vmx/vmx.c                             |   6 +
-> >   arch/x86/kvm/x86.c                                 |   1 +
-> >   tools/testing/selftests/kvm/.gitignore             |   1 +
-> >   tools/testing/selftests/kvm/Makefile               |  10 +-
-> >   .../testing/selftests/kvm/include/kvm_util_base.h  |  10 +
-> >   tools/testing/selftests/kvm/include/sparsebit.h    |  36 +--
-> >   tools/testing/selftests/kvm/include/x86_64/sev.h   |  44 +++
-> >   .../selftests/kvm/include/x86_64/sev_exitlib.h     |  14 +
-> >   tools/testing/selftests/kvm/include/x86_64/svm.h   |  35 +++
-> >   .../selftests/kvm/include/x86_64/svm_util.h        |   1 +
-> >   tools/testing/selftests/kvm/lib/kvm_util.c         | 270 ++++++++++++------
-> >   .../testing/selftests/kvm/lib/kvm_util_internal.h  |  10 +
-> >   tools/testing/selftests/kvm/lib/sparsebit.c        |  48 ++--
-> >   tools/testing/selftests/kvm/lib/ucall_common.c     |   4 +-
-> >   tools/testing/selftests/kvm/lib/x86_64/handlers.S  |   4 +-
-> >   tools/testing/selftests/kvm/lib/x86_64/processor.c |  16 +-
-> >   tools/testing/selftests/kvm/lib/x86_64/sev.c       | 252 ++++++++++++++++
-> >   .../testing/selftests/kvm/lib/x86_64/sev_exitlib.c | 249 ++++++++++++++++
-> >   .../selftests/kvm/x86_64/sev_all_boot_test.c       | 316 +++++++++++++++++++++
-> >   22 files changed, 1215 insertions(+), 133 deletions(-)
-> >   create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev.h
-> >   create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev_exitlib.h
-> >   create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev.c
-> >   create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev_exitlib.c
-> >   create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-> > 
-> > 
-> 
+Thanks
+Kevin
