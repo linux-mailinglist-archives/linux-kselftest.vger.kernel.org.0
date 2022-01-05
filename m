@@ -2,159 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7024A4854F5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jan 2022 15:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71BB48567C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jan 2022 17:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241041AbiAEOqC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jan 2022 09:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241016AbiAEOqC (ORCPT
+        id S241843AbiAEQJ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jan 2022 11:09:59 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11236 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241838AbiAEQJ4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:46:02 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC07C061761;
-        Wed,  5 Jan 2022 06:46:01 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id n30so50791111eda.13;
-        Wed, 05 Jan 2022 06:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tsD8f9xe/yOoJyzdLoBuH5tO2pYgzHZZxGASx3vHHzc=;
-        b=DIxyCLkUahoU3M+mxj7Jnpgjin2quX9tiF8LVbOUOS77Ig8gN6twbyS4ggZgDKGwJp
-         dwkGGjW3obwD/nXAl0hnZuaSkAyRyIm6Q/zAsh7C6ny1yPDD/7J34wmIkTPHNo1qql1s
-         dvzL6xD5oTQdr/sjbmnUrEtAVrxayDvnmxsqHER16jaMiuvuUIwAbXsXOONDIrhJCsIp
-         I6kxo1XZvtJQBqbCavTxSwfjdZhQ11o3x9pGestofLnfbtNZ/rakyIqTAxat4QEYdYgw
-         KqcYECfGxS0GD0mNf0eQHD9BMdD0AobA1c85F5puEmGmmeVzlMCPxJGnweKzBH8rvv+G
-         ryDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tsD8f9xe/yOoJyzdLoBuH5tO2pYgzHZZxGASx3vHHzc=;
-        b=mtKsuGnxc4uTtOEnEyCYOkivgzbw8y35mquhDeBk+S1MPtOqeaKY6qTKJ7vxV8ekWM
-         VmQEHpYk72E5ikn9Mi7tIr/I9v5/lBdBSF16+MyJ4Rcj7DgI9DQ6p/kghWoQdZL3pitt
-         pBrPFazOXXQTNg6jg1kkLjXvxknF46XZAyeNXKy15AaTSUXhJUlYGfka5zKUZTh5B9sT
-         /ldOzYOl18+PtPuQ7JdrRauaHVGcqvXGDYCN4HY2TXq/8bgX4/7M1PRpICuPxIYfeR/4
-         GNR5IQl/ZJdv/xMLJafsT2wMv7b5T9lUChosiyo8fe51434fmjMfu22w2NZA7G7d8pOZ
-         jktA==
-X-Gm-Message-State: AOAM5310caH8mf9ePnHPgtnovPqQdT9eVaoBE2Gq+mvLGaOmfIGpO2Eo
-        sd268EnRGdYbzqfiGDUOCuHl3ewPHwfSj7yTN/s=
-X-Google-Smtp-Source: ABdhPJzqdTl12XqIiJxzbnH7n36IgPGIQLTJWVcS4lHqMHrwIOSL3dEE9I5pAkIRrQootrBZoBpAV7jdyKZtXiGWL6g=
-X-Received: by 2002:a05:6402:40cd:: with SMTP id z13mr52996828edb.103.1641393960293;
- Wed, 05 Jan 2022 06:46:00 -0800 (PST)
+        Wed, 5 Jan 2022 11:09:56 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205F175a019294;
+        Wed, 5 Jan 2022 16:09:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=rd9wmIkq+S7vABNjYzU/I+AniDbecT1eW9IJXbVFL7k=;
+ b=dkBNp1Fh28RSX1bxRdDYjhx39xi7HiOgk07+eigx3E3NmSAXGj4Gwcx/74wrT100GIvD
+ PBlH01HWhDt4PPcOm91Dcgq4g9gvXIRoL20eE1oXuO6Kvon7i5FSMc3Wh20gLYWR4fod
+ 5ckdgv8msG1RYVvn9xh+TVeE13LvVXAgUUchenOKPfTR/2dpy/q9tKdgzgy+VHmCJHda
+ i4xb9P/E+hBLul2nUCjfqr1kU2laaNHQf2NQXP5Haik4syNXM1039xYesLikDVBScd+N
+ 2w0IzGN9NqbaITBW17GsiWYFC15xEzz3VwbDr5vWocuutPsCs/FV7x2RkPZDwv+cp7wC Pg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcpka1txe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 16:09:48 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 205G8j0H019268;
+        Wed, 5 Jan 2022 16:09:47 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01dal.us.ibm.com with ESMTP id 3daekbgw02-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 16:09:47 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 205G9j1g9044690
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jan 2022 16:09:46 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8861B205F;
+        Wed,  5 Jan 2022 16:09:45 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7850B206A;
+        Wed,  5 Jan 2022 16:09:43 +0000 (GMT)
+Received: from [9.211.129.18] (unknown [9.211.129.18])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jan 2022 16:09:43 +0000 (GMT)
+Message-ID: <cade9459-919d-cae9-a7a4-c4ce01ba8098@linux.vnet.ibm.com>
+Date:   Wed, 5 Jan 2022 11:09:42 -0500
 MIME-Version: 1.0
-References: <20220105131849.2559506-1-imagedong@tencent.com>
- <20220105131849.2559506-3-imagedong@tencent.com> <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
-In-Reply-To: <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 5 Jan 2022 22:45:48 +0800
-Message-ID: <CADxym3YKfp5=oyJRyM9AVp8GW7+fLuboeW0gs-LagLDy+hfj_g@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 2/2] bpf: selftests: add bind retry for
- post_bind{4, 6}
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 2/3] selftests/kexec: Enable secureboot tests for PowerPC
+Content-Language: en-US
+To:     Nageswara R Sastry <rnsastry@linux.ibm.com>, zohar@linux.ibm.com,
+        linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        mpe@ellerman.id.au, shuah@kernel.org
+Cc:     nayna@linux.ibm.com, dja@axtens.net, gcwilson@linux.ibm.com
+References: <20211124070802.1765-1-rnsastry@linux.ibm.com>
+ <20211124070802.1765-2-rnsastry@linux.ibm.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <20211124070802.1765-2-rnsastry@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1eeeELXo-vPOfYQgC9kmmumlTvbm7PwA
+X-Proofpoint-ORIG-GUID: 1eeeELXo-vPOfYQgC9kmmumlTvbm7PwA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-05_04,2022-01-04_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 impostorscore=0 adultscore=0 mlxscore=0 clxscore=1011
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201050108
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 9:57 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Wed, Jan 5, 2022 at 5:21 AM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > With previous patch, kernel is able to 'put_port' after sys_bind()
-> > fails. Add the test for that case: rebind another port after
-> > sys_bind() fails. If the bind success, it means previous bind
-> > operation is already undoed.
-> >
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
-> >  1 file changed, 146 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
-> > index e8edd3dd3ec2..68525d68d4e5 100644
-> > --- a/tools/testing/selftests/bpf/test_sock.c
-> > +++ b/tools/testing/selftests/bpf/test_sock.c
-> > @@ -35,12 +35,15 @@ struct sock_test {
-> >         /* Endpoint to bind() to */
-> >         const char *ip;
-> >         unsigned short port;
-> > +       unsigned short port_retry;
-> >         /* Expected test result */
-> >         enum {
-> >                 LOAD_REJECT,
-> >                 ATTACH_REJECT,
-> >                 BIND_REJECT,
-> >                 SUCCESS,
-> > +               RETRY_SUCCESS,
-> > +               RETRY_REJECT
-> >         } result;
-> >  };
-> >
-> > @@ -60,6 +63,7 @@ static struct sock_test tests[] = {
-> >                 0,
-> >                 NULL,
-> >                 0,
-> > +               0,
-> >                 LOAD_REJECT,
-> >         },
->
->
-> I assume we tried C99 initializers here, and this failed for some reason ?
->
 
-Yeah, C99 initializers should be a good choice here, therefore
-I don't need to change every entry here after I add a new field to
-'struct sock_test'.
+On 11/24/21 02:08, Nageswara R Sastry wrote:
+> Existing test cases determine secureboot state using efi variable, which is
+> available only on x86 architecture.
+> Add support for determining secureboot state using device tree property on
+> PowerPC architecture.
 
-I think C99 initializers should work here, I'll give it a try.
+Please replace 'PowerPC' with 'PowerNV'.
 
-Thanks!
-Menglong Dong
+Rest looks good.
 
-> diff --git a/tools/testing/selftests/bpf/test_sock.c
-> b/tools/testing/selftests/bpf/test_sock.c
-> index e8edd3dd3ec2..b57ce9f3eabf 100644
-> --- a/tools/testing/selftests/bpf/test_sock.c
-> +++ b/tools/testing/selftests/bpf/test_sock.c
-> @@ -54,13 +54,13 @@ static struct sock_test tests[] = {
->                         BPF_MOV64_IMM(BPF_REG_0, 1),
->                         BPF_EXIT_INSN(),
->                 },
-> -               BPF_CGROUP_INET4_POST_BIND,
-> -               BPF_CGROUP_INET4_POST_BIND,
-> -               0,
-> -               0,
-> -               NULL,
-> -               0,
-> -               LOAD_REJECT,
-> +               .expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
-> +               .attach_type = BPF_CGROUP_INET4_POST_BIND,
-> +               .domain = 0,
-> +               .type = 0,
-> +               .ip = NULL,
-> +               .port = 0,
-> +               .result = LOAD_REJECT,
->         },
->         {
->                 "bind4 load with invalid access: mark",
+Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+
+Tested-by: Nayna Jain <nayna@linux.ibm.com>
+
+Thanks & Regards,
+
+      - Nayna
+
