@@ -2,299 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E6D48652E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jan 2022 14:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29726486AF1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jan 2022 21:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiAFNV2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jan 2022 08:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239490AbiAFNVD (ORCPT
+        id S243615AbiAFUOk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jan 2022 15:14:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41348 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243606AbiAFUOj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:21:03 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303EAC061201;
-        Thu,  6 Jan 2022 05:21:03 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id i8so2509066pgt.13;
-        Thu, 06 Jan 2022 05:21:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wBc8X4yxTJj0yg0BtDL82zLPBsVK51ncdk64BgH5coI=;
-        b=QiLGxWOqHYifHEFc0SNUYeMbxRB9GWQ5GtNsL64uNUb5YuS6lIUGiAcKkoJxR8Znhc
-         d1nvRAit0UuRtdmKcu71a0jTeMS5ZaeJi7GyMNVj0iBd31KTpiUXQbVfJTVkE5iQ5kbu
-         CWWzddq6Q2KjEZb5ov8r2b5sp+VePdut2MRVHcuYUwHmC4D5TEfkpHuCDRvWkVIsa1//
-         TJImByXTSCpdqaO9zNr77nNyvhfFN10EH16bjikwmmzhuxn/DUvFg2rIYuEAOVLiFeDa
-         VZ/B8rdbEzHtZzu9sAiim33R7yIH2RXPUNW/eUfkassFIh1k3yleRdOl8rzkn45c3cqs
-         wtVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wBc8X4yxTJj0yg0BtDL82zLPBsVK51ncdk64BgH5coI=;
-        b=q6iaxXYbVXnWpLr1bm7QzsdE75iPJ2JQwo9UohJK2exzjZ0D+jrLckMRckpZZ3cmTv
-         hrErJtsq1ZeHb0rE5zkk5M8+eM0h4slyaW+WmvmbLEtN67ASUp8H6+1QUlFOrezH8AC8
-         2bLnIEsZiSU0CCVs5DqCrPSypTqj6o31HhexyZsScVV4jPIKJtq061Y4cwNe+8rA5xbx
-         WUt99Vhgah8mqriMzi68x9S/8Sq4XtHcppAbFM1FKhxciXGxz4NvTKg2AVJpO46l14WJ
-         pZ3UwdE7GxI1Kseg/8LhHeXPAg/fObzG4ATXqbFIiwVUtf15ocHY0CZrgtcx9FDpTVCj
-         /Gfw==
-X-Gm-Message-State: AOAM530dsnFVaPGds7n5jNeILrHIQb8lbxnd3y0z17oZIBcncg+l4cAD
-        qxlR0iE11FHuTxKrvZ/0tig=
-X-Google-Smtp-Source: ABdhPJxg9B/5ySTOsaJtZeU3RQPx6A0yzmrw5bP8wMQrYxm4CX3lv6F4kmOuJ7/AwOg/w5c0Vg7d1A==
-X-Received: by 2002:a63:354f:: with SMTP id c76mr48132493pga.193.1641475262761;
-        Thu, 06 Jan 2022 05:21:02 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id c11sm2777998pfv.85.2022.01.06.05.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 05:21:02 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org, edumazet@google.com
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH v5 net-next 3/3] bpf: selftests: add bind retry for post_bind{4, 6}
-Date:   Thu,  6 Jan 2022 21:20:22 +0800
-Message-Id: <20220106132022.3470772-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220106132022.3470772-1-imagedong@tencent.com>
-References: <20220106132022.3470772-1-imagedong@tencent.com>
+        Thu, 6 Jan 2022 15:14:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641500079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dtVfK+demW4pFZUYpmMxVrK1tXyLU+OVy0JCJWGY9xE=;
+        b=eijBoauBmRLJCM++FXETDuakkALq9jiPdoJdbgj+zKSvf69YLsYdCMS2Fef1xXGlXRhwlq
+        /8+arcMEiZlnR8qM9e5vwBj5xfwWjmw4mDST5xTkGeB2svRZ+SRaI5mbxRtUgvSTD5Zdmg
+        yxG/DQ7u5qIcvoEIDi2lqqZoxP1Ge+E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-294-0ppgeqXNO4Wc3oOtWx-G3g-1; Thu, 06 Jan 2022 15:14:36 -0500
+X-MC-Unique: 0ppgeqXNO4Wc3oOtWx-G3g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A92E51898290;
+        Thu,  6 Jan 2022 20:14:34 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 741114E2C1;
+        Thu,  6 Jan 2022 20:14:29 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mina Almasry <almasrymina@google.com>
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH] selftests/vm: Make charge_reserved_hugetlb.sh work with existing cgroup setting
+Date:   Thu,  6 Jan 2022 15:13:59 -0500
+Message-Id: <20220106201359.1646575-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+The hugetlb cgroup reservation test charge_reserved_hugetlb.sh assume
+that no cgroup filesystems are mounted before running the test. That is
+not true in many cases. As a result, the test fails to run. Fix that by
+querying the current cgroup mount setting and using the existing cgroup
+setup instead before attempting to freshly mount a cgroup filesystem.
 
-With previous patch, kernel is able to 'put_port' after sys_bind()
-fails. Add the test for that case: rebind another port after
-sys_bind() fails. If the bind success, it means previous bind
-operation is already undoed.
+Similar change is also made for hugetlb_reparenting_test.sh as well,
+though it still has problem if cgroup v2 isn't used.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+The patched test scripts were run on a centos 8 based system to verify
+that they ran properly.
+
+Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
+Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- tools/testing/selftests/bpf/test_sock.c | 150 ++++++++++++++++++++----
- 1 file changed, 130 insertions(+), 20 deletions(-)
+ .../selftests/vm/charge_reserved_hugetlb.sh   | 34 +++++++++++--------
+ .../selftests/vm/hugetlb_reparenting_test.sh  | 21 +++++++-----
+ .../selftests/vm/write_hugetlb_memory.sh      |  2 +-
+ 3 files changed, 34 insertions(+), 23 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+ mode change 100644 => 100755 tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+ mode change 100644 => 100755 tools/testing/selftests/vm/write_hugetlb_memory.sh
 
-diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
-index 94f9b126f5ed..fe10f8134278 100644
---- a/tools/testing/selftests/bpf/test_sock.c
-+++ b/tools/testing/selftests/bpf/test_sock.c
-@@ -35,12 +35,15 @@ struct sock_test {
- 	/* Endpoint to bind() to */
- 	const char *ip;
- 	unsigned short port;
-+	unsigned short port_retry;
- 	/* Expected test result */
- 	enum {
- 		LOAD_REJECT,
- 		ATTACH_REJECT,
- 		BIND_REJECT,
- 		SUCCESS,
-+		RETRY_SUCCESS,
-+		RETRY_REJECT
- 	} result;
- };
+diff --git a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+old mode 100644
+new mode 100755
+index fe8fcfb334e0..a5cb4b09a46c
+--- a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+@@ -24,19 +24,23 @@ if [[ "$1" == "-cgroup-v2" ]]; then
+   reservation_usage_file=rsvd.current
+ fi
  
-@@ -251,6 +254,99 @@ static struct sock_test tests[] = {
- 		.port = 4098,
- 		.result = SUCCESS,
- 	},
-+	{
-+		.descr = "bind4 deny specific IP & port of TCP, and retry",
-+		.insns = {
-+			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+
-+			/* if (ip == expected && port == expected) */
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_ip4)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
-+				    __bpf_constant_ntohl(0x7F000001), 4),
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_port)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x1002, 2),
-+
-+			/* return DENY; */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_A(1),
-+
-+			/* else return ALLOW; */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
-+		.attach_type = BPF_CGROUP_INET4_POST_BIND,
-+		.domain = AF_INET,
-+		.type = SOCK_STREAM,
-+		.ip = "127.0.0.1",
-+		.port = 4098,
-+		.port_retry = 5000,
-+		.result = RETRY_SUCCESS,
-+	},
-+	{
-+		.descr = "bind4 deny specific IP & port of UDP, and retry",
-+		.insns = {
-+			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+
-+			/* if (ip == expected && port == expected) */
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_ip4)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
-+				    __bpf_constant_ntohl(0x7F000001), 4),
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_port)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x1002, 2),
-+
-+			/* return DENY; */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_A(1),
-+
-+			/* else return ALLOW; */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
-+		.attach_type = BPF_CGROUP_INET4_POST_BIND,
-+		.domain = AF_INET,
-+		.type = SOCK_DGRAM,
-+		.ip = "127.0.0.1",
-+		.port = 4098,
-+		.port_retry = 5000,
-+		.result = RETRY_SUCCESS,
-+	},
-+	{
-+		.descr = "bind6 deny specific IP & port, and retry",
-+		.insns = {
-+			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+
-+			/* if (ip == expected && port == expected) */
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_ip6[3])),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7,
-+				    __bpf_constant_ntohl(0x00000001), 4),
-+			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
-+				    offsetof(struct bpf_sock, src_port)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_7, 0x2001, 2),
-+
-+			/* return DENY; */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_A(1),
-+
-+			/* else return ALLOW; */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.expected_attach_type = BPF_CGROUP_INET6_POST_BIND,
-+		.attach_type = BPF_CGROUP_INET6_POST_BIND,
-+		.domain = AF_INET6,
-+		.type = SOCK_STREAM,
-+		.ip = "::1",
-+		.port = 8193,
-+		.port_retry = 9000,
-+		.result = RETRY_SUCCESS,
-+	},
- 	{
- 		.descr = "bind4 allow all",
- 		.insns = {
-@@ -315,14 +411,15 @@ static int attach_sock_prog(int cgfd, int progfd,
- 	return bpf_prog_attach(progfd, cgfd, attach_type, BPF_F_ALLOW_OVERRIDE);
- }
- 
--static int bind_sock(int domain, int type, const char *ip, unsigned short port)
-+static int bind_sock(int domain, int type, const char *ip,
-+		     unsigned short port, unsigned short port_retry)
- {
- 	struct sockaddr_storage addr;
- 	struct sockaddr_in6 *addr6;
- 	struct sockaddr_in *addr4;
- 	int sockfd = -1;
- 	socklen_t len;
--	int err = 0;
-+	int res = SUCCESS;
- 
- 	sockfd = socket(domain, type, 0);
- 	if (sockfd < 0)
-@@ -348,21 +445,44 @@ static int bind_sock(int domain, int type, const char *ip, unsigned short port)
- 		goto err;
- 	}
- 
--	if (bind(sockfd, (const struct sockaddr *)&addr, len) == -1)
--		goto err;
-+	if (bind(sockfd, (const struct sockaddr *)&addr, len) == -1) {
-+		/* sys_bind() may fail for different reasons, errno has to be
-+		 * checked to confirm that BPF program rejected it.
-+		 */
-+		if (errno != EPERM)
-+			goto err;
-+		if (port_retry)
-+			goto retry;
-+		res = BIND_REJECT;
-+		goto out;
-+	}
- 
-+	goto out;
-+retry:
-+	if (domain == AF_INET)
-+		addr4->sin_port = htons(port_retry);
-+	else
-+		addr6->sin6_port = htons(port_retry);
-+	if (bind(sockfd, (const struct sockaddr *)&addr, len) == -1) {
-+		if (errno != EPERM)
-+			goto err;
-+		res = RETRY_REJECT;
-+	} else {
-+		res = RETRY_SUCCESS;
-+	}
- 	goto out;
- err:
--	err = -1;
-+	res = -1;
- out:
- 	close(sockfd);
--	return err;
-+	return res;
- }
- 
- static int run_test_case(int cgfd, const struct sock_test *test)
- {
- 	int progfd = -1;
- 	int err = 0;
-+	int res;
- 
- 	printf("Test case: %s .. ", test->descr);
- 	progfd = load_sock_prog(test->insns, test->expected_attach_type);
-@@ -380,21 +500,11 @@ static int run_test_case(int cgfd, const struct sock_test *test)
- 			goto err;
- 	}
- 
--	if (bind_sock(test->domain, test->type, test->ip, test->port) == -1) {
--		/* sys_bind() may fail for different reasons, errno has to be
--		 * checked to confirm that BPF program rejected it.
--		 */
--		if (test->result == BIND_REJECT && errno == EPERM)
--			goto out;
--		else
--			goto err;
--	}
+-cgroup_path=/dev/cgroup/memory
+-if [[ ! -e $cgroup_path ]]; then
+-  mkdir -p $cgroup_path
+-  if [[ $cgroup2 ]]; then
++if [[ $cgroup2 ]]; then
++  cgroup_path=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
++  if [[ -z "$cgroup_path" ]]; then
++    cgroup_path=/dev/cgroup/memory
+     mount -t cgroup2 none $cgroup_path
+-  else
++    do_umount=1
++  fi
++  echo "+hugetlb" >$cgroup_path/cgroup.subtree_control
++else
++  cgroup_path=$(mount -t cgroup | grep ",hugetlb" | awk -e '{print $3}')
++  if [[ -z "$cgroup_path" ]]; then
++    cgroup_path=/dev/cgroup/memory
+     mount -t cgroup memory,hugetlb $cgroup_path
++    do_umount=1
+   fi
+ fi
 -
-+	res = bind_sock(test->domain, test->type, test->ip, test->port,
-+			test->port_retry);
-+	if (res > 0 && test->result == res)
-+		goto out;
+-if [[ $cgroup2 ]]; then
+-  echo "+hugetlb" >/dev/cgroup/memory/cgroup.subtree_control
+-fi
++export cgroup_path
  
--	if (test->result != SUCCESS)
--		goto err;
--
--	goto out;
- err:
- 	err = -1;
- out:
+ function cleanup() {
+   if [[ $cgroup2 ]]; then
+@@ -108,7 +112,7 @@ function setup_cgroup() {
+ 
+ function wait_for_hugetlb_memory_to_get_depleted() {
+   local cgroup="$1"
+-  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
++  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
+   # Wait for hugetlbfs memory to get depleted.
+   while [ $(cat $path) != 0 ]; do
+     echo Waiting for hugetlb memory to get depleted.
+@@ -121,7 +125,7 @@ function wait_for_hugetlb_memory_to_get_reserved() {
+   local cgroup="$1"
+   local size="$2"
+ 
+-  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
++  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
+   # Wait for hugetlbfs memory to get written.
+   while [ $(cat $path) != $size ]; do
+     echo Waiting for hugetlb memory reservation to reach size $size.
+@@ -134,7 +138,7 @@ function wait_for_hugetlb_memory_to_get_written() {
+   local cgroup="$1"
+   local size="$2"
+ 
+-  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
++  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
+   # Wait for hugetlbfs memory to get written.
+   while [ $(cat $path) != $size ]; do
+     echo Waiting for hugetlb memory to reach size $size.
+@@ -574,5 +578,7 @@ for populate in "" "-o"; do
+   done     # populate
+ done       # method
+ 
+-umount $cgroup_path
+-rmdir $cgroup_path
++if [[ $do_umount ]]; then
++  umount $cgroup_path
++  rmdir $cgroup_path
++fi
+diff --git a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+old mode 100644
+new mode 100755
+index 4a9a3afe9fd4..bf2d2a684edf
+--- a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
++++ b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+@@ -18,19 +18,24 @@ if [[ "$1" == "-cgroup-v2" ]]; then
+   usage_file=current
+ fi
+ 
+-CGROUP_ROOT='/dev/cgroup/memory'
+-MNT='/mnt/huge/'
+ 
+-if [[ ! -e $CGROUP_ROOT ]]; then
+-  mkdir -p $CGROUP_ROOT
+-  if [[ $cgroup2 ]]; then
++if [[ $cgroup2 ]]; then
++  CGROUP_ROOT=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
++  if [[ -z "$CGROUP_ROOT" ]]; then
++    CGROUP_ROOT=/dev/cgroup/memory
+     mount -t cgroup2 none $CGROUP_ROOT
+-    sleep 1
+-    echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
+-  else
++    do_umount=1
++  fi
++  echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
++else
++  CGROUP_ROOT=$(mount -t cgroup | grep ",hugetlb" | awk -e '{print $3}')
++  if [[ -z "$CGROUP_ROOT" ]]; then
++    CGROUP_ROOT=/dev/cgroup/memory
+     mount -t cgroup memory,hugetlb $CGROUP_ROOT
++    do_umount=1
+   fi
+ fi
++MNT='/mnt/huge/'
+ 
+ function get_machine_hugepage_size() {
+   hpz=$(grep -i hugepagesize /proc/meminfo)
+diff --git a/tools/testing/selftests/vm/write_hugetlb_memory.sh b/tools/testing/selftests/vm/write_hugetlb_memory.sh
+old mode 100644
+new mode 100755
+index d3d0d108924d..70a02301f4c2
+--- a/tools/testing/selftests/vm/write_hugetlb_memory.sh
++++ b/tools/testing/selftests/vm/write_hugetlb_memory.sh
+@@ -14,7 +14,7 @@ want_sleep=$8
+ reserve=$9
+ 
+ echo "Putting task in cgroup '$cgroup'"
+-echo $$ > /dev/cgroup/memory/"$cgroup"/cgroup.procs
++echo $$ > ${cgroup_path:-/dev/cgroup/memory}/"$cgroup"/cgroup.procs
+ 
+ echo "Method is $method"
+ 
 -- 
-2.30.2
+2.27.0
 
