@@ -2,89 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45158486457
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jan 2022 13:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B790748651F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jan 2022 14:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238788AbiAFM0f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Jan 2022 07:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S239462AbiAFNUk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jan 2022 08:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238754AbiAFM0e (ORCPT
+        with ESMTP id S231453AbiAFNUk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:26:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8019C061245;
-        Thu,  6 Jan 2022 04:26:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D3EEB81FBB;
-        Thu,  6 Jan 2022 12:26:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A52C5C36AE3;
-        Thu,  6 Jan 2022 12:26:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641471992;
-        bh=F+VRetsdQhDk6RTHaHN8OZEU4IjmNt0fu6rA5nIO7a4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L4i9FukbcjQ8Ru8J0XU9nV2k/NPxE63fFvocJtu1H/UlWa7/rt/WArU7Sk/mrxIio
-         KRC5V3u2O+v0x75+J7m0U8e5kv94ylqTcYiTQ+n3mqfQRx93ER3vmjbsd2jjDcdcIk
-         SYNnsBhTC7y1YhprLKgVSQMUxakRMU9sKSPGo5z8=
-Date:   Thu, 6 Jan 2022 13:26:29 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Yangbo Lu <yangbo.lu@nxp.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jian Yang <jianyang@google.com>
-Subject: Re: txtimestamp.c:164:29: warning: format '0' expects argument of
- type 'long unsigned int', but argument 3 has type 'int64_t' {aka 'long long
- int'} [-Wformat=]
-Message-ID: <Ydbf9UV1ga2aytJX@kroah.com>
-References: <CA+G9fYtaoxVF-bL40kt=FKcjjaLUnS+h8hNf=wQv_dKKWn_MNQ@mail.gmail.com>
- <YdbGZiKKdVgh8A4i@kroah.com>
- <CA+G9fYtNQh8KygC7ufvkMuB_d7PX-meknhOpDcuQiPx8oBcrCA@mail.gmail.com>
+        Thu, 6 Jan 2022 08:20:40 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5237CC061245;
+        Thu,  6 Jan 2022 05:20:40 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id t19so2502847pfg.9;
+        Thu, 06 Jan 2022 05:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=63CBpxumFRhEVIAPbfpLgh370eooZ85aNh2ixBY2LbQ=;
+        b=GCNOUXs/f/02VYiLHnUwu4VBqscL8MQyNmeEh0LB2ngtSLJTUm24Ffb20Fn6E6r0E5
+         nN3uU0yvtfARlsAz/bQU6GD9X8Cr7FZzFZNzQ4+7mIYP24y6d+isTIvod8HMRnS79t2w
+         xVGB2o/CPKCFxY7sk446rT+wWvWDHeT/fnhO0XlVHxFbAZv3vQiJdP5o3866YfEyejNz
+         ANBj+XPbSJXLurY7TcLuXd7mI8ZgSTvYAx1NC8h2TfJemAH/lLCwW4j2Gk+4ni3yzkxk
+         eKIbzCQJdF76bDIrEpqiTqZyDtNy0hKFDNkAW8VfldgYYAZfsRJ3DDmbMAHYuela0X5Q
+         GwPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=63CBpxumFRhEVIAPbfpLgh370eooZ85aNh2ixBY2LbQ=;
+        b=rGZmUVS3hv270SYDGa7YKnk4KVULfcVaK75R6GUEBSUQBguHY8B+gbJY4MuNNnLJks
+         YAKscpXCF+1tKdRLrdtVyn8ujxdekg/7gbnPcHSB27O4TTRgD6aQmiasXKj2mgricoGu
+         5/5F39/zwxZl1SXpLCrfXFrdoSqwDL0VRqs9ewRWtcWWNjIwGUWcZY21g9ZD3YZWRvYw
+         ht/KTAAt8YQ+LvOM9gf+OhV2r4dAQmB2EazGOdC0zQsI4xb72G6lm1mdxXGbJLBTWYZ0
+         2974397z0cwefSE1/sdfkdGgx9E5m6XN3lF4ddPoVUOhFgqnk7fbO7n15Wsfsupp4azL
+         OmeA==
+X-Gm-Message-State: AOAM533xmPX3XQehV7FAn3T4JHXMq4d5th/kZfubVQoB+82b7D9+F43V
+        SSqIZdbYQQyjbn9Vp/iLUk8=
+X-Google-Smtp-Source: ABdhPJwOUo4pcL7A2OXFJjQ8QWyFkutGi8QKRpQHq+/ZxXoKpMcSP2/auCVyD8YFtJ/i+ZBNcuxylw==
+X-Received: by 2002:a63:3ece:: with SMTP id l197mr36367239pga.371.1641475239906;
+        Thu, 06 Jan 2022 05:20:39 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id c11sm2777998pfv.85.2022.01.06.05.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 05:20:39 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org, edumazet@google.com
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v5 net-next 0/3] net: bpf: handle return value of post_bind{4,6} and add selftests for it
+Date:   Thu,  6 Jan 2022 21:20:19 +0800
+Message-Id: <20220106132022.3470772-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtNQh8KygC7ufvkMuB_d7PX-meknhOpDcuQiPx8oBcrCA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:38:16PM +0530, Naresh Kamboju wrote:
-> On Thu, 6 Jan 2022 at 16:07, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Jan 06, 2022 at 03:39:09PM +0530, Naresh Kamboju wrote:
-> > > While building selftests the following warnings were noticed for arm
-> > > architecture on Linux stable v5.15.13 kernel and also on Linus's tree.
-> > >
-> > > arm-linux-gnueabihf-gcc -Wall -Wl,--no-as-needed -O2 -g
-> > > -I../../../../usr/include/    txtimestamp.c  -o
-> > > /home/tuxbuild/.cache/tuxmake/builds/current/kselftest/net/txtimestamp
-> > > txtimestamp.c: In function 'validate_timestamp':
-> > > txtimestamp.c:164:29: warning: format '0' expects argument of type
-> > > 'long unsigned int', but argument 3 has type 'int64_t' {aka 'long long
-> > > int'} [-Wformat=]
-> > >   164 |   fprintf(stderr, "ERROR: 0 us expected between 0 and 0\n",
-> 
-> <trim>
-> 
-> > Same question as before, is this a regression, and if so, any pointers
-> > to a fix?
-> 
-> This is a known warning on Linus's tree.
+From: Menglong Dong <imagedong@tencent.com>
 
-Great, please report the issue there, as there's nothing I can do about
-it in the 5.15.y tree until it is resolved there as you know.
+The return value of BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND() in
+__inet_bind() is not handled properly. While the return value
+is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
+exit:
+exit:
 
-thanks,
+        err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+        if (err) {
+                inet->inet_saddr = inet->inet_rcv_saddr = 0;
+                goto out_release_sock;
+        }
 
-greg k-h
+Let's take UDP for example and see what will happen. For UDP
+socket, it will be added to 'udp_prot.h.udp_table->hash' and
+'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
+called success. If 'inet->inet_rcv_saddr' is specified here,
+then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
+to (because inet_saddr is changed to 0), and UDP packet received
+will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
+specified here, the sock will work fine, as it can receive packet
+properly, which is wired, as the 'bind()' is already failed.
+
+To undo the get_port() operation, introduce the 'put_port' field
+for 'struct proto'. For TCP proto, it is inet_put_port(); For UDP
+proto, it is udp_lib_unhash(); For icmp proto, it is
+ping_unhash().
+
+Therefore, after sys_bind() fail caused by
+BPF_CGROUP_RUN_PROG_INET4_POST_BIND(), it will be unbinded, which
+means that it can try to be binded to another port.
+
+The second patch use C99 initializers in test_sock.c
+
+The third patch is the selftests for this modification.
+
+Changes since v4:
+- use C99 initializers in test_sock.c before adding the test case
+
+Changes since v3:
+- add the third patch which use C99 initializers in test_sock.c
+
+Changes since v2:
+- NULL check for sk->sk_prot->put_port
+
+Changes since v1:
+- introduce 'put_port' field for 'struct proto'
+- add selftests for it
+
+
+Menglong Dong (3):
+  net: bpf: handle return value of 
+    BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
+  bpf: selftests: use C99 initializers in test_sock.c
+  bpf: selftests: add bind retry for post_bind{4, 6}
+
+ include/net/sock.h                      |   1 +
+ net/ipv4/af_inet.c                      |   2 +
+ net/ipv4/ping.c                         |   1 +
+ net/ipv4/tcp_ipv4.c                     |   1 +
+ net/ipv4/udp.c                          |   1 +
+ net/ipv6/af_inet6.c                     |   2 +
+ net/ipv6/ping.c                         |   1 +
+ net/ipv6/tcp_ipv6.c                     |   1 +
+ net/ipv6/udp.c                          |   1 +
+ tools/testing/selftests/bpf/test_sock.c | 370 ++++++++++++++----------
+ 10 files changed, 233 insertions(+), 148 deletions(-)
+
+-- 
+2.27.0
+
