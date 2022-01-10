@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9636248A288
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jan 2022 23:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF2448A2A6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jan 2022 23:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345257AbiAJWOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jan 2022 17:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S242417AbiAJWVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jan 2022 17:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242582AbiAJWOL (ORCPT
+        with ESMTP id S241447AbiAJWVx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:14:11 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C07CC06173F
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:14:11 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id h1so14169817pls.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:14:11 -0800 (PST)
+        Mon, 10 Jan 2022 17:21:53 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F2BC061748
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:21:53 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso1279841pje.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cA2thSnMklXMw+C+WIsLavgyTwzV8Vdb/bSFnlNQwlM=;
-        b=rQo7NJxkM8KSvltDFE8GiXYv60OUEUM2J1ohMj7zFv7ZuLy58cRM1J64tGLqvvptdN
-         KtuNx53gLu0ZiTUP7um0L149waLwiWZABvP5fzn6qujudn24ZnfXze0Ww8agJR5jIIeV
-         2Gg3+NApiDyVBx4M7iZTnjGiEXTGr2/U+c5/Iyox8OJHJM1dIFo32rrAsl0fgqDri2sz
-         8Ee+z1dZjPoLIJD0Ml/3u559JlsoEB+eCDbZk4ypyCQ7Uwee/FVRRP5Zyda5GGiKxjPY
-         MkJTBOcFU089N4qpuSCQ7vxZgXH8fxomG/TCH9XlwK5/jR3mkOoIC85Axn7J5JaXU4mC
-         u3DQ==
+        bh=dpEgaA7tQQxRTXpViippoUOAKxED1oc92U+eN95LNGs=;
+        b=Hn++l73OqhxLfme2ErG2NqRu9ncAa+tUVLdIKUfHhZxaidp4c7iue3e8A5v7PyIFIG
+         QmO+PYhfi5xJoqAWLdAvi3zyIXYfDeLbcd2v8rWPgHzM0Gkk5OjEkoKCiCJCUiCorRmJ
+         c9CCKtbz4SERrhgz1qeXtCFRuQVC9YbVKmqNu1SnfNWoLFSo4BTJGzP99+iNa1NJfvTn
+         3g7MwaTneEG1gIRuUaF+CbS8VTj0/L2LkNgVSy6ILJhHv7EPCX8ITbeOh3BWo+nuIXmP
+         zEhsFaVwFTD0zo2zi39CbHch1gVGB47ATJVfKbdItybJZnCPl2hB6hK55QIIM76/OEWf
+         A1tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cA2thSnMklXMw+C+WIsLavgyTwzV8Vdb/bSFnlNQwlM=;
-        b=D6hhTSRECVTB63asJ3YA+H9ZG/7a9jFMsKlp56m4hfdPSSEtjVk49AuXA84y5nAPKJ
-         O3iZgjh8p76oFwrXZG22BdcDz0FfCatxaCpfZ04GmSa7nKgA7UyulH0Hy0von9DJZ+6D
-         PFstHwZUyxVuLW3CMoxN+KC1H6ujgRysFTvvhhR4YecWwArJi3ZWahkWZLuPHq3Gr16+
-         4sww0xyQbC+t3NYnqz9JABeaSKbHlKRGnpATmPJajlLlICOrvbU5dmEtK6NknpHY2DpE
-         /r/3xVGEcYZvDE10JRbESzIZG6Mx0ZczVHsbYcLq4xBGCL2VnT2Z0nLvNUx+8S0GxmFx
-         pRhg==
-X-Gm-Message-State: AOAM531vQ4y1Qps6uzC9pAtnG18Kkzdjivlg105Z7odcm6feoQYfnpwY
-        5KTVLQP4xMEu+DuZ9zqtUjew1eGNrb/a7fy+ABdddDxvoQvwFTiA
-X-Google-Smtp-Source: ABdhPJxGAPmnACRpzvskeA1k94inIqs7IJ349+gdQuK0t3OXSPON/CbiapdM0r/dMcIM/PeoesOnRffvBEG3J/49Dig=
-X-Received: by 2002:a63:b942:: with SMTP id v2mr1472907pgo.407.1641852850858;
- Mon, 10 Jan 2022 14:14:10 -0800 (PST)
+        bh=dpEgaA7tQQxRTXpViippoUOAKxED1oc92U+eN95LNGs=;
+        b=1/uyOVuLIgHpmO0MsoiWXwklm8VpqT7zJ81Ilfk6qdWAHhExOHAmTa4T//sHhYKRZn
+         Vy1b8GOrv3BixGfnvOw83ayA32bRqfb/D/cBjj9uitK8J+EmIZriCtUcHUINYHzEbQnK
+         SkYqNb05A+NcEwjbnzSuKkA17F1IXi/f3jA2nnRPFlr5ho6w+LlG3uwACUygyI05e2Xt
+         L9SFgnCZlNeN4Ob7oav9URUQu+OrRzE3IcrIrIlZ8pBxF5uNdEknJO4ayeB+/ThdO54v
+         3uQ8Zu07n3UBN48lgJBRrPPweYV7sZntF6se+FMtzJBZ/1MG9h/irAcjbpqKn4CoDJ1W
+         1POg==
+X-Gm-Message-State: AOAM531Rz/yJyhN06WI7vsj0T0K60MePjGCAW/W/DD9kcZb6B+wEJTeU
+        3P3upsa6KVaCnDamDmdD3/sEhfmFXfcEt2eY8wPylw==
+X-Google-Smtp-Source: ABdhPJzU68WaUrCxAJr0XWxbBe2huF8ZD7GWtX8Nh04kLOHZS3nCqLkZsig9aqAB5u3s7goLMXyUd0Ng5bYukv2mPdM=
+X-Received: by 2002:a62:80c2:0:b0:4bb:47a:6983 with SMTP id
+ j185-20020a6280c2000000b004bb047a6983mr1823271pfd.24.1641853312838; Mon, 10
+ Jan 2022 14:21:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-2-dlatypov@google.com>
-In-Reply-To: <20220108012304.1049587-2-dlatypov@google.com>
+References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-3-dlatypov@google.com>
+In-Reply-To: <20220108012304.1049587-3-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 10 Jan 2022 17:13:59 -0500
-Message-ID: <CAFd5g46RUc-v0GmjAEFggmgMxE7Ya_MCwMPO4YMEuFac49XLAw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kunit: add example test case showing off all the
- expect macros
+Date:   Mon, 10 Jan 2022 17:21:41 -0500
+Message-ID: <CAFd5g45HcdzB_CTNRRpH8BFbBvG0nDS4_6VUj3Tqx8XOuVTNOQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] kunit: move check if assertion passed into the macros
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
@@ -63,19 +63,110 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, Jan 7, 2022 at 8:23 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Currently, these macros are only really documented near the bottom of
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html#c.KUNIT_FAIL.
+> Currently the code always calls kunit_do_assertion() even though it does
+> nothing when `pass` is true.
 >
-> E.g. it's likely someone might just not realize that
-> KUNIT_EXPECT_STREQ() exists and instead use KUNIT_EXPECT_FALSE(strcmp())
-> or similar.
+> This change moves the `if(!(pass))` check into the macro instead
+> and renames the function to kunit_failed_assertion().
+> I feel this a  bit easier to read and understand.
 >
-> This can also serve as a basic smoketest that the KUnit assert machinery
-> still works for all the macros.
+> This has the potential upside of avoiding a function call that does
+> nothing most of the time (assuming your tests are passing) but comes
+> with the downside of generating a bit more code and branches.
+>
+> This also means we don't have to initialize structs that we don't need,
+> which will become a tiny bit more expensive if we switch over to using
+> static variables to try and reduce stack usage. (There's runtime code
+> to check if the variable has been initialized yet or not).
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-I still don't like how much this bloats the example test; aside from
-that, this looks good.
+Tiny nit, see below. Otherwise:
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+
+> ---
+>  include/kunit/test.h | 20 ++++++++++----------
+>  lib/kunit/test.c     | 13 ++++---------
+>  2 files changed, 14 insertions(+), 19 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index b26400731c02..690a28dfc795 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -770,18 +770,18 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+>   */
+>  #define KUNIT_SUCCEED(test) do {} while (0)
+>
+> -void kunit_do_assertion(struct kunit *test,
+> -                       struct kunit_assert *assert,
+> -                       bool pass,
+> -                       const char *fmt, ...);
+> +void kunit_failed_assertion(struct kunit *test,
+> +                           struct kunit_assert *assert,
+> +                           const char *fmt, ...);
+
+Tiny nit: I think this should be kunit_fail_assertion. I think
+functions should be in the active tense, imperative mood since when
+you call a function you are telling it to do something.
+
+Also, do we need to worry about this getting confused with KUNIT_FAIL,
+or KUNIT_FAIL_ASSERTION:
+
+https://elixir.bootlin.com/linux/v5.16/source/include/kunit/test.h#L788
+
+?
+
+>  #define KUNIT_ASSERTION(test, pass, assert_class, INITIALIZER, fmt, ...) do {  \
+> -       struct assert_class __assertion = INITIALIZER;                         \
+> -       kunit_do_assertion(test,                                               \
+> -                          &__assertion.assert,                                \
+> -                          pass,                                               \
+> -                          fmt,                                                \
+> -                          ##__VA_ARGS__);                                     \
+> +       if (!(pass)) {                                                         \
+> +               struct assert_class __assertion = INITIALIZER;                 \
+> +               kunit_failed_assertion(test,                                   \
+> +                                      &__assertion.assert,                    \
+> +                                      fmt,                                    \
+> +                                      ##__VA_ARGS__);                         \
+> +       }                                                                      \
+>  } while (0)
+>
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index c7ed4aabec04..5ad671745483 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -275,16 +275,11 @@ static void __noreturn kunit_abort(struct kunit *test)
+>         WARN_ONCE(true, "Throw could not abort from test!\n");
+>  }
+>
+> -void kunit_do_assertion(struct kunit *test,
+> -                       struct kunit_assert *assert,
+> -                       bool pass,
+> -                       const char *fmt, ...)
+> +void kunit_failed_assertion(struct kunit *test,
+> +                           struct kunit_assert *assert,
+> +                           const char *fmt, ...)
+>  {
+>         va_list args;
+> -
+> -       if (pass)
+> -               return;
+> -
+>         va_start(args, fmt);
+>
+>         assert->message.fmt = fmt;
+> @@ -297,7 +292,7 @@ void kunit_do_assertion(struct kunit *test,
+>         if (assert->type == KUNIT_ASSERTION)
+>                 kunit_abort(test);
+>  }
+> -EXPORT_SYMBOL_GPL(kunit_do_assertion);
+> +EXPORT_SYMBOL_GPL(kunit_failed_assertion);
+>
+>  void kunit_init_test(struct kunit *test, const char *name, char *log)
+>  {
+> --
+> 2.34.1.575.g55b058a8bb-goog
+>
