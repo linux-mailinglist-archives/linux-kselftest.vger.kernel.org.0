@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEBC48A2B3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jan 2022 23:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A8E48A2D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jan 2022 23:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345373AbiAJWZT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jan 2022 17:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S238635AbiAJWcK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jan 2022 17:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244885AbiAJWZS (ORCPT
+        with ESMTP id S241297AbiAJWcK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:25:18 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B519C061748
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:25:18 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 30so57957062edv.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:25:18 -0800 (PST)
+        Mon, 10 Jan 2022 17:32:10 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0935C06173F
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:32:09 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so1230186pjf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Jan 2022 14:32:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8TsWXEfioEfTTK1VDo1lBOqjBTxLrtfK2ag/gwU0Pqc=;
-        b=oJ/N1I5VcUaJhr7iJ+kzTzypJazZyuPseg2YMALCEdLKvYFIJxCSUmNV511Z4kpZVk
-         JzmcBEe8o4qej9RH1rHOkiB723+S+Rmj2OVk9MYKGurCoA/1XwJSO1kUg0ZsvZepBW/D
-         DaigJame+QZp3TU/9fmf8yHIesGHhBV8YwvYJ8ToK6+a5QNPuNdCwbp0i56ynigKr61y
-         G3YKkmku0KWvDv4CQf392La3PGTfXW5lJPTuEIcg9I5mbVIlL1PlzUPcM+8BBNvyXZzP
-         iSGJlPlNl/Vu/IkiWoC1ThZFlr3UPd7zmnNNqVERmxSNH8ezGAmv6maQMm0UD/OIwx62
-         u9Yw==
+        bh=DbbsQWjyXtZdlOn4Dc6o7hTt4Ddd2iucIvvroUkrD6w=;
+        b=ka2FvWLMfFsTIz3WuYux3yNx3kQvAAlxmSOLJVot5jlnH57wRyrYAvxT8s7wnIWTEL
+         2DeN5J0u+FcJLXpLjnC/SXfX6pLzLKP/YHMGViiORk+Rj8UQSKgNMloGmkEu6UgvVkJe
+         vCCuouP6I52AqQPQqbRsMDt6JS7yZUlXv0uLsq0vIVAUPhbDML3+N5Wphgc7EVFMlOio
+         RiXY9neN+oDZrzZdfQMw5NzwdbbX4h5HP4tI5WgceQ+m/9MXplBM+ahaG4A+L+zmTFws
+         6h3R/LTEZnJ/j3VdaeDT0wyjabJE8Y9FivVMKhfyEcQ3UWSxOkabYgBm0P0ttxkgEz+o
+         35Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8TsWXEfioEfTTK1VDo1lBOqjBTxLrtfK2ag/gwU0Pqc=;
-        b=y2H+iTXvTpupmUiTWkKSSygEi6tnFe+oHwL0iD0bZ4SjtzQmE9ftGlS3yqv3nnqM4S
-         zyZDKY3k8kA+ct1rfU1riybE0uzbmLYlOOyMhOQvpO/SDvV7c8EtFSjxZ38Eb4rsvMID
-         HlCaKCDguU2hADKgBemWQ1A5y9ffJIgaWD7a819MglRYflG6okrk30MslNUMUrhd9yge
-         yfADevLveUjjYmGefFxVTnSOIZ7/GteZzfKLuTnScL23wKGQjkgAzDG9cC0+xQX0GWSU
-         hxmUVwjGDgDB4XIZsS5OwDRYU/LWb3u7gUZJtqvW1CHxCgQChszGf56mn7alCFEipRBY
-         rS+A==
-X-Gm-Message-State: AOAM533ClMlrIkW6RFi+QFRFr5bc5G23k4MTghxV7E1cptfCIQw7AYsm
-        9xPttADKmB+jBWhM5JVStup5+qBsrqa2sfUSq/lyrA==
-X-Google-Smtp-Source: ABdhPJz/NhDGIg2gfV2mdOsT01yHlsQNq5QJDnIeRGtDliqArx9qwtiFbzpMs4IfWW2ENR4oBVpBN0uZZs3adk2GwAs=
-X-Received: by 2002:aa7:db8f:: with SMTP id u15mr1681805edt.36.1641853516933;
- Mon, 10 Jan 2022 14:25:16 -0800 (PST)
+        bh=DbbsQWjyXtZdlOn4Dc6o7hTt4Ddd2iucIvvroUkrD6w=;
+        b=Ppc0PqaAcy3wkC2S637qn69jpyMgqxUkY/iFbcMgwpL1EOqhK47M5QTTx/gYDybxM4
+         FTvxAV5YqXswbYvO63lgKUqxKigTmdVVnriWv7uvUo1LLGt9dyizvzDDvWAp6mVdO2Df
+         3/gdaMygSokwRGEjBhUMoXuJze9huYiY6U0jmP5kD5v0o8YqDU4U3UIuCnTvmEcS2SSi
+         T1Qg60CCKYnEJtUuXglE9SsHVhuxEuzDlruS92UuGa42n0Nys+QIbj2geNUNJhbgFxal
+         xxe9qpQSpql56rSoJNjuI7QCyMl+O7albewBmDuDhsGztpzTXq0A1+T6JnD3GbypBXBu
+         hEyA==
+X-Gm-Message-State: AOAM530amPSAYVSCQBLAoCNXm+xJdvL+L7gytQQZguMfgq9my4c8/hZ/
+        SWJrJj8sveyh1MTq8POFh/AlgdhAXtQ91bRwvscsxA==
+X-Google-Smtp-Source: ABdhPJwW79BM2QnjJ1OTqgs3/C3n5ydKSFjahOECAE+mVb59xdfD4fkQIXU9WBI4ZfZoIimggMU02KCTeEkgXNq12f4=
+X-Received: by 2002:a17:90a:e018:: with SMTP id u24mr1919206pjy.95.1641853929130;
+ Mon, 10 Jan 2022 14:32:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-2-dlatypov@google.com>
- <CAFd5g46RUc-v0GmjAEFggmgMxE7Ya_MCwMPO4YMEuFac49XLAw@mail.gmail.com>
-In-Reply-To: <CAFd5g46RUc-v0GmjAEFggmgMxE7Ya_MCwMPO4YMEuFac49XLAw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 10 Jan 2022 14:25:05 -0800
-Message-ID: <CAGS_qxo63enQyrEO7YOL75oGUsuzbntty-C60Z+==L59qKyBtw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kunit: add example test case showing off all the
- expect macros
-To:     Brendan Higgins <brendanhiggins@google.com>
+References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-5-dlatypov@google.com>
+In-Reply-To: <20220108012304.1049587-5-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 10 Jan 2022 17:31:58 -0500
+Message-ID: <CAFd5g47r8aQBWPtt6ffHokqqN2sMi10p1Q5QA3xGVLTVDQh98Q@mail.gmail.com>
+Subject: Re: [PATCH 4/6] kunit: factor out kunit_base_assert_format() call
+ into kunit_fail()
+To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         skhan@linuxfoundation.org, torvalds@linux-foundation.org
@@ -62,33 +61,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 2:14 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
+On Fri, Jan 7, 2022 at 8:23 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Fri, Jan 7, 2022 at 8:23 PM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Currently, these macros are only really documented near the bottom of
-> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html#c.KUNIT_FAIL.
-> >
-> > E.g. it's likely someone might just not realize that
-> > KUNIT_EXPECT_STREQ() exists and instead use KUNIT_EXPECT_FALSE(strcmp())
-> > or similar.
-> >
-> > This can also serve as a basic smoketest that the KUnit assert machinery
-> > still works for all the macros.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> We call this function first thing for all the assertion `format()`
+> functions.
+> This is the part that prints the file and line number and assertion type
+> (EXPECTATION, ASSERTION).
 >
-> I still don't like how much this bloats the example test; aside from
-> that, this looks good.
+> Having it as part of the format functions lets us have the flexibility
+> to not print that information (or print it differently) for new
+> assertion types, but I think this we don't need that.
 
-Agreed, it does add bloat.
-I just wanted something *somewhere* I could use to smoketest the later changes.
-I just remembered how people weren't very aware of the _MSG variants
-and thought this could help.
+nit: drop the "this".
 
-If others have a preference, I'll happily move out and into kunit-test.c.
-I'm fine either way as I initially was going to put it there to begin with.
-
+> And in the future, we'd like to consider factoring that data (file,
+> line#, type) out of the kunit_assert struct and into a `static`
+> variable, as Linus suggested [1], so we'd need to extract it anyways.
 >
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+>  lib/kunit/assert.c | 6 ------
+>  lib/kunit/test.c   | 1 +
+>  2 files changed, 1 insertion(+), 6 deletions(-)
+>
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index b972bda61c0c..4d9a1295efc7 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -40,7 +40,6 @@ EXPORT_SYMBOL_GPL(kunit_assert_print_msg);
+>  void kunit_fail_assert_format(const struct kunit_assert *assert,
+>                               struct string_stream *stream)
+>  {
+> -       kunit_base_assert_format(assert, stream);
+>         string_stream_add(stream, "%pV", &assert->message);
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
+> @@ -52,7 +51,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
+>
+>         unary_assert = container_of(assert, struct kunit_unary_assert, assert);
+>
+> -       kunit_base_assert_format(assert, stream);
+>         if (unary_assert->expected_true)
+>                 string_stream_add(stream,
+>                                   KUNIT_SUBTEST_INDENT "Expected %s to be true, but is false\n",
+> @@ -73,7 +71,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+>         ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
+>                                   assert);
+>
+> -       kunit_base_assert_format(assert, stream);
+>         if (!ptr_assert->value) {
+>                 string_stream_add(stream,
+>                                   KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
+> @@ -119,7 +116,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+>         binary_assert = container_of(assert, struct kunit_binary_assert,
+>                                      assert);
+>
+> -       kunit_base_assert_format(assert, stream);
+>         string_stream_add(stream,
+>                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+>                           binary_assert->left_text,
+> @@ -147,7 +143,6 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+>         binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
+>                                      assert);
+>
+> -       kunit_base_assert_format(assert, stream);
+>         string_stream_add(stream,
+>                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+>                           binary_assert->left_text,
+> @@ -187,7 +182,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+>         binary_assert = container_of(assert, struct kunit_binary_str_assert,
+>                                      assert);
+>
+> -       kunit_base_assert_format(assert, stream);
+>         string_stream_add(stream,
+>                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+>                           binary_assert->left_text,
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 5ad671745483..735c1b67d843 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -255,6 +255,7 @@ static void kunit_fail(struct kunit *test, struct kunit_assert *assert)
+>                 return;
+>         }
+>
+> +       kunit_base_assert_format(assert, stream);
+
+I think my thinking in having this function called by the other assert
+functions was to take advantage of inheritance. I was treating
+kunit_base_assert_format as the parent method that other methods were
+inheriting from, so I wanted to have them inherit some of the common
+behavior by calling the original function.
+
+If you decide to make this change, I think it would be a good idea to
+change the name of kunit_base_assert_format to not mislead to this
+effect.
+
+>         assert->format(assert, stream);
+>
+>         kunit_print_string_stream(test, stream);
+> --
+> 2.34.1.575.g55b058a8bb-goog
+>
