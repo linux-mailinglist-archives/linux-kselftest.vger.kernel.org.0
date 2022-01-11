@@ -2,52 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 310C548A8A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jan 2022 08:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CAD48AFA8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jan 2022 15:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348614AbiAKHqY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jan 2022 02:46:24 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59848 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbiAKHqY (ORCPT
+        id S242168AbiAKOgh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jan 2022 09:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240845AbiAKOgh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jan 2022 02:46:24 -0500
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id 475178286B; Tue, 11 Jan 2022 02:45:39 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1641887183; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
-        h=Date:From:To:Subject:From;
-        b=aH8lF3hycSCIWTIBvsh0akxFtxfJy+aXW5Bhm14PUX7Qy6DY2480qvuglgW7iVdGX
-         0oPsIdnqJTPehYyLbhlLJua0381ULbg42BzIiauT15xmmUGa1TJZqzzJCeeaE2xbKD
-         OZQDsXhWrwggGaZ62itSBiMnS5R1C6qHOL4rTkFqSbc1gx2piv5qkZAl2FX4/bm0o+
-         qH6BIat+d1Ry0fZLlH0IKqOaiiINZVySCujvm1f+xvzKR49S241l4FsfOc+gGXwmjI
-         ExK44wY0iZLRNgWuinXdPvyh33FGabLjm/6l9OpNyFo7Oyk4NdGctlmDiPBOLeZVgI
-         p83q6i/Pvk0kQ==
-Received: by mail.betterbiz.pl for <linux-kselftest@vger.kernel.org>; Tue, 11 Jan 2022 07:45:38 GMT
-Message-ID: <20220111024500-0.1.o.10jp.0.8e4at0g4qu@betterbiz.pl>
-Date:   Tue, 11 Jan 2022 07:45:38 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+        Tue, 11 Jan 2022 09:36:37 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD09C06173F;
+        Tue, 11 Jan 2022 06:36:36 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 3D8661F44642
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641911794;
+        bh=WoCSfvWZ0RM1u1nDrNK6amswglzkJ65ayw9iZSom+UI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J4zrWziFsqvl8KXsnoBV6LHs6IhDf2sdQkFD5qfCiGZcEvjktFI1em79VvJ3mbZk2
+         D9NXIMXeaSmTbjNVBYRrxWZf17/77NQlKyWIxMb4ahMoFscUn2/UPEPl62h+zCDfOx
+         tDG+ph9eROPaNmRTQSWpyMN8o9Z3S7atpH9HbJwrt4dty740OdV2vfkxicTKnf0QLw
+         u8ZV1xdREf7okKEA5bRtC2zW5QJPEygX1uNwyPYG5Nf+G5Bj7HPihBRnu5S4v4cSEa
+         gv/H/c4DsTKxLOowC4Lc4LN5QmLj521/lA6/PLSgxROeZAKgS6RTxUFY1OUUESqJ0H
+         2H4QCpK1MMMzQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH 1/2] selftests/lkdtm: Remove dead config option
+Date:   Tue, 11 Jan 2022 19:36:13 +0500
+Message-Id: <20220111143614.629452-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+CONFIG_HARDENED_USERCOPY_FALLBACK config option has been removed in
+commit 53944f171a89 ("mm: remove HARDENED_USERCOPY_FALLBACK"). Remove it
+from the lkdtm selftest config.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/lkdtm/config | 1 -
+ 1 file changed, 1 deletion(-)
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+index a26a3fa9e925..a7a58f885f52 100644
+--- a/tools/testing/selftests/lkdtm/config
++++ b/tools/testing/selftests/lkdtm/config
+@@ -3,7 +3,6 @@ CONFIG_DEBUG_LIST=y
+ CONFIG_SLAB_FREELIST_HARDENED=y
+ CONFIG_FORTIFY_SOURCE=y
+ CONFIG_HARDENED_USERCOPY=y
+-# CONFIG_HARDENED_USERCOPY_FALLBACK is not set
+ CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
+ CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+ CONFIG_UBSAN_BOUNDS=y
+-- 
+2.30.2
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Jakub Daroch
