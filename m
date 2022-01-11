@@ -2,60 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9C848B5B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jan 2022 19:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E619648B5DD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jan 2022 19:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345171AbiAKSe1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jan 2022 13:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S1345633AbiAKSmV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jan 2022 13:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345142AbiAKSe0 (ORCPT
+        with ESMTP id S243801AbiAKSmU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:34:26 -0500
+        Tue, 11 Jan 2022 13:42:20 -0500
 Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7EDC06173F
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jan 2022 10:34:25 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id i5so17158964edf.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jan 2022 10:34:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17114C06173F
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jan 2022 10:42:20 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id u25so37879edf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jan 2022 10:42:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KbcJr69eo4lbU4zhrQw9YdKDn5i2JTpJM9CjQKhnU08=;
-        b=D6oMv/3KxCor+0QrXJYT489/fgORrqWm+mSQ/sJBnsvcdNtGSFaPAVbCp+b+GKYUal
-         l3rRqEMKt6ejHbQaXKhJt87/bc3G6Xz2QP9kYL8BEO9/m/worSSZra/vRNlaqTxh/1bG
-         hqchk+8nlXMLtCuBKjbSHNuixJzydsFoVSZ9PQNhyvL2hgsc9Lp3x42skMLVdkqvPuzj
-         fnGNgfk27eylvR2SBuY3IKq+SlGwfRBIzni4cvAzK98jwYelE3saEM+OonsqKfTs7NZF
-         ds9H35AjEAsFV34WCjLwo6tz0VUpXz+NrSbN5fgNaqikn9KxRdiAyWAQwSx/0iefVpvJ
-         cYLg==
+        bh=nlv1m0oWEWqiXdzkq1FrQ63DGvpn5XRpuHy2G/KiWa4=;
+        b=FeMHMKmjeGqqoYlN0lmvGnc5tvk3svsJhTjO0oXhkGS+MxcT2SfRcnFfUp2+B2K+wO
+         2giMGlEp4nctatlgshafQW9MJU0m6j7U42SJ6Xrcj55fqJUzUY5NJ1TrDT0HfbpaYj8U
+         NChHW1WQd/Pdkn0F7iI78aEW0Y2x+6xR3FtyaReaYMTsnoIyxSbuiKT3rzcEwevjB0i0
+         esNnm3fe45iu6MU3Zp7IzWTldqLeyv2w6toL0iFdD9o/XpQJWCeobXZkEbbGf87pnTyO
+         pofazbD3rQmYJKMTiXONjjYDuTeYJC4Yw/6ycol1EHluaoVYV3qkQs2BghFTqMDleYd/
+         4EQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KbcJr69eo4lbU4zhrQw9YdKDn5i2JTpJM9CjQKhnU08=;
-        b=F6uiIIPyyLqaSm8cqix1wIKV9E2diYx0JN05S5eWmXC5gtYU2Do7Qy+ufSsF96NoKt
-         /aUiYgGc8hmtsnhQjjj1vAbxbLALFXHhcPEmnCjem2iqHXhxuIT9EtL0Xe6xGACZmlmj
-         fE77wlztjO03s46D66Dyuru/Z3f6dZdF5U13bqssYGLCMGo9+WGyRGG9V7uB6T87iSEE
-         /+aYy2rzVR2JSuyeORCJd81XBCrUBbagdwCZpExgh6YTAAw9SWz8R8SvulmlbxXxmKIK
-         vmqWJ/bbh6RGj9wTnFMyDV9BgdFVoI/FGG6IYV++ln1rJQdWyZ9ArlsgZ6uy/rzBKnZh
-         a9Bw==
-X-Gm-Message-State: AOAM532vUqAeyBZ1VrrcEr2UcvtXykCAytAjrJsLsgWrNRsi0gWYskt6
-        O8UN5KVFJ5ri1hYFQ5zFVGFNIUmUXGc5CajspJiJqw==
-X-Google-Smtp-Source: ABdhPJxqZOr6wztclNOl/uOgqeq9w+nyJjlLo1hy9SEyN9T5uaZt3WLH9SgPzY/2RaJ8zBNe8nP6IirH35xCzZKjDJM=
-X-Received: by 2002:a17:907:7f86:: with SMTP id qk6mr3200918ejc.425.1641926064066;
- Tue, 11 Jan 2022 10:34:24 -0800 (PST)
+        bh=nlv1m0oWEWqiXdzkq1FrQ63DGvpn5XRpuHy2G/KiWa4=;
+        b=dUOPV1vx+ZTjnYSP0StyyRR3JRCqAVF+C8pWZ5+Ka3aesp1uM4KzCcHkSK+fpjqaU2
+         CqTQdmA5pR8rVeTt1phdKra7GsH+85tzPtocy+H6MiV+j+BM1F8zScOV+aACk1rOV42u
+         mh/LaeglToeqfanMtNZqPu6ukZvdhLnqZKWtR6r9OaipfAU0vtz4s8o2Gl6xeBnPPADs
+         mwnJZyOhMKkh1uvu2QKmxijkHDRFnGUcFEEV3W298dLzXIUh/M2nNUD9AcrWUbvf0mEZ
+         SfoXZeYtS6j7rEaQaRoGJQhm5wF3TrG3E56BWn6m4ghfx/P+7/thJZY8ma9rdSkBun9m
+         tHIg==
+X-Gm-Message-State: AOAM532+AjLt8RY9ikvlzsKTG1FWtEwY9E0sbbn9h9I/HHdP99mN1ZRk
+        9OVpTdlEc/DYcWuvQs0Ft2eziM/JVGcvwp45VaVYvw==
+X-Google-Smtp-Source: ABdhPJybavSkCnT8Lo198i/c+n/vKgJF4wCc1ZFYWGqHcCkfCu5pdx6cl6czugcmgdCiv4Je0yqkD95FQHmQfXIoyQg=
+X-Received: by 2002:aa7:d785:: with SMTP id s5mr5460664edq.215.1641926537331;
+ Tue, 11 Jan 2022 10:42:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-4-dlatypov@google.com>
- <CABVgOSmCNTrObvALYr-fg5GyAjkNigUwS+amwQqK3co1YYEDQQ@mail.gmail.com>
-In-Reply-To: <CABVgOSmCNTrObvALYr-fg5GyAjkNigUwS+amwQqK3co1YYEDQQ@mail.gmail.com>
+References: <20220108012304.1049587-1-dlatypov@google.com> <20220108012304.1049587-3-dlatypov@google.com>
+ <CAFd5g45HcdzB_CTNRRpH8BFbBvG0nDS4_6VUj3Tqx8XOuVTNOQ@mail.gmail.com>
+ <CAGS_qxqhhu=Jy+vwWZGZLRG4qW5=ZJ8t7QbjtL54onc4-NFnrw@mail.gmail.com> <CABVgOSkyJvM=beWD8PM-sobHnVNRyqQYQpjeBYhbUEP4Lz8bLA@mail.gmail.com>
+In-Reply-To: <CABVgOSkyJvM=beWD8PM-sobHnVNRyqQYQpjeBYhbUEP4Lz8bLA@mail.gmail.com>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 11 Jan 2022 10:34:12 -0800
-Message-ID: <CAGS_qxoKyxWnnCq4C8ifoH70Cx5Q_LisbOPW-6x75BQaE8rm_g@mail.gmail.com>
-Subject: Re: [PATCH 3/6] kunit: drop unused kunit* field in kunit_assert
+Date:   Tue, 11 Jan 2022 10:42:06 -0800
+Message-ID: <CAGS_qxo3Va9EybJ4O109qF4wyAv7K2_4_ZBLsc5ovioAVDjb=Q@mail.gmail.com>
+Subject: Re: [PATCH 2/6] kunit: move check if assertion passed into the macros
 To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -63,268 +65,140 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Jan 10, 2022 at 10:51 PM David Gow <davidgow@google.com> wrote:
 >
-> On Sat, Jan 8, 2022 at 9:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+> On Tue, Jan 11, 2022 at 6:33 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > The `struct kunit* test` field in kunit_assert is unused.
-> > Note: we have access to `test` where we need it via the string_stream
-> > object. I assume `test` in `kunit_assert` predates this and was leftover
-> > after some refactoring.
+> > On Mon, Jan 10, 2022 at 2:21 PM Brendan Higgins
+> > <brendanhiggins@google.com> wrote:
+> > >
+> > > On Fri, Jan 7, 2022 at 8:23 PM Daniel Latypov <dlatypov@google.com> wrote:
+> > > >
+> > > > Currently the code always calls kunit_do_assertion() even though it does
+> > > > nothing when `pass` is true.
+> > > >
+> > > > This change moves the `if(!(pass))` check into the macro instead
+> > > > and renames the function to kunit_failed_assertion().
+> > > > I feel this a  bit easier to read and understand.
+> > > >
+> > > > This has the potential upside of avoiding a function call that does
+> > > > nothing most of the time (assuming your tests are passing) but comes
+> > > > with the downside of generating a bit more code and branches.
+> > > >
+> > > > This also means we don't have to initialize structs that we don't need,
+> > > > which will become a tiny bit more expensive if we switch over to using
+> > > > static variables to try and reduce stack usage. (There's runtime code
+> > > > to check if the variable has been initialized yet or not).
+> > > >
+> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > >
+> > > Tiny nit, see below. Otherwise:
+> > >
+> > > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> > >
+> > > > ---
+> > > >  include/kunit/test.h | 20 ++++++++++----------
+> > > >  lib/kunit/test.c     | 13 ++++---------
+> > > >  2 files changed, 14 insertions(+), 19 deletions(-)
+> > > >
+> > > > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > > > index b26400731c02..690a28dfc795 100644
+> > > > --- a/include/kunit/test.h
+> > > > +++ b/include/kunit/test.h
+> > > > @@ -770,18 +770,18 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+> > > >   */
+> > > >  #define KUNIT_SUCCEED(test) do {} while (0)
+> > > >
+> > > > -void kunit_do_assertion(struct kunit *test,
+> > > > -                       struct kunit_assert *assert,
+> > > > -                       bool pass,
+> > > > -                       const char *fmt, ...);
+> > > > +void kunit_failed_assertion(struct kunit *test,
+> > > > +                           struct kunit_assert *assert,
+> > > > +                           const char *fmt, ...);
+> > >
+> > > Tiny nit: I think this should be kunit_fail_assertion. I think
+> > > functions should be in the active tense, imperative mood since when
+> > > you call a function you are telling it to do something.
+> > >
+> > > Also, do we need to worry about this getting confused with KUNIT_FAIL,
+> > > or KUNIT_FAIL_ASSERTION:
+> >
+> > So do we want to try and pick a different name from
+> > kunit_fail_assertion() to avoid confusion with the macro?
+> > That's partly why I went with past tense.
+> > Perhaps: "kunit_do_assertion() => kunit_do_failed_assertion()" instead?
 >
-> Note that I don't like the idea of accessing 'test' via the string
-> stream in general, but we don't seem to ever actually do this (as far
-> as I can tell). Maybe if we wanted to be super nitpicky, rewording the
-> note to say "if we need it" rather than "where we need it" would be
-> clearer.
+> I'm not particularly picky about the name personally. But if I had to
+> join the bikeshedding, I'd probably go with kunit_assertion_fail() or
+> similar (kunit_assertion_failed works too, past-tense-wise.)
+>
+> But kunit_do_fail{,ed}_assertion() would work too.
 
-Ah, I had meant "where we need it" == "where string_stream needs it,
-as its the only user that doesn't get test passed as a parameter
-everywhere".
-
-Updated the wording to
-  Note: string_stream needs it, but it has its own `test` field.
+I've gone ahead and locally renamed it to kunit_do_failed_assertion().
+Talking offline, Brendan seemed ok with it, so we have 2 votes of
+"it's good enough".
 
 >
-> >
-> > This patch removes the field and cleans up the macros to avoid
-> > needlessly passing around `test`.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
 >
-> Looks good, thanks!
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
->
-> >  include/kunit/assert.h | 45 ++++++++++++------------------------------
-> >  include/kunit/test.h   | 14 +++++--------
-> >  2 files changed, 18 insertions(+), 41 deletions(-)
 > >
-> > diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-> > index ad889b539ab3..3da6c792496c 100644
-> > --- a/include/kunit/assert.h
-> > +++ b/include/kunit/assert.h
-> > @@ -30,7 +30,6 @@ enum kunit_assert_type {
+> > Tangent: we have some similar confusing names, e.g. KUNIT_ASSERTION is
+> > both the name of a macro and an enum (kunit_assert_type), and those
+> > have the exact same case.
 > >
-> >  /**
-> >   * struct kunit_assert - Data for printing a failed assertion or expectation.
-> > - * @test: the test case this expectation/assertion is associated with.
-> >   * @type: the type (either an expectation or an assertion) of this kunit_assert.
-> >   * @line: the source code line number that the expectation/assertion is at.
-> >   * @file: the file path of the source file that the expectation/assertion is in.
-> > @@ -41,7 +40,6 @@ enum kunit_assert_type {
-> >   * format a string to a user reporting the failure.
-> >   */
-> >  struct kunit_assert {
-> > -       struct kunit *test;
-> >         enum kunit_assert_type type;
-> >         int line;
-> >         const char *file;
-> > @@ -60,14 +58,12 @@ struct kunit_assert {
-> >
-> >  /**
-> >   * KUNIT_INIT_ASSERT_STRUCT() - Initializer for a &struct kunit_assert.
-> > - * @kunit: The test case that this expectation/assertion is associated with.
-> >   * @assert_type: The type (assertion or expectation) of this kunit_assert.
-> >   * @fmt: The formatting function which builds a string out of this kunit_assert.
-> >   *
-> >   * The base initializer for a &struct kunit_assert.
-> >   */
-> > -#define KUNIT_INIT_ASSERT_STRUCT(kunit, assert_type, fmt) {                   \
-> > -       .test = kunit,                                                         \
-> > +#define KUNIT_INIT_ASSERT_STRUCT(assert_type, fmt) {                          \
-> >         .type = assert_type,                                                   \
-> >         .file = __FILE__,                                                      \
-> >         .line = __LINE__,                                                      \
-> > @@ -96,15 +92,13 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
-> >
-> >  /**
-> >   * KUNIT_INIT_FAIL_ASSERT_STRUCT() - Initializer for &struct kunit_fail_assert.
-> > - * @test: The test case that this expectation/assertion is associated with.
-> >   * @type: The type (assertion or expectation) of this kunit_assert.
-> >   *
-> >   * Initializes a &struct kunit_fail_assert. Intended to be used in
-> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-> >   */
-> > -#define KUNIT_INIT_FAIL_ASSERT_STRUCT(test, type) {                           \
-> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
-> > -                                          type,                               \
-> > +#define KUNIT_INIT_FAIL_ASSERT_STRUCT(type) {                         \
-> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
-> >                                            kunit_fail_assert_format)           \
-> >  }
-> >
-> > @@ -129,7 +123,6 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
-> >
-> >  /**
-> >   * KUNIT_INIT_UNARY_ASSERT_STRUCT() - Initializes &struct kunit_unary_assert.
-> > - * @test: The test case that this expectation/assertion is associated with.
-> >   * @type: The type (assertion or expectation) of this kunit_assert.
-> >   * @cond: A string representation of the expression asserted true or false.
-> >   * @expect_true: True if of type KUNIT_{EXPECT|ASSERT}_TRUE, false otherwise.
-> > @@ -137,9 +130,8 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
-> >   * Initializes a &struct kunit_unary_assert. Intended to be used in
-> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-> >   */
-> > -#define KUNIT_INIT_UNARY_ASSERT_STRUCT(test, type, cond, expect_true) {               \
-> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
-> > -                                          type,                               \
-> > +#define KUNIT_INIT_UNARY_ASSERT_STRUCT(type, cond, expect_true) {             \
-> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
-> >                                            kunit_unary_assert_format),         \
-> >         .condition = cond,                                                     \
-> >         .expected_true = expect_true                                           \
-> > @@ -167,7 +159,6 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-> >  /**
-> >   * KUNIT_INIT_PTR_NOT_ERR_ASSERT_STRUCT() - Initializes a
-> >   *     &struct kunit_ptr_not_err_assert.
-> > - * @test: The test case that this expectation/assertion is associated with.
-> >   * @type: The type (assertion or expectation) of this kunit_assert.
-> >   * @txt: A string representation of the expression passed to the expectation.
-> >   * @val: The actual evaluated pointer value of the expression.
-> > @@ -175,9 +166,8 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-> >   * Initializes a &struct kunit_ptr_not_err_assert. Intended to be used in
-> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-> >   */
-> > -#define KUNIT_INIT_PTR_NOT_ERR_STRUCT(test, type, txt, val) {                 \
-> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
-> > -                                          type,                               \
-> > +#define KUNIT_INIT_PTR_NOT_ERR_STRUCT(type, txt, val) {                               \
-> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
-> >                                            kunit_ptr_not_err_assert_format),   \
-> >         .text = txt,                                                           \
-> >         .value = val                                                           \
-> > @@ -212,7 +202,6 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
-> >  /**
-> >   * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a
-> >   *     &struct kunit_binary_assert.
-> > - * @test: The test case that this expectation/assertion is associated with.
-> >   * @type: The type (assertion or expectation) of this kunit_assert.
-> >   * @op_str: A string representation of the comparison operator (e.g. "==").
-> >   * @left_str: A string representation of the expression in the left slot.
-> > @@ -223,15 +212,13 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
-> >   * Initializes a &struct kunit_binary_assert. Intended to be used in
-> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-> >   */
-> > -#define KUNIT_INIT_BINARY_ASSERT_STRUCT(test,                                 \
-> > -                                       type,                                  \
-> > +#define KUNIT_INIT_BINARY_ASSERT_STRUCT(type,                                 \
-> >                                         op_str,                                \
-> >                                         left_str,                              \
-> >                                         left_val,                              \
-> >                                         right_str,                             \
-> >                                         right_val) {                           \
-> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
-> > -                                          type,                               \
-> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
-> >                                            kunit_binary_assert_format),        \
-> >         .operation = op_str,                                                   \
-> >         .left_text = left_str,                                                 \
-> > @@ -269,7 +256,6 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-> >  /**
-> >   * KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT() - Initializes a
-> >   *     &struct kunit_binary_ptr_assert.
-> > - * @test: The test case that this expectation/assertion is associated with.
-> >   * @type: The type (assertion or expectation) of this kunit_assert.
-> >   * @op_str: A string representation of the comparison operator (e.g. "==").
-> >   * @left_str: A string representation of the expression in the left slot.
-> > @@ -280,15 +266,13 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-> >   * Initializes a &struct kunit_binary_ptr_assert. Intended to be used in
-> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-> >   */
-> > -#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(test,                             \
-> > -                                           type,                              \
-> > +#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(type,                             \
-> >                                             op_str,                            \
-> >                                             left_str,                          \
-> >                                             left_val,                          \
-> >                                             right_str,                         \
-> >                                             right_val) {                       \
-> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
-> > -                                          type,                               \
-> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
-> >                                            kunit_binary_ptr_assert_format),    \
-> >         .operation = op_str,                                                   \
-> >         .left_text = left_str,                                                 \
-> > @@ -326,7 +310,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-> >  /**
-> >   * KUNIT_INIT_BINARY_STR_ASSERT_STRUCT() - Initializes a
-> >   *     &struct kunit_binary_str_assert.
-> > - * @test: The test case that this expectation/assertion is associated with.
-> >   * @type: The type (assertion or expectation) of this kunit_assert.
-> >   * @op_str: A string representation of the comparison operator (e.g. "==").
-> >   * @left_str: A string representation of the expression in the left slot.
-> > @@ -337,15 +320,13 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-> >   * Initializes a &struct kunit_binary_str_assert. Intended to be used in
-> >   * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-> >   */
-> > -#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(test,                             \
-> > -                                           type,                              \
-> > +#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(type,                             \
-> >                                             op_str,                            \
-> >                                             left_str,                          \
-> >                                             left_val,                          \
-> >                                             right_str,                         \
-> >                                             right_val) {                       \
-> > -       .assert = KUNIT_INIT_ASSERT_STRUCT(test,                               \
-> > -                                          type,                               \
-> > +       .assert = KUNIT_INIT_ASSERT_STRUCT(type,                               \
-> >                                            kunit_binary_str_assert_format),    \
-> >         .operation = op_str,                                                   \
-> >         .left_text = left_str,                                                 \
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 690a28dfc795..ebd45593321e 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -789,7 +789,7 @@ void kunit_failed_assertion(struct kunit *test,
-> >         KUNIT_ASSERTION(test,                                                  \
-> >                         false,                                                 \
-> >                         kunit_fail_assert,                                     \
-> > -                       KUNIT_INIT_FAIL_ASSERT_STRUCT(test, assert_type),      \
-> > +                       KUNIT_INIT_FAIL_ASSERT_STRUCT(assert_type),      \
-> >                         fmt,                                                   \
-> >                         ##__VA_ARGS__)
-> >
-> > @@ -819,8 +819,7 @@ void kunit_failed_assertion(struct kunit *test,
-> >         KUNIT_ASSERTION(test,                                                  \
-> >                         !!(condition) == !!expected_true,                      \
-> >                         kunit_unary_assert,                                    \
-> > -                       KUNIT_INIT_UNARY_ASSERT_STRUCT(test,                   \
-> > -                                                      assert_type,            \
-> > +                       KUNIT_INIT_UNARY_ASSERT_STRUCT(assert_type,            \
-> >                                                        #condition,             \
-> >                                                        expected_true),         \
-> >                         fmt,                                                   \
-> > @@ -878,8 +877,7 @@ do {                                                                               \
-> >         KUNIT_ASSERTION(test,                                                  \
-> >                         __left op __right,                                     \
-> >                         assert_class,                                          \
-> > -                       ASSERT_CLASS_INIT(test,                                \
-> > -                                         assert_type,                         \
-> > +                       ASSERT_CLASS_INIT(assert_type,                         \
-> >                                           #op,                                 \
-> >                                           #left,                               \
-> >                                           __left,                              \
-> > @@ -1233,8 +1231,7 @@ do {                                                                             \
-> >         KUNIT_ASSERTION(test,                                                  \
-> >                         strcmp(__left, __right) op 0,                          \
-> >                         kunit_binary_str_assert,                               \
-> > -                       KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(test,              \
-> > -                                                       assert_type,           \
-> > +                       KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(assert_type,       \
-> >                                                         #op,                   \
-> >                                                         #left,                 \
-> >                                                         __left,                \
-> > @@ -1293,8 +1290,7 @@ do {                                                                             \
-> >         KUNIT_ASSERTION(test,                                                  \
-> >                         !IS_ERR_OR_NULL(__ptr),                                \
-> >                         kunit_ptr_not_err_assert,                              \
-> > -                       KUNIT_INIT_PTR_NOT_ERR_STRUCT(test,                    \
-> > -                                                     assert_type,             \
-> > +                       KUNIT_INIT_PTR_NOT_ERR_STRUCT(assert_type,             \
-> >                                                       #ptr,                    \
-> >                                                       __ptr),                  \
-> >                         fmt,                                                   \
-> > --
-> > 2.34.1.575.g55b058a8bb-goog
-> >
+> > >
+> > > https://elixir.bootlin.com/linux/v5.16/source/include/kunit/test.h#L788
+> > >
+> > > ?
+> > >
+> > > >  #define KUNIT_ASSERTION(test, pass, assert_class, INITIALIZER, fmt, ...) do {  \
+> > > > -       struct assert_class __assertion = INITIALIZER;                         \
+> > > > -       kunit_do_assertion(test,                                               \
+> > > > -                          &__assertion.assert,                                \
+> > > > -                          pass,                                               \
+> > > > -                          fmt,                                                \
+> > > > -                          ##__VA_ARGS__);                                     \
+> > > > +       if (!(pass)) {                                                         \
+> > > > +               struct assert_class __assertion = INITIALIZER;                 \
+> > > > +               kunit_failed_assertion(test,                                   \
+> > > > +                                      &__assertion.assert,                    \
+> > > > +                                      fmt,                                    \
+> > > > +                                      ##__VA_ARGS__);                         \
+> > > > +       }                                                                      \
+> > > >  } while (0)
+> > > >
+> > > >
+> > > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > > > index c7ed4aabec04..5ad671745483 100644
+> > > > --- a/lib/kunit/test.c
+> > > > +++ b/lib/kunit/test.c
+> > > > @@ -275,16 +275,11 @@ static void __noreturn kunit_abort(struct kunit *test)
+> > > >         WARN_ONCE(true, "Throw could not abort from test!\n");
+> > > >  }
+> > > >
+> > > > -void kunit_do_assertion(struct kunit *test,
+> > > > -                       struct kunit_assert *assert,
+> > > > -                       bool pass,
+> > > > -                       const char *fmt, ...)
+> > > > +void kunit_failed_assertion(struct kunit *test,
+> > > > +                           struct kunit_assert *assert,
+> > > > +                           const char *fmt, ...)
+> > > >  {
+> > > >         va_list args;
+> > > > -
+> > > > -       if (pass)
+> > > > -               return;
+> > > > -
+> > > >         va_start(args, fmt);
+> > > >
+> > > >         assert->message.fmt = fmt;
+> > > > @@ -297,7 +292,7 @@ void kunit_do_assertion(struct kunit *test,
+> > > >         if (assert->type == KUNIT_ASSERTION)
+> > > >                 kunit_abort(test);
+> > > >  }
+> > > > -EXPORT_SYMBOL_GPL(kunit_do_assertion);
+> > > > +EXPORT_SYMBOL_GPL(kunit_failed_assertion);
+> > > >
+> > > >  void kunit_init_test(struct kunit *test, const char *name, char *log)
+> > > >  {
+> > > > --
+> > > > 2.34.1.575.g55b058a8bb-goog
+> > > >
