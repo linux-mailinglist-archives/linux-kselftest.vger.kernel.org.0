@@ -2,97 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884E148C8EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jan 2022 17:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5764848CBA1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jan 2022 20:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiALQ5d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jan 2022 11:57:33 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:60381 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiALQ5b (ORCPT
+        id S1356913AbiALTMH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jan 2022 14:12:07 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37160 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356618AbiALTLD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jan 2022 11:57:31 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id C85C3240003;
-        Wed, 12 Jan 2022 16:57:25 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 17:57:25 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        Wed, 12 Jan 2022 14:11:03 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id D22501F453B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1642014661;
+        bh=ubIbtXQ1srjhhZkCWaAUTsQRTCKpUd7QlzP6ZpRxxWQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HL1786ePLgEJgkDu6ZP9kU8MNf6z3KGXPVwIKqN5n30Yrw2G3yjX6CHt0ujeGgkBV
+         i+GKHB8jta7NizChnpKgyzma4mbnTgtjdRwp8GPRnp9SsEFM4RWk8AeNLyTgW79fxD
+         1cT1L6O6e89GWWI2bKx2YKELelr0DhQiZNbc0fTc+VmzdamVDqX21QvfSA18M+fFIj
+         0vDchsoRcSJuQsym7AdLl6wACLuDXBeEecbXkrMMyiWZFTyuO0rHNFPMvDSHRX+KKQ
+         2gc3OwRJRkBUDCCnjvbE6DINCYK+ddD6VMOx33rZTw/UCHHOP2sd+/syyTyP4Roq5N
+         GhYjF8wZqg4HA==
+Date:   Wed, 12 Jan 2022 14:10:56 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
         <nfraprado@collabora.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Shuah Khan <shuah@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com
 Subject: Re: [PATCH] selftests: rtc: Increase test timeout so that all tests
  run
-Message-ID: <Yd8IdbGybWBOa5qe@piout.net>
+Message-ID: <20220112191056.c7gflbokgm2pispg@notapiano>
 References: <20220112165359.3206047-1-nfraprado@collabora.com>
+ <Yd8IdbGybWBOa5qe@piout.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220112165359.3206047-1-nfraprado@collabora.com>
+In-Reply-To: <Yd8IdbGybWBOa5qe@piout.net>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/01/2022 11:53:59-0500, Nícolas F. R. A. Prado wrote:
-> The timeout setting for the rtc kselftest is currently 90 seconds.
-> However, two of the tests set alarms, which take one minute to complete
-> each. So the timeout should be at least 120. Set it to 180, so that all
-> tests are able to complete and still have some slack.
+On Wed, Jan 12, 2022 at 05:57:25PM +0100, Alexandre Belloni wrote:
+> On 12/01/2022 11:53:59-0500, Nícolas F. R. A. Prado wrote:
+> > The timeout setting for the rtc kselftest is currently 90 seconds.
+> > However, two of the tests set alarms, which take one minute to complete
+> > each. So the timeout should be at least 120. Set it to 180, so that all
+> > tests are able to complete and still have some slack.
+> 
+> Hum, I don't get the logic from that, a test takes up to 60 seconds and
+> the timeout is 90s per test so we already have plenty of slack there.
 
-Hum, I don't get the logic from that, a test takes up to 60 seconds and
-the timeout is 90s per test so we already have plenty of slack there.
+Actually I did re-test locally and it is an issue since the 90s timeout is not
+per-test, but to the whole rtc test suite. Also it requires running the test
+through the selftest runner, and since the alarm is set to the next top of the
+minute, you might get lucky and it might all take less than 90 seconds.
 
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
-> 
-> This issue was discovered as part of adding the rtc kselftest to run on KernelCI
-> for the rk3399-gru-kevin device, which uses rtc-cros-ec as the RTC driver.
-> 
-> The output log with the current timeout is shown in [1]. As can be seen, the
-> whole test times out before the alarm_wkalm_set_minute test has had a chance to
-> complete:
-> 
-> 	# #  RUN           rtc.alarm_wkalm_set_minute ...
-> 	# # rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 11/01/2022 23:03:00.
-> 	#
-> 	not ok 1 selftests: rtc: rtctest # TIMEOUT 90 seconds
-> 
-> With the increased timeout, as shown in [2], the alarm_wkalm_set_minute test
-> does complete its run:
-> 
-> 	# #  RUN           rtc.alarm_wkalm_set_minute ...
-> 	# # rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 12/01/2022 15:54:00.
-> 	# #            OK  rtc.alarm_wkalm_set_minute
-> 	# ok 7 rtc.alarm_wkalm_set_minute
-> 	# # FAILED: 6 / 7 tests passed.
-> 
-> The fact that the alarm_alm_set_minute test times out on its own is probably an
-> issue with the rtc-cros-ec driver. Still, since the tests are independent, all
-> of them should be able to run regardless of how long each one takes (so,
-> assuming the worst case scenario).
-> 
-> [1] https://lava.collabora.co.uk/scheduler/job/5409783
-> [2] https://lava.collabora.co.uk/scheduler/job/5415176
-> 
->  tools/testing/selftests/rtc/settings | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
-> index ba4d85f74cd6..a953c96aa16e 100644
-> --- a/tools/testing/selftests/rtc/settings
-> +++ b/tools/testing/selftests/rtc/settings
-> @@ -1 +1 @@
-> -timeout=90
-> +timeout=180
-> -- 
-> 2.34.1
-> 
+However none of this was clear in my original commit message, so I'll send a v2
+with a better explanation.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+Nícolas
