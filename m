@@ -2,131 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C68D048DD6A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jan 2022 19:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2545B48E06E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jan 2022 23:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237464AbiAMSEM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jan 2022 13:04:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54866 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237440AbiAMSEL (ORCPT
+        id S238031AbiAMWi4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jan 2022 17:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238025AbiAMWi4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jan 2022 13:04:11 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20DHqsod027852;
-        Thu, 13 Jan 2022 18:04:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=h7PGYmYGOaS7whOzz2krlo4qhHm2j2+iN2wg1u9LGzo=;
- b=IugUQjNZbqI3tZpwi2Y5jTuSZwFgqmdjxbunCKZCJYFV56Gmj8Js7Ztgs2mCqhZ9DoV7
- ZmZfPRMgjpb3S6SJNopcGbp2WdHvyt73Vp705LYD60xXZ9ShaeAKXWPpCR9uzywhd/qo
- +ojjK6Ce0skaNzRPmJnVDG/jFFjE6UF/kXOLEMa74PJgaieNk44xZPM6oBgDztH4jVhf
- CYLZRwjyU6KkaI6LjC8THxoaHUsVp33k+Oc9ME4dIh7b9y4vSTJrkrOWdp/kNFAyIhf7
- kPHVXXSr64tLFiP08Vf7zo8uxA2heOpVbz4Y7jRa/wrCI1X0QZ+DTiKPMBzpKlLDS7mO gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djrv98716-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 18:04:07 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20DHu1qC009802;
-        Thu, 13 Jan 2022 18:04:07 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3djrv9870x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 18:04:07 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20DI3qek007408;
-        Thu, 13 Jan 2022 18:04:05 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 3df28bya1m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jan 2022 18:04:05 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20DI447v27066710
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Jan 2022 18:04:04 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F7F32806A;
-        Thu, 13 Jan 2022 18:04:04 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3544A28064;
-        Thu, 13 Jan 2022 18:04:04 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 13 Jan 2022 18:04:04 +0000 (GMT)
-Message-ID: <1e3b1e6f-6600-d77f-843b-f3d60e062192@linux.ibm.com>
-Date:   Thu, 13 Jan 2022 13:04:03 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
-Content-Language: en-US
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
- <YaVkw5dnCewnFybR@iki.fi>
- <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-In-Reply-To: <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VhrntTOZ2fUnC6cHeX1xOWCtbKldnM9b
-X-Proofpoint-ORIG-GUID: eYe9VVJM1UlquiHJWHJU8lBVaQ_VmqMM
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 13 Jan 2022 17:38:56 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D2CC061749
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 14:38:55 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id p37so1142998pfh.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 14:38:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=YbEI3Q/NEjCtDTVCV1jkA7nYNYBH/Wfa2wk3IkVyJko=;
+        b=TZSnmiKfh8lQHyoHB+yllzvEmA18to6wFnOGKYs0poMgePC/IzPQirrR4ktwaDnvqN
+         6MtgeXCy1yK/vlfiGBEgBcEWSdlaZhy13ZGg8bropI5LiWLT69uDg3RLIG4RAEnMei/e
+         OLsKu4ckBojbKLqXja5eQdc78QuplSbLUeUuR4YwQsmoJKPsmqAxP6kAsKKrhO2uloGx
+         jgBW3DLRyjuJTQuba5a1bywPT+79uteTY7MRR7+lTs5pNJAoJHK8njIEoPRz5bJHtGc4
+         HFHciKQwdRnv9OQdv5RacscrcPdsiz56D1dXGcQrq4Bp8NviqIrfWkgUqnbc+T36lHWO
+         JWDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=YbEI3Q/NEjCtDTVCV1jkA7nYNYBH/Wfa2wk3IkVyJko=;
+        b=huXoPkatvIDxbnBvbNoRVsRbiGJO6c/r3mTfGh0TkSwPED3cGTJVPFDNZUPxxFDiCB
+         07GtZJY3IZvRbyoLXZfn6MN3NAjQIJfES9FJC2jsHuhyLyrey+IHJcL1DR7EFGYdjirh
+         +Vfy1L+CTkpgJkBKv1plLP6WEYgJDOJUdXnrsDy46yhI5W4A1daj4lTmATldB+5kbAmj
+         IZkGsCidfdefBfwg1toxWg0zrAWo2MAc/TBsdc63vGWR2wylOruMFkcS0ZRVBoUQ655Q
+         IVqjKnf+wG0Uj8aU2yK1NslhTXQsxy+bJKL0TyjUYuY12B2i65s/h6QLIGMSMubw1Y5k
+         6+BA==
+X-Gm-Message-State: AOAM533C1dpl0+gJcriYxuG7AZiG5lcZW/Km+xMRIqyjXKIiNKe8c3dB
+        1aBRyw/CeT17pkrJvdJdowzAI3l7vCbBeFBv1kQ=
+X-Google-Smtp-Source: ABdhPJxV+CDcXMAaoBlObNCE+WkBdJZDSsiMXXJxSU4qLOl+5GP7wjtV5hGVQqePL03Cw94D/ZrqizECvr4TNYXN3v8=
+X-Received: by 2002:a05:6a00:26c5:b0:4bd:4ad6:9c71 with SMTP id
+ p5-20020a056a0026c500b004bd4ad69c71mr6167765pfw.45.1642113535225; Thu, 13 Jan
+ 2022 14:38:55 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-13_08,2022-01-13_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- adultscore=0 priorityscore=1501 spamscore=0 phishscore=0 mlxlogscore=822
- clxscore=1015 malwarescore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201130112
+Received: by 2002:a05:6a10:f38c:0:0:0:0 with HTTP; Thu, 13 Jan 2022 14:38:54
+ -0800 (PST)
+Reply-To: mchristophdaniel@gmail.com
+From:   Marcus Galois <marcus.galois@gmail.com>
+Date:   Thu, 13 Jan 2022 23:38:54 +0100
+Message-ID: <CANqBaXWLwHBNoawbz2tGySxar8jn5q2OzEiG-GjWCyVh=aJu6w@mail.gmail.com>
+Subject: Good News Finally.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Jarkko,
+Hello friend.
 
-   can you take this patch 1/2?
+You might find it so difficult to remember me, though it is indeed a
+very long time, I am much delighted to contact you again after a long
+period of time, I remember you despite circumstances that made things
+not worked out as we projected then. I want to inform you that the
+transaction we're doing together then finally worked out and I decided
+to contact you and to let you know because of your tremendous effort
+to make things work out then.
 
-  https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
+Meanwhile I must inform you that I'm presently in Caribbean Island for
+numerous business negotiation with some partners. with my sincere
+heart i have decided to compensate you with USD$900,000 for your
+dedication then on our transaction, you tried so much that period and
+I appreciated your effort. I wrote a cheque/check on your name, as
+soon as you receive it, you let me know.
 
-   Stefan
+Contact my secretary now on his email: mchristophdaniel@gmail.com
+Name: Mr. Christoph Daniel
 
+You are to forward to him your Name........ Address.......,Phone
+number......for shipment/dispatch of the cheque/Check to you
 
-On 12/23/21 20:12, Stefan Berger wrote:
-> Shuah,
->
->   are you going to take this fix here - only 1/2 ?
->
-> https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb 
->
->
->   Stefan
->
-> On 11/29/21 18:39, Jarkko Sakkinen wrote:
->> On Sat, Nov 27, 2021 at 11:10:51PM -0500, Stefan Berger wrote:
->>> From: Stefan Berger <stefanb@linux.ibm.com>
->>>
->>> Determine an available PCR bank to be used by a test case by 
->>> querying the
->>> capability TPM2_GET_CAP. The TPM2 returns TPML_PCR_SELECTIONS that
->>> contains an array of TPMS_PCR_SELECTIONs indicating available PCR banks
->>> and the bitmasks that show which PCRs are enabled in each bank. Collect
->>> the data in a dictionary. From the dictionary determine the PCR bank 
->>> that
->>> has the PCRs enabled that the test needs. This avoids test failures 
->>> with
->>> TPM2's that either to not have a SHA-1 bank or whose SHA-1 bank is
->>> disabled.
->>>
->>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->>
->> /Jarkko
+Regards,
+Mr. Marcus Galois
