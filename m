@@ -2,128 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF80748DA9A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jan 2022 16:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E745D48DC52
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jan 2022 17:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbiAMPVc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jan 2022 10:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
+        id S236951AbiAMQ7m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jan 2022 11:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236053AbiAMPVb (ORCPT
+        with ESMTP id S231269AbiAMQ7l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:21:31 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738DAC06161C;
-        Thu, 13 Jan 2022 07:21:31 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id z19so3176252ioj.1;
-        Thu, 13 Jan 2022 07:21:31 -0800 (PST)
+        Thu, 13 Jan 2022 11:59:41 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5CBC06161C
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 08:59:41 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id v48-20020a25abb3000000b006113ce63ed8so12370693ybi.22
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 08:59:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hKXDNPqj6gdEYMlDwoeecnOcDljaU6gXI4Mb+Rt+28U=;
-        b=Vi74UQhZn++PKnt5nrSk6Bkw8PTyQePjyiQBRXaeeVKABXcX0QzpShQMo45YCdU8MG
-         oKUSHWyFX70YqYt5rKlXjmPLAh2eXeVMulb3eoHPnjw47bQ5QnrNljzGeGBoDYJ3dyZ2
-         z6QcEEu4cixZO8eiWNhIhR1+j1B30hNmJUcfST/e8D9RHie4rbdp3TOdAneC+bpm31ad
-         TQ4jH3NjY2u2229Ed3gUili+bMQZVwcEnAm+Qrxx1ugYjpJDlqA8nUXpG5ibVxq/Hpky
-         EJPDOVj06GcFGColkCVJqp1EKH6pcSc9T3bhLaSm/6nnyKxAFwWPVVMjYM9zWDCChmtR
-         TgRA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=51TwYWlCVjLtcnMxIRndP7HWHkEk31I1oVO6dm0XZOE=;
+        b=sGkR6Hq5k59lCpoXjiW7ECByvuOuR1ZO2HO05yjfVR+1zvjs8WyihN6kJ88uuitVdL
+         vI7ZeFY7yH8ZrU8HEk95oHQY9DGxczR5eO1hw/et23GaztVqpsS4vshc79dDi5xwbYh8
+         fTY8paG/sgYOsCh/QRkkbEZwxDW+7VIkFGEqnnbJ+lRpurzKPXrPmHL+qY6wd0ERuZWQ
+         Cys7Iy0i5aeCseivOQUdLVvwDaS/1Pf1LFHl7sMI0mpt04EcbmOqazYUxxiAZJQb4M7N
+         p687MJ0iAkyC39kbA1zsmxFUFRMxgdnaT20U5CksXfYOaIseUiqNXrCWirIll0Th1gkf
+         88NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hKXDNPqj6gdEYMlDwoeecnOcDljaU6gXI4Mb+Rt+28U=;
-        b=ELMiQN/xWDWuYErgCEGjLLQ7tJrQv+jJcM5CIHH2TEGwyTr1J+iMA0st9tAE//imkt
-         xrTcsNEvQhnaaVU9PAG7Vv79WszrwKbrJTjnfi8p4aWVEgBA2n8FPwnUYNZdCGnh5Q8M
-         Fwsbtd01HzgeiK9BTatBN3hApiiMHhyYJi3kioJF7vTC6tGewSRBytacm1JJ8NPTnBys
-         zHnf1yfJZLV5LS22FTEp9LPfQVSMeZ5jzxYDdA9qbq+42Fbnydi/8eEiqVeHyU4YJJiK
-         T6UGyTus9oQs8r1lcYynh3PDaDPjjIHPBzx5XmAG8UYVlS/qiHUpCjG+K66/NsJx0Xoj
-         /gpA==
-X-Gm-Message-State: AOAM531XzX/xG5kppWeJ58o9yQCuJx7zOI/HuBwYzzk6R7668fjMg4na
-        I5/HQbkuf7clJEJkmbZLjME=
-X-Google-Smtp-Source: ABdhPJxutNrugiwBcJxztzoJQVwdZdbtjIkpwPZyziUuu/9hgY23/dOq8f89KzgcDkyBYcATBHaCdg==
-X-Received: by 2002:a05:6602:2dcf:: with SMTP id l15mr1215471iow.71.1642087290934;
-        Thu, 13 Jan 2022 07:21:30 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.58])
-        by smtp.googlemail.com with ESMTPSA id j7sm3290573iow.26.2022.01.13.07.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jan 2022 07:21:30 -0800 (PST)
-Message-ID: <8bde7cdc-6bd5-d50e-ea44-dfb480b88ca0@gmail.com>
-Date:   Thu, 13 Jan 2022 08:21:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 2/2] selftests: add option to list all available tests
-Content-Language: en-US
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211202022954.23545-1-lizhijian@cn.fujitsu.com>
- <20211202022954.23545-2-lizhijian@cn.fujitsu.com>
- <b76c51c6-80b6-c3ec-f416-f5e48aa5a6c5@fujitsu.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <b76c51c6-80b6-c3ec-f416-f5e48aa5a6c5@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=51TwYWlCVjLtcnMxIRndP7HWHkEk31I1oVO6dm0XZOE=;
+        b=zLL2AtdvbjDiobtJLs9B1fOZsdZUdKC6IyAj2YL9+dWdWpV/Mguzh6GA+bXep/CEpu
+         bxzk2vZ9Df7lbj803FByW0eusCEhdT8MlfX3trBiLvjefHtjdoKB2jradHWvnt4uS6za
+         zVS077TAla+kVMNN7TV0Ko0y+oT/Xgy/rM/Ik4svrJhpGI92I0VolpSleFrV3lz3n3xx
+         9/l7LjKR5IOePXnd82YcrRx+4QKPJMt8A8XUqIMwve6P+zq/IB1G9yEfkepLiUWT4e29
+         y+Eha5IiC0dieYp7F7HlHOIazC13zSjlSiwzxdRAvAVf9anea8PJ9PU2EiUwv18xC3Lz
+         37Rw==
+X-Gm-Message-State: AOAM5325YPaEETkep8GrjxKIyaHoOSF4E6g+QYORErpyc64QnFrqGzav
+        9FXUE+I0tcVzKW2jcMYN7EWtr4wIB0CQQg==
+X-Google-Smtp-Source: ABdhPJzRXQ1iNJrgYqJexjpuxTUBATG9/34Qa3zExxynTs7O+SWx69X9yBP5abVGsnuQ9WWC8jCDk4qH2C3jxg==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1a70:cede:4191:24bc])
+ (user=dlatypov job=sendgmr) by 2002:a25:3fc6:: with SMTP id
+ m189mr7438582yba.101.1642093180531; Thu, 13 Jan 2022 08:59:40 -0800 (PST)
+Date:   Thu, 13 Jan 2022 08:59:25 -0800
+Message-Id: <20220113165931.451305-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH v3 0/6] kunit: refactor assertions to use less stack
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        torvalds@linux-foundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/12/22 10:53 PM, lizhijian@fujitsu.com wrote:
-> ping
+*** BLURB HERE ***
+Every KUNIT_ASSERT/EXPECT() invocation puts a `kunit_assert` object onto
+the stack. The most common one is `kunit_binary_assert` which is 88
+bytes on UML. So in the cases where the compiler doesn't optimize this
+away, we can very quickly blow up the stack size.
 
-seems to have been lost in the void
+This series implements Linus' suggestion in [1].
+Namely, we split out the file, line number, and assert_type
+(EXPECT/ASSERT) out of kunit_assert.
 
-> 
-> 
-> On 02/12/2021 10:29, Li Zhijian wrote:
->> $ ./fcnal-test.sh -l
->> Test names: ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter
->> ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter
->> use_cases
->>
->> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
->> ---
->>   tools/testing/selftests/net/fcnal-test.sh | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
->> index 5cb59947eed2..7e78be99aa4c 100755
->> --- a/tools/testing/selftests/net/fcnal-test.sh
->> +++ b/tools/testing/selftests/net/fcnal-test.sh
->> @@ -3993,6 +3993,7 @@ usage: ${0##*/} OPTS
->>   	-4          IPv4 tests only
->>   	-6          IPv6 tests only
->>   	-t <test>   Test name/set to run
->> +	-l          List all available tests
->>   	-p          Pause on fail
->>   	-P          Pause after each test
->>   	-v          Be verbose
->> @@ -4006,10 +4007,15 @@ TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
->>   TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
->>   TESTS_OTHER="use_cases"
->>   
->> +list()
->> +{
->> +	echo "Test names: $TESTS_IPV4 $TESTS_IPV6 $TESTS_OTHER"
->> +}
+We can also drop the entirely unused `struct kunit *test` field, saving
+a bit more space as well.
 
-Just add the test list at the end of usage() like this:
+All together, sizeof(struct kunit_assert) went from 48 to 24 on UML.
+Note: the other assert types are bigger, see [2].
 
-@@ -4019,6 +4019,9 @@ usage: ${0##*/} OPTS
-        -p          Pause on fail
-        -P          Pause after each test
-        -v          Be verbose
-+
-+Tests:
-+       $TESTS_IPV4 $TESTS_IPV6 $TESTS_OTHER
- EOF
- }
+This series also adds in an example test that uses all the base
+KUNIT_EXPECT macros to both advertise their existence to new users and
+serve as a smoketest for all these changes here.
+
+[1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+[2] e.g. consider the most commonly used assert (also the biggest)
+  struct kunit_binary_assert {
+          struct kunit_assert assert;
+          const char *operation;
+          const char *left_text;
+          long long left_value;
+          const char *right_text;
+          long long right_value;
+  };
+So sizeof(struct kunit_binary_assert) = went from 88 to 64.
+I.e. only a 27% reduction instead of 50% in the most common case.
+
+All 3 of the `const char*` could be split out into a `static` var as well,
+but that's a bit trickier to do with how all the macros are written.
+
+=== Changelog ===
+v1 -> v2:
+* made the new example test more focused on documenting the macros
+rather than using them all as a smoketest
+* s/kunit_failed_assertion()/kunit_do_failed_assertion()
+* added `unlikely()` to `if(!(pass))` check in KUNIT_ASSERTION()
+
+v2 -> v3:
+* elaborate on intermediate TODO in patch 5 (deleted in patch 6)
+* update with more Reviewed-by's
 
 
+Daniel Latypov (6):
+  kunit: add example test case showing off all the expect macros
+  kunit: move check if assertion passed into the macros
+  kunit: drop unused kunit* field in kunit_assert
+  kunit: factor out kunit_base_assert_format() call into kunit_fail()
+  kunit: split out part of kunit_assert into a static const
+  kunit: drop unused assert_type from kunit_assert and clean up macros
+
+ include/kunit/assert.h         | 88 +++++++++++-----------------------
+ include/kunit/test.h           | 53 ++++++++++----------
+ lib/kunit/assert.c             | 15 ++----
+ lib/kunit/kunit-example-test.c | 42 ++++++++++++++++
+ lib/kunit/test.c               | 27 +++++------
+ 5 files changed, 117 insertions(+), 108 deletions(-)
+
+
+base-commit: ad659ccb5412874c6a89d3588cb18857c00e9d0f
+-- 
+2.34.1.703.g22d0c6ccf7-goog
 
