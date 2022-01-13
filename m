@@ -2,52 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E745D48DC52
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jan 2022 17:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4AB48DC55
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jan 2022 17:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbiAMQ7m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jan 2022 11:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S236954AbiAMQ7v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jan 2022 11:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiAMQ7l (ORCPT
+        with ESMTP id S236930AbiAMQ7u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jan 2022 11:59:41 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5CBC06161C
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 08:59:41 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id v48-20020a25abb3000000b006113ce63ed8so12370693ybi.22
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 08:59:41 -0800 (PST)
+        Thu, 13 Jan 2022 11:59:50 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73552C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 08:59:50 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id v66-20020a256145000000b006115377709aso12514791ybb.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jan 2022 08:59:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=51TwYWlCVjLtcnMxIRndP7HWHkEk31I1oVO6dm0XZOE=;
-        b=sGkR6Hq5k59lCpoXjiW7ECByvuOuR1ZO2HO05yjfVR+1zvjs8WyihN6kJ88uuitVdL
-         vI7ZeFY7yH8ZrU8HEk95oHQY9DGxczR5eO1hw/et23GaztVqpsS4vshc79dDi5xwbYh8
-         fTY8paG/sgYOsCh/QRkkbEZwxDW+7VIkFGEqnnbJ+lRpurzKPXrPmHL+qY6wd0ERuZWQ
-         Cys7Iy0i5aeCseivOQUdLVvwDaS/1Pf1LFHl7sMI0mpt04EcbmOqazYUxxiAZJQb4M7N
-         p687MJ0iAkyC39kbA1zsmxFUFRMxgdnaT20U5CksXfYOaIseUiqNXrCWirIll0Th1gkf
-         88NQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=56DWaENCHRMghpIV1icK93qpW14DeDvo1W7ZsO3A1B8=;
+        b=I5pIXTSreNu/k26AmGVwEGt4v2BG9gVUdimQLEIzP2yDG+po2TLOs8+n4YOx7yafNx
+         E8KY4MlzJmUK98afez6V5EOJ6cg9vnJZEpzFozgu3RpBLLKFL2ZAMyEQ5Ybv2FC6rx01
+         gHNbsI8qIatOXJzxeophN43v6akkKvTXePv4lo166QpDR3qW5S77cfKrR5YrqIf+7ETL
+         c5kcdJ7XDmEG4h43G8IEjhBQgcLU3mXJPRG1qZKsXCbpmGWRaMBNYfomH0oBzuU+LI2k
+         c6fvCz6kcKq0rJfAKNKVa8NDqdeHuhFdPL24YobQJeVRfJbziWiEVjpf7SDlJ9+xxFbX
+         KmYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=51TwYWlCVjLtcnMxIRndP7HWHkEk31I1oVO6dm0XZOE=;
-        b=zLL2AtdvbjDiobtJLs9B1fOZsdZUdKC6IyAj2YL9+dWdWpV/Mguzh6GA+bXep/CEpu
-         bxzk2vZ9Df7lbj803FByW0eusCEhdT8MlfX3trBiLvjefHtjdoKB2jradHWvnt4uS6za
-         zVS077TAla+kVMNN7TV0Ko0y+oT/Xgy/rM/Ik4svrJhpGI92I0VolpSleFrV3lz3n3xx
-         9/l7LjKR5IOePXnd82YcrRx+4QKPJMt8A8XUqIMwve6P+zq/IB1G9yEfkepLiUWT4e29
-         y+Eha5IiC0dieYp7F7HlHOIazC13zSjlSiwzxdRAvAVf9anea8PJ9PU2EiUwv18xC3Lz
-         37Rw==
-X-Gm-Message-State: AOAM5325YPaEETkep8GrjxKIyaHoOSF4E6g+QYORErpyc64QnFrqGzav
-        9FXUE+I0tcVzKW2jcMYN7EWtr4wIB0CQQg==
-X-Google-Smtp-Source: ABdhPJzRXQ1iNJrgYqJexjpuxTUBATG9/34Qa3zExxynTs7O+SWx69X9yBP5abVGsnuQ9WWC8jCDk4qH2C3jxg==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=56DWaENCHRMghpIV1icK93qpW14DeDvo1W7ZsO3A1B8=;
+        b=q4S6/+/wBbzdNUUhY/zVumXTfmuirBM4xbZKG1dEJ6/tkiP7UDuPVQ2LzGC6Nzgina
+         780Wep3WD15yWaZT/IRCcVahHlXvVIp1DbF14bIJ95JH7oEz465ndN708HfpYTKKnY6X
+         zFN7aO2zPAc9XMkthSBodiCOw4VqYAFpvIRfNtfywBgjF873Ga4C+6XbCMKoD8WIf9VY
+         9GXm9XegypEC4n5P3Uy/kVAg4/JyYUFWPW9nEH7VHCT08WTxqalgiGThJcceeVJmoQMS
+         n3QR+av3uocnrZGKbkW0IUm1KVPqVe+nGF21wZjZQ85yNZLuAPe0ie+x1lizNIYkiokG
+         Lpjg==
+X-Gm-Message-State: AOAM532E2KkRN1Tg2TtsipU9WnS5DM2INGV5HrwqtTnlOtGjAwXDKZRM
+        2LGX10jEzh98H8ldYHYW8WxO0g/h1eo1Vw==
+X-Google-Smtp-Source: ABdhPJxDCZZzIiLvvsZPEjr3S2+pReXde9HWQEBJ9XM+CW88mx/JVvUESeOutwQOk0fo1RWu6+F2h/2Em9LB7Q==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:1a70:cede:4191:24bc])
- (user=dlatypov job=sendgmr) by 2002:a25:3fc6:: with SMTP id
- m189mr7438582yba.101.1642093180531; Thu, 13 Jan 2022 08:59:40 -0800 (PST)
-Date:   Thu, 13 Jan 2022 08:59:25 -0800
-Message-Id: <20220113165931.451305-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a25:c8c3:: with SMTP id
+ y186mr7255985ybf.20.1642093189705; Thu, 13 Jan 2022 08:59:49 -0800 (PST)
+Date:   Thu, 13 Jan 2022 08:59:26 -0800
+In-Reply-To: <20220113165931.451305-1-dlatypov@google.com>
+Message-Id: <20220113165931.451305-2-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20220113165931.451305-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH v3 0/6] kunit: refactor assertions to use less stack
+Subject: [PATCH v3 1/6] kunit: add example test case showing off all the
+ expect macros
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -58,71 +63,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-*** BLURB HERE ***
-Every KUNIT_ASSERT/EXPECT() invocation puts a `kunit_assert` object onto
-the stack. The most common one is `kunit_binary_assert` which is 88
-bytes on UML. So in the cases where the compiler doesn't optimize this
-away, we can very quickly blow up the stack size.
+Currently, these macros are only really documented near the bottom of
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html#c.KUNIT_FAIL.
 
-This series implements Linus' suggestion in [1].
-Namely, we split out the file, line number, and assert_type
-(EXPECT/ASSERT) out of kunit_assert.
+E.g. it's likely someone might just not realize that
+KUNIT_EXPECT_STREQ() exists and instead use KUNIT_EXPECT_FALSE(strcmp())
+or similar.
 
-We can also drop the entirely unused `struct kunit *test` field, saving
-a bit more space as well.
+This can also serve as a basic smoketest that the KUnit assert machinery
+still works for all the macros.
 
-All together, sizeof(struct kunit_assert) went from 48 to 24 on UML.
-Note: the other assert types are bigger, see [2].
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+ lib/kunit/kunit-example-test.c | 42 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-This series also adds in an example test that uses all the base
-KUNIT_EXPECT macros to both advertise their existence to new users and
-serve as a smoketest for all these changes here.
-
-[1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
-[2] e.g. consider the most commonly used assert (also the biggest)
-  struct kunit_binary_assert {
-          struct kunit_assert assert;
-          const char *operation;
-          const char *left_text;
-          long long left_value;
-          const char *right_text;
-          long long right_value;
-  };
-So sizeof(struct kunit_binary_assert) = went from 88 to 64.
-I.e. only a 27% reduction instead of 50% in the most common case.
-
-All 3 of the `const char*` could be split out into a `static` var as well,
-but that's a bit trickier to do with how all the macros are written.
-
-=== Changelog ===
-v1 -> v2:
-* made the new example test more focused on documenting the macros
-rather than using them all as a smoketest
-* s/kunit_failed_assertion()/kunit_do_failed_assertion()
-* added `unlikely()` to `if(!(pass))` check in KUNIT_ASSERTION()
-
-v2 -> v3:
-* elaborate on intermediate TODO in patch 5 (deleted in patch 6)
-* update with more Reviewed-by's
-
-
-Daniel Latypov (6):
-  kunit: add example test case showing off all the expect macros
-  kunit: move check if assertion passed into the macros
-  kunit: drop unused kunit* field in kunit_assert
-  kunit: factor out kunit_base_assert_format() call into kunit_fail()
-  kunit: split out part of kunit_assert into a static const
-  kunit: drop unused assert_type from kunit_assert and clean up macros
-
- include/kunit/assert.h         | 88 +++++++++++-----------------------
- include/kunit/test.h           | 53 ++++++++++----------
- lib/kunit/assert.c             | 15 ++----
- lib/kunit/kunit-example-test.c | 42 ++++++++++++++++
- lib/kunit/test.c               | 27 +++++------
- 5 files changed, 117 insertions(+), 108 deletions(-)
-
-
-base-commit: ad659ccb5412874c6a89d3588cb18857c00e9d0f
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index 51099b0ca29c..4bbf37c04eba 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -69,6 +69,47 @@ static void example_mark_skipped_test(struct kunit *test)
+ 	/* This line should run */
+ 	kunit_info(test, "You should see this line.");
+ }
++
++/*
++ * This test shows off all the types of KUNIT_EXPECT macros.
++ */
++static void example_all_expect_macros_test(struct kunit *test)
++{
++	/* Boolean assertions */
++	KUNIT_EXPECT_TRUE(test, true);
++	KUNIT_EXPECT_FALSE(test, false);
++
++	/* Integer assertions */
++	KUNIT_EXPECT_EQ(test, 1, 1); /* check == */
++	KUNIT_EXPECT_GE(test, 1, 1); /* check >= */
++	KUNIT_EXPECT_LE(test, 1, 1); /* check <= */
++	KUNIT_EXPECT_NE(test, 1, 0); /* check != */
++	KUNIT_EXPECT_GT(test, 1, 0); /* check >  */
++	KUNIT_EXPECT_LT(test, 0, 1); /* check <  */
++
++	/* Pointer assertions */
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, test);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, NULL);
++	KUNIT_EXPECT_PTR_NE(test, test, NULL);
++
++	/* String assertions */
++	KUNIT_EXPECT_STREQ(test, "hi", "hi");
++	KUNIT_EXPECT_STRNEQ(test, "hi", "bye");
++
++	/*
++	 * There are also ASSERT variants of all of the above that abort test
++	 * execution if they fail. Useful for memory allocations, etc.
++	 */
++	KUNIT_ASSERT_GT(test, sizeof(char), 0);
++
++	/*
++	 * There are also _MSG variants of all of the above that let you include
++	 * additional text on failure.
++	 */
++	KUNIT_EXPECT_GT_MSG(test, sizeof(int), 0, "Your ints are 0-bit?!");
++	KUNIT_ASSERT_GT_MSG(test, sizeof(int), 0, "Your ints are 0-bit?!");
++}
++
+ /*
+  * Here we make a list of all the test cases we want to add to the test suite
+  * below.
+@@ -83,6 +124,7 @@ static struct kunit_case example_test_cases[] = {
+ 	KUNIT_CASE(example_simple_test),
+ 	KUNIT_CASE(example_skip_test),
+ 	KUNIT_CASE(example_mark_skipped_test),
++	KUNIT_CASE(example_all_expect_macros_test),
+ 	{}
+ };
+ 
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 
