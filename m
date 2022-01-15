@@ -2,72 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D42148F2E9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jan 2022 00:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B519148F429
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jan 2022 02:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiANXVm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jan 2022 18:21:42 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34116 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiANXVm (ORCPT
+        id S232027AbiAOBaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jan 2022 20:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229584AbiAOBaK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jan 2022 18:21:42 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 56AB71F46D79
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642202501;
-        bh=IG6R5uw0yb3VLWtgH6sIypdBw8QjZrLQPe1BTwKhfbI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hIfQ6LPv3hxOBrIzE+2fY+y+U+gAwIVNKl5BeY1UMT2Tzf/VfiKoelgFvpydPfVeu
-         YOgyyYx/a3JMIQnw1tpFjjmhNLc+1cye4D6C0e9/o8WFtEpO4Nl0CKYnIazi2QlyAX
-         EZc7ApWAQ/t0NTFv6RCOah2tBe/Y9iEHMrdiFlmUnNJWzyTs0HA65nOWdNbY+VSeWp
-         YMcuwxnEjxUkQhzm0ODVW2R8a+RYWiJlfUndo/JP9VAomYg6iu3T5DDC3fO2bwXPx/
-         NDdONaiKwFH9C4KUbkZjpHERQVv0HHyd0F4gNI3SsnOLqwiOusXcRKpIQ/3kX+5Wz7
-         yPHG312/z/VmQ==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-Subject: [PATCH] selftests: cpufreq: Write test output to stdout as well
-Date:   Fri, 14 Jan 2022 18:21:26 -0500
-Message-Id: <20220114232126.92043-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 14 Jan 2022 20:30:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C6C061574;
+        Fri, 14 Jan 2022 17:30:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F11F5620D9;
+        Sat, 15 Jan 2022 01:30:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C6D9C36AEA;
+        Sat, 15 Jan 2022 01:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642210209;
+        bh=jaeXbZMuIfqzwYIZi0iIZBP3+PIHLNTDh33oru99wiM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=V5D75XsazkAYpHFDzf5HTUvzndjUVuW3trJxE3XRPqlGlu5ETovGQSjchxTtgAe2q
+         eMWVHGLENn/QHNHR0xUEqaf5cBv0AJi34lYScoCu9JKKMcV1gexobGgCV4YIdnlMJ1
+         eFW0h2SPF2rz7C8BJ1wxcz7VyWpKg1e1fITor9TxWE8Mw0SnrHZ1tzbCO+uR9GwOnP
+         2C/p1WJNT2O+YCLVvKf27YNvDwlIIpMhhfq4zW7AguS3OEWT5sa/2pSCJj6q9lP5O3
+         fcmaaZlLSWkGE0GGYTEjj13zIiLfF8sgvC3IgTMD0vy51CaG8wuS/tU1vxXX05T2E+
+         7rE7O1JZHwlRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3774FF6079B;
+        Sat, 15 Jan 2022 01:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] test: selftests: remove unused various in
+ sockmap_verdict_prog.c
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164221020922.14883.7115689326424030782.git-patchwork-notify@kernel.org>
+Date:   Sat, 15 Jan 2022 01:30:09 +0000
+References: <20220113031658.633290-1-imagedong@tencent.com>
+In-Reply-To: <20220113031658.633290-1-imagedong@tencent.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        davemarchevsky@fb.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, imagedong@tencent.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use 'tee' to send the test output to stdout in addition to the current
-output file. This makes the output easier to handle in automated test
-systems and is superior to only later dumping the output file contents
-to stdout, since this way the test output can be interleaved with other
-log messages, like from the kernel, so that chronology is preserved,
-making it easier to detect issues.
+Hello:
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- tools/testing/selftests/cpufreq/main.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
-index 31f8c9a76c5f..60ce18ed0666 100755
---- a/tools/testing/selftests/cpufreq/main.sh
-+++ b/tools/testing/selftests/cpufreq/main.sh
-@@ -194,5 +194,5 @@ prerequisite
- 
- # Run requested functions
- clear_dumps $OUTFILE
--do_test >> $OUTFILE.txt
-+do_test | tee -a $OUTFILE.txt
- dmesg_dumps $OUTFILE
+On Thu, 13 Jan 2022 11:16:58 +0800 you wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> 'lport' and 'rport' in bpf_prog1() of sockmap_verdict_prog.c is not
+> used, just remove them.
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] test: selftests: remove unused various in sockmap_verdict_prog.c
+    https://git.kernel.org/bpf/bpf-next/c/e80f2a0d1946
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
