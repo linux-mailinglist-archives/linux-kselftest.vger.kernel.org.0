@@ -2,78 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B242D48F81F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Jan 2022 18:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE79748FA2A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Jan 2022 02:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiAORCw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 15 Jan 2022 12:02:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52722 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiAORCt (ORCPT
+        id S234048AbiAPB1V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Jan 2022 20:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234022AbiAPB1U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Jan 2022 12:02:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20FA660E98;
-        Sat, 15 Jan 2022 17:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08339C36AEA;
-        Sat, 15 Jan 2022 17:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642266168;
-        bh=lbcKM5IskQWWFzlg/kckGAMSE3TDu0u/GgkckYbyE9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VWkO1fSTwWIB5yIp5wZtkwR3dsraY1y1zumsLrKc6uxe+Di0Q177JbPUQyG7fopnB
-         4zioVHKPIJ0DkOVzIjCrRFMkwX/OrC1jp8BR9ahAQONHqTXFARqp6SfHf9bS9GnIcH
-         MofqRFVMoxBNR9VzRSmZA6YI35sgYgODxxgsfosva5QUsWB/33H23aWHndxsNJqAyA
-         HBZ7h6OpSpM8AFQGW5q26hzaFEorRtfDVzzJXabB9ansjDOg77k/gTyHJfh2G3dour
-         NUIl0OgH3mSGDsykF0T/jO4rErq+h6tNLrP414v7pobDteRdgossCn5cFSvWAcvUIn
-         CNjTMYXCLo5AQ==
-Date:   Sat, 15 Jan 2022 19:02:35 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
-Message-ID: <YeL+K9lQAwEyw4c7@iki.fi>
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
- <YaVkw5dnCewnFybR@iki.fi>
- <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
- <1e3b1e6f-6600-d77f-843b-f3d60e062192@linux.ibm.com>
- <YeLt7hbm6aIMeWBE@iki.fi>
+        Sat, 15 Jan 2022 20:27:20 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6EDC061574;
+        Sat, 15 Jan 2022 17:27:20 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id s15so6366646pfw.1;
+        Sat, 15 Jan 2022 17:27:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fVNk1oSC2wmUwoQeO0W1p6ZN64nd0MuS2ZCKpwibvj4=;
+        b=GNZE6fOKDnUfdraKk5RMFrgn9lwisSNz9qvP3BqHa7m9ijXROEICvFS/tlJWK8yENJ
+         DUxZsUOoNoauCkntdnUV+vdr9ED1siJYrLHxrlLJrV40p/bNWNwXPe2n3iz0WpOQzyoG
+         Q/rrfTGoFtQKQ8nxsF0FWg0cJoH7Dm7PCbRWeDPIYG5Mx7VEl/llYyqNAUfx2sFLo63/
+         KW2ucz0iP3QH/bmMGkbInDU5JhuCZNOFDsTD6N9W5uuzxHIJQeKiqg96AJ+yh1TGSJwW
+         u24vuoUUqdoDSyUc8bVXG9Wl0A04BEvpLxXOtE0+niVckGUpF6fqbIgXxw1GEtDqnhKM
+         /6mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fVNk1oSC2wmUwoQeO0W1p6ZN64nd0MuS2ZCKpwibvj4=;
+        b=mjR94hV5zRkHeClYCQI5Ny7ZvflpI2CXrJprFhfUxkPjxf6zA0u8ci/Y17Tm1nE6Ev
+         ef7bAJiSjaoFHmyqUlH8Ih2U02KHEf0bnSsTHK7cYU/B8OP0vJsDJH7rDiT/3MARsYIr
+         mOOSYSVOdRaWzt1reYFoiOzBvN7MKt+Sy5IDyH2u2kuhdaNX7EXXw12eGJ8UO748TKX1
+         8rKigI5bI2DdBJgVn3Y4a+79h3t0krWh1Cw2VGShMZCu4ugZroq1VDqzjJul/7CMkbF2
+         lRZCjHu39dmoI4HWkjKQvUfFXu5O4pu8beM3hgy0lyMacagYw3Tzy8TPz6YOo2KwQJTL
+         5d6A==
+X-Gm-Message-State: AOAM532AUI7Ijg5kIlz+pEwiBxPAHREPhdh85uZSXpzPvgOJmx8qpROq
+        JHNPrykwuAk3r+6qPY1oxOemTO3iE/w7xxQRz/8=
+X-Google-Smtp-Source: ABdhPJwusC2Ptee2VAtRyN8/4WCPspEyEzpVkFcqIlTzBenyInh58k+gHcrFVc+c2xZNXscINK2gYw==
+X-Received: by 2002:a63:6f08:: with SMTP id k8mr13368971pgc.51.1642296439601;
+        Sat, 15 Jan 2022 17:27:19 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id ot18sm9478939pjb.8.2022.01.15.17.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jan 2022 17:27:19 -0800 (PST)
+From:   Tadeusz Struk <tstruk@gmail.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Tadeusz Struk <tstruk@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/2] selftests: tpm: add async space test with noneexisting handle
+Date:   Sat, 15 Jan 2022 17:26:27 -0800
+Message-Id: <20220116012627.2031-2-tstruk@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220116012627.2031-1-tstruk@gmail.com>
+References: <20220116012627.2031-1-tstruk@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YeLt7hbm6aIMeWBE@iki.fi>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 05:53:18PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Jan 13, 2022 at 01:04:03PM -0500, Stefan Berger wrote:
-> > Jarkko,
-> > 
-> >   can you take this patch 1/2?
-> > 
-> >  https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
-> > 
-> >   Stefan
-> 
-> Oops. Sorry, I missed your request at 23rd.
-> 
-> Yes, we can for sure take that. I now tested by with SHA256 only
-> configuration so:
-> 
-> Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> I'm considering 5.17-rc2 pull rquest but want to leave the final
-> decision to the time when it can be sent. If I'll make rc2 PR in
-> the first place, I'll include this to the pull request.
+Add a test for /dev/tpmrm0 in async mode that checks if
+the code handles invalid handles correctly.
 
-OK, it's now applied, thank you.
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>
+Cc: <linux-kselftest@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
 
-BR, Jarkko
+Tested-by: Jarkko Sakkinen<jarkko@kernel.org>
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+---
+Changed in v2:
+- Updated commit message
+Changed in v3:
+- Fixed typo in the function name
+---
+ tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+index 9d764306887b..340ffef97fb6 100644
+--- a/tools/testing/selftests/tpm2/tpm2_tests.py
++++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+@@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
+         log.debug("Calling get_cap in a NON_BLOCKING mode")
+         async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
+         async_client.close()
++
++    def test_flush_invalid_context(self):
++        log = logging.getLogger(__name__)
++        log.debug(sys._getframe().f_code.co_name)
++
++        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
++        log.debug("Calling flush_context passing in an invalid handle ")
++        handle = 0x80123456
++        rc = 0
++        try:
++            async_client.flush_context(handle)
++        except OSError as e:
++            rc = e.errno
++
++        self.assertEqual(rc, 22)
++        async_client.close()
+-- 
+2.30.2
+
