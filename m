@@ -2,128 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768B9491124
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jan 2022 21:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596EB491182
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jan 2022 23:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiAQUzI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 15:55:08 -0500
-Received: from mail.efficios.com ([167.114.26.124]:52280 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiAQUzH (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 15:55:07 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id EAA29304BC6;
-        Mon, 17 Jan 2022 15:55:06 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id QluqGJmTO6uJ; Mon, 17 Jan 2022 15:55:06 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 4619E304AEF;
-        Mon, 17 Jan 2022 15:55:06 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4619E304AEF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1642452906;
-        bh=d49ncy0MXhPyV6I9UPtc4gs6gA7dVv8m6XtsJokPBKU=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=d/79NZ52WwiKIxEapfaX+yLqxzvEKc6VhLDVj90p5e130fe2PVoqRV7IYGfk/uQED
-         55pI8uGyxodadvKVkngAy+Eif/57C/4xK39CnuuZaVAT9L5ZT6jV/sDKJ9/r+b9F3w
-         x/U2M9qSNicNSU+BVStFnxr6xPfQE7JE166pLzdtkqg5w1Fvrz/GnvUM1BZwDEYI7M
-         f2Fd76Rz9y/kxcZbmTPikw1p2twlyRPpsg8cr7HR+FwZBNHEFwbqzhJcmW2DoCcK/U
-         n60uRR7O/GSW5SxtFnk6Tye1EsaL9oCmcEPM6DS60J3q8CV2WC3zxOM7Xu5s1tIjot
-         dpidoz/UiaFBw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xbVVbWiXWtg3; Mon, 17 Jan 2022 15:55:06 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 30BB1304E48;
-        Mon, 17 Jan 2022 15:55:06 -0500 (EST)
-Date:   Mon, 17 Jan 2022 15:55:06 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>
-Message-ID: <1701683017.40984.1642452906075.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220117203925.12164-1-mathieu.desnoyers@efficios.com>
-References: <20220117203925.12164-1-mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH 0/5] RSEQ selftests uplift for glibc-2.35
- compatibility
+        id S243422AbiAQWAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 17:00:34 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:39691 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231401AbiAQWAd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jan 2022 17:00:33 -0500
+Received: from [192.168.0.4] (ip5f5aea84.dynamic.kabel-deutschland.de [95.90.234.132])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D75F961EA1BE5;
+        Mon, 17 Jan 2022 23:00:30 +0100 (CET)
+Message-ID: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+Date:   Mon, 17 Jan 2022 23:00:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: RSEQ selftests uplift for glibc-2.35 compatibility
-Thread-Index: WM5Grb2V34t+nrcJuSFSG2JwO5Q8PA==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Problems with rcutorture on ppc64le: allmodconfig(2) and other
+ failures
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ I should really have CC'd the selftests maintainer and mailing list.
-  Adding them in Cc to patch 0/5 to bring this series to their attention. ]
+Dear Linux folks,
 
------ On Jan 17, 2022, at 3:39 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 
-> glibc-2.35 will be released on 2022-02-01. It introduces a user-space ABI
-> based on the thread pointer to access a reserved area of the TCB.
-> 
-> The rseq selftests originally expected the rseq thread data to sit in a
-> __rseq_abi TLS variable.
-> 
-> Considering that the rseq ABI only allows a single rseq registration per
-> thread, both cannot actively coexist in a process.
-> 
-> Adapt the selftests librseq implementation to become compatible with
-> glibc-2.35. Keep a fallback implementation based on TLS available when
-> an older glibc is detected.
-> 
-> Feedback is welcome,
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> Mathieu Desnoyers (5):
->  selftests/rseq: Remove useless assignment to cpu variable
->  selftests/rseq: Remove volatile from __rseq_abi
->  selftests/rseq: Introduce rseq_get_abi() helper
->  selftests/rseq: Introduce thread pointer getters
->  selftests/rseq: Uplift rseq selftests for compatibility with
->    glibc-2.35
-> 
-> tools/testing/selftests/rseq/Makefile         |   2 +-
-> tools/testing/selftests/rseq/param_test.c     |   4 +-
-> tools/testing/selftests/rseq/rseq-arm.h       |  32 ++--
-> tools/testing/selftests/rseq/rseq-arm64.h     |  32 ++--
-> .../rseq/rseq-generic-thread-pointer.h        |  25 +++
-> tools/testing/selftests/rseq/rseq-mips.h      |  32 ++--
-> .../selftests/rseq/rseq-ppc-thread-pointer.h  |  30 ++++
-> tools/testing/selftests/rseq/rseq-ppc.h       |  32 ++--
-> tools/testing/selftests/rseq/rseq-s390.h      |  24 +--
-> .../selftests/rseq/rseq-thread-pointer.h      |  19 +++
-> .../selftests/rseq/rseq-x86-thread-pointer.h  |  40 +++++
-> tools/testing/selftests/rseq/rseq-x86.h       |  30 ++--
-> tools/testing/selftests/rseq/rseq.c           | 161 +++++++++---------
-> tools/testing/selftests/rseq/rseq.h           |  24 ++-
-> 14 files changed, 302 insertions(+), 185 deletions(-)
-> create mode 100644 tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
-> create mode 100644 tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
-> create mode 100644 tools/testing/selftests/rseq/rseq-thread-pointer.h
-> create mode 100644 tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
-> 
-> --
-> 2.17.1
+On an IBM S822LC SL822 (ppc64le) with Ubuntu 21.04, I tried to torture 
+the RCU. allmodconfig(2) failed though.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+```
+$ git describe
+v5.16-10660-g0c947b893d69
+$ tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+  ---  tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+  --- Results directory:  2022.01.17-18.44.36-torture
+  --- allmodconfig: Start Mon Jan 17 06:44:36 PM CET 2022
+  --- rcutorture: Start Mon Jan 17 06:45:02 PM CET 2022
+  --- rcutorture-kasan: Start Mon Jan 17 07:07:41 PM CET 2022
+  --- locktorture: Start Mon Jan 17 07:33:38 PM CET 2022
+  --- locktorture-kasan: Start Mon Jan 17 07:37:05 PM CET 2022
+  --- scftorture: Start Mon Jan 17 07:40:54 PM CET 2022
+  --- scftorture-kasan: Start Mon Jan 17 07:43:31 PM CET 2022
+  --- refscale-rcu: Start Mon Jan 17 07:46:34 PM CET 2022
+  --- refscale-rcu-kasan: Start Mon Jan 17 07:49:08 PM CET 2022
+  --- refscale-srcu: Start Mon Jan 17 07:52:05 PM CET 2022
+  --- refscale-srcu-kasan: Start Mon Jan 17 07:54:39 PM CET 2022
+  --- refscale-rcu-tasks: Start Mon Jan 17 07:57:35 PM CET 2022
+  --- refscale-rcu-tasks-kasan: Start Mon Jan 17 08:00:10 PM CET 2022
+  --- refscale-rcu-trace: Start Mon Jan 17 08:03:06 PM CET 2022
+  --- refscale-rcu-trace-kasan: Start Mon Jan 17 08:05:40 PM CET 2022
+  --- refscale-refcnt: Start Mon Jan 17 08:08:40 PM CET 2022
+  --- refscale-refcnt-kasan: Start Mon Jan 17 08:11:15 PM CET 2022
+  --- refscale-rwlock: Start Mon Jan 17 08:14:14 PM CET 2022
+  --- refscale-rwlock-kasan: Start Mon Jan 17 08:16:48 PM CET 2022
+  --- refscale-rwsem: Start Mon Jan 17 08:19:45 PM CET 2022
+  --- refscale-rwsem-kasan: Start Mon Jan 17 08:22:18 PM CET 2022
+  --- refscale-lock: Start Mon Jan 17 08:25:17 PM CET 2022
+  --- refscale-lock-kasan: Start Mon Jan 17 08:27:53 PM CET 2022
+  --- refscale-lock-irq: Start Mon Jan 17 08:30:58 PM CET 2022
+  --- refscale-lock-irq-kasan: Start Mon Jan 17 08:33:42 PM CET 2022
+  --- refscale-acqrel: Start Mon Jan 17 08:36:58 PM CET 2022
+  --- refscale-acqrel-kasan: Start Mon Jan 17 08:39:33 PM CET 2022
+  --- refscale-clock: Start Mon Jan 17 08:42:33 PM CET 2022
+  --- refscale-clock-kasan: Start Mon Jan 17 08:45:08 PM CET 2022
+  --- rcuscale-rcu: Start Mon Jan 17 08:48:06 PM CET 2022
+  --- rcuscale-rcu-kasan: Start Mon Jan 17 08:49:25 PM CET 2022
+  --- rcuscale-srcu: Start Mon Jan 17 08:50:56 PM CET 2022
+  --- rcuscale-srcu-kasan: Start Mon Jan 17 08:52:14 PM CET 2022
+  --- rcuscale-srcud: Start Mon Jan 17 08:53:43 PM CET 2022
+  --- rcuscale-srcud-kasan: Start Mon Jan 17 08:55:01 PM CET 2022
+  --- rcuscale-tasks: Start Mon Jan 17 08:56:31 PM CET 2022
+  --- rcuscale-tasks-kasan: Start Mon Jan 17 08:57:48 PM CET 2022
+  --- rcuscale-tasks-tracing: Start Mon Jan 17 08:59:17 PM CET 2022
+  --- rcuscale-tasks-tracing-kasan: Start Mon Jan 17 09:00:35 PM CET 2022
+  --- rcuscale-kvfree: Start Mon Jan 17 09:02:05 PM CET 2022
+  --- rcuscale-kvfree-kasan: Start Mon Jan 17 09:03:23 PM CET 2022
+  --- clocksourcewd-1: Start Mon Jan 17 09:04:52 PM CET 2022
+  --- clocksourcewd-1-kasan: Start Mon Jan 17 09:06:11 PM CET 2022
+  --- clocksourcewd-2: Start Mon Jan 17 09:07:42 PM CET 2022
+  --- clocksourcewd-2-kasan: Start Mon Jan 17 09:08:59 PM CET 2022
+  ---  tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
+  ---  Done Mon Jan 17 09:10:29 PM CET 2022
+SUCCESSES:
+rcutorture(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcutorture
+rcutorture-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcutorture-kasan
+locktorture(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-locktorture
+locktorture-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-locktorture-kasan
+scftorture(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-scftorture
+scftorture-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-scftorture-kasan
+refscale-rcu(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rcu
+refscale-rcu-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rcu-kasan
+refscale-srcu(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-srcu
+refscale-srcu-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-srcu-kasan
+refscale-rcu-tasks(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rcu-tasks
+refscale-rcu-tasks-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rcu-tasks-kasan
+refscale-rcu-trace(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rcu-trace
+refscale-rcu-trace-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rcu-trace-kasan
+refscale-refcnt(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-refcnt
+refscale-refcnt-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-refcnt-kasan
+refscale-rwlock(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rwlock
+refscale-rwlock-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rwlock-kasan
+refscale-rwsem(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rwsem
+refscale-rwsem-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-rwsem-kasan
+refscale-lock(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-lock
+refscale-lock-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-lock-kasan
+refscale-lock-irq(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-lock-irq
+refscale-lock-irq-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-lock-irq-kasan
+refscale-acqrel(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-acqrel
+refscale-acqrel-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-acqrel-kasan
+refscale-clock(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-clock
+refscale-clock-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-refscale-clock-kasan
+rcuscale-rcu(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-rcu
+rcuscale-rcu-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-rcu-kasan
+rcuscale-srcu(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-srcu
+rcuscale-srcu-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-srcu-kasan
+rcuscale-srcud(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-srcud
+rcuscale-srcud-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-srcud-kasan
+rcuscale-tasks(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-tasks
+rcuscale-tasks-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-tasks-kasan
+rcuscale-tasks-tracing(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-tasks-tracing
+rcuscale-tasks-tracing-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-tasks-tracing-kasan
+rcuscale-kvfree(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-kvfree
+rcuscale-kvfree-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcuscale-kvfree-kasan
+clocksourcewd-1(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-clocksourcewd-1
+clocksourcewd-1-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-clocksourcewd-1-kasan
+clocksourcewd-2(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-clocksourcewd-2
+clocksourcewd-2-kasan(0) 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-clocksourcewd-2-kasan
+FAILURES:
+allmodconfig(2) 
+tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/allmodconfig
+Started at Mon Jan 17 06:44:36 PM CET 2022, ended at Mon Jan 17 09:10:29 
+PM CET 2022, duration 2:25:53.
+Summary: Successes: 44 Failures: 1.
+Size before compressing 0 files: 86M Mon Jan 17 09:10:29 PM CET 2022
+Waiting for final batch 1 of 22 compressions Mon Jan 17 09:10:29 PM CET 2022
+Size after compressing 0 files: 86M Mon Jan 17 09:10:29 PM CET 2022
+Total duration 2:25:53.
+```
+
+Here is an excerpt from `Make.out` [1]:
+
+```
+   CC [M]  sound/isa/ad1848/ad1848.o
+   CC      security/keys/encrypted-keys/ecryptfs_format.o
+In file included from <command-line>:
+././include/linux/kconfig.h:5:10: fatal error: generated/autoconf.h: No 
+such file or directory
+     5 | #include <generated/autoconf.h>
+       |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+   CC [M]  fs/reiserfs/inode.o
+In file included from <command-line>:
+././include/linux/kconfig.h:5:10: fatal error: generated/autoconf.h: No 
+such file or directory
+     5 | #include <generated/autoconf.h>
+       |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from <command-line>:
+././include/linux/kconfig.h:5:10: fatal error: generated/autoconf.h: No 
+such file or directory
+     5 | #include <generated/autoconf.h>
+       |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.build:288: 
+security/keys/encrypted-keys/ecryptfs_format.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from <command-line>:
+././include/linux/kconfig.h:5:10: fatal error: generated/autoconf.h: No 
+such file or directory
+     5 | #include <generated/autoconf.h>
+       |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+   CC [M]  sound/i2c/i2c.o
+In file included from <command-line>:
+././include/linux/kconfig.h:5:10: fatal error: generated/autoconf.h: No 
+such file or directory
+     5 | #include <generated/autoconf.h>
+       |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+   CC [M]  fs/ext4/block_validity.o
+make[3]: *** [scripts/Makefile.build:288: sound/isa/ad1848/ad1848.o] Error 1
+make[2]: *** [scripts/Makefile.build:550: sound/isa/ad1848] Error 2
+make[1]: *** [scripts/Makefile.build:550: sound/isa] Error 2
+make[1]: *** Waiting for unfinished jobs....
+```
+
+I wonder why other builds seem to have worked. But checking the other 
+results, despite the output saying the runs were a success the Linux 
+kernel builds seem to have failed. For example [2]:
+
+```
+$ more 
+tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcutorture/log
+tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 7 
+--configs CFLIST --trust-make --bootargs 
+rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot 
+rcupdate.rcu_task_stall_timeout=30000 --datestamp 
+2022.01.17-18.44.36-torture/results-rcutorture
+----Start batch 1: Mon Jan 17 06:45:03 PM CET 2022
+TREE03 16: Starting build. Mon Jan 17 06:45:03 PM CET 2022
+[…]
+TREE09 1: Build complete. Mon Jan 17 07:07:40 PM CET 2022
+---- No kernel runs. Mon Jan 17 07:07:40 PM CET 2022
+---- TREE03 16: Build/run results:
+  --- Mon Jan 17 06:45:03 PM CET 2022: Starting build, PID 3530842
+:CONFIG_HYPERVISOR_GUEST=y: improperly set
+:CONFIG_PARAVIRT=y: improperly set
+Kernel build error
+make[2]: *** No rule to make target 
+'arch/powerpc/kvm//dev/shm/linux/tools/testing/selftests/rcutorture/kvm_main.o', 
+needed by 'arch/powerpc/kvm/kvm.o'.  Stop.
+make[1]: *** [scripts/Makefile.build:550: arch/powerpc/kvm] Error 2
+make: *** [Makefile:1840: arch/powerpc] Error 2
+Run aborted.
+Build failed, not running KVM, see 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcutorture/TREE03.
+[…]
+ESC[031mBUG: ESC[mBuild failed
+ 
+/dev/shm/linux/tools/testing/selftests/rcutorture/res/2022.01.17-18.44.36-torture/results-rcutorture/TREE09
+  --- Done at Mon Jan 17 07:07:41 PM CET 2022 (22:39.0) exitcode 0
+```
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
+[2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
