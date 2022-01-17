@@ -2,101 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7B1490215
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jan 2022 07:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7F649024B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jan 2022 08:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiAQGlr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 01:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S234980AbiAQHDF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 02:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbiAQGlr (ORCPT
+        with ESMTP id S234938AbiAQHDF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 01:41:47 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39353C061574
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Jan 2022 22:41:47 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 8so10007847pgc.10
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Jan 2022 22:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=81bQSQb3wEEPINMq19rfFYIhQtFYQQaxVg6e3I6g4Z8=;
-        b=zRlJ7/jj2U4qgugcmf+lCbQLOC/npaAeyYwnwxnSYfnoqT9MjGZJn7+/Sah0MGNRo9
-         k9n0BS1t+1Wx951XTGmvHTE2R/0QsukC8N4ajrHwdhTLpL0D9Pis9+e1J4Qy7r1wT1L9
-         FituuSQhiMuI9IUmL6mB/m4K5C+gyd3dSswo1SjcV2AIc1zkdKLGP3YEyw9uRbSTnyef
-         6uwLkkG6P1sPu9QpABrojghmOds3GpdzgLuSlG5/5QmDALF4W9Z0yzUVDOZ69CFgJFC0
-         dPjpDpGxrLPA2mSW4+hEq0yXGGZSlbeNywVBg0rvb3znVIsa1Qhiq92tqSGqeU0jIHcq
-         LNCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=81bQSQb3wEEPINMq19rfFYIhQtFYQQaxVg6e3I6g4Z8=;
-        b=69fSzpIP8t2Uvz8Rs4FUPj6XiOQ6zDRcCoo2N0CH3cidfHOIG4cxnz/Ztdpx0nocVg
-         CiaAtcVdDV0EtMCVDk8XUgtNcX4JQx4PhzUu+9Q7MP/cNGhkJrLYyUcjwZ+fzZln0JZH
-         /SqGvQTcN/3BwVKYywIZHKuObyXt71O0OpTmLSPfq01EzhX9t0n+xQqvxMm0Q28RLSvS
-         Sa0ap0ANh9IpGrxGLOf43F4RTOX73Y21SmNebaZML+h/S+orZRr7OXb0/GX7TImqT+g1
-         Dtifn87Hssq+Y4/AYtlNKj3AfJ0ZLL4p0rSFO+5/XKSalkRLz8o3HLknremLlZOxxEFB
-         mgOg==
-X-Gm-Message-State: AOAM533skpa2rkrvCxbBUNFqf1L0oPgQIX2hQUzBVwi6K8H5RG9eOjoI
-        GoR2Bxa6+ZCEfJFoxKRXNWIMrw==
-X-Google-Smtp-Source: ABdhPJxCw4H0p4bJRCX4gflrN+anKXbVzdknmZomTRYKNMoouhPMB/DkmE9sAQGSEYWiSnDXypLjwA==
-X-Received: by 2002:a63:a745:: with SMTP id w5mr17851937pgo.374.1642401706728;
-        Sun, 16 Jan 2022 22:41:46 -0800 (PST)
-Received: from localhost ([223.184.90.234])
-        by smtp.gmail.com with ESMTPSA id c6sm12967468pfv.62.2022.01.16.22.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jan 2022 22:41:46 -0800 (PST)
-Date:   Mon, 17 Jan 2022 12:11:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH] selftests: cpufreq: Write test output to stdout as well
-Message-ID: <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
-References: <20220114232126.92043-1-nfraprado@collabora.com>
+        Mon, 17 Jan 2022 02:03:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92801C061574;
+        Sun, 16 Jan 2022 23:03:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 322CD60F56;
+        Mon, 17 Jan 2022 07:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B29C36AE3;
+        Mon, 17 Jan 2022 07:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642402984;
+        bh=EOuHMV8XxtW8D0CDysAeuHMIwRnmgp+AsOXZ2U2pwSc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=st/fnT0XARZN3W7lvp3150yrMru/fIlbTOaAUhHY8Aw0/Y8axXpqR3IKS6ghT1Cj3
+         nehffgdTfyt+KD4BWFwDkfA+YR0JDYm8Bfwq8du9R+L5iiFMUChzmxDIY70DQExueB
+         tKlg0bSZ3GNE0w3JQz2wMCPxo9wJXYagWXtZ+nVuWzXUF1cAt0cqGDlZ5nt74k+CrY
+         SKgedDV9uecOznJNZoqCt9MWe7+LAX7mC2YKmxi0qiFW7YHPXqOm/I7xaTHsvMb6/C
+         jjm0BcrcvAO+e8MvaID2nXoA2v5rRzLAYvv3xsqtc9gBUg8aynAWFsr7QDNzJsGDzH
+         H9dw/rEdzvtYw==
+Date:   Mon, 17 Jan 2022 09:02:49 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tadeusz Struk <tstruk@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
+ noneexisting handle
+Message-ID: <YeUUmaShH0/obt3A@iki.fi>
+References: <20220116012627.2031-1-tstruk@gmail.com>
+ <20220116012627.2031-2-tstruk@gmail.com>
+ <YeQs7Fy5NaK6m6Ar@iki.fi>
+ <YeR6Z9a4Z3Xz79Tp@iki.fi>
+ <070044a5-5468-1095-334f-67cf98eb30b3@gmail.com>
+ <YeTKG3qPxm2DJGCN@iki.fi>
+ <ed1dc51a-8dfb-1179-3200-13669a25c845@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220114232126.92043-1-nfraprado@collabora.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <ed1dc51a-8dfb-1179-3200-13669a25c845@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 14-01-22, 18:21, Nícolas F. R. A. Prado wrote:
-> Use 'tee' to send the test output to stdout in addition to the current
-> output file. This makes the output easier to handle in automated test
-> systems and is superior to only later dumping the output file contents
-> to stdout, since this way the test output can be interleaved with other
-> log messages, like from the kernel, so that chronology is preserved,
-> making it easier to detect issues.
+On Sun, Jan 16, 2022 at 06:55:25PM -0800, Tadeusz Struk wrote:
+> On 1/16/22 17:44, Jarkko Sakkinen wrote:
+> > NP, Both are applied now.
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->  tools/testing/selftests/cpufreq/main.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
-> index 31f8c9a76c5f..60ce18ed0666 100755
-> --- a/tools/testing/selftests/cpufreq/main.sh
-> +++ b/tools/testing/selftests/cpufreq/main.sh
-> @@ -194,5 +194,5 @@ prerequisite
->  
->  # Run requested functions
->  clear_dumps $OUTFILE
-> -do_test >> $OUTFILE.txt
-> +do_test | tee -a $OUTFILE.txt
->  dmesg_dumps $OUTFILE
+> Looking at
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/
+> I can see only the 2/2 selftest applied.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+It was my bad, forgot the update the remote master. Now it should be
+good.
 
--- 
-viresh
+BR, Jarkko
