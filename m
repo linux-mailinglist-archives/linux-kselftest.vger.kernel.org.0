@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE48F491253
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 00:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3D649125A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 00:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243797AbiAQXYt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 18:24:49 -0500
-Received: from mga12.intel.com ([192.55.52.136]:55081 "EHLO mga12.intel.com"
+        id S243798AbiAQXZD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 18:25:03 -0500
+Received: from mga12.intel.com ([192.55.52.136]:55097 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243793AbiAQXYs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 18:24:48 -0500
+        id S243793AbiAQXZB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jan 2022 18:25:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642461888; x=1673997888;
+  t=1642461901; x=1673997901;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=quUmjOVA9Wz2OOMMVV+W8akBlwHVso4xSDK0aYlLTGI=;
-  b=OlXOnKlV6ugWD5ARL2tN9kNMTQUyfenrjREDeWgA6z5+IrNeeuH/bUkW
-   oUkcG7dIX96Dla0V7Eu+Id1CupFf6pBESBNroQAZSgN7tlAU1ZBB1RzJ0
-   fUk7vuYod1q/uG0CwmL9DpajhW5ePOJb7HQ5eqDvZ7Vxl2Mz+K0SRcADJ
-   x3yPC6bdw1uJDz1+THb/KQsJazC4cc817sxre8T67xv7C5pLv0a3pTdl7
-   97RLhcLGXW1HmnQwImQZtrc8SIPRjqV9VNwcscjKrcGzOfeoQ1dFuraSy
-   VmRLc9nsh1sSul4RZJE0qt32sv/tY9W3P17iyocVwedvtSgwq1ccLD5TW
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224683773"
+  bh=7SZ5FkscuxR8Fu6Dmn9NNsNOTopG57Z6VqpuNtW5J8E=;
+  b=R77yLJfNyp0l0U4uO602QR+xH8NBmAhccHtgZAkTH0PvmBoS89DivVMU
+   Q6YE4p9dHLAUsY3zhmlcyOlQVATbPANwRQrecX83Q8RPiGQ9cdrCO99yK
+   gqMoL4J2aiWyjwreQH9BdFwOaKvbUHk+dM0YzdwqNKTvP0unRUxqyHt2A
+   Aqq7Emd3biSbYcNNPBMAgzWVAAPXC6evlyJoBKdU8FZzHOqHmMMOF49hz
+   kO229CRCGkWPnF4aAdZXP/zkULiH+HOF6RidRfljJOo1bwhzRCPB5i/7R
+   1FQUCJWVh51E6GO/mVtRYv/Ql+5SjjCdFz+VfOPUCsEOBn0Z3+KxGKOXq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224683797"
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="224683773"
+   d="scan'208";a="224683797"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 15:24:48 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 15:25:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="517554427"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 15:24:48 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+   d="scan'208";a="517554470"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 15:25:01 -0800
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 15:24:47 -0800
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ 15.1.2308.20; Mon, 17 Jan 2022 15:25:00 -0800
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 15:24:47 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ 15.1.2308.20; Mon, 17 Jan 2022 15:25:00 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 17 Jan 2022 15:24:47 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ 15.1.2308.20 via Frontend Transport; Mon, 17 Jan 2022 15:25:00 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 17 Jan 2022 15:24:46 -0800
+ 15.1.2308.20; Mon, 17 Jan 2022 15:25:00 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MLLmztMb7BhOJ6vS30/zz6+faR0H7kzaMMWcF1czJOB8w75pRCMAY2y5SEoOgJv9O5koyyj9V7tRepLgkY8NFmJgUxQ9LdxH0ZLvnwRZhjDfW/tVf0yDa3wcT1kufx0aYXgqarVcINx7RFDxySiAYdFl+OlQH+84At5z7xl/tt5tPQ3t5EQ6WQLc9E+YIx1OGn1XefMDGK2BdWyvy5s4of01kvGZCqQ3KZRlhNCYhSxC1/37LZjatR9h/AYLFoX7R/CseLsidSozwU2uF58MeW8fNP/QDpn6dk/+Uh/Lut7VTlhcDvu7Rki7WJB2EYjHKGwTVGBTCirbSbH9NGYHdw==
+ b=j0Ghs3ihrHzAChHBnIY0YYjHuaKG6n5NvPim9I7wbZ/v4fs2qdxmuJrn1J3x0Q0RC2uZZDsXwXrNcZ+lj2TIN5FmBl1saXdM5vLur2n2h5hTolHZROmkhIs0C1oN7yoAOPFzuyEC7tNSel9Y+tFL0VN1dMGQ/Dc30sBlyzab3gib64IOQCxV32u8B3j+E5whi3XHMkXPfx/fhXEngKVdc/tQzD4oDJnwGl89QXl81hMJxXqDmC5TJp+EmPxdaQeRGbnBGOl73TcPjx7NF9MOjjc1r+/wnPDpCm5DmrQ0TTZzB3Uvn/L9Q07YJP+6Zp4i1NbpTON3UVJ2ENezT96Niw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZeXNZdnDA2vS/Z+sC48PAkzUL7vTuZlZ96DW0e/2av4=;
- b=D8DQdm5mwQeBRThi4vUacMTekNH4f8vCaBTNqE/pEKe2Oae7g6UXxOSuEDArDgd6hFGhFaNrE48ae/lUINiippDSLv2F5mIFuHqZjSv38jx1EjbE/FDNx5S3cUfveHye+BHonXeb2vw7clTP+ytDU2fFx1KOD37awNxNcoyfPpuIVP7hlDgxiseGqhVpTWedT1ld3bocTgapf/PTknRDYC+bYm1su0bRTDw8s9WH38ga4sRAjRoFdr0yVrWUKCEWaRl1mHdmFjdDZxKkpWynciNfR/p/SFgxnmCbOTO3B3TSwlPGEpfymcjXWfkiVDinGVNsZO5QDiFhXTdakNkCGA==
+ bh=lKlHknuBE7WK6xRv+9R+AldWiYg3irUWS2IbYi9xaQo=;
+ b=P3gUgdf5GkRE2Dr8VEaSXbKoVD7/OYNP45OWKMO25sjthP2QoC9nocb/mdHG+ayrcfKLeCO0Qu+m3NNY0hF72L67h4563s9JEp85EPouFepjV4Ds6uu0BTRm5MklncLSXZLkGHLPCcGJ4ugYJlFdyK4rdRIcWrWNdpMHUM1HdUxTMiDsOFSvUjkqA9WDm1igyW/fJQnwK/XPDGcUPz5YLA8ZfADlqjKGMpwelX7JknrimK7wA932gycrJXj+fvQPwO54i7eZMFglDe/s8EhvwpWImQejznOeyyxJvhYYZnKNTBdZ712FFkNUnA3sJjxFWoEygNmBIM76QpTy2BIWKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -65,11 +65,11 @@ Authentication-Results: dkim=none (message not signed)
 Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
  DM4PR11MB5550.namprd11.prod.outlook.com (2603:10b6:5:38b::24) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4888.9; Mon, 17 Jan 2022 23:24:43 +0000
+ 15.20.4888.9; Mon, 17 Jan 2022 23:24:58 +0000
 Received: from DM4PR11MB5373.namprd11.prod.outlook.com
  ([fe80::fc15:bd26:128a:f5f5]) by DM4PR11MB5373.namprd11.prod.outlook.com
  ([fe80::fc15:bd26:128a:f5f5%8]) with mapi id 15.20.4888.014; Mon, 17 Jan 2022
- 23:24:43 +0000
+ 23:24:58 +0000
 From:   =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
 To:     <dri-devel@lists.freedesktop.org>,
         <linux-kselftest@vger.kernel.org>
@@ -83,520 +83,366 @@ CC:     Brendan Higgins <brendanhiggins@google.com>,
         Petri Latvala <petri.latvala@intel.com>,
         Arkadiusz Hiler <arek@hiler.eu>,
         =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
-Subject: [RFC 07/10] drm: test-drm_rect: Convert to KUnit
-Date:   Tue, 18 Jan 2022 00:22:56 +0100
-Message-ID: <20220117232259.180459-8-michal.winiarski@intel.com>
+Subject: [RFC 09/10] drm: selftests: Convert to KUnit
+Date:   Tue, 18 Jan 2022 00:22:58 +0100
+Message-ID: <20220117232259.180459-10-michal.winiarski@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220117232259.180459-1-michal.winiarski@intel.com>
 References: <20220117232259.180459-1-michal.winiarski@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS8P251CA0016.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:2f2::11) To DM4PR11MB5373.namprd11.prod.outlook.com
+X-ClientProxiedBy: AS9PR06CA0409.eurprd06.prod.outlook.com
+ (2603:10a6:20b:461::18) To DM4PR11MB5373.namprd11.prod.outlook.com
  (2603:10b6:5:394::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fcea89ac-3b72-43c0-3401-08d9da108adf
+X-MS-Office365-Filtering-Correlation-Id: 8064ead1-3a13-439f-570f-08d9da109389
 X-MS-TrafficTypeDiagnostic: DM4PR11MB5550:EE_
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM4PR11MB55503231545B863916E3FB5A98579@DM4PR11MB5550.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:549;
+X-Microsoft-Antispam-PRVS: <DM4PR11MB5550E04A4420DCC05B10133D98579@DM4PR11MB5550.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u5Hzi/IG4KCGfvStsW6TLkay3yvPHjzUXKvjo942EBv7/21VSEHSsmUqLkrDE7C+cR32Sip359MHEvySdnKf1/AUz/sR9kE2MycDTU22C0VJ7gbifXVkVmqQuHd9640tsV/0nI4oCLQZVhvZvgQ7VfNxDlqTy9BNsgLMVcyCojE2aONsgHGamwnXEPh4u9LgAM5hqrqTDt+wKsZXNypQr4EGRiaNb5l4NVNU2UMh7PEFbYi+LK4V/Q57/L1cFrfmcfgEMjphkJXUievR923WS2KMjnr4cRBVGPUPE80654W9WZLuraOUSPBfstavStcpswp+Cy463BqzBMVA2z/00ayp+VW0gIh0etvBGxxkR6j//IyOoo36exn8iucU+RoCymbhcRQurodcLcoFuq2Sn3b7b9XluIZADFNQOWD3aNOJO/BfW1SHNhvTBXObOfTT9aohSEvXPKUjkTpZJ0p+HR9eTpfPLRfo38znrDxzb57tF5+Fo46NcLOHAnsPhz0vASfyvDDK9gjFxb89XEe1T00dhTF/sUpWYdnVdaRZO1BYPUebGCTBhnKMDe2ix5SooSBTEp7wczIgZLau83u2FzXN7GzG1i6XpF1o0hlb9KMH6VNU8Pu9BQz0QR3FAeI8IXG1pjVstOBJmuWpcmKFlQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(82960400001)(4326008)(5660300002)(36756003)(186003)(6506007)(7416002)(1076003)(54906003)(6512007)(83380400001)(26005)(66946007)(66476007)(66556008)(316002)(6486002)(38100700002)(8936002)(508600001)(2906002)(30864003)(6666004)(8676002)(2616005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ktiPXdK1Yd1LWonUumMbng9XDIEiz9nVmFya20gGVrcPoEEUE98vKbmQfxpeSt/F4XOSzRaEySCmkBHd6LW2csWrHObh3vF/Su1AtRlVHYJcUBxOxuvpOBHM0LPmRw2Fq6ETYLvVP1UAQR/dFIfIcGe4tQM8phJ+dzJH3191DBjjqT3Z7n46Iv75FeNvXkpMGPVlZMHQFdlzxoN406k69K5cCxtODeBkecafL5Tsb8Fqsd+ScxhMX090UGzQc2SEwNc6sHnQNNmOOJGHTGHySz287bVQYub4lGJmyt1JSmZkmGo7Ag4eR5JEdHddOG3hTL6zaj6ErUnsn1hZ+ugxBQmMJJf9pS4VIRdCv05R+GxFiP+Vxpg6xVOT4q/99DSR+eHNAVNZ2QzOnSGs77wGrEc6jRPWt5+U9SH3n/r4lIcIzbWwq3wDrCpzADdAzJ7/mYHmdswXFKlvaZWrslz8frD0Cnke/1GCFCpBKrfbqRrMckqlkunZiURVVQbsj45WQrFENnMdY+1Owdpf22iHYVxEN4aeqlxiA1nj4qAhLMrcEt8/F+boFuBSE6tYZMKTXncbwPbMXx0ZbPLjM8K22BULnmuPzFjhcUvLpeyfPIKHE3Dyd5JZ8OwEtRUBsIuM9I0Lr9W6zk3CfKZo22Dddg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(82960400001)(4326008)(5660300002)(36756003)(186003)(6506007)(7416002)(1076003)(54906003)(6512007)(83380400001)(26005)(66946007)(66476007)(66556008)(316002)(6486002)(38100700002)(8936002)(508600001)(2906002)(30864003)(8676002)(2616005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2tEZG5ac0FDNG9qZ0FsbGpnWExZQWNTaGNBdGcxTlhoOHVqdElFVTdBZzEx?=
- =?utf-8?B?enN1STlrQkUveVk0YkUwVlhLTE5pRHRDOVpFZ1FlYUlHYmo3NDhFWGEwZWg5?=
- =?utf-8?B?RS9YeVh6OW0yZzMycVN6T0s3NE16aWppVnNEOHlaR0x4VkJDR3lXa2wxTnhz?=
- =?utf-8?B?bDNuZ1AyQmpyQzh2N1YzMlV6R1NSUGk2QmNVY3JMRXR2c2tqODZBOGwyQTBG?=
- =?utf-8?B?aUxHT0x3Z1A1MnFxTzBZOXZQTEVlSWhCcDZRTERoMlpBY3JtdmRvRUpXbHJC?=
- =?utf-8?B?bnJyaG9lOWhLZ003a2pQdEpqMVJHYlJSbVM5NzloaG1PRE42elova0FhOFd6?=
- =?utf-8?B?S01BK0QrS1lhVHRpTWtFVEtEL0ZNWFBMZEtyK2ZHRlhnMGVmWDJuU09TSFBv?=
- =?utf-8?B?Q05ZanBWYWZIUHFRRFJRRkZncTVFMFVYSDhPeGs5UXVjWERGOWliOW1zeFdL?=
- =?utf-8?B?QVlBeTRURzFXY29Gckd1TmdSV0kvbHZVSGNIL2w2ZUx5eGc3ak5VUEJGSGRk?=
- =?utf-8?B?TmViUkYwcW5QSHp1MWlmditCbWVJNmJKQlNNNmdiUmtSb1lnVmVSYU51cUxW?=
- =?utf-8?B?MFlSQmw0TUp6dC9BbkpkU0dvQTByN3R5YU9Qa0xHNXBPcENLaUJQRXJ2QXVC?=
- =?utf-8?B?VGZRdWlqYnA1SURxM2t4cUZ3MEVCcTZ4blJRcWUvcytha1pqbWVVdW9nWFhs?=
- =?utf-8?B?ZmdzSytqTzl5RFR2SzZoR1QzcW1vWVJMUjhBQmxZaXhCbEdMSTVQMGVjMG9k?=
- =?utf-8?B?QkVxeWFnYkJRVGFJbFBnbkVzdDZZd1NiZmZNbWQ1cGVhYzdZQmRVdWVud1lo?=
- =?utf-8?B?aTJpZUtOZDNQV0hzY2xIV1pwMmVreGhONkhtUXZGRnd1KzQwSFZSM1pJczQv?=
- =?utf-8?B?aFA3RWpxOXZRcUIwdlI2R3VwaDgxdUZGcjRnbkVYcFJ5a3RmU2NoSUJVTkE5?=
- =?utf-8?B?SGxndGhIV3UydzhrcnhrWXJsdWlKQ1BBTmx6cUU3Z0l6TTF6ZEhJU1BwWXhy?=
- =?utf-8?B?NVhNVkwzZ21hQWF0Qm92dTVPOHRHK1ZHL1lhbmlldUE2N1JycnRMMG9KZFFr?=
- =?utf-8?B?UkpXWkJkbmJiYnZPVTRVNUlHUWEyVnFob0VQTlQweWwrSnlwL1d3bEFaR3dk?=
- =?utf-8?B?MmpyQ1puM2pkbDlRQlJsNTBwa0Z3SEQyVEVWUFY3Y1JuVUZaU3VDdjFZZ0w5?=
- =?utf-8?B?Y3FMcTB1c3pHQmdCdit5eEtpK0luNkdwYXphSlovUzhyQWxyQXNmbUs1MFo4?=
- =?utf-8?B?WUFxOU5VQzNYR2NkRDRSQWt0M2FrYmRHd0ZybTl2RW5McVJVMG9Yb1dQdzJ5?=
- =?utf-8?B?bnJhMjFDL0dMbVRIYzF1ZlR3UmVzYkl6VC9RR2ZDR1A3WFJIdjdja3Y2Y25v?=
- =?utf-8?B?Y2lLNll6cXQ1SXk5UGs0eXdRY0NXMTFPNDR0eFNGTUpoWWQyeTJCSXZvRkp3?=
- =?utf-8?B?aXVoRnpBRGp4d09oaStmK1hQOVRRc1ZnMVhOMzRWWEc2emNzM0o2OHRiMG1p?=
- =?utf-8?B?TUE2UnhOU2ZCRGRpR3NES1kvUmI4dktJQit6ZFBUUWxWZ0tqUnN0SUY3Z2xH?=
- =?utf-8?B?WmFReDhNaHEydE5WeDZDT2Z4cXVDTkpxQ0JQcVY2NjFpSWFDT2pnWDRTTGxN?=
- =?utf-8?B?dkFpNE1HWkh4eDBndDIrd2JYaWlVWnVaTmN6SGEvcWl2eXhzeEdrbUxyZFJ6?=
- =?utf-8?B?OGQzbWJ4b0lhL01TaHhFbDgxVjhhUlJzeWp0d1ZJTlc5LzJoV0xCbHJSektL?=
- =?utf-8?B?Zk1WWTRMeERCR25kMEY4NnNzSDhjekJSaXc4eTlkMGlWTnM4bWVzaGxEVGJK?=
- =?utf-8?B?dXhVdjJzTVdSSHNzOTJXVkwyWkpnVWJtUkpTZVA0YVNSeHg5QVRCalNkczdC?=
- =?utf-8?B?S2RlLzBhU1gveFhMUFhKRjkzSFNBOXhqbHVRWWEvcXdYSFNRaWRmRXBUL1hG?=
- =?utf-8?B?NDAza2lDdElrWXNtamVCU21jZ3VhUVJiSFN1dnZSL2lCdEwzSG02SXFidXdT?=
- =?utf-8?B?c05WZkMwMWViUW4wYVRmeWt3VG5nZktBSWFvTFlHeXVjSVdQVmJwUUpnd2lK?=
- =?utf-8?B?YnNFdkl5U2o4S0cvNlN3blIrRUhoYzF2MnhibGkzdzNORW9VckoyTEVmQVlD?=
- =?utf-8?B?NWpQRWlxclBKbGp3TlBmVWtCVVJvbG4vc1JWVTAzZHMyZWd3SFlGNFg1a2tq?=
- =?utf-8?B?ZEpKYWtidUpQVFpjQTZ5TEJOdDdycm5Ra3NnM1l4Y3lPSDdycUpJeEFPcUFi?=
- =?utf-8?B?L1ExdTUydnpXWTcybDVJV1NUVmZ3PT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcea89ac-3b72-43c0-3401-08d9da108adf
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SFhFUmVoNG9zWHlmaHplV1E3enFaa0dId0NoRWI0UGVJejBaOWxkakNZaXV0?=
+ =?utf-8?B?KzJqRnVRVXQvd2ZVakg1NG16WDhhRXoyWmM4cHhYZkM3ZGlQVllQV2VISUo1?=
+ =?utf-8?B?WDg0NHZFb1hqc1F0bGVRazl6Um5wdUJ3K1ZGMlROb24wZXJnQ2cyL29yTlpy?=
+ =?utf-8?B?RTZyK1d0OWh0Sk04VjViTDBSY3pUWlBIYmNiUWd0eHdJbi8vUFI0VFpnTnkv?=
+ =?utf-8?B?U2l5QWJYenZtRzZYckw5d2d0MVEwUlFCcnJsT0JyK3VKSVdVNlc2WGNEbFBm?=
+ =?utf-8?B?SmVFTWxQZ0NmMFZ0K0xIcWtSYkFjUmQ0RVdtSGtYRGtFN2Y0WGFYdUZib0lJ?=
+ =?utf-8?B?OGtlNkhkTDN1TUZUNWtwRHdxaEZGaHhSOXhycEdIeHNmSEk2S28rd01KQXVF?=
+ =?utf-8?B?RUlCcStpUkhIQnJhZ3JpL1NZWjMxNGNRQ2pWd3kvTnpZSXdHMXp5RnFEUkZV?=
+ =?utf-8?B?dWkxS0FEM1pMMzFROEwrNXd3Tlp3dWVtWWlLY1hDOHZxaW1LUEVWemxIMk9h?=
+ =?utf-8?B?akMydFU1eFdkWXRLTXFIOG9GMG1maXZtQ01NWERxMkEvZTZIUUNtN2xqZ05l?=
+ =?utf-8?B?aWJHRTBDTUd5L1U4WFk4YjhFZmwzUnNMK3JPZFNnQlpDQmVGNm9XUko2Q3Iv?=
+ =?utf-8?B?SW1WRTJIYUVNLzl1MS9vdUpGZ0syQjdFaDBKOU01bWFDdkcxWEF4Njk3ZU1t?=
+ =?utf-8?B?ZnYyVENDcktKSkJiQ2xVMVl0YVM2QXhiRjU1M05Fbk50S3JZbktVWVFPbWZj?=
+ =?utf-8?B?UlV6a1p4ZnJDWjVma3VvZitJbEhZazA4dkVxK0w3RSt6Z2cxdERjNFBjMXo2?=
+ =?utf-8?B?N3lIRGxXUDhnZzVWM1NjSkpBVE5RK0VuU2dqMkE1TnBYdVBxZkdicUZHK3ZX?=
+ =?utf-8?B?VDhBenV6YVYyR3cvRTQxVXBxZ1BKaEtPZldYbnJ5WDhCZVZYNE56dWlGb2ZR?=
+ =?utf-8?B?L21RYysvSjRpazdhb2o4OUViUjVYS3BYWWkxODlGaUZqWDJSQ204WWhJeFVK?=
+ =?utf-8?B?U0dldkVKYXAxWlhvT05OMHJQYW9PaU1XcHpWZDBuRngxc1NpTjlDcXNSQUxu?=
+ =?utf-8?B?MjV1TlZ3YmkrQndTTm01L2xTR3Qzd2kwOHdQYzRoSklnMXc5RmY4NHNMSGRD?=
+ =?utf-8?B?MmhvbDlIWjlxNW05TFk2UENTV1RSZVZjaVViSGJhL2xhQlJLSWxTZE5mcXl6?=
+ =?utf-8?B?WjhVeWh2R3NwUzFKZ3l3N2tHZDFjZzVjVHRvVnVGb2s3K2xZbHdHUXVYWGNu?=
+ =?utf-8?B?blVIaHFmT1pHam1DKzlEU3ZWTFFRZ2dPQ0NsL2d3dGh4dDJVNi85OXJCSWl3?=
+ =?utf-8?B?K0FkZU82NXViTk4zL0QrTENGZytvUXM0enA0MDJta3EvVjVJeFZLcFFhNVFs?=
+ =?utf-8?B?S1RIS2poQ25zazZZMGdrakJjYnRMRlJ0b1FWOUthMXRHNnhpY2xEcmp3S2l5?=
+ =?utf-8?B?VDIxclFxbHorV0s3TEd6M2paUUNrcVlwUkdLVTY1a3AwV3Q0ZlhlaWhibkNj?=
+ =?utf-8?B?U3ZZcG9yWkFmVGFocE5tMGlFbUdqQkM1OC9DSmg0L3NMTERGV2tpZzlLNGpN?=
+ =?utf-8?B?eStPb0xrb2tCZ1lPeTQzT0lQWCtxckgrMzVZYmZrcnR1dVZuQ1g1cCtXWnVJ?=
+ =?utf-8?B?ZTNMdDg0ZDg0bzVIYUc2UjE1dGRKa3pVdzAzaDc1UTJDUHhMdGlyZ1VEaHdi?=
+ =?utf-8?B?K3UzZTduTUlxaTd1SFFRdWFnd1l6OXlQelBlWSt3L1JoQjVteUVMejYwZW9Z?=
+ =?utf-8?B?YlBmOUhJRzFtWXNjbTFucDdMUUFDSlJ6bWxzY3h3a1Y1SWY2VTdPeWI5dHFp?=
+ =?utf-8?B?M0l6OURrV0g1amErenlnSjJlYXcyRFdTb0w3WVpGcUgrYS9FS2JIaThxeG8y?=
+ =?utf-8?B?QVFTTHpUMVZSUFRFNU9WczA3ek8vaUpRK1cvWUcvQndaTnhQanowOUU2TWdG?=
+ =?utf-8?B?REJZWDdOODVMbmpOc3A4NURqYUttQmgxamtUbW9QVDJKMm9GUEtYWElWaGcv?=
+ =?utf-8?B?REduaXoxaDdkVVp1LzlXUXdWdmR3ZjUxczJUVUVISUtFRk5zaTJyVzlPVThs?=
+ =?utf-8?B?U2UyQkdjVGxYYitkY0hNcVNUZG9wUTJXT2x6RGVLV0ZjdCtvWGpnL3RXZDFM?=
+ =?utf-8?B?amk2V3RHQ2RjM2JWSGdOV25CMG03U1JVakRQMENDMyt6VTV1clYvQ3Q3Q0xU?=
+ =?utf-8?B?aHloaVFkR1I4Q0dXSEZyVS9JSjZ2TzcrRzk5VnVEUUgrQStaSmRDWlhDcm5K?=
+ =?utf-8?B?ZG9qT0RYSTRRQ0JROFFHT2dGajhnPT0=?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8064ead1-3a13-439f-570f-08d9da109389
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 23:24:43.5709
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 23:24:58.0312
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GE/y6zwZdaXuLHlwAa8iKXkyV71L7OOH+bLXHYya68FHAjeAmMjghZI47+VoHN8EOrzpszJ1TBfXIkZ5P0BzK3iIHbnbIT02Nug26ULEjrI=
+X-MS-Exchange-CrossTenant-UserPrincipalName: XawDAc8gBKZyQBAIVbzg2W7e80Pi4Z4h/OMPtQf5cRaPbqTIPOO98iOctAZtM0LoYDDGlh5tYAbtOQoVtzX0axqWyGmwODyeovrzW3MfKD4=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5550
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-One-to-one conversion, no functional changes.
-
-Now that all of the modeset selftests were converted, remove the helpers
-that are no longer used.
+Now that all tests were converted, remove the content that's no longer
+used and rename the directory to "test".
 
 Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
 ---
- drivers/gpu/drm/selftests/Makefile            |   8 +-
- .../gpu/drm/selftests/drm_modeset_selftests.h |  12 -
- .../drm/selftests/test-drm_modeset_common.c   |  32 ---
- .../drm/selftests/test-drm_modeset_common.h   |  24 --
- drivers/gpu/drm/selftests/test-drm_rect.c     | 212 ++++++++++--------
- 5 files changed, 122 insertions(+), 166 deletions(-)
- delete mode 100644 drivers/gpu/drm/selftests/drm_modeset_selftests.h
- delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.c
- delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.h
+ drivers/gpu/drm/Kconfig                       |  17 ---
+ drivers/gpu/drm/Makefile                      |   2 +-
+ drivers/gpu/drm/i915/Kconfig.debug            |   1 -
+ drivers/gpu/drm/selftests/drm_selftest.c      | 109 ------------------
+ drivers/gpu/drm/selftests/drm_selftest.h      |  41 -------
+ drivers/gpu/drm/{selftests => test}/Makefile  |   0
+ .../test-drm_cmdline_parser.c                 |   0
+ .../test-drm_damage_helper.c                  |   0
+ .../test-drm_dp_mst_helper.c                  |   0
+ .../drm/{selftests => test}/test-drm_format.c |   0
+ .../test-drm_framebuffer.c                    |   0
+ .../gpu/drm/{selftests => test}/test-drm_mm.c |   0
+ .../test-drm_plane_helper.c                   |   0
+ .../drm/{selftests => test}/test-drm_rect.c   |   0
+ 14 files changed, 1 insertion(+), 169 deletions(-)
+ delete mode 100644 drivers/gpu/drm/selftests/drm_selftest.c
+ delete mode 100644 drivers/gpu/drm/selftests/drm_selftest.h
+ rename drivers/gpu/drm/{selftests => test}/Makefile (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_cmdline_parser.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_damage_helper.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_dp_mst_helper.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_format.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_framebuffer.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_mm.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_plane_helper.c (100%)
+ rename drivers/gpu/drm/{selftests => test}/test-drm_rect.c (100%)
 
-diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index 77e37eebf099..2d524eddb4e3 100644
---- a/drivers/gpu/drm/selftests/Makefile
-+++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,11 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-only
--test-drm_modeset-$(CONFIG_DRM_DEBUG_SELFTEST) := \
--		      test-drm_modeset_common.o \
--		      test-drm_rect.o
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index c567324c96b9..7b18540a1b8a 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -63,23 +63,6 @@ config DRM_DEBUG_MM
  
--obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o
-+obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o
+ 	  If in doubt, say "N".
  
- obj-$(CONFIG_DRM_KUNIT_TEST) := \
- 	test-drm_cmdline_parser.o test-drm_plane_helper.o \
- 	test-drm_format.o test-drm_framebuffer.o \
--	test-drm_damage_helper.o test-drm_dp_mst_helper.o
-+	test-drm_damage_helper.o test-drm_dp_mst_helper.o \
-+	test-drm_rect.o
-diff --git a/drivers/gpu/drm/selftests/drm_modeset_selftests.h b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
+-config DRM_DEBUG_SELFTEST
+-	tristate "kselftests for DRM"
+-	depends on DRM
+-	depends on DEBUG_KERNEL
+-	select PRIME_NUMBERS
+-	select DRM_LIB_RANDOM
+-	select DRM_KMS_HELPER
+-	select DRM_EXPORT_FOR_TESTS if m
+-	default n
+-	help
+-	  This option provides kernel modules that can be used to run
+-	  various selftests on parts of the DRM api. This option is not
+-	  useful for distributions or general kernels, but only for kernel
+-	  developers working on DRM and associated drivers.
+-
+-	  If in doubt, say "N".
+-
+ config DRM_KUNIT_TEST
+ 	bool "DRM tests" if !KUNIT_ALL_TESTS
+ 	depends on DRM=y && KUNIT=y
+diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+index 550800e81836..6fe8143c43e7 100644
+--- a/drivers/gpu/drm/Makefile
++++ b/drivers/gpu/drm/Makefile
+@@ -65,7 +65,7 @@ drm_kms_helper-$(CONFIG_DRM_DP_AUX_CHARDEV) += drm_dp_aux_dev.o
+ drm_kms_helper-$(CONFIG_DRM_DP_CEC) += drm_dp_cec.o
+ 
+ obj-$(CONFIG_DRM_KMS_HELPER) += drm_kms_helper.o
+-obj-y += selftests/
++obj-y += test/
+ 
+ obj-$(CONFIG_DRM)	+= drm.o
+ obj-$(CONFIG_DRM_MIPI_DBI) += drm_mipi_dbi.o
+diff --git a/drivers/gpu/drm/i915/Kconfig.debug b/drivers/gpu/drm/i915/Kconfig.debug
+index e7fd3e76f8a2..425189f55d37 100644
+--- a/drivers/gpu/drm/i915/Kconfig.debug
++++ b/drivers/gpu/drm/i915/Kconfig.debug
+@@ -38,7 +38,6 @@ config DRM_I915_DEBUG
+ 	select DRM_VGEM # used by igt/prime_vgem (dmabuf interop checks)
+ 	select DRM_DEBUG_MM if DRM=y
+ 	select DRM_EXPORT_FOR_TESTS if m
+-	select DRM_DEBUG_SELFTEST
+ 	select DMABUF_SELFTESTS
+ 	select SW_SYNC # signaling validation framework (igt/syncobj*)
+ 	select DRM_I915_WERROR
+diff --git a/drivers/gpu/drm/selftests/drm_selftest.c b/drivers/gpu/drm/selftests/drm_selftest.c
 deleted file mode 100644
-index 630770d30aba..000000000000
---- a/drivers/gpu/drm/selftests/drm_modeset_selftests.h
+index e29ed9faef5b..000000000000
+--- a/drivers/gpu/drm/selftests/drm_selftest.c
 +++ /dev/null
-@@ -1,12 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/* List each unit test as selftest(name, function)
-- *
-- * The name is used as both an enum and expanded as igt__name to create
-- * a module parameter. It must be unique and legal for a C identifier.
-- *
-- * Tests are executed in order by igt/drm_selftests_helper
-- */
--selftest(drm_rect_clip_scaled_div_by_zero, igt_drm_rect_clip_scaled_div_by_zero)
--selftest(drm_rect_clip_scaled_not_clipped, igt_drm_rect_clip_scaled_not_clipped)
--selftest(drm_rect_clip_scaled_clipped, igt_drm_rect_clip_scaled_clipped)
--selftest(drm_rect_clip_scaled_signed_vs_unsigned, igt_drm_rect_clip_scaled_signed_vs_unsigned)
-diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.c b/drivers/gpu/drm/selftests/test-drm_modeset_common.c
-deleted file mode 100644
-index 2a7f93774006..000000000000
---- a/drivers/gpu/drm/selftests/test-drm_modeset_common.c
-+++ /dev/null
-@@ -1,32 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
+@@ -1,109 +0,0 @@
 -/*
-- * Common file for modeset selftests.
+- * Copyright © 2016 Intel Corporation
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice (including the next
+- * paragraph) shall be included in all copies or substantial portions of the
+- * Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+- * IN THE SOFTWARE.
 - */
 -
--#include <linux/module.h>
+-#include <linux/compiler.h>
 -
--#include "test-drm_modeset_common.h"
+-#define selftest(name, func) __idx_##name,
+-enum {
+-#include TESTS
+-};
+-#undef selftest
 -
--#define TESTS "drm_modeset_selftests.h"
--#include "drm_selftest.h"
+-#define selftest(n, f) [__idx_##n] = { .name = #n, .func = f },
+-static struct drm_selftest {
+-	bool enabled;
+-	const char *name;
+-	int (*func)(void *);
+-} selftests[] = {
+-#include TESTS
+-};
+-#undef selftest
 -
--#include "drm_selftest.c"
+-/* Embed the line number into the parameter name so that we can order tests */
+-#define param(n) __PASTE(igt__, __PASTE(__PASTE(__LINE__, __), n))
+-#define selftest_0(n, func, id) \
+-module_param_named(id, selftests[__idx_##n].enabled, bool, 0400);
+-#define selftest(n, func) selftest_0(n, func, param(n))
+-#include TESTS
+-#undef selftest
 -
--static int __init test_drm_modeset_init(void)
+-static void set_default_test_all(struct drm_selftest *st, unsigned long count)
+-{
+-	unsigned long i;
+-
+-	for (i = 0; i < count; i++)
+-		if (st[i].enabled)
+-			return;
+-
+-	for (i = 0; i < count; i++)
+-		st[i].enabled = true;
+-}
+-
+-static int run_selftests(struct drm_selftest *st,
+-			 unsigned long count,
+-			 void *data)
+-{
+-	int err = 0;
+-
+-	set_default_test_all(st, count);
+-
+-	/* Tests are listed in natural order in drm_*_selftests.h */
+-	for (; count--; st++) {
+-		if (!st->enabled)
+-			continue;
+-
+-		pr_debug("drm: Running %s\n", st->name);
+-		err = st->func(data);
+-		if (err)
+-			break;
+-	}
+-
+-	if (WARN(err > 0 || err == -ENOTTY,
+-		 "%s returned %d, conflicting with selftest's magic values!\n",
+-		 st->name, err))
+-		err = -1;
+-
+-	rcu_barrier();
+-	return err;
+-}
+-
+-static int __maybe_unused
+-__drm_subtests(const char *caller,
+-	       const struct drm_subtest *st,
+-	       int count,
+-	       void *data)
 -{
 -	int err;
 -
--	err = run_selftests(selftests, ARRAY_SIZE(selftests), NULL);
+-	for (; count--; st++) {
+-		pr_debug("Running %s/%s\n", caller, st->name);
+-		err = st->func(data);
+-		if (err) {
+-			pr_err("%s: %s failed with error %d\n",
+-			       caller, st->name, err);
+-			return err;
+-		}
+-	}
 -
--	return err > 0 ? 0 : err;
+-	return 0;
 -}
--
--static void __exit test_drm_modeset_exit(void)
--{
--}
--
--module_init(test_drm_modeset_init);
--module_exit(test_drm_modeset_exit);
--
--MODULE_AUTHOR("Intel Corporation");
--MODULE_LICENSE("GPL");
-diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
+diff --git a/drivers/gpu/drm/selftests/drm_selftest.h b/drivers/gpu/drm/selftests/drm_selftest.h
 deleted file mode 100644
-index c7cc5edc65f1..000000000000
---- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
+index c784ec02ff53..000000000000
+--- a/drivers/gpu/drm/selftests/drm_selftest.h
 +++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
+@@ -1,41 +0,0 @@
+-/*
+- * Copyright © 2016 Intel Corporation
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice (including the next
+- * paragraph) shall be included in all copies or substantial portions of the
+- * Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+- * IN THE SOFTWARE.
+- */
 -
--#ifndef __TEST_DRM_MODESET_COMMON_H__
--#define __TEST_DRM_MODESET_COMMON_H__
+-#ifndef __DRM_SELFTEST_H__
+-#define __DRM_SELFTEST_H__
 -
--#include <linux/errno.h>
--#include <linux/printk.h>
+-struct drm_subtest {
+-	int (*func)(void *data);
+-	const char *name;
+-};
 -
--#define FAIL(test, msg, ...) \
--	do { \
--		if (test) { \
--			pr_err("%s/%u: " msg, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
--			return -EINVAL; \
--		} \
--	} while (0)
+-static int __drm_subtests(const char *caller,
+-			  const struct drm_subtest *st,
+-			  int count,
+-			  void *data);
+-#define drm_subtests(T, data) \
+-	__drm_subtests(__func__, T, ARRAY_SIZE(T), data)
 -
--#define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
+-#define SUBTEST(x) { x, #x }
 -
--int igt_drm_rect_clip_scaled_div_by_zero(void *ignored);
--int igt_drm_rect_clip_scaled_not_clipped(void *ignored);
--int igt_drm_rect_clip_scaled_clipped(void *ignored);
--int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored);
--
--#endif
-diff --git a/drivers/gpu/drm/selftests/test-drm_rect.c b/drivers/gpu/drm/selftests/test-drm_rect.c
-index 3a5ff38321f4..f3d26c31ee66 100644
---- a/drivers/gpu/drm/selftests/test-drm_rect.c
-+++ b/drivers/gpu/drm/selftests/test-drm_rect.c
-@@ -3,15 +3,12 @@
-  * Test cases for the drm_rect functions
-  */
- 
--#define pr_fmt(fmt) "drm_rect: " fmt
--
-+#include <kunit/test.h>
- #include <linux/limits.h>
- 
- #include <drm/drm_rect.h>
- 
--#include "test-drm_modeset_common.h"
--
--int igt_drm_rect_clip_scaled_div_by_zero(void *ignored)
-+static void drm_rect_clip_scaled_div_by_zero(struct kunit *test)
- {
- 	struct drm_rect src, dst, clip;
- 	bool visible;
-@@ -23,21 +20,23 @@ int igt_drm_rect_clip_scaled_div_by_zero(void *ignored)
- 	drm_rect_init(&src, 0, 0, 0, 0);
- 	drm_rect_init(&dst, 0, 0, 0, 0);
- 	drm_rect_init(&clip, 1, 1, 1, 1);
-+
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--	FAIL(visible, "Destination not be visible\n");
--	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
-+
-+	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination not be visible");
-+	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible");
- 
- 	drm_rect_init(&src, 0, 0, 0, 0);
- 	drm_rect_init(&dst, 3, 3, 0, 0);
- 	drm_rect_init(&clip, 1, 1, 1, 1);
-+
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--	FAIL(visible, "Destination not be visible\n");
--	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
- 
--	return 0;
-+	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination not be visible");
-+	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible");
- }
- 
--int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
-+static void drm_rect_clip_scaled_not_clipped(struct kunit *test)
- {
- 	struct drm_rect src, dst, clip;
- 	bool visible;
-@@ -49,14 +48,16 @@ int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 0 && src.x2 == 1 << 16 &&
-+			      src.y1 == 0 && src.y2 == 1 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 0 && dst.x2 == 1 &&
-+			      dst.y1 == 0 && dst.y2 == 1,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 2:1 scaling */
- 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-@@ -65,14 +66,16 @@ int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 0 || src.x2 != 2 << 16 ||
--	     src.y1 != 0 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 0 && src.x2 == 2 << 16 &&
-+			      src.y1 == 0 && src.y2 == 2 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 0 && dst.x2 == 1 &&
-+			      dst.y1 == 0 && dst.y2 == 1,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 1:2 scaling */
- 	drm_rect_init(&src, 0, 0, 1 << 16, 1 << 16);
-@@ -81,19 +84,19 @@ int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 2 ||
--	     dst.y1 != 0 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
--
--	return 0;
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 0 && src.x2 == 1 << 16 &&
-+			      src.y1 == 0 && src.y2 == 1 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 0 && dst.x2 == 2 &&
-+			      dst.y1 == 0 && dst.y2 == 2,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- }
- 
--int igt_drm_rect_clip_scaled_clipped(void *ignored)
-+static void drm_rect_clip_scaled_clipped(struct kunit *test)
- {
- 	struct drm_rect src, dst, clip;
- 	bool visible;
-@@ -105,14 +108,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 0 && src.x2 == 1 << 16 &&
-+			      src.y1 == 0 && src.y2 == 1 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 0 && dst.x2 == 1 &&
-+			      dst.y1 == 0 && dst.y2 == 1,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 1:1 scaling bottom/right clip */
- 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-@@ -121,14 +126,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
--	     src.y1 != 1 << 16 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 1 || dst.x2 != 2 ||
--	     dst.y1 != 1 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 1 << 16 && src.x2 == 2 << 16 &&
-+			      src.y1 == 1 << 16 && src.y2 == 2 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 1 && dst.x2 == 2 &&
-+			      dst.y1 == 1 && dst.y2 == 2,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 2:1 scaling top/left clip */
- 	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
-@@ -137,14 +144,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 0 || src.x2 != 2 << 16 ||
--	     src.y1 != 0 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 0 && src.x2 == 2 << 16 &&
-+			      src.y1 == 0 && src.y2 == 2 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 0 && dst.x2 == 1 &&
-+			      dst.y1 == 0 && dst.y2 == 1,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 2:1 scaling bottom/right clip */
- 	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
-@@ -153,14 +162,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 2 << 16 || src.x2 != 4 << 16 ||
--	     src.y1 != 2 << 16 || src.y2 != 4 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 1 || dst.x2 != 2 ||
--	     dst.y1 != 1 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 2 << 16 && src.x2 == 4 << 16 &&
-+			      src.y1 == 2 << 16 && src.y2 == 4 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 1 && dst.x2 == 2 &&
-+			      dst.y1 == 1 && dst.y2 == 2,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 1:2 scaling top/left clip */
- 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-@@ -169,14 +180,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 2 ||
--	     dst.y1 != 0 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 0 && src.x2 == 1 << 16 &&
-+			      src.y1 == 0 && src.y2 == 1 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 0 && dst.x2 == 2 &&
-+			      dst.y1 == 0 && dst.y2 == 2,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- 
- 	/* 1:2 scaling bottom/right clip */
- 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-@@ -185,19 +198,19 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
--	     src.y1 != 1 << 16 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 2 || dst.x2 != 4 ||
--	     dst.y1 != 2 || dst.y2 != 4,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
--
--	return 0;
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      src.x1 == 1 << 16 && src.x2 == 2 << 16 &&
-+			      src.y1 == 1 << 16 && src.y2 == 2 << 16,
-+			      "Source badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test,
-+			      dst.x1 == 2 && dst.x2 == 4 &&
-+			      dst.y1 == 2 && dst.y2 == 4,
-+			      "Destination badly clipped");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
- }
- 
--int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored)
-+static void drm_rect_clip_scaled_signed_vs_unsigned(struct kunit *test)
- {
- 	struct drm_rect src, dst, clip;
- 	bool visible;
-@@ -216,8 +229,21 @@ int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored)
- 
- 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
- 
--	FAIL(visible, "Destination should not be visible\n");
--	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
--
--	return 0;
-+	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination should not be visible");
-+	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible");
- }
-+
-+static struct kunit_case drm_rect_tests[] = {
-+	KUNIT_CASE(drm_rect_clip_scaled_div_by_zero),
-+	KUNIT_CASE(drm_rect_clip_scaled_not_clipped),
-+	KUNIT_CASE(drm_rect_clip_scaled_clipped),
-+	KUNIT_CASE(drm_rect_clip_scaled_signed_vs_unsigned),
-+	{}
-+};
-+
-+static struct kunit_suite drm_rect_test_suite = {
-+	.name = "drm_rect_tests",
-+	.test_cases = drm_rect_tests,
-+};
-+
-+kunit_test_suite(drm_rect_test_suite);
+-#endif /* __DRM_SELFTEST_H__ */
+diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/test/Makefile
+similarity index 100%
+rename from drivers/gpu/drm/selftests/Makefile
+rename to drivers/gpu/drm/test/Makefile
+diff --git a/drivers/gpu/drm/selftests/test-drm_cmdline_parser.c b/drivers/gpu/drm/test/test-drm_cmdline_parser.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_cmdline_parser.c
+rename to drivers/gpu/drm/test/test-drm_cmdline_parser.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_damage_helper.c b/drivers/gpu/drm/test/test-drm_damage_helper.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_damage_helper.c
+rename to drivers/gpu/drm/test/test-drm_damage_helper.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/test/test-drm_dp_mst_helper.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+rename to drivers/gpu/drm/test/test-drm_dp_mst_helper.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_format.c b/drivers/gpu/drm/test/test-drm_format.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_format.c
+rename to drivers/gpu/drm/test/test-drm_format.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_framebuffer.c b/drivers/gpu/drm/test/test-drm_framebuffer.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_framebuffer.c
+rename to drivers/gpu/drm/test/test-drm_framebuffer.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_mm.c b/drivers/gpu/drm/test/test-drm_mm.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_mm.c
+rename to drivers/gpu/drm/test/test-drm_mm.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_plane_helper.c b/drivers/gpu/drm/test/test-drm_plane_helper.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_plane_helper.c
+rename to drivers/gpu/drm/test/test-drm_plane_helper.c
+diff --git a/drivers/gpu/drm/selftests/test-drm_rect.c b/drivers/gpu/drm/test/test-drm_rect.c
+similarity index 100%
+rename from drivers/gpu/drm/selftests/test-drm_rect.c
+rename to drivers/gpu/drm/test/test-drm_rect.c
 -- 
 2.34.1
 
