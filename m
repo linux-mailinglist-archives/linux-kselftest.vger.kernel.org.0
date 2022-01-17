@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E15F491252
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 00:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE48F491253
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 00:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243796AbiAQXYm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 18:24:42 -0500
-Received: from mga11.intel.com ([192.55.52.93]:21981 "EHLO mga11.intel.com"
+        id S243797AbiAQXYt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 18:24:49 -0500
+Received: from mga12.intel.com ([192.55.52.136]:55081 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243793AbiAQXYl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 18:24:41 -0500
+        id S243793AbiAQXYs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jan 2022 18:24:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642461881; x=1673997881;
+  t=1642461888; x=1673997888;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=GcWP1LRMN7SxSYJ3pSTe8V2ey5lZyLVzDF6iV8Uf3kU=;
-  b=Ogz/IjPEuxt3RsBqDtuAqAYl0wy0NLo+dPkCH6GPKR8Q7Ya9wSwhTJpG
-   /AmqM95rBx9b13xm9QzgFRzshCb0zEIMHOzN4HcZXGeCnALZoTITGFJzS
-   ByKGraOf2qbH4cw1urW37zWqXaN0oK7kAA2TyBwTVW7m4D78GfNyHQDCs
-   HbrtaNGuISbA1vWWBKtn1G2Txe5psYY2YBQWbRiGJQoK0B/t14eGwDeao
-   S2a44i8WYbRyJpI0Bqw6X/zgzjVjDOiskvxkaOug9XrAv/J1f198jHEyT
-   5F8wz2Ipd32asEYeGqTQ/hDvM+WzNg2iEu2dN7qOc+7CdaUdYaTDty8YU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="242264065"
+  bh=quUmjOVA9Wz2OOMMVV+W8akBlwHVso4xSDK0aYlLTGI=;
+  b=OlXOnKlV6ugWD5ARL2tN9kNMTQUyfenrjREDeWgA6z5+IrNeeuH/bUkW
+   oUkcG7dIX96Dla0V7Eu+Id1CupFf6pBESBNroQAZSgN7tlAU1ZBB1RzJ0
+   fUk7vuYod1q/uG0CwmL9DpajhW5ePOJb7HQ5eqDvZ7Vxl2Mz+K0SRcADJ
+   x3yPC6bdw1uJDz1+THb/KQsJazC4cc817sxre8T67xv7C5pLv0a3pTdl7
+   97RLhcLGXW1HmnQwImQZtrc8SIPRjqV9VNwcscjKrcGzOfeoQ1dFuraSy
+   VmRLc9nsh1sSul4RZJE0qt32sv/tY9W3P17iyocVwedvtSgwq1ccLD5TW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="224683773"
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="242264065"
+   d="scan'208";a="224683773"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 15:24:41 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 15:24:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="517554411"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 15:24:41 -0800
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="517554427"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jan 2022 15:24:48 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 15:24:40 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ 15.1.2308.20; Mon, 17 Jan 2022 15:24:47 -0800
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 17 Jan 2022 15:24:40 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ 15.1.2308.20; Mon, 17 Jan 2022 15:24:47 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 17 Jan 2022 15:24:40 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.171)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2308.20 via Frontend Transport; Mon, 17 Jan 2022 15:24:47 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 17 Jan 2022 15:24:40 -0800
+ 15.1.2308.20; Mon, 17 Jan 2022 15:24:46 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V/ypTEqIjI5qLpdPy4LDBxwrPbLrip+xUz4uUm6gIVzDsGXK+GQTdhuMIeEptzOHstzA7d6rhOkJOieB0QMnFPGQt+UfOTAt42WUVXu5jZjgrJ525shE3uw0XT7qNUKQ6Wmh2zbDfSy5oVlifcWGhV5MPUPeIPaPvnS7c0HpOApmYehBEUq7bJ9lzCsbe8L6M1pInvH2wVdEUiWcx21q7vNHWoGwl2nQ2aoyH6Lm4JoJOd51+4RO4T8VaQw+yQyVHreX9aEKUFvhuFaGSBL+4hlKkqLuHbqlTUA1GhVe3E6V7JyZQHG5rgcf9kkx7R31KsBwVHaN/eubxkq+4MoTdw==
+ b=MLLmztMb7BhOJ6vS30/zz6+faR0H7kzaMMWcF1czJOB8w75pRCMAY2y5SEoOgJv9O5koyyj9V7tRepLgkY8NFmJgUxQ9LdxH0ZLvnwRZhjDfW/tVf0yDa3wcT1kufx0aYXgqarVcINx7RFDxySiAYdFl+OlQH+84At5z7xl/tt5tPQ3t5EQ6WQLc9E+YIx1OGn1XefMDGK2BdWyvy5s4of01kvGZCqQ3KZRlhNCYhSxC1/37LZjatR9h/AYLFoX7R/CseLsidSozwU2uF58MeW8fNP/QDpn6dk/+Uh/Lut7VTlhcDvu7Rki7WJB2EYjHKGwTVGBTCirbSbH9NGYHdw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bhPMBEpU7fSd99CDkUXlfjakSYRMf0JwjL0TEAu1GOU=;
- b=h3FOo9bebJvnzqGJdzoQHMN8DMhc+5i4sg8rX0n1VUYx/h/kKOBpcYPRaXSg2UjsE2YO3YyKhhqNqSKmHa6wMN4aqvUTNAye429uJffCk8jb39j5tyR2yMDapOdUgrsnE0oP+xL7uKv6/dcHXAntp2OUjdFJtN9eIk7yAY8XzQm5nEUD/SuJ1U/zXyW0nDPgMYza23lVFgq01pU5utAN9/gEpg1xyt6T7ABGHvxTbw9PlbH+63l8iGKMFfnOH9YVYJWZXHxKoBniZyPcX7aULNc9hlZc5LZHvx15SAEl8gKMUiSBwPEzLJUYaOj5eFEPFYJFG6Bay60PVpUfWfGYRw==
+ bh=ZeXNZdnDA2vS/Z+sC48PAkzUL7vTuZlZ96DW0e/2av4=;
+ b=D8DQdm5mwQeBRThi4vUacMTekNH4f8vCaBTNqE/pEKe2Oae7g6UXxOSuEDArDgd6hFGhFaNrE48ae/lUINiippDSLv2F5mIFuHqZjSv38jx1EjbE/FDNx5S3cUfveHye+BHonXeb2vw7clTP+ytDU2fFx1KOD37awNxNcoyfPpuIVP7hlDgxiseGqhVpTWedT1ld3bocTgapf/PTknRDYC+bYm1su0bRTDw8s9WH38ga4sRAjRoFdr0yVrWUKCEWaRl1mHdmFjdDZxKkpWynciNfR/p/SFgxnmCbOTO3B3TSwlPGEpfymcjXWfkiVDinGVNsZO5QDiFhXTdakNkCGA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -65,11 +65,11 @@ Authentication-Results: dkim=none (message not signed)
 Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
  DM4PR11MB5550.namprd11.prod.outlook.com (2603:10b6:5:38b::24) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4888.9; Mon, 17 Jan 2022 23:24:36 +0000
+ 15.20.4888.9; Mon, 17 Jan 2022 23:24:43 +0000
 Received: from DM4PR11MB5373.namprd11.prod.outlook.com
  ([fe80::fc15:bd26:128a:f5f5]) by DM4PR11MB5373.namprd11.prod.outlook.com
  ([fe80::fc15:bd26:128a:f5f5%8]) with mapi id 15.20.4888.014; Mon, 17 Jan 2022
- 23:24:36 +0000
+ 23:24:43 +0000
 From:   =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
 To:     <dri-devel@lists.freedesktop.org>,
         <linux-kselftest@vger.kernel.org>
@@ -83,719 +83,520 @@ CC:     Brendan Higgins <brendanhiggins@google.com>,
         Petri Latvala <petri.latvala@intel.com>,
         Arkadiusz Hiler <arek@hiler.eu>,
         =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
-Subject: [RFC 06/10] drm: test-drm_dp_mst_helper: Convert to KUnit
-Date:   Tue, 18 Jan 2022 00:22:55 +0100
-Message-ID: <20220117232259.180459-7-michal.winiarski@intel.com>
+Subject: [RFC 07/10] drm: test-drm_rect: Convert to KUnit
+Date:   Tue, 18 Jan 2022 00:22:56 +0100
+Message-ID: <20220117232259.180459-8-michal.winiarski@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220117232259.180459-1-michal.winiarski@intel.com>
 References: <20220117232259.180459-1-michal.winiarski@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P265CA0056.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:60::20) To DM4PR11MB5373.namprd11.prod.outlook.com
+X-ClientProxiedBy: AS8P251CA0016.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:2f2::11) To DM4PR11MB5373.namprd11.prod.outlook.com
  (2603:10b6:5:394::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c6f0c31c-b6e4-4d26-4f1a-08d9da1086a8
+X-MS-Office365-Filtering-Correlation-Id: fcea89ac-3b72-43c0-3401-08d9da108adf
 X-MS-TrafficTypeDiagnostic: DM4PR11MB5550:EE_
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM4PR11MB5550824F58F8D6843FDC54CB98579@DM4PR11MB5550.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:773;
+X-Microsoft-Antispam-PRVS: <DM4PR11MB55503231545B863916E3FB5A98579@DM4PR11MB5550.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:549;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MMH3H+zODFnfLnkgrcVVhwPO8dhv0wVelBCByc4e3XMtvVKH5TZnlb5Vk/reg4GwsQ5tILrzdBPsyDIXXBUGqk91qyREbly6qfB56GkhhiFkdBiqR6ldue8pqO82zDaCmq4B3nmTBlYlpAvpJkD1tr0B6j2Dsjo8ThYXPiG9lTQDHkfBDzSrhJ08zPXciwFeculN0dAq9wDxMKKNNr3J+5KOOKjsBo4Iuq13sTl7btZDmLDD/hBFv56m+iw3e2krtvo274yK61QoDSvv58XJc6U1LxvamoYxUNAWtq32TWVHtK3erPlDIrWSz2AryuDZKyttl8dJJD2NGkS2KPBIh0Oai1y3DdmGD3qaRpJ7dDwKUPhASovOG+wtABANixyQY0X5HZ2N7/v8rKyK/6pvMslvuaVM9Ilm5cI9iroCPxtcrS1Rn1XrWKBvjcuwYrTRYyZXoAP1CN/4q/ljfkGPbRtNj3hrq1pFIKkcMZFTsAzTz3tOk9NlkbTVDGD7SqcaQ/A8tRVKkiFo7J4S25SvSdJg3L1Zzp+rR904KUsHWVIUiR1nCRVEyltM1uAHhP2pYDHoPvJ8+ahrsAEDM+GzyVGbPJYp1lyUN2/4OouF7Z1WKyOpt8Sj8CNSU9MgsdcmlyyBF2BQ7TKHB7gMJ5vUKw==
+X-Microsoft-Antispam-Message-Info: u5Hzi/IG4KCGfvStsW6TLkay3yvPHjzUXKvjo942EBv7/21VSEHSsmUqLkrDE7C+cR32Sip359MHEvySdnKf1/AUz/sR9kE2MycDTU22C0VJ7gbifXVkVmqQuHd9640tsV/0nI4oCLQZVhvZvgQ7VfNxDlqTy9BNsgLMVcyCojE2aONsgHGamwnXEPh4u9LgAM5hqrqTDt+wKsZXNypQr4EGRiaNb5l4NVNU2UMh7PEFbYi+LK4V/Q57/L1cFrfmcfgEMjphkJXUievR923WS2KMjnr4cRBVGPUPE80654W9WZLuraOUSPBfstavStcpswp+Cy463BqzBMVA2z/00ayp+VW0gIh0etvBGxxkR6j//IyOoo36exn8iucU+RoCymbhcRQurodcLcoFuq2Sn3b7b9XluIZADFNQOWD3aNOJO/BfW1SHNhvTBXObOfTT9aohSEvXPKUjkTpZJ0p+HR9eTpfPLRfo38znrDxzb57tF5+Fo46NcLOHAnsPhz0vASfyvDDK9gjFxb89XEe1T00dhTF/sUpWYdnVdaRZO1BYPUebGCTBhnKMDe2ix5SooSBTEp7wczIgZLau83u2FzXN7GzG1i6XpF1o0hlb9KMH6VNU8Pu9BQz0QR3FAeI8IXG1pjVstOBJmuWpcmKFlQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(82960400001)(4326008)(5660300002)(36756003)(186003)(6506007)(7416002)(1076003)(54906003)(6512007)(83380400001)(26005)(66946007)(66476007)(66556008)(316002)(6486002)(38100700002)(8936002)(508600001)(2906002)(30864003)(6666004)(8676002)(2616005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eDBrTGxldXM4SThxaEJSVFFLZmJyNzRDalJDSnhXMldDWEh0ZnRTTXl3b1oz?=
- =?utf-8?B?MjkvNGtwcldRelpycVQvdkhHTVlVVzVwdms0L1JVUWZWaHI3QVAvQmg4QUdi?=
- =?utf-8?B?QzNNY0o1dlRzamZuM2dkNnUvdFVhd3Q3Wll1VVZBRVRocUorVEtMQS9CMStS?=
- =?utf-8?B?ZnVXRkd4SWlwc1FWYk84TjBKeWQwSXRrZHNFWHV0TG9mWFJuNVVyV2wvZVRB?=
- =?utf-8?B?SnhsSFh5N0xaWDhtYlNnSGM4NGZVaEk2SHZZL3oxQktyZ09KcjNON2NxVitI?=
- =?utf-8?B?bWRwekVRbFJVSUtZNWZabDFCNHJ0MWFEdHBYSFFGTTJBb2R0RUdlOTNqZjIr?=
- =?utf-8?B?WEszU0FuV3FrRTRzU2VmdncvRHgxTm8zd3hDZUp0TGt1QXVoS0JkajFsUjJt?=
- =?utf-8?B?bFcwRWFNRS9DSkNEVDRtVWlJQnI5Z3R3cmp4TGozanJNZzNTbTRScVZNUnh5?=
- =?utf-8?B?ZnVmWCtURm1xM1I3YUkvTkxuYWc3NFJYRXBaWFArVERsanhRV1FLZkJpUUpm?=
- =?utf-8?B?MTZUeUkwdmlhTks3Zkd5VGVlM0pNVXd0bzhpNWlvU1owbDdpN2NNZG9aY3k3?=
- =?utf-8?B?NnRGby8xWU1ZQW1yVzJncTM3ZGwvTlIyQmFKTXUrM1RXa3kvSVo5V3FWMmk1?=
- =?utf-8?B?eXdZalZUc2hRU3FORlVSYWhSNFNsaWJvUnU0b2dDSHJNUnl4V25tVGZZdUFV?=
- =?utf-8?B?SWdSaFZHYTdyajVWeEI5Ymt6Q3gyR2wvS3ZYUUJtRGgxbnk5WTdFUmZJa083?=
- =?utf-8?B?VFFIcTlHanhwbURha05NZHo0T2RFQ2VrUkdPTTMybDdIN3UzWXVXc3Z1dFdN?=
- =?utf-8?B?eWg3MVZ3SE5qTEI5K0tmWlgxSGtMekJ0d0xIbGpUM2lld1lwdVAyVEtkU2hS?=
- =?utf-8?B?Z2d3akdCRFF6a0RHYXdjd0pURVp1Yks3bzd5MzFzVFJUeVRMRTJoTzRmRDEz?=
- =?utf-8?B?VlZmTUppOU5HUng4Y0FXK1lodUdMQ1ZaSkZVQ3hpUE81UUN6aU5lK2NoU1FF?=
- =?utf-8?B?S3Q1clM5RkVYd2xRYUpQbGh3cGpieFU4UzJIQzBJd2pTT2dXajlYWUNkU2tk?=
- =?utf-8?B?dHJRYzJVQXc2eHUvTitzYWhVYkRDVTBDRVdheHg3Q3JQeVkva0l6azdaWUx6?=
- =?utf-8?B?U1NrSnBlU0lVL2VBWGFiY09WdXRWS0txc2o2Y0piT1lqeFg1SnBzQTdURm9Z?=
- =?utf-8?B?aFZ2aU9vc01OOUtoU1JROUZWdlFOUHVmRVZZUFFGZWRjcWZqaFpaVkE0T3pM?=
- =?utf-8?B?L2NTV0RpMTROZTRuNktyaXYzZ25zTG0rMDFwY3BDbmhZQUtsUFlYeEZzQi9q?=
- =?utf-8?B?cG80MlNnclRKOUZxVElZRjd2TzlOYU5zWHJFYzdTZjFuQnVpNDdVNEt5UDlN?=
- =?utf-8?B?T0JEemtlQUZJUHdueHZDQjQ1ZFlFS3BXWDl4UkZVbDB6VExoa1d4ancvVnZE?=
- =?utf-8?B?WnIzNEJDVmlVTzg2WDh5QUVEM1hzNUlId2N1NFhHdnc2SlRBbyt3ZXRCUzN5?=
- =?utf-8?B?d0xvVVM0SU9FaXJ1WFBsVmtmWnVISkJRTTExUmJIOFlkVlJPeGhDenZML0dD?=
- =?utf-8?B?eHpBSUN3YmRLaGFlZ2R6UWxGbGdnS1BuYm1MMnROSThYVkZiaFZpNDF1RHRp?=
- =?utf-8?B?QXd0K043VmFURHBnOTVuaHJrWFBQTmZ4eU5BQXpBejc4eXFSYVM2MmZMZWhJ?=
- =?utf-8?B?dEsvS2VxZWJibUdjRTIxdEVkTGl3d1VBZERXNmgxTDJSSjRJYXdZNENRQysr?=
- =?utf-8?B?WFRqRCtZMVFJcU5Vekg5OFNsLzBWbFM5VGQ0QTVyd1ZiR3FvS20yOVU0UGdi?=
- =?utf-8?B?OGlqSDdVeTA5MFQxbTQ5a2tlVEsrNWgwd2tYS3l3YnIyN0lyM083cXR5Ujhv?=
- =?utf-8?B?YzliSVZhcDFTYkNRaUFlRWxWM2pvSjR5RWUyYlpwYThEOWYvSTBRd1dEVVYr?=
- =?utf-8?B?OTlST1JuZ0huVUpWN08rWmx4U1FCek9DQkZYSjN6MkExL0I4SlBTZWs0Z2xq?=
- =?utf-8?B?UTllSG1TanY3aWQ0M3h0TWNwajZIMVVWZkN6VW8vTWpPcWlzSFFiYnZqcmpQ?=
- =?utf-8?B?MndSdFdGYlJrMnJIL015VWIwYmcrTkQzMGR3akdnTWNNVVMxUHJhZjdEV01Y?=
- =?utf-8?B?T01WSCt5K3JFQzEzV1poNHFZZDQvSi9LSEpDMXMyRDdQalpkNVhLejFkOFBU?=
- =?utf-8?B?TjZqckZjOERKSnFGOGlSSW1lMUd4OUZTR1dkRDhlT1c2TjN1Y2FEcy93NGtl?=
- =?utf-8?B?MTFYQncxYkxxTW5SSTJmVWRGUWRnPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6f0c31c-b6e4-4d26-4f1a-08d9da1086a8
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2tEZG5ac0FDNG9qZ0FsbGpnWExZQWNTaGNBdGcxTlhoOHVqdElFVTdBZzEx?=
+ =?utf-8?B?enN1STlrQkUveVk0YkUwVlhLTE5pRHRDOVpFZ1FlYUlHYmo3NDhFWGEwZWg5?=
+ =?utf-8?B?RS9YeVh6OW0yZzMycVN6T0s3NE16aWppVnNEOHlaR0x4VkJDR3lXa2wxTnhz?=
+ =?utf-8?B?bDNuZ1AyQmpyQzh2N1YzMlV6R1NSUGk2QmNVY3JMRXR2c2tqODZBOGwyQTBG?=
+ =?utf-8?B?aUxHT0x3Z1A1MnFxTzBZOXZQTEVlSWhCcDZRTERoMlpBY3JtdmRvRUpXbHJC?=
+ =?utf-8?B?bnJyaG9lOWhLZ003a2pQdEpqMVJHYlJSbVM5NzloaG1PRE42elova0FhOFd6?=
+ =?utf-8?B?S01BK0QrS1lhVHRpTWtFVEtEL0ZNWFBMZEtyK2ZHRlhnMGVmWDJuU09TSFBv?=
+ =?utf-8?B?Q05ZanBWYWZIUHFRRFJRRkZncTVFMFVYSDhPeGs5UXVjWERGOWliOW1zeFdL?=
+ =?utf-8?B?QVlBeTRURzFXY29Gckd1TmdSV0kvbHZVSGNIL2w2ZUx5eGc3ak5VUEJGSGRk?=
+ =?utf-8?B?TmViUkYwcW5QSHp1MWlmditCbWVJNmJKQlNNNmdiUmtSb1lnVmVSYU51cUxW?=
+ =?utf-8?B?MFlSQmw0TUp6dC9BbkpkU0dvQTByN3R5YU9Qa0xHNXBPcENLaUJQRXJ2QXVC?=
+ =?utf-8?B?VGZRdWlqYnA1SURxM2t4cUZ3MEVCcTZ4blJRcWUvcytha1pqbWVVdW9nWFhs?=
+ =?utf-8?B?ZmdzSytqTzl5RFR2SzZoR1QzcW1vWVJMUjhBQmxZaXhCbEdMSTVQMGVjMG9k?=
+ =?utf-8?B?QkVxeWFnYkJRVGFJbFBnbkVzdDZZd1NiZmZNbWQ1cGVhYzdZQmRVdWVud1lo?=
+ =?utf-8?B?aTJpZUtOZDNQV0hzY2xIV1pwMmVreGhONkhtUXZGRnd1KzQwSFZSM1pJczQv?=
+ =?utf-8?B?aFA3RWpxOXZRcUIwdlI2R3VwaDgxdUZGcjRnbkVYcFJ5a3RmU2NoSUJVTkE5?=
+ =?utf-8?B?SGxndGhIV3UydzhrcnhrWXJsdWlKQ1BBTmx6cUU3Z0l6TTF6ZEhJU1BwWXhy?=
+ =?utf-8?B?NVhNVkwzZ21hQWF0Qm92dTVPOHRHK1ZHL1lhbmlldUE2N1JycnRMMG9KZFFr?=
+ =?utf-8?B?UkpXWkJkbmJiYnZPVTRVNUlHUWEyVnFob0VQTlQweWwrSnlwL1d3bEFaR3dk?=
+ =?utf-8?B?MmpyQ1puM2pkbDlRQlJsNTBwa0Z3SEQyVEVWUFY3Y1JuVUZaU3VDdjFZZ0w5?=
+ =?utf-8?B?Y3FMcTB1c3pHQmdCdit5eEtpK0luNkdwYXphSlovUzhyQWxyQXNmbUs1MFo4?=
+ =?utf-8?B?WUFxOU5VQzNYR2NkRDRSQWt0M2FrYmRHd0ZybTl2RW5McVJVMG9Yb1dQdzJ5?=
+ =?utf-8?B?bnJhMjFDL0dMbVRIYzF1ZlR3UmVzYkl6VC9RR2ZDR1A3WFJIdjdja3Y2Y25v?=
+ =?utf-8?B?Y2lLNll6cXQ1SXk5UGs0eXdRY0NXMTFPNDR0eFNGTUpoWWQyeTJCSXZvRkp3?=
+ =?utf-8?B?aXVoRnpBRGp4d09oaStmK1hQOVRRc1ZnMVhOMzRWWEc2emNzM0o2OHRiMG1p?=
+ =?utf-8?B?TUE2UnhOU2ZCRGRpR3NES1kvUmI4dktJQit6ZFBUUWxWZ0tqUnN0SUY3Z2xH?=
+ =?utf-8?B?WmFReDhNaHEydE5WeDZDT2Z4cXVDTkpxQ0JQcVY2NjFpSWFDT2pnWDRTTGxN?=
+ =?utf-8?B?dkFpNE1HWkh4eDBndDIrd2JYaWlVWnVaTmN6SGEvcWl2eXhzeEdrbUxyZFJ6?=
+ =?utf-8?B?OGQzbWJ4b0lhL01TaHhFbDgxVjhhUlJzeWp0d1ZJTlc5LzJoV0xCbHJSektL?=
+ =?utf-8?B?Zk1WWTRMeERCR25kMEY4NnNzSDhjekJSaXc4eTlkMGlWTnM4bWVzaGxEVGJK?=
+ =?utf-8?B?dXhVdjJzTVdSSHNzOTJXVkwyWkpnVWJtUkpTZVA0YVNSeHg5QVRCalNkczdC?=
+ =?utf-8?B?S2RlLzBhU1gveFhMUFhKRjkzSFNBOXhqbHVRWWEvcXdYSFNRaWRmRXBUL1hG?=
+ =?utf-8?B?NDAza2lDdElrWXNtamVCU21jZ3VhUVJiSFN1dnZSL2lCdEwzSG02SXFidXdT?=
+ =?utf-8?B?c05WZkMwMWViUW4wYVRmeWt3VG5nZktBSWFvTFlHeXVjSVdQVmJwUUpnd2lK?=
+ =?utf-8?B?YnNFdkl5U2o4S0cvNlN3blIrRUhoYzF2MnhibGkzdzNORW9VckoyTEVmQVlD?=
+ =?utf-8?B?NWpQRWlxclBKbGp3TlBmVWtCVVJvbG4vc1JWVTAzZHMyZWd3SFlGNFg1a2tq?=
+ =?utf-8?B?ZEpKYWtidUpQVFpjQTZ5TEJOdDdycm5Ra3NnM1l4Y3lPSDdycUpJeEFPcUFi?=
+ =?utf-8?B?L1ExdTUydnpXWTcybDVJV1NUVmZ3PT0=?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcea89ac-3b72-43c0-3401-08d9da108adf
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 23:24:36.5010
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2022 23:24:43.5709
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BSwUeou16kHll76Z9u25crM6JAydeUjriX5t0N+BIJo+ErS8UxKcIUsVVQrIU3ILa2cGP1lPbv5nCG9YnTXPG7yv/j3+qp2Iwm/FA0dYNYc=
+X-MS-Exchange-CrossTenant-UserPrincipalName: GE/y6zwZdaXuLHlwAa8iKXkyV71L7OOH+bLXHYya68FHAjeAmMjghZI47+VoHN8EOrzpszJ1TBfXIkZ5P0BzK3iIHbnbIT02Nug26ULEjrI=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5550
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-igt_dp_mst_calc_pbn_mode was converted one-to-one,
-igt_dp_mst_sideband_msg_req_decode was refactored to parameterized test.
+One-to-one conversion, no functional changes.
+
+Now that all of the modeset selftests were converted, remove the helpers
+that are no longer used.
 
 Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
 ---
- drivers/gpu/drm/selftests/Makefile            |   3 +-
- .../gpu/drm/selftests/drm_modeset_selftests.h |   2 -
- .../drm/selftests/test-drm_dp_mst_helper.c    | 502 ++++++++++++------
- .../drm/selftests/test-drm_modeset_common.h   |   2 -
- 4 files changed, 330 insertions(+), 179 deletions(-)
+ drivers/gpu/drm/selftests/Makefile            |   8 +-
+ .../gpu/drm/selftests/drm_modeset_selftests.h |  12 -
+ .../drm/selftests/test-drm_modeset_common.c   |  32 ---
+ .../drm/selftests/test-drm_modeset_common.h   |  24 --
+ drivers/gpu/drm/selftests/test-drm_rect.c     | 212 ++++++++++--------
+ 5 files changed, 122 insertions(+), 166 deletions(-)
+ delete mode 100644 drivers/gpu/drm/selftests/drm_modeset_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.h
 
 diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index 35f2f40dbaf3..77e37eebf099 100644
+index 77e37eebf099..2d524eddb4e3 100644
 --- a/drivers/gpu/drm/selftests/Makefile
 +++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,7 +1,6 @@
+@@ -1,11 +1,9 @@
  # SPDX-License-Identifier: GPL-2.0-only
- test-drm_modeset-$(CONFIG_DRM_DEBUG_SELFTEST) := \
- 		      test-drm_modeset_common.o \
--		      test-drm_dp_mst_helper.o \
- 		      test-drm_rect.o
+-test-drm_modeset-$(CONFIG_DRM_DEBUG_SELFTEST) := \
+-		      test-drm_modeset_common.o \
+-		      test-drm_rect.o
  
- obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o
-@@ -9,4 +8,4 @@ obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o
+-obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o
++obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o
+ 
  obj-$(CONFIG_DRM_KUNIT_TEST) := \
  	test-drm_cmdline_parser.o test-drm_plane_helper.o \
  	test-drm_format.o test-drm_framebuffer.o \
--	test-drm_damage_helper.o
-+	test-drm_damage_helper.o test-drm_dp_mst_helper.o
+-	test-drm_damage_helper.o test-drm_dp_mst_helper.o
++	test-drm_damage_helper.o test-drm_dp_mst_helper.o \
++	test-drm_rect.o
 diff --git a/drivers/gpu/drm/selftests/drm_modeset_selftests.h b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-index b6a6dba66b64..630770d30aba 100644
+deleted file mode 100644
+index 630770d30aba..000000000000
 --- a/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-+++ b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-@@ -10,5 +10,3 @@ selftest(drm_rect_clip_scaled_div_by_zero, igt_drm_rect_clip_scaled_div_by_zero)
- selftest(drm_rect_clip_scaled_not_clipped, igt_drm_rect_clip_scaled_not_clipped)
- selftest(drm_rect_clip_scaled_clipped, igt_drm_rect_clip_scaled_clipped)
- selftest(drm_rect_clip_scaled_signed_vs_unsigned, igt_drm_rect_clip_scaled_signed_vs_unsigned)
--selftest(dp_mst_calc_pbn_mode, igt_dp_mst_calc_pbn_mode)
--selftest(dp_mst_sideband_msg_req_decode, igt_dp_mst_sideband_msg_req_decode)
-diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-index 6b4759ed6bfd..d0719f3c5a42 100644
---- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-+++ b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
-@@ -3,54 +3,97 @@
-  * Test cases for for the DRM DP MST helpers
++++ /dev/null
+@@ -1,12 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* List each unit test as selftest(name, function)
+- *
+- * The name is used as both an enum and expanded as igt__name to create
+- * a module parameter. It must be unique and legal for a C identifier.
+- *
+- * Tests are executed in order by igt/drm_selftests_helper
+- */
+-selftest(drm_rect_clip_scaled_div_by_zero, igt_drm_rect_clip_scaled_div_by_zero)
+-selftest(drm_rect_clip_scaled_not_clipped, igt_drm_rect_clip_scaled_not_clipped)
+-selftest(drm_rect_clip_scaled_clipped, igt_drm_rect_clip_scaled_clipped)
+-selftest(drm_rect_clip_scaled_signed_vs_unsigned, igt_drm_rect_clip_scaled_signed_vs_unsigned)
+diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.c b/drivers/gpu/drm/selftests/test-drm_modeset_common.c
+deleted file mode 100644
+index 2a7f93774006..000000000000
+--- a/drivers/gpu/drm/selftests/test-drm_modeset_common.c
++++ /dev/null
+@@ -1,32 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Common file for modeset selftests.
+- */
+-
+-#include <linux/module.h>
+-
+-#include "test-drm_modeset_common.h"
+-
+-#define TESTS "drm_modeset_selftests.h"
+-#include "drm_selftest.h"
+-
+-#include "drm_selftest.c"
+-
+-static int __init test_drm_modeset_init(void)
+-{
+-	int err;
+-
+-	err = run_selftests(selftests, ARRAY_SIZE(selftests), NULL);
+-
+-	return err > 0 ? 0 : err;
+-}
+-
+-static void __exit test_drm_modeset_exit(void)
+-{
+-}
+-
+-module_init(test_drm_modeset_init);
+-module_exit(test_drm_modeset_exit);
+-
+-MODULE_AUTHOR("Intel Corporation");
+-MODULE_LICENSE("GPL");
+diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
+deleted file mode 100644
+index c7cc5edc65f1..000000000000
+--- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
++++ /dev/null
+@@ -1,24 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifndef __TEST_DRM_MODESET_COMMON_H__
+-#define __TEST_DRM_MODESET_COMMON_H__
+-
+-#include <linux/errno.h>
+-#include <linux/printk.h>
+-
+-#define FAIL(test, msg, ...) \
+-	do { \
+-		if (test) { \
+-			pr_err("%s/%u: " msg, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
+-			return -EINVAL; \
+-		} \
+-	} while (0)
+-
+-#define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
+-
+-int igt_drm_rect_clip_scaled_div_by_zero(void *ignored);
+-int igt_drm_rect_clip_scaled_not_clipped(void *ignored);
+-int igt_drm_rect_clip_scaled_clipped(void *ignored);
+-int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored);
+-
+-#endif
+diff --git a/drivers/gpu/drm/selftests/test-drm_rect.c b/drivers/gpu/drm/selftests/test-drm_rect.c
+index 3a5ff38321f4..f3d26c31ee66 100644
+--- a/drivers/gpu/drm/selftests/test-drm_rect.c
++++ b/drivers/gpu/drm/selftests/test-drm_rect.c
+@@ -3,15 +3,12 @@
+  * Test cases for the drm_rect functions
   */
  
--#define PREFIX_STR "[drm_dp_mst_helper]"
+-#define pr_fmt(fmt) "drm_rect: " fmt
 -
 +#include <kunit/test.h>
- #include <linux/random.h>
+ #include <linux/limits.h>
  
- #include <drm/drm_dp_mst_helper.h>
- #include <drm/drm_print.h>
+ #include <drm/drm_rect.h>
  
- #include "../drm_dp_mst_topology_internal.h"
 -#include "test-drm_modeset_common.h"
- 
--int igt_dp_mst_calc_pbn_mode(void *ignored)
-+struct dp_mst_calc_pbn_mode_test {
-+	int rate;
-+	int bpp;
-+	int expected;
-+	bool dsc;
-+};
-+
-+static void dp_mst_calc_pbn_mode(struct kunit *test)
+-
+-int igt_drm_rect_clip_scaled_div_by_zero(void *ignored)
++static void drm_rect_clip_scaled_div_by_zero(struct kunit *test)
  {
--	int pbn, i;
--	const struct {
--		int rate;
--		int bpp;
--		int expected;
--		bool dsc;
--	} test_params[] = {
--		{ 154000, 30, 689, false },
--		{ 234000, 30, 1047, false },
--		{ 297000, 24, 1063, false },
--		{ 332880, 24, 50, true },
--		{ 324540, 24, 49, true },
--	};
-+	const struct dp_mst_calc_pbn_mode_test *params = test->param_value;
-+	int pbn;
- 
--	for (i = 0; i < ARRAY_SIZE(test_params); i++) {
--		pbn = drm_dp_calc_pbn_mode(test_params[i].rate,
--					   test_params[i].bpp,
--					   test_params[i].dsc);
--		FAIL(pbn != test_params[i].expected,
--		     "Expected PBN %d for clock %d bpp %d, got %d\n",
--		     test_params[i].expected, test_params[i].rate,
--		     test_params[i].bpp, pbn);
--	}
-+	pbn = drm_dp_calc_pbn_mode(params->rate,
-+				   params->bpp,
-+				   params->dsc);
+ 	struct drm_rect src, dst, clip;
+ 	bool visible;
+@@ -23,21 +20,23 @@ int igt_drm_rect_clip_scaled_div_by_zero(void *ignored)
+ 	drm_rect_init(&src, 0, 0, 0, 0);
+ 	drm_rect_init(&dst, 0, 0, 0, 0);
+ 	drm_rect_init(&clip, 1, 1, 1, 1);
 +
-+	KUNIT_EXPECT_EQ(test, pbn, params->expected);
-+}
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	FAIL(visible, "Destination not be visible\n");
+-	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
++
++	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination not be visible");
++	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible");
+ 
+ 	drm_rect_init(&src, 0, 0, 0, 0);
+ 	drm_rect_init(&dst, 3, 3, 0, 0);
+ 	drm_rect_init(&clip, 1, 1, 1, 1);
++
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	FAIL(visible, "Destination not be visible\n");
+-	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
  
 -	return 0;
-+static const struct dp_mst_calc_pbn_mode_test dp_mst_calc_pbn_mode_tests[] = {
-+	{
-+		.rate = 154000,
-+		.bpp = 30,
-+		.expected = 689,
-+		.dsc = false,
-+	},
-+	{
-+		.rate = 234000,
-+		.bpp = 30,
-+		.expected = 1047,
-+		.dsc = false,
-+	},
-+	{
-+		.rate = 297000,
-+		.bpp = 24,
-+		.expected = 1063,
-+		.dsc = false,
-+	},
-+	{
-+		.rate = 332880,
-+		.bpp = 24,
-+		.expected = 50,
-+		.dsc = true,
-+	},
-+	{
-+		.rate = 324540,
-+		.bpp = 24,
-+		.expected = 49,
-+		.dsc = true,
-+	},
-+};
-+
-+static void dp_mst_calc_pbn_mode_desc(const struct dp_mst_calc_pbn_mode_test *t,
-+				      char *desc)
-+{
-+	sprintf(desc, "rate = %d, bpp = %d, dsc = %s",
-+		t->rate, t->bpp, t->dsc ? "true" : "false");
++	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination not be visible");
++	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible");
  }
  
--static bool
--sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
--		       const struct drm_dp_sideband_msg_req_body *out)
-+KUNIT_ARRAY_PARAM(dp_mst_calc_pbn_mode, dp_mst_calc_pbn_mode_tests, dp_mst_calc_pbn_mode_desc);
-+
-+static void
-+drm_dp_mst_helper_printfn(struct drm_printer *p, struct va_format *vaf)
-+{
-+	struct kunit *test = p->arg;
-+
-+	kunit_err(test, "%pV", vaf);
-+}
-+
-+static void
-+expect_sideband_msg_req_equal(struct kunit *test,
-+			      const struct drm_dp_sideband_msg_req_body *in,
-+			      const struct drm_dp_sideband_msg_req_body *out)
+-int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
++static void drm_rect_clip_scaled_not_clipped(struct kunit *test)
  {
- 	const struct drm_dp_remote_i2c_read_tx *txin, *txout;
-+	struct drm_printer p = {
-+		.printfn = drm_dp_mst_helper_printfn,
-+		.arg = test
-+	};
- 	int i;
+ 	struct drm_rect src, dst, clip;
+ 	bool visible;
+@@ -49,14 +48,16 @@ int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
  
- 	if (in->req_type != out->req_type)
--		return false;
-+		goto fail;
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
  
- 	switch (in->req_type) {
- 	/*
-@@ -65,7 +108,7 @@ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 		    IN.num_transactions != OUT.num_transactions ||
- 		    IN.port_number != OUT.port_number ||
- 		    IN.read_i2c_device_id != OUT.read_i2c_device_id)
--			return false;
-+			goto fail;
+-	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
+-	     src.y1 != 0 || src.y2 != 1 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
+-	     dst.y1 != 0 || dst.y2 != 1,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 0 && src.x2 == 1 << 16 &&
++			      src.y1 == 0 && src.y2 == 1 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 0 && dst.x2 == 1 &&
++			      dst.y1 == 0 && dst.y2 == 1,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
  
- 		for (i = 0; i < IN.num_transactions; i++) {
- 			txin = &IN.transactions[i];
-@@ -76,11 +119,11 @@ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 			    txin->num_bytes != txout->num_bytes ||
- 			    txin->i2c_transaction_delay !=
- 			    txout->i2c_transaction_delay)
--				return false;
-+				goto fail;
+ 	/* 2:1 scaling */
+ 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
+@@ -65,14 +66,16 @@ int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
  
- 			if (memcmp(txin->bytes, txout->bytes,
- 				   txin->num_bytes) != 0)
--				return false;
-+				goto fail;
- 		}
- 		break;
- #undef IN
-@@ -92,9 +135,12 @@ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 		if (IN.dpcd_address != OUT.dpcd_address ||
- 		    IN.num_bytes != OUT.num_bytes ||
- 		    IN.port_number != OUT.port_number)
--			return false;
-+			goto fail;
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
  
--		return memcmp(IN.bytes, OUT.bytes, IN.num_bytes) == 0;
-+		if (memcmp(IN.bytes, OUT.bytes, IN.num_bytes) != 0)
-+			goto fail;
-+
-+		break;
- #undef IN
- #undef OUT
+-	FAIL(src.x1 != 0 || src.x2 != 2 << 16 ||
+-	     src.y1 != 0 || src.y2 != 2 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
+-	     dst.y1 != 0 || dst.y2 != 1,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 0 && src.x2 == 2 << 16 &&
++			      src.y1 == 0 && src.y2 == 2 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 0 && dst.x2 == 1 &&
++			      dst.y1 == 0 && dst.y2 == 1,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
  
-@@ -104,55 +150,65 @@ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 		if (IN.port_number != OUT.port_number ||
- 		    IN.write_i2c_device_id != OUT.write_i2c_device_id ||
- 		    IN.num_bytes != OUT.num_bytes)
--			return false;
-+			goto fail;
+ 	/* 1:2 scaling */
+ 	drm_rect_init(&src, 0, 0, 1 << 16, 1 << 16);
+@@ -81,19 +84,19 @@ int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
  
--		return memcmp(IN.bytes, OUT.bytes, IN.num_bytes) == 0;
-+		if (memcmp(IN.bytes, OUT.bytes, IN.num_bytes) != 0)
-+			goto fail;
-+
-+		break;
- #undef IN
- #undef OUT
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
  
- 	default:
--		return memcmp(in, out, sizeof(*in)) == 0;
-+		if (memcmp(in, out, sizeof(*in)) != 0)
-+			goto fail;
- 	}
- 
--	return true;
-+	return;
-+
-+fail:
-+	drm_printf(&p, "Expected:\n");
-+	drm_dp_dump_sideband_msg_req_body(in, 1, &p);
-+	drm_printf(&p, "Got:\n");
-+	drm_dp_dump_sideband_msg_req_body(out, 1, &p);
-+	KUNIT_FAIL(test, "Encode/decode failed");
-+}
-+
-+struct dp_mst_sideband_msg_req_decode_test {
-+	const struct drm_dp_sideband_msg_req_body req;
-+	const struct drm_dp_sideband_msg_req_body
-+		(*f)(const struct drm_dp_sideband_msg_req_body *in);
-+};
-+
-+const struct drm_dp_sideband_msg_req_body
-+param_to_dp_mst_sideband_msg_req_body(const struct dp_mst_sideband_msg_req_decode_test *t)
-+{
-+	if (t->f)
-+		return t->f(&t->req);
-+
-+	return t->req;
- }
- 
--static bool
--sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
-+static void dp_mst_sideband_msg_req_decode(struct kunit *test)
- {
-+	const struct drm_dp_sideband_msg_req_body in =
-+		param_to_dp_mst_sideband_msg_req_body(test->param_value);
- 	struct drm_dp_sideband_msg_req_body *out;
--	struct drm_printer p = drm_err_printer(PREFIX_STR);
- 	struct drm_dp_sideband_msg_tx *txmsg;
--	int i, ret;
--	bool result = true;
+-	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
+-	     src.y1 != 0 || src.y2 != 1 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 0 || dst.x2 != 2 ||
+-	     dst.y1 != 0 || dst.y2 != 2,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
 -
--	out = kzalloc(sizeof(*out), GFP_KERNEL);
--	if (!out)
--		return false;
--
--	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
--	if (!txmsg)
--		return false;
--
--	drm_dp_encode_sideband_req(in, txmsg);
--	ret = drm_dp_decode_sideband_req(txmsg, out);
--	if (ret < 0) {
--		drm_printf(&p, "Failed to decode sideband request: %d\n",
--			   ret);
--		result = false;
--		goto out;
--	}
-+	int i;
- 
--	if (!sideband_msg_req_equal(in, out)) {
--		drm_printf(&p, "Encode/decode failed, expected:\n");
--		drm_dp_dump_sideband_msg_req_body(in, 1, &p);
--		drm_printf(&p, "Got:\n");
--		drm_dp_dump_sideband_msg_req_body(out, 1, &p);
--		result = false;
--		goto out;
--	}
-+	out = kunit_kzalloc(test, sizeof(*out), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, out);
- 
--	switch (in->req_type) {
-+	txmsg = kunit_kzalloc(test, sizeof(*txmsg), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, txmsg);
-+
-+	drm_dp_encode_sideband_req(&in, txmsg);
-+	KUNIT_ASSERT_EQ(test, drm_dp_decode_sideband_req(txmsg, out), 0);
-+
-+	expect_sideband_msg_req_equal(test, &in, out);
-+
-+	switch (in.req_type) {
- 	case DP_REMOTE_DPCD_WRITE:
- 		kfree(out->u.dpcd_write.bytes);
- 		break;
-@@ -164,110 +220,210 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
- 		kfree(out->u.i2c_write.bytes);
- 		break;
- 	}
--
--	/* Clear everything but the req_type for the input */
--	memset(&in->u, 0, sizeof(in->u));
--
--out:
--	kfree(out);
--	kfree(txmsg);
--	return result;
- }
- 
--int igt_dp_mst_sideband_msg_req_decode(void *unused)
-+static u8 data[] = { 0xff, 0x0, 0xdd };
-+
-+const struct drm_dp_sideband_msg_req_body
-+random_dp_query_enc_client_id(const struct drm_dp_sideband_msg_req_body *in)
- {
--	struct drm_dp_sideband_msg_req_body in = { 0 };
--	u8 data[] = { 0xff, 0x0, 0xdd };
--	int i;
-+	struct drm_dp_query_stream_enc_status enc_status = { };
- 
--#define DO_TEST() FAIL_ON(!sideband_msg_req_encode_decode(&in))
--
--	in.req_type = DP_ENUM_PATH_RESOURCES;
--	in.u.port_num.port_number = 5;
--	DO_TEST();
--
--	in.req_type = DP_POWER_UP_PHY;
--	in.u.port_num.port_number = 5;
--	DO_TEST();
--
--	in.req_type = DP_POWER_DOWN_PHY;
--	in.u.port_num.port_number = 5;
--	DO_TEST();
--
--	in.req_type = DP_ALLOCATE_PAYLOAD;
--	in.u.allocate_payload.number_sdp_streams = 3;
--	for (i = 0; i < in.u.allocate_payload.number_sdp_streams; i++)
--		in.u.allocate_payload.sdp_stream_sink[i] = i + 1;
--	DO_TEST();
--	in.u.allocate_payload.port_number = 0xf;
--	DO_TEST();
--	in.u.allocate_payload.vcpi = 0x7f;
--	DO_TEST();
--	in.u.allocate_payload.pbn = U16_MAX;
--	DO_TEST();
--
--	in.req_type = DP_QUERY_PAYLOAD;
--	in.u.query_payload.port_number = 0xf;
--	DO_TEST();
--	in.u.query_payload.vcpi = 0x7f;
--	DO_TEST();
--
--	in.req_type = DP_REMOTE_DPCD_READ;
--	in.u.dpcd_read.port_number = 0xf;
--	DO_TEST();
--	in.u.dpcd_read.dpcd_address = 0xfedcb;
--	DO_TEST();
--	in.u.dpcd_read.num_bytes = U8_MAX;
--	DO_TEST();
--
--	in.req_type = DP_REMOTE_DPCD_WRITE;
--	in.u.dpcd_write.port_number = 0xf;
--	DO_TEST();
--	in.u.dpcd_write.dpcd_address = 0xfedcb;
--	DO_TEST();
--	in.u.dpcd_write.num_bytes = ARRAY_SIZE(data);
--	in.u.dpcd_write.bytes = data;
--	DO_TEST();
--
--	in.req_type = DP_REMOTE_I2C_READ;
--	in.u.i2c_read.port_number = 0xf;
--	DO_TEST();
--	in.u.i2c_read.read_i2c_device_id = 0x7f;
--	DO_TEST();
--	in.u.i2c_read.num_transactions = 3;
--	in.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3;
--	for (i = 0; i < in.u.i2c_read.num_transactions; i++) {
--		in.u.i2c_read.transactions[i].bytes = data;
--		in.u.i2c_read.transactions[i].num_bytes = ARRAY_SIZE(data);
--		in.u.i2c_read.transactions[i].i2c_dev_id = 0x7f & ~i;
--		in.u.i2c_read.transactions[i].i2c_transaction_delay = 0xf & ~i;
--	}
--	DO_TEST();
--
--	in.req_type = DP_REMOTE_I2C_WRITE;
--	in.u.i2c_write.port_number = 0xf;
--	DO_TEST();
--	in.u.i2c_write.write_i2c_device_id = 0x7f;
--	DO_TEST();
--	in.u.i2c_write.num_bytes = ARRAY_SIZE(data);
--	in.u.i2c_write.bytes = data;
--	DO_TEST();
--
--	in.req_type = DP_QUERY_STREAM_ENC_STATUS;
--	in.u.enc_status.stream_id = 1;
--	DO_TEST();
--	get_random_bytes(in.u.enc_status.client_id,
--			 sizeof(in.u.enc_status.client_id));
--	DO_TEST();
--	in.u.enc_status.stream_event = 3;
--	DO_TEST();
--	in.u.enc_status.valid_stream_event = 0;
--	DO_TEST();
--	in.u.enc_status.stream_behavior = 3;
--	DO_TEST();
--	in.u.enc_status.valid_stream_behavior = 1;
--	DO_TEST();
--
--#undef DO_TEST
 -	return 0;
-+	get_random_bytes(enc_status.client_id, sizeof(enc_status.client_id));
-+
-+	return (const struct drm_dp_sideband_msg_req_body) { .req_type = in->req_type,
-+							     .u.enc_status = enc_status
-+	};
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 0 && src.x2 == 1 << 16 &&
++			      src.y1 == 0 && src.y2 == 1 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 0 && dst.x2 == 2 &&
++			      dst.y1 == 0 && dst.y2 == 2,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ }
+ 
+-int igt_drm_rect_clip_scaled_clipped(void *ignored)
++static void drm_rect_clip_scaled_clipped(struct kunit *test)
+ {
+ 	struct drm_rect src, dst, clip;
+ 	bool visible;
+@@ -105,14 +108,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
+-	     src.y1 != 0 || src.y2 != 1 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
+-	     dst.y1 != 0 || dst.y2 != 1,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 0 && src.x2 == 1 << 16 &&
++			      src.y1 == 0 && src.y2 == 1 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 0 && dst.x2 == 1 &&
++			      dst.y1 == 0 && dst.y2 == 1,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ 
+ 	/* 1:1 scaling bottom/right clip */
+ 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
+@@ -121,14 +126,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
+-	     src.y1 != 1 << 16 || src.y2 != 2 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 1 || dst.x2 != 2 ||
+-	     dst.y1 != 1 || dst.y2 != 2,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 1 << 16 && src.x2 == 2 << 16 &&
++			      src.y1 == 1 << 16 && src.y2 == 2 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 1 && dst.x2 == 2 &&
++			      dst.y1 == 1 && dst.y2 == 2,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ 
+ 	/* 2:1 scaling top/left clip */
+ 	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
+@@ -137,14 +144,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(src.x1 != 0 || src.x2 != 2 << 16 ||
+-	     src.y1 != 0 || src.y2 != 2 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
+-	     dst.y1 != 0 || dst.y2 != 1,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 0 && src.x2 == 2 << 16 &&
++			      src.y1 == 0 && src.y2 == 2 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 0 && dst.x2 == 1 &&
++			      dst.y1 == 0 && dst.y2 == 1,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ 
+ 	/* 2:1 scaling bottom/right clip */
+ 	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
+@@ -153,14 +162,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(src.x1 != 2 << 16 || src.x2 != 4 << 16 ||
+-	     src.y1 != 2 << 16 || src.y2 != 4 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 1 || dst.x2 != 2 ||
+-	     dst.y1 != 1 || dst.y2 != 2,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 2 << 16 && src.x2 == 4 << 16 &&
++			      src.y1 == 2 << 16 && src.y2 == 4 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 1 && dst.x2 == 2 &&
++			      dst.y1 == 1 && dst.y2 == 2,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ 
+ 	/* 1:2 scaling top/left clip */
+ 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
+@@ -169,14 +180,16 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
+-	     src.y1 != 0 || src.y2 != 1 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 0 || dst.x2 != 2 ||
+-	     dst.y1 != 0 || dst.y2 != 2,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 0 && src.x2 == 1 << 16 &&
++			      src.y1 == 0 && src.y2 == 1 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 0 && dst.x2 == 2 &&
++			      dst.y1 == 0 && dst.y2 == 2,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ 
+ 	/* 1:2 scaling bottom/right clip */
+ 	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
+@@ -185,19 +198,19 @@ int igt_drm_rect_clip_scaled_clipped(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
+-	     src.y1 != 1 << 16 || src.y2 != 2 << 16,
+-	     "Source badly clipped\n");
+-	FAIL(dst.x1 != 2 || dst.x2 != 4 ||
+-	     dst.y1 != 2 || dst.y2 != 4,
+-	     "Destination badly clipped\n");
+-	FAIL(!visible, "Destination should be visible\n");
+-	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-
+-	return 0;
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      src.x1 == 1 << 16 && src.x2 == 2 << 16 &&
++			      src.y1 == 1 << 16 && src.y2 == 2 << 16,
++			      "Source badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test,
++			      dst.x1 == 2 && dst.x2 == 4 &&
++			      dst.y1 == 2 && dst.y2 == 4,
++			      "Destination badly clipped");
++	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible");
++	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible");
+ }
+ 
+-int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored)
++static void drm_rect_clip_scaled_signed_vs_unsigned(struct kunit *test)
+ {
+ 	struct drm_rect src, dst, clip;
+ 	bool visible;
+@@ -216,8 +229,21 @@ int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored)
+ 
+ 	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+ 
+-	FAIL(visible, "Destination should not be visible\n");
+-	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
+-
+-	return 0;
++	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination should not be visible");
++	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible");
  }
 +
-+static const struct dp_mst_sideband_msg_req_decode_test dp_msg_sideband_msg_req_decode_tests[] = {
-+	{
-+		.req = {
-+			.req_type = DP_ENUM_PATH_RESOURCES,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_POWER_UP_PHY,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_POWER_DOWN_PHY,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.number_sdp_streams = 3,
-+			.u.allocate_payload.sdp_stream_sink = { 1, 2, 3 },
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.vcpi = 0x7f,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.pbn = U16_MAX,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_PAYLOAD,
-+			.u.query_payload.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_PAYLOAD,
-+			.u.query_payload.vcpi = 0x7f,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.dpcd_address = 0xfedcb,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.num_bytes = U8_MAX,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.dpcd_address = 0xfedcb,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.num_bytes = ARRAY_SIZE(data),
-+			.u.dpcd_write.bytes = data,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.read_i2c_device_id = 0x7f,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.num_transactions = 3,
-+			.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3,
-+			.u.i2c_read.transactions = {
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data),
-+				  .i2c_dev_id = 0x7f, .i2c_transaction_delay = 0xf, },
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data),
-+				  .i2c_dev_id = 0x7e, .i2c_transaction_delay = 0xe, },
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data),
-+				  .i2c_dev_id = 0x7d, .i2c_transaction_delay = 0xd, },
-+			},
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.write_i2c_device_id = 0x7f,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.num_bytes = ARRAY_SIZE(data),
-+			.u.i2c_write.bytes = data,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_id = 1,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+		},
-+		.f = random_dp_query_enc_client_id,
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_event = 3,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.valid_stream_event = 0,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_behavior = 3,
-+		},
-+	},
-+	{
-+		.req = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.valid_stream_behavior = 1,
-+		},
-+	},
-+};
-+
-+KUNIT_ARRAY_PARAM(dp_mst_sideband_msg_req, dp_msg_sideband_msg_req_decode_tests, NULL);
-+
-+static struct kunit_case drm_dp_mst_helper_tests[] = {
-+	KUNIT_CASE_PARAM(dp_mst_calc_pbn_mode, dp_mst_calc_pbn_mode_gen_params),
-+	KUNIT_CASE_PARAM(dp_mst_sideband_msg_req_decode, dp_mst_sideband_msg_req_gen_params),
++static struct kunit_case drm_rect_tests[] = {
++	KUNIT_CASE(drm_rect_clip_scaled_div_by_zero),
++	KUNIT_CASE(drm_rect_clip_scaled_not_clipped),
++	KUNIT_CASE(drm_rect_clip_scaled_clipped),
++	KUNIT_CASE(drm_rect_clip_scaled_signed_vs_unsigned),
 +	{}
 +};
 +
-+static struct kunit_suite drm_dp_mst_helper_test_suite = {
-+	.name = "drm_dp_mst_helper_tests",
-+	.test_cases = drm_dp_mst_helper_tests,
++static struct kunit_suite drm_rect_test_suite = {
++	.name = "drm_rect_tests",
++	.test_cases = drm_rect_tests,
 +};
 +
-+kunit_test_suite(drm_dp_mst_helper_test_suite);
-diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-index 1501d99aee2f..c7cc5edc65f1 100644
---- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-+++ b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-@@ -20,7 +20,5 @@ int igt_drm_rect_clip_scaled_div_by_zero(void *ignored);
- int igt_drm_rect_clip_scaled_not_clipped(void *ignored);
- int igt_drm_rect_clip_scaled_clipped(void *ignored);
- int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored);
--int igt_dp_mst_calc_pbn_mode(void *ignored);
--int igt_dp_mst_sideband_msg_req_decode(void *ignored);
- 
- #endif
++kunit_test_suite(drm_rect_test_suite);
 -- 
 2.34.1
 
