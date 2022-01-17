@@ -2,79 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CC3490063
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jan 2022 03:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B1490215
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jan 2022 07:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbiAQCz2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 16 Jan 2022 21:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S234806AbiAQGlr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 01:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbiAQCz1 (ORCPT
+        with ESMTP id S234787AbiAQGlr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 16 Jan 2022 21:55:27 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E99C061574;
-        Sun, 16 Jan 2022 18:55:27 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so9766941pjl.0;
-        Sun, 16 Jan 2022 18:55:27 -0800 (PST)
+        Mon, 17 Jan 2022 01:41:47 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39353C061574
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Jan 2022 22:41:47 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 8so10007847pgc.10
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Jan 2022 22:41:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TC/ZT9U+TsRTqvL1Tb9mnrdS2C63NBDexd+hsYqZ5YA=;
-        b=ioltH1Ov2iDS+zfilvwI9UGF/CcMMagRNRziEiYf2LDCpGiJQ5VKUVsRKGbDL57Ian
-         qV7rRvMH6jMd6xxyawKRu8OEhYYK+u1ryc19EBCI4k4+3VWPGLxhCQN55lY/QnMJugLo
-         PEY+EJKkFtlWKdemG4U3XYmDnUb8K3GigGkkVrHATN6McN6YEYpHbwsBp8WoUs+yW/MV
-         LNMk9YDZfGJ5YXB0W9hSPadI23jKwX2dTBIa7PITQW3ocP0ZoaADw3aHlajQA/DdE8sr
-         vHMXqTlkZSHrFBN2aHbHP03zDZmRT23xeaCusaHDFUVxSHgo4t18fgvNCjft6DaQLLue
-         7euQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=81bQSQb3wEEPINMq19rfFYIhQtFYQQaxVg6e3I6g4Z8=;
+        b=zRlJ7/jj2U4qgugcmf+lCbQLOC/npaAeyYwnwxnSYfnoqT9MjGZJn7+/Sah0MGNRo9
+         k9n0BS1t+1Wx951XTGmvHTE2R/0QsukC8N4ajrHwdhTLpL0D9Pis9+e1J4Qy7r1wT1L9
+         FituuSQhiMuI9IUmL6mB/m4K5C+gyd3dSswo1SjcV2AIc1zkdKLGP3YEyw9uRbSTnyef
+         6uwLkkG6P1sPu9QpABrojghmOds3GpdzgLuSlG5/5QmDALF4W9Z0yzUVDOZ69CFgJFC0
+         dPjpDpGxrLPA2mSW4+hEq0yXGGZSlbeNywVBg0rvb3znVIsa1Qhiq92tqSGqeU0jIHcq
+         LNCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TC/ZT9U+TsRTqvL1Tb9mnrdS2C63NBDexd+hsYqZ5YA=;
-        b=S9zwKH+Yd9sXbHmW0BD1+BCB+aXCbXmghiYerqKZsFSciH0jhKWRu9NFo/tePS6o7m
-         5Og7Jp2lOj3j0nFc5zMrpfFgpdNVABJGzMFE9WfiUKjR8vKF9WX/48VKD3TIuA8Cocvy
-         VdkJrrHFo3Dmxri6aP3n+GS06shYzwe3TdFbKiuHV+Y3ACXo+2FwwlYYlVmq7adIEfun
-         dS6rhuRM7kYarWHb6YgGjiH5MANwgLO3+UibVu/jH39dWrJlJd7e4t4136fZOaG3nWfU
-         wzf7AyFzUiYZ5MDZPeybUyO8QkOeHpW3If7EQbOaVpxAM26KIVjEGPh8wVBAENhRRjVn
-         KBmg==
-X-Gm-Message-State: AOAM531DPPNCrumWg7g1j7dGWXt25x8ehpLRgfYNVlUpyxG/ETWfhbWh
-        NHFfdJsZgCEB/8LRBHEW5/U=
-X-Google-Smtp-Source: ABdhPJxX/DmQygLiFOoAZgI7NcB5iJLAGqce8UZtJc2Um6HmytK1FcZF0sGb0BRyMsGrnTTICGFByg==
-X-Received: by 2002:a17:90b:4012:: with SMTP id ie18mr22834074pjb.43.1642388126918;
-        Sun, 16 Jan 2022 18:55:26 -0800 (PST)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id t3sm12457550pfj.137.2022.01.16.18.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jan 2022 18:55:26 -0800 (PST)
-Message-ID: <ed1dc51a-8dfb-1179-3200-13669a25c845@gmail.com>
-Date:   Sun, 16 Jan 2022 18:55:25 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=81bQSQb3wEEPINMq19rfFYIhQtFYQQaxVg6e3I6g4Z8=;
+        b=69fSzpIP8t2Uvz8Rs4FUPj6XiOQ6zDRcCoo2N0CH3cidfHOIG4cxnz/Ztdpx0nocVg
+         CiaAtcVdDV0EtMCVDk8XUgtNcX4JQx4PhzUu+9Q7MP/cNGhkJrLYyUcjwZ+fzZln0JZH
+         /SqGvQTcN/3BwVKYywIZHKuObyXt71O0OpTmLSPfq01EzhX9t0n+xQqvxMm0Q28RLSvS
+         Sa0ap0ANh9IpGrxGLOf43F4RTOX73Y21SmNebaZML+h/S+orZRr7OXb0/GX7TImqT+g1
+         Dtifn87Hssq+Y4/AYtlNKj3AfJ0ZLL4p0rSFO+5/XKSalkRLz8o3HLknremLlZOxxEFB
+         mgOg==
+X-Gm-Message-State: AOAM533skpa2rkrvCxbBUNFqf1L0oPgQIX2hQUzBVwi6K8H5RG9eOjoI
+        GoR2Bxa6+ZCEfJFoxKRXNWIMrw==
+X-Google-Smtp-Source: ABdhPJxCw4H0p4bJRCX4gflrN+anKXbVzdknmZomTRYKNMoouhPMB/DkmE9sAQGSEYWiSnDXypLjwA==
+X-Received: by 2002:a63:a745:: with SMTP id w5mr17851937pgo.374.1642401706728;
+        Sun, 16 Jan 2022 22:41:46 -0800 (PST)
+Received: from localhost ([223.184.90.234])
+        by smtp.gmail.com with ESMTPSA id c6sm12967468pfv.62.2022.01.16.22.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 22:41:46 -0800 (PST)
+Date:   Mon, 17 Jan 2022 12:11:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH] selftests: cpufreq: Write test output to stdout as well
+Message-ID: <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
+References: <20220114232126.92043-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
- noneexisting handle
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220116012627.2031-1-tstruk@gmail.com>
- <20220116012627.2031-2-tstruk@gmail.com> <YeQs7Fy5NaK6m6Ar@iki.fi>
- <YeR6Z9a4Z3Xz79Tp@iki.fi> <070044a5-5468-1095-334f-67cf98eb30b3@gmail.com>
- <YeTKG3qPxm2DJGCN@iki.fi>
-From:   Tadeusz Struk <tstruk@gmail.com>
-In-Reply-To: <YeTKG3qPxm2DJGCN@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220114232126.92043-1-nfraprado@collabora.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/16/22 17:44, Jarkko Sakkinen wrote:
-> NP, Both are applied now.
+On 14-01-22, 18:21, Nícolas F. R. A. Prado wrote:
+> Use 'tee' to send the test output to stdout in addition to the current
+> output file. This makes the output easier to handle in automated test
+> systems and is superior to only later dumping the output file contents
+> to stdout, since this way the test output can be interleaved with other
+> log messages, like from the kernel, so that chronology is preserved,
+> making it easier to detect issues.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  tools/testing/selftests/cpufreq/main.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+> index 31f8c9a76c5f..60ce18ed0666 100755
+> --- a/tools/testing/selftests/cpufreq/main.sh
+> +++ b/tools/testing/selftests/cpufreq/main.sh
+> @@ -194,5 +194,5 @@ prerequisite
+>  
+>  # Run requested functions
+>  clear_dumps $OUTFILE
+> -do_test >> $OUTFILE.txt
+> +do_test | tee -a $OUTFILE.txt
+>  dmesg_dumps $OUTFILE
 
-Looking at
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/
-I can see only the 2/2 selftest applied.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh
