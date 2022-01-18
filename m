@@ -2,117 +2,320 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDD649199E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2E54916F5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241819AbiARCzT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 21:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345785AbiARCcC (ORCPT
+        id S1344763AbiARChW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 21:37:22 -0500
+Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:48559 "EHLO
+        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344092AbiARCed (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:32:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24622C061574;
-        Mon, 17 Jan 2022 18:31:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3282B81235;
-        Tue, 18 Jan 2022 02:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07862C36AE3;
-        Tue, 18 Jan 2022 02:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473068;
-        bh=UD6Ht1hPoWlejkDH/Gzpu/erG3jhCpBQYjkRtuiDRoM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YY2PPF1YKEL1WvF4w9OqHK/Lz1WYGHSDwlrlbyGBNs7UQI9sMB7j/+iicMgcexGTt
-         trvanExfZ7CGL51fdRsxXf91AnOeIMogVDJ1rd5CuwRV3PwBJRgypS6V9dY4aCpcNr
-         Qbu4yZWST0gxt2go+aqglQ33rrRWsvqA0AlFdRded8mclpE/nGCHP4EsUXIuzLkuB8
-         mtKUWoVTfTAOGriDKynt1VVP4nKX8rFwY8EvAnHEAEncb3vmv7Dd+2Q7BjxkZtq7lF
-         NgZVvxrV1SOsgXgWiG59N3A6cL5I0kghaVWc+FeKEJMX8GcijNLEzvKHGwXJ9Ij33a
-         kB3JMCXGA+UIw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiri Olsa <jolsa@redhat.com>, Hangbin Liu <haliu@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jussi Maki <joamaki@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        ast@kernel.org, andrii@kernel.org, yhs@fb.com, sunyucong@gmail.com,
-        sdf@google.com, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 199/217] bpf/selftests: Fix namespace mount setup in tc_redirect
-Date:   Mon, 17 Jan 2022 21:19:22 -0500
-Message-Id: <20220118021940.1942199-199-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118021940.1942199-1-sashal@kernel.org>
-References: <20220118021940.1942199-1-sashal@kernel.org>
+        Mon, 17 Jan 2022 21:34:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642472848;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=nw8f4TKgi4Wpx6QLC+yCwTh4jbJ3hmnhXHEG+liUSwM=;
+        b=PB2M+s5nZjLoT6Z9KrDI728plysqiy19QMQdiAulyhKf0eHUMob7fWjZ+q5Eq+Vq
+        ziyDDYiPubeMV/1ks5uuBP8oDArABw5c6jM9eYI/L9U4nEhC7m2jtJ/NPcQx0VMbqGq
+        f1jQq4awsB2i7KeQ0SJ1nCTc18KnIxk3NgiI5iVI=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642472848;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=nw8f4TKgi4Wpx6QLC+yCwTh4jbJ3hmnhXHEG+liUSwM=;
+        b=i1IqBVAtYypaFVSasoy+9h8y8x++/8psXX0898gs+W9Paswh7ENyVYvIerpR8Zz6
+        4/d6i2Y5t57V5OvblNrzV9PfyMSpG1CUkJOe20dWV3IE/gu8XSZOw+20P5o4ZB66VJE
+        8UK0gb/S/PG6xaqErUQH/1WNSQQmtU/xkKprhdwM=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20220113
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017e6b02bbe1-9fd85329-4983-4ce9-a2a1-8c00290d439a-000000@email.amazonses.com>
+Date:   Tue, 18 Jan 2022 02:27:28 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.01.18-54.240.8.29
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jiri Olsa <jolsa@redhat.com>
+## Build
+* kernel: 5.16.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 27c9d5b3c24af29de643533984f1ba3e650c7c78
+* git describe: next-20220113
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220113
 
-[ Upstream commit 5e22dd18626726028a93ff1350a8a71a00fd843d ]
+## Test Regressions (compared to next-20211224)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
 
-The tc_redirect umounts /sys in the new namespace, which can be
-mounted as shared and cause global umount. The lazy umount also
-takes down mounted trees under /sys like debugfs, which won't be
-available after sysfs mounts again and could cause fails in other
-tests.
+* dragonboard-410c, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+  - cgroup.test_kill
 
-  # cat /proc/self/mountinfo | grep debugfs
-  34 23 0:7 / /sys/kernel/debug rw,nosuid,nodev,noexec,relatime shared:14 - debugfs debugfs rw
-  # cat /proc/self/mountinfo | grep sysfs
-  23 86 0:22 / /sys rw,nosuid,nodev,noexec,relatime shared:2 - sysfs sysfs rw
-  # mount | grep debugfs
-  debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+* dragonboard-410c, kselftest-kvm
+  - kvm.get-reg-list
 
-  # ./test_progs -t tc_redirect
-  #164 tc_redirect:OK
-  Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+* dragonboard-410c, kselftest-pidfd
+  - pidfd.pidfd_setns_test
 
-  # mount | grep debugfs
-  # cat /proc/self/mountinfo | grep debugfs
-  # cat /proc/self/mountinfo | grep sysfs
-  25 86 0:22 / /sys rw,relatime shared:2 - sysfs sysfs rw
+* dragonboard-410c, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-fsconfig-hidepid
+  - proc.proc-multiple-procfs
+  - proc.proc-uptime-001
 
-Making the sysfs private under the new namespace so the umount won't
-trigger the global sysfs umount.
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
 
-Reported-by: Hangbin Liu <haliu@redhat.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jussi Maki <joamaki@gmail.com>
-Link: https://lore.kernel.org/bpf/20220104121030.138216-1-jolsa@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/tc_redirect.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-index 4b18b73df10b6..c2426df58e172 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-@@ -105,6 +105,13 @@ static int setns_by_fd(int nsfd)
- 	if (!ASSERT_OK(err, "unshare"))
- 		return err;
- 
-+	/* Make our /sys mount private, so the following umount won't
-+	 * trigger the global umount in case it's shared.
-+	 */
-+	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
-+	if (!ASSERT_OK(err, "remount private /sys"))
-+		return err;
-+
- 	err = umount2("/sys", MNT_DETACH);
- 	if (!ASSERT_OK(err, "umount2 /sys"))
- 		return err;
--- 
-2.34.1
+* dragonboard-410c, kselftest-timens
+  - timens.procfs
+  - timens.timens
 
+* dragonboard-410c, kselftest-timers
+  - timers.nsleep-lat
+
+* hi6220-hikey, kselftest-pidfd
+  - pidfd.pidfd_setns_test
+
+* hi6220-hikey, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-multiple-procfs
+
+* hi6220-hikey, kselftest-sync
+  - sync.sync_test
+
+* hi6220-hikey, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* hi6220-hikey, kselftest-timers
+  - timers.set-timer-lat
+
+* qemu_i386, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+
+* qemu_i386, kselftest-pidfd
+  - pidfd.pidfd_setns_test
+
+* qemu_i386, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-multiple-procfs
+
+* qemu_i386, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* qemu_x86_64, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.cr4_cpuid_sync_test
+  - kvm.debug_regs
+  - kvm.demand_paging_test
+  - kvm.dirty_log_perf_test
+  - kvm.emulator_error_test
+  - kvm.get_cpuid_test
+  - kvm.get_msr_index_features
+  - kvm.hardware_disable_test
+  - kvm.hyperv_cpuid
+  - kvm.hyperv_features
+  - kvm.kvm_binary_stats_test
+  - kvm.kvm_create_max_vcpus
+  - kvm.kvm_page_table_test
+  - kvm.kvm_pv_test
+  - kvm.memslot_modification_stress_test
+  - kvm.mmu_role_test
+  - kvm.platform_info_test
+  - kvm.set_boot_cpu_id
+  - kvm.set_memory_region_test
+  - kvm.set_sregs_test
+  - kvm.smm_test
+  - kvm.state_test
+  - kvm.svm_int_ctl_test
+  - kvm.svm_vmcall_test
+  - kvm.sync_regs_test
+  - kvm.system_counter_offset_test
+  - kvm.tsc_msrs_test
+  - kvm.userspace_io_test
+  - kvm.userspace_msr_exit_test
+  - kvm.xapic_ipi_test
+
+* qemu_x86_64, kselftest-pidfd
+  - pidfd.pidfd_setns_test
+
+* qemu_x86_64, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-multiple-procfs
+
+* qemu_x86_64, kselftest-sync
+  - sync.sync_test
+
+* qemu_x86_64, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+
+## Metric Regressions (compared to next-20211224)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211224)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
+
+* dragonboard-410c, kselftest-lkdtm
+  - lkdtm.SLAB_FREE_DOUBLE.sh
+
+* dragonboard-410c, kselftest-proc
+  - proc.proc-fsconfig-hidepid
+
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
+
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* juno-r2, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* juno-r2, kselftest-clone3
+  - clone3.clone3_set_tid
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+
+## Metric Fixes (compared to next-20211224)
+No metric fixes found.
+
+## Test result summary
+total: 3775, pass: 1936, fail: 489, skip: 1350, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
