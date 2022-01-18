@@ -2,16 +2,16 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2E54916F5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F79B4915B2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344763AbiARChW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 21:37:22 -0500
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:48559 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344092AbiARCed (ORCPT
+        id S1344270AbiARC3b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 21:29:31 -0500
+Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:35459 "EHLO
+        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245303AbiARC13 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:34:33 -0500
+        Mon, 17 Jan 2022 21:27:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
         s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642472848;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
@@ -37,7 +37,7 @@ Content-Transfer-Encoding: 7bit
 Message-ID: <0100017e6b02bbe1-9fd85329-4983-4ce9-a2a1-8c00290d439a-000000@email.amazonses.com>
 Date:   Tue, 18 Jan 2022 02:27:28 +0000
 Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.01.18-54.240.8.29
+X-SES-Outgoing: 2022.01.18-54.240.8.81
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
