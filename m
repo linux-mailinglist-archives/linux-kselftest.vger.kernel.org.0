@@ -2,52 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A0C4919A7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADFC4919A2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345443AbiARCzW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 21:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345808AbiARCsj (ORCPT
+        id S1345450AbiARCzV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 21:55:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245641AbiARCmp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:48:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACE6C0612E1;
-        Mon, 17 Jan 2022 18:39:28 -0800 (PST)
+        Mon, 17 Jan 2022 21:42:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6ADC611F1;
-        Tue, 18 Jan 2022 02:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B29C36AE3;
-        Tue, 18 Jan 2022 02:39:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4064B81136;
+        Tue, 18 Jan 2022 02:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3E6C36AEB;
+        Tue, 18 Jan 2022 02:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473567;
-        bh=TElkjlzuCBV3Gc3JqGNMR1z/jwiZxTMPgmvaZtwLM8E=;
+        s=k20201202; t=1642473762;
+        bh=NsNmxlzJcp4bHdt1JVI79chzoIVKauwC5RQte6uzHu4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EBezdbPkcVrepUvg7wRmaMzioOrSPHTCiI45/LtOdQG5561V7l6bX79TJJt/meVn/
-         cB1QJO+esTevI8jMONtAcYzET7vNIR+89fBvgH7hXTsGUXsPc8Lm9cUz8pKanwZYbk
-         3by+pLYSjIGILaKPdxxGQ/ay/MxKBGPDfA5HA/qr3O8EHVC6VgpI7OxZ/SFFI4hN1q
-         vmsooVRB3sdfGnktPArJB8nA+lWiKa4zo5kUNd43HMVej7QW1A3z0DpWJcS//DISD7
-         F62yQBbpIjwCktSZ+0Fklp49Enbjrj2Cyeew9bY6k9SlAry18ImLPTMViQraO9pliX
-         mkM1ecMVjAWFA==
+        b=p7e7dOclAEb5V2RCMsebhnC4GdRINgiPTE/dDAvwVmecQn+nMR2APAdfAtEFXtxyq
+         wJ0HxS5zVqWHlXJT7zE/If8UQ0qwl4SukUyap4HTMES27w6Q0HZmBFPWkAN3mOkvKq
+         y5+aokr3691bByU5Ff5wLHjFaDx/S+PRu3X5jZNxT+jVInhyKh8cC33e3zccLb2TIr
+         im3TcRuovcvuYHlOjGQKSiWh2Be0wAfjODmGnWkaa0l8D/MNUl6hgp8CgndxMm8j7Z
+         Hhz9UKy7HvvjJdhf4r6id5mSUpuqZcPpFo4KltZdH1rH+ntHtliG+QSrteMlcMQgSC
+         LMY1ePMx/w0AA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiri Olsa <jolsa@redhat.com>, Hangbin Liu <haliu@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jussi Maki <joamaki@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        ast@kernel.org, andrii@kernel.org, yhs@fb.com, sdf@google.com,
-        sunyucong@gmail.com, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 170/188] bpf/selftests: Fix namespace mount setup in tc_redirect
-Date:   Mon, 17 Jan 2022 21:31:34 -0500
-Message-Id: <20220118023152.1948105-170-sashal@kernel.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, rostedt@goodmis.org,
+        mingo@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 058/116] selftests/ftrace: make kprobe profile testcase description unique
+Date:   Mon, 17 Jan 2022 21:39:09 -0500
+Message-Id: <20220118024007.1950576-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
-References: <20220118023152.1948105-1-sashal@kernel.org>
+In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
+References: <20220118024007.1950576-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,63 +51,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jiri Olsa <jolsa@redhat.com>
+From: Heiko Carstens <hca@linux.ibm.com>
 
-[ Upstream commit 5e22dd18626726028a93ff1350a8a71a00fd843d ]
+[ Upstream commit e5992f373c6eed6d09e5858e9623df1259b3ce30 ]
 
-The tc_redirect umounts /sys in the new namespace, which can be
-mounted as shared and cause global umount. The lazy umount also
-takes down mounted trees under /sys like debugfs, which won't be
-available after sysfs mounts again and could cause fails in other
-tests.
+Commit 32f6e5da83c7 ("selftests/ftrace: Add kprobe profile testcase")
+added a new kprobes testcase, but has a description which does not
+describe what the test case is doing and is duplicating the description
+of another test case.
 
-  # cat /proc/self/mountinfo | grep debugfs
-  34 23 0:7 / /sys/kernel/debug rw,nosuid,nodev,noexec,relatime shared:14 - debugfs debugfs rw
-  # cat /proc/self/mountinfo | grep sysfs
-  23 86 0:22 / /sys rw,nosuid,nodev,noexec,relatime shared:2 - sysfs sysfs rw
-  # mount | grep debugfs
-  debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+Therefore change the test case description, so it is unique and then
+allows easily to tell which test case actually passed or failed.
 
-  # ./test_progs -t tc_redirect
-  #164 tc_redirect:OK
-  Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
-
-  # mount | grep debugfs
-  # cat /proc/self/mountinfo | grep debugfs
-  # cat /proc/self/mountinfo | grep sysfs
-  25 86 0:22 / /sys rw,relatime shared:2 - sysfs sysfs rw
-
-Making the sysfs private under the new namespace so the umount won't
-trigger the global sysfs umount.
-
-Reported-by: Hangbin Liu <haliu@redhat.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jussi Maki <joamaki@gmail.com>
-Link: https://lore.kernel.org/bpf/20220104121030.138216-1-jolsa@kernel.org
+Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/tc_redirect.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/ftrace/test.d/kprobe/profile.tc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-index e7201ba29ccd6..47e3159729d21 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-@@ -105,6 +105,13 @@ static int setns_by_fd(int nsfd)
- 	if (!ASSERT_OK(err, "unshare"))
- 		return err;
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+index 98166fa3eb91c..34fb89b0c61fa 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+-# description: Kprobe dynamic event - adding and removing
++# description: Kprobe profile
+ # requires: kprobe_events
  
-+	/* Make our /sys mount private, so the following umount won't
-+	 * trigger the global umount in case it's shared.
-+	 */
-+	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
-+	if (!ASSERT_OK(err, "remount private /sys"))
-+		return err;
-+
- 	err = umount2("/sys", MNT_DETACH);
- 	if (!ASSERT_OK(err, "umount2 /sys"))
- 		return err;
+ ! grep -q 'myevent' kprobe_profile
 -- 
 2.34.1
 
