@@ -2,122 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5214925D7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 13:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02FC492643
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 14:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiARMlu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 07:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S240559AbiARNAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 08:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiARMlr (ORCPT
+        with ESMTP id S239024AbiARNAd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 07:41:47 -0500
-X-Greylist: delayed 343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Jan 2022 04:41:47 PST
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [IPv6:2001:1600:4:17::42aa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF96C061574;
-        Tue, 18 Jan 2022 04:41:47 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JdStT1zBDzMq01B;
-        Tue, 18 Jan 2022 13:36:01 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4JdStQ5z5tzlhMBj;
-        Tue, 18 Jan 2022 13:35:58 +0100 (CET)
-Message-ID: <8ea3bd61-8251-a5b6-c0b4-6d15bac4d2c5@digikod.net>
-Date:   Tue, 18 Jan 2022 13:35:46 +0100
+        Tue, 18 Jan 2022 08:00:33 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B8CC06173F
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 05:00:33 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id n14so11139041vkk.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 05:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=kt7BSYvG+rr2bLEECwLOEMCvBVZotJIk44/4XcKD9H0=;
+        b=oIAPvRrwyQK9z6AQAojxDeGAhXY+r2o1UmC6sFh8E/FwQr9mstQDRr/1NSvmGRtcCX
+         /w1QS+uNfbLsvQZX7xX+9sz3uC6D4RoCWaXbANnoA2dUrPepMcqirC5k6HNVS1fFqE0Z
+         mmnlRUiL8Xw3KIyLVLMGnExCwsSQFeIKh8JW3bqp1bYt9+tHsadbHk4RvmOHNK7Sl5QN
+         8VSQkuo3Tc4LhDddKs1B1xacb1x98ojXw9qcgRZeTdxEnzHjo/CWLLbARksjq/KHcz6i
+         aR29itdUv3X9HyWbgkBUkSe9JOKQ7x5gCFvVaYAAUeR/IrssS1C3mXYec7clwDkIPtov
+         CL+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=kt7BSYvG+rr2bLEECwLOEMCvBVZotJIk44/4XcKD9H0=;
+        b=XwVvegj3WJp0k5hVdCD9Cyi9xMOTFATN54BeVei0eLUgeABuhcqhxc73YeZRmKRY6V
+         EppEAWXHgg+uyjlDdOjzlA4SD4MzX4NslOKVxUQ7MnooaJKlgqN3/fkcfxupwizjLYxI
+         L859nh06crnUA7dvrOqafBqhqQmKviujq38E70FPiHj9l8F4W4xyOhcenPn5nkX0LWXK
+         OXLfmhe0zYcmnNjGPYZKi8/iUL2Hb1RaXWoYXi6WiDUClykHSf+VSIth+7RWZlyEBRk4
+         rZ2RRM7Rr0MigFRGEdmYF2siiuzro0KBF7QKcq+f21FCt2EUin0Nr9KSZ5ZIykhCJpJH
+         lJLw==
+X-Gm-Message-State: AOAM533buLhot4bPy9IL0lf8AAnNymombj0kkW6nQvHc7ga9XwFB5JMT
+        cJWqIqUURB1ngDai5Qb4GsWv7oXeP+KSiPMqSJc=
+X-Google-Smtp-Source: ABdhPJxU0Mgz8nglAQGJWvQd5fZGyHw86cgkNwVsJrkRauzIVzFmr7WCj4QJVEymoxx51zJjSdHqWP82BjKwyfLYnRA=
+X-Received: by 2002:a05:6122:1808:: with SMTP id ay8mr10188346vkb.36.1642510832144;
+ Tue, 18 Jan 2022 05:00:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:LANDLOCK SECURITY MODULE" 
-        <linux-security-module@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>
-Cc:     kernel@collabora.com
-References: <20220118112909.1885705-1-usama.anjum@collabora.com>
- <20220118112909.1885705-7-usama.anjum@collabora.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH 06/10] selftests: landlock: Add the uapi headers include
- variable
-In-Reply-To: <20220118112909.1885705-7-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab0:3793:0:0:0:0:0 with HTTP; Tue, 18 Jan 2022 05:00:31
+ -0800 (PST)
+Reply-To: mohsheikhalhamed@gmail.com
+From:   bratikox <bratikox@gmail.com>
+Date:   Tue, 18 Jan 2022 14:00:31 +0100
+Message-ID: <CAFuXTSx6Lu9odoPCd=RZLGBtKNFkTY9wS0ub46GZpRb2p6+pYQ@mail.gmail.com>
+Subject: Salam Alaikum /ADIA LOAN OFFER
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Salam Alaikum,
 
-On 18/01/2022 12:29, Muhammad Usama Anjum wrote:
-> Out of tree build of this test fails if relative path of the output
-> directory is specified. Remove the un-needed include paths and use
-> KHDR_INCLUDES to correctly reach the headers.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   tools/testing/selftests/landlock/Makefile | 11 +++--------
->   1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
-> index a99596ca9882..44c724b38a37 100644
-> --- a/tools/testing/selftests/landlock/Makefile
-> +++ b/tools/testing/selftests/landlock/Makefile
-> @@ -1,6 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
-> -CFLAGS += -Wall -O2
-> +CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
->   
->   src_test := $(wildcard *_test.c)
->   
-> @@ -12,13 +12,8 @@ KSFT_KHDR_INSTALL := 1
->   OVERRIDE_TARGETS := 1
->   include ../lib.mk
->   
-> -khdr_dir = $(top_srcdir)/usr/include
+We are a United Arab Emirates based investment company known as Abu
+Dhabi Investment Authority working on expanding its portfolio globally
+and financing projects.
 
-This should be updated to:
-khdr_dir = ${abs_srctree}/usr/include
+We are offering Corporate and Personal Loan at 3.5% Interest Rate for
+a duration of 5 to 10 years.
 
-Using a global KHDR_DIR instead of khdr_dir could be useful for others too.
+Please get back to us on Email: mohsheikhalhamed@gmail.com ,if you are
+interested for further embellishment.
 
-> -
-> -$(khdr_dir)/linux/landlock.h: khdr
-> -	@:
+We also pay 2% commission to brokers who introduce project owners for
+finance or other opportunities.
 
-This should be kept as is, otherwise we loose this check to rebuild the 
-headers if linux/landlock.h is updated, which is handy for development.
-KVM lost a similar behavior with this patch series.
 
-> -
->   $(OUTPUT)/true: true.c
->   	$(LINK.c) $< $(LDLIBS) -o $@ -static
->   
-> -$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
-
-This should not be changed.
-
-> -	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-> +$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
-> +	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
-
-This doesn't work when building in the local directory because 
-$abs_srctree and $KHDR_INCLUDES are empty:
-cd tools/testing/selftests/landlock && make
+ Yours truly,
+ Hamed Mohammad
+ (Personal Assistant)
+ Abu Dhabi Investment Authority
+ 211 Corniche, P.O Box 3600
+ Abu Dhabi,United Arab Emirates
