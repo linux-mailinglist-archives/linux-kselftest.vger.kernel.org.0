@@ -2,77 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF7F4921ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 10:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 493ED49242A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 11:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345142AbiARJEO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 04:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
+        id S238245AbiARK5M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 05:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345166AbiARJEF (ORCPT
+        with ESMTP id S238241AbiARK5L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:04:05 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20F5C06175C
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 01:04:00 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id h14so53619658ybe.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 01:04:00 -0800 (PST)
+        Tue, 18 Jan 2022 05:57:11 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE64C061574;
+        Tue, 18 Jan 2022 02:57:11 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id q25so77638572edb.2;
+        Tue, 18 Jan 2022 02:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=IAamEH5Xu1dJ3X0trVcFTPIrL7aTtcDGn5mUS4vw1a8=;
-        b=NHprezroMsvNvJXQj44poYAHm3bYOXBJZX5Wg8cW9F++sdGchhDxOadiHN0N74BqVo
-         LLsuxLOWO8eNb9Df+WO3omzRkxx9CES4mNA3Io5+oAgtUVpSbYHogg87+gCtw68c4I2t
-         jU5NFjjkmYDNDUVEzOuCjT2//b/zcZNUhM8rDEil4EjAKikZAouVCPfFT1ek6iBkNaWB
-         bcv0AUKVrFCVpxHEBYPBv8KSS3FHlu8eykSeEYJmKwrS5qbSbzeHmao2+zqXdm7uNchU
-         Rqamo/TlsQaFmHXGfCx8STX0aSjqEkHcratuhlypnT20IcvCVcqt6eV72JWjrAN3qvU0
-         7wEQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o/+Rln8yIeY2uKlTugrdAq1LQtFz1C8SbxruWoDiWt8=;
+        b=GdltdvYWpABQWF7iC433i9pHg5GIRb7ksm5UoXnhYQgMrg+rtMXyICAXwoK/dHYCdH
+         5hN5+yDPhfjmSteuFvD5RyPs7Xwymxt923uFTYNQNp9ACvCbV6RaYn98pIOOH0JcHLET
+         29lj3IBT67extlSzPrH1bS+AWg1ddisr8NvUdxRJxCtM5KNe/mfCrTFuO0uCuS4eiDAS
+         DBw0alRHMoMiJrLeQhCrOI3c/ShYg+Tk+Tv84DjTvRzK8Y6ZzJrjjmn/KGNk+gH/13Ba
+         F67n2cKZgEbU1vbe/+wK7MEHeyIYIGh0GcrTL3DWRLD/LHzKzVgtn2rta7MlbBUgR+Ge
+         oV/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=IAamEH5Xu1dJ3X0trVcFTPIrL7aTtcDGn5mUS4vw1a8=;
-        b=d9L6wh77QNVUbNn3HK/DC2IaJyrt4mcnHvxiLxyJ2ObJesazZLhW147BuZ41Tfeob2
-         A8OouZjPJn0NCtlMnaaaNoGgamxT/6h98k7FNxdWoGWr4gDQUifyJoOD1fqK1IRKkcZA
-         Jfz9IKn9g+9KGWdKxhTOOyCQhh1yeYbpORE3HPE1FLgiqsF6a7/3ahfDbSS2umvAqlVW
-         MgYfExnhi0pfE2tzzsFamC05vXEDz2R2XHSEqpnWbyH5cgrfVKVWlyJ2zKho1PMMxqvH
-         wntsg6bOCBGLQmLv5QGsuu9qM33r2pfCJFBrVuye5cGLcT/+fitoNpzm6hhszoET16nY
-         ZF5g==
-X-Gm-Message-State: AOAM533OMHdt/Y+mdbOyUbAED1nRtrWA/JMKCY8wR80tgeabtCgGdeFf
-        CuqVRYfyEGMSxLJ6lgAXEjvRwmoiz/HAIQ3nFdk=
-X-Google-Smtp-Source: ABdhPJykqN6yybQfaT0kT/1JcofcZUp4wlVhtJ/gATn7SS5XA0pfx+GW8LgTxWINZerrn1yMSBF81skqvw8cEBrK9Sg=
-X-Received: by 2002:a25:e549:: with SMTP id c70mr10839900ybh.339.1642496638937;
- Tue, 18 Jan 2022 01:03:58 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o/+Rln8yIeY2uKlTugrdAq1LQtFz1C8SbxruWoDiWt8=;
+        b=SuQ6jsmt9Fz8QDkhYgNBWwSNv77VhBjssJEhsf53g7BlmDwAIbACOqzaNi7eu6VfPN
+         AyXzTBO8nPyFEJILywYR+1iwLn1DJtQOn2mE4a0X2bZwGNgN+1c5x1ozv8UBGxgA3n2o
+         U9Zjb/rHpptjHKIFRuhpwAz+liGdIH4A/EntXp/dSonicvgaOxclDOdx0wFT1re3oK5a
+         6fJc0SIoVKbywXSEnwsm+0HaR734JECCOmoRDakzG6BCIl02rBTuBGq/Gem5T4q6P8ym
+         6PBH59IQ44vo1Tp2bxTRvkpxyJ31DHDvkvMzl7yjmcacuuAcxLuTWBl918N38wzoGoSE
+         T9qQ==
+X-Gm-Message-State: AOAM533oMLwEyPLW5yS7ofkR8FU94mWQg1RieYdFOC34OVPOaZl97hOR
+        lahxxa+0LXAYFdxIVcM+MqSNhvrtYtdL0GydEj434eU4kCw=
+X-Google-Smtp-Source: ABdhPJxFWa1fIhr9NflphOlvPjj1hEt8/v2QIGbyuQbqzz04sN8Ptqt+EN74NOeeXYQKEl6VS3ChBCpU+TqOFHIXJ3U=
+X-Received: by 2002:a17:906:99c3:: with SMTP id s3mr20830140ejn.486.1642503429968;
+ Tue, 18 Jan 2022 02:57:09 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:03:58
- -0800 (PST)
-Reply-To: asil.ajwad@gmail.com
-From:   Asil Ajwad <graceyaogokamboule@gmail.com>
-Date:   Mon, 17 Jan 2022 21:03:58 -1200
-Message-ID: <CA+Yy_gCoV9jOYW1qG-5psBKMTZyzWOj2x6Pu5iusfy4TEMaBwQ@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
+References: <36bd91e4-8eda-5677-7fde-40295932a640@molgen.mpg.de>
+ <CAABZP2wxXW2RqpKevt9erkYg3po0ByUEFvYsgy3cRty5Rt1Qyw@mail.gmail.com> <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
+In-Reply-To: <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Tue, 18 Jan 2022 18:56:58 +0800
+Message-ID: <CAABZP2zY_+pJHYL70YyTK2-K=LbB20Uvw1Y-C-zHT4nR1NUUFQ@mail.gmail.com>
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
--- 
-Greetings,
+Dear Paul
 
-I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
-an ATM Visa Card to withdraw money at, ATM Cash Machine in your
-country, if yes I want to transfer abounded fund the sum of $10.5million
-US-Dollars, to you from my country, this is part of the money that was
-abounded by our late old client a politician who unfortunately lost
-his life and was forced out of power Du to greedy act, the bank will
+On Tue, Jan 18, 2022 at 3:56 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Dear Zhouyi,
+>
+>
+> Thank you for your quick response.
+You are very welcome ;-)
+>
+>
+> Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
+>
+> > I have studied the rcu torture test recently. I am also interested in
+> > this topic.
+> > But I can't open
+> > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf-Make.out.txt
+> > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture-log.txt
+>
+> Sorry, about that. I should have checked those. I had put them into a
+> directory:
+>
+> [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/allmodconf-Make.out.txt
+> [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/rcutorture-log.txt
+I can open these URLs now, thank you, I will try my best to analyze
+the logs in the coming days.
+>
+> I am going to try to test your suggestions at the end of the day.
+Thanks a lot, looking forward to your test results.
 
-change the account details to your name, and apply for a Visa Card
-with your details, the Visa Card will be send to you, and you can be
-withdrawing money with it always, whatever any amount you withdraw
-daily, you will send 60% to me and you will take 40%, the Visa Card
-and the bank account will be on your name, I will be waiting for your
-response for more details, thanks to you a lot for giving me your time.
-
-regards,
-Mr.Asil Ajwad.
+>
+>
+> Kind regards,
+>
+> Paul
+Cheers
+Zhouyi
