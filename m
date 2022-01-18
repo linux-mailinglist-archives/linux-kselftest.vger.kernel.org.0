@@ -2,164 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D34EE49301B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 22:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C954930D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 23:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349614AbiARVrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 16:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S1350013AbiARWfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 17:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349603AbiARVrb (ORCPT
+        with ESMTP id S1350024AbiARWfO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 16:47:31 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFADC061401
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 13:47:30 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id u21so1557766edd.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 13:47:30 -0800 (PST)
+        Tue, 18 Jan 2022 17:35:14 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274A7C06173E
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 14:35:14 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id k189-20020a25c6c6000000b0061274ece35eso898164ybf.22
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 14:35:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FGas2wsR5I0Xu3XQ1U1PiZH1Bz7IfFmMtPMkpY3JwQs=;
-        b=bHC3qhzpOqwOWsCGU8nz/CY903WoUbR/4FZT4/aIJcI4EqWCgfGUrf3LyKcJeKtLid
-         Q8RY17Vn3luA9tgNnrXNKQFlw1gTVaeL+PBN1xq/WedQbqeHj4IYNfcQ+ostX61hSqb8
-         i341vsk8ERHVLt84Xex8CLe20cZFCrOnf0vqZoZWK1xnkT1M8YZ+pQey2uqK+z0+hBOs
-         rRHHHenkdNM0tjVouFF3BUCoeAEg+bHm2RsZSeceRSslAUA3KSqyKxg8XkzsgUkJiKrY
-         IxBrPVT4JI2nNFNuDKE/p3m5JSnu+WYkT9hnvaffodmZtg4QKzpeI5dLaKZRP3wnOa7n
-         Sdjg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=wGX0SgG3zKXJcV46j/Y6+4p2WMGDSqGFtH4FJYdgcw8=;
+        b=bwrxzsIaIgt7HiTRY9vyXV7xP/3VD5epRoVBl2SdP+/tnJ4C1q+jGrvTzsgUpQkuw2
+         wdmY6nboth4HLo0aaUBc0u4j/LM86v9/c9R6+nK90cnh0c64ZnnZ0/mHdzqvViY5whe6
+         dxwRK84lQnY8miw77jclVEgmHIH+XHCzi1dYomKOrllMFppaKubPCScJPYoJPOvfVl8u
+         CCoWekSKyl8/4ZdZxhBEbP/zR/6joAyKF644z7zPy9N6NxR+bkkii4//dEajFPrpdeaR
+         JO9WvUpaCHgX1U9m/AN9CzESYAnmrod0qBy0X0sYGpw2WPgvIrs/dqfOPNFfzzsnDzfv
+         Py7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FGas2wsR5I0Xu3XQ1U1PiZH1Bz7IfFmMtPMkpY3JwQs=;
-        b=tQDlY3VdOOG/wKT0M1W87HSggSc8tdME86OYBGd9tLX0l+wT/BNqRNRX/6bBgtXHwn
-         6JM8yeaI9sT2oJSoj+82i/xvyrw7B/aqz8JyOc8vHYaCbiE54570IFgS1K8ggGZKpM9D
-         WeNSH4U61oYA/YMtpTNdMEDVHZej9l501v7XS0Pqax0RsXYZt+9l5JVHtaPFJAhtXBc2
-         FNdMU/8YKVqK3zdDMyVe3Fjf423tdKktLq3o5FTU/TG+zrZdBQdAoG3W2Dwdi+t/eIPI
-         FvYdvoTJuhGBnotpWmUHeJhko+1j6Ahv3+lCt9EdpkjTArSuO6SZ9qrXj1IPCC1mWZ+B
-         c5lw==
-X-Gm-Message-State: AOAM533zfnfJxczDDJFC22INmqQ6/ij34ZbHanh/yDZOiqaCGJb7vA9f
-        KPMIp9X2eIqDdmClcAfMffXQYw==
-X-Google-Smtp-Source: ABdhPJwWbFrKUS/lRJJq/8VFObiKd0n2aVmGnF5RHGd9FSxMEaM8KRD5ae783HnEDAP9fF1ApDdMLQ==
-X-Received: by 2002:a17:907:6d03:: with SMTP id sa3mr22717797ejc.200.1642542449232;
-        Tue, 18 Jan 2022 13:47:29 -0800 (PST)
-Received: from ?IPV6:2a02:578:8593:1200:27ca:2fb0:c5af:41e? ([2a02:578:8593:1200:27ca:2fb0:c5af:41e])
-        by smtp.gmail.com with ESMTPSA id l25sm346996edc.20.2022.01.18.13.47.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 13:47:28 -0800 (PST)
-Message-ID: <4d60a170-53d7-3f9f-fa48-34d6c4020346@tessares.net>
-Date:   Tue, 18 Jan 2022 22:47:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 08/10] selftests: mptcp: Add the uapi headers include
- variable
-Content-Language: en-GB
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:LANDLOCK SECURITY MODULE" 
-        <linux-security-module@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>
-Cc:     kernel@collabora.com
-References: <20220118112909.1885705-1-usama.anjum@collabora.com>
- <20220118112909.1885705-9-usama.anjum@collabora.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20220118112909.1885705-9-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=wGX0SgG3zKXJcV46j/Y6+4p2WMGDSqGFtH4FJYdgcw8=;
+        b=prflMX1q7sI1LdKSReHsiI1BaOj/q6mWnMsdlyE+sX7EAYPLR8uMjp9ve0cddg8b4C
+         kgNJ1PtUPm/G2wd7EiDCHz7exluO/IstrF99mBKkFlLPnyaMgAFtyoA2RXQG77XtBmlr
+         IhLYWgcePuEddN9Wg+5ub825hCZXUofY2s6TiFPdh9tdFfbH+6PsWO/Mnhv7zLQU71wK
+         uTYH3UL54Zg5ldA6gRZrGycx4wsO/JoFaIaTySgXkQvqPuk68/ICesuN/du3CqVzbfqZ
+         Zeh1eRTHLJDEHtdk5xRTikxv5qzo+z4jTxmlJ9UXkz6dUShOpV7y+BKWeQShPUy6vj81
+         DlIQ==
+X-Gm-Message-State: AOAM530shWHt7ImbXDHBVb08m6L5iq+0cyGwZnsGz1pNvTQOuEu9WqIY
+        ia/DmXgMlAFdjzMWPSl6+UWJ/ljISZgo+g==
+X-Google-Smtp-Source: ABdhPJxX9W/k26DYxfe4M5MzZsB7Fnkt/0pntXM8jXL+lnZyejkumR5M4BiJsqorqpdpUjOSSqlf9rFxQHegRQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7fc9:5977:ab73:1d36])
+ (user=dlatypov job=sendgmr) by 2002:a25:654:: with SMTP id
+ 81mr33640131ybg.541.1642545313426; Tue, 18 Jan 2022 14:35:13 -0800 (PST)
+Date:   Tue, 18 Jan 2022 14:35:01 -0800
+Message-Id: <20220118223506.1701553-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
+Subject: [PATCH 0/5] kunit: decrease layers of assertion macros
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Muhammad,
+Note: this series applies on top of the series reducing stack usage,
+https://lore.kernel.org/linux-kselftest/20220113165931.451305-1-dlatypov@google.com/
+There's no real smenatic dependency between these, just potential for
+merge conflicts.
 
-On 18/01/2022 12:29, Muhammad Usama Anjum wrote:
-> Out of tree build of this test fails if relative path of the output
-> directory is specified. Remove the un-needed include paths and use
-> KHDR_INCLUDES to correctly reach the headers.
+The current layout of the assertion macros is confusing.
 
-Thank you for looking at that!
+Here's the call chain for KUNIT_EXPECT_EQ() and KUNIT_EXPECT_EQ_MSG()
+  KUNIT_EXPECT_EQ =>
+  KUNIT_BINARY_EQ_ASSERTION => # note: not shared with the _MSG variant
+  KUNIT_BINARY_EQ_MSG_ASSERTION =>
+  KUNIT_BASE_EQ_MSG_ASSERTION =>
+  KUNIT_BASE_BINARY_ASSERTION
 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/net/mptcp/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-> index 0356c4501c99..fed6866d3b73 100644
-> --- a/tools/testing/selftests/net/mptcp/Makefile
-> +++ b/tools/testing/selftests/net/mptcp/Makefile
-> @@ -1,9 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -top_srcdir = ../../../../..
+  KUNIT_EXPECT_EQ_MSG =>
+  KUNIT_BINARY_EQ_MSG_ASSERTION =>
+  KUNIT_BASE_EQ_MSG_ASSERTION =>
+  KUNIT_BASE_BINARY_ASSERTION
 
-Removing this line breaks our CI validating MPTCP selftests. That's
-because this "top_srcdir" variable is needed in the "lib.mk" file which
-is included at the end of this Makefile.
+After this series
+  KUNIT_EXPECT_EQ =>
+  KUNIT_EXPECT_EQ_MSG =>
+  KUNIT_BINARY_INT_ASSERTION =>
+  KUNIT_BASE_BINARY_ASSERTION
 
-But that's maybe a misuse from our side. Indeed to avoid compiling
-binaries and more from the VM, our CI does that as a preparation job
-before starting the VM and run MPTCP selftests:
+The current macro layout tries hard to reduce duplication, but comes at
+the cost of a lot of intermediates that can simply vanish.
 
-  $ make O=(...) INSTALL_HDR_PATH=(...)/kselftest/usr headers_install
-  $ make O=(...) -C tools/testing/selftests/net/mptcp
+The same call-chain again, but annotated with the info we add:
+  KUNIT_EXPECT_EQ => specify we're an EXPECT, not an ASSERT
+  KUNIT_BINARY_EQ_ASSERTION => specify we have a NULL msg
+  KUNIT_BINARY_EQ_MSG_ASSERTION => specify we work with ints, not ptrs
+  KUNIT_BASE_EQ_MSG_ASSERTION => specify that the op is '=='
+  KUNIT_BASE_BINARY_ASSERTION
 
-From the VM, we re-use the same source directory and we can start
-individual tests without having to compile anything else:
+We can see that each level of the chain only specifes one parameter at
+a time. We've taken the concept of DRY too far.
 
-  $ cd tools/testing/selftests/net/mptcp
-  $ ./mptcp_connect.sh
+The following is a full snippet of all the macros needed for
+KUNIT_EXPECT_EQ, showing that a bit of repetition is just fine:
+  #define KUNIT_BINARY_INT_ASSERTION(test,				       \
+				     assert_type,			       \
+				     left,				       \
+				     op,				       \
+				     right,				       \
+				     fmt,				       \
+				      ...)				       \
+	  KUNIT_BASE_BINARY_ASSERTION(test,				       \
+				      kunit_binary_assert,		       \
+				      KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
+				      assert_type,			       \
+				      left, op, right,			       \
+				      fmt,				       \
+				      ##__VA_ARGS__)
 
-We want to do that because some scripts are launched multiple times with
-different parameters.
+  #define KUNIT_EXPECT_EQ(test, left, right) \
+	  KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
 
-With your modifications, we can drop the headers_install instruction but
-we need to pass new parameters to the last 'make' command:
+  #define KUNIT_EXPECT_EQ_MSG(test, left, right, fmt, ...)		       \
+	  KUNIT_BINARY_INT_ASSERTION(test,				       \
+				     KUNIT_EXPECTATION,			       \
+				     left, ==, right,			       \
+				     fmt,				       \
+				      ##__VA_ARGS__)
 
-  $ make O=(...) top_srcdir=../../../../.. \
-                 KHDR_INCLUDES=-I(...)/usr/include \
-         -C tools/testing/selftests/net/mptcp
+as opposed to our current DRYer version
 
-Or is there a better way to do that?
-Can we leave the definition of "top_srcdir" like it was or did we miss
-something else?
+  #define KUNIT_BASE_EQ_MSG_ASSERTION(test,                                      \
+				      assert_class,                              \
+				      ASSERT_CLASS_INIT,                         \
+				      assert_type,                               \
+				      left,                                      \
+				      right,                                     \
+				      fmt,                                       \
+				      ...)                                       \
+	  KUNIT_BASE_BINARY_ASSERTION(test,                                      \
+				      assert_class,                              \
+				      ASSERT_CLASS_INIT,                         \
+				      assert_type,                               \
+				      left, ==, right,                           \
+				      fmt,                                       \
+				      ##__VA_ARGS__)
 
->  KSFT_KHDR_INSTALL := 1
->  
-> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g  -I$(top_srcdir)/usr/include
-> +CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g $(KHDR_INCLUDES)
->  
->  TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
->  	      simult_flows.sh mptcp_sockopt.sh
+  #define KUNIT_BINARY_EQ_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+	  KUNIT_BASE_EQ_MSG_ASSERTION(test,                                      \
+				      kunit_binary_assert,                       \
+				      KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+				      assert_type,                               \
+				      left,                                      \
+				      right,                                     \
+				      fmt,                                       \
+				      ##__VA_ARGS__)
 
-Note: I see there is a very long recipients list. If my issue is not
-directly due to your modifications, we can probably continue the
-discussion with a restricted audience.
+  #define KUNIT_BINARY_EQ_ASSERTION(test, assert_type, left, right)              \
+	  KUNIT_BINARY_EQ_MSG_ASSERTION(test,                                    \
+					assert_type,                             \
+					left,                                    \
+					right,                                   \
+					NULL)
+  #define KUNIT_EXPECT_EQ(test, left, right) \
+	  KUNIT_BINARY_EQ_ASSERTION(test, KUNIT_EXPECTATION, left, right)
 
-Cheers,
-Matt
+  #define KUNIT_EXPECT_EQ_MSG(test, left, right, fmt, ...)                       \
+	  KUNIT_BINARY_EQ_MSG_ASSERTION(test,                                    \
+					KUNIT_EXPECTATION,                       \
+					left,                                    \
+					right,                                   \
+					fmt,                                     \
+					##__VA_ARGS__)
+
+
+
+Daniel Latypov (5):
+  kunit: make KUNIT_EXPECT_EQ() use KUNIT_EXPECT_EQ_MSG(), etc.
+  kunit: drop unused intermediate macros for ptr inequality checks
+  kunit: reduce layering in string assertion macros
+  kunit: decrease macro layering for integer asserts
+  kunit: decrease macro layering for EQ/NE asserts
+
+ include/kunit/test.h | 660 ++++++++++---------------------------------
+ 1 file changed, 142 insertions(+), 518 deletions(-)
+
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+2.34.1.703.g22d0c6ccf7-goog
+
