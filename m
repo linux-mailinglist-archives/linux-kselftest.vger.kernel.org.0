@@ -2,49 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252A2491433
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC224915C2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 03:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244649AbiARCVC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jan 2022 21:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S1343833AbiARC3f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jan 2022 21:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244694AbiARCUh (ORCPT
+        with ESMTP id S1343870AbiARC1f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:20:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E098CC06176C;
-        Mon, 17 Jan 2022 18:20:19 -0800 (PST)
+        Mon, 17 Jan 2022 21:27:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A403AC0612DF;
+        Mon, 17 Jan 2022 18:25:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A151B8122C;
-        Tue, 18 Jan 2022 02:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0723CC36AE3;
-        Tue, 18 Jan 2022 02:20:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85D9A6116F;
+        Tue, 18 Jan 2022 02:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8F4C36AE3;
+        Tue, 18 Jan 2022 02:25:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642472417;
-        bh=J5+2k5Vu9FXtz194cQpO41gLQP387GfoIjXIZAfACjQ=;
+        s=k20201202; t=1642472731;
+        bh=NsNmxlzJcp4bHdt1JVI79chzoIVKauwC5RQte6uzHu4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LV87UHiCG2UXCsqwqyG5kY61SZR/3CBBfta5OeDx6rgBR7yyYWmQL4dHnUHbEOQhd
-         kKy5nwj9aoKV7I94tTNytHucVNMYr59Twzrn0mLqB/VeDaclWOZL8LHYy3m5u2ra4N
-         gDm2TSJ0jng/QSOc6l2cCHvVLwlZYYA5ync+ICSDNSfY6mdSosTdl2eEMG3r4gdaWS
-         R5Imo3hsKLMR/WFBT81XA3JDzFq0bacQLW5QSQqYHGpKHyI2EwsWSbUHi9rfJzJKJw
-         s7pE7p6+NHBtCGBDBrhKV88AzFqwehqwYXx0ZBTfLgl3HMwB+QiYxX2XMhsCuIEfCX
-         fFDfCUw+VW8zA==
+        b=QsM2sovbcbC7GquqzqH7c069Nhd1TddyoTwP9APRthI57yzcXn1l8eQ3on020NNK2
+         30Lx5BUZtHmIcmT+w/CigeHQ52dF1dUpRe8ch8vqHX6V3ZSB9+1j7B6KKYnMQbRSgq
+         jrm4K535tYzZ8xSCrxVZyrvZtcFLkzc4Hh8o6Z4fewW/pMek6UXdO5c30RaGvpYo6s
+         8y5oiX9YaQixJjaV3DqNUFFCiP/FtTEvoX3+YZg4/bqkHBb8dfSvsiD0CZKFuRkgee
+         PJBNfRqhW73tsxnk+eZvXksfVH01GPghcV8108mmZqB2oAy0IJzIjMuywDr4SkssB4
+         6vgq++bFed+2w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Hengqi Chen <hengqi.chen@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        daniel@iogearbox.net, vfedorenko@novek.ru, kafai@fb.com,
-        john.fastabend@gmail.com, ntspring@fb.com,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 014/217] selftests/bpf: Fix bpf_object leak in skb_ctx selftest
-Date:   Mon, 17 Jan 2022 21:16:17 -0500
-Message-Id: <20220118021940.1942199-14-sashal@kernel.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, rostedt@goodmis.org,
+        mingo@redhat.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 117/217] selftests/ftrace: make kprobe profile testcase description unique
+Date:   Mon, 17 Jan 2022 21:18:00 -0500
+Message-Id: <20220118021940.1942199-117-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118021940.1942199-1-sashal@kernel.org>
 References: <20220118021940.1942199-1-sashal@kernel.org>
@@ -56,34 +54,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Heiko Carstens <hca@linux.ibm.com>
 
-[ Upstream commit 8c7a95520184b6677ca6075e12df9c208d57d088 ]
+[ Upstream commit e5992f373c6eed6d09e5858e9623df1259b3ce30 ]
 
-skb_ctx selftest didn't close bpf_object implicitly allocated by
-bpf_prog_test_load() helper. Fix the problem by explicitly calling
-bpf_object__close() at the end of the test.
+Commit 32f6e5da83c7 ("selftests/ftrace: Add kprobe profile testcase")
+added a new kprobes testcase, but has a description which does not
+describe what the test case is doing and is duplicating the description
+of another test case.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
-Link: https://lore.kernel.org/bpf/20211107165521.9240-10-andrii@kernel.org
+Therefore change the test case description, so it is unique and then
+allows easily to tell which test case actually passed or failed.
+
+Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/ftrace/test.d/kprobe/profile.tc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index c437e6ba8fe20..db4d72563aaeb 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -111,4 +111,6 @@ void test_skb_ctx(void)
- 		   "ctx_out_mark",
- 		   "skb->mark == %u, expected %d\n",
- 		   skb.mark, 10);
-+
-+	bpf_object__close(obj);
- }
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+index 98166fa3eb91c..34fb89b0c61fa 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/profile.tc
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+-# description: Kprobe dynamic event - adding and removing
++# description: Kprobe profile
+ # requires: kprobe_events
+ 
+ ! grep -q 'myevent' kprobe_profile
 -- 
 2.34.1
 
