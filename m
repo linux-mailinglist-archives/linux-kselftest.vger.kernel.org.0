@@ -2,133 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5104926FA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 14:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE3D492733
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 14:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242378AbiARNTT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 08:19:19 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36902 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242302AbiARNTM (ORCPT
+        id S243336AbiARNXr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 08:23:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44581 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243680AbiARNXj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:19:12 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 283A01F43568
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642511949;
-        bh=NnA8DF5nv67Abok07B1FDD4ZaMq6Cy3stGYg/JYq7G0=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=gOOtBoB+LqcCGqcgcyaKvqu7qG58u5YJiGrs4xSCpwjbLSoAmu8d+ghKU2xzdrjGL
-         csHm1zQ4M9Wc1QqBiTxySkXIRBRsukryioI8Rf7kmqWuBU5sPYRtaI078IAg6rECbj
-         D0gSKpSnJE+wtTS6FKb9dGrhhjeSNSmKcI4rnGjdh56Eh3xAe8AOwK0B6pbhDNtkfH
-         4eUo0EBztcjo8Q7PvxJkf+3GUsCh7aiMJ49lTs1VYa3O+u/EVWLjGpvw4FLpQb3/8S
-         pg1o3CQba6wq9aviWjsg+dSN1rYUlNPGRE0vNwYjm+9EauBsD47BsSEwipQfRVWuh7
-         YyZXm6BLQxY/g==
-Message-ID: <a9f7185f-0a7f-3133-fcdd-bd790b51e6ae@collabora.com>
-Date:   Tue, 18 Jan 2022 18:18:59 +0500
+        Tue, 18 Jan 2022 08:23:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642512218;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sMJxvTYPAO2Woc0KNl4Uc9BZK4KZwIBCLQmQ1uUCVf8=;
+        b=MyaKPMubkshhoWxAv4U0lTr+mdvgrfGhA7ic31Yhk674b8lz8tGhJUusvK7oCEsQrStmNd
+        /72fuMPRs93tTv2ArpkjAsar2CQ67XPW4DF+VeFTLIF0Yd5128Mh2vCqCa+QPiTiGCKLlR
+        Gg5yfUXqHbeDYYxkMd1xd1+M8DLCdEw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-386-scoaLUkhN7ez505pQB-AJg-1; Tue, 18 Jan 2022 08:23:37 -0500
+X-MC-Unique: scoaLUkhN7ez505pQB-AJg-1
+Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso16934095edt.20
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 05:23:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sMJxvTYPAO2Woc0KNl4Uc9BZK4KZwIBCLQmQ1uUCVf8=;
+        b=VbjCUQsGXlnS2tikQQkc9GALIfrngdaAcFJBOFlcOxvEj50JFPQDKK+Q9TuydOdHP7
+         sDmDGUSE/x/R6ranQTYtXKiQ/iYinrsQRmYX2yygG9qRCMl60rVxnJPbfbCbIK8r83z3
+         WwcBiOLzkuQ1msJ0NSHRUDpqiUipu3DNBA3XV1ZeswzZkE7AxZWspGXomExMFWeG0J3L
+         8chDKobX8tpQgIcnJqI6HVR7Iyo5zMS3fFz9HiQiniejWuC/Oxez07bagi7P7etbFbYM
+         NXAfUiFthrJfU2GHhYvGjgLEKdUffjGUbzCh7Resp2YekjQ7VL5DKuykLSrpFRFEYIqW
+         O63A==
+X-Gm-Message-State: AOAM531W4vUG9r+iuOhRowwEOtMZQNMxgiRichdO29QsInJiv5b6iNve
+        13x5eZpmttqI6QFcUaY/FA+z+F0cRh9yVDODPuOAe2rXXJVe091o127zSn6fZ0zwh7QTTxe5SuA
+        Ux/iTzzbAbiffuU+qvWO6Z8txW3o7
+X-Received: by 2002:a50:8a94:: with SMTP id j20mr1916732edj.388.1642512216295;
+        Tue, 18 Jan 2022 05:23:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytWJp4uNsT0KmcH7Y3k3MrNh8mEQR13qd+NiOFs9BRb4oschFyAsxAjto4TKyZfUnG5eXY4A==
+X-Received: by 2002:a50:8a94:: with SMTP id j20mr1916715edj.388.1642512216051;
+        Tue, 18 Jan 2022 05:23:36 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id i23sm7080513edt.93.2022.01.18.05.23.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jan 2022 05:23:35 -0800 (PST)
+Message-ID: <c7e4a2f8-e840-5f0d-9bed-fc9b96b220a5@redhat.com>
+Date:   Tue, 18 Jan 2022 14:23:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Cc:     usama.anjum@collabora.com, kernel@collabora.com
-Subject: Re: [PATCH 06/10] selftests: landlock: Add the uapi headers include
- variable
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] selftests: kvm: add amx_test to .gitignore
 Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:LANDLOCK SECURITY MODULE" 
-        <linux-security-module@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>
-References: <20220118112909.1885705-1-usama.anjum@collabora.com>
- <20220118112909.1885705-7-usama.anjum@collabora.com>
- <8ea3bd61-8251-a5b6-c0b4-6d15bac4d2c5@digikod.net>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <8ea3bd61-8251-a5b6-c0b4-6d15bac4d2c5@digikod.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Yang Zhong <yang.zhong@intel.com>
+Cc:     kernel@collabora.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220118122053.1941915-1-usama.anjum@collabora.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220118122053.1941915-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 1/18/22 13:20, Muhammad Usama Anjum wrote:
+> amx_test's binary should be present in the .gitignore file for the git
+> to ignore it.
+> 
+> Fixes: bf70636d9443 ("selftest: kvm: Add amx selftest")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/kvm/.gitignore | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 8c129961accf..780066ae092c 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -8,6 +8,7 @@
+>   /s390x/memop
+>   /s390x/resets
+>   /s390x/sync_regs_test
+> +/x86_64/amx_test
+>   /x86_64/cr4_cpuid_sync_test
+>   /x86_64/debug_regs
+>   /x86_64/evmcs_test
 
+Queued, thanks.
 
-On 1/18/22 5:35 PM, Mickaël Salaün wrote:
-> 
-> On 18/01/2022 12:29, Muhammad Usama Anjum wrote:
->> Out of tree build of this test fails if relative path of the output
->> directory is specified. Remove the un-needed include paths and use
->> KHDR_INCLUDES to correctly reach the headers.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>   tools/testing/selftests/landlock/Makefile | 11 +++--------
->>   1 file changed, 3 insertions(+), 8 deletions(-)
->>
->> diff --git a/tools/testing/selftests/landlock/Makefile
->> b/tools/testing/selftests/landlock/Makefile
->> index a99596ca9882..44c724b38a37 100644
->> --- a/tools/testing/selftests/landlock/Makefile
->> +++ b/tools/testing/selftests/landlock/Makefile
->> @@ -1,6 +1,6 @@
->>   # SPDX-License-Identifier: GPL-2.0
->>   -CFLAGS += -Wall -O2
->> +CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
->>     src_test := $(wildcard *_test.c)
->>   @@ -12,13 +12,8 @@ KSFT_KHDR_INSTALL := 1
->>   OVERRIDE_TARGETS := 1
->>   include ../lib.mk
->>   -khdr_dir = $(top_srcdir)/usr/include
-> 
-> This should be updated to:
-> khdr_dir = ${abs_srctree}/usr/include
-> 
-> Using a global KHDR_DIR instead of khdr_dir could be useful for others too.
-> 
->> -
->> -$(khdr_dir)/linux/landlock.h: khdr
->> -    @:
-> 
-> This should be kept as is, otherwise we loose this check to rebuild the
-> headers if linux/landlock.h is updated, which is handy for development.
-> KVM lost a similar behavior with this patch series.
-> 
->> -
->>   $(OUTPUT)/true: true.c
->>       $(LINK.c) $< $(LDLIBS) -o $@ -static
->>   -$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h
->> ../kselftest_harness.h common.h
-> 
-> This should not be changed.
-> 
->> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
->> +$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
->> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
-> 
-> This doesn't work when building in the local directory because
-> $abs_srctree and $KHDR_INCLUDES are empty:
-> cd tools/testing/selftests/landlock && make
-Hi,
+paolo
 
-Thank you. I'll update this path and the kvm one. I'll send a V2.
-
-Thanks,
-Usama
