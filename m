@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCED84929EC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 16:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A547D4929FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 17:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbiARPyk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 10:54:40 -0500
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:42453 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235165AbiARPyj (ORCPT
+        id S1346171AbiARQC0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 11:02:26 -0500
+Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:39931 "EHLO
+        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346184AbiARQCY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 10:54:39 -0500
+        Tue, 18 Jan 2022 11:02:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642521278;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642521743;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=U5FqWnUJyCnXxpOT+aF1vCKkzQCAgizuBmdZLlgYMmM=;
-        b=Vk4JJPStjD2CmVM/WinzXcp1KmUx6gZRBL7MwvP36+WUk8pIcNTNPGP3uQaxe1gt
-        160UMF7F3fLKVFkwX62kytYAHqUGDbkYPQgWZbdfRM0erHXuL+PYQXwc/hBr16GBp/n
-        tIo2grEhehpgqhEmsP9QGpQOFhQdhDt3SYqEP8JU=
+        bh=NqO7nFTJ0IO41sYZdwqrSkj4k/3A2OFXJ7wlvd+Pmqo=;
+        b=MIphy+IC/4Y/abffXRXp5Vpq1smaWYS0oLS0HYDby5LvN85AOanqIEvS69Mr00nd
+        g0RLKHIdRUE0Zrj22T8+eWvSbREXDfbjgM5dDE8PCiB0Ld7XJyZMe4bD3G7UH1FMvYH
+        xdAZSs+8Lb8faUuNfswRd9UzYm7ONnivmBIXkFvU=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642521278;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642521743;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=U5FqWnUJyCnXxpOT+aF1vCKkzQCAgizuBmdZLlgYMmM=;
-        b=KwlzfpGO3e/Ha//GOK4hv/71pXyUCZnyF5Assyev9/RjeZdMChKV44Y4doj1xZLi
-        UU2/dX1Psz6Ag8VPCZncFTlhGDdSX59vyUe0m71p62KaQESiMjNIHATkjf0sK3DP1kr
-        LcxI55vOs88eauCKu3QVfKmgE4WBBZFW5xOE1SD0=
+        bh=NqO7nFTJ0IO41sYZdwqrSkj4k/3A2OFXJ7wlvd+Pmqo=;
+        b=HsHxmXV2PWh9W6M4T1JepWcf4tqe0ARHP4dVad2lD2p8CSU4gkbffqMLRST3nQV2
+        UAviPS74htmOaerph6+Dd/2QqYXiVwnbo55QjIi0b5oOXaMfc7XjUUJIGJ6misHdD7w
+        PVZV9kfISUhba0Fw2HxCNmNVFJ425uE8CGrocqT8=
 From:   lkft@linaro.org
 To:     lkft@linaro.org
 Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
         linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211123
+Subject: [REGRESSION] lkft kselftest for next-20211124
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017e6de5b63f-6b4f491e-0db4-4341-9327-3147115e16a8-000000@email.amazonses.com>
-Date:   Tue, 18 Jan 2022 15:54:38 +0000
+Message-ID: <0100017e6deccd3f-77964da7-0ebe-4914-b2dd-15e0449aa7fd-000000@email.amazonses.com>
+Date:   Tue, 18 Jan 2022 16:02:22 +0000
 Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.01.18-54.240.8.29
+X-SES-Outgoing: 2022.01.18-54.240.8.35
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -46,9 +46,9 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 * kernel: 5.16.0-rc2
 * git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
 * git branch: master
-* git commit: aacdecce8147c20b01f865b4e214bb8dbe8c4af1
-* git describe: next-20211123
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211123
+* git commit: 4b74e088fef6ce8cc513f935ce236c38bdf5f67b
+* git describe: next-20211124
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211124
 
 ## Test Regressions (compared to next-20211117)
 * dragonboard-410c, kselftest-capabilities
@@ -57,11 +57,32 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 * dragonboard-410c, kselftest-pidfd
   - pidfd.pidfd_poll_test
 
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
 
 * qemu_i386, kselftest-rtc
   - rtc.rtctest
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* qemu_x86_64, kselftest-proc
+  - proc.read
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-net
+  - net.gro.sh
+  - net.run_netsocktests
+  - net.so_txtime.sh
 
 * x15, kselftest-rtc
   - rtc.rtctest.rtc.alarm_alm_set
@@ -83,10 +104,7 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 * hi6220-hikey, kselftest-timers
   - timers.nsleep-lat
 
-* i386, kselftest-net
-  - net.ip_defrag.sh
-
-* i386, kselftest-rtc
+* qemu_arm, kselftest-rtc
   - rtc.rtctest
 
 * qemu_arm, kselftest-timers
@@ -95,8 +113,15 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 * qemu_x86_64, kselftest-timers
   - timers.rtcpie
 
-* x15, kselftest-rtc
-  - rtc.rtctest
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-net
+  - net.cmsg_so_mark.sh
+  - net.fib_rule_tests.sh
+  - net.icmp_redirect.sh
+  - net.tls
+  - net.unicast_extensions.sh
 
 * x15, kselftest-sync
   - sync.sync_test
@@ -109,11 +134,12 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 No metric fixes found.
 
 ## Test result summary
-total: 4492, pass: 2777, fail: 461, skip: 1254, xfail: 0
+total: 7117, pass: 4386, fail: 737, skip: 1994, xfail: 0
 
 ## Build Summary
 
 ## Test suites summary
+* kselftest-
 * kselftest-android
 * kselftest-arm64
 * kselftest-arm64/arm64.btitest.bti_c_func
