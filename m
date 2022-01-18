@@ -2,102 +2,196 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE3D492733
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 14:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FECD4929E4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 16:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243336AbiARNXr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 08:23:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44581 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243680AbiARNXj (ORCPT
+        id S1346030AbiARPwg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 10:52:36 -0500
+Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:46301 "EHLO
+        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233324AbiARPwf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 08:23:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642512218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sMJxvTYPAO2Woc0KNl4Uc9BZK4KZwIBCLQmQ1uUCVf8=;
-        b=MyaKPMubkshhoWxAv4U0lTr+mdvgrfGhA7ic31Yhk674b8lz8tGhJUusvK7oCEsQrStmNd
-        /72fuMPRs93tTv2ArpkjAsar2CQ67XPW4DF+VeFTLIF0Yd5128Mh2vCqCa+QPiTiGCKLlR
-        Gg5yfUXqHbeDYYxkMd1xd1+M8DLCdEw=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-scoaLUkhN7ez505pQB-AJg-1; Tue, 18 Jan 2022 08:23:37 -0500
-X-MC-Unique: scoaLUkhN7ez505pQB-AJg-1
-Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso16934095edt.20
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Jan 2022 05:23:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sMJxvTYPAO2Woc0KNl4Uc9BZK4KZwIBCLQmQ1uUCVf8=;
-        b=VbjCUQsGXlnS2tikQQkc9GALIfrngdaAcFJBOFlcOxvEj50JFPQDKK+Q9TuydOdHP7
-         sDmDGUSE/x/R6ranQTYtXKiQ/iYinrsQRmYX2yygG9qRCMl60rVxnJPbfbCbIK8r83z3
-         WwcBiOLzkuQ1msJ0NSHRUDpqiUipu3DNBA3XV1ZeswzZkE7AxZWspGXomExMFWeG0J3L
-         8chDKobX8tpQgIcnJqI6HVR7Iyo5zMS3fFz9HiQiniejWuC/Oxez07bagi7P7etbFbYM
-         NXAfUiFthrJfU2GHhYvGjgLEKdUffjGUbzCh7Resp2YekjQ7VL5DKuykLSrpFRFEYIqW
-         O63A==
-X-Gm-Message-State: AOAM531W4vUG9r+iuOhRowwEOtMZQNMxgiRichdO29QsInJiv5b6iNve
-        13x5eZpmttqI6QFcUaY/FA+z+F0cRh9yVDODPuOAe2rXXJVe091o127zSn6fZ0zwh7QTTxe5SuA
-        Ux/iTzzbAbiffuU+qvWO6Z8txW3o7
-X-Received: by 2002:a50:8a94:: with SMTP id j20mr1916732edj.388.1642512216295;
-        Tue, 18 Jan 2022 05:23:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJytWJp4uNsT0KmcH7Y3k3MrNh8mEQR13qd+NiOFs9BRb4oschFyAsxAjto4TKyZfUnG5eXY4A==
-X-Received: by 2002:a50:8a94:: with SMTP id j20mr1916715edj.388.1642512216051;
-        Tue, 18 Jan 2022 05:23:36 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id i23sm7080513edt.93.2022.01.18.05.23.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 05:23:35 -0800 (PST)
-Message-ID: <c7e4a2f8-e840-5f0d-9bed-fc9b96b220a5@redhat.com>
-Date:   Tue, 18 Jan 2022 14:23:33 +0100
+        Tue, 18 Jan 2022 10:52:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642521155;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=QFsjs9FFcADUla+OdtiluaNUoVc15oEykTqiXNylkFY=;
+        b=YlN710WHEtd6IxZQ1jLXrRI0ZXkihzpOxQkf67DNpB3cWOpx5F5xf3cOAvmvakHf
+        DrJESpjHlS7FEbyunsH9qvWYwnuViGwj5Emo/lWVYNbi3g7/qyINs38/LQQo2kGPKz3
+        e8JvmVxLzNnb0NUdgxlNK0FgEk+XjzPEYJzGFYpA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642521155;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=QFsjs9FFcADUla+OdtiluaNUoVc15oEykTqiXNylkFY=;
+        b=V8/HdiRRIV615PgbUrgey6BUlQtxImyzKNETswGYWll8BLb5Nvz2YI6VTykS7er+
+        ZdgdM9tldwnBUf1+glidfdSQUXWKqm46murAiWO2qYJXZAGAhhWMenRFspWxO34SCcL
+        2xTUZvCsAsm0NByTNP8OH3wtLk3ijpVF6KguM3E0=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211118
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] selftests: kvm: add amx_test to .gitignore
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Yang Zhong <yang.zhong@intel.com>
-Cc:     kernel@collabora.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220118122053.1941915-1-usama.anjum@collabora.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220118122053.1941915-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+Message-ID: <0100017e6de3d489-5fae87f5-0856-41d5-82fb-624d52abfc43-000000@email.amazonses.com>
+Date:   Tue, 18 Jan 2022 15:52:34 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.01.18-54.240.8.81
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/18/22 13:20, Muhammad Usama Anjum wrote:
-> amx_test's binary should be present in the .gitignore file for the git
-> to ignore it.
-> 
-> Fixes: bf70636d9443 ("selftest: kvm: Add amx selftest")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   tools/testing/selftests/kvm/.gitignore | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 8c129961accf..780066ae092c 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -8,6 +8,7 @@
->   /s390x/memop
->   /s390x/resets
->   /s390x/sync_regs_test
-> +/x86_64/amx_test
->   /x86_64/cr4_cpuid_sync_test
->   /x86_64/debug_regs
->   /x86_64/evmcs_test
+## Build
+* kernel: 5.16.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 5191249f880367a4cd675825cd721a8d78f26a45
+* git describe: next-20211118
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211118
 
-Queued, thanks.
+## Test Regressions (compared to next-20211115)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-paolo
+* i386, kselftest-net
+  - net.so_txtime.sh
 
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
+
+* x86, kselftest-kvm
+  - kvm.kvm_page_table_test
+
+
+## Metric Regressions (compared to next-20211115)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211115)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-sync
+  - sync.sync_test
+
+* x86, kselftest-net
+  - net.gro.sh
+
+
+## Metric Fixes (compared to next-20211115)
+No metric fixes found.
+
+## Test result summary
+total: 5350, pass: 3334, fail: 606, skip: 1410, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
