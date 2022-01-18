@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645EA492B88
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 17:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EE3492B8B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Jan 2022 17:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbiARQux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Jan 2022 11:50:53 -0500
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:35853 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239060AbiARQux (ORCPT
+        id S244204AbiARQvO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Jan 2022 11:51:14 -0500
+Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:39511 "EHLO
+        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239060AbiARQvO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jan 2022 11:50:53 -0500
+        Tue, 18 Jan 2022 11:51:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642524652;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642524673;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=uXmuUMZqVinSB3NUKRUKZ1JC7mu0oPfJfFfibA1gzpY=;
-        b=V+RfFTKBD6bCiS2kT9e+LxTQtIurzWY7n5CLDk3l/G8q/BIHAYY39aH59wv8C3vw
-        6rY4uA6EFUhnYAN3z8rzeWB9RyVIhfsXBwvIx1ZaQRADLt93MvnosMgWbz08e3vnDxx
-        tk73mOI9nPpuz8ir4w89ai0UgOBGdutvjwxSJ2A4=
+        bh=J6DXW3Tz+URePxKKgqGa79l5TLNeBu0DvOkgDErrT74=;
+        b=IeFu0czD6pRyy9+mt1RZ+eQ3vPalb4RrCquT89LkyTUYCIYqsziAhulmj7CKxUa+
+        O6xN4O6kWCxu80iHTbcV0BGlB0jrarteR7EBdViAovu0jDqjMmEsNssUBW8jQx4DtcM
+        z6vcB4g/rTS5hyKR9MMDiXHx+mX1JlqwMlJkq6LA=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642524652;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642524673;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=uXmuUMZqVinSB3NUKRUKZ1JC7mu0oPfJfFfibA1gzpY=;
-        b=j67eI3u8DWytKRQpsK1mfT3mAhMyZQt0+tW3xNuLaONPRkuQ6ZQkzLlaOrARsMk3
-        7kpKMePyz24uaDmJH462XpTBKWh/gB/ARU36zNSQcaMt2NCSitghWQPp4Md9rSj6FZq
-        0iBBpUwAlICz3FQ0YcnBbY/IptReFJAnSxkFf4m8=
+        bh=J6DXW3Tz+URePxKKgqGa79l5TLNeBu0DvOkgDErrT74=;
+        b=hMUy62R1UQgeoJbX8R1/cr6BWKoQQ8VP9RSKVMphf/6U6LnS8zA+1xFs/UYN87h9
+        Q6ehO/KgtulaeU/5snAHC2Fcjq/ngmW8ty/xN46OrVwj7oIkm0v3Lpvg1fmDArty2D3
+        kAKN307S92uDtd1rJbfuaBVemjTRRDqL7Fa+ePOg=
 From:   lkft@linaro.org
 To:     lkft@linaro.org
 Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
         linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211201
+Subject: [REGRESSION] lkft kselftest for next-20211130
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017e6e1931d8-3c028e66-8348-4e42-8b2e-32c9c1cc4853-000000@email.amazonses.com>
-Date:   Tue, 18 Jan 2022 16:50:52 +0000
+Message-ID: <0100017e6e1983e1-1002ca40-7108-40ea-8426-c33dc7e61f19-000000@email.amazonses.com>
+Date:   Tue, 18 Jan 2022 16:51:13 +0000
 Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.01.18-54.240.8.29
+X-SES-Outgoing: 2022.01.18-54.240.8.73
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -46,9 +46,9 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 * kernel: 5.16.0-rc3
 * git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
 * git branch: master
-* git commit: 048aeae86c3967f4c40666cd26f2c1eb73a4b805
-* git describe: next-20211201
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211201
+* git commit: 34f255a1e91ab44ff8926cf8294ff9144e62e861
+* git describe: next-20211130
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211130
 
 ## Test Regressions (compared to next-20211117)
 * dragonboard-410c, kselftest-capabilities
@@ -63,13 +63,16 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 * dragonboard-410c, kselftest-timers
   - timers.rtcpie
 
-* x15, kselftest-capabilities
-  - capabilities.test_execve
+* hi6220-hikey, kselftest-timers
+  - timers.rtcpie
+  - timers.set-timer-lat
 
-* x15, kselftest-cgroup
+* qemu_i386, kselftest-cgroup
   - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
 
 * x15, kselftest-rtc
   - rtc.rtctest.rtc.alarm_alm_set
@@ -78,7 +81,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   - rtc.rtctest.rtc.date_read
 
 * x86, kselftest-kvm
-  - kvm.vmx_pmu_msrs_test
+  - kvm.kvm_page_table_test
 
 
 ## Metric Regressions (compared to next-20211117)
@@ -88,10 +91,7 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
 ## Test Fixes (compared to next-20211117)
-* dragonboard-410c, kselftest-sync
-  - sync.sync_test
-
-* qemu_arm, kselftest-rtc
+* i386, kselftest-rtc
   - rtc.rtctest
 
 * qemu_arm, kselftest-timers
@@ -99,12 +99,6 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 * qemu_x86_64, kselftest-timers
   - timers.rtcpie
-
-* x15, kselftest-core
-  - core.close_range_test
-
-* x15, kselftest-rtc
-  - rtc.rtctest
 
 * x15, kselftest-sync
   - sync.sync_test
@@ -114,7 +108,7 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 No metric fixes found.
 
 ## Test result summary
-total: 4924, pass: 2542, fail: 525, skip: 1857, xfail: 0
+total: 4544, pass: 2455, fail: 420, skip: 1669, xfail: 0
 
 ## Build Summary
 
