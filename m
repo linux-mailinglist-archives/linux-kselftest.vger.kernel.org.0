@@ -2,105 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7CF49383A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jan 2022 11:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2080249389A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jan 2022 11:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353696AbiASKRY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jan 2022 05:17:24 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47820 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353710AbiASKRJ (ORCPT
+        id S1348533AbiASKeG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jan 2022 05:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343802AbiASKeB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:17:09 -0500
+        Wed, 19 Jan 2022 05:34:01 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A00BC061746;
+        Wed, 19 Jan 2022 02:34:01 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id AC62B1F44443
+        with ESMTPSA id B49011F44460
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642587428;
-        bh=ZgAzpMGfSGdCPLE/fHhKIS82NhtSqBUPZr7WBPwkwXI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C0mGMmA7q7UPYsiXK18YhhsNEQ//QfrpSJuvfRmQUme1U5Fg4vobtB0Ao0YZiGUUk
-         L3hEF7/vTCey+drcto8FB1II8khu5KrNSHj6tZDVDCrTS/eyExq2QqwYILoP2Qy10F
-         8Lmdf9wO/NjKg5Xp17P9zVfjJyRzSjdWaMGg9JMiYgITkIDPxQCI6DPGYbmCiq48wl
-         KdwbBRzvSFh0zarKFe2Y/qPcaWxXsJAdqBodS6834V2pv09q05jLvBfhen5Zoq/3Ih
-         uJqUJrZT+o/JZh8YBKDePxlOaWJ6AvYf+Pwr482gk45PmGVBeQDczi22XKAu6KIjXv
-         v5snzb//VssZA==
+        s=mail; t=1642588440;
+        bh=Ok+oNRTJoeyZh+8y6c73p7PjPSC6YypeZj6bp2whWWs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n7US8/u1f9kWZhQhLywVehUPFSkcpOaeBRuWBMcuc4nlETNS8TpfvWuXlFFCAMcLO
+         Y3ZAIn/8aC12d1EJhLLHeMqK2Ew1NYE2FGgnSh7IRLbl40A3y7+qz6ZbEkF9z3RMFS
+         rdGCRQLot31Vz9eAOFWabLBfNN67H0h6VXQ47xQQDFhR3g6+RNn6asuFJzoaFWOvSv
+         haWpwQNwT26QisGKzq4aeM6XTqxNKibzB7bW3MhgrzHt7MFebLfawZz/tWgEmIguyN
+         B7UYdTfIYZYsDuIL7SPXQrqRYwimbxWLtoiPLnZE7ezfk95dOQ7puLHpjxNaBFrS6Y
+         BfGE8S8EnrpCw==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Darren Hart <dvhart@infradead.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
         =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        chiminghao <chi.minghao@zte.com.cn>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list),
-        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM)),
-        linux-security-module@vger.kernel.org (open list:LANDLOCK SECURITY
-        MODULE), netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        mptcp@lists.linux.dev (open list:NETWORKING [MPTCP]),
-        linux-mm@kvack.org (open list:MEMORY MANAGEMENT)
+        Shuah Khan <shuah@kernel.org>
 Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH V2 10/10] selftests: vm: remove dependecy from internal kernel macros
-Date:   Wed, 19 Jan 2022 15:15:31 +0500
-Message-Id: <20220119101531.2850400-11-usama.anjum@collabora.com>
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: futex: set DEFAULT_INSTALL_HDR_PATH
+Date:   Wed, 19 Jan 2022 15:33:32 +0500
+Message-Id: <20220119103332.2887370-1-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220119101531.2850400-1-usama.anjum@collabora.com>
-References: <20220119101531.2850400-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The defination of swap() is used from kernel's internal header when this
-test is built in source tree. The build fails when this test is built
-out of source tree as defination of swap() isn't found. Selftests
-shouldn't depend on kernel's internal header files. They can only depend
-on uapi header files. Add the defination of swap() to fix the build
-error:
+If only futex selftest is compiled, uapi header files are copied to the
+selftests/futex/functional directory. This copy isn't needed. Set the
+DEFAULT_INSTALL_HDR_PATH variable to 1 to use the default header install
+path only. This removes extra copy of header file.
 
-	gcc -Wall  -I/linux_mainline2/build/usr/include -no-pie    userfaultfd.c -lrt -lpthread -o /linux_mainline2/build/kselftest/vm/userfaultfd
-	userfaultfd.c: In function ‘userfaultfd_stress’:
-	userfaultfd.c:1530:3: warning: implicit declaration of function ‘swap’; did you mean ‘swab’? [-Wimplicit-function-declaration]
-	 1530 |   swap(area_src, area_dst);
-	      |   ^~~~
-	      |   swab
-	/usr/bin/ld: /tmp/cclUUH7V.o: in function `userfaultfd_stress':
-	userfaultfd.c:(.text+0x4d64): undefined reference to `swap'
-	/usr/bin/ld: userfaultfd.c:(.text+0x4d82): undefined reference to `swap'
-	collect2: error: ld returned 1 exit status
-
-Fixes: 2c769ed7137a ("tools/testing/selftests/vm/userfaultfd.c: use swap() to make code cleaner")
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/futex/functional/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index d3fd24f9fae8..d2480ab93037 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -119,6 +119,9 @@ struct uffd_stats {
- 				 ~(unsigned long)(sizeof(unsigned long long) \
- 						  -  1)))
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index 5cc38de9d8ea..9a8c3700d773 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -24,6 +24,7 @@ TEST_PROGS := run.sh
  
-+#define swap(a, b) \
-+	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
-+
- const char *examples =
-     "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
-     "./userfaultfd anon 100 99999\n\n"
+ top_srcdir = ../../../../..
+ KSFT_KHDR_INSTALL := 1
++DEFAULT_INSTALL_HDR_PATH := 1
+ include ../../lib.mk
+ 
+ $(TEST_GEN_FILES): $(HEADERS)
 -- 
 2.30.2
 
