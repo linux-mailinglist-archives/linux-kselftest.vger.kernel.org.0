@@ -2,171 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5A549457D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jan 2022 02:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793AA494976
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jan 2022 09:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344578AbiATBVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jan 2022 20:21:05 -0500
-Received: from mail-dm6nam12on2046.outbound.protection.outlook.com ([40.107.243.46]:51216
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344114AbiATBVE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jan 2022 20:21:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gVxsCbgjoz/d2OYBB3oD9tXHRB4xzvKRA2EGJm5s2AqxMKRlttJ7hu4sMAM4CwGQy/YJ66MO3l5UGiAaU1azUi6SRG1uL6jH2szMdS/AXiiuhL90K4U+yPA+eapoHak5XNl0f0rYBl11kk+zmNnp4Kx0tI0VrCs9I4bUtxDUdexppmLJEFHUFxL4cN4xFn4T9Ma+qqX2BnOIIOMgfG0EBF2qDtzYUaj1DD7yKgiI4uIpuokOCTt/ohEtHPVp0/8hFqGGyayG4f7rE2ZrFNgcVqb1GrNOjcGqisa18x7qR18YF9LhwawDOi16vSm+m/KCe01D6SDFuM4I7DBxgLWLtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pbTqnzyO0Rs/2I3ICXZzgTul8NQ7Zu4IhThSIY2uumw=;
- b=avsaPq1cWdDULJgIMs6SQTq8piMyz49il0WE+G1XuyQ3XCbD7xkewaJj6lnTvFwJIoz2Eocap2U1YmumnRXnOy5dGE21zHHY44WRL6Jff48e7Cxfx96M4lezHa3VgbVtrMqQeaBJ3Gq6J2u6s3f4WVNV8oQhTmF+q7TVnzxyXl/dJ/OOPfY6b47l0PGuBLovhgOgMcLKoSjmYA3eKTrDpKHx9KAUB1uP6oJTM9sBNVZ5FPbPxK8Ra1zvKQLE6ovM7gZLG9kmOb8lOH5uA8jQD8Jp1jSXXfN30hLfZNGMNaUkhmMa/xWjxi+tZEeyJviGAu7yY5QnCwLnbIg4Br0vWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pbTqnzyO0Rs/2I3ICXZzgTul8NQ7Zu4IhThSIY2uumw=;
- b=Q3mUl/kI4J18hsoF7daDmT/VDTMh9x4Bx1VZqqgPiidMTgWVIxt6Hhn9JaXYtBSvLhABmK8HykHM67RCyo8+7As1P5a9o2B8v5afIvK5Z/zA7YSoEoXGxH22YfvA2nUmmsZbRJgB/2fVQllXO5SnVzTPY3JQvR+Y/wu5IVtXYM8Bt3u7fhsWUQskNTLnWGWBDr6GkEqPsc0twnKl5hiPzK+YV7hPCXi6mYAd9fVqehb93v62PyqM8KRCFXWJ5pYUrVPYt6qNpA88tSN1YOz3IalLJfK+ujZnAPu1YL3jmaR30J35O4iSkFMoaVUQopIGejzIL4DjRApKcgKkgOSQwg==
-Received: from BN6PR1201CA0023.namprd12.prod.outlook.com
- (2603:10b6:405:4c::33) by MN2PR12MB3293.namprd12.prod.outlook.com
- (2603:10b6:208:106::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4888.11; Thu, 20 Jan
- 2022 01:21:02 +0000
-Received: from BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:4c:cafe::34) by BN6PR1201CA0023.outlook.office365.com
- (2603:10b6:405:4c::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7 via Frontend
- Transport; Thu, 20 Jan 2022 01:21:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT056.mail.protection.outlook.com (10.13.177.26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4909.7 via Frontend Transport; Thu, 20 Jan 2022 01:21:01 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 20 Jan
- 2022 01:20:59 +0000
-Received: from nvdebian.localnet (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Wed, 19 Jan 2022
- 17:20:54 -0800
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        chiminghao <chi.minghao@zte.com.cn>,
+        id S1359227AbiATI3w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jan 2022 03:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359207AbiATI3r (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Jan 2022 03:29:47 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C071C06173F
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 00:29:46 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso18610082wma.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 00:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lRg1Hi7fshLwZOXJunSDXWp8Mi+a04TIBKVjfzILXqc=;
+        b=M6g6UzMtANcIE6R4pMS/wZvbQfFH0RkIxyOzQqhAI5EN/IntkdglHlmWBK62vPP7id
+         vmQbKOeMQsm6tAmbtdp9N9+5FB1ESJ1eFJZrmZqngpPN2G7CzWA7v8wJm4WciJotfe9f
+         3C6m2J0VKRBONU6jHsG4xee3adDuJMIRxucBHV9tylitRlr2WiO25ICuIIvHEUSwid3a
+         3jHTR3fvwAWYe4QCOhzzgztvTzOutWRX7vsbG6dj3dyhFhxOoFhHX2lzLr5M6eyHMg9d
+         1OahmGnGpJVPOS+VoO1jlj52rq+crn4c1xr6XEgJP1ohOuQKkqVq+1cwLN4BwHh5FH1H
+         F3dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lRg1Hi7fshLwZOXJunSDXWp8Mi+a04TIBKVjfzILXqc=;
+        b=Vwgr2l+mPS4qic81xqI5du28PtpIQrapMeXy2FaeAKO1bgEunWmHpsgU4B4lzRh/28
+         SFTRIYoTfupgTjiUg5AUfLA9lq7PHY0yxal9DSRijtlhHWSDL/i7H/3q4aq4iaCys7F9
+         QZbbpP5EUQRIHtQYtjaICYsQyccvAx5CMGQNpNvpASgw0j10UQIs52YnCPEIOJC+Nk80
+         LBNln46h4fT8HwtUaE7uBUjMgp8wVkkaLKdaLZGDzp2LmGdcWS9ItBlPKcPEtpSi2KpY
+         heU4CKW5a78FWlDdMXgAY0bm/CWtJjAmZkl9lOLRmZ4y4itAweIDCdp8FKrtZwWRUoQS
+         g3kQ==
+X-Gm-Message-State: AOAM533wZCMFcav+AGuTa/J+Nr8HzleHkOYPs6ASwF8pXQ7g58eLktfI
+        f4VnyeABgPqiuOFmFcXgCOb4I/VdAagUpJ0AEb+QeQ==
+X-Google-Smtp-Source: ABdhPJy/5kiTt1Crf4M9DcuwFpzxOJ8PMTolsMnrwikR8TJcWxjZaNhtDsqGR85pW/LSE9SUMdrZANpkXmv8ZOQ5FGI=
+X-Received: by 2002:a5d:6e8a:: with SMTP id k10mr33643975wrz.113.1642667384748;
+ Thu, 20 Jan 2022 00:29:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20220118190922.1557074-1-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 20 Jan 2022 16:29:33 +0800
+Message-ID: <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:LANDLOCK SECURITY MODULE" 
-        <linux-security-module@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-CC:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        <kernel@collabora.com>
-Subject: Re: [PATCH V2 10/10] selftests: vm: remove dependecy from internal kernel macros
-Date:   Thu, 20 Jan 2022 12:20:51 +1100
-Message-ID: <8257315.FuKUqIaFJu@nvdebian>
-In-Reply-To: <20220119101531.2850400-11-usama.anjum@collabora.com>
-References: <20220119101531.2850400-1-usama.anjum@collabora.com> <20220119101531.2850400-11-usama.anjum@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b17aa941-ef21-4860-0aff-08d9dbb31f39
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3293:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB3293C2F6B58D94B62743A2F7DF5A9@MN2PR12MB3293.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XoloNfPO5dWRVcuYsdezIKOxguVvwQwJ3mnJbjdmM54tfwa2P+pknSiRta6S2el+LCKYQKpLGHeHpXM41t42cpCJHEnqtk+OL307MkjQRGrGuftbcwGoEEq/H01kQ3T205DiDxTRFU44GEmbED3fwMDWr7dK7c1O3SFAHRbQxmFZOB8O/X9S8VGfurs6lp74yJ+bGFlYqfW7EN+F4b+8ePszIzzkdygt7wBYij5ZqCmaCUPOCdyhoaxyq9VODtYKQTxzAj3db/gWSjlQp81WA/1BHmaEvN8qER/xiD6KA5eRgIVOIPMVcqm7j5QJGOyLI2/o4ZemA2rJ7Cktl4hdnMm1ER6NZaJwAgrXb3HCSj5J5EmzrPiU9D8aLdUNN0k06kKUhHDjnbZgNHlrCIUNEz0RQZGqK5rEuFgeolirEx/qEtVWRiPZom8CWgeHFj+qGfv3xSRs/g/2EUpoLIt7jgwbWtUMBUJzse37177aBJAS7NUXE96uQD0xPA+UKHA20lqdDUjVgUBPr4ZgpudvWXvCU+cEcBAfqiWcKKoilRtjQwKq/zyoFwASTC1Z/Pt/WlZYPrdNcDfvBb+EFlnZ9VhcdRr+Jn77kiHBOwgK1HVsSQiDV81JrB+nVEh5o+95pQYCVfDNFGBl4FFhWCykenzkAL1BqTLjZfpgrR9W21xZe85YvEBAnij84St0tn67dXqGioarYgfNUUYsRJ2JfFqWj8Re6rHagD0sTjEZ3JxM62cW868hbI7L3cPo2MvCtfFyF5OQLP7glC4OaochIYED57rnuvOR0ZZKjWsuLQEGYa57Bvh+lgbKbddbWcPi
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(426003)(83380400001)(36860700001)(316002)(2906002)(8676002)(16526019)(82310400004)(86362001)(47076005)(81166007)(508600001)(40460700001)(9576002)(921005)(8936002)(6666004)(7416002)(356005)(9686003)(186003)(110136005)(70206006)(5660300002)(4326008)(26005)(54906003)(33716001)(336012)(70586007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2022 01:21:01.7221
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b17aa941-ef21-4860-0aff-08d9dbb31f39
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3293
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-
-On Wednesday, 19 January 2022 9:15:31 PM AEDT Muhammad Usama Anjum wrote:
-> The defination of swap() is used from kernel's internal header when this
-> test is built in source tree. The build fails when this test is built
-> out of source tree as defination of swap() isn't found. Selftests
-> shouldn't depend on kernel's internal header files. They can only depend
-> on uapi header files. Add the defination of swap() to fix the build
-> error:
->=20
-> 	gcc -Wall  -I/linux_mainline2/build/usr/include -no-pie    userfaultfd.c=
- -lrt -lpthread -o /linux_mainline2/build/kselftest/vm/userfaultfd
-> 	userfaultfd.c: In function =E2=80=98userfaultfd_stress=E2=80=99:
-> 	userfaultfd.c:1530:3: warning: implicit declaration of function =E2=80=
-=98swap=E2=80=99; did you mean =E2=80=98swab=E2=80=99? [-Wimplicit-function=
-=2Ddeclaration]
-> 	 1530 |   swap(area_src, area_dst);
-> 	      |   ^~~~
-> 	      |   swab
-> 	/usr/bin/ld: /tmp/cclUUH7V.o: in function `userfaultfd_stress':
-> 	userfaultfd.c:(.text+0x4d64): undefined reference to `swap'
-> 	/usr/bin/ld: userfaultfd.c:(.text+0x4d82): undefined reference to `swap'
-> 	collect2: error: ld returned 1 exit status
->=20
-> Fixes: 2c769ed7137a ("tools/testing/selftests/vm/userfaultfd.c: use swap(=
-) to make code cleaner")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+On Wed, Jan 19, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> This field is only used to pass along the parsed Test object from
+> parse_tests().
+> Everywhere else the `result` field is ignored.
+>
+> Instead make parse_tests() explicitly return a KunitResult and Test so
+> we can retire the `result` field.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
->  tools/testing/selftests/vm/userfaultfd.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/sel=
-ftests/vm/userfaultfd.c
-> index d3fd24f9fae8..d2480ab93037 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -119,6 +119,9 @@ struct uffd_stats {
->  				 ~(unsigned long)(sizeof(unsigned long long) \
->  						  -  1)))
-> =20
-> +#define swap(a, b) \
-> +	do { typeof(a) __tmp =3D (a); (a) =3D (b); (b) =3D __tmp; } while (0)
-> +
->  const char *examples =3D
->      "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
->      "./userfaultfd anon 100 99999\n\n"
->=20
+
+I personally prefer having the Test as part of the result -- it gives
+a slightly rust-esque sense of needing to check the actual result
+before using anything that's parsed. (Also, I'm still not used to the
+whole multiple return value thing, which is not as clear as an
+explicit named struct member, IMHO).
+That being said, we're not actually checking the result before using
+the Test, and certainly the use of Any and mashing a textual error
+message in the same field is rather unpleasant.
+
+My ideal solution would be to rename 'result' to something more
+sensible ('parsed_test', maybe?), and make it explicitly a Test rather
+than Any (and either add a separate field for the textual error
+message, or remove it as in this patch, having noticed that it's
+almost completely redundant to the enum).
+
+That being said, I can live with the current solution, but'd ideally
+like a comment or something to make the return value Tuple a bit more
+obvious.
+
+Thoughts?
 
 
+-- David
 
-
+>  tools/testing/kunit/kunit.py | 24 ++++++++----------------
+>  1 file changed, 8 insertions(+), 16 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 7a706f96f68d..9274c6355809 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -17,7 +17,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
+>
+>  from dataclasses import dataclass
+>  from enum import Enum, auto
+> -from typing import Any, Iterable, Sequence, List, Optional
+> +from typing import Iterable, List, Optional, Sequence, Tuple
+>
+>  import kunit_json
+>  import kunit_kernel
+> @@ -32,7 +32,6 @@ class KunitStatus(Enum):
+>  @dataclass
+>  class KunitResult:
+>         status: KunitStatus
+> -       result: Any
+>         elapsed_time: float
+>
+>  @dataclass
+> @@ -82,10 +81,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+>         config_end = time.time()
+>         if not success:
+>                 return KunitResult(KunitStatus.CONFIG_FAILURE,
+> -                                  'could not configure kernel',
+>                                    config_end - config_start)
+>         return KunitResult(KunitStatus.SUCCESS,
+> -                          'configured kernel successfully',
+>                            config_end - config_start)
+>
+>  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> @@ -100,14 +97,11 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>         build_end = time.time()
+>         if not success:
+>                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  'could not build kernel',
+>                                    build_end - build_start)
+>         if not success:
+>                 return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  'could not build kernel',
+>                                    build_end - build_start)
+>         return KunitResult(KunitStatus.SUCCESS,
+> -                          'built kernel successfully',
+>                            build_end - build_start)
+>
+>  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+> @@ -173,14 +167,14 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                         filter_glob=filter_glob,
+>                         build_dir=request.build_dir)
+>
+> -               result = parse_tests(request, run_result)
+> +               _, test_result = parse_tests(request, run_result)
+>                 # run_kernel() doesn't block on the kernel exiting.
+>                 # That only happens after we get the last line of output from `run_result`.
+>                 # So exec_time here actually contains parsing + execution time, which is fine.
+>                 test_end = time.time()
+>                 exec_time += test_end - test_start
+>
+> -               test_counts.add_subtest_counts(result.result.counts)
+> +               test_counts.add_subtest_counts(test_result.counts)
+>
+>         if len(filter_globs) == 1 and test_counts.crashed > 0:
+>                 bd = request.build_dir
+> @@ -189,7 +183,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                                 bd, bd, kunit_kernel.get_outfile_path(bd), bd, sys.argv[0]))
+>
+>         kunit_status = _map_to_overall_status(test_counts.get_status())
+> -       return KunitResult(status=kunit_status, result=result, elapsed_time=exec_time)
+> +       return KunitResult(status=kunit_status, elapsed_time=exec_time)
+>
+>  def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+>         if test_status in (kunit_parser.TestStatus.SUCCESS, kunit_parser.TestStatus.SKIPPED):
+> @@ -197,7 +191,7 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+>         else:
+>                 return KunitStatus.TEST_FAILURE
+>
+> -def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitResult:
+> +def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+>         parse_start = time.time()
+>
+>         test_result = kunit_parser.Test()
+> @@ -231,11 +225,9 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> KunitR
+>                         print(json_obj)
+>
+>         if test_result.status != kunit_parser.TestStatus.SUCCESS:
+> -               return KunitResult(KunitStatus.TEST_FAILURE, test_result,
+> -                                  parse_end - parse_start)
+> +               return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
+>
+> -       return KunitResult(KunitStatus.SUCCESS, test_result,
+> -                               parse_end - parse_start)
+> +       return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
+>
+>  def run_tests(linux: kunit_kernel.LinuxSourceTree,
+>               request: KunitRequest) -> KunitResult:
+> @@ -513,7 +505,7 @@ def main(argv, linux=None):
+>                 request = KunitParseRequest(raw_output=cli_args.raw_output,
+>                                             build_dir='',
+>                                             json=cli_args.json)
+> -               result = parse_tests(request, kunit_output)
+> +               result, _ = parse_tests(request, kunit_output)
+>                 if result.status != KunitStatus.SUCCESS:
+>                         sys.exit(1)
+>         else:
+>
+> base-commit: f079ab01b5609fb0c9acc52c88168bf1eed82373
+> --
+> 2.34.1.703.g22d0c6ccf7-goog
+>
