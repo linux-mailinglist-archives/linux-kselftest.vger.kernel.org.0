@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B850495A96
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jan 2022 08:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F8C495A97
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jan 2022 08:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349075AbiAUHWJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Jan 2022 02:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S1378969AbiAUHWL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Jan 2022 02:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378948AbiAUHWD (ORCPT
+        with ESMTP id S1378975AbiAUHWJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jan 2022 02:22:03 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7BBC061401
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 23:22:02 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso26985139wmj.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 23:22:02 -0800 (PST)
+        Fri, 21 Jan 2022 02:22:09 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E95BC06173F
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 23:22:08 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so20331647wme.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 23:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VmI6L81UjLNgtF9bRaFGyCBanbzTKfgaJgajqJamXbM=;
-        b=MAPvnqvS0FN162XpHjydAEv7oI4nPr3iw8GTYMFPlhT5IOFrDt/PPf5wMaewk8Q8a7
-         DIheeIMMABjYqLfVMiWspKfSiyEypwxfyCU4ewf5kmaaPHtrxgtBhB88fCrRFoOUspSa
-         uKBsJlJpqI+RgbJ3NpFDbgWNdsvN8QqJ6TcuzaaqFTnD+dRMhqoMAWmstBdss4503lNo
-         Nd8yikxY2iTG1vvhvlbk5H4bndFtu4jJtD3txPAIfORgYWMKkTt4ALzie5K0oSEMLrC1
-         LW+bmaPLUZlqBYwd1+vfc9ODHvFGxHqcb9QbsbJV3kF+6B/K3F4C7b5Tfn5qX3GmF42V
-         m52A==
+        bh=kCDndzprpmt8J8usmKa7r2GPdiDYtq7skjq7Pt9qfoQ=;
+        b=QCieyO2kWXOr2DpiaXjV/KoX0Ajl448G0dwUzo5kFvqqHD+IYgOEWSaLoumC64fH+4
+         4WQmmdLfAcGfCBE3LinJAo8VRmm5vsnbjF3J41VI/t+mXMZHZs2ozW2asmlBn6quEDw2
+         Q4/oktIaczLAp/vvLHBIcAL3W0KFaLxgcYE/lxkAi/ERhywyvgukWpevBJiB4uS7xsLW
+         K3GW98SeDrSQivgDdskRd5jIzKEAcCNfJcY0ztF4wvIdYe+jHnUHN3nyohL7790zsvay
+         bUx4UhrKQ0tMFPrVBJZihVTryBa6772zfAlcNWK80mNhVXbnLSEwvxdYuCdz+IOIK1ue
+         3Ujw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VmI6L81UjLNgtF9bRaFGyCBanbzTKfgaJgajqJamXbM=;
-        b=yxvWIf2COexkok6lpDpQyAI6vwv7I/eQG54SkXuI5K5mSPBtrg3LzSFmD6OdNnfsOm
-         lq+qaPsFl92O2WnH/qJbCubE/K+VVotU+EcnfYbOzdYBdE/pSRgrH2ZWxK3QNu6ZcfE5
-         AHMwInEPlM7880Zm+O7jksjoIFimJUJABlzgyG3Mukbe9DIHoqHLcqYWWhqOUDk3BIAE
-         t8LejyaXpSjEaTgy1Y0/xdRtiLP0iHExXMCkTpwfmz8JCwqlNgs4ubKcTzFoeEaD/o2M
-         Wiz+j+K/uI7IyrjfkYrAxcaT8sMxor6MK/J6BSdkSGNTx7w8fcUQIxxeiTpZCeE2zRRY
-         0eOA==
-X-Gm-Message-State: AOAM532JZpVlXYPu5xFDp1mmT4+HP59zgv0Elz540LTqv2h7Ztrb9l7h
-        bTwpX3anMVF2LTuCS2hwZbLlaf6QL4Z9I/kxPPOUiw==
-X-Google-Smtp-Source: ABdhPJz9sd+4Ev7yMRFJUnGKa5fROPuoLTcIRi8BEUyBG3qrdVOvLv3Qj6SpGQGPvuR4j84+tQX/gDKLSs2kzxrq4MI=
-X-Received: by 2002:a05:600c:4154:: with SMTP id h20mr1191759wmm.18.1642749720935;
- Thu, 20 Jan 2022 23:22:00 -0800 (PST)
+        bh=kCDndzprpmt8J8usmKa7r2GPdiDYtq7skjq7Pt9qfoQ=;
+        b=Ov4AxoLItUmN0JnVqsyVM42zDgdVF20BKRgFcOV6K8PhNwPLJ8fIAxFqEg947Qa3ZE
+         d6LMeetnsqRJcdUphsUXWmKGD77YdE6SMVq8O1m3k8BGhhzWp5QNPbhD+lbVmJRp0p+f
+         ceSZ3cWvlLTSC10Hby+ADjjFWRb8BBFbhhZ3/giaB7SuiJhzcdBSgLxBkur/m8x/7ZMz
+         QsiwAcrYGYPSh60xIV2e3tB6bwEUUAcB28xV77KXWOspfHQ9U1O5xevoHgI8Bb8/wOif
+         mkmWa4U7bSL5DlHQ/rXYHgn1Kt8J+P/c2RONtNMqoO4N51pb+Pr6mHef1C8nCvANkpoD
+         lHLA==
+X-Gm-Message-State: AOAM530lGYJ24obOMf5I4o0ZxKbu12R/ZSE/gD6SKAbOaMxgm91nPaxb
+        LLP0CiMZVKnaAqVLXeNhpH1QtPDSFE7YKF7kwlMebQ==
+X-Google-Smtp-Source: ABdhPJwa2l4w+YMQCxgTiMyfE2V4Eg+RSPSv3p5PwiJiRNK0dQzi5wFKTN2Ihmrz4SgnjSWeAoUoeI5O4nozegoZEmE=
+X-Received: by 2002:a05:6000:1786:: with SMTP id e6mr2580030wrg.177.1642749726698;
+ Thu, 20 Jan 2022 23:22:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118223506.1701553-1-dlatypov@google.com> <20220118223506.1701553-4-dlatypov@google.com>
-In-Reply-To: <20220118223506.1701553-4-dlatypov@google.com>
+References: <20220118223506.1701553-1-dlatypov@google.com> <20220118223506.1701553-5-dlatypov@google.com>
+In-Reply-To: <20220118223506.1701553-5-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 21 Jan 2022 15:21:49 +0800
-Message-ID: <CABVgOSkm349TgYProFFghSrRomU4ZLCAqKzPSufRewtsxUJMVg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] kunit: reduce layering in string assertion macros
+Date:   Fri, 21 Jan 2022 15:21:55 +0800
+Message-ID: <CABVgOS=srLPwLxpdPGK4CPXmcz-FC0G1-zUAiMnYq1XLuy5BUQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] kunit: decrease macro layering for integer asserts
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -65,141 +65,328 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, Jan 19, 2022 at 6:35 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
+> Introduce a KUNIT_BINARY_INT_ASSERTION for the likes of KUNIT_EXPECT_LT.
+> This is analagous to KUNIT_BINARY_STR_ASSERTION.
+>
+> Note: this patch leaves the EQ/NE macros untouched since those share
+> some intermediate macros for the pointer-based macros.
+
+I didn't like this until I realised the next patch in the series fixes it. :-)
+
+>
 > The current macro chain looks like:
-> KUNIT_EXPECT_STREQ => KUNIT_EXPECT_STREQ_MSG => KUNIT_BINARY_STR_EQ_MSG_ASSERTION => KUNIT_BINARY_STR_ASSERTION.
-> KUNIT_ASSERT_STREQ => KUNIT_ASSERT_STREQ_MSG => KUNIT_BINARY_STR_EQ_MSG_ASSERTION => KUNIT_BINARY_STR_ASSERTION.
-> <ditto for STR_NE>
+> KUNIT_EXPECT_LT_MSG => KUNIT_BASE_LT_MSG_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
+> KUNIT_EXPECT_GT_MSG => KUNIT_BASE_GT_MSG_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
+> <ditto for LE, GE, and ASSERT variants>
 >
 > After this change:
-> KUNIT_EXPECT_STREQ => KUNIT_EXPECT_STREQ_MSG => KUNIT_BINARY_STR_ASSERTION.
-> KUNIT_ASSERT_STREQ => KUNIT_ASSERT_STREQ_MSG => KUNIT_BINARY_STR_ASSERTION.
-> <ditto for STR_NE>
+> KUNIT_EXPECT_LT_MSG => KUNIT_BINARY_INT_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
+> KUNIT_EXPECT_GT_MSG => KUNIT_BINARY_INT_ASSERTION => KUNIT_BASE_BINARY_ASSERTION
 >
-> All the intermediate macro did was pass in "==" or "!=", so it seems
-> better to just drop them at the cost of a bit more copy-paste.
+> I.e. we've traded all the unique intermediary macros for a single shared
+> KUNIT_BINARY_INT_ASSERTION. The only difference is that users of
+> KUNIT_BINARY_INT_ASSERTION also need to pass the operation (==, <, etc.).
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-Agreed, I don't think the copy-paste here is significant enough to
-have any real chance of causing problems. This is clearly an
-improvement.
+This also seems like a win to me. While I'm not a huge fan of passing
+the operation into macros in general, it's so clearly an improvement
+here (and we're doing it elsewhere in the macros with good results)
+that I think it's a good idea in this case.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 
 -- David
 
->  include/kunit/test.h | 68 +++++++++++++-------------------------------
->  1 file changed, 20 insertions(+), 48 deletions(-)
+>  include/kunit/test.h | 199 +++++++++++--------------------------------
+>  1 file changed, 51 insertions(+), 148 deletions(-)
 >
 > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index c021945a75e3..d5dc1ef68bfe 100644
+> index d5dc1ef68bfe..48cf520b69ce 100644
 > --- a/include/kunit/test.h
 > +++ b/include/kunit/test.h
-> @@ -1098,30 +1098,6 @@ do {                                                                            \
->                         ##__VA_ARGS__);                                        \
->  } while (0)
+> @@ -920,77 +920,28 @@ do {                                                                             \
+>                                     fmt,                                       \
+>                                     ##__VA_ARGS__)
 >
-> -#define KUNIT_BINARY_STR_EQ_MSG_ASSERTION(test,                                       \
-> -                                         assert_type,                         \
-> -                                         left,                                \
-> -                                         right,                               \
-> -                                         fmt,                                 \
-> -                                         ...)                                 \
-> -       KUNIT_BINARY_STR_ASSERTION(test,                                       \
-> -                                  assert_type,                                \
-> -                                  left, ==, right,                            \
-> -                                  fmt,                                        \
-> -                                  ##__VA_ARGS__)
+> -#define KUNIT_BASE_LT_MSG_ASSERTION(test,                                     \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> -                                   ...)                                       \
+> -       KUNIT_BASE_BINARY_ASSERTION(test,                                      \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left, <, right,                            \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
 > -
-> -#define KUNIT_BINARY_STR_NE_MSG_ASSERTION(test,                                       \
-> -                                         assert_type,                         \
-> -                                         left,                                \
-> -                                         right,                               \
-> -                                         fmt,                                 \
-> -                                         ...)                                 \
-> -       KUNIT_BINARY_STR_ASSERTION(test,                                       \
-> -                                  assert_type,                                \
-> -                                  left, !=, right,                            \
-> -                                  fmt,                                        \
-> -                                  ##__VA_ARGS__)
+> -#define KUNIT_BASE_LE_MSG_ASSERTION(test,                                     \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> -                                   ...)                                       \
+> -       KUNIT_BASE_BINARY_ASSERTION(test,                                      \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left, <=, right,                           \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
 > -
->  #define KUNIT_PTR_NOT_ERR_OR_NULL_MSG_ASSERTION(test,                         \
->                                                 assert_type,                   \
->                                                 ptr,                           \
-> @@ -1371,12 +1347,11 @@ do {                                                                           \
->         KUNIT_EXPECT_STREQ_MSG(test, left, right, NULL)
+> -#define KUNIT_BASE_GT_MSG_ASSERTION(test,                                     \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> +#define KUNIT_BINARY_EQ_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+> +       KUNIT_BASE_EQ_MSG_ASSERTION(test,                                      \
+> +                                   kunit_binary_assert,                       \
+> +                                   KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+>                                     assert_type,                               \
+>                                     left,                                      \
+>                                     right,                                     \
+>                                     fmt,                                       \
+> -                                   ...)                                       \
+> -       KUNIT_BASE_BINARY_ASSERTION(test,                                      \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left, >, right,                            \
+> -                                   fmt,                                       \
+>                                     ##__VA_ARGS__)
 >
->  #define KUNIT_EXPECT_STREQ_MSG(test, left, right, fmt, ...)                   \
-> -       KUNIT_BINARY_STR_EQ_MSG_ASSERTION(test,                                \
-> -                                         KUNIT_EXPECTATION,                   \
-> -                                         left,                                \
-> -                                         right,                               \
-> -                                         fmt,                                 \
-> -                                         ##__VA_ARGS__)
-> +       KUNIT_BINARY_STR_ASSERTION(test,                                       \
+> -#define KUNIT_BASE_GE_MSG_ASSERTION(test,                                     \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> +#define KUNIT_BINARY_INT_ASSERTION(test,                                      \
+> +                                  assert_type,                                \
+> +                                  left,                                       \
+> +                                  op,                                         \
+> +                                  right,                                      \
+> +                                  fmt,                                        \
+>                                     ...)                                       \
+>         KUNIT_BASE_BINARY_ASSERTION(test,                                      \
+> -                                   assert_class,                              \
+> -                                   ASSERT_CLASS_INIT,                         \
+> -                                   assert_type,                               \
+> -                                   left, >=, right,                           \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
+> -
+> -#define KUNIT_BINARY_EQ_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+> -       KUNIT_BASE_EQ_MSG_ASSERTION(test,                                      \
+>                                     kunit_binary_assert,                       \
+>                                     KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+>                                     assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> +                                   left, op, right,                           \
+>                                     fmt,                                       \
+>                                     ##__VA_ARGS__)
+>
+> @@ -1034,46 +985,6 @@ do {                                                                             \
+>                                     fmt,                                       \
+>                                     ##__VA_ARGS__)
+>
+> -#define KUNIT_BINARY_LT_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+> -       KUNIT_BASE_LT_MSG_ASSERTION(test,                                      \
+> -                                   kunit_binary_assert,                       \
+> -                                   KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
+> -
+> -#define KUNIT_BINARY_LE_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+> -       KUNIT_BASE_LE_MSG_ASSERTION(test,                                      \
+> -                                   kunit_binary_assert,                       \
+> -                                   KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
+> -
+> -#define KUNIT_BINARY_GT_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+> -       KUNIT_BASE_GT_MSG_ASSERTION(test,                                      \
+> -                                   kunit_binary_assert,                       \
+> -                                   KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
+> -
+> -#define KUNIT_BINARY_GE_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+> -       KUNIT_BASE_GE_MSG_ASSERTION(test,                                      \
+> -                                   kunit_binary_assert,                       \
+> -                                   KUNIT_INIT_BINARY_ASSERT_STRUCT,           \
+> -                                   assert_type,                               \
+> -                                   left,                                      \
+> -                                   right,                                     \
+> -                                   fmt,                                       \
+> -                                   ##__VA_ARGS__)
+> -
+>  #define KUNIT_BINARY_STR_ASSERTION(test,                                      \
+>                                    assert_type,                                \
+>                                    left,                                       \
+> @@ -1259,12 +1170,11 @@ do {                                                                           \
+>         KUNIT_EXPECT_LT_MSG(test, left, right, NULL)
+>
+>  #define KUNIT_EXPECT_LT_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_LT_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_EXPECTATION,                       \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
 > +                                  KUNIT_EXPECTATION,                          \
-> +                                  left, ==, right,                            \
+> +                                  left, <, right,                             \
 > +                                  fmt,                                        \
-> +                                  ##__VA_ARGS__)
+> +                                   ##__VA_ARGS__)
 >
 >  /**
->   * KUNIT_EXPECT_STRNEQ() - Expects that strings @left and @right are not equal.
-> @@ -1393,12 +1368,11 @@ do {                                                                           \
->         KUNIT_EXPECT_STRNEQ_MSG(test, left, right, NULL)
+>   * KUNIT_EXPECT_LE() - Expects that @left is less than or equal to @right.
+> @@ -1281,12 +1191,11 @@ do {                                                                           \
+>         KUNIT_EXPECT_LE_MSG(test, left, right, NULL)
 >
->  #define KUNIT_EXPECT_STRNEQ_MSG(test, left, right, fmt, ...)                  \
-> -       KUNIT_BINARY_STR_NE_MSG_ASSERTION(test,                                \
-> -                                         KUNIT_EXPECTATION,                   \
-> -                                         left,                                \
-> -                                         right,                               \
-> -                                         fmt,                                 \
-> -                                         ##__VA_ARGS__)
-> +       KUNIT_BINARY_STR_ASSERTION(test,                                       \
+>  #define KUNIT_EXPECT_LE_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_LE_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_EXPECTATION,                       \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
+> +                                  KUNIT_ASSERTION,                            \
+> +                                  left, <=, right,                            \
+> +                                  fmt,                                        \
+> +                                   ##__VA_ARGS__)
+>
+>  /**
+>   * KUNIT_EXPECT_GT() - An expectation that @left is greater than @right.
+> @@ -1303,12 +1212,11 @@ do {                                                                           \
+>         KUNIT_EXPECT_GT_MSG(test, left, right, NULL)
+>
+>  #define KUNIT_EXPECT_GT_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_GT_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_EXPECTATION,                       \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
 > +                                  KUNIT_EXPECTATION,                          \
-> +                                  left, !=, right,                            \
+> +                                  left, >, right,                             \
 > +                                  fmt,                                        \
-> +                                  ##__VA_ARGS__)
+> +                                   ##__VA_ARGS__)
 >
 >  /**
->   * KUNIT_EXPECT_NOT_ERR_OR_NULL() - Expects that @ptr is not null and not err.
-> @@ -1648,12 +1622,11 @@ do {                                                                           \
->         KUNIT_ASSERT_STREQ_MSG(test, left, right, NULL)
+>   * KUNIT_EXPECT_GE() - Expects that @left is greater than or equal to @right.
+> @@ -1325,12 +1233,11 @@ do {                                                                           \
+>         KUNIT_EXPECT_GE_MSG(test, left, right, NULL)
 >
->  #define KUNIT_ASSERT_STREQ_MSG(test, left, right, fmt, ...)                   \
-> -       KUNIT_BINARY_STR_EQ_MSG_ASSERTION(test,                                \
-> -                                         KUNIT_ASSERTION,                     \
-> -                                         left,                                \
-> -                                         right,                               \
-> -                                         fmt,                                 \
-> -                                         ##__VA_ARGS__)
-> +       KUNIT_BINARY_STR_ASSERTION(test,                                       \
+>  #define KUNIT_EXPECT_GE_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_GE_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_EXPECTATION,                       \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
+> +                                  KUNIT_EXPECTATION,                          \
+> +                                  left, >=, right,                            \
+> +                                  fmt,                                        \
+> +                                   ##__VA_ARGS__)
+>
+>  /**
+>   * KUNIT_EXPECT_STREQ() - Expects that strings @left and @right are equal.
+> @@ -1536,12 +1443,11 @@ do {                                                                           \
+>         KUNIT_ASSERT_LT_MSG(test, left, right, NULL)
+>
+>  #define KUNIT_ASSERT_LT_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_LT_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_ASSERTION,                         \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
+> +                                  KUNIT_EXPECTATION,                          \
+> +                                  left, <, right,                             \
+> +                                  fmt,                                        \
+> +                                   ##__VA_ARGS__)
+>  /**
+>   * KUNIT_ASSERT_LE() - An assertion that @left is less than or equal to @right.
+>   * @test: The test context object.
+> @@ -1557,12 +1463,11 @@ do {                                                                           \
+>         KUNIT_ASSERT_LE_MSG(test, left, right, NULL)
+>
+>  #define KUNIT_ASSERT_LE_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_LE_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_ASSERTION,                         \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
 > +                                  KUNIT_ASSERTION,                            \
-> +                                  left, ==, right,                            \
+> +                                  left, <=, right,                            \
 > +                                  fmt,                                        \
-> +                                  ##__VA_ARGS__)
+> +                                   ##__VA_ARGS__)
 >
 >  /**
->   * KUNIT_ASSERT_STRNEQ() - Expects that strings @left and @right are not equal.
-> @@ -1670,12 +1643,11 @@ do {                                                                           \
->         KUNIT_ASSERT_STRNEQ_MSG(test, left, right, NULL)
+>   * KUNIT_ASSERT_GT() - An assertion that @left is greater than @right.
+> @@ -1579,12 +1484,11 @@ do {                                                                           \
+>         KUNIT_ASSERT_GT_MSG(test, left, right, NULL)
 >
->  #define KUNIT_ASSERT_STRNEQ_MSG(test, left, right, fmt, ...)                  \
-> -       KUNIT_BINARY_STR_NE_MSG_ASSERTION(test,                                \
-> -                                         KUNIT_ASSERTION,                     \
-> -                                         left,                                \
-> -                                         right,                               \
-> -                                         fmt,                                 \
-> -                                         ##__VA_ARGS__)
-> +       KUNIT_BINARY_STR_ASSERTION(test,                                       \
+>  #define KUNIT_ASSERT_GT_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_GT_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_ASSERTION,                         \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
+> +                                  KUNIT_EXPECTATION,                          \
+> +                                  left, >, right,                             \
+> +                                  fmt,                                        \
+> +                                   ##__VA_ARGS__)
+>
+>  /**
+>   * KUNIT_ASSERT_GE() - Assertion that @left is greater than or equal to @right.
+> @@ -1601,12 +1505,11 @@ do {                                                                           \
+>         KUNIT_ASSERT_GE_MSG(test, left, right, NULL)
+>
+>  #define KUNIT_ASSERT_GE_MSG(test, left, right, fmt, ...)                      \
+> -       KUNIT_BINARY_GE_MSG_ASSERTION(test,                                    \
+> -                                     KUNIT_ASSERTION,                         \
+> -                                     left,                                    \
+> -                                     right,                                   \
+> -                                     fmt,                                     \
+> -                                     ##__VA_ARGS__)
+> +       KUNIT_BINARY_INT_ASSERTION(test,                                       \
 > +                                  KUNIT_ASSERTION,                            \
-> +                                  left, !=, right,                            \
+> +                                  left, >=, right,                            \
 > +                                  fmt,                                        \
-> +                                  ##__VA_ARGS__)
+> +                                   ##__VA_ARGS__)
 >
 >  /**
->   * KUNIT_ASSERT_NOT_ERR_OR_NULL() - Assertion that @ptr is not null and not err.
+>   * KUNIT_ASSERT_STREQ() - An assertion that strings @left and @right are equal.
 > --
 > 2.34.1.703.g22d0c6ccf7-goog
 >
