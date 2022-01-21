@@ -2,125 +2,273 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3193A495783
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jan 2022 02:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5242495994
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Jan 2022 06:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiAUBAw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jan 2022 20:00:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiAUBAw (ORCPT
+        id S233439AbiAUFsn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Jan 2022 00:48:43 -0500
+Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:46895 "EHLO
+        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230443AbiAUFsl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jan 2022 20:00:52 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5061C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 17:00:51 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b13so36308037edn.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jan 2022 17:00:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qvrcavduwvJQ107/U7y4f2WAZMKBIw7TGMDOsClD2es=;
-        b=o5MgGa3IEPcw+i/fK2gpC1VcpHWGdOhAFpJEoEpIFVh2R0KFtNO7tVgfDQh2E9jJh+
-         P/V8IoKvHwAUHt0eWRB89CdPa2izOoGnJCXk9T7Itbzqy8I2eq6xAPugzd4r6vOE9LV7
-         ng+32CXwoDZPW2/NM5fnD69OPwxgsm5qq9Ed6h6gMqSycdga8zt00yTmY2wuj85LzWCt
-         1BvNMfS2R5mQIrZudB/yFZC5XvgYqeMz8c6KnRNwTzIs2Hdfi/HekylYDM+i3q6cYfoF
-         Tl6oLDM0wYrdx/L6aGIDZIZgGTi2uKPqMI5yBge7G+p1PuKFQaQp3dkI3rdSEPqluhn0
-         i7Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qvrcavduwvJQ107/U7y4f2WAZMKBIw7TGMDOsClD2es=;
-        b=U2Ic5T0uncB8n4tlXdUe/0E4BaFkTx0/NMRRQjWOb91CkfM9RBLAH4SH1cUAEZCGCr
-         QvGXkhIlRy4DGss22GDPQDW2AMvqf9aPH80jH1tMjP/8+/OmUviyPJPIkVxVPfidpxye
-         jWNQOOWAV06fEq4ntkPACTjRKUnRELWRoxbyNjAPlOcppFTb2PkXOw+9pMJfinmeAMpI
-         5xEPYsBDjDIiOxdnU4LnzPayAL0VyMZ+AgUqS+TZOe//or4IfDM6dg5cbETFMelN6zqD
-         vvjOn6Iuw7430hgjcDRHtTVpYYbFqYYZE64MzvbTSxy8mWCatyp9s8YUwnOUKTPrGXPm
-         v4UA==
-X-Gm-Message-State: AOAM532rGBiVP6pbfTMwbPjF9k7YgarOOYpiy3Tu1psXC1MN8b6V13bK
-        ZLXUGUQ1QUGKO7IH7mFlfP42G94lBYEnNPW6/uAUj6pOXC94Ltwv
-X-Google-Smtp-Source: ABdhPJybSFC7dbhNUzL7HJOrA6Rwh39AsAtnRqH3dM9c8VcGcj4oZT9LuhMAquJMwUZFq/xrv1cCl1cLEeAnjvwIF2c=
-X-Received: by 2002:a05:6402:1693:: with SMTP id a19mr1850592edv.247.1642726850236;
- Thu, 20 Jan 2022 17:00:50 -0800 (PST)
+        Fri, 21 Jan 2022 00:48:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642744120;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=wa9B77AxJdGF5IZDL62GeRVUTJh8sxGhaigBYNZCgcE=;
+        b=befjTWObVDwhcXGNKPKqcXwNLQ5YocLwkuvBQTQtti0Qvv1Md6uy+E8DVmMBES9G
+        ilT45CLh6fjd4FOjFbm8yWJlkGRfJ31ATyoIMqi0E1HE8lHtB5XZ4Hhs1jCrx2sQ0cJ
+        fI6AFka7qP2yGIKMzHowYlkVyovciB+1UgMz/lNE=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642744120;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=wa9B77AxJdGF5IZDL62GeRVUTJh8sxGhaigBYNZCgcE=;
+        b=LMyv8mbmKhxTgHJC38bfuB+JvP9uU9n/dcDbG96BuljyBOc0cOE6VF0q0u4KDHcY
+        +3wgEkBQ/ha7zOQgv6Pz/lPrMGBayRRADPNGFQZ7DPWSqdv9TCr7NtKpGf7/lmk6+BG
+        OSLgiHavg+ceOYkog4nwsaQBkyrqz6GlquxPNGOA=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20220120
 MIME-Version: 1.0
-References: <20220117232259.180459-1-michal.winiarski@intel.com>
- <20220117232259.180459-7-michal.winiarski@intel.com> <CAGS_qxo+Jeuoo7QQnEW883bT5z3HJqz2sCX=kzhra3UsEM9xOQ@mail.gmail.com>
- <22c46f5f-37c8-448a-6fff-2b0ec9d28fa9@intel.com>
-In-Reply-To: <22c46f5f-37c8-448a-6fff-2b0ec9d28fa9@intel.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 20 Jan 2022 17:00:39 -0800
-Message-ID: <CAGS_qxpt3uH4D=3pEa2pBcTr5UqtHbTGPEDFW67=6b2jrumvvQ@mail.gmail.com>
-Subject: Re: [RFC 06/10] drm: test-drm_dp_mst_helper: Convert to KUnit
-To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Petri Latvala <petri.latvala@intel.com>,
-        Arkadiusz Hiler <arek@hiler.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017e7b2e03a7-6d395f9e-09d0-4576-a095-2b356b79dc1e-000000@email.amazonses.com>
+Date:   Fri, 21 Jan 2022 05:48:40 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.01.21-54.240.8.29
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 4:49 PM Micha=C5=82 Winiarski
-<michal.winiarski@intel.com> wrote:
-> > Tangent:
-> > It might have been easier to do that if the kunit assertions returned p=
-ass/fail.
-> > E.g. instead of having to do
-> >
-> > if (!<long-condition>) {
-> >    KUNIT_FAIL("<long-condition> not met");
-> >    return;
-> > }
-> >
-> > if we could do
-> >
-> > if(!KUNIT_EXPECT_TRUE(long-condition))
-> >    return;
-> >
-> > or if there was a new macro type
-> >
-> > KUNIT_EXPECT_RET_TRUE(long-condition); // like ASSERT, but just return
-> > from this func on failure
->
-> This would simplify a bunch of other tests as well.
-> On the other hand - EXPECT_TRUE returning a value is not something I
-> would expect :)
+## Build
+* kernel: 5.16.0
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 7fc5253f5a13271e9df35d6b936ff97b74540a59
+* git describe: next-20220120
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220120
 
-Yeah.
-It felt painful to type that out :)
+## Test Regressions (compared to next-20220113)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
 
-But I felt the same need when looking at converting some other selftests ov=
-er.
-It definitely feels like there's room to make these sorts of helper
-functions better.
+* dragonboard-410c, kselftest-cgroup
+  - cgroup.test_kill
 
-KTF solved these by allowing asserts to `goto` or `break`, e.g.
-https://github.com/oracle/ktf/blob/63c19dead80de9cd654b08120d28a04f24174f4b=
-/kernel/ktf.h#L560
+* dragonboard-410c, kselftest-pidfd
+  - pidfd.pidfd_setns_test
 
-I had floated the idea of KUnit having a
-KUNIT_ASSERT_GOTO/KUNIT_ASSERT_RET (return)
-macro, but these would add yet another dimension to the macros (EXPECT
-vs ASSERT, _MSG vs no _MSG).
+* dragonboard-410c, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-fsconfig-hidepid
+  - proc.proc-multiple-procfs
 
-But I have some patches out that delete hundreds of lines from the
-assert macros along with some others I haven't sent out publicly yet.
-Maybe such a thing would be more palatable after those land?
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
 
-But for now, I think they can either just print enough debug info so
-that the failures are obvious (like this does), or they can use
-kunit_err() to print out additional info (like you do in other patches
-in this series).
+* dragonboard-410c, kselftest-rtc
+  - rtc.rtctest.rtc.uie_read
 
->
-> Thanks!
-> -Micha=C5=82
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
+
+* dragonboard-410c, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* juno-r2, kselftest-futex
+  - futex.run.sh
+
+* juno-r2, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+## Metric Regressions (compared to next-20220113)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220113)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
+
+* dragonboard-410c, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+  - cgroup.test_kill
+
+* dragonboard-410c, kselftest-pidfd
+  - pidfd.pidfd_setns_test
+
+* dragonboard-410c, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-fsconfig-hidepid
+  - proc.proc-multiple-procfs
+  - proc.proc-uptime-001
+
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
+
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
+
+* dragonboard-410c, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* dragonboard-410c, kselftest-timers
+  - timers.nsleep-lat
+
+* hi6220-hikey, kselftest-timers
+  - timers.nsleep-lat
+  - timers.set-timer-lat
+
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-sync
+  - sync.sync_test
+
+
+## Metric Fixes (compared to next-20220113)
+No metric fixes found.
+
+## Test result summary
+total: 12757, pass: 8812, fail: 1528, skip: 2417, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
