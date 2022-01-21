@@ -2,83 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB0949680C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jan 2022 00:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465DA496813
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jan 2022 00:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiAUXBa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Jan 2022 18:01:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
+        id S231812AbiAUXGa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Jan 2022 18:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiAUXBa (ORCPT
+        with ESMTP id S231720AbiAUXG3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jan 2022 18:01:30 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2ACC06173B
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Jan 2022 15:01:30 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id v3so4042708pgc.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Jan 2022 15:01:30 -0800 (PST)
+        Fri, 21 Jan 2022 18:06:29 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C154C06173B
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Jan 2022 15:06:29 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id t18so9983472plg.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Jan 2022 15:06:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PYphm4+4iS9SAoeVlv+LsUbA1aLD+SqyiCj3OPowf64=;
-        b=Dq+SOs17hUZ7jkqGt87h5phHUHLlR8aLu0VIPmtsQs5G0niRVjhQWWCzA0PT3PBHkC
-         hIqrPVaFJclYGYgRvAcvcwfZMELL7djjEB+faolNIABAFzb6gFJViRRb6EWaCaNmu+gp
-         PSxWWshifVNbDTtYwW8YftBra40Lv4/nybtMfeH3c3gtE/Drgcg3h52JmtZT0plAlNsc
-         Y7ptxf0oLZ3SeL9OdszF7OGeKKbhd/QdQFttVVOr0+a8z8qULGt96ELG1Sp2SFw/BucS
-         0dRbAkS2SYhEegpCpH9t63PN8rr+O9YM5lCHRYQ2oYVxJHPUc3pRC9CHjcwrpATNhmHD
-         yu0A==
+         :cc:content-transfer-encoding;
+        bh=ANWEnOEwRLJlp79+wbMeS29MVJAChClz5fjV1hvINyI=;
+        b=UMzMmME6YQM93ZegCmxvTaK8yDVTGMc5Q15DZ2uDfdyCb5IWrcnBIOlirriJLYlMGd
+         GuJXsyUpWu7hl02nmjX17kjPp7aO5oVwzSGxzEqBeNZm6WzZ3DkdbAor5H0AtKQufoRQ
+         r5e6sXYSEL9KYqsnWYB96KlxJd29GZx64JPNrURQf4fOnRjKaWPD4QU/vm1c21k4xB2B
+         /jXobUhPMr6QLO08qIzRsqwDpZTcs1vorOvZnEzwWq0frsPh529dBU13YbY0u06BDE23
+         WhmYx7qHMeMYMIxxrO1rLw7N641JcMhshQ7uuoZeVZpgoLfKVBTQMVHXchHB1n8mS4/3
+         xubQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PYphm4+4iS9SAoeVlv+LsUbA1aLD+SqyiCj3OPowf64=;
-        b=nPaXXYCmvVgk5fAgDvlq5vKLezE7eOz0seR8NGU4ld/cZnVayKJL/Uk4YV8NgtIZvi
-         qeLAI7mUgtC/N4k5R8Ao6yBX5QK5Zcm6VBWl62BBt4LKuyoajeL7FUC/9UEhfm5375FR
-         6rPm/FkUXdVyXsBkoIPl64v69UP7F5ePbVwGvuOqCSc1KPMIzQ1GCE++WJeIdBhMNEXg
-         dDTkU4XeAM6gRiZ5/EAWsLGs2vYi6u3bohl6YxzECDnWENaSdUor8KypBa0vnbRDg7NW
-         Z1T5dx3LYNvgnvfSIsfstTX4kWqsp9jsXjqoMzohfB7iHBcHrS4lBQCzYtO2aDsszfer
-         5y3w==
-X-Gm-Message-State: AOAM5325XlnhtwCUWTONC++dEqY5Qp4P/6o6R+fEvJdSKruQ3D8x7DIJ
-        uj1qLZ3/xTPn0v4IDJD1KaPiVvGJbo0QhTPmJiz9RA==
-X-Google-Smtp-Source: ABdhPJxaAdubDugrQEvvUGVtqIvv7Vu9kGzTezzTWcrI90O9URb2rxf/ZBKjDWIah6IuL4jcNuk30fOtzpDTtBP17Rw=
-X-Received: by 2002:a63:1157:: with SMTP id 23mr4319202pgr.12.1642806089188;
- Fri, 21 Jan 2022 15:01:29 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ANWEnOEwRLJlp79+wbMeS29MVJAChClz5fjV1hvINyI=;
+        b=oMoe8LI5VGTQ4V4L2M81+h2iTr5BuO3AQA7ZE1kTeujOKMHNWGn7M3GpN3gmEIk4lS
+         HEr5yLPMk0lmN7JE6ffwmia1i6BfE9S8Vr3C7k7L+PYqp8vn6b1Tvr56KKq5TqBSp3zy
+         BodC23CL0A1A5C998+QyLX/PSZi4VGpeYo2h3JoSKObdmnDl1S7j/jiQJ0K/jl/ITnV9
+         /0VBRhI/Vq38c17i5txUySOaXbOu7WdzxRxtHpGzbkGwCCj+p8hG35pxAu2ucBKU6CXD
+         KZEiRB6nvdwAPU/7WEd7WBqh3BIymssEZpH69+dFKwqq/mtAzDgc7ZF5x17q7IJUbfXX
+         YvBA==
+X-Gm-Message-State: AOAM53113mAh/PBx5XY9ic8w1tnWscmc60PYEaMB2BHQT5ho0swmt/PQ
+        pwXdPect6XYWHp54QFCWKn0lSyCtdEklk/WLfWspcA==
+X-Google-Smtp-Source: ABdhPJwgNyFh3Dzr5eTuQ+YcjzkH9S8Gi6DDU4AePnpkIiPZ7nkAy5BxDyL50VHCC+M3wP/4/XN5qIrYq98jGleP5TM=
+X-Received: by 2002:a17:902:8601:b0:149:ee23:890a with SMTP id
+ f1-20020a170902860100b00149ee23890amr5877920plo.12.1642806388722; Fri, 21 Jan
+ 2022 15:06:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220113165931.451305-1-dlatypov@google.com> <20220113165931.451305-5-dlatypov@google.com>
-In-Reply-To: <20220113165931.451305-5-dlatypov@google.com>
+References: <20220112233657.15886-1-michal.winiarski@intel.com>
+In-Reply-To: <20220112233657.15886-1-michal.winiarski@intel.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 21 Jan 2022 18:01:18 -0500
-Message-ID: <CAFd5g47Ae31FZBnF84Mv=WK9-7kYyODVDAfU03qQSP_O-qfmkA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] kunit: factor out kunit_base_assert_format() call
- into kunit_fail()
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, torvalds@linux-foundation.org
+Date:   Fri, 21 Jan 2022 18:06:17 -0500
+Message-ID: <CAFd5g467Yub=uRoRw_cS8Z4pCyjesAeMxc6yN4-1Qwj0Xwu1NA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Import missing importlib.abc
+To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 11:59 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, Jan 12, 2022 at 6:35 PM Micha=C5=82 Winiarski
+<michal.winiarski@intel.com> wrote:
 >
-> We call this function first thing for all the assertion `format()`
-> functions.
-> This is the part that prints the file and line number and assertion type
-> (EXPECTATION, ASSERTION).
+> Python 3.10.0 contains:
+> 9e09849d20 ("bpo-41006: importlib.util no longer imports typing (GH-20938=
+)")
 >
-> Having it as part of the format functions lets us have the flexibility
-> to not print that information (or print it differently) for new
-> assertion types, but I think this we don't need that.
+> It causes importlib.util to no longer import importlib.abs, which leads
+> to the following error when trying to use kunit with qemu:
+> AttributeError: module 'importlib' has no attribute 'abc'. Did you mean: =
+'_abc'?
 >
-> And in the future, we'd like to consider factoring that data (file,
-> line#, type) out of the kunit_assert struct and into a `static`
-> variable, as Linus suggested [1], so we'd need to extract it anyways.
+> Add the missing import.
 >
-> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+> Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
+
+Thanks!
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
