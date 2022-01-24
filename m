@@ -2,320 +2,293 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 479D0498352
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 16:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C19B49838D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 16:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240659AbiAXPO3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jan 2022 10:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S240411AbiAXPae (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jan 2022 10:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240656AbiAXPO2 (ORCPT
+        with ESMTP id S243241AbiAXPad (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:14:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A84C06173B
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 07:14:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D7CCCE11A0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 15:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8EDC340E5;
-        Mon, 24 Jan 2022 15:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643037264;
-        bh=gSh+ppXT8OgdNzTtGtJNoVLqbm1WPjb1DsXzaMFqlZw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=inWT6lgAZyJS9lALzbl+/q/bvDVOnE2xiSkLTTl9+3jr3gqPbpxAcYwG/fyBdFnjK
-         oO9Z6HJHgsRPuSUUdLw74uD+SKcN7PvxHC9qpt35Dt1POwaqljLZjEo97heRDd27Zq
-         uCVnRAyWQn9dYViqqnO6crC4lFw4dtzGEUs7a6TF1lpSAnmwN3EOWpt9xfn+fRhcTL
-         s+xtXqu78dKJ7lj6YmFLzUm1EOltnbeD8N3FIvj+X0xX2FaI8bkDFd+EgA0B1orDpI
-         ng45K6dwuaGhMCfZBvkQIC0aa6Ret0G6ckpnP1PWqyyK6Pd/32WzRZYO8BnLJ72Vy/
-         6HE9AXYTXVnBA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, alsa-devel@alsa-project.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] kselftest: alsa: Add test case for writing invalid values
-Date:   Mon, 24 Jan 2022 15:14:10 +0000
-Message-Id: <20220124151410.2715572-1-broonie@kernel.org>
+        Mon, 24 Jan 2022 10:30:33 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B7C061401;
+        Mon, 24 Jan 2022 07:30:32 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id C033210008F; Mon, 24 Jan 2022 15:30:28 +0000 (UTC)
+From:   Sean Young <sean@mess.org>
+To:     Shuah Khan <shuah@kernel.org>, linux-media@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] tools headers UAPI: remove stale lirc.h
+Date:   Mon, 24 Jan 2022 15:30:28 +0000
+Message-Id: <20220124153028.394409-1-sean@mess.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7477; h=from:subject; bh=gSh+ppXT8OgdNzTtGtJNoVLqbm1WPjb1DsXzaMFqlZw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh7sFpEatmip+S1fQ8LqsKlXS2EQvqhJsFjQWEOWUX lQtYjaKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe7BaQAKCRAk1otyXVSH0JqVB/ wNK2h30z3VFIOmb+niZMJQNoMkRrufjNmFilOaunfc3iOkLEfG3M2F/F5F2iVznwHzZ4L/C5etMoPK VgjxIMPPgSHCaTgL+UbO71cNS7FL6qBc71ELZI74lDX/3gxsMaUXBvT/1pDb5ws2hycRc8OybS0OmB fpGngFuhKosV1WGSO828U+KpZrHiM/ui5kXonpxTtLGEwTHSj8zRgRXPeRtQ/6jStmsxSLzx28L/ni v59+xmCOOZ86l9K9FZsctpwisFt8mgvqJzVCPerYxVEN2I2gnMALe6IZJgYzgFUhAR777yMaBLWoWB D64WOGDfTAwqNJqONPlNjWlBi74fHT
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attempt to write various invalid values for control types we know about and
-check that something sensible happens. The ABI isn't quite as clearly
-defined as one might like, rather than generating an error when an invalid
-value is written many devices will silently rewrite the value into one that
-is valid for the control. The exact value chosen is not predictable so in
-the case the write succeeds we just check that the value we read back is
-one that is valid for the control.
+The lirc.h file is an old copy of lirc.h from the kernel sources. It is
+out of date, and the bpf lirc tests don't need a new copy anyway. As
+long as /usr/include/linux/lirc.h is from kernel v5.2 or newer, the tests
+will compile fine.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sean Young <sean@mess.org>
 ---
- tools/testing/selftests/alsa/mixer-test.c | 222 +++++++++++++++++++++-
- 1 file changed, 221 insertions(+), 1 deletion(-)
+ tools/include/uapi/linux/lirc.h               | 229 ------------------
+ .../selftests/bpf/test_lirc_mode2_user.c      |   1 -
+ 2 files changed, 230 deletions(-)
+ delete mode 100644 tools/include/uapi/linux/lirc.h
 
-diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index 17f158d7a767..15e05b241468 100644
---- a/tools/testing/selftests/alsa/mixer-test.c
-+++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -13,6 +13,7 @@
+diff --git a/tools/include/uapi/linux/lirc.h b/tools/include/uapi/linux/lirc.h
+deleted file mode 100644
+index 45fcbf99d72e..000000000000
+--- a/tools/include/uapi/linux/lirc.h
++++ /dev/null
+@@ -1,229 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-/*
+- * lirc.h - linux infrared remote control header file
+- * last modified 2010/07/13 by Jarod Wilson
+- */
+-
+-#ifndef _LINUX_LIRC_H
+-#define _LINUX_LIRC_H
+-
+-#include <linux/types.h>
+-#include <linux/ioctl.h>
+-
+-#define PULSE_BIT       0x01000000
+-#define PULSE_MASK      0x00FFFFFF
+-
+-#define LIRC_MODE2_SPACE     0x00000000
+-#define LIRC_MODE2_PULSE     0x01000000
+-#define LIRC_MODE2_FREQUENCY 0x02000000
+-#define LIRC_MODE2_TIMEOUT   0x03000000
+-
+-#define LIRC_VALUE_MASK      0x00FFFFFF
+-#define LIRC_MODE2_MASK      0xFF000000
+-
+-#define LIRC_SPACE(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_SPACE)
+-#define LIRC_PULSE(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_PULSE)
+-#define LIRC_FREQUENCY(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_FREQUENCY)
+-#define LIRC_TIMEOUT(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_TIMEOUT)
+-
+-#define LIRC_VALUE(val) ((val)&LIRC_VALUE_MASK)
+-#define LIRC_MODE2(val) ((val)&LIRC_MODE2_MASK)
+-
+-#define LIRC_IS_SPACE(val) (LIRC_MODE2(val) == LIRC_MODE2_SPACE)
+-#define LIRC_IS_PULSE(val) (LIRC_MODE2(val) == LIRC_MODE2_PULSE)
+-#define LIRC_IS_FREQUENCY(val) (LIRC_MODE2(val) == LIRC_MODE2_FREQUENCY)
+-#define LIRC_IS_TIMEOUT(val) (LIRC_MODE2(val) == LIRC_MODE2_TIMEOUT)
+-
+-/* used heavily by lirc userspace */
+-#define lirc_t int
+-
+-/*** lirc compatible hardware features ***/
+-
+-#define LIRC_MODE2SEND(x) (x)
+-#define LIRC_SEND2MODE(x) (x)
+-#define LIRC_MODE2REC(x) ((x) << 16)
+-#define LIRC_REC2MODE(x) ((x) >> 16)
+-
+-#define LIRC_MODE_RAW                  0x00000001
+-#define LIRC_MODE_PULSE                0x00000002
+-#define LIRC_MODE_MODE2                0x00000004
+-#define LIRC_MODE_SCANCODE             0x00000008
+-#define LIRC_MODE_LIRCCODE             0x00000010
+-
+-
+-#define LIRC_CAN_SEND_RAW              LIRC_MODE2SEND(LIRC_MODE_RAW)
+-#define LIRC_CAN_SEND_PULSE            LIRC_MODE2SEND(LIRC_MODE_PULSE)
+-#define LIRC_CAN_SEND_MODE2            LIRC_MODE2SEND(LIRC_MODE_MODE2)
+-#define LIRC_CAN_SEND_LIRCCODE         LIRC_MODE2SEND(LIRC_MODE_LIRCCODE)
+-
+-#define LIRC_CAN_SEND_MASK             0x0000003f
+-
+-#define LIRC_CAN_SET_SEND_CARRIER      0x00000100
+-#define LIRC_CAN_SET_SEND_DUTY_CYCLE   0x00000200
+-#define LIRC_CAN_SET_TRANSMITTER_MASK  0x00000400
+-
+-#define LIRC_CAN_REC_RAW               LIRC_MODE2REC(LIRC_MODE_RAW)
+-#define LIRC_CAN_REC_PULSE             LIRC_MODE2REC(LIRC_MODE_PULSE)
+-#define LIRC_CAN_REC_MODE2             LIRC_MODE2REC(LIRC_MODE_MODE2)
+-#define LIRC_CAN_REC_SCANCODE          LIRC_MODE2REC(LIRC_MODE_SCANCODE)
+-#define LIRC_CAN_REC_LIRCCODE          LIRC_MODE2REC(LIRC_MODE_LIRCCODE)
+-
+-#define LIRC_CAN_REC_MASK              LIRC_MODE2REC(LIRC_CAN_SEND_MASK)
+-
+-#define LIRC_CAN_SET_REC_CARRIER       (LIRC_CAN_SET_SEND_CARRIER << 16)
+-#define LIRC_CAN_SET_REC_DUTY_CYCLE    (LIRC_CAN_SET_SEND_DUTY_CYCLE << 16)
+-
+-#define LIRC_CAN_SET_REC_DUTY_CYCLE_RANGE 0x40000000
+-#define LIRC_CAN_SET_REC_CARRIER_RANGE    0x80000000
+-#define LIRC_CAN_GET_REC_RESOLUTION       0x20000000
+-#define LIRC_CAN_SET_REC_TIMEOUT          0x10000000
+-#define LIRC_CAN_SET_REC_FILTER           0x08000000
+-
+-#define LIRC_CAN_MEASURE_CARRIER          0x02000000
+-#define LIRC_CAN_USE_WIDEBAND_RECEIVER    0x04000000
+-
+-#define LIRC_CAN_SEND(x) ((x)&LIRC_CAN_SEND_MASK)
+-#define LIRC_CAN_REC(x) ((x)&LIRC_CAN_REC_MASK)
+-
+-#define LIRC_CAN_NOTIFY_DECODE            0x01000000
+-
+-/*** IOCTL commands for lirc driver ***/
+-
+-#define LIRC_GET_FEATURES              _IOR('i', 0x00000000, __u32)
+-
+-#define LIRC_GET_SEND_MODE             _IOR('i', 0x00000001, __u32)
+-#define LIRC_GET_REC_MODE              _IOR('i', 0x00000002, __u32)
+-#define LIRC_GET_REC_RESOLUTION        _IOR('i', 0x00000007, __u32)
+-
+-#define LIRC_GET_MIN_TIMEOUT           _IOR('i', 0x00000008, __u32)
+-#define LIRC_GET_MAX_TIMEOUT           _IOR('i', 0x00000009, __u32)
+-
+-/* code length in bits, currently only for LIRC_MODE_LIRCCODE */
+-#define LIRC_GET_LENGTH                _IOR('i', 0x0000000f, __u32)
+-
+-#define LIRC_SET_SEND_MODE             _IOW('i', 0x00000011, __u32)
+-#define LIRC_SET_REC_MODE              _IOW('i', 0x00000012, __u32)
+-/* Note: these can reset the according pulse_width */
+-#define LIRC_SET_SEND_CARRIER          _IOW('i', 0x00000013, __u32)
+-#define LIRC_SET_REC_CARRIER           _IOW('i', 0x00000014, __u32)
+-#define LIRC_SET_SEND_DUTY_CYCLE       _IOW('i', 0x00000015, __u32)
+-#define LIRC_SET_TRANSMITTER_MASK      _IOW('i', 0x00000017, __u32)
+-
+-/*
+- * when a timeout != 0 is set the driver will send a
+- * LIRC_MODE2_TIMEOUT data packet, otherwise LIRC_MODE2_TIMEOUT is
+- * never sent, timeout is disabled by default
+- */
+-#define LIRC_SET_REC_TIMEOUT           _IOW('i', 0x00000018, __u32)
+-
+-/* 1 enables, 0 disables timeout reports in MODE2 */
+-#define LIRC_SET_REC_TIMEOUT_REPORTS   _IOW('i', 0x00000019, __u32)
+-
+-/*
+- * if enabled from the next key press on the driver will send
+- * LIRC_MODE2_FREQUENCY packets
+- */
+-#define LIRC_SET_MEASURE_CARRIER_MODE	_IOW('i', 0x0000001d, __u32)
+-
+-/*
+- * to set a range use LIRC_SET_REC_CARRIER_RANGE with the
+- * lower bound first and later LIRC_SET_REC_CARRIER with the upper bound
+- */
+-#define LIRC_SET_REC_CARRIER_RANGE     _IOW('i', 0x0000001f, __u32)
+-
+-#define LIRC_SET_WIDEBAND_RECEIVER     _IOW('i', 0x00000023, __u32)
+-
+-/*
+- * Return the recording timeout, which is either set by
+- * the ioctl LIRC_SET_REC_TIMEOUT or by the kernel after setting the protocols.
+- */
+-#define LIRC_GET_REC_TIMEOUT	       _IOR('i', 0x00000024, __u32)
+-
+-/*
+- * struct lirc_scancode - decoded scancode with protocol for use with
+- *	LIRC_MODE_SCANCODE
+- *
+- * @timestamp: Timestamp in nanoseconds using CLOCK_MONOTONIC when IR
+- *	was decoded.
+- * @flags: should be 0 for transmit. When receiving scancodes,
+- *	LIRC_SCANCODE_FLAG_TOGGLE or LIRC_SCANCODE_FLAG_REPEAT can be set
+- *	depending on the protocol
+- * @rc_proto: see enum rc_proto
+- * @keycode: the translated keycode. Set to 0 for transmit.
+- * @scancode: the scancode received or to be sent
+- */
+-struct lirc_scancode {
+-	__u64	timestamp;
+-	__u16	flags;
+-	__u16	rc_proto;
+-	__u32	keycode;
+-	__u64	scancode;
+-};
+-
+-/* Set if the toggle bit of rc-5 or rc-6 is enabled */
+-#define LIRC_SCANCODE_FLAG_TOGGLE	1
+-/* Set if this is a nec or sanyo repeat */
+-#define LIRC_SCANCODE_FLAG_REPEAT	2
+-
+-/**
+- * enum rc_proto - the Remote Controller protocol
+- *
+- * @RC_PROTO_UNKNOWN: Protocol not known
+- * @RC_PROTO_OTHER: Protocol known but proprietary
+- * @RC_PROTO_RC5: Philips RC5 protocol
+- * @RC_PROTO_RC5X_20: Philips RC5x 20 bit protocol
+- * @RC_PROTO_RC5_SZ: StreamZap variant of RC5
+- * @RC_PROTO_JVC: JVC protocol
+- * @RC_PROTO_SONY12: Sony 12 bit protocol
+- * @RC_PROTO_SONY15: Sony 15 bit protocol
+- * @RC_PROTO_SONY20: Sony 20 bit protocol
+- * @RC_PROTO_NEC: NEC protocol
+- * @RC_PROTO_NECX: Extended NEC protocol
+- * @RC_PROTO_NEC32: NEC 32 bit protocol
+- * @RC_PROTO_SANYO: Sanyo protocol
+- * @RC_PROTO_MCIR2_KBD: RC6-ish MCE keyboard
+- * @RC_PROTO_MCIR2_MSE: RC6-ish MCE mouse
+- * @RC_PROTO_RC6_0: Philips RC6-0-16 protocol
+- * @RC_PROTO_RC6_6A_20: Philips RC6-6A-20 protocol
+- * @RC_PROTO_RC6_6A_24: Philips RC6-6A-24 protocol
+- * @RC_PROTO_RC6_6A_32: Philips RC6-6A-32 protocol
+- * @RC_PROTO_RC6_MCE: MCE (Philips RC6-6A-32 subtype) protocol
+- * @RC_PROTO_SHARP: Sharp protocol
+- * @RC_PROTO_XMP: XMP protocol
+- * @RC_PROTO_CEC: CEC protocol
+- * @RC_PROTO_IMON: iMon Pad protocol
+- * @RC_PROTO_RCMM12: RC-MM protocol 12 bits
+- * @RC_PROTO_RCMM24: RC-MM protocol 24 bits
+- * @RC_PROTO_RCMM32: RC-MM protocol 32 bits
+- */
+-enum rc_proto {
+-	RC_PROTO_UNKNOWN	= 0,
+-	RC_PROTO_OTHER		= 1,
+-	RC_PROTO_RC5		= 2,
+-	RC_PROTO_RC5X_20	= 3,
+-	RC_PROTO_RC5_SZ		= 4,
+-	RC_PROTO_JVC		= 5,
+-	RC_PROTO_SONY12		= 6,
+-	RC_PROTO_SONY15		= 7,
+-	RC_PROTO_SONY20		= 8,
+-	RC_PROTO_NEC		= 9,
+-	RC_PROTO_NECX		= 10,
+-	RC_PROTO_NEC32		= 11,
+-	RC_PROTO_SANYO		= 12,
+-	RC_PROTO_MCIR2_KBD	= 13,
+-	RC_PROTO_MCIR2_MSE	= 14,
+-	RC_PROTO_RC6_0		= 15,
+-	RC_PROTO_RC6_6A_20	= 16,
+-	RC_PROTO_RC6_6A_24	= 17,
+-	RC_PROTO_RC6_6A_32	= 18,
+-	RC_PROTO_RC6_MCE	= 19,
+-	RC_PROTO_SHARP		= 20,
+-	RC_PROTO_XMP		= 21,
+-	RC_PROTO_CEC		= 22,
+-	RC_PROTO_IMON		= 23,
+-	RC_PROTO_RCMM12		= 24,
+-	RC_PROTO_RCMM24		= 25,
+-	RC_PROTO_RCMM32		= 26,
+-};
+-
+-#endif
+diff --git a/tools/testing/selftests/bpf/test_lirc_mode2_user.c b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
+index ebf68dce5504..2893e9f2f1e0 100644
+--- a/tools/testing/selftests/bpf/test_lirc_mode2_user.c
++++ b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
+@@ -28,7 +28,6 @@
+ // 5. We can read keycode from same /dev/lirc device
+ 
+ #include <linux/bpf.h>
+-#include <linux/lirc.h>
+ #include <linux/input.h>
+ #include <errno.h>
  #include <stdio.h>
- #include <stdlib.h>
- #include <stdbool.h>
-+#include <limits.h>
- #include <string.h>
- #include <getopt.h>
- #include <stdarg.h>
-@@ -26,7 +27,7 @@
- 
- #include "../kselftest.h"
- 
--#define TESTS_PER_CONTROL 3
-+#define TESTS_PER_CONTROL 4
- 
- struct card_data {
- 	snd_ctl_t *handle;
-@@ -679,6 +680,224 @@ void test_ctl_write_valid(struct ctl_data *ctl)
- 			 ctl->card->card, ctl->elem);
- }
- 
-+bool test_ctl_write_invalid_value(struct ctl_data *ctl,
-+				  snd_ctl_elem_value_t *val)
-+{
-+	int err;
-+	long val_read;
-+
-+	/* Ideally this will fail... */
-+	err = snd_ctl_elem_write(ctl->card->handle, val);
-+	if (err < 0)
-+		return false;
-+
-+	/* ...but some devices will clamp to an in range value */
-+	err = snd_ctl_elem_read(ctl->card->handle, val);
-+	if (err < 0) {
-+		ksft_print_msg("%s failed to read: %s\n",
-+			       ctl->name, snd_strerror(err));
-+		return true;
-+	}
-+
-+	return !ctl_value_valid(ctl, val);
-+}
-+
-+bool test_ctl_write_invalid_boolean(struct ctl_data *ctl)
-+{
-+	int err, i;
-+	long val_read;
-+	bool fail = false;
-+	snd_ctl_elem_value_t *val;
-+	snd_ctl_elem_value_alloca(&val);
-+
-+	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
-+		snd_ctl_elem_value_copy(val, ctl->def_val);
-+		snd_ctl_elem_value_set_boolean(val, i, 2);
-+
-+		if (test_ctl_write_invalid_value(ctl, val))
-+			fail = true;
-+	}
-+
-+	return !fail;
-+}
-+
-+bool test_ctl_write_invalid_integer(struct ctl_data *ctl)
-+{
-+	int i;
-+	bool fail = false;
-+	snd_ctl_elem_value_t *val;
-+	snd_ctl_elem_value_alloca(&val);
-+
-+	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
-+		if (snd_ctl_elem_info_get_min(ctl->info) != LONG_MIN) {
-+			/* Just under range */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer(val, i,
-+			       snd_ctl_elem_info_get_min(ctl->info) - 1);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+
-+			/* Minimum representable value */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer(val, i, LONG_MIN);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+		}
-+
-+		if (snd_ctl_elem_info_get_max(ctl->info) != LONG_MAX) {
-+			/* Just over range */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer(val, i,
-+			       snd_ctl_elem_info_get_max(ctl->info) + 1);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+
-+			/* Maximum representable value */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer(val, i, LONG_MAX);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+		}
-+	}
-+
-+	return !fail;
-+}
-+
-+bool test_ctl_write_invalid_integer64(struct ctl_data *ctl)
-+{
-+	int i;
-+	bool fail = false;
-+	snd_ctl_elem_value_t *val;
-+	snd_ctl_elem_value_alloca(&val);
-+
-+	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
-+		if (snd_ctl_elem_info_get_min64(ctl->info) != LLONG_MIN) {
-+			/* Just under range */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer64(val, i,
-+				snd_ctl_elem_info_get_min64(ctl->info) - 1);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+
-+			/* Minimum representable value */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer(val, i, LLONG_MIN);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+		}
-+
-+		if (snd_ctl_elem_info_get_max64(ctl->info) != LLONG_MAX) {
-+			/* Just over range */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer64(val, i,
-+				snd_ctl_elem_info_get_max64(ctl->info) + 1);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+
-+			/* Maximum representable value */
-+			snd_ctl_elem_value_copy(val, ctl->def_val);
-+			snd_ctl_elem_value_set_integer(val, i, LLONG_MAX);
-+
-+			if (test_ctl_write_invalid_value(ctl, val))
-+				fail = true;
-+		}
-+	}
-+
-+	return !fail;
-+}
-+
-+bool test_ctl_write_invalid_enumerated(struct ctl_data *ctl)
-+{
-+	int err, i;
-+	unsigned int val_read;
-+	bool fail = false;
-+	snd_ctl_elem_value_t *val;
-+	snd_ctl_elem_value_alloca(&val);
-+
-+	snd_ctl_elem_value_set_id(val, ctl->id);
-+
-+	for (i = 0; i < snd_ctl_elem_info_get_count(ctl->info); i++) {
-+		/* One beyond maximum */
-+		snd_ctl_elem_value_copy(val, ctl->def_val);
-+		snd_ctl_elem_value_set_enumerated(val, i,
-+				  snd_ctl_elem_info_get_items(ctl->info));
-+
-+		if (test_ctl_write_invalid_value(ctl, val))
-+			fail = true;
-+
-+		/* Maximum representable value */
-+		snd_ctl_elem_value_copy(val, ctl->def_val);
-+		snd_ctl_elem_value_set_enumerated(val, i, UINT_MAX);
-+
-+		if (test_ctl_write_invalid_value(ctl, val))
-+			fail = true;
-+
-+	}
-+
-+	return !fail;
-+}
-+
-+
-+void test_ctl_write_invalid(struct ctl_data *ctl)
-+{
-+	bool pass;
-+	int err;
-+
-+	/* If the control is turned off let's be polite */
-+	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
-+		ksft_print_msg("%s is inactive\n", ctl->name);
-+		ksft_test_result_skip("write_invalid.%d.%d\n",
-+				      ctl->card->card, ctl->elem);
-+		return;
-+	}
-+
-+	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
-+		ksft_print_msg("%s is not writeable\n", ctl->name);
-+		ksft_test_result_skip("write_invalid.%d.%d\n",
-+				      ctl->card->card, ctl->elem);
-+		return;
-+	}
-+
-+	switch (snd_ctl_elem_info_get_type(ctl->info)) {
-+	case SND_CTL_ELEM_TYPE_BOOLEAN:
-+		pass = test_ctl_write_invalid_boolean(ctl);
-+		break;
-+
-+	case SND_CTL_ELEM_TYPE_INTEGER:
-+		pass = test_ctl_write_invalid_integer(ctl);
-+		break;
-+
-+	case SND_CTL_ELEM_TYPE_INTEGER64:
-+		pass = test_ctl_write_invalid_integer64(ctl);
-+		break;
-+
-+	case SND_CTL_ELEM_TYPE_ENUMERATED:
-+		pass = test_ctl_write_invalid_enumerated(ctl);
-+		break;
-+
-+	default:
-+		/* No tests for this yet */
-+		ksft_test_result_skip("write_invalid.%d.%d\n",
-+				      ctl->card->card, ctl->elem);
-+		return;
-+	}
-+
-+	/* Restore the default value to minimise disruption */
-+	err = write_and_verify(ctl, ctl->def_val, NULL);
-+	if (err < 0)
-+		pass = false;
-+
-+	ksft_test_result(pass, "write_invalid.%d.%d\n",
-+			 ctl->card->card, ctl->elem);
-+}
-+
- int main(void)
- {
- 	struct ctl_data *ctl;
-@@ -697,6 +916,7 @@ int main(void)
- 		test_ctl_get_value(ctl);
- 		test_ctl_write_default(ctl);
- 		test_ctl_write_valid(ctl);
-+		test_ctl_write_invalid(ctl);
- 	}
- 
- 	ksft_exit_pass();
 -- 
-2.30.2
+2.34.1
 
