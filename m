@@ -2,293 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C19B49838D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 16:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFC74985FC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 18:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240411AbiAXPae (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jan 2022 10:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243241AbiAXPad (ORCPT
+        id S244161AbiAXRND (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jan 2022 12:13:03 -0500
+Received: from mail.efficios.com ([167.114.26.124]:47534 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241330AbiAXRND (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:30:33 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B7C061401;
-        Mon, 24 Jan 2022 07:30:32 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id C033210008F; Mon, 24 Jan 2022 15:30:28 +0000 (UTC)
-From:   Sean Young <sean@mess.org>
-To:     Shuah Khan <shuah@kernel.org>, linux-media@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] tools headers UAPI: remove stale lirc.h
-Date:   Mon, 24 Jan 2022 15:30:28 +0000
-Message-Id: <20220124153028.394409-1-sean@mess.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 24 Jan 2022 12:13:03 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 85E4834510B;
+        Mon, 24 Jan 2022 12:13:02 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id zLtCHEblF7-H; Mon, 24 Jan 2022 12:13:02 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 0774F344CCA;
+        Mon, 24 Jan 2022 12:13:02 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0774F344CCA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643044382;
+        bh=pwRIv4rPPqHaq4ss6KLwBKrB6pKid4L8cUtlJHoIJn0=;
+        h=From:To:Date:Message-Id;
+        b=Y6gGY37X5scSphKgS7ve01tm7PYjMtlO+WFAghqkA2+nh0TzELYi4VbXdWtD8Wf4S
+         BnxjQpk5CyB5IIcEHjNwzUgHQ1sIoAByjtQi9qP9d6+BvZCExTUSn1BVa/g0pYg8B1
+         031LIWFzhB3OaetlAU50AQvRxbZRH/K/OW9mFBkncFEQkxo2hjZ+v9sWLkazs2Eb0I
+         tE7bCNUcKQf0mqvs0DG01kTqb2FhzDNp1qQEHRTDeWZqO/HXHQig+s39xPOo3+Lk0J
+         KaAWqqWb6Fzswe1vfHlkaCH1bzmGm7oVgOMoF0gYVtqKJSuA4fMi+ACCPvw425dUDg
+         E4JyyHV3w/DVw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wa59DO4LSHYQ; Mon, 24 Jan 2022 12:13:01 -0500 (EST)
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by mail.efficios.com (Postfix) with ESMTPSA id A1BCF344CC9;
+        Mon, 24 Jan 2022 12:13:01 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH 00/15] rseq uapi and selftest updates
+Date:   Mon, 24 Jan 2022 12:12:38 -0500
+Message-Id: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The lirc.h file is an old copy of lirc.h from the kernel sources. It is
-out of date, and the bpf lirc tests don't need a new copy anyway. As
-long as /usr/include/linux/lirc.h is from kernel v5.2 or newer, the tests
-will compile fine.
+Update the rseq selftests to adapt to the userspace ABI chosen by glibc
+(will be released in February 2022). Provide a fallback implementation
+to work with older glibc as well.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- tools/include/uapi/linux/lirc.h               | 229 ------------------
- .../selftests/bpf/test_lirc_mode2_user.c      |   1 -
- 2 files changed, 230 deletions(-)
- delete mode 100644 tools/include/uapi/linux/lirc.h
+Remove broken 32-bit little/big endian accessor fields in rseq uapi.
 
-diff --git a/tools/include/uapi/linux/lirc.h b/tools/include/uapi/linux/lirc.h
-deleted file mode 100644
-index 45fcbf99d72e..000000000000
---- a/tools/include/uapi/linux/lirc.h
-+++ /dev/null
-@@ -1,229 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * lirc.h - linux infrared remote control header file
-- * last modified 2010/07/13 by Jarod Wilson
-- */
--
--#ifndef _LINUX_LIRC_H
--#define _LINUX_LIRC_H
--
--#include <linux/types.h>
--#include <linux/ioctl.h>
--
--#define PULSE_BIT       0x01000000
--#define PULSE_MASK      0x00FFFFFF
--
--#define LIRC_MODE2_SPACE     0x00000000
--#define LIRC_MODE2_PULSE     0x01000000
--#define LIRC_MODE2_FREQUENCY 0x02000000
--#define LIRC_MODE2_TIMEOUT   0x03000000
--
--#define LIRC_VALUE_MASK      0x00FFFFFF
--#define LIRC_MODE2_MASK      0xFF000000
--
--#define LIRC_SPACE(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_SPACE)
--#define LIRC_PULSE(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_PULSE)
--#define LIRC_FREQUENCY(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_FREQUENCY)
--#define LIRC_TIMEOUT(val) (((val)&LIRC_VALUE_MASK) | LIRC_MODE2_TIMEOUT)
--
--#define LIRC_VALUE(val) ((val)&LIRC_VALUE_MASK)
--#define LIRC_MODE2(val) ((val)&LIRC_MODE2_MASK)
--
--#define LIRC_IS_SPACE(val) (LIRC_MODE2(val) == LIRC_MODE2_SPACE)
--#define LIRC_IS_PULSE(val) (LIRC_MODE2(val) == LIRC_MODE2_PULSE)
--#define LIRC_IS_FREQUENCY(val) (LIRC_MODE2(val) == LIRC_MODE2_FREQUENCY)
--#define LIRC_IS_TIMEOUT(val) (LIRC_MODE2(val) == LIRC_MODE2_TIMEOUT)
--
--/* used heavily by lirc userspace */
--#define lirc_t int
--
--/*** lirc compatible hardware features ***/
--
--#define LIRC_MODE2SEND(x) (x)
--#define LIRC_SEND2MODE(x) (x)
--#define LIRC_MODE2REC(x) ((x) << 16)
--#define LIRC_REC2MODE(x) ((x) >> 16)
--
--#define LIRC_MODE_RAW                  0x00000001
--#define LIRC_MODE_PULSE                0x00000002
--#define LIRC_MODE_MODE2                0x00000004
--#define LIRC_MODE_SCANCODE             0x00000008
--#define LIRC_MODE_LIRCCODE             0x00000010
--
--
--#define LIRC_CAN_SEND_RAW              LIRC_MODE2SEND(LIRC_MODE_RAW)
--#define LIRC_CAN_SEND_PULSE            LIRC_MODE2SEND(LIRC_MODE_PULSE)
--#define LIRC_CAN_SEND_MODE2            LIRC_MODE2SEND(LIRC_MODE_MODE2)
--#define LIRC_CAN_SEND_LIRCCODE         LIRC_MODE2SEND(LIRC_MODE_LIRCCODE)
--
--#define LIRC_CAN_SEND_MASK             0x0000003f
--
--#define LIRC_CAN_SET_SEND_CARRIER      0x00000100
--#define LIRC_CAN_SET_SEND_DUTY_CYCLE   0x00000200
--#define LIRC_CAN_SET_TRANSMITTER_MASK  0x00000400
--
--#define LIRC_CAN_REC_RAW               LIRC_MODE2REC(LIRC_MODE_RAW)
--#define LIRC_CAN_REC_PULSE             LIRC_MODE2REC(LIRC_MODE_PULSE)
--#define LIRC_CAN_REC_MODE2             LIRC_MODE2REC(LIRC_MODE_MODE2)
--#define LIRC_CAN_REC_SCANCODE          LIRC_MODE2REC(LIRC_MODE_SCANCODE)
--#define LIRC_CAN_REC_LIRCCODE          LIRC_MODE2REC(LIRC_MODE_LIRCCODE)
--
--#define LIRC_CAN_REC_MASK              LIRC_MODE2REC(LIRC_CAN_SEND_MASK)
--
--#define LIRC_CAN_SET_REC_CARRIER       (LIRC_CAN_SET_SEND_CARRIER << 16)
--#define LIRC_CAN_SET_REC_DUTY_CYCLE    (LIRC_CAN_SET_SEND_DUTY_CYCLE << 16)
--
--#define LIRC_CAN_SET_REC_DUTY_CYCLE_RANGE 0x40000000
--#define LIRC_CAN_SET_REC_CARRIER_RANGE    0x80000000
--#define LIRC_CAN_GET_REC_RESOLUTION       0x20000000
--#define LIRC_CAN_SET_REC_TIMEOUT          0x10000000
--#define LIRC_CAN_SET_REC_FILTER           0x08000000
--
--#define LIRC_CAN_MEASURE_CARRIER          0x02000000
--#define LIRC_CAN_USE_WIDEBAND_RECEIVER    0x04000000
--
--#define LIRC_CAN_SEND(x) ((x)&LIRC_CAN_SEND_MASK)
--#define LIRC_CAN_REC(x) ((x)&LIRC_CAN_REC_MASK)
--
--#define LIRC_CAN_NOTIFY_DECODE            0x01000000
--
--/*** IOCTL commands for lirc driver ***/
--
--#define LIRC_GET_FEATURES              _IOR('i', 0x00000000, __u32)
--
--#define LIRC_GET_SEND_MODE             _IOR('i', 0x00000001, __u32)
--#define LIRC_GET_REC_MODE              _IOR('i', 0x00000002, __u32)
--#define LIRC_GET_REC_RESOLUTION        _IOR('i', 0x00000007, __u32)
--
--#define LIRC_GET_MIN_TIMEOUT           _IOR('i', 0x00000008, __u32)
--#define LIRC_GET_MAX_TIMEOUT           _IOR('i', 0x00000009, __u32)
--
--/* code length in bits, currently only for LIRC_MODE_LIRCCODE */
--#define LIRC_GET_LENGTH                _IOR('i', 0x0000000f, __u32)
--
--#define LIRC_SET_SEND_MODE             _IOW('i', 0x00000011, __u32)
--#define LIRC_SET_REC_MODE              _IOW('i', 0x00000012, __u32)
--/* Note: these can reset the according pulse_width */
--#define LIRC_SET_SEND_CARRIER          _IOW('i', 0x00000013, __u32)
--#define LIRC_SET_REC_CARRIER           _IOW('i', 0x00000014, __u32)
--#define LIRC_SET_SEND_DUTY_CYCLE       _IOW('i', 0x00000015, __u32)
--#define LIRC_SET_TRANSMITTER_MASK      _IOW('i', 0x00000017, __u32)
--
--/*
-- * when a timeout != 0 is set the driver will send a
-- * LIRC_MODE2_TIMEOUT data packet, otherwise LIRC_MODE2_TIMEOUT is
-- * never sent, timeout is disabled by default
-- */
--#define LIRC_SET_REC_TIMEOUT           _IOW('i', 0x00000018, __u32)
--
--/* 1 enables, 0 disables timeout reports in MODE2 */
--#define LIRC_SET_REC_TIMEOUT_REPORTS   _IOW('i', 0x00000019, __u32)
--
--/*
-- * if enabled from the next key press on the driver will send
-- * LIRC_MODE2_FREQUENCY packets
-- */
--#define LIRC_SET_MEASURE_CARRIER_MODE	_IOW('i', 0x0000001d, __u32)
--
--/*
-- * to set a range use LIRC_SET_REC_CARRIER_RANGE with the
-- * lower bound first and later LIRC_SET_REC_CARRIER with the upper bound
-- */
--#define LIRC_SET_REC_CARRIER_RANGE     _IOW('i', 0x0000001f, __u32)
--
--#define LIRC_SET_WIDEBAND_RECEIVER     _IOW('i', 0x00000023, __u32)
--
--/*
-- * Return the recording timeout, which is either set by
-- * the ioctl LIRC_SET_REC_TIMEOUT or by the kernel after setting the protocols.
-- */
--#define LIRC_GET_REC_TIMEOUT	       _IOR('i', 0x00000024, __u32)
--
--/*
-- * struct lirc_scancode - decoded scancode with protocol for use with
-- *	LIRC_MODE_SCANCODE
-- *
-- * @timestamp: Timestamp in nanoseconds using CLOCK_MONOTONIC when IR
-- *	was decoded.
-- * @flags: should be 0 for transmit. When receiving scancodes,
-- *	LIRC_SCANCODE_FLAG_TOGGLE or LIRC_SCANCODE_FLAG_REPEAT can be set
-- *	depending on the protocol
-- * @rc_proto: see enum rc_proto
-- * @keycode: the translated keycode. Set to 0 for transmit.
-- * @scancode: the scancode received or to be sent
-- */
--struct lirc_scancode {
--	__u64	timestamp;
--	__u16	flags;
--	__u16	rc_proto;
--	__u32	keycode;
--	__u64	scancode;
--};
--
--/* Set if the toggle bit of rc-5 or rc-6 is enabled */
--#define LIRC_SCANCODE_FLAG_TOGGLE	1
--/* Set if this is a nec or sanyo repeat */
--#define LIRC_SCANCODE_FLAG_REPEAT	2
--
--/**
-- * enum rc_proto - the Remote Controller protocol
-- *
-- * @RC_PROTO_UNKNOWN: Protocol not known
-- * @RC_PROTO_OTHER: Protocol known but proprietary
-- * @RC_PROTO_RC5: Philips RC5 protocol
-- * @RC_PROTO_RC5X_20: Philips RC5x 20 bit protocol
-- * @RC_PROTO_RC5_SZ: StreamZap variant of RC5
-- * @RC_PROTO_JVC: JVC protocol
-- * @RC_PROTO_SONY12: Sony 12 bit protocol
-- * @RC_PROTO_SONY15: Sony 15 bit protocol
-- * @RC_PROTO_SONY20: Sony 20 bit protocol
-- * @RC_PROTO_NEC: NEC protocol
-- * @RC_PROTO_NECX: Extended NEC protocol
-- * @RC_PROTO_NEC32: NEC 32 bit protocol
-- * @RC_PROTO_SANYO: Sanyo protocol
-- * @RC_PROTO_MCIR2_KBD: RC6-ish MCE keyboard
-- * @RC_PROTO_MCIR2_MSE: RC6-ish MCE mouse
-- * @RC_PROTO_RC6_0: Philips RC6-0-16 protocol
-- * @RC_PROTO_RC6_6A_20: Philips RC6-6A-20 protocol
-- * @RC_PROTO_RC6_6A_24: Philips RC6-6A-24 protocol
-- * @RC_PROTO_RC6_6A_32: Philips RC6-6A-32 protocol
-- * @RC_PROTO_RC6_MCE: MCE (Philips RC6-6A-32 subtype) protocol
-- * @RC_PROTO_SHARP: Sharp protocol
-- * @RC_PROTO_XMP: XMP protocol
-- * @RC_PROTO_CEC: CEC protocol
-- * @RC_PROTO_IMON: iMon Pad protocol
-- * @RC_PROTO_RCMM12: RC-MM protocol 12 bits
-- * @RC_PROTO_RCMM24: RC-MM protocol 24 bits
-- * @RC_PROTO_RCMM32: RC-MM protocol 32 bits
-- */
--enum rc_proto {
--	RC_PROTO_UNKNOWN	= 0,
--	RC_PROTO_OTHER		= 1,
--	RC_PROTO_RC5		= 2,
--	RC_PROTO_RC5X_20	= 3,
--	RC_PROTO_RC5_SZ		= 4,
--	RC_PROTO_JVC		= 5,
--	RC_PROTO_SONY12		= 6,
--	RC_PROTO_SONY15		= 7,
--	RC_PROTO_SONY20		= 8,
--	RC_PROTO_NEC		= 9,
--	RC_PROTO_NECX		= 10,
--	RC_PROTO_NEC32		= 11,
--	RC_PROTO_SANYO		= 12,
--	RC_PROTO_MCIR2_KBD	= 13,
--	RC_PROTO_MCIR2_MSE	= 14,
--	RC_PROTO_RC6_0		= 15,
--	RC_PROTO_RC6_6A_20	= 16,
--	RC_PROTO_RC6_6A_24	= 17,
--	RC_PROTO_RC6_6A_32	= 18,
--	RC_PROTO_RC6_MCE	= 19,
--	RC_PROTO_SHARP		= 20,
--	RC_PROTO_XMP		= 21,
--	RC_PROTO_CEC		= 22,
--	RC_PROTO_IMON		= 23,
--	RC_PROTO_RCMM12		= 24,
--	RC_PROTO_RCMM24		= 25,
--	RC_PROTO_RCMM32		= 26,
--};
--
--#endif
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2_user.c b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-index ebf68dce5504..2893e9f2f1e0 100644
---- a/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-+++ b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
-@@ -28,7 +28,6 @@
- // 5. We can read keycode from same /dev/lirc device
- 
- #include <linux/bpf.h>
--#include <linux/lirc.h>
- #include <linux/input.h>
- #include <errno.h>
- #include <stdio.h>
+Integrate various fixes gathered from librseq, including work-around for
+known gcc and clang compiler bugs with asm goto.
+
+The uplift to glibc's userspace ABI means we can now use %fs/%gs segment
+selectors directly in the inline assembler for accesses to the rseq
+thread area on x86.
+
+Feedback is welcome,
+
+Thanks,
+
+Mathieu
+
+Mathieu Desnoyers (15):
+  selftests/rseq: introduce own copy of rseq uapi header
+  rseq: Remove broken uapi field layout on 32-bit little endian
+  selftests/rseq: Remove useless assignment to cpu variable
+  selftests/rseq: Remove volatile from __rseq_abi
+  selftests/rseq: Introduce rseq_get_abi() helper
+  selftests/rseq: Introduce thread pointer getters
+  selftests/rseq: Uplift rseq selftests for compatibility with
+    glibc-2.35
+  selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big
+    endian
+  selftests/rseq: Fix ppc32 missing instruction selection "u" and "x"
+    for load/store
+  selftests/rseq: Fix ppc32 offsets by using long rather than off_t
+  selftests/rseq: Fix warnings about #if checks of undefined tokens
+  selftests/rseq: Remove arm/mips asm goto compiler work-around
+  selftests/rseq: Fix: work-around asm goto compiler bugs
+  selftests/rseq: x86-64: use %fs segment selector for accessing rseq
+    thread area
+  selftests/rseq: x86-32: use %gs segment selector for accessing rseq
+    thread area
+
+ include/uapi/linux/rseq.h                     |  17 +-
+ tools/testing/selftests/rseq/Makefile         |   2 +-
+ .../selftests/rseq/basic_percpu_ops_test.c    |   2 +-
+ tools/testing/selftests/rseq/compiler.h       |  30 +++
+ tools/testing/selftests/rseq/param_test.c     |   8 +-
+ tools/testing/selftests/rseq/rseq-abi.h       | 151 +++++++++++++
+ tools/testing/selftests/rseq/rseq-arm.h       | 110 +++++-----
+ tools/testing/selftests/rseq/rseq-arm64.h     |  79 +++++--
+ .../rseq/rseq-generic-thread-pointer.h        |  25 +++
+ tools/testing/selftests/rseq/rseq-mips.h      |  71 ++-----
+ .../selftests/rseq/rseq-ppc-thread-pointer.h  |  30 +++
+ tools/testing/selftests/rseq/rseq-ppc.h       | 128 +++++++----
+ tools/testing/selftests/rseq/rseq-s390.h      |  55 +++--
+ tools/testing/selftests/rseq/rseq-skip.h      |   2 +-
+ .../selftests/rseq/rseq-thread-pointer.h      |  19 ++
+ .../selftests/rseq/rseq-x86-thread-pointer.h  |  40 ++++
+ tools/testing/selftests/rseq/rseq-x86.h       | 200 ++++++++++++------
+ tools/testing/selftests/rseq/rseq.c           | 163 +++++++-------
+ tools/testing/selftests/rseq/rseq.h           |  29 ++-
+ 19 files changed, 793 insertions(+), 368 deletions(-)
+ create mode 100644 tools/testing/selftests/rseq/compiler.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-abi.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-generic-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-ppc-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-thread-pointer.h
+ create mode 100644 tools/testing/selftests/rseq/rseq-x86-thread-pointer.h
+
 -- 
-2.34.1
+2.17.1
 
