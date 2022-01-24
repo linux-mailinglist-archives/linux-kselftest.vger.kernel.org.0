@@ -2,225 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38334497F17
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 13:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3BD498345
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 16:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbiAXMQh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jan 2022 07:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241071AbiAXMOU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:14:20 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF56C06177D;
-        Mon, 24 Jan 2022 04:13:59 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id o12so20805143eju.13;
-        Mon, 24 Jan 2022 04:13:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mn408lO+pZH3mrHKxY73LKhzz0Csceev4QSmOp495H8=;
-        b=aTuPbaSPKZvv8buEAdEPUME0jG8i3UrWZJoUxY6IPj93uSUn6UtEUOBlvoZBW+OUdc
-         p6SCCOligO3SDhy7BfB8OYrfByZSLinZ60r97reiTtylpCGU6gCgHFaUAFjKL/b++EIc
-         xMKeOpM0SXTiZsLGy/5o+jDD1kEuc3k1gSsj4ZA1jW0j7VjaAr8l5kYSE+bXWPEbCBWc
-         Mm3AlEURQLP+0M5hZQBpZoT05fL7laggDV0cS5UiQt1SOawxzyQzbcPLmoIQ0WXitZ4D
-         f5Cq2oWVqGoeXgl/WcqnkFVkO66FV9JiqPfH1TtJVSl9b8dN1xFZ41cpYFvvyRFX79w3
-         Jl3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mn408lO+pZH3mrHKxY73LKhzz0Csceev4QSmOp495H8=;
-        b=PcR7Qspm4ajm5bTw93CRZySVUw/Inb9uGj5X3B1jIbuRrS7DkeBeJ/MWj5i4D0Mn3B
-         xkxD+vqri7FfRIG6D/oQ+QicIAYsz2bcVLLqQlPy7KnFz1/jKbrLpJDfaAPqza4wGNx1
-         zXNNOYqVmddR+TD6dwxaQUqr6maSOETNOAzE4c9+rfmEy12ydvoPPS1nHOuKTI86Xwan
-         oHFxLqvWQJxlhJBtjh0sdoxMWK80eQ57Y1/d9oq04exj8i1vCLqSBUJHtvIt89is/kqa
-         XMdq7Sw/QSQ/NCpvnP8Q9Ui5EUJt7bETsswjYVS7r7T0QYGAx5B29dC1sh54RZbEaxNS
-         yz5Q==
-X-Gm-Message-State: AOAM533WLy2O8o5V1g53IljYpqYcJ73HcGquv9Uwih1Y+styoV+vJmmP
-        ftnUoJYCUFgusYslhC8jWvQ=
-X-Google-Smtp-Source: ABdhPJxZi/muDBSqalbc/t15r0dAPfU8smxQUbiMsQO1VRfwYeSMOp3AieK07BdoumjDMGt90sg9pw==
-X-Received: by 2002:a17:907:3e96:: with SMTP id hs22mr3640399ejc.640.1643026438039;
-        Mon, 24 Jan 2022 04:13:58 -0800 (PST)
-Received: from ponky.lan ([2a04:241e:502:a09c:a21f:7a9f:9158:4a40])
-        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 04:13:57 -0800 (PST)
-From:   Leonard Crestez <cdleonard@gmail.com>
-To:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Philip Paeps <philip@trouble.is>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
+        id S240539AbiAXPNy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jan 2022 10:13:54 -0500
+Received: from mail-mw2nam12on2054.outbound.protection.outlook.com ([40.107.244.54]:51393
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240533AbiAXPNw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:13:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RdyorE6NVmCabQqjXfYRWrGH3J4EEhJmdZVHn/shWWzTg0y9Q/wBmRRu4EfSF61hLctKV/llGmePndLUU+vAo/jF9u1lnKv52IPX3KFquknpxAYlV8q5R1il7tqTuzJC/W4sokXUCiay80OgLAFzvn/sO9xkYa666zw/JIZY/lB/ZPk45ZgmxaDvW6EpUdwXLvZTLlrQxKAbDbVA92/MuQ1qZjvH1nTmZcDteNjux/+NIa86iTD8J/RZEzmpa56OaoNOB2khp9F+x1Cm0S/W+bl4Cnt78TyRKshp8BljeTwFQSRvcOdx5XoZhqRVY0NtYboII5xZJ21FpfDBaGYNBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Wix0i5uWXQX1vhRW8LIW1NjaKF8l7wcuUohhrqeVGgw=;
+ b=eO+mfyqDzCO8NBUIsiu8lq0DY5QNiAFURcnw/alsged9pkz5xuBy+PpnNXTKbNdoPYo9LPF1JaXfrHC9x/PIsWQWxZA3uAOUiAsO1TmKRxiHzD6xpOH1wx/CkQkVo2+FoH2UYlS7MCkWuSc0eo6K8lmqxYAepir8MO9nw+BYahdJol8iPGUsxhoLM0i9HeDAwZBtWkYGT1tv8rbFFTJ9nSjyUk1pjr6ECuOYWeYa4wLS6Wyg32r25nEyxdtgBKqmDDLSuzVHwQZu+VoZXmlUowSDQStUccP4hZ49g58EsKIOGUpnMzzaXs56IaWVbf5eBp97xUDKQ08tJock0rPL3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Wix0i5uWXQX1vhRW8LIW1NjaKF8l7wcuUohhrqeVGgw=;
+ b=NtR+Wo3hOHCO7bgWkVsJBn6OK/4C1Xh0aHashYd6anLABSHPfJpuB0N8lf0IX2eDKISVOA59W8mj/e6JiGDQjecZ7rbY5Gyk/4/Lyyo6fhjGXjZPYzG1/m/aQ5COp+uDXFTdt9OChpNe3uwkMKqCgmf8jXPDp6XLZjrnCUrLWTFWBI1DzSSgFVVUmX5dtwHubs1/hY6xJfPoF+BCbrNUnP/UjjAbhBX2PvgXXjTWBiA4jIZAiZ7R27iam8KE4E0gJ8UO/knjndKnijdxAD78uNLZIikpg2g+Ir9WZusrpGaGBJIE3oL2EPyeYdCIbWH/6SCtdHLPeIGWR93/M5hNyQ==
+Received: from BN9PR03CA0379.namprd03.prod.outlook.com (2603:10b6:408:f7::24)
+ by SA1PR12MB5669.namprd12.prod.outlook.com (2603:10b6:806:237::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Mon, 24 Jan
+ 2022 15:13:50 +0000
+Received: from BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::8e) by BN9PR03CA0379.outlook.office365.com
+ (2603:10b6:408:f7::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10 via Frontend
+ Transport; Mon, 24 Jan 2022 15:13:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT055.mail.protection.outlook.com (10.13.177.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Mon, 24 Jan 2022 15:13:50 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Mon, 24 Jan 2022 15:13:49 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
+ Mon, 24 Jan 2022 07:13:48 -0800
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Mon, 24 Jan 2022 07:13:42 -0800
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+To:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>
+CC:     Tariq Toukan <tariqt@nvidia.com>, Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 20/20] tcp: authopt: Try to respect rnextkeyid from SYN on SYNACK
-Date:   Mon, 24 Jan 2022 14:13:06 +0200
-Message-Id: <2008e2c33acc60883ff41adc33158b63ec2d3acb.1643026076.git.cdleonard@gmail.com>
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David Ahern" <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        "Florent Revest" <revest@chromium.org>,
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        "Maxim Mikityanskiy" <maximmi@nvidia.com>
+Subject: [PATCH bpf-next v2 0/3] New BPF helpers to accelerate synproxy
+Date:   Mon, 24 Jan 2022 17:13:37 +0200
+Message-ID: <20220124151340.376807-1-maximmi@nvidia.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1643026076.git.cdleonard@gmail.com>
-References: <cover.1643026076.git.cdleonard@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4193cfae-5cdb-4020-d9ed-08d9df4c2049
+X-MS-TrafficTypeDiagnostic: SA1PR12MB5669:EE_
+X-Microsoft-Antispam-PRVS: <SA1PR12MB566904A65685802C13DEA911DC5E9@SA1PR12MB5669.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6+m5f36K6QIuHBdpImPZ3jISNTkFZQdA1xUSbgWKjcLmZZ5H5tph0mpw5/e/ndOK8eX41RQPmsnTx/elbLcsV3kqSyXRcc4qoLh9PG7ciFG+Lr+N8ltEjdv/+92pEyTZkfz7mT0NzY9r1ijVxW2PZk+MuPnQxenB/8nsTrehFDD8p6xLJ35Iq9+MVU58qJ89A/n7Sy7xRqMjxGDaFeqnrmw4wNWn3v/7rETaaMKZ4MV3xr8zvCozUNElqcthA2nqLQ6ESrjW3zDM6q/XobH7YPlTA0Zopf+0zrGY6nRyod4CYr2Oe27AC94Yn2V6325yGIzttrP2k75bN19qlVHmDT25Py2A6NqX25/yxOHLbD4KSE3SRa19+YHRIL1pKYeSErHtZ8SJi+Ke3wyeccqeZh/FPl8VuMk93nfp0CanDpKDqfdH/lAfyMiZF73+mWd6D3A/RMVPwXOyOAzmE/KvN5Cj79BKeKX5ooJDdKB710ex/mgeCAYCIezw4ojNpiJbeF8+FpXG6opERFdtSlQx5b7L5pzLHVYLKFZZV6RRBOhv7YMe+w+qKgBOOfXohIglPwL2bHBzV2encrpvQoYJeXJiMwe+rlB+LDTQPsDwssBGEHezbglgTdmarp5E2R3bcWNuYhIKwrcBaw1lSNHYyUP/NYr4brHe3OCBWbFiELzjAKhLZ86GJsJ5l234yAV1m8Es5pag0tldbgwM7qBD3W6wvNqFjLAsxW1ipjKXPGMPWACz1+FIqB8CmAuUQgEbdGb/oYiJGtf5fCfIWzyC766pD56ZIfmmTld1b8n4TWVKylwphF8LLT6Pm9ML3wU8QU6qISGSRv9oB1n97y0pB2+sMscDdsPgb+N+JjseUQVXoUPVZVtrZvMm9M1WwiXQnm+Mu9z819H4YRkFX3MyIRX+AUW6OlwPYjVVMp5jKoo=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700004)(1076003)(7416002)(5660300002)(40460700003)(110136005)(36756003)(966005)(70206006)(86362001)(2616005)(508600001)(356005)(8676002)(186003)(26005)(54906003)(2906002)(316002)(4326008)(336012)(8936002)(6666004)(47076005)(70586007)(83380400001)(82310400004)(107886003)(81166007)(36860700001)(7696005)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 15:13:50.0292
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4193cfae-5cdb-4020-d9ed-08d9df4c2049
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5669
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-According to the RFC we should use the key that the peer suggests via
-rnextkeyid.
+The first patch of this series is an improvement to the existing
+syncookie BPF helper.
 
-This is currently done by storing recv_rnextkeyid in tcp_authopt_info
-but this does not work for the SYNACK case because the tcp_request_sock
-does not hold an info pointer for reasons of memory usage.
+The two other patches add new functionality that allows XDP to
+accelerate iptables synproxy.
 
-Handle this by storing recv_rnextkeyid inside tcp_request_sock. This
-doesn't increase the memory usage because there are unused bytes at the
-end.
+v1 of this series [1] used to include a patch that exposed conntrack
+lookup to BPF using stable helpers. It was superseded by series [2] by
+Kumar Kartikeya Dwivedi, which implements this functionality using
+unstable helpers.
 
-Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
----
- include/linux/tcp.h    |  6 ++++++
- net/ipv4/tcp_authopt.c | 26 ++++++++++++++++++++------
- net/ipv4/tcp_input.c   | 12 ++++++++++++
- 3 files changed, 38 insertions(+), 6 deletions(-)
+The second patch adds new helpers to issue and check SYN cookies without
+binding to a socket, which is useful in the synproxy scenario.
 
-diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-index 497604176119..0c346c2c2145 100644
---- a/include/linux/tcp.h
-+++ b/include/linux/tcp.h
-@@ -95,10 +95,13 @@ struct tcp_options_received {
- 	u8	saw_unknown:1,	/* Received unknown option		*/
- 		unused:7;
- 	u8	num_sacks;	/* Number of SACK blocks		*/
- 	u16	user_mss;	/* mss requested by user in ioctl	*/
- 	u16	mss_clamp;	/* Maximal mss, negotiated at connection setup */
-+#if IS_ENABLED(CONFIG_TCP_AUTHOPT)
-+	u8	rnextkeyid;
-+#endif
- };
- 
- static inline void tcp_clear_options(struct tcp_options_received *rx_opt)
- {
- 	rx_opt->tstamp_ok = rx_opt->sack_ok = 0;
-@@ -133,10 +136,13 @@ struct tcp_request_sock {
- 	u32				rcv_nxt; /* the ack # by SYNACK. For
- 						  * FastOpen it's the seq#
- 						  * after data-in-SYN.
- 						  */
- 	u8				syn_tos;
-+#if IS_ENABLED(CONFIG_TCP_AUTHOPT)
-+	u8				recv_rnextkeyid;
-+#endif
- };
- 
- static inline struct tcp_request_sock *tcp_rsk(const struct request_sock *req)
- {
- 	return (struct tcp_request_sock *)req;
-diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-index 5ea93eb495f1..4b316488c805 100644
---- a/net/ipv4/tcp_authopt.c
-+++ b/net/ipv4/tcp_authopt.c
-@@ -1,7 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- 
-+#include "linux/tcp.h"
-+#include "net/tcp_states.h"
- #include <net/tcp_authopt.h>
- #include <net/ip.h>
- #include <net/ipv6.h>
- #include <net/tcp.h>
- #include <linux/kref.h>
-@@ -424,21 +426,33 @@ struct tcp_authopt_key_info *__tcp_authopt_select_key(const struct sock *sk,
- {
- 	struct tcp_authopt_key_info *key, *new_key = NULL;
- 	struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
- 
- 	/* Listen sockets don't refer to any specific connection so we don't try
--	 * to keep using the same key and ignore any received keyids.
-+	 * to keep using the same key.
-+	 * The rnextkeyid is stored in tcp_request_sock
- 	 */
- 	if (sk->sk_state == TCP_LISTEN) {
--		int send_keyid = -1;
--
-+		int send_id = -1;
-+		struct tcp_request_sock *rsk;
-+
-+		if (WARN_ONCE(addr_sk->sk_state != TCP_NEW_SYN_RECV, "bad socket state"))
-+			return NULL;
-+		rsk = tcp_rsk((struct request_sock *)addr_sk);
-+		/* Forcing a specific send_keyid on a listen socket forces it for
-+		 * all clients so is unlikely to be useful.
-+		 */
- 		if (info->flags & TCP_AUTHOPT_FLAG_LOCK_KEYID)
--			send_keyid = info->send_keyid;
--		key = tcp_authopt_lookup_send(net, addr_sk, send_keyid);
-+			send_id = info->send_keyid;
-+		else
-+			send_id = rsk->recv_rnextkeyid;
-+		key = tcp_authopt_lookup_send(net, addr_sk, send_id);
-+		/* If no key found with specific send_id try anything else. */
-+		if (!key)
-+			key = tcp_authopt_lookup_send(net, addr_sk, -1);
- 		if (key)
- 			*rnextkeyid = key->recv_id;
--
- 		return key;
- 	}
- 
- 	if (locked) {
- 		sock_owned_by_me(sk);
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 91f1b04c1933..667da79df4ae 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -4094,10 +4094,18 @@ void tcp_parse_options(const struct net *net,
- 				/*
- 				 * The MD5 Hash has already been
- 				 * checked (see tcp_v{4,6}_do_rcv()).
- 				 */
- 				break;
-+#endif
-+#ifdef CONFIG_TCP_AUTHOPT
-+			case TCPOPT_AUTHOPT:
-+				/* Hash has already been checked.
-+				 * We parse rnextkeyid here so we can match it on synack
-+				 */
-+				opt_rx->rnextkeyid = ptr[1];
-+				break;
- #endif
- 			case TCPOPT_FASTOPEN:
- 				tcp_parse_fastopen_option(
- 					opsize - TCPOLEN_FASTOPEN_BASE,
- 					ptr, th->syn, foc, false);
-@@ -6891,10 +6899,14 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
- 		tcp_clear_options(&tmp_opt);
- 
- 	if (IS_ENABLED(CONFIG_SMC) && want_cookie)
- 		tmp_opt.smc_ok = 0;
- 
-+#if IS_ENABLED(CONFIG_TCP_AUTHOPT)
-+	tcp_rsk(req)->recv_rnextkeyid = tmp_opt.rnextkeyid;
-+#endif
-+
- 	tmp_opt.tstamp_ok = tmp_opt.saw_tstamp;
- 	tcp_openreq_init(req, &tmp_opt, skb, sk);
- 	inet_rsk(req)->no_srccheck = inet_sk(sk)->transparent;
- 
- 	/* Note: tcp_v6_init_req() might override ir_iif for link locals */
+The third patch adds a selftest, which consists of a script, an XDP
+program and a userspace control application. The XDP program uses
+socketless SYN cookie helpers and queries conntrack status instead of
+socket status. The userspace control application allows to tune
+parameters of the XDP program. This program also serves as a minimal
+example of usage of the new functionality.
+
+The draft of the new functionality was presented on Netdev 0x15 [3].
+
+v2 changes:
+
+Split into two series, submitted bugfixes to bpf, dropped the conntrack
+patches, implemented the timestamp cookie in BPF using bpf_loop, dropped
+the timestamp cookie patch.
+
+[1]: https://lore.kernel.org/bpf/20211020095815.GJ28644@breakpoint.cc/t/
+[2]: https://lore.kernel.org/bpf/20220114163953.1455836-1-memxor@gmail.com/
+[3]: https://netdevconf.info/0x15/session.html?Accelerating-synproxy-with-XDP
+
+Maxim Mikityanskiy (3):
+  bpf: Make errors of bpf_tcp_check_syncookie distinguishable
+  bpf: Add helpers to issue and check SYN cookies in XDP
+  bpf: Add selftests for raw syncookie helpers
+
+ include/net/tcp.h                             |   1 +
+ include/uapi/linux/bpf.h                      |  75 +-
+ net/core/filter.c                             | 128 ++-
+ net/ipv4/tcp_input.c                          |   3 +-
+ tools/include/uapi/linux/bpf.h                |  75 +-
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ .../selftests/bpf/progs/xdp_synproxy_kern.c   | 743 ++++++++++++++++++
+ .../selftests/bpf/test_xdp_synproxy.sh        |  71 ++
+ tools/testing/selftests/bpf/xdp_synproxy.c    | 418 ++++++++++
+ 10 files changed, 1510 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
+ create mode 100755 tools/testing/selftests/bpf/test_xdp_synproxy.sh
+ create mode 100644 tools/testing/selftests/bpf/xdp_synproxy.c
+
 -- 
-2.25.1
+2.30.2
 
