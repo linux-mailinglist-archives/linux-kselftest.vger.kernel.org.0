@@ -2,84 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C39A49864B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 18:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C36C498757
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 18:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244261AbiAXRSL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jan 2022 12:18:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54908 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244297AbiAXRSK (ORCPT
+        id S240965AbiAXR41 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jan 2022 12:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244557AbiAXR4Y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:18:10 -0500
+        Mon, 24 Jan 2022 12:56:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA8FC06173B
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 09:56:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E73612F0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 17:18:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A17C340E5;
-        Mon, 24 Jan 2022 17:18:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F1FB6134F
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 17:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531B9C340E5;
+        Mon, 24 Jan 2022 17:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643044689;
-        bh=cINPFgKL2Ut8k3Oy2wD5fkInRC1CnwPrnusLBuDdThE=;
+        s=k20201202; t=1643046983;
+        bh=j/gEX77Ep/TFQTQE/l5vF5wpUw8sbrtrlFYG2lJTUgk=;
         h=From:To:Cc:Subject:Date:From;
-        b=pvRRoOxBMA0Ame5jMPDrC9Qh4EoIXvtSTIxXy7rfxIOwvEh7C4//7TFcCemLkmcLM
-         +xesDIbCt8uSCIlHfwBwijCMVPy8sMf6zwbMeNmN7oJ59tvQuYDc03gD1bIdqOUU8e
-         zORJY3whI/89AR1l+uJv3Mqq1XybQuA2FesTUz2OBnON3G4FPsbRVA384dTt0gQ+uS
-         8SolE8UWUNCcFykQYt004/bwUHPYpFeESXmc4amSPpHPBP8qfmcxysvQIuCmNU8+PB
-         qaVYGfQ5Sxmg9mZlKLluspfMzpl2pcGVyMXk+9Z+XLrlfzinw8VnvpcCQc9t48KbQF
-         z/G+xLrO4SHFg==
+        b=fsL65306k2CREcI8NZIzUTAiUNp22F0dkTi3Qiv1yl8l3JqWzWwsDlgO425iirYX3
+         D7Jv6bgJ+2zsCjF5S9BEhAr2B3rjzUyDuz/nG1pcBi1J2DLoTvH1uMeF0EyerGXrph
+         jNDQNAU1YGgKP1fW7vuc7nQLsc+iHSCHBNszIFL1IFts704gJw2S1bDWU9Vi5acoq+
+         Ptu6uzgfQLilArC1fEp8HWtjBUrAti5QSkl4jXXZK/uFviqlXGFPZTpiMvk5H99pVZ
+         Va1S/g/RTCeqJ96VkpHqKqOnqZEc3j+dISJDQ6OiQTr8g22U3wifQHUsaa3JIwi1at
+         c/ort46cbNI/g==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH] kselftest/arm64: Remove local ARRAY_SIZE() definitions
-Date:   Mon, 24 Jan 2022 17:17:48 +0000
-Message-Id: <20220124171748.2195875-1-broonie@kernel.org>
+Subject: [PATCH v1 0/2] kselftest/arm64: Small fixes for sve-ptrace test
+Date:   Mon, 24 Jan 2022 17:55:25 +0000
+Message-Id: <20220124175527.3260234-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1265; h=from:subject; bh=cINPFgKL2Ut8k3Oy2wD5fkInRC1CnwPrnusLBuDdThE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh7t7WgEzITa3c+LpcX6BANIKS7MW2GTUq48+G78Hk TYKq/JWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe7e1gAKCRAk1otyXVSH0IHuCA CA6Vuy1vCu980lNhdJe7ZzbvxnoGcNhlW28hjsZ4A2XJZowETvZHs+vHeaUFgr0RLuQxQ8uJ5Cehi2 eSQpkgLw9ym4vvs28G3qGQubTX5nNMXZNTrrvAr+4EibqlA75DDL5xdrq7290/ZqVusTJPrlDyX0bZ Av3YX+V5zu+kvzaoDIcufSifT4YstW6rJUg2nje/A2ajM0au2qrEMZEWxANH7SfBY3OCWQzAIybifZ VP3H/49SZ8NWYeNWJcK7cjUipobNGpPx+bEYoWT67CgcN1GyC9xIG0+ogJJT81BwxOVtj03rJtV8dy s3poQYMovfig2rBeCwxQeKEc4OsGQE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=493; h=from:subject; bh=j/gEX77Ep/TFQTQE/l5vF5wpUw8sbrtrlFYG2lJTUgk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh7ugMkejbcjCcRxfKqPQbP+o9W3l1O0SQTqhWAUy2 q7R4VOWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe7oDAAKCRAk1otyXVSH0HoIB/ wNhw9b43Pz7waCRSStQ4le4n8alkjpSIB0NBGoSpmTOLspiF8f//OpbDIftEaLg5vaRu/KGuYs2Rsg 05wWzaI4MYKO/Nh3hnM+5/hpia8ueAcmRR71B4i6Wu05Q5N5g6bi4mA8fjm4ZwerFu/OlhbmXw5SSe coTgi2cDyxh5injirFR2Yp13brPgaiaY7DfypG1CA0sDL2ivpsot++LaLv67F6pTl9Qaha7/bP646r khNbSdkAguJuNND/vEChdvfgNqm43FjP4mhMF9Xtv5DgCv8zSS1rP3eYAcgRUtYoxl4889xfAIiElq FKyrAAJWm/h97pgqIcKPsE+yFol0E2
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-An ARRAY_SIZE() has been added to kselftest.h so remove the local versions
-in some of the arm64 selftests.
+A couple of fairly minor fixes for the sve-ptrace test, one output thing
+and one for an issue which would generate spurious false positives.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/syscall-abi.c | 1 -
- tools/testing/selftests/arm64/fp/sve-ptrace.c   | 2 --
- 2 files changed, 3 deletions(-)
+Mark Brown (2):
+  kselftest/arm64: Skip VL_INHERIT tests for unsupported vector types
+  kselftest/arm64: Correct logging of FPSIMD register read via ptrace
 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index d8eeeafb50dc..1e13b7523918 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -18,7 +18,6 @@
- 
- #include "../../kselftest.h"
- 
--#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
- #define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
- 
- extern void do_syscall(int sve_vl);
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index af798b9d232c..90ba1d6a6781 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -21,8 +21,6 @@
- 
- #include "../../kselftest.h"
- 
--#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
--
- /* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
- #ifndef NT_ARM_SVE
- #define NT_ARM_SVE 0x405
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+
+base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
 -- 
 2.30.2
 
