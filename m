@@ -2,260 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7996E497ABF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 09:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6189F497D71
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jan 2022 11:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbiAXIwy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jan 2022 03:52:54 -0500
-Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:59377 "EHLO
-        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242400AbiAXIww (ORCPT
+        id S237041AbiAXKxQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jan 2022 05:53:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34414 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237038AbiAXKxO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:52:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1643014371;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=o1K0lEEJe4jnf8J45sFmRcP/C6teT5vE0Bfx/oI1YJc=;
-        b=U+OYQRM2O+pN2c/+kbXbocfryywv4wFaKd6ovjZ4ABjddFwfalcUZtocILjPC9ih
-        R+Ha1Ps8qGNfQW+/Zkb9S9Z6emvLY7lXRb3iw1BfrZIRPDlAldxpjbNpMYNfuaCmSoV
-        0MvhtlncpnK33OgyI6fnt42yW5+akf4lf/39DZVU=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1643014371;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=o1K0lEEJe4jnf8J45sFmRcP/C6teT5vE0Bfx/oI1YJc=;
-        b=Z2VuoUr7LJLFED1p6QKtLX3H7Yg6Kg0Z7fZdbYef+3BxVsGz6hz9vBndflBrqyiJ
-        IsXzjBOFh4q9HyBfJXDjJovZ9ObZ6gcojDNWTWHdFKdIE9VU7WHRXTZCy9EP0Aytq95
-        jzTvZQxhaliZdxG/JTE7o4pKCx6exTZWwrOia4QY=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220124
+        Mon, 24 Jan 2022 05:53:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EAE7612F2;
+        Mon, 24 Jan 2022 10:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8F0C340E4;
+        Mon, 24 Jan 2022 10:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643021593;
+        bh=ZMfQWUpk0eDWkXdZTigFyfC36ehh99jynZEFFZLSbok=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rMkT1h22frBQn/cTz/3is31icPq12OL/glW8xho0ut6HBfsVoHBMko82K9bGo0+tx
+         tlcfD/x+m4USH16VRHx5S69dRXF/ei/i1WVuyH/FXulF1IblTar3w0LW98KcJr2ceg
+         u3kT++IizLHxgYS/Y5aY6e04RZyk/mxL/8SPzgQXSth5dvf8PN0AkSi2e8o049RC5j
+         i/Uhz6iH6mZVZ7tCVi1Y1TeSOuhVkhg4shN+avG+sWPtSJ4uKyDIo75HaSZ+Po7hgE
+         FSpy69yHtrJ9AcLKsWBuFPsHefIiKTOLMjCdauaIoKqCydijPSIwqXH+8d/5y+JZBG
+         7Pf1QIYrwHkmg==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Peter Collingbourne <pcc@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Balbir Singh <sblbir@amazon.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [resend RFC 3/3] tests: add new PR_SCHED_CORE_SHARE test
+Date:   Mon, 24 Jan 2022 11:52:47 +0100
+Message-Id: <20220124105247.2118990-4-brauner@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220124105247.2118990-1-brauner@kernel.org>
+References: <20220124105247.2118990-1-brauner@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017e8b49b602-2e1d3f57-46a0-4cd7-9dcb-9087f8de159c-000000@email.amazonses.com>
-Date:   Mon, 24 Jan 2022 08:52:50 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.01.24-54.240.8.73
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3036; h=from:subject; bh=ZMfQWUpk0eDWkXdZTigFyfC36ehh99jynZEFFZLSbok=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSS+a/nrsHpjTQmnzVYRq6/3Eg/6iSclPb25elvHJpOypz8m LJ4Y2VHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRE+0M/+N11D70tG7ccyFuwg5W3T fvIj5PW/L9YlHNxZ/vHospeeUz/I+T/bDRPidh4TT3txMrMmvab/unreA+5m1tLpP9viVRlxUA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.17.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 74e5dee6a5b9683e4e78aad784c6c807833cb89b
-* git describe: next-20220124
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220124
+Add tests for the new PR_SCHED_CORE_SHARE command.
 
-## Test Regressions (compared to next-20220121)
-* dragonboard-410c, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
+Cc: Peter Collingbourne <pcc@google.com>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Chris Hyser <chris.hyser@oracle.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Balbir Singh <sblbir@amazon.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ tools/testing/selftests/sched/cs_prctl_test.c | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-* dragonboard-410c, kselftest-net
-  - net.tls.tls.13_aes_gcm_256.shutdown_reuse
+diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
+index 8109b17dc764..985b83fe7221 100644
+--- a/tools/testing/selftests/sched/cs_prctl_test.c
++++ b/tools/testing/selftests/sched/cs_prctl_test.c
+@@ -229,6 +229,7 @@ int main(int argc, char *argv[])
+ 	int pidx;
+ 	int pid;
+ 	int opt;
++	int i;
+ 
+ 	while ((opt = getopt(argc, argv, ":hkT:P:d:")) != -1) {
+ 		switch (opt) {
+@@ -325,6 +326,28 @@ int main(int argc, char *argv[])
+ 	validate(get_cs_cookie(pid) != 0);
+ 	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
+ 
++	printf("\n## Set a new cookie on a single thread/PR_SCHED_CORE_SCOPE_THREAD [%d]\n", pid);
++	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_CREATE, pid, PR_SCHED_CORE_SCOPE_THREAD, 0) < 0)
++		handle_error("core_sched create failed -- PR_SCHED_CORE_SCOPE_THREAD");
++	disp_processes(num_processes, procs);
++
++	validate(get_cs_cookie(pid) != get_cs_cookie(procs[pidx].thr_tids[0]));
++
++	printf("\n## Copy cookie from a thread [%d] to [%d] as PR_SCHED_CORE_SCOPE_THREAD\n", pid, procs[pidx].thr_tids[0]);
++	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE, procs[pidx].thr_tids[0], PR_SCHED_CORE_SCOPE_THREAD, pid) < 0)
++		handle_error("core_sched share cookie from and to thread failed -- PR_SCHED_CORE_SCOPE_THREAD");
++	disp_processes(num_processes, procs);
++
++	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
++
++	printf("\n## Copy cookie from a thread [%d] to [%d] as PR_SCHED_CORE_SCOPE_THREAD_GROUP\n", pid, pid);
++	if (_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE, pid, PR_SCHED_CORE_SCOPE_THREAD_GROUP, pid) < 0)
++		handle_error("core_sched share cookie from and to thread-group failed -- PR_SCHED_CORE_SCOPE_THREAD_GROUP");
++	disp_processes(num_processes, procs);
++
++	for (i = 0; i < procs[pidx].num_threads; ++i)
++		validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[i]));
++
+ 	if (errors) {
+ 		printf("TESTS FAILED. errors: %d\n", errors);
+ 		res = 10;
+-- 
+2.32.0
 
-* dragonboard-410c, kselftest-pidfd
-  - pidfd.pidfd_setns_test
-
-* dragonboard-410c, kselftest-proc
-  - proc.fd-001-lookup
-  - proc.fd-002-posix-eq
-  - proc.proc-fsconfig-hidepid
-  - proc.proc-multiple-procfs
-
-* dragonboard-410c, kselftest-rseq
-  - rseq.basic_percpu_ops_test
-  - rseq.basic_test
-  - rseq.param_test
-  - rseq.param_test_benchmark
-  - rseq.param_test_compare_twice
-
-* dragonboard-410c, kselftest-seccomp
-  - seccomp.seccomp_bpf
-  - seccomp.seccomp_bpf.global.user_notification_filter_empty
-  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
-
-* dragonboard-410c, kselftest-sync
-  - sync.sync_test
-
-* dragonboard-410c, kselftest-timens
-  - timens.procfs
-  - timens.timens
-
-* i386, kselftest-rtc
-  - rtc.rtctest
-
-* juno-r2, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* x15, kselftest-capabilities
-  - capabilities.test_execve
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
-
-* x15, kselftest-core
-  - core.close_range_test
-
-* x15, kselftest-sync
-  - sync.sync_test
-
-
-## Metric Regressions (compared to next-20220121)
-No metric regressions found.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220121)
-* dragonboard-410c, kselftest-capabilities
-  - capabilities.test_execve
-
-* dragonboard-410c, kselftest-pidfd
-  - pidfd.pidfd_setns_test
-
-* dragonboard-410c, kselftest-proc
-  - proc.fd-001-lookup
-  - proc.fd-002-posix-eq
-  - proc.proc-fsconfig-hidepid
-  - proc.proc-multiple-procfs
-
-* dragonboard-410c, kselftest-rseq
-  - rseq.basic_percpu_ops_test
-  - rseq.basic_test
-  - rseq.param_test
-  - rseq.param_test_benchmark
-  - rseq.param_test_compare_twice
-
-* dragonboard-410c, kselftest-seccomp
-  - seccomp.seccomp_bpf
-  - seccomp.seccomp_bpf.global.user_notification_filter_empty
-  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
-
-* dragonboard-410c, kselftest-sync
-  - sync.sync_test
-
-* dragonboard-410c, kselftest-timens
-  - timens.procfs
-  - timens.timens
-
-* hi6220-hikey, kselftest-timers
-  - timers.set-timer-lat
-
-* juno-r2, kselftest-proc
-  - proc.proc-uptime-001
-
-* juno-r2, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-capabilities
-  - capabilities.test_execve
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
-
-* x15, kselftest-core
-  - core.close_range_test
-
-* x86, kselftest-net
-  - net.gro.sh
-  - net.udpgso_bench.sh
-
-
-## Metric Fixes (compared to next-20220121)
-No metric fixes found.
-
-## Test result summary
-total: 6558, pass: 4178, fail: 847, skip: 1533, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
