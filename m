@@ -2,104 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D93B49B532
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 14:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5032249B5E1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 15:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385523AbiAYNg7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 08:36:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33290 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577514AbiAYNeN (ORCPT
+        id S1444332AbiAYOQb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 09:16:31 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43284 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387693AbiAYOOU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:34:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA868B81807
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F8D9C340E0;
-        Tue, 25 Jan 2022 13:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643117648;
-        bh=pJMyQhuuFBmj58qKusgKdVkV+CnMwFe0bFQsGC9tLjI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d7MlSLh5uI+RmIexbdKv7iK8kzfAQOIXtZANjrj123XSXrn/rqNVnW5zY5h7OVowK
-         XKnY0UsvEhgJ3I5pJ+YbIrSlu3nIQgWoLt+UjuneRZM0CJpW1vjq4/d9nJSjNfaSVo
-         S6MpTWg6ywQLDKBZMK+KVMmkRAUU36pQHoW0VGiAHXRnHwVmkQVZmZ6Px+26sqkE1C
-         bDUmicdu0VoCHMp37X6QiZG/h7t53cdYdFkTfT1o0cQxeDrj0TDpN9T1czGpGHJtGZ
-         weIeABHpELXG6gpOxfZsjE6ChRhwT8Q54vDxRfgHMkysIUlECLx9Rq/3SHvSr5w0Tq
-         j6sfqoebxenWg==
-Date:   Tue, 25 Jan 2022 13:34:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v8 26/38] KVM: arm64: Handle SME host state when running
- guests
-Message-ID: <Ye/8SoZn2TJeShrl@sirena.org.uk>
-References: <20220125001114.193425-1-broonie@kernel.org>
- <20220125001114.193425-27-broonie@kernel.org>
- <87wnio6n7d.wl-maz@kernel.org>
- <Ye/ygvnlzPKYT2z6@sirena.org.uk>
- <87tuds6jbo.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="83e/iXmvSHvukbBv"
-Content-Disposition: inline
-In-Reply-To: <87tuds6jbo.wl-maz@kernel.org>
-X-Cookie: The second best policy is dishonesty.
+        Tue, 25 Jan 2022 09:14:20 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 36FA8210E2;
+        Tue, 25 Jan 2022 14:14:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643120055; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EPufQYCfjk0CmwsqlRmnaqd3XhXd7OMY3GxDqpQUduU=;
+        b=LvmiRU6JEm4Fk2IdB/JDzmWRQngUKQskUAP6FIA7GjJYfBSZyBxLUmrSniXCEwKnPR6PFq
+        1vga6tQiM6V+BQvrN/n63fkAnjzsp/oBbrcKyg1JDP0I0xrBuDUh4nq71H2ewpgvxBLP6R
+        /U4TCtqUNVgFQ42LqL5hYjz5ZCpCXhQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643120055;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EPufQYCfjk0CmwsqlRmnaqd3XhXd7OMY3GxDqpQUduU=;
+        b=BbLbKuML6yb02kPW7w53iLZ6pyHW2UApDvbuFOWUVWRybqaSR//jP0AiC1KYcYAs2XOF5d
+        5klJfS9hlFD46sBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 23A37A3B8E;
+        Tue, 25 Jan 2022 14:14:15 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 15:14:15 +0100
+Message-ID: <s5hzgnjoqbs.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] kselftest: alsa: Add test case for writing invalid values
+In-Reply-To: <20220124151410.2715572-1-broonie@kernel.org>
+References: <20220124151410.2715572-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, 24 Jan 2022 16:14:10 +0100,
+Mark Brown wrote:
+> +bool test_ctl_write_invalid_integer64(struct ctl_data *ctl)
+> +{
+....
+> +			/* Minimum representable value */
+> +			snd_ctl_elem_value_copy(val, ctl->def_val);
+> +			snd_ctl_elem_value_set_integer(val, i, LLONG_MIN);
 
---83e/iXmvSHvukbBv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This should be snd_ctl_elem_value_set_integer64()?
 
-On Tue, Jan 25, 2022 at 01:22:51PM +0000, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+> +			/* Maximum representable value */
+> +			snd_ctl_elem_value_copy(val, ctl->def_val);
+> +			snd_ctl_elem_value_set_integer(val, i, LLONG_MAX);
 
-> > > I find the use of CPACR_EL1_SMEN in some cases and its individual bits
-> > > in some others pretty confusing. I understand that you have modelled
-> > > it after the SVE code, but maybe this is a mistake we don't need to
-> > > repeat. I'd be in favour of directly exposing the individual bits in
-> > > all cases.
+Ditto.
 
-> > OK, it is just the KVM code that uses the plain ZEN.  I'll add a cleanup
-> > patch for that at the start of the series for ZEN I guess otherwise it
-> > looks worse, though that will inflate the size of the series a bit.
 
-> I'm happy to merge such a patch early if that helps.
+thanks,
 
-That'd be good.  There's also similar stuff going on with FPEN BTW
-(which is I imagine where the SVE stuff came from).
-
---83e/iXmvSHvukbBv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHv/EkACgkQJNaLcl1U
-h9DQPQf9GCKTKy4vTTTLzIlWshJTSRt31q72CwCyj/DNyVIr6JptpqeVFdrCGzmd
-q1jbV7gjgj4AUBvx1sdjnLYAZr9JkGEMqJRYZ9u/23bkeGHx4hlTJUDwTunyBPrV
-018rqaAibQu02YHYieZvvcWchrSLo+OG/L9OKcOcuaBxcvthPCYDoaDPs76/cEG+
-1bQvnst3cfuSPSD+GXcssAZPbXSvmGcXViVOZ5dyVB36N3XVXG89zPs/4PtGBoO5
-RVUPOZq/sq4PzR+0e7lV4xKjVkMmkfqFzYquLueE3XBVHY9vhLbwNdu12Qf+31Ss
-qRhpcxR98hOBToPYMpwJgD1sip7+QA==
-=IIxh
------END PGP SIGNATURE-----
-
---83e/iXmvSHvukbBv--
+Takashi
