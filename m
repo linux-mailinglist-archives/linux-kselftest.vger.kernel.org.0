@@ -2,38 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD8A49B386
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 13:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D896349B3D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 13:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiAYMNv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 07:13:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58728 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444194AbiAYMKo (ORCPT
+        id S1382498AbiAYMSA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 07:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386957AbiAYMPi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:10:44 -0500
+        Tue, 25 Jan 2022 07:15:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20795C061773
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 04:15:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3AC261147
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:10:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1743FC340E0;
-        Tue, 25 Jan 2022 12:10:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B312260F83
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:15:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC0EC340E0;
+        Tue, 25 Jan 2022 12:15:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643112635;
-        bh=sFg/+U854evqBj7SymFtSzOukK5/ylDdAyC4Ajtv1Ss=;
+        s=k20201202; t=1643112936;
+        bh=+BPgF8RegY0meHVcPfjKYDlnsQFJtpvb4tI1Bi3dYXE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OoIFIZjGdycI02z5vlSS7jd6GZPA2U7gNxY6w8PFRVRbbFoZ378iaQbjHuH6+DHMM
-         xtW88bSmai1VVg6YLlrx1uFCATucVq989h/gpId1NkXZ9JX6wxKm16ZDM4Gp+Ndh4r
-         vu/4KTpEKDIpkCWh0owUJ2Z78q0YwOMjXb94x/vLbdsAJO/KSC0l2Txns2jYZIbh7i
-         a8sbOrM8nc6fZu6JXrOWRcfk5RdT7BbmOvt60fPvIIYhgycd7M7L3UHaQnHxL6trfY
-         hnvJEVzV0Cee8kTSXV9Uihjq1htiR5YOYmU8LK8S/F3tY8P2GEvzKnFDGnrpNwWzLz
-         y6vRxSGUvNryg==
-Date:   Tue, 25 Jan 2022 12:10:28 +0000
+        b=MtM0nmjKZgFQbwMBnBGO/d5R3rHePax1BqLreg9msC+fpgKIGKk0ZGrk7Lk0bWo08
+         jEaruAfvfaT3zWVSlNFBOE3WVaQ9xfJPC87FnkuwedSYGET09lWy1LCQeiBinB2rdb
+         lwgoV5gjF8Go/Nj7Wl5q8tq8sn16X+fOInxNXBfHDuXccGOu652i/xwLYjX9+YmsA4
+         AtnS6Pr1WTGHgZog1BdwBhDrBatOqqHwnXEs3cQqdMN0o1lf6v32CgLbJkRKEyhUkx
+         9HxKqsipXfZG/GWBrdy12AHY+uHLxC6nxRDSSpqUg29V1zJ9u9g6xJqsviMtfNb3OI
+         u+vA4aFtVw4Fw==
+Date:   Tue, 25 Jan 2022 12:15:29 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>,
         Alan Hayward <alan.hayward@arm.com>,
@@ -43,73 +46,56 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v8 01/38] arm64: cpufeature: Always specify and use a
- field width for capabilities
-Message-ID: <Ye/otP4coRNRxS5P@sirena.org.uk>
+Subject: Re: [PATCH v8 05/38] arm64/sme: System register and exception
+ syndrome definitions
+Message-ID: <Ye/p4YpWWnZSPFaZ@sirena.org.uk>
 References: <20220125001114.193425-1-broonie@kernel.org>
- <20220125001114.193425-2-broonie@kernel.org>
- <edc0a8a0-5439-ff34-3de0-89ae0a4e60f4@arm.com>
+ <20220125001114.193425-6-broonie@kernel.org>
+ <87zgnk6or8.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XS5KfZPoqAQVB4C2"
+        protocol="application/pgp-signature"; boundary="DA6PqB3G+/AhTsSL"
 Content-Disposition: inline
-In-Reply-To: <edc0a8a0-5439-ff34-3de0-89ae0a4e60f4@arm.com>
+In-Reply-To: <87zgnk6or8.wl-maz@kernel.org>
 X-Cookie: The second best policy is dishonesty.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---XS5KfZPoqAQVB4C2
+--DA6PqB3G+/AhTsSL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Jan 25, 2022 at 10:57:47AM +0000, Suzuki K Poulose wrote:
-> On 25/01/2022 00:10, Mark Brown wrote:
+On Tue, Jan 25, 2022 at 11:25:31AM +0000, Marc Zyngier wrote:
+> On Tue, 25 Jan 2022 00:10:41 +0000,
+> Mark Brown <broonie@kernel.org> wrote:
 
-> > +	int val = cpuid_feature_extract_field_width(reg, entry->field_pos,
-> > +						    entry->field_width,
-> > +						    entry->sign);
+> > +/* HFG[WR]TR_EL2 bit definitions */
+> > +#define HFGxTR_EL2_nTPIDR_EL0_SHIFT	55
+> > +#define HFGxTR_EL2_nTPIDR_EL0_MASK	(1 << HFGxTR_EL2_nTPIDR_EL0_SHIFT)
 
-> Could we do something like :
+> This annoyingly clashes with bit 35 of the same registers, which maps
+> to TPIDR_EL0. I have the feeling that this really should be TPIDR2_EL0.
 
-> + int val = cpuid_feature_extract_field_width(reg, 		entry->field_pos,
-> 		entry->field_width ? : 4,
-> 		..
-> 		);
+Yes, it should be.
 
-> and leave the existing structures as they are ?
-
-Obviously we *could* (ideally without the ternery operator) but having
-the implicit default like that makes me nervous that it's too easy to
-just forget to fill it in and get the wrong default.
-
-> And that could avoid these changes too. We could add :
-
-> #define HWCAP_CPUID_MATCH_WIDTH(...)
-
-> when/if we need one, which sets the width.
-
-I'd originally had a completely separate set of definitions for single
-bit fields but Catlain wanted to get everything in one.  I'm not sure I
-see a huge advantage in sharing the match function and not also sharing
-the macro TBH.
-
---XS5KfZPoqAQVB4C2
+--DA6PqB3G+/AhTsSL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHv6LQACgkQJNaLcl1U
-h9BmCAf+OOGqr40J+iVV3HqoKIEq1uCYDDSkIElqZkeLGdKgbG70Z9c65SRPpb3n
-WgHwZRgAt4j99AtorLwbLUSHx/KFVG12+72Iwr5j6iexT4NW/64DPRJgUIbzXItk
-tVXRVOcBS6geqopHOvKny9vYbEcuU/RsibVkMQYTytUo9S76Bwh/AuxxoN3EqZn0
-Bjk9O2bqPnU8Wfy4usdFRBO8B8FhCCPlgzSr4/lCKIAp2ZlEYo7zzlNP+y5x3Y7W
-CwVHXSgCWwTOcWT5isvt/d9NRU/yp6woiVq4x1ly59mUrWNklyjUb3rNBP7v1Qyh
-sa0teR+x43Dw6/Ym9mL6L5+57HtAUg==
-=yrcl
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHv6eEACgkQJNaLcl1U
+h9Bqogf/cPq0bM4yoDggdP1uvRbGK1VpH1TSSNyNLxG6PNgq8w3D5EY8BuCDrP40
+Ss+eJ0UElwdsoXScwvFKoIeXt6pGtughyC2uEnxz+rif0YlGOQyoWg9SWbzq56+g
+lSrYeMGyIPzHiJaXtjsFQEQBfiRoxEGilmte8Owq01WhyTea9cEZbYyu9Wk8pjJZ
+GWPOOMBXqCRPL5zbFVJsGEV4meEMFew/pqNCZJw5jgkUEHGj8ln92kipxoE8YULJ
+ibed2fmR2WpadC7SftEzh9S/Gd+I2XBxtw5bg7f8OSqn0NAit0umxnwXVmT1jGxu
++kQ/lXqNg/SndWNAKKGAWteJRQqTUA==
+=nbA7
 -----END PGP SIGNATURE-----
 
---XS5KfZPoqAQVB4C2--
+--DA6PqB3G+/AhTsSL--
