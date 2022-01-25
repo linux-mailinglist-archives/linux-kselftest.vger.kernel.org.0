@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB8C49AA35
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 05:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C021C49AA33
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 05:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1324993AbiAYDfW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jan 2022 22:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S1324949AbiAYDfD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jan 2022 22:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3420461AbiAYCYX (ORCPT
+        with ESMTP id S3420462AbiAYCYX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 24 Jan 2022 21:24:23 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D3BC038AD7
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 16:15:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAF3C038ADF
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 16:15:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7250F61354
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:15:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 499EFC340E4;
-        Tue, 25 Jan 2022 00:15:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5E56153D
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56472C340EC;
+        Tue, 25 Jan 2022 00:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643069722;
-        bh=oQFaodbzt5WVe6CO56CBPQS4+bHv2dPRcgH3GEtal1s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ftnKt/ffVipJZ7A3F1KXXd2Uh+uZQw8/MAlWmMBeDCAaj3xSm8aoLcaxEchXajK8/
-         Ng5us/1Xz5cUxb25VpjlE97Y0Somkleg1rLgFq8hej5FV1rcluDEHhPhDendC4p6e1
-         /tKz2i5FIb0LcMEuuJP/DAlrFwZXugOHg5mLRL2hf1hJ33VwqI3ZGJ9CuaFVb7pmhT
-         lV6Z4eHhjtlp3TckCiiRdJoTzXkMisHVbcBGrfEgt8fqiu4jfneapPF9654jsqwHFl
-         wreK9ASzvQLyyfM3E3RhfxiMjDF0iCrpvoWt3vmTYZdsVC3GKWPnuHUf7YWZd6Fudd
-         /gNZQMfxkNxDQ==
+        s=k20201202; t=1643069726;
+        bh=wmDZvOjgxdLFa7bgm9rdffr3DT9HBunv56+iDfONLzU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QaGCgq2QfKmAeQ/FWFfFNRF8Vty8/myjdoiMFDQyGTSQFOPfrSCkg/TYwXOWM9HiT
+         WG9GcJufY5pjWrfmKtqVxAtrvPiKMwpxLtc+dAgh9emtyrNb0r3cT4jrYymaHq5XfI
+         Sl5IuplDGBdVStKYREzD8fll1Le4aqdZyzljN5Aaj/XJONdV3cwCQ/Qbr/y3xZzsZL
+         oyM6z8Yvfik8BuCs6Dxgk/PNBtLN29DgCgq10cnwnToT7OaHQpOD+XgVzA5oZvxd63
+         dAcd/8cMqaLzVtVOchF31E6M1/Po8+KLXVJPOpXkncL8p4RJr8ac3VV4dIicDi90ad
+         Q+bGIAjl8T5eQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,283 +48,504 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v8 00/38] arm64/sme: Initial support for the Scalable Matrix Extension
-Date:   Tue, 25 Jan 2022 00:10:36 +0000
-Message-Id: <20220125001114.193425-1-broonie@kernel.org>
+Subject: [PATCH v8 01/38] arm64: cpufeature: Always specify and use a field width for capabilities
+Date:   Tue, 25 Jan 2022 00:10:37 +0000
+Message-Id: <20220125001114.193425-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220125001114.193425-1-broonie@kernel.org>
+References: <20220125001114.193425-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14370; h=from:subject; bh=oQFaodbzt5WVe6CO56CBPQS4+bHv2dPRcgH3GEtal1s=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AB5rrdCLJ3i79jbqhc5EyKq3eooe9HGIx6byf6 IJhjIMiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AAQAKCRAk1otyXVSH0Mz0B/ 4ynWv6bK2a6WmDWy4aq6dlP3aR2Yjtl+2LMUnLzg8wbBOkS0A0o344MgFFvjuvyEOEuPUgxKpS5vg/ TfLrKygg0Y8eWAc0XKHV+gAfqIEIqNrV447kc1R84T+qSRjQuYL+i432Ee29fTdc7tTDZzp2QYW3ZI 7siXDbUk2uFHcWCNVsLiuoWehqiiZSyl5GTdIcRbs5Y/71VA+a/C+8qWbd67SfZiS/gPY1bFtSHtTg Ki5ZcgzdFeA8uuKapWrd3uGkPobO+kEwEXivpUmyxm2JKIXbV1eFgc/MgBUrNOP7eDGgSAV9i+4Jm/ OppqF0ne2yH4DqoHM5zK+p1Nyjw0RH
+X-Developer-Signature: v=1; a=openpgp-sha256; l=26719; h=from:subject; bh=wmDZvOjgxdLFa7bgm9rdffr3DT9HBunv56+iDfONLzU=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AC00RIvp+uMj/du/Zxg/mQGM4uZ+A7Yu0nJYSE 1Buc6cCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AAgAKCRAk1otyXVSH0NslB/ 4jQNn0ggq1SI3UCr5YQOc64YyMzPePqCsGj6rZy+pHtbSF+QIU/uxfbhjoKJa4r4Dhid6z8uPAsvA9 a6GJMNa2xX0rMRdysVema2D4dSGyXogdLzFZVEx8mkEbhG9/AoYmxdIr+wSgDpjypp7EYONHAhJrfA 3AxxDF1DpMWmSx0ifcYO+VUnyHCTP03XnBuwADbAz8jN50Z7/I25ANaMVfgTpJIYiYvAhHK5V6PoLz vKU2vi4fH70ZWE7R+h/2uLLQ34BgHGyzbcRrdT6rWoeBw6fI6LOCo/z/oXV2d+kL1Wlsj07GG7hdAE sRLX5ANZ04wAyY3hus0B1zzFtQHBMm
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series provides initial support for the ARMv9 Scalable Matrix
-Extension (SME).  SME takes the approach used for vectors in SVE and
-extends this to provide architectural support for matrix operations.  A
-more detailed overview can be found in [1].
+Since all the fields in the main ID registers are 4 bits wide we have up
+until now not bothered specifying the width in the code. Since we now
+wish to use this mechanism to enumerate features from the floating point
+feature registers which do not follow this pattern add a width to the
+table.  This means updating all the existing table entries but makes it
+less likely that we run into issues in future due to implicitly assuming
+a 4 bit width.
 
-For the kernel SME can be thought of as a series of features which are
-intended to be used together by applications but operate mostly
-orthogonally:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+---
+ arch/arm64/include/asm/cpufeature.h |   1 +
+ arch/arm64/kernel/cpufeature.c      | 167 +++++++++++++++++-----------
+ 2 files changed, 102 insertions(+), 66 deletions(-)
 
- - The ZA matrix register.
- - Streaming mode, in which ZA can be accessed and a subset of SVE
-   features are available.
- - A second vector length, used for streaming mode SVE and ZA and
-   controlled using a similar interface to that for SVE.
- - TPIDR2, a new userspace controllable system register intended for use
-   by the C library for storing context related to the ZA ABI.
-
-A substantial part of the series is dedicated to refactoring the
-existing SVE support so that we don't need to duplicate code for
-handling vector lengths and the SVE registers, this involves creating an
-array of vector types and making the users take the vector type as a
-parameter.  I'm not 100% happy with this but wasn't able to come up with
-anything better, duplicating code definitely felt like a bad idea so
-this felt like the least bad thing.  If this approach makes sense to
-people it might make sense to split this off into a separate series
-and/or merge it while the rest is pending review to try to make things a
-little more digestable, the series is very large so it'd probably make
-things easier to digest if some of the preparatory refactoring could be
-merged before the rest is ready.
-
-One feature of the architecture of particular note is that switching
-to and from streaming mode may change the size of and invalidate the
-contents of the SVE registers, and when in streaming mode the FFR is not
-accessible.  This complicates aspects of the ABI like signal handling
-and ptrace.
-
-This initial implementation is mainly intended to get the ABI in place,
-there are several areas which will be worked on going forwards - some of
-these will be blockers, others could be handled in followup serieses:
-
- - SME is currently not supported for KVM guests, this will be done as a
-   followup series.  A host system can use SME and run KVM guests but
-   SME is not available in the guests.
- - The KVM host support is done in a very simplistic way, were anyone to
-   attempt to use it in production there would be performance impacts on
-   hosts with SME support. As part of this we also add enumeration of
-   fine grained traps.
- - There is not currently ptrace or signal support TPIDR2, this will be
-   done as a followup series.
- - No support is currently provided for scheduler control of SME or SME
-   applications, given the size of the SME register state the context
-   switch overhead may be noticable so this may be needed especially for
-   real time applications.  Similar concerns already exist for larger
-   SVE vector lengths but are amplified for SME, particularly as the
-   vector length increases.
- - There has been no work on optimising the performance of anything the
-   kernel does.
-
-It is not expected that any systems will be encountered that support SME
-but not SVE, SME is an ARMv9 feature and SVE is mandatory for ARMv9.
-The code attempts to handle any such systems that are encountered but
-this hasn't been tested extensively.
-
-v8:
- - Rebase onto v5.17-rc1.
- - Support interoperation with KVM, SME is disabled for KVM guests with
-   minimal handling for cleaning up SME state when entering and leaving
-   the guest.
- - Document and implement that signal handlers are invoked with ZA and
-   streaming mode disabled.
- - Use the RDSVL instruction introduced in EAC2 of the architecture to
-   obtain the streaming mode vector length during enumeration, ZA state
-   loading/saving and in test programs.
- - Store a pointer to SVCR in fpsimd_last_state and use it in fpsimd_save()
-   for interoperation with KVM.
- - Add a test case sme_trap_no_sm checking that we generate a SIGILL
-   when using an instruction that requires streaming mode without
-   enabling it.
- - Add basic ZA context form validation to testcases helper library.
- - Move signal tests over to validating streaming VL from ZA information.
- - Pulled in patch removing ARRAY_SIZE() so that kselftest builds
-   cleanly and to avoid trivial conflicts.
-v7:
- - Rebase onto v5.16-rc3.
- - Reduce indentation when supporting custom triggers for signal tests
-   as suggested by Catalin.
- - Change to specifying a width for all CPU features rather than adding
-   single bit specific infrastructure.
- - Don't require zeroing of non-shared SVE state during syscalls.
-v6:
- - Rebase onto v5.16-rc1.
- - Return to disabling TIF_SVE on kernel entry even if we have SME
-   state, this avoids the need for KVM to handle the case where TIF_SVE
-   is set on guest entry.
- - Add syscall-abi.h to SME updates to syscall-abi, mistakenly omitted
-   from commit.
-v5:
- - Rebase onto currently merged SVE and kselftest patches.
- - Add support for the FA64 option, introduced in the recently published
-   EAC1 update to the specification.
- - Pull in test program for the syscall ABI previously sent separately
-   with some revisions and add coverage for the SME ABI.
- - Fix checking for options with 1 bit fields in ID_AA64SMFR0_EL1.
- - Minor fixes and clarifications to the ABI documentation.
-v4:
- - Rebase onto merged patches.
- - Remove an uneeded NULL check in vec_proc_do_default_vl().
- - Include patch to factor out utility routines in kselftests written in
-   assembler.
- - Specify -ffreestanding when building TPIDR2 test.
-v3:
- - Skip FFR rather than predicate registers in sve_flush_live().
- - Don't assume a bool is all zeros in sve_flush_live() as per AAPCS.
- - Don't redundantly specify a zero index when clearing FFR.
-v2:
- - Fix several issues with !SME and !SVE configurations.
- - Preserve TPIDR2 when creating a new thread/process unless
-   CLONE_SETTLS is set.
- - Report traps due to using features in an invalid mode as SIGILL.
- - Spell out streaming mode behaviour in SVE ABI documentation more
-   directly.
- - Document TPIDR2 in the ABI document.
- - Use SMSTART and SMSTOP rather than read/modify/write sequences.
- - Rework logic for exiting streaming mode on syscall.
- - Don't needlessly initialise SVCR on access trap.
- - Always restore SME VL for userspace if SME traps are disabled.
- - Only yield to encourage preemption every 128 iterations in za-test,
-   otherwise do a getpid(), and validate SVCR after syscall.
- - Leave streaming mode disabled except when reading the vector length
-   in za-test, and disable ZA after detecting a mismatch.
- - Add SME support to vlset.
- - Clarifications and typo fixes in comments.
- - Move sme_alloc() forward declaration back a patch.
-
-[1] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/scalable-matrix-extension-armv9-a-architecture
-
-Mark Brown (38):
-  arm64: cpufeature: Always specify and use a field width for
-    capabilities
-  arm64: Add feature detection for fine grained traps
-  kselftest/arm64: Remove local ARRAY_SIZE() definitions
-  arm64/sme: Provide ABI documentation for SME
-  arm64/sme: System register and exception syndrome definitions
-  arm64/sme: Manually encode SME instructions
-  arm64/sme: Early CPU setup for SME
-  arm64/sme: Basic enumeration support
-  arm64/sme: Identify supported SME vector lengths at boot
-  arm64/sme: Implement sysctl to set the default vector length
-  arm64/sme: Implement vector length configuration prctl()s
-  arm64/sme: Implement support for TPIDR2
-  arm64/sme: Implement SVCR context switching
-  arm64/sme: Implement streaming SVE context switching
-  arm64/sme: Implement ZA context switching
-  arm64/sme: Implement traps and syscall handling for SME
-  arm64/sme: Disable ZA and streaming mode when handling signals
-  arm64/sme: Implement streaming SVE signal handling
-  arm64/sme: Implement ZA signal handling
-  arm64/sme: Implement ptrace support for streaming mode SVE registers
-  arm64/sme: Add ptrace support for ZA
-  arm64/sme: Disable streaming mode and ZA when flushing CPU state
-  arm64/sme: Save and restore streaming mode over EFI runtime calls
-  KVM: arm64: Hide SME system registers from guests
-  KVM: arm64: Trap SME usage in guest
-  KVM: arm64: Handle SME host state when running guests
-  arm64/sme: Provide Kconfig for SME
-  kselftest/arm64: sme: Add streaming SME support to vlset
-  kselftest/arm64: Add tests for TPIDR2
-  kselftest/arm64: Extend vector configuration API tests to cover SME
-  kselftest/arm64: sme: Provide streaming mode SVE stress test
-  kselftest/arm64: signal: Allow tests to be incompatible with features
-  kselftest/arm64: signal: Handle ZA signal context in core code
-  kselftest/arm64: Add stress test for SME ZA context switching
-  kselftest/arm64: signal: Add SME signal handling tests
-  kselftest/arm64: Add streaming SVE to SVE ptrace tests
-  kselftest/arm64: Add coverage for the ZA ptrace interface
-  kselftest/arm64: Add SME support to syscall ABI test
-
- Documentation/arm64/elf_hwcaps.rst            |  33 +
- Documentation/arm64/index.rst                 |   1 +
- Documentation/arm64/sme.rst                   | 432 +++++++++++++
- Documentation/arm64/sve.rst                   |  70 ++-
- arch/arm64/Kconfig                            |  11 +
- arch/arm64/include/asm/cpu.h                  |   4 +
- arch/arm64/include/asm/cpufeature.h           |  25 +
- arch/arm64/include/asm/el2_setup.h            |  64 +-
- arch/arm64/include/asm/esr.h                  |  13 +-
- arch/arm64/include/asm/exception.h            |   1 +
- arch/arm64/include/asm/fpsimd.h               | 110 +++-
- arch/arm64/include/asm/fpsimdmacros.h         |  86 +++
- arch/arm64/include/asm/hwcap.h                |   8 +
- arch/arm64/include/asm/kvm_arm.h              |   1 +
- arch/arm64/include/asm/kvm_host.h             |   4 +
- arch/arm64/include/asm/processor.h            |  18 +-
- arch/arm64/include/asm/sysreg.h               |  64 ++
- arch/arm64/include/asm/thread_info.h          |   2 +
- arch/arm64/include/uapi/asm/hwcap.h           |   8 +
- arch/arm64/include/uapi/asm/ptrace.h          |  69 ++-
- arch/arm64/include/uapi/asm/sigcontext.h      |  55 +-
- arch/arm64/kernel/cpufeature.c                | 284 +++++++--
- arch/arm64/kernel/cpuinfo.c                   |  13 +
- arch/arm64/kernel/entry-common.c              |  11 +
- arch/arm64/kernel/entry-fpsimd.S              |  36 ++
- arch/arm64/kernel/fpsimd.c                    | 585 ++++++++++++++++--
- arch/arm64/kernel/process.c                   |  28 +-
- arch/arm64/kernel/ptrace.c                    | 356 +++++++++--
- arch/arm64/kernel/signal.c                    | 194 +++++-
- arch/arm64/kernel/syscall.c                   |  34 +-
- arch/arm64/kernel/traps.c                     |   1 +
- arch/arm64/kvm/fpsimd.c                       |  45 +-
- arch/arm64/kvm/hyp/nvhe/switch.c              |  30 +
- arch/arm64/kvm/hyp/vhe/switch.c               |  10 +-
- arch/arm64/kvm/sys_regs.c                     |   9 +-
- arch/arm64/tools/cpucaps                      |   3 +
- include/uapi/linux/elf.h                      |   2 +
- include/uapi/linux/prctl.h                    |   9 +
- kernel/sys.c                                  |  12 +
- tools/testing/selftests/arm64/abi/.gitignore  |   1 +
- tools/testing/selftests/arm64/abi/Makefile    |   9 +-
- .../selftests/arm64/abi/syscall-abi-asm.S     |  69 ++-
- .../testing/selftests/arm64/abi/syscall-abi.c | 205 +++++-
- .../testing/selftests/arm64/abi/syscall-abi.h |  15 +
- tools/testing/selftests/arm64/abi/tpidr2.c    | 298 +++++++++
- tools/testing/selftests/arm64/fp/.gitignore   |   4 +
- tools/testing/selftests/arm64/fp/Makefile     |  12 +-
- tools/testing/selftests/arm64/fp/rdvl-sme.c   |  14 +
- tools/testing/selftests/arm64/fp/rdvl.S       |   8 +
- tools/testing/selftests/arm64/fp/rdvl.h       |   1 +
- tools/testing/selftests/arm64/fp/ssve-stress  |  59 ++
- tools/testing/selftests/arm64/fp/sve-ptrace.c |  13 +-
- tools/testing/selftests/arm64/fp/sve-test.S   |  30 +
- tools/testing/selftests/arm64/fp/vec-syscfg.c |  10 +
- tools/testing/selftests/arm64/fp/vlset.c      |  10 +-
- tools/testing/selftests/arm64/fp/za-ptrace.c  | 354 +++++++++++
- tools/testing/selftests/arm64/fp/za-stress    |  59 ++
- tools/testing/selftests/arm64/fp/za-test.S    | 426 +++++++++++++
- .../testing/selftests/arm64/signal/.gitignore |   2 +
- .../selftests/arm64/signal/test_signals.h     |   5 +
- .../arm64/signal/test_signals_utils.c         |  40 +-
- .../arm64/signal/test_signals_utils.h         |   2 +
- .../testcases/fake_sigreturn_sme_change_vl.c  |  92 +++
- .../arm64/signal/testcases/sme_trap_no_sm.c   |  38 ++
- .../signal/testcases/sme_trap_non_streaming.c |  45 ++
- .../arm64/signal/testcases/sme_trap_za.c      |  36 ++
- .../selftests/arm64/signal/testcases/sme_vl.c |  68 ++
- .../arm64/signal/testcases/ssve_regs.c        | 129 ++++
- .../arm64/signal/testcases/testcases.c        |  36 ++
- .../arm64/signal/testcases/testcases.h        |   3 +-
- 70 files changed, 4590 insertions(+), 244 deletions(-)
- create mode 100644 Documentation/arm64/sme.rst
- create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi.h
- create mode 100644 tools/testing/selftests/arm64/abi/tpidr2.c
- create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sme.c
- create mode 100644 tools/testing/selftests/arm64/fp/ssve-stress
- create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
- create mode 100644 tools/testing/selftests/arm64/fp/za-stress
- create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_vl.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-
-
-base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index ef6be92b1921..2728abd9cae4 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -356,6 +356,7 @@ struct arm64_cpu_capabilities {
+ 		struct {	/* Feature register checking */
+ 			u32 sys_reg;
+ 			u8 field_pos;
++			u8 field_width;
+ 			u8 min_field_value;
+ 			u8 hwcap_type;
+ 			bool sign;
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index a46ab3b1c4d5..d9f09e40aaf6 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1307,7 +1307,9 @@ u64 __read_sysreg_by_encoding(u32 sys_id)
+ static bool
+ feature_matches(u64 reg, const struct arm64_cpu_capabilities *entry)
+ {
+-	int val = cpuid_feature_extract_field(reg, entry->field_pos, entry->sign);
++	int val = cpuid_feature_extract_field_width(reg, entry->field_pos,
++						    entry->field_width,
++						    entry->sign);
+ 
+ 	return val >= entry->min_field_value;
+ }
+@@ -1952,6 +1954,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64MMFR0_EL1,
+ 		.field_pos = ID_AA64MMFR0_ECV_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 1,
+ 	},
+@@ -1963,6 +1966,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64MMFR1_EL1,
+ 		.field_pos = ID_AA64MMFR1_PAN_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 1,
+ 		.cpu_enable = cpu_enable_pan,
+@@ -1976,6 +1980,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64MMFR1_EL1,
+ 		.field_pos = ID_AA64MMFR1_PAN_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 3,
+ 	},
+@@ -1988,6 +1993,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64ISAR0_EL1,
+ 		.field_pos = ID_AA64ISAR0_ATOMICS_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 2,
+ 	},
+@@ -2012,6 +2018,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64PFR0_EL0_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR0_ELx_32BIT_64BIT,
+ 	},
+ #ifdef CONFIG_KVM
+@@ -2023,6 +2030,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64PFR0_EL1_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR0_ELx_32BIT_64BIT,
+ 	},
+ 	{
+@@ -2043,6 +2051,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		 */
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.field_pos = ID_AA64PFR0_CSV3_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 1,
+ 		.matches = unmap_kernel_at_el0,
+ 		.cpu_enable = kpti_install_ng_mappings,
+@@ -2062,6 +2071,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.field_pos = ID_AA64ISAR1_DPB_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 1,
+ 	},
+ 	{
+@@ -2072,6 +2082,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64ISAR1_DPB_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 2,
+ 	},
+ #endif
+@@ -2083,6 +2094,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64PFR0_SVE_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR0_SVE,
+ 		.matches = has_cpuid_feature,
+ 		.cpu_enable = sve_kernel_enable,
+@@ -2097,6 +2109,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64PFR0_RAS_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR0_RAS_V1,
+ 		.cpu_enable = cpu_clear_disr,
+ 	},
+@@ -2115,6 +2128,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64PFR0_AMU_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR0_AMU,
+ 		.cpu_enable = cpu_amu_enable,
+ 	},
+@@ -2139,6 +2153,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64MMFR2_FWB_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 1,
+ 		.matches = has_cpuid_feature,
+ 		.cpu_enable = cpu_has_fwb,
+@@ -2150,6 +2165,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64MMFR2_TTL_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 1,
+ 		.matches = has_cpuid_feature,
+ 	},
+@@ -2160,6 +2176,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64ISAR0_EL1,
+ 		.field_pos = ID_AA64ISAR0_TLB_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = ID_AA64ISAR0_TLB_RANGE,
+ 	},
+@@ -2178,6 +2195,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64MMFR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64MMFR1_HADBS_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 2,
+ 		.matches = has_hw_dbm,
+ 		.cpu_enable = cpu_enable_hw_dbm,
+@@ -2190,6 +2208,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64ISAR0_EL1,
+ 		.field_pos = ID_AA64ISAR0_CRC32_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 1,
+ 	},
+ 	{
+@@ -2199,6 +2218,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64PFR1_EL1,
+ 		.field_pos = ID_AA64PFR1_SSBS_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = ID_AA64PFR1_SSBS_PSTATE_ONLY,
+ 	},
+@@ -2211,6 +2231,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64MMFR2_CNP_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = 1,
+ 		.cpu_enable = cpu_enable_cnp,
+ 	},
+@@ -2222,6 +2243,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.field_pos = ID_AA64ISAR1_SB_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 1,
+ 	},
+@@ -2233,6 +2255,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64ISAR1_APA_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64ISAR1_APA_ARCHITECTED,
+ 		.matches = has_address_auth_cpucap,
+ 	},
+@@ -2243,6 +2266,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64ISAR1_API_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64ISAR1_API_IMP_DEF,
+ 		.matches = has_address_auth_cpucap,
+ 	},
+@@ -2258,6 +2282,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64ISAR1_GPA_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64ISAR1_GPA_ARCHITECTED,
+ 		.matches = has_cpuid_feature,
+ 	},
+@@ -2268,6 +2293,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64ISAR1_GPI_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64ISAR1_GPI_IMP_DEF,
+ 		.matches = has_cpuid_feature,
+ 	},
+@@ -2288,6 +2314,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = can_use_gic_priorities,
+ 		.sys_reg = SYS_ID_AA64PFR0_EL1,
+ 		.field_pos = ID_AA64PFR0_GIC_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 1,
+ 	},
+@@ -2299,6 +2326,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+ 		.sys_reg = SYS_ID_AA64MMFR2_EL1,
+ 		.sign = FTR_UNSIGNED,
++		.field_width = 4,
+ 		.field_pos = ID_AA64MMFR2_E0PD_SHIFT,
+ 		.matches = has_cpuid_feature,
+ 		.min_field_value = 1,
+@@ -2313,6 +2341,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64ISAR0_EL1,
+ 		.field_pos = ID_AA64ISAR0_RNDR_SHIFT,
++		.field_width = 4,
+ 		.sign = FTR_UNSIGNED,
+ 		.min_field_value = 1,
+ 	},
+@@ -2330,6 +2359,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.cpu_enable = bti_enable,
+ 		.sys_reg = SYS_ID_AA64PFR1_EL1,
+ 		.field_pos = ID_AA64PFR1_BT_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR1_BT_BTI,
+ 		.sign = FTR_UNSIGNED,
+ 	},
+@@ -2342,6 +2372,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64PFR1_EL1,
+ 		.field_pos = ID_AA64PFR1_MTE_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR1_MTE,
+ 		.sign = FTR_UNSIGNED,
+ 		.cpu_enable = cpu_enable_mte,
+@@ -2353,6 +2384,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.matches = has_cpuid_feature,
+ 		.sys_reg = SYS_ID_AA64PFR1_EL1,
+ 		.field_pos = ID_AA64PFR1_MTE_SHIFT,
++		.field_width = 4,
+ 		.min_field_value = ID_AA64PFR1_MTE_ASYMM,
+ 		.sign = FTR_UNSIGNED,
+ 	},
+@@ -2364,16 +2396,18 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.sys_reg = SYS_ID_AA64ISAR1_EL1,
+ 		.sign = FTR_UNSIGNED,
+ 		.field_pos = ID_AA64ISAR1_LRCPC_SHIFT,
++		.field_width = 4,
+ 		.matches = has_cpuid_feature,
+ 		.min_field_value = 1,
+ 	},
+ 	{},
+ };
+ 
+-#define HWCAP_CPUID_MATCH(reg, field, s, min_value)				\
++#define HWCAP_CPUID_MATCH(reg, field, width, s, min_value)			\
+ 		.matches = has_cpuid_feature,					\
+ 		.sys_reg = reg,							\
+ 		.field_pos = field,						\
++		.field_width = width,						\
+ 		.sign = s,							\
+ 		.min_field_value = min_value,
+ 
+@@ -2383,10 +2417,10 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.hwcap_type = cap_type,						\
+ 		.hwcap = cap,							\
+ 
+-#define HWCAP_CAP(reg, field, s, min_value, cap_type, cap)			\
++#define HWCAP_CAP(reg, field, width, s, min_value, cap_type, cap)		\
+ 	{									\
+ 		__HWCAP_CAP(#cap, cap_type, cap)				\
+-		HWCAP_CPUID_MATCH(reg, field, s, min_value)			\
++		HWCAP_CPUID_MATCH(reg, field, width, s, min_value) 		\
+ 	}
+ 
+ #define HWCAP_MULTI_CAP(list, cap_type, cap)					\
+@@ -2406,11 +2440,12 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ static const struct arm64_cpu_capabilities ptr_auth_hwcap_addr_matches[] = {
+ 	{
+ 		HWCAP_CPUID_MATCH(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_APA_SHIFT,
+-				  FTR_UNSIGNED, ID_AA64ISAR1_APA_ARCHITECTED)
++				  4, FTR_UNSIGNED,
++				  ID_AA64ISAR1_APA_ARCHITECTED)
+ 	},
+ 	{
+ 		HWCAP_CPUID_MATCH(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_API_SHIFT,
+-				  FTR_UNSIGNED, ID_AA64ISAR1_API_IMP_DEF)
++				  4, FTR_UNSIGNED, ID_AA64ISAR1_API_IMP_DEF)
+ 	},
+ 	{},
+ };
+@@ -2418,77 +2453,77 @@ static const struct arm64_cpu_capabilities ptr_auth_hwcap_addr_matches[] = {
+ static const struct arm64_cpu_capabilities ptr_auth_hwcap_gen_matches[] = {
+ 	{
+ 		HWCAP_CPUID_MATCH(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_GPA_SHIFT,
+-				  FTR_UNSIGNED, ID_AA64ISAR1_GPA_ARCHITECTED)
++				  4, FTR_UNSIGNED, ID_AA64ISAR1_GPA_ARCHITECTED)
+ 	},
+ 	{
+ 		HWCAP_CPUID_MATCH(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_GPI_SHIFT,
+-				  FTR_UNSIGNED, ID_AA64ISAR1_GPI_IMP_DEF)
++				  4, FTR_UNSIGNED, ID_AA64ISAR1_GPI_IMP_DEF)
+ 	},
+ 	{},
+ };
+ #endif
+ 
+ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_AES_SHIFT, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_PMULL),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_AES_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AES),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA1_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SHA1),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA2_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SHA2),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA2_SHIFT, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_SHA512),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_CRC32_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_CRC32),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_ATOMICS_SHIFT, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_ATOMICS),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_RDM_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDRDM),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA3_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SHA3),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SM3_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SM3),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SM4_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SM4),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_DP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDDP),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_FHM_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDFHM),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_TS_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FLAGM),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_TS_SHIFT, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_FLAGM2),
+-	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_RNDR_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RNG),
+-	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_FP_SHIFT, FTR_SIGNED, 0, CAP_HWCAP, KERNEL_HWCAP_FP),
+-	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_FP_SHIFT, FTR_SIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FPHP),
+-	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_ASIMD_SHIFT, FTR_SIGNED, 0, CAP_HWCAP, KERNEL_HWCAP_ASIMD),
+-	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_ASIMD_SHIFT, FTR_SIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDHP),
+-	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_DIT_SHIFT, FTR_SIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_DIT),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_DPB_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_DCPOP),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_DPB_SHIFT, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_DCPODP),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_JSCVT_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_JSCVT),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_FCMA_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FCMA),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_LRCPC_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_LRCPC),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_LRCPC_SHIFT, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_ILRCPC),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_FRINTTS_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FRINT),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_SB_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SB),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_BF16_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_BF16),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_DGH_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_DGH),
+-	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_I8MM_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_I8MM),
+-	HWCAP_CAP(SYS_ID_AA64MMFR2_EL1, ID_AA64MMFR2_AT_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_USCAT),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_AES_SHIFT, 4, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_PMULL),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_AES_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AES),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA1_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SHA1),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA2_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SHA2),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA2_SHIFT, 4, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_SHA512),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_CRC32_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_CRC32),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_ATOMICS_SHIFT, 4, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_ATOMICS),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_RDM_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDRDM),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SHA3_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SHA3),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SM3_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SM3),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_SM4_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SM4),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_DP_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDDP),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_FHM_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDFHM),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_TS_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FLAGM),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_TS_SHIFT, 4, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_FLAGM2),
++	HWCAP_CAP(SYS_ID_AA64ISAR0_EL1, ID_AA64ISAR0_RNDR_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RNG),
++	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_FP_SHIFT, 4, FTR_SIGNED, 0, CAP_HWCAP, KERNEL_HWCAP_FP),
++	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_FP_SHIFT, 4, FTR_SIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FPHP),
++	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_ASIMD_SHIFT, 4, FTR_SIGNED, 0, CAP_HWCAP, KERNEL_HWCAP_ASIMD),
++	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_ASIMD_SHIFT, 4, FTR_SIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ASIMDHP),
++	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_DIT_SHIFT, 4, FTR_SIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_DIT),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_DPB_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_DCPOP),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_DPB_SHIFT, 4, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_DCPODP),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_JSCVT_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_JSCVT),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_FCMA_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FCMA),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_LRCPC_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_LRCPC),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_LRCPC_SHIFT, 4, FTR_UNSIGNED, 2, CAP_HWCAP, KERNEL_HWCAP_ILRCPC),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_FRINTTS_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_FRINT),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_SB_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_SB),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_BF16_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_BF16),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_DGH_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_DGH),
++	HWCAP_CAP(SYS_ID_AA64ISAR1_EL1, ID_AA64ISAR1_I8MM_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_I8MM),
++	HWCAP_CAP(SYS_ID_AA64MMFR2_EL1, ID_AA64MMFR2_AT_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_USCAT),
+ #ifdef CONFIG_ARM64_SVE
+-	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_SVE_SHIFT, FTR_UNSIGNED, ID_AA64PFR0_SVE, CAP_HWCAP, KERNEL_HWCAP_SVE),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_SVEVER_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_SVEVER_SVE2, CAP_HWCAP, KERNEL_HWCAP_SVE2),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_AES_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_AES, CAP_HWCAP, KERNEL_HWCAP_SVEAES),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_AES_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_AES_PMULL, CAP_HWCAP, KERNEL_HWCAP_SVEPMULL),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_BITPERM_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_BITPERM, CAP_HWCAP, KERNEL_HWCAP_SVEBITPERM),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_BF16_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_BF16, CAP_HWCAP, KERNEL_HWCAP_SVEBF16),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_SHA3_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_SHA3, CAP_HWCAP, KERNEL_HWCAP_SVESHA3),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_SM4_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_SM4, CAP_HWCAP, KERNEL_HWCAP_SVESM4),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_I8MM_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_I8MM, CAP_HWCAP, KERNEL_HWCAP_SVEI8MM),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_F32MM_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_F32MM, CAP_HWCAP, KERNEL_HWCAP_SVEF32MM),
+-	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_F64MM_SHIFT, FTR_UNSIGNED, ID_AA64ZFR0_F64MM, CAP_HWCAP, KERNEL_HWCAP_SVEF64MM),
++	HWCAP_CAP(SYS_ID_AA64PFR0_EL1, ID_AA64PFR0_SVE_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR0_SVE, CAP_HWCAP, KERNEL_HWCAP_SVE),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_SVEVER_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_SVEVER_SVE2, CAP_HWCAP, KERNEL_HWCAP_SVE2),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_AES_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_AES, CAP_HWCAP, KERNEL_HWCAP_SVEAES),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_AES_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_AES_PMULL, CAP_HWCAP, KERNEL_HWCAP_SVEPMULL),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_BITPERM_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_BITPERM, CAP_HWCAP, KERNEL_HWCAP_SVEBITPERM),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_BF16_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_BF16, CAP_HWCAP, KERNEL_HWCAP_SVEBF16),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_SHA3_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_SHA3, CAP_HWCAP, KERNEL_HWCAP_SVESHA3),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_SM4_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_SM4, CAP_HWCAP, KERNEL_HWCAP_SVESM4),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_I8MM_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_I8MM, CAP_HWCAP, KERNEL_HWCAP_SVEI8MM),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_F32MM_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_F32MM, CAP_HWCAP, KERNEL_HWCAP_SVEF32MM),
++	HWCAP_CAP(SYS_ID_AA64ZFR0_EL1, ID_AA64ZFR0_F64MM_SHIFT, 4, FTR_UNSIGNED, ID_AA64ZFR0_F64MM, CAP_HWCAP, KERNEL_HWCAP_SVEF64MM),
+ #endif
+-	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_SSBS_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_SSBS_PSTATE_INSNS, CAP_HWCAP, KERNEL_HWCAP_SSBS),
++	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_SSBS_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR1_SSBS_PSTATE_INSNS, CAP_HWCAP, KERNEL_HWCAP_SSBS),
+ #ifdef CONFIG_ARM64_BTI
+-	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_BT_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_BT_BTI, CAP_HWCAP, KERNEL_HWCAP_BTI),
++	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_BT_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR1_BT_BTI, CAP_HWCAP, KERNEL_HWCAP_BTI),
+ #endif
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ 	HWCAP_MULTI_CAP(ptr_auth_hwcap_addr_matches, CAP_HWCAP, KERNEL_HWCAP_PACA),
+ 	HWCAP_MULTI_CAP(ptr_auth_hwcap_gen_matches, CAP_HWCAP, KERNEL_HWCAP_PACG),
+ #endif
+ #ifdef CONFIG_ARM64_MTE
+-	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
++	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_MTE_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR1_MTE, CAP_HWCAP, KERNEL_HWCAP_MTE),
+ #endif /* CONFIG_ARM64_MTE */
+-	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
+-	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
+-	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_RPRES_SHIFT, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
++	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
++	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
++	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_RPRES_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
+ 	{},
+ };
+ 
+@@ -2517,15 +2552,15 @@ static bool compat_has_neon(const struct arm64_cpu_capabilities *cap, int scope)
+ static const struct arm64_cpu_capabilities compat_elf_hwcaps[] = {
+ #ifdef CONFIG_COMPAT
+ 	HWCAP_CAP_MATCH(compat_has_neon, CAP_COMPAT_HWCAP, COMPAT_HWCAP_NEON),
+-	HWCAP_CAP(SYS_MVFR1_EL1, MVFR1_SIMDFMAC_SHIFT, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP, COMPAT_HWCAP_VFPv4),
++	HWCAP_CAP(SYS_MVFR1_EL1, MVFR1_SIMDFMAC_SHIFT, 4, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP, COMPAT_HWCAP_VFPv4),
+ 	/* Arm v8 mandates MVFR0.FPDP == {0, 2}. So, piggy back on this for the presence of VFP support */
+-	HWCAP_CAP(SYS_MVFR0_EL1, MVFR0_FPDP_SHIFT, FTR_UNSIGNED, 2, CAP_COMPAT_HWCAP, COMPAT_HWCAP_VFP),
+-	HWCAP_CAP(SYS_MVFR0_EL1, MVFR0_FPDP_SHIFT, FTR_UNSIGNED, 2, CAP_COMPAT_HWCAP, COMPAT_HWCAP_VFPv3),
+-	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_AES_SHIFT, FTR_UNSIGNED, 2, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_PMULL),
+-	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_AES_SHIFT, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_AES),
+-	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_SHA1_SHIFT, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_SHA1),
+-	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_SHA2_SHIFT, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_SHA2),
+-	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_CRC32_SHIFT, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_CRC32),
++	HWCAP_CAP(SYS_MVFR0_EL1, MVFR0_FPDP_SHIFT, 4, FTR_UNSIGNED, 2, CAP_COMPAT_HWCAP, COMPAT_HWCAP_VFP),
++	HWCAP_CAP(SYS_MVFR0_EL1, MVFR0_FPDP_SHIFT, 4, FTR_UNSIGNED, 2, CAP_COMPAT_HWCAP, COMPAT_HWCAP_VFPv3),
++	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_AES_SHIFT, 4, FTR_UNSIGNED, 2, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_PMULL),
++	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_AES_SHIFT, 4, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_AES),
++	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_SHA1_SHIFT, 4, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_SHA1),
++	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_SHA2_SHIFT, 4, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_SHA2),
++	HWCAP_CAP(SYS_ID_ISAR5_EL1, ID_ISAR5_CRC32_SHIFT, 4, FTR_UNSIGNED, 1, CAP_COMPAT_HWCAP2, COMPAT_HWCAP2_CRC32),
+ #endif
+ 	{},
+ };
 -- 
 2.30.2
 
