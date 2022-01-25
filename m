@@ -2,135 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA6149B271
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 12:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EE949B2E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 12:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379664AbiAYK74 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 05:59:56 -0500
-Received: from foss.arm.com ([217.140.110.172]:34830 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379826AbiAYK5y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:57:54 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E2551FB;
-        Tue, 25 Jan 2022 02:57:51 -0800 (PST)
-Received: from [10.57.86.86] (unknown [10.57.86.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A2A303F7D8;
-        Tue, 25 Jan 2022 02:57:48 -0800 (PST)
-Message-ID: <edc0a8a0-5439-ff34-3de0-89ae0a4e60f4@arm.com>
-Date:   Tue, 25 Jan 2022 10:57:47 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH v8 01/38] arm64: cpufeature: Always specify and use a
- field width for capabilities
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        id S1380966AbiAYL1c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 06:27:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37304 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381415AbiAYLZp (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Jan 2022 06:25:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94103616B7
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 11:25:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 029A0C340E0;
+        Tue, 25 Jan 2022 11:25:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643109934;
+        bh=5bLCFAjlJFNhQXsgmIg9x9DzStgr7JqfFIndayznN5k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SIwm31fxD8HJltBNUe2buzudr6jhkfAnN5vQf4iDq/74ObRw4To5Z9OrjdCmU5Ue/
+         GWIZmMbpZrFlnfyF4QwnKeBrsVP2R4E1IfXLCuLZfFiXxt7UiuzkzOr2TQ22x+YGgb
+         JzI9YvhZ2QxVK1f6K/88ZqrB7ajTPTNVNr7sBpLJR7cHD6UBFy/DNZc9/gvBoGQzdo
+         A0UfvN+ZoUluZcAB8jUTGFPDh+G8eK3cI1FvDfRrYWY49QrX8GDnpaYOZkKJ3QWlai
+         q9b36nzRXKfcrWIbfD1EqvVYDt83uFBboGC0AoN3jgYuzLe6N9VjpisD28O2xfeg+C
+         RxjrUqed2tBdw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCJx5-002t5K-St; Tue, 25 Jan 2022 11:25:32 +0000
+Date:   Tue, 25 Jan 2022 11:25:31 +0000
+Message-ID: <87zgnk6or8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
         Luis Machado <luis.machado@arm.com>,
         Salil Akerkar <Salil.Akerkar@arm.com>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v8 05/38] arm64/sme: System register and exception syndrome definitions
+In-Reply-To: <20220125001114.193425-6-broonie@kernel.org>
 References: <20220125001114.193425-1-broonie@kernel.org>
- <20220125001114.193425-2-broonie@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220125001114.193425-2-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        <20220125001114.193425-6-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, skhan@linuxfoundation.org, shuah@kernel.org, alan.hayward@arm.com, luis.machado@arm.com, Salil.Akerkar@arm.com, Basant.KumarDwivedi@arm.com, szabolcs.nagy@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 25/01/2022 00:10, Mark Brown wrote:
-> Since all the fields in the main ID registers are 4 bits wide we have up
-> until now not bothered specifying the width in the code. Since we now
-> wish to use this mechanism to enumerate features from the floating point
-> feature registers which do not follow this pattern add a width to the
-> table.  This means updating all the existing table entries but makes it
-> less likely that we run into issues in future due to implicitly assuming
-> a 4 bit width.
+On Tue, 25 Jan 2022 00:10:41 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> ---
->   arch/arm64/include/asm/cpufeature.h |   1 +
->   arch/arm64/kernel/cpufeature.c      | 167 +++++++++++++++++-----------
->   2 files changed, 102 insertions(+), 66 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> index ef6be92b1921..2728abd9cae4 100644
-> --- a/arch/arm64/include/asm/cpufeature.h
-> +++ b/arch/arm64/include/asm/cpufeature.h
-> @@ -356,6 +356,7 @@ struct arm64_cpu_capabilities {
->   		struct {	/* Feature register checking */
->   			u32 sys_reg;
->   			u8 field_pos;
-> +			u8 field_width;
->   			u8 min_field_value;
->   			u8 hwcap_type;
->   			bool sign;
+> +/* HFG[WR]TR_EL2 bit definitions */
+> +#define HFGxTR_EL2_nTPIDR_EL0_SHIFT	55
+> +#define HFGxTR_EL2_nTPIDR_EL0_MASK	(1 << HFGxTR_EL2_nTPIDR_EL0_SHIFT)
 
+This annoyingly clashes with bit 35 of the same registers, which maps
+to TPIDR_EL0. I have the feeling that this really should be TPIDR2_EL0.
 
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index a46ab3b1c4d5..d9f09e40aaf6 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -1307,7 +1307,9 @@ u64 __read_sysreg_by_encoding(u32 sys_id)
->   static bool
->   feature_matches(u64 reg, const struct arm64_cpu_capabilities *entry)
->   {
-> -	int val = cpuid_feature_extract_field(reg, entry->field_pos, entry->sign);
-> +	int val = cpuid_feature_extract_field_width(reg, entry->field_pos,
-> +						    entry->field_width,
-> +						    entry->sign);
->   
+	M.
 
-Could we do something like :
-
-+ int val = cpuid_feature_extract_field_width(reg, 		entry->field_pos,
-		entry->field_width ? : 4,
-		..
-		);
-
-and leave the existing structures as they are ?
-
->   	return val >= entry->min_field_value;
->   }
-> @@ -1952,6 +1954,7 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
-
-There is arm64_errata[] array in cpu_errata.c. So, if we use the above
-proposal we could leave things unchanged for all existing uses.
-
->   		.matches = has_cpuid_feature,
->   		.sys_reg = SYS_ID_AA64MMFR0_EL1,
->   		.field_pos = ID_AA64MMFR0_ECV_SHIFT,
-> +		.field_width = 4,
->   		.sign = FTR_UNSIGNED,
->   		.min_field_value = 1,
->   	},
-...
-
-> -#define HWCAP_CPUID_MATCH(reg, field, s, min_value)				\
-> +#define HWCAP_CPUID_MATCH(reg, field, width, s, min_value)			\
->   		.matches = has_cpuid_feature,					\
->   		.sys_reg = reg,							\
->   		.field_pos = field,						\
-> +		.field_width = width,						\
->   		.sign = s,							\
->   		.min_field_value = min_value,
-
-And that could avoid these changes too. We could add :
-
-#define HWCAP_CPUID_MATCH_WIDTH(...)
-
-when/if we need one, which sets the width.
-
-Cheers
-Suzuki
+-- 
+Without deviation from the norm, progress is not possible.
