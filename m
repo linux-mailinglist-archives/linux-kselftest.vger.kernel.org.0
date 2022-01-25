@@ -2,108 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5262C49BD81
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 21:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CE949BD91
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 22:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbiAYUxA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 15:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S232738AbiAYVA1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 16:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiAYUwj (ORCPT
+        with ESMTP id S232744AbiAYVAZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:52:39 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4B7C061744
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:52:39 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id q204so10664540iod.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:52:39 -0800 (PST)
+        Tue, 25 Jan 2022 16:00:25 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AD4C061751
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:00:25 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 4-20020a250304000000b006137f4a9920so42811981ybd.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/uOHuMBWIqzsPRu5jrm/RXJrpyoE9KrZzrG0nDPUmUQ=;
-        b=JA+X+D2+jQGjPHUgwaZzAw+G+IQHrce37PdG/w1rApmU3BRC+yo8W8Xt69hHa3+5Nn
-         hnu9oK6xriVCICmj+Nqb5d/iCrD3X3jdE4DyRwouIhxfexMlkg7AniiMN8p6YVmMPFtF
-         6fL2JBp5Q8l3cbo5zDPEc0mPpMzonGORnkZfA=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lhZFy11ryScz7wsYxziWawYb+Qi1p9jcBVxhBaeOFbM=;
+        b=iTtZyr75FthgBMy7b0cykaOf/77pXGF17YdKySDjAZDbp2pPSqJEHOW0gDiV36yShP
+         d6Lv5enklnIq5YpCbz+3oN36PqQJxvIJeFt+gNn6FyOUEns3/uWg8BVLoS1pZLufF9BM
+         n5b+b7WPvPIhiGcMZ8Czap3gk91Hs4jmzjNjRPLzAchaIeVPXPoc2ylrPBB5CkPmTb5P
+         sxpM6ZBnOpXSPUrLbwshVy8Y4VR07EorHldESNhBOWnPdtQUQEujMLulesXIrHlRhPoX
+         1QIDOEGVWfPtSLtfNqwe4+9ddl7QZ2HuFsbWjskkbTShrPUWn7Cs5a8jypOEyHM4UZZF
+         A3nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/uOHuMBWIqzsPRu5jrm/RXJrpyoE9KrZzrG0nDPUmUQ=;
-        b=25WQ0t29nyZMOyVt1LtqqzgV/PCk82vFYVWtAKaYzRGFSA5bQhTSq6BJoem5INijBN
-         2ptbZTmhVFNkBmvbdX1Y8OqRPL73fESbV3aM//61wNBTgLv7ZLALViru9j3L3R9TMKxB
-         GDhdC6kuFBi5PXGzLho9ai5syN1lmjSnW5Rte8SpNgPFU+2Oig+M8s4dw2PVI7abpPyV
-         1JjnYJQ1+1UP3xcj8dGmt2ThAjEVEkMTMh7jbapy+EimQtDsXJ0yzKTg+HNmSst+A+uO
-         z/ihODYmiWhGuEr5godGIEG3KAZGfPQE5XZNMcGRJVIn6S9Y7f450Sj3EuQNn7MIb+0v
-         xLnA==
-X-Gm-Message-State: AOAM533LuFNCqxfC9p0t/fczakvjYtS3Dqd4lJ4QdQ39SFCHmLcCtDgc
-        1GoYy0Lt+dwgorsGs0tlX+7wIA==
-X-Google-Smtp-Source: ABdhPJxN5vxdRGXKizCDaf0QNPFfb9X1rWosGXVW7lkFLPqOqM7d9XyixC0OdcgYRCUYQrxNgJtUsA==
-X-Received: by 2002:a6b:8d42:: with SMTP id p63mr7839784iod.27.1643143958887;
-        Tue, 25 Jan 2022 12:52:38 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
-        by smtp.gmail.com with ESMTPSA id e17sm9299318ilm.67.2022.01.25.12.52.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:52:38 -0800 (PST)
-Subject: Re: [PATCH v2] selftests: rtc: Increase test timeout so that all
- tests run
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220112194142.3276385-1-nfraprado@collabora.com>
- <Yd84cDlW9+f7wQxq@piout.net>
- <f286a86d-6371-d8bd-6ca9-5f622468d1a4@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ae754c5f-909c-776d-ac65-7ea95fe22acc@linuxfoundation.org>
-Date:   Tue, 25 Jan 2022 13:52:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <f286a86d-6371-d8bd-6ca9-5f622468d1a4@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lhZFy11ryScz7wsYxziWawYb+Qi1p9jcBVxhBaeOFbM=;
+        b=M05ZCCnMjjkh6AuEArFe1tsndnozpYNfo+G6rMkVmornfLcgeeoaodlTZ00YO8BRDV
+         9TS85raVcLkvU79hn/ue1SXuFt5J5wJlnVRH8o4tG7ERYJJ8CeXKwKvEFgImGkl0NhZR
+         pdJsSpsHTqdcCvKmcJ4vPBNnMBs/wOghE5ZoQiMhch+MBRDAxdydBuGmCoit0FXo7S69
+         opYY949nTQMdn163U5rt+ljIjy24nkuSy46NLzXf5cHc0WeiTqey8N0X51FTZShNyCyQ
+         FmvhzUIMq4PG6d/oT66dFFiudZgbnOUap7G9d5n65sp5odymOwFH+Ret6sq67WoYD9s3
+         p4nQ==
+X-Gm-Message-State: AOAM53343mMCY4aFIAAwBrnCwvP8VoqOGirDDds3NkiMxchtZ6YQPwLz
+        NFf5gTkRT9ETig3VqXc/R4CCInHfFGU6kw==
+X-Google-Smtp-Source: ABdhPJxiZtgGgjhVY9T63xK9Vmx3lK5DTSaADtW6QL7LVDHDHG6S8D/3jQurMJ7ND76hgXfXl7OHV9skVu5UUQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ec63:7812:5e4a:c688])
+ (user=dlatypov job=sendgmr) by 2002:a81:36d7:0:b0:2ca:287c:6c18 with SMTP id
+ 00721157ae682-2ca287c6e66mr6946437b3.189.1643144424445; Tue, 25 Jan 2022
+ 13:00:24 -0800 (PST)
+Date:   Tue, 25 Jan 2022 13:00:08 -0800
+Message-Id: <20220125210011.3817742-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH 0/3] kunit: further reduce stack usage of asserts
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/12/22 4:51 PM, Shuah Khan wrote:
-> On 1/12/22 1:22 PM, Alexandre Belloni wrote:
->> On 12/01/2022 14:41:42-0500, Nícolas F. R. A. Prado wrote:
->>> The timeout setting for the rtc kselftest is currently 90 seconds. This
->>> setting is used by the kselftest runner to stop running a test if it
->>> takes longer than the assigned value.
->>>
->>> However, two of the test cases inside rtc set alarms. These alarms are
->>> set to the next beginning of the minute, so each of these test cases may
->>> take up to, in the worst case, 60 seconds.
->>>
->>> In order to allow for all test cases in rtc to run, even in the worst
->>> case, when using the kselftest runner, the timeout value should be
->>> increased to at least 120. Set it to 180, so there's some additional
->>> slack.
->>>
->>> Correct operation can be tested by running the following command right
->>> after the start of a minute (low second count), and checking that all
->>> test cases run:
->>>
->>>     ./run_kselftest.sh -c rtc
->>>
->>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
-> Thank you both. Will apply this for 5.17-rc2 once the merge window
-> closes.
-> 
+If the compiler doesn't optimize them away, each kunit assertion (use of
+KUNIT_EXPECT_EQ, etc.) can use 88 bytes of stack space in the worst and
+most common case. This has led to compiler warnings for certain configs
++ arches [1].
 
-Applied to linux-kselftest fixes branch for rc2/rc3
+This series builds upon [2] which cut down kunit_assert from 48 => 24
+bytes, but only reduced kunit_binary_assert (the most common one) from
+88 => 48.
 
-thanks,
--- Shuah
+Now we have kunit_assert = 8 and kunit_binary_assert = 32.
+The cost is we need to pass around another parameter to some functions
+(struct va_format *), and we introduce a new type
+(sturct kunit_binary_assert_text) for holding the textual representation
+of the KUNIT_EXPECT_EQ arguments.
+
+Note: it's possible to get kunit_assert = 0 and kunit_binary_assert =
+24 by removing the `format` function pointer field from kunit_assert.
+I think it's an improvement, but others might think that readability
+suffers from doing so, so I'm leaving that off from this series.
+
+Meta: this series applies on top of 5.17-rc1 + [2] and [3].
+That should be available at in Shuah's kunit branch [4], but my version
+of git is constantly segfaulting, so I can't try and rebase to verify.
+
+[1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+[2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-6-dlatypov@google.com/
+[3] https://lore.kernel.org/linux-kselftest/20220118223506.1701553-1-dlatypov@google.com/
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit 
+
+Daniel Latypov (3):
+  kunit: remove va_format from kunit_assert
+  kunit: consolidate KUNIT_INIT_BINARY_ASSERT_STRUCT macros
+  kunit: factor out str constants from binary assertion structs
+
+ include/kunit/assert.h | 152 ++++++++++++-----------------------------
+ include/kunit/test.h   |  32 +++++----
+ lib/kunit/assert.c     |  65 ++++++++++--------
+ lib/kunit/test.c       |  12 ++--
+ 4 files changed, 104 insertions(+), 157 deletions(-)
+
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 
