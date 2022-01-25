@@ -2,155 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA66749BBB2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 20:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B956D49BC1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 20:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiAYTAv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 14:00:51 -0500
-Received: from mail.efficios.com ([167.114.26.124]:51906 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiAYTAu (ORCPT
+        id S230053AbiAYTak (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 14:30:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39026 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230079AbiAYTaU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:00:50 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id EC54F34FA18;
-        Tue, 25 Jan 2022 14:00:48 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 5xdczh2_v_rL; Tue, 25 Jan 2022 14:00:48 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 8B3A834F568;
-        Tue, 25 Jan 2022 14:00:48 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 8B3A834F568
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643137248;
-        bh=xG2OTorEeD0amCPtFxqQHT32yhM8ef9v4q4M9il8G7k=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=JtD3PQQ94e5OxufsRH8LXTmTTVgOwXJnukhcYA7gs1L+a5UeqvuZd305VMTd5ew8s
-         5GxrhQ1Mx6obyvxKKPAYTDVG+2K+WRsV0POwdrPMKlwj3ADTqlV71Tu6XMJlAU2QWG
-         YhJ3V5UwzS/5HdOll28wgL9fQpeQ/3cTXKz3E9xcZykG7RjLrn6OueGvuDxe/fLUCB
-         lpUzoBJcVHCxFfM2lPs7S/N/3PIfQ4O8lZUcr1UQjjsduGvbhY4ImFKge70wvYMHL7
-         m8eci4G1P2Ps7Jg6xMt3o5U8XxFe/TqObHR8MNDsYxkXNN4ZUvEKg5en1QbetjWJQP
-         EVrhOWRTm4twg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nyPQtUQPY9hv; Tue, 25 Jan 2022 14:00:48 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 6D88334F565;
-        Tue, 25 Jan 2022 14:00:48 -0500 (EST)
-Date:   Tue, 25 Jan 2022 14:00:48 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>, shuah <shuah@kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andi Kleen <andi@firstfloor.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ben Maurer <bmaurer@fb.com>, rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>
-Message-ID: <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
-References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com> <20220124171253.22072-3-mathieu.desnoyers@efficios.com> <20220125122156.v2f5anzcs35i3rii@wittgenstein> <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
-Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
- 32-bit little endian
+        Tue, 25 Jan 2022 14:30:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5A8EB81A29
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 19:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D38C340E0;
+        Tue, 25 Jan 2022 19:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643139018;
+        bh=btODPc+dZZQjxxnN5VCaILHerPfd9JLeVrfEn0bK9tk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dSaFsdFwwAbRTjAdd1rKt01j6MoQhSzqoCXB2ttuKNPsms8UHQdMsW+rxJYBkNFXd
+         4MJVsENl3zHU69VdsZWGyNsDBYObbrZbAF3pjvSb7H+Y7C3SJ1xwa6JJGsOJvEDMJ3
+         mk7nEIOCoQQk7Mp2qAXTegcOnvX/btKBmaGrEUByTvkl9Tx6t6XESuXU2zwc6comKt
+         sAcvRzhvhfCs+wNUclZKB6J8en4RUY5Vcrkv577RFB0T0V+OCeM01kEYSyborXZaad
+         MarSneoWjlXL6UAmAosDhFFj7pVAnQPuZ0zfc5oaZAWw1g9RE9mB2GF/wWKzdJefxd
+         w9HQo8L8eHpfw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] kselftest: kvm/arm64: Skip tests if we can't create a vgic-v3
+Date:   Tue, 25 Jan 2022 19:28:51 +0000
+Message-Id: <20220125192851.3907611-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: rseq: Remove broken uapi field layout on 32-bit little endian
-Thread-Index: jBpzgk+GT1oWkc+mziLmJCxydp6hDf1GHpYP
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3268; h=from:subject; bh=btODPc+dZZQjxxnN5VCaILHerPfd9JLeVrfEn0bK9tk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8E8ZLLSOntKYlRv4TqS2Cfufo39D0QY0X34iBQg9 heFyjdKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfBPGQAKCRAk1otyXVSH0E6QCA CAATGByCssAImuJDJhg0mPnn6WtDIRT6Qdp5QicLgIS0yy84siOHyM/APpEBo8VsO4SzEe+Yt2lxvW +lPjCTHcszqOXLFL0M2kfeilUUqZ36Qy6KcrmalDt+v29KXzcx0xxCUiHTcWCpxN+EdXif4gaThT9z vomXR0usgx5LHcbHkv5rPkbDiR6nFcKVvs0eOaVt2u4OOKvS4eDJVLGW1eXms+DF1AuC94oOGFpQi8 +CgFU2pBd2NRcu1U5NkzEPP8PKj2JCXuk+nR/6V/tfNNcsvh7TrwijEUoKd/Z0eW/4yjk664mCC9Qu wfNB2mnHKn3WCThyad6cQ6YmXjueJv
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
------ On Jan 25, 2022, at 9:41 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+The arch_timer and vgic_irq kselftests assume that they can create a
+vgic-v3, using the library function vgic_v3_setup() which aborts with a
+test failure if it is not possible to do so. Since vgic-v3 can only be
+instantiated on systems where the host has GICv3 this leads to false
+positives on older systems where that is not the case.
 
-> ----- On Jan 25, 2022, at 7:21 AM, Christian Brauner brauner@kernel.org wrote:
-[...]
->>>  include/uapi/linux/rseq.h | 17 ++++-------------
-[...]
->>>  	union {
->> 
->> A bit unfortunate we seem to have to keep the union around even though
->> it's just one field now.
-> 
-> Well, as far as the user-space projects that I know of which use rseq
-> are concerned (glibc, librseq, tcmalloc), those end up with their own
-> copy of the uapi header anyway to deal with the big/little endian field
-> on 32-bit. So I'm very much open to remove the union if we accept that
-> this uapi header is really just meant to express the ABI and is not
-> expected to be used as an API by user-space.
-> 
-> That would mean we also bring a uapi header copy into the kernel
-> rseq selftests as well to minimize the gap between librseq and
-> the kernel sefltests (the kernel sefltests pretty much include a
-> copy of librseq for convenience. librseq is maintained out of tree).
-> 
-> Thoughts ?
+Fix this by changing vgic_v3_setup() to return an error if the vgic can't
+be instantiated and have the callers skip if this happens. We could also
+exit flagging a skip in vgic_v3_setup() but this would prevent future test
+cases conditionally deciding which GIC to use or generally doing more
+complex output.
 
-Actually, if we go ahead and remove the union, and replace:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kvm/aarch64/arch_timer.c | 7 ++++++-
+ tools/testing/selftests/kvm/aarch64/vgic_irq.c   | 5 +++++
+ tools/testing/selftests/kvm/lib/aarch64/vgic.c   | 4 +++-
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-struct rseq {
-  union {
-    __u64 ptr64;
-  } rseq_cs;
-[...]
-} v;
-
-by:
-
-struct rseq {
-  __u64 rseq_cs;
-} v;
-
-expressions such as these are unchanged:
-
-- sizeof(v.rseq_cs),
-- &v.rseq_cs,
-- __alignof__(v.rseq_cs),
-- offsetof(struct rseq, rseq_cs).
-
-So users of the uapi rseq.h (as an API) can still use rseq_abi->rseq_cs before
-and after the change.
-
-Based on this, I am inclined to remove the union, and just make the rseq_cs field
-a __u64.
-
-Any objections ?
-
-Thanks,
-
-Mathieu
-
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
+diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+index 9ad38bd360a4..791d38404652 100644
+--- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
++++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+@@ -366,6 +366,7 @@ static struct kvm_vm *test_vm_create(void)
+ {
+ 	struct kvm_vm *vm;
+ 	unsigned int i;
++	int ret;
+ 	int nr_vcpus = test_args.nr_vcpus;
+ 
+ 	vm = vm_create_default_with_vcpus(nr_vcpus, 0, 0, guest_code, NULL);
+@@ -382,7 +383,11 @@ static struct kvm_vm *test_vm_create(void)
+ 
+ 	ucall_init(vm, NULL);
+ 	test_init_timer_irq(vm);
+-	vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
++	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
++	if (ret < 0) {
++		pr_info("Failed to create vgic-v3, skipping\n");
++		exit(KSFT_SKIP);
++	}
+ 
+ 	/* Make all the test's cmdline args visible to the guest */
+ 	sync_global_to_guest(vm, test_args);
+diff --git a/tools/testing/selftests/kvm/aarch64/vgic_irq.c b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+index e6c7d7f8fbd1..8c6b61b8e6aa 100644
+--- a/tools/testing/selftests/kvm/aarch64/vgic_irq.c
++++ b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+@@ -761,6 +761,11 @@ static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split)
+ 
+ 	gic_fd = vgic_v3_setup(vm, 1, nr_irqs,
+ 			GICD_BASE_GPA, GICR_BASE_GPA);
++	if (gic_fd < 0) {
++		pr_info("Failed to create vgic-v3, skipping\n");
++		exit(KSFT_SKIP);
++	}
++
+ 
+ 	vm_install_exception_handler(vm, VECTOR_IRQ_CURRENT,
+ 		guest_irq_handlers[args.eoi_split][args.level_sensitive]);
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/vgic.c b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+index b3a0fca0d780..647c18733e1b 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/vgic.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+@@ -52,7 +52,9 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
+ 			nr_vcpus, nr_vcpus_created);
+ 
+ 	/* Distributor setup */
+-	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
++	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, true);
++	if (gic_fd == -1)
++		return -1;
+ 
+ 	kvm_device_access(gic_fd, KVM_DEV_ARM_VGIC_GRP_NR_IRQS,
+ 			0, &nr_irqs, true);
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.30.2
+
