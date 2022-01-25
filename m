@@ -2,100 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D896349B3D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 13:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88CD49B3E4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 13:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382498AbiAYMSA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 07:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386957AbiAYMPi (ORCPT
+        id S1383162AbiAYM0E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 07:26:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58562 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1444963AbiAYMWN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:15:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20795C061773
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 04:15:37 -0800 (PST)
+        Tue, 25 Jan 2022 07:22:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B312260F83
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC0EC340E0;
-        Tue, 25 Jan 2022 12:15:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D668CB817E6;
+        Tue, 25 Jan 2022 12:22:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FAEC340E0;
+        Tue, 25 Jan 2022 12:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643112936;
-        bh=+BPgF8RegY0meHVcPfjKYDlnsQFJtpvb4tI1Bi3dYXE=;
+        s=k20201202; t=1643113324;
+        bh=smHriwhZRzmYd06A5ADB/HEiixrqxr9u1mD1v+Ab6Rs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MtM0nmjKZgFQbwMBnBGO/d5R3rHePax1BqLreg9msC+fpgKIGKk0ZGrk7Lk0bWo08
-         jEaruAfvfaT3zWVSlNFBOE3WVaQ9xfJPC87FnkuwedSYGET09lWy1LCQeiBinB2rdb
-         lwgoV5gjF8Go/Nj7Wl5q8tq8sn16X+fOInxNXBfHDuXccGOu652i/xwLYjX9+YmsA4
-         AtnS6Pr1WTGHgZog1BdwBhDrBatOqqHwnXEs3cQqdMN0o1lf6v32CgLbJkRKEyhUkx
-         9HxKqsipXfZG/GWBrdy12AHY+uHLxC6nxRDSSpqUg29V1zJ9u9g6xJqsviMtfNb3OI
-         u+vA4aFtVw4Fw==
-Date:   Tue, 25 Jan 2022 12:15:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v8 05/38] arm64/sme: System register and exception
- syndrome definitions
-Message-ID: <Ye/p4YpWWnZSPFaZ@sirena.org.uk>
-References: <20220125001114.193425-1-broonie@kernel.org>
- <20220125001114.193425-6-broonie@kernel.org>
- <87zgnk6or8.wl-maz@kernel.org>
+        b=LlF0UtQmRh0zWYeJwpjdNbcl+auvhufZbOuRQRLHGYYtnDjxug/riXLFSSl2/cva9
+         UPOtl3tKKDG+IwxiqznI6SEzWmoqfrbPngwY1qQ7DGH7sOPphdsjmz1jQo+wpj/esN
+         7XyHDDOyMXsYMAsvY6AL193unLLV1ALpaqEUnjMeR7mj6z/M7OpaE+XWIDJMOxtJTa
+         Mv1qF4fI2pGgMcx2aEIDdzFksSv0g2OUCHdrqcTYxQNkN2gTpYM/xJHfwLHyBVlvPp
+         rqv4dxpLUpJHJds/ckQUtLTL/VcVkh1PCwIdZs5FS0EFdtESiG6Z6/bXvIU3Q7zX0C
+         /JbVI4irv9Hxg==
+Date:   Tue, 25 Jan 2022 13:21:56 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, Florian Weimer <fw@deneb.enyo.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Andi Kleen <andi@firstfloor.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ben Maurer <bmaurer@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>
+Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
+ 32-bit little endian
+Message-ID: <20220125122156.v2f5anzcs35i3rii@wittgenstein>
+References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
+ <20220124171253.22072-3-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DA6PqB3G+/AhTsSL"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87zgnk6or8.wl-maz@kernel.org>
-X-Cookie: The second best policy is dishonesty.
+In-Reply-To: <20220124171253.22072-3-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 12:12:40PM -0500, Mathieu Desnoyers wrote:
+> The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
+> entirely wrong on 32-bit little endian: a preprocessor logic mistake
+> wrongly uses the big endian field layout on 32-bit little endian
+> architectures.
+> 
+> Fortunately, those ptr32 accessors were never used within the kernel,
+> and only meant as a convenience for user-space.
+> 
+> Remove those and only leave the "ptr64" union field, as this is the only
+> thing really needed to express the ABI. Document how 32-bit
+> architectures are meant to interact with this "ptr64" union field.
+> 
+> Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update includes")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Florian Weimer <fw@deneb.enyo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-api@vger.kernel.org
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Dave Watson <davejwatson@fb.com>
+> Cc: Paul Turner <pjt@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Russell King <linux@arm.linux.org.uk>
+> Cc: "H . Peter Anvin" <hpa@zytor.com>
+> Cc: Andi Kleen <andi@firstfloor.org>
+> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+> Cc: Ben Maurer <bmaurer@fb.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Joel Fernandes <joelaf@google.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  include/uapi/linux/rseq.h | 17 ++++-------------
+>  1 file changed, 4 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+> index 9a402fdb60e9..31290f2424a7 100644
+> --- a/include/uapi/linux/rseq.h
+> +++ b/include/uapi/linux/rseq.h
+> @@ -105,22 +105,13 @@ struct rseq {
+>  	 * Read and set by the kernel. Set by user-space with single-copy
+>  	 * atomicity semantics. This field should only be updated by the
+>  	 * thread which registered this data structure. Aligned on 64-bit.
+> +	 *
+> +	 * 32-bit architectures should update the low order bits of the
+> +	 * rseq_cs.ptr64 field, leaving the high order bits initialized
+> +	 * to 0.
+>  	 */
+>  	union {
 
---DA6PqB3G+/AhTsSL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Jan 25, 2022 at 11:25:31AM +0000, Marc Zyngier wrote:
-> On Tue, 25 Jan 2022 00:10:41 +0000,
-> Mark Brown <broonie@kernel.org> wrote:
-
-> > +/* HFG[WR]TR_EL2 bit definitions */
-> > +#define HFGxTR_EL2_nTPIDR_EL0_SHIFT	55
-> > +#define HFGxTR_EL2_nTPIDR_EL0_MASK	(1 << HFGxTR_EL2_nTPIDR_EL0_SHIFT)
-
-> This annoyingly clashes with bit 35 of the same registers, which maps
-> to TPIDR_EL0. I have the feeling that this really should be TPIDR2_EL0.
-
-Yes, it should be.
-
---DA6PqB3G+/AhTsSL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHv6eEACgkQJNaLcl1U
-h9Bqogf/cPq0bM4yoDggdP1uvRbGK1VpH1TSSNyNLxG6PNgq8w3D5EY8BuCDrP40
-Ss+eJ0UElwdsoXScwvFKoIeXt6pGtughyC2uEnxz+rif0YlGOQyoWg9SWbzq56+g
-lSrYeMGyIPzHiJaXtjsFQEQBfiRoxEGilmte8Owq01WhyTea9cEZbYyu9Wk8pjJZ
-GWPOOMBXqCRPL5zbFVJsGEV4meEMFew/pqNCZJw5jgkUEHGj8ln92kipxoE8YULJ
-ibed2fmR2WpadC7SftEzh9S/Gd+I2XBxtw5bg7f8OSqn0NAit0umxnwXVmT1jGxu
-+kQ/lXqNg/SndWNAKKGAWteJRQqTUA==
-=nbA7
------END PGP SIGNATURE-----
-
---DA6PqB3G+/AhTsSL--
+A bit unfortunate we seem to have to keep the union around even though
+it's just one field now.
