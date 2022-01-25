@@ -2,106 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550F449B672
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 15:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F7549B6C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 15:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239014AbiAYOgB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 09:36:01 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55734 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388731AbiAYOZx (ORCPT
+        id S1580065AbiAYOpy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 09:45:54 -0500
+Received: from mail.efficios.com ([167.114.26.124]:45014 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1579980AbiAYOla (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:25:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF378B80ED5
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 14:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0BFC340E0;
-        Tue, 25 Jan 2022 14:25:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643120744;
-        bh=AAEEAEnnyX/L1DH7WC8/0Km2eJQRUtDNv04WJ7pfQAA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c335kB7NRNmQyuY3LbHiWWUUhNJ86fldQs6hst8PLp9IMNMaTRN+9AST0UapK9FlL
-         AK0pkuZN9WcyrHbIDWgEKl5boRHWH1vcesmo92RMXQiXLDwjDqPkBK/6E/DEq/BnOj
-         lXmRAG6UlNVTl5CkM7xcz0u2Ts865Dne2q5eb8HhwdDDprTAi9JvNyDQLmKw6CRO1l
-         8nbyFXkKAxS7aNDSRxh4RNCcpOgTCMLUsknYPo1lthhjJRQY/FjNGcTz0HrDpmN6NX
-         Q3J8V7F1L3b/krG3MoowyL/HCNcVRyICWb2XfJtlsbl12TQ5hbZHQ6RorbzTCLFKNf
-         9lN/Cc7njaAlQ==
-Date:   Tue, 25 Jan 2022 14:25:38 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v8 25/38] KVM: arm64: Trap SME usage in guest
-Message-ID: <YfAIYp1m/zLKkmbd@sirena.org.uk>
-References: <20220125001114.193425-1-broonie@kernel.org>
- <20220125001114.193425-26-broonie@kernel.org>
- <87y2346on8.wl-maz@kernel.org>
- <Ye/sS0jEXnBuumeG@sirena.org.uk>
- <87v8y86jdg.wl-maz@kernel.org>
+        Tue, 25 Jan 2022 09:41:30 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9EC9034DADC;
+        Tue, 25 Jan 2022 09:41:14 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id YxB3tzVOmELA; Tue, 25 Jan 2022 09:41:13 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 98E8434DADB;
+        Tue, 25 Jan 2022 09:41:13 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 98E8434DADB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643121673;
+        bh=UHmsUtxRyc2FuICvfcuMd8VU1FfVxU1M1pUOGC/s44M=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=N85YOg6In8OwsbZQpAXoK5xB8E3qIVHONNmqMtaz8WWMEkyBItYkr1GcS5kee0tmX
+         0bN7CP8hipq4nhJL4Jxpl4nJvaxzM2QNQG8WF6bnwEg5y/CR7Pqz7W872JFCdSsl9k
+         q1NvEEtdYTfqMs9XqF8DOHlYsgQAz6HtjNW2mT2lb/S5LQH8LLVxzYllqb72dZw0X5
+         2msFMBewjejqWC40X3278ONKGm6jkRy9iv+ZD7D6BSDREBj0ZF6wz/qQ5jwMS6C7BU
+         d4Yzz+4J4VcsLue6ukVO8qaVl+5ekmeV46WyPZ0SlyYzitmRjsdsZ2rszxBGFTcXIS
+         lSVr9P+utpqLw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bd4ULRnk5POI; Tue, 25 Jan 2022 09:41:13 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 7B50E34DC54;
+        Tue, 25 Jan 2022 09:41:13 -0500 (EST)
+Date:   Tue, 25 Jan 2022 09:41:13 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>, shuah <shuah@kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Andi Kleen <andi@firstfloor.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ben Maurer <bmaurer@fb.com>, rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>
+Message-ID: <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220125122156.v2f5anzcs35i3rii@wittgenstein>
+References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com> <20220124171253.22072-3-mathieu.desnoyers@efficios.com> <20220125122156.v2f5anzcs35i3rii@wittgenstein>
+Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
+ 32-bit little endian
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YEhifuxFIuvQlt0I"
-Content-Disposition: inline
-In-Reply-To: <87v8y86jdg.wl-maz@kernel.org>
-X-Cookie: The second best policy is dishonesty.
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
+Thread-Topic: rseq: Remove broken uapi field layout on 32-bit little endian
+Thread-Index: jBpzgk+GT1oWkc+mziLmJCxydp6hDQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+----- On Jan 25, 2022, at 7:21 AM, Christian Brauner brauner@kernel.org wrote:
 
---YEhifuxFIuvQlt0I
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Mon, Jan 24, 2022 at 12:12:40PM -0500, Mathieu Desnoyers wrote:
+>> The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
+>> entirely wrong on 32-bit little endian: a preprocessor logic mistake
+>> wrongly uses the big endian field layout on 32-bit little endian
+>> architectures.
+>> 
+>> Fortunately, those ptr32 accessors were never used within the kernel,
+>> and only meant as a convenience for user-space.
+>> 
+>> Remove those and only leave the "ptr64" union field, as this is the only
+>> thing really needed to express the ABI. Document how 32-bit
+>> architectures are meant to interact with this "ptr64" union field.
+>> 
+>> Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update
+>> includes")
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Cc: Florian Weimer <fw@deneb.enyo.de>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: linux-api@vger.kernel.org
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Boqun Feng <boqun.feng@gmail.com>
+>> Cc: Andy Lutomirski <luto@amacapital.net>
+>> Cc: Dave Watson <davejwatson@fb.com>
+>> Cc: Paul Turner <pjt@google.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: Russell King <linux@arm.linux.org.uk>
+>> Cc: "H . Peter Anvin" <hpa@zytor.com>
+>> Cc: Andi Kleen <andi@firstfloor.org>
+>> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+>> Cc: Ben Maurer <bmaurer@fb.com>
+>> Cc: Steven Rostedt <rostedt@goodmis.org>
+>> Cc: Josh Triplett <josh@joshtriplett.org>
+>> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will.deacon@arm.com>
+>> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+>> Cc: Joel Fernandes <joelaf@google.com>
+>> Cc: Paul E. McKenney <paulmck@kernel.org>
+>> ---
+>>  include/uapi/linux/rseq.h | 17 ++++-------------
+>>  1 file changed, 4 insertions(+), 13 deletions(-)
+>> 
+>> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+>> index 9a402fdb60e9..31290f2424a7 100644
+>> --- a/include/uapi/linux/rseq.h
+>> +++ b/include/uapi/linux/rseq.h
+>> @@ -105,22 +105,13 @@ struct rseq {
+>>  	 * Read and set by the kernel. Set by user-space with single-copy
+>>  	 * atomicity semantics. This field should only be updated by the
+>>  	 * thread which registered this data structure. Aligned on 64-bit.
+>> +	 *
+>> +	 * 32-bit architectures should update the low order bits of the
+>> +	 * rseq_cs.ptr64 field, leaving the high order bits initialized
+>> +	 * to 0.
+>>  	 */
+>>  	union {
+> 
+> A bit unfortunate we seem to have to keep the union around even though
+> it's just one field now.
 
-On Tue, Jan 25, 2022 at 01:21:47PM +0000, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+Well, as far as the user-space projects that I know of which use rseq
+are concerned (glibc, librseq, tcmalloc), those end up with their own
+copy of the uapi header anyway to deal with the big/little endian field
+on 32-bit. So I'm very much open to remove the union if we accept that
+this uapi header is really just meant to express the ABI and is not
+expected to be used as an API by user-space.
 
-> > OK, I'll remove the defensiveness here.  FGT is mandatory from v8.6 and
-> > SME is a v9 feature so people shouldn't build a SME implementation that
-> > lacks FGT.
+That would mean we also bring a uapi header copy into the kernel
+rseq selftests as well to minimize the gap between librseq and
+the kernel sefltests (the kernel sefltests pretty much include a
+copy of librseq for convenience. librseq is maintained out of tree).
 
-> Can you then please make it that SME doesn't get enabled at all if FGT
-> isn't present? It would also be good to have a clarification in the
-> architecture that it isn't allowed to build SME without FGT (specially
-> given that v9.0 is congruent to v8.5, and thus doesn't have FGT).
+Thoughts ?
 
-Right, this should be handled by the time the full spec is published -
-it's an issue people are aware of and it's not something that should
-ever get built.
+Thanks,
 
-It would be good to explicitly handle the dependency in the cpufeature
-stuff, we'll have other issues like this, but I'd like to handle that
-separately since at first look doing it properly is a bit of surgery on
-cpufeature and the series is already rather large.
+Mathieu
 
---YEhifuxFIuvQlt0I
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHwCGEACgkQJNaLcl1U
-h9B+Iwf/UgQEid+JO2QkdGR/J+t4OgReatZ/I57vAqYAESGun3agL/oLDXInx20v
-eCGN2xA+iulobCXCAGt6m6oRNJhjux5DYsqlrakgTTzcFXDDli+O2igLbjtk0mGh
-KkLjqK5y4ZNaspiYv8TncnOA6zG6KsMiRVQ+2/K+sfFaFXELoqsVdoYRDfxpEYRH
-P8/ii51TJiXcpLSQ2XVUy1s3Zux3OqDGq3BPE9C8NRG0E24/Ca+fcH0QyWPFKfPH
-OAgFgzukSkGpPDLJbnd1p3I3AONEyVyRBbYxNTisQiOPfhvl17mGFbaUzQumzkdY
-DCzSIFm7LoUu+rhxz0R6Xjhl27iSrA==
-=+7k2
------END PGP SIGNATURE-----
-
---YEhifuxFIuvQlt0I--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
