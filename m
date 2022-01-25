@@ -2,104 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F17EC49BD77
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 21:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E88649BD7A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 21:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbiAYUv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 15:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S232607AbiAYUw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 15:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232618AbiAYUvc (ORCPT
+        with ESMTP id S232599AbiAYUwH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:51:32 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1729AC061747
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:51:32 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id z199so10728199iof.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:51:32 -0800 (PST)
+        Tue, 25 Jan 2022 15:52:07 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC1EC061744
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:52:07 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id i62so9525436ioa.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 12:52:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=T8xWDu4VUa1KMmhWTT9ApCS91QssIS1sg0FGU1r8EdQ=;
-        b=fPq3W1qMhDmrc3O/H8jdKQejjyFMQcM1Nf2I2cWXLB9x+cYe7GtZ0SOc+D8gTv3JC9
-         px3drDlrNv8oN6Vd4UkFmJDaixRaMa1Z/7xVc3/TNd1u7J0OmTKAhVvt2X3h8qtXvhvg
-         LM9w+SFq8dO7kFkvlcUUZV3xdeaARAZFjuobc=
+        bh=OCJUq5jHgfkgVNsby7KQbTGRdgGOLVS/mZVDvuvbVQM=;
+        b=XDtRUAzCdycPSIlpf0grik4f8dPgS2/nusSo3wILEaRv793kD9AXzo4pKaWOqWar/f
+         uxh7UJmUzs4kR724KcwWUgC0Y+wcTV9abtTgnE3RxAl/iMre3I89ECkvpFucq7R65eRi
+         oUrt6KoJedPddvKQOmpMOTFPz6TYCTmsgInrg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=T8xWDu4VUa1KMmhWTT9ApCS91QssIS1sg0FGU1r8EdQ=;
-        b=j2vJyJZY8770tNUw7Zf86wq2w56K5CACFRirs0jYD5DnkLHiTSopuytN0SsVxDa739
-         fALE8SoWBqhUkIzm7aVjqTFqItkjSP2gsZKwFcgh9OmDMdyQfaMCunZo3psT/H7g6YFN
-         Rsfq94JtdwXwcLkKmrgbvH1qyw3mLB10O+Vuo79Xo9SROjTWxnF4pcZsgH6A59xdmXTM
-         JeqmMOufZjLItzlQLBJUiFSSmbDYzqCBM9UqFi1Hp5TAdvvXkPha97PUsDXw/SnSAhco
-         QhW6nbMvBA8P3GSBxrPMHyOqIyZDbul3QCl8nNJ7aw1qhVjntlEwAdmmUj3/GCcA9xEF
-         ZA6Q==
-X-Gm-Message-State: AOAM53335parb8hCZq4uwhGfN3sYC8DngOLKJVJur0j77nwzc9+/Eu7C
-        ZRgBdASlkb5CQPPfHIIfhQParg==
-X-Google-Smtp-Source: ABdhPJx/5kXDAPM3pl1xICZm6MAV5zSuAmwkrZES9NWzUNvjzNE6hLuNOCqo1WYWsXaDO98YHEW5og==
-X-Received: by 2002:a05:6638:31e:: with SMTP id w30mr5046563jap.57.1643143891513;
-        Tue, 25 Jan 2022 12:51:31 -0800 (PST)
+        bh=OCJUq5jHgfkgVNsby7KQbTGRdgGOLVS/mZVDvuvbVQM=;
+        b=OjV3ivoTVbvw42Yv3EDxZyPJdPSrwMGiXDI9ktVVD+fiKV7YzEiSzvYA49neb55f/p
+         AofjreXpWOS6PHxSZ6r4R47RbW7MtHn8qgKQbC7oUNcPjQ0GI30Wy+iIQwSKvzYL2/Ok
+         8dv40GVr4PwZcVnNTsv/56mcNPorMt8NqsoJNQz6TPgfcnltBXHII2LaDHVW8Q+7WMSm
+         QjuemCJrAQya8q3SGCRZB94W/bfRuW5Ml9/L5FeLxIHKUHm2ovh510wLKeVhpsezXK/s
+         l8ItkN8iVStq4ys9/e1eoQHZM3wK9kNVCbbl9f9Hk1zYmG5LgUi1IzPWlxOGgrZVzuXQ
+         A7Qg==
+X-Gm-Message-State: AOAM532iB14WWLz8S86akOuWP+RbDU4BaIUczRd8jbj+Dywg3lRg9PT+
+        76uMCtydeEoEBbigQ/6b2xXlRVMi4Z8q+Q==
+X-Google-Smtp-Source: ABdhPJyjdSeD5XUu2Mr1BnYKELR7qedOQe1LHbs1/7dxduM5uthKYktGexZ5EoGuH31VcQ5SL4t/JA==
+X-Received: by 2002:a05:6638:3009:: with SMTP id r9mr10016866jak.262.1643143926581;
+        Tue, 25 Jan 2022 12:52:06 -0800 (PST)
 Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
-        by smtp.gmail.com with ESMTPSA id e5sm9374160ilq.9.2022.01.25.12.51.30
+        by smtp.gmail.com with ESMTPSA id q16sm8238668ion.27.2022.01.25.12.52.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:51:31 -0800 (PST)
-Subject: Re: [PATCH] selftests: cpufreq: Write test output to stdout as well
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220114232126.92043-1-nfraprado@collabora.com>
- <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
+        Tue, 25 Jan 2022 12:52:06 -0800 (PST)
+Subject: Re: [PATCH 1/3] selftests/zram: Remove obsolete max_comp_streams
+ interface
+To:     "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
+        Alexey Kodanev <aleksei.kodanev@bell-sw.com>,
+        Petr Vorel <pvorel@suse.cz>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
+ <61DFC646.7060707@fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <31ebfa0a-5e2d-332c-cbe1-22bdfeee8cd9@linuxfoundation.org>
-Date:   Tue, 25 Jan 2022 13:51:29 -0700
+Message-ID: <2055a76c-f50a-467f-e1ae-e8b8496a4911@linuxfoundation.org>
+Date:   Tue, 25 Jan 2022 13:52:03 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <61DFC646.7060707@fujitsu.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/16/22 11:41 PM, Viresh Kumar wrote:
-> On 14-01-22, 18:21, Nícolas F. R. A. Prado wrote:
->> Use 'tee' to send the test output to stdout in addition to the current
->> output file. This makes the output easier to handle in automated test
->> systems and is superior to only later dumping the output file contents
->> to stdout, since this way the test output can be interleaved with other
->> log messages, like from the kernel, so that chronology is preserved,
->> making it easier to detect issues.
->>
->> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> ---
->>   tools/testing/selftests/cpufreq/main.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
->> index 31f8c9a76c5f..60ce18ed0666 100755
->> --- a/tools/testing/selftests/cpufreq/main.sh
->> +++ b/tools/testing/selftests/cpufreq/main.sh
->> @@ -194,5 +194,5 @@ prerequisite
->>   
->>   # Run requested functions
->>   clear_dumps $OUTFILE
->> -do_test >> $OUTFILE.txt
->> +do_test | tee -a $OUTFILE.txt
->>   dmesg_dumps $OUTFILE
+On 1/12/22 11:26 PM, xuyang2018.jy@fujitsu.com wrote:
+> Hi Ping
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
+> Best Regards
+> Yang Xu
+>> Since kernel commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram has
+>> switched to per-cpu streams. Even kernel still keep this interface for some reasons, but
+>> writing to max_comp_stream doesn't take any effect. So remove it.
+>>
+>> Signed-off-by: Yang Xu<xuyang2018.jy@fujitsu.com>
 
-Thank you. Applied to linux-kselftest fixes for rc2/3
+Reviewed and changes requested.
 
 thanks,
 -- Shuah
