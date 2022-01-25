@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D20D549B4F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 14:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334EF49B4F8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jan 2022 14:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386650AbiAYNZO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jan 2022 08:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S1386680AbiAYNZR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jan 2022 08:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1576439AbiAYNV4 (ORCPT
+        with ESMTP id S1576538AbiAYNW5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:21:56 -0500
+        Tue, 25 Jan 2022 08:22:57 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BF4C06175E
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 05:21:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E6CC0613EC
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 05:22:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 971D8B81809
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5232BC340E0;
-        Tue, 25 Jan 2022 13:21:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5ADAB81808
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81985C340E0;
+        Tue, 25 Jan 2022 13:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643116910;
-        bh=PJSTrk+R1poXRn4sn0sZB3L5b27X4yB/DBsC0W/v5Gs=;
+        s=k20201202; t=1643116973;
+        bh=dNsSh+nbek24LHzPtQ2vR4sDkfPRZ8rLrT05Kvxr+O0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f8Mi5y/sOWXB2D+hVkXAVFAepBES3Pglmoql9JFmt2ddSG51oDufSjV41HCplZxPY
-         ERty2wwWwaQnD6r2kzY5u4E1usdIix5W5JOGkriJVhCZLY05f1HGx18RjBI/SJ4v6c
-         SPjII1DxkP7pABZoBKxRb9j+j+rMH/Hh0gjekJty5K/LtFmBAO6TBq1TFOOuTaCbGa
-         bNvz0gb3PGmdBeQNCn/iUvuo5MIkdcyiEuUm5a1ccC2+Uz+InGYB32U5DSPDxTv8jJ
-         +RpwWB1u8o6srB4ERBT5MuN4uPs9AEaZQFRVdrTJl5kCLsIf+JQBjJY2k7+h88PJEj
-         TZMXWYm3fOwKg==
+        b=tXJOw07i0kYCGhxDK+raTLRGqqmTHjSxtHCen4PMVpxWYSAkIiF+OVZerP21Cw5Ot
+         YPoso29oqpdaqvJ7zguk+IO+MKsXd7v1V7E8Exgh/h8WnovQcKdk2tl1WCQDSFBcxN
+         5qCgMNTQmeTAXd/lL+ecwA4KTvHjiDwisXOpWQaL48JyMa8dMfnNixnGnMM9krbPER
+         NAgmOWhMRCDUmSKMeRPvC6pNsn/NUA9sGHIt/nUO46YQERj6TedyK1UpWTZ9m6qJj6
+         Yg4mUyY26mrsPAahCUkE2XCfwIYsQC/2q6mrl6iKwk/2bjlBzKXkd3BboejDVK/kT2
+         gipsR4vxebwlQ==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nCLlc-002ud5-B9; Tue, 25 Jan 2022 13:21:48 +0000
-Date:   Tue, 25 Jan 2022 13:21:47 +0000
-Message-ID: <87v8y86jdg.wl-maz@kernel.org>
+        id 1nCLmd-002uen-LS; Tue, 25 Jan 2022 13:22:51 +0000
+Date:   Tue, 25 Jan 2022 13:22:51 +0000
+Message-ID: <87tuds6jbo.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -55,12 +55,12 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v8 25/38] KVM: arm64: Trap SME usage in guest
-In-Reply-To: <Ye/sS0jEXnBuumeG@sirena.org.uk>
+Subject: Re: [PATCH v8 26/38] KVM: arm64: Handle SME host state when running guests
+In-Reply-To: <Ye/ygvnlzPKYT2z6@sirena.org.uk>
 References: <20220125001114.193425-1-broonie@kernel.org>
-        <20220125001114.193425-26-broonie@kernel.org>
-        <87y2346on8.wl-maz@kernel.org>
-        <Ye/sS0jEXnBuumeG@sirena.org.uk>
+        <20220125001114.193425-27-broonie@kernel.org>
+        <87wnio6n7d.wl-maz@kernel.org>
+        <Ye/ygvnlzPKYT2z6@sirena.org.uk>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -74,56 +74,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 25 Jan 2022 12:25:47 +0000,
+On Tue, 25 Jan 2022 12:52:18 +0000,
 Mark Brown <broonie@kernel.org> wrote:
 > 
 > [1  <text/plain; us-ascii (7bit)>]
-> On Tue, Jan 25, 2022 at 11:27:55AM +0000, Marc Zyngier wrote:
+> On Tue, Jan 25, 2022 at 11:59:02AM +0000, Marc Zyngier wrote:
 > > Mark Brown <broonie@kernel.org> wrote:
 > 
-> > > +	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME))
+> > > +	if (has_vhe()) {
+> > > +		if (system_supports_sme()) {
 > 
-> > Please drop the IS_ENABLED(). We purposely avoid conditional
-> > compilation in KVM in order to avoid bitrot, and the amount of code
-> > you save isn't significant. Having a static key is more than enough to
-> > avoid runtime costs.
+> > nit:	if (has_vhe() && system_supports_sme()) {
 > 
-> Sure, I wanted to be extra careful here as this is all in hot paths and
-> going to get moved elsewhere when we have real guest support.
+> > saves you one level of indentation.
 > 
-> > > +	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME) &&
-> > > +	    cpus_have_final_cap(ARM64_HAS_FGT)) {
-> > > +		val = read_sysreg_s(SYS_HFGRTR_EL2);
-> > > +		val &= ~(HFGxTR_EL2_nTPIDR_EL0_MASK |
-> > > +			 HFGxTR_EL2_nSMPRI_EL1_MASK);
-> > > +		write_sysreg_s(val, SYS_HFGRTR_EL2);
-> > > +
-> > > +		val = read_sysreg_s(SYS_HFGWTR_EL2);
-> > > +		val &= ~(HFGxTR_EL2_nTPIDR_EL0_MASK |
-> > > +			 HFGxTR_EL2_nSMPRI_EL1_MASK);
-> > > +		write_sysreg_s(val, SYS_HFGWTR_EL2);
-> > > +	}
+> Yes, for now.  IIRC there was some other stuff there when I had some of
+> the code for doing the register switching properly.
 > 
-> > If the CPUs do not have FGT, what provides the equivalent trapping?
+> > > +			/* Also restore EL0 state seen on entry */
+> > > +			if (vcpu->arch.flags & KVM_ARM64_HOST_SME_ENABLED)
+> > > +				sysreg_clear_set(CPACR_EL1, 0,
+> > > +						 CPACR_EL1_SMEN_EL0EN |
+> > > +						 CPACR_EL1_SMEN_EL1EN);
+> > > +			else
+> > > +				sysreg_clear_set(CPACR_EL1,
+> > > +						 CPACR_EL1_SMEN_EL0EN,
+> > > +						 CPACR_EL1_SMEN_EL1EN);
 > 
-> Nothing for nVHE mode.
+> > I find the use of CPACR_EL1_SMEN in some cases and its individual bits
+> > in some others pretty confusing. I understand that you have modelled
+> > it after the SVE code, but maybe this is a mistake we don't need to
+> > repeat. I'd be in favour of directly exposing the individual bits in
+> > all cases.
+> 
+> OK, it is just the KVM code that uses the plain ZEN.  I'll add a cleanup
+> patch for that at the start of the series for ZEN I guess otherwise it
+> looks worse, though that will inflate the size of the series a bit.
 
-That's what I feared.
-
-> 
-> > If FGT is mandatory when SME exists, then you should simplify the
-> > condition.
-> 
-> OK, I'll remove the defensiveness here.  FGT is mandatory from v8.6 and
-> SME is a v9 feature so people shouldn't build a SME implementation that
-> lacks FGT.
-
-Can you then please make it that SME doesn't get enabled at all if FGT
-isn't present? It would also be good to have a clarification in the
-architecture that it isn't allowed to build SME without FGT (specially
-given that v9.0 is congruent to v8.5, and thus doesn't have FGT).
-
-Thanks,
+I'm happy to merge such a patch early if that helps.
 
 	M.
 
