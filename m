@@ -2,88 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4FF49D11B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 18:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE2049D1AB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 19:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237344AbiAZRqG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 12:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237260AbiAZRqF (ORCPT
+        id S237445AbiAZSY7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 13:24:59 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56426 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237412AbiAZSY6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:46:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679A3C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 09:46:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 26 Jan 2022 13:24:58 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06BB261A90
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 17:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6503C340E3;
-        Wed, 26 Jan 2022 17:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643219164;
-        bh=RzYZzAPS850FeOS1uK0OYrU3jl7In9b5K4YKxnBG+2Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=et1LRTrSbrgx4a3AZPzVVvjxh32G0kFXHsuqL/OD5AGd0+gHnFBYuEMw1R3tNdV7O
-         99b7qJuYOaje66CfPXv3gj4/ho4qoaUO2n5QMdmJH/AwXUSvYOe5y0S0WDgwP+XAOj
-         BIpZT1rYtvMo7VusNb2H53ExWkq7Gd+BVYzAdlIbrwLEwZkb1gBjWwaVaOc4y61TPK
-         GQBzCFVTkGtL61vtAofIOV60+tTRvZ061hChsCWMUVywPdMa5OgxIV7aBMX0hC0IGF
-         KQXPCwsj66bkg7VT/OMLKdzyJ5sWHV+YT279QX8q1SgDfBX3tp3Kkee1LlhbSxILbC
-         YacUwJHKGCeCw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH] kselftest/arm64: Remove local definitions of MTE prctls
-Date:   Wed, 26 Jan 2022 17:44:21 +0000
-Message-Id: <20220126174421.1712795-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CCA371F3AF;
+        Wed, 26 Jan 2022 18:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643221497;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IoNCbcwyxnv6CxKL/uuKLe5hgsTrflJcuZ0lUaBY4Xw=;
+        b=CDJ8SJfqLfzlJvW887PQ9qXRLTfNiRoSGkqof4hsIyOB2EYkjuIi9V5XZywCF64oXefHFF
+        xBjlLLKSITIWSaJhCGB7EkA6s9ERjHj6HEMvyWVgn2oJSxxwUAJWrrhKudQPibPr7i9ByF
+        l48J8JZmB8ytxfSOc2rnmHH98ogAhU4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643221497;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IoNCbcwyxnv6CxKL/uuKLe5hgsTrflJcuZ0lUaBY4Xw=;
+        b=IVflkwyY72ut2OljZVidqhMoUJZEZEN2SyFj+QE3uB04AVewm9TWjOe3VMAuD5X/u8tzHY
+        kv+tOLvcWU44HMDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F77013E2C;
+        Wed, 26 Jan 2022 18:24:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qDbAGPmR8WGddgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Wed, 26 Jan 2022 18:24:57 +0000
+Date:   Wed, 26 Jan 2022 19:24:55 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
+        "aleksei.kodanev@bell-sw.com" <aleksei.kodanev@bell-sw.com>
+Subject: Re: [PATCH 1/3] selftests/zram: Remove obsolete max_comp_streams
+ interface
+Message-ID: <YfGR9xZ2EuMXyAzb@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
+ <1146337d-718e-a369-1012-224f06bc9c2f@linuxfoundation.org>
+ <61F0D9F7.1080200@fujitsu.com>
+ <YfD0hiUSf40jX82d@pevik>
+ <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1478; h=from:subject; bh=RzYZzAPS850FeOS1uK0OYrU3jl7In9b5K4YKxnBG+2Y=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8YgQstwPXDTpRJhALuchU1J0rihamTUObSRSa77x oEpnKoyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfGIEAAKCRAk1otyXVSH0Go8B/ 9MSw/KqebjwmIRuUm6Jfr7BQNJnUxFJM6AUSLklVq3Asw50F24b3yeSBOCMPxGkM8Re/g8NV8Fvasv TshoTvNJ+BQ6dNdQYIdeDeVUOCoWzW9T3QhU08M4wCzdN0+yzBRti2kd6HDAeWmhUy+M9wFNyyDB5P cx6+3OAJL8jgHASyup4SUqCxpi5I0viPY8lhuSQAscj6f34U0INhZ7dRjcqjr/eh1jFRyLPrM7aRw9 ZZhkWdv2ZYZMOek9/fVAzvb/N0MY3n02HqsCzQ99oZNj4wFSl6MAN4fC5PHHL+vpKi3zips7i55Whq r2F87ARYH9NcJqRuz+jBjX1YHknr68
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The GCR EL1 test unconditionally includes local definitions of the prctls
-it tests. Since not only will the kselftest build infrastructure ensure
-that the in tree uapi headers are available but the toolchain being used to
-build kselftest may ensure that system uapi headers with MTE support are
-available this causes the compiler to warn about duplicate definitions.
-Remove these duplicate definitions.
+> On 1/26/22 12:13 AM, Petr Vorel wrote:
+> > Hi all,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../selftests/arm64/mte/check_gcr_el1_cswitch.c       | 11 -----------
- 1 file changed, 11 deletions(-)
+> > > on 2022/1/26 4:33, Shuah Khan wrote :
+> > > > On 12/15/21 2:56 AM, Yang Xu wrote:
+> > > > > Since kernel commit 43209ea2d17a ("zram: remove max_comp_streams
+> > > > > internals"), zram has
+> > > > > switched to per-cpu streams. Even kernel still keep this interface for
+> > > > > some reasons, but
+> > > > > writing to max_comp_stream doesn't take any effect. So remove it.
 
-diff --git a/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c b/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c
-index a876db1f096a..325bca0de0f6 100644
---- a/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c
-+++ b/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c
-@@ -19,17 +19,6 @@
- #include "kselftest.h"
- #include "mte_common_util.h"
- 
--#define PR_SET_TAGGED_ADDR_CTRL 55
--#define PR_GET_TAGGED_ADDR_CTRL 56
--# define PR_TAGGED_ADDR_ENABLE  (1UL << 0)
--# define PR_MTE_TCF_SHIFT	1
--# define PR_MTE_TCF_NONE	(0UL << PR_MTE_TCF_SHIFT)
--# define PR_MTE_TCF_SYNC	(1UL << PR_MTE_TCF_SHIFT)
--# define PR_MTE_TCF_ASYNC	(2UL << PR_MTE_TCF_SHIFT)
--# define PR_MTE_TCF_MASK	(3UL << PR_MTE_TCF_SHIFT)
--# define PR_MTE_TAG_SHIFT	3
--# define PR_MTE_TAG_MASK	(0xffffUL << PR_MTE_TAG_SHIFT)
--
- #include "mte_def.h"
- 
- #define NUM_ITERATIONS		1024
--- 
-2.30.2
+> > > > I get that max_comp_stream doesn't do anything since this referenced
+> > > > commit. Don't we need this test on older kernels since older kernels
+> > > > still support max_comp_stream?
 
+> > > I read the following info from kernel selftest documentation
+> > > https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+
+> > > "The kernel contains a set of “self tests” under the
+> > > tools/testing/selftests/ directory. These are intended to be small tests
+> > > to exercise individual code paths in the kernel. Tests are intended to
+> > > be run after building, installing and booting a kernel."
+
+> > > So, we can build older kernel(use older kernel source) if we want to
+> > > test older kernel.
+
+> > > IMO, kernel selftest is different from other testsuit(ie ltp, this
+> > > shuould think about api changes because ltp may test on different kernel).
+> > Yes, that's how I understand the difference with approach of in kselftest - the
+> > kernel tree testsuite and LTP - the out-of-tree testsuite.
+
+
+> Removing max_comp_stream test appears to be motivated by the fact it isn't
+> needed on newer kernels.
+
+> Kselftest from mainline can be run on older stable kernels. This is a use-case
+> for a lot test rings. The idea is that when a new test gets added for older
+> code to regression test a bug, we should be able to run that test on an older
+> kernel. This is the reason why we don't remove code that can still test an older
+> kernel and make sure it skips gracefully.
+
+Thanks for clarifying this approach. It might be worth of documenting it in
+dev-tools/kselftest.rst.
+
+Kind regards,
+Petr
+
+> Hence, I won't be taking this patch.
+
+> thanks,
+> -- Shuah
