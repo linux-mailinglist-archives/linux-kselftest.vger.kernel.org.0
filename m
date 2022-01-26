@@ -2,105 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FCC49D3D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 21:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2201949D49F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 22:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiAZUuk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 15:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S229516AbiAZVio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 16:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiAZUuk (ORCPT
+        with ESMTP id S232629AbiAZVin (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:50:40 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1667C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:50:39 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id i1so767016ils.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:50:39 -0800 (PST)
+        Wed, 26 Jan 2022 16:38:43 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D6FC06173B
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 13:38:43 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id y27so893906pfa.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 13:38:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=g1rJEPs0w7TbjO5LiluyOsT70KWk/Gaa2amZ6SzJSNg=;
-        b=LuTGWXQWifwYDRK0Ygp4ORRKoXWDKfu7JXpfxYvH6+xWS0MeZ9A4AfeBilXSkvtRDh
-         znkkYjymaQGxlMvI2lgPErqRP7a/jxHudidDzFapBEmfCM2qCLbzzch1gj9urnz+FMnL
-         Lmh0myULWkTSD9DSPqbNzQPld8cp0zd1ZYqV0=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lD+IeXw2g3SnEFxxFA4tPs2Gg+BBC68wNzC39s+tbCM=;
+        b=g0V6+9+eAxLohg+otzC6p3X+pNpL0yR/rmt8gVDtaGXP6CRU88RuMCvIIzAUGX7DPr
+         /yOr+771CdzmvistWwFyguhIoaIJH+AC1ufY5Vd1IEjfjpxwRAA08P+kjWBGUF4VsNis
+         TVMhLX9wF+TzBkTnFpFIZ0RtPK1qWEhWgfzW2agGJlpBR5cRhuPVRJBQxuaUzN7u6VZh
+         qXZl+9wP/xYb4dQYwnySO/CCGuMfBPzijp4KgJXjatUVKkGsEVtrInoswg0MG74iOxxc
+         e55fcHJmaEQCiGS0B876dh8n0K2oQYkDCfRSVp2xDsAZmIiaesqmAWcHyqGwZL8tsKI4
+         0RoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=g1rJEPs0w7TbjO5LiluyOsT70KWk/Gaa2amZ6SzJSNg=;
-        b=i3NCIwk3eZ7zdhnkFyjFAbLFID7VDpFzyYE8eau0gIRfNdaE23u9lH/ImVvlvgiBdo
-         wi6S9SX+8zHYt+UabphGO5gymzON3gOV2hTAEtd2gdgCEULgDAkHOHJ/s43M8abo2+FA
-         9tPzqD26gwiLsudsbkpYNvAnPoyoaEiJo7DuYF0nao/QkVWFqEnzl+n3n2x+4KvjD3kk
-         13e0IPrvoPeHZIMLI9njvxDzqrRkf5iIF+nn2YM9G8RD87Tpw6DniWnR5q5U8CanEeoM
-         jhTDOBde9whlz7CXaXIU6jjVqGI9X14aRSAh8yUn7IQHeEIduChsyUfVcugNpZmMpNKZ
-         VInQ==
-X-Gm-Message-State: AOAM532iDt8uqfryq9lkq5x9SJYvLCy6bdWkGyvTXasNBPKk1GO6igZV
-        vfE6WbxerCdhcvxETGYXs2+s0A==
-X-Google-Smtp-Source: ABdhPJzLASiBQ1mqUUkmTRKw+Qt83yRsQOKnC9rpNhp0UwVvoRvgbqpJPBIXvFLNV8BTOFeyn3PSHw==
-X-Received: by 2002:a92:d4ce:: with SMTP id o14mr645706ilm.218.1643230239216;
-        Wed, 26 Jan 2022 12:50:39 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id f2sm11441452ilu.79.2022.01.26.12.50.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 12:50:38 -0800 (PST)
-Subject: Re: [PATCH v3] kselftest: kvm/arm64: Skip tests if we can't create a
- vgic-v3
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220126145242.3473836-1-broonie@kernel.org>
- <4424dd30-f74b-006f-b540-dbaf02e45e28@linuxfoundation.org>
- <YfGmk1I8l+ROoE/k@sirena.org.uk>
- <48c44d74-6668-7823-ada6-0285a8b32a35@linuxfoundation.org>
- <YfGrXr1/NGREULnB@sirena.org.uk>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2e9162ef-6107-e56c-e713-1f1ac7f83003@linuxfoundation.org>
-Date:   Wed, 26 Jan 2022 13:50:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lD+IeXw2g3SnEFxxFA4tPs2Gg+BBC68wNzC39s+tbCM=;
+        b=gdtH9qRhWpmS9bAi8BGxDRl7OnsiINMVHtfcwFw8FhIJIKPje6NP2PZEF34EXSrpiA
+         UvO8Pi5MtJjhoDXQZ/f/fp+zbp2OEO9vZMb6wlGyYNLcc7TeX+YoYxim70hKnjdu/qxA
+         KqdnvCCvFhIi93xsUIn9ci58UiinRg2gKk1wHyPvcI0Lc5WvI4num8gqzppdMqbwGClf
+         agxvCk7vG4B/PLwuuf+nkdaaHuBvyk0TgNV6zmcGur0JV1xY+7nV8Lz0frNex1lXHCqb
+         gGMGNdGSAqZ0AjkcbDTYVe7M/LWABqiX9HvFTaI1egyHS3rHIGjWglpAf7olvUf9M9sE
+         xsxg==
+X-Gm-Message-State: AOAM5332s9LMBWk2XBYMxMaa0DlReF5rDB11X206j0dCg5CauAXSIZek
+        kyPl7l0U9OmwHt6E2vFx7Spr/KzPG/5EUrKnvwdFrA==
+X-Google-Smtp-Source: ABdhPJxhUyY6fvWRkImec6LsPebj7DYp9opvIlGnXwWGuUtCS+f1D8i0ONWseFOnAO+6CvzSBcTgPcZuIPIGIG0g8gE=
+X-Received: by 2002:a05:6a00:1508:: with SMTP id q8mr261428pfu.3.1643233122805;
+ Wed, 26 Jan 2022 13:38:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YfGrXr1/NGREULnB@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220118190922.1557074-1-dlatypov@google.com> <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
+ <CAGS_qxqx+wcruc7DAD9TQjk27OF+VDo1n9S6atRx+dDG5cr=6g@mail.gmail.com> <CAGS_qxpRqOAoBbkkFttZgB_Zm+KM=pwprgZ0wzDROh21mO0r8Q@mail.gmail.com>
+In-Reply-To: <CAGS_qxpRqOAoBbkkFttZgB_Zm+KM=pwprgZ0wzDROh21mO0r8Q@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 26 Jan 2022 16:38:31 -0500
+Message-ID: <CAFd5g44B3aUY1k7n7c9066-McW0Rm=48H4ArUK2VbXB798e=BA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/26/22 1:13 PM, Mark Brown wrote:
-> On Wed, Jan 26, 2022 at 01:03:44PM -0700, Shuah Khan wrote:
->> On 1/26/22 12:52 PM, Mark Brown wrote:
-> 
->>> If the function fails for any reason other than the system not
->>> supporting vgic-v3 it will abort rather than return.
-> 
->> Hmm. vgic_v3_setup() return gic_fd looks like and the interface says
->> Return: GIC file-descriptor or negative error code upon failure
-> 
-> Yes, but in reality the only return other than a valid file descriptor
-> is just -1 rather than a useful error code.
-> 
+On Wed, Jan 26, 2022 at 2:55 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Thu, Jan 20, 2022 at 9:19 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > > That being said, I can live with the current solution, but'd ideally
+> > > like a comment or something to make the return value Tuple a bit more
+> > > obvious.
+> >
+> > A comment to explain that Tuple == multiple return values from a func?
+> > Or something else?
+>
+> Friendly ping.
+> Do we want a comment like this?
+>
+> # Note: Python uses tuples internally for multiple return values
+> def foo() -> Tuple[int, int]
+>    return 0, 1
 
-The interface document gives the impression that it will return
-error - Oh well. In which case, no point in printing that. Agree.
+I don't feel that's necessary. I think the use of tuple return types
+in Python is fairly common and don't require a comment, but I don't
+feel strongly about it either way.
 
->> I don't follow the abort part.
-> 
-> All the TEST_ASSERTS() in the code (including those in the functions
-> called) are calls to test_assert() in assert.c which if the test
-> asserted isn't true will print some diagnostics and call exit(), the
-> general idiom is to give up immediately on error.
-> 
+> I can go ahead and add that and send a v2 out.
+>
+> FYI,  if you do this in a REPL
+> >>> a = foo()
+> >>> type(a)
+> <class 'tuple'>
+>
+> The syntax for `a, b = foo()` is just using Python's unpacking feature, i.e.
+> b, c = (1, 2)
+>
+> So it's all just syntactic sugar around tuples.
+>
+> >
+> > Also ah, I thought we had more instances of multiple return in kunit.py.
+> > Looks like the only other is get_source_tree_ops_from_qemu_config().
+> > isolate_ktap_output() technically shows this off as well, but via yields.
+> >
+> > >
+> > > Thoughts?
 
-Ah right. Makes sense.
-
-thanks,
--- Shuah
+Personally, I think the change as is.
