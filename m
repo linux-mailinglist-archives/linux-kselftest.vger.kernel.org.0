@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4071349CDA6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 16:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4558A49CDA9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 16:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235850AbiAZPNy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 10:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S242613AbiAZPOA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 10:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbiAZPNy (ORCPT
+        with ESMTP id S233709AbiAZPOA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:13:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AD6C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 07:13:54 -0800 (PST)
+        Wed, 26 Jan 2022 10:14:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30572C06161C
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 07:14:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6FCC617B4
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 15:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D877C340E8;
-        Wed, 26 Jan 2022 15:13:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3A4FB81CA7
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 15:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF281C340E3;
+        Wed, 26 Jan 2022 15:13:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643210033;
-        bh=HZPqgEGfMDOJRbR9O3affXiwGZAfPzgR37m4iq1abJY=;
+        s=k20201202; t=1643210037;
+        bh=Sg4MO9YZQcbV+koV+CMJiKCz9E7cFOVY1Zqkeaooq10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aHPHxcSAlslb11pCOwl3Jo+DRTJxFbC+n3Xfdp9VIR+MX6Wxn5hBjvQ/NRn+1DlsL
-         /T7cOObray3K3N8jD9JyKIuhTTxcQeU2xpHeTVbWE90QnibLlMqqqwGiQEgaRLFOIy
-         4KNU4/7xNHbSMZvhzCrS/RvC19/TM2m+VULyo4+PEkBEGIAGKcFfj49bNyHSGgLEp5
-         JvQqwUaD+QNfj681jJy4FPUGgjXCvR2+NrBeP0i+OF2NVrEtR1OCrEVIOPGo4P6GV9
-         8QdemV2FFCQEj1OlO1MRMHWqm+fqkrptISS250R+mGLGyMzMLqp6SJ1excOmwLcBvH
-         dcc8P7Onk1q1A==
+        b=fzjKnwEHreMc66l3kPGF2+vKp9+l+5aCBgUCtayC9Q6KWdWIiYRnhLCsqAVrar6gs
+         I0Cc9UXUO2TIFoHxqUI/BgYCuAmgINoMEN9R+n3B1REXOQb7iqKAK92nWCqyVWj+O7
+         4ojBK5zA8bYN0Sjw8ctnjKcjAm6a3N/MHd3T6uHMUQhTTyjOwXyPxZASn9BjmTtHBg
+         FCbnFKHEEUY7ms6S5DTCNisPg8qpbdPxWmEMfMcC6uabSG9VBEvlTyOahEeuQt7n79
+         CsqAMazEyEzDG3SK+pbcpWU74VsfQJDDYt2QnUYFfmbdc4y3A+qBmgThAHRLnKjT0O
+         D28NbUkflRaZw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,116 +48,112 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v9 33/40] kselftest/arm64: signal: Allow tests to be incompatible with features
-Date:   Wed, 26 Jan 2022 15:11:13 +0000
-Message-Id: <20220126151120.3811248-34-broonie@kernel.org>
+Subject: [PATCH v9 34/40] kselftest/arm64: signal: Handle ZA signal context in core code
+Date:   Wed, 26 Jan 2022 15:11:14 +0000
+Message-Id: <20220126151120.3811248-35-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220126151120.3811248-1-broonie@kernel.org>
 References: <20220126151120.3811248-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3936; h=from:subject; bh=HZPqgEGfMDOJRbR9O3affXiwGZAfPzgR37m4iq1abJY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8WSRpfEXhZMiZZEUpvipJ+vhpvj7BzhhYgFzTZOk zo69Z22JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfFkkQAKCRAk1otyXVSH0Lf3B/ 9Xg2sLa9D12aP+Oj3NXxL28J51+BSip6GT4MaLaJrm+vwjwgxNUuSi3GWZYCIE3oWuqaxhOg0PYPQy kn/3/o2X885AR7rP4YqgIHG4WGck5T68WkbJjrv7ocz58I1rZLT+jUaWkfhFoSJbTrh++bLubHs6Di QfWzsESxW/pypWZmQXswLblwX07lEFEUYJKOk0SEiYkR7wzNCgPG+Hlg23cKTxq51nIbYb6UmX8KJo lYGtVBEOfu5DI/9Rgyw4/jKN1Nyo+SQLOjFKJiavyHSEA8DonwaVTmeeDwvyQDEJTG3rcs1pjQWf/H rrX2E9g3MWBXc9dtSU82cc+1Cw9j4W
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3220; h=from:subject; bh=Sg4MO9YZQcbV+koV+CMJiKCz9E7cFOVY1Zqkeaooq10=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8WSSvpNMvy7SNGRTsSL8cEuGKairNIi9+eypDo1i pNtel2SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfFkkgAKCRAk1otyXVSH0HtyB/ 0fb2wWNAmkiyXylja9l9e/IhJEoZjNo3HUCsgVclmoYP+6KWun+khRbrl4sH4rRAID7KMvZS1K6/Ui kvFx1Wnr9OYUg2VAs/pEtrrMfonKvWkzM3/H877JYoNbXd3D9o+ppI9MrPa9VWdZA71UKx/Si1LnY4 tarREqW2Jc7kgpzq337zb1A8Ah/4eWCe89sDcPUv22ynxtbgAO7sSqM41ZS0dFOPiheYYwc5WD/eV5 8KHQyLMmMzmpeJ4STcGnvM6kXi17pnQzEXG/gsNp0a14t8g2LSFDE6oA6D+Zmmdn8L6jiLkIAIQnKJ DGOEMHUdbz6Ko47IVJVXQiB914NBy7
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some features may invalidate some tests, for example by supporting an
-operation which would trap otherwise. Allow tests to list features that
-they are incompatible with so we can cover the case where a signal will
-be generated without disruption on systems where that won't happen.
+As part of the generic code for signal handling test cases we parse all
+signal frames to make sure they have at least the basic form we expect
+and that there are no unexpected frames present in the signal context.
+Add coverage of the ZA signal frame to this code.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../selftests/arm64/signal/test_signals.h     |  1 +
- .../arm64/signal/test_signals_utils.c         | 34 ++++++++++++++-----
- .../arm64/signal/test_signals_utils.h         |  2 ++
- 3 files changed, 28 insertions(+), 9 deletions(-)
+ .../arm64/signal/testcases/testcases.c        | 36 +++++++++++++++++++
+ .../arm64/signal/testcases/testcases.h        |  3 +-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
-index ebe8694dbef0..f909b70d9e98 100644
---- a/tools/testing/selftests/arm64/signal/test_signals.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals.h
-@@ -53,6 +53,7 @@ struct tdescr {
- 	char			*name;
- 	char			*descr;
- 	unsigned long		feats_required;
-+	unsigned long		feats_incompatible;
- 	/* bitmask of effectively supported feats: populated at run-time */
- 	unsigned long		feats_supported;
- 	bool			initialized;
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-index 2f8c23af3b5e..5743897984b0 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-@@ -36,6 +36,8 @@ static inline char *feats_to_string(unsigned long feats)
- {
- 	size_t flen = MAX_FEATS_SZ - 1;
- 
-+	feats_string[0] = '\0';
-+
- 	for (int i = 0; i < FMAX_END; i++) {
- 		if (feats & (1UL << i)) {
- 			size_t tlen = strlen(feats_names[i]);
-@@ -256,7 +258,7 @@ int test_init(struct tdescr *td)
- 		td->minsigstksz = MINSIGSTKSZ;
- 	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
- 
--	if (td->feats_required) {
-+	if (td->feats_required || td->feats_incompatible) {
- 		td->feats_supported = 0;
- 		/*
- 		 * Checking for CPU required features using both the
-@@ -267,15 +269,29 @@ int test_init(struct tdescr *td)
- 		if (getauxval(AT_HWCAP) & HWCAP_SVE)
- 			td->feats_supported |= FEAT_SVE;
- 		if (feats_ok(td)) {
--			fprintf(stderr,
--				"Required Features: [%s] supported\n",
--				feats_to_string(td->feats_required &
--						td->feats_supported));
-+			if (td->feats_required & td->feats_supported)
-+				fprintf(stderr,
-+					"Required Features: [%s] supported\n",
-+					feats_to_string(td->feats_required &
-+							td->feats_supported));
-+			if (!(td->feats_incompatible & td->feats_supported))
-+				fprintf(stderr,
-+					"Incompatible Features: [%s] absent\n",
-+					feats_to_string(td->feats_incompatible));
- 		} else {
--			fprintf(stderr,
--				"Required Features: [%s] NOT supported\n",
--				feats_to_string(td->feats_required &
--						~td->feats_supported));
-+			if ((td->feats_required & td->feats_supported) !=
-+			    td->feats_supported)
-+				fprintf(stderr,
-+					"Required Features: [%s] NOT supported\n",
-+					feats_to_string(td->feats_required &
-+							~td->feats_supported));
-+			if (td->feats_incompatible & td->feats_supported)
-+				fprintf(stderr,
-+					"Incompatible Features: [%s] supported\n",
-+					feats_to_string(td->feats_incompatible &
-+							~td->feats_supported));
-+
-+
- 			td->result = KSFT_SKIP;
- 			return 0;
- 		}
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-index 6772b5c8d274..f3aa99ba67bb 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-@@ -18,6 +18,8 @@ void test_result(struct tdescr *td);
- 
- static inline bool feats_ok(struct tdescr *td)
- {
-+	if (td->feats_incompatible & td->feats_supported)
-+		return false;
- 	return (td->feats_required & td->feats_supported) == td->feats_required;
+diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
+index 8c2a57fc2f9c..84c36bee4d82 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
++++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
+@@ -75,6 +75,31 @@ bool validate_sve_context(struct sve_context *sve, char **err)
+ 	return true;
  }
+ 
++bool validate_za_context(struct za_context *za, char **err)
++{
++	/* Size will be rounded up to a multiple of 16 bytes */
++	size_t regs_size
++		= ((ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za->vl)) + 15) / 16) * 16;
++
++	if (!za || !err)
++		return false;
++
++	/* Either a bare za_context or a za_context followed by regs data */
++	if ((za->head.size != sizeof(struct za_context)) &&
++	    (za->head.size != regs_size)) {
++		*err = "bad size for ZA context";
++		return false;
++	}
++
++	if (!sve_vl_valid(za->vl)) {
++		*err = "SME VL in ZA context invalid";
++
++		return false;
++	}
++
++	return true;
++}
++
+ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ {
+ 	bool terminated = false;
+@@ -82,6 +107,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 	int flags = 0;
+ 	struct extra_context *extra = NULL;
+ 	struct sve_context *sve = NULL;
++	struct za_context *za = NULL;
+ 	struct _aarch64_ctx *head =
+ 		(struct _aarch64_ctx *)uc->uc_mcontext.__reserved;
+ 
+@@ -120,6 +146,13 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 			sve = (struct sve_context *)head;
+ 			flags |= SVE_CTX;
+ 			break;
++		case ZA_MAGIC:
++			if (flags & ZA_CTX)
++				*err = "Multiple ZA_MAGIC";
++			/* Size is validated in validate_za_context() */
++			za = (struct za_context *)head;
++			flags |= ZA_CTX;
++			break;
+ 		case EXTRA_MAGIC:
+ 			if (flags & EXTRA_CTX)
+ 				*err = "Multiple EXTRA_MAGIC";
+@@ -165,6 +198,9 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 		if (flags & SVE_CTX)
+ 			if (!validate_sve_context(sve, err))
+ 				return false;
++		if (flags & ZA_CTX)
++			if (!validate_za_context(za, err))
++				return false;
+ 
+ 		head = GET_RESV_NEXT_HEAD(head);
+ 	}
+diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.h b/tools/testing/selftests/arm64/signal/testcases/testcases.h
+index ad884c135314..49f1d5de7b5b 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/testcases.h
++++ b/tools/testing/selftests/arm64/signal/testcases/testcases.h
+@@ -16,7 +16,8 @@
+ 
+ #define FPSIMD_CTX	(1 << 0)
+ #define SVE_CTX		(1 << 1)
+-#define EXTRA_CTX	(1 << 2)
++#define ZA_CTX		(1 << 2)
++#define EXTRA_CTX	(1 << 3)
+ 
+ #define KSFT_BAD_MAGIC	0xdeadbeef
  
 -- 
 2.30.2
