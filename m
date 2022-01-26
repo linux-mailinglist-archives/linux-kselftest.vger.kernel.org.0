@@ -2,291 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4AF49C33B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 06:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C4249C386
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 07:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbiAZF3P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 00:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiAZF3N (ORCPT
+        id S235235AbiAZGQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 01:16:02 -0500
+Received: from esa18.fujitsucc.c3s2.iphmx.com ([216.71.158.38]:58241 "EHLO
+        esa18.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235212AbiAZGQB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:29:13 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9324DC061744;
-        Tue, 25 Jan 2022 21:29:13 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j23so62077465edp.5;
-        Tue, 25 Jan 2022 21:29:13 -0800 (PST)
+        Wed, 26 Jan 2022 01:16:01 -0500
+X-Greylist: delayed 431 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jan 2022 01:16:00 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1643177761; x=1674713761;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=5r7oydULh2AKuLwO/N0v6Up+GZ8ujpxSIA/+DQQgMEM=;
+  b=GyKcA6smHhE8Vl9XDzvz8a9GEXIl4dwjayaC57f8gHNS8oJYaV7+fZ9l
+   YbPNOM0l0PVMiQV0Sgllw1YFqr4R5WNXpU+RPrZI2PHYtJp+QRX2+7LQD
+   b0/lEHyaacjcSKSrIBhoJJ36Gu4U/QRQ919hK2U/HMCmw35v7jCaVhmTZ
+   QMyGgLzsqb6yGIBkNvhY4qaPc+aocOPileA1pMFTNgAs7l8jklRT3rx2z
+   NJJG7xubg01euXvCEtrOVn8np+7n5vEvAw1UiYrHjvQdCsGe7D+5VNZOf
+   ROCCD3bFPpRqQyPbJGdvTkXa+gCzGmFkDr7DNAzJiZTWNYzJfQDb90uhd
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="49396836"
+X-IronPort-AV: E=Sophos;i="5.88,316,1635174000"; 
+   d="scan'208";a="49396836"
+Received: from mail-tycjpn01lp2176.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.176])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 15:08:44 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i9xNzLG4MD7qATqb3GHgBo0CBnnGF/tI5eL+LFcPI0yVdiYhpg3TlaJA1FGpeMo3pgU7JeAbwo4fsOy4zE3XhF9j+pZTYVspSl54OgCVeRbnejaalHSlf+GuS3M/zRV8zpC2VvsN/k2UCEi/DHVWbfuCsD69tcItSxXBvpm5cOwcfdzPpFzuyrjBHdFNZNu/ZtOXEoTlBM1TlMPBtt12bX/bWf5dpkSSkTcgOCSfdcZlsBU20Odi7UglfGSVurzbUjniltGa4xQI9k16GIAZ49PNvCvtw8OV030J0QbRRDJzXXHDHq8C5bWZgVEzgVDNDw8sMTHd3dfLusBPJ4ks9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5r7oydULh2AKuLwO/N0v6Up+GZ8ujpxSIA/+DQQgMEM=;
+ b=jcM1fzzC03VRoQBFv4NFBvcfMWNQg0jJAAzpZK3su6/9c4U7vNAgWCzLKwaXcVE+oSE999GmH2mfhZvJJf0da7V5hIVxJLiSMxOear/ewcy4P9JHu7n2gt9y81TFIcX7aBcGbqoT0/0esC+bQIwY+wny4oexFxC6RYt1zzYmlwszFRZdC/s622Dxp28ii+1bpw7w0mAvBF6g6NHbmcZiQH1XT0eXfBGoCFuDrUPH3MXIcOQJJeVKmqtz3HnO+/HTKw5r652ypOCsYlRKjQCxcI5IjF3Yveb4qFb7vQ/jFc1crRaFyxn4x2bSxlpwPVy0W3doaXgo9/XeyW20vYmClw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4PDdpxJRSa9UjiKgrk6TgyjF82dXoOGQZ1P6ZtEXjA8=;
-        b=nHjo7L8Jh50vZ/kfcUkLlOiGHLl5EcW8v2dxLfCuByJLDkpoJwGbV5Pg2x/lG4ys/r
-         4fbehsQkVZ1IRNFMnvErMvh6toF5nwbPW0Ff3ag82xXKU+cNHeXI64PZuPDf4KS1RqFI
-         u7+mX7OwCHI7nfMU+A/fVFbcw81ieY/poVAbrjjZThh0o2TkHhpr1h7MXlSxbypOdfUh
-         1yWRshYq+Ho1/YrQJ0QoC4nHFQhRKr03MlCBsAS8Yh7JgKveg+JP13SV3xwDgzLUnAQI
-         GppaHODCRrA0DIovHxtVmoLAg3LI0IeOu+xcazzCSDba3o/F3pEee2zC6LLbmfjzONlv
-         ROaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4PDdpxJRSa9UjiKgrk6TgyjF82dXoOGQZ1P6ZtEXjA8=;
-        b=jShjjnFgVWL2vK9t7DTBB32H5RXitq26SIgsZnxYz4IN26lKh3TLhtVJTCjbr7RQWX
-         s1hbnlm9zx3bcH393qLCCi/Sx0FICD07KghRIwN7w0S7bHsPaAzlJfk2RE8in/KsYL8M
-         9PCpKng3Xbi3F59bgTf4vLq3LcoOn1Mbo7maUrde61eRYn6SRW8ZHeovVSwEaGe3tGe2
-         PNX317TmDrkfQl63T1QPpKmXzcnj3rKnUc1mrX9fMQ0esAOEsKTRjfCPRU8AxTfrcdiT
-         FsDWDUrRxxHoiceqLXeo2fJYJTC4GpY0T5uc9nH7IZdU2rTsDYGEArj3QmwcMePTGs08
-         jKaQ==
-X-Gm-Message-State: AOAM5319XSRnBFLYjRZYcPfozWtbw9/cft4kmVjhkGW1p8Kl2gGGE0S3
-        CzJ+HqwemPZ4e1YKwMdn51xhqEDbpSz0xrO0TP8=
-X-Google-Smtp-Source: ABdhPJzNKB74HAnXwYwW9pgAXKjSKdOAdu5HGEb+K9iclcF4wwab6A0jW0r7EX3QD0vKy/JUnZKZfTk9dSwX7g2KINo=
-X-Received: by 2002:a05:6402:270f:: with SMTP id y15mr1528219edd.329.1643174951510;
- Tue, 25 Jan 2022 21:29:11 -0800 (PST)
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5r7oydULh2AKuLwO/N0v6Up+GZ8ujpxSIA/+DQQgMEM=;
+ b=pYzED4qcY2EwvhNBii9N3k1PlXtEHD24N++w/njwzZicjmFs8Iv1wby/OFjfQnm0M6u5cGhN5Sf6zuySiOXGaAOfzy133udA2yJ6+SqA1fzQAfL12f6W4jgY2Oxv/JAFO8IN6Q1l02JaPKDpgIWnbyfV17gpj5kxc0cSYeqQ9gg=
+Received: from TY2PR01MB4427.jpnprd01.prod.outlook.com (2603:1096:404:10d::20)
+ by OS3PR01MB8163.jpnprd01.prod.outlook.com (2603:1096:604:175::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Wed, 26 Jan
+ 2022 06:08:42 +0000
+Received: from TY2PR01MB4427.jpnprd01.prod.outlook.com
+ ([fe80::c954:50fd:21b5:1c8f]) by TY2PR01MB4427.jpnprd01.prod.outlook.com
+ ([fe80::c954:50fd:21b5:1c8f%5]) with mapi id 15.20.4909.017; Wed, 26 Jan 2022
+ 06:08:42 +0000
+From:   "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
+        "aleksei.kodanev@bell-sw.com" <aleksei.kodanev@bell-sw.com>
+Subject: Re: [PATCH 2/3] selftests/zram01.sh: Fix compression ratio
+ calculation
+Thread-Topic: [PATCH 2/3] selftests/zram01.sh: Fix compression ratio
+ calculation
+Thread-Index: AQHX8ZoRazkvy8ml7UWBS3Z6InXCRax0c3uAgACf1AA=
+Date:   Wed, 26 Jan 2022 06:08:42 +0000
+Message-ID: <61F0E590.3080101@fujitsu.com>
+References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
+ <1639562171-4434-2-git-send-email-xuyang2018.jy@fujitsu.com>
+ <f80750cd-d2e8-cc57-37b6-cb4f770c61e2@linuxfoundation.org>
+In-Reply-To: <f80750cd-d2e8-cc57-37b6-cb4f770c61e2@linuxfoundation.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 07934152-ff9a-4437-8f8a-08d9e0924d9e
+x-ms-traffictypediagnostic: OS3PR01MB8163:EE_
+x-microsoft-antispam-prvs: <OS3PR01MB81637FDB7A17B0AE282D6837FD209@OS3PR01MB8163.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:270;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YiVgBrkzftIQX9/WKPOI+eOSK0LyIiU1b6l1tApBsw7Gjx1nPiki+XnJPfD2LjCk1grph5JfWcZzNn2ALbudZXpaF5fThTYLLs8nEoBH0Ofm+iLL7yJElNzC+aiVytnhToxqf/i46WQDha4ihO05WLau8Ul/ARrasg6Ot/5OedPs+qdrXoKXeQdmc/0zTAXqsRgBVbu3h2FGpNRCgrc5BsTgK3yZESoeBZn/Y41WvZ8YPs4iOybhO4Gc+fmJ5NE8/N5Sgdfzj0OBG3IUr+vCERBs2Oiv6nBJ8PwyrBPSGezojMQ6nUKHILQDsCrPCMj0mJDbzW6N5MRzVkLjC1LW0lR+Dr4TCD00ZGVD2qZv8dEg5h9TG791YyhWvPWv8P44eGK3m77jhnGhLsyT2EUl8pSvAhYngiHwFQf0VWACb8aQnYFC71Iri799/TWztVnxrIEbf/QA3iYKBFtzDkQHKVVCkCgSR3AkT5TQ0bUkv3NR7J9BdA2xmn3DLoFwPcP5fnrDsc0Nqs7tGG42Haaj6sRxhN//MTKj36OOUe23SXFBVF6zaaIlLNkRJfTEVrwSQolJybelPtXAYMR5AKWZGaLxZvPwD2aePMWc/x5ZQL0BrM79IG/JxkQ9ttDljIyplJxmk/Yxl6sKYaDRB+j82q+wITCQKuVFjWFt2KMULSS9j9zd56w5Hp8K3B0jJAkCaXxmsb13mDlS8tqqzJCVyA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB4427.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(6506007)(53546011)(122000001)(87266011)(26005)(82960400001)(5660300002)(33656002)(85182001)(2906002)(36756003)(2616005)(186003)(71200400001)(8676002)(316002)(54906003)(86362001)(6916009)(91956017)(6486002)(4326008)(66946007)(38100700002)(508600001)(83380400001)(38070700005)(8936002)(64756008)(66446008)(66476007)(66556008)(76116006)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cURKS2JuaDJ0YzEwbzNhbStYS1NUZmNxOEk3a3lsZUp6R1hJQ3pHVE1TQTda?=
+ =?utf-8?B?T2VkbWFZZS9sSG84SUlFOFJZb3NJV1VkOStpaEtLZEs0VVRWSGRBcmkvdG95?=
+ =?utf-8?B?eExFU1h5RXd0TEpmMFpFMDNBQ2ZRYmF6eVFPY3ZZYmJCWjdBb245aHdPa0VG?=
+ =?utf-8?B?RGRMVmkvSWI1dy9pSEZQL0JUeGFZb3Q3SUxoUkg5VGhaai9JSUE0SXlnMEkz?=
+ =?utf-8?B?anp6ZjNlZXgwVFZkNmRQTDhaU3g5alkwYmRPNDY3OTM4WjdGNkJ1NGk3cWdu?=
+ =?utf-8?B?bS9lTTlLWXNzMThVbm5ncVJFdkpFRmRmbjlaa2FRNStpekJTbzlza0JOS3Bu?=
+ =?utf-8?B?WGNGWkRwWTFQcFVEaXBtdVJxT2J1aEk4NmpmemYxQlNQYWxWQnhOUGN4aCty?=
+ =?utf-8?B?M2tsREliZEpudGo0QzdJNTVZRDgzdEJwaGNwY05VWDJOS2M5VVpXVXF4TDlM?=
+ =?utf-8?B?UFMzeXF6S2l4QkNSMkw4U3lNdWJjZDJxM0cvU3NYOEdTdWlhMnE4bWF2Qnk4?=
+ =?utf-8?B?TFBpVHZjZGNiZ0Q3SFpCVExRcDZleTN5UStnc2dkbk5ERWd2dHZGZ1VLQ0oz?=
+ =?utf-8?B?S0xYL29zSHdTdUZ4aFhDcDZydXRHdTdZTkJoUG1vOVlKendZVWVTZVcrVlNJ?=
+ =?utf-8?B?STlyd1p2bzRpcHF6UU0wY2lETktFM2hJQ2xwRktxM3BoMkNwYU5kWGNFMkox?=
+ =?utf-8?B?Mmg4MWhCV2w1RTFxYmtTVlBaUjlDQmRaaFY0bUZSbTVPM2VLUmovdnNQZkdY?=
+ =?utf-8?B?WWswNjhPYzFNbldhMzdYQjdUZjhuT08rRlo0Q2dJamhUWTNqNkI4c21ZdDVr?=
+ =?utf-8?B?Z1dxL2ptSnkreWJlenVRQjZZS3k2UGR3and1S2hRWTFVRmxrdUVscCs4Rkts?=
+ =?utf-8?B?aW5TL2RuR2lGWi8ycy9Ha20wTWNhMWhDZkRjalcxbUZtMlVDM1BzOXFBK1Fi?=
+ =?utf-8?B?cE1OZ0RrOVRXU2FMMW1FTTdRcE5abGZCSVJNNEZaUTl1RjQvMlZCR1BqRHZv?=
+ =?utf-8?B?Y1BPUHZGNzlyeFZyZUM2ZGdsM0pDbytjK0JQejZ1WFdneGFiMHVGRTZhTTNL?=
+ =?utf-8?B?c1JmME9FY2h1VmJKRkYvcm9wVHpDVHB4UEpNOTgzakk5YS9CT3I2ZDBhWndF?=
+ =?utf-8?B?ZkdKWFkraFUxQVVZR3IyWjc0Ukh2b3JVc3BYSVAvSE1EdkZ1NCtiSVRhMU16?=
+ =?utf-8?B?WGVDeDhIN2lXK3h0am9EQVdHak9WN0ZESThTdkdkLzFtR0t0SXY3V2xEYmpj?=
+ =?utf-8?B?bDd4a2gyTjRGb3NRWEU0aUV6WHdJQXo4TS85azRXQ1NLbWpSVjFtazlMdUY4?=
+ =?utf-8?B?cWZhYVVSRlJXeXdsWFBYQXVXMEprT01ZQUJFQll0cU1VZHZTbGovQmdTRll3?=
+ =?utf-8?B?blJmdzhjbndQcVM5cEFxZVdSVE1KTWNKU2hOblhKNHVJQ21lTlhVVld3dkpF?=
+ =?utf-8?B?bGVSeE1KeGQ2blZoUXlDQkZJaFJoUFBHOVFxbzVJSnhhUWl4Q0RIRW1QVnJM?=
+ =?utf-8?B?SVJnM0E0eStkTEtiVTRYNVl4SjVubmpBS0ZJMUh4OUM1Vk1rM2FKanRCQ1dx?=
+ =?utf-8?B?ZFY1cFRzVm1sV3UrY1NLU1haeGtIeUpEZFp1cWZOU0hWZUdXNnhNVmlGM0NC?=
+ =?utf-8?B?aVoyOHN6QnBGU2c2NlZNWXM0a01wZFhSK0R1dURmc3hmZjkvRnFPRzJEekUr?=
+ =?utf-8?B?SjEvYXVNSno4UkhrZGxaVUg5ZVJBZnV2R2F3RzFwSTRpNER2VmFLazZwTWlR?=
+ =?utf-8?B?eGFqK1FPVlVTM2RtTUZXT1JlcTlubjNwRHpDbnQ1Q055eUdpR09oaDBXbDJt?=
+ =?utf-8?B?Y3JKNU5WRWdKSm9iOWxWRFMrSUVkRUZZem90Q3VaeTQrc1NKZW1aWmVnQ0l6?=
+ =?utf-8?B?UW5PaFVqdmdNd296S2paOVJLZ0NETUJEcnpyUmtvUk9HYWIrTzVIeUIyVW11?=
+ =?utf-8?B?cWdrMmthbFlpeGIrMkNrUzhMSW0za3VVVUY1d1NYL0lZNkZiQnNKekZwL1VP?=
+ =?utf-8?B?cDlGeGgvSDFnRDhYSEViQy9HWEVmMC9BUkZhK3I3M21yYTZLV1hWOEgvVTc5?=
+ =?utf-8?B?V3V1RHhyMmg5Rzg1KzFQVVRFTnNmM0tRaVVXSk5JMWJWY3dPbUF0Rk9LRzJl?=
+ =?utf-8?B?THRvSURuZlRrQ0w5aU9wK25ySnlVdjVON0tSZ2FFY0p1eFpTWEJBc2JnbEtU?=
+ =?utf-8?B?V3VEaWJEWWxhWmdUZjNVK3FOaXVqeGt2bXRVeUMwaG8yWm1rWVVLZHErY0hH?=
+ =?utf-8?Q?oBlrDz17prPUjNpG+QSlUd8nx55w0uMOh8XBm6qgFA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <86F2580B976AD644A17D7198EF0D0C20@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1>
- <20220119182143.GA2183703@paulmck-ThinkPad-P17-Gen-1> <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com>
- <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1> <CAABZP2zCWJ1S3We1f6UNVW=Q6h7cz8uMbR7PTzt9UWH9CjSZuw@mail.gmail.com>
- <CAABZP2z=ESWA1EYf1LGS40ipJxcVOAUkvJHA-rdDP6_0Oqjgsg@mail.gmail.com>
- <20220125180907.GN4285@paulmck-ThinkPad-P17-Gen-1> <CAABZP2xGZ__8MZWL0kGAdYJ9ZNq2omw9-VTACmrG8wR8RswG2A@mail.gmail.com>
- <CAABZP2wt03juddoKfxO0m=+kn407267jLJn+gPRzU-w3nUBkAQ@mail.gmail.com>
- <20220126045022.GW4285@paulmck-ThinkPad-P17-Gen-1> <20220126051427.GA3240075@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220126051427.GA3240075@paulmck-ThinkPad-P17-Gen-1>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 26 Jan 2022 13:28:59 +0800
-Message-ID: <CAABZP2wsR+nXWK1mdZxJ3FjSfgQ+Dx3HTa6gaEZPCysABrrY2g@mail.gmail.com>
-Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB4427.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07934152-ff9a-4437-8f8a-08d9e0924d9e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 06:08:42.1251
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tpwauhZ+5KwDYjCvdPEk8rpf10ZadXMSpWww5MyTEg8fyXxrY0zicoMfa6AC9Vpq03fuKufrxORUIjrWvIvggpEaSx0Sr6dFADpp12Q/F6U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8163
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks Paul for fixing it
-
-I will perform the tests now, since
-"tools/testing/selftests/rcutorture/bin/torture.sh --duration 10"  may
-last for some hours, I guess I will send the test results late at
-night (Pacific Time) ;-)
-
-Thanks again
-Cheers
-Zhouyi
-
-
-On Wed, Jan 26, 2022 at 1:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Tue, Jan 25, 2022 at 08:50:22PM -0800, Paul E. McKenney wrote:
-> > On Wed, Jan 26, 2022 at 12:09:12PM +0800, Zhouyi Zhou wrote:
-> > > Great Discovery !!
-> > > Hi Paul,
-> > > I track the log
-> > > make[2]: *** No rule to make target
-> > > 'arch/x86/kvm//home/zzy/Program/linux-next/linux-next/tools/testing/selftests/rcutorture/kvm_main.o',
-> >
-> > That does look like a very odd pathname, now that you mention it.
-> >
-> > > needed by 'arch/x86/kvm/kvm.o
-> > > into the file virt/kvm/Makefile.kvm:
-> > > 1# SPDX-License-Identifier: GPL-2.0
-> > >  2#
-> > >  3# Makefile for Kernel-based Virtual Machine module
-> > >  4#
-> > >  5
-> > >  6KVM ?= ../../../virt/kvm
-> > >  7
-> > >  8kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
-> > >  9kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
-> > > 10kvm-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
-> > > 11kvm-$(CONFIG_KVM_ASYNC_PF) += $(KVM)/async_pf.o
-> > > 12kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
-> > > 13kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
-> > > 14kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
-> > > line 6's ?= indicates to set the KDIR variable only if it's not
-> > > set/doesn't have a value.
-> > >
-> > > I guess we have set the variable KVM somewhere before make, I will
-> > > continue tracking it.
-> >
-> > But if you build an allmodconfig kernel by hand afterwards, it works?
-> >
-> > I wonder if I need to use a different environment variable in my scripts.
-> > For example, from tools/testing/selftests/rcutorture/bin/kvm.sh:
-> >
-> > KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> > PATH=${KVM}/bin:$PATH; export PATH
-> >
-> > Maybe like the (untested) patch shown below.
->
-> A somewhat more official version below.  Thank you for following up
-> on this!
->
->                                                         Thanx, Paul
->
-> ------------------------------------------------------------------------
->
-> commit 6b5cdbe80b01ce604fdf0f3ef6717a6466aca041
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Tue Jan 25 21:08:55 2022 -0800
->
->     torture: Change KVM environment variable to RCUTORTURE
->
->     The torture-test scripting's long-standing use of KVM as the environment
->     variable tracking the pathname of the rcutorture directory now conflicts
->     with allmodconfig builds due to the virt/kvm/Makefile.kvm file's use
->     of this as a makefile variable.  This commit therefore changes the
->     torture-test scripting from KVM to RCUTORTURE, avoiding the name conflict.
->
->     Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-again.sh b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-> index 5a0023d183dac..0941f1ddab658 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-> @@ -47,8 +47,8 @@ else
->         exit 1
->  fi
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  dryrun=
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-> index 370406bbfeedc..f17000a2ccf1f 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-> @@ -49,8 +49,8 @@ fi
->  mkdir $resdir/$ds
->  echo Results directory: $resdir/$ds
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->  echo Using all `identify_qemu_vcpus` CPUs.
->
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh b/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
-> index e4a00779b8c69..ee886b40a5d2c 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
-> @@ -22,8 +22,8 @@ T=${TMPDIR-/tmp}/kvm-end-run-stats.sh.$$
->  trap 'rm -rf $T' 0
->  mkdir $T
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->  default_starttime="`get_starttime`"
->  starttime="${2-default_starttime}"
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-remote.sh b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
-> index 29b068a55b466..8c4c1e4792d02 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
-> @@ -19,8 +19,8 @@ then
->         exit 1
->  fi
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  starttime="`get_starttime`"
-> @@ -108,8 +108,8 @@ else
->                 cat $T/kvm-again.sh.out | tee -a "$oldrun/remote-log"
->                 exit 2
->         fi
-> -       cp -a "$rundir" "$KVM/res/"
-> -       oldrun="$KVM/res/$ds"
-> +       cp -a "$rundir" "$RCUTORTURE/res/"
-> +       oldrun="$RCUTORTURE/res/$ds"
->  fi
->  echo | tee -a "$oldrun/remote-log"
->  echo " ----" kvm-again.sh output: "(`date`)" | tee -a "$oldrun/remote-log"
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-> index 348ad177a5acc..55b2c15332827 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-> @@ -25,15 +25,15 @@ LANG=en_US.UTF-8; export LANG
->
->  dur=$((30*60))
->  dryrun=""
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  TORTURE_ALLOTED_CPUS="`identify_qemu_vcpus`"
->  TORTURE_DEFCONFIG=defconfig
->  TORTURE_BOOT_IMAGE=""
->  TORTURE_BUILDONLY=
-> -TORTURE_INITRD="$KVM/initrd"; export TORTURE_INITRD
-> +TORTURE_INITRD="$RCUTORTURE/initrd"; export TORTURE_INITRD
->  TORTURE_KCONFIG_ARG=""
->  TORTURE_KCONFIG_GDB_ARG=""
->  TORTURE_BOOT_GDB_ARG=""
-> @@ -262,7 +262,7 @@ else
->         exit 1
->  fi
->
-> -CONFIGFRAG=${KVM}/configs/${TORTURE_SUITE}; export CONFIGFRAG
-> +CONFIGFRAG=${RCUTORTURE}/configs/${TORTURE_SUITE}; export CONFIGFRAG
->
->  defaultconfigs="`tr '\012' ' ' < $CONFIGFRAG/CFLIST`"
->  if test -z "$configs"
-> @@ -272,7 +272,7 @@ fi
->
->  if test -z "$resdir"
->  then
-> -       resdir=$KVM/res
-> +       resdir=$RCUTORTURE/res
->  fi
->
->  # Create a file of test-name/#cpus pairs, sorted by decreasing #cpus.
-> @@ -386,7 +386,7 @@ END {
->  # Generate a script to execute the tests in appropriate batches.
->  cat << ___EOF___ > $T/script
->  CONFIGFRAG="$CONFIGFRAG"; export CONFIGFRAG
-> -KVM="$KVM"; export KVM
-> +RCUTORTURE="$RCUTORTURE"; export RCUTORTURE
->  PATH="$PATH"; export PATH
->  TORTURE_ALLOTED_CPUS="$TORTURE_ALLOTED_CPUS"; export TORTURE_ALLOTED_CPUS
->  TORTURE_BOOT_IMAGE="$TORTURE_BOOT_IMAGE"; export TORTURE_BOOT_IMAGE
-> @@ -569,7 +569,7 @@ ___EOF___
->  awk < $T/cfgcpu.pack \
->         -v TORTURE_BUILDONLY="$TORTURE_BUILDONLY" \
->         -v CONFIGDIR="$CONFIGFRAG/" \
-> -       -v KVM="$KVM" \
-> +       -v RCUTORTURE="$RCUTORTURE" \
->         -v ncpus=$cpus \
->         -v jitter="$jitter" \
->         -v rd=$resdir/$ds/ \
-> diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-> index d1cb60085d8f2..e00e60efb2310 100755
-> --- a/tools/testing/selftests/rcutorture/bin/torture.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-> @@ -13,8 +13,8 @@
->  scriptname=$0
->  args="$*"
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  TORTURE_ALLOTED_CPUS="`identify_qemu_vcpus`"
+b24gMjAyMi8xLzI2IDQ6MzcsIFNodWFoIEtoYW4gd3JvdGU6DQo+IE9uIDEyLzE1LzIxIDI6NTYg
+QU0sIFlhbmcgWHUgd3JvdGU6DQo+PiB6cmFtMDEgdXNlcyBgZnJlZSAtbWAgdG8gbWVhc3VyZSB6
+cmFtIG1lbW9yeSB1c2FnZS4gVGhlIHJlc3VsdHMgYXJlDQo+PiBub25zZW5zZQ0KPj4gYmVjYXVz
+ZSB0aGV5IGFyZSBwb2xsdXRlZCBieSBhbGwgcnVubmluZyBwcm9jZXNzZXMgb24gdGhlIHN5c3Rl
+bS4NCj4+DQo+DQo+IEFyZSB0aGUgcmVzdWx0cyBpbmFjY3VyYXRlIG9yIGRvZXMgL3N5cy9ibG9j
+ay96cmFtPGlkPi9tbV9zdGF0IGlzIGEgcXVpY2sNCj4gd2F5IHRvIGdldCB0aGUgaW5mb3JtYXRp
+b24/DQpUaGUgImZyZWUgLW0iIHJlc3VsdCBpcyBpbmFjY3VyYXRlIGJlY2F1c2UgaXQgY2FjdWx0
+ZWQgZ2xvYmFsIHN5c3RlbWQgDQpmcmVlIG1lbW9yeSBpbnN0ZWFkIG9mIHByb2Nlc3MgdGhhdCB1
+c2VkIHpyYW0gZGV2aWNlLg0KDQpXZSBzaG91bGQgdXNlIG1tX3N0YXQgYXMgRG9jdW1lbnRhdGlv
+bi9hZG1pbi1ndWlkZS9ibG9ja2Rldi96cmFtLnJzdCB3cm90ZToNCg0KRmlsZSAvc3lzL2Jsb2Nr
+L3pyYW08aWQ+L21tX3N0YXQNCg0KVGhlIG1tX3N0YXQgZmlsZSByZXByZXNlbnRzIHRoZSBkZXZp
+Y2UncyBtbSBzdGF0aXN0aWNzLiBJdCBjb25zaXN0cyBvZiBhIA0Kc2luZ2xlDQpsaW5lIG9mIHRl
+eHQgYW5kIGNvbnRhaW5zIHRoZSBmb2xsb3dpbmcgc3RhdHMgc2VwYXJhdGVkIGJ5IHdoaXRlc3Bh
+Y2U6DQoNCiAgPT09PT09PT09PT09PT09PSANCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgb3JpZ19kYXRhX3NpemUgICB1bmNv
+bXByZXNzZWQgc2l6ZSBvZiBkYXRhIHN0b3JlZCBpbiB0aGlzIGRpc2suDQogICAgICAgICAgICAg
+ICAgICAgVW5pdDogYnl0ZXMNCiAgY29tcHJfZGF0YV9zaXplICBjb21wcmVzc2VkIHNpemUgb2Yg
+ZGF0YSBzdG9yZWQgaW4gdGhpcyBkaXNrDQogIG1lbV91c2VkX3RvdGFsICAgdGhlIGFtb3VudCBv
+ZiBtZW1vcnkgYWxsb2NhdGVkIGZvciB0aGlzIGRpc2suIFRoaXMNCiAgICAgICAgICAgICAgICAg
+ICBpbmNsdWRlcyBhbGxvY2F0b3IgZnJhZ21lbnRhdGlvbiBhbmQgbWV0YWRhdGENCj4NCj4gSW4g
+YW55IGNhc2UsIHRoaXMgcGF0Y2ggYW5kIGFsbCAzIHBhdGNoZXMgaW4gdGhpcyBzZXJpZXMgaGF2
+ZToNCj4NCj4gV0FSTklORzogUG9zc2libGUgdW53cmFwcGVkIGNvbW1pdCBkZXNjcmlwdGlvbiAo
+cHJlZmVyIGEgbWF4aW11bSA3NQ0KPiBjaGFycyBwZXIgbGluZSkNCj4NCj4gUGxlYXNlIHJ1biBj
+aGVja3BhdGNoLnBsIGFuZCBjbGVhbiB0aGVzZSB1cC4NCk9rLCBXaWxsIGRvIGl0IGluIHYyLg0K
+DQpCZXN0IFJlZ2FyZHMNCllhbmcgWHUNCj4NCj4gdGhhbmtzLA0KPiAtLSBTaHVhaA0K
