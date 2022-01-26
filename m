@@ -2,87 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD7D49CA12
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 13:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A65149CA53
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 14:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234536AbiAZMw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 07:52:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55962 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbiAZMw2 (ORCPT
+        id S231904AbiAZNFG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 08:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231691AbiAZNFF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:52:28 -0500
+        Wed, 26 Jan 2022 08:05:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8AC06161C
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 05:05:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C2D061A32
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:52:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FEAC340E3;
-        Wed, 26 Jan 2022 12:52:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E953461A6D
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 13:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E5CC340E3;
+        Wed, 26 Jan 2022 13:05:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643201547;
-        bh=o2ZPJgY1sa/GtYmc6gEf6NfJ0zITH9GxAUVpWbAb3CE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OJekI4r5r99zAqN5bCDTLJie3E9Ni+9K8wZE0XNqAiniPEkixzy1mB3sXeODxLEMA
-         w+0K79JwfzySFaw7TOtsGGeCEB4Sfl+ukHQb6iL1aajNNALQ2jV0zaZ3MDCFvIWArj
-         knl6CxiiNMLX3uA6SyWqsW1NnJi/CyqvqacMg1Z1nJlzP/WKi8v5yAauLrPgizdvad
-         43QO4kvZOYF6o6/iNuSiGaehVDMDT4NNrkMkrHdRYnWJdfV5ARgyjmTuU7dHM4xqNO
-         4xIS3MSrvX4hI/q+e4oJy6ewCmh5eU71aLVVDiDvOx59jBEf4bz9znMbDRdDgbGj85
-         VQKmS8ryPF4hA==
-Date:   Wed, 26 Jan 2022 12:52:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
+        s=k20201202; t=1643202304;
+        bh=aRSD0q8QbNlli6eHa3NnFpfLKDi1bW68kqnD1RqIhjc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Sv520NMzkWC3oJ5r3ashYHWDr0wfjkTiKCWfmcOVuri48k8f1ER/s7HLWwmsjUVJw
+         AfTExaG+VhAnGAMO2p4UTRltLcTuB/bDbXYitLw4a7bP83oY5gUDVlwg2QYItBgC9O
+         XJNcww3cNFzNLUTQGLJ0CrcZS7lkm7+Vjg/3jFCx6Uk/PMp2hgTAUPnapvwgy5nPnm
+         jgAKClyRGQadVZnamG+uxCrggvf1+ILfZ9kK97iiGjsFUNKG5iSgdu2qoxHQus8ESn
+         r5f6e1Zbdo2Q0RE3Fsv4I9ReSZ3LtfP9AxVXTHEY2348rtKheZmT1KG1QYx1gBZ9W3
+         sAQnc8H/QjLLg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nChyw-003DX9-9C; Wed, 26 Jan 2022 13:05:02 +0000
+Date:   Wed, 26 Jan 2022 13:05:01 +0000
+Message-ID: <87czke7ima.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Shuah Khan <shuah@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest: kvm/arm64: Skip tests if we can't create a
- vgic-v3
-Message-ID: <YfFEBlsUH+dMxmku@sirena.org.uk>
+Subject: Re: [PATCH] kselftest: kvm/arm64: Skip tests if we can't create a vgic-v3
+In-Reply-To: <YfFEBlsUH+dMxmku@sirena.org.uk>
 References: <20220125192851.3907611-1-broonie@kernel.org>
- <87h79q7tln.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yqSnZDWT+mQxO4gU"
-Content-Disposition: inline
-In-Reply-To: <87h79q7tln.wl-maz@kernel.org>
-X-Cookie: Use only in a well-ventilated area.
+        <87h79q7tln.wl-maz@kernel.org>
+        <YfFEBlsUH+dMxmku@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, shuah@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, 26 Jan 2022 12:52:22 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Wed, Jan 26, 2022 at 09:07:48AM +0000, Marc Zyngier wrote:
+> > Mark Brown <broonie@kernel.org> wrote:
+> 
+> > >  	/* Distributor setup */
+> > > -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
+> > > +	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, true);
+> 
+> > So you now only test whether it is possible to create a virtual GICv3,
+> > but don't actually create it. How does this work?
+> 
+> Oh, that's rather obscure in the API - so the file descriptor returned
+> if the test flag is specified can't actually be used?
 
---yqSnZDWT+mQxO4gU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+No file descriptor is returned at all from the kernel, so you should
+always get -1 as populated by kvm_create_device().
 
-On Wed, Jan 26, 2022 at 09:07:48AM +0000, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+See virt/kvm/kvm_main.c::kvm_ioctl_create_device().
 
-> >  	/* Distributor setup */
-> > -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
-> > +	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, true);
+	M.
 
-> So you now only test whether it is possible to create a virtual GICv3,
-> but don't actually create it. How does this work?
-
-Oh, that's rather obscure in the API - so the file descriptor returned
-if the test flag is specified can't actually be used?
-
---yqSnZDWT+mQxO4gU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxRAUACgkQJNaLcl1U
-h9AvJQf9GPAYtZanstoIG/vcqbA26bVsQFGfS/00XrVuAL2Gbc7mGcVXqn87KWGx
-hUpfjqbMlgfEAqSX8xudmJKLmHxxkFce8M49ZoeP0/nN1oxvCTftYEKOO+YH8xFO
-diP9rAIH4DGjH8szv7dzRE8KCSW0Svj8xwvBZm9SZJs7nqcZ1AcBN0iA2HRWCgK8
-V1irsnWI852LlcDfaYetrsr6WN169e/PXBNNuISNIqsDQDe9gYDFJNHIWzB3hV3n
-t2C3m3maET8C2vJukqxEe8Dv0E7A0Uofa4H8C6Y+Yae6HWd3cpD9WrSr7PfrW1un
-zS0RmqmmTTactke64zug0VjVbgRjvg==
-=8u2k
------END PGP SIGNATURE-----
-
---yqSnZDWT+mQxO4gU--
+-- 
+Without deviation from the norm, progress is not possible.
