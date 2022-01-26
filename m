@@ -2,184 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F50649CDBA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 16:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E6549CD7A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 16:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242662AbiAZPOd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 10:14:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42214 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242627AbiAZPO1 (ORCPT
+        id S242599AbiAZPMd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 10:12:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23652 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235639AbiAZPMd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:14:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D718361857
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 15:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4818BC340E8;
-        Wed, 26 Jan 2022 15:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643210066;
-        bh=copy4cRQ6puPNwPV3UaCKRsGUK05uLwxOUu+r7/XC10=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z78BLYv32FxtO975+1ZRXnyIDr1HVDi5tg9h1si/BHxCjOFnFExApxIrbNBgY1/8G
-         2LaXk4DreF+ZgjE3rmluBZXR/kQC7ROFrKNaPukUIOo4HS+dUUsg/1ESIh8+v/Pj01
-         XP0C7ML4IhpHSnU+mC9RyR/W9wdOWfMbntB/BoEGZHoBErvhoJJJJaBaLvK9Js54cu
-         uFiK17q2ZyvkxwMnzgE0MqCRC9TAVBly4bPoneGEl8ag5oDI6qr1Ymqc5aYraXHIgp
-         LY+k0xKH6buJicrdmx5qOvmYAi9VFZCFUJVLt3EwEj0zjkEGJPPke1K/1aPVBvi4a8
-         W3ZY4reYpUZ4Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
+        Wed, 26 Jan 2022 10:12:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643209952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UUIXRDsB43LqGC6wuVo5tX7u3LkbrScUsL4k4ngSu2Y=;
+        b=K5Ldzbe8JCoUCaE6G36I0hAyIGV5Q8avoLdhKpClVXlZmxqtoSrzt31e3GyXPC4VKEEsQt
+        YcwmHjRYPHPDmy+LaHVOgi07pDp7V4GyFroDOMIgqhyWG3PT5nQDiHxunRiJLsWzSg1tM2
+        KFaRlDw7FB6uPVZ2nQ+TZanxhQkz9Vk=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-2g8TLkecMGCvOFKobQbksg-1; Wed, 26 Jan 2022 10:12:31 -0500
+X-MC-Unique: 2g8TLkecMGCvOFKobQbksg-1
+Received: by mail-ej1-f69.google.com with SMTP id m21-20020a1709061ed500b006b3003ec50dso5018890ejj.17
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 07:12:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UUIXRDsB43LqGC6wuVo5tX7u3LkbrScUsL4k4ngSu2Y=;
+        b=NUufwUvi3t80AEo720ya+Im5JPcY14zy9yHknAr5x+w+HADJ2FAnwouV1R1/xOAJP0
+         xNWQf0YFUr40XTFnmrymU7yI7fM4WBWsr0L6/nlCC2WWCupYy4ONMAzUj2TUSW8KmWF+
+         xsMDOBzjuNedNe9o71JOm8aBaMC7F0e43xznz4f8WaRsdE5ax9MnWuiEbsfYYpcsBIiw
+         t+WUthE/NxpqgXGVRPYPxhPj/ILxj1pY+f7OMfSj/853+1X5ndKuAQLqOY0ESgyLEV4p
+         W2Z/ff9J0g9fO+DhF4Ig6vDyEVU7BylCzdpU1DG42jX86Ky2h66tj9COnpAbJi92a6cQ
+         Caaw==
+X-Gm-Message-State: AOAM530J3CSRHxQFApD0r3S2vWc0ET/WWYAK0t2LVhXDjkMsUDC6CDRo
+        57iuBRx3ETEJs/U+T/b6XYy5Ob5BWD1Eiy2DPOI4dWAdiPqsREG/Dar9KrCtHexj7c6h4aQrLE8
+        vDxNR9HtfHN9UAOmGEapDjjl4q2ro
+X-Received: by 2002:a05:6402:1e93:: with SMTP id f19mr24928681edf.343.1643209949954;
+        Wed, 26 Jan 2022 07:12:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6Qy96gPxqMhyDBBrrHHmi32FfITBGmSSHPgu5dt26Cvx+nGMpg11N+n6bAEnecDU6AecWoQ==
+X-Received: by 2002:a05:6402:1e93:: with SMTP id f19mr24928663edf.343.1643209949742;
+        Wed, 26 Jan 2022 07:12:29 -0800 (PST)
+Received: from gator (cst2-173-70.cust.vodafone.cz. [31.30.173.70])
+        by smtp.gmail.com with ESMTPSA id u17sm7479631ejb.31.2022.01.26.07.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 07:12:29 -0800 (PST)
+Date:   Wed, 26 Jan 2022 16:12:27 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v9 40/40] squqsh traps
-Date:   Wed, 26 Jan 2022 15:11:20 +0000
-Message-Id: <20220126151120.3811248-41-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220126151120.3811248-1-broonie@kernel.org>
-References: <20220126151120.3811248-1-broonie@kernel.org>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3] kselftest: kvm/arm64: Skip tests if we can't create a
+ vgic-v3
+Message-ID: <20220126151227.jlhb5o32jwal24m6@gator>
+References: <20220126145242.3473836-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4479; h=from:subject; bh=copy4cRQ6puPNwPV3UaCKRsGUK05uLwxOUu+r7/XC10=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8WSWpilDW9eFLR9WsG+pu8O0oF7wMm6YV2gEwgCG DNHOJqqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfFklgAKCRAk1otyXVSH0CjgB/ 9L+PEoqD+XcoxnxNpfVepzo0f0TuyQ/QjuCAai209ngWlT2tkE+A7RbRVGotpHUNWdRqTru1xQJ2iR kPGJXAWAUkpDOZb8Xe661bgaYNXIEBgabR3RhuOdTH/6pwrHhO3vpg+m4LAQNRTShE/ieYIuAb2r4w 4UdbuVJElFW0YcMiMsQgXTvwJgtG8RcS7zAs1I7YYTS85+x0jPrII3e4leiZJkS9vDt31Dgd7VXps1 wl4suOMcTKs+sdlJNH0fzGVEzf0WAQryFYfIXBUpCtOu1VXDKGyrb8tIqH5Xy1arbux0iOyDdI8oAN S3q7A55s/MzSSBaWoQFUyEenBIgMQL
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126145242.3473836-1-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
----
- arch/arm64/kvm/fpsimd.c          | 22 ++++++++++------------
- arch/arm64/kvm/hyp/nvhe/switch.c | 20 ++++++++++----------
- arch/arm64/kvm/hyp/vhe/switch.c  |  4 ++--
- 3 files changed, 22 insertions(+), 24 deletions(-)
+On Wed, Jan 26, 2022 at 02:52:42PM +0000, Mark Brown wrote:
+> The arch_timer and vgic_irq kselftests assume that they can create a
+> vgic-v3, using the library function vgic_v3_setup() which aborts with a
+> test failure if it is not possible to do so. Since vgic-v3 can only be
+> instantiated on systems where the host has GICv3 this leads to false
+> positives on older systems where that is not the case.
+> 
+> Fix this by changing vgic_v3_setup() to return an error if the vgic can't
+> be instantiated and have the callers skip if this happens. We could also
+> exit flagging a skip in vgic_v3_setup() but this would prevent future test
+> cases conditionally deciding which GIC to use or generally doing more
+> complex output.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> 
+> v3:
+>  - Use custom print_skip() helper.
+>  - Use internal version of _kvm_create_device.
+> v2:
+>  - The test for being able to create the GIC doesn't actually
+>    instantiate it, add a call doing so in that case.
+> 
+>  tools/testing/selftests/kvm/aarch64/arch_timer.c | 7 ++++++-
+>  tools/testing/selftests/kvm/aarch64/vgic_irq.c   | 4 ++++
+>  tools/testing/selftests/kvm/lib/aarch64/vgic.c   | 4 +++-
+>  3 files changed, 13 insertions(+), 2 deletions(-)
+>
 
-diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-index cecaddb644ce..1c585553d74f 100644
---- a/arch/arm64/kvm/fpsimd.c
-+++ b/arch/arm64/kvm/fpsimd.c
-@@ -153,18 +153,16 @@ void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
- 	 * If we have VHE then the Hyp code will reset CPACR_EL1 to
- 	 * CPACR_EL1_DEFAULT and we need to reenable SME.
- 	 */
--	if (has_vhe()) {
--		if (system_supports_sme()) {
--			/* Also restore EL0 state seen on entry */
--			if (vcpu->arch.flags & KVM_ARM64_HOST_SME_ENABLED)
--				sysreg_clear_set(CPACR_EL1, 0,
--						 CPACR_EL1_SMEN_EL0EN |
--						 CPACR_EL1_SMEN_EL1EN);
--			else
--				sysreg_clear_set(CPACR_EL1,
--						 CPACR_EL1_SMEN_EL0EN,
--						 CPACR_EL1_SMEN_EL1EN);
--		}
-+	if (has_vhe() && system_supports_sme()) {
-+		/* Also restore EL0 state seen on entry */
-+		if (vcpu->arch.flags & KVM_ARM64_HOST_SME_ENABLED)
-+			sysreg_clear_set(CPACR_EL1, 0,
-+					 CPACR_EL1_SMEN_EL0EN |
-+					 CPACR_EL1_SMEN_EL1EN);
-+		else
-+			sysreg_clear_set(CPACR_EL1,
-+					 CPACR_EL1_SMEN_EL0EN,
-+					 CPACR_EL1_SMEN_EL1EN);
- 	}
  
- 	if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 184bf6bd79b9..caace61ea459 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -47,21 +47,20 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
- 		val |= CPTR_EL2_TFP | CPTR_EL2_TZ;
- 		__activate_traps_fpsimd32(vcpu);
- 	}
--	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME))
-+	if (cpus_have_final_cap(ARM64_SME))
- 		val |= CPTR_EL2_TSM;
- 
- 	write_sysreg(val, cptr_el2);
- 	write_sysreg(__this_cpu_read(kvm_hyp_vector), vbar_el2);
- 
--	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME) &&
--	    cpus_have_final_cap(ARM64_HAS_FGT)) {
-+	if (cpus_have_final_cap(ARM64_SME)) {
- 		val = read_sysreg_s(SYS_HFGRTR_EL2);
--		val &= ~(HFGxTR_EL2_nTPIDR_EL0_MASK |
-+		val &= ~(HFGxTR_EL2_nTPIDR2_EL0_MASK |
- 			 HFGxTR_EL2_nSMPRI_EL1_MASK);
- 		write_sysreg_s(val, SYS_HFGRTR_EL2);
- 
- 		val = read_sysreg_s(SYS_HFGWTR_EL2);
--		val &= ~(HFGxTR_EL2_nTPIDR_EL0_MASK |
-+		val &= ~(HFGxTR_EL2_nTPIDR2_EL0_MASK |
- 			 HFGxTR_EL2_nSMPRI_EL1_MASK);
- 		write_sysreg_s(val, SYS_HFGWTR_EL2);
- 	}
-@@ -109,23 +108,24 @@ static void __deactivate_traps(struct kvm_vcpu *vcpu)
- 
- 	write_sysreg(this_cpu_ptr(&kvm_init_params)->hcr_el2, hcr_el2);
- 
--	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME) &&
--	    cpus_have_final_cap(ARM64_HAS_FGT)) {
-+	if (cpus_have_final_cap(ARM64_SME)) {
- 		u64 val;
- 
- 		val = read_sysreg_s(SYS_HFGRTR_EL2);
--		val |= HFGxTR_EL2_nTPIDR_EL0_MASK | HFGxTR_EL2_nSMPRI_EL1_MASK;
-+		val |= HFGxTR_EL2_nTPIDR2_EL0_MASK |
-+			HFGxTR_EL2_nSMPRI_EL1_MASK;
- 		write_sysreg_s(val, SYS_HFGRTR_EL2);
- 
- 		val = read_sysreg_s(SYS_HFGWTR_EL2);
--		val |= HFGxTR_EL2_nTPIDR_EL0_MASK | HFGxTR_EL2_nSMPRI_EL1_MASK;
-+		val |= HFGxTR_EL2_nTPIDR2_EL0_MASK |
-+			HFGxTR_EL2_nSMPRI_EL1_MASK;
- 		write_sysreg_s(val, SYS_HFGWTR_EL2);
- 	}
- 
- 	cptr = CPTR_EL2_DEFAULT;
- 	if (vcpu_has_sve(vcpu) && (vcpu->arch.flags & KVM_ARM64_FP_ENABLED))
- 		cptr |= CPTR_EL2_TZ;
--	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME))
-+	if (cpus_have_final_cap(ARM64_SME))
- 		cptr &= ~CPTR_EL2_TSM;
- 
- 	write_sysreg(cptr, cptr_el2);
-diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
-index 21217485514d..a4d2fb5c9710 100644
---- a/arch/arm64/kvm/hyp/vhe/switch.c
-+++ b/arch/arm64/kvm/hyp/vhe/switch.c
-@@ -60,7 +60,7 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
- 		__activate_traps_fpsimd32(vcpu);
- 	}
- 
--	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME))
-+	if (cpus_have_final_cap(ARM64_SME))
- 		write_sysreg(read_sysreg(sctlr_el2) & ~SCTLR_ELx_ENTP2,
- 			     sctlr_el2);
- 
-@@ -85,7 +85,7 @@ static void __deactivate_traps(struct kvm_vcpu *vcpu)
- 	 */
- 	asm(ALTERNATIVE("nop", "isb", ARM64_WORKAROUND_SPECULATIVE_AT));
- 
--	if (IS_ENABLED(CONFIG_ARM64_SME) && cpus_have_final_cap(ARM64_SME))
-+	if (cpus_have_final_cap(ARM64_SME))
- 		write_sysreg(read_sysreg(sctlr_el2) | SCTLR_ELx_ENTP2,
- 			     sctlr_el2);
- 
--- 
-2.30.2
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 
