@@ -2,28 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB6149C77B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 11:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3A449C77D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 11:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239910AbiAZK1l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 05:27:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:57870 "EHLO foss.arm.com"
+        id S239907AbiAZK1s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 05:27:48 -0500
+Received: from foss.arm.com ([217.140.110.172]:57876 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232606AbiAZK1i (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:27:38 -0500
+        id S239909AbiAZK1j (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:27:39 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 928E81FB;
-        Wed, 26 Jan 2022 02:27:37 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A1A611B3;
+        Wed, 26 Jan 2022 02:27:38 -0800 (PST)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8BCD73F766;
-        Wed, 26 Jan 2022 02:27:36 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7AB53F766;
+        Wed, 26 Jan 2022 02:27:37 -0800 (PST)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shuah@kernel.org, Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH 0/5] Miscellaneous trivial fixes
-Date:   Wed, 26 Jan 2022 10:27:18 +0000
-Message-Id: <20220126102723.23300-1-cristian.marussi@arm.com>
+Cc:     shuah@kernel.org, Cristian Marussi <cristian.marussi@arm.com>,
+        =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+Subject: [PATCH 1/5] selftests: skip mincore.check_file_mmap when fs lacks needed support
+Date:   Wed, 26 Jan 2022 10:27:19 +0000
+Message-Id: <20220126102723.23300-2-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220126102723.23300-1-cristian.marussi@arm.com>
+References: <20220126102723.23300-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -31,32 +34,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+Report mincore.check_file_mmap as SKIP instead of FAIL if the underlying
+filesystem lacks support of O_TMPFILE or fallocate since such failures
+are not really related to mincore functionality.
 
-a small series collecting a few trivial fixes that I have already sent
-previously (~Dec2021) as distinct patches.
-
-They are mostly trivial patches addressing failures that seemed more
-sensible to be marked as skips instead. (at least to me ...).
-Original developers are in Cc. (but not heard back from anyone :D)
-
-Thanks,
-Cristian
-
-Cristian Marussi (5):
-  selftests: skip mincore.check_file_mmap when fs lacks needed support
-  kselftest: Fix vdso_test_time to pass on skips
-  selftests: openat2: Print also errno in failure messages
-  selftests: openat2: Add missing dependency in Makefile
-  selftests: openat2: Skip testcases that fail with EOPNOTSUPP
-
+Cc: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+This can happen especially on test-automation systems where rootfs can
+be configured as being on NFS or virtual disks.
+---
  .../selftests/mincore/mincore_selftest.c      | 20 +++++++++++++------
- tools/testing/selftests/openat2/Makefile      |  2 +-
- tools/testing/selftests/openat2/helpers.h     | 12 ++++++-----
- .../testing/selftests/openat2/openat2_test.c  | 12 ++++++++++-
- tools/testing/selftests/vDSO/vdso_test_abi.c  |  3 ++-
- 5 files changed, 35 insertions(+), 14 deletions(-)
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
+diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
+index e54106643337..4c88238fc8f0 100644
+--- a/tools/testing/selftests/mincore/mincore_selftest.c
++++ b/tools/testing/selftests/mincore/mincore_selftest.c
+@@ -207,15 +207,21 @@ TEST(check_file_mmap)
+ 
+ 	errno = 0;
+ 	fd = open(".", O_TMPFILE | O_RDWR, 0600);
+-	ASSERT_NE(-1, fd) {
+-		TH_LOG("Can't create temporary file: %s",
+-			strerror(errno));
++	if (fd < 0) {
++		ASSERT_EQ(errno, EOPNOTSUPP) {
++			TH_LOG("Can't create temporary file: %s",
++			       strerror(errno));
++		}
++		SKIP(goto out_free, "O_TMPFILE not supported by filesystem.");
+ 	}
+ 	errno = 0;
+ 	retval = fallocate(fd, 0, 0, FILE_SIZE);
+-	ASSERT_EQ(0, retval) {
+-		TH_LOG("Error allocating space for the temporary file: %s",
+-			strerror(errno));
++	if (retval) {
++		ASSERT_EQ(errno, EOPNOTSUPP) {
++			TH_LOG("Error allocating space for the temporary file: %s",
++			       strerror(errno));
++		}
++		SKIP(goto out_close, "fallocate not supported by filesystem.");
+ 	}
+ 
+ 	/*
+@@ -271,7 +277,9 @@ TEST(check_file_mmap)
+ 	}
+ 
+ 	munmap(addr, FILE_SIZE);
++out_close:
+ 	close(fd);
++out_free:
+ 	free(vec);
+ }
+ 
 -- 
 2.17.1
 
