@@ -2,121 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9312749C9C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 13:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD7D49CA12
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 13:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241343AbiAZMe0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 07:34:26 -0500
-Received: from foss.arm.com ([217.140.110.172]:36820 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241330AbiAZMe0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:34:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 008D8D6E;
-        Wed, 26 Jan 2022 04:34:26 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41B1A3F793;
-        Wed, 26 Jan 2022 04:34:25 -0800 (PST)
-Date:   Wed, 26 Jan 2022 12:34:18 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
-Message-ID: <20220126123418.GH6113@e120937-lin>
-References: <20220126102723.23300-1-cristian.marussi@arm.com>
- <20220126102723.23300-3-cristian.marussi@arm.com>
- <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
+        id S234536AbiAZMw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 07:52:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55962 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234499AbiAZMw2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:52:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C2D061A32
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:52:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FEAC340E3;
+        Wed, 26 Jan 2022 12:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643201547;
+        bh=o2ZPJgY1sa/GtYmc6gEf6NfJ0zITH9GxAUVpWbAb3CE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OJekI4r5r99zAqN5bCDTLJie3E9Ni+9K8wZE0XNqAiniPEkixzy1mB3sXeODxLEMA
+         w+0K79JwfzySFaw7TOtsGGeCEB4Sfl+ukHQb6iL1aajNNALQ2jV0zaZ3MDCFvIWArj
+         knl6CxiiNMLX3uA6SyWqsW1NnJi/CyqvqacMg1Z1nJlzP/WKi8v5yAauLrPgizdvad
+         43QO4kvZOYF6o6/iNuSiGaehVDMDT4NNrkMkrHdRYnWJdfV5ARgyjmTuU7dHM4xqNO
+         4xIS3MSrvX4hI/q+e4oJy6ewCmh5eU71aLVVDiDvOx59jBEf4bz9znMbDRdDgbGj85
+         VQKmS8ryPF4hA==
+Date:   Wed, 26 Jan 2022 12:52:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest: kvm/arm64: Skip tests if we can't create a
+ vgic-v3
+Message-ID: <YfFEBlsUH+dMxmku@sirena.org.uk>
+References: <20220125192851.3907611-1-broonie@kernel.org>
+ <87h79q7tln.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yqSnZDWT+mQxO4gU"
 Content-Disposition: inline
-In-Reply-To: <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <87h79q7tln.wl-maz@kernel.org>
+X-Cookie: Use only in a well-ventilated area.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:22:45PM +0000, Vincenzo Frascino wrote:
-> Hi Cristian,
-> 
 
-Hi Vincenzo,
+--yqSnZDWT+mQxO4gU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-thanks for the feedback.
+On Wed, Jan 26, 2022 at 09:07:48AM +0000, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-> On 1/26/22 10:27 AM, Cristian Marussi wrote:
-> > When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
-> > report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
-> > 
-> > Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
-> > tests within vdso_test_abi to be considered FAIL when symbol is not found.
-> > 
-> > Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
-> > 
-> > Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> > Seen as a failure on both a JUNO and a Dragonboard on both recent and old
-> > kernels/testruns:
-> > 
-> > root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
-> > [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
-> > The time is 1637922136.675304
-> > The time is 1637922136.675361000
-> > The resolution is 0 1
-> > clock_id: CLOCK_REALTIME [PASS]
-> > The time is 1927.760604900
-> > The resolution is 0 1
-> > clock_id: CLOCK_BOOTTIME [PASS]
-> > The time is 1637922136.675649700
-> > The resolution is 0 1
-> > clock_id: CLOCK_TAI [PASS]
-> > The time is 1637922136.672000000
-> > The resolution is 0 4000000
-> > clock_id: CLOCK_REALTIME_COARSE [PASS]
-> > The time is 1927.761005600
-> > The resolution is 0 1
-> > clock_id: CLOCK_MONOTONIC [PASS]
-> > The time is 1927.761132780
-> > The resolution is 0 1
-> > clock_id: CLOCK_MONOTONIC_RAW [PASS]
-> > The time is 1927.757093740
-> > The resolution is 0 4000000
-> > clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-> > Could not find __kernel_time              <<< This caused a FAIL as a whole
-> > root@deb-buster-arm64:~# echo $?
-> > 1
-> > 
-> > e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
-> > ---
-> >  tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-> > index 3d603f1394af..7dcc66d1cecf 100644
-> > --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-> > +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-> > @@ -90,8 +90,9 @@ static int vdso_test_time(void)
-> >  		(vdso_time_t)vdso_sym(version, name[2]);
-> >  
-> >  	if (!vdso_time) {
-> > +		/* Skip if symbol not found: consider skipped tests as passed */
-> >  		printf("Could not find %s\n", name[2]);
-> > -		return KSFT_SKIP;
-> > +		return KSFT_PASS;
-> 
-> My preference would be to keep "KSFT_SKIP" here and verify separately the return
-> status of each test. This would maintain compliance with the kselftest API.
-> Could you please test the patch in-reply-to this one (will be sent shortly) and
-> let me know if it works for you?
-> 
-Sure, I was indeed not sure my solution was what you wanted.
+> >  	/* Distributor setup */
+> > -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
+> > +	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, true);
 
-> If it does feel free to fold it in the next version of your series with your
-> "Tested-by:" otherwise let me know.
+> So you now only test whether it is possible to create a virtual GICv3,
+> but don't actually create it. How does this work?
 
-Sure, I'll do and keep you on CC.
+Oh, that's rather obscure in the API - so the file descriptor returned
+if the test flag is specified can't actually be used?
 
-Thanks,
-Cristian
+--yqSnZDWT+mQxO4gU
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxRAUACgkQJNaLcl1U
+h9AvJQf9GPAYtZanstoIG/vcqbA26bVsQFGfS/00XrVuAL2Gbc7mGcVXqn87KWGx
+hUpfjqbMlgfEAqSX8xudmJKLmHxxkFce8M49ZoeP0/nN1oxvCTftYEKOO+YH8xFO
+diP9rAIH4DGjH8szv7dzRE8KCSW0Svj8xwvBZm9SZJs7nqcZ1AcBN0iA2HRWCgK8
+V1irsnWI852LlcDfaYetrsr6WN169e/PXBNNuISNIqsDQDe9gYDFJNHIWzB3hV3n
+t2C3m3maET8C2vJukqxEe8Dv0E7A0Uofa4H8C6Y+Yae6HWd3cpD9WrSr7PfrW1un
+zS0RmqmmTTactke64zug0VjVbgRjvg==
+=8u2k
+-----END PGP SIGNATURE-----
+
+--yqSnZDWT+mQxO4gU--
