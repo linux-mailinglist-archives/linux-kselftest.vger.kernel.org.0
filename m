@@ -2,130 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5B149C4D7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 09:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B18249C5CF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 10:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiAZIDj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 03:03:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56190 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiAZIDj (ORCPT
+        id S238808AbiAZJHy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 04:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238805AbiAZJHx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:03:39 -0500
+        Wed, 26 Jan 2022 04:07:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AE0C06161C
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 01:07:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3FC5B80E58;
-        Wed, 26 Jan 2022 08:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DBBC340E3;
-        Wed, 26 Jan 2022 08:03:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25D12B81C23
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 09:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5651C340E3;
+        Wed, 26 Jan 2022 09:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643184216;
-        bh=+vHH6coBn+fxyHOUtpoTMk9tkgCZPRFerUEzgh3lC0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pqneUEtDGDJuawtt4SeTc2xgeRMWSuDfz7221pvgZgzE/Hbz5WqBA4L7U2b4ksZBM
-         W3uPKQ/98bUEYNleUcCSuSuM3RA5lQvgBPK7MERY8oZjHuzo7WUMAhyVQa4KmJ1kEh
-         MXrpJLDDKqkGdk3uGT5XgSz9ZUyAmN4BxAXwKVrRrBCgjx70bWGj74oGZ1W66Ypcs6
-         fxg8i0UFLCMIf3JXciiOKRnpAY9kZk41FKgDj2hV5OUxSmVNtUpDwDEwh8maVOVGmC
-         5OE/PNGoEXw4PAt8hGfw5s0wGhmEurmz7IE0V0IpT34+JZrRFoO/nBQRmZzru9PGTp
-         EXCOueL0g0Vqg==
-Date:   Wed, 26 Jan 2022 09:03:27 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>, shuah <shuah@kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andi Kleen <andi@firstfloor.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ben Maurer <bmaurer@fb.com>, rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>
-Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
- 32-bit little endian
-Message-ID: <20220126080327.4g4pkv3haenxt2m6@wittgenstein>
-References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
- <20220124171253.22072-3-mathieu.desnoyers@efficios.com>
- <20220125122156.v2f5anzcs35i3rii@wittgenstein>
- <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
- <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com>
+        s=k20201202; t=1643188070;
+        bh=CoppXPKwlPuYpjxSjbP8rvLDgdyiQVokjZ7ovrpaV2U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dIgoghzP6U7sNeUaM0iVXDrjS0EB1bW1suZ1BkSaQS3GXSKDeiXbhMIMAUGabODmf
+         NuY3efJ5lQaFZ+qFfXOv1Lpwhj0Pv3a2mUlvlGT7dGhmSqpYb0vrjR9FVJ6VRHrxi1
+         dFxG8bAaYf7J6mGyJKkgXpltNJM0mdGbIrACwi/WeYlXmn7aGceGuJhlZxM2mY4fW3
+         WUYgkkvvTiwLQwIWaQW/7jqqgEMN8QT2VvnQhRPyQpP/Vn4fqPKLmEjcjGvMnX5I7h
+         7YhY2cbP8bG6k10PF4TVDTtzuzW5qjRr4+D03aut+PUj8dDa62ylFvmhG5Ag1j7wH9
+         GYpltoPPqvACg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCeHM-0039gh-TP; Wed, 26 Jan 2022 09:07:49 +0000
+Date:   Wed, 26 Jan 2022 09:07:48 +0000
+Message-ID: <87h79q7tln.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest: kvm/arm64: Skip tests if we can't create a vgic-v3
+In-Reply-To: <20220125192851.3907611-1-broonie@kernel.org>
+References: <20220125192851.3907611-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, shuah@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 02:00:48PM -0500, Mathieu Desnoyers wrote:
-> ----- On Jan 25, 2022, at 9:41 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On Tue, 25 Jan 2022 19:28:51 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> > ----- On Jan 25, 2022, at 7:21 AM, Christian Brauner brauner@kernel.org wrote:
-> [...]
-> >>>  include/uapi/linux/rseq.h | 17 ++++-------------
-> [...]
-> >>>  	union {
-> >> 
-> >> A bit unfortunate we seem to have to keep the union around even though
-> >> it's just one field now.
-> > 
-> > Well, as far as the user-space projects that I know of which use rseq
-> > are concerned (glibc, librseq, tcmalloc), those end up with their own
-> > copy of the uapi header anyway to deal with the big/little endian field
-> > on 32-bit. So I'm very much open to remove the union if we accept that
-> > this uapi header is really just meant to express the ABI and is not
-> > expected to be used as an API by user-space.
-> > 
-> > That would mean we also bring a uapi header copy into the kernel
-> > rseq selftests as well to minimize the gap between librseq and
-> > the kernel sefltests (the kernel sefltests pretty much include a
-> > copy of librseq for convenience. librseq is maintained out of tree).
-> > 
-> > Thoughts ?
+> The arch_timer and vgic_irq kselftests assume that they can create a
+> vgic-v3, using the library function vgic_v3_setup() which aborts with a
+> test failure if it is not possible to do so. Since vgic-v3 can only be
+> instantiated on systems where the host has GICv3 this leads to false
+> positives on older systems where that is not the case.
 > 
-> Actually, if we go ahead and remove the union, and replace:
+> Fix this by changing vgic_v3_setup() to return an error if the vgic can't
+> be instantiated and have the callers skip if this happens. We could also
+> exit flagging a skip in vgic_v3_setup() but this would prevent future test
+> cases conditionally deciding which GIC to use or generally doing more
+> complex output.
 > 
-> struct rseq {
->   union {
->     __u64 ptr64;
->   } rseq_cs;
-> [...]
-> } v;
-> 
-> by:
-> 
-> struct rseq {
->   __u64 rseq_cs;
-> } v;
-> 
-> expressions such as these are unchanged:
-> 
-> - sizeof(v.rseq_cs),
-> - &v.rseq_cs,
-> - __alignof__(v.rseq_cs),
-> - offsetof(struct rseq, rseq_cs).
-> 
-> So users of the uapi rseq.h (as an API) can still use rseq_abi->rseq_cs before
-> and after the change.
-> 
-> Based on this, I am inclined to remove the union, and just make the rseq_cs field
-> a __u64.
-> 
-> Any objections ?
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/aarch64/arch_timer.c | 7 ++++++-
+>  tools/testing/selftests/kvm/aarch64/vgic_irq.c   | 5 +++++
+>  tools/testing/selftests/kvm/lib/aarch64/vgic.c   | 4 +++-
+>  3 files changed, 14 insertions(+), 2 deletions(-)
+>
 
-I do like it fwiw. But since I haven't been heavily involved in the
-userspace usage of this I can't speak confidently to the regression
-potential of a change like this. But I would think that we should risk
-it instead of dragging a pointless union around forever.
+[...]
+
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/vgic.c b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> index b3a0fca0d780..647c18733e1b 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> @@ -52,7 +52,9 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
+>  			nr_vcpus, nr_vcpus_created);
+>  
+>  	/* Distributor setup */
+> -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
+> +	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, true);
+
+So you now only test whether it is possible to create a virtual GICv3,
+but don't actually create it. How does this work?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
