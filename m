@@ -2,99 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A8649D338
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 21:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DA449D33B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jan 2022 21:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiAZUNZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 15:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S230060AbiAZUNs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 15:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiAZUNZ (ORCPT
+        with ESMTP id S230121AbiAZUNs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:13:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B41FC06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:13:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEEC761779
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 20:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4CCC340E3;
-        Wed, 26 Jan 2022 20:13:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643228004;
-        bh=hmQwvBpYksIzl7tcb2EWb3VBLUCZuCxu0fG9RHpcc/A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c5brgLcOgZMJcUiF847vR77ELwVGIwtvyWnad09uOpkGBhYsb0BJ+W3OLZxHifz9O
-         jSczxpKBaMUyGvHAxdLo9EqY5sFIeK68bjApwhDDDQ6vOKzRD+CjKZ90O99Mx2CSp/
-         Xyz3kZ2FBleEAFziaBLYEcmzoawON03dFy24I9QyEbR75X9sBr4Z4EzrExYbgzYkOf
-         A8xjnQGDmQ1ZnDmSlo7GWJAnr/aJbjl7Re9ngOoKYGJe9U2AVWRLJvfiVt6SgS+Ptf
-         zrTHv1oLmuyamYZ9TnUMFII0PXoIVAOgW2yNu6ML/1XktIAXuLuXyUQu6VXn4Gjimy
-         /t58lS0pg2mBw==
-Date:   Wed, 26 Jan 2022 20:13:18 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3] kselftest: kvm/arm64: Skip tests if we can't create a
- vgic-v3
-Message-ID: <YfGrXr1/NGREULnB@sirena.org.uk>
-References: <20220126145242.3473836-1-broonie@kernel.org>
- <4424dd30-f74b-006f-b540-dbaf02e45e28@linuxfoundation.org>
- <YfGmk1I8l+ROoE/k@sirena.org.uk>
- <48c44d74-6668-7823-ada6-0285a8b32a35@linuxfoundation.org>
+        Wed, 26 Jan 2022 15:13:48 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269FEC06173B
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:13:48 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso411381ott.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 12:13:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pzbj8zCgavNPOsqdAJKfKx15yXUuBarV4g88BfwJ5Uw=;
+        b=EiCjf/dXx6PcwQfYyD5Mtu4jSLNd5zEa47wWx2U5haMMbtJEQhSPeTaHqEOzI96wE+
+         2RGa+InuUKeD//habRPfunHmUIU05w2nCr0vL/0LA71m8HO9bM2k0p26IOaae29ZCfw6
+         3LkAnT/jvGR05sDRNIQR+dYLOxsdW7rR1X7Rg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pzbj8zCgavNPOsqdAJKfKx15yXUuBarV4g88BfwJ5Uw=;
+        b=ZaVBgdTlI5p3LnXF8nfWw/HNWj8TechUrH0tLQ9ETJTxm/LZIZdOV8hXyyQA++w8uC
+         Kj2GMT2HER0Yhg3jJvsmyBV6UoIWa91ngWb6X3nJkfPh0TRt2TAQPB3xduY9k0EvWebz
+         zgVbqGzHb7eFhbkgeZz9xlOtUAeIVvQDz2hNalOXqxFTeoqHIj02qbAZFRrVL97N5vgi
+         G9v3kVF9Vp+RXe8liLs3gze3cg9wcfb3bTJQY6+0lvF5yBgtMlTvVqioetoO0yo56NpN
+         0ADkMbwQooZKCTu6O+DlyY3Uj42iCUqPVtSMJvmBzt7ouT3WdBthuZrcFBTueUFi5Sig
+         8mYA==
+X-Gm-Message-State: AOAM53356RPPHt08McBHX8uZ9lO7d61p6kxB16Mwab5Sd3KITPArlPm7
+        RcNo91jHg4vNPbtw8HaPQ/TvFQ==
+X-Google-Smtp-Source: ABdhPJwOLiJkefCmcpRy9PRna8y1Dkefx1bROzrpi2irVbbFBq3filLVRABU/M8eHV6GzXHir5v5Og==
+X-Received: by 2002:a05:6830:4491:: with SMTP id r17mr319589otv.112.1643228027463;
+        Wed, 26 Jan 2022 12:13:47 -0800 (PST)
+Received: from shuah-tx13.internal ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id a128sm5993573oob.17.2022.01.26.12.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 12:13:47 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, corbet@lwn.net
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs/kselftest: clarify running mainline tests on stables
+Date:   Wed, 26 Jan 2022 13:13:41 -0700
+Message-Id: <20220126201341.55771-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HNasRwzf7887euQs"
-Content-Disposition: inline
-In-Reply-To: <48c44d74-6668-7823-ada6-0285a8b32a35@linuxfoundation.org>
-X-Cookie: Use only in a well-ventilated area.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Update the document to clarifiy support for running mainline
+kselftest on stable releases and the reasons for not removing
+test code that can test older kernels.
 
---HNasRwzf7887euQs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ Documentation/dev-tools/kselftest.rst | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-On Wed, Jan 26, 2022 at 01:03:44PM -0700, Shuah Khan wrote:
-> On 1/26/22 12:52 PM, Mark Brown wrote:
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index dcefee707ccd..a833ecf12fbc 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -7,6 +7,14 @@ directory. These are intended to be small tests to exercise individual code
+ paths in the kernel. Tests are intended to be run after building, installing
+ and booting a kernel.
+ 
++Kselftest from mainline can be run on older stable kernels. Running tests
++from mainline offers the best coverage. Several test rings run mainline
++kselftest suite on stable releases. The reason is that when a new test
++gets added to test existing code to regression test a bug, we should be
++able to run that test on an older kernel. Hence, it is important to keep
++code that can still test an older kernel and make sure it skips the test
++gracefully on newer releases.
++
+ You can find additional information on Kselftest framework, how to
+ write new tests using the framework on Kselftest wiki:
+ 
+-- 
+2.32.0
 
-> > If the function fails for any reason other than the system not
-> > supporting vgic-v3 it will abort rather than return.
-
-> Hmm. vgic_v3_setup() return gic_fd looks like and the interface says
-> Return: GIC file-descriptor or negative error code upon failure
-
-Yes, but in reality the only return other than a valid file descriptor
-is just -1 rather than a useful error code.
-
-> I don't follow the abort part.
-
-All the TEST_ASSERTS() in the code (including those in the functions
-called) are calls to test_assert() in assert.c which if the test
-asserted isn't true will print some diagnostics and call exit(), the
-general idiom is to give up immediately on error.
-
---HNasRwzf7887euQs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxq14ACgkQJNaLcl1U
-h9CC/Qf+PVOAm5Wc6qrMXiY0e8FQ6SOhccpSgyoFbwUUJet/ReDC1snRgYGn+vTx
-O+LMTd3nvNcl2guAo+rUn/0bvyUFgINvvECors31R6gMO/y8m5rsQwP+2Hsf5FMY
-bLpy1Jd3olD/cXw8gstIq8X8HMvfGO5q2Kt4Pk4L1Bi73K6E37vG/CydsE21n1jc
-KI3JYbj2Zk41ylo8a/rfqcO7xQuhj3e+B2jT0Wll7+JyDCMZd69Cni/13mYBLy9e
-mudYeJfwt1HZWxNqltl9KWZ221u+Mkek/aCHfklyFLVIDcI0D/p8dT/Xmw0amWaI
-mnmMSKKsnsVFZ6VbdLE+kgHKKKPi9w==
-=q/Nf
------END PGP SIGNATURE-----
-
---HNasRwzf7887euQs--
