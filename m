@@ -2,86 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3322E49EDFF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 23:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56ACB49EE46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 23:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbiA0WRU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 17:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S231739AbiA0Wwj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 17:52:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235917AbiA0WRT (ORCPT
+        with ESMTP id S230330AbiA0Wwj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:17:19 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B84C06173B
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 14:17:19 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id y4-20020a5b0f44000000b00611862e546dso8682533ybr.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 14:17:19 -0800 (PST)
+        Thu, 27 Jan 2022 17:52:39 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F87C061714
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 14:52:38 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id o10so3919640ilh.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 14:52:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Ng6cTnLsuAPZewV+DZLtymIbJ2l6/2ZMklzgx9Cf0/E=;
-        b=aK/uxtVw3OVb2dfiyvGRFtaOYM/RkdPdMTza1qGmRpTkHkeNBvFnSi1NqZ7CJB3hlx
-         reiYlNPTlH7W+O4I3DUE5P4t4Y7MPVK0GBODfqdNRdrNTwgTlKDgcpQ57IzwQGNKIIFh
-         HkIXxsBkFeWBza5Pg4eqZgxHmDJ5sZQXSjo9i5W5fIlD32ALqRHzqzRFaqIcR2sC65Gu
-         C9JTjOchtXDWBG3EGrqC6OwY2BdgDe+3u5ZzZgCD9IAmmIfQ+CY0zVFqNoUQU6DMc27g
-         IbvGnFgT2sU7ylJShQhwQZiE1ogIiZsnJdZqpuGTxKgCbg0RyDRTgrGCpr6tOm8UjMLt
-         4+TQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s4m0SuB5V0XSaTQ7c/s3zbcks9iRovaFLAZKKzHJ6sA=;
+        b=PvzFJ1kh7JMWTPx40W7TtP9h89jsbeJHVz3JjOkCI8WC/xdjDeZpd5OSFCtYRA2T5b
+         fp/lrIwwGzYFl9xWj5HtUCN0Db9Aclio5MA0bPk68P8LFqSpZL3D8+pIRgPED1CvrYkj
+         PaueJkVBaHxQ3rbH2a8xNvbu0F8C1JzbObGrU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Ng6cTnLsuAPZewV+DZLtymIbJ2l6/2ZMklzgx9Cf0/E=;
-        b=BOFZLMvxlmLdT6p5EIJkd/KzQndREP1R6/B+7gGdpKV1KiJi1dKVcfMkIbsQMlpCc0
-         w5LMcQOvHczsgEsyaDVutPD96XIHmz4vHdyNGzm2xYe6XqNn7d5q3jiw35GT/kqVtfl+
-         QyHBf7Tt0rkoM0inEnmCjQKg+00Ht6ULU6t5Bu0hlJkMri6Q1r2D/k17zhZ6l3p/tImq
-         yKNPOQvOrV0TcoZsMXpSTJrHMmUdYw3BxIq3istI03EblRb3teRgR/A5J2k+hy8VAlif
-         kLaB6LZjXcBdVPb/0ljb7DYRBsoXE4uB/ewA4HZ5Hau5+hjSawdoi1FNbbln51CPhIU3
-         wKPw==
-X-Gm-Message-State: AOAM531z2eDzfnUvQSF4bX9cf8RMvoy9H4ylNT05cQDf3LTxaS9mILpQ
-        8R+OZvTPa9Tevg3v3FeZObx1C+KAu5zulQ==
-X-Google-Smtp-Source: ABdhPJx3O5plmb71BP71pNiAZH1OVetV56XjM5wtIeRSySbzFeJk2kmTSjN+rzssphFCL5a7G96JJ/WrjZjobg==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5484:2aa:f5f4:a1e0])
- (user=dlatypov job=sendgmr) by 2002:a25:cf01:: with SMTP id
- f1mr8060763ybg.389.1643321838253; Thu, 27 Jan 2022 14:17:18 -0800 (PST)
-Date:   Thu, 27 Jan 2022 14:17:10 -0800
-Message-Id: <20220127221710.165733-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH] kunit: fix missing f in f-string in run_checks.py
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s4m0SuB5V0XSaTQ7c/s3zbcks9iRovaFLAZKKzHJ6sA=;
+        b=lxp5bvVtFv/+AQurccQ7XctiaEyOnbE53OPmrQ9adz2eUiT79006AtymkEqhAPS/N7
+         88W3pTbaCua2GCI90btahasB8jn7lys1ImFrjxQ6aKHQV04mXq6UDncT/EZajOKqBPgj
+         yG/I2s93HD3IZBbVk3J0XZctySpjckVqs/BsEoxHNF+pB2vxLv0vedePFOMARKg2SrIS
+         jMq8qIofFbcvAW2CcSY588L/EJsRGks1aRsbjitnjyyqQVxBGQD7MTMlgm5sb0CutLqU
+         OrscN6qlST1UuVbDRnvjWMQa2HwPkb8ZrDR2hUCnjClwIoa7KoIoabIr0aQGtNacJymy
+         C6nw==
+X-Gm-Message-State: AOAM531R6+nkCHYUSHFCdFUTKDwOkJpTZ4hScjQNHWYofHLa73ZLJHld
+        92kbzpDRaV1jkihZRPqptVy0xA==
+X-Google-Smtp-Source: ABdhPJwTEO2adHqgnDAv0UCrrD/gmOsue8B+UNLBfkQjtNM4/AFGK/mQ0ET4LOGwVDJrRnz958OeKw==
+X-Received: by 2002:a92:d84f:: with SMTP id h15mr4204137ilq.96.1643323958193;
+        Thu, 27 Jan 2022 14:52:38 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id n23sm7022315ioo.55.2022.01.27.14.52.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 14:52:37 -0800 (PST)
+Subject: Re: [PATCH] selftests: futex: Use variable MAKE instead of make
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Bamvor Jian Zhang <bamvor.zhangjian@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220127174447.754605-1-usama.anjum@collabora.com>
+ <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b5b90951-f528-cd47-e6a1-e38c0de58070@linuxfoundation.org>
+Date:   Thu, 27 Jan 2022 15:52:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We're missing the `f` prefix to have python do string interpolation, so
-we'd never end up printing what the actual "unexpected" error is.
+On 1/27/22 11:09 AM, André Almeida wrote:
+> Hi Usama,
+> 
+> Às 14:44 de 27/01/22, Muhammad Usama Anjum escreveu:
+>> Recursive make commands should always use the variable MAKE, not the
+>> explicit command name ‘make’. This has benefits and removes the
+>> following warning when multiple jobs are used for the build:
+>>
+>> make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+>>
+>> Fixes: a8ba798bc8ec ("selftests: enable O and KBUILD_OUTPUT")
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> Thanks for the patch!
+> 
+> Reviewed-by: André Almeida <andrealmeid@collabora.com>
+> 
 
-Fixes: ee92ed38364e ("kunit: add run_checks.py script to validate kunit changes")
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/run_checks.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for the patch. Applied to linux-kselftest fixes for rc3
 
-diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
-index 4f32133ed77c..13d854afca9d 100755
---- a/tools/testing/kunit/run_checks.py
-+++ b/tools/testing/kunit/run_checks.py
-@@ -61,7 +61,7 @@ def main(argv: Sequence[str]) -> None:
- 		elif isinstance(ex, subprocess.CalledProcessError):
- 			print(f'{name}: FAILED')
- 		else:
--			print('{name}: unexpected exception: {ex}')
-+			print(f'{name}: unexpected exception: {ex}')
- 			continue
- 
- 		output = ex.output
-
-base-commit: 6125a5c70acddd9fc1fb7329047a254c74d0173c
--- 
-2.35.0.rc2.247.g8bbb082509-goog
-
+thanks,
+-- Shuah
