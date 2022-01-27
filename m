@@ -2,97 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56ACB49EE46
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 23:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0561049EE61
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 00:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiA0Wwj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 17:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S238913AbiA0XCD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 18:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiA0Wwj (ORCPT
+        with ESMTP id S238296AbiA0XCD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:52:39 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F87C061714
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 14:52:38 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id o10so3919640ilh.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 14:52:38 -0800 (PST)
+        Thu, 27 Jan 2022 18:02:03 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E609C061714
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 15:02:03 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id y17so3906930ilm.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 15:02:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=s4m0SuB5V0XSaTQ7c/s3zbcks9iRovaFLAZKKzHJ6sA=;
-        b=PvzFJ1kh7JMWTPx40W7TtP9h89jsbeJHVz3JjOkCI8WC/xdjDeZpd5OSFCtYRA2T5b
-         fp/lrIwwGzYFl9xWj5HtUCN0Db9Aclio5MA0bPk68P8LFqSpZL3D8+pIRgPED1CvrYkj
-         PaueJkVBaHxQ3rbH2a8xNvbu0F8C1JzbObGrU=
+        bh=/udoNmOdToKZ46JixRPRrkFS07mcQhi4GHZVYYVEkbc=;
+        b=JbObllQ61T/iGnBUjULS9/tBm7bjFLR+cUslbw4rxf/RHEdNUXRLGNH1OQE1R1MAzC
+         q7UY5vIIWqOJtz0a0PAM3vf4YwRtuLNO46PyqyWtRRoy64vBGofSZnluxWLr+h+usGJh
+         KSuk+fFej0loknxj937nOtODaRaL5x5T4VVIU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=s4m0SuB5V0XSaTQ7c/s3zbcks9iRovaFLAZKKzHJ6sA=;
-        b=lxp5bvVtFv/+AQurccQ7XctiaEyOnbE53OPmrQ9adz2eUiT79006AtymkEqhAPS/N7
-         88W3pTbaCua2GCI90btahasB8jn7lys1ImFrjxQ6aKHQV04mXq6UDncT/EZajOKqBPgj
-         yG/I2s93HD3IZBbVk3J0XZctySpjckVqs/BsEoxHNF+pB2vxLv0vedePFOMARKg2SrIS
-         jMq8qIofFbcvAW2CcSY588L/EJsRGks1aRsbjitnjyyqQVxBGQD7MTMlgm5sb0CutLqU
-         OrscN6qlST1UuVbDRnvjWMQa2HwPkb8ZrDR2hUCnjClwIoa7KoIoabIr0aQGtNacJymy
-         C6nw==
-X-Gm-Message-State: AOAM531R6+nkCHYUSHFCdFUTKDwOkJpTZ4hScjQNHWYofHLa73ZLJHld
-        92kbzpDRaV1jkihZRPqptVy0xA==
-X-Google-Smtp-Source: ABdhPJwTEO2adHqgnDAv0UCrrD/gmOsue8B+UNLBfkQjtNM4/AFGK/mQ0ET4LOGwVDJrRnz958OeKw==
-X-Received: by 2002:a92:d84f:: with SMTP id h15mr4204137ilq.96.1643323958193;
-        Thu, 27 Jan 2022 14:52:38 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id n23sm7022315ioo.55.2022.01.27.14.52.36
+        bh=/udoNmOdToKZ46JixRPRrkFS07mcQhi4GHZVYYVEkbc=;
+        b=RH/l9kn8p3ODyC5CiQUJnidG9UZQKWY7QLGVs5+9A78V7gsxt7h2uvggba7CVVGsnD
+         Cf03pnTzZHv1yrw2WR4mVuR7ZZ4ohB7fBRVGTo0TWyWAbJGQ8zBrB9b490q4YCMj/qkR
+         dY09gJI6CdbwQsv1Hwot+smY0YgqW6uLKUBr/2FXMNODZ1sydyMjrmb3FeOibr4abraB
+         min98ickvwoWR2VPfpMemKaQrCxuGfBNBoR2ZW208/u5or8J0m3c1/nkSTMpqUSLVOJh
+         Sy3NR74tvHCGnwS5XmsmeHQQoARH04swgNwUZHJ2D1fzTfZblEuyEemZ6cJgd1EWY+YD
+         zo9g==
+X-Gm-Message-State: AOAM533qExbC07QYqtuakUaOFG/RuB718csTW08UKqLUbz7Pki0FYsbr
+        foPiXDRqCAvvJz78IpLjJORcR7VLYyJoGg==
+X-Google-Smtp-Source: ABdhPJw7snTnsDnp2NSxNMlJZgf+Ks8g/n0IOMPOVZLcnCw/cpfCGHXpCKnBGD88sSz5Dq3YV4zEVA==
+X-Received: by 2002:a05:6e02:188c:: with SMTP id o12mr4196131ilu.95.1643324522750;
+        Thu, 27 Jan 2022 15:02:02 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:fcdb:3423:ed25:a583? ([2601:282:8200:4c:fcdb:3423:ed25:a583])
+        by smtp.gmail.com with ESMTPSA id m4sm12666632iln.48.2022.01.27.15.02.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 14:52:37 -0800 (PST)
-Subject: Re: [PATCH] selftests: futex: Use variable MAKE instead of make
-To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Bamvor Jian Zhang <bamvor.zhangjian@linaro.org>,
+        Thu, 27 Jan 2022 15:02:02 -0800 (PST)
+Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220127174447.754605-1-usama.anjum@collabora.com>
- <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
+References: <20220126102723.23300-1-cristian.marussi@arm.com>
+ <20220126102723.23300-3-cristian.marussi@arm.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b5b90951-f528-cd47-e6a1-e38c0de58070@linuxfoundation.org>
-Date:   Thu, 27 Jan 2022 15:52:35 -0700
+Message-ID: <3603bae9-d292-8c67-331f-18fe54586355@linuxfoundation.org>
+Date:   Thu, 27 Jan 2022 16:02:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
+In-Reply-To: <20220126102723.23300-3-cristian.marussi@arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/27/22 11:09 AM, André Almeida wrote:
-> Hi Usama,
+On 1/26/22 3:27 AM, Cristian Marussi wrote:
+> When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
+> report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
 > 
-> Às 14:44 de 27/01/22, Muhammad Usama Anjum escreveu:
->> Recursive make commands should always use the variable MAKE, not the
->> explicit command name ‘make’. This has benefits and removes the
->> following warning when multiple jobs are used for the build:
->>
->> make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
->>
->> Fixes: a8ba798bc8ec ("selftests: enable O and KBUILD_OUTPUT")
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
+> tests within vdso_test_abi to be considered FAIL when symbol is not found.
 > 
-> Thanks for the patch!
+> Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
 > 
-> Reviewed-by: André Almeida <andrealmeid@collabora.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> Seen as a failure on both a JUNO and a Dragonboard on both recent and old
+> kernels/testruns:
 > 
+> root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
+> [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
+> The time is 1637922136.675304
+> The time is 1637922136.675361000
+> The resolution is 0 1
+> clock_id: CLOCK_REALTIME [PASS]
+> The time is 1927.760604900
+> The resolution is 0 1
+> clock_id: CLOCK_BOOTTIME [PASS]
+> The time is 1637922136.675649700
+> The resolution is 0 1
+> clock_id: CLOCK_TAI [PASS]
+> The time is 1637922136.672000000
+> The resolution is 0 4000000
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> The time is 1927.761005600
+> The resolution is 0 1
+> clock_id: CLOCK_MONOTONIC [PASS]
+> The time is 1927.761132780
+> The resolution is 0 1
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> The time is 1927.757093740
+> The resolution is 0 4000000
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> Could not find __kernel_time              <<< This caused a FAIL as a whole
+> root@deb-buster-arm64:~# echo $?
+> 1
+> 
+> e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
+> ---
+>   tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> index 3d603f1394af..7dcc66d1cecf 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> @@ -90,8 +90,9 @@ static int vdso_test_time(void)
+>   		(vdso_time_t)vdso_sym(version, name[2]);
+>   
+>   	if (!vdso_time) {
+> +		/* Skip if symbol not found: consider skipped tests as passed */
+>   		printf("Could not find %s\n", name[2]);
+> -		return KSFT_SKIP;
+> +		return KSFT_PASS;
 
-Thank you for the patch. Applied to linux-kselftest fixes for rc3
+Skip is a the right option here. Pass indicates that the functionality
+has been tested and it passed. There is a clear message that says that
+the symbol isn't found
 
 thanks,
 -- Shuah
