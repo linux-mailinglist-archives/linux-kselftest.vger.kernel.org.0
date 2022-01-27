@@ -2,81 +2,196 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2431D49ED55
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 22:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D1C49ED64
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 22:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242071AbiA0VWV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 16:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
+        id S240581AbiA0VaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 16:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239496AbiA0VWS (ORCPT
+        with ESMTP id S235091AbiA0VaL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:22:18 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4971AC06173B
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 13:22:18 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d18so3912850plg.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 13:22:18 -0800 (PST)
+        Thu, 27 Jan 2022 16:30:11 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C64C061714
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 13:30:10 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a4-20020a5b0ec4000000b00615dc8c1623so8409697ybs.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 13:30:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VTPRRsgugmzf/THQn+bJVywd3QC27Vdizt4KZMMDQYo=;
-        b=NuUca3TpKHa+/WJgEQ+Q3lAf/ABT4f2qTCoFefqLr1TRQftjYNVPJYd5Kb6wm8EvIY
-         PiuiHV0+7ksboHD5Tc4yWjw04ZQ/VSzQubrXFj3C2PFT8CE56ID4s3WmuLa68SAb9iQW
-         5c14Z5pQ0Kg6j2Mny/8p4CFKTXrMHBOM9g+FPHIw8g+CvgVtNXyNzr03vys9/Q/U4J7S
-         NXUQELg3WGvlulTvkRYx6i7nZRXdpGfNuwQvqzeMI45+z0dGJW+ApDXJQHOjxLIZcq0K
-         yepg4XuDKBCmYxRaJTF1ygtcSTm2k/gK9K4sp6eMYB2l72hwHd3TZFTRS33FJDc0oMkv
-         4RNQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=B95/GPrHL3ehKM8Rm7wgzd+5Hfg8Ho8he70Zk+Aj96g=;
+        b=M5puYGiqOpDDdPdrv13u0tkUyLBdm15VQzzeJXFp1chap+jbhRRo7I0rcuDDzOxSjl
+         3cL1m1qJNnLu9bKjOOptxas/2MITDJh5flskv42B0oepTyfabrKYJivvMGrjamvONs0o
+         Qrp5dU++Y9TmLDmL1qqyxl2wXgca71IVhnAQvvQb48T9g4gG6YCElFD5FkRSnnJzLDvS
+         xIEhtyAqcRpzfHhld5Bocs3GKyaFh5Vqx7Os2A0xBH2lm+GKomBuuLeSTJC2qf4A+AT0
+         KV5fWQZ3ZSDQlIhD+C+2bjXZhTDzuRUY1yzudUK4UlrkmcAjFmoexk1kiQDNW+fKh5Jr
+         wu4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VTPRRsgugmzf/THQn+bJVywd3QC27Vdizt4KZMMDQYo=;
-        b=HU1sblGgEXQrk/HLVVPf568A82giffo75s8bdP54MSf0vGW9ei/SWWr2OkhTwBQNA5
-         THXVWtLagp/dx9KhxrxaqsvlWPJkEmnZf0SUMvRk+qsOTbgwM2GOyrcjK3NpipzivXMT
-         J262BQOvNa0CwPnrw9Y6PsX7Ki0F0F0YMldqOUDajf+a5Ybcomw4SxBRJ+aVweEhfNiq
-         SOqvA7K4D+a+co0GWGfnF3/nhoofnerIxrNCXLc6SeEWVBS2huTJAgo13r0uw14eMgVl
-         9+avHvrVP9NHQ9roqVx7goVuqXksGPbFrUHN12XZaBR4RtRMbw6Mz6cPbf55rBYssnUi
-         rOug==
-X-Gm-Message-State: AOAM533cLTEi7ke2gCLlaevVaL/SCQ9iI9Y5JnTbGKdUY6mMvJtfv3Wo
-        IDzcMm2o8l12Uu0mlb/I7f6fh8fCaP6Ovqc47rdEhA==
-X-Google-Smtp-Source: ABdhPJyrEfXh6IwQ2pWZe5a5gakX7KhAPijNMHSCnoa4kgrf/JmDkmxbkBzPzdfr7ujetYE8UJgJClA4vPUu9HFSD7k=
-X-Received: by 2002:a17:90b:17c4:: with SMTP id me4mr16229311pjb.198.1643318537602;
- Thu, 27 Jan 2022 13:22:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20220125210011.3817742-1-dlatypov@google.com> <20220125210011.3817742-2-dlatypov@google.com>
-In-Reply-To: <20220125210011.3817742-2-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 27 Jan 2022 16:22:06 -0500
-Message-ID: <CAFd5g46hoFZcKHXvfe1S5WyRX6gbj-CrtXcKjrixSyHwV+vp_w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] kunit: remove va_format from kunit_assert
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=B95/GPrHL3ehKM8Rm7wgzd+5Hfg8Ho8he70Zk+Aj96g=;
+        b=2BtYxZ5SNYEXV3r96v4xqfFodJPEZHBJlH2/RREKp/dRqIRHpkTi+XeF+CvPF0r6KY
+         tl8wYQujSmKmPrGQJH9//jch6bb4AFUxYEj4FAzoXo5z5uVQcPtE9rnKBxWKJ0Q8jwpN
+         bAEfIIDCNBuG8Ydx4q5XvMco6yU9MUq0WfLupjbGByDDQYsc5y84RdqUvsFeQX0zmacj
+         dxv44YBTtPk8uJFPcjrkl4R7RegbNQzXFTKhdkmueUXVa3EHO17Ug0Z/PNLdtVZQYnEG
+         0mi0q+/cOF8lkecpx1Fx5MED8zqAWHiXwo27ZGPx6G+WZHq/Uk4YEEylM7MRQPqP8bkr
+         2TYw==
+X-Gm-Message-State: AOAM531cenNKqxPsKa8N8/5bR3OZRJNycCf/YAgii5cVWHn7xktNaqDn
+        z4Fi4sKM7CR0TCasekrdkrB9GL22M23RzOF3Uqb7
+X-Google-Smtp-Source: ABdhPJz90vY8X1LcSRxAHAGv97T1CuywIIOQnBUF6s3pyOyCzGLxlxEu75zq+m942M4ZUYKJt/fKtHHa0YX0ApbvC3o+
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:c864:1e56:28bc:526b])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:3dd7:: with SMTP id
+ k206mr1ywa.56.1643319008177; Thu, 27 Jan 2022 13:30:08 -0800 (PST)
+Date:   Thu, 27 Jan 2022 13:29:51 -0800
+Message-Id: <20220127212951.3604667-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH] pidfd: fix test failure due to stack overflow on some arches
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 4:00 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> The concern is that having a lot of redundant fields in kunit_assert can
-> blow up stack usage if the compiler doesn't optimize them away [1].
->
-> The comment on this field implies that it was meant to be initialized
-> when the expect/assert was declared, but this only happens when we run
-> kunit_do_failed_assertion().
->
-> We don't need to access it outside of that function, so move it out of
-> the struct and make it a local variable there.
->
-> This change also takes the chance to reduce the number of macros by
-> inlining the now simplified KUNIT_INIT_ASSERT_STRUCT() macro.
->
-> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+When running the pidfd_fdinfo_test on arm64, it fails for me. After some
+digging, the reason is that the child exits due to SIGBUS, because it
+overflows the 1024 byte stack we've reserved for it.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+To fix the issue, increase the stack size to 8192 bytes (this number is
+somewhat arbitrary, and was arrived at through experimentation -- I kept
+doubling until the failure no longer occurred).
+
+Also, let's make the issue easier to debug. wait_for_pid() returns an
+ambiguous value: it may return -1 in all of these cases:
+
+1. waitpid() itself returned -1
+2. waitpid() returned success, but we found !WIFEXITED(status).
+3. The child process exited, but it did so with a -1 exit code.
+
+There's no way for the caller to tell the difference. So, at least log
+which occurred, so the test runner can debug things.
+
+While debugging this, I found that we had !WIFEXITED(), because the
+child exited due to a signal. This seems like a reasonably common case,
+so also print out whether or not we have WIFSIGNALED(), and the
+associated WTERMSIG() (if any). This lets us see the SIGBUS I'm fixing
+clearly when it occurs.
+
+Finally, I'm suspicious of allocating the child's stack on our stack.
+man clone(2) suggests that the correct way to do this is with mmap(),
+and in particular by setting MAP_STACK. So, switch to doing it that way
+instead.
+
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/pidfd/pidfd.h         | 13 ++++++++---
+ .../selftests/pidfd/pidfd_fdinfo_test.c       | 22 +++++++++++++++----
+ 2 files changed, 28 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+index 01f8d3c0cf2c..6922d6417e1c 100644
+--- a/tools/testing/selftests/pidfd/pidfd.h
++++ b/tools/testing/selftests/pidfd/pidfd.h
+@@ -68,7 +68,7 @@
+ #define PIDFD_SKIP 3
+ #define PIDFD_XFAIL 4
+ 
+-int wait_for_pid(pid_t pid)
++static inline int wait_for_pid(pid_t pid)
+ {
+ 	int status, ret;
+ 
+@@ -78,13 +78,20 @@ int wait_for_pid(pid_t pid)
+ 		if (errno == EINTR)
+ 			goto again;
+ 
++		ksft_print_msg("waitpid returned -1, errno=%d\n", errno);
+ 		return -1;
+ 	}
+ 
+-	if (!WIFEXITED(status))
++	if (!WIFEXITED(status)) {
++		ksft_print_msg(
++		       "waitpid !WIFEXITED, WIFSIGNALED=%d, WTERMSIG=%d\n",
++		       WIFSIGNALED(status), WTERMSIG(status));
+ 		return -1;
++	}
+ 
+-	return WEXITSTATUS(status);
++	ret = WEXITSTATUS(status);
++	ksft_print_msg("waitpid WEXITSTATUS=%d\n", ret);
++	return ret;
+ }
+ 
+ static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
+diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+index 22558524f71c..3fd8e903118f 100644
+--- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+@@ -12,6 +12,7 @@
+ #include <string.h>
+ #include <syscall.h>
+ #include <sys/wait.h>
++#include <sys/mman.h>
+ 
+ #include "pidfd.h"
+ #include "../kselftest.h"
+@@ -80,7 +81,10 @@ static inline int error_check(struct error *err, const char *test_name)
+ 	return err->code;
+ }
+ 
++#define CHILD_STACK_SIZE 8192
++
+ struct child {
++	char *stack;
+ 	pid_t pid;
+ 	int   fd;
+ };
+@@ -89,17 +93,22 @@ static struct child clone_newns(int (*fn)(void *), void *args,
+ 				struct error *err)
+ {
+ 	static int flags = CLONE_PIDFD | CLONE_NEWPID | CLONE_NEWNS | SIGCHLD;
+-	size_t stack_size = 1024;
+-	char *stack[1024] = { 0 };
+ 	struct child ret;
+ 
+ 	if (!(flags & CLONE_NEWUSER) && geteuid() != 0)
+ 		flags |= CLONE_NEWUSER;
+ 
++	ret.stack = mmap(NULL, CHILD_STACK_SIZE, PROT_READ | PROT_WRITE,
++			 MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
++	if (ret.stack == MAP_FAILED) {
++		error_set(err, -1, "mmap of stack failed (errno %d)", errno);
++		return ret;
++	}
++
+ #ifdef __ia64__
+-	ret.pid = __clone2(fn, stack, stack_size, flags, args, &ret.fd);
++	ret.pid = __clone2(fn, ret.stack, CHILD_STACK_SIZE, flags, args, &ret.fd);
+ #else
+-	ret.pid = clone(fn, stack + stack_size, flags, args, &ret.fd);
++	ret.pid = clone(fn, ret.stack + CHILD_STACK_SIZE, flags, args, &ret.fd);
+ #endif
+ 
+ 	if (ret.pid < 0) {
+@@ -129,6 +138,11 @@ static inline int child_join(struct child *child, struct error *err)
+ 	else if (r > 0)
+ 		error_set(err, r, "child %d reported: %d", child->pid, r);
+ 
++	if (munmap(child->stack, CHILD_STACK_SIZE)) {
++		error_set(err, -1, "munmap of child stack failed (errno %d)", errno);
++		r = -1;
++	}
++
+ 	return r;
+ }
+ 
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
+
