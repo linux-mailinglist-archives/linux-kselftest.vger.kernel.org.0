@@ -2,383 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EBC49D955
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 04:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8416B49D98F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 05:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiA0Dj5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jan 2022 22:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        id S230057AbiA0ERE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jan 2022 23:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiA0Dj5 (ORCPT
+        with ESMTP id S229846AbiA0ERE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 22:39:57 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D39C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 19:39:56 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so1060445wme.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 19:39:56 -0800 (PST)
+        Wed, 26 Jan 2022 23:17:04 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4485C06161C
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 20:17:03 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so1676885pja.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 20:17:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GhsNNzCsrT+IO9FFEkmOPihHWILho1+mWYSrj3LT5+g=;
-        b=fuU3Maa7qkO8ByteJtpThZ+Wf8abVwhMd70TiyfjlBzXEMwcM9HiK3ZiacIH+L6T2z
-         lleFCDQaLz3Kq78iQIsYxOz81E8xuUP//zkEwgeDvsR4dUPQZWphcOuPldJSxpYy1Mnb
-         AMrOXh4SdBWFPNwGlsiAe8YQOKs4ky+UVWYRjrVHm52hjjZtCNey1roxkh9zTVG1tU1V
-         hJRsnbZFE/3pfpi6Ifu4Xx2JeDvVeZoH1vCy5Bseubc2MJo6NzQq049LkxATZiSyxFwJ
-         730EXlJcALxj/MkRd6485vP7ZNpWkDpCxeqR0rVBE0jVklKyDBZxQmfZcvSZ/bL65u0B
-         GN1w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MlI851lUoHdmSjJoGiyp5I4kiqlKaCdV4NPdXhxRA+8=;
+        b=C8VvuZFe4rCP2uCFSONmb99RN1LdQn529TOYmrpKoK7PYZcziPiAhrOW11oPx+kR43
+         opz70CnPxzxoZTYSSVhdERYlJMV8TdO2QuyuvwmFnkgUYxlX3/+xpOKrqI+Z+SedE8V0
+         b2zhdCzpSnUjJajZlBYXB+FSVxcFj2HkqHfh92IhUWwU9i3Q4biweQtzgZksk14c+YiH
+         52bQWQ89Jcu87pb3B4VxHhWSQojQZDN4MzrgykfnIRP/6lSrZxJ1K92QfFOGFIVPjDYw
+         3UM41Q/sdGDYKwy0SqhzCI9wShehVrMqDwPAZ1e+aIL1TRmW3bpwLdmcoEgNXDTVMahN
+         1OPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GhsNNzCsrT+IO9FFEkmOPihHWILho1+mWYSrj3LT5+g=;
-        b=C/ACViWKG7w+bvvbBBdgTj/7Q8g7KHCJ3CKrXTZyE8OI9ytKY+TaulGJkiBvVfNrbt
-         gkSBlsJpABgNmHTnI11Fms6tl0svDFnmf/x0e0djOmv6rhuw4kByoibV3qoHR4hRCL27
-         GOUKmgz/ztpjOdJemSgdXKkXckCpL4BdxHgMJIISpyAZkm0zHjHCTpvLWKw+NLK0QROF
-         zDSM8g5FBCKNYuoXGba/EfHN9qdIWEmsKs3jsaomam1Ksz5V1Fk11etC0gpJihHQvp/H
-         DYkthR+gWl0CBnBY4wW715SBevoIpS4TSNkr+XhFn3E2Ar/U6MAnEJJzrBCGDzLby8EK
-         cV2g==
-X-Gm-Message-State: AOAM533l/P8p8ZakPcEZuHuY8dZHE51TYSpVNfB5mYCGnMJvZJDCd4xz
-        s/M4oHQ2s9JN9LQ7XUy+E/NNMP003xTJ8v25CqkCvg==
-X-Google-Smtp-Source: ABdhPJz2kFgM4YgWjlsi4iS8QYqc+G87JpVUvOLRZKFL04zD290XMk9D80MIclwhYMgQIydKhqiqsobxj+cniXJCU+o=
-X-Received: by 2002:a1c:e90a:: with SMTP id q10mr10142565wmc.18.1643254795210;
- Wed, 26 Jan 2022 19:39:55 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MlI851lUoHdmSjJoGiyp5I4kiqlKaCdV4NPdXhxRA+8=;
+        b=bTikZCw2+9MHtkWZfEIZQxa3zE3dYOPP392pPeAV9ljmCKAs98VoX/s+Qj2o68QWoJ
+         ioDz4kH2cPpW4S7G997/eziBLb0SNwqGIT5koJkoPHdkJk7CdAoUCJuyd8Y5sYEKHrmv
+         655swbdkAZXez6Jo+QYKGO0IMYeFjvO7lj0jd5/aRZKCLOV1zyQHWuL1E6nV4BPSg74r
+         2ZicC9F4pTP3gcmbndAPkA3p74Vn54VGQtWVXOe1wl7o82jieZzcfRmh02Sa5FE04Zux
+         nqPNC2KmorcVvh5CbBGRb1HX/vsZge5WEnEP30gGfNH+qhgu15CgBKvUuAnj/3H9kKz1
+         ejjQ==
+X-Gm-Message-State: AOAM533R+g2KMPjYHGx0Pdkh1g53JqyrToCULwCs6QPdx5PJQHR8IMcL
+        zYk92lldl9fj31yk310JSbsrcg==
+X-Google-Smtp-Source: ABdhPJzz3u8vPsKiH9OPkvGE3abpQ/af8KLmu4FJ0c7+83/vDdWzlReCnpAVhOP8ndMIaORK9xGeGg==
+X-Received: by 2002:a17:902:f083:: with SMTP id p3mr2247927pla.72.1643257023220;
+        Wed, 26 Jan 2022 20:17:03 -0800 (PST)
+Received: from google.com (150.12.83.34.bc.googleusercontent.com. [34.83.12.150])
+        by smtp.gmail.com with ESMTPSA id z7sm3556746pfe.49.2022.01.26.20.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 20:17:02 -0800 (PST)
+Date:   Wed, 26 Jan 2022 20:16:59 -0800
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3] kselftest: kvm/arm64: Skip tests if we can't create a
+ vgic-v3
+Message-ID: <YfIcu2DMi83eua8C@google.com>
+References: <20220126145242.3473836-1-broonie@kernel.org>
 MIME-Version: 1.0
-References: <20220125210011.3817742-1-dlatypov@google.com> <20220125210011.3817742-4-dlatypov@google.com>
-In-Reply-To: <20220125210011.3817742-4-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 27 Jan 2022 11:39:43 +0800
-Message-ID: <CABVgOSm4EWFK5-KWto1HF3AEY9c77s5MufufXRDek3PAcWCccA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: factor out str constants from binary assertion structs
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126145242.3473836-1-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 5:00 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> If the compiler doesn't optimize them away, each kunit assertion (use of
-> KUNIT_EXPECT_EQ, etc.) can use 88 bytes of stack space in the worst and
-> most common case. This has led to compiler warnings and a suggestion
-> from Linus to move data from the structs into static const's where
-> possible [1].
->
-> This builds upon [2] which did so for the base struct kunit_assert type.
-> That only reduced sizeof(struct kunit_binary_assert) from 88 to 64.
->
-> Given these are by far the most commonly used asserts, this patch
-> factors out the textual representations of the operands and comparator
-> into another static const, saving 16 more bytes.
->
-> In detail, KUNIT_EXPECT_EQ(test, 2 + 2, 5) yields the following struct
->   (struct kunit_binary_assert) {
->     .assert = <struct kunit_assert>,
->     .operation = "==",
->     .left_text = "2 + 2",
->     .left_value = 4,
->     .right_text = "5",
->     .right_value = 5,
->   }
-> After this change
->   static const struct kunit_binary_assert_text __text = {
->     .operation = "==",
->     .left_text = "2 + 2",
->     .right_text = "5",
->   };
->   (struct kunit_binary_assert) {
->     .assert = <struct kunit_assert>,
->     .text = &__text,
->     .left_value = 4,
->     .right_value = 5,
->   }
->
-> This also DRYs the code a bit more since these str fields were repeated
-> for the string and pointer versions of kunit_binary_assert.
->
-> Note: we could name the kunit_binary_assert_text fields left/right
-> instead of left_text/right_text. But that would require changing the
-> macros a bit since they have args called "left" and "right" which would
-> be substituted in `.left = #left` as `.2 + 2 = \"2 + 2\"`.
->
-> [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
-> [2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-6-dlatypov@google.com/
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Wed, Jan 26, 2022 at 02:52:42PM +0000, Mark Brown wrote:
+> The arch_timer and vgic_irq kselftests assume that they can create a
+> vgic-v3, using the library function vgic_v3_setup() which aborts with a
+> test failure if it is not possible to do so. Since vgic-v3 can only be
+> instantiated on systems where the host has GICv3 this leads to false
+> positives on older systems where that is not the case.
+> 
+> Fix this by changing vgic_v3_setup() to return an error if the vgic can't
+> be instantiated and have the callers skip if this happens. We could also
+> exit flagging a skip in vgic_v3_setup() but this would prevent future test
+> cases conditionally deciding which GIC to use or generally doing more
+> complex output.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
+> 
+> v3:
+>  - Use custom print_skip() helper.
+>  - Use internal version of _kvm_create_device.
+> v2:
+>  - The test for being able to create the GIC doesn't actually
+>    instantiate it, add a call doing so in that case.
+> 
+>  tools/testing/selftests/kvm/aarch64/arch_timer.c | 7 ++++++-
+>  tools/testing/selftests/kvm/aarch64/vgic_irq.c   | 4 ++++
+>  tools/testing/selftests/kvm/lib/aarch64/vgic.c   | 4 +++-
+>  3 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> index 9ad38bd360a4..b08d30bf71c5 100644
+> --- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> +++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> @@ -366,6 +366,7 @@ static struct kvm_vm *test_vm_create(void)
+>  {
+>  	struct kvm_vm *vm;
+>  	unsigned int i;
+> +	int ret;
+>  	int nr_vcpus = test_args.nr_vcpus;
+>  
+>  	vm = vm_create_default_with_vcpus(nr_vcpus, 0, 0, guest_code, NULL);
+> @@ -382,7 +383,11 @@ static struct kvm_vm *test_vm_create(void)
+>  
+>  	ucall_init(vm, NULL);
+>  	test_init_timer_irq(vm);
+> -	vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+> +	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+> +	if (ret < 0) {
+> +		print_skip("Failed to create vgic-v3");
+> +		exit(KSFT_SKIP);
+> +	}
+>  
+>  	/* Make all the test's cmdline args visible to the guest */
+>  	sync_global_to_guest(vm, test_args);
+> diff --git a/tools/testing/selftests/kvm/aarch64/vgic_irq.c b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+> index e6c7d7f8fbd1..7eca97799917 100644
+> --- a/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+> +++ b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+> @@ -761,6 +761,10 @@ static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split)
+>  
+>  	gic_fd = vgic_v3_setup(vm, 1, nr_irqs,
+>  			GICD_BASE_GPA, GICR_BASE_GPA);
+> +	if (gic_fd < 0) {
+> +		print_skip("Failed to create vgic-v3, skipping");
+> +		exit(KSFT_SKIP);
+> +	}
+>  
+>  	vm_install_exception_handler(vm, VECTOR_IRQ_CURRENT,
+>  		guest_irq_handlers[args.eoi_split][args.level_sensitive]);
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/vgic.c b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> index b3a0fca0d780..f5cd0c536d85 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> @@ -52,7 +52,9 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
+>  			nr_vcpus, nr_vcpus_created);
+>  
+>  	/* Distributor setup */
+> -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
+> +	if (_kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3,
+> +			       false, &gic_fd) != 0)
+> +		return -1;
+>  
+>  	kvm_device_access(gic_fd, KVM_DEV_ARM_VGIC_GRP_NR_IRQS,
+>  			0, &nr_irqs, true);
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> kvmarm mailing list
+> kvmarm@lists.cs.columbia.edu
+> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
 
-This definitely _feels_ like it's adding a bit more complexity than
-would be ideal by splitting this out into a separate function, but I
-do agree that it's worth it.
+Tried both gicv2 and v3 and the change works as expected.
 
-I think left_text / right_text are good enough names, too: I wouldn't
-bother trying to make them .left/.right.
-
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  include/kunit/assert.h | 49 +++++++++++++++++++-----------------------
->  include/kunit/test.h   | 20 +++++++++++------
->  lib/kunit/assert.c     | 38 ++++++++++++++++----------------
->  3 files changed, 54 insertions(+), 53 deletions(-)
->
-> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-> index 649bfac9f406..4b52e12c2ae8 100644
-> --- a/include/kunit/assert.h
-> +++ b/include/kunit/assert.h
-> @@ -150,14 +150,25 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
->         .value = val                                                           \
->  }
->
-> +/**
-> + * struct kunit_binary_assert_text - holds strings for &struct
-> + *     kunit_binary_assert and friends to try and make the structs smaller.
-> + * @operation: A string representation of the comparison operator (e.g. "==").
-> + * @left_text: A string representation of the left expression (e.g. "2+2").
-> + * @right_text: A string representation of the right expression (e.g. "2+2").
-> + */
-> +struct kunit_binary_assert_text {
-> +       const char *operation;
-> +       const char *left_text;
-> +       const char *right_text;
-> +};
-> +
->  /**
->   * struct kunit_binary_assert - An expectation/assertion that compares two
->   *     non-pointer values (for example, KUNIT_EXPECT_EQ(test, 1 + 1, 2)).
->   * @assert: The parent of this type.
-> - * @operation: A string representation of the comparison operator (e.g. "==").
-> - * @left_text: A string representation of the expression in the left slot.
-> + * @text: Holds the textual representations of the operands and op (e.g.  "==").
->   * @left_value: The actual evaluated value of the expression in the left slot.
-> - * @right_text: A string representation of the expression in the right slot.
->   * @right_value: The actual evaluated value of the expression in the right slot.
->   *
->   * Represents an expectation/assertion that compares two non-pointer values. For
-> @@ -166,10 +177,8 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
->   */
->  struct kunit_binary_assert {
->         struct kunit_assert assert;
-> -       const char *operation;
-> -       const char *left_text;
-> +       const struct kunit_binary_assert_text *text;
->         long long left_value;
-> -       const char *right_text;
->         long long right_value;
->  };
->
-> @@ -182,10 +191,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->   *     kunit_binary_assert, kunit_binary_ptr_assert, etc.
->   *
->   * @format_func: a function which formats the assert to a string.
-> - * @op_str: A string representation of the comparison operator (e.g. "==").
-> - * @left_str: A string representation of the expression in the left slot.
-> + * @text_: Pointer to a kunit_binary_assert_text.
->   * @left_val: The actual evaluated value of the expression in the left slot.
-> - * @right_str: A string representation of the expression in the right slot.
->   * @right_val: The actual evaluated value of the expression in the right slot.
->   *
->   * Initializes a binary assert like kunit_binary_assert,
-> @@ -194,16 +201,12 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->   * This is ultimately used by binary assertion macros like KUNIT_EXPECT_EQ, etc.
->   */
->  #define KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,                          \
-> -                                       op_str,                                \
-> -                                       left_str,                              \
-> +                                       text_,                                 \
->                                         left_val,                              \
-> -                                       right_str,                             \
->                                         right_val) {                           \
->         .assert = { .format = format_func },                                   \
-> -       .operation = op_str,                                                   \
-> -       .left_text = left_str,                                                 \
-> +       .text = text_,                                                         \
->         .left_value = left_val,                                                \
-> -       .right_text = right_str,                                               \
->         .right_value = right_val                                               \
->  }
->
-> @@ -211,10 +214,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->   * struct kunit_binary_ptr_assert - An expectation/assertion that compares two
->   *     pointer values (for example, KUNIT_EXPECT_PTR_EQ(test, foo, bar)).
->   * @assert: The parent of this type.
-> - * @operation: A string representation of the comparison operator (e.g. "==").
-> - * @left_text: A string representation of the expression in the left slot.
-> + * @text: Holds the textual representations of the operands and op (e.g.  "==").
->   * @left_value: The actual evaluated value of the expression in the left slot.
-> - * @right_text: A string representation of the expression in the right slot.
->   * @right_value: The actual evaluated value of the expression in the right slot.
->   *
->   * Represents an expectation/assertion that compares two pointer values. For
-> @@ -223,10 +224,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->   */
->  struct kunit_binary_ptr_assert {
->         struct kunit_assert assert;
-> -       const char *operation;
-> -       const char *left_text;
-> +       const struct kunit_binary_assert_text *text;
->         const void *left_value;
-> -       const char *right_text;
->         const void *right_value;
->  };
->
-> @@ -238,10 +237,8 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
->   * struct kunit_binary_str_assert - An expectation/assertion that compares two
->   *     string values (for example, KUNIT_EXPECT_STREQ(test, foo, "bar")).
->   * @assert: The parent of this type.
-> - * @operation: A string representation of the comparison operator (e.g. "==").
-> - * @left_text: A string representation of the expression in the left slot.
-> + * @text: Holds the textual representations of the operands and comparator.
->   * @left_value: The actual evaluated value of the expression in the left slot.
-> - * @right_text: A string representation of the expression in the right slot.
->   * @right_value: The actual evaluated value of the expression in the right slot.
->   *
->   * Represents an expectation/assertion that compares two string values. For
-> @@ -250,10 +247,8 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
->   */
->  struct kunit_binary_str_assert {
->         struct kunit_assert assert;
-> -       const char *operation;
-> -       const char *left_text;
-> +       const struct kunit_binary_assert_text *text;
->         const char *left_value;
-> -       const char *right_text;
->         const char *right_value;
->  };
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index a93dfb8ff393..088ff394ae94 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -874,16 +874,19 @@ void kunit_do_failed_assertion(struct kunit *test,
->  do {                                                                          \
->         typeof(left) __left = (left);                                          \
->         typeof(right) __right = (right);                                       \
-> +       static const struct kunit_binary_assert_text __text = {                \
-> +               .operation = #op,                                              \
-> +               .left_text = #left,                                            \
-> +               .right_text = #right,                                          \
-> +       };                                                                     \
->                                                                                \
->         KUNIT_ASSERTION(test,                                                  \
->                         assert_type,                                           \
->                         __left op __right,                                     \
->                         assert_class,                                          \
->                         KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,           \
-> -                                                       #op,                   \
-> -                                                       #left,                 \
-> +                                                       &__text,               \
->                                                         __left,                \
-> -                                                       #right,                \
->                                                         __right),              \
->                         fmt,                                                   \
->                         ##__VA_ARGS__);                                        \
-> @@ -928,17 +931,20 @@ do {                                                                             \
->                                    ...)                                        \
->  do {                                                                          \
->         const char *__left = (left);                                           \
-> -       const char *__right = (right);                                 \
-> +       const char *__right = (right);                                         \
-> +       static const struct kunit_binary_assert_text __text = {                \
-> +               .operation = #op,                                              \
-> +               .left_text = #left,                                            \
-> +               .right_text = #right,                                          \
-> +       };                                                                     \
->                                                                                \
->         KUNIT_ASSERTION(test,                                                  \
->                         assert_type,                                           \
->                         strcmp(__left, __right) op 0,                          \
->                         kunit_binary_str_assert,                               \
->                         KUNIT_INIT_BINARY_ASSERT_STRUCT(kunit_binary_str_assert_format,\
-> -                                                       #op,                   \
-> -                                                       #left,                 \
-> +                                                       &__text,               \
->                                                         __left,                \
-> -                                                       #right,                \
->                                                         __right),              \
->                         fmt,                                                   \
->                         ##__VA_ARGS__);                                        \
-> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index c9c7ee0dfafa..d00d6d181ee8 100644
-> --- a/lib/kunit/assert.c
-> +++ b/lib/kunit/assert.c
-> @@ -122,18 +122,18 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->
->         string_stream_add(stream,
->                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> -                         binary_assert->left_text,
-> -                         binary_assert->operation,
-> -                         binary_assert->right_text);
-> -       if (!is_literal(stream->test, binary_assert->left_text,
-> +                         binary_assert->text->left_text,
-> +                         binary_assert->text->operation,
-> +                         binary_assert->text->right_text);
-> +       if (!is_literal(stream->test, binary_assert->text->left_text,
->                         binary_assert->left_value, stream->gfp))
->                 string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
-> -                                 binary_assert->left_text,
-> +                                 binary_assert->text->left_text,
->                                   binary_assert->left_value);
-> -       if (!is_literal(stream->test, binary_assert->right_text,
-> +       if (!is_literal(stream->test, binary_assert->text->right_text,
->                         binary_assert->right_value, stream->gfp))
->                 string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
-> -                                 binary_assert->right_text,
-> +                                 binary_assert->text->right_text,
->                                   binary_assert->right_value);
->         kunit_assert_print_msg(message, stream);
->  }
-> @@ -150,14 +150,14 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
->
->         string_stream_add(stream,
->                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> -                         binary_assert->left_text,
-> -                         binary_assert->operation,
-> -                         binary_assert->right_text);
-> +                         binary_assert->text->left_text,
-> +                         binary_assert->text->operation,
-> +                         binary_assert->text->right_text);
->         string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-> -                         binary_assert->left_text,
-> +                         binary_assert->text->left_text,
->                           binary_assert->left_value);
->         string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
-> -                         binary_assert->right_text,
-> +                         binary_assert->text->right_text,
->                           binary_assert->right_value);
->         kunit_assert_print_msg(message, stream);
->  }
-> @@ -190,16 +190,16 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
->
->         string_stream_add(stream,
->                           KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> -                         binary_assert->left_text,
-> -                         binary_assert->operation,
-> -                         binary_assert->right_text);
-> -       if (!is_str_literal(binary_assert->left_text, binary_assert->left_value))
-> +                         binary_assert->text->left_text,
-> +                         binary_assert->text->operation,
-> +                         binary_assert->text->right_text);
-> +       if (!is_str_literal(binary_assert->text->left_text, binary_assert->left_value))
->                 string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"\n",
-> -                                 binary_assert->left_text,
-> +                                 binary_assert->text->left_text,
->                                   binary_assert->left_value);
-> -       if (!is_str_literal(binary_assert->right_text, binary_assert->right_value))
-> +       if (!is_str_literal(binary_assert->text->right_text, binary_assert->right_value))
->                 string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"",
-> -                                 binary_assert->right_text,
-> +                                 binary_assert->text->right_text,
->                                   binary_assert->right_value);
->         kunit_assert_print_msg(message, stream);
->  }
-> --
-> 2.35.0.rc2.247.g8bbb082509-goog
->
+Tested-by: Ricardo Koller <ricarkol@google.com>
