@@ -2,21 +2,21 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26FF49E75D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 17:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A65749E75E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 17:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243604AbiA0QWA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 11:22:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:42108 "EHLO foss.arm.com"
+        id S243607AbiA0QWC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 11:22:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:42116 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238119AbiA0QWA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:22:00 -0500
+        id S238119AbiA0QWC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:22:02 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5516113E;
-        Thu, 27 Jan 2022 08:21:59 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33D971063;
+        Thu, 27 Jan 2022 08:22:02 -0800 (PST)
 Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB6BD3F766;
-        Thu, 27 Jan 2022 08:21:58 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18E133F766;
+        Thu, 27 Jan 2022 08:22:00 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
@@ -24,9 +24,9 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
         james.morse@arm.com
-Subject: [PATCH 1/3] arm64: selftests: Generate all the possible logical immediates as a header
-Date:   Thu, 27 Jan 2022 16:21:25 +0000
-Message-Id: <20220127162127.2391947-2-james.morse@arm.com>
+Subject: [PATCH 2/3] arm64: insn: Add tests for aarch64_insn_gen_logical_immediate()
+Date:   Thu, 27 Jan 2022 16:21:26 +0000
+Message-Id: <20220127162127.2391947-3-james.morse@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220127162127.2391947-1-james.morse@arm.com>
 References: <20220127162127.2391947-1-james.morse@arm.com>
@@ -37,280 +37,236 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Aarch64 has instructions to generate reasonably complicated 32 or 64
-bit masks from only 13 bits of information. To test the in-kernel code
-that spots the pattern to produce the instruction encoding a golden set
-of values is needed.
+bit masks from only 13 bits of information.
+aarch64_insn_gen_logical_immediate() has to created the immediate
+encoding by spotting the patterns in the 32 or 64 bit immediate.
 
-A header file containing these is large. Instead, generate every possible
-instruction encoding, and its decoded immediate, based on the arm-arm's
-DecodeBitMasks() pseudocode. These are output in a format that can be used
-in a header file for the test.
+Despite attempts to validate or model this code, or use it as-is outside
+the kernel tree, bugs still exist.
 
-Having the golden values in a header file allows them to be inspected,
-and checked against a trusted source. The generation program can be told
-to pass each value through objdump and compared.
+Add a self test module that tests this code in place against a golden
+set of values.
 
-Unsat's jitterbug project has a python script that does this too, but
-the license isn't clear from the github repository.
-
-Link: https://lore.kernel.org/linux-arm-kernel/CAB-e3NRCJ_4+vkFPkMN67DwBBtO=sJw>
-CC: Luke Nelson <luke.r.nels@gmail.com>
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- arch/arm64/Makefile              |   1 +
- arch/arm64/tools/.gitignore      |   2 +
- arch/arm64/tools/Makefile        |  12 +-
- arch/arm64/tools/gen_logic_imm.c | 190 +++++++++++++++++++++++++++++++
- 4 files changed, 204 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/tools/.gitignore
- create mode 100644 arch/arm64/tools/gen_logic_imm.c
+ arch/arm64/Kconfig.debug                   |  3 +
+ arch/arm64/Makefile                        |  2 +
+ arch/arm64/lib/Makefile                    |  2 +
+ arch/arm64/lib/insn.c                      |  3 +
+ arch/arm64/lib/test_insn.c                 | 90 ++++++++++++++++++++++
+ tools/testing/selftests/arm64/Makefile     |  2 +-
+ tools/testing/selftests/arm64/lib/Makefile |  6 ++
+ tools/testing/selftests/arm64/lib/config   |  1 +
+ tools/testing/selftests/arm64/lib/insn.sh  |  5 ++
+ 9 files changed, 113 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/lib/test_insn.c
+ create mode 100644 tools/testing/selftests/arm64/lib/Makefile
+ create mode 100644 tools/testing/selftests/arm64/lib/config
+ create mode 100755 tools/testing/selftests/arm64/lib/insn.sh
 
+diff --git a/arch/arm64/Kconfig.debug b/arch/arm64/Kconfig.debug
+index 265c4461031f..10df6056db3e 100644
+--- a/arch/arm64/Kconfig.debug
++++ b/arch/arm64/Kconfig.debug
+@@ -20,4 +20,7 @@ config ARM64_RELOC_TEST
+ 	depends on m
+ 	tristate "Relocation testing module"
+ 
++config TEST_INSN
++	tristate "Test functions located in the aarch64 instruction encoder at runtime"
++
+ source "drivers/hwtracing/coresight/Kconfig"
 diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 2f1de88651e6..0bd590605416 100644
+index 0bd590605416..4930a2b077b8 100644
 --- a/arch/arm64/Makefile
 +++ b/arch/arm64/Makefile
-@@ -176,6 +176,7 @@ vdso_install:
+@@ -176,7 +176,9 @@ vdso_install:
  
  archprepare:
  	$(Q)$(MAKE) $(build)=arch/arm64/tools kapi
-+	$(Q)$(MAKE) $(build)=arch/arm64/tools tests
++#ifdef CONFIG_TEST_INSN
+ 	$(Q)$(MAKE) $(build)=arch/arm64/tools tests
++#endif
  ifeq ($(CONFIG_ARM64_ERRATUM_843419),y)
    ifneq ($(CONFIG_ARM64_LD_HAS_FIX_ERRATUM_843419),y)
  	@echo "warning: ld does not support --fix-cortex-a53-843419; kernel may be susceptible to erratum" >&2
-diff --git a/arch/arm64/tools/.gitignore b/arch/arm64/tools/.gitignore
+diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
+index 29490be2546b..d180945ecc22 100644
+--- a/arch/arm64/lib/Makefile
++++ b/arch/arm64/lib/Makefile
+@@ -22,3 +22,5 @@ obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+ obj-$(CONFIG_ARM64_MTE) += mte.o
+ 
+ obj-$(CONFIG_KASAN_SW_TAGS) += kasan_sw_tags.o
++
++obj-$(CONFIG_TEST_INSN) += test_insn.o
+diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
+index fccfe363e567..8888e407032f 100644
+--- a/arch/arm64/lib/insn.c
++++ b/arch/arm64/lib/insn.c
+@@ -193,6 +193,7 @@ u64 aarch64_insn_decode_immediate(enum aarch64_insn_imm_type type, u32 insn)
+ 
+ 	return (insn >> shift) & mask;
+ }
++EXPORT_SYMBOL_GPL(aarch64_insn_decode_immediate);
+ 
+ u32 __kprobes aarch64_insn_encode_immediate(enum aarch64_insn_imm_type type,
+ 				  u32 insn, u64 imm)
+@@ -256,6 +257,7 @@ u32 aarch64_insn_decode_register(enum aarch64_insn_register_type type,
+ 
+ 	return (insn >> shift) & GENMASK(4, 0);
+ }
++EXPORT_SYMBOL_GPL(aarch64_insn_decode_register);
+ 
+ static u32 aarch64_insn_encode_register(enum aarch64_insn_register_type type,
+ 					u32 insn,
+@@ -1424,6 +1426,7 @@ u32 aarch64_insn_gen_logical_immediate(enum aarch64_insn_logic_type type,
+ 	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RN, insn, Rn);
+ 	return aarch64_encode_immediate(imm, variant, insn);
+ }
++EXPORT_SYMBOL_GPL(aarch64_insn_gen_logical_immediate);
+ 
+ u32 aarch64_insn_gen_extr(enum aarch64_insn_variant variant,
+ 			  enum aarch64_insn_register Rm,
+diff --git a/arch/arm64/lib/test_insn.c b/arch/arm64/lib/test_insn.c
 new file mode 100644
-index 000000000000..6ee79cdac729
+index 000000000000..41466f61c6c0
 --- /dev/null
-+++ b/arch/arm64/tools/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+gen_logic_imm
-diff --git a/arch/arm64/tools/Makefile b/arch/arm64/tools/Makefile
-index 932b4fe5c768..ce44b531fba7 100644
---- a/arch/arm64/tools/Makefile
-+++ b/arch/arm64/tools/Makefile
-@@ -4,10 +4,11 @@ gen := arch/$(ARCH)/include/generated
- kapi := $(gen)/asm
- 
- kapi-hdrs-y := $(kapi)/cpucaps.h
-+tests-hdrs-y := $(kapi)/test_logic_imm_generated.h
- 
- targets += $(addprefix ../../../,$(gen-y) $(kapi-hdrs-y))
- 
--PHONY += kapi
-+PHONY += kapi tests
- 
- kapi:   $(kapi-hdrs-y) $(gen-y)
- 
-@@ -20,3 +21,12 @@ quiet_cmd_gen_cpucaps = GEN     $@
- 
- $(kapi)/cpucaps.h: $(src)/gen-cpucaps.awk $(src)/cpucaps FORCE
- 	$(call if_changed,gen_cpucaps)
++++ b/arch/arm64/lib/test_insn.c
+@@ -0,0 +1,90 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test cases for the aarch64 insn encoder.
++ *
++ * Copyright (C) 2021 ARM Limited.
++ */
 +
-+tests:	$(tests-hdrs-y) $(gen-y)
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+quiet_cmd_build_gen_logic_imm = GEN     $@
-+      cmd_build_gen_logic_imm = $(obj)/gen_logic_imm > $@
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/printk.h>
 +
-+hostprogs := gen_logic_imm
-+$(kapi)/test_logic_imm_generated.h: $(obj)/gen_logic_imm FORCE
-+	$(call if_changed,build_gen_logic_imm)
-diff --git a/arch/arm64/tools/gen_logic_imm.c b/arch/arm64/tools/gen_logic_imm.c
-new file mode 100644
-index 000000000000..42ac83a33823
---- /dev/null
-+++ b/arch/arm64/tools/gen_logic_imm.c
-@@ -0,0 +1,190 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2021 ARM Limited */
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdint.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
++#include <asm/debug-monitors.h>
++#include <asm/insn.h>
 +
-+typedef uint32_t u32;
-+typedef uint64_t u64;
++#include "../../../tools/testing/selftests/kselftest_module.h"
 +
-+static u64 gen_mask(u32 num_bits)
-+{
-+	if (num_bits == 64)
-+		return ~0ULL;
++struct bitmask_test_case {
++	/* input */
++	u64 imm;
 +
-+	return (1ULL<<num_bits) - 1;
-+}
++	/* expected output */
++	u64 n, immr, imms;
++};
++struct bitmask_test_case aarch64_logic_imm_test[] = {
++#include <asm/test_logic_imm_generated.h>
++};
 +
-+static u64 ror(u64 bits, u64 count, u64 esize)
-+{
-+	u64 ret;
-+	u64 bottom_bits = bits & gen_mask(count);
++KSTM_MODULE_GLOBALS();
 +
-+	if (!count)
-+		return bits;
-+
-+	ret = bottom_bits << (esize - count) | (bits >> count);
-+
-+	return ret;
-+}
-+
-+static u64 replicate(u64 bits, u32 esize)
++static void __init test_logic_imm(void)
 +{
 +	int i;
-+	u64 ret = 0;
++	u8 rd, rn;
++	u32 insn;
 +
-+	bits &= gen_mask(esize);
-+	for (i = 0; i < 64; i += esize)
-+		ret |= (u64)bits << i;
++	for (i = 0; i < ARRAY_SIZE(aarch64_logic_imm_test); i++) {
++		total_tests++;
 +
-+	return ret;
-+}
++		rd = i % 30;
++		rn = (i + 1) % 30;
 +
-+static u32 fls(u32 x)
-+{
-+	/* If x is 0, the result is undefined */
-+	if (!x)
-+		return 32;
++		insn = aarch64_insn_gen_logical_immediate(AARCH64_INSN_LOGIC_AND,
++							  AARCH64_INSN_VARIANT_64BIT,
++							  rn, rd, aarch64_logic_imm_test[i].imm);
 +
-+	return 32 - __builtin_clz(x);
-+}
-+
-+#define PIPE_READ	0
-+#define PIPE_WRITE	1
-+/*
-+ * Use objdump to decode the encoded instruction, and compare the immediate.
-+ * On error, returns the bad instruction, otherwise returns 0.
-+ */
-+static int validate(u64 val, u32 immN, u32 imms, u32 immr, char *objdump)
-+{
-+	pid_t child;
-+	char *immediate;
-+	char val_str[32];
-+	u32 insn = 0x12000000;
-+	char output[1024] = {0};
-+	int fd, pipefd[2], bytes;
-+	char filename[] = "validate_gen_logic_imm.XXXXXX";
-+
-+	insn |= 1 << 31;
-+	insn |= (immN & 0x1)<<22;
-+	insn |= (immr & 0x3f)<<16;
-+	insn |= (imms & 0x3f)<<10;
-+
-+	fd = mkstemp(filename);
-+	if (fd < 0)
-+		abort();
-+
-+	write(fd, &insn, sizeof(insn));
-+	close(fd);
-+
-+	if (pipe(pipefd))
-+		return 0;
-+
-+	child = vfork();
-+	if (child) {
-+		close(pipefd[PIPE_WRITE]);
-+		waitpid(child, NULL, 0);
-+
-+		bytes = read(pipefd[PIPE_READ], output, sizeof(output));
-+		close(pipefd[PIPE_READ]);
-+		if (!bytes || bytes == sizeof(output))
-+			return insn;
-+
-+		immediate = strstr(output, "x0, x0, #");
-+		if (!immediate)
-+			return insn;
-+		immediate += strlen("x0, x0, #");
-+
-+		/*
-+		 * strtoll() has its own ideas about overflow and underflow.
-+		 * Do a string comparison. immediate ends in a newline.
-+		 */
-+		snprintf(val_str, sizeof(val_str), "0x%lx", val);
-+		if (strncmp(val_str, immediate, strlen(val_str))) {
-+			fprintf(stderr, "Unexpected decode from objdump: %s\n",
-+				immediate);
-+			return insn;
-+		}
-+	} else {
-+		close(pipefd[PIPE_READ]);
-+		close(1);
-+		dup2(pipefd[PIPE_WRITE], 1);
-+		execl(objdump, objdump, "-b", "binary", "-m", "aarch64", "-D",
-+		      filename, (char *) NULL);
-+		abort();
-+	}
-+
-+	unlink(filename);
-+	return 0;
-+}
-+
-+static int decode_bit_masks(u32 immN, u32 imms, u32 immr, char *objdump)
-+{
-+	u32 esize, len, S, R;
-+	u64 levels, welem, wmask;
-+
-+	imms &= 0x3f;
-+	immr &= 0x3f;
-+
-+	len = fls((immN << 6) | (~imms & 0x3f));
-+	if (!len || len > 7)
-+		return 0;
-+
-+	esize = 1 << (len - 1);
-+	levels = gen_mask(len);
-+	S = imms & levels;
-+	if (S + 1 >= esize)
-+		return 0;
-+	R = immr & levels;
-+	if (immr >= esize)
-+		return 0;
-+
-+	welem = gen_mask(S + 1);
-+	wmask = replicate(ror(welem, R, esize), esize);
-+
-+	printf("\t{0x%.16lx, %u, %2u, %2u},\n", wmask, immN, immr, imms);
-+
-+	if (objdump) {
-+		u32 bad_insn = validate(wmask, immN, imms, immr, objdump);
-+
-+		if (bad_insn) {
-+			fprintf(stderr,
-+				"Failed to validate encoding of 0x%.16lx as 0x%x\n",
-+				wmask, bad_insn);
-+			exit(1);
++		if (!aarch64_insn_is_and_imm(insn) ||
++		    rd != aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RD, insn) ||
++		    rn != aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RN, insn) ||
++		    aarch64_logic_imm_test[i].imms != aarch64_insn_decode_immediate(AARCH64_INSN_IMM_S, insn) ||
++		    aarch64_logic_imm_test[i].immr != aarch64_insn_decode_immediate(AARCH64_INSN_IMM_R, insn) ||
++		    aarch64_logic_imm_test[i].n != aarch64_insn_decode_immediate(AARCH64_INSN_IMM_N, insn)) {
++			failed_tests++;
++			pr_warn_once("[%s:%u] Failed to encode immediate 0x%llx (got insn 0x%x))\n",
++				     __FILE__, __LINE__, aarch64_logic_imm_test[i].imm, insn);
++			continue;
 +		}
 +	}
-+
-+	return 1;
 +}
 +
-+int main(int argc, char **argv)
++static void __init do_test_bad_logic_imm(u64 imm, enum aarch64_insn_variant var)
 +{
-+	u32 immN, imms, immr, count = 0;
-+	char *objdump = NULL;
++	u32 insn;
 +
-+	if (argc > 2) {
-+		fprintf(stderr, "Usage: %s [/path/to/objdump]\n", argv[0]);
-+		exit(0);
-+	} else if (argc == 2) {
-+		objdump = argv[1];
-+	}
-+
-+	for (immN = 0; immN <= 1; immN++) {
-+		for (imms = 0; imms <= 0x3f; imms++) {
-+			for (immr = 0; immr <= 0x3f; immr++)
-+				count += decode_bit_masks(immN, imms, immr, objdump);
-+		}
-+	}
-+
-+	if (count != 5334) {
-+		printf("#error Wrong number of encodings generated.\n");
-+		exit(1);
-+	}
-+
-+	return 0;
++	total_tests++;
++	insn = aarch64_insn_gen_logical_immediate(AARCH64_INSN_LOGIC_AND,
++						  var, 0, 0, imm);
++	if (insn != AARCH64_BREAK_FAULT)
++		failed_tests++;
 +}
++
++static void __init test_bad_logic_imm(void)
++{
++	do_test_bad_logic_imm(0, AARCH64_INSN_VARIANT_64BIT);
++	do_test_bad_logic_imm(0x1234, AARCH64_INSN_VARIANT_64BIT);
++	do_test_bad_logic_imm(0xffffffffffffffff, AARCH64_INSN_VARIANT_64BIT);
++	do_test_bad_logic_imm((1ULL<<32), AARCH64_INSN_VARIANT_32BIT);
++}
++
++static void __init selftest(void)
++{
++	test_logic_imm();
++	test_bad_logic_imm();
++}
++
++KSTM_MODULE_LOADERS(test_insn);
++MODULE_AUTHOR("James Morse <james.morse@arm.com>");
++MODULE_LICENSE("GPL");
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index 1e8d9a8f59df..2c59e7d40524 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -4,7 +4,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+ 
+ ifneq (,$(filter $(ARCH),aarch64 arm64))
+-ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi
++ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi lib
+ else
+ ARM64_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/arm64/lib/Makefile b/tools/testing/selftests/arm64/lib/Makefile
+new file mode 100644
+index 000000000000..5ed92a5135ce
+--- /dev/null
++++ b/tools/testing/selftests/arm64/lib/Makefile
+@@ -0,0 +1,6 @@
++# Copyright (C) 2022 ARM Limited
++# Makefile for arm64/lib/ function selftests
++
++TEST_PROGS := insn.sh
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/lib/config b/tools/testing/selftests/arm64/lib/config
+new file mode 100644
+index 000000000000..cb982478782b
+--- /dev/null
++++ b/tools/testing/selftests/arm64/lib/config
+@@ -0,0 +1 @@
++CONFIG_TEST_INSN=m
+diff --git a/tools/testing/selftests/arm64/lib/insn.sh b/tools/testing/selftests/arm64/lib/insn.sh
+new file mode 100755
+index 000000000000..3d893b1a0069
+--- /dev/null
++++ b/tools/testing/selftests/arm64/lib/insn.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Tests the aarch64 instruction generation infrastructure using test_insn
++# kernel module.
++$(dirname $0)/../../kselftest/module.sh "insn" test_insn
 -- 
 2.30.2
 
