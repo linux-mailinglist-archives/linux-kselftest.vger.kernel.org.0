@@ -2,79 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C43249E75F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 17:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE9449E79D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 17:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243608AbiA0QWF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 11:22:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:42126 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238119AbiA0QWE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:22:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94762113E;
-        Thu, 27 Jan 2022 08:22:04 -0800 (PST)
-Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A9EE3F766;
-        Thu, 27 Jan 2022 08:22:03 -0800 (PST)
-From:   James Morse <james.morse@arm.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-        james.morse@arm.com
-Subject: [PATCH 3/3] arm64: insn: Generate 64 bit mask immediates correctly
-Date:   Thu, 27 Jan 2022 16:21:27 +0000
-Message-Id: <20220127162127.2391947-4-james.morse@arm.com>
+        id S243807AbiA0Qeg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 11:34:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243811AbiA0Qef (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:34:35 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD02EC06173B;
+        Thu, 27 Jan 2022 08:34:35 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id DDBDA1F456FB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643301274;
+        bh=V2GLUi717w2Dlg/kVKUyboqPFORMhSh1EGPbc48EV4E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SUBNK8pnwILM1K0Csj0Uus7FV5e1yygSIKkvQ64ze9ZjgP5pqpZ5x0JI+hj1I+wAV
+         1hnSQn8V+p41ovDO3d8Ylhd3qp/8/NExRE81pjqoUwD2WHgDomJ/xKfsFF58M0uXN+
+         9E4PZgJC/Rsx831eGf/7NI5LrSiIy9skoH9RFQkDXpyvvmEMZxKhjz7WtMXfcQOxRl
+         m4dbY8zJV9u0TkUYtc0bkIO5eLuVCCy7vMCFXX0ix+wPvYmbB101BS9zyCWDta4WSi
+         qTlDFN7s3ApZb8V9l8Kya9OllGJhYggt16MKnNigi07/IIqBDEIMKs1YbJyzXCUk2c
+         IjOOGRo16lTmw==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/exec: Remove pipe from TEST_GEN_FILES
+Date:   Thu, 27 Jan 2022 21:33:45 +0500
+Message-Id: <20220127163346.653546-1-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220127162127.2391947-1-james.morse@arm.com>
-References: <20220127162127.2391947-1-james.morse@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When the insn framework is used to encode an AND/ORR/EOR instruction,
-aarch64_encode_immediate() is used to pick the immr imms values.
+pipe named FIFO special file is being created in execveat.c to perform
+some tests. Makefile doesn't need to do anything with the pipe. When it
+isn't found, Makefile generates the following build error:
 
-If the immediate is a 64bit mask, with bit 63 set, and zeros in any
-of the upper 32 bits, the immr value is incorrectly calculated meaning
-the wrong mask is generated.
-For example, 0x8000000000000001 should have an immr of 1, but 32 is used,
-meaning the resulting mask is 0x0000000300000000.
+make: *** No rule to make target '/linux_mainline/tools/testing/selftests/exec/pipe', needed by 'all'.  Stop.
 
-It would appear eBPF is unable to hit these cases, as build_insn()'s
-imm value is a s32, so when used with BPF_ALU64, the sign-extended
-u64 immediate would always have all-1s or all-0s in the upper 32 bits.
-
-KVM does not generate a va_mask with any of the top bits set as these
-VA wouldn't be usable with TTBR0_EL2.
-
-This happens because the rotation is calculated from fls(~imm), which
-takes an unsigned int, but the immediate may be 64bit.
-
-Use fls64() so the 64bit mask doesn't get truncated to a u32.
-
-Signed-off-by: James Morse <james.morse@arm.com>
+Fixes: 61016db15b8e ("selftests/exec: Verify execve of non-regular files fail")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- arch/arm64/lib/insn.c | 2 +-
+ tools/testing/selftests/exec/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-index 8888e407032f..90253af7e294 100644
---- a/arch/arm64/lib/insn.c
-+++ b/arch/arm64/lib/insn.c
-@@ -1381,7 +1381,7 @@ static u32 aarch64_encode_immediate(u64 imm,
- 		 * Compute the rotation to get a continuous set of
- 		 * ones, with the first bit set at position 0
- 		 */
--		ror = fls(~imm);
-+		ror = fls64(~imm);
- 	}
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index dd61118df66ed..12c5e27d32c16 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -5,7 +5,7 @@ CFLAGS += -D_GNU_SOURCE
  
- 	/*
+ TEST_PROGS := binfmt_script non-regular
+ TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
+-TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
++TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+ TEST_FILES := Makefile
+ 
 -- 
 2.30.2
 
