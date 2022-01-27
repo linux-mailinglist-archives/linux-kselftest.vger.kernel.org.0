@@ -2,92 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBD549E9D2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 19:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC24049EA68
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jan 2022 19:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245047AbiA0SKP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 13:10:15 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56052 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245044AbiA0SKA (ORCPT
+        id S233376AbiA0SeT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 13:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232362AbiA0SeS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:10:00 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 828411F45959
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643306993;
-        bh=YVoSqeGpj1x8qNffk1ngm8QY3CihsqcwqVnxalY6JQA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D4BRmTKTR2LGJULzoGImx9UM8MAmQAIFxdKqz6IlmxXBouQq2exhNsZxnCO/goIEY
-         VI//0QQps3np+GTOpmDfw3Db0pkiCvfi3vejGyDthT5kbCQIF7KjTgl6PJg5cZXIfg
-         YQeo9LHstGvJ5+q9xL+Ke/tg+IREToOVT7CZgZcZs5FPz735EyBa7FzOvB2IYWnfqR
-         b56ZmAfMEDJAklWtBjU5peZYwlhZXmS6vGKWmsmtNQ9cH2mz5mZT602qcCV59VsEcJ
-         42lS4d7f6gylLPTiOA3kSPIiJh4HixJoFlqzcMWEjDiVDLXwPLEPFozl4XWMgAK9UD
-         97sUShmLVHRgQ==
-Message-ID: <65054310-e925-4072-7df2-e1550d8a9a4f@collabora.com>
-Date:   Thu, 27 Jan 2022 15:09:44 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] selftests: futex: Use variable MAKE instead of make
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Bamvor Jian Zhang <bamvor.zhangjian@linaro.org>
-References: <20220127174447.754605-1-usama.anjum@collabora.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-In-Reply-To: <20220127174447.754605-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Thu, 27 Jan 2022 13:34:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6BEC061714
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 10:34:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71B42B801BD
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 18:34:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFEAC340E4;
+        Thu, 27 Jan 2022 18:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643308455;
+        bh=lZB6K5zcYeJPwQ6/f4YwG4MPqn0/eM8uiY9oUuQOpqA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sbQPtD9mEGaKYsj/AH/xL2NKKH26KqFEbwKU6l/pcYvG+1G52HVFdPs7mEOz+aBjm
+         oyA72B4FBBv6WDIC8yak/qau6W4fGIGYsl4eNJLwMhXM4qD4w02mbddgVHkJmuWglJ
+         S7Ab+rlgDtmjIAZT45maRYh4piQAMSQFeGIlzDWXbJqjcg34P/FFXxo7fhHR0shyYv
+         WSk1x8JlACpb/irf/wI+XdcNQcGzXeeEcCLLQtBDE3LeFWR6m3xuHM9QZHVzod2YBx
+         cCzbVqUyrW/VKwRqIAGYhUjW3lhkneohsEWXtdMxJ4AhqmPkr63qX7+mdmfiWGzBMn
+         /hgh2MKBsW5BQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nD9b3-003bFN-BO; Thu, 27 Jan 2022 18:34:13 +0000
+Date:   Thu, 27 Jan 2022 18:34:12 +0000
+Message-ID: <87sft958pn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 3/3] arm64: insn: Generate 64 bit mask immediates correctly
+In-Reply-To: <20220127162127.2391947-4-james.morse@arm.com>
+References: <20220127162127.2391947-1-james.morse@arm.com>
+        <20220127162127.2391947-4-james.morse@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: james.morse@arm.com, linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, broonie@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Usama,
-
-Às 14:44 de 27/01/22, Muhammad Usama Anjum escreveu:
-> Recursive make commands should always use the variable MAKE, not the
-> explicit command name ‘make’. This has benefits and removes the
-> following warning when multiple jobs are used for the build:
+On Thu, 27 Jan 2022 16:21:27 +0000,
+James Morse <james.morse@arm.com> wrote:
 > 
-> make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+> When the insn framework is used to encode an AND/ORR/EOR instruction,
+> aarch64_encode_immediate() is used to pick the immr imms values.
 > 
-> Fixes: a8ba798bc8ec ("selftests: enable O and KBUILD_OUTPUT")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-
-Thanks for the patch!
-
-Reviewed-by: André Almeida <andrealmeid@collabora.com>
-
+> If the immediate is a 64bit mask, with bit 63 set, and zeros in any
+> of the upper 32 bits, the immr value is incorrectly calculated meaning
+> the wrong mask is generated.
+> For example, 0x8000000000000001 should have an immr of 1, but 32 is used,
+> meaning the resulting mask is 0x0000000300000000.
+> 
+> It would appear eBPF is unable to hit these cases, as build_insn()'s
+> imm value is a s32, so when used with BPF_ALU64, the sign-extended
+> u64 immediate would always have all-1s or all-0s in the upper 32 bits.
+> 
+> KVM does not generate a va_mask with any of the top bits set as these
+> VA wouldn't be usable with TTBR0_EL2.
+> 
+> This happens because the rotation is calculated from fls(~imm), which
+> takes an unsigned int, but the immediate may be 64bit.
+> 
+> Use fls64() so the 64bit mask doesn't get truncated to a u32.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
 > ---
->  tools/testing/selftests/futex/Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/arm64/lib/insn.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-> index 12631f0076a10..11e157d7533b8 100644
-> --- a/tools/testing/selftests/futex/Makefile
-> +++ b/tools/testing/selftests/futex/Makefile
-> @@ -11,7 +11,7 @@ all:
->  	@for DIR in $(SUBDIRS); do		\
->  		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
->  		mkdir $$BUILD_TARGET  -p;	\
-> -		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
-> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
->  		if [ -e $$DIR/$(TEST_PROGS) ]; then \
->  			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
->  		fi \
-> @@ -32,6 +32,6 @@ override define CLEAN
->  	@for DIR in $(SUBDIRS); do		\
->  		BUILD_TARGET=$(OUTPUT)/$$DIR;	\
->  		mkdir $$BUILD_TARGET  -p;	\
-> -		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
-> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
->  	done
->  endef
+> diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
+> index 8888e407032f..90253af7e294 100644
+> --- a/arch/arm64/lib/insn.c
+> +++ b/arch/arm64/lib/insn.c
+> @@ -1381,7 +1381,7 @@ static u32 aarch64_encode_immediate(u64 imm,
+>  		 * Compute the rotation to get a continuous set of
+>  		 * ones, with the first bit set at position 0
+>  		 */
+> -		ror = fls(~imm);
+> +		ror = fls64(~imm);
+>  	}
+>  
+>  	/*
+
+Oh crap, not again... :-( Clearly, my initial test harness wasn't as
+good as I thought. Out for morbid curiosity, how was this found?
+
+Brown-paper-bag-for: Marc Zyngier <maz@kernel.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
