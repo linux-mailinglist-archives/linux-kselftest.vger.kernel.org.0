@@ -2,79 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBD949FD31
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 16:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E191549FE2E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 17:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349723AbiA1P4A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jan 2022 10:56:00 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:36938 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239060AbiA1Pz6 (ORCPT
+        id S1350156AbiA1Qgm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jan 2022 11:36:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40646 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350253AbiA1Qgi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:55:58 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7C6411F391;
-        Fri, 28 Jan 2022 15:55:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643385356;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vzpgaAqLH7gCwNYYrQ+2BmZ46IrMyJ/+TvHIJbhEkVw=;
-        b=HQCr7GA+8fMC00/0uVwZJ06iHV9mM2bLeNRTFwybz7o8hEbRv/K9MUPfzdhllmeHyglfYr
-        moZT23nDT2cdwzKqyEW6xfygD8l3bydM46Gded4k98whTcBOVwD7GhrwR2Y5+x1F3lTO6Y
-        TdH9nWg73tjUruSkMZ+2OdCyWKBlAww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643385356;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vzpgaAqLH7gCwNYYrQ+2BmZ46IrMyJ/+TvHIJbhEkVw=;
-        b=KJbOhWbcBEgcSk70pW1pq88WQAQ086lsgu5iUEuP6+wz/To3KF+1HEelVWByXI2LyGApNt
-        jrcWNoO0Y/PtqGDA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 6AB43A3B84;
-        Fri, 28 Jan 2022 15:55:55 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id CBA58DA7A9; Fri, 28 Jan 2022 16:55:13 +0100 (CET)
-Date:   Fri, 28 Jan 2022 16:55:13 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, lkft-triage@lists.linaro.org,
-        regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>
-Subject: Re: [next] i386: ERROR: modpost: "__aeabi_uldivmod"
- [fs/btrfs/btrfs.ko] undefined!
-Message-ID: <20220128155513.GI14046@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Sterba <dsterba@suse.com>, Josef Bacik <josef@toxicpanda.com>,
-        Chris Mason <clm@fb.com>
-References: <CA+G9fYtGGdxLwkV=VHdDP_d2C0oLd7=wUhF1wcYtndpp-y5BTA@mail.gmail.com>
+        Fri, 28 Jan 2022 11:36:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3BA01B82421
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 16:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B482C340E7;
+        Fri, 28 Jan 2022 16:36:34 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 0/2] kselftest/arm64: Small fixes for sve-ptrace test
+Date:   Fri, 28 Jan 2022 16:36:32 +0000
+Message-Id: <164338778361.1487778.11798631924947396189.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220124175527.3260234-1-broonie@kernel.org>
+References: <20220124175527.3260234-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtGGdxLwkV=VHdDP_d2C0oLd7=wUhF1wcYtndpp-y5BTA@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 05:52:05PM +0530, Naresh Kamboju wrote:
-> [ Please ignore this email if it is already reported ]
+On Mon, 24 Jan 2022 17:55:25 +0000, Mark Brown wrote:
+> A couple of fairly minor fixes for the sve-ptrace test, one output thing
+> and one for an issue which would generate spurious false positives.
+> 
+> Mark Brown (2):
+>   kselftest/arm64: Skip VL_INHERIT tests for unsupported vector types
+>   kselftest/arm64: Correct logging of FPSIMD register read via ptrace
+> 
+> [...]
 
-Yeah thanks for the report anyway, fix has been pushed to new for-next
-snapshot.
+Applied to arm64 (for-next/fixes), thanks!
+
+[1/2] kselftest/arm64: Skip VL_INHERIT tests for unsupported vector types
+      https://git.kernel.org/arm64/c/50806fd91428
+[2/2] kselftest/arm64: Correct logging of FPSIMD register read via ptrace
+      https://git.kernel.org/arm64/c/9ae279ecabe3
+
+-- 
+Catalin
+
