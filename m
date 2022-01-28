@@ -2,176 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DF149F4C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 08:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7081349F5A2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 09:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242916AbiA1Hyo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jan 2022 02:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiA1Hyn (ORCPT
+        id S1347446AbiA1Iwr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jan 2022 03:52:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34248 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238669AbiA1Iwg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jan 2022 02:54:43 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F51C061714
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 23:54:43 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id u15so9255955wrt.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 23:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vMKYzLK/6pMHna39bnqgb+94Tea1KXoRE9gNct5ZTWI=;
-        b=iGTtN5sZWqTcyIuaoOXPaB1YNKxEJcZxHCzPK8nP9Y6D0cmwAHyboajCX1nbf46Xt9
-         4Oh+aCnXDmmwv+MvOZ5gwCY5AVwWq2PBW62JxHkIG0pxBsxqJ5jLxBMfg95JZZ0TmQyW
-         1ejW65O+I9uMb3TwCFJgYwq2JXIeJkXiW+bFtSwD2rC0wk3F4CcbbzMDQVkH3iYTqWTF
-         O/EL/SSMJq94Q/6NYPmSu87UPcP3fInM7OK1eMfy8qVc6Gd5xewZbh3Eorpr+53rW4Lb
-         lx6cGYszo9rfiXFa1zrR3FsUSZ/CbamTiOmc7MnBt3XpUXZe2esmp0flM1Iz4rzDF1JX
-         XWMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vMKYzLK/6pMHna39bnqgb+94Tea1KXoRE9gNct5ZTWI=;
-        b=nIsviLvjzV6dBBerXZ5B0ex+TnOzk442EMZ3/lk+MCMzHdjga+xRqLhNXcNPa3JxKg
-         2yZE09cVZ8M4kb38qaqhhutCW5ZUubUz1G18/gb5fIdZMvB8oeIJp0lhBiy3ByQB7kR3
-         3CuUUXAeA4IE/RFzJBxWodIusJR5Fg/kF/BY0B6uE32HfnUumIcA2Lf5PhMtUWbE5ZFA
-         G88CAmn4WjxNZF4nQ3bCxvY/9fymMHgIo9ikuvzRIJsQVrWy3jWgibss87cHYj63NQdi
-         yMjMHGfYMrdoQxC6qtIYFCjb9SzEROflJNoT0yW102+GebhFgdLYqcpOHqQbXCgmTaES
-         cmrg==
-X-Gm-Message-State: AOAM531gQzJ8uCc6UfJkP4RjxxF53PNYMaTS58UEAwzjyYknAaWy6635
-        SuJFw3qGsWA3QOynHgXUXFb+GBOj/4ZSbPQl3BxtoQ==
-X-Google-Smtp-Source: ABdhPJwkOhtkpCwoM6gH4l1ikkXHk78P4xDW8ie0dLzFFa9vdmSqo4WaQunM2vY7ZFniQBiabGZpouo2XLIFH7S6/D4=
-X-Received: by 2002:adf:e60f:: with SMTP id p15mr5975505wrm.177.1643356482050;
- Thu, 27 Jan 2022 23:54:42 -0800 (PST)
+        Fri, 28 Jan 2022 03:52:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8637B824F3;
+        Fri, 28 Jan 2022 08:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58E4C340E8;
+        Fri, 28 Jan 2022 08:52:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643359953;
+        bh=A4ZIq4YD54mut6tILAfqK6qkKR21qOF5XKfRj9haV7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CRAb5TSqgtbYl/IuvBdAeio42OQkKV8HONQvLbracpULCcVf4ckEOQIbGpEy89J0y
+         Zyn508vIY/LKWJ/gTeXV1neO5E4LYN+y8aSu52Yzlr5bksmAye+T3h8/+vHfR8WSO0
+         CL2shUlnt0Xwoj4sB3n0oJ9TmcvYZPhgYb9oEKGtzKQknZnVtC4sXOVUivG+h8RC6E
+         t3rDMlLGsG5VPY7IdKsbx9lKnQGH231ls8WgalFLUDLpBZuQt2QpmwW34FGv+Jkp4/
+         8VGzOzi+aBYIleGYPrdjQRnhPpdkGn2bx1Cgg9o+asYslsEXSCFaO8VwkzvwAl02fl
+         3MaBw8qE9fawg==
+Date:   Fri, 28 Jan 2022 09:52:24 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, Florian Weimer <fw@deneb.enyo.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Andi Kleen <andi@firstfloor.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ben Maurer <bmaurer@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>
+Subject: Re: [RFC PATCH v2] rseq: Remove broken uapi field layout on 32-bit
+ little endian
+Message-ID: <20220128085224.twfwxz4ttxnaeweo@wittgenstein>
+References: <1116876795.2062.1643223596536.JavaMail.zimbra@efficios.com>
+ <20220127152720.25898-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-References: <20211002022656.1681956-1-jk@codeconstruct.com.au>
- <CABVgOS=F9K_AzoWjKPRT9m014NAo37vKHYEp-jHWDt5M+pkzSw@mail.gmail.com>
- <101d12fc9250b7a445ff50a9e7a25cd74d0e16eb.camel@codeconstruct.com.au>
- <CAFd5g46HN9pBcQhgEBGW6b=DR7ds48+Pggf0Y_d7804YO1aiKg@mail.gmail.com>
- <af2793322ce99c2bfa9e7dc35884a103b67f48b5.camel@codeconstruct.com.au>
- <CABVgOSn8fJ1YkFSwfNDoh93ve0r2Xom-RjiWvdwttvxqx39UEQ@mail.gmail.com>
- <e5fa413ed59083ca63f3479d507b972380da0dcf.camel@codeconstruct.com.au> <CABVgOSnpyAd-nmxB4VGahCoYep4HXmQ_YQWb=5EgyJpirCNT0w@mail.gmail.com>
-In-Reply-To: <CABVgOSnpyAd-nmxB4VGahCoYep4HXmQ_YQWb=5EgyJpirCNT0w@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 28 Jan 2022 15:54:30 +0800
-Message-ID: <CABVgOS=3H27ezf0At8aoo1T5XDnoG-uA_QRLinuiw-H52H4Uaw@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/2] mctp: test: disallow MCTP_TEST when building
- as a module
-To:     Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220127152720.25898-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 3:41 PM David Gow <davidgow@google.com> wrote:
->
-> On Thu, Jan 6, 2022 at 6:53 PM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
-> >
-> > Hi all,
-> >
-> > Happy new year! I'm just picking up this thread again, after having a
-> > bunch of other things come up at the end of December. I've since
-> > implemented some of the direct feedback on the patch, but wanted to
-> > clarify some overall direction too:
->
-> Thanks for reaching back out -- and sorry for the delay. I've dusted
-> everything off post-LCA now, and had another look over this.
->
-> I'm CCing both the KUnit mailing list and Daniel Latypov on this
-> thread so we can avoid (or track) any potential conflicts with things
-> like:
-> https://lore.kernel.org/linux-kselftest/20211013191320.2490913-1-dlatypov@google.com/
+On Thu, Jan 27, 2022 at 10:27:20AM -0500, Mathieu Desnoyers wrote:
+> The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
+> entirely wrong on 32-bit little endian: a preprocessor logic mistake
+> wrongly uses the big endian field layout on 32-bit little endian
+> architectures.
+> 
+> Fortunately, those ptr32 accessors were never used within the kernel,
+> and only meant as a convenience for user-space.
+> 
+> Remove those and replace the whole rseq_cs union by a __u64 type, as
+> this is the only thing really needed to express the ABI. Document how
+> 32-bit architectures are meant to interact with this field.
+> 
+> Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update includes")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Florian Weimer <fw@deneb.enyo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-api@vger.kernel.org
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Dave Watson <davejwatson@fb.com>
+> Cc: Paul Turner <pjt@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Russell King <linux@arm.linux.org.uk>
+> Cc: "H . Peter Anvin" <hpa@zytor.com>
+> Cc: Andi Kleen <andi@firstfloor.org>
+> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+> Cc: Ben Maurer <bmaurer@fb.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Joel Fernandes <joelaf@google.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> ---
 
-[Whoops, I'm smart. Actually CCing them this time!]
+Looks way cleaner now! Fwiw,
+Acked-by: Christian Brauner <brauner@kernel.org>
 
->
->
-> >
-> > > One idea I've had in the past is to keep such a list around of "test
-> > > suites to be run when KUnit is ready". This is partly because it's
-> > > much nicer to have all the test suites run together as part of a
-> > > single (K)TAP output, so this could be a way of implementing (at least
-> > > part of) that.
-> >
-> > I had a look at implementing this, but it doesn't seem to win us much
-> > with the current structure: since we kunit_run_all_tests() before a
-> > filesystem is available, kunit will always be "ready" (and the tests
-> > run) before we've had a chance to load modules, which may contain
-> > further tests.
->
-> I think the benefit of something like this isn't really with test
-> modules so much as with built-in tests which are run manually. The
-> thunderbolt test, for instance, currently initialises and runs tests
-> itself[1,2], rather than via the KUnit executor, so that it can ensure
-> some proportion of the stack is properly initialised. If there's a way
-> of coalescing those into the same TAP output as other built-in tests,
-> that'd be useful.
->
-> Thinking about it, though, I think it's a separate problem from module
-> support, so not worth shoehorning in at this stage.
-> >
-> > One option would be to defer kunit_run_all_tests() until we think we
-> > have the full set of tests, but there's no specific point at which we
-> > know that all required modules are loaded. We could defer this to an
-> > explicit user-triggered "run the tests now" interface (debugfs?), but
-> > that might break expectations of the tests automatically executing on
-> > init.
->
-> Yeah, while I do think it'd be neat to have an interface to explicitly
-> run (or re-run) tests, I think having tests run on module load is
-> still the most sensible thing, particularly since that's what people
-> are expecting at the moment (especially with tests which were ported
-> from standalone modules to KUnit).
->
-> There was a plan to allow test suites to be triggered from debugfs
-> individually at some point, but I think it got derailed as tests
-> weren't working if run twice, or some builtin-only tests having
-> problems if run after a userland was brought up.
->
-> In any case, I think we should get test suites in modules running on
-> module load, and leave any debugfs-related shenanigans for a future
-> patchset.
->
-> > Alternatively, I could properly split the TAP output, and just run tests
-> > whenever they're probed - either from the built-in set or as modules are
-> > loaded at arbitrary points in the future. However, I'm not sure of what
-> > the expectations on the consumer-side of the TAP output might be.
->
-> At the moment, the KUnit tooling will stop parsing after the first
-> full TAP output, so if suites are outputting TAP separately, only the
-> first one will be handled properly by kunit_tool. Of course,
-> kunit_tool doesn't really handle modules by itself at the moment, so
-> as long as the output is provided to kunit_tool one at a time, it's
-> still possible to use it. (And the possibility of adding a way for
-> kunit_tool to handle multiple TAP outputs in the same file is
-> something we plan to look into.)
->
-> So, I think this isn't a problem for modules at the moment, though
-> again it could be a bit painful for things like the thunderbolt test
-> where there are multiple TAP documents from built-ins.
->
-> Note that the updated KTAP[3] spec does actually leave the option open
-> for TAP output to effectively be "streaming" and to not state the
-> total number of tests in advance, but I don't think that's the ideal
-> way of handling it here.
->
-> > Are there any preferences on the approach here?
->
-> So, after all that, I think the original plan makes the most sense,
-> and if we find any cases which are particularly annoying we can either
-> change things then, or (better still) adapt the tooling to handle them
-> better.
->
-> Thanks again for looking into this!
-> -- David
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thunderbolt/test.c#n2730
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thunderbolt/domain.c#n881
-> [3]: https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
+>  include/uapi/linux/rseq.h | 20 ++++----------------
+>  kernel/rseq.c             |  8 ++++----
+>  2 files changed, 8 insertions(+), 20 deletions(-)
+> 
+> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+> index 9a402fdb60e9..77ee207623a9 100644
+> --- a/include/uapi/linux/rseq.h
+> +++ b/include/uapi/linux/rseq.h
+> @@ -105,23 +105,11 @@ struct rseq {
+>  	 * Read and set by the kernel. Set by user-space with single-copy
+>  	 * atomicity semantics. This field should only be updated by the
+>  	 * thread which registered this data structure. Aligned on 64-bit.
+> +	 *
+> +	 * 32-bit architectures should update the low order bits of the
+> +	 * rseq_cs field, leaving the high order bits initialized to 0.
+>  	 */
+> -	union {
+> -		__u64 ptr64;
+> -#ifdef __LP64__
+> -		__u64 ptr;
+> -#else
+> -		struct {
+> -#if (defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN)) || defined(__BIG_ENDIAN)
+> -			__u32 padding;		/* Initialized to zero. */
+> -			__u32 ptr32;
+> -#else /* LITTLE */
+> -			__u32 ptr32;
+> -			__u32 padding;		/* Initialized to zero. */
+> -#endif /* ENDIAN */
+> -		} ptr;
+> -#endif
+> -	} rseq_cs;
+> +	__u64 rseq_cs;
+>  
+>  	/*
+>  	 * Restartable sequences flags field.
+> diff --git a/kernel/rseq.c b/kernel/rseq.c
+> index 6d45ac3dae7f..97ac20b4f738 100644
+> --- a/kernel/rseq.c
+> +++ b/kernel/rseq.c
+> @@ -128,10 +128,10 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
+>  	int ret;
+>  
+>  #ifdef CONFIG_64BIT
+> -	if (get_user(ptr, &t->rseq->rseq_cs.ptr64))
+> +	if (get_user(ptr, &t->rseq->rseq_cs))
+>  		return -EFAULT;
+>  #else
+> -	if (copy_from_user(&ptr, &t->rseq->rseq_cs.ptr64, sizeof(ptr)))
+> +	if (copy_from_user(&ptr, &t->rseq->rseq_cs, sizeof(ptr)))
+>  		return -EFAULT;
+>  #endif
+>  	if (!ptr) {
+> @@ -217,9 +217,9 @@ static int clear_rseq_cs(struct task_struct *t)
+>  	 * Set rseq_cs to NULL.
+>  	 */
+>  #ifdef CONFIG_64BIT
+> -	return put_user(0UL, &t->rseq->rseq_cs.ptr64);
+> +	return put_user(0UL, &t->rseq->rseq_cs);
+>  #else
+> -	if (clear_user(&t->rseq->rseq_cs.ptr64, sizeof(t->rseq->rseq_cs.ptr64)))
+> +	if (clear_user(&t->rseq->rseq_cs, sizeof(t->rseq->rseq_cs)))
+>  		return -EFAULT;
+>  	return 0;
+>  #endif
+> -- 
+> 2.17.1
+> 
