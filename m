@@ -2,151 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD6749F5C5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 09:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4C749F7EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 12:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiA1I6H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jan 2022 03:58:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36444 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiA1I6G (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:58:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C870B824EA;
-        Fri, 28 Jan 2022 08:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E563C340E6;
-        Fri, 28 Jan 2022 08:58:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643360284;
-        bh=VybN4pzch65oeAi5HDL+8lwtT0cmSDE01H8knqAz1I4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eenZ5YRl7LyQLTevsJfI1fCgyoQtVIXJR5MbbBTleOdl/EtGMroCvwYxgxEqnx1Vp
-         GAGWMZoDRevJBqn1HGs52PgOPYagQ1nCVGKaoBEBjwvnkEfY6MWsn4Nw64ohiS4bbg
-         4jy7S30AUDvZt1qd1cZcbAmKwKUiZ4kYzRfJM3eupsLGcyWuwlGeLofphxG6E6z77/
-         hUk1gUrMmO4b8jLyqCH1hzend12wNy83S20a+xoS9tLYcEwYVnx2ww4+W7mMcS1VPZ
-         zGk2Hhzr07GZkB64mKNr2RYQAdfEGjCyiDeGXY614sira832gTeO/D4W33i9KU79SC
-         9rGxhdl/xCbYg==
-Date:   Fri, 28 Jan 2022 09:57:59 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-Message-ID: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-References: <20220127221115.3731388-1-axelrasmussen@google.com>
+        id S244130AbiA1LJm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jan 2022 06:09:42 -0500
+Received: from foss.arm.com ([217.140.110.172]:36894 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348068AbiA1LJS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 28 Jan 2022 06:09:18 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B86E0113E;
+        Fri, 28 Jan 2022 03:09:17 -0800 (PST)
+Received: from [10.57.12.200] (unknown [10.57.12.200])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B73A3F766;
+        Fri, 28 Jan 2022 03:09:15 -0800 (PST)
+Subject: Re: [PATCH] kselftest: Fix vdso_test_abi return status
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Cristian Marussi <cristian.marussi@arm.com>
+References: <20220126102723.23300-3-cristian.marussi@arm.com>
+ <20220126122608.54061-1-vincenzo.frascino@arm.com>
+ <5ea69341-73af-e741-7b5d-c161845583c9@linuxfoundation.org>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <3f0ed265-1eec-b12a-2fc2-6a558eb835c4@arm.com>
+Date:   Fri, 28 Jan 2022 11:09:27 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <5ea69341-73af-e741-7b5d-c161845583c9@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220127221115.3731388-1-axelrasmussen@google.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
-> These are some trivial fixups, which were needed to build the tests with
-> clang and -Werror. The following issues are fixed:
-> 
-> - Remove various unused variables.
-> - In child_poll_leader_exit_test, clang isn't smart enough to realize
->   syscall(SYS_exit, 0) won't return, so it complains we never return
->   from a non-void function. Add an extra exit(0) to appease it.
-> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
->   uninitialized, if we have !use_waitpid. Initialize it to zero to get
->   the right behavior in that case.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
+Hi Shuah,
 
-Thanks!
-(Fwiw, all those tests should also be ported to use the TEST_*() harness
-infra. Currently it's an annoying mix.)
-Acked-by: Christian Brauner <brauner@kernel.org>
+On 1/27/22 11:18 PM, Shuah Khan wrote:
+> 
+> You can use the ksft_* counts interfaces for this instead of adding
+> counts here. ksft_test_result_*() can be used to increment the right
+> result counters and then print counts at the end.
+> 
+> Either if there is a failure in any of the tests it will be fail with
+> clear indication on which tests failed. vdso_test_clock() test for
+> example is reporting false positives by overriding the Skip return
+> with a pass.
+> 
 
->  tools/testing/selftests/clone3/clone3.c    | 2 --
->  tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
->  tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> index 076cf4325f78..cd4582129c7d 100644
-> --- a/tools/testing/selftests/clone3/clone3.c
-> +++ b/tools/testing/selftests/clone3/clone3.c
-> @@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
->  
->  int main(int argc, char *argv[])
->  {
-> -	pid_t pid;
-> -
->  	uid_t uid = getuid();
->  
->  	ksft_print_header();
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index 529eb700ac26..9a2d64901d59 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
->  {
->  	int pid, pidfd = 0;
->  	int status, ret;
-> -	pthread_t t1;
->  	time_t prog_start = time(NULL);
->  	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
->  
-> @@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
->  	 */
->  	*child_exit_secs = time(NULL);
->  	syscall(SYS_exit, 0);
-> +	/* Never reached, but appeases compiler thinking we should return. */
-> +	exit(0);
->  }
->  
->  static void test_pidfd_poll_leader_exit(int use_waitpid)
->  {
->  	int pid, pidfd = 0;
-> -	int status, ret;
-> -	time_t prog_start = time(NULL);
-> +	int status, ret = 0;
->  	const char *test_name = "pidfd_poll check for premature notification on non-empty"
->  				"group leader exit";
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-> index be2943f072f6..17999e082aa7 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-> @@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->  
->  TEST(wait_simple)
->  {
-> -	int pidfd = -1, status = 0;
-> +	int pidfd = -1;
->  	pid_t parent_tid = -1;
->  	struct clone_args args = {
->  		.parent_tid = ptr_to_u64(&parent_tid),
-> @@ -47,7 +47,6 @@ TEST(wait_simple)
->  		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
->  		.exit_signal = SIGCHLD,
->  	};
-> -	int ret;
->  	pid_t pid;
->  	siginfo_t info = {
->  		.si_signo = 0,
-> @@ -88,7 +87,7 @@ TEST(wait_simple)
->  
->  TEST(wait_states)
->  {
-> -	int pidfd = -1, status = 0;
-> +	int pidfd = -1;
->  	pid_t parent_tid = -1;
->  	struct clone_args args = {
->  		.parent_tid = ptr_to_u64(&parent_tid),
-> -- 
-> 2.35.0.rc2.247.g8bbb082509-goog
-> 
+Good point. I missed one condition in updating the test. I will post v2 that
+will be compliant with the interface you mentioned.
+
+Thanks.
+
+> thanks,
+> -- Shuah
+
+-- 
+Regards,
+Vincenzo
