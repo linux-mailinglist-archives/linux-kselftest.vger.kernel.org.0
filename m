@@ -2,186 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A260C49F13B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 03:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0350949F28A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 05:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345525AbiA1Crx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jan 2022 21:47:53 -0500
-Received: from mga02.intel.com ([134.134.136.20]:61627 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345507AbiA1Crx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:47:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643338073; x=1674874073;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZoXCdsrtsztluG+o4sm2fG3tQLVmbVv74lR9eawI9u4=;
-  b=mVs1M3EGv6TQlom3M9+ykc9pwQjha0btgopZ1PlwRTCfhEepP6ONb9ZJ
-   2F1q1+BOS9XUVCD/SlYTc8bEDvZeA/fzIdCt8FvfrZBmtt45m2a7zQDgk
-   8WkiIk05GZ0pAwOenUpRVhOovvVYGHul3bzk/32Ur9l9OBJ+A3Q0aZ5bH
-   kTfPpZXqgV4whcYm7QNHj6BtTGMDpXeVVRQqEUdv10k7L9mSwLUA09KCB
-   ZUeFO6ZOjIJRwpU2OChMAAeYN95GGDPr8Fk/J8fcCGJjl5DudSxLxKCbX
-   /3zzhl3CijmRB4fbdrBitQ2xw49mPq9Qt2GROLroOrsyiFBCbsRUtmNDC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="234403973"
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="234403973"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 18:47:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,322,1635231600"; 
-   d="scan'208";a="674949731"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2022 18:47:50 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDHIj-000NLK-P1; Fri, 28 Jan 2022 02:47:49 +0000
-Date:   Fri, 28 Jan 2022 10:47:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, james.morse@arm.com
-Subject: Re: [PATCH 1/3] arm64: selftests: Generate all the possible logical
- immediates as a header
-Message-ID: <202201281052.Nzl9wJM4-lkp@intel.com>
-References: <20220127162127.2391947-2-james.morse@arm.com>
+        id S1346062AbiA1EgA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jan 2022 23:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346061AbiA1EgA (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Jan 2022 23:36:00 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A87C06173B
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 20:35:59 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id e8so8631335wrc.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jan 2022 20:35:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NjMVNnFHw5l0SfQ5jsSi4cfE7ZyRsd0RS1s9FDyEMkM=;
+        b=YuTuDc9DAfgYJkx9ivUhquM9vU+HCogTo5W5T9biL0smE3wnwMLh2lIc9HPVJcFQvw
+         qkW+EhLNxQRxNVtYj16ro3C+N7J3oPFuFBvTAapIa3I5AxmSwbTONuln75vn+NqFx+zT
+         U6voGOy8puLmzyQWf03ecJkq3hbxvO4NT57FAUyaNf4CYo0v5qDo44U7N2u7wfCUSOcp
+         mnDM0tyHAt23lBGdUorDIratSEDq075JZTqd5rvOIW9uWV9XTon3KK/vJWMkrzFV/2jq
+         hGGrK5wE9OelYNj2odHo6kcTXXBaHkgh5JW+asknpBRkmQrBeK8S3AUlgA7rKAK0oBpt
+         c5YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NjMVNnFHw5l0SfQ5jsSi4cfE7ZyRsd0RS1s9FDyEMkM=;
+        b=QbyDwrReDZWGxoV4NXEVD9b2+XmkW/5hCnBg0gdMG3XK2dB73yIkbJRXyMk/giSLxr
+         NWgfDNQGc/hnzFOxf6WUtMahIgF0XFp3ifY6Io56LbgHO2OuaEROCAqA+ty9y35QAQiU
+         N7JoMEMI6Pb7SgGvfbx8BIMLROvHyodBLVZsDnkvcLIrL8pE0/TwaoL9M1RQDIwd7L4Z
+         rqo4pde90NhIcv2z1uPeCAXgfl5DY7fKO078tqnQB6RAKs+0RnlbV86+PujZvAnQNb2D
+         jhdFPc3LeGFtxFC1APMcn/+pukPIYew2CQAxGuS5Czfg3xCKU01UajYmQuXu2njUbV39
+         nDIw==
+X-Gm-Message-State: AOAM532c/hvT3roWXJL0juKmuPEcz5/9Qgu8F2Mlfq97d+1K0YeqNBDJ
+        /glQ6m7Wkr0MAvtUM/ZER0is4aVKv6pnRfB2uO/9Uw==
+X-Google-Smtp-Source: ABdhPJykWubi5/tbvcApmthmKfSxqyTZFndZ1SFfaPB43XRPYsXMeGtvKxe7G2LP563J7zfVIirtGjF7g8TDEzYuwB0=
+X-Received: by 2002:adf:fb05:: with SMTP id c5mr5627495wrr.220.1643344557501;
+ Thu, 27 Jan 2022 20:35:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127162127.2391947-2-james.morse@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220127215222.159049-1-dlatypov@google.com>
+In-Reply-To: <20220127215222.159049-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 28 Jan 2022 12:35:45 +0800
+Message-ID: <CABVgOSnUni8Vk5BCweNgfOSFPEsFXiAegsz3FgBSd0PNL3OoTA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: cleanup assertion macro internal variables
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi James,
+On Fri, Jan 28, 2022 at 5:52 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> All the operands should be tagged `const`.
+> We're only assigning them to variables so that we can compare them (e.g.
+> check if left == right, etc.) and avoid evaluating expressions multiple
+> times.
+>
+> There's no need for them to be mutable.
+>
+> Also rename the helper variable `loc` to `__loc` like we do with
+> `__assertion` and `__strs` to avoid potential name collisions with user
+> code.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+> Note: this patch is based on top of
+> https://lore.kernel.org/all/20220125210011.3817742-4-dlatypov@google.com/
+> There is no semantic dependency between the patches, but they touch
+> adjacent lines.
+> ---
 
-I love your patch! Perhaps something to improve:
+Looks good.
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on arm/for-next xilinx-xlnx/master soc/for-next kvmarm/next v5.17-rc1 next-20220127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Reviewed-by: David Gow <davidgow@google.com>
 
-url:    https://github.com/0day-ci/linux/commits/James-Morse/arm64-insn-Generate-64-bit-mask-immediates-correctly/20220128-002213
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-randconfig-p001-20220128 (https://download.01.org/0day-ci/archive/20220128/202201281052.Nzl9wJM4-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1ead98d2c8c4c28ea27964dbf7b5b89a83b8e7ec
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review James-Morse/arm64-insn-Generate-64-bit-mask-immediates-correctly/20220128-002213
-        git checkout 1ead98d2c8c4c28ea27964dbf7b5b89a83b8e7ec
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 prepare
+Cheers,
+-- David
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm64/tools/gen_logic_imm.c: In function 'validate':
->> arch/arm64/tools/gen_logic_imm.c:81:2: warning: ignoring return value of 'write' declared with attribute 'warn_unused_result' [-Wunused-result]
-      81 |  write(fd, &insn, sizeof(insn));
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   arch/arm64/tools/gen_logic_imm.c: In function 'validate':
->> arch/arm64/tools/gen_logic_imm.c:81:2: warning: ignoring return value of 'write' declared with attribute 'warn_unused_result' [-Wunused-result]
-      81 |  write(fd, &insn, sizeof(insn));
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso/vgettimeofday.c:9:5: warning: no previous prototype for '__kernel_clock_gettime' [-Wmissing-prototypes]
-       9 | int __kernel_clock_gettime(clockid_t clock,
-         |     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso/vgettimeofday.c:15:5: warning: no previous prototype for '__kernel_gettimeofday' [-Wmissing-prototypes]
-      15 | int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso/vgettimeofday.c:21:5: warning: no previous prototype for '__kernel_clock_getres' [-Wmissing-prototypes]
-      21 | int __kernel_clock_getres(clockid_t clock_id,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +81 arch/arm64/tools/gen_logic_imm.c
-
-    55	
-    56	#define PIPE_READ	0
-    57	#define PIPE_WRITE	1
-    58	/*
-    59	 * Use objdump to decode the encoded instruction, and compare the immediate.
-    60	 * On error, returns the bad instruction, otherwise returns 0.
-    61	 */
-    62	static int validate(u64 val, u32 immN, u32 imms, u32 immr, char *objdump)
-    63	{
-    64		pid_t child;
-    65		char *immediate;
-    66		char val_str[32];
-    67		u32 insn = 0x12000000;
-    68		char output[1024] = {0};
-    69		int fd, pipefd[2], bytes;
-    70		char filename[] = "validate_gen_logic_imm.XXXXXX";
-    71	
-    72		insn |= 1 << 31;
-    73		insn |= (immN & 0x1)<<22;
-    74		insn |= (immr & 0x3f)<<16;
-    75		insn |= (imms & 0x3f)<<10;
-    76	
-    77		fd = mkstemp(filename);
-    78		if (fd < 0)
-    79			abort();
-    80	
-  > 81		write(fd, &insn, sizeof(insn));
-    82		close(fd);
-    83	
-    84		if (pipe(pipefd))
-    85			return 0;
-    86	
-    87		child = vfork();
-    88		if (child) {
-    89			close(pipefd[PIPE_WRITE]);
-    90			waitpid(child, NULL, 0);
-    91	
-    92			bytes = read(pipefd[PIPE_READ], output, sizeof(output));
-    93			close(pipefd[PIPE_READ]);
-    94			if (!bytes || bytes == sizeof(output))
-    95				return insn;
-    96	
-    97			immediate = strstr(output, "x0, x0, #");
-    98			if (!immediate)
-    99				return insn;
-   100			immediate += strlen("x0, x0, #");
-   101	
-   102			/*
-   103			 * strtoll() has its own ideas about overflow and underflow.
-   104			 * Do a string comparison. immediate ends in a newline.
-   105			 */
-   106			snprintf(val_str, sizeof(val_str), "0x%lx", val);
-   107			if (strncmp(val_str, immediate, strlen(val_str))) {
-   108				fprintf(stderr, "Unexpected decode from objdump: %s\n",
-   109					immediate);
-   110				return insn;
-   111			}
-   112		} else {
-   113			close(pipefd[PIPE_READ]);
-   114			close(1);
-   115			dup2(pipefd[PIPE_WRITE], 1);
-   116			execl(objdump, objdump, "-b", "binary", "-m", "aarch64", "-D",
-   117			      filename, (char *) NULL);
-   118			abort();
-   119		}
-   120	
-   121		unlink(filename);
-   122		return 0;
-   123	}
-   124	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  include/kunit/test.h | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 088ff394ae94..00b9ff7783ab 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -779,10 +779,10 @@ void kunit_do_failed_assertion(struct kunit *test,
+>
+>  #define KUNIT_ASSERTION(test, assert_type, pass, assert_class, INITIALIZER, fmt, ...) do { \
+>         if (unlikely(!(pass))) {                                               \
+> -               static const struct kunit_loc loc = KUNIT_CURRENT_LOC;         \
+> +               static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;       \
+>                 struct assert_class __assertion = INITIALIZER;                 \
+>                 kunit_do_failed_assertion(test,                                \
+> -                                         &loc,                                \
+> +                                         &__loc,                              \
+>                                           assert_type,                         \
+>                                           &__assertion.assert,                 \
+>                                           fmt,                                 \
+> @@ -872,8 +872,8 @@ void kunit_do_failed_assertion(struct kunit *test,
+>                                     fmt,                                       \
+>                                     ...)                                       \
+>  do {                                                                          \
+> -       typeof(left) __left = (left);                                          \
+> -       typeof(right) __right = (right);                                       \
+> +       const typeof(left) __left = (left);                                    \
+> +       const typeof(right) __right = (right);                                 \
+>         static const struct kunit_binary_assert_text __text = {                \
+>                 .operation = #op,                                              \
+>                 .left_text = #left,                                            \
+> @@ -956,7 +956,7 @@ do {                                                                               \
+>                                                 fmt,                           \
+>                                                 ...)                           \
+>  do {                                                                          \
+> -       typeof(ptr) __ptr = (ptr);                                             \
+> +       const typeof(ptr) __ptr = (ptr);                                       \
+>                                                                                \
+>         KUNIT_ASSERTION(test,                                                  \
+>                         assert_type,                                           \
+> --
+> 2.35.0.rc2.247.g8bbb082509-goog
+>
