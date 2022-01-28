@@ -2,105 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470444A0299
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 22:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57B54A029B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 22:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241375AbiA1VTz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jan 2022 16:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S240795AbiA1VVZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jan 2022 16:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235133AbiA1VTy (ORCPT
+        with ESMTP id S240672AbiA1VVZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:19:54 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ED4C061714
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 13:19:54 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id j2so20004357ejk.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 13:19:54 -0800 (PST)
+        Fri, 28 Jan 2022 16:21:25 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E6DC06173B
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 13:21:24 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id f8so6284935pgf.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 13:21:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7lZ8ffNlvdrvmT96h8/DlPx1/riHLrWMluhYkp5LYp8=;
-        b=WPJyhTdgPV3Sykuapr6GtS6LgbfAH6PC27FjN8jYgQuo5QUlp5+ug2+Hk+fIo5DI3z
-         HCvaadpIgU4KhTvB0y4Hu++cXJ01Y24EI+Ie6Tk0xUInrFr3ceYyGbzHUm6vO/pinP84
-         ntLGJcYZ6ZSJ2VGZ6Tzo3Nn/jjHF2Cd1iIQDRT4gmkKcEKNMQzqcfgRxMBWfnphibPVp
-         xR7e0PL3WO5a62HRLkPc9nXuAo/JubYtcwQjubNwfLz84R2vjQ8hQhfhbvectYh5ZQmS
-         MW40oNJ331TtmVOns2bXlhFJPnaipOppQR9I5MbWuxmqPH+6CrBxgozpjXDC02Wt2JDL
-         xq4g==
+        bh=kYog/BqFDWNUevncRZPSz/7DuXyTbwEtBR6tVJ1Z7ec=;
+        b=JTdfELdG5DjgJJA5MLvURWVhN3HOJkymfEO2b46OC3Y9DCLTR6HA/ak2T1AKpLMJEK
+         BBCMnl4VT84crQCyuMVSXFfEmkYn2VQLHTBx+75VvEOc7YYXynUoDx60pxBZf8yLhHvh
+         h8LMUUEUVhEXePjKNBWe5pnc4GiMoYODg+kshlC5MZ1Ciu/lNtdovB+f3W5eIVwRjADR
+         dNO3Z0U2posO7lwRWqMjZnMKPa4ZZNIRovwFsdGUEq5fxPB1Jyn/6I8EVYBuoaWM1MN9
+         PLbcagmWKrOnbobyfj+HCzVJ0tGwygqcBZYyPsUMhOm7cxyAp0PqQbw+7F1qPa8e0HdI
+         VSpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7lZ8ffNlvdrvmT96h8/DlPx1/riHLrWMluhYkp5LYp8=;
-        b=MzGhWcxZ9eGqap3GtuVjV2Q1iL8Eu5lHK8rMX4RPhxOm8xhbBLYcdIfMynOqA0RFrr
-         +vUmzr231hCphtmNnoOG8rFD8fYj9jLgBuRxzmfh3rfhOvwyglySMnwSQrOL2D7b5EO/
-         TxCi4SIbTe0dhwW0lSfgoLc/kafgL1vZh2GTaEGfH5JT8jLHdnBRg4/YW6Su2l3dhZPQ
-         L++15/SgKw0X2Tqs+h7dXWw04GS/x3YgDaIOZaMykcRJvgwq2neW0j2vZOrSK0IknpAU
-         9c6cccJP/sRr1oJEhODcTbvPvhdHN4WXdJ5si1oZB5e1rA3dA6T1F25f4dWLGg1NWlWa
-         OEnw==
-X-Gm-Message-State: AOAM5324P+7pM+SLW+VW49f7DFLJTEid11eT8ShKkrR2Eq5bdS/egu3W
-        RpG0XdIbvG0ZrxAFupGM4uY97b2J1n/o8Ny/Xu9f8Q==
-X-Google-Smtp-Source: ABdhPJyN4c24gPx4RQUkT1Ozabx/C+LhtygJLfsnEItjLywNDAiXGe/yWuDotYfPg/j+EYuUbmeLcSEcxwToKLQZBKQ=
-X-Received: by 2002:a17:906:794f:: with SMTP id l15mr8720055ejo.75.1643404792858;
- Fri, 28 Jan 2022 13:19:52 -0800 (PST)
+        bh=kYog/BqFDWNUevncRZPSz/7DuXyTbwEtBR6tVJ1Z7ec=;
+        b=OUvYc3Os3+raSw0/AHMXfgoSEa56a6Zw6bZHvdZ+2M9vFFpkZI5IrWdZ0aNl+A10Gq
+         U1Xhb8d91rQ98RXNQ3uSsj/Vwk13M7VufgcP5D6b/UnLSoWBqqQQb0vYCWGsSomSiNYN
+         HtOm+WiViT/I2SgKu5a9bGqGiS4C9/yV8/KtCoISlTdKYnMR50zVlhxgb+epyszVkJOS
+         A9l2KLgYDzK/fTB0Mm4pkJaeq5554hPqoft4u0we9viJWtu4eGfcZg34+paQl8C/YZ/V
+         dHUmBx1CyOJKXyu/kX4JquBkjAI7x9QWxyx/jPBA6P0KIY4B/HLHGxpmtsF41yK6X+MJ
+         ZKZw==
+X-Gm-Message-State: AOAM530dbyO5162XzZEB4CE73D5lSINYCxJiig015LtmRRNUInwsCexg
+        TDakvZ5CEFSWgOvXy2OeUlppLxbx34Uwh8y0Gm31+Q==
+X-Google-Smtp-Source: ABdhPJzbpNIre/OilPR86TNoXJzaHM5vK9Oqem5lcugnKToTZ8sd15K4YCPa4UhDD+gJ4UfSvBoXLn8/ATvLduhboJQ=
+X-Received: by 2002:a63:184a:: with SMTP id 10mr7861393pgy.609.1643404884224;
+ Fri, 28 Jan 2022 13:21:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20211013191320.2490913-1-dlatypov@google.com> <CAFd5g47=aO3e8d4_GGcgY9BK43Z0Oo6SGD-2e5rJDp5r3k4XXQ@mail.gmail.com>
- <CAGS_qxoziNGNVpsUfvUfOReADY0PdriV2gJJ7+LUzzd+7BU-Ow@mail.gmail.com> <0f85025124359304c8a2a97d007b66d5655645c1.camel@codeconstruct.com.au>
-In-Reply-To: <0f85025124359304c8a2a97d007b66d5655645c1.camel@codeconstruct.com.au>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 28 Jan 2022 13:19:41 -0800
-Message-ID: <CAGS_qxpvX74vnAGhC=TAxFy1NT3mXB0S3AHUZvK2FA59hDijxA@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: flatten kunit_suite*** to kunit_suite** in executor
-To:     Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+References: <20220127215222.159049-1-dlatypov@google.com>
+In-Reply-To: <20220127215222.159049-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 28 Jan 2022 16:21:13 -0500
+Message-ID: <CAFd5g47imcBAPNqrX+ZpmVzw8mgaPiBX_ip0euFAgmTA3cxitA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: cleanup assertion macro internal variables
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 6:55 PM Jeremy Kerr <jk@codeconstruct.com.au> wrote:
-> Resulting in the .kunit_test_suites section just being a set of
-> contiguous pointers to struct kunit_suite. We get the number of suites
-> from the section size.
-
-<snip>
-
+On Thu, Jan 27, 2022 at 4:52 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> That was my thinking, anyway. I think it probably makes sense to do that
-> cleanup after the section patch, as that means we don't need any
-> post-processing on the suites arrays.
-
-To be honest, I'm actually tempted to pay the cost of postprocessing
-and proposing a change like this for real.
-Going from kunit_suite*** to ** shaves off a lot of code from the unit
-test and the filtering code path.
-
-Specifically I'm thinking this can go into the kunit branch,
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
-Then when we have the series reworking modules, one of two things can happen.
-1. if we get to kunit_suite** with null-terminated arrays, fixing the
-executor just means dropping the post-processing step.
-2. If we get to kunit_suite* as mentioned above, then there'll be a
-bit more work, but not as much.
-
-Alternatively, I can wait and send you an updated version of this
-patch to include at the start of your series like
-PATCH 1/x: this patch with post-processing, using either * or **
-...
-PATCH x/x: final rework, and drop the postprocessing
-
-It's just that the prospect of submitting a patch that reduces so much
-code makes me eager to try and get it submitted :)
-Brendan and David seem ok with paying the bit of runtime overhead for
-post-processing, esp. if we time it so this patch lands in the same
-Linux release as the module rework.
-But I can hold off if it'll make your life more difficult.
-
+> All the operands should be tagged `const`.
+> We're only assigning them to variables so that we can compare them (e.g.
+> check if left == right, etc.) and avoid evaluating expressions multiple
+> times.
 >
-> Cheers,
->
->
-> Jeremy
+> There's no need for them to be mutable.
+
+Agreed.
+
+> Also rename the helper variable `loc` to `__loc` like we do with
+> `__assertion` and `__strs` to avoid potential name collisions with user
+> code.
+
+Probably not necessary since we create a new code block (we are inside
+of an if-statement, do-while-loop, etc), but I don't really care
+either way.
+
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
