@@ -2,138 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC384A02F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jan 2022 22:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FFA4A2AE0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jan 2022 02:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351519AbiA1VhJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jan 2022 16:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S241256AbiA2BKe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jan 2022 20:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351508AbiA1VhJ (ORCPT
+        with ESMTP id S229812AbiA2BKd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jan 2022 16:37:09 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD601C061747
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 13:37:08 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id p15so20235226ejc.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 13:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CUuoA1H1xCLa0a1bVW4NlOMKpUawKO6N9kfvmo3RGOM=;
-        b=U4gZi4VClu3Fy3b0MUuy+OH+FPtbaikctEYX0ZAeCHxIky1wQ3Bv9sLZYdRg3sg8jn
-         gQ1TXW9cQQmRIce4Ur/I/oZRJXONbWQcitCi62NNG88NPyiRR+VM+o4JLs4Dq6pKlLfV
-         AcoEjvvNLllQuFcBUmosqPuyp+bqe3K28zBRwUKVQwN21sapCudCqhEcwXysEXBsV7MM
-         sqaSGvuY3gaejvqSaltDVaWFAfdhdJzBPwug1N3YFxZG1jE3HY3ZSB96jaV2sot9rL4T
-         Lk2G8s1Xc7Kjce44nsgXExVd/IwlbhuqsTeJYKLhn2asN1FSNCIKYWjURZbpdZ/y/6m3
-         +bww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CUuoA1H1xCLa0a1bVW4NlOMKpUawKO6N9kfvmo3RGOM=;
-        b=CJigNwsBR6YJpEkrkR68dAzQ0HnR6f0rY2H0GU3fBDrLpqACjMqUCIYMvpN2kzpirN
-         dfKgsoytiPpvYKrZKBGWjR3+GBFQrgYrTylH3O2t1PyqxOFo1z6uvo7rohx7jMPgMeMW
-         N8obwOdL2M2jRVfwaLGA/II8FTsmcN4+SNa42yMrANyr9/cAYloBRXBERc4jR/z6yMWY
-         9Fq/gXb2EkLM4hyo2N7ItGoTOCvNgjs7T2R+QWXtl8Zj3RGmMYx7Gq8G1rVrjRROGA5V
-         nWofTIwXCiV8xTkIfb+9tgjjTNwjQvBNlPuXmrz1E/5z2j8LKwwjtUxk3Q+NC2D2oUpj
-         y70w==
-X-Gm-Message-State: AOAM531Sq5M4mV8vXWE34/RFl6I8qo14nQSHBxBLafagsGqMHMc0+qv3
-        gCjuggCEITVUyxPWQS8UeN7UFPmrKPuigDKue5XoGA==
-X-Google-Smtp-Source: ABdhPJxVAzum5yLTwHC5et+cUTTSy3/uTZLz/Hrr/hiuqjfdxn1Bg2Sxql6rOIt5SPVlxQ+oLnZsJk3HnWnNlRZVAGo=
-X-Received: by 2002:a17:906:794f:: with SMTP id l15mr8765287ejo.75.1643405827189;
- Fri, 28 Jan 2022 13:37:07 -0800 (PST)
+        Fri, 28 Jan 2022 20:10:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F080C061714;
+        Fri, 28 Jan 2022 17:10:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30A53B826A5;
+        Sat, 29 Jan 2022 01:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2337BC340E7;
+        Sat, 29 Jan 2022 01:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643418630;
+        bh=FzrdKJdnCjC7nrl+Ux42pu7GZuSgeLwr59FvsBIsRaE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QqQtJfKZS9cYuQv7K3GIwiSOVcQokzpaKZ0uIZEbNDe7Jrz3mfDbazYg5qUIb7xEB
+         n4pHEoHCE151u7TAwshc7GkKh+VQpWaaJuBS+Ap50Y5DukB7oARn3g7E/kVK3R5hux
+         UetJdT0CpBu05zCoNPkcOcyjJ1KYY87Zq8GRfVcuR8WIZ3eQ9Zye5ZBiXgrPDeg3P3
+         qyEp5V7fXrUMv+ahivEzIK0vKpLAQuC2pC3wSfU9ylK0Q0ffFEVOsvwdt1gmLp7ki7
+         P78y9JamzhUpG83byY+tMJwjAUJsnCsxpEn5Jown1hWd6Tf5Rss6DnxZFgP32Zm2kD
+         bueUCp0EcrJXg==
+Date:   Fri, 28 Jan 2022 18:10:24 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, ndesaulniers@google.com, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, quentin@isovalent.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v2 1/6] tools: Help cross-building with clang
+Message-ID: <YfSUAPnZX/wP8U+p@archlinux-ax161>
+References: <20211216163842.829836-1-jean-philippe@linaro.org>
+ <20211216163842.829836-2-jean-philippe@linaro.org>
 MIME-Version: 1.0
-References: <20220127215222.159049-1-dlatypov@google.com> <CAFd5g47imcBAPNqrX+ZpmVzw8mgaPiBX_ip0euFAgmTA3cxitA@mail.gmail.com>
-In-Reply-To: <CAFd5g47imcBAPNqrX+ZpmVzw8mgaPiBX_ip0euFAgmTA3cxitA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 28 Jan 2022 13:36:55 -0800
-Message-ID: <CAGS_qxoSn16TgDUvQTUpamu1xzY85Cbqy7Qg94fyKwjE4jw7Fg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: cleanup assertion macro internal variables
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216163842.829836-2-jean-philippe@linaro.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 1:21 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Thu, Jan 27, 2022 at 4:52 PM Daniel Latypov <dlatypov@google.com> wrot=
-e:
-> >
-> > All the operands should be tagged `const`.
-> > We're only assigning them to variables so that we can compare them (e.g=
-.
-> > check if left =3D=3D right, etc.) and avoid evaluating expressions mult=
-iple
-> > times.
-> >
-> > There's no need for them to be mutable.
->
-> Agreed.
->
-> > Also rename the helper variable `loc` to `__loc` like we do with
-> > `__assertion` and `__strs` to avoid potential name collisions with user
-> > code.
->
-> Probably not necessary since we create a new code block (we are inside
-> of an if-statement, do-while-loop, etc), but I don't really care
-> either way.
+Hi Jean-Philippe,
 
-You're totally right that this doesn't matter with our current macros.
+On Thu, Dec 16, 2021 at 04:38:38PM +0000, Jean-Philippe Brucker wrote:
+> Cross-compilation with clang uses the -target parameter rather than a
+> toolchain prefix. Just like the kernel Makefile, add that parameter to
+> CFLAGS when CROSS_COMPILE is set.
+> 
+> Unlike the kernel Makefile, we use the --sysroot and --gcc-toolchain
+> options because unlike the kernel, tools require standard libraries.
+> Commit c91d4e47e10e ("Makefile: Remove '--gcc-toolchain' flag") provides
+> some background about --gcc-toolchain. Normally clang finds on its own
+> the additional utilities and libraries that it needs (for example GNU ld
+> or glibc). On some systems however, this autodetection doesn't work.
+> There, our only recourse is asking GCC directly, and pass the result to
+> --sysroot and --gcc-toolchain. Of course that only works when a cross
+> GCC is available.
+> 
+> Autodetection worked fine on Debian, but to use the aarch64-linux-gnu
+> toolchain from Archlinux I needed both --sysroot (for crt1.o) and
+> --gcc-toolchain (for crtbegin.o, -lgcc). The --prefix parameter wasn't
+> needed there, but it might be useful on other distributions.
+> 
+> Use the CLANG_CROSS_FLAGS variable instead of CLANG_FLAGS because it
+> allows tools such as bpftool, that need to build both host and target
+> binaries, to easily filter out the cross-build flags from CFLAGS.
+> 
+> Acked-by: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> ---
+> Most tools I looked at needed additional changes to support cross-build
+> with clang. I've only done the work for bpf tools.
+> ---
+>  tools/scripts/Makefile.include | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index 071312f5eb92..b0be5f40a3f1 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -87,7 +87,18 @@ LLVM_STRIP	?= llvm-strip
+>  
+>  ifeq ($(CC_NO_CLANG), 1)
+>  EXTRA_WARNINGS += -Wstrict-aliasing=3
+> -endif
+> +
+> +else ifneq ($(CROSS_COMPILE),)
+> +CLANG_CROSS_FLAGS := --target=$(notdir $(CROSS_COMPILE:%-=%))
+> +GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)gcc))
 
-given
-int loc =3D 42;
-KUNIT_EXPECT_TRUE(test, loc);
-KUNIT_EXPECT_EQ(test, loc, 42);
+Apologies for noticing this so late, I only ran into this recently.
 
-becomes
-do {
-        if (__builtin_expect(!!(!(!!(loc) =3D=3D !!true)), 0)) {
-                /* we don't use the operands in here, so `loc` is fine */
-                static const struct kunit_loc loc =3D {
-                        .file =3D "lib/kunit/kunit-example-test.c", .line =
-=3D 25
-                };
-...
-do {
-        typeof(loc) __left =3D (loc);
-        typeof(42) __right =3D (42);
-        do {
-                /* We never reference the expression again, so `loc` is fin=
-e */
-                if (__builtin_expect(!!(!(__left =3D=3D __right)), 0)) {
-                        static const struct kunit_loc loc =3D {
-                                .file =3D "lib/kunit/kunit-example-test.c",
-                                .line =3D 24
-                        };
+This line causes a warning when running 'make clean' when
+'$(CROSS_COMPILE)gcc' does not exist in PATH. For example:
 
-But reminder: this was *not* the case until very recently.
-Sau we didn't have my earlier patch to move the `if(!(passed))` check
-into the macro.
-Then we'd have issues, e.g.
-../lib/kunit/kunit-example-test.c: In function =E2=80=98example_simple_test=
-=E2=80=99:
-../include/kunit/test.h:828:26: error: wrong type argument to unary
-exclamation mark
-  828 |                         !!(condition) =3D=3D !!expected_true,
-                \
-      |
-...
-../lib/kunit/kunit-example-test.c:25:9: note: in expansion of macro
-=E2=80=98KUNIT_EXPECT_TRUE=E2=80=99
-   25 |         KUNIT_EXPECT_TRUE(test, loc);
-      |         ^~~~~~~~~~~~~~~~~
+$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnu- LLVM=1 LLVM_IAS=0 clean
+which: no powerpc-linux-gnu-gcc in ($PATH)
 
-So being defensive here lets us change up our implementation more freely.
+I only have powerpc-linux-gnu binutils in my PATH, not GCC, as I am only
+working with clang.
 
->
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
->
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+This happens because of the 'resolve_btfids_clean target', which always
+runs when running the 'clean' target on an in-tree build (since
+$(objtree) = $(srctree)).
+
+I tried looking into the best way to fix this but I am not at all
+familiar with the tools/ build system; would you mind taking a look?
+I see some machinery at the top of tools/bpf/Makefile for avoiding
+running some commands under certain commands but I am unsure how to
+shuffle that around to make everything work.
+
+Cheers,
+Nathan
+
+> +ifneq ($(GCC_TOOLCHAIN_DIR),)
+> +CLANG_CROSS_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+> +CLANG_CROSS_FLAGS += --sysroot=$(shell $(CROSS_COMPILE)gcc -print-sysroot)
+> +CLANG_CROSS_FLAGS += --gcc-toolchain=$(realpath $(GCC_TOOLCHAIN_DIR)/..)
+> +endif # GCC_TOOLCHAIN_DIR
+> +CFLAGS += $(CLANG_CROSS_FLAGS)
+> +AFLAGS += $(CLANG_CROSS_FLAGS)
+> +endif # CROSS_COMPILE
+>  
+>  # Hack to avoid type-punned warnings on old systems such as RHEL5:
+>  # We should be changing CFLAGS and checking gcc version, but this
+> -- 
+> 2.34.1
+> 
+> 
