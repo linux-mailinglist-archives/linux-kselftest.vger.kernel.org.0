@@ -2,98 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 706884A2B8F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jan 2022 05:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55844A3110
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jan 2022 18:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiA2EPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jan 2022 23:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbiA2EPP (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jan 2022 23:15:15 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7854C061714
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 20:15:14 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c190-20020a1c9ac7000000b0035081bc722dso5361258wme.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jan 2022 20:15:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u4oel1aQBoCtI/b7gkK6UL5x2odlkFP6no8sfDKO+Pg=;
-        b=LUPkVY/TcyzOL0KUTKOMPPkxjWtZRrwB3qQhWUHq/enS3OBA9r9jFpseAGdPZDowxw
-         eF57APKjuCQ446mmevqtldVRmIx9TCA7Y2oAZYfk3QdLaYEI2qn7wlflWc64wuHPzQZp
-         NkwuxKKnksGZSXrFMsFyvdUXMAu/kdtOzLYHSXtzN1MfgTcDwCfA2HhxQERheaAcL9tx
-         Slwqmt0A6TsUrFTFecX7gWVLuiZtnOOn71jHFc5Qr0ntDYSVpuncXEaJbqtmC3CZ9JZn
-         CxnvxQSJ8aZ/D2a12dzwePAzmo7vzSQ/r9EZ5nHmxq/KAA/kJ6cMPhrWZi7ety/6ZjN+
-         0Vig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u4oel1aQBoCtI/b7gkK6UL5x2odlkFP6no8sfDKO+Pg=;
-        b=2Ztrf3Wki2miCQPGlf5rch5uP65UdwiwMLUEdbuZeep6iuXzXhRBqXbLXy0OCRIj3b
-         stGWzejWSChuaTw0ugrvyoOSWBXo8oOyxMmicu/AkioGGXupY7/SuG7dmuM9HoRMO4sB
-         hwFJJXWlD/jdpoC7oT1XsbUbo5xdpzck88d5tqODxuqpl2ibWeCGPMtz62J9KfzfN/1a
-         +zv/BrHmmbqh7hGa5woMFxVSoYndJXeldvXFB+IIHrIjPwdl4TLJDP01g337GGU1TM+1
-         ESqp9QoiyFdSpWSZKiURJDexTzgq9bnmOiFABLbsU8fH6uGnHKZuulxA7llPcZGeC9Az
-         aOcQ==
-X-Gm-Message-State: AOAM5325P5yKwSegpgm0zMUwwOY3sj9lacyQk1cxAUmbZqpbeI9SUYJ3
-        tIDDyBmrEWZxS8lLjtT6P//xGk1QSiuzoekY0LdtEg==
-X-Google-Smtp-Source: ABdhPJyJtOmRyTmN1Db/Nvc1SI43ufGP0GPkypCaSyJvYg+TaDwEsgkzTiKthZmm5E5iVrOnyYIDmJ/0nCw5YRvKqxI=
-X-Received: by 2002:a1c:e90a:: with SMTP id q10mr18501063wmc.18.1643429712927;
- Fri, 28 Jan 2022 20:15:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220127221710.165733-1-dlatypov@google.com>
-In-Reply-To: <20220127221710.165733-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 29 Jan 2022 12:15:01 +0800
-Message-ID: <CABVgOSncO56y02RkUMeBU2rpqxXgDudL24gG0UUqzhX58JqjJg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix missing f in f-string in run_checks.py
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1346024AbiA2Rof (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jan 2022 12:44:35 -0500
+Received: from mga06.intel.com ([134.134.136.31]:54627 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349021AbiA2Roe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 29 Jan 2022 12:44:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643478274; x=1675014274;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=Owt2/avuqAtl47qyDRa69L2r49VRLIBmzHJVHbW63DI=;
+  b=Eq8l1mgmpBjGQGZdDUWC4dJ6conUqJPVO/Lca1/+7cLVZHemH+oBcPkX
+   UMItrGkOOorlaf8Nc7xviLpdBuvQ1W9S9rThBtPQmXNQuU9Nxy/EfW2FG
+   3RWCTjMU693M1r+8R9gkFxIK6eqLELp7Rpa5yzBUkZkA+9Iu9uxE2fYZL
+   0GU3+RHD/Q37wU9rXVLqOXvbSpMk1pramWIduJsV53fAedcD3VWx1Q4ye
+   V1up1PEiGE0C8pxUhJmSZMeEIo0ghi4Nvq3cjxuXLjGXwW0fAZcitCfyd
+   5CwxstTcd+cUVnNDA+bpeo9tTY/S8E8jkbd5TnS1gqC7WSsLHJgCgeoha
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10242"; a="308016821"
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="308016821"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2022 09:44:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,327,1635231600"; 
+   d="scan'208";a="675370405"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Jan 2022 09:44:34 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com
+Cc:     yang.zhong@intel.com, ravi.v.shankar@intel.com,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 2/2] selftests/x86/amx: Update the ARCH_REQ_XCOMP_PERM test
+Date:   Sat, 29 Jan 2022 09:36:47 -0800
+Message-Id: <20220129173647.27981-3-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220129173647.27981-1-chang.seok.bae@intel.com>
+References: <20220129173647.27981-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 6:17 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> We're missing the `f` prefix to have python do string interpolation, so
-> we'd never end up printing what the actual "unexpected" error is.
->
-> Fixes: ee92ed38364e ("kunit: add run_checks.py script to validate kunit changes")
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+Update the arch_prctl test to check the permission bitmap whether the
+requested feature is added as expected or not.
 
-Looks good!
+Every non-dynamic feature that is enabled is permitted already for use.
+TILECFG is not dynamic feature. Ensure the bit is always on from
+ARCH_GET_XCOMP_PERM.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ tools/testing/selftests/x86/amx.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-Cheers,
--- David
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index 3615ef4a48bb..e1e2c8f3356f 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -368,9 +368,16 @@ static void req_xtiledata_perm(void)
+ 
+ static void validate_req_xcomp_perm(enum expected_result exp)
+ {
+-	unsigned long bitmask;
++	unsigned long bitmask, expected_bitmask;
+ 	long rc;
+ 
++	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
++	if (rc) {
++		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
++	} else if (!(bitmask & XFEATURE_MASK_XTILECFG)) {
++		fatal_error("ARCH_GET_XCOMP_PERM returns XFEATURE_XTILECFG off.");
++	}
++
+ 	rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
+ 	if (exp == FAIL_EXPECTED) {
+ 		if (rc) {
+@@ -383,10 +390,15 @@ static void validate_req_xcomp_perm(enum expected_result exp)
+ 		fatal_error("ARCH_REQ_XCOMP_PERM saw unexpected failure.\n");
+ 	}
+ 
++	expected_bitmask = bitmask | XFEATURE_MASK_XTILEDATA;
++
+ 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
+ 	if (rc) {
+ 		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
+-	} else if (bitmask & XFEATURE_MASK_XTILE) {
++	} else if (bitmask != expected_bitmask) {
++		fatal_error("ARCH_REQ_XCOMP_PERM saw a wrong bitmask: %lx, expected: %lx.\n",
++			    bitmask, expected_bitmask);
++	} else {
+ 		printf("\tARCH_REQ_XCOMP_PERM is successful.\n");
+ 	}
+ }
+-- 
+2.17.1
 
->  tools/testing/kunit/run_checks.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
-> index 4f32133ed77c..13d854afca9d 100755
-> --- a/tools/testing/kunit/run_checks.py
-> +++ b/tools/testing/kunit/run_checks.py
-> @@ -61,7 +61,7 @@ def main(argv: Sequence[str]) -> None:
->                 elif isinstance(ex, subprocess.CalledProcessError):
->                         print(f'{name}: FAILED')
->                 else:
-> -                       print('{name}: unexpected exception: {ex}')
-> +                       print(f'{name}: unexpected exception: {ex}')
->                         continue
->
->                 output = ex.output
->
-> base-commit: 6125a5c70acddd9fc1fb7329047a254c74d0173c
-> --
-> 2.35.0.rc2.247.g8bbb082509-goog
->
