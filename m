@@ -2,65 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957F84A4ACE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jan 2022 16:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EBD4A4AD1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jan 2022 16:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242983AbiAaPmH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jan 2022 10:42:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22269 "EHLO
+        id S1379783AbiAaPmK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jan 2022 10:42:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23542 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236278AbiAaPmH (ORCPT
+        by vger.kernel.org with ESMTP id S1350284AbiAaPmK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jan 2022 10:42:07 -0500
+        Mon, 31 Jan 2022 10:42:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643643726;
+        s=mimecast20190719; t=1643643729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1sW7rzPQhozZJd5bIGL105H+ak+PyChDVEsMpXF5SsA=;
-        b=cG8Dn2Z2l5t041xxWBFu0uYyJmYiz+myZAIv80YS30B6xrHrwx7tcX4wpMY7uEm9YzYWci
-        VPbc6GHkq6ckPJ5klvNUMCoaWkbg1nMgW9KxRMTW7osuhudnIsOPzwB9XuDpfwWUNVBuwo
-        hAk+Na2aF0Bjb2JpkU6hN2L/ixYuBTM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=hkxchTylyBIw36KxB2bjQj4NjTJ8gEN7NWBvja/ptEI=;
+        b=OtgrpUGvsyy2TZRhrjCjDfrMqRL3pJE9NqjoBlqkwIosAY+5OPsm3AOUqkcZ/2cCD+FCm6
+        0g9EsnFuSn7jds4Sj4r5Zf1w0qmIZ7Dk86CukO6jaWzuewCsZ/jSyVtVr06ZEukX25IMf3
+        hngVqQaopH5dvbaVKT0lfHzD+lKCnM0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-e3YW6kMOO66Ewrn53KQLWg-1; Mon, 31 Jan 2022 10:42:05 -0500
-X-MC-Unique: e3YW6kMOO66Ewrn53KQLWg-1
-Received: by mail-wm1-f70.google.com with SMTP id q125-20020a1c4383000000b003503e10c027so3092366wma.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 07:42:04 -0800 (PST)
+ us-mta-541-y1rtsdR2MDuhadJgqkeJZw-1; Mon, 31 Jan 2022 10:42:07 -0500
+X-MC-Unique: y1rtsdR2MDuhadJgqkeJZw-1
+Received: by mail-wr1-f70.google.com with SMTP id x4-20020adfbb44000000b001d83e815683so4955474wrg.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 07:42:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1sW7rzPQhozZJd5bIGL105H+ak+PyChDVEsMpXF5SsA=;
-        b=X0QgF1DxpIurqHeGs/66E+dCFEHtNcDzHUFuk+QGuMSI/mDNkxE66M7TEM2760TOeV
-         h956blxuXA2vCcdQ1FAUBHp6JVLKkmJIeHeTjk3CZsoFouWAx1IhhVqD2qSbkViHqTfN
-         aQm0bnPQJYOkubH/SoZK1JggXeMBHKURzOfkUJlU3KB6myfPTwmo8TSjdBZ9jwqRKofW
-         CZRL/KIoKPI9PzaihdzUV57O3F7JfTkfim3VYfxJEigZrRcf03ANqkwBbL9Pgr0YJb9/
-         BH1FwNgdxwMT/yoXNUW6ZIrm97ha/eFNYExQtqqzudqgkO0ufQQf2mNNX4gn6ksEfthm
-         fFPQ==
-X-Gm-Message-State: AOAM531+BUMprClkcrlc2ejLoXn+cnBThnH1gD4f6m3751oH58hwBf+W
-        uLcJeuuydmKriEkHrT6ZWCC8eNIjr1ne0JjCc3jAg5sIZFYCXqOC5vkjNkViLVwRuwbf7YfSCy9
-        oF4ll0jU/8WLB8T3yduEjUTXUI9VU
-X-Received: by 2002:a05:600c:4606:: with SMTP id m6mr18884793wmo.158.1643643724082;
-        Mon, 31 Jan 2022 07:42:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxby5+LXKmhGyrUYjq8E3JvF/Tb4DHqOiKvlAvELRnZXgXmO2oDHs3fV9s7zGDIfs9YNcWdTw==
-X-Received: by 2002:a05:600c:4606:: with SMTP id m6mr18884782wmo.158.1643643723938;
-        Mon, 31 Jan 2022 07:42:03 -0800 (PST)
+        bh=hkxchTylyBIw36KxB2bjQj4NjTJ8gEN7NWBvja/ptEI=;
+        b=EgP1kIrWRau95J5tkARuDNwoqn+FnhtieYKQr4qz6g4MYsGPWiQKB1iCP0rnpPyBfB
+         C5vejaAPfuNPc3meDqgLHdrHn+WT9NHsvLLmoiKqHbuyX1YkiCw2uoQPMhzH8OfOb7On
+         9eaJNfkLS+tlJNbxlA0D65CTAqRw7IpEnvdxdAr5Trv2pZr3Q+tZyDuvsaN/JXn286iZ
+         JqEbP7FBGq5flfuu5oaeFQVzYIP0aZi6h8EjaeFCmGDetRV+3vAYeC67v5LH3UeZHi+z
+         WWpg3Nabpj/dOKWjB59X8nUDFp0FV1P6WMNf/L2OcizMG3qzj1tdMaK9HruFHgRU4L4z
+         hZeg==
+X-Gm-Message-State: AOAM5304EToDRkM25TUx/Lm+X/DetwA8mCl/4q+eczkiy+2oyaVddTSH
+        PGvJ/UzQYuFcWAZQA3bA6T677/wKOkbafdJz2DyMEPgV6PkniANv9ZP/efjgG4ouT2R69QVlR+8
+        y6Lrk9NcPOgCdyOHnNJJyhIgO+oaT
+X-Received: by 2002:adf:9dc6:: with SMTP id q6mr17692038wre.679.1643643726601;
+        Mon, 31 Jan 2022 07:42:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy1DwCI3Fw2wTecxht4WC3IQ8a5vpBieNVHkhHesxDAYIX779C8wLRFnFWyOh+KqnTZ7JI11A==
+X-Received: by 2002:adf:9dc6:: with SMTP id q6mr17692030wre.679.1643643726417;
+        Mon, 31 Jan 2022 07:42:06 -0800 (PST)
 Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id p17sm12454713wrf.112.2022.01.31.07.42.03
+        by smtp.gmail.com with ESMTPSA id i9sm14449262wry.32.2022.01.31.07.42.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 07:42:03 -0800 (PST)
-Date:   Mon, 31 Jan 2022 16:42:01 +0100
+        Mon, 31 Jan 2022 07:42:06 -0800 (PST)
+Date:   Mon, 31 Jan 2022 16:42:04 +0100
 From:   Guillaume Nault <gnault@redhat.com>
 To:     David Miller <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
 Cc:     netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org,
         Roopa Prabhu <roopa@cumulusnetworks.com>
-Subject: [PATCH net-next 1/4] selftests: fib rule: Make 'getmatch' and
- 'match' local variables
-Message-ID: <6c58c82747ac8351105a0d25eefc594206d414d6.1643643083.git.gnault@redhat.com>
+Subject: [PATCH net-next 2/4] selftests: fib rule: Drop erroneous TABLE
+ variable
+Message-ID: <f9dd17fc0be13b359361056dc0337b33d187459b.1643643083.git.gnault@redhat.com>
 References: <cover.1643643083.git.gnault@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,37 +70,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's restrict the scope of these variables to avoid possible
-interferences.
+The fib_rule6_del_by_pref() and fib_rule4_del_by_pref() functions use
+an uninitialised $TABLE variable. They should use $RTABLE instead.
+This doesn't alter the result of the test, as it just makes the grep
+command less specific (but since the script always uses the same table
+number, that doesn't really matter).
+
+Let's fix it anyway and, while there, specify the filtering parameters
+directly in 'ip -X rule show' to avoid the extra grep command entirely.
 
 Signed-off-by: Guillaume Nault <gnault@redhat.com>
 ---
- tools/testing/selftests/net/fib_rule_tests.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/net/fib_rule_tests.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index 43ea8407a82e..f04f337dd7c6 100755
+index f04f337dd7c6..012f9385d68c 100755
 --- a/tools/testing/selftests/net/fib_rule_tests.sh
 +++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -115,6 +115,9 @@ fib_rule6_test_match_n_redirect()
+@@ -96,7 +96,7 @@ fib_rule6_del()
  
- fib_rule6_test()
+ fib_rule6_del_by_pref()
  {
-+	local getmatch
-+	local match
-+
- 	# setup the fib rule redirect route
- 	$IP -6 route add table $RTABLE default via $GW_IP6 dev $DEV onlink
+-	pref=$($IP -6 rule show | grep "$1 lookup $TABLE" | cut -d ":" -f 1)
++	pref=$($IP -6 rule show $1 table $RTABLE | cut -d ":" -f 1)
+ 	$IP -6 rule del pref $pref
+ }
  
-@@ -184,6 +187,9 @@ fib_rule4_test_match_n_redirect()
+@@ -168,7 +168,7 @@ fib_rule4_del()
  
- fib_rule4_test()
+ fib_rule4_del_by_pref()
  {
-+	local getmatch
-+	local match
-+
- 	# setup the fib rule redirect route
- 	$IP route add table $RTABLE default via $GW_IP4 dev $DEV onlink
+-	pref=$($IP rule show | grep "$1 lookup $TABLE" | cut -d ":" -f 1)
++	pref=$($IP rule show $1 table $RTABLE | cut -d ":" -f 1)
+ 	$IP rule del pref $pref
+ }
  
 -- 
 2.21.3
