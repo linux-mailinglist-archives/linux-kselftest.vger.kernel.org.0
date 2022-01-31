@@ -2,94 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882034A4D63
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jan 2022 18:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17D94A4F66
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Jan 2022 20:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381025AbiAaRh6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jan 2022 12:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S1359639AbiAaTZs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Jan 2022 14:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381040AbiAaRh5 (ORCPT
+        with ESMTP id S1348075AbiAaTZr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jan 2022 12:37:57 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF762C06173D
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 09:37:57 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id s1so12050043ilj.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 09:37:57 -0800 (PST)
+        Mon, 31 Jan 2022 14:25:47 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E7C06173B
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 11:25:46 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id g2so13129657pgo.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 11:25:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8XiEhEIc6GPrOy61yWxlOIFlYNHT1dKB1NGb7FtAFv8=;
-        b=eitccCFFfue7+J/VoBFC3XgyotyS9xyGKLRYGs9u4JIUeo3e//pzWH29TGLwyiIGaJ
-         Sc/xy9hvdCtOSNr/C5zarL0GDTP95d5T2WgrPuwsBdHh8d7ytjkp3FqbJQQ1B+KniG2g
-         u9FweIeFiyHtgS01zJCVMG2eorfA6gIqWNi3Q=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eXGf5WCTdRujs8c3iA+q8x9yw63xl/p7dIlJ18j1g0k=;
+        b=ViXsl44S7dZb5JWKzVTj8IGlfi04XDzigxkaEgZXxp0J1OA6KHZAH4XcM+XtwbQUv7
+         IhLtdQ2eDQmm67OwyiJNE3ndCZIKWV+lXNQcdNyDH5jQ9/MFI+TXWQUHFv5v8eL/PHlW
+         6kIL2/4tXvMtyQS7HPfovb5wBAUE061JG/E8gnHwCPLRzgOG8G2uDGGkZn8tI475nECo
+         5z4MtIjG8/TkTg17A625vsqxlNSbwmBf01dUfnu3jX3doz0l1kFNfflZcK9UJITMzjno
+         BwZf9ai7avQe2WTDzCHwSf13n3qTjTLbhBTs1VcSyicyzB9jiA+7K3+KSNH7AXb63SFH
+         0R1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8XiEhEIc6GPrOy61yWxlOIFlYNHT1dKB1NGb7FtAFv8=;
-        b=Z/xUXIeN1wo7OtmE4TmOlJtlmIwFd92S0K+J1mQgEiN3XXz4FE/cdKYW33/M428Kw2
-         sWEZhmPYMUM3bZhxlntf4EumR5dedjCaOdoe3zMlrvdFx/P09X7tHE96om/lCOq4VZLG
-         cGsM7mp+omHe0E5mWHb+Ze7+2yASPYGL+a52PTu4H209vKRMpEF0zAiPMHoCutFpCX/6
-         gKCFkWWX7mbL98vFopd24MznXH5UjuVqPuRHYG7hN7JjQf5MERQGKT8c8avLvJfQAkFD
-         /vk0DDyAFDrNUAaO+ZpNwytOhRBxHqJLxTYJREh82bGMF4YHuNvLFhljCYsu66GFwUq6
-         6YKw==
-X-Gm-Message-State: AOAM532JVI+6TLpjPzCM/B2IUd/aN4pRlaiPh2rwPClDihEx9wSgitxv
-        lfjSXNuhSzm22Yt5UtFptWVWlQ==
-X-Google-Smtp-Source: ABdhPJy82tBGgtocPF6fYHvtMkpmZ07MAXznuTPlai5ZQ11Xm+VEykni4kt+G/4+lrWjvPjWaohedQ==
-X-Received: by 2002:a05:6e02:152c:: with SMTP id i12mr12746996ilu.215.1643650677138;
-        Mon, 31 Jan 2022 09:37:57 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id z5sm19459022ioq.47.2022.01.31.09.37.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 09:37:56 -0800 (PST)
-Subject: Re: [PATCH v4] kselftest: Fix vdso_test_abi return status
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220131113405.25977-1-vincenzo.frascino@arm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <299a9d32-ec50-029b-b8c7-b89aff6331a4@linuxfoundation.org>
-Date:   Mon, 31 Jan 2022 10:37:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eXGf5WCTdRujs8c3iA+q8x9yw63xl/p7dIlJ18j1g0k=;
+        b=PwNQrjV979mDFSi3aNdCzi7azcTLIzAj5ob9iIcp6gBz2v8z522LpfF5XzUNKi3s08
+         gLJTd+QmElUDqXOEfNYyjl9T+2zs9UsMT1PmmpxsiW2zrh9mvC1LaK5MRaPPrJMhYG5o
+         +QE+YTJ2weOf2IxI+Ddma6OblbP6EwB/k3EiFSZV2w/qNYGHZPdeJ6/tDsSSScqeHOBT
+         Zq8C/4zpEIwbmwGSJIe1fZTCC/5G80XOlTEWyykrcIe6u6kpGXBGMhd49Rv/hc+0ire6
+         3FCp+eHDcORmGupno8o8Myu0CgkJEt8fqcNrawnxg1uzXSg6cEFUx2C1+yU01+jVN2Te
+         ptLw==
+X-Gm-Message-State: AOAM532s9fLO+yl5ktL8tU+HxD/D5hB5THnf3hRIa2nLLfkgg4PmD2qt
+        ddIZx8rroh5/6k7NDgcr1zIUZgVfaT+T6HPk42plGw==
+X-Google-Smtp-Source: ABdhPJw1vhNusZ1GU768T+2P42NMgdzvrqkQF9yGWmPGojl/h4JYNENm9wG9shwRx4UMfimo1130MnYsuRfSPPVeWfw=
+X-Received: by 2002:aa7:8a14:: with SMTP id m20mr21629811pfa.63.1643657145867;
+ Mon, 31 Jan 2022 11:25:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220131113405.25977-1-vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220127221710.165733-1-dlatypov@google.com>
+In-Reply-To: <20220127221710.165733-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 31 Jan 2022 14:25:34 -0500
+Message-ID: <CAFd5g45gQ=05eRTGGbVsd2kA1iMKuUahPL6u-8zrOXpyNgSF9w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix missing f in f-string in run_checks.py
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/31/22 4:34 AM, Vincenzo Frascino wrote:
-> vdso_test_abi contains a batch of tests that verify the validity of the
-> vDSO ABI.
-> 
-> When a vDSO symbol is not found the relevant test is skipped reporting
-> KSFT_SKIP. All the tests return values are then added in a single
-> variable which is checked to verify failures. This approach can have
-> side effects which result in reporting the wrong kselftest exit status.
-> 
-> Fix vdso_test_abi verifying the return code of each test separately.
-> 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Reported-by: Cristian Marussi <cristian.marussi@arm.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->   tools/testing/selftests/vDSO/vdso_test_abi.c | 135 +++++++++----------
->   1 file changed, 62 insertions(+), 73 deletions(-)
-> 
+On Thu, Jan 27, 2022 at 5:17 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> We're missing the `f` prefix to have python do string interpolation, so
+> we'd never end up printing what the actual "unexpected" error is.
+>
+> Fixes: ee92ed38364e ("kunit: add run_checks.py script to validate kunit changes")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Thank you. Applied to linux-kselftest fixes for rc3
-
-thanks,
--- Shuah
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
