@@ -2,129 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B593A4A6794
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Feb 2022 23:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 111BB4A6829
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Feb 2022 23:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237786AbiBAWMV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Feb 2022 17:12:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234769AbiBAWMU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:12:20 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19129C061714
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Feb 2022 14:12:20 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id p63so22234084iod.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Feb 2022 14:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=xEClXmc0bdiu76CLg2SmNj+Tr5eO3D7n9NXH7Xz/xgQ=;
-        b=LCANwjZ8OwvjINuQx4nynmz1zpRYCKxoZC5qyrnaTYevHgM2ATxAQih4yZLOBhamck
-         HLUREtl41G47R1XHnjiffjUyjckvbuRGBVBlAW2LPZg9AwRl3+xIbJdWzCYESUXXtZjY
-         SUP2nF7QXXMzr8fm6XleF2gux/pFuQ6nVL/dw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=xEClXmc0bdiu76CLg2SmNj+Tr5eO3D7n9NXH7Xz/xgQ=;
-        b=LdWHeXD/EPHD0H3S6q7kBoQisQO4TVmwOsw3dj/oe3qWcY+539Eeun+Ci7I+6RqZip
-         EPknRogQlGzFq0zrCqliQan7+GAk8fW0Pokvz4DOcoWi+hoNN5FhRK450l8rkEpTQ5do
-         mizpsKEjBNMF7xL654IZGboIR1hsgxvH446RrHf90LWmCAspTuiiltTd1HcRmE0TjNqN
-         DM7Vel7cUDDr8XOyHy5Pj7J7e7se0kPAJudADAb2nK9v/VU/TYU8aPzDPv3uNw46eMFu
-         qiRscSu0ED9Jld+04OhyMRZkiTO4Xpczac9HEv0gxtKvMUr9itLF5c7hH7xUXS3zwWXi
-         QsRw==
-X-Gm-Message-State: AOAM531qY6mGKgXxfmxIwuUiEdK6fzKjbcH5OfztHOmTLZYt1he/UXNf
-        3fwWayRkLMG2T1XjC1YZJ1Q35A==
-X-Google-Smtp-Source: ABdhPJxm7UQVOGaPxfCY3vsdsfYH+Y/xMGxuzMAgXCHF+eyBhR0WP/uOLE15WQsmrrmoZOUad6yanw==
-X-Received: by 2002:a6b:6f09:: with SMTP id k9mr14992926ioc.61.1643753539459;
-        Tue, 01 Feb 2022 14:12:19 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id a6sm11055813ilk.6.2022.02.01.14.12.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 14:12:18 -0800 (PST)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit fixes update for Linux 5.17-rc3
-Message-ID: <714c5db3-dcf8-86ba-4e87-49c9a36f9862@linuxfoundation.org>
-Date:   Tue, 1 Feb 2022 15:12:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S239766AbiBAWrO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Feb 2022 17:47:14 -0500
+Received: from mga09.intel.com ([134.134.136.24]:18697 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232447AbiBAWrO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:47:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643755634; x=1675291634;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z9uo9M9sOXjOl8KjB5JfXfuHIJVUsR+sO+VCCIh/Dz0=;
+  b=mdjzCe01JtpCRtxhJaa6xogOVYnDz+vTsXA6FJkj0xfigRU9dZ2GmH3V
+   UauVceZgR503jdFz0FE+yjhV9Je4OGrAbe2SZUb9lIQGK8aSiqmkGtSTc
+   291oUzKxPhd8G+qtZVVmUYYmd5LrH8J55O7VKT968aMWJJdLy/eTWwQU/
+   RUmdEOrqgPCBNB4SViDm9GG9RTKBw+fqU9aneQD3B7JUj2xabZKByRL62
+   AvwFz5OoliIMFiTbvl4l1LR4B6rUQQexCiurkUawMQFLdyTKArXXqN+/H
+   +Rl9JAfOIPFp76Bas7Euru89II/QpxsjXW5gTVgO5Tkscsm94Ix7SuCCX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247582279"
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="247582279"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:47:14 -0800
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="698584741"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:47:14 -0800
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     jarkko@kernel.org, dave.hansen@linux.intel.com,
+        linux-sgx@vger.kernel.org, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org
+Subject: [PATCH V2 0/4] selftests/sgx: Early enclave loading error path fixes
+Date:   Tue,  1 Feb 2022 14:47:02 -0800
+Message-Id: <cover.1643754040.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------675B65142C724EC95E1400AE"
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------675B65142C724EC95E1400AE
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Changes since V1:
+- V1: https://lore.kernel.org/linux-sgx/cover.1643393473.git.reinette.chatre@intel.com/
+- All changes impact the commit messages only, no changes to code.
+- Rewrite commit message of 1/4 (Dave).
+- Detail in 2/4 commit log what callers will see with this change (Dave).
+- Add Acked-by from Dave to 2/4 and 4/4.
 
-Hi Linus,
+Hi Everybody,
 
-Please pull the following KUnit fixes update for Linux 5.17-rc3.
+Please find included a few fixes that address problems encountered after
+venturing into the enclave loading error handling code of the SGX
+selftests.
 
-This kunit update for Linux 5.17-rc3 consists of a single fix to
-an error seen on qemu due to a missing import.
+Reinette
 
-diff is attached.
+Reinette Chatre (4):
+  selftests/sgx: Fix NULL-pointer-dereference upon early test failure
+  selftests/sgx: Do not attempt enclave build without valid enclave
+  selftests/sgx: Ensure enclave data available during debug print
+  selftests/sgx: Remove extra newlines in test output
 
-thanks,
--- Shuah
+ tools/testing/selftests/sgx/load.c | 9 +++++----
+ tools/testing/selftests/sgx/main.c | 9 +++++----
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-----------------------------------------------------------------
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+base-commit: 2056e2989bf47ad7274ecc5e9dda2add53c112f9
+-- 
+2.25.1
 
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.17-rc3
-
-for you to fetch changes up to 235528072f28b3b0a1446279b7eaddda36dbf743:
-
-   kunit: tool: Import missing importlib.abc (2022-01-25 12:59:43 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-kunit-fixes-5.17-rc3
-
-This kunit update for Linux 5.17-rc3 consists of a single fix to an error
-seen on qemu due to a missing import.
-
-----------------------------------------------------------------
-Michał Winiarski (1):
-       kunit: tool: Import missing importlib.abc
-
-  tools/testing/kunit/kunit_kernel.py | 1 +
-  1 file changed, 1 insertion(+)
-----------------------------------------------------------------
-
---------------675B65142C724EC95E1400AE
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-fixes-5.17-rc3.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-fixes-5.17-rc3.diff"
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 44bbe54f25f1..3c4196cef3ed 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -6,6 +6,7 @@
- # Author: Felix Guo <felixguoxiuping@gmail.com>
- # Author: Brendan Higgins <brendanhiggins@google.com>
- 
-+import importlib.abc
- import importlib.util
- import logging
- import subprocess
-
---------------675B65142C724EC95E1400AE--
