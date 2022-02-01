@@ -2,125 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3664A55F0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Feb 2022 05:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A824A5E1D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Feb 2022 15:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbiBAEfk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Jan 2022 23:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiBAEfk (ORCPT
+        id S239165AbiBAOUM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Feb 2022 09:20:12 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39170 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239151AbiBAOUM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jan 2022 23:35:40 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212E5C06173B
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 20:35:40 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n40-20020a05600c3ba800b00353958feb16so539700wms.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jan 2022 20:35:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b+o1HhmhOYMcydfOnh8AY93cuxdP17P1TGCtSIC0GtY=;
-        b=FeS7SD7lgm4cKhg7aFKeoGaC9NPFeUiSr3Hihj0CFFM5fwE1dO/NpzBbbxupDTtMCa
-         gr8/CiTNpZ0LGBSXv/3ZVsr4ID2XUEGt/SWJ5yvNALNPnPEZrHBvWAy9VhDUaDQzpVKQ
-         Wh2IAEXwPkH1LXtidtJ4oFHx2NeVtbbC3TS+4kg5246tmcWOSQIW65K7s4kuYr88IWJr
-         XSmU1zHw5Dya9N7dq77mBE3P9/hy6CFWCttAychZAGjqLQKcrvUiR8B7O/C38IcbT0Kv
-         rQfO3x1ugEATXQgKnMgxhXEELfTo41x25dSIGKOx/EZIUjgR8vQ7XDKdwBx2DT2YNpSa
-         VX0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b+o1HhmhOYMcydfOnh8AY93cuxdP17P1TGCtSIC0GtY=;
-        b=4zfUli3shZX/Q15znu4QrULaQ+PUrqC6qXJIAonhSE5DzRBoKfVY8jSK2k2/JHyFwz
-         ybtgbceY2G81CG+TGUEWYZspz5+Jbhe9vCX3/1pYYQj6949Wl22qLsBzlC3fy8rhD8jm
-         9cpVqu5zdZMb63jMcL08asMzpgmBw5nn68tFyC0092UqIJQgxxoYbO8eXEwvWgN/21Op
-         gN+dlnIbNWRoxYjQq8hC3RGVq8XrwBXxK7ol7TsGWnO9jslRcDoE/NlfUdY1rTuaZC8z
-         /DeDLZLlPOlWjW96voMyGF0e7dg70oCpNkFHv18MpEFif1hXajy4ua+KR79qqd9crgmg
-         za8Q==
-X-Gm-Message-State: AOAM533XdoCPRnHY++rPXrBMRWSnHKZ5J1c7hPfqfprMDWH4TMwYlK/H
-        ox7ZABHzRLOq3Nxp+S/1kno/bNzvgPVi0cA1c4udyQ==
-X-Google-Smtp-Source: ABdhPJz7mkKzeYnPL8PE3/yG00xKmn0ykg7wMcBgAlQwbkXXJAXG2O3onBXXt/PQF1v/Vv82t7p2xOcDVVS3v3jolOs=
-X-Received: by 2002:a1c:4645:: with SMTP id t66mr151794wma.39.1643690138461;
- Mon, 31 Jan 2022 20:35:38 -0800 (PST)
+        Tue, 1 Feb 2022 09:20:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 503D3B82E3E;
+        Tue,  1 Feb 2022 14:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D14E4C340ED;
+        Tue,  1 Feb 2022 14:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643725209;
+        bh=Na67gv+49YjqY2yngHBViPya9GdQ6ph1gdzIMuK4dh4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YP9cfGLbJG1t7YYGe4cskZ45CDqBS0WF1vd7WAA+9UaR6LlRL1FvljgundvN3rFig
+         BkplXUrKdP5JmTua9bc5gw/JqUZNXrQhOxbYN32wlWDyaBhCnyuzRG/KKoRSlIuy6N
+         fEvQZ7hM74TGEO93FC2PGH31l2PHGGFShGPXoaZyiC+r7jK8XXHD65WLyNsLB1ciQq
+         NTsBAFh+OMOU74UZByMkE2wp4bDQXFngm1/l04T1oF/BPDSBzkj7vmfHHV5NZ2cwUt
+         k/hOXkwuWNg0fAP4K2FT562ck8+wi9sXdT7RmSS0HSaTaNUg5YCycbjTYYtlfaxxqS
+         YvP6umA1uVzww==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B969CE5D07D;
+        Tue,  1 Feb 2022 14:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220131212341.1082577-1-dlatypov@google.com>
-In-Reply-To: <20220131212341.1082577-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 1 Feb 2022 12:35:27 +0800
-Message-ID: <CABVgOSm-t2qs8c4b6+xw1O8V8DfUPXEZV4ahjyLoqwQFSjJp1g@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: fix path to .kunitconfig in start.rst
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Yifan Yuan <alpc_metic@live.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/4] selftests: fib rule: Small internal and test
+ output improvments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164372520975.31623.1854554114084409693.git-patchwork-notify@kernel.org>
+Date:   Tue, 01 Feb 2022 14:20:09 +0000
+References: <cover.1643643083.git.gnault@redhat.com>
+In-Reply-To: <cover.1643643083.git.gnault@redhat.com>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        roopa@cumulusnetworks.com, liuhangbin@gmail.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 5:23 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Commit ddbd60c779b4 ("kunit: use --build_dir=.kunit as default") changed
-> the default --build_dir, which had the side effect of making
-> `.kunitconfig` move to `.kunit/.kunitconfig`.
->
-> However, the first few lines of kunit/start.rst never got updated, oops.
->
-> Fix this by telling people to run kunit.py first, which will
-> automatically generate the .kunit directory and .kunitconfig file, and
-> then edit the file manually as desired.
->
-> Reported-by: Yifan Yuan <alpc_metic@live.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
-> v1 -> v2: rebase onto 5.17 (had the kunit docs rewrite)
-> ---
+Hello:
 
-Looks good: this was definitely confusing. And (my version of) sphinx
-doesn't complain, which is reassuring.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Reviewed-by: David Gow <davidgow@google.com>
+On Mon, 31 Jan 2022 16:41:54 +0100 you wrote:
+> The first half of these patch set improves the code logic and has no
+> user visible effect. The second half improves the script output, to
+> make it clearer and nicer to read.
+> 
+> Guillaume Nault (4):
+>   selftests: fib rule: Make 'getmatch' and 'match' local variables
+>   selftests: fib rule: Drop erroneous TABLE variable
+>   selftests: fib rule: Log test description
+>   selftests: fib rule: Don't echo modified sysctls
+> 
+> [...]
 
-Cheers,
--- David
+Here is the summary with links:
+  - [net-next,1/4] selftests: fib rule: Make 'getmatch' and 'match' local variables
+    https://git.kernel.org/netdev/net-next/c/8af2ba9a7811
+  - [net-next,2/4] selftests: fib rule: Drop erroneous TABLE variable
+    https://git.kernel.org/netdev/net-next/c/2e2521136327
+  - [net-next,3/4] selftests: fib rule: Log test description
+    https://git.kernel.org/netdev/net-next/c/21f25cd43672
+  - [net-next,4/4] selftests: fib rule: Don't echo modified sysctls
+    https://git.kernel.org/netdev/net-next/c/9f397dd5f155
 
->  Documentation/dev-tools/kunit/start.rst | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index ad168d16968f..867a4bba6bf6 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -41,13 +41,18 @@ or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
->         CONFIG_MSDOS_FS=y
->         CONFIG_FAT_KUNIT_TEST=y
->
-> -1. A good starting point for the ``.kunitconfig``, is the KUnit default
-> -   config. Run the command:
-> +1. A good starting point for the ``.kunitconfig`` is the KUnit default config.
-> +   You can generate it by running:
->
->  .. code-block:: bash
->
->         cd $PATH_TO_LINUX_REPO
-> -       cp tools/testing/kunit/configs/default.config .kunitconfig
-> +       tools/testing/kunit/kunit.py config
-> +       cat .kunit/.kunitconfig
-> +
-> +.. note ::
-> +   ``.kunitconfig`` lives in the ``--build_dir`` used by kunit.py, which is
-> +   ``.kunit`` by default.
->
->  .. note ::
->     You may want to remove CONFIG_KUNIT_ALL_TESTS from the ``.kunitconfig`` as
->
-> base-commit: c2741453478badf571ef020d160053e8d5e1ba94
-> --
-> 2.35.0.rc2.247.g8bbb082509-goog
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
