@@ -2,175 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7D54A74F5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 16:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 292EA4A74F8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 16:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345575AbiBBPwu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 10:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        id S1345566AbiBBPxx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Feb 2022 10:53:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240354AbiBBPwu (ORCPT
+        with ESMTP id S1343836AbiBBPxx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:52:50 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314C9C061714
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 07:52:50 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id z18so8608367ilp.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 07:52:50 -0800 (PST)
+        Wed, 2 Feb 2022 10:53:53 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F71BC06173B
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 07:53:53 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id c188so25973943iof.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 07:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hnuCjOcrcVbTrSMGDeFitTnyY+vwDbK2/TPhiEo9TIY=;
-        b=bGrhcn/ZvfDpHWNEWDSBjLp+4cy2d/yHhtihOOYV3lMkyzPmQxHG84pnZf01rhqafB
-         WbEdrn1JDmAZhI0+ucBk7sTbZ5hhY6+d3AA1OZBz2+JRSROtN3nUtnC7vZbh28Rhod8Q
-         iKMvXn7CqgBHMWzG6+vZ0i+h+urQ2ZH1maBHk=
+        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
+        b=ENABLJMA05R4soziave+d7UPm5zfjbrRymzXBoJsaW0z6qAKD2n9BRtw7tMe8IWvtT
+         Dtw076aY5ms2kHZAAIDpNevhFb8kbWcCRn5sIFiTdWfl+S4e2MesYrqCgrU0NJHNQkOc
+         frhUCeyRRNVCb6l36CVwAiB4lbVwnXLyCG9nQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=hnuCjOcrcVbTrSMGDeFitTnyY+vwDbK2/TPhiEo9TIY=;
-        b=oAFIY1Q0flPVJrO8XrUajO80WP0eS6tziX/n/FW/GQNRmsSUYCd1fDfnpSxsIPCDsZ
-         F2hlsPRXEqY3G6ttBl29K+yxokwhbutlLZ1HKF4wC9qgRqz1k58npOnRWuJePO3+ONqn
-         MbesN7jhXD0qk41C2+JrnJ2f4xd9ypGt4GXprQGwjSxxteDMSswBtFM+I0ZKWS00KCbF
-         JBSrNAdCplRt/zZ82iXP7FWC6k2qgFP58flA75ochH5EBKy1BsCKyOApU9CpYrGZtktU
-         OH1AhtePiryQ+IQB/0F35VptGYee36pGIFQkzLqqUV+N8ku4tWpkl1iGDk3Dz60YNB2s
-         +IcQ==
-X-Gm-Message-State: AOAM5322sJ5YCwYGKQm+6g051fNPnOn/qQKnzxQyLksCLhthlKGqcb6Z
-        i++ytPP2kStuEyoKU02D1fUr/IPMV7X2iQ==
-X-Google-Smtp-Source: ABdhPJyF+eRCT1nRVCPDFDYtMeqLp9IKbZfVRn14uMg4P8XLDHSDNIADZx4gognWvY9yFB+l1cKjHw==
-X-Received: by 2002:a92:1901:: with SMTP id 1mr16973107ilz.70.1643817169453;
-        Wed, 02 Feb 2022 07:52:49 -0800 (PST)
+        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
+        b=YO6FNN1aBG8hj8FFprvs8pD3SfPUfMdE7YbRBUHX9dGwhOIZ/ATZGMk//beqEoLqk1
+         rhkMUq64hpACD117+K5icz4GrnaqdkxWQbhupQJl0swrbUKWmnwVJEIWDmzyvfHNcixI
+         A17floHqLvtWLWko/LWLZyvVD/fGOaXuhcO8OxNfels6ka1gGYC+vSZHJMK4RAFq2Bmi
+         N/1uEslGqiyuOMM/zxKkCvbnb4KxHv2wvWP2DkxBGES8+pPhokSel4zmIpVhaK/ILh3G
+         hOAfJ9w8zvLQhgSZQrsOn5eH4ESKgl9RPA9WEx1DREaJ3iCIT6V85ELOfTlA4aLQ10O4
+         78Pg==
+X-Gm-Message-State: AOAM533rrHYgBxkzj+Ay5U7V8u7A2u+ZclkD0yK/jvZsuK3oXKBu+w/R
+        B2T5xpnBgUY6Nk5gIom6mFlPXg==
+X-Google-Smtp-Source: ABdhPJw6EtuJMPNRgqXBZ1urjdtS9DTte0fKkn/dXlVvcSumMDMNt2EoK1WwnohoNyDsHDMB2u/rhg==
+X-Received: by 2002:a02:9f07:: with SMTP id z7mr12280320jal.87.1643817232526;
+        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id e11sm17164586ioq.41.2022.02.02.07.52.48
+        by smtp.gmail.com with ESMTPSA id o4sm17381145iou.42.2022.02.02.07.53.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:52:49 -0800 (PST)
-Subject: Re: [PATCH] pidfd: fix test failure due to stack overflow on some
- arches
+        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
+Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
 To:     Christian Brauner <brauner@kernel.org>,
         Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Christian Brauner <christian@brauner.io>,
         Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Zach O'Keefe <zokeefe@google.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220127212951.3604667-1-axelrasmussen@google.com>
- <20220128085616.tnsowlg5iff6ofm4@wittgenstein>
+        llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220127221115.3731388-1-axelrasmussen@google.com>
+ <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <924d8fd8-7069-41d2-9887-f36160d9f598@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 08:52:47 -0700
+Message-ID: <54a0cd63-6ec9-21fa-722a-da933b0ff1bf@linuxfoundation.org>
+Date:   Wed, 2 Feb 2022 08:53:49 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220128085616.tnsowlg5iff6ofm4@wittgenstein>
+In-Reply-To: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/28/22 1:56 AM, Christian Brauner wrote:
-> On Thu, Jan 27, 2022 at 01:29:51PM -0800, Axel Rasmussen wrote:
->> When running the pidfd_fdinfo_test on arm64, it fails for me. After some
->> digging, the reason is that the child exits due to SIGBUS, because it
->> overflows the 1024 byte stack we've reserved for it.
+On 1/28/22 1:57 AM, Christian Brauner wrote:
+> On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
+>> These are some trivial fixups, which were needed to build the tests with
+>> clang and -Werror. The following issues are fixed:
 >>
->> To fix the issue, increase the stack size to 8192 bytes (this number is
->> somewhat arbitrary, and was arrived at through experimentation -- I kept
->> doubling until the failure no longer occurred).
->>
->> Also, let's make the issue easier to debug. wait_for_pid() returns an
->> ambiguous value: it may return -1 in all of these cases:
->>
->> 1. waitpid() itself returned -1
->> 2. waitpid() returned success, but we found !WIFEXITED(status).
->> 3. The child process exited, but it did so with a -1 exit code.
->>
->> There's no way for the caller to tell the difference. So, at least log
->> which occurred, so the test runner can debug things.
->>
->> While debugging this, I found that we had !WIFEXITED(), because the
->> child exited due to a signal. This seems like a reasonably common case,
->> so also print out whether or not we have WIFSIGNALED(), and the
->> associated WTERMSIG() (if any). This lets us see the SIGBUS I'm fixing
->> clearly when it occurs.
->>
->> Finally, I'm suspicious of allocating the child's stack on our stack.
->> man clone(2) suggests that the correct way to do this is with mmap(),
->> and in particular by setting MAP_STACK. So, switch to doing it that way
->> instead.
-> 
-> Heh, yes. :)
-> 
-> commit 99c3a000279919cc4875c9dfa9c3ebb41ed8773e
-> Author: Michael Kerrisk <mtk.manpages@gmail.com>
-> Date:   Thu Nov 14 12:19:21 2019 +0100
-> 
->      clone.2: Allocate child's stack using mmap(2) rather than malloc(3)
-> 
->      Christian Brauner suggested mmap(MAP_STACKED), rather than
->      malloc(), as the canonical way of allocating a stack for the
->      child of clone(), and Jann Horn noted some reasons why:
-> 
->          Not on Linux, but on OpenBSD, they do use MAP_STACK now
->          AFAIK; this was announced here:
->          <http://openbsd-archive.7691.n7.nabble.com/stack-register-checking-td338238.html>.
->          Basically they periodically check whether the userspace
->          stack pointer points into a MAP_STACK region, and if not,
->          they kill the process. So even if it's a no-op on Linux, it
->          might make sense to advise people to use the flag to improve
->          portability? I'm not sure if that's something that belongs
->          in Linux manpages.
-> 
->          Another reason against malloc() is that when setting up
->          thread stacks in proper, reliable software, you'll probably
->          want to place a guard page (in other words, a 4K PROT_NONE
->          VMA) at the bottom of the stack to reliably catch stack
->          overflows; and you probably don't want to do that with
->          malloc, in particular with non-page-aligned allocations.
-> 
->      And the OpenBSD 6.5 manual pages says:
-> 
->          MAP_STACK
->              Indicate that the mapping is used as a stack. This
->              flag must be used in combination with MAP_ANON and
->              MAP_PRIVATE.
-> 
->      And I then noticed that MAP_STACK seems already to be on
->      FreeBSD for a long time:
-> 
->          MAP_STACK
->              Map the area as a stack.  MAP_ANON is implied.
->              Offset should be 0, fd must be -1, and prot should
->              include at least PROT_READ and PROT_WRITE.  This
->              option creates a memory region that grows to at
->              most len bytes in size, starting from the stack
->              top and growing down.  The stack top is the start‐
->              ing address returned by the call, plus len bytes.
->              The bottom of the stack at maximum growth is the
->              starting address returned by the call.
-> 
->              The entire area is reserved from the point of view
->              of other mmap() calls, even if not faulted in yet.
-> 
->      Reported-by: Jann Horn <jannh@google.com>
->      Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
->      Signed-off-by: Michael Kerrisk <mtk.manpages@gmail.com>
-> 
-> 
+>> - Remove various unused variables.
+>> - In child_poll_leader_exit_test, clang isn't smart enough to realize
+>>    syscall(SYS_exit, 0) won't return, so it complains we never return
+>>    from a non-void function. Add an extra exit(0) to appease it.
+>> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
+>>    uninitialized, if we have !use_waitpid. Initialize it to zero to get
+>>    the right behavior in that case.
 >>
 >> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 >> ---
 > 
-> Yeah, stack handling - especially with legacy clone() - is yucky on the
-> best of days. Thank you for the fix.
-> 
+> Thanks!
+> (Fwiw, all those tests should also be ported to use the TEST_*() harness
+> infra. Currently it's an annoying mix.)
 > Acked-by: Christian Brauner <brauner@kernel.org>
 > 
 
-Thank you both. Will apply for 5.17-rc4 or so.
+Yes. Porting would be great. I will take this for now for 5.17-rc4
 
 thanks,
 -- Shuah
