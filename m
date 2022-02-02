@@ -2,96 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 345694A682D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Feb 2022 23:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBEF4A6944
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 01:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239234AbiBAWrQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Feb 2022 17:47:16 -0500
-Received: from mga09.intel.com ([134.134.136.24]:18698 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241098AbiBAWrP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:47:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643755635; x=1675291635;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JE82XzBjwOsa8Dx89eCExGVuYLlGOygBUFLZoVdUfTc=;
-  b=XA+0Dp3gaBQPwLsT180L5vrcpcT/5P+tduwXxlc6+gD2nyuuPlSjBF/e
-   SUeX/0H3heS0Vt6i835VcxMIDY4v3p1eE5omYHyaHM4Q0S12MDmGS8ECD
-   6mkvUfTEwTmi1Kb2WSSagAvYmTnIaydc7wPL177LLjZl1GZ+qdyG5pvlL
-   WE2xGarq0zsgbBy2DkMtQNnNPMBKt/by00fxv5nzhTp7ISjkrT5ty2wta
-   5kKA4ULhZV6oK1v6evhEgGVo1JU6+yYwtPRguNrNEXwpPj46AbCsS3M6d
-   EOR2tDBmSNQRfxAQfeThQCZtXBuSsBiD7KRYaWKoqzdru+jgEMsfa76Nn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247582284"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="247582284"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:47:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="698584745"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:47:14 -0800
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     jarkko@kernel.org, dave.hansen@linux.intel.com,
-        linux-sgx@vger.kernel.org, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org
-Subject: [PATCH V2 4/4] selftests/sgx: Remove extra newlines in test output
-Date:   Tue,  1 Feb 2022 14:47:06 -0800
-Message-Id: <16317683a1822bbd44ab3ca48b60a9a217ac24de.1643754040.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1643754040.git.reinette.chatre@intel.com>
-References: <cover.1643754040.git.reinette.chatre@intel.com>
+        id S243371AbiBBAdp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Feb 2022 19:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243339AbiBBAdp (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Feb 2022 19:33:45 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DEC061714
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Feb 2022 16:33:45 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id c188so23427650iof.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Feb 2022 16:33:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JepB/7vXyZQxWCvygSiSQrAo+dG4wBZLbFMfRyPaAg4=;
+        b=BYjOOb9hkhtXBfhwGlSCCO509XKcvbv2hf2hjKfopkh4jOXW8O7HhQjDtyYIJa0jl5
+         qTtw9X86XWTlwMVzFMnM1PJoeTfB9MsBay3aIwLob3YGE1Oy90CKWlPXcFf5aPf5E+FR
+         QnQRAqB7avjTD9AOWkm0wdpaP7ob+3r/RNbW8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JepB/7vXyZQxWCvygSiSQrAo+dG4wBZLbFMfRyPaAg4=;
+        b=DfR5QFnrR2QAXS1JjyQJcMKF+7k4TBJtJwK3UhhrF5y2sQ5468b+IRo5bjkNNogyPR
+         EpZ8dAHxzRd/toxy5kaeKSppqju9WTQxVoaugp9Y8DU9tKifggwZxmcU6hOz96ZvOICx
+         Z2lOaaOH9n9tUArwBVe+IRYtNFiqZyYGkTs262DAzGe3NMhU7qMRj/IvJ/QoV0wDesJZ
+         PScYuXUOzkgehYEN6u/AznrG6F6JWOGcX1DZE+t4l03FSO9qmdQ4Rp2TXb/0w1nD/x93
+         hhMUfzF1EURInGvm4UOpakU0qwaIqLk+Z1/SJOXdvUgMImBl60eRFlidrupqMP/DHt4i
+         G47Q==
+X-Gm-Message-State: AOAM531gTx8NDlH24ozlF9jHUveIQegGFNTW79AnGgcl7cdMoAZMHdV5
+        xsdFcBW5GgP9T1pgsM73CBCDvg==
+X-Google-Smtp-Source: ABdhPJyLnuma3ioM5xd1+ADrOhX9jvjTMjYRkEa1l7nl/NLBbTeuZXG1YAA6NxvjtObNkd79ajkSow==
+X-Received: by 2002:a02:6248:: with SMTP id d69mr14688442jac.133.1643762024503;
+        Tue, 01 Feb 2022 16:33:44 -0800 (PST)
+Received: from shuah-tx13.internal ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id l13sm5971445ilj.24.2022.02.01.16.33.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 16:33:44 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     akpm@linux-foundation.org, shuah@kernel.org, chi.minghao@zte.com.cn
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest/vm: Revert "tools/testing/selftests/vm/userfaultfd.c: use swap() to make code cleaner"
+Date:   Tue,  1 Feb 2022 17:33:40 -0700
+Message-Id: <20220202003340.87195-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The TH_LOG() macro is an optional debug logging function made
-available by kselftest itself. When TH_LOG_ENABLED is set it
-prints the provided message with additional information and
-formatting that already includes a newline.
+With this change, userfaultfd fails to build with undefined reference
+swap() error:
 
-Providing a newline to the message printed by TH_LOG() results
-in a double newline that produces irregular test output.
+userfaultfd.c: In function ‘userfaultfd_stress’:
+userfaultfd.c:1530:17: warning: implicit declaration of function ‘swap’; did you mean ‘swab’? [-Wimplicit-function-declaration]
+ 1530 |                 swap(area_src, area_dst);
+      |                 ^~~~
+      |                 swab
+/usr/bin/ld: /tmp/ccDGOAdV.o: in function `userfaultfd_stress':
+userfaultfd.c:(.text+0x549e): undefined reference to `swap'
+/usr/bin/ld: userfaultfd.c:(.text+0x54bc): undefined reference to `swap'
+collect2: error: ld returned 1 exit status
 
-Remove the unnecessary newlines from the text provided to
-TH_LOG().
+Revert the commit to fix the problem.
 
-Fixes: 1b35eb719549 ("selftests/sgx: Encpsulate the test enclave creation")
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Fixes: 2c769ed7137a ("tools/testing/selftests/vm/userfaultfd.c: use swap() to make code cleaner")
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
-Changes since V1:
-- Add Acked-by from Dave.
+ tools/testing/selftests/vm/userfaultfd.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- tools/testing/selftests/sgx/main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index b0bd95a4730d..dd74fa42302e 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -146,7 +146,7 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index d3fd24f9fae8..2f49c9af1b58 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -1417,6 +1417,7 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
+ static int userfaultfd_stress(void)
+ {
+ 	void *area;
++	char *tmp_area;
+ 	unsigned long nr;
+ 	struct uffdio_register uffdio_register;
+ 	struct uffd_stats uffd_stats[nr_cpus];
+@@ -1527,9 +1528,13 @@ static int userfaultfd_stress(void)
+ 					    count_verify[nr], nr);
  
- 	if (!encl_load("test_encl.elf", encl, heap_size)) {
- 		encl_delete(encl);
--		TH_LOG("Failed to load the test enclave.\n");
-+		TH_LOG("Failed to load the test enclave.");
- 		return false;
+ 		/* prepare next bounce */
+-		swap(area_src, area_dst);
++		tmp_area = area_src;
++		area_src = area_dst;
++		area_dst = tmp_area;
+ 
+-		swap(area_src_alias, area_dst_alias);
++		tmp_area = area_src_alias;
++		area_src_alias = area_dst_alias;
++		area_dst_alias = tmp_area;
+ 
+ 		uffd_stats_report(uffd_stats, nr_cpus);
  	}
- 
-@@ -204,7 +204,7 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
- 		fclose(maps_file);
- 	}
- 
--	TH_LOG("Failed to initialize the test enclave.\n");
-+	TH_LOG("Failed to initialize the test enclave.");
- 
- 	encl_delete(encl);
- 
 -- 
-2.25.1
+2.32.0
 
