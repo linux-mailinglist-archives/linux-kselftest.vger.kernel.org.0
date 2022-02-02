@@ -2,36 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1CB4A72BD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 15:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D2D4A72B9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 15:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344785AbiBBOKT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 09:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344787AbiBBOKS (ORCPT
+        id S231518AbiBBOKW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Feb 2022 09:10:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35428 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344790AbiBBOKU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:10:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B5BC061714
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 06:10:17 -0800 (PST)
+        Wed, 2 Feb 2022 09:10:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 759AB617F0
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 14:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24018C004E1;
-        Wed,  2 Feb 2022 14:10:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE02A6187F
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 14:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCCBC340F0;
+        Wed,  2 Feb 2022 14:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643811016;
-        bh=CIhNbzAYIdtiQgDhDMW5zJ+2HCAbYDs3socLWaHaV7A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ANsM53l6AELpiXnW6LfjeS9tO4cCvGLueNq+qybycT/WrTKPZOpsKcKZJlXtH+Qfd
-         DgWRBT7GghWpAZJohEInVin2d7uXPksjjRvuYvV5kIMpkU4IYi6IDQiUkzcQ1D69QB
-         m9vRgaFzQ5QYzEc8JZae7aVM7SLRj7gRN4wlI2y/oKtSIVJnPonx+rCUWKklPg/Dzd
-         7T0tgYY/QzeZcSGF5YfncbLvpSGtrey+HCtnFKcFfHMdXzmI4MRKyqrFgb6XgL9lvd
-         O50yoO6GGni2i3RqS75/FndyQ6Q8Yk7umCSrrBc+ECDikFRcbAZkle2YW9RLcVL6LX
-         +9jwdgYsIwSvg==
+        s=k20201202; t=1643811019;
+        bh=undVi2xoxeBWosZOo7DDc5Nxn/ZvS7RImD4dfo8aGzo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PrQDpZWzbNuiXFltPWaepIQQ6/QYtV+bxM7M4oFMsRmE289mokJ63AEJPrrzH6iGg
+         z488v35qFJVCSc4P45MgLyPat+ut5wzY1lGwI2U64ixMJ3KCUaN7+ZHqenEItISHpl
+         emN6iMGnkLOYhvCzNToZlY1wqGYU7puUftHD6KnlHegI1Eg8LafZvrV3DKBwABdSfU
+         W8gSqkfiZ6po7U+1pd/v57TFQgpOHsSNl9YyLUH6CNfVrgGI4u6Q9r0A8iCsR6KJEz
+         nND4J55VZ0vEzf1dOuXZUxLd018EE3+Y9zRBLAfhrA+FlZZYi1m5FjPDqADVC8Nq4M
+         b+HaVdEmTyRIg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Shuah Khan <shuah@kernel.org>
@@ -39,280 +36,242 @@ Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         Takashi Sakamoto <o-takashi@sakamocchi.jp>,
         Mark Brown <broonie@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 1/2] kselftest: alsa: Check for event generation when we write to controls
-Date:   Wed,  2 Feb 2022 14:10:10 +0000
-Message-Id: <20220202141011.14924-1-broonie@kernel.org>
+Subject: [PATCH v2 2/2] kselftest: alsa: Declare most functions static
+Date:   Wed,  2 Feb 2022 14:10:11 +0000
+Message-Id: <20220202141011.14924-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220202141011.14924-1-broonie@kernel.org>
+References: <20220202141011.14924-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8238; h=from:subject; bh=CIhNbzAYIdtiQgDhDMW5zJ+2HCAbYDs3socLWaHaV7A=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh+o9+NRBF06QjWNxu4Wm1bx92rmTayMsgE3JyUBzw EqbsSIyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfqPfgAKCRAk1otyXVSH0C6mB/ 0d85HuqsYAhx2ZioDn/+7fk+f4YVnTx6SQ7J+Yx9PwALoGQoQyWrDNkP9syndMOodeN17r0AddPWhE bPNOcvD6qQfWkVPBTD21ibxrv60lP4KJFuKnNaWfrJd4qC42wJLLOhjPBYcRSHk46bFHh9MOldPFNz GFA+G5d98bZbM9n+Pdfa8qqo8/D3AmqIsReoH8itBH3cILtw6gd92ZRk4DiNmPjmIzdFZZMAGlbYr+ EQ0iMm2BBEiuxj1eic6uXvk/ZBL7BQbrb+Bo6B0mipbDzOfLHIP+QjreKIPCtfrMWX/9RW8A6v1v5M OK2XyYYsdYhznlje64/7oVzs2wJyit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7315; h=from:subject; bh=undVi2xoxeBWosZOo7DDc5Nxn/ZvS7RImD4dfo8aGzo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh+o9/qS3pVequsO6jsQTu5vObI6h7yD33Lqsnjndj Ep+15UGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfqPfwAKCRAk1otyXVSH0FDEB/ 0cr60mTmz5zM14OwI+xxU5NxXN2nF2+Jqk86lOWCRt3tLMqOziLMp5I8U/GrrpipgbeNvy0ecz8Ewq gKv0Ap5v1T1YQ9wYd7CjpeeqDn5jsl+6sPNWVv55IEEAG9xPLU1WGPxS6BpKIpzotVXSSiJ4FOAPVu UeW43qNKnqXXNTmEmLB/iqVKZCe44Si9YKH2Bv/KWWnlCig76R0CIOtHvox5VRBj/8ZalAPXemTkcG JbzBrGzD90FAAyVVIczdcrXs329Y3uos79niEpRNmzMKo0G76+NbHI6Uz/92cZKFWzkaVS+D2ZBBJ8 i391ssKl3KWOhFe/Paq5fhKEJq5oED
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some coverage of event generation to mixer-test. Rather than doing a
-separate set of writes designed to trigger events we add a step to the
-existing write_and_verify() which checks to see if the value we read back
-from non-volatile controls matches the value before writing and that an
-event is or isn't generated as appropriate. The "tests" for events then
-simply check that no spurious or missing events were detected. This avoids
-needing further logic to generate appropriate values for each control type
-and maximises coverage.
-
-When checking for events we use a timeout of 0. This relies on the kernel
-generating any event prior to returning to userspace when setting a control.
-That is currently the case and it is difficult to see it changing, if it
-does the test will need to be updated. Using a delay of 0 means that we
-don't slow things down unduly when checking for no event or when events
-fail to be generated.
-
-We don't check behaviour for volatile controls since we can't tell what
-the behaviour is supposed to be for any given control.
+This program has only one file so most functions can be static.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
-
-v2:
- - Get the numid from the API rather than using the control index.
-
- tools/testing/selftests/alsa/mixer-test.c | 148 +++++++++++++++++++++-
- 1 file changed, 145 insertions(+), 3 deletions(-)
+ tools/testing/selftests/alsa/mixer-test.c | 58 ++++++++++++-----------
+ 1 file changed, 30 insertions(+), 28 deletions(-)
 
 diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index 0e88f4f3d802..79ffbca429ee 100644
+index 79ffbca429ee..ac40c7d17152 100644
 --- a/tools/testing/selftests/alsa/mixer-test.c
 +++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -3,7 +3,7 @@
- // kselftest for the ALSA mixer API
- //
- // Original author: Mark Brown <broonie@kernel.org>
--// Copyright (c) 2021 Arm Limited
-+// Copyright (c) 2021-2 Arm Limited
+@@ -71,7 +71,8 @@ struct ctl_data *ctl_list = NULL;
+ #endif
  
- // This test will iterate over all cards detected in the system, exercising
- // every mixer control it can find.  This may conflict with other system
-@@ -27,11 +27,12 @@
+ #ifndef LIB_HAS_LOAD_STRING
+-int snd_config_load_string(snd_config_t **config, const char *s, size_t size)
++static int snd_config_load_string(snd_config_t **config, const char *s,
++				  size_t size)
+ {
+ 	snd_input_t *input;
+ 	snd_config_t *dst;
+@@ -99,7 +100,7 @@ int snd_config_load_string(snd_config_t **config, const char *s, size_t size)
+ }
+ #endif
  
- #include "../kselftest.h"
- 
--#define TESTS_PER_CONTROL 4
-+#define TESTS_PER_CONTROL 6
- 
- struct card_data {
- 	snd_ctl_t *handle;
- 	int card;
-+	struct pollfd pollfd;
- 	int num_ctls;
- 	snd_ctl_elem_list_t *ctls;
- 	struct card_data *next;
-@@ -43,6 +44,8 @@ struct ctl_data {
- 	snd_ctl_elem_info_t *info;
- 	snd_ctl_elem_value_t *def_val;
- 	int elem;
-+	int event_missing;
-+	int event_spurious;
- 	struct card_data *card;
- 	struct ctl_data *next;
- };
-@@ -149,6 +152,7 @@ void find_controls(void)
- 			if (!ctl_data)
- 				ksft_exit_fail_msg("Out of memory\n");
- 
-+			memset(ctl_data, 0, sizeof(*ctl_data));
- 			ctl_data->card = card_data;
- 			ctl_data->elem = ctl;
- 			ctl_data->name = snd_ctl_elem_list_get_name(card_data->ctls,
-@@ -184,6 +188,26 @@ void find_controls(void)
- 			ctl_list = ctl_data;
- 		}
- 
-+		/* Set up for events */
-+		err = snd_ctl_subscribe_events(card_data->handle, true);
-+		if (err < 0) {
-+			ksft_exit_fail_msg("snd_ctl_subscribe_events() failed for card %d: %d\n",
-+					   card, err);
-+		}
-+
-+		err = snd_ctl_poll_descriptors_count(card_data->handle);
-+		if (err != 1) {
-+			ksft_exit_fail_msg("Unexpected desciptor count %d for card %d\n",
-+					   err, card);
-+		}
-+
-+		err = snd_ctl_poll_descriptors(card_data->handle,
-+					       &card_data->pollfd, 1);
-+		if (err != 1) {
-+			ksft_exit_fail_msg("snd_ctl_poll_descriptors() failed for %d\n",
-+				       card, err);
-+		}
-+
- 	next_card:
- 		if (snd_card_next(&card) < 0) {
- 			ksft_print_msg("snd_card_next");
-@@ -194,6 +218,73 @@ void find_controls(void)
- 	snd_config_delete(config);
+-void find_controls(void)
++static void find_controls(void)
+ {
+ 	char name[32];
+ 	int card, ctl, err;
+@@ -222,7 +223,7 @@ void find_controls(void)
+  * Block for up to timeout ms for an event, returns a negative value
+  * on error, 0 for no event and 1 for an event.
+  */
+-int wait_for_event(struct ctl_data *ctl, int timeout)
++static int wait_for_event(struct ctl_data *ctl, int timeout)
+ {
+ 	unsigned short revents;
+ 	snd_ctl_event_t *event;
+@@ -285,8 +286,9 @@ int wait_for_event(struct ctl_data *ctl, int timeout)
+ 	return 1;
  }
  
-+/*
-+ * Block for up to timeout ms for an event, returns a negative value
-+ * on error, 0 for no event and 1 for an event.
-+ */
-+int wait_for_event(struct ctl_data *ctl, int timeout)
-+{
-+	unsigned short revents;
-+	snd_ctl_event_t *event;
-+	int count, err;
-+	unsigned int mask = 0;
-+	unsigned int ev_id;
-+
-+	snd_ctl_event_alloca(&event);
-+
-+	do {
-+		err = poll(&(ctl->card->pollfd), 1, timeout);
-+		if (err < 0) {
-+			ksft_print_msg("poll() failed for %s: %s (%d)\n",
-+				       ctl->name, strerror(errno), errno);
-+			return -1;
-+		}
-+		/* Timeout */
-+		if (err == 0)
-+			return 0;
-+
-+		err = snd_ctl_poll_descriptors_revents(ctl->card->handle,
-+						       &(ctl->card->pollfd),
-+						       1, &revents);
-+		if (err < 0) {
-+			ksft_print_msg("snd_ctl_poll_desciptors_revents() failed for %s: %d\n",
-+				       ctl->name, err);
-+			return err;
-+		}
-+		if (revents & POLLERR) {
-+			ksft_print_msg("snd_ctl_poll_desciptors_revents() reported POLLERR for %s\n",
-+				       ctl->name);
-+			return -1;
-+		}
-+		/* No read events */
-+		if (!(revents & POLLIN)) {
-+			ksft_print_msg("No POLLIN\n");
-+			continue;
-+		}
-+
-+		err = snd_ctl_read(ctl->card->handle, event);
-+		if (err < 0) {
-+			ksft_print_msg("snd_ctl_read() failed for %s: %d\n",
-+			       ctl->name, err);
-+			return err;
-+		}
-+
-+		if (snd_ctl_event_get_type(event) != SND_CTL_EVENT_ELEM)
-+			continue;
-+
-+		/* The ID returned from the event is 1 less than numid */
-+		mask = snd_ctl_event_elem_get_mask(event);
-+		ev_id = snd_ctl_event_elem_get_numid(event);
-+		if (ev_id != snd_ctl_elem_info_get_numid(ctl->info)) {
-+			ksft_print_msg("Event for unexpected ctl %s\n",
-+				       snd_ctl_event_elem_get_name(event));
-+			continue;
-+		}
-+	} while ((mask & SND_CTL_EVENT_MASK_VALUE) != SND_CTL_EVENT_MASK_VALUE);
-+
-+	return 1;
-+}
-+
- bool ctl_value_index_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val,
- 			   int index)
+-bool ctl_value_index_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val,
+-			   int index)
++static bool ctl_value_index_valid(struct ctl_data *ctl,
++				  snd_ctl_elem_value_t *val,
++				  int index)
  {
-@@ -428,7 +519,8 @@ int write_and_verify(struct ctl_data *ctl,
+ 	long int_val;
+ 	long long int64_val;
+@@ -397,7 +399,7 @@ bool ctl_value_index_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val,
+  * Check that the provided value meets the constraints for the
+  * provided control.
+  */
+-bool ctl_value_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val)
++static bool ctl_value_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val)
  {
- 	int err, i;
- 	bool error_expected, mismatch_shown;
--	snd_ctl_elem_value_t *read_val, *w_val;
-+	snd_ctl_elem_value_t *initial_val, *read_val, *w_val;
-+	snd_ctl_elem_value_alloca(&initial_val);
- 	snd_ctl_elem_value_alloca(&read_val);
- 	snd_ctl_elem_value_alloca(&w_val);
+ 	int i;
+ 	bool valid = true;
+@@ -413,7 +415,7 @@ bool ctl_value_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val)
+  * Check that we can read the default value and it is valid. Write
+  * tests use the read value to restore the default.
+  */
+-void test_ctl_get_value(struct ctl_data *ctl)
++static void test_ctl_get_value(struct ctl_data *ctl)
+ {
+ 	int err;
  
-@@ -446,6 +538,18 @@ int write_and_verify(struct ctl_data *ctl,
- 		snd_ctl_elem_value_copy(expected_val, write_val);
- 	}
- 
-+	/* Store the value before we write */
-+	if (snd_ctl_elem_info_is_readable(ctl->info)) {
-+		snd_ctl_elem_value_set_id(initial_val, ctl->id);
-+
-+		err = snd_ctl_elem_read(ctl->card->handle, initial_val);
-+		if (err < 0) {
-+			ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
-+				       snd_strerror(err));
-+			return err;
-+		}
-+	}
-+
- 	/*
- 	 * Do the write, if we have an expected value ignore the error
- 	 * and carry on to validate the expected value.
-@@ -470,6 +574,30 @@ int write_and_verify(struct ctl_data *ctl,
- 		return err;
- 	}
- 
-+	/*
-+	 * Check for an event if the value changed, or confirm that
-+	 * there was none if it didn't.  We rely on the kernel
-+	 * generating the notification before it returns from the
-+	 * write, this is currently true, should that ever change this
-+	 * will most likely break and need updating.
-+	 */
-+	if (!snd_ctl_elem_info_is_volatile(ctl->info)) {
-+		err = wait_for_event(ctl, 0);
-+		if (snd_ctl_elem_value_compare(initial_val, read_val)) {
-+			if (err < 1) {
-+				ksft_print_msg("No event generated for %s\n",
-+					       ctl->name);
-+				ctl->event_missing++;
-+			}
-+		} else {
-+			if (err != 0) {
-+				ksft_print_msg("Spurious event generated for %s\n",
-+					       ctl->name);
-+				ctl->event_spurious++;
-+			}
-+		}
-+	}
-+
- 	/*
- 	 * Use the libray to compare values, if there's a mismatch
- 	 * carry on and try to provide a more useful diagnostic than
-@@ -898,6 +1026,18 @@ void test_ctl_write_invalid(struct ctl_data *ctl)
+@@ -448,9 +450,9 @@ void test_ctl_get_value(struct ctl_data *ctl)
  			 ctl->card->card, ctl->elem);
  }
  
-+void test_ctl_event_missing(struct ctl_data *ctl)
-+{
-+	ksft_test_result(!ctl->event_missing, "event_missing.%d.%d\n",
-+			 ctl->card->card, ctl->elem);
-+}
-+
-+void test_ctl_event_spurious(struct ctl_data *ctl)
-+{
-+	ksft_test_result(!ctl->event_spurious, "event_spurious.%d.%d\n",
-+			 ctl->card->card, ctl->elem);
-+}
-+
- int main(void)
+-bool show_mismatch(struct ctl_data *ctl, int index,
+-		   snd_ctl_elem_value_t *read_val,
+-		   snd_ctl_elem_value_t *expected_val)
++static bool show_mismatch(struct ctl_data *ctl, int index,
++			  snd_ctl_elem_value_t *read_val,
++			  snd_ctl_elem_value_t *expected_val)
  {
- 	struct ctl_data *ctl;
-@@ -917,6 +1057,8 @@ int main(void)
- 		test_ctl_write_default(ctl);
- 		test_ctl_write_valid(ctl);
- 		test_ctl_write_invalid(ctl);
-+		test_ctl_event_missing(ctl);
-+		test_ctl_event_spurious(ctl);
- 	}
+ 	long long expected_int, read_int;
  
- 	ksft_exit_pass();
+@@ -513,9 +515,9 @@ bool show_mismatch(struct ctl_data *ctl, int index,
+  * the write to fail, for verifying that invalid writes don't corrupt
+  * anything.
+  */
+-int write_and_verify(struct ctl_data *ctl,
+-		     snd_ctl_elem_value_t *write_val,
+-		     snd_ctl_elem_value_t *expected_val)
++static int write_and_verify(struct ctl_data *ctl,
++			    snd_ctl_elem_value_t *write_val,
++			    snd_ctl_elem_value_t *expected_val)
+ {
+ 	int err, i;
+ 	bool error_expected, mismatch_shown;
+@@ -622,7 +624,7 @@ int write_and_verify(struct ctl_data *ctl,
+  * Make sure we can write the default value back to the control, this
+  * should validate that at least some write works.
+  */
+-void test_ctl_write_default(struct ctl_data *ctl)
++static void test_ctl_write_default(struct ctl_data *ctl)
+ {
+ 	int err;
+ 
+@@ -655,7 +657,7 @@ void test_ctl_write_default(struct ctl_data *ctl)
+ 			 ctl->card->card, ctl->elem);
+ }
+ 
+-bool test_ctl_write_valid_boolean(struct ctl_data *ctl)
++static bool test_ctl_write_valid_boolean(struct ctl_data *ctl)
+ {
+ 	int err, i, j;
+ 	bool fail = false;
+@@ -676,7 +678,7 @@ bool test_ctl_write_valid_boolean(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-bool test_ctl_write_valid_integer(struct ctl_data *ctl)
++static bool test_ctl_write_valid_integer(struct ctl_data *ctl)
+ {
+ 	int err;
+ 	int i;
+@@ -706,7 +708,7 @@ bool test_ctl_write_valid_integer(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-bool test_ctl_write_valid_integer64(struct ctl_data *ctl)
++static bool test_ctl_write_valid_integer64(struct ctl_data *ctl)
+ {
+ 	int err, i;
+ 	long long j, step;
+@@ -734,7 +736,7 @@ bool test_ctl_write_valid_integer64(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
++static bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
+ {
+ 	int err, i, j;
+ 	bool fail = false;
+@@ -755,7 +757,7 @@ bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-void test_ctl_write_valid(struct ctl_data *ctl)
++static void test_ctl_write_valid(struct ctl_data *ctl)
+ {
+ 	bool pass;
+ 	int err;
+@@ -808,8 +810,8 @@ void test_ctl_write_valid(struct ctl_data *ctl)
+ 			 ctl->card->card, ctl->elem);
+ }
+ 
+-bool test_ctl_write_invalid_value(struct ctl_data *ctl,
+-				  snd_ctl_elem_value_t *val)
++static bool test_ctl_write_invalid_value(struct ctl_data *ctl,
++					 snd_ctl_elem_value_t *val)
+ {
+ 	int err;
+ 	long val_read;
+@@ -830,7 +832,7 @@ bool test_ctl_write_invalid_value(struct ctl_data *ctl,
+ 	return !ctl_value_valid(ctl, val);
+ }
+ 
+-bool test_ctl_write_invalid_boolean(struct ctl_data *ctl)
++static bool test_ctl_write_invalid_boolean(struct ctl_data *ctl)
+ {
+ 	int err, i;
+ 	long val_read;
+@@ -849,7 +851,7 @@ bool test_ctl_write_invalid_boolean(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-bool test_ctl_write_invalid_integer(struct ctl_data *ctl)
++static bool test_ctl_write_invalid_integer(struct ctl_data *ctl)
+ {
+ 	int i;
+ 	bool fail = false;
+@@ -895,7 +897,7 @@ bool test_ctl_write_invalid_integer(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-bool test_ctl_write_invalid_integer64(struct ctl_data *ctl)
++static bool test_ctl_write_invalid_integer64(struct ctl_data *ctl)
+ {
+ 	int i;
+ 	bool fail = false;
+@@ -941,7 +943,7 @@ bool test_ctl_write_invalid_integer64(struct ctl_data *ctl)
+ 	return !fail;
+ }
+ 
+-bool test_ctl_write_invalid_enumerated(struct ctl_data *ctl)
++static bool test_ctl_write_invalid_enumerated(struct ctl_data *ctl)
+ {
+ 	int err, i;
+ 	unsigned int val_read;
+@@ -973,7 +975,7 @@ bool test_ctl_write_invalid_enumerated(struct ctl_data *ctl)
+ }
+ 
+ 
+-void test_ctl_write_invalid(struct ctl_data *ctl)
++static void test_ctl_write_invalid(struct ctl_data *ctl)
+ {
+ 	bool pass;
+ 	int err;
+@@ -1026,13 +1028,13 @@ void test_ctl_write_invalid(struct ctl_data *ctl)
+ 			 ctl->card->card, ctl->elem);
+ }
+ 
+-void test_ctl_event_missing(struct ctl_data *ctl)
++static void test_ctl_event_missing(struct ctl_data *ctl)
+ {
+ 	ksft_test_result(!ctl->event_missing, "event_missing.%d.%d\n",
+ 			 ctl->card->card, ctl->elem);
+ }
+ 
+-void test_ctl_event_spurious(struct ctl_data *ctl)
++static void test_ctl_event_spurious(struct ctl_data *ctl)
+ {
+ 	ksft_test_result(!ctl->event_spurious, "event_spurious.%d.%d\n",
+ 			 ctl->card->card, ctl->elem);
 -- 
 2.30.2
 
