@@ -2,133 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECAE4A7486
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 16:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93824A748E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 16:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiBBPXa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 10:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345455AbiBBPX3 (ORCPT
+        id S241662AbiBBPY1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Feb 2022 10:24:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34431 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230484AbiBBPY1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:23:29 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3CCC06173B
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 07:23:29 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id q204so25838039iod.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 07:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XFqlwHLzxsSkTu4EbLQcoHbn4CyjCcQeSmjOwD3D0b8=;
-        b=KjTnQGPzCt0S96UuIiNaawuVsmZa9fYmRebjLuFamfRMalfj7glkboFmx2YQiVjxxi
-         OFiyfetLE/KKL1YviKxiRuabpPFcUmMMwWrECiJfjImb8tCVUyU600HZGw/+E5Jg7ncm
-         fQtaS1Gh6MWfhgntWc+BtgcMKLgRdFXik9aGQ=
+        Wed, 2 Feb 2022 10:24:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643815466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=wbfCqbIp07biNHmVcfksEUeSGRpB450MoXKgsGlsSvU=;
+        b=HMemB6W1MJl6f/EhBa1diVX0153MfAtp76qCqgrONHmB7YxuDWviql5atT5wf7tQUbNAug
+        hL/PwPRm59oTyVT9nYyrauHIOA23qzamnckV8SheO1F/2CziX7PO3O9VBfEGp/f2dDpQlF
+        rvh3xt0uOb9uKpiNi4kfHekyXZ9R5lc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-353-LAm3A_J_O_mHOOUvRXhBPg-1; Wed, 02 Feb 2022 10:24:26 -0500
+X-MC-Unique: LAm3A_J_O_mHOOUvRXhBPg-1
+Received: by mail-wr1-f72.google.com with SMTP id x4-20020adfbb44000000b001d83e815683so6908704wrg.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 07:24:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XFqlwHLzxsSkTu4EbLQcoHbn4CyjCcQeSmjOwD3D0b8=;
-        b=rPEW2zqSF2YRQ1GxJjP5ddTp9J4ZcvibNMvxlbtdJZtjx8dT2Z6XWNIRiOlNc+9MOp
-         7RIlhR7Um5/mdjCg2p6yOI8bPQfXIQR6kLSHJ86yMkLb8ghBm0tsP50gcPEwWI6+1t+u
-         11xjVNgAFkzD9j1mbvjiLV0VNlGTbS6N1SBal1CTnjH1bAOQYEoG3+hWYNdeFKJ7IEO1
-         rFQlkd2H5vS/PbLHz/CnN3E8COsieTgondeEvZn4+cvpyMfnKdYNxOzHh2XvwbQRukPt
-         erKfsYOTqneakg976XeXTVPkpEO64cSav0ZfBPG3uF1FqWrCAP1SzWHot1l9fTThWdVc
-         v+Cg==
-X-Gm-Message-State: AOAM531lCqTr37vTjcnWtFHSfEIZ1EEqpkO6KqiOkHUy4GqcLSQ7xrSa
-        XMSgjcaZtF//VzJMuiz34Y5aAQ==
-X-Google-Smtp-Source: ABdhPJwDnQ5AYawUXmJEJT+iihMTgbH4Y5Qg1y5crUIqxFnZmWZ4x9zV9SU+rsirQ4wVe6B0oamhbg==
-X-Received: by 2002:a02:aa0a:: with SMTP id r10mr9395203jam.246.1643815409098;
-        Wed, 02 Feb 2022 07:23:29 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id z23sm15236046iol.11.2022.02.02.07.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:23:28 -0800 (PST)
-Subject: Re: kselftest tree on kernelci.org
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ece6ea91-c44b-0bea-c4a2-ec099fa94881@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 08:23:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=wbfCqbIp07biNHmVcfksEUeSGRpB450MoXKgsGlsSvU=;
+        b=o8jUmZTpiEJccXzy3caphtBke1SomP8WaxQTQwBbwCm8cqtsbHX2DLarltOGAVorVw
+         Dhz1Ixg39H8wcPa9IOwL5xxmX4sOPJCKSDh8eppCURdgt0O7+rFjDh757RRbil5YP4e7
+         VwEL+4FeyBhrBjE9Q6oz/WxJljo6BPT+mCpSD6NH9HJgTtQbix46Re6HtCOJh5KAvn1N
+         hpyZaryERA+hneCJYzvEUWtVKNcV3dGt4297eRAgJHfX1+qWRatxhU83qXS+t29QSSd8
+         m0H88x7mmNpIYxTAzF/RLigi51ufdT4/+Q9vRz5na3yUy83mrv8jLXd02/YFErBty0IT
+         rSbw==
+X-Gm-Message-State: AOAM5311/oEkAihzuSt4zlbKpP/OqE/FlCzNEHo0Ym1v3S8so0Scb5hQ
+        R2U69aLC599bCe17Ci4/i7xkYDhMPc04YPFwdSs6YfZav9UJV8aQTFiY4pQZYQXTyVojMz9acel
+        SJl/SPK/L71hLNg/OC7Wf/g2jNIT+
+X-Received: by 2002:adf:d1e9:: with SMTP id g9mr25495217wrd.166.1643815464416;
+        Wed, 02 Feb 2022 07:24:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxlOhXtDJ+HPBsWYCYPkfTLAvav6APznjRzlOdHckDMQxh4xTH4iZD4qtIRH5SWVifZEpvEqg==
+X-Received: by 2002:adf:d1e9:: with SMTP id g9mr25495200wrd.166.1643815464205;
+        Wed, 02 Feb 2022 07:24:24 -0800 (PST)
+Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id ay3sm4988031wmb.44.2022.02.02.07.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 07:24:23 -0800 (PST)
+Date:   Wed, 2 Feb 2022 16:24:21 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, Florian Westphal <fw@strlen.de>
+Subject: [PATCH net-next] selftests: rtnetlink: Use more sensible tos values
+Message-ID: <d61119e68d01ba7ef3ba50c1345a5123a11de123.1643815297.git.gnault@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Guillaume,
+Using tos 0x1 with 'ip route get <IPv4 address> ...' doesn't test much
+of the tos option handling: 0x1 just sets an ECN bit, which is cleared
+by inet_rtm_getroute() before doing the fib lookup. Let's use 0x10
+instead, which is actually taken into account in the route lookup (and
+is less surprising for the reader).
 
-On 2/2/22 6:32 AM, Guillaume Tucker wrote:
-> Hi Shuah,
-> 
-> I've made this PR to start monitoring the "fixes" branch from the
-> kselftest tree on kernelci.org:
-> 
->    https://github.com/kernelci/kernelci-core/pull/998
-> 
+For consistency, use 0x10 for the IPv6 route lookup too (IPv6 currently
+doesn't clear ECN bits, but might do so in the future).
 
-Thank you.
+Signed-off-by: Guillaume Nault <gnault@redhat.com>
+---
+No Fixes tag, since this is for net-next and the original test wasn't
+actually broken in the first place.
 
-> While kselftest changes eventually land in linux-next, monitoring
-> your tree directly means we can test it earlier and potentially
-> enable more build variants or experimental tests.  Since
-> kernelci.org also builds and runs some kselftests we're regularly
-> finding issues and people are sending fixes for them.  See this
-> recent story for example:
-> 
->    https://twitter.com/kernelci/status/1488831497259921409
-> 
-> Keeping an eye on kselftest patches with kernelci.org means we
-> can verify that fixes do what they're supposed to do with a much
-> larger test coverage than what individual developers can do.
-> We've been applying kselftest fixes on a branch managed by
-> kernelci.org to verify them in the past, but having the actual
-> kselftest tree part of the workflow would seem much better.
-> 
+ tools/testing/selftests/net/rtnetlink.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Absolutely.
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index c9ce3dfa42ee..0900c5438fbb 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -216,9 +216,9 @@ kci_test_route_get()
+ 	check_err $?
+ 	ip route get fe80::1 dev "$devdummy" > /dev/null
+ 	check_err $?
+-	ip route get 127.0.0.1 from 127.0.0.1 oif lo tos 0x1 mark 0x1 > /dev/null
++	ip route get 127.0.0.1 from 127.0.0.1 oif lo tos 0x10 mark 0x1 > /dev/null
+ 	check_err $?
+-	ip route get ::1 from ::1 iif lo oif lo tos 0x1 mark 0x1 > /dev/null
++	ip route get ::1 from ::1 iif lo oif lo tos 0x10 mark 0x1 > /dev/null
+ 	check_err $?
+ 	ip addr add dev "$devdummy" 10.23.7.11/24
+ 	check_err $?
+-- 
+2.21.3
 
-> There are several branches in your tree, while "fixes" seemed
-> like the most useful one to pick I see there is also a "kernelci"
-> branch too but it hasn't been updated for a while, reviving it
-> could give you the possibility to test patches through
-> kernelci.org before applying them on other branches that get
-> pulled into linux-next and mainline.
-> 
-
-This branch was a topic branch specific for changes I made for
-kernelci runs to be cleaner - I should delete this.
-
-If you are looking for other branches to monitor in addition to
-"fixes" branch, the following are the ones to add:
-
-next (for the merge window), kunit (kunit changes slated for merge window),
-kunit-fixes
-
-> Many things could potentially be done with arbitrary builds and
-> tests etc.  These are some initial suggestions.  How does this
-> sound?
-
-Sounds great to me. Since selftest patches flow through various
-subsystem trees, having kernelci keep an eye is great. This would
-be another pair of eyes in addition to occasional tests I run and
-Linaro (LKTP) monitoring next.
-
-How often do you send reports - I will watch out for them. Thanks
-again for taking the initiative to add kselftest to kernelci.
-
-thanks,
--- Shuah
