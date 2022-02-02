@@ -2,69 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292EA4A74F8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 16:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072674A76F4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 18:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345566AbiBBPxx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 10:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S1346303AbiBBRi7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Feb 2022 12:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343836AbiBBPxx (ORCPT
+        with ESMTP id S230409AbiBBRi7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:53:53 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F71BC06173B
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 07:53:53 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id c188so25973943iof.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 07:53:53 -0800 (PST)
+        Wed, 2 Feb 2022 12:38:59 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5499DC061714
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 09:38:59 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id c188so26404582iof.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 09:38:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
-        b=ENABLJMA05R4soziave+d7UPm5zfjbrRymzXBoJsaW0z6qAKD2n9BRtw7tMe8IWvtT
-         Dtw076aY5ms2kHZAAIDpNevhFb8kbWcCRn5sIFiTdWfl+S4e2MesYrqCgrU0NJHNQkOc
-         frhUCeyRRNVCb6l36CVwAiB4lbVwnXLyCG9nQ=
+        bh=5ZgUDIIYZb0p0sGt1ruE6r7EKduNuE6iJPlnBrAIoKA=;
+        b=cUKtZGMEPyShwOxkBLK4TT6kN7iU9FHiF/YbNpPfqYjw0okt5j1OVTXSJqqaOO1qic
+         /YNUuFlCbUAaGudiS8lOBDA3wHToNsrSsxYGp1MlhN6AGhKBfd3tQ42rHsivBJ0Xao5K
+         Ny30q3/1w0SYI7sr4pWArpxIagMxVCqYJcmwo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
-        b=YO6FNN1aBG8hj8FFprvs8pD3SfPUfMdE7YbRBUHX9dGwhOIZ/ATZGMk//beqEoLqk1
-         rhkMUq64hpACD117+K5icz4GrnaqdkxWQbhupQJl0swrbUKWmnwVJEIWDmzyvfHNcixI
-         A17floHqLvtWLWko/LWLZyvVD/fGOaXuhcO8OxNfels6ka1gGYC+vSZHJMK4RAFq2Bmi
-         N/1uEslGqiyuOMM/zxKkCvbnb4KxHv2wvWP2DkxBGES8+pPhokSel4zmIpVhaK/ILh3G
-         hOAfJ9w8zvLQhgSZQrsOn5eH4ESKgl9RPA9WEx1DREaJ3iCIT6V85ELOfTlA4aLQ10O4
-         78Pg==
-X-Gm-Message-State: AOAM533rrHYgBxkzj+Ay5U7V8u7A2u+ZclkD0yK/jvZsuK3oXKBu+w/R
-        B2T5xpnBgUY6Nk5gIom6mFlPXg==
-X-Google-Smtp-Source: ABdhPJw6EtuJMPNRgqXBZ1urjdtS9DTte0fKkn/dXlVvcSumMDMNt2EoK1WwnohoNyDsHDMB2u/rhg==
-X-Received: by 2002:a02:9f07:: with SMTP id z7mr12280320jal.87.1643817232526;
-        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
+        bh=5ZgUDIIYZb0p0sGt1ruE6r7EKduNuE6iJPlnBrAIoKA=;
+        b=HVYVL+DnFrNsSW5H3BWWqQfvPfsgDXnFwq5b6YxADpIXfhRbbgYjKVISZHDIyq0Jxi
+         qrRxa3ZpCW6V6ao3mbnP6PjpiUac0l75Cq8WHASq1gzveUOhuSHIt9CTrPvlPcYoswD8
+         FBita6ZSwjEZz4oqQ92MYUUtWGBsGSwklxbKCI1mdH7SY2nlcWZwpJ2Ud134xIuVQqSo
+         UZjyv1Ht/ySLzbXOFRDcaGqQESVquf17BEVjQWeiZL+1LWUuo7hKshICKNF+eW76PqM1
+         T/NxLZB+B2W2lbqvw70OK4WDM+QPw8bO/o0n9thyItWwVpGBnFBAe8eAQmiy2W/hslX1
+         CTFg==
+X-Gm-Message-State: AOAM533JPkR/qvyGy/PvqcnFx4t068BZ5l30E6VuI+gJslznX/VZGz7D
+        t3bIZPycKXMJ9AKPFCTUFtVgzw==
+X-Google-Smtp-Source: ABdhPJywVmU21xcaWcoRexhtWbe7YKkj4yex5iylSdnFCIHBDrhD2VplYVOBvZUOkDTituScSgE0Hw==
+X-Received: by 2002:a05:6638:4105:: with SMTP id ay5mr16415785jab.186.1643823538745;
+        Wed, 02 Feb 2022 09:38:58 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id o4sm17381145iou.42.2022.02.02.07.53.50
+        by smtp.gmail.com with ESMTPSA id y22sm3767548iow.2.2022.02.02.09.38.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
-Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-To:     Christian Brauner <brauner@kernel.org>,
-        Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220127221115.3731388-1-axelrasmussen@google.com>
- <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
+        Wed, 02 Feb 2022 09:38:58 -0800 (PST)
+Subject: Re: [PATCH] selftests/exec: Avoid future NULL argv execve warning
+To:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220201000807.2453486-1-keescook@chromium.org>
+ <Yfqfo0rbq/B/l6IP@localhost.localdomain>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <54a0cd63-6ec9-21fa-722a-da933b0ff1bf@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 08:53:49 -0700
+Message-ID: <7af32164-dbdf-26f1-1aaa-b720365f9743@linuxfoundation.org>
+Date:   Wed, 2 Feb 2022 10:38:57 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
+In-Reply-To: <Yfqfo0rbq/B/l6IP@localhost.localdomain>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,29 +76,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/28/22 1:57 AM, Christian Brauner wrote:
-> On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
->> These are some trivial fixups, which were needed to build the tests with
->> clang and -Werror. The following issues are fixed:
->>
->> - Remove various unused variables.
->> - In child_poll_leader_exit_test, clang isn't smart enough to realize
->>    syscall(SYS_exit, 0) won't return, so it complains we never return
->>    from a non-void function. Add an extra exit(0) to appease it.
->> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
->>    uninitialized, if we have !use_waitpid. Initialize it to zero to get
->>    the right behavior in that case.
->>
->> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->> ---
+On 2/2/22 8:13 AM, Alexey Dobriyan wrote:
+> On Mon, Jan 31, 2022 at 04:08:07PM -0800, Kees Cook wrote:
+>> Build actual argv for launching recursion test to avoid future warning
+>> about using an empty argv in execve().
 > 
-> Thanks!
-> (Fwiw, all those tests should also be ported to use the TEST_*() harness
-> infra. Currently it's an annoying mix.)
-> Acked-by: Christian Brauner <brauner@kernel.org>
+>> --- a/tools/testing/selftests/exec/recursion-depth.c
+>> +++ b/tools/testing/selftests/exec/recursion-depth.c
+>> @@ -24,8 +24,14 @@
+>>   #include <sys/mount.h>
+>>   #include <unistd.h>
+>>   
+>> +#define FILENAME "/tmp/1"
+>> +#define HASHBANG "#!" FILENAME "\n"
+>> +
+>>   int main(void)
+>>   {
+>> +	char * const argv[] = { FILENAME, NULL };
+>> +	int rv;
 > 
+> Can we move out of -Wdeclaration-after-statement mentality in tests at least?
 
-Yes. Porting would be great. I will take this for now for 5.17-rc4
+selftest like the rest of the kernel follows the same coding guidelines.
+It will follow the moving "-Wdeclaration-after-statement mentality" when
+the rest of the kernel does.
+
+Looks like this topic was discussed in the following:
+https://patchwork.kernel.org/project/linux-kbuild/patch/c6fda26e8d134264b04fadc3386d6c32@gmail.com/
 
 thanks,
 -- Shuah
