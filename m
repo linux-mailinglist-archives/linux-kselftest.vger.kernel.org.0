@@ -2,108 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C064A79E6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 22:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B366A4A7A05
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 22:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238715AbiBBVAi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 16:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S1347440AbiBBVKR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Feb 2022 16:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347368AbiBBVAh (ORCPT
+        with ESMTP id S237717AbiBBVKR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 16:00:37 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AACC061714;
-        Wed,  2 Feb 2022 13:00:36 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id k18so840912wrg.11;
-        Wed, 02 Feb 2022 13:00:36 -0800 (PST)
+        Wed, 2 Feb 2022 16:10:17 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238EAC06173B
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 13:10:17 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id n17so701500iod.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 13:10:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7OLSMx2LWSD7WsWcsdtwVZjsVIo2l+VXQLS4NW/dV3s=;
-        b=eFLJLpFYFhHEofxCZUnGM50cphxmqi3TKrpCx+wcfetrsnhrHvhxr4vOJE7lYB9ZmT
-         /elrTIKpSpkNXbqzxpdrXO2XLx2iEBrHH6xoHjDn+FbU4BKv6zKwNVN21CO+5xc3Q3Wf
-         8JKqHd/l5LZtx1UNv6k/TCXVkNZGL6v3a4kNko+voY2evS+gEb46C0pQ8OzSTtQs7eRe
-         TnD0irmM9NqYkKyUvBgrOjQkKwLVCIrCjj2Ic8XUshmvRRkPVspCOJU2ZB0Y+O8xoyCf
-         aEzKh+7sGJIbiGcAOtsLd45+WZlD/YL3t9Af/XVy46iejsEd+O6bWOu0HMrzUUxWtaaP
-         TRYA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3t75659HzPBq87wFRBg/hKoyMSaZFRX143OrPCse9fA=;
+        b=FetyPppDYU956R83igKID+s65jxrPkNP9iHqHnYDnzitra0C3DnelZ7GXPiKprrgb0
+         XJyqkDaqbxlDVvpMEDWTdcBGD2368gDxM7OkZK42TJkWP/3pGxxp/pt6a2w2cOnaVQ2u
+         +h9uqANz/+hYCmJUiwEHvljOoHS/HcPpgt8Is=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7OLSMx2LWSD7WsWcsdtwVZjsVIo2l+VXQLS4NW/dV3s=;
-        b=5tHP4qXhBSqYZV0QAAEf3J2QVGn/2kGyD/AasRlG/uQClMur1NKvQ179+75mPm9lJ6
-         SvjWkiMXi77NlkFXgdpItQHIJYzoKFxCj2DAq39ojLJo0+nXgGgxh7cPWPrdTJzCMhDz
-         Dj9knsKOAHKNG6y8Pu65HNvH1/dzltQFuP3zsT1dcH3XBCdUVsxBghLMXMs/1BV6m9dg
-         qOc90AnW5YJhvMhc1OAByftpV6BUhSpVIRlXFKLuF+Zi7rqSC9xyB92trWZV20bLwqli
-         QAsGrxy4tdoRwIw2yyxQGnRfjMhFlRcMyRGCOhLbMuJH88pbcK4nCFCvgt1ow853AwLn
-         5/SA==
-X-Gm-Message-State: AOAM533gaI2oGgdc6xQDx8jijjWlmAcprRuuGn+axjuSVj1gkWekJJ53
-        77CsZxfMGMgpkSOodskLaw==
-X-Google-Smtp-Source: ABdhPJzyLbGClv9WiZEVQXQQzzJST75S7NNTUYTVo82rCjZ58Cit08TatZSRK6vgPtbzGK74oumIzA==
-X-Received: by 2002:a5d:494b:: with SMTP id r11mr27085816wrs.626.1643835635248;
-        Wed, 02 Feb 2022 13:00:35 -0800 (PST)
-Received: from localhost.localdomain ([46.53.252.48])
-        by smtp.gmail.com with ESMTPSA id j19sm6464929wmq.17.2022.02.02.13.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 13:00:34 -0800 (PST)
-Date:   Thu, 3 Feb 2022 00:00:32 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3t75659HzPBq87wFRBg/hKoyMSaZFRX143OrPCse9fA=;
+        b=wsWUZ/2P95FXtbgNlN5wPeay8KFhnf+Zyotp9WW+IkCjhXPQFxxtzRLnJZOQeF+Szn
+         WVl7xxWBvUpnJVO35Z32n5mWzUC1ltVa9LqIyoGWUX0Nte5PzUto1cE+JrFhRPlnGkwG
+         CCjxU45dzGXknpIGIazVCYCwT2MMIxN+aHaVCDT5/VA8R5kwmHQUJOzrShmcx020yisC
+         vmhXKJ/XIQEGqye3+0LA1kPnXRgncIP3tYn4sIotzYMwRb/kPtzt9PU9eCdWhLdi2/sT
+         nxsvNk4DwNi+BWQFfoRFrBbBEUjtst+B24+pfumfX8P6brTdU/hIEtj8AarG7SfoWtUp
+         i98A==
+X-Gm-Message-State: AOAM5302k+9BZ047eUHujRiFASMJD8HH7/UosAV1HcRvA64ie8/0n+Mx
+        NRHHt9fuFzw485AjwXD6s9O1TQ==
+X-Google-Smtp-Source: ABdhPJzZ/U40pLxN1F7mOBlTvI7e1PiFI3vnLg2IOzGJpegL6dPnnCWv9ezVVSNzL/N6gkrjlBskXQ==
+X-Received: by 2002:a05:6638:3888:: with SMTP id b8mr15850151jav.250.1643836216416;
+        Wed, 02 Feb 2022 13:10:16 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c3sm24565292iow.28.2022.02.02.13.10.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 13:10:16 -0800 (PST)
+Subject: Re: [PATCH net-next] selftests: fib offload: use sensible tos values
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] selftests/exec: Avoid future NULL argv execve warning
-Message-ID: <Yfrw8GREVRgN76tF@localhost.localdomain>
-References: <20220201000807.2453486-1-keescook@chromium.org>
- <Yfqfo0rbq/B/l6IP@localhost.localdomain>
- <7af32164-dbdf-26f1-1aaa-b720365f9743@linuxfoundation.org>
+        Ido Schimmel <idosch@mellanox.com>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <5e43b343720360a1c0e4f5947d9e917b26f30fbf.1643826556.git.gnault@redhat.com>
+ <54a7071e-71ad-0c7d-ccc4-0f85dbe1e077@linuxfoundation.org>
+ <20220202201614.GB15826@pc-4.home>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c5be299d-35e9-9ae9-185f-2faa6eccb149@linuxfoundation.org>
+Date:   Wed, 2 Feb 2022 14:10:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7af32164-dbdf-26f1-1aaa-b720365f9743@linuxfoundation.org>
+In-Reply-To: <20220202201614.GB15826@pc-4.home>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 10:38:57AM -0700, Shuah Khan wrote:
-> On 2/2/22 8:13 AM, Alexey Dobriyan wrote:
-> > On Mon, Jan 31, 2022 at 04:08:07PM -0800, Kees Cook wrote:
-> > > Build actual argv for launching recursion test to avoid future warning
-> > > about using an empty argv in execve().
-> > 
-> > > --- a/tools/testing/selftests/exec/recursion-depth.c
-> > > +++ b/tools/testing/selftests/exec/recursion-depth.c
-> > > @@ -24,8 +24,14 @@
-> > >   #include <sys/mount.h>
-> > >   #include <unistd.h>
-> > > +#define FILENAME "/tmp/1"
-> > > +#define HASHBANG "#!" FILENAME "\n"
-> > > +
-> > >   int main(void)
-> > >   {
-> > > +	char * const argv[] = { FILENAME, NULL };
-> > > +	int rv;
-> > 
-> > Can we move out of -Wdeclaration-after-statement mentality in tests at least?
+On 2/2/22 1:16 PM, Guillaume Nault wrote:
+> On Wed, Feb 02, 2022 at 12:46:10PM -0700, Shuah Khan wrote:
+>> On 2/2/22 11:30 AM, Guillaume Nault wrote:
+>>> Although both iproute2 and the kernel accept 1 and 2 as tos values for
+>>> new routes, those are invalid. These values only set ECN bits, which
+>>> are ignored during IPv4 fib lookups. Therefore, no packet can actually
+>>> match such routes. This selftest therefore only succeeds because it
+>>> doesn't verify that the new routes do actually work in practice (it
+>>> just checks if the routes are offloaded or not).
+>>>
+>>> It makes more sense to use tos values that don't conflict with ECN.
+>>> This way, the selftest won't be affected if we later decide to warn or
+>>> even reject invalid tos configurations for new routes.
+>>
+>> Wouldn't it make sense to leave these invalid values in the test though.
+>> Removing these makes this test out of sync withe kernel.
 > 
-> selftest like the rest of the kernel follows the same coding guidelines.
-> It will follow the moving "-Wdeclaration-after-statement mentality" when
-> the rest of the kernel does.
+> Do you mean keeping the test as is and only modify it when (if) we
+> decide to reject such invalid values?
+
+This is for sure. Remove the invalid values in sync with the kernel code.
+
+> Or to write two versions of the
+> test, one with invalid values, the other with correct ones?
 > 
-> Looks like this topic was discussed in the following:
-> https://patchwork.kernel.org/project/linux-kbuild/patch/c6fda26e8d134264b04fadc3386d6c32@gmail.com/
 
-The only real argument is "gcc miscompiles /proc" to which adding -Wdeclaration-after-statement
-looks like a too big hammer.
+This one makes sense if it adds value in testing to make sure we continue
+to reject invalid values.
 
-Why can't we have nice things?
+> I don't get what keeping a test with the invalid values could bring us.
+> It's confusing for the reader, and might break in the future. This
+> patch makes the test future proof, without altering its intent and code
+> coverage. It still works on current (and past) kernels, so I don't see
+> what this patch could make out of sync.
+> 
+
+If kernel still accepts these values, then the test is valid as long as
+kernel still doesn't flag these values as invalid.
+
+I might be missing something. Don't you want to test with invalid values
+so make sure they are indeed rejected?
+
+thanks,
+-- Shuah
