@@ -2,81 +2,317 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302B64A7197
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 14:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1CB4A72BD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Feb 2022 15:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiBBNch (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 08:32:37 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57642 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiBBNcg (ORCPT
+        id S1344785AbiBBOKT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Feb 2022 09:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344787AbiBBOKS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:32:36 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gtucker)
-        with ESMTPSA id 9916E1F4459C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643808755;
-        bh=itrri+xresWOD9wIBg0EiwvvsJKxEyhEpv0hS7QNFeI=;
-        h=Date:To:Cc:From:Subject:From;
-        b=UM3XKm6Gi0hGCd5eFhRcCp3L4CEbSIPf4nPxxWwoH0pVgDDgMGtWsV0pDal0hQrOn
-         BWJvOqsToB24U7dOgQdeSNYiBXZPUgKvR6PP0l0qkv0TpHf3cb2y73jXzq7QEm+wJS
-         AW/KgGGCWWiq4yryMuUwSZP+FIQ0BQqlS+0mlZqf5mQ4/zS/bACVHTJMtgpQuthiQw
-         cRYGFr66Noz8R2nxjHjJSvkUfczT9xOuHle7lZFC+FPOM/QhaPKUxfOfspcDQiYwx6
-         XMFhfj+kQQX6OvkdUaZ5yHThKyPqzUJAc4Q61+Jst+2E844wCRh1aP/BPfB+5ea7yJ
-         +l8HJy4aKR5PQ==
-Message-ID: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
-Date:   Wed, 2 Feb 2022 13:32:31 +0000
+        Wed, 2 Feb 2022 09:10:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B5BC061714
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 06:10:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 759AB617F0
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 14:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24018C004E1;
+        Wed,  2 Feb 2022 14:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643811016;
+        bh=CIhNbzAYIdtiQgDhDMW5zJ+2HCAbYDs3socLWaHaV7A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ANsM53l6AELpiXnW6LfjeS9tO4cCvGLueNq+qybycT/WrTKPZOpsKcKZJlXtH+Qfd
+         DgWRBT7GghWpAZJohEInVin2d7uXPksjjRvuYvV5kIMpkU4IYi6IDQiUkzcQ1D69QB
+         m9vRgaFzQ5QYzEc8JZae7aVM7SLRj7gRN4wlI2y/oKtSIVJnPonx+rCUWKklPg/Dzd
+         7T0tgYY/QzeZcSGF5YfncbLvpSGtrey+HCtnFKcFfHMdXzmI4MRKyqrFgb6XgL9lvd
+         O50yoO6GGni2i3RqS75/FndyQ6Q8Yk7umCSrrBc+ECDikFRcbAZkle2YW9RLcVL6LX
+         +9jwdgYsIwSvg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v2 1/2] kselftest: alsa: Check for event generation when we write to controls
+Date:   Wed,  2 Feb 2022 14:10:10 +0000
+Message-Id: <20220202141011.14924-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-Subject: kselftest tree on kernelci.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8238; h=from:subject; bh=CIhNbzAYIdtiQgDhDMW5zJ+2HCAbYDs3socLWaHaV7A=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh+o9+NRBF06QjWNxu4Wm1bx92rmTayMsgE3JyUBzw EqbsSIyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfqPfgAKCRAk1otyXVSH0C6mB/ 0d85HuqsYAhx2ZioDn/+7fk+f4YVnTx6SQ7J+Yx9PwALoGQoQyWrDNkP9syndMOodeN17r0AddPWhE bPNOcvD6qQfWkVPBTD21ibxrv60lP4KJFuKnNaWfrJd4qC42wJLLOhjPBYcRSHk46bFHh9MOldPFNz GFA+G5d98bZbM9n+Pdfa8qqo8/D3AmqIsReoH8itBH3cILtw6gd92ZRk4DiNmPjmIzdFZZMAGlbYr+ EQ0iMm2BBEiuxj1eic6uXvk/ZBL7BQbrb+Bo6B0mipbDzOfLHIP+QjreKIPCtfrMWX/9RW8A6v1v5M OK2XyYYsdYhznlje64/7oVzs2wJyit
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+Add some coverage of event generation to mixer-test. Rather than doing a
+separate set of writes designed to trigger events we add a step to the
+existing write_and_verify() which checks to see if the value we read back
+from non-volatile controls matches the value before writing and that an
+event is or isn't generated as appropriate. The "tests" for events then
+simply check that no spurious or missing events were detected. This avoids
+needing further logic to generate appropriate values for each control type
+and maximises coverage.
 
-I've made this PR to start monitoring the "fixes" branch from the
-kselftest tree on kernelci.org:
+When checking for events we use a timeout of 0. This relies on the kernel
+generating any event prior to returning to userspace when setting a control.
+That is currently the case and it is difficult to see it changing, if it
+does the test will need to be updated. Using a delay of 0 means that we
+don't slow things down unduly when checking for no event or when events
+fail to be generated.
 
-  https://github.com/kernelci/kernelci-core/pull/998
+We don't check behaviour for volatile controls since we can't tell what
+the behaviour is supposed to be for any given control.
 
-While kselftest changes eventually land in linux-next, monitoring
-your tree directly means we can test it earlier and potentially
-enable more build variants or experimental tests.  Since
-kernelci.org also builds and runs some kselftests we're regularly
-finding issues and people are sending fixes for them.  See this
-recent story for example:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+---
 
-  https://twitter.com/kernelci/status/1488831497259921409
+v2:
+ - Get the numid from the API rather than using the control index.
 
-Keeping an eye on kselftest patches with kernelci.org means we
-can verify that fixes do what they're supposed to do with a much
-larger test coverage than what individual developers can do.
-We've been applying kselftest fixes on a branch managed by
-kernelci.org to verify them in the past, but having the actual
-kselftest tree part of the workflow would seem much better.
+ tools/testing/selftests/alsa/mixer-test.c | 148 +++++++++++++++++++++-
+ 1 file changed, 145 insertions(+), 3 deletions(-)
 
-There are several branches in your tree, while "fixes" seemed
-like the most useful one to pick I see there is also a "kernelci"
-branch too but it hasn't been updated for a while, reviving it
-could give you the possibility to test patches through
-kernelci.org before applying them on other branches that get
-pulled into linux-next and mainline.
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index 0e88f4f3d802..79ffbca429ee 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -3,7 +3,7 @@
+ // kselftest for the ALSA mixer API
+ //
+ // Original author: Mark Brown <broonie@kernel.org>
+-// Copyright (c) 2021 Arm Limited
++// Copyright (c) 2021-2 Arm Limited
+ 
+ // This test will iterate over all cards detected in the system, exercising
+ // every mixer control it can find.  This may conflict with other system
+@@ -27,11 +27,12 @@
+ 
+ #include "../kselftest.h"
+ 
+-#define TESTS_PER_CONTROL 4
++#define TESTS_PER_CONTROL 6
+ 
+ struct card_data {
+ 	snd_ctl_t *handle;
+ 	int card;
++	struct pollfd pollfd;
+ 	int num_ctls;
+ 	snd_ctl_elem_list_t *ctls;
+ 	struct card_data *next;
+@@ -43,6 +44,8 @@ struct ctl_data {
+ 	snd_ctl_elem_info_t *info;
+ 	snd_ctl_elem_value_t *def_val;
+ 	int elem;
++	int event_missing;
++	int event_spurious;
+ 	struct card_data *card;
+ 	struct ctl_data *next;
+ };
+@@ -149,6 +152,7 @@ void find_controls(void)
+ 			if (!ctl_data)
+ 				ksft_exit_fail_msg("Out of memory\n");
+ 
++			memset(ctl_data, 0, sizeof(*ctl_data));
+ 			ctl_data->card = card_data;
+ 			ctl_data->elem = ctl;
+ 			ctl_data->name = snd_ctl_elem_list_get_name(card_data->ctls,
+@@ -184,6 +188,26 @@ void find_controls(void)
+ 			ctl_list = ctl_data;
+ 		}
+ 
++		/* Set up for events */
++		err = snd_ctl_subscribe_events(card_data->handle, true);
++		if (err < 0) {
++			ksft_exit_fail_msg("snd_ctl_subscribe_events() failed for card %d: %d\n",
++					   card, err);
++		}
++
++		err = snd_ctl_poll_descriptors_count(card_data->handle);
++		if (err != 1) {
++			ksft_exit_fail_msg("Unexpected desciptor count %d for card %d\n",
++					   err, card);
++		}
++
++		err = snd_ctl_poll_descriptors(card_data->handle,
++					       &card_data->pollfd, 1);
++		if (err != 1) {
++			ksft_exit_fail_msg("snd_ctl_poll_descriptors() failed for %d\n",
++				       card, err);
++		}
++
+ 	next_card:
+ 		if (snd_card_next(&card) < 0) {
+ 			ksft_print_msg("snd_card_next");
+@@ -194,6 +218,73 @@ void find_controls(void)
+ 	snd_config_delete(config);
+ }
+ 
++/*
++ * Block for up to timeout ms for an event, returns a negative value
++ * on error, 0 for no event and 1 for an event.
++ */
++int wait_for_event(struct ctl_data *ctl, int timeout)
++{
++	unsigned short revents;
++	snd_ctl_event_t *event;
++	int count, err;
++	unsigned int mask = 0;
++	unsigned int ev_id;
++
++	snd_ctl_event_alloca(&event);
++
++	do {
++		err = poll(&(ctl->card->pollfd), 1, timeout);
++		if (err < 0) {
++			ksft_print_msg("poll() failed for %s: %s (%d)\n",
++				       ctl->name, strerror(errno), errno);
++			return -1;
++		}
++		/* Timeout */
++		if (err == 0)
++			return 0;
++
++		err = snd_ctl_poll_descriptors_revents(ctl->card->handle,
++						       &(ctl->card->pollfd),
++						       1, &revents);
++		if (err < 0) {
++			ksft_print_msg("snd_ctl_poll_desciptors_revents() failed for %s: %d\n",
++				       ctl->name, err);
++			return err;
++		}
++		if (revents & POLLERR) {
++			ksft_print_msg("snd_ctl_poll_desciptors_revents() reported POLLERR for %s\n",
++				       ctl->name);
++			return -1;
++		}
++		/* No read events */
++		if (!(revents & POLLIN)) {
++			ksft_print_msg("No POLLIN\n");
++			continue;
++		}
++
++		err = snd_ctl_read(ctl->card->handle, event);
++		if (err < 0) {
++			ksft_print_msg("snd_ctl_read() failed for %s: %d\n",
++			       ctl->name, err);
++			return err;
++		}
++
++		if (snd_ctl_event_get_type(event) != SND_CTL_EVENT_ELEM)
++			continue;
++
++		/* The ID returned from the event is 1 less than numid */
++		mask = snd_ctl_event_elem_get_mask(event);
++		ev_id = snd_ctl_event_elem_get_numid(event);
++		if (ev_id != snd_ctl_elem_info_get_numid(ctl->info)) {
++			ksft_print_msg("Event for unexpected ctl %s\n",
++				       snd_ctl_event_elem_get_name(event));
++			continue;
++		}
++	} while ((mask & SND_CTL_EVENT_MASK_VALUE) != SND_CTL_EVENT_MASK_VALUE);
++
++	return 1;
++}
++
+ bool ctl_value_index_valid(struct ctl_data *ctl, snd_ctl_elem_value_t *val,
+ 			   int index)
+ {
+@@ -428,7 +519,8 @@ int write_and_verify(struct ctl_data *ctl,
+ {
+ 	int err, i;
+ 	bool error_expected, mismatch_shown;
+-	snd_ctl_elem_value_t *read_val, *w_val;
++	snd_ctl_elem_value_t *initial_val, *read_val, *w_val;
++	snd_ctl_elem_value_alloca(&initial_val);
+ 	snd_ctl_elem_value_alloca(&read_val);
+ 	snd_ctl_elem_value_alloca(&w_val);
+ 
+@@ -446,6 +538,18 @@ int write_and_verify(struct ctl_data *ctl,
+ 		snd_ctl_elem_value_copy(expected_val, write_val);
+ 	}
+ 
++	/* Store the value before we write */
++	if (snd_ctl_elem_info_is_readable(ctl->info)) {
++		snd_ctl_elem_value_set_id(initial_val, ctl->id);
++
++		err = snd_ctl_elem_read(ctl->card->handle, initial_val);
++		if (err < 0) {
++			ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
++				       snd_strerror(err));
++			return err;
++		}
++	}
++
+ 	/*
+ 	 * Do the write, if we have an expected value ignore the error
+ 	 * and carry on to validate the expected value.
+@@ -470,6 +574,30 @@ int write_and_verify(struct ctl_data *ctl,
+ 		return err;
+ 	}
+ 
++	/*
++	 * Check for an event if the value changed, or confirm that
++	 * there was none if it didn't.  We rely on the kernel
++	 * generating the notification before it returns from the
++	 * write, this is currently true, should that ever change this
++	 * will most likely break and need updating.
++	 */
++	if (!snd_ctl_elem_info_is_volatile(ctl->info)) {
++		err = wait_for_event(ctl, 0);
++		if (snd_ctl_elem_value_compare(initial_val, read_val)) {
++			if (err < 1) {
++				ksft_print_msg("No event generated for %s\n",
++					       ctl->name);
++				ctl->event_missing++;
++			}
++		} else {
++			if (err != 0) {
++				ksft_print_msg("Spurious event generated for %s\n",
++					       ctl->name);
++				ctl->event_spurious++;
++			}
++		}
++	}
++
+ 	/*
+ 	 * Use the libray to compare values, if there's a mismatch
+ 	 * carry on and try to provide a more useful diagnostic than
+@@ -898,6 +1026,18 @@ void test_ctl_write_invalid(struct ctl_data *ctl)
+ 			 ctl->card->card, ctl->elem);
+ }
+ 
++void test_ctl_event_missing(struct ctl_data *ctl)
++{
++	ksft_test_result(!ctl->event_missing, "event_missing.%d.%d\n",
++			 ctl->card->card, ctl->elem);
++}
++
++void test_ctl_event_spurious(struct ctl_data *ctl)
++{
++	ksft_test_result(!ctl->event_spurious, "event_spurious.%d.%d\n",
++			 ctl->card->card, ctl->elem);
++}
++
+ int main(void)
+ {
+ 	struct ctl_data *ctl;
+@@ -917,6 +1057,8 @@ int main(void)
+ 		test_ctl_write_default(ctl);
+ 		test_ctl_write_valid(ctl);
+ 		test_ctl_write_invalid(ctl);
++		test_ctl_event_missing(ctl);
++		test_ctl_event_spurious(ctl);
+ 	}
+ 
+ 	ksft_exit_pass();
+-- 
+2.30.2
 
-Many things could potentially be done with arbitrary builds and
-tests etc.  These are some initial suggestions.  How does this
-sound?
-
-Best wishes,
-Guillaume
