@@ -2,136 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDD54A7BAF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Feb 2022 00:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1304A8238
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Feb 2022 11:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347891AbiBBX3u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Feb 2022 18:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S1350172AbiBCKRh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Feb 2022 05:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiBBX3t (ORCPT
+        with ESMTP id S1350071AbiBCKRN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:29:49 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B3AC061714
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Feb 2022 15:29:49 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id z199so1058618iof.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Feb 2022 15:29:49 -0800 (PST)
+        Thu, 3 Feb 2022 05:17:13 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FF5C06173D
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Feb 2022 02:17:13 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so1454313wms.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Feb 2022 02:17:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XSkZgyT9SaCPdPpjpxg7RKDi2ly8T2FHcL7rm88MUFg=;
-        b=hvorJX2QM4MFzTy0ftnmWv0klwNhmYimvwKPhT813Rida2VLz9HO67CRuWBrlqJXsL
-         XTYu6bS4GUWJQFLRILcZER1QqTyNRIdbE7CMsXQ/QOp/qlj3ESCly2dy06h/Ij5zvMJz
-         n363hcEyPSBT3uMEsITwejz8w2ot6wH2buTT0=
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:organization:content-transfer-encoding;
+        bh=o3foges394i2Torrv4y+TkfDP2u0wbyz9Waj/q2IzPs=;
+        b=YyabZF+bAVlRUnVwcDYtoiQuljWP8JdqwJ197sAprqEqfy3sUeWGBzBPvbwHfkl+yZ
+         TkJGHXhhiT5XFU426aMqKd26Wm2OXpj189RZW8qlgUtSlUi+vhD9tCJOHGpTeKywBbKw
+         HSJL167+DsD/m0oJweA4wrMli+DLoY+pvjeT+CvAIph+m6vRg61PadA+baeDyqBGbF8L
+         Hx0rga7a23FFBBJMmTj1ZCIWyuMFPgZCPm9Fa5pznlV9aI0hcVw4YBPsSuOAhQsfAiBO
+         8ACnLygQxPst0fyQh2dJKFgePAomhNsXXXNmexztTCkC0vRhUvQpoQie/Nn9Ai2tkrsF
+         eGiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XSkZgyT9SaCPdPpjpxg7RKDi2ly8T2FHcL7rm88MUFg=;
-        b=n7dfR/kkmELV7FOvDyk73LsNOFy5eO3/nURmwEO42yjxNMAQDjemdrNR9QcuyGqZP1
-         Yx5GxTf+iC2OwzPnL7MRY02sczn0Szh726O3pE3of85hak9gfV/oVnD1xlAs0m9QjHiD
-         ciyaHkyXkGrA0WNCNtxW6F/KGZluP815tnLLD8SURyP8ov9nvrvfhNwa161uU/YPhscb
-         rzxuCzcPb3xzlUVlshtZ5F1uUvwaO3tZAUWzG61z/RqGC0AAXE7lddhL5K58KuvoayMk
-         4kE4RlKjOHeliNq82LImEN8rtbTfFsz1YJtX8OxZzZ/T6F0qlcV8DgprNJX3hfhiBh/p
-         R7Gg==
-X-Gm-Message-State: AOAM530+izmlZha1sCdMdy89Y9Q40/cIbbKCV/x/sakTm4/oop6h72gM
-        JMf2ycVlub7LHPMLXFT4SbuCtQ==
-X-Google-Smtp-Source: ABdhPJyUj4OmV4GrmvIVJVnwTzsyusvoqIfRBVhe4CTCzDYNa7k8KLSMatqyontDWFnJ+WQtgcvzRg==
-X-Received: by 2002:a05:6602:340a:: with SMTP id n10mr5126693ioz.76.1643844589140;
-        Wed, 02 Feb 2022 15:29:49 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id r64sm19029581iod.25.2022.02.02.15.29.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 15:29:48 -0800 (PST)
-Subject: Re: [PATCH net-next] selftests: fib offload: use sensible tos values
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ido Schimmel <idosch@mellanox.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <5e43b343720360a1c0e4f5947d9e917b26f30fbf.1643826556.git.gnault@redhat.com>
- <54a7071e-71ad-0c7d-ccc4-0f85dbe1e077@linuxfoundation.org>
- <20220202201614.GB15826@pc-4.home>
- <c5be299d-35e9-9ae9-185f-2faa6eccb149@linuxfoundation.org>
- <20220202232555.GC15826@pc-4.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e860d2f9-2137-8829-c76d-79555a47b3d4@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 16:29:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:organization:content-transfer-encoding;
+        bh=o3foges394i2Torrv4y+TkfDP2u0wbyz9Waj/q2IzPs=;
+        b=Rljsb7bbSjgOx9koWG50noY70UsB/6GoSPW0uF/epC3iVp7bDRlhoqq1j6q/ytoucl
+         rVxjfFIwfodkQg3urHFWljF1eSl8gT+SzpKidOsjkSgg5U/9CfyEU9B/4fifMPeuLz22
+         6PeEEzdiApxwaauCBnaQS53YlVQ+sUzqxjOEDbwmYYTZOhZIUHHDDQoTjqlmYCQxgWpa
+         5KUF86F95PToELZOabi6Ef1NZhOHqrDddZg6xngj4MuLS79yox/70FkHuDm0bKHLw4Ow
+         Lw7rzecPatHg+gb9++hJz5IYNHe+zUDrq8r2+Qq4epv6d0NNd729Z1JaAbzdOblfgChy
+         Hb3g==
+X-Gm-Message-State: AOAM531bn85IHZVoatZMkyf/ZkVJCNnrkjsVh+raXAM551FdVXAMCO8C
+        sIWTrdBOQaLNnvPGUZVH9R7Nqw==
+X-Google-Smtp-Source: ABdhPJwfmVyB651XY0XDybKU/UHpoCzbXoGWw23cPBIU7I1BHaIU8CTvE8YL95uSIy3eRic/tsKSgA==
+X-Received: by 2002:a05:600c:3392:: with SMTP id o18mr9769405wmp.59.1643883431935;
+        Thu, 03 Feb 2022 02:17:11 -0800 (PST)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id g6sm19017148wrq.97.2022.02.03.02.17.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 02:17:11 -0800 (PST)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Danielle Ratson <danieller@nvidia.com>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net-next 5/5] selftests: net: bridge: Parameterize ageing timeout
+Date:   Thu,  3 Feb 2022 11:16:57 +0100
+Message-Id: <20220203101657.990241-6-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220203101657.990241-1-tobias@waldekranz.com>
+References: <20220203101657.990241-1-tobias@waldekranz.com>
 MIME-Version: 1.0
-In-Reply-To: <20220202232555.GC15826@pc-4.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Organization: Westermo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/2/22 4:25 PM, Guillaume Nault wrote:
-> On Wed, Feb 02, 2022 at 02:10:15PM -0700, Shuah Khan wrote:
->> On 2/2/22 1:16 PM, Guillaume Nault wrote:
->>> On Wed, Feb 02, 2022 at 12:46:10PM -0700, Shuah Khan wrote:
->>>> On 2/2/22 11:30 AM, Guillaume Nault wrote:
->>>>> Although both iproute2 and the kernel accept 1 and 2 as tos values for
->>>>> new routes, those are invalid. These values only set ECN bits, which
->>>>> are ignored during IPv4 fib lookups. Therefore, no packet can actually
->>>>> match such routes. This selftest therefore only succeeds because it
->>>>> doesn't verify that the new routes do actually work in practice (it
->>>>> just checks if the routes are offloaded or not).
->>>>>
->>>>> It makes more sense to use tos values that don't conflict with ECN.
->>>>> This way, the selftest won't be affected if we later decide to warn or
->>>>> even reject invalid tos configurations for new routes.
->>>>
->>>> Wouldn't it make sense to leave these invalid values in the test though.
->>>> Removing these makes this test out of sync withe kernel.
->>>
->>> Do you mean keeping the test as is and only modify it when (if) we
->>> decide to reject such invalid values?
->>
->> This is for sure. Remove the invalid values in sync with the kernel code.
->>
->>> Or to write two versions of the
->>> test, one with invalid values, the other with correct ones?
->>>
->>
->> This one makes sense if it adds value in testing to make sure we continue
->> to reject invalid values.
->>
->>> I don't get what keeping a test with the invalid values could bring us.
->>> It's confusing for the reader, and might break in the future. This
->>> patch makes the test future proof, without altering its intent and code
->>> coverage. It still works on current (and past) kernels, so I don't see
->>> what this patch could make out of sync.
->>>
->>
->> If kernel still accepts these values, then the test is valid as long as
->> kernel still doesn't flag these values as invalid.
->>
->> I might be missing something. Don't you want to test with invalid values
->> so make sure they are indeed rejected?
-> 
-> Testing invalid values makes sense, but in another selftest IMHO. This
-> file is used to test hardware offload behaviour (although it lives
-> under selftests/net/, it's only called from other scripts living under
-> selftests/drivers/). Testing for accepted/rejected values should be
-> done in a network generic selftest, not in driver specific ones.
-> 
-> I'm currently working on a patch series that'd include such tests (as
-> part of a larger project aimed at fixing conflicting interpretations of
-> ECN bits). But for fib_offload_lib.sh, I'd really prefer if we could
-> keep it focused on testing driver features.
-> 
+Allow the ageing timeout that is set on bridges to be customized from
+forwarding.config. This allows the tests to be run on hardware which
+does not support a 10s timeout (e.g. mv88e6xxx).
 
-A separate test for invalid values makes sense. It will be easier to find
-and report problems.
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+---
+ tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh  | 5 +++--
+ .../testing/selftests/net/forwarding/bridge_vlan_unaware.sh  | 5 +++--
+ .../selftests/net/forwarding/forwarding.config.sample        | 2 ++
+ tools/testing/selftests/net/forwarding/lib.sh                | 1 +
+ 4 files changed, 9 insertions(+), 4 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+index b90dff8d3a94..64bd00fe9a4f 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh
+@@ -28,8 +28,9 @@ h2_destroy()
+ 
+ switch_create()
+ {
+-	# 10 Seconds ageing time.
+-	ip link add dev br0 type bridge vlan_filtering 1 ageing_time 1000 \
++	ip link add dev br0 type bridge \
++		vlan_filtering 1 \
++		ageing_time $LOW_AGEING_TIME \
+ 		mcast_snooping 0
+ 
+ 	ip link set dev $swp1 master br0
+diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_unaware.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_unaware.sh
+index c15c6c85c984..1c8a26046589 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_vlan_unaware.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_vlan_unaware.sh
+@@ -27,8 +27,9 @@ h2_destroy()
+ 
+ switch_create()
+ {
+-	# 10 Seconds ageing time.
+-	ip link add dev br0 type bridge ageing_time 1000 mcast_snooping 0
++	ip link add dev br0 type bridge \
++		ageing_time $LOW_AGEING_TIME \
++		mcast_snooping 0
+ 
+ 	ip link set dev $swp1 master br0
+ 	ip link set dev $swp2 master br0
+diff --git a/tools/testing/selftests/net/forwarding/forwarding.config.sample b/tools/testing/selftests/net/forwarding/forwarding.config.sample
+index b0980a2efa31..4a546509de90 100644
+--- a/tools/testing/selftests/net/forwarding/forwarding.config.sample
++++ b/tools/testing/selftests/net/forwarding/forwarding.config.sample
+@@ -41,6 +41,8 @@ NETIF_CREATE=yes
+ # Timeout (in seconds) before ping exits regardless of how many packets have
+ # been sent or received
+ PING_TIMEOUT=5
++# Minimum ageing_time (in centiseconds) supported by hardware
++LOW_AGEING_TIME=1000
+ # Flag for tc match, supposed to be skip_sw/skip_hw which means do not process
+ # filter by software/hardware
+ TC_FLAG=skip_hw
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 7da783d6f453..e7e434a4758b 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -24,6 +24,7 @@ PING_COUNT=${PING_COUNT:=10}
+ PING_TIMEOUT=${PING_TIMEOUT:=5}
+ WAIT_TIMEOUT=${WAIT_TIMEOUT:=20}
+ INTERFACE_TIMEOUT=${INTERFACE_TIMEOUT:=600}
++LOW_AGEING_TIME=${LOW_AGEING_TIME:=1000}
+ REQUIRE_JQ=${REQUIRE_JQ:=yes}
+ REQUIRE_MZ=${REQUIRE_MZ:=yes}
+ 
+-- 
+2.25.1
 
