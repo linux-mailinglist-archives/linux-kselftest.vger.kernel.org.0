@@ -2,69 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D714A4A91EE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Feb 2022 02:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAF44A924F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Feb 2022 03:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356477AbiBDBQg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Feb 2022 20:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        id S242059AbiBDCaE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Feb 2022 21:30:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbiBDBQe (ORCPT
+        with ESMTP id S232591AbiBDCaE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Feb 2022 20:16:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84357C061714;
-        Thu,  3 Feb 2022 17:16:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43531B81E57;
-        Fri,  4 Feb 2022 01:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12CFDC340E8;
-        Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643937392;
-        bh=Cyt3I3EBMavNFow1QRriz9SViu1nkBRsjpVOO+ycS+I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=X9VAtBBnW8BhgxZ3xzaECd0M5Vw9Zk1Bva5rCUCczmdoG6+rJT/i+ZMa/+UiRUtsj
-         NbBcZngkD4r7Npg/g4x+4ooAjhqRRZBIh2E3tdY5XUa+qxWKwST6D+cCJBQ3de9e37
-         PDhdgjmz5dJ0UXJ3L5onK4vqHQ9xOfiGsawkE5A2AxmQeqddQj43CTLZTvSporBMCZ
-         wlFE640yUF/8fs4gEkR41iFpfPDSyoWQxLAl7rzGf4+wgfc8T/bIJy7+W/KQ379i6B
-         bVmJ5gQVOn1NHi12oQ6gOAqBkMb5rz0UAr1DmRrgm/LhiAr5GLynIdulyHA1zW21Bk
-         pt3ERWVNg7Vdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02E73E5D08C;
-        Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.17-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
-References: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc3
-X-PR-Tracked-Commit-Id: ec049891b2dc16591813eacaddc476b3d27c8c14
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 25b20ae8151b3d5289896f4f200ff790d2cdf4bf
-Message-Id: <164393739200.12311.15807559014449375931.pr-tracker-bot@kernel.org>
-Date:   Fri, 04 Feb 2022 01:16:32 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 3 Feb 2022 21:30:04 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA11C061714;
+        Thu,  3 Feb 2022 18:30:04 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id s18so5689602ioa.12;
+        Thu, 03 Feb 2022 18:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=OTrC/ChFFDlMeg9wabFJuljEVHThOgwhDVJ2eQe+sqM=;
+        b=CrVP0fW+Lt59T5PVfRminhPlGN8XqmzojbqDgLwNUDQO9j7eZFBKy6CTKNYSLY4btB
+         yuS4tDqIoeJeevZVez8tidunOLm0Bp6RX2JTliuabS+4wQPKUDHDwUxkA+jUSD/7zqkC
+         Ehjylvrw6yzP4ET4u0HQHdTMpoYUMUYzGNvGENls8hH6klBktezlmwOgWzkEJnkA2aUu
+         mn3vEE1kAyWMVttKVG4GzJDsMxFZIS64w4g4sC0PecRI7qdAK/KoFAmJ139WU8iSNjXg
+         t9vr+qBAgdNxRXmd6YAA6+mWh0DbEaCCOTa8llPsObvFevyPIeif9hUiBLkaRdqcQysA
+         mLLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=OTrC/ChFFDlMeg9wabFJuljEVHThOgwhDVJ2eQe+sqM=;
+        b=NM+6zZPPQEvYZ1qvV/1mtm+sZxG7UtPlfR1Q761U6hNa/Cnp/qm1v4BYd4cDwynavI
+         0IWlk4nK+z4Yxby4HIMZvYP5qV+QXY9hfT+ZASPOJ8Eh4W0VqYAh0Vzp3T9nVQYbVs02
+         FD4NB9zMYlylwA7KXs4CMyTIJxQUAZP+kXbDT+hlq4KEGAplIIL3jGxCgPI2qPP39h1E
+         5bQmyD/vVVvi4DKBXQMbBeFPqOGNwFLxlkcXhBV2d3mBI8gG+ezoAG7GmWOy011bSFBT
+         +4VA0Wj2pSLcyPlL1j5Phlwrl7pLJT16WxNMVFqWFGp2JTBr2FThlHCHYmLcipSAD0RG
+         tNXw==
+X-Gm-Message-State: AOAM532OV3g6WdYfv8F0kdq1/OK+1hy3ZilQh8H6vHiOLf09OyQPqYap
+        yyAIxfdBhigrMYqGUk9tTJY=
+X-Google-Smtp-Source: ABdhPJyxhUID65AugHMBuJX/lLO28PohlHd+nmy1/xOzcP960jmL7ToObemZEu2FQb9yIq0Nr8tsQQ==
+X-Received: by 2002:a6b:f218:: with SMTP id q24mr358856ioh.55.1643941803044;
+        Thu, 03 Feb 2022 18:30:03 -0800 (PST)
+Received: from localhost ([99.197.200.79])
+        by smtp.gmail.com with ESMTPSA id ay35sm305821iob.3.2022.02.03.18.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 18:30:02 -0800 (PST)
+Date:   Thu, 03 Feb 2022 18:29:55 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>
+Message-ID: <61fc8fa39a5e6_1d27c20836@john.notmuch>
+In-Reply-To: <8f5fecac-ce6e-adc8-305b-a2ee76328bce@nvidia.com>
+References: <20220124151340.376807-1-maximmi@nvidia.com>
+ <20220124151340.376807-3-maximmi@nvidia.com>
+ <61efacc6980f4_274ca2083e@john.notmuch>
+ <8f5fecac-ce6e-adc8-305b-a2ee76328bce@nvidia.com>
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Add helpers to issue and check SYN
+ cookies in XDP
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Thu, 3 Feb 2022 13:35:26 -0700:
+Maxim Mikityanskiy wrote:
+> On 2022-01-25 09:54, John Fastabend wrote:
+> > Maxim Mikityanskiy wrote:
+> >> The new helpers bpf_tcp_raw_{gen,check}_syncookie allow an XDP program
+> >> to generate SYN cookies in response to TCP SYN packets and to check
+> >> those cookies upon receiving the first ACK packet (the final packet of
+> >> the TCP handshake).
+> >>
+> >> Unlike bpf_tcp_{gen,check}_syncookie these new helpers don't need a
+> >> listening socket on the local machine, which allows to use them together
+> >> with synproxy to accelerate SYN cookie generation.
+> >>
+> >> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+> >> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> >> ---
+> > 
+> > [...]
+> > 
+> >> +
+> >> +BPF_CALL_4(bpf_tcp_raw_check_syncookie, void *, iph, u32, iph_len,
+> >> +	   struct tcphdr *, th, u32, th_len)
+> >> +{
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc3
+[...]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/25b20ae8151b3d5289896f4f200ff790d2cdf4bf
+>> > 
+> > Did you consider just exposing __cookie_v4_check() and __cookie_v6_check()?
+> 
+> No, I didn't, I just implemented it consistently with 
+> bpf_tcp_check_syncookie, but let's consider it.
+> 
+> I can't just pass a pointer from BPF without passing the size, so I 
+> would need some wrappers around __cookie_v{4,6}_check anyway. The checks 
+> for th_len and iph_len would have to stay in the helpers. The check for 
+> TCP flags (ACK, !RST, !SYN) could be either in the helper or in BPF. The 
+> switch would obviously be gone.
 
-Thank you!
+For consideration... those duplicate checks in the runtime that we
+already could know from verifier side are bothering me.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+We could have some new mem types, PTR_TO_IPV4, PTR_TO_IPv6, and PTR_TO_TCP.
+Then we simplify the helper signatures to just,
+
+  bpf_tcp_raw_check_syncookie_v4(iph, tcph);
+  bpf_tcp_raw_check_syncookie_v6(iph, tcph);
+
+And the verifier "knows" what a v4/v6 header is and does the mem
+check at verification time instead of run time.
+
+Then the code becomes very straightforward,
+
+ BPF_CALL_2(bpf_tcp_raw_check_syncookie_v4, void *, iph, void *, th)
+{
+   u16 mss = tcp_parse_mss_option(th, 0) ?: TCP_MSS_DEFAULT;   
+   return  __cookie_v4_init_sequence(iph, th, &mss);
+}
+
+We don't need length checks because we are guaranteed by conmpiler
+to have valid lengths, assume code is smart enough to understand
+syn, ack, rst because any real program likely already knows this.
+And v4/v6 is likely also known by real program already.
+
+If we push a bit more on this mss with PTR_TO_TCP and PTR_TO_IP
+we can simply mark tcp_parse_mss_option and __cookie_v4_init_sequence
+and let BPF side call them.
+
+Curious what others think here.
+
+> 
+> The bottom line is that it would be the same code, but without the 
+> switch, and repeated twice. What benefit do you see in this approach? 
+>  From my side, I only see the ability to drop one branch at the expense 
+> of duplicating the code above the switch (th_len and iph_len checks).
+> 
+> > My code at least has already run the code above before it would ever call
+> > this helper so all the other bits are duplicate.
+> 
+> Sorry, I didn't quite understand this part. What "your code" are you 
+> referring to?
+
+Just the XDP parsers we have already switch early on based on v4/v6
+and I imagine that most progs also know this. So yes we are arguing
+about a simple switch, but instruction here and instruction there
+add up over time. Also passing the size through the helper bothers
+me slightly given the verifier should know the size already.
