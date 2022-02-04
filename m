@@ -2,158 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C12F4AA40E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Feb 2022 00:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AF34AA489
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Feb 2022 00:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244670AbiBDXNU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Feb 2022 18:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S235866AbiBDXke (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Feb 2022 18:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiBDXNU (ORCPT
+        with ESMTP id S1378613AbiBDXkG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:13:20 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E17DFB27F4
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Feb 2022 15:13:17 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id f17so13979205wrx.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Feb 2022 15:13:17 -0800 (PST)
+        Fri, 4 Feb 2022 18:40:06 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CEDDFFE362
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Feb 2022 15:39:41 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id d188so9327747iof.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Feb 2022 15:39:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VfYCxFlpbvl7OujUUxXMKcam5bYyjMQ9TxZLwWilF4Y=;
-        b=IjKsNTP3UmtI+YfyHZJ0qh5DSvYiShtyinPh2WOTKo2LC1R5Im2gedu5u9xfLooF4+
-         UxUJXD/dy/Tl+V8My9opTUaU/uixmq5z0us3RoC7Bgbo700hMuzVj257AuS4ktrqgACR
-         JE1XfixdYgbAeynvegt5gll/MPrWdf0b6BQfbhRUpIoONgo6tKgQYpiUple0FwM9IaHG
-         CmD96KIrg2NPA61K7dJX0+azXzCvdQsfEjax6u2RHlHWTxFWp89xPocpS8yQG7q5+g0H
-         R9WNyOY2Y6TVuu7wHZLpnid1rpTlKUJT2O6qa3lVmtqr6HEuLuR4/QDnfyR3vG9Pq8nW
-         THtw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=chay6cI5krPMdvmjI0OgtPSx/juylZb2Zp77TTGYBDU=;
+        b=ghF9s5MbclL4SAtvIK2qGV+BljWVspJXqofubIdxJEF14Xz9ytHpkkFxpswuY/BsgI
+         jyktOsJw7HiIBplyOMdLypyl5fEAN123X3pm30RrXatGH7VJLU0G2sGL6oulw1BlK47Q
+         zlEtzHahkHzgXbyjsAtGOBVSuOZtqDlBcOdjI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VfYCxFlpbvl7OujUUxXMKcam5bYyjMQ9TxZLwWilF4Y=;
-        b=e3GGwwZvE6M67ljP1Iwj/ho+8mZJ1PQWmH7zMUG3DzWEP1R2FCul8BL8zNuzYHTdHh
-         dg5p4AQT4u78QZe4q4opFVXIVxPC7fVUqHGiWiHgJqih64JnOJoIANSjiicpw5K5C7Mx
-         o0BmH0SdOm0qrBg2EniIIaWHg8DJPxQHl699Ez4xodq/AAGPhtc29NR+y22OelCwwnRi
-         EK5CMtdd9TKb2wKj49qydKHpPkaTU96qjUor3y3s92MHuKnxJYA/2PRw9RfWDuWJ1cmc
-         +xHqaFd1c+9qZ54P2mHCYG5zS2YSpbIHSKVIuhnIp2AJNDRQ7LIT0SK+3X+aOG85EO++
-         r6xQ==
-X-Gm-Message-State: AOAM532hRAoytpcMNu1EoFlHo2zRgWoVIG95awram6tjfAcZIDViIJJo
-        euexDeBp58Gw83/pYCsoXyf6s6s//wKH4hQ8x5b5KA==
-X-Google-Smtp-Source: ABdhPJzL6D+TJwXa5HDo4f0yCGthyil6w59QwryxQD1ifMJhEDqjpOIWu7afVuh86c0pKEcjxS8nNWPb2G3HwFNPOes=
-X-Received: by 2002:a05:6000:1b88:: with SMTP id r8mr916267wru.447.1644016395758;
- Fri, 04 Feb 2022 15:13:15 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=chay6cI5krPMdvmjI0OgtPSx/juylZb2Zp77TTGYBDU=;
+        b=q9DP0RL7HY/9Cn7Gze9kpTQtPRew1VqarfZv5YI53Gi2Q5rBPn1WzhecULUaJXe+1T
+         Y4mmgIrtHL6la8ivhErC+lMAAvDKXvxasYPSxAv5SzvbBLYNMzPeh+LZVUAbwIdDChtF
+         FQuaODceEZxygCIw8KS2NCCnqgYE4I9LIIIErBxI2AHEguZdHovWpp7XLnA9APpm8HnG
+         RtbiLg2l9DmMjjxvSoAdXTlMNxRCBSJrxWhv1t+0Y4aeNI6EoywlZULwew5mLABUKNjt
+         x4szgKZVN7szswycAbcrOCvj4Jsx1y6srMC0ldo/tZVSOwweaeQjFOPJzgNYOayjI41W
+         MVZA==
+X-Gm-Message-State: AOAM531RugKKtgZ/0DOMHk1mZc9TajY4nVLgyqs0AYXlj+d7KnUfH+zW
+        mxHe4xziGiDeNogqqsKSkbzEZw==
+X-Google-Smtp-Source: ABdhPJxwry8B1iySH3HNGgjwyySt2sl1IYQJ9sPBEZsfj1ARJPiZ4Cfn77PbNSIkbwQAa0+fQ9Qv2g==
+X-Received: by 2002:a05:6638:2493:: with SMTP id x19mr681599jat.219.1644017980601;
+        Fri, 04 Feb 2022 15:39:40 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id e17sm1654076ilm.67.2022.02.04.15.39.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 15:39:40 -0800 (PST)
+Subject: Re: [PATCH 0/3] selftests: Remove duplicate CPUID wrappers
+To:     Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Suchanek <msuchanek@suse.de>, linux-mm@kvack.org,
+        "Chang S . Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1644000145.git.reinette.chatre@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <81df8c0e-fde6-f3b8-f988-b539f193635b@linuxfoundation.org>
+Date:   Fri, 4 Feb 2022 16:39:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220204203248.2981902-1-frowand.list@gmail.com>
-In-Reply-To: <20220204203248.2981902-1-frowand.list@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 5 Feb 2022 07:13:04 +0800
-Message-ID: <CABVgOS=JUxV6PRUZvTQhisSP+p34+K9Z6yT7HkXu6qeqtak1tw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Documentation: dev-tools: clarify KTAP specification wording
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1644000145.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_50,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 4:32 AM <frowand.list@gmail.com> wrote:
->
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> Clarify some confusing phrasing.
+On 2/4/22 12:17 PM, Reinette Chatre wrote:
+> A few tests that require running CPUID do so with a private
+> implementation of a wrapper for CPUID. This duplication of
+> the CPUID wrapper should be avoided but having one is also
+> unnecessary because of the existence of a macro that can
+> be used instead.
+> 
+> This series replaces private CPUID wrappers with calls
+> to the __cpuid_count() macro from cpuid.h as made available
+> by gcc and clang/llvm.
+> 
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Ram Pai <linuxram@us.ibm.com>
+> Cc: Sandipan Das <sandipan@linux.ibm.com>
+> Cc: Florian Weimer <fweimer@redhat.com>
+> Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Michal Suchanek <msuchanek@suse.de>
+> Cc: linux-mm@kvack.org
+> Cc: Chang S. Bae <chang.seok.bae@intel.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: x86@kernel.org
+> Cc: Andy Lutomirski <luto@kernel.org>
+> 
+> Reinette Chatre (3):
+>    selftests/vm/pkeys: Use existing __cpuid_count() macro
+>    selftests/x86/amx: Use existing __cpuid_count() macro
+>    selftests/x86/corrupt_xstate_header: Use existing __cpuid_count()
+>      macro
+> 
+>   tools/testing/selftests/vm/pkey-x86.h         | 22 +++---------------
+>   tools/testing/selftests/x86/amx.c             | 23 +++++--------------
+>   .../selftests/x86/corrupt_xstate_header.c     | 17 ++------------
+>   3 files changed, 11 insertions(+), 51 deletions(-)
+> 
 
-Thanks for this! A few comments below:
+I am all for this cleanup. However, I am not finding __cpuid_count()
+marco on my system with gcc:
 
->
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> ---
->
-> One item that may result in bikeshedding is that I added the spec
-> version to the title line.
+gcc --version
+gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
 
-This is fine by me.
+My concern is regression on older gcc versions.
 
->
->  Documentation/dev-tools/ktap.rst | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index 878530cb9c27..3b7a26816930 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-> @@ -1,8 +1,8 @@
->  .. SPDX-License-Identifier: GPL-2.0
->
-> -========================================
-> -The Kernel Test Anything Protocol (KTAP)
-> -========================================
-> +===================================================
-> +The Kernel Test Anything Protocol (KTAP), version 1
-> +===================================================
->
->  TAP, or the Test Anything Protocol is a format for specifying test results used
->  by a number of projects. It's website and specification are found at this `link
-> @@ -186,7 +186,7 @@ starting with another KTAP version line and test plan, and end with the overall
->  result. If one of the subtests fail, for example, the parent test should also
->  fail.
->
-> -Additionally, all result lines in a subtest should be indented. One level of
-> +Additionally, all lines in a subtest should be indented. One level of
-
-The original reason for this is to accommodate "unknown" lines which
-were not generated by the test itself (e.g, a KASAN report or BUG or
-something). These are awkward, as sometimes they're a useful thing to
-have as part of the test result, and sometimes they're unrelated spam.
-(Additionally, I think kselftest will indent these, as it indents the
-full results in a separate pass afterwards, but KUnit won't, as the
-level of nesting is done during printing.)
-
-Personally, I'd rather leave this as is, or perhaps call out "unknown"
-lines explicitly, e.g:
-Additionally, all lines in a subtest (except for 'unknown' lines)
-should be indented...
-
-Thoughts?
-
->  indentation is two spaces: "  ". The indentation should begin at the version
->  line and should end before the parent test's result line.
->
-> @@ -225,8 +225,8 @@ Major differences between TAP and KTAP
->  --------------------------------------
->
->  Note the major differences between the TAP and KTAP specification:
-> -- yaml and json are not recommended in diagnostic messages
-> -- TODO directive not recognized
-> +- yaml and json are not recommended in KTAP diagnostic messages
-> +- TODO directive not recognized in KTAP
->  - KTAP allows for an arbitrary number of tests to be nested
->
-
-Looks good here, cheers.
-
-
->  The TAP14 specification does permit nested tests, but instead of using another
-> --
-> Frank Rowand <frank.rowand@sony.com>
->
+thanks,
+-- Shuah
