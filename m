@@ -1,105 +1,106 @@
 Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0E34A9ED8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Feb 2022 19:19:46 +0100 (CET)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD3C4A9FDC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Feb 2022 20:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377493AbiBDSTp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Feb 2022 13:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357678AbiBDSTp (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:19:45 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C31C06173D
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Feb 2022 10:19:44 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id y84so8485167iof.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Feb 2022 10:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BhArQkxbtN0pvvjCBG0OYL1pBDNdr/svZIAn025HybE=;
-        b=AHG7JqXHFg1WzW9OKdp+766xUIWPFbqNWGbrGAAE28jVoghvIysHSbP0hxh6cX4CkK
-         0cP/lUMizivvyPybQPZT3d/ehIPuWhOheYV+dNMmUa/QjuyEW5LYdYTmbu4upcDqMrNK
-         JD71+zYd6vUAB3OhQZaRTJqT/7VB50czYVJxw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BhArQkxbtN0pvvjCBG0OYL1pBDNdr/svZIAn025HybE=;
-        b=6QWDkBJKfESCssxFfrgI9rtgRnCzTkRn/AGRgxpbvmD0J14RKLcjZ8JhI9Z8bFXel6
-         KTpDkF/8wPNHNUWN3nQfYKXr3V+LqmECpXjFOSulmkeNhhLRvlxxBUep9P4uP9xpIwKl
-         i8tqfOahRnOxflsUqDI03uhargjYwo5GkVUiqk9SVHcHqMLDncNcZ2C5M8vfkAeJ4JES
-         WNKh59pvtc5HsuB7KIvwi4+YuX2LpXhTTH71WfCJMxH5TTotBnOMVtdddVcryYc2tS9o
-         1vCg5y8ObHAx/GBhTubIIClzDSUx/MHQZywUQzq0yRBURgDuTKb8nrqbAYO3X0OYnq4u
-         z/TQ==
-X-Gm-Message-State: AOAM5328J3FkKogTc5z0NcuLX688cE8AGlMxKLNXW4JYey5Oov+K4pd7
-        RZnf+Vgj874fHVnAgL37gY9qmQ==
-X-Google-Smtp-Source: ABdhPJzTFIthmhWE16ytzf8DU+RjpHZFziYmvkFxyOqMMkX3YZK8OsBmjThsALoz+nyAsAMrY5MdaQ==
-X-Received: by 2002:a05:6602:2a49:: with SMTP id k9mr172607iov.83.1643998784351;
-        Fri, 04 Feb 2022 10:19:44 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id a2sm1355546ilj.35.2022.02.04.10.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 10:19:44 -0800 (PST)
-Subject: Re: [PATCH net-next 3/4] ipv4: Reject routes specifying ECN bits in
- rtm_tos
-To:     Guillaume Nault <gnault@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgense?= =?UTF-8?Q?n?= 
-        <toke@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Russell Strong <russell@strong.id.au>,
-        Dave Taht <dave.taht@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1643981839.git.gnault@redhat.com>
- <e59d6861e3c230c9fd1f24f116de38a73fa27773.1643981839.git.gnault@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d45370df-f752-bbcf-1fd1-ee52769c45c2@linuxfoundation.org>
-Date:   Fri, 4 Feb 2022 11:19:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232185AbiBDTSB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Feb 2022 14:18:01 -0500
+Received: from mga11.intel.com ([192.55.52.93]:61194 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231728AbiBDTSA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 4 Feb 2022 14:18:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644002280; x=1675538280;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n8C5babs3ZkUMBv/nFFD9Th7rXCW1erD1QQPKYBJ0M4=;
+  b=ZhvrEyrdhxUzGgdKhWpdRWKC9Zak42FFay9JzQQ7VYhxjxLQOf+1bXRt
+   71qO7Us2A2SWCetd97zw/V39SrVwd3tZgIeGbnb4KvZvUuYZc3M1lkjlx
+   qC1uiQWYiDQIjOvL9HPqwmXrGBTabUG+H4zGNaQ7ktBWs1xtqfgzS3QMQ
+   6mychpwHabOv92UKYCtqQ3ZbvPSn+R1kEOFwJ3flu9BzPRysK3rVeaj5w
+   ndRXekg9RnqmhZejeU1xmdKSzB5s/kiq/B3n+6TIaRZ4rRAWgFk7uOwo6
+   rcItNkSKi0I9z5VjnM2029m9aYD6v1H96svHDsUjIQrKxQ1CDpVR3dylW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="246017063"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="246017063"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:18:00 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="524412811"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:17:59 -0800
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Suchanek <msuchanek@suse.de>, linux-mm@kvack.org,
+        "Chang S . Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>
+Subject: [PATCH 0/3] selftests: Remove duplicate CPUID wrappers
+Date:   Fri,  4 Feb 2022 11:17:08 -0800
+Message-Id: <cover.1644000145.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <e59d6861e3c230c9fd1f24f116de38a73fa27773.1643981839.git.gnault@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/4/22 6:58 AM, Guillaume Nault wrote:
-> Use the new dscp_t type to replace the fc_tos field of fib_config, to
-> ensure IPv4 routes aren't influenced by ECN bits when configured with
-> non-zero rtm_tos.
-> 
-> Before this patch, IPv4 routes specifying an rtm_tos with some of the
-> ECN bits set were accepted. However they wouldn't work (never match) as
-> IPv4 normally clears the ECN bits with IPTOS_RT_MASK before doing a FIB
-> lookup (although a few buggy code paths don't).
-> 
-> After this patch, IPv4 routes specifying an rtm_tos with any ECN bit
-> set is rejected.
-> 
-> Note: IPv6 routes ignore rtm_tos altogether, any rtm_tos is accepted,
-> but treated as if it were 0.
-> 
-> Signed-off-by: Guillaume Nault <gnault@redhat.com>
-> ---
-> Shuah, FYI, this is the patch I was refering to in our discussion about
-> testing invalid tos values:
-> https://lore.kernel.org/netdev/20220202232555.GC15826@pc-4.home/
-> 
+A few tests that require running CPUID do so with a private
+implementation of a wrapper for CPUID. This duplication of
+the CPUID wrapper should be avoided but having one is also
+unnecessary because of the existence of a macro that can
+be used instead.
 
-This give me context. Thank you.
+This series replaces private CPUID wrappers with calls
+to the __cpuid_count() macro from cpuid.h as made available
+by gcc and clang/llvm.
 
-thanks,
--- Shuah
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ram Pai <linuxram@us.ibm.com>
+Cc: Sandipan Das <sandipan@linux.ibm.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Suchanek <msuchanek@suse.de>
+Cc: linux-mm@kvack.org
+Cc: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Cc: Andy Lutomirski <luto@kernel.org>
+
+Reinette Chatre (3):
+  selftests/vm/pkeys: Use existing __cpuid_count() macro
+  selftests/x86/amx: Use existing __cpuid_count() macro
+  selftests/x86/corrupt_xstate_header: Use existing __cpuid_count()
+    macro
+
+ tools/testing/selftests/vm/pkey-x86.h         | 22 +++---------------
+ tools/testing/selftests/x86/amx.c             | 23 +++++--------------
+ .../selftests/x86/corrupt_xstate_header.c     | 17 ++------------
+ 3 files changed, 11 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+
