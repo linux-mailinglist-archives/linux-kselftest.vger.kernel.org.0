@@ -2,92 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5EA4ACA89
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 21:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D924ACABF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 21:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiBGUrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 15:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S234973AbiBGUuX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 15:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241630AbiBGUcK (ORCPT
+        with ESMTP id S234500AbiBGUuV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:32:10 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B87C0401DA
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:32:09 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id x65so496013pfx.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:32:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1P8hA1j9aywFJgfHjGYLfcilDGyQWP/oEP/rL7ICpyg=;
-        b=C06fimZteiDPoqZEu2rPd0hp5X05Xu0F8lNukNvXrC+SHmbeaRXXVOOPeN18tKtywR
-         P1+CY4LIGJR3E4i+nMbWJgjXQLn0rgLLAbMXyEDV7jWHBD66bf1bRgmGfwSbPpsJCu//
-         FFlgWppTLm/5QqkvSGU/tM/Y1y30kZ6w/e+cqsczks/n8G2VRUX/Yr/7QKsOHOcJLe9F
-         WOO+bGwKVmf4WWCoOSQ7ilLPzkYbMmeyT0lNJONAGNKITT6/PApHfzpuqUHjixPw373F
-         9/1MDyR0oQawyfmi+5YY2P/IDWOb6kQsvefxAMaUCqC4FSpSOwFSgQ2flSnipZz5F+Rb
-         MRmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1P8hA1j9aywFJgfHjGYLfcilDGyQWP/oEP/rL7ICpyg=;
-        b=p7PCzOxUFzy+/oBXnZEEHpZXervSaZJBBirbRjxwsX8Xu1kARMjRm+LRNXLxq9Fgks
-         wVGBYSwIYi48MdmgDG198GJB71hT74zhBD9TfEZGEywqioONwCjEcyvn/LIyz4uHIwZU
-         iTVcsKGxicNKuzbcB5LGih8NfAExIHkkfP+eKDgQc9USo4EMplgonh106nrFM79Ds60R
-         AkYzZtoWjzck5CzrhiixmgIT0TjNNQu0O+mmjqsDoy4MmWd0BBzzPywNyhHzlvXtInKc
-         sO+RTYYv9AMq5re2UgXVTyBVtPwEQXt6FqxphfjG/1GKa0Wo7R75GIGtW1Mcp6vn37N5
-         FnPg==
-X-Gm-Message-State: AOAM533OgZUAzk1BA6MGyH5LSc9i26wcm9C11W7wtlJTOQYbe2sNL36c
-        E+DIe7eiLwBJnv1WjN6nD50KBG+9Rdaj0Ln8o7Nbxw==
-X-Google-Smtp-Source: ABdhPJzdiVW/zhtdK0Fc+Zk69XCZxEluVIICSO7cBbOk5Z3lLzYGJkWJ/w2d7cthfjL73eD7SoteD4xaEYUlVPSO2Nw=
-X-Received: by 2002:a05:6a00:1508:: with SMTP id q8mr1109927pfu.3.1644265928635;
- Mon, 07 Feb 2022 12:32:08 -0800 (PST)
+        Mon, 7 Feb 2022 15:50:21 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A920C06173B;
+        Mon,  7 Feb 2022 12:50:19 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 489061F449A7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644267017;
+        bh=3lS6N5RJps0OJmMkGwekeXsU2Va8vgdu8W44CQNZmXM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=movQ8j5Qfu3B5UzmjKxjVkNVTWCBwElWoP+woePSYr7NjRY1jTFKP1lAts5SqQl8g
+         eOJdCW973qIxeq3Corq05gMIzs1kOR95/89Z2QDJtpXUYSBnsbALWRU9IL0yLON2Ro
+         fmq3Uj9hlX33ztZwnm6ApgNnj/NShdal1MRL6yijnnNE2H4Nu0WevBJUU0idmUMCau
+         JIGLnSSrMMnP1fUi8vkGfQv1vg9ulXiUhnnCxZHp7HgNTtSkVgfhO34uiiS+exSerU
+         M8iAx2my//x6rg1gLCVc/TPcHks7BVOCvB9efI6GjxuBu985crIr5lbSd5Q2ErkM4R
+         hGHDQpneVnCGw==
+Message-ID: <24d02704-e590-63d0-4d8a-c76578249bea@collabora.com>
+Date:   Tue, 8 Feb 2022 01:50:09 +0500
 MIME-Version: 1.0
-References: <20220207112043.397074-1-akirakawata1@gmail.com>
-In-Reply-To: <20220207112043.397074-1-akirakawata1@gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 7 Feb 2022 15:31:57 -0500
-Message-ID: <CAFd5g466EGdOvvAp8t1tZDe4ks1XgJpA1Hwouds+9ASjznxhFA@mail.gmail.com>
-Subject: Re: [PATCH v1] Documentation: KUnit: Fix usage bug
-To:     Akira Kawata <akirakawata1@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: futex: set DEFAULT_INSTALL_HDR_PATH
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220119103332.2887370-1-usama.anjum@collabora.com>
+ <3a4878b9-f175-f16f-a901-efc33b2bf89f@linuxfoundation.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <3a4878b9-f175-f16f-a901-efc33b2bf89f@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 6:21 AM Akira Kawata <akirakawata1@gmail.com> wrote:
->
-> Fix a bug of kunit documentation.
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=205773
->
-> : Quoting Steve Pfetsch:
-> :
-> : kunit documentation is incorrect:
-> : https://kunit.dev/third_party/stable_kernel/docs/usage.html
-> : struct rectangle *self = container_of(this, struct shape, parent);
-> :
-> :
-> : Shouldn't it be:
-> : struct rectangle *self = container_of(this, struct rectangle, parent);
-> : ?
->
-> Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
+On 2/7/22 11:40 PM, Shuah Khan wrote:
+> On 1/19/22 3:33 AM, Muhammad Usama Anjum wrote:
+>> If only futex selftest is compiled, uapi header files are copied to the
+>> selftests/futex/functional directory. This copy isn't needed. Set the
+>> DEFAULT_INSTALL_HDR_PATH variable to 1 to use the default header install
+>> path only. This removes extra copy of header file.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   tools/testing/selftests/futex/functional/Makefile | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/selftests/futex/functional/Makefile
+>> b/tools/testing/selftests/futex/functional/Makefile
+>> index 5cc38de9d8ea..9a8c3700d773 100644
+>> --- a/tools/testing/selftests/futex/functional/Makefile
+>> +++ b/tools/testing/selftests/futex/functional/Makefile
+>> @@ -24,6 +24,7 @@ TEST_PROGS := run.sh
+>>     top_srcdir = ../../../../..
+>>   KSFT_KHDR_INSTALL := 1
+>> +DEFAULT_INSTALL_HDR_PATH := 1
+>>   include ../../lib.mk
+>>     $(TEST_GEN_FILES): $(HEADERS)
+>>
+> 
+> This will be a good cleanup. However, please make there is no dependencies
+> in the futex test sub-dirs on being able to find the headers under futex
+> 
+I've tried the following variations. The build is fine.
 
-Wow. I can't believe we let this go for this long...and even after
-doing an *almost* complete rewrite of that page.
+cd tools/testing/selftests/futex/functional
+make
 
-Anyway, thanks for fixing this!
+cd tools/testing/selftests/futex/
+make
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+make -C tools/testing/selftests/
+
+> I vaguely remember leaving this in place for reason.
+> 
+This must have been fixed in previous changes made to the build system.
+
+> thanks,
+> -- Shuah
+> 
