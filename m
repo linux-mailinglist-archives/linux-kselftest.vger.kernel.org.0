@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BAB4AC3DF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84ED4AC3F1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240408AbiBGPfP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 10:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S238697AbiBGPfN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 10:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355455AbiBGPYn (ORCPT
+        with ESMTP id S1356127AbiBGPYs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:24:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABBCC0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:42 -0800 (PST)
+        Mon, 7 Feb 2022 10:24:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753DBC0401CE
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 486C86149E
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 500AEC340F1;
-        Mon,  7 Feb 2022 15:24:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38136B815A6
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43228C340F2;
+        Mon,  7 Feb 2022 15:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247481;
-        bh=7yIiqkcfbJp87t6cPR9WNAAcTxL4NrY+L/kW3l1UCeY=;
+        s=k20201202; t=1644247486;
+        bh=+stvVyRnz2H4xbnaEtKWfcp0/IPDCeyODbC6Y5cXcCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d/XPnmGbkUKMQSxWZ8YQOprLirkxWlQyYtfVI9uKZBeUhoKmJQzWecxSXlOEnUZZS
-         1ipCrjDO98MljwwhzBLl5FEVJjIiqUj9kk2Mzp8GWZ96zS9bc2Bn2iApkTpU806syp
-         7ET7IcKix/w+6SqA4yO+7m9GjJ5d8ELiXhZifypwT4dywruUlJ+REgXOHTIgXGN6+m
-         w8fNJvtKgY/weqV8kt81a7OQcX0a9tBy6O6oRCBtgtFffWrrmhau7G1lu3ZZXsZWhW
-         oVn1M/VRaBzYmpIAG/zzq2eI+f/duicN6w9UZRV2Daqo5twwmqOAXE9yAttDaNJtD2
-         VS2LuOn4rvVag==
+        b=BeGQY67CXRWkA02czlOg4e4dKQhn1vgI0TX0Kzvk92P2fXSxyJ5PZWf6JYjOh28HG
+         p/fcLBFTTYtSxmJ0HdA+tLpc5Dt3SvtdUu0aCiagxYI6IPJ2FfmB6Q3516WmUXUlvr
+         sK843zAnWjjzJQUIN0M3GElhb43EQjDIaRJSDys7IPjJ/sroNZ+Q09hJGxtT4+A3i/
+         TMZLeRX92xt/Zwsfw0+rQCGsDpmCTfoa3kob31yRRRK/nCjSj3rCJpcSsa4I3pUOyg
+         3pgwkQtQ4m1aZ8I99dU4lZt6qIvRyb7UXGx/s9GxtOAaCYuZ/siUWdvC4Lq+H3sC9r
+         9f5S4Sk87qJ/A==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,14 +48,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 23/40] arm64/sme: Add ptrace support for ZA
-Date:   Mon,  7 Feb 2022 15:20:52 +0000
-Message-Id: <20220207152109.197566-24-broonie@kernel.org>
+Subject: [PATCH v11 24/40] arm64/sme: Disable streaming mode and ZA when flushing CPU state
+Date:   Mon,  7 Feb 2022 15:20:53 +0000
+Message-Id: <20220207152109.197566-25-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8277; h=from:subject; bh=7yIiqkcfbJp87t6cPR9WNAAcTxL4NrY+L/kW3l1UCeY=; b=owGbwMvMwMWocq27KDak/QLjabUkhiRGi+t68j1Huba3xr5k4tOfJ6jFH6N0r94rzdijqdX6kn+Q wJFORmMWBkYuBlkxRZa1zzJWpYdLbJ3/aP4rmEGsTCBTGLg4BWAij16w/8+Pzq3W/+e+pGO3WsrjHf eSrdUqc/f8czm20tWkVOveyxM2h9ybr0X7msb8uDHHtujUd9UWkSudxrH1nB/1TV4ZLp+u5h6jas3+ uicz5Evzq7MJyvKz5hRzHvbe1xE/hcme3TtHx1TGT8/836qFVZO/HGzi7v4lw3VJdNdOpn9d62IqfG bN8mo2uabXz6x3dJIRn1JuTMJLfbaLYrI7/eTKk14zqypFp8eEva+QatjGs8QqY1L+8XUftklrmaZv /T7Zw32NcPOkAm6RhBOhEtXPPMQWMXzaH+d5eb7XXw7xfUqO/4VSv2bkZu9csebG02RzoT1llvd5zE /PY9U2q3ThvRThxP1uprrnzSoA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1128; h=from:subject; bh=+stvVyRnz2H4xbnaEtKWfcp0/IPDCeyODbC6Y5cXcCY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjXZjkrllyw3wrZv65gkzLMq7K6hvi8wR5NerZM dVGlefyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE41wAKCRAk1otyXVSH0NQpB/ 9paVTph2pBZxYnT/c1ExiDXuHtp0fK3bfvDPEFT3bvWk96GqS7QwDkwaX2TuIM/QS8Ip7+6FM11I1z /Od20Ab96ZmMgKUnlxByL9hKw4g+pQcJB8Wqz4V6cV185sLmu8Dij7x/1+35pVPTOwft4FvC+uBe2a SSAcH1i11FngQ+xBNThdmdvo+2KWxm8L1AZ98cMW5EcyROtHRU/Bt4sM5M1+GhqyNJFqCD1vP06tLb bs5P0ELeLusAiGHNUThbDtTZbuNMANSC5axgd6WIFW7mUbGV4ZtsVHJsSID+dxJlsU5Bys1zUzt8hF TFjiL/AwQ/WxnrY43MddYL5xVG+cdM
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,273 +68,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ZA array can be read and written with the NT_ARM_ZA.  Similarly to
-our interface for the SVE vector registers the regset consists of a
-header with information on the current vector length followed by an
-optional register data payload, represented as for signals as a series
-of horizontal vectors from 0 to VL/8 in the endianness independent
-format used for vectors.
-
-On get if ZA is enabled then register data will be provided, otherwise
-it will be omitted.  On set if register data is provided then ZA is
-enabled and initialized using the provided data, otherwise it is
-disabled.
+Both streaming mode and ZA may increase power consumption when they are
+enabled and streaming mode makes many FPSIMD and SVE instructions undefined
+which will cause problems for any kernel mode floating point so disable
+both when we flush the CPU state. This covers both kernel_neon_begin() and
+idle and after flushing the state a reload is always required anyway.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/uapi/asm/ptrace.h |  56 +++++++++++
- arch/arm64/kernel/ptrace.c           | 144 +++++++++++++++++++++++++++
- include/uapi/linux/elf.h             |   1 +
- 3 files changed, 201 insertions(+)
+ arch/arm64/kernel/fpsimd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
-index 522b925a78c1..7fa2f7036aa7 100644
---- a/arch/arm64/include/uapi/asm/ptrace.h
-+++ b/arch/arm64/include/uapi/asm/ptrace.h
-@@ -268,6 +268,62 @@ struct user_pac_generic_keys {
- 	__uint128_t	apgakey;
- };
- 
-+/* ZA state (NT_ARM_ZA) */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 8b111b7f2006..e00d3a9e919c 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1762,6 +1762,15 @@ static void fpsimd_flush_cpu_state(void)
+ {
+ 	WARN_ON(!system_supports_fpsimd());
+ 	__this_cpu_write(fpsimd_last_state.st, NULL);
 +
-+struct user_za_header {
-+	__u32 size; /* total meaningful regset content in bytes */
-+	__u32 max_size; /* maxmium possible size for this thread */
-+	__u16 vl; /* current vector length */
-+	__u16 max_vl; /* maximum possible vector length */
-+	__u16 flags;
-+	__u16 __reserved;
-+};
++	/*
++	 * Leaving streaming mode enabled will cause issues for any kernel
++	 * NEON and leaving streaming mode or ZA enabled may increase power
++	 * consumption.
++	 */
++	if (system_supports_sme())
++		sme_smstop();
 +
-+/*
-+ * Common ZA_PT_* flags:
-+ * These must be kept in sync with prctl interface in <linux/prctl.h>
-+ */
-+#define ZA_PT_VL_INHERIT		((1 << 17) /* PR_SME_VL_INHERIT */ >> 16)
-+#define ZA_PT_VL_ONEXEC			((1 << 18) /* PR_SME_SET_VL_ONEXEC */ >> 16)
-+
-+
-+/*
-+ * The remainder of the ZA state follows struct user_za_header.  The
-+ * total size of the ZA state (including header) depends on the
-+ * metadata in the header:  ZA_PT_SIZE(vq, flags) gives the total size
-+ * of the state in bytes, including the header.
-+ *
-+ * Refer to <asm/sigcontext.h> for details of how to pass the correct
-+ * "vq" argument to these macros.
-+ */
-+
-+/* Offset from the start of struct user_za_header to the register data */
-+#define ZA_PT_ZA_OFFSET						\
-+	((sizeof(struct user_za_header) + (__SVE_VQ_BYTES - 1))	\
-+		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
-+
-+/*
-+ * The payload starts at offset ZA_PT_ZA_OFFSET, and is of size
-+ * ZA_PT_ZA_SIZE(vq, flags).
-+ *
-+ * The ZA array is stored as a sequence of horizontal vectors ZAV of SVL/8
-+ * bytes each, starting from vector 0.
-+ *
-+ * Additional data might be appended in the future.
-+ *
-+ * The ZA matrix is represented in memory in an endianness-invariant layout
-+ * which differs from the layout used for the FPSIMD V-registers on big-endian
-+ * systems: see sigcontext.h for more explanation.
-+ */
-+
-+#define ZA_PT_ZAV_OFFSET(vq, n) \
-+	(ZA_PT_ZA_OFFSET + ((vq * __SVE_VQ_BYTES) * n))
-+
-+#define ZA_PT_ZA_SIZE(vq) ((vq * __SVE_VQ_BYTES) * (vq * __SVE_VQ_BYTES))
-+
-+#define ZA_PT_SIZE(vq)						\
-+	(ZA_PT_ZA_OFFSET + ZA_PT_ZA_SIZE(vq))
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _UAPI__ASM_PTRACE_H */
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 0b8324fa1abc..d6f27d3bf6e7 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -996,6 +996,141 @@ static int ssve_set(struct task_struct *target,
- 			      ARM64_VEC_SME);
+ 	set_thread_flag(TIF_FOREIGN_FPSTATE);
  }
  
-+static int za_get(struct task_struct *target,
-+		  const struct user_regset *regset,
-+		  struct membuf to)
-+{
-+	struct user_za_header header;
-+	unsigned int vq;
-+	unsigned long start, end;
-+
-+	if (!system_supports_sme())
-+		return -EINVAL;
-+
-+	/* Header */
-+	memset(&header, 0, sizeof(header));
-+
-+	if (test_tsk_thread_flag(target, TIF_SME_VL_INHERIT))
-+		header.flags |= ZA_PT_VL_INHERIT;
-+
-+	header.vl = task_get_sme_vl(target);
-+	vq = sve_vq_from_vl(header.vl);
-+	header.max_vl = sme_max_vl();
-+	header.max_size = ZA_PT_SIZE(vq);
-+
-+	/* If ZA is not active there is only the header */
-+	if (thread_za_enabled(&target->thread))
-+		header.size = ZA_PT_SIZE(vq);
-+	else
-+		header.size = ZA_PT_ZA_OFFSET;
-+
-+	membuf_write(&to, &header, sizeof(header));
-+
-+	BUILD_BUG_ON(ZA_PT_ZA_OFFSET != sizeof(header));
-+	end = ZA_PT_ZA_OFFSET;
-+;
-+	if (target == current)
-+		fpsimd_preserve_current_state();
-+
-+	/* Any register data to include? */
-+	if (thread_za_enabled(&target->thread)) {
-+		start = end;
-+		end = ZA_PT_SIZE(vq);
-+		membuf_write(&to, target->thread.za_state, end - start);
-+	}
-+
-+	/* Zero any trailing padding */
-+	start = end;
-+	end = ALIGN(header.size, SVE_VQ_BYTES);
-+	return membuf_zero(&to, end - start);
-+}
-+
-+static int za_set(struct task_struct *target,
-+		  const struct user_regset *regset,
-+		  unsigned int pos, unsigned int count,
-+		  const void *kbuf, const void __user *ubuf)
-+{
-+	int ret;
-+	struct user_za_header header;
-+	unsigned int vq;
-+	unsigned long start, end;
-+
-+	if (!system_supports_sme())
-+		return -EINVAL;
-+
-+	/* Header */
-+	if (count < sizeof(header))
-+		return -EINVAL;
-+	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &header,
-+				 0, sizeof(header));
-+	if (ret)
-+		goto out;
-+
-+	/*
-+	 * All current ZA_PT_* flags are consumed by
-+	 * vec_set_vector_length(), which will also validate them for
-+	 * us:
-+	 */
-+	ret = vec_set_vector_length(target, ARM64_VEC_SME, header.vl,
-+		((unsigned long)header.flags) << 16);
-+	if (ret)
-+		goto out;
-+
-+	/* Actual VL set may be less than the user asked for: */
-+	vq = sve_vq_from_vl(task_get_sme_vl(target));
-+
-+	/* Ensure there is some SVE storage for streaming mode */
-+	if (!target->thread.sve_state) {
-+		sve_alloc(target);
-+		if (!target->thread.sve_state) {
-+			clear_thread_flag(TIF_SME);
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+	}
-+
-+	/* Allocate/reinit ZA storage */
-+	sme_alloc(target);
-+	if (!target->thread.za_state) {
-+		ret = -ENOMEM;
-+		clear_tsk_thread_flag(target, TIF_SME);
-+		goto out;
-+	}
-+
-+	/* If there is no data then disable ZA */
-+	if (!count) {
-+		target->thread.svcr &= ~SYS_SVCR_EL0_ZA_MASK;
-+		goto out;
-+	}
-+
-+	/*
-+	 * If setting a different VL from the requested VL and there is
-+	 * register data, the data layout will be wrong: don't even
-+	 * try to set the registers in this case.
-+	 */
-+	if (vq != sve_vq_from_vl(header.vl)) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	BUILD_BUG_ON(ZA_PT_ZA_OFFSET != sizeof(header));
-+	start = ZA_PT_ZA_OFFSET;
-+	end = ZA_PT_SIZE(vq);
-+	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
-+				 target->thread.za_state,
-+				 start, end);
-+	if (ret)
-+		goto out;
-+
-+	/* Mark ZA as active and let userspace use it */
-+	set_tsk_thread_flag(target, TIF_SME);
-+	target->thread.svcr |= SYS_SVCR_EL0_ZA_MASK;
-+
-+out:
-+	fpsimd_flush_task_state(target);
-+	return ret;
-+}
-+
- #endif /* CONFIG_ARM64_SME */
- 
- #ifdef CONFIG_ARM64_PTR_AUTH
-@@ -1217,6 +1352,7 @@ enum aarch64_regset {
- #endif
- #ifdef CONFIG_ARM64_SVE
- 	REGSET_SSVE,
-+	REGSET_ZA,
- #endif
- #ifdef CONFIG_ARM64_PTR_AUTH
- 	REGSET_PAC_MASK,
-@@ -1308,6 +1444,14 @@ static const struct user_regset aarch64_regsets[] = {
- 		.regset_get = ssve_get,
- 		.set = ssve_set,
- 	},
-+	[REGSET_ZA] = { /* SME ZA */
-+		.core_note_type = NT_ARM_ZA,
-+		.n = DIV_ROUND_UP(ZA_PT_ZA_SIZE(SVE_VQ_MAX), SVE_VQ_BYTES),
-+		.size = SVE_VQ_BYTES,
-+		.align = SVE_VQ_BYTES,
-+		.regset_get = za_get,
-+		.set = za_set,
-+	},
- #endif
- #ifdef CONFIG_ARM64_PTR_AUTH
- 	[REGSET_PAC_MASK] = {
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 61502388683f..7ef574f3256a 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -428,6 +428,7 @@ typedef struct elf64_shdr {
- #define NT_ARM_TAGGED_ADDR_CTRL	0x409	/* arm64 tagged address control (prctl()) */
- #define NT_ARM_PAC_ENABLED_KEYS	0x40a	/* arm64 ptr auth enabled keys (prctl()) */
- #define NT_ARM_SSVE	0x40b		/* ARM Streaming SVE registers */
-+#define NT_ARM_ZA	0x40c		/* ARM SME ZA registers */
- #define NT_ARC_V2	0x600		/* ARCv2 accumulator/extra registers */
- #define NT_VMCOREDD	0x700		/* Vmcore Device Dump Note */
- #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
 -- 
 2.30.2
 
