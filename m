@@ -2,71 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81F84AC98C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 20:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD854ACA2F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 21:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235906AbiBGT1C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 14:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S241416AbiBGULh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 15:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237153AbiBGTXK (ORCPT
+        with ESMTP id S240453AbiBGUIk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:23:10 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C3C0401DA;
-        Mon,  7 Feb 2022 11:23:10 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id c188so18197652iof.6;
-        Mon, 07 Feb 2022 11:23:10 -0800 (PST)
+        Mon, 7 Feb 2022 15:08:40 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07568C0401E1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:08:40 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id y9so6387051pjf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6NM7Ake9kho34MN1EmrmT8NV0K8P6BDSXILnmG4EDnQ=;
-        b=GYijXH/rJC/AMLJ2OxzqYk27/RyiwNDq7vFloLi30hoIdxnu5QM4P8/5mXFinUuUsT
-         Vdt/Tyu/YZMW6fkkgZ+iTVLjUnQt0ciXRuauMCez2/Qr+1/yZzv1Zr7A3L/t3JBov4og
-         fs9lzwAp4fzqacsYNCwUMOV18fQ1UWb2Mu2RwnIk+Fga31BKNOA3t8o4wRA8FEvBnZ3U
-         F9PBcZmKqZNPjwa+j2ilMbjBN4zLqRlUfMDors0RvfVECB97zzcGLo99oSOXq8SVjYco
-         REcR0MLUN6zxP7ju/F3F0RFRHZdkIfgy6CkdPO1FAUOEiZ+YSOCrWgbhIaqGdAgJgj+e
-         LoUg==
+        bh=LNwds3cgV6uMX28QySXkXVMQplA0HsKCenltQ/gMoBA=;
+        b=j258jgaQuSFCKLNbLuL3hr6Uk1FCHwaxDyBxLgVGgZ0arJ4S/Ms8LrI5m+TzWnxBP7
+         AYJe7XCXhyLOOE2e1/5DQnqv5jTOvSXHRSC34HtUW4xAPd5IRwPCivVKJZDfXlVoOnV5
+         sYGZ36Ev6Q1mJM6vb45h5142vJzEhYN0aGLqMn+Y8LUIZovnNTuwduSJzqa4TTvF9LvI
+         8XDwnaqm6MSAved76vNOh0StXkD66tT3gAUYso022ea2JISSaI5PFtw4mhdK0klkaEtf
+         F6rcqby0qSTws2cPiX4xFVG12aR+ZNTJDmsISE4vgH8w4Py6RyI27wd5Xx0uco5kCin8
+         XqTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6NM7Ake9kho34MN1EmrmT8NV0K8P6BDSXILnmG4EDnQ=;
-        b=gq9aLgG+UkBwjRJhzcD6Q+q49rQFpy12Lm7I40dcR68O7UJZ55iHcDpvb0/Ztqunfd
-         ocuuZVag6otODa0fBPNB1qBRdFqf29U+9BvtKhzEkqNnJtoLP4IRd5glt/fHDcyCfFr0
-         JDyvZ0NDoz/VG6WtzxIUc7si78EAT+ZZumdmsCLFfryZZQuIsJ1zeAocpmyIU69qocAY
-         60NARNETg0xm17aaqv394GiT/lqLr7paN92+eyEZFg0FKK2OJK705cShx+fLjRe8FnMC
-         qbmo1/Cv/A8Osxjn/aJ5c7rA7FHKwVxcowzfwwnBIDbD5Ecod6ra+5P8UmVpkt2GboQD
-         2ZeQ==
-X-Gm-Message-State: AOAM533A4RTupN5WutKgx53BcMQd4flApdnVmDlmZaga7s7KyuBSkQWp
-        M3isn2p7XqPCGdM41PN+uBH7NLv/T0K7Bko9rnE=
-X-Google-Smtp-Source: ABdhPJwWdbsMxXEp32Ec06c+K/9QK9+hktthjg6LlBSVY2Qfp+qViF5rI8She+cfTeqM4l6cM1IzJvoV/6C0IZeCc3M=
-X-Received: by 2002:a05:6638:304d:: with SMTP id u13mr571045jak.103.1644261789459;
- Mon, 07 Feb 2022 11:23:09 -0800 (PST)
+        bh=LNwds3cgV6uMX28QySXkXVMQplA0HsKCenltQ/gMoBA=;
+        b=YFZAkHDOTJGPZ91YY1JJ2EGiBWoZkBguLhSU7x4rase2oLV322S2UiQgIh4iETYYDg
+         focmQ3DH4lWZX6Tk5mL0+cspK0WO84L4KLf1qgrcySSsskGsOJAGJJo9ws+iVP8zF4Vu
+         R+uvaZz39LCDTZ2lj63BmPvJgsLKeL55UgSLjtGAm7E7o0chT0Pg65GHkGD2ejWJV13t
+         YbiIvftzoDZ4XFdWg2nXIaoOJvPKWVH8JK6V5GkZTL2xeija9+yaXuaxHlt5pevXtZna
+         AkI9RQR5bErMyMZxC0VxvRsRkT6e9hqCQUvckFiPOgAW3cbbXDz/v5udPmU/Q8P69+tB
+         M2hg==
+X-Gm-Message-State: AOAM532RN1ZaziA+hEAd/gPeDNYRN1nj5Xme05f4OClRZs4u/AIQmedN
+        r9u7TTbmTkwm50ZuQmL10Kb/XhmkGrxEGJG/508HOg==
+X-Google-Smtp-Source: ABdhPJyCyMcvR+grYQyc1blHWaBUPNliRVb5L5Dbb4GWBaCaP0ktKX+iEoVK88cuZrP4dHVThhJlUPBfLOVL/BsHw8E=
+X-Received: by 2002:a17:902:b682:: with SMTP id c2mr1313446pls.126.1644264519213;
+ Mon, 07 Feb 2022 12:08:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20220204225817.3918648-1-usama.anjum@collabora.com>
-In-Reply-To: <20220204225817.3918648-1-usama.anjum@collabora.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Feb 2022 11:22:58 -0800
-Message-ID: <CAEf4Bzbf38F39XHJnCKy19m97JZJnhN0+Sr-TAVzZnSKuqzL4w@mail.gmail.com>
-Subject: Re: [PATCH] selftests: Fix build when $(O) points to a relative path
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, kernel@collabora.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+References: <20220207183308.1829495-1-ribalda@chromium.org>
+In-Reply-To: <20220207183308.1829495-1-ribalda@chromium.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 7 Feb 2022 15:08:30 -0500
+Message-ID: <CAFd5g46X_jptwL5UsebR2Ooq7ubneSZ5p-Qp4BOL9dt2gFhMAw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] kunit: Introduce _NULL and _NOT_NULL macros
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,54 +67,146 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 2:59 PM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+On Mon, Feb 7, 2022 at 1:33 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> Build of bpf and tc-testing selftests fails when the relative path of
-> the build directory is specified.
+> Today, when we want to check if a pointer is NULL and not ERR we have
+> two options:
 >
-> make -C tools/testing/selftests O=build0
-> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
-> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
-> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
-> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+> EXPECT_TRUE(test, ptr == NULL);
 >
-> The fix is same as mentioned in commit 150a27328b68 ("bpf, preload: Fix
-> build when $(O) points to a relative path").
+> or
 >
+> EXPECT_PTR_NE(test, ptr, (struct mystruct *)NULL);
+>
+> Create a new set of macros that take care of NULL checks.
 
-I don't think it actually helps building BPF selftest. Even with this
-patch applied, all the feature detection doesn't work, and I get
-reallocarray redefinition failure when bpftool is being built as part
-of selftest.
+Also worth mentioning that we have a KUNIT_EXPECT_NOT_ERR_OR_NULL()
+(as well as an ASSERT flavor); however, I can imagine circumstances
+where you don't want to check if a pointer is potentially an err_ptr:
 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+https://elixir.bootlin.com/linux/v5.17-rc3/source/include/kunit/test.h#L1586
+
+Otherwise - aside from a minor nit below - this looks good. Send me
+the rebased version that Daniel mentioned, and I'll give it a
+reviewed-by.
+
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
->  tools/testing/selftests/Makefile | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  include/kunit/test.h | 91 ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
 >
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 4eda7c7c15694..aa0faf132c35a 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -178,6 +178,7 @@ all: khdr
->                 BUILD_TARGET=$$BUILD/$$TARGET;                  \
->                 mkdir $$BUILD_TARGET  -p;                       \
->                 $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET       \
-> +                               O=$(abs_objtree)                \
->                                 $(if $(FORCE_TARGETS),|| exit); \
->                 ret=$$((ret * $$?));                            \
->         done; exit $$ret;
-> @@ -185,7 +186,8 @@ all: khdr
->  run_tests: all
->         @for TARGET in $(TARGETS); do \
->                 BUILD_TARGET=$$BUILD/$$TARGET;  \
-> -               $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
-> +               $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
-> +                               O=$(abs_objtree);                   \
->         done;
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index b26400731c02..a84bf065e64b 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -1395,6 +1395,51 @@ do {                                                                            \
+>                                           ##__VA_ARGS__)
 >
->  hotplug:
-> --
-> 2.30.2
+>  /**
+> + * KUNIT_EXPECT_NULL() - Expects that @ptr is null.
+> + * @test: The test context object.
+> + * @ptr: an arbitrary pointer.
+> + *
+> + * Sets an expectation that the value that @ptr evaluates to is null. This is
+> + * semantically equivalent to KUNIT_EXPECT_PTR_EQ(@test, NULL, ptr).
+> + * See KUNIT_EXPECT_TRUE() for more information.
+> + */
+> +#define KUNIT_EXPECT_NULL(test, ptr)                                          \
+> +       KUNIT_BINARY_PTR_EQ_ASSERTION(test,                                    \
+> +                                     KUNIT_EXPECTATION,                       \
+> +                                     (typeof(ptr))NULL,                       \
+> +                                     ptr)
+
+Minor nit: can you put these new declarations just ahead of the
+existing KUNIT_{EXPECT|ASSERT}_NOT_ERR_OR_NULL() macros that I
+mentioned above respectively?
+
+> +#define KUNIT_EXPECT_NULL_MSG(test, ptr, fmt, ...)                            \
+> +       KUNIT_BINARY_PTR_EQ_MSG_ASSERTION(test,                                \
+> +                                         KUNIT_EXPECTATION,                   \
+> +                                         (typeof(ptr))NULL,                   \
+> +                                         ptr,                                 \
+> +                                         fmt,                                 \
+> +                                         ##__VA_ARGS__)
+> +/**
+> + * KUNIT_EXPECT_NOT_NULL() - Expects that @ptr is not null.
+> + * @test: The test context object.
+> + * @ptr: an arbitrary pointer.
+> + *
+> + * Sets an expectation that the value that @ptr evaluates to is not null. This
+> + * is semantically equivalent to KUNIT_EXPECT_PTR_NE(@test, NULL, ptr).
+> + * See KUNIT_EXPECT_TRUE() for more information.
+> + */
+> +#define KUNIT_EXPECT_NOT_NULL(test, ptr)                                      \
+> +       KUNIT_BINARY_PTR_NE_ASSERTION(test,                                    \
+> +                                     KUNIT_EXPECTATION,                       \
+> +                                     (typeof(ptr))NULL,                       \
+> +                                     ptr)
+> +
+> +#define KUNIT_EXPECT_NOT_NULL_MSG(test, ptr, fmt, ...)                        \
+> +       KUNIT_BINARY_PTR_NE_MSG_ASSERTION(test,                                \
+> +                                         KUNIT_EXPECTATION,                   \
+> +                                         (typeof(ptr))NULL,                   \
+> +                                         ptr,                                 \
+> +                                         fmt,                                 \
+> +                                         ##__VA_ARGS__)
+> +
+> +                          /**
+>   * KUNIT_EXPECT_NE() - An expectation that @left and @right are not equal.
+>   * @test: The test context object.
+>   * @left: an arbitrary expression that evaluates to a primitive C type.
+> @@ -1678,6 +1723,52 @@ do {                                                                            \
+>                                           fmt,                                 \
+>                                           ##__VA_ARGS__)
 >
+> +/**
+> + * KUNIT_ASSERT_NULL() - Asserts that pointers @ptr is null.
+> + * @test: The test context object.
+> + * @ptr: an arbitrary pointer.
+> + *
+> + * Sets an assertion that the values that @ptr evaluates to is null. This is
+> + * the same as KUNIT_EXPECT_NULL(), except it causes an assertion
+> + * failure (see KUNIT_ASSERT_TRUE()) when the assertion is not met.
+> + */
+> +#define KUNIT_ASSERT_NULL(test, ptr) \
+> +       KUNIT_BINARY_PTR_EQ_ASSERTION(test,                                    \
+> +                                     KUNIT_ASSERTION,                         \
+> +                                     (typeof(ptr))NULL,                       \
+> +                                     ptr)
+> +
+> +#define KUNIT_ASSERT_NULL_MSG(test, ptr, fmt, ...) \
+> +       KUNIT_BINARY_PTR_EQ_MSG_ASSERTION(test,                                \
+> +                                         KUNIT_ASSERTION,                     \
+> +                                         (typeof(ptr))NULL,                   \
+> +                                         ptr,                                 \
+> +                                         fmt,                                 \
+> +                                         ##__VA_ARGS__)
+> +
+> +/**
+> + * KUNIT_ASSERT_NOT_NULL() - Asserts that pointers @ptr is not null.
+> + * @test: The test context object.
+> + * @ptr: an arbitrary pointer.
+> + *
+> + * Sets an assertion that the values that @ptr evaluates to is not null. This
+> + * is the same as KUNIT_EXPECT_NOT_NULL(), except it causes an assertion
+> + * failure (see KUNIT_ASSERT_TRUE()) when the assertion is not met.
+> + */
+> +#define KUNIT_ASSERT_NOT_NULL(test, ptr) \
+> +       KUNIT_BINARY_PTR_NE_ASSERTION(test,                                    \
+> +                                     KUNIT_ASSERTION,                         \
+> +                                     (typeof(ptr))NULL,                       \
+> +                                     ptr)
+> +
+> +#define KUNIT_ASSERT_NOT_NULL_MSG(test, ptr, fmt, ...)                        \
+> +       KUNIT_BINARY_PTR_NE_MSG_ASSERTION(test,                                \
+> +                                         KUNIT_ASSERTION,                     \
+> +                                         (typeof(ptr))NULL,                   \
+> +                                         ptr,                                 \
+> +                                         fmt,                                 \
+> +                                         ##__VA_ARGS__)
+> +
+>  /**
+>   * KUNIT_ASSERT_NE() - An assertion that @left and @right are not equal.
+>   * @test: The test context object.
+
+Cheers!
