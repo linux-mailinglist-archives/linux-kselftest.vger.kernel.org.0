@@ -2,199 +2,353 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50564ABF99
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 14:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624CC4AC3F9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345286AbiBGN1m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 08:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S1343861AbiBGPfU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 10:35:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447122AbiBGMzk (ORCPT
+        with ESMTP id S1343817AbiBGPXJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:55:40 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0934C0401C5
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 04:55:17 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217CnLoB030403;
-        Mon, 7 Feb 2022 12:55:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=kn18y3xtRaN64vxrwc7lwhHaRapKnj41eEic09ENWi4=;
- b=TLUzNKjG9v93o8/MlS217CtgwniBf+Yq89ePwXLJZyKcku/HSuV6t/jxolGvm33Wkk0N
- 6McjdqBQBUAq2x1nebNST4+MFNYJrhZUrQjBXE6pT1wz7g+dH2HRMOQXyH7ECuJSg3ds
- 7y/Z3kNACwgAW4wuztjO2fIODYLf6gRKMNWex+HM3rLTHoK82BfP/8AIqzQDpqNIz+T0
- JCMw4KHwtNW/fll6USh9Fu3WS9gZdKEQV/5+vyyYJgvWTzFtBWK0XfagFxwfSkYu6Twm
- 5ZhNj5LMjLcKzlyubR7Px7od8ot4hVC4wAFXJQEsI+41kv/mV5jg4Lqbr3WlPuxk2EG4 dA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e1guswyht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Feb 2022 12:55:15 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 217CpTqi169214;
-        Mon, 7 Feb 2022 12:55:14 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
-        by aserp3020.oracle.com with ESMTP id 3e1h248q0e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Feb 2022 12:55:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dJ88pFVo02AvyixlwRmBz91UHVjLSUJ+Pz9KaBFd/+Q81MglQ2MrM65lVCDSmNjWJ7V44m6jM4L43BAlHI9q1PoEYAVvC4bvI6fyY06jUq1hnCoQcVo7znbufz3BhvdZs4H4EUmYClTewQs5WMJwDZcZqD2+YfoBkKBhuFRj1k4M3+0E2nFBydHA+MQRoZaYDfIZWKFGB1vyrENvrdI0sCsfRLHQzMLHTB33KoI3IXExdQuol0sw3KnYg6CHCKbBnCO9EMCDEnVlICOnf9Zx/WaEoq7WdNLw8nJOlbs1eutE+h4NFo5opY5f7wmvYNok0owX/D1rz/BD95MQ0EkWlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kn18y3xtRaN64vxrwc7lwhHaRapKnj41eEic09ENWi4=;
- b=jPS+5rSw0ZLsdFwsBt1mTNHUIDm1+rltXT11hXWQ3TcLlLXdDqpcZO9FxFxmyc4NnX8LpBx3/Lu83ll9h9WVPP8ksky1PahCPi5iWm/BkK2RP1/vLxWH30BuKmMu6gEnA/E1XSxHiNbDaDTn74FlHRTqy+N12dkUsaDy8Yu7Y/WaZh5Fz18noJ1nTu/JNDVxZzVA+fpLXUDeYXh+Q6zAqS0nGxy8/PMpEvxGqnMvVlbdUKfLxHTgnxLT07ep9wNfiIMWDdUQCSTKkHk1DeN8tIACSk0CiDjlp+nkbn7cO9BRDJ+tsWn19t3pITj3B/QJtGyKDtkX8GXqolvMHRS7UA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kn18y3xtRaN64vxrwc7lwhHaRapKnj41eEic09ENWi4=;
- b=OQZhNERy/x3YSKu4bZlO6F6zeCw60JfawA5rOzonxaicsb7bauP1vypqBzw3ATCKHHwZ86Ss39G5yk8dIFXFHon6t3b30cXfSYE/BUUsp+tHxdcdReavmKEWt7dEGGLARabnLIB+EtFMQyNUbQ496t0to4NZxIakZlKPwyIDJkE=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BLAPR10MB5329.namprd10.prod.outlook.com
- (2603:10b6:208:307::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Mon, 7 Feb
- 2022 12:55:12 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8%5]) with mapi id 15.20.4951.018; Mon, 7 Feb 2022
- 12:55:12 +0000
-Date:   Mon, 7 Feb 2022 15:55:02 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     dave.hansen@linux.intel.com
-Cc:     linux-kselftest@vger.kernel.org
-Subject: [bug report] x86/pkeys: Add self-tests
-Message-ID: <20220207125502.GA20855@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0083.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:22::16) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Mon, 7 Feb 2022 10:23:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130EBC0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97C0A61035
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58955C004E1;
+        Mon,  7 Feb 2022 15:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644247387;
+        bh=SXQJ0YXc4r4sW2IiZu0MdkfJ/rfVP/aNhrt4gvQ5KBI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bj68k20SZLsTbKyvKtsWWQPzG9Jh7Gq0DOmVvBI1ruBdRIIGrTDLa690z2IfmoNWs
+         +F1G4iLmDXy/VAf8ZvCs6Mqms1QihctyL5jpqXsfb7sM9IKv0oFgD9nwH4mm9EVhiD
+         YadK73nGG24PbY/u8AjZDer72Kwfd7wtZ9rQu8ikwX8LmYIaSygX3zxzRQ30HCvVcq
+         SsZt2gQdBKKuqWqf2e82VbF5U+luGtDCX+qmV81tsRMXqc7VwfEoYbKSLhS+Fv9gAk
+         HsUBinVR/I/xb88ZIDSM5YGYmY07Ub4cRyZFUjoteintc4ens5Pr0lhGaU+cDNRuoe
+         QRdwCP7Fkyapw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v11 00/40] arm64/sme: Initial support for the Scalable Matrix Extension
+Date:   Mon,  7 Feb 2022 15:20:29 +0000
+Message-Id: <20220207152109.197566-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bd3c0ad9-f905-4963-bcbc-08d9ea39140a
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5329:EE_
-X-Microsoft-Antispam-PRVS: <BLAPR10MB53291BBBF01C1CB88F08D8818E2C9@BLAPR10MB5329.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R3F6vDW7JODomjTQtd7HHPhKh7HAoB/lHWC2l1Y85LhnB0L9xD0QovIchFjbHKUUuy292tg8R1NmZ4OUb/0+2+yORfSWa1zQuFyzgrKhsWa9KQAkA/Qzsd95sqLGusIhQiaWsNyVEBGT1NTcUGHyIA4D3HfHZ4T9qvXgcuLztaasx3d+Gf2r+B2VOr5ot2q1PEwJgS6pa7ArC1xwPDNkL/pH/BU6YBh7rLrar2VxyanXMrRc6HTdgJlPOK0TbmiNxokUzSbQMX4CuXfXagyN6P4N3ZY/tLGCoCLNrXHKWtYjxtDJ3o3UZVjhPfbXLuqgm/a2q1GZp0B/trRrsBPIEGYsd89mWITzd39OMNLk5SgfttCxLOR/uqTf3hU3MOsG9e8XeRrkUJCTVSYWmG8UIQMkgujnp0i1wsBCbslgN2NKrBlrUAbAEoJpxjRAKn/HlGo7tHI7Y8x8tO1MPiObgC+gen9a45jUq2Kf/QyAr3d+SM9cfloIO04A8RxSnMuoW/fIbI/0poDOtnnF8IHJRvsxgB2bwfPMRTzltOXTbUFHcWb7+ZIbxDrBO3tcySYaAti9+FhEVyLt1s5AYxifl5ivRdUUiemcBxmqADjII8VQGEdHKsdWuvNI/gpPIIz2YNF5WLwtYSg3eg/pNJWsiqajHtKeWD4ei6eyNzNEVj570YnBpEumS5I0m6AYr6FbO+E0SySCwhmFd2NWYfsmPA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(86362001)(38350700002)(38100700002)(66946007)(8676002)(8936002)(4326008)(66476007)(316002)(6916009)(66556008)(83380400001)(44832011)(33716001)(6486002)(2906002)(5660300002)(6506007)(6666004)(33656002)(6512007)(508600001)(1076003)(52116002)(26005)(9686003)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OsxhD7jbysKqcOgRS/gkHGemzdOJMw9aiOGJzPtnz5eMM2hmjb3g8ZrG0nyS?=
- =?us-ascii?Q?fl+RKs6aEaHZn/yFD4gscSHTRQOOYpjNP+36p4rzACfrfkPAZN6L6+qMiZfL?=
- =?us-ascii?Q?95scKo04M49Gf4X81WCWNPpCVL5Hw2x7mesH/ncGmR4ZsFfemnFRi+Qejd0u?=
- =?us-ascii?Q?2OUVDHYwnAU5sRqckChlp8o0DozBQTscSkuakeSdNMs73U8Ro13nfmRXMeNx?=
- =?us-ascii?Q?iOXcVl4cJNxo5PHla5e95BNrrD5cNc1VxMpooCvwAaIFOXmKybUhfFokXB9v?=
- =?us-ascii?Q?Zjjla67YHHBjIawXrPLPougAUTO/KWry9TQ81K5+9BrU6XMv8Gx0YnYwyHZr?=
- =?us-ascii?Q?6AILKpMF6cH4fQSi8AunqMj+9su0UoDKYIxc2qGJsJji1ZMCBkLRFzTDl6eo?=
- =?us-ascii?Q?oUXM9ijWRnQyFDIng1u/zkG28ZkHk18NbN5a7OA1DfuJwbBdAVw7KmW+TDIs?=
- =?us-ascii?Q?+AdnZjISVuQUrqIwltC4UiqTHyZE1UeorQLG1l9wrNmNp39aurYC1lHU2JDj?=
- =?us-ascii?Q?5yF++tuelpiOD2JWrHdRkAajZTpbgeZ/+5yHKRFkw0OTGwbA9l77SC9tiIJy?=
- =?us-ascii?Q?4/1dUecunyELqrx2CNtIncL+jTjMzwlZutWrk38LiRNCs2S6GpPMczB5ymic?=
- =?us-ascii?Q?Hnfnk7nXxKaV/ykTwekwMIZ0S0ZrPFaLbmFffMjFva808zsfjyj+RBgnRXBU?=
- =?us-ascii?Q?j35QH7YwgZkLKtMhyQdGgOtcpnQTiezFqXRl/XjGkjhJIBSENtS84VHkBF9y?=
- =?us-ascii?Q?grTFe1hKiVGw0NXuHUumhhEYpe9cASPZQrr6wFzvb0XBz83qD89VPfgzv/pJ?=
- =?us-ascii?Q?6vCUs7Yzo7OI00IAPa5lAcyFuMfVVZb57BAn6o0RDllVniKIF4t1IGVltP1g?=
- =?us-ascii?Q?wEPNBMrfSmPjfBxETpN/H3ce5+bxa3jhJzVmbd1gyHA1OMa2A52XA9Ab3vJj?=
- =?us-ascii?Q?5+aUN9HyDfTXiaW29ZR9WIFa/7lSiECilBioWqTY6R6iWOcqqkny7ffpPLE6?=
- =?us-ascii?Q?LvpV+mUv/gLXF2AFxZ3sPTN+w0aEHm78AWZOcOBxAlIXsJT/hQdw770kX6gg?=
- =?us-ascii?Q?5pvRKoKpSmjOqdyO0ACqE2hQvqobLOQ/g9RVF20zDArrTLml6HIi3JGZpkYA?=
- =?us-ascii?Q?L1pAbaptRQZt/HABwPgRAHBWGrh7EtHM0BmXgq16KV3XQIS2UrLoY7/iN3Sk?=
- =?us-ascii?Q?VMmn27OGpVJNBPX3Fh4586NIbyvtxLjWY6WhryqYUFmjFtqmElXgDBvn4w3t?=
- =?us-ascii?Q?EKcAE1uTjz40NAkh2wrfZOlyG6ZXwUf6Qo/kQqqvLiKCehfXtKW5Hc4jIPaC?=
- =?us-ascii?Q?ZEuZ7AE5E0wWvFdQDh3bAUzLk2aRyULiC3MwdGkNqz/K8brQuEBa6K+gj1Pg?=
- =?us-ascii?Q?1fqwEjedKywPrpx21XUY/0zXpuRoNydHMtLb7qtLQwY+SR5r+zp/Me3O6Yl1?=
- =?us-ascii?Q?KwzebgfodeVFYHyMYin7AwijZEfizTyecm0xaYcLXs9tQwWd9wPRAs8ZFTrz?=
- =?us-ascii?Q?C128xzPxlnms1xJWCpAqTcVJWRXSKBptaGKfs0zTA34xXwUarlxWND2++tR9?=
- =?us-ascii?Q?+sGhffNhwz5r807rzCFrVyLdgtgALFNT/H23z0YnVjj/1xI997fOxLFf/7DX?=
- =?us-ascii?Q?iBHou8nXjbSDt/ujuylvHerUl19xFliI5URY5/KpaK9NqvtFJtoDEo6e0ZSi?=
- =?us-ascii?Q?2djI1w=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd3c0ad9-f905-4963-bcbc-08d9ea39140a
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 12:55:12.1012
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /u28HHYLk6UHXQeUG1Xra/7I3VBATgC20ZAB/0RhmKfAaWi3kjqJ2SNCFTAXz4VaK53RLR44aA4FdUhzzb4nUJnhJHkvUheDtIDJ/auibhI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5329
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10250 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
- phishscore=0 malwarescore=0 mlxlogscore=817 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202070083
-X-Proofpoint-ORIG-GUID: y6kCrvvZI95Ng63Q2h-Jt2kTOeYgJbK_
-X-Proofpoint-GUID: y6kCrvvZI95Ng63Q2h-Jt2kTOeYgJbK_
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15183; h=from:subject; bh=SXQJ0YXc4r4sW2IiZu0MdkfJ/rfVP/aNhrt4gvQ5KBI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjFfZ3PSPFZ6P/pJTORZo7k+Q6dI1vCNbbWL26M gapQC0KJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4xQAKCRAk1otyXVSH0HcVCA CBbraF6WHwHkjV1beccpYSosBWt1SRrvlHMTt1WMabqy2kK/0HxbV0vBOfo9GYyq/fQ9Rl22NiA+ND 5sfa5nydYF9MTQKrbRj6MGbHUr5iWmTNk09Yi++Zsety+2SZycEBjIBNeEGFdgjqIr/EapUkZc29NR rf2jt/asawd4v5BJlyJN75wrHUzIFq7OEvvvOSr6M8ZAC+7Yo6uUyj67Qc1m/FhngmOAh0lLzEflov 5BPiVi9X1rE1dLNOqfNz05f88LusPF88pg1PcqBcEd2cOGvLOCxqWetOaqb7MaIRSfNzSjSh8QQ6QV R2mYiKmd2YhWPviXIcG6IPf8YB8NCf
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Dave Hansen,
+This series provides initial support for the ARMv9 Scalable Matrix
+Extension (SME).  SME takes the approach used for vectors in SVE and
+extends this to provide architectural support for matrix operations.  A
+more detailed overview can be found in [1].
 
-The patch 5f23f6d082a9: "x86/pkeys: Add self-tests" from Jul 29,
-2016, leads to the following Smatch static checker warning:
+For the kernel SME can be thought of as a series of features which are
+intended to be used together by applications but operate mostly
+orthogonally:
 
-	tools/testing/selftests/vm/protection_keys.c:647 record_pkey_malloc()
-	warn: address of 'pkey_malloc_records[i]' is probably non-NULL
+ - The ZA matrix register.
+ - Streaming mode, in which ZA can be accessed and a subset of SVE
+   features are available.
+ - A second vector length, used for streaming mode SVE and ZA and
+   controlled using a similar interface to that for SVE.
+ - TPIDR2, a new userspace controllable system register intended for use
+   by the C library for storing context related to the ZA ABI.
 
-tools/testing/selftests/vm/protection_keys.c
-    638 long nr_pkey_malloc_records;
-    639 void record_pkey_malloc(void *ptr, long size, int prot)
-    640 {
-    641         long i;
-    642         struct pkey_malloc_record *rec = NULL;
-    643 
-    644         for (i = 0; i < nr_pkey_malloc_records; i++) {
-    645                 rec = &pkey_malloc_records[i];
-    646                 /* find a free record */
---> 647                 if (rec)
-    648                         break;
-    649         }
-    650         if (!rec) {
+A substantial part of the series is dedicated to refactoring the
+existing SVE support so that we don't need to duplicate code for
+handling vector lengths and the SVE registers, this involves creating an
+array of vector types and making the users take the vector type as a
+parameter.  I'm not 100% happy with this but wasn't able to come up with
+anything better, duplicating code definitely felt like a bad idea so
+this felt like the least bad thing.  If this approach makes sense to
+people it might make sense to split this off into a separate series
+and/or merge it while the rest is pending review to try to make things a
+little more digestable, the series is very large so it'd probably make
+things easier to digest if some of the preparatory refactoring could be
+merged before the rest is ready.
 
-This code is supposed re-allocate memory.  If we run out, then allocate
-2x the memory.  But it only works for the first allocation where
-"pkey_malloc_records" is NULL.
+One feature of the architecture of particular note is that switching
+to and from streaming mode may change the size of and invalidate the
+contents of the SVE registers, and when in streaming mode the FFR is not
+accessible.  This complicates aspects of the ABI like signal handling
+and ptrace.
 
-For the following allocations it will just select &pkey_malloc_records[0]
-and re-use that again.
+This initial implementation is mainly intended to get the ABI in place,
+there are several areas which will be worked on going forwards - some of
+these will be blockers, others could be handled in followup serieses:
 
-    651                 /* every record is full */
-    652                 size_t old_nr_records = nr_pkey_malloc_records;
-    653                 size_t new_nr_records = (nr_pkey_malloc_records * 2 + 1);
-    654                 size_t new_size = new_nr_records * sizeof(struct pkey_malloc_record);
-    655                 dprintf2("new_nr_records: %zd\n", new_nr_records);
-    656                 dprintf2("new_size: %zd\n", new_size);
-    657                 pkey_malloc_records = realloc(pkey_malloc_records, new_size);
-    658                 pkey_assert(pkey_malloc_records != NULL);
-    659                 rec = &pkey_malloc_records[nr_pkey_malloc_records];
-    660                 /*
-    661                  * realloc() does not initialize memory, so zero it from
-    662                  * the first new record all the way to the end.
-    663                  */
-    664                 for (i = 0; i < new_nr_records - old_nr_records; i++)
-    665                         memset(rec + i, 0, sizeof(*rec));
-    666         }
-    667         dprintf3("filling malloc record[%d/%p]: {%p, %ld}\n",
-    668                 (int)(rec - pkey_malloc_records), rec, ptr, size);
-    669         rec->ptr = ptr;
-    670         rec->size = size;
-    671         rec->prot = prot;
-    672         pkey_last_malloc_record = rec;
-    673         nr_pkey_malloc_records++;
-    674 }
+ - SME is currently not supported for KVM guests, this will be done as a
+   followup series.  A host system can use SME and run KVM guests but
+   SME is not available in the guests.
+ - The KVM host support is done in a very simplistic way, were anyone to
+   attempt to use it in production there would be performance impacts on
+   hosts with SME support. As part of this we also add enumeration of
+   fine grained traps.
+ - There is not currently ptrace or signal support TPIDR2, this will be
+   done as a followup series.
+ - No support is currently provided for scheduler control of SME or SME
+   applications, given the size of the SME register state the context
+   switch overhead may be noticable so this may be needed especially for
+   real time applications.  Similar concerns already exist for larger
+   SVE vector lengths but are amplified for SME, particularly as the
+   vector length increases.
+ - There has been no work on optimising the performance of anything the
+   kernel does.
 
-regards,
-dan carpenter
+It is not expected that any systems will be encountered that support SME
+but not SVE, SME is an ARMv9 feature and SVE is mandatory for ARMv9.
+The code attempts to handle any such systems that are encountered but
+this hasn't been tested extensively.
+
+v11:
+ - Rebase onto v5.17-rc3.
+ - Provide a sme-inst.h to collect manual encodings in kselftest.
+v10:
+ - Actually do the rebase of fixups from the previous version into
+   relevant patches.
+v9:
+ - Remove defensive programming around IS_ENABLED() and FGT in KVM code.
+ - Fix naming of TPIDR2 FGT register bit.
+ - Add patches making handling of floating point register bits more
+   consistent (also sent as separate series).
+ - Drop now unused enumeration of fine grained traps.
+v8:
+ - Rebase onto v5.17-rc1.
+ - Support interoperation with KVM, SME is disabled for KVM guests with
+   minimal handling for cleaning up SME state when entering and leaving
+   the guest.
+ - Document and implement that signal handlers are invoked with ZA and
+   streaming mode disabled.
+ - Use the RDSVL instruction introduced in EAC2 of the architecture to
+   obtain the streaming mode vector length during enumeration, ZA state
+   loading/saving and in test programs.
+ - Store a pointer to SVCR in fpsimd_last_state and use it in fpsimd_save()
+   for interoperation with KVM.
+ - Add a test case sme_trap_no_sm checking that we generate a SIGILL
+   when using an instruction that requires streaming mode without
+   enabling it.
+ - Add basic ZA context form validation to testcases helper library.
+ - Move signal tests over to validating streaming VL from ZA information.
+ - Pulled in patch removing ARRAY_SIZE() so that kselftest builds
+   cleanly and to avoid trivial conflicts.
+v7:
+ - Rebase onto v5.16-rc3.
+ - Reduce indentation when supporting custom triggers for signal tests
+   as suggested by Catalin.
+ - Change to specifying a width for all CPU features rather than adding
+   single bit specific infrastructure.
+ - Don't require zeroing of non-shared SVE state during syscalls.
+v6:
+ - Rebase onto v5.16-rc1.
+ - Return to disabling TIF_SVE on kernel entry even if we have SME
+   state, this avoids the need for KVM to handle the case where TIF_SVE
+   is set on guest entry.
+ - Add syscall-abi.h to SME updates to syscall-abi, mistakenly omitted
+   from commit.
+v5:
+ - Rebase onto currently merged SVE and kselftest patches.
+ - Add support for the FA64 option, introduced in the recently published
+   EAC1 update to the specification.
+ - Pull in test program for the syscall ABI previously sent separately
+   with some revisions and add coverage for the SME ABI.
+ - Fix checking for options with 1 bit fields in ID_AA64SMFR0_EL1.
+ - Minor fixes and clarifications to the ABI documentation.
+v4:
+ - Rebase onto merged patches.
+ - Remove an uneeded NULL check in vec_proc_do_default_vl().
+ - Include patch to factor out utility routines in kselftests written in
+   assembler.
+ - Specify -ffreestanding when building TPIDR2 test.
+v3:
+ - Skip FFR rather than predicate registers in sve_flush_live().
+ - Don't assume a bool is all zeros in sve_flush_live() as per AAPCS.
+ - Don't redundantly specify a zero index when clearing FFR.
+v2:
+ - Fix several issues with !SME and !SVE configurations.
+ - Preserve TPIDR2 when creating a new thread/process unless
+   CLONE_SETTLS is set.
+ - Report traps due to using features in an invalid mode as SIGILL.
+ - Spell out streaming mode behaviour in SVE ABI documentation more
+   directly.
+ - Document TPIDR2 in the ABI document.
+ - Use SMSTART and SMSTOP rather than read/modify/write sequences.
+ - Rework logic for exiting streaming mode on syscall.
+ - Don't needlessly initialise SVCR on access trap.
+ - Always restore SME VL for userspace if SME traps are disabled.
+ - Only yield to encourage preemption every 128 iterations in za-test,
+   otherwise do a getpid(), and validate SVCR after syscall.
+ - Leave streaming mode disabled except when reading the vector length
+   in za-test, and disable ZA after detecting a mismatch.
+ - Add SME support to vlset.
+ - Clarifications and typo fixes in comments.
+ - Move sme_alloc() forward declaration back a patch.
+
+[1] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/scalable-matrix-extension-armv9-a-architecture
+
+Mark Brown (40):
+  arm64: Define CPACR_EL1_FPEN similarly to other floating point
+    controls
+  arm64: Always use individual bits in CPACR floating point enables
+  arm64: cpufeature: Always specify and use a field width for
+    capabilities
+  kselftest/arm64: Remove local ARRAY_SIZE() definitions
+  kselftest/arm64: signal: Allow tests to be incompatible with features
+  arm64/sme: Provide ABI documentation for SME
+  arm64/sme: System register and exception syndrome definitions
+  arm64/sme: Manually encode SME instructions
+  arm64/sme: Early CPU setup for SME
+  arm64/sme: Basic enumeration support
+  arm64/sme: Identify supported SME vector lengths at boot
+  arm64/sme: Implement sysctl to set the default vector length
+  arm64/sme: Implement vector length configuration prctl()s
+  arm64/sme: Implement support for TPIDR2
+  arm64/sme: Implement SVCR context switching
+  arm64/sme: Implement streaming SVE context switching
+  arm64/sme: Implement ZA context switching
+  arm64/sme: Implement traps and syscall handling for SME
+  arm64/sme: Disable ZA and streaming mode when handling signals
+  arm64/sme: Implement streaming SVE signal handling
+  arm64/sme: Implement ZA signal handling
+  arm64/sme: Implement ptrace support for streaming mode SVE registers
+  arm64/sme: Add ptrace support for ZA
+  arm64/sme: Disable streaming mode and ZA when flushing CPU state
+  arm64/sme: Save and restore streaming mode over EFI runtime calls
+  KVM: arm64: Hide SME system registers from guests
+  KVM: arm64: Trap SME usage in guest
+  KVM: arm64: Handle SME host state when running guests
+  arm64/sme: Provide Kconfig for SME
+  kselftest/arm64: Add manual encodings for SME instructions
+  kselftest/arm64: sme: Add SME support to vlset
+  kselftest/arm64: Add tests for TPIDR2
+  kselftest/arm64: Extend vector configuration API tests to cover SME
+  kselftest/arm64: sme: Provide streaming mode SVE stress test
+  kselftest/arm64: signal: Handle ZA signal context in core code
+  kselftest/arm64: Add stress test for SME ZA context switching
+  kselftest/arm64: signal: Add SME signal handling tests
+  kselftest/arm64: Add streaming SVE to SVE ptrace tests
+  kselftest/arm64: Add coverage for the ZA ptrace interface
+  kselftest/arm64: Add SME support to syscall ABI test
+
+ Documentation/arm64/elf_hwcaps.rst            |  33 +
+ Documentation/arm64/index.rst                 |   1 +
+ Documentation/arm64/sme.rst                   | 432 +++++++++++++
+ Documentation/arm64/sve.rst                   |  70 ++-
+ arch/arm64/Kconfig                            |  11 +
+ arch/arm64/include/asm/cpu.h                  |   4 +
+ arch/arm64/include/asm/cpufeature.h           |  25 +
+ arch/arm64/include/asm/el2_setup.h            |  64 +-
+ arch/arm64/include/asm/esr.h                  |  13 +-
+ arch/arm64/include/asm/exception.h            |   1 +
+ arch/arm64/include/asm/fpsimd.h               | 110 +++-
+ arch/arm64/include/asm/fpsimdmacros.h         |  86 +++
+ arch/arm64/include/asm/hwcap.h                |   8 +
+ arch/arm64/include/asm/kvm_arm.h              |   5 +-
+ arch/arm64/include/asm/kvm_host.h             |   4 +
+ arch/arm64/include/asm/processor.h            |  18 +-
+ arch/arm64/include/asm/sysreg.h               |  67 +-
+ arch/arm64/include/asm/thread_info.h          |   2 +
+ arch/arm64/include/uapi/asm/hwcap.h           |   8 +
+ arch/arm64/include/uapi/asm/ptrace.h          |  69 ++-
+ arch/arm64/include/uapi/asm/sigcontext.h      |  55 +-
+ arch/arm64/kernel/cpufeature.c                | 273 ++++++--
+ arch/arm64/kernel/cpuinfo.c                   |  13 +
+ arch/arm64/kernel/entry-common.c              |  11 +
+ arch/arm64/kernel/entry-fpsimd.S              |  36 ++
+ arch/arm64/kernel/fpsimd.c                    | 585 ++++++++++++++++--
+ arch/arm64/kernel/process.c                   |  28 +-
+ arch/arm64/kernel/ptrace.c                    | 356 +++++++++--
+ arch/arm64/kernel/signal.c                    | 194 +++++-
+ arch/arm64/kernel/syscall.c                   |  34 +-
+ arch/arm64/kernel/traps.c                     |   1 +
+ arch/arm64/kvm/fpsimd.c                       |  43 +-
+ arch/arm64/kvm/hyp/include/hyp/switch.h       |   4 +-
+ arch/arm64/kvm/hyp/nvhe/switch.c              |  30 +
+ arch/arm64/kvm/hyp/vhe/switch.c               |  15 +-
+ arch/arm64/kvm/sys_regs.c                     |   9 +-
+ arch/arm64/tools/cpucaps                      |   2 +
+ include/uapi/linux/elf.h                      |   2 +
+ include/uapi/linux/prctl.h                    |   9 +
+ kernel/sys.c                                  |  12 +
+ tools/testing/selftests/arm64/abi/.gitignore  |   1 +
+ tools/testing/selftests/arm64/abi/Makefile    |   9 +-
+ .../selftests/arm64/abi/syscall-abi-asm.S     |  69 ++-
+ .../testing/selftests/arm64/abi/syscall-abi.c | 205 +++++-
+ .../testing/selftests/arm64/abi/syscall-abi.h |  15 +
+ tools/testing/selftests/arm64/abi/tpidr2.c    | 298 +++++++++
+ tools/testing/selftests/arm64/fp/.gitignore   |   4 +
+ tools/testing/selftests/arm64/fp/Makefile     |  12 +-
+ tools/testing/selftests/arm64/fp/rdvl-sme.c   |  14 +
+ tools/testing/selftests/arm64/fp/rdvl.S       |  10 +
+ tools/testing/selftests/arm64/fp/rdvl.h       |   1 +
+ tools/testing/selftests/arm64/fp/sme-inst.h   |  51 ++
+ tools/testing/selftests/arm64/fp/ssve-stress  |  59 ++
+ tools/testing/selftests/arm64/fp/sve-ptrace.c |  13 +-
+ tools/testing/selftests/arm64/fp/sve-test.S   |  20 +
+ tools/testing/selftests/arm64/fp/vec-syscfg.c |  10 +
+ tools/testing/selftests/arm64/fp/vlset.c      |  10 +-
+ tools/testing/selftests/arm64/fp/za-ptrace.c  | 354 +++++++++++
+ tools/testing/selftests/arm64/fp/za-stress    |  59 ++
+ tools/testing/selftests/arm64/fp/za-test.S    | 388 ++++++++++++
+ .../testing/selftests/arm64/signal/.gitignore |   2 +
+ .../selftests/arm64/signal/test_signals.h     |   5 +
+ .../arm64/signal/test_signals_utils.c         |  40 +-
+ .../arm64/signal/test_signals_utils.h         |   2 +
+ .../testcases/fake_sigreturn_sme_change_vl.c  |  92 +++
+ .../arm64/signal/testcases/sme_trap_no_sm.c   |  38 ++
+ .../signal/testcases/sme_trap_non_streaming.c |  45 ++
+ .../arm64/signal/testcases/sme_trap_za.c      |  36 ++
+ .../selftests/arm64/signal/testcases/sme_vl.c |  68 ++
+ .../arm64/signal/testcases/ssve_regs.c        | 129 ++++
+ .../arm64/signal/testcases/testcases.c        |  36 ++
+ .../arm64/signal/testcases/testcases.h        |   3 +-
+ 72 files changed, 4590 insertions(+), 251 deletions(-)
+ create mode 100644 Documentation/arm64/sme.rst
+ create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi.h
+ create mode 100644 tools/testing/selftests/arm64/abi/tpidr2.c
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sme.c
+ create mode 100644 tools/testing/selftests/arm64/fp/sme-inst.h
+ create mode 100644 tools/testing/selftests/arm64/fp/ssve-stress
+ create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
+ create mode 100644 tools/testing/selftests/arm64/fp/za-stress
+ create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+
+
+base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
+-- 
+2.30.2
+
