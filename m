@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DED24ACD7D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 02:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376DB4ACD80
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 02:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343656AbiBHBGe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 20:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S233576AbiBHBGf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240862AbiBGXye (ORCPT
+        with ESMTP id S231723AbiBGX53 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:54:34 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFB0C061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:54:33 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id m8so6006328ilg.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 15:54:33 -0800 (PST)
+        Mon, 7 Feb 2022 18:57:29 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CD8C061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:57:29 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id 15so12539455ilg.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 15:57:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qe1HIsobsjsqqovhNg1dTepKFqWmN+a6KPj6qtwUnWY=;
-        b=GNyOq+vpsfpSC9QIrBb/7GjblKlADOIqWX4+fMq9/u1WfMddHB0fS49onDPdtXoVPt
-         yTQvKiWdujbtWyWuNAJBCFXj/ug/r2yHinspBGhhYNX9TqH1ysSKBypJBXi/iWqGag0w
-         GMI/AX5J2nDV5UGYQOPFsIy1vpNwRbZOqz5ok=
+        bh=ej/oxUOPfotPxZF6x1ri18KCfGD2YGEa1yg//ehHnUo=;
+        b=JM1m+wmNu9FmFD+riCw6wb0p0d0pPl0h2477lD+tG9SKyf0FsP7JkN9pPVcDr3gd+W
+         j2ePlxvb84+QbHooh0I29hU87nJlmnnGpzAlcozQSqqYKSVKvv0ozt9M9NGf7soKkz/n
+         HC6i2z7jO6xoxajglXYzdv/Xw1DRQ96BgXnt4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=qe1HIsobsjsqqovhNg1dTepKFqWmN+a6KPj6qtwUnWY=;
-        b=3k+fOTBqedMVXrsHf84AXt39RBEIy6aMrPuMAtTFVSVpXxmGO2QdK+8n4Mi8Cg5bPw
-         d8qXy0j+8XsHGrqJ6+I9re1eC9P1VM4jJ5gV3cxVe/7DH+WYnM1GzIfdAqFtjeAaKuLS
-         db/NEZ4xRvjWwfTUDMRP3w/+P2LApcD6Tybld983ff1vYFymbr1pjKXeRFtamzXB1Qme
-         lCDjfNZlwmjMGXNJ6VckFlmU9cBszD5muK/VsLU8BEjwIln/f4MeDR4ySqMGTmYDlciZ
-         gPo3nEcIPC6hclaEKyCNqCcuc4a4NI+S/wF2tJunHRCJlfCtQzyEQOCHw85poKxFbRkF
-         RY9Q==
-X-Gm-Message-State: AOAM532STa0QJNMunKXJzjKCd98UlbdDwFSe6D8pwciNhGrye95qWHvD
-        g0K2tobpMFx1UVnBH8/DTKRLrg==
-X-Google-Smtp-Source: ABdhPJyCgVME8X/bAItiYGT5c+rfQjilh5rsHieEvdLoeWX2msU9HoQD9yLg5PgDg85hVcKDwatsDw==
-X-Received: by 2002:a05:6e02:1aaf:: with SMTP id l15mr874954ilv.31.1644278072703;
-        Mon, 07 Feb 2022 15:54:32 -0800 (PST)
+        bh=ej/oxUOPfotPxZF6x1ri18KCfGD2YGEa1yg//ehHnUo=;
+        b=Pu1DVR+yp6PRy6RqYEZ8ouCqgsQ/kiZXbXHnaCLESStOIO7udFjvbFMs3RkJOn4Dfx
+         8CfkHHW5+kYa63PXC25prziQUEoam0wmhOgEMVZmEvOcJ6IEcs5EvKLcAEVox2in8RsC
+         FhwC4iCMfyIckTYhSZhCM6leSu6bLrykcq/FfPUKL7ADYrCs6nbC1YSrvUqorPQjPcDQ
+         F5bOjEWVyY9Z0t49FSZ4+K6ULkXQCUvPy8nTn55ui2gwi8poxofLBH8Weaecq1sQ2hj8
+         wMiVRHyvGNHM1Se+7wEqp3sSd60V6vH7bGcOM525GAhPgmvAiavghCjFHDey5TeuDSV4
+         ScDg==
+X-Gm-Message-State: AOAM533iS05aEO36625ZI3SSwRWa11EbqCVDCxX/7SGaNsJk/pDEayy+
+        j48Tqtofz59rVtppPOy2AluZYg==
+X-Google-Smtp-Source: ABdhPJwk8Uh5JobMOPX23+iidTPeN7IN+ed0TPp/GJ65/GbrujVjigZ3b7VgXcHPdBWjo2As4O2qpQ==
+X-Received: by 2002:a05:6e02:e12:: with SMTP id a18mr886458ilk.200.1644278248618;
+        Mon, 07 Feb 2022 15:57:28 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id o7sm6317885ilo.17.2022.02.07.15.54.31
+        by smtp.gmail.com with ESMTPSA id b4sm2861038iln.15.2022.02.07.15.57.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 15:54:32 -0800 (PST)
-Subject: Re: [PATCH v11 05/40] kselftest/arm64: signal: Allow tests to be
- incompatible with features
+        Mon, 07 Feb 2022 15:57:28 -0800 (PST)
+Subject: Re: [PATCH v11 30/40] kselftest/arm64: Add manual encodings for SME
+ instructions
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -64,14 +64,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-6-broonie@kernel.org>
+ <20220207152109.197566-31-broonie@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <10072dd0-8853-81fe-0c94-a00638b12f9a@linuxfoundation.org>
-Date:   Mon, 7 Feb 2022 16:54:31 -0700
+Message-ID: <638b7ae1-6669-5524-318a-6b8a07cf3919@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 16:57:27 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220207152109.197566-6-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-31-broonie@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,109 +86,17 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2/7/22 8:20 AM, Mark Brown wrote:
-> Some features may invalidate some tests, for example by supporting an
-> operation which would trap otherwise. Allow tests to list features that
-> they are incompatible with so we can cover the case where a signal will
-> be generated without disruption on systems where that won't happen.
+> As for the kernel so that we don't have ambitious toolchain requirements
+> to build the tests manually encode some of the SVE instructions.
 > 
+
+Thank you for thinking about toolchain requirements. Please add a bit more
+information on how these defines are used here in this commit log.
+
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   .../selftests/arm64/signal/test_signals.h     |  1 +
->   .../arm64/signal/test_signals_utils.c         | 34 ++++++++++++++-----
->   .../arm64/signal/test_signals_utils.h         |  2 ++
->   3 files changed, 28 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
-> index ebe8694dbef0..f909b70d9e98 100644
-> --- a/tools/testing/selftests/arm64/signal/test_signals.h
-> +++ b/tools/testing/selftests/arm64/signal/test_signals.h
-> @@ -53,6 +53,7 @@ struct tdescr {
->   	char			*name;
->   	char			*descr;
->   	unsigned long		feats_required;
-> +	unsigned long		feats_incompatible;
->   	/* bitmask of effectively supported feats: populated at run-time */
->   	unsigned long		feats_supported;
->   	bool			initialized;
-> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-> index 2f8c23af3b5e..5743897984b0 100644
-> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
-> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-> @@ -36,6 +36,8 @@ static inline char *feats_to_string(unsigned long feats)
->   {
->   	size_t flen = MAX_FEATS_SZ - 1;
->   
-> +	feats_string[0] = '\0';
-> +
->   	for (int i = 0; i < FMAX_END; i++) {
->   		if (feats & (1UL << i)) {
->   			size_t tlen = strlen(feats_names[i]);
-> @@ -256,7 +258,7 @@ int test_init(struct tdescr *td)
->   		td->minsigstksz = MINSIGSTKSZ;
->   	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
->   
-> -	if (td->feats_required) {
-> +	if (td->feats_required || td->feats_incompatible) {
->   		td->feats_supported = 0;
->   		/*
->   		 * Checking for CPU required features using both the
-> @@ -267,15 +269,29 @@ int test_init(struct tdescr *td)
->   		if (getauxval(AT_HWCAP) & HWCAP_SVE)
->   			td->feats_supported |= FEAT_SVE;
->   		if (feats_ok(td)) {
-> -			fprintf(stderr,
-> -				"Required Features: [%s] supported\n",
-> -				feats_to_string(td->feats_required &
-> -						td->feats_supported));
-> +			if (td->feats_required & td->feats_supported)
-> +				fprintf(stderr,
-> +					"Required Features: [%s] supported\n",
-> +					feats_to_string(td->feats_required &
-> +							td->feats_supported));
-> +			if (!(td->feats_incompatible & td->feats_supported))
-> +				fprintf(stderr,
-> +					"Incompatible Features: [%s] absent\n",
-> +					feats_to_string(td->feats_incompatible));
->   		} else {
-> -			fprintf(stderr,
-> -				"Required Features: [%s] NOT supported\n",
-> -				feats_to_string(td->feats_required &
-> -						~td->feats_supported));
-> +			if ((td->feats_required & td->feats_supported) !=
-> +			    td->feats_supported)
-> +				fprintf(stderr,
-> +					"Required Features: [%s] NOT supported\n",
-> +					feats_to_string(td->feats_required &
-> +							~td->feats_supported));
-> +			if (td->feats_incompatible & td->feats_supported)
-> +				fprintf(stderr,
-> +					"Incompatible Features: [%s] supported\n",
-> +					feats_to_string(td->feats_incompatible &
-> +							~td->feats_supported));
-> +
-> +
->   			td->result = KSFT_SKIP;
->   			return 0;
->   		}
-> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> index 6772b5c8d274..f3aa99ba67bb 100644
-> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> @@ -18,6 +18,8 @@ void test_result(struct tdescr *td);
->   
->   static inline bool feats_ok(struct tdescr *td)
->   {
-> +	if (td->feats_incompatible & td->feats_supported)
-> +		return false;
->   	return (td->feats_required & td->feats_supported) == td->feats_required;
->   }
->   
-> 
 
-Assuming default_handler() will skip test and return skip test when
-feature is unsupported?
-
-Looks good to me.
+Rest looks good to me.
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
