@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E764AC402
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C994AC3EA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243451AbiBGPfQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 10:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S1377215AbiBGPfa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 10:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236762AbiBGPXi (ORCPT
+        with ESMTP id S1345108AbiBGPXk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6560DC0401C8
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:37 -0800 (PST)
+        Mon, 7 Feb 2022 10:23:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41D6C0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24BBFB815B1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595B6C004E1;
-        Mon,  7 Feb 2022 15:23:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 508AB61035
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468C5C340F2;
+        Mon,  7 Feb 2022 15:23:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247414;
-        bh=tClwxBxXeStlBQhw570CauUAMkDJNDdPwv6KEDRDvAE=;
+        s=k20201202; t=1644247418;
+        bh=HMQHyHN36InZca7SOj753D+ZgRaa/ByOBuanPgEEWxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uSGmZyGTc4VNvYWsk5zWoqyoGuWv0cDwzrrHeC3VSL3u7svcWCXFAyOCERcHdW8Pg
-         Tg9V5eH6lOpu/CA3TJhgW6LtuOn4FwP8tmg9JZzeQ9I9Hzqq4lvM7UT1htQ7bgG/2z
-         cAmR/8Ek+KfOOFISNVJ2mX0kjjEqk/E2iHSWJueqJK+EtvValeHdFq3PtGCSUZGix8
-         X5wUQDkws7sdUKno845QmOShTBvfv8y/rWvhau7GTAPrnO0uIWFlTxtiO6KazqfsiI
-         KIPE6GnLb8YUpA6cAwDrtZaw+eSlQSVsbEGPauka2dqqWmH5zFdsHZ1zUsa2kCb/4x
-         6IPYtV1CA6/tw==
+        b=RaDkJG5UFzR+PFUH/Cktih1qAaGz1BpcVaXiu+8wx2N8fBhoEUyrqGmsypWqLcyDJ
+         wvRGHTEY87NjdSrkt8v43kNU07jhx7qkeQ1bwNAkV4043CoRaksSJT8MWQ2gy/ILIr
+         cS13TTYBSYhe5K1Er6zkjv441wvoNk1CAFJlCsJ5ey4rllXuNRdK6fIyflNMUSBLTe
+         OaMoTpYjjcprNj/gXImSvJjQizp9HmcMqf39a+Ts+jYUjkvEyUUDZ2gDINzhiYvOy7
+         I7ZT9uulLZOh3uThiY6TwEGu4bEE+MeGYwk96fXn+E+dNeVYTa+FyE8iXvkGNGzHtO
+         /7EDTkwC/LZiw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,14 +48,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 07/40] arm64/sme: System register and exception syndrome definitions
-Date:   Mon,  7 Feb 2022 15:20:36 +0000
-Message-Id: <20220207152109.197566-8-broonie@kernel.org>
+Subject: [PATCH v11 08/40] arm64/sme: Manually encode SME instructions
+Date:   Mon,  7 Feb 2022 15:20:37 +0000
+Message-Id: <20220207152109.197566-9-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9085; h=from:subject; bh=tClwxBxXeStlBQhw570CauUAMkDJNDdPwv6KEDRDvAE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjKDx0r2L48QqKPssZegcV0F8B7481zG5jsAeZU saYOs0mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4ygAKCRAk1otyXVSH0NXQB/ 9KW5K/RNHd5PxVlLWL60qMfOdbeRutb2K5lO+dUwfDPi7CgZD8qvY0xaOl4gNtHnVdq7QxRxhMMNz7 D4ag2cIt64wKE8kSyhX3CNgmoXUtE0keInICJ+R/+UsuYPZ3yXLI5oW5lUGTSu6fWeOW5i/Jye7hCU Q8u/uw0PwFcR9Xz+wxCxukZZa57o05xrgc6ZXbPYpXvweHIIHaZTKsEJGeXoqVJk+3MJOnI4DmPRyG kVCn7bKsvpJA+XJw77sUUMcGpPdCcE7L+ou/vt7sU2WcxKMinueaaGyoKQFOLpfAJD3S7aL8uz9Wrl NQ8OJ1bSdslIjAmGtuikQKtg8uy/HE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3671; h=from:subject; bh=HMQHyHN36InZca7SOj753D+ZgRaa/ByOBuanPgEEWxc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjLU4t0P2TtzTYSd2s2Hen3CRw27ngQIyNfDOJC 4/nuJxWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4ywAKCRAk1otyXVSH0GAMB/ 9r5CGhL1EtZIHg+mK4TXgNsO7uYuELjxQxQ3n78fLzcDGxMxoR8R44ZqWmgqx6mU1VVelM90wnmmMa 1+x5JvPphvyA07/N98GXBbNxCHzi9+4KAFEq3DN0p28vywW0dbSU0Yy7vRYiO6Eu4YJpa3O45zOjVR +Mb8INezzMfNN7yEwGDBzHg1PchJwSx+Y2Z6hg2x+nEdagqjcdPLmKIa+bfrc17qfFhDeChDyoIpcz 3IFCV0y4OiCt5Mq1zNz5EMU7EwiDIkalR36gxWbPLQvLdhAnP1ljnvYpSycyehik8Uzj0Cml6go8P3 E6m+IgUmYExixGQW2ZW2o46Kc5va9k
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,260 +68,133 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The arm64 Scalable Matrix Extension (SME) adds some new system registers,
-fields in existing system registers and exception syndromes. This patch
-adds definitions for these for use in future patches implementing support
-for this extension.
+As with SVE rather than impose ambitious toolchain requirements for SME
+we manually encode the few instructions which we require in order to
+perform the work the kernel needs to do. The instructions used to save
+and restore context are provided as assembler macros while those for
+entering and leaving streaming mode are done in asm volatile blocks
+since they are expected to be used from C.
 
-Since SME will be the first user of FEAT_HCX in the kernel also include
-the definitions for enumerating it and the HCRX system register it adds.
+We could do the SMSTART and SMSTOP operations with read/modify/write
+cycles on SVCR but using the aliases provided for individual field
+accesses should be slightly faster. These instructions are aliases for
+MSR but since our minimum toolchain requirements are old enough to mean
+that we can't use the sX_X_cX_cX_X form and they always use xzr rather
+than taking a value like write_sysreg_s() wants we just use .inst.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/esr.h     | 12 +++++-
- arch/arm64/include/asm/kvm_arm.h |  1 +
- arch/arm64/include/asm/sysreg.h  | 63 ++++++++++++++++++++++++++++++++
- arch/arm64/kernel/traps.c        |  1 +
- 4 files changed, 76 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/fpsimd.h       | 25 +++++++++++++
+ arch/arm64/include/asm/fpsimdmacros.h | 53 +++++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
-diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-index d52a0b269ee8..43872e0cfd1e 100644
---- a/arch/arm64/include/asm/esr.h
-+++ b/arch/arm64/include/asm/esr.h
-@@ -37,7 +37,8 @@
- #define ESR_ELx_EC_ERET		(0x1a)	/* EL2 only */
- /* Unallocated EC: 0x1B */
- #define ESR_ELx_EC_FPAC		(0x1C)	/* EL1 and above */
--/* Unallocated EC: 0x1D - 0x1E */
-+#define ESR_ELx_EC_SME		(0x1D)
-+/* Unallocated EC: 0x1E */
- #define ESR_ELx_EC_IMP_DEF	(0x1f)	/* EL3 only */
- #define ESR_ELx_EC_IABT_LOW	(0x20)
- #define ESR_ELx_EC_IABT_CUR	(0x21)
-@@ -327,6 +328,15 @@
- #define ESR_ELx_CP15_32_ISS_SYS_CNTFRQ	(ESR_ELx_CP15_32_ISS_SYS_VAL(0, 0, 14, 0) |\
- 					 ESR_ELx_CP15_32_ISS_DIR_READ)
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index cb24385e3632..c90f7f99a768 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -249,6 +249,31 @@ static inline void sve_setup(void) { }
  
-+/*
-+ * ISS values for SME traps
-+ */
+ #endif /* ! CONFIG_ARM64_SVE */
+ 
++#ifdef CONFIG_ARM64_SME
 +
-+#define ESR_ELx_SME_ISS_SME_DISABLED	0
-+#define ESR_ELx_SME_ISS_ILL		1
-+#define ESR_ELx_SME_ISS_SM_DISABLED	2
-+#define ESR_ELx_SME_ISS_ZA_DISABLED	3
++static inline void sme_smstart_sm(void)
++{
++	asm volatile(".inst 0xd503437f");
++}
 +
- #ifndef __ASSEMBLY__
- #include <asm/types.h>
- 
-diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-index 1767ded83888..13ae232ec4a1 100644
---- a/arch/arm64/include/asm/kvm_arm.h
-+++ b/arch/arm64/include/asm/kvm_arm.h
-@@ -279,6 +279,7 @@
- #define CPTR_EL2_TCPAC	(1U << 31)
- #define CPTR_EL2_TAM	(1 << 30)
- #define CPTR_EL2_TTA	(1 << 20)
-+#define CPTR_EL2_TSM	(1 << 12)
- #define CPTR_EL2_TFP	(1 << CPTR_EL2_TFP_SHIFT)
- #define CPTR_EL2_TZ	(1 << 8)
- #define CPTR_NVHE_EL2_RES1	0x000032ff /* known RES1 bits in CPTR_EL2 (nVHE) */
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index e66dd9ebc337..6056c9aaab28 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -173,6 +173,7 @@
- #define SYS_ID_AA64PFR0_EL1		sys_reg(3, 0, 0, 4, 0)
- #define SYS_ID_AA64PFR1_EL1		sys_reg(3, 0, 0, 4, 1)
- #define SYS_ID_AA64ZFR0_EL1		sys_reg(3, 0, 0, 4, 4)
-+#define SYS_ID_AA64SMFR0_EL1		sys_reg(3, 0, 0, 4, 5)
- 
- #define SYS_ID_AA64DFR0_EL1		sys_reg(3, 0, 0, 5, 0)
- #define SYS_ID_AA64DFR1_EL1		sys_reg(3, 0, 0, 5, 1)
-@@ -196,6 +197,8 @@
- 
- #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
- #define SYS_TRFCR_EL1			sys_reg(3, 0, 1, 2, 1)
-+#define SYS_SMPRI_EL1			sys_reg(3, 0, 1, 2, 4)
-+#define SYS_SMCR_EL1			sys_reg(3, 0, 1, 2, 6)
- 
- #define SYS_TTBR0_EL1			sys_reg(3, 0, 2, 0, 0)
- #define SYS_TTBR1_EL1			sys_reg(3, 0, 2, 0, 1)
-@@ -388,6 +391,8 @@
- #define TRBIDR_ALIGN_MASK		GENMASK(3, 0)
- #define TRBIDR_ALIGN_SHIFT		0
- 
-+#define SMPRI_EL1_PRIORITY_MASK		0xf
++static inline void sme_smstop_sm(void)
++{
++	asm volatile(".inst 0xd503427f");
++}
 +
- #define SYS_PMINTENSET_EL1		sys_reg(3, 0, 9, 14, 1)
- #define SYS_PMINTENCLR_EL1		sys_reg(3, 0, 9, 14, 2)
- 
-@@ -443,8 +448,13 @@
- #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
- #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
- #define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
-+#define SYS_SMIDR_EL1			sys_reg(3, 1, 0, 0, 6)
- #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
- 
-+#define SYS_SMIDR_EL1_IMPLEMENTER_SHIFT	24
-+#define SYS_SMIDR_EL1_SMPS_SHIFT	15
-+#define SYS_SMIDR_EL1_AFFINITY_SHIFT	0
++static inline void sme_smstop(void)
++{
++	asm volatile(".inst 0xd503467f");
++}
 +
- #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
- 
- #define SYS_CTR_EL0			sys_reg(3, 3, 0, 0, 1)
-@@ -453,6 +463,10 @@
- #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
- #define SYS_RNDRRS_EL0			sys_reg(3, 3, 2, 4, 1)
- 
-+#define SYS_SVCR_EL0			sys_reg(3, 3, 4, 2, 2)
-+#define SYS_SVCR_EL0_ZA_MASK		2
-+#define SYS_SVCR_EL0_SM_MASK		1
++#else
 +
- #define SYS_PMCR_EL0			sys_reg(3, 3, 9, 12, 0)
- #define SYS_PMCNTENSET_EL0		sys_reg(3, 3, 9, 12, 1)
- #define SYS_PMCNTENCLR_EL0		sys_reg(3, 3, 9, 12, 2)
-@@ -469,6 +483,7 @@
- 
- #define SYS_TPIDR_EL0			sys_reg(3, 3, 13, 0, 2)
- #define SYS_TPIDRRO_EL0			sys_reg(3, 3, 13, 0, 3)
-+#define SYS_TPIDR2_EL0			sys_reg(3, 3, 13, 0, 5)
- 
- #define SYS_SCXTNUM_EL0			sys_reg(3, 3, 13, 0, 7)
- 
-@@ -538,6 +553,9 @@
- #define SYS_HFGITR_EL2			sys_reg(3, 4, 1, 1, 6)
- #define SYS_ZCR_EL2			sys_reg(3, 4, 1, 2, 0)
- #define SYS_TRFCR_EL2			sys_reg(3, 4, 1, 2, 1)
-+#define SYS_HCRX_EL2			sys_reg(3, 4, 1, 2, 2)
-+#define SYS_SMPRIMAP_EL2		sys_reg(3, 4, 1, 2, 5)
-+#define SYS_SMCR_EL2			sys_reg(3, 4, 1, 2, 6)
- #define SYS_DACR32_EL2			sys_reg(3, 4, 3, 0, 0)
- #define SYS_HDFGRTR_EL2			sys_reg(3, 4, 3, 1, 4)
- #define SYS_HDFGWTR_EL2			sys_reg(3, 4, 3, 1, 5)
-@@ -597,6 +615,7 @@
- #define SYS_SCTLR_EL12			sys_reg(3, 5, 1, 0, 0)
- #define SYS_CPACR_EL12			sys_reg(3, 5, 1, 0, 2)
- #define SYS_ZCR_EL12			sys_reg(3, 5, 1, 2, 0)
-+#define SYS_SMCR_EL12			sys_reg(3, 5, 1, 2, 6)
- #define SYS_TTBR0_EL12			sys_reg(3, 5, 2, 0, 0)
- #define SYS_TTBR1_EL12			sys_reg(3, 5, 2, 0, 1)
- #define SYS_TCR_EL12			sys_reg(3, 5, 2, 0, 2)
-@@ -620,6 +639,7 @@
- #define SYS_CNTV_CVAL_EL02		sys_reg(3, 5, 14, 3, 2)
- 
- /* Common SCTLR_ELx flags. */
-+#define SCTLR_ELx_ENTP2	(BIT(60))
- #define SCTLR_ELx_DSSBS	(BIT(44))
- #define SCTLR_ELx_ATA	(BIT(43))
- 
-@@ -815,6 +835,7 @@
- #define ID_AA64PFR0_ELx_32BIT_64BIT	0x2
- 
- /* id_aa64pfr1 */
-+#define ID_AA64PFR1_SME_SHIFT		24
- #define ID_AA64PFR1_MPAMFRAC_SHIFT	16
- #define ID_AA64PFR1_RASFRAC_SHIFT	12
- #define ID_AA64PFR1_MTE_SHIFT		8
-@@ -825,6 +846,7 @@
- #define ID_AA64PFR1_SSBS_PSTATE_ONLY	1
- #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
- #define ID_AA64PFR1_BT_BTI		0x1
-+#define ID_AA64PFR1_SME			1
- 
- #define ID_AA64PFR1_MTE_NI		0x0
- #define ID_AA64PFR1_MTE_EL0		0x1
-@@ -853,6 +875,23 @@
- #define ID_AA64ZFR0_AES_PMULL		0x2
- #define ID_AA64ZFR0_SVEVER_SVE2		0x1
- 
-+/* id_aa64smfr0 */
-+#define ID_AA64SMFR0_FA64_SHIFT		63
-+#define ID_AA64SMFR0_I16I64_SHIFT	52
-+#define ID_AA64SMFR0_F64F64_SHIFT	48
-+#define ID_AA64SMFR0_I8I32_SHIFT	36
-+#define ID_AA64SMFR0_F16F32_SHIFT	35
-+#define ID_AA64SMFR0_B16F32_SHIFT	34
-+#define ID_AA64SMFR0_F32F32_SHIFT	32
++static inline void sme_smstart_sm(void) { }
++static inline void sme_smstop_sm(void) { }
++static inline void sme_smstop(void) { }
 +
-+#define ID_AA64SMFR0_FA64		0x1
-+#define ID_AA64SMFR0_I16I64		0x4
-+#define ID_AA64SMFR0_F64F64		0x1
-+#define ID_AA64SMFR0_I8I32		0x4
-+#define ID_AA64SMFR0_F16F32		0x1
-+#define ID_AA64SMFR0_B16F32		0x1
-+#define ID_AA64SMFR0_F32F32		0x1
++#endif /* ! CONFIG_ARM64_SME */
 +
- /* id_aa64mmfr0 */
- #define ID_AA64MMFR0_ECV_SHIFT		60
- #define ID_AA64MMFR0_FGT_SHIFT		56
-@@ -904,6 +943,7 @@
- #endif
+ /* For use by EFI runtime services calls only */
+ extern void __efi_fpsimd_begin(void);
+ extern void __efi_fpsimd_end(void);
+diff --git a/arch/arm64/include/asm/fpsimdmacros.h b/arch/arm64/include/asm/fpsimdmacros.h
+index 2509d7dde55a..11c426ddd62c 100644
+--- a/arch/arm64/include/asm/fpsimdmacros.h
++++ b/arch/arm64/include/asm/fpsimdmacros.h
+@@ -93,6 +93,12 @@
+ 	.endif
+ .endm
  
- /* id_aa64mmfr1 */
-+#define ID_AA64MMFR1_HCX_SHIFT		40
- #define ID_AA64MMFR1_AFP_SHIFT		44
- #define ID_AA64MMFR1_ETS_SHIFT		36
- #define ID_AA64MMFR1_TWED_SHIFT		32
-@@ -1097,9 +1137,24 @@
- #define ZCR_ELx_LEN_SIZE	9
- #define ZCR_ELx_LEN_MASK	0x1ff
++.macro _sme_check_wv v
++	.if (\v) < 12 || (\v) > 15
++		.error "Bad vector select register \v."
++	.endif
++.endm
++
+ /* SVE instruction encodings for non-SVE-capable assemblers */
+ /* (pre binutils 2.28, all kernel capable clang versions support SVE) */
  
-+#define SMCR_ELx_FA64_SHIFT	31
-+#define SMCR_ELx_FA64_MASK	(1 << SMCR_ELx_FA64_SHIFT)
+@@ -174,6 +180,53 @@
+ 		| (\np)
+ .endm
+ 
++/* SME instruction encodings for non-SME-capable assemblers */
++
++/* RDSVL X\nx, #\imm */
++.macro _sme_rdsvl nx, imm
++	_check_general_reg \nx
++	_check_num (\imm), -0x20, 0x1f
++	.inst	0x04bf5800			\
++		| (\nx)				\
++		| (((\imm) & 0x3f) << 5)
++.endm
 +
 +/*
-+ * The SMCR_ELx_LEN_* definitions intentionally include bits [8:4] which
-+ * are reserved by the SME architecture for future expansion of the LEN
-+ * field, with compatible semantics.
++ * STR (vector from ZA array):
++ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
 + */
-+#define SMCR_ELx_LEN_SHIFT	0
-+#define SMCR_ELx_LEN_SIZE	9
-+#define SMCR_ELx_LEN_MASK	0x1ff
++.macro _sme_str_zav nw, nxbase, offset=0
++	_sme_check_wv \nw
++	_check_general_reg \nxbase
++	_check_num (\offset), -0x100, 0xff
++	.inst	0xe1200000			\
++		| (((\nw) & 3) << 13)		\
++		| ((\nxbase) << 5)		\
++		| ((\offset) & 7)
++.endm
 +
- #define CPACR_EL1_FPEN_EL1EN	(BIT(20)) /* enable EL1 access */
- #define CPACR_EL1_FPEN_EL0EN	(BIT(21)) /* enable EL0 access, if EL1EN set */
- 
-+#define CPACR_EL1_SMEN_EL1EN	(BIT(24)) /* enable EL1 access */
-+#define CPACR_EL1_SMEN_EL0EN	(BIT(25)) /* enable EL0 access, if EL1EN set */
++/*
++ * LDR (vector to ZA array):
++ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ */
++.macro _sme_ldr_zav nw, nxbase, offset=0
++	_sme_check_wv \nw
++	_check_general_reg \nxbase
++	_check_num (\offset), -0x100, 0xff
++	.inst	0xe1000000			\
++		| (((\nw) & 3) << 13)		\
++		| ((\nxbase) << 5)		\
++		| ((\offset) & 7)
++.endm
 +
- #define CPACR_EL1_ZEN_EL1EN	(BIT(16)) /* enable EL1 access */
- #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
- 
-@@ -1152,6 +1207,8 @@
- #define TRFCR_ELx_ExTRE			BIT(1)
- #define TRFCR_ELx_E0TRE			BIT(0)
- 
-+/* HCRX_EL2 definitions */
-+#define HCRX_EL2_SMPME_MASK		(1 << 5)
- 
- /* GIC Hypervisor interface registers */
- /* ICH_MISR_EL2 bit definitions */
-@@ -1215,6 +1272,12 @@
- #define ICH_VTR_TDS_SHIFT	19
- #define ICH_VTR_TDS_MASK	(1 << ICH_VTR_TDS_SHIFT)
- 
-+/* HFG[WR]TR_EL2 bit definitions */
-+#define HFGxTR_EL2_nTPIDR2_EL0_SHIFT	55
-+#define HFGxTR_EL2_nTPIDR2_EL0_MASK	BIT_MASK(HFGxTR_EL2_nTPIDR2_EL0_SHIFT)
-+#define HFGxTR_EL2_nSMPRI_EL1_SHIFT	54
-+#define HFGxTR_EL2_nSMPRI_EL1_MASK	BIT_MASK(HFGxTR_EL2_nSMPRI_EL1_SHIFT)
++/*
++ * Zero the entire ZA array
++ *	ZERO ZA
++ */
++.macro zero_za
++	.inst 0xc00800ff
++.endm
 +
- #define ARM64_FEATURE_FIELD_BITS	4
- 
- /* Create a mask for the feature bits of the specified feature. */
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 70fc42470f13..88effb25c399 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -822,6 +822,7 @@ static const char *esr_class_str[] = {
- 	[ESR_ELx_EC_SVE]		= "SVE",
- 	[ESR_ELx_EC_ERET]		= "ERET/ERETAA/ERETAB",
- 	[ESR_ELx_EC_FPAC]		= "FPAC",
-+	[ESR_ELx_EC_SME]		= "SME",
- 	[ESR_ELx_EC_IMP_DEF]		= "EL3 IMP DEF",
- 	[ESR_ELx_EC_IABT_LOW]		= "IABT (lower EL)",
- 	[ESR_ELx_EC_IABT_CUR]		= "IABT (current EL)",
+ .macro __for from:req, to:req
+ 	.if (\from) == (\to)
+ 		_for__body %\from
 -- 
 2.30.2
 
