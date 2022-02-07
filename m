@@ -2,147 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F2C4ACAC3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 21:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD2B4ACACB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 22:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiBGUwB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 15:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
+        id S230280AbiBGVAR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 16:00:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236695AbiBGUv1 (ORCPT
+        with ESMTP id S230243AbiBGVAQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:51:27 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CDDC0401D1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:51:25 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id l25so12428465eda.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:51:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZNlSwKrPwSead3UlRii3n77Lkm90XPxm3oVtpWfrGKc=;
-        b=mS6jSDKYIhakEkDr4CG7f6fqvgucCPeKuqZOt1j2klKp0Svy5Vsza5m+UFOD7FYCzE
-         uWYqud8X6VOxt+97xirc/NvW8/77FTRZ4xh5fq6DZIzj9It00itjEphY+CXPJd/+0Vnn
-         pfThl+v2H2nxOalU8dN2PTSRLiwDFCktDJ7mOhe4D8CD96G+ZJH5DZ8iIujwrKqG848X
-         49k1JL9h60YwC+sp2LYeWNUPcUpqxhErWbPpB1az3CFapA5UKJnO5tLAMInXb8G2irN5
-         9Poy93s2qBu9DjvxoojED7IJZwiO3WErarmE2GbFAeCLSqVsXQ4XlvMYpehi1CG7lfwb
-         nGjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZNlSwKrPwSead3UlRii3n77Lkm90XPxm3oVtpWfrGKc=;
-        b=j0hqgENC+SuM6nIcM4TKhM8HbNPYBsXizPWyoXB4OmOY0pWIicfNeCM8RgAdAwwfBf
-         Zyi+CBxFRdSFy7gVNF/rce30Xh1S79cMZ6xpAm9XkVU1Rs+Srk5061qEp0XsT0e6LGCV
-         oMJ1IlvbQ/ATEdgBswBaBPOot0HvY25Jy3Bw+GhPlKdLQK1AX2OONpIyD0DTRTrxBPxk
-         RTTzswrWST67i68s8E7xHIWDXamGXsSRzd4EMICVsa19PHBv4xd+6iX5b02O2e6kJbw0
-         q9aaKiAldtD+o1KKOpqS/V1gH3vQu3nRlqUr7+odKPzpxm0vkd/cfxslB3a+F1HIV5QT
-         6H7w==
-X-Gm-Message-State: AOAM532VADcjC3YgfV+6BIq7TuXrYD8LXUxE3WuHrABhFhqV4P0eeaTS
-        djhO7lBJFt8fHDW5Xllw/8L3xnLolKfNmTMiSWmWlg==
-X-Google-Smtp-Source: ABdhPJzFb3lI6lRz0KL+g71DaTE9kY//KH+eix0ltoL5/vgqZKweHEcm6w/V9Gz1TMNddwjEgnoTRy1Vx427FFzBPp0=
-X-Received: by 2002:aa7:c155:: with SMTP id r21mr1254502edp.327.1644267083805;
- Mon, 07 Feb 2022 12:51:23 -0800 (PST)
+        Mon, 7 Feb 2022 16:00:16 -0500
+X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 13:00:15 PST
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04B8C06173B;
+        Mon,  7 Feb 2022 13:00:15 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id B2EE91F449C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644267606;
+        bh=N5JqssyGW7G70mGE9QlOJwJiSFPcXLNfmk8H/V5Cg2k=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=i43/GqRMALGePiOvKLLiVm68rl7kuD1jPtECg5+AFtHcce0lAwh1/GGSmHJCn1jLm
+         X6EL8T3rmdu1TBQ/ziIiAobHLYePbEtAuBsXOtvThf0rFuOu8ioogWyo6+p0fFYO0U
+         ZLVr+k/X26iDjWvfPYqFgwc+hy1U+5WgvQ2zeSKTUHwbHkc7+MItKBgcSIpQIEsWKS
+         7W8bg5mwFpiErJuWGEN7K4AK8h2t5qcIQurHllkJpGqXRQfas9/efaLODRJ1EjX+n5
+         NBoTD33o5y28NxivwECmAHmWVYfQ12CbFe71ygKzJgFU11I4fj5npRIXDC8Gzhq2U4
+         zmjQwNtPnfCgA==
+Message-ID: <701fbfac-b548-1f05-7841-e233ef82be15@collabora.com>
+Date:   Tue, 8 Feb 2022 01:59:58 +0500
 MIME-Version: 1.0
-References: <20220207202714.1890024-1-ribalda@chromium.org>
-In-Reply-To: <20220207202714.1890024-1-ribalda@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 7 Feb 2022 12:51:12 -0800
-Message-ID: <CAGS_qxoMTqpGW9EwSbgTafKRbTdG+kaTw+Ea6BfbzMHRiCN=FA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] kunit: Introduce _NULL and _NOT_NULL macros
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, kernel@collabora.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH] selftests: Fix build when $(O) points to a relative path
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20220204225817.3918648-1-usama.anjum@collabora.com>
+ <CAEf4Bzbf38F39XHJnCKy19m97JZJnhN0+Sr-TAVzZnSKuqzL4w@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAEf4Bzbf38F39XHJnCKy19m97JZJnhN0+Sr-TAVzZnSKuqzL4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 12:27 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Today, when we want to check if a pointer is NULL and not ERR we have
-> two options:
->
-> EXPECT_TRUE(test, ptr == NULL);
->
-> or
->
-> EXPECT_PTR_NE(test, ptr, (struct mystruct *)NULL);
+On 2/8/22 12:22 AM, Andrii Nakryiko wrote:
+> On Fri, Feb 4, 2022 at 2:59 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Build of bpf and tc-testing selftests fails when the relative path of
+>> the build directory is specified.
+>>
+>> make -C tools/testing/selftests O=build0
+>> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
+>> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+>> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
+>> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+>>
+>> The fix is same as mentioned in commit 150a27328b68 ("bpf, preload: Fix
+>> build when $(O) points to a relative path").
+>>
+> 
+> I don't think it actually helps building BPF selftest. Even with this
+This patch is fixing one type of build error which occurs if output
+directory's path is relative.
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> patch applied, all the feature detection doesn't work, and I get
+> reallocarray redefinition failure when bpftool is being built as part
+> of selftest.
+There may be more problems in BPF tests. Those needs to be looked at
+separately.
 
-Sorry, some minor nits I forgot to include in my previous mail:
-
-minor nit: perhaps KUNIT_EXPECT_TRUE(...)
-I don't think most people would be confused by this, but if we send a
-v3, might be good to be more precise.
-
->
-> Create a new set of macros that take care of NULL checks.
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  include/kunit/test.h | 88 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 00b9ff7783ab..5970d3a0e4af 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -1218,6 +1218,50 @@ do {                                                                            \
->                                    fmt,                                        \
->                                    ##__VA_ARGS__)
->
-> +/**
-> + * KUNIT_EXPECT_NULL() - Expects that @ptr is null.
-> + * @test: The test context object.
-> + * @ptr: an arbitrary pointer.
-> + *
-> + * Sets an expectation that the value that @ptr evaluates to is null. This is
-> + * semantically equivalent to KUNIT_EXPECT_PTR_EQ(@test, NULL, ptr).
-> + * See KUNIT_EXPECT_TRUE() for more information.
-> + */
-> +#define KUNIT_EXPECT_NULL(test, ptr)                                          \
-> +       KUNIT_EXPECT_PTR_EQ_MSG(test,                                          \
-> +                               (typeof(ptr))NULL,                             \
-
-First point: hmm, I dropped the (typeof(ptr)) casting and didn't have
-any build warnings.
-So I don't think the cast is strictly necessary.
-We use this value in the comparison (left == right) and when we store
-them in the assert struct.
-The former is fine since `myptr == NULL` is valid, and the latter is
-fine since we store both left/right as `void *` in the end.
-
-It does have the benefit of making the comparison operand more
-distinct from the NULL `msg` parameter, however.
-I personally would lean towards dropping it still.
-A bit less to read, and it also generates less code after the
-preprocessing step.
-
-Second point: I think it might be more natural to have the NULL be the
-`right` parameter.
-
-Right now we get
-      Expected ((void *)0) == test, but
-        ((void *)0) == 0000000000000000
-        test == 00000000a1803d18
-
-I think it's a bit more natural for the user to see the expression
-they provided first, i.e.
-    Expected test == ((void *)0), but
-        test == 00000000a1003d18
-        ((void *)0) == 0000000000000000
-
-If we do flip the order, let's remember to update the comments as
-well, the "semantically equivalent to" bit.
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  tools/testing/selftests/Makefile | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index 4eda7c7c15694..aa0faf132c35a 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -178,6 +178,7 @@ all: khdr
+>>                 BUILD_TARGET=$$BUILD/$$TARGET;                  \
+>>                 mkdir $$BUILD_TARGET  -p;                       \
+>>                 $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET       \
+>> +                               O=$(abs_objtree)                \
+>>                                 $(if $(FORCE_TARGETS),|| exit); \
+>>                 ret=$$((ret * $$?));                            \
+>>         done; exit $$ret;
+>> @@ -185,7 +186,8 @@ all: khdr
+>>  run_tests: all
+>>         @for TARGET in $(TARGETS); do \
+>>                 BUILD_TARGET=$$BUILD/$$TARGET;  \
+>> -               $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+>> +               $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
+>> +                               O=$(abs_objtree);                   \
+>>         done;
+>>
+>>  hotplug:
+>> --
+>> 2.30.2
+>>
