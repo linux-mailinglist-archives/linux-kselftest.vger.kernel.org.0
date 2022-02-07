@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294BC4AC3E6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581B34AC3FF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242056AbiBGPfP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 10:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S1343697AbiBGPfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 10:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345450AbiBGPXu (ORCPT
+        with ESMTP id S1345513AbiBGPXw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226AEC0401C8
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:49 -0800 (PST)
+        Mon, 7 Feb 2022 10:23:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FD7C0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF0ECB815AE
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C19BC340F3;
-        Mon,  7 Feb 2022 15:23:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 168BB6149F
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FCFC340F0;
+        Mon,  7 Feb 2022 15:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247426;
-        bh=7y2dHGQiyoyZyX+UcuyLMcmIWkwNWZFNxdfhIUoMns8=;
+        s=k20201202; t=1644247430;
+        bh=0LIy1tfnTrWayVHc1vQxAK1haetaGS+Re+ogEQF7Ph0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7uApXimQGgFKEDTc3xjZpKTTjmrap8HJPEdl/6G6vksfaEcubxY0+0F82gHgExr7
-         Vj5NkRDoq1oD86jM4eGKuCG98Fs6CgZ1d9yC2H5mOxmmJoX2P1zUhILF2TO1mWsdAg
-         UvoCM/QJlXd5oGLC3+bWNwoEE43Ya6DSrODg2V/HGF/Hf5igP3sRVJeffP1puQgzw0
-         HT09KTFaaZ7RU5lWkP91zuUF7TSaHlfBs62YtxUCIsrVlBi5P6HXMqxeSnZn2LZTwf
-         ES+8e942RbEVUEXm0pw3tJ1+11Z6h/rdv/a+8BrDdcAByevdR6sjtCFC7LPvHGQ5+T
-         kwL4GqS1aLg1Q==
+        b=ugaFs7NuAEiyN9+hxUFEvmEUl3FIJp4uH5LFpGHDDm8JCvoArKkx+bWGJuKZDnqUu
+         tSaJi6P50YYASXWl9+FbGcIDg68B/LhMpadGjtHLu2f6E221WU7QolmCJY2r9eCYBI
+         Y16adwefnR7qRSXvECGsWph8GA9DVUCQD+gArrsGCrJDiMnXAyHSDvnJKeueFZrURm
+         /ETcOE62ieBw0btlTTYsLXk9pEw1/Yrcu03MhA2oXEFdvuR38e0KbxmuG/toNtzIgv
+         14pcoy2aqDPj4I9V4yous9kwUWot4Zh1rRmC180rIIr/s2Pkdjm+lYPHIhkSQvwwq5
+         tSuFrxS3Si+hw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,14 +48,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 10/40] arm64/sme: Basic enumeration support
-Date:   Mon,  7 Feb 2022 15:20:39 +0000
-Message-Id: <20220207152109.197566-11-broonie@kernel.org>
+Subject: [PATCH v11 11/40] arm64/sme: Identify supported SME vector lengths at boot
+Date:   Mon,  7 Feb 2022 15:20:40 +0000
+Message-Id: <20220207152109.197566-12-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13377; h=from:subject; bh=7y2dHGQiyoyZyX+UcuyLMcmIWkwNWZFNxdfhIUoMns8=; b=owGbwMvMwMWocq27KDak/QLjabUkhiRGizMryy+4d9eYpgcbfFa8xcjIfOT57pjiKx0ajK5Lr+T0 Fgd2MhqzMDByMciKKbKsfZaxKj1cYuv8R/NfwQxiZQKZwsDFKQATEfnE/j/MdfWSxI+xT36bcNQZGD 7eIDh/ZlBG35bq4zN4pqoqMPyZuVHgsMuKNxfv5MTMWF922ejVAoU0mfdzls4vVitU675Q8P976+f1 Phc25Dr8SBBXLVVvnLW9JG1Knl/4og9pPM/b3ITZYwUXv0mR/GIYuGk+93nf1ldrZA7vbPpe391S7F 5UJrF4WUOHWdCV8LrSR0eWtid11yS4/atn55mw2HmXQwWfyDb2oNVCIqtYVijOEOf3uiZyy413utGP t8VbPmxWnpdlnp91T55LQ32P+QN/jcwTdsUCUwUflfGrCzxVPsZqobN567LKWxpPrcWql0Ve0QrY3X VhK0dsaG+WApufmFBaRnYZ98okAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13528; h=from:subject; bh=0LIy1tfnTrWayVHc1vQxAK1haetaGS+Re+ogEQF7Ph0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjNkc9PMnAjAU8TAEWLdpOJpwOrQLoxlEhohV4x RoiHliCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4zQAKCRAk1otyXVSH0Fh/B/ 0dxIcJrMjePk5ML6bjRj9yLwhXhGflq9aMw5M77sBlIjJwdfp7stH4F9lOcdZ5r5oD/OoD740pr1V6 BiJXTDmg2NKLk1jVrQvLqMcqmC+eoLma1EXs2j65G63bomAEX0WgV1djnWwQCgE/vS4/2pMbQ7lTrt qm+8Ms7PXIZbHUcG17mg9VxHhwDL0k3HD0jm8LtGuzSVESbNw5FnHsK9hXMY91b2qYFcMzHp+Kq1lI pdRvmPOgnG+hjk0hbnQzl916cZh0zzAErp51xZquWNSV1swSyZwPnPT8PRHsA5cNx9ZP28G7PO6sKx fAh0Nc1jR7EU79158v5SHBlF5pg5ih
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,343 +68,436 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces basic cpufeature support for discovering the presence
-of the Scalable Matrix Extension.
+The vector lengths used for SME are controlled through a similar set of
+registers to those for SVE and enumerated using a similar algorithm with
+some slight differences due to the fact that unlike SVE there are no
+restrictions on which combinations of vector lengths can be supported
+nor any mandatory vector lengths which must be implemented.  Add a new
+vector type and implement support for enumerating it.
+
+One slightly awkward feature is that we need to read the current vector
+length using a different instruction (or enter streaming mode which
+would have the same issue and be higher cost).  Rather than add an ops
+structure we add special cases directly in the otherwise generic
+vec_probe_vqs() function, this is a bit inelegant but it's the only
+place where this is an issue.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/arm64/elf_hwcaps.rst  | 33 +++++++++++++++++
- arch/arm64/include/asm/cpu.h        |  1 +
- arch/arm64/include/asm/cpufeature.h | 12 ++++++
- arch/arm64/include/asm/fpsimd.h     |  2 +
- arch/arm64/include/asm/hwcap.h      |  8 ++++
- arch/arm64/include/uapi/asm/hwcap.h |  8 ++++
- arch/arm64/kernel/cpufeature.c      | 57 +++++++++++++++++++++++++++++
- arch/arm64/kernel/cpuinfo.c         |  9 +++++
- arch/arm64/kernel/fpsimd.c          | 30 +++++++++++++++
- arch/arm64/tools/cpucaps            |  2 +
- 10 files changed, 162 insertions(+)
+ arch/arm64/include/asm/cpu.h        |   3 +
+ arch/arm64/include/asm/cpufeature.h |   7 ++
+ arch/arm64/include/asm/fpsimd.h     |  26 ++++++
+ arch/arm64/include/asm/processor.h  |   1 +
+ arch/arm64/kernel/cpufeature.c      |  49 +++++++++++
+ arch/arm64/kernel/cpuinfo.c         |   4 +
+ arch/arm64/kernel/entry-fpsimd.S    |   9 ++
+ arch/arm64/kernel/fpsimd.c          | 123 +++++++++++++++++++++++++++-
+ 8 files changed, 220 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index b72ff17d600a..5626cf208000 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -259,6 +259,39 @@ HWCAP2_RPRES
- 
-     Functionality implied by ID_AA64ISAR2_EL1.RPRES == 0b0001.
- 
-+HWCAP2_SME
-+
-+    Functionality implied by ID_AA64PFR1_EL1.SME == 0b0001, as described
-+    by Documentation/arm64/sme.rst.
-+
-+HWCAP2_SME_I16I64
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.I16I64 == 0b1111.
-+
-+HWCAP2_SME_F64F64
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.F64F64 == 0b1.
-+
-+HWCAP2_SME_I8I32
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.I8I32 == 0b1111.
-+
-+HWCAP2_SME_F16F32
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.F16F32 == 0b1.
-+
-+HWCAP2_SME_B16F32
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.B16F32 == 0b1.
-+
-+HWCAP2_SME_F32F32
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.F32F32 == 0b1.
-+
-+HWCAP2_SME_FA64
-+
-+    Functionality implied by ID_AA64SMFR0_EL1.FA64 == 0b1.
-+
- 4. Unused AT_HWCAP bits
- -----------------------
- 
 diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
-index a58e366f0b07..d08062bcb9c1 100644
+index d08062bcb9c1..550e1fc4ae6c 100644
 --- a/arch/arm64/include/asm/cpu.h
 +++ b/arch/arm64/include/asm/cpu.h
-@@ -58,6 +58,7 @@ struct cpuinfo_arm64 {
- 	u64		reg_id_aa64pfr0;
- 	u64		reg_id_aa64pfr1;
- 	u64		reg_id_aa64zfr0;
-+	u64		reg_id_aa64smfr0;
+@@ -64,6 +64,9 @@ struct cpuinfo_arm64 {
  
- 	struct cpuinfo_32bit	aarch32;
- 
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index 2728abd9cae4..f93b1442143f 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -728,6 +728,18 @@ static __always_inline bool system_supports_sve(void)
- 		cpus_have_const_cap(ARM64_SVE);
- }
- 
-+static __always_inline bool system_supports_sme(void)
-+{
-+	return IS_ENABLED(CONFIG_ARM64_SME) &&
-+		cpus_have_const_cap(ARM64_SME);
-+}
+ 	/* pseudo-ZCR for recording maximum ZCR_EL1 LEN value: */
+ 	u64		reg_zcr;
 +
-+static __always_inline bool system_supports_fa64(void)
-+{
-+	return IS_ENABLED(CONFIG_ARM64_SME) &&
-+		cpus_have_const_cap(ARM64_SME_FA64);
-+}
-+
- static __always_inline bool system_supports_cnp(void)
- {
- 	return IS_ENABLED(CONFIG_ARM64_CNP) &&
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index c90f7f99a768..6b7eb6f2cecd 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -74,6 +74,8 @@ extern void sve_set_vq(unsigned long vq_minus_1);
- 
- struct arm64_cpu_capabilities;
- extern void sve_kernel_enable(const struct arm64_cpu_capabilities *__unused);
-+extern void sme_kernel_enable(const struct arm64_cpu_capabilities *__unused);
-+extern void fa64_kernel_enable(const struct arm64_cpu_capabilities *__unused);
- 
- extern u64 read_zcr_features(void);
- 
-diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
-index f68fbb207473..76d9999527c5 100644
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -108,6 +108,14 @@
- #define KERNEL_HWCAP_ECV		__khwcap2_feature(ECV)
- #define KERNEL_HWCAP_AFP		__khwcap2_feature(AFP)
- #define KERNEL_HWCAP_RPRES		__khwcap2_feature(RPRES)
-+#define KERNEL_HWCAP_SME		__khwcap2_feature(SME)
-+#define KERNEL_HWCAP_SME_I16I64		__khwcap2_feature(SME_I16I64)
-+#define KERNEL_HWCAP_SME_F64F64		__khwcap2_feature(SME_F64F64)
-+#define KERNEL_HWCAP_SME_I8I32		__khwcap2_feature(SME_I8I32)
-+#define KERNEL_HWCAP_SME_F16F32		__khwcap2_feature(SME_F16F32)
-+#define KERNEL_HWCAP_SME_B16F32		__khwcap2_feature(SME_B16F32)
-+#define KERNEL_HWCAP_SME_F32F32		__khwcap2_feature(SME_F32F32)
-+#define KERNEL_HWCAP_SME_FA64		__khwcap2_feature(SME_FA64)
- 
- /*
-  * This yields a mask that user programs can use to figure out what
-diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
-index f03731847d9d..60de5626f8fb 100644
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -78,5 +78,13 @@
- #define HWCAP2_ECV		(1 << 19)
- #define HWCAP2_AFP		(1 << 20)
- #define HWCAP2_RPRES		(1 << 21)
-+#define HWCAP2_SME		(1 << 22)
-+#define HWCAP2_SME_I16I64	(1 << 23)
-+#define HWCAP2_SME_F64F64	(1 << 24)
-+#define HWCAP2_SME_I8I32	(1 << 25)
-+#define HWCAP2_SME_F16F32	(1 << 26)
-+#define HWCAP2_SME_B16F32	(1 << 27)
-+#define HWCAP2_SME_F32F32	(1 << 28)
-+#define HWCAP2_SME_FA64		(1 << 29)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 64a748c2b351..2634e32bbfb9 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -251,6 +251,7 @@ static const struct arm64_ftr_bits ftr_id_aa64pfr0[] = {
++	/* pseudo-SMCR for recording maximum ZCR_EL1 LEN value: */
++	u64		reg_smcr;
  };
  
- static const struct arm64_ftr_bits ftr_id_aa64pfr1[] = {
-+	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_SME_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_MPAMFRAC_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64PFR1_RASFRAC_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_MTE),
-@@ -283,6 +284,24 @@ static const struct arm64_ftr_bits ftr_id_aa64zfr0[] = {
+ DECLARE_PER_CPU(struct cpuinfo_arm64, cpu_data);
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index f93b1442143f..9d36035acce3 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -620,6 +620,13 @@ static inline bool id_aa64pfr0_sve(u64 pfr0)
+ 	return val > 0;
+ }
+ 
++static inline bool id_aa64pfr1_sme(u64 pfr1)
++{
++	u32 val = cpuid_feature_extract_unsigned_field(pfr1, ID_AA64PFR1_SME_SHIFT);
++
++	return val > 0;
++}
++
+ static inline bool id_aa64pfr1_mte(u64 pfr1)
+ {
+ 	u32 val = cpuid_feature_extract_unsigned_field(pfr1, ID_AA64PFR1_MTE_SHIFT);
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index 6b7eb6f2cecd..8cb99b6fe565 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -78,6 +78,7 @@ extern void sme_kernel_enable(const struct arm64_cpu_capabilities *__unused);
+ extern void fa64_kernel_enable(const struct arm64_cpu_capabilities *__unused);
+ 
+ extern u64 read_zcr_features(void);
++extern u64 read_smcr_features(void);
+ 
+ /*
+  * Helpers to translate bit indices in sve_vq_map to VQ values (and
+@@ -172,6 +173,12 @@ static inline void write_vl(enum vec_type type, u64 val)
+ 		tmp = read_sysreg_s(SYS_ZCR_EL1) & ~ZCR_ELx_LEN_MASK;
+ 		write_sysreg_s(tmp | val, SYS_ZCR_EL1);
+ 		break;
++#endif
++#ifdef CONFIG_ARM64_SME
++	case ARM64_VEC_SME:
++		tmp = read_sysreg_s(SYS_SMCR_EL1) & ~SMCR_ELx_LEN_MASK;
++		write_sysreg_s(tmp | val, SYS_SMCR_EL1);
++		break;
+ #endif
+ 	default:
+ 		WARN_ON_ONCE(1);
+@@ -268,12 +275,31 @@ static inline void sme_smstop(void)
+ 	asm volatile(".inst 0xd503467f");
+ }
+ 
++extern void __init sme_setup(void);
++
++static inline int sme_max_vl(void)
++{
++	return vec_max_vl(ARM64_VEC_SME);
++}
++
++static inline int sme_max_virtualisable_vl(void)
++{
++	return vec_max_virtualisable_vl(ARM64_VEC_SME);
++}
++
++extern unsigned int sme_get_vl(void);
++
+ #else
+ 
+ static inline void sme_smstart_sm(void) { }
+ static inline void sme_smstop_sm(void) { }
+ static inline void sme_smstop(void) { }
+ 
++static inline void sme_setup(void) { }
++static inline unsigned int sme_get_vl(void) { return 0; }
++static inline int sme_max_vl(void) { return 0; }
++static inline int sme_max_virtualisable_vl(void) { return 0; }
++
+ #endif /* ! CONFIG_ARM64_SME */
+ 
+ /* For use by EFI runtime services calls only */
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index 6f41b65f9962..df68f0fb0ded 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -117,6 +117,7 @@ struct debug_info {
+ 
+ enum vec_type {
+ 	ARM64_VEC_SVE = 0,
++	ARM64_VEC_SME,
+ 	ARM64_VEC_MAX,
+ };
+ 
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 2634e32bbfb9..2b746365d6a8 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -570,6 +570,12 @@ static const struct arm64_ftr_bits ftr_zcr[] = {
  	ARM64_FTR_END,
  };
  
-+static const struct arm64_ftr_bits ftr_id_aa64smfr0[] = {
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_FA64_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_I16I64_SHIFT, 4, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F64F64_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_I8I32_SHIFT, 4, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F16F32_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_B16F32_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_F32F32_SHIFT, 1, 0),
++static const struct arm64_ftr_bits ftr_smcr[] = {
++	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE,
++		SMCR_ELx_LEN_SHIFT, SMCR_ELx_LEN_SIZE, 0),	/* LEN */
 +	ARM64_FTR_END,
 +};
 +
- static const struct arm64_ftr_bits ftr_id_aa64mmfr0[] = {
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR0_ECV_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_LOWER_SAFE, ID_AA64MMFR0_FGT_SHIFT, 4, 0),
-@@ -634,6 +653,7 @@ static const struct __ftr_reg_entry {
- 	ARM64_FTR_REG_OVERRIDE(SYS_ID_AA64PFR1_EL1, ftr_id_aa64pfr1,
- 			       &id_aa64pfr1_override),
- 	ARM64_FTR_REG(SYS_ID_AA64ZFR0_EL1, ftr_id_aa64zfr0),
-+	ARM64_FTR_REG(SYS_ID_AA64SMFR0_EL1, ftr_id_aa64smfr0),
+ /*
+  * Common ftr bits for a 32bit register with all hidden, strict
+  * attributes, with 4bit feature fields and a default safe value of
+@@ -673,6 +679,7 @@ static const struct __ftr_reg_entry {
  
- 	/* Op1 = 0, CRn = 0, CRm = 5 */
- 	ARM64_FTR_REG(SYS_ID_AA64DFR0_EL1, ftr_id_aa64dfr0),
-@@ -947,6 +967,7 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
- 	init_cpu_ftr_reg(SYS_ID_AA64PFR0_EL1, info->reg_id_aa64pfr0);
- 	init_cpu_ftr_reg(SYS_ID_AA64PFR1_EL1, info->reg_id_aa64pfr1);
- 	init_cpu_ftr_reg(SYS_ID_AA64ZFR0_EL1, info->reg_id_aa64zfr0);
-+	init_cpu_ftr_reg(SYS_ID_AA64SMFR0_EL1, info->reg_id_aa64smfr0);
+ 	/* Op1 = 0, CRn = 1, CRm = 2 */
+ 	ARM64_FTR_REG(SYS_ZCR_EL1, ftr_zcr),
++	ARM64_FTR_REG(SYS_SMCR_EL1, ftr_smcr),
  
- 	if (id_aa64pfr0_32bit_el0(info->reg_id_aa64pfr0))
- 		init_32bit_cpu_features(&info->aarch32);
-@@ -2403,6 +2424,32 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
- 		.matches = has_cpuid_feature,
- 		.min_field_value = 1,
- 	},
-+#ifdef CONFIG_ARM64_SME
-+	{
-+		.desc = "Scalable Matrix Extension",
-+		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-+		.capability = ARM64_SME,
-+		.sys_reg = SYS_ID_AA64PFR1_EL1,
-+		.sign = FTR_UNSIGNED,
-+		.field_pos = ID_AA64PFR1_SME_SHIFT,
-+		.field_width = 4,
-+		.min_field_value = ID_AA64PFR1_SME,
-+		.matches = has_cpuid_feature,
-+		.cpu_enable = sme_kernel_enable,
-+	},
-+	{
-+		.desc = "FA64",
-+		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-+		.capability = ARM64_SME_FA64,
-+		.sys_reg = SYS_ID_AA64SMFR0_EL1,
-+		.sign = FTR_UNSIGNED,
-+		.field_pos = ID_AA64SMFR0_FA64_SHIFT,
-+		.field_width = 1,
-+		.min_field_value = ID_AA64SMFR0_FA64,
-+		.matches = has_cpuid_feature,
-+		.cpu_enable = fa64_kernel_enable,
-+	},
-+#endif /* CONFIG_ARM64_SME */
- 	{},
- };
+ 	/* Op1 = 1, CRn = 0, CRm = 0 */
+ 	ARM64_FTR_REG(SYS_GMID_EL1, ftr_gmid),
+@@ -977,6 +984,14 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
+ 		vec_init_vq_map(ARM64_VEC_SVE);
+ 	}
  
-@@ -2527,6 +2574,16 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_ECV_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
- 	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_AFP_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
- 	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_RPRES_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
-+#ifdef CONFIG_ARM64_SME
-+	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_SME_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR1_SME, CAP_HWCAP, KERNEL_HWCAP_SME),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_FA64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_FA64, CAP_HWCAP, KERNEL_HWCAP_SME_FA64),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_I16I64_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_I16I64, CAP_HWCAP, KERNEL_HWCAP_SME_I16I64),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_F64F64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_F64F64, CAP_HWCAP, KERNEL_HWCAP_SME_F64F64),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_I8I32_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_I8I32, CAP_HWCAP, KERNEL_HWCAP_SME_I8I32),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_F16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_F16F32, CAP_HWCAP, KERNEL_HWCAP_SME_F16F32),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_B16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_B16F32, CAP_HWCAP, KERNEL_HWCAP_SME_B16F32),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_F32F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_F32F32, CAP_HWCAP, KERNEL_HWCAP_SME_F32F32),
-+#endif /* CONFIG_ARM64_SME */
- 	{},
- };
++	if (id_aa64pfr1_sme(info->reg_id_aa64pfr1)) {
++		init_cpu_ftr_reg(SYS_SMCR_EL1, info->reg_smcr);
++		if (IS_ENABLED(CONFIG_ARM64_SME)) {
++			sme_kernel_enable(NULL);
++			vec_init_vq_map(ARM64_VEC_SME);
++		}
++	}
++
+ 	if (id_aa64pfr1_mte(info->reg_id_aa64pfr1))
+ 		init_cpu_ftr_reg(SYS_GMID_EL1, info->reg_gmid);
  
+@@ -1203,6 +1218,9 @@ void update_cpu_features(int cpu,
+ 	taint |= check_update_ftr_reg(SYS_ID_AA64ZFR0_EL1, cpu,
+ 				      info->reg_id_aa64zfr0, boot->reg_id_aa64zfr0);
+ 
++	taint |= check_update_ftr_reg(SYS_ID_AA64SMFR0_EL1, cpu,
++				      info->reg_id_aa64smfr0, boot->reg_id_aa64smfr0);
++
+ 	if (id_aa64pfr0_sve(info->reg_id_aa64pfr0)) {
+ 		taint |= check_update_ftr_reg(SYS_ZCR_EL1, cpu,
+ 					info->reg_zcr, boot->reg_zcr);
+@@ -1213,6 +1231,16 @@ void update_cpu_features(int cpu,
+ 			vec_update_vq_map(ARM64_VEC_SVE);
+ 	}
+ 
++	if (id_aa64pfr1_sme(info->reg_id_aa64pfr1)) {
++		taint |= check_update_ftr_reg(SYS_SMCR_EL1, cpu,
++					info->reg_smcr, boot->reg_smcr);
++
++		/* Probe vector lengths, unless we already gave up on SME */
++		if (id_aa64pfr1_sme(read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1)) &&
++		    !system_capabilities_finalized())
++			vec_update_vq_map(ARM64_VEC_SME);
++	}
++
+ 	/*
+ 	 * The kernel uses the LDGM/STGM instructions and the number of tags
+ 	 * they read/write depends on the GMID_EL1.BS field. Check that the
+@@ -2881,6 +2909,23 @@ static void verify_sve_features(void)
+ 	/* Add checks on other ZCR bits here if necessary */
+ }
+ 
++static void verify_sme_features(void)
++{
++	u64 safe_smcr = read_sanitised_ftr_reg(SYS_SMCR_EL1);
++	u64 smcr = read_smcr_features();
++
++	unsigned int safe_len = safe_smcr & SMCR_ELx_LEN_MASK;
++	unsigned int len = smcr & SMCR_ELx_LEN_MASK;
++
++	if (len < safe_len || vec_verify_vq_map(ARM64_VEC_SME)) {
++		pr_crit("CPU%d: SME: vector length support mismatch\n",
++			smp_processor_id());
++		cpu_die_early();
++	}
++
++	/* Add checks on other SMCR bits here if necessary */
++}
++
+ static void verify_hyp_capabilities(void)
+ {
+ 	u64 safe_mmfr1, mmfr0, mmfr1;
+@@ -2933,6 +2978,9 @@ static void verify_local_cpu_capabilities(void)
+ 	if (system_supports_sve())
+ 		verify_sve_features();
+ 
++	if (system_supports_sme())
++		verify_sme_features();
++
+ 	if (is_hyp_mode_available())
+ 		verify_hyp_capabilities();
+ }
+@@ -3050,6 +3098,7 @@ void __init setup_cpu_features(void)
+ 		pr_info("emulated: Privileged Access Never (PAN) using TTBR0_EL1 switching\n");
+ 
+ 	sve_setup();
++	sme_setup();
+ 	minsigstksz_setup();
+ 
+ 	/* Advertise that we have computed the system capabilities */
 diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index 591c18a889a5..33ec182e872e 100644
+index 33ec182e872e..72dc155719b0 100644
 --- a/arch/arm64/kernel/cpuinfo.c
 +++ b/arch/arm64/kernel/cpuinfo.c
-@@ -97,6 +97,14 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_ECV]		= "ecv",
- 	[KERNEL_HWCAP_AFP]		= "afp",
- 	[KERNEL_HWCAP_RPRES]		= "rpres",
-+	[KERNEL_HWCAP_SME]		= "sme",
-+	[KERNEL_HWCAP_SME_I16I64]	= "smei16i64",
-+	[KERNEL_HWCAP_SME_F64F64]	= "smef64f64",
-+	[KERNEL_HWCAP_SME_I8I32]	= "smei8i32",
-+	[KERNEL_HWCAP_SME_F16F32]	= "smef16f32",
-+	[KERNEL_HWCAP_SME_B16F32]	= "smeb16f32",
-+	[KERNEL_HWCAP_SME_F32F32]	= "smef32f32",
-+	[KERNEL_HWCAP_SME_FA64]		= "smefa64",
- };
+@@ -420,6 +420,10 @@ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
+ 	    id_aa64pfr0_sve(info->reg_id_aa64pfr0))
+ 		info->reg_zcr = read_zcr_features();
  
- #ifdef CONFIG_COMPAT
-@@ -400,6 +408,7 @@ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
- 	info->reg_id_aa64pfr0 = read_cpuid(ID_AA64PFR0_EL1);
- 	info->reg_id_aa64pfr1 = read_cpuid(ID_AA64PFR1_EL1);
- 	info->reg_id_aa64zfr0 = read_cpuid(ID_AA64ZFR0_EL1);
-+	info->reg_id_aa64smfr0 = read_cpuid(ID_AA64SMFR0_EL1);
++	if (IS_ENABLED(CONFIG_ARM64_SME) &&
++	    id_aa64pfr1_sme(info->reg_id_aa64pfr1))
++		info->reg_smcr = read_smcr_features();
++
+ 	cpuinfo_detect_icache_policy(info);
+ }
  
- 	if (id_aa64pfr1_mte(info->reg_id_aa64pfr1))
- 		info->reg_gmid = read_cpuid(GMID_EL1);
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 5280e098cfb5..576490be3c2b 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -987,6 +987,32 @@ void fpsimd_release_task(struct task_struct *dead_task)
+diff --git a/arch/arm64/kernel/entry-fpsimd.S b/arch/arm64/kernel/entry-fpsimd.S
+index dc242e269f9a..deee5f01462e 100644
+--- a/arch/arm64/kernel/entry-fpsimd.S
++++ b/arch/arm64/kernel/entry-fpsimd.S
+@@ -86,3 +86,12 @@ SYM_FUNC_START(sve_flush_live)
+ SYM_FUNC_END(sve_flush_live)
  
  #endif /* CONFIG_ARM64_SVE */
++
++#ifdef CONFIG_ARM64_SME
++
++SYM_FUNC_START(sme_get_vl)
++	_sme_rdsvl	0, 1
++	ret
++SYM_FUNC_END(sme_get_vl)
++
++#endif /* CONFIG_ARM64_SME */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 576490be3c2b..3fb2167f8af7 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -136,6 +136,12 @@ __ro_after_init struct vl_info vl_info[ARM64_VEC_MAX] = {
+ 		.max_virtualisable_vl	= SVE_VL_MIN,
+ 	},
+ #endif
++#ifdef CONFIG_ARM64_SME
++	[ARM64_VEC_SME] = {
++		.type			= ARM64_VEC_SME,
++		.name			= "SME",
++	},
++#endif
+ };
+ 
+ static unsigned int vec_vl_inherit_flag(enum vec_type type)
+@@ -186,6 +192,20 @@ extern void __percpu *efi_sve_state;
+ 
+ #endif /* ! CONFIG_ARM64_SVE */
  
 +#ifdef CONFIG_ARM64_SME
 +
-+void sme_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
++static int get_sme_default_vl(void)
 +{
-+	/* Set priority for all PEs to architecturally defined minimum */
-+	write_sysreg_s(read_sysreg_s(SYS_SMPRI_EL1) & ~SMPRI_EL1_PRIORITY_MASK,
-+		       SYS_SMPRI_EL1);
-+
-+	/* Allow SME in kernel */
-+	write_sysreg(read_sysreg(CPACR_EL1) | CPACR_EL1_SMEN_EL1EN, CPACR_EL1);
-+	isb();
++	return get_default_vl(ARM64_VEC_SME);
 +}
 +
++static void set_sme_default_vl(int val)
++{
++	set_default_vl(ARM64_VEC_SME, val);
++}
++
++#endif
++
+ DEFINE_PER_CPU(bool, fpsimd_context_busy);
+ EXPORT_PER_CPU_SYMBOL(fpsimd_context_busy);
+ 
+@@ -403,6 +423,8 @@ static unsigned int find_supported_vector_length(enum vec_type type,
+ 
+ 	if (vl > max_vl)
+ 		vl = max_vl;
++	if (vl < info->min_vl)
++		vl = info->min_vl;
+ 
+ 	bit = find_next_bit(info->vq_map, SVE_VQ_MAX,
+ 			    __vq_to_bit(sve_vq_from_vl(vl)));
+@@ -764,7 +786,23 @@ static void vec_probe_vqs(struct vl_info *info,
+ 
+ 	for (vq = SVE_VQ_MAX; vq >= SVE_VQ_MIN; --vq) {
+ 		write_vl(info->type, vq - 1); /* self-syncing */
+-		vl = sve_get_vl();
++
++		switch (info->type) {
++		case ARM64_VEC_SVE:
++			vl = sve_get_vl();
++			break;
++		case ARM64_VEC_SME:
++			vl = sme_get_vl();
++			break;
++		default:
++			vl = 0;
++			break;
++		}
++
++		/* Minimum VL identified? */
++		if (sve_vq_from_vl(vl) > vq)
++			break;
++
+ 		vq = sve_vq_from_vl(vl); /* skip intervening lengths */
+ 		set_bit(__vq_to_bit(vq), map);
+ 	}
+@@ -1011,7 +1049,88 @@ void fa64_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
+ 		       SYS_SMCR_EL1);
+ }
+ 
+-#endif /* CONFIG_ARM64_SVE */
 +/*
-+ * This must be called after sme_kernel_enable(), we rely on the
-+ * feature table being sorted to ensure this.
++ * Read the pseudo-SMCR used by cpufeatures to identify the supported
++ * vector length.
++ *
++ * Use only if SME is present.
++ * This function clobbers the SME vector length.
 + */
-+void fa64_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
++u64 read_smcr_features(void)
 +{
-+	/* Allow use of FA64 */
-+	write_sysreg_s(read_sysreg_s(SYS_SMCR_EL1) | SMCR_ELx_FA64_MASK,
++	u64 smcr;
++	unsigned int vq_max;
++
++	sme_kernel_enable(NULL);
++	sme_smstart_sm();
++
++	/*
++	 * Set the maximum possible VL.
++	 */
++	write_sysreg_s(read_sysreg_s(SYS_SMCR_EL1) | SMCR_ELx_LEN_MASK,
 +		       SYS_SMCR_EL1);
++
++	smcr = read_sysreg_s(SYS_SMCR_EL1);
++	smcr &= ~(u64)SMCR_ELx_LEN_MASK; /* Only the LEN field */
++	vq_max = sve_vq_from_vl(sve_get_vl());
++	smcr |= vq_max - 1; /* set LEN field to maximum effective value */
++
++	sme_smstop_sm();
++
++	return smcr;
 +}
 +
-+#endif /* CONFIG_ARM64_SVE */
++void __init sme_setup(void)
++{
++	struct vl_info *info = &vl_info[ARM64_VEC_SME];
++	u64 smcr;
++	int min_bit;
 +
++	if (!system_supports_sme())
++		return;
++
++	/*
++	 * SME doesn't require any particular vector length be
++	 * supported but it does require at least one.  We should have
++	 * disabled the feature entirely while bringing up CPUs but
++	 * let's double check here.
++	 */
++	WARN_ON(bitmap_empty(info->vq_map, SVE_VQ_MAX));
++
++	min_bit = find_last_bit(info->vq_map, SVE_VQ_MAX);
++	info->min_vl = sve_vl_from_vq(__bit_to_vq(min_bit));
++
++	smcr = read_sanitised_ftr_reg(SYS_SMCR_EL1);
++	info->max_vl = sve_vl_from_vq((smcr & SMCR_ELx_LEN_MASK) + 1);
++
++	/*
++	 * Sanity-check that the max VL we determined through CPU features
++	 * corresponds properly to sme_vq_map.  If not, do our best:
++	 */
++	if (WARN_ON(info->max_vl != find_supported_vector_length(ARM64_VEC_SME,
++								 info->max_vl)))
++		info->max_vl = find_supported_vector_length(ARM64_VEC_SME,
++							    info->max_vl);
++
++	WARN_ON(info->min_vl > info->max_vl);
++
++	/*
++	 * For the default VL, pick the maximum supported value <= 32
++	 * (256 bits) if there is one since this is guaranteed not to
++	 * grow the signal frame when in streaming mode, otherwise the
++	 * minimum available VL will be used.
++	 */
++	set_sme_default_vl(find_supported_vector_length(ARM64_VEC_SME, 32));
++
++	pr_info("SME: minimum available vector length %u bytes per vector\n",
++		info->min_vl);
++	pr_info("SME: maximum available vector length %u bytes per vector\n",
++		info->max_vl);
++	pr_info("SME: default vector length %u bytes per vector\n",
++		get_sme_default_vl());
++}
++
++#endif /* CONFIG_ARM64_SME */
+ 
  /*
   * Trapped SVE access
-  *
-@@ -1532,6 +1558,10 @@ static int __init fpsimd_init(void)
- 	if (!cpu_have_named_feature(ASIMD))
- 		pr_notice("Advanced SIMD is not implemented\n");
- 
-+
-+	if (cpu_have_named_feature(SME) && !cpu_have_named_feature(SVE))
-+		pr_notice("SME is implemented but not SVE\n");
-+
- 	return sve_sysctl_init();
- }
- core_initcall(fpsimd_init);
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index 9c65b1e25a96..0a602525bda6 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -41,6 +41,8 @@ KVM_PROTECTED_MODE
- MISMATCHED_CACHE_TYPE
- MTE
- MTE_ASYMM
-+SME
-+SME_FA64
- SPECTRE_V2
- SPECTRE_V3A
- SPECTRE_V4
 -- 
 2.30.2
 
