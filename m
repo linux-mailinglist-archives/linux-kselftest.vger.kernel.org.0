@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8AE4ACD7C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 02:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DED24ACD7D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 02:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344039AbiBHBGa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 20:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        id S1343656AbiBHBGe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343656AbiBGXpo (ORCPT
+        with ESMTP id S240862AbiBGXye (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 18:45:44 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE274C061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:45:42 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id i62so19094419ioa.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 15:45:42 -0800 (PST)
+        Mon, 7 Feb 2022 18:54:34 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFB0C061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:54:33 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id m8so6006328ilg.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 15:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+NtK+MtbClH0X1MQpNUl7kYgTKeiw8K+NzlTmVLxEXI=;
-        b=XRKoi18G+9mwulJnEQ3gZIpKynRci7Mf24Un7f422FB0eEUFbAYtavNEkpyrdPhN0f
-         a7rzu/0l89ECUvtizPXxOwIUWOrHFkFocqlL0+gwAMXc9YMWktraZKFIUKRZLdR15yR7
-         9Gk5UmBEgU9bA1Zq6cKxJj7i2zL3emxV2QwQ0=
+        bh=qe1HIsobsjsqqovhNg1dTepKFqWmN+a6KPj6qtwUnWY=;
+        b=GNyOq+vpsfpSC9QIrBb/7GjblKlADOIqWX4+fMq9/u1WfMddHB0fS49onDPdtXoVPt
+         yTQvKiWdujbtWyWuNAJBCFXj/ug/r2yHinspBGhhYNX9TqH1ysSKBypJBXi/iWqGag0w
+         GMI/AX5J2nDV5UGYQOPFsIy1vpNwRbZOqz5ok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+NtK+MtbClH0X1MQpNUl7kYgTKeiw8K+NzlTmVLxEXI=;
-        b=cZXxqnj0Df2P9Fol8m/de1IU3vjFpTdzHuI6WhPiavFFVM6CITn0xGm9sJQ6mxLEC9
-         YXCze5hBLAMMRk2ZKzRWK2dJMmA5Z0Ca3oWCzH2sXBTjEjqk2qn+JV/t/vPVQDVeJZ71
-         Fs+zbXSniI58a0ivyVimzBAufY5RL+SmrU3ra/LJX8ljNOCJuH0W0ijQX45ixEVpLf6d
-         nuHQdnvPBjtFJd5n3KY9I0oLE0Urd8vp5UR6JQ9OpTgRxsacLty1q4nM6O3bTObwKuCj
-         fiCAkMq7USpEuUMWMifRL03/oJsvzN9Kf5lnskumZhuQZim0kMyZfy6aJzilSRrtb+L3
-         fnkQ==
-X-Gm-Message-State: AOAM533BnKO38qYVLceXFrnSMSsa1MPxWAAwfA0he3y35f7n/CGBvbTm
-        PKpTtQtFI1RNozCQxYBU5q4nhA==
-X-Google-Smtp-Source: ABdhPJzpO1bKNmrLxG0itop7T1/GKIIEgHvPBDjKVCWthMAzwB529RsjYK96DPnNd3NQWFl82bLZSQ==
-X-Received: by 2002:a05:6602:483:: with SMTP id y3mr897165iov.0.1644277542223;
-        Mon, 07 Feb 2022 15:45:42 -0800 (PST)
+        bh=qe1HIsobsjsqqovhNg1dTepKFqWmN+a6KPj6qtwUnWY=;
+        b=3k+fOTBqedMVXrsHf84AXt39RBEIy6aMrPuMAtTFVSVpXxmGO2QdK+8n4Mi8Cg5bPw
+         d8qXy0j+8XsHGrqJ6+I9re1eC9P1VM4jJ5gV3cxVe/7DH+WYnM1GzIfdAqFtjeAaKuLS
+         db/NEZ4xRvjWwfTUDMRP3w/+P2LApcD6Tybld983ff1vYFymbr1pjKXeRFtamzXB1Qme
+         lCDjfNZlwmjMGXNJ6VckFlmU9cBszD5muK/VsLU8BEjwIln/f4MeDR4ySqMGTmYDlciZ
+         gPo3nEcIPC6hclaEKyCNqCcuc4a4NI+S/wF2tJunHRCJlfCtQzyEQOCHw85poKxFbRkF
+         RY9Q==
+X-Gm-Message-State: AOAM532STa0QJNMunKXJzjKCd98UlbdDwFSe6D8pwciNhGrye95qWHvD
+        g0K2tobpMFx1UVnBH8/DTKRLrg==
+X-Google-Smtp-Source: ABdhPJyCgVME8X/bAItiYGT5c+rfQjilh5rsHieEvdLoeWX2msU9HoQD9yLg5PgDg85hVcKDwatsDw==
+X-Received: by 2002:a05:6e02:1aaf:: with SMTP id l15mr874954ilv.31.1644278072703;
+        Mon, 07 Feb 2022 15:54:32 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id z23sm6764095iol.11.2022.02.07.15.45.41
+        by smtp.gmail.com with ESMTPSA id o7sm6317885ilo.17.2022.02.07.15.54.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 15:45:41 -0800 (PST)
-Subject: Re: [PATCH v11 04/40] kselftest/arm64: Remove local ARRAY_SIZE()
- definitions
+        Mon, 07 Feb 2022 15:54:32 -0800 (PST)
+Subject: Re: [PATCH v11 05/40] kselftest/arm64: signal: Allow tests to be
+ incompatible with features
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -64,14 +64,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-5-broonie@kernel.org>
+ <20220207152109.197566-6-broonie@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3d009772-ae57-a617-c871-f8ce1e33852d@linuxfoundation.org>
-Date:   Mon, 7 Feb 2022 16:45:40 -0700
+Message-ID: <10072dd0-8853-81fe-0c94-a00638b12f9a@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 16:54:31 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220207152109.197566-5-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-6-broonie@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,43 +86,109 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2/7/22 8:20 AM, Mark Brown wrote:
-> An ARRAY_SIZE() has been added to kselftest.h so remove the local versions
-> in some of the arm64 selftests.
+> Some features may invalidate some tests, for example by supporting an
+> operation which would trap otherwise. Allow tests to list features that
+> they are incompatible with so we can cover the case where a signal will
+> be generated without disruption on systems where that won't happen.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   tools/testing/selftests/arm64/abi/syscall-abi.c | 1 -
->   tools/testing/selftests/arm64/fp/sve-ptrace.c   | 2 --
->   2 files changed, 3 deletions(-)
+>   .../selftests/arm64/signal/test_signals.h     |  1 +
+>   .../arm64/signal/test_signals_utils.c         | 34 ++++++++++++++-----
+>   .../arm64/signal/test_signals_utils.h         |  2 ++
+>   3 files changed, 28 insertions(+), 9 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-> index d8eeeafb50dc..1e13b7523918 100644
-> --- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-> +++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-> @@ -18,7 +18,6 @@
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+> index ebe8694dbef0..f909b70d9e98 100644
+> --- a/tools/testing/selftests/arm64/signal/test_signals.h
+> +++ b/tools/testing/selftests/arm64/signal/test_signals.h
+> @@ -53,6 +53,7 @@ struct tdescr {
+>   	char			*name;
+>   	char			*descr;
+>   	unsigned long		feats_required;
+> +	unsigned long		feats_incompatible;
+>   	/* bitmask of effectively supported feats: populated at run-time */
+>   	unsigned long		feats_supported;
+>   	bool			initialized;
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+> index 2f8c23af3b5e..5743897984b0 100644
+> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
+> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+> @@ -36,6 +36,8 @@ static inline char *feats_to_string(unsigned long feats)
+>   {
+>   	size_t flen = MAX_FEATS_SZ - 1;
 >   
->   #include "../../kselftest.h"
+> +	feats_string[0] = '\0';
+> +
+>   	for (int i = 0; i < FMAX_END; i++) {
+>   		if (feats & (1UL << i)) {
+>   			size_t tlen = strlen(feats_names[i]);
+> @@ -256,7 +258,7 @@ int test_init(struct tdescr *td)
+>   		td->minsigstksz = MINSIGSTKSZ;
+>   	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
 >   
-> -#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
->   #define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
+> -	if (td->feats_required) {
+> +	if (td->feats_required || td->feats_incompatible) {
+>   		td->feats_supported = 0;
+>   		/*
+>   		 * Checking for CPU required features using both the
+> @@ -267,15 +269,29 @@ int test_init(struct tdescr *td)
+>   		if (getauxval(AT_HWCAP) & HWCAP_SVE)
+>   			td->feats_supported |= FEAT_SVE;
+>   		if (feats_ok(td)) {
+> -			fprintf(stderr,
+> -				"Required Features: [%s] supported\n",
+> -				feats_to_string(td->feats_required &
+> -						td->feats_supported));
+> +			if (td->feats_required & td->feats_supported)
+> +				fprintf(stderr,
+> +					"Required Features: [%s] supported\n",
+> +					feats_to_string(td->feats_required &
+> +							td->feats_supported));
+> +			if (!(td->feats_incompatible & td->feats_supported))
+> +				fprintf(stderr,
+> +					"Incompatible Features: [%s] absent\n",
+> +					feats_to_string(td->feats_incompatible));
+>   		} else {
+> -			fprintf(stderr,
+> -				"Required Features: [%s] NOT supported\n",
+> -				feats_to_string(td->feats_required &
+> -						~td->feats_supported));
+> +			if ((td->feats_required & td->feats_supported) !=
+> +			    td->feats_supported)
+> +				fprintf(stderr,
+> +					"Required Features: [%s] NOT supported\n",
+> +					feats_to_string(td->feats_required &
+> +							~td->feats_supported));
+> +			if (td->feats_incompatible & td->feats_supported)
+> +				fprintf(stderr,
+> +					"Incompatible Features: [%s] supported\n",
+> +					feats_to_string(td->feats_incompatible &
+> +							~td->feats_supported));
+> +
+> +
+>   			td->result = KSFT_SKIP;
+>   			return 0;
+>   		}
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+> index 6772b5c8d274..f3aa99ba67bb 100644
+> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
+> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+> @@ -18,6 +18,8 @@ void test_result(struct tdescr *td);
 >   
->   extern void do_syscall(int sve_vl);
-> diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> index a3c1e67441f9..4bd333768cc4 100644
-> --- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> +++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> @@ -21,8 +21,6 @@
+>   static inline bool feats_ok(struct tdescr *td)
+>   {
+> +	if (td->feats_incompatible & td->feats_supported)
+> +		return false;
+>   	return (td->feats_required & td->feats_supported) == td->feats_required;
+>   }
 >   
->   #include "../../kselftest.h"
->   
-> -#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-> -
->   /* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
->   #ifndef NT_ARM_SVE
->   #define NT_ARM_SVE 0x405
 > 
 
-Thank you for cleaning this up.
+Assuming default_handler() will skip test and return skip test when
+feature is unsupported?
+
+Looks good to me.
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
