@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84ED4AC3F1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139C64AC3F2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Feb 2022 16:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238697AbiBGPfN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 10:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S1355313AbiBGPf0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 10:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356127AbiBGPYs (ORCPT
+        with ESMTP id S1356668AbiBGPYw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:24:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753DBC0401CE
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:48 -0800 (PST)
+        Mon, 7 Feb 2022 10:24:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3209C0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38136B815A6
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43228C340F2;
-        Mon,  7 Feb 2022 15:24:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82BCE6077B
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F2C0C340EF;
+        Mon,  7 Feb 2022 15:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247486;
-        bh=+stvVyRnz2H4xbnaEtKWfcp0/IPDCeyODbC6Y5cXcCY=;
+        s=k20201202; t=1644247490;
+        bh=9LPfnNjILhCHVOzA/ALZlaZgBfzu64ZFSV1uulmc3Ng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BeGQY67CXRWkA02czlOg4e4dKQhn1vgI0TX0Kzvk92P2fXSxyJ5PZWf6JYjOh28HG
-         p/fcLBFTTYtSxmJ0HdA+tLpc5Dt3SvtdUu0aCiagxYI6IPJ2FfmB6Q3516WmUXUlvr
-         sK843zAnWjjzJQUIN0M3GElhb43EQjDIaRJSDys7IPjJ/sroNZ+Q09hJGxtT4+A3i/
-         TMZLeRX92xt/Zwsfw0+rQCGsDpmCTfoa3kob31yRRRK/nCjSj3rCJpcSsa4I3pUOyg
-         3pgwkQtQ4m1aZ8I99dU4lZt6qIvRyb7UXGx/s9GxtOAaCYuZ/siUWdvC4Lq+H3sC9r
-         9f5S4Sk87qJ/A==
+        b=kxoSDdt0Kh2RwlSvjSL3zsoD1rJC5sDT/CnLYhtE9fv1iTpJxsYWEsDMf+raRmnaO
+         FXWbLgae9OSiUHi28JKVdHCItNgbe5vjDjCmvNwo3OLXrVa90crgWcv/Jg8aXaTEst
+         /e52uNzXX3RcgHtbuDLChQu+LBOT4KuPcjsDkevEk/yeSVeIhUk/5wPKWKxL3R27cn
+         yZPNu8UlrAHXPBnmSnZSAu4DvUshvCwEI7I0bgMl30xFbn4KnPnW7h/LzD38oa4Owy
+         vAz7D17eK12m+LWF31uUdpho+tU3NKGaCaZEsSdVqrlylKNxxQ9/mSxlhVSA0n87On
+         CpVb08IWtf8NQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,14 +48,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 24/40] arm64/sme: Disable streaming mode and ZA when flushing CPU state
-Date:   Mon,  7 Feb 2022 15:20:53 +0000
-Message-Id: <20220207152109.197566-25-broonie@kernel.org>
+Subject: [PATCH v11 25/40] arm64/sme: Save and restore streaming mode over EFI runtime calls
+Date:   Mon,  7 Feb 2022 15:20:54 +0000
+Message-Id: <20220207152109.197566-26-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1128; h=from:subject; bh=+stvVyRnz2H4xbnaEtKWfcp0/IPDCeyODbC6Y5cXcCY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjXZjkrllyw3wrZv65gkzLMq7K6hvi8wR5NerZM dVGlefyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE41wAKCRAk1otyXVSH0NQpB/ 9paVTph2pBZxYnT/c1ExiDXuHtp0fK3bfvDPEFT3bvWk96GqS7QwDkwaX2TuIM/QS8Ip7+6FM11I1z /Od20Ab96ZmMgKUnlxByL9hKw4g+pQcJB8Wqz4V6cV185sLmu8Dij7x/1+35pVPTOwft4FvC+uBe2a SSAcH1i11FngQ+xBNThdmdvo+2KWxm8L1AZ98cMW5EcyROtHRU/Bt4sM5M1+GhqyNJFqCD1vP06tLb bs5P0ELeLusAiGHNUThbDtTZbuNMANSC5axgd6WIFW7mUbGV4ZtsVHJsSID+dxJlsU5Bys1zUzt8hF TFjiL/AwQ/WxnrY43MddYL5xVG+cdM
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3623; h=from:subject; bh=9LPfnNjILhCHVOzA/ALZlaZgBfzu64ZFSV1uulmc3Ng=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjY+1rMeb1w4VGXA4pCLW80Hj1ML4fkGBbtIMNG NJ0XdkiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE42AAKCRAk1otyXVSH0AIOB/ 94XWxY6Lu8kuJwxMa2agvCzWmE8NoGMt9TZJ+LCfv645Us8AjJZ0nEMKR0RveCUIrIp42wlBdhXBCf ThVQNkxCMyOZUeWpHGhJAVkY7UiijPVJ+WUlF9qCGBmMyHMFXtN9Ncqdj6ZBnj8V/DxwXcT7MYU/vY QG/XaK7ZzUfJDLKettGLh7/DS82uXKr0egxF/bpUMDkS4b4UNc+vs5cFKrZiIv7fN3EXw0eE6fInt5 084WnSqzRPzQM5i11kM4cVwu5LDcfVyzXRCzN5dis7OHPq/kfn9LXnvYrBkf5/X1uMRrCnZqmvvIJe 8Ks9EqaW+Tz/YmOsnPsaaQ0CDbvmMp
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,37 +68,119 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Both streaming mode and ZA may increase power consumption when they are
-enabled and streaming mode makes many FPSIMD and SVE instructions undefined
-which will cause problems for any kernel mode floating point so disable
-both when we flush the CPU state. This covers both kernel_neon_begin() and
-idle and after flushing the state a reload is always required anyway.
+When saving and restoring the floating point state over an EFI runtime
+call ensure that we handle streaming mode, only handling FFR if we are not
+in streaming mode and ensuring that we are in normal mode over the call
+into runtime services.
+
+We currently assume that ZA will not be modified by runtime services, the
+specification is not yet finalised so this may need updating if that
+changes.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm64/kernel/fpsimd.c | 47 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 41 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 8b111b7f2006..e00d3a9e919c 100644
+index e00d3a9e919c..a7077a5d1ed2 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -1762,6 +1762,15 @@ static void fpsimd_flush_cpu_state(void)
- {
- 	WARN_ON(!system_supports_fpsimd());
- 	__this_cpu_write(fpsimd_last_state.st, NULL);
-+
-+	/*
-+	 * Leaving streaming mode enabled will cause issues for any kernel
-+	 * NEON and leaving streaming mode or ZA enabled may increase power
-+	 * consumption.
-+	 */
-+	if (system_supports_sme())
-+		sme_smstop();
-+
- 	set_thread_flag(TIF_FOREIGN_FPSTATE);
- }
+@@ -1059,21 +1059,25 @@ int vec_verify_vq_map(enum vec_type type)
  
+ static void __init sve_efi_setup(void)
+ {
+-	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
++	int max_vl = 0;
++	int i;
+ 
+ 	if (!IS_ENABLED(CONFIG_EFI))
+ 		return;
+ 
++	for (i = 0; i < ARRAY_SIZE(vl_info); i++)
++		max_vl = max(vl_info[i].max_vl, max_vl);
++
+ 	/*
+ 	 * alloc_percpu() warns and prints a backtrace if this goes wrong.
+ 	 * This is evidence of a crippled system and we are returning void,
+ 	 * so no attempt is made to handle this situation here.
+ 	 */
+-	if (!sve_vl_valid(info->max_vl))
++	if (!sve_vl_valid(max_vl))
+ 		goto fail;
+ 
+ 	efi_sve_state = __alloc_percpu(
+-		SVE_SIG_REGS_SIZE(sve_vq_from_vl(info->max_vl)), SVE_VQ_BYTES);
++		SVE_SIG_REGS_SIZE(sve_vq_from_vl(max_vl)), SVE_VQ_BYTES);
+ 	if (!efi_sve_state)
+ 		goto fail;
+ 
+@@ -1848,6 +1852,7 @@ EXPORT_SYMBOL(kernel_neon_end);
+ static DEFINE_PER_CPU(struct user_fpsimd_state, efi_fpsimd_state);
+ static DEFINE_PER_CPU(bool, efi_fpsimd_state_used);
+ static DEFINE_PER_CPU(bool, efi_sve_state_used);
++static DEFINE_PER_CPU(bool, efi_sm_state);
+ 
+ /*
+  * EFI runtime services support functions
+@@ -1882,12 +1887,28 @@ void __efi_fpsimd_begin(void)
+ 		 */
+ 		if (system_supports_sve() && likely(efi_sve_state)) {
+ 			char *sve_state = this_cpu_ptr(efi_sve_state);
++			bool ffr = true;
++			u64 svcr;
+ 
+ 			__this_cpu_write(efi_sve_state_used, true);
+ 
++			/* If we are in streaming mode don't touch FFR */
++			if (system_supports_sme()) {
++				svcr = read_sysreg_s(SYS_SVCR_EL0);
++
++				ffr = svcr & SYS_SVCR_EL0_SM_MASK;
++
++				__this_cpu_write(efi_sm_state, ffr);
++			}
++
+ 			sve_save_state(sve_state + sve_ffr_offset(sve_max_vl()),
+ 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
+-				       true);
++				       ffr);
++
++			if (system_supports_sme())
++				sysreg_clear_set_s(SYS_SVCR_EL0,
++						   SYS_SVCR_EL0_SM_MASK, 0);
++
+ 		} else {
+ 			fpsimd_save_state(this_cpu_ptr(&efi_fpsimd_state));
+ 		}
+@@ -1910,11 +1931,25 @@ void __efi_fpsimd_end(void)
+ 		if (system_supports_sve() &&
+ 		    likely(__this_cpu_read(efi_sve_state_used))) {
+ 			char const *sve_state = this_cpu_ptr(efi_sve_state);
++			bool ffr = true;
++
++			/*
++			 * Restore streaming mode; EFI calls are
++			 * normal function calls so should not return in
++			 * streaming mode.
++			 */
++			if (system_supports_sme()) {
++				if (__this_cpu_read(efi_sm_state)) {
++					sysreg_clear_set_s(SYS_SVCR_EL0,
++							   0,
++							   SYS_SVCR_EL0_SM_MASK);
++					ffr = false;
++				}
++			}
+ 
+-			sve_set_vq(sve_vq_from_vl(sve_get_vl()) - 1);
+ 			sve_load_state(sve_state + sve_ffr_offset(sve_max_vl()),
+ 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
+-				       true);
++				       ffr);
+ 
+ 			__this_cpu_write(efi_sve_state_used, false);
+ 		} else {
 -- 
 2.30.2
 
