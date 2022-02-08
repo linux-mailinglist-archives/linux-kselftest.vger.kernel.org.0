@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3424AD813
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 13:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586334AD7D9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 12:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358115AbiBHLu4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Feb 2022 06:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S1355842AbiBHLuz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Feb 2022 06:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237835AbiBHLu2 (ORCPT
+        with ESMTP id S1358060AbiBHLu3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 06:50:28 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA3CC0048E7
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 03:45:49 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id k25so51016526ejp.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 03:45:49 -0800 (PST)
+        Tue, 8 Feb 2022 06:50:29 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AB7C0048EC
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 03:45:51 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id m4so51555333ejb.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 03:45:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=34ZmyfAhOEYAooNo/xPVmg8jgekAv0axuEgwIeZSupk=;
-        b=VWm2iwcQQkpnk65R4SmtbJhKVg2unvzMEnXszek1LqS/doZylu/IDpFQZdvgLiwYYW
-         pWHY9vi8CVqd83iGgSIaKS91N+vakWK2dRGD1WTg/SlBWDXbslVHHVE+OiixHPKErXAo
-         YpAG91FdGfQvIf7PJZ/PKuuqYihmj1LkduWRU=
+        bh=HihT2WHm5CL9KTfiGWQaowQJbGra0dr2IasABIBxyUw=;
+        b=dIU94/X3NSIjW+rsZ/+s0eeBqfr3PvqsbVqXO6YiS3opCaDTgSHjBC6a5bzaVC+fmC
+         7hJY2+P8i+1tDD9eY6/IsSwD5g78d6XUSWGspQOlq5T/5LqyahFVFcIX1tf2Hq20QCFO
+         XIOfuk4gjyKsHJT0PULu8IFwxLpabXqzpBy/Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=34ZmyfAhOEYAooNo/xPVmg8jgekAv0axuEgwIeZSupk=;
-        b=OkhiPhxJA1hUG0Gr8OfAWRDQVWki7kSUTM/jMf/72G25hPzMelWEr9H43MZjIgnd9j
-         tZeB1s0WURiuqg5wJ0qXni8cbGe38mpP9bx+WocJEcPRMm+qJ+Wio9tZM5IOtyJYEz4J
-         AFHOoanw6bTspQXvXOW1VpNHTJwuRE5IyaIL337TKQ+QVOBB9KqYYzVwwNh64g5vrYgF
-         xL95dOQ77BASY155ZLos4aYPs4tX10HVMF9kDPXbf0Thqf1Q7e1vuV3C55DCrbyYkBsc
-         svtIqadk/0cbXwvoixWN+h6eUW4FlyraLuvUpzwpyPVUEeGXOoyWNeQM3gTiyKLq2XZG
-         8R1w==
-X-Gm-Message-State: AOAM530H6zyw/7EgYjD4C2LhGF5m2zrhNeV5OeZIWotjWLTBY2OEboON
-        XiBPjVXFWLi2sMXPw9xk7if18g==
-X-Google-Smtp-Source: ABdhPJzcIOqW4k13lO6xxbSRnY8WUE4J6Y9D4oo2fT5T0AbhgJTCz5acugMKk2ASIOmm0WpCivu35A==
-X-Received: by 2002:a17:907:961b:: with SMTP id gb27mr3185433ejc.444.1644320748441;
-        Tue, 08 Feb 2022 03:45:48 -0800 (PST)
+        bh=HihT2WHm5CL9KTfiGWQaowQJbGra0dr2IasABIBxyUw=;
+        b=KVOSUWRSFYMudWQ762n0EFTu9vKxTXRWNUMSndlOeo8ii/pCZ/l+jo2rKdW5StWmHR
+         se6U9PCoRQwSc1ohURdZg6KC9/0ftsFUlY6POu9rCo4U6HkyOIUiRk6xup3Y7gI2Forg
+         TtM5lK4/Y8qBvMq2WJP1hpOF1cPyAgnhh9Il9f0ZUKp1cyZgax8Id//qWDDFIS+6/H+i
+         zjz1pB9xvur8cxIq0m0ZnI1j3zRrxN3E7hFdzVbZBJfP/mSu6y7D+EAw/TWop3GUv/ER
+         HO2sHrPyPvHOcFoQPx0JUF4gdSAnle6bBsjN5qVXiPqRfxe2i2QSsgMm4EEs8oRWA9px
+         psfw==
+X-Gm-Message-State: AOAM530qvNzJJ/nnSSIDVl3zdB1ichtRgvI5q9Pih4Mse0hnCIgS0JYp
+        hwMSDz1BP7b4hY0WK6tbTl4Gfw==
+X-Google-Smtp-Source: ABdhPJzo1ehebUbL5Zza/R8qwmqZqxbxBXxGJPyv3pmwWAQvc2EDBDyYvTbVgE/7K50OuPHt4wmwXQ==
+X-Received: by 2002:a17:907:c27:: with SMTP id ga39mr3323524ejc.626.1644320749345;
+        Tue, 08 Feb 2022 03:45:49 -0800 (PST)
 Received: from alco.corp.google.com ([2620:0:1059:10:5d0f:d242:ddbf:a8a6])
-        by smtp.gmail.com with ESMTPSA id y2sm4151902edt.54.2022.02.08.03.45.47
+        by smtp.gmail.com with ESMTPSA id y2sm4151902edt.54.2022.02.08.03.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 03:45:48 -0800 (PST)
+        Tue, 08 Feb 2022 03:45:49 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org,
@@ -52,9 +52,9 @@ To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Daniel Latypov <dlatypov@google.com>
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v4 5/6] mctp: test: Use NULL macros
-Date:   Tue,  8 Feb 2022 12:45:40 +0100
-Message-Id: <20220208114541.2046909-5-ribalda@chromium.org>
+Subject: [PATCH v4 6/6] apparmor: test: Use NULL macros
+Date:   Tue,  8 Feb 2022 12:45:41 +0100
+Message-Id: <20220208114541.2046909-6-ribalda@chromium.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208114541.2046909-1-ribalda@chromium.org>
 References: <20220208114541.2046909-1-ribalda@chromium.org>
@@ -70,37 +70,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace the PTR_EQ NULL checks wit the NULL macros. More idiomatic and
-specific.
+Replace the PTR_EQ NULL checks with the more idiomatic and specific NULL
+macros.
 
 Reviewed-by: Daniel Latypov <dlatypov@google.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- net/mctp/test/route-test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ security/apparmor/policy_unpack_test.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/mctp/test/route-test.c b/net/mctp/test/route-test.c
-index 750f9f9b4daf..eb70b524c78e 100644
---- a/net/mctp/test/route-test.c
-+++ b/net/mctp/test/route-test.c
-@@ -361,7 +361,7 @@ static void mctp_test_route_input_sk(struct kunit *test)
- 	} else {
- 		KUNIT_EXPECT_NE(test, rc, 0);
- 		skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
--		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
-+		KUNIT_EXPECT_NULL(test, skb2);
- 	}
+diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+index 533137f45361..5c18d2f19862 100644
+--- a/security/apparmor/policy_unpack_test.c
++++ b/security/apparmor/policy_unpack_test.c
+@@ -313,7 +313,7 @@ static void policy_unpack_test_unpack_strdup_out_of_bounds(struct kunit *test)
+ 	size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
  
- 	__mctp_route_test_fini(test, dev, rt, sock);
-@@ -430,7 +430,7 @@ static void mctp_test_route_input_sk_reasm(struct kunit *test)
- 		skb_free_datagram(sock->sk, skb2);
+ 	KUNIT_EXPECT_EQ(test, size, 0);
+-	KUNIT_EXPECT_PTR_EQ(test, string, (char *)NULL);
++	KUNIT_EXPECT_NULL(test, string);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
+ }
  
- 	} else {
--		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
-+		KUNIT_EXPECT_NULL(test, skb2);
- 	}
+@@ -409,7 +409,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
+ 	size = unpack_u16_chunk(puf->e, &chunk);
  
- 	__mctp_route_test_fini(test, dev, rt, sock);
+ 	KUNIT_EXPECT_EQ(test, size, (size_t)0);
+-	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
++	KUNIT_EXPECT_NULL(test, chunk);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
+ }
+ 
+@@ -431,7 +431,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
+ 	size = unpack_u16_chunk(puf->e, &chunk);
+ 
+ 	KUNIT_EXPECT_EQ(test, size, (size_t)0);
+-	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
++	KUNIT_EXPECT_NULL(test, chunk);
+ 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
+ }
+ 
 -- 
 2.35.0.263.gb82422642f-goog
 
