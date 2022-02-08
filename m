@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214EF4ADBF0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 16:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F5D4ADC3A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 16:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379433AbiBHPEn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Feb 2022 10:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S1351562AbiBHPR5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Feb 2022 10:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379219AbiBHPEm (ORCPT
+        with ESMTP id S239424AbiBHPR4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 10:04:42 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD30C061576
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 07:04:42 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so3078913pjb.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 07:04:42 -0800 (PST)
+        Tue, 8 Feb 2022 10:17:56 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A92C061576
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 07:17:55 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id y5so18456901pfe.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 07:17:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=a3HMhKGW03/GkK4KihmFBpv/X/TX7fFT30mI4jqwmLM=;
-        b=rKQ9RV4/gQkA7R1OiinKZa7fu61LH/yCOtIMHIQ9V+cLenXTU2LezRjjKb90dYsVFp
-         oasLbFLfTxkXuo2iTGMXqbFgfoYzCOysiCdlGL7Zhg+OlQqcgKgpf7YkJcXjCKc5XZ6j
-         /jloVWO91mQWIrkoDXOgxlSKT0eEz5hyx3DzVPDHxRmUUuhefaljG0Zkeio3UehiWAdc
-         2aHMwTNwS7LzbxQ4+r0/QVFNGvFXgjWquScMg76xCh74dhBifYo3FewJPg8JsUXvNn2X
-         xY/DQeXN0wWPF0QNVkzStMsdmxoFy80uZsMmQrc7gdM3D+eB+DSYyow+WdvYWEscqA4m
-         kg3A==
+        bh=yrBmGJhTaqayR1aEtrikdHuO+CJmz+DpCSKKFmgPyUg=;
+        b=XGsBNS2SdQc9WOc3IgSz/7CwhWuPi08Gg9MqWjFk7mA3RpHUnHr3ScD50tcj4tGs3l
+         YWYrtE3xdriK7gP2nDjuKA4pX2Z0dacYBqmXozKrGtHNe4TmozLgHhGwVcB9h3C1jaQM
+         wpuUn8Meyx/ZyPk0JkAdSuipF4ZRZQxSa/DecMzZfTLEcV2DuRfsoprk3aVLXXYUlYWi
+         MYbS0NF9J/dgxAh9CtgqhwJVL1zzKGtbbYgEJyFPMbrt2cLif0p3nKz+64YiSVRE0Msi
+         BRqaoGPOelGsS80v3j2RpIT4enwORmV6nwVmhXwAOhm0GIgRy4YdM3pzJrC6Pus/MqbI
+         Jx1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=a3HMhKGW03/GkK4KihmFBpv/X/TX7fFT30mI4jqwmLM=;
-        b=5gt683L4KQSeKZ1u/so+Hp4eZTjuTfa2I4Xy5dtcJ9dNevSZ/qY24MucQRR5LM5LNY
-         v4/h1Qn6+uuac2jnFXOQI4zAUrIjOcXYzZxYlL3xzJNtwqjNTgIME4hDfjOPRRJvpTBV
-         NIM53bsVuIyLIBdvVX76ErUGAq0KOV+SpEO96RkA2EnqGumnX6p0ziDV1n4/5I/fxlUu
-         x21c5L8C69G7jtvSgaTPb69sTaKFpV+eu3DZcky/cJt7HvdAkCRWstukiplCRgJsSyXV
-         dam7SMTuAIk9d9igZQmoMGTdCEIBmwgYp1vgoDEMm+Wi5uG3rzNdNid2PZ/QViF/xkiC
-         3/AA==
-X-Gm-Message-State: AOAM532XYvHzIvO5hHvID7QoB/Zs9Y03fcIYj0J9rDU6d2zT8Y88Qly+
-        rx7nKtQoZ9S6to/ZvPy8/sjXugfrEMxMxJDc
-X-Google-Smtp-Source: ABdhPJyEhMAA+pixgY6UZrRTx2CSyCkKrilHo+1q7HQRAt0/UvMw387nI9iiYh/wW8703NxFWadQNA==
-X-Received: by 2002:a17:90b:3e8e:: with SMTP id rj14mr1810781pjb.112.1644332681523;
-        Tue, 08 Feb 2022 07:04:41 -0800 (PST)
+        bh=yrBmGJhTaqayR1aEtrikdHuO+CJmz+DpCSKKFmgPyUg=;
+        b=KGkZ5Rg8FVE7DljK+qRv5FAOnn9hqHJ2+G4Rxyy2dfvoLwaJNhEldnlDtzJMhqDTsn
+         l/4Ks7CG0yq62vlurIIfbDGZY/NnkZcNnUwzwRJQyaxQ6pslLN8xAICxSUoaSXTLH1kI
+         /R08uEeDS6ieMRSOhF0fr30Nd5SN6qZsp9inxEfTJWTQRJ1VR2VC8Mt4dk16stkibgc6
+         NHHSctVDqAYivhXHLvSf6HjLy9rUKYIH6xM+nv14YqokuX+/WZY7Z61HAQVdljyt8m8i
+         v4pZrkBL9plo2ZICotZK5kRAfQVX+rr5pUGGatQiWDgeOQwTUo4pNhhBy2aYobYnS/Og
+         K7Qw==
+X-Gm-Message-State: AOAM532XrCnj5IAzEOIqd2SZIXYFuhG8PZ/4kCk/tLo+3HELXEbOiTBn
+        hQ0aK0/zOK8VrMeTSByq/OpmgQ==
+X-Google-Smtp-Source: ABdhPJzrkCEhyInGyxdSadkG8W1FRkHNrHGgOs+eZUrYlZGnOSZtqhm+/2fOOT57KxZbq8NFZjaLGQ==
+X-Received: by 2002:a63:6786:: with SMTP id b128mr37446pgc.278.1644333475215;
+        Tue, 08 Feb 2022 07:17:55 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m68sm2519502pga.10.2022.02.08.07.04.41
+        by smtp.gmail.com with ESMTPSA id ml19sm3409101pjb.52.2022.02.08.07.17.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 07:04:41 -0800 (PST)
-Message-ID: <62028689.1c69fb81.901d.5e69@mx.google.com>
-Date:   Tue, 08 Feb 2022 07:04:41 -0800 (PST)
+        Tue, 08 Feb 2022 07:17:54 -0800 (PST)
+Message-ID: <620289a2.1c69fb81.35dec.875a@mx.google.com>
+Date:   Tue, 08 Feb 2022 07:17:54 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
 X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: fixes
-X-Kernelci-Kernel: linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db
-Subject: kselftest/fixes build: 8 builds: 0 failed, 8 passed,
- 1 warning (linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db)
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v5.17-rc1-2-g6d468898d774
+Subject: kselftest/next build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.17-rc1-2-g6d468898d774)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -71,27 +71,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes build: 8 builds: 0 failed, 8 passed, 1 warning (linux-kself=
-test-fixes-5.17-rc3-3-g183f80fd72db)
+kselftest/next build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc1-2-=
+g6d468898d774)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db/
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v5.17-rc1-2-g6d468898d774/
 
 Tree: kselftest
-Branch: fixes
-Git Describe: linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db
-Git Commit: 183f80fd72db42c9cc483aa7a5e8e881355d0b03
+Branch: next
+Git Describe: v5.17-rc1-2-g6d468898d774
+Git Commit: 6d468898d7744564ea9cb59d8de8f74660421599
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
 est.git
-Built: 4 unique architectures
+Built: 3 unique architectures
 
 Warnings Detected:
 
 arm64:
 
 arm:
-
-i386:
 
 x86_64:
     x86_64_defconfig+kselftest (clang-14): 1 warning
@@ -128,11 +126,6 @@ rs, 0 warnings, 0 section mismatches
 -----
 defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
 rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
