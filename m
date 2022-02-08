@@ -2,63 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5750C4ADE99
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 17:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7470A4ADEFC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 18:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240522AbiBHQro (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Feb 2022 11:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
+        id S1352623AbiBHRLK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Feb 2022 12:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238447AbiBHQrn (ORCPT
+        with ESMTP id S1345912AbiBHRLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 11:47:43 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644D5C061578
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 08:47:43 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id z18so14455638ilp.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 08:47:43 -0800 (PST)
+        Tue, 8 Feb 2022 12:11:09 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF710C0613CB
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 09:11:05 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id y84so22066247iof.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 09:11:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4ekLUS/+NuWskbgINo6td92M1u4mJlXxAyOideI3Gr0=;
-        b=DpHVKDHjmDa073qxMyCoLuFOt8hnFEiMkuUq1DYSSeTD/G5ILe9U6/XG9X+6r+gC8o
-         H/xw2xCWTiPCnfUiLEhOtmQeQNDYBmUtLvcel4aNu8VyDV0Tjbf1R6XbEbeShckIt4YY
-         pND6cM5UpzTOj2JcFSKwwUsnvZIWwFDEeu0m4=
+        bh=DUOmgbDHv9TGhzCwwc6ir5fTuwgLxZHx2yr6wrlhX/c=;
+        b=eex8i7kur3v78Vl/7duuld6Gedj+S9MbQzPL4dqaRAmkcvf6y19qbfCr7f0mpjVnYe
+         7NbM8tZue9DfEpwG7KleDx6axk4urVIRu6QhVzMymZ9l3AoEsJDxpe1mTPCJRrBPLTRv
+         GR5X4ED9HqF2qffqJd17N70du82rofyEAm0dk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=4ekLUS/+NuWskbgINo6td92M1u4mJlXxAyOideI3Gr0=;
-        b=Z5gF8Q5+vhRaiS56WGRcbvlFM0Bvvvv2Q3VFW570Q9hmoNCOkrhYHvqJMDK/2hsJw1
-         UsiTtVPDKz1WGvZQYd1+Ic04XFk+gZivGDQKXq8GGcY0NVdlCvUYqq8O7vDP7/uIMS1L
-         nL4EocXaBxms/5xnd859UHSn52hu3Jg9frebRysBi3z7FRTh8/Af7HeJt4rYZZIxN4D5
-         6utBWCsjsgLWtEgRndw7fuT5O68HMfugf1QSp31Hs0Zp+99EX1E1F5glCHx8UUikz+Ni
-         NWo6dcbLmdGOfZNPbaYbCbKbMX/imFMJ3sB8dvaK9EkegqXxXkjhUxpdLUtiLp3O7onv
-         Y1Rw==
-X-Gm-Message-State: AOAM531AMs5+Vq3uSy0tYUiqnU6l6mKWIpYSAB/u6bPpz1jdytAlDY79
-        tCxNnsUHwvH/ShHjbc82JPKV5g==
-X-Google-Smtp-Source: ABdhPJwUKQH9abD7ya2mFlJ3HnHxdfbTvEysc9E0ncM7IM9nL1Cx9aXZgfZBJ0X+p52/vNAST1wrEg==
-X-Received: by 2002:a05:6e02:1449:: with SMTP id p9mr2607103ilo.289.1644338862785;
-        Tue, 08 Feb 2022 08:47:42 -0800 (PST)
+        bh=DUOmgbDHv9TGhzCwwc6ir5fTuwgLxZHx2yr6wrlhX/c=;
+        b=Skv6bx8RDnQPzFdBPfUMjPn0kBdA+ZgWQPdP6LQvhWPdhnm8Bs2jxIaah9e8AkCTZo
+         gPZ3F4G29hcqzqtXuqOpvITJ73n3EskwL0dvLzH1SlyVJ9KnPHw4YZi+G7aJ4TXy6N6W
+         6LNFCg73xAkjrZEgGLrvRxRjvs8rAV3qFU/8PdxIGMKj3i98gHtExDAgXwx2wTc2vL2y
+         QWwWlyfvAaHNjNSnp7VSnIeZj3YmMrMCx/VZ0UEO8RzHYMdzS7uPoT0cR1Rrv+aMThVx
+         jYoiR91ZJmkHlGbiOCfcknQTwp2cZpRQQara0QqCPmMasPG7+wMB4FhE3XQCuMi2hB25
+         Xk1w==
+X-Gm-Message-State: AOAM532F1hf+NiwUUIy78xb2FPmAv4t51yApB4KlqQA+yDucyup50/3M
+        hbXT+wLIZlDAWw/eFNKPli/oXQ==
+X-Google-Smtp-Source: ABdhPJxI+60kUWV0wK02Do1Ljum8fRfUSV96QCsR/1AD9uHXCNG3g22230pw4nhS3axAL2kQCSoY8Q==
+X-Received: by 2002:a05:6602:2ac1:: with SMTP id m1mr2448582iov.123.1644340265093;
+        Tue, 08 Feb 2022 09:11:05 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id u26sm8155570ior.52.2022.02.08.08.47.42
+        by smtp.gmail.com with ESMTPSA id g7sm7620275ild.23.2022.02.08.09.11.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 08:47:42 -0800 (PST)
-Subject: Re: kselftest/fixes build: 8 builds: 0 failed, 8 passed, 1 warning
- (linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db)
-To:     "kernelci.org bot" <bot@kernelci.org>, kernelci-results@groups.io,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-References: <62028689.1c69fb81.901d.5e69@mx.google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>
+        Tue, 08 Feb 2022 09:11:04 -0800 (PST)
+Subject: Re: [PATCH v3 1/1] Documentation: dev-tools: clarify KTAP
+ specification wording
+To:     frowand.list@gmail.com, Jonathan Corbet <corbet@lwn.net>,
+        David Gow <davidgow@google.com>,
+        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
+        Tim.Bird@sony.com, Brendan Higgins <brendanhiggins@google.com>
+Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220208164623.3151777-1-frowand.list@gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <dae5693e-68bf-1d42-e21e-94ab5429efb5@linuxfoundation.org>
-Date:   Tue, 8 Feb 2022 09:47:42 -0700
+Message-ID: <86c4c8ce-468d-8922-3ada-7960f1924ba8@linuxfoundation.org>
+Date:   Tue, 8 Feb 2022 10:11:03 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <62028689.1c69fb81.901d.5e69@mx.google.com>
+In-Reply-To: <20220208164623.3151777-1-frowand.list@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,37 +78,100 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/8/22 8:04 AM, kernelci.org bot wrote:
-> kselftest/fixes build: 8 builds: 0 failed, 8 passed, 1 warning (linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db)
+On 2/8/22 9:46 AM, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kernel/linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db/
+> Add the spec version to the title line.
 > 
-> Tree: kselftest
-> Branch: fixes
-> Git Describe: linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db
-> Git Commit: 183f80fd72db42c9cc483aa7a5e8e881355d0b03
-> Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-> Built: 4 unique architectures
+> Explain likely source of "Unknown lines".
 > 
-> Warnings Detected:
+> "Unknown lines" in nested tests are optionally indented.
 > 
-> arm64:
+> Add "Unknown lines" items to differences between TAP & KTAP list
 > 
-> arm:
+> Reviewed-by: Tim Bird <Tim.Bird@sony.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
 > 
-> i386:
+> Changes since version 2
+>    - Add missing quote after word: incorrect
+>    - Add Reviewed-by tags
 > 
-> x86_64:
->      x86_64_defconfig+kselftest (clang-14): 1 warning
+> Changes since version 1
+>    - Explain likely source of "Unknown lines"
+>    - "Unknown line" in nested tests are optionally indented
+>    - Add "Unknown lines" items to differences between TAP & KTAP list
 > 
+>   Documentation/dev-tools/ktap.rst | 24 ++++++++++++++++++------
+>   1 file changed, 18 insertions(+), 6 deletions(-)
 > 
-> Warnings summary:
-> 
->      1    net/core/skbuff.o: warning: objtool: skb_copy()+0x132: unreachable instruction
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index 878530cb9c27..dfb3f10a8b2d 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -1,8 +1,8 @@
+>   .. SPDX-License-Identifier: GPL-2.0
+>   
+> -========================================
+> -The Kernel Test Anything Protocol (KTAP)
+> -========================================
+> +===================================================
+> +The Kernel Test Anything Protocol (KTAP), version 1
+> +===================================================
+>   
+>   TAP, or the Test Anything Protocol is a format for specifying test results used
+>   by a number of projects. It's website and specification are found at this `link
+> @@ -174,6 +174,13 @@ There may be lines within KTAP output that do not follow the format of one of
+>   the four formats for lines described above. This is allowed, however, they will
+>   not influence the status of the tests.
+>   
+> +This is an important difference from TAP.  Kernel tests may print messages
+> +to the system console or a log file.  Both of these destinations may contain
+> +messages either from unrelated kernel or userspace activity, or kernel
+> +messages from non-test code that is invoked by the test.  The kernel code
+> +invoked by the test likely is not aware that a test is in progress and
+> +thus can not print the message as a diagnostic message.
+> +
+>   Nested tests
+>   ------------
+>   
+> @@ -186,10 +193,13 @@ starting with another KTAP version line and test plan, and end with the overall
+>   result. If one of the subtests fail, for example, the parent test should also
+>   fail.
+>   
+> -Additionally, all result lines in a subtest should be indented. One level of
+> +Additionally, all lines in a subtest should be indented. One level of
+>   indentation is two spaces: "  ". The indentation should begin at the version
+>   line and should end before the parent test's result line.
+>   
+> +"Unknown lines" are not considered to be lines in a subtest and thus are
+> +allowed to be either indented or not indented.
+> +
+>   An example of a test with two nested subtests:
+>   
+>   .. code-block::
+> @@ -225,9 +235,11 @@ Major differences between TAP and KTAP
+>   --------------------------------------
+>   
+>   Note the major differences between the TAP and KTAP specification:
+> -- yaml and json are not recommended in diagnostic messages
+> -- TODO directive not recognized
+> +- yaml and json are not recommended in KTAP diagnostic messages
+> +- TODO directive not recognized in KTAP
+>   - KTAP allows for an arbitrary number of tests to be nested> +- TAP includes "Unknown lines" in the category of "Anything else"
+> +- TAP says "Unknown lines" are "incorrect"; KTAP allows "Unknown lines"
+>   
+
+If we can put the data in a table - makes it lot easier to read
+
+>   The TAP14 specification does permit nested tests, but instead of using another
+>   nested version line, uses a line of the form
 > 
 
-This is not ksefltest test build failure. Could this be because CONFIG_SKB_EXTENSIONS
-isn't enabled in x86_64_defconfig
+Looks good otherwise. Thanks for clearly outlining the differences.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
