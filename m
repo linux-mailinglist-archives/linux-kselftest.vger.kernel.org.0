@@ -2,118 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7922B4ADBC6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 15:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214EF4ADBF0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 16:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378981AbiBHO5Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Feb 2022 09:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S1379433AbiBHPEn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Feb 2022 10:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378991AbiBHO5Y (ORCPT
+        with ESMTP id S1379219AbiBHPEm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:57:24 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E308C061579
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 06:57:23 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id f17so20925196edd.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 06:57:23 -0800 (PST)
+        Tue, 8 Feb 2022 10:04:42 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD30C061576
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 07:04:42 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so3078913pjb.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 07:04:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EPGckZDXD5dKY+OHvFvXimjXLNAanNMSNprTgL/Df4o=;
-        b=jeUTJv7bqTiD0hTflysO1LMASbBud7a0GhZ5bnMOKyjPKNZTXG5m28cAe+2i+iSg89
-         sWw4nhjmCG5xCqWN725Gb3J4aFbv7Y73NAacVw/LNL6wnlegJAuh5ppeymEBeR8DYCJc
-         83IbqVGQCi4gtzdyxf4vD57gIEmtw20JAeuOo=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=a3HMhKGW03/GkK4KihmFBpv/X/TX7fFT30mI4jqwmLM=;
+        b=rKQ9RV4/gQkA7R1OiinKZa7fu61LH/yCOtIMHIQ9V+cLenXTU2LezRjjKb90dYsVFp
+         oasLbFLfTxkXuo2iTGMXqbFgfoYzCOysiCdlGL7Zhg+OlQqcgKgpf7YkJcXjCKc5XZ6j
+         /jloVWO91mQWIrkoDXOgxlSKT0eEz5hyx3DzVPDHxRmUUuhefaljG0Zkeio3UehiWAdc
+         2aHMwTNwS7LzbxQ4+r0/QVFNGvFXgjWquScMg76xCh74dhBifYo3FewJPg8JsUXvNn2X
+         xY/DQeXN0wWPF0QNVkzStMsdmxoFy80uZsMmQrc7gdM3D+eB+DSYyow+WdvYWEscqA4m
+         kg3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EPGckZDXD5dKY+OHvFvXimjXLNAanNMSNprTgL/Df4o=;
-        b=j3/4APDYtvxvQ1KzbrfC1uBPn6jFRpIan0fBkXWkaEZDnOlFrNldDdLBbyJMsHn0dj
-         7OkN9jQ8N3t43jdhU5xFpOg1/9nmLYFvhyGpthEEgi9zfBjCCVOwb+0ksJq6FJ4dEJ+A
-         rHfNFuo4XZgt6q1V51giKeGTxzfDp/K6MX/TeJf5EshM4Z+1iBGnT/SGEs0WhcWF17NE
-         qZUo/KwA14cnPaex0unzE2ay7nEG52bodIimJu3qruakJRQII9DGVYvDo3g9p65HuZSN
-         7IqklapfGSo6/tMhnjHea31cun/BqxkqV2YdEx5R3ul1mcPJzZ5fuAsFDR2bkxBdqOYy
-         Rt0g==
-X-Gm-Message-State: AOAM531Rq9N4fN8yfLPgijtj8MnML4tFDRVFDqafhwaL/Fl6PVv2LvNy
-        hhpi6HW4Ol3LPmfdRDcaEDvTvHWqA1ZTH7xu
-X-Google-Smtp-Source: ABdhPJz9u6F9eMUl14Dx2XbmRNAoVHwWahYK77kcHDAH9jEWg2dl+skt6VSRuZB/PkC047shDskjyw==
-X-Received: by 2002:a05:6402:4248:: with SMTP id g8mr5022944edb.158.1644332241931;
-        Tue, 08 Feb 2022 06:57:21 -0800 (PST)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id j19sm4881444ejm.111.2022.02.08.06.57.20
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 06:57:21 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id f17so20925029edd.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 06:57:20 -0800 (PST)
-X-Received: by 2002:a05:6402:1681:: with SMTP id a1mr4855489edv.167.1644332240523;
- Tue, 08 Feb 2022 06:57:20 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=a3HMhKGW03/GkK4KihmFBpv/X/TX7fFT30mI4jqwmLM=;
+        b=5gt683L4KQSeKZ1u/so+Hp4eZTjuTfa2I4Xy5dtcJ9dNevSZ/qY24MucQRR5LM5LNY
+         v4/h1Qn6+uuac2jnFXOQI4zAUrIjOcXYzZxYlL3xzJNtwqjNTgIME4hDfjOPRRJvpTBV
+         NIM53bsVuIyLIBdvVX76ErUGAq0KOV+SpEO96RkA2EnqGumnX6p0ziDV1n4/5I/fxlUu
+         x21c5L8C69G7jtvSgaTPb69sTaKFpV+eu3DZcky/cJt7HvdAkCRWstukiplCRgJsSyXV
+         dam7SMTuAIk9d9igZQmoMGTdCEIBmwgYp1vgoDEMm+Wi5uG3rzNdNid2PZ/QViF/xkiC
+         3/AA==
+X-Gm-Message-State: AOAM532XYvHzIvO5hHvID7QoB/Zs9Y03fcIYj0J9rDU6d2zT8Y88Qly+
+        rx7nKtQoZ9S6to/ZvPy8/sjXugfrEMxMxJDc
+X-Google-Smtp-Source: ABdhPJyEhMAA+pixgY6UZrRTx2CSyCkKrilHo+1q7HQRAt0/UvMw387nI9iiYh/wW8703NxFWadQNA==
+X-Received: by 2002:a17:90b:3e8e:: with SMTP id rj14mr1810781pjb.112.1644332681523;
+        Tue, 08 Feb 2022 07:04:41 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m68sm2519502pga.10.2022.02.08.07.04.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 07:04:41 -0800 (PST)
+Message-ID: <62028689.1c69fb81.901d.5e69@mx.google.com>
+Date:   Tue, 08 Feb 2022 07:04:41 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220208114541.2046909-1-ribalda@chromium.org>
- <20220208114541.2046909-3-ribalda@chromium.org> <YgJmaDJTGTmRgNIy@lahna>
-In-Reply-To: <YgJmaDJTGTmRgNIy@lahna>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 8 Feb 2022 15:57:09 +0100
-X-Gmail-Original-Message-ID: <CANiDSCu_QCbTmvrwDsrEeoMKoc4JN1HmQDDCKnYdQTtWUgWnPQ@mail.gmail.com>
-Message-ID: <CANiDSCu_QCbTmvrwDsrEeoMKoc4JN1HmQDDCKnYdQTtWUgWnPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] thunderbolt: test: use NULL macros
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: fixes
+X-Kernelci-Kernel: linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db
+Subject: kselftest/fixes build: 8 builds: 0 failed, 8 passed,
+ 1 warning (linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mika
+kselftest/fixes build: 8 builds: 0 failed, 8 passed, 1 warning (linux-kself=
+test-fixes-5.17-rc3-3-g183f80fd72db)
 
-Thanks for your review
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db/
 
-On Tue, 8 Feb 2022 at 13:47, Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Tue, Feb 08, 2022 at 12:45:38PM +0100, Ricardo Ribalda wrote:
-> > Replace the NULL checks with the more specific and idiomatic NULL macros.
-> >
-> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/thunderbolt/test.c | 130 ++++++++++++++++++-------------------
-> >  1 file changed, 65 insertions(+), 65 deletions(-)
-> >
-> > diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-> > index 1f69bab236ee..f5bf8d659db4 100644
-> > --- a/drivers/thunderbolt/test.c
-> > +++ b/drivers/thunderbolt/test.c
->
-> You could add these too while there:
->
-> >       p = tb_property_find(dir, "foo", TB_PROPERTY_TYPE_TEXT);
-> >       KUNIT_ASSERT_TRUE(test, !p);
->
-> >       p = tb_property_find(dir, "missing", TB_PROPERTY_TYPE_DIRECTORY);
-> >       KUNIT_ASSERT_TRUE(test, !p);
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-5.17-rc3-3-g183f80fd72db
+Git Commit: 183f80fd72db42c9cc483aa7a5e8e881355d0b03
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-To avid keeping spamming the list. I have pushed my series to
-https://git.kernel.org/pub/scm/linux/kernel/git/ribalda/linux.git/log/?h=kunit_null-v5
+Warnings Detected:
 
-if there are no more comments by tomorrow I will resend it to the
-list. Maintainers can also pick the patches from there if they prefer
-so.
+arm64:
 
-Thanks!
+arm:
 
--- 
-Ricardo Ribalda
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-14): 1 warning
+
+
+Warnings summary:
+
+    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x132: unreachable=
+ instruction
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    net/core/skbuff.o: warning: objtool: skb_copy()+0x132: unreachable inst=
+ruction
+
+---
+For more info write to <info@kernelci.org>
