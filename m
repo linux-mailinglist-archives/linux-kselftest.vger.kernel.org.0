@@ -2,131 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761E84ADAE4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 15:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97F84ADB38
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 15:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377758AbiBHOMw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Feb 2022 09:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S1377693AbiBHOfK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Feb 2022 09:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377752AbiBHOMs (ORCPT
+        with ESMTP id S1377715AbiBHOfJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 09:12:48 -0500
-X-Greylist: delayed 1092 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 06:12:43 PST
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18384C03FEDA;
-        Tue,  8 Feb 2022 06:12:42 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:39206)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHQwu-0004wn-9Z; Tue, 08 Feb 2022 06:54:28 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:42144 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHQws-009yMp-W6; Tue, 08 Feb 2022 06:54:27 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        Tue, 8 Feb 2022 09:35:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC137C03FED7
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 06:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644330906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KmFJeladEEskqQ9EzVNc5xq5Av17QOOXTzYVPPQJwR0=;
+        b=TgFtS6j5dCFdfiEDGFDTiOyflbpRLqDFEwgtaHx1wN4/HMyTdLy6ajL8KFUEPZJaRL5Hea
+        mu9B5cfAVFfUTcFtb+Pjj9uO5CH82uKeMrJCXjVgA3SKHkFcjPktgz3q6Ujgfz3veUk40Z
+        VUh5PFFTgf303vJXe7qSIOouuJfgn9Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-w8KinnD_NgmHPWZeWZ7idg-1; Tue, 08 Feb 2022 09:35:05 -0500
+X-MC-Unique: w8KinnD_NgmHPWZeWZ7idg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D31ED1091DA0;
+        Tue,  8 Feb 2022 14:35:01 +0000 (UTC)
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6AD070F55;
+        Tue,  8 Feb 2022 14:34:54 +0000 (UTC)
+Message-ID: <0cdac80177eea408b7e316bd1fc4c0c5839ba1d4.camel@redhat.com>
+Subject: Re: [PATCH v3 2/6] KVM: x86: add force_intercept_exceptions_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Kieran Bingham <kbingham@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-Date:   Tue, 08 Feb 2022 07:54:00 -0600
-In-Reply-To: <20220207121800.5079-1-mkoutny@suse.com> ("Michal =?utf-8?Q?K?=
- =?utf-8?Q?outn=C3=BD=22's?=
-        message of "Mon, 7 Feb 2022 13:17:54 +0100")
-Message-ID: <87ee4dihvr.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Andrew Morton <akpm@linux-foundation.org>,
+        Borislav Petkov <bp@suse.de>
+Date:   Tue, 08 Feb 2022 16:34:53 +0200
+In-Reply-To: <YTECUaPa9kySQxRX@google.com>
+References: <20210811122927.900604-1-mlevitsk@redhat.com>
+         <20210811122927.900604-3-mlevitsk@redhat.com> <YTECUaPa9kySQxRX@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nHQws-009yMp-W6;;;mid=<87ee4dihvr.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/ahRGJgxPKAsR4MwgKINp4kU2cAU6uSPQ=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: =?ISO-8859-1?Q?*;Michal Koutn=c3=bd <mkoutny@suse.com>?=
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 611 ms - load_scoreonly_sql: 0.21 (0.0%),
-        signal_user_changed: 12 (2.0%), b_tie_ro: 10 (1.7%), parse: 1.51
-        (0.2%), extract_message_metadata: 14 (2.3%), get_uri_detail_list: 2.2
-        (0.4%), tests_pri_-1000: 14 (2.2%), tests_pri_-950: 1.31 (0.2%),
-        tests_pri_-900: 1.08 (0.2%), tests_pri_-90: 148 (24.3%), check_bayes:
-        142 (23.2%), b_tokenize: 7 (1.1%), b_tok_get_all: 8 (1.3%),
-        b_comp_prob: 2.5 (0.4%), b_tok_touch_all: 121 (19.7%), b_finish: 0.96
-        (0.2%), tests_pri_0: 406 (66.4%), check_dkim_signature: 0.54 (0.1%),
-        check_dkim_adsp: 3.1 (0.5%), poll_dns_idle: 1.21 (0.2%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 7 (1.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH 0/6] RLIMIT_NPROC in ucounts fixups
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Michal Koutný <mkoutny@suse.com> writes:
+On Thu, 2021-09-02 at 16:56 +0000, Sean Christopherson wrote:
+> Assuming this hasn't been abandoned...
+> 
+> On Wed, Aug 11, 2021, Maxim Levitsky wrote:
+> > This parameter will be used by VMX and SVM code to force
+> > interception of a set of exceptions, given by a bitmask
+> > for guest debug and/or kvm debug.
+> > 
+> > This is based on an idea first shown here:
+> > https://patchwork.kernel.org/project/kvm/patch/20160301192822.GD22677@pd.tnic/
+> > 
+> > CC: Borislav Petkov <bp@suse.de>
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 3 +++
+> >  arch/x86/kvm/x86.h | 2 ++
+> >  2 files changed, 5 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index fdc0c18339fb..092e2fad3c0d 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -184,6 +184,9 @@ module_param(force_emulation_prefix, bool, S_IRUGO);
+> >  int __read_mostly pi_inject_timer = -1;
+> >  module_param(pi_inject_timer, bint, S_IRUGO | S_IWUSR);
+> >  
+> > +uint force_intercept_exceptions_mask;
+> > +module_param(force_intercept_exceptions_mask, uint, S_IRUGO | S_IWUSR);
+> 
+> Use octal permissions.  This also can't be a simple writable param, at least not
+> without a well-documented disclaimer, as there's no guarantee a vCPU will update
+> its exception bitmap in a timely fashion.  An alternative to a module param would
+> be to extend/add a per-VM ioctl(), e.g. maybe KVM_SET_GUEST_DEBUG?  The downside
+> of an ioctl() is that it would require userspace enabling :-/
+> 
 
-> This series is a result of looking deeper into breakage of
-> tools/testing/selftests/rlimits/rlimits-per-userns.c after 
-> https://lore.kernel.org/r/20220204181144.24462-1-mkoutny@suse.com/
-> is applied.
->
-> The description of the original problem that lead to RLIMIT_NPROC et al.
-> ucounts rewrite could be ambiguously interpretted as supporting either
-> the case of:
-> - never-fork service or
-> - fork (RLIMIT_NPROC-1) times service.
->
-> The scenario is weird anyway given existence of pids controller.
->
-> The realization of that scenario relies not only on tracking number of
-> processes per user_ns but also newly allows the root to override limit through
-> set*uid. The commit message didn't mention that, so it's unclear if it
-> was the intention too.
->
-> I also noticed that the RLIMIT_NPROC enforcing in fork seems subject to TOCTOU
-> race (check(nr_tasks),...,nr_tasks++) so the limit is rather advisory (but
-> that's not a new thing related to ucounts rewrite).
->
-> This series is RFC to discuss relevance of the subtle changes RLIMIT_NPROC to
-> ucounts rewrite introduced.
+All other module params in this file use macros for permissions, that is why
+I used them too.
 
-A quick reply (because I don't have a lot of time at the moment).
+I'll add a comment with a disclaimer here - this is only for debug.
+I strongly don't want to have this as ioctl as that will indeed need qemu patches,
+not to mention things like unit tests and which don't even always use qemu.
 
-I agree with the issues your first patch before this series addresses
-and the issues the first 3 patches address.
-
-I have not looked at the tests.
-
-I actually disagree with most of your fixes.  Both because of
-intrusiveness and because of awkwardness.  My basic problem with
-your fixes is I don't think they leave the code in a more maintainable
-state.
-
-Hopefully later today I can propose some alternative fixes and we can
-continue the discussion.
-
-
-One thing I think you misunderstood is the capability checks in set_user
-have always been there.  There is a very good argument they are badly
-placed so are not exactly checking the correct credentials.  Especially
-now.
-
-Your patch 4/6 I don't think makes sense.  It has always been the
-case that root without capabilities is subject to the rlimit.  If  you
-are in a user namespace you are root without capabilities.
+Or I can make this parameter read-only. I don't mind reloading kvm module when
+I change this parameter.
 
 
-Eric
+Best regards,
+	Maxim Levitsky
+
+PS: Forgot to send this mail, it was in my drafts folder.
+
