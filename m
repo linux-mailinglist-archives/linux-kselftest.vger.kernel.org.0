@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC51C4ACD6F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 02:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF574ACD70
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Feb 2022 02:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343745AbiBHBGZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Feb 2022 20:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S1343578AbiBHBGY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Feb 2022 20:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241046AbiBHAkL (ORCPT
+        with ESMTP id S1344300AbiBHBBx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:40:11 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5625C061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:40:10 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id y84so19254505iof.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:40:10 -0800 (PST)
+        Mon, 7 Feb 2022 20:01:53 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E772C061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 17:01:52 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id b5so6303666ile.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 17:01:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DXeBvPGPhYY+G0mgsEODvq+5edCNWHsu13flglIZ8UM=;
-        b=PouLRfqDZfaw1BrQsKzh+xn99PLlR1bC33CV3R7yMYhNxvRWiYU/etVWr0UHoioj0L
-         6g/cfYNtG27eRKW9sUplUKo4Ixiz0JVr1GVnaNCS4RbPY5IVon3GpPzQ36L4NjTu6tOL
-         WCDDTQKmh7tBNLSGVFY4SqUv7dN6QprlpBePQ=
+        bh=+MSw8f2/WMFrNwenSrqO3coph/spjyCfBlyMTMFY/nk=;
+        b=cPNkEM9iGfcJmQQG5GNFgSuiDqvjU/v/K45O/APMcWW5cUCBQR73fV9H94r8Alz1lK
+         6oiDGMhJcO5rLXfq5xdzTTQ6QqyrPxTkFIE3KibvM23+VBpiDMb4vD97E12rzj1ovFkJ
+         5KF3SojlyhGie/6lG4LcfosrR6z+q8sOa/UyU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=DXeBvPGPhYY+G0mgsEODvq+5edCNWHsu13flglIZ8UM=;
-        b=TiO3iz1u/FEWcEQQFX41d6iGYnCmlflmjnfUoJoJuhaLCEJ+kG7BWv1q5fqqsbm/zc
-         lXdlME1zCewGjD6AqfNdEVmxAqfMFKs8nGwfzswXS3ju3r3yQoYFLiIbNidgt+VgZYNF
-         8xmzFEa/62TGU0GDVHC9evg5F3IK++psP/a2Al/u79uVxdI32PUYUYN0swZMTQU8DR8c
-         n1icnLUo5LeMNxw7rzb+rRyqvnVl0TDRBlAgvrTDqFFenQ6K2t6Ef+eh1NFn6NWsG0Nd
-         hUkTtrjLsdedaj/y6AXrpYqIyD0c9mfjuDbuqa9PsuPAlmxf8+jzMdCFLj8xNPJIJVTB
-         OV+w==
-X-Gm-Message-State: AOAM533S5xuHQ9KeES/KjlLN1w5BTEx0gYwVGp67Vv0wRUt2TWWwo1tW
-        sZrlfKcmG/XU2R3zc1x1Z4i48g==
-X-Google-Smtp-Source: ABdhPJzeX0vLAAWRHPBAbA5cgmSlTkcN8+zoFIZE6KO/H/cq6RdFUbzERhuo/trd9mdX5FzHSG3mrw==
-X-Received: by 2002:a05:6638:14cb:: with SMTP id l11mr1058327jak.292.1644280810350;
-        Mon, 07 Feb 2022 16:40:10 -0800 (PST)
+        bh=+MSw8f2/WMFrNwenSrqO3coph/spjyCfBlyMTMFY/nk=;
+        b=QPDTx45R7J0Qgggkxzn9aD2OuZ3edAu7CGHhYMBWzy3TyUPfJOIjkUBNksrt8IYFAe
+         t5sHN6fYqO0A/DoyUCi+57P5FDfJk/PtM+dYiVYMUKWSFE5NPZLh6n8Vhi0jK3Y4r3u0
+         f4/4FiIk1fSLF6Ib6jsSQ2gijQNyoEXQiDipqdrTEYh5qNTGK5MNWLjlaGXUOMxpZAaM
+         smLkvmzuf5dXnpX3H6atQ5pCBhIfDPeHXJNQMS5TY5DHa3T/L78XW2h1OjJ85a7xtf/O
+         l6g08Ic3XHe+PG0TID0LoZi4UHCDr9TnsOvRrOVDjp0zHNiRPcVWEdw0JSxiEFYa5FiP
+         htsg==
+X-Gm-Message-State: AOAM530MICcafCyQ+c9LvYdkdNYq7EaJ36CARH/8lSmMgQiMrdRLLmEs
+        4cePqHKYwidJ3a3U+psDUoFWfIZGTgV9eQ==
+X-Google-Smtp-Source: ABdhPJyGZReyBrJkI6hJYVU6PZGQBedUHSLPj5q18a333DDeJ2KPnz/9AFYXHaqc7vMPQWKU4pb/bQ==
+X-Received: by 2002:a05:6e02:1b83:: with SMTP id h3mr997196ili.81.1644282111497;
+        Mon, 07 Feb 2022 17:01:51 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id m12sm7043930iow.54.2022.02.07.16.40.09
+        by smtp.gmail.com with ESMTPSA id o7sm6407298ilo.17.2022.02.07.17.01.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 16:40:09 -0800 (PST)
-Subject: Re: [PATCH v11 34/40] kselftest/arm64: sme: Provide streaming mode
- SVE stress test
+        Mon, 07 Feb 2022 17:01:50 -0800 (PST)
+Subject: Re: [PATCH v11 35/40] kselftest/arm64: signal: Handle ZA signal
+ context in core code
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -64,14 +64,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-35-broonie@kernel.org>
+ <20220207152109.197566-36-broonie@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3b173e0e-7651-b820-26c4-37d1cbe94224@linuxfoundation.org>
-Date:   Mon, 7 Feb 2022 17:40:08 -0700
+Message-ID: <c69632e7-45d1-b29f-79a9-1724cbb0a30b@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 18:01:49 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220207152109.197566-35-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-36-broonie@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,115 +86,113 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2/7/22 8:21 AM, Mark Brown wrote:
-> One of the features of SME is the addition of streaming mode, in which we
-> have access to a set of streaming mode SVE registers at the SME vector
-> length. Since these are accessed using the SVE instructions let's reuse
-> the existing SVE stress test for testing with a compile time option for
-> controlling the few small differences needed:
-> 
->   - Enter streaming mode immediately on starting the program.
->   - In streaming mode FFR is removed so skip reading and writing FFR.
-> 
-> In order to avoid requiring a cutting edge toolchain with SME support
-> use the op/CR form for specifying SVCR.
-
-A few words or pointer to op/CR form would help as education for
-people that aren't familiar with the form (self included).
-
+> As part of the generic code for signal handling test cases we parse all
+> signal frames to make sure they have at least the basic form we expect
+> and that there are no unexpected frames present in the signal context.
+> Add coverage of the ZA signal frame to this code.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   tools/testing/selftests/arm64/fp/.gitignore  |  1 +
->   tools/testing/selftests/arm64/fp/Makefile    |  3 +
->   tools/testing/selftests/arm64/fp/ssve-stress | 59 ++++++++++++++++++++
->   tools/testing/selftests/arm64/fp/sve-test.S  | 20 +++++++
->   4 files changed, 83 insertions(+)
->   create mode 100644 tools/testing/selftests/arm64/fp/ssve-stress
+>   .../arm64/signal/testcases/testcases.c        | 36 +++++++++++++++++++
+>   .../arm64/signal/testcases/testcases.h        |  3 +-
+>   2 files changed, 38 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-> index 6e9a610c5e5d..5729a5b1adfc 100644
-> --- a/tools/testing/selftests/arm64/fp/.gitignore
-> +++ b/tools/testing/selftests/arm64/fp/.gitignore
-> @@ -5,5 +5,6 @@ rdvl-sve
->   sve-probe-vls
->   sve-ptrace
->   sve-test
-> +ssve-test
->   vec-syscfg
->   vlset
-> diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-> index a224fff8082b..e6643c9b0474 100644
-> --- a/tools/testing/selftests/arm64/fp/Makefile
-> +++ b/tools/testing/selftests/arm64/fp/Makefile
-> @@ -5,6 +5,7 @@ TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
->   TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
->   	rdvl-sme rdvl-sve \
->   	sve-test sve-stress \
-> +	ssve-test ssve-stress \
->   	vlset
+> diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
+> index 8c2a57fc2f9c..84c36bee4d82 100644
+> --- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
+> +++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
+> @@ -75,6 +75,31 @@ bool validate_sve_context(struct sve_context *sve, char **err)
+>   	return true;
+>   }
 >   
->   all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
-> @@ -19,6 +20,8 @@ sve-ptrace: sve-ptrace.o
->   sve-probe-vls: sve-probe-vls.o rdvl.o
->   sve-test: sve-test.o asm-utils.o
->   	$(CC) -nostdlib $^ -o $@
-> +ssve-test: sve-test.S asm-utils.o
-> +	$(CC) -DSSVE -nostdlib $^ -o $@
->   vec-syscfg: vec-syscfg.o rdvl.o
->   vlset: vlset.o
+> +bool validate_za_context(struct za_context *za, char **err)
+> +{
+> +	/* Size will be rounded up to a multiple of 16 bytes */
+> +	size_t regs_size
+> +		= ((ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za->vl)) + 15) / 16) * 16;
+> +
+> +	if (!za || !err)
+> +		return false;
+> +
+> +	/* Either a bare za_context or a za_context followed by regs data */
+> +	if ((za->head.size != sizeof(struct za_context)) &&
+> +	    (za->head.size != regs_size)) {
+> +		*err = "bad size for ZA context";
+> +		return false;
+> +	}
+> +
+> +	if (!sve_vl_valid(za->vl)) {
+> +		*err = "SME VL in ZA context invalid";
+> +
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>   bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+>   {
+>   	bool terminated = false;
+> @@ -82,6 +107,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+>   	int flags = 0;
+>   	struct extra_context *extra = NULL;
+>   	struct sve_context *sve = NULL;
+> +	struct za_context *za = NULL;
+>   	struct _aarch64_ctx *head =
+>   		(struct _aarch64_ctx *)uc->uc_mcontext.__reserved;
 >   
-> diff --git a/tools/testing/selftests/arm64/fp/ssve-stress b/tools/testing/selftests/arm64/fp/ssve-stress
-> new file mode 100644
-> index 000000000000..e2bd2cc184ad
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/fp/ssve-stress
-> @@ -0,0 +1,59 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Copyright (C) 2015-2019 ARM Limited.
-> +# Original author: Dave Martin <Dave.Martin@arm.com>
-> +
-> +set -ue
-> +
-> +NR_CPUS=`nproc`
-> +
-> +pids=
-> +logs=
-> +
-> +cleanup () {
-> +	trap - INT TERM CHLD
-> +	set +e
-> +
-> +	if [ -n "$pids" ]; then
-> +		kill $pids
-> +		wait $pids
-> +		pids=
-> +	fi
-> +
-> +	if [ -n "$logs" ]; then
-> +		cat $logs
-> +		rm $logs
-> +		logs=
-> +	fi
-> +}
-> +
-> +interrupt () {
-> +	cleanup
-> +	exit 0
-> +}
-> +
-> +child_died () {
-> +	cleanup
-> +	exit 1
+> @@ -120,6 +146,13 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+>   			sve = (struct sve_context *)head;
+>   			flags |= SVE_CTX;
+>   			break;
+> +		case ZA_MAGIC:
+> +			if (flags & ZA_CTX)
+> +				*err = "Multiple ZA_MAGIC";
 
-Is this a failure condition?
+Is this considered an error?
 
-> +}
-> +
+> +			/* Size is validated in validate_za_context() */
+> +			za = (struct za_context *)head;
+> +			flags |= ZA_CTX;
+> +			break;
+>   		case EXTRA_MAGIC:
+>   			if (flags & EXTRA_CTX)
+>   				*err = "Multiple EXTRA_MAGIC";
+> @@ -165,6 +198,9 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+>   		if (flags & SVE_CTX)
+>   			if (!validate_sve_context(sve, err))
+>   				return false;
+> +		if (flags & ZA_CTX)
+> +			if (!validate_za_context(za, err))
 
-With the comments explained or addressed:
+If validate_za_context() finds an error, the above "Multiple ZA_MAGIC" will
+be overwritten? Is that the intent?
+
+> +				return false;
+>   
+>   		head = GET_RESV_NEXT_HEAD(head);
+>   	}
+> diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.h b/tools/testing/selftests/arm64/signal/testcases/testcases.h
+> index ad884c135314..49f1d5de7b5b 100644
+> --- a/tools/testing/selftests/arm64/signal/testcases/testcases.h
+> +++ b/tools/testing/selftests/arm64/signal/testcases/testcases.h
+> @@ -16,7 +16,8 @@
+>   
+>   #define FPSIMD_CTX	(1 << 0)
+>   #define SVE_CTX		(1 << 1)
+> -#define EXTRA_CTX	(1 << 2)
+> +#define ZA_CTX		(1 << 2)
+> +#define EXTRA_CTX	(1 << 3)
+>   
+>   #define KSFT_BAD_MAGIC	0xdeadbeef
+>   
+> 
+
+With these explained or fixed:
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
 thanks,
 -- Shuah
