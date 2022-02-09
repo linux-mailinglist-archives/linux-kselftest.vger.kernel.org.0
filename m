@@ -2,67 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFFC4AFA5E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Feb 2022 19:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5270A4AFA91
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Feb 2022 19:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239761AbiBISgy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Feb 2022 13:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S239780AbiBISij (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Feb 2022 13:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239697AbiBISgb (ORCPT
+        with ESMTP id S239903AbiBISiQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:36:31 -0500
+        Wed, 9 Feb 2022 13:38:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7DFC05CB9D
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 10:36:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4A7C05CB9E;
+        Wed,  9 Feb 2022 10:38:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11664B821BD
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 18:36:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463ECC340E7;
-        Wed,  9 Feb 2022 18:36:18 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 18:36:15 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Joey Gouly <joey.gouly@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, nd@arm.com, broonie@kernel.org,
-        shuah@kernel.org, skhan@linuxfoundation.org, will@kernel.org
-Subject: Re: [PATCH v3 1/6] kselftest/arm64: mte: user_mem: introduce
- tag_offset and tag_len
-Message-ID: <YgQJn/NVZFAc3DaG@arm.com>
-References: <20220209152240.52788-1-joey.gouly@arm.com>
- <20220209152240.52788-2-joey.gouly@arm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4045FB82384;
+        Wed,  9 Feb 2022 18:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16482C340F1;
+        Wed,  9 Feb 2022 18:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644431886;
+        bh=6TGHFzWoBF8VCHFHfVRCuz5fx3lT8j5ALTDaaJYk2OE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Qw0Etd3tRlKn+qSj1d1+xKSpVuGcFfD8XwQD3pUjnOwiM03pSrjPWXyaaioxsnvSY
+         cGe0IXsGfv6/MXrE/6k916i9Xq/knwzyZ6cJPx3nwT6AlN/xDJyx68HxpiziOYzxm1
+         UNYLXk8gXDkaqcpUsxTD/tR3YSgmrY/XB4FBaiMUpsr76RCH93+Qpea4gBUINGMKbV
+         sl7ivfU1DxyIt5jwnUN4RB48vMKmW+QAqoR7knfwKw6OUMpdtcFaXms3cZ4jGbEFEB
+         aNtuEak4/ol2BBMJ+eWx2UMZK8utWzt/FQIW8YzEgbwC58R8tmdxi9GkEnLmTGapal
+         33J2lzjT57n7g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: [PATCH AUTOSEL 5.15 03/36] kunit: tool: Import missing importlib.abc
+Date:   Wed,  9 Feb 2022 13:37:26 -0500
+Message-Id: <20220209183759.47134-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220209183759.47134-1-sashal@kernel.org>
+References: <20220209183759.47134-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209152240.52788-2-joey.gouly@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:22:35PM +0000, Joey Gouly wrote:
-> These can be used to place an MTE tag at an address that is not at a
-> page size boundary.
-> 
-> The kernel prior to 295cf156231c ("arm64: Avoid premature usercopy failure"),
-> would infinite loop if an MTE tag was placed not at a PAGE_SIZE boundary.
-> This is because the kernel checked if the pages were readable by checking the
-> first byte of each page, but would then fault in the middle of the page due
-> to the MTE tag.
-> 
-> Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Tested-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+From: Michał Winiarski <michal.winiarski@intel.com>
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+[ Upstream commit 235528072f28b3b0a1446279b7eaddda36dbf743 ]
+
+Python 3.10.0 contains:
+9e09849d20 ("bpo-41006: importlib.util no longer imports typing (GH-20938)")
+
+It causes importlib.util to no longer import importlib.abs, which leads
+to the following error when trying to use kunit with qemu:
+AttributeError: module 'importlib' has no attribute 'abc'. Did you mean: '_abc'?
+
+Add the missing import.
+
+Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/kunit/kunit_kernel.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 2c6f916ccbafa..0874e512d109b 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -6,6 +6,7 @@
+ # Author: Felix Guo <felixguoxiuping@gmail.com>
+ # Author: Brendan Higgins <brendanhiggins@google.com>
+ 
++import importlib.abc
+ import importlib.util
+ import logging
+ import subprocess
+-- 
+2.34.1
+
