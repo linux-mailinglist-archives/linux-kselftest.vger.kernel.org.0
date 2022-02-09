@@ -1,384 +1,120 @@
 Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DAF4AFBEB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Feb 2022 19:52:02 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 42F384AFD65
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Feb 2022 20:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240712AbiBISv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Feb 2022 13:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S234523AbiBIT3F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Feb 2022 14:29:05 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241234AbiBISuy (ORCPT
+        with ESMTP id S236200AbiBIT2G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:50:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEAAC03F93F;
-        Wed,  9 Feb 2022 10:46:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63252B82386;
-        Wed,  9 Feb 2022 18:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1582BC340E7;
-        Wed,  9 Feb 2022 18:46:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644432386;
-        bh=okCagNw6vmwShPkrE2a1CdLnrg8TCiVrhIFRvrreXHA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OuXR8XSHCaOLbo7xhm5DSrPYjKhgvEABOOEndp1ZcbBaaHI7+qxlIlUTR31ObTyy6
-         /CGvsPjSpIwW1W5ezoyyF33gPNFBasuZlwl21tH9jKe797/0zTaStAPMpselBOB4fM
-         8UmVcgX4eQ0OkXKH3z+e687RS3+OLMoka4BOq7UjFob0V8KZHX7JP9L+hmRr7BFYic
-         T1sIc63CnyvF48G5ZWgqFCT81deI5Jf0eSoWxFCoBYKPyj3bVbdTWQT1dM+aNgPxYc
-         UdZcdYoSDgiwRFQ7PeZO4LI8khZJgifBDVx8QzmK/bvO5zUa/G0Pa6q6zudF1oJl1R
-         PDeZYJOGU28cw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Xu <xuyang2018.jy@fujitsu.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 4/7] selftests/zram: Adapt the situation that /dev/zram0 is being used
-Date:   Wed,  9 Feb 2022 13:45:47 -0500
-Message-Id: <20220209184550.48481-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209184550.48481-1-sashal@kernel.org>
-References: <20220209184550.48481-1-sashal@kernel.org>
+        Wed, 9 Feb 2022 14:28:06 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434F3E016D86
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 11:26:42 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id n17so4561679iod.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Feb 2022 11:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=uJdZ7oqw+QQlIzr17qqdwzwfregbqFYC9sj7YzP1HYY=;
+        b=fYz8PGQMd29UOajQhZT2X83HUOpYoErPoGjRcNCM4yVnITAfRZgeDe7UMSvRLFe4oS
+         1k0WRleLPHEuUfcf6Ia64xTw2nV6RRaWj+2NboS6Cc4j+5N0sOvshg1GvERuJ5jICtiI
+         eslZtJUanhs7SqaFUnbPEbDHd79D+9p9fHxms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uJdZ7oqw+QQlIzr17qqdwzwfregbqFYC9sj7YzP1HYY=;
+        b=6rY+AA1m6gpaTDaoVVtTy3p4dLUNu/seFex5UFBn7BUriGTBxerHtkCkpG1N1bKzLh
+         qJmWu1j9SQyLmFYlgMm/fWiJVQBhs8OsRymxCnoV15UVWRCQuVROF0lkKkvm8hdoLOEg
+         8ic+voT1BUw3bpmNaqOpZkjNa1Vc581xumf87FzOUO4RsnT8tk8H9T5Hf6i/RP3Fv1OI
+         sozKenf1Ui5YpZH2llTBP/gWUy45+08IxYOos8GGEpM11gBgsG5Ln4LHQ8KaMGFLQ8TY
+         bZkkrai+wWxJ/jg5ijNwiJPYcrShw+2PY+r9+8tboq6rB3baQJE/EpAsXNjawGTul5r2
+         +Whg==
+X-Gm-Message-State: AOAM531inLE1cl9drL86z2J7/mqdHvScyTAK62azgLrYHJIvvnUnmcDF
+        4NiwzInxpyuyQk4SAYsTqvi/9g==
+X-Google-Smtp-Source: ABdhPJw5MU53uJwqzrLtiF140G+vIQQ1qVQ9YiU1UrUUC9dzqLmlqHS4jlfDiPOVYXjgDYKvgAj0iA==
+X-Received: by 2002:a6b:6f09:: with SMTP id k9mr1864423ioc.61.1644434801604;
+        Wed, 09 Feb 2022 11:26:41 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id o22sm9992022iow.37.2022.02.09.11.26.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 11:26:41 -0800 (PST)
+Subject: Re: [PATCH] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <aa0833ac-154e-9a66-c3f5-7c3b98f15f19@linuxfoundation.org>
+Date:   Wed, 9 Feb 2022 12:26:40 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yang Xu <xuyang2018.jy@fujitsu.com>
+On 2/9/22 9:24 AM, Krzysztof Kozlowski wrote:
+> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
+> do_softirq fails for such kernel:
+> 
+>    echo do_softirq
+>    ftracetest: 81: echo: echo: I/O error
+> 
+> Choose some other externally visible function for the test.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> ---
+> 
+> I understand that the failure does not exist on mainline kernel (only
+> with PREEMPT_RT patchset) but the change does not harm it.
+> 
+> If it is not suitable alone, please consider it for RT patchset.
+> ---
+>   .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> index e96e279e0533..1d0c7601865f 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+> @@ -19,7 +19,7 @@ fail() { # mesg
+>   
+>   FILTER=set_ftrace_filter
+>   FUNC1="schedule"
+> -FUNC2="do_softirq"
+> +FUNC2="_printk"
+>   
+>   ALL_FUNCS="#### all functions enabled ####"
+>   
+> 
 
-[ Upstream commit 01dabed20573804750af5c7bf8d1598a6bf7bf6e ]
+Change looks good to me.
 
-If zram-generator package is installed and works, then we can not remove
-zram module because zram swap is being used. This case needs a clean zram
-environment, change this test by using hot_add/hot_remove interface. So
-even zram device is being used, we still can add zram device and remove
-them in cleanup.
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-The two interface was introduced since kernel commit 6566d1a32bf7("zram:
-add dynamic device add/remove functionality") in v4.2-rc1. If kernel
-supports these two interface, we use hot_add/hot_remove to slove this
-problem, if not, just check whether zram is being used or built in, then
-skip it on old kernel.
-
-Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/zram/zram.sh     |  15 +---
- tools/testing/selftests/zram/zram01.sh   |   3 +-
- tools/testing/selftests/zram/zram02.sh   |   1 -
- tools/testing/selftests/zram/zram_lib.sh | 110 +++++++++++++----------
- 4 files changed, 66 insertions(+), 63 deletions(-)
-
-diff --git a/tools/testing/selftests/zram/zram.sh b/tools/testing/selftests/zram/zram.sh
-index 9399c4aeaa265..d4652e295ff8a 100755
---- a/tools/testing/selftests/zram/zram.sh
-+++ b/tools/testing/selftests/zram/zram.sh
-@@ -1,9 +1,6 @@
- #!/bin/bash
- TCID="zram.sh"
- 
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
--
- . ./zram_lib.sh
- 
- run_zram () {
-@@ -17,14 +14,4 @@ echo ""
- 
- check_prereqs
- 
--# check zram module exists
--MODULE_PATH=/lib/modules/`uname -r`/kernel/drivers/block/zram/zram.ko
--if [ -f $MODULE_PATH ]; then
--	run_zram
--elif [ -b /dev/zram0 ]; then
--	run_zram
--else
--	echo "$TCID : No zram.ko module or /dev/zram0 device file not found"
--	echo "$TCID : CONFIG_ZRAM is not set"
--	exit $ksft_skip
--fi
-+run_zram
-diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
-index ac6e4ddd2604e..8abc9965089d1 100755
---- a/tools/testing/selftests/zram/zram01.sh
-+++ b/tools/testing/selftests/zram/zram01.sh
-@@ -42,7 +42,7 @@ zram_algs="lzo"
- 
- zram_fill_fs()
- {
--	for i in $(seq 0 $(($dev_num - 1))); do
-+	for i in $(seq $dev_start $dev_end); do
- 		echo "fill zram$i..."
- 		local b=0
- 		while [ true ]; do
-@@ -76,7 +76,6 @@ zram_mount
- 
- zram_fill_fs
- zram_cleanup
--zram_unload
- 
- if [ $ERR_CODE -ne 0 ]; then
- 	echo "$TCID : [FAIL]"
-diff --git a/tools/testing/selftests/zram/zram02.sh b/tools/testing/selftests/zram/zram02.sh
-index 74569b883737f..3768cfd2e5f83 100755
---- a/tools/testing/selftests/zram/zram02.sh
-+++ b/tools/testing/selftests/zram/zram02.sh
-@@ -45,7 +45,6 @@ zram_set_memlimit
- zram_makeswap
- zram_swapoff
- zram_cleanup
--zram_unload
- 
- if [ $ERR_CODE -ne 0 ]; then
- 	echo "$TCID : [FAIL]"
-diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
-index 2c1d1c567f854..130d193cbd727 100755
---- a/tools/testing/selftests/zram/zram_lib.sh
-+++ b/tools/testing/selftests/zram/zram_lib.sh
-@@ -14,10 +14,12 @@
- # Author: Alexey Kodanev <alexey.kodanev@oracle.com>
- # Modified: Naresh Kamboju <naresh.kamboju@linaro.org>
- 
--MODULE=0
- dev_makeswap=-1
- dev_mounted=-1
--
-+dev_start=0
-+dev_end=-1
-+module_load=-1
-+sys_control=-1
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- kernel_version=`uname -r | cut -d'.' -f1,2`
-@@ -55,57 +57,72 @@ zram_cleanup()
- {
- 	echo "zram cleanup"
- 	local i=
--	for i in $(seq 0 $dev_makeswap); do
-+	for i in $(seq $dev_start $dev_makeswap); do
- 		swapoff /dev/zram$i
- 	done
- 
--	for i in $(seq 0 $dev_mounted); do
-+	for i in $(seq $dev_start $dev_mounted); do
- 		umount /dev/zram$i
- 	done
- 
--	for i in $(seq 0 $(($dev_num - 1))); do
-+	for i in $(seq $dev_start $dev_end); do
- 		echo 1 > /sys/block/zram${i}/reset
- 		rm -rf zram$i
- 	done
- 
--}
-+	if [ $sys_control -eq 1 ]; then
-+		for i in $(seq $dev_start $dev_end); do
-+			echo $i > /sys/class/zram-control/hot_remove
-+		done
-+	fi
- 
--zram_unload()
--{
--	if [ $MODULE -ne 0 ] ; then
--		echo "zram rmmod zram"
-+	if [ $module_load -eq 1 ]; then
- 		rmmod zram > /dev/null 2>&1
- 	fi
- }
- 
- zram_load()
- {
--	# check zram module exists
--	MODULE_PATH=/lib/modules/`uname -r`/kernel/drivers/block/zram/zram.ko
--	if [ -f $MODULE_PATH ]; then
--		MODULE=1
--		echo "create '$dev_num' zram device(s)"
--		modprobe zram num_devices=$dev_num
--		if [ $? -ne 0 ]; then
--			echo "failed to insert zram module"
--			exit 1
--		fi
--
--		dev_num_created=$(ls /dev/zram* | wc -w)
-+	echo "create '$dev_num' zram device(s)"
-+
-+	# zram module loaded, new kernel
-+	if [ -d "/sys/class/zram-control" ]; then
-+		echo "zram modules already loaded, kernel supports" \
-+			"zram-control interface"
-+		dev_start=$(ls /dev/zram* | wc -w)
-+		dev_end=$(($dev_start + $dev_num - 1))
-+		sys_control=1
-+
-+		for i in $(seq $dev_start $dev_end); do
-+			cat /sys/class/zram-control/hot_add > /dev/null
-+		done
-+
-+		echo "all zram devices (/dev/zram$dev_start~$dev_end" \
-+			"successfully created"
-+		return 0
-+	fi
- 
--		if [ "$dev_num_created" -ne "$dev_num" ]; then
--			echo "unexpected num of devices: $dev_num_created"
--			ERR_CODE=-1
-+	# detect old kernel or built-in
-+	modprobe zram num_devices=$dev_num
-+	if [ ! -d "/sys/class/zram-control" ]; then
-+		if grep -q '^zram' /proc/modules; then
-+			rmmod zram > /dev/null 2>&1
-+			if [ $? -ne 0 ]; then
-+				echo "zram module is being used on old kernel" \
-+					"without zram-control interface"
-+				exit $ksft_skip
-+			fi
- 		else
--			echo "zram load module successful"
-+			echo "test needs CONFIG_ZRAM=m on old kernel without" \
-+				"zram-control interface"
-+			exit $ksft_skip
- 		fi
--	elif [ -b /dev/zram0 ]; then
--		echo "/dev/zram0 device file found: OK"
--	else
--		echo "ERROR: No zram.ko module or no /dev/zram0 device found"
--		echo "$TCID : CONFIG_ZRAM is not set"
--		exit 1
-+		modprobe zram num_devices=$dev_num
- 	fi
-+
-+	module_load=1
-+	dev_end=$(($dev_num - 1))
-+	echo "all zram devices (/dev/zram0~$dev_end) successfully created"
- }
- 
- zram_max_streams()
-@@ -119,7 +136,7 @@ zram_max_streams()
- 		return 0
- 	fi
- 
--	local i=0
-+	local i=$dev_start
- 	for max_s in $zram_max_streams; do
- 		local sys_path="/sys/block/zram${i}/max_comp_streams"
- 		echo $max_s > $sys_path || \
-@@ -131,7 +148,7 @@ zram_max_streams()
- 			echo "FAIL can't set max_streams '$max_s', get $max_stream"
- 
- 		i=$(($i + 1))
--		echo "$sys_path = '$max_streams' ($i/$dev_num)"
-+		echo "$sys_path = '$max_streams'"
- 	done
- 
- 	echo "zram max streams: OK"
-@@ -141,15 +158,16 @@ zram_compress_alg()
- {
- 	echo "test that we can set compression algorithm"
- 
--	local algs=$(cat /sys/block/zram0/comp_algorithm)
-+	local i=$dev_start
-+	local algs=$(cat /sys/block/zram${i}/comp_algorithm)
- 	echo "supported algs: $algs"
--	local i=0
-+
- 	for alg in $zram_algs; do
- 		local sys_path="/sys/block/zram${i}/comp_algorithm"
- 		echo "$alg" >	$sys_path || \
- 			echo "FAIL can't set '$alg' to $sys_path"
- 		i=$(($i + 1))
--		echo "$sys_path = '$alg' ($i/$dev_num)"
-+		echo "$sys_path = '$alg'"
- 	done
- 
- 	echo "zram set compression algorithm: OK"
-@@ -158,14 +176,14 @@ zram_compress_alg()
- zram_set_disksizes()
- {
- 	echo "set disk size to zram device(s)"
--	local i=0
-+	local i=$dev_start
- 	for ds in $zram_sizes; do
- 		local sys_path="/sys/block/zram${i}/disksize"
- 		echo "$ds" >	$sys_path || \
- 			echo "FAIL can't set '$ds' to $sys_path"
- 
- 		i=$(($i + 1))
--		echo "$sys_path = '$ds' ($i/$dev_num)"
-+		echo "$sys_path = '$ds'"
- 	done
- 
- 	echo "zram set disksizes: OK"
-@@ -175,14 +193,14 @@ zram_set_memlimit()
- {
- 	echo "set memory limit to zram device(s)"
- 
--	local i=0
-+	local i=$dev_start
- 	for ds in $zram_mem_limits; do
- 		local sys_path="/sys/block/zram${i}/mem_limit"
- 		echo "$ds" >	$sys_path || \
- 			echo "FAIL can't set '$ds' to $sys_path"
- 
- 		i=$(($i + 1))
--		echo "$sys_path = '$ds' ($i/$dev_num)"
-+		echo "$sys_path = '$ds'"
- 	done
- 
- 	echo "zram set memory limit: OK"
-@@ -191,8 +209,8 @@ zram_set_memlimit()
- zram_makeswap()
- {
- 	echo "make swap with zram device(s)"
--	local i=0
--	for i in $(seq 0 $(($dev_num - 1))); do
-+	local i=$dev_start
-+	for i in $(seq $dev_start $dev_end); do
- 		mkswap /dev/zram$i > err.log 2>&1
- 		if [ $? -ne 0 ]; then
- 			cat err.log
-@@ -215,7 +233,7 @@ zram_makeswap()
- zram_swapoff()
- {
- 	local i=
--	for i in $(seq 0 $dev_makeswap); do
-+	for i in $(seq $dev_start $dev_end); do
- 		swapoff /dev/zram$i > err.log 2>&1
- 		if [ $? -ne 0 ]; then
- 			cat err.log
-@@ -229,7 +247,7 @@ zram_swapoff()
- 
- zram_makefs()
- {
--	local i=0
-+	local i=$dev_start
- 	for fs in $zram_filesystems; do
- 		# if requested fs not supported default it to ext2
- 		which mkfs.$fs > /dev/null 2>&1 || fs=ext2
-@@ -248,7 +266,7 @@ zram_makefs()
- zram_mount()
- {
- 	local i=0
--	for i in $(seq 0 $(($dev_num - 1))); do
-+	for i in $(seq $dev_start $dev_end); do
- 		echo "mount /dev/zram$i"
- 		mkdir zram$i
- 		mount /dev/zram$i zram$i > /dev/null || \
--- 
-2.34.1
+thanks,
+-- Shuah
 
