@@ -2,74 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B484AF67D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Feb 2022 17:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21774AFA07
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Feb 2022 19:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236777AbiBIQZN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Feb 2022 11:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S239254AbiBISdw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Feb 2022 13:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236768AbiBIQZM (ORCPT
+        with ESMTP id S239285AbiBISdu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:25:12 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C615C0613C9
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 08:25:15 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 9 Feb 2022 13:33:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5939C05CB88;
+        Wed,  9 Feb 2022 10:33:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C4F813F1E9
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 16:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644423911;
-        bh=/xekYk/q8PDd5X+mZnZ/+eb+Bf0iUFVR8K4RtVmP8o4=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=U+gjmSlolYuUisQo0EDYIhK5RHaPwDdDvXikHufLFgBTfai88FvWmsUUsnmhJkFXu
-         R1eAHAPiBgJByKS9ryg1Awn2zOSnG+ECzbMxHsjEbDAvJlm+CN5MDCa0+xQyFzlcnK
-         uemSpDXlqnZJGjXjw//W36FVYRMPGixvZM/TSPmvlnVpw6dfdyU1X6SoE7Zs4H2wfz
-         QtPpJgZTmot60G5y3+dbxJFnmRkLEIHcqv567Vg1P8CVsx+m/almcfdvbZiEnedGiP
-         /sMcrk9f2Rxi/jHF2XaEnCp5+9RvlC2ht1p1/BSYnPt3GbXXK6ce1c+OiInk3wEqVy
-         KXIJ5qCGMXjUQ==
-Received: by mail-ed1-f72.google.com with SMTP id cr7-20020a056402222700b0040f59dae606so1652710edb.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Feb 2022 08:25:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/xekYk/q8PDd5X+mZnZ/+eb+Bf0iUFVR8K4RtVmP8o4=;
-        b=op8jbkP0X1SYUkDnVM2zBGyUDbwaMDmVMxaSyI48TwKeazRUI7NEqujs8C8Zv0JZ/K
-         NX/wV9s1O5dDqkUk+jAyUGQ9ZIrGrqV3+xgvYVhI5qdyjDXaXDB3fpK4oWtrfmu0c0w7
-         YIcBucVGqtF1lNony8TESCPpEshteh0HBgYvfAp9icf1fkz3Abdkgiuc/pEW53gkioS3
-         cOzTHwoEjwQQBCAUzbhSxEBq8ueB6SMB8uAf5NZkU9eGKtXLUSz0FLSDrenyKoOR2wlU
-         A3wPvxXuH6mftKUtzQEXygvY06mE4Z5fOys/yAueAty1pBFbA7ynGIFi+vqcbZcdPJCP
-         kuiA==
-X-Gm-Message-State: AOAM530Yfhq3D3zN6Z+B9/6FZ5PhChQwTrzzJ4vcY8TXNMGp3zwJL544
-        B7fkroCKGD6UEvRAZZt2rvOdhS0aGAp7aXIvGBkxrMwokusLav1gDBShBLS3EzfFsCrWY4ZG/Or
-        r1FPuQNeqzOiIcpLCT+MW5GM0+g0f+s+tyOSUK0Pw5rY8EA==
-X-Received: by 2002:a17:907:a409:: with SMTP id sg9mr2642419ejc.219.1644423910884;
-        Wed, 09 Feb 2022 08:25:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzKvtjCZePVTEi6+XanNHWx67xsb5RlaQqVAD+8Rt87SKNwj0aCwZWrYYo6ZHiUBiw21MJl1A==
-X-Received: by 2002:a17:907:a409:: with SMTP id sg9mr2642412ejc.219.1644423910718;
-        Wed, 09 Feb 2022 08:25:10 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id d23sm6687575edv.79.2022.02.09.08.25.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:25:10 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
-Subject: [PATCH] selftests/ftrace: Do not trace do_softirq because of PREEMPT_RT
-Date:   Wed,  9 Feb 2022 17:24:30 +0100
-Message-Id: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D4C4B8203D;
+        Wed,  9 Feb 2022 18:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3EBC340E7;
+        Wed,  9 Feb 2022 18:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644431631;
+        bh=qyPfW4IlrBgNepnCTk3sw+8PUobJnB7UBEwn1fAXbqM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TufoHfam+GECG+IvIIl6/yY/PeKZkOY+extUH02Mk55bVef4UKlDB8s8gp2kA1RAE
+         kta4GXw56bYlMZugr9ktDrTXb42B/Bwsvs12dh2dEPxdowWhgxEhwvHF5QpZdkNxvV
+         4Fr1WAZzPk6QYVwuzToqKwbaGRXj5IT/Ao01OxYGxlyQL8nMg7HyZpON/9OTPvmjoV
+         zek6LD0BR5kLLRawCgwqZH7yv3D7RE3osudGLMs+SpqFXG+Z+SObGtP20Yw86nn1wY
+         EJVA3+5clR6XQ/oTAH3URCRtz9V/rna8D6cWiYg2vU8Goxmji8AgQVkkWOd1VzrTQD
+         w+9ywsgM2hBuw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: [PATCH AUTOSEL 5.16 05/42] kunit: tool: Import missing importlib.abc
+Date:   Wed,  9 Feb 2022 13:32:37 -0500
+Message-Id: <20220209183335.46545-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220209183335.46545-1-sashal@kernel.org>
+References: <20220209183335.46545-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,39 +61,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
-do_softirq fails for such kernel:
+From: Michał Winiarski <michal.winiarski@intel.com>
 
-  echo do_softirq
-  ftracetest: 81: echo: echo: I/O error
+[ Upstream commit 235528072f28b3b0a1446279b7eaddda36dbf743 ]
 
-Choose some other externally visible function for the test.
+Python 3.10.0 contains:
+9e09849d20 ("bpo-41006: importlib.util no longer imports typing (GH-20938)")
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+It causes importlib.util to no longer import importlib.abs, which leads
+to the following error when trying to use kunit with qemu:
+AttributeError: module 'importlib' has no attribute 'abc'. Did you mean: '_abc'?
 
+Add the missing import.
+
+Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ tools/testing/kunit/kunit_kernel.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-I understand that the failure does not exist on mainline kernel (only
-with PREEMPT_RT patchset) but the change does not harm it.
-
-If it is not suitable alone, please consider it for RT patchset.
----
- .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-index e96e279e0533..1d0c7601865f 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-@@ -19,7 +19,7 @@ fail() { # mesg
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 66095568bf327..fae843bf2f0eb 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -6,6 +6,7 @@
+ # Author: Felix Guo <felixguoxiuping@gmail.com>
+ # Author: Brendan Higgins <brendanhiggins@google.com>
  
- FILTER=set_ftrace_filter
- FUNC1="schedule"
--FUNC2="do_softirq"
-+FUNC2="_printk"
- 
- ALL_FUNCS="#### all functions enabled ####"
- 
++import importlib.abc
+ import importlib.util
+ import logging
+ import subprocess
 -- 
-2.32.0
+2.34.1
 
