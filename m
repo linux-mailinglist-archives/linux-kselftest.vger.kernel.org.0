@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892C94B15D9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 20:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF7C4B15DA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 20:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243027AbiBJTH4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 14:07:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46762 "EHLO
+        id S1343652AbiBJTII (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 14:08:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236382AbiBJTHz (ORCPT
+        with ESMTP id S236382AbiBJTIH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 14:07:55 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA93BE6A;
-        Thu, 10 Feb 2022 11:07:56 -0800 (PST)
+        Thu, 10 Feb 2022 14:08:07 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F5910C2;
+        Thu, 10 Feb 2022 11:08:08 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id 15D951F4673D
+        with ESMTPSA id C36A81F4676E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644520075;
-        bh=1rWTHTOu/9ZCL4nSK783UU0XLclDFK7bWJjIFMEY3aA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VKXG7iap6mk4sIHKNMeND3sOzufZOiG80I6qy2TNSBG9X2y4VdtyVCZaKMxW11rgJ
-         95sacDBT4yqCoixTW8KRBh+VxIS+kEoZCFwyQvOQcHLQIW66Ax6vlAizLJuANVdArj
-         EIRrcOYYMNTTyzXa/ej8ppIeTSCCK/FDr46Bnp8JpmJ1Hgo7CWVK76lzBO+CfFcI83
-         TJXg5tJGhMdH3Wqgkl54QcWZ7aEWvjptRBoqbisLJzmNjDHQK6nPdtgrcwOTLrLHxa
-         migMCy4mEnDQNdrNZDhF8eghOyuJSDY/svBoR04BCfQEY9W93CxCxUTI1xCyyyKfS3
-         wVUxGzpKCVgKw==
+        s=mail; t=1644520078;
+        bh=0jYGpXD6Jqyxvu0gUaOrjVAD3YdDmEptoto1aYaXkx4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BN2I87IFqIlmzuZQ9OgfAua3tk7cvmzg6kPr/iGhmd2PCTT5IlEK6dztVZIhezLD4
+         3WyDMRomVZar+N2tWODVT57JL6onXu7UD70VCXwygCA3nUIOH4bDRlvpRP5nT5mYoW
+         trR/KdhjCdonotJWSA59R2C8ZQ2RD1ohbU2sWVNHuk3rVAUxXKL91pP8wWh6D3X69a
+         N/jk5E1OGqcogkV72MXj79i79HKdT2GHUSZirSjE/PJ4fY2I9RUb5SKh8AWNAzJuPj
+         eeGI29ugeLl8mgLRAaBITV8CbnMDxrPQQItFWjcCgI7bgHic1xmejv3QeO6j3dxatm
+         JugxnpvjGWi1w==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -39,11 +39,14 @@ To:     Jarkko Sakkinen <jarkko@kernel.org>,
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
         linux-kernel@vger.kernel.org (open list)
 Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernelci@groups.io
-Subject: [PATCH 0/2] selftests: sgx: Fix build of test_sgx
-Date:   Fri, 11 Feb 2022 00:06:39 +0500
-Message-Id: <20220210190642.1477814-1-usama.anjum@collabora.com>
+        kernel@collabora.com, kernelci@groups.io,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
+Date:   Fri, 11 Feb 2022 00:06:40 +0500
+Message-Id: <20220210190642.1477814-2-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220210190642.1477814-1-usama.anjum@collabora.com>
+References: <20220210190642.1477814-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,33 +59,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CC can have multiple sub-strings like "ccache gcc". Build system of sgx
-selftest is unable to support this use case and test_sgx isn't built.
-Then rsync gives an erorr:
+CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
+it is treated as single string and double quote are used around it.
+This can be fixed by removing the quotes and not treating CC a single
+string.
 
-rsync: [sender] link_stat "//linux/build/kselftest/sgx/test_sgx" failed: No such file or directory (2)
-rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
-
-This can be fixed if CC is considered to have one string while passing to
-check_cc.sh script and inside this script, CC is expanded before execution.
-
-Following build tests have been performed to confirm that these patches
-don't break anything else. The verification has also been done through
-KernelCI scripts locally as KernelCI has caught this bug:
-1) cd tools/testing/selftests && make
-2) make -C tools/testing/selftests
-3) make -C tools/testing/selftests O=build
-4) make -C tools/testing/selftests O=build CC="ccache gcc"
-5) ./kci_build make_kselftest
-
-Muhammad Usama Anjum (2):
-  selftests: x86: allow expansion of $(CC)
-  selftests: sgx: Treat CC as one argument
-
- tools/testing/selftests/sgx/Makefile    | 2 +-
+Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
  tools/testing/selftests/x86/check_cc.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
+index 3e2089c8cf549..aff2c15018b53 100755
+--- a/tools/testing/selftests/x86/check_cc.sh
++++ b/tools/testing/selftests/x86/check_cc.sh
+@@ -7,7 +7,7 @@ CC="$1"
+ TESTPROG="$2"
+ shift 2
+ 
+-if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
++if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+     echo 1
+ else
+     echo 0
 -- 
 2.30.2
 
