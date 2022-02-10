@@ -2,128 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4C54B18C2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 23:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA9F4B192B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 00:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345212AbiBJWqr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 17:46:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35420 "EHLO
+        id S1345509AbiBJXLx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 18:11:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345205AbiBJWqr (ORCPT
+        with ESMTP id S1345508AbiBJXLw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:46:47 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AD75F4E
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 14:46:47 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id e11so4661409ils.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 14:46:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B/UXIV3zf866V2KVi395pqDMtj3eD/83YXll34yD54w=;
-        b=BDz7AdxsRIcraonOF4GIu+SUGbj1wkvZhku3SLPoSuwmlYMbKzH/x/rw21Zq2qZGN/
-         RqnAHnf0EMjXBB/sYR35dmGGeYeSkNIdE78z1g3sh8hGsS4YXwqr7d54V0YXKW9b5Z7y
-         h3UK4GKzi0cKc8CQOElBzKDKu3ylqWx4Ex2+w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B/UXIV3zf866V2KVi395pqDMtj3eD/83YXll34yD54w=;
-        b=2PAcqiIq941T9ctirnSUmGywOBCgaQwwuF2qeaq7N94oU8lr1FNkcsXB4pT8H2RGud
-         M+mw5ufxi/pcMwZ7t0JSbARsKqlT9N8OhfHDHyisIRpzMPhQLBUDahXlBY4aOKy7YHmJ
-         xXOw6uOhr7akhr/3iPKgwoX3E211sdsfXf7xSPpa/YwyEBQa2UyrCqdZ4Fyhrv91qBbm
-         XGGfyg2WyE8Hacich2mAu0+EzKp3iqjhTmY9SmDcOZ4/suQ8KUiuRghavODDDfHrT9ae
-         Jov20So9YQ29XKH38MEjcJkE4K2xwiTqIfltx/F6rBvELdpIdj1NpLb4HCFuucH4E9H7
-         jpow==
-X-Gm-Message-State: AOAM530fE4e/wNjtSsARutfYrxoq1aVhOc2nyYdeENzv30pCb7R6jw+f
-        0EmV4SiW46kMl3/7qCadI70jgCqXC6XL6A==
-X-Google-Smtp-Source: ABdhPJx4+vBo900qqkINhcheGliA9WQQ0yV4w/bhniIOWepwfYg1sRffUB0hU4xb+Z0iqz9KI3p0bQ==
-X-Received: by 2002:a92:1311:: with SMTP id 17mr5118958ilt.42.1644533206807;
-        Thu, 10 Feb 2022 14:46:46 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c2sm8558041ilh.43.2022.02.10.14.46.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 14:46:46 -0800 (PST)
-Subject: Re: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        "kernelci.org bot" <bot@kernelci.org>
-References: <20220210190642.1477814-1-usama.anjum@collabora.com>
- <20220210190642.1477814-2-usama.anjum@collabora.com>
- <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
- <81619c13-41e6-3aab-4cf7-9b6d5a11e05c@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <08b8b886-4ec4-994a-4a4b-0da30766df1e@linuxfoundation.org>
-Date:   Thu, 10 Feb 2022 15:46:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 10 Feb 2022 18:11:52 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC455F5D;
+        Thu, 10 Feb 2022 15:11:52 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 1E5A31F469B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644534711;
+        bh=xJk1X1Ou6Pj/lU4m3+l3X4A8FKv0b4TtWehWstyFtXM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=lkNkBwNu3iDeSbxbxmet/aqfx3hhFrQ3FBBRbXIoO+lQStXrobNg3t/g4nl3tQ1gX
+         FIZPublwfNFKTq0N+K3/aOdozYJVx5cKySe/NoLst7xgG5oghsf/2DTe1rKAmYXk52
+         OSHezvvvrA2ceJ0fxhgAi35xzbqLDZN6a4Z+DN2AQNHnQT92cxiCzYGSaZhHpD6tqQ
+         bYRF3c7Sh6e/B7vfE1bxu5Iji30pldoNAFuBGMvg47DAV/WAwWUVdBtNjDaC3tYaeB
+         zUzQ3D2nvsEL2zJywXcCRm+3Lp9K0H4azyW19a8BUVPwPwRd0vy8w/V1khLtWkOR22
+         7fPgtj9o+VzXg==
+Message-ID: <63e239fc-9282-0276-50b2-3172a446262d@collabora.com>
+Date:   Fri, 11 Feb 2022 04:11:40 +0500
 MIME-Version: 1.0
-In-Reply-To: <81619c13-41e6-3aab-4cf7-9b6d5a11e05c@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
+ missing headers
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Sherry Yang <sherry.yang@oracle.com>, skhan@linuxfoundation.org,
+        shuah@kernel.org, keescook@chromium.org, luto@amacapital.net,
+        wad@chromium.org, christian@brauner.io, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org
+References: <20220210203049.67249-1-sherry.yang@oracle.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220210203049.67249-1-sherry.yang@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/10/22 3:41 PM, Muhammad Usama Anjum wrote:
-> On 2/11/22 1:51 AM, Shuah Khan wrote:
->> On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
->>> CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
->>> it is treated as single string and double quote are used around it.
->>> This can be fixed by removing the quotes and not treating CC a single
->>> string.
->>>
->>> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture
->>> detection")
->>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>>    tools/testing/selftests/x86/check_cc.sh | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/x86/check_cc.sh
->>> b/tools/testing/selftests/x86/check_cc.sh
->>> index 3e2089c8cf549..aff2c15018b53 100755
->>> --- a/tools/testing/selftests/x86/check_cc.sh
->>> +++ b/tools/testing/selftests/x86/check_cc.sh
->>> @@ -7,7 +7,7 @@ CC="$1"
->>>    TESTPROG="$2"
->>>    shift 2
->>>    -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->>> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->>>        echo 1
->>>    else
->>>        echo 0
->>>
->>
->> The intent is testing if $CC is set. Does this change work when
->> $CC is not set?
->>
-> Yeah, it works. I've added a debug variable inside sgx/Makefile and it
-> is detecting empty argument correctly as well.
+On 2/11/22 1:30 AM, Sherry Yang wrote:
+> seccomp_bpf failed on tests 47 global.user_notification_filter_empty
+> and 48 global.user_notification_filter_empty_threaded when it's
+> tested on updated kernel but with old kernel headers. Because old
+> kernel headers don't have definition of macro __NR_clone3 which is
+> required for these two tests. Since under selftests/, we can install
+> headers once for all tests (the default INSTALL_HDR_PATH is
+> usr/include), fix it by adding usr/include to the list of directories
+> to be searched. Use "-isystem" to indicate it's a system directory as
+> the real kernel headers directories are.
 > 
+> Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
+> Tested-by: Sherry Yang <sherry.yang@oracle.com>
+> ---
+>  tools/testing/selftests/seccomp/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+> index 0ebfe8b0e147..585f7a0c10cb 100644
+> --- a/tools/testing/selftests/seccomp/Makefile
+> +++ b/tools/testing/selftests/seccomp/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS += -Wl,-no-as-needed -Wall
+> +CFLAGS += -Wl,-no-as-needed -Wall -isystem ../../../../usr/include/"../../../../usr/include/" directory doesn't have header files if
+different output directory is used for kselftests build like "make -C
+tools/tests/selftest O=build". Can you try adding recently added
+variable, KHDR_INCLUDES here which makes this kind of headers inclusion
+easy and correct for other build combinations as well?
 
-Sounds good.
-
-thanks,
--- Shuah
