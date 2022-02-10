@@ -2,205 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B114B028A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 02:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7936F4B02FB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 03:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbiBJB4E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Feb 2022 20:56:04 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60266 "EHLO
+        id S232752AbiBJCCi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Feb 2022 21:02:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbiBJBzo (ORCPT
+        with ESMTP id S234608AbiBJCAR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:55:44 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC9B2AA8E
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 17:37:38 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id d27so3115665wrb.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Feb 2022 17:37:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J3yltjbke254DrltEMa2jfUTN9LNACI9ozbxbO91G5k=;
-        b=WsqqEYCAXjrNR4nKMxKQ+/n1AzA6LCtvFVYJaK1zxr9rP53eS2MpNZkPi6id1BLXDn
-         x9ip/Q/7TUb353XThsuHtoQ0yHODowfK/GcqUxB1tc7xkDjY25y9xzWzj+ucSYEo7Gdw
-         f68P8ByI65xkbbn+Ym7nRkxCa8JEspiDYHl6bdQLgy4bZHfwliBT9M3z41PdxPXDvxu7
-         8fO2NH82LZ9m2Gvii7B+YI/wOXyh4D2ixYhNfQiN+QQKf2SBI32XGDGEajMZYGHQeeoH
-         /Nyv43iF1q1VFFIRVY6rXG4Mp19idy8c/QdjRfcJHKivqJeGkOnrh5z2WrPp/dS2uxFq
-         k6aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J3yltjbke254DrltEMa2jfUTN9LNACI9ozbxbO91G5k=;
-        b=gB3aOK1bV9hnQZrji3GRQfprXCIj+lb6O7V9AsEd2zq3tIEOdKFlHalF1FGPe7XaGt
-         +GZiDpzTHe086j4X6vXDqN2/cHBy1RzQR4Us/zVAN31y+whLXvy5Tb8z7cRR2XvkNSQN
-         uc6jyZa2UlH5pCYhwgOgIHZkG2esc1ifbI5ovVyhGfM3YcZpHksDNu/31pUqoRL8wunA
-         oEwsmMiTZz65XFFmuwyFJc2H6iFEwMDVRTr0D1TQHgbriVvljOuLWGiBYjipTQz+iwet
-         gVBtZEJn8JrxLzdz8AnKBYCO57PwDx1XjtDChemsq3+nb/BK3rFRzqwiUX1Utd42vTen
-         GygA==
-X-Gm-Message-State: AOAM53338m1NveZnrsMw+7MhpA3Yq+N6ThbBiqfyvZ1Zh67KvRxZeTeU
-        UK+96NkXaihy4jJDyE3Xcalzb+NOeFle60pTJXxRNfgi7SjtTA==
-X-Google-Smtp-Source: ABdhPJwq62uinZtJKWxWNzISWawAa3D953n4Fq52DkoUrTEM4TzyQSmuSdqys4D5n/PaI7HHGUNisPL57lIKXwr1lOg=
-X-Received: by 2002:a5d:64a7:: with SMTP id m7mr4331762wrp.80.1644457056586;
- Wed, 09 Feb 2022 17:37:36 -0800 (PST)
+        Wed, 9 Feb 2022 21:00:17 -0500
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458DB103F;
+        Wed,  9 Feb 2022 17:57:21 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:43770)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHyhy-0011Oq-PQ; Wed, 09 Feb 2022 18:57:18 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:44682 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHyhw-00AMiJ-MT; Wed, 09 Feb 2022 18:57:18 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Solar Designer <solar@openwall.com>
+Cc:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <20220207121800.5079-2-mkoutny@suse.com>
+        <20220210011405.GA17076@openwall.com>
+Date:   Wed, 09 Feb 2022 19:57:10 -0600
+In-Reply-To: <20220210011405.GA17076@openwall.com> (Solar Designer's message
+        of "Thu, 10 Feb 2022 02:14:05 +0100")
+Message-ID: <87v8xn8ow9.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220210003224.773957-1-keescook@chromium.org>
-In-Reply-To: <20220210003224.773957-1-keescook@chromium.org>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 10 Feb 2022 09:37:25 +0800
-Message-ID: <CABVgOSkx0xNkyva3UtmxVQM=rZyoRNDiytpzCkNG8era+mXMnA@mail.gmail.com>
-Subject: Re: [PATCH] um: Enable FORTIFY_SOURCE
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b94d0f05d79ffeaa"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1nHyhw-00AMiJ-MT;;;mid=<87v8xn8ow9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18XlNqZ8OwOBkY4TyLNlmApbq/5YW22QNU=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Solar Designer <solar@openwall.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1481 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.8 (0.3%), b_tie_ro: 3.2 (0.2%), parse: 1.37
+        (0.1%), extract_message_metadata: 16 (1.1%), get_uri_detail_list: 2.1
+        (0.1%), tests_pri_-1000: 17 (1.2%), tests_pri_-950: 1.06 (0.1%),
+        tests_pri_-900: 0.84 (0.1%), tests_pri_-90: 64 (4.3%), check_bayes: 63
+        (4.2%), b_tokenize: 8 (0.5%), b_tok_get_all: 10 (0.7%), b_comp_prob:
+        2.2 (0.2%), b_tok_touch_all: 38 (2.6%), b_finish: 0.79 (0.1%),
+        tests_pri_0: 1365 (92.2%), check_dkim_signature: 0.44 (0.0%),
+        check_dkim_adsp: 2.1 (0.1%), poll_dns_idle: 0.22 (0.0%), tests_pri_10:
+        1.85 (0.1%), tests_pri_500: 7 (0.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check
+ against new user credentials
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000b94d0f05d79ffeaa
-Content-Type: text/plain; charset="UTF-8"
+Solar Designer <solar@openwall.com> writes:
 
-On Thu, Feb 10, 2022 at 8:32 AM Kees Cook <keescook@chromium.org> wrote:
+> Hi Michal,
 >
-> Enable FORTIFY_SOURCE so running Kunit tests can test fortified
-> functions.
+> On Mon, Feb 07, 2022 at 01:17:55PM +0100, Michal Koutný wrote:
+>> The check is currently against the current->cred but since those are
+>> going to change and we want to check RLIMIT_NPROC condition after the
+>> switch, supply the capability check with the new cred.
+>> But since we're checking new_user being INIT_USER any new cred's
+>> capability-based allowance may be redundant when the check fails and the
+>> alternative solution would be revert of the commit 2863643fb8b9
+>> ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>> 
+>> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>> 
+>> Cc: Solar Designer <solar@openwall.com>
+>> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+>> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+>> ---
+>>  kernel/sys.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/kernel/sys.c b/kernel/sys.c
+>> index 8ea20912103a..48c90dcceff3 100644
+>> --- a/kernel/sys.c
+>> +++ b/kernel/sys.c
+>> @@ -481,7 +481,8 @@ static int set_user(struct cred *new)
+>>  	 */
+>>  	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
+>>  			new_user != INIT_USER &&
+>> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>> +			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
+>> +			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
+>>  		current->flags |= PF_NPROC_EXCEEDED;
+>>  	else
+>>  		current->flags &= ~PF_NPROC_EXCEEDED;
 >
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-
-Thanks -- I was successfully able to run KUnit tests with
-FORTIFY_SOURCE with this, and added some errors which it caught.
-
-It might be worth noting that FORTIFY_SOURCE isn't enabled by default
-under KUnit with this patch, though it's possible to use it with
-./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_FORTIFY_SOURCE=y
-
-Tested-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  arch/um/Kconfig              | 1 +
->  arch/um/os-Linux/user_syms.c | 1 +
->  2 files changed, 2 insertions(+)
+> Thank you for working on this and CC'ing me on it.  This is related to
+> the discussion Christian and I had in September:
 >
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index 4d398b80aea8..746e661395d7 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -9,6 +9,7 @@ config UML
->         select ARCH_HAS_KCOV
->         select ARCH_HAS_STRNCPY_FROM_USER
->         select ARCH_HAS_STRNLEN_USER
-> +       select ARCH_HAS_FORTIFY_SOURCE
->         select ARCH_NO_PREEMPT
->         select HAVE_ARCH_AUDITSYSCALL
->         select HAVE_ARCH_SECCOMP_FILTER
-> diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
-> index 715594fe5719..d9845b5219ce 100644
-> --- a/arch/um/os-Linux/user_syms.c
-> +++ b/arch/um/os-Linux/user_syms.c
-> @@ -1,4 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#define __NO_FORTIFY
->  #include <linux/types.h>
->  #include <linux/module.h>
+> https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
 >
-> --
-> 2.30.2
+> Christian was going to revert 2863643fb8b9, but apparently that never
+> happened.  Back then, I also suggested:
 >
+> "Alternatively, we could postpone the set_user() calls until we're
+> running with the new user's capabilities, but that's an invasive change
+> that's likely to create its own issues."
 
---000000000000b94d0f05d79ffeaa
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+I really think we need to do something like that.  Probably just set a
+flag in commit_creds and test later.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB5
-jfXy7/MUzVxeicSwnEj98yQFJ1i/BQIiJp+6MWhgpjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTAwMTM3MzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAG+FWw/TAeWs535scteMM
-JGG8Lx14zelXFPbXWNPcmqWUpO0vshOIJBNdo6fBkWFytZf8Zlut9FWA0H8kXuxbembfEoPUOwkA
-/R1GdiurFJYKiA1SgsRBrohmcoN78ir3//PSF/qx8Qzj7lTprVI5pH1avPr74h5Tpk4BLsE75uIK
-jGh+cSPv+GIoKcBmvAkwdErLDrILyECDYww+SbsC9cDEc69Hze93y825COJRonMxsLxjXz2Y0tyD
-V0AyCXH5WvwkwwlYttIGLnWjfBVA4r2iJkz5Fh5eJfJHS0ak014k1+H0UiI8Y0JMHgliXwpUjl7j
-17IbGbR/ZTjHn3jt4w==
---000000000000b94d0f05d79ffeaa--
+I was working on fixes that looked cleaner and I just recently realized
+that the test in fork is almost as bad.  The function has_capability can
+be used but the same kind of problems exist.
+
+I thought I was very quickly going to have patches to post but I need
+to redo everything now that I have noticed the issue in fork, so it will
+be a day or so.
+
+Eric
+
+
+> The change you propose above is similar to that, but is more limited and
+> non-invasive.  That looks good to me.
+>
+> However, I think you need to drop the negations of the return value from
+> security_capable().  security_capable() returns 0 or -EPERM, while
+> capable() returns a bool, in kernel/capability.c: ns_capable_common():
+>
+> 	capable = security_capable(current_cred(), ns, cap, opts);
+> 	if (capable == 0) {
+> 		current->flags |= PF_SUPERPRIV;
+> 		return true;
+> 	}
+> 	return false;
+>
+> Also, your change would result in this no longer setting PF_SUPERPRIV.
+> This may be fine, but you could want to document it.
+>
+> On a related note, this comment in security/commoncap.c needs an update:
+>
+>  * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+>  * and has_capability() functions.  That is, it has the reverse semantics:
+>  * cap_has_capability() returns 0 when a task has a capability, but the
+>  * kernel's capable() and has_capability() returns 1 for this case.
+>
+> cap_has_capability() doesn't actually exist, and perhaps the comment
+> should refer to cap_capable().
+>
+> Alexander
