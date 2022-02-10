@@ -2,112 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179724B1256
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 17:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C68C4B1288
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 17:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbiBJQJL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 11:09:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60888 "EHLO
+        id S240618AbiBJQS6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 11:18:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244016AbiBJQJL (ORCPT
+        with ESMTP id S239586AbiBJQS5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:09:11 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351D9CC6
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 08:09:12 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id t184so6926588vst.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 08:09:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TRwPb5Y+oBkP41XEt/JXjya2Xo5aicaCGmanVBPeNig=;
-        b=R5iXAIJyn5nNTBjra5nrJeFym34vS+blo4YIs4MhOiIkIBJUmO81I8FmYY5J3KdEk3
-         Ww1crq7HzjrrjAmQ5QZwPZWCRMeHX4fOIecZgF0PmxkHfi5AHsq8KlRk8N9IGnP54gN5
-         ++QGFkPEC1UCzJC99/P++84QyO/wxA6eaze1+OPL/zsoeRzNNPFK0uCZXBPtFVxg1WlX
-         vpeLsQa0tqTloY6Q/jfdecxSSEY7ANdvIxylQUnmAzz6xuffquxll7kkWEaYecDbM7sY
-         triYS7uch0DbgivVcmsjIwNFf/LliQITrZ801j0Bm90crKwt7BwhWdTMRjhp2mZcXsL1
-         O5jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TRwPb5Y+oBkP41XEt/JXjya2Xo5aicaCGmanVBPeNig=;
-        b=zTa95qR7EHxeePqwlry+0iVDSxZAnj1k+2OE3SrtoOrAZQ5W2tWoVv8ly69KyqbI7z
-         STYbgHQZZeeK8i6pRLeTMFFrpJ9R5pyN2jznb5cNYMkow3DfiyaKezn8/+O0y66pUvup
-         CmsvS7YsNqxlnhXG4s2Eg6VqYmfAWv2GS/FQFGVDylhs5TfD18wI3TrE3Ypc0k/gOM75
-         J6MTP7mLYUUAC0ch2rbzeYbvOvJPPSccDbqvaaakRBuZb5MxoRZ85bJVRITUxGztZMq+
-         Is5cGtgccPv+mVIJAq3mJ+8LLJ1mfu0w5D8iSCWyEDhvgrzttT1KaNYBPPu0q/7QG1qC
-         W9dA==
-X-Gm-Message-State: AOAM5304dJfuHQxBDXZDgArCoOlkAoVba84IXa9Y112my7AVOMrgJffa
-        UX3cHokSWte4KpLi0yxBJhwHrxhYrS8=
-X-Google-Smtp-Source: ABdhPJzsH3icICGSciPSQSVJKK92jv8ClWImxf2OVLy0hhVzzGUn7Exk0bvCancCG60t6HeG3Jg1sw==
-X-Received: by 2002:a67:7206:: with SMTP id n6mr2483822vsc.21.1644509351381;
-        Thu, 10 Feb 2022 08:09:11 -0800 (PST)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id t207sm693536vkb.45.2022.02.10.08.09.10
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:09:10 -0800 (PST)
-Received: by mail-vk1-f179.google.com with SMTP id 5so3343152vkq.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 08:09:10 -0800 (PST)
-X-Received: by 2002:a05:6122:507:: with SMTP id x7mr2742625vko.14.1644509350149;
- Thu, 10 Feb 2022 08:09:10 -0800 (PST)
+        Thu, 10 Feb 2022 11:18:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C37F98
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 08:18:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECDD161D2E
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 16:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9EFC004E1;
+        Thu, 10 Feb 2022 16:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644509937;
+        bh=mE84CfkELN0c9QW331zz8GqcAyg9pAb8AMkwuNJ/wAo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kBzfe+whiU8VkD4nnORvwXkJN8aVak97dv2TTsubkTsnNIVCNC/uzO1fIGIaoeQvp
+         7dG6zzaZ5tBMf7/WFGwormiSNi5N8C6pa+WdE2ZNNUek3CibRw7WDKQWyRgw6UOrnA
+         LIEjwM0WF2rVJOpf7kz8DwkQTKLpj591RU9ZKhnsd1aUJPPEIQUo8uGy5+qf/9fSIu
+         DWsoOLKMks7BYOFTJ/xF4asIUwLuiWkmxjoNVsfMc6kn8omtqzWuckOs51E5Tvvsdl
+         tvNbYEbcx4IprVlXrVSzphSQHcQdCOePTm8B6O1WgQ4d5HVYyyTlAq5lHtWzhqwXDl
+         9DWLNIrz1Ad9A==
+Date:   Thu, 10 Feb 2022 16:18:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YgU66pT3efqwwn7U@sirena.org.uk>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-7-broonie@kernel.org>
+ <49da0f58-7a20-e557-54c3-34bd7074f711@linuxfoundation.org>
+ <YgKQTLwW+ha5XNx8@sirena.org.uk>
+ <YgK4kKrSs6e9seG8@sirena.org.uk>
+ <e6d76104-b7f6-1588-d734-1a09c2990299@linuxfoundation.org>
+ <YgK9v7u+FcBTB1ur@sirena.org.uk>
+ <d41ec776-5bd0-438f-0ab3-6eb1891e7fdc@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220210003649.3120861-1-kuba@kernel.org>
-In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 10 Feb 2022 11:08:33 -0500
-X-Gmail-Original-Message-ID: <CA+FuTScN_Mu5qV1H3Wpo4o=5hTiakP0eD7NRuZse-4TsxubQyA@mail.gmail.com>
-Message-ID: <CA+FuTScN_Mu5qV1H3Wpo4o=5hTiakP0eD7NRuZse-4TsxubQyA@mail.gmail.com>
-Subject: Re: [PATCH net-next 00/11] net: ping6: support basic socket cmsgs
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, lorenzo@google.com,
-        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E6HfXQqv4dHcMRh/"
+Content-Disposition: inline
+In-Reply-To: <d41ec776-5bd0-438f-0ab3-6eb1891e7fdc@linuxfoundation.org>
+X-Cookie: Only God can make random selections.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 7:36 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Add support for common SOL_SOCKET cmsgs in ICMPv6 sockets.
-> Extend the cmsg tests to cover more cmsgs and socket types.
->
-> SOL_IPV6 cmsgs to follow.
->
-> Jakub Kicinski (11):
->   net: ping6: remove a pr_debug() statement
->   net: ping6: support packet timestamping
->   net: ping6: support setting socket options via cmsg
->   selftests: net: rename cmsg_so_mark
->   selftests: net: make cmsg_so_mark ready for more options
->   selftests: net: cmsg_sender: support icmp and raw sockets
->   selftests: net: cmsg_so_mark: test ICMP and RAW sockets
->   selftests: net: cmsg_so_mark: test with SO_MARK set by setsockopt
->   selftests: net: cmsg_sender: support setting SO_TXTIME
->   selftests: net: cmsg_sender: support Tx timestamping
->   selftests: net: test standard socket cmsgs across UDP and ICMP sockets
->
->  net/ipv6/ping.c                             |  14 +-
->  tools/testing/selftests/net/.gitignore      |   2 +-
->  tools/testing/selftests/net/Makefile        |   3 +-
->  tools/testing/selftests/net/cmsg_sender.c   | 380 ++++++++++++++++++++
->  tools/testing/selftests/net/cmsg_so_mark.c  |  67 ----
->  tools/testing/selftests/net/cmsg_so_mark.sh |  32 +-
->  tools/testing/selftests/net/cmsg_time.sh    |  83 +++++
->  7 files changed, 499 insertions(+), 82 deletions(-)
->  create mode 100644 tools/testing/selftests/net/cmsg_sender.c
->  delete mode 100644 tools/testing/selftests/net/cmsg_so_mark.c
->  create mode 100755 tools/testing/selftests/net/cmsg_time.sh
->
 
-Already merged, but since I was on the cc line: overall looks great to
-me too. Thanks Jakub.
+--E6HfXQqv4dHcMRh/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 10, 2022 at 08:12:44AM -0700, Shuah Khan wrote:
+> On 2/8/22 12:00 PM, Mark Brown wrote:
+
+> > Sure, there are lots of structured files in there like .rst ones which
+> > have SPDX headers but this is just a free format text file so it's not
+> > clear what if any format to use.
+
+> I think SPDX is applicable to all files free format or not. Are you seeing
+> any build warns during doc build on this?
+
+No, but I'm not exactly going out of my way to do anything with them.
+As far as I know these files don't get touched during builds, they just
+exist in the kernel tree.  If there is some way of generating warnings
+=66rom them there are quite a lot of other such files already there and
+doing so.  Like I say I can't find any evidence that anyone has looked
+at adding SPDX to these files, as far as I know the long term plan such
+as it is is to convert to other formats and I can't immediately think
+how one would do it otherwise in a way that works well.
+
+I'm sure the license compliance people would find adding annotations
+useful but working out how to do that sensibly for these files seems
+beyond the scope of this series.
+
+--E6HfXQqv4dHcMRh/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIFOuoACgkQJNaLcl1U
+h9A10Af9HttlrltFQQbCvNVwAOt31oIw1I7NKyD4F2QPCnbjirxGPF9FhoQCKxlh
+/4VLdkvuPNogggtjy9M2yHjmRN4rix4RlhVTd2L4gyPaixsNDSyn8Qu77x4jq6iP
+d2qsu+w8J8Fzg4bq7oRPMHPa/kEJXwq02NiVZMzcxHU0kuBue5qJEpU8HRGnRwDV
+3ZaWQOYl0zRojYCYWz4a/FGdPVGyhvA0Giet2iYRFJ4c4UHOReS65y7w49dzDsqZ
+sgK2ZbwLIpZGqiiCjC+hdYqbRHebJpMsJSQekJLKEYeI5Az1VktNXPnAzTOGiqYY
+34BmoPSY/6gjss5tsCgqNbkF8N/D9Q==
+=kc0B
+-----END PGP SIGNATURE-----
+
+--E6HfXQqv4dHcMRh/--
