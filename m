@@ -2,103 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E334B17A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 22:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350654B17E9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 23:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344679AbiBJVgj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 16:36:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49618 "EHLO
+        id S1344797AbiBJWFX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 17:05:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245668AbiBJVgi (ORCPT
+        with ESMTP id S237490AbiBJWFW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:36:38 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B5926C2
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 13:36:38 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id i62so9154363ioa.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 13:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jISv2sd7M+VGGWYHc7AMvBHEJbhlhhpLfU1b+J7OE3Y=;
-        b=S6tgd4/+f1shugVBQbimIlzTmJdvI5eGxO7+DNCwN8VGdq+Ha2GJzIi8pVTs+c5Wzk
-         6w9yMcwgebHlwWMiLmHqikiisn74QLoAis4KIifvJ1RCYO425QxGE89SXud3mIfljN5i
-         XSVrshuGp8f0avBqbxCdf/DonSTSZbYQAU5JI=
+        Thu, 10 Feb 2022 17:05:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F06F0F23
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 14:05:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644530721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CHki4NQGix/o6xHSAHI1vc1+xjLGEOdiSoRfFNXvPi8=;
+        b=dsxeNFvFO9A7htkrZD0jjsvIWGYxdrifS/TVOhqHhHdNHpRBVbpbgkeN9RVscEUmAyUw9P
+        X1REG2jMCeCSEjaoKH3HImzLA2mVZdpbzRpOgAvzCPLNV4Rx95h+mraVEd0urxXam9RSzA
+        U2FGsBvkHvwrF/EYu63XNFs3so/d3GM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-341-efhyKNYDMsGq_m9aZSXE1w-1; Thu, 10 Feb 2022 17:05:20 -0500
+X-MC-Unique: efhyKNYDMsGq_m9aZSXE1w-1
+Received: by mail-wr1-f71.google.com with SMTP id d13-20020adfa34d000000b001e33a1c56f3so3031747wrb.20
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 14:05:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jISv2sd7M+VGGWYHc7AMvBHEJbhlhhpLfU1b+J7OE3Y=;
-        b=JhAf01Gxpzt4rMkP1JW12KQcq5OaDAbjpI3PBetJYS/W6tj7fVlbPnbXXrrYJw5vxz
-         H4MgSFb8XDLNuP0yR3PsVySefWLI7wMNBp0da/hzdXbKeDehrbXLmdOecTOg1ni4xSKj
-         a7zBcBSlgzXeY9aKQcUieZOLFHEPO0EikHmp7L3RT7Jebc1gGa8eadoAFo0LjNkQNvjK
-         N4uGmEoOdIG47ky54w7GvHdWiN5w2LCYDkinsWiwdAZ4rgmnCP2tzKJ8mkz+BY28BGTv
-         HZ74gcIeJwYrSrjkH277Y1ypBAiovqeO/Jgwab0AeAk7e9e5XBXdpq9aLoSsaiuaQgxA
-         ZL5g==
-X-Gm-Message-State: AOAM532H0oS92mDxLJr3aS8J6wywBegvSkNwoC5w2xXA5fqsf6PUDafc
-        QvcchUBdFHndImc37Gp8DYtdqA==
-X-Google-Smtp-Source: ABdhPJz+VMFC+XfveESzcl1fhZU4kNFuh4neT8NKOj1ob1N95YkY58ueb4yAIvJJy7vbugALukp2fg==
-X-Received: by 2002:a02:7346:: with SMTP id a6mr5038215jae.299.1644528997801;
-        Thu, 10 Feb 2022 13:36:37 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id p11sm13281429iov.38.2022.02.10.13.36.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 13:36:37 -0800 (PST)
-Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
- missing headers
-To:     Kees Cook <keescook@chromium.org>,
-        Sherry Yang <sherry.yang@oracle.com>
-Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
-        christian@brauner.io, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220210203049.67249-1-sherry.yang@oracle.com>
- <202202101316.E38FEAFBCA@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2e3d93a2-51ae-cef1-b251-c28ecc386dad@linuxfoundation.org>
-Date:   Thu, 10 Feb 2022 14:36:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=CHki4NQGix/o6xHSAHI1vc1+xjLGEOdiSoRfFNXvPi8=;
+        b=ewXsgzmtdEdXa7MCUzq5qbHiEmvWVpp4IgwDu4/h5t+3HQp2HYKPXaXv5RRVDUGnRJ
+         y+pD61Xgw0hiSEK9y8KEZKbTUmICnip3K3N6QmfUBXCZT8rl23OrUUH+RB0m45iKsIlr
+         Sayko+hnk5AWG1n3ka2UWpO3fo8OBeUjuL+MlXLA0e28Bk1Or2Cb8A3ff/Uqv6dbhsed
+         fGbwxzrMHVXxp/n0RTM9pp8oV2Uaa78WNNioRs3vTx3VaOkZ76fBV4BWvwRdo36unjnX
+         v/9BaWKcguehCaNlv5xPJ6Jx1KrvT1wk7cirb1uKxsoYQam1SYXxMtJzxWofDG//NQ3a
+         lYCg==
+X-Gm-Message-State: AOAM531jKrAiTkvxWww1ILQhK9OeMCQQINOUH3pIcgezhot8eF3ZfPUd
+        YVVknvNzQ01SUlV178D4Ku/ICNzSWs9krqzbfQMYIvO1D1XJKd8KhiCoOsibopZXa1KSnwSNdlP
+        p8UIOgb2WAXuE93k2l5yaEsnGOhfq
+X-Received: by 2002:adf:ed8e:: with SMTP id c14mr5846576wro.688.1644530719448;
+        Thu, 10 Feb 2022 14:05:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCXcAZE5KzedQudWeRn9dls4oSg7GDgn8W191HvOGCvVb9GnBGrQNKTte3JgfdQBUZWUt2ZQ==
+X-Received: by 2002:adf:ed8e:: with SMTP id c14mr5846567wro.688.1644530719255;
+        Thu, 10 Feb 2022 14:05:19 -0800 (PST)
+Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id b25sm990992wmj.46.2022.02.10.14.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 14:05:18 -0800 (PST)
+Date:   Thu, 10 Feb 2022 23:05:16 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH net-next] ipv6: Reject routes configurations that specify
+ dsfield (tos)
+Message-ID: <20220210220516.GA31389@pc-4.home>
+References: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
+ <7bbeba35-17a7-f8ba-0587-4bb1c9b6721e@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <202202101316.E38FEAFBCA@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7bbeba35-17a7-f8ba-0587-4bb1c9b6721e@linuxfoundation.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/10/22 2:16 PM, Kees Cook wrote:
-> On Thu, Feb 10, 2022 at 12:30:49PM -0800, Sherry Yang wrote:
->> seccomp_bpf failed on tests 47 global.user_notification_filter_empty
->> and 48 global.user_notification_filter_empty_threaded when it's
->> tested on updated kernel but with old kernel headers. Because old
->> kernel headers don't have definition of macro __NR_clone3 which is
->> required for these two tests. Since under selftests/, we can install
->> headers once for all tests (the default INSTALL_HDR_PATH is
->> usr/include), fix it by adding usr/include to the list of directories
->> to be searched. Use "-isystem" to indicate it's a system directory as
->> the real kernel headers directories are.
->>
->> Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
+On Thu, Feb 10, 2022 at 11:23:20AM -0700, Shuah Khan wrote:
+> On 2/10/22 8:08 AM, Guillaume Nault wrote:
+> > The ->rtm_tos option is normally used to route packets based on both
+> > the destination address and the DS field. However it's ignored for
+> > IPv6 routes. Setting ->rtm_tos for IPv6 is thus invalid as the route
+> > is going to work only on the destination address anyway, so it won't
+> > behave as specified.
+> > 
+> > Suggested-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> > Signed-off-by: Guillaume Nault <gnault@redhat.com>
+> > ---
+> > The same problem exists for ->rtm_scope. I'm working only on ->rtm_tos
+> > here because IPv4 recently started to validate this option too (as part
+> > of the DSCP/ECN clarification effort).
+> > I'll give this patch some soak time, then send another one for
+> > rejecting ->rtm_scope in IPv6 routes if nobody complains.
+> > 
+> >   net/ipv6/route.c                         |  6 ++++++
+> >   tools/testing/selftests/net/fib_tests.sh | 13 +++++++++++++
+> >   2 files changed, 19 insertions(+)
+> > 
+> > diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> > index f4884cda13b9..dd98a11fbdb6 100644
+> > --- a/net/ipv6/route.c
+> > +++ b/net/ipv6/route.c
+> > @@ -5009,6 +5009,12 @@ static int rtm_to_fib6_config(struct sk_buff *skb, struct nlmsghdr *nlh,
+> >   	err = -EINVAL;
+> >   	rtm = nlmsg_data(nlh);
+> > +	if (rtm->rtm_tos) {
+> > +		NL_SET_ERR_MSG(extack,
+> > +			       "Invalid dsfield (tos): option not available for IPv6");
 > 
-> Thanks!
+> Is this an expected failure on ipv6, in which case should this test report
+> pass? Should it print "failed as expected" or is returning fail from errout
+> is what should happen?
+
+This is an expected failure. When ->rtm_tos is set, iproute2 fails with
+error code 2 and prints
+"Error: Invalid dsfield (tos): option not available for IPv6.".
+
+The selftest redirects stderr to /dev/null by default (unless -v is
+passed on the command line) and expects the command to fail and
+return 2. So the default output is just:
+
+IPv6 route with dsfield tests
+    TEST: Reject route with dsfield                                     [ OK ]
+
+Of course, on a kernel that accepts non-null ->rtm_tos, "[ OK ]"
+becomes "[FAIL]", and the the failed tests couter is incremented.
+
+> > +		goto errout;
+> > +	}
+> > +
+> >   	*cfg = (struct fib6_config){
+> >   		.fc_table = rtm->rtm_table,
+> >   		.fc_dst_len = rtm->rtm_dst_len,
+> > diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> > index bb73235976b3..e2690cc42da3 100755
+> > --- a/tools/testing/selftests/net/fib_tests.sh
+> > +++ b/tools/testing/selftests/net/fib_tests.sh
+> > @@ -988,12 +988,25 @@ ipv6_rt_replace()
+> >   	ipv6_rt_replace_mpath
+> >   }
+> > +ipv6_rt_dsfield()
+> > +{
+> > +	echo
+> > +	echo "IPv6 route with dsfield tests"
+> > +
+> > +	run_cmd "$IP -6 route flush 2001:db8:102::/64"
+> > +
+> > +	# IPv6 doesn't support routing based on dsfield
+> > +	run_cmd "$IP -6 route add 2001:db8:102::/64 dsfield 0x04 via 2001:db8:101::2"
+> > +	log_test $? 2 "Reject route with dsfield"
+> > +}
+> > +
+> >   ipv6_route_test()
+> >   {
+> >   	route_setup
+> >   	ipv6_rt_add
+> >   	ipv6_rt_replace
+> > +	ipv6_rt_dsfield
+> >   	route_cleanup
+> >   }
+> > 
 > 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> With the above comment addressed or explained.
+> 
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> thanks,
+> -- Shuah
 > 
 
-Thank you. I will queue this up for rc5.
-
-thanks,
--- Shuah
