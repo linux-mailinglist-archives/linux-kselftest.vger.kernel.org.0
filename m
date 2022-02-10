@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB7F4B1474
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 18:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F354A4B1479
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 18:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245272AbiBJRnN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 12:43:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49206 "EHLO
+        id S245284AbiBJRnX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 12:43:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245269AbiBJRnM (ORCPT
+        with ESMTP id S245288AbiBJRnW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:43:12 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F435192
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 09:43:13 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id l9so841761plg.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 09:43:13 -0800 (PST)
+        Thu, 10 Feb 2022 12:43:22 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1602606
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 09:43:21 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so9288287pja.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 09:43:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=RfVaSD5Jbl1UCapkvwTHkbWqS8zVw2iOHKCAwa9H0bo=;
-        b=mPRxMXX+y3f90qS/gIUi3DqSuIu88IQgUnYn/CtI8oUWe8L9TD1H0WXBI064iWvs9x
-         0sURffRFCyyd9vSBECvmcKMtKeYwQRctxSOoQfnBkzNdynfh7tnSgBmffK6bbr4gp+/c
-         kq58WyJkxkzQnHmbGDTtGDYBGOvGAN2PIO5RM=
+        bh=JWTciHa8tMED3FXA+Ogdt6wVZFyYQZwP+ShqeFRit+I=;
+        b=Ck3LZGNu0+N7P6xsV9DDei7cJLvODVs1BnOzvk0bszpoiLl6jJyJGZ2+30GWFFu9jz
+         5/O7MdvbVHxjTB0K8wZMEsvKndsWprLvwjfAeMdDhiGY/8VADLXqmH/vR5HlpstEvzMm
+         4oRjk2qpDWkgSUR+DXT4SyThiJjLHLqZFdUqY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=RfVaSD5Jbl1UCapkvwTHkbWqS8zVw2iOHKCAwa9H0bo=;
-        b=oy4+CluqzqqgAZLvseqCvrKT8ycSslBU66IFzY7ktmlR/bOr7+DDa4O339FGDUO7wE
-         AokM3mW/grnyrfOA1PHtvieX3l6nsuLqOmvjv0dKXw5J4o0k9DtAltC95bjbYAIGDbV0
-         NJQcuWo/af1kzuy1ysFRQpkFhBPgGQTT0h8+++lSIymtPSIruuiECFl/7998tVRwHbzF
-         /YSTCJu+Epb2J3wPt2ZveYHB85tVA3xM1NsfIfqjWvpVUnz56CPlgscDHZppduT5Hbfm
-         zJw/MYLD/6st3S/k2L+7d4w4/Gvl7oi472C/dlGvi4i6jSp20dj04El8dhbW8d0FSBRL
-         539Q==
-X-Gm-Message-State: AOAM532tDe3hcwvQCvm69q7ZjT7paR2or81czxC4QurAIclNJh5dSCu8
-        7yyz69QjAQzkBC2nEhOOPUBeWw==
-X-Google-Smtp-Source: ABdhPJyEmB34sogZs6Rj+2bZzHJh+ef5Kc026LQokIFwesK8wdexB1XeGvWkY1tS4FM6JSfJeUjC1g==
-X-Received: by 2002:a17:902:b90a:: with SMTP id bf10mr8691668plb.36.1644514993117;
-        Thu, 10 Feb 2022 09:43:13 -0800 (PST)
+        bh=JWTciHa8tMED3FXA+Ogdt6wVZFyYQZwP+ShqeFRit+I=;
+        b=6WBC4ZlLsO1TvzdzG5hkEAplK69TwElRyg7jHdx+tg/cS4rc2bJJXS4zcP0BSBE5/s
+         vD4GO6Yxcq43+CijP50tKZUKdnVMT8UDYN9sGjhFvqTQexAIcjWBOxb+gnkvisyA7eit
+         m1auptSCvQj9jkz2bqhn7r6PAmVgwnHopiPQnNoDi5Sy5txQ2aXer8L/3opmU8/7Nn5f
+         R9BAE1tePUFBtRS2QlE7AiFZJkDSI2EHI9eBMOZ8F68UwLiUfOqRhBYiv7b0YKdUuwdN
+         rtBGdadMh/Oe724ZlE1sHDOQFD7d+ZKbIBZ8F2bki54Qly0bZgHMBBWzMsUfZDnyne8Q
+         IhJg==
+X-Gm-Message-State: AOAM532i35IIH5UbWIW7SA4ialMwpKPDJR5EIRJRNWn20adZswKhXJ15
+        AHLUkSeH5YrnyZB92KskOWg7MQ==
+X-Google-Smtp-Source: ABdhPJwfu2aJvaqWXY1aRdvOiBamWd2wXwn64hpgV8EqWsUme9kFg4luF0ZxCPobzkh3kcfPGwXuPw==
+X-Received: by 2002:a17:90b:4c52:: with SMTP id np18mr3975968pjb.49.1644515000573;
+        Thu, 10 Feb 2022 09:43:20 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 204sm24336775pfu.91.2022.02.10.09.43.12
+        by smtp.gmail.com with ESMTPSA id q16sm24645520pfu.194.2022.02.10.09.43.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 09:43:12 -0800 (PST)
-Date:   Thu, 10 Feb 2022 09:43:12 -0800
+        Thu, 10 Feb 2022 09:43:20 -0800 (PST)
+Date:   Thu, 10 Feb 2022 09:43:19 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     frowand.list@gmail.com
 Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
@@ -56,18 +56,18 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
         kernelci@groups.io, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] Documentation: dev-tools: clarify KTAP
- specification wording
-Message-ID: <202202100942.A8206C0@keescook>
+Subject: Re: [PATCH v4 2/2] Documentation: dev-tools: fix KTAP specification
+ build warnings
+Message-ID: <202202100943.3E8C5B4B@keescook>
 References: <20220210023519.3221051-1-frowand.list@gmail.com>
- <20220210023519.3221051-2-frowand.list@gmail.com>
+ <20220210023519.3221051-3-frowand.list@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210023519.3221051-2-frowand.list@gmail.com>
+In-Reply-To: <20220210023519.3221051-3-frowand.list@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,23 +75,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 08:35:18PM -0600, frowand.list@gmail.com wrote:
+On Wed, Feb 09, 2022 at 08:35:19PM -0600, frowand.list@gmail.com wrote:
 > From: Frank Rowand <frank.rowand@sony.com>
 > 
-> Add the spec version to the title line.
+> Convert "Major differences between TAP and KTAP" from a bullet list
+> to a table.  The bullet list was being formatted as a single
+> paragraph.
 > 
-> Explain likely source of "Unknown lines".
+> Add missing required argument in code-block directives.
 > 
-> "Unknown lines" in nested tests are optionally indented.
+> ---
 > 
-> Add "Unknown lines" items to differences between TAP & KTAP list
+> Table conversion suggested by Shuah.
 > 
-> Reviewed-by: Tim Bird <Tim.Bird@sony.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Patch 2/2 not previously reviewed, so Reviewed-by tags not provided.
+> 
+> Changes since version 3
+>   - Add this commit (patch 2/2) to the series
+> 
 > Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-
-Thanks for nailing this down!
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
