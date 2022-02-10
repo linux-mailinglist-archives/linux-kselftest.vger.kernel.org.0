@@ -2,101 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892774B0292
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 02:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB05A4B0289
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 02:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiBJB4f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S233197AbiBJB4f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 9 Feb 2022 20:56:35 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60152 "EHLO
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbiBJB4D (ORCPT
+        with ESMTP id S233188AbiBJB4B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:56:03 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C062BB02
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 17:48:33 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id d15-20020a17090a564f00b001b937f4ae2fso1702458pji.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Feb 2022 17:48:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b6mmBz6t35yik3VhkFP6A7kQ3O5P30JK27hLe7Q0ulY=;
-        b=ZccprKSK//ZALRudlRMNgZptyRngyNB9lJ/sm2zd4oP9RBebLTVMW9vHvyX1eW3BC5
-         mM/qJCf1fl+7+9w46dPuJEaWVmE3saS54TjVbn79uFU4zWRFsHgJhXdLjU3XmyeeDu4b
-         3ygVwvCUSBQySyY7WDYSATaazDuCkKfMy+GM6mKW954RlioSqY6vcGaBMOD96wI5kikb
-         SwiExWokQgdlsTC9TE5ANM0oVTgl1hqnOZ7TE8iF9gFs6Ao9TohKkASi4G2TLkfGOsjW
-         ABLtYC6Yg02rd/APMgVxMf9zyePNjJkriPOc2f5V7iToAsf1ImNV/F4m8rpQPWKGxame
-         bdzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b6mmBz6t35yik3VhkFP6A7kQ3O5P30JK27hLe7Q0ulY=;
-        b=nrxGruhcjnGde0UcsD8vhDjHaMWpmfYocYSQjh84nVKOw9icxKpGApfktxPQwoYUuR
-         vrDnH2UV0IDVSKLhxzaSEWu29YiHKOeU1ZlOVHo1qlz0qxgeesy0IsxZGKAaUJsiry9g
-         g1FPhM3bkjM6q5bOQDMaIthSoZB11NBj2s23El3dWK2TtoNMiaJBJ8RpPC0sboqvLkhB
-         ckKJz3Wc58SGdS5butWXUi42MBPb6CsAjjZPVGwLoJgeocWEYbsKjC4cDk0aVaeTBNNZ
-         eUgGYtX9foDYP3WxrUP/iQiyooXjqQPDHDw5y68Kn0csYR8/33/a9QSdouF7WFrdwHF4
-         LIKg==
-X-Gm-Message-State: AOAM533yr6cwSM8tv5qZTSx/O8MrB4s52FPTtUOmDSO+YJ3JwjpzoDiN
-        II7GsPieseIDOG5amKJ9UGnLOOBX7GeY8jyBCgg7ZW3uQZc=
-X-Google-Smtp-Source: ABdhPJyOTmPbdqCyIBqYP1ntx6P9eXy1egrm7sfhmc+Kj5LYoGa53VQDBGCTYPrbiC/MJFttNJATWAnQFUw0PV3Fw9w=
-X-Received: by 2002:a05:6122:c83:: with SMTP id ba3mr1748326vkb.27.1644453870493;
- Wed, 09 Feb 2022 16:44:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20220210003649.3120861-1-kuba@kernel.org> <20220210003649.3120861-3-kuba@kernel.org>
-In-Reply-To: <20220210003649.3120861-3-kuba@kernel.org>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Wed, 9 Feb 2022 16:44:18 -0800
-Message-ID: <CANP3RGfqsFNOvtGk6e_3sia0esEknNr2gT-PmcbhRV+S2MEaUA@mail.gmail.com>
-Subject: Re: [PATCH net-next 02/11] net: ping6: support packet timestamping
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Willem Bruijn <willemb@google.com>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 20:56:01 -0500
+X-Greylist: delayed 1199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 17:43:16 PST
+Received: from mother.openwall.net (mother.openwall.net [195.42.179.200])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2998F2B69F
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 17:43:14 -0800 (PST)
+Received: (qmail 7392 invoked from network); 10 Feb 2022 01:16:33 -0000
+Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
+  by localhost with SMTP; 10 Feb 2022 01:16:33 -0000
+Received: by pvt.openwall.com (Postfix, from userid 503)
+        id 0E08DAB88C; Thu, 10 Feb 2022 02:14:05 +0100 (CET)
+Date:   Thu, 10 Feb 2022 02:14:05 +0100
+From:   Solar Designer <solar@openwall.com>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>
+Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check against new user credentials
+Message-ID: <20220210011405.GA17076@openwall.com>
+References: <20220207121800.5079-1-mkoutny@suse.com> <20220207121800.5079-2-mkoutny@suse.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220207121800.5079-2-mkoutny@suse.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 4:36 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Nothing prevents the user from requesting timestamping
-> on ping6 sockets, yet timestamps are not going to be reported.
-> Plumb the flags through.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  net/ipv6/ping.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-> index 86a72f7a61cf..3228ccd8abf1 100644
-> --- a/net/ipv6/ping.c
-> +++ b/net/ipv6/ping.c
-> @@ -113,6 +113,7 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->
->         ipcm6_init_sk(&ipc6, np);
->         ipc6.sockc.mark = sk->sk_mark;
-> +       ipc6.sockc.tsflags = sk->sk_tsflags;
->         fl6.flowlabel = ip6_make_flowinfo(ipc6.tclass, fl6.flowlabel);
->
->         dst = ip6_sk_dst_lookup_flow(sk, &fl6, daddr, false);
-> --
-> 2.34.1
->
+Hi Michal,
 
-probably deserves a fixes tag?
-otherwise looks fine to me
+On Mon, Feb 07, 2022 at 01:17:55PM +0100, Michal Koutný wrote:
+> The check is currently against the current->cred but since those are
+> going to change and we want to check RLIMIT_NPROC condition after the
+> switch, supply the capability check with the new cred.
+> But since we're checking new_user being INIT_USER any new cred's
+> capability-based allowance may be redundant when the check fails and the
+> alternative solution would be revert of the commit 2863643fb8b9
+> ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+> 
+> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+> 
+> Cc: Solar Designer <solar@openwall.com>
+> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>  kernel/sys.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sys.c b/kernel/sys.c
+> index 8ea20912103a..48c90dcceff3 100644
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+> @@ -481,7 +481,8 @@ static int set_user(struct cred *new)
+>  	 */
+>  	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
+>  			new_user != INIT_USER &&
+> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+> +			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
+> +			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
+>  		current->flags |= PF_NPROC_EXCEEDED;
+>  	else
+>  		current->flags &= ~PF_NPROC_EXCEEDED;
+
+Thank you for working on this and CC'ing me on it.  This is related to
+the discussion Christian and I had in September:
+
+https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
+
+Christian was going to revert 2863643fb8b9, but apparently that never
+happened.  Back then, I also suggested:
+
+"Alternatively, we could postpone the set_user() calls until we're
+running with the new user's capabilities, but that's an invasive change
+that's likely to create its own issues."
+
+The change you propose above is similar to that, but is more limited and
+non-invasive.  That looks good to me.
+
+However, I think you need to drop the negations of the return value from
+security_capable().  security_capable() returns 0 or -EPERM, while
+capable() returns a bool, in kernel/capability.c: ns_capable_common():
+
+	capable = security_capable(current_cred(), ns, cap, opts);
+	if (capable == 0) {
+		current->flags |= PF_SUPERPRIV;
+		return true;
+	}
+	return false;
+
+Also, your change would result in this no longer setting PF_SUPERPRIV.
+This may be fine, but you could want to document it.
+
+On a related note, this comment in security/commoncap.c needs an update:
+
+ * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+ * and has_capability() functions.  That is, it has the reverse semantics:
+ * cap_has_capability() returns 0 when a task has a capability, but the
+ * kernel's capable() and has_capability() returns 1 for this case.
+
+cap_has_capability() doesn't actually exist, and perhaps the comment
+should refer to cap_capable().
+
+Alexander
