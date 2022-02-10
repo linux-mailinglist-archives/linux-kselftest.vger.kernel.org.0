@@ -2,71 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7BB4B14D8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 19:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41F04B14FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 19:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245485AbiBJSCB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 13:02:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60160 "EHLO
+        id S245570AbiBJSLI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 13:11:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245473AbiBJSCA (ORCPT
+        with ESMTP id S229462AbiBJSLH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:02:00 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6E5109E
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 10:02:01 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id c188so8335782iof.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 10:02:01 -0800 (PST)
+        Thu, 10 Feb 2022 13:11:07 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B6A1169;
+        Thu, 10 Feb 2022 10:11:08 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso6410400pjg.0;
+        Thu, 10 Feb 2022 10:11:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YepB74YlwePIkAaR4jtJTCENwnjxuVeuYeoAzgmVff4=;
-        b=bXMJH/qYLpSGVC+53Dxuy73NFXsj3RTkKnyj0yhH2RrVLo0bm5WgGOa67Qrf9N+Siw
-         s7PWaw8C1karEO3Pz9b6Ti5PK/1HjVIZ//eqWs8JWlJ/DJByvN23Ycp2EG4vUz7o8jYr
-         JmkKYdMJNUozDO9Z/c9yNb5b1NVKBhWVatPxY=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=k6N2s4V8eQa/iy+jkMeryWb488ArbG76+kT+N6TtkqA=;
+        b=ogRQEud2IPc+YtyoYtBXU6MZVpBWOiQQihqzXux/znY+17Liz8L5e1v0Z8oGGIyNSy
+         TaAEfPtMmxTLMucSVs3agGFvhb+bWwBq8J8StUPxez11GAuRjrkK4SnqPZbMHmFmrNLo
+         vMii+ulIuKrNtdcr2MK8jKGl1tDQmBq/4pMB8sdgyhLbuv4//8apQassnmLm7/w0UFSe
+         zHu4GZ2NDQEgUd0GiQwFqKeHE7frPjsVcDB0uURBzTmN7plqfBT810sV5BSPwWDc9RpX
+         31HAP/Y/7+jt8B0lwc8ghGJYYPZ8a6XRbouKHztWO0VMgafb6b10PpF4BORZffNe+b1t
+         uk6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=YepB74YlwePIkAaR4jtJTCENwnjxuVeuYeoAzgmVff4=;
-        b=hmpkAj6WZ+nBac3v+znFZA7sxwdmOwbjr6p0yyzPAWDeNu8QUHPabNsktMf0sJx5Ie
-         rsO0n01mveOoHIQm5HPbzySmQ4Zyno8Yz+1qpe26JStNhzVWa99cd+26LDcTEqkqJuqT
-         W7M0X8Bq0ZrqyzeIsLfc7K7+XRN5EYvz2127NXT+fWCnwpsjOEcjwFBJq6mQ80me33fW
-         K8h9RruiLFLFZpoqUc6B9iMRXZDLPSgof1r3qqiGBRQxdPayGDPwe0Ev8OXZ/yaz5Zum
-         BL0w3n1VIUc1NupBQ2olSxs2vlf0yNH8hbP5V3J5GLWdrDLdz6ujkcY/FqsnekFRanr+
-         vM+Q==
-X-Gm-Message-State: AOAM5311nA39Q10X0MaIYqNLVR6ATZtw15y1yHxHxyC+wlalOBvX2Dxf
-        SpwHKTvNhYkcJ15zl0VCyZoB0g==
-X-Google-Smtp-Source: ABdhPJwEuUFKMBsXzMtvsJ6U3tEwNExOh8IkrPx4WikpPszvu5J46DYU+pTWMhwP4AnfJ2XywHgyWw==
-X-Received: by 2002:a05:6638:2050:: with SMTP id t16mr4618952jaj.144.1644516121336;
-        Thu, 10 Feb 2022 10:02:01 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id p16sm8482826ilm.85.2022.02.10.10.02.00
+        bh=k6N2s4V8eQa/iy+jkMeryWb488ArbG76+kT+N6TtkqA=;
+        b=hEU3B/G1KHzz+ZID5lzoYObTLl9dsJoJqjNrK9KePKNYiBWflEouufx60E3Y0kH1+P
+         0VGBgrSXWlx1jLCMSjHuO9n7uynpVLqV5STcRPKGXmlgijR5y59V7Tt0fy7PxjEe9MMo
+         ucAOiHouJNTGx5iQ975kx4AVhMN+v/0tgpDoWximxRLPEDO2XZaOiscGvrMagMXxBWqj
+         YRGJIyODwA4YFYgSzxot6x5Km14YG15ZMxP+ScudPiFeyrh4I7Vcp/2vYFQGu2EbV4c+
+         ubVna4/Usj/DrfcsFTpF/hYIbil9haFEivZBHnZLP/YbyPoBtksdGu46owNCgK0DUMtL
+         hXdw==
+X-Gm-Message-State: AOAM531f6H+TwOYlbprTGrz3awsvMVSdr4HV9Sil22/yixtyW8oI/gRm
+        8aea3U+3YpYwRa4VIoIDUUPQMoi4Il4=
+X-Google-Smtp-Source: ABdhPJyWrMOOnbaY/SnbYOfCEoXt8t83gN7NQrBD90Kd4V1W4IGy9iO/coNMcPsiro812zf7R/GE8A==
+X-Received: by 2002:a17:903:2309:: with SMTP id d9mr4199037plh.16.1644516668179;
+        Thu, 10 Feb 2022 10:11:08 -0800 (PST)
+Received: from [10.20.86.120] ([72.164.175.30])
+        by smtp.googlemail.com with ESMTPSA id a14sm1306846pgw.27.2022.02.10.10.11.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 10:02:01 -0800 (PST)
-Subject: Re: [PATCH V2] selftests: kvm: Remove absent target file
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220210172352.1317554-1-usama.anjum@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
-Date:   Thu, 10 Feb 2022 11:02:00 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 10 Feb 2022 10:11:07 -0800 (PST)
+Message-ID: <6952fd74-0202-47ed-a0f8-4b776bdf3ff2@gmail.com>
+Date:   Thu, 10 Feb 2022 10:11:05 -0800
 MIME-Version: 1.0
-In-Reply-To: <20220210172352.1317554-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH net-next] ipv6: Reject routes configurations that specify
+ dsfield (tos)
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+To:     Guillaume Nault <gnault@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,48 +80,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/10/22 10:23 AM, Muhammad Usama Anjum wrote:
-> There is no vmx_pi_mmio_test file. Remove it to get rid of error while
-> creation of selftest archive:
+On 2/10/22 7:08 AM, Guillaume Nault wrote:
+> The ->rtm_tos option is normally used to route packets based on both
+> the destination address and the DS field. However it's ignored for
+> IPv6 routes. Setting ->rtm_tos for IPv6 is thus invalid as the route
+> is going to work only on the destination address anyway, so it won't
+> behave as specified.
 > 
-> rsync: [sender] link_stat "/kselftest/kvm/x86_64/vmx_pi_mmio_test" failed: No such file or directory (2)
-> rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
-> 
-> Fixes: 6a58150859fd ("selftest: KVM: Add intra host migration tests")
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Suggested-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> Signed-off-by: Guillaume Nault <gnault@redhat.com>
 > ---
-> Changes in V2:
-> Edited the subject line
-> ---
->   tools/testing/selftests/kvm/Makefile | 1 -
->   1 file changed, 1 deletion(-)
+> The same problem exists for ->rtm_scope. I'm working only on ->rtm_tos
+> here because IPv4 recently started to validate this option too (as part
+> of the DSCP/ECN clarification effort).
+> I'll give this patch some soak time, then send another one for
+> rejecting ->rtm_scope in IPv6 routes if nobody complains.
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index d61286208e242..b970397f725c7 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -82,7 +82,6 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
->   TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_msrs_test
->   TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
->   TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
-> -TEST_GEN_PROGS_x86_64 += x86_64/vmx_pi_mmio_test
->   TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
->   TEST_GEN_PROGS_x86_64 += x86_64/amx_test
->   TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
+>  net/ipv6/route.c                         |  6 ++++++
+>  tools/testing/selftests/net/fib_tests.sh | 13 +++++++++++++
+>  2 files changed, 19 insertions(+)
 > 
 
-I am fine with the change itself. For this patch:
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-However, are we missing a vmx_pi_mmio_test and that test needs to be added.
 
-Just in case the test didn't make it into the 6a58150859fd and the intent
-was to add it - hence the Makefile addition? This can be addressed in
-another patch. Just want to make sure we aren't missing a test.
-
-Peter Gonda can confirm perhaps?
-
-thanks,
--- Shuah
