@@ -2,67 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CED4B02CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 03:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933E34B02D3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 03:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbiBJCAU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Feb 2022 21:00:20 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33792 "EHLO
+        id S233784AbiBJB73 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Feb 2022 20:59:29 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiBJB7X (ORCPT
+        with ESMTP id S233651AbiBJB7Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:59:23 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32DF28CFB
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 17:36:12 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u16so1825445pfg.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Feb 2022 17:36:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
-        b=SAzNK2jOoju8Kh3tfB4nt1GBgAe2hFe+vZ/ZEcNq9+YseZkdv2Fs4ANx/8Njn2iHYw
-         VgImwzzPwpqjZer2EaG3EFoHGPc7ZAG0lVoML//dwhD2BjDTxWacHXbShQifoKV37Z0B
-         VlqmbomQWjifurbhavxvDrNbK8H8R7Dm5ffKg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
-        b=ZWDvjTwayyAb/AQrmgqV4d0+/ihKoL7XC8Ozv4jM2lMj/5E75DvB0Ben1u1FEDLkur
-         cQrBzTknkYel8woCbJvcO2leSvld4Dn4eCzDOOXF5yS0ua0i9sWSNnO2Xb6qETHBdTS9
-         lAiUU7JAPGsNFvQKa3Ij/EiqNfo9ceUd8iXKqqpwr51mAXtd4bkeDige3qg5rCRirZ5X
-         kmEkuGhrY6GeGZToJMeRxdv0NV3yVO8HrJ6k1X0a5FxEq7iCkZvLumqY+XTEvx12zIM4
-         JFw0n2uowXuUVIzR6uWXCiyQbvc4f3jcqR8CeHwdNqdN+6nOPJMM3aO4Mj/pCvrIdR6q
-         FqVQ==
-X-Gm-Message-State: AOAM532iLr/CSFWFV8m+7i1Ncd+WUX+JfMUmOplnQ4czm/0oe1w9CS8g
-        kt3UfsnztebIUIj8XSv3fFwUIhpPckTADw==
-X-Google-Smtp-Source: ABdhPJx1Wh7HpA/HF6B4EOxrjALlX3FDTxDRKrQ1wIzg5zjIWbRCBbc3R4Vri25XuSFgtzE6GDqv0A==
-X-Received: by 2002:a63:cf05:: with SMTP id j5mr4054620pgg.544.1644453146584;
-        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id lr7sm8382805pjb.42.2022.02.09.16.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jeff Dike <jdike@addtoit.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-um@lists.infradead.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] um: Enable FORTIFY_SOURCE
-Date:   Wed,  9 Feb 2022 16:32:24 -0800
-Message-Id: <20220210003224.773957-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 9 Feb 2022 20:59:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E02AB;
+        Wed,  9 Feb 2022 17:56:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B47F616D2;
+        Thu, 10 Feb 2022 00:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596DFC340E7;
+        Thu, 10 Feb 2022 00:36:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644453413;
+        bh=Nqx9UqIwQAq/YChOaq2hfeu2SItd1xNMbZqtwE17fJ4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RiTwFsZL3FlFooeHoNRq56XjCIfLAFSm2C2s1/QcaO1uKDSPnSLPVT/Hhp/kugU1M
+         9rSMIoM84F6e7PrBinSbU7RLpyuMEifqukUo7WS+6U5msXXN0pz53RH/A7GvQZWxyQ
+         7ChvMvCACs2ebgrOn2GXEBF2B+pPbQC7UGcThDB/1+5fuBlytrPpEwz/rShq9X8UBz
+         +6Odg+tf8UKWeQqw2r0kYp9jwK8YMMtdsBrWn8MXbYEOoiP9b+ugftN4+w8h7ZuVCX
+         CT7G+/w/Y4DHYw8sg9nA1JdlaUehlC2s0Z/EzBKNePazfvNSGDjVS3w0BxCDbgLLIT
+         PapWjsBJ6nvBg==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
+        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 00/11] net: ping6: support basic socket cmsgs
+Date:   Wed,  9 Feb 2022 16:36:38 -0800
+Message-Id: <20220210003649.3120861-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=965; h=from:subject; bh=8p9qV7nCUTAMY0NIWHaERW8Fzn7HqVa7AIuy3N51Nyw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiBF0Xl67ZsAL362Vl2CFFWCSHpRPRaKgRKXg0mWx7 ZMVp4xqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgRdFwAKCRCJcvTf3G3AJgidD/ 0ZTEYhKrilkWGasprf9ZIJxdPF1kViXr2K/C6/H7qvfbMkbD5Fg2txX23xhIDwLbpy5MpK6IDxNR2P MaUrUJnHJl0ZNl2PNf2uHwC/kjyyYsTvIHWJcdwDIBceeGQ7ub0Oq7j2vm/ldaha1PEymXloMWDwHz /3fj9YBHe5CKyezHu0V0lUx0hm4jNUDN3meuyyr3VAQ7sclsdreGSU+Ci0IhyaH6KuOlPtxmK+GGXQ r8lfsQiPVm5BJl8l+52BHMXlCQNhs4Nz6qv0Woxb9YML5Dv62TkyeGp/lWSPgPJFsSnnm3oycROEtr YxP3tKf0eBqiYZ/BmpO+svULC2RCO1ZBCuZ3Dl7hWtoC0hj6p2l8MwjH/P/VJDj8Qi4IjNAg8Pk1ou Zh7Fye8CDaK8vxMKBKB0HQ+OmgTnf4CM3eYhEvTQgnzhmnsiHS5rsAhfH0pgDMyp8F+WXGDc9CPYaF dBEixq9z4prhX1xhEZ9oZosu4MH0rUOwjFzaLuqJkSlfpIw8limtRgTkrtVFa4NLOjQqLZ1MAkRx5C B4ipNCCEMFhMf21hLLc54+iBrfAutksrvAhvYx8YLdOX/6nn3doqRqbjRwq38WqJsIzWgWeDv1veIK JO/xEQBVhQRO5nJ3XymXJQv5p2F7scM+73OoDDW+Hg+88tMp6ynYwykvph0A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,37 +54,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Enable FORTIFY_SOURCE so running Kunit tests can test fortified
-functions.
+Add support for common SOL_SOCKET cmsgs in ICMPv6 sockets.
+Extend the cmsg tests to cover more cmsgs and socket types.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/um/Kconfig              | 1 +
- arch/um/os-Linux/user_syms.c | 1 +
- 2 files changed, 2 insertions(+)
+SOL_IPV6 cmsgs to follow.
 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 4d398b80aea8..746e661395d7 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -9,6 +9,7 @@ config UML
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
-+	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
-index 715594fe5719..d9845b5219ce 100644
---- a/arch/um/os-Linux/user_syms.c
-+++ b/arch/um/os-Linux/user_syms.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define __NO_FORTIFY
- #include <linux/types.h>
- #include <linux/module.h>
- 
+Jakub Kicinski (11):
+  net: ping6: remove a pr_debug() statement
+  net: ping6: support packet timestamping
+  net: ping6: support setting socket options via cmsg
+  selftests: net: rename cmsg_so_mark
+  selftests: net: make cmsg_so_mark ready for more options
+  selftests: net: cmsg_sender: support icmp and raw sockets
+  selftests: net: cmsg_so_mark: test ICMP and RAW sockets
+  selftests: net: cmsg_so_mark: test with SO_MARK set by setsockopt
+  selftests: net: cmsg_sender: support setting SO_TXTIME
+  selftests: net: cmsg_sender: support Tx timestamping
+  selftests: net: test standard socket cmsgs across UDP and ICMP sockets
+
+ net/ipv6/ping.c                             |  14 +-
+ tools/testing/selftests/net/.gitignore      |   2 +-
+ tools/testing/selftests/net/Makefile        |   3 +-
+ tools/testing/selftests/net/cmsg_sender.c   | 380 ++++++++++++++++++++
+ tools/testing/selftests/net/cmsg_so_mark.c  |  67 ----
+ tools/testing/selftests/net/cmsg_so_mark.sh |  32 +-
+ tools/testing/selftests/net/cmsg_time.sh    |  83 +++++
+ 7 files changed, 499 insertions(+), 82 deletions(-)
+ create mode 100644 tools/testing/selftests/net/cmsg_sender.c
+ delete mode 100644 tools/testing/selftests/net/cmsg_so_mark.c
+ create mode 100755 tools/testing/selftests/net/cmsg_time.sh
+
 -- 
-2.30.2
+2.34.1
 
