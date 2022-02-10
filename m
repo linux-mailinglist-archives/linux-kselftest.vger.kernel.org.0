@@ -2,145 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA794B1801
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 23:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AF34B1814
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 23:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344871AbiBJWPg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 17:15:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47312 "EHLO
+        id S1344803AbiBJWXw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 17:23:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344866AbiBJWPf (ORCPT
+        with ESMTP id S1344917AbiBJWXv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:15:35 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288411145
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 14:15:36 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id 9so9286084iou.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 14:15:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EOJCZlWtnaUAqUSbnSeiKKhH2IwojqmUtfeSmw0q78U=;
-        b=Q/d0wrOm6M783QMRxF1jZN6EmO/xV3HHfO8yZWm7f7ij/lYlpuYtLHZ5W48ZnSl5tr
-         IHAzRq5pbzGRx0H5ypA9TXk5ZOvmT35OVOzbKc1n5hcTRf0jPUkzbV/UoPtBhuuPrSJM
-         zmheiR0YJe/Ny21GHTsIKkOJRJHcnW2CjGnB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EOJCZlWtnaUAqUSbnSeiKKhH2IwojqmUtfeSmw0q78U=;
-        b=fku+5P4Ibns7xBvPhOiJk4q5qs93gzk2ZHdWhYHY0bcZDhpzBlCoT9r6OKFZ65Yh6k
-         3GNmtdyMRPOfn/SzZ1t6MNjkVJ7dIaZIlI//iplifZD6VScR9KRYOhap8eWHirp/vCXJ
-         P0FFhOkLbV6dANzYaKVCGiZIsCqc5CKpG4smtzFRxZqVP0/JcuHpcqYWSE5VsgxRANEq
-         hvVkFPm/BY6k2J66UVjT+vlTAVi7sRAb6xgrrh84kW3GfV7nzyu9udnK2lt4L4G53aUS
-         Aa4cW6+L1IDYW+u7KcmAka2yMWf+TmUNtNwyQTmrRNbh12Xj64abvChdvTyG3o2g0VUr
-         SrZA==
-X-Gm-Message-State: AOAM533HwPuVJAunI3Fp07FRIe1KEwGg5qGxj6EfDun0IofVXzTVVxte
-        Jnkk7nHhiBBDdmi4KXIU9OE+BQ==
-X-Google-Smtp-Source: ABdhPJzZe3214Rziic0zSZxbipcgLIu3ZL5p/9SqAc6FL/T1Gg83dfbgw2cAkIBYcA1WFQ6fVhD3uA==
-X-Received: by 2002:a05:6602:2cd3:: with SMTP id j19mr4870736iow.17.1644531335139;
-        Thu, 10 Feb 2022 14:15:35 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id i17sm9029851ilq.19.2022.02.10.14.15.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 14:15:34 -0800 (PST)
-Subject: Re: [PATCH net-next] ipv6: Reject routes configurations that specify
- dsfield (tos)
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
- <7bbeba35-17a7-f8ba-0587-4bb1c9b6721e@linuxfoundation.org>
- <20220210220516.GA31389@pc-4.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0b401730-4f18-4e61-1c88-1dce438d6166@linuxfoundation.org>
-Date:   Thu, 10 Feb 2022 15:15:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 10 Feb 2022 17:23:51 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683B6218E;
+        Thu, 10 Feb 2022 14:23:52 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 488F21F4697B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644531830;
+        bh=RgI9opHTA8T3KBo/qgOPw6qU7NMZ7C5YJme0G3lmwOk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DE8sxEwGN0RlDd3neWzxykMly3jHRT51EyVefOfc0zSRUfCOi9dP33tyE+aigzzvE
+         2whaT+Dp4az2AvTHX65p5WV+dqL4ZL387Z7nKXlJ3y5m2mKMBtSV9BwMLyXq8JF/wB
+         Ph33eDxmhWWylw7ZgSprEGQ8GmN0kPQKL+JBV5dx1v+y/onQ1/JDMI2XktWfcErfdI
+         YPH7wMfDHVmtdVGSTPgyiHZs3765lI29T2r8aSWOdw14+7dnC5kIKEOeKQc+iTGnY9
+         z+vMyb7xU2/Jr753oeVyGCH2NWpRdZVXqq9oPFED8+AiHQW/RakTAtL4jWHfDadzr0
+         Zav0l3sTuLuwg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernelci@groups.io,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2] selftests/exec: Rename file binfmt_script to binfmt_script.py
+Date:   Fri, 11 Feb 2022 03:23:19 +0500
+Message-Id: <20220210222319.1864680-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220210220516.GA31389@pc-4.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/10/22 3:05 PM, Guillaume Nault wrote:
-> On Thu, Feb 10, 2022 at 11:23:20AM -0700, Shuah Khan wrote:
->> On 2/10/22 8:08 AM, Guillaume Nault wrote:
->>> The ->rtm_tos option is normally used to route packets based on both
->>> the destination address and the DS field. However it's ignored for
->>> IPv6 routes. Setting ->rtm_tos for IPv6 is thus invalid as the route
->>> is going to work only on the destination address anyway, so it won't
->>> behave as specified.
->>>
->>> Suggested-by: Toke Høiland-Jørgensen <toke@redhat.com>
->>> Signed-off-by: Guillaume Nault <gnault@redhat.com>
->>> ---
->>> The same problem exists for ->rtm_scope. I'm working only on ->rtm_tos
->>> here because IPv4 recently started to validate this option too (as part
->>> of the DSCP/ECN clarification effort).
->>> I'll give this patch some soak time, then send another one for
->>> rejecting ->rtm_scope in IPv6 routes if nobody complains.
->>>
->>>    net/ipv6/route.c                         |  6 ++++++
->>>    tools/testing/selftests/net/fib_tests.sh | 13 +++++++++++++
->>>    2 files changed, 19 insertions(+)
->>>
->>> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
->>> index f4884cda13b9..dd98a11fbdb6 100644
->>> --- a/net/ipv6/route.c
->>> +++ b/net/ipv6/route.c
->>> @@ -5009,6 +5009,12 @@ static int rtm_to_fib6_config(struct sk_buff *skb, struct nlmsghdr *nlh,
->>>    	err = -EINVAL;
->>>    	rtm = nlmsg_data(nlh);
->>> +	if (rtm->rtm_tos) {
->>> +		NL_SET_ERR_MSG(extack,
->>> +			       "Invalid dsfield (tos): option not available for IPv6");
->>
->> Is this an expected failure on ipv6, in which case should this test report
->> pass? Should it print "failed as expected" or is returning fail from errout
->> is what should happen?
-> 
-> This is an expected failure. When ->rtm_tos is set, iproute2 fails with
-> error code 2 and prints
-> "Error: Invalid dsfield (tos): option not available for IPv6.".
-> 
-> The selftest redirects stderr to /dev/null by default (unless -v is
-> passed on the command line) and expects the command to fail and
-> return 2. So the default output is just:
-> 
-> IPv6 route with dsfield tests
->      TEST: Reject route with dsfield                                     [ OK ]
-> 
-> Of course, on a kernel that accepts non-null ->rtm_tos, "[ OK ]"
-> becomes "[FAIL]", and the the failed tests couter is incremented.
-> 
+Rename file for readability purpose. Update its usage and references.
 
-Sounds good to me.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+This path was suggested while review of the following patch. Please
+apply it after applying that one first:
+	selftests/exec: Add non-regular to TEST_GEN_PROGS
+Changes in V2:
+	Remove changes from binfmt_script.py, they were wrong
+---
+ tools/testing/selftests/exec/Makefile                           | 2 +-
+ .../testing/selftests/exec/{binfmt_script => binfmt_script.py}  | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/testing/selftests/exec/{binfmt_script => binfmt_script.py} (100%)
 
->>
->> With the above comment addressed or explained.
->>
->> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->>
-
-thanks,
--- Shuah
-
-
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index a89ba6de79870..a0b8688b08369 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -3,7 +3,7 @@ CFLAGS = -Wall
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
+ 
+-TEST_PROGS := binfmt_script
++TEST_PROGS := binfmt_script.py
+ TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script.py
+similarity index 100%
+rename from tools/testing/selftests/exec/binfmt_script
+rename to tools/testing/selftests/exec/binfmt_script.py
+-- 
+2.30.2
 
