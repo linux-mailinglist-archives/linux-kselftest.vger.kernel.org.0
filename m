@@ -2,159 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA874B152D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 19:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC554B1547
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 19:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245683AbiBJSXZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 13:23:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53484 "EHLO
+        id S245747AbiBJSc5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 13:32:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245679AbiBJSXW (ORCPT
+        with ESMTP id S239195AbiBJScz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:23:22 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2EF10EA
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 10:23:22 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 9so8469619iou.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 10:23:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dAMVeP+RrHny3xSC7eHQLJIyFnrRwFhwNujG08bdq0E=;
-        b=M5PnKCW9+uPpbU0ZInspy36qX6Hr5eUta2KPtl9IDkwMX/baYPN8m4KPhAIDqdJPgS
-         Qv1h1IAkjMz8RexKRczaPQCupnoCLnjhryD8l+K+dX1q8HzzpSEqNRhIKOAkQDl1Xx0C
-         B6Vw1/+QA4pBcJTsuY8hRUsOj1KZ+W9xoqxms=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dAMVeP+RrHny3xSC7eHQLJIyFnrRwFhwNujG08bdq0E=;
-        b=xLQP//f1rPcZwFxIF8puasHymFcqGNTycS5rkarsYlfUaaWJCwRC1GOw3BS4NTLRUY
-         quOYRRDJ+JYc41ezPYWbtHH0ulObqNuqrNqdjms94V1x8y6a+hlWl/8HcZMtUPg5Obzu
-         On2wlE6OfUysC6q/Vm8+zz0givH/M4+7vqSh6oCCrJyCt/2EoFQWMxZhXfU9wWJnxY8i
-         QCYFCZiX+YPQ76oTFnEeJU22N8pw5Fz7Wbr3ylLtn8oVse3gU/SKw1l6fF6Wclx9pLg2
-         l/laehmnujsxwisfwtzINLuzeig1TG9J8Z8J1Poum0CovLYjKQPQhH8kzKZJRhAIkGrs
-         62WQ==
-X-Gm-Message-State: AOAM533eLrhO5srMjwYIg4HX9UE7nkr8sss0K1f9k1MsWiV/CPcgRRC0
-        Z5mvN1jUJWbGcqh/vmB56NmRZg==
-X-Google-Smtp-Source: ABdhPJwJnXeUxnhpTMbDRQY1GX7bzgZcf78+wvrzSAYmKNWHs1PwHZLTvOfxG8s3ZncQQdgXsZ3yvg==
-X-Received: by 2002:a05:6638:268b:: with SMTP id o11mr4893658jat.117.1644517402063;
-        Thu, 10 Feb 2022 10:23:22 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id b6sm11895639ioz.43.2022.02.10.10.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 10:23:21 -0800 (PST)
-Subject: Re: [PATCH net-next] ipv6: Reject routes configurations that specify
- dsfield (tos)
-To:     Guillaume Nault <gnault@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7bbeba35-17a7-f8ba-0587-4bb1c9b6721e@linuxfoundation.org>
-Date:   Thu, 10 Feb 2022 11:23:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 10 Feb 2022 13:32:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2597E192
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 10:32:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE010B826A8
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 18:32:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A94C004E1;
+        Thu, 10 Feb 2022 18:32:50 +0000 (UTC)
+Date:   Thu, 10 Feb 2022 18:32:46 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YgVaTounTtunlGU6@arm.com>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-7-broonie@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207152109.197566-7-broonie@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/10/22 8:08 AM, Guillaume Nault wrote:
-> The ->rtm_tos option is normally used to route packets based on both
-> the destination address and the DS field. However it's ignored for
-> IPv6 routes. Setting ->rtm_tos for IPv6 is thus invalid as the route
-> is going to work only on the destination address anyway, so it won't
-> behave as specified.
-> 
-> Suggested-by: Toke Høiland-Jørgensen <toke@redhat.com>
-> Signed-off-by: Guillaume Nault <gnault@redhat.com>
-> ---
-> The same problem exists for ->rtm_scope. I'm working only on ->rtm_tos
-> here because IPv4 recently started to validate this option too (as part
-> of the DSCP/ECN clarification effort).
-> I'll give this patch some soak time, then send another one for
-> rejecting ->rtm_scope in IPv6 routes if nobody complains.
-> 
->   net/ipv6/route.c                         |  6 ++++++
->   tools/testing/selftests/net/fib_tests.sh | 13 +++++++++++++
->   2 files changed, 19 insertions(+)
-> 
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index f4884cda13b9..dd98a11fbdb6 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -5009,6 +5009,12 @@ static int rtm_to_fib6_config(struct sk_buff *skb, struct nlmsghdr *nlh,
->   	err = -EINVAL;
->   	rtm = nlmsg_data(nlh);
->   
-> +	if (rtm->rtm_tos) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "Invalid dsfield (tos): option not available for IPv6");
-
-Is this an expected failure on ipv6, in which case should this test report
-pass? Should it print "failed as expected" or is returning fail from errout
-is what should happen?
-
-> +		goto errout;
-> +	}
+On Mon, Feb 07, 2022 at 03:20:35PM +0000, Mark Brown wrote:
+> diff --git a/Documentation/arm64/sme.rst b/Documentation/arm64/sme.rst
+> new file mode 100644
+> index 000000000000..15df3157c592
+> --- /dev/null
+> +++ b/Documentation/arm64/sme.rst
+[...]
+> +3.  Sharing of streaming and non-streaming mode SVE state
+> +---------------------------------------------------------
 > +
->   	*cfg = (struct fib6_config){
->   		.fc_table = rtm->rtm_table,
->   		.fc_dst_len = rtm->rtm_dst_len,
-> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-> index bb73235976b3..e2690cc42da3 100755
-> --- a/tools/testing/selftests/net/fib_tests.sh
-> +++ b/tools/testing/selftests/net/fib_tests.sh
-> @@ -988,12 +988,25 @@ ipv6_rt_replace()
->   	ipv6_rt_replace_mpath
->   }
->   
-> +ipv6_rt_dsfield()
-> +{
-> +	echo
-> +	echo "IPv6 route with dsfield tests"
-> +
-> +	run_cmd "$IP -6 route flush 2001:db8:102::/64"
-> +
-> +	# IPv6 doesn't support routing based on dsfield
-> +	run_cmd "$IP -6 route add 2001:db8:102::/64 dsfield 0x04 via 2001:db8:101::2"
-> +	log_test $? 2 "Reject route with dsfield"
-> +}
-> +
->   ipv6_route_test()
->   {
->   	route_setup
->   
->   	ipv6_rt_add
->   	ipv6_rt_replace
-> +	ipv6_rt_dsfield
->   
->   	route_cleanup
->   }
-> 
+> +It is implementation defined which if any parts of the SVE state are shared
+> +between streaming and non-streaming modes.  When switching between modes
+> +via software interfaces such as ptrace if no register content is provided as
+> +part of switching no state will be assumed to be shared and everything will
+> +be zeroed.
 
-With the above comment addressed or explained.
+Is there anything other than ptrace() here? I read the sigreturn() case
+below but did not say anything about changing PSTATE.SM via the
+sigcontext. I guess it's similar to ptrace().
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> +4.  System call behaviour
+> +-------------------------
+> +
+> +* On syscall PSTATE.ZA is preserved, if PSTATE.ZA==1 then the contents of the
+> +  ZA matrix are preserved.
 
-thanks,
--- Shuah
+Sorry if this was discussed. What is the rationale for preserving the ZA
+registers on syscall? We don't do this for the top part of the Z
+registers.
+
+> +* On syscall PSTATE.SM will be cleared and the SVE registers will be handled
+> +  as normal.
+
+What does that mean? Is this as per the sve.rst doc (unspecified but
+zeroed in practice)?
+
+> +* Neither the SVE registers nor ZA are used to pass arguments to or receive
+> +  results from any syscall.
+> +
+> +* On creation fork() or clone() the newly created process will have PSTATE.SM
+> +  and PSTATE.ZA cleared.
+
+This looks slightly inconsistent with the first bullet point on ZA being
+preserved on syscalls. Why do these differ?
+
+[...]
+> +References
+> +==========
+> +
+> +[1] arch/arm64/include/uapi/asm/sigcontext.h
+> +    AArch64 Linux signal ABI definitions
+> +
+> +[2] arch/arm64/include/uapi/asm/ptrace.h
+> +    AArch64 Linux ptrace ABI definitions
+> +
+> +[3] Documentation/arm64/cpu-feature-registers.rst
+> +
+> +[4] ARM IHI0055C
+> +    http://infocenter.arm.com/help/topic/com.arm.doc.ihi0055c/IHI0055C_beta_aapcs64.pdf
+> +    http://infocenter.arm.com/help/topic/com.arm.doc.subset.swdev.abi/index.html
+> +    Procedure Call Standard for the ARM 64-bit Architecture (AArch64)
+
+The second link no longer works. I also couldn't find any reference to
+[4] but there's a lot of text to scan, so I may have missed it.
+
+-- 
+Catalin
