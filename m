@@ -2,94 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E0A4B04BA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 06:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5784B050E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Feb 2022 06:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiBJFAH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Feb 2022 00:00:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39642 "EHLO
+        id S233730AbiBJFaD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Feb 2022 00:30:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiBJFAH (ORCPT
+        with ESMTP id S231808AbiBJFaC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 00:00:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275061F7;
-        Wed,  9 Feb 2022 21:00:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53CF8B80E19;
-        Thu, 10 Feb 2022 05:00:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49067C004E1;
-        Thu, 10 Feb 2022 05:00:05 +0000 (UTC)
-Date:   Thu, 10 Feb 2022 00:00:03 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
-Subject: Re: [PATCH] selftests/ftrace: Do not trace do_softirq because of
- PREEMPT_RT
-Message-ID: <20220210000003.6b6142f9@gandalf.local.home>
-In-Reply-To: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
-References: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 10 Feb 2022 00:30:02 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E869110A1;
+        Wed,  9 Feb 2022 21:30:03 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso3284290pjj.1;
+        Wed, 09 Feb 2022 21:30:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VuCJ7K5SeMohW1YsUjQ2FAv4U3pm6pjgJmJW6BkHw6U=;
+        b=S1mHNeRUCnicyhOCL+zoqpFwgt+nTPNgqrTPK6DVoQRptANFHPf2HaehlWMfCMDW9P
+         Y4gb6iQXNPBuDlzgzVFRvrfi7ZVzYBQxGlUY3pqFNuDiJhqFpeGN5rc4SQP8VR+5RdYT
+         qmzA+s1PQbsKBLgmXTmdizEvl+iyCS63IqNCsRzNeX8ECstIw3lNXCMdn+XswGEwqVcb
+         DGOSRgLxeDZhw+4EzQUN7JYTPRDJyoOqqYciTJE7YytwyMu/P3D/ZaGM4WgJkx1ZQhWs
+         4mHmzQnWlQf7LIQxZckI3Kjzfavvd/rDAvPCnA5WbbiWcukSpsqz/iMDCwPcFyhlUX/V
+         wGiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VuCJ7K5SeMohW1YsUjQ2FAv4U3pm6pjgJmJW6BkHw6U=;
+        b=DcSs4y/JUohG3lOyxx2BpSbJ4IxN20Yq7X+eUVsmDR34xHKNp0HBpQUpSe74u/TE5d
+         CGp51FH4Ujz7rsQAXMpWlme70STLDqDkmiYRXMG+D+WW/dhPeq0mZZd9dR2ZWPDkroyk
+         df7fcuDZTpPUyf2MjExW5JyAqKJO2om80j6Auz5GnyL3rSdeCTZe35tQw2acdIgQf36n
+         0YqaXcTan+Wtym0XThE0xBtYMvw7/UDBrbaAPPfFbqEtFCmDQMf/mOnTMzaKGKCFSeih
+         xdakNOSS2Pu3uU0Jibf+L210nc1zD+Sd33BtXbvtcz6qjW5L2mHcuOSy7YGB2Q0Eld7a
+         NV5A==
+X-Gm-Message-State: AOAM533u9LsbRNAKxQJTDjHtCNIUhxlkoAXQf4sFUk+0zCo4eN5rsezU
+        q4cyjiFEaV1zPnITcQ9X+4M=
+X-Google-Smtp-Source: ABdhPJxfui1Ef7WUMqgyHKEXNP/fK6QRPFX/TKGCQ2BSb5/SQg84QVU+vD+9UDabHefQVtQ3tbwWSw==
+X-Received: by 2002:a17:902:6903:: with SMTP id j3mr5687413plk.23.1644471003380;
+        Wed, 09 Feb 2022 21:30:03 -0800 (PST)
+Received: from [10.0.2.64] ([209.37.97.194])
+        by smtp.googlemail.com with ESMTPSA id g12sm20658072pfm.119.2022.02.09.21.30.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 21:30:03 -0800 (PST)
+Message-ID: <c76228c0-c8e1-eeef-7721-96f0822b21d2@gmail.com>
+Date:   Wed, 9 Feb 2022 21:30:01 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH net-next 01/11] net: ping6: remove a pr_debug() statement
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
+        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <20220210003649.3120861-1-kuba@kernel.org>
+ <20220210003649.3120861-2-kuba@kernel.org>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220210003649.3120861-2-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed,  9 Feb 2022 17:24:30 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
-
-> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
-> do_softirq fails for such kernel:
+On 2/9/22 4:36 PM, Jakub Kicinski wrote:
+> We have ftrace and BPF today, there's no need for printing arguments
+> at the start of a function.
 > 
->   echo do_softirq
->   ftracetest: 81: echo: echo: I/O error
-> 
-> Choose some other externally visible function for the test.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
+>  net/ipv6/ping.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> I understand that the failure does not exist on mainline kernel (only
-> with PREEMPT_RT patchset) but the change does not harm it.
-> 
-> If it is not suitable alone, please consider it for RT patchset.
-> ---
->  .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-> index e96e279e0533..1d0c7601865f 100644
-> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-> @@ -19,7 +19,7 @@ fail() { # mesg
->  
->  FILTER=set_ftrace_filter
->  FUNC1="schedule"
-> -FUNC2="do_softirq"
-> +FUNC2="_printk"
 
-The problem with the above, is that it is not guaranteed to trigger (and
-probably will not), where as the do_softirq is. The filtering is suppose to
-trace something that actually happens.
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-How about using: scheduler_tick ?
-
--- Steve
-
-
->  
->  ALL_FUNCS="#### all functions enabled ####"
->  
 
