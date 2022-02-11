@@ -2,138 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2944B2E77
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 21:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D5E4B3114
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 23:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353217AbiBKUdA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 15:33:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34188 "EHLO
+        id S233304AbiBKWy5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 17:54:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351880AbiBKUc7 (ORCPT
+        with ESMTP id S229484AbiBKWy4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:32:59 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2529CCE4;
-        Fri, 11 Feb 2022 12:32:58 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:58500)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIcb8-006sHy-VQ; Fri, 11 Feb 2022 13:32:55 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:52036 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIcb7-00A7Qi-RT; Fri, 11 Feb 2022 13:32:54 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Solar Designer <solar@openwall.com>
-Cc:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <20220207121800.5079-2-mkoutny@suse.com>
-        <20220210011405.GA17076@openwall.com>
-Date:   Fri, 11 Feb 2022 14:32:47 -0600
-In-Reply-To: <20220210011405.GA17076@openwall.com> (Solar Designer's message
-        of "Thu, 10 Feb 2022 02:14:05 +0100")
-Message-ID: <87h795xhxs.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 11 Feb 2022 17:54:56 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAB2C63
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 14:54:51 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s7so18615753edd.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 14:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MNyMAxSIRfmX6E7yXPlJDgtVqsNPCnT37/UNnUhdfcg=;
+        b=PN9gtVb6nSnvnmYjzjkpar1jLF7GagSkv+xQr42ThW3tkgFPyh5shJv4uUq+9uowwk
+         hAMckfSuryI9zgaiB/0OKuIGElkEmt/7wAMrTlot2O4f0J6Je7NesXPW6lvD+tlI5sOp
+         6HUeYP4mTBPxy1SIeC90fuVLNrH2GQUdLF81ee23vBhHQGmSt6n+tiSW8wsMbQlkAJdI
+         U5iEETDzJhV78YQSZfKjT29DXQsWSj33/Mqg3xgd3NaiWX9aFoEK12eOzd+gPfEybadh
+         Hc4UDro//JidGXk8V/5JIh0UsmaB00MYxGhlbnbaEg7qK6yfcc9nTB5bI6IojQLwQvLy
+         cJVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MNyMAxSIRfmX6E7yXPlJDgtVqsNPCnT37/UNnUhdfcg=;
+        b=KaNz9RCKVYJjbO68Z+EjHrgq/sbMvRUy+fZoIIxNxpzHzKtveym6k3AhmQy091pk6k
+         5EeXLGGM4o4orUBytVOyhDyePFcsUrEX0EJWrqojBwf8IcZFlbxxIL2z1fydLZmbMHXM
+         V+rvzF1xA/IB9DeKuWkd1oYTxv68WoYdhXOIZrTmGo5VnWkARZS0ryVJObkbdCRcHD44
+         Dfoa1TV0fYkuQ/th/jPd6Sfb/yqIanzBNg+w3G3HmO8WjsyBWGtOhz95OUw49a38dKHL
+         xDySfAEgAXERN0lG7itpUjeY428InXnUwKcH3/UGFfsknI9Ij5H0KnpWB5QwgQcznjWz
+         1T8A==
+X-Gm-Message-State: AOAM532m3l1dXh6TOVi6qNgFPC6sOaQ/s4Y7B3nVNbmHQj4D99b5e1Ux
+        o5oLaroGXvv58Ee63/h8fg0ein8NqJHRYLMDWwXmFQ==
+X-Google-Smtp-Source: ABdhPJzPOkMa9Yfx2cK2rXg9vNZWhy2XXDei6adD9tdqXmeicrpJGROv/oH9u7zS4GKx4ElGyaSyuLujHB+nvPRtLh8=
+X-Received: by 2002:a05:6402:289:: with SMTP id l9mr4272896edv.272.1644620090064;
+ Fri, 11 Feb 2022 14:54:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nIcb7-00A7Qi-RT;;;mid=<87h795xhxs.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+5Gcs6GFJ0JaUFgYHgyqu37QsE/9if+6I=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220211094133.265066-1-ribalda@chromium.org> <20220211094133.265066-3-ribalda@chromium.org>
+ <YgY1lzA20zyFcVi3@lahna> <CANiDSCs3+637REhtGjKy+MSnUm-Mh-k1S7Lk9UKqC8JY-k=zTw@mail.gmail.com>
+ <YgaOS8BLz23k6JVq@lahna> <YgaPXhOr/lFny4IS@lahna> <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
+In-Reply-To: <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 11 Feb 2022 14:54:37 -0800
+Message-ID: <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/6] thunderbolt: test: use NULL macros
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;Solar Designer <solar@openwall.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 562 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (2.0%), b_tie_ro: 10 (1.7%), parse: 0.96
-        (0.2%), extract_message_metadata: 18 (3.2%), get_uri_detail_list: 1.90
-        (0.3%), tests_pri_-1000: 14 (2.5%), tests_pri_-950: 1.23 (0.2%),
-        tests_pri_-900: 0.98 (0.2%), tests_pri_-90: 75 (13.3%), check_bayes:
-        73 (13.0%), b_tokenize: 8 (1.4%), b_tok_get_all: 8 (1.5%),
-        b_comp_prob: 2.4 (0.4%), b_tok_touch_all: 51 (9.1%), b_finish: 0.85
-        (0.2%), tests_pri_0: 291 (51.9%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 2.7 (0.5%), poll_dns_idle: 134 (23.9%), tests_pri_10:
-        1.94 (0.3%), tests_pri_500: 145 (25.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check
- against new user credentials
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Solar Designer <solar@openwall.com> writes:
-
-> Hi Michal,
+On Fri, Feb 11, 2022 at 8:33 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> On Mon, Feb 07, 2022 at 01:17:55PM +0100, Michal Koutný wrote:
->> The check is currently against the current->cred but since those are
->> going to change and we want to check RLIMIT_NPROC condition after the
->> switch, supply the capability check with the new cred.
->> But since we're checking new_user being INIT_USER any new cred's
->> capability-based allowance may be redundant when the check fails and the
->> alternative solution would be revert of the commit 2863643fb8b9
->> ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
->> 
->> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
->> 
->> Cc: Solar Designer <solar@openwall.com>
->> Cc: Christian Brauner <christian.brauner@ubuntu.com>
->> Signed-off-by: Michal Koutný <mkoutny@suse.com>
->> ---
->>  kernel/sys.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git a/kernel/sys.c b/kernel/sys.c
->> index 8ea20912103a..48c90dcceff3 100644
->> --- a/kernel/sys.c
->> +++ b/kernel/sys.c
->> @@ -481,7 +481,8 @@ static int set_user(struct cred *new)
->>  	 */
->>  	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
->>  			new_user != INIT_USER &&
->> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
->> +			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
->> +			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
->>  		current->flags |= PF_NPROC_EXCEEDED;
->>  	else
->>  		current->flags &= ~PF_NPROC_EXCEEDED;
+> Hi Mika
 >
-> Thank you for working on this and CC'ing me on it.  This is related to
-> the discussion Christian and I had in September:
->
-> https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
->
-> Christian was going to revert 2863643fb8b9, but apparently that never
-> happened.  Back then, I also suggested:
->
-> "Alternatively, we could postpone the set_user() calls until we're
-> running with the new user's capabilities, but that's an invasive change
-> that's likely to create its own issues."
+> On Fri, 11 Feb 2022 at 17:31, Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Fri, Feb 11, 2022 at 06:26:56PM +0200, Mika Westerberg wrote:
+> > > > To test it I had enabled:
+> > > > PCI, USB4 and USB4_KUNIT_TEST
+> > > >
+> > > > and then run it with
+> > > >
+> > > > ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
+> > > >
+> > > > Unfortunately, kunit was not able to run the tests
+> > > >
+> > > > This hack did the trick:
+> > > >
+> > > >
+> > > >  int tb_test_init(void)
+> > > >  {
+> > > > -       return __kunit_test_suites_init(tb_test_suites);
+> > > > +       //return __kunit_test_suites_init(tb_test_suites);
+> > > > +       return 0;
+> > > >  }
+> > > >
+> > > >  void tb_test_exit(void)
+> > > >  {
+> > > > -       return __kunit_test_suites_exit(tb_test_suites);
+> > > > +       //return __kunit_test_suites_exit(tb_test_suites);
+> > > >  }
+> > > > +
+> > > > +kunit_test_suites(&tb_test_suite);
+> > > >
+> > > > I looked into why we do this and I found:
+> > > >
+> > > > thunderbolt: Allow KUnit tests to be built also when CONFIG_USB4=m
+> > > >
+> > > >
+> > > > I am a bit confused. The patch talks about build coverage, but even
+> > > > with that patch reverted if
+> > > > USB4_KUNIT_TEST=m
+> > > > then test.c is built.
+> > > >
+> > > > Shouldn't we simply revert that patch?
+> > >
+> > > Nah, either build it into the kernel or load the driver manually:
+> > >
+> > >   # modprobe thunderbolt
+> >
+> > Forgot to explain why this does not run the tests (I think):
+> >
+> >  ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
+> >
+> > The driver depends on PCI and I don't think that's enabled on UML at
+> > least. I typically run it inside QEMU.
 
-Back then you mentioned that apache suexec was broken.  Do you have
-any more details?
+You can get it working on UML now.
+If you apply the patch upthread for the test to use kunit_test_suites(), then
 
-I would like to make certain the apache suexec issue is fixed but
-without a few details I can't do that.  I tried looking but I can't
-find an public report about apache suexec being broken.
+$ cat usb4_kunitconfig
+CONFIG_PCI=y
+CONFIG_VIRTIO_UML=y
+CONFIG_UML_PCI_OVER_VIRTIO=y
 
-My goal is to come up with a very careful and conservative set of
-patches that fix all of the known issues with RLIMIT_NPROC.
+CONFIG_KUNIT=y
+CONFIG_USB4=y
+CONFIG_USB4_KUNIT_TEST=y
 
-Eric
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=usb4_kunitconfig
+...
+[14:48:55] [PASSED] tb_test_property_copy
+[14:48:55] =================== [PASSED] thunderbolt ===================
+[14:48:55] ============================================================
+[14:48:55] Testing complete. Passed: 37, Failed: 0, Crashed: 0,
+Skipped: 0, Errors: 0
+
+Mika, should I propose a patch that updates the test and adds a
+drivers/thunderbolt/.kunitconfig with the above contents?
+
+Then it could be invoked as
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
