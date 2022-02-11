@@ -2,122 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85354B22CD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 11:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA92B4B232B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 11:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348790AbiBKKIa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 05:08:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43794 "EHLO
+        id S242867AbiBKKeJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 05:34:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiBKKI3 (ORCPT
+        with ESMTP id S231628AbiBKKeI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:08:29 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DC62D3
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 02:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644574109; x=1676110109;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z2gk1OpljxDmJHIclc6+jtjq1esiae1ePRP93bRgHfI=;
-  b=K3bZFxTgdt6zaOkFoG1i6egGPSpLnkLSPuxmaKiDgL1ISFSYBnIdVXst
-   c8dov7HRRP+4QfHeHWZ9mMXRQxjPB9vilWQ0EstGLd7cf6PcXPDacHJL8
-   Q4zFSOD7dADhyaUy5dMwKeo20k5G93utxh1Dp4m7MWKTW5K3TkCZNvU0l
-   dPy89UMUKp1QFelBkvKe3Kv6SlyIhWQjPi7zW/+m4qwv5H7uSEgXGLhqX
-   XuJDuvWVgBsGKwmeH78fmnEIEeczLpfoHPEoXuqm7fz1QPs8I9lLbUFU3
-   kkIdh40PD8JCqy0rIiuq5vIU0Lz+lQRHAsEFiTzEOjgkFLIzUMzL8AhRb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="248536477"
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="248536477"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:08:28 -0800
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="483271617"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:08:25 -0800
-Received: by lahna (sSMTP sendmail emulation); Fri, 11 Feb 2022 12:08:23 +0200
-Date:   Fri, 11 Feb 2022 12:08:23 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Subject: Re: [PATCH v5 3/6] thunderbolt: test: use NULL macros
-Message-ID: <YgY1lzA20zyFcVi3@lahna>
-References: <20220211094133.265066-1-ribalda@chromium.org>
- <20220211094133.265066-3-ribalda@chromium.org>
+        Fri, 11 Feb 2022 05:34:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6689AEA6
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 02:34:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B72AB828BA
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 10:34:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AED7C340E9;
+        Fri, 11 Feb 2022 10:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644575645;
+        bh=wXXuyKBQt46IGOEHezmN82dITuXgKrK5o/eWPXu2fvY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SvqgYTsPaCzQdgevk0P6T6vM6jW6nDW8c4Md4WJQARQLFYVVvGHCfSM3lOGaDZL2m
+         zJhOtTpJWum2yeaLgVDIhHKciV0E8HE7GgjUI6g5vkGsm6QT9O9f/XEL7rO2oSGM32
+         Wb6+NgshhTdM2q/d9LDUChl7laPTCNStwtZ3wR1t2LjtwY1DazH7nJrxUByhI0cb3y
+         FKLeEyg8UjIp8pey9AYNC27YThq42ecrLJ7sUiW+Tkhq9yH2P2DJoVuv12tS9TvPhu
+         8pzH6EhPyfHX8BH3dveaWXMJRiUYrkVK+offjxfTHFacoVRlLJBDdm8CInbKRnItbc
+         yB/EPxDXx8DvA==
+Date:   Fri, 11 Feb 2022 12:33:56 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] selftest/vm: Use correct PAGE_SHIFT value for
+ ppc64
+Message-ID: <YgY7lDToiQ0pM6U6@kernel.org>
+References: <20220211063330.99648-1-aneesh.kumar@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211094133.265066-3-ribalda@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220211063330.99648-1-aneesh.kumar@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-
-On Fri, Feb 11, 2022 at 10:41:30AM +0100, Ricardo Ribalda wrote:
-> Replace the NULL checks with the more specific and idiomatic NULL macros.
+On Fri, Feb 11, 2022 at 12:03:28PM +0530, Aneesh Kumar K.V wrote:
+> Keep it simple by using a #define and limiting hugepage size to 2M.
+> This keeps the test simpler instead of dynamically finding the page size
+> and huge page size.
 > 
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Without this tests are broken w.r.t reading /proc/self/pagemap
+> 
+> 	if (pread(pagemap_fd, ent, sizeof(ent),
+> 			(uintptr_t)ptr >> (PAGE_SHIFT - 3)) != sizeof(ent))
+> 		err(2, "read pagemap");
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 > ---
-
-...
-
-> @@ -2496,50 +2496,50 @@ static void tb_test_property_parse(struct kunit *test)
->  	struct tb_property *p;
+>  tools/testing/selftests/vm/ksm_tests.c        | 9 ++++++++-
+>  tools/testing/selftests/vm/transhuge-stress.c | 9 ++++++++-
+>  2 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
+> index 1436e1a9a3d3..cae72872152b 100644
+> --- a/tools/testing/selftests/vm/ksm_tests.c
+> +++ b/tools/testing/selftests/vm/ksm_tests.c
+> @@ -22,7 +22,14 @@
+>  #define KSM_MERGE_ACROSS_NODES_DEFAULT true
+>  #define MB (1ul << 20)
 >  
->  	dir = tb_property_parse_dir(root_directory, ARRAY_SIZE(root_directory));
-> -	KUNIT_ASSERT_TRUE(test, dir != NULL);
-> +	KUNIT_ASSERT_NOT_NULL(test, dir);
+> -#define PAGE_SHIFT 12
+> +#ifdef __powerpc64__
+> +#define PAGE_SHIFT	16
+> +#else
+> +#define PAGE_SHIFT	12
+> +#endif
+
+Page size can be other than 4096 for other configurations as well. And even
+on ppc64 it's not necessarily 64k.
+
+Ideally page size in selftests/vm should be sysconf(_SC_PAGESIZE)
+
+> +/*
+> + * On ppc64 this will only work with radix 2M hugepage size
+> + */
+>  #define HPAGE_SHIFT 21
 >  
->  	p = tb_property_find(dir, "foo", TB_PROPERTY_TYPE_TEXT);
-> -	KUNIT_ASSERT_TRUE(test, !p);
-> +	KUNIT_ASSERT_NOT_NULL(test, p);
-
-This should be KUNIT_ASSERT_NULL(test, p) as we specifically want to
-check that the property does not exist (!p is same as p == NULL).
-
->  	p = tb_property_find(dir, "vendorid", TB_PROPERTY_TYPE_TEXT);
-> -	KUNIT_ASSERT_TRUE(test, p != NULL);
-> +	KUNIT_ASSERT_NOT_NULL(test, p);
->  	KUNIT_EXPECT_STREQ(test, p->value.text, "Apple Inc.");
+>  #define PAGE_SIZE (1 << PAGE_SHIFT)
+> diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
+> index 5e4c036f6ad3..b1f8d98355c5 100644
+> --- a/tools/testing/selftests/vm/transhuge-stress.c
+> +++ b/tools/testing/selftests/vm/transhuge-stress.c
+> @@ -16,7 +16,14 @@
+>  #include <string.h>
+>  #include <sys/mman.h>
 >  
->  	p = tb_property_find(dir, "vendorid", TB_PROPERTY_TYPE_VALUE);
-> -	KUNIT_ASSERT_TRUE(test, p != NULL);
-> +	KUNIT_ASSERT_NOT_NULL(test, p);
->  	KUNIT_EXPECT_EQ(test, p->value.immediate, 0xa27);
+> -#define PAGE_SHIFT 12
+> +#ifdef __powerpc64__
+> +#define PAGE_SHIFT	16
+> +#else
+> +#define PAGE_SHIFT	12
+> +#endif
+> +/*
+> + * On ppc64 this will only work with radix 2M hugepage size
+> + */
+>  #define HPAGE_SHIFT 21
 >  
->  	p = tb_property_find(dir, "deviceid", TB_PROPERTY_TYPE_TEXT);
-> -	KUNIT_ASSERT_TRUE(test, p != NULL);
-> +	KUNIT_ASSERT_NOT_NULL(test, p);
->  	KUNIT_EXPECT_STREQ(test, p->value.text, "Macintosh");
->  
->  	p = tb_property_find(dir, "deviceid", TB_PROPERTY_TYPE_VALUE);
-> -	KUNIT_ASSERT_TRUE(test, p != NULL);
-> +	KUNIT_ASSERT_NOT_NULL(test, p);
->  	KUNIT_EXPECT_EQ(test, p->value.immediate, 0xa);
->  
->  	p = tb_property_find(dir, "missing", TB_PROPERTY_TYPE_DIRECTORY);
-> -	KUNIT_ASSERT_TRUE(test, !p);
-> +	KUNIT_ASSERT_NOT_NULL(test, p);
+>  #define PAGE_SIZE (1 << PAGE_SHIFT)
+> -- 
+> 2.34.1
+> 
+> 
 
-Ditto here.
-
-With those fixed (please also run the tests if possible to see that they
-still pass) you can add,
-
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
-Thanks!
+-- 
+Sincerely yours,
+Mike.
