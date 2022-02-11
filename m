@@ -2,126 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5EA4B2BE3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 18:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03364B2C75
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 19:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352229AbiBKRhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 12:37:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55224 "EHLO
+        id S245119AbiBKSOJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 13:14:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352225AbiBKRhf (ORCPT
+        with ESMTP id S243798AbiBKSOJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:37:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC581397
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 09:37:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644601052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lb+5m3UkvEcY0i6pZfp3uff/KtF/0biJeSNgO+ZhLKc=;
-        b=B2a7BOywXMwk5FHx9FLZrFWHH9xc11A656TSlLqDMoJqyyIWNpGLfV+HVNYYxshThYT2CS
-        /yA1WR2lZEDrPa9zcnly4KcUZc6uE3eUiEcg0CrUw6t3qcCom4wSWTXEBeBNJUVMs67MsP
-        zjyX3gyj6TePjPXdL8aMKdZuiGG2t3Q=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-57-tVjuqM9C6g56Seg5Dlg-1; Fri, 11 Feb 2022 12:37:31 -0500
-X-MC-Unique: 57-tVjuqM9C6g56Seg5Dlg-1
-Received: by mail-ej1-f70.google.com with SMTP id o7-20020a170906860700b006cbe6deec1bso4380736ejx.22
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 09:37:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Lb+5m3UkvEcY0i6pZfp3uff/KtF/0biJeSNgO+ZhLKc=;
-        b=C+XzFLocWI7Jo/IRen02MND03CEj7Cp6WWyl3pfQeU4QWed/m4eh8M1zoEv6rqItro
-         oJbXrPY5whS6v6QU9NHmQea9o3+tf1zDO2Ewc0A013vhPhSawB83jgUV8zrkAUuT464x
-         UBSqO2xudHTYuvieGUI8OQmy7E0k48NYSosI2LMkw2owa+mgQZlQ5l/ttLOR0GwxVK1b
-         4F1c5gmooQmBS3p729Fp4fWPvSWLyefRkM+W3XELjlriHa+aU8izzVWQiGhybwOy+SgS
-         7NieYsfbkmEvHC2yNE0SeoS3kCT+vLO3FZXdu4uK0bcdl9FRNtqpyFvZAgm4vvDgr7P9
-         Un1Q==
-X-Gm-Message-State: AOAM530cMltrH6VBoti3sdPHbyclK6lBWWKH3ABkYRQk/pknYVk4AIMb
-        wv9vMtkzBvoG+6VqOBwf2OYIWSoXMWRpVtUL//7dPKGQIr/8ivQdCd/Btz0M44guTxJ5ZshRqW2
-        xv01DsjcVYBezBc0P86hRVNfR7PJO
-X-Received: by 2002:a17:906:b116:: with SMTP id u22mr2339321ejy.427.1644601049751;
-        Fri, 11 Feb 2022 09:37:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJysRgOQX6h5hRe6xafAimOWoRs3+jppMqkGmJ61EpELY50wNI9nETyBQTfyjx9OM1/mztWdtg==
-X-Received: by 2002:a17:906:b116:: with SMTP id u22mr2339244ejy.427.1644601048751;
-        Fri, 11 Feb 2022 09:37:28 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id e4sm1062414ejm.116.2022.02.11.09.37.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 09:37:28 -0800 (PST)
-Message-ID: <e9f1166d-78a0-1806-42bb-03f2e1671128@redhat.com>
-Date:   Fri, 11 Feb 2022 18:37:24 +0100
+        Fri, 11 Feb 2022 13:14:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53734CEC
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 10:14:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F77AB82A48
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 18:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCAEC340E9;
+        Fri, 11 Feb 2022 18:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644603244;
+        bh=AhgL4SP5wlwD+zr/JKbq/l2D8ucLJyESgKJCAelqRdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=flJPl5F+zx7qwTRbFXA/4k03Dhre76dU9rSpHsRQRWxxbbXpGWuDdJ6/p7MKe3P6j
+         13xIBFDtK2rKndtUAVrE76yETKrs5ypYFRtPNyBoaUjfhshnLP89nAkFST3MbHdRRX
+         +nvwaKTG2rekg2vVCb8RvRXGGbnZFKMqlpANG8sqqCqIlIzYpT/CmDhY0ZhLEUwqVD
+         m/QcNWmm6j8wbWidGEb8NR5a64IYRPnMouf7QMCc2ujVSrmLhYB5nBdpiTIvZxIwQW
+         cFJ3Wc+hG9+7/7Kk1qv3ocJhhoCiJy9rkSmj1pOSXyDuBd08kJ2uvdk9Xaeu1sRQ6a
+         ivgYiOu9ozLdQ==
+Date:   Fri, 11 Feb 2022 18:13:58 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YganZni933HbRTmO@sirena.org.uk>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-7-broonie@kernel.org>
+ <YgVaTounTtunlGU6@arm.com>
+ <YgVrbc4fFrA0Vjh2@sirena.org.uk>
+ <YgaWmP+P7v9b2lLz@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] selftests: kvm: Remove absent target file
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220210172352.1317554-1-usama.anjum@collabora.com>
- <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
- <eb4e24c6-41d0-4f3a-2af0-3008db408da6@redhat.com>
- <9198c43b-e5e2-fa58-5862-598dc7019ad6@linuxfoundation.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <9198c43b-e5e2-fa58-5862-598dc7019ad6@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YAmZ/SKZifOE9OWf"
+Content-Disposition: inline
+In-Reply-To: <YgaWmP+P7v9b2lLz@arm.com>
+X-Cookie: do {
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/11/22 18:34, Shuah Khan wrote:
-> On 2/10/22 11:56 AM, Paolo Bonzini wrote:
->> On 2/10/22 19:02, Shuah Khan wrote:
->>>
->>> I am fine with the change itself. For this patch:
->>>
->>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->>>
->>> However, are we missing a vmx_pi_mmio_test and that test needs to be 
->>> added.
->>>
->>> Just in case the test didn't make it into the 6a58150859fd and the 
->>> intent
->>> was to add it - hence the Makefile addition? This can be addressed in
->>> another patch. Just want to make sure we aren't missing a test.
->>
->> This was probably a rebase resolution issue.  The vmx_pi_mmio_test 
->> fails in the mainline tree, and is lingering in my tree together with 
->> the fix because somebody promised a better fix for it.  I included the 
->> TEST_GEN_PROGS_x86_64 line by mistake when rebasing Peter Gonda's test 
->> below vmx_pi_mmio_test.
->>
->> Thanks for the fix,
->>
->> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
->>
-> 
-> Paolo,
-> 
-> Thank you for explaining the discrepancy. Would you like take
-> this through your tree? This patch depends on
-> 
-> commit: de1956f48543e90f94b1194395f33140898b39b2
 
-Yes, of course.  Queued now.
+--YAmZ/SKZifOE9OWf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Paolo
+On Fri, Feb 11, 2022 at 05:02:16PM +0000, Catalin Marinas wrote:
+> On Thu, Feb 10, 2022 at 07:45:49PM +0000, Mark Brown wrote:
 
+> > If we don't preserve ZA then userspace will be forced to save it when
+> > enabled which increases overall costs, if we do preserve ZA then it's no
+> > more expensive for the kernel to save it than userspace, we avoid the
+> > cost of restoring in the case where return directly to userspace without
+> > context switching and if we do future work to save more lazily then we
+> > may be able to avoid some of the saves.
+
+> Thanks for the explanation and the PCS pointer. I guess doing the lazy
+> saving scheme in the syscall handler is a lot more painful (faults etc.)
+> and it's a user-only ABI/PCS, so we shouldn't tie the kernel into it.
+
+Yes, other than the considerations around clone() it's clearly more
+complicated to engage with.
+
+> Given that Linux doesn't plan to use the ZA registers itself, in most
+> cases it won't need to restore anything. But we still need to save the
+> ZA registers on context switch in case the thread wakes up on a
+> different CPU. How often do you reckon would the user do a syscall with
+> active ZA?
+
+I would expect it to be very rare that userspace would want to do a
+syscall with ZA enabled, though obviously there's not a huge body of
+real world SME code to validate that against yet.  The expected usage
+pattern is that both ZA and SM are only enabled for fairly brief bursts
+of intense computation and disabled when not actively used.  It's
+possible that you will see things like logging during computation, or
+perhaps streaming data to/from a running algorithm incrementally during
+operation, generating syscalls so I wouldn't be surprised to see it
+happen but it for most systems it should be a very small percentage of
+system calls.
+
+> > > What does that mean? Is this as per the sve.rst doc (unspecified but
+> > > zeroed in practice)?
+
+> > Yes, we will exit streaming mode and proceed as per sve.rst and the rest
+> > of the ABI.
+
+> So in this case we consider the syscall interface as non-streaming (as
+> per the PCS terminology). Should we require that the PSTATE.SM is
+> cleared by the user as well? Alternatively, we could make it
+> streaming-compatible and just preserve it. Are there any drawbacks?
+> kernel_neon_begin() could clear SM if needed.
+
+In fact kernel_neon_begin() already disables PSTATE.SM since we need to
+account for the case where userspace was preempted rather than issued a
+syscall.  We could require that PSTATE.SM is disabled by the user,
+though it's questionable what we could usefully and helpfully do about
+it if they forget other than disable it anyway or generate a signal.
+
+We could preserve PSTATE.SM, though since all the other register state
+for streaming mode is shared with SVE I would expect that we should be
+applying the SVE discard rules to it and there is therefore no other
+state that should be retained.  As things stand this would either result
+in more overhead or complicate the register save and restore a bit since
+if we're in streaming mode we currently assume that we should save and
+restore the full SVE register contents but normally in a syscall we only
+need to save and restore the FPSIMD subset.  The overhead might go away
+anyway as a result of general work on syscall optimisation for SVE,
+though that work isn't done yet and may not end up working out that way.
+
+Having said that as with ZA userspace can just exit streaming mode to
+avoid any overhead having it enabled introduces and the common case is
+expected to be that it will have done so due to the PCS, it should be an
+extremely rare case - unlike keeping ZA active there doesn't seem to be
+any case where it would be sensible to want to do this and the PCS means
+you'd have to actively try to do so.
+
+> > Largely just because it's more complicated to implement copying the ZA
+> > backing store for this and it seemed more likely that someone would be
+> > surprised by a new process getting stuck carrying a potentially large
+> > copy of ZA around that it was unaware of than that someone would
+> > actually want that to happen.  It's not a particularly strongly held
+> > opinon.
+
+> If PSTATE.ZA is valid and the user does a fork() (well, implemented as
+> clone()), normally it expects a nearly identical state in the child.
+> With clone() if a new thread is created, we likely don't need the
+> additional ZA state. We got away with having to think about this for
+> SVE as the state is lost on syscall. Here we risk having a vaguely
+> defined ABI - fork() is disabled on arm64 for example but we do have
+> clone() and clone3().
+
+> Still thinking about this but maybe we could do something like always
+> copy the ZA state unless CLONE_VM is passed for example. It is
+> marginally more precise.
+
+We should definitely write this up a bit more explictly whatever we do,
+like I say I don't really have strong opinions here.
+
+There's also the interaction with the lazy save state to consider -
+TPIDR2 is cleared if CLONE_SETTLS is specified which would interfere
+with any lazy state saving that had already happened, though hopefully
+userspace is taking care of that as part of setting up the new thread so
+I think it's fine.
+
+--YAmZ/SKZifOE9OWf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGp2UACgkQJNaLcl1U
+h9AIQAf8D5srkxC+RZZ7YwZjzxYgVg8sz99TAumIpwsl9Np4inwRi8gYSPgCSW9Q
+JEsYI4415LBWm2ZTluD7dL56JnwE2tb/4fhyygeYYdxiix+Hh9NEsQNTMHitrlqd
+1D5+CmEKrFNe2xc1KWkppDFjJj+ajsUp+zY6I05k4gUBl37jbXbp4N8gQ6+9nhIP
+ERSVGWt+ElhjMw4yCEc3xK6Pq19cKL4BvmgN2Bi3pD1HItVEa9OLkMlDi9GEm9k4
+e2OFcolJ7nEMzsHpeV4/8Mrwn3XgC2wgfHPV6LbSnCTv+C3u5E4bB8BLD5w9K0D0
+Vy6+LLlYi8r256HiWfRbA17I4ZLf0w==
+=IVui
+-----END PGP SIGNATURE-----
+
+--YAmZ/SKZifOE9OWf--
