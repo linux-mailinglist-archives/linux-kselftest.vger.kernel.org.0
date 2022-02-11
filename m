@@ -2,177 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA8C4B24CC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 12:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB2C4B2518
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 13:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345000AbiBKLwd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 06:52:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41686 "EHLO
+        id S1349813AbiBKMA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 07:00:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234362AbiBKLwd (ORCPT
+        with ESMTP id S239402AbiBKMA0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:52:33 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54920F4F
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 03:52:32 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21B9TK68006200;
-        Fri, 11 Feb 2022 11:52:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=r39KjGFYeZYwVJPkXzwSRLfqzvNS7gYWMV9ipUzI6Fw=;
- b=biFL3k/xmqzF53ra3qMpHdLlXXgrWfJGL6HuIXICGHrl95In0Qh/2lO+az7mbT/FGhVP
- 3CTvVXG/pRUaGefIcamMcdKGAtw259EMAqlaS03S0Ou1N+Ar80AtieNBtl22J+JC1xzo
- uobcjPtPIH6F2K+/alMIqkTOOxEKNcQP4PDdwHx3rNFGbqL7EVdAgFrtIKBhOXBnRH64
- 4qYLRRVEmwtB7TMpGKQOAhOeJatkOgkDmg4/3S/zJnSjoFeK4bvo/LoZ4QXOK71yLhiU
- fq/NKl7FMTCzBb+jN55fgT30X3Z77o9kmiI+BYZQR04kDWzJdtGpc3NsZxtjdI4r9iPz WQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e5n6xany8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 11:52:21 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21BBh3h8014897;
-        Fri, 11 Feb 2022 11:52:19 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e1gva99r5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 11:52:19 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21BBqHWl40567128
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Feb 2022 11:52:17 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 75F0E5204F;
-        Fri, 11 Feb 2022 11:52:17 +0000 (GMT)
-Received: from [9.43.112.9] (unknown [9.43.112.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 148A252051;
-        Fri, 11 Feb 2022 11:52:14 +0000 (GMT)
-Message-ID: <27a71056-489a-4099-b094-64766bea84db@linux.ibm.com>
-Date:   Fri, 11 Feb 2022 17:22:13 +0530
+        Fri, 11 Feb 2022 07:00:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E912F4E;
+        Fri, 11 Feb 2022 04:00:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A23F8B82963;
+        Fri, 11 Feb 2022 12:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EB443C340F5;
+        Fri, 11 Feb 2022 12:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644580814;
+        bh=fOys6QnTDTRCo5I3/Wrb/J4asiTQG4aJqxGwoWTg1m4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QlMoUVwHLpXahhpW4FvTif/XzGh3ezwqmRw7BYpnDv3RPHgFreWRmGmvItSKicRRE
+         Epi++wJ/bqleTOH+Y36S63iaN0Tyxd5khT1QMuSERbn71xYHuxntgtJt2rnss31BUm
+         LZUL0siDuYgiXUqTk/rqYxuL3dlRQVfEXc54SgdXae2IB4lc8VYtbAF2wJVVq77oah
+         lHzKzQygDm+gJ9DW5mYWKrEIVDpoll+SKK2LOHdsnMDNVWKIktHBOcD6jlk/Ssfc1u
+         qG5m6t6Jp/NZ7vbJkw2tgeG+MoFGb8uABeCtxmhDHNnlKxEalQ49HRv81FkBDOv4/e
+         grNrlcyiiPHHw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D38E2E5D09D;
+        Fri, 11 Feb 2022 12:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] selftest/vm: Use correct PAGE_SHIFT value for
- ppc64
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-References: <20220211063330.99648-1-aneesh.kumar@linux.ibm.com>
- <YgY7lDToiQ0pM6U6@kernel.org>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <YgY7lDToiQ0pM6U6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uP_lgHUcSyk14ev7v3z0Qc0YmgeID5j8
-X-Proofpoint-GUID: uP_lgHUcSyk14ev7v3z0Qc0YmgeID5j8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-11_04,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1011 impostorscore=0 phishscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202110066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] ipv6: Reject routes configurations that specify
+ dsfield (tos)
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164458081385.17283.4661621446713469533.git-patchwork-notify@kernel.org>
+Date:   Fri, 11 Feb 2022 12:00:13 +0000
+References: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
+In-Reply-To: <51234fd156acbe2161e928631cdc3d74b00002a7.1644505353.git.gnault@redhat.com>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, toke@redhat.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/11/22 16:03, Mike Rapoport wrote:
-> On Fri, Feb 11, 2022 at 12:03:28PM +0530, Aneesh Kumar K.V wrote:
->> Keep it simple by using a #define and limiting hugepage size to 2M.
->> This keeps the test simpler instead of dynamically finding the page size
->> and huge page size.
->>
->> Without this tests are broken w.r.t reading /proc/self/pagemap
->>
->> 	if (pread(pagemap_fd, ent, sizeof(ent),
->> 			(uintptr_t)ptr >> (PAGE_SHIFT - 3)) != sizeof(ent))
->> 		err(2, "read pagemap");
->>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: linux-kselftest@vger.kernel.org
->> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->> ---
->>   tools/testing/selftests/vm/ksm_tests.c        | 9 ++++++++-
->>   tools/testing/selftests/vm/transhuge-stress.c | 9 ++++++++-
->>   2 files changed, 16 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
->> index 1436e1a9a3d3..cae72872152b 100644
->> --- a/tools/testing/selftests/vm/ksm_tests.c
->> +++ b/tools/testing/selftests/vm/ksm_tests.c
->> @@ -22,7 +22,14 @@
->>   #define KSM_MERGE_ACROSS_NODES_DEFAULT true
->>   #define MB (1ul << 20)
->>   
->> -#define PAGE_SHIFT 12
->> +#ifdef __powerpc64__
->> +#define PAGE_SHIFT	16
->> +#else
->> +#define PAGE_SHIFT	12
->> +#endif
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 10 Feb 2022 16:08:08 +0100 you wrote:
+> The ->rtm_tos option is normally used to route packets based on both
+> the destination address and the DS field. However it's ignored for
+> IPv6 routes. Setting ->rtm_tos for IPv6 is thus invalid as the route
+> is going to work only on the destination address anyway, so it won't
+> behave as specified.
 > 
-> Page size can be other than 4096 for other configurations as well. And even
-> on ppc64 it's not necessarily 64k.
+> Suggested-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> Signed-off-by: Guillaume Nault <gnault@redhat.com>
 > 
+> [...]
 
-But most common test config is with 64K page size.
+Here is the summary with links:
+  - [net-next] ipv6: Reject routes configurations that specify dsfield (tos)
+    https://git.kernel.org/netdev/net-next/c/b9605161e7be
 
-> Ideally page size in selftests/vm should be sysconf(_SC_PAGESIZE)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-
-yes. As explained in commit message, the idea was to keep it simpler.
-
-"Keep it simple by using a #define and limiting hugepage size to 2M.
-This keeps the test simpler instead of dynamically finding the page size
-and huge page size.
-
-Without this tests are broken w.r.t reading /proc/self/pagemap"
-
-We can definitely look at updating multiple tests in selftest/vm to work 
-with dynamic value of pagesize and huagepage size. But that can be 
-outside this patch?
-
-> 
->> +/*
->> + * On ppc64 this will only work with radix 2M hugepage size
->> + */
->>   #define HPAGE_SHIFT 21
->>   
->>   #define PAGE_SIZE (1 << PAGE_SHIFT)
->> diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
->> index 5e4c036f6ad3..b1f8d98355c5 100644
->> --- a/tools/testing/selftests/vm/transhuge-stress.c
->> +++ b/tools/testing/selftests/vm/transhuge-stress.c
->> @@ -16,7 +16,14 @@
->>   #include <string.h>
->>   #include <sys/mman.h>
->>   
->> -#define PAGE_SHIFT 12
->> +#ifdef __powerpc64__
->> +#define PAGE_SHIFT	16
->> +#else
->> +#define PAGE_SHIFT	12
->> +#endif
->> +/*
->> + * On ppc64 this will only work with radix 2M hugepage size
->> + */
->>   #define HPAGE_SHIFT 21
->>   
->>   #define PAGE_SIZE (1 << PAGE_SHIFT)
->> -- 
->> 2.34.1
->>
->>
-> 
 
