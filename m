@@ -2,114 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EB14B2AB0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 17:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEF04B2B31
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 18:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351640AbiBKQmz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 11:42:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44824 "EHLO
+        id S230480AbiBKRC2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 12:02:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351632AbiBKQmy (ORCPT
+        with ESMTP id S232166AbiBKRC1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:42:54 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC624D68
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 08:42:52 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id e7so20029149ejn.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 08:42:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rYp/F1vbxbLivUF65w2maaWuA20v5CCQAIJDPT6o8JY=;
-        b=CL6Jlbne1nQ4xOStNkTjKFGiu6eZkyt70Mcb0LWc0882nAZ7P7kd+jW4SmkAkdbSOi
-         SK2lKsX8ECKyxCq1E/oi+ky7sq/74xwgWEug8LnHLiiTm/zDSY3u7V739zYQHq14qwu0
-         KRESuB29xjHnegmn33WD7l+FJH06sG7eTLfZM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rYp/F1vbxbLivUF65w2maaWuA20v5CCQAIJDPT6o8JY=;
-        b=JkVmEoBzRzoOJ9P12d/p69fSvBzmV2KQu7GCdSUbfGvSP9WvuQqtCjkBwV99je92oO
-         TCwcselHbB5Ka5XpVchx5UgOwQFOtPWVJJ9Ze+c+JWTYiWFGhi+Qi9UdkLEKVtwh+ePX
-         qN7TP09A0aa0D6wjTgF90O2e7lm8fg/0xPC8W2ZXg1K0+nesfWMMbeIoI8FUbMvE0CZK
-         Kc1VXi31AjV0Q0JB5PEUOBDB2EgnhZsz/666RhLECUWkB22RMVI8rznccpgO3CMBkoS/
-         6d1qVtbwGvrI/7QlYvAGM+fsjCWHaXSeqXPjUK1C9bFS8PpTVsvyVsQ3XzdmKwXxsXSr
-         T9uQ==
-X-Gm-Message-State: AOAM532XqjWgpoYOVWNLyWSoXfMS/XMa8ZChZ/O0TGGBY+TvJO180c/j
-        WvhVuh5bvXSX0HpcCrSBbRgiTQ==
-X-Google-Smtp-Source: ABdhPJygyJBMvsfog6wCOcGdFWEDQXX093IZi30k7s33kVrBINglEQvM2MGt+3IsIw8946097lp0cw==
-X-Received: by 2002:a17:907:6d1b:: with SMTP id sa27mr2076137ejc.166.1644597771403;
-        Fri, 11 Feb 2022 08:42:51 -0800 (PST)
-Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id i24sm4981233edt.86.2022.02.11.08.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:42:51 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 6/6] apparmor: test: Use NULL macros
-Date:   Fri, 11 Feb 2022 17:42:46 +0100
-Message-Id: <20220211164246.410079-6-ribalda@chromium.org>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-In-Reply-To: <20220211164246.410079-1-ribalda@chromium.org>
-References: <20220211164246.410079-1-ribalda@chromium.org>
+        Fri, 11 Feb 2022 12:02:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720933B3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 09:02:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A3DAB82AD0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 17:02:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3804C340E9;
+        Fri, 11 Feb 2022 17:02:19 +0000 (UTC)
+Date:   Fri, 11 Feb 2022 17:02:16 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YgaWmP+P7v9b2lLz@arm.com>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-7-broonie@kernel.org>
+ <YgVaTounTtunlGU6@arm.com>
+ <YgVrbc4fFrA0Vjh2@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgVrbc4fFrA0Vjh2@sirena.org.uk>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace the PTR_EQ NULL checks with the more idiomatic and specific NULL
-macros.
+On Thu, Feb 10, 2022 at 07:45:49PM +0000, Mark Brown wrote:
+> On Thu, Feb 10, 2022 at 06:32:46PM +0000, Catalin Marinas wrote:
+> > On Mon, Feb 07, 2022 at 03:20:35PM +0000, Mark Brown wrote:
+> > > +4.  System call behaviour
+> > > +-------------------------
+> 
+> > > +* On syscall PSTATE.ZA is preserved, if PSTATE.ZA==1 then the contents of the
+> > > +  ZA matrix are preserved.
+> 
+> > Sorry if this was discussed. What is the rationale for preserving the ZA
+> > registers on syscall? We don't do this for the top part of the Z
+> > registers.
+> 
+> In both cases it's mirroring the expected PCS which is that for normal
+> functions they must be called with streaming mode disabled, the high
+> bits of Z may be changed and there is a lazy saving scheme for ZA.  The
+> handling of the Z registers falls out of a combination of the fact that
+> the low bits are shared with the V registers and a desire to
+> interoperate with binaries that are only aware of FPSIMD.
+> 
+> See:
+> 
+>   https://github.com/rsandifo-arm/abi-aa/blob/sme-aapcs64/aapcs64/aapcs64.rst
+> 
+> for the PCS (it's an open pull request on the AAPCS), if we disable ZA
+> we should really cooperate with the lazy save scheme for ZA in section
+> 6.5 which would involve writing to userspace buffers.  Given that we
+> need to support preserving ZA for cases where userspace is preempted
+> it's not really much effort to do that, if userspace doesn't want the
+> cost it can disable ZA before doing a syscall and it means that syscalls
+> don't push userspace code that would otherwise not do anything with ZA
+> to have problems interoperating with the lazy saving scheme.
+> 
+> If we don't preserve ZA then userspace will be forced to save it when
+> enabled which increases overall costs, if we do preserve ZA then it's no
+> more expensive for the kernel to save it than userspace, we avoid the
+> cost of restoring in the case where return directly to userspace without
+> context switching and if we do future work to save more lazily then we
+> may be able to avoid some of the saves.
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- security/apparmor/policy_unpack_test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks for the explanation and the PCS pointer. I guess doing the lazy
+saving scheme in the syscall handler is a lot more painful (faults etc.)
+and it's a user-only ABI/PCS, so we shouldn't tie the kernel into it.
 
-diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-index 533137f45361..5c18d2f19862 100644
---- a/security/apparmor/policy_unpack_test.c
-+++ b/security/apparmor/policy_unpack_test.c
-@@ -313,7 +313,7 @@ static void policy_unpack_test_unpack_strdup_out_of_bounds(struct kunit *test)
- 	size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
- 
- 	KUNIT_EXPECT_EQ(test, size, 0);
--	KUNIT_EXPECT_PTR_EQ(test, string, (char *)NULL);
-+	KUNIT_EXPECT_NULL(test, string);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
- }
- 
-@@ -409,7 +409,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
- 	size = unpack_u16_chunk(puf->e, &chunk);
- 
- 	KUNIT_EXPECT_EQ(test, size, (size_t)0);
--	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
-+	KUNIT_EXPECT_NULL(test, chunk);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
- }
- 
-@@ -431,7 +431,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
- 	size = unpack_u16_chunk(puf->e, &chunk);
- 
- 	KUNIT_EXPECT_EQ(test, size, (size_t)0);
--	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
-+	KUNIT_EXPECT_NULL(test, chunk);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
- }
- 
+Given that Linux doesn't plan to use the ZA registers itself, in most
+cases it won't need to restore anything. But we still need to save the
+ZA registers on context switch in case the thread wakes up on a
+different CPU. How often do you reckon would the user do a syscall with
+active ZA?
+
+Anyway, I'll go through the other patches and get back to the ABI doc
+later, once I understand the kernel implementation better.
+
+> > > +  as normal.
+> 
+> > What does that mean? Is this as per the sve.rst doc (unspecified but
+> > zeroed in practice)?
+> 
+> Yes, we will exit streaming mode and proceed as per sve.rst and the rest
+> of the ABI.
+
+So in this case we consider the syscall interface as non-streaming (as
+per the PCS terminology). Should we require that the PSTATE.SM is
+cleared by the user as well? Alternatively, we could make it
+streaming-compatible and just preserve it. Are there any drawbacks?
+kernel_neon_begin() could clear SM if needed.
+
+> > > +* Neither the SVE registers nor ZA are used to pass arguments to or receive
+> > > +  results from any syscall.
+> > > +
+> > > +* On creation fork() or clone() the newly created process will have PSTATE.SM
+> > > +  and PSTATE.ZA cleared.
+> 
+> > This looks slightly inconsistent with the first bullet point on ZA being
+> > preserved on syscalls. Why do these differ?
+> 
+> Largely just because it's more complicated to implement copying the ZA
+> backing store for this and it seemed more likely that someone would be
+> surprised by a new process getting stuck carrying a potentially large
+> copy of ZA around that it was unaware of than that someone would
+> actually want that to happen.  It's not a particularly strongly held
+> opinon.
+
+If PSTATE.ZA is valid and the user does a fork() (well, implemented as
+clone()), normally it expects a nearly identical state in the child.
+With clone() if a new thread is created, we likely don't need the
+additional ZA state. We got away with having to think about this for
+SVE as the state is lost on syscall. Here we risk having a vaguely
+defined ABI - fork() is disabled on arm64 for example but we do have
+clone() and clone3().
+
+Still thinking about this but maybe we could do something like always
+copy the ZA state unless CLONE_VM is passed for example. It is
+marginally more precise.
+
+> > > +[4] ARM IHI0055C
+> > > +    http://infocenter.arm.com/help/topic/com.arm.doc.ihi0055c/IHI0055C_beta_aapcs64.pdf
+> > > +    http://infocenter.arm.com/help/topic/com.arm.doc.subset.swdev.abi/index.html
+> > > +    Procedure Call Standard for the ARM 64-bit Architecture (AArch64)
+> 
+> > The second link no longer works. I also couldn't find any reference to
+> > [4] but there's a lot of text to scan, so I may have missed it.
+> 
+> We don't referenced it, it's just carried over from SVE.
+
+So I guess we can drop them from this doc.
+
 -- 
-2.35.1.265.g69c8d7142f-goog
-
+Catalin
