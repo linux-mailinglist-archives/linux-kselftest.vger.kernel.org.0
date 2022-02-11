@@ -2,81 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921394B1E9A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 07:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DDC4B2245
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 10:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236822AbiBKGfS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 01:35:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36290 "EHLO
+        id S1343896AbiBKJlq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 04:41:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiBKGfS (ORCPT
+        with ESMTP id S234778AbiBKJlm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:35:18 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3550E56
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 22:35:17 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21B6PJJD011241;
-        Fri, 11 Feb 2022 06:35:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=SWc9HmSHc793CMFIC2l4bwVO7HD12ma7vyanF9gnhcM=;
- b=pQKc8/LOC3p2DkWRpXR2OhsWuoiT4HzgcOQQIRjVUEp03TRGJP/q4ZNxJBcXm7mMjWpU
- WgsE4CH06nG2GfJm+3dI3jhwvWpy3NK5yTPCxQnx01VIbTkyhuy8Bc6vPOzNxRhuOR49
- o8+YLKv5K10yjFVUMFoBFpcE05FNNGrcTzDuV/k9NxCTUPBbuJNCA3ktOYJpAB7vXudH
- TuyHAKfr5biXLA0j+54amjgA0FwytQcbumpefSqccnVGp0zEcrXSMITxBAwt/Spppzbt
- DTd1o9ifxrtIfL31wk9YtRElocjx1WfaUeBtL+tM43+c1kcERAFT55G2pGJtHPBgbZ7K kg== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e5b38q8ca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 06:35:01 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21B6XQpT014417;
-        Fri, 11 Feb 2022 06:35:01 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma02dal.us.ibm.com with ESMTP id 3e3gq1nqyn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 06:35:01 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21B6Z0nq32964884
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Feb 2022 06:35:00 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED01C13605E;
-        Fri, 11 Feb 2022 06:34:59 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D558136053;
-        Fri, 11 Feb 2022 06:34:57 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.43.41.36])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Feb 2022 06:34:57 +0000 (GMT)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/2] selftest/vm: Add util.h and and move helper functions there
-Date:   Fri, 11 Feb 2022 12:03:29 +0530
-Message-Id: <20220211063330.99648-2-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220211063330.99648-1-aneesh.kumar@linux.ibm.com>
-References: <20220211063330.99648-1-aneesh.kumar@linux.ibm.com>
+        Fri, 11 Feb 2022 04:41:42 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFC910A0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 01:41:41 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id p24so21659355ejo.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 01:41:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vsf2QgtdatJ2wExDY4gvcboSixkFghVOFaraVlgt+kM=;
+        b=aNwI2IxJubmpP+64mkhgrKN3wO139Ak4PiJbNw49dZKYsqpNJI+pDZM2rZPtC678IL
+         aJWoY90Bp44guIS+JWCfSc57udtqvLH4jW8X/owNqgbRjJCWwf80hg1guWj/5UJrm7JJ
+         TFlPmtmtnjwf4dGP01QJ4wG20e/F9lWZOxm58=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vsf2QgtdatJ2wExDY4gvcboSixkFghVOFaraVlgt+kM=;
+        b=FTekXFfzwe74PfPm3QSoEmJOx9UDYn0MzoDrjsn7Y9scqpxlQqWW1nY/236lBuxMGE
+         ETA5YYrHx3k6hyWeOVKYI4N5bTG0zIEbFBlSc7x9PQgRcOIyMqbp3faxA9+D5hAVi3q1
+         OgcRxsxY1tkU/OqipfEg9PAd3D3VM4qxvHPg/yPRhv41CAxDJArCX9W55QnIkKJYg3Vi
+         p/b6SDAGmOJheLnnANXxrB5OrFARNofJZukCJ4MIfYHMQuyMoNiZL+utd7htaSxn1Q3b
+         dzt/vI44vDhPtqVcV84w/MpvBmIBzv8aMfE1jQ9DFvv2aNxTCwyvzCXAkONI8714UFVE
+         J1VQ==
+X-Gm-Message-State: AOAM530adkTajQ9DLExD2WgVXqS16hWlt2t+o1pUwR9/dnZuwTk5F0qR
+        8jIoIlnh7tkfxFpftmRFJdiwXQ==
+X-Google-Smtp-Source: ABdhPJw+InPe3gyY5Qn/XyNmPEB0uQKhUgpF3GibZGze3g8tA8WhsUQwOKE05nMV03myAGheeUFWTA==
+X-Received: by 2002:a17:906:7948:: with SMTP id l8mr663890ejo.752.1644572500145;
+        Fri, 11 Feb 2022 01:41:40 -0800 (PST)
+Received: from alco.corp.google.com ([2620:0:1059:10:83e3:abbd:d188:2cc5])
+        by smtp.gmail.com with ESMTPSA id e8sm603196ejl.68.2022.02.11.01.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 01:41:39 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v5 1/6] kunit: Introduce _NULL and _NOT_NULL macros
+Date:   Fri, 11 Feb 2022 10:41:28 +0100
+Message-Id: <20220211094133.265066-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: H6QsVuT_qpeFL_jvK7a5VVGJZPAAHqNW
-X-Proofpoint-ORIG-GUID: H6QsVuT_qpeFL_jvK7a5VVGJZPAAHqNW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-11_02,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 spamscore=0 suspectscore=0 impostorscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 malwarescore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202110036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,222 +68,126 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Avoid code duplication by adding util.h
+Today, when we want to check if a pointer is NULL and not ERR we have
+two options:
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+KUNIT_EXPECT_TRUE(test, ptr == NULL);
+
+or
+
+KUNIT_EXPECT_PTR_NE(test, ptr, (struct mystruct *)NULL);
+
+Create a new set of macros that take care of NULL checks.
+
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- tools/testing/selftests/vm/ksm_tests.c        | 45 +---------------
- tools/testing/selftests/vm/transhuge-stress.c | 49 ++---------------
- tools/testing/selftests/vm/util.h             | 54 +++++++++++++++++++
- 3 files changed, 58 insertions(+), 90 deletions(-)
- create mode 100644 tools/testing/selftests/vm/util.h
+ include/kunit/test.h | 84 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
-index cae72872152b..fd85f15869d1 100644
---- a/tools/testing/selftests/vm/ksm_tests.c
-+++ b/tools/testing/selftests/vm/ksm_tests.c
-@@ -12,6 +12,7 @@
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 00b9ff7783ab..e6c18b609b47 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -1218,6 +1218,48 @@ do {									       \
+ 				   fmt,					       \
+ 				   ##__VA_ARGS__)
  
- #include "../kselftest.h"
- #include "../../../../include/vdso/time64.h"
-+#include "util.h"
- 
- #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
- #define KSM_FP(s) (KSM_SYSFS_PATH s)
-@@ -22,22 +23,6 @@
- #define KSM_MERGE_ACROSS_NODES_DEFAULT true
- #define MB (1ul << 20)
- 
--#ifdef __powerpc64__
--#define PAGE_SHIFT	16
--#else
--#define PAGE_SHIFT	12
--#endif
--/*
-- * On ppc64 this will only work with radix 2M hugepage size
-- */
--#define HPAGE_SHIFT 21
--
--#define PAGE_SIZE (1 << PAGE_SHIFT)
--#define HPAGE_SIZE (1 << HPAGE_SHIFT)
--
--#define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
--#define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
--
- struct ksm_sysfs {
- 	unsigned long max_page_sharing;
- 	unsigned long merge_across_nodes;
-@@ -463,34 +448,6 @@ static int check_ksm_numa_merge(int mapping, int prot, int timeout, bool merge_a
- 	return KSFT_FAIL;
- }
- 
--int64_t allocate_transhuge(void *ptr, int pagemap_fd)
--{
--	uint64_t ent[2];
--
--	/* drop pmd */
--	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
--				MAP_FIXED | MAP_ANONYMOUS |
--				MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
--		errx(2, "mmap transhuge");
--
--	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
--		err(2, "MADV_HUGEPAGE");
--
--	/* allocate transparent huge page */
--	*(volatile void **)ptr = ptr;
--
--	if (pread(pagemap_fd, ent, sizeof(ent),
--			(uintptr_t)ptr >> (PAGE_SHIFT - 3)) != sizeof(ent))
--		err(2, "read pagemap");
--
--	if (PAGEMAP_PRESENT(ent[0]) && PAGEMAP_PRESENT(ent[1]) &&
--	    PAGEMAP_PFN(ent[0]) + 1 == PAGEMAP_PFN(ent[1]) &&
--	    !(PAGEMAP_PFN(ent[0]) & ((1 << (HPAGE_SHIFT - PAGE_SHIFT)) - 1)))
--		return PAGEMAP_PFN(ent[0]);
--
--	return -1;
--}
--
- static int ksm_merge_hugepages_time(int mapping, int prot, int timeout, size_t map_size)
- {
- 	void *map_ptr, *map_ptr_orig;
-diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
-index b1f8d98355c5..0da4aa10746a 100644
---- a/tools/testing/selftests/vm/transhuge-stress.c
-+++ b/tools/testing/selftests/vm/transhuge-stress.c
-@@ -16,51 +16,7 @@
- #include <string.h>
- #include <sys/mman.h>
- 
--#ifdef __powerpc64__
--#define PAGE_SHIFT	16
--#else
--#define PAGE_SHIFT	12
--#endif
--/*
-- * On ppc64 this will only work with radix 2M hugepage size
-- */
--#define HPAGE_SHIFT 21
--
--#define PAGE_SIZE (1 << PAGE_SHIFT)
--#define HPAGE_SIZE (1 << HPAGE_SHIFT)
--
--#define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
--#define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
--
--int pagemap_fd;
--
--int64_t allocate_transhuge(void *ptr)
--{
--	uint64_t ent[2];
--
--	/* drop pmd */
--	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
--				MAP_FIXED | MAP_ANONYMOUS |
--				MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
--		errx(2, "mmap transhuge");
--
--	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
--		err(2, "MADV_HUGEPAGE");
--
--	/* allocate transparent huge page */
--	*(volatile void **)ptr = ptr;
--
--	if (pread(pagemap_fd, ent, sizeof(ent),
--			(uintptr_t)ptr >> (PAGE_SHIFT - 3)) != sizeof(ent))
--		err(2, "read pagemap");
--
--	if (PAGEMAP_PRESENT(ent[0]) && PAGEMAP_PRESENT(ent[1]) &&
--	    PAGEMAP_PFN(ent[0]) + 1 == PAGEMAP_PFN(ent[1]) &&
--	    !(PAGEMAP_PFN(ent[0]) & ((1 << (HPAGE_SHIFT - PAGE_SHIFT)) - 1)))
--		return PAGEMAP_PFN(ent[0]);
--
--	return -1;
--}
-+#include "util.h"
- 
- int main(int argc, char **argv)
- {
-@@ -70,6 +26,7 @@ int main(int argc, char **argv)
- 	double s;
- 	uint8_t *map;
- 	size_t map_len;
-+	int pagemap_fd;
- 
- 	ram = sysconf(_SC_PHYS_PAGES);
- 	if (ram > SIZE_MAX / sysconf(_SC_PAGESIZE) / 4)
-@@ -116,7 +73,7 @@ int main(int argc, char **argv)
- 		for (p = ptr; p < ptr + len; p += HPAGE_SIZE) {
- 			int64_t pfn;
- 
--			pfn = allocate_transhuge(p);
-+			pfn = allocate_transhuge(p, pagemap_fd);
- 
- 			if (pfn < 0) {
- 				nr_failed++;
-diff --git a/tools/testing/selftests/vm/util.h b/tools/testing/selftests/vm/util.h
-new file mode 100644
-index 000000000000..8ec94940371f
---- /dev/null
-+++ b/tools/testing/selftests/vm/util.h
-@@ -0,0 +1,54 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __KSELFTEST_VM_UTIL_H
-+#define __KSELFTEST_VM_UTIL_H
-+
-+#include <sys/mman.h>
-+#include <err.h>
-+
-+#ifdef __powerpc64__
-+#define PAGE_SHIFT	16
-+#else
-+#define PAGE_SHIFT	12
-+#endif
-+/*
-+ * On ppc64 this will only work with radix 2M hugepage size
++/**
++ * KUNIT_EXPECT_NULL() - Expects that @ptr is null.
++ * @test: The test context object.
++ * @ptr: an arbitrary pointer.
++ *
++ * Sets an expectation that the value that @ptr evaluates to is null. This is
++ * semantically equivalent to KUNIT_EXPECT_PTR_EQ(@test, ptr, NULL).
++ * See KUNIT_EXPECT_TRUE() for more information.
 + */
-+#define HPAGE_SHIFT 21
++#define KUNIT_EXPECT_NULL(test, ptr)				               \
++	KUNIT_EXPECT_NULL_MSG(test,					       \
++			      ptr,					       \
++			      NULL)
 +
-+#define PAGE_SIZE (1 << PAGE_SHIFT)
-+#define HPAGE_SIZE (1 << HPAGE_SHIFT)
++#define KUNIT_EXPECT_NULL_MSG(test, ptr, fmt, ...)	                       \
++	KUNIT_BINARY_PTR_ASSERTION(test,				       \
++				   KUNIT_EXPECTATION,			       \
++				   ptr, ==, NULL,			       \
++				   fmt,					       \
++				   ##__VA_ARGS__)
 +
-+#define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
-+#define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
++/**
++ * KUNIT_EXPECT_NOT_NULL() - Expects that @ptr is not null.
++ * @test: The test context object.
++ * @ptr: an arbitrary pointer.
++ *
++ * Sets an expectation that the value that @ptr evaluates to is not null. This
++ * is semantically equivalent to KUNIT_EXPECT_PTR_NE(@test, ptr, NULL).
++ * See KUNIT_EXPECT_TRUE() for more information.
++ */
++#define KUNIT_EXPECT_NOT_NULL(test, ptr)			               \
++	KUNIT_EXPECT_NOT_NULL_MSG(test,					       \
++				  ptr,					       \
++				  NULL)
 +
++#define KUNIT_EXPECT_NOT_NULL_MSG(test, ptr, fmt, ...)	                       \
++	KUNIT_BINARY_PTR_ASSERTION(test,				       \
++				   KUNIT_EXPECTATION,			       \
++				   ptr, !=, NULL,			       \
++				   fmt,					       \
++				   ##__VA_ARGS__)
 +
-+static inline int64_t allocate_transhuge(void *ptr, int pagemap_fd)
-+{
-+	uint64_t ent[2];
+ /**
+  * KUNIT_EXPECT_NOT_ERR_OR_NULL() - Expects that @ptr is not null and not err.
+  * @test: The test context object.
+@@ -1485,6 +1527,48 @@ do {									       \
+ 				   fmt,					       \
+ 				   ##__VA_ARGS__)
+ 
++/**
++ * KUNIT_ASSERT_NULL() - Asserts that pointers @ptr is null.
++ * @test: The test context object.
++ * @ptr: an arbitrary pointer.
++ *
++ * Sets an assertion that the values that @ptr evaluates to is null. This is
++ * the same as KUNIT_EXPECT_NULL(), except it causes an assertion
++ * failure (see KUNIT_ASSERT_TRUE()) when the assertion is not met.
++ */
++#define KUNIT_ASSERT_NULL(test, ptr) \
++	KUNIT_ASSERT_NULL_MSG(test,					       \
++			      ptr,					       \
++			      NULL)
 +
-+	/* drop pmd */
-+	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
-+		 MAP_FIXED | MAP_ANONYMOUS |
-+		 MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
-+		errx(2, "mmap transhuge");
++#define KUNIT_ASSERT_NULL_MSG(test, ptr, fmt, ...) \
++	KUNIT_BINARY_PTR_ASSERTION(test,				       \
++				   KUNIT_ASSERTION,			       \
++				   ptr, ==, NULL,			       \
++				   fmt,					       \
++				   ##__VA_ARGS__)
 +
-+	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
-+		err(2, "MADV_HUGEPAGE");
++/**
++ * KUNIT_ASSERT_NOT_NULL() - Asserts that pointers @ptr is not null.
++ * @test: The test context object.
++ * @ptr: an arbitrary pointer.
++ *
++ * Sets an assertion that the values that @ptr evaluates to is not null. This
++ * is the same as KUNIT_EXPECT_NOT_NULL(), except it causes an assertion
++ * failure (see KUNIT_ASSERT_TRUE()) when the assertion is not met.
++ */
++#define KUNIT_ASSERT_NOT_NULL(test, ptr) \
++	KUNIT_ASSERT_NOT_NULL_MSG(test,					       \
++				  ptr,					       \
++				  NULL)
 +
-+	/* allocate transparent huge page */
-+	*(volatile void **)ptr = ptr;
++#define KUNIT_ASSERT_NOT_NULL_MSG(test, ptr, fmt, ...) \
++	KUNIT_BINARY_PTR_ASSERTION(test,				       \
++				   KUNIT_ASSERTION,			       \
++				   ptr, !=, NULL,			       \
++				   fmt,					       \
++				   ##__VA_ARGS__)
 +
-+	if (pread(pagemap_fd, ent, sizeof(ent),
-+		  (uintptr_t)ptr >> (PAGE_SHIFT - 3)) != sizeof(ent))
-+		err(2, "read pagemap");
-+
-+	if (PAGEMAP_PRESENT(ent[0]) && PAGEMAP_PRESENT(ent[1]) &&
-+	    PAGEMAP_PFN(ent[0]) + 1 == PAGEMAP_PFN(ent[1]) &&
-+	    !(PAGEMAP_PFN(ent[0]) & ((1 << (HPAGE_SHIFT - PAGE_SHIFT)) - 1)))
-+		return PAGEMAP_PFN(ent[0]);
-+
-+	return -1;
-+}
-+
-+#endif
+ /**
+  * KUNIT_ASSERT_NOT_ERR_OR_NULL() - Assertion that @ptr is not null and not err.
+  * @test: The test context object.
 -- 
-2.34.1
+2.35.1.265.g69c8d7142f-goog
 
