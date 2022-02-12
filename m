@@ -2,154 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D5E4B3114
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Feb 2022 23:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267AD4B3253
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Feb 2022 02:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiBKWy5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Feb 2022 17:54:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42992 "EHLO
+        id S243505AbiBLBKA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Feb 2022 20:10:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiBKWy4 (ORCPT
+        with ESMTP id S234870AbiBLBKA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 17:54:56 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAB2C63
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 14:54:51 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id s7so18615753edd.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 14:54:51 -0800 (PST)
+        Fri, 11 Feb 2022 20:10:00 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3776BD5C
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 17:09:57 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id i30so19106071pfk.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 17:09:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MNyMAxSIRfmX6E7yXPlJDgtVqsNPCnT37/UNnUhdfcg=;
-        b=PN9gtVb6nSnvnmYjzjkpar1jLF7GagSkv+xQr42ThW3tkgFPyh5shJv4uUq+9uowwk
-         hAMckfSuryI9zgaiB/0OKuIGElkEmt/7wAMrTlot2O4f0J6Je7NesXPW6lvD+tlI5sOp
-         6HUeYP4mTBPxy1SIeC90fuVLNrH2GQUdLF81ee23vBhHQGmSt6n+tiSW8wsMbQlkAJdI
-         U5iEETDzJhV78YQSZfKjT29DXQsWSj33/Mqg3xgd3NaiWX9aFoEK12eOzd+gPfEybadh
-         Hc4UDro//JidGXk8V/5JIh0UsmaB00MYxGhlbnbaEg7qK6yfcc9nTB5bI6IojQLwQvLy
-         cJVA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=JHu4eDHgWX+rqIL8cDnAMKv2T4Koe7Z+xBB7PNRPIPw=;
+        b=0mNPaEREieCxRVNlGF+qLorOKl/t+p1aZCpgqxgcb4mbnJ7ZVwaDZdTQGxvmM5Z3sl
+         7AkLP4FXqhlj9A0bqEU36NeCcrYKn9y/2fh7JE94/y9bEJtEfOeNbvZtqF0OS7E2RYq3
+         Tpql2t4KCMxCFlz3DPCNodCoZfV6E/TBsYemFEznAl8cKN7ZveVlAieDVNJgoiWQEVqa
+         I2o+FECOn+MP0dzoUChHL93DffzHQzXsnxx69oQjAUfU9l6lkzq9qUO+nFnfwvpqglMT
+         YB6qXXj/SXYjfFkZ9T7dm0kNVsswGfSluOID9KAKPZDICgq2w8AopEEWPIU9CVyJ39r7
+         wJVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MNyMAxSIRfmX6E7yXPlJDgtVqsNPCnT37/UNnUhdfcg=;
-        b=KaNz9RCKVYJjbO68Z+EjHrgq/sbMvRUy+fZoIIxNxpzHzKtveym6k3AhmQy091pk6k
-         5EeXLGGM4o4orUBytVOyhDyePFcsUrEX0EJWrqojBwf8IcZFlbxxIL2z1fydLZmbMHXM
-         V+rvzF1xA/IB9DeKuWkd1oYTxv68WoYdhXOIZrTmGo5VnWkARZS0ryVJObkbdCRcHD44
-         Dfoa1TV0fYkuQ/th/jPd6Sfb/yqIanzBNg+w3G3HmO8WjsyBWGtOhz95OUw49a38dKHL
-         xDySfAEgAXERN0lG7itpUjeY428InXnUwKcH3/UGFfsknI9Ij5H0KnpWB5QwgQcznjWz
-         1T8A==
-X-Gm-Message-State: AOAM532m3l1dXh6TOVi6qNgFPC6sOaQ/s4Y7B3nVNbmHQj4D99b5e1Ux
-        o5oLaroGXvv58Ee63/h8fg0ein8NqJHRYLMDWwXmFQ==
-X-Google-Smtp-Source: ABdhPJzPOkMa9Yfx2cK2rXg9vNZWhy2XXDei6adD9tdqXmeicrpJGROv/oH9u7zS4GKx4ElGyaSyuLujHB+nvPRtLh8=
-X-Received: by 2002:a05:6402:289:: with SMTP id l9mr4272896edv.272.1644620090064;
- Fri, 11 Feb 2022 14:54:50 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=JHu4eDHgWX+rqIL8cDnAMKv2T4Koe7Z+xBB7PNRPIPw=;
+        b=AGEGzrJjSAPvZxkBBhn+v++EbCUpXK4xNQJxlMdA141Sds8R9tS5cD3XSG1ju8PFGq
+         NIh8cnEY7kDKTEy34zhwsb5BhfMxs/KFQe7V1zGzmFIW0P/t6GOYwvEIttTLPzEhMaJ2
+         DCTvU6mOTn8kyXD4V4TekTcz2W2PGkEC1pAOkehZlKmTZTZIbhRZY+RavEmEbhT89N5q
+         SMCEUCS/SgeXpLvg6DJjGiJjn6vRITCu3Q8Fx26DwOFo4sIoOlh6u5vgRfm28hiFMu2C
+         Eogdbr0MyFPPb7bTnVQp0Wjv8XfaVMUSoWGLc3qDsH0RqO4D56PVkr/5YocXpwuKSYC6
+         sbaA==
+X-Gm-Message-State: AOAM530QPwmBf250joPU0kK5mLD/luirpy/kHQZmf44u/joh0B52UfPr
+        7pUdNrjnapiMwnl0xajLSp4wS+b5ivC8Uu5K
+X-Google-Smtp-Source: ABdhPJwyGZQzj+VMLEoHapNIt+ohSIqniK50rV28lFqrZv18et9HCTpN0M618rDnfTYZCp/MODF4QA==
+X-Received: by 2002:a63:ec56:: with SMTP id r22mr3478243pgj.229.1644628196747;
+        Fri, 11 Feb 2022 17:09:56 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id ob12sm6298982pjb.47.2022.02.11.17.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 17:09:56 -0800 (PST)
+Message-ID: <620708e4.1c69fb81.5134.fb41@mx.google.com>
+Date:   Fri, 11 Feb 2022 17:09:56 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220211094133.265066-1-ribalda@chromium.org> <20220211094133.265066-3-ribalda@chromium.org>
- <YgY1lzA20zyFcVi3@lahna> <CANiDSCs3+637REhtGjKy+MSnUm-Mh-k1S7Lk9UKqC8JY-k=zTw@mail.gmail.com>
- <YgaOS8BLz23k6JVq@lahna> <YgaPXhOr/lFny4IS@lahna> <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
-In-Reply-To: <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 11 Feb 2022 14:54:37 -0800
-Message-ID: <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/6] thunderbolt: test: use NULL macros
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: fixes
+X-Kernelci-Kernel: linux-kselftest-fixes-5.17-rc4-1-ga7e793a867ae
+Subject: kselftest/fixes build: 8 builds: 0 failed, 8 passed,
+ 1 warning (linux-kselftest-fixes-5.17-rc4-1-ga7e793a867ae)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 8:33 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Hi Mika
->
-> On Fri, 11 Feb 2022 at 17:31, Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > On Fri, Feb 11, 2022 at 06:26:56PM +0200, Mika Westerberg wrote:
-> > > > To test it I had enabled:
-> > > > PCI, USB4 and USB4_KUNIT_TEST
-> > > >
-> > > > and then run it with
-> > > >
-> > > > ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
-> > > >
-> > > > Unfortunately, kunit was not able to run the tests
-> > > >
-> > > > This hack did the trick:
-> > > >
-> > > >
-> > > >  int tb_test_init(void)
-> > > >  {
-> > > > -       return __kunit_test_suites_init(tb_test_suites);
-> > > > +       //return __kunit_test_suites_init(tb_test_suites);
-> > > > +       return 0;
-> > > >  }
-> > > >
-> > > >  void tb_test_exit(void)
-> > > >  {
-> > > > -       return __kunit_test_suites_exit(tb_test_suites);
-> > > > +       //return __kunit_test_suites_exit(tb_test_suites);
-> > > >  }
-> > > > +
-> > > > +kunit_test_suites(&tb_test_suite);
-> > > >
-> > > > I looked into why we do this and I found:
-> > > >
-> > > > thunderbolt: Allow KUnit tests to be built also when CONFIG_USB4=m
-> > > >
-> > > >
-> > > > I am a bit confused. The patch talks about build coverage, but even
-> > > > with that patch reverted if
-> > > > USB4_KUNIT_TEST=m
-> > > > then test.c is built.
-> > > >
-> > > > Shouldn't we simply revert that patch?
-> > >
-> > > Nah, either build it into the kernel or load the driver manually:
-> > >
-> > >   # modprobe thunderbolt
-> >
-> > Forgot to explain why this does not run the tests (I think):
-> >
-> >  ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
-> >
-> > The driver depends on PCI and I don't think that's enabled on UML at
-> > least. I typically run it inside QEMU.
+kselftest/fixes build: 8 builds: 0 failed, 8 passed, 1 warning (linux-kself=
+test-fixes-5.17-rc4-1-ga7e793a867ae)
 
-You can get it working on UML now.
-If you apply the patch upthread for the test to use kunit_test_suites(), then
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-5.17-rc4-1-ga7e793a867ae/
 
-$ cat usb4_kunitconfig
-CONFIG_PCI=y
-CONFIG_VIRTIO_UML=y
-CONFIG_UML_PCI_OVER_VIRTIO=y
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-5.17-rc4-1-ga7e793a867ae
+Git Commit: a7e793a867ae312cecdeb6f06cceff98263e75dd
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-CONFIG_KUNIT=y
-CONFIG_USB4=y
-CONFIG_USB4_KUNIT_TEST=y
+Warnings Detected:
 
-$ ./tools/testing/kunit/kunit.py run --kunitconfig=usb4_kunitconfig
-...
-[14:48:55] [PASSED] tb_test_property_copy
-[14:48:55] =================== [PASSED] thunderbolt ===================
-[14:48:55] ============================================================
-[14:48:55] Testing complete. Passed: 37, Failed: 0, Crashed: 0,
-Skipped: 0, Errors: 0
+arm64:
 
-Mika, should I propose a patch that updates the test and adds a
-drivers/thunderbolt/.kunitconfig with the above contents?
+arm:
 
-Then it could be invoked as
-$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-14): 1 warning
+
+
+Warnings summary:
+
+    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x132: unreachable=
+ instruction
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    net/core/skbuff.o: warning: objtool: skb_copy()+0x132: unreachable inst=
+ruction
+
+---
+For more info write to <info@kernelci.org>
