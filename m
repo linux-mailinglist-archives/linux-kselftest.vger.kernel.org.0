@@ -2,117 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFA44B3855
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Feb 2022 23:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB754B3B7F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Feb 2022 14:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiBLWOb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 12 Feb 2022 17:14:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36948 "EHLO
+        id S236176AbiBMNGo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 13 Feb 2022 08:06:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiBLWOb (ORCPT
+        with ESMTP id S229674AbiBMNGn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Feb 2022 17:14:31 -0500
-Received: from mother.openwall.net (mother.openwall.net [195.42.179.200])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3279760A80
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Feb 2022 14:14:24 -0800 (PST)
-Received: (qmail 11884 invoked from network); 12 Feb 2022 22:14:23 -0000
-Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
-  by localhost with SMTP; 12 Feb 2022 22:14:23 -0000
-Received: by pvt.openwall.com (Postfix, from userid 503)
-        id 44AA3AB88C; Sat, 12 Feb 2022 23:14:12 +0100 (CET)
-Date:   Sat, 12 Feb 2022 23:14:12 +0100
-From:   Solar Designer <solar@openwall.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Michal Koutn?? <mkoutny@suse.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check against new user credentials
-Message-ID: <20220212221412.GA29214@openwall.com>
-References: <20220207121800.5079-1-mkoutny@suse.com> <20220207121800.5079-2-mkoutny@suse.com> <20220210011405.GA17076@openwall.com> <87h795xhxs.fsf@email.froward.int.ebiederm.org>
+        Sun, 13 Feb 2022 08:06:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61735B88E;
+        Sun, 13 Feb 2022 05:06:37 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DAPOGv007992;
+        Sun, 13 Feb 2022 13:06:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=cQPiw2dyD8PgwyjWmIk8sBpF1FR7uPpYLP5WigSzu+0=;
+ b=oi/0aktaJZz9GBmenntUm1blxvOZlDwfwkiFmHKZdAGwBSRZiU4J0+iC51ml9JhBJa64
+ GTS7HfFh6QjxmhBcyaYKDTLoGg0aJTk/AXN4GsfCwp6mtB7o5n3Svd1MifVsLbegVFng
+ f3RIrQ02HBrLlXjvIkKNoSFgnn5xSOeIs4W/jFiZzAiFNV0c47cZDXGHw21j7BvPjKCd
+ R7sgx5WSEZxY+xXZtk71XX2s5YK4+B3374zwhBmBb2DD6eLlJ3ZlopabtVncTEwzTlg+
+ qoQaEk1fkOgT2vhSuypr4LsqvFkx6AA84dKyZEHoNkSZAIi2+T7R2d3urbI1zMfz4O7e wA== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6ueedjc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 13:06:08 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DD3Ht9003084;
+        Sun, 13 Feb 2022 13:06:05 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3e645j63u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 13:06:05 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DD63VF39715094
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Feb 2022 13:06:03 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32020AE053;
+        Sun, 13 Feb 2022 13:06:03 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACE5CAE051;
+        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
+Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
+Message-ID: <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not
+ available
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, Florent Revest <revest@chromium.org>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 13 Feb 2022 08:06:01 -0500
+In-Reply-To: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87h795xhxs.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
+X-Proofpoint-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-13_04,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 clxscore=1011 adultscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202130089
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 02:32:47PM -0600, Eric W. Biederman wrote:
-> Solar Designer <solar@openwall.com> writes:
-> > https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
-> >
-> > Christian was going to revert 2863643fb8b9, but apparently that never
-> > happened.  Back then, I also suggested:
-> >
-> > "Alternatively, we could postpone the set_user() calls until we're
-> > running with the new user's capabilities, but that's an invasive change
-> > that's likely to create its own issues."
+Hi Roberto,
+
+On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
+> __ima_inode_hash() checks if a digest has been already calculated by
+> looking for the integrity_iint_cache structure associated to the passed
+> inode.
 > 
-> Back then you mentioned that apache suexec was broken.  Do you have
-> any more details?
+> Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
+> interested in obtaining the information without having to setup an IMA
+> policy so that the digest is always available at the time they call one of
+> those functions.
 > 
-> I would like to make certain the apache suexec issue is fixed but
-> without a few details I can't do that.  I tried looking but I can't
-> find an public report about apache suexec being broken.
+> Open a new file descriptor in __ima_inode_hash(), so that this function
+> could invoke ima_collect_measurement() to calculate the digest if it is not
+> available. Still return -EOPNOTSUPP if the calculation failed.
+> 
+> Instead of opening a new file descriptor, the one from ima_file_hash()
+> could have been used. However, since ima_inode_hash() was created to obtain
+> the digest when the file descriptor is not available, it could benefit from
+> this change too. Also, the opened file descriptor might be not suitable for
+> use (file descriptor opened not for reading).
+> 
+> This change does not cause memory usage increase, due to using a temporary
+> integrity_iint_cache structure for the digest calculation, and due to
+> freeing the ima_digest_data structure inside integrity_iint_cache before
+> exiting from __ima_inode_hash().
+> 
+> Finally, update the test by removing ima_setup.sh (it is not necessary
+> anymore to set an IMA policy) and by directly executing /bin/true.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-I'm not aware of anyone actually running into this issue and reporting
-it.  The systems that I personally know use suexec along with rlimits
-still run older/distro kernels, so would not yet be affected.
+Although this patch doesn't directly modify either ima_file_hash() or
+ima_inode_hash(),  this change affects both functions.  ima_file_hash()
+was introduced to be used with eBPF.  Based on Florent's post, changing
+the ima_file_hash() behavor seems fine.  Since I have no idea whether
+anyone is still using ima_inode_hash(), perhaps it would be safer to
+limit this behavior change to just ima_file_hash().
 
-So my mention was based on my understanding of how suexec works, and
-code review.  Specifically, Apache httpd has the setting RLimitNPROC,
-which makes it set RLIMIT_NPROC:
+Please update the ima_file_hash() doc.  While touching this area, I'd
+appreciate your fixing the first doc line in both ima_file_hash() and
+ima_inode_hash() cases, which wraps spanning two lines.
 
-https://httpd.apache.org/docs/2.4/mod/core.html#rlimitnproc
+Please split the IMA from the eBPF changes.
 
-The above documentation for it includes:
+-- 
+thanks,
 
-"This applies to processes forked from Apache httpd children servicing
-requests, not the Apache httpd children themselves. This includes CGI
-scripts and SSI exec commands, but not any processes forked from the
-Apache httpd parent, such as piped logs."
+Mimi
 
-In code, there are:
-
-./modules/generators/mod_cgid.c:        ( (cgid_req.limits.limit_nproc_set) && ((rc = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC,
-./modules/generators/mod_cgi.c:        ((rc = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC,
-./modules/filters/mod_ext_filter.c:    rv = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC, conf->limit_nproc);
-
-For example, in mod_cgi.c this is in run_cgi_child().
-
-I think this means an httpd child sets RLIMIT_NPROC shortly before it
-execs suexec, which is a SUID root program.  suexec then switches to the
-target user and execs the CGI script.
-
-Before 2863643fb8b9, the setuid() in suexec would set the flag, and the
-target user's process count would be checked against RLIMIT_NPROC on
-execve().  After 2863643fb8b9, the setuid() in suexec wouldn't set the
-flag because setuid() is (naturally) called when the process is still
-running as root (thus, has those limits bypass capabilities), and
-accordingly execve() would not check the target user's process count
-against RLIMIT_NPROC.
-
-> My goal is to come up with a very careful and conservative set of
-> patches that fix all of the known issues with RLIMIT_NPROC.
-
-The most conservative fix for this one would be to revert 2863643fb8b9
-(preserving other changes that were made on top of it).  I think this
-commit did not fix a real issue - it attempted to fix what someone
-thought was a discrepancy, but actually made it worse.
-
-However, your recent patch trying to fix that commit looks like it'd
-also repair the behavior for suexec.
-
-Thanks,
-
-Alexander
