@@ -2,67 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E76A4B4526
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 10:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BBC4B46EE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 10:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiBNJFs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 04:05:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56794 "EHLO
+        id S245218AbiBNJo7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 04:44:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242610AbiBNJFo (ORCPT
+        with ESMTP id S244824AbiBNJo1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:05:44 -0500
-X-Greylist: delayed 1472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 01:05:37 PST
-Received: from mail.ruletown.pl (mail.ruletown.pl [192.71.213.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533335FF16
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 01:05:37 -0800 (PST)
-Received: by mail.ruletown.pl (Postfix, from userid 1001)
-        id 0E8D140B85; Mon, 14 Feb 2022 09:40:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ruletown.pl; s=mail;
-        t=1644828064; bh=VNuNg2MzRkdVVfp4kSZZW7SxoKEFGotk5GCW4ktyH/8=;
-        h=Date:From:To:Subject:From;
-        b=UeXm1wKbImEEviBqsvORrnWr+Wa6sm9H5AObXvVmSC6TTfxLFxPWdhsMVk8Aay4K0
-         Y3U6MiKgffeqOFseh65eVId2A8FEBbpM+r21KpUL8cUe5uPIOyAY7m/K7RdnP88AxW
-         L+BnZxfKSFPAvGRpWkfwqIMKmM0bmYnCP0Y4i/LU5hJGL/xkcV/xDrJI/YkhLgmY6R
-         xDCJFRu9uum18237EpqgxzJN2WZ+LSwN6DhxYgCvMg1qBW1DksfsgLyCysg4n8Dk7u
-         3yHG6+goxensEhCtQr2WXqcr8nTHcVWaKSKV8H/HbQh87PPG84wBPc2bE/d4qq+gIh
-         oaKWjFXSXmC/A==
-Received: by mail.ruletown.pl for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 08:40:46 GMT
-Message-ID: <20220214084500-0.1.v.1zxy.0.2gyjql3w4b@ruletown.pl>
-Date:   Mon, 14 Feb 2022 08:40:46 GMT
-From:   "Filip Ostrowski" <filip.ostrowski@ruletown.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.ruletown.pl
+        Mon, 14 Feb 2022 04:44:27 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0DA6D19B;
+        Mon, 14 Feb 2022 01:38:12 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id v12so25826263wrv.2;
+        Mon, 14 Feb 2022 01:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FwbcItNcsm7dTxEvHbAh6CvI7B2XT+qjV62cTTFagwM=;
+        b=Wxl6CgXnSUYOyv/ar/mxtQlrXLh8EkeQAWWUad/KB2GpooYqEDig6Whv+L1vujQ/Cv
+         nXShHlHkx+nP6XkAZXx01VOX8xuWX6val0flPOygMlds+P99XX22X3o6aGuML35xA/y8
+         WnqMaTdVdUMVK/qdv+cAXfpO2fvbgkLWEIWlRTdKO7ziHnf0KWCRo4AEj0Jt9kjnAEZU
+         1JRIFGuL6+DQ2sUyq4+cmVdTPm2chhpHQRwYURsTqzVLOunL5ezIiEedzv7jKMogU+UL
+         Uzpqiji2BoveSh/Gwh0uTkyPSB7ovGn7tjtwZe4Xtf2ansjkSciYeJOuoccTm8nIsDPg
+         YlqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FwbcItNcsm7dTxEvHbAh6CvI7B2XT+qjV62cTTFagwM=;
+        b=gy7KkrniwE63igaSRUiBsK9QyTNFLOzrq2BJKqnZvU/Lo/5BqMeGCiawtsBVzTTohR
+         gFXbOhuc3bSFRH7Dmjcp38Hx7nprtCeLRhgF3bFrCZVlrxT17qQ9qQMXPc49bnCBmAcH
+         pHMXlKuzfl2XNt+kHYQgCvIssWqEksSOdN3tKHzRIlHHN4CZp6xKlWZqUKLHcnIrKFTB
+         3/ncfFs5m7ZnvKBDjdsjUu5idSuafB0ajdw73/gjruRlE8sQvrRxWQEDUdk+3p4iqAeb
+         sivm+m1R1KmbTsMEaHxulQ+XuJldp2T8att3ll9Z0X8MbV2a3H6mQo3nzewCDtbc6Jns
+         RkGQ==
+X-Gm-Message-State: AOAM5328AaivoWRvuDyZiyb7d5rqYD5yDzFW9XrPvtcuxLjX0P+A777N
+        h5Pw84YtV233Xoa7fPHbyHg=
+X-Google-Smtp-Source: ABdhPJxCUP1Y6OAuh3WjUMVMTHkWbPFYNV6VCirBHLjl5MEXY+oDXSnD8aIzgRd4bO8NRi3OukbljA==
+X-Received: by 2002:a5d:6888:: with SMTP id h8mr10351125wru.57.1644831491109;
+        Mon, 14 Feb 2022 01:38:11 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id t18sm30595213wri.34.2022.02.14.01.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 01:38:10 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests: net: cmsg_sender: Fix spelling mistake "MONOTINIC" -> "MONOTONIC"
+Date:   Mon, 14 Feb 2022 09:38:10 +0000
+Message-Id: <20220214093810.44792-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+There is a spelling mistake in an error message. Fix it.
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/net/cmsg_sender.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
+index 24444dc72543..efa617bd34e2 100644
+--- a/tools/testing/selftests/net/cmsg_sender.c
++++ b/tools/testing/selftests/net/cmsg_sender.c
+@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
+ 	if (clock_gettime(CLOCK_REALTIME, &time_start_real))
+ 		error(ERN_GETTIME, errno, "gettime REALTIME");
+ 	if (clock_gettime(CLOCK_MONOTONIC, &time_start_mono))
+-		error(ERN_GETTIME, errno, "gettime MONOTINIC");
++		error(ERN_GETTIME, errno, "gettime MONOTONIC");
+ 
+ 	iov[0].iov_base = buf;
+ 	iov[0].iov_len = sizeof(buf);
+-- 
+2.34.1
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
-
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
-
-
-Pozdrawiam,
-Filip Ostrowski
