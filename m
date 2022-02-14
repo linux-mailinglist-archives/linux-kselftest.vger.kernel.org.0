@@ -2,141 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB754B3B7F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Feb 2022 14:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB8A4B41F4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 07:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbiBMNGo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 13 Feb 2022 08:06:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35436 "EHLO
+        id S232221AbiBNGYm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 01:24:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiBMNGn (ORCPT
+        with ESMTP id S229585AbiBNGYl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Feb 2022 08:06:43 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61735B88E;
-        Sun, 13 Feb 2022 05:06:37 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DAPOGv007992;
-        Sun, 13 Feb 2022 13:06:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=cQPiw2dyD8PgwyjWmIk8sBpF1FR7uPpYLP5WigSzu+0=;
- b=oi/0aktaJZz9GBmenntUm1blxvOZlDwfwkiFmHKZdAGwBSRZiU4J0+iC51ml9JhBJa64
- GTS7HfFh6QjxmhBcyaYKDTLoGg0aJTk/AXN4GsfCwp6mtB7o5n3Svd1MifVsLbegVFng
- f3RIrQ02HBrLlXjvIkKNoSFgnn5xSOeIs4W/jFiZzAiFNV0c47cZDXGHw21j7BvPjKCd
- R7sgx5WSEZxY+xXZtk71XX2s5YK4+B3374zwhBmBb2DD6eLlJ3ZlopabtVncTEwzTlg+
- qoQaEk1fkOgT2vhSuypr4LsqvFkx6AA84dKyZEHoNkSZAIi2+T7R2d3urbI1zMfz4O7e wA== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6ueedjc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 13:06:08 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DD3Ht9003084;
-        Sun, 13 Feb 2022 13:06:05 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645j63u0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 13:06:05 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DD63VF39715094
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Feb 2022 13:06:03 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32020AE053;
-        Sun, 13 Feb 2022 13:06:03 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ACE5CAE051;
-        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
-Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
-Message-ID: <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not
- available
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@kernel.org, Florent Revest <revest@chromium.org>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 13 Feb 2022 08:06:01 -0500
-In-Reply-To: <20220211104828.4061334-1-roberto.sassu@huawei.com>
-References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
-X-Proofpoint-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-13_04,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 adultscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202130089
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 01:24:41 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25754E389
+        for <linux-kselftest@vger.kernel.org>; Sun, 13 Feb 2022 22:24:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644819874; x=1676355874;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Pvk3lPrntMX0uY2eeOPY/dBiGDlj3REUxSVNgFB0cg=;
+  b=DdreKTDhwRxrl3dGjGxPvGls/hYv74daDMKCY1c03QQnFDCAwFp76SYI
+   WrhuDBop4KeGykjnDmQRsjsIttsYyy8MfyJg+np8s//2o4em4/Ipu7VoV
+   oobYPQjZ6WlTVRim/x+p7D3295z3DT+OzsJ1FUym/bOVtDdvx3liX3fsE
+   UePJeFHNiodczZUhBCgTO1Ev8AbLbGt5DEwd/97nyEfLjFxIunO7XKzEG
+   uontQIzpdd0SU2m0lm8TUE7xVSBkxToRNNOkDvt3gDjIOKqxPEeI3FJAW
+   Hreb1byyHmXR+pAJ2WtMpKudmNrF0fLZEzJZj25OYmFJMoxgXtB9tHjj7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="310761122"
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="310761122"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:24:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
+   d="scan'208";a="631946017"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:24:31 -0800
+Received: by lahna (sSMTP sendmail emulation); Mon, 14 Feb 2022 08:24:28 +0200
+Date:   Mon, 14 Feb 2022 08:24:28 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, kunit-dev@googlegroups.com,
+        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: [PATCH v5 3/6] thunderbolt: test: use NULL macros
+Message-ID: <Ygn1nPpPsM/DDqr1@lahna>
+References: <20220211094133.265066-1-ribalda@chromium.org>
+ <20220211094133.265066-3-ribalda@chromium.org>
+ <YgY1lzA20zyFcVi3@lahna>
+ <CANiDSCs3+637REhtGjKy+MSnUm-Mh-k1S7Lk9UKqC8JY-k=zTw@mail.gmail.com>
+ <YgaOS8BLz23k6JVq@lahna>
+ <YgaPXhOr/lFny4IS@lahna>
+ <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
+ <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Roberto,
+Hi,
 
-On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
-> __ima_inode_hash() checks if a digest has been already calculated by
-> looking for the integrity_iint_cache structure associated to the passed
-> inode.
+On Fri, Feb 11, 2022 at 02:54:37PM -0800, Daniel Latypov wrote:
+> On Fri, Feb 11, 2022 at 8:33 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
+> >
+> > Hi Mika
+> >
+> > On Fri, 11 Feb 2022 at 17:31, Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > >
+> > > On Fri, Feb 11, 2022 at 06:26:56PM +0200, Mika Westerberg wrote:
+> > > > > To test it I had enabled:
+> > > > > PCI, USB4 and USB4_KUNIT_TEST
+> > > > >
+> > > > > and then run it with
+> > > > >
+> > > > > ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
+> > > > >
+> > > > > Unfortunately, kunit was not able to run the tests
+> > > > >
+> > > > > This hack did the trick:
+> > > > >
+> > > > >
+> > > > >  int tb_test_init(void)
+> > > > >  {
+> > > > > -       return __kunit_test_suites_init(tb_test_suites);
+> > > > > +       //return __kunit_test_suites_init(tb_test_suites);
+> > > > > +       return 0;
+> > > > >  }
+> > > > >
+> > > > >  void tb_test_exit(void)
+> > > > >  {
+> > > > > -       return __kunit_test_suites_exit(tb_test_suites);
+> > > > > +       //return __kunit_test_suites_exit(tb_test_suites);
+> > > > >  }
+> > > > > +
+> > > > > +kunit_test_suites(&tb_test_suite);
+> > > > >
+> > > > > I looked into why we do this and I found:
+> > > > >
+> > > > > thunderbolt: Allow KUnit tests to be built also when CONFIG_USB4=m
+> > > > >
+> > > > >
+> > > > > I am a bit confused. The patch talks about build coverage, but even
+> > > > > with that patch reverted if
+> > > > > USB4_KUNIT_TEST=m
+> > > > > then test.c is built.
+> > > > >
+> > > > > Shouldn't we simply revert that patch?
+> > > >
+> > > > Nah, either build it into the kernel or load the driver manually:
+> > > >
+> > > >   # modprobe thunderbolt
+> > >
+> > > Forgot to explain why this does not run the tests (I think):
+> > >
+> > >  ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
+> > >
+> > > The driver depends on PCI and I don't think that's enabled on UML at
+> > > least. I typically run it inside QEMU.
 > 
-> Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
-> interested in obtaining the information without having to setup an IMA
-> policy so that the digest is always available at the time they call one of
-> those functions.
+> You can get it working on UML now.
+> If you apply the patch upthread for the test to use kunit_test_suites(), then
 > 
-> Open a new file descriptor in __ima_inode_hash(), so that this function
-> could invoke ima_collect_measurement() to calculate the digest if it is not
-> available. Still return -EOPNOTSUPP if the calculation failed.
+> $ cat usb4_kunitconfig
+> CONFIG_PCI=y
+> CONFIG_VIRTIO_UML=y
+> CONFIG_UML_PCI_OVER_VIRTIO=y
 > 
-> Instead of opening a new file descriptor, the one from ima_file_hash()
-> could have been used. However, since ima_inode_hash() was created to obtain
-> the digest when the file descriptor is not available, it could benefit from
-> this change too. Also, the opened file descriptor might be not suitable for
-> use (file descriptor opened not for reading).
+> CONFIG_KUNIT=y
+> CONFIG_USB4=y
+> CONFIG_USB4_KUNIT_TEST=y
 > 
-> This change does not cause memory usage increase, due to using a temporary
-> integrity_iint_cache structure for the digest calculation, and due to
-> freeing the ima_digest_data structure inside integrity_iint_cache before
-> exiting from __ima_inode_hash().
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=usb4_kunitconfig
+> ...
+> [14:48:55] [PASSED] tb_test_property_copy
+> [14:48:55] =================== [PASSED] thunderbolt ===================
+> [14:48:55] ============================================================
+> [14:48:55] Testing complete. Passed: 37, Failed: 0, Crashed: 0,
+> Skipped: 0, Errors: 0
+
+That's great!
+
+> Mika, should I propose a patch that updates the test and adds a
+> drivers/thunderbolt/.kunitconfig with the above contents?
 > 
-> Finally, update the test by removing ima_setup.sh (it is not necessary
-> anymore to set an IMA policy) and by directly executing /bin/true.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Then it could be invoked as
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
 
-Although this patch doesn't directly modify either ima_file_hash() or
-ima_inode_hash(),  this change affects both functions.  ima_file_hash()
-was introduced to be used with eBPF.  Based on Florent's post, changing
-the ima_file_hash() behavor seems fine.  Since I have no idea whether
-anyone is still using ima_inode_hash(), perhaps it would be safer to
-limit this behavior change to just ima_file_hash().
-
-Please update the ima_file_hash() doc.  While touching this area, I'd
-appreciate your fixing the first doc line in both ima_file_hash() and
-ima_inode_hash() cases, which wraps spanning two lines.
-
-Please split the IMA from the eBPF changes.
-
--- 
-thanks,
-
-Mimi
-
+Yes please :)
