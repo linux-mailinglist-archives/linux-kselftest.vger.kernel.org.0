@@ -2,94 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BBC4B46EE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 10:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D554B4E8A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 12:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245218AbiBNJo7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 04:44:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33874 "EHLO
+        id S1351478AbiBNLdy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 06:33:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244824AbiBNJo1 (ORCPT
+        with ESMTP id S1351552AbiBNLdn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:44:27 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0DA6D19B;
-        Mon, 14 Feb 2022 01:38:12 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v12so25826263wrv.2;
-        Mon, 14 Feb 2022 01:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FwbcItNcsm7dTxEvHbAh6CvI7B2XT+qjV62cTTFagwM=;
-        b=Wxl6CgXnSUYOyv/ar/mxtQlrXLh8EkeQAWWUad/KB2GpooYqEDig6Whv+L1vujQ/Cv
-         nXShHlHkx+nP6XkAZXx01VOX8xuWX6val0flPOygMlds+P99XX22X3o6aGuML35xA/y8
-         WnqMaTdVdUMVK/qdv+cAXfpO2fvbgkLWEIWlRTdKO7ziHnf0KWCRo4AEj0Jt9kjnAEZU
-         1JRIFGuL6+DQ2sUyq4+cmVdTPm2chhpHQRwYURsTqzVLOunL5ezIiEedzv7jKMogU+UL
-         Uzpqiji2BoveSh/Gwh0uTkyPSB7ovGn7tjtwZe4Xtf2ansjkSciYeJOuoccTm8nIsDPg
-         YlqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FwbcItNcsm7dTxEvHbAh6CvI7B2XT+qjV62cTTFagwM=;
-        b=gy7KkrniwE63igaSRUiBsK9QyTNFLOzrq2BJKqnZvU/Lo/5BqMeGCiawtsBVzTTohR
-         gFXbOhuc3bSFRH7Dmjcp38Hx7nprtCeLRhgF3bFrCZVlrxT17qQ9qQMXPc49bnCBmAcH
-         pHMXlKuzfl2XNt+kHYQgCvIssWqEksSOdN3tKHzRIlHHN4CZp6xKlWZqUKLHcnIrKFTB
-         3/ncfFs5m7ZnvKBDjdsjUu5idSuafB0ajdw73/gjruRlE8sQvrRxWQEDUdk+3p4iqAeb
-         sivm+m1R1KmbTsMEaHxulQ+XuJldp2T8att3ll9Z0X8MbV2a3H6mQo3nzewCDtbc6Jns
-         RkGQ==
-X-Gm-Message-State: AOAM5328AaivoWRvuDyZiyb7d5rqYD5yDzFW9XrPvtcuxLjX0P+A777N
-        h5Pw84YtV233Xoa7fPHbyHg=
-X-Google-Smtp-Source: ABdhPJxCUP1Y6OAuh3WjUMVMTHkWbPFYNV6VCirBHLjl5MEXY+oDXSnD8aIzgRd4bO8NRi3OukbljA==
-X-Received: by 2002:a5d:6888:: with SMTP id h8mr10351125wru.57.1644831491109;
-        Mon, 14 Feb 2022 01:38:11 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id t18sm30595213wri.34.2022.02.14.01.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 01:38:10 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests: net: cmsg_sender: Fix spelling mistake "MONOTINIC" -> "MONOTONIC"
-Date:   Mon, 14 Feb 2022 09:38:10 +0000
-Message-Id: <20220214093810.44792-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Feb 2022 06:33:43 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CBB6623F;
+        Mon, 14 Feb 2022 03:19:06 -0800 (PST)
+Date:   Mon, 14 Feb 2022 12:19:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644837544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TUCDizit6LTXe+/Z7T4+9bqxe+YJSMfI2IhU/DVOtKY=;
+        b=TJuYP9SxAH4EcWDpm6XCS+R8gN3OgxWiK4tgjHkGVvYymALEsSgIduBlSJJ1qH9ItVOp1/
+        HUGLsLiybl53Fip90qHs2BcaiMWrGtrAzOHsEe2xfg5vBIe4+mb62vtHXqe10JvJT5XMbm
+        Z9z0NDAN/42Ie16SsgmxkFKyB1AZvCWQSkPgWYbTSrbhqQfs6wIHqVZMQuiNlrczg0LhAR
+        hNbwjIk5l5TggackMIqZQehE95dNkxdMJJD61kDalHtkO7drqJckUhrjPoVFY/TioWLhXD
+        kg7uTqSCfPjx+bwk68FQT1VRlGeI+53kWTENOgGfilF+9iqywqdwE7WJDw+4oA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644837544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TUCDizit6LTXe+/Z7T4+9bqxe+YJSMfI2IhU/DVOtKY=;
+        b=wnRWctoS8b6dZ6CVHS04P744Fy8jgvdjeIbzBT/reAMI6H2rRDMpfm4yH0kwbtiW6ytm2u
+        LKIcFdCKAdT3UNAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v3] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+Message-ID: <Ygo6pqWmkTWJNNcR@linutronix.de>
+References: <20220214083657.165921-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220214083657.165921-1-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a spelling mistake in an error message. Fix it.
+On 2022-02-14 09:36:57 [+0100], Krzysztof Kozlowski wrote:
+> The PREEMPT_RT patchset does not use do_softirq() function thus trying
+> to filter for do_softirq fails for such kernel:
+>=20
+>   echo do_softirq
+>   ftracetest: 81: echo: echo: I/O error
+>=20
+> Choose some other visible function for the test.  The function does not
+> have to be actually executed during the test, because it is only testing
+> filter API interface.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/net/cmsg_sender.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index 24444dc72543..efa617bd34e2 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
- 	if (clock_gettime(CLOCK_REALTIME, &time_start_real))
- 		error(ERN_GETTIME, errno, "gettime REALTIME");
- 	if (clock_gettime(CLOCK_MONOTONIC, &time_start_mono))
--		error(ERN_GETTIME, errno, "gettime MONOTINIC");
-+		error(ERN_GETTIME, errno, "gettime MONOTONIC");
- 
- 	iov[0].iov_base = buf;
- 	iov[0].iov_len = sizeof(buf);
--- 
-2.34.1
+> Notes:
+> I understand that the failure does not exist on mainline kernel (only
+> with PREEMPT_RT patchset) but the change does not harm it.
 
+Yes, and now it does not sound (to me) like duct tape. Thank you.
+
+> If it is not suitable alone, please consider it for RT patchset.
+
+We trying to get it merged so=E2=80=A6
+
+Sebastian
