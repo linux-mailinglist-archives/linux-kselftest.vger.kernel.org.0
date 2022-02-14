@@ -2,110 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79FB4B5C73
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 22:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311E54B5D59
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 22:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiBNVRI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 16:17:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60974 "EHLO
+        id S231680AbiBNV4s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 16:56:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiBNVRH (ORCPT
+        with ESMTP id S231649AbiBNV4r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:17:07 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB552132943
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 13:16:58 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id d188so21521831iof.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 13:16:58 -0800 (PST)
+        Mon, 14 Feb 2022 16:56:47 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688CA240AC
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 13:56:38 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id c4so10215612pfl.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 13:56:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fWI/C1yfb+9wFKwbONNPcLLBB0Ih56XvX3BMqqSOd1Y=;
-        b=ESbE50vsogJHzE+1a/RYDHo/WgfZXW73RrPEMeyIGALKiYdqqPys80tZoNhVgugEYs
-         iY6dmuXr1ODeIJMb/NYXeihuzaHzGJbdSdEU6uK3uSLGkRuBUd30/OSlMjY1cIxkJUjd
-         m5gyZU313xbSJaxxtdTVjWincj2DECIIAvsWg=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OiSsgbTNNS1PN2vIPffxFK30orCDWpVATmUi7r4Spwg=;
+        b=s2HLQSrEt1NVq3FaO+ItzWZFW9EJKI1oCIoU5Jy54OTgfCqR5PwyTzERIxURcgsAZd
+         qNUSe36yPkPVXgbpjzQm+FOJExSbbdqleCWn9WzVHNUQI74JuKmsH6WYtdUr+60csGrL
+         joRG5DeBZTuH4FJSEDJLdKCPoh8/Fxu1OgBsPlpNJ/QBQIH9warKHhaprmtNcEcmQVEV
+         Y5W9UIJDKomuxLj2e3bK1l+yXhvCZX1Yc7TSCy8ZK+TRAya0gWX451cja6JpPA5X8EC/
+         SVvCKI+/uomzhGTcd6zMcRwokZzCufOWj/joH1SvK5KptpNnHFx+HGGI3apdLw6jYryx
+         BjwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fWI/C1yfb+9wFKwbONNPcLLBB0Ih56XvX3BMqqSOd1Y=;
-        b=N28K2xV8+77N11ZJO1uevRg+MTN/BDjBGDr8WAcMn1z3jFEBYaXRtcyLhnN0OijjK4
-         7Q61CmhwwVSXZWKCn315AWkTx1M/0q8VgEWqOzJSK5zY3P9cLa6xiUEjlGV9WVH+jInb
-         721sO+geMGjRA3l0tF/AmHLhyV3NTYrB1ShT4G/cLy6L81DJs7p1MOP+6dlpbrc4iTJq
-         d9t+XD4FoH2a7Pm2CR9H1Dw6W/3V6EFVsql7Iu5Lu7fb3yZNBIjwPnk8AxqINuR8wNwI
-         i7WvLIVtHxzG60VMbTMcpwo8bVDrK5o2NDZhFKzpci0f5xZetJsLXRfs+ae3QJvMi6Xz
-         eVtA==
-X-Gm-Message-State: AOAM5329wZPxzGnSMXWDrL35Rn59t7BXKQ7e/fgUufFiXobZNWLVKacC
-        xLqYpXqmq/sRqNEvIiIoAWYBBptFa4k7DA==
-X-Google-Smtp-Source: ABdhPJyrXxz2EbuHWruPVS7GR25u9adQa2p6SuorPSX8MtPWSZ2UB8Ze0ZZB2AU1wMN1OrX+AeBeNg==
-X-Received: by 2002:a05:6602:2c0d:: with SMTP id w13mr462239iov.184.1644873417859;
-        Mon, 14 Feb 2022 13:16:57 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id j12sm10118708ilu.12.2022.02.14.13.16.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 13:16:57 -0800 (PST)
-Subject: Re: [PATCH V2] selftests: Use -isystem instead of -I to include
- headers
-To:     Kees Cook <keescook@chromium.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        sherry.yang@oracle.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220214160756.3543590-1-usama.anjum@collabora.com>
- <202202141125.085DF9BA6@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <51b7f746-d98c-b8e6-7d8f-98064ce0f697@linuxfoundation.org>
-Date:   Mon, 14 Feb 2022 14:16:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OiSsgbTNNS1PN2vIPffxFK30orCDWpVATmUi7r4Spwg=;
+        b=KuiU2oP6nyWRQeBsv3qbJdy6H0/ovowXkCMo+fheaJuYN3eUtjrNJqvMYPWaELZ4bi
+         WZeIE8HwZeyaOkDW33Rvkw5a/FaiLdXyhgb9U1FwvsNdPL2F0pjuiN57MfykEnNhXHe1
+         jlr4trVarh3EYmB4oFPH/vSXwlT0R1dEVa99Cnz0vPZkfFDbjQ5IV+QKRwPWw9Is4Y/Q
+         FzhkiR8EbCo0cDyxjXghxgNBpmgqWbQze/JdOSS9HiAPdLCFGeJ9IU+4WuSkRJAmJWNk
+         MeR9wxh2FdVNZC5Rti7KkfNvI0ICLeBM6RQkT05FFgDCcMyvrvejOlojEPnejf3J0nZk
+         oCew==
+X-Gm-Message-State: AOAM531huMEWxiFmdQGM06R2iwSb6vNkUFD6bIa6jICbhxcm9z2/CT3d
+        dxn+3GDW1qtHqld3TK4UbyHFx6IQ+NQD/Mj+oKkauQ==
+X-Google-Smtp-Source: ABdhPJyRoHiuH80bBOXiC5qPysRfk9zG+7MBAT8XtZyduYTj7PVhc/t5GG7c/JUqSnNMFiZOG85ck4R12JWh6AlDJvs=
+X-Received: by 2002:a63:ea4b:: with SMTP id l11mr934534pgk.12.1644875797678;
+ Mon, 14 Feb 2022 13:56:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <202202141125.085DF9BA6@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220210233630.3304495-1-frowand.list@gmail.com>
+In-Reply-To: <20220210233630.3304495-1-frowand.list@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 14 Feb 2022 16:56:26 -0500
+Message-ID: <CAFd5g46HuUcPggLrUjuXO7XJGSxQK590oK7OCOB9ma+TFCiTdg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] Documentation: dev-tools: clarify KTAP
+ specification wording
+To:     frowand.list@gmail.com
+Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
+        Tim.Bird@sony.com, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/14/22 12:25 PM, Kees Cook wrote:
-> On Mon, Feb 14, 2022 at 09:07:56PM +0500, Muhammad Usama Anjum wrote:
->> Selftests need kernel headers and glibc for compilation. In compilation
->> of selftests, uapi headers from kernel source are used instead of
->> default ones while glibc has already been compiled with different header
->> files installed in the operating system. So there can be redefination
+On Thu, Feb 10, 2022 at 6:36 PM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> Add the spec version to the title line.
+>
+> Explain likely source of "Unknown lines".
+>
+> "Unknown lines" in nested tests are optionally indented.
+>
+> Add "Unknown lines" items to differences between TAP & KTAP list
+>
+> Convert "Major differences between TAP and KTAP" from a bullet list
+> to a table.  The bullet list was being formatted as a single
+> paragraph.
+>
+> Reviewed-by: Tim Bird <Tim.Bird@sony.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 
-Spelling - redefinition
-
->> warnings from compiler. These warnings can be suppressed by using
->> -isystem to include the uapi headers.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-
-Looks good to me. With the above minor type fixed:
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-This one depends on an earlier patch that added that added KHDR_INCLUDES
-which is in Andrew's
-
-https://ozlabs.org/~akpm/mmotm/broken-out/selftests-add-and-export-a-kernel-uapi-headers-path.patch
-
-Andrew, would you like to take this through your tree?
-
-thanks,
--- Shuah
-
-Would you like to apply this on top of th
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
