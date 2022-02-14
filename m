@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFBB4B5587
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 17:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C764B55A4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 17:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346938AbiBNQEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 11:04:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49770 "EHLO
+        id S234645AbiBNQIf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 11:08:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345126AbiBNQEW (ORCPT
+        with ESMTP id S242693AbiBNQIe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:04:22 -0500
+        Mon, 14 Feb 2022 11:08:34 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6FF4198D;
-        Mon, 14 Feb 2022 08:04:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B349F97;
+        Mon, 14 Feb 2022 08:08:26 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id EE7221F43E14
+        with ESMTPSA id D303C1F43DBE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644854651;
-        bh=hhGdfBGp3XEGTgPwWSi2w1YSBb6AMg6JC+TrhGkRd3U=;
+        s=mail; t=1644854905;
+        bh=aJsSEXf1LJvbiDXIpOJk5PLiUdc/g9YrvOrNGjI88oo=;
         h=From:To:Cc:Subject:Date:From;
-        b=VmZnjDBXlO0jFVw0dmKZ0d+fy8kPHcbiFaqywZrdEZNP1Rh1PznhsfXbaFFIiM5GR
-         x2fsK3gFeOmLd87l2pgF5SKcsNkFzHWB68deRdWM0NcQo3+g1zONQgtTTC+YQabQzU
-         OJUR5g6rnsH61DATvCTUS3CXgXdrqXJhws5p9AaXcnvIOh2DMG+R6nrerZ79etdvhp
-         CgM3fkFNJ21gcMY8VRyseVpJ+KyfMiFUAh99516xx8SIoUu0Z4k3BhxNsV1kFncJHj
-         jxGY5yIC1+WpjsL+k1asHDwaxUHrxze6UUp4i0oNnMG6zFdEs3HCm76y439/hqrXm/
-         RoWaSs06LtSDA==
+        b=U+cM9tRoLy6qCMzSaQWPpmBDcHcYKhrWG1v0A85bD5Zm8cc+ytYZvtImj3axC+m1e
+         veew8NkjIDmonpu7Dn92nl1J9Bqw84+6MVhVnSh1WIrIj3DF1pBW2StU+W5k7MtLyg
+         usRG+e+t7rH7vlC8Ves0nswrY5bFVWjckrc3SVrzmKrjT129wNU4W1edIqIPYJSYdo
+         W07xl5/Fdtxd3Y9Sm4D0nLyssLbdFzK2zTPFn5tq3NxUKABZKwmYMxS6RFuktlyncp
+         EujRRhoeQU2ZWyfrya8Ha7lbNkNV7iY3mE8nL7jLld6ilYOY+HGiwpQEZE8AjdlMXB
+         JqD9sKh+vZiMw==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         kernel@collabora.com, sherry.yang@oracle.com,
         keescook@chromium.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Use -isystem instead of -I to include headers
-Date:   Mon, 14 Feb 2022 21:03:39 +0500
-Message-Id: <20220214160339.3537720-1-usama.anjum@collabora.com>
+Subject: [PATCH V2] selftests: Use -isystem instead of -I to include headers
+Date:   Mon, 14 Feb 2022 21:07:56 +0500
+Message-Id: <20220214160756.3543590-1-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,14 +59,17 @@ warnings from compiler. These warnings can be suppressed by using
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Changes in V2:
+Remove debug code
+---
+ tools/testing/selftests/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 4eda7c7c15694..0178b5c801656 100644
+index 4eda7c7c15694..06cc683f81b1a 100644
 --- a/tools/testing/selftests/Makefile
 +++ b/tools/testing/selftests/Makefile
-@@ -130,14 +130,16 @@ ifneq ($(KBUILD_OUTPUT),)
+@@ -130,11 +130,11 @@ ifneq ($(KBUILD_OUTPUT),)
    # $(realpath ...) resolves symlinks
    abs_objtree := $(realpath $(abs_objtree))
    BUILD := $(abs_objtree)/kselftest
@@ -80,11 +83,6 @@ index 4eda7c7c15694..0178b5c801656 100644
    DEFAULT_INSTALL_HDR_PATH := 1
  endif
  
-+$(info $$KHDR_INCLUDES iss [${KHDR_INCLUDES}])
-+
- # Prepare for headers install
- include $(top_srcdir)/scripts/subarch.include
- ARCH           ?= $(SUBARCH)
 -- 
 2.30.2
 
