@@ -2,84 +2,220 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EEE4B5A8E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 20:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB0C4B5B4E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 21:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiBNTbt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 14:31:49 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34196 "EHLO
+        id S229522AbiBNUtc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 15:49:32 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiBNTbq (ORCPT
+        with ESMTP id S229475AbiBNUtb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 14:31:46 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6E6112A
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 11:31:29 -0800 (PST)
-Received: by mail-pj1-f50.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so112032pjm.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 11:31:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B3WRB1YL+L5+JbxjEZnwA++AmlGgE13EuGL+PRtHx8Q=;
-        b=AG59o1FvNvGvpQjnEKK7YIua4+FGo7zkXCx11iAZy3iRr1cIHX4gAGKMYtlr+uUtkK
-         vQ/XbgHjhIMTeqSRSpp3SphCTkg1b1RZgd7SdlkMgl0tVADRCb97t7zFbMb3q+qwalUh
-         5mFP3ayooEfBQKfTTG8fK2M/3Zk7Sn+qMMyZE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B3WRB1YL+L5+JbxjEZnwA++AmlGgE13EuGL+PRtHx8Q=;
-        b=4CqW/A73Ts+GocaXqvyx96W2uLQCuHgp3nQcoWthngGjwcTsEPLbOPavTjfN9iN7ay
-         Z27yk9MZlZxGcV/uolelLdid8J3sT/K1A7fRzRNhOnGMcYS/sdR9TLemn7Sh7Dd1BABV
-         nZTTrRtOQgWfcpAgx1JYnqN99K/s2m8ABWbiNXA7obI0BXZDmozCRFD2NnISk+O2wBxA
-         3v7oqV96a+xA4/c7aD6PfKqJpExbBc+l1TKYY12dr5hE7TPXeNAWnh65g3qeNtZxh5eb
-         R7gg0gMwY4qbDT0ohljgZFlqC7X91e61ZjGSuaDc4lf1wRG2ePzHAUUXzhRE8ydPir2O
-         BC9w==
-X-Gm-Message-State: AOAM530AxpmxP46Kp9TwWZS9qQFzVkKuX3dnHXb+TmaE9yHABWsB66GK
-        2vmP4qEwUTZcnahDCIs/OYQxew==
-X-Google-Smtp-Source: ABdhPJy+kZEHNiyZXB8hQH3+c79ZYEF67uFWvHkrb/jUovgvh6gYuF9jGI1/GqjQlyBi5+IQy5S5qQ==
-X-Received: by 2002:a17:90a:688e:: with SMTP id a14mr132426pjd.63.1644866725061;
-        Mon, 14 Feb 2022 11:25:25 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c4sm25662839pfl.131.2022.02.14.11.25.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:25:24 -0800 (PST)
-Date:   Mon, 14 Feb 2022 11:25:23 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        sherry.yang@oracle.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] selftests: Use -isystem instead of -I to include
- headers
-Message-ID: <202202141125.085DF9BA6@keescook>
-References: <20220214160756.3543590-1-usama.anjum@collabora.com>
+        Mon, 14 Feb 2022 15:49:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C27FB10B2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 12:49:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B82AB81662
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 19:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D63C340EE;
+        Mon, 14 Feb 2022 19:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644867659;
+        bh=1o5yberQtulpwwBd/plhZbg28raYj8ZfYwhHG4ZSxto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bfTmgXXadlMCUzdd7Ex9U0v4ZkThqvVNxUWIhRWKBci+ySORwLpe9TAkTqhaFf3Qk
+         1WMTZqraPlhucWRNPM4MZ60GCr+zWFIpPBXaB6+hKiWZYzRwVqGFHl8JcKoy98W8TG
+         mo0UOx3zq+Bgtd+b3qMXKwzcltJ09obZjRpHghs0T5eoUli5g/yqYY4f5+ouawkRF+
+         M8VAOzYNjCMEzwYnWV4Ng3303UUz+zeNYDUlOHoTQeIG37x2hHunV/jtDPdwB38CJK
+         NBxo3dsItnggCiRS6UNL95q0cO0pxM8NnFMVRj+jva5AZ00ouY3FkVthW1udGl7MIF
+         yU90mBm8XWB8Q==
+Date:   Mon, 14 Feb 2022 19:40:52 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YgqwRIIi7UZzOOR2@sirena.org.uk>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-7-broonie@kernel.org>
+ <YgVaTounTtunlGU6@arm.com>
+ <YgVrbc4fFrA0Vjh2@sirena.org.uk>
+ <YgaWmP+P7v9b2lLz@arm.com>
+ <YganZni933HbRTmO@sirena.org.uk>
+ <YgqdTv3Hq+H76Ml7@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m90JMmwjd1FkMFl4"
 Content-Disposition: inline
-In-Reply-To: <20220214160756.3543590-1-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YgqdTv3Hq+H76Ml7@arm.com>
+X-Cookie: Am I in GRADUATE SCHOOL yet?
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 09:07:56PM +0500, Muhammad Usama Anjum wrote:
-> Selftests need kernel headers and glibc for compilation. In compilation
-> of selftests, uapi headers from kernel source are used instead of
-> default ones while glibc has already been compiled with different header
-> files installed in the operating system. So there can be redefination
-> warnings from compiler. These warnings can be suppressed by using
-> -isystem to include the uapi headers.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+--m90JMmwjd1FkMFl4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Kees Cook
+On Mon, Feb 14, 2022 at 06:19:58PM +0000, Catalin Marinas wrote:
+> On Fri, Feb 11, 2022 at 06:13:58PM +0000, Mark Brown wrote:
+
+> > We could preserve PSTATE.SM, though since all the other register state
+> > for streaming mode is shared with SVE I would expect that we should be
+> > applying the SVE discard rules to it and there is therefore no other
+> > state that should be retained.
+
+> So when clearing PSTATE.SM, the streaming SVE regs become unknown (well,
+> the wording is a bit more verbose). I think this fits well with the
+> proposal to drop the streaming SVE state entirely on syscalls.
+
+They're preserved or zeroed, yes.
+
+> The ZA state I think is not affected by the PSTATE.SM change (early
+> internal SME specs were listing this as unknown after SM clearing but I
+> can't find it in the latest spec). However, after the syscall, the user
+> won't be able to execute SME instruction until turning on PSTATE.SM
+> again.
+
+Yes, ZA is preserved unless PSTATE.ZA is disabled.  There are some
+instructions that can be used to interact with it outside of streaming
+mode, a subset of the instructions for loading and storing values in ZA.
+
+> Would the libc wrappers preserve PSTATE.SM? What I find a bit confusing
+> is that we only partially preserve some state while in streaming mode -
+> the ZA registers but not the SVE ones.
+
+I would expect that libc wrappers would expect to be called with
+streaming mode already disabled - that's what default functions in the
+PCS expect, and since without FA64 enabled a huge proportion of FPSIMD
+instructions and some SVE instructions become undefined standard code
+could easily generate traps if it uses those instructions for anything.
+I wouldn't expect that libc would explicitly disable SME itself in
+standard configurations.
+
+>                                        Is the user more likely to turn
+> PSTATE.SM on for ZA processing or for SVE? If the former, we don't want
+> to unnecessarily save/restore some SVE state that the user doesn't care
+
+It's expected that any active work with ZA will require enabling
+streaming mode, you can't do any actual computation with it without
+doing so and most of the work with ZA will involve using the streaming
+mode SVE registers as part of the computation (eg, collecting results in
+a Z register, or doing an operation to a ZA tile using the contents of a
+Z register as an operand).
+
+It is also expected that some applications may prefer to execute what is
+mainly a SVE workload in streaming mode, as well as any performance
+relevant differences in the implementation choices the hardware makes it
+is likely that some systems will have vector lengths available in
+streaming mode that are otherwise unavailable (eg, you might have PEs
+with 128 bit FPSIMD/SVE units and a 512 bit SMCU).
+
+I don't have a good handle on which sort of usage is going to be more
+common, and I expect that the answer is going to be very system
+dependent varying based on both the mix of applications running on the
+system at any given moment and the capabilities of the standard and
+streaming mode floating point implementations that the system has.
+
+However the existing syscall ABI for the Z and P registers (which is all
+the SVE register state, FFR is a magic P register) means that unless we
+treat streaming mode differently to non-streaming mode we'll be
+discarding whatever state is there anyway so userspace by definition
+shouldn't have anything in there it expects to be preserved when it does
+a syscall.  I'd rather not introduce an ABI that guarantees that we
+preserve the streaming mode SVE register state in cases where we discard
+(or can discard) the non-streaming SVE register state, that's both going
+to be more complicated to implement and more likely to cause unexpected
+differences that trip userspace up.
+
+> about (can we even trap SVE instructions independently of SME while in
+> streaming mode?).
+
+I'd need to check through but I don't believe so.
+
+> I'd find it clearer if we preserved PSTATE.SM and, w.r.t. the streaming
+> SVE state, we somewhat follow the PCS and not restore the regs (input
+> from the libc people welcomed).
+
+Like I say we can do that easily enough, it's not something I expect to
+ever come up in practical usage though.
+
+> > Having said that as with ZA userspace can just exit streaming mode to
+> > avoid any overhead having it enabled introduces and the common case is
+> > expected to be that it will have done so due to the PCS, it should be an
+> > extremely rare case - unlike keeping ZA active there doesn't seem to be
+> > any case where it would be sensible to want to do this and the PCS means
+> > you'd have to actively try to do so.
+
+> IIUC, the PCS introduced the notion of streaming-compatible functions
+> that preserve the SM bit. If they are non-streaming, SM should be 0 on
+
+Yes, it isn't the default though.
+
+> entry. It would be nice if we put the syscalls in one of these
+> categories, so either mandate SM == 0 on entry or preserve (the latter
+> being easier, I think, I haven't looked at what it takes to save/restore
+> the streaming SVE state; I may change my mind after reviewing at the
+> other patches).
+
+The streaming SVE state is identical to the SVE state with the exception
+of the FFR predicate register which is not present unless FA64 is
+available in the system and enabled and the separatly configured vector
+length.
+
+It's sounding like we may as well just preserve SM, it shouldn't come up
+that often anyway and if it causes performance problems we can probably
+optimise it, and/or userspace can simply just not do that.  Like I say I
+don't have particularly strong feelings, the current behaviour was just
+the easiest thing to implement and it doesn't seem like there is a use
+case.  This is fine by me, I can do that for the next version.
+
+[fork()/clone() behaviour]
+> (few hours later) I think instead of singling out fork() (clone3()
+> actually), we can just say that new tasks (process/thread) always start
+> with PSTATE.ZA == 0, PSTATE.SM == 0 (tbd for this) and TPIDR2_EL0 == 0
+> irrespective of any clone3() flags (even CLONE_SETTLS). The C library
+> will have to implement the lazy ZA saving in the parent before the
+> syscall and the child will automatically recover the state if it follows
+> the PCS.
+
+Works for me, I think forcing the userspace to consider this is going to
+work out more robust.
+
+--m90JMmwjd1FkMFl4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIKsEMACgkQJNaLcl1U
+h9CY5wf8CSOiz63Wqwe1/Yuqmw2EskUr3T5VUQjZG17xtbYsMIbDQTwuK0PL9sr+
+5pXdIYsvcDH0+3Su8LL6+WKQYfGbLBli9b5nK6yWoQME6tP7E6fD51eJg6TiXvaZ
+0ujB61I5aGOHxLDYnpZJmeKKiJplFdTYzunW6PyCGgQqU8Sya84bCNNPP1PQj3vm
+s4MDXEl9Ypif4go0ptR3Dkb6hJhayvCfTv9CxJ8KoeQxqrqwvlAmYfmKpCBRGXs9
+i2EN621MQidF9GdhiwKfEhAvJZRM3zdf4vacdtRpbSLys3wRYPFMSQ1/N3t2BxMw
+6+PSEUDzijTYJ+PxbdqIREE9kEH/pA==
+=8xaj
+-----END PGP SIGNATURE-----
+
+--m90JMmwjd1FkMFl4--
