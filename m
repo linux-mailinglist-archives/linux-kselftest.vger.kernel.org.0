@@ -2,165 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6734B59CB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 19:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135FA4B59F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 19:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357411AbiBNSUX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 13:20:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33380 "EHLO
+        id S1357473AbiBNSda (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 13:33:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357425AbiBNSUV (ORCPT
+        with ESMTP id S1356429AbiBNSd2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:20:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB356548B
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 10:20:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50D5EB815CC
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 18:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10DEC340E9;
-        Mon, 14 Feb 2022 18:20:03 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 18:19:58 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
-Message-ID: <YgqdTv3Hq+H76Ml7@arm.com>
-References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-7-broonie@kernel.org>
- <YgVaTounTtunlGU6@arm.com>
- <YgVrbc4fFrA0Vjh2@sirena.org.uk>
- <YgaWmP+P7v9b2lLz@arm.com>
- <YganZni933HbRTmO@sirena.org.uk>
+        Mon, 14 Feb 2022 13:33:28 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEB1652E9
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 10:33:20 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id d3so13018256ilr.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 10:33:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tPJrWe/i1MqPMtoPzbeR0YlE4FVwmAqDMvl6+ufirY4=;
+        b=COkS4HG2yhu5A+qPYPGPODAVhYDxh2/jZFV1uAoGVTzJcBYPaXav2ILkA+Rl8b+vzh
+         aP96JiOp8O+222QWhSurBWbwFqm1uF1n0AtJu385qY5DwYoAzFLtML3w+T1hhCwz1UkV
+         LxyE3mKgNIHtUkLv/tlfZQGknbGYd4tdDCNVk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tPJrWe/i1MqPMtoPzbeR0YlE4FVwmAqDMvl6+ufirY4=;
+        b=N4krMkDC3Xekl/5FuWjujhuH4XzIE0enfsmSXsglt+v4xjVhOGzAeizdb9MfTKBX7h
+         SyxHktgpWhDYX/JSWz1mEqzSsDi+VVq6jC0gRMPHS6+eta6XiGJ7nbDS+mziuThIN8nz
+         bfNTg4SSsuglbCCdqYIakX8rNrNuFRINmEXyrWXC3FVYbZ/VBr/wTsbdkyPQbHCBnd3Q
+         AXxOTQqwFHMwDHPyZhhfjEMT3KuXHJ8EM/JF8DOzxHsNdT+enbFrmjw11zl5223SdEAa
+         5dymCrjUmzoo6bnynIHuNAla1BjGffx3ZF4uTGDy9/htzJ//zz4Mo6bq3diuN8XItn8N
+         MY+g==
+X-Gm-Message-State: AOAM533JOVIca21gRR2o8QfSD7zlbbd3z1tK5fuW4TwU/O5emSLGmokn
+        aF4kGqbEKd4WR5DNKnKPZugQMA==
+X-Google-Smtp-Source: ABdhPJwmbomCs/78CZKWKJaM/G0NMmImZ7RDFmjRwVP0Cf9Pq2eAUr8RIwQIdHQv4nTc1UGomvsRnA==
+X-Received: by 2002:a05:6e02:1544:: with SMTP id j4mr92677ilu.77.1644863599754;
+        Mon, 14 Feb 2022 10:33:19 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id g1sm23149484iob.34.2022.02.14.10.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 10:33:19 -0800 (PST)
+Subject: Re: [PATCH v3] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220214083657.165921-1-krzysztof.kozlowski@canonical.com>
+ <Ygo6pqWmkTWJNNcR@linutronix.de>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8f034cd5-8495-de0e-6a3c-4d002e49cc51@linuxfoundation.org>
+Date:   Mon, 14 Feb 2022 11:33:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YganZni933HbRTmO@sirena.org.uk>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ygo6pqWmkTWJNNcR@linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 06:13:58PM +0000, Mark Brown wrote:
-> On Fri, Feb 11, 2022 at 05:02:16PM +0000, Catalin Marinas wrote:
-> > So in this case we consider the syscall interface as non-streaming (as
-> > per the PCS terminology). Should we require that the PSTATE.SM is
-> > cleared by the user as well? Alternatively, we could make it
-> > streaming-compatible and just preserve it. Are there any drawbacks?
-> > kernel_neon_begin() could clear SM if needed.
+On 2/14/22 4:19 AM, Sebastian Andrzej Siewior wrote:
+> On 2022-02-14 09:36:57 [+0100], Krzysztof Kozlowski wrote:
+>> The PREEMPT_RT patchset does not use do_softirq() function thus trying
+>> to filter for do_softirq fails for such kernel:
+>>
+>>    echo do_softirq
+>>    ftracetest: 81: echo: echo: I/O error
+>>
+>> Choose some other visible function for the test.  The function does not
+>> have to be actually executed during the test, because it is only testing
+>> filter API interface.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 > 
-> In fact kernel_neon_begin() already disables PSTATE.SM since we need to
-> account for the case where userspace was preempted rather than issued a
-> syscall.  We could require that PSTATE.SM is disabled by the user,
-> though it's questionable what we could usefully and helpfully do about
-> it if they forget other than disable it anyway or generate a signal.
+> Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > 
-> We could preserve PSTATE.SM, though since all the other register state
-> for streaming mode is shared with SVE I would expect that we should be
-> applying the SVE discard rules to it and there is therefore no other
-> state that should be retained.
-
-So when clearing PSTATE.SM, the streaming SVE regs become unknown (well,
-the wording is a bit more verbose). I think this fits well with the
-proposal to drop the streaming SVE state entirely on syscalls.
-
-The ZA state I think is not affected by the PSTATE.SM change (early
-internal SME specs were listing this as unknown after SM clearing but I
-can't find it in the latest spec). However, after the syscall, the user
-won't be able to execute SME instruction until turning on PSTATE.SM
-again.
-
-Would the libc wrappers preserve PSTATE.SM? What I find a bit confusing
-is that we only partially preserve some state while in streaming mode -
-the ZA registers but not the SVE ones. Is the user more likely to turn
-PSTATE.SM on for ZA processing or for SVE? If the former, we don't want
-to unnecessarily save/restore some SVE state that the user doesn't care
-about (can we even trap SVE instructions independently of SME while in
-streaming mode?).
-
-I'd find it clearer if we preserved PSTATE.SM and, w.r.t. the streaming
-SVE state, we somewhat follow the PCS and not restore the regs (input
-from the libc people welcomed).
-
-> As things stand this would either result
-> in more overhead or complicate the register save and restore a bit since
-> if we're in streaming mode we currently assume that we should save and
-> restore the full SVE register contents but normally in a syscall we only
-> need to save and restore the FPSIMD subset.  The overhead might go away
-> anyway as a result of general work on syscall optimisation for SVE,
-> though that work isn't done yet and may not end up working out that way.
+>> Notes:
+>> I understand that the failure does not exist on mainline kernel (only
+>> with PREEMPT_RT patchset) but the change does not harm it.
 > 
-> Having said that as with ZA userspace can just exit streaming mode to
-> avoid any overhead having it enabled introduces and the common case is
-> expected to be that it will have done so due to the PCS, it should be an
-> extremely rare case - unlike keeping ZA active there doesn't seem to be
-> any case where it would be sensible to want to do this and the PCS means
-> you'd have to actively try to do so.
 
-IIUC, the PCS introduced the notion of streaming-compatible functions
-that preserve the SM bit. If they are non-streaming, SM should be 0 on
-entry. It would be nice if we put the syscalls in one of these
-categories, so either mandate SM == 0 on entry or preserve (the latter
-being easier, I think, I haven't looked at what it takes to save/restore
-the streaming SVE state; I may change my mind after reviewing at the
-other patches).
+Steve,
 
-> > If PSTATE.ZA is valid and the user does a fork() (well, implemented as
-> > clone()), normally it expects a nearly identical state in the child.
-> > With clone() if a new thread is created, we likely don't need the
-> > additional ZA state. We got away with having to think about this for
-> > SVE as the state is lost on syscall. Here we risk having a vaguely
-> > defined ABI - fork() is disabled on arm64 for example but we do have
-> > clone() and clone3().
-> 
-> > Still thinking about this but maybe we could do something like always
-> > copy the ZA state unless CLONE_VM is passed for example. It is
-> > marginally more precise.
-> 
-> We should definitely write this up a bit more explictly whatever we do,
-> like I say I don't really have strong opinions here.
-> 
-> There's also the interaction with the lazy save state to consider -
-> TPIDR2 is cleared if CLONE_SETTLS is specified which would interfere
-> with any lazy state saving that had already happened, though hopefully
-> userspace is taking care of that as part of setting up the new thread so
-> I think it's fine.
+Would you like me to take this through linux-kselftest next for 5.18-rc1
 
-TPIDR2_EL0 should indeed be cleared in the child, it doesn't make sense
-to start a thread with this reg pointing to a buffer in another thread
-(not sure whether it needs to be tied to SETTLS but that works as well).
+I am guessing there is no urgency on this - of not I can take this in for
+rc5.
 
-In fork()+execve() cases, it doesn't make sense to preserve ZA in the
-child but we can't tell at fork/clone3() time. OTOH, it probably doesn't
-make much sense to call clone3() with PSTATE.ZA set either, so such copy
-would rarely/never happen in the kernel. We'd just carry some code for
-the classic fork() case.
-
-(few hours later) I think instead of singling out fork() (clone3()
-actually), we can just say that new tasks (process/thread) always start
-with PSTATE.ZA == 0, PSTATE.SM == 0 (tbd for this) and TPIDR2_EL0 == 0
-irrespective of any clone3() flags (even CLONE_SETTLS). The C library
-will have to implement the lazy ZA saving in the parent before the
-syscall and the child will automatically recover the state if it follows
-the PCS.
-
--- 
-Catalin
+thanks,
+-- Shuah
