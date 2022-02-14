@@ -2,160 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB8A4B41F4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 07:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232704B43E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 09:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiBNGYm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 01:24:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39524 "EHLO
+        id S236132AbiBNITF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 03:19:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiBNGYl (ORCPT
+        with ESMTP id S232671AbiBNITC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:24:41 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25754E389
-        for <linux-kselftest@vger.kernel.org>; Sun, 13 Feb 2022 22:24:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644819874; x=1676355874;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Pvk3lPrntMX0uY2eeOPY/dBiGDlj3REUxSVNgFB0cg=;
-  b=DdreKTDhwRxrl3dGjGxPvGls/hYv74daDMKCY1c03QQnFDCAwFp76SYI
-   WrhuDBop4KeGykjnDmQRsjsIttsYyy8MfyJg+np8s//2o4em4/Ipu7VoV
-   oobYPQjZ6WlTVRim/x+p7D3295z3DT+OzsJ1FUym/bOVtDdvx3liX3fsE
-   UePJeFHNiodczZUhBCgTO1Ev8AbLbGt5DEwd/97nyEfLjFxIunO7XKzEG
-   uontQIzpdd0SU2m0lm8TUE7xVSBkxToRNNOkDvt3gDjIOKqxPEeI3FJAW
-   Hreb1byyHmXR+pAJ2WtMpKudmNrF0fLZEzJZj25OYmFJMoxgXtB9tHjj7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="310761122"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="310761122"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:24:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="631946017"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 22:24:31 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 14 Feb 2022 08:24:28 +0200
-Date:   Mon, 14 Feb 2022 08:24:28 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH v5 3/6] thunderbolt: test: use NULL macros
-Message-ID: <Ygn1nPpPsM/DDqr1@lahna>
-References: <20220211094133.265066-1-ribalda@chromium.org>
- <20220211094133.265066-3-ribalda@chromium.org>
- <YgY1lzA20zyFcVi3@lahna>
- <CANiDSCs3+637REhtGjKy+MSnUm-Mh-k1S7Lk9UKqC8JY-k=zTw@mail.gmail.com>
- <YgaOS8BLz23k6JVq@lahna>
- <YgaPXhOr/lFny4IS@lahna>
- <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
- <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com>
+        Mon, 14 Feb 2022 03:19:02 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42EA25C40;
+        Mon, 14 Feb 2022 00:18:54 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id BBEB11F43333
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644826733;
+        bh=DGeNZvAkAxc84jyqOMSeG0plMeoRslPbkBa/UawJm90=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=LEJloTnuoTb17lj2/3q1rVL+T9coa2HajJg0FPD5cgCEypg5bBOQtpy1fGbB5q3lz
+         Kgnl3cw0Wpd9rALgRVsLCECWyAMs/4jda2QzUH2RcW/e5O2T1oM2fxlmxf4sIFbPLs
+         6NOgs6btI2asoBA4PQ4T4Av4GysrFK1VAXm5XmZfzXqgJdkTvEXkj7R42vi30sVNyt
+         wgouBW5vRkTgYurBvcuH2b8rkc4JfdEDQFBcUBzbo3sJKhUTB1ndxuABjxgV7seSXY
+         W0MQ6JQfgFi+JzckRLG694Hzvu1X54+3zblzEBguM0gmFphtL6T9j7S55fiHhJRSoR
+         pMiiUJ/ty/0iQ==
+Message-ID: <5af77f27-447c-794c-c96f-212dda3e4ab9@collabora.com>
+Date:   Mon, 14 Feb 2022 13:18:43 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220210190642.1477814-1-usama.anjum@collabora.com>
+ <20220210190642.1477814-2-usama.anjum@collabora.com>
+ <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
+ <99625ceecead4e9eb73de2fc8acb2ae9@AcuMS.aculab.com>
+ <7a501981-e4ce-fb08-7c1e-6aca26245cef@linuxfoundation.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <7a501981-e4ce-fb08-7c1e-6aca26245cef@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SCC_BODY_URI_ONLY,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-
-On Fri, Feb 11, 2022 at 02:54:37PM -0800, Daniel Latypov wrote:
-> On Fri, Feb 11, 2022 at 8:33 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >
-> > Hi Mika
-> >
-> > On Fri, 11 Feb 2022 at 17:31, Mika Westerberg
-> > <mika.westerberg@linux.intel.com> wrote:
-> > >
-> > > On Fri, Feb 11, 2022 at 06:26:56PM +0200, Mika Westerberg wrote:
-> > > > > To test it I had enabled:
-> > > > > PCI, USB4 and USB4_KUNIT_TEST
-> > > > >
-> > > > > and then run it with
-> > > > >
-> > > > > ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
-> > > > >
-> > > > > Unfortunately, kunit was not able to run the tests
-> > > > >
-> > > > > This hack did the trick:
-> > > > >
-> > > > >
-> > > > >  int tb_test_init(void)
-> > > > >  {
-> > > > > -       return __kunit_test_suites_init(tb_test_suites);
-> > > > > +       //return __kunit_test_suites_init(tb_test_suites);
-> > > > > +       return 0;
-> > > > >  }
-> > > > >
-> > > > >  void tb_test_exit(void)
-> > > > >  {
-> > > > > -       return __kunit_test_suites_exit(tb_test_suites);
-> > > > > +       //return __kunit_test_suites_exit(tb_test_suites);
-> > > > >  }
-> > > > > +
-> > > > > +kunit_test_suites(&tb_test_suite);
-> > > > >
-> > > > > I looked into why we do this and I found:
-> > > > >
-> > > > > thunderbolt: Allow KUnit tests to be built also when CONFIG_USB4=m
-> > > > >
-> > > > >
-> > > > > I am a bit confused. The patch talks about build coverage, but even
-> > > > > with that patch reverted if
-> > > > > USB4_KUNIT_TEST=m
-> > > > > then test.c is built.
-> > > > >
-> > > > > Shouldn't we simply revert that patch?
-> > > >
-> > > > Nah, either build it into the kernel or load the driver manually:
-> > > >
-> > > >   # modprobe thunderbolt
-> > >
-> > > Forgot to explain why this does not run the tests (I think):
-> > >
-> > >  ./tools/testing/kunit/kunit.py run --jobs=$(nproc) --arch=x86_64
-> > >
-> > > The driver depends on PCI and I don't think that's enabled on UML at
-> > > least. I typically run it inside QEMU.
+On 2/11/22 10:13 PM, Shuah Khan wrote:
+> On 2/11/22 9:47 AM, David Laight wrote:
+>> From: Shuah Khan
+>>> Sent: 10 February 2022 20:52
+>>>
+>>> On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
+>>>> CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
+>>>> it is treated as single string and double quote are used around it.
+>>>> This can be fixed by removing the quotes and not treating CC a single
+>>>> string.
+>>>>
+>>>> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture
+>>>> detection")
+>>>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>> ---
+>>>>    tools/testing/selftests/x86/check_cc.sh | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/x86/check_cc.sh
+>>>> b/tools/testing/selftests/x86/check_cc.sh
+>>>> index 3e2089c8cf549..aff2c15018b53 100755
+>>>> --- a/tools/testing/selftests/x86/check_cc.sh
+>>>> +++ b/tools/testing/selftests/x86/check_cc.sh
+>>>> @@ -7,7 +7,7 @@ CC="$1"
+>>>>    TESTPROG="$2"
+>>>>    shift 2
+>>>>
+>>>> -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>>>> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>>>>        echo 1
+>>>>    else
+>>>>        echo 0
+>>>>
+>>>
+>>> The intent is testing if $CC is set. Does this change work when
+>>> $CC is not set?
+>>
+>> More by luck than judgement. Before and after.
+>> If $CC might be empty you probably want:
+>>
+>> [ -n "$CC" ] && { echo 0; return; }
+>>
+>> The subject is also wrong. Should be "allow field splitting' of ${CC}.
+>> (no brace or curly braces, not round ones.)
+>>
 > 
-> You can get it working on UML now.
-> If you apply the patch upthread for the test to use kunit_test_suites(), then
+> Good points. It would be good enhancement to add the check - since the
+> current logic doesn't handle the null CC
 > 
-> $ cat usb4_kunitconfig
-> CONFIG_PCI=y
-> CONFIG_VIRTIO_UML=y
-> CONFIG_UML_PCI_OVER_VIRTIO=y
-> 
-> CONFIG_KUNIT=y
-> CONFIG_USB4=y
-> CONFIG_USB4_KUNIT_TEST=y
-> 
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=usb4_kunitconfig
-> ...
-> [14:48:55] [PASSED] tb_test_property_copy
-> [14:48:55] =================== [PASSED] thunderbolt ===================
-> [14:48:55] ============================================================
-> [14:48:55] Testing complete. Passed: 37, Failed: 0, Crashed: 0,
-> Skipped: 0, Errors: 0
-
-That's great!
-
-> Mika, should I propose a patch that updates the test and adds a
-> drivers/thunderbolt/.kunitconfig with the above contents?
-> 
-> Then it could be invoked as
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
-
-Yes please :)
+I'll send a V2.
+> thanks,
+> -- Shuah
