@@ -2,47 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C764B55A4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 17:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5214B55D7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 17:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbiBNQIf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 11:08:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52648 "EHLO
+        id S243894AbiBNQNF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 11:13:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242693AbiBNQIe (ORCPT
+        with ESMTP id S230109AbiBNQNF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:08:34 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B349F97;
-        Mon, 14 Feb 2022 08:08:26 -0800 (PST)
+        Mon, 14 Feb 2022 11:13:05 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADF3CFE;
+        Mon, 14 Feb 2022 08:12:57 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id D303C1F43DBE
+        with ESMTPSA id 6743F1F438A4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644854905;
-        bh=aJsSEXf1LJvbiDXIpOJk5PLiUdc/g9YrvOrNGjI88oo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=U+cM9tRoLy6qCMzSaQWPpmBDcHcYKhrWG1v0A85bD5Zm8cc+ytYZvtImj3axC+m1e
-         veew8NkjIDmonpu7Dn92nl1J9Bqw84+6MVhVnSh1WIrIj3DF1pBW2StU+W5k7MtLyg
-         usRG+e+t7rH7vlC8Ves0nswrY5bFVWjckrc3SVrzmKrjT129wNU4W1edIqIPYJSYdo
-         W07xl5/Fdtxd3Y9Sm4D0nLyssLbdFzK2zTPFn5tq3NxUKABZKwmYMxS6RFuktlyncp
-         EujRRhoeQU2ZWyfrya8Ha7lbNkNV7iY3mE8nL7jLld6ilYOY+HGiwpQEZE8AjdlMXB
-         JqD9sKh+vZiMw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, sherry.yang@oracle.com,
-        keescook@chromium.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2] selftests: Use -isystem instead of -I to include headers
-Date:   Mon, 14 Feb 2022 21:07:56 +0500
-Message-Id: <20220214160756.3543590-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        s=mail; t=1644855176;
+        bh=xszuPxTh+RrzQKdIk/UYX7m0IGZxD+CwZJwkc1byRNE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Ox3V1acuR+hSOBVzElsGhFQ8rG9+6L/wP8sjXuVapRZ7yoQjj3DHWjBoqgpyHkoX5
+         76BHrtYZ7MAjYVi99wdgv1CmPmfjQSJBLwO8Rh7tmStfo5U7bk6PALpi3bgMZZtpSr
+         yYiVU1ML3GhZteHchvEssnFHl3rlCAoAHpOljqwjqDsq5fBGYtDIfvIkvlZi3sphjb
+         HyhsDzmYbJYLk8ngZjCRcEeG2IZXu/srQTj2bVX41YOrSspvnoVWMNTIP781NdPTIG
+         cwN9npokyHQJvN5fnS/oyQ9Jvg2ngGwyX58u2AXNgWC4Et2m0cgX8iwnkrxjShlHrQ
+         HfDyy19xoDoLQ==
+Message-ID: <66140ffb-306e-2956-2f6b-c017a38e18f8@collabora.com>
+Date:   Mon, 14 Feb 2022 21:12:46 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, Shuah Khan <skhan@linuxfoundation.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "christian@brauner.io" <christian@brauner.io>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
+ missing headers
+Content-Language: en-US
+To:     Sherry Yang <sherry.yang@oracle.com>
+References: <20220210203049.67249-1-sherry.yang@oracle.com>
+ <755ec9b2-8781-a75a-4fd0-39fb518fc484@collabora.com>
+ <85DF69B3-3932-4227-978C-C6DAC7CAE64D@oracle.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <85DF69B3-3932-4227-978C-C6DAC7CAE64D@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,39 +72,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Selftests need kernel headers and glibc for compilation. In compilation
-of selftests, uapi headers from kernel source are used instead of
-default ones while glibc has already been compiled with different header
-files installed in the operating system. So there can be redefination
-warnings from compiler. These warnings can be suppressed by using
--isystem to include the uapi headers.
+>> "../../../../usr/include/" directory doesn't have header files if
+>> different output directory is used for kselftests build like "make -C
+>> tools/tests/selftest O=build". Can you try adding recently added
+>> variable, KHDR_INCLUDES here which makes this kind of headers inclusion
+>> easy and correct for other build combinations as well?
+>>
+>>
+> 
+> Hi Muhammad,
+> 
+> I just pulled linux-next, and tried with KHDR_INCLUDES. It works. Very nice 
+> work! I really appreciate you made headers inclusion compatible. However, 
+> my case is a little more complicated. It will throw warnings with -I, using 
+> -isystem can suppress these warnings, more details please refer to 
+> https://lore.kernel.org/all/C340461A-6FD2-440A-8EFC-D7E85BF48DB5@oracle.com/
+> 
+> According to this case, do you think will it be better to export header path 
+> (KHDR_INCLUDES) without “-I”?
+Well said. I've thought about it and it seems like -isystem is better
+than -I. I've sent a patch:
+https://lore.kernel.org/linux-kselftest/20220214160756.3543590-1-usama.anjum@collabora.com/
+I'm looking forward to discussion on it.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Changes in V2:
-Remove debug code
----
- tools/testing/selftests/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 4eda7c7c15694..06cc683f81b1a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -130,11 +130,11 @@ ifneq ($(KBUILD_OUTPUT),)
-   # $(realpath ...) resolves symlinks
-   abs_objtree := $(realpath $(abs_objtree))
-   BUILD := $(abs_objtree)/kselftest
--  KHDR_INCLUDES := -I${abs_objtree}/usr/include
-+  KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
- else
-   BUILD := $(CURDIR)
-   abs_srctree := $(shell cd $(top_srcdir) && pwd)
--  KHDR_INCLUDES := -I${abs_srctree}/usr/include
-+  KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
-   DEFAULT_INSTALL_HDR_PATH := 1
- endif
- 
--- 
-2.30.2
-
+Thanks,
+Usama
