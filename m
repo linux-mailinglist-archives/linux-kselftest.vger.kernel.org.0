@@ -2,56 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCC14B5314
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 15:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFBB4B5587
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Feb 2022 17:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345103AbiBNOUV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Feb 2022 09:20:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55426 "EHLO
+        id S1346938AbiBNQEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Feb 2022 11:04:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbiBNOUT (ORCPT
+        with ESMTP id S1345126AbiBNQEW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:20:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FAB4A3F8;
-        Mon, 14 Feb 2022 06:20:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F7236103D;
-        Mon, 14 Feb 2022 14:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D43AC340EF;
-        Mon, 14 Feb 2022 14:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644848410;
-        bh=wmIB5Xx8YNnUp61IjytANTE6h4pdM98NwtQfxsN8ya8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pYBK/WpdPB+Adjglevy0jGVzBfuBMEdwXHH8BrZbH2MZqZgacGtuvZPO+ImU6k/XQ
-         CfoVzmV+0LFsOBnPGKyZb6xXIlcmwAfzJPZFpyglbLOMtL1pJkXa0vpfyvbq5WqOjG
-         tSo8sA6SGBvCay2POScyPZji8e96hukgYIptsaB3vXjdMuqAa10V5brRc4YNW0a5aD
-         ZjSTkXV1aRZFuTYBu2Mi+jq1OVetpoIyTQ/Te8W2es2IbV+2CRO3vDyuf/KjMYhbhE
-         NiT7Pskq1fzQCNE+GRS4lZpgA0WHmK2C96/cS46WNYVrKjcRITsTAYvUT4YJ2sIsLL
-         1mH8YHiOjboVg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 76C41E74CC2;
-        Mon, 14 Feb 2022 14:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 14 Feb 2022 11:04:22 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6FF4198D;
+        Mon, 14 Feb 2022 08:04:13 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id EE7221F43E14
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644854651;
+        bh=hhGdfBGp3XEGTgPwWSi2w1YSBb6AMg6JC+TrhGkRd3U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VmZnjDBXlO0jFVw0dmKZ0d+fy8kPHcbiFaqywZrdEZNP1Rh1PznhsfXbaFFIiM5GR
+         x2fsK3gFeOmLd87l2pgF5SKcsNkFzHWB68deRdWM0NcQo3+g1zONQgtTTC+YQabQzU
+         OJUR5g6rnsH61DATvCTUS3CXgXdrqXJhws5p9AaXcnvIOh2DMG+R6nrerZ79etdvhp
+         CgM3fkFNJ21gcMY8VRyseVpJ+KyfMiFUAh99516xx8SIoUu0Z4k3BhxNsV1kFncJHj
+         jxGY5yIC1+WpjsL+k1asHDwaxUHrxze6UUp4i0oNnMG6zFdEs3HCm76y439/hqrXm/
+         RoWaSs06LtSDA==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, sherry.yang@oracle.com,
+        keescook@chromium.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: Use -isystem instead of -I to include headers
+Date:   Mon, 14 Feb 2022 21:03:39 +0500
+Message-Id: <20220214160339.3537720-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] selftests: net: cmsg_sender: Fix spelling mistake
- "MONOTINIC" -> "MONOTONIC"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164484841048.14634.689140204535571711.git-patchwork-notify@kernel.org>
-Date:   Mon, 14 Feb 2022 14:20:10 +0000
-References: <20220214093810.44792-1-colin.i.king@gmail.com>
-In-Reply-To: <20220214093810.44792-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,26 +50,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Selftests need kernel headers and glibc for compilation. In compilation
+of selftests, uapi headers from kernel source are used instead of
+default ones while glibc has already been compiled with different header
+files installed in the operating system. So there can be redefination
+warnings from compiler. These warnings can be suppressed by using
+-isystem to include the uapi headers.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On Mon, 14 Feb 2022 09:38:10 +0000 you wrote:
-> There is a spelling mistake in an error message. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  tools/testing/selftests/net/cmsg_sender.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - [next] selftests: net: cmsg_sender: Fix spelling mistake "MONOTINIC" -> "MONOTONIC"
-    https://git.kernel.org/netdev/net-next/c/12d8c11198af
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 4eda7c7c15694..0178b5c801656 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -130,14 +130,16 @@ ifneq ($(KBUILD_OUTPUT),)
+   # $(realpath ...) resolves symlinks
+   abs_objtree := $(realpath $(abs_objtree))
+   BUILD := $(abs_objtree)/kselftest
+-  KHDR_INCLUDES := -I${abs_objtree}/usr/include
++  KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
+ else
+   BUILD := $(CURDIR)
+   abs_srctree := $(shell cd $(top_srcdir) && pwd)
+-  KHDR_INCLUDES := -I${abs_srctree}/usr/include
++  KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+   DEFAULT_INSTALL_HDR_PATH := 1
+ endif
+ 
++$(info $$KHDR_INCLUDES iss [${KHDR_INCLUDES}])
++
+ # Prepare for headers install
+ include $(top_srcdir)/scripts/subarch.include
+ ARCH           ?= $(SUBARCH)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
