@@ -2,81 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85ECA4B7B13
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Feb 2022 00:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755264B7B1E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Feb 2022 00:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244181AbiBOXPH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Feb 2022 18:15:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54758 "EHLO
+        id S244779AbiBOXTD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Feb 2022 18:19:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbiBOXPH (ORCPT
+        with ESMTP id S244791AbiBOXTC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:15:07 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F265F8B85;
-        Tue, 15 Feb 2022 15:14:56 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        Tue, 15 Feb 2022 18:19:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E1BF94C2
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 15:18:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id ED242385;
-        Tue, 15 Feb 2022 23:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net ED242385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1644966896; bh=0KRd24qYWSdMi+ZRf6iF24wWMW4EA6JvT/Fg9LWsjdE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ENlbIfdVmDWTe5fUIeoHrd86rrkUdZzWvfe4BBZSzdgdTXV81zlyQSR9ru1XXTTF7
-         Ik/sevhTvj30Lxhpw/FMt/sYCArI1Secylip9j6X2JlRzw12N/vt5CshautChBgrqu
-         jujivMWJV7sKE6kg8OOReaU7M5dD1O0XIWO3wQK+mIbM/rp5zNTF7C61L+O9LDedkP
-         NcjiJEhnecjQQQEXhURBLYWdpkYcUcfRVTfPFHuX04tlOOBLPqy4CL3UP0hJKoMS6C
-         2g8Y6h7rb4XHYsavU8M0A27K0RDkiOqBMkEO2VRMQDksYdanCAS2tcmgx58rpxuz69
-         fr4eNr4tQymRg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     frowand.list@gmail.com, David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        Tim.Bird@sony.com, Brendan Higgins <brendanhiggins@google.com>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] Documentation: dev-tools: clarify KTAP
- specification wording
-In-Reply-To: <20220210233630.3304495-1-frowand.list@gmail.com>
-References: <20220210233630.3304495-1-frowand.list@gmail.com>
-Date:   Tue, 15 Feb 2022 16:14:55 -0700
-Message-ID: <87sfsj7mds.fsf@meer.lwn.net>
+        by sin.source.kernel.org (Postfix) with ESMTPS id D5293CE2150
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 23:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2027C340F5;
+        Tue, 15 Feb 2022 23:18:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644967128;
+        bh=nxuvU3M/Qng0e7071QMVgxAU31oog2T42pvp4Kia2TU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SymAOB1qGGZ+/uzy/4Ep/6+XyXYpJq+PfVS6flLERSvUxf77BkvhzdGtZW6x2y39l
+         cLKQY2KBsMfA1yazI4W0rUnx0J5jvWKdel18KoUG9AYgHri+soFVMmb/WbPK/EZpWv
+         y/6W8LQjJUS8DZqyL5TbZMhhRnk7QEheCKKfk3T9o139ZZEjqRcWz1YwtRCT5Emtwi
+         EU/aZqumqRPGj9mEtDXTmJOcAPJ5lRRqAiuJA9QWgGwPSP3M5Gph+dL2RBUTTGesnT
+         V54lKfy1vugntIIzpr++0iC2iHJNo+rJdgvjl/xbZh7uv77fYnNsFyLphj4yT7LQTF
+         0o3K6ndYX1pdw==
+From:   Will Deacon <will@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] kselftest/arm64: Remove local ARRAY_SIZE() definitions
+Date:   Tue, 15 Feb 2022 23:18:25 +0000
+Message-Id: <164494074126.1780873.9232103158382846688.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220124171748.2195875-1-broonie@kernel.org>
+References: <20220124171748.2195875-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-frowand.list@gmail.com writes:
+On Mon, 24 Jan 2022 17:17:48 +0000, Mark Brown wrote:
+> An ARRAY_SIZE() has been added to kselftest.h so remove the local versions
+> in some of the arm64 selftests.
+> 
+> 
 
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> Add the spec version to the title line.
->
-> Explain likely source of "Unknown lines".
->
-> "Unknown lines" in nested tests are optionally indented.
->
-> Add "Unknown lines" items to differences between TAP & KTAP list
->
-> Convert "Major differences between TAP and KTAP" from a bullet list
-> to a table.  The bullet list was being formatted as a single
-> paragraph.
->
-> Reviewed-by: Tim Bird <Tim.Bird@sony.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+Applied to arm64 (for-next/kselftest), thanks!
 
-I've applied this, thanks.
+[1/1] kselftest/arm64: Remove local ARRAY_SIZE() definitions
+      https://git.kernel.org/arm64/c/3673d4b9cf68
 
-jon
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
