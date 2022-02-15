@@ -2,161 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068254B72D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Feb 2022 17:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC6A4B72AC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Feb 2022 17:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240599AbiBOPdw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Feb 2022 10:33:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43340 "EHLO
+        id S241331AbiBOPr1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Feb 2022 10:47:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237490AbiBOPdq (ORCPT
+        with ESMTP id S240872AbiBOPrR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:33:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935A8A8EED;
-        Tue, 15 Feb 2022 07:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A974B8185B;
-        Tue, 15 Feb 2022 15:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79C1C340F2;
-        Tue, 15 Feb 2022 15:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644939016;
-        bh=qJwGXYo41BOzEX6oFtnAmcbygBymqUp/dIQMb+BAvlQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=toB1+tjH280Rxab4Nq+JVo9pwKh2LgmrB5RKdUOE/uZduzmBq6H+kPVbMKU0zRciA
-         mJjElqXB+Ia5qWu2VXlLauPBAzOeaYc1Q9ofQ0lXVEmFzAEM9TYe0xuoRL/CQ7QIf4
-         rnKuOUhTgWna9N07VFKM84d6t5MwYgLND1GNat21OPZwIn9oU4schUGBp82J0EQka1
-         vVU/wx9wZgxXVB0Y+nQ9XZERS9IK36MLzCBk6vtTVihqYDYp7j+g2FssWEL1QI85OU
-         5dgVJLSKVjPoRRLQnzy253nP6+t3FBLXl2mvZFf1bRKOGw1n0MJwlQUR6F9Pq8YZdO
-         u7daHQgz5gUiw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 11/23] selftests: fixup build warnings in pidfd / clone3 tests
-Date:   Tue, 15 Feb 2022 10:29:45 -0500
-Message-Id: <20220215152957.581303-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215152957.581303-1-sashal@kernel.org>
-References: <20220215152957.581303-1-sashal@kernel.org>
+        Tue, 15 Feb 2022 10:47:17 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40961CC532
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 07:46:09 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id c14so5508475ilm.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 07:46:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zQs21yv2f+We8y2ER6IR8G/EJEy1JELXcGjZReUP8ME=;
+        b=UjT5GW/IvoqiKyKL8/Wl5k3GSDeoRbZKenU7cV9xB29VZJr/+VmO7z3nPvExTJ6cb3
+         RYCsVfzRFtabEK+bcZGvIIJey/nm/15EfDpaXq8hFFeX91x+S8HmLkfsRdIzXahDn7IY
+         qUm4N4kSN4imaKgCjD323SsyZiAU1WhgCWiD8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zQs21yv2f+We8y2ER6IR8G/EJEy1JELXcGjZReUP8ME=;
+        b=H7oOipl5viPuHUvWDRbu3M63sqjQwfEO4hkkMaeviVoWzXUvykUFJ9LRT+woFTl+C5
+         YvZeiNMsVNEZV/2b76/3+dgLi4cIVw6kPLCb8n6JDQIm/6s6nLZXHfvMBp3ITPiKLsIe
+         YzvzZZ9cyMVBhhXbBbOJ8bwec9+D0Lfe+27uxgPToTcXGYHoZegipjT7vQK7giq8QXV5
+         MsE9Eo61pvRSQr6U11bL9kWdFyn6sVH7FQWf/BTQnE0vdRHPkeHN+3sY2pDDTbEvDpzp
+         Da4rRjjY3XC/tyhgtLqFNlwgapYaDbE94ntTqZX07ymeh8uTvXK+yPWIqpn97oFiGbN9
+         sloA==
+X-Gm-Message-State: AOAM531xwFX4GNAY6k/PdMpQgHJdnuCvgm7fCzEeqkjj8YpaXBjFtUSs
+        CeO72O8SNgU+FcERsKVWZMSljA==
+X-Google-Smtp-Source: ABdhPJwzLkAFx8rhlhLaDU9FF8txtiwWC2frhOjc/xUT8iwtOAyMUlXov0SQjOW9BE8EqiULkIY4IQ==
+X-Received: by 2002:a92:db0e:: with SMTP id b14mr2943259iln.153.1644939968545;
+        Tue, 15 Feb 2022 07:46:08 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id 12sm13323337ilx.20.2022.02.15.07.46.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 07:46:08 -0800 (PST)
+Subject: Re: [PATCH v2 1/6] ima: Fix documentation-related warnings in
+ ima_main.c
+To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, revest@chromium.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+ <20220215124042.186506-2-roberto.sassu@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <759a70de-a06b-592c-de4a-f7c74fbe4619@linuxfoundation.org>
+Date:   Tue, 15 Feb 2022 08:46:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220215124042.186506-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Axel Rasmussen <axelrasmussen@google.com>
+On 2/15/22 5:40 AM, Roberto Sassu wrote:
+> Fix some warnings in ima_main.c, displayed with W=n make argument.
+> 
 
-[ Upstream commit e2aa5e650b07693477dff554053605976789fd68 ]
+Thank you for fixing these. Doc builds are full of them and few less
+is welcome.
 
-These are some trivial fixups, which were needed to build the tests with
-clang and -Werror. The following issues are fixed:
+Adding the warns or summary of them to change log will be good.
 
-- Remove various unused variables.
-- In child_poll_leader_exit_test, clang isn't smart enough to realize
-  syscall(SYS_exit, 0) won't return, so it complains we never return
-  from a non-void function. Add an extra exit(0) to appease it.
-- In test_pidfd_poll_leader_exit, ret may be branched on despite being
-  uninitialized, if we have !use_waitpid. Initialize it to zero to get
-  the right behavior in that case.
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   security/integrity/ima/ima_main.c | 11 ++++++-----
+>   1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 8c6e4514d494..946ba8a12eab 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -418,6 +418,7 @@ int ima_file_mmap(struct file *file, unsigned long prot)
+>   
+>   /**
+>    * ima_file_mprotect - based on policy, limit mprotect change
+> + * @vma: vm_area_struct protection is set to
+>    * @prot: contains the protection that will be applied by the kernel.
+>    *
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/clone3/clone3.c    | 2 --
- tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
- tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
- 3 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 076cf4325f783..cd4582129c7d6 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
- 
- int main(int argc, char *argv[])
- {
--	pid_t pid;
--
- 	uid_t uid = getuid();
- 
- 	ksft_print_header();
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index 529eb700ac26a..9a2d64901d591 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
- {
- 	int pid, pidfd = 0;
- 	int status, ret;
--	pthread_t t1;
- 	time_t prog_start = time(NULL);
- 	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
- 
-@@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
- 	 */
- 	*child_exit_secs = time(NULL);
- 	syscall(SYS_exit, 0);
-+	/* Never reached, but appeases compiler thinking we should return. */
-+	exit(0);
- }
- 
- static void test_pidfd_poll_leader_exit(int use_waitpid)
- {
- 	int pid, pidfd = 0;
--	int status, ret;
--	time_t prog_start = time(NULL);
-+	int status, ret = 0;
- 	const char *test_name = "pidfd_poll check for premature notification on non-empty"
- 				"group leader exit";
- 
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index be2943f072f60..17999e082aa71 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
- 
- TEST(wait_simple)
- {
--	int pidfd = -1, status = 0;
-+	int pidfd = -1;
- 	pid_t parent_tid = -1;
- 	struct clone_args args = {
- 		.parent_tid = ptr_to_u64(&parent_tid),
-@@ -47,7 +47,6 @@ TEST(wait_simple)
- 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
- 		.exit_signal = SIGCHLD,
- 	};
--	int ret;
- 	pid_t pid;
- 	siginfo_t info = {
- 		.si_signo = 0,
-@@ -88,7 +87,7 @@ TEST(wait_simple)
- 
- TEST(wait_states)
- {
--	int pidfd = -1, status = 0;
-+	int pidfd = -1;
- 	pid_t parent_tid = -1;
- 	struct clone_args args = {
- 		.parent_tid = ptr_to_u64(&parent_tid),
--- 
-2.34.1
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
