@@ -2,155 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586654B6C7D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Feb 2022 13:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169614B7397
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Feb 2022 17:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237971AbiBOMoK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Feb 2022 07:44:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56230 "EHLO
+        id S237505AbiBOPZP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Feb 2022 10:25:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237969AbiBOMnm (ORCPT
+        with ESMTP id S235614AbiBOPZO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 07:43:42 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F97F20F46;
-        Tue, 15 Feb 2022 04:43:03 -0800 (PST)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JygcY3VYqz67Ybb;
-        Tue, 15 Feb 2022 20:38:37 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Feb 2022 13:43:01 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <shuah@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
-        <revest@chromium.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 6/6] selftests/bpf: Add test for bpf_lsm_kernel_read_file()
-Date:   Tue, 15 Feb 2022 13:40:42 +0100
-Message-ID: <20220215124042.186506-7-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220215124042.186506-1-roberto.sassu@huawei.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+        Tue, 15 Feb 2022 10:25:14 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E25085BCC
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 07:25:04 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id p63so24166794iod.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 07:25:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=STSfeMkR8sO6JKdBEzPJOeiPGWaxCEMoqHon21FihTU=;
+        b=YJUS8WZ6GALIAGJCgBqidA/jRC7Y4VlfQon9K7eJGbV5JFiV8G0w1bkomi5BZCStpo
+         emu7g8n7Y+/hd7YAaj3mNC5X9GOT0unsqyZ6koBcMT4NHVx/u3LydOeUDO6Ov0P1JZAE
+         iT3hqQ4GGlayHiq7Kauf4oVzTr3qwGqqaWZNE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=STSfeMkR8sO6JKdBEzPJOeiPGWaxCEMoqHon21FihTU=;
+        b=vy1+dSFsMpBiEGGR0rq3LouNRbpB68RsMHwV3T1NOaLE/WiOrL23uAscQ0NnIL8nFN
+         tSZeJEUYmq2SwNRhvqYG+Mt8dd6vs4flhwvpyHrvO+RNRgR7uT4Q2rrKdC3mSN5wbtWN
+         OegJzlBhjw6xexItmh/d4Wzho81WD1epHXq1k0NKYBZuloCUb23EvY709NmqSIUpU5ei
+         09HCLE9sQmeVDLyp+ZQ0jHExzUMFsqUCGvko9OvJ4hMMn6M/f8u38+2Q7WNtO1l38Dv8
+         Prs/2v831i8xNaSy3D91J38CtnKc+/U9hRsuyfRQ0Lj5kPpSKo+WKZ3YIoIj2TyxovgF
+         SKEg==
+X-Gm-Message-State: AOAM532dLC99rJz9XywJ7UK69xywTO+Vr1Bd3jKgseymaYOvlhEoR4rF
+        sHGuEJkL5cRXtQmc/dMPYuHIJQ==
+X-Google-Smtp-Source: ABdhPJy+IcgP1I/EPyq/Kpzq9SYpM21us3QTIGn6lhDEubr9KH/TzO2vI54UO9yXV6od31OPqFQCyA==
+X-Received: by 2002:a05:6602:2ac1:: with SMTP id m1mr2681467iov.123.1644938703517;
+        Tue, 15 Feb 2022 07:25:03 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id r13sm10603485ilb.35.2022.02.15.07.25.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 07:25:03 -0800 (PST)
+Subject: Re: [PATCH] selftests: kvm: Check whether SIDA memop fails for normal
+ guests
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220215074824.188440-1-thuth@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org>
+Date:   Tue, 15 Feb 2022 08:25:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220215074824.188440-1-thuth@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test the ability of bpf_lsm_kernel_read_file() to call the sleepable
-functions bpf_ima_inode_hash() or bpf_ima_file_hash() to obtain a
-measurement of a loaded IMA policy.
+On 2/15/22 12:48 AM, Thomas Huth wrote:
+> Commit 2c212e1baedc ("KVM: s390: Return error on SIDA memop on normal
+> guest") fixed the behavior of the SIDA memops for normal guests. It
+> would be nice to have a way to test whether the current kernel has
+> the fix applied or not. Thus add a check to the KVM selftests for
+> these two memops.
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>   tools/testing/selftests/kvm/s390x/memop.c | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index 9f49ead380ab..d19c3ffdea3f 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -160,6 +160,21 @@ int main(int argc, char *argv[])
+>   	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+>   	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
+>   
+> +	/* Check that the SIDA calls are rejected for non-protected guests */
+> +	ksmo.gaddr = 0;
+> +	ksmo.flags = 0;
+> +	ksmo.size = 8;
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.sida_offset = 0x1c0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_READ in non-protected mode");
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/testing/selftests/bpf/ima_setup.sh      |  2 ++
- .../selftests/bpf/prog_tests/test_ima.c       |  3 +-
- tools/testing/selftests/bpf/progs/ima.c       | 28 ++++++++++++++++---
- 3 files changed, 28 insertions(+), 5 deletions(-)
+Printing what passed would be a good addition to understand the tests that
+get run and expected to pass.
 
-diff --git a/tools/testing/selftests/bpf/ima_setup.sh b/tools/testing/selftests/bpf/ima_setup.sh
-index 8e62581113a3..82530f19f85a 100755
---- a/tools/testing/selftests/bpf/ima_setup.sh
-+++ b/tools/testing/selftests/bpf/ima_setup.sh
-@@ -51,6 +51,7 @@ setup()
- 
- 	ensure_mount_securityfs
- 	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${IMA_POLICY_FILE}
-+	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${mount_dir}/policy_test
- }
- 
- cleanup() {
-@@ -74,6 +75,7 @@ run()
- 	local mount_dir="${tmp_dir}/mnt"
- 	local copied_bin_path="${mount_dir}/$(basename ${TEST_BINARY})"
- 
-+	echo ${mount_dir}/policy_test > ${IMA_POLICY_FILE}
- 	exec "${copied_bin_path}"
- }
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-index 62bf0e830453..c4a62d7b70df 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-@@ -97,8 +97,9 @@ void test_test_ima(void)
- 	/*
- 	 * 1 sample with use_ima_file_hash = false
- 	 * 2 samples with use_ima_file_hash = true (./ima_setup.sh, /bin/true)
-+	 * 1 sample with use_ima_file_hash = true (IMA policy)
- 	 */
--	ASSERT_EQ(err, 3, "num_samples_or_err");
-+	ASSERT_EQ(err, 4, "num_samples_or_err");
- 	ASSERT_NEQ(ima_hash_from_bpf, 0, "ima_hash");
- 
- close_clean:
-diff --git a/tools/testing/selftests/bpf/progs/ima.c b/tools/testing/selftests/bpf/progs/ima.c
-index 9bb63f96cfc0..9b4c03f30a1c 100644
---- a/tools/testing/selftests/bpf/progs/ima.c
-+++ b/tools/testing/selftests/bpf/progs/ima.c
-@@ -20,8 +20,7 @@ char _license[] SEC("license") = "GPL";
- 
- bool use_ima_file_hash;
- 
--SEC("lsm.s/bprm_committed_creds")
--void BPF_PROG(ima, struct linux_binprm *bprm)
-+static void ima_test_common(struct file *file)
- {
- 	u64 ima_hash = 0;
- 	u64 *sample;
-@@ -31,10 +30,10 @@ void BPF_PROG(ima, struct linux_binprm *bprm)
- 	pid = bpf_get_current_pid_tgid() >> 32;
- 	if (pid == monitored_pid) {
- 		if (!use_ima_file_hash)
--			ret = bpf_ima_inode_hash(bprm->file->f_inode, &ima_hash,
-+			ret = bpf_ima_inode_hash(file->f_inode, &ima_hash,
- 						 sizeof(ima_hash));
- 		else
--			ret = bpf_ima_file_hash(bprm->file, &ima_hash,
-+			ret = bpf_ima_file_hash(file, &ima_hash,
- 						sizeof(ima_hash));
- 		if (ret < 0 || ima_hash == 0)
- 			return;
-@@ -49,3 +48,24 @@ void BPF_PROG(ima, struct linux_binprm *bprm)
- 
- 	return;
- }
-+
-+SEC("lsm.s/bprm_committed_creds")
-+void BPF_PROG(ima, struct linux_binprm *bprm)
-+{
-+	ima_test_common(bprm->file);
-+}
-+
-+SEC("lsm.s/kernel_read_file")
-+int BPF_PROG(kernel_read_file, struct file *file, enum kernel_read_file_id id,
-+	     bool contents)
-+{
-+	if (!contents)
-+		return 0;
-+
-+	if (id != READING_POLICY)
-+		return 0;
-+
-+	ima_test_common(file);
-+
-+	return 0;
-+}
--- 
-2.32.0
+> +	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL,
+> +		    "ioctl does not reject SIDA_WRITE in non-protected mode");
+> +
 
+Same here.
+
+>   	kvm_vm_free(vm);
+>   
+>   	return 0;
+> 
+
+Something to consider in a follow-on patch and future changes to these tests.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
