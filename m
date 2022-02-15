@@ -2,50 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83D94B78B4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Feb 2022 21:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9EA4B7559
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Feb 2022 21:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243686AbiBOTfV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Feb 2022 14:35:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35270 "EHLO
+        id S236969AbiBOTjN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Feb 2022 14:39:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbiBOTfV (ORCPT
+        with ESMTP id S232487AbiBOTjM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 14:35:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE769B91E9;
-        Tue, 15 Feb 2022 11:35:10 -0800 (PST)
+        Tue, 15 Feb 2022 14:39:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070B7BF45;
+        Tue, 15 Feb 2022 11:39:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44BB2B81C66;
-        Tue, 15 Feb 2022 19:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E5CC340EB;
-        Tue, 15 Feb 2022 19:35:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 978A561758;
+        Tue, 15 Feb 2022 19:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE11C340EB;
+        Tue, 15 Feb 2022 19:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644953708;
-        bh=j3MB4eWyGs+b6k4/lCq/v3mpk3aMuCyi+sHhwEInd4w=;
+        s=k20201202; t=1644953941;
+        bh=nDxaLKVnY/Q/9k9SG0O1zGYGRkz0Ak4nfPyxLLVRLb4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hj4fnlYc053KVhcFhbyhQAZmIlWxbU+bBwfbrJ4xk92Z6soYRDKXJgQPQd+VVpFnz
-         H1kssRhM28lzyo2B8OprE2gIEma9ibmYeaOEVTZzXqKW6+0LPTK7BTxU8ZZLymsu2a
-         +yd/+6pRhsxir/Ns67YJGrZK/nscByaqYy+xCzoukRkd3rFHJND3sX4HXgTpkmXd0l
-         fs7YeIk2161IXneBTrMAG3JqxAwsunjihxA6Mp6GePUgXClwkNyab3fyOYu4SJhG0K
-         L3p26kfPfw5FLSO7+XUzQUMeenkmkfpJMy9LLDgrk5sr8R07aOVIEOpjSGvltrGd2/
-         9rgsaiNQs5G2A==
-Date:   Tue, 15 Feb 2022 20:35:41 +0100
+        b=buzQVg/FJm9sogfWwhGTDPsUi0xQCebq8s91at2pb9PynIW/zF7wKDVySEnrMBH28
+         Q6fMoomCjjl4PQojHbf8SQhQas1IZn40RrLoTuaZtIPDsevy+7dEhn1xmx2ZzDJl79
+         iQQyvHozMwKvYEeGDRARTtnKpmufL5INKPcNCRbmyg7U2/od0B1FeBQA26s+CBxKbK
+         1QREHoEsNKltry1p3WJBQzdUGVrQ/fgsrnw3bq9eOEiK/pt3qrjgli0vId0H3+7cuj
+         JSl9CURDFTLi2X6C0ZPvQ/9C7XeARjVnnM5qvpUpU/F9HnkWnw8NQB1e/NjFo8U2BG
+         dBD5iWAgZ68Zw==
+Date:   Tue, 15 Feb 2022 20:39:34 +0100
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 Cc:     dave.hansen@linux.intel.com, linux-sgx@vger.kernel.org,
         shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/4] selftests/sgx: Ensure enclave data available during
- debug print
-Message-ID: <YgwAjf7oauR4F54J@iki.fi>
+Subject: Re: [PATCH 1/4] selftests/sgx: Fix segfault upon early test failure
+Message-ID: <YgwBdmOnIMCQBhwX@iki.fi>
 References: <cover.1643393473.git.reinette.chatre@intel.com>
- <ddb6554a95b0978aa018740fbfb32f786bcbd284.1643393473.git.reinette.chatre@intel.com>
+ <3c1d84724ecc7c94131ba1d94dc4c5de5aafc58f.1643393473.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ddb6554a95b0978aa018740fbfb32f786bcbd284.1643393473.git.reinette.chatre@intel.com>
+In-Reply-To: <3c1d84724ecc7c94131ba1d94dc4c5de5aafc58f.1643393473.git.reinette.chatre@intel.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,48 +55,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:23:58AM -0800, Reinette Chatre wrote:
-> In support of debugging the SGX tests print details from
-> the enclave and its memory mappings if any failure is encountered
-> during enclave loading.
+On Fri, Jan 28, 2022 at 10:23:56AM -0800, Reinette Chatre wrote:
+> A segfault is encountered if there happens to be an
+> early failure of any of the SGX tests. One way to
+> reproduce this is to remove the enclave binary
+> "test_encl.elf" that will trigger early enclave loading
+> failure followed by a segfault.
 > 
-> When a failure is encountered no data is printed because the
-> printing of the data is preceded by cleanup of the data.
+> The segfault occurs within encl_delete() that cleans up
+> after an enclave by umapping its mapped regions and closing
+> the file descriptor to the SGX driver. As integrated with
+> the kselftest harness encl_delete() is called upon exit
+> from every test, irrespective of test success. encl_delete()
+> is also called to clean up if an error is encountered during
+> enclave loading.
 > 
-> Move the data cleanup after the data print.
+> encl_delete() is thus responsible for cleaning any amount of
+> enclave state - including state that has already been cleaned.
 > 
-> Fixes: 147172148909 ("selftests/sgx: Dump segments and /proc/self/maps only on failure")
+> encl_delete() starts by accessing encl->segment_tbl that may
+> not have been created yet due to a very early failure or may
+> already be cleaned up because of a failure encountered after
+> encl->segment_tbl was created.
+> 
+> Ensure encl->segment_tbl is valid before attempting to access
+> memory offset from it. The offset with which it is accessed,
+> encl->nr_segments, is initialized after encl->segment_tbl and
+> thus considered valid to use after the encl->segment_tbl check
+> succeeds.
+
+Nit: textwidth=75
+
+Not something I would NAK but just saying.
+
+> 
+> Fixes: 3200505d4de6 ("selftests/sgx: Create a heap for the test enclave")
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
->  tools/testing/selftests/sgx/main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/sgx/load.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> index a7cd2c3e6f7e..b0bd95a4730d 100644
-> --- a/tools/testing/selftests/sgx/main.c
-> +++ b/tools/testing/selftests/sgx/main.c
-> @@ -186,8 +186,6 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
->  	return true;
+> diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+> index 9d4322c946e2..006b464c8fc9 100644
+> --- a/tools/testing/selftests/sgx/load.c
+> +++ b/tools/testing/selftests/sgx/load.c
+> @@ -21,7 +21,7 @@
 >  
->  err:
-> -	encl_delete(encl);
+>  void encl_delete(struct encl *encl)
+>  {
+> -	struct encl_segment *heap_seg = &encl->segment_tbl[encl->nr_segments - 1];
+> +	struct encl_segment *heap_seg;
+>  
+>  	if (encl->encl_base)
+>  		munmap((void *)encl->encl_base, encl->encl_size);
+> @@ -32,10 +32,11 @@ void encl_delete(struct encl *encl)
+>  	if (encl->fd)
+>  		close(encl->fd);
+>  
+> -	munmap(heap_seg->src, heap_seg->size);
 > -
->  	for (i = 0; i < encl->nr_segments; i++) {
->  		seg = &encl->segment_tbl[i];
+> -	if (encl->segment_tbl)
+> +	if (encl->segment_tbl) {
+> +		heap_seg = &encl->segment_tbl[encl->nr_segments - 1];
+> +		munmap(heap_seg->src, heap_seg->size);
+>  		free(encl->segment_tbl);
+> +	}
 >  
-> @@ -208,6 +206,8 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
->  
->  	TH_LOG("Failed to initialize the test enclave.\n");
->  
-> +	encl_delete(encl);
-> +
->  	return false;
+>  	memset(encl, 0, sizeof(*encl));
 >  }
->  
 > -- 
 > 2.25.1
 > 
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org> 
+
+I tested this by a minor code mod to trigger to failure case.
 
 /Jarkko
