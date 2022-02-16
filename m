@@ -2,55 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DED4B7B23
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Feb 2022 00:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D294D4B7DE8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Feb 2022 03:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244789AbiBOXTS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Feb 2022 18:19:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36116 "EHLO
+        id S240775AbiBPC3P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Feb 2022 21:29:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238655AbiBOXTR (ORCPT
+        with ESMTP id S238195AbiBPC3O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:19:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56A8C1C9E
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 15:19:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3466FCE2428
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 23:19:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90EDC340F0;
-        Tue, 15 Feb 2022 23:19:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644967142;
-        bh=a28YIHSUOy9eOFEg+BnX1V/dUAmlqgrDdm7faAdVzFc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e1rp+8+5gXaBRXYjRF+BaMZNC7vqgfQW/QTFAIZ8bCE3dEQkSlNyFeSsZmMz7aDXK
-         PgzcIcVh6CVpMpEJzwhyuKoLx+KqqLLRgmUTQgnl1g3oD5AGD+n4v668LDWZpKClqo
-         OOKx91uvKAvXB6WZE7E6n5HRj6BENQ7oX7DhOeyjv7k6AcpCwfedrDewsQWtRTpWYr
-         M+pqCgt+2T3Lx6dJywwLAr38CT48jtmwRkVGx5uosMiOWgMy6+7NMPE4oGB3LZPjXa
-         RRWuYqc9XL5v5Pe6+wdCy9jJVnCNRnIo3toE8YSndIdmY2AL5s1SaXy2L+NNbFyXbd
-         /uImdp60QQFGA==
-From:   Will Deacon <will@kernel.org>
-To:     Joey Gouly <joey.gouly@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        broonie@kernel.org, nd@arm.com
-Subject: Re: [PATCH v3 0/6] add more test coverage to MTE kselftests
-Date:   Tue, 15 Feb 2022 23:18:31 +0000
-Message-Id: <164494427139.150360.10580448401712881711.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220209152240.52788-1-joey.gouly@arm.com>
-References: <20220209152240.52788-1-joey.gouly@arm.com>
+        Tue, 15 Feb 2022 21:29:14 -0500
+Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE0DF5408;
+        Tue, 15 Feb 2022 18:29:02 -0800 (PST)
+IronPort-SDR: aNryIlvJOTe14jwYtjGyHTLN0IkSMTY1dHspYMGgrGDvqEL/rdAEb4fkslS1uhdCMQ7GskvErM
+ 5YhrVTZoqMF93O/twrEcJCWm2/zkTo9zOtxax4Q22c2qoh9wSVEToBS+yIoXEgORr0u7iS2Jos
+ vMEnvq9fzyDg+y8YjjdXz08d1p6ty5jCkjjF8sSgJ1L/NdNQMPC5mbXc5jpN2pmpregffRGQTL
+ jCP2HaWOV8CxJnuZnK/utv/GRNYoXYEwuNLJuOgoQ8y9Zro12ZflzCD8o3rV02+28RgN9u+Etx
+ xuIB8EDtW2X3dXmCMYSIuvPJ
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="62683520"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635174000"; 
+   d="scan'208";a="62683520"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 16 Feb 2022 11:27:57 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 8C599CA244;
+        Wed, 16 Feb 2022 11:27:55 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id A9830D95FF;
+        Wed, 16 Feb 2022 11:27:54 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om4.fujitsu.com (Postfix) with ESMTP id AFB114007E8D1;
+        Wed, 16 Feb 2022 11:27:53 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v3 0/5] selftests/resctrl: Add resctrl_tests into kselftest set
+Date:   Wed, 16 Feb 2022 11:26:36 +0900
+Message-Id: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,35 +56,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 9 Feb 2022 15:22:34 +0000, Joey Gouly wrote:
-> This is a series which refactors and then adds some extra tests for MTE
-> in the kselftest framework.
-> 
-> The issue that these tests are for was was fixed by Robin in
-> 295cf156231c ("arm64: Avoid premature usercopy failure") and based on a
-> simplified example by Catalin [1].
-> 
-> [...]
+Hello,
 
-Applied to arm64 (for-next/kselftest), thanks!
+The aim of this series is to make resctrl_tests run by using
+kselftest framework.
+- I modify resctrl_test Makefile and kselftest Makefile,
+  to enable build/run resctrl_tests by using kselftest framework.
+  Of course, users can also build/run resctrl_tests without
+  using framework as before.
+- I change the default limited time for resctrl_tests to 120 seconds, to
+  ensure the resctrl_tests finish in limited time on different environments.
+- When resctrl file system is not supported by environment or
+  resctrl_tests is not run as root, return skip code of kselftest framework.
+- If resctrl_tests does not finish in limited time, terminate it as
+  same as executing ctrl+c that kills parent process and child process.
 
-[1/6] kselftest/arm64: mte: user_mem: introduce tag_offset and tag_len
-      https://git.kernel.org/arm64/c/d53f8f8dbe97
-[2/6] kselftest/arm64: mte: user_mem: rework error handling
-      https://git.kernel.org/arm64/c/ff0b9aba30ae
-[3/6] kselftest/arm64: mte: user_mem: check different offsets and sizes
-      https://git.kernel.org/arm64/c/682b064bae87
-[4/6] kselftest/arm64: mte: user_mem: add test type enum
-      https://git.kernel.org/arm64/c/b9fc700176f1
-[5/6] kselftest/arm64: mte: user_mem: add more test types
-      https://git.kernel.org/arm64/c/e8d3974f34fa
-[6/6] kselftest/arm64: mte: user_mem: test a wider range of values
-      https://git.kernel.org/arm64/c/0a775ccb8120
+Difference from v2:
+- I reworte changelog of this patch series.
+- I added how to use framework to run resctrl to README. [PATCH v3 2/5]
+- License has no dependencies on this patch series, I separated from it this patch series to another patch.
+https://lore.kernel.org/lkml/20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com/
 
-Cheers,
+With regard to the limited time, I think 120s is not a problem since some tests have a longer
+timeout (e.g. net test is 300s). Please let me know if this is wrong.
+
+Thanks,
+
+Shaopeng Tan (5):
+  selftests/resctrl: Kill child process before parent process terminates
+    if SIGTERM is received
+  selftests/resctrl: Make resctrl_tests run using kselftest framework
+  selftests/resctrl: Update README about using kselftest framework to
+    build/run resctrl_tests
+  selftests/resctrl: Change the default limited time to 120 seconds
+  selftests/resctrl: Fix resctrl_tests' return code to work with
+    selftest framework
+
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/resctrl/Makefile      | 20 ++++-------
+ tools/testing/selftests/resctrl/README        | 34 +++++++++++++++++++
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 +--
+ tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+ tools/testing/selftests/resctrl/settings      |  1 +
+ 6 files changed, 45 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/resctrl/settings
+
 -- 
-Will
+2.27.0
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
