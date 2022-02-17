@@ -2,83 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070724B9631
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Feb 2022 03:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57AE4B97FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Feb 2022 06:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiBQC7z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Feb 2022 21:59:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35350 "EHLO
+        id S231132AbiBQFD6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Feb 2022 00:03:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiBQC7z (ORCPT
+        with ESMTP id S229523AbiBQFD5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Feb 2022 21:59:55 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA69C1FFF5F
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Feb 2022 18:59:41 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so2964280wmq.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Feb 2022 18:59:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kn/LDmM7Giwjd+26mVkordTjd0rTELciFT9tMQUQryk=;
-        b=dWYR8YZqLKZ1D9hrocyg1i5E9iNSh/XcwYZebZxs9WfuI9Sl7AygXFIFYUMFUXqIJh
-         pPbd8D/CkRFc8HH/K545+Tbh/NYjfFaULbpvsJE+48r5suK21FhMQr600kF6cpiEOcEZ
-         hIq/U2UIY81GUxg6sSz98GnrqGo+D6i0eHGQCce1Fw5LHFFvWaF0i7THTe8T7j5pukIU
-         wx150gJpCocGcbtZ+MKWyC4ROneXRgDrLmnESdpsdJEV6BnA2CCco2PnLFTqEeB7Tzxt
-         ynRfxGJ0bhcYRWmGKDxdm0AvrAOVx0wdS8lF/7V/pL6d/3usyVZpzwUd9RQwMzZvOZS9
-         5AKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kn/LDmM7Giwjd+26mVkordTjd0rTELciFT9tMQUQryk=;
-        b=2ysAJou5E3V4Ws7mjcwVcQ7+5F+MiIE1mUtisfFoL0aG6As6WQjW0wXfYT4x+XQXBb
-         h54oMBsXTlhHzUeDWadM00GwhZn4BFVbwujY3MISXO41nfPry2rQzxe9KcnigeP9sE6P
-         D91DjXUOZHaFYTqz7Vl2JhTLO1AUm5dqi8nJqDfmu9076U4hai7b+Zq4JpPb0y/8s6RS
-         1OC8pnSd2bIM1gKvV8GSB0vdNtEJZ/8fgpT0qMr+MnFdik1tmPxsOxccdNG7I4GyvJPd
-         79LZsEQbPEwZt4oejdK/4yKpICiBl/SeG9D/o3nltbdIJuCwUZZs4HmfO84RZ5x/12xI
-         ncww==
-X-Gm-Message-State: AOAM532pdHpiSs4FhgPlN3ONRkDmwWjupxsNLZMZ8p9Fyrig4EzPHSCO
-        jYNh/UmFDlwsH6uGyfwBLeRbyHMYszG4Ab3H82TYww==
-X-Google-Smtp-Source: ABdhPJxsqZZCrzn79f6VaiQDnruwqgTNUuolyn2u2fWhw0sOJzG8OE9y9rTC7L0UD/I193BapB+nkoPAnfmCl744MM0=
-X-Received: by 2002:a05:600c:1da4:b0:37c:729:f84d with SMTP id
- p36-20020a05600c1da400b0037c0729f84dmr4139433wms.131.1645066779319; Wed, 16
- Feb 2022 18:59:39 -0800 (PST)
+        Thu, 17 Feb 2022 00:03:57 -0500
+X-Greylist: delayed 276 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 21:03:41 PST
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B16618C2DF;
+        Wed, 16 Feb 2022 21:03:40 -0800 (PST)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 21H4txCj031587;
+        Thu, 17 Feb 2022 13:55:59 +0900
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 21H4tb7b030427;
+        Thu, 17 Feb 2022 13:55:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 21H4tb7b030427
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645073738;
+        bh=XT+hixO3OHzRLvB8+uXJ8rcVlX1aTroBtBRh2n+1zQY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=y7dYjnFd4wsC3TTZW1BdEoNjB4sXAHPx0oJ8ABx+P0g3nx4tKIj8RHnGp5PTqxZxP
+         F/NwszPL7gcDNXn8C95gahpJKOuhawN36TQNiyqpII8iJ7j1obZhq9H1Jm8mU4AoDo
+         tYEsoc19rtHNgG0UMiUzgfJi6rdU5DmfXuNc6rgFuhRYpHfhA52pBSeYa4fofhQDYN
+         ARoDDn05/6oJ8613UFpkQwaDNAV3QbUGSNTBVmLB+VEJ/3eyMmAXbAvyCJOZ4ZvD2i
+         sKEiwUEm3utUkypeph7bZ8SWyRkIahSFZHZrsY4kepFKduHoMAgcYGBF7Vz4YdhaHP
+         qCnjo7q5wYCSQ==
+X-Nifty-SrcIP: [209.85.216.43]
+Received: by mail-pj1-f43.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso5284343pjb.1;
+        Wed, 16 Feb 2022 20:55:37 -0800 (PST)
+X-Gm-Message-State: AOAM533LyphR5LuoChSI1L6v+i1cwCPDBAuuII6YV7H09qcfrQ7TkJV3
+        ShZ+OC17RNuDYpHam+P0DZCUBnvvY/L5IuGNDW4=
+X-Google-Smtp-Source: ABdhPJxFswrX5ZhULOVqkkTeNUddZz5GKFlBSh38FlNOFO45DNJA/a61t3Ziez+i+J+9QUNCxhaseXwszlPu87Vxsso=
+X-Received: by 2002:a17:902:e8d7:b0:149:3b5d:2b8b with SMTP id
+ v23-20020a170902e8d700b001493b5d2b8bmr1173473plg.162.1645073737215; Wed, 16
+ Feb 2022 20:55:37 -0800 (PST)
 MIME-Version: 1.0
 References: <20220217002843.2312603-1-keescook@chromium.org>
 In-Reply-To: <20220217002843.2312603-1-keescook@chromium.org>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 17 Feb 2022 10:59:27 +0800
-Message-ID: <CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 17 Feb 2022 13:54:58 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
+Message-ID: <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com>
 Subject: Re: [PATCH] um: Allow builds with Clang
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nathan Chancellor <nathan@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kbuild@vger.kernel.org,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
         llvm@lists.linux.dev,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        x86@kernel.org, linux-hardening@vger.kernel.org
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 8:28 AM Kees Cook <keescook@chromium.org> wrote:
+On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
 >
 > Add x86-64 target for Clang+um and update user-offsets.c to use
 > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
@@ -105,23 +98,6 @@ On Thu, Feb 17, 2022 at 8:28 AM Kees Cook <keescook@chromium.org> wrote:
 > Cc: llvm@lists.linux.dev
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
-
-Thanks, this worked fine for me, with one small note:
-
-I get the following warning with clang (13.0.1) under UML (but not
-under x86_64):
-clang: warning: argument unused during compilation:
-'-mno-global-merge' [-Wunused-command-line-argument]
-
-It's not really a problem unless -Werror is enabled, though, so this
-is still definitely an improvement over clang not working at all.
-
-With that caveat, this is:
-Tested-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
 >  arch/x86/um/user-offsets.c | 4 ++--
 >  scripts/Makefile.clang     | 1 +
 >  2 files changed, 3 insertions(+), 2 deletions(-)
@@ -152,13 +128,27 @@ Cheers,
 >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
 >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
 > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+
+
+Does this work for the i386 host?
+
+UML supports i386 and x86_64 as the host architecture as of now,
+but this always compiles UML for x86_64?
+
+
+
+
+
+
+
 >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
 >
 >  ifeq ($(CROSS_COMPILE),)
 > --
 > 2.30.2
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220217002843.2312603-1-keescook%40chromium.org.
+
+
+-- 
+Best Regards
+Masahiro Yamada
