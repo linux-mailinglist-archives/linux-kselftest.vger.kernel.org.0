@@ -2,160 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F424BB8F2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 13:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C744BB91C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 13:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiBRMOt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Feb 2022 07:14:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55592 "EHLO
+        id S235174AbiBRM1S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Feb 2022 07:27:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiBRMOs (ORCPT
+        with ESMTP id S235169AbiBRM1R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:14:48 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960C1285707;
-        Fri, 18 Feb 2022 04:14:31 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21IAbx5j004757;
-        Fri, 18 Feb 2022 12:14:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qYg3HbRvuyaDwlHM7pM6xhilL0TvYLUeas7iaFOSKs4=;
- b=oapUP9ukTBd+6fEhkmhMmghy447KM4OKaHQLx6dXARxsCoqenmY1bzxjmrUCmvRtpDRE
- 5MpsEY3FTOuzaKJE8ZHv9CcdR4bYzYDb0o3+GmEAtBUvzLtFwKKn0AEh6pPXZi/ZQT47
- 9a5xCn3cGHCW2Wbui7RwTpWpz1HAVFjgCJuJZ/SfHFdNONB3rgswDZBjNrtxyCU8Yjx6
- ehZh3C7JsniHLgKbd4Q8akeFVYi7dRFfQCRKI6WjQDo+UKjlh2kD/6hH6XPXdiD1ezsp
- x+FmEbWFLHWUsRnszfJgJhHHRtWgUb34xRtqSWX6FX4iCKgSQ5f+eCf2ZHGjVsLjirrk tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ea9jda9aj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:14:30 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21ICETOO008647;
-        Fri, 18 Feb 2022 12:14:29 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ea9jda9a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:14:29 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21IC7rRH027863;
-        Fri, 18 Feb 2022 12:14:27 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e645khwda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Feb 2022 12:14:27 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21ICEOa818940406
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Feb 2022 12:14:24 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17B6EA4054;
-        Fri, 18 Feb 2022 12:14:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1A5EA4062;
-        Fri, 18 Feb 2022 12:14:22 +0000 (GMT)
-Received: from [9.171.81.151] (unknown [9.171.81.151])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Feb 2022 12:14:22 +0000 (GMT)
-Message-ID: <2af9c3a9-e5a1-484b-9c1e-693a25993cdb@linux.ibm.com>
-Date:   Fri, 18 Feb 2022 13:14:21 +0100
+        Fri, 18 Feb 2022 07:27:17 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9773B1B7BF;
+        Fri, 18 Feb 2022 04:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=MVaFoxpSrw0lXOFRf60il59+xXDuimORkK161w41iNc=;
+        t=1645187219; x=1646396819; b=EXibw6MQDxwd+G9ZAGVB7tlsFUP8j9mDkVRMKG/rZAkrK1b
+        DvpIMQb2rEZIJlLjbXgYU641EJcGdpL2saikvB4+JDr/QblHL4nO8a78ww2/oCeSnyz1/UxPlEoQY
+        QCSV+OTJvz+5IVTZ7kwUMvpKywlU7+mchSrEq11AL0anykxxgT48GuBBGgn4QN5ZbFT8Yxyn2wfah
+        CBtdsJbFk92XfeOuVkRRGl0r9V/Z9Kgfo2+o919/aZKPrPWo+vhey5YBi/ddP7r5lkNDq41h41Ao7
+        7CndmP3jomv4luE25VGXdLKA5X+P5TmnZs4p9RJCU6tZ7uU3FVa+8XwQksIkgr0Q==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nL2LH-002du1-NQ;
+        Fri, 18 Feb 2022 13:26:31 +0100
+Message-ID: <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-um@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, felix.kuehling@amd.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 18 Feb 2022 13:26:30 +0100
+In-Reply-To: <20220218075727.2737623-5-davidgow@google.com>
+References: <20220218075727.2737623-1-davidgow@google.com>
+         <20220218075727.2737623-5-davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] KVM: s390: selftests: Test vm and vcpu memop with
- keys
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220211182215.2730017-11-scgl@linux.ibm.com>
- <20220217145336.1794778-1-scgl@linux.ibm.com>
- <20220217145336.1794778-3-scgl@linux.ibm.com>
- <7d0b5b03-21f4-0402-779a-788d4bd58071@linuxfoundation.org>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <7d0b5b03-21f4-0402-779a-788d4bd58071@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dgoOZILauosDLH8qZeOhpT3DQ9BI8vfF
-X-Proofpoint-GUID: H5CqkSacmumSN9NkkxkBuif3WNkLkAdt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-18_04,2022-02-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 mlxscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202180078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/17/22 18:54, Shuah Khan wrote:
-> On 2/17/22 7:53 AM, Janis Schoetterl-Glausch wrote:
->> Test storage key checking for both vm and vcpu MEM_OP ioctls.
->> Test both error and non error conditions.
->>
+On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
 > 
-> This patch seems to combine restructuring the code and new code.
-> e,g test_errors() was added in the last patch, only to be redone
-> in this patch with test_errors split into test_common_errors()
-> 
-> Doing restructure in a separate patch and then adding new code
-> makes it easier to review and also keep them simpler patches.
-> 
-> Please split the code in these two patches to just do restructure
-> and then add new code.
-> 
-> I also would like to have good reasons to change existing code and
-> make them into macros.
->  
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>   tools/testing/selftests/kvm/s390x/memop.c | 342 +++++++++++++++++++++-
->>   1 file changed, 328 insertions(+), 14 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
->> index 4510418d73e6..bc12a9238967 100644
->> --- a/tools/testing/selftests/kvm/s390x/memop.c
->> +++ b/tools/testing/selftests/kvm/s390x/memop.c
->> @@ -201,6 +201,8 @@ static int err_memop_ioctl(struct test_vcpu vcpu, struct kvm_s390_mem_op *ksmo)
->>   #define PAGE_SHIFT 12
->>   #define PAGE_SIZE (1ULL << PAGE_SHIFT)
->>   #define PAGE_MASK (~(PAGE_SIZE - 1))
->> +#define CR0_FETCH_PROTECTION_OVERRIDE    (1UL << (63 - 38))
->> +#define CR0_STORAGE_PROTECTION_OVERRIDE    (1UL << (63 - 39))
->>     #define ASSERT_MEM_EQ(p1, p2, size) \
->>       TEST_ASSERT(!memcmp(p1, p2, size), "Memory contents do not match!")
->> @@ -235,6 +237,11 @@ static struct test_default test_default_init(void *guest_code)
->>       return t;
->>   }
->>   +static vm_vaddr_t test_vaddr_alloc(struct test_vcpu vm, size_t size, vm_vaddr_t vaddr_min)
->> +{
->> +    return vm_vaddr_alloc(vm.vm, size, vaddr_min);
->> +}
->> +
-> 
-> What is the value of adding a new routine that simply calls another?
+> Note that, while this does build again, it still segfaults on startup,
+> so more work remains to be done.
 
-I just found the vm.vm confusing/ugly and wanted to hide it,
-I'm not married to that idea, tho.
+That's probably just a lot more stuff getting included somehow?
 
-> Do you see this routine changing in the future to do more?
-
-No.
+> They are:
+> - CONFIG_VFIO_PCI: Needs ioport_map/ioport_unmap.
+> - CONFIG_INFINIBAND_RDMAVT: Needs cpuinfo_x86 and __copy_user_nocache
+> - CONFIG_BNXT: Failing under UML with -Werror
+> ERROR:root:../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In function ‘bnxt_ptp_enable’:
+> ../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array subscript 255 is above array bounds of ‘struct pps_pin[4]’ [-Werror=array-bounds]
+>   400 |                         ptp->pps_info.pins[pin_id].event = BNXT_PPS_EVENT_EXTERNAL;
+>       |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~
+> - CONFIG_PATA_CS5535: Needs MSR access (__tracepoint_{read,write}_msr)
+> - CONFIG_VDPA: Enables CONFIG_DMA_OPS, which is unimplemented. ('dma_ops' is not defined)
 > 
-> thanks,
-> -- Shuah
+> These are all issues which should be investigated properly and the
+> corresponding options either fixed or disabled under UML. Having this
+> list of broken options should act as a good to-do list here, and will
+> allow these issues to be worked on independently, and other tests to
+> work in the meantime.
+> 
 
+I'm not really sure it makes sense to even do anything other than
+disabling these.
+
+It looks like all of them are just exposed by now being able to build
+PCI drivers on UML. Surely the people writing the driver didn't expect
+their drivers to run over simulated PCI (which is what the UML PCI
+support is all about).
+
+Now from a PCI driver point of view you can't really tell the difference
+(and anyway the driver won't be probed), but the issues (at least the
+build time ones) come from having
+
+    UML && PCI && X86_64
+
+or
+
+    UML && PCI && X86_32
+
+because drivers typically depend on X86_64 or X86_32, rather than on
+"X86 && X86_64" or "X86 && X86_32". In a sense thus, the issue is those
+drivers don't know that "!X86 && (X86_32 || X86_64)" can happen (with
+UML).
+
+
+Now you could say that's the driver bug, or you could say that they
+should just add "depends on !UML" (though that's basically equivalent to
+adding "depends on X86" and the latter may be preferable in some cases).
+
+Or actually in the three patches you have (1-3) it's in the code, but
+same thing, you can either add && !UML (like you did) or add && X86.
+
+
+Arguably, however, building PCI drivers by default is somewhat
+questionable in the first place?
+
+So maybe you should just add
+
+    # CONFIG_UML_PCI_OVER_VIRTIO is not set
+
+to the broken_on_uml.config since it exposes all these issues, and
+really is not very useful since you're not going to actually run with
+any simulated PCI devices anyway, so drivers will not be probed.
+
+johannes
