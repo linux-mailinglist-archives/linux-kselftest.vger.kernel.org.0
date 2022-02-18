@@ -2,129 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAD34BBBAB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 16:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6A94BBC35
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 16:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbiBRPCV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Feb 2022 10:02:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44698 "EHLO
+        id S230191AbiBRPby (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Feb 2022 10:31:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236718AbiBRPCT (ORCPT
+        with ESMTP id S237030AbiBRPbw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Feb 2022 10:02:19 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEBD18D232;
-        Fri, 18 Feb 2022 07:02:00 -0800 (PST)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K0ZdT5fdXz67sHf;
-        Fri, 18 Feb 2022 23:01:01 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Feb 2022 16:01:57 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Fri, 18 Feb 2022 16:01:57 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Thread-Topic: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Thread-Index: AQHYImlgJM6Z1962JUm5hvc+dgM0dqyZawKA
-Date:   Fri, 18 Feb 2022 15:01:57 +0000
-Message-ID: <4513acbef98840199ff62124601cf455@huawei.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
-In-Reply-To: <20220215124042.186506-1-roberto.sassu@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 18 Feb 2022 10:31:52 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC14B83;
+        Fri, 18 Feb 2022 07:31:35 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 80D321F4413F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645198293;
+        bh=6kXNcgeXq4h1TBYpaLPf905wOVvFiiD9fLfLvf0P14Q=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=WfG3p1q7AzzJCJJ3GoThT/g1EW7NmMSa8olh9zWGJyRQh+PNkPwNq56wWe3NSA7Ep
+         BTekEFNRJMkXJpZXxhQZENQwT0eGLLiFTbSzz7ix9E4Jfy4Wjt76nigFnnFfSbnMmq
+         51qAFUuBuUzPiCGFt6cZAGfJOjz1Wvq93vr4VXfKBWHejUIckhgYFPq7v0/2fk3NDO
+         1jvPLyzs+YTtJx8q/Do8IFuAnyxSC0XhUz/LA8nFArHHaV1ALCw9yykEeho1b0jHtZ
+         9HfV3ipzABi53lRkvhOnt9zMCryuoZ/+9TWokJfHkSWekZaJ1FCIxRCjsfFys8LcW4
+         Bm/S45IwXy8Mg==
+Message-ID: <31d4c254-2769-db7c-2a28-3f21c2e8bc52@collabora.com>
+Date:   Fri, 18 Feb 2022 20:31:24 +0500
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        kernelci@groups.io,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
+ CFI_FORWARD_PROTO
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+References: <20220217205620.2512094-1-usama.anjum@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220217205620.2512094-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SCC_BODY_URI_ONLY,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Roberto Sassu
-> Sent: Tuesday, February 15, 2022 1:41 PM
-> Extend the interoperability with IMA, to give wider flexibility for the
-> implementation of integrity-focused LSMs based on eBPF.
+On 2/18/22 1:56 AM, Muhammad Usama Anjum wrote:
+> Add config options which are needed for LKDTM sub-tests.
+> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
+> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
+> INIT_ON_FREE_DEFAULT_ON config.
 > 
-> Patch 1 fixes some style issues.
+> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
+> kind. Turn it off for now by default until proper support.
 > 
-> Patches 2-4 gives the ability to eBPF-based LSMs to take advantage of the
-> measurement capability of IMA without needing to setup a policy in IMA
-> (those LSMs might implement the policy capability themselves).
-> 
-> Patches 5-6 allows eBPF-based LSMs to evaluate files read by the kernel.
-
-Hi everyone
-
-I published the new DIGLIM eBPF, that takes advantage of
-the new features introduced with this patch set:
-
-https://github.com/robertosassu/diglim-ebpf
-
-the eBPF program is in ebpf/diglim_kern.c
-
-If you could have a look and give me some comments
-or suggestions, it would be very appreciated!
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
-
-> Changelog
-> 
-> v1:
-> - Modify ima_file_hash() only and allow the usage of the function with the
->   modified behavior by eBPF-based LSMs through the new function
->   bpf_ima_file_hash() (suggested by Mimi)
-> - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
->   and bpf_ima_file_hash() can be called inside the implementation of
->   eBPF-based LSMs for this hook
-> 
-> Roberto Sassu (6):
->   ima: Fix documentation-related warnings in ima_main.c
->   ima: Always return a file measurement in ima_file_hash()
->   bpf-lsm: Introduce new helper bpf_ima_file_hash()
->   selftests/bpf: Add test for bpf_ima_file_hash()
->   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
->   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
-> 
->  include/uapi/linux/bpf.h                      | 11 +++++
->  kernel/bpf/bpf_lsm.c                          | 21 +++++++++
->  security/integrity/ima/ima_main.c             | 47 ++++++++++++-------
->  tools/include/uapi/linux/bpf.h                | 11 +++++
->  tools/testing/selftests/bpf/ima_setup.sh      |  2 +
->  .../selftests/bpf/prog_tests/test_ima.c       | 30 ++++++++++--
->  tools/testing/selftests/bpf/progs/ima.c       | 34 ++++++++++++--
->  7 files changed, 132 insertions(+), 24 deletions(-)
-> 
-> --
-> 2.32.0
-
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
