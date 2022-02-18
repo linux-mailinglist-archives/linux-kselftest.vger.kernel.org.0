@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205384BC136
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 21:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE224BC146
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 21:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237825AbiBRUco (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Feb 2022 15:32:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60174 "EHLO
+        id S239507AbiBRUjy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Feb 2022 15:39:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236885AbiBRUcn (ORCPT
+        with ESMTP id S238031AbiBRUjx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:32:43 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9E733354
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:32:26 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id c18so6418275ioc.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:32:26 -0800 (PST)
+        Fri, 18 Feb 2022 15:39:53 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A88E53B47
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:39:36 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id e11so5562861ils.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:39:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OC/1gLj8YvBkQUZUrsbQXVRK4g0Fu/RGJXaLX/hTlIE=;
-        b=VUYiRxl7QQYbQTzrhoI5VxmE1dxTzS+T3rXsSAxVrz0cjQGpiXzj0nj9SJlA/Tiipu
-         jT7JCWmkgKGytpB+3pbmcXMnSKAmmgoorkrtcAdJ7WvEpcRIR47ZaxhN0ItkuEkNcnKf
-         PWizezoRmX11NmsQ9ej6OoEbXNe3RiUi+Ff3c=
+        bh=Owzp7ReUdsWuLc4QhsZpzCQwjgZ4ldLu5CKLQDlRO3M=;
+        b=dsQWfFGCiMTZKKkTyzVrnC0tNFMqkn1VeDiBADvV+cWncrRQNRp9Dmid0j6+PC4f5n
+         EpzNPPQUsOxl8Fyi94EXSYTlkUx6TZWLSG+xlnWNmc1PLPI6I2k2qSoo6WnnKr/h2nRl
+         ieNzjbRA7+MLoBPhYG8ZsqaWcBxl/bvkSmY4c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=OC/1gLj8YvBkQUZUrsbQXVRK4g0Fu/RGJXaLX/hTlIE=;
-        b=NZtl95s6QeE9gYiR2VlDHqmaY9kNItI7ScIxMGB4/OuvO9ZbSbs/VKbUmCzQQHS0YU
-         0TG4x8BYGIhXdQeRVswE856GR4kRVlVYP4PhlFq0xk/N17+5cBlC5TtOIxCKuc6GodTg
-         PexhmNECDamnVvXXLBThRz7Oo+6oM7bKf77rBOR2iTh6aUTBAmU6OMz5+RYWazun4H06
-         ui7MgQW5JNEjF0WeTozeCF8aLr5mrsFJOqarGO1BElr3nZwN+HWoGp+plafTuxOQ7KoQ
-         YWKC4+iJ572YcmFJXLarKhqitdIzH3+05vlfboGksf8ED1viQknxlM36qRTfmLwPLp3A
-         zJGQ==
-X-Gm-Message-State: AOAM532Ko+KnxfS+0Fzn9Bs+10zDrYxLKG8Axh5gUB3EMjvX0iF/Oq3Z
-        mLLPMKCZIeJ/ZSKQBS7+PUxoMw==
-X-Google-Smtp-Source: ABdhPJxcsC5WZ3meD4lZFBEjpZyxGnBOKuRaKCQS2yliGT78npKQinvgqDJK+vrAtBDCyd2ffoFHyQ==
-X-Received: by 2002:a05:6638:3043:b0:314:7ce2:4a6e with SMTP id u3-20020a056638304300b003147ce24a6emr6409294jak.258.1645216345652;
-        Fri, 18 Feb 2022 12:32:25 -0800 (PST)
+        bh=Owzp7ReUdsWuLc4QhsZpzCQwjgZ4ldLu5CKLQDlRO3M=;
+        b=tKP0Csc3R/lZBFAEPeS47IpzzKikPV9T4OV/Q+v2TGHklpWY3ZFgCvHb3gx6oA0T5L
+         XY0UUjiyPvOczGKbY43WW2R60S3m4E3g9nzfbdw8UCX6YzNp8vcScojeiN3k2CPpsQJf
+         zDPsQ8mAvWORSl8NFMUQnZkcEjAJoWIV/vIsCn0BlZKg9pquko3wf74sFXA4Z5mvKUt9
+         tfvDpNU1sNAnNQiu2o+u0jI3TzHz3h85pUnxm3ajf8U6PpC9ah+fa+BK5YDL+r+RGlyq
+         XpF8SKPep0+99heaha6DcBC63VfBSyAYxAIrar+ioDFh4U+UftWZYSMMy35nuRxcwghI
+         3Nog==
+X-Gm-Message-State: AOAM531y7EL4pzdgH+Nrjbx67LXWVB7vzuqJ8ZjIuw8989muZvkKPyml
+        Vt5KSG+3lMQHxA77YK3N7EPnOA==
+X-Google-Smtp-Source: ABdhPJxVJ4pJJPMsDTPCsiQODKIBaR4Oamof5GieivoTGwr3QyJDB07tlQOgCrfiJ1iKax2b57oiVQ==
+X-Received: by 2002:a92:3406:0:b0:2be:a7b8:4efb with SMTP id b6-20020a923406000000b002bea7b84efbmr6757465ila.67.1645216775783;
+        Fri, 18 Feb 2022 12:39:35 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id k11sm4596618iob.23.2022.02.18.12.32.24
+        by smtp.gmail.com with ESMTPSA id b24sm4989142ioc.24.2022.02.18.12.39.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 12:32:25 -0800 (PST)
-Subject: Re: [PATCH v3 4/5] selftests/resctrl: Change the default limited time
- to 120 seconds
+        Fri, 18 Feb 2022 12:39:35 -0800 (PST)
+Subject: Re: [PATCH v3 5/5] selftests/resctrl: Fix resctrl_tests' return code
+ to work with selftest framework
 To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -55,21 +55,21 @@ To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-5-tan.shaopeng@jp.fujitsu.com>
+ <20220216022641.2998318-6-tan.shaopeng@jp.fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fb4db52d-49dc-3df8-8ae7-d2bee80e5a4b@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 13:32:24 -0700
+Message-ID: <1ebbc8d3-c04f-045c-164a-0ea8bd26422f@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 13:39:34 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220216022641.2998318-5-tan.shaopeng@jp.fujitsu.com>
+In-Reply-To: <20220216022641.2998318-6-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,40 +77,77 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> When testing on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz the resctrl
-> selftests fail due to timeout after exceeding the default time limit of
-> 45 seconds. On this system the test takes about 68 seconds.
-> Since the failing test by default accesses a fixed size of memory, the
-> execution time should not vary significantly between different environment.
-> A new default of 120 seconds should be sufficient yet easy to customize
-> with the introduction of the "settings" file for reference.
+> In kselftest framework, if a sub test can not run by some reasons,
+> the test result should be marked as SKIP rather than FAIL.
+> Return KSFT_SKIP(4) instead of KSFT_FAIL(1) if resctrl_tests is not run
+> as root or it is run on a test environment which does not support resctrl.
 > 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->  From the perspective of the kselftest framework,
-> a rule of "Don't take too long" is a concern.
-> To get some better informed opinions from kselftest audience,
-> I highlighted this change in the cover letter.
-> 
-> I adopted most of Reinette's phrase from the discussion in patch v2
-> to explain why 120s is appropriate for this test.
-> 
->   tools/testing/selftests/resctrl/settings | 1 +
->   1 file changed, 1 insertion(+)
->   create mode 100644 tools/testing/selftests/resctrl/settings
-> 
-> diff --git a/tools/testing/selftests/resctrl/settings b/tools/testing/selftests/resctrl/settings
-> new file mode 100644
-> index 000000000000..6091b45d226b
-> --- /dev/null
-> +++ b/tools/testing/selftests/resctrl/settings
-> @@ -0,0 +1 @@
-> +timeout=120
+>   - ksft_exit_fail_msg(): returns KSFT_FAIL(1)
+>   - ksft_exit_skip(): returns KSFT_SKIP(4)
 > 
 
-This is fine.
+Thank for making this change to skip.
+
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> ---
+> Some important feedbacks from v1&v2 are addressed as follows:
+> 
+> - It is important to highlight that a skipped test is marked
+>    as successful to not unnecessarily report a feature failure
+>    when there actually is a failure in the test environment.
+>    => I highligted this content in changelog as follows.
+>       "In kselftest framework, if a test is not run by some reason,
+>       the test result is marked as SKIP rather than FAIL."
+> 
+> - The subject line can be made more succinct while the details are
+>    moved to the commit message.
+>    => I made subject line succinct and moved the details to changelog.
+> 
+> - How changing ksft_exit_fail_msg() to ksft_exit_skip() accomplishes
+>    the goal of unifying the return code.
+>    => In changelog, I explained why return code KSFT_SKIP(4) is needed
+>       in kselftest framework and the return code of each function.
+> 
+>   tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> index 973f09a66e1e..3be0895c492b 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> @@ -205,7 +205,7 @@ int main(int argc, char **argv)
+>   	 * 2. We execute perf commands
+>   	 */
+>   	if (geteuid() != 0)
+> -		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
+> +		return ksft_exit_skip("Not running as root, abort testing.\n");
+
+Let's update the message to "This test must be run as root. Skipping..."
+>   
+>   	/* Detect AMD vendor */
+>   	detect_amd();
+> @@ -235,7 +235,7 @@ int main(int argc, char **argv)
+>   	sprintf(bm_type, "fill_buf");
+>   
+>   	if (!check_resctrlfs_support())
+> -		return ksft_exit_fail_msg("resctrl FS does not exist\n");
+> +		return ksft_exit_skip("resctrl FS does not exist\n");
+
+Update the message to read -
+
+"resctrl FS doesn not exist. Enable X86_CPU_RESCTRL and PROC_CPU_RESCTRL config options"
+
+>   
+>   	filter_dmesg();
+>   
+> 
+
+With these changes:
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
+
+
+
