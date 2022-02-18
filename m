@@ -2,103 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB124BB39E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 08:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5DE4BB3AA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 08:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiBRHxR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Feb 2022 02:53:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55862 "EHLO
+        id S232225AbiBRH6N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Feb 2022 02:58:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiBRHxQ (ORCPT
+        with ESMTP id S232221AbiBRH6L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Feb 2022 02:53:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9905D6A3B4;
-        Thu, 17 Feb 2022 23:52:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A161B82538;
-        Fri, 18 Feb 2022 07:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CE8C340E9;
-        Fri, 18 Feb 2022 07:52:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645170777;
-        bh=WLAGjSGNb/26rp/2ZS1J2DnI/WrX+hLgCMjaN0HluQg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=Ssq4OgTen80Y5rHXytvnaql9XvpvLjb30KcpAtGaWAMLqULzzajbsI0PGqIEP6SaL
-         0amvoKpfWSgxpx2RrEwMwDxhyiq3ZmMdSLBBQ3CkhsZLNqrG/bfHz7gRYjV1Q5aQF6
-         Pm/DZe+Bq1XQvuzqqsU6LKxyf7XElqHXqIrLDd90dtD/fkmENjoL2JxbDGZ6mhRXGB
-         REXhTRLD1ARxjFKfUuffVr4jpm9VwW+6v2m0TPeHxjUXFR6bxIlu88w0QmqJa5Y9c8
-         Ri1Bg542nyLpcz2fLY626Y6TNP9aAJcF8IsjM1h4dwQ4AVnHUbbka/y/XnD/tLQqre
-         Sr0cO05crqT3Q==
-From:   SeongJae Park <sj@kernel.org>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>, rientjes@google.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/damon: make selftests executable
-Date:   Fri, 18 Feb 2022 07:52:54 +0000
-Message-Id: <20220218075254.11467-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220218001017.3500673-3-yuanchu@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Feb 2022 02:58:11 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B90615DB30
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 23:57:55 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id z28-20020aa79f9c000000b004e10449d919so1288248pfr.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 23:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pzssXhX8riGRjAd4+3metqANF5chmN7DhU3KIG19plk=;
+        b=BXYHGO/apr1trZ7ANJF1Lt6pYKglG4Ybyk1oIZRHZKKVSqoKSXgrBXlJ+1OM+32L9t
+         MU8n7K+r76s0oXflCxISCV1ICc0UvMWkHQwSTytgu8Evx0a2e982roAPsTJGWM6fb62G
+         4xiTSYukPeiMTehnCZ8Ef6urhW9UdAhyCH8qBQH/Z3umLv0xdGv2JPdSLHgNuZnc3YDQ
+         m26WTBm81XDNmFpY/glb5MBqUkdfdOBU4PUPqt6iZ2jAhWr3J7itrrkNCi44IwFV8KeU
+         S94sCD0t8mfXDphKvuDMvw2otQeqJUpd7l5aT+oeKWADzDv5u6Czmms69AvfX5QGDeUK
+         NAmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pzssXhX8riGRjAd4+3metqANF5chmN7DhU3KIG19plk=;
+        b=FuGpf9IsoqFwI6GJgWZp2da2iN4YoITmpIqgA+yRXG+p4RmH+w6/Ttz1j6M090yyi9
+         joNScxjq8meWIvO80gNLEimTec2hNUGorfMD6CLSdqNn+jY6qFVQZruXUwSpGDhQ2ih9
+         reTqehWXzIM8k10czRBeF0NCBJH1C9eDhkJUOQjy2uilfPzIRQdSyC2BqWqobKM21cLh
+         XpHIm6/SNc1MRGP29Y7g3D3Qovu5Fj40I8flEL2uA8MoLESLNIcBnRNPzlBbor+FwDkM
+         RDfXu195WsxH9tfdh3aBedwMnDQsAnLlURqh1NXP4QeIoyvnyF34+dyCwgetEfs4e76u
+         eQSw==
+X-Gm-Message-State: AOAM5306hh96LSs6Jl7YIj1cfc1+foSmKVX2JHUcAssxNqkHW9EaFtU5
+        GQm1VKQ66wygQU3V1I67KAwDG5mxOir5ow==
+X-Google-Smtp-Source: ABdhPJw0UMsgszZC5yB3naBv5jFWjYWF4uP6hg8QghCa4W6xT10Nwxg2nhu4SD1k1Vghgej18o9lOhbEem5LzA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90a:a50f:b0:1b8:e6ad:f63c with SMTP
+ id a15-20020a17090aa50f00b001b8e6adf63cmr333880pjq.1.1645171074073; Thu, 17
+ Feb 2022 23:57:54 -0800 (PST)
+Date:   Fri, 18 Feb 2022 15:57:23 +0800
+Message-Id: <20220218075727.2737623-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH 0/4] kunit,um: Fix kunit.py build --alltests
+From:   David Gow <davidgow@google.com>
+To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, x86@kernel.org, felix.kuehling@amd.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Yuanchu,
+kunit_tool's --alltests option uses UML and make allyesconfig to produce
+a configuration which enables as many tests as possible. However, make
+ARCH=um allyesconfig is broken for a number of reasons.
 
-Thank you for this patch!
+Fix a few different UML build breakages, and disable a few config
+options in kunit_tool in order to get this kernel compiling again.
 
-On Fri, 18 Feb 2022 00:10:17 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+Note that the resulting kernel still doesn't run, but having it compile
+is the first step to fixing that.
 
-> The damon selftests do not have the executable bit on. We fix that by
-> setting the x bits on the .sh files similar to other existing shell
-> selftests.
-> 
-> Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+David Gow (3):
+  drm/amdgpu: Make smu7_hwmgr build on UML
+  IB/qib: Compile under User-Mode Linux
+  kunit: tool: Disable broken options for --alltests
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Randy Dunlap (1):
+  drm/amdgpu: Fix compilation under UML
 
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c               | 6 +++---
+ drivers/gpu/drm/amd/amdkfd/kfd_topology.c           | 2 +-
+ drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu7_hwmgr.c | 2 +-
+ drivers/infiniband/hw/qib/qib_wc_x86_64.c           | 4 ++++
+ tools/testing/kunit/configs/broken_on_uml.config    | 5 +++++
+ 5 files changed, 14 insertions(+), 5 deletions(-)
 
-Thanks,
-SJ
+-- 
+2.35.1.265.g69c8d7142f-goog
 
-> ---
->  tools/testing/selftests/damon/debugfs_attrs.sh                 | 0
->  tools/testing/selftests/damon/debugfs_empty_targets.sh         | 0
->  tools/testing/selftests/damon/debugfs_huge_count_read_write.sh | 0
->  tools/testing/selftests/damon/debugfs_schemes.sh               | 0
->  tools/testing/selftests/damon/debugfs_target_ids.sh            | 0
->  5 files changed, 0 insertions(+), 0 deletions(-)
->  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
->  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
->  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
->  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_schemes.sh
->  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
-> 
-> diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-> old mode 100644
-> new mode 100755
-> diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-> old mode 100644
-> new mode 100755
-> diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-> old mode 100644
-> new mode 100755
-> diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
-> old mode 100644
-> new mode 100755
-> diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
-> old mode 100644
-> new mode 100755
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
