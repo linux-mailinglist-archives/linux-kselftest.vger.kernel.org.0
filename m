@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004D54BC103
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 21:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F664BC12A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 21:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbiBRUKa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Feb 2022 15:10:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34624 "EHLO
+        id S239230AbiBRU13 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Feb 2022 15:27:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiBRUK3 (ORCPT
+        with ESMTP id S238017AbiBRU12 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Feb 2022 15:10:29 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7599524B2A3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:10:12 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id r7so3467017iot.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:10:12 -0800 (PST)
+        Fri, 18 Feb 2022 15:27:28 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EB715C19F
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:27:10 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id n5so5504054ilk.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 12:27:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YIWJpKEENbFmbXbEyafcxIcJq6TphA9pvUdJgiZAvyE=;
-        b=HlutxaM+IbO8xNMZTBAF65o2Cc5yGGegUjfKlJS1Zty5V2H/VvESFd2K1dklflc3BZ
-         ukF56mfOCn1pWBx/sK+pnhYEcjKzeVeHKwJr2jtw9f0lreeHxy/qdqFZz80CVvIuVNOd
-         yKuIXBusqH+gm6OCwpgcJIb3mJakayN7ht+6Q=
+        bh=hdfNSNhRw+L/FJ84RFkhuGnrjkbL34umetIyVHK2Fz0=;
+        b=awM/WyJj8Im8lw/ob2O7iZVxy9Ud0hfj8S6TU6y4/TeHmvzk2W++LzzGDPyCrHoYNl
+         /xeOhCZsHV8Gom2JN6+OvCDdvNRaigp35QWGQTvl1ownxY4K8QWqOz2ItmM/Xt/50H8X
+         KjMA9BCyB2EGB7R/DHgq7W0omcrEL3y8uD9Ng=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=YIWJpKEENbFmbXbEyafcxIcJq6TphA9pvUdJgiZAvyE=;
-        b=oAK1zgGwSdGoPG/gQRwaJgyDeGXu6zWQ6sSdpFhBNe6sl8jr6t9OLgLN6ONaDP769v
-         p+ofLmFindp1z7HN+Y0E83+tmXtyB2A97ql8RntQ/mczj7USnPSopg69sXFyNZjW9HLi
-         /tfpgAwzW0fiwjbN6BggGgz52BOtYWydfl0qBNl//+ia7sAXu2rGQZ7DYZqqN97wlJa1
-         NrVZ/N31+GIc4MBzJwLzlh+RKmBNz3sV3zy0Y+szxV7nVu9WqQRUfr2ShD/QeDfENaz0
-         9bc5zc2fJFO5VfKdM0Le7NOZoOp7CFx6lw2wUhOE4EAKADwwmhpuOniNu3t2MwUd0ITF
-         n0dQ==
-X-Gm-Message-State: AOAM532jfGDTWd7umK7AFYFwuiSs1MX5fWey7w9QVPYsPyKu9FINTT/b
-        f1F9m9/n40xnavrxDZZJIwZlJPh697r5AQ==
-X-Google-Smtp-Source: ABdhPJwqQDwxWISKZBWY0L8hGgo42UBhTa//k+554mx88o/db9mFUtSqS7l2M7uBvWV9mNbGfDmPWg==
-X-Received: by 2002:a05:6602:15cf:b0:614:52d4:952 with SMTP id f15-20020a05660215cf00b0061452d40952mr6527679iow.185.1645215011808;
-        Fri, 18 Feb 2022 12:10:11 -0800 (PST)
+        bh=hdfNSNhRw+L/FJ84RFkhuGnrjkbL34umetIyVHK2Fz0=;
+        b=d3fgTcN9oiadbKa+XS6Q+Ltuvc0LKWib+islFljRrMUulTRKIv5XE5nlwPrSlH0AMG
+         aFmHGUcMNFi/rB1CvD0h2/WDuPMjyZ0z6uaTH3U7iP9RcyEjp9b59T3jCQ1xPOKY/xpk
+         WW8FmD/9E8NRqtO//lJtbXnromR5olvztQBHJhCSW/m/2m2Bb8Pw5WgbyN2OWNs/LeUb
+         p2gcV4dmYEJ7SkO1KWtbqcKV9QvEbty1DWga3zF2OWwL2RGCPn1/Cjx4V4pEuGy4KJKD
+         /+MK66vferFdHG/YWYlzJ+LhcgmJ3kGNAu+5XofnvDf1mes9rXqbcGsxa4YcOIZOIWaV
+         Rr1A==
+X-Gm-Message-State: AOAM532sGnJ8EC/sycL48i3QeWiRwcEfgy5CXK6If8tDvTyBszrDxi1t
+        F+YIGzpGW5/sYlsUUQbFrQIzzA==
+X-Google-Smtp-Source: ABdhPJyQF+xAafBhMOif6g4tMge18w7Z1QH9nW9puw+/H2uol05DPRdrkjPqf1tRSuYIPVBxxtpw8Q==
+X-Received: by 2002:a05:6e02:1a2c:b0:2c1:d84b:1987 with SMTP id g12-20020a056e021a2c00b002c1d84b1987mr1962451ile.45.1645216029917;
+        Fri, 18 Feb 2022 12:27:09 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y6sm4213205ilv.3.2022.02.18.12.10.10
+        by smtp.gmail.com with ESMTPSA id w4sm3977445ilo.53.2022.02.18.12.27.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 12:10:11 -0800 (PST)
-Subject: Re: [PATCH v3 1/5] selftests/resctrl: Kill child process before
- parent process terminates if SIGTERM is received
+        Fri, 18 Feb 2022 12:27:09 -0800 (PST)
+Subject: Re: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
+ kselftest framework
 To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -55,14 +55,14 @@ To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-2-tan.shaopeng@jp.fujitsu.com>
+ <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f0205a17-fba6-7c06-303d-a6e690c93073@linuxfoundation.org>
-Date:   Fri, 18 Feb 2022 13:10:10 -0700
+Message-ID: <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
+Date:   Fri, 18 Feb 2022 13:27:08 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220216022641.2998318-2-tan.shaopeng@jp.fujitsu.com>
+In-Reply-To: <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,63 +77,98 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> In kselftest framework, a sub test is run using the timeout utility
-> and it will send SIGTERM to the test upon timeout.
+> In kselftest framework, all tests can be build/run at a time,
+> and a sub test also can be build/run individually. As follows:
+> $ make -C tools/testing/selftests run_tests
+> $ make -C tools/testing/selftests TARGETS=ptrace run_tests
 > 
-> In resctrl_tests, a child process is created by fork() to
-> run benchmark but SIGTERM is not set in sigaction().
-> If SIGTERM signal is received, the parent process will be killed,
-> but the child process still exists.
+> However, resctrl_tests cannot be run using kselftest framework,
+> users have to change directory to tools/testing/selftests/resctrl/,
+> run "make" to build executable file "resctrl_tests",
+> and run "sudo ./resctrl_tests" to execute the test.
 > 
-> kill child process before parent process terminates
-> if SIGTERM signal is received.
+> To build/run resctrl_tests using kselftest framework.
+> Modify tools/testing/selftests/Makefile
+> and tools/testing/selftests/resctrl/Makefile.
+> 
+> Even after this change, users can still build/run resctrl_tests
+> without using framework as before.
 > 
 > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
 > Some important feedbacks from v1&v2 are addressed as follows:
 > 
-> - Change the order so that current patch 3/3 becomes 1/3. Since without
->    the SIGTERM fix, the test would hang if run from the kselftest framework.
->    => I changed the order and the SIGTERM fix now becomes patch [1/5].
+> - The changelog mentions that changes were made to the resctrl
+>    selftest Makefile but it does not describe what the change accomplish
+>    or why they are needed.
+>    => By changing the Makefile, resctrl_tests can use kselftest
+>       framework like other sub tests. I described this in changelog.
 > 
-> - Describe that the test is run using the timeout utility and
->    it will send SIGTERM to the test upon timeout.
->    => I updated the changelog to include this information.
+> - The changelog did not describe how a user may use the kselftest
+>    framework to run the resctrl tests nor the requested information
+>    on how existing workflows are impacted.
+>    => I described how to build/run resctrl_tests with kselftest framework,
+>       and described the existing workflows are not impacted that users can
+>       build/run resctrl_tests without using kselftest framework as before.
 > 
-> - Describe changes in imperative mood, and address this in all patches.
->    See Documentation/process/submitting-patches.rst for more details.
->    => I described all my patches' changelog in imperative mood and
->       deleted "This commit".
+> - tools/testing/selftests/resctrl/README should be updated.
+>    => I separate the update of README to a new patch.[patch v3 3/5]
 > 
-> - +	    sigaction(SIGTERM, &sigact, NULL) ||
->    This snippet is preceded with a comment that describes its usage
->    you could also update it with the expanded use of the kselftest framework.
->    => I don't think it is necessary to add other comments.
->       Since the current comment already states "Register CTRL-C handler for parent,
->       as it has to kill benchmark before exiting", So, when SIGTERM comes,
->       the benchmark(child process) should be killed before parent process terminates,
->       but it was missing.
+> - Why is the meaning of "EXTRA_SOURCES" (i.e. what is "extra"?) and
+>    why is "SRCS" no longer sufficient?
+>    => I referred to other Makefiles, and found "SRCS" is better
+>       than "EXTRA_SOURCES". So, I updated it to use "SRCS".
 > 
->   tools/testing/selftests/resctrl/resctrl_val.c | 1 +
->   1 file changed, 1 insertion(+)
+>   tools/testing/selftests/Makefile         |  1 +
+>   tools/testing/selftests/resctrl/Makefile | 20 ++++++--------------
+>   2 files changed, 7 insertions(+), 14 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-> index 95224345c78e..b32b96356ec7 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_val.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -678,6 +678,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
->   	sigemptyset(&sigact.sa_mask);
->   	sigact.sa_flags = SA_SIGINFO;
->   	if (sigaction(SIGINT, &sigact, NULL) ||
-> +	    sigaction(SIGTERM, &sigact, NULL) ||
->   	    sigaction(SIGHUP, &sigact, NULL)) {
->   		perror("# sigaction");
->   		ret = errno;
-> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index c852eb40c4f7..7df397c6893c 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -51,6 +51,7 @@ TARGETS += proc
+>   TARGETS += pstore
+>   TARGETS += ptrace
+>   TARGETS += openat2
+> +TARGETS += resctrl
+>   TARGETS += rlimits
+>   TARGETS += rseq
+>   TARGETS += rtc
+> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
+> index 6bcee2ec91a9..de26638540ba 100644
+> --- a/tools/testing/selftests/resctrl/Makefile
+> +++ b/tools/testing/selftests/resctrl/Makefile
+> @@ -1,17 +1,9 @@
+> -CC = $(CROSS_COMPILE)gcc
+> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
+> -SRCS=$(wildcard *.c)
+> -OBJS=$(SRCS:.c=.o)
+> +CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
+>   
+> -all: resctrl_tests
+> +TEST_GEN_PROGS := resctrl_tests
+> +SRCS := $(wildcard *.c)
+>   
+> -$(OBJS): $(SRCS)
+> -	$(CC) $(CFLAGS) -c $(SRCS)
+> +all: $(TEST_GEN_PROGS)
+>   
+> -resctrl_tests: $(OBJS)
+> -	$(CC) $(CFLAGS) -o $@ $^
+> -
+> -.PHONY: clean
+> -
+> -clean:
+> -	$(RM) $(OBJS) resctrl_tests
+> +$(TEST_GEN_PROGS): $(SRCS)
 
-This looks good to me.
+This patch breaks the test build - the below use-cases fail
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+make kselftest-all TARGETS=resctrl
+make -C  tools/testing/selftests/ TARGETS=resctrl
+
+Also a simple make in tools/testing/selftests/resctr
 
 thanks,
 -- Shuah
