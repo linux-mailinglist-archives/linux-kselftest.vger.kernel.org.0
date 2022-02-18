@@ -2,132 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C744BB91C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 13:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116F24BBBA8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Feb 2022 16:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbiBRM1S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Feb 2022 07:27:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37040 "EHLO
+        id S236670AbiBRPCQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Feb 2022 10:02:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiBRM1R (ORCPT
+        with ESMTP id S234273AbiBRPCN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Feb 2022 07:27:17 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9773B1B7BF;
-        Fri, 18 Feb 2022 04:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=MVaFoxpSrw0lXOFRf60il59+xXDuimORkK161w41iNc=;
-        t=1645187219; x=1646396819; b=EXibw6MQDxwd+G9ZAGVB7tlsFUP8j9mDkVRMKG/rZAkrK1b
-        DvpIMQb2rEZIJlLjbXgYU641EJcGdpL2saikvB4+JDr/QblHL4nO8a78ww2/oCeSnyz1/UxPlEoQY
-        QCSV+OTJvz+5IVTZ7kwUMvpKywlU7+mchSrEq11AL0anykxxgT48GuBBGgn4QN5ZbFT8Yxyn2wfah
-        CBtdsJbFk92XfeOuVkRRGl0r9V/Z9Kgfo2+o919/aZKPrPWo+vhey5YBi/ddP7r5lkNDq41h41Ao7
-        7CndmP3jomv4luE25VGXdLKA5X+P5TmnZs4p9RJCU6tZ7uU3FVa+8XwQksIkgr0Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nL2LH-002du1-NQ;
-        Fri, 18 Feb 2022 13:26:31 +0100
-Message-ID: <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
-Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
+        Fri, 18 Feb 2022 10:02:13 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD16F18C2F2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 07:01:54 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id a28so15204926qvb.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Feb 2022 07:01:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qQOuPloDj1FDvrT18I7yp3YumR1JEJ9ojjlV/rcHoPw=;
+        b=RoS0gyblqR/tsGfQ7lArc8WXX3kNZMvPTfZET3nsnl+Rr8n361EoMRIfa1S+T8g8oc
+         NmAlJEUUOZ5XHaM5YrjNSr5VsFbJTayGS5be9bu+8ZuTGnnxnkPavDlHAMpATFRtc11K
+         fiKwKgEOqF+51vJxLCJG62RY8EQ2KpYmP7mAntkiGoPgLp6RQG9Lz93DB55QoyA5iy4K
+         jD0aW9yE0JKDtqB8vCY2rRZ02xMADfrBesx1EB/DYj+qq78BrufP6AkXF4xsqmELAlVq
+         1FXz/tX3UyRzucAxKzmHRYKSZZAyzlWABCgkRcxEK/GH/tUhjJjJ7pXdKtahQ8czEgJj
+         SqpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qQOuPloDj1FDvrT18I7yp3YumR1JEJ9ojjlV/rcHoPw=;
+        b=YzUVCOt+OxRqZPdFnhepNqLDc9hWLDQiY8AkpXZflx0xLdkbXxuQYmU9DvJD6mL18V
+         RibCemcRa1nnZwOKAMQU9Dwj4acOPSdxr5qHag0gy4stuN9AqLy+KNs3TwNB5m0pNYnt
+         8VWhgBaOzu1kpCR81gX+gVJOdE9UUq7AQQG8SesRWBRqISwmJErE5Yg9XCPVasQC6oCM
+         iKHUa1TZ+gBWGE96TlVkeFhF5GtZXMya8b6nZOfYFwh+R6NdOz4ArepbOK84vt51CWix
+         7Flm6uqRj0xZN8e7XtrkyQmWKinVmgo72MbTAEFds/pHEq7FmVYpBz2Vd1C9tv0gk9bc
+         Ejqw==
+X-Gm-Message-State: AOAM531yFXSAztbTBrFWkXg9tlWgpl4Dn2EI24DYhQUZGZgrkSXdQRj8
+        J77yc1SzJjJYYTNCxcUw4W7Vyw==
+X-Google-Smtp-Source: ABdhPJxj9yyCZvW5c4Ugzq0ieNoelSzlHZ5AUX07DsgnGoll6g+QZTPyJ2Fq/jgnUxsgsAq5KC011A==
+X-Received: by 2002:ac8:7fd5:0:b0:2cf:93ff:5638 with SMTP id b21-20020ac87fd5000000b002cf93ff5638mr7063274qtk.435.1645196514006;
+        Fri, 18 Feb 2022 07:01:54 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id s4sm23008395qko.113.2022.02.18.07.01.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 07:01:52 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nL4lb-006cts-Vr; Fri, 18 Feb 2022 11:01:51 -0400
+Date:   Fri, 18 Feb 2022 11:01:51 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     David Gow <davidgow@google.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Brendan Higgins <brendanhiggins@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-um@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-um@lists.infradead.org, amd-gfx@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
         x86@kernel.org, felix.kuehling@amd.com,
         linux-kernel@vger.kernel.org
-Date:   Fri, 18 Feb 2022 13:26:30 +0100
-In-Reply-To: <20220218075727.2737623-5-davidgow@google.com>
+Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
+Message-ID: <20220218150151.GD1037534@ziepe.ca>
 References: <20220218075727.2737623-1-davidgow@google.com>
-         <20220218075727.2737623-5-davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+ <20220218075727.2737623-5-davidgow@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218075727.2737623-5-davidgow@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
+On Fri, Feb 18, 2022 at 03:57:27PM +0800, David Gow wrote:
+> There are a number of Kconfig options which break compilation under UML with
+> allyesconfig.  As kunit_tool's --alltests option is based on allyesconfig and
+> UML, we need to update the list of broken options to make --alltests build
+> again.
 > 
 > Note that, while this does build again, it still segfaults on startup,
 > so more work remains to be done.
-
-That's probably just a lot more stuff getting included somehow?
-
+> 
 > They are:
 > - CONFIG_VFIO_PCI: Needs ioport_map/ioport_unmap.
 > - CONFIG_INFINIBAND_RDMAVT: Needs cpuinfo_x86 and __copy_user_nocache
-> - CONFIG_BNXT: Failing under UML with -Werror
-> ERROR:root:../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In function ‘bnxt_ptp_enable’:
-> ../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array subscript 255 is above array bounds of ‘struct pps_pin[4]’ [-Werror=array-bounds]
->   400 |                         ptp->pps_info.pins[pin_id].event = BNXT_PPS_EVENT_EXTERNAL;
->       |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~
-> - CONFIG_PATA_CS5535: Needs MSR access (__tracepoint_{read,write}_msr)
-> - CONFIG_VDPA: Enables CONFIG_DMA_OPS, which is unimplemented. ('dma_ops' is not defined)
-> 
-> These are all issues which should be investigated properly and the
-> corresponding options either fixed or disabled under UML. Having this
-> list of broken options should act as a good to-do list here, and will
-> allow these issues to be worked on independently, and other tests to
-> work in the meantime.
-> 
 
-I'm not really sure it makes sense to even do anything other than
-disabling these.
+It doesn't make sense to patch qib and then turn this option off, it
+is required to build qib.
 
-It looks like all of them are just exposed by now being able to build
-PCI drivers on UML. Surely the people writing the driver didn't expect
-their drivers to run over simulated PCI (which is what the UML PCI
-support is all about).
-
-Now from a PCI driver point of view you can't really tell the difference
-(and anyway the driver won't be probed), but the issues (at least the
-build time ones) come from having
-
-    UML && PCI && X86_64
-
-or
-
-    UML && PCI && X86_32
-
-because drivers typically depend on X86_64 or X86_32, rather than on
-"X86 && X86_64" or "X86 && X86_32". In a sense thus, the issue is those
-drivers don't know that "!X86 && (X86_32 || X86_64)" can happen (with
-UML).
-
-
-Now you could say that's the driver bug, or you could say that they
-should just add "depends on !UML" (though that's basically equivalent to
-adding "depends on X86" and the latter may be preferable in some cases).
-
-Or actually in the three patches you have (1-3) it's in the code, but
-same thing, you can either add && !UML (like you did) or add && X86.
-
-
-Arguably, however, building PCI drivers by default is somewhat
-questionable in the first place?
-
-So maybe you should just add
-
-    # CONFIG_UML_PCI_OVER_VIRTIO is not set
-
-to the broken_on_uml.config since it exposes all these issues, and
-really is not very useful since you're not going to actually run with
-any simulated PCI devices anyway, so drivers will not be probed.
-
-johannes
+Jason
