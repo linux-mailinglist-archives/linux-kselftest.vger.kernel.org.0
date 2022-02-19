@@ -2,132 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C332F4BC791
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Feb 2022 11:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAC44BC933
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Feb 2022 16:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241869AbiBSKA6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Feb 2022 05:00:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44302 "EHLO
+        id S240712AbiBSPoX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Feb 2022 10:44:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiBSKA6 (ORCPT
+        with ESMTP id S235451AbiBSPoW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Feb 2022 05:00:58 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E16A1BFA;
-        Sat, 19 Feb 2022 02:00:38 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id hw13so20541213ejc.9;
-        Sat, 19 Feb 2022 02:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eyoLzh3GoCjEcko6E6TRX3Q0MN5P8KHlKdLhPGSzjas=;
-        b=nnddJEcHqLBBgfgW6X8nP2hJ+jbcGZujjBROoEt9DQKra/B8N1F3VqRROEaOdXzS1G
-         TnmFhHNUyN5sK64vsVyWIaI5/IWYIRSDlRlHN9lO44vm9/RH205qjm0HVp0WDQBkojHS
-         SxK7lXv9qPuxBw0h8IcrUN22V3RAYtX9gwDEXgiSTbwCKm6Cv+emuMeHX4pjOUOxLO1r
-         SBJvros1knM0ArBLcFpYEDQBMbDEOjZyNBZZLUKg0Dh+l34NitpBj33SGW8TgzKLy4aU
-         BUdMEoxEsM4NVFdyaStDhqIhtOms7cKP4Ae+XytJsnPBGISv5erc6kLo/q/y+6+jwYSL
-         tJVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eyoLzh3GoCjEcko6E6TRX3Q0MN5P8KHlKdLhPGSzjas=;
-        b=ikZVPyIlASmHZ8l0LzizvdISxXwDLAR9X8p3ifNg1lWZ1QB9bSlmWF2ucgYVRlNzil
-         2mLL0frS+3j3BRiiDasziSZa3I/iVMvU7vHm1bP1d+5yze98xKlwIfI4okKhWM4Y9yNv
-         hGHpYiACfFJ+Swpsr8TxowJ8nR/J9EVe3GIueqaJsGcCZtByXsI9SlKNg8g/WN99suyf
-         5D5CvnCfAoCqO6ouU3dYEZehToU8lFX59uC4b/6eBWoJho1OTktfXiCrFH/1cVSNe05u
-         VM8iMi/dE6eRXQR7AM/mDLqFOQz62kO7+GtlD7KsDIRRMCz/98K7hb53hVaLdMi2M7V5
-         SX1Q==
-X-Gm-Message-State: AOAM531SyddbjLXZ6CCt4lCJv3jaM4D+l5KiUkWoeZv4CScBbj40UQmk
-        IKcMn/dZfnm2ZK3Ub+OZYrg=
-X-Google-Smtp-Source: ABdhPJx1V2gD2Zh/g9vSl2TlbwK/2IUdNqZeGbq6SyVxCfhg7AYOb4RmbSYhkOf48WpzRbDFW0e3YQ==
-X-Received: by 2002:a17:906:154c:b0:6ce:21d7:2826 with SMTP id c12-20020a170906154c00b006ce21d72826mr9312950ejd.9.1645264837397;
-        Sat, 19 Feb 2022 02:00:37 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id b20sm5824839ede.23.2022.02.19.02.00.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 02:00:36 -0800 (PST)
-Date:   Sat, 19 Feb 2022 12:00:34 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Suryaputra <ssuryaextr@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Po-Hsu Lin <po-hsu.lin@canonical.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/5] net: dsa: mv88e6xxx: Add support for
- bridge port locked mode
-Message-ID: <20220219100034.lh343dkmc4fbiad3@skbuf>
-References: <20220218155148.2329797-1-schultz.hans+netdev@gmail.com>
- <20220218155148.2329797-5-schultz.hans+netdev@gmail.com>
+        Sat, 19 Feb 2022 10:44:22 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DB6606DA;
+        Sat, 19 Feb 2022 07:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=51IuRnSgtWxZG2Jmu2renXJr42JUA6j1ZiqJaCkpimM=;
+        t=1645285443; x=1646495043; b=qyks8bf/gJgo+UE96AF+v7tTvMKni7RZUpphuTWTqN8Rk2R
+        Am7kqD49/sN5h4KDNJPrSZGV8f0GcT75I8xJNB7dcGxCbOdkerMrLVcOLIVrkE0K6bv3YpBEdoOFL
+        1T81+KgUQBYxxc8wcQ1X1VE+Li9W+osj7t0tXNzeK1JoBCdyEaAgR0y5IEE4UUtiZHm8kPNYbacIc
+        A7g4sVndtVppm8t6AXmAx3tRoGo/iJOTJ7lkr+kSWTa8E0INoalHKlQDPTbykbSf8rx5SDnxlLtl/
+        8xSYGedMKPgdMqq9W6I/HuRtVdvmcEjn+9lNqGKpUR7wIQuW5bhAPk9ifVlFgosw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nLRtJ-0035Fb-Ex;
+        Sat, 19 Feb 2022 16:43:21 +0100
+Message-ID: <d14b6a0c72788e78bab2bd1f0bc2c49891ded5d7.camel@sipsolutions.net>
+Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     David Gow <davidgow@google.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        x86@kernel.org, felix.kuehling@amd.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Sat, 19 Feb 2022 16:43:19 +0100
+In-Reply-To: <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
+References: <20220218075727.2737623-1-davidgow@google.com>
+         <20220218075727.2737623-5-davidgow@google.com>
+         <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+         <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218155148.2329797-5-schultz.hans+netdev@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 04:51:47PM +0100, Hans Schultz wrote:
-> diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-> index ab41619a809b..46b7381899a0 100644
-> --- a/drivers/net/dsa/mv88e6xxx/port.c
-> +++ b/drivers/net/dsa/mv88e6xxx/port.c
-> @@ -1234,6 +1234,39 @@ int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
->  	return err;
->  }
->  
-> +int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
-> +			    bool locked)
-> +{
-> +	u16 reg;
-> +	int err;
-> +
-> +	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg);
-> +	if (err)
-> +		return err;
-> +
-> +	reg &= ~MV88E6XXX_PORT_CTL0_SA_FILT_MASK;
-> +	if (locked)
-> +		reg |= MV88E6XXX_PORT_CTL0_SA_FILT_DROP_ON_LOCK;
-> +
-> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL0, reg);
-> +	if (err)
-> +		return err;
-> +
-> +	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, &reg);
-> +	if (err)
-> +		return err;
-> +
-> +	reg &= ~MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> +	if (locked)
-> +		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> +
-> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, reg);
+On Sat, 2022-02-19 at 16:00 +0800, David Gow wrote:
+> On Fri, Feb 18, 2022 at 8:26 PM Johannes Berg <johannes@sipsolutions.net> wrote:
+> > 
+> > On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
+> > > 
+> > > Note that, while this does build again, it still segfaults on startup,
+> > > so more work remains to be done.
+> > 
+> > That's probably just a lot more stuff getting included somehow?
+> > 
+> 
+> Yeah: it used to work (a couple of years ago), but something has
+> broken it in the meantime. It's just a shame that bisecting things
+> with allyesconfig takes so long...
 
-	return mv88e6xxx_port_write(...);
+Heh, right.
 
-> +	if (err)
-> +		return err;
-> +
-> +	return 0;
-> +}
+But I guess you could "Kconfig bisect" first, i.e. see what option
+breaks it? It might not even help to bisect, if it's just some option
+getting enabled over time. Or perhaps the kernel is just too big for the
+address space layout if you have allyesconfig? Though that shouldn't be
+an issue, I think.
+
+> I didn't realise X86 wasn't defined in UML: 
+
+X86 is the architecture, X86_{32,64} is kind of a selection for how you
+want things to be built, and it's thus required for UML on x86, because
+UML imports stuff from X86.
+
+> that's definitely a bit
+> cleaner than !UML in a number of these cases.
+
+It looks like some (most?) of them don't really work that way though
+since they're not really platform specific, they just know only about a
+handful of platforms that they're compatible with.
+
+> Not all of those issues are fundamentally solved by "depends on X86",
+> though: there are a few which might be other missing things in UML
+> (maybe the 'dma_ops' issues?), and/or might be the result of -Werror
+> being enabled.
+
+Right.
+
+> We do want the ability to build PCI drivers under UML, as it makes
+> running KUnit tests for PCI drivers much simpler and more pleasant.
+
+OK, fair point. I'm thinking about this area in general also right now
+for iwlwifi, and obviously we're probably the only user of the virtual
+PCI code that lets us connect the driver to a simulated device on UML
+(but the driver doesn't really know) :-)
+
+> And indeed, it does work for KUnit in general, it's just that some
+> drivers do have the issues mentioned above, so allyesconfig picks up
+> every broken driver.
+
+Right.
+
+> We don't actually build the PCI drivers by default, only if the
+> "--alltests" option is passed, which does include them, as we do have
+> tests which depend on PCI we'd like to run (like the thunderbolt
+> test).
+
+Makes sense.
+> 
+> I did try this as well, and it just got us a different set of issues
+> (there are a bunch of drivers which depend on IOMEM but don't state it
+> -- I'll try to send fixes for those out next week). 
+> 
+
+Fun.
+
+> Ultimately, the 'broken_on_uml.config' file is just there to pare back
+> allyesconfig a bit for KUnit's purposes, but we still definitely want
+> as many options (and hence tests) enabled as possible long-term. So I
+> think actual fixes to either the code or Kconfig do make sense.
+
+Makes sense.
+
+> Is 'make ARCH=um allyesconfig' something we actually want to be able
+> to build? If so, no amount of adding things to KUnit's
+> broken_on_uml.config will solve the underlying issues, and we'll need
+> to at least update the Kconfig entries.
+> 
+
+That's a good point, as long as people are doing allyes/randconfig
+builds on UML, we probably need to have these fixes anyway rather than
+disabling something for KUnit specifically.
+
+johannes
