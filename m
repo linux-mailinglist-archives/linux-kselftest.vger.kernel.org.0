@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF924BC6DA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Feb 2022 09:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912824BC6DE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Feb 2022 09:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241710AbiBSIAl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Feb 2022 03:00:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43834 "EHLO
+        id S241146AbiBSIAz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Feb 2022 03:00:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiBSIAj (ORCPT
+        with ESMTP id S231582AbiBSIAy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Feb 2022 03:00:39 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE31B202075
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Feb 2022 00:00:16 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id az26-20020a05600c601a00b0037c078db59cso7908369wmb.4
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Feb 2022 00:00:16 -0800 (PST)
+        Sat, 19 Feb 2022 03:00:54 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFF0202075
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Feb 2022 00:00:35 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h6so18134230wrb.9
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Feb 2022 00:00:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=G51UX3AVEsugVQxKX5ONqBXMOPDOOXrNFxnuO2/wc3c=;
-        b=A6pACAEZnztDG+RUZUCJmYbDLfGgp3M0m8AZ6QFiWptZ+xSjPv1XonaA2F2Hb7ILmo
-         3y+ap7IP65TtiXc/E+wXiBpxRnLPYseU1gllpHZ+wGzFb0XrCP08ZVmvtQt7kKaX4zGQ
-         Le26+Rnuab8qjoal6dkO4dK3minIxw71tLcnrngo9VdOYj3UXcjfy3LPS2BHZIksAfQ+
-         zk7+PmdwPu+GLSHmlSJpM1FRbYurE5igjCdCMImi2ev7cZCqv2mJq0USPvIz9N8r1bmT
-         OS5KUyQ5eE+6Q/Qw8C5JUDemGXeo+MpApDIii0zDCVnyUrb1qO8NOHLl2O3wW0PaHX6n
-         scRQ==
+        bh=1bm2cjDotHNnlgdOiZHlYtdCU72n38X9c1F5BAycuCQ=;
+        b=GJ2U1dnWktgqlNLOjX2RzpceEY3xsM5EDB49H/lsK6GTLRFyM7vcw/xsFWBWlkknDq
+         FwfB/Kk07B4D2wQ5+jvvyAB+SoZn3VBT6fP7NUAzMcVt3XsIm4TsehhVNIH+eYkGs80Y
+         IWwxNyCJHDxs+XGJo3CwZD0mayLATPX+/bld+U8kBGhSqSRnr3em3i0ULE7D9ayJW0+K
+         LAlgPwa5vaxwvH8kvNsxbg/aaJ1hzikN02dRdbO5f1NhxqSIVTgqE51WdDJ8QF0l5UzN
+         +V/HQpIik1B7oJEjP/IMvOy3Livo1FbfsUsxmmUVDT5JSLLQWmNTnqbUts3TOndSodPy
+         yKrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=G51UX3AVEsugVQxKX5ONqBXMOPDOOXrNFxnuO2/wc3c=;
-        b=wkteLU0poivO/rl2D+P3QcEIEIjXxQ0W7kShNj9xYO6nbnqGiBDn5MGWRp85IS5zR4
-         nN1zqXC1MhOqxL2Cs/TsLFbbvkyDMTb2fKCMBbZ8SsTbpg2VxEH4PTBMxjCq44seCK1A
-         Ke7rLj5LOV5n+66qiVuAXYbqjzAuJiVKdNr9deFchyL43GYP/qlsMx6kzPrU35js53xQ
-         reqleTTDNBVaFJrfsudX2/MT0fb+JxGo6qy2+sGzGgkuj31Q9ELJv/WXFKJevbfR58UN
-         jFhA6pK9q5WQikHCZTpoJI4g4I29KVgXhLHdmxY7RF7xDah6geJnRAcgUH/oyYOKAcmC
-         S5Bg==
-X-Gm-Message-State: AOAM5301kCnqSlCMTCFjetK0WQ69skRSKdiTCuYMP3yuR5uy0aURaKXH
-        x5DXY+nJuPdQvC0+moNl2czp+Lg+pSYsIUwjWxVKiA==
-X-Google-Smtp-Source: ABdhPJzbJOrM/2OLBtDRNHfACqh08uaaCdcmb5NeBmC69hAFuvYRavqZoqsRXsCrlc74PcOn8wHgcFrPuLcM4oK0IOY=
-X-Received: by 2002:a05:600c:215:b0:37c:729:f84d with SMTP id
- 21-20020a05600c021500b0037c0729f84dmr9399022wmi.131.1645257615313; Sat, 19
- Feb 2022 00:00:15 -0800 (PST)
+        bh=1bm2cjDotHNnlgdOiZHlYtdCU72n38X9c1F5BAycuCQ=;
+        b=LMFrrbSiLHw2PrAtpuPYZP4xJ8HGBqbHNfhwwpj7nCyoPV40MVYA63MlrVd8RVlAQb
+         3x+cZQJ6K6aReKHmROACAJq6c4JEVJFFPCls0h1Gxm+TCeEFv2k3Bwv1xiMFgKQml70O
+         Ghc7oZz8yCaf+HqwYEm/LkB5qgv8ZuTEoQcKs9Xmp4Nm6hRDlcgfuwkCSck3YEZDR1TB
+         H/MKTEe4Ey/X4Fz2lWIS4tRUkm/4i2bt9iGd16Bb7//y8TEu1Y+8aJu6KRr78Jvuie9C
+         PNQ5RN3c3hzaPMw8n8s/woWO2zsqTW1hLo4FaGOYBLg/5KYSLlehjnsYcx2RhVQSYyW6
+         EvdQ==
+X-Gm-Message-State: AOAM533621BoQ7HX2ZlKl2VhCSChoxGlwCKiZ5mjFvdDQr8DWJqkBhRi
+        CHrxAaSlY2m58iucnjiRhdFrKTlpaGub6G91I5XZDw==
+X-Google-Smtp-Source: ABdhPJwZr3Wnjgl9INswmRX8j6PE+U9N5T0seoUM0s29l+SpYSFVVzVA2VAhljcYE2g84EpAA0a4jn2GXa2Q4MVs80M=
+X-Received: by 2002:adf:f109:0:b0:1e3:e2d:e6e0 with SMTP id
+ r9-20020adff109000000b001e30e2de6e0mr8501855wro.177.1645257634157; Sat, 19
+ Feb 2022 00:00:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20220218075727.2737623-1-davidgow@google.com> <20220218075727.2737623-5-davidgow@google.com>
- <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
-In-Reply-To: <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
+References: <20220218075727.2737623-1-davidgow@google.com> <20220218075727.2737623-2-davidgow@google.com>
+ <ef8eee23-ba8c-e76a-d32d-68658841708d@amd.com>
+In-Reply-To: <ef8eee23-ba8c-e76a-d32d-68658841708d@amd.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 19 Feb 2022 16:00:04 +0800
-Message-ID: <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
-To:     Johannes Berg <johannes@sipsolutions.net>
+Date:   Sat, 19 Feb 2022 16:00:22 +0800
+Message-ID: <CABVgOSnFjDnjbPh_E+GSzp-8WoRVPFa36=5GUpPtC-ba-fGkaw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] drm/amdgpu: Fix compilation under UML
+To:     Felix Kuehling <felix.kuehling@amd.com>
 Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -64,10 +64,10 @@ Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, linux-rdma@vger.kernel.org,
-        x86@kernel.org, felix.kuehling@amd.com,
+        x86@kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000beb73e05d85a6383"
+        boundary="000000000000ddc89005d85a6478"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -79,131 +79,112 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000beb73e05d85a6383
+--000000000000ddc89005d85a6478
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 18, 2022 at 8:26 PM Johannes Berg <johannes@sipsolutions.net> w=
-rote:
+On Sat, Feb 19, 2022 at 12:39 AM Felix Kuehling <felix.kuehling@amd.com> wr=
+ote:
 >
-> On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
+>
+> Am 2022-02-18 um 02:57 schrieb David Gow:
+> > From: Randy Dunlap <rdunlap@infradead.org>
 > >
-> > Note that, while this does build again, it still segfaults on startup,
-> > so more work remains to be done.
->
-> That's probably just a lot more stuff getting included somehow?
->
-
-Yeah: it used to work (a couple of years ago), but something has
-broken it in the meantime. It's just a shame that bisecting things
-with allyesconfig takes so long...
-
-> > They are:
-> > - CONFIG_VFIO_PCI: Needs ioport_map/ioport_unmap.
-> > - CONFIG_INFINIBAND_RDMAVT: Needs cpuinfo_x86 and __copy_user_nocache
-> > - CONFIG_BNXT: Failing under UML with -Werror
-> > ERROR:root:../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In functio=
-n =E2=80=98bnxt_ptp_enable=E2=80=99:
-> > ../drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:400:43: error: array s=
-ubscript 255 is above array bounds of =E2=80=98struct pps_pin[4]=E2=80=99 [=
--Werror=3Darray-bounds]
-> >   400 |                         ptp->pps_info.pins[pin_id].event =3D BN=
-XT_PPS_EVENT_EXTERNAL;
-> >       |                         ~~~~~~~~~~~~~~~~~~^~~~~~~~
-> > - CONFIG_PATA_CS5535: Needs MSR access (__tracepoint_{read,write}_msr)
-> > - CONFIG_VDPA: Enables CONFIG_DMA_OPS, which is unimplemented. ('dma_op=
-s' is not defined)
+> > cpuinfo_x86 and its associated macros are not available under ARCH=3Dum=
+,
+> > even though CONFIG_X86_64 is defined.
 > >
-> > These are all issues which should be investigated properly and the
-> > corresponding options either fixed or disabled under UML. Having this
-> > list of broken options should act as a good to-do list here, and will
-> > allow these issues to be worked on independently, and other tests to
-> > work in the meantime.
+> > This patch (and discussion) were originally posted here:
+> > https://lkml.org/lkml/2022/1/24/1547
 > >
+> > This produces the following build errors:
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1556:9: note: in=
+ expansion of macro =E2=80=98cpu_data=E2=80=99
+> >    return cpu_data(first_cpu_of_numa_node).apicid;
+> >           ^~~~~~~~
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:1560:1: error: c=
+ontrol reaches end of non-void function [-Werror=3Dreturn-type]
+> >
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c: In function =E2=80=
+=98kfd_fill_iolink_info_for_cpu=E2=80=99:
+> > ../arch/um/include/asm/processor-generic.h:103:19: error: called object=
+ is not a function or function pointer
+> >   #define cpu_data (&boot_cpu_data)
+> >                    ~^~~~~~~~~~~~~~~
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1688:27: note: in ex=
+pansion of macro =E2=80=98cpu_data=E2=80=99
+> >    struct cpuinfo_x86 *c =3D &cpu_data(0);
+> >                             ^~~~~~~~
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1691:7: error: deref=
+erencing pointer to incomplete type =E2=80=98struct cpuinfo_x86=E2=80=99
+> >    if (c->x86_vendor =3D=3D X86_VENDOR_AMD)
+> >         ^~
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1691:23: error: =E2=
+=80=98X86_VENDOR_AMD=E2=80=99 undeclared (first use in this function); did =
+you mean =E2=80=98X86_VENDOR_ANY=E2=80=99?
+> >    if (c->x86_vendor =3D=3D X86_VENDOR_AMD)
+> >                         ^~~~~~~~~~~~~~
+> >                         X86_VENDOR_ANY
+> >
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c: In function =E2=80=
+=98kfd_create_vcrat_image_cpu=E2=80=99:
+> > ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_crat.c:1742:11: warning: un=
+used variable =E2=80=98entries=E2=80=99 [-Wunused-variable]
+> >    uint32_t entries =3D 0;
+> >
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > ---
+> >   drivers/gpu/drm/amd/amdkfd/kfd_crat.c     | 6 +++---
+> >   drivers/gpu/drm/amd/amdkfd/kfd_topology.c | 2 +-
+> >   2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/am=
+d/amdkfd/kfd_crat.c
+> > index 9624bbe8b501..b1e2d117be3d 100644
+> > --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> > +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+> > @@ -1682,7 +1682,7 @@ static int kfd_fill_mem_info_for_cpu(int numa_nod=
+e_id, int *avail_size,
+> >       return 0;
+> >   }
+> >
+> > -#ifdef CONFIG_X86_64
+> > +#if defined(CONFIG_X86_64) && !defined(CONFIG_UML)
 >
-> I'm not really sure it makes sense to even do anything other than
-> disabling these.
->
-> It looks like all of them are just exposed by now being able to build
-> PCI drivers on UML. Surely the people writing the driver didn't expect
-> their drivers to run over simulated PCI (which is what the UML PCI
-> support is all about).
->
-> Now from a PCI driver point of view you can't really tell the difference
-> (and anyway the driver won't be probed), but the issues (at least the
-> build time ones) come from having
->
->     UML && PCI && X86_64
->
-> or
->
->     UML && PCI && X86_32
->
-> because drivers typically depend on X86_64 or X86_32, rather than on
-> "X86 && X86_64" or "X86 && X86_32". In a sense thus, the issue is those
-> drivers don't know that "!X86 && (X86_32 || X86_64)" can happen (with
-> UML).
->
->
-> Now you could say that's the driver bug, or you could say that they
-> should just add "depends on !UML" (though that's basically equivalent to
-> adding "depends on X86" and the latter may be preferable in some cases).
->
-> Or actually in the three patches you have (1-3) it's in the code, but
-> same thing, you can either add && !UML (like you did) or add && X86.
+> I don't think it makes sense to compile a hardware device driver in a
+> UML config. Instead of scattering UML #ifdefs through our code, I would
+> recommend adding this to Kconfig:
 >
 
-I didn't realise X86 wasn't defined in UML: that's definitely a bit
-cleaner than !UML in a number of these cases.
+There are cases where I think it could make sense to have a hardware
+driver under UML, though I agree they're pretty rare.
 
-Not all of those issues are fundamentally solved by "depends on X86",
-though: there are a few which might be other missing things in UML
-(maybe the 'dma_ops' issues?), and/or might be the result of -Werror
-being enabled.
+In particular, there's the virtio PCI support in UML, which one could
+potentially hook up a GPU to. The case I care more about is the
+ability to run KUnit tests under UML: if amdgpu wanted to have KUnit
+tests, it could still run them in qemu (or on real hardware), but UML
+is faster and more convenient, if the code being tested can compile
+under it.
 
->
-> Arguably, however, building PCI drivers by default is somewhat
-> questionable in the first place?
+So I have a slight preference personally for fixing this, to unblock those =
+uses.
 
-We do want the ability to build PCI drivers under UML, as it makes
-running KUnit tests for PCI drivers much simpler and more pleasant.
-And indeed, it does work for KUnit in general, it's just that some
-drivers do have the issues mentioned above, so allyesconfig picks up
-every broken driver.
-
-We don't actually build the PCI drivers by default, only if the
-"--alltests" option is passed, which does include them, as we do have
-tests which depend on PCI we'd like to run (like the thunderbolt
-test).
-
->
-> So maybe you should just add
->
->     # CONFIG_UML_PCI_OVER_VIRTIO is not set
->
-> to the broken_on_uml.config since it exposes all these issues, and
-> really is not very useful since you're not going to actually run with
-> any simulated PCI devices anyway, so drivers will not be probed.
-
-I did try this as well, and it just got us a different set of issues
-(there are a bunch of drivers which depend on IOMEM but don't state it
--- I'll try to send fixes for those out next week). And we'd lose
-things like the thunderbolt test if PCI
-
-Ultimately, the 'broken_on_uml.config' file is just there to pare back
-allyesconfig a bit for KUnit's purposes, but we still definitely want
-as many options (and hence tests) enabled as possible long-term. So I
-think actual fixes to either the code or Kconfig do make sense.
-
-Is 'make ARCH=3Dum allyesconfig' something we actually want to be able
-to build? If so, no amount of adding things to KUnit's
-broken_on_uml.config will solve the underlying issues, and we'll need
-to at least update the Kconfig entries.
+That being said, it's definitely not worth placing a significant
+burden on you maintaining these things if no-one uses them. And since
+there doesn't appear to be any such use at the moment[1], I've no
+strong objection to just disabling this for now (it can always be
+re-enabled and fixed if it becomes useful later).
 
 Cheers,
 -- David
 
---000000000000beb73e05d85a6383
+[1] The proposed DRM KUnit tests don't require any actual hardware
+drivers, as I understand it:
+https://lore.kernel.org/all/20220117232259.180459-5-michal.winiarski@intel.=
+com/T/
+
+--000000000000ddc89005d85a6478
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -270,14 +251,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC1
-hK5mkWbXD3kQGhQArPS3EpKnqjuOZpFfFWnAx7DK6DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTkwODAwMTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAD
+bDG4S/ht/giejbOZGd/p6/lp8S/M/DHA3U+Ot88qtDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTkwODAwMzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjnpewcuZUJVS6VIu0yi4
-03UYYnjQhPEECv0bhdeu4hsYPRtRxIiCLf3pHo16X6hgQixHb8uSkg5VJDcLfSKM6CCkOQLj8Zt8
-tZ1qXXWuD2yF+nWgcW0zHG9zpfGy2g5v0H3e4z3XswHVBQdgFcsY/N2v/m+7FlSlIKp4eKHVUyWQ
-QDocj2QwLwrPTzvToOVgfvnPDNf3CuMwA80C7v9WEX/syUDQMaQSWCyfuxTiaUHfBdvRCGgZt+M7
-XGmNI+IWcxeYhj5xZo4LWkK8APgeCTs5d+MhF0JpZK1QqJnb9rWSjyf7hOJdwPpedIOyrjQDfmbx
-pB+HTOm+2IxT/N2jYA==
---000000000000beb73e05d85a6383--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAKANLJk4i7jUMAjnEhFHl
+o2f9h+XHj1vfL7KVXEc1ciAAUdpZxezlv2cCZEdq9krX+jtap9bTVtJzyLMbVr5SixD3Ob5tVk0f
+E8+a8irhK9+YVAQchpYBa8+RJdqH0J1HeFb80T5P1jN73CevRgcoGDjd1izkE9NKJ0l6lvoHv8LF
+0p0HA2IHK6nYYs3xdRkVCL7Nu8cFQxkDf7TjmBiqrIH2GxVwU84dpMTrkzBqT7ZswXYZ/LrcUcNp
+Jr3U0AY9S11MadPemWc97d53FMqEtCy2rLB/pEIcKioSUIKRbbtLM/QKotZO07I6xLDzGnXHDP2T
+kczRI/2I9zlFWB7rVg==
+--000000000000ddc89005d85a6478--
