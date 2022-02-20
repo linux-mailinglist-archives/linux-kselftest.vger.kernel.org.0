@@ -2,63 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAC44BC933
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Feb 2022 16:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3865D4BCDB2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Feb 2022 11:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240712AbiBSPoX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Feb 2022 10:44:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35990 "EHLO
+        id S232875AbiBTJNU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 20 Feb 2022 04:13:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbiBSPoW (ORCPT
+        with ESMTP id S232377AbiBTJNS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Feb 2022 10:44:22 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DB6606DA;
-        Sat, 19 Feb 2022 07:44:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=51IuRnSgtWxZG2Jmu2renXJr42JUA6j1ZiqJaCkpimM=;
-        t=1645285443; x=1646495043; b=qyks8bf/gJgo+UE96AF+v7tTvMKni7RZUpphuTWTqN8Rk2R
-        Am7kqD49/sN5h4KDNJPrSZGV8f0GcT75I8xJNB7dcGxCbOdkerMrLVcOLIVrkE0K6bv3YpBEdoOFL
-        1T81+KgUQBYxxc8wcQ1X1VE+Li9W+osj7t0tXNzeK1JoBCdyEaAgR0y5IEE4UUtiZHm8kPNYbacIc
-        A7g4sVndtVppm8t6AXmAx3tRoGo/iJOTJ7lkr+kSWTa8E0INoalHKlQDPTbykbSf8rx5SDnxlLtl/
-        8xSYGedMKPgdMqq9W6I/HuRtVdvmcEjn+9lNqGKpUR7wIQuW5bhAPk9ifVlFgosw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nLRtJ-0035Fb-Ex;
-        Sat, 19 Feb 2022 16:43:21 +0100
-Message-ID: <d14b6a0c72788e78bab2bd1f0bc2c49891ded5d7.camel@sipsolutions.net>
-Subject: Re: [PATCH 4/4] kunit: tool: Disable broken options for --alltests
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     David Gow <davidgow@google.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-rdma@vger.kernel.org,
-        x86@kernel.org, felix.kuehling@amd.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Sat, 19 Feb 2022 16:43:19 +0100
-In-Reply-To: <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
-References: <20220218075727.2737623-1-davidgow@google.com>
-         <20220218075727.2737623-5-davidgow@google.com>
-         <ac4c5f8c890e5bdd7ad7ecc04a51e72fa3ac1703.camel@sipsolutions.net>
-         <CABVgOSnBq0QE+Cq+SDeV-LxOQYbGZ6Bqbjix6h-UpNj0GMicPA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Sun, 20 Feb 2022 04:13:18 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8AC634B;
+        Sun, 20 Feb 2022 01:12:56 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5E123580161;
+        Sun, 20 Feb 2022 04:12:55 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Sun, 20 Feb 2022 04:12:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=I/zojRZvTUsxCxK+q
+        zyFQV0GgixUlcPgJMI4gO/Q7Rg=; b=NH8MFPr0TbVkzALXm+qXtPThk2EtBYxAs
+        EyXvAI1q2+VwSjm1PRO5kb0WUYLnbBI9YPC2WxX0AbccB6K6mqUHi5qz58v+467l
+        ho8cUzY9o+rHIftLJPPNYinNcY1rMnE1l8XwL6MeMevdWZxO+lKZOAcqY8PjPxan
+        kj+vQ0BH2wLYJP7a8OoET7m4pZ7OR+iq0a1aGJBz/QVB3Ui5OMfjrVX+pnWDpvAD
+        mXjMM6ci5YIzoq6iTRyT1KvNXaUYFVpE41IQ6+lQVfSrCjlDaZkGjmDUy/rZNwtw
+        AWjgwbnP4KQhDQ1C2sKQfWex4jN78ogLT9koYhOmdmeeySfkaEMCw==
+X-ME-Sender: <xms:FgYSYvIQOdJ7H4k5AxTL9GXFKFYnA9lsccXdhOKdlrwd6cfx26egcA>
+    <xme:FgYSYjK_k4qjoHYsUA3wghR5AuR5onKlDjG1-xiprEFVHenroV0j22-k8YaBdb0of
+    ujRek95BuXnFF4>
+X-ME-Received: <xmr:FgYSYnusJ1RGN4zFjsyVwqR6eSpGNwRRO0Am-oSjb7BEnnhux4LjJHt_3RoEWkk_pi5UhG-aPzyi393gpHAUM2Ydei0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeggddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepgfejvefhvdegiedukeetudevgeeujeefffeffeetkeekueeuheejudeltdejuedu
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
+    hstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:FgYSYoZeImoQxvugMUoL2zp8JXciQqu6w9uJUqowCrlIrp6TT7A1tg>
+    <xmx:FgYSYmZnWqUx4Gh5J5HloijXynfa9wpFbKnpmJOb7kiBeOXCiksmZg>
+    <xmx:FgYSYsBGUud_e5NbzcqOFJZhqnyn7tnPpFL2KM-MMjlMAi9sj7MX6g>
+    <xmx:FwYSYuMKOIy9_e4bhHPfm-QsM2XmTPt4wNZmTbylSEcyxlJ-nb0vVQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 20 Feb 2022 04:12:53 -0500 (EST)
+Date:   Sun, 20 Feb 2022 11:12:50 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 5/5] selftests: forwarding: tests of locked
+ port feature
+Message-ID: <YhIGEvAeNpSDDRKU@shredder>
+References: <20220218155148.2329797-1-schultz.hans+netdev@gmail.com>
+ <20220218155148.2329797-6-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218155148.2329797-6-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,92 +88,277 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 2022-02-19 at 16:00 +0800, David Gow wrote:
-> On Fri, Feb 18, 2022 at 8:26 PM Johannes Berg <johannes@sipsolutions.net> wrote:
-> > 
-> > On Fri, 2022-02-18 at 15:57 +0800, David Gow wrote:
-> > > 
-> > > Note that, while this does build again, it still segfaults on startup,
-> > > so more work remains to be done.
-> > 
-> > That's probably just a lot more stuff getting included somehow?
-> > 
+On Fri, Feb 18, 2022 at 04:51:48PM +0100, Hans Schultz wrote:
+> These tests check that the basic locked port feature works, so that no 'host'
+> can communicate (ping) through a locked port unless the MAC address of the
+> 'host' interface is in the forwarding database of the bridge.
+
+Thanks for adding the test. I assume this was tested with both mv88e6xxx
+and veth?
+
 > 
-> Yeah: it used to work (a couple of years ago), but something has
-> broken it in the meantime. It's just a shame that bisecting things
-> with allyesconfig takes so long...
-
-Heh, right.
-
-But I guess you could "Kconfig bisect" first, i.e. see what option
-breaks it? It might not even help to bisect, if it's just some option
-getting enabled over time. Or perhaps the kernel is just too big for the
-address space layout if you have allyesconfig? Though that shouldn't be
-an issue, I think.
-
-> I didn't realise X86 wasn't defined in UML: 
-
-X86 is the architecture, X86_{32,64} is kind of a selection for how you
-want things to be built, and it's thus required for UML on x86, because
-UML imports stuff from X86.
-
-> that's definitely a bit
-> cleaner than !UML in a number of these cases.
-
-It looks like some (most?) of them don't really work that way though
-since they're not really platform specific, they just know only about a
-handful of platforms that they're compatible with.
-
-> Not all of those issues are fundamentally solved by "depends on X86",
-> though: there are a few which might be other missing things in UML
-> (maybe the 'dma_ops' issues?), and/or might be the result of -Werror
-> being enabled.
-
-Right.
-
-> We do want the ability to build PCI drivers under UML, as it makes
-> running KUnit tests for PCI drivers much simpler and more pleasant.
-
-OK, fair point. I'm thinking about this area in general also right now
-for iwlwifi, and obviously we're probably the only user of the virtual
-PCI code that lets us connect the driver to a simulated device on UML
-(but the driver doesn't really know) :-)
-
-> And indeed, it does work for KUnit in general, it's just that some
-> drivers do have the issues mentioned above, so allyesconfig picks up
-> every broken driver.
-
-Right.
-
-> We don't actually build the PCI drivers by default, only if the
-> "--alltests" option is passed, which does include them, as we do have
-> tests which depend on PCI we'd like to run (like the thunderbolt
-> test).
-
-Makes sense.
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  .../testing/selftests/net/forwarding/Makefile |   1 +
+>  .../net/forwarding/bridge_locked_port.sh      | 174 ++++++++++++++++++
+>  tools/testing/selftests/net/forwarding/lib.sh |  16 ++
+>  3 files changed, 191 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/forwarding/bridge_locked_port.sh
 > 
-> I did try this as well, and it just got us a different set of issues
-> (there are a bunch of drivers which depend on IOMEM but don't state it
-> -- I'll try to send fixes for those out next week). 
+> diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
+> index 72ee644d47bf..8fa97ae9af9e 100644
+> --- a/tools/testing/selftests/net/forwarding/Makefile
+> +++ b/tools/testing/selftests/net/forwarding/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0+ OR MIT
+>  
+>  TEST_PROGS = bridge_igmp.sh \
+> +	bridge_locked_port.sh \
+>  	bridge_port_isolation.sh \
+>  	bridge_sticky_fdb.sh \
+>  	bridge_vlan_aware.sh \
+> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> new file mode 100755
+> index 000000000000..d2805441b325
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> @@ -0,0 +1,174 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+> +NUM_NETIFS=4
+> +CHECK_TC="no"
+> +source lib.sh
+> +
+> +h1_create()
+> +{
+> +	simple_if_init $h1 192.0.2.1/24 2001:db8:1::1/64
+> +	vrf_create "vrf-vlan-h1"
+> +        ip link set dev vrf-vlan-h1 up
+> +        vlan_create $h1 100 vrf-vlan-h1 192.0.3.1/24 2001:db8:3::1/64
+
+In the tests we try to use only addresses specified in RFC 5737. Instead
+of 192.0.3.0/24 I suggest 198.51.100.0/24
+
+> +}
+> +
+> +h1_destroy()
+> +{
+> +	vlan_destroy $h1 100
+> +	simple_if_fini $h1 192.0.2.1/24 2001:db8:1::1/64
+> +}
+> +
+> +h2_create()
+> +{
+> +	simple_if_init $h2 192.0.2.2/24 2001:db8:1::2/64
+> +	vrf_create "vrf-vlan-h2"
+> +	ip link set dev vrf-vlan-h2 up
+> +	vlan_create $h2 100 vrf-vlan-h2 192.0.3.2/24 2001:db8:3::2/64
+> +}
+> +
+> +h2_destroy()
+> +{
+> +	vlan_destroy $h2 100
+> +	simple_if_fini $h2 192.0.2.2/24 2001:db8:1::2/64
+> +}
+> +
+> +switch_create()
+> +{
+> +	ip link add dev br0 type bridge vlan_filtering 1
+> +
+> +	ip link set dev $swp1 master br0
+> +	ip link set dev $swp2 master br0
+> +
+> +	ip link set dev br0 up
+> +	ip link set dev $swp1 up
+> +	ip link set dev $swp2 up
+> +
+> +	bridge link set dev $swp1 learning off
+> +}
+> +
+> +switch_destroy()
+> +{
+> +	ip link set dev $swp2 down
+> +	ip link set dev $swp1 down
+> +
+> +	ip link del dev br0
+> +}
+> +
+> +setup_prepare()
+> +{
+> +	h1=${NETIFS[p1]}
+> +	swp1=${NETIFS[p2]}
+> +
+> +	swp2=${NETIFS[p3]}
+> +	h2=${NETIFS[p4]}
+> +
+> +	vrf_prepare
+> +
+> +	h1_create
+> +	h2_create
+> +
+> +	switch_create
+> +}
+> +
+> +cleanup()
+> +{
+> +	pre_cleanup
+> +
+> +	switch_destroy
+> +
+> +	h2_destroy
+> +	h1_destroy
+> +
+> +	vrf_cleanup
+> +}
+> +
+> +ifaddr()
+
+We already have mac_get()
+
+> +{
+> +	ip -br link show dev "$1" | awk '{ print($3); }'
+> +}
+> +
+> +locked_port_ipv4()
+> +{
+> +	RET=0
+> +
+> +	check_locked_port_support || return 0
+> +
+> +	ping_do $h1 192.0.2.2
+> +	check_err $? "Ping didn't work when it should have"
+
+Better to use unique error messages that pinpoint the problem:
+
+"Ping did not work before locking port"
+
+> +
+> +	bridge link set dev $swp1 locked on
+> +
+> +	ping_do $h1 192.0.2.2
+> +	check_fail $? "Ping worked when it should not have"
+
+"Ping worked after locking port, but before adding a FDB entry"
+
+> +
+> +	bridge fdb add `ifaddr $h1` dev $swp1 master static
+
+bridge fdb add $(mac_get $h1) dev $swp1 master static
+
+> +
+> +	ping_do $h1 192.0.2.2
+> +	check_err $? "Ping didn't work when it should have"
+
+"Ping did not work after locking port and adding a FDB entry"
+
+> +
+> +	bridge link set dev $swp1 locked off
+> +	bridge fdb del `ifaddr $h1` dev $swp1 master static
+
+I suggest to add another test case here to see that ping works after
+unlocking the port and removing the FDB entry
+
+Same comments on the other test cases
+
+> +	log_test "Locked port ipv4"
+> +}
+> +
+> +locked_port_vlan()
+> +{
+> +	RET=0
+> +
+> +	check_locked_port_support || return 0
+> +	check_vlan_filtering_support || return 0
+
+Why this check is needed? The bridge was already created with
+"vlan_filtering 1"
+
+> +
+> +	bridge vlan add vid 100 dev $swp1 tagged
+
+Not familiar with "tagged" keyword. I believe iproute2 ignores it.
+Please drop it
+
+> +	bridge vlan add vid 100 dev $swp2 tagged
+> +
+> +	ping_do $h1.100 192.0.3.2
+> +	check_err $? "Ping didn't work when it should have"
+> +
+> +	bridge link set dev $swp1 locked on
+> +	ping_do $h1.100 192.0.3.2
+> +	check_fail $? "Ping worked when it should not have"
+> +
+> +	bridge fdb add `ifaddr $h1` dev $swp1 vlan 100 master static
+> +
+> +	ping_do $h1.100 192.0.3.2
+> +	check_err $? "Ping didn't work when it should have"
+> +
+> +	bridge link set dev $swp1 locked off
+> +	bridge vlan del vid 100 dev $swp1
+> +	bridge vlan del vid 100 dev $swp2
+> +	bridge fdb del `ifaddr $h1` dev $swp1 vlan 100 master static
+> +	log_test "Locked port vlan"
+> +}
+> +
+> +locked_port_ipv6()
+> +{
+> +	RET=0
+> +	check_locked_port_support || return 0
+> +
+> +	ping6_do $h1 2001:db8:1::2
+> +	check_err $? "Ping6 didn't work when it should have"
+> +
+> +	bridge link set dev $swp1 locked on
+> +
+> +	ping6_do $h1 2001:db8:1::2
+> +	check_fail $? "Ping worked when it should not have"
+> +
+> +	bridge fdb add `ifaddr $h1` dev $swp1 master static
+> +	ping6_do $h1 2001:db8:1::2
+> +	check_err $? "Ping didn't work when it should have"
+> +
+> +	bridge link set dev $swp1 locked off
+> +	bridge fdb del `ifaddr $h1` dev $swp1 master static
+> +	log_test "Locked port ipv6"
+> +}
+> +
+> +trap cleanup EXIT
+> +
+> +setup_prepare
+> +setup_wait
+> +
+> +tests_run
+> +
+> +exit $EXIT_STATUS
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> index 7da783d6f453..9ded90f17ead 100644
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -125,6 +125,22 @@ check_ethtool_lanes_support()
+>  	fi
+>  }
+>  
+> +check_locked_port_support()
+> +{
+> +        if ! bridge -d link show | grep -q " locked"; then
+> +                echo "SKIP: iproute2 too old; Locked port feature not supported."
+> +                return $ksft_skip
+> +        fi
+> +}
+> +
+> +check_vlan_filtering_support()
+> +{
+> +	if ! bridge -d vlan show | grep -q "state forwarding"; then
+> +		echo "SKIP: vlan filtering not supported."
+> +		return $ksft_skip
+> +	fi
+> +}
+> +
+>  if [[ "$(id -u)" -ne 0 ]]; then
+>  	echo "SKIP: need root privileges"
+>  	exit $ksft_skip
+> -- 
+> 2.30.2
 > 
-
-Fun.
-
-> Ultimately, the 'broken_on_uml.config' file is just there to pare back
-> allyesconfig a bit for KUnit's purposes, but we still definitely want
-> as many options (and hence tests) enabled as possible long-term. So I
-> think actual fixes to either the code or Kconfig do make sense.
-
-Makes sense.
-
-> Is 'make ARCH=um allyesconfig' something we actually want to be able
-> to build? If so, no amount of adding things to KUnit's
-> broken_on_uml.config will solve the underlying issues, and we'll need
-> to at least update the Kconfig entries.
-> 
-
-That's a good point, as long as people are doing allyes/randconfig
-builds on UML, we probably need to have these fixes anyway rather than
-disabling something for KUnit specifically.
-
-johannes
