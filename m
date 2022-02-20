@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008374BCDDC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Feb 2022 11:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485204BCE5E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Feb 2022 13:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiBTJyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 20 Feb 2022 04:54:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58974 "EHLO
+        id S236549AbiBTMJW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 20 Feb 2022 07:09:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiBTJyw (ORCPT
+        with ESMTP id S229509AbiBTMJV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 20 Feb 2022 04:54:52 -0500
+        Sun, 20 Feb 2022 07:09:21 -0500
 Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECEB43ED6;
-        Sun, 20 Feb 2022 01:54:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D7427CE;
+        Sun, 20 Feb 2022 04:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645350869;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645358938;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=CI7aPjbCMIJBhrg99NXNcQ0AYlHUSTFnv/QzuHedZCo=;
-        b=NJ1QMRCQv8d9BvVKqbUXRZjaFNEhVSqfYdBX9cE5p/Mf1R9i9dfDXUv9f2ZggJNj
-        s/jQOaTH8w5MzFvVlh2EOJ6Qc/Y+s5VgGBMLUw/UkgVVdkBwlwkfrj0BXt/89NOpS4X
-        0tChhej+t1cD99fjzizxcZ9odd7umKQQEs9/aKGE=
+        bh=G8hRDruforIKzwsEyd3c3gZSeQje7/UXc9DJOMk75T4=;
+        b=UQdUqi5NkRJXU2Ip1KXYboKr2TzAfOy62LzteBJZaB6YiFsheRw6ujL9aBFvQ9eg
+        uYOX2NnSk4etvnURKsS8lJJoAlLtEabxJszpRVC3bd5n+tU+9N8LLq0YV89ExaHJMaq
+        3b1IM+P8fuUuygOQs1TSUi/ezfIGJItECgK6ovHo=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645350869;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645358938;
         h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=CI7aPjbCMIJBhrg99NXNcQ0AYlHUSTFnv/QzuHedZCo=;
-        b=RCGoW1NCh+pG4oHMD4dX6Cd9dD4CdLIgQMw51/cbI2YnZiWBQaaRousW6ZqHSn4c
-        2Sj6sTxp+MUWhV3vJKQuoEkOxxpF7dItDA5lHWIpaMab0mfM2ZEwN3yT3i53iAdE6zc
-        AkyFBJiZGQBRNTXmCcAacTgKhyW2VmseRXQyVU9M=
+        bh=G8hRDruforIKzwsEyd3c3gZSeQje7/UXc9DJOMk75T4=;
+        b=iX/eKVoSG+TA4OU0q0WPiiDwdr4w8MEKMyE+dmG/LXawQXeUBoh3hilrAQl2bYh+
+        +snbeHE+hrMe6QocEk3R7Bsu42yV1MmWSphgXXOXUog2rDHsjR68o2E4oly+mDoGty3
+        Te6sJOFMEO0sbtF9ugl3f+mdayNaQi/07JalWs3o=
 From:   lkft@linaro.org
 To:     lkft@linaro.org
 Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
         linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220202
+Subject: [REGRESSION] lkft kselftest for next-20220203
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <0100017f168dd90e-8efa765d-3d26-4762-8ff1-f8feef2453e2-000000@email.amazonses.com>
-Date:   Sun, 20 Feb 2022 09:54:29 +0000
+Message-ID: <0100017f1708f8b7-35d5c7a4-9e80-47bf-8fe8-4260155cb63d-000000@email.amazonses.com>
+Date:   Sun, 20 Feb 2022 12:08:58 +0000
 Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
 X-SES-Outgoing: 2022.02.20-54.240.8.29
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,18 +56,21 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 * kernel: 5.17.0-rc2
 * git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
 * git branch: master
-* git commit: 6abab1b81b657ca74b7c443e832d95c87901e75b
-* git describe: next-20220202
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220202
+* git commit: 2d3d8c7643a56bfe2e808f97d5a4360d49f3b45b
+* git describe: next-20220203
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220203
 
 ## Test Regressions (compared to next-20220124)
+* hi6220-hikey, kselftest-timers
+  - timers.set-timer-lat
+
 * i386, kselftest-seccomp
   - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
   - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
   - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
 * juno-r2, kselftest-net
-  - net.tls.tls.13_sm4_ccm.recv_lowat
+  - net.tls.tls.12_aes_gcm.shutdown_reuse
 
 * juno-r2, kselftest-seccomp
   - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
@@ -96,6 +99,9 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
   - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
+* x86, kselftest-net
+  - net.gro.sh
+
 * x86, kselftest-seccomp
   - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
   - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
@@ -109,6 +115,9 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
 ## Test Fixes (compared to next-20220124)
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
 * i386, kselftest-rtc
   - rtc.rtctest
 
@@ -119,9 +128,6 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 * juno-r2, kselftest-cpufreq
   - cpufreq.main.sh
 
-* juno-r2, kselftest-lkdtm
-  - lkdtm.ARRAY_BOUNDS.sh
-
 * juno-r2, kselftest-mincore
   - mincore.mincore_selftest
 
@@ -130,9 +136,6 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 * qemu_arm, kselftest-rtc
   - rtc.rtctest
-
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
 
 * qemu_i386, kselftest-cpufreq
   - cpufreq.main.sh
@@ -162,6 +165,9 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
   - rtc.rtctest.rtc.alarm_wkalm_set_minute
   - rtc.rtctest.rtc.date_read
 
+* x15, kselftest-sync
+  - sync.sync_test
+
 * x86, kselftest-lkdtm
   - lkdtm.ARRAY_BOUNDS.sh
 
@@ -173,12 +179,25 @@ Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 No metric fixes found.
 
 ## Test result summary
-total: 4318, pass: 2787, fail: 524, skip: 1007, xfail: 0
+total: 5110, pass: 3395, fail: 609, skip: 1106, xfail: 0
 
 ## Build Summary
 
 ## Test suites summary
 * kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
 * kselftest-bpf
 * kselftest-breakpoints
 * kselftest-capabilities
