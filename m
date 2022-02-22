@@ -2,107 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6416C4BF7CC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Feb 2022 13:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302274BF7EA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Feb 2022 13:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbiBVMIH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Feb 2022 07:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S231902AbiBVMKL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Feb 2022 07:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiBVMIE (ORCPT
+        with ESMTP id S231892AbiBVMKL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:08:04 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF509E57F;
-        Tue, 22 Feb 2022 04:07:38 -0800 (PST)
-Received: from localhost.localdomain (ip5f5aebb8.dynamic.kabel-deutschland.de [95.90.235.184])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 22 Feb 2022 07:10:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06815A204
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Feb 2022 04:09:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2A94A61E64846;
-        Tue, 22 Feb 2022 13:07:37 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] torture: Make thread detection more robust by using lspcu
-Date:   Tue, 22 Feb 2022 13:07:17 +0100
-Message-Id: <20220222120718.17141-2-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220222120718.17141-1-pmenzel@molgen.mpg.de>
-References: <20220222120718.17141-1-pmenzel@molgen.mpg.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7F5CB8198B
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Feb 2022 12:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39F0C340E8;
+        Tue, 22 Feb 2022 12:09:40 +0000 (UTC)
+Date:   Tue, 22 Feb 2022 12:09:37 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v11 10/40] arm64/sme: Basic enumeration support
+Message-ID: <YhTSgWRfEcn7ZVg1@arm.com>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-11-broonie@kernel.org>
+ <YhOihgeVRTztfDqv@arm.com>
+ <YhOpL54V9RAthj24@sirena.org.uk>
+ <YhPnCx+Rajjverjc@arm.com>
+ <YhQb6r0mVSYDHowo@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhQb6r0mVSYDHowo@sirena.org.uk>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For consecutive numbers *lscpu* collapses the output and just shows the
-range with start and end. The processors are numbered that way on POWER8.
+On Mon, Feb 21, 2022 at 11:10:34PM +0000, Mark Brown wrote:
+> On Mon, Feb 21, 2022 at 07:24:59PM +0000, Catalin Marinas wrote:
+> > On Mon, Feb 21, 2022 at 03:01:03PM +0000, Mark Brown wrote:
+> > > We do run the kernel in streaming mode - entering the kernel through a
+> > > syscall or preemption will not change the streaming mode state, and we
+> > > need to be in streaming mode in order to save or restore the register
+> > > state for streaming mode.  In particular we need FA64 enabled for EL1 in
+> > > order to context switch FFR when in streaming mode, without it we'll
+> > > generate an exception when we execute the rdffr or wrffr.  We don't do
+> > > any real floating point work in streaming mode but we absolutely need to
+> > > run in streaming mode and only exit streaming mode when restoring a
+> > > context where it is disabled, when using floating point in the kernel or
+> > > when idling the CPU.
+> 
+> > So, IIUC, for Linux it is mandatory that FEAT_SME_FA64 is supported,
+> > otherwise we won't be able to enable SME. Does the architecture say
+> 
+> The feature is not mandatory and we do not require it for Linux.  It is
+> expected that many implementations will choose to not support FA64.
+> 
+> The only impact it has on the kernel is that if it's present then we
+> need to enable it for each EL and then context switch FFR in streaming
+> mode, the code is there to do that conditionally already.
 
-    $ sudo ppc64_cpu --smt=8
-    $ lscpu | grep '^NUMA node'
-    NUMA node(s):                    2
-    NUMA node0 CPU(s):               0-79
-    NUMA node8 CPU(s):               80-159
+OK, I get it. So FFR is only present if FA64 is supported.
 
-This causes the heuristic to detect the number threads per core, looking
-for the number after the first comma, to fail, and QEMU aborts because of
-invalid arguments.
+> This is actually a bit awkward for not disabling streaming mode when we
+> do a syscall since the disabled instructions include the FPSMID mov
+> vector, vector instruction which we currently use to zero the high bits
+> of the Z registers.  That issue goes away if the optimisations I've got
+> for relaxed flushing of the non-shared SVE state that we discussed in
+> relation to syscall-abi get merged, though it'd still be there if we add
+> a sysctl to force flushing.  This is a solvable problem though, even if
+> we have to use a less efficient sequence to flush in streaming mode.
 
-    $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
-    $
+I guess the simplest is to just disable streaming mode on syscall. The C
+library would mark the syscall wrappers as not streaming compatible, so
+whoever is calling them might disable SM anyway.
 
-(Before the last patch, the whole line was returned.)
+So I think your original proposal in the ABI doc is fine (I just need
+the libc people to confirm ;)).
 
-    $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
-    NUMA node0 CPU(s):               0-79
-
-*lscpu* shows the number of threads per core, so use that value directly.
-
-    $ sudo ppc64_cpu --smt=8
-    $ lscpu | grep 'Thread(s) per core'
-    Thread(s) per core:              8
-    $ sudo ppc64_cpu --smt=off
-    $ lscpu | grep 'Thread(s) per core'
-    Thread(s) per core:              1
-
-Note, the replaced heuristic is also incorrect for that case, where the
-threads per core are disabled.
-
-    $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
-    8
-
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
- tools/testing/selftests/rcutorture/bin/functions.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-index 5cff520955e6..66d0414d8e4b 100644
---- a/tools/testing/selftests/rcutorture/bin/functions.sh
-+++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-@@ -301,7 +301,7 @@ specify_qemu_cpus () {
- 			echo $2 -smp $3
- 			;;
- 		qemu-system-ppc64)
--			nt="`lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'`"
-+			nt="`lscpu | sed -n 's/^Thread(s) per core:\s*//p'`"
- 			echo $2 -smp cores=`expr \( $3 + $nt - 1 \) / $nt`,threads=$nt
- 			;;
- 		esac
 -- 
-2.35.1
-
+Catalin
