@@ -2,105 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67224BF9A4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Feb 2022 14:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91414BFF85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Feb 2022 18:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiBVNnC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Feb 2022 08:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S232893AbiBVRBT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Feb 2022 12:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiBVNnB (ORCPT
+        with ESMTP id S231290AbiBVRBS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:43:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82738119843
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Feb 2022 05:42:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B5BB0CE1285
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Feb 2022 13:42:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10505C340E8;
-        Tue, 22 Feb 2022 13:42:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645537353;
-        bh=Dgt4Njyb87/1m9sSS9cByUyH93W7hgmQZXT2bQcvLbM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FS2HTkxtW64sxuVW8n0wSjhFlnRTJuMQnIZ8Xql1lrAR2ox/DacMZ9PAdsJk6UWK/
-         mu+lY9POXbUOs0c2AHa+OGNgqOtv+kg9mpdjVN3o56QsCE8yey3T6RwZOLC+uJnAYn
-         E5l5gg+GY4HB9yJg74dQ1KkkL00YZaQid3Lj1x7SSfNKlW5Oq30olisneiH6HghyJl
-         tgkN+zOyCjmG8tw7x6KTV7YQSGw6NLul3xsoE+xyTYTzQnpAE0Sl59MMFaYKX1VDT0
-         K3MLAy35yo2hAhq3M0LaJkWHiJ9nfqMM7pGsbSBMCeiQphDm/8HWb0tstH8e8u5vTp
-         5JdcGAvVtr6ag==
-Date:   Tue, 22 Feb 2022 13:42:26 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        Tue, 22 Feb 2022 12:01:18 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E8E16E7CB;
+        Tue, 22 Feb 2022 09:00:51 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 797D65803B7;
+        Tue, 22 Feb 2022 12:00:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 22 Feb 2022 12:00:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=HtCItNyhGVUgQ9zYx
+        8y8HwkSSNP7qG6erjhX3gp1Vas=; b=GtZc3a+Qfwr7g0xbB/r/BXPgspmACWS5G
+        0OGqRVvN6z11OqHVovHGRWCIY+6qwMtxF85hTXbUfkCrF+fnjHoeZnPCv0XXOJla
+        0JkgBu9WCWEnKJottlEKs/Q4JTZdyLmnRmhTbDr+/rVr0IPN2yxgwBw/wMgTVpG8
+        C9DoX4S/LL3KjKX65DZDCRznCURUQokspAfI6u2Fi3Fx8wU6QTNyq8N5GoT7nieO
+        Yhhv/C7ifwD/9umjdWpzeNwMitCll2oBCOj6sJ8t/mdGGx5OHFJ+xV/TdaC/1R0N
+        6AUjtVDxl/Y72YPEjJVL0il7EKgeRDlxX1hKjl3laKNHeOagby5aA==
+X-ME-Sender: <xms:wRYVYiV488PJ8dsyWXC2-qZX4Ec6K41Dsf4gR_5L-9d82sciAItPsQ>
+    <xme:wRYVYumBrUxVr8yJp28gXjHjH6idO1Ji3PhD6ODs9V4bVAf8CwKGf-myJP2AHBedc
+    jQyhpQuubrzuUs>
+X-ME-Received: <xmr:wRYVYmb-w1BGYM1gutgPONq5dR0QQG6p26CwXhoUD4DKQDnERE5vPOkh4d_7pU4ztW3VGAKMjf_r8oAuyqgkzbGcag0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeekgdelfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
+    hstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:whYVYpVh7rh-btnjQECit2ixdjjH1xEQgpb0OQe732sLUJXzafy88w>
+    <xmx:whYVYskuy1ClagUaAi7TsEOtjRvTRcRyXCCXBfOPZhK_9PsMx-ELbw>
+    <xmx:whYVYucdvuL-RBwSfTBPxtNiwaIxsdnMxtpGFdKjt1-cJflnmCUyjw>
+    <xmx:whYVYqpPNokjYGIilBHrkHosAHqdWOFV-0p14_H7TjNh5i0VZ3gNjw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Feb 2022 12:00:48 -0500 (EST)
+Date:   Tue, 22 Feb 2022 19:00:46 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
         Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 16/40] arm64/sme: Implement streaming SVE context
- switching
-Message-ID: <YhToQuAqnbg3FXDI@sirena.org.uk>
-References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-17-broonie@kernel.org>
- <YhTct2Cy1fMOsjuZ@arm.com>
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 5/5] selftests: forwarding: tests of locked
+ port feature
+Message-ID: <YhUWvhkhRVY+/Osd@shredder>
+References: <20220222132818.1180786-1-schultz.hans+netdev@gmail.com>
+ <20220222132818.1180786-6-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HCJoz7wijUUjw35T"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhTct2Cy1fMOsjuZ@arm.com>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220222132818.1180786-6-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Feb 22, 2022 at 02:28:18PM +0100, Hans Schultz wrote:
+> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> new file mode 100755
+> index 000000000000..a8800e531d07
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> @@ -0,0 +1,180 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+> +NUM_NETIFS=4
+> +CHECK_TC="no"
+> +source lib.sh
+> +
+> +h1_create()
+> +{
+> +	simple_if_init $h1 192.0.2.1/24 2001:db8:1::1/64
+> +	vrf_create "vrf-vlan-h1"
+> +	ip link set dev vrf-vlan-h1 up
+> +	vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24 ::ffff:c633:6401/64
 
---HCJoz7wijUUjw35T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi,
 
-On Tue, Feb 22, 2022 at 12:53:11PM +0000, Catalin Marinas wrote:
+Why did you change it from 2001:db8:3::1/64 to ::ffff:c633:6401/64? It
+was actually OK the first time...
 
-> I think I get this but a state diagram somewhere would help ;).
+Anyway, looking at locked_port_vlan() I see that you are only testing
+IPv4 so you can just drop this address:
 
-> IIUC you don't disable SM on a context switch, you just leave it in
-> place until a task_fpsimd_load(). It shouldn't be a problem as
-> kernel_neon_begin() disables it anyway.
+vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24
 
-Yes, streaming mode is part of the floating point state and this is how
-we handle floating point in general - it's part of what's tracked with
-TIF_FOREIGN_FPSTATE.  Unless we want to do something with floating point
-we don't touch it.
+Same for $h2
 
---HCJoz7wijUUjw35T
-Content-Type: application/pgp-signature; name="signature.asc"
+LGTM otherwise. Feel free to add my tag to the next version
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIU6EIACgkQJNaLcl1U
-h9AQKwf+NQfS1WFJTmF/zyR2Ew84K70XTrrLzPlgOF24CCCSuihIA3ZF22mUWYB4
-W3snzj3yvOJioOrceWBR/rcSXdLqQy/KDO9CUbWAkShtfo4uukYgS9pivUZAEm8m
-f+tJg3ktwvR7iO/wrYW65kfYAlwxSdzjXbUBFb8BkcwVjiezVOWVR1cZp8WV47DC
-pIztOPzukFtV1lwiwZw6/p9M0qhsrXooLGBXcDw99t5WWWyfSF0sXREO8V1C0Tx5
-zWULO6hCfSr9uK9T19lMG/FXDSnrV+3A0QuWZY2qMJiub1mgKJH/ofRKCNHnnJSR
-70fYhIlRd5nXUGingt6IIJaIp/tQbw==
-=JTyO
------END PGP SIGNATURE-----
-
---HCJoz7wijUUjw35T--
+> +}
