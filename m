@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD7F4C16DD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Feb 2022 16:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F684C16E5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Feb 2022 16:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbiBWPdd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Feb 2022 10:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
+        id S233126AbiBWPfG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Feb 2022 10:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242095AbiBWPdc (ORCPT
+        with ESMTP id S236344AbiBWPfG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:33:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C193B82FC
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 07:33:05 -0800 (PST)
+        Wed, 23 Feb 2022 10:35:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B07FB91DF
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 07:34:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD32BB81981
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 15:33:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34F8C340EB;
-        Wed, 23 Feb 2022 15:32:59 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 15:32:56 +0000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBF0F6182C
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 15:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680A6C340E7;
+        Wed, 23 Feb 2022 15:34:34 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 15:34:31 +0000
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -38,15 +38,14 @@ Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 26/40] KVM: arm64: Hide SME system registers from
- guests
-Message-ID: <YhZTqKu8yb4iwBYK@arm.com>
+Subject: Re: [PATCH v11 27/40] KVM: arm64: Trap SME usage in guest
+Message-ID: <YhZUB04SK3kZ08uz@arm.com>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-27-broonie@kernel.org>
+ <20220207152109.197566-28-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207152109.197566-27-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-28-broonie@kernel.org>
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -56,13 +55,21 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:20:55PM +0000, Mark Brown wrote:
-> For the time being we do not support use of SME by KVM guests, support for
-> this will be enabled in future. In order to prevent any side effects or
-> side channels via the new system registers, including the EL0 read/write
-> register TPIDR2, explicitly undefine all the system registers added by
-> SME and mask out the SME bitfield in SYS_ID_AA64PFR1.
+On Mon, Feb 07, 2022 at 03:20:56PM +0000, Mark Brown wrote:
+> SME defines two new traps which need to be enabled for guests to ensure
+> that they can't use SME, one for the main SME operations which mirrors the
+> traps for SVE and another for access to TPIDR2 in SCTLR_EL2.
+> 
+> For VHE manage SMEN along with ZEN in activate_traps() and the FP state
+> management callbacks, along with SCTLR_EL2.EnTPIDR2.  There is no
+> existing dynamic management of SCTLR_EL2.
+> 
+> For nVHE manage TSM in activate_traps() along with the fine grained
+> traps for TPIDR2 and SMPRI.  There is no existing dynamic management of
+> fine grained traps.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
+
+This looks alright to me but I'm not a kvm expert. FWIW:
 
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
