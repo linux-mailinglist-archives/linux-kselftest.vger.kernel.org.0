@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FBD4C16B7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Feb 2022 16:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C786C4C16C9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Feb 2022 16:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240772AbiBWP17 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Feb 2022 10:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S232535AbiBWP3R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Feb 2022 10:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiBWP17 (ORCPT
+        with ESMTP id S242071AbiBWP3Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:27:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991E4583B3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 07:27:31 -0800 (PST)
+        Wed, 23 Feb 2022 10:29:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D72657AB
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 07:28:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31119617E4
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 15:27:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22BEC340E7;
-        Wed, 23 Feb 2022 15:27:27 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 15:27:24 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id E75B3B82077
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 15:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B21BC340E7;
+        Wed, 23 Feb 2022 15:28:39 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 15:28:35 +0000
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -38,14 +38,15 @@ Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 23/40] arm64/sme: Add ptrace support for ZA
-Message-ID: <YhZSXEAXvPaHbxwb@arm.com>
+Subject: Re: [PATCH v11 24/40] arm64/sme: Disable streaming mode and ZA when
+ flushing CPU state
+Message-ID: <YhZSo32WuURnQslQ@arm.com>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-24-broonie@kernel.org>
+ <20220207152109.197566-25-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207152109.197566-24-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-25-broonie@kernel.org>
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -55,22 +56,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:20:52PM +0000, Mark Brown wrote:
-> The ZA array can be read and written with the NT_ARM_ZA.  Similarly to
-> our interface for the SVE vector registers the regset consists of a
-> header with information on the current vector length followed by an
-> optional register data payload, represented as for signals as a series
-> of horizontal vectors from 0 to VL/8 in the endianness independent
-> format used for vectors.
-> 
-> On get if ZA is enabled then register data will be provided, otherwise
-> it will be omitted.  On set if register data is provided then ZA is
-> enabled and initialized using the provided data, otherwise it is
-> disabled.
+On Mon, Feb 07, 2022 at 03:20:53PM +0000, Mark Brown wrote:
+> Both streaming mode and ZA may increase power consumption when they are
+> enabled and streaming mode makes many FPSIMD and SVE instructions undefined
+> which will cause problems for any kernel mode floating point so disable
+> both when we flush the CPU state. This covers both kernel_neon_begin() and
+> idle and after flushing the state a reload is always required anyway.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
-
-The patch looks fine to be but I'd like Luis to look at the ptrace ABI
-in this series.
 
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
