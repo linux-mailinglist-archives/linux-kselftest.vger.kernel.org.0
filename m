@@ -2,51 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C96E4C1B55
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Feb 2022 20:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457A64C1BF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Feb 2022 20:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244091AbiBWTEK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Feb 2022 14:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S244281AbiBWTQd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Feb 2022 14:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiBWTEK (ORCPT
+        with ESMTP id S244305AbiBWTQ0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:04:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEADB1D0CC;
-        Wed, 23 Feb 2022 11:03:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 719C26168F;
-        Wed, 23 Feb 2022 19:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4438C340E7;
-        Wed, 23 Feb 2022 19:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645643020;
-        bh=Lo+rvEWRJNqoSEUkIFmf7EbqThnTEYWUSXqpONBnfkc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=P2J6UGlEdQEAMWrh38f2++8ZXhJUUBsbLZ3ieMVLOE76r/jzNrMgZoMcSsWh++IG8
-         Sfdbnqc3BJkmntD5WZkncAV9jtgkuKsvb0suXaRknEEBCDVDRgLO79wLNjJ8X1DMxe
-         Pw8W2pPar7UBsCnprKZIfkZVOrhrEOe28H2FXSOKuiTRrBMqxE2phWtVMzV/tKWcR2
-         V3+saGq3v9Kd4f8H2sdWQF8umx8vOB7wRIrhBz0P1mN7jLMlLn8PoBqbMpMFher9s6
-         7XqKSBYU6C4k9lG/ogBe6/XOTtBBwiPlpnwMcfIC/RHyXkyYRYgpw/E6mizs414R9T
-         REiFpSxFgQJow==
-From:   SeongJae Park <sj@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
-        xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/12] mm/damon: Implement a minimal stub for sysfs-based DAMON interface
-Date:   Wed, 23 Feb 2022 19:03:37 +0000
-Message-Id: <20220223190337.1705-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YhZ9+xsQ2zNmTdjD@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 23 Feb 2022 14:16:26 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12DB4198F;
+        Wed, 23 Feb 2022 11:15:57 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id B9D781F44BA3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645643756;
+        bh=x4JSiCOPtHsEXvsPXBpm2AoOrkiPe4lh9yMOQ/SteAw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CWCww7KqR8hxR5Wnu42ftHnZyk8bwfNctTtGtF+/5zFtTCQqgYP54C/4vYbayXpSl
+         AjQsJ2OieDO1SXF/fsIgBnOaufeKla0AsZeh9WCbLD5pmxTnthifosiqev843rTsWU
+         KOHA/7qXo/OLo/k3631gwv+jZ7gBVABv/QXg+OibsrBt46Ah3aBOPv9FRj1T4LkwDM
+         /Gti9b2RmEWomGRkvsRsZoe+dm5zqPENEaiHSmIRDg+9pL0eAkxRuCuich/WUUohsB
+         JJc+AKYX+FWPezodQUGiQFIo3/TWgE3RH1zlfflPlo44oJTq3Nt9WNbVyTkY0YmJMe
+         s+PI+w5xp++lA==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernelci@groups.io, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, keescook@chromium.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Makefile: Fix separate output directory build of kselftests
+Date:   Thu, 24 Feb 2022 00:10:15 +0500
+Message-Id: <20220223191016.1658728-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,53 +52,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 23 Feb 2022 19:33:31 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
+Build of kselftests fail if kernel's top most Makefile is used for
+running or building kselftests with separate output directory. The
+absolute path is needed to reference other files during this kind of
+build. Set KBUILD_ABS_SRCTREE to use absolute path during the build. It
+fixes the following different types of errors:
 
-> On Wed, Feb 23, 2022 at 05:13:41PM +0000, SeongJae Park wrote:
-> > On Wed, 23 Feb 2022 16:45:13 +0000 SeongJae Park <sj@kernel.org> wrote:
-> > 
-> > > On Wed, 23 Feb 2022 17:09:38 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > > On Wed, Feb 23, 2022 at 03:20:42PM +0000, SeongJae Park wrote:
-> > > > > +static struct kobj_attribute damon_sysfs_ul_range_min_attr =
-> > > > > +		__ATTR(min, 0600, damon_sysfs_ul_range_min_show,
-> > > > > +				damon_sysfs_ul_range_min_store);
-> > > > > +
-> > > > > +static struct kobj_attribute damon_sysfs_ul_range_max_attr =
-> > > > > +		__ATTR(max, 0600, damon_sysfs_ul_range_max_show,
-> > > > > +				damon_sysfs_ul_range_max_store);
-> > > > 
-> > > > Can you use __ATTR_RW_MODE() instead here and elsewhere?
-> > > 
-> > > Sure, I will, in the next revision.
-> > 
-> > After thinking once more, I realized that it might not so simple.  First of
-> > all, there are two files having same name in different directories
-> > (kdamonds/<N>/pid and targets/<N>/pid).  The files work differently, so I need
-> > to use different _show/_store callbacks for them but __ATTR_RW_MODE() wouldn't
-> > support the case.
-> 
-> The reason I recommend using these macros is to prevent you from having
-> sysfs files with the same name, yet doing different things in different
-> places in the sysfs tree :)
+make kselftest-all O=/linux_mainline/build
+Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
 
-Thank you for clarifying!  Maybe I was making the hierarchy unnecessarily deep
-and thus naming files too short and/or common, which could confuses relative
-paths users.
+make kselftest-all O=build
+Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
 
-> 
-> > Secondly, I'd like to keep the file names short because the meaning of the
-> > files can easily inferred from the hierarchy, but want to keep the _show/_store
-> > callback names to have prefixes that allows us easily know their meaning and
-> > usage even though it makes the name a little bit longer because I don't want to
-> > have too much source files for DAMON sysfs interface.
-> > 
-> > Am I missing some of your point?
-> 
-> How about renaming one of the files?
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+I've tested this patch on top of next-20220217. The latest next-20220222
+have missing patches.
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thank you for the suggestion, will do so.
+diff --git a/Makefile b/Makefile
+index 86f633c2809ea..62b3eb8a102ab 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1411,10 +1411,10 @@ tools/%: FORCE
+ 
+ PHONY += kselftest
+ kselftest:
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
++	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests KBUILD_ABS_SRCTREE=1 run_tests
+ 
+ kselftest-%: FORCE
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
++	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests KBUILD_ABS_SRCTREE=1 $*
+ 
+ PHONY += kselftest-merge
+ kselftest-merge:
+-- 
+2.30.2
 
-
-Thanks,
-SJ
