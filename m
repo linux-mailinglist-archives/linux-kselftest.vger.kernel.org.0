@@ -2,57 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FFB4C240C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 07:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950934C240E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 07:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiBXG1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Feb 2022 01:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S231280AbiBXG1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Feb 2022 01:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiBXG1L (ORCPT
+        with ESMTP id S231279AbiBXG1N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:27:11 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521AE1F4
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:37 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id v21so1357175wrv.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:37 -0800 (PST)
+        Thu, 24 Feb 2022 01:27:13 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2800C25CC
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:43 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id j17so1417663wrc.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ahYwT4mm84FdbgU5PjcKSNY5SL7RiEDiobXuty9qv5M=;
-        b=P7az79LqnpumJHMULemau+GDpj01FStQ0TYf503kdD3n3wy15ZiriYFKgWOcKLNrHp
-         u7pAzCMMbCHCgWHarH41oFwJNJ1SvWFr2Cj1pSiQ32DsaEsernxtKjPikLZj6cPh4UHU
-         /sf/YI/dN0txO1mGahvFO08nW/xo3k38yUNr2+yVqCsLjLDcPz4BJoocko2feEngbNv7
-         UwIlX3p2ma71XH82dfBNfaxEZvLZvVdrpyULpYsDQTinmNQFl7zz/SAo0LlnFyrAvBqo
-         x/s+UuubOMVLG9sT7beJVQMfZgDTKnnzfEdnjmtlcjS4lwLfK/2XAAb2FwL2Ce2KI3Od
-         fjXA==
+        bh=D50ZR/WdGoZqxTELDMt4mSXfS93JdtQW34WfX/73k0s=;
+        b=ZsFFEvJxk1rCBaAYs9YiGkKAiLXpMEirxeBFcGOpRlZGNNfcDHZvc0Vjt5DdkjZOSm
+         KQcZhfEK0eNvhz7KZzsDygtLLhX+MbWpYdGCtfgkPj5aKb+yphEV6IEokFeEmk3rkVrU
+         jAB3LvpQaPNzV+R0GxXNEy5+Ueim1wSDFsI39XPvb3HTUEINAqRgS2Zz4Lr01YNZvji0
+         Ub7Gsey5RgKdsk4GrKGKS6P/tEc6ZRu6eVC7EcIvnnjOfCRyPJbHK5vEvgog633eMPX+
+         XfzCiC2ynQwYzk/ZXXQUSHWb+EIjgawCQ/SM2cAQnxKKKUIVE0m3AlPlLJRanr0cp3Gl
+         Sh5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ahYwT4mm84FdbgU5PjcKSNY5SL7RiEDiobXuty9qv5M=;
-        b=Vjfg2yy7Cg5Po/J7GqGlzdXZJJ2u3DAQhIo8Nwu4IfSNRj1pNzlOFMK5et1ncJg/3r
-         YLvX7R/nabQbVgjyUYSqarw9/lYgKaA0/mCLyCwIeF7SdPLS4qOcXd/s6lxc5wvsXiDQ
-         XfamFAWzeQj/VmxHxXr105Tc4YXVFvwHBkTdxXfV7mszHeF0EOVr06j29BjWacLf5hrE
-         B88va66bDRn0Mh0J+DKp7uWUflB1UfZXkckj6CapsJ3yOAGoWGlj54tIGo5jwgOgo+hw
-         QWihz6JZwlgPARGRTWRXNrfARChEZotMzYWR+sPrdpF9wbkE8aegxnO+cSZRBmo+phdf
-         /Maw==
-X-Gm-Message-State: AOAM533Py6bjxhjNXD968h5vqXTj6RmZX5f2flylypA1zHL8oyz7j6yh
-        p4ApPzgIXc6UEnLhrttAdOcW/wXB4K8d4le/29Aaag==
-X-Google-Smtp-Source: ABdhPJx8cWhVzCl6i8kzQmCwJwI+TUxurybcXqvocYLCA0R68XtTuKh+U6FYz9JJxUNLAKJ5dKa/m71dt7MOw7NHgC8=
-X-Received: by 2002:adf:a486:0:b0:1ed:9cfe:179d with SMTP id
- g6-20020adfa486000000b001ed9cfe179dmr956088wrb.113.1645683995698; Wed, 23 Feb
- 2022 22:26:35 -0800 (PST)
+        bh=D50ZR/WdGoZqxTELDMt4mSXfS93JdtQW34WfX/73k0s=;
+        b=0ejtbgPuY1g6ppgpKq1q0xzSdsnBLyREDZBYBVBvkcWk5x9GzHXNhvu6UzvYHxuO6K
+         d5SNVqZVctVI52MMP0jwYqxWfZCiOetLQdEsTBjzv0B3VXHqQ2QmOmzKpK0BIOQUs3Vc
+         WFVlV0jpCXMwySsIa6B2DtxNj4jR0XDEmRRooKqpJepa72LFp/+5au8cp8/1PxVOCLSa
+         YKpXNjdrzuIORqL9RJkP0r8lpQs4sBV1bjHe68JQVJIIIgHIx1sD8FJCs03cK+9uuCEI
+         uZzRtuVq6cXC0tqP0k/8EU5v7L6VuQQ/y1h4BqLNLWhTMZ4JM/g99FtY7uXj8LSk98sh
+         SWkQ==
+X-Gm-Message-State: AOAM530zC95CIZjpInosSos99GwkiOwvrVTRvVsLjkLZBJfz6H/XxGOc
+        h+H12NCrnxydj/MDGCpB3b6map6rn4Yg98gSU/tyjg==
+X-Google-Smtp-Source: ABdhPJzC8Giz2wiCWShDAJ3Q4xF084oOC/NH4Ybaxg6U2Vn5atxKRheJ88JSsPMrTFOZ/Dmsm4Xbb6HfJs27r68ZDOM=
+X-Received: by 2002:a05:6000:186d:b0:1e8:49fc:69ce with SMTP id
+ d13-20020a056000186d00b001e849fc69cemr947417wri.80.1645684001411; Wed, 23 Feb
+ 2022 22:26:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220217205227.4098452-1-dlatypov@google.com>
-In-Reply-To: <20220217205227.4098452-1-dlatypov@google.com>
+References: <20220217205227.4098452-1-dlatypov@google.com> <20220217205227.4098452-2-dlatypov@google.com>
+In-Reply-To: <20220217205227.4098452-2-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 24 Feb 2022 14:26:24 +0800
-Message-ID: <CABVgOSkVH9aJ4qU34zVXFA0PfDhemdJyYVc=CkGUVJNSZmQnpA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] kunit: tool: readability tweaks in KernelCI json
- generation logic
+Date:   Thu, 24 Feb 2022 14:26:30 +0800
+Message-ID: <CABVgOSk9kCm=-C4HWdNHUdRJtPxxV0pL0=TN9vFWpwN+PHzSLA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: tool: refactor how we plumb metadata into JSON
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -61,7 +60,7 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         <linux-kselftest@vger.kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ffc12205d8bda963"
+        boundary="000000000000570cda05d8bdaa77"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,89 +72,226 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000ffc12205d8bda963
+--000000000000570cda05d8bdaa77
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, Feb 18, 2022 at 4:52 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Use a more idiomatic check that a list is non-empty (`if mylist:`) and
-> sinmplify the function body by dedenting and using a dict to map between
-
-Nit: spelling of "simplify". (This is also the first time I've seen
-"dedenting" as a word, which I thought was a typo for a while, too...)
-
-> the kunit TestStatus enum => KernelCI json status string.
+> When using --json, kunit.py run/exec/parse will produce results in
+> KernelCI json format.
+> As part of that, we include the build_dir that was used, and we
+> (incorrectly) hardcode in the arch, etc.
 >
-> The dict hopefully makes it less likely to have bugs like commit
-> 9a6bb30a8830 ("kunit: tool: fix --json output for skipped tests").
+> We'll want a way to plumb more values (as well as the correct `arch`),
+> so this patch groups those fields into kunit_json.Metadata type.
+> This patch should have no user visible changes.
+>
+> And since we only used build_dir in KunitParseRequest for json, we can
+> now move it out of that struct and add it into KunitExecRequest, which
+> needs it and used to get it via inheritance.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
->
-> Note: this series is based on my earlier set of kunit tool cleanups for
-> 5.18, https://lore.kernel.org/linux-kselftest/20220118190922.1557074-1-dlatypov@google.com/
->
-> There's no interesting semantic dependency, just some boring merge
-> conflicts, specifically with patch #4 there, https://lore.kernel.org/linux-kselftest/20220118190922.1557074-5-dlatypov@google.com/
->
-> ---
 
-Looks good to me. While in general, I think I prefer an extra level of
-indentation to using "continue", it doesn't worry me either way here.
-The use of a Dict is definitely an improvement.
+This is much nicer, thanks.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 
 -- David
 
->  tools/testing/kunit/kunit_json.py | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  tools/testing/kunit/kunit.py           | 16 +++++++-------
+>  tools/testing/kunit/kunit_json.py      | 29 ++++++++++++++++++--------
+>  tools/testing/kunit/kunit_tool_test.py |  9 ++++----
+>  3 files changed, 33 insertions(+), 21 deletions(-)
 >
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 4cb91d191f1d..7dd6ed42141f 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -47,11 +47,11 @@ class KunitBuildRequest(KunitConfigRequest):
+>  @dataclass
+>  class KunitParseRequest:
+>         raw_output: Optional[str]
+> -       build_dir: str
+>         json: Optional[str]
+>
+>  @dataclass
+>  class KunitExecRequest(KunitParseRequest):
+> +       build_dir: str
+>         timeout: int
+>         alltests: bool
+>         filter_glob: str
+> @@ -153,6 +153,8 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                                 test_glob = request.filter_glob.split('.', maxsplit=2)[1]
+>                                 filter_globs = [g + '.'+ test_glob for g in filter_globs]
+>
+> +       metadata = kunit_json.Metadata(build_dir=request.build_dir)
+> +
+>         test_counts = kunit_parser.TestCounts()
+>         exec_time = 0.0
+>         for i, filter_glob in enumerate(filter_globs):
+> @@ -165,7 +167,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                         filter_glob=filter_glob,
+>                         build_dir=request.build_dir)
+>
+> -               _, test_result = parse_tests(request, run_result)
+> +               _, test_result = parse_tests(request, metadata, run_result)
+>                 # run_kernel() doesn't block on the kernel exiting.
+>                 # That only happens after we get the last line of output from `run_result`.
+>                 # So exec_time here actually contains parsing + execution time, which is fine.
+> @@ -189,7 +191,7 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+>         else:
+>                 return KunitStatus.TEST_FAILURE
+>
+> -def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+> +def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+>         parse_start = time.time()
+>
+>         test_result = kunit_parser.Test()
+> @@ -216,8 +218,7 @@ def parse_tests(request: KunitParseRequest, input_data: Iterable[str]) -> Tuple[
+>         if request.json:
+>                 json_str = kunit_json.get_json_result(
+>                                         test=test_result,
+> -                                       def_config='kunit_defconfig',
+> -                                       build_dir=request.build_dir)
+> +                                       metadata=metadata)
+>                 if request.json == 'stdout':
+>                         print(json_str)
+>                 else:
+> @@ -504,10 +505,11 @@ def main(argv, linux=None):
+>                 else:
+>                         with open(cli_args.file, 'r', errors='backslashreplace') as f:
+>                                 kunit_output = f.read().splitlines()
+> +               # We know nothing about how the result was created!
+> +               metadata = kunit_json.Metadata()
+>                 request = KunitParseRequest(raw_output=cli_args.raw_output,
+> -                                           build_dir='',
+>                                             json=cli_args.json)
+> -               result, _ = parse_tests(request, kunit_output)
+> +               result, _ = parse_tests(request, metadata, kunit_output)
+>                 if result.status != KunitStatus.SUCCESS:
+>                         sys.exit(1)
+>         else:
 > diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
-> index 24d103049bca..14a480d3308a 100644
+> index 14a480d3308a..0a7e29a315ed 100644
 > --- a/tools/testing/kunit/kunit_json.py
 > +++ b/tools/testing/kunit/kunit_json.py
-> @@ -16,24 +16,24 @@ from typing import Any, Dict
+> @@ -6,6 +6,7 @@
+>  # Copyright (C) 2020, Google LLC.
+>  # Author: Heidi Fahim <heidifahim@google.com>
 >
+> +from dataclasses import dataclass
+>  import json
+>  import os
+>
+> @@ -14,6 +15,13 @@ import kunit_parser
+>  from kunit_parser import Test, TestStatus
+>  from typing import Any, Dict
+>
+> +@dataclass
+> +class Metadata:
+> +       """Stores metadata about this run to include in get_json_result()."""
+> +       arch: str = 'UM'
+> +       def_config: str = 'kunit_defconfig'
+> +       build_dir: str = ''
+> +
 >  JsonObj = Dict[str, Any]
 >
-> +_status_map: Dict[TestStatus, str] = {
-> +       TestStatus.SUCCESS: "PASS",
-> +       TestStatus.SKIPPED: "SKIP",
-> +       TestStatus.TEST_CRASHED: "ERROR",
-> +}
-> +
->  def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
+>  _status_map: Dict[TestStatus, str] = {
+> @@ -22,14 +30,13 @@ _status_map: Dict[TestStatus, str] = {
+>         TestStatus.TEST_CRASHED: "ERROR",
+>  }
+>
+> -def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
+> +def _get_group_json(test: Test, common_fields: JsonObj) -> JsonObj:
 >         sub_groups = []  # List[JsonObj]
 >         test_cases = []  # List[JsonObj]
 >
 >         for subtest in test.subtests:
-> -               if len(subtest.subtests):
-> +               if subtest.subtests:
->                         sub_group = _get_group_json(subtest, def_config,
->                                 build_dir)
+>                 if subtest.subtests:
+> -                       sub_group = _get_group_json(subtest, def_config,
+> -                               build_dir)
+> +                       sub_group = _get_group_json(subtest, common_fields)
 >                         sub_groups.append(sub_group)
-> -               else:
-> -                       test_case = {"name": subtest.name, "status": "FAIL"}
-> -                       if subtest.status == TestStatus.SUCCESS:
-> -                               test_case["status"] = "PASS"
-> -                       elif subtest.status == TestStatus.SKIPPED:
-> -                               test_case["status"] = "SKIP"
-> -                       elif subtest.status == TestStatus.TEST_CRASHED:
-> -                               test_case["status"] = "ERROR"
-> -                       test_cases.append(test_case)
-> +                       continue
-> +               status = _status_map.get(subtest.status, "FAIL")
-> +               test_cases.append({"name": subtest.name, "status": status})
+>                         continue
+>                 status = _status_map.get(subtest.status, "FAIL")
+> @@ -37,19 +44,23 @@ def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
 >
 >         test_group = {
 >                 "name": test.name,
+> -               "arch": "UM",
+> -               "defconfig": def_config,
+> -               "build_environment": build_dir,
+>                 "sub_groups": sub_groups,
+>                 "test_cases": test_cases,
+> +       }
+> +       test_group.update(common_fields)
+> +       return test_group
+> +
+> +def get_json_result(test: Test, metadata: Metadata) -> str:
+> +       common_fields = {
+> +               "arch": metadata.arch,
+> +               "defconfig": metadata.def_config,
+> +               "build_environment": metadata.build_dir,
+>                 "lab_name": None,
+>                 "kernel": None,
+>                 "job": None,
+>                 "git_branch": "kselftest",
+>         }
+> -       return test_group
+>
+> -def get_json_result(test: Test, def_config: str, build_dir: str) -> str:
+> -       test_group = _get_group_json(test, def_config, build_dir)
+> +       test_group = _get_group_json(test, common_fields)
+>         test_group["name"] = "KUnit Test Group"
+>         return json.dumps(test_group, indent=4)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index a3c036a620b2..60806994683c 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -468,8 +468,7 @@ class KUnitJsonTest(unittest.TestCase):
+>                         test_result = kunit_parser.parse_run_tests(file)
+>                         json_obj = kunit_json.get_json_result(
+>                                 test=test_result,
+> -                               def_config='kunit_defconfig',
+> -                               build_dir='.kunit')
+> +                               metadata=kunit_json.Metadata())
+>                 return json.loads(json_obj)
+>
+>         def test_failed_test_json(self):
+> @@ -691,7 +690,7 @@ class KUnitMainTest(unittest.TestCase):
+>                 self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
+>
+>                 got = kunit._list_tests(self.linux_source_mock,
+> -                                    kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*', None, 'suite'))
+> +                                    kunit.KunitExecRequest(None, None, '.kunit', 300, False, 'suite*', None, 'suite'))
+>
+>                 self.assertEqual(got, want)
+>                 # Should respect the user's filter glob when listing tests.
+> @@ -706,7 +705,7 @@ class KUnitMainTest(unittest.TestCase):
+>
+>                 # Should respect the user's filter glob when listing tests.
+>                 mock_tests.assert_called_once_with(mock.ANY,
+> -                                    kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*.test*', None, 'suite'))
+> +                                    kunit.KunitExecRequest(None, None, '.kunit', 300, False, 'suite*.test*', None, 'suite'))
+>                 self.linux_source_mock.run_kernel.assert_has_calls([
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', timeout=300),
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', timeout=300),
+> @@ -719,7 +718,7 @@ class KUnitMainTest(unittest.TestCase):
+>
+>                 # Should respect the user's filter glob when listing tests.
+>                 mock_tests.assert_called_once_with(mock.ANY,
+> -                                    kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*', None, 'test'))
+> +                                    kunit.KunitExecRequest(None, None, '.kunit', 300, False, 'suite*', None, 'test'))
+>                 self.linux_source_mock.run_kernel.assert_has_calls([
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', timeout=300),
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', timeout=300),
 > --
 > 2.35.1.473.g83b2b277ed-goog
 >
 
---000000000000ffc12205d8bda963
+--000000000000570cda05d8bdaa77
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -222,14 +358,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDQ
-A+R3zsJcifVogfhxKwXey2l7gbBjkELImCWZzuOFyjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjQwNjI2MzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCL
+/lyXfaRPY7Bx8/EEnZKE7YhArRiQ9RERoeR02WEulTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjQwNjI2NDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAeyRKvrr8WxJZBoU1el5X
-Ke/JNsmT+qVeHN/ho9RI0LqfC2xjcoTxB9x41IXtMBF9fVgjwyg+C0VsFC7ffrurcwz5IBzslkuk
-oMHkwp0FbCBCCvZNe/9tofHKcxBnvghDxvm9QcQ62Vm8QWlORuIxvSY3KBK+3ZafXHSB3yhFhLsx
-atfjrAH+dXDhJRzBemckcIsV4WR+VGXG+gozpmXr9ZqaFEf+9Vz2ledDUP5e9wi24kG7E9fw9aJG
-sEhidKsxbOsDWqHX3LLPFinZ+160rv7d/8zmCRSSWb93wC37brwH7LroHobpfkN2NApIgQ4QcGAQ
-wOjZg1uUmokLVqv7zA==
---000000000000ffc12205d8bda963--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAekTAmPAIFzIKZJenZvHM
+//VGctWQ4446/drjTYyFvx0yCdWnzhC2/OZXTHUu0lmjBxjEojiikd+xsCGMuBlEpQFjIE3RQPFk
+Ra4v3ZUHmAZ9NdKy9D1zUvMT9FZSZ19Wb3/lTKup2mkOl9XoyKt8B+zMSlesN/SC/meXs4eMj9wG
+aYdLIPbz50je1c/YS9zk2pnDWYRcHMYaufOrS1Q0w0otjzudpVR+7IRj2AkN3QY5c4FWROBla6/f
+erVhJf6w/WX5J6a//CFM/MFb858ftrS2h2Y/R0h2OBc2dPU53g0V9y7nTVWaTaEFO0pTrI9+Mk5D
+Y2GlQl3/MAKMJKY6ww==
+--000000000000570cda05d8bdaa77--
