@@ -2,66 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59B24C2411
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 07:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B35474C2429
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 07:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiBXG1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Feb 2022 01:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S231245AbiBXGog (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Feb 2022 01:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiBXG1T (ORCPT
+        with ESMTP id S230447AbiBXGof (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:27:19 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3E8B7DC
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:48 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id s13so1354666wrb.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:47 -0800 (PST)
+        Thu, 24 Feb 2022 01:44:35 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3EB26A3A2
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:44:06 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id j22so1358935wrb.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:44:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NL1FJiEW7xIyU+CCXWgQuZdx+KXm4C3VFTrdVsIyKxc=;
-        b=qDLBOlimunSfCQ6RsZA49t9M6kdGd64RMHIhvMMzHZa3kpaWrndiGZ+FWGwyexMOs4
-         DAazPGaT77q43UYhxqXJZ5Ox6RJVS2qnyr/7by6IE3cOmIFxl40x3HSuOBhVtdhSxP6l
-         2+cKoV4OepxGkQ+qIOzqsBhSyWF308uzDsS8feCn75Y8rs5suxfaCTy6RV0xId0CGHW2
-         P3VTVjSouThMPKWxCpBEp0dkL8CfpaYQQ7g1Kq3FubhgAUhcFZqLV5VJ+3mZpp/2kQ6h
-         tQNdOqDlpw8kZ2OTNbxxtpakO/ZFvJHpaCqUCVr04zyWpuhoyyziz+WmjRrYX5o3lvj/
-         uZug==
+        bh=6lXc3CLDHT8+xps/lCXgOLvKW7RM5QlUdj9lxprQpNA=;
+        b=S102Wj8K0pRf5lWMcyrQCi6157RYty514GwUihV6lM4G0lzmCZ3Gdw12H2dLzXEjpV
+         EqPQLU5Zn0yRY36q0MQsU6pHImc8wf29XV+FPQTvdS4VXTx+Z8t4sp+QLwTBrF0GkYGM
+         Cyl0EFCTISUwIEy9ol4Lk0LtSqV+P43QgV8+lLd69FVwNHNH2aEqFjr/CyOaK5lZmU5X
+         fAXTinkInnlN1cuCxji5IG5UYAveBlvyLiruE0WZTE440lxo/r7enZBFegcr8KbEsV52
+         EVRNxA1+pjMZKZdLvA4x4RjBP7z5zA06+t2iE4uztqqkqNcMJNsFy3pTW1maWrmsX5J0
+         z8ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NL1FJiEW7xIyU+CCXWgQuZdx+KXm4C3VFTrdVsIyKxc=;
-        b=LUlra9Jl0BHXwKeqPopCjY9flIZoI4HJoqPovXgyk2MymuV60d5DutbCbU1fwZuENN
-         8f4eHDluohSE1gUXy/esc0Q3Zf9Sjihv5aKb7q+Bf+lEop2M1ijo27dAXH4s30tbM7e2
-         eje0oLuwtuHdVY2mDfqREc9ZU5NYKyVd/g4ubiGoW8iBtqCIn0cYZhtfrsXsKEMXA5ud
-         mMVd1iuri9hvLmxIusBy+x5w2RyQX8FpZrbYy+OCuRnJZwoXLYXf0gnh/bQjGIOuvzJD
-         Ivvr7vh3LfHVarXJ/dhBEAXkXpg85eETf8thTp3SJ6NJOMWKxOVS3juIK8mtijKCTjsz
-         simQ==
-X-Gm-Message-State: AOAM533nm/HWZJnymUMeNo30HivwAYlFJsPgqoA6XZ5CoTDiNTByNovD
-        EgjbARUSn6PYk5dItbdKMaIVuJ6/AfoONprSqt61GF/GrMA=
-X-Google-Smtp-Source: ABdhPJyyP0xvWOK9mg2Xt+P13712OBJ8o0tX0rY7uOmJesWVq/8DjhNwQqf6631T1cXY1Eox8fGa2yNBtsYNe2yYph8=
-X-Received: by 2002:adf:d1c9:0:b0:1ea:8b11:98a4 with SMTP id
- b9-20020adfd1c9000000b001ea8b1198a4mr930894wrd.220.1645684006544; Wed, 23 Feb
- 2022 22:26:46 -0800 (PST)
+        bh=6lXc3CLDHT8+xps/lCXgOLvKW7RM5QlUdj9lxprQpNA=;
+        b=uWSK55JIDpyq5l/rY8nNJ396F7p2cOzrKo3y4/psYBgig2GImtadn35mg4zdR/uirN
+         y5KpnJ8CGX3t0nvpddsB1fwNWJiCqsDt4JAdhTTad9TfvrlQVCv48MVTZA0ckG+yEkkC
+         ulAqR3cASTLWjMqeBCUU3qA4d4Q0cYhrrp/fHcrG4Z8u2QMA5DvA3fGg8BVyHToKEkXO
+         wNGgdRqh64ummTvABqluK77jt8pMhF4jmVs0vAsb+gUI5GqQIzZcMat4LZdoUJedwuwy
+         oiQfbNZqGIldOHbJixkr+L+M7xwBHg1BgH1KXS+pSVVcRauDuscpda+cfxDnVIP9rwv4
+         5JlQ==
+X-Gm-Message-State: AOAM533zI9WJtS/oRKyLAHqGC6iQy0v9gtuAATH9OR/GrKAFr6BzLcO0
+        PVJUxmP6LA8TzZ21s0QuLDYV4CZjEolr7E71Fwy2cw==
+X-Google-Smtp-Source: ABdhPJw3EVqXsCPnZHV+opJ2szLW1JjGlkEhzGs7IobmSMKzkM74idXoIgCPCe7c890s+fVSEjUHU2fwwG6opajbPu8=
+X-Received: by 2002:adf:a486:0:b0:1ed:9cfe:179d with SMTP id
+ g6-20020adfa486000000b001ed9cfe179dmr1005465wrb.113.1645685044848; Wed, 23
+ Feb 2022 22:44:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20220217205227.4098452-1-dlatypov@google.com> <20220217205227.4098452-3-dlatypov@google.com>
-In-Reply-To: <20220217205227.4098452-3-dlatypov@google.com>
+References: <20220224055350.1854078-1-keescook@chromium.org>
+In-Reply-To: <20220224055350.1854078-1-keescook@chromium.org>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 24 Feb 2022 14:26:35 +0800
-Message-ID: <CABVgOSmayxKsZYi36gbMWxExhE+=ae8PfFA_tbCGogPnwkw0gA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: tool: properly report the used arch for
- --json, or '' if not known
-To:     Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 24 Feb 2022 14:43:53 +0800
+Message-ID: <CABVgOS=pFN4T5HjYpJPW4KOzXRFr-SUTm09xymxBmyidg0h=WA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Do not colorize output when redirected
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a3795905d8bdaafc"
+        boundary="000000000000870a0f05d8bde886"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,94 +72,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000a3795905d8bdaafc
+--000000000000870a0f05d8bde886
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Feb 18, 2022 at 4:52 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu, Feb 24, 2022 at 1:53 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Before, kunit.py always printed "arch": "UM" in its json output, but...
-> 1. With `kunit.py parse`, we could be parsing output from anywhere, so
->     we can't say that.
-> 2. Capitalizing it is probably wrong, as it's `ARCH=um`
-> 3. Commit 87c9c1631788 ("kunit: tool: add support for QEMU") made it so
->    kunit.py could knowingly run a different arch, yet we'd still always
->    claim "UM".
+> Filling log files with color codes makes diffs and other comparisons
+> difficult. Only emit vt100 codes when the stdout is a TTY.
 >
-Agreed on all counts!
-
-> This patch addresses all of those. E.g.
->
-> 1.
-> $ ./tools/testing/kunit/kunit.py parse .kunit/test.log --json | grep -o '"arch.*' | sort -u
-> "arch": "",
->
-> 2.
-> $ ./tools/testing/kunit/kunit.py run --json | ...
-> "arch": "um",
->
-> 3.
-> $ ./tools/testing/kunit/kunit.py run --json --arch=x86_64 | ...
-> "arch": "x86_64",
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Cc: Brendan Higgins <brendanhiggins@google.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
 
-Looks good, and works well here. One question/comment below, but in general:
+Ah, you can tell a tool has "made it" when people are redirecting its output!
+
+This works fine here.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
+Thanks,
 -- David
 
->  tools/testing/kunit/kunit.py        | 4 ++--
->  tools/testing/kunit/kunit_kernel.py | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  tools/testing/kunit/kunit_parser.py | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 7dd6ed42141f..5ccdafd4d5aa 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -153,7 +153,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
->                                 test_glob = request.filter_glob.split('.', maxsplit=2)[1]
->                                 filter_globs = [g + '.'+ test_glob for g in filter_globs]
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 05ff334761dd..807ed2bd6832 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -11,6 +11,7 @@
 >
-> -       metadata = kunit_json.Metadata(build_dir=request.build_dir)
-> +       metadata = kunit_json.Metadata(arch=linux.arch(), build_dir=request.build_dir)
+>  from __future__ import annotations
+>  import re
+> +import sys
 >
->         test_counts = kunit_parser.TestCounts()
->         exec_time = 0.0
-> @@ -506,7 +506,7 @@ def main(argv, linux=None):
->                         with open(cli_args.file, 'r', errors='backslashreplace') as f:
->                                 kunit_output = f.read().splitlines()
->                 # We know nothing about how the result was created!
-> -               metadata = kunit_json.Metadata()
-> +               metadata = kunit_json.Metadata(arch='', build_dir='', def_config='')
-
-Why do we explicitly pass empty strings in here, rather than making
-the defaults correct for this case?
-
-
->                 request = KunitParseRequest(raw_output=cli_args.raw_output,
->                                             json=cli_args.json)
->                 result, _ = parse_tests(request, metadata, kunit_output)
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index fe159e7ff697..bbbe2ffe30b7 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -248,6 +248,8 @@ class LinuxSourceTree(object):
->                         kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
->                         self._kconfig.merge_in_entries(kconfig)
+>  import datetime
+>  from enum import Enum, auto
+> @@ -503,14 +504,20 @@ RESET = '\033[0;0m'
 >
-> +       def arch(self) -> str:
-> +               return self._arch
+>  def red(text: str) -> str:
+>         """Returns inputted string with red color code."""
+> +       if not sys.stdout.isatty():
+> +               return text
+>         return '\033[1;31m' + text + RESET
 >
->         def clean(self) -> bool:
->                 try:
+>  def yellow(text: str) -> str:
+>         """Returns inputted string with yellow color code."""
+> +       if not sys.stdout.isatty():
+> +               return text
+>         return '\033[1;33m' + text + RESET
+>
+>  def green(text: str) -> str:
+>         """Returns inputted string with green color code."""
+> +       if not sys.stdout.isatty():
+> +               return text
+>         return '\033[1;32m' + text + RESET
+>
+>  ANSI_LEN = len(red(''))
 > --
-> 2.35.1.473.g83b2b277ed-goog
+> 2.30.2
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220224055350.1854078-1-keescook%40chromium.org.
 
---000000000000a3795905d8bdaafc
+--000000000000870a0f05d8bde886
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -227,14 +206,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCx
-J4+sjI0iHI+B1kLb+Ca5iDUlBZ/6wEfEurvRE3Ca/jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjQwNjI2NDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDi
+MM3jlhhZJZidIDV7cluqhluWNBaylFIIb1wac9dIXDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjQwNjQ0MDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGFBl3224vPFhuecQA2eH
-bpHQ3hVvswBBQpNLISeWKw93/cayVD5D7T/htKPelTRHATltE7cmK5t7VkA3h2aX1/hRx9tdHGO4
-fqMETu4B+eKl0YuIDGCSJ2LjeIfHr7pOmygRtMdWG9tXq59p/pLI8si8BSMlP00csLqW6z4L/6SJ
-yrm5UCPVqeOUI/gOqL+0vnFFOekSNwp578B1ih0fYqWgW5i8kNrsoU3xaQuOJ1caeuBkcU0pzF4q
-ya+wai8bFYdDpR1HBK6rcoKW4lFKsPeW/p7I82Z1Mm3/YBVrrLTRrCiPLgAMM6iWITqbjYdBapd6
-xWCuFfJAGN5lSFKakg==
---000000000000a3795905d8bdaafc--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAsUUdwmPsdMVpuBgHaB67
+XzfMU8OGkFY4U3OndOGfnaE/xbH/5EKSmXgpgpealIUFGttjMQw1E2vy6V6juCDBtDZIpgdg9RtJ
+BSxcfihtj1o/aJ4DDlDfxekccZLnm5cOSRVBQjkz7ADCtDHiGTPmOO0BqWOMV/cBD1pcPSYWfrH7
+3Lqfmnnc5exL2qy+qH8IX/XjKzkUY9EcxRw8oKa255Sr7XeRGOYvYrGWoeTr5Y5uel0n/pfDoAkk
+yZykVCo8hd45l7ddYgwKEZyDjoKQ2hbl2JE94y5+5L7lpys4kKYybjyNBHYmEJrbsvEm5ItRSFS5
+qjMpmRCk6NeEyRaOqg==
+--000000000000870a0f05d8bde886--
