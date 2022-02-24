@@ -2,161 +2,234 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EB94C23C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 06:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FFB4C240C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 07:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiBXF7F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Feb 2022 00:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S231256AbiBXG1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Feb 2022 01:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiBXF7E (ORCPT
+        with ESMTP id S229500AbiBXG1L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:59:04 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D06B265BC5
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 21:58:34 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id l9so373772pls.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 21:58:34 -0800 (PST)
+        Thu, 24 Feb 2022 01:27:11 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521AE1F4
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:37 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id v21so1357175wrv.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 22:26:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zAnejYzjMLOw9nDkVzejCfKZ6oBBZ5wn5KiXGCpLjMA=;
-        b=ngRxHm3L+/PjW4guu4lIB7R2vAimLs2Yef4Disoe//YgHKnOK/FKD3M2CdZYJjFwjP
-         NPHCFYPZT/Le825KrJuJWI1EwYb4+M1mQ+NIf96KxpVqDlL8bEZx6LB+mKGvJwFkFKVF
-         RqzsPe4Myj0OCUQeY0I7JxpBX8A3GUqjWv/yQ=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ahYwT4mm84FdbgU5PjcKSNY5SL7RiEDiobXuty9qv5M=;
+        b=P7az79LqnpumJHMULemau+GDpj01FStQ0TYf503kdD3n3wy15ZiriYFKgWOcKLNrHp
+         u7pAzCMMbCHCgWHarH41oFwJNJ1SvWFr2Cj1pSiQ32DsaEsernxtKjPikLZj6cPh4UHU
+         /sf/YI/dN0txO1mGahvFO08nW/xo3k38yUNr2+yVqCsLjLDcPz4BJoocko2feEngbNv7
+         UwIlX3p2ma71XH82dfBNfaxEZvLZvVdrpyULpYsDQTinmNQFl7zz/SAo0LlnFyrAvBqo
+         x/s+UuubOMVLG9sT7beJVQMfZgDTKnnzfEdnjmtlcjS4lwLfK/2XAAb2FwL2Ce2KI3Od
+         fjXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zAnejYzjMLOw9nDkVzejCfKZ6oBBZ5wn5KiXGCpLjMA=;
-        b=p8hyM4DLdLl/CArwuOoCrAqVvnTPU4O4xcPVoMrxGqnf9MyEXk6wpJH1N33JVI1Bnt
-         exaCPkwvZ2WHsxQWrQhK0KBgpBUlB2XiJmVlxgPPsYs8bZNd9fWXBIBBp/rIb+qWNs7Y
-         PemMO8V2W98MMs/eWBUQhrcqbx21PSjUOBWETipZABFN1lM8Z0RKH5fU4enMN7PI5Azd
-         HgMKu9CjC9vZ7EGNvkaGVrVq+9CfW1BL33zlITp33nD/q4tGDrggludOC5Kt5inkmjQD
-         q+zLiXzzv8D1LgYHLZ0nLFwXrA5o91GVWnH8Fr1vJFNTNSVF9uVNL4eab1L60nDBfvyP
-         +uOQ==
-X-Gm-Message-State: AOAM530ixgtTNchDpa+3dRaIC5b47kKdyRXLJoMWAGU4oLGN2BNt7qYE
-        wlgEzKiotdsiF3NEEiv7MxySJEmJrwmf+g==
-X-Google-Smtp-Source: ABdhPJyJ9xUurNYX2PkzlWyR0k1G5n6hF4pFLyT3YuG8dMdiPW/0Tc4RSx6Lns8rrrPi2W3XrglbrQ==
-X-Received: by 2002:a17:90b:17c3:b0:1b8:cda0:bc08 with SMTP id me3-20020a17090b17c300b001b8cda0bc08mr12981731pjb.72.1645682313918;
-        Wed, 23 Feb 2022 21:58:33 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm4840603pju.44.2022.02.23.21.58.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 21:58:33 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jeff Dike <jdike@addtoit.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
-        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2] um: Allow builds with Clang
-Date:   Wed, 23 Feb 2022 21:58:31 -0800
-Message-Id: <20220224055831.1854786-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ahYwT4mm84FdbgU5PjcKSNY5SL7RiEDiobXuty9qv5M=;
+        b=Vjfg2yy7Cg5Po/J7GqGlzdXZJJ2u3DAQhIo8Nwu4IfSNRj1pNzlOFMK5et1ncJg/3r
+         YLvX7R/nabQbVgjyUYSqarw9/lYgKaA0/mCLyCwIeF7SdPLS4qOcXd/s6lxc5wvsXiDQ
+         XfamFAWzeQj/VmxHxXr105Tc4YXVFvwHBkTdxXfV7mszHeF0EOVr06j29BjWacLf5hrE
+         B88va66bDRn0Mh0J+DKp7uWUflB1UfZXkckj6CapsJ3yOAGoWGlj54tIGo5jwgOgo+hw
+         QWihz6JZwlgPARGRTWRXNrfARChEZotMzYWR+sPrdpF9wbkE8aegxnO+cSZRBmo+phdf
+         /Maw==
+X-Gm-Message-State: AOAM533Py6bjxhjNXD968h5vqXTj6RmZX5f2flylypA1zHL8oyz7j6yh
+        p4ApPzgIXc6UEnLhrttAdOcW/wXB4K8d4le/29Aaag==
+X-Google-Smtp-Source: ABdhPJx8cWhVzCl6i8kzQmCwJwI+TUxurybcXqvocYLCA0R68XtTuKh+U6FYz9JJxUNLAKJ5dKa/m71dt7MOw7NHgC8=
+X-Received: by 2002:adf:a486:0:b0:1ed:9cfe:179d with SMTP id
+ g6-20020adfa486000000b001ed9cfe179dmr956088wrb.113.1645683995698; Wed, 23 Feb
+ 2022 22:26:35 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3199; h=from:subject; bh=ORjKUvuElRuveNhaPtG55IXvBNRDQtztW8DXNHkaB6o=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFx6H2Rp6e7Ak5NdBJtPWHhMi31ltuCxXU+/l480f UATwZt2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcehwAKCRCJcvTf3G3AJkQlD/ 4pCZ2mWoBuXFc2QpaBO0O3ONucPC8rUors6QDfZuMU1xAyl8Spj1bUbGEnl1BMT5VYBXBygi5tQqJK DtecMG/4Sy9fGup2xayFUu2DX8O9RHBeV71eroXdeYg2dh0+O1sb5iwXZVbLj3OV6HOGoUkiWDpms3 U6ogMwfe5Mb9GXwSncSK76Cbp9bXnSvRMJTzmxfGJlZ4dGpkRY8a6kMKlxwog8W7wzlM2+BK4MG+D9 s/waoLXueOywfOD63bJDfqHimMj18NbCinyQiTwiqjTFEEEXwjzZ8jlC9jBhfXHbje6Uyn7DNGEiBi 2TmbgbA1Mq09IHEtbQ33ExSsNJl/mcONkTiYEsofTtkCA7KwkLz0yu1RW0SMwanMSq5tL3pzMRmR4c uPEB1vUFm3b6VqDmrsFIEfRmBE8WDEYmaklgv8vxRBlXeu/BPeb4HJAO0Hmuy/jTPwoSr4B7vTlNKD Mux7qGTGcGgOwnFxQ3diqxvi4PnN/UW+6atTfzH2wTVYhNFxQNez0tiMEmAwGP2tJ+2J76UstlpRXY r8V1oopSzb18Qq11SBU53h3tIDPq2gNIvfPmmPOh6MtOjsp7EMCJ9Wk3vcfkHZusGFcxjRJPgJnbBx sC5IKds+n1EERQpguuWcbRt3p5W3K1zvBvcpJQ0aHrutERV3LkYlfSmzO1TA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220217205227.4098452-1-dlatypov@google.com>
+In-Reply-To: <20220217205227.4098452-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 24 Feb 2022 14:26:24 +0800
+Message-ID: <CABVgOSkVH9aJ4qU34zVXFA0PfDhemdJyYVc=CkGUVJNSZmQnpA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kunit: tool: readability tweaks in KernelCI json
+ generation logic
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ffc12205d8bda963"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add x86-64 target for Clang+um and update user-offsets.c to use
-Clang-friendly assembly, similar to the fix from commit cf0c3e68aa81
-("kbuild: fix asm-offset generation to work with clang").
+--000000000000ffc12205d8bda963
+Content-Type: text/plain; charset="UTF-8"
 
-This lets me run KUnit tests with Clang:
+On Fri, Feb 18, 2022 at 4:52 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Use a more idiomatic check that a list is non-empty (`if mylist:`) and
+> sinmplify the function body by dedenting and using a dict to map between
 
-$ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
-...
-$ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
-...
+Nit: spelling of "simplify". (This is also the first time I've seen
+"dedenting" as a word, which I thought was a typo for a while, too...)
 
-Cc: Jeff Dike <jdike@addtoit.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: David Gow <davidgow@google.com>
-Cc: linux-um@lists.infradead.org
-Cc: linux-kbuild@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Cc: llvm@lists.linux.dev
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/lkml/Yg2YubZxvYvx7%2Fnm@dev-arch.archlinux-ax161/
-Tested-by: David Gow <davidgow@google.com>
-Link: https://lore.kernel.org/lkml/CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com/
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1: https://lore.kernel.org/lkml/20220217002843.2312603-1-keescook@chromium.org/
-v2:
- - tweak commit log phrasing and alphabetize targets (nathan)
- - fix a missing implicit fallthrough under 32-bit builds
- - add review tags
----
- arch/um/os-Linux/execvp.c  | 1 +
- arch/x86/um/user-offsets.c | 4 ++--
- scripts/Makefile.clang     | 1 +
- 3 files changed, 4 insertions(+), 2 deletions(-)
+> the kunit TestStatus enum => KernelCI json status string.
+>
+> The dict hopefully makes it less likely to have bugs like commit
+> 9a6bb30a8830 ("kunit: tool: fix --json output for skipped tests").
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+>
+> Note: this series is based on my earlier set of kunit tool cleanups for
+> 5.18, https://lore.kernel.org/linux-kselftest/20220118190922.1557074-1-dlatypov@google.com/
+>
+> There's no interesting semantic dependency, just some boring merge
+> conflicts, specifically with patch #4 there, https://lore.kernel.org/linux-kselftest/20220118190922.1557074-5-dlatypov@google.com/
+>
+> ---
 
-diff --git a/arch/um/os-Linux/execvp.c b/arch/um/os-Linux/execvp.c
-index 84a0777c2a45..c09a5fd5e225 100644
---- a/arch/um/os-Linux/execvp.c
-+++ b/arch/um/os-Linux/execvp.c
-@@ -93,6 +93,7 @@ int execvp_noalloc(char *buf, const char *file, char *const argv[])
- 					   up finding no executable we can use, we want to diagnose
- 					   that we did find one but were denied access.  */
- 					got_eacces = 1;
-+					break;
- 				case ENOENT:
- 				case ESTALE:
- 				case ENOTDIR:
-diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
-index bae61554abcc..d9071827b515 100644
---- a/arch/x86/um/user-offsets.c
-+++ b/arch/x86/um/user-offsets.c
-@@ -10,10 +10,10 @@
- #include <asm/types.h>
- 
- #define DEFINE(sym, val) \
--	asm volatile("\n->" #sym " %0 " #val : : "i" (val))
-+	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
- 
- #define DEFINE_LONGS(sym, val) \
--	asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
-+	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
- 
- void foo(void)
- {
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index 51fc23e2e9e5..6e49344c6db2 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -9,6 +9,7 @@ CLANG_TARGET_FLAGS_mips		:= mipsel-linux-gnu
- CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
- CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
- CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
-+CLANG_TARGET_FLAGS_um		:= x86_64-linux-gnu
- CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
- CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
- 
--- 
-2.30.2
+Looks good to me. While in general, I think I prefer an extra level of
+indentation to using "continue", it doesn't worry me either way here.
+The use of a Dict is definitely an improvement.
 
+Reviewed-by: David Gow <davidgow@google.com>
+
+
+-- David
+
+>  tools/testing/kunit/kunit_json.py | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+> index 24d103049bca..14a480d3308a 100644
+> --- a/tools/testing/kunit/kunit_json.py
+> +++ b/tools/testing/kunit/kunit_json.py
+> @@ -16,24 +16,24 @@ from typing import Any, Dict
+>
+>  JsonObj = Dict[str, Any]
+>
+> +_status_map: Dict[TestStatus, str] = {
+> +       TestStatus.SUCCESS: "PASS",
+> +       TestStatus.SKIPPED: "SKIP",
+> +       TestStatus.TEST_CRASHED: "ERROR",
+> +}
+> +
+>  def _get_group_json(test: Test, def_config: str, build_dir: str) -> JsonObj:
+>         sub_groups = []  # List[JsonObj]
+>         test_cases = []  # List[JsonObj]
+>
+>         for subtest in test.subtests:
+> -               if len(subtest.subtests):
+> +               if subtest.subtests:
+>                         sub_group = _get_group_json(subtest, def_config,
+>                                 build_dir)
+>                         sub_groups.append(sub_group)
+> -               else:
+> -                       test_case = {"name": subtest.name, "status": "FAIL"}
+> -                       if subtest.status == TestStatus.SUCCESS:
+> -                               test_case["status"] = "PASS"
+> -                       elif subtest.status == TestStatus.SKIPPED:
+> -                               test_case["status"] = "SKIP"
+> -                       elif subtest.status == TestStatus.TEST_CRASHED:
+> -                               test_case["status"] = "ERROR"
+> -                       test_cases.append(test_case)
+> +                       continue
+> +               status = _status_map.get(subtest.status, "FAIL")
+> +               test_cases.append({"name": subtest.name, "status": status})
+>
+>         test_group = {
+>                 "name": test.name,
+> --
+> 2.35.1.473.g83b2b277ed-goog
+>
+
+--000000000000ffc12205d8bda963
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDQ
+A+R3zsJcifVogfhxKwXey2l7gbBjkELImCWZzuOFyjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjQwNjI2MzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAeyRKvrr8WxJZBoU1el5X
+Ke/JNsmT+qVeHN/ho9RI0LqfC2xjcoTxB9x41IXtMBF9fVgjwyg+C0VsFC7ffrurcwz5IBzslkuk
+oMHkwp0FbCBCCvZNe/9tofHKcxBnvghDxvm9QcQ62Vm8QWlORuIxvSY3KBK+3ZafXHSB3yhFhLsx
+atfjrAH+dXDhJRzBemckcIsV4WR+VGXG+gozpmXr9ZqaFEf+9Vz2ledDUP5e9wi24kG7E9fw9aJG
+sEhidKsxbOsDWqHX3LLPFinZ+160rv7d/8zmCRSSWb93wC37brwH7LroHobpfkN2NApIgQ4QcGAQ
+wOjZg1uUmokLVqv7zA==
+--000000000000ffc12205d8bda963--
