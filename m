@@ -2,125 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077AE4C348B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 19:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951A84C34C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 19:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiBXSVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Feb 2022 13:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
+        id S232432AbiBXS24 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Feb 2022 13:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiBXSVE (ORCPT
+        with ESMTP id S230257AbiBXS24 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:21:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECC52556E4;
-        Thu, 24 Feb 2022 10:20:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A56D60B0E;
-        Thu, 24 Feb 2022 18:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78637C340E9;
-        Thu, 24 Feb 2022 18:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645726833;
-        bh=cLEjIETcg/OJ3fT0H+e8jwtt0eqs6MXPvVtlC2jV8PQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nyqKUgzRU2t7o/ub+aIX9fXlhdK+rfzjWeg6vo2QTWXXEN1cewKOjPJRnXe/Nx2Ou
-         loZukuiIEs4ALvJflu8IX4X2HXaPHATG5b/MavRxbxOwMZJ3wpgQEbE6nNuafSBC7u
-         t9TOIji+xztIIxeN2btLZqJmJZ6ub920T/uymotM=
-Date:   Thu, 24 Feb 2022 19:20:25 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
-Message-ID: <YhfMaYsS3YI9T2nT@kroah.com>
-References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
- <YhdsgokMMSEQ0Yc8@kroah.com>
- <f965c04f34aabe93fe8ef91bb4d1ce4d24159173.camel@hadess.net>
+        Thu, 24 Feb 2022 13:28:56 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613DC113DB6
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Feb 2022 10:28:25 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id q17so4104623edd.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Feb 2022 10:28:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A9fzDXY9Pawtti5sitNYgs0Fy4usPU844voMfn3IdBw=;
+        b=dl6HDEGVlT4NNXS+IICLIyWUeJ4CPNtZVqt7karefHOT34m9SGbvzOBZnY4TRymU+P
+         TkWhXBb6+tkuw3h4utWmhoNw6f+PwulSb7gpb+/NZejGPPxjEbaBMwIoyyP5tVnqrnQI
+         NU8gttIl16ZIr9mhL9cMEXK7E0Q9RK3aACepd+i0T6ECmKr1Ko8jaU6MhGwU4USSGPfq
+         z779HAe3Cr+BgKDZ8/CCe0NULpEw0jkPfilJrpWc4A+0mBtl4Dx5QXt15277Bov3kmLJ
+         xxFcHR9V4DDznD/q4rB8pCa4mUrLkNRhFtkVse/rJeEVYV0SEw/kkggDHdHJ7xCbHjRr
+         tYIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A9fzDXY9Pawtti5sitNYgs0Fy4usPU844voMfn3IdBw=;
+        b=sFAoXt+OoABahbEOJOQf9WLvZk2e42koQp/oKOyIW6eut81AI0Yb3h1TI1dzks4Jmp
+         YmfrNTB2Ky9IBAyw2lwqbB9TWiMtY91FBQJh/nHUPpCNJprD/qFpBFjuo1o2ZrKa0BU0
+         pdSITvs3uqS3GQi313hYt/bJe9VPCUyzvG4l28pfyLKQOUAPjw4J1S21S7+3jSjzZGBc
+         BxhmkEwKw/lMuN6LE9Qta5qMciAfd1rQvACwKKoqqjgYoVFJ3FtiI4c0crXvJgPVZ+ep
+         +ILJ9AIQTc9lMSzMbaeNf4BL1kFNoama+WZL//I4yDOgOpHFO+rkyT9Dq0xttlgzvgFY
+         HQkA==
+X-Gm-Message-State: AOAM531/gbfod8qjSjeH8yqLk7vpzbCfnFBS3tkbEGd1iMh12UvDCisZ
+        9ovghhVsUdFhsh9Y9qMwgQZ6XPoB0isKeplvH6oo9g==
+X-Google-Smtp-Source: ABdhPJyd0J9YBYi7aXnqX6OwRKkx26kDeX3KMKqCXaMxU62hgxoaffTO84p3kE7edGocRELjW9JrDbnvnBAzeENlM9g=
+X-Received: by 2002:aa7:d592:0:b0:410:b9f9:90f2 with SMTP id
+ r18-20020aa7d592000000b00410b9f990f2mr3543452edq.327.1645727303752; Thu, 24
+ Feb 2022 10:28:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f965c04f34aabe93fe8ef91bb4d1ce4d24159173.camel@hadess.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224055350.1854078-1-keescook@chromium.org>
+In-Reply-To: <20220224055350.1854078-1-keescook@chromium.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 24 Feb 2022 10:28:12 -0800
+Message-ID: <CAGS_qxo1UkRUbXnX7NkfDCLhqa2-_dn3poKBi=NyGJ4C0EhUmw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Do not colorize output when redirected
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 06:41:18PM +0100, Bastien Nocera wrote:
-> On Thu, 2022-02-24 at 12:31 +0100, Greg KH wrote:
-> > On Thu, Feb 24, 2022 at 12:08:22PM +0100, Benjamin Tissoires wrote:
-> > > Hi there,
-> > > 
-> > > This series introduces support of eBPF for HID devices.
-> > > 
-> > > I have several use cases where eBPF could be interesting for those
-> > > input devices:
-> > > 
-> > > - simple fixup of report descriptor:
-> > > 
-> > > In the HID tree, we have half of the drivers that are "simple" and
-> > > that just fix one key or one byte in the report descriptor.
-> > > Currently, for users of such devices, the process of fixing them
-> > > is long and painful.
-> > > With eBPF, we could externalize those fixups in one external repo,
-> > > ship various CoRe bpf programs and have those programs loaded at
-> > > boot
-> > > time without having to install a new kernel (and wait 6 months for
-> > > the
-> > > fix to land in the distro kernel)
-> > 
-> > Why would a distro update such an external repo faster than they
-> > update
-> > the kernel?  Many sane distros update their kernel faster than other
-> > packages already, how about fixing your distro?  :)
-> > 
-> > I'm all for the idea of using ebpf for HID devices, but now we have
-> > to
-> > keep track of multiple packages to be in sync here.  Is this making
-> > things harder overall?
-> 
-> I don't quite understand how taking eBPF quirks for HID devices out of
-> the kernel tree is different from taking suspend quirks out of the
-> kernel tree:
-> https://www.spinics.net/lists/linux-usb/msg204506.html
+On Wed, Feb 23, 2022 at 9:53 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Filling log files with color codes makes diffs and other comparisons
+> difficult. Only emit vt100 codes when the stdout is a TTY.
+>
+> Cc: Brendan Higgins <brendanhiggins@google.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  tools/testing/kunit/kunit_parser.py | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 05ff334761dd..807ed2bd6832 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -11,6 +11,7 @@
+>
+>  from __future__ import annotations
+>  import re
+> +import sys
+>
+>  import datetime
+>  from enum import Enum, auto
+> @@ -503,14 +504,20 @@ RESET = '\033[0;0m'
+>
+>  def red(text: str) -> str:
+>         """Returns inputted string with red color code."""
+> +       if not sys.stdout.isatty():
+> +               return text
 
-A list of all devices possible, and the policy decisions to make on
-those devices, belongs in userspace, not in the kernel.  That's what the
-hwdb contains.
+I'd been thinking about doing this for a while.
+I'd just gotten used to removing them via sed, or ending pipes with less -R.
+I totally agree it's for the best that colors be turned off by default
+when piping.
 
-Quirks in order to get the device to work properly is not a policy
-decision, they are needed to get the device to work.  If you wish to
-suspend it or not based on the vendor/product id, in order to possibly
-save some more battery life on some types of systems, is something that
-belongs in userspace.
+My hesitation was whether we'd want to introduce a flag like grep et al have.
+I.e. --color=auto/always/etc.
 
-If you want to replace the existing HID quirk tables with an ebpf
-program that ships with the kernel, wonderful, I have no objection to
-that.  If a user is required to download the external quirk table just
-to get their device to work with the kernel, that's probably something
-you don't want to do.
+Pros:
+* consistency with grep, maybe less surprise
+* allows wrappers around kunit.py to redirect output and still show color
+   * this is very niche and I know it. But I happen to own such a wrapper :)
 
-thanks,
+Cons:
+* an extra flag that's very niche
+  * I'm likely the only person to have ever used `kunit.py run | ... | less -R`
+* the logic to check for coloring becomes more complicated, need to add a helper
 
-greg k-h
+I'm fine if we just stick with this simpler approach or do it later.
+My aforementioned wrapper only redirects stdout when necessary anyways.
+
+
+>         return '\033[1;31m' + text + RESET
+>
+>  def yellow(text: str) -> str:
+>         """Returns inputted string with yellow color code."""
+> +       if not sys.stdout.isatty():
+> +               return text
+>         return '\033[1;33m' + text + RESET
+>
+>  def green(text: str) -> str:
+>         """Returns inputted string with green color code."""
+> +       if not sys.stdout.isatty():
+> +               return text
+>         return '\033[1;32m' + text + RESET
+>
+>  ANSI_LEN = len(red(''))
+> --
+> 2.30.2
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220224055350.1854078-1-keescook%40chromium.org.
