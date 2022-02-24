@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DB04C21A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 03:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D4B4C20FD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Feb 2022 02:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiBXCRD convert rfc822-to-8bit (ORCPT
+        id S229545AbiBXBd0 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Feb 2022 21:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        Wed, 23 Feb 2022 20:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiBXCRC (ORCPT
+        with ESMTP id S229575AbiBXBdZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:17:02 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B02BB0A;
-        Wed, 23 Feb 2022 18:16:33 -0800 (PST)
-Received: from in02.mta.xmission.com ([166.70.13.52]:33614)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        Wed, 23 Feb 2022 20:33:25 -0500
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B5449CB4;
+        Wed, 23 Feb 2022 17:32:52 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:35060)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1nN2rs-00GJkb-1D; Wed, 23 Feb 2022 18:24:28 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53352 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id 1nN2zx-00AMnv-Jv; Wed, 23 Feb 2022 18:32:49 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53688 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1nN2rq-0044iM-PT; Wed, 23 Feb 2022 18:24:27 -0700
+        id 1nN2zw-00EDEm-Bb; Wed, 23 Feb 2022 18:32:49 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     Linus Torvalds <linus@torvalds.org>
 Cc:     Linux API <linux-api@vger.kernel.org>,
@@ -45,45 +45,45 @@ Cc:     Linux API <linux-api@vger.kernel.org>,
         Neil Brown <neilb@cse.unsw.edu.au>, NeilBrown <neilb@suse.de>,
         "Serge E. Hallyn" <serge@hallyn.com>, Jann Horn <jannh@google.com>,
         Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>
+In-Reply-To: <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
+        (Linus Torvalds's message of "Wed, 23 Feb 2022 11:50:38 -0800")
 References: <20220207121800.5079-1-mkoutny@suse.com>
         <e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr>
         <20220215101150.GD21589@blackbody.suse.cz>
         <87zgmi5rhm.fsf@email.froward.int.ebiederm.org>
         <87fso91n0v.fsf_-_@email.froward.int.ebiederm.org>
         <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-Date:   Wed, 23 Feb 2022 19:24:19 -0600
-In-Reply-To: <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-        (Linus Torvalds's message of "Wed, 23 Feb 2022 11:50:38 -0800")
-Message-ID: <878ru1qcos.fsf@email.froward.int.ebiederm.org>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 23 Feb 2022 19:32:41 -0600
+Message-ID: <87ee3toxqe.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nN2rq-0044iM-PT;;;mid=<878ru1qcos.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/U781PhiDNIl7q7MwB3lIxUeSfdkrvwaY=
+X-XM-SPF: eid=1nN2zw-00EDEm-Bb;;;mid=<87ee3toxqe.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+jQZBwXH9ZWGkbzMxdKBeobm1bR1k1t1k=
 X-SA-Exim-Connect-IP: 68.227.174.4
 X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
 X-Spam-Combo: **;Linus Torvalds <linus@torvalds.org>
 X-Spam-Relay-Country: 
-X-Spam-Timing: total 674 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (1.6%), b_tie_ro: 10 (1.4%), parse: 1.70
-        (0.3%), extract_message_metadata: 20 (2.9%), get_uri_detail_list: 3.7
-        (0.5%), tests_pri_-1000: 14 (2.1%), tests_pri_-950: 1.24 (0.2%),
-        tests_pri_-900: 1.03 (0.2%), tests_pri_-90: 124 (18.4%), check_bayes:
-        119 (17.7%), b_tokenize: 11 (1.6%), b_tok_get_all: 12 (1.7%),
-        b_comp_prob: 4.0 (0.6%), b_tok_touch_all: 89 (13.2%), b_finish: 0.93
-        (0.1%), tests_pri_0: 488 (72.4%), check_dkim_signature: 0.67 (0.1%),
-        check_dkim_adsp: 3.0 (0.4%), poll_dns_idle: 1.22 (0.2%), tests_pri_10:
-        2.2 (0.3%), tests_pri_500: 7 (1.0%), rewrite_mail: 0.00 (0.0%)
+X-Spam-Timing: total 635 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 12 (1.8%), b_tie_ro: 10 (1.6%), parse: 1.55
+        (0.2%), extract_message_metadata: 14 (2.2%), get_uri_detail_list: 3.0
+        (0.5%), tests_pri_-1000: 14 (2.3%), tests_pri_-950: 1.29 (0.2%),
+        tests_pri_-900: 1.02 (0.2%), tests_pri_-90: 155 (24.4%), check_bayes:
+        153 (24.1%), b_tokenize: 11 (1.8%), b_tok_get_all: 11 (1.8%),
+        b_comp_prob: 3.8 (0.6%), b_tok_touch_all: 123 (19.4%), b_finish: 0.88
+        (0.1%), tests_pri_0: 417 (65.8%), check_dkim_signature: 0.61 (0.1%),
+        check_dkim_adsp: 2.4 (0.4%), poll_dns_idle: 0.69 (0.1%), tests_pri_10:
+        2.3 (0.4%), tests_pri_500: 12 (1.9%), rewrite_mail: 0.00 (0.0%)
 Subject: Re: How should rlimits, suid exec, and capabilities interact?
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -101,19 +101,26 @@ program to the user who ran that program, not to the user the program
 runs as.  Does anyone see a problem with charging the user the program
 runs as?
 
-The reason I want to change who is charged with a process (besides it
-making more sense in my head) is so that capable(CAP_SYS_RESOURCE) can
-be used instead of the magic incantation (cred->user == INIT_USER).
+The reason I want to change which user is charged with a process
+(besides it making more sense in my head) is so that
+"capable(CAP_SYS_RESOURCE)" can be used instead of the magic incantation
+"(cred->user == INIT_USER)".
+
+Today "capable(CAP_SYS_RESOURCE)" with respect to RLIMIT_NPROC is
+effectively meaningless for suid programs because the of the mismatch of
+charging the real user with the effective users credentials.
 
 An accidental experiment happened in v5.14-rc1 in July when the ucount
 rlimit code was merged.  It was only this last week when after Michal
-Koutný discovered the discrepency through code inspect a bug fix was
-merged.
+Koutný discovered the discrepancy through code inspection I merged a
+bug fix because the code was not preserving the existing behavior as
+intended.
 
-This changes the behavior that has existed in some form since Linux v1.0
-when per user process limits were added.
 
-The original code in v1.0 looked like:
+This behavior has existed in some form since Linux v1.0 when per user
+process limits were added.
+
+The original code in v1.0 was:
 > static int find_empty_process(void)
 > {
 >        int free_task;
@@ -150,8 +157,9 @@ Having tracked the use of real uid in limits back this far my guess
 is that it was an accident of the implementation and real uid vs
 effective uid had not be considered.
 
-Does anyone know if choosing the real uid was a deliberate decision
-anywhere in the history of Linux?
+Does anyone know if choosing the real uid vs the effective uid for
+accounting a users processes was a deliberate decision anywhere in the
+history of Linux?
 
 
 
