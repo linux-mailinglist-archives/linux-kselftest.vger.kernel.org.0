@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B624C3FBF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 09:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0C34C3FC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 09:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbiBYIFv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 03:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S238385AbiBYILD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 03:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiBYIFu (ORCPT
+        with ESMTP id S238383AbiBYILD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:05:50 -0500
+        Fri, 25 Feb 2022 03:11:03 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD5919F460;
-        Fri, 25 Feb 2022 00:05:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C4882D1C;
+        Fri, 25 Feb 2022 00:10:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8710261BA7;
-        Fri, 25 Feb 2022 08:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156CBC340E7;
-        Fri, 25 Feb 2022 08:05:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A984F61BEF;
+        Fri, 25 Feb 2022 08:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D13DC340E7;
+        Fri, 25 Feb 2022 08:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645776318;
-        bh=R8Z4PS4bqFbVj1m0cBD53CKo7jMpJ9THvKAGLBQf9oM=;
+        s=k20201202; t=1645776627;
+        bh=M4USnKyDoarCLAxcj1URQPBkgtFfHFlk4iSdKCZvhDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=SPkRrLaOLKMIxxH9f9JcRA6CW6sx836DiPSgqMMrnYIvCE/O5XlpRLSzNRyKOCgFR
-         khzLwdIlspdVyx9yDgJwzbLTpXRqEcsrOYbKPCXz2VvPsj+ga4/HZEiGa8SIdcPso/
-         VCdGejyWK5f2jPvWuq7vNh8gtCGjBdS9Qa8VrGq27sZqrP6wBKx2cHxXGswpu/NjDV
-         XUL5Aml+wxOZuOQyf2/NA/XvOt6TJPdwKZDxQkACB+O6GlFuYLtGnP3HdpQPp5SRUT
-         XLHcrVXLQxD6CVPevUf0oWCafdt0LwLKo1xU3jbkrhmLIyHRYSuQHJHm1oR2c81jmc
-         m4Jy9WNn8uSmg==
+        b=UAEdRQDpfxyMq22KEHqXjb2MSXT45ERk5n65VvbAVYMpGvJF2emahbmmx8FCEcaWo
+         IBZj1FH+v+jljfDybUB2oX/ziJbvr458jFZUU/LCHrJtVOEj55YFm4pOz3+qr40Td5
+         uVu28mVrlu9wkKlEb4dQb4mmvy6AIeO4SE7ukOOIrVKDgJ0hlemya2PJmdr58Es1G/
+         8/PmuB9BY/fbAIB1lHpSLa1/sz3lFnU7sWIEAgCgptikkt2IJjQrn9sn2w+xsS2JWy
+         XGrzsQG/ACQ3uwhDufUPV/+CQznIr4MdGjYLX/D9nCi+U6/UU1lfPWoRAid6ydhRzJ
+         /TYBZFQERCYPw==
 From:   SeongJae Park <sj@kernel.org>
 To:     xhao@linux.alibaba.com
 Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
@@ -39,12 +39,12 @@ Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
         linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/12] Introduce DAMON sysfs interface
-Date:   Fri, 25 Feb 2022 08:05:13 +0000
-Message-Id: <20220225080513.1908-1-sj@kernel.org>
+Subject: Re: [PATCH 03/12] mm/damon: Implement a minimal stub for sysfs-based DAMON interface
+Date:   Fri, 25 Feb 2022 08:10:24 +0000
+Message-Id: <20220225081024.1979-1-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <1dbf6a7e-0805-bc44-ec4b-379405d619d1@linux.alibaba.com>
+In-Reply-To: <66331451-48d8-6658-cdce-6e79df27ae5e@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,40 +59,31 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Xin,
 
-On Fri, 25 Feb 2022 15:32:47 +0800 xhao@linux.alibaba.com wrote:
+On Fri, 25 Feb 2022 15:21:05 +0800 xhao@linux.alibaba.com wrote:
 
-> Hi SeongJae:
+> Hi, SeongJae:
 > 
 > On 2/23/22 11:20 PM, SeongJae Park wrote:
-[...]
-> > Introduction
-> > ============
+> > DAMON's debugfs-based user interface served very well, so far.  However,
+> > it unnecessarily depends on debugfs, while DAMON is not aimed to be used
+> > for only debugging.  Also, the interface receives multiple values via
+> > one file.  For example, schemes file receives 18 values separated by
+> > white spaces.  As a result, it is ineffient, hard to be used, and
+> > difficult to be extended.  Especially, keeping backward compatibility of
+> > user space tools is getting only challenging.  It would be better to
+> > implement another reliable and flexible interface and deprecate the
+> > debugfs interface in long term.
 > >
-> > DAMON's debugfs-based user interface (DAMON_DBGFS) served very well, so far.
-> > However, it unnecessarily depends on debugfs, while DAMON is not aimed to be
-> > used for only debugging.  Also, the interface receives multiple values via one
-> > file.  For example, schemes file receives 18 values.  As a result, it is
-> > inefficient, hard to be used, and difficult to be extended.  Especially,
-> > keeping backward compatibility of user space tools is getting only challenging.
-> > It would be better to implement another reliable and flexible interface and
-> > deprecate DAMON_DBGFS in long term.
+> > To this end, this commit implements a stub of a part of the new user
+> > interface of DAMON using sysfs.  Specifically, this commit implements
+> > the sysfs control parts for virtual address space monitoring.
 > >
-> > For the reason, this patchset introduces a sysfs-based new user interface of
-> > DAMON.  The idea of the new interface is, using directory hierarchies and
-> > having one dedicated file for each value.  For a short example, users can do
-> > the virtual address monitoring via the interface as below:
-> >
-> >      # cd /sys/kernel/mm/damon/admin/
-> >      # echo 1 > kdamonds/nr
-> >      # echo 1 > kdamonds/0/contexts/nr
-> >      # echo vaddr > kdamonds/0/contexts/0/operations
-> >      # echo 1 > kdamonds/0/contexts/0/targets/nr
-> >      # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
-> >      # echo on > kdamonds/0/state
-> >
-> > A brief representation of the files hierarchy of DAMON sysfs interface is as
-> > below.  Childs are represented with indentation, directories are having '/'
-> > suffix, and files in each directory are separated by comma.
+> > More specifically, the idea of the new interface is, using directory
+> > hierarchies and making one file for one value.  The hierarchy that this
+> > commit is introducing is as below.  In the below figure,
+> > parents-children relations are represented with indentations, each
+> > directory is having ``/`` suffix, and files in each directory are
+> > separated by comma (",").
 > >
 > >      /sys/kernel/mm/damon/admin
 > >      │ kdamonds/nr
@@ -104,125 +95,102 @@ On Fri, 25 Feb 2022 15:32:47 +0800 xhao@linux.alibaba.com wrote:
 > >      │ │ │ │ │ │ nr_regions/min,max
 > >      │ │ │ │ │ targets/nr
 > >      │ │ │ │ │ │ 0/pid
-> >      │ │ │ │ │ │ │ regions/nr
-> >      │ │ │ │ │ │ │ │ 0/start,end
-> >      │ │ │ │ │ │ │ │ ...
 > >      │ │ │ │ │ │ ...
-> >      │ │ │ │ │ schemes/nr
-> >      │ │ │ │ │ 0/action
-> >      │ │ │ │ │ │ access_pattern/
-> >      │ │ │ │ │ │ │ sz/min,max
-> >      │ │ │ │ │ │ │ nr_accesses/min,max
-> >      │ │ │ │ │ │ │ age/min,max
-> >      │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
-> >      │ │ │ │ │ │ │ weights/sz,nr_accesses,age
-> >      │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
-> >      │ │ │ │ │ │ stats/nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
-> >      │ │ │ │ │ ...
+> >      │ │ │ │ ...
 > >      │ │ ...
+> 
 > >
-> > Detailed usage of the files will be described in the final Documentation patch
-> > of this patchset.
+> > Writing a number <N> to each 'nr' file makes directories of name <0> to
+> > <N-1> in the directory of the 'nr' file.  That's all this commit does.
+> > Writing proper values to relevant files will construct the DAMON
+> > contexts, and writing a special keyword, 'on', to 'state' files for each
+> > kdamond will ask DAMON to start the constructed contexts.
+> >
+> > For a short example, using below commands for
+> > monitoring virtual address spaces of a given workload is imaginable:
+> >
+> >      # cd /sys/kernel/mm/damon/admin/
+> >      # echo 1 > kdamonds/nr
+> >      # echo 1 > kdamonds/0/contexts/nr
+> >      # echo vaddr > kdamonds/0/contexts/0/damon_type
+> >      # echo 1 > kdamonds/0/contexts/0/targets/nr
+> >      # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
+> >      # echo on > kdamonds/0/state
 > 
-> The introduction of the sys DAMON interface makes DAMON seem more 
-> hierarchical, but it brings a problem. From a user's perspective,
+> I do some test  about the sys interface, like this:
 > 
-> I find it difficult to operate. For example:
+> [root@rt2k03395 0]# tree
+> .
+> ├── contexts
+> │   ├── 0
+> │   │   ├── monitoring_attrs
+> │   │   │   ├── intervals
+> │   │   │   │   ├── aggr_us
+> │   │   │   │   ├── sample_us
+> │   │   │   │   └── update_us
+> │   │   │   └── nr_regions
+> │   │   │       ├── max
+> │   │   │       └── min
+> │   │   ├── operations
+> │   │   ├── schemes
+> │   │   │   └── nr
+> │   │   └── targets
+> │   │       ├── 0
+> │   │       │   ├── pid
+> │   │       │   └── regions
+> │   │       │       ├── 0
+> │   │       │       │   ├── end
+> │   │       │       │   └── start
+> │   │       │       ├── 1
+> │   │       │       │   ├── end
+> │   │       │       │   └── start
+> │   │       │       ├── 10
+> │   │       │       │   ├── end
+> │   │       │       │   └── start
+> │   │       │       ├── 11
+> │   │       │       │   ├── end
+> │   │       │       │   └── start
+> │   │       │       ├── 12
 > 
-> step one:
+> cd regions/
+> [root@rt2k03395 regions]# ls
+> 0  10  12  14  16  18  2   21  23  25  27  29  30  32  34  36  38 4   
+> 41  43  45  47  49  6  8  nr
+> 1  11  13  15  17  19  20  22  24  26  28  3   31  33  35  37  39 40  
+> 42  44  46  48  5   7  9
+> [root@rt2k03395 regions]# cd 44/cat *
 > 
-> echo xxx > /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr
+> [root@rt2k03395 regions/44]# cat *
+> 0  0
 > 
-> step two:
+> I'm skeptical about the number regions ? And after manually setting the 
+> number of nr, the processing of
 > 
-> echo /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr/1/pid
+> "start" and "end" will be very troublesome,I guess you might want to do 
+> some special region addresses,
 > 
-> echo /sys/kernel/mm/damon/admin/kdamonds/0/contexts/0/targets/nr/0/pid
-> 
-> .........
-> 
-> Alas, it is really too troublesome to operate, can you make it as simple 
-> as possible, perhaps by referring to the implementation of cgroup.
+> such as hot or cold region, Is that true ？
 
-Thank you very much for the great comments.  I agree that this interface
-requires quite a redundant works.  Nevertheless, this interface is not aimed to
-be used by human hand but user space tools.  We provide the DAMON user-space
-tool, damo, for the purpose.  Damo already supports this interface while
-introducing nearly-zero change to the end user interface.  All you need to do
-to use sysfs in background with damo is adding '--damon_interface sysfs' to the
-command.
+The purpose of regions/ directory is for supporting the initial monitoring
+regions feature of debugfs, which is optional for virtual address spaces
+monitoring, but essential for physical address space monitoing.  If you need to
+monitor only virtual address spaces, you don't need to populate the directory.
 
-I guess someone might still want low level sysfs control for development and
-testing purpose.  For the case, damo is providing a new subcommand, fs[1], for
-more low level sysfs control with better interface.  It allows users to
-read/write all hierarchies and values in DAMON sysfs via json format.  For
-example:
+In a future, we could add nr_accesses and age files under each region directory
+and apply the monitoring results there.
 
-    # ./damo/damo fs --damon_interface sysfs read
-    {
-        "kdamonds": {
-            "0": {
-                "contexts": {
-                    "nr_contexts": "0\n"
-                },
-                "pid": "-1\n",
-                "state": "off\n"
-            },
-            "nr_kdamonds": "1\n"
-        }
-    }
-    # cat content.json
-    {
-        "kdamonds": {
-            "0": {
-                "contexts": {
-                    "nr_contexts": "1\n"
-                }
-            }
-        }
-    }
-    # ./damo/damo fs --damon_interface sysfs write --content "$(cat content.json)"
-    # ./damo/damo fs --damon_interface sysfs read
-    {
-        "kdamonds": {
-            "0": {
-                "contexts": {
-                    "0": {
-                        "monitoring_attrs": {
-                            "intervals": {
-                                "aggr_us": "100000\n",
-                                "sample_us": "5000\n",
-                                "update_us": "60000000\n"
-                            },
-                            "nr_regions": {
-                                "max": "1000\n",
-                                "min": "10\n"
-                            }
-                        },
-                        "operations": "vaddr\n",
-                        "schemes": {
-                            "nr_schemes": "0\n"
-                        },
-                        "targets": {
-                            "nr_targets": "0\n"
-                        }
-                    },
-                    "nr_contexts": "1\n"
-                },
-                "pid": "-1\n",
-                "state": "off\n"
-            },
-            "nr_kdamonds": "1\n"
-        }
-    }
 
-I admit damo interface is still not perfect.  It has many rooms for
-improvement.
+> But I think you need to think 
+> about how do you deal with too many
+> 
+> uncontacted reigons that need to be done.
 
-If even damo is too heavyweight for you, you could use some general scripts
-that can do above work in similar manner:
-https://github.com/sjp38/lazybox/blob/master/scripts/fs.py
+Sysfs interface is not aimed to be used by human hand but user space tools, and
+we provide a reference tool, damo.  Please consider using that or implement
+your own.  You could also refer to my reply to your other email for this point:
+https://lore.kernel.org/linux-mm/20220225080513.1908-1-sj@kernel.org/
 
 
 Thanks,
 SJ
+[...]
