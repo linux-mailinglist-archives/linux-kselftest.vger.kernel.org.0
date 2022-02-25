@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605BB4C4566
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 14:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E284E4C456A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 14:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240958AbiBYNIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 08:08:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S240807AbiBYNIt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 08:08:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240955AbiBYNIp (ORCPT
+        with ESMTP id S237398AbiBYNIq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:08:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F3622EDF3;
-        Fri, 25 Feb 2022 05:07:54 -0800 (PST)
+        Fri, 25 Feb 2022 08:08:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07222BD59;
+        Fri, 25 Feb 2022 05:07:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1710961C58;
-        Fri, 25 Feb 2022 13:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94552C36AE2;
-        Fri, 25 Feb 2022 13:07:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3575CB830AE;
+        Fri, 25 Feb 2022 13:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D317FC340E7;
+        Fri, 25 Feb 2022 13:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645794473;
-        bh=rBv35waBQuZoP8RzCF4uYjDmYlfZR9I7ImwYw1zQTCQ=;
+        s=k20201202; t=1645794476;
+        bh=NHWnpdjCDQ/qZCpS5wGhWJGIYUliNqhg7XIUolzmOkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQGMcwdv7KYjmQtVQRQNz3f6u7lCq+r8hg6TrZEA5A2LKmhwF8bROD3uAWpxgjXuy
-         NWLKmOemAGunLrVCSL6KBjOw9qN/OCY+0IYsVYH6ML7wWT18jedRaC5hFeBRMEVR0+
-         cEN9aMxDLnM5jAUzreWfrGtlufiH/M0PztgRepuSz94h5sDRNnucAMQXeV+8fIGZZD
-         jEktYLAxltVXNpIzaB7kCD9TsSTLShVuGXhXaYf7DkMDhTuUYj33hBqT6hHgGPUEtP
-         akkqdaLptkkY4vF9DwEIeZhDSp7+p0YxmpXBaKY5yOAHtxbQ4sNpkDFoffwvht1a9B
-         Gzg7Va87XCNXA==
+        b=WdHOu5Wqe4G4KL5V+y6eFqhBgar+Jb5VQztvQbjRPk++B2yUAWq8wxHPCT5e8c645
+         YjVtx7wEJZ5NBAnoi41y2wkmUXDpe8Ck2tebL62zZS7Vb+7xDewHlse/9uxawfAD2V
+         CCTQaG4lPBmbQI1z154gEIEXs2lEkgTIwAxNZ2Q9b8/GmuUEGa81MoaGHRwuOp1IH9
+         AgDG31jQUA//y/nfQuVJlfvVn4pGu4Ou7dGfD5eLIseGNzKWpZLzq07ZyB84CCiOOC
+         8mlvrbfY2zzmOtITuwpQLrvh5RzgMkJE1/WjPVvJukgO4GSehd4vl68vaeNCetbbQQ
+         nQfHMEY/G549g==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
         xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 08/13] mm/damon/sysfs: Support schemes prioritization
-Date:   Fri, 25 Feb 2022 13:07:07 +0000
-Message-Id: <20220225130712.12682-9-sj@kernel.org>
+Subject: [PATCH v2 09/13] mm/damon/sysfs: Support DAMOS watermarks
+Date:   Fri, 25 Feb 2022 13:07:08 +0000
+Message-Id: <20220225130712.12682-10-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220225130712.12682-1-sj@kernel.org>
 References: <20220225130712.12682-1-sj@kernel.org>
@@ -57,244 +57,320 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit makes DAMON sysfs interface supports the DAMOS' regions
-prioritization weights feature under quotas limitation.  Specifically,
-this commit adds 'weights' directory under each scheme directory and
-makes kdamond 'state' file writing respects the contents in the
-directory.
+This commit makes DAMON sysfs interface supports the DAMOS watermarks
+feature.  Specifically, this commit adds 'watermarks' directory under
+each scheme directory and makes kdamond 'state' file writing respects
+the contents in the directory.
+
+As a result, the files hierarchy becomes as below:
 
     /sys/kernel/mm/damon/admin
-    │ kdamonds/nr
+    │ kdamonds/nr_kdamonds
     │ │ 0/state,pid
-    │ │ │ contexts/nr
+    │ │ │ contexts/nr_contexts
     │ │ │ │ 0/operations
     │ │ │ │ │ monitoring_attrs/intervals/sample_us,aggr_us,update_us
     │ │ │ │ │ │ nr_regions/min,max
-    │ │ │ │ │ targets/nr
-    │ │ │ │ │ │ 0/pid
-    │ │ │ │ │ │ │ regions/nr
+    │ │ │ │ │ targets/nr_targets
+    │ │ │ │ │ │ 0/pid_target
+    │ │ │ │ │ │ │ regions/nr_regions
     │ │ │ │ │ │ │ │ 0/start,end
     │ │ │ │ │ │ │ │ ...
     │ │ │ │ │ │ ...
-    │ │ │ │ │ schemes/nr
+    │ │ │ │ │ schemes/nr_schemes
     │ │ │ │ │ │ 0/action
     │ │ │ │ │ │ │ access_pattern/
     │ │ │ │ │ │ │ │ sz/min,max
     │ │ │ │ │ │ │ │ nr_accesses/min,max
     │ │ │ │ │ │ │ │ age/min,max
-    │ │ │ │ │ │ │ quotas/ms,bytes,reset_interval_ms
-    │ │ │ │ │ │ │ │ weights/    <- NEW DIRECTORY
-    │ │ │ │ │ │ │ │ │ weights/sz_permil,nr_accesses_permil,age_permil
+    │ │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
+    │ │ │ │ │ │ │ │ weights/sz_permil,nr_accesses_permil,age_permil
+    │ │ │ │ │ │ │ watermarks/    <- NEW DIRECTORY
+    │ │ │ │ │ │ │ │ metric,interval_us,high,mid,lo
     │ │ │ │ │ │ ...
     │ │ │ │ ...
     │ │ ...
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs.c | 152 ++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 149 insertions(+), 3 deletions(-)
+ mm/damon/sysfs.c | 220 +++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 215 insertions(+), 5 deletions(-)
 
 diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 36540bdf6442..fb1c39eabc31 100644
+index fb1c39eabc31..2e09ed36f666 100644
 --- a/mm/damon/sysfs.c
 +++ b/mm/damon/sysfs.c
-@@ -113,12 +113,130 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
+@@ -113,6 +113,189 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
  	.default_groups = damon_sysfs_ul_range_groups,
  };
  
 +/*
-+ * scheme/weights directory
++ * watermarks directory
 + */
 +
-+struct damon_sysfs_weights {
++struct damon_sysfs_watermarks {
 +	struct kobject kobj;
-+	unsigned int sz;
-+	unsigned int nr_accesses;
-+	unsigned int age;
++	enum damos_wmark_metric metric;
++	unsigned long interval_us;
++	unsigned long high;
++	unsigned long mid;
++	unsigned long low;
 +};
 +
-+static struct damon_sysfs_weights *damon_sysfs_weights_alloc(unsigned int sz,
-+		unsigned int nr_accesses, unsigned int age)
++static struct damon_sysfs_watermarks *damon_sysfs_watermarks_alloc(
++		enum damos_wmark_metric metric, unsigned long interval_us,
++		unsigned long high, unsigned long mid, unsigned long low)
 +{
-+	struct damon_sysfs_weights *weights = kmalloc(sizeof(*weights),
-+			GFP_KERNEL);
++	struct damon_sysfs_watermarks *watermarks = kmalloc(
++			sizeof(*watermarks), GFP_KERNEL);
 +
-+	if (!weights)
++	if (!watermarks)
 +		return NULL;
-+	weights->kobj = (struct kobject){};
-+	weights->sz = sz;
-+	weights->nr_accesses = nr_accesses;
-+	weights->age = age;
-+	return weights;
++	watermarks->kobj = (struct kobject){};
++	watermarks->metric = metric;
++	watermarks->interval_us = interval_us;
++	watermarks->high = high;
++	watermarks->mid = mid;
++	watermarks->low = low;
++	return watermarks;
 +}
 +
-+static ssize_t sz_permil_show(struct kobject *kobj,
++/* Should match with enum damos_wmark_metric */
++static const char * const damon_sysfs_wmark_metric_strs[] = {
++	"none",
++	"free_mem_rate",
++};
++
++static ssize_t metric_show(struct kobject *kobj, struct kobj_attribute *attr,
++		char *buf)
++{
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++
++	return sysfs_emit(buf, "%s\n",
++			damon_sysfs_wmark_metric_strs[watermarks->metric]);
++}
++
++static ssize_t metric_store(struct kobject *kobj, struct kobj_attribute *attr,
++		const char *buf, size_t count)
++{
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++	enum damos_wmark_metric metric;
++
++	for (metric = 0; metric <= NR_DAMOS_WMARK_METRICS; metric++) {
++		if (sysfs_streq(buf, damon_sysfs_wmark_metric_strs[metric])) {
++			watermarks->metric = metric;
++			return count;
++		}
++	}
++	return -EINVAL;
++}
++
++static ssize_t interval_us_show(struct kobject *kobj,
 +		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
 +
-+	return sysfs_emit(buf, "%u\n", weights->sz);
++	return sysfs_emit(buf, "%lu\n", watermarks->interval_us);
 +}
 +
-+static ssize_t sz_permil_store(struct kobject *kobj,
++static ssize_t interval_us_store(struct kobject *kobj,
 +		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
-+	int err = kstrtouint(buf, 0, &weights->sz);
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++	int err = kstrtoul(buf, 0, &watermarks->interval_us);
 +
 +	if (err)
 +		return -EINVAL;
 +	return count;
 +}
 +
-+static ssize_t nr_accesses_permil_show(struct kobject *kobj,
++static ssize_t high_show(struct kobject *kobj,
 +		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
 +
-+	return sysfs_emit(buf, "%u\n", weights->nr_accesses);
++	return sysfs_emit(buf, "%lu\n", watermarks->high);
 +}
 +
-+static ssize_t nr_accesses_permil_store(struct kobject *kobj,
++static ssize_t high_store(struct kobject *kobj,
 +		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
-+	int err = kstrtouint(buf, 0, &weights->nr_accesses);
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++	int err = kstrtoul(buf, 0, &watermarks->high);
 +
 +	if (err)
 +		return -EINVAL;
 +	return count;
 +}
 +
-+static ssize_t age_permil_show(struct kobject *kobj,
++static ssize_t mid_show(struct kobject *kobj,
 +		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
 +
-+	return sysfs_emit(buf, "%u\n", weights->age);
++	return sysfs_emit(buf, "%lu\n", watermarks->mid);
 +}
 +
-+static ssize_t age_permil_store(struct kobject *kobj,
++static ssize_t mid_store(struct kobject *kobj,
 +		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
-+	int err = kstrtouint(buf, 0, &weights->age);
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++	int err = kstrtoul(buf, 0, &watermarks->mid);
 +
 +	if (err)
 +		return -EINVAL;
 +	return count;
 +}
 +
-+static void damon_sysfs_weights_release(struct kobject *kobj)
++static ssize_t low_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
 +{
-+	kfree(container_of(kobj, struct damon_sysfs_weights, kobj));
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++
++	return sysfs_emit(buf, "%lu\n", watermarks->low);
 +}
 +
-+static struct kobj_attribute damon_sysfs_weights_sz_attr =
-+		__ATTR_RW_MODE(sz_permil, 0600);
++static ssize_t low_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
++{
++	struct damon_sysfs_watermarks *watermarks = container_of(kobj,
++			struct damon_sysfs_watermarks, kobj);
++	int err = kstrtoul(buf, 0, &watermarks->low);
 +
-+static struct kobj_attribute damon_sysfs_weights_nr_accesses_attr =
-+		__ATTR_RW_MODE(nr_accesses_permil, 0600);
++	if (err)
++		return -EINVAL;
++	return count;
++}
 +
-+static struct kobj_attribute damon_sysfs_weights_age_attr =
-+		__ATTR_RW_MODE(age_permil, 0600);
++static void damon_sysfs_watermarks_release(struct kobject *kobj)
++{
++	kfree(container_of(kobj, struct damon_sysfs_watermarks, kobj));
++}
 +
-+static struct attribute *damon_sysfs_weights_attrs[] = {
-+	&damon_sysfs_weights_sz_attr.attr,
-+	&damon_sysfs_weights_nr_accesses_attr.attr,
-+	&damon_sysfs_weights_age_attr.attr,
++static struct kobj_attribute damon_sysfs_watermarks_metric_attr =
++		__ATTR_RW_MODE(metric, 0600);
++
++static struct kobj_attribute damon_sysfs_watermarks_interval_us_attr =
++		__ATTR_RW_MODE(interval_us, 0600);
++
++static struct kobj_attribute damon_sysfs_watermarks_high_attr =
++		__ATTR_RW_MODE(high, 0600);
++
++static struct kobj_attribute damon_sysfs_watermarks_mid_attr =
++		__ATTR_RW_MODE(mid, 0600);
++
++static struct kobj_attribute damon_sysfs_watermarks_low_attr =
++		__ATTR_RW_MODE(low, 0600);
++
++static struct attribute *damon_sysfs_watermarks_attrs[] = {
++	&damon_sysfs_watermarks_metric_attr.attr,
++	&damon_sysfs_watermarks_interval_us_attr.attr,
++	&damon_sysfs_watermarks_high_attr.attr,
++	&damon_sysfs_watermarks_mid_attr.attr,
++	&damon_sysfs_watermarks_low_attr.attr,
 +	NULL,
 +};
-+ATTRIBUTE_GROUPS(damon_sysfs_weights);
++ATTRIBUTE_GROUPS(damon_sysfs_watermarks);
 +
-+static struct kobj_type damon_sysfs_weights_ktype = {
-+	.release = damon_sysfs_weights_release,
++static struct kobj_type damon_sysfs_watermarks_ktype = {
++	.release = damon_sysfs_watermarks_release,
 +	.sysfs_ops = &kobj_sysfs_ops,
-+	.default_groups = damon_sysfs_weights_groups,
++	.default_groups = damon_sysfs_watermarks_groups,
 +};
 +
  /*
-  * quotas directory
+  * scheme/weights directory
   */
+@@ -469,6 +652,7 @@ struct damon_sysfs_scheme {
+ 	enum damos_action action;
+ 	struct damon_sysfs_access_pattern *access_pattern;
+ 	struct damon_sysfs_quotas *quotas;
++	struct damon_sysfs_watermarks *watermarks;
+ };
  
- struct damon_sysfs_quotas {
- 	struct kobject kobj;
-+	struct damon_sysfs_weights *weights;
- 	unsigned long ms;
- 	unsigned long sz;
- 	unsigned long reset_interval_ms;
-@@ -129,6 +247,29 @@ static struct damon_sysfs_quotas *damon_sysfs_quotas_alloc(void)
- 	return kzalloc(sizeof(struct damon_sysfs_quotas), GFP_KERNEL);
+ /* This should match with enum damos_action */
+@@ -541,6 +725,24 @@ static int damon_sysfs_scheme_set_quotas(struct damon_sysfs_scheme *scheme)
+ 	return err;
  }
  
-+static int damon_sysfs_quotas_add_dirs(struct damon_sysfs_quotas *quotas)
++static int damon_sysfs_scheme_set_watermarks(struct damon_sysfs_scheme *scheme)
 +{
-+	struct damon_sysfs_weights *weights;
++	struct damon_sysfs_watermarks *watermarks =
++		damon_sysfs_watermarks_alloc(DAMOS_WMARK_NONE, 0, 0, 0, 0);
 +	int err;
 +
-+	weights = damon_sysfs_weights_alloc(0, 0, 0);
-+	if (!weights)
++	if (!watermarks)
 +		return -ENOMEM;
-+
-+	err = kobject_init_and_add(&weights->kobj, &damon_sysfs_weights_ktype,
-+			&quotas->kobj, "weights");
++	err = kobject_init_and_add(&watermarks->kobj,
++			&damon_sysfs_watermarks_ktype, &scheme->kobj,
++			"watermarks");
 +	if (err)
-+		kobject_put(&weights->kobj);
++		kobject_put(&watermarks->kobj);
 +	else
-+		quotas->weights = weights;
++		scheme->watermarks = watermarks;
 +	return err;
 +}
 +
-+static void damon_sysfs_quotas_rm_dirs(struct damon_sysfs_quotas *quotas)
-+{
-+	kobject_put(&quotas->weights->kobj);
-+}
-+
- static ssize_t ms_show(struct kobject *kobj, struct kobj_attribute *attr,
- 		char *buf)
+ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
  {
-@@ -387,6 +528,9 @@ static int damon_sysfs_scheme_set_quotas(struct damon_sysfs_scheme *scheme)
- 		return -ENOMEM;
- 	err = kobject_init_and_add(&quotas->kobj, &damon_sysfs_quotas_ktype,
- 			&scheme->kobj, "quotas");
-+	if (err)
-+		goto out;
-+	err = damon_sysfs_quotas_add_dirs(quotas);
+ 	int err;
+@@ -551,8 +753,14 @@ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
+ 	err = damon_sysfs_scheme_set_quotas(scheme);
  	if (err)
- 		goto out;
- 	scheme->quotas = quotas;
-@@ -419,6 +563,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
- {
- 	damon_sysfs_access_pattern_rm_dirs(scheme->access_pattern);
+ 		goto put_access_pattern_out;
++	err = damon_sysfs_scheme_set_watermarks(scheme);
++	if (err)
++		goto put_quotas_access_pattern_out;
+ 	return 0;
+ 
++put_quotas_access_pattern_out:
++	kobject_put(&scheme->quotas->kobj);
++	scheme->quotas = NULL;
+ put_access_pattern_out:
  	kobject_put(&scheme->access_pattern->kobj);
-+	damon_sysfs_quotas_rm_dirs(scheme->quotas);
+ 	scheme->access_pattern = NULL;
+@@ -565,6 +773,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
+ 	kobject_put(&scheme->access_pattern->kobj);
+ 	damon_sysfs_quotas_rm_dirs(scheme->quotas);
  	kobject_put(&scheme->quotas->kobj);
++	kobject_put(&scheme->watermarks->kobj);
  }
  
-@@ -1657,13 +1802,14 @@ static struct damos *damon_sysfs_mk_scheme(
- 	struct damon_sysfs_access_pattern *pattern =
+ static ssize_t action_show(struct kobject *kobj, struct kobj_attribute *attr,
+@@ -1803,6 +2012,7 @@ static struct damos *damon_sysfs_mk_scheme(
  		sysfs_scheme->access_pattern;
  	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
-+	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
+ 	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
++	struct damon_sysfs_watermarks *sysfs_wmarks = sysfs_scheme->watermarks;
  	struct damos_quota quota = {
  		.ms = sysfs_quotas->ms,
  		.sz = sysfs_quotas->sz,
- 		.reset_interval = sysfs_quotas->reset_interval_ms,
--		.weight_sz = 1000,
--		.weight_nr_accesses = 1000,
--		.weight_age = 1000,
-+		.weight_sz = sysfs_weights->sz,
-+		.weight_nr_accesses = sysfs_weights->nr_accesses,
-+		.weight_age = sysfs_weights->age,
+@@ -1812,11 +2022,11 @@ static struct damos *damon_sysfs_mk_scheme(
+ 		.weight_age = sysfs_weights->age,
  	};
  	struct damos_watermarks wmarks = {
- 		.metric = DAMOS_WMARK_NONE,
+-		.metric = DAMOS_WMARK_NONE,
+-		.interval = 0,
+-		.high = 0,
+-		.mid = 0,
+-		.low = 0,
++		.metric = sysfs_wmarks->metric,
++		.interval = sysfs_wmarks->interval_us,
++		.high = sysfs_wmarks->high,
++		.mid = sysfs_wmarks->mid,
++		.low = sysfs_wmarks->low,
+ 	};
+ 
+ 	return damon_new_scheme(pattern->sz->min, pattern->sz->max,
 -- 
 2.17.1
 
