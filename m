@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600814C4D86
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 19:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9454C4D8F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 19:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiBYSVX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 13:21:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S231442AbiBYSXC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 13:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiBYSVW (ORCPT
+        with ESMTP id S231599AbiBYSXA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:21:22 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258201F9801
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 10:20:50 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id r7so7478896iot.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 10:20:50 -0800 (PST)
+        Fri, 25 Feb 2022 13:23:00 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EE31BE87
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 10:22:28 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id t11so7460457ioi.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 10:22:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MWLlCQx/OHozBmLwVGzmPeq2Ic2iWbuSjFqtIjn7Lz8=;
-        b=V8r36s3vT+1gs9l0tfc87OEjEEk2YBK14rZMzKm8N9OdsZrvjU2tslt20Ljk8UQPSK
-         OympIVHSG6d24g+b66Ds/k48iSb9vd+wkZO9c7PR8/1M+TSsQcXa2HB2yHa1wiHcIhPe
-         kwujV1XNG+iTQaHtMJKccdwQt3OJuaL86Agig=
+        bh=4i7Dn6xMqNIvDQ6SKHYlCE8bqBPJnnLQezZBe+tm+7E=;
+        b=P6fzb+OZwpOlvaG3+EnWy1v6RTMFv/HjCAiOKJanAe76hkVLxtNE5HdrdpTBhWnZxP
+         BpxRm/AAeooby+ng8DNSr6qE1UgblJnuS+pbruvGLX7cFH5ZHPSo0WfWiM56kRe20HZ5
+         pzvkhw4ZAIOsXC2D2YuzQqd2s0NERUatK41Hs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=MWLlCQx/OHozBmLwVGzmPeq2Ic2iWbuSjFqtIjn7Lz8=;
-        b=DepiZsc7pGqR5pazTN5aj0PHiy9sdnPZySGfAYIbEu6P8YzOEU56GwW3/KB81tG3Ao
-         /22oMnshrkWfB8O32KFoC/0VvEZHicHRJjpJLnFtf05izFB/QcZ5R7mneRkqSd0FR4j9
-         xrQemb5AACHHcwke3M6Twup9GF8dSbUGKOmnz/gd//0vWVhBkxcahhigaxqfl2lY91t/
-         deTYVp/8/+WRsNtpQ/swloIH/aDlDGi3//jUXn8ZowSC+uN993WA568H6GII4WMQmWl9
-         35EchtPAUuG5FAhpHR9Lc2ryzmCfHRVS0J3qmSUxjsl25k7+WUIS6mGqPGuZOtG78iB5
-         Fylw==
-X-Gm-Message-State: AOAM532qWZEX3vFVEUvROEEFuPidgK8Mkf+8dMpBp/bpsx5sWTMI8SMP
-        Ml8UTxh59NiBL8FL1fwPUXffHQ==
-X-Google-Smtp-Source: ABdhPJxfC2RtKazndNmHoXswy1ToULjeL9n9L0TlP95AwtBRC1K5bIpUGaxwCkBuHDLSrxmhCCMk5A==
-X-Received: by 2002:a02:c850:0:b0:30e:54b4:d8de with SMTP id r16-20020a02c850000000b0030e54b4d8demr6784696jao.146.1645813249475;
-        Fri, 25 Feb 2022 10:20:49 -0800 (PST)
+        bh=4i7Dn6xMqNIvDQ6SKHYlCE8bqBPJnnLQezZBe+tm+7E=;
+        b=SI03mJaoCTfgB+YdgQHgNjQVhHMq1+e6W/zhwNoeHbjha0bsBbje69ZdRvyOzSUt8t
+         t7XDiw2Z5KIPlZ449DPQBEcQc4xs1CMIcsfcG0zL+7pHnbc9qBJZDBYnpDhArhElJm/3
+         tqh6OwnPfVZm30EgIWUvNA6U/Mo8nR8YGneNr6PO2oC6UK/esApi9aXu9oydy5dbuty2
+         CUNDhg+C1LAZ405PLsrDTYy5Ujt5cG2uXSMmWNNq+VscK0AeLJ4pNDAmzMdfbr3PaMTh
+         XMryQznvKMrjSmWMebCDZkWtgYLE78/vNZWxL0brmvYq3Lf0kC2xAtMTG/xoHTxu9sxX
+         R2tQ==
+X-Gm-Message-State: AOAM5330lsVmVvXU4P8y/0AfsmvJr7z1+tUZ+3C8NgQ0QXN5rgSTU+Et
+        my803ZuXKJAh2v63koO6zJ+AZw==
+X-Google-Smtp-Source: ABdhPJzo/Kt9WGTU8DxFi837ltOzHh2NPMAEUvMDP0w2rSR46kgdf8Wl5YnxAc9awM/UaRhOFNu2vA==
+X-Received: by 2002:a05:6638:bc1:b0:311:905f:790c with SMTP id g1-20020a0566380bc100b00311905f790cmr7025930jad.74.1645813347815;
+        Fri, 25 Feb 2022 10:22:27 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id w25-20020a5ed619000000b00640d84049c0sm1876803iom.20.2022.02.25.10.20.48
+        by smtp.gmail.com with ESMTPSA id u9-20020a5d8189000000b006415781ebe5sm1957643ion.5.2022.02.25.10.22.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 10:20:49 -0800 (PST)
-Subject: Re: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
+        Fri, 25 Feb 2022 10:22:27 -0800 (PST)
+Subject: Re: [PATCH v3 0/5] selftests/resctrl: Add resctrl_tests into
+ kselftest set
 To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -56,18 +56,15 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
- <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
- <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
- <5200cb0b-6417-d97b-7f17-eae4bf4b0901@linuxfoundation.org>
- <TYAPR01MB6330E0C641FC7F0EEE0DCA688B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <d9f81a0f-5f25-9304-fdca-fc164224a786@linuxfoundation.org>
+ <TYAPR01MB63306F67590849B0354D8FB78B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <04c4e4b1-b499-8d35-2eb6-9914cc579c0b@linuxfoundation.org>
-Date:   Fri, 25 Feb 2022 11:20:48 -0700
+Message-ID: <34174016-e4fd-be4c-a5c0-81d63557de64@linuxfoundation.org>
+Date:   Fri, 25 Feb 2022 11:22:27 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <TYAPR01MB6330E0C641FC7F0EEE0DCA688B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYAPR01MB63306F67590849B0354D8FB78B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
 Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -81,153 +78,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/25/22 1:02 AM, tan.shaopeng@fujitsu.com wrote:
+On 2/25/22 1:03 AM, tan.shaopeng@fujitsu.com wrote:
 > Hi Shuah,
 > 
->> On 2/22/22 12:55 AM, tan.shaopeng@fujitsu.com wrote:
->>> Hi Khan,
+>> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
+>>> Hello,
 >>>
->>>> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
->>>>> In kselftest framework, all tests can be build/run at a time, and a
->>>>> sub test also can be build/run individually. As follows:
->>>>> $ make -C tools/testing/selftests run_tests $ make -C
->>>>> tools/testing/selftests TARGETS=ptrace run_tests
->>>>>
->>>>> However, resctrl_tests cannot be run using kselftest framework,
->>>>> users have to change directory to tools/testing/selftests/resctrl/,
->>>>> run "make" to build executable file "resctrl_tests", and run "sudo
->>>>> ./resctrl_tests" to execute the test.
->>>>>
->>>>> To build/run resctrl_tests using kselftest framework.
->>>>> Modify tools/testing/selftests/Makefile and
->>>>> tools/testing/selftests/resctrl/Makefile.
->>>>>
->>>>> Even after this change, users can still build/run resctrl_tests
->>>>> without using framework as before.
->>>>>
->>>>> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
->>>>> ---
->>>>> Some important feedbacks from v1&v2 are addressed as follows:
->>>>>
->>>>> - The changelog mentions that changes were made to the resctrl
->>>>>      selftest Makefile but it does not describe what the change
->> accomplish
->>>>>      or why they are needed.
->>>>>      => By changing the Makefile, resctrl_tests can use kselftest
->>>>>         framework like other sub tests. I described this in changelog.
->>>>>
->>>>> - The changelog did not describe how a user may use the kselftest
->>>>>      framework to run the resctrl tests nor the requested information
->>>>>      on how existing workflows are impacted.
->>>>>      => I described how to build/run resctrl_tests with kselftest
->> framework,
->>>>>         and described the existing workflows are not impacted that users
->> can
->>>>>         build/run resctrl_tests without using kselftest framework as
->> before.
->>>>>
->>>>> - tools/testing/selftests/resctrl/README should be updated.
->>>>>      => I separate the update of README to a new patch.[patch v3 3/5]
->>>>>
->>>>> - Why is the meaning of "EXTRA_SOURCES" (i.e. what is "extra"?) and
->>>>>      why is "SRCS" no longer sufficient?
->>>>>      => I referred to other Makefiles, and found "SRCS" is better
->>>>>         than "EXTRA_SOURCES". So, I updated it to use "SRCS".
->>>>>
->>>>>     tools/testing/selftests/Makefile         |  1 +
->>>>>     tools/testing/selftests/resctrl/Makefile | 20 ++++++--------------
->>>>>     2 files changed, 7 insertions(+), 14 deletions(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/Makefile
->>>>> b/tools/testing/selftests/Makefile
->>>>> index c852eb40c4f7..7df397c6893c 100644
->>>>> --- a/tools/testing/selftests/Makefile
->>>>> +++ b/tools/testing/selftests/Makefile
->>>>> @@ -51,6 +51,7 @@ TARGETS += proc
->>>>>     TARGETS += pstore
->>>>>     TARGETS += ptrace
->>>>>     TARGETS += openat2
->>>>> +TARGETS += resctrl
->>>>>     TARGETS += rlimits
->>>>>     TARGETS += rseq
->>>>>     TARGETS += rtc
->>>>> diff --git a/tools/testing/selftests/resctrl/Makefile
->>>>> b/tools/testing/selftests/resctrl/Makefile
->>>>> index 6bcee2ec91a9..de26638540ba 100644
->>>>> --- a/tools/testing/selftests/resctrl/Makefile
->>>>> +++ b/tools/testing/selftests/resctrl/Makefile
->>>>> @@ -1,17 +1,9 @@
->>>>> -CC = $(CROSS_COMPILE)gcc
->>>>> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -SRCS=$(wildcard *.c)
->>>>> -OBJS=$(SRCS:.c=.o)
->>>>> +CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
->>>>>
->>>>> -all: resctrl_tests
->>>>> +TEST_GEN_PROGS := resctrl_tests
->>>>> +SRCS := $(wildcard *.c)
->>>>>
->>>>> -$(OBJS): $(SRCS)
->>>>> -	$(CC) $(CFLAGS) -c $(SRCS)
->>>>> +all: $(TEST_GEN_PROGS)
->>>>>
->>>>> -resctrl_tests: $(OBJS)
->>>>> -	$(CC) $(CFLAGS) -o $@ $^
->>>>> -
->>>>> -.PHONY: clean
->>>>> -
->>>>> -clean:
->>>>> -	$(RM) $(OBJS) resctrl_tests
->>>>> +$(TEST_GEN_PROGS): $(SRCS)
->>>>
->>>> This patch breaks the test build - the below use-cases fail
->>>>
->>>> make kselftest-all TARGETS=resctrl
->>>> make -C  tools/testing/selftests/ TARGETS=resctrl
->>>>
->>>> Also a simple make in tools/testing/selftests/resctr
+>>> The aim of this series is to make resctrl_tests run by using kselftest
+>>> framework.
+>>> - I modify resctrl_test Makefile and kselftest Makefile,
+>>>     to enable build/run resctrl_tests by using kselftest framework.
+>>>     Of course, users can also build/run resctrl_tests without
+>>>     using framework as before.
+>>> - I change the default limited time for resctrl_tests to 120 seconds, to
+>>>     ensure the resctrl_tests finish in limited time on different environments.
+>>> - When resctrl file system is not supported by environment or
+>>>     resctrl_tests is not run as root, return skip code of kselftest framework.
+>>> - If resctrl_tests does not finish in limited time, terminate it as
+>>>     same as executing ctrl+c that kills parent process and child process.
 >>>
->>> Thanks for your feedbacks.
->>> I applied these patches to the source below and built resctrl_tests
->>> successfully using above use-cases on x86/arm machine.
->>> (1)
->>>    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>    Tag: v5.16
->>> (2)
->>>    https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>>    Tag: next-20220217
+>>> Difference from v2:
+>>> - I reworte changelog of this patch series.
+>>> - I added how to use framework to run resctrl to README. [PATCH v3
+>>> 2/5]
+>>> - License has no dependencies on this patch series, I separated from it this
+>> patch series to another patch.
+>>> https://lore.kernel.org/lkml/20211213100154.180599-1-tan.shaopeng@jp.f
+>>> ujitsu.com/
 >>>
->>> Could you tell me which kernel source you used to build and what error
->>> message you got?
+>>> With regard to the limited time, I think 120s is not a problem since
+>>> some tests have a longer timeout (e.g. net test is 300s). Please let me know if
+>> this is wrong.
+>>>
+>>> Thanks,
+>>>
+>>> Shaopeng Tan (5):
+>>>     selftests/resctrl: Kill child process before parent process terminates
+>>>       if SIGTERM is received
+>>>     selftests/resctrl: Make resctrl_tests run using kselftest framework
+>>>     selftests/resctrl: Update README about using kselftest framework to
+>>>       build/run resctrl_tests
+>>>     selftests/resctrl: Change the default limited time to 120 seconds
+>>>     selftests/resctrl: Fix resctrl_tests' return code to work with
+>>>       selftest framework
+>>>
+>>>    tools/testing/selftests/Makefile              |  1 +
+>>>    tools/testing/selftests/resctrl/Makefile      | 20 ++++-------
+>>>    tools/testing/selftests/resctrl/README        | 34
+>> +++++++++++++++++++
+>>>    .../testing/selftests/resctrl/resctrl_tests.c |  4 +--
+>>>    tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+>>>    tools/testing/selftests/resctrl/settings      |  1 +
+>>>    6 files changed, 45 insertions(+), 16 deletions(-)
+>>>    create mode 100644 tools/testing/selftests/resctrl/settings
 >>>
 >>
->> I tried this on Linux 5.17-rc4
+>> Reviewed the patches - patches 1/5, 4/5 & 5/5 don't depend on kselftest
+>> framework improvements. 2/5 and 3/5 are.
+>>
+>> Please reorder the patches - move 4/5 and 5/5 up and make 2/5 and 3/5 the
+>> last in this series. Also see comments on individual patches.
 > 
-> I tried these patches on Linux 5.17-rc4 with gcc version 8.4.1
-> and resctrl_tests is still built successfully.
+> Ok, I will reorder all patches as follows, so that independent patches come first
+> and Makefile related patches come last:
+> [PATCH 1/5] selftests/resctrl: Kill child process before parent process terminates if SIGTERM is received
+> [PATCH 4/5] selftests/resctrl: Change the default limited time to 120 seconds
+> [PATCH 5/5] selftests/resctrl: Fix resctrl_tests' return code to work with selftest framework
+> [PATCH 2/5] selftests/resctrl: Make resctrl_tests run using kselftest framework
+> [PATCH 3/5] selftests/resctrl: Update README about using kselftest framework to build/run resctrl_tests
+> [PATCH] selftests/resctrl: Add missing SPDX license to Makefile
 > 
-> Could you tell me what error message you got when you built it?
+> Please let me know if I'm wrong.
+> 
 
-Here it is:
-
-make
-gcc   resctrl_tests.o cache.c cat_test.c cmt_test.c fill_buf.c mba_test.c mbm_test.c resctrlfs.c resctrl_tests.c resctrl_val.c   -o resctrl_tests
-/usr/bin/ld: /tmp/ccoarGr4.o:(.bss+0x0): multiple definition of `is_amd'; resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl_tests.c:16: first defined here
-/usr/bin/ld: /tmp/ccoarGr4.o: in function `detect_amd':
-resctrl_tests.c:(.text+0x63b): multiple definition of `detect_amd'; resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl_tests.c:19: first defined here
-/usr/bin/ld: /tmp/ccoarGr4.o: in function `tests_cleanup':
-resctrl_tests.c:(.text+0x780): multiple definition of `tests_cleanup'; resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl_tests.c:50: first defined here
-/usr/bin/ld: /tmp/ccoarGr4.o: in function `main':
-resctrl_tests.c:(.text+0xadd): multiple definition of `main'; resctrl_tests.o:/linux/linux_5.17/tools/testing/selftests/resctrl/resctrl_tests.c:129: first defined here
-collect2: error: ld returned 1 exit status
-make: *** [<builtin>: resctrl_tests] Error 1
-
-I have gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
-
-Take a look at the changes to
-tools/testing/selftests/resctrl/Makefile
-
-I don't think you need to make the changes you made. I would start
-small with including lib.mk and work from there.
+This split looks good to me.
 
 thanks,
 -- Shuah
+
