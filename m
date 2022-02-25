@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8DC4C4C53
+	by mail.lfdr.de (Postfix) with ESMTP id 20A234C4C52
 	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 18:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243748AbiBYRfV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 12:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S242030AbiBYRf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 12:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242030AbiBYRfU (ORCPT
+        with ESMTP id S243767AbiBYRfZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 12:35:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221081AA041
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 09:34:47 -0800 (PST)
+        Fri, 25 Feb 2022 12:35:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D381B1DC1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 09:34:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2AF061DC0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 17:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E87C340F1;
-        Fri, 25 Feb 2022 17:34:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43718B832CD
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 17:34:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A11C340F2;
+        Fri, 25 Feb 2022 17:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645810486;
-        bh=P/nokR+lh+lVS48PGTQFmztfquPuUQZJXfMCMOFRh7E=;
+        s=k20201202; t=1645810489;
+        bh=Gc0gUgV2lehHJCVTaAZ18CcKS0Bz6npKGWGO2NP1650=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ASGrFmfIkCiqi8QD5/49og2CAwqyGrXO/mA7cJWD4rkMuPKsxVuUsfIeeFDzI3l/5
-         OoNym3nsJGlqkyWpPF4Fbz113If6oWj85hiYIfLkT7hGGWDQyI3AIbrNm3RZ8uqyv5
-         Tut0/YplzrPdFAVtWyDeO5Ho4ehGBSZfoch2ncX6ZYor5rtENqxiyapXnLwlOzN8J2
-         lMkaH2NxhnIDX/FFh9Eagc49oU/e6JOMgylHl24IDFrSXfXAy8a++0s/x6zSgWOBfs
-         VrN+twFV1f5TEUFEQyeQ1OpeHdBoBUwCc3qfd8NDq3IkxDftfHvcYLIuKOc5U6YRpx
-         XN2up64tvdsKA==
+        b=Om1TqDcc8sb/tHRgnXcMN5zavJQlaKN7V1/E9Mvkv8Hb6Q1LVG572Co4+saJ0E1mP
+         xO9/rZtp1+b/KCLhxsyNk4OT1cPz8FU4TZfPai9YmNXORWgAxhuK/KGUSJT2paWZnB
+         fGjz5Hp8+HsDSoCeBwgxJhq6/GjthkwYfgvD6GduAemTp/3anqE543HInkhXDsARD/
+         S46m7cL4n6mfFGjDODlqR3flnxFWsfC2l3dRiWMmj/Sb3x4RqqOl84gwknUcqz2xPq
+         0y3zKYDLt4E1xQ6njDU6MmGx4b9eKu41g+9O7KeRrt6V4rcsHriYl2cGk7s+QmjSSg
+         FV5McTOkekfpA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -48,14 +48,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v12 06/40] arm64/sme: Provide ABI documentation for SME
-Date:   Fri, 25 Feb 2022 16:58:49 +0000
-Message-Id: <20220225165923.1474372-7-broonie@kernel.org>
+Subject: [PATCH v12 07/40] arm64/sme: System register and exception syndrome definitions
+Date:   Fri, 25 Feb 2022 16:58:50 +0000
+Message-Id: <20220225165923.1474372-8-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220225165923.1474372-1-broonie@kernel.org>
 References: <20220225165923.1474372-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=25513; h=from:subject; bh=P/nokR+lh+lVS48PGTQFmztfquPuUQZJXfMCMOFRh7E=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiGQrOORrOj4y6tNb87ECJ0UvplNB4/OCyJcjvIUle +z/JnFCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYhkKzgAKCRAk1otyXVSH0OEMB/ 99iZnfIb8GQ0M1pydv4v6MBkpyA4RQfp50fbtwee5dT8uE6CIOLfNoR9F3V2qzm9Ks4uscyUfoCHhA aOZ6DNOIi4Qj0Pb6ZYZBqzrI+TFzvheOavMBO6gOtSIjVX1rzICsDUjNqKxe1epEehoycWaUeSkoZm iyt86lPnpS0EPFhJmsFv/7JNvLKKN2BZHdYcoCIddwlV02gcUJfD0s0Mg9XnYKzEpTFtY0CvGc/mKU U3jXjNwlAJ9nZ3P34qDSpj+UwM7V/AVFl6cs6Opr+yTRPcPy76BGCLMoRxLG4pUBSl7H382mQaiwlf on9FRIIIEVMmC12H+sFiUtkktu7d/B
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9639; h=from:subject; bh=Gc0gUgV2lehHJCVTaAZ18CcKS0Bz6npKGWGO2NP1650=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiGQrPkabbV9T7pkFz7A6AhYX6Wxb7lbyIPkUcmwEe RH2mnQyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYhkKzwAKCRAk1otyXVSH0J9mB/ 0cbS/w64P642ZZW1EqKvcxwRoW6+A7MVYfJuLXLeSjFkmx8HXcexdnMyp/OUX+7FUrZARsPPybGjwS o+nfQxOZpA0Xxg/EsW2xi738tuL2FxsK0bxQxppWynRD06NaEhChH3PB/mYf/8CC1IVxJukUJCEy97 rV+UKXM3qQSpvDEo8XxH3E8y+iIdlwYUMkqPvbNr+Iw9giyeW/gzOcUUAAGWaAaqXhQ0XfqEJCr1f7 WCUvhUPOtCVzyxmHWRxWBD/yBkEqlIoVcjFZpMjoq/hcqvCtJcVKF4Qu1OFblzhuO7MYQ+mJMm8aj1 GO9soUTyQQKboL6afivaqxgVIUzeUp
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,617 +68,272 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Provide ABI documentation for SME similar to that for SVE. Due to the very
-large overlap around streaming SVE mode in both implementation and
-interfaces documentation for streaming mode SVE is added to the SVE
-document rather than the SME one.
+The arm64 Scalable Matrix Extension (SME) adds some new system registers,
+fields in existing system registers and exception syndromes. This patch
+adds definitions for these for use in future patches implementing support
+for this extension.
+
+Since SME will be the first user of FEAT_HCX in the kernel also include
+the definitions for enumerating it and the HCRX system register it adds.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- Documentation/arm64/index.rst |   1 +
- Documentation/arm64/sme.rst   | 427 ++++++++++++++++++++++++++++++++++
- Documentation/arm64/sve.rst   |  70 +++++-
- 3 files changed, 488 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/arm64/sme.rst
+ arch/arm64/include/asm/esr.h     | 12 +++++-
+ arch/arm64/include/asm/kvm_arm.h |  1 +
+ arch/arm64/include/asm/sysreg.h  | 67 ++++++++++++++++++++++++++++++++
+ arch/arm64/kernel/traps.c        |  1 +
+ 4 files changed, 80 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index 4f840bac083e..ae21f8118830 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -21,6 +21,7 @@ ARM64 Architecture
-     perf
-     pointer-authentication
-     silicon-errata
-+    sme
-     sve
-     tagged-address-abi
-     tagged-pointers
-diff --git a/Documentation/arm64/sme.rst b/Documentation/arm64/sme.rst
-new file mode 100644
-index 000000000000..0493838bdc44
---- /dev/null
-+++ b/Documentation/arm64/sme.rst
-@@ -0,0 +1,427 @@
-+===================================================
-+Scalable Matrix Extension support for AArch64 Linux
-+===================================================
-+
-+This document outlines briefly the interface provided to userspace by Linux in
-+order to support use of the ARM Scalable Matrix Extension (SME).
-+
-+This is an outline of the most important features and issues only and not
-+intended to be exhaustive.  It should be read in conjunction with the SVE
-+documentation in sve.rst which provides details on the Streaming SVE mode
-+included in SME.
-+
-+This document does not aim to describe the SME architecture or programmer's
-+model.  To aid understanding, a minimal description of relevant programmer's
-+model features for SME is included in Appendix A.
-+
-+
-+1.  General
-+-----------
-+
-+* PSTATE.SM, PSTATE.ZA, the streaming mode vector length, the ZA
-+  register state and TPIDR2_EL0 are tracked per thread.
-+
-+* The presence of SME is reported to userspace via HWCAP2_SME in the aux vector
-+  AT_HWCAP2 entry.  Presence of this flag implies the presence of the SME
-+  instructions and registers, and the Linux-specific system interfaces
-+  described in this document.  SME is reported in /proc/cpuinfo as "sme".
-+
-+* Support for the execution of SME instructions in userspace can also be
-+  detected by reading the CPU ID register ID_AA64PFR1_EL1 using an MRS
-+  instruction, and checking that the value of the SME field is nonzero. [3]
-+
-+  It does not guarantee the presence of the system interfaces described in the
-+  following sections: software that needs to verify that those interfaces are
-+  present must check for HWCAP2_SME instead.
-+
-+* There are a number of optional SME features, presence of these is reported
-+  through AT_HWCAP2 through:
-+
-+	HWCAP2_SME_I16I64
-+	HWCAP2_SME_F64F64
-+	HWCAP2_SME_I8I32
-+	HWCAP2_SME_F16F32
-+	HWCAP2_SME_B16F32
-+	HWCAP2_SME_F32F32
-+	HWCAP2_SME_FA64
-+
-+  This list may be extended over time as the SME architecture evolves.
-+
-+  These extensions are also reported via the CPU ID register ID_AA64SMFR0_EL1,
-+  which userspace can read using an MRS instruction.  See elf_hwcaps.txt and
-+  cpu-feature-registers.txt for details.
-+
-+* Debuggers should restrict themselves to interacting with the target via the
-+  NT_ARM_SVE, NT_ARM_SSVE and NT_ARM_ZA regsets.  The recommended way
-+  of detecting support for these regsets is to connect to a target process
-+  first and then attempt a
-+
-+	ptrace(PTRACE_GETREGSET, pid, NT_ARM_<regset>, &iov).
-+
-+* Whenever ZA register values are exchanged in memory between userspace and
-+  the kernel, the register value is encoded in memory as a series of horizontal
-+  vectors from 0 to VL/8-1 stored in the same endianness invariant format as is
-+  used for SVE vectors.
-+
-+* On thread creation TPIDR2_EL0 is preserved unless CLONE_SETTLS is specified,
-+  in which case it is set to 0.
-+
-+2.  Vector lengths
-+------------------
-+
-+SME defines a second vector length similar to the SVE vector length which is
-+controls the size of the streaming mode SVE vectors and the ZA matrix array.
-+The ZA matrix is square with each side having as many bytes as a SVE vector.
-+
-+
-+3.  Sharing of streaming and non-streaming mode SVE state
-+---------------------------------------------------------
-+
-+It is implementation defined which if any parts of the SVE state are shared
-+between streaming and non-streaming modes.  When switching between modes
-+via software interfaces such as ptrace if no register content is provided as
-+part of switching no state will be assumed to be shared and everything will
-+be zeroed.
-+
-+
-+4.  System call behaviour
-+-------------------------
-+
-+* On syscall PSTATE.ZA is preserved, if PSTATE.ZA==1 then the contents of the
-+  ZA matrix are preserved.
-+
-+* On syscall PSTATE.SM will be cleared and the SVE registers will be handled
-+  as normal.
-+
-+* Neither the SVE registers nor ZA are used to pass arguments to or receive
-+  results from any syscall.
-+
-+* On creation fork() or clone() the newly created process will have PSTATE.SM
-+  and PSTATE.ZA cleared.
-+
-+* All other SME state of a thread, including the currently configured vector
-+  length, the state of the PR_SME_VL_INHERIT flag, and the deferred vector
-+  length (if any), is preserved across all syscalls, subject to the specific
-+  exceptions for execve() described in section 6.
-+
-+
-+5.  Signal handling
-+-------------------
-+
-+* Signal handlers are invoked with streaming mode and ZA disabled.
-+
-+* A new signal frame record za_context encodes the ZA register contents on
-+  signal delivery. [1]
-+
-+* The signal frame record for ZA always contains basic metadata, in particular
-+  the thread's vector length (in za_context.vl).
-+
-+* The ZA matrix may or may not be included in the record, depending on
-+  the value of PSTATE.ZA.  The registers are present if and only if:
-+  za_context.head.size >= ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za_context.vl))
-+  in which case PSTATE.ZA == 1.
-+
-+* If matrix data is present, the remainder of the record has a vl-dependent
-+  size and layout.  Macros ZA_SIG_* are defined [1] to facilitate access to
-+  them.
-+
-+* The matrix is stored as a series of horizontal vectors in the same format as
-+  is used for SVE vectors.
-+
-+* If the ZA context is too big to fit in sigcontext.__reserved[], then extra
-+  space is allocated on the stack, an extra_context record is written in
-+  __reserved[] referencing this space.  za_context is then written in the
-+  extra space.  Refer to [1] for further details about this mechanism.
-+
-+
-+5.  Signal return
-+-----------------
-+
-+When returning from a signal handler:
-+
-+* If there is no za_context record in the signal frame, or if the record is
-+  present but contains no register data as described in the previous section,
-+  then ZA is disabled.
-+
-+* If za_context is present in the signal frame and contains matrix data then
-+  PSTATE.ZA is set to 1 and ZA is populated with the specified data.
-+
-+* The vector length cannot be changed via signal return.  If za_context.vl in
-+  the signal frame does not match the current vector length, the signal return
-+  attempt is treated as illegal, resulting in a forced SIGSEGV.
-+
-+
-+6.  prctl extensions
-+--------------------
-+
-+Some new prctl() calls are added to allow programs to manage the SME vector
-+length:
-+
-+prctl(PR_SME_SET_VL, unsigned long arg)
-+
-+    Sets the vector length of the calling thread and related flags, where
-+    arg == vl | flags.  Other threads of the calling process are unaffected.
-+
-+    vl is the desired vector length, where sve_vl_valid(vl) must be true.
-+
-+    flags:
-+
-+	PR_SME_VL_INHERIT
-+
-+	    Inherit the current vector length across execve().  Otherwise, the
-+	    vector length is reset to the system default at execve().  (See
-+	    Section 9.)
-+
-+	PR_SME_SET_VL_ONEXEC
-+
-+	    Defer the requested vector length change until the next execve()
-+	    performed by this thread.
-+
-+	    The effect is equivalent to implicit execution of the following
-+	    call immediately after the next execve() (if any) by the thread:
-+
-+		prctl(PR_SME_SET_VL, arg & ~PR_SME_SET_VL_ONEXEC)
-+
-+	    This allows launching of a new program with a different vector
-+	    length, while avoiding runtime side effects in the caller.
-+
-+	    Without PR_SME_SET_VL_ONEXEC, the requested change takes effect
-+	    immediately.
-+
-+
-+    Return value: a nonnegative on success, or a negative value on error:
-+	EINVAL: SME not supported, invalid vector length requested, or
-+	    invalid flags.
-+
-+
-+    On success:
-+
-+    * Either the calling thread's vector length or the deferred vector length
-+      to be applied at the next execve() by the thread (dependent on whether
-+      PR_SME_SET_VL_ONEXEC is present in arg), is set to the largest value
-+      supported by the system that is less than or equal to vl.  If vl ==
-+      SVE_VL_MAX, the value set will be the largest value supported by the
-+      system.
-+
-+    * Any previously outstanding deferred vector length change in the calling
-+      thread is cancelled.
-+
-+    * The returned value describes the resulting configuration, encoded as for
-+      PR_SME_GET_VL.  The vector length reported in this value is the new
-+      current vector length for this thread if PR_SME_SET_VL_ONEXEC was not
-+      present in arg; otherwise, the reported vector length is the deferred
-+      vector length that will be applied at the next execve() by the calling
-+      thread.
-+
-+    * Changing the vector length causes all of ZA, P0..P15, FFR and all bits of
-+      Z0..Z31 except for Z0 bits [127:0] .. Z31 bits [127:0] to become
-+      unspecified, including both streaming and non-streaming SVE state.
-+      Calling PR_SME_SET_VL with vl equal to the thread's current vector
-+      length, or calling PR_SME_SET_VL with the PR_SVE_SET_VL_ONEXEC flag,
-+      does not constitute a change to the vector length for this purpose.
-+
-+    * Changing the vector length causes PSTATE.ZA and PSTATE.SM to be cleared.
-+      Calling PR_SME_SET_VL with vl equal to the thread's current vector
-+      length, or calling PR_SME_SET_VL with the PR_SVE_SET_VL_ONEXEC flag,
-+      does not constitute a change to the vector length for this purpose.
-+
-+
-+prctl(PR_SME_GET_VL)
-+
-+    Gets the vector length of the calling thread.
-+
-+    The following flag may be OR-ed into the result:
-+
-+	PR_SME_VL_INHERIT
-+
-+	    Vector length will be inherited across execve().
-+
-+    There is no way to determine whether there is an outstanding deferred
-+    vector length change (which would only normally be the case between a
-+    fork() or vfork() and the corresponding execve() in typical use).
-+
-+    To extract the vector length from the result, bitwise and it with
-+    PR_SME_VL_LEN_MASK.
-+
-+    Return value: a nonnegative value on success, or a negative value on error:
-+	EINVAL: SME not supported.
-+
-+
-+7.  ptrace extensions
-+---------------------
-+
-+* A new regset NT_ARM_SSVE is defined for access to streaming mode SVE
-+  state via PTRACE_GETREGSET and  PTRACE_SETREGSET, this is documented in
-+  sve.rst.
-+
-+* A new regset NT_ARM_ZA is defined for ZA state for access to ZA state via
-+  PTRACE_GETREGSET and PTRACE_SETREGSET.
-+
-+  Refer to [2] for definitions.
-+
-+The regset data starts with struct user_za_header, containing:
-+
-+    size
-+
-+	Size of the complete regset, in bytes.
-+	This depends on vl and possibly on other things in the future.
-+
-+	If a call to PTRACE_GETREGSET requests less data than the value of
-+	size, the caller can allocate a larger buffer and retry in order to
-+	read the complete regset.
-+
-+    max_size
-+
-+	Maximum size in bytes that the regset can grow to for the target
-+	thread.  The regset won't grow bigger than this even if the target
-+	thread changes its vector length etc.
-+
-+    vl
-+
-+	Target thread's current streaming vector length, in bytes.
-+
-+    max_vl
-+
-+	Maximum possible streaming vector length for the target thread.
-+
-+    flags
-+
-+	Zero or more of the following flags, which have the same
-+	meaning and behaviour as the corresponding PR_SET_VL_* flags:
-+
-+	    SME_PT_VL_INHERIT
-+
-+	    SME_PT_VL_ONEXEC (SETREGSET only).
-+
-+* The effects of changing the vector length and/or flags are equivalent to
-+  those documented for PR_SME_SET_VL.
-+
-+  The caller must make a further GETREGSET call if it needs to know what VL is
-+  actually set by SETREGSET, unless is it known in advance that the requested
-+  VL is supported.
-+
-+* The size and layout of the payload depends on the header fields.  The
-+  SME_PT_ZA_*() macros are provided to facilitate access to the data.
-+
-+* In either case, for SETREGSET it is permissible to omit the payload, in which
-+  case the vector length and flags are changed and PSTATE.ZA is set to 0
-+  (along with any consequences of those changes).  If a payload is provided
-+  then PSTATE.ZA will be set to 1.
-+
-+* For SETREGSET, if the requested VL is not supported, the effect will be the
-+  same as if the payload were omitted, except that an EIO error is reported.
-+  No attempt is made to translate the payload data to the correct layout
-+  for the vector length actually set.  It is up to the caller to translate the
-+  payload layout for the actual VL and retry.
-+
-+* The effect of writing a partial, incomplete payload is unspecified.
-+
-+
-+8.  ELF coredump extensions
-+---------------------------
-+
-+* NT_ARM_SSVE notes will be added to each coredump for
-+  each thread of the dumped process.  The contents will be equivalent to the
-+  data that would have been read if a PTRACE_GETREGSET of the corresponding
-+  type were executed for each thread when the coredump was generated.
-+
-+* A NT_ARM_ZA note will be added to each coredump for each thread of the
-+  dumped process.  The contents will be equivalent to the data that would have
-+  been read if a PTRACE_GETREGSET of NT_ARM_ZA were executed for each thread
-+  when the coredump was generated.
-+
-+
-+9.  System runtime configuration
-+--------------------------------
-+
-+* To mitigate the ABI impact of expansion of the signal frame, a policy
-+  mechanism is provided for administrators, distro maintainers and developers
-+  to set the default vector length for userspace processes:
-+
-+/proc/sys/abi/sme_default_vector_length
-+
-+    Writing the text representation of an integer to this file sets the system
-+    default vector length to the specified value, unless the value is greater
-+    than the maximum vector length supported by the system in which case the
-+    default vector length is set to that maximum.
-+
-+    The result can be determined by reopening the file and reading its
-+    contents.
-+
-+    At boot, the default vector length is initially set to 32 or the maximum
-+    supported vector length, whichever is smaller and supported.  This
-+    determines the initial vector length of the init process (PID 1).
-+
-+    Reading this file returns the current system default vector length.
-+
-+* At every execve() call, the new vector length of the new process is set to
-+  the system default vector length, unless
-+
-+    * PR_SME_VL_INHERIT (or equivalently SME_PT_VL_INHERIT) is set for the
-+      calling thread, or
-+
-+    * a deferred vector length change is pending, established via the
-+      PR_SME_SET_VL_ONEXEC flag (or SME_PT_VL_ONEXEC).
-+
-+* Modifying the system default vector length does not affect the vector length
-+  of any existing process or thread that does not make an execve() call.
-+
-+
-+Appendix A.  SME programmer's model (informative)
-+=================================================
-+
-+This section provides a minimal description of the additions made by SVE to the
-+ARMv8-A programmer's model that are relevant to this document.
-+
-+Note: This section is for information only and not intended to be complete or
-+to replace any architectural specification.
-+
-+A.1.  Registers
-+---------------
-+
-+In A64 state, SME adds the following:
-+
-+* A new mode, streaming mode, in which a subset of the normal FPSIMD and SVE
-+  features are available.  When supported EL0 software may enter and leave
-+  streaming mode at any time.
-+
-+  For best system performance it is strongly encouraged for software to enable
-+  streaming mode only when it is actively being used.
-+
-+* A new vector length controlling the size of ZA and the Z registers when in
-+  streaming mode, separately to the vector length used for SVE when not in
-+  streaming mode.  There is no requirement that either the currently selected
-+  vector length or the set of vector lengths supported for the two modes in
-+  a given system have any relationship.  The streaming mode vector length
-+  is referred to as SVL.
-+
-+* A new ZA matrix register.  This is a square matrix of SVLxSVL bits.  Most
-+  operations on ZA require that streaming mode be enabled but ZA can be
-+  enabled without streaming mode in order to load, save and retain data.
-+
-+  For best system performance it is strongly encouraged for software to enable
-+  ZA only when it is actively being used.
-+
-+* Two new 1 bit fields in PSTATE which may be controlled via the SMSTART and
-+  SMSTOP instructions or by access to the SVCR system register:
-+
-+  * PSTATE.ZA, if this is 1 then the ZA matrix is accessible and has valid
-+    data while if it is 0 then ZA can not be accessed.  When PSTATE.ZA is
-+    changed from 0 to 1 all bits in ZA are cleared.
-+
-+  * PSTATE.SM, if this is 1 then the PE is in streaming mode.  When the value
-+    of PSTATE.SM is changed then it is implementation defined if the subset
-+    of the floating point register bits valid in both modes may be retained.
-+    Any other bits will be cleared.
-+
-+
-+References
-+==========
-+
-+[1] arch/arm64/include/uapi/asm/sigcontext.h
-+    AArch64 Linux signal ABI definitions
-+
-+[2] arch/arm64/include/uapi/asm/ptrace.h
-+    AArch64 Linux ptrace ABI definitions
-+
-+[3] Documentation/arm64/cpu-feature-registers.rst
-diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
-index 9d9a4de5bc34..93c2c2990584 100644
---- a/Documentation/arm64/sve.rst
-+++ b/Documentation/arm64/sve.rst
-@@ -7,7 +7,9 @@ Author: Dave Martin <Dave.Martin@arm.com>
- Date:   4 August 2017
+diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+index d52a0b269ee8..43872e0cfd1e 100644
+--- a/arch/arm64/include/asm/esr.h
++++ b/arch/arm64/include/asm/esr.h
+@@ -37,7 +37,8 @@
+ #define ESR_ELx_EC_ERET		(0x1a)	/* EL2 only */
+ /* Unallocated EC: 0x1B */
+ #define ESR_ELx_EC_FPAC		(0x1C)	/* EL1 and above */
+-/* Unallocated EC: 0x1D - 0x1E */
++#define ESR_ELx_EC_SME		(0x1D)
++/* Unallocated EC: 0x1E */
+ #define ESR_ELx_EC_IMP_DEF	(0x1f)	/* EL3 only */
+ #define ESR_ELx_EC_IABT_LOW	(0x20)
+ #define ESR_ELx_EC_IABT_CUR	(0x21)
+@@ -327,6 +328,15 @@
+ #define ESR_ELx_CP15_32_ISS_SYS_CNTFRQ	(ESR_ELx_CP15_32_ISS_SYS_VAL(0, 0, 14, 0) |\
+ 					 ESR_ELx_CP15_32_ISS_DIR_READ)
  
- This document outlines briefly the interface provided to userspace by Linux in
--order to support use of the ARM Scalable Vector Extension (SVE).
-+order to support use of the ARM Scalable Vector Extension (SVE), including
-+interactions with Streaming SVE mode added by the Scalable Matrix Extension
-+(SME).
- 
- This is an outline of the most important features and issues only and not
- intended to be exhaustive.
-@@ -23,6 +25,10 @@ model features for SVE is included in Appendix A.
- * SVE registers Z0..Z31, P0..P15 and FFR and the current vector length VL, are
-   tracked per-thread.
- 
-+* In streaming mode FFR is not accessible unless HWCAP2_SME_FA64 is present
-+  in the system, when it is not supported and these interfaces are used to
-+  access streaming mode FFR is read and written as zero.
++/*
++ * ISS values for SME traps
++ */
 +
- * The presence of SVE is reported to userspace via HWCAP_SVE in the aux vector
-   AT_HWCAP entry.  Presence of this flag implies the presence of the SVE
-   instructions and registers, and the Linux-specific system interfaces
-@@ -53,10 +59,19 @@ model features for SVE is included in Appendix A.
-   which userspace can read using an MRS instruction.  See elf_hwcaps.txt and
-   cpu-feature-registers.txt for details.
- 
-+* On hardware that supports the SME extensions, HWCAP2_SME will also be
-+  reported in the AT_HWCAP2 aux vector entry.  Among other things SME adds
-+  streaming mode which provides a subset of the SVE feature set using a
-+  separate SME vector length and the same Z/V registers.  See sme.rst
-+  for more details.
++#define ESR_ELx_SME_ISS_SME_DISABLED	0
++#define ESR_ELx_SME_ISS_ILL		1
++#define ESR_ELx_SME_ISS_SM_DISABLED	2
++#define ESR_ELx_SME_ISS_ZA_DISABLED	3
 +
- * Debuggers should restrict themselves to interacting with the target via the
-   NT_ARM_SVE regset.  The recommended way of detecting support for this regset
-   is to connect to a target process first and then attempt a
--  ptrace(PTRACE_GETREGSET, pid, NT_ARM_SVE, &iov).
-+  ptrace(PTRACE_GETREGSET, pid, NT_ARM_SVE, &iov).  Note that when SME is
-+  present and streaming SVE mode is in use the FPSIMD subset of registers
-+  will be read via NT_ARM_SVE and NT_ARM_SVE writes will exit streaming mode
-+  in the target.
+ #ifndef __ASSEMBLY__
+ #include <asm/types.h>
  
- * Whenever SVE scalable register values (Zn, Pn, FFR) are exchanged in memory
-   between userspace and the kernel, the register value is encoded in memory in
-@@ -126,6 +141,11 @@ the SVE instruction set architecture.
-   are only present in fpsimd_context.  For convenience, the content of V0..V31
-   is duplicated between sve_context and fpsimd_context.
- 
-+* The record contains a flag field which includes a flag SVE_SIG_FLAG_SM which
-+  if set indicates that the thread is in streaming mode and the vector length
-+  and register data (if present) describe the streaming SVE data and vector
-+  length.
+diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+index 1767ded83888..13ae232ec4a1 100644
+--- a/arch/arm64/include/asm/kvm_arm.h
++++ b/arch/arm64/include/asm/kvm_arm.h
+@@ -279,6 +279,7 @@
+ #define CPTR_EL2_TCPAC	(1U << 31)
+ #define CPTR_EL2_TAM	(1 << 30)
+ #define CPTR_EL2_TTA	(1 << 20)
++#define CPTR_EL2_TSM	(1 << 12)
+ #define CPTR_EL2_TFP	(1 << CPTR_EL2_TFP_SHIFT)
+ #define CPTR_EL2_TZ	(1 << 8)
+ #define CPTR_NVHE_EL2_RES1	0x000032ff /* known RES1 bits in CPTR_EL2 (nVHE) */
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index e66dd9ebc337..77d1d4cd8e2f 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -118,6 +118,10 @@
+  * System registers, organised loosely by encoding but grouped together
+  * where the architected name contains an index. e.g. ID_MMFR<n>_EL1.
+  */
++#define SYS_SVCR_SMSTOP_SM_EL0		sys_reg(0, 3, 4, 2, 3)
++#define SYS_SVCR_SMSTART_SM_EL0		sys_reg(0, 3, 4, 3, 3)
++#define SYS_SVCR_SMSTOP_SMZA_EL0	sys_reg(0, 3, 4, 6, 3)
 +
- * The signal frame record for SVE always contains basic metadata, in particular
-   the thread's vector length (in sve_context.vl).
+ #define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
+ #define SYS_MDCCINT_EL1			sys_reg(2, 0, 0, 2, 0)
+ #define SYS_MDSCR_EL1			sys_reg(2, 0, 0, 2, 2)
+@@ -173,6 +177,7 @@
+ #define SYS_ID_AA64PFR0_EL1		sys_reg(3, 0, 0, 4, 0)
+ #define SYS_ID_AA64PFR1_EL1		sys_reg(3, 0, 0, 4, 1)
+ #define SYS_ID_AA64ZFR0_EL1		sys_reg(3, 0, 0, 4, 4)
++#define SYS_ID_AA64SMFR0_EL1		sys_reg(3, 0, 0, 4, 5)
  
-@@ -170,6 +190,11 @@ When returning from a signal handler:
-   the signal frame does not match the current vector length, the signal return
-   attempt is treated as illegal, resulting in a forced SIGSEGV.
+ #define SYS_ID_AA64DFR0_EL1		sys_reg(3, 0, 0, 5, 0)
+ #define SYS_ID_AA64DFR1_EL1		sys_reg(3, 0, 0, 5, 1)
+@@ -196,6 +201,8 @@
  
-+* It is permitted to enter or leave streaming mode by setting or clearing
-+  the SVE_SIG_FLAG_SM flag but applications should take care to ensure that
-+  when doing so sve_context.vl and any register data are appropriate for the
-+  vector length in the new mode.
+ #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
+ #define SYS_TRFCR_EL1			sys_reg(3, 0, 1, 2, 1)
++#define SYS_SMPRI_EL1			sys_reg(3, 0, 1, 2, 4)
++#define SYS_SMCR_EL1			sys_reg(3, 0, 1, 2, 6)
+ 
+ #define SYS_TTBR0_EL1			sys_reg(3, 0, 2, 0, 0)
+ #define SYS_TTBR1_EL1			sys_reg(3, 0, 2, 0, 1)
+@@ -388,6 +395,8 @@
+ #define TRBIDR_ALIGN_MASK		GENMASK(3, 0)
+ #define TRBIDR_ALIGN_SHIFT		0
+ 
++#define SMPRI_EL1_PRIORITY_MASK		0xf
 +
+ #define SYS_PMINTENSET_EL1		sys_reg(3, 0, 9, 14, 1)
+ #define SYS_PMINTENCLR_EL1		sys_reg(3, 0, 9, 14, 2)
  
- 6.  prctl extensions
- --------------------
-@@ -265,8 +290,14 @@ prctl(PR_SVE_GET_VL)
- 7.  ptrace extensions
- ---------------------
+@@ -443,8 +452,13 @@
+ #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
+ #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
+ #define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
++#define SYS_SMIDR_EL1			sys_reg(3, 1, 0, 0, 6)
+ #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
  
--* A new regset NT_ARM_SVE is defined for use with PTRACE_GETREGSET and
--  PTRACE_SETREGSET.
-+* New regsets NT_ARM_SVE and NT_ARM_SSVE are defined for use with
-+  PTRACE_GETREGSET and PTRACE_SETREGSET. NT_ARM_SSVE describes the
-+  streaming mode SVE registers and NT_ARM_SVE describes the
-+  non-streaming mode SVE registers.
++#define SYS_SMIDR_EL1_IMPLEMENTER_SHIFT	24
++#define SYS_SMIDR_EL1_SMPS_SHIFT	15
++#define SYS_SMIDR_EL1_AFFINITY_SHIFT	0
 +
-+  In this description a register set is referred to as being "live" when
-+  the target is in the appropriate streaming or non-streaming mode and is
-+  using data beyond the subset shared with the FPSIMD Vn registers.
+ #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
  
-   Refer to [2] for definitions.
+ #define SYS_CTR_EL0			sys_reg(3, 3, 0, 0, 1)
+@@ -453,6 +467,10 @@
+ #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
+ #define SYS_RNDRRS_EL0			sys_reg(3, 3, 2, 4, 1)
  
-@@ -297,7 +328,7 @@ The regset data starts with struct user_sve_header, containing:
- 
-     flags
- 
--	either
-+	at most one of
- 
- 	    SVE_PT_REGS_FPSIMD
- 
-@@ -331,6 +362,10 @@ The regset data starts with struct user_sve_header, containing:
- 
- 	    SVE_PT_VL_ONEXEC (SETREGSET only).
- 
-+	If neither FPSIMD nor SVE flags are provided then no register
-+	payload is available, this is only possible when SME is implemented.
++#define SYS_SVCR_EL0			sys_reg(3, 3, 4, 2, 2)
++#define SYS_SVCR_EL0_ZA_MASK		2
++#define SYS_SVCR_EL0_SM_MASK		1
 +
+ #define SYS_PMCR_EL0			sys_reg(3, 3, 9, 12, 0)
+ #define SYS_PMCNTENSET_EL0		sys_reg(3, 3, 9, 12, 1)
+ #define SYS_PMCNTENCLR_EL0		sys_reg(3, 3, 9, 12, 2)
+@@ -469,6 +487,7 @@
+ 
+ #define SYS_TPIDR_EL0			sys_reg(3, 3, 13, 0, 2)
+ #define SYS_TPIDRRO_EL0			sys_reg(3, 3, 13, 0, 3)
++#define SYS_TPIDR2_EL0			sys_reg(3, 3, 13, 0, 5)
+ 
+ #define SYS_SCXTNUM_EL0			sys_reg(3, 3, 13, 0, 7)
+ 
+@@ -538,6 +557,9 @@
+ #define SYS_HFGITR_EL2			sys_reg(3, 4, 1, 1, 6)
+ #define SYS_ZCR_EL2			sys_reg(3, 4, 1, 2, 0)
+ #define SYS_TRFCR_EL2			sys_reg(3, 4, 1, 2, 1)
++#define SYS_HCRX_EL2			sys_reg(3, 4, 1, 2, 2)
++#define SYS_SMPRIMAP_EL2		sys_reg(3, 4, 1, 2, 5)
++#define SYS_SMCR_EL2			sys_reg(3, 4, 1, 2, 6)
+ #define SYS_DACR32_EL2			sys_reg(3, 4, 3, 0, 0)
+ #define SYS_HDFGRTR_EL2			sys_reg(3, 4, 3, 1, 4)
+ #define SYS_HDFGWTR_EL2			sys_reg(3, 4, 3, 1, 5)
+@@ -597,6 +619,7 @@
+ #define SYS_SCTLR_EL12			sys_reg(3, 5, 1, 0, 0)
+ #define SYS_CPACR_EL12			sys_reg(3, 5, 1, 0, 2)
+ #define SYS_ZCR_EL12			sys_reg(3, 5, 1, 2, 0)
++#define SYS_SMCR_EL12			sys_reg(3, 5, 1, 2, 6)
+ #define SYS_TTBR0_EL12			sys_reg(3, 5, 2, 0, 0)
+ #define SYS_TTBR1_EL12			sys_reg(3, 5, 2, 0, 1)
+ #define SYS_TCR_EL12			sys_reg(3, 5, 2, 0, 2)
+@@ -620,6 +643,7 @@
+ #define SYS_CNTV_CVAL_EL02		sys_reg(3, 5, 14, 3, 2)
+ 
+ /* Common SCTLR_ELx flags. */
++#define SCTLR_ELx_ENTP2	(BIT(60))
+ #define SCTLR_ELx_DSSBS	(BIT(44))
+ #define SCTLR_ELx_ATA	(BIT(43))
+ 
+@@ -815,6 +839,7 @@
+ #define ID_AA64PFR0_ELx_32BIT_64BIT	0x2
+ 
+ /* id_aa64pfr1 */
++#define ID_AA64PFR1_SME_SHIFT		24
+ #define ID_AA64PFR1_MPAMFRAC_SHIFT	16
+ #define ID_AA64PFR1_RASFRAC_SHIFT	12
+ #define ID_AA64PFR1_MTE_SHIFT		8
+@@ -825,6 +850,7 @@
+ #define ID_AA64PFR1_SSBS_PSTATE_ONLY	1
+ #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
+ #define ID_AA64PFR1_BT_BTI		0x1
++#define ID_AA64PFR1_SME			1
+ 
+ #define ID_AA64PFR1_MTE_NI		0x0
+ #define ID_AA64PFR1_MTE_EL0		0x1
+@@ -853,6 +879,23 @@
+ #define ID_AA64ZFR0_AES_PMULL		0x2
+ #define ID_AA64ZFR0_SVEVER_SVE2		0x1
+ 
++/* id_aa64smfr0 */
++#define ID_AA64SMFR0_FA64_SHIFT		63
++#define ID_AA64SMFR0_I16I64_SHIFT	52
++#define ID_AA64SMFR0_F64F64_SHIFT	48
++#define ID_AA64SMFR0_I8I32_SHIFT	36
++#define ID_AA64SMFR0_F16F32_SHIFT	35
++#define ID_AA64SMFR0_B16F32_SHIFT	34
++#define ID_AA64SMFR0_F32F32_SHIFT	32
 +
- * The effects of changing the vector length and/or flags are equivalent to
-   those documented for PR_SVE_SET_VL.
- 
-@@ -346,6 +381,13 @@ The regset data starts with struct user_sve_header, containing:
-   case only the vector length and flags are changed (along with any
-   consequences of those changes).
- 
-+* In systems supporting SME when in streaming mode a GETREGSET for
-+  NT_REG_SVE will return only the user_sve_header with no register data,
-+  similarly a GETREGSET for NT_REG_SSVE will not return any register data
-+  when not in streaming mode.
++#define ID_AA64SMFR0_FA64		0x1
++#define ID_AA64SMFR0_I16I64		0x4
++#define ID_AA64SMFR0_F64F64		0x1
++#define ID_AA64SMFR0_I8I32		0x4
++#define ID_AA64SMFR0_F16F32		0x1
++#define ID_AA64SMFR0_B16F32		0x1
++#define ID_AA64SMFR0_F32F32		0x1
 +
-+* A GETREGSET for NT_ARM_SSVE will never return SVE_PT_REGS_FPSIMD.
+ /* id_aa64mmfr0 */
+ #define ID_AA64MMFR0_ECV_SHIFT		60
+ #define ID_AA64MMFR0_FGT_SHIFT		56
+@@ -904,6 +947,7 @@
+ #endif
+ 
+ /* id_aa64mmfr1 */
++#define ID_AA64MMFR1_HCX_SHIFT		40
+ #define ID_AA64MMFR1_AFP_SHIFT		44
+ #define ID_AA64MMFR1_ETS_SHIFT		36
+ #define ID_AA64MMFR1_TWED_SHIFT		32
+@@ -1097,9 +1141,24 @@
+ #define ZCR_ELx_LEN_SIZE	9
+ #define ZCR_ELx_LEN_MASK	0x1ff
+ 
++#define SMCR_ELx_FA64_SHIFT	31
++#define SMCR_ELx_FA64_MASK	(1 << SMCR_ELx_FA64_SHIFT)
 +
- * For SETREGSET, if an SVE_PT_REGS_SVE payload is present and the
-   requested VL is not supported, the effect will be the same as if the
-   payload were omitted, except that an EIO error is reported.  No
-@@ -355,17 +397,25 @@ The regset data starts with struct user_sve_header, containing:
-   unspecified.  It is up to the caller to translate the payload layout
-   for the actual VL and retry.
- 
-+* Where SME is implemented it is not possible to GETREGSET the register
-+  state for normal SVE when in streaming mode, nor the streaming mode
-+  register state when in normal mode, regardless of the implementation defined
-+  behaviour of the hardware for sharing data between the two modes.
++/*
++ * The SMCR_ELx_LEN_* definitions intentionally include bits [8:4] which
++ * are reserved by the SME architecture for future expansion of the LEN
++ * field, with compatible semantics.
++ */
++#define SMCR_ELx_LEN_SHIFT	0
++#define SMCR_ELx_LEN_SIZE	9
++#define SMCR_ELx_LEN_MASK	0x1ff
 +
-+* Any SETREGSET of NT_ARM_SVE will exit streaming mode if the target was in
-+  streaming mode and any SETREGSET of NT_ARM_SSVE will enter streaming mode
-+  if the target was not in streaming mode.
+ #define CPACR_EL1_FPEN_EL1EN	(BIT(20)) /* enable EL1 access */
+ #define CPACR_EL1_FPEN_EL0EN	(BIT(21)) /* enable EL0 access, if EL1EN set */
+ 
++#define CPACR_EL1_SMEN_EL1EN	(BIT(24)) /* enable EL1 access */
++#define CPACR_EL1_SMEN_EL0EN	(BIT(25)) /* enable EL0 access, if EL1EN set */
 +
- * The effect of writing a partial, incomplete payload is unspecified.
+ #define CPACR_EL1_ZEN_EL1EN	(BIT(16)) /* enable EL1 access */
+ #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
  
+@@ -1152,6 +1211,8 @@
+ #define TRFCR_ELx_ExTRE			BIT(1)
+ #define TRFCR_ELx_E0TRE			BIT(0)
  
- 8.  ELF coredump extensions
- ---------------------------
++/* HCRX_EL2 definitions */
++#define HCRX_EL2_SMPME_MASK		(1 << 5)
  
--* A NT_ARM_SVE note will be added to each coredump for each thread of the
--  dumped process.  The contents will be equivalent to the data that would have
--  been read if a PTRACE_GETREGSET of NT_ARM_SVE were executed for each thread
--  when the coredump was generated.
--
-+* NT_ARM_SVE and NT_ARM_SSVE notes will be added to each coredump for
-+  each thread of the dumped process.  The contents will be equivalent to the
-+  data that would have been read if a PTRACE_GETREGSET of the corresponding
-+  type were executed for each thread when the coredump was generated.
+ /* GIC Hypervisor interface registers */
+ /* ICH_MISR_EL2 bit definitions */
+@@ -1215,6 +1276,12 @@
+ #define ICH_VTR_TDS_SHIFT	19
+ #define ICH_VTR_TDS_MASK	(1 << ICH_VTR_TDS_SHIFT)
  
- 9.  System runtime configuration
- --------------------------------
++/* HFG[WR]TR_EL2 bit definitions */
++#define HFGxTR_EL2_nTPIDR2_EL0_SHIFT	55
++#define HFGxTR_EL2_nTPIDR2_EL0_MASK	BIT_MASK(HFGxTR_EL2_nTPIDR2_EL0_SHIFT)
++#define HFGxTR_EL2_nSMPRI_EL1_SHIFT	54
++#define HFGxTR_EL2_nSMPRI_EL1_MASK	BIT_MASK(HFGxTR_EL2_nSMPRI_EL1_SHIFT)
++
+ #define ARM64_FEATURE_FIELD_BITS	4
+ 
+ /* Create a mask for the feature bits of the specified feature. */
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 70fc42470f13..88effb25c399 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -822,6 +822,7 @@ static const char *esr_class_str[] = {
+ 	[ESR_ELx_EC_SVE]		= "SVE",
+ 	[ESR_ELx_EC_ERET]		= "ERET/ERETAA/ERETAB",
+ 	[ESR_ELx_EC_FPAC]		= "FPAC",
++	[ESR_ELx_EC_SME]		= "SME",
+ 	[ESR_ELx_EC_IMP_DEF]		= "EL3 IMP DEF",
+ 	[ESR_ELx_EC_IABT_LOW]		= "IABT (lower EL)",
+ 	[ESR_ELx_EC_IABT_CUR]		= "IABT (current EL)",
 -- 
 2.30.2
 
