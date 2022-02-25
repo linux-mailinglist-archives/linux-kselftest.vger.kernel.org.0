@@ -2,195 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0C34C3FC6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 09:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6D74C404B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 09:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238385AbiBYILD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 03:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
+        id S238487AbiBYImD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 03:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238383AbiBYILD (ORCPT
+        with ESMTP id S232557AbiBYImC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:11:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C4882D1C;
-        Fri, 25 Feb 2022 00:10:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A984F61BEF;
-        Fri, 25 Feb 2022 08:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D13DC340E7;
-        Fri, 25 Feb 2022 08:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645776627;
-        bh=M4USnKyDoarCLAxcj1URQPBkgtFfHFlk4iSdKCZvhDU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=UAEdRQDpfxyMq22KEHqXjb2MSXT45ERk5n65VvbAVYMpGvJF2emahbmmx8FCEcaWo
-         IBZj1FH+v+jljfDybUB2oX/ziJbvr458jFZUU/LCHrJtVOEj55YFm4pOz3+qr40Td5
-         uVu28mVrlu9wkKlEb4dQb4mmvy6AIeO4SE7ukOOIrVKDgJ0hlemya2PJmdr58Es1G/
-         8/PmuB9BY/fbAIB1lHpSLa1/sz3lFnU7sWIEAgCgptikkt2IJjQrn9sn2w+xsS2JWy
-         XGrzsQG/ACQ3uwhDufUPV/+CQznIr4MdGjYLX/D9nCi+U6/UU1lfPWoRAid6ydhRzJ
-         /TYBZFQERCYPw==
-From:   SeongJae Park <sj@kernel.org>
-To:     xhao@linux.alibaba.com
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
-        linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/12] mm/damon: Implement a minimal stub for sysfs-based DAMON interface
-Date:   Fri, 25 Feb 2022 08:10:24 +0000
-Message-Id: <20220225081024.1979-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Fri, 25 Feb 2022 03:42:02 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B7E253145;
+        Fri, 25 Feb 2022 00:41:27 -0800 (PST)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K4jsD5X8Kz67yxx;
+        Fri, 25 Feb 2022 16:40:32 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 25 Feb 2022 09:41:25 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Fri, 25 Feb 2022 09:41:25 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Thread-Topic: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Thread-Index: AQHYImlgJM6Z1962JUm5hvc+dgM0dqyjZeaAgACU/jA=
+Date:   Fri, 25 Feb 2022 08:41:25 +0000
+Message-ID: <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+ <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+In-Reply-To: <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-In-Reply-To: <66331451-48d8-6658-cdce-6e79df27ae5e@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Xin,
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Friday, February 25, 2022 1:22 AM
+> Hi Roberto,
+> 
+> On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> > Extend the interoperability with IMA, to give wider flexibility for the
+> > implementation of integrity-focused LSMs based on eBPF.
+> 
+> I've previously requested adding eBPF module measurements and signature
+> verification support in IMA.  There seemed to be some interest, but
+> nothing has been posted.
 
-On Fri, 25 Feb 2022 15:21:05 +0800 xhao@linux.alibaba.com wrote:
+Hi Mimi
 
-> Hi, SeongJae:
-> 
-> On 2/23/22 11:20 PM, SeongJae Park wrote:
-> > DAMON's debugfs-based user interface served very well, so far.  However,
-> > it unnecessarily depends on debugfs, while DAMON is not aimed to be used
-> > for only debugging.  Also, the interface receives multiple values via
-> > one file.  For example, schemes file receives 18 values separated by
-> > white spaces.  As a result, it is ineffient, hard to be used, and
-> > difficult to be extended.  Especially, keeping backward compatibility of
-> > user space tools is getting only challenging.  It would be better to
-> > implement another reliable and flexible interface and deprecate the
-> > debugfs interface in long term.
-> >
-> > To this end, this commit implements a stub of a part of the new user
-> > interface of DAMON using sysfs.  Specifically, this commit implements
-> > the sysfs control parts for virtual address space monitoring.
-> >
-> > More specifically, the idea of the new interface is, using directory
-> > hierarchies and making one file for one value.  The hierarchy that this
-> > commit is introducing is as below.  In the below figure,
-> > parents-children relations are represented with indentations, each
-> > directory is having ``/`` suffix, and files in each directory are
-> > separated by comma (",").
-> >
-> >      /sys/kernel/mm/damon/admin
-> >      │ kdamonds/nr
-> >      │ │ 0/state,pid
-> >      │ │ │ contexts/nr
-> >      │ │ │ │ 0/operations
-> >      │ │ │ │ │ monitoring_attrs/
-> >      │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
-> >      │ │ │ │ │ │ nr_regions/min,max
-> >      │ │ │ │ │ targets/nr
-> >      │ │ │ │ │ │ 0/pid
-> >      │ │ │ │ │ │ ...
-> >      │ │ │ │ ...
-> >      │ │ ...
-> 
-> >
-> > Writing a number <N> to each 'nr' file makes directories of name <0> to
-> > <N-1> in the directory of the 'nr' file.  That's all this commit does.
-> > Writing proper values to relevant files will construct the DAMON
-> > contexts, and writing a special keyword, 'on', to 'state' files for each
-> > kdamond will ask DAMON to start the constructed contexts.
-> >
-> > For a short example, using below commands for
-> > monitoring virtual address spaces of a given workload is imaginable:
-> >
-> >      # cd /sys/kernel/mm/damon/admin/
-> >      # echo 1 > kdamonds/nr
-> >      # echo 1 > kdamonds/0/contexts/nr
-> >      # echo vaddr > kdamonds/0/contexts/0/damon_type
-> >      # echo 1 > kdamonds/0/contexts/0/targets/nr
-> >      # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
-> >      # echo on > kdamonds/0/state
-> 
-> I do some test  about the sys interface, like this:
-> 
-> [root@rt2k03395 0]# tree
-> .
-> ├── contexts
-> │   ├── 0
-> │   │   ├── monitoring_attrs
-> │   │   │   ├── intervals
-> │   │   │   │   ├── aggr_us
-> │   │   │   │   ├── sample_us
-> │   │   │   │   └── update_us
-> │   │   │   └── nr_regions
-> │   │   │       ├── max
-> │   │   │       └── min
-> │   │   ├── operations
-> │   │   ├── schemes
-> │   │   │   └── nr
-> │   │   └── targets
-> │   │       ├── 0
-> │   │       │   ├── pid
-> │   │       │   └── regions
-> │   │       │       ├── 0
-> │   │       │       │   ├── end
-> │   │       │       │   └── start
-> │   │       │       ├── 1
-> │   │       │       │   ├── end
-> │   │       │       │   └── start
-> │   │       │       ├── 10
-> │   │       │       │   ├── end
-> │   │       │       │   └── start
-> │   │       │       ├── 11
-> │   │       │       │   ├── end
-> │   │       │       │   └── start
-> │   │       │       ├── 12
-> 
-> cd regions/
-> [root@rt2k03395 regions]# ls
-> 0  10  12  14  16  18  2   21  23  25  27  29  30  32  34  36  38 4   
-> 41  43  45  47  49  6  8  nr
-> 1  11  13  15  17  19  20  22  24  26  28  3   31  33  35  37  39 40  
-> 42  44  46  48  5   7  9
-> [root@rt2k03395 regions]# cd 44/cat *
-> 
-> [root@rt2k03395 regions/44]# cat *
-> 0  0
-> 
-> I'm skeptical about the number regions ? And after manually setting the 
-> number of nr, the processing of
-> 
-> "start" and "end" will be very troublesome,I guess you might want to do 
-> some special region addresses,
-> 
-> such as hot or cold region, Is that true ？
+for my use case, DIGLIM eBPF, IMA integrity verification is
+needed until the binary carrying the eBPF program is executed
+as the init process. I've been thinking to use an appended
+signature to overcome the limitation of lack of xattrs in the
+initial ram disk.
 
-The purpose of regions/ directory is for supporting the initial monitoring
-regions feature of debugfs, which is optional for virtual address spaces
-monitoring, but essential for physical address space monitoing.  If you need to
-monitor only virtual address spaces, you don't need to populate the directory.
+At that point, the LSM is attached and it can enforce an
+execution policy, allowing or denying execution and mmap
+of files depending on the digest lists (reference values) read
+by the user space side.
 
-In a future, we could add nr_accesses and age files under each region directory
-and apply the monitoring results there.
+After the LSM is attached, IMA's job would be just to calculate
+the file digests (currently, I'm using an audit policy to ensure
+that the digest is available when the eBPF program calls
+bpf_ima_inode_hash()).
 
+The main benefit of this patch set is that the audit policy
+would not be required and digests are calculated only when
+requested by the eBPF program.
 
-> But I think you need to think 
-> about how do you deal with too many
-> 
-> uncontacted reigons that need to be done.
+Thanks
 
-Sysfs interface is not aimed to be used by human hand but user space tools, and
-we provide a reference tool, damo.  Please consider using that or implement
-your own.  You could also refer to my reply to your other email for this point:
-https://lore.kernel.org/linux-mm/20220225080513.1908-1-sj@kernel.org/
+Roberto
 
-
-Thanks,
-SJ
-[...]
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
