@@ -2,157 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9454C4D8F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 19:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3928A4C4E0A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 19:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiBYSXC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 13:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S232776AbiBYSuP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 13:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiBYSXA (ORCPT
+        with ESMTP id S232773AbiBYSuO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 13:23:00 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EE31BE87
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 10:22:28 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id t11so7460457ioi.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 10:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4i7Dn6xMqNIvDQ6SKHYlCE8bqBPJnnLQezZBe+tm+7E=;
-        b=P6fzb+OZwpOlvaG3+EnWy1v6RTMFv/HjCAiOKJanAe76hkVLxtNE5HdrdpTBhWnZxP
-         BpxRm/AAeooby+ng8DNSr6qE1UgblJnuS+pbruvGLX7cFH5ZHPSo0WfWiM56kRe20HZ5
-         pzvkhw4ZAIOsXC2D2YuzQqd2s0NERUatK41Hs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4i7Dn6xMqNIvDQ6SKHYlCE8bqBPJnnLQezZBe+tm+7E=;
-        b=SI03mJaoCTfgB+YdgQHgNjQVhHMq1+e6W/zhwNoeHbjha0bsBbje69ZdRvyOzSUt8t
-         t7XDiw2Z5KIPlZ449DPQBEcQc4xs1CMIcsfcG0zL+7pHnbc9qBJZDBYnpDhArhElJm/3
-         tqh6OwnPfVZm30EgIWUvNA6U/Mo8nR8YGneNr6PO2oC6UK/esApi9aXu9oydy5dbuty2
-         CUNDhg+C1LAZ405PLsrDTYy5Ujt5cG2uXSMmWNNq+VscK0AeLJ4pNDAmzMdfbr3PaMTh
-         XMryQznvKMrjSmWMebCDZkWtgYLE78/vNZWxL0brmvYq3Lf0kC2xAtMTG/xoHTxu9sxX
-         R2tQ==
-X-Gm-Message-State: AOAM5330lsVmVvXU4P8y/0AfsmvJr7z1+tUZ+3C8NgQ0QXN5rgSTU+Et
-        my803ZuXKJAh2v63koO6zJ+AZw==
-X-Google-Smtp-Source: ABdhPJzo/Kt9WGTU8DxFi837ltOzHh2NPMAEUvMDP0w2rSR46kgdf8Wl5YnxAc9awM/UaRhOFNu2vA==
-X-Received: by 2002:a05:6638:bc1:b0:311:905f:790c with SMTP id g1-20020a0566380bc100b00311905f790cmr7025930jad.74.1645813347815;
-        Fri, 25 Feb 2022 10:22:27 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id u9-20020a5d8189000000b006415781ebe5sm1957643ion.5.2022.02.25.10.22.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 10:22:27 -0800 (PST)
-Subject: Re: [PATCH v3 0/5] selftests/resctrl: Add resctrl_tests into
- kselftest set
-To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <d9f81a0f-5f25-9304-fdca-fc164224a786@linuxfoundation.org>
- <TYAPR01MB63306F67590849B0354D8FB78B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <34174016-e4fd-be4c-a5c0-81d63557de64@linuxfoundation.org>
-Date:   Fri, 25 Feb 2022 11:22:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 25 Feb 2022 13:50:14 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FC7182D8A;
+        Fri, 25 Feb 2022 10:49:41 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id DED551F4664E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645814980;
+        bh=W1siran0TDWu7KT1NGueE/mVjJkk8nSZK4wyUM635do=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=WijUW/t4Phhx9H51BK2pBFSQkcaSPVGY+5nyahB6tSqLcsRuGthEKnKM6MTXySYOk
+         dtkboROcim2ASyTrJwugmHjLAIO/htDGkxMCbopG8TIZ6OJiRLjt9t3fuWqc38PLse
+         NkWA8WLGiyPonH80gGYow+LYwyiIeHsBdeh2neu66f0ZI0ksCFGWen6HOHw0X5wA8K
+         wXs+5lXyErJs6pG9+2mS6EAtOJXj09wOI/TFTaWExYF24I4/1bK8svQ1X6jARLdPVg
+         HGbQjB2pKOw15iNAkIimvqxIrHO2zFUVjbX3Q3nt1zVEn9OOqODCNwQGYHWhEb3ypZ
+         B6Hk93T9vDfZQ==
+Message-ID: <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
+Date:   Fri, 25 Feb 2022 18:49:37 +0000
 MIME-Version: 1.0
-In-Reply-To: <TYAPR01MB63306F67590849B0354D8FB78B3E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
 Content-Language: en-US
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
+In-Reply-To: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/25/22 1:03 AM, tan.shaopeng@fujitsu.com wrote:
-> Hi Shuah,
+On 25/02/2022 13:15, Guillaume Tucker wrote:
+> Add quotes around $(CC) when calling check_cc.sh from a Makefile to
+> pass the value as a single argument to the script even if it has
+> several words such as "ccache gcc".  Conversely, remove quotes in
+> check_cc.sh when calling $CC to make it a command with potentially
+> several arguments again.
 > 
->> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
->>> Hello,
->>>
->>> The aim of this series is to make resctrl_tests run by using kselftest
->>> framework.
->>> - I modify resctrl_test Makefile and kselftest Makefile,
->>>     to enable build/run resctrl_tests by using kselftest framework.
->>>     Of course, users can also build/run resctrl_tests without
->>>     using framework as before.
->>> - I change the default limited time for resctrl_tests to 120 seconds, to
->>>     ensure the resctrl_tests finish in limited time on different environments.
->>> - When resctrl file system is not supported by environment or
->>>     resctrl_tests is not run as root, return skip code of kselftest framework.
->>> - If resctrl_tests does not finish in limited time, terminate it as
->>>     same as executing ctrl+c that kills parent process and child process.
->>>
->>> Difference from v2:
->>> - I reworte changelog of this patch series.
->>> - I added how to use framework to run resctrl to README. [PATCH v3
->>> 2/5]
->>> - License has no dependencies on this patch series, I separated from it this
->> patch series to another patch.
->>> https://lore.kernel.org/lkml/20211213100154.180599-1-tan.shaopeng@jp.f
->>> ujitsu.com/
->>>
->>> With regard to the limited time, I think 120s is not a problem since
->>> some tests have a longer timeout (e.g. net test is 300s). Please let me know if
->> this is wrong.
->>>
->>> Thanks,
->>>
->>> Shaopeng Tan (5):
->>>     selftests/resctrl: Kill child process before parent process terminates
->>>       if SIGTERM is received
->>>     selftests/resctrl: Make resctrl_tests run using kselftest framework
->>>     selftests/resctrl: Update README about using kselftest framework to
->>>       build/run resctrl_tests
->>>     selftests/resctrl: Change the default limited time to 120 seconds
->>>     selftests/resctrl: Fix resctrl_tests' return code to work with
->>>       selftest framework
->>>
->>>    tools/testing/selftests/Makefile              |  1 +
->>>    tools/testing/selftests/resctrl/Makefile      | 20 ++++-------
->>>    tools/testing/selftests/resctrl/README        | 34
->> +++++++++++++++++++
->>>    .../testing/selftests/resctrl/resctrl_tests.c |  4 +--
->>>    tools/testing/selftests/resctrl/resctrl_val.c |  1 +
->>>    tools/testing/selftests/resctrl/settings      |  1 +
->>>    6 files changed, 45 insertions(+), 16 deletions(-)
->>>    create mode 100644 tools/testing/selftests/resctrl/settings
->>>
->>
->> Reviewed the patches - patches 1/5, 4/5 & 5/5 don't depend on kselftest
->> framework improvements. 2/5 and 3/5 are.
->>
->> Please reorder the patches - move 4/5 and 5/5 up and make 2/5 and 3/5 the
->> last in this series. Also see comments on individual patches.
+> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+> Tested-by: "kernelci.org bot" <bot@kernelci.org>
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> ---
+>  tools/testing/selftests/vm/Makefile     | 6 +++---
+>  tools/testing/selftests/x86/Makefile    | 6 +++---
+>  tools/testing/selftests/x86/check_cc.sh | 2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> Ok, I will reorder all patches as follows, so that independent patches come first
-> and Makefile related patches come last:
-> [PATCH 1/5] selftests/resctrl: Kill child process before parent process terminates if SIGTERM is received
-> [PATCH 4/5] selftests/resctrl: Change the default limited time to 120 seconds
-> [PATCH 5/5] selftests/resctrl: Fix resctrl_tests' return code to work with selftest framework
-> [PATCH 2/5] selftests/resctrl: Make resctrl_tests run using kselftest framework
-> [PATCH 3/5] selftests/resctrl: Update README about using kselftest framework to build/run resctrl_tests
-> [PATCH] selftests/resctrl: Add missing SPDX license to Makefile
-> 
-> Please let me know if I'm wrong.
-> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 1607322a112c..d934f026ebb5 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -49,9 +49,9 @@ TEST_GEN_FILES += split_huge_page_test
+>  TEST_GEN_FILES += ksm_tests
+>  
+>  ifeq ($(MACHINE),x86_64)
+> -CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+> -CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
+> -CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
+> +CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
+> +CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
+> +CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+>  
+>  TARGETS := protection_keys
+>  BINARIES_32 := $(TARGETS:%=%_32)
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 8a1f62ab3c8e..53df7d3893d3 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -6,9 +6,9 @@ include ../lib.mk
+>  .PHONY: all all_32 all_64 warn_32bit_failure clean
+>  
+>  UNAME_M := $(shell uname -m)
+> -CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+> -CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+> -CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+> +CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
+> +CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
+> +CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+>  
+>  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+>  			check_initial_reg_state sigreturn iopl ioperm \
+> diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
+> index 3e2089c8cf54..aff2c15018b5 100755
+> --- a/tools/testing/selftests/x86/check_cc.sh
+> +++ b/tools/testing/selftests/x86/check_cc.sh
+> @@ -7,7 +7,7 @@ CC="$1"
+>  TESTPROG="$2"
+>  shift 2
+>  
+> -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>      echo 1
+>  else
+>      echo 0
 
-This split looks good to me.
+I see the change in check_cc.sh is already covered by Usama's patch:
 
-thanks,
--- Shuah
+  selftests/x86: Add validity check and allow field splitting
+
+-if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
++if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+
+
+However, the rest of this patch in the Makefiles still needs to
+be applied.  Let me know if I should rebase it on top of Usama's.
+
+Thanks,
+Guillaume
 
