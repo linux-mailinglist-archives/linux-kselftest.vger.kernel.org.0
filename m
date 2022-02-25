@@ -2,192 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540DF4C3A59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 01:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34904C3BFE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 03:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiBYAaM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Feb 2022 19:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S236588AbiBYCxq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Feb 2022 21:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiBYAaL (ORCPT
+        with ESMTP id S234435AbiBYCxq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:30:11 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC4329F412;
-        Thu, 24 Feb 2022 16:29:41 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:42592)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nNOUI-001Ewm-DQ; Thu, 24 Feb 2022 17:29:34 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:56954 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nNOUH-000XdN-5K; Thu, 24 Feb 2022 17:29:34 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        Etienne Dechamps <etienne@edechamps.fr>,
-        Alexey Gladkov <legion@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Security Officers <security@kernel.org>,
-        Neil Brown <neilb@cse.unsw.edu.au>, NeilBrown <neilb@suse.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jann Horn <jannh@google.com>,
-        Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        Linus Torvalds <linus@torvalds.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr>
-        <20220215101150.GD21589@blackbody.suse.cz>
-        <87zgmi5rhm.fsf@email.froward.int.ebiederm.org>
-        <87fso91n0v.fsf_-_@email.froward.int.ebiederm.org>
-        <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-        <878ru1qcos.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wgW8+vmqhx4t+uFiZL==8Ac5VWTqCm_oshA0e47B73qPw@mail.gmail.com>
-        <87tucpko7d.fsf@email.froward.int.ebiederm.org>
-        <87sfs8jmpz.fsf_-_@email.froward.int.ebiederm.org>
-        <202202240826.E31BADF@keescook>
-Date:   Thu, 24 Feb 2022 18:29:24 -0600
-In-Reply-To: <202202240826.E31BADF@keescook> (Kees Cook's message of "Thu, 24
-        Feb 2022 08:28:41 -0800")
-Message-ID: <87y21zhjq3.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nNOUH-000XdN-5K;;;mid=<87y21zhjq3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+tiJNf1YjykR+rfILbUT6/qjREErIq3zE=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+        Thu, 24 Feb 2022 21:53:46 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0EE278CAF
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Feb 2022 18:53:15 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id g19-20020aa796b3000000b004e136dcec34so2313939pfk.23
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Feb 2022 18:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2puWIl3IcpbmEtDoBGd8mpwWXz/flgK5gtzvJt22Ibg=;
+        b=V7A8Rb2FXvpOWQfWfzts5uMpUAXDUD+M3X+h/q51ZiFHnsqw6bhHOmPnaoE/ZY5iOQ
+         C8orkMrqUIiLMxOLijz28b1G+810z04aGpYpY4X0pI3wqm7P/t7sWYKk1aXduo9gdbhw
+         1RyDvYEIhp+V2Sa8MxaG/5Ur286JFCurw2fjxoe8oAj4IeSjVCCKYjadlmyL25pI9aNo
+         SApjixcEDESi3VEHQZ6r++HehdafCfN2K3xj1eXCQ1+cM6e3EgyVe5mecBCKCOaQi8ut
+         d8F+eBLvh2qcv4lPsWt+D65gG3/e8tGPx77ArCe2k0ONFiJ65/xXlcROmNm4FaBDWBfy
+         Qtew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2puWIl3IcpbmEtDoBGd8mpwWXz/flgK5gtzvJt22Ibg=;
+        b=SvIYatDKP24erhVnlGoUzCnCFCDq9tyRBEF7b7aBd8n3u0iN4CBzsCsy9hKAShcKJi
+         3zNv1H8OedhwBx4ZGYqvMLVgzCMR8ZIbBqwTmnxLYL9KLyBIMKxw1xMvBbkWpE8oVjN1
+         GqKmVwSeH/t0+NXsX6GBeUzAAwl2LjnmUWOzsa3ghqICK0pKGYofsCOtbUZ/5yWhVuxv
+         7XUnDH2PFTX8rbSt84A7Tp1LvJ0hYc0b9YeqkYdSgSN/WH9GJFsEpPvNOpDcZNnjkS7q
+         px2lIuDO7cuWqlXg3gBOH71wGPbJ1/AVVVRo2aLIMrWIzzdZrjcGfmSYkcsNYKtLiIAl
+         liSw==
+X-Gm-Message-State: AOAM532c3NrHZSrBMB7rxNx58+jDzyesF8oQl9YKjR5x0UJcOlLDspIR
+        rKFrDiwXV4UIyQIfv8nQV8vLxiTTnJknFg==
+X-Google-Smtp-Source: ABdhPJyAVL+KVNuKKmj4OCwnf0mb2V2caveapLa1ZAGZW4xhwAdHDu2wqfAIMOl8UrftyjkEAcI9bMuubXYhJw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90b:4b52:b0:1bc:b208:dc5c with SMTP
+ id mi18-20020a17090b4b5200b001bcb208dc5cmr139771pjb.1.1645757594543; Thu, 24
+ Feb 2022 18:53:14 -0800 (PST)
+Date:   Fri, 25 Feb 2022 10:52:46 +0800
+Message-Id: <20220225025247.1888244-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH v4 1/3] list: test: Add test for list_del_init_careful()
+From:   David Gow <davidgow@google.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 634 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.2 (0.7%), b_tie_ro: 2.9 (0.5%), parse: 0.92
-        (0.1%), extract_message_metadata: 15 (2.3%), get_uri_detail_list: 2.1
-        (0.3%), tests_pri_-1000: 21 (3.3%), tests_pri_-950: 0.99 (0.2%),
-        tests_pri_-900: 0.82 (0.1%), tests_pri_-90: 62 (9.8%), check_bayes: 61
-        (9.6%), b_tokenize: 9 (1.4%), b_tok_get_all: 12 (1.8%), b_comp_prob:
-        2.7 (0.4%), b_tok_touch_all: 33 (5.3%), b_finish: 0.80 (0.1%),
-        tests_pri_0: 392 (61.9%), check_dkim_signature: 0.44 (0.1%),
-        check_dkim_adsp: 1.87 (0.3%), poll_dns_idle: 121 (19.2%),
-        tests_pri_10: 2.3 (0.4%), tests_pri_500: 132 (20.8%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [PATCH] ucounts: Fix systemd LimigtNPROC with private users
- regression
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+The list_del_init_careful() function was added[1] after the list KUnit
+test. Add a very basic test to cover it.
 
-> typo: Subject's LimigtNPROC -> LimitNPROC
->
-> On Thu, Feb 24, 2022 at 09:41:44AM -0600, Eric W. Biederman wrote:
->> 
->> Long story short recursively enforcing RLIMIT_NPROC when it is not
->> enforced on the process that creates a new user namespace, causes
->> currently working code to fail.  There is no reason to enforce
->> RLIMIT_NPROC recursively when we don't enforce it normally so update
->> the code to detect this case.
->> 
->> I would like to simply use capable(CAP_SYS_RESOURCE) to detect when
->> RLIMIT_NPROC is not enforced upon the caller.  Unfortunately because
->> RLIMIT_NPROC is charged and checked for enforcement based upon the
->> real uid, using capable() wich is euid based is inconsistent with reality.
->
-> typo: wich -> which
+Note that this test only covers the single-threaded behaviour (which
+matches list_del_init()), as is already the case with the test for
+list_empty_careful().
 
-Ahh... Typos.
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6fe44d96fc1536af5b11cd859686453d1b7bfd1
 
->> Come as close as possible to testing for capable(CAP_SYS_RESOURCE) by
->> testing for when the real uid would match the conditions when
->> CAP_SYS_RESOURCE would be present if the real uid was the effective
->> uid.
->> 
->> Reported-by: Etienne Dechamps <etienne@edechamps.fr>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215596
->> Link: https://lkml.kernel.org/r/e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr
->> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
->> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->> ---
->> 
->> The previous conversation has given me enough clarity that I can see
->> which tests I am comfortable with use for this pending regression fix.
->> 
->> I have tested this and it works for me.  Does anyone have any concerns
->> with this change?
->
-> I'd really love some kind of selftest that exercises the edge cases; do
-> you have your tests in some form that could be converted?
->
-> But otherwise, yes, this looks like the best option here.
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
 
-Let's start with Michal Koutný tests.  I keep forgetting to look at
-them.  This cold has really been kicking my butt.
+Changes since v3:
+https://lore.kernel.org/lkml/20220209052813.854014-1-davidgow@google.com/
+- Fix a comment style issue.
+- Add Reviewed-by tags.
 
-For this issue the test case was a systemd unit file.  Which is simple
-and demonstrates the real-world regression but not really minimal in the
-way a kernel selftest should be.
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220208040122.695258-1-davidgow@google.com/
+- Fix the test calling list_del_init() instead of
+  list_del_init_careful()
+- Improve the comment noting we only test single-threaded behaviour.
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
->> 
->>  kernel/user_namespace.c | 14 +++++++++++++-
->>  1 file changed, 13 insertions(+), 1 deletion(-)
->> 
->> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
->> index 6b2e3ca7ee99..5481ba44a8d6 100644
->> --- a/kernel/user_namespace.c
->> +++ b/kernel/user_namespace.c
->> @@ -58,6 +58,18 @@ static void set_cred_user_ns(struct cred *cred, struct user_namespace *user_ns)
->>  	cred->user_ns = user_ns;
->>  }
->>  
->> +static unsigned long enforced_nproc_rlimit(void)
->> +{
->> +	unsigned long limit = RLIM_INFINITY;
->> +
->> +	/* Is RLIMIT_NPROC currently enforced? */
->> +	if (!uid_eq(current_uid(), GLOBAL_ROOT_UID) ||
->> +	    (current_user_ns() != &init_user_ns))
->> +		limit = rlimit(RLIMIT_NPROC);
->> +
->> +	return limit;
->> +}
->> +
->>  /*
->>   * Create a new user namespace, deriving the creator from the user in the
->>   * passed credentials, and replacing that user with the new root user for the
->> @@ -122,7 +134,7 @@ int create_user_ns(struct cred *new)
->>  	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++) {
->>  		ns->ucount_max[i] = INT_MAX;
->>  	}
->> -	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC));
->> +	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_NPROC, enforced_nproc_rlimit());
->>  	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MSGQUEUE, rlimit(RLIMIT_MSGQUEUE));
->>  	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_SIGPENDING, rlimit(RLIMIT_SIGPENDING));
->>  	set_rlimit_ucount_max(ns, UCOUNT_RLIMIT_MEMLOCK, rlimit(RLIMIT_MEMLOCK));
->> -- 
->> 2.29.2
->> 
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220205061539.273330-1-davidgow@google.com/
+- Patch 1/3 unchanged
+---
+ lib/list-test.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Eric
+diff --git a/lib/list-test.c b/lib/list-test.c
+index ee09505df16f..302b7382bff4 100644
+--- a/lib/list-test.c
++++ b/lib/list-test.c
+@@ -161,6 +161,26 @@ static void list_test_list_del_init(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
+ }
+ 
++static void list_test_list_del_init_careful(struct kunit *test)
++{
++	/* NOTE: This test only checks the behaviour of this function in
++	 * isolation. It does not verify memory model guarantees.
++	 */
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_del_init_careful(&a);
++	/* after: [list] -> b, a initialised */
++
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
++}
++
+ static void list_test_list_move(struct kunit *test)
+ {
+ 	struct list_head a, b;
+@@ -707,6 +727,7 @@ static struct kunit_case list_test_cases[] = {
+ 	KUNIT_CASE(list_test_list_replace_init),
+ 	KUNIT_CASE(list_test_list_swap),
+ 	KUNIT_CASE(list_test_list_del_init),
++	KUNIT_CASE(list_test_list_del_init_careful),
+ 	KUNIT_CASE(list_test_list_move),
+ 	KUNIT_CASE(list_test_list_move_tail),
+ 	KUNIT_CASE(list_test_list_bulk_move_tail),
+-- 
+2.35.1.574.g5d30c73bfb-goog
+
