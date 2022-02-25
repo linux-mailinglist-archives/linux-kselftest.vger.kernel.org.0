@@ -2,71 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FB84C49F4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 17:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A349E4C4A25
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 17:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242544AbiBYQBu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 11:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S242622AbiBYQHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 11:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242545AbiBYQBt (ORCPT
+        with ESMTP id S242621AbiBYQHU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:01:49 -0500
+        Fri, 25 Feb 2022 11:07:20 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89F8D1F124A
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 08:01:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E099F21131E
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 08:06:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645804870;
+        s=mimecast20190719; t=1645805206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=w9dhf5wwXThEWj3cf5cdg0iQ4nnKBS281ReX6j2zl94=;
-        b=FaqhwseJpvCX97+JLQIeD9XMzvAEGJwTuDfQLzIRlKbcp2YtAdiXQeRHEg2x73kgwbad8S
-        Zet4hNl4FwZ9Y/YqVr/vinvGKEguCnvA6Ml8qz7E6XbSd0jROhB0hrjxkmF7Yb3d8b5uGD
-        r4ivpeZ01rxS2QkoCpJLl4wcoq+rgd0=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=JtNsOA458FeQEet3eOy2MiWL9UbbHGcWhapQcMGFooY=;
+        b=EvriBeJmaKA9toWJMbVMuqAfxqoSfBrtIM4qzuETChFtVohuFJS+6d5EnlEeYoaHr08LXw
+        P8iNNd0z262mnqlm0ljVnGszJsogvmlJHk8lkEMi7IP91a16U3YITDbqlRUkdOa+6psCMA
+        3Ir7MxKR/xGDNsY3GIl87QQmWwxC5dQ=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-lMKWh98XMUeDSArcutTtug-1; Fri, 25 Feb 2022 11:01:07 -0500
-X-MC-Unique: lMKWh98XMUeDSArcutTtug-1
-Received: by mail-pl1-f197.google.com with SMTP id x18-20020a170902b41200b0014fc2665bddso3218418plr.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 08:01:07 -0800 (PST)
+ us-mta-220-PArR3C9kOa2HvhAobo_tNw-1; Fri, 25 Feb 2022 11:06:44 -0500
+X-MC-Unique: PArR3C9kOa2HvhAobo_tNw-1
+Received: by mail-pl1-f200.google.com with SMTP id 17-20020a170902ee5100b0014fef809980so3221485plo.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 08:06:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w9dhf5wwXThEWj3cf5cdg0iQ4nnKBS281ReX6j2zl94=;
-        b=da8X9tTnjz8zoBCJOJcO1955rntMKxh7iKlgK/uUHoJ+HN2glHIqtcvQ6geKjwel4n
-         pj396m/JLE8aMMG1uF64LU6fljZM1XvwIWou8ZjqpYwFIvleznD4DgfB2mVCntsxrKPu
-         RJPiX9+tRZVtOocj22pw2vu+aMssMl6nitCApVACq8R1ahg3U8lcyH82hXKMNhBqDO8N
-         9d6evkYohbuHDnGxJrokvCjKUQcGk5rXwTkiywW1zYnHqATMrr9EUbIFaAkocIxHGvBK
-         KgFXTAKyf0sLXj9vFvtHHzel1og/zCDqcDWOloJoYSEj6Y2xt6EXqoCzC2oEcBREyMCR
-         76+w==
-X-Gm-Message-State: AOAM531YAXxBGlEPg0C22it2/OfqTYQhK+FkrLW/sW+v+Y88PM3rxXfW
-        UcLRjGE4a4pJr8T3X5i+RSZCzF/rdkijQV9a8jvnECxu8NTwxS1rPWQukkjeY8SFYecNaL4lxeU
-        Zf8zcLry630MD55k8ja9w38HwScvhQ2MJxwBK1hBcc0QB
-X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id r10-20020a17090a560a00b001bc72e73c13mr3732936pjf.246.1645804865964;
-        Fri, 25 Feb 2022 08:01:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwnDxShEdRtw82Y2ve6Ld5WQ6/BwpdkROL6sfF8knWeb+GpiwWno7qGoJpgjLzdJaMj+agHtqJVEo21uvWjJLE=
-X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id
- r10-20020a17090a560a00b001bc72e73c13mr3732820pjf.246.1645804864803; Fri, 25
- Feb 2022 08:01:04 -0800 (PST)
+        bh=JtNsOA458FeQEet3eOy2MiWL9UbbHGcWhapQcMGFooY=;
+        b=bolxvMyafgJRkAzEUYZz+IfNUBgMhxIlWVKQxpfy8396CfVwjOBCOeO+sQmQlzP7ad
+         t89KfTu1ehvR6zUYfwe4gwlWqXapjbXbkcaaSvfxxdbS7mH+gyZcLrxiaDAN6Ll+2nEX
+         WmcYgngiE3EdSyDZclcHw49gPwAGPI51n3uG+9i3tRRPjmsrMWuiNhKvsASrIRpZTR3K
+         h6EQxMfuubFGR9TrBhHP3IBBvb0xGPvEbtuTFzjCJYreDbwPSHBNYyXrjOshCUEAqv9+
+         VisQNhSQqatQKDSZopukeQl/j06jSGaCSNc0QLfUJKCGmf1JQI7/R2sjZhHCF9EpKIq9
+         5//Q==
+X-Gm-Message-State: AOAM530HoYN1U7ua5F5hu7ddD1/LaS4KqSU9NbMqS3836YxJx6BGz5xW
+        dxqWhbCE9zHX5MFcaIW5S83kr5BMTXGKEUa/jJiKCwAG/ORKlEi7/NmqJ2dw7ObDL1odEnPU19k
+        au6aLrSR3nafUcj2eNBr0QUaRz0lJJ3czRbmxfGB1MOgA
+X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id bc8-20020a170902930800b0014edef5e6b5mr8295956plb.73.1645805203637;
+        Fri, 25 Feb 2022 08:06:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUIpWXteQHikzWnedR/pQmtGNKJt81L52dh8Zvx5yBKuSs0mA4pDWiMKp+ELlQrYIZ5T2VI/o7I3Fd2NGvn7E=
+X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id
+ bc8-20020a170902930800b0014edef5e6b5mr8295906plb.73.1645805203288; Fri, 25
+ Feb 2022 08:06:43 -0800 (PST)
 MIME-Version: 1.0
 References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
  <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
- <YhjbzxxgxtSxFLe/@kroah.com>
-In-Reply-To: <YhjbzxxgxtSxFLe/@kroah.com>
+ <ed97e5e8-f2b8-569f-5319-36cd3d2b79b3@fb.com>
+In-Reply-To: <ed97e5e8-f2b8-569f-5319-36cd3d2b79b3@fb.com>
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 25 Feb 2022 17:00:53 +0100
-Message-ID: <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
+Date:   Fri, 25 Feb 2022 17:06:32 +0100
+Message-ID: <CAO-hwJ+CJkPqdOE+OpZHOscMk3HHZb4qVtXjF-bkOweU0QjppA@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>,
@@ -89,37 +90,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 2:38 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Thu, Feb 24, 2022 at 6:21 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> On Thu, Feb 24, 2022 at 02:49:21PM +0100, Benjamin Tissoires wrote:
+>
+>
+> On 2/24/22 5:49 AM, Benjamin Tissoires wrote:
 > > Hi Greg,
 > >
 > > Thanks for the quick answer :)
 > >
 > > On Thu, Feb 24, 2022 at 12:31 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Feb 24, 2022 at 12:08:22PM +0100, Benjamin Tissoires wrote:
-> > > > Hi there,
-> > > >
-> > > > This series introduces support of eBPF for HID devices.
-> > > >
-> > > > I have several use cases where eBPF could be interesting for those
-> > > > input devices:
-> > > >
-> > > > - simple fixup of report descriptor:
-> > > >
-> > > > In the HID tree, we have half of the drivers that are "simple" and
-> > > > that just fix one key or one byte in the report descriptor.
-> > > > Currently, for users of such devices, the process of fixing them
-> > > > is long and painful.
-> > > > With eBPF, we could externalize those fixups in one external repo,
-> > > > ship various CoRe bpf programs and have those programs loaded at boot
-> > > > time without having to install a new kernel (and wait 6 months for the
-> > > > fix to land in the distro kernel)
-> > >
-> > > Why would a distro update such an external repo faster than they update
-> > > the kernel?  Many sane distros update their kernel faster than other
-> > > packages already, how about fixing your distro?  :)
+> >>
+> >> On Thu, Feb 24, 2022 at 12:08:22PM +0100, Benjamin Tissoires wrote:
+> >>> Hi there,
+> >>>
+> >>> This series introduces support of eBPF for HID devices.
+> >>>
+> >>> I have several use cases where eBPF could be interesting for those
+> >>> input devices:
+> >>>
+> >>> - simple fixup of report descriptor:
+> >>>
+> >>> In the HID tree, we have half of the drivers that are "simple" and
+> >>> that just fix one key or one byte in the report descriptor.
+> >>> Currently, for users of such devices, the process of fixing them
+> >>> is long and painful.
+> >>> With eBPF, we could externalize those fixups in one external repo,
+> >>> ship various CoRe bpf programs and have those programs loaded at boot
+> >>> time without having to install a new kernel (and wait 6 months for the
+> >>> fix to land in the distro kernel)
+> >>
+> >> Why would a distro update such an external repo faster than they update
+> >> the kernel?  Many sane distros update their kernel faster than other
+> >> packages already, how about fixing your distro?  :)
 > >
 > > Heh, I'm going to try to dodge the incoming rhel bullet :)
 > >
@@ -132,34 +135,29 @@ On Fri, Feb 25, 2022 at 2:38 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 > > Brain fart: is there any chance we could keep the validated bpf
 > > programs in the kernel tree?
 >
-> That would make the most sense to me.  And allow "slow" distros to
-> override the HID bpf quirks easily if they need to.  If you do that,
-> then most of my objections of the "now the code is in two places that
-> you have to track" goes away :)
+> Yes, see kernel/bpf/preload/iterators/iterators.bpf.c.
 
-Unfortunately, I don't think we will be able to have all the bpf
-programs in the kernel.
+Thanks. This is indeed interesting.
+I am not sure the exact usage of it though :)
 
-I would say programs that "enable" a device (report descriptor fixup,
-events override, single key remapping) which are there to make the
-device fully functional could likely be stored and loaded by the
-kernel. I have yet to figure out if the suggestion from Yonghong Song
-allows me to also load the bpf program or if it's just a repo in the
-tree for the sources.
+One thing I wonder too while we are on this topic, is it possible to
+load a bpf program from the kernel directly, in the same way we can
+request firmwares?
 
-However, for USI pens (or any other functionality that needs a new
-high level kernel interface) I don't think we will have them here.
-Unless we want to also bind the public API to dbus (or graybus maybe),
-the bpf program should live in the userspace program so it can update
-it and not be tied to the decisions in the kernel (I'll go more into
-detail later in this reply).
+Because if we can do that, in my HID use case we could replace simple
+drivers with bpf programs entirely and reduce the development cycle to
+a bare minimum.
 
-So that's going to be a half and half solution :/
+Cheers,
+Benjamin
+
 
 >
-> > > I'm all for the idea of using ebpf for HID devices, but now we have to
-> > > keep track of multiple packages to be in sync here.  Is this making
-> > > things harder overall?
+> >
+> >>
+> >> I'm all for the idea of using ebpf for HID devices, but now we have to
+> >> keep track of multiple packages to be in sync here.  Is this making
+> >> things harder overall?
 > >
 > > Probably, and this is also maybe opening a can of worms. Vendors will
 > > be able to say "use that bpf program for my HID device because the
@@ -170,266 +168,18 @@ So that's going to be a half and half solution :/
 > > GPL. Which means that if firmware vendors want to distribute blobs
 > > through BPF, either it's GPL and they have to provide the sources, or
 > > it's not happening.
->
-> You can make the new HID bpf api only availble to GPL programs, and if I
-> were you, that's what I would do just to keep any legal issues from
-> coming up.  Also bundling it with the kernel makes it easier.
-
-Looking at kernel/bpf/bpf_lsm.c I can confirm that it should be easy
-to prevent a program from binding to HID if it's not GPL :)
-
->
+> >
 > > I am not entirely clear on which plan I want to have for userspace.
 > > I'd like to have libinput on board, but right now, Peter's stance is
 > > "not in my garden" (and he has good reasons for it).
 > > So my initial plan is to cook and hold the bpf programs in hid-tools,
 > > which is the repo I am using for the regression tests on HID.
->
-> Why isn't the hid regression tests in the kernel tree also?  That would
-> allow all of the testers out there to test things much easier than
-> having to suck down another test repo (like Linaro and 0-day and
-> kernelci would be forced to do).
-
-2 years ago I would have argued that the ease of development of
-gitlab.fd.o was more suited to a fast moving project.
-
-Now... The changes in the core part of the code don't change much so
-yes, merging it in the kernel might have a lot of benefits outside of
-what you said. The most immediate one is that I could require fixes to
-be provided with a test, and merge them together, without having to
-hold them until Linus releases a new version.
-
-If nobody complains of having the regression tests in python with
-pytest and some Python 3.6+ features, that is definitely something I
-should look for.
-
->
+> >
 > > I plan on building a systemd intrinsic that would detect the HID
 > > VID/PID and then load the various BPF programs associated with the
 > > small fixes.
 > > Note that everything can not be fixed through eBPF, simply because at
 > > boot we don't always have the root partition mounted.
+> [...]
 >
-> Root partitions are now on HID devices?  :)
-
-Sorry for not being clear :)
-
-I mean that if you need a bpf program to be loaded from userspace at
-boot to make your keyboard functional, then you need to have the root
-partition mounted (or put the program in the initrd) so udev can load
-it. Now if your keyboard is supposed to give the password used to
-decrypt your root partition but you need a bpf program on that said
-partition to make it functional, you are screwed :)
-
->
-> > > > - Universal Stylus Interface (or any other new fancy feature that
-> > > >   requires a new kernel API)
-> > > >
-> > > > See [0].
-> > > > Basically, USI pens are requiring a new kernel API because there are
-> > > > some channels of communication our HID and input stack are not capable
-> > > > of. Instead of using hidraw or creating new sysfs or ioctls, we can rely
-> > > > on eBPF to have the kernel API controlled by the consumer and to not
-> > > > impact the performances by waking up userspace every time there is an
-> > > > event.
-> > >
-> > > How is userspace supposed to interact with these devices in a unified
-> > > way then?  This would allow random new interfaces to be created, one
-> > > each for each device, and again, be a pain to track for a distro to keep
-> > > in sync.  And how are you going to keep the ebpf interface these
-> > > provides in sync with the userspace program?
-> >
-> > Right now, the idea we have is to export the USI specifics through
-> > dbus. This has a couple of advantages: we are not tied to USI and can
-> > "emulate" those parameters by storing them on disk instead of in the
-> > pen, and this is easily accessible from all applications directly.
-> >
-> > I am trying to push to have one implementation of that dbus service
-> > with the Intel and ChromeOS folks so general linux doesn't have to
-> > recreate it. But if you look at it, with hidraw nothing prevents
-> > someone from writing such a library/daemon in its own world without
-> > sharing it with anybody.
-> >
-> > The main advantage of eBPF compared to hidraw is that you can analyse
-> > the incoming event without waking userspace and only wake it up when
-> > there is something noticeable.
->
-> That is a very good benefit, and one that many battery-powered devices
-> would like.
->
-> > In terms of random interfaces, yes, this is a good point. But the way
-> > I see it is that we can provide one kernel API (eBPF for HID) which we
-> > will maintain and not have to maintain forever a badly designed kernel
-> > API for a specific device. Though also note that USI is a HID standard
-> > (I think there is a second one), so AFAICT, the same bpf program
-> > should be able to be generic enough to be cross vendor. So there will
-> > be one provider only for USI.
->
-> Ok, that's good to know.
->
-> <good stuff snipped>
->
-> > Yeah, I completely understand the view. However, please keep in mind
-> > that most of it (though not firewall and some corner cases of tracing)
-> > is already possible to do through hidraw.
-> > One other example of that is SDL. We got Sony involved to create a
-> > nice driver for the DualSense controller (the PS5 one), but they
-> > simply ignore it and use plain HID (through hidraw). They have the
-> > advantage of this being cross-platform and can provide a consistent
-> > experience across platforms. And as a result, in the kernel, we have
-> > to hands up the handling of the device whenever somebody opens a
-> > hidraw node for those devices (Steam is also doing the same FWIW).
-> >
-> > Which reminds me that I also have another use-case: joystick
-> > dead-zone. You can have a small filter that configures the dead zone
-> > and doesn't even wake up userspace for those hardware glitches...
->
-> hidraw is a big issue, and I understand why vendors use that and prefer
-> it over writing a kernel driver.  They can control it and ship it to
-> users and it makes life easier for them.  It's also what Windows has
-> been doing for decades now, so it's a comfortable interface for them to
-> write their code in userspace.
->
-> But, now you are going to ask them to use bpf instead?  Why would they
-> switch off of hidraw to use this api?  What benefit are you going to
-> provide them here for that?
-
-Again, there are 2 big classes of users of hid-bpf ("you" here is a
-developer in general):
-1. you need to fix your device
-2. you need to add a new kernel API
-
-2. can be entirely done with hidraw:
-- you open the hidraw node
-- you parse every incoming event
-- out of that you build up your high level API
-
-This is what we are doing in libratbag for instance to support gaming
-mice that need extra features. We try to not read every single event,
-but some mice are done in a way we don't have a choice.
-
-With bpf, you could:
-- load the bpf program
-- have the kernel (bpf program) parse the incoming report without
-waking up user space
-- when something changes (a given button is pressed) the bpf program
-notifies userspace with an event
-- then userspace builds its own API on top of it (forward that change
-through dbus for example)
-
-As far as 1., the aim is not to replace hidraw but the kernel drivers
-themselves:
-instead of having a formal driver loaded in the kernel, you can rely
-on a bpf program to do whatever needs to be done to make the device
-working.
-
-If the FW is wrong and the report descriptor messes up a button
-mapping, you can change that with bpf instead of having a specific
-driver for it.
-And of course, using hidraw for that just doesn't work because the
-event stream you get from hidraw is for the process only. In BPF, we
-can change the event flow for anybody, which allows much more power
-(but this is scarier too).
-
-This class of bpf program should actually reside in the kernel tree so
-everybody can benefit from it (circling back to your first point).
-
-So I am not deprecating hidraw nor I am not asking them to use bpf instead.
-But when you are interested in just one byte in the report, bpf allows
-you to speed up your program and save battery.
-
->
-> This is why I've delayed doing bpf for USB.  Right now we have a nice
-> cross-platform way to write userspace USB drivers using usbfs/libusb.
-> All a bpf api to USB would be doing is much the same thing that libusb
-> does, for almost no real added benefit that I can tell.
->
-> USB, is a really "simple" networking like protocol (send/recieve
-> packets).  So it ties into the bpf model well.  But the need to use bpf
-> for USB so far I don't have a real justification.
->
-> And the same thing here.  Yes it is cool, and personally I love it, but
-> what is going to get people off of hidraw to use this instead?  You
-> can'd drop hidraw now (just like I can't drop usbfs), so all this means
-> is we have yet-another-way to do something on the system.  Is that a
-> good idea?  I don't know.
->
-> Also you mention dbus as the carrier for the HID information to
-> userspace programs.  Is dbus really the right thing for sending streams
-> of input data around?  Yes it will probably work, but I don't think it
-> was designed for that at all, so the overhead involved might just
-> overshadow any of the improvements you made using bpf.  And also, you
-> could do this today with hidraw, right?
-
-Let me go into more details regarding USI.
-Peter drafted a WIP for the dbus API at
-https://gitlab.freedesktop.org/whot/usid. Unfortunately that's the
-only tangent thing I can share right now for it, and it doesn't even
-have the bpf part ;).
-
-Basically the dbus API will export just the USI bits we care about:
-- Preferred Color: the 8-bit Web color or 24 bit RGB color assigned to
-the device
-- Preferred Line Width: the physical width (e.g. 2mm)
-- Preferred Line Style: One of Ink, Pencil, Highlighter, Chisel
-Marker, Brush, No Preference.
-
-The rest of the event stream will still continue to go through evdev,
-and not dbus.
-
-The bpf program we should have here parses the incoming report and
-whenever there is a change in those 3 properties above, it raises an
-event to the dbus daemon which will in turn forward that to its
-clients.
-On the other side, when a client needs to have a color change for
-instance, it sets the dbus property and then the dbus daemon might
-either store the data on disk or on the pen through bpf and HID.
-
-So yes, you can do that with hidraw but that means you need to parse
-all incoming reports in userspace for events that will likely occur
-every once in a while.
-
-In my mind, the dbus operations here are to replace the kernel API you
-might want to create instead. In that case, Tero started with 2
-in-kernel possibilities: a sysfs entry we could read/write, or a new
-ioctl attached to the evdev node (it was actually a separate char
-device).
-
->
-> > Anyway, IOW, I think the bpf approach will allow kernel-like
-> > performances of hidraw applications, and I would be more inclined to
-> > ask people to move their weird issue in userspace thanks to that.
->
-> I like this from a "everyone should use bpf" point of view, but how are
-> you going to tell people "use bpf over hidraw" in a way that gets them
-> to do so?  If you have a good answer for that, I might just steal it for
-> the bpf-USB interface as well :)
->
-
-I don't think we can have a generic answer here unfortunately. It will
-depend on the use case:
-- SDL/Steam -> they are interested in the entire stream of events, so
-we can't really tell them to use bpf, unless if they want to fix a
-deadzone of a joystick
-- if the idea is to fix the device (spurious event, wrong key mapping,
-drift of one coordinate), hidraw doesn't apply, and bpf is IMO better
-than writing a kernel module as long as we can ship them with the
-kernel (because of the cost of compiling a driver/kernel and testing
-is much higher than just inserting a BPF program in the running
-kernel)
-- if the idea is to add a new kernel API or functionality to a device
-(a new haptic FF implementation, some USI properties, something unique
-enough to not be generic and have a properly defined API), then bpf is
-a good choice because by tying the bpf program with the high level API
-from userspace we can ensure we don't have to maintain this kernel API
-with all its bugs forever. And here, you could use hidraw but if you
-need to filter a small amount of information in the event stream
-instead of just using Set/Get reports, then BPF is much more
-efficient.
-
-I don't know enough about the USB use case you have for libusb (I know
-mostly the input ones ;-P) to be able to give you an answer there.
-
-Cheers,
-Benjamin
 
