@@ -2,64 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6D74C404B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 09:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7821A4C41E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 11:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238487AbiBYImD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 03:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S239280AbiBYJ75 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 04:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiBYImC (ORCPT
+        with ESMTP id S239077AbiBYJ7y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 03:42:02 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B7E253145;
-        Fri, 25 Feb 2022 00:41:27 -0800 (PST)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K4jsD5X8Kz67yxx;
-        Fri, 25 Feb 2022 16:40:32 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 25 Feb 2022 09:41:25 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Fri, 25 Feb 2022 09:41:25 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Thread-Topic: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Thread-Index: AQHYImlgJM6Z1962JUm5hvc+dgM0dqyjZeaAgACU/jA=
-Date:   Fri, 25 Feb 2022 08:41:25 +0000
-Message-ID: <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
- <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
-In-Reply-To: <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 25 Feb 2022 04:59:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98FB9195323
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 01:59:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645783161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=MbaAnUzDXBIjgGEx4lHvzPBqQwHsLkYBb7psPRTwgKsalLTU2hDA7LZZCsKILtaW/F3T82
+        oyszY9cVO3nxT0DxOp6urJF5Z9igxZRgFk0JiJSlVijYtOsjgy9m/DYDkBZlHElaKzXs6f
+        5+lRM+/Epw2V/Ttn8YPe44M8ncNww0o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-433-imX3CkjHO_yjV7CipoERpw-1; Fri, 25 Feb 2022 04:59:18 -0500
+X-MC-Unique: imX3CkjHO_yjV7CipoERpw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D371FC80;
+        Fri, 25 Feb 2022 09:59:16 +0000 (UTC)
+Received: from avogadro.lan (unknown [10.39.193.11])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F1D797B6C5;
+        Fri, 25 Feb 2022 09:59:13 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: kvm: add hyperv_svm_test to .gitignore
+Date:   Fri, 25 Feb 2022 10:59:05 +0100
+Message-Id: <20220225095907.478995-2-pbonzini@redhat.com>
+In-Reply-To: 20220225070558.73195-1-likexu@tencent.com
+References: 
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,43 +64,7 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Friday, February 25, 2022 1:22 AM
-> Hi Roberto,
-> 
-> On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
-> > Extend the interoperability with IMA, to give wider flexibility for the
-> > implementation of integrity-focused LSMs based on eBPF.
-> 
-> I've previously requested adding eBPF module measurements and signature
-> verification support in IMA.  There seemed to be some interest, but
-> nothing has been posted.
+Queued, thanks.
 
-Hi Mimi
+Paolo
 
-for my use case, DIGLIM eBPF, IMA integrity verification is
-needed until the binary carrying the eBPF program is executed
-as the init process. I've been thinking to use an appended
-signature to overcome the limitation of lack of xattrs in the
-initial ram disk.
-
-At that point, the LSM is attached and it can enforce an
-execution policy, allowing or denying execution and mmap
-of files depending on the digest lists (reference values) read
-by the user space side.
-
-After the LSM is attached, IMA's job would be just to calculate
-the file digests (currently, I'm using an audit policy to ensure
-that the digest is available when the eBPF program calls
-bpf_ima_inode_hash()).
-
-The main benefit of this patch set is that the audit policy
-would not be required and digests are calculated only when
-requested by the eBPF program.
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
