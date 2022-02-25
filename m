@@ -2,51 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925054C456E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 14:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BDE4C4573
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 14:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbiBYNIv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 08:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S240954AbiBYNIz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 08:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240987AbiBYNIr (ORCPT
+        with ESMTP id S235249AbiBYNIs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 08:08:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C561E7A44;
-        Fri, 25 Feb 2022 05:08:02 -0800 (PST)
+        Fri, 25 Feb 2022 08:08:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6181E7A5F;
+        Fri, 25 Feb 2022 05:08:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98BFEB830AC;
-        Fri, 25 Feb 2022 13:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6632AC340F1;
-        Fri, 25 Feb 2022 13:07:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B57C7B830B5;
+        Fri, 25 Feb 2022 13:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A71CC340F1;
+        Fri, 25 Feb 2022 13:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645794479;
-        bh=AFSnVJ+JUNiLHVBRbWuAosJ/kz9NbEh9PfBsNux6iBU=;
+        s=k20201202; t=1645794482;
+        bh=aFXZs4gJDapIZa98xuTSqwWOnEa7ktOvSyOqX1aA5WI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uHEPsKfKV7ZQxuq+PChQsvFo0JctV5gVY9+TI8ic1sk66t6k7n1H4+c/kO2IQpU9R
-         fA2RWcC9T/Yjj0mmvXJ/4aD/pahhEs6zc/8WsqIURzIZBv8JeCjzc0n6ThVNi++3mN
-         m6gy1cMZpDgD8KKLB7TfOunoKAXY8gA3b4kAbPIb3lC3nFSb0FIX/c9NNrksHRfWSU
-         WmbAXTleEvML9jjS039+1d2UEWvb3uYvRoXMguSUzHg8xtfOS9R36Kk3BGK7G2kWh2
-         Wlzz3a3y8tVNM1Zr54RFdGeFud8SWebOFHqxJ5GpuCgDPh8Ymcdgtud6JLbxK0eWwE
-         MqJB3aejH7o3Q==
+        b=gjhPAHVIvkQLZmFcpFhNUsVzbvra/ImUq4QSZE+bw0JAE6E/6M9LYvp2HTTxjYBt4
+         CJ3qnC1BFaYb10gALlwwjkQUESELRlxQIEFIsT7oL/11V9XV9H2ol8TkDDtqKXHtGn
+         nUO27aNKpfJWd9kvdIhAmIqRRoC6WymJjgWwUPo+7PZY1Yq8CU9gwmDTZ0SLgybk+/
+         WxwLlqyoBIp+rZrBxBPG98c8zGOB/ItGr8Hwqq5Ht5FMQyXk49koCx7VaJL6UiBAuG
+         57q5FY57jvquyShGKpdMLhk/NDWuGKuNQnzL+KURpzJMDGIQB2LidzG44F+1Z4Lrwn
+         22Yc1h23GXt0A==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
         xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 10/13] mm/damon/sysfs: Support DAMOS stats
-Date:   Fri, 25 Feb 2022 13:07:09 +0000
-Message-Id: <20220225130712.12682-11-sj@kernel.org>
+Subject: [PATCH v2 11/13] selftests/damon: Add a test for DAMON sysfs interface
+Date:   Fri, 25 Feb 2022 13:07:10 +0000
+Message-Id: <20220225130712.12682-12-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220225130712.12682-1-sj@kernel.org>
 References: <20220225130712.12682-1-sj@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,253 +54,340 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit makes DAMON sysfs interface supports the DAMOS stats
-feature.  Specifically, this commit adds 'stats' directory under each
-scheme directory, and update the contents of the files under the
-directory according to the latest monitoring results, when the user
-writes special keyword, 'update_schemes_stats' to the 'state' file of
-the kdamond.
-
-As a result, the files hierarchy becomes as below:
-
-    /sys/kernel/mm/damon/admin
-    │ kdamonds/nr_kdamonds
-    │ │ 0/state,pid
-    │ │ │ contexts/nr_contexts
-    │ │ │ │ 0/operations
-    │ │ │ │ │ monitoring_attrs/intervals/sample_us,aggr_us,update_us
-    │ │ │ │ │ │ nr_regions/min,max
-    │ │ │ │ │ targets/nr_targets
-    │ │ │ │ │ │ 0/pid_target
-    │ │ │ │ │ │ │ regions/nr_regions
-    │ │ │ │ │ │ │ │ 0/start,end
-    │ │ │ │ │ │ │ │ ...
-    │ │ │ │ │ │ ...
-    │ │ │ │ │ schemes/nr_schemes
-    │ │ │ │ │ │ 0/action
-    │ │ │ │ │ │ │ access_pattern/
-    │ │ │ │ │ │ │ │ sz/min,max
-    │ │ │ │ │ │ │ │ nr_accesses/min,max
-    │ │ │ │ │ │ │ │ age/min,max
-    │ │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
-    │ │ │ │ │ │ │ │ weights/sz_permil,nr_accesses_permil,age_permil
-    │ │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
-    │ │ │ │ │ │ │ stats/    <- NEW DIRECTORY
-    │ │ │ │ │ │ │ │ nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
-    │ │ │ │ │ │ ...
-    │ │ │ │ ...
-    │ │ ...
+This commit adds a selftest for DAMON sysfs interface.  It tests the
+functionality of 'nr' files and existence of files in each directory of
+the hierarchy.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs.c | 150 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 150 insertions(+)
+ tools/testing/selftests/damon/Makefile |   1 +
+ tools/testing/selftests/damon/sysfs.sh | 306 +++++++++++++++++++++++++
+ 2 files changed, 307 insertions(+)
+ create mode 100755 tools/testing/selftests/damon/sysfs.sh
 
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 2e09ed36f666..32a9d21c0db5 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -113,6 +113,105 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
- 	.default_groups = damon_sysfs_ul_range_groups,
- };
+diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+index 937d36ae9a69..0470c5f3e690 100644
+--- a/tools/testing/selftests/damon/Makefile
++++ b/tools/testing/selftests/damon/Makefile
+@@ -6,5 +6,6 @@ TEST_GEN_FILES += huge_count_read_write
+ TEST_FILES = _chk_dependency.sh _debugfs_common.sh
+ TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
+ TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
++TEST_PROGS += sysfs.sh
  
-+/*
-+ * schemes/stats directory
-+ */
+ include ../lib.mk
+diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
+new file mode 100755
+index 000000000000..2e3ae77cb6db
+--- /dev/null
++++ b/tools/testing/selftests/damon/sysfs.sh
+@@ -0,0 +1,306 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+struct damon_sysfs_stats {
-+	struct kobject kobj;
-+	unsigned long nr_tried;
-+	unsigned long sz_tried;
-+	unsigned long nr_applied;
-+	unsigned long sz_applied;
-+	unsigned long qt_exceeds;
-+};
++# Kselftest frmework requirement - SKIP code is 4.
++ksft_skip=4
 +
-+static struct damon_sysfs_stats *damon_sysfs_stats_alloc(void)
++ensure_write_succ()
 +{
-+	return kzalloc(sizeof(struct damon_sysfs_stats), GFP_KERNEL);
++	file=$1
++	content=$2
++	reason=$3
++
++	if ! echo "$content" > "$file"
++	then
++		echo "writing $content to $file failed"
++		echo "expected success because $reason"
++		exit 1
++	fi
 +}
 +
-+static ssize_t nr_tried_show(struct kobject *kobj, struct kobj_attribute *attr,
-+		char *buf)
++ensure_write_fail()
 +{
-+	struct damon_sysfs_stats *stats = container_of(kobj,
-+			struct damon_sysfs_stats, kobj);
++	file=$1
++	content=$2
++	reason=$3
 +
-+	return sysfs_emit(buf, "%lu\n", stats->nr_tried);
++	if echo "$content" > "$file"
++	then
++		echo "writing $content to $file succeed ($fail_reason)"
++		echo "expected failure because $reason"
++		exit 1
++	fi
 +}
 +
-+static ssize_t sz_tried_show(struct kobject *kobj, struct kobj_attribute *attr,
-+		char *buf)
++ensure_dir()
 +{
-+	struct damon_sysfs_stats *stats = container_of(kobj,
-+			struct damon_sysfs_stats, kobj);
-+
-+	return sysfs_emit(buf, "%lu\n", stats->sz_tried);
++	dir=$1
++	to_ensure=$2
++	if [ "$to_ensure" = "exist" ] && [ ! -d "$dir" ]
++	then
++		echo "$dir dir is expected but not found"
++		exit 1
++	elif [ "$to_ensure" = "not_exist" ] && [ -d "$dir" ]
++	then
++		echo "$dir dir is not expected but found"
++		exit 1
++	fi
 +}
 +
-+static ssize_t nr_applied_show(struct kobject *kobj,
-+		struct kobj_attribute *attr, char *buf)
++ensure_file()
 +{
-+	struct damon_sysfs_stats *stats = container_of(kobj,
-+			struct damon_sysfs_stats, kobj);
-+
-+	return sysfs_emit(buf, "%lu\n", stats->nr_applied);
++	file=$1
++	to_ensure=$2
++	permission=$3
++	if [ "$to_ensure" = "exist" ]
++	then
++		if [ ! -f "$file" ]
++		then
++			echo "$file is expected but not found"
++			exit 1
++		fi
++		perm=$(stat -c "%a" "$file")
++		if [ ! "$perm" = "$permission" ]
++		then
++			echo "$file permission: expected $permission but $perm"
++			exit 1
++		fi
++	elif [ "$to_ensure" = "not_exist" ] && [ -f "$dir" ]
++	then
++		echo "$file is not expected but found"
++		exit 1
++	fi
 +}
 +
-+static ssize_t sz_applied_show(struct kobject *kobj,
-+		struct kobj_attribute *attr, char *buf)
++test_range()
 +{
-+	struct damon_sysfs_stats *stats = container_of(kobj,
-+			struct damon_sysfs_stats, kobj);
-+
-+	return sysfs_emit(buf, "%lu\n", stats->sz_applied);
++	range_dir=$1
++	ensure_dir "$range_dir" "exist"
++	ensure_file "$range_dir/min" "exist" 600
++	ensure_file "$range_dir/max" "exist" 600
 +}
 +
-+static ssize_t qt_exceeds_show(struct kobject *kobj,
-+		struct kobj_attribute *attr, char *buf)
++test_stats()
 +{
-+	struct damon_sysfs_stats *stats = container_of(kobj,
-+			struct damon_sysfs_stats, kobj);
-+
-+	return sysfs_emit(buf, "%lu\n", stats->qt_exceeds);
++	stats_dir=$1
++	ensure_dir "$stats_dir" "exist"
++	for f in nr_tried sz_tried nr_applied sz_applied qt_exceeds
++	do
++		ensure_file "$stats_dir/$f" "exist" "400"
++	done
 +}
 +
-+static void damon_sysfs_stats_release(struct kobject *kobj)
++test_watermarks()
 +{
-+	kfree(container_of(kobj, struct damon_sysfs_stats, kobj));
++	watermarks_dir=$1
++	ensure_dir "$watermarks_dir" "exist"
++	ensure_file "$watermarks_dir/metric" "exist" "600"
++	ensure_file "$watermarks_dir/interval_us" "exist" "600"
++	ensure_file "$watermarks_dir/high" "exist" "600"
++	ensure_file "$watermarks_dir/mid" "exist" "600"
++	ensure_file "$watermarks_dir/low" "exist" "600"
 +}
 +
-+static struct kobj_attribute damon_sysfs_stats_nr_tried_attr =
-+		__ATTR_RO_MODE(nr_tried, 0400);
-+
-+static struct kobj_attribute damon_sysfs_stats_sz_tried_attr =
-+		__ATTR_RO_MODE(sz_tried, 0400);
-+
-+static struct kobj_attribute damon_sysfs_stats_nr_applied_attr =
-+		__ATTR_RO_MODE(nr_applied, 0400);
-+
-+static struct kobj_attribute damon_sysfs_stats_sz_applied_attr =
-+		__ATTR_RO_MODE(sz_applied, 0400);
-+
-+static struct kobj_attribute damon_sysfs_stats_qt_exceeds_attr =
-+		__ATTR_RO_MODE(qt_exceeds, 0400);
-+
-+static struct attribute *damon_sysfs_stats_attrs[] = {
-+	&damon_sysfs_stats_nr_tried_attr.attr,
-+	&damon_sysfs_stats_sz_tried_attr.attr,
-+	&damon_sysfs_stats_nr_applied_attr.attr,
-+	&damon_sysfs_stats_sz_applied_attr.attr,
-+	&damon_sysfs_stats_qt_exceeds_attr.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(damon_sysfs_stats);
-+
-+static struct kobj_type damon_sysfs_stats_ktype = {
-+	.release = damon_sysfs_stats_release,
-+	.sysfs_ops = &kobj_sysfs_ops,
-+	.default_groups = damon_sysfs_stats_groups,
-+};
-+
- /*
-  * watermarks directory
-  */
-@@ -653,6 +752,7 @@ struct damon_sysfs_scheme {
- 	struct damon_sysfs_access_pattern *access_pattern;
- 	struct damon_sysfs_quotas *quotas;
- 	struct damon_sysfs_watermarks *watermarks;
-+	struct damon_sysfs_stats *stats;
- };
- 
- /* This should match with enum damos_action */
-@@ -743,6 +843,22 @@ static int damon_sysfs_scheme_set_watermarks(struct damon_sysfs_scheme *scheme)
- 	return err;
- }
- 
-+static int damon_sysfs_scheme_set_stats(struct damon_sysfs_scheme *scheme)
++test_weights()
 +{
-+	struct damon_sysfs_stats *stats = damon_sysfs_stats_alloc();
-+	int err;
-+
-+	if (!stats)
-+		return -ENOMEM;
-+	err = kobject_init_and_add(&stats->kobj, &damon_sysfs_stats_ktype,
-+			&scheme->kobj, "stats");
-+	if (err)
-+		kobject_put(&stats->kobj);
-+	else
-+		scheme->stats = stats;
-+	return err;
++	weights_dir=$1
++	ensure_dir "$weights_dir" "exist"
++	ensure_file "$weights_dir/sz_permil" "exist" "600"
++	ensure_file "$weights_dir/nr_accesses_permil" "exist" "600"
++	ensure_file "$weights_dir/age_permil" "exist" "600"
 +}
 +
- static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
- {
- 	int err;
-@@ -756,8 +872,14 @@ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
- 	err = damon_sysfs_scheme_set_watermarks(scheme);
- 	if (err)
- 		goto put_quotas_access_pattern_out;
-+	err = damon_sysfs_scheme_set_stats(scheme);
-+	if (err)
-+		goto put_watermarks_quotas_access_pattern_out;
- 	return 0;
- 
-+put_watermarks_quotas_access_pattern_out:
-+	kobject_put(&scheme->watermarks->kobj);
-+	scheme->watermarks = NULL;
- put_quotas_access_pattern_out:
- 	kobject_put(&scheme->quotas->kobj);
- 	scheme->quotas = NULL;
-@@ -774,6 +896,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
- 	damon_sysfs_quotas_rm_dirs(scheme->quotas);
- 	kobject_put(&scheme->quotas->kobj);
- 	kobject_put(&scheme->watermarks->kobj);
-+	kobject_put(&scheme->stats->kobj);
- }
- 
- static ssize_t action_show(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -2139,6 +2262,31 @@ static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
- 	 */
- }
- 
-+static int damon_sysfs_update_schemes_stats(struct damon_sysfs_kdamond *kdamond)
++test_quotas()
 +{
-+	struct damon_ctx *ctx = kdamond->damon_ctx;
-+	struct damos *scheme;
-+	int schemes_idx = 0;
-+
-+	if (!ctx)
-+		return -EINVAL;
-+	mutex_lock(&ctx->kdamond_lock);
-+	damon_for_each_scheme(scheme, ctx) {
-+		struct damon_sysfs_schemes *sysfs_schemes;
-+		struct damon_sysfs_stats *sysfs_stats;
-+
-+		sysfs_schemes = kdamond->contexts->contexts_arr[0]->schemes;
-+		sysfs_stats = sysfs_schemes->schemes_arr[schemes_idx++]->stats;
-+		sysfs_stats->nr_tried = scheme->stat.nr_tried;
-+		sysfs_stats->sz_tried = scheme->stat.sz_tried;
-+		sysfs_stats->nr_applied = scheme->stat.nr_applied;
-+		sysfs_stats->sz_applied = scheme->stat.sz_applied;
-+		sysfs_stats->qt_exceeds = scheme->stat.qt_exceeds;
-+	}
-+	mutex_unlock(&ctx->kdamond_lock);
-+	return 0;
++	quotas_dir=$1
++	ensure_dir "$quotas_dir" "exist"
++	ensure_file "$quotas_dir/ms" "exist" 600
++	ensure_file "$quotas_dir/bytes" "exist" 600
++	ensure_file "$quotas_dir/reset_interval_ms" "exist" 600
++	test_weights "$quotas_dir/weights"
 +}
 +
- static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
- 		const char *buf, size_t count)
- {
-@@ -2152,6 +2300,8 @@ static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
- 		ret = damon_sysfs_turn_damon_on(kdamond);
- 	else if (sysfs_streq(buf, "off"))
- 		ret = damon_sysfs_turn_damon_off(kdamond);
-+	else if (sysfs_streq(buf, "update_schemes_stats"))
-+		ret = damon_sysfs_update_schemes_stats(kdamond);
- 	else
- 		ret = -EINVAL;
- 	mutex_unlock(&damon_sysfs_lock);
++test_access_pattern()
++{
++	access_pattern_dir=$1
++	ensure_dir "$access_pattern_dir" "exist"
++	test_range "$access_pattern_dir/age"
++	test_range "$access_pattern_dir/nr_accesses"
++	test_range "$access_pattern_dir/sz"
++}
++
++test_scheme()
++{
++	scheme_dir=$1
++	ensure_dir "$scheme_dir" "exist"
++	ensure_file "$scheme_dir/action" "exist" "600"
++	test_access_pattern "$scheme_dir/access_pattern"
++	test_quotas "$scheme_dir/quotas"
++	test_watermarks "$scheme_dir/watermarks"
++	test_stats "$scheme_dir/stats"
++}
++
++test_schemes()
++{
++	schemes_dir=$1
++	ensure_dir "$schemes_dir" "exist"
++	ensure_file "$schemes_dir/nr_schemes" "exist" 600
++
++	ensure_write_succ  "$schemes_dir/nr_schemes" "1" "valid input"
++	test_scheme "$schemes_dir/0"
++
++	ensure_write_succ  "$schemes_dir/nr_schemes" "2" "valid input"
++	test_scheme "$schemes_dir/0"
++	test_scheme "$schemes_dir/1"
++
++	ensure_write_succ "$schemes_dir/nr_schemes" "0" "valid input"
++	ensure_dir "$schemes_dir/0" "not_exist"
++	ensure_dir "$schemes_dir/1" "not_exist"
++}
++
++test_region()
++{
++	region_dir=$1
++	ensure_dir "$region_dir" "exist"
++	ensure_file "$region_dir/start" "exist" 600
++	ensure_file "$region_dir/end" "exist" 600
++}
++
++test_regions()
++{
++	regions_dir=$1
++	ensure_dir "$regions_dir" "exist"
++	ensure_file "$regions_dir/nr_regions" "exist" 600
++
++	ensure_write_succ  "$regions_dir/nr_regions" "1" "valid input"
++	test_region "$regions_dir/0"
++
++	ensure_write_succ  "$regions_dir/nr_regions" "2" "valid input"
++	test_region "$regions_dir/0"
++	test_region "$regions_dir/1"
++
++	ensure_write_succ "$regions_dir/nr_regions" "0" "valid input"
++	ensure_dir "$regions_dir/0" "not_exist"
++	ensure_dir "$regions_dir/1" "not_exist"
++}
++
++test_target()
++{
++	target_dir=$1
++	ensure_dir "$target_dir" "exist"
++	ensure_file "$target_dir/pid_target" "exist" "600"
++	test_regions "$target_dir/regions"
++}
++
++test_targets()
++{
++	targets_dir=$1
++	ensure_dir "$targets_dir" "exist"
++	ensure_file "$targets_dir/nr_targets" "exist" 600
++
++	ensure_write_succ  "$targets_dir/nr_targets" "1" "valid input"
++	test_target "$targets_dir/0"
++
++	ensure_write_succ  "$targets_dir/nr_targets" "2" "valid input"
++	test_target "$targets_dir/0"
++	test_target "$targets_dir/1"
++
++	ensure_write_succ "$targets_dir/nr_targets" "0" "valid input"
++	ensure_dir "$targets_dir/0" "not_exist"
++	ensure_dir "$targets_dir/1" "not_exist"
++}
++
++test_intervals()
++{
++	intervals_dir=$1
++	ensure_dir "$intervals_dir" "exist"
++	ensure_file "$intervals_dir/aggr_us" "exist" "600"
++	ensure_file "$intervals_dir/sample_us" "exist" "600"
++	ensure_file "$intervals_dir/update_us" "exist" "600"
++}
++
++test_monitoring_attrs()
++{
++	monitoring_attrs_dir=$1
++	ensure_dir "$monitoring_attrs_dir" "exist"
++	test_intervals "$monitoring_attrs_dir/intervals"
++	test_range "$monitoring_attrs_dir/nr_regions"
++}
++
++test_context()
++{
++	context_dir=$1
++	ensure_dir "$context_dir" "exist"
++	ensure_file "$context_dir/operations" "exist" 600
++	test_monitoring_attrs "$context_dir/monitoring_attrs"
++	test_targets "$context_dir/targets"
++	test_schemes "$context_dir/schemes"
++}
++
++test_contexts()
++{
++	contexts_dir=$1
++	ensure_dir "$contexts_dir" "exist"
++	ensure_file "$contexts_dir/nr_contexts" "exist" 600
++
++	ensure_write_succ  "$contexts_dir/nr_contexts" "1" "valid input"
++	test_context "$contexts_dir/0"
++
++	ensure_write_fail "$contexts_dir/nr_contexts" "2" "only 0/1 are supported"
++	test_context "$contexts_dir/0"
++
++	ensure_write_succ "$contexts_dir/nr_contexts" "0" "valid input"
++	ensure_dir "$contexts_dir/0" "not_exist"
++}
++
++test_kdamond()
++{
++	kdamond_dir=$1
++	ensure_dir "$kdamond_dir" "exist"
++	ensure_file "$kdamond_dir/state" "exist" "600"
++	ensure_file "$kdamond_dir/pid" "exist" 400
++	test_contexts "$kdamond_dir/contexts"
++}
++
++test_kdamonds()
++{
++	kdamonds_dir=$1
++	ensure_dir "$kdamonds_dir" "exist"
++
++	ensure_file "$kdamonds_dir/nr_kdamonds" "exist" "600"
++
++	ensure_write_succ  "$kdamonds_dir/nr_kdamonds" "1" "valid input"
++	test_kdamond "$kdamonds_dir/0"
++
++	ensure_write_succ  "$kdamonds_dir/nr_kdamonds" "2" "valid input"
++	test_kdamond "$kdamonds_dir/0"
++	test_kdamond "$kdamonds_dir/1"
++
++	ensure_write_succ "$kdamonds_dir/nr_kdamonds" "0" "valid input"
++	ensure_dir "$kdamonds_dir/0" "not_exist"
++	ensure_dir "$kdamonds_dir/1" "not_exist"
++}
++
++test_damon_sysfs()
++{
++	damon_sysfs=$1
++	if [ ! -d "$damon_sysfs" ]
++	then
++		echo "$damon_sysfs not found"
++		exit $ksft_skip
++	fi
++
++	test_kdamonds "$damon_sysfs/kdamonds"
++}
++
++check_dependencies()
++{
++	if [ $EUID -ne 0 ]
++	then
++		echo "Run as root"
++		exit $ksft_skip
++	fi
++}
++
++check_dependencies
++test_damon_sysfs "/sys/kernel/mm/damon/admin"
 -- 
 2.17.1
 
