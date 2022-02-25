@@ -2,81 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7604C50CD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Feb 2022 22:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C94C4C5255
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Feb 2022 01:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiBYVim (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Feb 2022 16:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        id S239737AbiBZAAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Feb 2022 19:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiBYVil (ORCPT
+        with ESMTP id S239693AbiBZAAe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 16:38:41 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8ACD793A6
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 13:38:06 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-282-rsTMIwefMfiHyc_im_tfFA-1; Fri, 25 Feb 2022 21:38:03 +0000
-X-MC-Unique: rsTMIwefMfiHyc_im_tfFA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 25 Feb 2022 21:38:01 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 25 Feb 2022 21:38:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
+        Fri, 25 Feb 2022 19:00:34 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980181CFA23
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 16:00:00 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id f2so5584819ilq.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 16:00:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ugujCcskb2T7bOFA5bnbVN0NBcapcRUHyZhHhBqvqXY=;
+        b=b8P3ld0PDgHf4i3aCMJxbvtuNOGN48qXnOALgF9KRQwQ3sY6D5OfjLKAHQYg0NrVEG
+         fGBI01HZZJYXimvvwWThe1L3nn05OUOYooFHUwtqMDpJEYDyc2cROIlKSUFEIZ8k4wxK
+         asLWK3aDOse3uuGcbbj6k+mrt3quhhZoiUsKA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ugujCcskb2T7bOFA5bnbVN0NBcapcRUHyZhHhBqvqXY=;
+        b=LUSsN4k/fnSEQeB2lQXKe4oVwirucwhKQFEuPAmfEXqNqE5VKrINDmQQ7y68r5Ii7x
+         2wrMwp5Yb6Rf84wEiVsif0OwDSPhQbvuknrk6aTu7JNFC9bA1a7dQJQ3aDJfOFj9vx6F
+         aYsUfN1/gbdx6PTrJ/H3VBjPhvSLeVUbxRpCl692SSj4LMs5YXXzCWVVqGgkaoDYhuWU
+         5XMBPp3RvC8SviJp/Iri3BCEeuz/8PJeMc3v7mHqEFMR7o+e7AFEiwiJvjB7McKzxms+
+         pjPF1frYbCLrG+0+fzDFsL5Aojh2cDwpq5Tkb5xvMllfSgLeICmXH110p2LbElCyTTIx
+         xGJw==
+X-Gm-Message-State: AOAM530clfAXDpzyQJOIDBSsQjAZ8NtDmnS1jGDAefosaPz4vFVBih5N
+        rP5mM3p30nZhyqpmCjNuv1QXFw==
+X-Google-Smtp-Source: ABdhPJwmWforBC8vtISK/So9rB+mq563DEdqr+aghfqU/fGd7aPhTtWQedUnhWCcfoMqpwxBTqBs4Q==
+X-Received: by 2002:a05:6e02:214a:b0:2be:752a:1c24 with SMTP id d10-20020a056e02214a00b002be752a1c24mr8166149ilv.274.1645833599929;
+        Fri, 25 Feb 2022 15:59:59 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id g24-20020a056602073800b006405890451fsm2190605iox.34.2022.02.25.15.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 15:59:59 -0800 (PST)
+Subject: Re: [PATCH] kselftest: add generated objects to .gitignore
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
-Thread-Topic: [PATCH] selftests, x86: fix how check_cc.sh is being invoked
-Thread-Index: AQHYKniHz+vlDNOxwkeP2MprKgi3dqykyk5A
-Date:   Fri, 25 Feb 2022 21:38:01 +0000
-Message-ID: <006c160c1e0240df8a86cc679b2a6678@AcuMS.aculab.com>
-References: <9320d88a3a65350d9bfdc5e258742cd0b162f017.1645794882.git.guillaume.tucker@collabora.com>
- <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
-In-Reply-To: <8e88488b-1666-ce1b-6d79-7c6758672ac0@collabora.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220225102726.3231228-1-usama.anjum@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f3757ff8-0078-4cf9-c0c6-95c780b90ae2@linuxfoundation.org>
+Date:   Fri, 25 Feb 2022 16:59:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <20220225102726.3231228-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RnJvbTogR3VpbGxhdW1lIFR1Y2tlcg0KPiBTZW50OiAyNSBGZWJydWFyeSAyMDIyIDE4OjUwDQou
-Li4NCj4gPiAtaWYgIiRDQyIgLW8gL2Rldi9udWxsICIkVEVTVFBST0ciIC1PMCAiJEAiIDI+L2Rl
-di9udWxsOyB0aGVuDQo+ID4gK2lmICRDQyAtbyAvZGV2L251bGwgIiRURVNUUFJPRyIgLU8wICIk
-QCIgMj4vZGV2L251bGw7IHRoZW4NCj4gPiAgICAgIGVjaG8gMQ0KPiA+ICBlbHNlDQo+ID4gICAg
-ICBlY2hvIDANCj4gDQo+IEkgc2VlIHRoZSBjaGFuZ2UgaW4gY2hlY2tfY2Muc2ggaXMgYWxyZWFk
-eSBjb3ZlcmVkIGJ5IFVzYW1hJ3MgcGF0Y2g6DQo+IA0KPiAgIHNlbGZ0ZXN0cy94ODY6IEFkZCB2
-YWxpZGl0eSBjaGVjayBhbmQgYWxsb3cgZmllbGQgc3BsaXR0aW5nDQo+IA0KPiAtaWYgIiRDQyIg
-LW8gL2Rldi9udWxsICIkVEVTVFBST0ciIC1PMCAiJEAiIDI+L2Rldi9udWxsOyB0aGVuDQo+ICtp
-ZiBbIC1uICIkQ0MiIF0gJiYgJENDIC1vIC9kZXYvbnVsbCAiJFRFU1RQUk9HIiAtTzAgIiRAIiAy
-Pi9kZXYvbnVsbDsgdGhlbg0KDQpPcjoNCglpZiAke0NDOi1mYWxzZX0gLW8gL2Rldi9udWxsIC4u
-Li4NClRoZXJlJ3MgYWx3YXlzIG9uZSBtb3JlIHdheS4uLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0
-ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBL
-ZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 2/25/22 3:27 AM, Muhammad Usama Anjum wrote:
+> Add kselftests_install directory and some other files to the
+> .gitignore.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/.gitignore      | 1 +
+>   tools/testing/selftests/exec/.gitignore | 2 ++
+>   tools/testing/selftests/kvm/.gitignore  | 1 +
+>   tools/testing/selftests/net/.gitignore  | 1 +
+>   4 files changed, 5 insertions(+)
+> 
 
+It is better to split these patches per test - makes it easier
+to apply. Please send separate patches for each test. This patch
+doesn't apply as is.
+
+thanks,
+-- Shuah
