@@ -2,101 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AB94C5492
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Feb 2022 09:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995564C54AA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Feb 2022 09:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiBZIIV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Feb 2022 03:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        id S230247AbiBZIpX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Feb 2022 03:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiBZIIV (ORCPT
+        with ESMTP id S230118AbiBZIpW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Feb 2022 03:08:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452133EAAB;
-        Sat, 26 Feb 2022 00:07:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDFC160E9A;
-        Sat, 26 Feb 2022 08:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42924C340E8;
-        Sat, 26 Feb 2022 08:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645862866;
-        bh=evy4XN0cXQyAddyjb+9P2DGhByVUh1+2+x/nxkz9HVs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aPaJX3B0nVG9Plv7XUMl8R0QoyyUx/FeIjg+sCFJrzo13lvj2995wcuhhygQ/nI9I
-         X1h48zTRyNbREfOIDKyvxtDaTdlilOuzSzDW30szePFrzdQ6naW5ZTBOr1l5BTWq4Q
-         o5eSJodUy+0qe75UTrL7JhLA9T437rbdFnkq3m4s=
-Date:   Sat, 26 Feb 2022 09:07:42 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-Message-ID: <YhnfzipoU1NbkjQQ@kroah.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
- <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
- <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
- <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
+        Sat, 26 Feb 2022 03:45:22 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32B61B84EC
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Feb 2022 00:44:47 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id e13so6694752plh.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Feb 2022 00:44:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=hleVd6AMEiCC0Gx10crdH6ea4EGESWOa/Luc+HHS9KQ=;
+        b=duItfAcvtHLHLZ3FuOS/LUPwMI7VBJMGsQeOoKYRqMCbnrxmBbu6K6lIJ4uWShGDd+
+         DPbwf1tHbOVn1nej0UVybyRH5FWuMwt1bsHbqRYJeUGzm+L88G6ItNUMjWIj8aofNLgz
+         1u1229lYDsl6ahMSVFG8mym6T3XW3hmvkt+B1Q/wS3bCtOr35dYCQ8Ak0tkXOtKSVtG6
+         kZKo36wkiTIChmpFXxdbAD7wp+hVVtFfGedfyZB4tZjhM7AJav3X7kMDQWE07hhAoCIt
+         86YeagvuJU8LlfMSrQ3Ov0kVC9HnVEJqrr/S69jtl7+BO4irMlhdLPAwcLuTfiz5+w/g
+         5ynw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=hleVd6AMEiCC0Gx10crdH6ea4EGESWOa/Luc+HHS9KQ=;
+        b=fl243E2NF+xb8Lt8y4ym/LWfb2CD1WNFnMzbmChgV46FppTF7z9nWikIvwv70pQEf+
+         muNt4It0WX5jTwElFG3tIB8BtvtecU+4BK/lBeDRQwvTcR6ExS+BojPiNbjmuEg1LGvn
+         geThXWpuXp3pb3nQbzDU5abVpRyORFg13YntLhAKgkGeSJWz9gnmEc6pqGEq8PlfXvKT
+         mCXItSmRFVFhPalEzXl7Td+aGxLhq/qu9lbQATBzQoUBqwepusxhNYhfbXh4ql7gxY5l
+         A8sSASX/9n/TJj15wlycUxnX4iPA2JPmGMqbcWC1xMtWjI8NMwYjYWj7UIymxfz15tyX
+         mBNA==
+X-Gm-Message-State: AOAM532KRO6IILlQ5EtZrTeRBbLGOqd4FR7OgxkPn+O/uETmzBLl6+f3
+        jTzHjtxU9ygyTaKZEhpU9orokHIB+MUluBVDSSA=
+X-Google-Smtp-Source: ABdhPJwgxHt3FuFkhVcQsSX5t0teDiUcdp9sTMDe24/oJk1lgobYqSk6fTjYRde+ixXk9xJPsVdqaQ==
+X-Received: by 2002:a17:90b:3682:b0:1bc:3891:b266 with SMTP id mj2-20020a17090b368200b001bc3891b266mr7067302pjb.137.1645865087160;
+        Sat, 26 Feb 2022 00:44:47 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h6-20020a056a00230600b004e1aaf9b302sm6296166pfh.143.2022.02.26.00.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Feb 2022 00:44:46 -0800 (PST)
+Message-ID: <6219e87e.1c69fb81.aebf4.04b9@mx.google.com>
+Date:   Sat, 26 Feb 2022 00:44:46 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v5.17-rc5-17-g2aaa36e95ea5
+Subject: kselftest/next kselftest-rtc: 4 runs,
+ 1 regressions (v5.17-rc5-17-g2aaa36e95ea5)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 02:11:04PM -0500, Mimi Zohar wrote:
-> On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
-> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > > Sent: Friday, February 25, 2022 1:22 AM
-> > > Hi Roberto,
-> > > 
-> > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
-> > > > Extend the interoperability with IMA, to give wider flexibility for the
-> > > > implementation of integrity-focused LSMs based on eBPF.
-> > > 
-> > > I've previously requested adding eBPF module measurements and signature
-> > > verification support in IMA.  There seemed to be some interest, but
-> > > nothing has been posted.
-> > 
-> > Hi Mimi
-> > 
-> > for my use case, DIGLIM eBPF, IMA integrity verification is
-> > needed until the binary carrying the eBPF program is executed
-> > as the init process. I've been thinking to use an appended
-> > signature to overcome the limitation of lack of xattrs in the
-> > initial ram disk.
-> 
-> I would still like to see xattrs supported in the initial ram disk. 
-> Assuming you're still interested in pursuing it, someone would need to
-> review and upstream it.  Greg?
+kselftest/next kselftest-rtc: 4 runs, 1 regressions (v5.17-rc5-17-g2aaa36e9=
+5ea5)
 
-Me?  How about the filesystem maintainers and developers?  :)
+Regressions Summary
+-------------------
 
-There's a reason we never added xattrs support to ram disks, but I can't
-remember why...
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chr=
+omebook | 1          =
 
-thanks,
 
-gre gk-h
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v5.1=
+7-rc5-17-g2aaa36e95ea5/plan/kselftest-rtc/
+
+  Test:     kselftest-rtc
+  Tree:     kselftest
+  Branch:   next
+  Describe: v5.17-rc5-17-g2aaa36e95ea5
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      2aaa36e95ea586ad23edfcc1d474e8b735a4d1c3 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chr=
+omebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6219d8f3528d314f79c62974
+
+  Results:     7 PASS, 3 FAIL, 7 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v5.17-rc5-17-g2=
+aaa36e95ea5/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
+/kselftest-rtc-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v5.17-rc5-17-g2=
+aaa36e95ea5/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
+/kselftest-rtc-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20220218.1/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-rtc.rtc_rtctest_rtc_alarm_alm_set: https://kernelci.org/test/=
+case/id/6219d8f3528d314f79c6297a
+        new failure (last pass: v5.17-rc5-16-g1900be289b59) =
+
+ =20
