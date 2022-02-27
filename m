@@ -2,105 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085FB4C59C7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Feb 2022 06:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F844C5DDC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Feb 2022 18:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbiB0FyZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Feb 2022 00:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S229931AbiB0Rrx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Feb 2022 12:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiB0FyY (ORCPT
+        with ESMTP id S229932AbiB0Rrw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Feb 2022 00:54:24 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F31B0B
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Feb 2022 21:53:49 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id c9so8164104pll.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Feb 2022 21:53:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TBvazhbiMSJHiFRR8rtsztnvbns4XgMHNyrmX4NjfhY=;
-        b=JS6dGDwtp+g07D0ANKPKJloW3mTpltjYKKF/C4VxIAMQNqjXMU/DzJXXFiml4noxZl
-         YHuS0iHlT3Dw+BzkgR4x//1nRwt4l7Io+GX3Fz/ZAsMy2Z5t31/beYFSlaSftJsoisRt
-         DTeOEdZHWvV+DuLOVOVXg5x01+p5ToBEsq2Oyi+NRCPpTXSAqmcJ11aCtQHsqcr6laO/
-         ZP/lndswMYzxN2FYKU1Ha8tiV7QW51mloOdszdoklbhq4BnC14o0qWBd6/wtz5kPygxz
-         0fsrdH2xg9G/zWjugpIu4+V5vfNXilxqI7dFAQYM41dlKhKadhHu8ORXvoxAOPEBHoMX
-         pCzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TBvazhbiMSJHiFRR8rtsztnvbns4XgMHNyrmX4NjfhY=;
-        b=ID8aUtt8TfScEIkTeVU1EuB53359Jp9Eydds/wLwJTNENtDaug2bXI6Gj+Anmn0GoB
-         kaXFbQVwY9JsGDRPIdeDDc/zEZcrhowNneOtn/4m64+HL/tFP/fxTlJV4jzSg7ynbOXf
-         8w+YGDVwxBY1brNoQO8/F0Ne/cxuMdIINDdK5bZiOC4UiyG7WnQTBERBNcgtdtporWlX
-         LHXmH5MOe1YXnCQ5+GZLAt5AFyIcpWCKtOGYgOW0hBvZSwioI1mWQwW5Hh3lDrz9fvY8
-         TM2GrUlyRYQbymUyfviPsuGS6sjDF6ppq+F1x6JLnmzuKmVmLmUdddIxQV9F1ucFDkIz
-         2fAA==
-X-Gm-Message-State: AOAM5305CtmTju49RrKkv0VxmMnsUDnHXiveQN2SGjgHp2XYLbjEI5Cm
-        oJFtoSRvtH/xE3UiWZN8vZvQLQ==
-X-Google-Smtp-Source: ABdhPJwApFx8t+Bs5NDGGq+radi7MKoxi719NQVN5s+mt2a3EiPcLw4wD1OW5kBIeQ685vC1I4Pf4A==
-X-Received: by 2002:a17:90a:bb8d:b0:1bc:72a9:a07d with SMTP id v13-20020a17090abb8d00b001bc72a9a07dmr10705858pjr.9.1645941228842;
-        Sat, 26 Feb 2022 21:53:48 -0800 (PST)
-Received: from localhost.localdomain ([2409:8a28:e6f:a720:d522:416f:1b2a:d253])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056a00234900b004f3b1c23497sm8547647pfj.101.2022.02.26.21.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 21:53:48 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH 2/2] kselftest/vm: fix tests build with old libc
-Date:   Sun, 27 Feb 2022 13:53:30 +0800
-Message-Id: <20220227055330.43087-2-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220227055330.43087-1-zhouchengming@bytedance.com>
-References: <20220227055330.43087-1-zhouchengming@bytedance.com>
+        Sun, 27 Feb 2022 12:47:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF1D192B8;
+        Sun, 27 Feb 2022 09:47:15 -0800 (PST)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21RFhvWH024416;
+        Sun, 27 Feb 2022 17:46:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=1QT+MIO5sQ0+JqoR5oSJ3DCQEEiRdGdRmp8VLGdPWfY=;
+ b=TXdyGagn3Hf+0Sh+VqIUC5zyVVR6UFq80qAi/s4LALIjFggi5sMFOqzMYL94MPrUgQlr
+ 6uBPZXhdOEI1/A9z+raQTshHas3+aFpHrZspt621RTAAGadagwavc69TQKeNrN7dDLnY
+ 3qfclnz64nk69u8hVnHNvz4mAZsRHAylUhunkb0DNdee/xhuIwTFexSd9xZ++NvoYcHm
+ l2es5TZJHzvxfdIuvUpKqilRWIPAbo5V2emias6B44l4MU2cvjgy/rKLbsn7SPb0yRdW
+ wJAKIEApKK+3xzmkBTZqhKbY1/qPFGfH9ZgtezTp28Mz2YTZWPJfRFK9YGeM9ZkMiqcr zg== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3egc6u9ffy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 27 Feb 2022 17:46:55 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21RHgqKh008397;
+        Sun, 27 Feb 2022 17:46:53 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3efbu8vr5q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 27 Feb 2022 17:46:53 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21RHkpUP45220184
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 27 Feb 2022 17:46:51 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E491811C05B;
+        Sun, 27 Feb 2022 17:46:50 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA03411C050;
+        Sun, 27 Feb 2022 17:46:48 +0000 (GMT)
+Received: from sig-9-65-89-64.ibm.com (unknown [9.65.89.64])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 27 Feb 2022 17:46:48 +0000 (GMT)
+Message-ID: <8b140d740ccb813a3fabacd928a5dc3499f145db.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Sun, 27 Feb 2022 12:46:48 -0500
+In-Reply-To: <YhnfzipoU1NbkjQQ@kroah.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+         <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+         <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
+         <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
+         <YhnfzipoU1NbkjQQ@kroah.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: E-5Jt3XnaWTAon6wvc8bbVIw6kQEakXm
+X-Proofpoint-GUID: E-5Jt3XnaWTAon6wvc8bbVIw6kQEakXm
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-27_07,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ adultscore=0 suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202270122
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The error message when I build vm tests on debian10 (GLIBC 2.28):
+On Sat, 2022-02-26 at 09:07 +0100, Greg Kroah-Hartman wrote:
+> On Fri, Feb 25, 2022 at 02:11:04PM -0500, Mimi Zohar wrote:
+> > On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
+> > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > > Sent: Friday, February 25, 2022 1:22 AM
+> > > > Hi Roberto,
+> > > > 
+> > > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> > > > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > > > implementation of integrity-focused LSMs based on eBPF.
+> > > > 
+> > > > I've previously requested adding eBPF module measurements and signature
+> > > > verification support in IMA.  There seemed to be some interest, but
+> > > > nothing has been posted.
+> > > 
+> > > Hi Mimi
+> > > 
+> > > for my use case, DIGLIM eBPF, IMA integrity verification is
+> > > needed until the binary carrying the eBPF program is executed
+> > > as the init process. I've been thinking to use an appended
+> > > signature to overcome the limitation of lack of xattrs in the
+> > > initial ram disk.
+> > 
+> > I would still like to see xattrs supported in the initial ram disk. 
+> > Assuming you're still interested in pursuing it, someone would need to
+> > review and upstream it.  Greg?
+> 
+> Me?  How about the filesystem maintainers and developers?  :)
+> 
+> There's a reason we never added xattrs support to ram disks, but I can't
+> remember why...
 
-userfaultfd.c: In function ‘userfaultfd_pagemap_test’:
-userfaultfd.c:1393:37: error: ‘MADV_PAGEOUT’ undeclared (first use
-in this function); did you mean ‘MADV_RANDOM’?
-  if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
-                                     ^~~~~~~~~~~~
-                                     MADV_RANDOM
+CPIO 'newc' format doesn't support xattrs.
 
-This patch includes these newer definitions from UAPI linux/mman.h,
-is useful to fix tests build on systems without these definitions in
-glibc sys/mman.h.
+thanks,
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 2f49c9af1b58..3fc1d2ee2948 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -46,6 +46,7 @@
- #include <signal.h>
- #include <poll.h>
- #include <string.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
--- 
-2.20.1
+Mimi
 
