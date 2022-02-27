@@ -2,99 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F844C5DDC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Feb 2022 18:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B994C5E3F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Feb 2022 19:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiB0Rrx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Feb 2022 12:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
+        id S231210AbiB0SqM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Feb 2022 13:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiB0Rrw (ORCPT
+        with ESMTP id S231197AbiB0SqJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Feb 2022 12:47:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF1D192B8;
-        Sun, 27 Feb 2022 09:47:15 -0800 (PST)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21RFhvWH024416;
-        Sun, 27 Feb 2022 17:46:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=1QT+MIO5sQ0+JqoR5oSJ3DCQEEiRdGdRmp8VLGdPWfY=;
- b=TXdyGagn3Hf+0Sh+VqIUC5zyVVR6UFq80qAi/s4LALIjFggi5sMFOqzMYL94MPrUgQlr
- 6uBPZXhdOEI1/A9z+raQTshHas3+aFpHrZspt621RTAAGadagwavc69TQKeNrN7dDLnY
- 3qfclnz64nk69u8hVnHNvz4mAZsRHAylUhunkb0DNdee/xhuIwTFexSd9xZ++NvoYcHm
- l2es5TZJHzvxfdIuvUpKqilRWIPAbo5V2emias6B44l4MU2cvjgy/rKLbsn7SPb0yRdW
- wJAKIEApKK+3xzmkBTZqhKbY1/qPFGfH9ZgtezTp28Mz2YTZWPJfRFK9YGeM9ZkMiqcr zg== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3egc6u9ffy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 27 Feb 2022 17:46:55 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21RHgqKh008397;
-        Sun, 27 Feb 2022 17:46:53 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3efbu8vr5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 27 Feb 2022 17:46:53 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21RHkpUP45220184
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 27 Feb 2022 17:46:51 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E491811C05B;
-        Sun, 27 Feb 2022 17:46:50 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA03411C050;
-        Sun, 27 Feb 2022 17:46:48 +0000 (GMT)
-Received: from sig-9-65-89-64.ibm.com (unknown [9.65.89.64])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 27 Feb 2022 17:46:48 +0000 (GMT)
-Message-ID: <8b140d740ccb813a3fabacd928a5dc3499f145db.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Sun, 27 Feb 2022 12:46:48 -0500
-In-Reply-To: <YhnfzipoU1NbkjQQ@kroah.com>
-References: <20220215124042.186506-1-roberto.sassu@huawei.com>
-         <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
-         <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
-         <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
-         <YhnfzipoU1NbkjQQ@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: E-5Jt3XnaWTAon6wvc8bbVIw6kQEakXm
-X-Proofpoint-GUID: E-5Jt3XnaWTAon6wvc8bbVIw6kQEakXm
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 27 Feb 2022 13:46:09 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185A450E37
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Feb 2022 10:45:24 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id e13so8918807plh.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Feb 2022 10:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BMkktAsNfHIhPa1AJtPClUlYlr4FtiZE1a3GDbCXgk4=;
+        b=eH6EZmnqMckOS9O4oCCAOQ97Gk7PWZAVrFVwAHWRPKjSCasHblw8J3H51Cto/L4Oq/
+         7zqDwL6uGdZO25v6bmjZhS2MBNmqdSItLdQ8tnbuPyKYCvQsgJaqVAw1FtxJcVe83/LS
+         Zy2H2PJDdnwp3/ziVO/JJXQqpsFMARfT5Ychk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BMkktAsNfHIhPa1AJtPClUlYlr4FtiZE1a3GDbCXgk4=;
+        b=xW/FOGMhLOqcq/HtUgbYnXWVZaKOOVryc9v4C0Xlfk9CGwm/bMXa80I350yHdl/BnU
+         jgdBscsTrfGzMV7Q2AomBjSA6QqpY07oj6qlCg/+VsBKIlrMH9Nx3unZob9lNZyCncp2
+         TJoPFOZ5ki2zSVEumHW6pXDOf2gY0APYUh5q2qh6fqCJQUJMzIkpzeKJ+B1EZrEe9pAA
+         wF7o4cGY4e0BfaWOnOk1lGQUFXaA2JUK84+4IzKViVCbD9aVGMVXowN+BKws1ZIsZka9
+         4qTSyZonsFhannmUBl9rG4eba+7a71C6Hh7ccqDOm1zhUKPU2/YHKrTdLbBI93/21ob3
+         2lLQ==
+X-Gm-Message-State: AOAM533+f1FPp0rtrB9+O8wh7SpyBP6m+rYLrBXk9h+wD7dIruWrO+g5
+        MYWPWUi9cMP/opsG249EhWSanQ==
+X-Google-Smtp-Source: ABdhPJw84+Su+R84+skE0k1lOhQUbnaFmq9xBqLDdfjXiaJKJ64Oxb/qHpmbmqqlBln5RT3beTcbVA==
+X-Received: by 2002:a17:902:d705:b0:14e:e5a2:1b34 with SMTP id w5-20020a170902d70500b0014ee5a21b34mr16650742ply.88.1645987523283;
+        Sun, 27 Feb 2022 10:45:23 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y12-20020a62ce0c000000b004ec4d8900d5sm10038318pfg.163.2022.02.27.10.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 10:45:23 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, llvm@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v3 5/7] um: Allow builds with Clang
+Date:   Sun, 27 Feb 2022 10:45:15 -0800
+Message-Id: <20220227184517.504931-6-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220227184517.504931-1-keescook@chromium.org>
+References: <20220227184517.504931-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-27_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- adultscore=0 suspectscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202270122
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3536; h=from:subject; bh=9QnH+z+rCwCFrRsn/51gPTE+pPH8ccRFsd0v6DZGBGk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiG8a8dEBk1HwrxEO2kL1Oda4tIa5yb6JeGO7Q8F+W TXMu3eKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhvGvAAKCRCJcvTf3G3AJh5fD/ 9KuzRhMOYg8agcaXgdhk9bHElsujSJHIv4H/iYy4vhIm5y+K4au1niInCr8gbRxN8h9SSpzFeHVeOV A+xuZDPDYD0/lGfOoYtZpV2f9uQZVbCu2O4DEne9NwKDTvoIRjBem9qfJmbhHpG6gcFnEYy8IA3/oe YoJUrjDoIKakakFQ0EWS7Y3OF6mZutVETPOUUBQJJ6FTmaXehOi2JRWbE5M0Y6f1utAKkHM7GQObJl gp4Y6NzKu3MsgDQC/PitvlV7wxex2381qQKHfMjaBXLtUKLizYHyvbjWStV9XM2J6VbCt0BU/LV+yJ qDs59Ih223zt/j7TbKxTAjrwLIX+byh70A+0o9K4CJvWbyAJ9X5CnAccGvf1HCW28QwuyLrpTwSAy8 YiSKxd9UxcYUI4/CDSV+8r72iiUkt7nWG1Ygv1E416BjhxHrDuk2k7nFssdZEYfIlDIqQA8ey/QpWf d48v7LOCx1Cui2GUH/XGI/QqDM7TOISr58NfvoT02QrJ398Hk/EovB9Y1CzFA+hlUrdcmRLnfw+THt WQvvUo7T7/w80plD1UFpTjsxcPq6znVhO0NCDULvpyGKXfCqzxri43YBojcrgwA4vXNVIrRUeaC5RW nBl0txZW59SpCiVLjlI9W0bmg+VGOmyOQGYcXCJo4mdIvb2DjeBGm21cJnyA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,41 +81,94 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 2022-02-26 at 09:07 +0100, Greg Kroah-Hartman wrote:
-> On Fri, Feb 25, 2022 at 02:11:04PM -0500, Mimi Zohar wrote:
-> > On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
-> > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > > > Sent: Friday, February 25, 2022 1:22 AM
-> > > > Hi Roberto,
-> > > > 
-> > > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
-> > > > > Extend the interoperability with IMA, to give wider flexibility for the
-> > > > > implementation of integrity-focused LSMs based on eBPF.
-> > > > 
-> > > > I've previously requested adding eBPF module measurements and signature
-> > > > verification support in IMA.  There seemed to be some interest, but
-> > > > nothing has been posted.
-> > > 
-> > > Hi Mimi
-> > > 
-> > > for my use case, DIGLIM eBPF, IMA integrity verification is
-> > > needed until the binary carrying the eBPF program is executed
-> > > as the init process. I've been thinking to use an appended
-> > > signature to overcome the limitation of lack of xattrs in the
-> > > initial ram disk.
-> > 
-> > I would still like to see xattrs supported in the initial ram disk. 
-> > Assuming you're still interested in pursuing it, someone would need to
-> > review and upstream it.  Greg?
-> 
-> Me?  How about the filesystem maintainers and developers?  :)
-> 
-> There's a reason we never added xattrs support to ram disks, but I can't
-> remember why...
+Add SUBARCH target for Clang+um (which must go last, not alphabetically,
+so the other SUBARCHes are assigned). Remove open-coded "DEFINE"
+macro, instead using linux/kbuild.h's version which was updated to use
+Clang-friendly assembly in commit cf0c3e68aa81 ("kbuild: fix asm-offset
+generation to work with clang"). Redefine "DEFINE_LONGS" in terms of
+"COMMENT" and "DEFINE" so that the intended coment actually has useful
+content. Add a missed "break" to avoid implicit fall-through warnings.
 
-CPIO 'newc' format doesn't support xattrs.
+This lets me run KUnit tests with Clang:
 
-thanks,
+$ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+...
 
-Mimi
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: David Gow <davidgow@google.com>
+Cc: linux-um@lists.infradead.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: llvm@lists.linux.dev
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/lkml/Yg2YubZxvYvx7%2Fnm@dev-arch.archlinux-ax161/
+Tested-by: David Gow <davidgow@google.com>
+Link: https://lore.kernel.org/lkml/CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com/
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v1: https://lore.kernel.org/lkml/20220217002843.2312603-1-keescook@chromium.org
+v2: https://lore.kernel.org/lkml/20220224055831.1854786-1-keescook@chromium.org
+v3:
+ - use kbuild.h to avoid duplication (Masahiro)
+ - fix intended comments (Masahiro)
+ - use SUBARCH (Nathan)
+---
+ arch/um/os-Linux/execvp.c  | 1 +
+ arch/x86/um/user-offsets.c | 9 ++++-----
+ scripts/Makefile.clang     | 1 +
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/arch/um/os-Linux/execvp.c b/arch/um/os-Linux/execvp.c
+index 84a0777c2a45..c09a5fd5e225 100644
+--- a/arch/um/os-Linux/execvp.c
++++ b/arch/um/os-Linux/execvp.c
+@@ -93,6 +93,7 @@ int execvp_noalloc(char *buf, const char *file, char *const argv[])
+ 					   up finding no executable we can use, we want to diagnose
+ 					   that we did find one but were denied access.  */
+ 					got_eacces = 1;
++					break;
+ 				case ENOENT:
+ 				case ESTALE:
+ 				case ENOTDIR:
+diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+index bae61554abcc..e54a9814ccf1 100644
+--- a/arch/x86/um/user-offsets.c
++++ b/arch/x86/um/user-offsets.c
+@@ -8,12 +8,11 @@
+ #define __FRAME_OFFSETS
+ #include <linux/ptrace.h>
+ #include <asm/types.h>
++#include <linux/kbuild.h>
+ 
+-#define DEFINE(sym, val) \
+-	asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+-
+-#define DEFINE_LONGS(sym, val) \
+-	asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
++#define DEFINE_LONGS(sym, val)	\
++	COMMENT(#val " / sizeof(unsigned long)");	\
++	DEFINE(sym, val / sizeof(unsigned long))
+ 
+ void foo(void)
+ {
+diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+index 51fc23e2e9e5..87285b76adb2 100644
+--- a/scripts/Makefile.clang
++++ b/scripts/Makefile.clang
+@@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
+ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+ CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
++CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
+ CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+ 
+ ifeq ($(CROSS_COMPILE),)
+-- 
+2.32.0
 
