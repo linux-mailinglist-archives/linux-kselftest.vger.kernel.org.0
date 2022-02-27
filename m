@@ -2,112 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26224C591F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Feb 2022 04:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0754C592F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Feb 2022 04:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiB0D2S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Feb 2022 22:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S229912AbiB0D6q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Feb 2022 22:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiB0D2R (ORCPT
+        with ESMTP id S229776AbiB0D6p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Feb 2022 22:28:17 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570CE3AA70;
-        Sat, 26 Feb 2022 19:27:41 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id em10-20020a17090b014a00b001bc3071f921so11800570pjb.5;
-        Sat, 26 Feb 2022 19:27:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FKNI+luVZFLm4IVWsZpPnDpCsgFIPr6zk+10yzzBlg0=;
-        b=clmntm+JHN6QbH4VrAUPAPaZyxPWASA7Qt3Hy2GqwhK98IOSpKWP5s5O8ddBXD4vul
-         uqZD2L4R2jJ3eR4iN1Rs+2U8AjfYXhd9zKOSPk1vFURif1qBIZnENsqVdpxZc3PmI0jR
-         bKtEbE9/6z+SrOc7h/EM0bqGYoK+7rBtCHXQfLA+vLErQV2fhLF5A8kdIe8ubacBTqgy
-         MpITH1La3CT/Jt9gdNSZzW55uHXjA9aTjIkxu5zSSlBKerPmWuVDcwGWR/0A/Mpxf3fG
-         HkYXGBHIF1kAfnFF59YUCiiEMtULthEjVRgaljQgdHQ+vMOnylqwRhkwDCUo3mzgviX8
-         Qh2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FKNI+luVZFLm4IVWsZpPnDpCsgFIPr6zk+10yzzBlg0=;
-        b=CI/h+deqS3LLELMnBBGbn36BbOXjfGiZxoubSjf0QnSNdVNs2u/R6IErpNmb8gpWJA
-         QfiscdjCW5OYxKOjWxQRZCY2pavMIdPlXjHlCKglGVyh41wpLEM+eOISZn6pPsKkw7Ox
-         KCbMeCvqnR1WcLGvNG20vky6EgEJ6sQD53zXgx5PKAPlNnZ0mYGE91Yr3Ou3gmk034R9
-         b89hVLrNTevvGV1xYnRm1fBHCMSSC35pMfUbFIvQuAvQECjYqWlqIC95hHPTB9k6eTCA
-         EXxo+F0ZzwsUJ7xcFhCrXAzLJAOJjWwwlhIJBWM0/l0uf+rooFE3KfOlcDEdOnj+xKCd
-         F5fQ==
-X-Gm-Message-State: AOAM533E7h5RuRhrvwU634wL0zLUM3WoueIhyRfB066MQfZjDA+fdxK2
-        nw1gIfDvRhqqmOoZISukYbA=
-X-Google-Smtp-Source: ABdhPJwNhhdA157VdxKzxlG2ZmDTS0Izn/JqUe+JO3UrddXxe6VGR9jpLpeY1eNDr0TYdqUZtjxpyg==
-X-Received: by 2002:a17:902:edcd:b0:14d:c114:b86b with SMTP id q13-20020a170902edcd00b0014dc114b86bmr14364844plk.166.1645932460823;
-        Sat, 26 Feb 2022 19:27:40 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:6566])
-        by smtp.gmail.com with ESMTPSA id c34-20020a630d22000000b0034cb89e4695sm6829830pgl.28.2022.02.26.19.27.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 19:27:40 -0800 (PST)
-Date:   Sat, 26 Feb 2022 19:27:37 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH bpf-next v3 5/5] bpf: Add selftests for raw syncookie
- helpers
-Message-ID: <20220227032737.zrtgxkussxmeqezh@ast-mbp.dhcp.thefacebook.com>
-References: <20220224151145.355355-1-maximmi@nvidia.com>
- <20220224151145.355355-6-maximmi@nvidia.com>
+        Sat, 26 Feb 2022 22:58:45 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8FD7938B;
+        Sat, 26 Feb 2022 19:58:07 -0800 (PST)
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 21R3viK9010135;
+        Sun, 27 Feb 2022 12:57:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 21R3viK9010135
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645934265;
+        bh=8vul5cjxHnllEZ9R6kEDpmi+BU/2oY7ZUKtmPcOAiP4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ylAlrzaYHOIz+P1Py/lElRr8Oin5oBV0vItOMGnS7uuc3zxQON2WIpHwNtxYl4fmd
+         vVGDSBcQa74Hwki4/sPqgfV/LevdM7JNwTSTrwnTwk7jnMC12I0HA77ucBiz9tqL6L
+         DzW/2jrxEDj1RTC0g8HyZuDl0bYkONGuTDuAtvolWGMrq6pMEHeOBaRQMXVDAcoleM
+         OHO1pMVcmjXDq6tIKAuK1cP8djpZANPMjXOZTlMnlk2FMwhAeo5Md8qVCa9hBOjMnl
+         WISvXpcyCCYqbotUuqb0Ja57LohhiZCAHFK8uicuKJRbIB5ch8B7v2tOe3f3h1IwTP
+         GkhlIx9EgqeBQ==
+X-Nifty-SrcIP: [209.85.210.175]
+Received: by mail-pf1-f175.google.com with SMTP id a5so7260423pfv.9;
+        Sat, 26 Feb 2022 19:57:44 -0800 (PST)
+X-Gm-Message-State: AOAM533P8cXwi1Jf9vERMrw00EWet5tRjPnZ6xhYL73Bekn8lYM6+mrS
+        N4tddRUU+t4CVhpycbENa7/aY1yRnN8Of/QhtCo=
+X-Google-Smtp-Source: ABdhPJxjVjGM+x2ubvRA5AcuT0fdFuqGSyU4IS6P8OuiKJceoIpY9wcwxuBtYN0eK7eF+0vaytCJWw4mPryhGf+UpR8=
+X-Received: by 2002:a63:1d44:0:b0:373:5612:629b with SMTP id
+ d4-20020a631d44000000b003735612629bmr12512970pgm.352.1645934264084; Sat, 26
+ Feb 2022 19:57:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224151145.355355-6-maximmi@nvidia.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_FMBLA_NEWDOM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220224055831.1854786-1-keescook@chromium.org>
+In-Reply-To: <20220224055831.1854786-1-keescook@chromium.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 27 Feb 2022 12:57:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQewgWYhioL-kWvgpQCnLeg6vgULbAotU-qi46NDoFw2w@mail.gmail.com>
+Message-ID: <CAK7LNAQewgWYhioL-kWvgpQCnLeg6vgULbAotU-qi46NDoFw2w@mail.gmail.com>
+Subject: Re: [PATCH v2] um: Allow builds with Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 05:11:45PM +0200, Maxim Mikityanskiy wrote:
-> This commit adds selftests for the new BPF helpers:
-> bpf_tcp_raw_{gen,check}_syncookie_ipv{4,6}.
-> 
-> xdp_synproxy_kern.c is a BPF program that generates SYN cookies on
-> allowed TCP ports and sends SYNACKs to clients, accelerating synproxy
-> iptables module.
-> 
-> xdp_synproxy.c is a userspace control application that allows to
-> configure the following options in runtime: list of allowed ports, MSS,
-> window scale, TTL.
-> 
-> test_xdp_synproxy.sh is a script that demonstrates the setup of synproxy
-> with XDP acceleration and serves as a selftest for the new feature.
+On Thu, Feb 24, 2022 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Add x86-64 target for Clang+um and update user-offsets.c to use
+> Clang-friendly assembly, similar to the fix from commit cf0c3e68aa81
+> ("kbuild: fix asm-offset generation to work with clang").
+>
+> This lets me run KUnit tests with Clang:
+>
+> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> ...
+> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> ...
+>
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: llvm@lists.linux.dev
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://lore.kernel.org/lkml/Yg2YubZxvYvx7%2Fnm@dev-arch.archlinux-ax161/
+> Tested-by: David Gow <davidgow@google.com>
+> Link: https://lore.kernel.org/lkml/CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com/
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v1: https://lore.kernel.org/lkml/20220217002843.2312603-1-keescook@chromium.org/
+> v2:
+>  - tweak commit log phrasing and alphabetize targets (nathan)
+>  - fix a missing implicit fallthrough under 32-bit builds
+>  - add review tags
+> ---
+>  arch/um/os-Linux/execvp.c  | 1 +
+>  arch/x86/um/user-offsets.c | 4 ++--
+>  scripts/Makefile.clang     | 1 +
+>  3 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/um/os-Linux/execvp.c b/arch/um/os-Linux/execvp.c
+> index 84a0777c2a45..c09a5fd5e225 100644
+> --- a/arch/um/os-Linux/execvp.c
+> +++ b/arch/um/os-Linux/execvp.c
+> @@ -93,6 +93,7 @@ int execvp_noalloc(char *buf, const char *file, char *const argv[])
+>                                            up finding no executable we can use, we want to diagnose
+>                                            that we did find one but were denied access.  */
+>                                         got_eacces = 1;
+> +                                       break;
+>                                 case ENOENT:
+>                                 case ESTALE:
+>                                 case ENOTDIR:
+> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> index bae61554abcc..d9071827b515 100644
+> --- a/arch/x86/um/user-offsets.c
+> +++ b/arch/x86/um/user-offsets.c
+> @@ -10,10 +10,10 @@
+>  #include <asm/types.h>
+>
+>  #define DEFINE(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
 
-Please convert the test into test_progs runner.
-We don't accept standalone tests anymore.
+
+Another way might be  #include <linux/kbuild.h> and delete this macro
+definition.
+
+
+>  #define DEFINE_LONGS(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+
+
+This generates wrong comments.
+
+In include/generated/user_constants.h,
+I see this:
+
+   #define HOST_BX 5 /* RBX */
+
+(Here, the value of RBX is 40.)
+
+
+
+  #define DEFINE_LONGS(sym, val)     asm volatile("\n.ascii \"->" #sym
+" %0 " #val "/sizeof(unsigned long)\"": : "i" (val/sizeof(unsigned
+long)))
+
+creates valid comments:
+
+   #define HOST_BX 5 /* RBX/sizeof(unsigned long) */
+
+
+
+Another way might be to do this indirectly.
+
+     #define DEFINE_LONGS(sym, val)     DEFINE(sym, val / sizeof(unsigned long))
+
+The comments in include/generated/user_constans.h do not retain
+the original macro names, though...
+
+
+
+
+
+
+
+>  void foo(void)
+>  {
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..6e49344c6db2 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -9,6 +9,7 @@ CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
+>  CLANG_TARGET_FLAGS_powerpc     := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+
+
+Personally, I like Nathan's idea, but we can live with the hard-coding
+since we see no efforts for UML on other host arch.
+
+
+
+
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+> --
+> 2.30.2
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
