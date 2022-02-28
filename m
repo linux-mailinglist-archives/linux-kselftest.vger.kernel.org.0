@@ -2,111 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB184C65C8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Feb 2022 10:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2829B4C6736
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Feb 2022 11:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiB1Jib (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Feb 2022 04:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S234823AbiB1Kof (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Feb 2022 05:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiB1Jia (ORCPT
+        with ESMTP id S229565AbiB1Koe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Feb 2022 04:38:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0D3E5FB8
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Feb 2022 01:37:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646041070;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O6xuI99PpvDDOODhlbvd9Uc1T3uVIjTSRXmL6hAEYXs=;
-        b=b0Oecg70y75kS+Rhvfp4wLjXiM+jgIOAQeKQXWFAUHIE2q9XN8JltyOqxuwZhLhIYZ5hwD
-        uJPg/dUDOCNjNr2pwJfSfeCrF/nq0XKJmJ4fY26+P8EKJfOcyX9S6OTg9mtRO7oA6bL6UD
-        M6BpBjlMFiRoW4pwC1xIueCbGUTp2uI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-WLspIE50Of-ME7KBbPAuBg-1; Mon, 28 Feb 2022 04:37:48 -0500
-X-MC-Unique: WLspIE50Of-ME7KBbPAuBg-1
-Received: by mail-wr1-f72.google.com with SMTP id v24-20020adf8b58000000b001eda5c5cf95so1817776wra.18
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Feb 2022 01:37:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=O6xuI99PpvDDOODhlbvd9Uc1T3uVIjTSRXmL6hAEYXs=;
-        b=VCw52oN2cfB+6Z/MWnCKIQ2M3zJaIXAniMJwmE3npsUtbN7Ld9lU2yj74HC9Ee7VOg
-         Oh49h13//uCTzaFtBa5Y+JYV7TMtfEDS5dHqFNltQjiyt5ndKuKZy0nITez2Iq5Ub15V
-         X/y1fkw/ZQL2pslm5aOHWqUse83csvo2+4zAiXuJH0D5kmoLASjnQjkF/8xZxqZjsPk3
-         e9woFOmGsIug/D0ihn4VVC6S5QeS6AyjIwJmRt460pnkz7z2e7vQ3/dk0qoI9Yk3srOo
-         L2tKfLHHc3jHik4W1nJqW/rPy7acs8x+c8/0PSwXPSbSG3U6hQrFPETqAPKzpwF2N9ZB
-         6M/g==
-X-Gm-Message-State: AOAM533Su4xgpRRlx83CAnjpR5avXtSDXRlay35doqvkBm/Xtx71qBwx
-        IsyVRwMoqzXr++cJB7vwluJucNDurquZwL5gGmG36QIlGZrnNmhVvOazA6vgIBcBRy9GGWr1wKr
-        0qf77z4uQRUiN87wMbU5M6cnOYUp2
-X-Received: by 2002:a05:600c:68b:b0:380:d3e3:5bac with SMTP id a11-20020a05600c068b00b00380d3e35bacmr12725268wmn.127.1646041067484;
-        Mon, 28 Feb 2022 01:37:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxhW7y7soOEk6w3DJYoM93NX0XSqq5ao6PuHL/oQN6/HEeVH+4iT1S317aR4vg+JubPxFR9UQ==
-X-Received: by 2002:a05:600c:68b:b0:380:d3e3:5bac with SMTP id a11-20020a05600c068b00b00380d3e35bacmr12725255wmn.127.1646041067304;
-        Mon, 28 Feb 2022 01:37:47 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:9700:f1d:e242:33b4:67f? (p200300cbc70297000f1de24233b4067f.dip0.t-ipconnect.de. [2003:cb:c702:9700:f1d:e242:33b4:67f])
-        by smtp.gmail.com with ESMTPSA id a17-20020a5d5091000000b001edb61b2687sm14108652wrt.63.2022.02.28.01.37.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 01:37:46 -0800 (PST)
-Message-ID: <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
-Date:   Mon, 28 Feb 2022 10:37:46 +0100
+        Mon, 28 Feb 2022 05:44:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A6387AC;
+        Mon, 28 Feb 2022 02:43:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DAB3B80FD4;
+        Mon, 28 Feb 2022 10:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C84BC340E7;
+        Mon, 28 Feb 2022 10:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646045032;
+        bh=q6N/NvoiVt/nRwHbH0HFmIxbGn9klhqF/V7IKGiwFlw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vLHZSPnM3sfCqvs3Yak3CaQI5vmbppmheBQVr+BGlw8fSOsioZaPEsa77JwL7gaqP
+         4ixSK+FSSn5bJVlKUFg4iRfNvZFJEZIssyklXKaH9JKX+G6ogcq5OSZKgLcHdeUwhi
+         IIkOFM7T4Qu0BbbkonLGusGnY8lhGdNk3vWEqGok=
+Date:   Mon, 28 Feb 2022 11:43:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "revest@chromium.org" <revest@chromium.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] bpf-lsm: Extend interoperability with IMA
+Message-ID: <YhynZby+AyA/PuBU@kroah.com>
+References: <20220215124042.186506-1-roberto.sassu@huawei.com>
+ <408a96085814b2578486b2859e63ff906f5e5876.camel@linux.ibm.com>
+ <5117c79227ce4b9d97e193fd8fb59ba2@huawei.com>
+ <223d9eedc03f68cfa4f1624c4673e844e29da7d5.camel@linux.ibm.com>
+ <6a838878fdb3430b8e1d3e47aab7f22b@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        Will Deacon <will@kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20220224212335.3045905-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220224212335.3045905-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a838878fdb3430b8e1d3e47aab7f22b@huawei.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 24.02.22 22:23, Muhammad Usama Anjum wrote:
-> This introduces three tests:
-> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
-> check if the SD bit flipped.
-> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
-> 3) Check soft-dirty on huge pages
+On Mon, Feb 28, 2022 at 09:12:35AM +0000, Roberto Sassu wrote:
+> > From: Roberto Sassu
+> > Sent: Monday, February 28, 2022 10:08 AM
+> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > Sent: Friday, February 25, 2022 8:11 PM
+> > > On Fri, 2022-02-25 at 08:41 +0000, Roberto Sassu wrote:
+> > > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > > > Sent: Friday, February 25, 2022 1:22 AM
+> > > > > Hi Roberto,
+> > > > >
+> > > > > On Tue, 2022-02-15 at 13:40 +0100, Roberto Sassu wrote:
+> > > > > > Extend the interoperability with IMA, to give wider flexibility for the
+> > > > > > implementation of integrity-focused LSMs based on eBPF.
+> > > > >
+> > > > > I've previously requested adding eBPF module measurements and signature
+> > > > > verification support in IMA.  There seemed to be some interest, but
+> > > > > nothing has been posted.
+> > > >
+> > > > Hi Mimi
+> > > >
+> > > > for my use case, DIGLIM eBPF, IMA integrity verification is
+> > > > needed until the binary carrying the eBPF program is executed
+> > > > as the init process. I've been thinking to use an appended
+> > > > signature to overcome the limitation of lack of xattrs in the
+> > > > initial ram disk.
+> > >
+> > > I would still like to see xattrs supported in the initial ram disk.
+> > > Assuming you're still interested in pursuing it, someone would need to
+> > > review and upstream it.  Greg?
+> > 
+> > I could revise this work. However, since appended signatures
+> > would work too, I would propose to extend this appraisal
+> > mode to executables, if it is fine for you.
 > 
-> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
-> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
-> same issue that he fixed, and this test would have caught it.
+> Regarding this patch set, I kindly ask if you could accept it,
+> after I make the changes suggested.
 > 
+> The changes are simple, and waiting another kernel cycle
+> seems too long.
 
-A note that madv_populate.c already contains some SOFTDIRTY tests
-regarding MADV_POPULATE. Eventually we want to factor out
-softdirty/pagemap handling+checks for easier reuse.
+3 months is not a long time, get it right first, there is no deadline
+here.
 
+thanks,
 
--- 
-Thanks,
-
-David / dhildenb
-
+greg k-h
