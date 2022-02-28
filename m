@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5574C647F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Feb 2022 09:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D78084C6485
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Feb 2022 09:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbiB1IOG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Feb 2022 03:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
+        id S233891AbiB1IOH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Feb 2022 03:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbiB1IOF (ORCPT
+        with ESMTP id S233890AbiB1IOG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:14:05 -0500
+        Mon, 28 Feb 2022 03:14:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE93D4A6;
-        Mon, 28 Feb 2022 00:13:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B92E3A735;
+        Mon, 28 Feb 2022 00:13:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAC9D6113B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE9E86113D;
+        Mon, 28 Feb 2022 08:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5253EC36AE5;
         Mon, 28 Feb 2022 08:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D6EC340F7;
-        Mon, 28 Feb 2022 08:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646036006;
-        bh=KddJdFqVOnq0xfhpG7XfrROWOOfyL2vi8LybdSNAuAQ=;
+        s=k20201202; t=1646036007;
+        bh=gy7a+rbxsqAtXGvFj8lJRy3faq2q3d+XiqclILKcfZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eOaS0cZTCGEKizv7WXc4cbDiBQNt/wL730I+FiDxE26p9x5SYan3c73iR7TOl5PHz
-         ttfKeUedOAWzERNVGxfPZE5Z2x3XS2kJVINkSGQI2EO+UevZBCCuJCh95Ttdm5MML/
-         8UnyEvIUmknKVBiPzhuZLjNzti4RDy3Kh8lVFbD7S8zcqJy7Dte/NBS3SMdzAH6PoC
-         3ubaJf47ELIRRnjm2hYM9U6Q6qTnWyjQ/drxxWhLee+PKQTbd+klQ9j+mCm3A9KnkJ
-         15tgbVeyQfX4HIlt3orIRSP7xbdK7x5ZvXY3pZwbA0hsXgpitkuFxDX5mnvdeMB+S7
-         q5BUYjb26/dYQ==
+        b=MxeE4A+ez/E9K16exwc6BCRyxobeFgMScBswslVs2FFlp5jA8RrgCZh0pU2LqnW8H
+         WOElUDWgffQ5DsN4A0BrVu5g0cbuxxaEtRqjqDiJ9Mc+SZFw8TbwJcvpSHOrJs9Gdg
+         FsvMdf1oNFpxDyFMTfoi+dvVdpcgF0JXVVs9cPzV5Du/aaBUoI5Fhrv15idg8EBMOa
+         1QlAJeMDWU0r9whhdj90eG50lg81xZZD7j0ukPkiBb5ajGGhNkjkkD7BdIO/mEfbCb
+         HF9orF8gHUQR8wqWxI8dp4xg82fFQKD7ob05MYhDQg8BtCuwGrg4VIA+YEdaZi3AJe
+         xtQwNMOAPT4/A==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
@@ -39,9 +39,9 @@ Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
         linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v3 04/13] mm/damon/sysfs: Link DAMON for virtual address spaces monitoring
-Date:   Mon, 28 Feb 2022 08:13:05 +0000
-Message-Id: <20220228081314.5770-5-sj@kernel.org>
+Subject: [PATCH v3 05/13] mm/damon/sysfs: Support the physical address space monitoring
+Date:   Mon, 28 Feb 2022 08:13:06 +0000
+Message-Id: <20220228081314.5770-6-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220228081314.5770-1-sj@kernel.org>
 References: <20220228081314.5770-1-sj@kernel.org>
@@ -58,16 +58,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit links the DAMON sysfs interface to DAMON so that users can
-control DAMON via the interface.  In detail, this commit makes writing
-'on' to 'state' file constructs DAMON contexts based on values that
-users have written to relevant sysfs files and start the context.  It
-supports only virtual address spaces monitoring at the moment, though.
+This commit makes DAMON sysfs interface supports the physical address
+space monitoring.  Specifically, this commit adds support of the initial
+monitoring regions set feature by adding 'regions' directory under each
+target directory and makes context operations file to receive 'paddr' in
+addition to 'vaddr'.
 
-The files hierarchy of DAMON sysfs interface after this commit is shown
-below.  In the below figure, parents-children relations are represented
-with indentations, each directory is having ``/`` suffix, and files in
-each directory are separated by comma (",").
+As a result, the files hierarchy becomes as below:
 
     /sys/kernel/mm/damon/admin
     │ kdamonds/nr_kdamonds
@@ -79,236 +76,357 @@ each directory are separated by comma (",").
     │ │ │ │ │ │ nr_regions/min,max
     │ │ │ │ │ targets/nr_targets
     │ │ │ │ │ │ 0/pid_target
+    │ │ │ │ │ │ │ regions/nr_regions    <- NEW DIRECTORY
+    │ │ │ │ │ │ │ │ 0/start,end
+    │ │ │ │ │ │ │ │ ...
     │ │ │ │ │ │ ...
     │ │ │ │ ...
     │ │ ...
 
-The usage is straightforward.  Writing a number ('N') to each 'nr_*'
-file makes directories named '0' to 'N-1'.  Users can construct DAMON
-contexts by writing proper values to the files in the straightforward
-manner and start each kdamond by writing 'on' to 'kdamonds/<N>/state'.
-
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs.c | 192 ++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 189 insertions(+), 3 deletions(-)
+ mm/damon/sysfs.c | 276 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 271 insertions(+), 5 deletions(-)
 
 diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 87cf28ae6a6f..9221c93db6cc 100644
+index 9221c93db6cc..968a4ba8e81b 100644
 --- a/mm/damon/sysfs.c
 +++ b/mm/damon/sysfs.c
-@@ -806,22 +806,208 @@ static void damon_sysfs_kdamond_rm_dirs(struct damon_sysfs_kdamond *kdamond)
- 	kobject_put(&kdamond->contexts->kobj);
- }
+@@ -113,12 +113,220 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
+ 	.default_groups = damon_sysfs_ul_range_groups,
+ };
  
-+static bool damon_sysfs_ctx_running(struct damon_ctx *ctx)
-+{
-+	bool running;
++/*
++ * init region directory
++ */
 +
-+	mutex_lock(&ctx->kdamond_lock);
-+	running = ctx->kdamond != NULL;
-+	mutex_unlock(&ctx->kdamond_lock);
-+	return running;
++struct damon_sysfs_region {
++	struct kobject kobj;
++	unsigned long start;
++	unsigned long end;
++};
++
++static struct damon_sysfs_region *damon_sysfs_region_alloc(
++		unsigned long start,
++		unsigned long end)
++{
++	struct damon_sysfs_region *region = kmalloc(sizeof(*region),
++			GFP_KERNEL);
++
++	if (!region)
++		return NULL;
++	region->kobj = (struct kobject){};
++	region->start = start;
++	region->end = end;
++	return region;
 +}
 +
- static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
- 		char *buf)
- {
--	return -EINVAL;
-+	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
-+			struct damon_sysfs_kdamond, kobj);
-+	struct damon_ctx *ctx = kdamond->damon_ctx;
-+	bool running;
++static ssize_t start_show(struct kobject *kobj, struct kobj_attribute *attr,
++		char *buf)
++{
++	struct damon_sysfs_region *region = container_of(kobj,
++			struct damon_sysfs_region, kobj);
 +
-+	if (!ctx)
-+		running = false;
-+	else
-+		running = damon_sysfs_ctx_running(ctx);
-+
-+	return sysfs_emit(buf, "%s\n", running ? "on" : "off");
++	return sysfs_emit(buf, "%lu\n", region->start);
 +}
 +
-+static int damon_sysfs_set_attrs(struct damon_ctx *ctx,
-+		struct damon_sysfs_attrs *sys_attrs)
++static ssize_t start_store(struct kobject *kobj, struct kobj_attribute *attr,
++		const char *buf, size_t count)
 +{
-+	struct damon_sysfs_intervals *sys_intervals = sys_attrs->intervals;
-+	struct damon_sysfs_ul_range *sys_nr_regions =
-+		sys_attrs->nr_regions_range;
++	struct damon_sysfs_region *region = container_of(kobj,
++			struct damon_sysfs_region, kobj);
++	int err = kstrtoul(buf, 0, &region->start);
 +
-+	return damon_set_attrs(ctx, sys_intervals->sample_us,
-+			sys_intervals->aggr_us, sys_intervals->update_us,
-+			sys_nr_regions->min, sys_nr_regions->max);
++	if (err)
++		return -EINVAL;
++	return count;
 +}
 +
-+static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
++static ssize_t end_show(struct kobject *kobj, struct kobj_attribute *attr,
++		char *buf)
 +{
-+	struct damon_target *t, *next;
++	struct damon_sysfs_region *region = container_of(kobj,
++			struct damon_sysfs_region, kobj);
 +
-+	damon_for_each_target_safe(t, next, ctx) {
-+		if (ctx->ops.id == DAMON_OPS_VADDR)
-+			put_pid(t->pid);
-+		damon_destroy_target(t);
-+	}
++	return sysfs_emit(buf, "%lu\n", region->end);
 +}
 +
-+static int damon_sysfs_set_targets(struct damon_ctx *ctx,
-+		struct damon_sysfs_targets *sysfs_targets)
++static ssize_t end_store(struct kobject *kobj, struct kobj_attribute *attr,
++		const char *buf, size_t count)
 +{
++	struct damon_sysfs_region *region = container_of(kobj,
++			struct damon_sysfs_region, kobj);
++	int err = kstrtoul(buf, 0, &region->end);
++
++	if (err)
++		return -EINVAL;
++	return count;
++}
++
++static void damon_sysfs_region_release(struct kobject *kobj)
++{
++	kfree(container_of(kobj, struct damon_sysfs_region, kobj));
++}
++
++static struct kobj_attribute damon_sysfs_region_start_attr =
++		__ATTR_RW_MODE(start, 0600);
++
++static struct kobj_attribute damon_sysfs_region_end_attr =
++		__ATTR_RW_MODE(end, 0600);
++
++static struct attribute *damon_sysfs_region_attrs[] = {
++	&damon_sysfs_region_start_attr.attr,
++	&damon_sysfs_region_end_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_region);
++
++static struct kobj_type damon_sysfs_region_ktype = {
++	.release = damon_sysfs_region_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_region_groups,
++};
++
++/*
++ * init_regions directory
++ */
++
++struct damon_sysfs_regions {
++	struct kobject kobj;
++	struct damon_sysfs_region **regions_arr;
++	int nr;
++};
++
++static struct damon_sysfs_regions *damon_sysfs_regions_alloc(void)
++{
++	return kzalloc(sizeof(struct damon_sysfs_regions), GFP_KERNEL);
++}
++
++static void damon_sysfs_regions_rm_dirs(struct damon_sysfs_regions *regions)
++{
++	struct damon_sysfs_region **regions_arr = regions->regions_arr;
 +	int i;
 +
-+	for (i = 0; i < sysfs_targets->nr; i++) {
-+		struct damon_sysfs_target *sys_target =
-+			sysfs_targets->targets_arr[i];
-+		struct damon_target *t = damon_new_target();
++	for (i = 0; i < regions->nr; i++)
++		kobject_put(&regions_arr[i]->kobj);
++	regions->nr = 0;
++	kfree(regions_arr);
++	regions->regions_arr = NULL;
++}
 +
-+		if (!t) {
-+			damon_sysfs_destroy_targets(ctx);
++static int damon_sysfs_regions_add_dirs(struct damon_sysfs_regions *regions,
++		int nr_regions)
++{
++	struct damon_sysfs_region **regions_arr, *region;
++	int err, i;
++
++	damon_sysfs_regions_rm_dirs(regions);
++	if (!nr_regions)
++		return 0;
++
++	regions_arr = kmalloc_array(nr_regions, sizeof(*regions_arr),
++			GFP_KERNEL | __GFP_NOWARN);
++	if (!regions_arr)
++		return -ENOMEM;
++	regions->regions_arr = regions_arr;
++
++	for (i = 0; i < nr_regions; i++) {
++		region = damon_sysfs_region_alloc(0, 0);
++		if (!region) {
++			damon_sysfs_regions_rm_dirs(regions);
 +			return -ENOMEM;
 +		}
-+		if (ctx->ops.id == DAMON_OPS_VADDR) {
-+			t->pid = find_get_pid(sys_target->pid);
-+			if (!t->pid) {
-+				damon_sysfs_destroy_targets(ctx);
-+				return -EINVAL;
-+			}
++
++		err = kobject_init_and_add(&region->kobj,
++				&damon_sysfs_region_ktype, &regions->kobj,
++				"%d", i);
++		if (err) {
++			kobject_put(&region->kobj);
++			damon_sysfs_regions_rm_dirs(regions);
++			return err;
 +		}
-+		damon_add_target(ctx, t);
++
++		regions_arr[i] = region;
++		regions->nr++;
 +	}
 +	return 0;
 +}
 +
-+static void damon_sysfs_before_terminate(struct damon_ctx *ctx)
++static ssize_t nr_regions_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_target *t, *next;
++	struct damon_sysfs_regions *regions = container_of(kobj,
++			struct damon_sysfs_regions, kobj);
 +
-+	if (ctx->ops.id != DAMON_OPS_VADDR)
-+		return;
-+
-+	mutex_lock(&ctx->kdamond_lock);
-+	damon_for_each_target_safe(t, next, ctx) {
-+		put_pid(t->pid);
-+		damon_destroy_target(t);
-+	}
-+	mutex_unlock(&ctx->kdamond_lock);
++	return sysfs_emit(buf, "%d\n", regions->nr);
 +}
 +
-+static struct damon_ctx *damon_sysfs_build_ctx(
-+		struct damon_sysfs_context *sys_ctx)
++static ssize_t nr_regions_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_ctx *ctx = damon_new_ctx();
-+	int err;
++	struct damon_sysfs_regions *regions = container_of(kobj,
++			struct damon_sysfs_regions, kobj);
++	int nr, err = kstrtoint(buf, 0, &nr);
 +
-+	if (!ctx)
-+		return ERR_PTR(-ENOMEM);
-+
-+	err = damon_select_ops(ctx, sys_ctx->ops_id);
 +	if (err)
-+		goto out;
-+	err = damon_sysfs_set_attrs(ctx, sys_ctx->attrs);
-+	if (err)
-+		goto out;
-+	err = damon_sysfs_set_targets(ctx, sys_ctx->targets);
-+	if (err)
-+		goto out;
-+
-+	ctx->callback.before_terminate = damon_sysfs_before_terminate;
-+	return ctx;
-+
-+out:
-+	damon_destroy_ctx(ctx);
-+	return ERR_PTR(err);
-+}
-+
-+static int damon_sysfs_turn_damon_on(struct damon_sysfs_kdamond *kdamond)
-+{
-+	struct damon_ctx *ctx;
-+	int err;
-+
-+	if (kdamond->damon_ctx &&
-+			damon_sysfs_ctx_running(kdamond->damon_ctx))
-+		return -EBUSY;
-+	/* TODO: support multiple contexts per kdamond */
-+	if (kdamond->contexts->nr != 1)
++		return err;
++	if (nr < 0)
 +		return -EINVAL;
 +
-+	if (kdamond->damon_ctx)
-+		damon_destroy_ctx(kdamond->damon_ctx);
-+	kdamond->damon_ctx = NULL;
-+
-+	ctx = damon_sysfs_build_ctx(kdamond->contexts->contexts_arr[0]);
-+	if (IS_ERR(ctx))
-+		return PTR_ERR(ctx);
-+	err = damon_start(&ctx, 1, false);
-+	if (err) {
-+		damon_destroy_ctx(ctx);
++	if (!mutex_trylock(&damon_sysfs_lock))
++		return -EBUSY;
++	err = damon_sysfs_regions_add_dirs(regions, nr);
++	mutex_unlock(&damon_sysfs_lock);
++	if (err)
 +		return err;
-+	}
-+	kdamond->damon_ctx = ctx;
++
++	return count;
++}
++
++static void damon_sysfs_regions_release(struct kobject *kobj)
++{
++	kfree(container_of(kobj, struct damon_sysfs_regions, kobj));
++}
++
++static struct kobj_attribute damon_sysfs_regions_nr_attr =
++		__ATTR_RW_MODE(nr_regions, 0600);
++
++static struct attribute *damon_sysfs_regions_attrs[] = {
++	&damon_sysfs_regions_nr_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_regions);
++
++static struct kobj_type damon_sysfs_regions_ktype = {
++	.release = damon_sysfs_regions_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_regions_groups,
++};
++
+ /*
+  * target directory
+  */
+ 
+ struct damon_sysfs_target {
+ 	struct kobject kobj;
++	struct damon_sysfs_regions *regions;
+ 	int pid;
+ };
+ 
+@@ -127,6 +335,29 @@ static struct damon_sysfs_target *damon_sysfs_target_alloc(void)
+ 	return kzalloc(sizeof(struct damon_sysfs_target), GFP_KERNEL);
+ }
+ 
++static int damon_sysfs_target_add_dirs(struct damon_sysfs_target *target)
++{
++	struct damon_sysfs_regions *regions = damon_sysfs_regions_alloc();
++	int err;
++
++	if (!regions)
++		return -ENOMEM;
++
++	err = kobject_init_and_add(&regions->kobj, &damon_sysfs_regions_ktype,
++			&target->kobj, "regions");
++	if (err)
++		kobject_put(&regions->kobj);
++	else
++		target->regions = regions;
 +	return err;
 +}
 +
-+static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
++static void damon_sysfs_target_rm_dirs(struct damon_sysfs_target *target)
 +{
-+	if (!kdamond->damon_ctx)
-+		return -EINVAL;
-+	return damon_stop(&kdamond->damon_ctx, 1);
-+	/*
-+	 * To allow users show final monitoring results of already turned-off
-+	 * DAMON, we free kdamond->damon_ctx in next
-+	 * damon_sysfs_turn_damon_on(), or kdamonds_nr_store()
-+	 */
- }
- 
- static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
- 		const char *buf, size_t count)
- {
--	return -EINVAL;
-+	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
-+			struct damon_sysfs_kdamond, kobj);
-+	ssize_t ret;
++	damon_sysfs_regions_rm_dirs(target->regions);
++	kobject_put(&target->regions->kobj);
++}
 +
-+	if (!mutex_trylock(&damon_sysfs_lock))
-+		return -EBUSY;
-+	if (sysfs_streq(buf, "on"))
-+		ret = damon_sysfs_turn_damon_on(kdamond);
-+	else if (sysfs_streq(buf, "off"))
-+		ret = damon_sysfs_turn_damon_off(kdamond);
-+	else
-+		ret = -EINVAL;
-+	mutex_unlock(&damon_sysfs_lock);
-+	if (!ret)
-+		ret = count;
-+	return ret;
- }
- 
- static ssize_t pid_show(struct kobject *kobj,
+ static ssize_t pid_target_show(struct kobject *kobj,
  		struct kobj_attribute *attr, char *buf)
  {
--	return -EINVAL;
-+	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
-+			struct damon_sysfs_kdamond, kobj);
-+	struct damon_ctx *ctx;
-+	int pid;
-+
-+	if (!mutex_trylock(&damon_sysfs_lock))
-+		return -EBUSY;
-+	ctx = kdamond->damon_ctx;
-+	if (!ctx) {
-+		pid = -1;
-+		goto out;
+@@ -188,8 +419,10 @@ static void damon_sysfs_targets_rm_dirs(struct damon_sysfs_targets *targets)
+ 	struct damon_sysfs_target **targets_arr = targets->targets_arr;
+ 	int i;
+ 
+-	for (i = 0; i < targets->nr; i++)
++	for (i = 0; i < targets->nr; i++) {
++		damon_sysfs_target_rm_dirs(targets_arr[i]);
+ 		kobject_put(&targets_arr[i]->kobj);
 +	}
-+	mutex_lock(&ctx->kdamond_lock);
-+	if (!ctx->kdamond)
-+		pid = -1;
-+	else
-+		pid = ctx->kdamond->pid;
-+	mutex_unlock(&ctx->kdamond_lock);
-+out:
-+	mutex_unlock(&damon_sysfs_lock);
-+	return sysfs_emit(buf, "%d\n", pid);
+ 	targets->nr = 0;
+ 	kfree(targets_arr);
+ 	targets->targets_arr = NULL;
+@@ -224,6 +457,10 @@ static int damon_sysfs_targets_add_dirs(struct damon_sysfs_targets *targets,
+ 		if (err)
+ 			goto out;
+ 
++		err = damon_sysfs_target_add_dirs(target);
++		if (err)
++			goto out;
++
+ 		targets_arr[i] = target;
+ 		targets->nr++;
+ 	}
+@@ -608,9 +845,6 @@ static ssize_t operations_store(struct kobject *kobj,
+ 
+ 	for (id = 0; id < NR_DAMON_OPS; id++) {
+ 		if (sysfs_streq(buf, damon_sysfs_ops_strs[id])) {
+-			/* Support only vaddr */
+-			if (id != DAMON_OPS_VADDR)
+-				return -EINVAL;
+ 			context->ops_id = id;
+ 			return count;
+ 		}
+@@ -855,10 +1089,37 @@ static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
+ 	}
  }
  
- static void damon_sysfs_kdamond_release(struct kobject *kobj)
++static int damon_sysfs_set_regions(struct damon_target *t,
++		struct damon_sysfs_regions *sysfs_regions)
++{
++	int i;
++
++	for (i = 0; i < sysfs_regions->nr; i++) {
++		struct damon_sysfs_region *sys_region =
++			sysfs_regions->regions_arr[i];
++		struct damon_region *prev, *r;
++
++		if (sys_region->start > sys_region->end)
++			return -EINVAL;
++		r = damon_new_region(sys_region->start, sys_region->end);
++		if (!r)
++			return -ENOMEM;
++		damon_add_region(r, t);
++		if (damon_nr_regions(t) > 1) {
++			prev = damon_prev_region(r);
++			if (prev->ar.end > r->ar.start) {
++				damon_destroy_region(r, t);
++				return -EINVAL;
++			}
++		}
++	}
++	return 0;
++}
++
+ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+ 		struct damon_sysfs_targets *sysfs_targets)
+ {
+-	int i;
++	int i, err;
+ 
+ 	for (i = 0; i < sysfs_targets->nr; i++) {
+ 		struct damon_sysfs_target *sys_target =
+@@ -877,6 +1138,11 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+ 			}
+ 		}
+ 		damon_add_target(ctx, t);
++		err = damon_sysfs_set_regions(t, sys_target->regions);
++		if (err) {
++			damon_sysfs_destroy_targets(ctx);
++			return err;
++		}
+ 	}
+ 	return 0;
+ }
 -- 
 2.17.1
 
