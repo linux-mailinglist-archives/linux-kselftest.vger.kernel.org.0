@@ -2,40 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAF04C71C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Feb 2022 17:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BDE4C735C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Feb 2022 18:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237947AbiB1Qeh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Feb 2022 11:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S235581AbiB1Reh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Feb 2022 12:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237943AbiB1Qef (ORCPT
+        with ESMTP id S238878AbiB1Rd7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Feb 2022 11:34:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3A146B24;
-        Mon, 28 Feb 2022 08:33:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 642596123C;
-        Mon, 28 Feb 2022 16:33:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BF2C340E7;
-        Mon, 28 Feb 2022 16:33:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646066035;
-        bh=5TnaHWBObWPu9LztXoyemUFcbfrnH0z+xI99F3n3R8g=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=kZ7m26CkOlcamcJdE9TffN0PMCAyW+ITFSrvbw+O5Isw9bz+NzyxDoTqwC2Vx70/l
-         dI+voha1t1y0FCt5boFo/mFFvqOweUkVd64clVQVww3Dfl+irtWa2J8hfSj08w+tw4
-         SqkvSmHe6m++E1niteZAnImg6RU/XmxMKbFgfiOP1f4lE8HGkR2xzafac0ZuxYfzPu
-         yISiQuBFePoqFsZnNMSf/zNmjhHoN7XMOYrqIXaa5YcDJfiQj3ZOfopuPhSRzCmPIj
-         KawGoJ3iGh/jLrPQQHu/Mr3+j2Ik+onCBFgt5xR8kl68ALhhWpHzMK5b/LgEbHe0OF
-         htDcjt9pjubFg==
-Date:   Mon, 28 Feb 2022 17:33:49 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Mon, 28 Feb 2022 12:33:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D7DE9399F
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Feb 2022 09:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646069434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TBNyyVKFIgtXo2siONgO+K8rh6ETB7+JIbrxg9YBDkY=;
+        b=jWcgGKLGUTr8n3DzavkHxlUfsdyH8E6IGCOTX7PShDKHQBmpW9QituArsXgjVhMGgcuKdA
+        QFyx6l6EXJvzAW6uFqxSYfnTt1lurF/GIeuB8xzguuMRVBeCwAB6HrlCkipdy4BmeGhf9l
+        YnTY0EWGYAqG42XjHgLmgd1sKkfM2cc=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-310-6kzfAYZ7OyK2Ya5pgH-EvQ-1; Mon, 28 Feb 2022 12:30:31 -0500
+X-MC-Unique: 6kzfAYZ7OyK2Ya5pgH-EvQ-1
+Received: by mail-pl1-f198.google.com with SMTP id p5-20020a1709028a8500b001517d75694aso42381plo.19
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Feb 2022 09:30:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TBNyyVKFIgtXo2siONgO+K8rh6ETB7+JIbrxg9YBDkY=;
+        b=HE4kbDQU+MtwIXakUChyqrak3SKMFnOs0I1cax0oXmpRJ8w5DX9beu0okQMU5kBTp4
+         X6TjVr3C66FVNdSN/NTpr6WRaVRKGNfa/A0YBd4hbdCG+0rlKvYMtW22XnscNr7xCluc
+         oTVxWSxNEXSUSoyzCeDys4JXqf37T9g9BDm8CTW4tR38guWfDqKf5w5xO1jyb6DLZpII
+         ZtlutHCsBlAJgjqyYvOKiZo5vjbsHddXooriARUrKOoWfP15Asp4+sTdrajOaEx72zuO
+         ty6NKb7LYDfRJgeJF/RpEBg/5qFwKTC2NH7CtZ9SM7vz1wVr7vy8VNL4ALPG5vxoxdRv
+         SpHg==
+X-Gm-Message-State: AOAM530I3aU7vClfaEtRTQrGeCLnzXzo0/y3ICtxZAbS8hd6R44/fKT/
+        aN8BWSTBVevHuaWQm+NxpPH3SzBppaUfaGq1KL7/owxeTGpocbCf45Kt+i7xQcHxhqsnJmN67i5
+        kplbz6lc5zG2BKkeF7rnyYc6EluIsOi9hb62FEPsptNBn
+X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id r10-20020a17090a560a00b001bc72e73c13mr17481034pjf.246.1646069430728;
+        Mon, 28 Feb 2022 09:30:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw1v8+Lu0rP+9NAXHotlnTBxz36fDCgljyirfY6qlP//hmJIiUmPdBMWOJ0HtOZuZM/abGbibrD7d754N3pyLA=
+X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id
+ r10-20020a17090a560a00b001bc72e73c13mr17481014pjf.246.1646069430520; Mon, 28
+ Feb 2022 09:30:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
+ <20220224110828.2168231-2-benjamin.tissoires@redhat.com> <YhdtKN7qodX7VDPV@kroah.com>
+In-Reply-To: <YhdtKN7qodX7VDPV@kroah.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 28 Feb 2022 18:30:19 +0100
+Message-ID: <CAO-hwJL73en_7thxM6Xt-RC2kqp=D8oyWuU_EL60hCsFCYPrsg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/6] HID: initial BPF implementation
+To:     Greg KH <greg@kroah.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -48,47 +73,59 @@ cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Tero Kristo <tero.kristo@linux.intel.com>,
         lkml <linux-kernel@vger.kernel.org>,
         "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Peter Hutterer <peter.hutterer@redhat.com>
-Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
-In-Reply-To: <YhkEqpF6QSYeoMQn@kroah.com>
-Message-ID: <nycvar.YFH.7.76.2202281733000.11721@cbobk.fhfr.pm>
-References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com> <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com> <YhjbzxxgxtSxFLe/@kroah.com> <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
- <YhkEqpF6QSYeoMQn@kroah.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 25 Feb 2022, Greg KH wrote:
+On Thu, Feb 24, 2022 at 12:41 PM Greg KH <greg@kroah.com> wrote:
+>
+> On Thu, Feb 24, 2022 at 12:08:23PM +0100, Benjamin Tissoires wrote:
+> > index 000000000000..243ac45a253f
+> > --- /dev/null
+> > +++ b/include/uapi/linux/bpf_hid.h
+> > @@ -0,0 +1,39 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> > +
+> > +/*
+> > + *  HID BPF public headers
+> > + *
+> > + *  Copyright (c) 2021 Benjamin Tissoires
+> > + */
+> > +
+> > +#ifndef _UAPI__LINUX_BPF_HID_H__
+> > +#define _UAPI__LINUX_BPF_HID_H__
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +#define HID_BPF_MAX_BUFFER_SIZE              16384           /* 16kb */
+> > +
+> > +struct hid_device;
+> > +
+> > +enum hid_bpf_event {
+> > +     HID_BPF_UNDEF = 0,
+> > +     HID_BPF_DEVICE_EVENT,
+> > +};
+> > +
+> > +/* type is HID_BPF_DEVICE_EVENT */
+> > +struct hid_bpf_ctx_device_event {
+> > +     __u8 data[HID_BPF_MAX_BUFFER_SIZE];
+> > +     unsigned long size;
+>
+> That's not a valid type to cross the user/kernel boundry, shouldn't it
+> be "__u64"?  But really, isn't __u32 enough here?
 
-> > I mean that if you need a bpf program to be loaded from userspace at
-> > boot to make your keyboard functional, then you need to have the root
-> > partition mounted (or put the program in the initrd) so udev can load
-> > it. Now if your keyboard is supposed to give the password used to
-> > decrypt your root partition but you need a bpf program on that said
-> > partition to make it functional, you are screwed :)
-> 
-> True, but that's why the HID boot protocol was designed for keyboards
-> and mice, so that they "always" work.  Yeah, I know many devices ignore
-> it, oh well...
+Fixed locally with a __u16 instead. Will be present in v2.
 
-That's a very mild statement :)
-
-*Most* of the recent modern HW doesn't support it as far as I can say.
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
+Cheers,
+Benjamin
 
