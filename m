@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F514C96CC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Mar 2022 21:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4AA4C9686
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Mar 2022 21:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238130AbiCAUY4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Mar 2022 15:24:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S237688AbiCAUYx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Mar 2022 15:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239163AbiCAUYd (ORCPT
+        with ESMTP id S239257AbiCAUYh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:24:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960AC90CEA;
-        Tue,  1 Mar 2022 12:22:12 -0800 (PST)
+        Tue, 1 Mar 2022 15:24:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC56F427F1;
+        Tue,  1 Mar 2022 12:22:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEE43B81D4B;
-        Tue,  1 Mar 2022 20:22:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592C5C340EE;
-        Tue,  1 Mar 2022 20:22:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8848360AE2;
+        Tue,  1 Mar 2022 20:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62451C340EE;
+        Tue,  1 Mar 2022 20:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646166129;
-        bh=mw2xiBHC6MTelNrcFcAoX333abKycd68WsMm6emhTSk=;
+        s=k20201202; t=1646166166;
+        bh=ykPzFqII9JhxFvpT1iK7FFBwhs+Pt/E9JaOCth/cxsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ys1bTT3ab15acqy7rN7bU97aq1Mc8rOdxcl/Px1jpZ1m/BFPCcH907KZ/AsCskVG0
-         IXyWw5HjogNXDCfhKR7VYL2uy4CMnR6HXHnJe18f5h9if0+jMSiwzvDiyeYIWNy1Ry
-         CMNTdnf2F6mQm33M79bRNuUVO9JH4zG4j8zuc2+CwjWUy8FZL3c2c1FBEJ+7/Z9Hve
-         FCjlkK3sFsOHi0H6tMZXXyF+fMD0oNxcWxB3jtidE3SPaXRVDmLLOJFA+Pd0dMpdoM
-         7FihWypeTMLB9I25Wuyf0TC7JJYXnVBYETOXn2LBV5hBNNQJ77jKPEQ50fRiGbNPlu
-         8nc24AYO0o2JQ==
+        b=hDKQUifiMXi1lBSXdMYyl2xM6gMpWd24Ii0/Zpa2d95G7tg3MEEq4xRvrV9auSUx4
+         FY3q7IUJAskD80qL4yZkwmTClwusTXHbx6esL/8PBm8NlOniWV7JuVca+LFBGnh7oU
+         4trwIFRVcM7qiI96DfvRVpANC786qzgMkhREVl8gfLd6xdnjHjmy8RpzobQUfTkV1x
+         pKc9gw1hSHYDFvqpAOhM6ix3TqmMVWfCfmF6V0Gs6xt6TyZSrhNfe7RQ6g/VVrzN0G
+         h8ccAUHZv9yiIJJvzntQtti0R7sRp8Grfp+x62WUt2j2HL1+rVR4lzuleYRLjEOZKa
+         NKmhy8tNCQSqg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -41,12 +41,12 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, gthelen@google.com,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 7/7] selftests/memfd: clean up mapping in mfd_fail_write
-Date:   Tue,  1 Mar 2022 15:21:28 -0500
-Message-Id: <20220301202131.19318-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 6/6] selftests/memfd: clean up mapping in mfd_fail_write
+Date:   Tue,  1 Mar 2022 15:22:10 -0500
+Message-Id: <20220301202212.19419-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220301202131.19318-1-sashal@kernel.org>
-References: <20220301202131.19318-1-sashal@kernel.org>
+In-Reply-To: <20220301202212.19419-1-sashal@kernel.org>
+References: <20220301202212.19419-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -99,10 +99,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 845e5f67b6f02..cf4c5276eb06a 100644
+index 26546892cd545..faab09215c88b 100644
 --- a/tools/testing/selftests/memfd/memfd_test.c
 +++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -416,6 +416,7 @@ static void mfd_fail_write(int fd)
+@@ -373,6 +373,7 @@ static void mfd_fail_write(int fd)
  			printf("mmap()+mprotect() didn't fail as expected\n");
  			abort();
  		}
