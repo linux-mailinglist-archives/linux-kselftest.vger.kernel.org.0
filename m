@@ -2,134 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A6F4C8F16
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Mar 2022 16:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173014C9581
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Mar 2022 21:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbiCAPaH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Mar 2022 10:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S232861AbiCAUOg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Mar 2022 15:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiCAPaG (ORCPT
+        with ESMTP id S229603AbiCAUOg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Mar 2022 10:30:06 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B1317078
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Mar 2022 07:29:20 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id c18so18818628ioc.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Mar 2022 07:29:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JLpzyiylffXpYKOI4/wAJpbR1EAOvSqSarR62ILfzxg=;
-        b=h/wWCF7mJ71VhkAmufHh/jZRBTnW8Ap+8K0IssvuDfBRN/sRD4jRPUFLvR6LmX84e9
-         GswDevPUad3Q4j2uZ2lre3MssU18K2ziQWstwFFOCKPyTqG0uDg8EFFEQ2SM8tVb1jIN
-         TykcNl20dBaBkYEzkHTvxxQSyK5anbq4ZVe+o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JLpzyiylffXpYKOI4/wAJpbR1EAOvSqSarR62ILfzxg=;
-        b=QWMryVv5DoPd18Q04GclueFYfzQpridbcwVP7hK6/pIayuBtqzXJT9Fdh1LCt6gOBb
-         jsf7CKmZLgGzsQmoahqg024NxUWlHT+TvxhnuvsbUjOO2SfT3SsKpEWp/BmlMD331koH
-         ANi6NtvyKpHXnUfWXKOlGy7KtlVREIKZf8Nm07L1QiGA5JEsOyn/r+B326Cw2l4YHe9o
-         PuEWMT8ibV9qgEJIRwEYsUbMdtrFS0rbGGXlrUr6XBPLP+ubBFhVZe82abxanhXKTGVv
-         Ytc6QbCvxxaA7zQIoRfXN0cg+8XUjHkhRDTtbttJNsSFFapIPwvzxuaRbUGqOpeAQsYi
-         ZDQw==
-X-Gm-Message-State: AOAM531cQ5VTxmD1fWrQvSR0vrYD0WX1K1+sZbpB49GKFXojp312Svuc
-        Xz3OnD+wN7+3Gays0Q0+8fwjFg==
-X-Google-Smtp-Source: ABdhPJyItWAaR2S2fFhZiwhlqaYDrGakTJS0a+yeNdq+94aUuWcwG7Z8OmCFwTybYus7Kg+BORZ8Mw==
-X-Received: by 2002:a5e:df41:0:b0:642:8c0:ce78 with SMTP id g1-20020a5edf41000000b0064208c0ce78mr18726025ioq.142.1646148560263;
-        Tue, 01 Mar 2022 07:29:20 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id i16-20020a056e02055000b002c2877213bdsm8118473ils.3.2022.03.01.07.29.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 07:29:19 -0800 (PST)
-Subject: Re: [PATCH] selftests: vm: remove duplicated macro and use swap() to
- make code cleaner
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org
-Cc:     shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Lv Ruyi (CGEL ZTE)" <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220301014404.2052655-1-lv.ruyi@zte.com.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9d6ae3b1-3f36-8196-c136-fa2d07dbca5d@linuxfoundation.org>
-Date:   Tue, 1 Mar 2022 08:29:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 1 Mar 2022 15:14:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8660A38D81;
+        Tue,  1 Mar 2022 12:13:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1809E61710;
+        Tue,  1 Mar 2022 20:13:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE34DC340EE;
+        Tue,  1 Mar 2022 20:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646165633;
+        bh=IKX32sWHzfqA+GXof/lcAj87x4fva3TL+Bqv6/XCzIk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ipq1GxBvzrSE7AMt2MVerjK5I3IeOm9cS0DMV7Ig3LO4wjDCwadF0tQQII+gHAd6n
+         osWK0xpw/7tC7Bl07pNlQuJrFmrRxiXPFNeZQHnGbHxU/5QIxL7G4OjLUo1vA9eM4v
+         arJmny6djYgEufmftB1D7oKnoOJdPY6wYSKrx7ccqBCM1V+kRo+F2LszzHGgkLgloF
+         4Si42GuNwwYqK/4MTtReQ2bcrlchcv/22GZoxQPyOzwCmQOCiyib6YAca1dc6X2Xd1
+         gVe8Gvo9QD3zAwRrWvr5twCQ01NBr8SwJnKCl9z9NHrPNoy6zGrKKg3MN3de09liz9
+         6p1BTfS8kG8wA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 01/28] selftests/bpf: Add test for bpf_timer overwriting crash
+Date:   Tue,  1 Mar 2022 15:13:06 -0500
+Message-Id: <20220301201344.18191-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20220301014404.2052655-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/28/22 6:44 PM, cgel.zte@gmail.com wrote:
-> From: "Lv Ruyi (CGEL ZTE)" <lv.ruyi@zte.com.cn>
-> 
-> The macro is duplicated, so remove one. And use swap to make code cleaner.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi (CGEL ZTE) <lv.ruyi@zte.com.cn>
-> ---
->   tools/testing/selftests/vm/userfaultfd.c | 13 ++-----------
->   1 file changed, 2 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index ab394e6bff43..100f08362164 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -121,9 +121,6 @@ struct uffd_stats {
->   #define swap(a, b) \
->   	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
->   
-> -#define swap(a, b) \
-> -	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
-> -
->   const char *examples =
->       "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
->       "./userfaultfd anon 100 99999\n\n"
-> @@ -1424,7 +1421,6 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
->   static int userfaultfd_stress(void)
->   {
->   	void *area;
-> -	char *tmp_area;
->   	unsigned long nr;
->   	struct uffdio_register uffdio_register;
->   	struct uffd_stats uffd_stats[nr_cpus];
-> @@ -1535,13 +1531,8 @@ static int userfaultfd_stress(void)
->   					    count_verify[nr], nr);
->   
->   		/* prepare next bounce */
-> -		tmp_area = area_src;
-> -		area_src = area_dst;
-> -		area_dst = tmp_area;
-> -
-> -		tmp_area = area_src_alias;
-> -		area_src_alias = area_dst_alias;
-> -		area_dst_alias = tmp_area;
-> +		swap(area_src, area_dst);
-> +		swap(area_src_alias, area_dst_alias);
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Where is swap() defined? Does this patch compile? I reverted a
-change like this one reported by Zeal Robot recently. Let's
-make sure this change compiles and runs.
+[ Upstream commit a7e75016a0753c24d6c995bc02501ae35368e333 ]
 
->   
->   		uffd_stats_report(uffd_stats, nr_cpus);
->   	}
-> 
+Add a test that validates that timer value is not overwritten when doing
+a copy_map_value call in the kernel. Without the prior fix, this test
+triggers a crash.
 
-thanks,
--- Shuah
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220209070324.1093182-3-memxor@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../selftests/bpf/prog_tests/timer_crash.c    | 32 +++++++++++
+ .../testing/selftests/bpf/progs/timer_crash.c | 54 +++++++++++++++++++
+ 2 files changed, 86 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_crash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_crash.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/timer_crash.c b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
+new file mode 100644
+index 0000000000000..f74b82305da8c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "timer_crash.skel.h"
++
++enum {
++	MODE_ARRAY,
++	MODE_HASH,
++};
++
++static void test_timer_crash_mode(int mode)
++{
++	struct timer_crash *skel;
++
++	skel = timer_crash__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "timer_crash__open_and_load"))
++		return;
++	skel->bss->pid = getpid();
++	skel->bss->crash_map = mode;
++	if (!ASSERT_OK(timer_crash__attach(skel), "timer_crash__attach"))
++		goto end;
++	usleep(1);
++end:
++	timer_crash__destroy(skel);
++}
++
++void test_timer_crash(void)
++{
++	if (test__start_subtest("array"))
++		test_timer_crash_mode(MODE_ARRAY);
++	if (test__start_subtest("hash"))
++		test_timer_crash_mode(MODE_HASH);
++}
+diff --git a/tools/testing/selftests/bpf/progs/timer_crash.c b/tools/testing/selftests/bpf/progs/timer_crash.c
+new file mode 100644
+index 0000000000000..f8f7944e70dae
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/timer_crash.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++struct map_elem {
++	struct bpf_timer timer;
++	struct bpf_spin_lock lock;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct map_elem);
++} amap SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct map_elem);
++} hmap SEC(".maps");
++
++int pid = 0;
++int crash_map = 0; /* 0 for amap, 1 for hmap */
++
++SEC("fentry/do_nanosleep")
++int sys_enter(void *ctx)
++{
++	struct map_elem *e, value = {};
++	void *map = crash_map ? (void *)&hmap : (void *)&amap;
++
++	if (bpf_get_current_task_btf()->tgid != pid)
++		return 0;
++
++	*(void **)&value = (void *)0xdeadcaf3;
++
++	bpf_map_update_elem(map, &(int){0}, &value, 0);
++	/* For array map, doing bpf_map_update_elem will do a
++	 * check_and_free_timer_in_array, which will trigger the crash if timer
++	 * pointer was overwritten, for hmap we need to use bpf_timer_cancel.
++	 */
++	if (crash_map == 1) {
++		e = bpf_map_lookup_elem(map, &(int){0});
++		if (!e)
++			return 0;
++		bpf_timer_cancel(&e->timer);
++	}
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.34.1
+
