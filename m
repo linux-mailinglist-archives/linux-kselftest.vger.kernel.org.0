@@ -2,48 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173014C9581
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Mar 2022 21:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E02B4C95F9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Mar 2022 21:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbiCAUOg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Mar 2022 15:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S237949AbiCAURf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Mar 2022 15:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiCAUOg (ORCPT
+        with ESMTP id S237877AbiCAURW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Mar 2022 15:14:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8660A38D81;
-        Tue,  1 Mar 2022 12:13:54 -0800 (PST)
+        Tue, 1 Mar 2022 15:17:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3D87ED8C;
+        Tue,  1 Mar 2022 12:16:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1809E61710;
-        Tue,  1 Mar 2022 20:13:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE34DC340EE;
-        Tue,  1 Mar 2022 20:13:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3221CB81D1A;
+        Tue,  1 Mar 2022 20:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45B5C340EE;
+        Tue,  1 Mar 2022 20:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646165633;
-        bh=IKX32sWHzfqA+GXof/lcAj87x4fva3TL+Bqv6/XCzIk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ipq1GxBvzrSE7AMt2MVerjK5I3IeOm9cS0DMV7Ig3LO4wjDCwadF0tQQII+gHAd6n
-         osWK0xpw/7tC7Bl07pNlQuJrFmrRxiXPFNeZQHnGbHxU/5QIxL7G4OjLUo1vA9eM4v
-         arJmny6djYgEufmftB1D7oKnoOJdPY6wYSKrx7ccqBCM1V+kRo+F2LszzHGgkLgloF
-         4Si42GuNwwYqK/4MTtReQ2bcrlchcv/22GZoxQPyOzwCmQOCiyib6YAca1dc6X2Xd1
-         gVe8Gvo9QD3zAwRrWvr5twCQ01NBr8SwJnKCl9z9NHrPNoy6zGrKKg3MN3de09liz9
-         6p1BTfS8kG8wA==
+        s=k20201202; t=1646165774;
+        bh=6u5hYmnVqzpjLai+66w0PPoKJevf0lUcfY+US3gukLs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mlX+h0vIjKf6Xdt/yOCL/Yt84kpIYb4MuNhSRa2npSxj+4Swkl6lZRdkFaEn8e2js
+         Yjlhh2DFRj0jUc+DNWMw0lgx+Rar8i2nNHXLUTWGEO7Ua0Ly1qvGBxMIl/I6gCWHb4
+         ewTYiFUCsC67O6TkxHiN/cMsh5eJYtfecBrXKSxnqNPta11yzePg3k62Y8pMzZAY1L
+         aY2/t5Xd62VGt3CJAoFC9ruF7rgWCxuQ1kKUO8uLxY466UdOdenDyCItOc9wwwtVPP
+         LDy6QIiatjjlkjbU02oyMuRqx0dA30+XxoM1k52JTRD42RZlUELfnJPpTjvOWMct7I
+         eap3n/0Dc/WgA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 01/28] selftests/bpf: Add test for bpf_timer overwriting crash
-Date:   Tue,  1 Mar 2022 15:13:06 -0500
-Message-Id: <20220301201344.18191-1-sashal@kernel.org>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 27/28] selftest/vm: fix map_fixed_noreplace test failure
+Date:   Tue,  1 Mar 2022 15:13:32 -0500
+Message-Id: <20220301201344.18191-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220301201344.18191-1-sashal@kernel.org>
+References: <20220301201344.18191-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,123 +61,179 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
 
-[ Upstream commit a7e75016a0753c24d6c995bc02501ae35368e333 ]
+[ Upstream commit f39c58008dee7ab5fc94c3f1995a21e886801df0 ]
 
-Add a test that validates that timer value is not overwritten when doing
-a copy_map_value call in the kernel. Without the prior fix, this test
-triggers a crash.
+On the latest RHEL the test fails due to executable mapped at 256MB
+address
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220209070324.1093182-3-memxor@gmail.com
+     # ./map_fixed_noreplace
+    mmap() @ 0x10000000-0x10050000 p=0xffffffffffffffff result=File exists
+    10000000-10010000 r-xp 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
+    10010000-10020000 r--p 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
+    10020000-10030000 rw-p 00010000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
+    10029b90000-10029bc0000 rw-p 00000000 00:00 0                            [heap]
+    7fffbb510000-7fffbb750000 r-xp 00000000 fd:04 24534                      /usr/lib64/libc.so.6
+    7fffbb750000-7fffbb760000 r--p 00230000 fd:04 24534                      /usr/lib64/libc.so.6
+    7fffbb760000-7fffbb770000 rw-p 00240000 fd:04 24534                      /usr/lib64/libc.so.6
+    7fffbb780000-7fffbb7a0000 r--p 00000000 00:00 0                          [vvar]
+    7fffbb7a0000-7fffbb7b0000 r-xp 00000000 00:00 0                          [vdso]
+    7fffbb7b0000-7fffbb800000 r-xp 00000000 fd:04 24514                      /usr/lib64/ld64.so.2
+    7fffbb800000-7fffbb810000 r--p 00040000 fd:04 24514                      /usr/lib64/ld64.so.2
+    7fffbb810000-7fffbb820000 rw-p 00050000 fd:04 24514                      /usr/lib64/ld64.so.2
+    7fffd93f0000-7fffd9420000 rw-p 00000000 00:00 0                          [stack]
+    Error: couldn't map the space we need for the test
+
+Fix this by finding a free address using mmap instead of hardcoding
+BASE_ADDRESS.
+
+Link: https://lkml.kernel.org/r/20220217083417.373823-1-aneesh.kumar@linux.ibm.com
+Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Jann Horn <jannh@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/bpf/prog_tests/timer_crash.c    | 32 +++++++++++
- .../testing/selftests/bpf/progs/timer_crash.c | 54 +++++++++++++++++++
- 2 files changed, 86 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_crash.c
- create mode 100644 tools/testing/selftests/bpf/progs/timer_crash.c
+ .../selftests/vm/map_fixed_noreplace.c        | 49 ++++++++++++++-----
+ 1 file changed, 37 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/timer_crash.c b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
-new file mode 100644
-index 0000000000000..f74b82305da8c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "timer_crash.skel.h"
-+
-+enum {
-+	MODE_ARRAY,
-+	MODE_HASH,
-+};
-+
-+static void test_timer_crash_mode(int mode)
+diff --git a/tools/testing/selftests/vm/map_fixed_noreplace.c b/tools/testing/selftests/vm/map_fixed_noreplace.c
+index d91bde5112686..eed44322d1a63 100644
+--- a/tools/testing/selftests/vm/map_fixed_noreplace.c
++++ b/tools/testing/selftests/vm/map_fixed_noreplace.c
+@@ -17,9 +17,6 @@
+ #define MAP_FIXED_NOREPLACE 0x100000
+ #endif
+ 
+-#define BASE_ADDRESS	(256ul * 1024 * 1024)
+-
+-
+ static void dump_maps(void)
+ {
+ 	char cmd[32];
+@@ -28,18 +25,46 @@ static void dump_maps(void)
+ 	system(cmd);
+ }
+ 
++static unsigned long find_base_addr(unsigned long size)
 +{
-+	struct timer_crash *skel;
++	void *addr;
++	unsigned long flags;
 +
-+	skel = timer_crash__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "timer_crash__open_and_load"))
-+		return;
-+	skel->bss->pid = getpid();
-+	skel->bss->crash_map = mode;
-+	if (!ASSERT_OK(timer_crash__attach(skel), "timer_crash__attach"))
-+		goto end;
-+	usleep(1);
-+end:
-+	timer_crash__destroy(skel);
-+}
-+
-+void test_timer_crash(void)
-+{
-+	if (test__start_subtest("array"))
-+		test_timer_crash_mode(MODE_ARRAY);
-+	if (test__start_subtest("hash"))
-+		test_timer_crash_mode(MODE_HASH);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/timer_crash.c b/tools/testing/selftests/bpf/progs/timer_crash.c
-new file mode 100644
-index 0000000000000..f8f7944e70dae
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/timer_crash.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct map_elem {
-+	struct bpf_timer timer;
-+	struct bpf_spin_lock lock;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct map_elem);
-+} amap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct map_elem);
-+} hmap SEC(".maps");
-+
-+int pid = 0;
-+int crash_map = 0; /* 0 for amap, 1 for hmap */
-+
-+SEC("fentry/do_nanosleep")
-+int sys_enter(void *ctx)
-+{
-+	struct map_elem *e, value = {};
-+	void *map = crash_map ? (void *)&hmap : (void *)&amap;
-+
-+	if (bpf_get_current_task_btf()->tgid != pid)
++	flags = MAP_PRIVATE | MAP_ANONYMOUS;
++	addr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
++	if (addr == MAP_FAILED) {
++		printf("Error: couldn't map the space we need for the test\n");
 +		return 0;
-+
-+	*(void **)&value = (void *)0xdeadcaf3;
-+
-+	bpf_map_update_elem(map, &(int){0}, &value, 0);
-+	/* For array map, doing bpf_map_update_elem will do a
-+	 * check_and_free_timer_in_array, which will trigger the crash if timer
-+	 * pointer was overwritten, for hmap we need to use bpf_timer_cancel.
-+	 */
-+	if (crash_map == 1) {
-+		e = bpf_map_lookup_elem(map, &(int){0});
-+		if (!e)
-+			return 0;
-+		bpf_timer_cancel(&e->timer);
 +	}
-+	return 0;
++
++	if (munmap(addr, size) != 0) {
++		printf("Error: couldn't map the space we need for the test\n");
++		return 0;
++	}
++	return (unsigned long)addr;
 +}
 +
-+char _license[] SEC("license") = "GPL";
+ int main(void)
+ {
++	unsigned long base_addr;
+ 	unsigned long flags, addr, size, page_size;
+ 	char *p;
+ 
+ 	page_size = sysconf(_SC_PAGE_SIZE);
+ 
++	//let's find a base addr that is free before we start the tests
++	size = 5 * page_size;
++	base_addr = find_base_addr(size);
++	if (!base_addr) {
++		printf("Error: couldn't map the space we need for the test\n");
++		return 1;
++	}
++
+ 	flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE;
+ 
+ 	// Check we can map all the areas we need below
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 5 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 
+@@ -60,7 +85,7 @@ int main(void)
+ 	printf("unmap() successful\n");
+ 
+ 	errno = 0;
+-	addr = BASE_ADDRESS + page_size;
++	addr = base_addr + page_size;
+ 	size = 3 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -80,7 +105,7 @@ int main(void)
+ 	 *     +4 |  free  | new
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 5 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -101,7 +126,7 @@ int main(void)
+ 	 *     +4 |  free  |
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS + (2 * page_size);
++	addr = base_addr + (2 * page_size);
+ 	size = page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -121,7 +146,7 @@ int main(void)
+ 	 *     +4 |  free  | new
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS + (3 * page_size);
++	addr = base_addr + (3 * page_size);
+ 	size = 2 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -141,7 +166,7 @@ int main(void)
+ 	 *     +4 |  free  |
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 2 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -161,7 +186,7 @@ int main(void)
+ 	 *     +4 |  free  |
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -181,7 +206,7 @@ int main(void)
+ 	 *     +4 |  free  |  new
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS + (4 * page_size);
++	addr = base_addr + (4 * page_size);
+ 	size = page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -192,7 +217,7 @@ int main(void)
+ 		return 1;
+ 	}
+ 
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 5 * page_size;
+ 	if (munmap((void *)addr, size) != 0) {
+ 		dump_maps();
 -- 
 2.34.1
 
