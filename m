@@ -2,48 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422274CACD1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 19:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE014CB08C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 22:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244379AbiCBSCf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Mar 2022 13:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        id S241129AbiCBVCM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Mar 2022 16:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244349AbiCBSCc (ORCPT
+        with ESMTP id S230374AbiCBVCJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:02:32 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AF4D5F77;
-        Wed,  2 Mar 2022 10:01:47 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id ACCB71F44057
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646244106;
-        bh=6DltTDrqqoo+1sbXqZ8HBcJEVvAAxkOr4W8gwR7K9Q0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=beDeqYBeE8oXVoKd0nzuLmDezeftmBBm+dAET6ojxYUj7VAIluVlilJXHugt9N7Dh
-         JXPhoYu42XKS/PnXYTL8lAwQLGJgnO5xQ+9Borr2tmVxhiSrjhwfuRaceAyTyoUyk6
-         ZOMQOUhz7pRYxsQLYCq2JbehXr8j4vH25poUCiD2WU+/vyLfHjUqbonnmDSQWhhR8z
-         yl+iRMFrgthk4kLyfcREGf1MlYCy80sWgatRJIJz2K6LLVM8HWFMWSK5of0pr5Q5Zi
-         n6agntz3dnA2L4jQg+10LjMXzNHARXfMXRhMJjyVee0VHgdXw2f8vrpUyjPDkJv3Ca
-         OiWJiFzpUCDqA==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 3/3] selftests: kvm: add generated file to the .gitignore
-Date:   Wed,  2 Mar 2022 23:01:20 +0500
-Message-Id: <20220302180121.1717581-3-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220302180121.1717581-1-usama.anjum@collabora.com>
-References: <20220302180121.1717581-1-usama.anjum@collabora.com>
+        Wed, 2 Mar 2022 16:02:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CE0D2069;
+        Wed,  2 Mar 2022 13:01:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED85FB81FB1;
+        Wed,  2 Mar 2022 21:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373FAC340EF;
+        Wed,  2 Mar 2022 21:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646254882;
+        bh=pZMMoaiSp8YleU3wN8sImtSMq9BxXGCX7Zfl1Pe7QD8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oYHdl47qdJ+kPW01KWr5eEu+Mly9YCoqjHEDPP/7ln9wzjC7sUYr8ECtKDmp4LNPT
+         V3LZeSHIziSS+35f93pNcO2bfp+VDl4UMIwiP/br0by18qcdB3dTeJzfXD4AkAnNNq
+         Niryo7xgV0bWZDYJ5L/LrvltT9FwYU4nmvLZA8AIrBuXBNjntd5yJjAH3F49vwaJUc
+         WLj2av77MnSA/DVioCN8VafQ4OZRBXuM7vboDaiyXgdYZyOkmjSxlW3FgDrTPtkZpH
+         DQ7LfkIJ7FyumKIlr9uVc5b0US6149uLdQirmA5QwMRmV7m3fKC0d8S/y/T3X6Rbx5
+         lj+iTtYNI54hA==
+Date:   Wed, 2 Mar 2022 16:01:18 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 4.19 09/13] selftests/ftrace: Do not trace
+ do_softirq because of PREEMPT_RT
+Message-ID: <Yh/bHmpENqn1x7kK@sashalap>
+References: <20220223023152.242065-1-sashal@kernel.org>
+ <20220223023152.242065-9-sashal@kernel.org>
+ <20220224224622.GD6522@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220224224622.GD6522@duo.ucw.cz>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,25 +61,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add hyperv_svm_test to the .gitignore file.
+On Thu, Feb 24, 2022 at 11:46:22PM +0100, Pavel Machek wrote:
+>On Tue 2022-02-22 21:31:48, Sasha Levin wrote:
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+>> [ Upstream commit 6fec1ab67f8d60704cc7de64abcfd389ab131542 ]
+>>
+>> The PREEMPT_RT patchset does not use do_softirq() function thus trying
+>> to filter for do_softirq fails for such kernel:
+>>
+>>   echo do_softirq
+>>   ftracetest: 81: echo: echo: I/O error
+>>
+>> Choose some other visible function for the test.  The function does not
+>> have to be actually executed during the test, because it is only testing
+>> filter API interface.
+>
+>This needs -rt patch even on mainline, right?
+>
+>It is certainly not needed in -stable branches.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/kvm/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+I'll drop it, thanks.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 7903580a48ac..4d11adeac214 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -21,6 +21,7 @@
- /x86_64/hyperv_clock
- /x86_64/hyperv_cpuid
- /x86_64/hyperv_features
-+/x86_64/hyperv_svm_test
- /x86_64/mmio_warning_test
- /x86_64/mmu_role_test
- /x86_64/platform_info_test
 -- 
-2.30.2
-
+Thanks,
+Sasha
