@@ -2,41 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0044CACCB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 19:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047A04CACCF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 19:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239609AbiCBSC0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Mar 2022 13:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
+        id S244372AbiCBSCc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Mar 2022 13:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiCBSC0 (ORCPT
+        with ESMTP id S244363AbiCBSC2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:02:26 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13B8D5DEB;
-        Wed,  2 Mar 2022 10:01:42 -0800 (PST)
+        Wed, 2 Mar 2022 13:02:28 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50740D5DF4;
+        Wed,  2 Mar 2022 10:01:45 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id 12F1C1F43FAF
+        with ESMTPSA id 126331F44030
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646244101;
-        bh=tB4dwZK0Et/2OMzDW/FvWoGbb4aD30Ljk6K8uOCkSoA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gyJyTqZgH0ONxkzxgJB/NKs1qGqLolWEAwH/Elnbu6w7HSfK7BZwDLQkMO4yyJBGw
-         Wpqpfvr3MYokc9B/m6stGw4X4OtBE+QLxfr5pVJmddH0rFs4YTK+d0cJ097A1FF2mY
-         zG3bDB6fSmWZ5VQHi6KRK7Dgtq5wbqwE4D+ayvedRtnws3XndluCtQxfCLCodd2JpW
-         KYQPHVQ7F4+GgT+7Qw4v7QT2qkGKkstveq5U2e9H+j/H0N9mJZQF3WwClRkQ3hmtaJ
-         6BPhJgsDXOePgY3KWeLMaSf5HZKr2uGQ3Z2AJ2K2LWNXVfFrAFUQLdwH5dvIdNhmAg
-         VAbHoeJ+CSZRQ==
+        s=mail; t=1646244104;
+        bh=TO/lYfvWn3GKhSIAvogB1BYYjqYiSleaZUgz1mJKfr0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=D7yPZRKb/I87/D6naI6Vr5lJbqeRuW0dd1UrIv4pgIu2TOhRAFrZHRfJbxF+/rjD2
+         9LqRT5d+oY6d9pjb+Q7kz0bJAgpZlBC8kAUXTTBUN9ek83n1gQ8ZPb64b45hkbUeGi
+         OvV8r9Ce3rW5BmOGgyG+3DAy5oeWBHxu63EXSBZnyfAuS0z1h9olBTKO/Ev4/KIWHc
+         Yr2XXXAaGLuHmvi2ZHNt58h6IsSVXZim9WI7rMubTD6ue3qWGOC9Ge6cLVfXTElftj
+         WaFw3iHMKodtBkJ9WfUcdeovaGcJDWi2sFvoAEZ7a2N5wBhTxPu28fqSfKSyy6Un+L
+         qjS9WZ/3/VNmw==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>
 Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 1/3] selftests: add kselftest_install to .gitignore
-Date:   Wed,  2 Mar 2022 23:01:18 +0500
-Message-Id: <20220302180121.1717581-1-usama.anjum@collabora.com>
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 2/3] selftests/exec: add generated files to .gitignore
+Date:   Wed,  2 Mar 2022 23:01:19 +0500
+Message-Id: <20220302180121.1717581-2-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220302180121.1717581-1-usama.anjum@collabora.com>
+References: <20220302180121.1717581-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -49,31 +53,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add kselftest_install directory to the .gitignore which is created while
-creation of tar ball of objects:
-make -C tools/testing/selftests gen_tar
+Add generated files non-regular and null-argv to .gitignore file.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-Changes in V2:
-Break up the patch in individual test patches
-Remove changes related to net selftest
----
- tools/testing/selftests/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/exec/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
-index 055a5019b13c..cb24124ac5b9 100644
---- a/tools/testing/selftests/.gitignore
-+++ b/tools/testing/selftests/.gitignore
-@@ -3,6 +3,7 @@ gpiogpio-event-mon
- gpiogpio-hammer
- gpioinclude/
- gpiolsgpio
-+kselftest_install/
- tpm2/SpaceTest.log
- 
- # Python bytecode and cache
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index 9e2f00343f15..90c238ba6a4b 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -7,6 +7,8 @@ execveat.moved
+ execveat.path.ephemeral
+ execveat.ephemeral
+ execveat.denatured
++non-regular
++null-argv
+ /load_address_*
+ /recursion-depth
+ xxxxxxxx*
 -- 
 2.30.2
 
