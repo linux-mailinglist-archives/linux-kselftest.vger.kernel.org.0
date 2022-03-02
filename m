@@ -2,97 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322624CACC4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 19:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0044CACCB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 19:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244315AbiCBSBX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Mar 2022 13:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S239609AbiCBSC0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Mar 2022 13:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbiCBSBX (ORCPT
+        with ESMTP id S232648AbiCBSC0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Mar 2022 13:01:23 -0500
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54EFFD5DF4;
-        Wed,  2 Mar 2022 10:00:39 -0800 (PST)
-Received: from netfilter.org (unknown [78.30.32.163])
-        by mail.netfilter.org (Postfix) with ESMTPSA id 83C50625FA;
-        Wed,  2 Mar 2022 18:59:07 +0100 (CET)
-Date:   Wed, 2 Mar 2022 19:00:26 +0100
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Geliang Tang <geliang.tang@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Kai Liu <kai.liu@suse.com>, netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: netfilter: fix a build error on openSUSE
-Message-ID: <Yh+wulh/nIkFeFmz@salvia>
-References: <5ee95e93a11a239df8e09d059da25a4eaa5725ba.1646198836.git.geliang.tang@suse.com>
- <8cbf1231-0da5-c8a0-d66b-1488633d9895@linuxfoundation.org>
+        Wed, 2 Mar 2022 13:02:26 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13B8D5DEB;
+        Wed,  2 Mar 2022 10:01:42 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 12F1C1F43FAF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646244101;
+        bh=tB4dwZK0Et/2OMzDW/FvWoGbb4aD30Ljk6K8uOCkSoA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gyJyTqZgH0ONxkzxgJB/NKs1qGqLolWEAwH/Elnbu6w7HSfK7BZwDLQkMO4yyJBGw
+         Wpqpfvr3MYokc9B/m6stGw4X4OtBE+QLxfr5pVJmddH0rFs4YTK+d0cJ097A1FF2mY
+         zG3bDB6fSmWZ5VQHi6KRK7Dgtq5wbqwE4D+ayvedRtnws3XndluCtQxfCLCodd2JpW
+         KYQPHVQ7F4+GgT+7Qw4v7QT2qkGKkstveq5U2e9H+j/H0N9mJZQF3WwClRkQ3hmtaJ
+         6BPhJgsDXOePgY3KWeLMaSf5HZKr2uGQ3Z2AJ2K2LWNXVfFrAFUQLdwH5dvIdNhmAg
+         VAbHoeJ+CSZRQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 1/3] selftests: add kselftest_install to .gitignore
+Date:   Wed,  2 Mar 2022 23:01:18 +0500
+Message-Id: <20220302180121.1717581-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8cbf1231-0da5-c8a0-d66b-1488633d9895@linuxfoundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 10:11:11AM -0700, Shuah Khan wrote:
-> On 3/1/22 10:29 PM, Geliang Tang wrote:
-> > This patch fixed the following build error on openSUSE Leap 15.3:
-> > 
-> > =======================================================================
-> >   gcc     nf-queue.c -lmnl -o tools/testing/selftests/netfilter/nf-queue
-> >   nf-queue.c:13:10: fatal error: libmnl/libmnl.h: No such file or directory
-> >    #include <libmnl/libmnl.h>
-> >             ^~~~~~~~~~~~~~~~~
-> >   compilation terminated.
-> > =======================================================================
-> > 
-> > It is because libmnl.h is put in the directory of
-> > "/usr/include/libmnl/libmnl/" on openSUSE, not "/usr/include/libmnl/":
-> > 
-> >   > rpm -ql libmnl-devel
-> >   /usr/include/libmnl
-> >   /usr/include/libmnl/libmnl
-> >   /usr/include/libmnl/libmnl/libmnl.h
-> >   /usr/lib64/libmnl.so
-> >   /usr/lib64/pkgconfig/libmnl.pc
-> > 
-> > Suggested-by: Kai Liu <kai.liu@suse.com>
-> > Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-> > ---
-> > v2:
-> >   - use pkg-config
-> > ---
-> >   tools/testing/selftests/netfilter/Makefile | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
-> > index e4f845dd942b..8136c1fab7ab 100644
-> > --- a/tools/testing/selftests/netfilter/Makefile
-> > +++ b/tools/testing/selftests/netfilter/Makefile
-> > @@ -8,6 +8,7 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
-> >   	ipip-conntrack-mtu.sh conntrack_tcp_unreplied.sh \
-> >   	conntrack_vrf.sh nft_synproxy.sh
-> > +CFLAGS += $(shell pkg-config --cflags libmnl 2>/dev/null || echo "-I/usr/include/libmnl")
-> >   LDLIBS = -lmnl
-> >   TEST_GEN_FILES =  nf-queue
-> > 
-> 
-> Adding Pablo to the thread.
-> 
-> Pablo,
-> 
-> This looks good to me. I can take this through linux-kselftest tree.
-> Let me know either way.
-> 
-> Or if it is going through netfilter tree:
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Add kselftest_install directory to the .gitignore which is created while
+creation of tar ball of objects:
+make -C tools/testing/selftests gen_tar
 
-If this does not cause any issue when running tests in any other
-distros, then it is fine with me.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes in V2:
+Break up the patch in individual test patches
+Remove changes related to net selftest
+---
+ tools/testing/selftests/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index 055a5019b13c..cb24124ac5b9 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -3,6 +3,7 @@ gpiogpio-event-mon
+ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
++kselftest_install/
+ tpm2/SpaceTest.log
+ 
+ # Python bytecode and cache
+-- 
+2.30.2
+
