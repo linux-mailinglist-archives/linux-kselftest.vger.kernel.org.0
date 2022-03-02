@@ -2,72 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC7E4CB230
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Mar 2022 23:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8054CB30E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 00:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245417AbiCBWVv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Mar 2022 17:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S229624AbiCBXq3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Mar 2022 18:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245427AbiCBWVp (ORCPT
+        with ESMTP id S229590AbiCBXqZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Mar 2022 17:21:45 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A5D64C7;
-        Wed,  2 Mar 2022 14:21:00 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p17so2801272plo.9;
-        Wed, 02 Mar 2022 14:21:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
-        b=Yx2Tu1pyRlHwyWfAJpaPEYBK7U9Xa99I7npuIMQDOm1nT+bKEWdz9xuk9vvQiYr6J8
-         m1U1geFt2wL4cHfRXI9KOdoZNY51YM8PgOUStDGYaT8EXuRMtYZw20kOBukG/tLik6lf
-         I0+G0WYqOLGTVWbD+OP460WGiCHhUe2jIN76eywXx51y/KwDNyJGRD4pp7pwjc/wJiaI
-         vVbW1C767aYo5MU1Swv6OSimECLQ2Z0f+iBvSA6zIGTnAxQxOcDShEQS1e4HdBUH4EDX
-         r9S5UNIPWTXY9ud/6RiFoDm39kjo7s8VJhjQxeP4QymVnd8IOBYOvCBQHc3pIKgFQZBN
-         uf8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7nNxLa5fVLf7zBJyhXcOqLR/oQ9otRapOrLZOBmy+fs=;
-        b=Iq2JiWqmC/iD+Xk6YKx9kpodTGpfEQTgSi4IhwVkW+R0jdM+nxS8GnLu6LUSZyCo7p
-         jQoJDwBLoLmpddyimWTJWveVVgQS/h6DG5QJPHpZNQsJpedW+Xol2g0NRFmX36My3tTy
-         rxBEb/BpWuBi+2GOlYwz5xCmBxPUdF41qWFES8y170ZQxQ6Ho0gXfYvPkNCcCU3A8mQB
-         jBMXTr3llKq5CZicr0upJhgbo7PCBNm9taa6JaVwLwwujVDgxzOouzSXCmh6pgTrMJNG
-         Hew3rzKRAamBfV4VZl2JPfsmwmuhZG7bIgotVXEr4c7OvXSgqPOpLF14xfiw9ESZ0qGA
-         K+Vw==
-X-Gm-Message-State: AOAM533av3EAY7GNKuCJEI/t5BXJWFGs+IQyQMRnXVkiAQYo2NEZhVCf
-        zdSyeNM3gwENdnLJeGYkjFk=
-X-Google-Smtp-Source: ABdhPJw3LwqNN9faD/CN8tV5gcaPOEskQM2Wni+pDcj4Vlrbq+CBge0QXPo1hghH4Dd+dIkl+666fQ==
-X-Received: by 2002:a17:902:7786:b0:14d:51c6:21a8 with SMTP id o6-20020a170902778600b0014d51c621a8mr33480455pll.75.1646259659674;
-        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::2:156b])
-        by smtp.gmail.com with ESMTPSA id h6-20020a636c06000000b00363a2533b17sm151118pgc.8.2022.03.02.14.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 14:20:59 -0800 (PST)
-Date:   Wed, 2 Mar 2022 14:20:56 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     zohar@linux.ibm.com, shuah@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, revest@chromium.org,
-        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-Message-ID: <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+        Wed, 2 Mar 2022 18:46:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C04E5F251;
+        Wed,  2 Mar 2022 15:44:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6DC1139F;
+        Wed,  2 Mar 2022 15:19:08 -0800 (PST)
+Received: from [10.57.20.1] (unknown [10.57.20.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0FCF3F66F;
+        Wed,  2 Mar 2022 15:19:05 -0800 (PST)
+Message-ID: <77afb869-126d-c9e9-96a5-0aedc4e4569d@arm.com>
+Date:   Wed, 2 Mar 2022 23:19:04 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [next] Internal error: aarch64 BRK: f20003e8 at pc :
+ has_cpuid_feature
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Freescale Mailman List <freescale@lists.linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Qian Cai <quic_qiancai@quicinc.com>
+References: <CA+G9fYuX3nM5y_VD_0menGTF0AqDOZ85=ptmQ_3XoPAAxYMWyQ@mail.gmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CA+G9fYuX3nM5y_VD_0menGTF0AqDOZ85=ptmQ_3XoPAAxYMWyQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +61,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
-> Extend the interoperability with IMA, to give wider flexibility for the
-> implementation of integrity-focused LSMs based on eBPF.
-> 
-> Patch 1 fixes some style issues.
-> 
-> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
-> measurement capability of IMA without needing to setup a policy in IMA
-> (those LSMs might implement the policy capability themselves).
-> 
-> Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
-> 
-> Changelog
-> 
-> v2:
-> - Add better description to patch 1 (suggested by Shuah)
-> - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
-> - Move declaration of bpf_ima_file_hash() at the end (suggested by
->   Yonghong)
-> - Add tests to check if the digest has been recalculated
-> - Add deny test for bpf_kernel_read_file()
-> - Add description to tests
-> 
-> v1:
-> - Modify ima_file_hash() only and allow the usage of the function with the
->   modified behavior by eBPF-based LSMs through the new function
->   bpf_ima_file_hash() (suggested by Mimi)
-> - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
->   and bpf_ima_file_hash() can be called inside the implementation of
->   eBPF-based LSMs for this hook
-> 
-> Roberto Sassu (9):
->   ima: Fix documentation-related warnings in ima_main.c
->   ima: Always return a file measurement in ima_file_hash()
->   bpf-lsm: Introduce new helper bpf_ima_file_hash()
->   selftests/bpf: Move sample generation code to ima_test_common()
->   selftests/bpf: Add test for bpf_ima_file_hash()
->   selftests/bpf: Check if the digest is refreshed after a file write
->   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
->   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
->   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
->     policy
 
-We have to land this set through bpf-next.
-Please get the Acks for patches 1 and 2, so we can proceed.
+Hi Naresh
+
+On 02/03/2022 21:15, Naresh Kamboju wrote:
+> [Please ignore this email if it is already reported]
+> 
+> Linux next-20220228..next-20220302 running on Freescale Layerscape 2088A RDB
+> board the following kernel crash reported [1].
+> 
+> This kernel crash is only seen with kselftest-merge configs.
+
+This should be fixed by :
+
+https://lkml.kernel.org/r/20220302134225.159217-1-broonie@kernel.org
+
+Cheers
+Suzuki
+
+
+> 
+> metadata:
+>    git_ref: master
+>    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>    git_sha: 6705cd745adbbeac6b13002c7a30060f7b2568a5
+>    git_describe: next-20220228..next-20220302
+>    kernel-config: https://builds.tuxbuild.com/25kHVbzi7zV3Pzb1i4scZwtXzeA/config
+>    device: Freescale Layerscape 2088A RDB Board
+> 
+> Kernel crash:
+> [    0.000000] Detected PIPT I-cache on CPU0
+> [    0.000000] Internal error: aarch64 BRK: f20003e8 [#1] PREEMPT SMP
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+> 5.17.0-rc6-next-20220228 #1
+> [    0.000000] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+> [    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.000000] pc : has_cpuid_feature+0x104/0x10c
+> [    0.000000] lr : has_cpuid_feature+0x58/0x10c
+> [    0.000000] sp : ffffb7b2bf6b3d00
+> [    0.000000] x29: ffffb7b2bf6b3d00 x28: ffffb7b2be085690 x27: 0000000000000018
+> [    0.000000] x26: ffffb7b2be874e48 x25: ffffb7b2be874e70 x24: ffffb7b2beabc238
+> [    0.000000] x23: 0000000000000005 x22: ffffb7b2bfc05be0 x21: ffffb7b2bfc05728
+> [    0.000000] x20: 0000000000000020 x19: ffffb7b2be084950 x18: 0000000000000000
+> [    0.000000] x17: 6666666666663733 x16: 000000000001f000 x15: 0126000040000000
+> [    0.000000] x14: 1020110500000000 x13: 0000000002102211 x12: 0126000040000000
+> [    0.000000] x11: 0000000000000000 x10: 0000000000000043 x9 : 1211111110110222
+> [    0.000000] x8 : 0000000010011011 x7 : 0000013100000000 x6 : 0000000002102211
+> [    0.000000] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> [    0.000000] x2 : 0000000000000028 x1 : 0000000000000040 x0 : 0022220000000000
+> [    0.000000] Call trace:
+> [    0.000000]  has_cpuid_feature+0x104/0x10c
+> [    0.000000]  has_useable_gicv3_cpuif+0x24/0x94
+> [    0.000000]  update_cpu_capabilities+0x90/0x144
+> [    0.000000]  init_cpu_features+0x28c/0x2b4
+> [    0.000000]  cpuinfo_store_boot_cpu+0x58/0x68
+> [    0.000000]  smp_prepare_boot_cpu+0x4c/0x60
+> [    0.000000]  start_kernel+0x20c/0x77c
+> [    0.000000]  __primary_switched+0xc0/0xc8
+> [    0.000000] Code: b9402260 17ffffd7 d2800000 17ffffd6 (d4207d00)
+> [    0.000000] ---[ end trace 0000000000000000 ]---
+> [    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+> [1] https://lavalab.nxp.com/scheduler/job/851695#L565
+> [2] https://lavalab.nxp.com/scheduler/job/853258#L695
+
