@@ -2,187 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D514CC5B1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 20:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D39484CC5B3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 20:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiCCTKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 14:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S234555AbiCCTLI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 14:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbiCCTKW (ORCPT
+        with ESMTP id S233923AbiCCTLI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:10:22 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E9E187E30
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 11:09:36 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id em10-20020a17090b014a00b001bc3071f921so8550157pjb.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 11:09:36 -0800 (PST)
+        Thu, 3 Mar 2022 14:11:08 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7636F195303
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 11:10:21 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id f14so7002672ioz.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 11:10:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j7TJLOnN6hgODDuo1callp0lhdyoclIZFm0WJljlY8s=;
-        b=fVnhMSDNmlqJL+mlE4nr2PgQuPT9LGKEI5pLg6UMKecnlAeYN/FVWHDwnXJhWjrE/n
-         DmINVFplNUArYTWf3s3r3hSQ8aSUka6JL/mICjXhADVYWnkAJ2AMABSG1FR+9aEbBXaQ
-         MW2bjvj5LntyCBXcjwdKceOmtzdFX2X3FBxps=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=g/sFkbVANY6s1VOUMcV1aNrt4vhPUDmBJyNDe6I1g68=;
+        b=eGSJxOjmE0cIxMw/fXCT0KGZpbtCKnaB3ZK22ZDwn9JetqtO0qIlWKv5gNiQ4VvQhb
+         ecfPJDL2+i2614IQBximAIcYRu2T8jWUZD6y8FJNlo1ERgtYyNcOyAfVE9IfGIXwBICT
+         9QEn9Jv+nXY6+G1BdKGZman6Btp1jus5+rpYA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j7TJLOnN6hgODDuo1callp0lhdyoclIZFm0WJljlY8s=;
-        b=cCDAs+fgVrcBww04SJI2XM8d8OUdnmGBHplnuvlMYrFUxgPW61KDVp8VFzlRReOBSR
-         0fL8BF2Of6oM/XzY7Vx2godIWA1tY46VM0LVenMyrEVqWOvlipXT6UzAiYfnT8OdfrWB
-         WIkxrhxpo92zx4d9xd5DP9fvAfHJ9+bcVC23P6/VGJVq0EHR8pbGpZimHAJ2s1TXWP4I
-         3sFILqF1nfADU9Q5fEs986XdTsxLotUTYEdE6DEMLfHfTtmoT+WCb8IIG2cowZCOzph3
-         IBDzs5RlDx7J6kpqieRrlObqivSt96WcU9DjJwOzfzcMdbJqcm1mwycvj+q51RBQWcP9
-         902Q==
-X-Gm-Message-State: AOAM532gD2bqK3DFtB/YQRAnLdylE2szlryFly9PWdjNr/xJUksAQYS+
-        xXxAzllfaerKdTo7iCKhVkQBQA==
-X-Google-Smtp-Source: ABdhPJyfvwYzCoBtdXSSCDsYpSdESFLlaFH3e43QTFvMWUmnNTc6eJPUCpEnqo8wvQrcrYNq7n2KPQ==
-X-Received: by 2002:a17:90b:1c11:b0:1bf:c13:e4a3 with SMTP id oc17-20020a17090b1c1100b001bf0c13e4a3mr5279740pjb.188.1646334575652;
-        Thu, 03 Mar 2022 11:09:35 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d3-20020a056a00244300b004bc9397d3d0sm3198347pfj.103.2022.03.03.11.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 11:09:35 -0800 (PST)
-Date:   Thu, 3 Mar 2022 11:09:34 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Dan Li <ashimida@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Message-ID: <202203031105.A1B4CAE6@keescook>
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=g/sFkbVANY6s1VOUMcV1aNrt4vhPUDmBJyNDe6I1g68=;
+        b=B3mRLiKJ4RKNmEA0F3pkl+3/TBPRQ8ueHnhgnIha+1eLaU+jv9vfoKPiPeIS3V8+NZ
+         bl+6V0G2DFwamYwXtk4/eO9hw3WjtQIPn4IFrNBOc0kSkFWWzPO43v8S5LCD8exQ+H7G
+         2TGwIC7YN/oIAik1maJg+n5Yn3f4E42nuiBaUAsiFRDcDHMXekZdcF517DUKwXd5YlEt
+         0yceuo+S5sQWi5dHurxLiqk8wxh/syKqsmlCwR40qGJirbEqqc+D4dPdSuzPM45k/4ec
+         sgR3TkFjon6Z0F8RVjwzo2TQZ4wE2B02KAVe9CR7eDSvOXiRUQA7qVz55CTkeKlKAEX+
+         S5pQ==
+X-Gm-Message-State: AOAM530N0wYx/36JUxC6mUahAsJQt+5T1ThJ2MJ6k4ZtVR2UiSdAwAkA
+        0y67GirJJcO+6Ty8Y36KHt1BJg==
+X-Google-Smtp-Source: ABdhPJw05Uhuane2sSjF/DZ6Wk7V2Zj5SR03jKOcehMNVhhorOnQI8dC5GCpGPoySCXO1uAnVUqIPQ==
+X-Received: by 2002:a5d:83c8:0:b0:604:c09b:259c with SMTP id u8-20020a5d83c8000000b00604c09b259cmr28740939ior.106.1646334620771;
+        Thu, 03 Mar 2022 11:10:20 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id q190-20020a6b8ec7000000b00638d75f5cd0sm2802277iod.47.2022.03.03.11.10.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Mar 2022 11:10:20 -0800 (PST)
+Subject: Re: [PATCH v2] selftests: netfilter: fix a build error on openSUSE
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Geliang Tang <geliang.tang@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Kai Liu <kai.liu@suse.com>, netfilter-devel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <5ee95e93a11a239df8e09d059da25a4eaa5725ba.1646198836.git.geliang.tang@suse.com>
+ <8cbf1231-0da5-c8a0-d66b-1488633d9895@linuxfoundation.org>
+ <Yh+wulh/nIkFeFmz@salvia>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c2318ebe-beaa-64b8-6c6c-ee552cb35e0f@linuxfoundation.org>
+Date:   Thu, 3 Mar 2022 12:10:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203031010.0A492D114@keescook>
+In-Reply-To: <Yh+wulh/nIkFeFmz@salvia>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
-> Though, having the IS_ENABLED in there makes me wonder if this test
-> should instead be made _survivable_ on failure. Something like this,
-> completely untested:
+On 3/2/22 11:00 AM, Pablo Neira Ayuso wrote:
+> On Wed, Mar 02, 2022 at 10:11:11AM -0700, Shuah Khan wrote:
+>> On 3/1/22 10:29 PM, Geliang Tang wrote:
+>>> This patch fixed the following build error on openSUSE Leap 15.3:
+>>>
+>>> =======================================================================
+>>>    gcc     nf-queue.c -lmnl -o tools/testing/selftests/netfilter/nf-queue
+>>>    nf-queue.c:13:10: fatal error: libmnl/libmnl.h: No such file or directory
+>>>     #include <libmnl/libmnl.h>
+>>>              ^~~~~~~~~~~~~~~~~
+>>>    compilation terminated.
+>>> =======================================================================
+>>>
+>>> It is because libmnl.h is put in the directory of
+>>> "/usr/include/libmnl/libmnl/" on openSUSE, not "/usr/include/libmnl/":
+>>>
+>>>    > rpm -ql libmnl-devel
+>>>    /usr/include/libmnl
+>>>    /usr/include/libmnl/libmnl
+>>>    /usr/include/libmnl/libmnl/libmnl.h
+>>>    /usr/lib64/libmnl.so
+>>>    /usr/lib64/pkgconfig/libmnl.pc
+>>>
+>>> Suggested-by: Kai Liu <kai.liu@suse.com>
+>>> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+>>> ---
+>>> v2:
+>>>    - use pkg-config
+>>> ---
+>>>    tools/testing/selftests/netfilter/Makefile | 1 +
+>>>    1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
+>>> index e4f845dd942b..8136c1fab7ab 100644
+>>> --- a/tools/testing/selftests/netfilter/Makefile
+>>> +++ b/tools/testing/selftests/netfilter/Makefile
+>>> @@ -8,6 +8,7 @@ TEST_PROGS := nft_trans_stress.sh nft_fib.sh nft_nat.sh bridge_brouter.sh \
+>>>    	ipip-conntrack-mtu.sh conntrack_tcp_unreplied.sh \
+>>>    	conntrack_vrf.sh nft_synproxy.sh
+>>> +CFLAGS += $(shell pkg-config --cflags libmnl 2>/dev/null || echo "-I/usr/include/libmnl")
+>>>    LDLIBS = -lmnl
+>>>    TEST_GEN_FILES =  nf-queue
+>>>
+>>
+>> Adding Pablo to the thread.
+>>
+>> Pablo,
+>>
+>> This looks good to me. I can take this through linux-kselftest tree.
+>> Let me know either way.
+>>
+>> Or if it is going through netfilter tree:
+>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
+> If this does not cause any issue when running tests in any other
+> distros, then it is fine with me.
 > 
-> #ifdef CONFIG_ARM64
-> static noinline void lkdtm_scs_set_lr(unsigned long *addr)
-> {
-> 	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 	*lr = addr;
-> }
-> 
-> /* Function with __noscs attribute clears its return address. */
-> static noinline void __noscs lkdtm_noscs_set_lr(unsigned long *addr)
-> {
-> 	unsigned long **lr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 	*lr = addr;
-> }
-> #endif
-> 
-> 
-> void lkdtm_CFI_BACKWARD_SHADOW(void)
-> {
-> #ifdef CONFIG_ARM64
-> 
-> 	/* Verify the "normal" condition of LR corruption working. */
-> 	do {
-> 		/* Keep label in scope to avoid compiler warning. */
-> 		if ((volatile int)0)
-> 			goto unexpected;
-> 
-> 		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-> 		lkdtm_noscs_set_lr(&&expected);
-> 
-> unexpected:
-> 		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-> 		break;
-> 
-> expected:
-> 		pr_err("ok: lr corruption redirected without scs.\n");
-> 	} while (0);
-> 
-> 
-> 	do {
-> 		/* Keep labe in scope to avoid compiler warning. */
-> 		if ((volatile int)0)
-> 			goto good_scs;
-> 
-> 		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> 		lkdtm_scs_set_lr(&&bad_scs);
-> 
-> good_scs:
-> 		pr_info("ok: scs takes effect.\n");
-> 		break;
-> 
-> bad_scs:
-> 		pr_err("FAIL: return address rewritten!\n");
-> 		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-> 	} while (0);
-> #else
-> 	pr_err("XFAIL: this test is arm64-only\n");
-> #endif
-> }
-> 
-> And we should, actually, be able to make the "set_lr" functions be
-> arch-specific, leaving the test itself arch-agnostic....
 
-Yeah, as a tested example, this works for x86_64, and based on what you
-had, I'd expect it to work on arm64 too:
+I tested this on Ubuntu 21.10 and worked for me. I will apply this for
+Linux 5.18-rc1 then.
 
-#include <stdio.h>
-
-static __attribute__((noinline))
-void set_return_addr(unsigned long *expected, unsigned long *addr)
-{
-    /* Use of volatile is to make sure final write isn't seen as a dead store. */
-    unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-
-    /* Make sure we've found the right place on the stack before writing it. */
-    if (*ret_addr == expected)
-        *ret_addr = addr;
-}
-
-volatile int force_label;
-int main(void)
-{
-    do {
-        /* Keep labels in scope. */
-        if (force_label)
-            goto normal;
-        if (force_label)
-            goto redirected;
-
-        set_return_addr(&&normal, &&redirected);
-normal:
-        printf("I should be skipped\n");
-        break;
-redirected:
-        printf("Redirected\n");
-    } while (0);
-
-    return 0;
-}
-
-
-It does _not_ work under Clang, though, which I'm still looking at.
-
--- 
-Kees Cook
+thanks,
+-- Shuah
