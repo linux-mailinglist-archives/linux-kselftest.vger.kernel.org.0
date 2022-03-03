@@ -2,121 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EB54CC851
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 22:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8272B4CC8B5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 23:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236642AbiCCVq5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 16:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
+        id S236760AbiCCWUo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 17:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236639AbiCCVq4 (ORCPT
+        with ESMTP id S233366AbiCCWUo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:46:56 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFE7546B1
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 13:46:10 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id x14so5089156ill.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 13:46:10 -0800 (PST)
+        Thu, 3 Mar 2022 17:20:44 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4FD10A7E9
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 14:19:57 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id u2so5494884ioc.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 14:19:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dK/IOow+P5v9xYBFUtB5XaIy2vFaJ6VtzofO9XJ2vLA=;
-        b=iaUIzEybhNynRX57A9NPhLVQR8qWsrW87j7I2gP6PfPhB1N2KJLDGvER3L91GYIYfn
-         kx4r6NK8bwnmnvZrmxOmn5r5YGx78vycqExakQs/gIf+aQtfsFWLFv7Mbo/h4kK+Fby1
-         +ku6NcFXonpuW2pUXBf80x6Inw567tXGOV9Aw=
+        bh=Uy2afJ9ZPvmmHWI6b6VB2HM3H9arIDEQAaJ8qNi/u4s=;
+        b=AlMT6ljgLpZMvzgD59xHREgkpKiwKbtEuapOcBDIpPtJKRqPOXV5oO+kmZCujKdnEM
+         fD3joPO6+cvZ7l8OTW9lKXJOo2YStlCEYiRdIiJOCEnB7aHGVQhrJZTnpOunVg4cDg58
+         ncYE0pwb5SnXjTa6giQK3X4pbcCr1szj2cyHg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=dK/IOow+P5v9xYBFUtB5XaIy2vFaJ6VtzofO9XJ2vLA=;
-        b=tq9/O/PPwasIeetWNXM7X+XKAfSUbJRBkeTwaCOy54FVCY/4Zrjw8dbmd9xM1rizDY
-         sywTYQfPG9wzggKxA8QD6Dsp4GwSuSPdZQsJuZwQl5qSoZAJKYpEQeQiPba2533RsDDl
-         MWlHauQDSUbA7JiNkao4m/ZE4OJ0zEby7G9vT0igY5CRlN+3pnBAMd2//6p4XLxrJ2Qs
-         b0fnkQhD0RftIiIogU4/y/mHKoEnZsIBm9vMgXPYVs8Q1j8aTAr7kom7MJ5alt7ntSlN
-         Nv7o76gcg7TTYnaFt4M8QOcWLlhlPEFrrZEQJHvdTfrj00lyOrMQW+FXuZ7adLUoxzDS
-         H8Aw==
-X-Gm-Message-State: AOAM532KWHgf1vWFrqKTQeM+wG+V6COVIaqbXc6HPDOlotAuwcHAUITo
-        yUu0dXmB2bKzK5d/pSjMG0BSbQ==
-X-Google-Smtp-Source: ABdhPJxFTfoJrFkecC1ukZMVcqeTeGXHhkLuHmnCG5OGT8GcD+G3FBEHb10TRMnae/SeoXVaG9ANcA==
-X-Received: by 2002:a92:c888:0:b0:2c2:fb23:1cf with SMTP id w8-20020a92c888000000b002c2fb2301cfmr16145861ilo.301.1646343969977;
-        Thu, 03 Mar 2022 13:46:09 -0800 (PST)
+        bh=Uy2afJ9ZPvmmHWI6b6VB2HM3H9arIDEQAaJ8qNi/u4s=;
+        b=EkiOBzVRv8Cpy9pMbhWoegjijorxhqaOTNfbq5lQbiU+fV5uPS9t+HtUXh6HyzStlA
+         gFuiKm3kv4EuF6CcIvq4OkriKilavaGMq5HeNbZ5BkpjVpMnQdXQ2Cq5Sf5DmlhkBf7r
+         wltA69oEWvq5bEkMk1e+XE/0cMikOEhJWFNiWEevDlQ9zvXi4SJ01HzPKPryPG627Hqy
+         1PrXg26UCH03sYYmHqA0jop2dYPBP93ZlvqlkaXHPXdocNh4PuCvT7aoqvb94rc4BmJY
+         xOGLJqsF1HB3peBR7ZrhC2u+s61D1VfHF+3jizMnzDigwnHvN0Wa1LDPmbfi/AeXqEyc
+         O2Ow==
+X-Gm-Message-State: AOAM530Laf7n9FckIASOd+4UmcapG1t8OEaMlKvpW3/DhviqqCRxrX1A
+        6NG2P/paIME98BXHA4/UgykYKg==
+X-Google-Smtp-Source: ABdhPJwyV0kCAYS8zhtpz6l8KGJh5RlhH2rviKwOeDCFKFlpKmMI3raFfSdWuPxguPN1PV2EMTVkDg==
+X-Received: by 2002:a05:6602:242a:b0:640:746c:c2bd with SMTP id g10-20020a056602242a00b00640746cc2bdmr28851332iob.74.1646345997073;
+        Thu, 03 Mar 2022 14:19:57 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id b10-20020a056602000a00b0064074921986sm2779927ioa.41.2022.03.03.13.46.09
+        by smtp.gmail.com with ESMTPSA id i14-20020a056e021d0e00b002c60beec66asm1878556ila.78.2022.03.03.14.19.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 13:46:09 -0800 (PST)
-Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        kernelci@groups.io, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
+        Thu, 03 Mar 2022 14:19:56 -0800 (PST)
+Subject: Re: [PATCH V2] selftests: Fix build when $(O) points to a relative
+ path
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     kernel@collabora.com, kernelci@groups.io,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220224212335.3045905-1-usama.anjum@collabora.com>
- <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
- <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org>
- <87o82mkhif.fsf@collabora.com>
+References: <20220216223817.1386745-1-usama.anjum@collabora.com>
+ <46489cd9-fb7a-5a4b-7f36-1c9f6566bd93@collabora.com>
+ <63870982-62ba-97f2-5ee2-d4457a7a5cdb@linuxfoundation.org>
+ <9a643612-ea85-7b28-a792-770927836d43@linuxfoundation.org>
+ <ddb52ffe-5016-cc5a-3af4-a0a8e7b3e119@collabora.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ee9b8c8b-0d27-bd01-e10d-9062c32f2486@linuxfoundation.org>
-Date:   Thu, 3 Mar 2022 14:46:08 -0700
+Message-ID: <a6096266-5063-d353-924d-cb0379d25380@linuxfoundation.org>
+Date:   Thu, 3 Mar 2022 15:19:55 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <87o82mkhif.fsf@collabora.com>
+In-Reply-To: <ddb52ffe-5016-cc5a-3af4-a0a8e7b3e119@collabora.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/3/22 11:39 AM, Gabriel Krisman Bertazi wrote:
-> Shuah Khan <skhan@linuxfoundation.org> writes:
-> 
->> On 2/28/22 2:37 AM, David Hildenbrand wrote:
->>> On 24.02.22 22:23, Muhammad Usama Anjum wrote:
->>>> This introduces three tests:
->>>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
->>>> check if the SD bit flipped.
->>>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
->>>> 3) Check soft-dirty on huge pages
+On 2/26/22 12:32 AM, Muhammad Usama Anjum wrote:
+> On 2/26/22 2:13 AM, Shuah Khan wrote:
+>> On 2/25/22 11:01 AM, Shuah Khan wrote:
+>>> On 2/25/22 10:22 AM, Muhammad Usama Anjum wrote:
+>>>> Any thoughts about it?
 >>>>
->>>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
->>>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
->>>> same issue that he fixed, and this test would have caught it.
->>>>
->>> A note that madv_populate.c already contains some SOFTDIRTY tests
->>> regarding MADV_POPULATE. Eventually we want to factor out
->>> softdirty/pagemap handling+checks for easier reuse.
+>>>
+>>> No to post please.
+>>>
+>>>> On 2/17/22 3:38 AM, Muhammad Usama Anjum wrote:
+>>>>> Build of bpf and tc-testing selftests fails when the relative path of
+>>>>> the build directory is specified.
+>>>>>
+>>>>> make -C tools/testing/selftests O=build0
+>>>>> make[1]: Entering directory
+>>>>> '/linux_mainline/tools/testing/selftests/bpf'
+>>>>> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.
+>>>>> Stop.
+>>>>> make[1]: Entering directory
+>>>>> '/linux_mainline/tools/testing/selftests/tc-testing'
+>>>>> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.
+>>>>> Stop.
+>>>>>
+>>>>> Makefiles of bpf and tc-testing include scripts/Makefile.include file.
+>>>>> This file has sanity checking inside it which checks the output path.
+>>>>> The output path is not relative to the bpf or tc-testing. The sanity
+>>>>> check fails. Expand the output path to get rid of this error. The
+>>>>> fix is
+>>>>> the same as mentioned in commit 150a27328b68 ("bpf, preload: Fix build
+>>>>> when $(O) points to a relative path").
+>>>>>
+>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>> ---
+>>>>> Changes in V2:
+>>>>> Add more explaination to the commit message.
+>>>>> Support make install as well.
 >>>
 >>
->> Is this patch unnecessary then?
+>> Does the same happen when you use make kselftest-all?
+> No, this problem doesn't appear when using make kselftest-all.
 > 
-> It is not unnecessary since the madv test doesn't cover the bug tested
-> here, afaik.  But, as mentioned when I originally submitted this patch,
-> it should be merged into selftests/vm/madv_populate.c or, at least,
-> reuse that existing infrastructure.
+> As separate output directory build was broken in kernel's top most
+> Makefile i.e., make kselftest-all O=dir. (I've sent separate patch to
+> fix this:
+> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/)
+> So people must have been using kselftest's internal Makefile directly to
+> keep object files in separate directory i.e., make -C
+> tools/testing/selftests O=dir and in this way the build of these tests
+> (bpf, tc-testing) fail. This patch is fixing those build errors.
 > 
-> https://lore.kernel.org/lkml/87lf553z5g.fsf@collabora.com/
+>>
+>> I am unable to reproduce what you are seeing?
+> make -C tools/testing/selftests O=dir should reproduce this problem.
 > 
 
-Oops this one came in a few months ago and appears to have slipped
-through and didn't get the right attention. Sorry about that.
-
-Please resend the patch and cc all the everybody on this thread.
-
-I would like to have your patch reviewed and looked at first. This
-patch needs rework sine it has several comments to be addressed.
+Applied to linux-kselftest next for Linux 5.18-rc1.
 
 thanks,
 -- Shuah
