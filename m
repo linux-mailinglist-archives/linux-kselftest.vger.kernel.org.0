@@ -2,126 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EA84CBB05
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 11:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9C64CBC1B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 12:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiCCKIs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 05:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S232137AbiCCLH3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 06:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiCCKIr (ORCPT
+        with ESMTP id S231575AbiCCLH2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 05:08:47 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A9516EAB3;
-        Thu,  3 Mar 2022 02:08:01 -0800 (PST)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K8RTz6Vc5z67Wgc;
-        Thu,  3 Mar 2022 18:06:47 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 3 Mar 2022 11:07:59 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Thu, 3 Mar 2022 11:07:59 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-Thread-Topic: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-Thread-Index: AQHYLiawVJiGIoJTAUWtCyWVLc4li6ysmoEAgADV/tA=
-Date:   Thu, 3 Mar 2022 10:07:59 +0000
-Message-ID: <c9ef19a0203e4e9eb9416fa84d034db0@huawei.com>
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
- <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 3 Mar 2022 06:07:28 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B8E17C41E;
+        Thu,  3 Mar 2022 03:06:43 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id B1FAF1F45670
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646305602;
+        bh=04+GErvRLlfhBjoyh0q1PNEzVX2LD6M2KAvb8xvne10=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nmZuTxkJ0YO9axs+PIMgA7q1yD5MiFSzwbOVNWi2UAngUsbTM9Rwj0SbZ129WrTuc
+         CLs9+0kOKc5C6ZZ+pTp1bzeqpfNGanYeKeGZ3z8OiysCyy8NWOaaHlphnMS/sZMna7
+         wh6bUcHFQtXmtD97VHGFl4R1vbycqhyQTUznNa4TFocxigJpFVw66xtHkGAgrYmx+O
+         NC0Pe4Zvf8VBwwvFYlMfZF0vSD2CGejdRpNss9vVXrrjTjt1EKXLlQkHPngB+bBdUs
+         re2/OtE6ID6xAJIpvoLl+O+ALOw8FTf6zWTXJSyA4IVGfHt3skC+jLaIGzVA7G2kWP
+         qCSAzEq5maxRw==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/interpreter: fix separate directory build
+Date:   Thu,  3 Mar 2022 16:06:28 +0500
+Message-Id: <20220303110629.2072927-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> Sent: Wednesday, March 2, 2022 11:21 PM
-> On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
-> > Extend the interoperability with IMA, to give wider flexibility for the
-> > implementation of integrity-focused LSMs based on eBPF.
-> >
-> > Patch 1 fixes some style issues.
-> >
-> > Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
-> > measurement capability of IMA without needing to setup a policy in IMA
-> > (those LSMs might implement the policy capability themselves).
-> >
-> > Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
-> >
-> > Changelog
-> >
-> > v2:
-> > - Add better description to patch 1 (suggested by Shuah)
-> > - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
-> > - Move declaration of bpf_ima_file_hash() at the end (suggested by
-> >   Yonghong)
-> > - Add tests to check if the digest has been recalculated
-> > - Add deny test for bpf_kernel_read_file()
-> > - Add description to tests
-> >
-> > v1:
-> > - Modify ima_file_hash() only and allow the usage of the function with the
-> >   modified behavior by eBPF-based LSMs through the new function
-> >   bpf_ima_file_hash() (suggested by Mimi)
-> > - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
-> >   and bpf_ima_file_hash() can be called inside the implementation of
-> >   eBPF-based LSMs for this hook
-> >
-> > Roberto Sassu (9):
-> >   ima: Fix documentation-related warnings in ima_main.c
-> >   ima: Always return a file measurement in ima_file_hash()
-> >   bpf-lsm: Introduce new helper bpf_ima_file_hash()
-> >   selftests/bpf: Move sample generation code to ima_test_common()
-> >   selftests/bpf: Add test for bpf_ima_file_hash()
-> >   selftests/bpf: Check if the digest is refreshed after a file write
-> >   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
-> >   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
-> >   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
-> >     policy
-> 
-> We have to land this set through bpf-next.
-> Please get the Acks for patches 1 and 2, so we can proceed.
+Separate directory build fails of this test as headers include path isn't
+set correctly in that case. Fix it by including KHDR_INCLUDES.
 
-Ok. Mimi, do you have time to have a look at those patches?
+make -C tools/testing/selftests O=build1
+gcc -Wall -O2 -I../../../../usr/include    trust_policy_test.c -lcap -o /linux_mainline/build1/kselftest/interpreter/trust_policy_test
+trust_policy_test.c:14:10: fatal error: linux/trusted-for.h: No such file or directory
+   14 | #include <linux/trusted-for.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
 
-Thanks
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/interpreter/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Roberto
+diff --git a/tools/testing/selftests/interpreter/Makefile b/tools/testing/selftests/interpreter/Makefile
+index 7402fdb6533f..51dde8e01e32 100644
+--- a/tools/testing/selftests/interpreter/Makefile
++++ b/tools/testing/selftests/interpreter/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-CFLAGS += -Wall -O2 -I$(khdr_dir)
++CFLAGS += -Wall -O2 -I$(khdr_dir) $(KHDR_INCLUDES)
+ LDLIBS += -lcap
+ 
+ src_test := $(wildcard *_test.c)
+-- 
+2.30.2
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
