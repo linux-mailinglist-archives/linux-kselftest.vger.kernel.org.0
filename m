@@ -2,103 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825834CC8C4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 23:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8E24CC93C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 23:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbiCCWXx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 17:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S237013AbiCCWkd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 17:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236832AbiCCWXx (ORCPT
+        with ESMTP id S237002AbiCCWkd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 17:23:53 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8A610C51A
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 14:23:06 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id w7so7574195ioj.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 14:23:06 -0800 (PST)
+        Thu, 3 Mar 2022 17:40:33 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1653B1533A7;
+        Thu,  3 Mar 2022 14:39:47 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id t14so5945750pgr.3;
+        Thu, 03 Mar 2022 14:39:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZDyiSlnb5GR7xrn7fUYkxCnceCJroYsxkkmzYk8uQRE=;
-        b=ag53/yTwXTxhCQbM9pPl3IpMKr6LjiZSdosbbviofABa7AdlyoMrCLv3bsdPqVv0p+
-         iTOqkHdRZMYsm1ilIzRYnbi+r7JNcoJ4X3pY1ysHIGDt/zfsfN5H9VBwI2yWSFey6f8l
-         pSfHfRONoEURjqigSBC6VHjz3rkJEfEuYxQwI=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eWDKJRYY6oFHnn34EJL4pDVUO+3dJRu5ycnBE7hvdes=;
+        b=AkhtvnwAqD27ux5bXVvk0MLcX5a1fieqcywUeIsJJLTtPW1wTcmKUfWWup/0XyUZyB
+         tyy8NXFcZCVVONQZnGmiY7HOEx+mLa7KY24aLknoh6adS03prOaEDJSqugK2/asB2ads
+         gkliC/omB/xF9qNKjqxkjDcJrHfCsH2hs2XuwensYsXGooDm+lOgZBm0+hgrgqDwUOPU
+         xXi+tKFg6yxyonhnNXZcPU8PPzvkptfnd57CnBZwC93wEENXFWzmkcWINhC87CdZ5ycA
+         tMEtY6sZf+a/YcYar71kkAM1uC6XIwUIwdm6sFaU0bnh9818K0c74zTwUJRTXKxN1Gtg
+         tM0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZDyiSlnb5GR7xrn7fUYkxCnceCJroYsxkkmzYk8uQRE=;
-        b=FlUENQ9mhYHLhEviI3oetqL2IMpaW1krbCbbuTep+SY/6IgaMmCRnlUAs8yKS2UXML
-         7xYIfCkdaiUKGOiJa5EogkpagRnyte7HjMAY7BVLhnXqKHATk3jJL1BUPDUYIcYF3XUo
-         LaXpvGuf4m94VsP02w9orQ30HcdwAhnsFsZ+NxEezzQYVZ8dzIna4/XUvE6yPpV4G55W
-         2zeGu5oQ84kPl6InomGifoglMMJun/Lex8+41IM4L1A74vy8XJTGkMbbY8JIaN9C3eqI
-         xDkOuY7noA1sPEVydn8US+UbYVje2Jo+n5Uxl6BSXjNCC5mUVo7TvTx9frIdH/3qhtPY
-         LAxw==
-X-Gm-Message-State: AOAM531RACucekC8WPzMAucgUxiyyfvkfbDqP+XTKYcfd+E75W30PSIM
-        fQRJKbSdw5pLvT241M5FPe4kow==
-X-Google-Smtp-Source: ABdhPJz7kZop8pzmlRYqjAVCDw9u/15uKLiDsRH78UZ9ON8/oBompeYFzxt2VeTy/Z9I+5Yqesv23g==
-X-Received: by 2002:a05:6638:160d:b0:314:e6e5:4699 with SMTP id x13-20020a056638160d00b00314e6e54699mr30638055jas.47.1646346185995;
-        Thu, 03 Mar 2022 14:23:05 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id t14-20020a056e02160e00b002c60907ec07sm3009032ilu.62.2022.03.03.14.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 14:23:05 -0800 (PST)
-Subject: Re: [PATCH V2 3/3] selftests: kvm: add generated file to the
- .gitignore
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220302180121.1717581-1-usama.anjum@collabora.com>
- <20220302180121.1717581-3-usama.anjum@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d319d47e-0b98-fe94-8b24-65fa8a61889b@linuxfoundation.org>
-Date:   Thu, 3 Mar 2022 15:23:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eWDKJRYY6oFHnn34EJL4pDVUO+3dJRu5ycnBE7hvdes=;
+        b=AUgRVBP+0b1iTVltrNk+Cd1oOOznx7F2KsW5/sUlkytUsU58pRQwNty87wleMT9xCn
+         Z75O0bGLTBctX/46j+17/jo7l4kqAwuaMiBTRCqTGYvnbA3wq2AlUbHgC8Lt6Q/OFKyl
+         OulwI0n0v1Z2hV5HHneWWBnf0KbC7NptC0HFJIVju9V8Pwep3E99GWKXLadm+wxWZ7IF
+         jIWR3ogPa8+hd9JqpDxsUWTF3ADRutKgCILW3fg65jmj4gNwtISaYa/oa+UNwe4OkAyK
+         G+4a1zz22Rz29RgT0cPjJb3ZZKifE6CSq3I+ukPZpHiFPHVwe4p2xdAPAccZxRCPy53/
+         k79w==
+X-Gm-Message-State: AOAM532o6p2Vmo7A7o7TKeBeo2hAK0kt0FxpeU/J6OfWjZIejFSN2aCL
+        ohWTwZDcZz8i8vyVVpDUQ5dXiIpm0NptIBf2nE0=
+X-Google-Smtp-Source: ABdhPJzfIILGrDAUb4PgBCLExnCATh8xb3uP0X+L+S7XB9RvY14Y9Xzz1WzFDUu+/9NXgaaJtCTV9ZBHJQF/7RJuvBk=
+X-Received: by 2002:a65:5386:0:b0:375:ec6f:667f with SMTP id
+ x6-20020a655386000000b00375ec6f667fmr29590342pgq.543.1646347186560; Thu, 03
+ Mar 2022 14:39:46 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220302180121.1717581-3-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+ <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
+ <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
+ <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
+ <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
+ <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com> <b6bf8463c1b370a5b5c9987ae1312fd930d36785.camel@linux.ibm.com>
+In-Reply-To: <b6bf8463c1b370a5b5c9987ae1312fd930d36785.camel@linux.ibm.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 3 Mar 2022 14:39:35 -0800
+Message-ID: <CAADnVQKfh3Z1DXJ3PEjFheQWEDFOKQjuyx+pkvqe6MXEmo7YHQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     KP Singh <kpsingh@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Florent Revest <revest@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/2/22 11:01 AM, Muhammad Usama Anjum wrote:
-> Add hyperv_svm_test to the .gitignore file.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   tools/testing/selftests/kvm/.gitignore | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 7903580a48ac..4d11adeac214 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -21,6 +21,7 @@
->   /x86_64/hyperv_clock
->   /x86_64/hyperv_cpuid
->   /x86_64/hyperv_features
-> +/x86_64/hyperv_svm_test
->   /x86_64/mmio_warning_test
->   /x86_64/mmu_role_test
->   /x86_64/platform_info_test
-> 
+On Thu, Mar 3, 2022 at 11:13 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Thu, 2022-03-03 at 19:14 +0100, KP Singh wrote:
+> >
+> > Even Robert's use case is to implement IMA policies in BPF this is still
+> > fundamentally different from IMA doing integrity measurement for BPF
+> > and blocking this patch-set on the latter does not seem rational and
+> > I don't see how implementing integrity for BPF would avoid your
+> > concerns.
+>
+> eBPF modules are an entire class of files currently not being measured,
+> audited, or appraised.  This is an integrity gap that needs to be
+> closed.  The purpose would be to at least measure and verify the
+> integrity of the eBPF module that is going to be used in lieu of
+> traditional IMA.
 
-Applied to linux-kselftest next for Linux 5.18-rc1
+Mimi,
 
-thanks,
--- Shuah
+. There is no such thing as "eBPF modules". There are BPF programs.
+They cannot be signed the same way as kernel modules.
+We've been working on providing a way to sign them for more
+than a year now. That work is still ongoing.
+
+. IMA cannot be used for integrity check of BPF programs for the same
+reasons why kernel module like signing cannot be used.
+
+. This patch set is orthogonal.
