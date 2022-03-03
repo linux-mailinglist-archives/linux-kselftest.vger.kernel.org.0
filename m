@@ -2,191 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09BB4CB809
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 08:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A5A4CB9D5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 10:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiCCHoi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 02:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S231793AbiCCJHk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 04:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCCHoh (ORCPT
+        with ESMTP id S231785AbiCCJHh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 02:44:37 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A6F1637FF;
-        Wed,  2 Mar 2022 23:43:51 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0V66qjBS_1646293420;
-Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V66qjBS_1646293420)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 03 Mar 2022 15:43:46 +0800
-From:   Dan Li <ashimida@linux.alibaba.com>
-To:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        ashimida@linux.alibaba.com, gregkh@linuxfoundation.org,
-        linux@roeck-us.net, keescook@chromium.org,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Thu, 3 Mar 2022 04:07:37 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E255A17776A
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 01:06:52 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id q9-20020a17090a7a8900b001bf0a7d9dfdso877333pjf.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 01:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2bQdkuF0SOPnoGthP45kPV6bs5nvMHTPUBqrBi7KDmE=;
+        b=CwcLSYEWIYkwRIiSSoxKp+6DeCkwVywNCvkORnPKqsNTneqEIEtKoa1z3mwpqSO5W4
+         C4EHKgRYdUXjCIOSBiph61mK8NoMu3VVGZdQoh1vzbAAj6PmbcMhAyb+4ErMMn/svnDL
+         FP8rthWhTrzh2Va1j3Zfzp+FYQz4qCJD1gVJd7MbjNd/ghRt2JDE69B0eP4rYOZJWtNk
+         iy8+/9w5gmFETfLE9rVgJeZuSKmAoHiJKgxbZtHPkGMaD2ChCzD6jJS3mXJoVYXdg2Zb
+         Nn0/DhX7zv8c3bY7H6zzF0hk+Q/LD8THdUGTyGynCcth2eoJxJBm37j1FQ/tcNYb/tBi
+         a+Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2bQdkuF0SOPnoGthP45kPV6bs5nvMHTPUBqrBi7KDmE=;
+        b=c7fd/VxbTb0q6tfF+RPolXSvpbO2kQNDURL8bMwcECF+jpJw5dRXx1Wup4r96AU90+
+         uyWgG/xNF5rceHRZrE+wr1k/Ck2ibMvYYKHVlCxtdgelH6/D8JwaZr01xiZxfN/HuiIr
+         CzT9eMiCjz2oyro74mIfh3i4Su3hNwoqix9adzxKb7+jdtseY0g8lJf2Yujr4WZscckk
+         +lO9QCGLS8VjmOyj8qvQSDe8YL2EOm+je/Qj5OAJnUylJNv57C0UqChKtdRS6mJWSl0A
+         vEyrfoK5YqYDXt2cDrUOTW2xHoWyUpm/l4oa4DFejusrWFMe6OJjkhMPbzKOJg/1fqiD
+         9TXQ==
+X-Gm-Message-State: AOAM530IOvK8giwZY1ZanDRYZeTVm5XmNt1gSxapBehZD1uVkGS6DPKN
+        Ry7D++L3Nge4HQRk2kF6zu4o80Ske/V2TA==
+X-Google-Smtp-Source: ABdhPJxF438b/WEu22WxHZgv3A03n8SRdHWfJx5cX+REUymSJzQW01Ac5BTggzKnp1cW4D9MmVLPr1IGpLealw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90b:4b52:b0:1bc:b208:dc5c with SMTP
+ id mi18-20020a17090b4b5200b001bcb208dc5cmr1023750pjb.1.1646298411425; Thu, 03
+ Mar 2022 01:06:51 -0800 (PST)
+Date:   Thu,  3 Mar 2022 17:06:42 +0800
+Message-Id: <20220303090643.241747-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+From:   David Gow <davidgow@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Subject: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Date:   Wed,  2 Mar 2022 23:43:39 -0800
-Message-Id: <20220303074339.86337-1-ashimida@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220303073340.86008-1-ashimida@linux.alibaba.com>
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests for SCS (Shadow Call Stack) based
-backward CFI (as implemented by Clang and GCC).
+The things built with USER_CFLAGS don't seem to recognise it as a
+compiler option, and print a warning:
+clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
 
-Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+Fixes: 744814d2fa ("um: Allow builds with Clang")
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- drivers/misc/lkdtm/Makefile             |  1 +
- drivers/misc/lkdtm/core.c               |  2 +
- drivers/misc/lkdtm/lkdtm.h              |  4 ++
- drivers/misc/lkdtm/scs.c                | 67 +++++++++++++++++++++++++
- tools/testing/selftests/lkdtm/tests.txt |  2 +
- 5 files changed, 76 insertions(+)
- create mode 100644 drivers/misc/lkdtm/scs.c
 
-diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
-index 2e0aa74ac185..e2fb17868af2 100644
---- a/drivers/misc/lkdtm/Makefile
-+++ b/drivers/misc/lkdtm/Makefile
-@@ -10,6 +10,7 @@ lkdtm-$(CONFIG_LKDTM)		+= rodata_objcopy.o
- lkdtm-$(CONFIG_LKDTM)		+= usercopy.o
- lkdtm-$(CONFIG_LKDTM)		+= stackleak.o
- lkdtm-$(CONFIG_LKDTM)		+= cfi.o
-+lkdtm-$(CONFIG_LKDTM)		+= scs.o
- lkdtm-$(CONFIG_LKDTM)		+= fortify.o
- lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
+This warning shows up after merging:
+https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
+
+I'm not 100% sure why this is necessary, but it does seem to work. All
+the attempts to get rid of -mno-global-merge entirely have been met with
+skepticism, but I'm guessing that it's not a problem for just the UML
+"user" files, as they shouldn't(?) interact too much with modules.
+
+ arch/um/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index f2fe63bfd819..320b09cd513c 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+ 		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+ 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
  
-diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-index f69b964b9952..d0ce0bec117c 100644
---- a/drivers/misc/lkdtm/core.c
-+++ b/drivers/misc/lkdtm/core.c
-@@ -178,6 +178,8 @@ static const struct crashtype crashtypes[] = {
- 	CRASHTYPE(USERCOPY_KERNEL),
- 	CRASHTYPE(STACKLEAK_ERASING),
- 	CRASHTYPE(CFI_FORWARD_PROTO),
-+	CRASHTYPE(CFI_BACKWARD_SHADOW),
-+	CRASHTYPE(CFI_BACKWARD_SHADOW_WITH_NOSCS),
- 	CRASHTYPE(FORTIFIED_OBJECT),
- 	CRASHTYPE(FORTIFIED_SUBOBJECT),
- 	CRASHTYPE(FORTIFIED_STRSCPY),
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index d6137c70ebbe..a23d32dfc10b 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -158,6 +158,10 @@ void lkdtm_STACKLEAK_ERASING(void);
- /* cfi.c */
- void lkdtm_CFI_FORWARD_PROTO(void);
++ifdef CONFIG_CC_IS_CLANG
++USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
++endif
++
+ #This will adjust *FLAGS accordingly to the platform.
+ include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
  
-+/* scs.c */
-+void lkdtm_CFI_BACKWARD_SHADOW(void);
-+void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void);
-+
- /* fortify.c */
- void lkdtm_FORTIFIED_OBJECT(void);
- void lkdtm_FORTIFIED_SUBOBJECT(void);
-diff --git a/drivers/misc/lkdtm/scs.c b/drivers/misc/lkdtm/scs.c
-new file mode 100644
-index 000000000000..5922a55a8844
---- /dev/null
-+++ b/drivers/misc/lkdtm/scs.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This is for all the tests relating directly to Shadow Call Stack.
-+ */
-+#include "lkdtm.h"
-+
-+#ifdef CONFIG_ARM64
-+/* Function clears its return address. */
-+static noinline void lkdtm_scs_clear_lr(void)
-+{
-+	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
-+
-+	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
-+}
-+
-+/* Function with __noscs attribute clears its return address. */
-+static noinline void __noscs lkdtm_noscs_clear_lr(void)
-+{
-+	unsigned long *lr = (unsigned long *)__builtin_frame_address(0) + 1;
-+
-+	asm volatile("str xzr, [%0]\n\t" : : "r"(lr) : "x30");
-+}
-+#endif
-+
-+/*
-+ * This tries to call a function protected by Shadow Call Stack,
-+ * which corrupts its own return address during execution.
-+ * Due to the protection, the corruption will not take effect
-+ * when the function returns.
-+ */
-+void lkdtm_CFI_BACKWARD_SHADOW(void)
-+{
-+#ifdef CONFIG_ARM64
-+	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
-+		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
-+		return;
-+	}
-+
-+	pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-+	lkdtm_scs_clear_lr();
-+
-+	pr_err("ok: scs takes effect.\n");
-+#else
-+	pr_err("XFAIL: this test is arm64-only\n");
-+#endif
-+}
-+
-+/*
-+ * This tries to call a function not protected by Shadow Call Stack,
-+ * which corrupts its own return address during execution.
-+ */
-+void lkdtm_CFI_BACKWARD_SHADOW_WITH_NOSCS(void)
-+{
-+#ifdef CONFIG_ARM64
-+	if (!IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
-+		pr_err("FAIL: kernel not built with CONFIG_SHADOW_CALL_STACK\n");
-+		return;
-+	}
-+
-+	pr_info("Trying to corrupt lr in a function with attribute __noscs ...\n");
-+	lkdtm_noscs_clear_lr();
-+
-+	pr_err("FAIL: __noscs attribute does not take effect!\n");
-+#else
-+	pr_err("XFAIL: this test is arm64-only\n");
-+#endif
-+}
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 6b36b7f5dcf9..c849765c8dcc 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -73,6 +73,8 @@ USERCOPY_STACK_BEYOND
- USERCOPY_KERNEL
- STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
- CFI_FORWARD_PROTO
-+CFI_BACKWARD_SHADOW ok: scs takes effect
-+CFI_BACKWARD_SHADOW_WITH_NOSCS
- FORTIFIED_STRSCPY
- FORTIFIED_OBJECT
- FORTIFIED_SUBOBJECT
 -- 
-2.17.1
+2.35.1.616.g0bdcbb4464-goog
 
