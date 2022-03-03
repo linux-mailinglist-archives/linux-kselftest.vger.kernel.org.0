@@ -2,100 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E4A4CC2C5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 17:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF5B4CC3C1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 18:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbiCCQbP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 11:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S235351AbiCCRbo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 12:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiCCQbO (ORCPT
+        with ESMTP id S233589AbiCCRbn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 11:31:14 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9DF10EC66;
-        Thu,  3 Mar 2022 08:30:28 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223GF9lk015672;
-        Thu, 3 Mar 2022 16:30:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=JvemLlmF4yOQ1FVXXpV2KwKYt5Im31tdEZJtt2mUi8o=;
- b=g8Rx9uFM7islYz13m+XKPrDy+PCXljUnN5tSpU/NWuAIm1O466L4FTFQi8/ZFDOgiMQ6
- ZGSkaukt/1d7SyXaON79DuVyjWmGWwlj9kBRFgMzY4Lq/zHpryq20vc5ah9rQyKnePHl
- kjPijbhv3IexLJt8bquI2vNyLIL34q9Eu2/dLn2xicrsgbwuWzpTBvUYBfAHLm2mXql1
- IJs0Zl35E/DXO8v+p24mQxIjN5PU1ImjDdwPNDnw21BAcCkrvS2Uz8LmRdzh410QEmv1
- GZpVf4LRk040aTBu4wqXueL7/RQUqQ7riYHvSyZgrlbf0DU542t+S8ogFTMUibMchxUW ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejsp22hw7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 16:30:08 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 223GIP0f006913;
-        Thu, 3 Mar 2022 16:30:08 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ejsp22htb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 16:30:07 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 223GIuju019234;
-        Thu, 3 Mar 2022 16:30:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3efbu9gp1m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Mar 2022 16:30:03 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 223GU1bG53674388
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Mar 2022 16:30:01 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 057B7A4060;
-        Thu,  3 Mar 2022 16:30:01 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 82F1BA405C;
-        Thu,  3 Mar 2022 16:29:58 +0000 (GMT)
-Received: from sig-9-65-93-208.ibm.com (unknown [9.65.93.208])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Mar 2022 16:29:58 +0000 (GMT)
-Message-ID: <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, revest@chromium.org, gregkh@linuxfoundation.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@google.com>,
-        Kees Cook <keescook@chromium.org>
-Date:   Thu, 03 Mar 2022 11:29:57 -0500
-In-Reply-To: <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
-         <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
-         <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
-         <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -sbs3MRY0XbRzfcOjEjbnQdDi2CiUNJJ
-X-Proofpoint-GUID: Lp_-sfFtFHyutjhVXm3ioNWwSbY3J-4q
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 3 Mar 2022 12:31:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9555E199D51;
+        Thu,  3 Mar 2022 09:30:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C42DB82650;
+        Thu,  3 Mar 2022 17:30:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45241C340E9;
+        Thu,  3 Mar 2022 17:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646328655;
+        bh=GCDTpWwAdbUUe92yPSIjZBhj5yfaiPwzu66bwylkoac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CLQazQPiBOZrP69PhmqDFy7s/3OGcDUji9CNq78GafEhJcptBOq9ejoyBYJ2f546B
+         WTlZ8u1FFUpD/OSgSZY6He9snfv0gRmz7lyA01z+f8swbsuntwtgqOlSdC95A9rhzD
+         4EHG/xJLnX+ThYlzbEB371mF/DWMhhm1qjhNHHYZhOO7+PHV6EBURX4/QlJg2a/04b
+         cK6IxzhArX/HTp+RcLIdMrJ/+byFkhr/Hqjfdh68MR5K6wiC4kB9Fz3hjA/9cu5twz
+         SOPBjB6KiiImIA7vzXX5v1kdIK7cVQWHqIsb9S4rGhtqXcJiLS7L+LsHATv9VdVI4o
+         g0bbBtjD2FOMg==
+Date:   Thu, 3 Mar 2022 10:30:47 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] um: clang: Strip out -mno-global-merge from USER_CFLAGS
+Message-ID: <YiD7R2wRxoWxtVq7@dev-arch.thelio-3990X>
+References: <20220303090643.241747-1-davidgow@google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-03_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
- phishscore=0 bulkscore=0 adultscore=0 spamscore=0 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203030078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303090643.241747-1-davidgow@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -104,112 +61,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2022-03-03 at 17:17 +0100, KP Singh wrote:
-> On Thu, Mar 3, 2022 at 5:05 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >
-> > [Cc'ing Florent, Kees]
-> >
-> > Hi Alexei,
-> >
-> > On Wed, 2022-03-02 at 14:20 -0800, Alexei Starovoitov wrote:
-> > > On Wed, Mar 02, 2022 at 12:13:55PM +0100, Roberto Sassu wrote:
-> > > > Extend the interoperability with IMA, to give wider flexibility for the
-> > > > implementation of integrity-focused LSMs based on eBPF.
-> > > >
-> > > > Patch 1 fixes some style issues.
-> > > >
-> > > > Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
-> > > > measurement capability of IMA without needing to setup a policy in IMA
-> > > > (those LSMs might implement the policy capability themselves).
-> > > >
-> > > > Patches 7-9 allow eBPF-based LSMs to evaluate files read by the kernel.
-> > > >
-> > > > Changelog
-> > > >
-> > > > v2:
-> > > > - Add better description to patch 1 (suggested by Shuah)
-> > > > - Recalculate digest if it is not fresh (when IMA_COLLECTED flag not set)
-> > > > - Move declaration of bpf_ima_file_hash() at the end (suggested by
-> > > >   Yonghong)
-> > > > - Add tests to check if the digest has been recalculated
-> > > > - Add deny test for bpf_kernel_read_file()
-> > > > - Add description to tests
-> > > >
-> > > > v1:
-> > > > - Modify ima_file_hash() only and allow the usage of the function with the
-> > > >   modified behavior by eBPF-based LSMs through the new function
-> > > >   bpf_ima_file_hash() (suggested by Mimi)
-> > > > - Make bpf_lsm_kernel_read_file() sleepable so that bpf_ima_inode_hash()
-> > > >   and bpf_ima_file_hash() can be called inside the implementation of
-> > > >   eBPF-based LSMs for this hook
-> > > >
-> > > > Roberto Sassu (9):
-> > > >   ima: Fix documentation-related warnings in ima_main.c
-> > > >   ima: Always return a file measurement in ima_file_hash()
-> > > >   bpf-lsm: Introduce new helper bpf_ima_file_hash()
-> > > >   selftests/bpf: Move sample generation code to ima_test_common()
-> > > >   selftests/bpf: Add test for bpf_ima_file_hash()
-> > > >   selftests/bpf: Check if the digest is refreshed after a file write
-> > > >   bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
-> > > >   selftests/bpf: Add test for bpf_lsm_kernel_read_file()
-> > > >   selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA
-> > > >     policy
-> > >
-> > > We have to land this set through bpf-next.
-> > > Please get the Acks for patches 1 and 2, so we can proceed.
-> >
-> 
-> Hi Mimi,
-> 
-> > Each year in the LSS integrity status update talk, I've mentioned the
-> > eBPF integrity gaps.  I finally reached out to KP, Florent Revest, Kees
-> 
-> Thanks for bringing this up and it's very timely because we have been
-> having discussion around eBPF program signing and delineating that
-> from eBPF program integrity use-cases.
-> 
-> My plan is to travel to LSS (travel and visa permitting) and we can discuss
-> it more there.
-> 
-> If you prefer we can also discuss it before in one of the BPF office hours:
-> 
-> https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
+Hi David,
 
-Sounds good.
-
+On Thu, Mar 03, 2022 at 05:06:42PM +0800, David Gow wrote:
+> The things built with USER_CFLAGS don't seem to recognise it as a
+> compiler option, and print a warning:
+> clang: warning: argument unused during compilation: '-mno-global-merge' [-Wunused-command-line-argument]
 > 
-> > and others, letting them know that I'm concerned about the eBPF module
-> > integrity gaps.  True there is a difference between signing the eBPF
-> > source modules versus the eBPF generated output, but IMA could at least
-> > verify the integrity of the source eBPF modules making sure they are
-> > measured, the module hash audited, and are properly signed.
-> >
-> > Before expanding the ima_file_hash() or ima_inode_hash() usage, I'd
-> > appreciate someone adding the IMA support to measure, appraise, and
-> > audit eBPF modules.  I realize that closing the eBPF integrity gaps is
-> > orthogonal to this patch set, but this patch set is not only extending
+> Fixes: 744814d2fa ("um: Allow builds with Clang")
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
 > 
-> This really is orthogonal and IMHO it does not seem rational to block this
-> patchset on it.
+> This warning shows up after merging:
+> https://lore.kernel.org/lkml/20220227184517.504931-6-keescook@chromium.org/
 > 
-> > the ima_file_hash()/ima_inode_hash() usage, but will be used to
-> > circumvent IMA.  As per usual, IMA is policy based, allowing those
+> I'm not 100% sure why this is necessary, but it does seem to work. All
+> the attempts to get rid of -mno-global-merge entirely have been met with
+> skepticism, but I'm guessing that it's not a problem for just the UML
+> "user" files, as they shouldn't(?) interact too much with modules.
+
+Thank you for the patch! I think it is correct, as this flag only works
+for AArch64 and ARM, as it is only used in Clang::AddAArch64TargetArgs()
+and Clang::AddARMTargetArgs() in clang/lib/Driver/ToolChains/Clang.cpp,
+which are obviously never called with UML. I am not sure why we do not
+see warning during regular kernel builds, maybe something about how UML
+objects are compiled exposes this?
+
+Regardless, I would definitely like to clean up this instance of the
+warning because I would like to make this warning a hard error so that
+we do not get cryptic cc-option failures:
+
+https://github.com/ClangBuiltLinux/linux/issues/1587
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+One small comment below.
+
+>  arch/um/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> I don't think they are being used to circumvent IMA but for totally
-> different use-cases (e.g. as a data point for detecting attacks).
+> diff --git a/arch/um/Makefile b/arch/um/Makefile
+> index f2fe63bfd819..320b09cd513c 100644
+> --- a/arch/um/Makefile
+> +++ b/arch/um/Makefile
+> @@ -75,6 +75,10 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+>  		-D_FILE_OFFSET_BITS=64 -idirafter $(srctree)/include \
+>  		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+>  
+> +ifdef CONFIG_CC_IS_CLANG
+
+Is this ifdef needed?
+
+> +USER_CFLAGS := $(patsubst -mno-global-merge,,$(USER_CFLAGS))
+> +endif
+> +
+>  #This will adjust *FLAGS accordingly to the platform.
+>  include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+>  
+> -- 
+> 2.35.1.616.g0bdcbb4464-goog
 > 
-> 
-> > interested in eBPF module integrity to define IMA policy rules.
-
-That might be true for your usecase, but not Roberto's.  From the cover
-letter above, Roberto was honest in saying:
-
-Patches 2-6 give the ability to eBPF-based LSMs to take advantage of
-the measurement capability of IMA without needing to setup a policy in
-IMA (those LSMs might implement the policy capability themselves).
-
--- 
-thanks,
-
-Mimi
-
