@@ -2,69 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E324CC6A6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 20:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA304CC7FF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 22:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbiCCT7a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 14:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S233602AbiCCV2a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 16:28:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235683AbiCCT73 (ORCPT
+        with ESMTP id S231358AbiCCV2a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 14:59:29 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C6B107D04
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 11:58:43 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id j5so4920406ila.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 11:58:43 -0800 (PST)
+        Thu, 3 Mar 2022 16:28:30 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A85E20F65
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 13:27:43 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id c23so7415530ioi.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 13:27:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Dc0/cXuKBhE+v21Fkw/yBa8klzDWAfQShrPlFuUudE8=;
-        b=StdlfoMfm7t/BujrCf01iGVCqB04gnay5aosRl0GOSXllZ+llLA0WF8v5UTttOmKfQ
-         5R9fBxSrQeKgAUHZWUqV3v6TRHUvfOIH095mu2twXeRcTSH/y+KiKQwyq/KviBXhssUB
-         ho6LgxCIl1WxMHjccr1naXtsuVhZn9y6q//t0=
+        bh=ih0JJt97BBLYj6Fn0f3k3bViw991U3vBLG4c2N4VIno=;
+        b=Pf7u6B9wHbx5Ozd3EXU+1heavGLb89mO4+WtHg+MxHJM7uaFi7TVvEc7m8OxmUOd7X
+         PDHum2XOROhKVlbmwnJ6p4R4fO325YxCEo8Zwn+nSpeNthHHTQvx8pdExlbnGzEYv+6X
+         /R3lrU9fRntHH+wdRb5Tlgp/HD6eIbsc2wHJg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Dc0/cXuKBhE+v21Fkw/yBa8klzDWAfQShrPlFuUudE8=;
-        b=d9Gh9X5bd2xF8gDo9WtuhSjqxBobwMJyvzW6DSEIsE1LV6fKEHfESReeoJ1+XRBpcS
-         pJag2oWP7tqM/JkXyL0yri06i9T3MMMUb50l5FneFVv7CqnLpENIfqiJ86o2/LPtjX8d
-         dJ1tliFoLWnkkpjVX7v/32HYJFcZ7F5xgrM5+OYe3/tl6k5FprxCon6g0aC7GILYACGh
-         n8CFkKeRVfHjOw7Ngar8gfRrtzM8QimTV6SE7Ga3bOI0Uuhq66ZMbYKK1FPi9vckgCZ0
-         jdqV9QGXIySrav33+OroBD4np8NOvjFfQiSXW9Sa20d60Ib/TLroyJQLY0QxEl8MseeI
-         e9ZQ==
-X-Gm-Message-State: AOAM533LlOaiPwMvZF8BHlnI3WXt95Bhqf5J6gwECqy9W+EWc47IZjGw
-        mTAedrcVRLHgGUipBqjV7mB7BA==
-X-Google-Smtp-Source: ABdhPJxb3BE7VjErTKZL17yHyLkTjNG3kinSMhqezJVGMwfYr1VETlpbuVtkRAnMzIYadLLYqXmWSQ==
-X-Received: by 2002:a05:6e02:20c3:b0:2c2:9e23:8263 with SMTP id 3-20020a056e0220c300b002c29e238263mr32162282ilq.248.1646337522515;
-        Thu, 03 Mar 2022 11:58:42 -0800 (PST)
+        bh=ih0JJt97BBLYj6Fn0f3k3bViw991U3vBLG4c2N4VIno=;
+        b=gqEKRMR0wjbCo/dqBv1I/LwJ60XFdGUb5dyC4Z0/FJAJzpTtXviJ0QWybSKzOVtotM
+         Y7mCB5WYCvbfhhphxyk9jEajHKwh24naVLy6IpTma78m0DcBsiz079JsXpVV+Ubqbpx4
+         7iGc81rvAGWn7oENErPsqGEmKsWjlEeP/Rw/pxb1cHjbx5W6igOs23CNom+Lwh8vsm8X
+         IhNKqCh/gXlRALMVybFSRZrB9eL2qqdseke6FHYdiCArCBEH8j0188osWfeFFLmSSgzU
+         T8fd4zuapCdFHMqAG8XyUgbJKerFMTCPEhK717YBBAwVsT9S6HyfmLAI6NqahO9O1wnb
+         0V+Q==
+X-Gm-Message-State: AOAM532tPzlf7AflYFugwgGOQdeHS8lidJLJ+SuBwNxnfIuV3tiyiVwq
+        NlXUrzdvFW0T9I2e+ws5hxV2Dw==
+X-Google-Smtp-Source: ABdhPJxLJkLqkINiqGbVbJ4zT+0L5Qkaxvre0HSWGZ/ryhqV8qgdVfxgM0lguf4zYT5cA+cNSVWMVg==
+X-Received: by 2002:a05:6602:1541:b0:645:7001:8ad1 with SMTP id h1-20020a056602154100b0064570018ad1mr2991689iow.192.1646342862987;
+        Thu, 03 Mar 2022 13:27:42 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c18-20020a05660221d200b00640a0083089sm2685366ioc.30.2022.03.03.11.58.41
+        by smtp.gmail.com with ESMTPSA id l1-20020a056e021aa100b002c56271ac39sm3120534ilv.56.2022.03.03.13.27.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 11:58:42 -0800 (PST)
-Subject: Re: [PATCH] kselftest/arm64: Log the PIDs of the parent and child in
- sve-ptrace
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
+        Thu, 03 Mar 2022 13:27:42 -0800 (PST)
+Subject: Re: [PATCH 2/2] kselftest/vm: fix tests build with old libc
+To:     Chengming Zhou <zhouchengming@bytedance.com>,
+        akpm@linux-foundation.org, shuah@kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220303192817.2732509-1-broonie@kernel.org>
+References: <20220227055330.43087-1-zhouchengming@bytedance.com>
+ <20220227055330.43087-2-zhouchengming@bytedance.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <02711bbf-9081-6f92-8c7d-5d09b86a4f37@linuxfoundation.org>
-Date:   Thu, 3 Mar 2022 12:58:41 -0700
+Message-ID: <ed6cc632-8209-0afe-fdff-ee179610d73d@linuxfoundation.org>
+Date:   Thu, 3 Mar 2022 14:27:41 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220303192817.2732509-1-broonie@kernel.org>
+In-Reply-To: <20220227055330.43087-2-zhouchengming@bytedance.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,35 +74,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/3/22 12:28 PM, Mark Brown wrote:
-> If the test triggers a problem it may well result in a log message from
-> the kernel such as a WARN() or BUG(). If these include a PID it can help
-> with debugging to know if it was the parent or child process that triggered
-> the issue, since the test is just creating a new thread the process name
-> will be the same either way. Print the PIDs of the parent and child on
-> startup so users have this information to hand should it be needed.
+On 2/26/22 10:53 PM, Chengming Zhou wrote:
+> The error message when I build vm tests on debian10 (GLIBC 2.28):
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> userfaultfd.c: In function ‘userfaultfd_pagemap_test’:
+> userfaultfd.c:1393:37: error: ‘MADV_PAGEOUT’ undeclared (first use
+> in this function); did you mean ‘MADV_RANDOM’?
+>    if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
+>                                       ^~~~~~~~~~~~
+>                                       MADV_RANDOM
+> 
+> This patch includes these newer definitions from UAPI linux/mman.h,
+> is useful to fix tests build on systems without these definitions in
+> glibc sys/mman.h.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 > ---
->   tools/testing/selftests/arm64/fp/sve-ptrace.c | 2 ++
->   1 file changed, 2 insertions(+)
+>   tools/testing/selftests/vm/userfaultfd.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> index 4bd333768cc4..4c418b2021e0 100644
-> --- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> +++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> @@ -487,6 +487,8 @@ static int do_parent(pid_t child)
->   	unsigned int vq, vl;
->   	bool vl_supported;
->   
-> +	ksft_print_msg("Parent is %d, child is %d\n", getpid(), child);
-> +
->   	/* Attach to the child */
->   	while (1) {
->   		int sig;
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 2f49c9af1b58..3fc1d2ee2948 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -46,6 +46,7 @@
+>   #include <signal.h>
+>   #include <poll.h>
+>   #include <string.h>
+> +#include <linux/mman.h>
+>   #include <sys/mman.h>
+>   #include <sys/syscall.h>
+>   #include <sys/ioctl.h>
 > 
 
-Nice addition. Thanks for the patch.
+Looks good to me.
+
+Andrew,
+
+If you want to take this through your tree or I can apply it.
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
