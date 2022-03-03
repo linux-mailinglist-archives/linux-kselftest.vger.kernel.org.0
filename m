@@ -2,64 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880784CC82C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 22:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EB54CC851
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Mar 2022 22:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235468AbiCCVkZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 16:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S236642AbiCCVq5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 16:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiCCVkZ (ORCPT
+        with ESMTP id S236639AbiCCVq4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 16:40:25 -0500
+        Thu, 3 Mar 2022 16:46:56 -0500
 Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36C5E1B45
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 13:39:38 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id y5so5077615ill.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 13:39:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFE7546B1
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 13:46:10 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id x14so5089156ill.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 13:46:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GrVA4wCtJ9ZZHjn3qb/7bEScChq15mZGv+SPu/mtxIM=;
-        b=VCCqrS+5HnBr+1wxFMQSWauFi4Qp22D2JmhF5xNptWdbB+RRGVsOw0hr43SMv8QQSA
-         FvZ+O4XYQKizNzZzSiTG6DT1LKtSG1W1CjmvdyiW4yNigLzrBVqP0UZvQuGRu9juEqcV
-         N78vuK7UANHhsr7DbY+xfl5U00+fswtNYm4jo=
+        bh=dK/IOow+P5v9xYBFUtB5XaIy2vFaJ6VtzofO9XJ2vLA=;
+        b=iaUIzEybhNynRX57A9NPhLVQR8qWsrW87j7I2gP6PfPhB1N2KJLDGvER3L91GYIYfn
+         kx4r6NK8bwnmnvZrmxOmn5r5YGx78vycqExakQs/gIf+aQtfsFWLFv7Mbo/h4kK+Fby1
+         +ku6NcFXonpuW2pUXBf80x6Inw567tXGOV9Aw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=GrVA4wCtJ9ZZHjn3qb/7bEScChq15mZGv+SPu/mtxIM=;
-        b=MLuX0w4YG5UqMak7N73qA/JrYLXA/dMW+AhB5AR00xvvNXiZx5NheIAYPK7xojFjYb
-         dJHsBDcPsDyaaxIYW6fIHpy5YBbJWrwIHDF61PYjvFFFfiURbRf6cOPL1dsHilYuebce
-         Tdqxr7UJbwwrJRQIqOuVsLUFj+ncpRm9RPTSZhg0vcdS9Hbfpqv9lcxs2vRFYekoFIKD
-         rBiTTz2tUOXZokAHRinQUK39loo+VJlXAzbHA9WFm+egsueibtSmv7r60GTGbFpD5ZN6
-         5D79k1kW28rqGC7uFEZxt74VRBUsCVMcLLFlczBAmox9t8b8OrnqqWj2wFQ2mWFyReYS
-         aPag==
-X-Gm-Message-State: AOAM530eEZFhj/VMj8Dc72CelWJp0L3o+9otASlLaKYJ8lSPuL/nbw6k
-        Yr5X5Qbd2akIWTYE/d0XXXOTIw==
-X-Google-Smtp-Source: ABdhPJzbbv3ggQn9TAbpL4V/TQDXEGyuOp2p0inmz8pxdQifa0sBXO4Vk4R6ADVOl5MwgFyzP/zxzw==
-X-Received: by 2002:a92:c5aa:0:b0:2c5:f753:9069 with SMTP id r10-20020a92c5aa000000b002c5f7539069mr6683520ilt.71.1646343578331;
-        Thu, 03 Mar 2022 13:39:38 -0800 (PST)
+        bh=dK/IOow+P5v9xYBFUtB5XaIy2vFaJ6VtzofO9XJ2vLA=;
+        b=tq9/O/PPwasIeetWNXM7X+XKAfSUbJRBkeTwaCOy54FVCY/4Zrjw8dbmd9xM1rizDY
+         sywTYQfPG9wzggKxA8QD6Dsp4GwSuSPdZQsJuZwQl5qSoZAJKYpEQeQiPba2533RsDDl
+         MWlHauQDSUbA7JiNkao4m/ZE4OJ0zEby7G9vT0igY5CRlN+3pnBAMd2//6p4XLxrJ2Qs
+         b0fnkQhD0RftIiIogU4/y/mHKoEnZsIBm9vMgXPYVs8Q1j8aTAr7kom7MJ5alt7ntSlN
+         Nv7o76gcg7TTYnaFt4M8QOcWLlhlPEFrrZEQJHvdTfrj00lyOrMQW+FXuZ7adLUoxzDS
+         H8Aw==
+X-Gm-Message-State: AOAM532KWHgf1vWFrqKTQeM+wG+V6COVIaqbXc6HPDOlotAuwcHAUITo
+        yUu0dXmB2bKzK5d/pSjMG0BSbQ==
+X-Google-Smtp-Source: ABdhPJxFTfoJrFkecC1ukZMVcqeTeGXHhkLuHmnCG5OGT8GcD+G3FBEHb10TRMnae/SeoXVaG9ANcA==
+X-Received: by 2002:a92:c888:0:b0:2c2:fb23:1cf with SMTP id w8-20020a92c888000000b002c2fb2301cfmr16145861ilo.301.1646343969977;
+        Thu, 03 Mar 2022 13:46:09 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id f4-20020a92b504000000b002c21ef70a81sm3233325ile.7.2022.03.03.13.39.37
+        by smtp.gmail.com with ESMTPSA id b10-20020a056602000a00b0064074921986sm2779927ioa.41.2022.03.03.13.46.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Mar 2022 13:39:37 -0800 (PST)
-Subject: Re: [PATCH] selftests/interpreter: fix separate directory build
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        Thu, 03 Mar 2022 13:46:09 -0800 (PST)
+Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220303110629.2072927-1-usama.anjum@collabora.com>
+References: <20220224212335.3045905-1-usama.anjum@collabora.com>
+ <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
+ <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org>
+ <87o82mkhif.fsf@collabora.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b97fe611-0a2d-6907-b924-a9132e2d427f@linuxfoundation.org>
-Date:   Thu, 3 Mar 2022 14:39:37 -0700
+Message-ID: <ee9b8c8b-0d27-bd01-e10d-9062c32f2486@linuxfoundation.org>
+Date:   Thu, 3 Mar 2022 14:46:08 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220303110629.2072927-1-usama.anjum@collabora.com>
+In-Reply-To: <87o82mkhif.fsf@collabora.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,46 +80,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/3/22 4:06 AM, Muhammad Usama Anjum wrote:
-> Separate directory build fails of this test as headers include path isn't
-> set correctly in that case. Fix it by including KHDR_INCLUDES.
+On 3/3/22 11:39 AM, Gabriel Krisman Bertazi wrote:
+> Shuah Khan <skhan@linuxfoundation.org> writes:
 > 
-> make -C tools/testing/selftests O=build1
-> gcc -Wall -O2 -I../../../../usr/include    trust_policy_test.c -lcap -o /linux_mainline/build1/kselftest/interpreter/trust_policy_test
-> trust_policy_test.c:14:10: fatal error: linux/trusted-for.h: No such file or directory
->     14 | #include <linux/trusted-for.h>
->        |          ^~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
+>> On 2/28/22 2:37 AM, David Hildenbrand wrote:
+>>> On 24.02.22 22:23, Muhammad Usama Anjum wrote:
+>>>> This introduces three tests:
+>>>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
+>>>> check if the SD bit flipped.
+>>>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
+>>>> 3) Check soft-dirty on huge pages
+>>>>
+>>>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
+>>>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
+>>>> same issue that he fixed, and this test would have caught it.
+>>>>
+>>> A note that madv_populate.c already contains some SOFTDIRTY tests
+>>> regarding MADV_POPULATE. Eventually we want to factor out
+>>> softdirty/pagemap handling+checks for easier reuse.
+>>>
+>>
+>> Is this patch unnecessary then?
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   tools/testing/selftests/interpreter/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> It is not unnecessary since the madv test doesn't cover the bug tested
+> here, afaik.  But, as mentioned when I originally submitted this patch,
+> it should be merged into selftests/vm/madv_populate.c or, at least,
+> reuse that existing infrastructure.
 > 
-> diff --git a/tools/testing/selftests/interpreter/Makefile b/tools/testing/selftests/interpreter/Makefile
-> index 7402fdb6533f..51dde8e01e32 100644
-> --- a/tools/testing/selftests/interpreter/Makefile
-> +++ b/tools/testing/selftests/interpreter/Makefile
-> @@ -1,6 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
-> -CFLAGS += -Wall -O2 -I$(khdr_dir)
-> +CFLAGS += -Wall -O2 -I$(khdr_dir) $(KHDR_INCLUDES)
->   LDLIBS += -lcap
->   
-
-Change looks fine to me.
-
->   src_test := $(wildcard *_test.c)
+> https://lore.kernel.org/lkml/87lf553z5g.fsf@collabora.com/
 > 
 
-I am not seeing this test in linux-kselftest next for sure. Which tree is
-this patch based on? Please  add the repo info to the patch subject line
-in the future.
+Oops this one came in a few months ago and appears to have slipped
+through and didn't get the right attention. Sorry about that.
 
-Either way I don't have the patch that added in liunx-kselftest repo:
+Please resend the patch and cc all the everybody on this thread.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+I would like to have your patch reviewed and looked at first. This
+patch needs rework sine it has several comments to be addressed.
 
 thanks,
 -- Shuah
