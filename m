@@ -2,63 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59F44CCA12
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 00:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66BF4CCA7F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 01:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237161AbiCCXe2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Mar 2022 18:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S232267AbiCDAHk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Mar 2022 19:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiCCXe2 (ORCPT
+        with ESMTP id S232242AbiCDAHk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Mar 2022 18:34:28 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AF2B153D
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 15:33:42 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id k1so6093964pfu.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 15:33:42 -0800 (PST)
+        Thu, 3 Mar 2022 19:07:40 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A6ECB3A
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Mar 2022 16:06:53 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id u74-20020a63794d000000b00373efe2ac5aso3517490pgc.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Mar 2022 16:06:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=LlDf0G3gy4zP0KLKlph7n0pH0poTgm/9+vNFKpM1i0M=;
-        b=jqNtxwM7bAAxYLrvRbdixlSBMCCci/lRY/AXW97/BTIVd9Lzziui5AvaBH1zS0DGl6
-         q/DwqyQWFvczKnOrAs2O7qD8sHKKOTvSLkioI/6pWAHFLbX2K24LSCGzfTAfKz50e+Ra
-         4vnWONu3I13Mi5cK2MfSd7Ni4fkam2J+HJ8SAmkzZnpI6MVQT/rfRkwQJHQXvAcnBu35
-         pM3YaZkkm3UlDbLuUvmwdOmJ5bNuesH1TueqQukPhvwNf96/fDxAqEaccckmJEejpXSW
-         RGJwNy7p+nzIIPJHD6eW/XLNqsQkt0IcQw5sazl94RA7/LVrifZvYdOUcPdcUyyZGcHh
-         Qs8w==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=L2EqmECeGnDxBTpQsY7qBHnNCdpRu+0gpxLs2lR25VM=;
+        b=Od6sUIoBeI6YLIHz8dugjZNkV2e1G9ybEJ+EtPnZaPldHnMI495OSQXixpu5cD8MIL
+         LftkXHa1bDXNL/O7LVOgt6AQJJvJ0Z2+X/vMsRdavLJfC5JpSufc7XnPYGoIJYPFiMxt
+         SAHSYAxwfxCNp+0SYsc4xSvU7KTsOv2itMiPEVdMknFAsmNfYdZJ/rWBKFh0Bnhmv5ce
+         T7BDGlgmj141JJuCh9WvVnH0a0SXb+fEAuA4BXQieWuqf+pR/BtURhwmoeNU27CHClQb
+         kp55gbk1n8GvC5i6hbNFSqVC5JYHoxiOtNPthp61DnahHJj9bxhC570JzV2IIQQMnQY5
+         Co3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=LlDf0G3gy4zP0KLKlph7n0pH0poTgm/9+vNFKpM1i0M=;
-        b=4dJwMTOiyg2lk5AN0Iioph1Cm/hI1G0awDCV4aHwvzk19YbnMWGrohwReaLBbrA1/V
-         xEvjdfNiKzNR8LvceeBfrp3jzhm+S5Xrnq6OfWmYzMt8VEpBe5vPjmxvrVKO+2v/WuKC
-         aJx+TqAWYYJKWVCHD7rKFFXp6abOj7K8qOXW0pmEBwpYKS32JwADMMxJAbBg8TVlRiOr
-         XFj7gvrZn0m1bJXobudHd+AqyXeH07LIpwQlpmG4tDAA10QlqR4Lg2NgkR/eLLNqQYl/
-         TxEK6FvBwWdaYWvp+qk+npPtS3PB8rL5HR51AnqSj1xYwlM674U/1EPOQhNB3N2MT7ZD
-         QQig==
-X-Gm-Message-State: AOAM532H4NHTnu3VXXN5ebWU+DB4jGeUxhADSbLLEQA3MoXo2RjriT+G
-        D3ZwAZo2yH3XBFCklPrmQynW/+jq54C1jAkQUw7zvA==
-X-Google-Smtp-Source: ABdhPJxywxpNYJGmS7I03Bafx+s0cUuvwtNDA0OEmJgEA/H+p85W5Vd9nXrDOhfu3m/eNp9Q5PfMb/mhIb4ipC3RxUc=
-X-Received: by 2002:a65:6901:0:b0:378:8154:e2bf with SMTP id
- s1-20020a656901000000b003788154e2bfmr21301009pgq.401.1646350421796; Thu, 03
- Mar 2022 15:33:41 -0800 (PST)
-MIME-Version: 1.0
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=L2EqmECeGnDxBTpQsY7qBHnNCdpRu+0gpxLs2lR25VM=;
+        b=0NHO7XA2R4Aoga1aHGSQnBfaX8rk1b2WWgj0koJZ1aHuNDSzWw09ngsRDAcOtDE4WB
+         /qBuDfbUkUZN1nTuglS0sPxaN8QB/ZJFqXEtlnPymsEvD64dyYCnR+Rz1jTw/c6wvv3R
+         35TZu7DICXMnbOGLmRmsRQ9r0IKvYJ+0XQXjXvuiSSzZJftPw+3DIkWh/hK8yoHdyBvy
+         LvlxNwAcmHBb+zU78GbI5NYBb+IwMi6LhJLgyaO8XeclUlqYcSSbD1iwnvzP64LBYRb+
+         Uf7FLqDNk89Yt4ogl8yncUjLRPHAXocCLjXfBvoqMaQ7DlXjGR/umOmJqb4DT5VUeO7r
+         pkFQ==
+X-Gm-Message-State: AOAM530QmTwiYhTL9Ipn7wiuP8a12Q+B7Al30pRQ7dkocxgrjVozjZG/
+        qZhD6eHuAGEouiXxIYDEntEygUZ02+59MtYk
+X-Google-Smtp-Source: ABdhPJwf+20lur8uv++KBdcOVEbgmjgiEAuuWAsUNu0PrpdZBGP1HHD9FdhGtIOfDG0Vu8bdNEN7h6tsuFuUnliQ
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a05:6a00:de:b0:4e0:ca1a:9f07 with SMTP
+ id e30-20020a056a0000de00b004e0ca1a9f07mr41091497pfj.11.1646352412683; Thu,
+ 03 Mar 2022 16:06:52 -0800 (PST)
+Date:   Fri,  4 Mar 2022 00:06:45 +0000
+Message-Id: <20220304000645.1888133-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH] selftests: vm: fix clang build error multiple output files
 From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 3 Mar 2022 15:33:06 -0800
-Message-ID: <CAJD7tkaidL-QKN-WrhcSfkXBOKqHJBsQ2_FkqAyoxzqTha7Hyw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kselftest/vm: Rename TARGETS to BUILD_TARGETS
-To:     apopple@nvidia.com
-Cc:     akpm@linux-foundation.org, dave.hansen@intel.com,
-        harish@linux.ibm.com, jhubbard@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linuxram@us.ibm.com, rcampbell@nvidia.com,
-        sandipan@linux.ibm.com, shuah@kernel.org
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-18.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,10 +68,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I ran into the same problem when running:
+When building the vm selftests using clang, some errors are seen due to
+having headers in the compilation command:
 
-make -C tools/testing/selftests TARGETS=vm
+clang -Wall -I ../../../../usr/include  -no-pie    gup_test.c ../../../../mm/gup_test.h -lrt -lpthread -o .../tools/testing/selftests/vm/gup_test
+clang: error: cannot specify -o when generating multiple output files
+make[1]: *** [../lib.mk:146: .../tools/testing/selftests/vm/gup_test] Error 1
 
-I was going to send a fix but I found this one deep in the mailing list.
+Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+file lib.mk.
 
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+---
+This patch was inspired by:
+https://lore.kernel.org/lkml/20211105162530.3307666-1-anders.roxell@linaro.org/
+
+
+---
+ tools/testing/selftests/vm/Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 1607322a112c..a14b5b800897 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for vm selftests
+ 
++LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
++
+ include local_config.mk
+ 
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+@@ -140,10 +142,6 @@ endif
+ 
+ $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
+ 
+-$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
+-
+-$(OUTPUT)/hmm-tests: local_config.h
+-
+ # HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
+ $(OUTPUT)/hmm-tests: LDLIBS += $(HMM_EXTRA_LIBS)
+ 
+-- 
+2.35.1.616.g0bdcbb4464-goog
+
