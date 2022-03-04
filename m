@@ -2,222 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCC64CD91A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 17:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F984CD967
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 17:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240787AbiCDQ2e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Mar 2022 11:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S238023AbiCDQsV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Mar 2022 11:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234137AbiCDQ2d (ORCPT
+        with ESMTP id S240742AbiCDQsS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Mar 2022 11:28:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE6DE0AE4;
-        Fri,  4 Mar 2022 08:27:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CA8D61D9B;
-        Fri,  4 Mar 2022 16:27:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F54C340E9;
-        Fri,  4 Mar 2022 16:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646411262;
-        bh=yZI5SE6Yu+jf7Glt6Q2PXdc260ByZ2le2G+I7rC8g30=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uhjbWDuzVvPCDeEj1zw4Zlqge7qOxShxUw02Rp0btAvpb5w/0LC8Imq9dZ28tjC8z
-         c72oJQxuGOD+ci74xSH+nFhX4jjJu6t9p2vs8g0T/IbuW2kXAsnEFoPIu/iuRtRk1d
-         eLhVVIzZ9dW9Bxu1RNAUQN6JNpSGGOO2OoAcstmdr6dEx/z9CjfbGCAvHdqqDHOY9w
-         r3NFNerdsKRzeFaCJOJ7CU09WhkuoCDzL2Y6Utx39ZL9IqlRUjMBbX9mlgeNFpgUIB
-         d7TUFZXl+R32aSVPO31VJemVXOBVG92w43Zl2aYLFis869e5gYqUYU3M9vvJ7l9LEO
-         bbZjRUgnggwDQ==
-Date:   Fri, 4 Mar 2022 09:27:35 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] kbuild: Allow a suffix with $(LLVM)
-Message-ID: <YiI993aaIYSv23sI@dev-arch.thelio-3990X>
-References: <20220302234400.782002-1-nathan@kernel.org>
- <CAK7LNARAPqTaO0Zho0VFib6kxjfpbnvrX-ZwcVPQgES5T8z4qQ@mail.gmail.com>
+        Fri, 4 Mar 2022 11:48:18 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E93B00
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Mar 2022 08:47:27 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id w37so7989772pga.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Mar 2022 08:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=msiw2RpvtseF5v93UX9fBo9UvEwhVQ5eYYt3vzFADkU=;
+        b=TUc5/Px9IL72ZeJfga+qq9Fl6HtIWsna9YwRwZ0LxrK5LOibeXMrTdkJSRwYpSlWjQ
+         WqnxJyrZQZE2QyUJ8B3smstoWZT3o4VLTM6YhUz91d10+fSlzIl7OumNIQnB2SX8Co4I
+         VCkmuxvgYcOX0ukvMefuuKW0s/ffisaP7Mtc41RkkDVFz4fCkn6J/BSw6F54uQF65hwc
+         PXxiBwF5vhkMfttbZhB18acDpnXH5LjZvur5+ZPbmSeETyLbyRulsgGU0p013V9z+RMO
+         zd4cr/k+ymnP6s99mFkP54csbP5c2rbMws9s82ONtE/ZK5gvGXqV99j0z5vJc9GliO3N
+         ZU3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=msiw2RpvtseF5v93UX9fBo9UvEwhVQ5eYYt3vzFADkU=;
+        b=1HkyQOhHFn1cviJb8MJq3Jl4ZvDrODJeTbriLm/nv/F2xrODAjMjbHPTpYcJMj/x6K
+         J0h0RV50Af00WWGQ1iZgsyubKREIeK9V48OJ94dchIvAdybL5J8Z2blThnrZA0jc8U/1
+         yqKRhivHKmKVhbXXFzWWenzSaRBcF1Gg5kUI+1UUfqhJrdWq2YoJ3Mth0aBI/g9Z7jCg
+         gB01IRvXU0McBoiIBYbbA+m5pqnTyJ6CyLrbl1HKBiIYIfi+whW+KWZvTTyM0K94QC/S
+         WGplp6EUYk/nnXVwohByXVQaMM3pyzeyIkUB/gVghghau+bYcMoOSiE1GSyrO2qX7W0z
+         IAIw==
+X-Gm-Message-State: AOAM532OJFRpRHrpf1mHfhBzVfJsgFYO52736lmM7tSNvfN6M8eU/pTB
+        59tLIBF+lV/svTL2sdkbseORXomL6jCj8I8ytvg=
+X-Google-Smtp-Source: ABdhPJz+oYlQcaTlqKC96s0c/tfNqMl/B+wfvbttRdp1Rpt/ldsjmPjAPtfIUndlguLWKcwLj+I0EQ==
+X-Received: by 2002:a63:6b83:0:b0:37c:5768:b353 with SMTP id g125-20020a636b83000000b0037c5768b353mr7013112pgc.79.1646412446558;
+        Fri, 04 Mar 2022 08:47:26 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a5-20020a621a05000000b004e1cb7632a7sm6738875pfa.64.2022.03.04.08.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 08:47:26 -0800 (PST)
+Message-ID: <6222429e.1c69fb81.2be8.2162@mx.google.com>
+Date:   Fri, 04 Mar 2022 08:47:26 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNARAPqTaO0Zho0VFib6kxjfpbnvrX-ZwcVPQgES5T8z4qQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v5.17-rc5-22-gf6d344cd5fa6
+Subject: kselftest/next build: 8 builds: 0 failed,
+ 8 passed (v5.17-rc5-22-gf6d344cd5fa6)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 08:16:00PM +0900, Masahiro Yamada wrote:
-> On Thu, Mar 3, 2022 at 8:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > The LLVM make variable allows a developer to quickly switch between the
-> > GNU and LLVM tools. However, it does not handle versioned binaries, such
-> > as the ones shipped by Debian, as LLVM=1 just defines the tool variables
-> > with the unversioned binaries.
-> >
-> > There was some discussion during the review of the patch that introduces
-> > LLVM=1 around versioned binaries, ultimately coming to the conclusion
-> > that developers can just add the folder that contains the unversioned
-> > binaries to their PATH, as Debian's versioned suffixed binaries are
-> > really just symlinks to the unversioned binaries in /usr/lib/llvm-#/bin:
-> >
-> > $ realpath /usr/bin/clang-14
-> > /usr/lib/llvm-14/bin/clang
-> >
-> > $ PATH=/usr/lib/llvm-14/bin:$PATH make ... LLVM=1
-> >
-> > However, that can be cumbersome to developers who are constantly testing
-> > series with different toolchains and versions. It is simple enough to
-> > support these versioned binaries directly in the Kbuild system by
-> > allowing the developer to specify the version suffix with LLVM=, which
-> > is shorter than the above suggestion:
-> >
-> > $ make ... LLVM=-14
-> >
-> > It does not change the meaning of LLVM=1 (which will continue to use
-> > unversioned binaries) and it does not add too much additional complexity
-> > to the existing $(LLVM) code, while allowing developers to quickly test
-> > their series with different versions of the whole LLVM suite of tools.
-> >
-> > Link: https://lore.kernel.org/r/20200317215515.226917-1-ndesaulniers@google.com/
-> > Link: https://lore.kernel.org/r/20220224151322.072632223@infradead.org/
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >
-> > RFC -> v1: https://lore.kernel.org/r/Yh%2FegU1LZudfrgVy@dev-arch.thelio-3990X/
-> >
-> > * Tidy up commit message slightly.
-> >
-> > * Add tags.
-> >
-> > * Add links to prior discussions for context.
-> >
-> > * Add change to tools/testing/selftests/lib.mk.
-> >
-> > I would like for this to go through the Kbuild tree, please ack as
-> > necessary.
-> >
-> >  Documentation/kbuild/llvm.rst  |  7 +++++++
-> >  Makefile                       | 24 ++++++++++++++----------
-> >  tools/scripts/Makefile.include | 20 ++++++++++++--------
-> >  tools/testing/selftests/lib.mk |  6 +++++-
-> >  4 files changed, 38 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > index d32616891dcf..5805a8473a36 100644
-> > --- a/Documentation/kbuild/llvm.rst
-> > +++ b/Documentation/kbuild/llvm.rst
-> > @@ -60,6 +60,13 @@ They can be enabled individually. The full list of the parameters: ::
-> >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
-> >
-> > +If your LLVM tools have a suffix and you prefer to test an explicit version rather
-> > +than the unsuffixed executables, use ``LLVM=<suffix>``. For example: ::
-> > +
-> > +       make LLVM=-14
-> > +
-> > +will use ``clang-14``, ``ld.lld-14``, etc.
-> > +
-> >  The integrated assembler is enabled by default. You can pass ``LLVM_IAS=0`` to
-> >  disable it.
-> 
-> 
-> Perhaps, it might be worth mentioning the difference between
-> LLVM=1 and LLVM=<suffix>
-> 
-> The current behavior is,
-> any value other than '1' is regarded as a suffix.
+kselftest/next build: 8 builds: 0 failed, 8 passed (v5.17-rc5-22-gf6d344cd5=
+fa6)
 
-Maybe just adding something like:
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v5.17-rc5-22-gf6d344cd5fa6/
 
-"... prefer to test an explicit version rather than the unsuffixed
-executables like above, ..."
+Tree: kselftest
+Branch: next
+Git Describe: v5.17-rc5-22-gf6d344cd5fa6
+Git Commit: f6d344cd5fa6a15e1ec2da350470b35a3f55f74c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-? I'll try to come up with a clearer way to word everything for v2.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-> > diff --git a/Makefile b/Makefile
-> > index a82095c69fdd..963840c00eae 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -424,8 +424,12 @@ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
-> >  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
-> >
-> >  ifneq ($(LLVM),)
-> > -HOSTCC = clang
-> > -HOSTCXX        = clang++
-> > +ifneq ($(LLVM),1)
-> > +LLVM_SFX := $(LLVM)
-> > +endif
-> 
-> I am OK with this, but please note LLVM=0
-> uses 'clang0', 'ld.lld0' instead of disabling
-> LLVM explicitly.
-> 
-> This might be a small surprise because LLVM_IAS=0
-> is used to disable the integrated assembler.
+Detailed per-defconfig build reports:
 
-Right, but we have that problem right now, as LLVM=0 is currently
-treated like LLVM=1. I suppose I could add a line to the documentation
-in a follow up change to clarify this.
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
-> If you want handle LLVM=<suffix>
-> only when <suffix> start with a hyphen,
-> you can do like this:
-> 
-> ifneq ($(filter -%, $(LLVM)),)
-> LLVM_SFX := $(LLVM)
-> endif
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
 
-I did think about this. I guess the only reason I did not do that in
-this version is someone might have a different suffix scheme than
-Debian's but it is probably better to be a little bit more precise based
-on what we know in this moment. I will change it to that and update the
-documentation.
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
-> In the future, If somebody requests to support
->     make LLVM=/path/to/my/own/llvm/dir/
-> to use llvm tools in that path,
-> we can expand the code like this:
-> 
-> 
-> 
-> # "LLVM=foo/bar/" is a syntax sugar of "LLVM=1 LLVM_PFX=foo/bar"
-> # "LLVM=-foo" is a syntax sugar of "LLVM=1 LLVM_SFX=-foo"
-> 
-> ifneq ($(filter %/, $(LLVM)),)
-> LLVM_PFX := $(LLVM)
-> else ifneq ($(filter -%, $(LLVM)),)
-> LLVM_SFX := $(LLVM)
-> endif
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
 
-I know I personally I would use the prefix form when testing with LLVM=1
-so I think I will just go ahead and support that now, especially since
-Peter had aimed to support a full path with his CC patch that we NAK'd.
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
-> Lastly, I personally prefer to fully spell LLVM_SUFFIX
-> as Nick originally suggested:
-> https://lkml.org/lkml/2020/3/17/1477
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
-Ack, I have changed this locally and I'll send a v2 along shortly once I
-have written some documentation to codify these suggested changes.
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
 
-Thank you for the comments and review, cheers!
-Nathan
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
