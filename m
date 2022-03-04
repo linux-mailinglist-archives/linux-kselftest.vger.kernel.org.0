@@ -2,114 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E104CD6C2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 15:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A5D4CD6D3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 15:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239954AbiCDOvf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Mar 2022 09:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S239987AbiCDOzT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Mar 2022 09:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236106AbiCDOve (ORCPT
+        with ESMTP id S239986AbiCDOzS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:51:34 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6DF76646
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Mar 2022 06:50:46 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so7026280pju.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Mar 2022 06:50:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qGajYq/2Y8cBdDlqrjorvnqnZd0B5kqCZ5qkXRiChPc=;
-        b=LoKymxMnUUd4Qg39UfUGbaGqi+9wFch08Xhwa4MiFfU34YUWHwInABhQbdzbKCViwD
-         Gs5QT18FOd33txjBj2qHeIbU+MO+F3mgnnY23mjTk9n/seq5ITaqC4pW01PBl61EsYG0
-         wPKey6Pmg5+nWxN2qcrQDEY0KLt8MONsgAyOjhPnM9J9mda87YUGpcpQBduSKtFFd8Y1
-         +CeGLWR8OFy0fVq4ttuxxyzHmqmvkjGsdWFZBnJW3RCKn9ain2xDCEs8f0p93Rf3uIVi
-         hQujSsxi+UVZ1aE35BtKU2aoRi4mOc8UJ8Yjm9FVv86wvT22sDcRjSyJWhOMXJwbI6Hu
-         A0wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qGajYq/2Y8cBdDlqrjorvnqnZd0B5kqCZ5qkXRiChPc=;
-        b=HAz4vjFlfjXkjEXemuVMFAjT6OuKvkab67WZpgfFajApDmUoq0saBAib2KUneu9KUH
-         39p9wxiJfnbBPi/gO0aoNMy6zJuJgiGJPA0Ar8VY6qJjGktxG6Dl2bjpg3dE5zhUacp9
-         87NbfFAXWvpHYr3dOdvBfixIaKmAZSILqgo+Z98xu42iOlo4AGM0vmzNlZPSQyM7Bq0J
-         zwCgzWDzuWyVkwt0F1WppWzW6Ylng5ZrqV429kYtqZuOYle00+fWxHaFdfrywjujaVHz
-         IjO9nYyEuYj6U4Px3RlaaUCq4MfjB6m1rg30RduqMdVDENQeQqEtbCK0JWOxluvVtRcc
-         rUTA==
-X-Gm-Message-State: AOAM532em+KyyF6uUDBQ+aSFiPzL2I1GslZ5dQLr163ZxBSodmLS1Rhj
-        8q61FeAY804WwSYsI3tzer/VqQ==
-X-Google-Smtp-Source: ABdhPJwZaTifOscR/tZC+QEj0ArP9SQ5w03IwxALm43ULQDKIqMbnxqU4MINzWjzl2KhNzJK/4pPVg==
-X-Received: by 2002:a17:902:b60f:b0:14f:ee29:5ef7 with SMTP id b15-20020a170902b60f00b0014fee295ef7mr41377789pls.106.1646405446441;
-        Fri, 04 Mar 2022 06:50:46 -0800 (PST)
-Received: from ?IPV6:2409:8a28:e6d:cc00:d089:89fd:5c33:f12? ([2409:8a28:e6d:cc00:d089:89fd:5c33:f12])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056a001d0b00b004f4057fafe2sm5885040pfx.94.2022.03.04.06.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 06:50:46 -0800 (PST)
-Message-ID: <f57550a9-f3d7-9a04-a51a-6224b352af7b@bytedance.com>
-Date:   Fri, 4 Mar 2022 22:50:36 +0800
+        Fri, 4 Mar 2022 09:55:18 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C521B0C4E;
+        Fri,  4 Mar 2022 06:54:29 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6CkHJB_1646405664;
+Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6CkHJB_1646405664)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 04 Mar 2022 22:54:25 +0800
+Message-ID: <c26c8946-f979-de83-38ff-ab6533b55885@linux.alibaba.com>
+Date:   Fri, 4 Mar 2022 06:54:23 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [External] Re: [PATCH 1/2] kselftest/vm: override TARGETS from
- arguments
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
 Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, akpm@linux-foundation.org,
-        shuah@kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220227055330.43087-1-zhouchengming@bytedance.com>
- <b29de093-72dd-1dc5-b591-2a75f49cdb2a@linuxfoundation.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <b29de093-72dd-1dc5-b591-2a75f49cdb2a@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        gregkh@linuxfoundation.org, linux@roeck-us.net,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <202203031105.A1B4CAE6@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022/3/4 3:17 上午, Shuah Khan wrote:
-> On 2/26/22 10:53 PM, Chengming Zhou wrote:
->> We can specify which testcases to build using TARGETS argument,
->> for example: make -C tools/testing/selftests TARGETS=vm, cause
->> the ordinary assignment of TARGETS in Makefile will be ignored.
->> So we need to use override directive to change that.
+
+
+On 3/3/22 11:09, Kees Cook wrote:
+> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
+>> Though, having the IS_ENABLED in there makes me wonder if this test
+>> should instead be made _survivable_ on failure. Something like this,
+>> completely untested:
 >>
->> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->> ---
->>   tools/testing/selftests/vm/Makefile | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
->> index 1607322a112c..0b330a5b1840 100644
->> --- a/tools/testing/selftests/vm/Makefile
->> +++ b/tools/testing/selftests/vm/Makefile
->> @@ -53,7 +53,7 @@ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_progra
->>   CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
->>   CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
->>   -TARGETS := protection_keys
->> +override TARGETS := protection_keys
->>   BINARIES_32 := $(TARGETS:%=%_32)
->>   BINARIES_64 := $(TARGETS:%=%_64)
->>  
+>> And we should, actually, be able to make the "set_lr" functions be
+>> arch-specific, leaving the test itself arch-agnostic....
 > 
-> Let's not override TARGETS - rename TARGETS in this file.
-> VM_TARGETS?
-
-Looks like Andrew has already added this patch to the -mm tree. I think
-both way is ok to solve this problem. Should I rename to VM_TARGETS and
-send another patch?
-
-Thanks.
-
+> Yeah, as a tested example, this works for x86_64, and based on what you
+> had, I'd expect it to work on arm64 too:
 > 
-> thanks,
-> -- Shuah
+> #include <stdio.h>
+> 
+> static __attribute__((noinline))
+> void set_return_addr(unsigned long *expected, unsigned long *addr)
+> {
+>      /* Use of volatile is to make sure final write isn't seen as a dead store. */
+>      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> 
+>      /* Make sure we've found the right place on the stack before writing it. */
+>      if (*ret_addr == expected)
+>          *ret_addr = addr;
+> }
+> 
+> volatile int force_label;
+> int main(void)
+> {
+>      do {
+>          /* Keep labels in scope. */
+>          if (force_label)
+>              goto normal;
+>          if (force_label)
+>              goto redirected;
+> 
+>          set_return_addr(&&normal, &&redirected);
+> normal:
+>          printf("I should be skipped\n");
+>          break;
+
+ From the assembly code, it seems that "&&normal" does't always equal
+to the address of label "normal" when we use clang with -O2.
+
+> redirected:
+>          printf("Redirected\n");
+>      } while (0);
+>
+
+The address of "&&redirected" may appear in the middle of the assembly
+instructions of the printf. If we unconditionally jump to "&&normal",
+it may crash directly because x0 is not set correctly.
+
+>      return 0;
+> }
+> 
+> 
+> It does _not_ work under Clang, though, which I'm still looking at.
+> 
+
+AFAICT, maybe we could specify -O0 optimization to bypass this.
+
+
+BTW:
+Occasionally found, the following code works correctly, but i think
+it doesn't solve the issue :)
+
+#include <stdio.h>
+
+static __attribute__((noinline))
+void set_return_addr(unsigned long *expected, unsigned long *addr)
+{
+     /* Use of volatile is to make sure final write isn't seen as a dead store. */
+     unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+
+     /* Make sure we've found the right place on the stack before writing it. */
+//    if (*ret_addr == expected)
+         *ret_addr = addr;
+}
+volatile int force_label;
+int main(void)
+{
+     do {
+         /* Keep labels in scope. */
+         if (force_label)
+             goto normal;
+         if (force_label)
+             goto redirected;
+
+         set_return_addr(&&normal, &&redirected);
+normal:
+         printf("I should be skipped\n");
+         break;
+
+redirected:
+         printf("Redirected\n");
+         printf("\n");				//add a new printf
+     } while (0);
+
+     return 0;
+}
