@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE9E4CDA65
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 18:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DF54CDA6D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 18:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238791AbiCDRaH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Mar 2022 12:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S233773AbiCDRb0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Mar 2022 12:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239723AbiCDRaG (ORCPT
+        with ESMTP id S236201AbiCDRbZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:30:06 -0500
+        Fri, 4 Mar 2022 12:31:25 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 809B6145635
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Mar 2022 09:29:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 865DB1BE4C4
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Mar 2022 09:30:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646414957;
+        s=mimecast20190719; t=1646415036;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JLcaNFoE2+O0p0Og9VR8JqYYYchyQ3ie9yDd/O1/oyc=;
-        b=B9fII5Y4VZAFQaOWixTS+e/oHavioRBsfG5gAko4u312K9+5NdG4OdL8hiGyGCOmtk8FRw
-        GyfGlav7XBBgO0WtEDJfzJGCDDY8jyt3X+opkoP76xMcx7E52FmPd+dDY9iTxBtmZJrpEs
-        ELl8TXM+N6bSsfv6F3rlrakvgxdA7pQ=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ZanlT+mtaAIwjGwU2toplmlGf6ZuTIRandFY4G7p54=;
+        b=NbwZ7U0NeGXLlFySUT3RipN6s9pKGJ1SBVOF/VjgbsOjbMM1bXof856eHzDzE92KYNxzwG
+        CP4jLNampR0FKKgULVgByLCUVomarXSMCkshn31GDv0lZM3C8mP1yuIA7jh+n5/X1M5N9o
+        UbSxF3SIu5IEzpGiTFhk771ILMnV/FA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-92-k_uNrN6uNGuz396T5P2sYg-1; Fri, 04 Mar 2022 12:29:12 -0500
-X-MC-Unique: k_uNrN6uNGuz396T5P2sYg-1
+ us-mta-654-yu9FeJp1MuappFvdmDwWdQ-1; Fri, 04 Mar 2022 12:30:30 -0500
+X-MC-Unique: yu9FeJp1MuappFvdmDwWdQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9CF521006AA5;
-        Fri,  4 Mar 2022 17:29:09 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0F9781854E37;
+        Fri,  4 Mar 2022 17:30:18 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E74386599;
-        Fri,  4 Mar 2022 17:28:58 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9CC6286599;
+        Fri,  4 Mar 2022 17:29:21 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -53,10 +54,13 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
-Date:   Fri,  4 Mar 2022 18:28:24 +0100
-Message-Id: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sean Young <sean@mess.org>
+Subject: [PATCH bpf-next v2 01/28] bpf: add new is_sys_admin_prog_type() helper
+Date:   Fri,  4 Mar 2022 18:28:25 +0100
+Message-Id: <20220304172852.274126-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
@@ -71,133 +75,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
 
-This is a followup of my v1 at [0].
+Extract a new helper for it, it will be also used for the HID bpf
+implementation.
 
-The short summary of the previous cover letter and discussions is that
-HID could benefit from BPF for the following use cases:
+Cc: Sean Young <sean@mess.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-- simple fixup of report descriptor:
-  benefits are faster development time and testing, with the produced
-  bpf program being shipped in the kernel directly (the shipping part
-  is *not* addressed here).
+---
 
-- Universal Stylus Interface:
-  allows a user-space program to define its own kernel interface
+new in v2
+---
+ kernel/bpf/syscall.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-- Surface Dial:
-  somehow similar to the previous one except that userspace can decide
-  to change the shape of the exported device
-
-- firewall:
-  still partly missing there, there is not yet interception of hidraw
-  calls, but it's coming in a followup series, I promise
-
-- tracing:
-  well, tracing.
-
-
-I tried to address as many comments as I could and here is the short log
-of changes:
-
-v2:
-===
-
-- split the series by subsystem (bpf, HID, libbpf, selftests and
-  samples)
-
-- Added an extra patch at the beginning to not require CAP_NET_ADMIN for
-  BPF_PROG_TYPE_LIRC_MODE2 (please shout if this is wrong)
-
-- made the bpf context attached to HID program of dynamic size:
-  * the first 1 kB will be able to be addressed directly
-  * the rest can be retrieved through bpf_hid_{set|get}_data
-    (note that I am definitivey not happy with that API, because there
-    is part of it in bits and other in bytes. ouch)
-
-- added an extra patch to prevent non GPL HID bpf programs to be loaded
-  of type BPF_PROG_TYPE_HID
-  * same here, not really happy but I don't know where to put that check
-    in verifier.c
-
-- added a new flag BPF_F_INSERT_HEAD for BPF_LINK_CREATE syscall when in
-  used with HID program types.
-  * this flag is used for tracing, to be able to load a program before
-    any others that might already have been inserted and that might
-    change the data stream.
-
-Cheers,
-Benjamin
-
-
-
-[0] https://lore.kernel.org/linux-input/20220224110828.2168231-1-benjamin.tissoires@redhat.com/T/#t
-
-
-Benjamin Tissoires (28):
-  bpf: add new is_sys_admin_prog_type() helper
-  bpf: introduce hid program type
-  HID: hook up with bpf
-  libbpf: add HID program type and API
-  selftests/bpf: add tests for the HID-bpf initial implementation
-  samples/bpf: add new hid_mouse example
-  bpf/hid: add a new attach type to change the report descriptor
-  HID: allow to change the report descriptor from an eBPF program
-  libbpf: add new attach type BPF_HID_RDESC_FIXUP
-  selftests/bpf: add report descriptor fixup tests
-  samples/bpf: add a report descriptor fixup
-  bpf/hid: add hid_{get|set}_data helpers
-  HID: bpf: implement hid_bpf_get|set_data
-  selftests/bpf: add tests for hid_{get|set}_data helpers
-  bpf/hid: add new BPF type to trigger commands from userspace
-  libbpf: add new attach type BPF_HID_USER_EVENT
-  selftests/bpf: add test for user call of HID bpf programs
-  selftests/bpf: hid: rely on uhid event to know if a test device is
-    ready
-  bpf/hid: add bpf_hid_raw_request helper function
-  HID: add implementation of bpf_hid_raw_request
-  selftests/bpf: add tests for bpf_hid_hw_request
-  bpf/verifier: prevent non GPL programs to be loaded against HID
-  HID: bpf: compute only the required buffer size for the device
-  HID: bpf: only call hid_bpf_raw_event() if a ctx is available
-  bpf/hid: Add a flag to add the program at the beginning of the list
-  libbpf: add handling for BPF_F_INSERT_HEAD in HID programs
-  selftests/bpf: Add a test for BPF_F_INSERT_HEAD
-  samples/bpf: fix bpf_program__attach_hid() api change
-
- drivers/hid/Makefile                         |   1 +
- drivers/hid/hid-bpf.c                        | 361 +++++++++
- drivers/hid/hid-core.c                       |  34 +-
- include/linux/bpf-hid.h                      | 129 +++
- include/linux/bpf_types.h                    |   4 +
- include/linux/hid.h                          |  25 +
- include/uapi/linux/bpf.h                     |  59 ++
- include/uapi/linux/bpf_hid.h                 |  50 ++
- kernel/bpf/Makefile                          |   3 +
- kernel/bpf/hid.c                             | 652 +++++++++++++++
- kernel/bpf/syscall.c                         |  26 +-
- kernel/bpf/verifier.c                        |   7 +
- samples/bpf/.gitignore                       |   1 +
- samples/bpf/Makefile                         |   4 +
- samples/bpf/hid_mouse_kern.c                 |  91 +++
- samples/bpf/hid_mouse_user.c                 | 129 +++
- tools/include/uapi/linux/bpf.h               |  59 ++
- tools/lib/bpf/libbpf.c                       |  22 +-
- tools/lib/bpf/libbpf.h                       |   2 +
- tools/lib/bpf/libbpf.map                     |   1 +
- tools/testing/selftests/bpf/prog_tests/hid.c | 788 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/hid.c      | 216 +++++
- 22 files changed, 2649 insertions(+), 15 deletions(-)
- create mode 100644 drivers/hid/hid-bpf.c
- create mode 100644 include/linux/bpf-hid.h
- create mode 100644 include/uapi/linux/bpf_hid.h
- create mode 100644 kernel/bpf/hid.c
- create mode 100644 samples/bpf/hid_mouse_kern.c
- create mode 100644 samples/bpf/hid_mouse_user.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
- create mode 100644 tools/testing/selftests/bpf/progs/hid.c
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index db402ebc5570..cc570891322b 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+ 	case BPF_PROG_TYPE_LWT_SEG6LOCAL:
+ 	case BPF_PROG_TYPE_SK_SKB:
+ 	case BPF_PROG_TYPE_SK_MSG:
+-	case BPF_PROG_TYPE_LIRC_MODE2:
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 	case BPF_PROG_TYPE_CGROUP_DEVICE:
+ 	case BPF_PROG_TYPE_CGROUP_SOCK:
+@@ -2202,6 +2201,17 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
+ 	}
+ }
+ 
++static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
++{
++	switch (prog_type) {
++	case BPF_PROG_TYPE_LIRC_MODE2:
++	case BPF_PROG_TYPE_EXT: /* extends any prog */
++		return true;
++	default:
++		return false;
++	}
++}
++
+ /* last field in 'union bpf_attr' used by this command */
+ #define	BPF_PROG_LOAD_LAST_FIELD core_relo_rec_size
+ 
+@@ -2252,6 +2262,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ 		return -EPERM;
+ 	if (is_perfmon_prog_type(type) && !perfmon_capable())
+ 		return -EPERM;
++	if (is_sys_admin_prog_type(type) && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
+ 
+ 	/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
+ 	 * or btf, we need to check which one it is
 -- 
 2.35.1
 
