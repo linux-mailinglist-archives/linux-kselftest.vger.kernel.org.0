@@ -2,168 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BCA4CD700
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 16:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B7B4CD8CF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 17:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbiCDPCO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Mar 2022 10:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S240683AbiCDQPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Mar 2022 11:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiCDPCO (ORCPT
+        with ESMTP id S240702AbiCDQPK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:02:14 -0500
-Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FCA177D24;
-        Fri,  4 Mar 2022 07:01:25 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6CkI3R_1646406078;
-Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6CkI3R_1646406078)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 04 Mar 2022 23:01:19 +0800
-Message-ID: <48268e7c-a912-c648-be69-b5e41639bf3e@linux.alibaba.com>
-Date:   Fri, 4 Mar 2022 07:01:18 -0800
+        Fri, 4 Mar 2022 11:15:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33B4158790;
+        Fri,  4 Mar 2022 08:14:13 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id F19981F46AE7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646410452;
+        bh=E2LGBSxjIQabf0bhUjv3Mh0qf9oY5wW2xSYGdoaQSxE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=J9MMbjEO8Vy4G1dcC7G1yQdRQ9ENG/jVUp0O6noQk/Ma9SU0TLw8UG8CkNW2jzY5b
+         veOgEMQBVj9OJM1zt6lBrNmxVrWnsBgnUSoWp8GUf5DT7cQYXjUQRj0pGetcZX+kEw
+         21ju2TRlhS+XJIr3CEVqM4YYBBNA68UdKjiI97IhBvVbBOqzpvtqCsDgZB83MFvyuY
+         1RJyljs9KALlkEydSHqQo0YtWxP1+RAK+EZZIEiiULoAbrgWRWdFWMHvHe3DBrYx5c
+         eIsqA8VwNkmev52sWjJzCbJdrjnJqHeXHxms2Vxfb+I/NvDZw7ZQ49br7OGtWBx4ic
+         Dxl2RU/jOHsCg==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3] selftests: vm: Add test for Soft-Dirty PTE bit
+Organization: Collabora
+References: <20220224212335.3045905-1-usama.anjum@collabora.com>
+        <3b7c068b-ac7e-62fc-f0cd-a8dbf8642876@redhat.com>
+        <6133317f-4da0-3aae-f352-b75f0f94dbd4@linuxfoundation.org>
+        <87o82mkhif.fsf@collabora.com>
+        <ee9b8c8b-0d27-bd01-e10d-9062c32f2486@linuxfoundation.org>
+Date:   Fri, 04 Mar 2022 11:14:08 -0500
+In-Reply-To: <ee9b8c8b-0d27-bd01-e10d-9062c32f2486@linuxfoundation.org> (Shuah
+        Khan's message of "Thu, 3 Mar 2022 14:46:08 -0700")
+Message-ID: <87r17hg0fj.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Content-Language: en-US
-From:   Dan Li <ashimida@linux.alibaba.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
- <c26c8946-f979-de83-38ff-ab6533b55885@linux.alibaba.com>
-In-Reply-To: <c26c8946-f979-de83-38ff-ab6533b55885@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-
-On 3/4/22 06:54, Dan Li wrote:
-> 
-> 
-> On 3/3/22 11:09, Kees Cook wrote:
->> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
->>> Though, having the IS_ENABLED in there makes me wonder if this test
->>> should instead be made _survivable_ on failure. Something like this,
->>> completely untested:
+> On 3/3/22 11:39 AM, Gabriel Krisman Bertazi wrote:
+>> Shuah Khan <skhan@linuxfoundation.org> writes:
+>> 
+>>> On 2/28/22 2:37 AM, David Hildenbrand wrote:
+>>>> On 24.02.22 22:23, Muhammad Usama Anjum wrote:
+>>>>> This introduces three tests:
+>>>>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
+>>>>> check if the SD bit flipped.
+>>>>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
+>>>>> 3) Check soft-dirty on huge pages
+>>>>>
+>>>>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
+>>>>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
+>>>>> same issue that he fixed, and this test would have caught it.
+>>>>>
+>>>> A note that madv_populate.c already contains some SOFTDIRTY tests
+>>>> regarding MADV_POPULATE. Eventually we want to factor out
+>>>> softdirty/pagemap handling+checks for easier reuse.
+>>>>
 >>>
->>>
->>> And we should, actually, be able to make the "set_lr" functions be
->>> arch-specific, leaving the test itself arch-agnostic....
->>
->> Yeah, as a tested example, this works for x86_64, and based on what you
->> had, I'd expect it to work on arm64 too:
->>
->> #include <stdio.h>
->>
->> static __attribute__((noinline))
->> void set_return_addr(unsigned long *expected, unsigned long *addr)
->> {
->>      /* Use of volatile is to make sure final write isn't seen as a dead store. */
->>      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
->>
->>      /* Make sure we've found the right place on the stack before writing it. */
->>      if (*ret_addr == expected)
->>          *ret_addr = addr;
->> }
->>
->> volatile int force_label;
->> int main(void)
->> {
->>      do {
->>          /* Keep labels in scope. */
->>          if (force_label)
->>              goto normal;
->>          if (force_label)
->>              goto redirected;
->>
->>          set_return_addr(&&normal, &&redirected);
->> normal:
->>          printf("I should be skipped\n");
->>          break;
-> 
->  From the assembly code, it seems that "&&normal" does't always equal
-> to the address of label "normal" when we use clang with -O2.
-> 
->> redirected:
->>          printf("Redirected\n");
->>      } while (0);
->>
-> 
-> The address of "&&redirected" may appear in the middle of the assembly
-> instructions of the printf. If we unconditionally jump to "&&normal",> it may crash directly because x0 is not set correctly.
+>>> Is this patch unnecessary then?
+>> It is not unnecessary since the madv test doesn't cover the bug tested
+>> here, afaik.  But, as mentioned when I originally submitted this patch,
+>> it should be merged into selftests/vm/madv_populate.c or, at least,
+>> reuse that existing infrastructure.
+>> https://lore.kernel.org/lkml/87lf553z5g.fsf@collabora.com/
+>> 
+>
+> Oops this one came in a few months ago and appears to have slipped
+> through and didn't get the right attention. Sorry about that.
+>
+> Please resend the patch and cc all the everybody on this thread.
+>
+> I would like to have your patch reviewed and looked at first. This
+> patch needs rework sine it has several comments to be addressed.
 
-Sorry, it should be:
-The address of "&&redirected" may appear in the middle of the assembly
-instructions of the printf. If we unconditionally jump to "&&redirected",
-it may crash directly because x0 of printf is not set correctly.
+Hi Shuah,
 
-Thanks,
-Dan.
-> 
->>      return 0;
->> }
->>
->>
->> It does _not_ work under Clang, though, which I'm still looking at.
->>
-> 
-> AFAICT, maybe we could specify -O0 optimization to bypass this.
-> 
-> 
-> BTW:
-> Occasionally found, the following code works correctly, but i think
-> it doesn't solve the issue :)
-> 
-> #include <stdio.h>
-> 
-> static __attribute__((noinline))
-> void set_return_addr(unsigned long *expected, unsigned long *addr)
-> {
->      /* Use of volatile is to make sure final write isn't seen as a dead store. */
->      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> 
->      /* Make sure we've found the right place on the stack before writing it. */
-> //    if (*ret_addr == expected)
->          *ret_addr = addr;
-> }
-> volatile int force_label;
-> int main(void)
-> {
->      do {
->          /* Keep labels in scope. */
->          if (force_label)
->              goto normal;
->          if (force_label)
->              goto redirected;
-> 
->          set_return_addr(&&normal, &&redirected);
-> normal:
->          printf("I should be skipped\n");
->          break;
-> 
-> redirected:
->          printf("Redirected\n");
->          printf("\n");                //add a new printf
->      } while (0);
-> 
->      return 0;
-> }
+The patch being discussed in that thread is the same that Usama is
+proposing here, minus a few modifications. Usama has taken over the work
+to upstream it.
+
+We just spoke, and he will follow up with a new version that addresses
+the coding issues and reuses the infrastructure from madv_populate.c
+
+Sorry for the noise.
+
+-- 
+Gabriel Krisman Bertazi
