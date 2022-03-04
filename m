@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B234CD145
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 10:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838D44CD13C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Mar 2022 10:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239065AbiCDJie (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Mar 2022 04:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S238336AbiCDJia (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Mar 2022 04:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239470AbiCDJiM (ORCPT
+        with ESMTP id S239474AbiCDJiM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 4 Mar 2022 04:38:12 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5663C75603;
-        Fri,  4 Mar 2022 01:37:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C14180238;
+        Fri,  4 Mar 2022 01:37:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B42A3618EF;
-        Fri,  4 Mar 2022 09:37:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BD7C340E9;
-        Fri,  4 Mar 2022 09:37:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A71561877;
+        Fri,  4 Mar 2022 09:37:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5D8C340EF;
+        Fri,  4 Mar 2022 09:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646386638;
-        bh=bHeESoq0k2mSEDu9DZQY+QQFO8wHekg/jk6QS3O0pUE=;
+        s=k20201202; t=1646386640;
+        bh=fNTV4I+C0WTycHpfTEy4ufYiU5ACD5yToWtt9P3LLcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MEZ9NTT0OI4NPRUAkGocKZ6x94r0wWgcfZB9FQh0TvORgBYTRCnPx9ItN/NHWvM2d
-         BUaMsHjV83KQvtldKmOnTZw/mq8H39XbmFHVMnvSzLyqU+rEFTwatNCVqBC6gzCc8n
-         YTc6xTkBkHIYwKJT9ZHuiv8K8uShhMR2uemUbWwWuc6nGHd7clt0At2zEtwV1yOsW8
-         F9KN4ajgNdG/o02bvOKldetVMDVHbvMQqFYQDqkxKTcbKlSF9gBFaKE8xPoFgK4g37
-         9E24Vg2AUYBFhigxLz+HykcSArkB7Nq0wzPe9DUYLauq5iysOMpsInBRKQTHcQJ3Ac
-         Yj0kwWqKYebfQ==
+        b=Zxklv0+mjLnuEjVfhieo8wknZwsJ+Ka5beq8Enuh+yawD7aJyoar1IHAb148XKLoa
+         TakPoKOdaiNnLohz1FNH3Glf7oqxP8X2jojeYzrRBqo3HyrUlBOQwsRP0PNTGpcJpp
+         +HT+seybm3SVuS+UdHzFJJwsYbdHevMHLbiCQDBT3gMmr1Izbyy7G8fCmJKuyPteqx
+         XcWFEOlG2x26Y6qNfXRRF5Ec+pG8Hl0LgJPvzoIH1rBgrrrbvzqY6JZkpyZjJzqm9v
+         5t+QVrNNp37qd+c7kee87RmRHi/6hidyvN23duVe8fke/xM2WYwfJ56Z5aNy80Vuux
+         XwnMo73FqZIIg==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Nathaniel McCallum <nathaniel@profian.com>,
@@ -41,9 +41,9 @@ Cc:     Nathaniel McCallum <nathaniel@profian.com>,
         Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
         linux-kernel@vger.kernel.org (open list)
-Subject: [RFC PATCH v2.1 23/30] selftests/sgx: Introduce dynamic entry point
-Date:   Fri,  4 Mar 2022 11:35:17 +0200
-Message-Id: <20220304093524.397485-23-jarkko@kernel.org>
+Subject: [RFC PATCH v2.1 24/30] selftests/sgx: Introduce TCS initialization enclave operation
+Date:   Fri,  4 Mar 2022 11:35:18 +0200
+Message-Id: <20220304093524.397485-24-jarkko@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220304093524.397485-1-jarkko@kernel.org>
 References: <20220304093524.397485-1-jarkko@kernel.org>
@@ -61,47 +61,98 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Reinette Chatre <reinette.chatre@intel.com>
 
-The test enclave (test_encl.elf) is built with two initialized
-Thread Control Structures (TCS) included in the binary. Both TCS are
-initialized with the same entry point, encl_entry, that correctly
-computes the absolute address of the stack based on the stack of each
-TCS that is also built into the binary.
+The Thread Control Structure (TCS) contains meta-data used by the
+hardware to save and restore thread specific information when
+entering/exiting the enclave. A TCS can be added to an initialized
+enclave by first adding a new regular enclave page, initializing the
+content of the new page from within the enclave, and then changing that
+page's type to a TCS.
 
-A new TCS can be added dynamically to the enclave and requires to be
-initialized with an entry point used to enter the enclave. Since the
-existing entry point, encl_entry, assumes that the TCS and its stack
-exists at particular offsets within the binary it is not able to handle
-a dynamically added TCS and its stack.
-
-Introduce a new entry point, encl_dyn_entry, that initializes the
-absolute address of that thread's stack to the address immediately
-preceding the TCS itself. It is now possible to dynamically add a
-contiguous memory region to the enclave with the new stack preceding
-the new TCS. With the new TCS initialized with encl_dyn_entry as entry
-point the absolute address of the stack is computed correctly on entry.
+Support the initialization of a TCS from within the enclave.
+The variable information needed that should be provided from outside
+the enclave is the address of the TCS, address of the State Save Area
+(SSA), and the entry point that the thread should use to enter the
+enclave. With this information provided all needed fields of a TCS
+can be initialized.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/sgx/test_encl_bootstrap.S | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/sgx/defines.h   |  8 +++++++
+ tools/testing/selftests/sgx/test_encl.c | 30 +++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
-index 82fb0dfcbd23..03ae0f57e29d 100644
---- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
-+++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
-@@ -45,6 +45,12 @@ encl_entry:
- 	# TCS #2. By adding the value of encl_stack to it, we get
- 	# the absolute address for the stack.
- 	lea	(encl_stack)(%rbx), %rax
-+	jmp encl_entry_core
-+encl_dyn_entry:
-+	# Entry point for dynamically created TCS page expected to follow
-+	# its stack directly.
-+	lea -1(%rbx), %rax
-+encl_entry_core:
- 	xchg	%rsp, %rax
- 	push	%rax
+diff --git a/tools/testing/selftests/sgx/defines.h b/tools/testing/selftests/sgx/defines.h
+index b638eb98c80c..d8587c971941 100644
+--- a/tools/testing/selftests/sgx/defines.h
++++ b/tools/testing/selftests/sgx/defines.h
+@@ -26,6 +26,7 @@ enum encl_op_type {
+ 	ENCL_OP_NOP,
+ 	ENCL_OP_EACCEPT,
+ 	ENCL_OP_EMODPE,
++	ENCL_OP_INIT_TCS_PAGE,
+ 	ENCL_OP_MAX,
+ };
  
+@@ -68,4 +69,11 @@ struct encl_op_emodpe {
+ 	uint64_t flags;
+ };
+ 
++struct encl_op_init_tcs_page {
++	struct encl_op_header header;
++	uint64_t tcs_page;
++	uint64_t ssa;
++	uint64_t entry;
++};
++
+ #endif /* DEFINES_H */
+diff --git a/tools/testing/selftests/sgx/test_encl.c b/tools/testing/selftests/sgx/test_encl.c
+index 5b6c65331527..c0d6397295e3 100644
+--- a/tools/testing/selftests/sgx/test_encl.c
++++ b/tools/testing/selftests/sgx/test_encl.c
+@@ -57,6 +57,35 @@ static void *memcpy(void *dest, const void *src, size_t n)
+ 	return dest;
+ }
+ 
++static void *memset(void *dest, int c, size_t n)
++{
++	size_t i;
++
++	for (i = 0; i < n; i++)
++		((char *)dest)[i] = c;
++
++	return dest;
++}
++
++static void do_encl_init_tcs_page(void *_op)
++{
++	struct encl_op_init_tcs_page *op = _op;
++	void *tcs = (void *)op->tcs_page;
++	uint32_t val_32;
++
++	memset(tcs, 0, 16);			/* STATE and FLAGS */
++	memcpy(tcs + 16, &op->ssa, 8);		/* OSSA */
++	memset(tcs + 24, 0, 4);			/* CSSA */
++	val_32 = 1;
++	memcpy(tcs + 28, &val_32, 4);		/* NSSA */
++	memcpy(tcs + 32, &op->entry, 8);	/* OENTRY */
++	memset(tcs + 40, 0, 24);		/* AEP, OFSBASE, OGSBASE */
++	val_32 = 0xFFFFFFFF;
++	memcpy(tcs + 64, &val_32, 4);		/* FSLIMIT */
++	memcpy(tcs + 68, &val_32, 4);		/* GSLIMIT */
++	memset(tcs + 72, 0, 4024);		/* Reserved */
++}
++
+ static void do_encl_op_put_to_buf(void *op)
+ {
+ 	struct encl_op_put_to_buf *op2 = op;
+@@ -100,6 +129,7 @@ void encl_body(void *rdi,  void *rsi)
+ 		do_encl_op_nop,
+ 		do_encl_eaccept,
+ 		do_encl_emodpe,
++		do_encl_init_tcs_page,
+ 	};
+ 
+ 	struct encl_op_header *op = (struct encl_op_header *)rdi;
 -- 
 2.35.1
 
