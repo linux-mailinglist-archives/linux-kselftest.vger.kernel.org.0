@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8416C4CE167
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Mar 2022 01:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD59B4CE170
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Mar 2022 01:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiCEAVv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Mar 2022 19:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S230053AbiCEAY0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Mar 2022 19:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiCEAVs (ORCPT
+        with ESMTP id S229449AbiCEAYZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Mar 2022 19:21:48 -0500
+        Fri, 4 Mar 2022 19:24:25 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C74255F90;
-        Fri,  4 Mar 2022 16:21:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6587B555;
+        Fri,  4 Mar 2022 16:23:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D24F561F08;
-        Sat,  5 Mar 2022 00:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3966BC340F3;
-        Sat,  5 Mar 2022 00:20:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E670861F46;
+        Sat,  5 Mar 2022 00:23:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57795C340F1;
+        Sat,  5 Mar 2022 00:23:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646439659;
-        bh=B1FjitSdpbaZU/Y+cqd+b/Ws5YFB8gaS+fSH+7oHtf8=;
+        s=k20201202; t=1646439816;
+        bh=oVr0MHcRWA7BlyaKO3wuNIotdRH8J4KNzvrQ/jGVkD8=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AkPcC0ZwOkREUF8PF9uRiiiNHA7QlRzkeG0+/58FUt/Bs2Dg5/ng3PyE/ebAZzAoh
-         9PImjDhdfeq08e/rLq7O5oqeEERvLuQPpgqGBG1O9d76r41yXyfD7BVhoow2GGRJhO
-         xthX6t7t5FB1Z4QNxK9v3Q/VcGsUNvJSqZeA4cHbq0y6ti/4ze3gapr5dpGJFGCvDK
-         tfXuXVAEIg1lF5WS3DiCChbKXHUoU8ImQOXdxGUAvugVErm/aN6NG4GEUUZjAtl0I9
-         Kl3y5byOjiMbvzVoILroCewuKAVm4kTquniu5hsp1AeXhbjxFrwM7Y8Js5yLHKLZp6
-         Ie0PtP5GTiT7Q==
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d07ae0b1c4so108840637b3.11;
-        Fri, 04 Mar 2022 16:20:59 -0800 (PST)
-X-Gm-Message-State: AOAM533oI7XdvvTyJrqldg7ZOpv7BbwtrmPWLoKAWWa5ouC6HSbV45q6
-        eAJfJYeO5GhI0KVgkntbiDI9T3hN0XpBaTKCC1o=
-X-Google-Smtp-Source: ABdhPJwEKBwWWaOAF6bL3fC7cgLiukLooTdcPALz1Su1cbj0MLLRaEOXNuJuNIbTCI/mSEImg6jSKahuqZ3hLpS/aeQ=
-X-Received: by 2002:a81:57d5:0:b0:2dc:62b3:1455 with SMTP id
- l204-20020a8157d5000000b002dc62b31455mr1007641ywb.73.1646439658179; Fri, 04
- Mar 2022 16:20:58 -0800 (PST)
+        b=ExYDSE7cO64LbKB8MMqhdgVwaUEqsVziHk9DUkI6TrMrMdGWB8MweNd2sjAaQPcQA
+         dybytGWsBzuR7B/vjZGVIcj4PAemUd72e06gAYDbQzWu7cIRc/nagMaPAP3B4RPUdX
+         E+js8N6XrcSzImDyOEVwwdT/r3T9mpZC3Al5wbeoO7LqT1njD3pHihxj8SU/oUzI7C
+         CwO5mm6lHFMgCBs3ji2dMn3kdAp4ov3Rm18qkxaWrHGP5JYE4NhGKx8mhfiXmo3xvk
+         Jk2soRi+gzqQFqjRX8GV6yWvCg5ARMZuPi78da9+n27gspEm3iwHqoLxladL2N69ga
+         w8LFjeBRdf9sQ==
+Received: by mail-yb1-f175.google.com with SMTP id l2so536534ybe.8;
+        Fri, 04 Mar 2022 16:23:36 -0800 (PST)
+X-Gm-Message-State: AOAM530s/Y7Z9x6qlff4RSS5uF6Mcl/TGdITkGY0ppghpcBf8ahkdZLP
+        2UJ0B0kl3XJ3t3nGx51zPo98/Mho+jtzk4U85Tw=
+X-Google-Smtp-Source: ABdhPJxKvkWE3NA74yGINk/xO5jvCCL0DMTS/uh1q2KYRGBuxnS3RoyTMxWDUovTCNYRc94qBeDKauaBBebuL5T2JFs=
+X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
+ j1-20020a258b81000000b0062917d568c1mr415320ybl.449.1646439815376; Fri, 04 Mar
+ 2022 16:23:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com> <20220304172852.274126-3-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220304172852.274126-3-benjamin.tissoires@redhat.com>
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com> <20220304172852.274126-4-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220304172852.274126-4-benjamin.tissoires@redhat.com>
 From:   Song Liu <song@kernel.org>
-Date:   Fri, 4 Mar 2022 16:20:46 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW62DZzYb6RwDETNB7u2gMWw2GRwQ_60-363PSvHWEyhUA@mail.gmail.com>
-Message-ID: <CAPhsuW62DZzYb6RwDETNB7u2gMWw2GRwQ_60-363PSvHWEyhUA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
+Date:   Fri, 4 Mar 2022 16:23:24 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5UmK0TQwjR3_oXLeTix3HimnQdjRLattmM+3i8Y996yA@mail.gmail.com>
+Message-ID: <CAPhsuW5UmK0TQwjR3_oXLeTix3HimnQdjRLattmM+3i8Y996yA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 03/28] HID: hook up with bpf
 To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -79,39 +79,50 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
 <benjamin.tissoires@redhat.com> wrote:
 >
+> Now that BPF can be compatible with HID, add the capability into HID.
+> drivers/hid/hid-bpf.c takes care of the glue between bpf and HID, and
+> hid-core can then inject any incoming event from the device into a BPF
+> program to filter/analyze it.
+>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
 [...]
-> +#endif
+
 > +
-> +static inline bool bpf_hid_link_empty(struct bpf_hid *bpf,
-> +                                     enum bpf_hid_attach_type type)
+> +static int hid_bpf_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
 > +{
-> +       return list_empty(&bpf->links[type]);
+> +       int err = 0;
+> +
+> +       switch (type) {
+> +       case BPF_HID_ATTACH_DEVICE_EVENT:
+> +               if (!hdev->bpf.ctx) {
+> +                       hdev->bpf.ctx = bpf_hid_allocate_ctx(hdev, HID_BPF_MAX_BUFFER_SIZE);
+> +                       if (IS_ERR(hdev->bpf.ctx)) {
+> +                               err = PTR_ERR(hdev->bpf.ctx);
+> +                               hdev->bpf.ctx = NULL;
+> +                       }
+> +               }
+> +               break;
+> +       default:
+> +               /* do nothing */
+
+Do we need to show warning and/or return EINVAL here?
+
+> +       }
+> +
+> +       return err;
 > +}
 > +
-> +struct bpf_hid_hooks {
-> +       struct hid_device *(*hdev_from_fd)(int fd);
-> +       int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> +       void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> +static void hid_bpf_array_detached(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> +{
+> +       switch (type) {
+> +       case BPF_HID_ATTACH_DEVICE_EVENT:
+> +               kfree(hdev->bpf.ctx);
+> +               hdev->bpf.ctx = NULL;
+> +               break;
+> +       default:
+> +               /* do nothing */
 
-shall we call this array_detach()? detached sounds like a function that
-checks the status of link/hook.
+ditto
 
-[...]
-
-> --- /dev/null
-> +++ b/kernel/bpf/hid.c
-> @@ -0,0 +1,437 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * based on kernel/bpf/net-namespace.c
-> + */
-
-I guess we don't need this comment.
-
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/bpf-hid.h>
-> +#include <linux/filter.h>
-> +#include <linux/hid.h>
-> +#include <linux/hidraw.h>
 [...]
