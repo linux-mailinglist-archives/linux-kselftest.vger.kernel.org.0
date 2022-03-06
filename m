@@ -2,125 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2CF4CE622
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Mar 2022 17:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C624CE99F
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Mar 2022 07:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiCEQ6x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Mar 2022 11:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        id S233073AbiCFGwH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Mar 2022 01:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiCEQ6x (ORCPT
+        with ESMTP id S233069AbiCFGvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Mar 2022 11:58:53 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5408E41FA9;
-        Sat,  5 Mar 2022 08:58:02 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 47BBB101CB3; Sat,  5 Mar 2022 16:58:00 +0000 (UTC)
-Date:   Sat, 5 Mar 2022 16:58:00 +0000
-From:   Sean Young <sean@mess.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Song Liu <song@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 01/28] bpf: add new is_sys_admin_prog_type()
- helper
-Message-ID: <YiOWmG2oARiYmRHr@gofer.mess.org>
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-2-benjamin.tissoires@redhat.com>
- <CAPhsuW4otgwwDN6+xcjPXmZyUDiynEKFtXjaFb-=kjz7HzUmZw@mail.gmail.com>
- <CAO-hwJJjDMaTXH9i1UkO7Qy+sbNprDyW67cRp8HryMMWMi5H9w@mail.gmail.com>
+        Sun, 6 Mar 2022 01:51:55 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BCC6FA21
+        for <linux-kselftest@vger.kernel.org>; Sat,  5 Mar 2022 22:51:00 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so21222498lfb.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Mar 2022 22:51:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=KDgAx1nMZI4VA0728iAuqALj69hyn7X0WLLUiz2m+OH09NDtWJqkn0K0IjhaqXccDL
+         nYA9IS56U+BvEYDp5ZuYOTDJ28DkbGQXOo4nCoFRXwOq8btCUGBKve+nLdvXGAtQGfZd
+         8/3HmQyIohZytZNIAaZ2YSJ+VGfF2cuAbX+92kqJIy7dPjcCYPV+qxcIVHj5OJkNioe8
+         RnnPJV63I7FofbcYlKCR7cawwHR+Gyj/OksLFoNh7LOBENUnMHRRrWfgS+R5N0DbQgRd
+         FM7OvtlHYW5haJ9bCovh/xFv8pj40s/F/HFWyLhlvxnDTkjGlvvz7xTkeBicCtgptiHh
+         fIkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=iG/zwOkhfEHdSYp0uR9TJ+P7uRyHzW5Qe0Ociqraa71kkON+iotQPLM/fS8M6y8kVt
+         FbIrgWm6UTN1wojCrN2JySPT1YZn/rrwE+jFRUvA/nN/2QBut0ECzzw3Z0EW+mI2o2XT
+         cDq+kFEz8ocQ913XYq+yTiBAydNMqwZf5/A9bRRhFZgrNLKl5KanoJUacSR9XI5OQMna
+         zSLbvdX9nwDgeA+i1REbjV6ABZV5n7WopFmmYo2mW4+PJb0rxyOj44kWFMNEYCA0FUdx
+         zEunLQHA+lJ5r5TGMteIWnHirfiMO8A9wjG5TTUuzWR6q/VBn117Wy4D6dmHbm1ToUjD
+         3mbw==
+X-Gm-Message-State: AOAM5304rVmiY/Yu17jmr/igepqnhDemfOU3IQSm8kttEIxgkVJWQnUc
+        LTNaT+m60yWkAVS+3aoTkliutgFkLGPOb8SMS3XY4643wVU=
+X-Google-Smtp-Source: ABdhPJzq04i8VJyC6uwySEx5tzgrtxCg/XL0hqdBTWFWm66/zQAuy3m2ubrZV75jrYUP9jvmG0PdhfRUhLuebg8/B7w=
+X-Received: by 2002:a2e:94c7:0:b0:247:de4e:e9bc with SMTP id
+ r7-20020a2e94c7000000b00247de4ee9bcmr2397951ljh.397.1646549448778; Sat, 05
+ Mar 2022 22:50:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO-hwJJjDMaTXH9i1UkO7Qy+sbNprDyW67cRp8HryMMWMi5H9w@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Reply-To: mrs.susanelwoodhara17@gmail.com
+Sender: mrs.arawyann@gmail.com
+Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:50:48 -0800 (PST)
+From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
+Date:   Sun, 6 Mar 2022 06:50:48 +0000
+X-Google-Sender-Auth: NOWRSnt_sskMD3s295a30bcHvEs
+Message-ID: <CACppo47TD9J4Sy+vaJu1wXHqd88WqFwMNn6OdkY1khwXu3TuFw@mail.gmail.com>
+Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 11:07:04AM +0100, Benjamin Tissoires wrote:
-> On Sat, Mar 5, 2022 at 12:12 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 9:30 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
-> > >
-> > > Extract a new helper for it, it will be also used for the HID bpf
-> > > implementation.
-> > >
-> > > Cc: Sean Young <sean@mess.org>
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > ---
-> > >
-> > > new in v2
-> > > ---
-> > >  kernel/bpf/syscall.c | 14 +++++++++++++-
-> > >  1 file changed, 13 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > > index db402ebc5570..cc570891322b 100644
-> > > --- a/kernel/bpf/syscall.c
-> > > +++ b/kernel/bpf/syscall.c
-> > > @@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
-> > >         case BPF_PROG_TYPE_LWT_SEG6LOCAL:
-> > >         case BPF_PROG_TYPE_SK_SKB:
-> > >         case BPF_PROG_TYPE_SK_MSG:
-> > > -       case BPF_PROG_TYPE_LIRC_MODE2:
-> > >         case BPF_PROG_TYPE_FLOW_DISSECTOR:
-> > >         case BPF_PROG_TYPE_CGROUP_DEVICE:
-> > >         case BPF_PROG_TYPE_CGROUP_SOCK:
-> > > @@ -2202,6 +2201,17 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
-> > >         }
-> > >  }
-> > >
-> > > +static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
-> > > +{
-> > > +       switch (prog_type) {
-> > > +       case BPF_PROG_TYPE_LIRC_MODE2:
-> > > +       case BPF_PROG_TYPE_EXT: /* extends any prog */
-> > > +               return true;
-> > > +       default:
-> > > +               return false;
-> > > +       }
-> > > +}
-> >
-> > I am not sure whether we should do this. This is a behavior change, that may
-> > break some user space. Also, BPF_PROG_TYPE_EXT is checked in
-> > is_perfmon_prog_type(), and this change will make that case useless.
-> 
-> Sure, I can drop it from v3 and make this function appear for HID only.
+GOD BLESS YOU AS YOU REPLY URGENTLY
 
-For BPF_PROG_TYPE_LIRC_MODE2, I don't think this change will break userspace.
-This is called from ir-keytable(1) which is called from udev. It should have
-all the necessary permissions.
-
-In addition, the vast majority IR decoders are non-bpf. bpf ir decoders have
-very few users at the moment.
-
-I am working on completely new userspace tooling which will make extensive
-use of bpf ir decoding with full lircd and IRP compatibility, but this is not
-finished yet (see https://github.com/seanyoung/cir).
-
-Thanks
-
-Sean
+ Hello Dear,
+Greetings, I am contacting you regarding an important information i
+have for you please reply to confirm your email address and for more
+details Thanks
+Regards
+Mrs Susan Elwood Hara.
