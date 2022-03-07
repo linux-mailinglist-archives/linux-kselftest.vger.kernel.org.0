@@ -2,53 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CEC4D0605
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 19:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E203A4D066C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 19:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244481AbiCGSM7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Mar 2022 13:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S243685AbiCGSYo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Mar 2022 13:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241596AbiCGSM6 (ORCPT
+        with ESMTP id S234218AbiCGSYo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:12:58 -0500
+        Mon, 7 Mar 2022 13:24:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA5265813;
-        Mon,  7 Mar 2022 10:12:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F91085BC2;
+        Mon,  7 Mar 2022 10:23:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B154612D8;
-        Mon,  7 Mar 2022 18:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4755C340EF;
-        Mon,  7 Mar 2022 18:12:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BCB86132C;
+        Mon,  7 Mar 2022 18:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EF2C340F9;
+        Mon,  7 Mar 2022 18:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646676722;
-        bh=7SnCPkdwsxJGwpkdFqlHuUuDSdeXpOUHPBz01VNaJaE=;
+        s=k20201202; t=1646677428;
+        bh=CS4P4e6QC0dUdnxHehPTl5+rFZM2fucKmx3loJHj/iE=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uEGbH611keqViMtcvSDFfr04yicHxU+HboFesqdEiydQBak3alHEjkzuKTxpzPGla
-         3pMmSIxsb3NxypO7rjoFWjjTNLHIX6nmFSkkH4wZXmF7ZB028kTBBdqOJ/rMbHu+X+
-         BDbhxVhTw8AGyjKAR6vBiPFFfjjzfIMp5ULo9OY1abxANhVz9xryZY0QLs8zNnKN9V
-         g4+k7MheWv5Mt6jQFMEG7lhWbTjj4OG/527rGF+IB1Ll7I+W7w9eaXRQg64lkN748R
-         GXmM4mZyVp82jCm841EXGRBQrdm306+l67gXeZxnBMfLznjcwMshImBfm9vQ0HxsaL
-         +a4fVodNPsHvA==
-Received: by mail-yb1-f170.google.com with SMTP id l2so13190233ybe.8;
-        Mon, 07 Mar 2022 10:12:02 -0800 (PST)
-X-Gm-Message-State: AOAM532L66tU+k/9qKud/syfLhoVLo3D3RjqxA5KEFWSCh0nEWYtBDPV
-        knhJ7ETIHq1kHbQhtaJpk204SoJI3BpcfSI+XoQ=
-X-Google-Smtp-Source: ABdhPJwILUMoOgkBhUjC+vc910B4Xeebwa3HBZyw9YZNJbz9I1ydBkpMbaTWiwiyIzw/MiTvG/mOEQeCZrB2btDc64E=
-X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
- j1-20020a258b81000000b0062917d568c1mr8199079ybl.449.1646676721862; Mon, 07
- Mar 2022 10:12:01 -0800 (PST)
+        b=Ffv6OZy6+JZpPO3lSvUF9pq/MQsS36/mvR8gcmuk+Ax4+sCL5HmbZFpbeRplVobaX
+         uNTGVxZOSfFpDStLOkY2Gv4T2Og868F09ZW8vaNG0fH0uhJouLy8S/HelBl0W8oUGs
+         r6XwpPfS1g+jBbHLeTKArSQVbyO2/6A60X5PU+LaLw+/mjfjb4jGJk5Uos3OWR2bng
+         9oUinZZFXg0NcSNqwfSXu5+b9gaG3rQTnkt6ohrSeuJ3VDWbRceUgqFFYsu03CEvFO
+         DSK5KHhbnhu/en6xNHrRONQunStl7B/7GAW2sXKhZy90b11FYLG3CaYSUMHfqYfzO4
+         9askWT4WfvERw==
+Received: by mail-yb1-f182.google.com with SMTP id h126so32787865ybc.1;
+        Mon, 07 Mar 2022 10:23:48 -0800 (PST)
+X-Gm-Message-State: AOAM532YvSPIA2K9oIBByh/vonX+E2v2/yma5GiUyuAMNa8C897fbrIc
+        K9DeWFnBFPkAzTe6Le/MattYA4+JQSRsnzFoslY=
+X-Google-Smtp-Source: ABdhPJxqtMkZ9saT/BmU+QIFTsB5APsQLwF9DsDqE1wKcE1TLJ7FHJGyrSsR8flj+fzTBul5Tbm/TOxw6GV9a74dEDk=
+X-Received: by 2002:a05:6902:1ca:b0:624:e2a1:2856 with SMTP id
+ u10-20020a05690201ca00b00624e2a12856mr8958927ybh.389.1646677427301; Mon, 07
+ Mar 2022 10:23:47 -0800 (PST)
 MIME-Version: 1.0
 References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <CAPhsuW5APYjoZWKDkZ9CBZzaF0NfSQQ-OeZSJgDa=wB-5O+Wng@mail.gmail.com> <CAO-hwJJkhxDAhT_cwo=Tkx8_=B-MuS=_enByj1t6GEuXD9Lj5Q@mail.gmail.com>
-In-Reply-To: <CAO-hwJJkhxDAhT_cwo=Tkx8_=B-MuS=_enByj1t6GEuXD9Lj5Q@mail.gmail.com>
+ <20220304172852.274126-2-benjamin.tissoires@redhat.com> <CAPhsuW4otgwwDN6+xcjPXmZyUDiynEKFtXjaFb-=kjz7HzUmZw@mail.gmail.com>
+ <CAO-hwJJjDMaTXH9i1UkO7Qy+sbNprDyW67cRp8HryMMWMi5H9w@mail.gmail.com>
+In-Reply-To: <CAO-hwJJjDMaTXH9i1UkO7Qy+sbNprDyW67cRp8HryMMWMi5H9w@mail.gmail.com>
 From:   Song Liu <song@kernel.org>
-Date:   Mon, 7 Mar 2022 10:11:51 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-Message-ID: <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
+Date:   Mon, 7 Mar 2022 10:23:36 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4wnsd0oQ3a_OqNVw4-0+fJyZm1f+nA1QRBW-pByKDPYg@mail.gmail.com>
+Message-ID: <CAPhsuW4wnsd0oQ3a_OqNVw4-0+fJyZm1f+nA1QRBW-pByKDPYg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 01/28] bpf: add new is_sys_admin_prog_type() helper
 To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -65,7 +66,7 @@ Cc:     Greg KH <gregkh@linuxfoundation.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+        linux-kselftest@vger.kernel.org, Sean Young <sean@mess.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -77,131 +78,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 2:23 AM Benjamin Tissoires
+On Sat, Mar 5, 2022 at 2:07 AM Benjamin Tissoires
 <benjamin.tissoires@redhat.com> wrote:
+>
+> On Sat, Mar 5, 2022 at 12:12 AM Song Liu <song@kernel.org> wrote:
+> >
+> > On Fri, Mar 4, 2022 at 9:30 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
 > > >
+> > > LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
+> > >
+> > > Extract a new helper for it, it will be also used for the HID bpf
+> > > implementation.
+> > >
+> > > Cc: Sean Young <sean@mess.org>
+> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > >
+> > > ---
+> > >
+> > > new in v2
+> > > ---
+> > >  kernel/bpf/syscall.c | 14 +++++++++++++-
+> > >  1 file changed, 13 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > index db402ebc5570..cc570891322b 100644
+> > > --- a/kernel/bpf/syscall.c
+> > > +++ b/kernel/bpf/syscall.c
+> > > @@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+> > >         case BPF_PROG_TYPE_LWT_SEG6LOCAL:
+> > >         case BPF_PROG_TYPE_SK_SKB:
+> > >         case BPF_PROG_TYPE_SK_MSG:
+> > > -       case BPF_PROG_TYPE_LIRC_MODE2:
+> > >         case BPF_PROG_TYPE_FLOW_DISSECTOR:
+> > >         case BPF_PROG_TYPE_CGROUP_DEVICE:
+> > >         case BPF_PROG_TYPE_CGROUP_SOCK:
+> > > @@ -2202,6 +2201,17 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
+> > >         }
+> > >  }
+> > >
+> > > +static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
+> > > +{
+> > > +       switch (prog_type) {
+> > > +       case BPF_PROG_TYPE_LIRC_MODE2:
+> > > +       case BPF_PROG_TYPE_EXT: /* extends any prog */
+> > > +               return true;
+> > > +       default:
+> > > +               return false;
+> > > +       }
+> > > +}
 > >
-> > The set looks good so far. I will review the rest later.
-> >
-> > [...]
-> >
-> > A quick note about how we organize these patches. Maybe we can
-> > merge some of these patches like:
+> > I am not sure whether we should do this. This is a behavior change, that may
+> > break some user space. Also, BPF_PROG_TYPE_EXT is checked in
+> > is_perfmon_prog_type(), and this change will make that case useless.
 >
-> Just to be sure we are talking about the same thing: you mean squash
-> the patch together?
+> Sure, I can drop it from v3 and make this function appear for HID only.
+>
+> Regarding BPF_PROG_TYPE_EXT, it was already in both
+> is_net_admin_prog_type() and is_perfmon_prog_type(), so I duplicated
+> it here, but I agree, given that it's already in the first function
+> there, CPA_SYS_ADMIN is already checked.
 
-Right, squash some patches together.
-
->
-> >
-> > >   bpf: introduce hid program type
-> > >   bpf/hid: add a new attach type to change the report descriptor
-> > >   bpf/hid: add new BPF type to trigger commands from userspace
-> > I guess the three can merge into one.
-> >
-> > >   HID: hook up with bpf
-> > >   HID: allow to change the report descriptor from an eBPF program
-> > >   HID: bpf: compute only the required buffer size for the device
-> > >   HID: bpf: only call hid_bpf_raw_event() if a ctx is available
-> > I haven't read through all of them, but I guess they can probably merge
-> > as well.
->
-> There are certainly patches that we could squash together (3 and 4
-> from this list into the previous ones), but I'd like to keep some sort
-> of granularity here to not have a patch bomb that gets harder to come
-> back later.
-
-Totally agreed with the granularity of patches. I am not a big fan of patch
-bombs either. :)
-
-I guess the problem I have with the current version is that I don't have a
-big picture of the design while reading through relatively big patches. A
-overview with the following information in the cover letter would be really
-help here:
-  1. How different types of programs are triggered (IRQ, user input, etc.);
-  2. What are the operations and/or outcomes of these programs;
-  3. How would programs of different types (or attach types) interact
-   with each other (via bpf maps? chaining?)
-  4. What's the new uapi;
-  5. New helpers and other logistics
-
-Sometimes, I find the changes to uapi are the key for me to understand the
-patches, and I would like to see one or two patches with all the UAPI
-changes (i.e. bpf_hid_attach_type). However, that may or may not apply to
-this set due to granularity concerns.
-
-Does this make sense?
-
-Thanks,
-Song
-
-
-
-
->
-> >
-> > >   libbpf: add HID program type and API
-> > >   libbpf: add new attach type BPF_HID_RDESC_FIXUP
-> > >   libbpf: add new attach type BPF_HID_USER_EVENT
-> > There 3 can merge, and maybe also the one below
-> > >   libbpf: add handling for BPF_F_INSERT_HEAD in HID programs
->
-> Yeah, the libbpf changes are small enough to not really justify
-> separate patches.
->
-> >
-> > >   samples/bpf: add new hid_mouse example
-> > >   samples/bpf: add a report descriptor fixup
-> > >   samples/bpf: fix bpf_program__attach_hid() api change
-> > Maybe it makes sense to merge these 3?
->
-> Sure, why not.
->
-> >
-> > >   bpf/hid: add hid_{get|set}_data helpers
-> > >   HID: bpf: implement hid_bpf_get|set_data
-> > >   bpf/hid: add bpf_hid_raw_request helper function
-> > >   HID: add implementation of bpf_hid_raw_request
-> > We can have 1 or 2 patches for these helpers
->
-> OK, the patches should be self-contained enough.
->
-> >
-> > >   selftests/bpf: add tests for the HID-bpf initial implementation
-> > >   selftests/bpf: add report descriptor fixup tests
-> > >   selftests/bpf: add tests for hid_{get|set}_data helpers
-> > >   selftests/bpf: add test for user call of HID bpf programs
-> > >   selftests/bpf: hid: rely on uhid event to know if a test device is
-> > >     ready
-> > >   selftests/bpf: add tests for bpf_hid_hw_request
-> > >   selftests/bpf: Add a test for BPF_F_INSERT_HEAD
-> > These selftests could also merge into 1 or 2 patches I guess.
->
-> I'd still like to link them to the granularity of the bpf changes, so
-> I can refer a selftest change to a specific commit/functionality
-> added. But that's just my personal taste, and I can be convinced
-> otherwise. This should give us maybe 4 patches instead of 7.
->
-> >
-> > I understand rearranging these patches may take quite some effort.
-> > But I do feel that's a cleaner approach (from someone doesn't know
-> > much about HID). If you really hate it that way, we can discuss...
-> >
->
-> No worries. I don't mind iterating on the series. IIRC I already
-> rewrote it twice from scratch, and that's when the selftests I
-> introduced in the second rewrite were tremendously helpful :) And
-> honestly I don't think it'll be too much effort to reorder/squash the
-> patches given that the v2 is *very* granular.
->
-> Anyway, I prefer having the reviewers happy so we can have a solid
-> rock API from day 1 than keeping it obscure for everyone and having to
-> deal with design issues forever. So if it takes 10 or 20 revisions to
-> have everybody on the same page, that's fine with me (not that I want
-> to have that many revisions, just that I won't be afraid of the
-> bikeshedding we might have at some point).
->
-> Cheers,
-> Benjamin
->
+I think with current code, a user with CAP_BPF, CAP_NET_ADMIN, and
+CAP_PERFMON (but not CAP_SYS_ADMIN) can load programs of type
+BPF_PROG_TYPE_EXT. But after the patch, the same user will not be
+able to do it. Did I misread it? It is not a common case though.
