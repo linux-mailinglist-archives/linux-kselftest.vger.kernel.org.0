@@ -2,131 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705EA4CFFCC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 14:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446304D028F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 16:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242805AbiCGNTG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Mar 2022 08:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S241348AbiCGPSz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Mar 2022 10:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242684AbiCGNTF (ORCPT
+        with ESMTP id S233032AbiCGPSz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Mar 2022 08:19:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D88627B03
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 05:18:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4BEE611FE
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 13:18:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4296FC340EB
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 13:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646659088;
-        bh=0x9avxE1QuPb1xRSPHVfHgo20smbkC0ezQPHmsX583Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fdfnW2FlS2s/NtI9OIEPoL3friIZhn4gB+q9ykNTwU5vvuw+nEflebKpQ3V3Pf4Lq
-         z1BWhCICYLQtHghvBBeeuVJezZ3Hf6PZ3w+svus4UbBeUsvAyA0WgXS5q6PEXrcohQ
-         U23e8nTBn7HGvs9ksItlQIjmC62kxSbWB5GB4c5VWjL7CJVUNiioReQrUB0b+B0izG
-         3192CzMmcsmDuN9waHQVmNKjgENwZ5u7B40kB4aazoknGByseLS7kWkeZnji6uljzW
-         qp6gKFVNXu3ojloMsNRa7sUIp/hh1PyEtMUFyfS2vflRdTLJz7zczBt/r6E6axLPhR
-         2anp04mEGAqyA==
-Received: by mail-ej1-f41.google.com with SMTP id d10so31823825eje.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Mar 2022 05:18:08 -0800 (PST)
-X-Gm-Message-State: AOAM532G3cyPQUiIzMyWrs4mN2iGTfzNBhqMOTj/W9HfZVcO8QPbNcO5
-        qXrtvuZrGTUbuXryfb6rAsXF14HwSFu2gAVBEGS82Q==
-X-Google-Smtp-Source: ABdhPJxvgCXjgHPF1PjOKJm57sEpqWrgNtbAss/mIVzf2hdDQwOt3w5GqYZan1KufyCv5U1e45adv0v2fXT5T3kQmJk=
-X-Received: by 2002:a17:906:a1c8:b0:6da:a635:e402 with SMTP id
- bx8-20020a170906a1c800b006daa635e402mr9441257ejb.598.1646659086280; Mon, 07
- Mar 2022 05:18:06 -0800 (PST)
+        Mon, 7 Mar 2022 10:18:55 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3C95044C;
+        Mon,  7 Mar 2022 07:17:55 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6XN-TY_1646666269;
+Received: from 192.168.193.155(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6XN-TY_1646666269)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Mar 2022 23:17:51 +0800
+Message-ID: <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
+Date:   Mon, 7 Mar 2022 07:16:36 -0800
 MIME-Version: 1.0
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
- <20220302222056.73dzw5lnapvfurxg@ast-mbp.dhcp.thefacebook.com>
- <fe1d17e7e7d4b5e4cdeb9f96f5771ded23b7c8f0.camel@linux.ibm.com>
- <CACYkzJ4fmJ4XtC6gx6k_Gjq0n5vjSJyq=L--H-Eho072HJoywA@mail.gmail.com>
- <04d878d4b2441bb8a579a4191d8edc936c5a794a.camel@linux.ibm.com>
- <CACYkzJ5RNDV582yt1xCZ8AQUW6v_o0Dtoc_XAQN1GXnoOmze6Q@mail.gmail.com>
- <b6bf8463c1b370a5b5c9987ae1312fd930d36785.camel@linux.ibm.com>
- <CAADnVQKfh3Z1DXJ3PEjFheQWEDFOKQjuyx+pkvqe6MXEmo7YHQ@mail.gmail.com> <40db9f74fd3c9c7b660e3a203c5a6eda08736d5b.camel@linux.ibm.com>
-In-Reply-To: <40db9f74fd3c9c7b660e3a203c5a6eda08736d5b.camel@linux.ibm.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 7 Mar 2022 14:17:55 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ65D2OZKrEbrCS32+FsQ3BVzs1zQcRQSLnaNQHYTjZFBA@mail.gmail.com>
-Message-ID: <CACYkzJ65D2OZKrEbrCS32+FsQ3BVzs1zQcRQSLnaNQHYTjZFBA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Florent Revest <revest@google.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
+        gregkh@linuxfoundation.org, linux@roeck-us.net,
+        luc.vanoostenryck@gmail.com, elver@google.com,
+        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
+        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
+        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
+ <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <202203031105.A1B4CAE6@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 3:57 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> On Thu, 2022-03-03 at 14:39 -0800, Alexei Starovoitov wrote:
->
-> > . There is no such thing as "eBPF modules". There are BPF programs.
-> > They cannot be signed the same way as kernel modules.
-> > We've been working on providing a way to sign them for more
-> > than a year now. That work is still ongoing.
-> >
-> > . IMA cannot be used for integrity check of BPF programs for the same
-> > reasons why kernel module like signing cannot be used.
->
-> I assume the issue isn't where the signature is stored (e.g. appended,
-> xattr), but of calculating the hash.  Where is the discussion taking
 
-This has the relevant background: https://lwn.net/Articles/853489/
 
-We had some more discussions in one of our BSC meeting:
+On 3/3/22 11:09, Kees Cook wrote:
+> On Thu, Mar 03, 2022 at 10:42:45AM -0800, Kees Cook wrote:
+>> And we should, actually, be able to make the "set_lr" functions be
+>> arch-specific, leaving the test itself arch-agnostic....
+> 
+> Yeah, as a tested example, this works for x86_64, and based on what you
+> had, I'd expect it to work on arm64 too:
+> 
+> #include <stdio.h>
+> 
+> static __attribute__((noinline))
+> void set_return_addr(unsigned long *expected, unsigned long *addr)
+> {
+>      /* Use of volatile is to make sure final write isn't seen as a dead store. */
+>      unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> 
+>      /* Make sure we've found the right place on the stack before writing it. */
+>      if (*ret_addr == expected)
+>          *ret_addr = addr;
+> }
+> 
+> volatile int force_label;
+> int main(void)
+> {
+>      do {
+>          /* Keep labels in scope. */
+>          if (force_label)
+>              goto normal;
+>          if (force_label)
+>              goto redirected;
+> 
+>          set_return_addr(&&normal, &&redirected);
+> normal:
+>          printf("I should be skipped\n");
+>          break;
+> redirected:
+>          printf("Redirected\n");
+>      } while (0);
+> 
+>      return 0;
+> }
+> 
+> 
+> It does _not_ work under Clang, though, which I'm still looking at.
+> 
 
-https://github.com/ebpf-io/bsc/blob/master/minutes.md
+The following code seems to work fine under clang/gcc, x86_64/aarch64
+(also tested in lkdtm_CFI_BACKWARD_SHADOW):
 
-and we expect the discussions to continue over conferences this year
- (e.g. LSF/MM/BPF, Linux Plumbers). As I mentioned on another thread
-we don't have to wait for conferences and we can discuss this in the BPF
-office hours. Please feel free to add an agenda at:
+#include <stdio.h>
 
-https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU/edit#gid=0
+static __attribute__((noinline))
+void set_return_addr(unsigned long *expected, unsigned long *addr)
+{
+     /* Use of volatile is to make sure final write isn't seen as a dead store. */
+     unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
 
-(best is to give some notice so that interested folks can join).
+     /* Make sure we've found the right place on the stack before writing it. */
+     if(*ret_addr == expected)
+         *ret_addr = (addr);
+}
 
-> place?   Are there any summaries of what has been discussed?
->
-> FYI, IMA isn't limited to measuring files.  Support was added for
-> buffer measurements (e.g kexec boot command line, certificates) and
-> measuring kernel critical data (e.g. SELinux in memory policy & state,
-> device mapper).
+static volatile int force_label;
 
-Nice. I need to look at how this is implemented.
+int main(void)
+{
+     void *array[] = {0, &&normal, &&redirected};
 
-- KP
+     if (force_label) {
+         /* Call it with a NULL to avoid parameters being treated as constants in -02. */
+         set_return_addr(NULL, NULL);
+         goto * array[force_label];
+     }
 
->
-> thanks,
->
-> Mimi
->
+     do {
+
+         set_return_addr(&&normal, &&redirected);
+
+normal:
+         printf("I should be skipped\n");
+         break;
+
+redirected:
+         printf("Redirected\n");
+
+     } while (0);
+
+     return 0;
+}
+
+But currently it still crashes when I try to enable
+"-mbranch-protection=pac-ret+leaf+bti".
+
+Because the address of "&&redirected" is not encrypted under pac,
+the autiasp check will fail when set_return_addr returns, and
+eventually cause the function to crash when it returns to "&&redirected"
+("&&redirected" as a reserved label always seems to start with a bti j
+insn).
+
+For lkdtm, if we're going to handle both cases in one function, maybe
+it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
+and maybe also turn off -O2 options for the function :)
+
+Thanks,
+Dan.
