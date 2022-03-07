@@ -2,230 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995924D06B2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 19:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF124D0746
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 20:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244794AbiCGSkw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Mar 2022 13:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S240292AbiCGTJk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Mar 2022 14:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240323AbiCGSku (ORCPT
+        with ESMTP id S240322AbiCGTJj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Mar 2022 13:40:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04BAE4D63A
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 10:39:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646678394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ZYITTVdz5E4+MP8QXGV8rdQvoNIDdLo/xFs/aMEjrI=;
-        b=Ue/uiHYWByMxQmXTJK1ir1dy3J1MVsGs8DTYJDRpYuwGfXV3nZpvipfQZ5Vdf0gg6zCSju
-        UQeVzTcd7cKPfdR993gSVnF8ttzXlFU8hciIKqDltvWXbiltvSD0mbqQHdqHrZTtosqqOH
-        86chIa6SZv/0sCtlP8hE+vW7p+1Qbwc=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-AWZ1QT9VPWia0LA7Bp88tA-1; Mon, 07 Mar 2022 13:39:52 -0500
-X-MC-Unique: AWZ1QT9VPWia0LA7Bp88tA-1
-Received: by mail-pl1-f200.google.com with SMTP id d14-20020a170902654e00b001518cc774d3so7840057pln.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Mar 2022 10:39:52 -0800 (PST)
+        Mon, 7 Mar 2022 14:09:39 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C65419C37
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 11:08:44 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id r20so21937142ljj.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Mar 2022 11:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lqdFcj/W3ROtaaLGNZJbzsf9vyM2NVPkSBm3INx+BLs=;
+        b=rfR0JcG6nuRaVIkXXgGAegektp5HSFDVUF91VlM0HcyOauIq6tLbs7wauxENXC0btb
+         p8y1dXe10FP3m4bn7GIwnpvC6FX6LCWi8n0s3OsVBh5zR2vtqauwBqooPEyXFXPwsIXI
+         62bdrmK25fNTgDZg8wJzs40LnOGNLG1en3+O2YHwTaLzbIVSg/0cJQFsDDU6mwqDgdRq
+         8VIfwpxBj8u6NEY7gT9YpRSH4XlxawGUuOk2T4WsVMqRa405CTVD4rzPmUfb9jJIWnOH
+         v5czkolhWUGk6Kk7sv9Vye1CuebzWG4LHHYshIxfssyFSMc2MP+BlO+5ww1BiNEr34zx
+         gkKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9ZYITTVdz5E4+MP8QXGV8rdQvoNIDdLo/xFs/aMEjrI=;
-        b=pJCrywEwPJyGD3cLLQGbhX7FeMgdT14pM6cuTkASd2j4k3VD8A5tX5on/+lRefV8Kb
-         uvQrpw+26GdqZOi4/AN/8O7/xl0Be23VAlyTBFNH1NUBSj76SoBPYghvQutkOIB1pFv1
-         GjkPuEyN6qxfkEYM6U9xYLInQ9NshiWagstydM+4gLdoTMAry+AQLHMtrJt4d91cPkzT
-         TJlX9IgAdOJ5TIe8nrEkfnDNXWjvobn8BjXyhiAgUPIYYGA56iEtr3o2Jg25zNgl08cr
-         GEhrVi4/bvDezG/FaN1b5HvTRZVKJ9lVzBuSY4iuCazYeno3J0DQAskNpHBWEZQwCZqc
-         ecQw==
-X-Gm-Message-State: AOAM530dTnfnxvNxkfyWEnjokdIrwiHoh6ikk7I1YeQGXGbCRqTzstjU
-        5ojjncLrUCLQRG7CSZnCj5jB7Acdvftugxqa4/g78Q6xMSx6Ka+ZotTdFS1Qj3Jin8ao5JnLkkI
-        uikIC7JvjGIFH9VMaK0t7cEjffPW+BinFH/A+Y5aSQYVD
-X-Received: by 2002:a17:90a:dac2:b0:1bd:fecf:6bd1 with SMTP id g2-20020a17090adac200b001bdfecf6bd1mr301664pjx.113.1646678391743;
-        Mon, 07 Mar 2022 10:39:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzDDHIBz07WN3CzLDgk3mGB0kBAncDY+MW2K8mom6cbKR7neISU8OXSB6QzhoWCCgjgI/vefNzYDogresVc6J4=
-X-Received: by 2002:a17:90a:dac2:b0:1bd:fecf:6bd1 with SMTP id
- g2-20020a17090adac200b001bdfecf6bd1mr301626pjx.113.1646678391376; Mon, 07 Mar
- 2022 10:39:51 -0800 (PST)
+        bh=lqdFcj/W3ROtaaLGNZJbzsf9vyM2NVPkSBm3INx+BLs=;
+        b=V3OvRdfy35vSWX5pOpYmyEkiGClNkmRv9hjw89XJY0QyKoEBO9h27gRipIVudIf0di
+         DWAMAaBYik6EGYrOlHXbA4KaDT45InpDHt7vTiwI7aqrdc4gnVYeSi6zlWnPjmGI+PRw
+         daO6Y+9+3rUxiU0RXVmlHXZWwOWvtsZQjyrB4oqgzf/K8e51VpeJOUf+bB5DVXeMtPol
+         pADrWKEGVBLOK3V/Gi8gEIJlsxvAyrTEY7zUeGa8uq2mQAJ2NDD7p9Y6pYBvf1ih3WmX
+         yZTZGquQVXB2XCuKSwoqh0+30+ypnuM8JhhHclZiR9Z4GjA4MxfiRCQugemWrifINvd6
+         iJqA==
+X-Gm-Message-State: AOAM531M462am/p7eUgRkCu2fpkzxOCTXxlAQdcrwAg8mL+Gq2NBp/2X
+        fH3H7KZJq++6NMYXqnEMI3W7a2EjNEbM4yJP33prDQ==
+X-Google-Smtp-Source: ABdhPJxUEH+WXE4ZEDL3yAUMLDOBvQpg4ljCyCYbedmFgU3xFcH283DgaImI8yUXP7kHpdQV2ZWAnn0IBgfQDPiwNxM=
+X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
+ y2-20020a05651c154200b002338ff5eb80mr8416360ljp.352.1646680120998; Mon, 07
+ Mar 2022 11:08:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-3-benjamin.tissoires@redhat.com> <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
-In-Reply-To: <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 7 Mar 2022 19:39:40 +0100
-Message-ID: <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+References: <20220304170813.1689186-1-nathan@kernel.org>
+In-Reply-To: <20220304170813.1689186-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 7 Mar 2022 11:08:29 -0800
+Message-ID: <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 1:03 AM Song Liu <song@kernel.org> wrote:
+On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > HID is a protocol that could benefit from using BPF too.
+> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+> index d32616891dcf..68b74416ec48 100644
+> --- a/Documentation/kbuild/llvm.rst
+> +++ b/Documentation/kbuild/llvm.rst
+> @@ -49,17 +49,36 @@ example: ::
+>  LLVM Utilities
+>  --------------
 >
-> [...]
+> -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
+> -to enable them. ::
+> -
+> -       make LLVM=1
+> -
+> -They can be enabled individually. The full list of the parameters: ::
+> +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
+> +The full list of supported make variables: ::
 >
-> > +#include <linux/list.h>
-> > +#include <linux/slab.h>
-> > +
-> > +struct bpf_prog;
-> > +struct bpf_prog_array;
-> > +struct hid_device;
-> > +
-> > +enum bpf_hid_attach_type {
-> > +       BPF_HID_ATTACH_INVALID = -1,
-> > +       BPF_HID_ATTACH_DEVICE_EVENT = 0,
-> > +       MAX_BPF_HID_ATTACH_TYPE
+>         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
+>           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
+>           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
 >
-> Is it typical to have different BPF programs for different attach types?
-> Otherwise, (different types may have similar BPF programs), maybe
-> we can pass type as an argument to the program (shared among
-> different types)?
+> +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
+> +
+> +       make LLVM=1
+> +
+> +If your LLVM tools are not available in your PATH, you can supply their
+> +location using the LLVM variable with a trailing slash: ::
+> +
+> +       make LLVM=/path/to/llvm/
+> +
+> +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
 
-Not quite sure I am entirely following you, but I consider the various
-attach types to be quite different and thus you can not really reuse
-the same BPF program with 2 different attach types.
+I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
+works and (my interpretation of what) Masahiro said "if anyone asks
+for this, here's how we could do that."  I don't think I've seen an
+explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
+won't hold this patch up over that.  Either way:
 
-In my view, we have 4 attach types:
-- BPF_HID_ATTACH_DEVICE_EVENT: called whenever we receive an IRQ from
-the given device (so this is net-like event stream)
-- BPF_HID_ATTACH_RDESC_FIXUP: there can be only one of this type, and
-this is called to change the device capabilities. So you can not reuse
-the other programs for this one
-- BPF_HID_ATTACH_USER_EVENT: called explicitly by the userspace
-process owning the program. There we can use functions that are
-sleeping (we are not in IRQ context), so this is also fundamentally
-different from the 3 others.
-- BPF_HID_ATTACH_DRIVER_EVENT: whenever the driver gets called into,
-we get a bpf program run. This can be suspend/resume, or even specific
-request to the device (change a feature on the device or get its
-current state). Again, IMO fundamentally different from the others.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-So I'm open to any suggestions, but if we can keep the userspace API
-being defined with different SEC in libbpf, that would be the best.
+> +
+> +If your LLVM tools have a version suffix and you want to test with that
+> +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
+> +can pass the suffix using the ``LLVM`` variable: ::
+> +
+> +       make LLVM=-14
+> +
+> +which will use ``clang-14``, ``ld.lld-14``, etc.
+> +
+> +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
+> +``LLVM=1``.
 
->
-> [...]
->
-> > +struct hid_device;
-> > +
-> > +enum hid_bpf_event {
-> > +       HID_BPF_UNDEF = 0,
-> > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
-> > +};
-> > +
-> > +struct hid_bpf_ctx {
-> > +       enum hid_bpf_event type;        /* read-only */
-> > +       __u16 allocated_size;           /* the allocated size of data below (RO) */
->
-> There is a (6-byte?) hole here.
->
-> > +       struct hid_device *hdev;        /* read-only */
-> > +
-> > +       __u16 size;                     /* used size in data (RW) */
-> > +       __u8 data[];                    /* data buffer (RW) */
-> > +};
->
-> Do we really need hit_bpf_ctx in uapi? Maybe we can just use it
-> from vmlinuxh?
+Hmm... I can see someone's build wrappers setting LLVM=1, then them
+being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
+might expect.  But Masahiro says let's fix this later which is fine.
 
-I had a thought at this context today, and I think I am getting to the
-limit of what I understand.
-
-My first worry is that the way I wrote it there, with a variable data
-field length is that this is not forward compatible. Unless BTF and
-CORE are making magic, this will bite me in the long run IMO.
-
-But then, you are talking about not using uapi, and I am starting to
-wonder: am I doing the things correctly?
-
-To solve my first issue (and the weird API I had to introduce in the
-bpf_hid_get/set_data), I came up to the following:
-instead of exporting the data directly in the context, I could create
-a helper bpf_hid_get_data_buf(ctx, const uint size) that returns a
-RET_PTR_TO_ALLOC_MEM_OR_NULL in the same way bpf_ringbuf_reserve()
-does.
-
-This way, I can directly access the fields within the bpf program
-without having to worry about the size.
-
-But now, I am wondering whether the uapi I defined here is correct in
-the way CORE works.
-
-My goal is to have HID-BPF programs to be CORE compatible, and not
-have to recompile them depending on the underlying kernel.
-
-I can not understand right now if I need to add some other BTF helpers
-in the same way the access to struct xdp_md and struct xdp_buff are
-converted between one and other, or if defining a forward compatible
-struct hid_bpf_ctx is enough.
-As far as I understand, .convert_ctx_access allows to export a stable
-uapi to the bpf prog users with the verifier doing the conversion
-between the structs for me. But is this really required for all the
-BPF programs if we want them to be CORE?
-
-Also, I am starting to wonder if I should not hide fields in the
-context to the users. The .data field could be a pointer and only
-accessed through the helper I mentioned above. This would be forward
-compatible, and also allows to use whatever available memory in the
-kernel to be forwarded to the BPF program. This way I can skip the
-memcpy part and work directly with the incoming dma data buffer from
-the IRQ.
-
-But is it best practice to do such a thing?
-
-Cheers,
-Benjamin
-
->
-> [...]
->
-> > +
-> > +static bool hid_is_valid_access(int off, int size,
-> > +                               enum bpf_access_type access_type,
-> > +                               const struct bpf_prog *prog,
-> > +                               struct bpf_insn_access_aux *info)
-> > +{
-> > +       /* everything not in ctx is prohibited */
-> > +       if (off < 0 || off + size > sizeof(struct hid_bpf_ctx) + HID_BPF_MIN_BUFFER_SIZE)
-> > +               return false;
->
-> Mabe add the following here to fail unaligned accesses
->
->         if (off % size != 0)
->                 return false;
-> [...]
->
-
+--
+Thanks,
+~Nick Desaulniers
