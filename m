@@ -2,66 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084F54D1D55
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 17:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3584D200E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 19:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348371AbiCHQhV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Mar 2022 11:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S1349538AbiCHSXf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Mar 2022 13:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348375AbiCHQhU (ORCPT
+        with ESMTP id S1349582AbiCHSW5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Mar 2022 11:37:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9A751311;
-        Tue,  8 Mar 2022 08:36:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qk8gZa9N3AskrJn2j9FvrWIxAqKPjieXt9y5DlvxdVg=; b=lrKkBtItZ2p0f2KTpxQ+dZGQZC
-        2Bahna8JsffcfVNGoy7ANQZRPXBf952KhT1nd/gh9B+Pke6cQShXh1wJ5atv7Xyp1Slw/FjFodVm6
-        V8Qf6JP8samqQGZPFZ/EZHZFEMe0qiuyurSuDwEePDS1RHVPLRo8RRzDwhcdT3qYsKgIUTzstvjbi
-        aDCLF3aRRua6uYS0S6ZW/T/mhP9uzzqGBb8WvGwz8jkz6JU03cvSJSHpaD7d62L7yR2ASIAhbMxC1
-        VshtmVQ7dvksoCnIuJQ26SyYM1Ji5bEegEYhs7VU9RiERk0SV5p4wfQtE/orOS9lXkqbD1DFMhdDr
-        eDKnFi2w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRcor-00GLFR-Uu; Tue, 08 Mar 2022 16:36:18 +0000
-Date:   Tue, 8 Mar 2022 16:36:17 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-Message-ID: <YieGARVP2dhn8tbQ@casper.infradead.org>
-References: <20220304170813.1689186-1-nathan@kernel.org>
- <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+        Tue, 8 Mar 2022 13:22:57 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B7556C36;
+        Tue,  8 Mar 2022 10:22:00 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id d62so21889102iog.13;
+        Tue, 08 Mar 2022 10:22:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s/aSiwa4OsaHjuhB4cvErlX8E1QGHNTboTB9+HLwgwM=;
+        b=BoYmw4Rvgt6yhXyB4+VaRBsgw0ePcMEN6wWZRJOPq0es17z7AeBjjcA8YmH0IBehdv
+         lkScxEgiLLYR35oagmriDRJn+6HOQ7xEyN6QmEDu9XqC5ldLetKIRN51ulKxsdqMMOwh
+         DF6D1320yOVQmRBhXS32wKqt0RGJuDb5OHKwK8eRVEeChIard+JPBoLbRrgfxXTfIIFF
+         gS9mp1Z5/cCmj+qZRVpoGVaKwwKQ3ZIdS+lljZfuwbdt70KPLy2p2V9JA5QjS5Qb5Hi+
+         jF4KRxoWC5tuvO0jJET3YdkwQpRQahzoPXuh4QX9PURGUwG/o9P8vTg/7DvibxJpXBv3
+         JvgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s/aSiwa4OsaHjuhB4cvErlX8E1QGHNTboTB9+HLwgwM=;
+        b=aQim8hBY8635MRPkxSJE0xECGZ3zFRkln1wm3pLPIwDQIagnX07MQGFtHym8WJQkLp
+         +XXUlrk0Pl6QHTvRcrlHXfk4/Hz11+rfww8FfS9wkFlJvfNoAbRdO3EDCwSYFIydkCTO
+         o+347glSuQrDSnKcjuRz7WGv+HVEFA0/2BCGYJrBsOaV8Y5/L+RlHwNIXymsUtAqsonn
+         lYlGtIV+WVpBBDcpPJCCMeTBU36L4KwcySAHZhrwsX1cNK/Se0QNAPURtppldUZ1qhu9
+         enKWrzygW3XyFr9edKorb7PFyhxTY4n6LLsIV5RsXmFFzPpoTenTGcUuUB46vpd37VGO
+         xO5A==
+X-Gm-Message-State: AOAM5313xTvLWwOYX7d/Obqbw3+zMsNU71OWPsc5RWrrJiX/J1s96Gm3
+        d0C6Thn8WHJCxYcGSWmoHhNabD4bRpzOqA==
+X-Google-Smtp-Source: ABdhPJy/s5NdsXuzzi8pgnnpYVqjxwKV0qqx6sRD/Oy+zF12aUgXpmdGwFA5KAa469//b1DAiqNS+w==
+X-Received: by 2002:a05:6638:240d:b0:314:dd3c:81cc with SMTP id z13-20020a056638240d00b00314dd3c81ccmr16419365jat.287.1646763720041;
+        Tue, 08 Mar 2022 10:22:00 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.65])
+        by smtp.googlemail.com with ESMTPSA id r9-20020a056e0219c900b002c5ffafa701sm12672716ill.79.2022.03.08.10.21.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 10:21:59 -0800 (PST)
+Message-ID: <d5a67e6a-6e1b-8f69-8d2a-e05708dfa3c9@gmail.com>
+Date:   Tue, 8 Mar 2022 11:21:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [PATCH net] selftests: pmtu.sh: Kill tcpdump processes launched
+ by subshell.
+Content-Language: en-US
+To:     Guillaume Nault <gnault@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+References: <0378c55466d8d1f7b6d99d581811d49429e1f4e7.1646691728.git.gnault@redhat.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <0378c55466d8d1f7b6d99d581811d49429e1f4e7.1646691728.git.gnault@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> > +``LLVM=1``.
+On 3/7/22 3:38 PM, Guillaume Nault wrote:
+> The cleanup() function takes care of killing processes launched by the
+> test functions. It relies on variables like ${tcpdump_pids} to get the
+> relevant PIDs. But tests are run in their own subshell, so updated
+> *_pids values are invisible to other shells. Therefore cleanup() never
+> sees any process to kill:
 > 
-> Hmm... I can see someone's build wrappers setting LLVM=1, then them
-> being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
-> might expect.  But Masahiro says let's fix this later which is fine.
+> $ ./tools/testing/selftests/net/pmtu.sh -t pmtu_ipv4_exception
+> TEST: ipv4: PMTU exceptions                                         [ OK ]
+> TEST: ipv4: PMTU exceptions - nexthop objects                       [ OK ]
+> 
+> $ pgrep -af tcpdump
+> 6084 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
+> 6085 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
+> 6086 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
+> 6087 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
+> 6088 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
+> 6089 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
+> 6090 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
+> 6091 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
+> 6228 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
+> 6229 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
+> 6230 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
+> 6231 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
+> 6232 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
+> 6233 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
+> 6234 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
+> 6235 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
+> 
+> Fix this by running cleanup() in the context of the test subshell.
+> Now that each test cleans the environment after completion, there's no
+> need for calling cleanup() again when the next test starts. So let's
+> drop it from the setup() function. This is okay because cleanup() is
+> also called when pmtu.sh starts, so even the first test starts in a
+> clean environment.
+> 
+> Note: PAUSE_ON_FAIL is still evaluated before cleanup(), so one can
+> still inspect the test environment upon failure when using -p.
+> 
+> Fixes: a92a0a7b8e7c ("selftests: pmtu: Simplify cleanup and namespace names")
+> Signed-off-by: Guillaume Nault <gnault@redhat.com>
+> ---
+>  tools/testing/selftests/net/pmtu.sh | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
-What happens if you say LLVM= instead of LLVM=0 ?  Would that "undo"
-a prior LLVM=1 and use GCC instead?
+Reviewed-by: David Ahern <dsahern@kernel.org>
+
+
