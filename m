@@ -2,161 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420054D1954
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 14:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9591F4D199E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 14:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiCHNiQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Mar 2022 08:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S1347110AbiCHNwn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Mar 2022 08:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344390AbiCHNiN (ORCPT
+        with ESMTP id S244822AbiCHNwm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:38:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CAAC496BD
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 05:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646746635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xhWKpJMEu/E6K5E8FVFu8klaC4t/DVD3aQhe7Ihi7RE=;
-        b=ZUaIlKEloW3slv0bFL5scqw+dxwczmTTIs2JtCxKgWglBD5MvAyYlwThBAHbBa7IPICb4s
-        yMj/SMgLtAWgx2z76PIzwYVm0RLbqe15XqFJQJfHG/V7x2b/dwprmiOXILnWSXYnCaJifO
-        44STAQyo2pgaShWFGapbJZ+69kZPvSc=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-372-B3ujso1wPomS_6o6fzTrcg-1; Tue, 08 Mar 2022 08:37:14 -0500
-X-MC-Unique: B3ujso1wPomS_6o6fzTrcg-1
-Received: by mail-pf1-f198.google.com with SMTP id i72-20020a62874b000000b004f66c5b963cso10638353pfe.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Mar 2022 05:37:13 -0800 (PST)
+        Tue, 8 Mar 2022 08:52:42 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDFE42A20
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 05:51:45 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D6BEA3F60B
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 13:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646747502;
+        bh=gfyiehsHSCfxlKgNkCwVdg7pcAcR1+WSTjtuQee0hjc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=CBEJzHxUgr+Qw0BD/FZ/GCN6XoBt1JE/0ywZc4gf2wXJpNXOq6yi2NhHFFBU1/+HB
+         6RgJVne8zfY2wO1YsixXcVPFkQp4jZPZ3YQtFHlYFgcqFAcv/jn57EArlh/ZXYYc0E
+         oJJVvygotOsXkwPCxpIhiCYwN+BO8leEmRy53H2uPg1siwL/hSZZkXgZGe52sK6TvK
+         7EvN5yJoanW9mFXdtp/MBr3IPgggnhZXZ3jo8BMk/LHGuflt8OD2cdzRPrNXxJyFmF
+         SzQOjO3Gg735VT2AMMpv6XoVGuHFsZQErp1XLtp0RbsBRpVqc9p1sBO3E57ndITUH4
+         veqjWod+WdF8w==
+Received: by mail-ed1-f69.google.com with SMTP id h17-20020a05640250d100b004133863d836so10652881edb.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Mar 2022 05:51:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xhWKpJMEu/E6K5E8FVFu8klaC4t/DVD3aQhe7Ihi7RE=;
-        b=COUbs+ctKDKFri5cYXvb6fXChKhvUXY8q6Yw5tkwZTlviIsvql0boKrgk3wyPGs+8s
-         lCB3kZmcwaJWcZ7a1UbcKdg4RPWoMbeK8kcW1ygz3JgKT6Z4goyU3Pr1w0sOgWkMWq+w
-         X3XFWSSXRMw75t21C6q6KdtRpoYoygKKQVXRCGsWQkXsaK2bmJ/WYAx4LZnsk9k8ZOem
-         dBtn6gkIQLTa6Jf1ra2jlzO5OJC05kgNvp7A1NAG2h9AlFXhD0Ab0ck/JfyxxF9omue1
-         rFWp/6XojZ0hIqdA1DGeKZVMakh0UW/P2t3pxlKFx4OmGEuEDP8dvB2u41YFUwuMbFQt
-         GQFw==
-X-Gm-Message-State: AOAM531xZ6A82Wpq04UT7zRiFzGXSFQajF7RYvIHtb/ATgvm0Ge/cJzt
-        rJjMSQdyHLnIHRUhWjTEdESvx7qeO1dr2Ze1iGcZn+ih1sOBwSgD1knw+vR4RBLS7xar5FbiZ2+
-        Vut/HM4gZf53tI3rjT6pLZxH2JUOWOUWScf8z+2N5YGG/
-X-Received: by 2002:a17:902:c407:b0:151:f794:ac5e with SMTP id k7-20020a170902c40700b00151f794ac5emr6557660plk.67.1646746632915;
-        Tue, 08 Mar 2022 05:37:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxH7lKjecmXh4BgOUsidbsUgZyvzcMgDU6mn0VwVrEex18NF//hg/FePuDpXYtu+/umBrPRyySRl1rvmLXpJR0=
-X-Received: by 2002:a17:902:c407:b0:151:f794:ac5e with SMTP id
- k7-20020a170902c40700b00151f794ac5emr6557623plk.67.1646746632670; Tue, 08 Mar
- 2022 05:37:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <CAPhsuW5APYjoZWKDkZ9CBZzaF0NfSQQ-OeZSJgDa=wB-5O+Wng@mail.gmail.com>
- <CAO-hwJJkhxDAhT_cwo=Tkx8_=B-MuS=_enByj1t6GEuXD9Lj5Q@mail.gmail.com> <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-In-Reply-To: <CAPhsuW54ytOFrpW8+2kTuxNxu+-7JNmybCpbU=uG+un+-Xpw4A@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 8 Mar 2022 14:37:01 +0100
-Message-ID: <CAO-hwJ+DO0cenO_vqG+85c=U5=W4Ksqfa+nqPEW7cqby=YDwmw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gfyiehsHSCfxlKgNkCwVdg7pcAcR1+WSTjtuQee0hjc=;
+        b=QL2gFqlVDkgxHY+QwMzYEGpq0VnM+dYyMg2Fg3yDbgl6q0Xlky/J1DntaZE+IfLQ4N
+         cMtaUAK+YV+VDMhMxSJ2x8WZE1MzaGtRTulTYDMPbF6QfKqPT0yIYEeYelZstHIUA9u9
+         G6uNVHOffBxfmNNUoOtzQfaVD3fp5G/jo4xmo3S0A3u1dhZycXIM6K4nrJSdSoAMXDiD
+         sQbCvVg+tSmf+kod+mwYyMjnMwQjExjT52/frhWFGqrKvQ9jN3EUYEUF+EGvKeb45Pkf
+         2q9IDZ8rI2G4EYDL+EThnqO9zQbUDeco8EX3JZXIi/eHF75jVDEY76v76+b/p27Xu1Du
+         4HDQ==
+X-Gm-Message-State: AOAM530DWIxN54qUzUGXqRF8RfZNPuaE/g9WBu/PH+yZ6+w5EEcxp0j2
+        q5BhpQAGOSZA7BorLxhLGnXj3mNU3SmQOt8WYVGUL3Uq4cKClF5XlSM1mKsMU8MkMb3OX7+PQ71
+        Q6qG7MZyRFfgPAQOvsDw+reMfNAOAprvmt+EIhUqzUvonwQ==
+X-Received: by 2002:a17:906:2b93:b0:6cf:bb48:5a80 with SMTP id m19-20020a1709062b9300b006cfbb485a80mr12934382ejg.681.1646747502549;
+        Tue, 08 Mar 2022 05:51:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysAvtt7THWDP/7AQq9m26HPhDMKhrOPlwL6m0Q4Ozl6W8r2lgyPin1uXHPmX+Ti1qYgfKN0w==
+X-Received: by 2002:a17:906:2b93:b0:6cf:bb48:5a80 with SMTP id m19-20020a1709062b9300b006cfbb485a80mr12934365ejg.681.1646747502267;
+        Tue, 08 Mar 2022 05:51:42 -0800 (PST)
+Received: from localhost.localdomain (p5087f509.dip0.t-ipconnect.de. [80.135.245.9])
+        by smtp.gmail.com with ESMTPSA id b15-20020a50cccf000000b0040f74c6abedsm7606163edj.77.2022.03.08.05.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 05:51:41 -0800 (PST)
+From:   Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+To:     kuba@kernel.org, davem@davemloft.net, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: [PATCH] net: netdevsim: fix byte order on ipsec debugfs file
+Date:   Tue,  8 Mar 2022 14:51:06 +0100
+Message-Id: <20220308135106.890270-1-kleber.souza@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 7:12 PM Song Liu <song@kernel.org> wrote:
->
-> On Sat, Mar 5, 2022 at 2:23 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > >
-> > > The set looks good so far. I will review the rest later.
-> > >
-> > > [...]
-> > >
-> > > A quick note about how we organize these patches. Maybe we can
-> > > merge some of these patches like:
-> >
-> > Just to be sure we are talking about the same thing: you mean squash
-> > the patch together?
->
-> Right, squash some patches together.
->
-> >
-> > >
-> > > >   bpf: introduce hid program type
-> > > >   bpf/hid: add a new attach type to change the report descriptor
-> > > >   bpf/hid: add new BPF type to trigger commands from userspace
-> > > I guess the three can merge into one.
-> > >
-> > > >   HID: hook up with bpf
-> > > >   HID: allow to change the report descriptor from an eBPF program
-> > > >   HID: bpf: compute only the required buffer size for the device
-> > > >   HID: bpf: only call hid_bpf_raw_event() if a ctx is available
-> > > I haven't read through all of them, but I guess they can probably merge
-> > > as well.
-> >
-> > There are certainly patches that we could squash together (3 and 4
-> > from this list into the previous ones), but I'd like to keep some sort
-> > of granularity here to not have a patch bomb that gets harder to come
-> > back later.
->
-> Totally agreed with the granularity of patches. I am not a big fan of patch
-> bombs either. :)
->
-> I guess the problem I have with the current version is that I don't have a
-> big picture of the design while reading through relatively big patches. A
-> overview with the following information in the cover letter would be really
-> help here:
->   1. How different types of programs are triggered (IRQ, user input, etc.);
->   2. What are the operations and/or outcomes of these programs;
->   3. How would programs of different types (or attach types) interact
->    with each other (via bpf maps? chaining?)
->   4. What's the new uapi;
->   5. New helpers and other logistics
->
-> Sometimes, I find the changes to uapi are the key for me to understand the
-> patches, and I would like to see one or two patches with all the UAPI
-> changes (i.e. bpf_hid_attach_type). However, that may or may not apply to
-> this set due to granularity concerns.
->
-> Does this make sense?
->
+When adding a new xfrm state, the data provided via struct xfrm_state
+is stored in network byte order. This needs to be taken into
+consideration when exporting the SAs data to userspace via debugfs,
+otherwise the content will depend on the system endianness. Fix this by
+converting all multi-byte fields from network to host order.
 
-It definitely does. And as I read that, I realized that if I manage to
-get such a clear depiction of what HID-BPF is, it would certainly be a
-good idea to paste that in a file into the Documentation directory as
-well :)
+Also fix the selftest script which was expecting the data as exported by
+a little-endian system, which was inverted.
 
-I think you have a slightly better picture now with the exchanges we
-are having on the individual patches, but I'll try to come out with
-that description in the cover letter for v3.
+Fixes: 7699353da875 ("netdevsim: add ipsec offload testing")
+Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test")
+Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+---
+ drivers/net/netdevsim/ipsec.c            | 13 +++++++------
+ tools/testing/selftests/net/rtnetlink.sh | 10 +++++-----
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
-Cheers,
-Benjamin
+diff --git a/drivers/net/netdevsim/ipsec.c b/drivers/net/netdevsim/ipsec.c
+index b80ed2ffd45e..03fb8b56edc4 100644
+--- a/drivers/net/netdevsim/ipsec.c
++++ b/drivers/net/netdevsim/ipsec.c
+@@ -41,16 +41,17 @@ static ssize_t nsim_dbg_netdev_ops_read(struct file *filp,
+ 
+ 		p += scnprintf(p, bufsize - (p - buf),
+ 			       "sa[%i] %cx ipaddr=0x%08x %08x %08x %08x\n",
+-			       i, (sap->rx ? 'r' : 't'), sap->ipaddr[0],
+-			       sap->ipaddr[1], sap->ipaddr[2], sap->ipaddr[3]);
++			       i, (sap->rx ? 'r' : 't'), ntohl(sap->ipaddr[0]),
++			       ntohl(sap->ipaddr[1]), ntohl(sap->ipaddr[2]),
++			       ntohl(sap->ipaddr[3]));
+ 		p += scnprintf(p, bufsize - (p - buf),
+ 			       "sa[%i]    spi=0x%08x proto=0x%x salt=0x%08x crypt=%d\n",
+-			       i, be32_to_cpu(sap->xs->id.spi),
+-			       sap->xs->id.proto, sap->salt, sap->crypt);
++			       i, ntohl(sap->xs->id.spi),
++			       sap->xs->id.proto, ntohl(sap->salt), sap->crypt);
+ 		p += scnprintf(p, bufsize - (p - buf),
+ 			       "sa[%i]    key=0x%08x %08x %08x %08x\n",
+-			       i, sap->key[0], sap->key[1],
+-			       sap->key[2], sap->key[3]);
++			       i, ntohl(sap->key[0]), ntohl(sap->key[1]),
++			       ntohl(sap->key[2]), ntohl(sap->key[3]));
+ 	}
+ 
+ 	len = simple_read_from_buffer(buffer, count, ppos, buf, p - buf);
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index c9ce3dfa42ee..8b1f20947673 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -814,11 +814,11 @@ kci_test_ipsec_offload()
+ 	diff $sysfsf - << EOF
+ SA count=2 tx=3
+ sa[0] tx ipaddr=0x00000000 00000000 00000000 00000000
+-sa[0]    spi=0x00000009 proto=0x32 salt=0x61626364 crypt=1
+-sa[0]    key=0x34333231 38373635 32313039 36353433
+-sa[1] rx ipaddr=0x00000000 00000000 00000000 037ba8c0
+-sa[1]    spi=0x00000009 proto=0x32 salt=0x61626364 crypt=1
+-sa[1]    key=0x34333231 38373635 32313039 36353433
++sa[0]    spi=0x00000009 proto=0x32 salt=0x64636261 crypt=1
++sa[0]    key=0x31323334 35363738 39303132 33343536
++sa[1] rx ipaddr=0x00000000 00000000 00000000 c0a87b03
++sa[1]    spi=0x00000009 proto=0x32 salt=0x64636261 crypt=1
++sa[1]    key=0x31323334 35363738 39303132 33343536
+ EOF
+ 	if [ $? -ne 0 ] ; then
+ 		echo "FAIL: ipsec_offload incorrect driver data"
+-- 
+2.32.0
 
