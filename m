@@ -2,263 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB6E4D133A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 10:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616A94D1488
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 11:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345323AbiCHJV2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Mar 2022 04:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        id S242962AbiCHKRc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Mar 2022 05:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345310AbiCHJVT (ORCPT
+        with ESMTP id S1345730AbiCHKR3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Mar 2022 04:21:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 029503D1E0
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 01:20:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646731222;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BHJNKcefmBPCZQfETqNljYPzoWjRgF0JS6C9KGiRgtk=;
-        b=N3Pie8mVIT5xFoHikqTxkeM6+BgvcxzIhzpkyQEaiKkegR/1hfLZDs9YYN/xMDNeeV/ywe
-        OmfqHbz+xe72hCTXCqCYEu7KPW4fliJTVz8Y0J3YSenAqZKGO1NxTkJQ8JeXDpuFL4UZjd
-        agEl7oFTUniuY6QoumX4CmE206ll4y4=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-CZCUQzunPFC2F8u_C4VsCw-1; Tue, 08 Mar 2022 04:20:18 -0500
-X-MC-Unique: CZCUQzunPFC2F8u_C4VsCw-1
-Received: by mail-pj1-f69.google.com with SMTP id p5-20020a17090a748500b001bee6752974so1163377pjk.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Mar 2022 01:20:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BHJNKcefmBPCZQfETqNljYPzoWjRgF0JS6C9KGiRgtk=;
-        b=u0SjQIKVwVx//X/SEsvrFnJ2erFMZNdFoWNXv5l5zG/mznmm/qtCp9x16LZmrX8VRy
-         r61RnNkUYaW6RP2FNotOYYOYHHTrE0+u3vN5vDb087t/v0ykOlk+GLm3l0dtylOWM5Uf
-         Wd3L2M89rczV0bwt8IL52ZJkdV8SDk77gamRs9aVZtyw+LggOPQnmk6EiXzDp5qYTEsK
-         db5q420sodfMarZTirMAHg95KcS36aRl7yyPT3dobcqRexTYk6Gs+tKfURNic48abNN2
-         YcFZKjaQFbwiL+2WfxiIf3EicNcFncUGKwweIS+V/FoNOfLzcg2ow0b6+Kjv2r+/iJso
-         Ol0Q==
-X-Gm-Message-State: AOAM532LF6Zo3/cW2mv5stDkn/L4F70zyCFV08lrRW4/9xBwkl/y3Ubt
-        9u2Qn2FkSJFAZx0BLx2SMgi3zQDlO/pN4IP/0kwmUNUnOemxyUK9sWFomYJPCJW4byRrrpH+Yje
-        K6nt5u9vTroHmbi2XibMeQp96vVo2Eo8i59A+Gr9gyQtC
-X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id r10-20020a17090a560a00b001bc72e73c13mr3561607pjf.246.1646731217685;
-        Tue, 08 Mar 2022 01:20:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxGBcsxWUY1lv6BGvVcM0BJmAMRFc5RbO84C7BBpZHsPBTdtiEjxgMTPrLlikfMuAeEH1bfUbyx1yR8JsE0/AY=
-X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id
- r10-20020a17090a560a00b001bc72e73c13mr3561553pjf.246.1646731217191; Tue, 08
- Mar 2022 01:20:17 -0800 (PST)
+        Tue, 8 Mar 2022 05:17:29 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5403742EC8;
+        Tue,  8 Mar 2022 02:16:33 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2289Ac9E002406;
+        Tue, 8 Mar 2022 10:16:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=xfmUHCm+vt3QL75YbpuxMaa7UKUaJfuD5kqmP5rxiMg=;
+ b=ntIzA8W4WZ0cHSmfEbemMmaEkGT1S1SlWTLm6ya0T2lvNJq6K9Trxf7+B5iuSavytl/7
+ soOMPwPYBJV9DrtQNYMT7YVBvZuoyXYdwppOZIAmeOeQdidkyub9VZCbilgzYkZyUxkK
+ ktg5fe4KjOaC9JQUan74rIsxmFJMcqXpqRcJw2VAXupTBShJUbcPStGxXiYYHTW4b0zt
+ KFbI0nNCRA0Ls2DFrWt8xjw7BG3kpNNehetQ4a91baBLINCxhjERhd4EhKZB+42MN2TW
+ e1i6fz6r0Z77r9hKwOs+eg8Zwq5dQv+t7ZzKJu2OCEuo0I8YNxzJ0p6JGS6VB66Hgi2V EQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ep0bcwuaj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 10:16:30 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 228A4KMQ029550;
+        Tue, 8 Mar 2022 10:16:30 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ep0bcwua5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 10:16:29 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 228ACxAf026035;
+        Tue, 8 Mar 2022 10:16:28 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3ekyg8x340-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Mar 2022 10:16:27 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 228AGNs154788410
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Mar 2022 10:16:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF9E411C04C;
+        Tue,  8 Mar 2022 10:16:23 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D73C11C050;
+        Tue,  8 Mar 2022 10:16:23 +0000 (GMT)
+Received: from [9.171.93.186] (unknown [9.171.93.186])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Mar 2022 10:16:23 +0000 (GMT)
+Message-ID: <821e840f-c167-611a-e954-38173a90c0a5@linux.ibm.com>
+Date:   Tue, 8 Mar 2022 11:16:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 0/5] memop selftest for storage key checking
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Thomas Huth <thuth@redhat.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220211182215.2730017-11-scgl@linux.ibm.com>
+ <20220225155311.3540514-1-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220225155311.3540514-1-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZN8cRf2sJdkGeWheZ3l1_EGtbdtV705P
+X-Proofpoint-ORIG-GUID: NNo5KLSAcui5w3yZnbrzApIwjBCXS5nh
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-3-benjamin.tissoires@redhat.com> <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
- <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com> <CAPhsuW5mZQ-N7RCndxP0RNi669RU5Tbu-Uu0M-KW2-mPYZbbng@mail.gmail.com>
-In-Reply-To: <CAPhsuW5mZQ-N7RCndxP0RNi669RU5Tbu-Uu0M-KW2-mPYZbbng@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 8 Mar 2022 10:20:06 +0100
-Message-ID: <CAO-hwJ+_aZDdKguze-BC+Ok9=HccAYSUFrNJmQBZfX3oufRGUQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-08_03,2022-03-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 spamscore=0 impostorscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203080053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 1:57 AM Song Liu <song@kernel.org> wrote:
->
-> On Mon, Mar 7, 2022 at 10:39 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Sat, Mar 5, 2022 at 1:03 AM Song Liu <song@kernel.org> wrote:
-> > >
-> > > On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > HID is a protocol that could benefit from using BPF too.
-> > >
-> > > [...]
-> > >
-> > > > +#include <linux/list.h>
-> > > > +#include <linux/slab.h>
-> > > > +
-> > > > +struct bpf_prog;
-> > > > +struct bpf_prog_array;
-> > > > +struct hid_device;
-> > > > +
-> > > > +enum bpf_hid_attach_type {
-> > > > +       BPF_HID_ATTACH_INVALID = -1,
-> > > > +       BPF_HID_ATTACH_DEVICE_EVENT = 0,
-> > > > +       MAX_BPF_HID_ATTACH_TYPE
-> > >
-> > > Is it typical to have different BPF programs for different attach types?
-> > > Otherwise, (different types may have similar BPF programs), maybe
-> > > we can pass type as an argument to the program (shared among
-> > > different types)?
-> >
-> > Not quite sure I am entirely following you, but I consider the various
-> > attach types to be quite different and thus you can not really reuse
-> > the same BPF program with 2 different attach types.
-> >
-> > In my view, we have 4 attach types:
-> > - BPF_HID_ATTACH_DEVICE_EVENT: called whenever we receive an IRQ from
-> > the given device (so this is net-like event stream)
-> > - BPF_HID_ATTACH_RDESC_FIXUP: there can be only one of this type, and
-> > this is called to change the device capabilities. So you can not reuse
-> > the other programs for this one
-> > - BPF_HID_ATTACH_USER_EVENT: called explicitly by the userspace
-> > process owning the program. There we can use functions that are
-> > sleeping (we are not in IRQ context), so this is also fundamentally
-> > different from the 3 others.
-> > - BPF_HID_ATTACH_DRIVER_EVENT: whenever the driver gets called into,
-> > we get a bpf program run. This can be suspend/resume, or even specific
-> > request to the device (change a feature on the device or get its
-> > current state). Again, IMO fundamentally different from the others.
-> >
-> > So I'm open to any suggestions, but if we can keep the userspace API
-> > being defined with different SEC in libbpf, that would be the best.
->
-> Thanks for this information. Different attach_types sound right for the use
-> case.
->
-> >
-> > >
-> > > [...]
-> > >
-> > > > +struct hid_device;
-> > > > +
-> > > > +enum hid_bpf_event {
-> > > > +       HID_BPF_UNDEF = 0,
-> > > > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
-> > > > +};
-> > > > +
-> > > > +struct hid_bpf_ctx {
-> > > > +       enum hid_bpf_event type;        /* read-only */
-> > > > +       __u16 allocated_size;           /* the allocated size of data below (RO) */
-> > >
-> > > There is a (6-byte?) hole here.
-> > >
-> > > > +       struct hid_device *hdev;        /* read-only */
-> > > > +
-> > > > +       __u16 size;                     /* used size in data (RW) */
-> > > > +       __u8 data[];                    /* data buffer (RW) */
-> > > > +};
-> > >
-> > > Do we really need hit_bpf_ctx in uapi? Maybe we can just use it
-> > > from vmlinuxh?
-> >
-> > I had a thought at this context today, and I think I am getting to the
-> > limit of what I understand.
-> >
-> > My first worry is that the way I wrote it there, with a variable data
-> > field length is that this is not forward compatible. Unless BTF and
-> > CORE are making magic, this will bite me in the long run IMO.
-> >
-> > But then, you are talking about not using uapi, and I am starting to
-> > wonder: am I doing the things correctly?
-> >
-> > To solve my first issue (and the weird API I had to introduce in the
-> > bpf_hid_get/set_data), I came up to the following:
-> > instead of exporting the data directly in the context, I could create
-> > a helper bpf_hid_get_data_buf(ctx, const uint size) that returns a
-> > RET_PTR_TO_ALLOC_MEM_OR_NULL in the same way bpf_ringbuf_reserve()
-> > does.
-> >
-> > This way, I can directly access the fields within the bpf program
-> > without having to worry about the size.
-> >
-> > But now, I am wondering whether the uapi I defined here is correct in
-> > the way CORE works.
-> >
-> > My goal is to have HID-BPF programs to be CORE compatible, and not
-> > have to recompile them depending on the underlying kernel.
-> >
-> > I can not understand right now if I need to add some other BTF helpers
-> > in the same way the access to struct xdp_md and struct xdp_buff are
-> > converted between one and other, or if defining a forward compatible
-> > struct hid_bpf_ctx is enough.
-> > As far as I understand, .convert_ctx_access allows to export a stable
-> > uapi to the bpf prog users with the verifier doing the conversion
-> > between the structs for me. But is this really required for all the
-> > BPF programs if we want them to be CORE?
-> >
-> > Also, I am starting to wonder if I should not hide fields in the
-> > context to the users. The .data field could be a pointer and only
-> > accessed through the helper I mentioned above. This would be forward
-> > compatible, and also allows to use whatever available memory in the
-> > kernel to be forwarded to the BPF program. This way I can skip the
-> > memcpy part and work directly with the incoming dma data buffer from
-> > the IRQ.
-> >
-> > But is it best practice to do such a thing?
->
-> I think .convert_ctx_access is the way to go if we want to access the data
-> buffer without memcpy. I am not sure how much work is needed to make
-> it compatible with CORE though.
->
-> To make sure I understand the case, do we want something like
->
-> bpf_prog(struct hid_bpf_ctx *ctx)
-> {
->     /* makes sure n < ctx->size */
->     x = ctx->data[n]; /* read data */
->     ctx->data[n] = <something>; /* write data */
->     ctx->size = <something <= n>; /* change data size */
-> }
->
-> We also need it to be CORE, so that we may modify hid_bpf_ctx by
-> inserting more members to it before data.
->
-> Is this accurate?
->
+Can you send this as a separate thread (not inside the original thread). Otherwise things like b4 get confused and people might also overlook this.
 
-Yes, you pretty much summed it all (except maybe that we might want to
-have allocated_size in addition to size so we can also grow the value
-of .size within the allocated limit).
 
-All in all, what I want for HID bpf programs is to be able to read and
-write an array of bytes, and change its size within an allocated
-kernel limit.
-
-This will apply to every HID bpf attach type, to the exception of some
-BPF_HID_ATTACH_DRIVER_EVENT when we are receiving a suspend/resume
-notification. Though in the suspend/resume case we won't have the data
-array available, so it won't matter much.
-
-I want the HID bpf programs to be CORE, but if you tell me that it
-would matter only if we need to reshuffle hid_bpf_ctx, I would be fine
-simply put a comment "new fields must be added at the end" like some
-other definitions of contexts are doing.
-
-Besides that, I currently do not want to allow access to the content
-of struct hid_device (or any other kernel struct) in HID BPF programs.
-That might be of interest at some point for debugging, but with just
-the array capability I should be able to achieve all of my use cases.
-
-Cheers,
-Benjamin
-
+Am 25.02.22 um 16:53 schrieb Janis Schoetterl-Glausch:
+> Refactor memop selftest and add tests.
+> Add storage key tests, both for success as well as failure cases.
+> Similarly test both vcpu and vm ioctls.
+> 
+> v1 -> v2
+>   * restructure commits
+>   * get rid of test_* wrapper functions that hid vm.vm
+>   * minor changes
+> 
+> v0 -> v2
+>   * complete rewrite
+> 
+> v1: https://lore.kernel.org/kvm/20220217145336.1794778-1-scgl@linux.ibm.com/
+> v0: https://lore.kernel.org/kvm/20220211182215.2730017-11-scgl@linux.ibm.com/
+> 
+> Janis Schoetterl-Glausch (5):
+>    KVM: s390: selftests: Split memop tests
+>    KVM: s390: selftests: Add macro as abstraction for MEM_OP
+>    KVM: s390: selftests: Add named stages for memop test
+>    KVM: s390: selftests: Add more copy memop tests
+>    KVM: s390: selftests: Add error memop tests
+> 
+>   tools/testing/selftests/kvm/s390x/memop.c | 734 ++++++++++++++++++----
+>   1 file changed, 616 insertions(+), 118 deletions(-)
+> 
+> 
+> base-commit: ee6a569d3bf64c9676eee3eecb861fb01cc11311
