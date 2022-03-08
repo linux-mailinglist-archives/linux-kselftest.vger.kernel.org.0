@@ -2,146 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841FD4D232C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 22:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DFC4D2368
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 22:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243184AbiCHVUh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Mar 2022 16:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S1350396AbiCHVjW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Mar 2022 16:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234950AbiCHVUg (ORCPT
+        with ESMTP id S231890AbiCHVjW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Mar 2022 16:20:36 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9C12D1F4
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 13:19:38 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id h7so132072ile.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Mar 2022 13:19:38 -0800 (PST)
+        Tue, 8 Mar 2022 16:39:22 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB6336B74
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 13:38:24 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id q11so608715iod.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Mar 2022 13:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QLkteIHRhUSwMXJUDME8Lv3LFalvJ1bqMQRnTxAe590=;
-        b=HPHLxDYxsD2+TZ97by9ltALMf5ZHAJRHroJziBzdFwPuSJCKFZe4Yg027YVsTH6yCw
-         i3KnR6zXLuQMsYM4TizAFnN6ywf0cp6as6NL0rWeD34y0dg06ufDv99CZ6frUbi4E0uE
-         ISz7vzV+iA8emrmC8AR103T/jvoipxfWillrs=
+        bh=iiqBcIu6f71RMtOoo4wLPDFgYhHNPzl3jFLGPGUCerE=;
+        b=HZ0QA3I99qa4FgdUpKr0K+9re9GuvvY3hc0kK3hgHHrPLvPvBRJgcyUaw8pmmBBHB5
+         u3oGXiTQPJCIcS6OWMqlnVynjmzj+jYZ5STy/LIi9O6jk2qfI8Bg7F6aniLJ/x53/TOX
+         9sQJXgzoiYAkA+zbL9SJ0ky/wCw8oNf+2KS+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=QLkteIHRhUSwMXJUDME8Lv3LFalvJ1bqMQRnTxAe590=;
-        b=KfVUmv6FkqKH/9KDTpnVEMJW1K2V/Fbp9bEAjMMKOcJ8L3qNe8940YAUmsSmyR4gcZ
-         Ghb2hy7t9KOXrG1LDSulfEaxVcmZtFMsg6vq9+dV/9aAJdVjSe3raXY73Fbcg+CN+XZc
-         RM2SxrJ7bhphfh+k14BHO5l19XSoYTC6yuixioFNotaU+oVLsbxeTQq0JJ2SlDVLhEBc
-         7rwMppZ3Z7jV8HQknHuyVNC8T69tqJxxR9SOaeka6vnpy99gYcrL5tsG4viSCSJ2WNcb
-         0046MBg/uOhnVo2/tmasYKYum5rzm63sV9DjxOZWYN6Ui9Z/gGoAkvnMlj40ZBtncn21
-         gBvw==
-X-Gm-Message-State: AOAM530AwXM5yW6Nbh7ulM1AY1LHaW3nTGWGLKPjFnMWb5gs+4pXreH3
-        niioWbTF1eBee1Wy0PX8PiwRlA==
-X-Google-Smtp-Source: ABdhPJyv+OH6SuRIzmqviaFC/odZEMdUR/TmLwGhSf+amvFfnigvBORf3Lp73Pst8YT7Bsp/7ZB+pA==
-X-Received: by 2002:a05:6e02:5b1:b0:2c6:218d:fb38 with SMTP id k17-20020a056e0205b100b002c6218dfb38mr17562252ils.266.1646774377886;
-        Tue, 08 Mar 2022 13:19:37 -0800 (PST)
+        bh=iiqBcIu6f71RMtOoo4wLPDFgYhHNPzl3jFLGPGUCerE=;
+        b=aZSXJ5mCqrJXxmbTrVRccGVICF2EXVFz6M/6+5wk8mXqLc2seFo3U732L7STQ2XCEl
+         OrhXm0RPzsdnlJT73A4wPU5PkoHxRr0V5KFOReCfessw4FfTlRg79MS+uuw8lxTUaSqK
+         Wb4LSwhkUrK58vh+NVmII+c76LWTCaj58vnbegTGqKjOo/T3s/JEPh0WfV0OBbAxUpHB
+         7kNAI7+jWjktzoDiOAUTDt38Yh42V00jdgREmte+3BeHaW9j2SFuEbwgXsZvP/zRJvxd
+         eg6CXmKHBkaFAuFUFERcxKa6AEKfWw9avz3VNGrovt1tc6KhmHjfveu78wKGvSa//XFF
+         Ywiw==
+X-Gm-Message-State: AOAM531yLpArje4ON6eWhOVLc7zeQzbIiDpw0n0ebRQNeSAgQGdKqPMn
+        Cm28fJpj0NgX5wp2s+6Kg7C9+g==
+X-Google-Smtp-Source: ABdhPJzh4r8PfgNaHjo26ftKeFXvz6W7YYH43AxdoRzfWEpPiHMylu/cULgdT4E1njyB1tgDCKeTzw==
+X-Received: by 2002:a05:6638:349f:b0:318:c543:ae1a with SMTP id t31-20020a056638349f00b00318c543ae1amr1956275jal.26.1646775503920;
+        Tue, 08 Mar 2022 13:38:23 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id d7-20020a5d9647000000b00638d53cd21esm11212583ios.26.2022.03.08.13.19.37
+        by smtp.gmail.com with ESMTPSA id p22-20020a5d8d16000000b006115627b87csm8268ioj.55.2022.03.08.13.38.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 13:19:37 -0800 (PST)
-Subject: Re: [PATCH] Makefile: Fix separate output directory build of
- kselftests
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kernel@collabora.com, kernelci@groups.io, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, keescook@chromium.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 08 Mar 2022 13:38:23 -0800 (PST)
+Subject: Re: [PATCH v3] selftests/resctrl: Print a message if the result of
+ MBM&CMT tests is failed on Intel cpu
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220223191016.1658728-1-usama.anjum@collabora.com>
- <6e954470-f593-e27a-d15c-ecd5c28f4dca@linuxfoundation.org>
- <2ac8cecb-5e14-a8b2-7629-a9ab9d474585@collabora.com>
+References: <20220304103957.487660-1-tan.shaopeng@jp.fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <65c11aba-bcab-28f4-a016-8cad128809ad@linuxfoundation.org>
-Date:   Tue, 8 Mar 2022 14:19:36 -0700
+Message-ID: <9647f7ed-6a02-8603-0de4-3292d4d13157@linuxfoundation.org>
+Date:   Tue, 8 Mar 2022 14:38:22 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <2ac8cecb-5e14-a8b2-7629-a9ab9d474585@collabora.com>
+In-Reply-To: <20220304103957.487660-1-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/8/22 1:11 AM, Muhammad Usama Anjum wrote:
-> On 3/4/22 2:32 AM, Shuah Khan wrote:
->> On 2/23/22 12:10 PM, Muhammad Usama Anjum wrote:
->>> Build of kselftests fail if kernel's top most Makefile is used for
->>> running or building kselftests with separate output directory. The
->>> absolute path is needed to reference other files during this kind of
->>> build. Set KBUILD_ABS_SRCTREE to use absolute path during the build. It
->>> fixes the following different types of errors:
->>>
->>> make kselftest-all O=/linux_mainline/build
->>> Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
->>>
->>> make kselftest-all O=build
->>> Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>> I've tested this patch on top of next-20220217. The latest next-20220222
->>> have missing patches.
->>
->> Can you give more details on the use-cases you tested? Did you test all
->> the ways kselftest are built?
->>
-> Yeah, I've tried to test all the ways. Here are the different ways I've
-> used to test it:
-> 1) Same directory build of kselftest (this is already working)
-> make kselftest
-> make kselftest-all
-> make kselftest-install
-> make kselftest-clean
-> make kselftest-gen_tar
+On 3/4/22 3:39 AM, Shaopeng Tan wrote:
+> According to "Intel Resource Director Technology (Intel RDT) on
+> 2nd Generation Intel Xeon Scalable Processors Reference Manual",
+> When the Intel Sub-NUMA Clustering(SNC) feature is enabled,
+> Intel CMT and MBM counters may not be accurate.
 > 
-> 2) These were failing when separate output directory is specified either
-> as relative or absolute path. After adding this patch, these are also
-> working. kselfetst.rst mentions separate output directory build in this way.
-> make kselftest O=build
-> make kselftest-all O=build
-> make kselftest-install O=build
-> make kselftest-clean O=build
-> make kselftest-gen_tar O=build
+> However, there does not seem to be an architectural way to detect
+> if SNC is enabled.
 > 
-> make kselftest O=/build
-> make kselftest-all O=/build
-> make kselftest-install O=/build
-> make kselftest-clean O=/build
-> make kselftest-gen_tar O=/build
+> If the result of MBM&CMT test fails on Intel CPU,
+> print a message to let users know a possible cause of failure.
 > 
-> Tested on top of next-20220307 after applying this patch.
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> ---
+> Hello,
 > 
+> In PATCH V2, I tried to detect whether SNC is enabled by NUMA info and
+> cpuinfo(socket_num), but it is not reliable and no future-proof.
+> 
+> I just print a message to let users know a possible cause of "not ok",
+> When CMT or MBM test runs on Intel CPU, and the result is "not ok".
+> 
+> This patch is based on v5.16.
 
-Thank you for testing all these use-cases. This is a good comprehensive
-list. Do you mind sending a doc patch for
+Also need to be rebased on mainline latest
 
-Documentation/dev-tools/kselftest.rst
+> 
+>   tools/testing/selftests/resctrl/resctrl_tests.c | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> index 973f09a66e1e..ec2bdce7b85f 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> @@ -14,8 +14,9 @@
+>   #define BENCHMARK_ARG_SIZE	64
+>   
+>   bool is_amd;
+> +bool is_intel;
+>   
 
-The text here could almost as is as a new section after
+Why is this a global? I am not seeing a reason. These detect_*()s
+could be moved to resctrl.h and get rid of globals.
 
-Contributing new tests (details) with a new section that outlines
-the tests to run when adding a new test to selftests/Makefile
-and making changes to kselftest common frameowork: selftests/Makefile,
-selftests/lib.mk
+Instead of adding intel check to detect_amd() add detect_intel()
+or is_intel() and have ut return true of it detects intel.
 
-Let me know if you are unable to, I will send a patch in.
+
+> -void detect_amd(void)
+> +void detect_vendor(void)
+>   {
+>   	FILE *inf = fopen("/proc/cpuinfo", "r");
+>   	char *res;
+> @@ -29,6 +30,7 @@ void detect_amd(void)
+>   		char *s = strchr(res, ':');
+>   
+>   		is_amd = s && !strcmp(s, ": AuthenticAMD\n");
+> +		is_intel = s && !strcmp(s, ": GenuineIntel\n");
+>   		free(res);
+>   	}
+>   	fclose(inf);
+> @@ -70,6 +72,8 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
+>   		sprintf(benchmark_cmd[5], "%s", MBA_STR);
+>   	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
+>   	ksft_test_result(!res, "MBM: bw change\n");
+> +	if (is_intel && res)
+> +		ksft_print_msg("Intel CMT and MBM counters may be inaccurate when Sub-NUMA Clustering (SNC) is enabled. Ensure SNC is disabled in the BIOS if this system supports SNC.\n");
+
+This message is rather long. Please make it concise.
+
+>   	mbm_test_cleanup();
+>   }
+>   
+> @@ -106,6 +110,8 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
+>   		sprintf(benchmark_cmd[5], "%s", CMT_STR);
+>   	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
+>   	ksft_test_result(!res, "CMT: test\n");
+> +	if (is_intel && res)
+> +		ksft_print_msg("Intel CMT and MBM counters may be inaccurate when Sub-NUMA Clustering (SNC) is enabled. Ensure SNC is disabled in the BIOS if this system supports SNC.\n");
+
+This message is rather long. Please make it concise.
+
+>   	cmt_test_cleanup();
+>   }
+>   
+> @@ -207,8 +213,8 @@ int main(int argc, char **argv)
+>   	if (geteuid() != 0)
+>   		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
+>   
+> -	/* Detect AMD vendor */
+> -	detect_amd();
+> +	/* Detect AMD/INTEL vendor */
+> +	detect_vendor();
+>   
+>   	if (has_ben) {
+>   		/* Extract benchmark command from command line. */
+> 
 
 thanks,
 -- Shuah
