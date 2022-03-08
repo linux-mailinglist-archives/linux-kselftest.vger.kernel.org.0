@@ -2,146 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B3C4D0B44
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Mar 2022 23:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28DB4D0D18
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 01:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343811AbiCGWjj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Mar 2022 17:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S1344138AbiCHA6J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Mar 2022 19:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243206AbiCGWji (ORCPT
+        with ESMTP id S1344216AbiCHA6H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Mar 2022 17:39:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D8151C109
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 14:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646692722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=WwCj9tmeEF9G3sFW68kDXMvHQYtm97AqiL1Iqd+awRI=;
-        b=NnyK11KBxNzZt2KsOCvVdMjvOl3l/43i2Ydd0XUdCGk3q7H7tCHTNV2qhif9eYHO2H02nw
-        KjtYY9ga+De7W5Z0iSyvD+XFSBLexmUQn3db0M05PWAIXf1GIXLpJ+fhdkTfnlcabtimQB
-        jki7uts8hiScVwhUtpd5F8A6HFBGbLA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-nSiWqWHePrmSpPh010rX5A-1; Mon, 07 Mar 2022 17:38:40 -0500
-X-MC-Unique: nSiWqWHePrmSpPh010rX5A-1
-Received: by mail-wr1-f70.google.com with SMTP id z16-20020adff1d0000000b001ef7dc78b23so4953367wro.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Mar 2022 14:38:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=WwCj9tmeEF9G3sFW68kDXMvHQYtm97AqiL1Iqd+awRI=;
-        b=AkaRjaF8tRh6KCU9dENi23eAzLkIPpAHjC1tKPwaCM8Mr/UJdA0NG1raFrSQa8meKu
-         I354RHWPfD44fQUviL86rGb+opiyisiEpQ/xBcKhxBjuq1hBp+R1DjhkBFQz+MB6L3Vh
-         p6QaAxtrLKEdwb39IsE4I+U5JQEt/z233ZxKZ3tJOXA1bfWeZrDGjEE+LY0/fD9jc678
-         JJCq7ADmzmzaSzQ8Sqf0jC+i7s8UXcYDcILTSjSk4ex2NYFRs5680io6f/z/xyOpvMCT
-         4bLOW4fq8qzxZZDG7dMK4zTMSjbnzLs8rgoW0JGMT9cfv8IvvER7wzMJYHWrm4RGGtnb
-         Yq7g==
-X-Gm-Message-State: AOAM5317oD1epnq0UPo/k2GXmtVQ2A646rQJLtKPbbTdh5do7ETyC7N1
-        QahpB6N0eRlYN8Ed4v8B9PeAeBFBZy5Ed6YoMdn+KWCTo6PMQ2q0EAWr52LAs8JG5pASfRMMkUf
-        P/mFbYkLH89ZHINbS1bwo4GjdAcke
-X-Received: by 2002:adf:c40e:0:b0:1f1:d719:52d2 with SMTP id v14-20020adfc40e000000b001f1d71952d2mr10257410wrf.105.1646692719617;
-        Mon, 07 Mar 2022 14:38:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxiIYBa+X7uMcs0qmPxYR5fSqFB8ajs0/BrHplSbZfFfuQX/9S2EfHij2ixsVzr04C2s4PGJA==
-X-Received: by 2002:adf:c40e:0:b0:1f1:d719:52d2 with SMTP id v14-20020adfc40e000000b001f1d71952d2mr10257399wrf.105.1646692719428;
-        Mon, 07 Mar 2022 14:38:39 -0800 (PST)
-Received: from debian.home (2a01cb058d3818005c1e4a7b0f47339f.ipv6.abo.wanadoo.fr. [2a01:cb05:8d38:1800:5c1e:4a7b:f47:339f])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c228700b00389865c646dsm652524wmf.14.2022.03.07.14.38.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 14:38:39 -0800 (PST)
-Date:   Mon, 7 Mar 2022 23:38:37 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, David Ahern <dsahern@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: pmtu.sh: Kill tcpdump processes launched by
- subshell.
-Message-ID: <0378c55466d8d1f7b6d99d581811d49429e1f4e7.1646691728.git.gnault@redhat.com>
+        Mon, 7 Mar 2022 19:58:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334551155;
+        Mon,  7 Mar 2022 16:57:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAF68B8175C;
+        Tue,  8 Mar 2022 00:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A38C340F7;
+        Tue,  8 Mar 2022 00:57:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646701029;
+        bh=je9wh1jfc8vKoLFB/XMs5xZvr+6tezIiCo7tP89tgpY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RtO0co1gSFJwkq5vXNLxKNXO9f+Lqdl/mTUmq3ywOT33iUb4fS3ofFh/GNVp3Qjw+
+         +uzyYNtR5S34pDPFvE4ay2DXgKx2v1Cko9Re1wcy5Ov6cNEVTgmu/A3mEHiUSo8lvZ
+         nycf7fbdhQ5/WKRcp9H+y3P+Pnn/jffuuYCmfsNg/r9k6l6c/Yvl3MZmOwyWd8+ycx
+         /PaAZcNPWQ9UNuvfgUENYGupOJ4rLXnVV+/knXC57CkiHPMTee7WloB3QvyXWpMWv5
+         VOtax9kU/mu2L4xvOPP36dLjxchYBMp7CYManYIXd/f5W/MkTRrZSz16q34atGJ0xm
+         gjoieoE60I1Gw==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2dc242a79beso174466237b3.8;
+        Mon, 07 Mar 2022 16:57:09 -0800 (PST)
+X-Gm-Message-State: AOAM531+Xug1aIvWcWQ7dnvy0PBoOEpw99I0r/RvTmHukYfGLwH5SEaz
+        nA/PVsLf9fc9biRWgGvJs6kYjoFmdl2r1sBDyqg=
+X-Google-Smtp-Source: ABdhPJw5iu98Yx0WOcx2dkiKYmMKSq7PTAddXcLAeBR9h8z6v4BOKZMtV6hsGVJoY6yvheeO6z4E3FZsWGXfPBMxJBI=
+X-Received: by 2002:a0d:fb45:0:b0:2d0:d09a:576c with SMTP id
+ l66-20020a0dfb45000000b002d0d09a576cmr11184300ywf.447.1646701028244; Mon, 07
+ Mar 2022 16:57:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-3-benjamin.tissoires@redhat.com> <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
+ <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com>
+In-Reply-To: <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 7 Mar 2022 16:56:57 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5mZQ-N7RCndxP0RNi669RU5Tbu-Uu0M-KW2-mPYZbbng@mail.gmail.com>
+Message-ID: <CAPhsuW5mZQ-N7RCndxP0RNi669RU5Tbu-Uu0M-KW2-mPYZbbng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The cleanup() function takes care of killing processes launched by the
-test functions. It relies on variables like ${tcpdump_pids} to get the
-relevant PIDs. But tests are run in their own subshell, so updated
-*_pids values are invisible to other shells. Therefore cleanup() never
-sees any process to kill:
+On Mon, Mar 7, 2022 at 10:39 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Sat, Mar 5, 2022 at 1:03 AM Song Liu <song@kernel.org> wrote:
+> >
+> > On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > HID is a protocol that could benefit from using BPF too.
+> >
+> > [...]
+> >
+> > > +#include <linux/list.h>
+> > > +#include <linux/slab.h>
+> > > +
+> > > +struct bpf_prog;
+> > > +struct bpf_prog_array;
+> > > +struct hid_device;
+> > > +
+> > > +enum bpf_hid_attach_type {
+> > > +       BPF_HID_ATTACH_INVALID = -1,
+> > > +       BPF_HID_ATTACH_DEVICE_EVENT = 0,
+> > > +       MAX_BPF_HID_ATTACH_TYPE
+> >
+> > Is it typical to have different BPF programs for different attach types?
+> > Otherwise, (different types may have similar BPF programs), maybe
+> > we can pass type as an argument to the program (shared among
+> > different types)?
+>
+> Not quite sure I am entirely following you, but I consider the various
+> attach types to be quite different and thus you can not really reuse
+> the same BPF program with 2 different attach types.
+>
+> In my view, we have 4 attach types:
+> - BPF_HID_ATTACH_DEVICE_EVENT: called whenever we receive an IRQ from
+> the given device (so this is net-like event stream)
+> - BPF_HID_ATTACH_RDESC_FIXUP: there can be only one of this type, and
+> this is called to change the device capabilities. So you can not reuse
+> the other programs for this one
+> - BPF_HID_ATTACH_USER_EVENT: called explicitly by the userspace
+> process owning the program. There we can use functions that are
+> sleeping (we are not in IRQ context), so this is also fundamentally
+> different from the 3 others.
+> - BPF_HID_ATTACH_DRIVER_EVENT: whenever the driver gets called into,
+> we get a bpf program run. This can be suspend/resume, or even specific
+> request to the device (change a feature on the device or get its
+> current state). Again, IMO fundamentally different from the others.
+>
+> So I'm open to any suggestions, but if we can keep the userspace API
+> being defined with different SEC in libbpf, that would be the best.
 
-$ ./tools/testing/selftests/net/pmtu.sh -t pmtu_ipv4_exception
-TEST: ipv4: PMTU exceptions                                         [ OK ]
-TEST: ipv4: PMTU exceptions - nexthop objects                       [ OK ]
+Thanks for this information. Different attach_types sound right for the use
+case.
 
-$ pgrep -af tcpdump
-6084 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
-6085 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
-6086 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
-6087 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
-6088 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
-6089 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
-6090 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
-6091 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
-6228 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
-6229 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
-6230 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
-6231 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
-6232 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
-6233 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
-6234 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
-6235 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
+>
+> >
+> > [...]
+> >
+> > > +struct hid_device;
+> > > +
+> > > +enum hid_bpf_event {
+> > > +       HID_BPF_UNDEF = 0,
+> > > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
+> > > +};
+> > > +
+> > > +struct hid_bpf_ctx {
+> > > +       enum hid_bpf_event type;        /* read-only */
+> > > +       __u16 allocated_size;           /* the allocated size of data below (RO) */
+> >
+> > There is a (6-byte?) hole here.
+> >
+> > > +       struct hid_device *hdev;        /* read-only */
+> > > +
+> > > +       __u16 size;                     /* used size in data (RW) */
+> > > +       __u8 data[];                    /* data buffer (RW) */
+> > > +};
+> >
+> > Do we really need hit_bpf_ctx in uapi? Maybe we can just use it
+> > from vmlinuxh?
+>
+> I had a thought at this context today, and I think I am getting to the
+> limit of what I understand.
+>
+> My first worry is that the way I wrote it there, with a variable data
+> field length is that this is not forward compatible. Unless BTF and
+> CORE are making magic, this will bite me in the long run IMO.
+>
+> But then, you are talking about not using uapi, and I am starting to
+> wonder: am I doing the things correctly?
+>
+> To solve my first issue (and the weird API I had to introduce in the
+> bpf_hid_get/set_data), I came up to the following:
+> instead of exporting the data directly in the context, I could create
+> a helper bpf_hid_get_data_buf(ctx, const uint size) that returns a
+> RET_PTR_TO_ALLOC_MEM_OR_NULL in the same way bpf_ringbuf_reserve()
+> does.
+>
+> This way, I can directly access the fields within the bpf program
+> without having to worry about the size.
+>
+> But now, I am wondering whether the uapi I defined here is correct in
+> the way CORE works.
+>
+> My goal is to have HID-BPF programs to be CORE compatible, and not
+> have to recompile them depending on the underlying kernel.
+>
+> I can not understand right now if I need to add some other BTF helpers
+> in the same way the access to struct xdp_md and struct xdp_buff are
+> converted between one and other, or if defining a forward compatible
+> struct hid_bpf_ctx is enough.
+> As far as I understand, .convert_ctx_access allows to export a stable
+> uapi to the bpf prog users with the verifier doing the conversion
+> between the structs for me. But is this really required for all the
+> BPF programs if we want them to be CORE?
+>
+> Also, I am starting to wonder if I should not hide fields in the
+> context to the users. The .data field could be a pointer and only
+> accessed through the helper I mentioned above. This would be forward
+> compatible, and also allows to use whatever available memory in the
+> kernel to be forwarded to the BPF program. This way I can skip the
+> memcpy part and work directly with the incoming dma data buffer from
+> the IRQ.
+>
+> But is it best practice to do such a thing?
 
-Fix this by running cleanup() in the context of the test subshell.
-Now that each test cleans the environment after completion, there's no
-need for calling cleanup() again when the next test starts. So let's
-drop it from the setup() function. This is okay because cleanup() is
-also called when pmtu.sh starts, so even the first test starts in a
-clean environment.
+I think .convert_ctx_access is the way to go if we want to access the data
+buffer without memcpy. I am not sure how much work is needed to make
+it compatible with CORE though.
 
-Note: PAUSE_ON_FAIL is still evaluated before cleanup(), so one can
-still inspect the test environment upon failure when using -p.
+To make sure I understand the case, do we want something like
 
-Fixes: a92a0a7b8e7c ("selftests: pmtu: Simplify cleanup and namespace names")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
----
- tools/testing/selftests/net/pmtu.sh | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+bpf_prog(struct hid_bpf_ctx *ctx)
+{
+    /* makes sure n < ctx->size */
+    x = ctx->data[n]; /* read data */
+    ctx->data[n] = <something>; /* write data */
+    ctx->size = <something <= n>; /* change data size */
+}
 
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-index 543ad7513a8e..1db670a01f9b 100755
---- a/tools/testing/selftests/net/pmtu.sh
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -865,7 +865,6 @@ setup_ovs_bridge() {
- setup() {
- 	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
- 
--	cleanup
- 	for arg do
- 		eval setup_${arg} || { echo "  ${arg} not supported"; return 1; }
- 	done
-@@ -1836,6 +1835,10 @@ run_test() {
- 
- 	unset IFS
- 
-+	# Since cleanup() relies on variables modified by this subshell, it
-+	# has to run in this context.
-+	trap cleanup EXIT
-+
- 	if [ "$VERBOSE" = "1" ]; then
- 		printf "\n##########################################################################\n\n"
- 	fi
--- 
-2.21.3
+We also need it to be CORE, so that we may modify hid_bpf_ctx by
+inserting more members to it before data.
 
+Is this accurate?
+
+Song
