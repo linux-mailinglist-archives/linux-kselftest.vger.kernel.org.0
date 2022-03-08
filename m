@@ -2,179 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1885A4D0F81
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 06:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A77F4D103E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 07:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238608AbiCHFxO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Mar 2022 00:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S241927AbiCHGaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Mar 2022 01:30:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiCHFxI (ORCPT
+        with ESMTP id S232068AbiCHGaL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Mar 2022 00:53:08 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77185E25;
-        Mon,  7 Mar 2022 21:52:11 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id b16so5434460ioz.3;
-        Mon, 07 Mar 2022 21:52:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+aAQ68z5bUdi4gi3f7x74ZA2W3mBI33pygnpmeRuBzI=;
-        b=X1GRs5Yy1RYIEnhBxsIrFW0jFcRRm10ThJfBJUR0L/V6kCShOlw8YoQqlvYXauA+Wj
-         fWm/zqn7vKHkXtPzXYI069QKuog/kXlQtTE6ulEBHFwL1Mgo4fHGVRMKuwQ8pFCnV4sd
-         p6GlqXV2vZ1oRO/hQyp3FZWqzRFl88D0itB78rJZoEq7lKnTHY9wkAgdf5xObI89Pdqm
-         G/e3SICZiEEI6/VZN1EQDzTcyhvN1HK7U8LQFPTfuBwMhDTELpzuHl7/2hfsktGO8qfm
-         HqzNFRXqN8yTpqUqj1nSXqX1NRPDzMc+YKzDHEYM+jp3bYP0bHDxkc4QQx7ctP2J0K/V
-         61LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+aAQ68z5bUdi4gi3f7x74ZA2W3mBI33pygnpmeRuBzI=;
-        b=x900cMiQC+Cac1WulHU8Ai1/9mp/KBmAjk4Hw9u7M14lZlK2y6O+Rm+MuJ8DkwL+MK
-         WKK0u8iaBiN7XLIR+vpH8PBdV60CQZ3LgJ66wjUXkglmtXhMl/WmABemgmLGsy3OCd1m
-         ThcXOl3JQs0g4cHPVp2BpkvY/pi1oVBQ5UNc3/KDBM60uKOO8IBvl7du8UWR65HqxYGN
-         wr5LuuZaaVCUYEAqj/tHne7UtIn0LcbejZhmiyP43dztOhC3TK1r67InB7Jq1s8+LIv1
-         WG+FLdAos88KtFZqzpMAg30ajlfQUHVrxDW0L0SBQBOq2d/RrplGXqhEJhowgqkU53rE
-         LBNQ==
-X-Gm-Message-State: AOAM531Tc2vncRvZXAWizzUDPgyPxdK9/hFB8PUBZJzrpW5t6wKQ5R7e
-        gm/vO9P218X9ovosVGsKMiPAbWkHeKX0Xj0u7O4x6hdQFxM=
-X-Google-Smtp-Source: ABdhPJzXf9gakKVFrNzk/yuF6YME/q3/SGtybwMxDDTkzyJNgvUtSPyEDmXzmTmerQMwtxhDHNuPNJsWavo9cZPOM6s=
-X-Received: by 2002:a05:6602:1605:b0:644:d491:1bec with SMTP id
- x5-20020a056602160500b00644d4911becmr13210383iow.63.1646718730922; Mon, 07
- Mar 2022 21:52:10 -0800 (PST)
+        Tue, 8 Mar 2022 01:30:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7243D38D8A
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Mar 2022 22:29:14 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KCQP25z2mzdZkh;
+        Tue,  8 Mar 2022 14:27:50 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Mar 2022 14:29:11 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <song.bao.hua@hisilicon.com>, <hch@lst.de>, <shuah@kernel.org>,
+        <chenxiang66@hisilicon.com>, <skhan@linuxfoundation.org>
+CC:     <iommu@lists.linux-foundation.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+Subject: [RESEND] dma-mapping: benchmark: Extract a common header file for map_benchmark definition
+Date:   Tue, 8 Mar 2022 14:28:57 +0800
+Message-ID: <20220308062857.45585-1-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-5-benjamin.tissoires@redhat.com> <CAEf4BzZa8sP4QzEgi4T4L1_tz9D8gNNvjeQt3J0hrV6kq8NfUQ@mail.gmail.com>
- <D32CC967-8923-4933-A303-8455F32C6DA0@fb.com>
-In-Reply-To: <D32CC967-8923-4933-A303-8455F32C6DA0@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Mar 2022 21:52:00 -0800
-Message-ID: <CAEf4BzaxuYt+0j8z71y9z1+i0a=Q0hS0mb4cEKKzbiq3QAyNaA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/28] libbpf: add HID program type and API
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 5:38 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Mar 7, 2022, at 5:30 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> >>
-> >> HID-bpf program type are needing a new SEC.
-> >> To bind a hid-bpf program, we can rely on bpf_program__attach_fd()
-> >> so export a new function to the API.
-> >>
-> >> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >>
-> >> ---
-> >>
-> >> changes in v2:
-> >> - split the series by bpf/libbpf/hid/selftests and samples
-> >> ---
-> >> tools/lib/bpf/libbpf.c   | 7 +++++++
-> >> tools/lib/bpf/libbpf.h   | 2 ++
-> >> tools/lib/bpf/libbpf.map | 1 +
-> >> 3 files changed, 10 insertions(+)
-> >>
-> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >> index 81bf01d67671..356bbd3ad2c7 100644
-> >> --- a/tools/lib/bpf/libbpf.c
-> >> +++ b/tools/lib/bpf/libbpf.c
-> >> @@ -8680,6 +8680,7 @@ static const struct bpf_sec_def section_defs[] = {
-> >>        SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-> >>        SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
-> >>        SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-> >> +       SEC_DEF("hid/device_event",     HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-> >
-> > no SEC_SLOPPY_PFX for any new program type, please
-> >
-> >
-> >> };
-> >>
-> >> #define MAX_TYPE_NAME_SIZE 32
-> >> @@ -10659,6 +10660,12 @@ static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie)
-> >>        return bpf_program__attach_iter(prog, NULL);
-> >> }
-> >>
-> >> +struct bpf_link *
-> >> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd)
-> >> +{
-> >> +       return bpf_program__attach_fd(prog, hid_fd, 0, "hid");
-> >> +}
-> >> +
-> >> struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
-> >> {
-> >>        if (!prog->sec_def || !prog->sec_def->attach_fn)
-> >> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> >> index c8d8daad212e..f677ac0a9ede 100644
-> >> --- a/tools/lib/bpf/libbpf.h
-> >> +++ b/tools/lib/bpf/libbpf.h
-> >> @@ -529,6 +529,8 @@ struct bpf_iter_attach_opts {
-> >> LIBBPF_API struct bpf_link *
-> >> bpf_program__attach_iter(const struct bpf_program *prog,
-> >>                         const struct bpf_iter_attach_opts *opts);
-> >> +LIBBPF_API struct bpf_link *
-> >> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd);
-> >>
-> >> /*
-> >>  * Libbpf allows callers to adjust BPF programs before being loaded
-> >> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> >> index 47e70c9058d9..fdc6fa743953 100644
-> >> --- a/tools/lib/bpf/libbpf.map
-> >> +++ b/tools/lib/bpf/libbpf.map
-> >> @@ -424,6 +424,7 @@ LIBBPF_0.6.0 {
-> >> LIBBPF_0.7.0 {
-> >>        global:
-> >>                bpf_btf_load;
-> >> +               bpf_program__attach_hid;
-> >
-> > should go into 0.8.0
->
-> Ah, I missed this one.
->
-> btw, bpf_xdp_attach and buddies should also go into 0.8.0, no?
+kernel/dma/map_benchmark.c and selftests/dma/dma_map_benchmark.c
+have duplicate map_benchmark definitions, which tends to lead to
+inconsistent changes to map_benchmark on both sides, extract a
+common header file to avoid this problem.
 
-not really, they were released in libbpf v0.7, it's just any new
-incoming API that should go into 0.8.0
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+Acked-by: Barry Song <song.bao.hua@hisilicon.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ kernel/dma/map_benchmark.c                    | 24 +-------------
+ kernel/dma/map_benchmark.h                    | 31 +++++++++++++++++++
+ .../testing/selftests/dma/dma_map_benchmark.c | 25 +--------------
+ 3 files changed, 33 insertions(+), 47 deletions(-)
+ create mode 100644 kernel/dma/map_benchmark.h
 
->
-> >
-> >>                bpf_program__expected_attach_type;
-> >>                bpf_program__log_buf;
-> >>                bpf_program__log_level;
-> >> --
-> >> 2.35.1
-> >>
->
+diff --git a/kernel/dma/map_benchmark.c b/kernel/dma/map_benchmark.c
+index 9b9af1bd6be3..c05f4e242991 100644
+--- a/kernel/dma/map_benchmark.c
++++ b/kernel/dma/map_benchmark.c
+@@ -18,29 +18,7 @@
+ #include <linux/slab.h>
+ #include <linux/timekeeping.h>
+ 
+-#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
+-#define DMA_MAP_MAX_THREADS	1024
+-#define DMA_MAP_MAX_SECONDS	300
+-#define DMA_MAP_MAX_TRANS_DELAY	(10 * NSEC_PER_MSEC)
+-
+-#define DMA_MAP_BIDIRECTIONAL	0
+-#define DMA_MAP_TO_DEVICE	1
+-#define DMA_MAP_FROM_DEVICE	2
+-
+-struct map_benchmark {
+-	__u64 avg_map_100ns; /* average map latency in 100ns */
+-	__u64 map_stddev; /* standard deviation of map latency */
+-	__u64 avg_unmap_100ns; /* as above */
+-	__u64 unmap_stddev;
+-	__u32 threads; /* how many threads will do map/unmap in parallel */
+-	__u32 seconds; /* how long the test will last */
+-	__s32 node; /* which numa node this benchmark will run on */
+-	__u32 dma_bits; /* DMA addressing capability */
+-	__u32 dma_dir; /* DMA data direction */
+-	__u32 dma_trans_ns; /* time for DMA transmission in ns */
+-	__u32 granule;	/* how many PAGE_SIZE will do map/unmap once a time */
+-	__u8 expansion[76];	/* For future use */
+-};
++#include "map_benchmark.h"
+ 
+ struct map_benchmark_data {
+ 	struct map_benchmark bparam;
+diff --git a/kernel/dma/map_benchmark.h b/kernel/dma/map_benchmark.h
+new file mode 100644
+index 000000000000..62674c83bde4
+--- /dev/null
++++ b/kernel/dma/map_benchmark.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2022 HiSilicon Limited.
++ */
++
++#ifndef _KERNEL_DMA_BENCHMARK_H
++#define _KERNEL_DMA_BENCHMARK_H
++
++#define DMA_MAP_BENCHMARK       _IOWR('d', 1, struct map_benchmark)
++#define DMA_MAP_MAX_THREADS     1024
++#define DMA_MAP_MAX_SECONDS     300
++#define DMA_MAP_MAX_TRANS_DELAY (10 * NSEC_PER_MSEC)
++
++#define DMA_MAP_BIDIRECTIONAL   0
++#define DMA_MAP_TO_DEVICE       1
++#define DMA_MAP_FROM_DEVICE     2
++
++struct map_benchmark {
++	__u64 avg_map_100ns; /* average map latency in 100ns */
++	__u64 map_stddev; /* standard deviation of map latency */
++	__u64 avg_unmap_100ns; /* as above */
++	__u64 unmap_stddev;
++	__u32 threads; /* how many threads will do map/unmap in parallel */
++	__u32 seconds; /* how long the test will last */
++	__s32 node; /* which numa node this benchmark will run on */
++	__u32 dma_bits; /* DMA addressing capability */
++	__u32 dma_dir; /* DMA data direction */
++	__u32 dma_trans_ns; /* time for DMA transmission in ns */
++	__u32 granule;  /* how many PAGE_SIZE will do map/unmap once a time */
++};
++#endif /* _KERNEL_DMA_BENCHMARK_H */
+diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
+index 485dff51bad2..33bf073071aa 100644
+--- a/tools/testing/selftests/dma/dma_map_benchmark.c
++++ b/tools/testing/selftests/dma/dma_map_benchmark.c
+@@ -11,39 +11,16 @@
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <linux/types.h>
++#include "../../../../kernel/dma/map_benchmark.h"
+ 
+ #define NSEC_PER_MSEC	1000000L
+ 
+-#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
+-#define DMA_MAP_MAX_THREADS	1024
+-#define DMA_MAP_MAX_SECONDS     300
+-#define DMA_MAP_MAX_TRANS_DELAY	(10 * NSEC_PER_MSEC)
+-
+-#define DMA_MAP_BIDIRECTIONAL	0
+-#define DMA_MAP_TO_DEVICE	1
+-#define DMA_MAP_FROM_DEVICE	2
+-
+ static char *directions[] = {
+ 	"BIDIRECTIONAL",
+ 	"TO_DEVICE",
+ 	"FROM_DEVICE",
+ };
+ 
+-struct map_benchmark {
+-	__u64 avg_map_100ns; /* average map latency in 100ns */
+-	__u64 map_stddev; /* standard deviation of map latency */
+-	__u64 avg_unmap_100ns; /* as above */
+-	__u64 unmap_stddev;
+-	__u32 threads; /* how many threads will do map/unmap in parallel */
+-	__u32 seconds; /* how long the test will last */
+-	__s32 node; /* which numa node this benchmark will run on */
+-	__u32 dma_bits; /* DMA addressing capability */
+-	__u32 dma_dir; /* DMA data direction */
+-	__u32 dma_trans_ns; /* time for DMA transmission in ns */
+-	__u32 granule; /* how many PAGE_SIZE will do map/unmap once a time */
+-	__u8 expansion[76];	/* For future use */
+-};
+-
+ int main(int argc, char **argv)
+ {
+ 	struct map_benchmark map;
+-- 
+2.33.0
+
