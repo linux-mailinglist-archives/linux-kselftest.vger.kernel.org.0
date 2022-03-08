@@ -2,54 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28DB4D0D18
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 01:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D024D0D80
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Mar 2022 02:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344138AbiCHA6J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Mar 2022 19:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S244541AbiCHBbt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Mar 2022 20:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344216AbiCHA6H (ORCPT
+        with ESMTP id S234504AbiCHBbt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Mar 2022 19:58:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334551155;
-        Mon,  7 Mar 2022 16:57:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAF68B8175C;
-        Tue,  8 Mar 2022 00:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A38C340F7;
-        Tue,  8 Mar 2022 00:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646701029;
-        bh=je9wh1jfc8vKoLFB/XMs5xZvr+6tezIiCo7tP89tgpY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RtO0co1gSFJwkq5vXNLxKNXO9f+Lqdl/mTUmq3ywOT33iUb4fS3ofFh/GNVp3Qjw+
-         +uzyYNtR5S34pDPFvE4ay2DXgKx2v1Cko9Re1wcy5Ov6cNEVTgmu/A3mEHiUSo8lvZ
-         nycf7fbdhQ5/WKRcp9H+y3P+Pnn/jffuuYCmfsNg/r9k6l6c/Yvl3MZmOwyWd8+ycx
-         /PaAZcNPWQ9UNuvfgUENYGupOJ4rLXnVV+/knXC57CkiHPMTee7WloB3QvyXWpMWv5
-         VOtax9kU/mu2L4xvOPP36dLjxchYBMp7CYManYIXd/f5W/MkTRrZSz16q34atGJ0xm
-         gjoieoE60I1Gw==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2dc242a79beso174466237b3.8;
-        Mon, 07 Mar 2022 16:57:09 -0800 (PST)
-X-Gm-Message-State: AOAM531+Xug1aIvWcWQ7dnvy0PBoOEpw99I0r/RvTmHukYfGLwH5SEaz
-        nA/PVsLf9fc9biRWgGvJs6kYjoFmdl2r1sBDyqg=
-X-Google-Smtp-Source: ABdhPJw5iu98Yx0WOcx2dkiKYmMKSq7PTAddXcLAeBR9h8z6v4BOKZMtV6hsGVJoY6yvheeO6z4E3FZsWGXfPBMxJBI=
-X-Received: by 2002:a0d:fb45:0:b0:2d0:d09a:576c with SMTP id
- l66-20020a0dfb45000000b002d0d09a576cmr11184300ywf.447.1646701028244; Mon, 07
- Mar 2022 16:57:08 -0800 (PST)
+        Mon, 7 Mar 2022 20:31:49 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C9ABCAE;
+        Mon,  7 Mar 2022 17:30:54 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id q11so4693525iod.6;
+        Mon, 07 Mar 2022 17:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ftWOPeuHK1TC5pvYB+4M9RHPfIBUPNyVAd6l0pcXX2g=;
+        b=SB89zb3PQDxATQT7Ea7gk5rnEsht5EXi+pPqXEmEf9kJrNhPomEZ9CqiBoUlDF+6op
+         730uAYt4EH5iIqKa2FZEgP7OEzhy4gBo4qkVtODg7hTMZ1vIKMBDXaE/+Ctq5JdNRn4S
+         T2iA/zbrcZde2HFIewe7M58Rovb6QqEzMLSx2JN9AbhG9MKnvItYXtkBEmBKwi8fKkym
+         oh0SBWbnQIwGN4E3/PI8O9BByfDjEsL/7W+IcJ6thLoIXMoA1BWD+sLVhGd9F6UZyMgG
+         d9p1+JGoabyNHXSUMeP3lvVsunJkuvk9G4UmwtHE5NSrI/7A8EuUuJEPcdmh6+FNNYDv
+         AhGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ftWOPeuHK1TC5pvYB+4M9RHPfIBUPNyVAd6l0pcXX2g=;
+        b=auIVW6jdkt3tuT9d7bOilG1WKvAhC7fQn4vpk8ESsxelEHXj9YG4UehvrnkAMk5k/5
+         UE0RFN84Q7hNIocw+0RuDyP0MVA9RCG3SrdiHDm5NlRWEJ7+3NaYmaykW8yleYuKlg43
+         8XU3QjZl+c25nSwOHrP6iJqWZ7VnMCdcpTOVGa0uN0rjqFgjIuRLqq9nGj+LfKs7xF+5
+         X1chGmw+/a67Yyods6Glq1hvy3Fb7voDtjjrpqJRi98poyzTS5B+Z5nCUub6jdy4Ya9K
+         ftXhoLcL5qU3tet51mgq5S0xNpM2+JbUy9iYNgeQf3Sb9MuMLE+gCaIgCRZlmJDgUmoV
+         I1+w==
+X-Gm-Message-State: AOAM533YLr0PoYrFs3Fe2MB2heKOC4OJsKtj0HaWuKFA5HpklobUPvWJ
+        RKf+PuizpfEYetckmZ9ir2t4oM0z5FRK9wMI5u0=
+X-Google-Smtp-Source: ABdhPJzreixvrFJjVqO1BfS+PqFe/E26XD9xYKeRWSVd1JR1X9w5MMjyFx+6SSMadxXZ97YEZLmzCqjpkUqo9FJJJq8=
+X-Received: by 2002:a5d:948a:0:b0:645:b742:87c0 with SMTP id
+ v10-20020a5d948a000000b00645b74287c0mr9000261ioj.79.1646703053408; Mon, 07
+ Mar 2022 17:30:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-3-benjamin.tissoires@redhat.com> <CAPhsuW5CYF9isR4ffRdm3xA_n_FBoL+AGFkzNn4dn2LgRaQQkg@mail.gmail.com>
- <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com>
-In-Reply-To: <CAO-hwJKFE4Ps962BBubn8=1K0k9mC2qi8VerFbZo1sqpp6yekg@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 7 Mar 2022 16:56:57 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5mZQ-N7RCndxP0RNi669RU5Tbu-Uu0M-KW2-mPYZbbng@mail.gmail.com>
-Message-ID: <CAPhsuW5mZQ-N7RCndxP0RNi669RU5Tbu-Uu0M-KW2-mPYZbbng@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/28] bpf: introduce hid program type
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com> <20220304172852.274126-5-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220304172852.274126-5-benjamin.tissoires@redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 7 Mar 2022 17:30:42 -0800
+Message-ID: <CAEf4BzZa8sP4QzEgi4T4L1_tz9D8gNNvjeQt3J0hrV6kq8NfUQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 04/28] libbpf: add HID program type and API
 To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -64,162 +66,97 @@ Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Joe Stringer <joe@cilium.io>,
         Tero Kristo <tero.kristo@linux.intel.com>,
         open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+        linux-input@vger.kernel.org, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 10:39 AM Benjamin Tissoires
+On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
 <benjamin.tissoires@redhat.com> wrote:
 >
-> On Sat, Mar 5, 2022 at 1:03 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Fri, Mar 4, 2022 at 9:31 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > HID is a protocol that could benefit from using BPF too.
-> >
-> > [...]
-> >
-> > > +#include <linux/list.h>
-> > > +#include <linux/slab.h>
-> > > +
-> > > +struct bpf_prog;
-> > > +struct bpf_prog_array;
-> > > +struct hid_device;
-> > > +
-> > > +enum bpf_hid_attach_type {
-> > > +       BPF_HID_ATTACH_INVALID = -1,
-> > > +       BPF_HID_ATTACH_DEVICE_EVENT = 0,
-> > > +       MAX_BPF_HID_ATTACH_TYPE
-> >
-> > Is it typical to have different BPF programs for different attach types?
-> > Otherwise, (different types may have similar BPF programs), maybe
-> > we can pass type as an argument to the program (shared among
-> > different types)?
+> HID-bpf program type are needing a new SEC.
+> To bind a hid-bpf program, we can rely on bpf_program__attach_fd()
+> so export a new function to the API.
 >
-> Not quite sure I am entirely following you, but I consider the various
-> attach types to be quite different and thus you can not really reuse
-> the same BPF program with 2 different attach types.
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 >
-> In my view, we have 4 attach types:
-> - BPF_HID_ATTACH_DEVICE_EVENT: called whenever we receive an IRQ from
-> the given device (so this is net-like event stream)
-> - BPF_HID_ATTACH_RDESC_FIXUP: there can be only one of this type, and
-> this is called to change the device capabilities. So you can not reuse
-> the other programs for this one
-> - BPF_HID_ATTACH_USER_EVENT: called explicitly by the userspace
-> process owning the program. There we can use functions that are
-> sleeping (we are not in IRQ context), so this is also fundamentally
-> different from the 3 others.
-> - BPF_HID_ATTACH_DRIVER_EVENT: whenever the driver gets called into,
-> we get a bpf program run. This can be suspend/resume, or even specific
-> request to the device (change a feature on the device or get its
-> current state). Again, IMO fundamentally different from the others.
+> ---
 >
-> So I'm open to any suggestions, but if we can keep the userspace API
-> being defined with different SEC in libbpf, that would be the best.
+> changes in v2:
+> - split the series by bpf/libbpf/hid/selftests and samples
+> ---
+>  tools/lib/bpf/libbpf.c   | 7 +++++++
+>  tools/lib/bpf/libbpf.h   | 2 ++
+>  tools/lib/bpf/libbpf.map | 1 +
+>  3 files changed, 10 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 81bf01d67671..356bbd3ad2c7 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -8680,6 +8680,7 @@ static const struct bpf_sec_def section_defs[] = {
+>         SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+>         SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
+>         SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+> +       SEC_DEF("hid/device_event",     HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
 
-Thanks for this information. Different attach_types sound right for the use
-case.
+no SEC_SLOPPY_PFX for any new program type, please
 
->
-> >
-> > [...]
-> >
-> > > +struct hid_device;
-> > > +
-> > > +enum hid_bpf_event {
-> > > +       HID_BPF_UNDEF = 0,
-> > > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
-> > > +};
-> > > +
-> > > +struct hid_bpf_ctx {
-> > > +       enum hid_bpf_event type;        /* read-only */
-> > > +       __u16 allocated_size;           /* the allocated size of data below (RO) */
-> >
-> > There is a (6-byte?) hole here.
-> >
-> > > +       struct hid_device *hdev;        /* read-only */
-> > > +
-> > > +       __u16 size;                     /* used size in data (RW) */
-> > > +       __u8 data[];                    /* data buffer (RW) */
-> > > +};
-> >
-> > Do we really need hit_bpf_ctx in uapi? Maybe we can just use it
-> > from vmlinuxh?
->
-> I had a thought at this context today, and I think I am getting to the
-> limit of what I understand.
->
-> My first worry is that the way I wrote it there, with a variable data
-> field length is that this is not forward compatible. Unless BTF and
-> CORE are making magic, this will bite me in the long run IMO.
->
-> But then, you are talking about not using uapi, and I am starting to
-> wonder: am I doing the things correctly?
->
-> To solve my first issue (and the weird API I had to introduce in the
-> bpf_hid_get/set_data), I came up to the following:
-> instead of exporting the data directly in the context, I could create
-> a helper bpf_hid_get_data_buf(ctx, const uint size) that returns a
-> RET_PTR_TO_ALLOC_MEM_OR_NULL in the same way bpf_ringbuf_reserve()
-> does.
->
-> This way, I can directly access the fields within the bpf program
-> without having to worry about the size.
->
-> But now, I am wondering whether the uapi I defined here is correct in
-> the way CORE works.
->
-> My goal is to have HID-BPF programs to be CORE compatible, and not
-> have to recompile them depending on the underlying kernel.
->
-> I can not understand right now if I need to add some other BTF helpers
-> in the same way the access to struct xdp_md and struct xdp_buff are
-> converted between one and other, or if defining a forward compatible
-> struct hid_bpf_ctx is enough.
-> As far as I understand, .convert_ctx_access allows to export a stable
-> uapi to the bpf prog users with the verifier doing the conversion
-> between the structs for me. But is this really required for all the
-> BPF programs if we want them to be CORE?
->
-> Also, I am starting to wonder if I should not hide fields in the
-> context to the users. The .data field could be a pointer and only
-> accessed through the helper I mentioned above. This would be forward
-> compatible, and also allows to use whatever available memory in the
-> kernel to be forwarded to the BPF program. This way I can skip the
-> memcpy part and work directly with the incoming dma data buffer from
-> the IRQ.
->
-> But is it best practice to do such a thing?
 
-I think .convert_ctx_access is the way to go if we want to access the data
-buffer without memcpy. I am not sure how much work is needed to make
-it compatible with CORE though.
+>  };
+>
+>  #define MAX_TYPE_NAME_SIZE 32
+> @@ -10659,6 +10660,12 @@ static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie)
+>         return bpf_program__attach_iter(prog, NULL);
+>  }
+>
+> +struct bpf_link *
+> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd)
+> +{
+> +       return bpf_program__attach_fd(prog, hid_fd, 0, "hid");
+> +}
+> +
+>  struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
+>  {
+>         if (!prog->sec_def || !prog->sec_def->attach_fn)
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index c8d8daad212e..f677ac0a9ede 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -529,6 +529,8 @@ struct bpf_iter_attach_opts {
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_iter(const struct bpf_program *prog,
+>                          const struct bpf_iter_attach_opts *opts);
+> +LIBBPF_API struct bpf_link *
+> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd);
+>
+>  /*
+>   * Libbpf allows callers to adjust BPF programs before being loaded
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 47e70c9058d9..fdc6fa743953 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -424,6 +424,7 @@ LIBBPF_0.6.0 {
+>  LIBBPF_0.7.0 {
+>         global:
+>                 bpf_btf_load;
+> +               bpf_program__attach_hid;
 
-To make sure I understand the case, do we want something like
+should go into 0.8.0
 
-bpf_prog(struct hid_bpf_ctx *ctx)
-{
-    /* makes sure n < ctx->size */
-    x = ctx->data[n]; /* read data */
-    ctx->data[n] = <something>; /* write data */
-    ctx->size = <something <= n>; /* change data size */
-}
-
-We also need it to be CORE, so that we may modify hid_bpf_ctx by
-inserting more members to it before data.
-
-Is this accurate?
-
-Song
+>                 bpf_program__expected_attach_type;
+>                 bpf_program__log_buf;
+>                 bpf_program__log_level;
+> --
+> 2.35.1
+>
