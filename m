@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827DC4D3775
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 18:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872794D37BF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 18:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbiCIQgQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 11:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S236607AbiCIQgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 11:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiCIQbM (ORCPT
+        with ESMTP id S238759AbiCIQbr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:31:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785D1190C06;
-        Wed,  9 Mar 2022 08:25:17 -0800 (PST)
+        Wed, 9 Mar 2022 11:31:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC2A1A06C8;
+        Wed,  9 Mar 2022 08:26:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9905A6187D;
-        Wed,  9 Mar 2022 16:25:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0B8C340F6;
-        Wed,  9 Mar 2022 16:25:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40AABB82253;
+        Wed,  9 Mar 2022 16:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD28AC340EC;
+        Wed,  9 Mar 2022 16:26:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646843107;
-        bh=UR70ayxhFp+l6h9jOgA2GAaST2YfS64RXHquF81m+LE=;
+        s=k20201202; t=1646843177;
+        bh=wEoJkZLmzdMrIsHPFU3oRk0kM0mMwx+PzxnxITksLjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bJWIeYJjuPYKIfBJjtv/V/IU5yfu7SOHlFTZGZtmHnY8QnY27iik3ick4812Gx4K5
-         EbrTCnIRDkXTjiF+rWm1E3aQaHPF0GcQk9jcuiPMGh4P+h3rorT9COBjGSS7vW0wjw
-         wNivFCxMd6a5BCkv4vdRW+jEjuRZVlXVaTynn8ahtwDU1Dn2a60yt6f+v485KLO9XJ
-         bve1W5IwCz6DrLFnK2u3qZ5AEecINIpmZtNASN8+e9nWTAj7GO/bXkq2pK0LPKYxP9
-         JHoTHvyxS1DPCKyQ+/l2PfMTDGLu14OIzldrJzAXaBx3uRC2HTTtCBdiVpa9eE9Tes
-         u+fYMy3kUbFGA==
+        b=ctfj+KRo6x8UcDkQxLkzoON8UNj65F18r+wgWoGtHM34hcwdszqivHiIwjbLRPEHV
+         rcFNN3wJjAQKx1Xl+rJvYvWEFOOAsZyYmiJn8+A5h0KOLtzJrbJAKpKsivAvZkUmYU
+         H4jINJNxhxxxN9vkr6YTeMacBoAUsykAld0cjXnO10kLvvRYmUR4DMARCFgoCEwRTH
+         FF1ylDPmovak65oYHl4N9OeYUwFNrD6UMyu0QLkyf1Yc6Kndfj1jrp42PlJzqTmqe3
+         fOgHAs8V0HrFfdgWbz7AbF8WOi+zGM1XjsTEVGjzSggf9Swc2g0U5gb2wo+9Ahuj2P
+         QfxJdOjrO58Vg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
@@ -40,12 +40,12 @@ Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 19/19] kselftest/vm: fix tests build with old libc
-Date:   Wed,  9 Mar 2022 11:23:36 -0500
-Message-Id: <20220309162337.136773-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 14/14] kselftest/vm: fix tests build with old libc
+Date:   Wed,  9 Mar 2022 11:25:07 -0500
+Message-Id: <20220309162508.137035-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220309162337.136773-1-sashal@kernel.org>
-References: <20220309162337.136773-1-sashal@kernel.org>
+In-Reply-To: <20220309162508.137035-1-sashal@kernel.org>
+References: <20220309162508.137035-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 9ba7feffe344..9814a0a15ba7 100644
+index 1963440f6725..b2c7043c0c30 100644
 --- a/tools/testing/selftests/vm/userfaultfd.c
 +++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -46,6 +46,7 @@
+@@ -60,6 +60,7 @@
  #include <signal.h>
  #include <poll.h>
  #include <string.h>
