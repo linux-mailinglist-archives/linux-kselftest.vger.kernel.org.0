@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A215C4D34B2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 17:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D634D4D34C3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 17:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235864AbiCIQ0K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 11:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S231162AbiCIQ0s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 11:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238154AbiCIQV3 (ORCPT
+        with ESMTP id S235738AbiCIQYp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 11:21:29 -0500
+        Wed, 9 Mar 2022 11:24:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1FA149940;
-        Wed,  9 Mar 2022 08:19:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADE72B269;
+        Wed,  9 Mar 2022 08:21:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2A7E6195D;
-        Wed,  9 Mar 2022 16:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF4F4C340F3;
-        Wed,  9 Mar 2022 16:19:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBD1A61926;
+        Wed,  9 Mar 2022 16:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50B3C340F8;
+        Wed,  9 Mar 2022 16:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646842782;
-        bh=wViiIbI+fAkHxZCT6CmdLSYEMSxSUGNtqEn6W0aGD8g=;
+        s=k20201202; t=1646842917;
+        bh=uIZCe6E8jZb9HUb1IBq2CrYznAY50Ov0CeC0YvXDCs8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NQbaU8f8f/DDX2cAvbNsuE8MY0DaUQ6entu0bfD0SKKfuIBafI+q/4FCb0RyKwHoJ
-         3SwqRrF6XOA4yg7iOYNK9WF9FOKZZupIuCT4iKrPR91IGwTK7pu+uOFQLEUxqwwjYe
-         MyKs7qctALQ/4pdkTazDaKG+iHb8qKma9yY2kTlpJDZkOJzsKu1h71TLhYhwN0mqJW
-         I9vjxJ6ymjlUHU8HuGZp+5msv923qW+auYyNJr+CK4ayZ6QfJN6BlsmQybPAxFLElE
-         CCQN9g0urDA0s/+sGfKj4NNpBBGZHONLjkLNAWShGaTFGJX3W2oSgleeSl5JLrL0BK
-         54NjQE2KnxhsA==
+        b=IS6650eVDCoL4dhdx0lB/TGLLmRnJG0iLPVRzEy6GYMEo24iEreElVdu3aIooqtDv
+         016ypivxmDdlVW7Uq/97IeNXfG4NjA1Z8HtgvuxGf38vrYg+4rxHCy/ReXRQ3/u5q3
+         mAiuVJ8F3s99Ch5lps0rO/BUKb16KeUfD/BE/dbA+m2wEXna+58/sxeOlstAlO5+66
+         /zyxiM0qWEskrt2dFlCIislWCi0XUGd9fgDhxWvlqqnONSacIVGSKyqHvn3rQ8XLyw
+         ETsNLOv0PerQV812Doi9i41+lVTXAp4OwuXBG906Nh5LF64tPBl559uS1rcqg9MBpz
+         J+f8wUMETmnwA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
@@ -40,12 +40,12 @@ Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 27/27] kselftest/vm: fix tests build with old libc
-Date:   Wed,  9 Mar 2022 11:17:04 -0500
-Message-Id: <20220309161711.135679-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 24/24] kselftest/vm: fix tests build with old libc
+Date:   Wed,  9 Mar 2022 11:19:43 -0500
+Message-Id: <20220309161946.136122-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220309161711.135679-1-sashal@kernel.org>
-References: <20220309161711.135679-1-sashal@kernel.org>
+In-Reply-To: <20220309161946.136122-1-sashal@kernel.org>
+References: <20220309161946.136122-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 9354a5e0321c..3f7f5bd4e4c0 100644
+index 81690f1737c8..138b011c667e 100644
 --- a/tools/testing/selftests/vm/userfaultfd.c
 +++ b/tools/testing/selftests/vm/userfaultfd.c
 @@ -46,6 +46,7 @@
