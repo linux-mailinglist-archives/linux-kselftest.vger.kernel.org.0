@@ -2,108 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104154D2B89
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 10:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7A84D2C04
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 10:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiCIJOf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 04:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S231248AbiCIJbU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 04:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbiCIJOf (ORCPT
+        with ESMTP id S229810AbiCIJbU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:14:35 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF93FD9E
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 01:13:36 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9E7073F60D
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 09:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646817214;
-        bh=DWve8mUzjjNi/DaGPnOk7W3TtiB3wUxX/ugKfBnsP20=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=gPQuIz9S15FrfE4hSaPrPJ7ItBAJ2RWh5SR6aH79lK4NBe5WsLG9yJTDzltEa76B6
-         +pT2NImiu8nv6da4yL3rWaQRz0BAAx541W1YJ0afdbnGraBIEulxs94FKyRBDlXMN3
-         VZG9XgzXTJ+zg67yANpDvP2ivjQQ68rX+nV+9S1C9mcE4IkggPN8LGkR58tTd7NGSl
-         FKNOOglFSheu20xek9NIUGTBcFoZnp/iDgmuwEAvssJqoRAXMYeKUmCnfcu9ku4Dkf
-         bH7cNdcgy/oBWNM9SjL4msOJKBl/AByoNmIOrmoIhTUP5cQdC/Ui6dXUSBmT5HItn5
-         USEqszgErdZ0A==
-Received: by mail-ej1-f70.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso956301ejs.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 01:13:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DWve8mUzjjNi/DaGPnOk7W3TtiB3wUxX/ugKfBnsP20=;
-        b=3QhVjZBlMzkN/nC9JhLakEPYnoMdbkInIiPIqFVcM9c7dDlAk2UGnSxMm3WZDzap37
-         ZLW083KO0ijYX3SgGZ+W+q+3XxeU7IQEh4C7GgEInLPlgTupgrkFmuUED8Vbie/rz9FJ
-         13E43+fnVy8ZD5qi75CVdOPDrAs0qyIgzhg0RMTfO67ODrDwyr6pzmBh70JQMC5b3KDQ
-         O2v9YgG1OSKQi0mogu8uuZDmBIr7Ag+H1kDw4lTtKGN52hcgAonvVd1usK3ncNysjh5P
-         zGtWo2WXXV8xD6+5qm3LZvRih+BgmJJiBguilTIdGOF20JZQ33wOt12Xi92COB+yi76Q
-         G8zw==
-X-Gm-Message-State: AOAM532QPrNWnBfrKCPjW1iqUtEYe0LYLRqYxAFe4mv+si65AeuUiUpC
-        YGteaBa9gJnMbrSqeGnBBCa+a8/oYRsCAEtcxEO9dmJpgYuwIM3Yq3eyoO31S/AYSWGIuR1pPPS
-        2LzPgCrD/f3Z91eJX1/vbhPzDtjDWUPK4R/X65hsKRb9tGw==
-X-Received: by 2002:a17:907:7849:b0:6d5:87bd:5602 with SMTP id lb9-20020a170907784900b006d587bd5602mr16471511ejc.349.1646817214166;
-        Wed, 09 Mar 2022 01:13:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyaayiRmg6jlQ9OnyXmW7jxsQHTWWXcd8Bg4GTp0MUrRybx25RZqMcDfYHZw8faWNI/n5LJoA==
-X-Received: by 2002:a17:907:7849:b0:6d5:87bd:5602 with SMTP id lb9-20020a170907784900b006d587bd5602mr16471490ejc.349.1646817213950;
-        Wed, 09 Mar 2022 01:13:33 -0800 (PST)
-Received: from [192.168.68.108] (p5087f509.dip0.t-ipconnect.de. [80.135.245.9])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm513258edx.58.2022.03.09.01.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 01:13:33 -0800 (PST)
-Message-ID: <8e6684df-7b6e-ccb5-b123-2dc8337442bd@canonical.com>
-Date:   Wed, 9 Mar 2022 10:13:32 +0100
+        Wed, 9 Mar 2022 04:31:20 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121A016E7FD;
+        Wed,  9 Mar 2022 01:30:21 -0800 (PST)
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2299TvBX019363;
+        Wed, 9 Mar 2022 18:29:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2299TvBX019363
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1646818197;
+        bh=clWEPD6AdacDEOa6KCj1PoO9ewauxhdqGkF+hXLwHwk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2ZBjVKdPQdgv2Bf5DpuDj5qDdwZB+cQOy2j0ZK9KEuJ8nKf0zltZI2QKpVNNqI+c2
+         9H6KpNZTD+L0I4dyEwZz2u3ARS8LJGcnlah2So+0nnWOFJAFVVhgfK5krPahB7fRlG
+         YoBBWPI6/IFnZ49FivVSUifs4Uq9OnvURv5QFuGT8aa0UQpG/kSbruV5k+lmYTwnQt
+         nK7IVR9NKZMnqiS/vJvMZk3YZQzXclhu2/7h54TQqnFFlC1buCF4W7ox3Bt/R0+g3V
+         tPf1GjqDaeTAbnX1G0r4dNfYbAPot4bPrNrNsji9Huh0xrZ8kb9dpib6iUf0TiQHmK
+         TQuRWnbOPnjLg==
+X-Nifty-SrcIP: [209.85.214.177]
+Received: by mail-pl1-f177.google.com with SMTP id e2so1433120pls.10;
+        Wed, 09 Mar 2022 01:29:57 -0800 (PST)
+X-Gm-Message-State: AOAM530XQQNkjEIj90aXVvAqxQowb/zaVXFeZ0wjO/SRzw4yxT4/dJDo
+        eKQSaxNnIfK6uno75PkrrzvMm4BXjz1iRb0wgqw=
+X-Google-Smtp-Source: ABdhPJzc8aP7snE9Ier6y4JJAKFK3/PD64bYVfxzp+1b47gYUv+R/6gaz0BM5wKcDEzUg6jYau3NZwheI8vd7fEoeDA=
+X-Received: by 2002:a17:902:eb84:b0:151:f80e:e98b with SMTP id
+ q4-20020a170902eb8400b00151f80ee98bmr10526055plg.99.1646818196448; Wed, 09
+ Mar 2022 01:29:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] net: netdevsim: fix byte order on ipsec debugfs file
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220308135106.890270-1-kleber.souza@canonical.com>
- <20220308215851.397817bd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Kleber Souza <kleber.souza@canonical.com>
-In-Reply-To: <20220308215851.397817bd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+ <YieGARVP2dhn8tbQ@casper.infradead.org>
+In-Reply-To: <YieGARVP2dhn8tbQ@casper.infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 9 Mar 2022 18:29:14 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQnAgOqd1Zr3R0KBuGJps8K+Z7PGH5av9nA-VpJwZ4MeQ@mail.gmail.com>
+Message-ID: <CAK7LNAQnAgOqd1Zr3R0KBuGJps8K+Z7PGH5av9nA-VpJwZ4MeQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 09.03.22 06:58, Jakub Kicinski wrote:
-> On Tue,  8 Mar 2022 14:51:06 +0100 Kleber Sacilotto de Souza wrote:
->> When adding a new xfrm state, the data provided via struct xfrm_state
->> is stored in network byte order. This needs to be taken into
->> consideration when exporting the SAs data to userspace via debugfs,
->> otherwise the content will depend on the system endianness. Fix this by
->> converting all multi-byte fields from network to host order.
->>
->> Also fix the selftest script which was expecting the data as exported by
->> a little-endian system, which was inverted.
->>
->> Fixes: 7699353da875 ("netdevsim: add ipsec offload testing")
->> Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test")
->> Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
-> 
-> Then the struct members need to have the correct types,
-> as is this patch adds sparse warnings (build with C=1).
+On Wed, Mar 9, 2022 at 1:36 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
+> > > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
+> > > +``LLVM=1``.
+> >
+> > Hmm... I can see someone's build wrappers setting LLVM=1, then them
+> > being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
+> > might expect.  But Masahiro says let's fix this later which is fine.
+>
+> What happens if you say LLVM= instead of LLVM=0 ?  Would that "undo"
+> a prior LLVM=1 and use GCC instead?
 
-Hi Jakub,
+I think so.
 
-Thank you for the review. I'll fix it and send a v2 shortly.
 
-Kleber
+-- 
+Best Regards
+Masahiro Yamada
