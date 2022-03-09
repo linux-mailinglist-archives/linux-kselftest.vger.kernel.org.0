@@ -2,100 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA034D28C7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 07:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF774D2902
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 07:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiCIGNq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 01:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
+        id S229880AbiCIGc5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 01:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiCIGNo (ORCPT
+        with ESMTP id S229542AbiCIGc4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:13:44 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7541513D0F
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Mar 2022 22:12:46 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id z30so2283137ybi.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Mar 2022 22:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=//61snb4FzOH8xBVPrGQSTEOIUqrxrg6uRM2aNBozZM=;
-        b=aPuBcekGsi9P0Kiu8PsroQfxh8B7CEY6shdyL04CVPdMJL6Vm6jfWWpHEHG1Fy0XCI
-         GicYeww/yzqyXCzvC5YdjEZFIExYDrgeI/8dY4G6cnKzSNAeD1htsJz3jwdB7ZezvpcI
-         ylPESixpZyteiQ/IQRd2ehwVVjzir7EsJKcOixe1Z3QO8g8FDQoJfrNU45RyKvdfTHHu
-         P+FpBA+pNBsiQs8uFtzHz3kyaBobyaGwOMezcQjGxCeeFEOdfYGCAySUaS22L1nwRdd1
-         13S+33dJMoLs+nUmw8i2TilPRzHjdU82xpE2FGuCH9WG3bb3N5YFi01j1KSS7Oa2fDfu
-         9U6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=//61snb4FzOH8xBVPrGQSTEOIUqrxrg6uRM2aNBozZM=;
-        b=CffrB9OjWkbixWfy2mrETowIGIF7aXZmzTQw2uCWeZ8XMn8998bnIG8shkd7Vogwtu
-         WOBl+jjzUQlr9CnlasO0cAMtQzQbJOzydC6zebDxxVY1ovcS7xwR3I3vose9s96dJObR
-         AZwFKEpEveG+idoIT30wFs4F1pv9JrWICcfI91WTSLujBgCt+OpU36wZBAl+RHcmua8P
-         kKTB3PnSuLU5TLoFMVRPoLnjRG1VSXPx/460L5JOUB0zqijLIfC/GENVHQpE+0N2dV6y
-         CNmXG3EIyPDEok5Jtv+BQGMKHgRIVLkxio/zDRd306WFEXotSDU/M8ncKzr+cUBRurdd
-         fwzQ==
-X-Gm-Message-State: AOAM533WjJR8CKcT9lg3YkqgyKwpIkbuGgsd1IWPnorHxzcXWnxgpg4c
-        38WSP/wh1nKlBaPjas4TMVr9DyenuC1YjjxVzgN9Vw==
-X-Google-Smtp-Source: ABdhPJzBuek4ThwGw7LKMg2H3OQNOMTaq1RqGtFnxwre1s0xPWyQLGExZZ0bojDIycqhpJghZtJJ7rUAhAaGkCHK27w=
-X-Received: by 2002:a05:6902:203:b0:628:7b6f:2845 with SMTP id
- j3-20020a056902020300b006287b6f2845mr15356927ybs.533.1646806365542; Tue, 08
- Mar 2022 22:12:45 -0800 (PST)
+        Wed, 9 Mar 2022 01:32:56 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF551617DB;
+        Tue,  8 Mar 2022 22:31:58 -0800 (PST)
+Received: from kwepemi100020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KD2P539QGzBrhQ;
+        Wed,  9 Mar 2022 14:30:01 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100020.china.huawei.com (7.221.188.48) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Wed, 9 Mar 2022 14:31:56 +0800
+Received: from [10.174.179.19] (10.174.179.19) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Mar 2022 14:31:55 +0800
+Message-ID: <0423ef8e-bfd0-3a4b-78a5-17dc621660d2@huawei.com>
+Date:   Wed, 9 Mar 2022 14:31:54 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 2/3] kunit: make kunit_test_timeout compatible with
+ comment
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>
+CC:     <brendanhiggins@google.com>, <glider@google.com>,
+        <dvyukov@google.com>, <akpm@linux-foundation.org>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>,
+        <linux-mm@kvack.org>, <wangkefeng.wang@huawei.com>
 References: <20220309014705.1265861-1-liupeng256@huawei.com>
-In-Reply-To: <20220309014705.1265861-1-liupeng256@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 9 Mar 2022 07:12:08 +0100
-Message-ID: <CANpmjNMfkUSUEihTc2u_v6fOhHiyNOAOs2QROjCMEROMTbaxLQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] kunit: fix a UAF bug and do some optimization
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     brendanhiggins@google.com, glider@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        wangkefeng.wang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220309014705.1265861-3-liupeng256@huawei.com>
+ <CANpmjNOU+M1ZaRTMPMCFE7pm8JXLKsWcMpMAsDmJXZUga3N7=A@mail.gmail.com>
+From:   "liupeng (DM)" <liupeng256@huawei.com>
+In-Reply-To: <CANpmjNOU+M1ZaRTMPMCFE7pm8JXLKsWcMpMAsDmJXZUga3N7=A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.19]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 02:29, 'Peng Liu' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> This series is to fix UAF when running kfence test case test_gfpzero,
-> which is time costly. This UAF bug can be easily triggered by setting
-> CONFIG_KFENCE_DYNAMIC_OBJECTS = 65535. Furthermore, some optimization
-> for kunit tests has been done.
+Thank you for your advice.
 
-Yeah, I've observed this problem before, so thanks for fixing.
-
-It's CONFIG_KFENCE_NUM_OBJECTS (not "DYNAMIC") - please fix in all patches.
-
-
-> Peng Liu (3):
->   kunit: fix UAF when run kfence test case test_gfpzero
->   kunit: make kunit_test_timeout compatible with comment
->   kfence: test: try to avoid test_gfpzero trigger rcu_stall
+On 2022/3/9 14:03, Marco Elver wrote:
+> On Wed, 9 Mar 2022 at 02:29, 'Peng Liu' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+>> In function kunit_test_timeout, it is declared "300 * MSEC_PER_SEC"
+>> represent 5min. However, it is wrong when dealing with arm64 whose
+>> default HZ = 250, or some other situations. Use msecs_to_jiffies to
+>> fix this, and kunit_test_timeout will work as desired.
+>>
+>> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+> Does this need a:
 >
->  lib/kunit/try-catch.c   | 3 ++-
->  mm/kfence/kfence_test.c | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+> Fixes: 5f3e06208920 ("kunit: test: add support for test abort")
 >
-> --
-> 2.18.0.huawei.25
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309014705.1265861-1-liupeng256%40huawei.com.
+> ?
+
+Yes, I will add this description.
+
+>> ---
+>>   lib/kunit/try-catch.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
+>> index 6b3d4db94077..f7825991d576 100644
+>> --- a/lib/kunit/try-catch.c
+>> +++ b/lib/kunit/try-catch.c
+>> @@ -52,7 +52,7 @@ static unsigned long kunit_test_timeout(void)
+>>           * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
+>>           * the task will be killed and an oops generated.
+>>           */
+>> -       return 300 * MSEC_PER_SEC; /* 5 min */
+>> +       return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
+> Why not just "300 * HZ" ?
+
+Because I have seen patch
+
+df3c30f6e904 ("staging: lustre: replace direct HZ access with kernel APIs").
+
+Here, both "msecs_to_jiffies(MSEC_PER_SEC)" and "300 * HZ" is ok for me.
+
+>>   }
+>>
+>>   void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
+>> --
+>> 2.18.0.huawei.25
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309014705.1265861-3-liupeng256%40huawei.com.
+> .
