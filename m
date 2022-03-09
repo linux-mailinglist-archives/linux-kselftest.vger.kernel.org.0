@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876844D3C1F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 22:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFD84D3C24
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 22:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiCIVgK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 16:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        id S236734AbiCIVh2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 16:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCIVgJ (ORCPT
+        with ESMTP id S235179AbiCIVh1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 16:36:09 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406AFA23A
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 13:35:10 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id b9so1056369ila.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 13:35:10 -0800 (PST)
+        Wed, 9 Mar 2022 16:37:27 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D14BFA23F
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 13:36:28 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id b7so1435133ilm.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 13:36:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a+PokWnNPzuahwZwgt4jPIAV6o7vc6F/8JG7kbUD8kY=;
-        b=ShWwFzvGcsJujkNLAZaAqeWfVR5IDYk1AJRilm0azBO9Rsyk/HQ5nC/zL8OlWK0ubT
-         +ckFb8jMtIsQuqpX2Wsi1m2IkchJ6FhSx/kjH7jkrYStjesJa93UI/eRaIn6p4LPrvUT
-         wpf+JKms5Eg/rLCkh63Yv2QHq+DfooILaG4H8=
+        bh=48i5RGtPTBBwfjzXHXLl5XUkcNYXDf667sJR3CqzmlY=;
+        b=DVBiMEs3yFtHYC0TQIKdOEmfdJaTy2+aadp/sSLKwmAD1c7LNDSVzbbqeaV5w2KDuM
+         eD0xe2aaxliCYvCwkNPT0l7sY4IqefwG10OwIHZ66lsiwWzGKd+IxikeniXAVWxRDqR+
+         eVc9SIWm8wOIH9EcpwHT1jvOXMHi4ScLej+Vs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=a+PokWnNPzuahwZwgt4jPIAV6o7vc6F/8JG7kbUD8kY=;
-        b=cQgGjYEumqvItf0FYNgBZd6WwkeXrrXlBHtxON2d5xhKc0SBE3oowi+PmbSr4fgxsl
-         3yVMu/vKnasVAuJK1yjZoG3UhDqR5fSthrx8TUObOLh2vzT0Lv0gv1D3FynXdSnAQwj1
-         rRYjJoqpWrxwcw16VWGctvxoTCco3QUJIFMUl/a4fQX8VTGSypsi4TX8xxW/ESqyY0uP
-         tHxrZwX9IVe9rykZrNM/7pXnMPSY1Vg66FaA0etEaxC56A3XLMn2PwBwjAJnCCkmxHEm
-         tfOX1ODnUm8vHYWFvgkZ9IQNspAikwe/wBIYaA2Tp+0bEFBI5wXQRhZIfE07m64yOect
-         gsAA==
-X-Gm-Message-State: AOAM533xuFIMPCkF0K+ZlUC+qntGmuEnA7mXPU4Xjlb/fZR8fWiAUJ5W
-        ZLQPzgqffi2J8T6IpdcS5zuM0Q==
-X-Google-Smtp-Source: ABdhPJxbFMp8hlqX5hP0ON+Zp+I2WxqvbEFtnxYMKFSDFp1BnU9g+quzdbUwAY2/4dnJPDVyo99fXw==
-X-Received: by 2002:a92:cdaa:0:b0:2c6:6751:dd18 with SMTP id g10-20020a92cdaa000000b002c66751dd18mr1129241ild.314.1646861709660;
-        Wed, 09 Mar 2022 13:35:09 -0800 (PST)
+        bh=48i5RGtPTBBwfjzXHXLl5XUkcNYXDf667sJR3CqzmlY=;
+        b=OIbAhnvtSGe3dOyYLlQY9fWrpf+IFIjWxAkbVnFAhc7/OAzlcL5eSTxq5vS2cYlssm
+         QOmaWs0upBj5UJ9dnxYO6iSd74vC7dHGQOAyo0bUvENYapEXdqdmPEu0wGSo5Mo9ukaw
+         R74zIdHjJHhVAeMRLn8goNgQYga31lYaNTVX3BcZ0RrvWTIzuviGqxtvc0FFAKE4V0zS
+         xEElCp5LlJuq/taff5L+0weL949d4hPiepf0lPB9CNT16PomGzNHsg0lUzNwrXGTINo+
+         6aKcNHpzeCJyb6KFLVMbTtWTJ/z22YBoZNhpcKfpVsm4BM7x337LAHC5VWBC1qOIA5zv
+         DyOA==
+X-Gm-Message-State: AOAM530sb2cD/NmJIx8C3ABp87tYRdNdG/fNVcosQowkagJsjaRBDCxr
+        TcIrWfARWsGmGM/1dqQPxz7+ulq9B+GoQw==
+X-Google-Smtp-Source: ABdhPJwat0wlYD5W730gEYBFLUkBX+nKv7K6pbJjYx9nVjPpjrJgm/U5BM+AWlPleGsLHYfYFAIsxA==
+X-Received: by 2002:a05:6e02:1d84:b0:2c6:678e:94a3 with SMTP id h4-20020a056e021d8400b002c6678e94a3mr1071196ila.238.1646861787822;
+        Wed, 09 Mar 2022 13:36:27 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id i14-20020a056e02152e00b002bee249710csm1689110ilu.15.2022.03.09.13.35.09
+        by smtp.gmail.com with ESMTPSA id d8-20020a056e021c4800b002c6467c0c8bsm1763916ilg.51.2022.03.09.13.36.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 13:35:09 -0800 (PST)
-Subject: Re: [PATCH v1 1/3] kselftest/arm64: Fix comment for
- ptrace_sve_get_fpsimd_data()
+        Wed, 09 Mar 2022 13:36:27 -0800 (PST)
+Subject: Re: [PATCH v1 2/3] kselftest/arm64: Remove assumption that tasks
+ start FPSIMD only
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -55,14 +55,14 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220309115918.22469-1-broonie@kernel.org>
- <20220309115918.22469-2-broonie@kernel.org>
+ <20220309115918.22469-3-broonie@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d76bca00-0efe-9450-4d6e-cf46fa05bbdd@linuxfoundation.org>
-Date:   Wed, 9 Mar 2022 14:35:08 -0700
+Message-ID: <5f892a90-6870-001b-d265-885f49a738ce@linuxfoundation.org>
+Date:   Wed, 9 Mar 2022 14:36:26 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220309115918.22469-2-broonie@kernel.org>
+In-Reply-To: <20220309115918.22469-3-broonie@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,28 +77,37 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 3/9/22 4:59 AM, Mark Brown wrote:
-> The comment for ptrace_sve_get_fpsimd_data() doesn't describe what the test
-> does at all, fix that.
+> Currently the sve-ptrace test for setting and reading FPSIMD data assumes
+> that the child will start off in FPSIMD only mode and that it can use this
+> to read some FPSIMD mode SVE ptrace data, skipping the test if it can't.
+> This isn't an assumption guaranteed by the ABI and also limits how we can
+> use this testcase within the program. Instead skip the initial read and
+> just generate a FPSIMD format buffer for the write part of the test, making
+> the coverage more robust in the face of future kernel and test program
+> changes.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   tools/testing/selftests/arm64/fp/sve-ptrace.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   tools/testing/selftests/arm64/fp/sve-ptrace.c | 39 ++++++++-----------
+>   1 file changed, 16 insertions(+), 23 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> index a3c1e67441f9..6b139d5f67f1 100644
+> index 6b139d5f67f1..ccd3ff1e8c06 100644
 > --- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
 > +++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-> @@ -397,7 +397,7 @@ static void ptrace_set_sve_get_sve_data(pid_t child,
->   	free(write_buf);
->   }
+> @@ -48,7 +48,7 @@ static const struct vec_type vec_types[] = {
 >   
-> -/* Validate attempting to set SVE data and read SVE data */
-> +/* Validate attempting to set SVE data and read it via the FPSIMD regset */
->   static void ptrace_set_sve_get_fpsimd_data(pid_t child,
->   					   const struct vec_type *type,
->   					   unsigned int vl)
-> 
+>   #define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
+>   #define FLAG_TESTS 2
+> -#define FPSIMD_TESTS 3
+> +#define FPSIMD_TESTS 2
+
+Looks like there is one less test now?
+
+>   
+>   #define EXPECTED_TESTS ((VL_TESTS + FLAG_TESTS + FPSIMD_TESTS) * ARRAY_SIZE(vec_types))
+>   
+>
 
 Looks good to me.
 
@@ -106,3 +115,4 @@ Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
+
