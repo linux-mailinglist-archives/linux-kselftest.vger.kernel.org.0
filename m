@@ -2,55 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EBC4D290F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 07:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA664D2AA0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 09:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiCIGkX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 01:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S231203AbiCII2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 03:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiCIGkW (ORCPT
+        with ESMTP id S229818AbiCII2O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 01:40:22 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E8A3FDAB;
-        Tue,  8 Mar 2022 22:39:23 -0800 (PST)
-Received: from kwepemi100017.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KD2VJ33G2z1GCG9;
-        Wed,  9 Mar 2022 14:34:32 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100017.china.huawei.com (7.221.188.163) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 14:39:21 +0800
-Received: from [10.174.179.19] (10.174.179.19) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 14:39:20 +0800
-Message-ID: <832e7424-280c-d5e7-ae61-832f4f0a03b9@huawei.com>
-Date:   Wed, 9 Mar 2022 14:39:19 +0800
+        Wed, 9 Mar 2022 03:28:14 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE146C12DD;
+        Wed,  9 Mar 2022 00:27:15 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 75846101C67; Wed,  9 Mar 2022 08:27:11 +0000 (UTC)
+Date:   Wed, 9 Mar 2022 08:27:11 +0000
+From:   Sean Young <sean@mess.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 01/28] bpf: add new is_sys_admin_prog_type()
+ helper
+Message-ID: <Yihk34SLS6ZYS01D@gofer.mess.org>
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-2-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 0/3] kunit: fix a UAF bug and do some optimization
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-CC:     <brendanhiggins@google.com>, <glider@google.com>,
-        <dvyukov@google.com>, <akpm@linux-foundation.org>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>,
-        <linux-mm@kvack.org>, <wangkefeng.wang@huawei.com>
-References: <20220309014705.1265861-1-liupeng256@huawei.com>
- <CANpmjNMfkUSUEihTc2u_v6fOhHiyNOAOs2QROjCMEROMTbaxLQ@mail.gmail.com>
-From:   "liupeng (DM)" <liupeng256@huawei.com>
-In-Reply-To: <CANpmjNMfkUSUEihTc2u_v6fOhHiyNOAOs2QROjCMEROMTbaxLQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.19]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304172852.274126-2-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,34 +53,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Good, I will send a revised series latter.
+On Fri, Mar 04, 2022 at 06:28:25PM +0100, Benjamin Tissoires wrote:
+> LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
+> 
+> Extract a new helper for it, it will be also used for the HID bpf
+> implementation.
+> 
+> Cc: Sean Young <sean@mess.org>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-On 2022/3/9 14:12, Marco Elver wrote:
-> On Wed, 9 Mar 2022 at 02:29, 'Peng Liu' via kasan-dev
-> <kasan-dev@googlegroups.com> wrote:
->> This series is to fix UAF when running kfence test case test_gfpzero,
->> which is time costly. This UAF bug can be easily triggered by setting
->> CONFIG_KFENCE_DYNAMIC_OBJECTS = 65535. Furthermore, some optimization
->> for kunit tests has been done.
-> Yeah, I've observed this problem before, so thanks for fixing.
->
-> It's CONFIG_KFENCE_NUM_OBJECTS (not "DYNAMIC") - please fix in all patches.
->
-Sorry for this mistake, I will check it in all patches.
->> Peng Liu (3):
->>    kunit: fix UAF when run kfence test case test_gfpzero
->>    kunit: make kunit_test_timeout compatible with comment
->>    kfence: test: try to avoid test_gfpzero trigger rcu_stall
->>
->>   lib/kunit/try-catch.c   | 3 ++-
->>   mm/kfence/kfence_test.c | 3 ++-
->>   2 files changed, 4 insertions(+), 2 deletions(-)
->>
->> --
->> 2.18.0.huawei.25
->>
->> --
->> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309014705.1265861-1-liupeng256%40huawei.com.
-> .
+For BPF_PROG_TYPE_LIRC_MODE2, I don't think this change will break userspace.
+This is called from ir-keytable(1) which is called from udev. It should have
+all the necessary permissions.
+
+In addition, the vast majority IR decoders are non-bpf. bpf ir decoders have
+very few users at the moment.
+
+Acked-by: Sean Young <sean@mess.org>
+
+
+Sean
+
+> 
+> ---
+> 
+> new in v2
+> ---
+>  kernel/bpf/syscall.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index db402ebc5570..cc570891322b 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+>  	case BPF_PROG_TYPE_LWT_SEG6LOCAL:
+>  	case BPF_PROG_TYPE_SK_SKB:
+>  	case BPF_PROG_TYPE_SK_MSG:
+> -	case BPF_PROG_TYPE_LIRC_MODE2:
+>  	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+>  	case BPF_PROG_TYPE_CGROUP_DEVICE:
+>  	case BPF_PROG_TYPE_CGROUP_SOCK:
+> @@ -2202,6 +2201,17 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
+>  	}
+>  }
+>  
+> +static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
+> +{
+> +	switch (prog_type) {
+> +	case BPF_PROG_TYPE_LIRC_MODE2:
+> +	case BPF_PROG_TYPE_EXT: /* extends any prog */
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  /* last field in 'union bpf_attr' used by this command */
+>  #define	BPF_PROG_LOAD_LAST_FIELD core_relo_rec_size
+>  
+> @@ -2252,6 +2262,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+>  		return -EPERM;
+>  	if (is_perfmon_prog_type(type) && !perfmon_capable())
+>  		return -EPERM;
+> +	if (is_sys_admin_prog_type(type) && !capable(CAP_SYS_ADMIN))
+> +		return -EPERM;
+>  
+>  	/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
+>  	 * or btf, we need to check which one it is
+> -- 
+> 2.35.1
