@@ -2,108 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117DB4D2A7F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 09:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD654D2B26
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 10:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiCIIUo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 03:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S231633AbiCIJA4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 04:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiCIIUm (ORCPT
+        with ESMTP id S231651AbiCIJAy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:20:42 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2736166A58;
-        Wed,  9 Mar 2022 00:19:41 -0800 (PST)
-Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KD4k241ZNzbc0G;
-        Wed,  9 Mar 2022 16:14:50 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 16:19:39 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 16:19:38 +0800
-From:   Peng Liu <liupeng256@huawei.com>
-To:     <brendanhiggins@google.com>, <glider@google.com>,
-        <elver@google.com>, <dvyukov@google.com>,
-        <akpm@linux-foundation.org>, <linux-kselftest@vger.kernel.org>,
-        <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
-        <kasan-dev@googlegroups.com>, <linux-mm@kvack.org>
-CC:     <wangkefeng.wang@huawei.com>, <liupeng256@huawei.com>
-Subject: [PATCH v2 3/3] kfence: test: try to avoid test_gfpzero trigger rcu_stall
-Date:   Wed, 9 Mar 2022 08:37:53 +0000
-Message-ID: <20220309083753.1561921-4-liupeng256@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
-In-Reply-To: <20220309083753.1561921-1-liupeng256@huawei.com>
-References: <20220309083753.1561921-1-liupeng256@huawei.com>
+        Wed, 9 Mar 2022 04:00:54 -0500
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3503041614
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 00:59:56 -0800 (PST)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id 962F1433A4; Wed,  9 Mar 2022 09:55:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1646816163; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=FBSzHagRbE3hyEqAUAyuCruqj4WwDuxD9Kh6OY2TZdROgBDwmsk2/EgrSTeQmP68S
+         UdIQrshtxr92NqsEFI4kmjw3WxrrIx8LSat8OWZzmpiOzhnu0hinm9ZpaKsCO6z8up
+         Rp47wz1VIujBWq/MbfdCJeVUT2QwD44BUDkwXbHRuH4UfXhiz1pp/LdHT7UZCE7o1q
+         6J9hiKoYUGqOE9BCchyFhAnIrFocxZdgPr51/XwpjlRu3gSquyuCL6oCu6c+w5CA8L
+         xZbb6TtuRxhVNmAWR73CmnbOy6HJl9WEKyQuNPwE+h8mwyY7hH5t7FU+g/wiWURGy8
+         y5syQYOOv27Iw==
+Received: by mail.olerise.pl for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 08:55:55 GMT
+Message-ID: <20220309084500-0.1.27.nrl1.0.0shl3ipvrm@olerise.pl>
+Date:   Wed,  9 Mar 2022 08:55:55 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When CONFIG_KFENCE_NUM_OBJECTS is set to a big number, kfence
-kunit-test-case test_gfpzero will eat up nearly all the CPU's
-resources and rcu_stall is reported as the following log which
-is cut from a physical server.
+Dzie=C5=84 dobry,
 
-  rcu: INFO: rcu_sched self-detected stall on CPU
-  rcu: 	68-....: (14422 ticks this GP) idle=6ce/1/0x4000000000000002
-  softirq=592/592 fqs=7500 (t=15004 jiffies g=10677 q=20019)
-  Task dump for CPU 68:
-  task:kunit_try_catch state:R  running task
-  stack:    0 pid: 9728 ppid:     2 flags:0x0000020a
-  Call trace:
-   dump_backtrace+0x0/0x1e4
-   show_stack+0x20/0x2c
-   sched_show_task+0x148/0x170
-   ...
-   rcu_sched_clock_irq+0x70/0x180
-   update_process_times+0x68/0xb0
-   tick_sched_handle+0x38/0x74
-   ...
-   gic_handle_irq+0x78/0x2c0
-   el1_irq+0xb8/0x140
-   kfree+0xd8/0x53c
-   test_alloc+0x264/0x310 [kfence_test]
-   test_gfpzero+0xf4/0x840 [kfence_test]
-   kunit_try_run_case+0x48/0x20c
-   kunit_generic_run_threadfn_adapter+0x28/0x34
-   kthread+0x108/0x13c
-   ret_from_fork+0x10/0x18
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-To avoid rcu_stall and unacceptable latency, a schedule point is
-added to test_gfpzero.
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-Signed-off-by: Peng Liu <liupeng256@huawei.com>
----
- mm/kfence/kfence_test.c | 1 +
- 1 file changed, 1 insertion(+)
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
-diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-index caed6b4eba94..1b50f70a4c0f 100644
---- a/mm/kfence/kfence_test.c
-+++ b/mm/kfence/kfence_test.c
-@@ -627,6 +627,7 @@ static void test_gfpzero(struct kunit *test)
- 			kunit_warn(test, "giving up ... cannot get same object back\n");
- 			return;
- 		}
-+		cond_resched();
- 	}
- 
- 	for (i = 0; i < size; i++)
--- 
-2.18.0.huawei.25
 
+Pozdrawiam
+Miko=C5=82aj Rudzik
