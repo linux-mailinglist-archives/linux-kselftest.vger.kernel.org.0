@@ -2,139 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D065E4D53BA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 22:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BF24D542F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 23:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiCJVnR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Mar 2022 16:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S242700AbiCJWJy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Mar 2022 17:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344039AbiCJVnQ (ORCPT
+        with ESMTP id S240075AbiCJWJx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Mar 2022 16:43:16 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BEA19417F
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 13:42:12 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2d07ae0b1c0so74151457b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 13:42:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=X1pCWOxN1ukIne/lto86DuwN95tdGaxh3GRtyvz2dIg=;
-        b=J4suHYHMFQjki4DGGqcv+lWRKy1XqEZBaZFqAcg73gjqA2x+qHjWNvBNR8c8ZCyecS
-         /0H6mm0cFlOfnSNiEu1xl/wyjhmnoae4XDhKSHta/Jrcn1Iupn2lo+C3myyzgAZrHmjL
-         Xpn8dYzBtFltgSHuPERecyg3SUr+3DdlwhxhNshY2hNqtC1vHLx3Q9hRYaKpOuEFNvpl
-         yh9jTU6wHiVdDLM/A4xXitM+ySjsXQ74tJFpYax1dUdKptwopQN/gzTTmvIePUuJRYPo
-         Kw7KpLFxEj7UMU1HALiedRdoeLdU9Q6lWCQvo7K09/4n6vHWQgW4VkKbhO8jyf6hG2qD
-         6FHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=X1pCWOxN1ukIne/lto86DuwN95tdGaxh3GRtyvz2dIg=;
-        b=z4k+6Y8g3T9DrRxnURusC41VV40WujYhhFN7VChr33zd/8AyPhFOFJdT7bnIPcBvcF
-         LNoSPBsEilMWU3kndGBafv2LT30Nskebs+YuGu2S5gDOYh2TGkoREEf49a7pv7rUhK3z
-         Mk2v8r0yaPOcZ64kJAwhWFRJ2wHZmd17ajKrAYDa8MWZchZzRaeQOPpL6tpCejQum5s9
-         AFsRfS5dyje4x4LD1M8SfnvRkEfoC1kRyMckFfKzN/4+nGAkx8pQDVLoRBYe8dx1DPsv
-         4AW7fvk6lZDeEyUO8soUYoAHZ/ABrdtVovK/rPYmQFQlqEHX8RldOGUZ+u0Xg3Ht207k
-         LZNA==
-X-Gm-Message-State: AOAM533P4Q63Uc0DIU1GGN2ZM8JQN15c5AETYO1gvdfgQFFfre3JGXJQ
-        plSN7R3xDU5cOoVwbPtRo1qeytwFW6vBSlh0X7e0gQ==
-X-Google-Smtp-Source: ABdhPJyWnPXGxFM36m84FiBwDSt+c0Dq7q2AbT937AavjMnMLI1vw9qCHGkygnXVzfEzx9RUgnngEn0cnZiFIjXfPa8=
-X-Received: by 2002:a81:983:0:b0:2dc:62af:71eb with SMTP id
- 125-20020a810983000000b002dc62af71ebmr5848548ywj.9.1646948531807; Thu, 10 Mar
- 2022 13:42:11 -0800 (PST)
+        Thu, 10 Mar 2022 17:09:53 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4C65FF0B;
+        Thu, 10 Mar 2022 14:08:50 -0800 (PST)
+Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nSQxd-000Ayr-EU; Thu, 10 Mar 2022 23:08:42 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nSQxd-000LZN-0J; Thu, 10 Mar 2022 23:08:41 +0100
+Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
+To:     Guo Zhengkui <guozhengkui@vivo.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Christy Lee <christylee@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com
+References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net>
+ <20220309033518.1743-1-guozhengkui@vivo.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ba71e22a-cf59-b2bd-50c0-d0c9fb3f4e08@iogearbox.net>
+Date:   Thu, 10 Mar 2022 23:08:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Received: by 2002:a0d:df06:0:0:0:0:0 with HTTP; Thu, 10 Mar 2022 13:42:11
- -0800 (PST)
-In-Reply-To: <20220310210210.2124637-1-brendanhiggins@google.com>
-References: <20220310210210.2124637-1-brendanhiggins@google.com>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Thu, 10 Mar 2022 18:42:11 -0300
-Message-ID: <CAKgze5ZCov7a7A2_s+dRXRdPNDfd54-VBq06PdM8mQvf9aq=zQ@mail.gmail.com>
-Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        daniel.gutson@eclypsium.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220309033518.1743-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26477/Thu Mar 10 10:34:39 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/10/22, Brendan Higgins <brendanhiggins@google.com> wrote:
-> Add support for a new kind of kunit_suite registration macro called
-> kunit_test_init_suite(); this new registration macro allows the
-> registration of kunit_suites that reference functions marked __init and
-> data marked __initdata.
->
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->
-> This patch is in response to a KUnit user issue[1] in which the user was
-> attempting to test some init functions; although this is a functional
-> solution as long as KUnit tests only run during the init phase, we will
-> need to do more work if we ever allow tests to run after the init phase
-> is over; it is for this reason that this patch adds a new registration
-> macro rather than simply modifying the existing macros.
->
-> [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
->
-> ---
->  include/kunit/test.h | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b26400731c02..1878e585f6d3 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -379,6 +379,27 @@ static inline int kunit_run_all_tests(void)
->
->  #define kunit_test_suite(suite)	kunit_test_suites(&suite)
->
-> +/**
-> + * kunit_test_init_suites() - used to register one or more &struct
-> kunit_suite
-> + *			      containing init functions or init data.
-> + *
-> + * @__suites: a statically allocated list of &struct kunit_suite.
-> + *
-> + * This functions identically as &kunit_test_suites() except that it
-> suppresses
-> + * modpost warnings for referencing functions marked __init or data marked
-> + * __initdata; this is OK because currently KUnit only runs tests upon
-> boot
-> + * during the init phase or upon loading a module during the init phase.
-> + *
-> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot,
-> these
-> + * tests must be excluded.
-> + */
-> +#define kunit_test_init_suites(__suites...)				\
-> +	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
-> +			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
-> +			    ##__suites)
-> +
-> +#define kunit_test_init_suite(suite)	kunit_test_init_suites(&suite)
-> +
->  #define kunit_suite_for_each_test_case(suite, test_case)		\
->  	for (test_case = suite->test_cases; test_case->run_case; test_case++)
->
->
-> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> --
-> 2.35.1.723.g4982287a31-goog
->
->
+On 3/9/22 4:35 AM, Guo Zhengkui wrote:
+> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
+> 
+> Use `ARRAY_SIZE(arr)` in bpf_util.h instead of forms like
+> `sizeof(arr)/sizeof(arr[0])`.
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-Thanks for the feature :)
+BPF CI fails with:
 
-Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+https://github.com/kernel-patches/bpf/runs/5498238267?check_suite_focus=true
+
+   pahole: Multithreading requires elfutils >= 0.178. Continuing with a single thread...
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:130:8: error: redefinition of 'bpf_map_def'
+   struct bpf_map_def {
+          ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:685:8: note: previous definition is here
+   struct bpf_map_def {
+          ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:138:6: error: redefinition of 'libbpf_pin_type'
+   enum libbpf_pin_type {
+        ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:191:6: note: previous definition is here
+   enum libbpf_pin_type {
+        ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:139:2: error: redefinition of enumerator 'LIBBPF_PIN_NONE'
+           LIBBPF_PIN_NONE,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:192:2: note: previous definition is here
+           LIBBPF_PIN_NONE,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:141:2: error: redefinition of enumerator 'LIBBPF_PIN_BY_NAME'
+           LIBBPF_PIN_BY_NAME,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:194:2: note: previous definition is here
+           LIBBPF_PIN_BY_NAME,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:144:6: error: redefinition of 'libbpf_tristate'
+   enum libbpf_tristate {
+        ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1304:6: note: previous definition is here
+   enum libbpf_tristate {
+        ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:145:2: error: redefinition of enumerator 'TRI_NO'
+           TRI_NO = 0,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1305:2: note: previous definition is here
+           TRI_NO = 0,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:146:2: error: redefinition of enumerator 'TRI_YES'
+           TRI_YES = 1,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1306:2: note: previous definition is here
+           TRI_YES = 1,
+           ^
+   In file included from progs/test_rdonly_maps.c:7:
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/bpf_helpers.h:147:2: error: redefinition of enumerator 'TRI_MODULE'
+           TRI_MODULE = 2,
+           ^
+   /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:1307:2: note: previous definition is here
+           TRI_MODULE = 2,
+           ^
+   8 errors generated.
+   make: *** [Makefile:488: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/test_rdonly_maps.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   Error: Process completed with exit code 2.
