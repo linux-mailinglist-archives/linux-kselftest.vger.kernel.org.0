@@ -2,100 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9D14D51ED
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 20:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD55B4D5201
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 20:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245361AbiCJSSK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Mar 2022 13:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S1343648AbiCJTer (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Mar 2022 14:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236928AbiCJSSK (ORCPT
+        with ESMTP id S1343627AbiCJTel (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Mar 2022 13:18:10 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448913D906
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 10:17:08 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso7083967pjc.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 10:17:08 -0800 (PST)
+        Thu, 10 Mar 2022 14:34:41 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C3714F28A
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 11:33:33 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bt26so11271158lfb.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 11:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8i9PcoBgS4Z5fTHkHhwCw2b7OCjvoaGKsCGSTw+C1tM=;
-        b=FHz7R3ScT4P/6jx0UHpLjssNo+wzcUAnkAq0eNZlWWEK3aYGOxTGOxoQ/SFYQ4gitQ
-         IzTn31mtdV3LRCsbXyZSNMjDZxDVwh14jEA1Mz6aZXSZSmLrPmfX8dxOIT0DkyfXgObJ
-         sadA5/c2IF8P5u2OaXSS9m3nK92vT8MhshqvQ=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4n6+idQ0426w+zkqVp6H2ORC9fnCFio1PZzrW8WKfUg=;
+        b=OqorwzMtB49Fqip4wdm9stFVvynD2x0VggX/za+LSk2+cpHubYR90RJjOnsqoXAZJS
+         PKEVUeYOlX9QtjBhjnUyqb2PSsDR+wETukIDxJkkWJI/DMsjfuTMhgIY8mWPWQI2oyra
+         o9JsTO9TomWo7QJKLuNr0wMP8y/j0gAZ8MvjywUAmGwereXi3I5q/gwobTMAtCKGo3oi
+         vt/8ah4AtRtGVIPPYFZ4mhGu4YhvT3BEEVZTIY2Bk+dPnS0QYjByJLaLoXqCs3CRn8kZ
+         L0EpsvYejfkgMhc+/apIKBKxCkq9x+U6bH72wsz5pbyzAid1oMjnyYZpZwTlBQCy59QM
+         HvbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8i9PcoBgS4Z5fTHkHhwCw2b7OCjvoaGKsCGSTw+C1tM=;
-        b=3uY474DI1an01Ry+GGrEl2jFjRNb4pZmvZGRJlMlD6N0Rhe4hw4iIyn688WY7DRsD5
-         MHHfJlWdelcW8NjOdF0cSM01RZ5PrUyV982VS4oD7Uu9D6YYE8fnkPbO5QYsEZQZd6CZ
-         4YMZYDWbgUyUhsY61a8KsMRQ94Qaop7V6rpBAxajV2UO5EfsiEpiGz3TCW6fylRLeP10
-         bz60CjWFmWX108lL/CB613Vfq3UM9CKi6fj6S0H+6F7Y0FVM61YJcI9bbbog3HbUe4PS
-         8aJzmc1NzHug375tc1iYIHHBtMPfeKuv44s57ESjwDYjnMfseA0Q7MvSGQE9dX+sTTJU
-         z3Iw==
-X-Gm-Message-State: AOAM531J6iqFhIQ2TmvbFHR4RNx03wbDr0hYg+vu298CRk7clpukEp0e
-        ysbpELSJcIQCA0+laobM8zK8ug==
-X-Google-Smtp-Source: ABdhPJzmiruB6ATSxE49WZKgHvZiUJtMXmtRjvqxJVHf8r+8/uOrEQawYL1mjAJMJLNoP66nxh0ubA==
-X-Received: by 2002:a17:902:9a4b:b0:14f:fe0b:5546 with SMTP id x11-20020a1709029a4b00b0014ffe0b5546mr6364220plv.46.1646936227861;
-        Thu, 10 Mar 2022 10:17:07 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w5-20020a17090a4f4500b001bf3bdf39a8sm6785842pjl.4.2022.03.10.10.17.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 10:17:07 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     luc.vanoostenryck@gmail.com, nathan@kernel.org, shuah@kernel.org,
-        mark.rutland@arm.com, akpm@linux-foundation.org,
-        tglx@linutronix.de, ndesaulniers@google.com, linux@roeck-us.net,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, npiggin@gmail.com, arnd@arndb.de,
-        masahiroy@kernel.org, ojeda@kernel.org,
-        Dan Li <ashimida@linux.alibaba.com>, elver@google.com,
-        samitolvanen@google.com
-Cc:     Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 1/2] AARCH64: Add gcc Shadow Call Stack support
-Date:   Thu, 10 Mar 2022 10:15:37 -0800
-Message-Id: <164693613561.1275052.17242543278628621803.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220303074323.86282-1-ashimida@linux.alibaba.com>
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com> <20220303074323.86282-1-ashimida@linux.alibaba.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4n6+idQ0426w+zkqVp6H2ORC9fnCFio1PZzrW8WKfUg=;
+        b=ndMd3Ii4VgNNGXjt2ZYiUznyEXW8mCNt0Kya5ApOo7SDcD3uOomN1kxEAoW1xJKSnG
+         JVM+fOeNdJgSzx4daNaYGojSIeHwehHc/Pz8eftdJCtjZBogKgEiY4ThMzGQGAEZC/UB
+         6/O+BfWj1xhVm05rIXY4vaPTyjLKv3xGqihFIjQhwPJvqToKCM+3JgiIE3FCCES28SgF
+         h0jNOgQNLDGC7XpG2KARgFGMSEUykE77eXNq+sbFKm4R4qOTjvc1hs1MPIaZpuTF+xDR
+         aOP2ScSOGkQr4rHRzH6yvi+6VEPMQhBEzUzFgyo6KSnN/4BV80AKWB+g95JHw8MzKwhN
+         K0mQ==
+X-Gm-Message-State: AOAM530lU56qPmwhAx7mNONTc14OBX/KDLhVFYdyC7QA+5Vyzhmr95p0
+        O001PSDHVhVMN4BDzp89BR4k+1FA+BXGs+zsIQGfAw==
+X-Google-Smtp-Source: ABdhPJwMmlW87gYnDG08JkAcAdSJk0r0l+PhyvspUkMuuh2orjECrIymDRz2y9i5JbalSY67z7Cseau7s6pXnUeek3s=
+X-Received: by 2002:a05:6512:5d2:b0:448:2e88:e9bd with SMTP id
+ o18-20020a05651205d200b004482e88e9bdmr4058133lfo.424.1646940811350; Thu, 10
+ Mar 2022 11:33:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220309165222.2843651-1-tjmercier@google.com> <20220309165222.2843651-8-tjmercier@google.com>
+In-Reply-To: <20220309165222.2843651-8-tjmercier@google.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Thu, 10 Mar 2022 11:33:20 -0800
+Message-ID: <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
+Subject: Re: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
+        Kenny.Ho@amd.com, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2 Mar 2022 23:43:23 -0800, Dan Li wrote:
-> Shadow call stacks will be available in GCC >= 12, this patch makes
-> the corresponding kernel configuration available when compiling
-> the kernel with the gcc.
-> 
-> Note that the implementation in GCC is slightly different from Clang.
-> With SCS enabled, functions will only pop x30 once in the epilogue,
-> like:
-> 
-> [...]
+On Wed, Mar 9, 2022 at 8:52 AM T.J. Mercier <tjmercier@google.com> wrote:
+>
+> The kernel interface should use types that the kernel defines instead of
+> pid_t and uid_t, whose definiton is owned by libc. This fixes the header
+> so that it can be included without first including sys/types.h.
+>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> ---
+>  include/uapi/linux/android/binder.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+> index 169fd5069a1a..aa28454dbca3 100644
+> --- a/include/uapi/linux/android/binder.h
+> +++ b/include/uapi/linux/android/binder.h
+> @@ -289,8 +289,8 @@ struct binder_transaction_data {
+>
+>         /* General information about the transaction. */
+>         __u32           flags;
+> -       pid_t           sender_pid;
+> -       uid_t           sender_euid;
+> +       __kernel_pid_t  sender_pid;
+> +       __kernel_uid_t  sender_euid;
 
-I'm taking this one now so it'll make the merge window. We can hammer
-out the lkdtm test after that.
+Are we guaranteed that this does not affect the UAPI at all? Userspace
+code using this definition will have to run with kernels using the old
+definition and visa-versa.
 
-Applied to for-next/hardening, thanks!
-
-[1/2] arm64: Add gcc Shadow Call Stack support
-      https://git.kernel.org/kees/c/afcf5441b9ff
-
--- 
-Kees Cook
-
+>         binder_size_t   data_size;      /* number of bytes of data */
+>         binder_size_t   offsets_size;   /* number of bytes of offsets */
+>
+> --
+> 2.35.1.616.g0bdcbb4464-goog
+>
