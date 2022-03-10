@@ -2,98 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C554D3E43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 01:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3964D4083
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 06:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiCJAhl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 19:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S239514AbiCJFBR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Mar 2022 00:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238999AbiCJAhd (ORCPT
+        with ESMTP id S229722AbiCJFBO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 19:37:33 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC911AA20
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 16:36:33 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id g17so6723743lfh.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 16:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tU+Fe+vcmWYII8bcpQckbuUOYQxVwc8Ms6FjnpeZUXo=;
-        b=L/mvPUr5+ed9/8F1xYBeOkHEQX/N5BqBnxQcWBYwpz8RAerWYK3vG+jQ8UcnJ76O8n
-         Z6F8qP7cE8tNgjablMkD4TSjih/QPIMEsvNLTgmbdeWBRVediWkgAMhZdVVhEgcgGEdK
-         lMZ1J3pO3p0Ql46BLe9TS7msF+0WkJiXc3GEYEhfXxvSABXRpmnJrXBNidzsucgWij7W
-         h71P/xxdG4gMnr+gam3ehpQ7R8zTNQQGhJ/hYPRcyYsfLb7u+8rs0B5WjYUfbEvSpW08
-         3VtCaxMUJjZ5zrZuYEdWuLeNzUmAVqnhioFkV1FhQj3OlGZ8RQb3TRq3538igabd/3yR
-         jrhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tU+Fe+vcmWYII8bcpQckbuUOYQxVwc8Ms6FjnpeZUXo=;
-        b=5V65gq+nYz8fDS0z9/CAK4R2/UQc84FRqSAjyXhJBpMkt1abXYlFLWIyikh9I8EGw3
-         dc4j1hExLz8J4KCfj5SwSLH8pvpEfeVb139/SfLqF4c8+KAr2Cm8PKV7q7wNpOnyunZj
-         1ti9U2lNVwSNSVsSLl7v5TaVGZAKedygGVpgmLNsFmxaiLsAXz8RfbfKkbuqWagGnZkw
-         adgrvMxjczqqlTVcaA3LLfVX3HkSJsFjKxNEf46z2JSCe5BkQjmeW0Z7d+/VKKKPQQ6G
-         APjoUNqUrbrVObVEEfN8726QqZoutRNYBPKWPRx4s0SG/GuGsRkLLu2wMYlbDY02eauz
-         GW8w==
-X-Gm-Message-State: AOAM531t3M5G6Xi8bi7BEEmfSnoJhsBqJ+eV/4zmrGOHOKUILIfWeUoO
-        ojiekq8eho0QOYGu9EaYh/DjAJ+SJJig+rnIJnezug==
-X-Google-Smtp-Source: ABdhPJytXKwI98E3nQqK0BdQ0dFxt9GnezH6c63KyMKM/BPYYzDCKWIjWSo338Qxmgo/66zO3+BC+IAEhGNy/BYPIF4=
-X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
- i3-20020ac25223000000b004485100e427mr1387380lfl.87.1646872591569; Wed, 09 Mar
- 2022 16:36:31 -0800 (PST)
+        Thu, 10 Mar 2022 00:01:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D7E12D912;
+        Wed,  9 Mar 2022 21:00:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8E2B824CA;
+        Thu, 10 Mar 2022 05:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 15DBFC340F5;
+        Thu, 10 Mar 2022 05:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646888411;
+        bh=FUCafaSQYsW9Ri+24aru4nd/M6+KGOCDKqiSyFUwqwE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YwCrnVvDZ0fSoP1wRMtPUTWtHR/PkRerivDKrdRCKJQz1Nj4ZcSq+AMMxEnBvd4p9
+         pNnBjkHWsz2pqRLyGRo4oQR0CLVPlDP4jJ4bOW1PwADDEFjIdV5MCf5rdg/b5jCr5n
+         H+FG1BrmKLQQbmRi2HC8k86u7Q/HKllMM7nButHqx0Ro0lwabRsk4x8v7c3YDTcyRa
+         tK32rL/dwwowJPBJVA3ZaVqBzShG4VzoCCK9xf7FcLCQisU1T7RkIb8CqFWADCAW6u
+         8UuP4K324wrSCPEeDPWyfD3KvHPyUn+1KNVdoFb+qp5CW24drmr19RZFzv/Lx8clsx
+         KQ/AMgxtVwptA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE61CEAC095;
+        Thu, 10 Mar 2022 05:00:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
- <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-In-Reply-To: <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 9 Mar 2022 16:36:20 -0800
-Message-ID: <CAKwvOd=0tn3DeqDkKxxk61EvHY9Vb+SnHkXugUmHCMFF_0VVoQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] selftests: pmtu.sh: Fix cleanup of processes
+ launched in subshell.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164688841097.28597.13633737666030841874.git-patchwork-notify@kernel.org>
+Date:   Thu, 10 Mar 2022 05:00:10 +0000
+References: <cover.1646776561.git.gnault@redhat.com>
+In-Reply-To: <cover.1646776561.git.gnault@redhat.com>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        dsahern@gmail.com, vfedorenko@novek.ru, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 7:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > +If your LLVM tools are not available in your PATH, you can supply their
-> > > +location using the LLVM variable with a trailing slash: ::
-> > > +
-> > > +       make LLVM=/path/to/llvm/
-> > > +
-> > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> >
-> > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> > works and (my interpretation of what) Masahiro said "if anyone asks
-> > for this, here's how we could do that."  I don't think I've seen an
-> > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> > won't hold this patch up over that.  Either way:
->
-> Right, there has not been an explicit ask for the prefix support yet,
-> although I know I personally would use it,
+Hello:
 
-Then let that be reason enough. :)
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 8 Mar 2022 23:14:57 +0100 you wrote:
+> Depending on the options used, pmtu.sh may launch tcpdump and nettest
+> processes in the background. However it fails to clean them up after
+> the tests complete.
+> 
+> Patch 1 allows the cleanup() function to read the list of PIDs launched
+> by the tests.
+> Patch 2 fixes the way the nettest PIDs are retrieved.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/2] selftests: pmtu.sh: Kill tcpdump processes launched by subshell.
+    https://git.kernel.org/netdev/net/c/18dfc667550f
+  - [net,2/2] selftests: pmtu.sh: Kill nettest processes launched in subshell.
+    https://git.kernel.org/netdev/net/c/94a4a4fe4c69
+
+You are awesome, thank you!
 -- 
-Thanks,
-~Nick Desaulniers
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
