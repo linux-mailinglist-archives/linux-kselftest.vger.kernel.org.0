@@ -2,61 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015874D50B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 18:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9D14D51ED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 20:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245159AbiCJRh5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Mar 2022 12:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S245361AbiCJSSK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Mar 2022 13:18:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245250AbiCJRhx (ORCPT
+        with ESMTP id S236928AbiCJSSK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:37:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05203191418;
-        Thu, 10 Mar 2022 09:36:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 937F361DFD;
-        Thu, 10 Mar 2022 17:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69144C340E8;
-        Thu, 10 Mar 2022 17:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646933811;
-        bh=h0waVYpyuTnkxGPqGqawZDdOqQAy45V3TgKXqVDiUgs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gGgZ9ufXsEo9xVy70iZNBJODuGslQ1+tolhXfEhoXVWR6AqvkeyQcsvQeD/AOt2V4
-         7GfFsQc0SBybJ2TgT/QjnghtIz9FaqXAZcua97AnhAxTWfZzZebelbBOCiHU8DeQjK
-         z7dWBNBei5WZ6MNIHnI4x152MF+LBn3KBWls7cuIwjczDJhFfIMbhz0DNortW5fqIg
-         LeDnJ08FqIqa+M74JiEfpJtCeE/z+XV3CAn8npZPVXcBkF0imyPcw9sOYTllUQT1aD
-         Dl+ym1SUXxpRfOkBQmv4qsjEswk1zps8/YN7keBqTbZeozmOrjrOsFeG9Au5LbJ8Wf
-         nu50xEtAaOVvg==
-Date:   Thu, 10 Mar 2022 10:36:43 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
-Message-ID: <Yio3K4bgdyFEBy7J@dev-arch.thelio-3990X>
-References: <20220304170813.1689186-1-nathan@kernel.org>
- <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
- <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
- <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
+        Thu, 10 Mar 2022 13:18:10 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448913D906
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 10:17:08 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso7083967pjc.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 10:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8i9PcoBgS4Z5fTHkHhwCw2b7OCjvoaGKsCGSTw+C1tM=;
+        b=FHz7R3ScT4P/6jx0UHpLjssNo+wzcUAnkAq0eNZlWWEK3aYGOxTGOxoQ/SFYQ4gitQ
+         IzTn31mtdV3LRCsbXyZSNMjDZxDVwh14jEA1Mz6aZXSZSmLrPmfX8dxOIT0DkyfXgObJ
+         sadA5/c2IF8P5u2OaXSS9m3nK92vT8MhshqvQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8i9PcoBgS4Z5fTHkHhwCw2b7OCjvoaGKsCGSTw+C1tM=;
+        b=3uY474DI1an01Ry+GGrEl2jFjRNb4pZmvZGRJlMlD6N0Rhe4hw4iIyn688WY7DRsD5
+         MHHfJlWdelcW8NjOdF0cSM01RZ5PrUyV982VS4oD7Uu9D6YYE8fnkPbO5QYsEZQZd6CZ
+         4YMZYDWbgUyUhsY61a8KsMRQ94Qaop7V6rpBAxajV2UO5EfsiEpiGz3TCW6fylRLeP10
+         bz60CjWFmWX108lL/CB613Vfq3UM9CKi6fj6S0H+6F7Y0FVM61YJcI9bbbog3HbUe4PS
+         8aJzmc1NzHug375tc1iYIHHBtMPfeKuv44s57ESjwDYjnMfseA0Q7MvSGQE9dX+sTTJU
+         z3Iw==
+X-Gm-Message-State: AOAM531J6iqFhIQ2TmvbFHR4RNx03wbDr0hYg+vu298CRk7clpukEp0e
+        ysbpELSJcIQCA0+laobM8zK8ug==
+X-Google-Smtp-Source: ABdhPJzmiruB6ATSxE49WZKgHvZiUJtMXmtRjvqxJVHf8r+8/uOrEQawYL1mjAJMJLNoP66nxh0ubA==
+X-Received: by 2002:a17:902:9a4b:b0:14f:fe0b:5546 with SMTP id x11-20020a1709029a4b00b0014ffe0b5546mr6364220plv.46.1646936227861;
+        Thu, 10 Mar 2022 10:17:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w5-20020a17090a4f4500b001bf3bdf39a8sm6785842pjl.4.2022.03.10.10.17.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 10:17:07 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     luc.vanoostenryck@gmail.com, nathan@kernel.org, shuah@kernel.org,
+        mark.rutland@arm.com, akpm@linux-foundation.org,
+        tglx@linutronix.de, ndesaulniers@google.com, linux@roeck-us.net,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, npiggin@gmail.com, arnd@arndb.de,
+        masahiroy@kernel.org, ojeda@kernel.org,
+        Dan Li <ashimida@linux.alibaba.com>, elver@google.com,
+        samitolvanen@google.com
+Cc:     Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 1/2] AARCH64: Add gcc Shadow Call Stack support
+Date:   Thu, 10 Mar 2022 10:15:37 -0800
+Message-Id: <164693613561.1275052.17242543278628621803.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220303074323.86282-1-ashimida@linux.alibaba.com>
+References: <20220303073340.86008-1-ashimida@linux.alibaba.com> <20220303074323.86282-1-ashimida@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAThknb0=-XhfB6zspke-sNHMEmTbGy8WVeg20ntT72wqA@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,132 +77,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 06:33:40PM +0900, Masahiro Yamada wrote:
-> On Wed, Mar 9, 2022 at 12:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
-> > > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> > > > index d32616891dcf..68b74416ec48 100644
-> > > > --- a/Documentation/kbuild/llvm.rst
-> > > > +++ b/Documentation/kbuild/llvm.rst
-> > > > @@ -49,17 +49,36 @@ example: ::
-> > > >  LLVM Utilities
-> > > >  --------------
-> > > >
-> > > > -LLVM has substitutes for GNU binutils utilities. Kbuild supports ``LLVM=1``
-> > > > -to enable them. ::
-> > > > -
-> > > > -       make LLVM=1
-> > > > -
-> > > > -They can be enabled individually. The full list of the parameters: ::
-> > > > +LLVM has substitutes for GNU binutils utilities. They can be enabled individually.
-> > > > +The full list of supported make variables: ::
-> > > >
-> > > >         make CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm STRIP=llvm-strip \
-> > > >           OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf \
-> > > >           HOSTCC=clang HOSTCXX=clang++ HOSTAR=llvm-ar HOSTLD=ld.lld
-> > > >
-> > > > +To simplify the above command, Kbuild supports the ``LLVM`` variable: ::
-> > > > +
-> > > > +       make LLVM=1
-> > > > +
-> > > > +If your LLVM tools are not available in your PATH, you can supply their
-> > > > +location using the LLVM variable with a trailing slash: ::
-> > > > +
-> > > > +       make LLVM=/path/to/llvm/
-> > > > +
-> > > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
-> > >
-> > > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
-> > > works and (my interpretation of what) Masahiro said "if anyone asks
-> > > for this, here's how we could do that."  I don't think I've seen an
-> > > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
-> > > won't hold this patch up over that.  Either way:
-> >
-> > Right, there has not been an explicit ask for the prefix support yet,
-> > although I know I personally would use it, but I think that it is worth
-> > doing now instead of later for a few reasons:
-> >
-> > 1. It makes path goofs easier to spot. If you do
-> >
-> >      $ PATH=/path/to/llvm:$PATH make LLVM=1 ...
-> >
-> >    with a path to LLVM that does not exist (maybe you are bisecting an
-> >    issue and using a temporary build of LLVM and you forgot the path it
-> >    was in), you fall back to the LLVM tools that are in other places in
-> >    your PATH, which is not what the developer intended. I know that I
-> >    have messed up bisects that way. If you did
-> >
-> >      $ make LLVM=/path/to/llvm/
-> >
-> >    with a path that does not exist, there will be an error much earlier:
-> >
-> >      $ make LLVM=/this/path/does/not/exist/ defconfig
-> >      /bin/sh: line 1: /this/path/does/not/exist/clang: No such file or directory
-> >
-> > 2. It does not take that much more code or documentation to support. It
-> >    is the same amount of code as the suffix and the documentation is
-> >    roughly the same amount of lines as well.
-> >
-> > 3. If we wait to implement the path-based use of $(LLVM), we have three
-> >    "sequence" points: the initial support of $(LLVM), the suffix
-> >    support, and the prefix support. As we are constantly working with
-> >    various trees, it would make it harder to know what to use when. If
-> >    we just do it in the same patch, we know 5.18+ can use both of these
-> >    methods.
-> >
-> > However, at the end of the day, we are a team and if you feel like we
-> > should only have suffix support, I am more than happy to push a v3 that
-> > does just that and we can revist prefix support in the future. Just let
-> > me know!
+On Wed, 2 Mar 2022 23:43:23 -0800, Dan Li wrote:
+> Shadow call stacks will be available in GCC >= 12, this patch makes
+> the corresponding kernel configuration available when compiling
+> the kernel with the gcc.
 > 
+> Note that the implementation in GCC is slightly different from Clang.
+> With SCS enabled, functions will only pop x30 once in the epilogue,
+> like:
 > 
-> I do not have a strong opinion about this.
-> (I just mentioned the LLVM=/path/to/llvm/ form because I guessed
-> somebody would request this sooner or later.)
-> 
-> 
-> If you want me to pick up this version, I will apply it with fixing up
-> a nit pointed out by Kees   (": ::" -> "::")
-> 
-> If you want to send v3, that is fine with me as well.
-> 
-> Please let me know your thoughts.
+> [...]
 
-Given Nick's response, please pick up this revision with Kees' nit.
-Thank you!
+I'm taking this one now so it'll make the merge window. We can hammer
+out the lkdtm test after that.
 
-Cheers,
-Nathan
+Applied to for-next/hardening, thanks!
 
-> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > >
-> > > > +
-> > > > +If your LLVM tools have a version suffix and you want to test with that
-> > > > +explicit version rather than the unsuffixed executables like ``LLVM=1``, you
-> > > > +can pass the suffix using the ``LLVM`` variable: ::
-> > > > +
-> > > > +       make LLVM=-14
-> > > > +
-> > > > +which will use ``clang-14``, ``ld.lld-14``, etc.
-> > > > +
-> > > > +``LLVM=0`` is not the same as omitting ``LLVM`` altogether, it will behave like
-> > > > +``LLVM=1``.
-> > >
-> > > Hmm... I can see someone's build wrappers setting LLVM=1, then them
-> > > being surprised that appending LLVM=0 doesn't disable LLVM=1 as they
-> > > might expect.  But Masahiro says let's fix this later which is fine.
-> >
-> > Sure, I guess that is a reasonable case to support. I'll see if I can
-> > come up with something that makes sense after this change lands.
-> >
-> > Cheers,
-> > Nathan
-> 
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
+[1/2] arm64: Add gcc Shadow Call Stack support
+      https://git.kernel.org/kees/c/afcf5441b9ff
+
+-- 
+Kees Cook
+
