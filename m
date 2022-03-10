@@ -2,50 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1744D5054
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 18:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C554D504A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 18:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245342AbiCJRXh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Mar 2022 12:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S244970AbiCJRZN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Mar 2022 12:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245169AbiCJRXO (ORCPT
+        with ESMTP id S245033AbiCJRYo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Mar 2022 12:23:14 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC6199E0D;
-        Thu, 10 Mar 2022 09:22:05 -0800 (PST)
+        Thu, 10 Mar 2022 12:24:44 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558DEA1BD9;
+        Thu, 10 Mar 2022 09:22:57 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id F04C31F45971
+        with ESMTPSA id E857B1F45971
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646932924;
-        bh=i/m/QTnQZtO4pBYr23EP3F44855Vs8iYB2YeC5Sa160=;
+        s=mail; t=1646932976;
+        bh=gPXPrWidsGQRlCs43HiJv+Myai4ltXWpHwdDjvCSozc=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=lQNDzoqQcQHi40W8Q9fdlv96g/Qst7bGRrx7JPFO2XzG8cMyCq2/ljTUvOXR/3h6o
-         Q74NFnvFP+tWixKoVB8+4HgPFZZgqKYQDWyisnA10wrjz2r80y4OmnBBQ0ShSylOq7
-         o/J00VuAaH3/YLLFbNmRIjvHxGL8oXs+VjFpz4UgjCK3hLKefJoTiLNua9luhZT70Z
-         MPSFaZfACdLIC+p5CRmtJmNyiEiTkgOhe5zSuYc9Y6pSXdL0P0nn0tU5ARwrQKceSg
-         mGY8CbJbATym5tGu7VP54KoaA3rfzv5iQ8XOmcQ6wIRKo+JOI7+5AsxhVZuUirgC88
-         sSk+UGbI3Xb4A==
-Message-ID: <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
-Date:   Thu, 10 Mar 2022 22:21:57 +0500
+        b=D7KCtz+d1XXtvDJdwx+LFJMyD4WugzaH3HDWVgQ5/nziZJN3vshphGhKShizooNq8
+         ZZqSlJDbZTViL6fzWiS+818qlsKwYUA027FjZe/FPKnLWk9Drdf5zOYKGalVQwrTru
+         UBC3Ed5ITYvDTmQVs5Dezo7YkBJMmZSlFLDw40mfOlVFGWh/y3+9OK9/oarUdO/xEa
+         10aFlyepIEFKfq9cE9+LmgZwIvbzEtUNSRI+DOfWE0KrFIBQvB5PWxmln3ZxPvZEw0
+         novVsGgc7qzNFJ+u1hlJdi9SM4vj1MpsFvfsGg5yJJld6nGbtCUtvR3dweRdu7yXvf
+         Y7NFdhYELRAhQ==
+Message-ID: <76529762-1a36-142d-0aa9-beb5fa2bb27b@collabora.com>
+Date:   Thu, 10 Mar 2022 22:22:51 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
 Cc:     usama.anjum@collabora.com, Shuah Khan <shuah@kernel.org>,
-        kernel@collabora.com, kernelci@groups.io,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel@collabora.com, kernelci@groups.io,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
- CFI_FORWARD_PROTO
+Subject: Re: [PATCH 2/2] selftests/lkdtm: add config
 Content-Language: en-US
 To:     Kees Cook <keescook@chromium.org>
 References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <202203091122.A51B31230A@keescook>
+ <20220217205620.2512094-2-usama.anjum@collabora.com>
+ <202203091123.33E89F5@keescook>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <202203091122.A51B31230A@keescook>
+In-Reply-To: <202203091123.33E89F5@keescook>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -58,31 +57,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/10/22 12:22 AM, Kees Cook wrote:
-> On Fri, Feb 18, 2022 at 01:56:19AM +0500, Muhammad Usama Anjum wrote:
->> Add config options which are needed for LKDTM sub-tests.
->> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
->> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
->> INIT_ON_FREE_DEFAULT_ON config.
->>
->> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
->> kind. Turn it off for now by default until proper support.
+On 3/10/22 12:23 AM, Kees Cook wrote:
+> On Fri, Feb 18, 2022 at 01:56:20AM +0500, Muhammad Usama Anjum wrote:
+>> Add config option which is needed for SLAB_LINEAR_OVERFLOW test. It
+>> needs KASAN enabled.
 > 
-> Building under LTO Clang on arm64, this is available. What's the right
-> way to add a CONFIG that isn't always available?
-> 
-> -Kees
-Yeah, as you had mentioned
-(https://github.com/kernelci/kernelci-project/issues/84#issuecomment-1042015431):
-
-CFI_FORWARD_PROTO is going to fail unless there is an active CFI system
-in place of some kind. Right now this depends on arm64+Clang. In the
-future, this will be arch-agnostic+Clang, but for the moment, it should
-be safe to exclude this test.
-
-In this patch, I'm turning off CFI_FORWARD_PROTO by default here. We can
-re-enable it when it becomes arch agnostic. CFI_FORWARD_PROTO cannot be
-turned off by using a config. Please let me know your thoughts otherwise.
+> I'd prefer this use the SLAB_DEBUG options -- KASAN is very heavy.
+I'll test it out and update in the next patch version.
 
 -- 
 Muhammad Usama Anjum
