@@ -2,98 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A914D3C7B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Mar 2022 23:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C554D3E43
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Mar 2022 01:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiCIWB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Mar 2022 17:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S233863AbiCJAhl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Mar 2022 19:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbiCIWB2 (ORCPT
+        with ESMTP id S238999AbiCJAhd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 17:01:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5E649C93
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 14:00:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 294CA61B50
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 22:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB8BC340EE;
-        Wed,  9 Mar 2022 22:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646863228;
-        bh=rYHKjAVXwMlDeDIO8VYvj0f4A+ZZbV25BEt2ni6dXO0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lcm9kAu1GCKMB8E/r7nbWpefk8wViLLJJJOhS0i3CoLUI8+wZbWkLiEhZk1AlV5XH
-         NrTOMyrTknv6l0Me6HVYGU+TBEY7VebNlmduL0V0NuBgQOBUFtOH0UiMYc+omMYqId
-         GEb+br+DbkV8f3tWEmvtIHdc+gfbTyX9kUOVMR6gvAJoWwEHkyG6jyUWs6CPneMspr
-         58slyd8wFacY8QP4kUnm9s5kuiuO4m7kINL8Z9Dcx8+bJX5I6y6jUHQwKzWJEYXINj
-         ObDfY1Tk1a2rFI/frbON3A3Nw1d5TGeHe2+z258QofxATKyzYaKf7FFTqe9lyIK8jb
-         ubN8Eo9XC2sUA==
-Date:   Wed, 9 Mar 2022 22:00:23 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] kselftest/arm64: Remove assumption that tasks
- start FPSIMD only
-Message-ID: <Yikjd4s/05G9UFe0@sirena.org.uk>
-References: <20220309115918.22469-1-broonie@kernel.org>
- <20220309115918.22469-3-broonie@kernel.org>
- <5f892a90-6870-001b-d265-885f49a738ce@linuxfoundation.org>
+        Wed, 9 Mar 2022 19:37:33 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC911AA20
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 16:36:33 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id g17so6723743lfh.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 16:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tU+Fe+vcmWYII8bcpQckbuUOYQxVwc8Ms6FjnpeZUXo=;
+        b=L/mvPUr5+ed9/8F1xYBeOkHEQX/N5BqBnxQcWBYwpz8RAerWYK3vG+jQ8UcnJ76O8n
+         Z6F8qP7cE8tNgjablMkD4TSjih/QPIMEsvNLTgmbdeWBRVediWkgAMhZdVVhEgcgGEdK
+         lMZ1J3pO3p0Ql46BLe9TS7msF+0WkJiXc3GEYEhfXxvSABXRpmnJrXBNidzsucgWij7W
+         h71P/xxdG4gMnr+gam3ehpQ7R8zTNQQGhJ/hYPRcyYsfLb7u+8rs0B5WjYUfbEvSpW08
+         3VtCaxMUJjZ5zrZuYEdWuLeNzUmAVqnhioFkV1FhQj3OlGZ8RQb3TRq3538igabd/3yR
+         jrhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tU+Fe+vcmWYII8bcpQckbuUOYQxVwc8Ms6FjnpeZUXo=;
+        b=5V65gq+nYz8fDS0z9/CAK4R2/UQc84FRqSAjyXhJBpMkt1abXYlFLWIyikh9I8EGw3
+         dc4j1hExLz8J4KCfj5SwSLH8pvpEfeVb139/SfLqF4c8+KAr2Cm8PKV7q7wNpOnyunZj
+         1ti9U2lNVwSNSVsSLl7v5TaVGZAKedygGVpgmLNsFmxaiLsAXz8RfbfKkbuqWagGnZkw
+         adgrvMxjczqqlTVcaA3LLfVX3HkSJsFjKxNEf46z2JSCe5BkQjmeW0Z7d+/VKKKPQQ6G
+         APjoUNqUrbrVObVEEfN8726QqZoutRNYBPKWPRx4s0SG/GuGsRkLLu2wMYlbDY02eauz
+         GW8w==
+X-Gm-Message-State: AOAM531t3M5G6Xi8bi7BEEmfSnoJhsBqJ+eV/4zmrGOHOKUILIfWeUoO
+        ojiekq8eho0QOYGu9EaYh/DjAJ+SJJig+rnIJnezug==
+X-Google-Smtp-Source: ABdhPJytXKwI98E3nQqK0BdQ0dFxt9GnezH6c63KyMKM/BPYYzDCKWIjWSo338Qxmgo/66zO3+BC+IAEhGNy/BYPIF4=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr1387380lfl.87.1646872591569; Wed, 09 Mar
+ 2022 16:36:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yjQwSUxe3/Q4PRFt"
-Content-Disposition: inline
-In-Reply-To: <5f892a90-6870-001b-d265-885f49a738ce@linuxfoundation.org>
-X-Cookie: You will inherit millions of dollars.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220304170813.1689186-1-nathan@kernel.org> <CAKwvOd=Q-7vPaRPj1wQagFsY3txcAKzrqU_D2UAX3h4ym91uUA@mail.gmail.com>
+ <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
+In-Reply-To: <Yid6eS7YV4Oxj+hx@dev-arch.thelio-3990X>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 9 Mar 2022 16:36:20 -0800
+Message-ID: <CAKwvOd=0tn3DeqDkKxxk61EvHY9Vb+SnHkXugUmHCMFF_0VVoQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Make $(LLVM) more flexible
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>, llvm@lists.linux.dev,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Mar 8, 2022 at 7:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, Mar 07, 2022 at 11:08:29AM -0800, Nick Desaulniers wrote:
+> > On Fri, Mar 4, 2022 at 9:14 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > +If your LLVM tools are not available in your PATH, you can supply their
+> > > +location using the LLVM variable with a trailing slash: ::
+> > > +
+> > > +       make LLVM=/path/to/llvm/
+> > > +
+> > > +which will use ``/path/to/llvm/clang``, ``/path/to/llvm/ld.lld``, etc.
+> >
+> > I don't think we should do this; `PATH=/path/to/llvm/ make LLVM=1`
+> > works and (my interpretation of what) Masahiro said "if anyone asks
+> > for this, here's how we could do that."  I don't think I've seen an
+> > explicit ask for that. I'd rather LLVM= have 2 behaviors than 3, but I
+> > won't hold this patch up over that.  Either way:
+>
+> Right, there has not been an explicit ask for the prefix support yet,
+> although I know I personally would use it,
 
---yjQwSUxe3/Q4PRFt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Mar 09, 2022 at 02:36:26PM -0700, Shuah Khan wrote:
-> On 3/9/22 4:59 AM, Mark Brown wrote:
-
-> > Currently the sve-ptrace test for setting and reading FPSIMD data assumes
-> > that the child will start off in FPSIMD only mode and that it can use this
-> > to read some FPSIMD mode SVE ptrace data, skipping the test if it can't.
-
-> > -#define FPSIMD_TESTS 3
-> > +#define FPSIMD_TESTS 2
-
-> Looks like there is one less test now?
-
-Yes, the initial read which we assumed would return FPSIMD data was
-being reported as a distinct test.
-
---yjQwSUxe3/Q4PRFt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIpI3YACgkQJNaLcl1U
-h9AyZAf+O8Ql9HLb++q/vJcbZV3qEt8GudXQTmR0hfzaXdom9kdbhlO+5fatHLmv
-HDMPOA4gKp4TUumMJEbd9sUMLbHd6ZdlFaw5ErxcRfr3CNDMrNxPezYjVntoTvo9
-9gOF3xQkJmTlEyDj1sdiRbw1ftUJteT7OCHQPvWQfErXT6t04UxSKWQI95IdFiSX
-KIldIe+hVg0f1hAx6+HjCo4pb+AxlQoh7dRmUb7PsLf2oCILIBJ788cYLsoIkuMx
-InlA0BaZ39ZQ32r4lnrXttYYC61eq73jyMKxbpWTrbBeRaRT8p8n+Yhk+gX8Z2qT
-cvbVlXHNJ4VozE3bhusJkQI3kLD2LA==
-=P4Xn
------END PGP SIGNATURE-----
-
---yjQwSUxe3/Q4PRFt--
+Then let that be reason enough. :)
+-- 
+Thanks,
+~Nick Desaulniers
