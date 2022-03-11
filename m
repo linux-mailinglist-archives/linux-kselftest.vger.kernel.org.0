@@ -2,90 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CEF4D67A6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 18:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A964D6818
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 18:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350783AbiCKRbv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 12:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S232917AbiCKR5i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 12:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350770AbiCKRbu (ORCPT
+        with ESMTP id S232542AbiCKR5i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 12:31:50 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9FC9902;
-        Fri, 11 Mar 2022 09:30:46 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id s11so8373677pfu.13;
-        Fri, 11 Mar 2022 09:30:46 -0800 (PST)
+        Fri, 11 Mar 2022 12:57:38 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107031C1ED3
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 09:56:34 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x5so11795582edd.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 09:56:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b/8G55OzOqdOPe7ewbRDJHazDCpsX+avNi08vKU5HkA=;
-        b=gzjsfC++jDmc81RlDezZ3e0OUo7nQXc/fCO1TYtfk6FGVg60b6gaM0jn/obtZY0yWM
-         Of/Ccp8o5cN6cHgR1HQeULX1IYbG0MzERzGaz3NjNqPndkbqWDjpEYH3g+/vDK/fKhRD
-         pER9a4QQZbIecTfzA1Ol0MDWsTPIH3WgOkIsIqUXsHmovMfaCUme35nJOg56wj3hc0GO
-         gSNvverPnDJ9JEA8x+z+F3Bb0DqAwQRKkUWaCXJGq9jc7EZUqALVOJmCBHorK/hUbhXv
-         J+aw+TUzEZdG8ButQ4aJ+QAwxtHULMiq7UxZMvMmEywuKSOSkkCi9Hq+ZqoFcLuEessJ
-         QEjQ==
+         :cc:content-transfer-encoding;
+        bh=6uqrZCjfvTCf0vt8DbhYIoNyBdrnrfGnyWV6ShUB2vU=;
+        b=Np8v8rOaTexwZ9CowsixK98xvDVR/E2HeNEE9G8HenWAgLG2yemAxpgvVci5J5M9E/
+         ww2D8EpkdwkrLH/I0vWWh9u7qyWvZ4VZaOSsPpHkxHjzl2SNgKnjo/HqG83j30EfsRFV
+         PD3gWWPF3jC2guzLSofGcoOW71gHVlrFct9bgSM6bGnCNsPr1FSNzwngi/ElmXVsS9AG
+         JQq1PLSXqweRV+CbnOgPPQllnqthJEE3BHdv4zqiCfrzRk7z2K5hyu6MUYHRMoNNXeqe
+         XdUc3gi649tmmAnRsMMVQzCJvADluc2wizuISjw8kNhajMhuJQpWa9hsWmwVPWyAC0p0
+         4m/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b/8G55OzOqdOPe7ewbRDJHazDCpsX+avNi08vKU5HkA=;
-        b=k7BDbxqH/Kl57iKCNtipNmBfC3fTznF0ppG0+ZnF4YDJ7tKseT5G1Gr4WOMnawz9gF
-         DmYTXVt+OJH+/6HVm9COkQDWS6IVbVjba7nt1RMGkMj5DIMBzUzLOGkvENJZuTtc5tPk
-         TqxJIs42GGS9KVIeWWSi02Wn3B4l/VatqX88iN+H3EgEuZ2btKSx/yn3sRCO1fPELwBO
-         6br7s7qIzL1jJ7ac+bWEuPHq4Ss8PE1EXhZtvxfAbjklQ1v52EVvM+FyxIHKuDmWtGTc
-         O6HCSoUGZINhLeCt8z9cGx2yK42NR4+Kq2osgbd5riOt+1Oyl7q38Tp7RjzSj6vxbkNZ
-         Pbug==
-X-Gm-Message-State: AOAM531CcrrqtYP9PBhA8idb5ruFqsWiYQwUSgOPg1Cp7dbmtAbP8A7a
-        EtmiK7Te91DVriOrB5JJmstbQarR8iSoLR8U7ZM=
-X-Google-Smtp-Source: ABdhPJwtZAS4uEz31pZlqlmM9COGPd6xb6eeF9Q+qu7aBAfoh/XIpWQ8eMjuTPwyoOD0QOBtHtid81WoayDQ9kj1Vvw=
-X-Received: by 2002:a63:6809:0:b0:37c:68d3:1224 with SMTP id
- d9-20020a636809000000b0037c68d31224mr9127795pgc.287.1647019846156; Fri, 11
- Mar 2022 09:30:46 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6uqrZCjfvTCf0vt8DbhYIoNyBdrnrfGnyWV6ShUB2vU=;
+        b=GQs4FXH3+9idtCrosqJXkqqlbKmzAcXAR3LlX3rxqW3O0VKR1NnAfwShyfj/+ypRcj
+         MqzvYI3hXjmTHtXYerZjPOykCGSVE1ZlKBcuKvEqYSETTsXtWZgCh/aG/b1IpisMSytY
+         QWHSCgzNtUkDjY9oc36hUia8mhRKE9IoZtHw8jvuCL5FJzQelQPylOnw5VTKgdV4OQ7m
+         59uUH78mDepo4ah3/VoxoLxWwXWvgxjmvYHGhHB/TNlDEUqhp/b+5tOB3eJyWR0UGRvo
+         im2P+RT7W2Apdj041wAlEy32RKf12QRmAI66I0F51fEGbNmOt8EIbl0CZGqm4Oq5aqMu
+         Q4fw==
+X-Gm-Message-State: AOAM530osVYTggIMGYeSHXHS6N80I9Rzdvr3Pn+7S/WOS+GkLUmW6UZh
+        UNtPi5WQ6AMBFHGRj1GlS3BoLMFMR45S2FPTrHpwXw==
+X-Google-Smtp-Source: ABdhPJwYY3OG4OM3NNI/L0bMert1EmCD8hdhav4/Wgf4KNE3snW+GGxbN3UYDTLUSIImyQRJ8LcMXpAFS/L8po/gON4=
+X-Received: by 2002:a05:6402:3490:b0:416:8b97:b1f7 with SMTP id
+ v16-20020a056402349000b004168b97b1f7mr9808627edc.36.1647021392341; Fri, 11
+ Mar 2022 09:56:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224151145.355355-1-maximmi@nvidia.com> <20220224151145.355355-5-maximmi@nvidia.com>
- <20220227032519.2pgbfassbxbkxjsn@ast-mbp.dhcp.thefacebook.com> <DM4PR12MB51509E0F9B1D2846969A6A72DC0C9@DM4PR12MB5150.namprd12.prod.outlook.com>
-In-Reply-To: <DM4PR12MB51509E0F9B1D2846969A6A72DC0C9@DM4PR12MB5150.namprd12.prod.outlook.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 11 Mar 2022 09:30:35 -0800
-Message-ID: <CAADnVQL-44zw3MvyuCNm6fn5K6m8hnzYmXWJbBF3aXrLKQFLVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/5] bpf: Add helpers to issue and check SYN
- cookies in XDP
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>
+References: <20220310210210.2124637-1-brendanhiggins@google.com>
+ <Yirz/hbo4K9zN9Ht@google.com> <CAFmMkTFa9xVt314WEGd0nNx+ovc=aGB_yN1LorP7WrBga9quxw@mail.gmail.com>
+In-Reply-To: <CAFmMkTFa9xVt314WEGd0nNx+ovc=aGB_yN1LorP7WrBga9quxw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 11 Mar 2022 11:56:20 -0600
+Message-ID: <CAGS_qxqHhGEYS_4C-gTmPt_d3Fm==VOTEzQGggWh6MWppTHtZQ@mail.gmail.com>
+Subject: Re: [RFC v1] kunit: add support for kunit_suites that reference init code
+To:     Daniel Gutson <daniel.gutson@eclypsium.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,41 +73,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 8:36 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+On Fri, Mar 11, 2022 at 4:14 AM Daniel Gutson
+<daniel.gutson@eclypsium.com> wrote:
 >
-> > -----Original Message-----
-> > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > Sent: 27 February, 2022 05:25
-> >
-> > On Thu, Feb 24, 2022 at 05:11:44PM +0200, Maxim Mikityanskiy wrote:
-> > > @@ -7798,6 +7916,14 @@ xdp_func_proto(enum bpf_func_id func_id, const
-> > struct bpf_prog *prog)
-> > >             return &bpf_tcp_check_syncookie_proto;
-> > >     case BPF_FUNC_tcp_gen_syncookie:
-> > >             return &bpf_tcp_gen_syncookie_proto;
-> > > +   case BPF_FUNC_tcp_raw_gen_syncookie_ipv4:
-> > > +           return &bpf_tcp_raw_gen_syncookie_ipv4_proto;
-> > > +   case BPF_FUNC_tcp_raw_gen_syncookie_ipv6:
-> > > +           return &bpf_tcp_raw_gen_syncookie_ipv6_proto;
-> > > +   case BPF_FUNC_tcp_raw_check_syncookie_ipv4:
-> > > +           return &bpf_tcp_raw_check_syncookie_ipv4_proto;
-> > > +   case BPF_FUNC_tcp_raw_check_syncookie_ipv6:
-> > > +           return &bpf_tcp_raw_check_syncookie_ipv6_proto;
-> > >  #endif
-> >
-> > I understand that the main use case for new helpers is XDP specific,
-> > but why limit them to XDP?
-> > The feature looks generic and applicable to skb too.
 >
-> That sounds like an extra feature, rather than a limitation. That's out
-> of scope of what I planned to do.
 >
-> Besides, it sounds kind of useless to me, because the intention of the
-> new helpers is to accelerate synproxy, and I doubt BPF over SKBs will
-> accelerate anything. Maybe someone else has another use case for these
-> helpers and SKBs - in that case I leave the opportunity to add this
-> feature up to them.
+> El vie., 11 mar. 2022 4:02 a. m., David Gow <davidgow@google.com> escribi=
+=C3=B3:
+>>
+>> On Thu, Mar 10, 2022 at 01:02:10PM -0800, Brendan Higgins wrote:
+>> > Add support for a new kind of kunit_suite registration macro called
+>> > kunit_test_init_suite(); this new registration macro allows the
+>> > registration of kunit_suites that reference functions marked __init an=
+d
+>> > data marked __initdata.
+>> >
+>> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+>> > ---
+>> >
+>> > This patch is in response to a KUnit user issue[1] in which the user w=
+as
+>> > attempting to test some init functions; although this is a functional
+>> > solution as long as KUnit tests only run during the init phase, we wil=
+l
+>> > need to do more work if we ever allow tests to run after the init phas=
+e
+>> > is over; it is for this reason that this patch adds a new registration
+>> > macro rather than simply modifying the existing macros.
+>> >
+>> > [1] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
+>> >
+>> > ---
+>>
+>> I'm a little concerned that this is just removing the warnings, but do
+>> agree that this is safe enough for the moment. At least the information
+>> about which tests need __init is preserved by the use of a different
+>> macro.
+>>
+>> I guess one day we'll need a second list of 'init' tests or something...
+>
+>
+> Hi, could you please detail about this? Why a second list?
+>
 
-This patchset will not be accepted until the feature is generalized
-to both xdp and skb and tested for both.
-"I dont have a use case for it" is not an excuse to narrow down the scope.
+I assume this is referring to a future where we want to run tests
+_after_ the init phase.
+In that case, we'd need to be able to separately register tests that
+run during and those that run after.
+(Or we could have one list and just tag each suite as init/post-init.
+If we ever had >2 "phases" where we run tests, this might be the more
+scalable option)
+
+Is it likely we'd have tests run after?
+Not in the near future, I don't think. But it could be asked for.
+
+For context, here's where built-in KUnit tests currently run:
+https://elixir.bootlin.com/linux/v5.17-rc7/source/init/main.c#L1615
+That'd probably become kunit_run_init_tests() and then we'd have
+another kunit_run_post_init_tests() called later, or something.
