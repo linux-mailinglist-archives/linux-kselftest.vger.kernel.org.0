@@ -2,535 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449D04D6655
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501FF4D6672
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344223AbiCKQ3t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 11:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
+        id S1350380AbiCKQhY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 11:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350558AbiCKQ14 (ORCPT
+        with ESMTP id S1345690AbiCKQhX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:27:56 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10B51D529E;
-        Fri, 11 Mar 2022 08:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1647015977;
-  x=1678551977;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mFUerXsYecLMbfF90aqK9kLZr/AsxHAsijhoN1YRpYE=;
-  b=E51iE8mo73xG45s6o3lJCeIESUQx03qmsA4jvTlpN/FHgFnYzLtCciuI
-   Y6u1gU0icDErxJ2e2SImtEqMYiNTSORUH9gYBXKzOAm9P7fZdi2oqIp1l
-   HLwS2c0pNDcGSaDm81ETNrSS48V6zCfIhbU+uFWYMgu6DCZpD8RRgVlHi
-   8cytBP8KeYjKt5tDr05GrWzPsISpKGijhvh9DeKsZRbp3doArhMzSb+PW
-   8hAug48G7Q9h16Q5sblPxP0BnHO/+6QcEDImzdBiwWeFNYN9vhcbIP24V
-   9lHRLDgrb4yX3QY9tpCf4JfGJQm0tGgg5C6eix/HVJoaMzeP4ICUmZIz8
-   w==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
-        <shuah@kernel.org>, <brendanhiggins@google.com>,
-        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
-        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
-        <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-Subject: [RFC v1 10/10] rtc: pcf8563: add roadtest
-Date:   Fri, 11 Mar 2022 17:24:45 +0100
-Message-ID: <20220311162445.346685-11-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220311162445.346685-1-vincent.whitchurch@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+        Fri, 11 Mar 2022 11:37:23 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2063.outbound.protection.outlook.com [40.107.101.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41471C65C7;
+        Fri, 11 Mar 2022 08:36:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CPThfuVR7mYc3wnD5T7jgXIPbJcp1diWGHZm867vDlo/2HzNdftLB/X1+5+gQvHGLqVIBg/EiMzQsuYSrpDGM3KPhhI6CTqVkTlh86t9VYcfFD01LHDmwenxdhXQMV1/YFZPnZWqGKIA5KAadO31uHLplRrDW9rKhf/E97yluBc+EWNuDCHK2ojK0NQrlDZRBcp4EoYpNny2WRvNxA8S54u+TT5TPCpMwITKIbGDUMN0KLmi0AZzq0kQp2E2dfaJ72LO9COJSCaVZEdLSdmtzC+rYhaeiuzAeQKKQvoPNje2rRH1ti7TJ9mYrzQVPab6aSLt7YWxN5YO4h/Vs3Jiow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/sRSyxSBF+rGJOFVLtA6y1NsBb34l/EdkieaiqUgcEs=;
+ b=KdcLnSGL44oEyhYHHOezdt2ejxWc+rYkhxr5mfDvy24tSawd8CxnCCe+RcQZ5Oz4Fhos+THpiDR3IGyPrjKgvJvoS2OIPUKqarD6j3w/EytB3WNsWnNqwL6N4jelE0fxvqNZN5aAWhT+w/G4Klx0gUsicE+QZjFl6S8xR/vzaQTo19KJM2KygE98xVXnoXyWhM60HWtBmVYnwWPJt3xTrZhI4XY2WIJyz5nMvS2+VasVN4K6dzzeFSQngYZUgiaxZPODpfdhIyvwcTWAhzomHzo3kyRW7ZCgex1uQvKUpc9VyF6jJCHd4vxvh4n48mgS/NehlwjT/XXwdkxN13UFYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/sRSyxSBF+rGJOFVLtA6y1NsBb34l/EdkieaiqUgcEs=;
+ b=K1JfwAXKMeYINMv11wKdNyjkszNDVySCAuGwRjEaJUh4kRI2sw92KXyI8L+STvOPMdCQ3GbobKXKVuRJ7I/jWz2y7NtTr78Txzp0o897GFj/BplUtp3cISAutmiZ78+gsRPZxsQjrrT8aG6WFq0M/LTbXccBhHVFA50Xt2nb2WDAYcPoAKdSfXH8KvXvfbEfX7e2vALtzyK8EnvHDVwGhv+O25CcQu0/zAnnSB0u3+yFMSPPaZu+7COhDOHIiGTxDgZlmhKAQK2tMegpoTS8Jj6n6y6ltYH0UiXVr6IUq3N8Bt2C1XZJ2ERDW1uxxzTUux5Owikydlz03dkwDy2lkw==
+Received: from DM4PR12MB5150.namprd12.prod.outlook.com (2603:10b6:5:391::23)
+ by BN8PR12MB3073.namprd12.prod.outlook.com (2603:10b6:408:66::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Fri, 11 Mar
+ 2022 16:36:19 +0000
+Received: from DM4PR12MB5150.namprd12.prod.outlook.com
+ ([fe80::698a:be42:9ca2:bb4f]) by DM4PR12MB5150.namprd12.prod.outlook.com
+ ([fe80::698a:be42:9ca2:bb4f%6]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
+ 16:36:19 +0000
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        =?iso-8859-1?Q?Toke_H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>
+Subject: RE: [PATCH bpf-next v3 4/5] bpf: Add helpers to issue and check SYN
+ cookies in XDP
+Thread-Topic: [PATCH bpf-next v3 4/5] bpf: Add helpers to issue and check SYN
+ cookies in XDP
+Thread-Index: AQHYKZEIZ876oRailk6qPfc0r7EgGKymwCiAgBOy65A=
+Date:   Fri, 11 Mar 2022 16:36:19 +0000
+Message-ID: <DM4PR12MB51509E0F9B1D2846969A6A72DC0C9@DM4PR12MB5150.namprd12.prod.outlook.com>
+References: <20220224151145.355355-1-maximmi@nvidia.com>
+ <20220224151145.355355-5-maximmi@nvidia.com>
+ <20220227032519.2pgbfassbxbkxjsn@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220227032519.2pgbfassbxbkxjsn@ast-mbp.dhcp.thefacebook.com>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 41d42446-aa09-45fe-9df0-08da037d451b
+x-ms-traffictypediagnostic: BN8PR12MB3073:EE_
+x-microsoft-antispam-prvs: <BN8PR12MB3073CAFD1A77938AC114145ADC0C9@BN8PR12MB3073.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 30+RKP7EDPawnCmdB78T9+WU2a2lAE8kagY8HPRFmAWosX/bywPU6TZB4s2lO6ax3woQOIw+VY5W+OZ58qt2+vldH9qwHYNqToId5P+T4Nsi1QzzqrF6HQfZbfyg4xyQIjIcbKRfnVRj6xYwgIarAsHaikepnbTdHDn4BKBrsn0z3Dg36O2gDYn7XmMjq79yEJ05j5jTER7V4tkHNSqNuPGFJDPycps4+UDx9BtYWxDbR+GDQL4bsbK3fXNbKvqVNDimVKldTKMyG2YUcbIXaNEyelVaBjEw/8L3GE/HVgnfUrztxeMyNP9U54ls2s7dDE2jPULw6hLfdR5/Zx0wZFNTQEPzuqGXwAfkfxg5Fi+diTcPeJ24TVBSrIsMfZF5FE9K0B2+ZmPs94S55ULTT5IvbPM9TfzmGpaRHphjgoZsLcKegXBXHN/TP/L4ItTSEtUYy9xQtgLPo6mSied3QVpxwlOcjiduHfo+I8JHrbVCDiX6ra+oQJf6BKcOknGSYTMQqD+Rk1E4BUcSvPfhLnvKlAc1xmjIW9exx4Dhq0WWZKxq4DLGYx89iWsn+svAd3Vuj8lpfLkjIPH8q3UQgDL9lZUzr7iWuxSTjFxNQsJpcIU/8jww7A+4B6VlkqyrY7IsUvMi1nrgALnPqsq2znLW7M8GIpCdZv/b0Lw0579I89KIScoOM2dBvdXW/FXV9AKSffTRNSdwmQGieZxWew==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5150.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(2906002)(76116006)(54906003)(508600001)(6916009)(9686003)(38100700002)(6506007)(316002)(71200400001)(38070700005)(7416002)(122000001)(64756008)(66446008)(66476007)(5660300002)(26005)(186003)(55016003)(66556008)(66946007)(8676002)(52536014)(33656002)(83380400001)(86362001)(4326008)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?u6P5aigl06wQUKLhau4RfjS6E+fTDJkreI77sEUowMwWGosNkr790jXgyy?=
+ =?iso-8859-1?Q?toyQ06BlHIm7VBzT82nU520FyndHg4bq++oi3rEFRxuEZcmS3n8ooawzN0?=
+ =?iso-8859-1?Q?AVvHxPRbejL8qrl603nvuMP/ujCC0SZoC2sbK4ZT0T26ZTdhcX7McenkfV?=
+ =?iso-8859-1?Q?LBC1lpWTJYrancvE9ZnT3cTLc5nYPbbHaKLEe+DiIvBPTcE3w5lRnVa9nQ?=
+ =?iso-8859-1?Q?0Vq22Q3QnqKvBtZ8TrHiPb8TZDpApvQfObb8nvbpno6otNAInTsIYb2V9z?=
+ =?iso-8859-1?Q?DxKlt6QZ2+hHNk2NM0J9msipkuC3YGkuJTFTR/PF6m84dY6VjZGT11eSXt?=
+ =?iso-8859-1?Q?S51MgISJFizSo1t24uNK/3FfECT/uqeyhqDBv6qsI5Wftl1A5i1Tpz0XG4?=
+ =?iso-8859-1?Q?9U/MeCFhWXhT8d769tBA97iR5kiGyJBVk8Vb2m8wbps90uBDHrw6eklRDG?=
+ =?iso-8859-1?Q?el5xsslKuhM/qj4LLmM5kMasvMvd/8UN4PIZ2RFX5h8f5sg9EhG9ZGg0b5?=
+ =?iso-8859-1?Q?wL829oY9Loz+5KwDY9kvmlhI3VNSlI42lOvmxlElg5Hbigjo+5M1ceARXd?=
+ =?iso-8859-1?Q?HmKmthz/bfub0iBxlQ8yLbs4x206lFUeS7leoJ1QVFqSz1t0JeD8inqBSV?=
+ =?iso-8859-1?Q?auHLlvLBKnrHyadCkYDXWanmpPRtg84WN8/Jnfz16SD+eLVpaJLaYPkGYF?=
+ =?iso-8859-1?Q?BibLAd31AClUF1JVs0UfkpSR/+61cZvHSCfZ3gSUYdhr2iwlFkPLGj9rML?=
+ =?iso-8859-1?Q?tD8eMCt3o6+Wi9lYZpxOcmtfc6G1xo+8cQMcrkzEuMRPmclYzgbpx+lNYx?=
+ =?iso-8859-1?Q?Coi192A8QW+U5L31/hilWEnfh/hFB1I8oZFH6GV5+sciuvwEw0tR8b1T6S?=
+ =?iso-8859-1?Q?ICsrY/yeWDWLnm7kNkFThn/qvZU0rPkEmMGZn53eK28JtHFGC5dbZwZDgf?=
+ =?iso-8859-1?Q?+loHlLsKwwk8vb6H8WN+Fs6nTpJbBg9ItFBdTm5EIFWjhJdGeOpxFjM9AK?=
+ =?iso-8859-1?Q?qGrduCWFwM/iDTaerch+vbX+bGDzayvmZCpdt4Fx1rcZzuPPhrHhOBgDj4?=
+ =?iso-8859-1?Q?JBPScwoDc5tyD4Gr195oB/15V3viO7Era50YP3K7aKmfTgneqjnZZxIZFV?=
+ =?iso-8859-1?Q?vBHZ3Dvv2IpvIyHrCTKIhxoG5gJ1PLx39LaC31yrU14we79v7TjaSuWYfP?=
+ =?iso-8859-1?Q?y7A3VoDIlEQjuev9WPRbqMvmPfQh0bArJ89UxMnVTBSEO+IGg9j0ePTMQU?=
+ =?iso-8859-1?Q?Mwms5O9xYgwaG+wYbDu9zVjnTHgQ63ElCW5rnTbCaVzgUXPCBmOq7fW1Aq?=
+ =?iso-8859-1?Q?uf/blsfnEBK2ypjFSxrx12yiQaZ8g7RkE0LMQodcUpZ2H5QZ4Dmf/6tfNN?=
+ =?iso-8859-1?Q?OQaWwuWCu0jGA27KGSinhLlue5ctxw4sIMF+Bd9C4TgSAjsUIQ9SS6dyj4?=
+ =?iso-8859-1?Q?+JAPno9it20r6jeDI254QGQRpQCREaeOYn4Xs8KERlqzka0QsWfaRx1tpm?=
+ =?iso-8859-1?Q?mxiCbAyRPIwYzdLS5nlnRd?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5150.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41d42446-aa09-45fe-9df0-08da037d451b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2022 16:36:19.0329
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6uPJHMFkDkr+KIIQRFFfJgnwsDLb+IaQwUfZBMCQYTf6aY0K0r1zyU0ziGzuFNLk20kCLwmXou9dU9xMhJNQOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3073
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a roadtest for the PCF8563 RTC driver, testing many of the features
-including alarm and invalid time handling.  Since it's the first
-roadtest for RTC, some helper code for handling the ABI is included.
+> -----Original Message-----
+> From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Sent: 27 February, 2022 05:25
+>=20
+> On Thu, Feb 24, 2022 at 05:11:44PM +0200, Maxim Mikityanskiy wrote:
+> > @@ -7798,6 +7916,14 @@ xdp_func_proto(enum bpf_func_id func_id, const
+> struct bpf_prog *prog)
+> >  		return &bpf_tcp_check_syncookie_proto;
+> >  	case BPF_FUNC_tcp_gen_syncookie:
+> >  		return &bpf_tcp_gen_syncookie_proto;
+> > +	case BPF_FUNC_tcp_raw_gen_syncookie_ipv4:
+> > +		return &bpf_tcp_raw_gen_syncookie_ipv4_proto;
+> > +	case BPF_FUNC_tcp_raw_gen_syncookie_ipv6:
+> > +		return &bpf_tcp_raw_gen_syncookie_ipv6_proto;
+> > +	case BPF_FUNC_tcp_raw_check_syncookie_ipv4:
+> > +		return &bpf_tcp_raw_check_syncookie_ipv4_proto;
+> > +	case BPF_FUNC_tcp_raw_check_syncookie_ipv6:
+> > +		return &bpf_tcp_raw_check_syncookie_ipv6_proto;
+> >  #endif
+>=20
+> I understand that the main use case for new helpers is XDP specific,
+> but why limit them to XDP?
+> The feature looks generic and applicable to skb too.
 
-The following fixes were posted for problems identified during
-development of these tests:
+That sounds like an extra feature, rather than a limitation. That's out
+of scope of what I planned to do.
 
- - rtc: fix use-after-free on device removal
-   https://lore.kernel.org/lkml/20211210160951.7718-1-vincent.whitchurch@axis.com/
-
- - rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
-   https://lore.kernel.org/lkml/20220301131220.4011810-1-vincent.whitchurch@axis.com/
-
- - rtc: pcf8523: fix alarm interrupt disabling
-   https://lore.kernel.org/lkml/20211103152253.22844-1-vincent.whitchurch@axis.com/
-   (not the same hardware/driver, but this was the original target for
-    test development)
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- .../roadtest/roadtest/tests/rtc/__init__.py   |   0
- .../roadtest/roadtest/tests/rtc/config        |   1 +
- .../roadtest/roadtest/tests/rtc/rtc.py        |  73 ++++
- .../roadtest/tests/rtc/test_pcf8563.py        | 348 ++++++++++++++++++
- 4 files changed, 422 insertions(+)
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
-
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/__init__.py b/tools/testing/roadtest/roadtest/tests/rtc/__init__.py
-new file mode 100644
-index 000000000000..e69de29bb2d1
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/config b/tools/testing/roadtest/roadtest/tests/rtc/config
-new file mode 100644
-index 000000000000..f3654f9d7c19
---- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/rtc/config
-@@ -0,0 +1 @@
-+CONFIG_RTC_DRV_PCF8563=m
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/rtc.py b/tools/testing/roadtest/roadtest/tests/rtc/rtc.py
-new file mode 100644
-index 000000000000..1a2855bfc195
---- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/rtc/rtc.py
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright Axis Communications AB
-+
-+import contextlib
-+import fcntl
-+import struct
-+import typing
-+from pathlib import Path
-+from typing import Any, cast
-+
-+RTC_RD_TIME = 0x80247009
-+RTC_SET_TIME = 0x4024700A
-+RTC_WKALM_SET = 0x4028700F
-+RTC_VL_READ = 0x80047013
-+
-+RTC_IRQF = 0x80
-+RTC_AF = 0x20
-+
-+RTC_VL_DATA_INVALID = 1 << 0
-+
-+
-+class RTCTime(typing.NamedTuple):
-+    tm_sec: int
-+    tm_min: int
-+    tm_hour: int
-+    tm_mday: int
-+    tm_mon: int
-+    tm_year: int
-+    tm_wday: int
-+    tm_yday: int
-+    tm_isdst: int
-+
-+
-+class RTC(contextlib.AbstractContextManager):
-+    def __init__(self, devpath: Path) -> None:
-+        rtc = next(devpath.glob("rtc/rtc*")).name
-+        self.filename = f"/dev/{rtc}"
-+
-+    def __enter__(self) -> "RTC":
-+        self.file = open(self.filename, "rb")
-+        return self
-+
-+    def __exit__(self, *_: Any) -> None:
-+        self.file.close()
-+
-+    def read_time(self) -> RTCTime:
-+        s = struct.Struct("9i")
-+        buf = bytearray(s.size)
-+        fcntl.ioctl(self.file.fileno(), RTC_RD_TIME, buf)
-+        return RTCTime._make(s.unpack(buf))
-+
-+    def set_time(self, tm: RTCTime) -> int:
-+        s = struct.Struct("9i")
-+        buf = bytearray(s.size)
-+        s.pack_into(buf, 0, *tm)
-+        return fcntl.ioctl(self.file.fileno(), RTC_SET_TIME, buf)
-+
-+    def set_wake_alarm(self, enabled: bool, time: RTCTime) -> int:
-+        s = struct.Struct("2B9i")
-+        buf = bytearray(s.size)
-+        s.pack_into(buf, 0, enabled, False, *time)
-+        return fcntl.ioctl(self.file.fileno(), RTC_WKALM_SET, buf)
-+
-+    def read(self) -> int:
-+        s = struct.Struct("L")
-+        buf = self.file.read(s.size)
-+        return cast(int, s.unpack(buf)[0])
-+
-+    def read_vl(self) -> int:
-+        s = struct.Struct("I")
-+        buf = bytearray(s.size)
-+        fcntl.ioctl(self.file.fileno(), RTC_VL_READ, buf)
-+        return cast(int, s.unpack(buf)[0])
-diff --git a/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py b/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
-new file mode 100644
-index 000000000000..a9f4c6d92762
---- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
-@@ -0,0 +1,348 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright Axis Communications AB
-+
-+import errno
-+import logging
-+from typing import Any, Final, Optional
-+
-+from roadtest.backend.i2c import I2CModel
-+from roadtest.core.devicetree import DtFragment, DtVar
-+from roadtest.core.hardware import Hardware
-+from roadtest.core.modules import insmod
-+from roadtest.core.suite import UMLTestCase
-+from roadtest.core.sysfs import I2CDriver
-+
-+from . import rtc
-+
-+logger = logging.getLogger(__name__)
-+
-+REG_CONTROL_STATUS_1: Final = 0x00
-+REG_CONTROL_STATUS_2: Final = 0x01
-+REG_VL_SECONDS: Final = 0x02
-+REG_VL_MINUTES: Final = 0x03
-+REG_VL_HOURS: Final = 0x04
-+REG_VL_DAYS: Final = 0x05
-+REG_VL_WEEKDAYS: Final = 0x06
-+REG_VL_CENTURY_MONTHS: Final = 0x07
-+REG_VL_YEARS: Final = 0x08
-+REG_VL_MINUTE_ALARM: Final = 0x09
-+REG_VL_HOUR_ALARM: Final = 0x0A
-+REG_VL_DAY_ALARM: Final = 0x0B
-+REG_VL_WEEKDAY_ALARM: Final = 0x0C
-+REG_CLKOUT_CONTROL: Final = 0x0D
-+REG_TIMER_CONTROL: Final = 0x0E
-+REG_TIMER: Final = 0x0F
-+
-+REG_CONTROL_STATUS_2_AIE: Final = 1 << 1
-+REG_CONTROL_STATUS_2_AF: Final = 1 << 3
-+
-+REG_VL_CENTURY_MONTHS_C: Final = 1 << 7
-+
-+REG_VL_ALARM_AE: Final = 1 << 7
-+
-+
-+class PCF8563(I2CModel):
-+    def __init__(self, int: Optional[int] = None, **kwargs: Any) -> None:
-+        super().__init__(**kwargs)
-+        self.int = int
-+        self._set_int(False)
-+
-+        self.reg_addr = 0
-+        # Reset values from Table 27 in datasheet, with X and - bits set to 0
-+        self.regs = {
-+            REG_CONTROL_STATUS_1: 0b_0000_1000,
-+            REG_CONTROL_STATUS_2: 0b_0000_0000,
-+            REG_VL_SECONDS: 0b_1000_0000,
-+            REG_VL_MINUTES: 0b_0000_0000,
-+            REG_VL_HOURS: 0b_0000_0000,
-+            REG_VL_DAYS: 0b_0000_0000,
-+            REG_VL_WEEKDAYS: 0b_0000_0000,
-+            REG_VL_CENTURY_MONTHS: 0b_0000_0000,
-+            REG_VL_YEARS: 0b_0000_0000,
-+            REG_VL_MINUTE_ALARM: 0b_1000_0000,
-+            REG_VL_HOUR_ALARM: 0b_1000_0000,
-+            REG_VL_DAY_ALARM: 0b_1000_0000,
-+            REG_VL_WEEKDAY_ALARM: 0b_1000_0000,
-+            REG_CLKOUT_CONTROL: 0b_1000_0000,
-+            REG_TIMER_CONTROL: 0b_0000_0011,
-+            REG_TIMER: 0b_0000_0000,
-+        }
-+
-+    def _set_int(self, active: int) -> None:
-+        # Active-low
-+        self.backend.gpio.set(self.int, not active)
-+
-+    def _check_alarm(self, addr: int) -> None:
-+        alarmregs = [
-+            REG_VL_MINUTE_ALARM,
-+            REG_VL_HOUR_ALARM,
-+            REG_VL_DAY_ALARM,
-+            REG_VL_WEEKDAY_ALARM,
-+        ]
-+        timeregs = [
-+            REG_VL_MINUTES,
-+            REG_VL_HOURS,
-+            REG_VL_DAYS,
-+            REG_VL_WEEKDAYS,
-+        ]
-+
-+        if addr not in alarmregs + timeregs:
-+            return
-+
-+        af = all(
-+            self.regs[a] == self.regs[b]
-+            for a, b in zip(alarmregs, timeregs)
-+            if not self.regs[a] & REG_VL_ALARM_AE
-+        )
-+        self.reg_write(REG_CONTROL_STATUS_2, self.regs[REG_CONTROL_STATUS_2] | af << 3)
-+
-+    def _update_irq(self) -> None:
-+        aie = self.regs[REG_CONTROL_STATUS_2] & REG_CONTROL_STATUS_2_AIE
-+        af = self.regs[REG_CONTROL_STATUS_2] & REG_CONTROL_STATUS_2_AF
-+
-+        logger.debug(f"{aie=} {af=}")
-+        self._set_int(aie and af)
-+
-+    def reg_read(self, addr: int) -> int:
-+        val = self.regs[addr]
-+        return val
-+
-+    def reg_write(self, addr: int, val: int) -> None:
-+        assert addr in self.regs
-+        self.regs[addr] = val
-+        logger.debug(f"{addr=:x} {val=:x}")
-+        self._check_alarm(addr)
-+        self._update_irq()
-+
-+    def read(self, len: int) -> bytes:
-+        data = bytearray(len)
-+
-+        for i in range(len):
-+            data[i] = self.reg_read(self.reg_addr)
-+            self.reg_addr = self.reg_addr + 1
-+
-+        return bytes(data)
-+
-+    def write(self, data: bytes) -> None:
-+        self.reg_addr = data[0]
-+
-+        for i, byte in enumerate(data[1:]):
-+            addr = self.reg_addr + i
-+            self.backend.mock.reg_write(addr, byte)
-+            self.reg_write(addr, byte)
-+
-+
-+class TestPCF8563(UMLTestCase):
-+    dts = DtFragment(
-+        src="""
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&i2c {
-+    rtc@$addr$ {
-+        compatible = "nxp,pcf8563";
-+        reg = <0x$addr$>;
-+    };
-+
-+    rtc@$irqaddr$ {
-+        compatible = "nxp,pcf8563";
-+        reg = <0x$irqaddr$>;
-+        interrupt-parent = <&gpio>;
-+        interrupts = <$gpio$ IRQ_TYPE_LEVEL_LOW>;
-+    };
-+};
-+        """,
-+        variables={
-+            "addr": DtVar.I2C_ADDR,
-+            "irqaddr": DtVar.I2C_ADDR,
-+            "gpio": DtVar.GPIO_PIN,
-+        },
-+    )
-+
-+    @classmethod
-+    def setUpClass(cls) -> None:
-+        insmod("rtc-pcf8563")
-+
-+    @classmethod
-+    def tearDownClass(cls) -> None:
-+        # Can't rmmod since alarmtimer holds permanent reference
-+        pass
-+
-+    def setUp(self) -> None:
-+        self.driver = I2CDriver("rtc-pcf8563")
-+        self.hw = Hardware("i2c")
-+        self.hw.load_model(PCF8563, int=self.dts["gpio"])
-+
-+    def tearDown(self) -> None:
-+        self.hw.close()
-+
-+    def test_read_time_invalid(self) -> None:
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            self.assertEqual(rtcdev.read_vl(), rtc.RTC_VL_DATA_INVALID)
-+
-+            with self.assertRaises(OSError) as cm:
-+                rtcdev.read_time()
-+            self.assertEqual(cm.exception.errno, errno.EINVAL)
-+
-+    def test_no_alarm_support(self) -> None:
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            # Make sure the times are valid so we don't get -EINVAL due to
-+            # that.
-+            tm = rtc.RTCTime(
-+                tm_sec=10,
-+                tm_min=1,
-+                tm_hour=1,
-+                tm_mday=1,
-+                tm_mon=0,
-+                tm_year=121,
-+                tm_wday=0,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+            rtcdev.set_time(tm)
-+
-+            alarmtm = tm._replace(tm_sec=0, tm_min=2)
-+            with self.assertRaises(OSError) as cm:
-+                rtcdev.set_wake_alarm(True, alarmtm)
-+            self.assertEqual(cm.exception.errno, errno.EINVAL)
-+
-+    def test_alarm(self) -> None:
-+        addr = self.dts["irqaddr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            tm = rtc.RTCTime(
-+                tm_sec=10,
-+                tm_min=1,
-+                tm_hour=1,
-+                tm_mday=1,
-+                tm_mon=0,
-+                tm_year=121,
-+                tm_wday=5,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+            rtcdev.set_time(tm)
-+
-+            alarmtm = tm._replace(tm_sec=0, tm_min=2)
-+            rtcdev.set_wake_alarm(True, alarmtm)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_last_reg_write(self, REG_VL_MINUTE_ALARM, 0x02)
-+            mock.assert_last_reg_write(self, REG_VL_HOUR_ALARM, 0x01)
-+            mock.assert_last_reg_write(self, REG_VL_DAY_ALARM, 0x01)
-+            mock.assert_last_reg_write(self, REG_VL_WEEKDAY_ALARM, 5)
-+            mock.assert_last_reg_write(
-+                self, REG_CONTROL_STATUS_2, REG_CONTROL_STATUS_2_AIE
-+            )
-+            mock.reset_mock()
-+
-+            self.hw.reg_write(REG_VL_MINUTES, 0x02)
-+            self.hw.kick()
-+
-+            # This waits for the interrupt
-+            self.assertEqual(rtcdev.read() & 0xFF, rtc.RTC_IRQF | rtc.RTC_AF)
-+
-+            alarmtm = tm._replace(tm_sec=0, tm_min=3)
-+            rtcdev.set_wake_alarm(False, alarmtm)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_last_reg_write(self, REG_CONTROL_STATUS_2, 0)
-+
-+    def test_read_time_valid(self) -> None:
-+        self.hw.reg_write(REG_VL_SECONDS, 0x37)
-+        self.hw.reg_write(REG_VL_MINUTES, 0x10)
-+        self.hw.reg_write(REG_VL_HOURS, 0x11)
-+        self.hw.reg_write(REG_VL_DAYS, 0x25)
-+        self.hw.reg_write(REG_VL_WEEKDAYS, 0x00)
-+        self.hw.reg_write(REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12)
-+        self.hw.reg_write(REG_VL_YEARS, 0x21)
-+
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            tm = rtcdev.read_time()
-+            self.assertEqual(
-+                tm,
-+                rtc.RTCTime(
-+                    tm_sec=37,
-+                    tm_min=10,
-+                    tm_hour=11,
-+                    tm_mday=25,
-+                    tm_mon=11,
-+                    tm_year=121,
-+                    tm_wday=0,
-+                    tm_yday=0,
-+                    tm_isdst=0,
-+                ),
-+            )
-+
-+    def test_set_time_after_invalid(self) -> None:
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            self.assertEqual(rtcdev.read_vl(), rtc.RTC_VL_DATA_INVALID)
-+
-+            tm = rtc.RTCTime(
-+                tm_sec=37,
-+                tm_min=10,
-+                tm_hour=11,
-+                tm_mday=25,
-+                tm_mon=11,
-+                tm_year=121,
-+                tm_wday=0,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+
-+            rtcdev.set_time(tm)
-+            tm2 = rtcdev.read_time()
-+            self.assertEqual(tm, tm2)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_VL_SECONDS, 0x37)
-+            mock.assert_reg_write_once(self, REG_VL_MINUTES, 0x10)
-+            mock.assert_reg_write_once(self, REG_VL_HOURS, 0x11)
-+            mock.assert_reg_write_once(self, REG_VL_DAYS, 0x25)
-+            mock.assert_reg_write_once(self, REG_VL_WEEKDAYS, 0x00)
-+            # The driver uses the wrong polarity of the Century bit
-+            # if the time was invalid.  This probably doesn't matter(?).
-+            mock.assert_reg_write_once(self, REG_VL_CENTURY_MONTHS, 0 << 7 | 0x12)
-+            mock.assert_reg_write_once(self, REG_VL_YEARS, 0x21)
-+
-+            self.assertEqual(rtcdev.read_vl(), 0)
-+
-+    def test_set_time_after_valid(self) -> None:
-+        self.hw.reg_write(REG_VL_SECONDS, 0x37)
-+        self.hw.reg_write(REG_VL_MINUTES, 0x10)
-+        self.hw.reg_write(REG_VL_HOURS, 0x11)
-+        self.hw.reg_write(REG_VL_DAYS, 0x25)
-+        self.hw.reg_write(REG_VL_WEEKDAYS, 0x00)
-+        self.hw.reg_write(REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12)
-+        self.hw.reg_write(REG_VL_YEARS, 0x21)
-+
-+        addr = self.dts["addr"]
-+        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
-+            tm = rtc.RTCTime(
-+                tm_sec=37,
-+                tm_min=10,
-+                tm_hour=11,
-+                tm_mday=25,
-+                tm_mon=11,
-+                tm_year=121,
-+                tm_wday=0,
-+                tm_yday=0,
-+                tm_isdst=0,
-+            )
-+
-+            rtcdev.set_time(tm)
-+            tm2 = rtcdev.read_time()
-+            self.assertEqual(tm, tm2)
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_VL_SECONDS, 0x37)
-+            mock.assert_reg_write_once(self, REG_VL_MINUTES, 0x10)
-+            mock.assert_reg_write_once(self, REG_VL_HOURS, 0x11)
-+            mock.assert_reg_write_once(self, REG_VL_DAYS, 0x25)
-+            mock.assert_reg_write_once(self, REG_VL_WEEKDAYS, 0x00)
-+            mock.assert_reg_write_once(
-+                self, REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12
-+            )
-+            mock.assert_reg_write_once(self, REG_VL_YEARS, 0x21)
--- 
-2.34.1
-
+Besides, it sounds kind of useless to me, because the intention of the
+new helpers is to accelerate synproxy, and I doubt BPF over SKBs will
+accelerate anything. Maybe someone else has another use case for these
+helpers and SKBs - in that case I leave the opportunity to add this
+feature up to them.
