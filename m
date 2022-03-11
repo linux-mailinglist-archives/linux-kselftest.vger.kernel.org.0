@@ -2,175 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD4B4D6847
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 19:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E810A4D688C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 19:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349304AbiCKSIH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 13:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S1350957AbiCKSjt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 13:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiCKSIG (ORCPT
+        with ESMTP id S240230AbiCKSjs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 13:08:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAF1BA17B;
-        Fri, 11 Mar 2022 10:07:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 178EB61E70;
-        Fri, 11 Mar 2022 18:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AEBC340E9;
-        Fri, 11 Mar 2022 18:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647022021;
-        bh=FbqNvOscYJ7Bfr/Vx00UgkhPaUqUnhlZCF+USYAVP7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vOMJW+v9J+BqQYR/PnmJ698oQuG3E+dq1i4rfVycrdqD+cso8RQTZa5pT2Yo4F9LD
-         1xtdIuzSSBeZcdQ96Kbk9RN5+OYHpfdue+UzoY3aB6SU5fKqE1TQlTGFMJygCFc1EP
-         pFK3kzS7x2d1SfpMUz5b+96BnjndaCnL3HRyaSVI2TFYBQToCgbIz0lSWd9CWrq8bG
-         LVLkcTRBT+tWtgdRhTNsce+EUu/l7QLK7ZlZFGRCDcw+jPkopTFWyLAE5KrPS6espp
-         J/DSeNVhR/jDSNkGi6xHavFIrUTqc4sN119HRZv1mFz+qnkc2xwSt8J5xD6WvekkeU
-         gzrqZFrmzJR1w==
-Date:   Fri, 11 Mar 2022 18:06:54 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        shuah@kernel.org, brendanhiggins@google.com,
-        linux-kselftest@vger.kernel.org, jic23@kernel.org,
-        linux-iio@vger.kernel.org, lgirdwood@gmail.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org
-Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
-Message-ID: <YiuPvkQroV/WdFpx@sirena.org.uk>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-10-vincent.whitchurch@axis.com>
+        Fri, 11 Mar 2022 13:39:48 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05C45F8EB;
+        Fri, 11 Mar 2022 10:38:42 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id b16so11146388ioz.3;
+        Fri, 11 Mar 2022 10:38:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WFI9p5E2R1wq2NWvgYHqRIb+Zo5MSuZDRoBWnSp8cC0=;
+        b=Hz3qF2Jc/oDqlPTyODeX6aJQMsymr4mAoQa/4iAsl+s+AcF7H76WTBaUcvqqHezecW
+         Caq83ucTlRONEvHL6A75juWpGkNRjv+7NosLvVgx1Nl2iORThEFQxIN7kKR9QEvz60WL
+         ogrT0hc9l+uc2i7OIhyA/mZqv2G9Ztpk9n/ru+8TXm8uFCkk58VYqlVaeNRh0DVdX0ep
+         79Gg+qviEwPZHp3ezLtIZSDB+6qicFDbmpHraRxEprWl8R9pCxayyL8Z8ie67DYsxMjh
+         O16+Gi5uMiQc5BGr2z06DFg60HsziOkdOvgXL582mcqkh4XZ2o2IWgKYB/4uD5nOInfC
+         5Z7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WFI9p5E2R1wq2NWvgYHqRIb+Zo5MSuZDRoBWnSp8cC0=;
+        b=rDjWE3tbitOA6MIH8sjY6329LnnEjGqoyDz6neGHZ9AxUHeT80/uKlIf+bjhBhohp7
+         0UwFalgu6cQMzq8f02WgMGtIXr3WSVY8PkCwaWMJ3J5iY7iWPFuWPuYGGOW8uUghdjq7
+         GUZRlumQ0ZM+XvyLiZO5PVPZ6n/aBB2dByt9Bi4car6qMfEgLAco5covyW+vzup6MoTY
+         oc1B0eaYSRKq/CgoSozpVCwnLfAyA/L1JNWWybBgoW8aeJXymJrzQXilFYng2YjKO5mk
+         v6b8mo7IWjn725VXIo+rTOVn3rIreQ58azHqzXUWqUveRsEY/oxLqd+WyykKuTI35yXw
+         ZerA==
+X-Gm-Message-State: AOAM532S/mLYJWgWRr4UViaUCWMvf2Y3u8DZANRYWY30wwJFr9OtBuiW
+        5g7Ug0C00TlZUwGXOh/iTyf3Xs92uwlzJ+ovfrs=
+X-Google-Smtp-Source: ABdhPJwbmX1TybktyboJLuwffG7A5SMbgfzBhvnTrqO+0vKlPqtv7HOCxy6lefykP99jsDVGZTzRSIQr9pZc5Ok9EDY=
+X-Received: by 2002:a02:c00e:0:b0:317:c548:97c with SMTP id
+ y14-20020a02c00e000000b00317c548097cmr9696778jai.234.1647023922364; Fri, 11
+ Mar 2022 10:38:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MolxjZU9V35M/+dw"
-Content-Disposition: inline
-In-Reply-To: <20220311162445.346685-10-vincent.whitchurch@axis.com>
-X-Cookie: A fool and his money are soon popular.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net> <20220309033518.1743-1-guozhengkui@vivo.com>
+In-Reply-To: <20220309033518.1743-1-guozhengkui@vivo.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 11 Mar 2022 10:38:31 -0800
+Message-ID: <CAEf4BzY0F3g8oH7+u14DTs707STVSCi8j=A5_S=hn6VRXHzzXg@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Christy Lee <christylee@fb.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        zhengkui_guo@outlook.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Mar 8, 2022 at 7:36 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
+>
+> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
+>
+> Use `ARRAY_SIZE(arr)` in bpf_util.h instead of forms like
+> `sizeof(arr)/sizeof(arr[0])`.
+>
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> ---
+>  .../selftests/bpf/prog_tests/cgroup_attach_autodetach.c     | 2 +-
+>  .../testing/selftests/bpf/prog_tests/cgroup_attach_multi.c  | 2 +-
+>  .../selftests/bpf/prog_tests/cgroup_attach_override.c       | 2 +-
+>  tools/testing/selftests/bpf/prog_tests/global_data.c        | 6 +++---
+>  tools/testing/selftests/bpf/prog_tests/obj_name.c           | 2 +-
+>  tools/testing/selftests/bpf/progs/syscall.c                 | 3 ++-
+>  tools/testing/selftests/bpf/progs/test_rdonly_maps.c        | 3 ++-
+>  tools/testing/selftests/bpf/test_cgroup_storage.c           | 2 +-
+>  tools/testing/selftests/bpf/test_lru_map.c                  | 4 ++--
+>  tools/testing/selftests/bpf/test_sock_addr.c                | 6 +++---
+>  tools/testing/selftests/bpf/test_sockmap.c                  | 4 ++--
+>  11 files changed, 19 insertions(+), 17 deletions(-)
+>
 
---MolxjZU9V35M/+dw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[...]
 
-On Fri, Mar 11, 2022 at 05:24:44PM +0100, Vincent Whitchurch wrote:
+> diff --git a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+> index fc8e8a34a3db..a500f2c15970 100644
+> --- a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+> +++ b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+> @@ -3,6 +3,7 @@
+>
+>  #include <linux/ptrace.h>
+>  #include <linux/bpf.h>
+> +#include <bpf_util.h>
 
-This looks like it could be useful, modulo the general concerns with
-mocking stuff.  I've not looked at the broader framework stuff in any
-meanigful way.
+bpf_util.h isn't supposed to be included from BPF source code side. Is
+this ARRAY_SIZE() use so important for BPF programs? Maybe just leave
+existing code under progs/*.c as is?
 
-> +    @classmethod
-> +    def setUpClass(cls) -> None:
-> +        insmod("tps6286x-regulator")
+>  #include <bpf/bpf_helpers.h>
+>
+>  const struct {
+> @@ -64,7 +65,7 @@ int full_loop(struct pt_regs *ctx)
+>  {
+>         /* prevent compiler to optimize everything out */
+>         unsigned * volatile p = (void *)&rdonly_values.a;
+> -       int i = sizeof(rdonly_values.a) / sizeof(rdonly_values.a[0]);
+> +       int i = ARRAY_SIZE(rdonly_values.a);
+>         unsigned iters = 0, sum = 0;
+>
+>         /* validate verifier can allow full loop as well */
 
-Shouldn't this get figured out when the device gets created in DT (if it
-doesn't I guess the tests found a bug...)?
-
-> +    def setUp(self) -> None:
-> +        self.driver = I2CDriver("tps6286x")
-> +        self.hw = Hardware("i2c")
-> +        self.hw.load_model(TPS62864)
-
-This feels like there could be some syntactic sugar to say "create this
-I2C device" in one call?  In general a lot of the frameworkish stuff
-feels verbose.
-
-> +    def test_voltage(self) -> None:
-> +        with (
-> +            self.driver.bind(self.dts["normal"]),
-> +            PlatformDriver("reg-virt-consumer").bind(
-> +                "tps62864_normal_consumer"
-> +            ) as consumerdev,
-> +        ):
-> +            maxfile = consumerdev.path / "max_microvolts"
-> +            minfile = consumerdev.path / "min_microvolts"
-> +
-> +            write_int(maxfile, 1675000)
-> +            write_int(minfile, 800000)
-> +
-> +            mock = self.hw.update_mock()
-> +            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 5)
-> +            mock.assert_reg_write_once(self, REG_VOUT1, 0x50)
-> +            mock.reset_mock()
-
-Some comments about the assertations here would seem to be in order.
-It's not altogether clear what this is testing - it looks to be
-verifying that the regulator is enabled with the voltage set to 800mV
-mapping to 0x50 in VOUT1 but I'm not sure that the idle reader would
-pick that up.
-
-> +            mV = 1000
-> +            data = [
-> +                (400 * mV, 0x00),
-> +                (900 * mV, 0x64),
-> +                (1675 * mV, 0xFF),
-> +            ]
-> +
-> +            for voltage, val in data:
-> +                write_int(minfile, voltage)
-> +                mock = self.hw.update_mock()
-> +                mock.assert_reg_write_once(self, REG_VOUT1, val)
-> +                mock.reset_mock()
-
-For covering regulators in general (especially those like this that use
-the generic helpers) I'd be inclined to go through every single voltage
-that can be set which isn't so interesting for this driver with it's
-linear voltage control but more interesting for something that's not
-continuous.  I'd also put a cross check in that the voltage and enable
-state that's reported via the read interface in sysfs is the one that we
-think we've just set, that'd validate that the framework's model of
-what's going on matches both what the driver did to the "hardware" and
-what the running kernel thinks is going on so we're joined up top to
-bottom (for the regulator framework the read values come from the
-driver so it is actually covering the driver).
-
-This all feels like it could readily be factored out into a generic
-helper, much as the actual drivers are especially when they're more data
-driven.  Ideally with the ability to override the default I/O operations
-for things with sequences that need to be followed instead of just a
-bitfield to update.  Callbacks to validate enable state, voltage, mode
-and so on in the hardware.  If we did that then rather than open coding
-every single test for every single device we could approach things at
-the framework level and give people working on a given device a pile of
-off the shelf tests which are more likely to catch things that an
-individual driver author might've missed, it also avoids the test
-coverage being more laborious than writing the actual driver.
-
-This does raise the questions I mentioned about how useful the testing
-really is of course, even more so when someone works out how to generate
-the data tables for the test and the driver from the same source, but
-that's just generally an issue for mocked tests at the conceptual level
-and clearly it's an approach that's fairly widely used and people get
-value from.
-
---MolxjZU9V35M/+dw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrj70ACgkQJNaLcl1U
-h9D1Rgf9Ftqa1fE0HqpChhmXg9bevuB0hQF8ey0T0Ypw/UorQPenedWbtt0/waZY
-K8rGaxJFPJbpC26PeXga6PnVPe7rm+uJtKQe7kICGvkvdCzVfqEH6uNxUfMwPki3
-zD2nhS1EvX7bB4NUDP8a3BgrFu8KWh6Npx2yj1cUKUoKFAPBhktCFs/wP5xfhvDV
-16sVYMN3QInL8IERk5F+lJSZHHOqfyt0lu7hgW70d+GoAlix/NwXL67ezPMykft/
-iyATJkFPB6KoBG2IChUzCFOzMN8KVfjXMCcl5JxOgSpER4jqMeDIbjTsv4uilzFf
-LUaSWbjwsd5iJoc7O2UJ+5I6S6vUDA==
-=X5TK
------END PGP SIGNATURE-----
-
---MolxjZU9V35M/+dw--
+[...]
