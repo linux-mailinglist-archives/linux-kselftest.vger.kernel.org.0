@@ -2,259 +2,315 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B314D6453
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 16:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F104D661D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348537AbiCKPJ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 10:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S1350403AbiCKQ0t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 11:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348518AbiCKPJ6 (ORCPT
+        with ESMTP id S1350342AbiCKQ0g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:09:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C521C0260
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 07:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647011333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=F/08TVTeX7qJdWIo3uuJ3+sRiIGvopv0E/DcuimI5Vg=;
-        b=A5M8jWZzAIB9ji5a5Zrc8ZIQjKMMTBCLHmuls3Kr3zAimYd92o3yAAQAmCDxfyfxn2pPlq
-        0Qjk+LzL+/R0kSWpkOKAlq4e0LMWCto+WvSjKhdw007tk4tFEu10Yjg4GBw+Y+2kvUbHhu
-        8GvpYW2pICIS6O9FpPy4K3c4yinIUYg=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-163-O_B-qQqRP7y5iZSq6Lc4og-1; Fri, 11 Mar 2022 10:08:50 -0500
-X-MC-Unique: O_B-qQqRP7y5iZSq6Lc4og-1
-Received: by mail-pg1-f197.google.com with SMTP id bh9-20020a056a02020900b0036c0d29eb3eso4991744pgb.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 07:08:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F/08TVTeX7qJdWIo3uuJ3+sRiIGvopv0E/DcuimI5Vg=;
-        b=mVX9k+86L8Hju0MVp8lFUQqr7xUwc13yJHhWFCGHkPHcg9CBBgZpkdkzWVXevexYO0
-         SbVlpgLamovENKdGFNvHdLzx6PJe4n674IEhutiuN777R5oj/My5FkUw8FNciJ3CYBfB
-         gZoJQErDZQJ1jL3/SsdsRsq39jEbc6oUq9oc9QY2yDNqPG5x++aCMC/APJa62z0wu0Ej
-         r15vkkOBj8Te31HLrCxTY0Ut6mP4iVXRDKHJq0Cc7lD5QwbAdAqAY53fMzuqz4VdWpQi
-         A2eYheEMGqvuEQZ8fErO1TBAENzpf0MLCE/NOltEs4SiS1x2qAsX5hH1Tr34yZIkRZnI
-         MuOA==
-X-Gm-Message-State: AOAM5318y0ftzlv+66Au2Z45cauxnshjSYHKKtW5D/U/crlP3ATyqVFd
-        JAWccELQL1RMzZPYhKgJcoSrPoUt3oypYgaQMf+XkfuYqbKRDCdYxXp6mTPh3b9Af0iIEAp5WFc
-        pzNDATshWjtaP/qvpxC17+4g/sy3E9CCzNf7IQAEF49Ds
-X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id x17-20020a170902e05100b00151b4853453mr10676975plx.116.1647011329126;
-        Fri, 11 Mar 2022 07:08:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwP66U88wrg4Uba/sXa89zRWh8cpyDVryV2J34r/lzVwh1XrWMHAvI+0SP9yFnM0v3WNYY/Auphd33L2Zn2V7A=
-X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id
- x17-20020a170902e05100b00151b4853453mr10676930plx.116.1647011328721; Fri, 11
- Mar 2022 07:08:48 -0800 (PST)
+        Fri, 11 Mar 2022 11:26:36 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F41F1B8BF7;
+        Fri, 11 Mar 2022 08:25:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1647015902;
+  x=1678551902;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eqHYnpjKDOMF1TwiA1Bf1WVBNshhdDSbtR3z1p21pAk=;
+  b=LkpaT22z9yzvNZbzx0/U1CPCP2w2+HflUInWlFPV5q44tzUtQbOhBmWT
+   LJVC/RPbvDDO9siDFpGN6BLms1CZOz6Ab+h0tZFH2O2hTk7Pi/Mqu39yg
+   alOd7kEXNLs6jq6a6zuQGQfLvzlF69e0m0vT/q+TBmlntQW7A+Lp3y7b3
+   WAJSlvzconIXizP5VIR0cIs1t+WnsIvIndtVhFaGkpcpu0xuxeVwMfPXR
+   369R4GwH+Qjsx/4JHbFoy6SuHzeFqMj7Om0gZ1VCBCLZrrTE8396ujnCT
+   7UD6NFa/9w2g2PWK7MD+nZUHRnkVKjEUxUl3VMnsSIN8wzx70y/K5MKaQ
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <shuah@kernel.org>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
+        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
+        <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: [RFC v1 00/10] roadtest: a driver testing framework
+Date:   Fri, 11 Mar 2022 17:24:35 +0100
+Message-ID: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-13-benjamin.tissoires@redhat.com> <YiJdRQxYzfncfTR5@kroah.com>
- <CAO-hwJJ3Yi+JLr40J8nXccjF8PrjiQw1w0Bskz8QHXdNVh1n+A@mail.gmail.com>
- <YiM/tTYeuAcnz/Xh@kroah.com> <CAPhsuW4Yhpr6jeY8QCCvUcg_1REGWRRy7m5GXZw5Ehtt3eyAHQ@mail.gmail.com>
-In-Reply-To: <CAPhsuW4Yhpr6jeY8QCCvUcg_1REGWRRy7m5GXZw5Ehtt3eyAHQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 11 Mar 2022 16:08:37 +0100
-Message-ID: <CAO-hwJ+BuTsSJdH=dmtyNKcQw-vJ4up+MzZRcbN2E+aa=9iPnQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 12/28] bpf/hid: add hid_{get|set}_data helpers
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 1:41 AM Song Liu <song@kernel.org> wrote:
->
-> On Sat, Mar 5, 2022 at 2:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sat, Mar 05, 2022 at 11:33:07AM +0100, Benjamin Tissoires wrote:
-> > > On Fri, Mar 4, 2022 at 7:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Fri, Mar 04, 2022 at 06:28:36PM +0100, Benjamin Tissoires wrote:
-> > > > > When we process an incoming HID report, it is common to have to account
-> > > > > for fields that are not aligned in the report. HID is using 2 helpers
-> > > > > hid_field_extract() and implement() to pick up any data at any offset
-> > > > > within the report.
-> > > > >
-> > > > > Export those 2 helpers in BPF programs so users can also rely on them.
-> > > > > The second net worth advantage of those helpers is that now we can
-> > > > > fetch data anywhere in the report without knowing at compile time the
-> > > > > location of it. The boundary checks are done in hid-bpf.c, to prevent
-> > > > > a memory leak.
-> > > > >
-> > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > changes in v2:
-> > > > > - split the patch with libbpf and HID left outside.
-> > > > > ---
-> > > > >  include/linux/bpf-hid.h        |  4 +++
-> > > > >  include/uapi/linux/bpf.h       | 32 ++++++++++++++++++++
-> > > > >  kernel/bpf/hid.c               | 53 ++++++++++++++++++++++++++++++++++
-> > > > >  tools/include/uapi/linux/bpf.h | 32 ++++++++++++++++++++
-> > > > >  4 files changed, 121 insertions(+)
-> > > > >
-> > > > > diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
-> > > > > index 0c5000b28b20..69bb28523ceb 100644
-> > > > > --- a/include/linux/bpf-hid.h
-> > > > > +++ b/include/linux/bpf-hid.h
-> > > > > @@ -93,6 +93,10 @@ struct bpf_hid_hooks {
-> > > > >       int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> > > > >       void (*link_attached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> > > > >       void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> > > > > +     int (*hid_get_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
-> > > > > +                         u64 offset, u32 n, u8 *data, u64 data_size);
-> > > > > +     int (*hid_set_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
-> > > > > +                         u64 offset, u32 n, u8 *data, u64 data_size);
-> > > > >  };
-> > > > >
-> > > > >  #ifdef CONFIG_BPF
-> > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > > index a7a8d9cfcf24..4845a20e6f96 100644
-> > > > > --- a/include/uapi/linux/bpf.h
-> > > > > +++ b/include/uapi/linux/bpf.h
-> > > > > @@ -5090,6 +5090,36 @@ union bpf_attr {
-> > > > >   *   Return
-> > > > >   *           0 on success, or a negative error in case of failure. On error
-> > > > >   *           *dst* buffer is zeroed out.
-> > > > > + *
-> > > > > + * int bpf_hid_get_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
-> > > > > + *   Description
-> > > > > + *           Get the data of size n (in bits) at the given offset (bits) in the
-> > > > > + *           ctx->event.data field and store it into data.
-> > > > > + *
-> > > > > + *           if n is less or equal than 32, we can address with bit precision,
-> > > > > + *           the value in the buffer. However, data must be a pointer to a u32
-> > > > > + *           and size must be 4.
-> > > > > + *
-> > > > > + *           if n is greater than 32, offset and n must be a multiple of 8
-> > > > > + *           and the result is working with a memcpy internally.
-> > > > > + *   Return
-> > > > > + *           The length of data copied into data. On error, a negative value
-> > > > > + *           is returned.
-> > > > > + *
-> > > > > + * int bpf_hid_set_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
-> > > > > + *   Description
-> > > > > + *           Set the data of size n (in bits) at the given offset (bits) in the
-> > > > > + *           ctx->event.data field.
-> > > > > + *
-> > > > > + *           if n is less or equal than 32, we can address with bit precision,
-> > > > > + *           the value in the buffer. However, data must be a pointer to a u32
-> > > > > + *           and size must be 4.
-> > > > > + *
-> > > > > + *           if n is greater than 32, offset and n must be a multiple of 8
-> > > > > + *           and the result is working with a memcpy internally.
-> > > > > + *   Return
-> > > > > + *           The length of data copied into ctx->event.data. On error, a negative
-> > > > > + *           value is returned.
-> > > >
-> > >
-> > > Quick answer on this one (before going deeper with the other remarks next week):
-> > >
-> > > > Wait, nevermind my reviewed-by previously, see my comment about how this
-> > > > might be split into 4:
-> > > >         bpf_hid_set_bytes()
-> > > >         bpf_hid_get_bytes()
-> > > >         bpf_hid_set_bits()
-> > > >         bpf_hid_get_bits()
-> > > >
-> > > > Should be easier to understand and maintain over time, right?
-> > >
-> > > Yes, definitively. I thought about adding a `bytes` suffix to the
-> > > function name for n > 32, but not the `bits` one, meaning the API was
-> > > still bunkers in my head.
->
-> Do we really need per-bit access? I was under the impression that only
-> one BPF program is working on a ctx/buffer at a time, so we can just do
-> read-modify-write at byte level, no?
->
+This patchset proposes roadtest, a device-driver testing framework.  Drivers
+are tested under User Mode Linux (UML) and interact with mocked/modelled
+hardware.  The tests and hardware models are written in Python, the former
+using Python's built-in unittest framework.
 
-Yes, we really need per-bit access, and yes only one BPF program is
-working on a ctx/buffer at a time.
+Drivers are tested via their userspace interfaces.  The hardware models allow
+tests to inject values into registers and assert that drivers control the
+hardware in the right way and react as expected to stimuli.
 
-The per-bit access is a HID requirement and a much more convenient way
-of accessing data in the buffer. Well, there is another advantage too
-that I'll add later.
+Roadtest is meant to be used for relatively simple drivers, such as the ones
+part of the IIO, regulator and RTC subsystems.
 
-Basically, in the HID world, HW makers are trying to 'compact' the
-reports their device is sending to a minimum value.
+Questions and answers:
 
-For instance, when you have a 3 buttons + wheel mouse you may need:
-3 bits of information for the 3 buttons
-4 bits for the wheel
-16 bits for X
-16 bits for Y.
+= Why do we need this?
 
-This usually translates almost verbatim in the report (we can add one
-bit of padding between buttons and wheel), which means that accessing
-the wheel data requires the user to access the offset 4 (bits) of size
-4 bits in the report.
+There are a large amount of these kind of drivers in the kernel.  Most of the
+hardware is not available in current CI systems so most drivers can only, at
+best, be build-tested there.  Even basic soundness such as a driver
+successfully probing and binding to the devices it tries to be support cannot
+be tested.  Drivers cannot be easily regression-tested to ensure that bugs
+fixed once do not get reintroduced.
 
-Some HW vendors are not even bothering aligning the data, so this can
-be messy from time to time with just plain byte access.
-All in all, the HID report descriptor gives you that information, and
-internally, the HID stack stores the offset in bits and the sizes in
-bits to access them without too much trouble.
+Many drivers support multiple related hardware variants, and far from all patch
+submitters have access to all the variants which the driver that they are
+patching supports, so there is no way for them to easily verify that they
+haven't broken something basic on a variant which they do not own.
 
-The second advantage I have with these 2 accessors is that it allows
-me to not know statically the offset and size values. Because the
-helper in the kernel checks them for me, I can use registers values
-that are unknown to the verifier and can basically have:
+Furthermore, hardware can be used in many different configurations with drivers
+supporting many different devicetree properties, so even just having access to
+all the variants would be insufficient.
 
-```
-__u64 offsetX = 0;
-__u64 offsetY = 0;
-__u32 sizeX = 0;
-__u32 sizeY = 0;
+On top of that, some of the chips measure environmental conditions such as
+temperature, so testing extreme cases may not be simple even if one has access
+to the hardware.
 
-SEC("hid/device_event")
-int invert_xy(struct hid_bpf_ctx *ctx)
-{
-  __u16 x, y;
+All this makes development, modification, maintenance, and reviewing of these
+drivers harder than it necessarily needs to be.  Roadtest hopes to make some of
+these things slightly easier by providing a framework to create hardware
+models/mocks and to write testcases which exercise drivers using these models.
 
-  if (sizeX == 16) {
-    x = bpf_hid_get_bits(ctx, offsetX, sizeX);
-    bpf_hid_set_bits(ctx, offsetX, -x);
-  }
-  if (sizeY == 16) {
-    y = bpf_hid_get_bits(ctx, offsetY, sizeY);
-    bpf_hid_set_bits(ctx, offsetY, -y);
-  }
-  return 0;
-}
-```
+= Do you have some specific examples of the kind of code this could be used to
+  test?
 
-Then, I have my userspace program parse the report descriptor, set the
-correct values for size{X|Y} and offset{X|Y} and I can have this
-program compiled once and redistributed many times.
+Here is an example of a patch which can easily be regression-tested using
+roadtest (in fact, this series includes such a regression test) but is much
+harder to do so automatically with real hardware since it requires specific
+environmental conditions:
 
-Cheers,
-Benjamin
+ iio: light: opt3001: Fixed timeout error when 0 lux
+ https://lore.kernel.org/lkml/20210920125351.6569-1-valek@2n.cz/
+
+Here is another example.  This driver has code which correctly parses a
+documented devicetree property (amstaos,proximity-diodes) but which then fails
+to actually communicate this setting to the hardware in any way.  Such code can
+be easily tested with roadtest since the framework integrates devicetree
+support and provides functions to assert that drivers writes expected registers
+with expected values:
+
+ drivers/iio/light/tsl2772.c tsl2772_read_prox_diodes()
+
+(Both the above examples happen to be from the same subsystem but that should
+in no way be taken to imply that such issues are unique to that subsystem or
+that that subsystem has more of them.)
+
+= How does this relate to kselftests?
+
+Tests in kselftests also test kernel code using the userspace interfaces, but
+that's about what's common between the frameworks.  kselftests has other goals
+and does not provide any kind of mechanism for hardware mocking.
+
+= How does this relate to kunit?
+
+Kunit is for unit testing of functions in kernel code, and is not meant for
+testing kernel code via userspace interfaces.  It could in theory be used to
+test some of the simple drivers too, but that would require (1) a large amount
+of mocking code in various kernel frameworks, and, more importantly, (2)
+refactoring of the drivers to be tested.
+
+This can be contrasted with roadtest which works with mostly unmodified drivers
+and which mocks the hardware at the lowest level without having to change
+kernel frameworks.
+
+= How do I use it?
+
+See Documentation/dev-tools/roadtest.rst added by the documentation patch for
+more information about running and writing tests using this framework.
+
+= What's included in the patchset?
+
+The current framework allows developing tests for hardware which uses the I2C
+bus.  Hardware models can also control GPIOs and use them to trigger
+interrupts.
+
+This series includes tests for some IIO, regulator and RTC drivers.  The
+regulator and RTC tests depend on a few driver patches which are either in
+review or in linux-next.  These are noted in the commit messages.
+
+The entire patch set, including the required dependencies, is also available in
+a git tree:
+
+ https://github.com/vwax/linux/commits/roadtest/rfc-v1
+
+Cc: linux-kernel@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+
+Cc: shuah@kernel.org
+Cc: brendanhiggins@google.com
+Cc: linux-kselftest@vger.kernel.org
+
+Cc: jic23@kernel.org
+Cc: linux-iio@vger.kernel.org
+
+Cc: lgirdwood@gmail.com
+Cc: broonie@kernel.org
+
+Cc: a.zummo@towertech.it
+Cc: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org
+
+Cc: corbet@lwn.net
+Cc: linux-doc@vger.kernel.org
+
+Vincent Whitchurch (10):
+  roadtest: import libvhost-user from QEMU
+  roadtest: add C backend
+  roadtest: add framework
+  roadtest: add base config
+  roadtest: add build files
+  roadtest: add documentation
+  iio: light: opt3001: add roadtest
+  iio: light: vcnl4000: add roadtest
+  regulator: tps62864: add roadtest
+  rtc: pcf8563: add roadtest
+
+ Documentation/dev-tools/index.rst             |    1 +
+ Documentation/dev-tools/roadtest.rst          |  669 ++++
+ tools/testing/roadtest/.gitignore             |    2 +
+ tools/testing/roadtest/Dockerfile             |   25 +
+ tools/testing/roadtest/Makefile               |   84 +
+ tools/testing/roadtest/init.sh                |   19 +
+ tools/testing/roadtest/pyproject.toml         |   10 +
+ tools/testing/roadtest/requirements.txt       |    4 +
+ tools/testing/roadtest/roadtest/__init__.py   |    2 +
+ .../roadtest/roadtest/backend/__init__.py     |    0
+ .../roadtest/roadtest/backend/backend.py      |   32 +
+ .../testing/roadtest/roadtest/backend/gpio.py |  111 +
+ .../testing/roadtest/roadtest/backend/i2c.py  |  123 +
+ .../testing/roadtest/roadtest/backend/main.py |   13 +
+ .../testing/roadtest/roadtest/backend/mock.py |   20 +
+ .../roadtest/roadtest/backend/test_gpio.py    |   98 +
+ .../roadtest/roadtest/backend/test_i2c.py     |   84 +
+ .../testing/roadtest/roadtest/cmd/__init__.py |    0
+ tools/testing/roadtest/roadtest/cmd/main.py   |  146 +
+ tools/testing/roadtest/roadtest/cmd/remote.py |   48 +
+ .../roadtest/roadtest/core/__init__.py        |    0
+ .../testing/roadtest/roadtest/core/control.py |   52 +
+ .../roadtest/roadtest/core/devicetree.py      |  155 +
+ .../roadtest/roadtest/core/hardware.py        |   94 +
+ tools/testing/roadtest/roadtest/core/log.py   |   42 +
+ .../testing/roadtest/roadtest/core/modules.py |   38 +
+ .../testing/roadtest/roadtest/core/opslog.py  |   35 +
+ tools/testing/roadtest/roadtest/core/proxy.py |   48 +
+ tools/testing/roadtest/roadtest/core/suite.py |  286 ++
+ tools/testing/roadtest/roadtest/core/sysfs.py |   77 +
+ .../roadtest/roadtest/core/test_control.py    |   35 +
+ .../roadtest/roadtest/core/test_devicetree.py |   31 +
+ .../roadtest/roadtest/core/test_hardware.py   |   41 +
+ .../roadtest/roadtest/core/test_log.py        |   54 +
+ .../roadtest/roadtest/core/test_opslog.py     |   27 +
+ .../roadtest/roadtest/tests/__init__.py       |    0
+ .../roadtest/roadtest/tests/base/config       |   84 +
+ .../roadtest/roadtest/tests/iio/__init__.py   |    0
+ .../roadtest/roadtest/tests/iio/config        |    1 +
+ .../roadtest/roadtest/tests/iio/iio.py        |  112 +
+ .../roadtest/tests/iio/light/__init__.py      |    0
+ .../roadtest/roadtest/tests/iio/light/config  |    2 +
+ .../roadtest/tests/iio/light/test_opt3001.py  |   95 +
+ .../roadtest/tests/iio/light/test_vcnl4000.py |  132 +
+ .../roadtest/tests/iio/light/test_vcnl4010.py |  282 ++
+ .../roadtest/tests/iio/light/test_vcnl4040.py |  104 +
+ .../roadtest/tests/iio/light/test_vcnl4200.py |   96 +
+ .../roadtest/tests/regulator/__init__.py      |    0
+ .../roadtest/roadtest/tests/regulator/config  |    4 +
+ .../roadtest/tests/regulator/test_tps62864.py |  187 ++
+ .../roadtest/roadtest/tests/rtc/__init__.py   |    0
+ .../roadtest/roadtest/tests/rtc/config        |    1 +
+ .../roadtest/roadtest/tests/rtc/rtc.py        |   73 +
+ .../roadtest/tests/rtc/test_pcf8563.py        |  348 ++
+ tools/testing/roadtest/src/.gitignore         |    1 +
+ tools/testing/roadtest/src/backend.c          |  884 +++++
+ .../src/libvhost-user/include/atomic.h        |  310 ++
+ .../src/libvhost-user/libvhost-user.c         | 2885 +++++++++++++++++
+ .../src/libvhost-user/libvhost-user.h         |  691 ++++
+ 59 files changed, 8798 insertions(+)
+ create mode 100644 Documentation/dev-tools/roadtest.rst
+ create mode 100644 tools/testing/roadtest/.gitignore
+ create mode 100644 tools/testing/roadtest/Dockerfile
+ create mode 100644 tools/testing/roadtest/Makefile
+ create mode 100755 tools/testing/roadtest/init.sh
+ create mode 100644 tools/testing/roadtest/pyproject.toml
+ create mode 100644 tools/testing/roadtest/requirements.txt
+ create mode 100644 tools/testing/roadtest/roadtest/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/backend.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/gpio.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/i2c.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/main.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/mock.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/test_gpio.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/test_i2c.py
+ create mode 100644 tools/testing/roadtest/roadtest/cmd/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/cmd/main.py
+ create mode 100644 tools/testing/roadtest/roadtest/cmd/remote.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/control.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/devicetree.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/hardware.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/log.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/modules.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/opslog.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/proxy.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/suite.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/sysfs.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_control.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_devicetree.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_hardware.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_log.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_opslog.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/base/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/iio.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
+ create mode 100644 tools/testing/roadtest/src/.gitignore
+ create mode 100644 tools/testing/roadtest/src/backend.c
+ create mode 100644 tools/testing/roadtest/src/libvhost-user/include/atomic.h
+ create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.c
+ create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.h
+
+-- 
+2.34.1
 
