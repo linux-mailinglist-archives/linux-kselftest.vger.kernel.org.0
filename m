@@ -2,56 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175564D62A0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 14:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B314D6453
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 16:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245064AbiCKNxS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 08:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S1348537AbiCKPJ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 10:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348976AbiCKNxQ (ORCPT
+        with ESMTP id S1348518AbiCKPJ6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 08:53:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8894B1C4B05
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 05:52:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB58B82BF4
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 13:52:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE761C36AE2;
-        Fri, 11 Mar 2022 13:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647006727;
-        bh=hMdi/2FK0D/IjT+fUziwBHzOtEJWdD1HREKm5mcfz5U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DBa9AbKYLQvne7ETMwxWq9RnLZD0/ot3kGSR6ra+AIc1ZBfNONKEeT3Ph+vJ62WLh
-         vtssTtBFplU4KQx2nUVeG0fGxFCU/Wcw6UcGn6TO/IZ+7lGjk+slPt//o5kRvK+B2Y
-         nY0o3a0w47Hg3wOAehJgO4ZeK6lBUeyGONaEQVg8zY7cRCtRJ6jVPTacAXYW8Ud62w
-         XQEwMeCtXQhquMulq2c4lEA/yUBZ5KMBdH/3LrXApWTduSSLawpHkKzq15GwGNwps7
-         rK5xxQAtzZipXPXXOTVBgfaLCYHqyeWpYI5J0zyoJJkvciiTxtTZa9POH4SrkrjCsM
-         sP0D2/A/BPlwQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 4/4] kselftest/arm64: Add simple test for MTE prctl
-Date:   Fri, 11 Mar 2022 13:51:48 +0000
-Message-Id: <20220311135148.410366-5-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220311135148.410366-1-broonie@kernel.org>
-References: <20220311135148.410366-1-broonie@kernel.org>
+        Fri, 11 Mar 2022 10:09:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C521C0260
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 07:08:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647011333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F/08TVTeX7qJdWIo3uuJ3+sRiIGvopv0E/DcuimI5Vg=;
+        b=A5M8jWZzAIB9ji5a5Zrc8ZIQjKMMTBCLHmuls3Kr3zAimYd92o3yAAQAmCDxfyfxn2pPlq
+        0Qjk+LzL+/R0kSWpkOKAlq4e0LMWCto+WvSjKhdw007tk4tFEu10Yjg4GBw+Y+2kvUbHhu
+        8GvpYW2pICIS6O9FpPy4K3c4yinIUYg=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-O_B-qQqRP7y5iZSq6Lc4og-1; Fri, 11 Mar 2022 10:08:50 -0500
+X-MC-Unique: O_B-qQqRP7y5iZSq6Lc4og-1
+Received: by mail-pg1-f197.google.com with SMTP id bh9-20020a056a02020900b0036c0d29eb3eso4991744pgb.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 07:08:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F/08TVTeX7qJdWIo3uuJ3+sRiIGvopv0E/DcuimI5Vg=;
+        b=mVX9k+86L8Hju0MVp8lFUQqr7xUwc13yJHhWFCGHkPHcg9CBBgZpkdkzWVXevexYO0
+         SbVlpgLamovENKdGFNvHdLzx6PJe4n674IEhutiuN777R5oj/My5FkUw8FNciJ3CYBfB
+         gZoJQErDZQJ1jL3/SsdsRsq39jEbc6oUq9oc9QY2yDNqPG5x++aCMC/APJa62z0wu0Ej
+         r15vkkOBj8Te31HLrCxTY0Ut6mP4iVXRDKHJq0Cc7lD5QwbAdAqAY53fMzuqz4VdWpQi
+         A2eYheEMGqvuEQZ8fErO1TBAENzpf0MLCE/NOltEs4SiS1x2qAsX5hH1Tr34yZIkRZnI
+         MuOA==
+X-Gm-Message-State: AOAM5318y0ftzlv+66Au2Z45cauxnshjSYHKKtW5D/U/crlP3ATyqVFd
+        JAWccELQL1RMzZPYhKgJcoSrPoUt3oypYgaQMf+XkfuYqbKRDCdYxXp6mTPh3b9Af0iIEAp5WFc
+        pzNDATshWjtaP/qvpxC17+4g/sy3E9CCzNf7IQAEF49Ds
+X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id x17-20020a170902e05100b00151b4853453mr10676975plx.116.1647011329126;
+        Fri, 11 Mar 2022 07:08:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwP66U88wrg4Uba/sXa89zRWh8cpyDVryV2J34r/lzVwh1XrWMHAvI+0SP9yFnM0v3WNYY/Auphd33L2Zn2V7A=
+X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id
+ x17-20020a170902e05100b00151b4853453mr10676930plx.116.1647011328721; Fri, 11
+ Mar 2022 07:08:48 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3986; h=from:subject; bh=hMdi/2FK0D/IjT+fUziwBHzOtEJWdD1HREKm5mcfz5U=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiK1PyuP4PIJEfS/gV2HlOeCPq1merlrlRslXeyqjH kr4QV0SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYitT8gAKCRAk1otyXVSH0AM3B/ 95PUS55mTecPOu+D+MoVGY4xc6Pb9NoHBrrYNbTrwc6pTbVHs9QKhvkzAEIPYkvBnJwEeA/NW25HC2 rxol4zfyZG66O6L9goO1WJ2CEKRf5KU+rw0twcj8eMDMamnxxAAnV7GeDw3Qk0fFHhwdzuG9AzvqzE XP1gsE9pvBlljpu4XOaQccFja9gQ3+7MZi70/DQF50h1ZSdG7r76FblaHi4CbvEJhq+n9TEGInFV7o G4zVEI/YZJsYq2gkZEzEw+qW2jfEPeXIr6QwbeeVMpWFQaEoYyeFtas45KvS70woyRhjU0KX2aGEC1 YxsCqXWqHLVF6lAmK/3g/P8gfrVnpW
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-13-benjamin.tissoires@redhat.com> <YiJdRQxYzfncfTR5@kroah.com>
+ <CAO-hwJJ3Yi+JLr40J8nXccjF8PrjiQw1w0Bskz8QHXdNVh1n+A@mail.gmail.com>
+ <YiM/tTYeuAcnz/Xh@kroah.com> <CAPhsuW4Yhpr6jeY8QCCvUcg_1REGWRRy7m5GXZw5Ehtt3eyAHQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW4Yhpr6jeY8QCCvUcg_1REGWRRy7m5GXZw5Ehtt3eyAHQ@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 11 Mar 2022 16:08:37 +0100
+Message-ID: <CAO-hwJ+BuTsSJdH=dmtyNKcQw-vJ4up+MzZRcbN2E+aa=9iPnQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 12/28] bpf/hid: add hid_{get|set}_data helpers
+To:     Song Liu <song@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,157 +89,172 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current tests use the prctls for various things but there's no
-coverage of the edges of the interface so add some basics. This isn't
-hugely useful as it is (it originally had some coverage for the
-combinations with asymmetric mode but we removed the prctl() for that)
-but it might be a helpful starting point for future work, for example
-covering error handling.
+On Fri, Mar 11, 2022 at 1:41 AM Song Liu <song@kernel.org> wrote:
+>
+> On Sat, Mar 5, 2022 at 2:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sat, Mar 05, 2022 at 11:33:07AM +0100, Benjamin Tissoires wrote:
+> > > On Fri, Mar 4, 2022 at 7:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Fri, Mar 04, 2022 at 06:28:36PM +0100, Benjamin Tissoires wrote:
+> > > > > When we process an incoming HID report, it is common to have to account
+> > > > > for fields that are not aligned in the report. HID is using 2 helpers
+> > > > > hid_field_extract() and implement() to pick up any data at any offset
+> > > > > within the report.
+> > > > >
+> > > > > Export those 2 helpers in BPF programs so users can also rely on them.
+> > > > > The second net worth advantage of those helpers is that now we can
+> > > > > fetch data anywhere in the report without knowing at compile time the
+> > > > > location of it. The boundary checks are done in hid-bpf.c, to prevent
+> > > > > a memory leak.
+> > > > >
+> > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > > >
+> > > > > ---
+> > > > >
+> > > > > changes in v2:
+> > > > > - split the patch with libbpf and HID left outside.
+> > > > > ---
+> > > > >  include/linux/bpf-hid.h        |  4 +++
+> > > > >  include/uapi/linux/bpf.h       | 32 ++++++++++++++++++++
+> > > > >  kernel/bpf/hid.c               | 53 ++++++++++++++++++++++++++++++++++
+> > > > >  tools/include/uapi/linux/bpf.h | 32 ++++++++++++++++++++
+> > > > >  4 files changed, 121 insertions(+)
+> > > > >
+> > > > > diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
+> > > > > index 0c5000b28b20..69bb28523ceb 100644
+> > > > > --- a/include/linux/bpf-hid.h
+> > > > > +++ b/include/linux/bpf-hid.h
+> > > > > @@ -93,6 +93,10 @@ struct bpf_hid_hooks {
+> > > > >       int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> > > > >       void (*link_attached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> > > > >       void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+> > > > > +     int (*hid_get_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
+> > > > > +                         u64 offset, u32 n, u8 *data, u64 data_size);
+> > > > > +     int (*hid_set_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
+> > > > > +                         u64 offset, u32 n, u8 *data, u64 data_size);
+> > > > >  };
+> > > > >
+> > > > >  #ifdef CONFIG_BPF
+> > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > > index a7a8d9cfcf24..4845a20e6f96 100644
+> > > > > --- a/include/uapi/linux/bpf.h
+> > > > > +++ b/include/uapi/linux/bpf.h
+> > > > > @@ -5090,6 +5090,36 @@ union bpf_attr {
+> > > > >   *   Return
+> > > > >   *           0 on success, or a negative error in case of failure. On error
+> > > > >   *           *dst* buffer is zeroed out.
+> > > > > + *
+> > > > > + * int bpf_hid_get_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
+> > > > > + *   Description
+> > > > > + *           Get the data of size n (in bits) at the given offset (bits) in the
+> > > > > + *           ctx->event.data field and store it into data.
+> > > > > + *
+> > > > > + *           if n is less or equal than 32, we can address with bit precision,
+> > > > > + *           the value in the buffer. However, data must be a pointer to a u32
+> > > > > + *           and size must be 4.
+> > > > > + *
+> > > > > + *           if n is greater than 32, offset and n must be a multiple of 8
+> > > > > + *           and the result is working with a memcpy internally.
+> > > > > + *   Return
+> > > > > + *           The length of data copied into data. On error, a negative value
+> > > > > + *           is returned.
+> > > > > + *
+> > > > > + * int bpf_hid_set_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
+> > > > > + *   Description
+> > > > > + *           Set the data of size n (in bits) at the given offset (bits) in the
+> > > > > + *           ctx->event.data field.
+> > > > > + *
+> > > > > + *           if n is less or equal than 32, we can address with bit precision,
+> > > > > + *           the value in the buffer. However, data must be a pointer to a u32
+> > > > > + *           and size must be 4.
+> > > > > + *
+> > > > > + *           if n is greater than 32, offset and n must be a multiple of 8
+> > > > > + *           and the result is working with a memcpy internally.
+> > > > > + *   Return
+> > > > > + *           The length of data copied into ctx->event.data. On error, a negative
+> > > > > + *           value is returned.
+> > > >
+> > >
+> > > Quick answer on this one (before going deeper with the other remarks next week):
+> > >
+> > > > Wait, nevermind my reviewed-by previously, see my comment about how this
+> > > > might be split into 4:
+> > > >         bpf_hid_set_bytes()
+> > > >         bpf_hid_get_bytes()
+> > > >         bpf_hid_set_bits()
+> > > >         bpf_hid_get_bits()
+> > > >
+> > > > Should be easier to understand and maintain over time, right?
+> > >
+> > > Yes, definitively. I thought about adding a `bytes` suffix to the
+> > > function name for n > 32, but not the `bits` one, meaning the API was
+> > > still bunkers in my head.
+>
+> Do we really need per-bit access? I was under the impression that only
+> one BPF program is working on a ctx/buffer at a time, so we can just do
+> read-modify-write at byte level, no?
+>
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/arm64/mte/.gitignore  |   1 +
- .../testing/selftests/arm64/mte/check_prctl.c | 119 ++++++++++++++++++
- 2 files changed, 120 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/mte/check_prctl.c
+Yes, we really need per-bit access, and yes only one BPF program is
+working on a ctx/buffer at a time.
 
-diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index d1fe4ddf1669..052d0f9f92b3 100644
---- a/tools/testing/selftests/arm64/mte/.gitignore
-+++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -3,5 +3,6 @@ check_gcr_el1_cswitch
- check_tags_inclusion
- check_child_memory
- check_mmap_options
-+check_prctl
- check_ksm_options
- check_user_mem
-diff --git a/tools/testing/selftests/arm64/mte/check_prctl.c b/tools/testing/selftests/arm64/mte/check_prctl.c
-new file mode 100644
-index 000000000000..f139a33a43ef
---- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/check_prctl.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2022 ARM Limited
-+
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+
-+#include <asm/hwcap.h>
-+
-+#include "kselftest.h"
-+
-+static int set_tagged_addr_ctrl(int val)
-+{
-+	int ret;
-+
-+	ret = prctl(PR_SET_TAGGED_ADDR_CTRL, val, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_print_msg("PR_SET_TAGGED_ADDR_CTRL: failed %d %d (%s)\n",
-+			       ret, errno, strerror(errno));
-+	return ret;
-+}
-+
-+static int get_tagged_addr_ctrl(void)
-+{
-+	int ret;
-+
-+	ret = prctl(PR_GET_TAGGED_ADDR_CTRL, 0, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_print_msg("PR_GET_TAGGED_ADDR_CTRL failed: %d %d (%s)\n",
-+			       ret, errno, strerror(errno));
-+	return ret;
-+}
-+
-+/*
-+ * Read the current mode without having done any configuration, should
-+ * run first.
-+ */
-+void check_basic_read(void)
-+{
-+	int ret;
-+
-+	ret = get_tagged_addr_ctrl();
-+	if (ret < 0) {
-+		ksft_test_result_fail("check_basic_read\n");
-+		return;
-+	}
-+
-+	if (ret & PR_MTE_TCF_SYNC)
-+		ksft_print_msg("SYNC enabled\n");
-+	if (ret & PR_MTE_TCF_ASYNC)
-+		ksft_print_msg("ASYNC enabled\n");
-+
-+	/* Any configuration is valid */
-+	ksft_test_result_pass("check_basic_read\n");
-+}
-+
-+/*
-+ * Attempt to set a specified combination of modes.
-+ */
-+void set_mode_test(const char *name, int hwcap2, int mask)
-+{
-+	int ret;
-+
-+	if ((getauxval(AT_HWCAP2) & hwcap2) != hwcap2) {
-+		ksft_test_result_skip("%s\n", name);
-+		return;
-+	}
-+
-+	ret = set_tagged_addr_ctrl(mask);
-+	if (ret < 0) {
-+		ksft_test_result_fail("%s\n", name);
-+		return;
-+	}
-+
-+	ret = get_tagged_addr_ctrl();
-+	if (ret < 0) {
-+		ksft_test_result_fail("%s\n", name);
-+		return;
-+	}
-+
-+	if ((ret & PR_MTE_TCF_MASK) == mask) {
-+		ksft_test_result_pass("%s\n", name);
-+	} else {
-+		ksft_print_msg("Got %x, expected %x\n",
-+			       (ret & PR_MTE_TCF_MASK), mask);
-+		ksft_test_result_fail("%s\n", name);
-+	}
-+}
-+
-+struct mte_mode {
-+	int mask;
-+	int hwcap2;
-+	const char *name;
-+} mte_modes[] = {
-+	{ PR_MTE_TCF_NONE,  0,          "NONE"  },
-+	{ PR_MTE_TCF_SYNC,  HWCAP2_MTE, "SYNC"  },
-+	{ PR_MTE_TCF_ASYNC, HWCAP2_MTE, "ASYNC" },
-+	{ PR_MTE_TCF_SYNC | PR_MTE_TCF_ASYNC,  HWCAP2_MTE, "SYNC+ASYNC"  },
-+};
-+
-+int main(void)
-+{
-+	int i;
-+
-+	ksft_print_header();
-+	ksft_set_plan(5);
-+
-+	check_basic_read();
-+	for (i = 0; i < ARRAY_SIZE(mte_modes); i++)
-+		set_mode_test(mte_modes[i].name, mte_modes[i].hwcap2,
-+			      mte_modes[i].mask);
-+
-+	ksft_print_cnts();
-+
-+	return 0;
-+}
--- 
-2.30.2
+The per-bit access is a HID requirement and a much more convenient way
+of accessing data in the buffer. Well, there is another advantage too
+that I'll add later.
+
+Basically, in the HID world, HW makers are trying to 'compact' the
+reports their device is sending to a minimum value.
+
+For instance, when you have a 3 buttons + wheel mouse you may need:
+3 bits of information for the 3 buttons
+4 bits for the wheel
+16 bits for X
+16 bits for Y.
+
+This usually translates almost verbatim in the report (we can add one
+bit of padding between buttons and wheel), which means that accessing
+the wheel data requires the user to access the offset 4 (bits) of size
+4 bits in the report.
+
+Some HW vendors are not even bothering aligning the data, so this can
+be messy from time to time with just plain byte access.
+All in all, the HID report descriptor gives you that information, and
+internally, the HID stack stores the offset in bits and the sizes in
+bits to access them without too much trouble.
+
+The second advantage I have with these 2 accessors is that it allows
+me to not know statically the offset and size values. Because the
+helper in the kernel checks them for me, I can use registers values
+that are unknown to the verifier and can basically have:
+
+```
+__u64 offsetX = 0;
+__u64 offsetY = 0;
+__u32 sizeX = 0;
+__u32 sizeY = 0;
+
+SEC("hid/device_event")
+int invert_xy(struct hid_bpf_ctx *ctx)
+{
+  __u16 x, y;
+
+  if (sizeX == 16) {
+    x = bpf_hid_get_bits(ctx, offsetX, sizeX);
+    bpf_hid_set_bits(ctx, offsetX, -x);
+  }
+  if (sizeY == 16) {
+    y = bpf_hid_get_bits(ctx, offsetY, sizeY);
+    bpf_hid_set_bits(ctx, offsetY, -y);
+  }
+  return 0;
+}
+```
+
+Then, I have my userspace program parse the report descriptor, set the
+correct values for size{X|Y} and offset{X|Y} and I can have this
+program compiled once and redistributed many times.
+
+Cheers,
+Benjamin
 
