@@ -2,143 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB564D5C4E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 08:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8AB4D5F19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 11:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiCKHaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 02:30:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S243868AbiCKKGr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 05:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344492AbiCKHaJ (ORCPT
+        with ESMTP id S232675AbiCKKGr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 02:30:09 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922601B6E29
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 23:29:05 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id n66-20020a254045000000b0062883b59ddbso6722867yba.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Mar 2022 23:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=e1nLgX5logjeFyMYEkbC1aYDUofzxBmSlcZWRpPxl7A=;
-        b=b0spp3EZvveQ+nqs3kX6yx7yQ498jn1euKH6mnZj6P1rGAhbDNq2fIrco90JJi8VvA
-         EZF5b59PzsA6CXMm9LyjT2O5V7S9bQG2ehyOUCNL7IBgpQzf/3kNl3K1AdEoYq4tEmO8
-         kLNUDR6IRuDAxQiecB3s/YD7cSAINIv7wplEdyytq5aS07SvgTuxAb4hf2ZcXzxfkJCn
-         Xy2VHBFdKgKnD3d0s9cDScSVk1H/Z446ubK+XDhWGEFbKgVk9FFahft/W4b4xwa7Undm
-         xmXCnyrRZuEideBChlDIU3uYrzQr3bKTAPP08UzLbJ/hseOLNrX7C6YLTo5ih3JhtfC6
-         a2cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=e1nLgX5logjeFyMYEkbC1aYDUofzxBmSlcZWRpPxl7A=;
-        b=cv3/cKHIUMsSkne3VQoOd4WVqH5HQrQbotkU7jNl+qSlzvMJ7YvJWimUx38Y/NyD8U
-         GmxiFCV2RAg0oNoKDhTNwir+RHC7HDplb1M+i7aLNDjaI+WpbgXzS2P05RJhzt/mgB3e
-         kA+0AnJjbYvLuX1+imf0fx8NKRfkejHi/31IQng2WO2uD1Q4TJ84NaGzzs974JRK/OYI
-         wLvrw1S25zTbBdfNDwRqkVTHF2GMnvAD2XKRcR0taZ7yNNFk1LdVoQ9RvzvrgFstUFcH
-         7WfodPz44dRB2EdgjDCTkg1TZXqBpWx3KjG/S3MwLqGkIErA/Ac/xT71VSNsbCduhkYO
-         4rGA==
-X-Gm-Message-State: AOAM531SwMplgCXsSGCw4TjrUg5EuCZrvU+iNPt3QyylTl45pUs9sBLD
-        oz6eib2UZK7Lf9a3pTlIlu+QpTCiUncZm+0Qg/IpJA==
-X-Google-Smtp-Source: ABdhPJxIgcqfcPQNV2Mf0S1CuBduUoePyIvJ/y7UAVwe1Nn9kDnrjeC7z2iGti7ZlrqPZa6ZWtExnARyVP3hTHpzWrxZ7w==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:7ca5:48f0:ef38:d556])
- (user=brendanhiggins job=sendgmr) by 2002:a05:6902:104:b0:628:bc80:748f with
- SMTP id o4-20020a056902010400b00628bc80748fmr7059512ybh.575.1646983744795;
- Thu, 10 Mar 2022 23:29:04 -0800 (PST)
-Date:   Thu, 10 Mar 2022 23:28:59 -0800
-Message-Id: <20220311072859.2174624-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH v1] kunit: add support for kunit_suites that reference init code
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        martin.fernandez@eclypsium.com, daniel.gutson@eclypsium.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        jk@codeconstruct.com.au,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 05:06:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDCF1BA91C;
+        Fri, 11 Mar 2022 02:05:44 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id C21C81F4650C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1646993137;
+        bh=jEWELbnkMSAaJxzzNjMAQVWOOpBG/dxBEOwA4lVOpmc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T+wVZZTNYiEKC/biq+/wfWjW7u/lNc+EUyLe9fSJP+w5Hoao4Q/+1h3JYiungcBHP
+         gvtewihWyT70KCx5BNE/ALyU5B43uYGR9d/45TLlEgT7NEPwT/czZuPXWVr7zGrf8U
+         cBwFBeoC5AiHmw45hf+Ek8b1EzOL1aBYbj73zumdKS38j5jklu2E3tirDac+Hz3d0L
+         fN+zkrPzqStuI3R8ZVEUwQ8TiTCsrWqBZ+yFWq7cOTJNunXlG8IfhgSgOtpk/IOEvB
+         iDaQA9buO0avwnYxmhYVHRLkKr22DUwkeVkh7Eg2aMGFxrUgWG2rVHgmLv7wKdh4X6
+         qergnIQVCJ5sw==
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        kernel@collabora.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernelci@groups.io
+Subject: [PATCH v2] selftests, x86: fix how check_cc.sh is being invoked
+Date:   Fri, 11 Mar 2022 10:05:30 +0000
+Message-Id: <d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add support for a new kind of kunit_suite registration macro called
-kunit_test_init_suite(); this new registration macro allows the
-registration of kunit_suites that reference functions marked __init and
-data marked __initdata.
+The $(CC) variable used in Makefiles could contain several arguments
+such as "ccache gcc".  These need to be passed as a single string to
+check_cc.sh, otherwise only the first argument will be used as the
+compiler command.  Without quotes, the $(CC) variable is passed as
+distinct arguments which causes the script to fail to build trivial
+programs.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: David Gow <davidgow@google.com>
+Fix this by adding quotes around $(CC) when calling check_cc.sh to
+pass the whole string as a single argument to the script even if it
+has several words such as "ccache gcc".
+
+Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+Tested-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 ---
 
-This is a follow-up to the RFC here[1].
+Notes:
+    v2: rebase and drop changes in check_cc.sh
 
-This patch is in response to a KUnit user issue[2] in which the user was
-attempting to test some init functions; although this is a functional
-solution as long as KUnit tests only run during the init phase, we will
-need to do more work if we ever allow tests to run after the init phase
-is over; it is for this reason that this patch adds a new registration
-macro rather than simply modifying the existing macros.
+ tools/testing/selftests/vm/Makefile  | 6 +++---
+ tools/testing/selftests/x86/Makefile | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Changes since last version:
- - I added more to the kunit_test_init_suites() kernel-doc comment
-   detailing "how" the modpost warnings are suppressed in addition to
-   the existing information regarding "why" it is OK for the modpost
-   warnings to be suppressed.
-
-[1] https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
-[2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-
----
- include/kunit/test.h | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index b26400731c02..7f303a06bc97 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index fbccdda93629..213f6a57d7f6 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -54,9 +54,9 @@ TEST_GEN_FILES += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
  
- #define kunit_test_suite(suite)	kunit_test_suites(&suite)
+ ifeq ($(MACHINE),x86_64)
+-CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
+-CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
++CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
  
-+/**
-+ * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-+ *			      containing init functions or init data.
-+ *
-+ * @__suites: a statically allocated list of &struct kunit_suite.
-+ *
-+ * This functions identically as &kunit_test_suites() except that it suppresses
-+ * modpost warnings for referencing functions marked __init or data marked
-+ * __initdata; this is OK because currently KUnit only runs tests upon boot
-+ * during the init phase or upon loading a module during the init phase.
-+ *
-+ * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-+ * tests must be excluded.
-+ *
-+ * The only thing this macro does that's different from kunit_test_suites is
-+ * that it suffixes the array and suite declarations it makes with _probe;
-+ * modpost suppresses warnings about referencing init data for symbols named in
-+ * this manner.
-+ */
-+#define kunit_test_init_suites(__suites...)				\
-+	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
-+			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
-+			    ##__suites)
-+
-+#define kunit_test_init_suite(suite)	kunit_test_init_suites(&suite)
-+
- #define kunit_suite_for_each_test_case(suite, test_case)		\
- 	for (test_case = suite->test_cases; test_case->run_case; test_case++)
+ override TARGETS := protection_keys
+ BINARIES_32 := $(TARGETS:%=%_32)
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 8a1f62ab3c8e..53df7d3893d3 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -6,9 +6,9 @@ include ../lib.mk
+ .PHONY: all all_32 all_64 warn_32bit_failure clean
  
-
-base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+ UNAME_M := $(shell uname -m)
+-CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+-CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
++CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+ 
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
 -- 
-2.35.1.723.g4982287a31-goog
+2.30.2
 
