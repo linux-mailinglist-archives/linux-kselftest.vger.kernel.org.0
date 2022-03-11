@@ -2,84 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B714D5855
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 03:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396514D58C1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 04:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243654AbiCKCri (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Mar 2022 21:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S232631AbiCKDVQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Mar 2022 22:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239089AbiCKCrh (ORCPT
+        with ESMTP id S230400AbiCKDVP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Mar 2022 21:47:37 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2981A41E9;
-        Thu, 10 Mar 2022 18:46:34 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0V6rDYwB_1646966789;
-Received: from 192.168.193.160(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V6rDYwB_1646966789)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Mar 2022 10:46:30 +0800
-Message-ID: <fc2fa0a9-eae8-edc4-f86f-b9056d93ee12@linux.alibaba.com>
-Date:   Thu, 10 Mar 2022 18:46:29 -0800
+        Thu, 10 Mar 2022 22:21:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0061A7D92;
+        Thu, 10 Mar 2022 19:20:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D17610A2;
+        Fri, 11 Mar 2022 03:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DBE5AC340EF;
+        Fri, 11 Mar 2022 03:20:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646968812;
+        bh=VsGSHD7E4OpMLRoeX2QE+gkBvx0t0j1p1Ol0/Z7+yS0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=luK9NBPoQgXMbyWFT8nnbcOtbyvjfOpUXfoOyFuWrpBiEM/r/ufilfCNcmQ3oVX/N
+         x6EmdIwPtaD6MCifUK+Hc8W3j4ClYF0ea+osOGypIv+l54kemQJm3teGPCbJrg/K+D
+         PMfBAcbK1yHAMxvAjhMlIAtNyo5vkumxWmasEyVMW/j1VhX1tIcNLPBnZg1kJ9YboQ
+         vOVi5oPXv6Wd0LhliEjJ+UFFRokUEInZd6Fh9pxft3HJKZU+TLVmYVV8hauMZn3vMA
+         fC+cLp4bWjNI6uMmh0gGsKjYyzPxK5wEkV8O8OOQ0rWS5p7UO6vRDIsdb3yCy6RiOs
+         VhEo/gLcl723g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BE6D9EAC095;
+        Fri, 11 Mar 2022 03:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/2] lkdtm: Add Shadow Call Stack tests
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, arnd@arndb.de, catalin.marinas@arm.com,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        luc.vanoostenryck@gmail.com, elver@google.com,
-        mark.rutland@arm.com, masahiroy@kernel.org, ojeda@kernel.org,
-        nathan@kernel.org, npiggin@gmail.com, ndesaulniers@google.com,
-        samitolvanen@google.com, shuah@kernel.org, tglx@linutronix.de,
-        will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220303073340.86008-1-ashimida@linux.alibaba.com>
- <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <202203031010.0A492D114@keescook> <202203031105.A1B4CAE6@keescook>
- <92a767c4-09e1-8783-2581-9848bb72890d@linux.alibaba.com>
- <202203091211.4F00F560@keescook>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <202203091211.4F00F560@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 0/9] bpf-lsm: Extend interoperability with IMA
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164696881277.12219.12423811667872228529.git-patchwork-notify@kernel.org>
+Date:   Fri, 11 Mar 2022 03:20:12 +0000
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
+In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     zohar@linux.ibm.com, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, revest@chromium.org,
+        gregkh@linuxfoundation.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed, 2 Mar 2022 12:13:55 +0100 you wrote:
+> Extend the interoperability with IMA, to give wider flexibility for the
+> implementation of integrity-focused LSMs based on eBPF.
+> 
+> Patch 1 fixes some style issues.
+> 
+> Patches 2-6 give the ability to eBPF-based LSMs to take advantage of the
+> measurement capability of IMA without needing to setup a policy in IMA
+> (those LSMs might implement the policy capability themselves).
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3,1/9] ima: Fix documentation-related warnings in ima_main.c
+    https://git.kernel.org/bpf/bpf-next/c/bae60eefb95c
+  - [v3,2/9] ima: Always return a file measurement in ima_file_hash()
+    https://git.kernel.org/bpf/bpf-next/c/280fe8367b0d
+  - [v3,3/9] bpf-lsm: Introduce new helper bpf_ima_file_hash()
+    https://git.kernel.org/bpf/bpf-next/c/174b16946e39
+  - [v3,4/9] selftests/bpf: Move sample generation code to ima_test_common()
+    https://git.kernel.org/bpf/bpf-next/c/2746de3c53d6
+  - [v3,5/9] selftests/bpf: Add test for bpf_ima_file_hash()
+    https://git.kernel.org/bpf/bpf-next/c/27a77d0d460c
+  - [v3,6/9] selftests/bpf: Check if the digest is refreshed after a file write
+    https://git.kernel.org/bpf/bpf-next/c/91e8fa254dbd
+  - [v3,7/9] bpf-lsm: Make bpf_lsm_kernel_read_file() as sleepable
+    https://git.kernel.org/bpf/bpf-next/c/df6b3039fa11
+  - [v3,8/9] selftests/bpf: Add test for bpf_lsm_kernel_read_file()
+    https://git.kernel.org/bpf/bpf-next/c/e6dcf7bbf37c
+  - [v3,9/9] selftests/bpf: Check that bpf_kernel_read_file() denies reading IMA policy
+    https://git.kernel.org/bpf/bpf-next/c/7bae42b68d7f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 3/9/22 12:16, Kees Cook wrote:
-> On Mon, Mar 07, 2022 at 07:16:36AM -0800, Dan Li wrote:
->> But currently it still crashes when I try to enable
->> "-mbranch-protection=pac-ret+leaf+bti".
->>
->> Because the address of "&&redirected" is not encrypted under pac,
->> the autiasp check will fail when set_return_addr returns, and
->> eventually cause the function to crash when it returns to "&&redirected"
->> ("&&redirected" as a reserved label always seems to start with a bti j
->> insn).
-> 
-> Strictly speaking, this is entirely correct. :)
-> 
->> For lkdtm, if we're going to handle both cases in one function, maybe
->> it would be better to turn off the -mbranch-protection=pac-ret+leaf+bti
->> and maybe also turn off -O2 options for the function :)
-> 
-> If we can apply a function attribute to turn off pac for the "does this
-> work without protections", that should be sufficient.
-> 
-
-Got it, will do in the next version :)
-
-Thanks,
-Dan.
