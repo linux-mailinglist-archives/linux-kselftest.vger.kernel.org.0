@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A404D6648
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449D04D6655
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346315AbiCKQ3L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 11:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S1344223AbiCKQ3t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 11:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350513AbiCKQ1x (ORCPT
+        with ESMTP id S1350558AbiCKQ14 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:27:53 -0500
+        Fri, 11 Mar 2022 11:27:56 -0500
 Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01271D4522;
-        Fri, 11 Mar 2022 08:26:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10B51D529E;
+        Fri, 11 Mar 2022 08:26:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1647015967;
-  x=1678551967;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1647015977;
+  x=1678551977;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sxaJ4mG3Y2RIBWG3Mim/tcF1834/P18PDxXFWE4XQiY=;
-  b=EbGqWLWlN+xsLiCco4wKJCrDnxQ7PvggacA0QXfV97tmvtdHg7mDoc9F
-   S+fGzsQt4jFf6+Bks0JSndq+i5fW70DIVR22bm+PxAPAXabzi1OT0BzAa
-   AYM57O8DwrfCrRitR2QQ8/7cuicsAe1Dnq9Suk/BFiY1qGUz+H38rnRc2
-   CfRj7sJEhkLW2NcuywbdLRmN8xDh27apgE1BffN1ALxTaxCB35bJv4dzO
-   fB42JTTSKJSm+eO6LbjEfSeMAPCt6b5YWxEl4fuPwuigJE+eJIMzwaNlD
-   Dx/hGsnP/eMB6zFGMHf89FMdK4a9abnR3CZ4/ersUwBVDypAMc/IffEpZ
-   Q==;
+  bh=mFUerXsYecLMbfF90aqK9kLZr/AsxHAsijhoN1YRpYE=;
+  b=E51iE8mo73xG45s6o3lJCeIESUQx03qmsA4jvTlpN/FHgFnYzLtCciuI
+   Y6u1gU0icDErxJ2e2SImtEqMYiNTSORUH9gYBXKzOAm9P7fZdi2oqIp1l
+   HLwS2c0pNDcGSaDm81ETNrSS48V6zCfIhbU+uFWYMgu6DCZpD8RRgVlHi
+   8cytBP8KeYjKt5tDr05GrWzPsISpKGijhvh9DeKsZRbp3doArhMzSb+PW
+   8hAug48G7Q9h16Q5sblPxP0BnHO/+6QcEDImzdBiwWeFNYN9vhcbIP24V
+   9lHRLDgrb4yX3QY9tpCf4JfGJQm0tGgg5C6eix/HVJoaMzeP4ICUmZIz8
+   w==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <kernel@axis.com>,
@@ -39,9 +39,9 @@ CC:     <kernel@axis.com>,
         <broonie@kernel.org>, <a.zummo@towertech.it>,
         <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
         <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-Subject: [RFC v1 09/10] regulator: tps62864: add roadtest
-Date:   Fri, 11 Mar 2022 17:24:44 +0100
-Message-ID: <20220311162445.346685-10-vincent.whitchurch@axis.com>
+Subject: [RFC v1 10/10] rtc: pcf8563: add roadtest
+Date:   Fri, 11 Mar 2022 17:24:45 +0100
+Message-ID: <20220311162445.346685-11-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220311162445.346685-1-vincent.whitchurch@axis.com>
 References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
@@ -58,239 +58,479 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a roadtest for the recently-added tps62864 regulator driver.  It
-tests voltage setting, mode setting, as well as devicetree mode
-translation.  It uses the recently-added devicetree support in
-regulator-virtual-consumer.
+Add a roadtest for the PCF8563 RTC driver, testing many of the features
+including alarm and invalid time handling.  Since it's the first
+roadtest for RTC, some helper code for handling the ABI is included.
 
-All the variants supported by the driver have identical register
-interfaces so only one test/model is added.
+The following fixes were posted for problems identified during
+development of these tests:
 
-It requires the following patches which are, as of writing, not in
-mainline:
+ - rtc: fix use-after-free on device removal
+   https://lore.kernel.org/lkml/20211210160951.7718-1-vincent.whitchurch@axis.com/
 
- - regulator: Add support for TPS6286x
-   https://lore.kernel.org/lkml/20220204155241.576342-3-vincent.whitchurch@axis.com/
+ - rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
+   https://lore.kernel.org/lkml/20220301131220.4011810-1-vincent.whitchurch@axis.com/
 
- - regulator: virtual: add devicetree support
-   https://lore.kernel.org/lkml/20220301111831.3742383-4-vincent.whitchurch@axis.com/
+ - rtc: pcf8523: fix alarm interrupt disabling
+   https://lore.kernel.org/lkml/20211103152253.22844-1-vincent.whitchurch@axis.com/
+   (not the same hardware/driver, but this was the original target for
+    test development)
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- .../roadtest/tests/regulator/__init__.py      |   0
- .../roadtest/roadtest/tests/regulator/config  |   4 +
- .../roadtest/tests/regulator/test_tps62864.py | 187 ++++++++++++++++++
- 3 files changed, 191 insertions(+)
- create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
+ .../roadtest/roadtest/tests/rtc/__init__.py   |   0
+ .../roadtest/roadtest/tests/rtc/config        |   1 +
+ .../roadtest/roadtest/tests/rtc/rtc.py        |  73 ++++
+ .../roadtest/tests/rtc/test_pcf8563.py        | 348 ++++++++++++++++++
+ 4 files changed, 422 insertions(+)
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
 
-diff --git a/tools/testing/roadtest/roadtest/tests/regulator/__init__.py b/tools/testing/roadtest/roadtest/tests/regulator/__init__.py
+diff --git a/tools/testing/roadtest/roadtest/tests/rtc/__init__.py b/tools/testing/roadtest/roadtest/tests/rtc/__init__.py
 new file mode 100644
 index 000000000000..e69de29bb2d1
-diff --git a/tools/testing/roadtest/roadtest/tests/regulator/config b/tools/testing/roadtest/roadtest/tests/regulator/config
+diff --git a/tools/testing/roadtest/roadtest/tests/rtc/config b/tools/testing/roadtest/roadtest/tests/rtc/config
 new file mode 100644
-index 000000000000..b2b503947e70
+index 000000000000..f3654f9d7c19
 --- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/regulator/config
-@@ -0,0 +1,4 @@
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_DEBUG=y
-+CONFIG_REGULATOR_VIRTUAL_CONSUMER=y
-+CONFIG_REGULATOR_TPS6286X=m
-diff --git a/tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py b/tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
++++ b/tools/testing/roadtest/roadtest/tests/rtc/config
+@@ -0,0 +1 @@
++CONFIG_RTC_DRV_PCF8563=m
+diff --git a/tools/testing/roadtest/roadtest/tests/rtc/rtc.py b/tools/testing/roadtest/roadtest/tests/rtc/rtc.py
 new file mode 100644
-index 000000000000..f7db4293d840
+index 000000000000..1a2855bfc195
 --- /dev/null
-+++ b/tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
-@@ -0,0 +1,187 @@
++++ b/tools/testing/roadtest/roadtest/tests/rtc/rtc.py
+@@ -0,0 +1,73 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +# Copyright Axis Communications AB
 +
-+from typing import Any, Final
++import contextlib
++import fcntl
++import struct
++import typing
++from pathlib import Path
++from typing import Any, cast
 +
-+from roadtest.backend.i2c import SimpleSMBusModel
++RTC_RD_TIME = 0x80247009
++RTC_SET_TIME = 0x4024700A
++RTC_WKALM_SET = 0x4028700F
++RTC_VL_READ = 0x80047013
++
++RTC_IRQF = 0x80
++RTC_AF = 0x20
++
++RTC_VL_DATA_INVALID = 1 << 0
++
++
++class RTCTime(typing.NamedTuple):
++    tm_sec: int
++    tm_min: int
++    tm_hour: int
++    tm_mday: int
++    tm_mon: int
++    tm_year: int
++    tm_wday: int
++    tm_yday: int
++    tm_isdst: int
++
++
++class RTC(contextlib.AbstractContextManager):
++    def __init__(self, devpath: Path) -> None:
++        rtc = next(devpath.glob("rtc/rtc*")).name
++        self.filename = f"/dev/{rtc}"
++
++    def __enter__(self) -> "RTC":
++        self.file = open(self.filename, "rb")
++        return self
++
++    def __exit__(self, *_: Any) -> None:
++        self.file.close()
++
++    def read_time(self) -> RTCTime:
++        s = struct.Struct("9i")
++        buf = bytearray(s.size)
++        fcntl.ioctl(self.file.fileno(), RTC_RD_TIME, buf)
++        return RTCTime._make(s.unpack(buf))
++
++    def set_time(self, tm: RTCTime) -> int:
++        s = struct.Struct("9i")
++        buf = bytearray(s.size)
++        s.pack_into(buf, 0, *tm)
++        return fcntl.ioctl(self.file.fileno(), RTC_SET_TIME, buf)
++
++    def set_wake_alarm(self, enabled: bool, time: RTCTime) -> int:
++        s = struct.Struct("2B9i")
++        buf = bytearray(s.size)
++        s.pack_into(buf, 0, enabled, False, *time)
++        return fcntl.ioctl(self.file.fileno(), RTC_WKALM_SET, buf)
++
++    def read(self) -> int:
++        s = struct.Struct("L")
++        buf = self.file.read(s.size)
++        return cast(int, s.unpack(buf)[0])
++
++    def read_vl(self) -> int:
++        s = struct.Struct("I")
++        buf = bytearray(s.size)
++        fcntl.ioctl(self.file.fileno(), RTC_VL_READ, buf)
++        return cast(int, s.unpack(buf)[0])
+diff --git a/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py b/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
+new file mode 100644
+index 000000000000..a9f4c6d92762
+--- /dev/null
++++ b/tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
+@@ -0,0 +1,348 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright Axis Communications AB
++
++import errno
++import logging
++from typing import Any, Final, Optional
++
++from roadtest.backend.i2c import I2CModel
 +from roadtest.core.devicetree import DtFragment, DtVar
 +from roadtest.core.hardware import Hardware
-+from roadtest.core.modules import insmod, rmmod
++from roadtest.core.modules import insmod
 +from roadtest.core.suite import UMLTestCase
-+from roadtest.core.sysfs import (
-+    I2CDriver,
-+    PlatformDriver,
-+    read_str,
-+    write_int,
-+    write_str,
-+)
++from roadtest.core.sysfs import I2CDriver
 +
-+REG_VOUT1: Final = 0x01
-+REG_VOUT2: Final = 0x02
-+REG_CONTROL: Final = 0x03
-+REG_STATUS: Final = 0x05
++from . import rtc
++
++logger = logging.getLogger(__name__)
++
++REG_CONTROL_STATUS_1: Final = 0x00
++REG_CONTROL_STATUS_2: Final = 0x01
++REG_VL_SECONDS: Final = 0x02
++REG_VL_MINUTES: Final = 0x03
++REG_VL_HOURS: Final = 0x04
++REG_VL_DAYS: Final = 0x05
++REG_VL_WEEKDAYS: Final = 0x06
++REG_VL_CENTURY_MONTHS: Final = 0x07
++REG_VL_YEARS: Final = 0x08
++REG_VL_MINUTE_ALARM: Final = 0x09
++REG_VL_HOUR_ALARM: Final = 0x0A
++REG_VL_DAY_ALARM: Final = 0x0B
++REG_VL_WEEKDAY_ALARM: Final = 0x0C
++REG_CLKOUT_CONTROL: Final = 0x0D
++REG_TIMER_CONTROL: Final = 0x0E
++REG_TIMER: Final = 0x0F
++
++REG_CONTROL_STATUS_2_AIE: Final = 1 << 1
++REG_CONTROL_STATUS_2_AF: Final = 1 << 3
++
++REG_VL_CENTURY_MONTHS_C: Final = 1 << 7
++
++REG_VL_ALARM_AE: Final = 1 << 7
 +
 +
-+class TPS62864(SimpleSMBusModel):
-+    def __init__(self, **kwargs: Any) -> None:
-+        super().__init__(
-+            # From datasheet section 8.6 Register map
-+            # XXX does not match reality -- recheck
-+            regs={
-+                REG_VOUT1: 0x64,
-+                REG_VOUT2: 0x64,
-+                REG_CONTROL: 0x00,
-+                REG_STATUS: 0x00,
-+            },
-+            regbytes=1,
-+            **kwargs,
++class PCF8563(I2CModel):
++    def __init__(self, int: Optional[int] = None, **kwargs: Any) -> None:
++        super().__init__(**kwargs)
++        self.int = int
++        self._set_int(False)
++
++        self.reg_addr = 0
++        # Reset values from Table 27 in datasheet, with X and - bits set to 0
++        self.regs = {
++            REG_CONTROL_STATUS_1: 0b_0000_1000,
++            REG_CONTROL_STATUS_2: 0b_0000_0000,
++            REG_VL_SECONDS: 0b_1000_0000,
++            REG_VL_MINUTES: 0b_0000_0000,
++            REG_VL_HOURS: 0b_0000_0000,
++            REG_VL_DAYS: 0b_0000_0000,
++            REG_VL_WEEKDAYS: 0b_0000_0000,
++            REG_VL_CENTURY_MONTHS: 0b_0000_0000,
++            REG_VL_YEARS: 0b_0000_0000,
++            REG_VL_MINUTE_ALARM: 0b_1000_0000,
++            REG_VL_HOUR_ALARM: 0b_1000_0000,
++            REG_VL_DAY_ALARM: 0b_1000_0000,
++            REG_VL_WEEKDAY_ALARM: 0b_1000_0000,
++            REG_CLKOUT_CONTROL: 0b_1000_0000,
++            REG_TIMER_CONTROL: 0b_0000_0011,
++            REG_TIMER: 0b_0000_0000,
++        }
++
++    def _set_int(self, active: int) -> None:
++        # Active-low
++        self.backend.gpio.set(self.int, not active)
++
++    def _check_alarm(self, addr: int) -> None:
++        alarmregs = [
++            REG_VL_MINUTE_ALARM,
++            REG_VL_HOUR_ALARM,
++            REG_VL_DAY_ALARM,
++            REG_VL_WEEKDAY_ALARM,
++        ]
++        timeregs = [
++            REG_VL_MINUTES,
++            REG_VL_HOURS,
++            REG_VL_DAYS,
++            REG_VL_WEEKDAYS,
++        ]
++
++        if addr not in alarmregs + timeregs:
++            return
++
++        af = all(
++            self.regs[a] == self.regs[b]
++            for a, b in zip(alarmregs, timeregs)
++            if not self.regs[a] & REG_VL_ALARM_AE
 +        )
++        self.reg_write(REG_CONTROL_STATUS_2, self.regs[REG_CONTROL_STATUS_2] | af << 3)
++
++    def _update_irq(self) -> None:
++        aie = self.regs[REG_CONTROL_STATUS_2] & REG_CONTROL_STATUS_2_AIE
++        af = self.regs[REG_CONTROL_STATUS_2] & REG_CONTROL_STATUS_2_AF
++
++        logger.debug(f"{aie=} {af=}")
++        self._set_int(aie and af)
++
++    def reg_read(self, addr: int) -> int:
++        val = self.regs[addr]
++        return val
++
++    def reg_write(self, addr: int, val: int) -> None:
++        assert addr in self.regs
++        self.regs[addr] = val
++        logger.debug(f"{addr=:x} {val=:x}")
++        self._check_alarm(addr)
++        self._update_irq()
++
++    def read(self, len: int) -> bytes:
++        data = bytearray(len)
++
++        for i in range(len):
++            data[i] = self.reg_read(self.reg_addr)
++            self.reg_addr = self.reg_addr + 1
++
++        return bytes(data)
++
++    def write(self, data: bytes) -> None:
++        self.reg_addr = data[0]
++
++        for i, byte in enumerate(data[1:]):
++            addr = self.reg_addr + i
++            self.backend.mock.reg_write(addr, byte)
++            self.reg_write(addr, byte)
 +
 +
-+class TestTPS62864(UMLTestCase):
++class TestPCF8563(UMLTestCase):
 +    dts = DtFragment(
 +        src="""
-+#include <dt-bindings/regulator/ti,tps62864.h>
++#include <dt-bindings/interrupt-controller/irq.h>
 +
 +&i2c {
-+    regulator@$normal$ {
-+        compatible = "ti,tps62864";
-+        reg = <0x$normal$>;
-+
-+        regulators {
-+            tps62864_normal: SW {
-+                regulator-name = "+0.85V";
-+                regulator-min-microvolt = <400000>;
-+                regulator-max-microvolt = <1675000>;
-+                regulator-allowed-modes = <TPS62864_MODE_NORMAL TPS62864_MODE_FPWM>;
-+            };
-+        };
++    rtc@$addr$ {
++        compatible = "nxp,pcf8563";
++        reg = <0x$addr$>;
 +    };
 +
-+    regulator@$fpwm$ {
-+        compatible = "ti,tps62864";
-+        reg = <0x$fpwm$>;
-+
-+        regulators {
-+            tps62864_fpwm: SW {
-+                regulator-name = "+0.85V";
-+                regulator-min-microvolt = <400000>;
-+                regulator-max-microvolt = <1675000>;
-+                regulator-initial-mode = <TPS62864_MODE_FPWM>;
-+            };
-+        };
-+    };
-+};
-+
-+/ {
-+    tps62864_normal_consumer {
-+        compatible = "regulator-virtual-consumer";
-+        default-supply = <&tps62864_normal>;
-+    };
-+
-+    tps62864_fpwm_consumer {
-+        compatible = "regulator-virtual-consumer";
-+        default-supply = <&tps62864_fpwm>;
++    rtc@$irqaddr$ {
++        compatible = "nxp,pcf8563";
++        reg = <0x$irqaddr$>;
++        interrupt-parent = <&gpio>;
++        interrupts = <$gpio$ IRQ_TYPE_LEVEL_LOW>;
 +    };
 +};
 +        """,
 +        variables={
-+            "normal": DtVar.I2C_ADDR,
-+            "fpwm": DtVar.I2C_ADDR,
++            "addr": DtVar.I2C_ADDR,
++            "irqaddr": DtVar.I2C_ADDR,
++            "gpio": DtVar.GPIO_PIN,
 +        },
 +    )
 +
 +    @classmethod
 +    def setUpClass(cls) -> None:
-+        insmod("tps6286x-regulator")
++        insmod("rtc-pcf8563")
 +
 +    @classmethod
 +    def tearDownClass(cls) -> None:
-+        rmmod("tps6286x-regulator")
++        # Can't rmmod since alarmtimer holds permanent reference
++        pass
 +
 +    def setUp(self) -> None:
-+        self.driver = I2CDriver("tps6286x")
++        self.driver = I2CDriver("rtc-pcf8563")
 +        self.hw = Hardware("i2c")
-+        self.hw.load_model(TPS62864)
++        self.hw.load_model(PCF8563, int=self.dts["gpio"])
 +
 +    def tearDown(self) -> None:
 +        self.hw.close()
 +
-+    def test_voltage(self) -> None:
-+        with (
-+            self.driver.bind(self.dts["normal"]),
-+            PlatformDriver("reg-virt-consumer").bind(
-+                "tps62864_normal_consumer"
-+            ) as consumerdev,
-+        ):
-+            maxfile = consumerdev.path / "max_microvolts"
-+            minfile = consumerdev.path / "min_microvolts"
++    def test_read_time_invalid(self) -> None:
++        addr = self.dts["addr"]
++        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
++            self.assertEqual(rtcdev.read_vl(), rtc.RTC_VL_DATA_INVALID)
 +
-+            write_int(maxfile, 1675000)
-+            write_int(minfile, 800000)
++            with self.assertRaises(OSError) as cm:
++                rtcdev.read_time()
++            self.assertEqual(cm.exception.errno, errno.EINVAL)
 +
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 5)
-+            mock.assert_reg_write_once(self, REG_VOUT1, 0x50)
-+            mock.reset_mock()
++    def test_no_alarm_support(self) -> None:
++        addr = self.dts["addr"]
++        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
++            # Make sure the times are valid so we don't get -EINVAL due to
++            # that.
++            tm = rtc.RTCTime(
++                tm_sec=10,
++                tm_min=1,
++                tm_hour=1,
++                tm_mday=1,
++                tm_mon=0,
++                tm_year=121,
++                tm_wday=0,
++                tm_yday=0,
++                tm_isdst=0,
++            )
++            rtcdev.set_time(tm)
 +
-+            mV = 1000
-+            data = [
-+                (400 * mV, 0x00),
-+                (900 * mV, 0x64),
-+                (1675 * mV, 0xFF),
-+            ]
++            alarmtm = tm._replace(tm_sec=0, tm_min=2)
++            with self.assertRaises(OSError) as cm:
++                rtcdev.set_wake_alarm(True, alarmtm)
++            self.assertEqual(cm.exception.errno, errno.EINVAL)
 +
-+            for voltage, val in data:
-+                write_int(minfile, voltage)
-+                mock = self.hw.update_mock()
-+                mock.assert_reg_write_once(self, REG_VOUT1, val)
-+                mock.reset_mock()
++    def test_alarm(self) -> None:
++        addr = self.dts["irqaddr"]
++        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
++            tm = rtc.RTCTime(
++                tm_sec=10,
++                tm_min=1,
++                tm_hour=1,
++                tm_mday=1,
++                tm_mon=0,
++                tm_year=121,
++                tm_wday=5,
++                tm_yday=0,
++                tm_isdst=0,
++            )
++            rtcdev.set_time(tm)
 +
-+            write_int(minfile, 0)
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_CONTROL, 0)
-+            mock.reset_mock()
-+
-+    def test_modes(self) -> None:
-+        with (
-+            self.driver.bind(self.dts["normal"]),
-+            PlatformDriver("reg-virt-consumer").bind(
-+                "tps62864_normal_consumer"
-+            ) as consumerdev,
-+        ):
-+            modefile = consumerdev.path / "mode"
-+            write_str(modefile, "fast")
-+
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 4)
-+            mock.reset_mock()
-+
-+            write_str(modefile, "normal")
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_CONTROL, 0)
-+            mock.reset_mock()
-+
-+    def test_dt_force_pwm(self) -> None:
-+        with (
-+            self.driver.bind(self.dts["fpwm"]),
-+            PlatformDriver("reg-virt-consumer").bind(
-+                "tps62864_fpwm_consumer"
-+            ) as consumerdev,
-+        ):
-+            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 4)
-+            mock.reset_mock()
-+
-+            modefile = consumerdev.path / "mode"
-+            self.assertEquals(read_str(modefile), "fast")
-+
-+            maxfile = consumerdev.path / "max_microvolts"
-+            minfile = consumerdev.path / "min_microvolts"
-+
-+            write_int(maxfile, 1675000)
-+            write_int(minfile, 800000)
++            alarmtm = tm._replace(tm_sec=0, tm_min=2)
++            rtcdev.set_wake_alarm(True, alarmtm)
 +
 +            mock = self.hw.update_mock()
-+            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 5 | 1 << 4)
++            mock.assert_last_reg_write(self, REG_VL_MINUTE_ALARM, 0x02)
++            mock.assert_last_reg_write(self, REG_VL_HOUR_ALARM, 0x01)
++            mock.assert_last_reg_write(self, REG_VL_DAY_ALARM, 0x01)
++            mock.assert_last_reg_write(self, REG_VL_WEEKDAY_ALARM, 5)
++            mock.assert_last_reg_write(
++                self, REG_CONTROL_STATUS_2, REG_CONTROL_STATUS_2_AIE
++            )
 +            mock.reset_mock()
++
++            self.hw.reg_write(REG_VL_MINUTES, 0x02)
++            self.hw.kick()
++
++            # This waits for the interrupt
++            self.assertEqual(rtcdev.read() & 0xFF, rtc.RTC_IRQF | rtc.RTC_AF)
++
++            alarmtm = tm._replace(tm_sec=0, tm_min=3)
++            rtcdev.set_wake_alarm(False, alarmtm)
++
++            mock = self.hw.update_mock()
++            mock.assert_last_reg_write(self, REG_CONTROL_STATUS_2, 0)
++
++    def test_read_time_valid(self) -> None:
++        self.hw.reg_write(REG_VL_SECONDS, 0x37)
++        self.hw.reg_write(REG_VL_MINUTES, 0x10)
++        self.hw.reg_write(REG_VL_HOURS, 0x11)
++        self.hw.reg_write(REG_VL_DAYS, 0x25)
++        self.hw.reg_write(REG_VL_WEEKDAYS, 0x00)
++        self.hw.reg_write(REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12)
++        self.hw.reg_write(REG_VL_YEARS, 0x21)
++
++        addr = self.dts["addr"]
++        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
++            tm = rtcdev.read_time()
++            self.assertEqual(
++                tm,
++                rtc.RTCTime(
++                    tm_sec=37,
++                    tm_min=10,
++                    tm_hour=11,
++                    tm_mday=25,
++                    tm_mon=11,
++                    tm_year=121,
++                    tm_wday=0,
++                    tm_yday=0,
++                    tm_isdst=0,
++                ),
++            )
++
++    def test_set_time_after_invalid(self) -> None:
++        addr = self.dts["addr"]
++        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
++            self.assertEqual(rtcdev.read_vl(), rtc.RTC_VL_DATA_INVALID)
++
++            tm = rtc.RTCTime(
++                tm_sec=37,
++                tm_min=10,
++                tm_hour=11,
++                tm_mday=25,
++                tm_mon=11,
++                tm_year=121,
++                tm_wday=0,
++                tm_yday=0,
++                tm_isdst=0,
++            )
++
++            rtcdev.set_time(tm)
++            tm2 = rtcdev.read_time()
++            self.assertEqual(tm, tm2)
++
++            mock = self.hw.update_mock()
++            mock.assert_reg_write_once(self, REG_VL_SECONDS, 0x37)
++            mock.assert_reg_write_once(self, REG_VL_MINUTES, 0x10)
++            mock.assert_reg_write_once(self, REG_VL_HOURS, 0x11)
++            mock.assert_reg_write_once(self, REG_VL_DAYS, 0x25)
++            mock.assert_reg_write_once(self, REG_VL_WEEKDAYS, 0x00)
++            # The driver uses the wrong polarity of the Century bit
++            # if the time was invalid.  This probably doesn't matter(?).
++            mock.assert_reg_write_once(self, REG_VL_CENTURY_MONTHS, 0 << 7 | 0x12)
++            mock.assert_reg_write_once(self, REG_VL_YEARS, 0x21)
++
++            self.assertEqual(rtcdev.read_vl(), 0)
++
++    def test_set_time_after_valid(self) -> None:
++        self.hw.reg_write(REG_VL_SECONDS, 0x37)
++        self.hw.reg_write(REG_VL_MINUTES, 0x10)
++        self.hw.reg_write(REG_VL_HOURS, 0x11)
++        self.hw.reg_write(REG_VL_DAYS, 0x25)
++        self.hw.reg_write(REG_VL_WEEKDAYS, 0x00)
++        self.hw.reg_write(REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12)
++        self.hw.reg_write(REG_VL_YEARS, 0x21)
++
++        addr = self.dts["addr"]
++        with self.driver.bind(addr) as dev, rtc.RTC(dev.path) as rtcdev:
++            tm = rtc.RTCTime(
++                tm_sec=37,
++                tm_min=10,
++                tm_hour=11,
++                tm_mday=25,
++                tm_mon=11,
++                tm_year=121,
++                tm_wday=0,
++                tm_yday=0,
++                tm_isdst=0,
++            )
++
++            rtcdev.set_time(tm)
++            tm2 = rtcdev.read_time()
++            self.assertEqual(tm, tm2)
++
++            mock = self.hw.update_mock()
++            mock.assert_reg_write_once(self, REG_VL_SECONDS, 0x37)
++            mock.assert_reg_write_once(self, REG_VL_MINUTES, 0x10)
++            mock.assert_reg_write_once(self, REG_VL_HOURS, 0x11)
++            mock.assert_reg_write_once(self, REG_VL_DAYS, 0x25)
++            mock.assert_reg_write_once(self, REG_VL_WEEKDAYS, 0x00)
++            mock.assert_reg_write_once(
++                self, REG_VL_CENTURY_MONTHS, REG_VL_CENTURY_MONTHS_C | 0x12
++            )
++            mock.assert_reg_write_once(self, REG_VL_YEARS, 0x21)
 -- 
 2.34.1
 
