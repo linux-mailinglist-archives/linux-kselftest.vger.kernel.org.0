@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F104D661D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15EA4D6612
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Mar 2022 17:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350403AbiCKQ0t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Mar 2022 11:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S1350246AbiCKQ0i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Mar 2022 11:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350342AbiCKQ0g (ORCPT
+        with ESMTP id S1350313AbiCKQ0d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 11:26:36 -0500
+        Fri, 11 Mar 2022 11:26:33 -0500
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F41F1B8BF7;
-        Fri, 11 Mar 2022 08:25:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61940117C9E;
+        Fri, 11 Mar 2022 08:24:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1647015902;
-  x=1678551902;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eqHYnpjKDOMF1TwiA1Bf1WVBNshhdDSbtR3z1p21pAk=;
-  b=LkpaT22z9yzvNZbzx0/U1CPCP2w2+HflUInWlFPV5q44tzUtQbOhBmWT
-   LJVC/RPbvDDO9siDFpGN6BLms1CZOz6Ab+h0tZFH2O2hTk7Pi/Mqu39yg
-   alOd7kEXNLs6jq6a6zuQGQfLvzlF69e0m0vT/q+TBmlntQW7A+Lp3y7b3
-   WAJSlvzconIXizP5VIR0cIs1t+WnsIvIndtVhFaGkpcpu0xuxeVwMfPXR
-   369R4GwH+Qjsx/4JHbFoy6SuHzeFqMj7Om0gZ1VCBCLZrrTE8396ujnCT
-   7UD6NFa/9w2g2PWK7MD+nZUHRnkVKjEUxUl3VMnsSIN8wzx70y/K5MKaQ
+  d=axis.com; q=dns/txt; s=axis-central1; t=1647015895;
+  x=1678551895;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rpTqoknbDOn72Q+UH1BdHCLF3yJZId72jHd8FypIw5U=;
+  b=KcTKg2XaTrn9jOPkhoLZo2g8hqlxgAXxCaFNkEUNe/XZTLF/5fsg9L3y
+   OdLoqHasFsEuGvrL3LfvL090oX71yeOWW3ecNOCg5CRf+I4/teuL4zz8q
+   zMRpnGKbSJm78pKxDDIf8lPxKmJ7h5A7ZoY7fCl1J8428NVg2XHRtx3IP
+   HamRXuPpMPfjpfU5el/1ezL+8usJUFiYcUOUkQq50sZPpsE5RhVzmuCtb
+   GlPBe3U083ksEsKd3lktBBvV7a22ilYu8l3sbdXHFS1b3dVyUgpK1PX/f
+   P6feCGwcFEvaubxiuyGKtPJibVVktt5rCamgOBh80lBzcGZwrjj9VfM5S
    Q==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <linux-kernel@vger.kernel.org>
@@ -39,10 +39,12 @@ CC:     <kernel@axis.com>,
         <broonie@kernel.org>, <a.zummo@towertech.it>,
         <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
         <corbet@lwn.net>, <linux-doc@vger.kernel.org>
-Subject: [RFC v1 00/10] roadtest: a driver testing framework
-Date:   Fri, 11 Mar 2022 17:24:35 +0100
-Message-ID: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+Subject: [RFC v1 02/10] roadtest: add C backend
+Date:   Fri, 11 Mar 2022 17:24:37 +0100
+Message-ID: <20220311162445.346685-3-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -56,261 +58,909 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset proposes roadtest, a device-driver testing framework.  Drivers
-are tested under User Mode Linux (UML) and interact with mocked/modelled
-hardware.  The tests and hardware models are written in Python, the former
-using Python's built-in unittest framework.
+Add the C parts of the roadtest framework.  This uses QEMU's
+libvhost-user to implement the device side of virtio-user and
+virtio-gpio and bridge them to the Python portions of the backend.
 
-Drivers are tested via their userspace interfaces.  The hardware models allow
-tests to inject values into registers and assert that drivers control the
-hardware in the right way and react as expected to stimuli.
+The C backend is also responsible for starting UML after the virtio
+device implementations are initialized.
 
-Roadtest is meant to be used for relatively simple drivers, such as the ones
-part of the IIO, regulator and RTC subsystems.
-
-Questions and answers:
-
-= Why do we need this?
-
-There are a large amount of these kind of drivers in the kernel.  Most of the
-hardware is not available in current CI systems so most drivers can only, at
-best, be build-tested there.  Even basic soundness such as a driver
-successfully probing and binding to the devices it tries to be support cannot
-be tested.  Drivers cannot be easily regression-tested to ensure that bugs
-fixed once do not get reintroduced.
-
-Many drivers support multiple related hardware variants, and far from all patch
-submitters have access to all the variants which the driver that they are
-patching supports, so there is no way for them to easily verify that they
-haven't broken something basic on a variant which they do not own.
-
-Furthermore, hardware can be used in many different configurations with drivers
-supporting many different devicetree properties, so even just having access to
-all the variants would be insufficient.
-
-On top of that, some of the chips measure environmental conditions such as
-temperature, so testing extreme cases may not be simple even if one has access
-to the hardware.
-
-All this makes development, modification, maintenance, and reviewing of these
-drivers harder than it necessarily needs to be.  Roadtest hopes to make some of
-these things slightly easier by providing a framework to create hardware
-models/mocks and to write testcases which exercise drivers using these models.
-
-= Do you have some specific examples of the kind of code this could be used to
-  test?
-
-Here is an example of a patch which can easily be regression-tested using
-roadtest (in fact, this series includes such a regression test) but is much
-harder to do so automatically with real hardware since it requires specific
-environmental conditions:
-
- iio: light: opt3001: Fixed timeout error when 0 lux
- https://lore.kernel.org/lkml/20210920125351.6569-1-valek@2n.cz/
-
-Here is another example.  This driver has code which correctly parses a
-documented devicetree property (amstaos,proximity-diodes) but which then fails
-to actually communicate this setting to the hardware in any way.  Such code can
-be easily tested with roadtest since the framework integrates devicetree
-support and provides functions to assert that drivers writes expected registers
-with expected values:
-
- drivers/iio/light/tsl2772.c tsl2772_read_prox_diodes()
-
-(Both the above examples happen to be from the same subsystem but that should
-in no way be taken to imply that such issues are unique to that subsystem or
-that that subsystem has more of them.)
-
-= How does this relate to kselftests?
-
-Tests in kselftests also test kernel code using the userspace interfaces, but
-that's about what's common between the frameworks.  kselftests has other goals
-and does not provide any kind of mechanism for hardware mocking.
-
-= How does this relate to kunit?
-
-Kunit is for unit testing of functions in kernel code, and is not meant for
-testing kernel code via userspace interfaces.  It could in theory be used to
-test some of the simple drivers too, but that would require (1) a large amount
-of mocking code in various kernel frameworks, and, more importantly, (2)
-refactoring of the drivers to be tested.
-
-This can be contrasted with roadtest which works with mostly unmodified drivers
-and which mocks the hardware at the lowest level without having to change
-kernel frameworks.
-
-= How do I use it?
-
-See Documentation/dev-tools/roadtest.rst added by the documentation patch for
-more information about running and writing tests using this framework.
-
-= What's included in the patchset?
-
-The current framework allows developing tests for hardware which uses the I2C
-bus.  Hardware models can also control GPIOs and use them to trigger
-interrupts.
-
-This series includes tests for some IIO, regulator and RTC drivers.  The
-regulator and RTC tests depend on a few driver patches which are either in
-review or in linux-next.  These are noted in the commit messages.
-
-The entire patch set, including the required dependencies, is also available in
-a git tree:
-
- https://github.com/vwax/linux/commits/roadtest/rfc-v1
-
-Cc: linux-kernel@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-um@lists.infradead.org
-
-Cc: shuah@kernel.org
-Cc: brendanhiggins@google.com
-Cc: linux-kselftest@vger.kernel.org
-
-Cc: jic23@kernel.org
-Cc: linux-iio@vger.kernel.org
-
-Cc: lgirdwood@gmail.com
-Cc: broonie@kernel.org
-
-Cc: a.zummo@towertech.it
-Cc: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org
-
-Cc: corbet@lwn.net
-Cc: linux-doc@vger.kernel.org
-
-Vincent Whitchurch (10):
-  roadtest: import libvhost-user from QEMU
-  roadtest: add C backend
-  roadtest: add framework
-  roadtest: add base config
-  roadtest: add build files
-  roadtest: add documentation
-  iio: light: opt3001: add roadtest
-  iio: light: vcnl4000: add roadtest
-  regulator: tps62864: add roadtest
-  rtc: pcf8563: add roadtest
-
- Documentation/dev-tools/index.rst             |    1 +
- Documentation/dev-tools/roadtest.rst          |  669 ++++
- tools/testing/roadtest/.gitignore             |    2 +
- tools/testing/roadtest/Dockerfile             |   25 +
- tools/testing/roadtest/Makefile               |   84 +
- tools/testing/roadtest/init.sh                |   19 +
- tools/testing/roadtest/pyproject.toml         |   10 +
- tools/testing/roadtest/requirements.txt       |    4 +
- tools/testing/roadtest/roadtest/__init__.py   |    2 +
- .../roadtest/roadtest/backend/__init__.py     |    0
- .../roadtest/roadtest/backend/backend.py      |   32 +
- .../testing/roadtest/roadtest/backend/gpio.py |  111 +
- .../testing/roadtest/roadtest/backend/i2c.py  |  123 +
- .../testing/roadtest/roadtest/backend/main.py |   13 +
- .../testing/roadtest/roadtest/backend/mock.py |   20 +
- .../roadtest/roadtest/backend/test_gpio.py    |   98 +
- .../roadtest/roadtest/backend/test_i2c.py     |   84 +
- .../testing/roadtest/roadtest/cmd/__init__.py |    0
- tools/testing/roadtest/roadtest/cmd/main.py   |  146 +
- tools/testing/roadtest/roadtest/cmd/remote.py |   48 +
- .../roadtest/roadtest/core/__init__.py        |    0
- .../testing/roadtest/roadtest/core/control.py |   52 +
- .../roadtest/roadtest/core/devicetree.py      |  155 +
- .../roadtest/roadtest/core/hardware.py        |   94 +
- tools/testing/roadtest/roadtest/core/log.py   |   42 +
- .../testing/roadtest/roadtest/core/modules.py |   38 +
- .../testing/roadtest/roadtest/core/opslog.py  |   35 +
- tools/testing/roadtest/roadtest/core/proxy.py |   48 +
- tools/testing/roadtest/roadtest/core/suite.py |  286 ++
- tools/testing/roadtest/roadtest/core/sysfs.py |   77 +
- .../roadtest/roadtest/core/test_control.py    |   35 +
- .../roadtest/roadtest/core/test_devicetree.py |   31 +
- .../roadtest/roadtest/core/test_hardware.py   |   41 +
- .../roadtest/roadtest/core/test_log.py        |   54 +
- .../roadtest/roadtest/core/test_opslog.py     |   27 +
- .../roadtest/roadtest/tests/__init__.py       |    0
- .../roadtest/roadtest/tests/base/config       |   84 +
- .../roadtest/roadtest/tests/iio/__init__.py   |    0
- .../roadtest/roadtest/tests/iio/config        |    1 +
- .../roadtest/roadtest/tests/iio/iio.py        |  112 +
- .../roadtest/tests/iio/light/__init__.py      |    0
- .../roadtest/roadtest/tests/iio/light/config  |    2 +
- .../roadtest/tests/iio/light/test_opt3001.py  |   95 +
- .../roadtest/tests/iio/light/test_vcnl4000.py |  132 +
- .../roadtest/tests/iio/light/test_vcnl4010.py |  282 ++
- .../roadtest/tests/iio/light/test_vcnl4040.py |  104 +
- .../roadtest/tests/iio/light/test_vcnl4200.py |   96 +
- .../roadtest/tests/regulator/__init__.py      |    0
- .../roadtest/roadtest/tests/regulator/config  |    4 +
- .../roadtest/tests/regulator/test_tps62864.py |  187 ++
- .../roadtest/roadtest/tests/rtc/__init__.py   |    0
- .../roadtest/roadtest/tests/rtc/config        |    1 +
- .../roadtest/roadtest/tests/rtc/rtc.py        |   73 +
- .../roadtest/tests/rtc/test_pcf8563.py        |  348 ++
- tools/testing/roadtest/src/.gitignore         |    1 +
- tools/testing/roadtest/src/backend.c          |  884 +++++
- .../src/libvhost-user/include/atomic.h        |  310 ++
- .../src/libvhost-user/libvhost-user.c         | 2885 +++++++++++++++++
- .../src/libvhost-user/libvhost-user.h         |  691 ++++
- 59 files changed, 8798 insertions(+)
- create mode 100644 Documentation/dev-tools/roadtest.rst
- create mode 100644 tools/testing/roadtest/.gitignore
- create mode 100644 tools/testing/roadtest/Dockerfile
- create mode 100644 tools/testing/roadtest/Makefile
- create mode 100755 tools/testing/roadtest/init.sh
- create mode 100644 tools/testing/roadtest/pyproject.toml
- create mode 100644 tools/testing/roadtest/requirements.txt
- create mode 100644 tools/testing/roadtest/roadtest/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/backend.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/gpio.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/i2c.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/main.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/mock.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/test_gpio.py
- create mode 100644 tools/testing/roadtest/roadtest/backend/test_i2c.py
- create mode 100644 tools/testing/roadtest/roadtest/cmd/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/cmd/main.py
- create mode 100644 tools/testing/roadtest/roadtest/cmd/remote.py
- create mode 100644 tools/testing/roadtest/roadtest/core/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/core/control.py
- create mode 100644 tools/testing/roadtest/roadtest/core/devicetree.py
- create mode 100644 tools/testing/roadtest/roadtest/core/hardware.py
- create mode 100644 tools/testing/roadtest/roadtest/core/log.py
- create mode 100644 tools/testing/roadtest/roadtest/core/modules.py
- create mode 100644 tools/testing/roadtest/roadtest/core/opslog.py
- create mode 100644 tools/testing/roadtest/roadtest/core/proxy.py
- create mode 100644 tools/testing/roadtest/roadtest/core/suite.py
- create mode 100644 tools/testing/roadtest/roadtest/core/sysfs.py
- create mode 100644 tools/testing/roadtest/roadtest/core/test_control.py
- create mode 100644 tools/testing/roadtest/roadtest/core/test_devicetree.py
- create mode 100644 tools/testing/roadtest/roadtest/core/test_hardware.py
- create mode 100644 tools/testing/roadtest/roadtest/core/test_log.py
- create mode 100644 tools/testing/roadtest/roadtest/core/test_opslog.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/base/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/iio.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
- create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
- create mode 100644 tools/testing/roadtest/src/.gitignore
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ tools/testing/roadtest/src/backend.c | 884 +++++++++++++++++++++++++++
+ 1 file changed, 884 insertions(+)
  create mode 100644 tools/testing/roadtest/src/backend.c
- create mode 100644 tools/testing/roadtest/src/libvhost-user/include/atomic.h
- create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.c
- create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.h
 
+diff --git a/tools/testing/roadtest/src/backend.c b/tools/testing/roadtest/src/backend.c
+new file mode 100644
+index 000000000000..d5ac08b20fd9
+--- /dev/null
++++ b/tools/testing/roadtest/src/backend.c
+@@ -0,0 +1,884 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright Axis Communications AB
++
++#define PY_SSIZE_T_CLEAN
++#include <Python.h>
++
++#include <err.h>
++#include <getopt.h>
++#include <stdlib.h>
++#include <sys/epoll.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++#include <sys/un.h>
++#include <unistd.h>
++#include <stdio.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <linux/virtio_gpio.h>
++#include <linux/virtio_i2c.h>
++#include <linux/kernel.h>
++#include <linux/list.h>
++
++#include "libvhost-user.h"
++
++enum watch_type {
++	LISTEN,
++	SOCKET_WATCH,
++	VU_WATCH,
++};
++
++struct watch {
++	VuDev *dev;
++	enum watch_type type;
++	int fd;
++	void *func;
++	void *data;
++	struct list_head list;
++};
++
++struct vhost_user_i2c {
++	VuDev dev;
++	FILE *control;
++};
++
++struct vhost_user_gpio {
++	VuDev dev;
++	FILE *control;
++	VuVirtqElement *irq_elements[64];
++};
++
++#define dbg(...)                                                               \
++	do {                                                                   \
++		if (0) {                                                       \
++			fprintf(stderr, __VA_ARGS__);                          \
++		}                                                              \
++	} while (0)
++
++static LIST_HEAD(watches);
++
++static int epfd;
++
++static PyObject *py_i2c_read, *py_i2c_write, *py_process_control;
++static PyObject *py_gpio_set_irq_type, *py_gpio_unmask;
++
++static const char *opt_main_script;
++static char *opt_gpio_socket;
++static char *opt_i2c_socket;
++
++static struct vhost_user_gpio gpio;
++static struct vhost_user_i2c i2c;
++
++static void dump_iov(const char *what, struct iovec *iovec, unsigned int count)
++{
++	int i;
++
++	dbg("dumping %s with count %u\n", what, count);
++
++	for (i = 0; i < count; i++) {
++		struct iovec *iov = &iovec[0];
++
++		dbg("i %d base %p len %zu\n", i, iov->iov_base, iov->iov_len);
++	}
++}
++
++static bool i2c_read(struct vhost_user_i2c *vi, uint16_t addr, void *data,
++		     size_t len)
++{
++	PyObject *pArgs, *pValue;
++
++	dbg("i2c read addr %#x len %zu\n", addr, len);
++
++	pArgs = PyTuple_New(1);
++	pValue = PyLong_FromLong(len);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyObject_CallObject(py_i2c_read, pArgs);
++	Py_DECREF(pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		return false;
++	}
++
++	unsigned char *buffer;
++	Py_ssize_t length;
++
++	if (PyBytes_AsStringAndSize(pValue, (char **)&buffer, &length) < 0) {
++		PyErr_Print();
++		errx(1, "invalid result from i2c.read()");
++	}
++	if (length != len) {
++		errx(1,
++		     "unexpected length from i2c.read(), expected %zu, got %zu",
++		     len, length);
++	}
++
++	memcpy(data, buffer, len);
++
++	return true;
++}
++
++static bool i2c_write(struct vhost_user_i2c *vi, uint16_t addr,
++		      const void *data, size_t len)
++{
++	PyObject *pArgs, *pValue;
++
++	dbg("i2c write addr %#x len %zu\n", addr, len);
++
++	pArgs = PyTuple_New(1);
++	pValue = PyBytes_FromStringAndSize(data, len);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyObject_CallObject(py_i2c_write, pArgs);
++	Py_DECREF(pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		return false;
++	}
++
++	return true;
++}
++
++static void gpio_send_irq_response(struct vhost_user_gpio *gpio,
++				   unsigned int pin, unsigned int status);
++
++static PyObject *cbackend_trigger_gpio_irq(PyObject *self, PyObject *args)
++{
++	unsigned int pin;
++
++	if (!PyArg_ParseTuple(args, "I", &pin))
++		return NULL;
++
++	dbg("trigger gpio %u irq\n", pin);
++
++	gpio_send_irq_response(&gpio, pin, VIRTIO_GPIO_IRQ_STATUS_VALID);
++
++	Py_RETURN_NONE;
++}
++
++static PyMethodDef EmbMethods[] = {
++	{ "trigger_gpio_irq", cbackend_trigger_gpio_irq, METH_VARARGS,
++	  "Return the number of arguments received by the process." },
++	{ NULL, NULL, 0, NULL }
++};
++
++static PyModuleDef EmbModule = { PyModuleDef_HEAD_INIT,
++				 "cbackend",
++				 NULL,
++				 -1,
++				 EmbMethods,
++				 NULL,
++				 NULL,
++				 NULL,
++				 NULL };
++
++static PyObject *PyInit_cbackend(void)
++{
++	return PyModule_Create(&EmbModule);
++}
++
++static void init_python_i2c(PyObject *backend)
++{
++	PyObject *i2c = PyObject_GetAttrString(backend, "i2c");
++
++	if (!i2c) {
++		PyErr_Print();
++		errx(1, "Error getting backend.i2c");
++	}
++
++	py_i2c_read = PyObject_GetAttrString(i2c, "read");
++	if (!py_i2c_read) {
++		PyErr_Print();
++		errx(1, "Error getting i2c.read");
++	}
++
++	py_i2c_write = PyObject_GetAttrString(i2c, "write");
++	if (!py_i2c_write) {
++		PyErr_Print();
++		errx(1, "Error getting i2c.write");
++	}
++}
++
++static void init_python_gpio(PyObject *backend)
++{
++	PyObject *gpio = PyObject_GetAttrString(backend, "gpio");
++
++	if (!gpio) {
++		PyErr_Print();
++		errx(1, "error getting backend.gpio");
++	}
++
++	py_gpio_set_irq_type = PyObject_GetAttrString(gpio, "set_irq_type");
++	if (!py_gpio_set_irq_type) {
++		PyErr_Print();
++		errx(1, "error getting gpio.set_irq_type");
++	}
++
++	py_gpio_unmask = PyObject_GetAttrString(gpio, "unmask");
++	if (!py_gpio_unmask) {
++		PyErr_Print();
++		errx(1, "error getting gpio.unmask");
++	}
++}
++
++static void init_python(void)
++{
++	PyObject *mainmod, *backend;
++	FILE *file;
++
++	PyImport_AppendInittab("cbackend", &PyInit_cbackend);
++
++	Py_Initialize();
++
++	file = fopen(opt_main_script, "r");
++	if (!file)
++		err(1, "open %s", opt_main_script);
++
++	if (PyRun_SimpleFile(file, "main.py") < 0) {
++		PyErr_Print();
++		errx(1, "error running %s", opt_main_script);
++	}
++	fclose(file);
++
++	mainmod = PyImport_AddModule("__main__");
++	if (!mainmod) {
++		PyErr_Print();
++		errx(1, "error getting __main__");
++	}
++
++	backend = PyObject_GetAttrString(mainmod, "backend");
++	if (!backend) {
++		PyErr_Print();
++		errx(1, "error getting backend");
++	}
++
++	py_process_control = PyObject_GetAttrString(backend, "process_control");
++	if (!py_process_control) {
++		PyErr_Print();
++		errx(1, "error getting backend.process_control");
++	}
++
++	init_python_i2c(backend);
++	init_python_gpio(backend);
++}
++
++static void i2c_handle_cmdq(VuDev *dev, int qidx)
++{
++	struct vhost_user_i2c *vi =
++		container_of(dev, struct vhost_user_i2c, dev);
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++	VuVirtqElement *elem;
++
++	for (;;) {
++		struct virtio_i2c_out_hdr *hdr;
++		struct iovec *resultv;
++		size_t used = 0;
++		bool ok = true;
++
++		elem = vu_queue_pop(dev, vq, sizeof(VuVirtqElement));
++		if (!elem)
++			break;
++
++		dbg("elem %p index %u out_num %u in_num %u\n", elem,
++		    elem->index, elem->out_num, elem->in_num);
++		dump_iov("out", elem->out_sg, elem->out_num);
++		dump_iov("in", elem->in_sg, elem->in_num);
++
++		assert(elem->out_sg[0].iov_len == sizeof(*hdr));
++		hdr = elem->out_sg[0].iov_base;
++
++		if (elem->out_num == 2 && elem->in_num == 1) {
++			struct iovec *data = &elem->out_sg[1];
++
++			ok = i2c_write(vi, hdr->addr, data->iov_base,
++				       data->iov_len);
++			resultv = &elem->in_sg[0];
++		} else if (elem->out_num == 1 && elem->in_num == 2) {
++			struct iovec *data = &elem->in_sg[0];
++
++			ok = i2c_read(vi, hdr->addr, data->iov_base,
++				      data->iov_len);
++			resultv = &elem->in_sg[1];
++			used += data->iov_len;
++		} else {
++			assert(false);
++		}
++
++		struct virtio_i2c_in_hdr *inhdr = resultv->iov_base;
++
++		inhdr->status = ok ? VIRTIO_I2C_MSG_OK : VIRTIO_I2C_MSG_ERR;
++
++		used += sizeof(*inhdr);
++		vu_queue_push(dev, vq, elem, used);
++		free(elem);
++	}
++
++	vu_queue_notify(&vi->dev, vq);
++}
++
++static void i2c_queue_set_started(VuDev *dev, int qidx, bool started)
++{
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++
++	dbg("queue started %d:%d\n", qidx, started);
++
++	vu_set_queue_handler(dev, vq, started ? i2c_handle_cmdq : NULL);
++}
++
++static bool i2cquit;
++static bool gpioquit;
++
++static void remove_watch(VuDev *dev, int fd);
++
++static int i2c_process_msg(VuDev *dev, VhostUserMsg *vmsg, int *do_reply)
++{
++	if (vmsg->request == VHOST_USER_NONE) {
++		dbg("i2c disconnect");
++		remove_watch(dev, -1);
++		i2cquit = true;
++		return true;
++	}
++	return false;
++}
++static int gpio_process_msg(VuDev *dev, VhostUserMsg *vmsg, int *do_reply)
++{
++	if (vmsg->request == VHOST_USER_NONE) {
++		dbg("gpio disconnect");
++		remove_watch(dev, -1);
++		gpioquit = true;
++		return true;
++	}
++	return false;
++}
++
++static uint64_t i2c_get_features(VuDev *dev)
++{
++	return 1ull << VIRTIO_I2C_F_ZERO_LENGTH_REQUEST;
++}
++
++static const VuDevIface i2c_iface = {
++	.get_features = i2c_get_features,
++	.queue_set_started = i2c_queue_set_started,
++	.process_msg = i2c_process_msg,
++};
++
++static void gpio_send_irq_response(struct vhost_user_gpio *gpio,
++				   unsigned int pin, unsigned int status)
++{
++	assert(pin < ARRAY_SIZE(gpio->irq_elements));
++
++	VuVirtqElement *elem = gpio->irq_elements[pin];
++	VuVirtq *vq = vu_get_queue(&gpio->dev, 1);
++
++	if (!elem) {
++		dbg("no irq buf for pin %d\n", pin);
++		assert(status != VIRTIO_GPIO_IRQ_STATUS_VALID);
++		return;
++	}
++
++	struct virtio_gpio_irq_response *resp;
++
++	assert(elem->out_num == 1);
++	assert(elem->in_sg[0].iov_len == sizeof(*resp));
++
++	resp = elem->in_sg[0].iov_base;
++	resp->status = status;
++
++	vu_queue_push(&gpio->dev, vq, elem, sizeof(*resp));
++	gpio->irq_elements[pin] = NULL;
++	free(elem);
++
++	vu_queue_notify(&gpio->dev, vq);
++}
++
++static void gpio_set_irq_type(struct vhost_user_gpio *gpio, unsigned int pin,
++			      unsigned int type)
++{
++	PyObject *pArgs, *pValue;
++
++	pArgs = PyTuple_New(2);
++	pValue = PyLong_FromLong(pin);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyLong_FromLong(type);
++	PyTuple_SetItem(pArgs, 1, pValue);
++
++	pValue = PyObject_CallObject(py_gpio_set_irq_type, pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		errx(1, "error from gpio.set_irq_type()");
++	}
++	Py_DECREF(pArgs);
++
++	if (type == VIRTIO_GPIO_IRQ_TYPE_NONE) {
++		gpio_send_irq_response(gpio, pin,
++				       VIRTIO_GPIO_IRQ_STATUS_INVALID);
++	}
++}
++
++static void gpio_unmask(struct vhost_user_gpio *vi, unsigned int gpio)
++{
++	PyObject *pArgs, *pValue;
++
++	pArgs = PyTuple_New(1);
++	pValue = PyLong_FromLong(gpio);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyObject_CallObject(py_gpio_unmask, pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		errx(1, "error from gpio.unmask()");
++	}
++	Py_DECREF(pArgs);
++}
++
++static void gpio_handle_cmdq(VuDev *dev, int qidx)
++{
++	struct vhost_user_gpio *vi =
++		container_of(dev, struct vhost_user_gpio, dev);
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++	VuVirtqElement *elem;
++
++	while (1) {
++		struct virtio_gpio_request *req;
++		struct virtio_gpio_response *resp;
++
++		elem = vu_queue_pop(dev, vq, sizeof(VuVirtqElement));
++		if (!elem)
++			break;
++
++		dbg("elem %p index %u out_num %u in_num %u\n", elem,
++		    elem->index, elem->out_num, elem->in_num);
++
++		dump_iov("out", elem->out_sg, elem->out_num);
++		dump_iov("in", elem->in_sg, elem->in_num);
++
++		assert(elem->out_num == 1);
++		assert(elem->in_num == 1);
++
++		assert(elem->out_sg[0].iov_len == sizeof(*req));
++		assert(elem->in_sg[0].iov_len == sizeof(*resp));
++
++		req = elem->out_sg[0].iov_base;
++		resp = elem->in_sg[0].iov_base;
++
++		dbg("req type %#x gpio %#x value %#x\n", req->type, req->gpio,
++		    req->value);
++
++		switch (req->type) {
++		case VIRTIO_GPIO_MSG_IRQ_TYPE:
++			gpio_set_irq_type(vi, req->gpio, req->value);
++			break;
++		default:
++			/*
++			 * The other types couldhooked up to Python later for
++			 * testing of drivers' control of GPIOs.
++			 */
++			break;
++		}
++
++		resp->status = VIRTIO_GPIO_STATUS_OK;
++		resp->value = 0;
++
++		vu_queue_push(dev, vq, elem, sizeof(*resp));
++		free(elem);
++	}
++
++	vu_queue_notify(&vi->dev, vq);
++}
++
++static void gpio_handle_eventq(VuDev *dev, int qidx)
++{
++	struct vhost_user_gpio *vi =
++		container_of(dev, struct vhost_user_gpio, dev);
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++	VuVirtqElement *elem;
++
++	for (;;) {
++		struct virtio_gpio_irq_request *req;
++		struct virtio_gpio_irq_response *resp;
++
++		elem = vu_queue_pop(dev, vq, sizeof(VuVirtqElement));
++		if (!elem)
++			break;
++
++		dbg("elem %p index %u out_num %u in_num %u\n", elem,
++		    elem->index, elem->out_num, elem->in_num);
++
++		dump_iov("out", elem->out_sg, elem->out_num);
++		dump_iov("in", elem->in_sg, elem->in_num);
++
++		assert(elem->out_num == 1);
++		assert(elem->in_num == 1);
++
++		assert(elem->out_sg[0].iov_len == sizeof(*req));
++		assert(elem->in_sg[0].iov_len == sizeof(*resp));
++
++		req = elem->out_sg[0].iov_base;
++		resp = elem->in_sg[0].iov_base;
++
++		dbg("irq req gpio %#x\n", req->gpio);
++
++		assert(req->gpio < ARRAY_SIZE(vi->irq_elements));
++		assert(vi->irq_elements[req->gpio] == NULL);
++
++		vi->irq_elements[req->gpio] = elem;
++
++		gpio_unmask(vi, req->gpio);
++	}
++}
++
++static void gpio_queue_set_started(VuDev *dev, int qidx, bool started)
++{
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++
++	dbg("%s %d:%d\n", __func__, qidx, started);
++
++	if (qidx == 0)
++		vu_set_queue_handler(dev, vq,
++				     started ? gpio_handle_cmdq : NULL);
++	if (qidx == 1)
++		vu_set_queue_handler(dev, vq,
++				     started ? gpio_handle_eventq : NULL);
++}
++
++static int gpio_get_config(VuDev *dev, uint8_t *config, uint32_t len)
++{
++	struct vhost_user_gpio *gpio =
++		container_of(dev, struct vhost_user_gpio, dev);
++	static struct virtio_gpio_config gpioconfig = {
++		.ngpio = ARRAY_SIZE(gpio->irq_elements),
++	};
++
++	dbg("%s: len %u\n", __func__, len);
++
++	if (len > sizeof(struct virtio_gpio_config))
++		return -1;
++
++	memcpy(config, &gpioconfig, len);
++
++	return 0;
++}
++
++static uint64_t gpio_get_protocol_features(VuDev *dev)
++{
++	return 1ull << VHOST_USER_PROTOCOL_F_CONFIG;
++}
++
++static uint64_t gpio_get_features(VuDev *dev)
++{
++	return 1ull << VIRTIO_GPIO_F_IRQ;
++}
++
++static const VuDevIface gpio_vuiface = {
++	.get_features = gpio_get_features,
++	.queue_set_started = gpio_queue_set_started,
++	.process_msg = gpio_process_msg,
++	.get_config = gpio_get_config,
++	.get_protocol_features = gpio_get_protocol_features,
++};
++
++static void panic(VuDev *dev, const char *err)
++{
++	fprintf(stderr, "panicking!");
++	abort();
++}
++
++static struct watch *new_watch(struct VuDev *dev, int fd, enum watch_type type,
++			       void *func, void *data)
++{
++	struct watch *watch = malloc(sizeof(*watch));
++
++	assert(watch);
++
++	watch->dev = dev;
++	watch->fd = fd;
++	watch->func = func;
++	watch->data = data;
++	watch->type = type;
++
++	list_add(&watch->list, &watches);
++
++	return watch;
++}
++
++static void set_watch(VuDev *dev, int fd, int condition, vu_watch_cb cb,
++		      void *data)
++{
++	struct watch *watch = new_watch(dev, fd, VU_WATCH, cb, data);
++	int ret;
++
++	struct epoll_event ev = {
++		.events = EPOLLIN,
++		.data.ptr = watch,
++	};
++
++	dbg("set watch epfd %d fd %d condition %d cb %p\n", epfd, fd, condition,
++	    cb);
++
++	epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL);
++
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev);
++	if (ret < 0)
++		err(1, "epoll_ctl");
++}
++
++static void remove_watch(VuDev *dev, int fd)
++{
++	struct watch *watch, *tmp;
++
++	list_for_each_entry_safe(watch, tmp, &watches, list) {
++		if (watch->dev != dev)
++			continue;
++		if (fd >= 0 && watch->fd != fd)
++			continue;
++
++		epoll_ctl(epfd, EPOLL_CTL_DEL, watch->fd, NULL);
++
++		list_del(&watch->list);
++		free(watch);
++	}
++}
++
++static int unix_listen(const char *path)
++{
++	struct sockaddr_un un = {
++		.sun_family = AF_UNIX,
++	};
++	int sock;
++	int ret;
++
++	unlink(path);
++
++	sock = socket(PF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
++	if (sock < 0)
++		err(1, "socket");
++
++	memcpy(&un.sun_path, path, strlen(path));
++
++	ret = bind(sock, (struct sockaddr *)&un, sizeof(un));
++	if (ret < 0)
++		err(1, "bind");
++
++	ret = listen(sock, 1);
++	if (ret < 0)
++		err(1, "listen");
++
++	return sock;
++}
++
++static void dev_add_watch(int epfd, struct watch *watch)
++{
++	struct epoll_event event = {
++		.events = EPOLLIN | EPOLLONESHOT,
++		.data.ptr = watch,
++	};
++	int ret;
++
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, watch->fd, &event);
++	if (ret < 0)
++		err(1, "EPOLL_CTL_ADD");
++}
++
++static VuDev *gpio_init(int epfd, const char *path)
++{
++	struct watch *watch;
++	VuDev *dev;
++	int lsock;
++	bool rc;
++
++	lsock = unix_listen(path);
++	if (lsock < 0)
++		err(1, "listen %s", path);
++
++	rc = vu_init(&gpio.dev, 2, lsock, panic, NULL, set_watch,
++		     remove_watch, &gpio_vuiface);
++	assert(rc == true);
++
++	dev = &gpio.dev;
++	watch = new_watch(dev, lsock, LISTEN, vu_dispatch, dev);
++
++	dev_add_watch(epfd, watch);
++
++	return dev;
++}
++
++static VuDev *i2c_init(int epfd, const char *path)
++{
++	static struct vhost_user_i2c i2c = {};
++	VuDev *dev = &i2c.dev;
++	struct watch *watch;
++	int lsock;
++	bool rc;
++
++	lsock = unix_listen(path);
++	if (lsock < 0)
++		err(1, "listen %s", path);
++
++	rc = vu_init(dev, 1, lsock, panic, NULL, set_watch,
++		     remove_watch, &i2c_iface);
++	assert(rc == true);
++
++	watch = new_watch(dev, lsock, LISTEN, vu_dispatch, dev);
++
++	dev_add_watch(epfd, watch);
++
++	return dev;
++}
++
++static pid_t run_uml(char **argv)
++{
++	int log, null, ret;
++	pid_t pid;
++
++	pid = fork();
++	if (pid < 0)
++		err(1, "fork");
++	if (pid > 0)
++		return pid;
++
++	chdir(getenv("ROADTEST_WORK_DIR"));
++
++	log = open("uml.txt", O_WRONLY | O_TRUNC | O_APPEND | O_CREAT, 0600);
++	if (log < 0)
++		err(1, "open uml.txt");
++
++	null = open("/dev/null", O_RDONLY);
++	if (null < 0)
++		err(1, "open null");
++
++	ret = dup2(null, 0);
++	if (ret < 0)
++		err(1, "dup2");
++
++	ret = dup2(log, 1);
++	if (ret < 0)
++		err(1, "dup2");
++
++	ret = dup2(log, 2);
++	if (ret < 0)
++		err(1, "dup2");
++
++	execvpe(argv[0], argv, environ);
++	err(1, "execve");
++
++	return -1;
++}
++
++int main(int argc, char *argv[])
++{
++	static struct option long_option[] = {
++		{ "main-script", required_argument, 0, 'm' },
++		{ "gpio-socket", required_argument, 0, 'g' },
++		{ "i2c-socket", required_argument, 0, 'i' },
++	};
++
++	while (1) {
++		int c = getopt_long(argc, argv, "", long_option, NULL);
++
++		if (c == -1)
++			break;
++
++		switch (c) {
++		case 'm':
++			opt_main_script = optarg;
++			break;
++
++		case 'g':
++			opt_gpio_socket = optarg;
++			break;
++
++		case 'i':
++			opt_i2c_socket = optarg;
++			break;
++
++		default:
++			errx(1, "getopt");
++		}
++	}
++
++	if (!opt_main_script || !opt_gpio_socket || !opt_i2c_socket)
++		errx(1, "Invalid arguments");
++
++	epfd = epoll_create1(EPOLL_CLOEXEC);
++	if (epfd < 0)
++		err(1, "epoll_create1");
++
++	init_python();
++
++	gpio_init(epfd, opt_gpio_socket);
++	i2c_init(epfd, opt_i2c_socket);
++
++	run_uml(&argv[optind]);
++
++	while (1) {
++		struct epoll_event events[10];
++		int nfds;
++		int i;
++
++		nfds = epoll_wait(epfd, events, ARRAY_SIZE(events), -1);
++		if (nfds < 0) {
++			if (errno == EINTR) {
++				continue;
++
++				err(1, "epoll_wait");
++			}
++		}
++
++		if (!PyObject_CallObject(py_process_control, NULL)) {
++			PyErr_Print();
++			errx(1, "error from backend.process_control");
++		}
++
++		for (i = 0; i < nfds; i++) {
++			struct epoll_event *event = &events[i];
++			struct watch *watch = event->data.ptr;
++			int fd;
++
++			switch (watch->type) {
++			case LISTEN:
++				fd = accept(watch->fd, NULL, NULL);
++				close(watch->fd);
++				if (fd == -1)
++					err(1, "accept");
++
++				watch->dev->sock = fd;
++				watch->fd = fd;
++				watch->type = SOCKET_WATCH;
++
++				struct epoll_event event = {
++					.events = EPOLLIN,
++					.data.ptr = watch,
++				};
++
++				int ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd,
++						    &event);
++				if (ret < 0)
++					err(1, "epoll_ctl");
++
++				break;
++			case SOCKET_WATCH:
++				vu_dispatch(watch->dev);
++				break;
++			case VU_WATCH:
++				((vu_watch_cb)(watch->func))(watch->dev, POLLIN,
++							     watch->data);
++				break;
++			default:
++				fprintf(stderr, "abort!");
++				abort();
++			}
++		}
++
++		if (i2cquit && gpioquit)
++			break;
++	}
++
++	vu_deinit(&i2c.dev);
++	vu_deinit(&gpio.dev);
++
++	Py_Finalize();
++
++	return 0;
++}
 -- 
 2.34.1
 
