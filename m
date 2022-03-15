@@ -2,52 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADFB4DA444
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 21:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F02D4DA5C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 23:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiCOUy1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Mar 2022 16:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S1344033AbiCOW5k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Mar 2022 18:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiCOUy0 (ORCPT
+        with ESMTP id S242097AbiCOW5h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:54:26 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5E421E05;
-        Tue, 15 Mar 2022 13:53:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 88E221F427AB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647377588;
-        bh=fMsS3LbTcwht92/HR/LuwAiQjOoU49g8L/K9h5T6wuw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=NPGaNKmiWX2v2hpAWpVIPDIQNRjkR8AuG4C8ohhDI5soFk9+3OoT6M7lP8Wp7HJqH
-         4Zgw7sLqujjMOobSdz9filIP8YCIV6805LSl3yfHdv+woG+f/+oVOozjkaHghYoi0Z
-         XmLZGhlmTa27/3SYPV4M3ZppvRf3o+41dWiwc01jz0JPJL7N6ktyeepxZV41RFsDYf
-         3OqeiDR9qlo7uqk1+mIEzDTIKs1rdtPj5nKSrcM15Ui2Fp43HvuJDkjaBugDSP3mH1
-         +DES5GfJ52tuT6VSp8JAQ3DlgcybCIQgacSDXcDtwMZye2nSmCAQnzSLSK7kT7cxy3
-         h8/Xr8akde8Nw==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Organization: Collabora
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
-        <20220315085014.1047291-2-usama.anjum@collabora.com>
-Date:   Tue, 15 Mar 2022 16:53:05 -0400
-In-Reply-To: <20220315085014.1047291-2-usama.anjum@collabora.com> (Muhammad
-        Usama Anjum's message of "Tue, 15 Mar 2022 13:50:12 +0500")
-Message-ID: <871qz3ndji.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 15 Mar 2022 18:57:37 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BA05D5E8
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Mar 2022 15:56:23 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id h10so875078oia.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Mar 2022 15:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=ljhqCefXzcruXQp9WtlPDBfDUy90SHN1xf9SfOB4wXo=;
+        b=JJdvfR6X7QbqEPUgushUKYa1RNBQkRRR4WC3wPNl5kIq/jo7YTlvg2icY93SRLQXUh
+         /H3mr3foM2w4Zeg0j43gJ+lyqTZfkwfWNtS7hhqrgDZzg1uMGpAMthALWh/NvjFIn0uk
+         z3f1NAhLXblGVwDuppexEX2ch+IXdxztXMB0CgXCRibvmSYeh9K1kwtyLMGeo6P19j1N
+         Jtli/+ReQBAwDCc1T90MIaQrwJ+HgvzDdaWem43Q2c+fFy3/26A9/HhbRTJRjcCnbG5G
+         EuQjWi2H+mQ7i+YNbP971nB8QNYJ9z541H61yb1PbWeBwslBmfI5P8ltP7wPBHkp0K1e
+         VZCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=ljhqCefXzcruXQp9WtlPDBfDUy90SHN1xf9SfOB4wXo=;
+        b=DMEYjl3HSa269617sFzRnxHXpFmEBAT67S1CL9+Ta4GsPALOJM7WGQJuYztX0ad4xD
+         uR8GUpHQ8QOR/OV7PxdQcvTdpISmAa3jX4eFNVtbRJlXyV0WI/jFo4sVkduBjqZOEkcw
+         smN51NvZRJfY7957YinK6wz6ekUR7VMOycWM9q+jVLww4MqHiQChdwtllhVqaeMji0CR
+         voi3iEV1jbsq0yVQvOUVga/5AB74d5Lxj0mrWK1/87o0xxqfFzE5dt/hwbNwowBB+XKj
+         3edY4IuNAScttVWwieQzUhsqSg3e37FEx37KVdjP0jj70fwRLk1GDmn+VnLmpojmU3K8
+         hfmw==
+X-Gm-Message-State: AOAM533BIRtgps6doArasnr7lSbIPofJ2jyXCnwPRAZHITiE2WfzJlB8
+        +A6RsJXHaJDhjvQNHc0+yVrtmA==
+X-Google-Smtp-Source: ABdhPJxBltnxj+cRdTc3QSEmr5cFA2sw31omFs/+72HwwBL1IWZvFZ6qtR1216vBiT4g5Njj0Zdmuw==
+X-Received: by 2002:aca:db03:0:b0:2da:363b:658b with SMTP id s3-20020acadb03000000b002da363b658bmr2763996oig.173.1647384983257;
+        Tue, 15 Mar 2022 15:56:23 -0700 (PDT)
+Received: from linaro.org ([189.4.186.55])
+        by smtp.gmail.com with ESMTPSA id a19-20020a056808099300b002da1428db03sm247765oic.7.2022.03.15.15.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 15:56:22 -0700 (PDT)
+References: <20220225165923.1474372-1-broonie@kernel.org>
+ <20220225165923.1474372-24-broonie@kernel.org>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v12 23/40] arm64/sme: Add ptrace support for ZA
+Date:   Tue, 15 Mar 2022 18:51:36 -0300
+In-reply-to: <20220225165923.1474372-24-broonie@kernel.org>
+Message-ID: <84v8werfn3.fsf@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,186 +83,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
 
-> From: Gabriel Krisman Bertazi <krisman@collabora.com>
+Hello,
 
-Hi Usama,
+Just one trivial comment:
 
-Please, cc me on the whole thread.  I didn't get the patch 1/2 or the
-cover letter.
+Mark Brown <broonie@kernel.org> writes:
 
-> This introduces three tests:
-> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
-> check if the SD bit is flipped.
-> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
-> 3) Check soft-dirty on huge pages
->
-> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
-> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
-> same issue that he fixed, and this test would have caught it.
->
-> CC: Will Deacon <will@kernel.org>
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> V3 of this patch is in Andrew's tree. Please drop that.
-
-v3 is still in linux-next and this note is quite hidden in the middle of
-the commit message.
-
->
-> Changes in V4:
-> Cosmetic changes
-> Removed global variables
-> Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
-> once
-> Some other minor changes
-> Correct the authorship of the patch
->
-> Tests of soft dirty bit in this patch and in madv_populate.c are
-> non-overlapping. madv_populate.c has only one soft-dirty bit test in the
-> context of different advise (MADV_POPULATE_READ and
-> MADV_POPULATE_WRITE). This new test adds more tests.
->
-> Tab width of 8 has been used to align the macros. This alignment may look
-> odd in shell or email. But it looks alright in editors.
-
-I'm curious if you tested reverting 912efa17e512. Did the new versions
-of this patch still catch the original issue?
-
-> Test output:
-> TAP version 13
-> 1..5
-> ok 1 Test test_simple
-> ok 2 Test test_vma_reuse reused memory location
-> ok 3 Test test_vma_reuse dirty bit of previous page
-> ok 4 Test test_hugepage huge page allocation
-> ok 5 Test test_hugepage huge page dirty bit
->  # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
->
-> Or
->
-> TAP version 13
-> 1..5
-> ok 1 Test test_simple
-> ok 2 Test test_vma_reuse reused memory location
-> ok 3 Test test_vma_reuse dirty bit of previous page
-> ok 4 # SKIP Test test_hugepage huge page allocation
-> ok 5 # SKIP Test test_hugepage huge page dirty bit
->  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
->
-> Changes in V3:
-> Move test to selftests/vm
-> Use kselftest macros
-> Minor updates to make code more maintainable
-> Add configurations in config file
->
-> V2 of this patch:
-> https://lore.kernel.org/lkml/20210603151518.2437813-1-krisman@collabora.com/
-> ---
->  tools/testing/selftests/vm/.gitignore   |   1 +
->  tools/testing/selftests/vm/Makefile     |   2 +
->  tools/testing/selftests/vm/config       |   2 +
->  tools/testing/selftests/vm/soft-dirty.c | 146 ++++++++++++++++++++++++
->  4 files changed, 151 insertions(+)
->  create mode 100644 tools/testing/selftests/vm/soft-dirty.c
->
-> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-> index d7507f3c7c76a..3cb4fa771ec2a 100644
-> --- a/tools/testing/selftests/vm/.gitignore
-> +++ b/tools/testing/selftests/vm/.gitignore
-> @@ -29,5 +29,6 @@ write_to_hugetlbfs
->  hmm-tests
->  memfd_secret
->  local_config.*
-> +soft-dirty
->  split_huge_page_test
->  ksm_tests
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 4e68edb26d6b6..f25eb30b5f0cb 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -47,6 +47,7 @@ TEST_GEN_FILES += on-fault-limit
->  TEST_GEN_FILES += thuge-gen
->  TEST_GEN_FILES += transhuge-stress
->  TEST_GEN_FILES += userfaultfd
-> +TEST_GEN_PROGS += soft-dirty
->  TEST_GEN_PROGS += split_huge_page_test
->  TEST_GEN_FILES += ksm_tests
->  
-> @@ -92,6 +93,7 @@ KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
->  $(OUTPUT)/madv_populate: vm_util.c
-> +$(OUTPUT)/soft-dirty: vm_util.c
->  $(OUTPUT)/split_huge_page_test: vm_util.c
->  
->  ifeq ($(MACHINE),x86_64)
-> diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
-> index 60e82da0de850..be087c4bc3961 100644
-> --- a/tools/testing/selftests/vm/config
-> +++ b/tools/testing/selftests/vm/config
-> @@ -4,3 +4,5 @@ CONFIG_TEST_VMALLOC=m
->  CONFIG_DEVICE_PRIVATE=y
->  CONFIG_TEST_HMM=m
->  CONFIG_GUP_TEST=y
-> +CONFIG_TRANSPARENT_HUGEPAGE=y
-> +CONFIG_MEM_SOFT_DIRTY=y
-> diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
-> new file mode 100644
-> index 0000000000000..2d50ed3472206
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/soft-dirty.c
-> @@ -0,0 +1,146 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <stdbool.h>
-> +#include <fcntl.h>
-> +#include <stdint.h>
-> +#include <malloc.h>
-> +#include <sys/mman.h>
-> +#include "../kselftest.h"
-> +#include "vm_util.h"
-> +
-> +#define PAGEMAP			"/proc/self/pagemap"
-> +#define CLEAR_REFS		"/proc/self/clear_refs"
-> +#define MAX_LINE_LENGTH		512
-
-MAX_LINE_LENGTH is no longer used after check_for_pattern was dropped.
-
-Can't the previous defines and file handling functions also go the
-vm_util.h?
-
-> +#define TEST_ITERATIONS		10000
-> +
-> +static void test_simple(int pagemap_fd, int pagesize)
+> +static int za_get(struct task_struct *target,
+> +		  const struct user_regset *regset,
+> +		  struct membuf to)
 > +{
-> +	int i;
-> +	char *map;
+> +	struct user_za_header header;
+> +	unsigned int vq;
+> +	unsigned long start, end;
 > +
-> +	map = aligned_alloc(pagesize, pagesize);
-> +	if (!map)
-> +		ksft_exit_fail_msg("mmap failed\n");
+> +	if (!system_supports_sme())
+> +		return -EINVAL;
 > +
-> +	clear_softdirty();
+> +	/* Header */
+> +	memset(&header, 0, sizeof(header));
 > +
-> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-> +		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-> +			break;
-> +		}
+> +	if (test_tsk_thread_flag(target, TIF_SME_VL_INHERIT))
+> +		header.flags |= ZA_PT_VL_INHERIT;
 > +
-> +		clear_softdirty();
-> +		map[0]++;
+> +	header.vl = task_get_sme_vl(target);
+> +	vq = sve_vq_from_vl(header.vl);
+> +	header.max_vl = sme_max_vl();
+> +	header.max_size = ZA_PT_SIZE(vq);
+> +
+> +	/* If ZA is not active there is only the header */
+> +	if (thread_za_enabled(&target->thread))
+> +		header.size = ZA_PT_SIZE(vq);
+> +	else
+> +		header.size = ZA_PT_ZA_OFFSET;
+> +
+> +	membuf_write(&to, &header, sizeof(header));
+> +
+> +	BUILD_BUG_ON(ZA_PT_ZA_OFFSET != sizeof(header));
+> +	end = ZA_PT_ZA_OFFSET;
+> +;
 
+Stray semicolon.
 
-This will overflow several times during TEST_ITERATIONS.  While it is
-not broken, since we care about causing the page fault, it is not
-obvious.  Can you add a comment or do something like this instead?
-
-  map[0] = !map[0];
+> +	if (target == current)
+> +		fpsimd_preserve_current_state();
+> +
+> +	/* Any register data to include? */
+> +	if (thread_za_enabled(&target->thread)) {
+> +		start = end;
+> +		end = ZA_PT_SIZE(vq);
+> +		membuf_write(&to, target->thread.za_state, end - start);
+> +	}
+> +
+> +	/* Zero any trailing padding */
+> +	start = end;
+> +	end = ALIGN(header.size, SVE_VQ_BYTES);
+> +	return membuf_zero(&to, end - start);
+> +}
 
 -- 
-Gabriel Krisman Bertazi
+Thanks,
+Thiago
