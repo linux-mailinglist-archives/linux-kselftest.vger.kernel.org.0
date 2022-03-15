@@ -2,42 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AE24D96B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 09:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571A84D96B9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 09:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiCOIwE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Mar 2022 04:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S1346216AbiCOIwN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Mar 2022 04:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346207AbiCOIwC (ORCPT
+        with ESMTP id S1346214AbiCOIwK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:52:02 -0400
+        Tue, 15 Mar 2022 04:52:10 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397254D610;
-        Tue, 15 Mar 2022 01:50:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587714D623;
+        Tue, 15 Mar 2022 01:50:58 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id 84CF21F431AC
+        with ESMTPSA id E767D1F43189
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647334248;
-        bh=nHtwrinbUYWfO8AEIJvgFJxDJ2MMOOw46lB73jRrvj0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=j8ZSSKC2rlQ2hJR/rrMrORiqHefuuTKjVJ+6oZ6/H/dIqY6Ezb7xpUEdZ50oHG5+U
-         DDPs4f1KP7egAC/NFH7A5amaajQ5B4tji3ANxS9+WVBgDoY86J4JXB98MFGP0HOSP5
-         uJlIUNWw6potGN9I+KHyV0c+mDCI3IQX/VDzDbESA6tCbcMIQ4FovIMIcLXuwDoh9X
-         LLMs5+DGGZGLCTWQHGwkPAK1cJIPncVOLoUkJLUabD04p/7aFBUAJveCRZjQ6xLOWM
-         mx0Ni5XYBSTHbh5Vy+zi7jdrw3+IB3mKNwIEG8vA3OO8rMdug3NtdjnCCOnnqkNRH6
-         RlIOGIS/1wgAw==
+        s=mail; t=1647334257;
+        bh=lopgVZP2WwtNXTEKFbRsbX8u2BD4qu5zhX66pLhAQoc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PkE4HH0M9WpZsbl2G9hpbgem8WqAwHX0e0j+R/9QnERZEsrZkJ0CHIeCJ1c+I3USY
+         /sB8O96aVWWAQhD63I5eXuy400SV8hU6zKzH+izf/dFTJJ+4Bb+3dw5KKkKXuBzvEP
+         oKzmCohsjowrSVW+n14iKWHoHU/J1LjGxQBIYbd/+xottpyFQP6H9sglUKA5q576lT
+         XqyElvHZ5Uot4r0YMauk749De6p6jFK8ozuPydlAdkpBo9XL/1DNwlTqEdbaiP7nLx
+         QtHak9M2c/zh2gft0HSDHPV6AJHZg+kV+0PnSDgdRhkyaF96p0R0QU4BESHqSflD7N
+         CmpP8afJlQhgw==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
+Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        usama.anjum@collabora.com, kernel@collabora.com,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH V4 1/2] selftests: vm: bring common functions to a new file
-Date:   Tue, 15 Mar 2022 13:50:11 +0500
-Message-Id: <20220315085014.1047291-1-usama.anjum@collabora.com>
+Subject: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
+Date:   Tue, 15 Mar 2022 13:50:12 +0500
+Message-Id: <20220315085014.1047291-2-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220315085014.1047291-1-usama.anjum@collabora.com>
+References: <20220315085014.1047291-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -50,350 +53,270 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Bring common functions to a new file. These functions can be used in the
-new tests. This helps in code duplication.
+From: Gabriel Krisman Bertazi <krisman@collabora.com>
 
+This introduces three tests:
+1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
+check if the SD bit is flipped.
+2) Check VMA reuse: validate the VM_SOFTDIRTY usage
+3) Check soft-dirty on huge pages
+
+This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
+Invalidate TLB after clearing soft-dirty page state"). I was tracking the
+same issue that he fixed, and this test would have caught it.
+
+CC: Will Deacon <will@kernel.org>
+Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/vm/Makefile           |   7 +-
- tools/testing/selftests/vm/madv_populate.c    |  34 +-----
- .../selftests/vm/split_huge_page_test.c       |  77 +------------
- tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
- tools/testing/selftests/vm/vm_util.h          |  15 +++
- 5 files changed, 125 insertions(+), 111 deletions(-)
- create mode 100644 tools/testing/selftests/vm/vm_util.c
- create mode 100644 tools/testing/selftests/vm/vm_util.h
+V3 of this patch is in Andrew's tree. Please drop that.
 
+Changes in V4:
+Cosmetic changes
+Removed global variables
+Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
+once
+Some other minor changes
+Correct the authorship of the patch
+
+Tests of soft dirty bit in this patch and in madv_populate.c are
+non-overlapping. madv_populate.c has only one soft-dirty bit test in the
+context of different advise (MADV_POPULATE_READ and
+MADV_POPULATE_WRITE). This new test adds more tests.
+
+Tab width of 8 has been used to align the macros. This alignment may look
+odd in shell or email. But it looks alright in editors.
+
+Test output:
+TAP version 13
+1..5
+ok 1 Test test_simple
+ok 2 Test test_vma_reuse reused memory location
+ok 3 Test test_vma_reuse dirty bit of previous page
+ok 4 Test test_hugepage huge page allocation
+ok 5 Test test_hugepage huge page dirty bit
+ # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Or
+
+TAP version 13
+1..5
+ok 1 Test test_simple
+ok 2 Test test_vma_reuse reused memory location
+ok 3 Test test_vma_reuse dirty bit of previous page
+ok 4 # SKIP Test test_hugepage huge page allocation
+ok 5 # SKIP Test test_hugepage huge page dirty bit
+ # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
+
+Changes in V3:
+Move test to selftests/vm
+Use kselftest macros
+Minor updates to make code more maintainable
+Add configurations in config file
+
+V2 of this patch:
+https://lore.kernel.org/lkml/20210603151518.2437813-1-krisman@collabora.com/
+---
+ tools/testing/selftests/vm/.gitignore   |   1 +
+ tools/testing/selftests/vm/Makefile     |   2 +
+ tools/testing/selftests/vm/config       |   2 +
+ tools/testing/selftests/vm/soft-dirty.c | 146 ++++++++++++++++++++++++
+ 4 files changed, 151 insertions(+)
+ create mode 100644 tools/testing/selftests/vm/soft-dirty.c
+
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index d7507f3c7c76a..3cb4fa771ec2a 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -29,5 +29,6 @@ write_to_hugetlbfs
+ hmm-tests
+ memfd_secret
+ local_config.*
++soft-dirty
+ split_huge_page_test
+ ksm_tests
 diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 5e43f072f5b76..4e68edb26d6b6 100644
+index 4e68edb26d6b6..f25eb30b5f0cb 100644
 --- a/tools/testing/selftests/vm/Makefile
 +++ b/tools/testing/selftests/vm/Makefile
-@@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
- TEST_GEN_FILES += hugepage-shm
- TEST_GEN_FILES += hugepage-vmemmap
- TEST_GEN_FILES += khugepaged
--TEST_GEN_FILES += madv_populate
-+TEST_GEN_PROGS = madv_populate
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-@@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+@@ -47,6 +47,7 @@ TEST_GEN_FILES += on-fault-limit
  TEST_GEN_FILES += thuge-gen
  TEST_GEN_FILES += transhuge-stress
  TEST_GEN_FILES += userfaultfd
--TEST_GEN_FILES += split_huge_page_test
-+TEST_GEN_PROGS += split_huge_page_test
++TEST_GEN_PROGS += soft-dirty
+ TEST_GEN_PROGS += split_huge_page_test
  TEST_GEN_FILES += ksm_tests
  
- ifeq ($(MACHINE),x86_64)
-@@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
- KSFT_KHDR_INSTALL := 1
+@@ -92,6 +93,7 @@ KSFT_KHDR_INSTALL := 1
  include ../lib.mk
  
-+$(OUTPUT)/madv_populate: vm_util.c
-+$(OUTPUT)/split_huge_page_test: vm_util.c
-+
+ $(OUTPUT)/madv_populate: vm_util.c
++$(OUTPUT)/soft-dirty: vm_util.c
+ $(OUTPUT)/split_huge_page_test: vm_util.c
+ 
  ifeq ($(MACHINE),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
- BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
-diff --git a/tools/testing/selftests/vm/madv_populate.c b/tools/testing/selftests/vm/madv_populate.c
-index 3ee0e82756002..715a42e8e2cdb 100644
---- a/tools/testing/selftests/vm/madv_populate.c
-+++ b/tools/testing/selftests/vm/madv_populate.c
-@@ -18,6 +18,7 @@
- #include <sys/mman.h>
- 
- #include "../kselftest.h"
-+#include "vm_util.h"
- 
- /*
-  * For now, we're using 2 MiB of private anonymous memory for all tests.
-@@ -26,18 +27,6 @@
- 
- static size_t pagesize;
- 
--static uint64_t pagemap_get_entry(int fd, char *start)
--{
--	const unsigned long pfn = (unsigned long)start / pagesize;
--	uint64_t entry;
--	int ret;
--
--	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
--	if (ret != sizeof(entry))
--		ksft_exit_fail_msg("reading pagemap failed\n");
--	return entry;
--}
--
- static bool pagemap_is_populated(int fd, char *start)
- {
- 	uint64_t entry = pagemap_get_entry(fd, start);
-@@ -46,13 +35,6 @@ static bool pagemap_is_populated(int fd, char *start)
- 	return entry & 0xc000000000000000ull;
- }
- 
--static bool pagemap_is_softdirty(int fd, char *start)
--{
--	uint64_t entry = pagemap_get_entry(fd, start);
--
--	return entry & 0x0080000000000000ull;
--}
--
- static void sense_support(void)
- {
- 	char *addr;
-@@ -258,20 +240,6 @@ static bool range_is_not_softdirty(char *start, ssize_t size)
- 	return ret;
- }
- 
--static void clear_softdirty(void)
--{
--	int fd = open("/proc/self/clear_refs", O_WRONLY);
--	const char *ctrl = "4";
--	int ret;
--
--	if (fd < 0)
--		ksft_exit_fail_msg("opening clear_refs failed\n");
--	ret = write(fd, ctrl, strlen(ctrl));
--	if (ret != strlen(ctrl))
--		ksft_exit_fail_msg("writing clear_refs failed\n");
--	close(fd);
--}
--
- static void test_softdirty(void)
- {
- 	char *addr;
-diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
-index 52497b7b9f1db..b6b381611fb6d 100644
---- a/tools/testing/selftests/vm/split_huge_page_test.c
-+++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -16,6 +16,7 @@
- #include <sys/mount.h>
- #include <malloc.h>
- #include <stdbool.h>
-+#include "vm_util.h"
- 
- uint64_t pagesize;
- unsigned int pageshift;
-@@ -51,30 +52,6 @@ int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
- 	return 0;
- }
- 
--
--static uint64_t read_pmd_pagesize(void)
--{
--	int fd;
--	char buf[20];
--	ssize_t num_read;
--
--	fd = open(PMD_SIZE_PATH, O_RDONLY);
--	if (fd == -1) {
--		perror("Open hpage_pmd_size failed");
--		exit(EXIT_FAILURE);
--	}
--	num_read = read(fd, buf, 19);
--	if (num_read < 1) {
--		close(fd);
--		perror("Read hpage_pmd_size failed");
--		exit(EXIT_FAILURE);
--	}
--	buf[num_read] = '\0';
--	close(fd);
--
--	return strtoul(buf, NULL, 10);
--}
--
- static int write_file(const char *path, const char *buf, size_t buflen)
- {
- 	int fd;
-@@ -113,58 +90,6 @@ static void write_debugfs(const char *fmt, ...)
- 	}
- }
- 
--#define MAX_LINE_LENGTH 500
--
--static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
--{
--	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
--		if (!strncmp(buf, pattern, strlen(pattern)))
--			return true;
--	}
--	return false;
--}
--
--static uint64_t check_huge(void *addr)
--{
--	uint64_t thp = 0;
--	int ret;
--	FILE *fp;
--	char buffer[MAX_LINE_LENGTH];
--	char addr_pattern[MAX_LINE_LENGTH];
--
--	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
--		       (unsigned long) addr);
--	if (ret >= MAX_LINE_LENGTH) {
--		printf("%s: Pattern is too long\n", __func__);
--		exit(EXIT_FAILURE);
--	}
--
--
--	fp = fopen(SMAP_PATH, "r");
--	if (!fp) {
--		printf("%s: Failed to open file %s\n", __func__, SMAP_PATH);
--		exit(EXIT_FAILURE);
--	}
--	if (!check_for_pattern(fp, addr_pattern, buffer))
--		goto err_out;
--
--	/*
--	 * Fetch the AnonHugePages: in the same block and check the number of
--	 * hugepages.
--	 */
--	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
--		goto err_out;
--
--	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1) {
--		printf("Reading smap error\n");
--		exit(EXIT_FAILURE);
--	}
--
--err_out:
--	fclose(fp);
--	return thp;
--}
--
- void split_pmd_thp(void)
- {
- 	char *one_page;
-diff --git a/tools/testing/selftests/vm/vm_util.c b/tools/testing/selftests/vm/vm_util.c
+diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
+index 60e82da0de850..be087c4bc3961 100644
+--- a/tools/testing/selftests/vm/config
++++ b/tools/testing/selftests/vm/config
+@@ -4,3 +4,5 @@ CONFIG_TEST_VMALLOC=m
+ CONFIG_DEVICE_PRIVATE=y
+ CONFIG_TEST_HMM=m
+ CONFIG_GUP_TEST=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_MEM_SOFT_DIRTY=y
+diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
 new file mode 100644
-index 0000000000000..c946e04df9236
+index 0000000000000..2d50ed3472206
 --- /dev/null
-+++ b/tools/testing/selftests/vm/vm_util.c
-@@ -0,0 +1,103 @@
++++ b/tools/testing/selftests/vm/soft-dirty.c
+@@ -0,0 +1,146 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#include <stdbool.h>
++#include <stdio.h>
 +#include <string.h>
++#include <stdbool.h>
++#include <fcntl.h>
++#include <stdint.h>
++#include <malloc.h>
++#include <sys/mman.h>
++#include "../kselftest.h"
 +#include "vm_util.h"
 +
-+uint64_t pagemap_get_entry(int fd, char *start)
++#define PAGEMAP			"/proc/self/pagemap"
++#define CLEAR_REFS		"/proc/self/clear_refs"
++#define MAX_LINE_LENGTH		512
++#define TEST_ITERATIONS		10000
++
++static void test_simple(int pagemap_fd, int pagesize)
 +{
-+	const unsigned long pfn = (unsigned long)start / getpagesize();
-+	uint64_t entry;
-+	int ret;
++	int i;
++	char *map;
 +
-+	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
-+	if (ret != sizeof(entry))
-+		ksft_exit_fail_msg("reading pagemap failed\n");
-+	return entry;
-+}
++	map = aligned_alloc(pagesize, pagesize);
++	if (!map)
++		ksft_exit_fail_msg("mmap failed\n");
 +
-+bool pagemap_is_softdirty(int fd, char *start)
-+{
-+	uint64_t entry = pagemap_get_entry(fd, start);
++	clear_softdirty();
 +
-+	return ((entry >> DIRTY_BIT_LOCATION) & 1);
-+}
++	for (i = 0 ; i < TEST_ITERATIONS; i++) {
++		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
++			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
++			break;
++		}
 +
-+void clear_softdirty(void)
-+{
-+	int ret;
-+	const char *ctrl = "4";
-+	int fd = open("/proc/self/clear_refs", O_WRONLY);
++		clear_softdirty();
++		map[0]++;
 +
-+	if (fd < 0)
-+		ksft_exit_fail_msg("opening clear_refs failed\n");
-+	ret = write(fd, ctrl, strlen(ctrl));
-+	close(fd);
-+	if (ret != strlen(ctrl))
-+		ksft_exit_fail_msg("writing clear_refs failed\n");
-+}
++		if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
++			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
++			break;
++		}
 +
-+
-+static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
-+{
-+	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
-+		if (!strncmp(buf, pattern, strlen(pattern)))
-+			return true;
++		clear_softdirty();
 +	}
-+	return false;
++	free(map);
++
++	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
 +}
 +
-+uint64_t read_pmd_pagesize(void)
++static void test_vma_reuse(int pagemap_fd, int pagesize)
 +{
-+	int fd;
-+	char buf[20];
-+	ssize_t num_read;
++	char *map, *map2;
 +
-+	fd = open(PMD_SIZE, O_RDONLY);
-+	if (fd == -1)
-+		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
++	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
++	if (map == MAP_FAILED)
++		ksft_exit_fail_msg("mmap failed");
 +
-+	num_read = read(fd, buf, 19);
-+	if (num_read < 1) {
-+		close(fd);
-+		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
-+	}
-+	buf[num_read] = '\0';
-+	close(fd);
++	clear_softdirty();
 +
-+	return strtoul(buf, NULL, 10);
-+}
-+
-+uint64_t check_huge(void *addr)
-+{
-+	uint64_t thp = 0;
-+	int ret;
-+	FILE *fp;
-+	char buffer[MAX_LINE_LENGTH];
-+	char addr_pattern[MAX_LINE_LENGTH];
-+
-+	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-+		       (unsigned long) addr);
-+	if (ret >= MAX_LINE_LENGTH)
-+		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
-+
-+	fp = fopen(SMAP, "r");
-+	if (!fp)
-+		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
-+
-+	if (!check_for_pattern(fp, addr_pattern, buffer))
-+		goto err_out;
-+
-+	/*
-+	 * Fetch the AnonHugePages: in the same block and check the number of
-+	 * hugepages.
++	/* Write to the page before unmapping and map the same size region again to check
++	 * if same memory region is gotten next time and if dirty bit is preserved across
++	 * this type of allocations.
 +	 */
-+	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-+		goto err_out;
++	map[0]++;
 +
-+	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
-+		ksft_exit_fail_msg("Reading smap error\n");
++	munmap(map, pagesize);
 +
-+err_out:
-+	fclose(fp);
-+	return thp;
++	map2 = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
++	if (map2 == MAP_FAILED)
++		ksft_exit_fail_msg("mmap failed");
++
++	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
++
++	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) != 0,
++			 "Test %s dirty bit of previous page\n", __func__);
++
++	munmap(map2, pagesize);
 +}
-diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
-new file mode 100644
-index 0000000000000..7522dbb859f0f
---- /dev/null
-+++ b/tools/testing/selftests/vm/vm_util.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <stdint.h>
-+#include <fcntl.h>
-+#include "../kselftest.h"
 +
-+#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-+#define	SMAP			"/proc/self/smaps"
-+#define	DIRTY_BIT_LOCATION	55
-+#define	MAX_LINE_LENGTH		512
++static void test_hugepage(int pagemap_fd, int pagesize)
++{
++	char *map;
++	int i, ret;
++	size_t hpage_len = read_pmd_pagesize();
 +
-+uint64_t pagemap_get_entry(int fd, char *start);
-+bool pagemap_is_softdirty(int fd, char *start);
-+void clear_softdirty(void);
-+uint64_t read_pmd_pagesize(void);
-+uint64_t check_huge(void *addr);
++	map = memalign(hpage_len, hpage_len);
++	if (!map)
++		ksft_exit_fail_msg("memalign failed\n");
++
++	ret = madvise(map, hpage_len, MADV_HUGEPAGE);
++	if (ret)
++		ksft_exit_fail_msg("madvise failed %d\n", ret);
++
++	for (i = 0; i < hpage_len; i++)
++		map[i] = (char)i;
++
++	if (check_huge(map)) {
++		ksft_test_result_pass("Test %s huge page allocation\n", __func__);
++
++		clear_softdirty();
++		for (i = 0 ; i < TEST_ITERATIONS ; i++) {
++			if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
++				ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
++				break;
++			}
++
++			clear_softdirty();
++			map[0]++;
++
++			if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
++				ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
++				break;
++			}
++			clear_softdirty();
++		}
++
++		ksft_test_result(i == TEST_ITERATIONS, "Test %s huge page dirty bit\n", __func__);
++	} else {
++		// hugepage allocation failed. skip these tests
++		ksft_test_result_skip("Test %s huge page allocation\n", __func__);
++		ksft_test_result_skip("Test %s huge page dirty bit\n", __func__);
++	}
++	free(map);
++}
++
++int main(int argc, char **argv)
++{
++	int pagemap_fd;
++	int pagesize;
++
++	ksft_print_header();
++	ksft_set_plan(5);
++
++	pagemap_fd = open(PAGEMAP, O_RDONLY);
++	if (pagemap_fd < 0)
++		ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP);
++
++	pagesize = getpagesize();
++
++	test_simple(pagemap_fd, pagesize);
++	test_vma_reuse(pagemap_fd, pagesize);
++	test_hugepage(pagemap_fd, pagesize);
++
++	close(pagemap_fd);
++
++	return ksft_exit_pass();
++}
 -- 
 2.30.2
 
