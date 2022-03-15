@@ -2,136 +2,398 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD1F4D95C2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 08:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AE24D96B7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 09:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiCOH55 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Mar 2022 03:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        id S230499AbiCOIwE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Mar 2022 04:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245208AbiCOH5o (ORCPT
+        with ESMTP id S1346207AbiCOIwC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:57:44 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F9774BBB6
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Mar 2022 00:56:31 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-216-xYBwVrWXPkuS3LcJVzhFpQ-1; Tue, 15 Mar 2022 07:56:28 +0000
-X-MC-Unique: xYBwVrWXPkuS3LcJVzhFpQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 15 Mar 2022 07:56:27 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 15 Mar 2022 07:56:26 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'T.J. Mercier'" <tjmercier@google.com>,
-        Todd Kjos <tkjos@google.com>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "Hridya Valsaraju" <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Sumit Semwal" <sumit.semwal@linaro.org>,
-        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        "Brian Starkey" <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        "Tejun Heo" <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        "Kenny.Ho@amd.com" <Kenny.Ho@amd.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for
- userspace
-Thread-Topic: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for
- userspace
-Thread-Index: AQHYN/2hnJZ5hPm3HkKIFJirFaEIKazAEl4g
-Date:   Tue, 15 Mar 2022 07:56:26 +0000
-Message-ID: <a365a5f6c7864a879b133b99d1f43fb2@AcuMS.aculab.com>
-References: <20220309165222.2843651-1-tjmercier@google.com>
- <20220309165222.2843651-8-tjmercier@google.com>
- <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
- <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com>
-In-Reply-To: <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 15 Mar 2022 04:52:02 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397254D610;
+        Tue, 15 Mar 2022 01:50:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 84CF21F431AC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647334248;
+        bh=nHtwrinbUYWfO8AEIJvgFJxDJ2MMOOw46lB73jRrvj0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j8ZSSKC2rlQ2hJR/rrMrORiqHefuuTKjVJ+6oZ6/H/dIqY6Ezb7xpUEdZ50oHG5+U
+         DDPs4f1KP7egAC/NFH7A5amaajQ5B4tji3ANxS9+WVBgDoY86J4JXB98MFGP0HOSP5
+         uJlIUNWw6potGN9I+KHyV0c+mDCI3IQX/VDzDbESA6tCbcMIQ4FovIMIcLXuwDoh9X
+         LLMs5+DGGZGLCTWQHGwkPAK1cJIPncVOLoUkJLUabD04p/7aFBUAJveCRZjQ6xLOWM
+         mx0Ni5XYBSTHbh5Vy+zi7jdrw3+IB3mKNwIEG8vA3OO8rMdug3NtdjnCCOnnqkNRH6
+         RlIOGIS/1wgAw==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V4 1/2] selftests: vm: bring common functions to a new file
+Date:   Tue, 15 Mar 2022 13:50:11 +0500
+Message-Id: <20220315085014.1047291-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RnJvbTogVC5KLiBNZXJjaWVyDQo+IFNlbnQ6IDE0IE1hcmNoIDIwMjIgMjM6NDUNCj4gDQo+IE9u
-IFRodSwgTWFyIDEwLCAyMDIyIGF0IDExOjMzIEFNIFRvZGQgS2pvcyA8dGtqb3NAZ29vZ2xlLmNv
-bT4gd3JvdGU6DQo+ID4NCj4gPiBPbiBXZWQsIE1hciA5LCAyMDIyIGF0IDg6NTIgQU0gVC5KLiBN
-ZXJjaWVyIDx0am1lcmNpZXJAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+ID4gPg0KPiA+ID4gVGhlIGtl
-cm5lbCBpbnRlcmZhY2Ugc2hvdWxkIHVzZSB0eXBlcyB0aGF0IHRoZSBrZXJuZWwgZGVmaW5lcyBp
-bnN0ZWFkIG9mDQo+ID4gPiBwaWRfdCBhbmQgdWlkX3QsIHdob3NlIGRlZmluaXRvbiBpcyBvd25l
-ZCBieSBsaWJjLiBUaGlzIGZpeGVzIHRoZSBoZWFkZXINCj4gPiA+IHNvIHRoYXQgaXQgY2FuIGJl
-IGluY2x1ZGVkIHdpdGhvdXQgZmlyc3QgaW5jbHVkaW5nIHN5cy90eXBlcy5oLg0KPiA+ID4NCj4g
-PiA+IFNpZ25lZC1vZmYtYnk6IFQuSi4gTWVyY2llciA8dGptZXJjaWVyQGdvb2dsZS5jb20+DQo+
-ID4gPiAtLS0NCj4gPiA+ICBpbmNsdWRlL3VhcGkvbGludXgvYW5kcm9pZC9iaW5kZXIuaCB8IDQg
-KystLQ0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
-KC0pDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvdWFwaS9saW51eC9hbmRyb2lk
-L2JpbmRlci5oIGIvaW5jbHVkZS91YXBpL2xpbnV4L2FuZHJvaWQvYmluZGVyLmgNCj4gPiA+IGlu
-ZGV4IDE2OWZkNTA2OWExYS4uYWEyODQ1NGRiY2EzIDEwMDY0NA0KPiA+ID4gLS0tIGEvaW5jbHVk
-ZS91YXBpL2xpbnV4L2FuZHJvaWQvYmluZGVyLmgNCj4gPiA+ICsrKyBiL2luY2x1ZGUvdWFwaS9s
-aW51eC9hbmRyb2lkL2JpbmRlci5oDQo+ID4gPiBAQCAtMjg5LDggKzI4OSw4IEBAIHN0cnVjdCBi
-aW5kZXJfdHJhbnNhY3Rpb25fZGF0YSB7DQo+ID4gPg0KPiA+ID4gICAgICAgICAvKiBHZW5lcmFs
-IGluZm9ybWF0aW9uIGFib3V0IHRoZSB0cmFuc2FjdGlvbi4gKi8NCj4gPiA+ICAgICAgICAgX191
-MzIgICAgICAgICAgIGZsYWdzOw0KPiA+ID4gLSAgICAgICBwaWRfdCAgICAgICAgICAgc2VuZGVy
-X3BpZDsNCj4gPiA+IC0gICAgICAgdWlkX3QgICAgICAgICAgIHNlbmRlcl9ldWlkOw0KPiA+ID4g
-KyAgICAgICBfX2tlcm5lbF9waWRfdCAgc2VuZGVyX3BpZDsNCj4gPiA+ICsgICAgICAgX19rZXJu
-ZWxfdWlkX3QgIHNlbmRlcl9ldWlkOw0KPiA+DQo+ID4gQXJlIHdlIGd1YXJhbnRlZWQgdGhhdCB0
-aGlzIGRvZXMgbm90IGFmZmVjdCB0aGUgVUFQSSBhdCBhbGw/IFVzZXJzcGFjZQ0KPiA+IGNvZGUg
-dXNpbmcgdGhpcyBkZWZpbml0aW9uIHdpbGwgaGF2ZSB0byBydW4gd2l0aCBrZXJuZWxzIHVzaW5n
-IHRoZSBvbGQNCj4gPiBkZWZpbml0aW9uIGFuZCB2aXNhLXZlcnNhLg0KPiANCj4gQSBzdGFuZGFy
-ZHMgY29tcGxpYW50IHVzZXJzcGFjZSBzaG91bGQgYmUgZXhwZWN0aW5nIGEgc2lnbmVkIGludGVn
-ZXINCj4gdHlwZSBoZXJlLiBTbyB0aGUgb25seSB3YXkgSSBjYW4gdGhpbmsgdXNlcnNwYWNlIHdv
-dWxkIGJlIGFmZmVjdGVkIGlzDQo+IGlmOg0KPiAxKSBwaWRfdCBpcyBhIGxvbmcgQU5EDQo+IDIp
-IHNpemVvZihsb25nKSA+IHNpemVvZihpbnQpIEFORA0KPiAzKSBDb25zdW1lcnMgb2YgdGhlIHBp
-ZF90IGRlZmluaXRpb24gYWN0dWFsbHkgYXR0ZW1wdCB0byBtdXRhdGUgdGhlDQo+IHJlc3VsdCB0
-byBtYWtlIHVzZSBvZiBleHRyYSBiaXRzIGluIHRoZSB2YXJpYWJsZSAod2hpY2ggYXJlIG5vdCB0
-aGVyZSkNCg0KT3IgdGhlIHVzZXJzcGFjZSBoZWFkZXJzIGhhdmUgYSAxNmJpdCBwaWRfdC4NCg0K
-SSBjYW4ndCBoZWxwIGZlZWxpbmcgdGhhdCB1YXBpIGhlYWRlcnMgc2hvdWxkIG9ubHkgdXNlIGV4
-cGxpY2l0DQpmaXhlZCBzaXplZCB0eXBlcy4NClRoZXJlIGlzIG5vIHBvaW50IGluZGlyZWN0aW5n
-IHRoZSB0eXBlIG5hbWVzIC0gdGhlIHNpemVzIHN0aWxsDQpjYW4ndCBiZSBjaGFuZ2VzLg0KDQoJ
-RGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
-dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
-OTczODYgKFdhbGVzKQ0K
+Bring common functions to a new file. These functions can be used in the
+new tests. This helps in code duplication.
+
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/vm/Makefile           |   7 +-
+ tools/testing/selftests/vm/madv_populate.c    |  34 +-----
+ .../selftests/vm/split_huge_page_test.c       |  77 +------------
+ tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
+ tools/testing/selftests/vm/vm_util.h          |  15 +++
+ 5 files changed, 125 insertions(+), 111 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/vm_util.c
+ create mode 100644 tools/testing/selftests/vm/vm_util.h
+
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 5e43f072f5b76..4e68edb26d6b6 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
+ TEST_GEN_FILES += hugepage-shm
+ TEST_GEN_FILES += hugepage-vmemmap
+ TEST_GEN_FILES += khugepaged
+-TEST_GEN_FILES += madv_populate
++TEST_GEN_PROGS = madv_populate
+ TEST_GEN_FILES += map_fixed_noreplace
+ TEST_GEN_FILES += map_hugetlb
+ TEST_GEN_FILES += map_populate
+@@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
+-TEST_GEN_FILES += split_huge_page_test
++TEST_GEN_PROGS += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
+ 
+ ifeq ($(MACHINE),x86_64)
+@@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
++$(OUTPUT)/madv_populate: vm_util.c
++$(OUTPUT)/split_huge_page_test: vm_util.c
++
+ ifeq ($(MACHINE),x86_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+diff --git a/tools/testing/selftests/vm/madv_populate.c b/tools/testing/selftests/vm/madv_populate.c
+index 3ee0e82756002..715a42e8e2cdb 100644
+--- a/tools/testing/selftests/vm/madv_populate.c
++++ b/tools/testing/selftests/vm/madv_populate.c
+@@ -18,6 +18,7 @@
+ #include <sys/mman.h>
+ 
+ #include "../kselftest.h"
++#include "vm_util.h"
+ 
+ /*
+  * For now, we're using 2 MiB of private anonymous memory for all tests.
+@@ -26,18 +27,6 @@
+ 
+ static size_t pagesize;
+ 
+-static uint64_t pagemap_get_entry(int fd, char *start)
+-{
+-	const unsigned long pfn = (unsigned long)start / pagesize;
+-	uint64_t entry;
+-	int ret;
+-
+-	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
+-	if (ret != sizeof(entry))
+-		ksft_exit_fail_msg("reading pagemap failed\n");
+-	return entry;
+-}
+-
+ static bool pagemap_is_populated(int fd, char *start)
+ {
+ 	uint64_t entry = pagemap_get_entry(fd, start);
+@@ -46,13 +35,6 @@ static bool pagemap_is_populated(int fd, char *start)
+ 	return entry & 0xc000000000000000ull;
+ }
+ 
+-static bool pagemap_is_softdirty(int fd, char *start)
+-{
+-	uint64_t entry = pagemap_get_entry(fd, start);
+-
+-	return entry & 0x0080000000000000ull;
+-}
+-
+ static void sense_support(void)
+ {
+ 	char *addr;
+@@ -258,20 +240,6 @@ static bool range_is_not_softdirty(char *start, ssize_t size)
+ 	return ret;
+ }
+ 
+-static void clear_softdirty(void)
+-{
+-	int fd = open("/proc/self/clear_refs", O_WRONLY);
+-	const char *ctrl = "4";
+-	int ret;
+-
+-	if (fd < 0)
+-		ksft_exit_fail_msg("opening clear_refs failed\n");
+-	ret = write(fd, ctrl, strlen(ctrl));
+-	if (ret != strlen(ctrl))
+-		ksft_exit_fail_msg("writing clear_refs failed\n");
+-	close(fd);
+-}
+-
+ static void test_softdirty(void)
+ {
+ 	char *addr;
+diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
+index 52497b7b9f1db..b6b381611fb6d 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
++++ b/tools/testing/selftests/vm/split_huge_page_test.c
+@@ -16,6 +16,7 @@
+ #include <sys/mount.h>
+ #include <malloc.h>
+ #include <stdbool.h>
++#include "vm_util.h"
+ 
+ uint64_t pagesize;
+ unsigned int pageshift;
+@@ -51,30 +52,6 @@ int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
+ 	return 0;
+ }
+ 
+-
+-static uint64_t read_pmd_pagesize(void)
+-{
+-	int fd;
+-	char buf[20];
+-	ssize_t num_read;
+-
+-	fd = open(PMD_SIZE_PATH, O_RDONLY);
+-	if (fd == -1) {
+-		perror("Open hpage_pmd_size failed");
+-		exit(EXIT_FAILURE);
+-	}
+-	num_read = read(fd, buf, 19);
+-	if (num_read < 1) {
+-		close(fd);
+-		perror("Read hpage_pmd_size failed");
+-		exit(EXIT_FAILURE);
+-	}
+-	buf[num_read] = '\0';
+-	close(fd);
+-
+-	return strtoul(buf, NULL, 10);
+-}
+-
+ static int write_file(const char *path, const char *buf, size_t buflen)
+ {
+ 	int fd;
+@@ -113,58 +90,6 @@ static void write_debugfs(const char *fmt, ...)
+ 	}
+ }
+ 
+-#define MAX_LINE_LENGTH 500
+-
+-static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
+-{
+-	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
+-		if (!strncmp(buf, pattern, strlen(pattern)))
+-			return true;
+-	}
+-	return false;
+-}
+-
+-static uint64_t check_huge(void *addr)
+-{
+-	uint64_t thp = 0;
+-	int ret;
+-	FILE *fp;
+-	char buffer[MAX_LINE_LENGTH];
+-	char addr_pattern[MAX_LINE_LENGTH];
+-
+-	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
+-		       (unsigned long) addr);
+-	if (ret >= MAX_LINE_LENGTH) {
+-		printf("%s: Pattern is too long\n", __func__);
+-		exit(EXIT_FAILURE);
+-	}
+-
+-
+-	fp = fopen(SMAP_PATH, "r");
+-	if (!fp) {
+-		printf("%s: Failed to open file %s\n", __func__, SMAP_PATH);
+-		exit(EXIT_FAILURE);
+-	}
+-	if (!check_for_pattern(fp, addr_pattern, buffer))
+-		goto err_out;
+-
+-	/*
+-	 * Fetch the AnonHugePages: in the same block and check the number of
+-	 * hugepages.
+-	 */
+-	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
+-		goto err_out;
+-
+-	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1) {
+-		printf("Reading smap error\n");
+-		exit(EXIT_FAILURE);
+-	}
+-
+-err_out:
+-	fclose(fp);
+-	return thp;
+-}
+-
+ void split_pmd_thp(void)
+ {
+ 	char *one_page;
+diff --git a/tools/testing/selftests/vm/vm_util.c b/tools/testing/selftests/vm/vm_util.c
+new file mode 100644
+index 0000000000000..c946e04df9236
+--- /dev/null
++++ b/tools/testing/selftests/vm/vm_util.c
+@@ -0,0 +1,103 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdbool.h>
++#include <string.h>
++#include "vm_util.h"
++
++uint64_t pagemap_get_entry(int fd, char *start)
++{
++	const unsigned long pfn = (unsigned long)start / getpagesize();
++	uint64_t entry;
++	int ret;
++
++	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
++	if (ret != sizeof(entry))
++		ksft_exit_fail_msg("reading pagemap failed\n");
++	return entry;
++}
++
++bool pagemap_is_softdirty(int fd, char *start)
++{
++	uint64_t entry = pagemap_get_entry(fd, start);
++
++	return ((entry >> DIRTY_BIT_LOCATION) & 1);
++}
++
++void clear_softdirty(void)
++{
++	int ret;
++	const char *ctrl = "4";
++	int fd = open("/proc/self/clear_refs", O_WRONLY);
++
++	if (fd < 0)
++		ksft_exit_fail_msg("opening clear_refs failed\n");
++	ret = write(fd, ctrl, strlen(ctrl));
++	close(fd);
++	if (ret != strlen(ctrl))
++		ksft_exit_fail_msg("writing clear_refs failed\n");
++}
++
++
++static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
++{
++	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
++		if (!strncmp(buf, pattern, strlen(pattern)))
++			return true;
++	}
++	return false;
++}
++
++uint64_t read_pmd_pagesize(void)
++{
++	int fd;
++	char buf[20];
++	ssize_t num_read;
++
++	fd = open(PMD_SIZE, O_RDONLY);
++	if (fd == -1)
++		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
++
++	num_read = read(fd, buf, 19);
++	if (num_read < 1) {
++		close(fd);
++		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
++	}
++	buf[num_read] = '\0';
++	close(fd);
++
++	return strtoul(buf, NULL, 10);
++}
++
++uint64_t check_huge(void *addr)
++{
++	uint64_t thp = 0;
++	int ret;
++	FILE *fp;
++	char buffer[MAX_LINE_LENGTH];
++	char addr_pattern[MAX_LINE_LENGTH];
++
++	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
++		       (unsigned long) addr);
++	if (ret >= MAX_LINE_LENGTH)
++		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
++
++	fp = fopen(SMAP, "r");
++	if (!fp)
++		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
++
++	if (!check_for_pattern(fp, addr_pattern, buffer))
++		goto err_out;
++
++	/*
++	 * Fetch the AnonHugePages: in the same block and check the number of
++	 * hugepages.
++	 */
++	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
++		goto err_out;
++
++	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
++		ksft_exit_fail_msg("Reading smap error\n");
++
++err_out:
++	fclose(fp);
++	return thp;
++}
+diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
+new file mode 100644
+index 0000000000000..7522dbb859f0f
+--- /dev/null
++++ b/tools/testing/selftests/vm/vm_util.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <stdint.h>
++#include <fcntl.h>
++#include "../kselftest.h"
++
++#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
++#define	SMAP			"/proc/self/smaps"
++#define	DIRTY_BIT_LOCATION	55
++#define	MAX_LINE_LENGTH		512
++
++uint64_t pagemap_get_entry(int fd, char *start);
++bool pagemap_is_softdirty(int fd, char *start);
++void clear_softdirty(void);
++uint64_t read_pmd_pagesize(void);
++uint64_t check_huge(void *addr);
+-- 
+2.30.2
 
