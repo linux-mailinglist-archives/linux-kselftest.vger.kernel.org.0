@@ -2,218 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604794DA0DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 18:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C614DA2E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 20:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244023AbiCORIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Mar 2022 13:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
+        id S1351278AbiCOTEN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Mar 2022 15:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350485AbiCORHy (ORCPT
+        with ESMTP id S1351243AbiCOTEH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:07:54 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474C5580C0;
-        Tue, 15 Mar 2022 10:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647364002; x=1678900002;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0XG+gX0DCjUrifLHVo4uvhwaHh2d9IKH+kZXF/KXoOE=;
-  b=O0Wh72+SxpnY1kunIVWqpRmr4AoABFX7eBbg6y+nSJgqUhsBCnEzaG8k
-   CkiKrh4J0d+op01OFDYi7NSYbt2AZoblb8vOYGgjfeXa5uOmCCdTTDPQf
-   sCrvxbs/tamlcpN8vfo0SiPc3BcYFBDzIbtR06QihMJtb6PGuSQXR3PQT
-   CwvRoLg8D/gOfFUHOFsVO7+eQWVQX0qiiuk/ELn7Bxu7eeIiaF/DTKICF
-   X9Xl+kDS9gY29uor9gAaWFpl+cVlmxl4VzX1uPhLBcPt+XUQqYPEAY1vi
-   OgGFKcBoRk1mU1i4prehYC61GUjh0bsg4CUs9dCcHvL8DNiyTDYm86NkR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="317085653"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="317085653"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 10:04:26 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="690269219"
-Received: from lepple-mobl1.ger.corp.intel.com (HELO [10.252.56.30]) ([10.252.56.30])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 10:04:21 -0700
-Message-ID: <84435254-b072-661f-f108-81a00178d7bc@linux.intel.com>
-Date:   Tue, 15 Mar 2022 19:04:19 +0200
+        Tue, 15 Mar 2022 15:04:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DEA50E3E
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Mar 2022 12:02:49 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bi12so43622832ejb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Mar 2022 12:02:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nYOjHF+WhaOll744zl3KXczQ6UnybRfVr7cW3I5uN/U=;
+        b=eWq9aQSnpFSM7gGPtqgzIwr8bb/qKsDMvo0mIbS4s59AMIIHEMyCDMwhpLWRS+EYBR
+         qN4oTEZNXWPjiFCM5wbN4L3FVB0yMfHlzKy9DLlhHVCdkUAg+H8m96o6+l6phOAtZZtL
+         HqEaabMV1A231GA5THyiGjQn+CcdPV6Wcj7+UPW4PCAGWku/81HP+8C5q//5lWvhO0Pu
+         3zeib+NRZoI9eWeTsoj34Li0T9JVhg3Z1kUYOR1XGxD8A2nRmcx8ve9PFlZCqJIC6N4E
+         zEz1m0vSJoc3+NJsHrbvJr8ATMwQ+P3zv+QChYRQcRSYL4oNsBWZ06rrB2G0G0fVIJ1p
+         NQSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nYOjHF+WhaOll744zl3KXczQ6UnybRfVr7cW3I5uN/U=;
+        b=cN4tiFCMako7532hUX5zlbXWveM8edxEYI8GXo1/74DTiVm+Xm5BA/AgNOKIlDF4bw
+         trehgZTWFsvj+87TTJMIHoeQ5Ee5eBJxHa3I7EWR9ubTRV6Dv6SHoexcxoykvAhaHfyu
+         jy7OfYTK8g8KPCk+81edvSDbm7m44cDyXFv4LbSEaeXzCEsgpzFbenYMV5stNv7TIOzx
+         QmJJ0d8wzPjNxuanRbpCOJcpEvEu/p0ko9v/ulPWI9+tGMm/LJyur+HcNuHR02wklvMf
+         ERWIJhtDiv2jtiJx0aADVANE2Cm/KsNYHHOP+KnpiN3woAqormeP5VcyJn39W5wXRPLA
+         4Q4A==
+X-Gm-Message-State: AOAM531P2TUgId+YqN7xBoNZQIIrNuYfCtDH76TnEtaKsmBGOcIaBwZh
+        TgLCVG2G1CDWjftSqykDmWc2CE+6dmZWpZW1AFqPVQ==
+X-Google-Smtp-Source: ABdhPJxRVh2ZUD0Nbieh2mZpcZVRDFfmA10fIZydckRgsnzTb2ustxoM9NqZuPCgmtI1mueDRq1Ne12Wp4MutQ+KdLw=
+X-Received: by 2002:a17:907:7f2a:b0:6d6:df12:7f57 with SMTP id
+ qf42-20020a1709077f2a00b006d6df127f57mr23761361ejc.122.1647370967391; Tue, 15
+ Mar 2022 12:02:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220309165222.2843651-1-tjmercier@google.com>
+ <20220309165222.2843651-8-tjmercier@google.com> <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
+ <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com> <a365a5f6c7864a879b133b99d1f43fb2@AcuMS.aculab.com>
+In-Reply-To: <a365a5f6c7864a879b133b99d1f43fb2@AcuMS.aculab.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 15 Mar 2022 12:02:35 -0700
+Message-ID: <CABdmKX3NEm8+pDBj2VG-r8E91CVHwQ+gGcKhG8D=5MgWcgincg@mail.gmail.com>
+Subject: Re: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Todd Kjos <tkjos@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Kenny.Ho@amd.com" <Kenny.Ho@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Benjamin,
+On Tue, Mar 15, 2022 at 12:56 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: T.J. Mercier
+> > Sent: 14 March 2022 23:45
+> >
+> > On Thu, Mar 10, 2022 at 11:33 AM Todd Kjos <tkjos@google.com> wrote:
+> > >
+> > > On Wed, Mar 9, 2022 at 8:52 AM T.J. Mercier <tjmercier@google.com> wrote:
+> > > >
+> > > > The kernel interface should use types that the kernel defines instead of
+> > > > pid_t and uid_t, whose definiton is owned by libc. This fixes the header
+> > > > so that it can be included without first including sys/types.h.
+> > > >
+> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > > ---
+> > > >  include/uapi/linux/android/binder.h | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+> > > > index 169fd5069a1a..aa28454dbca3 100644
+> > > > --- a/include/uapi/linux/android/binder.h
+> > > > +++ b/include/uapi/linux/android/binder.h
+> > > > @@ -289,8 +289,8 @@ struct binder_transaction_data {
+> > > >
+> > > >         /* General information about the transaction. */
+> > > >         __u32           flags;
+> > > > -       pid_t           sender_pid;
+> > > > -       uid_t           sender_euid;
+> > > > +       __kernel_pid_t  sender_pid;
+> > > > +       __kernel_uid_t  sender_euid;
+> > >
+> > > Are we guaranteed that this does not affect the UAPI at all? Userspace
+> > > code using this definition will have to run with kernels using the old
+> > > definition and visa-versa.
+> >
+> > A standards compliant userspace should be expecting a signed integer
+> > type here. So the only way I can think userspace would be affected is
+> > if:
+> > 1) pid_t is a long AND
+> > 2) sizeof(long) > sizeof(int) AND
+> > 3) Consumers of the pid_t definition actually attempt to mutate the
+> > result to make use of extra bits in the variable (which are not there)
+>
+> Or the userspace headers have a 16bit pid_t.
 
-On 04/03/2022 19:28, Benjamin Tissoires wrote:
-> Hi,
->
-> This is a followup of my v1 at [0].
->
-> The short summary of the previous cover letter and discussions is that
-> HID could benefit from BPF for the following use cases:
->
-> - simple fixup of report descriptor:
->    benefits are faster development time and testing, with the produced
->    bpf program being shipped in the kernel directly (the shipping part
->    is *not* addressed here).
->
-> - Universal Stylus Interface:
->    allows a user-space program to define its own kernel interface
->
-> - Surface Dial:
->    somehow similar to the previous one except that userspace can decide
->    to change the shape of the exported device
->
-> - firewall:
->    still partly missing there, there is not yet interception of hidraw
->    calls, but it's coming in a followup series, I promise
->
-> - tracing:
->    well, tracing.
->
->
-> I tried to address as many comments as I could and here is the short log
-> of changes:
->
-> v2:
-> ===
->
-> - split the series by subsystem (bpf, HID, libbpf, selftests and
->    samples)
->
-> - Added an extra patch at the beginning to not require CAP_NET_ADMIN for
->    BPF_PROG_TYPE_LIRC_MODE2 (please shout if this is wrong)
->
-> - made the bpf context attached to HID program of dynamic size:
->    * the first 1 kB will be able to be addressed directly
->    * the rest can be retrieved through bpf_hid_{set|get}_data
->      (note that I am definitivey not happy with that API, because there
->      is part of it in bits and other in bytes. ouch)
->
-> - added an extra patch to prevent non GPL HID bpf programs to be loaded
->    of type BPF_PROG_TYPE_HID
->    * same here, not really happy but I don't know where to put that check
->      in verifier.c
->
-> - added a new flag BPF_F_INSERT_HEAD for BPF_LINK_CREATE syscall when in
->    used with HID program types.
->    * this flag is used for tracing, to be able to load a program before
->      any others that might already have been inserted and that might
->      change the data stream.
->
-> Cheers,
-> Benjamin
-
-I posted a couple of comments to the series, but other than that for the 
-whole series you can use:
-
-Reviewed-by: Tero Kristo <tero.kristo@linux.intel.com>
-
-Tested-by: Tero Kristo <tero.kristo@linux.intel.com>
-
-I did test this with my USI-BPF program + userspace code, they work with 
-few minor updates compared to previous version.
-
--Tero
+Since the kernel uses an int for PIDs, wouldn't a 16 bit pid_t already
+be potentially broken (overflow) on systems where int is not 16 bits?
+On systems where int is 16 bits, there is no change here except to
+achieve uniform use of __kernel_pid_t in the kernel headers and fix
+the include problem.
 
 >
+> I can't help feeling that uapi headers should only use explicit
+> fixed sized types.
+> There is no point indirecting the type names - the sizes still
+> can't be changes.
+
+I think it's still unlikely to be an actual problem. For example there
+are other occasions where a switch like this was made:
+https://github.com/torvalds/linux/commit/694a58e29ef27c4c26f103a9decfd053f94dd34c
+https://github.com/torvalds/linux/commit/269b8fd5d058f2c0da01a42b20315ffc2640d99b
+
+And also since Binder's only known user is Android through Bionic
+which already expects the type of pid_t to be __kernel_pid_t.
+
+
 >
+>         David
 >
-> [0] https://lore.kernel.org/linux-input/20220224110828.2168231-1-benjamin.tissoires@redhat.com/T/#t
->
->
-> Benjamin Tissoires (28):
->    bpf: add new is_sys_admin_prog_type() helper
->    bpf: introduce hid program type
->    HID: hook up with bpf
->    libbpf: add HID program type and API
->    selftests/bpf: add tests for the HID-bpf initial implementation
->    samples/bpf: add new hid_mouse example
->    bpf/hid: add a new attach type to change the report descriptor
->    HID: allow to change the report descriptor from an eBPF program
->    libbpf: add new attach type BPF_HID_RDESC_FIXUP
->    selftests/bpf: add report descriptor fixup tests
->    samples/bpf: add a report descriptor fixup
->    bpf/hid: add hid_{get|set}_data helpers
->    HID: bpf: implement hid_bpf_get|set_data
->    selftests/bpf: add tests for hid_{get|set}_data helpers
->    bpf/hid: add new BPF type to trigger commands from userspace
->    libbpf: add new attach type BPF_HID_USER_EVENT
->    selftests/bpf: add test for user call of HID bpf programs
->    selftests/bpf: hid: rely on uhid event to know if a test device is
->      ready
->    bpf/hid: add bpf_hid_raw_request helper function
->    HID: add implementation of bpf_hid_raw_request
->    selftests/bpf: add tests for bpf_hid_hw_request
->    bpf/verifier: prevent non GPL programs to be loaded against HID
->    HID: bpf: compute only the required buffer size for the device
->    HID: bpf: only call hid_bpf_raw_event() if a ctx is available
->    bpf/hid: Add a flag to add the program at the beginning of the list
->    libbpf: add handling for BPF_F_INSERT_HEAD in HID programs
->    selftests/bpf: Add a test for BPF_F_INSERT_HEAD
->    samples/bpf: fix bpf_program__attach_hid() api change
->
->   drivers/hid/Makefile                         |   1 +
->   drivers/hid/hid-bpf.c                        | 361 +++++++++
->   drivers/hid/hid-core.c                       |  34 +-
->   include/linux/bpf-hid.h                      | 129 +++
->   include/linux/bpf_types.h                    |   4 +
->   include/linux/hid.h                          |  25 +
->   include/uapi/linux/bpf.h                     |  59 ++
->   include/uapi/linux/bpf_hid.h                 |  50 ++
->   kernel/bpf/Makefile                          |   3 +
->   kernel/bpf/hid.c                             | 652 +++++++++++++++
->   kernel/bpf/syscall.c                         |  26 +-
->   kernel/bpf/verifier.c                        |   7 +
->   samples/bpf/.gitignore                       |   1 +
->   samples/bpf/Makefile                         |   4 +
->   samples/bpf/hid_mouse_kern.c                 |  91 +++
->   samples/bpf/hid_mouse_user.c                 | 129 +++
->   tools/include/uapi/linux/bpf.h               |  59 ++
->   tools/lib/bpf/libbpf.c                       |  22 +-
->   tools/lib/bpf/libbpf.h                       |   2 +
->   tools/lib/bpf/libbpf.map                     |   1 +
->   tools/testing/selftests/bpf/prog_tests/hid.c | 788 +++++++++++++++++++
->   tools/testing/selftests/bpf/progs/hid.c      | 216 +++++
->   22 files changed, 2649 insertions(+), 15 deletions(-)
->   create mode 100644 drivers/hid/hid-bpf.c
->   create mode 100644 include/linux/bpf-hid.h
->   create mode 100644 include/uapi/linux/bpf_hid.h
->   create mode 100644 kernel/bpf/hid.c
->   create mode 100644 samples/bpf/hid_mouse_kern.c
->   create mode 100644 samples/bpf/hid_mouse_user.c
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
->   create mode 100644 tools/testing/selftests/bpf/progs/hid.c
->
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
