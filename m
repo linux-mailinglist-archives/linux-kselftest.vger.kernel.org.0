@@ -2,321 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571A84D96B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 09:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7954D9A9C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Mar 2022 12:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346216AbiCOIwN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Mar 2022 04:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S1346955AbiCOLtk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Mar 2022 07:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346214AbiCOIwK (ORCPT
+        with ESMTP id S1348003AbiCOLti (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:52:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587714D623;
-        Tue, 15 Mar 2022 01:50:58 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id E767D1F43189
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647334257;
-        bh=lopgVZP2WwtNXTEKFbRsbX8u2BD4qu5zhX66pLhAQoc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PkE4HH0M9WpZsbl2G9hpbgem8WqAwHX0e0j+R/9QnERZEsrZkJ0CHIeCJ1c+I3USY
-         /sB8O96aVWWAQhD63I5eXuy400SV8hU6zKzH+izf/dFTJJ+4Bb+3dw5KKkKXuBzvEP
-         oKzmCohsjowrSVW+n14iKWHoHU/J1LjGxQBIYbd/+xottpyFQP6H9sglUKA5q576lT
-         XqyElvHZ5Uot4r0YMauk749De6p6jFK8ozuPydlAdkpBo9XL/1DNwlTqEdbaiP7nLx
-         QtHak9M2c/zh2gft0HSDHPV6AJHZg+kV+0PnSDgdRhkyaF96p0R0QU4BESHqSflD7N
-         CmpP8afJlQhgw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        usama.anjum@collabora.com, kernel@collabora.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Date:   Tue, 15 Mar 2022 13:50:12 +0500
-Message-Id: <20220315085014.1047291-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220315085014.1047291-1-usama.anjum@collabora.com>
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
+        Tue, 15 Mar 2022 07:49:38 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2105.outbound.protection.outlook.com [40.107.117.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E395E27FFB;
+        Tue, 15 Mar 2022 04:48:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V/Q2CL1goNiMHYQjSm+wlz+HJrS9rlQXN+25t5gXBlkY0gxwhl91MoXDYQBOvO5L6ex8Lw8GlkjcPpqUuwZIQAJisFYZNfWjbk/yPLpFZLu2cDZAhcnq3BiAALRUwRM7pDdTSCjc8Og8Wq+wFCjwDTqpHScSrSu48y44gq/G6gQROENMDbuZkuaTjDUSNbK6qnLSR/5+l5X5xlMkZsTrYuXMWneWVfUpM6KYK4GUe8450f16zBuQlf/Tc1HAlPGKdfbax1wyUAelEq8IiC2tx71I7W5Yr0fN08haNR9cbQWwVC8OQhRcvkUhoBR3PVmJuHHs7LrhyhSSNf1WVVNLjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v6f+9E7eRrCZtFl/R5Tz1jC7D1JwV64nyOwPidDWEu4=;
+ b=ftTra4rOlQd5QxgRuMsJxpJgxSOA3jPhE4sVJLpYyWa3nF7qtYR8j5INB4KSjWqf4U05U3XbfARe8ZOj0IroQmRGZ+v4RYWPvc2ewHrjJpeVn/ec+iyoJ5onB0FBbclRPV95vIRSH12SuDqAevutQI6+Zxo8b04iqCYjpGgdxexAmCRl02i5hymBz4SZbTkk3g0IyNkHs49JlbxGFRqyYN/50Oev/tGHOA7s6SWV47U8/YKhaBBRZlNZu4wppxTVi6bj+qiO4dUpxdcdV61SXG+X1wUKnxuOZFfPJU9/fq+9g7UcUHEechiLu7q+YAUwB7oM8275RHwa0d1CkSDV+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v6f+9E7eRrCZtFl/R5Tz1jC7D1JwV64nyOwPidDWEu4=;
+ b=PV4MKdJ0QyNf9waGbX0XgPvBzSpbpNxEisD3kAbEZLoqnM1l457D1rdBgcARoq5JivZQNeh9BnRz6q4ILYkuF7E7RU4QWtvQU8kHsT1Ym0nnKUwZILySN8fId1JuNHKh78A6zXcKXqOGLXc5+VRZyHK3CIer2V8tNciaXUzrbWk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by SG2PR06MB3498.apcprd06.prod.outlook.com (2603:1096:4:a1::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Tue, 15 Mar
+ 2022 11:48:21 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5061.029; Tue, 15 Mar 2022
+ 11:48:21 +0000
+Message-ID: <9aa7d222-57ff-ad0c-7094-a3ee160ddb83@vivo.com>
+Date:   Tue, 15 Mar 2022 19:48:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] selftests/bpf: fix array_size.cocci warning
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Christy Lee <christylee@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        "zhengkui_guo@outlook.com" <zhengkui_guo@outlook.com>
+References: <b01130f4-0f9c-9fe4-639b-0dcece4ca09a@iogearbox.net>
+ <20220309033518.1743-1-guozhengkui@vivo.com>
+ <CAEf4BzY0F3g8oH7+u14DTs707STVSCi8j=A5_S=hn6VRXHzzXg@mail.gmail.com>
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+In-Reply-To: <CAEf4BzY0F3g8oH7+u14DTs707STVSCi8j=A5_S=hn6VRXHzzXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR04CA0059.apcprd04.prod.outlook.com
+ (2603:1096:202:14::27) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d2290d22-24d8-4c80-c50a-08da0679b403
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3498:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB3498DACE22868AF4BCDA4C51C7109@SG2PR06MB3498.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: McsambJ2gglT6krcxHE1Cx8HzodAQ1RVtvhF3xNHa9EzaqyIxoypjNpvvh48xGcdmKsLHvIf+XXP6KvSoN7scnayOuiJNGHXY/PAZbI6Fdmxv6q0GhugpgeBnBKzYCLX90HJpjrin3pChUmdqAvJmqdlvMhbidUg1Cy5SUbyCYgig2JHCPMmfRzm5pUa4A+R54qoOkyJS/4yj4/SWFsLyciVTZ6/7oqRR0w5w+JTXdLTCnMdNAipChTQG4cCMtm8Aa+WqITpdivcLRyxGzJlxeXJrUB/q8hsYOkXRzcJ7+5/abvqJDsy6jevDtbEXpcz7Pe2pbGx9elONRE0r/Tl7EbD4j6SkHkwLfQR9tFOFjCo+sgtWJzJA5c6yvqnYi6D3wIQdinGZ7PmF4Jy+Eal0iU/qDPQzdjI+lMZfFW1f5g1M9CD2Bg1C7YSdyfJhv4QT3A2rkzzmtrB/mYv3mynBqGNqM1jT4Jsu6W0A9/YGs5XZyXvwxJxBgBLwO10ZEunepIDdPKnBxQdJSEfMlT6kbpcJeELf7Y+nC57RGAHoi+18YxCgY25GI7yJe7jeHr9Fx7h7wtgAoXfmUaONd4v4KtUuSuA0KuwbjSvzH2paGEBM4SdvUVF9zxYTs/f6h7dogBqhbUV/FPAUu2gWgYzP5gDBkclnEjFd1A26YJfqUJxldxR4A8ZCL7pR8t+Z/HzWaT68UlGu8q0IhL8yP0t+1oFLWlyaF/fT3TzCagz+cSp/hz4ohRjTT5K6aWO3Lgwnvx9T99uBtmRDoAQ0kGExg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(6486002)(31696002)(316002)(36756003)(4326008)(54906003)(508600001)(86362001)(6916009)(53546011)(8676002)(52116002)(6512007)(31686004)(6506007)(38350700002)(38100700002)(26005)(5660300002)(2906002)(66946007)(66476007)(66556008)(2616005)(83380400001)(7416002)(8936002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WjdBcmYzd0YwRk56Z24zUVBkNXl1SFh1dm5yU2lFaGhIRGErRzVOaXprdjh2?=
+ =?utf-8?B?VVAzejlyTy81end4TXcvWmxzaE5qWHBBSk9uZUQ5L2ZsMVRBMXJrejVsME9t?=
+ =?utf-8?B?R3RwVDFjV3VheGVNR2YwWFhreXhabXNCVmVtYnM3c1BRRzF6SHRKc2FqME1W?=
+ =?utf-8?B?MUh4OVdFMUVOMStRNnA2Y2pucEg2U3BWVjFPTEJWOWdwSjVXZ2Y1MEVINmM4?=
+ =?utf-8?B?bnU0dnhTV0NUMzNlNEY1ZzlRdnFuY1pIL012U2RuSTFXNHpZMXhQRitCb2N5?=
+ =?utf-8?B?cFowRmZrRk9BdFE0eHB0enpIeU1ob3ExTVA2dzk4dVpjUURTMy9jSDN4VVFu?=
+ =?utf-8?B?UWNsdDZhS1AybnppSi9lcmdhTXgyaDBUWi8rWHprNzI0NGFzV081eS9ITmQ1?=
+ =?utf-8?B?OXdvSlF5OGRCalEvNmkwLzB4RTA5UHpMeHNwRTVLT21TOWRKT1V6Z21LRGlW?=
+ =?utf-8?B?RmJtSU9JRndhZWlteHRZWXFzOTJkcDVYcGxmUUNCajZxNjhBendMMWpoOEpz?=
+ =?utf-8?B?eDBqbTR4RTAzK1NJMG82N3JUYjkvRTZ4ZllaaHlzdEh0UU84ZE4zdHNDay9Q?=
+ =?utf-8?B?eWE0SWQ1TVZaR0szTUtuR2pMODBNcGRYNUdnaWlCWTFmS08vQlp1MUNKVDVH?=
+ =?utf-8?B?eTlvbzd4S1E4QWhBM2ZCeUtBajk2S0pmQkhqSGs1bWdWUjhhb3BDYUdvNXVH?=
+ =?utf-8?B?eTd6RWVLZXpnbHV6cW1Ob3lUVzhJcFk2OVU5QWNxWlNNdXBEejJCT0RCQ3hG?=
+ =?utf-8?B?NzBOREZJQ0JNRDdtRVFndm15c05hNWxobE9lM3RFb3BPSkJLTFJCZS9tQXA1?=
+ =?utf-8?B?a3dxQlNiMUZSWnZzTlpvWHRDNnlqRStDeHR5bGZ5UDR4V3RWSHlHZWZZUHJv?=
+ =?utf-8?B?UUVrZU1KVzdDRUtOZDNnUS91OHI0WVpWZUhXWnFjNTM0ZnpvZzFiV2dCSzJH?=
+ =?utf-8?B?TFIrNUZQcUdoZGhRQUVheDFmQWkyQll1VDUvZXZUcXFNT0k0cFhwMHNSZ0xT?=
+ =?utf-8?B?Y3pHUHpCZ0hla3JSSTY4cnRKVW1vaW9YTERleFZNam5PSnZKWkt1cVlzVHA3?=
+ =?utf-8?B?MEdnVGY5OGRzU0NSUmZmTXlPT3NmZmpuSEdhZDJ1dGc1b09FQW8wTlo2ZWg2?=
+ =?utf-8?B?K3JIaU5HMzJ6N3BTMW9Xak1LeG1XbEIwWjNqaWNnV2lJOWZRM2cxcnhiakIr?=
+ =?utf-8?B?VVVqQTcvU1BEdGZETU1reVl1VUkwT1QwVzlNR3QraW0xYzRNVlNGSE5TZWFR?=
+ =?utf-8?B?ZU9tbER6anhzQ1BiazNhTHhwZzJhSXV4Q2VaZ2w3OEVWSFRPeHozQ3Q3a2ZO?=
+ =?utf-8?B?dDZXV0NzejBpdkpDd1FzbGxuR1FsQks5Zkh1M3poR1htK3gzcTVVQjhmWEZz?=
+ =?utf-8?B?bCtHSjlydVR3RitKbWFEeGtKUlhYRnZuSW1GZTNFUjNjN21odHJNVTlTcUts?=
+ =?utf-8?B?OU5FZmpPZGtNOFU0cVNxRTJ4aWJWUmRYSFBPNEJsMDhVZDdCWmlxOTNVbUJD?=
+ =?utf-8?B?K1M5Sm9nUEovTldKeGNhbndHYWNkWTQwcUs3R2JXNDV1L3AzVENPaXVwWFcz?=
+ =?utf-8?B?ZnhwMDdmd2ZzZHhXYmQyWHFBcUZNOS9rN1hSNUFOY3pSa2hzQ0QwamdYVldZ?=
+ =?utf-8?B?M05lelhmblNKT0QyOG0zRjZxeW9UUmk0bVdCR0ltMk15WGo3WVNRMmh2SXM4?=
+ =?utf-8?B?VW42YUZGVkYvQWpac1FTdE0zNVJ6OFg2eW0rRy9pU0RDb1ZUNHoxT1kxKytW?=
+ =?utf-8?B?ZGRkRUh3TDRzRDkzbWUzNjFVYmN5U3Y1aW1Vc2Z2cXVnM21DcHY4V2lqcmw3?=
+ =?utf-8?B?MWl2UzNvNFBqdnFoLzhkTEtVaHlQU1JYNTV3NXJ0M2I0T0ZCbFc5SG03ZUlv?=
+ =?utf-8?B?N2VkdklsUjBmS2hlQ0xCUnJ2S0ZSaVcrd2pGNkhUZ2VxWFF4Z1Zsai9ZK2RX?=
+ =?utf-8?Q?lDA8lAjMLNhIUnaHM3rrMOmtx6VA+eG3?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2290d22-24d8-4c80-c50a-08da0679b403
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2022 11:48:21.0114
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CzKohw5hI7NdSVgQYdMqBI5u2BIKavCIRyTM8FwDeourqwGsxApvMzS3y35YRbpu7Ykev+vRp4VAt5Ak7JVzOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3498
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Gabriel Krisman Bertazi <krisman@collabora.com>
+On 2022/3/12 2:38, Andrii Nakryiko wrote:
+> On Tue, Mar 8, 2022 at 7:36 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
+>>
+>> Fix the array_size.cocci warning in tools/testing/selftests/bpf/
+>>
+>> Use `ARRAY_SIZE(arr)` in bpf_util.h instead of forms like
+>> `sizeof(arr)/sizeof(arr[0])`.
+>>
+>> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+>> ---
+>>   .../selftests/bpf/prog_tests/cgroup_attach_autodetach.c     | 2 +-
+>>   .../testing/selftests/bpf/prog_tests/cgroup_attach_multi.c  | 2 +-
+>>   .../selftests/bpf/prog_tests/cgroup_attach_override.c       | 2 +-
+>>   tools/testing/selftests/bpf/prog_tests/global_data.c        | 6 +++---
+>>   tools/testing/selftests/bpf/prog_tests/obj_name.c           | 2 +-
+>>   tools/testing/selftests/bpf/progs/syscall.c                 | 3 ++-
+>>   tools/testing/selftests/bpf/progs/test_rdonly_maps.c        | 3 ++-
+>>   tools/testing/selftests/bpf/test_cgroup_storage.c           | 2 +-
+>>   tools/testing/selftests/bpf/test_lru_map.c                  | 4 ++--
+>>   tools/testing/selftests/bpf/test_sock_addr.c                | 6 +++---
+>>   tools/testing/selftests/bpf/test_sockmap.c                  | 4 ++--
+>>   11 files changed, 19 insertions(+), 17 deletions(-)
+>>
+> 
+> [...]
+> 
+>> diff --git a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+>> index fc8e8a34a3db..a500f2c15970 100644
+>> --- a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+>> +++ b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
+>> @@ -3,6 +3,7 @@
+>>
+>>   #include <linux/ptrace.h>
+>>   #include <linux/bpf.h>
+>> +#include <bpf_util.h>
+> 
+> bpf_util.h isn't supposed to be included from BPF source code side. Is
+> this ARRAY_SIZE() use so important for BPF programs? Maybe just leave
+> existing code under progs/*.c as is?
 
-This introduces three tests:
-1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
-check if the SD bit is flipped.
-2) Check VMA reuse: validate the VM_SOFTDIRTY usage
-3) Check soft-dirty on huge pages
+I think so. Just leave progs/*.c unchanged. I'll commit PATCH v3.
 
-This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
-Invalidate TLB after clearing soft-dirty page state"). I was tracking the
-same issue that he fixed, and this test would have caught it.
+> 
+>>   #include <bpf/bpf_helpers.h>
+>>
+>>   const struct {
+>> @@ -64,7 +65,7 @@ int full_loop(struct pt_regs *ctx)
+>>   {
+>>          /* prevent compiler to optimize everything out */
+>>          unsigned * volatile p = (void *)&rdonly_values.a;
+>> -       int i = sizeof(rdonly_values.a) / sizeof(rdonly_values.a[0]);
+>> +       int i = ARRAY_SIZE(rdonly_values.a);
+>>          unsigned iters = 0, sum = 0;
+>>
+>>          /* validate verifier can allow full loop as well */
+> 
+> [...]
 
-CC: Will Deacon <will@kernel.org>
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-V3 of this patch is in Andrew's tree. Please drop that.
-
-Changes in V4:
-Cosmetic changes
-Removed global variables
-Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
-once
-Some other minor changes
-Correct the authorship of the patch
-
-Tests of soft dirty bit in this patch and in madv_populate.c are
-non-overlapping. madv_populate.c has only one soft-dirty bit test in the
-context of different advise (MADV_POPULATE_READ and
-MADV_POPULATE_WRITE). This new test adds more tests.
-
-Tab width of 8 has been used to align the macros. This alignment may look
-odd in shell or email. But it looks alright in editors.
-
-Test output:
-TAP version 13
-1..5
-ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 Test test_hugepage huge page allocation
-ok 5 Test test_hugepage huge page dirty bit
- # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Or
-
-TAP version 13
-1..5
-ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 # SKIP Test test_hugepage huge page allocation
-ok 5 # SKIP Test test_hugepage huge page dirty bit
- # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
-
-Changes in V3:
-Move test to selftests/vm
-Use kselftest macros
-Minor updates to make code more maintainable
-Add configurations in config file
-
-V2 of this patch:
-https://lore.kernel.org/lkml/20210603151518.2437813-1-krisman@collabora.com/
----
- tools/testing/selftests/vm/.gitignore   |   1 +
- tools/testing/selftests/vm/Makefile     |   2 +
- tools/testing/selftests/vm/config       |   2 +
- tools/testing/selftests/vm/soft-dirty.c | 146 ++++++++++++++++++++++++
- 4 files changed, 151 insertions(+)
- create mode 100644 tools/testing/selftests/vm/soft-dirty.c
-
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index d7507f3c7c76a..3cb4fa771ec2a 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -29,5 +29,6 @@ write_to_hugetlbfs
- hmm-tests
- memfd_secret
- local_config.*
-+soft-dirty
- split_huge_page_test
- ksm_tests
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 4e68edb26d6b6..f25eb30b5f0cb 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -47,6 +47,7 @@ TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
-+TEST_GEN_PROGS += soft-dirty
- TEST_GEN_PROGS += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
- 
-@@ -92,6 +93,7 @@ KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- $(OUTPUT)/madv_populate: vm_util.c
-+$(OUTPUT)/soft-dirty: vm_util.c
- $(OUTPUT)/split_huge_page_test: vm_util.c
- 
- ifeq ($(MACHINE),x86_64)
-diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
-index 60e82da0de850..be087c4bc3961 100644
---- a/tools/testing/selftests/vm/config
-+++ b/tools/testing/selftests/vm/config
-@@ -4,3 +4,5 @@ CONFIG_TEST_VMALLOC=m
- CONFIG_DEVICE_PRIVATE=y
- CONFIG_TEST_HMM=m
- CONFIG_GUP_TEST=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_MEM_SOFT_DIRTY=y
-diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
-new file mode 100644
-index 0000000000000..2d50ed3472206
---- /dev/null
-+++ b/tools/testing/selftests/vm/soft-dirty.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdbool.h>
-+#include <fcntl.h>
-+#include <stdint.h>
-+#include <malloc.h>
-+#include <sys/mman.h>
-+#include "../kselftest.h"
-+#include "vm_util.h"
-+
-+#define PAGEMAP			"/proc/self/pagemap"
-+#define CLEAR_REFS		"/proc/self/clear_refs"
-+#define MAX_LINE_LENGTH		512
-+#define TEST_ITERATIONS		10000
-+
-+static void test_simple(int pagemap_fd, int pagesize)
-+{
-+	int i;
-+	char *map;
-+
-+	map = aligned_alloc(pagesize, pagesize);
-+	if (!map)
-+		ksft_exit_fail_msg("mmap failed\n");
-+
-+	clear_softdirty();
-+
-+	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-+		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-+			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		clear_softdirty();
-+		map[0]++;
-+
-+		if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-+			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		clear_softdirty();
-+	}
-+	free(map);
-+
-+	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-+}
-+
-+static void test_vma_reuse(int pagemap_fd, int pagesize)
-+{
-+	char *map, *map2;
-+
-+	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed");
-+
-+	clear_softdirty();
-+
-+	/* Write to the page before unmapping and map the same size region again to check
-+	 * if same memory region is gotten next time and if dirty bit is preserved across
-+	 * this type of allocations.
-+	 */
-+	map[0]++;
-+
-+	munmap(map, pagesize);
-+
-+	map2 = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-+	if (map2 == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed");
-+
-+	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
-+
-+	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) != 0,
-+			 "Test %s dirty bit of previous page\n", __func__);
-+
-+	munmap(map2, pagesize);
-+}
-+
-+static void test_hugepage(int pagemap_fd, int pagesize)
-+{
-+	char *map;
-+	int i, ret;
-+	size_t hpage_len = read_pmd_pagesize();
-+
-+	map = memalign(hpage_len, hpage_len);
-+	if (!map)
-+		ksft_exit_fail_msg("memalign failed\n");
-+
-+	ret = madvise(map, hpage_len, MADV_HUGEPAGE);
-+	if (ret)
-+		ksft_exit_fail_msg("madvise failed %d\n", ret);
-+
-+	for (i = 0; i < hpage_len; i++)
-+		map[i] = (char)i;
-+
-+	if (check_huge(map)) {
-+		ksft_test_result_pass("Test %s huge page allocation\n", __func__);
-+
-+		clear_softdirty();
-+		for (i = 0 ; i < TEST_ITERATIONS ; i++) {
-+			if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-+				ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-+				break;
-+			}
-+
-+			clear_softdirty();
-+			map[0]++;
-+
-+			if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-+				ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-+				break;
-+			}
-+			clear_softdirty();
-+		}
-+
-+		ksft_test_result(i == TEST_ITERATIONS, "Test %s huge page dirty bit\n", __func__);
-+	} else {
-+		// hugepage allocation failed. skip these tests
-+		ksft_test_result_skip("Test %s huge page allocation\n", __func__);
-+		ksft_test_result_skip("Test %s huge page dirty bit\n", __func__);
-+	}
-+	free(map);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int pagemap_fd;
-+	int pagesize;
-+
-+	ksft_print_header();
-+	ksft_set_plan(5);
-+
-+	pagemap_fd = open(PAGEMAP, O_RDONLY);
-+	if (pagemap_fd < 0)
-+		ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP);
-+
-+	pagesize = getpagesize();
-+
-+	test_simple(pagemap_fd, pagesize);
-+	test_vma_reuse(pagemap_fd, pagesize);
-+	test_hugepage(pagemap_fd, pagesize);
-+
-+	close(pagemap_fd);
-+
-+	return ksft_exit_pass();
-+}
--- 
-2.30.2
-
+Zhengkui
