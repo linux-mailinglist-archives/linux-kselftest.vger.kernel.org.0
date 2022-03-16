@@ -2,161 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018914DB95D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 21:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239C64DBA47
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 22:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356159AbiCPU2I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Mar 2022 16:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S1356056AbiCPVp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Mar 2022 17:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357964AbiCPU17 (ORCPT
+        with ESMTP id S1356917AbiCPVpt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:27:59 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC603F8AE;
-        Wed, 16 Mar 2022 13:26:43 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d15so1704635qty.8;
-        Wed, 16 Mar 2022 13:26:43 -0700 (PDT)
+        Wed, 16 Mar 2022 17:45:49 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1241AF35
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Mar 2022 14:44:34 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id u30-20020a4a6c5e000000b00320d8dc2438so4281188oof.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Mar 2022 14:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Gns4/i7WVTMPvm4NCq+ncvvmRYDMWRv+EPtpCaahO6I=;
-        b=Y4SLtxmwKiGsSL/pt5pVjNOc8tI4eDK8Avvn7lQnt8NjQTgicY9820fpiXjU5jBXAv
-         fR6gCM19reTd6IHxEtYkZ7iXoZMjQi4S3S7cGEndRgEpU2439g9jVmmeuseWAg9KByeI
-         PmuxYYiomzKSbVsLeHA9tPuOggZfxsR+/aFuUXZGsYcg4jdcPw4IFR9MVG9s4R8upKhT
-         BeLDkiNxuMzCQq1vEtkM9Epb071ZocsII6eucqqe9a0hvwVhYPgmWes2tSSvm4GN0szb
-         WgnkQSu9JbMCzjKuK2ZAhGrDF3Inos8eNDllCIV/oRp5jV28vxsrOzN7bj5aaGdRQT9c
-         vdDg==
+        d=linaro.org; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=jaTnWfP5Ctwr90+tTsSeB1mPeSYn8clE+CkG+kehTNk=;
+        b=I4xUDzI1RQ9uhmUTrNp9Zl9awT7HtuyhW42gT4zUQGO2cTzapPafEa21pW2fJjSJh6
+         M/drMRkTXwYbNkaj5qy/FlNRZ5Wal9fzyfAv5mmZE2ufle/Nnf51tWlLZ6vApCGvmJ/b
+         HQYvCayrrItYl4WZl+KlwNQdbE9TFlLbt9XdKw/zBmvw6XzOVWA/FL3QJSU5ptQbbz/J
+         FBGKWI5meAce6LYi9WaOSqvYJNWhTOvnbZP0iIxV9LXiAd+oDHU6/FZIUtawnMbfPqNe
+         4X9OqWGaDHdwpDxUymsjkc58xeoVpXwq0ru5BfsR/re+n0rvku5p7aDCw6V8AIDDshWr
+         GkAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Gns4/i7WVTMPvm4NCq+ncvvmRYDMWRv+EPtpCaahO6I=;
-        b=sXwCKYK6aPh7dQjY0V++LB/qqlvg5E2au/MM7crn6a0Z99zEqagPmWyGZYXGLIbrcv
-         rw5C6dLu3EZ5CxsHp2ck83ail7EvgY/xM/Yfk4ZE+Rxbk0QShYxUUmOZhvIdno5gK+8Z
-         q60Ya12B++F71S24rOH4zaBys0ci0CgpC84h/j9P/5SBVGPzin8XKmfGwNZz6g0nY+YL
-         0oj1VzMUPdU55tVpfnl+IpCcdXkOxEb8IPBJg1ILccEjdJzzmu//DGEswhJkviFdSlyt
-         a0fnhwDFXwAr3vSDcb7oRxSJsQq5LHOaZdJKJW6UKq2LUycI0IhNXgp9JWcyZG3eU3+L
-         aStA==
-X-Gm-Message-State: AOAM531AOlUyFL2/QgX+Z+RsrChPCX3Hz2fUn8eed6deeX0SCfpBYUN4
-        RBlJ5DuaPFs+4fbaj4dVVBs=
-X-Google-Smtp-Source: ABdhPJwDDTLLFZ3EPcFp8sFnXz3GpraQjpfswl3LzydEvK2e93Q65Q22kyKStXJosR6i+yavMvSWpw==
-X-Received: by 2002:a05:622a:1808:b0:2e0:6d99:a782 with SMTP id t8-20020a05622a180800b002e06d99a782mr1360726qtc.406.1647462402852;
-        Wed, 16 Mar 2022 13:26:42 -0700 (PDT)
-Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:7488:f626:3f3b:5607])
-        by smtp.gmail.com with ESMTPSA id bp9-20020a05622a1b8900b002e0e86b8ac6sm1940074qtb.67.2022.03.16.13.26.41
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=jaTnWfP5Ctwr90+tTsSeB1mPeSYn8clE+CkG+kehTNk=;
+        b=U3kUQjVCjqWytUV9fft9P/nAAQcUGh328BWkF8Y652WhdhYPhxOa8Ce5o+H56UeJTC
+         TCVcH8mHhKBxbwtJXG+aJ2hL6VxkX5M1HJTC5v0mcjbf36JXy8XbVn4FU/+mF7XxYU3y
+         K8+KFRrEWKbpdxxZ2HvxbSXcjSoGX4u9HZ0T5H80IcSMOyv992o36ZRfYR5PGCvveCBk
+         4K6qKIJZJP8IMQ/uwk1bloSmaljIsSoSo4rMb5hwUDpciRT625yS5aucs/sofVQUNOnU
+         9PUAy6Nj4YHdLTWq/ptj2g9Xirf6TdAg/oWKHJVNf6pXxowBKBcIyiCHb5gGugHjztff
+         6gkg==
+X-Gm-Message-State: AOAM530N29qiQf6KidXTg4l1JUHCL6BfdiuaMlJlDhQWIiaC80v8CXvC
+        ceXkPARcMKJLi+Uv8CgEllzfunA6i6KAPW0hADc=
+X-Google-Smtp-Source: ABdhPJyn2zMtJrrUWIhbSfg3xPJmr73k3HTxz5k9k2IpYSZgp00Taw6kZsoWEYPNqF8D9fjRROZaKQ==
+X-Received: by 2002:a05:6870:9617:b0:d7:5d73:8545 with SMTP id d23-20020a056870961700b000d75d738545mr677058oaq.15.1647467073556;
+        Wed, 16 Mar 2022 14:44:33 -0700 (PDT)
+Received: from localhost ([2804:14d:7e39:8470:b171:978c:2a42:8690])
+        by smtp.gmail.com with ESMTPSA id a19-20020a056808099300b002da1428db03sm1441975oic.7.2022.03.16.14.44.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 13:26:42 -0700 (PDT)
-From:   frowand.list@gmail.com
-To:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+        Wed, 16 Mar 2022 14:44:33 -0700 (PDT)
+References: <20220225165923.1474372-1-broonie@kernel.org>
+ <20220225165923.1474372-12-broonie@kernel.org>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] Documentation: dev-tools: use literal block instead of code-block
-Date:   Wed, 16 Mar 2022 15:26:22 -0500
-Message-Id: <20220316202622.324866-3-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316202622.324866-1-frowand.list@gmail.com>
-References: <20220316202622.324866-1-frowand.list@gmail.com>
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v12 11/40] arm64/sme: Identify supported SME vector
+ lengths at boot
+Date:   Wed, 16 Mar 2022 18:32:47 -0300
+In-reply-to: <20220225165923.1474372-12-broonie@kernel.org>
+Message-ID: <8435jhd13g.fsf@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
 
-KTAP Specification: Change code-block directives to straightforward
-literal blocks since the blocks do not contain code.
+Hello,
 
-Suggested-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
- Documentation/dev-tools/ktap.rst | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Just a small suggestion:
 
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index 37b5dc61bfb8..b9a57ceddd4f 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -115,34 +115,32 @@ The diagnostic data field is optional, and results which have neither a
- directive nor any diagnostic data do not need to include the "#" field
- separator.
- 
--Example result lines include:
--
--.. code-block:: none
-+Example result lines include::
- 
- 	ok 1 test_case_name
- 
- The test "test_case_name" passed.
- 
--.. code-block:: none
-+::
- 
- 	not ok 1 test_case_name
- 
- The test "test_case_name" failed.
- 
--.. code-block:: none
-+::
- 
- 	ok 1 test # SKIP necessary dependency unavailable
- 
- The test "test" was SKIPPED with the diagnostic message "necessary dependency
- unavailable".
- 
--.. code-block:: none
-+::
- 
- 	not ok 1 test # TIMEOUT 30 seconds
- 
- The test "test" timed out, with diagnostic data "30 seconds".
- 
--.. code-block:: none
-+::
- 
- 	ok 5 check return code # rcode=0
- 
-@@ -202,7 +200,7 @@ allowed to be either indented or not indented.
- 
- An example of a test with two nested subtests:
- 
--.. code-block:: none
-+::
- 
- 	KTAP version 1
- 	1..1
-@@ -215,7 +213,7 @@ An example of a test with two nested subtests:
- 
- An example format with multiple levels of nested testing:
- 
--.. code-block:: none
-+::
- 
- 	KTAP version 1
- 	1..2
-@@ -250,7 +248,7 @@ nested version line, uses a line of the form
- 
- Example KTAP output
- --------------------
--.. code-block:: none
-+::
- 
- 	KTAP version 1
- 	1..1
--- 
-Frank Rowand <frank.rowand@sony.com>
+Mark Brown <broonie@kernel.org> writes:
 
+> diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
+> index d08062bcb9c1..550e1fc4ae6c 100644
+> --- a/arch/arm64/include/asm/cpu.h
+> +++ b/arch/arm64/include/asm/cpu.h
+> @@ -64,6 +64,9 @@ struct cpuinfo_arm64 {
+>=20=20
+>  	/* pseudo-ZCR for recording maximum ZCR_EL1 LEN value: */
+>  	u64		reg_zcr;
+> +
+> +	/* pseudo-SMCR for recording maximum ZCR_EL1 LEN value: */
+> +	u64		reg_smcr;
+>  };
+
+Perhaps append =E2=80=9Cwhen in streaming mode=E2=80=9D to the comment abov=
+e (or mention
+streaming mode in some other way), to convey the difference between
+reg_smcr and reg_zcr?
+
+--=20
+Thiago
