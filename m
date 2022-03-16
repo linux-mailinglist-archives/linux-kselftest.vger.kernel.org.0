@@ -2,281 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB424DACF8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 09:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429774DACFD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 09:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347256AbiCPI5P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Mar 2022 04:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S1354730AbiCPI6M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Mar 2022 04:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242512AbiCPI5O (ORCPT
+        with ESMTP id S1354808AbiCPI6L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:57:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39E232C13C
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Mar 2022 01:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647420958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mOXL/dlYJ9Y7q9KmoEp9L9wBQeuY/rwi8nHu81o4BOc=;
-        b=Zjv+GKkD8TLQ5L/+ylqi/uX42nbdw2sUnxFBTaSL8L/We9CAzqttDt8SRvP4qXMI9JjZJh
-        LfbPgLEsh8R6ceM4RmTisfY8/9B7winDw5/FBKuq4LCaq2R5cO4tLQQGQQTbgByxxZMXx/
-        97YPcjhcwsbWuDSacO0fxDWkgOJH4NI=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-42-xmHY5P0uM7eFxz8STBnRkQ-1; Wed, 16 Mar 2022 04:55:56 -0400
-X-MC-Unique: xmHY5P0uM7eFxz8STBnRkQ-1
-Received: by mail-wr1-f69.google.com with SMTP id f14-20020adfc98e000000b001e8593b40b0so314067wrh.14
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Mar 2022 01:55:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=mOXL/dlYJ9Y7q9KmoEp9L9wBQeuY/rwi8nHu81o4BOc=;
-        b=L36dj4oPAo5XQbzSul/Fc6uo6ZJYFdSH13zshQyXkASXaCofDEobEJrKZrO5lpbwib
-         xwR3hIcYV2hXCXG+91d44crADms8B2J5SIgIf0lMygAMUSwAtZ/MHKsolFcyNMHGtLaH
-         UjrdRdTUz5yHWud7QzdQ1okAFQXgqvyBe89IGBb9cMBaIRt/SLkoWoPGRrkcSVoULFHL
-         uhVT3+km71J087aQE+nUySqpPHP0LPi1fp/qLlyDnLCs6lq4pm3Nv+fN64+oI5eTDSt9
-         rbqhAjeegbWZpzXDKioFZW04xi5ZBb2cHiruVgs7vZFqWCe5tZkRExNaV7cn6HUyPG86
-         frFA==
-X-Gm-Message-State: AOAM531vnpe8DKxu5Bh99d6KVnQ20HQ9MN3gf41CE+6s2exz4c+upN1a
-        1+vdvZhB1M39H1BZiY83tCAOYBXJqyDv4AFmsPCSY40V9oLbfqboZAWyJbznqICR6/R8wSIQBKN
-        t3qxSk1GLqbV4Z1oKFltdLEaq6OrP
-X-Received: by 2002:a05:6000:2c9:b0:1f0:49aa:d347 with SMTP id o9-20020a05600002c900b001f049aad347mr23452343wry.453.1647420955619;
-        Wed, 16 Mar 2022 01:55:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyd7sa+0eL137AIqkXqTEIJzbfdMHDmQgaMRZl52+qq2qpQhfpnTOOt6EPW7m4NTjXbmHuow==
-X-Received: by 2002:a05:6000:2c9:b0:1f0:49aa:d347 with SMTP id o9-20020a05600002c900b001f049aad347mr23452321wry.453.1647420955257;
-        Wed, 16 Mar 2022 01:55:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:f900:aa79:cd25:e0:32d1? (p200300cbc706f900aa79cd2500e032d1.dip0.t-ipconnect.de. [2003:cb:c706:f900:aa79:cd25:e0:32d1])
-        by smtp.gmail.com with ESMTPSA id g26-20020a05600c4c9a00b00389a48b68bdsm1078382wmp.10.2022.03.16.01.55.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 01:55:54 -0700 (PDT)
-Message-ID: <b47a93fe-da50-d0d4-be8f-87071bf181f9@redhat.com>
-Date:   Wed, 16 Mar 2022 09:55:54 +0100
+        Wed, 16 Mar 2022 04:58:11 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289B44739A;
+        Wed, 16 Mar 2022 01:56:58 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22G8Bmqa025811;
+        Wed, 16 Mar 2022 08:56:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=p+mOR6ca9NJR3oIyyKmPv0Pg7oEI7rt9N+6UdwFdsO0=;
+ b=ZQYGzKiVbWeK8m4oQ9aarLvOagHj3KyrnXhg9vm4hsiTOEiG4anqiSCp6rVzYuhbsdZY
+ AEbi7867t6eLmmeW0HWHBHR+434vJMKYpDqVuKTaM032liSaNrGVHGLbI04ogFXQk7/T
+ W20GS5G9zoNEuzSLHageTPOm/xzt76GG+G9nQ0ujbDzQ3VCXgtwtsFbDQUBDSNolGMN2
+ 47ClzunLwgodeNfvQOVRw8x5i20+8ly7bNgJ4q7DRlsNBPhYKRHOyF2gQT0l2EJDH2Rb
+ sCltJAR+Q1V/lHEkjycJu02ZsGx9VurJm+KjTAPu6y0YZ1N9cQi78DL1K8AeHQrN2nF/ Fg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3euc5u0uuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 08:56:56 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22G8J4g5019351;
+        Wed, 16 Mar 2022 08:56:55 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3euc5u0utm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 08:56:55 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22G8lIcg016582;
+        Wed, 16 Mar 2022 08:56:53 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3erk58q956-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 08:56:53 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22G8uqLQ46072200
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Mar 2022 08:56:52 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 15FEAA405B;
+        Wed, 16 Mar 2022 08:56:50 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7CE20A4054;
+        Wed, 16 Mar 2022 08:56:49 +0000 (GMT)
+Received: from [9.145.38.138] (unknown [9.145.38.138])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Mar 2022 08:56:49 +0000 (GMT)
+Message-ID: <772ea26a-7133-8401-3e0d-0fef17b75638@linux.ibm.com>
+Date:   Wed, 16 Mar 2022 09:56:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
+Subject: Re: [PATCH v3 2/4] drivers/s390/char: Add Query Ultravisor
+ Information to uvdevice
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH V4 1/2] selftests: vm: bring common functions to a new
- file
-In-Reply-To: <20220315085014.1047291-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Steffen Eiden <seiden@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>, Nico Boehr <nrb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20220304141141.32767-1-seiden@linux.ibm.com>
+ <20220304141141.32767-3-seiden@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220304141141.32767-3-seiden@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NEvx_hY3lQuHo0eKO4DHfHV_xkQcL3Nh
+X-Proofpoint-GUID: I8lxpRXp_GncQffvYJkrd6r5SFdF9b3Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-16_02,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 adultscore=0 suspectscore=0
+ mlxlogscore=850 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203160052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15.03.22 09:50, Muhammad Usama Anjum wrote:
-> Bring common functions to a new file. These functions can be used in the
-> new tests. This helps in code duplication.
+On 3/4/22 15:11, Steffen Eiden wrote:
+> This patch enables userspace to call the Query Ultravisor Information
+> Ultravisor Call using IOCTLs on the uvdevice.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> The uvdevice will do some sanity checks first, build the UVCB,
+> perform the UV call, and copy the result to userspace.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+
+
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
 > ---
->  tools/testing/selftests/vm/Makefile           |   7 +-
->  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
->  .../selftests/vm/split_huge_page_test.c       |  77 +------------
->  tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
->  tools/testing/selftests/vm/vm_util.h          |  15 +++
->  5 files changed, 125 insertions(+), 111 deletions(-)
->  create mode 100644 tools/testing/selftests/vm/vm_util.c
->  create mode 100644 tools/testing/selftests/vm/vm_util.h
+>   arch/s390/include/uapi/asm/uvdevice.h |  2 +
+>   drivers/s390/char/uvdevice.c          | 56 +++++++++++++++++++++++++++
+>   2 files changed, 58 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 5e43f072f5b76..4e68edb26d6b6 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
->  TEST_GEN_FILES += hugepage-shm
->  TEST_GEN_FILES += hugepage-vmemmap
->  TEST_GEN_FILES += khugepaged
-> -TEST_GEN_FILES += madv_populate
-> +TEST_GEN_PROGS = madv_populate
->  TEST_GEN_FILES += map_fixed_noreplace
->  TEST_GEN_FILES += map_hugetlb
->  TEST_GEN_FILES += map_populate
-> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
->  TEST_GEN_FILES += thuge-gen
->  TEST_GEN_FILES += transhuge-stress
->  TEST_GEN_FILES += userfaultfd
-> -TEST_GEN_FILES += split_huge_page_test
-> +TEST_GEN_PROGS += split_huge_page_test
->  TEST_GEN_FILES += ksm_tests
->  
->  ifeq ($(MACHINE),x86_64)
-> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
->  KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
-> +$(OUTPUT)/madv_populate: vm_util.c
-> +$(OUTPUT)/split_huge_page_test: vm_util.c
-> +
-
-
-[...]
-
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdbool.h>
-> +#include <string.h>
-> +#include "vm_util.h"
-> +
-> +uint64_t pagemap_get_entry(int fd, char *start)
+> diff --git a/arch/s390/include/uapi/asm/uvdevice.h b/arch/s390/include/uapi/asm/uvdevice.h
+> index d40f69345c75..7520bdde3102 100644
+> --- a/arch/s390/include/uapi/asm/uvdevice.h
+> +++ b/arch/s390/include/uapi/asm/uvdevice.h
+> @@ -42,10 +42,12 @@ struct uvio_attest {
+>   #define UVIO_ATT_ARCB_MAX_LEN		0x100000
+>   #define UVIO_ATT_MEASUREMENT_MAX_LEN	0x8000
+>   #define UVIO_ATT_ADDITIONAL_MAX_LEN	0x8000
+> +#define UVIO_QUI_MAX_LEN		0x8000
+>   
+>   #define UVIO_DEVICE_NAME "uv"
+>   #define UVIO_TYPE_UVC 'u'
+>   
+>   #define UVIO_IOCTL_ATT _IOWR(UVIO_TYPE_UVC, 0x01, struct uvio_ioctl_cb)
+> +#define UVIO_IOCTL_QUI _IOWR(UVIO_TYPE_UVC, 0x02, struct uvio_ioctl_cb)
+>   
+>   #endif  /* __S390X_ASM_UVDEVICE_H */
+> diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
+> index b720dc8d0bd9..cfce8c5999e6 100644
+> --- a/drivers/s390/char/uvdevice.c
+> +++ b/drivers/s390/char/uvdevice.c
+> @@ -31,6 +31,55 @@
+>   #include <asm/uvdevice.h>
+>   #include <asm/uv.h>
+>   
+> +/**
+> + * uvio_qui() - Perform a Query Ultravisor Information UVC.
+> + *
+> + * uv_ioctl: ioctl control block
+> + *
+> + * uvio_qui() does a Query Ultravisor Information (QUI) Ultravisor Call.
+> + * It creates the uvc qui request and sends it to the Ultravisor. After that
+> + * it copies the response to userspace and fills the rc and rrc of uv_ioctl
+> + * uv_call with the response values of the Ultravisor.
+> + *
+> + * Create the UVC structure, send the UVC to UV and write the response in the ioctl struct.
+> + *
+> + * Return: 0 on success or a negative error code on error.
+> + */
+> +static int uvio_qui(struct uvio_ioctl_cb *uv_ioctl)
 > +{
-> +	const unsigned long pfn = (unsigned long)start / getpagesize();
-> +	uint64_t entry;
+> +	u8 __user *user_buf_addr = (__user u8 *)uv_ioctl->argument_addr;
+> +	size_t user_buf_len = uv_ioctl->argument_len;
+> +	struct uv_cb_header *uvcb_qui = NULL;
 > +	int ret;
-> +
-> +	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
-> +	if (ret != sizeof(entry))
-> +		ksft_exit_fail_msg("reading pagemap failed\n");
-> +	return entry;
-> +}
-> +
-> +bool pagemap_is_softdirty(int fd, char *start)
-> +{
-> +	uint64_t entry = pagemap_get_entry(fd, start);
-> +
-> +	return ((entry >> DIRTY_BIT_LOCATION) & 1);
-> +}
-
-Please leave code you're moving around as untouched as possible to avoid
-unrelated bugs that happen by mistake and are hard to review.
-
-> +
-> +void clear_softdirty(void)
-> +{
-> +	int ret;
-> +	const char *ctrl = "4";
-> +	int fd = open("/proc/self/clear_refs", O_WRONLY);
-> +
-> +	if (fd < 0)
-> +		ksft_exit_fail_msg("opening clear_refs failed\n");
-> +	ret = write(fd, ctrl, strlen(ctrl));
-> +	close(fd);
-> +	if (ret != strlen(ctrl))
-> +		ksft_exit_fail_msg("writing clear_refs failed\n");
-> +}
-> +
-> +
-> +static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
-> +{
-> +	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
-> +		if (!strncmp(buf, pattern, strlen(pattern)))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +uint64_t read_pmd_pagesize(void)
-> +{
-> +	int fd;
-> +	char buf[20];
-> +	ssize_t num_read;
-> +
-> +	fd = open(PMD_SIZE, O_RDONLY);
-> +	if (fd == -1)
-> +		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
-> +
-> +	num_read = read(fd, buf, 19);
-> +	if (num_read < 1) {
-> +		close(fd);
-> +		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
-> +	}
-> +	buf[num_read] = '\0';
-> +	close(fd);
-> +
-> +	return strtoul(buf, NULL, 10);
-> +}
-> +
-> +uint64_t check_huge(void *addr)
-> +{
-> +	uint64_t thp = 0;
-> +	int ret;
-> +	FILE *fp;
-> +	char buffer[MAX_LINE_LENGTH];
-> +	char addr_pattern[MAX_LINE_LENGTH];
-> +
-> +	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-> +		       (unsigned long) addr);
-> +	if (ret >= MAX_LINE_LENGTH)
-> +		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
-> +
-> +	fp = fopen(SMAP, "r");
-> +	if (!fp)
-> +		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
-> +
-> +	if (!check_for_pattern(fp, addr_pattern, buffer))
-> +		goto err_out;
 > +
 > +	/*
-> +	 * Fetch the AnonHugePages: in the same block and check the number of
-> +	 * hugepages.
+> +	 * Do not check for a too small buffer. If userspace provides a buffer
+> +	 * that is too small the Ultravisor will complain.
 > +	 */
-> +	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-> +		goto err_out;
+> +	ret = -EINVAL;
+> +	if (!user_buf_len || user_buf_len > UVIO_QUI_MAX_LEN)
+> +		goto out;
+> +	ret = -ENOMEM;
+> +	uvcb_qui = kvzalloc(user_buf_len, GFP_KERNEL);
+> +	if (!uvcb_qui)
+> +		goto out;
+> +	uvcb_qui->len = user_buf_len;
+> +	uvcb_qui->cmd = UVC_CMD_QUI;
 > +
-> +	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
-> +		ksft_exit_fail_msg("Reading smap error\n");
+> +	uv_call(0, (u64)uvcb_qui);
 > +
-> +err_out:
-> +	fclose(fp);
-> +	return thp;
+> +	ret = -EFAULT;
+> +	if (copy_to_user(user_buf_addr, uvcb_qui, uvcb_qui->len))
+> +		goto out;
+> +	uv_ioctl->uv_rc = uvcb_qui->rc;
+> +	uv_ioctl->uv_rrc = uvcb_qui->rrc;
+> +
+> +	ret = 0;
+> +out:
+> +	kvfree(uvcb_qui);
+> +	return ret;
 > +}
-> diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
-> new file mode 100644
-> index 0000000000000..7522dbb859f0f
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/vm_util.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <stdint.h>
-> +#include <fcntl.h>
-> +#include "../kselftest.h"
 > +
-> +#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-
-Ehm no. PMD_SIZE_PATH at best -- just as it used to.
-
-> +#define	SMAP			"/proc/self/smaps"
-
-SMAPS_PATH
-
-> +#define	DIRTY_BIT_LOCATION	55
-
-Please inline that just as it used to. There is no value in a magic
-define without any proper namespace.
-
-> +#define	MAX_LINE_LENGTH		512
-
-This used to be 500. Why the change?
-
-
-Also: weird indentation and these all look like the should go into
-vm_util.c. They are not used outside that file.
-
-
-
--- 
-Thanks,
-
-David / dhildenb
+>   static int uvio_build_uvcb_attest(struct uv_cb_attest *uvcb_attest, u8 *arcb,
+>   				  u8 *meas, u8 *add_data, struct uvio_attest *uvio_attest)
+>   {
+> @@ -217,6 +266,13 @@ static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>   			goto out;
+>   		ret = uvio_attestation(uv_ioctl);
+>   		break;
+> +	case UVIO_IOCTL_QUI:
+> +		ret = uvio_copy_and_check_ioctl(uv_ioctl, argp);
+> +		if (ret)
+> +			goto out;
+> +		ret = uvio_qui(uv_ioctl);
+> +		break;
+> +
+>   	default:
+>   		ret = -ENOIOCTLCMD;
+>   		break;
 
