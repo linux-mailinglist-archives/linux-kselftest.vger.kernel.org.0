@@ -2,199 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982564DB738
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 18:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A7E4DB95C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 21:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243950AbiCPRhj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Mar 2022 13:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S1346287AbiCPU2H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Mar 2022 16:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239152AbiCPRhi (ORCPT
+        with ESMTP id S1357944AbiCPU15 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:37:38 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B00B674C1;
-        Wed, 16 Mar 2022 10:36:23 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 6F9591F430DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647452182;
-        bh=CcIxudwQJMgXuoIKm9oLlx5LdLPJZ9BlYBuhMcMRnmI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=IiPUZ/OADUJlHDKAwqADefd9ggOCIa5NXfKPYcqxdq3Yct/2qNnmWRZVMH7luFZqn
-         eDH5p2h4TqROCiRChNrgvdohvrtM8zi28Ey5fRWLI31Xuno4xG7PjzMhlhY+lwzb2+
-         1CSF1x4PjOzYtdRngZazwoqOJElurTS2yXIUQB0qvU/lEqG9aOFWjewZ1TQHRkuASS
-         k+/31ZXA/T3/a6/UO+fJjk2vbdg3TEpkU6hbdAdURZH7J8uEDcMVJ65lEDT2XALCJd
-         1zjhYbO1TDQ24HqSfc67QKoMRtMKk2PxB7T6YL1vMVw1zVgI6AgS7R8ZRmk/7cBh0s
-         layUMKAVVehpQ==
-Message-ID: <468db472-3298-0f3d-e000-29aed1abcd91@collabora.com>
-Date:   Wed, 16 Mar 2022 22:36:14 +0500
+        Wed, 16 Mar 2022 16:27:57 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74BD3F8AE;
+        Wed, 16 Mar 2022 13:26:41 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id v2so2821712qtc.5;
+        Wed, 16 Mar 2022 13:26:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qYynkwQ+j3b/YGx/TNtwPxZ5TKXzPPLTT7lPgCZm+48=;
+        b=DzH36QZjHNcrZ0UH3XWqpH7SBIvo6qxszr0gTMibyuzJMeuva7mRN9TFl0oiYdnYUE
+         FGF49z9z6uzwT68tr/hmHPEiExZSm/gPs0gxTgq0Hs8H7RvhCGWM+ambf3f3LOqxguVU
+         yPZO5j+UrdUUl1vkAOwvBK3jvEKbMHD9GnVo5fYaLHTy5KGuZvWEOEY0qXAFIss+GTuF
+         UZlMsSDenY9IG83XPNN4FsEGIqeGzMZphQKVqqVch1wF9GR1sbzZyjbCrTAmgdKvpVbV
+         63x9+aXkKCwhfqF/sk+fBURf0uoLkIh6JlHhQ8YIWW/a32CSj3o1NH4rEuUhJNKOKS3f
+         EIxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qYynkwQ+j3b/YGx/TNtwPxZ5TKXzPPLTT7lPgCZm+48=;
+        b=FrDn/n8DWgIh6adtm5uVePd+Q4g0vT/PQzz/fUFYc38S57u+yxImQOOUPuZil9xRmS
+         05SWvTy99/pO6XumJ5cGGihpglCsi03eA3fOHebkM4yceDXIj2V2cIwyIySKU9oRuod9
+         gjgEeUFABurkGIX2J6aJnUifiNd6Su5Xq1fD6rdhGBCu6KkkSsptj0cJdrXKr9+dtY0t
+         InG09egxumpbxO/Rg7b47niLXiEkbyT0xXZQ5ZUg2neiSBG7aPVsSvKI1/GkUtyu+uOj
+         YawWB4QP/9al4Roal1i55YfuQgqLRMAo0RhuoRbCbWlfcHqHJjBiqogS94q2zG4O/0w/
+         KtkQ==
+X-Gm-Message-State: AOAM531f3lwgOdvoFlDPackbt7fx1S4o/wTYAjcsXNgUv9CrKKN7Fi9r
+        wSRwEvaC+jKYsIzGOUH3uB8=
+X-Google-Smtp-Source: ABdhPJyUyCHgYvLQH1YEBa8eWojwkGpa42X+W5njt6/tHky6i+6enBnVEZTswalGWe4gbYUBQV4BYg==
+X-Received: by 2002:ac8:5711:0:b0:2e1:cde2:6922 with SMTP id 17-20020ac85711000000b002e1cde26922mr1383558qtw.116.1647462400814;
+        Wed, 16 Mar 2022 13:26:40 -0700 (PDT)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:7488:f626:3f3b:5607])
+        by smtp.gmail.com with ESMTPSA id bp9-20020a05622a1b8900b002e0e86b8ac6sm1940074qtb.67.2022.03.16.13.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 13:26:40 -0700 (PDT)
+From:   frowand.list@gmail.com
+To:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/2] Documentation: dev-tools: begin KTAP spec v2 process
+Date:   Wed, 16 Mar 2022 15:26:20 -0500
+Message-Id: <20220316202622.324866-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Cc:     usama.anjum@collabora.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Content-Language: en-US
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
- <20220315085014.1047291-2-usama.anjum@collabora.com>
- <871qz3ndji.fsf@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <871qz3ndji.fsf@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/16/22 1:53 AM, Gabriel Krisman Bertazi wrote:
-> Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
-> 
->> From: Gabriel Krisman Bertazi <krisman@collabora.com>
-> 
-> Hi Usama,
-> 
-> Please, cc me on the whole thread.  I didn't get the patch 1/2 or the
-> cover letter.
-> 
+From: Frank Rowand <frank.rowand@sony.com>
 
-Sorry, I'll correct it.
+An August 2021 RFC patch [1] to create the KTAP Specification resulted in
+some discussion of possible items to add to the specification.
+The conversation ended without completing the document.
 
->> This introduces three tests:
->> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
->> check if the SD bit is flipped.
->> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
->> 3) Check soft-dirty on huge pages
->>
->> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
->> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
->> same issue that he fixed, and this test would have caught it.
->>
->> CC: Will Deacon <will@kernel.org>
->> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> V3 of this patch is in Andrew's tree. Please drop that.
-> 
-> v3 is still in linux-next and this note is quite hidden in the middle of
-> the commit message.
+Progress resumed with a December 2021 RFC patch [2] to add a KTAP
+Specification file (Version 1) to the Linux kernel.  Many of the
+suggestions from the August 2021 discussion were not included in
+Version 1.  This patch series is intended to revisit some of the
+suggestions from the August 2021 discussion.
 
-I've tried to put this message at the top of the changelog. I can add
-"Note" in the start of it. What can be some other way to highlight this
-kind of important message?
+Patch 1 changes the Specification version to "2-rc" to indicate
+that following patches are not yet accepted into a final version 2.
 
->>
->> Changes in V4:
->> Cosmetic changes
->> Removed global variables
->> Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
->> once
->> Some other minor changes
->> Correct the authorship of the patch
->>
->> Tests of soft dirty bit in this patch and in madv_populate.c are
->> non-overlapping. madv_populate.c has only one soft-dirty bit test in the
->> context of different advise (MADV_POPULATE_READ and
->> MADV_POPULATE_WRITE). This new test adds more tests.
->>
->> Tab width of 8 has been used to align the macros. This alignment may look
->> odd in shell or email. But it looks alright in editors.
-> 
-> I'm curious if you tested reverting 912efa17e512. Did the new versions
-> of this patch still catch the original issue?
+Patch 2 is an example of a simple change to the Specification.  The
+change does not change the content of the Specification, but updates
+a formatting directive as suggested by the Documentation maintainer.
 
-Yeah, it did after I reverted the patch and fixed build errors because
-of some function's signature change and one test failed and hence issue
-is caught:
+I intend to take some specific suggestions from the August 2021
+discussion to create stand-alone RFC patches to the Specification
+instead of adding them as additional patches in this series.  The
+intent is to focus discussion on a single area of the Specification
+in each patch email thread.
 
-TAP version 13
-1..5
-# dirty bit was 0, but should be 1 (i=1)
-not ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 # SKIP Test test_hugepage huge page allocation
-ok 5 # SKIP Test test_hugepage huge page dirty bit
-# Totals: pass:2 fail:1 xfail:0 xpass:0 skip:2 error:0
+[1] https://lore.kernel.org/r/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com
+[2] https://lore.kernel.org/r/20211207190251.18426-1-davidgow@google.com
 
+Frank Rowand (2):
+  Documentation: dev-tools: KTAP spec change version to 2-rc
+  Documentation: dev-tools: use literal block instead of code-block
 
->> Test output:
->> TAP version 13
->> 1..5
->> ok 1 Test test_simple
->> ok 2 Test test_vma_reuse reused memory location
->> ok 3 Test test_vma_reuse dirty bit of previous page
->> ok 4 Test test_hugepage huge page allocation
->> ok 5 Test test_hugepage huge page dirty bit
->>  # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
->>
->> Or
->>
->> TAP version 13
->> 1..5
->> ok 1 Test test_simple
->> ok 2 Test test_vma_reuse reused memory location
->> ok 3 Test test_vma_reuse dirty bit of previous page
->> ok 4 # SKIP Test test_hugepage huge page allocation
->> ok 5 # SKIP Test test_hugepage huge page dirty bit
->>  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
-[..]
->> +
->> +#define PAGEMAP			"/proc/self/pagemap"
->> +#define CLEAR_REFS		"/proc/self/clear_refs"
->> +#define MAX_LINE_LENGTH		512
-> 
-> MAX_LINE_LENGTH is no longer used after check_for_pattern was dropped.
-> 
-> Can't the previous defines and file handling functions also go the
-> vm_util.h?
-> 
-
-I don't want to make changes in other two tests. I just want to move
-some functions which we need for this test into vm_util.h while keeping
-changes less.
-
->> +#define TEST_ITERATIONS		10000
->> +
->> +static void test_simple(int pagemap_fd, int pagesize)
->> +{
->> +	int i;
->> +	char *map;
->> +
->> +	map = aligned_alloc(pagesize, pagesize);
->> +	if (!map)
->> +		ksft_exit_fail_msg("mmap failed\n");
->> +
->> +	clear_softdirty();
->> +
->> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
->> +		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
->> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
->> +			break;
->> +		}
->> +
->> +		clear_softdirty();
->> +		map[0]++;
-> 
-> 
-> This will overflow several times during TEST_ITERATIONS.  While it is
-> not broken, since we care about causing the page fault, it is not
-> obvious.  Can you add a comment or do something like this instead?
-> 
->   map[0] = !map[0];
-
-Yeah, it is less obvious. I'll add a comment
+ Documentation/dev-tools/ktap.rst | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
 -- 
-Muhammad Usama Anjum
+Frank Rowand <frank.rowand@sony.com>
+
