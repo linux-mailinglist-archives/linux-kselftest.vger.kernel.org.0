@@ -2,51 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BC64DB69F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 17:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982564DB738
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Mar 2022 18:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357010AbiCPQso (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Mar 2022 12:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S243950AbiCPRhj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Mar 2022 13:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238933AbiCPQso (ORCPT
+        with ESMTP id S239152AbiCPRhi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:48:44 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5AE2DD74;
-        Wed, 16 Mar 2022 09:47:27 -0700 (PDT)
+        Wed, 16 Mar 2022 13:37:38 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B00B674C1;
+        Wed, 16 Mar 2022 10:36:23 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id ABA771F444BE
+        with ESMTPSA id 6F9591F430DD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647449245;
-        bh=Vt70eCSvc2zqki9hfDzcz6upXnG7HHuoQp1wXP5ezc4=;
+        s=mail; t=1647452182;
+        bh=CcIxudwQJMgXuoIKm9oLlx5LdLPJZ9BlYBuhMcMRnmI=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=eTxFJlVOq7IEc/chB3Uc0RmKZ2SkSN0enFVgAdUsuPiFiB+9Ch094CE0i/7g6Pj9f
-         mNSJ2JnthPnQqfJ+gKzNvn/zWwHHebMylOedAtQ7lPWawtW9kWfPtHx4B4wyT/ZovU
-         0C8pv91Wrwg3YZm5KrLeD7pZBzvqgZ7iaTFkF4cPo+KMQWIwsqLLRXjTLRIV9bc4ps
-         LuJM4AqH+O4KU7DMMlfhFLBs8mOqcyHBcuKa+W03GlDVRr9qUVBrwU4iqXcAgy3AeJ
-         2uoyW80iKa4J7bLD6ehys30u5vjYtomA+i9HOQYmvIjwEFPLUz6jZQWCkZaJsqLTFB
-         VU06/6q7RiUgQ==
-Message-ID: <453bf08c-0110-03d9-7346-76a7c2118987@collabora.com>
-Date:   Wed, 16 Mar 2022 21:47:19 +0500
+        b=IiPUZ/OADUJlHDKAwqADefd9ggOCIa5NXfKPYcqxdq3Yct/2qNnmWRZVMH7luFZqn
+         eDH5p2h4TqROCiRChNrgvdohvrtM8zi28Ey5fRWLI31Xuno4xG7PjzMhlhY+lwzb2+
+         1CSF1x4PjOzYtdRngZazwoqOJElurTS2yXIUQB0qvU/lEqG9aOFWjewZ1TQHRkuASS
+         k+/31ZXA/T3/a6/UO+fJjk2vbdg3TEpkU6hbdAdURZH7J8uEDcMVJ65lEDT2XALCJd
+         1zjhYbO1TDQ24HqSfc67QKoMRtMKk2PxB7T6YL1vMVw1zVgI6AgS7R8ZRmk/7cBh0s
+         layUMKAVVehpQ==
+Message-ID: <468db472-3298-0f3d-e000-29aed1abcd91@collabora.com>
+Date:   Wed, 16 Mar 2022 22:36:14 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
+Cc:     usama.anjum@collabora.com,
         Andrew Morton <akpm@linux-foundation.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH V4 1/2] selftests: vm: bring common functions to a new
- file
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
 References: <20220315085014.1047291-1-usama.anjum@collabora.com>
- <b47a93fe-da50-d0d4-be8f-87071bf181f9@redhat.com>
+ <20220315085014.1047291-2-usama.anjum@collabora.com>
+ <871qz3ndji.fsf@collabora.com>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <b47a93fe-da50-d0d4-be8f-87071bf181f9@redhat.com>
+In-Reply-To: <871qz3ndji.fsf@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,203 +58,143 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+On 3/16/22 1:53 AM, Gabriel Krisman Bertazi wrote:
+> Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
+> 
+>> From: Gabriel Krisman Bertazi <krisman@collabora.com>
+> 
+> Hi Usama,
+> 
+> Please, cc me on the whole thread.  I didn't get the patch 1/2 or the
+> cover letter.
+> 
 
-Thank you for the review. I'll correct everything mentioned here in the
-next iteration.
+Sorry, I'll correct it.
 
-+[Gabriel]
-
-On 3/16/22 1:55 PM, David Hildenbrand wrote:
-> On 15.03.22 09:50, Muhammad Usama Anjum wrote:
->> Bring common functions to a new file. These functions can be used in the
->> new tests. This helps in code duplication.
+>> This introduces three tests:
+>> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
+>> check if the SD bit is flipped.
+>> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
+>> 3) Check soft-dirty on huge pages
 >>
+>> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
+>> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
+>> same issue that he fixed, and this test would have caught it.
+>>
+>> CC: Will Deacon <will@kernel.org>
+>> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
 >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 >> ---
->>  tools/testing/selftests/vm/Makefile           |   7 +-
->>  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
->>  .../selftests/vm/split_huge_page_test.c       |  77 +------------
->>  tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
->>  tools/testing/selftests/vm/vm_util.h          |  15 +++
->>  5 files changed, 125 insertions(+), 111 deletions(-)
->>  create mode 100644 tools/testing/selftests/vm/vm_util.c
->>  create mode 100644 tools/testing/selftests/vm/vm_util.h
+>> V3 of this patch is in Andrew's tree. Please drop that.
+> 
+> v3 is still in linux-next and this note is quite hidden in the middle of
+> the commit message.
+
+I've tried to put this message at the top of the changelog. I can add
+"Note" in the start of it. What can be some other way to highlight this
+kind of important message?
+
 >>
->> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
->> index 5e43f072f5b76..4e68edb26d6b6 100644
->> --- a/tools/testing/selftests/vm/Makefile
->> +++ b/tools/testing/selftests/vm/Makefile
->> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
->>  TEST_GEN_FILES += hugepage-shm
->>  TEST_GEN_FILES += hugepage-vmemmap
->>  TEST_GEN_FILES += khugepaged
->> -TEST_GEN_FILES += madv_populate
->> +TEST_GEN_PROGS = madv_populate
->>  TEST_GEN_FILES += map_fixed_noreplace
->>  TEST_GEN_FILES += map_hugetlb
->>  TEST_GEN_FILES += map_populate
->> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
->>  TEST_GEN_FILES += thuge-gen
->>  TEST_GEN_FILES += transhuge-stress
->>  TEST_GEN_FILES += userfaultfd
->> -TEST_GEN_FILES += split_huge_page_test
->> +TEST_GEN_PROGS += split_huge_page_test
->>  TEST_GEN_FILES += ksm_tests
->>  
->>  ifeq ($(MACHINE),x86_64)
->> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
->>  KSFT_KHDR_INSTALL := 1
->>  include ../lib.mk
->>  
->> +$(OUTPUT)/madv_populate: vm_util.c
->> +$(OUTPUT)/split_huge_page_test: vm_util.c
+>> Changes in V4:
+>> Cosmetic changes
+>> Removed global variables
+>> Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
+>> once
+>> Some other minor changes
+>> Correct the authorship of the patch
+>>
+>> Tests of soft dirty bit in this patch and in madv_populate.c are
+>> non-overlapping. madv_populate.c has only one soft-dirty bit test in the
+>> context of different advise (MADV_POPULATE_READ and
+>> MADV_POPULATE_WRITE). This new test adds more tests.
+>>
+>> Tab width of 8 has been used to align the macros. This alignment may look
+>> odd in shell or email. But it looks alright in editors.
+> 
+> I'm curious if you tested reverting 912efa17e512. Did the new versions
+> of this patch still catch the original issue?
+
+Yeah, it did after I reverted the patch and fixed build errors because
+of some function's signature change and one test failed and hence issue
+is caught:
+
+TAP version 13
+1..5
+# dirty bit was 0, but should be 1 (i=1)
+not ok 1 Test test_simple
+ok 2 Test test_vma_reuse reused memory location
+ok 3 Test test_vma_reuse dirty bit of previous page
+ok 4 # SKIP Test test_hugepage huge page allocation
+ok 5 # SKIP Test test_hugepage huge page dirty bit
+# Totals: pass:2 fail:1 xfail:0 xpass:0 skip:2 error:0
+
+
+>> Test output:
+>> TAP version 13
+>> 1..5
+>> ok 1 Test test_simple
+>> ok 2 Test test_vma_reuse reused memory location
+>> ok 3 Test test_vma_reuse dirty bit of previous page
+>> ok 4 Test test_hugepage huge page allocation
+>> ok 5 Test test_hugepage huge page dirty bit
+>>  # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>
+>> Or
+>>
+>> TAP version 13
+>> 1..5
+>> ok 1 Test test_simple
+>> ok 2 Test test_vma_reuse reused memory location
+>> ok 3 Test test_vma_reuse dirty bit of previous page
+>> ok 4 # SKIP Test test_hugepage huge page allocation
+>> ok 5 # SKIP Test test_hugepage huge page dirty bit
+>>  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
+[..]
 >> +
+>> +#define PAGEMAP			"/proc/self/pagemap"
+>> +#define CLEAR_REFS		"/proc/self/clear_refs"
+>> +#define MAX_LINE_LENGTH		512
 > 
+> MAX_LINE_LENGTH is no longer used after check_for_pattern was dropped.
 > 
-> [...]
+> Can't the previous defines and file handling functions also go the
+> vm_util.h?
 > 
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <stdbool.h>
->> +#include <string.h>
->> +#include "vm_util.h"
+
+I don't want to make changes in other two tests. I just want to move
+some functions which we need for this test into vm_util.h while keeping
+changes less.
+
+>> +#define TEST_ITERATIONS		10000
 >> +
->> +uint64_t pagemap_get_entry(int fd, char *start)
+>> +static void test_simple(int pagemap_fd, int pagesize)
 >> +{
->> +	const unsigned long pfn = (unsigned long)start / getpagesize();
->> +	uint64_t entry;
->> +	int ret;
+>> +	int i;
+>> +	char *map;
 >> +
->> +	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
->> +	if (ret != sizeof(entry))
->> +		ksft_exit_fail_msg("reading pagemap failed\n");
->> +	return entry;
->> +}
+>> +	map = aligned_alloc(pagesize, pagesize);
+>> +	if (!map)
+>> +		ksft_exit_fail_msg("mmap failed\n");
 >> +
->> +bool pagemap_is_softdirty(int fd, char *start)
->> +{
->> +	uint64_t entry = pagemap_get_entry(fd, start);
+>> +	clear_softdirty();
 >> +
->> +	return ((entry >> DIRTY_BIT_LOCATION) & 1);
->> +}
-> 
-> Please leave code you're moving around as untouched as possible to avoid
-> unrelated bugs that happen by mistake and are hard to review.
-> 
+>> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
+>> +		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
+>> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
+>> +			break;
+>> +		}
 >> +
->> +void clear_softdirty(void)
->> +{
->> +	int ret;
->> +	const char *ctrl = "4";
->> +	int fd = open("/proc/self/clear_refs", O_WRONLY);
->> +
->> +	if (fd < 0)
->> +		ksft_exit_fail_msg("opening clear_refs failed\n");
->> +	ret = write(fd, ctrl, strlen(ctrl));
->> +	close(fd);
->> +	if (ret != strlen(ctrl))
->> +		ksft_exit_fail_msg("writing clear_refs failed\n");
->> +}
->> +
->> +
->> +static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
->> +{
->> +	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
->> +		if (!strncmp(buf, pattern, strlen(pattern)))
->> +			return true;
->> +	}
->> +	return false;
->> +}
->> +
->> +uint64_t read_pmd_pagesize(void)
->> +{
->> +	int fd;
->> +	char buf[20];
->> +	ssize_t num_read;
->> +
->> +	fd = open(PMD_SIZE, O_RDONLY);
->> +	if (fd == -1)
->> +		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
->> +
->> +	num_read = read(fd, buf, 19);
->> +	if (num_read < 1) {
->> +		close(fd);
->> +		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
->> +	}
->> +	buf[num_read] = '\0';
->> +	close(fd);
->> +
->> +	return strtoul(buf, NULL, 10);
->> +}
->> +
->> +uint64_t check_huge(void *addr)
->> +{
->> +	uint64_t thp = 0;
->> +	int ret;
->> +	FILE *fp;
->> +	char buffer[MAX_LINE_LENGTH];
->> +	char addr_pattern[MAX_LINE_LENGTH];
->> +
->> +	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
->> +		       (unsigned long) addr);
->> +	if (ret >= MAX_LINE_LENGTH)
->> +		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
->> +
->> +	fp = fopen(SMAP, "r");
->> +	if (!fp)
->> +		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
->> +
->> +	if (!check_for_pattern(fp, addr_pattern, buffer))
->> +		goto err_out;
->> +
->> +	/*
->> +	 * Fetch the AnonHugePages: in the same block and check the number of
->> +	 * hugepages.
->> +	 */
->> +	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
->> +		goto err_out;
->> +
->> +	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
->> +		ksft_exit_fail_msg("Reading smap error\n");
->> +
->> +err_out:
->> +	fclose(fp);
->> +	return thp;
->> +}
->> diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
->> new file mode 100644
->> index 0000000000000..7522dbb859f0f
->> --- /dev/null
->> +++ b/tools/testing/selftests/vm/vm_util.h
->> @@ -0,0 +1,15 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#include <stdint.h>
->> +#include <fcntl.h>
->> +#include "../kselftest.h"
->> +
->> +#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-> 
-> Ehm no. PMD_SIZE_PATH at best -- just as it used to.
-> 
->> +#define	SMAP			"/proc/self/smaps"
-> 
-> SMAPS_PATH
-> 
->> +#define	DIRTY_BIT_LOCATION	55
-> 
-> Please inline that just as it used to. There is no value in a magic
-> define without any proper namespace.
-> 
->> +#define	MAX_LINE_LENGTH		512
-> 
-> This used to be 500. Why the change?
+>> +		clear_softdirty();
+>> +		map[0]++;
 > 
 > 
-> Also: weird indentation and these all look like the should go into
-> vm_util.c. They are not used outside that file.
+> This will overflow several times during TEST_ITERATIONS.  While it is
+> not broken, since we care about causing the page fault, it is not
+> obvious.  Can you add a comment or do something like this instead?
 > 
-> 
-> 
+>   map[0] = !map[0];
+
+Yeah, it is less obvious. I'll add a comment
 
 -- 
 Muhammad Usama Anjum
