@@ -2,84 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E88A4DC54C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 12:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC5E4DC5F8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 13:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbiCQMAp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 08:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S233658AbiCQMq3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Mar 2022 08:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbiCQMAo (ORCPT
+        with ESMTP id S233661AbiCQMq3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:00:44 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C55173374;
-        Thu, 17 Mar 2022 04:59:10 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DA0B9580275;
-        Thu, 17 Mar 2022 07:59:09 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 17 Mar 2022 07:59:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=NfFJnkbS3KtilmlXQThAwkw4X4l3eg9znnE/jO
-        g1d5E=; b=N7X5g0pEnkMstgHhqa5+3+0BxTuLz3jVhklrKWMqTOsjegxrvnn1QH
-        Fkdqg24A/ZPO41OAHum1syefQta0Tpi3oVmP5kV8Py12EHR0up9gRD2xvTI7uoa9
-        7D/+0PzOTRErTWQd+XprZVizUqWWf3YjC82AHS8ni1cN4R/C73z1BBPE2rw523xq
-        CkhzuIOPZwqLTjDVqY+Tl5L4gurrdZTgGPc5tTx67ncRL66cXwhB27hSqx4gNDAO
-        RZ7HOop1Tei6M11w1rk7aFAfewV/qSDpIngB2tqbdV695Du2NuMCHf483Fc56lRu
-        XpAZErArtRSnJmaNcUU9QC+MM2mW82AQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=NfFJnkbS3KtilmlXQ
-        ThAwkw4X4l3eg9znnE/jOg1d5E=; b=hD1Gz/uapIf/sWB9JNGq2bqENk7Jvi4hN
-        Y0UvF1yhANVZFON0lDUCzuGbeJQLMNYy8rMbUNaasWYetsyeI8RvU3uVYj4G/XzV
-        hUd5Xt4VKRDcFc61ktuXCtuBjJjZRG7JBly0e/6dGp3yI1SGxLcaOZjwaHxIlDA4
-        MCQZ17wR7waqIx3n6yPT7Nkq4wHiSw7ryxi53joG27ELAZYgNQNHr9WTnxaBm8dx
-        G1hOwLABojoLiGHCZDlz8jcI4sY7YOOflgS19LdWg/S5JeIDA48MBIyHi0W/fcC4
-        HbFAqAW2y+HIOkoX0myj6dIWm3OjHtc5/MmzRn8d7UKlPO/eVgCZg==
-X-ME-Sender: <xms:jSIzYsskDvWb7X-Jb8vYizwxdLJTYB-dmk1uznYkPEODEfYfQnkZYw>
-    <xme:jSIzYpcoLkl4N6S17qTcUmXINKE6tpxzQO6jjGbGBwXHIJC_7FMfbliFXCinLRNuI
-    UT7xcVmTZTeLw>
-X-ME-Received: <xmr:jSIzYnxKs_WExetxBzF948L5tleHabZroB3pjVjlPYRhp66oUEX2ah-YdrjkHhFEwGlSko8hf4yjos0nKpkl559k--gF8oCU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:jSIzYvOKdSmNOe5q9nzBP4i0bVe4Vifx9yNFfzDzTyDsTENkwnuHNw>
-    <xmx:jSIzYs8_KlCfxHsGGGD8EZd0FyGIPhWGPa85ixPflkJawBatUCzIrw>
-    <xmx:jSIzYnXBC-3TXQI5QCnD61cP629Zi7Co6Gh6K05b4WbMvEziWXPURw>
-    <xmx:jSIzYgS3WKweICGsPYsF1o0_VVIE8DYgbqLe2Dx-KvuzLG6AZPYmCA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Mar 2022 07:59:09 -0400 (EDT)
-Date:   Thu, 17 Mar 2022 12:59:06 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        david@redhat.com, frankja@linux.ibm.com, gor@linux.ibm.com,
-        hca@linux.ibm.com, imbrenda@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org, nrb@linux.ibm.com, shuah@kernel.org
-Subject: Re: [PATCH v3 1/4] drivers/s390/char: Add Ultravisor io device
-Message-ID: <YjMiiom+zRfkhe6F@kroah.com>
-References: <20220304141141.32767-2-seiden@linux.ibm.com>
- <20220317094706.4921-1-seiden@linux.ibm.com>
- <YjMGgSstSCZAmcVa@kroah.com>
- <6175e7fa-070e-8ab2-843a-8019d0dc0c83@linux.ibm.com>
+        Thu, 17 Mar 2022 08:46:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 053821042A5
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 05:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647521111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=Qqa/Ov513ThnEsEWFPNgQG8r30QerKlezRS4gXg/kpo=;
+        b=a9Rys1RoTMR4F7CzWIbA/vk60wq4ez97PWiF4m9nKiKHN30ubXLYdjch+4Ikxx+HyOjQuw
+        USFg03h1tmdBDdrGPeVZgFld6Y++mE3qed56CnJidewfAej+lPk6kegNWGo9boZfwgDMBa
+        enpzi1kXQ98cVn/LDVDEGVH10kmZ46I=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-482-CbIK_B7LN-WHzmZnCctgOQ-1; Thu, 17 Mar 2022 08:45:09 -0400
+X-MC-Unique: CbIK_B7LN-WHzmZnCctgOQ-1
+Received: by mail-wr1-f72.google.com with SMTP id t15-20020adfdc0f000000b001ef93643476so1516353wri.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 05:45:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Qqa/Ov513ThnEsEWFPNgQG8r30QerKlezRS4gXg/kpo=;
+        b=aj+EpSME2dvSaQzjX6YxJZCqHlEMcP7j8kX+LTyUeWUa60r/Lg40CiKJefR6bRyHVD
+         a95TNCKY6ZcCJU39irIWDyup1YKSm5sRXfzrqjAlxnFJO0ukvun7N6d8XqU66gt79MH3
+         xIxcdA6KVuyH2Zap8a9wqJyZoL129mKN8dZMWTTbs368Ukq6/eDt9u3zUyfbaDZkbFmP
+         cIDs2kTMSXk08Mxq0hOG3z3jQP9V95FTD/lpRw92q8qc+ovNZ6/QQt1AT7+6OXO5uDDe
+         MC64gF32SvKvklI+DsWYIGJ5tMHVYrC/S4T72utMHU2igGkFpGQXYa8f8cvxu8k806Ra
+         8RrQ==
+X-Gm-Message-State: AOAM532H/U4N8FY5jn42vEi8iHxI8o+aP8p4+Mv1AcxyUPGAbqQMtPwO
+        qpcCY6TI9ayTAGfQokd/Yjoa90lNSo4j1Mu+iL9cqy0VAC5Vk4baRsjagt0k9bZ5wv2m2f8TKjs
+        iNSLxrjRPtrt50bg3MkMuHs/3TxCf
+X-Received: by 2002:a5d:66c5:0:b0:1f1:d7e3:7068 with SMTP id k5-20020a5d66c5000000b001f1d7e37068mr3831194wrw.410.1647521107887;
+        Thu, 17 Mar 2022 05:45:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQUEz9vTD/tN2vTIWpyB+hSq9ZgG3GpogtOJn/Hz4HV5q/2amMBXTc2kBHynEiyLTPZY+MFA==
+X-Received: by 2002:a5d:66c5:0:b0:1f1:d7e3:7068 with SMTP id k5-20020a5d66c5000000b001f1d7e37068mr3831183wrw.410.1647521107691;
+        Thu, 17 Mar 2022 05:45:07 -0700 (PDT)
+Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id 11-20020a05600c26cb00b0037ff53511f2sm6947761wmv.31.2022.03.17.05.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 05:45:07 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 13:45:05 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 0/2] ipv4: Handle TOS and scope properly for ICMP
+ redirects and PMTU updates
+Message-ID: <cover.1647519748.git.gnault@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6175e7fa-070e-8ab2-843a-8019d0dc0c83@linux.ibm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,37 +79,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 12:07:58PM +0100, Steffen Eiden wrote:
-> Hi greg,
-> 
-> On 3/17/22 10:59, Greg KH wrote:
-> > On Thu, Mar 17, 2022 at 09:47:06AM +0000, Steffen Eiden wrote:
-> > > This patch adds a new miscdevice to expose some Ultravisor functions
-> > > to userspace. Userspace can send IOCTLs to the uvdevice that will then
-> > > emit a corresponding Ultravisor Call and hands the result over to
-> > > userspace. The uvdevice is available if the Ultravisor Call facility is
-> > > present.
-> > > Userspace can call the Retrieve Attestation Measurement
-> > > Ultravisor Call using IOCTLs on the uvdevice.
-> > > 
-> > > The uvdevice will do some sanity checks first.
-> > > Then, copy the request data to kernel space, build the UVCB,
-> > > perform the UV call, and copy the result back to userspace.
-> > > 
-> > > Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> > > Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-> > 
-> > Do you have a pointer to the userspace code that interacts with this
-> > kernel driver?  That would be good to have to verify that the api here
-> > is sane.
-> > 
-> There is a userspace tool currently under development, however, not yet
-> ready to be published.
+ICMPv4 PMTU and redirect handlers didn't properly initialise the
+struct flowi4 they used for route lookups:
 
-Then really, this driver should not be merged until the user/kernel api
-is determined to work properly, right?  Why submit this now if userspace
-isn't working?
+  * ECN bits sometimes weren't cleared from ->flowi4_tos.
+  * The RTO_ONLINK flag wasn't taken into account for ->flowi4_scope.
 
-thanks,
+In some special cases, this resulted in ICMP redirects and PMTU updates
+not being taken into account because fib_lookup() couldn't retrieve the
+correct route.
 
-greg k-h
+Changes since v1:
+  * Fix 'Fixes' tag in patch 1 (David Ahern).
+  * Add kernel seltest (David Ahern).
+
+Guillaume Nault (2):
+  ipv4: Fix route lookups when handling ICMP redirects and PMTU updates
+  selftest: net: Test IPv4 PMTU exceptions with DSCP and ECN
+
+ net/ipv4/route.c                    |  18 +++-
+ tools/testing/selftests/net/pmtu.sh | 141 +++++++++++++++++++++++++++-
+ 2 files changed, 151 insertions(+), 8 deletions(-)
+
+-- 
+2.21.3
+
