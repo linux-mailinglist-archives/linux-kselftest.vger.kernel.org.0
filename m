@@ -2,66 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DC44DC09B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 09:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9CA4DC18A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 09:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiCQIFT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 04:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S229973AbiCQIoY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Mar 2022 04:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiCQIFS (ORCPT
+        with ESMTP id S229756AbiCQIoX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:05:18 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3094213D44
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:04:00 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so2683429wmp.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:04:00 -0700 (PDT)
+        Thu, 17 Mar 2022 04:44:23 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D307C14C
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:43:06 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id hu12so3723062qvb.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:43:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OKjV90cN1IGQEcWSnQ9FVvDbEIEBFHqsHyLKb/fTnMo=;
-        b=DHUYUoGRFPHaB3cl0YhqmdSrOnenWLR0GxDT9Yp0NCW9WIiR9gk+c/sOk8iv1AMiCa
-         HecNsRfoaIGhOrgrGd3RK8XDXDehoXss5d6hehB8dM8xGFvwC64e0Ain48I00ca26AfX
-         eteoAP9+XtKc4QCPtu2rZ/6KO7d8KDYrp4DoDNPJ0xErtzdAfvd6jhEXQi2kScaoXjv4
-         piC+ps0Px3jJb01rW3lR+GoNIYVcvCRuQxE8OF3eD/Z4GUB8zAd/NvVK6M1YSf54Jt2j
-         0zm+J304W45lL1W/9X53CcrhbLRFSRvZHYTTm2x8Wbalu2POMKxfTi2T4b0WZkXqeGm7
-         OV0A==
+        bh=5OFboGfiEbRd0O5jj9TIAUxi2dz+c1bHC8t00SDVTDM=;
+        b=SahyL1AqHeuhrk241s8/9DKPhKUAdmDWHLHUAQnqzZ1xNJpgaU10ZsbZTqNGgfz4Tx
+         LJh3nyz4vabNczkJDneHMc/il1XT9a+SMbkas6epsh26CAGpByI2mn7iGvI+HEtLhl9o
+         VQXN5d3zk4weYXm6G167h+ySW1yRT1Dj7djwwD45oFCyQoTiH6bMwgQLWIilOYnPGU1e
+         BaOiVqtqwI3vx4zqqq+Vf2lXIGNAapRsYXleOc6TjUpj4jBfyEN2HOk8y4MSMJqvJV0/
+         D71URdDhTNm4jykH2CodK2H0pMJ8yGHLOUQxFd90NnsYCa7eVCGeZ1XCz8rCScRIBa57
+         zeMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OKjV90cN1IGQEcWSnQ9FVvDbEIEBFHqsHyLKb/fTnMo=;
-        b=rTqTUlQDY+//QJvBVryuU963R20Aj/cQ9gl+Qp1gqcaXgdYjKrD9Mc7IfGhcv8KAtC
-         72pgCarh37atbCAnG3EVoZ5+7abWL+j9nkYgpP2fZ0Qmh2zKQiy8fH8OOycBSgvVryL5
-         s5SIb35dlIVyjtIvNvLlu3TXvBjcMXnTrompVdhS+xa5ZR1Y9W0syPUXqbKMWMOfc/DZ
-         6ZJq/Sn1YwFJhgmNoaHnGN+A8QwvMJTEsMxQkrTtAvASP/NeMkc12w23E/x9baMK+duA
-         VdTE/SCFwUq2rvFTpDKxhsqmZPxbJJknYEv19y8lJ1gyMItzBGzPCdHlbKDOZkP8GS3W
-         OnTQ==
-X-Gm-Message-State: AOAM533PsJJm+UhV071c23GRX2r8UhfyEflALoyl0nUHSTFP+s3ggjRS
-        o34lGYSeO9WCj4c8df5as5Uxl4C2aMLzwjy9vrjctg==
-X-Google-Smtp-Source: ABdhPJxg/Cc+37sSpei8q4ub6J3Q8Uu8mxQOC71PTvdaU7UUPfbDfiDfS1QBuk/mixYd+IW74/Mtk5/M0WhumMbSXLQ=
-X-Received: by 2002:a05:600c:1c8e:b0:38b:5608:9f00 with SMTP id
- k14-20020a05600c1c8e00b0038b56089f00mr2763321wms.163.1647504238550; Thu, 17
- Mar 2022 01:03:58 -0700 (PDT)
+        bh=5OFboGfiEbRd0O5jj9TIAUxi2dz+c1bHC8t00SDVTDM=;
+        b=e/PW2/SJ+MyXX3kq9ZOf5Nxl1RUKC8IoTOFogOzDtPKdZL/8kM1vl4EMABs8renWnx
+         WN0jSYFYA/2e+u4kwdhsysQg6C+ojlzLC/hJ2rs+bKcni7Npye76haKXvqqvMMPvRWWK
+         AUQOxxkx7k98stPh0acpZKY819tTj0GYUtxqF0LHbKz5cZdanaGWtnftLLNXKcDxe7mA
+         oHWqzNIRTxRWJYMQKrdN9+9KjZ77LLpqSPw4XoSRpoWKYCnmkYL8lYzjP23vlWGHRkNX
+         dMTIUEWXkMvinLApov2oZWmFHq/NOOghgtdwWDvPHxiXEVRn7SSZvai/xAKWLFzRTQ8d
+         SH4w==
+X-Gm-Message-State: AOAM531FN15p//Wxe2LVAnNickHAvYPGgxYQPuPJrqQ1a253vJiosAJi
+        ZYN8wAc+SG2TrrnQA9RF64WufBD+BWwQ5klmBFnM/A==
+X-Google-Smtp-Source: ABdhPJyMaPc+wBVz0IYSasdBtgb8T2E7a2EUZN9kgmCOuoZkWd/JEx7gXuELJXoMc1WGWhFBoNA5i3897Jj4qXASHbc=
+X-Received: by 2002:a05:6214:29c7:b0:435:d0ae:dcd9 with SMTP id
+ gh7-20020a05621429c700b00435d0aedcd9mr2559194qvb.101.1647506585131; Thu, 17
+ Mar 2022 01:43:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220316024432.1454366-1-dlatypov@google.com> <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
- <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com>
-In-Reply-To: <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com>
+References: <20220316202622.324866-1-frowand.list@gmail.com>
+In-Reply-To: <20220316202622.324866-1-frowand.list@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 17 Mar 2022 16:03:47 +0800
-Message-ID: <CABVgOSk4W85e4j=COrx=KDAoRkMuKEWjdvVp5BxhQWrOqtM37w@mail.gmail.com>
-Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Date:   Thu, 17 Mar 2022 16:42:50 +0800
+Message-ID: <CABVgOSmkvxhHSJx0W6BEYz=Ai9vB=nCz625dSKLLUfU0rMLkFA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Documentation: dev-tools: begin KTAP spec v2 process
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ee1c0205da65785f"
+        boundary="000000000000cb994b05da6604e6"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,154 +79,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000ee1c0205da65785f
+--000000000000cb994b05da6604e6
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 17, 2022 at 12:19 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
 >
-> On Wed, Mar 16, 2022 at 12:41 AM David Gow <davidgow@google.com> wrote:
-> >
-> > On Wed, Mar 16, 2022 at 10:44 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > >
-> > > Background:
-> > > Currently, a reader looking at kunit/test.h will find the file is quite
-> > > long, and the first meaty comment is a doc comment about struct
-> > > kunit_resource.
-> > >
-> > > Most users will not ever use the KUnit resource API directly.
-> > > They'll use kunit_kmalloc() and friends, or decide it's simpler to do
-> > > cleanups via labels (it often can be) instead of figuring out how to use
-> > > the API.
-> > >
-> >
-> > A depressing (but probably not untrue) thought. I think that, even if
+> From: Frank Rowand <frank.rowand@sony.com>
 >
-> I'm not sure it's that depressing.
-> Without some compiler support (e.g. GCC's `cleanup`), I can see there
-> being a number of one-off things that don't warrant formalizing into a
-> resource.
+> An August 2021 RFC patch [1] to create the KTAP Specification resulted in
+> some discussion of possible items to add to the specification.
+> The conversation ended without completing the document.
+>
+> Progress resumed with a December 2021 RFC patch [2] to add a KTAP
+> Specification file (Version 1) to the Linux kernel.  Many of the
+> suggestions from the August 2021 discussion were not included in
+> Version 1.  This patch series is intended to revisit some of the
+> suggestions from the August 2021 discussion.
 
-True, though I do think that the resources API could use a bit of
-polish to reduce the friction involved in figuring out how to use the
-API.
-(And this patch is a good start!)
+Thanks for kicking this off again. There were definitely a lot of good
+ideas in those threads which we haven't got to yet.
 
+I think there is an interesting line to walk between keeping KTAP
+sufficiently "TAP-like" (particularly w/r/t being able to reuse
+existing TAP parsers), and actually adding features, but I don't
+recall seeing many such issues in the previous threads.
 
-> More detail:
-> It works OK when there's one pointer parameter, e.g. [1], but I feel
-> like you'd normally need to capture at least one more local variable.
-> So then you need to define a new struct to hold all the values, which
-> is where I'd draw the line personally.
 >
-> [1] https://elixir.bootlin.com/linux/v5.17-rc8/source/lib/kunit/executor_test.c#L182
->
-> > most people were to use the resource API, having it in test.h makes it
-> > harder, as having the resource functions separate makes it easier to
-> > understand as well.
-> >
-> > > It's also logically separate from everything else in test.h.
-> > > Removing it from the file doesn't cause any compilation errors (since
-> > > struct kunit has `struct list_head resources` to store them).
-> > >
-> > > This commit:
-> > > Let's move it into a kunit/resource.h file and give it a separate page
-> > > in the docs, kunit/api/resource.rst.
-> >
-> > Yay! This makes a lot of sense to me, as I've wasted a lot of time
-> > scrolling through test.h.
-> >
-> > >
-> > > We include resource.h at the bottom of test.h since
-> > > * don't want to force existing users to add a new include if they use the API
-> > > * it accesses `lock` inside `struct kunit` in a inline func
-> > >   * so we can't just forward declare, and the alternatives require
-> > >     uninlining the func, adding hepers to lock/unlock, or other more
-> > >     invasive changes.
-> >
-> > I don't like this, but still think it's an improvement on what we have
-> > now. Ultimately, I think adding helpers to lock/unlock or similar and
->
-> Yes, I can see us maybe needing this in the future.
-> Right now, outside of test.c, there's only one callsite for each (in
-> resource.h).
->
-> > making users include this separately is probably the right thing to
-> > do, as nesting the headers like this is a bit ugly, but I won't lose
-> > sleep over leaving it till later.
->
-> Ack, I can add a TODO to indicate we want to clean this up?
-> It's a bit annoying right now, but it'll only get more annoying in the future.
+> Patch 1 changes the Specification version to "2-rc" to indicate
+> that following patches are not yet accepted into a final version 2.
 
-Yeah, let's get this in largely as-is first, then we can start adding
-direct includes of "resource.h" where necessary before making it
-required.
+I'm okay with this, though I'd want us to be a little careful with the
+timing so we don't end up with, for example, 5.18 having a KTAP spec
+called 2-rc which is functionally indistinguishable from v1.
 
-> >
-> > >
-> > > Now the first big comment in test.h is about kunit_case, which is a lot
-> > > more relevant to what a new user wants to know.
-> > >
-> > > A side effect of this is git blame won't properly track history by
-> > > default, users need to run
-> > > $ git blame -L ,1 -C17 include/kunit/resource.h
-> >
-> > This is a pain, but is probably worth it. Thanks for including the
-> > command in the commit message, which should mitigate it slightly.
-> >
-> > >
-> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > > ---
-> >
-> > This was starting to annoy me, too, as it was a pain to read through
-> > everything in test.h. It'll be a bit of short-term pain,
-> > merge-conflict wise if we have other changes to the resource system
-> > (which I fear is likely), but is worth it.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > -- David
-> >
-> > >
-> > > NOTE: this file doesn't split out code from test.c to a new resource.c
-> > > file.
-> > > I'm primarily concerned with users trying to read the headers, so I
-> > > didn't think messing up git blame (w/ default settings) was worth it.
-> > > But I can make that change if it feels appropriate (it might also be
-> > > messier).
-> >
-> > Personally, I think it's probably worth splitting this out as well.
-> > And the sooner we do it, the less history we'll obscure. :-)
 >
-> Yeah, that was my thought.
-> But if you think this would help users, then I think we have a case to
-> make this change.
+> Patch 2 is an example of a simple change to the Specification.  The
+> change does not change the content of the Specification, but updates
+> a formatting directive as suggested by the Documentation maintainer.
+
+Thanks -- personally, I'd rather this change _does_ go in straight
+away, even before the 2-rc renaming.
+
+> I intend to take some specific suggestions from the August 2021
+> discussion to create stand-alone RFC patches to the Specification
+> instead of adding them as additional patches in this series.  The
+> intent is to focus discussion on a single area of the Specification
+> in each patch email thread.
+
+Seems like a sensible way to structure the discussion. It could get a
+little bit messy if there end up being merge conflicts, but the whole
+thing could be collapsed into a single patchset later if that ended up
+making more sense. (Though that might remove the need for the "rc"
+version, depending on exactly when and how it happened.)
+
+I'd also be curious to see patches to tests and/or test parsers to
+show off any particularly compatibility-breaking and/or interesting
+changes, though I don't think that _has_ to be a prerequisite for
+discussion or the spec.
+
 >
-> Should I send a v2 with resource.c split out?
-> Brendan (and any others who have an opinion), what's your preference?
+> [1] https://lore.kernel.org/r/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com
+> [2] https://lore.kernel.org/r/20211207190251.18426-1-davidgow@google.com
+>
+> Frank Rowand (2):
+>   Documentation: dev-tools: KTAP spec change version to 2-rc
+>   Documentation: dev-tools: use literal block instead of code-block
+>
+>  Documentation/dev-tools/ktap.rst | 20 +++++++++-----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+>
+> --
+> Frank Rowand <frank.rowand@sony.com>
+>
 
-I think it's a separate enough thing that this patch could go in
-as-is, and resource.c could be split in a separate one if you
-preferred. But doing it in a v2 is fine as well.
+Cheers,
+-- David
 
-> >
-> > But I agree, it's less of an issue as it only directly affects people
-> > working on KUnit itself. Though making it easier for users to find and
-> > read the implementation of these functions could help them understand
-> > API "gotchas", so I think it's worthwhile.
-> >
-> > >
-> > > ---
-> > >  Documentation/dev-tools/kunit/api/index.rst   |   5 +
-> > >  .../dev-tools/kunit/api/resource.rst          |  13 +
-> > >  include/kunit/resource.h                      | 319 ++++++++++++++++++
-> > >  include/kunit/test.h                          | 301 +----------------
-> > >  4 files changed, 339 insertions(+), 299 deletions(-)
-> > >  create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
-> > >  create mode 100644 include/kunit/resource.h
-> > >
-> > <...snip...>
-
---000000000000ee1c0205da65785f
+--000000000000cb994b05da6604e6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -287,14 +222,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAQ
-1v3IWkyPfUd+pctSqIZtY+7iKn9fNw7uMebL8/pOQTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTcwODAzNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBn
+daIT+gpBNflXR4eLXrgbGfvj3MmwMqJl0RWGuPkw1DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTcwODQzMDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAejRQOfUmyPk1J4DYfgqT
-OyIIeCbfEp7JN+wR2AlpvMOmtMkgfz0iml9tsPdE+mxSD/TF5+NgDasSduI+7EZ25ovnqUDF6uW/
-lqBIkaX1B3PgRK4eQwqG0CaBqZyQT1FG8WLuIVA8c5XqKA9s2DGtUxKKAu33/PggIIh3CtycKrCR
-kKvs/y+mRIivxnWK0t6yFMjacM592+Kg+uAKPFzmDOJKGRR1hqmXclOr+TVaFBGHVxBT+wMJCUNm
-6j7o0TgayLV+a1KY8lom6cQPBMuiWYgiyp5252dYpSAk48bULIZjBgB2/A4xFIwa1LrGJqIW5d8Q
-6b3O0grPAevDr2EDAw==
---000000000000ee1c0205da65785f--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAo8L6wf0I/ZY1xewwSQTI
+EhaTLXZy/q023l2Lse8T/Zpk9V0p80n8P9lnY9fj8Pzs4YRM7NWQywvXhI8JctLfQIPpKN6cP4WZ
+ke44wDVqyD2WZJCFeumnrS3TRLKXYKZ9NjQ7BWRvxsogcsgKmPRrEbDb6OiWz1fbNCjWhrl6rzyy
+usM5r4ZheVxA55ua/MleCH8DnzVwNIardaYtA3hDap4D8fA4PeGFWAxlos++gyKaLLF9UijfNmyw
+zKPd01WixgDbhL4f5Z60VRry/0ntcMF68A0HEUvSx2XrtNvl+SDdltYB6+SRjVdUMQ6Yib6KHAjp
+R0Xsncfu+A1WRlXOIg==
+--000000000000cb994b05da6604e6--
