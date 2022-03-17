@@ -2,343 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EAE4DC5FB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 13:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6EB4DC7E1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 14:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiCQMqh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 08:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S234549AbiCQNwO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Mar 2022 09:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbiCQMqg (ORCPT
+        with ESMTP id S233676AbiCQNwO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:46:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F375107834
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 05:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647521116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=88CAxKMWn5FORVv6LBMsjE9krM2M0gkaKC7IljIFvus=;
-        b=BU7zGEfdNy3bEvd+74Vnu57wJr5KKOxIXALbAiaiCLEjW31aQcF0hIT/xLEfD+FFM2c9Tv
-        ms5eXJdaFblRG5aRepHLCkLeR3SDWt4sI13oz+QninI1ELLw2KaoXLBTxDIClKrwbf3GXx
-        UcySbnkei5OAmEX9Y2NgmfUH0Jw2F5k=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-T9cEGWzDPdCnhpLYOIQv0Q-1; Thu, 17 Mar 2022 08:45:15 -0400
-X-MC-Unique: T9cEGWzDPdCnhpLYOIQv0Q-1
-Received: by mail-wm1-f72.google.com with SMTP id k41-20020a05600c1ca900b00389a2b983efso1596884wms.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 05:45:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=88CAxKMWn5FORVv6LBMsjE9krM2M0gkaKC7IljIFvus=;
-        b=4Flx+TLk0iDPQNv0iQpl1Xws/NEKgxw9LUofKq5CWjxZSz4tLIfEKgjjiaHgte8Tck
-         XOh/4J+b6rakY7HbZ3gfLZ5fKta+sEa1XayaXCz4LE81wRzCnr+JLKCCm0MwQbJ4qmsq
-         hvzF+b3xac01JjU6+2S3K7aeyLZe0H5MUuROiGPUsYCv443Lad9VSFne5JaGprw3dQau
-         bqjdmo9/z1jbTifB5O7M/MHMUCR1tIeJmufJkM1W5jAdlrS7p/df3er4cVzSvt89OIdX
-         QyU18oa6XJDrcspGgSPoJG/U+cjqj5pI8j99rZpHNUpXKCARTxOPynwwNhQWgjNfQJ5i
-         prSA==
-X-Gm-Message-State: AOAM531dAM1SmW7Na7IVHnq56byvxn528owD3jkI+GYy0CE+Gbp7gQeI
-        pw+U72Iah7LTe9ugv+2N/prPo9/aZRwAgwB6g5bSgwrmSFsGO3fuW0w1FPjR/EGfBII+MXLKghI
-        Ej2q5/AIt30LBd4MT+Kh6G4FBgq2l
-X-Received: by 2002:a5d:4151:0:b0:203:d18a:7df4 with SMTP id c17-20020a5d4151000000b00203d18a7df4mr3837252wrq.1.1647521114070;
-        Thu, 17 Mar 2022 05:45:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx/k3xeWC9ZAwjVi4GDj8PwpRoPPK1ra7rZRb30/NwCI7gnDhigvx1HNfoN6lYB5ozmD1ZdcQ==
-X-Received: by 2002:a5d:4151:0:b0:203:d18a:7df4 with SMTP id c17-20020a5d4151000000b00203d18a7df4mr3837230wrq.1.1647521113836;
-        Thu, 17 Mar 2022 05:45:13 -0700 (PDT)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b001e6114938a8sm3966966wrs.56.2022.03.17.05.45.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 05:45:13 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 13:45:11 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 2/2] selftest: net: Test IPv4 PMTU exceptions with
- DSCP and ECN
-Message-ID: <6f3853ab347422044d71f394bb991548d30992d3.1647519748.git.gnault@redhat.com>
-References: <cover.1647519748.git.gnault@redhat.com>
+        Thu, 17 Mar 2022 09:52:14 -0400
+X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 06:50:57 PDT
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290451CABEF
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 06:50:56 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 41A805C00C2;
+        Thu, 17 Mar 2022 09:44:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 17 Mar 2022 09:44:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=cgLvCoZ+reMOUxcSz
+        Tb0NcXr/MQseBQTzNT+xFvmncU=; b=hPKPfuHBJBEX+L4UQ2y043DZBPIh293rI
+        doLU9LsgikXoL8Ib3ZEYa7L0VbDSUWgoXRHnUtNA0Qy4F27Yc3omfSGkvDItb/QN
+        yK4/gBMjP9D0EFTMxsb0m1u/rowaRgVmRl1scbqYycJpn5AgYVIELxKQshjr6DHt
+        BwXij39HpbqmZU4lxQBz4XWgDaQ3/lafgfFemTYAngvEIIJe6iS5NqnNPfehi+Xt
+        JB/xy6oFqwEwd+zKcFSl9oM6W6pcCShLAmMcd9Wz1UabX155iPLgWP6AYJKGYQP5
+        JU5d4z1vnokvLa/590Krvh8xlCYqP925JjCRXxNxkumgKWdihpecA==
+X-ME-Sender: <xms:KDszYnvdAvEu4cVwdNHwn1ASuT1qwlU2-gVpiPrc2-hpdh6p0qVN6g>
+    <xme:KDszYofrjlCHSv_gaboa9HwZWAvmu6Ss_yC3rTv26SgN-k7uB1oaeDw-VOMzIHxxg
+    49I3EBoByvxUFQ>
+X-ME-Received: <xmr:KDszYqzqSd5g1UUOe8q5anZ6MAHqEYDn6XVmnaBDXQzG177n5DWWaeN8YkThEMUQfTqY2nfAO7nIrjF2_rVBbGzZzzs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:KDszYmPfwtFcAL-L4CUmMSLMAvAlLM3frY0sM4vhnKWF6ODaTf7yMQ>
+    <xmx:KDszYn_TM2qjdwpdr2XbT4iAqXl07aV1vvTD9ZqxibXr82zMzlBRYA>
+    <xmx:KDszYmXDD2R33H3dsZ8iD_Mf5hwAPog2YY2QH9H-BprZ9sWGQEFeKQ>
+    <xmx:KTszYkixf2kmsYBqmOQPODCE6ffMKZnIeRtjvKGGtqiF8Cp9yGXfSg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Mar 2022 09:44:08 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 15:44:03 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>, razor@blackwall.org
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Message-ID: <YjM7Iwx4MDdGEHFA@shredder>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-2-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1647519748.git.gnault@redhat.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220317093902.1305816-2-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add two tests to pmtu.sh, for verifying that PMTU exceptions get
-properly created for routes that don't belong to the main table.
+On Thu, Mar 17, 2022 at 10:38:59AM +0100, Hans Schultz wrote:
+> Add an intermediate state for clients behind a locked port to allow for
+> possible opening of the port for said clients. This feature corresponds
+> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
+> latter defined by Cisco.
+> Only the kernel can set this FDB entry flag, while userspace can read
+> the flag and remove it by deleting the FDB entry.
 
-A fib-rule based on the packet's DSCP field is used to jump to the
-correct table. ECN shouldn't interfere with this process, so each test
-has two components: one that only sets DSCP and one that sets both DSCP
-and ECN.
+Can you explain where this flag is rejected by the kernel?
 
-One of the test triggers PMTU exceptions using ICMP Echo Requests, the
-other using UDP packets (to test different handlers in the kernel).
+Nik, it seems the bridge ignores 'NDA_FLAGS_EXT', but I think that for
+new flags we should do a better job and reject unsupported
+configurations. WDYT?
 
-A few adjustments are necessary in the rest of the script to allow
-policy routing scenarios:
-
-  * Add global variable rt_table that allows setup_routing_*() to
-    add routes to a specific routing table. By default rt_table is set
-    to "main", so existing tests don't need to be modified.
-
-  * Another global variable, policy_mark, is used to define which
-    dsfield value is used for policy routing. This variable has no
-    effect on tests that don't use policy routing.
-
-  * The UDP version of the test uses socat. So cleanup() now also need
-    to kill socat PIDs.
-
-  * route_get_dst_pmtu_from_exception() and route_get_dst_exception()
-    now take an optional third argument specifying the dsfield. If
-    not specified, 0 is used, so existing users don't need to be
-    modified.
-
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
----
- tools/testing/selftests/net/pmtu.sh | 141 +++++++++++++++++++++++++++-
- 1 file changed, 137 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-index 694732e4b344..736e358dc549 100755
---- a/tools/testing/selftests/net/pmtu.sh
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -26,6 +26,15 @@
- # - pmtu_ipv6
- #	Same as pmtu_ipv4, except for locked PMTU tests, using IPv6
- #
-+# - pmtu_ipv4_dscp_icmp_exception
-+#	Set up the same network topology as pmtu_ipv4, but use non-default
-+#	routing table in A. A fib-rule is used to jump to this routing table
-+#	based on DSCP. Send ICMPv4 packets with the expected DSCP value and
-+#	verify that ECN doesn't interfere with the creation of PMTU exceptions.
-+#
-+# - pmtu_ipv4_dscp_udp_exception
-+#	Same as pmtu_ipv4_dscp_icmp_exception, but use UDP instead of ICMP.
-+#
- # - pmtu_ipv4_vxlan4_exception
- #	Set up the same network topology as pmtu_ipv4, create a VXLAN tunnel
- #	over IPv4 between A and B, routed via R1. On the link between R1 and B,
-@@ -203,6 +212,8 @@ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- tests="
- 	pmtu_ipv4_exception		ipv4: PMTU exceptions			1
- 	pmtu_ipv6_exception		ipv6: PMTU exceptions			1
-+	pmtu_ipv4_dscp_icmp_exception	ICMPv4 with DSCP and ECN: PMTU exceptions	1
-+	pmtu_ipv4_dscp_udp_exception	UDPv4 with DSCP and ECN: PMTU exceptions	1
- 	pmtu_ipv4_vxlan4_exception	IPv4 over vxlan4: PMTU exceptions	1
- 	pmtu_ipv6_vxlan4_exception	IPv6 over vxlan4: PMTU exceptions	1
- 	pmtu_ipv4_vxlan6_exception	IPv4 over vxlan6: PMTU exceptions	1
-@@ -323,6 +334,9 @@ routes_nh="
- 	B	6	default			61
- "
- 
-+policy_mark=0x04
-+rt_table=main
-+
- veth4_a_addr="192.168.1.1"
- veth4_b_addr="192.168.1.2"
- veth4_c_addr="192.168.2.10"
-@@ -346,6 +360,7 @@ dummy6_mask="64"
- err_buf=
- tcpdump_pids=
- nettest_pids=
-+socat_pids=
- 
- err() {
- 	err_buf="${err_buf}${1}
-@@ -723,7 +738,7 @@ setup_routing_old() {
- 
- 		ns_name="$(nsname ${ns})"
- 
--		ip -n ${ns_name} route add ${addr} via ${gw}
-+		ip -n "${ns_name}" route add "${addr}" table "${rt_table}" via "${gw}"
- 
- 		ns=""; addr=""; gw=""
- 	done
-@@ -753,7 +768,7 @@ setup_routing_new() {
- 
- 		ns_name="$(nsname ${ns})"
- 
--		ip -n ${ns_name} -${fam} route add ${addr} nhid ${nhid}
-+		ip -n "${ns_name}" -"${fam}" route add "${addr}" table "${rt_table}" nhid "${nhid}"
- 
- 		ns=""; fam=""; addr=""; nhid=""
- 	done
-@@ -798,6 +813,24 @@ setup_routing() {
- 	return 0
- }
- 
-+setup_policy_routing() {
-+	setup_routing
-+
-+	ip -netns "${NS_A}" -4 rule add dsfield "${policy_mark}" \
-+		table "${rt_table}"
-+
-+	# Set the IPv4 Don't Fragment bit with tc, since socat doesn't seem to
-+	# have an option do to it.
-+	tc -netns "${NS_A}" qdisc replace dev veth_A-R1 root prio
-+	tc -netns "${NS_A}" qdisc replace dev veth_A-R2 root prio
-+	tc -netns "${NS_A}" filter add dev veth_A-R1                      \
-+		protocol ipv4 flower ip_proto udp                         \
-+		action pedit ex munge ip df set 0x40 pipe csum ip and udp
-+	tc -netns "${NS_A}" filter add dev veth_A-R2                      \
-+		protocol ipv4 flower ip_proto udp                         \
-+		action pedit ex munge ip df set 0x40 pipe csum ip and udp
-+}
-+
- setup_bridge() {
- 	run_cmd ${ns_a} ip link add br0 type bridge || return $ksft_skip
- 	run_cmd ${ns_a} ip link set br0 up
-@@ -903,6 +936,11 @@ cleanup() {
- 	done
- 	nettest_pids=
- 
-+	for pid in ${socat_pids}; do
-+		kill "${pid}"
-+	done
-+	socat_pids=
-+
- 	for n in ${NS_A} ${NS_B} ${NS_C} ${NS_R1} ${NS_R2}; do
- 		ip netns del ${n} 2> /dev/null
- 	done
-@@ -950,15 +988,21 @@ link_get_mtu() {
- route_get_dst_exception() {
- 	ns_cmd="${1}"
- 	dst="${2}"
-+	dsfield="${3}"
- 
--	${ns_cmd} ip route get "${dst}"
-+	if [ -z "${dsfield}" ]; then
-+		dsfield=0
-+	fi
-+
-+	${ns_cmd} ip route get "${dst}" dsfield "${dsfield}"
- }
- 
- route_get_dst_pmtu_from_exception() {
- 	ns_cmd="${1}"
- 	dst="${2}"
-+	dsfield="${3}"
- 
--	mtu_parse "$(route_get_dst_exception "${ns_cmd}" ${dst})"
-+	mtu_parse "$(route_get_dst_exception "${ns_cmd}" "${dst}" "${dsfield}")"
- }
- 
- check_pmtu_value() {
-@@ -1068,6 +1112,95 @@ test_pmtu_ipv6_exception() {
- 	test_pmtu_ipvX 6
- }
- 
-+test_pmtu_ipv4_dscp_icmp_exception() {
-+	rt_table=100
-+
-+	setup namespaces policy_routing || return $ksft_skip
-+	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
-+	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
-+	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
-+	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
-+
-+	# Set up initial MTU values
-+	mtu "${ns_a}"  veth_A-R1 2000
-+	mtu "${ns_r1}" veth_R1-A 2000
-+	mtu "${ns_r1}" veth_R1-B 1400
-+	mtu "${ns_b}"  veth_B-R1 1400
-+
-+	mtu "${ns_a}"  veth_A-R2 2000
-+	mtu "${ns_r2}" veth_R2-A 2000
-+	mtu "${ns_r2}" veth_R2-B 1500
-+	mtu "${ns_b}"  veth_B-R2 1500
-+
-+	len=$((2000 - 20 - 8)) # Fills MTU of veth_A-R1
-+
-+	dst1="${prefix4}.${b_r1}.1"
-+	dst2="${prefix4}.${b_r2}.1"
-+
-+	# Create route exceptions
-+	dsfield=${policy_mark} # No ECN bit set (Not-ECT)
-+	run_cmd "${ns_a}" ping -q -M want -Q "${dsfield}" -c 1 -w 1 -s "${len}" "${dst1}"
-+
-+	dsfield=$(printf "%#x" $((policy_mark + 0x02))) # ECN=2 (ECT(0))
-+	run_cmd "${ns_a}" ping -q -M want -Q "${dsfield}" -c 1 -w 1 -s "${len}" "${dst2}"
-+
-+	# Check that exceptions have been created with the correct PMTU
-+	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" "${policy_mark}")"
-+	check_pmtu_value "1400" "${pmtu_1}" "exceeding MTU" || return 1
-+
-+	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" "${policy_mark}")"
-+	check_pmtu_value "1500" "${pmtu_2}" "exceeding MTU" || return 1
-+}
-+
-+test_pmtu_ipv4_dscp_udp_exception() {
-+	rt_table=100
-+
-+	if ! which socat > /dev/null 2>&1; then
-+		echo "'socat' command not found; skipping tests"
-+		return $ksft_skip
-+	fi
-+
-+	setup namespaces policy_routing || return $ksft_skip
-+	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
-+	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
-+	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
-+	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
-+
-+	# Set up initial MTU values
-+	mtu "${ns_a}"  veth_A-R1 2000
-+	mtu "${ns_r1}" veth_R1-A 2000
-+	mtu "${ns_r1}" veth_R1-B 1400
-+	mtu "${ns_b}"  veth_B-R1 1400
-+
-+	mtu "${ns_a}"  veth_A-R2 2000
-+	mtu "${ns_r2}" veth_R2-A 2000
-+	mtu "${ns_r2}" veth_R2-B 1500
-+	mtu "${ns_b}"  veth_B-R2 1500
-+
-+	len=$((2000 - 20 - 8)) # Fills MTU of veth_A-R1
-+
-+	dst1="${prefix4}.${b_r1}.1"
-+	dst2="${prefix4}.${b_r2}.1"
-+
-+	# Create route exceptions
-+	run_cmd_bg "${ns_b}" socat UDP-LISTEN:50000 OPEN:/dev/null,wronly=1
-+	socat_pids="${socat_pids} $!"
-+
-+	dsfield=${policy_mark} # No ECN bit set (Not-ECT)
-+	run_cmd "${ns_a}" socat OPEN:/dev/zero,rdonly=1,readbytes="${len}" \
-+		UDP:"${dst1}":50000,tos="${dsfield}"
-+
-+	dsfield=$(printf "%#x" $((policy_mark + 0x02))) # ECN=2 (ECT(0))
-+	run_cmd "${ns_a}" socat OPEN:/dev/zero,rdonly=1,readbytes="${len}" \
-+		UDP:"${dst2}":50000,tos="${dsfield}"
-+
-+	# Check that exceptions have been created with the correct PMTU
-+	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" "${policy_mark}")"
-+	check_pmtu_value "1400" "${pmtu_1}" "exceeding MTU" || return 1
-+	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" "${policy_mark}")"
-+	check_pmtu_value "1500" "${pmtu_2}" "exceeding MTU" || return 1
-+}
-+
- test_pmtu_ipvX_over_vxlanY_or_geneveY_exception() {
- 	type=${1}
- 	family=${2}
--- 
-2.21.3
-
+The neighbour code will correctly reject the new flag due to
+'NTF_EXT_MASK'.
