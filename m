@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB544DC18F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 09:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38C04DC193
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 09:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiCQIof (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 04:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S231430AbiCQIop (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Mar 2022 04:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiCQIoa (ORCPT
+        with ESMTP id S231417AbiCQIoo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:44:30 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747A89CEE
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:43:13 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id h196so3798250qke.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:43:13 -0700 (PDT)
+        Thu, 17 Mar 2022 04:44:44 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D90B6E77
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:43:23 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id kd12so3739244qvb.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 01:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rs3lb7HtcIYm9jZ0SzSQorbfVpEkZlFo5LaC9tfbwvo=;
-        b=S3obRpQQHMVJi7+H5VR1TblcIOe5dqdqb8mGFSQesQcvlxnLr824JMUI0hn+idD6Sc
-         AlJPpleInHsltAc+MgLNC0uzm3AQTat2ek0sBox3dxH4O2lDlNmuLdTS1szJMJpSsbsD
-         xEQiTJtIPm//1YEjqN50nSk1Nabda7XpoTaIfWd0tRQmmxjX4Sx57wu0sgtUlaprtfKC
-         00+9HLBUZf1G2eTdFtNgtJzJtoJM4JGniAZ0C1j5rakg6gBVgIq/I7tWsd8eGxu6YDTV
-         +lTqrtYm4TDZF7NZ7cUm7V07bHnlVi84ilC/qOIDNh89jjyB9OaAaEwqIWc7Rha+5Bet
-         s1FA==
+        bh=O9H+gXHjNW5/xPBMc/pokchE3hAYeEtgFu4L48RE2BU=;
+        b=kxKxNaWLe0O68aqZ94pQJZ0izvts2XGQQlmoZLvpU44AXjo17ysLM6N4DnXOshzHXa
+         4paGNTizzaPl18HsuxXpTkZrbaclFJuVWc3G9lSx5YUM+dfoJJgcVJrxBL3pFwYHlWeC
+         +SazNnlwLh3h/ZTGgkr+pXjV2m4ln2PxOdq70K5lTwMMEzArKBIaoWFoyAFKPfgoPesc
+         Y+eKTg0ZWNbT3H74NyFYp2iHF26/SKSaf/9t1/qUMmhTFOjvP+hvY8wuumbNeUyE22ZV
+         9QKekU8EohSxQPXXvb0joFZcSrdPS/VMSB1MOAGXhOk7DqFMJW9dvLmKEWlEZ9di4tpq
+         Jj7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rs3lb7HtcIYm9jZ0SzSQorbfVpEkZlFo5LaC9tfbwvo=;
-        b=tWG27Sigomb2Ts007Zeh9s/XFii48PcpnVOIzopx80rqFIBR0hb6VFzl5W52e2pvyy
-         fsI3fxHbLw47q8Nsm2Y4Aw3YlWPqdh/KosC4KUqXmVkqj3oYe/EDH+8hFkmktyfpRw58
-         F95xJu0Kavh/N/XK16/rN8QLtCJgVgwlGGilcSx4K5rXPTq1U6K+IB7unAMr4Jpjv7F+
-         98LFQSGgyt+HHAWsOE3+3EiR2wMdNJO/lkoqRwP3DZX9+F8mywywwej5POwa9xsQX842
-         g/8W4pLEviNLpoIsEPwXKzQzgO95kr0KqcY+k+RIPX/uVM4GMkcKNXyIJh/4YVvPIXHb
-         f9Lw==
-X-Gm-Message-State: AOAM530L9FLr6sxqxkSjGzmq/0nSy61NZobhGqefku2pWDYsNRE5HDuC
-        5O9WqZmuNPKV3ne26qVQAeleqyLbKD9XL59S+gmfTQ==
-X-Google-Smtp-Source: ABdhPJxDx5zqb/CO4eBwMWctdU1OC2nZfmL/RDU6S20tEDv4fUUVbz7t6iX/Hxz4EYOmkE0aRA6A7ukFfyQ9IPcwoS4=
-X-Received: by 2002:a05:620a:404f:b0:67d:dc82:6319 with SMTP id
- i15-20020a05620a404f00b0067ddc826319mr2094461qko.359.1647506592791; Thu, 17
- Mar 2022 01:43:12 -0700 (PDT)
+        bh=O9H+gXHjNW5/xPBMc/pokchE3hAYeEtgFu4L48RE2BU=;
+        b=f+KApDS2McxiJs/7aRM1z6e+7vK5BNoaJsmNVgCfbPCWSdfxJ11i6jYiLYFnlUowrr
+         Vtvw0RfMzqHdaO8G0kn9J1Xr+FtOKfO/GpBrS36Z+Gm/LRdBw1UT9OyZALgo0/uBX1Dl
+         wqHF11eDsQfZs50awS44fhDnEkHoKCS1FkF5qk3387TocX6TNvnNkS3iULGfekgNZqLj
+         zQPI8dQGdvY3u1PBfyqNxp6lbvdDEtoga2D6jitJ/ylBx2/BnLx6uDX+US6ufiisN+ER
+         t1f9Zyy2DReTYQOSRI2sYpDZnaOQhzxbkHn2ok1aRI1DO5X51OVhn4ZU635qjQRtU75L
+         OwMA==
+X-Gm-Message-State: AOAM5319cn/ajAT6ftuVO2hO7flxhXkZeM3c7K96zKRmAWp4yYRdWGIm
+        f65UwP9cBg31MoUbclZZ+HveEPCSu5J4E6i0wjicsg==
+X-Google-Smtp-Source: ABdhPJz7tSnICHGgjrk4Ox9GC631xG2x+y8FWGdsZnc+6TSzW+4IoahugpOtAepQXnrPNsE/9r6cSmjXM5UzfNv7HTQ=
+X-Received: by 2002:a05:6214:d8b:b0:440:d680:c744 with SMTP id
+ e11-20020a0562140d8b00b00440d680c744mr2691992qve.29.1647506602915; Thu, 17
+ Mar 2022 01:43:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220316202622.324866-1-frowand.list@gmail.com> <20220316202622.324866-2-frowand.list@gmail.com>
-In-Reply-To: <20220316202622.324866-2-frowand.list@gmail.com>
+References: <20220316202622.324866-1-frowand.list@gmail.com> <20220316202622.324866-3-frowand.list@gmail.com>
+In-Reply-To: <20220316202622.324866-3-frowand.list@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 17 Mar 2022 16:43:01 +0800
-Message-ID: <CABVgOSm_rQcBhbC5C7Z7_+zEheCjkjHCmzKHyx7b5bYLESvA0A@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] Documentation: dev-tools: KTAP spec change
- version to 2-rc
+Date:   Thu, 17 Mar 2022 16:43:11 +0800
+Message-ID: <CABVgOSngfB41BVoEvQ1JX+2oFvS7Mik58VfPm9pydmiC_GSD6Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] Documentation: dev-tools: use literal block
+ instead of code-block
 To:     Frank Rowand <frowand.list@gmail.com>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -68,7 +68,7 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003f634805da660506"
+        boundary="000000000000d9b8b005da660595"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -80,66 +80,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000003f634805da660506
+--000000000000d9b8b005da660595
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
 >
 > From: Frank Rowand <frank.rowand@sony.com>
 >
-> Prepare KTAP Specification for the process of creating Version 2.
-> The version will remain 2-rc until the final commit to complete
-> Version 2.
+> KTAP Specification: Change code-block directives to straightforward
+> literal blocks since the blocks do not contain code.
 >
+> Suggested-by: Jonathan Corbet <corbet@lwn.net>
 > Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 > ---
 
-This seems okay to me, though I'd generally rather this stay in a
-branch rather than hitting torvalds/master while there aren't any
-substantive changes to the actual spec. (Basically, let's not rush
-naming this "2-rc" for 5.18 if there aren't any other changes: a 2-rc
-which is practically the same as 1 is probably going to be more
-confusing than helpful if it sticks around for a whole kernel release.
+This looks good to me.
 
-(Also, when would we want to update the various mentions of "KTAP
-version 1" in the document to "KTAP version 2" or "KTAP version 2-rc"?
-Now, when 2 is released, at the first breaking change to that example,
-etc?)
+I'd personally rather push this through independently of the KTAP 2.0
+spec updates, as it's really just a minor formatting change to the
+spec, and it has no impact on the actual KTAP format.
+
+So, if we can accept this independently, that'd be swell.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/ktap.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+
+>  Documentation/dev-tools/ktap.rst | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
 >
 > diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index 5ee735c6687f..37b5dc61bfb8 100644
+> index 37b5dc61bfb8..b9a57ceddd4f 100644
 > --- a/Documentation/dev-tools/ktap.rst
 > +++ b/Documentation/dev-tools/ktap.rst
-> @@ -1,7 +1,7 @@
->  .. SPDX-License-Identifier: GPL-2.0
+> @@ -115,34 +115,32 @@ The diagnostic data field is optional, and results which have neither a
+>  directive nor any diagnostic data do not need to include the "#" field
+>  separator.
 >
->  ===================================================
-> -The Kernel Test Anything Protocol (KTAP), version 1
-> +The Kernel Test Anything Protocol (KTAP), version 2-rc
->  ===================================================
-
-Nit: Sphinx complains that we now need more '=' signs:
-
-Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
-===================================================
-
-
-The Kernel Test Anything Protocol (KTAP), version 2-rc
-===================================================
-
+> -Example result lines include:
+> -
+> -.. code-block:: none
+> +Example result lines include::
 >
->  TAP, or the Test Anything Protocol is a format for specifying test results used
+>         ok 1 test_case_name
+>
+>  The test "test_case_name" passed.
+>
+> -.. code-block:: none
+> +::
+>
+>         not ok 1 test_case_name
+>
+>  The test "test_case_name" failed.
+>
+> -.. code-block:: none
+> +::
+>
+>         ok 1 test # SKIP necessary dependency unavailable
+>
+>  The test "test" was SKIPPED with the diagnostic message "necessary dependency
+>  unavailable".
+>
+> -.. code-block:: none
+> +::
+>
+>         not ok 1 test # TIMEOUT 30 seconds
+>
+>  The test "test" timed out, with diagnostic data "30 seconds".
+>
+> -.. code-block:: none
+> +::
+>
+>         ok 5 check return code # rcode=0
+>
+> @@ -202,7 +200,7 @@ allowed to be either indented or not indented.
+>
+>  An example of a test with two nested subtests:
+>
+> -.. code-block:: none
+> +::
+>
+>         KTAP version 1
+>         1..1
+> @@ -215,7 +213,7 @@ An example of a test with two nested subtests:
+>
+>  An example format with multiple levels of nested testing:
+>
+> -.. code-block:: none
+> +::
+>
+>         KTAP version 1
+>         1..2
+> @@ -250,7 +248,7 @@ nested version line, uses a line of the form
+>
+>  Example KTAP output
+>  --------------------
+> -.. code-block:: none
+> +::
+>
+>         KTAP version 1
+>         1..1
 > --
 > Frank Rowand <frank.rowand@sony.com>
 >
 
---0000000000003f634805da660506
+--000000000000d9b8b005da660595
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -206,14 +253,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDw
-tItYCAgJ/bRlpimWHGUYIqXUdsRV/avp5ObTVs5ztTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTcwODQzMTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD/
+veQhoB/7AHajBmLtRzTMPDV3mVNkoti1RQbI/Q2JuzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTcwODQzMjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGd+sl70+zVJe6yTwawdw
-uSUWxCAISxCs/yiw/KD8Pf4Psdb4iqx7skYPflWvBaiz6pPCIK8D/V+fvnT4Ry5lEY3Y1P36j5L+
-7LZEafUwv1mKLkjfa6GSFx9+lVZa+BnhCmckddXWv7Jg8HKXumsTULyJ2vulvCfm9y81dd9oTiJZ
-M8UyZkGD4UOAqloGFiqdmFV85M9IlwbDq3zIejhpPgTHwvpyXaOWZvU7GupHfZVUgQhZLtQqwJvY
-vwVUqr4mzNyEmrpCdsCTxUokoV+b6EK2hVqfwhE0snAheXbKb8yA1MPMdNmrdv4bYvIhNeL6ZfNt
-f2JmEjaj8Zhsm5c8wQ==
---0000000000003f634805da660506--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYYVU/uOUwk2ECXLz2vo8
+sPQsJpV3JDiHHFsYbNfpBx+eZ4FkOO34HKNWQfOY0f7bF9zM86+82TeNTQF1aPaySptG2ZZkSeB6
+5v+uRQNV673O9abHKHNl3z+lZqQuRdpJLzr0QjlXQtm4F+3erqPtvOvS5b38ckmcfxDOD31/v2/H
+5tfTzF7xrUmXsBQo5bgjNFQnDvqxvJwwKCPOD86lNTEfq9AhiQs5SYicl9KYQv2RQaCHDJ4+jXY7
+NKm3czYyz3K4w11fx7ZAXvhdL4TkGmkRUqhLS7w0i0BhiPH+9rxomV8s8cUEzvwfP13NiR9nQvya
+wpY8z3aTsy+HPJ8I0A==
+--000000000000d9b8b005da660595--
