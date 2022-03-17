@@ -2,89 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FAA4DC910
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 15:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BF54DC93A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 15:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiCQOli (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 10:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S235297AbiCQOvt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Mar 2022 10:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235194AbiCQOld (ORCPT
+        with ESMTP id S235152AbiCQOvs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:41:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47559186F9E;
-        Thu, 17 Mar 2022 07:40:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCA66B80122;
-        Thu, 17 Mar 2022 14:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 29DE1C340F2;
-        Thu, 17 Mar 2022 14:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647528010;
-        bh=W+C/rY1F7cscNtkzq88lgvhn6XE+laUchKkk4A1EC+0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Q6JAGE+VyUhFhCkX3PD7XHPPELlF3bfE091Lmj+8XBeTIICABOIxm0uOg8oNWTREj
-         8+K5hVpooma9/YUm7RF8D/WLgZd0hFbH+1ohXzIfB0lR4DaE6iRG+pYJNF1YbXQDNL
-         +VFob51SLCFsp4jkc0Fq9VjJATIHNu2TgahDGsftVfctH38FVo2xoBYJM/K+0rYW5D
-         KM9JUQbeKR39xXD7IntI+F1qQX3OR8v9lfU+OGgRPMXUxq0Zl4gopkGyvRf5TQ/InI
-         e4KJuU6dematLm31gyVd+tLsdxLbwBSOURttk5/3Kdtf87xHiHxWTpkkS0EtbaG55O
-         5p9bYX3Ybz9Mg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 073BCF0383F;
-        Thu, 17 Mar 2022 14:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Mar 2022 10:51:48 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD45920214F;
+        Thu, 17 Mar 2022 07:50:31 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 25so7524423ljv.10;
+        Thu, 17 Mar 2022 07:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=a1deU4EzeQc2joaO/0pAzd9yMJPMyBOx4cFep+UZqpU=;
+        b=grrSiCZnED0iRJVv3x8DdKEd2SBdCYYEKvx78/W0bwwg6lNgPAwknPtj4c6HaqI+EB
+         VZs4aVLKZIGpaopOl4oa9mXcGDZjPzf1yTo5p0EmoAYBo/s3qCpBLinPtdu3E6eGqBMb
+         BeMNwzdrmDCinI9oocmQ5z5nhtlFXBeyLEDAN8X9j3/B9X7tOU2M4rO8llre/dB5Sq+1
+         KlypWQFtEU1f3jxAFhUeICPh+WHp4WY2F4N17BPjz4AFxSx392cLPRuBgS1/6ir8D+5q
+         pacdrxhFJUnthnPVsdra+8yLjOibVEBRoaxMPkokjOHAwNvP5aQuAOqkdbQulW94i2rb
+         JeAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=a1deU4EzeQc2joaO/0pAzd9yMJPMyBOx4cFep+UZqpU=;
+        b=tFIY/mnP7aDXrjndYVEECz+98mrOwpmbjNruNHQT3xGAql8wKuNzOvv5bM7gxXCfpw
+         C+d+BIgFAjY41UzNDS0908V3mARdLlQCy2DdGC4PDZpj/wNfEv+Putv8WbpUQu2wUfv4
+         N8Utdep9bPe+DOygpDgvvKkZTgAX1ARXtPKYav/VJA6J0Fv0w/QgqOwbQJOTPwtNoVKS
+         kbpephRx82LSx2hwz/LgjBk22v5m9LN+2nsEwNvuHlQC5a6mmCxIjSESDGKO0J+ofiL5
+         rjrqfGxIzWX0NOnIbBA6yyC8pwsG3Le8u5WcFuIzr05Ux4JlbxslhHRJfr+v1JYZR7ye
+         Dz5A==
+X-Gm-Message-State: AOAM531LmuA8jajHRnOZ09+6CD3Fh+tj8Z8x21T56z5Q439cL8+xpQph
+        o+QYXKZRrSxoLvZDYabCOX3zIwygHRJT/g==
+X-Google-Smtp-Source: ABdhPJwNNENC86ntj9Bj44eTnnIs1ropK1IquslMLjtqZZuQXlzZ7Lk2v+RfqJm9d5uJs6CT7C21DA==
+X-Received: by 2002:a2e:9d43:0:b0:249:4022:dd32 with SMTP id y3-20020a2e9d43000000b002494022dd32mr3101119ljj.235.1647528630053;
+        Thu, 17 Mar 2022 07:50:30 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id k5-20020a2e2405000000b0024801a68041sm449691ljk.128.2022.03.17.07.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 07:50:29 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Ido Schimmel <idosch@idosch.org>,
+        Hans Schultz <schultz.hans@gmail.com>, razor@blackwall.org
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+In-Reply-To: <YjM7Iwx4MDdGEHFA@shredder>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-2-schultz.hans+netdev@gmail.com>
+ <YjM7Iwx4MDdGEHFA@shredder>
+Date:   Thu, 17 Mar 2022 15:50:26 +0100
+Message-ID: <86ilsciqfh.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net: fix array_size.cocci warning
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164752801002.21318.2421302537534313985.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Mar 2022 14:40:10 +0000
-References: <20220316092858.9398-1-guozhengkui@vivo.com>
-In-Reply-To: <20220316092858.9398-1-guozhengkui@vivo.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        zhengkui_guo@outlook.com
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On tor, mar 17, 2022 at 15:44, Ido Schimmel <idosch@idosch.org> wrote:
+> On Thu, Mar 17, 2022 at 10:38:59AM +0100, Hans Schultz wrote:
+>> Add an intermediate state for clients behind a locked port to allow for
+>> possible opening of the port for said clients. This feature corresponds
+>> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
+>> latter defined by Cisco.
+>> Only the kernel can set this FDB entry flag, while userspace can read
+>> the flag and remove it by deleting the FDB entry.
+>
+> Can you explain where this flag is rejected by the kernel?
+>
+Is it an effort to set the flag from iproute2 on adding a fdb entry?
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Wed, 16 Mar 2022 17:28:57 +0800 you wrote:
-> Fix array_size.cocci warning in tools/testing/selftests/net.
-> 
-> Use `ARRAY_SIZE(arr)` instead of forms like `sizeof(arr)/sizeof(arr[0])`.
-> 
-> It has been tested with gcc (Debian 8.3.0-6) 8.3.0.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - selftests: net: fix array_size.cocci warning
-    https://git.kernel.org/netdev/net-next/c/1abea24af42c
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Nik, it seems the bridge ignores 'NDA_FLAGS_EXT', but I think that for
+> new flags we should do a better job and reject unsupported
+> configurations. WDYT?
+>
+> The neighbour code will correctly reject the new flag due to
+> 'NTF_EXT_MASK'.
