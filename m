@@ -2,479 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115EE4DD2F4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 03:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9934DD400
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 05:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbiCRCPC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 22:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
+        id S232389AbiCREwA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 00:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiCRCPB (ORCPT
+        with ESMTP id S231846AbiCREwA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 22:15:01 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A33151D22
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 19:13:43 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e5a3c1384cso55455397b3.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 19:13:43 -0700 (PDT)
+        Fri, 18 Mar 2022 00:52:00 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05E831934;
+        Thu, 17 Mar 2022 21:50:40 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q19so4272396pgm.6;
+        Thu, 17 Mar 2022 21:50:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=v2VVloeAOVBO4J08VTd30nqSdy1avKNhgmxPh4EuPbA=;
-        b=JhmFTpLYqNCrQZBbjrqjuHN14QhY6/EodVyC/sFm3bn6I358gmKbcy2OFIvAFhIrxk
-         vV0ZACYe5nInRxZ/bVS+m6yvyX0P2XAbTFaSEOQJKO8bOx/D7RgcbBc74bojB6XMTmG5
-         St+NcNK/RgksiZQMoVrZFDYNC6zzIj8Lj+SbRA31SobBq410lvREY6EgAKHWGyi7MtDX
-         m8Ptrpq5MKVKfJGkp43z3ZalM/hUY9UIVBV06k75lyOy7CnKET7df5fXhFURQ7ygmXRC
-         Ouz/6A/2YZcJBdm4yAClH5eb+PSEZUbQ0uX20psLUJ96Ka1qlpzaG/rIc9EajuJvMGkq
-         FmHA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aPJHHquyjBnSufkdQ/CHMVfaCdWkcaHC/wocvUvtM2g=;
+        b=L5+IUfXTkDjiK+ANw+KnlygW7x1M6zI1nZKYKG8jW93yJ0tEAcGlUx48T0NZ2sFz6L
+         jDxT0gbkygNOOKK8Tc1gVyd6ymspz90eonQ6TBa9V4zx3wN+Dthk53JLZ74y06zljXlz
+         VQaly16G1x2Hl2uxOXsUJUU7hVD2hrCLJkQ5fODbmlMU/PInY7mTYAZ8MO0ETg1B9dDH
+         WSiG2J1HZzIXHJdqmFhD32TclV02lEfivp3bBcbXzPgM/zhTItKhadan3OnKhc2aVkzv
+         lLkvJkBnbik5ttZL0XPEhbpaEruniAVu5asVUQ9WaWcY0DS/6zFjiyJDajkoueovd9i6
+         hM6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=v2VVloeAOVBO4J08VTd30nqSdy1avKNhgmxPh4EuPbA=;
-        b=GuS0KntgJUrZw5seN3huU4FeK5vpn2AEe/WL+kuG0tw0pcP166aig6sImPI0Y9OCh0
-         ZoahjQMz0RgoquqE4/qHN3kqN1xJEk62+v9Qbj83wzs/g0CWNSDol6NwilYw+FEEQr5R
-         U6XA7dlDoDiTHi226y6RZH2tGanNin3meHHGzlMl5hWTdgD7H+RZEt0peI+QTp6g8OEh
-         nPt8hYAm99qHytbYWe/I4xm1Ks9SKDRU5X7IA9PtWdTUr5p6/afx3kOwlKTNJZcmMQmu
-         czuOQ8A6EPtBJWTvETerLnM552MECJVgcRzvO0EqVXFRz06cu2Mvtt6/sniuIgswG3mu
-         52Kw==
-X-Gm-Message-State: AOAM530JPZiaUEglEWmogywhOEzIZKcpXwS/SVm9xr6OFOr/I5bt+pej
-        0pWo/7W9bvxOYJvl7xWdrTOgbZ8fZel4FQ==
-X-Google-Smtp-Source: ABdhPJzAG45IMQ6X4jxzor/ToKD8n07PmR1bQ/XpMwTYavkMIGQbav3Aoz/Q+ArwNoRWvQpuQ+25HpQvXGvovA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:e7d2:0:b0:633:bbf0:30c7 with SMTP id
- e201-20020a25e7d2000000b00633bbf030c7mr431216ybh.503.1647569622349; Thu, 17
- Mar 2022 19:13:42 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 10:13:14 +0800
-In-Reply-To: <20220318021314.3225240-1-davidgow@google.com>
-Message-Id: <20220318021314.3225240-3-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220318021314.3225240-1-davidgow@google.com>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [RFC PATCH 2/2] kunit: expose ftrace-based API for stubbing out
- functions during tests
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aPJHHquyjBnSufkdQ/CHMVfaCdWkcaHC/wocvUvtM2g=;
+        b=4/fuLvu89KkL6d0wmYMQguq5HiFDNP3GlyDH54qP4WiQWFPiH7yP88pLRRKDDkbsZT
+         gAJJW6rAiVP1tPvVf5YWGJtV0ynMBQ1g7V/3PNAO6wshj7xfSgKTy7kfT1J2s/rmmjo7
+         5bYqkRUkvshOnqNVpxSsTXrotI/qBnwpWMyiI7g5/MGqlBpdTKxNZpE0gcwi+rmSseAx
+         0GSrsMOyPPujCXbudWdFG4qVeom67aqGX+9jFfZLaUL2yuV5S0gjHOOPlxRNhAUjfWic
+         VsCnV8RyDirKxmyyuFMcrgXTx+trp7nkqfRS/26hl2bTSH6yn0ezwBxBqZZaO94o6HXl
+         cTEw==
+X-Gm-Message-State: AOAM531bss81YfZ18v7m6Mu0eU4TaxKcYUZ6HhnKcjEgtyNjBTiQrXdM
+        HMQShiuEx24hMvU8sWr6sMufA+zkWZAMGQ==
+X-Google-Smtp-Source: ABdhPJzhxM+hugE7owmzEeU+bzQPYLXLvCW/ZmgFw14Vv0YIH0K1U6rFcf3IiYlZhsK58SGQHcP1rw==
+X-Received: by 2002:a65:538f:0:b0:382:b4d:bdd8 with SMTP id x15-20020a65538f000000b003820b4dbdd8mr4457255pgq.262.1647579040371;
+        Thu, 17 Mar 2022 21:50:40 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-92.three.co.id. [180.214.233.92])
+        by smtp.gmail.com with ESMTPSA id u4-20020a056a00158400b004fa0263cf5dsm8788368pfk.130.2022.03.17.21.50.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 21:50:39 -0700 (PDT)
+Message-ID: <07033c8a-fe1a-f97e-49b3-48d1da1e0413@gmail.com>
+Date:   Fri, 18 Mar 2022 11:50:34 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] docs/kselftest: add more guidelines for adding new tests
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220317172758.582690-1-usama.anjum@collabora.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220317172758.582690-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Daniel Latypov <dlatypov@google.com>
+On 18/03/22 00.27, Muhammad Usama Anjum wrote:
+> Add the following new guidelines:
+> - Add instruction to use lib.mk
+> - Add instruction about how to use headers from kernel source
+> - Add instruction to add .gitignore file
+> - Add instruction about how to add new test in selftests/Makefile
+> - Add instruction about different build commands to test
+> 
 
-Allow function redirection using ftrace and kernel livepatch. This is
-basically equivalent to the static_stub support in the previous patch,
-but does not require the function being replaced to be modified (save
-for the addition of KUNIT_STUBBABLE/noinline).
+Too verbose, because people can figure out what were added in the diff
+without explicitly mention them.
+  
+> + * Use lib.mk instead of writing Makefile from sratch. Specify flags and
+> +   binaries generation flags on need basis before including lib.mk. ::
+> +
+> +    CFLAGS = $(KHDR_INCLUDES)
+> +    TEST_GEN_PROGS := close_range_test
+> +    include ../lib.mk
+> +
 
-This is hidden behind the CONFIG_KUNIT_FTRACE_STUBS option, and has a
-number of dependencies, including ftrace, livepatch and
-CONFIG_KALLSYMS_ALL. As a result, it only works on architectures where
-these are available.
+I think what you mean is "In your Makefile, use facilities from lib.mk by
+including it instead of reinventing the wheel.", right?
 
-You can run the KUnit example tests with the following:
-$ ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit/stubs_example.kunitconfig --arch=x86_64
+> + * Add new test name in TARGETS in selftests/Makefile::
+> +
+> +    TARGETS += android
+> +
+> + * All of the following build commands should be successful
+> +
+> +   - Same directory build of kselftests::
+> +
+> +      make kselftest-all
+> +      make kselftest-install
+> +      make kselftest-clean
+> +      make kselftest-gen_tar
+> +
+> +   - Build with absolute output directory path::
+> +
+> +      make kselftest-all O=/abs_build_path
+> +      make kselftest-install O=/abs_build_path
+> +      make kselftest-clean O=/abs_build_path
+> +      make kselftest-gen_tar O=/abs_build_path
+> +
+> +   - Build with relative output directory path::
+> +
+> +      make kselftest-all O=relative_path
+> +      make kselftest-install O=relative_path
+> +      make kselftest-clean O=relative_path
+> +      make kselftest-gen_tar O=relative_path
+> +
+> +   - Build from Makefile of selftests directly::
+> +
+> +      make -C tools/testing/selftests
+> +      make -C tools/testing/selftests O=/abs_build_path
+> +      make -C tools/testing/selftests O=relative_path
+> +
 
-To the end user, replacing a function is very simple, e.g.
-  KUNIT_STUBBABLE void real_func(int n);
-  void replacement_func(int n);
+For simplicity, we can say "All changes should pass
+kselftest-{all,install,clean,gen_tar} builds."
 
-  /* in tests */
-  kunit_activate_ftrace_stub(test, real_func, replacement_func);
+You don't need to spell out full command-line in the guideline unless
+absolutely necessary, in general.
 
-The implementation is inspired by Steven's snippet here [1].
-
-Some more details:
-* stubbing is automatically undone at the end of tests
-* it can also be manually undone with kunit_deactive_ftrace_stub()
-* stubbing only applies when current->kunit_test == test
-  * note: currently can't have more than one test running at a time
-* KUNIT_STUBBABLE marks tests as noinline when CONFIG_KUNIT_STUBS is set
-  * this ensures we can actually stub all calls
-* KUNIT_STUBBABLE_TRAMPOLINE is a version that evaluates to
-  __always_inline when stubbing is not enabled
-  * This may need to be used with a wrapper function.
-  * See the doc comment for more details.
-
-Sharp-edges:
-* kernel livepatch only works on some arches (not UML)
-* if you don't use noinline/KUNIT_STUBBABLE, functions might be inlined
-  and thus none of this works:
-  * if it's always inlined, at least the attempt to stub will fail
-  * if it's sometimes inlined, then the stub silently won't work
-
-[1] https://lore.kernel.org/lkml/20220224091550.2b7e8784@gandalf.local.home
-
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
- lib/kunit/Kconfig                   |  11 +++
- lib/kunit/Makefile                  |   4 +
- lib/kunit/ftrace_stub.c             | 138 ++++++++++++++++++++++++++++
- lib/kunit/kunit-example-test.c      |  27 +++++-
- lib/kunit/stubs_example.kunitconfig |  11 +++
- 6 files changed, 274 insertions(+), 1 deletion(-)
- create mode 100644 include/kunit/ftrace_stub.h
- create mode 100644 lib/kunit/ftrace_stub.c
- create mode 100644 lib/kunit/stubs_example.kunitconfig
-
-diff --git a/include/kunit/ftrace_stub.h b/include/kunit/ftrace_stub.h
-new file mode 100644
-index 000000000000..54c053b7e9c1
---- /dev/null
-+++ b/include/kunit/ftrace_stub.h
-@@ -0,0 +1,84 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _KUNIT_FTRACE_STUB_H
-+#define _KUNIT_FTRACE_STUB_H
-+
-+/** KUNIT_STUBBABLE - marks a function as stubbable when stubbing support is
-+ * enabled.
-+ *
-+ * Stubbing uses ftrace internally, so we can only stub out functions when they
-+ * are not inlined. This macro eavlautes to noinline when stubbing support is
-+ * enabled to thus make it safe.
-+ *
-+ * If you cannot add this annotation to the function, you can instead use
-+ * KUNIT_STUBBABLE_TRAMPOLINE, which is the same, but evaluates to
-+ * __always_inline when stubbing is not enabled.
-+ *
-+ * Consider copy_to_user, which is marked as __always_inline:
-+ *
-+ * .. code-block:: c
-+ *	static KUNIT_STUBBABLE_TRAMPOLINE unsigned long
-+ *	copy_to_user_trampoline(void __user *to, const void *from, unsigned long n)
-+ *	{
-+ *		return copy_to_user(to, from, n);
-+ *	}
-+ *
-+ * Then we simply need to update our code to go through this function instead
-+ * (in the places where we want to stub it out).
-+ */
-+#if IS_ENABLED(CONFIG_KUNIT_FTRACE_STUBS)
-+#define KUNIT_STUBBABLE noinline
-+#define KUNIT_STUBBABLE_TRAMPOLINE noinline
-+#else
-+#define KUNIT_STUBBABLE
-+#define KUNIT_STUBBABLE_TRAMPOLINE __always_inline
-+#endif
-+
-+struct kunit;
-+
-+/**
-+ * kunit_activate_ftrace_stub() - makes all calls to @func go to @replacement during @test.
-+ * @test: The test context object.
-+ * @func: The function to stub out, must be annotated with KUNIT_STUBBABLE.
-+ * @replacement: The function to replace @func with.
-+ *
-+ * All calls to @func will instead call @replacement for the duration of the
-+ * current test. If called from outside the test's thread, the function will
-+ * not be redirected.
-+ *
-+ * The redirection can be disabled again with kunit_deactivate_ftrace_stub().
-+ *
-+ * Example:
-+ *
-+ * .. code-block:: c
-+ *	KUNIT_STUBBABLE int real_func(int n)
-+ *	{
-+ *		pr_info("real_func() called with %d", n);
-+ *		return 0;
-+ *	}
-+ *
-+ *	void replacement_func(int n)
-+ *	{
-+ *		pr_info("replacement_func() called with %d", n);
-+ *		return 42;
-+ *	}
-+ *
-+ *	void example_test(struct kunit *test)
-+ *	{
-+ *		kunit_active_ftrace_stub(test, real_func, replacement_func);
-+ *		KUNIT_EXPECT_EQ(test, real_func(1), 42);
-+ *	}
-+ *
-+ */
-+#define kunit_activate_ftrace_stub(test, func, replacement) do { \
-+	typecheck(typeof(func), replacement); \
-+	__kunit_activate_ftrace_stub(test, #func, func, replacement); \
-+} while (0)
-+
-+void __kunit_activate_ftrace_stub(struct kunit *test,
-+				  const char *name,
-+				  void *real_fn_addr,
-+				  void *replacement_addr);
-+
-+
-+void kunit_deactivate_ftrace_stub(struct kunit *test, void *real_fn_addr);
-+#endif  /* _KUNIT_STUB_H */
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 0b5dfb001bac..978e4f72bae0 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -59,4 +59,15 @@ config KUNIT_ALL_TESTS
- 
- 	  If unsure, say N.
- 
-+config KUNIT_FTRACE_STUBS
-+	bool "Support for stubbing out functions in KUnit tests with ftrace and kernel livepatch"
-+	depends on FTRACE=y && FUNCTION_TRACER=y && MODULES=y && DEBUG_KERNEL=y && KALLSYMS_ALL=y && LIVEPATCH=y
-+	help
-+	  Builds support for stubbing out functions for the duration of KUnit
-+	  test cases or suites using ftrace and kernel livepatch.
-+	  See KUNIT_EXAMPLE_TEST for an example.
-+
-+	  NOTE: this does not work on all architectures (like UML, arm64) and
-+	  relies on a lot of magic (see the dependencies list).
-+
- endif # KUNIT
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index f9e929700782..75092c12c3d0 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -19,3 +19,7 @@ obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
- endif
- 
- obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
-+
-+ifeq ($(CONFIG_KUNIT_FTRACE_STUBS),y)
-+kunit-objs +=				ftrace_stub.o
-+endif
-diff --git a/lib/kunit/ftrace_stub.c b/lib/kunit/ftrace_stub.c
-new file mode 100644
-index 000000000000..13207e1c7aff
---- /dev/null
-+++ b/lib/kunit/ftrace_stub.c
-@@ -0,0 +1,138 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <kunit/test.h>
-+
-+#include <linux/typecheck.h>
-+
-+#include <linux/ftrace.h>
-+#include <linux/livepatch.h>
-+#include <linux/sched.h>
-+
-+struct kunit_ftrace_stub_ctx {
-+	struct kunit *test;
-+	unsigned long real_fn_addr; /* used as a key to lookup the stub */
-+	unsigned long replacement_addr;
-+	struct ftrace_ops ops; /* a copy of kunit_stub_base_ops with .private set */
-+};
-+
-+static void kunit_stub_trampoline(unsigned long ip, unsigned long parent_ip,
-+				  struct ftrace_ops *ops,
-+				  struct ftrace_regs *fregs)
-+{
-+	struct kunit_ftrace_stub_ctx *ctx = ops->private;
-+	int lock_bit;
-+
-+	if (current->kunit_test != ctx->test)
-+		return;
-+
-+	lock_bit = ftrace_test_recursion_trylock(ip, parent_ip);
-+	KUNIT_ASSERT_GE(ctx->test, lock_bit, 0);
-+
-+	klp_arch_set_pc(fregs, ctx->replacement_addr);
-+
-+	ftrace_test_recursion_unlock(lock_bit);
-+}
-+
-+static struct ftrace_ops kunit_stub_base_ops = {
-+	.func = &kunit_stub_trampoline,
-+	.flags = FTRACE_OPS_FL_IPMODIFY |
-+#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-+		FTRACE_OPS_FL_SAVE_REGS |
-+#endif
-+		FTRACE_OPS_FL_DYNAMIC
-+};
-+
-+static void __kunit_ftrace_stub_resource_free(struct kunit_resource *res)
-+{
-+	struct kunit_ftrace_stub_ctx *ctx = res->data;
-+
-+	unregister_ftrace_function(&ctx->ops);
-+	kfree(ctx);
-+}
-+
-+/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
-+static bool __kunit_static_stub_resource_match(struct kunit *test,
-+						struct kunit_resource *res,
-+						void *match_real_fn_addr)
-+{
-+	/* This pointer is only valid if res is a static stub resource. */
-+	struct kunit_ftrace_stub_ctx *ctx = res->data;
-+
-+	/* Make sure the resource is a static stub resource. */
-+	if (res->free != &__kunit_ftrace_stub_resource_free)
-+		return false;
-+
-+	return ctx->real_fn_addr == (unsigned long)match_real_fn_addr;
-+}
-+
-+void kunit_deactivate_ftrace_stub(struct kunit *test, void *real_fn_addr)
-+{
-+	struct kunit_resource *res;
-+
-+	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-+				"Tried to deactivate a NULL stub.");
-+
-+	/* Look up the existing stub for this function. */
-+	res = kunit_find_resource(test,
-+				  __kunit_static_stub_resource_match,
-+				  real_fn_addr);
-+
-+	/* Error out if the stub doesn't exist. */
-+	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
-+				"Tried to deactivate a nonexistent stub.");
-+
-+	/* Free the stub. We 'put' twice, as we got a reference
-+	 * from kunit_find_resource(). The free function will deactivate the
-+	 * ftrace stub.
-+	 */
-+	kunit_remove_resource(test, res);
-+	kunit_put_resource(res);
-+}
-+EXPORT_SYMBOL_GPL(kunit_deactivate_ftrace_stub);
-+
-+void __kunit_activate_ftrace_stub(struct kunit *test,
-+				  const char *name,
-+				  void *real_fn_addr,
-+				  void *replacement_addr)
-+{
-+	unsigned long ftrace_ip;
-+	struct kunit_ftrace_stub_ctx *ctx;
-+	int ret;
-+
-+	ftrace_ip = ftrace_location((unsigned long)real_fn_addr);
-+	if (!ftrace_ip)
-+		KUNIT_ASSERT_FAILURE(test, "%s ip is invalid: not a function, or is marked notrace or inline", name);
-+
-+	/* Allocate the stub context, which contains pointers to the replacement
-+	 * function and the test object. It's also registered as a KUnit
-+	 * resource which can be looked up by address (to deactivate manually)
-+	 * and is destroyed automatically on test exit.
-+	 */
-+	ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ctx, "failed to allocate kunit stub for %s", name);
-+
-+	ctx->test = test;
-+	ctx->ops = kunit_stub_base_ops;
-+	ctx->ops.private = ctx;
-+	ctx->real_fn_addr = (unsigned long)real_fn_addr;
-+	ctx->replacement_addr = (unsigned long)replacement_addr;
-+
-+	ret = ftrace_set_filter_ip(&ctx->ops, ftrace_ip, 0, 0);
-+	if (ret) {
-+		kfree(ctx);
-+		KUNIT_ASSERT_FAILURE(test, "failed to set filter ip for %s: %d", name, ret);
-+	}
-+
-+	ret = register_ftrace_function(&ctx->ops);
-+	if (ret) {
-+		kfree(ctx);
-+		if (ret == -EBUSY)
-+			KUNIT_ASSERT_FAILURE(test, "failed to register stub (-EBUSY) for %s, likely due to already stubbing it?", name);
-+		KUNIT_ASSERT_FAILURE(test, "failed to register stub for %s: %d", name, ret);
-+	}
-+
-+	/* Register the stub as a resource with a cleanup function */
-+	kunit_alloc_resource(test, NULL,
-+			     __kunit_ftrace_stub_resource_free,
-+			     GFP_KERNEL, ctx);
-+}
-+EXPORT_SYMBOL_GPL(__kunit_activate_ftrace_stub);
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index 670c21e74446..7f20b132343b 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -8,6 +8,7 @@
- 
- #include <kunit/test.h>
- #include <kunit/static_stub.h>
-+#include <kunit/ftrace_stub.h>
- 
- /*
-  * This is the most fundamental element of KUnit, the test case. A test case
-@@ -72,7 +73,7 @@ static void example_mark_skipped_test(struct kunit *test)
- }
- 
- /* This is a function we'll replace with static stubs. */
--static int add_one(int i)
-+static KUNIT_STUBBABLE int add_one(int i)
- {
- 	/* This will trigger the stub if active. */
- 	KUNIT_STATIC_STUB_REDIRECT(add_one, i);
-@@ -107,6 +108,29 @@ static void example_static_stub_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, add_one(1), 2);
- }
- 
-+/*
-+ * This test shows the use of static stubs.
-+ */
-+static void example_ftrace_stub_test(struct kunit *test)
-+{
-+#if !IS_ENABLED(CONFIG_KUNIT_FTRACE_STUBS)
-+	kunit_skip(test, "KUNIT_FTRACE_STUBS not enabled");
-+#else
-+	/* By default, function is not stubbed. */
-+	KUNIT_EXPECT_EQ(test, add_one(1), 2);
-+
-+	/* Replace add_one() with subtract_one(). */
-+	kunit_activate_ftrace_stub(test, add_one, subtract_one);
-+
-+	/* add_one() is now replaced. */
-+	KUNIT_EXPECT_EQ(test, add_one(1), 0);
-+
-+	/* Return add_one() to normal. */
-+	kunit_deactivate_ftrace_stub(test, add_one);
-+	KUNIT_EXPECT_EQ(test, add_one(1), 2);
-+#endif
-+}
-+
- /*
-  * Here we make a list of all the test cases we want to add to the test suite
-  * below.
-@@ -122,6 +146,7 @@ static struct kunit_case example_test_cases[] = {
- 	KUNIT_CASE(example_skip_test),
- 	KUNIT_CASE(example_mark_skipped_test),
- 	KUNIT_CASE(example_static_stub_test),
-+	KUNIT_CASE(example_ftrace_stub_test),
- 	{}
- };
- 
-diff --git a/lib/kunit/stubs_example.kunitconfig b/lib/kunit/stubs_example.kunitconfig
-new file mode 100644
-index 000000000000..a47369199fb9
---- /dev/null
-+++ b/lib/kunit/stubs_example.kunitconfig
-@@ -0,0 +1,11 @@
-+CONFIG_KUNIT=y
-+CONFIG_KUNIT_FTRACE_STUBS=y
-+CONFIG_KUNIT_EXAMPLE_TEST=y
-+
-+# Depedencies
-+CONFIG_FTRACE=y
-+CONFIG_FUNCTION_TRACER=y
-+CONFIG_MODULES=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_LIVEPATCH=y
 -- 
-2.35.1.894.gb6a874cedc-goog
-
+An old man doll... just what I always wanted! - Clara
