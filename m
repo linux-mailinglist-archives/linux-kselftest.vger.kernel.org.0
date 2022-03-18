@@ -2,75 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7774DE0BC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 19:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBAD4DE1B8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 20:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240010AbiCRSId (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 14:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S240102AbiCRTZM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 15:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239969AbiCRSIc (ORCPT
+        with ESMTP id S239449AbiCRTZK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:08:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98B02F09D5;
-        Fri, 18 Mar 2022 11:07:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5396361AE9;
-        Fri, 18 Mar 2022 18:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6959C36AE3;
-        Fri, 18 Mar 2022 18:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647626832;
-        bh=2+jsyRzao3o9WqKhy3sPHH79gWwA1AmH0Ljrc3xGYps=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FxdY0uf2aTo/9OTbQ2nuqPXBXSGi+OpNSaZfBRBCqdMverR/XfOdmayWYJN8tRrVb
-         bymIWfTHgeJ8gKC7K1Hw/VYUgfek7YRHUQX2SoDU/rwPKmdc/DGvZPIOaPOMtzDq+l
-         xdaWCA7M3NzGHzB0gzHiUP4YQWVnwHIu5JTILICMiVssJc9dyj6fJDOIEuyhEpUPYN
-         p3GyYiKwaKEQtE4FfOUjyL/5jagvZrEkcSNgOMJhZC1JdVT7BIRHOHKkNNNTguQD2h
-         SO1avJVQqhG71QZtlYCc/D0qvQRjIO5jNFXCkdINRmP/ZIxxPP59FwUhXNkvzaQvYN
-         qUG9I9B/rMsZQ==
-Received: by mail-yb1-f171.google.com with SMTP id t11so17208272ybi.6;
-        Fri, 18 Mar 2022 11:07:12 -0700 (PDT)
-X-Gm-Message-State: AOAM531oy7TYd8FkzOrzfy1i3VmUDwtEWOzGNbVHX3cS1kyayZm5gfDC
-        hFRZBx2K9m7DlANaFCe6ws8XdVQtAc8DPYG8gCw=
-X-Google-Smtp-Source: ABdhPJzGdHJloFcUCWqzD16w/I7Nedej9Z6/WpiREx002wPoJlh8OLXEYVGHTutGJHWXCZrrkvCKTuAilALRRAq0aXI=
-X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
- j1-20020a258b81000000b0062917d568c1mr10898086ybl.449.1647626831812; Fri, 18
- Mar 2022 11:07:11 -0700 (PDT)
+        Fri, 18 Mar 2022 15:25:10 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E899304AC5;
+        Fri, 18 Mar 2022 12:23:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id EF71D1F45C19
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647631428;
+        bh=WlSxsl1AsukIIoT+HgzKCmviZWgGsHJPvRrOsuv2jMo=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=jM4edW6w09UWqtmSOGEzQOsPEfY7cXe6gIGCHOxMZ8c6Hv82Sf4WL9YJL10v99060
+         4w8ErN+CrDUNSGP6uJBC3TycxdVc28S5a/5RB3ENmDEH/FBNF9sYd+Hk0kZfLuYtdI
+         htUPBgQvPM215lCR+lJ6iLDxdi+E2MeIGtiFqAcM6t6lhqazkBrThN0cAOSVvQk1p3
+         dJIRPlMw2Z/9nWO4cnp78zSe8R0Llz4N9v6cI9Yrj4hCgiOGFYvxzUWojB3LaMFob3
+         1rTZdwbc5zeeWClc/PQELSFfvpaH1bnfX7D+jYg/e87DrpoprnTCE1NjOk4YPVE1iW
+         EZ4Ynd4Mw6Xjw==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        david@redhat.com, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V5 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
+Organization: Collabora
+References: <20220317103323.94799-1-usama.anjum@collabora.com>
+        <20220317103323.94799-2-usama.anjum@collabora.com>
+Date:   Fri, 18 Mar 2022 15:23:43 -0400
+In-Reply-To: <20220317103323.94799-2-usama.anjum@collabora.com> (Muhammad
+        Usama Anjum's message of "Thu, 17 Mar 2022 15:33:22 +0500")
+Message-ID: <87ilsbyshs.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com> <20220318161528.1531164-2-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220318161528.1531164-2-benjamin.tissoires@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 18 Mar 2022 11:07:00 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5QMRrvJ_8=RpOv09je180PUHDDy_BciqCKhhKz0Utfsw@mail.gmail.com>
-Message-ID: <CAPhsuW5QMRrvJ_8=RpOv09je180PUHDDy_BciqCKhhKz0Utfsw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 01/17] bpf: add new is_sys_admin_prog_type() helper
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Sean Young <sean@mess.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,69 +56,101 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> LIRC_MODE2 does not really need net_admin capability, but only sys_admin.
->
-> Extract a new helper for it, it will be also used for the HID bpf
-> implementation.
->
-> Cc: Sean Young <sean@mess.org>
-> Acked-by: Sean Young <sean@mess.org>
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
 
-Acked-by: Song Liu <songliubraving@fb.com>
-
->
-> ---
->
-> changes in v3:
-> - dropped BPF_PROG_TYPE_EXT from the new helper
->
-> new in v2
-> ---
->  kernel/bpf/syscall.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 9beb585be5a6..b88688264ad0 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -2165,7 +2165,6 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
->         case BPF_PROG_TYPE_LWT_SEG6LOCAL:
->         case BPF_PROG_TYPE_SK_SKB:
->         case BPF_PROG_TYPE_SK_MSG:
-> -       case BPF_PROG_TYPE_LIRC_MODE2:
->         case BPF_PROG_TYPE_FLOW_DISSECTOR:
->         case BPF_PROG_TYPE_CGROUP_DEVICE:
->         case BPF_PROG_TYPE_CGROUP_SOCK:
-> @@ -2202,6 +2201,16 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
->         }
->  }
->
-> +static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
+> new file mode 100644
+> index 0000000000000..3153ebac6909b
+> --- /dev/null
+> +++ b/tools/testing/selftests/vm/soft-dirty.c
+> @@ -0,0 +1,146 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <stdbool.h>
+> +#include <fcntl.h>
+> +#include <stdint.h>
+> +#include <malloc.h>
+> +#include <sys/mman.h>
+> +#include "../kselftest.h"
+> +#include "vm_util.h"
+> +
+> +#define PAGEMAP_FILE_PATH "/proc/self/pagemap"
+> +#define TEST_ITERATIONS 10000
+> +
+> +static void test_simple(int pagemap_fd, int pagesize)
 > +{
-> +       switch (prog_type) {
-> +       case BPF_PROG_TYPE_LIRC_MODE2:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
+> +	int i;
+> +	char *map;
+> +
+> +	map = aligned_alloc(pagesize, pagesize);
+> +	if (!map)
+> +		ksft_exit_fail_msg("mmap failed\n");
+> +
+> +	clear_softdirty();
+> +
+> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
+> +		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
+> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
+> +			break;
+> +		}
+> +
+> +		clear_softdirty();
+> +		// Write something to the page to get the dirty bit enabled on the page
+> +		map[0] = i % 255;
+
+you don't need this mod at all but at least it should be 256 :).  I think
+Either 'map[0] = !map[0]' or keeping the original 'map[0]++' is fine.
+
+> +
+> +		if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
+> +			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
+> +			break;
+> +		}
+> +
+> +		clear_softdirty();
+> +	}
+> +	free(map);
+> +
+> +	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
 > +}
 > +
->  /* last field in 'union bpf_attr' used by this command */
->  #define        BPF_PROG_LOAD_LAST_FIELD core_relo_rec_size
->
-> @@ -2252,6 +2261,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
->                 return -EPERM;
->         if (is_perfmon_prog_type(type) && !perfmon_capable())
->                 return -EPERM;
-> +       if (is_sys_admin_prog_type(type) && !capable(CAP_SYS_ADMIN))
-> +               return -EPERM;
->
->         /* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
->          * or btf, we need to check which one it is
-> --
-> 2.35.1
->
+> +static void test_vma_reuse(int pagemap_fd, int pagesize)
+> +{
+> +	char *map, *map2;
+> +
+> +	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
+> +	if (map == MAP_FAILED)
+> +		ksft_exit_fail_msg("mmap failed");
+> +
+> +	clear_softdirty();
+> +
+> +	/* Write to the page before unmapping and map the same size region again to check
+> +	 * if same memory region is gotten next time and if dirty bit is preserved across
+> +	 * this type of allocations.
+> +	 */
+
+This reads weird.  It should *not* be preserved across different
+mappings.  Also, we are not testing if the same region is reused, we are
+depending on it to test the sd bit.
+
+/* Ensures the soft-dirty bit is reset accross different mappings on the
+same address.  */
+
+> +	map[0]++;
+
+This is inconsistent with the other two tests.
+
+> +
+> +	munmap(map, pagesize);
+> +
+> +	map2 = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
+> +	if (map2 == MAP_FAILED)
+> +		ksft_exit_fail_msg("mmap failed");
+> +
+> +	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
+
+if map != map2, the test itself is broken, meaning we should skip it, not
+fail, i guess.
+
+-- 
+Gabriel Krisman Bertazi
