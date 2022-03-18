@@ -2,61 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5B64DD66F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 09:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD7D4DDA64
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 14:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiCRIt2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 04:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S236634AbiCRNXb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 09:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbiCRIt0 (ORCPT
+        with ESMTP id S236668AbiCRNX2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:49:26 -0400
-Received: from mail.postform.pl (mail.postform.pl [195.231.64.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ED260F6
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 01:48:08 -0700 (PDT)
-Received: by mail.postform.pl (Postfix, from userid 1001)
-        id 8A150A3EFE; Fri, 18 Mar 2022 08:38:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=postform.pl; s=mail;
-        t=1647592725; bh=Cp7iEcBs6UYsUZoqwaSKv66JiG6VJnuY7Lx3D9vYwU4=;
-        h=Date:From:To:Subject:From;
-        b=aJmn5odQ47n62Z2MbPUZ8XNiAFnpaq3jGTdKucu6sXwZ9nDZJbk1a/MMRv/Dgny74
-         q35WcmfLIwTePkt44QenfuK+SVtxygbBP2l24evnS0CYKk0+LATZD7/j/h6g3pFv9D
-         q1TVp31oWZYzNac54fT44QIMZBShWzaKPKAuN0bdIi0bc2rCU6C9D8T+gx+S6ZyFxs
-         sUjPYh8c0+X6J0EWmfjcsaSIKFlBBb4vBA69TaByDmIZUlYpp6MK+vnKOLeR9mntYF
-         vzk3iWE+Fqp145QssDSdWEJwjAPKhKqbpKPFfgjVvy/YljjpSroLoQ8qnos1Og7fCR
-         2SZKy84/qDNPw==
-Received: by mail.postform.pl for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 08:36:44 GMT
-Message-ID: <20220318074502-0.1.1i.jodl.0.uch89oo5md@postform.pl>
-Date:   Fri, 18 Mar 2022 08:36:44 GMT
-From:   "Norbert Karecki" <norbert.karecki@postform.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.postform.pl
+        Fri, 18 Mar 2022 09:23:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D831C231D;
+        Fri, 18 Mar 2022 06:22:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14509B82345;
+        Fri, 18 Mar 2022 13:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED08CC340E8;
+        Fri, 18 Mar 2022 13:22:00 +0000 (UTC)
+Date:   Fri, 18 Mar 2022 09:21:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] kunit: Support redirecting function calls
+Message-ID: <20220318092159.6f275782@gandalf.local.home>
+In-Reply-To: <20220318021314.3225240-1-davidgow@google.com>
+References: <20220318021314.3225240-1-davidgow@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Fri, 18 Mar 2022 10:13:12 +0800
+David Gow <davidgow@google.com> wrote:
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+> Does either (or both) of these features sound useful, and is this
+> sort-of API the right model? (Personally, I think there's a reasonable
+> scope for both.) Is anything obviously missing or wrong? Do the names,
+> descriptions etc. make any sense?
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Obviously I'm biased toward the ftrace solution ;-)
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam
-Norbert Karecki
+-- Steve
