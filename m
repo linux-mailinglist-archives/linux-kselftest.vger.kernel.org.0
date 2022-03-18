@@ -2,164 +2,231 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE654DDD35
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 16:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD21E4DDD44
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 16:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238280AbiCRPqv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 11:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S238269AbiCRPux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 11:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbiCRPqv (ORCPT
+        with ESMTP id S236491AbiCRPux (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:46:51 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B8EDBD2D;
-        Fri, 18 Mar 2022 08:45:29 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id e16so536702lfc.13;
-        Fri, 18 Mar 2022 08:45:29 -0700 (PDT)
+        Fri, 18 Mar 2022 11:50:53 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F81A2D0241;
+        Fri, 18 Mar 2022 08:49:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=w9yc5QCXnoNRlnxAIpP6dQxCkCMVrsMOMCyEys6TQis=;
-        b=T2qHWC580J0XVLFbwGxYKtYvqDl7Fg+++QEHEAJ08FnAgvnWRvbH9tCpVG3QOVmLk/
-         yFwG/XGkPnhcxMaWLjTEA7ICqKHju9w1x216TK4uT0H2Zpc1+UAB6COEozAQXivxEcxW
-         Qx26zGBeD0BWVZEBFDjQLntzuP0Tjjapln8HbiI6GQU9dAzYuQFfJu8dpZsUpXrke9KA
-         lvX9Rt4KwKGT7dklcPUwVMztOoljO/CQUhdsTPgevwTyVYYk1K9843AujWQBFlfTo7jq
-         g+X3Kg8zWYBkd8uAub/wUAy6WTeQk7NNUC6FsdmCXyCKLLSJVgVT93v3RMe20R1Mcsla
-         IEaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=w9yc5QCXnoNRlnxAIpP6dQxCkCMVrsMOMCyEys6TQis=;
-        b=RjIz3QBJNx85diBsiypj0qnbnX91p4TKyajeGrA4Cw6PWTj/KVjApyt8PhWOXnACub
-         TSF5qrIUU1sRpWbADyOk8o6lq2GRYAcQvywfcESxO0ZxTVAPjaPEeqGeayk2A3x3LPMI
-         OnUi1XwKMo7KahvjbXkQltLXSesq56slCkSffl/SdDs+nm+4UGRPHrj5OQn5hvIKHDN+
-         JhUxjC6kqiUOGMIIIjji/SeC+WFJbEpJw0Mim+fzqRBVIMpSn7FSwfeOSk3K3nd44Hs+
-         RbyEptb4YFTTdc06puI1TqFufccDuf/DmWX0iMkE0n2JVhiRPFceZlH9lrhtD44DlY7t
-         gpZA==
-X-Gm-Message-State: AOAM532c3fYyRiGNQpJ5IK+9SQjg7iSpcKc6/67xv6k69AbEqhUEYliq
-        QSGJYxL54H2LhmlHROH96aZvTIu/2b9anw==
-X-Google-Smtp-Source: ABdhPJxF2o8DhY6wJ2+kUMh9mDmviFUNVcIg4BQrGQ/w5QcqsP4a5IOaIfUpvUKf1rVSyZoGXmXrFA==
-X-Received: by 2002:a05:6512:b03:b0:448:1e7c:8859 with SMTP id w3-20020a0565120b0300b004481e7c8859mr6505378lfu.110.1647618327540;
-        Fri, 18 Mar 2022 08:45:27 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id u2-20020a2e9f02000000b00244c5e20ee9sm1028484ljk.23.2022.03.18.08.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 08:45:27 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 4/4] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YjNMS6aFG+93ejj5@shredder>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-5-schultz.hans+netdev@gmail.com>
- <YjNMS6aFG+93ejj5@shredder>
-Date:   Fri, 18 Mar 2022 16:45:24 +0100
-Message-ID: <86mthnw9gr.fsf@gmail.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1647618572;
+  x=1679154572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wcKA0KxoiU/AM8nvFRewTqVOc2fCyIBAGriShKCLLSk=;
+  b=dfmcli8lf8C/XrNUNuU0x786nL0kFuaD/1YntgoYgOkvvwBibABvLFqR
+   8YnSP88uLG367QGRmB6CtOph3gD/bKCJsKLqXV51LZxaJ4A3Wb51+XcVv
+   gRLTNBMRpvtE8DYR12nTyt4z17lK/ZTk8odYASip4n5FVK0cgSvQkO6gu
+   iVVn9Ymg/3zeVY154dMkslySSKtEGFqvwOPIRZOJliBSQBAo+F4Nd7zHO
+   j5ZtfM2r5MK/8TkH6j1v9l0lmmoRRM2/sZKjAghrqU05Ko+lztH4yDDx4
+   5tYjz0V8FC5RJNZE2641t2usoyopTo2t2IhXLjTsh+2yfm/56KAYRel2R
+   g==;
+Date:   Fri, 18 Mar 2022 16:49:27 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
+Message-ID: <20220318154927.GA32172@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+ <20220311162445.346685-8-vincent.whitchurch@axis.com>
+ <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On tor, mar 17, 2022 at 16:57, Ido Schimmel <idosch@idosch.org> wrote:
-> On Thu, Mar 17, 2022 at 10:39:02AM +0100, Hans Schultz wrote:
->> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
->> locked flag set. denying access until the FDB entry is replaced with a
->> FDB entry without the locked flag set.
->> 
->> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
->> ---
->>  .../net/forwarding/bridge_locked_port.sh      | 29 ++++++++++++++++++-
->>  1 file changed, 28 insertions(+), 1 deletion(-)
->> 
->> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
->> index 6e98efa6d371..2f9519e814b6 100755
->> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
->> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
->> @@ -1,7 +1,7 @@
->>  #!/bin/bash
->>  # SPDX-License-Identifier: GPL-2.0
->>  
->> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
->> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
->>  NUM_NETIFS=4
->>  CHECK_TC="no"
->>  source lib.sh
->> @@ -170,6 +170,33 @@ locked_port_ipv6()
->>  	log_test "Locked port ipv6"
->>  }
->>  
->> +locked_port_mab()
->> +{
->> +	RET=0
->> +	check_locked_port_support || return 0
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_err $? "MAB: Ping did not work before locking port"
->> +
->> +	bridge link set dev $swp1 locked on
->> +	bridge link set dev $swp1 learning on
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_fail $? "MAB: Ping worked on port just locked"
->> +
->> +	if ! bridge fdb show | grep `mac_get $h1` | grep -q "locked"; then
->> +		RET=1
->> +		retmsg="MAB: No locked fdb entry after ping on locked port"
->> +	fi
->
-> bridge fdb show | grep `mac_get $h1 | grep -q "locked"
-> check_err $? "MAB: No locked fdb entry after ping on locked port"
->
->> +
->> +	bridge fdb del `mac_get $h1` dev $swp1 master
->> +	bridge fdb add `mac_get $h1` dev $swp1 master static
->
-> bridge fdb replace `mac_get $h1` dev $swp1 master static
->
-Unfortunately for some reason 'replace' does not work in several of the
-tests, while when replaced with 'del+add', they work.
+On Tue, Mar 15, 2022 at 12:11:50AM +0100, Brendan Higgins wrote:
+> On Fri, Mar 11, 2022 at 11:24 AM Vincent Whitchurch
+> <vincent.whitchurch@axis.com> wrote:
+> > +class TestOPT3001(UMLTestCase):
+> 
+> I am partial to starting with UML since there are a lot of nice easy
+> things about starting there; however, I imagine people will eventually
+> want to use this on other architectures (speaking from experience).
+> How difficult do you think it would be to extend this to support
+> manipulating fake devices in say QEMU?
 
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
->> +
->> +	log_test "Locked port MAB"
->
-> Clean up after the test to revert to initial state:
->
-> bridge fdb del `mac_get $h1` dev $swp1 master
-> bridge link set dev $swp1 locked off
->
->
->> +}
->>  trap cleanup EXIT
->>  
->>  setup_prepare
->> -- 
->> 2.30.2
->> 
+It should be possible, but upstream QEMU doesn't have everything that we
+need so some work is needed there.  Also, of course work is need to
+provide user space for running the tests and communicating between the
+virtual machine and the backend:
+
+- We need user space, so build scripts would need to be provided to
+  cross-compile busybox and Python (and whatever libraries it needs) for
+  the target architecture.
+
+- We also use UML's hostfs feature to make things transparent to the
+  user and to avoid having to set up things like networking for
+  communication between the host and the backend.  I think QEMU's 9pfs
+  support can be used as a rootfs too but it's not something I've
+  personally tested.
+
+- We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
+  vhost-user API to communicate from UML to the backend.  The latest
+  version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
+  doesn't seem to have been merged yet, so work is needed on the QEMU
+  side.  This will also be true for other buses in the future, if they
+  are implemented with new virtio devices.
+
+- For MMIO, UML has virtio-mmio which allows implementing any PCIe
+  device (and by extension any platform device) outside of UML, but last
+  I checked, upstream QEMU did not have something similar.
+
+> I also have some colleagues inside of Google that worked on some
+> projects to simulate simple devices on an FPGA to test software and
+> adjacent devices in a conceptually similar way; one of these teams
+> built a Domain Specific Language kind of like roadtest to implement
+> the tests and the environment for the tests. The main reason I mention
+> this here is I am thinking about maybe one day having an API you can
+> implement so you can run your roadtests on UML, QEMU, or on any
+> emulator or hardware testbed that implements the appropriate API.
+> 
+> I'll try to dig up some people who might be interested and add them here.
+> 
+> > +    dts = DtFragment(
+> > +        src="""
+> > +&i2c {
+> > +    light-sensor@$addr$ {
+> > +        compatible = "ti,opt3001";
+> > +        reg = <0x$addr$>;
+> > +    };
+> > +};
+> > +        """,
+> > +        variables={
+> > +            "addr": DtVar.I2C_ADDR,
+> > +        },
+> > +    )
+> > +
+> > +    @classmethod
+> > +    def setUpClass(cls) -> None:
+> > +        insmod("opt3001")
+> > +
+> > +    @classmethod
+> > +    def tearDownClass(cls) -> None:
+> > +        rmmod("opt3001")
+> > +
+> > +    def setUp(self) -> None:
+> > +        self.driver = I2CDriver("opt3001")
+> > +        self.hw = Hardware("i2c")
+> > +        self.hw.load_model(OPT3001)
+> > +
+> > +    def tearDown(self) -> None:
+> > +        self.hw.close()
+> > +
+> > +    def test_illuminance(self) -> None:
+> > +        data = [
+> > +            # Some values from datasheet, and 0
+> > +            (0b_0000_0000_0000_0000, 0),
+> > +            (0b_0000_0000_0000_0001, 0.01),
+> > +            (0b_0011_0100_0101_0110, 88.80),
+> > +            (0b_0111_1000_1001_1010, 2818.56),
+> > +        ]
+> > +        with self.driver.bind(self.dts["addr"]) as dev:
+> > +            luxfile = dev.path / "iio:device0/in_illuminance_input"
+> > +
+> > +            for regval, lux in data:
+> > +                self.hw.reg_write(REG_RESULT, regval)
+> > +                self.assertEqual(read_float(luxfile), lux)
+> 
+> I love the framework; this looks very easy to use.
+> 
+> One nit about this test; it seems like you cover just one test case
+> here - the happy path. Can you cover some other one? Particularly some
+> error paths?
+> 
+> Sorry, I am not trying to be cheeky here; it looks like this driver
+> actually should probably be fully (or very close to fully) testable
+> via roadtest as I understand it. It only looks like there are a
+> handful of cases to cover for the driver: the device is busy, the
+> device returned something invalid, the user requested something
+> invalid, and several SMBus read/write failures - it really only looks
+> like there are a handful of paths and I think they are all accessible
+> via the I2C interface (except for maybe the user requesting something
+> invalid).
+
+Yes, there are more things that could be tested in this driver.
+However, as the commit message says, I only indented this particular
+test to serve as a regression test for the specific bug fix, which would
+need an environment where the chip detects 0 lux to be able to test on
+real hardware.  There are a few reasons for this:
+
+ - Unlike the other drivers being tested in this series, I don't have
+   access to boards with this chip so my interest in this particular
+   piece of hardware is limited.
+
+ - I actually started writing more tests for this driver earlier on
+   (specifically, testing the configuration which uses interrupts), but
+   I quickly discovered that this driver has race conditions which
+   result in unbalanced mutex locking (in brief: the ok_to_ignore_lock
+   stuff is broken).  This shows the value of the test framework, but I
+   also didn't want to write non-trivial fixes for drivers where I
+   didn't have real hardware to test.
+
+ - Also, some paths in this driver needs a modification to be tested
+   under roadtest.  It uses wait_event_timeout() with a fixed value, but
+   we cannot guarantee that this constraint is met in the test
+   environment since it depends on things like CPU load on the host.
+
+   (Also, we use UML's "time travel" feature which essentially
+   fast-forwards through idle time, so the constraint can never be met
+   in practice.)
+   
+   So the timeout parameter would have to be made adjustable via say a
+   module parameter, to be able to make it infinite (to test the normal
+   case) and not (to be able to test timeout handling).  I think this
+   could be done fairly cleanly with a one- or two-liner patch to the
+   driver and by hiding the details in a header file behind a
+   roadtest-specific config option, but I wanted to avoid having to
+   patch the kernel proper for the initial version of the framework.
+
+For vcnl4000, I have actually inherited some out-of-tree patches which
+are in need of mainlining so the tests are a bit more complete since I'm
+hoping to send some patches to that driver soon.  The period mode busy
+handling is not tested there either though, I can try to add that.
+
+As for I2C API failures, I have not added tests for them in any of the
+drivers.  There's not much the test cases could assert, other than
+perhaps error propagation, so it's unclear if there is enough value
+compared to the effort required to implement test cases to make sure
+that every I2C transaction's failure path is tested.
+
+But I think that we do want to at least make sure the error paths are
+executed, to check that drivers don't crash or deadlock due to faulty
+cleanups and the like.  A way to solve this could be to implement fault
+injection support in the I2C framework.  The fail-nth feature could be
+used to systemically trigger each and every I2C transaction failure and
+check that the driver doesn't blow up, while using the roadtest as a
+means to hit the various code paths in the driver during each of the
+iterations of fail-nth.  Fault injection support would also be helpful
+when testing on real hardware.
