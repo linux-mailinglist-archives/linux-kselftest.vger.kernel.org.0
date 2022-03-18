@@ -2,53 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45C64DE2DE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 21:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214D44DE2EA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 21:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240857AbiCRUwp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 16:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S240909AbiCRUyx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 16:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240855AbiCRUwo (ORCPT
+        with ESMTP id S240879AbiCRUyn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:52:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F18A1162A7;
-        Fri, 18 Mar 2022 13:51:23 -0700 (PDT)
+        Fri, 18 Mar 2022 16:54:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B903F13E8C;
+        Fri, 18 Mar 2022 13:53:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE6D160C0D;
-        Fri, 18 Mar 2022 20:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A3AC36AED;
-        Fri, 18 Mar 2022 20:51:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B639360C97;
+        Fri, 18 Mar 2022 20:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2620EC340F0;
+        Fri, 18 Mar 2022 20:53:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647636682;
-        bh=+NTtQb4p/kuYp+V4YKsTlmDKNgCo9xfxoasrL2qS+WY=;
+        s=k20201202; t=1647636800;
+        bh=TjVN2fp278eXriOI9SR6DI17Nzf6AbyB2oL/GOkjMSU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tonB/N6VpNML0FUXFIKgIKd93Z5sx16IMrid6XS6lXScCx2xUCYRh0S1UuBQqlV2Y
-         oY41QgJ7IFIrwtacaKQc4nJhNSNdWrMLQxo7QvLF1eQTQnb+uz4vWb5h6sc5t8m7Sp
-         af1CcPyBDGjTHzRBm4lwxyp8oVzUXZpzLHMyYy1lugCwssW+kvcwrMBIYZ/2tLFBel
-         JzqqR7QPYVHNjoIMUKNPpTvZdVHHdGyQHO7bWM90aOmV/GMxihSn2mtqnjBG2ONCLb
-         LIr8k00tW1RAXdaBkGtpAyKFeYI/EGo6ZDJtg9BqdWiMTO8gvZ0K5sdhp00M48m2vw
-         5omyPQKseaRyg==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2e592e700acso103521077b3.5;
-        Fri, 18 Mar 2022 13:51:22 -0700 (PDT)
-X-Gm-Message-State: AOAM531+bGI9tQW83Lb+tIN1Aru13n7QzqbDquVgX9eaMAiiAgQOgfWF
-        akXZuqfZlZ6qp51mpRETNeij3UDanLkLCU6cg2o=
-X-Google-Smtp-Source: ABdhPJwqtnRnTFFnk3TYLZfrYxozXwxl87N3c9z2yIcAQ06zIU0vK1q7PNEiwS2VQmPFT1dCp+b1UnzwpaaFwtVbYVQ=
-X-Received: by 2002:a81:79d5:0:b0:2e5:9d33:82ab with SMTP id
- u204-20020a8179d5000000b002e59d3382abmr13272599ywc.460.1647636681268; Fri, 18
- Mar 2022 13:51:21 -0700 (PDT)
+        b=LE7IkSJtJcvUA9l8s14Eua2UjZusYTTGAlsXevOO/KVns3P9Yf6HsQ15xvXRFLgLB
+         Fvefv1LIARd8obBDjgUiRbGOOD/drHgtBiL7kAg6kWLR9tjywlClzu0RxRPg7DXd6Q
+         cWx+kXvVgzxlXnt+uDKO3Vb5z5dd8ms5AyLti37yKGgsywjFR3s73XlRuJzF1xUTyU
+         C9I/GlBpSDI6FQLnKVZ4y4LdM8lK66290i+CTqynYAcVZj4TK5lTVsThZL501tAmrP
+         gsSq0Dd4xxF9MwlRr7cuysEWzSP6iGyWhwsQEwG8ym9/A5jyE/SMk71Kngy3r1SroV
+         0A5KjqLjGz8nQ==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e5757b57caso103580397b3.4;
+        Fri, 18 Mar 2022 13:53:20 -0700 (PDT)
+X-Gm-Message-State: AOAM531WJ5FBgcSM5ojDk0ajhDkKsbkxo0zQIJd3aeDc6iV5PYNHRlTP
+        TMsCsDKcAvDh5bB7synoQs6AczMaCXe7Vb0NzSU=
+X-Google-Smtp-Source: ABdhPJyVyC2ZLXg4kmlJFxKJg2KyYONhq97Iuh52wagVWeUp3bDUvJMgQJ6vRVLcXY98856NjnhNNUNcFUI6YJdkoRQ=
+X-Received: by 2002:a81:951:0:b0:2e5:9e38:147c with SMTP id
+ 78-20020a810951000000b002e59e38147cmr13231148ywj.211.1647636799151; Fri, 18
+ Mar 2022 13:53:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com> <20220318161528.1531164-4-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220318161528.1531164-4-benjamin.tissoires@redhat.com>
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com> <20220318161528.1531164-5-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220318161528.1531164-5-benjamin.tissoires@redhat.com>
 From:   Song Liu <song@kernel.org>
-Date:   Fri, 18 Mar 2022 13:51:10 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5+2h9S_xnAY104frBpqhKYQk2wqc3Cp1fucNsHXwvVNQ@mail.gmail.com>
-Message-ID: <CAPhsuW5+2h9S_xnAY104frBpqhKYQk2wqc3Cp1fucNsHXwvVNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 03/17] bpf/verifier: prevent non GPL programs
- to be loaded against HID
+Date:   Fri, 18 Mar 2022 13:53:08 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7k2Z-Kex2wbBxUqC9xCi55U-Y7LHDkEGnU_BRfuf0AKg@mail.gmail.com>
+Message-ID: <CAPhsuW7k2Z-Kex2wbBxUqC9xCi55U-Y7LHDkEGnU_BRfuf0AKg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 04/17] libbpf: add HID program type and API
 To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -78,118 +77,216 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+On Fri, Mar 18, 2022 at 9:18 AM Benjamin Tissoires
 <benjamin.tissoires@redhat.com> wrote:
 >
-> This is just to hammer the obvious because I suspect you can not already
-> load a bpf HID program which is not GPL because all of the useful
-> functions are GPL only.
->
-> Anyway, this ensures that users are not tempted to bypass this requirement
-> and will allow us to ship tested BPF programs in the kernel without having
-> to aorry about the license.
+> HID-bpf program type are needing new SECs.
+> To bind a hid-bpf program, we can rely on bpf_program__attach_fd()
+> so export a new function to the API.
 >
 > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 Acked-by: Song Liu <songliubraving@fb.com>
-
-
 >
 > ---
 >
-> no changes in v3
+> changes in v3:
+> - squashed the libbpf changes into 1
+> - moved bpf_program__attach_hid to 0.8.0
+> - added SEC_DEF("hid/driver_event")
 >
-> new in v2:
->  - Note: I placed this statement in check_attach_btf_id() to be local to
->    other similar checks (regarding LSM), however, I have no idea if this
->    is the correct place. Please shout at me if it isn't.
+> changes in v2:
+> - split the series by bpf/libbpf/hid/selftests and samples
 > ---
->  include/linux/bpf-hid.h |  8 ++++++++
->  kernel/bpf/hid.c        | 12 ++++++++++++
->  kernel/bpf/verifier.c   |  7 +++++++
->  3 files changed, 27 insertions(+)
+>  tools/include/uapi/linux/bpf.h | 31 +++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.c         | 23 +++++++++++++++++------
+>  tools/lib/bpf/libbpf.h         |  2 ++
+>  tools/lib/bpf/libbpf.map       |  1 +
+>  4 files changed, 51 insertions(+), 6 deletions(-)
 >
-> diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
-> index 9c8dbd389995..7f596554fe8c 100644
-> --- a/include/linux/bpf-hid.h
-> +++ b/include/linux/bpf-hid.h
-> @@ -2,6 +2,7 @@
->  #ifndef _BPF_HID_H
->  #define _BPF_HID_H
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 99fab54ae9c0..0e8438e93768 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -952,6 +952,7 @@ enum bpf_prog_type {
+>         BPF_PROG_TYPE_LSM,
+>         BPF_PROG_TYPE_SK_LOOKUP,
+>         BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+> +       BPF_PROG_TYPE_HID,
+>  };
 >
-> +#include <linux/bpf_verifier.h>
->  #include <linux/mutex.h>
->  #include <uapi/linux/bpf.h>
->  #include <uapi/linux/bpf_hid.h>
-> @@ -69,6 +70,8 @@ int bpf_hid_prog_query(const union bpf_attr *attr,
->                        union bpf_attr __user *uattr);
->  int bpf_hid_link_create(const union bpf_attr *attr,
->                         struct bpf_prog *prog);
-> +int bpf_hid_verify_prog(struct bpf_verifier_log *vlog,
-> +                       const struct bpf_prog *prog);
->  #else
->  static inline int bpf_hid_prog_query(const union bpf_attr *attr,
->                                      union bpf_attr __user *uattr)
-> @@ -81,6 +84,11 @@ static inline int bpf_hid_link_create(const union bpf_attr *attr,
+>  enum bpf_attach_type {
+> @@ -997,6 +998,10 @@ enum bpf_attach_type {
+>         BPF_SK_REUSEPORT_SELECT,
+>         BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+>         BPF_PERF_EVENT,
+> +       BPF_HID_DEVICE_EVENT,
+> +       BPF_HID_RDESC_FIXUP,
+> +       BPF_HID_USER_EVENT,
+> +       BPF_HID_DRIVER_EVENT,
+>         __MAX_BPF_ATTACH_TYPE
+>  };
+>
+> @@ -1011,6 +1016,7 @@ enum bpf_link_type {
+>         BPF_LINK_TYPE_NETNS = 5,
+>         BPF_LINK_TYPE_XDP = 6,
+>         BPF_LINK_TYPE_PERF_EVENT = 7,
+> +       BPF_LINK_TYPE_HID = 8,
+>
+>         MAX_BPF_LINK_TYPE,
+>  };
+> @@ -1118,6 +1124,16 @@ enum bpf_link_type {
+>   */
+>  #define BPF_F_XDP_HAS_FRAGS    (1U << 5)
+>
+> +/* HID flag used in BPF_LINK_CREATE command
+> + *
+> + * NONE(default): The bpf program will be added at the tail of the list
+> + * of existing bpf program for this type.
+> + *
+> + * BPF_F_INSERT_HEAD: The bpf program will be added at the beginning
+> + * of the list of existing bpf program for this type..
+> + */
+> +#define BPF_F_INSERT_HEAD      (1U << 0)
+> +
+>  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+>   * the following extensions:
+>   *
+> @@ -5129,6 +5145,16 @@ union bpf_attr {
+>   *             The **hash_algo** is returned on success,
+>   *             **-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
+>   *             invalid arguments are passed.
+> + *
+> + * void *bpf_hid_get_data(void *ctx, u64 offset, u64 size)
+> + *     Description
+> + *             Returns a pointer to the data associated with context at the given
+> + *             offset and size (in bytes).
+> + *
+> + *             Note: the returned pointer is refcounted and must be dereferenced
+> + *             by a call to bpf_hid_discard;
+> + *     Return
+> + *             The pointer to the data. On error, a null value is returned.
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -5325,6 +5351,7 @@ union bpf_attr {
+>         FN(copy_from_user_task),        \
+>         FN(skb_set_tstamp),             \
+>         FN(ima_file_hash),              \
+> +       FN(hid_get_data),               \
+>         /* */
+>
+>  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> @@ -5925,6 +5952,10 @@ struct bpf_link_info {
+>                 struct {
+>                         __u32 ifindex;
+>                 } xdp;
+> +               struct  {
+> +                       __s32 hidraw_number;
+> +                       __u32 attach_type;
+> +               } hid;
+>         };
+>  } __attribute__((aligned(8)));
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 43161fdd44bb..6b9ba313eb5b 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -8675,6 +8675,10 @@ static const struct bpf_sec_def section_defs[] = {
+>         SEC_DEF("cgroup/setsockopt",    CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+>         SEC_DEF("struct_ops+",          STRUCT_OPS, 0, SEC_NONE),
+>         SEC_DEF("sk_lookup",            SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+> +       SEC_DEF("hid/device_event",     HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT),
+> +       SEC_DEF("hid/rdesc_fixup",      HID, BPF_HID_RDESC_FIXUP, SEC_ATTACHABLE_OPT),
+> +       SEC_DEF("hid/user_event",       HID, BPF_HID_USER_EVENT, SEC_ATTACHABLE_OPT),
+> +       SEC_DEF("hid/driver_event",     HID, BPF_HID_DRIVER_EVENT, SEC_ATTACHABLE_OPT),
+>  };
+>
+>  static size_t custom_sec_def_cnt;
+> @@ -10630,10 +10634,11 @@ static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_li
+>
+>  static struct bpf_link *
+>  bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id,
+> -                      const char *target_name)
+> +                      const char *target_name, __u32 flags)
 >  {
->         return -EOPNOTSUPP;
->  }
-> +static inline int bpf_hid_verify_prog(struct bpf_verifier_log *vlog,
-> +                                     const struct bpf_prog *prog)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
->  #endif
->
->  static inline bool bpf_hid_link_empty(struct bpf_hid *bpf,
-> diff --git a/kernel/bpf/hid.c b/kernel/bpf/hid.c
-> index c21dc05f6207..2dfeaaa8a83f 100644
-> --- a/kernel/bpf/hid.c
-> +++ b/kernel/bpf/hid.c
-> @@ -34,6 +34,18 @@ void bpf_hid_set_hooks(struct bpf_hid_hooks *hooks)
->  }
->  EXPORT_SYMBOL_GPL(bpf_hid_set_hooks);
->
-> +int bpf_hid_verify_prog(struct bpf_verifier_log *vlog,
-> +                       const struct bpf_prog *prog)
-> +{
-> +       if (!prog->gpl_compatible) {
-> +               bpf_log(vlog,
-> +                       "HID programs must have a GPL compatible license\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  BPF_CALL_3(bpf_hid_get_data, struct hid_bpf_ctx_kern*, ctx, u64, offset, u64, size)
+>         DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
+> -                           .target_btf_id = btf_id);
+> +                           .target_btf_id = btf_id,
+> +                           .flags = flags);
+>         enum bpf_attach_type attach_type;
+>         char errmsg[STRERR_BUFSIZE];
+>         struct bpf_link *link;
+> @@ -10667,19 +10672,19 @@ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id
+>  struct bpf_link *
+>  bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd)
 >  {
->         if (!size)
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index cf92f9c01556..da06d633fb8d 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -21,6 +21,7 @@
->  #include <linux/perf_event.h>
->  #include <linux/ctype.h>
->  #include <linux/error-injection.h>
-> +#include <linux/bpf-hid.h>
->  #include <linux/bpf_lsm.h>
->  #include <linux/btf_ids.h>
+> -       return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
+> +       return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup", 0);
+>  }
 >
-> @@ -14272,6 +14273,12 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
->         if (prog->type == BPF_PROG_TYPE_STRUCT_OPS)
->                 return check_struct_ops_btf_id(env);
+>  struct bpf_link *
+>  bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd)
+>  {
+> -       return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
+> +       return bpf_program__attach_fd(prog, netns_fd, 0, "netns", 0);
+>  }
 >
-> +       if (prog->type == BPF_PROG_TYPE_HID) {
-> +               ret = bpf_hid_verify_prog(&env->log, prog);
-> +               if (ret < 0)
-> +                       return ret;
-> +       }
+>  struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex)
+>  {
+>         /* target_fd/target_ifindex use the same field in LINK_CREATE */
+> -       return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
+> +       return bpf_program__attach_fd(prog, ifindex, 0, "xdp", 0);
+>  }
+>
+>  struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+> @@ -10705,7 +10710,7 @@ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+>                 if (btf_id < 0)
+>                         return libbpf_err_ptr(btf_id);
+>
+> -               return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
+> +               return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace", 0);
+>         } else {
+>                 /* no target, so use raw_tracepoint_open for compatibility
+>                  * with old kernels
+> @@ -10760,6 +10765,12 @@ static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_l
+>         return libbpf_get_error(*link);
+>  }
+>
+> +struct bpf_link *
+> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd, __u32 flags)
+> +{
+> +       return bpf_program__attach_fd(prog, hid_fd, 0, "hid", flags);
+> +}
 > +
->         if (prog->type != BPF_PROG_TYPE_TRACING &&
->             prog->type != BPF_PROG_TYPE_LSM &&
->             prog->type != BPF_PROG_TYPE_EXT)
+>  struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
+>  {
+>         struct bpf_link *link = NULL;
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index c1b0c2ef14d8..13dff4865da5 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -529,6 +529,8 @@ struct bpf_iter_attach_opts {
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_iter(const struct bpf_program *prog,
+>                          const struct bpf_iter_attach_opts *opts);
+> +LIBBPF_API struct bpf_link *
+> +bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd, __u32 flags);
+>
+>  /*
+>   * Libbpf allows callers to adjust BPF programs before being loaded
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index df1b947792c8..cd8da9a8bf36 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -442,6 +442,7 @@ LIBBPF_0.7.0 {
+>
+>  LIBBPF_0.8.0 {
+>         global:
+> +               bpf_program__attach_hid;
+>                 libbpf_register_prog_handler;
+>                 libbpf_unregister_prog_handler;
+>  } LIBBPF_0.7.0;
 > --
 > 2.35.1
 >
