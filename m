@@ -2,60 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD7D4DDA64
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 14:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE654DDD35
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 16:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbiCRNXb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S238280AbiCRPqv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 11:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236668AbiCRNX2 (ORCPT
+        with ESMTP id S234403AbiCRPqv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:23:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D831C231D;
-        Fri, 18 Mar 2022 06:22:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14509B82345;
-        Fri, 18 Mar 2022 13:22:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED08CC340E8;
-        Fri, 18 Mar 2022 13:22:00 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 09:21:59 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] kunit: Support redirecting function calls
-Message-ID: <20220318092159.6f275782@gandalf.local.home>
-In-Reply-To: <20220318021314.3225240-1-davidgow@google.com>
-References: <20220318021314.3225240-1-davidgow@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 18 Mar 2022 11:46:51 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B8EDBD2D;
+        Fri, 18 Mar 2022 08:45:29 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id e16so536702lfc.13;
+        Fri, 18 Mar 2022 08:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=w9yc5QCXnoNRlnxAIpP6dQxCkCMVrsMOMCyEys6TQis=;
+        b=T2qHWC580J0XVLFbwGxYKtYvqDl7Fg+++QEHEAJ08FnAgvnWRvbH9tCpVG3QOVmLk/
+         yFwG/XGkPnhcxMaWLjTEA7ICqKHju9w1x216TK4uT0H2Zpc1+UAB6COEozAQXivxEcxW
+         Qx26zGBeD0BWVZEBFDjQLntzuP0Tjjapln8HbiI6GQU9dAzYuQFfJu8dpZsUpXrke9KA
+         lvX9Rt4KwKGT7dklcPUwVMztOoljO/CQUhdsTPgevwTyVYYk1K9843AujWQBFlfTo7jq
+         g+X3Kg8zWYBkd8uAub/wUAy6WTeQk7NNUC6FsdmCXyCKLLSJVgVT93v3RMe20R1Mcsla
+         IEaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=w9yc5QCXnoNRlnxAIpP6dQxCkCMVrsMOMCyEys6TQis=;
+        b=RjIz3QBJNx85diBsiypj0qnbnX91p4TKyajeGrA4Cw6PWTj/KVjApyt8PhWOXnACub
+         TSF5qrIUU1sRpWbADyOk8o6lq2GRYAcQvywfcESxO0ZxTVAPjaPEeqGeayk2A3x3LPMI
+         OnUi1XwKMo7KahvjbXkQltLXSesq56slCkSffl/SdDs+nm+4UGRPHrj5OQn5hvIKHDN+
+         JhUxjC6kqiUOGMIIIjji/SeC+WFJbEpJw0Mim+fzqRBVIMpSn7FSwfeOSk3K3nd44Hs+
+         RbyEptb4YFTTdc06puI1TqFufccDuf/DmWX0iMkE0n2JVhiRPFceZlH9lrhtD44DlY7t
+         gpZA==
+X-Gm-Message-State: AOAM532c3fYyRiGNQpJ5IK+9SQjg7iSpcKc6/67xv6k69AbEqhUEYliq
+        QSGJYxL54H2LhmlHROH96aZvTIu/2b9anw==
+X-Google-Smtp-Source: ABdhPJxF2o8DhY6wJ2+kUMh9mDmviFUNVcIg4BQrGQ/w5QcqsP4a5IOaIfUpvUKf1rVSyZoGXmXrFA==
+X-Received: by 2002:a05:6512:b03:b0:448:1e7c:8859 with SMTP id w3-20020a0565120b0300b004481e7c8859mr6505378lfu.110.1647618327540;
+        Fri, 18 Mar 2022 08:45:27 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id u2-20020a2e9f02000000b00244c5e20ee9sm1028484ljk.23.2022.03.18.08.45.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 08:45:27 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Ido Schimmel <idosch@idosch.org>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 4/4] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YjNMS6aFG+93ejj5@shredder>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-5-schultz.hans+netdev@gmail.com>
+ <YjNMS6aFG+93ejj5@shredder>
+Date:   Fri, 18 Mar 2022 16:45:24 +0100
+Message-ID: <86mthnw9gr.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 18 Mar 2022 10:13:12 +0800
-David Gow <davidgow@google.com> wrote:
+On tor, mar 17, 2022 at 16:57, Ido Schimmel <idosch@idosch.org> wrote:
+> On Thu, Mar 17, 2022 at 10:39:02AM +0100, Hans Schultz wrote:
+>> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
+>> locked flag set. denying access until the FDB entry is replaced with a
+>> FDB entry without the locked flag set.
+>> 
+>> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+>> ---
+>>  .../net/forwarding/bridge_locked_port.sh      | 29 ++++++++++++++++++-
+>>  1 file changed, 28 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> index 6e98efa6d371..2f9519e814b6 100755
+>> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> @@ -1,7 +1,7 @@
+>>  #!/bin/bash
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  
+>> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+>> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
+>>  NUM_NETIFS=4
+>>  CHECK_TC="no"
+>>  source lib.sh
+>> @@ -170,6 +170,33 @@ locked_port_ipv6()
+>>  	log_test "Locked port ipv6"
+>>  }
+>>  
+>> +locked_port_mab()
+>> +{
+>> +	RET=0
+>> +	check_locked_port_support || return 0
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_err $? "MAB: Ping did not work before locking port"
+>> +
+>> +	bridge link set dev $swp1 locked on
+>> +	bridge link set dev $swp1 learning on
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_fail $? "MAB: Ping worked on port just locked"
+>> +
+>> +	if ! bridge fdb show | grep `mac_get $h1` | grep -q "locked"; then
+>> +		RET=1
+>> +		retmsg="MAB: No locked fdb entry after ping on locked port"
+>> +	fi
+>
+> bridge fdb show | grep `mac_get $h1 | grep -q "locked"
+> check_err $? "MAB: No locked fdb entry after ping on locked port"
+>
+>> +
+>> +	bridge fdb del `mac_get $h1` dev $swp1 master
+>> +	bridge fdb add `mac_get $h1` dev $swp1 master static
+>
+> bridge fdb replace `mac_get $h1` dev $swp1 master static
+>
+Unfortunately for some reason 'replace' does not work in several of the
+tests, while when replaced with 'del+add', they work.
 
-> Does either (or both) of these features sound useful, and is this
-> sort-of API the right model? (Personally, I think there's a reasonable
-> scope for both.) Is anything obviously missing or wrong? Do the names,
-> descriptions etc. make any sense?
-
-Obviously I'm biased toward the ftrace solution ;-)
-
--- Steve
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
+>> +
+>> +	log_test "Locked port MAB"
+>
+> Clean up after the test to revert to initial state:
+>
+> bridge fdb del `mac_get $h1` dev $swp1 master
+> bridge link set dev $swp1 locked off
+>
+>
+>> +}
+>>  trap cleanup EXIT
+>>  
+>>  setup_prepare
+>> -- 
+>> 2.30.2
+>> 
