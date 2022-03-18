@@ -2,80 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D564DCED3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Mar 2022 20:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39004DD2EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 03:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237913AbiCQT2X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Mar 2022 15:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S231658AbiCRCOw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Mar 2022 22:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbiCQT2X (ORCPT
+        with ESMTP id S230202AbiCRCOv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:28:23 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800A2215478;
-        Thu, 17 Mar 2022 12:27:05 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id hw13so12603457ejc.9;
-        Thu, 17 Mar 2022 12:27:05 -0700 (PDT)
+        Thu, 17 Mar 2022 22:14:51 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A26F2135
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 19:13:33 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e599f0c613so60442437b3.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Mar 2022 19:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/7iAhcR4tM55eEx0OphxTplV89HWokZKexzro1tRyR4=;
-        b=B8XIvyZykfMaM6OPqWJsED+v5Dwn3xRPjvNFplB7XHHqcf+b+PsDawQkL/LFEncHXO
-         7BsmBBjN6XsztRPgkTlTEVyciryk7kfyMykxuI0t9DoxYnt6rqJSySkzGa499pRV5xQl
-         2K0JH+lIFThsnhGGADoEf9LSYYhuI6P0EY+ZAWnVI1Aoj9oMpsxKN0wTqYppiQyz2G8a
-         /y+0qKS+hz8wZ9WtRe3aGXVnubOQHNZdyZiZpxwrIKXgeyYwZePhUlo/rH6Yb2RuPjCl
-         +aXjTlyMvs9HnFgqVZk8dr50w/0ScT/W1K8nPH8qAzkUX5hAtwUQCGZ6EDlKWyUlrOTI
-         htjA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lJQh/Exyrm7jkuouuP+OFVuB8hBfkh2Al21bjlOl0AQ=;
+        b=bU5cNjnSbfuOBeInriKiwJ43wTavdmlH3NKiDX7FoCYGJjoGx81eqzj7U/cGMRVN+S
+         DMAklEp0sQd5oNelJoM25F6J37gJQbf0lKfBertZq3LzbXhzrW6tYNWdm6G/1KHXCJ+V
+         otWWGManMbwWjWugM9Jsmq/7mlLH08ZnG4XePmjQ/kBySP/moZ2ySLLga770efdOZH06
+         tVfT6yyWqxj8CGnUX4LQvsZZ6ABJn15pYZgm3xG5aDxm4ejOZMOqAa+058F5aEM+7uml
+         djP9jWDcgSeJp/UhFl8jXTatDsG2tsmri+wPhNrF9xF84EQRYVV1kcJpwiZAYEcJ0DUL
+         mkNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/7iAhcR4tM55eEx0OphxTplV89HWokZKexzro1tRyR4=;
-        b=fDHclNRupJwIFfc9nsTCOmNOk0Un/H/51uzQb5SHhY7FEYyMYNL/FEcqRbdUDpryJX
-         y+2sMmZETlkejMFTvPXtbvEcamww46AWj/57Nl6dF2GVGjGDfwd4e2mwb7mZ8E2cMAbk
-         WKJpNQMW8Qk/rM/LvrL5xk4qQ1eVZ5v0DpwiUbvwf58ohDynxSaJA+GkIGHmGKtBJc9K
-         zUi/D9bLensWod20T5kz0Jwq/vl87O30ttfo9e0JHwiB9lb60gmHzR6vponZAXaMKPAb
-         4dz/uw82W0ASqtz8MMke+VODhD7iXJ1ybSCNWRk4Hv5Tq/zUHNFqxgMeHLUGovBG2ntb
-         G8HQ==
-X-Gm-Message-State: AOAM531RZr3lsZtUcFGrhhcmFFIKf5T/iLXlqRIjpQf+qi5awoF+88Ma
-        7kmdIzSEcEByueWEerENIyA=
-X-Google-Smtp-Source: ABdhPJwPhRlaqdL9Yr6GpyMIvyoLXWBJgeNDVCRYVIiBTwwE4iUBPuPMJFdJZW6dfMgWExHCpvYwhA==
-X-Received: by 2002:a17:906:dc81:b0:6df:8348:d201 with SMTP id cs1-20020a170906dc8100b006df8348d201mr5832495ejc.113.1647545223798;
-        Thu, 17 Mar 2022 12:27:03 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090679c300b006cf9ce53354sm2782790ejo.190.2022.03.17.12.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 12:27:03 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 21:27:01 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20220317192701.vskynomfmnciv732@skbuf>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-4-schultz.hans+netdev@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317093902.1305816-4-schultz.hans+netdev@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lJQh/Exyrm7jkuouuP+OFVuB8hBfkh2Al21bjlOl0AQ=;
+        b=s41WJLMRsfay11h55j8cZQblXz6oN6AqNbCUhtcs1OGeKRoY/iGfKLMrC+/ULa/B74
+         VpgqqRyjgGC2D8YawHc0AMmiv9IyKBZgm7Wx91ue95P/QIPJWoJgjde9exXRCaW9eita
+         /wO0PCjcOPaw0NGP8vXTd5V6r7GMWJuJ9BmaTYoEiJU6xEhdKV5Dijgs8bil256NsoI4
+         jKoeCgky62LCtWahG7skbVTAySDskU8yZSyuz3LbqnpjUs31icyZIysUoXTZBt3V9Rtb
+         zZx20RZ0VOJDTOuAdQhUIvwulsUpwGdNacZVCUHdDTHmsWkK43tPURHPF7UGgUAOQ3Ux
+         JGXQ==
+X-Gm-Message-State: AOAM5323fzUDhovhAmxWo2yAFmn0WZnZ/0LwzfY6Mjy0UejQIA1bO/Xl
+        Pmnw8WNm+LQosOTsz2lPGveXsVDszjloIQ==
+X-Google-Smtp-Source: ABdhPJwfzO6Vfvq0NFoAyajCpwKamuadpZgMSHI9lgsqF5mO2tNkiNrQDm5hddG34QkZKXXe+1YreV64q/yv9A==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:d756:0:b0:2e5:9b8a:78f6 with SMTP id
+ z83-20020a0dd756000000b002e59b8a78f6mr9179301ywd.216.1647569613119; Thu, 17
+ Mar 2022 19:13:33 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 10:13:12 +0800
+Message-Id: <20220318021314.3225240-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [RFC PATCH 0/2] kunit: Support redirecting function calls
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,74 +69,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:39:01AM +0100, Hans Schultz wrote:
-> +int mv88e6xxx_switchdev_handle_atu_miss_violation(struct mv88e6xxx_chip *chip,
-> +						  int port,
-> +						  struct mv88e6xxx_atu_entry *entry,
-> +						  u16 fid)
-> +{
-> +	struct switchdev_notifier_fdb_info info = {
-> +		.addr = entry->mac,
-> +		.vid = 0,
-> +		.added_by_user = false,
-> +		.is_local = false,
-> +		.offloaded = true,
-> +		.locked = true,
-> +	};
-> +	struct mv88e6xxx_fid_search_ctx ctx;
-> +	struct netlink_ext_ack *extack;
-> +	struct net_device *brport;
-> +	struct dsa_port *dp;
-> +	int err;
-> +
-> +	ctx.fid_search = fid;
-> +	err = mv88e6xxx_vtu_walk(chip, mv88e6xxx_find_vid_on_matching_fid, &ctx);
-> +	if (err < 0)
-> +		return err;
-> +	if (err == 1)
-> +		info.vid = ctx.vid_found;
-> +	else
-> +		return -ENODATA;
-> +
-> +	dp = dsa_to_port(chip->ds, port);
-> +	brport = dsa_port_to_bridge_port(dp);
-> +	if (!brport)
-> +		return -ENODEV;
+When writing tests, it'd often be very useful to be able to intercept
+calls to a function in the code being tested and replace it with a
+test-specific stub. This has always been an obviously missing piece of
+KUnit, and the solutions always involve some tradeoffs with cleanliness,
+performance, or impact on non-test code. See the folowing document for
+some of the challenges:
+https://kunit.dev/mocking.html
 
-dsa_port_to_bridge_port() must be under rtnl_lock().
+This series consists of two prototype patches which add support for this
+sort of redirection to KUnit tests:
 
-On a different CPU rather than the one servicing the interrupt, the
-rtnl_lock is held exactly by the user space command that triggers the
-deletion of the bridge port.
+1: static_stub: Any function which might want to be intercepted adds a
+call to a macro which checks if a test has redirected calls to it, and
+calls the corresponding replacement.
 
-The interrupt thread runs, calls dsa_port_to_bridge_port(), and finds
-a non-NULL brport, because the bridge is still doing something else in
-del_nbp(), it hasn't yet reached the netdev_upper_dev_unlink() function
-which will trigger dsa_port_bridge_leave() -> dsa_port_bridge_destroy().
+2: ftrace_stub: Functions are intercepted using ftrace and livepatch.
+This doesn't require adding a new prologue to each function being
+replaced, but does have more dependencies (which restricts it to a small
+number of architectures, not including UML), and doesn't work well with
+inline functions.
 
-So you continue bravely, and you call rtnl_lock() below. This will block
-until the "ip" command finishes. When you acquire the rtnl_lock however,
-the brport is no longer valid, because you have waited for the user
-space command to finish.
+The API for both implementations is very similar, so it should be easy
+to migrate from one to the other if necessary.  Both of these
+implementations restrict the redirection to the test context: it is
+automatically undone after the KUnit test completes, and does not affect
+calls in other threads. If CONFIG_KUNIT is not enabled, there should be
+no overhead in either implementation.
 
-Best case, the bridge port deletion command was "ip link set lan0 nomaster".
-So "brport" is "lan0", you call SWITCHDEV_FDB_ADD_TO_BRIDGE, the bridge
-doesn't recognize it as a bridge port, says "huh, weird" and carries on.
+Does either (or both) of these features sound useful, and is this
+sort-of API the right model? (Personally, I think there's a reasonable
+scope for both.) Is anything obviously missing or wrong? Do the names,
+descriptions etc. make any sense?
 
-Worst case, "brport" was an offloaded LAG device which was a bridge
-port, and when it got destroyed by "ip link del bond0", the bridge port
-got destroyed too. So at this stage, you have a use-after-free because
-bond0 no longer exists.
+Note that these patches are definitely still at the "prototype" level,
+and things like error-handling, documentation, and testing are still
+pretty sparse. There is also quite a bit of room for optimisation.
+These'll all be improved for v1 if the concept seems good.
 
-> +
-> +	rtnl_lock();
-> +	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE, brport, &info.info, extack);
-> +	if (err)
-> +		goto out;
-> +	entry->portvec = MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS;
-> +	err = mv88e6xxx_g1_atu_loadpurge(chip, fid, entry);
-> +
-> +out:
-> +	rtnl_unlock();
-> +	return err;
-> +}
+Cheers,
+-- David
+
+Daniel Latypov (1):
+  kunit: expose ftrace-based API for stubbing out functions during tests
+
+David Gow (1):
+  kunit: Expose 'static stub' API to redirect functions
+
+ include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
+ include/kunit/static_stub.h         | 106 +++++++++++++++++++++
+ lib/kunit/Kconfig                   |  11 +++
+ lib/kunit/Makefile                  |   5 +
+ lib/kunit/ftrace_stub.c             | 138 ++++++++++++++++++++++++++++
+ lib/kunit/kunit-example-test.c      |  64 +++++++++++++
+ lib/kunit/static_stub.c             | 125 +++++++++++++++++++++++++
+ lib/kunit/stubs_example.kunitconfig |  11 +++
+ 8 files changed, 544 insertions(+)
+ create mode 100644 include/kunit/ftrace_stub.h
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/ftrace_stub.c
+ create mode 100644 lib/kunit/static_stub.c
+ create mode 100644 lib/kunit/stubs_example.kunitconfig
+
+-- 
+2.35.1.894.gb6a874cedc-goog
+
