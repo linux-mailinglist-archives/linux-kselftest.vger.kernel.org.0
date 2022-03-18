@@ -2,341 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A37E4DE225
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 21:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD7C4DE227
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 21:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240422AbiCRUMi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 16:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S229792AbiCRUM4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 16:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiCRUMg (ORCPT
+        with ESMTP id S239791AbiCRUMy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:12:36 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F76420827E;
-        Fri, 18 Mar 2022 13:11:16 -0700 (PDT)
+        Fri, 18 Mar 2022 16:12:54 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB8324223E;
+        Fri, 18 Mar 2022 13:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647634276; x=1679170276;
+  t=1647634295; x=1679170295;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=/yWvTRnDdXaa8rHxI2jm4rs2DJZD6VPjYml9fmFvUg8=;
-  b=Gx8IX2sFLhD12QDnAhqRNCbHMIfR/vb6SOOfDbGBZfWq5+y1CL+kcxBN
-   jlqvlR/Q3kPVsCd2U7IiZ0pXUNB8xFUCIq5Ejo1i5w9A4Sv0ALXJLNhNU
-   b4WWKlmIH8L+SXhC0gRcLExdehgJ+rfLRHGMVUeZ6qD0jFnWW/HtMLlDi
-   p7LmtDfjbzm5O0PWMC+DiD5pYA5OL0qI5GledVcP6nwaOLr16nA8zD+Dz
-   rOxJm3hk+fpS3mpi6eH7Bf/DZIaWKsh/ARHQDUfa45KCv5J/fcdbv4SIQ
-   DSIDGjuNcsxyTY2EPHwK7+g7YAnkuwVLm4drMogjvzRcrx+YseQUUtGAc
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="317927259"
+  bh=gGm/Z6CK3dw5pgWjnr7CvslkX3M0E7U5rVypvYuWTgM=;
+  b=litq5g2bE2JQnO7T2EjP0ruRRlYdwF4SZl4aVAcjBIYsvdRfeAHoHTWC
+   WoSkpsV+kPjP4U1at0Goc5oGM31nQKSkyBRPZSaN2sKYlcfNZTNqI3lik
+   sb4f1tDFP787kOLVyv8gGqQTDm/B2I+zQaGqRgrLfNfURdIY7ucTzGC3Q
+   7/N9MBf9f82ayibGsHUUh7Cxs7p635QxjFcPIbCnGmG+Op4KWGDTR1+nu
+   6UZYai5x5UR4JoZJlBQnwDNIMP538BMISb2PIh6Me9ZZHmrzwuXffxH1U
+   ac6/C25a9+0BrdOQCZoEaopzWUgbVZ2dVLgcPTjrRti+eOH/DUkaAR0NA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="282027562"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="317927259"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 13:11:15 -0700
+   d="scan'208";a="282027562"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 13:11:34 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="599634782"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Mar 2022 13:11:15 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="558625791"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 18 Mar 2022 13:11:34 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 13:11:14 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2308.21; Fri, 18 Mar 2022 13:11:33 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Fri, 18 Mar 2022 13:11:14 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2308.21; Fri, 18 Mar 2022 13:11:33 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Fri, 18 Mar 2022 13:11:33 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Fri, 18 Mar 2022 13:11:14 -0700
+ 15.1.2308.21; Fri, 18 Mar 2022 13:11:33 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ebMxapqjSt1euxg4AMqN8kKfAeLmuEqFMzt4IWPOR9TVG0D01YNw5btXZ3HRnlh28wzMzucNnot3GY6NsKlvaJCO/JuX2yLPvgFrNVK24qNH/pa4/E7dm9xsH27urSzG9i7sfdQg0bEnQYzHZC+c/qMAtV9zqx5E8ELr1kXyZTdLmre4LhYQzt754+Apnl2msR3fo9tZpHT4oftc8l9Imv9nptOqOhMRnLIPibdWm26O5qMPIGS3MfOhMoKznunzBdXxxBNPxjtIfyhlHRu7wm+g7OiabiRt6rEkkGKsOrqSn+G8rBCQUWcpNIL2uvel+1qhuA0HoOKDfgeUdTmrgA==
+ b=IaVZo2UBIM8qCOeegSFh0fSlJ5+toGFJbV8ZvbatxAffhghkJX+YucPwxAWMuoCxEukSlrdxvb8RNoRQ53keeE2O8oUWXus0OfWmyP4vtUbThlzIkxOQBx8acbYm3hnjPCXzzG495cTX8ICDHNQq3emNBhWxyNr78rCaOVfwiYQZ/qTwD0K/l7uqijbvdtROMZ6JcrysNAA8SxyEy1f73Qqi/osz0pIK5NDXQu3RcFMwdsoFa1Igbag9pUk4PjJKKxNtoJRcBczHrkNZnUN4Ct2O3/a1Bd93FCWSaL4i0U3bx2weyqs49MbkfoCvTIGchISjRfCCcE97LEbq9LV8qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UOaW4kIj54w7HYhPcaS6ZehF7FfovOMqlsCX26foD0M=;
- b=V1m8rvwIFmBnD1/ZSYFI4Y6GssCplh5glqn/AWgjmqXUc+hkbVwiJwBdeMmppY6boN5mP5I/VFgIVYSFlPXW5PVLDhjTOzEUv5+XbWyOLHXtYb+rc4wF2XOE+3N3LkdA7wtev1ICmlPvod7H0SRESQGXKwp2Wnmzh0JOgH6AB0dGlasY929CVqHxdV6Mu3UgATPW9s2+i4IY7nWfYvhTOg9tBs1x2laCdFhyVwULxBcHfLWcqtlvMiK8gtpv1i7ITuosX+x6sfwLIXqRmC9v3fANZy7Ot5V+jdMRIUrN19DQi33NTT7ibOaPV1psNXu14+f8e8o+sYpFTT26QPQe3Q==
+ bh=Z7f392YV5ql2RP5BT7LrFYPiLa1ICDVljDtu68eCEQs=;
+ b=M7ZKX8zLNr73y+HIsV5R+LG8c/0K6RXo7/+MAvlw8v4jw1dv8DVO6wDuC1WvCMq5kL1iBhq8ETLgo357HK81sFMtHodc4qAGY4vwBcjCOk8QIpT649P/yaqv1W/brV6G80Dk319yHjvv9aEE6ZRs7kiFcBIYUFwkKTQsXUW0TXEws80sbArW6OU+UXq131FjEwM32wphmFhBTlV8gFWfpaEPie53HX35aPAbkC8sgCmZoHud342W175T+IbKl8iyCnDTJh226xk9DS32481UCd9YUbK5GhW93eTKO5X3EJIVRpAKxpBgLpFQkMAaMd6tYu45QU0LeijaIjc80W+Dlw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by DM5PR1101MB2299.namprd11.prod.outlook.com (2603:10b6:4:58::17) with
+ by BN6PR11MB3985.namprd11.prod.outlook.com (2603:10b6:405:7b::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 18 Mar
- 2022 20:11:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Fri, 18 Mar
+ 2022 20:11:31 +0000
 Received: from BN0PR11MB5744.namprd11.prod.outlook.com
  ([fe80::ec9a:f02a:6fc1:c6c]) by BN0PR11MB5744.namprd11.prod.outlook.com
  ([fe80::ec9a:f02a:6fc1:c6c%6]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 20:11:12 +0000
-Message-ID: <b04e184e-23db-62ce-288c-54fe482d6265@intel.com>
-Date:   Fri, 18 Mar 2022 13:11:07 -0700
+ 20:11:31 +0000
+Message-ID: <0f5f9bd7-fdfe-ec10-071c-a75f981ff317@intel.com>
+Date:   Fri, 18 Mar 2022 13:11:26 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v4 1/2] selftest/resctrl: Extend cpu vendor detection
+Subject: Re: [PATCH v4 2/2] selftests/resctrl: Print a message if the result
+ of MBM&CMT tests is failed on Intel cpu
 Content-Language: en-US
 To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <shuah@kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 References: <20220316055940.292550-1-tan.shaopeng@jp.fujitsu.com>
- <20220316055940.292550-2-tan.shaopeng@jp.fujitsu.com>
+ <20220316055940.292550-3-tan.shaopeng@jp.fujitsu.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20220316055940.292550-2-tan.shaopeng@jp.fujitsu.com>
+In-Reply-To: <20220316055940.292550-3-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CO2PR05CA0104.namprd05.prod.outlook.com
- (2603:10b6:104:1::30) To BN0PR11MB5744.namprd11.prod.outlook.com
+X-ClientProxiedBy: CO2PR05CA0096.namprd05.prod.outlook.com
+ (2603:10b6:104:1::22) To BN0PR11MB5744.namprd11.prod.outlook.com
  (2603:10b6:408:166::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 36b54850-a315-4b9e-b002-08da091b7271
-X-MS-TrafficTypeDiagnostic: DM5PR1101MB2299:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8f0a147-d83b-4f8d-51b1-08da091b7e33
+X-MS-TrafficTypeDiagnostic: BN6PR11MB3985:EE_
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM5PR1101MB2299EB9665F674FEF88E23D7F8139@DM5PR1101MB2299.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BN6PR11MB3985BF6298A5978388CAE01FF8139@BN6PR11MB3985.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b8HPROgxW+AHeMw94lz6C3/QUFiNy2O95qqwkxuOAa8ZZv4qybrQcgf+JLx8s/VrFKk6+bI7kFXURLG0CNnou7EaL48NLVGsMypnzExxqnFFuyVZ1JF9ghK+OYbX/BiALZ2qPFRQuYR/SOdvPXGwdlJuz4oEojJx0gJ5rtDn0lRffYEZiZWJRjnXYzCH1POPcX1MMZiATYajnrsXkeZEPrNyItF+AJ1hRaWidfE9m23+UhjJkIJPUUseoX2Z0blT5ncxUJh6J7G+92AtI7VHUy2/YL3zfv4RmUjc/Bu3XdoXVwmkL35OZ/TO5YGRaz5H1bu1ICWvfNLlh8hqflPYeeNWjReaqPoqgRiFbhd2ndPwsMpPPz320ts6KK2Io2Muqx2uKDnYcBTEwdu6bf53DlG90gXh8+4Gjj77+ubWXAnq+2Y0sP+yiPzEx1XoyXChEev8tQPg6f2h1k5n8aUHp1DlhIbvj+I+4Lau+Cniw6d4yDpo4FNOPMe9AokKf6NJdS6/apA7T34GeY4ISpszFHQXcNgUD/lxCopyBzRBs4FePw5TeIgZIm2ooHPWBlPvh/Rmp6nzTR68ELp6GqSMHOBZot6akHkKbMOTJW1RXRr7I1yF5XYDINJeMNC7OUtGaY7bxFm8idVoZqJVNQeBplV2BpKjaO5wOag64UA5A0l7xvC+riwkdkwyUFcexWl8q0c3FoWJ76ZB+CyBs4ESUyd7e7gQJcZPoJpT8OuFZYV11dfbZfY5n0yM/fL+v/8w
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(8676002)(5660300002)(38100700002)(83380400001)(2906002)(31696002)(26005)(186003)(86362001)(66476007)(2616005)(66556008)(66946007)(82960400001)(6486002)(44832011)(110136005)(508600001)(36756003)(8936002)(6512007)(31686004)(6506007)(53546011)(6666004)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: VNymu7Emj38Url6sQPPBqR1b77r8/SO7UJKvZ+fPr+siUFjH8e+pR5ashNRTsIzI9/JQ+xyrmN4Kh7CaLWMklQs5kdltsGMvph+1OadDiue9aq0USYkx9GAyAl3iB0hh5C3taShPmc8U1hBVvexXGyxJtAgBpx85wzWlTLE5ykpdcacQ0wNAkPqh4sXjsiEqs6YH8wBlLnKfY97lu/mcIpdInq1xspxnIErTs788Dn5cQhM5bsAu9RDdXE93LAy2t7NCiJzzGvWqQFgNagF+BemC8n0k+xv+uJ3NDNoRibIfZJlbZs7stFDVahLH+TDHBMvLULMZzEPUYDAqijmh3QlZPYKCD0GTDv1f8CISXMkcbMLNNR5XYrVFu6UUoc+0Yp6eIFVNa2fm0b6Oyj8VJnuJeMRDQb8qHbGB0u+2JAEC4T1ylB6kj5rcP+rKLEITm9X5HsJBthibaRE527+u6aq8tGNC1do6nB6PwEPZ40IsUtxzlktrjxpK4RyAn/KHyt6MtuokiP+h9FGKMSU+QnTrLYrw46CKYKiRrbW+bOP2AB+NbMJw8G8php4T7ol0VvSgxkPcG6DwD9FWFPP/swqCAF1Z+VwW9TxHSwC6Vweq3HEIz70kRZnIbdeMsU6l1awfbvz6HI6ILTdXn38VQrHss8EtWLVF7B2zO/Ga9HtpPQ4tddEqxSd/4bIPkMsNe6FKHcYwTyLP1u8uiY3eX4MxWPa1huafA5HK6GnT9mGsqsjvP3MR5UM5jZcv5v+I
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(26005)(2616005)(83380400001)(6666004)(6512007)(6506007)(36756003)(53546011)(508600001)(6486002)(66476007)(316002)(8676002)(66556008)(44832011)(86362001)(31696002)(15650500001)(2906002)(31686004)(82960400001)(8936002)(38100700002)(66946007)(4326008)(110136005)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmFNSXBVYnpBcDhhSGlXMWNMWVdYSmVsUmJ5L0JLWHRIVmZOTkZOdUFDWkFG?=
- =?utf-8?B?SmtYK1RmQVNvNVhWakNIbUhlWDFNWEQwRmhjVXBpRlhJVmkxbDZ5ZTJKS1pB?=
- =?utf-8?B?WnRVZ2Z3YjZzK29IUVY0dG9abTUwUEo3OUU3THJyTFVFQi93bzYwWXdTcVd6?=
- =?utf-8?B?Z0F1Um45TGRpYXQrUkNTeWsvZ2ZjR2JiVXZ4ZlNrY1lta095TXNicHVBRFZT?=
- =?utf-8?B?d2VWV0R3dHRvWTU4Znc5UGN5RmdQNEdYK2RIQVo1aGZ1a3E0ZTh5eXNsNEh5?=
- =?utf-8?B?elpad0trbG51cXhyaW9UdjYwcjRGSEtId0o3ME5rcDB3R1ZJRW9Ea3Y1aDNP?=
- =?utf-8?B?K1VMUHBTSWJyNDkxUXc1ak9FcWtPWEliV2ZWK3dhMTYvQXh6dVFhTkhLa3pk?=
- =?utf-8?B?NHVsZUdvZ3lXRy9Xamt3NUtsRUI2TmFoUjEvQkdaSWFGV2hORFcvcDB6cGpP?=
- =?utf-8?B?MWpRV1JmdEdiQm5PejNyNUIyY2Qyd1g3ZGZJUUdSb0w5MHdTMExRTkM2WWRm?=
- =?utf-8?B?THVvQTQ4YVpNU1R1cXhFZ1EwV3Iza3lEcFVST3FFTGVNSHA5bnlCY25RZEdo?=
- =?utf-8?B?VWtMWlF4eFFZQ1d5cjlZV2RSdXlwSDZzY3hCVktwcjF6eUo4QUxPbG56MEFz?=
- =?utf-8?B?dUlkdlpIajJidHRMRE9raUQ3VTlOZVdFVWUvRDRwRmhNTlpnOFYyanh4dk1Z?=
- =?utf-8?B?MDBCbzFqWEphakRsOEJ6ZmRaenloNUdDcDBpbkczV0dUWGNuQnlrYndYTVFM?=
- =?utf-8?B?VENzWkRqV2dNNk9MK25PaTlaSWUrM3dYY1V1bStrcmJ6ZmJaeXczUU5rNGwr?=
- =?utf-8?B?QzVVelV2YXA3eDFYb24wZE1rRWxhZ0VoTWhWblo0anFTdks4U2FHYzl6QlRL?=
- =?utf-8?B?TEZRekZtRWZVNmxjcHJkMXBGTXZjU2gyTEsvRG1nTXJNZGtSNnc0ekptKys4?=
- =?utf-8?B?dTZTb3A5VStLSEt0SGxtTFNVZlJmN2pHMzIxdmNkSlpkZUMzZEVkNjM3RVFy?=
- =?utf-8?B?cFU0d213ZW9acklHcUFPMmRJL0YrTDd6R2NVMllKeDladGlBTHJXclNVZkNm?=
- =?utf-8?B?SWsvY1lTanJ1UC9YR2FlcEdnTXg1aDBZbXR0REJkc0NQOThHMG5KOEFqSGdo?=
- =?utf-8?B?SkpFOXcxb2JPWDVJRzNSQnNmUm9ZaUpOVitmN2FyazFsUWV6cGJFVVd0bEVV?=
- =?utf-8?B?MjJVVXBnbisvaG0xRXFFaVF4ajRqbTlmQ2tYelhzT2M1ck9kWGUyaWo3TGhi?=
- =?utf-8?B?ckZKbzRnNjU1ZnMyWENHcE93R0FhTkZibGY3U3NxREl0elBpREF3NUpqUUcz?=
- =?utf-8?B?MFQzUUYrMnlUYkVFWHJLOFhJNCtxLzNIWVFRamJRQUgzd2FnV3JiZE5zOWVO?=
- =?utf-8?B?Q1hBRXVkNmVUZ1krNTdsRUlQY1JJcjlnR2FVamJTOWdaSTNKOGtVME94Q0tG?=
- =?utf-8?B?RVE1c3ppSlczdU1KdlJ2Mk93MUVSdWhXMG5CYTA1M2NqUWdHNHIxRVVIRzZX?=
- =?utf-8?B?SnFQUWl1VVo0VDBNL20vblNjM1hoaXVLS1VEdE8ya3doTG9GRi9jWUl6RVF6?=
- =?utf-8?B?ckFZOUx6K0ZSdUpzVERvaFJPcExJVGgyc1JsZFlEbXFuYUxMWWpIbXgyWWpG?=
- =?utf-8?B?MUZOQXA0aGZJMmVVcVdqSnllNUVZcWFOY3RkNjZ1QTR0N0JXTU1WK1UyUUpG?=
- =?utf-8?B?TXJ4eEwyM3FicWtlOGNNbjNUa3lLTDY3ZE45d2VoQnRpVENSRU5iUjAwZ2pt?=
- =?utf-8?B?QTVZc1pScDd2ejlJSUtpTkhLNWF3bVdIb1VkQ3hWbjVpL3AvTDRLM0M3Zi9a?=
- =?utf-8?B?N0M0bHArRkk5TEtHZEFDT2JmSDhiWms3T3I4eUJYdlI2bjNzL0EwV1JtY0VX?=
- =?utf-8?B?bTBNUjBCWW8rd0RsYktJWUwrckpIbmpuNDdoL1Vxd1A3anNNQ1VFZUVUQmcz?=
- =?utf-8?B?QzJLMWtqaVB5SW9UdFozMWZWUWY3cEhKUTRML2RXSi9KZUFOU1pubm5oMmNj?=
- =?utf-8?B?ckZyTnlpZm5RPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 36b54850-a315-4b9e-b002-08da091b7271
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVVET2Y1elZ3QWR6bXNBNENQYWd4QkxpYjlVS0EvZ0JLN0pZSkZWWEN0Wlpm?=
+ =?utf-8?B?RTNPTWVTMkZSZDJHSzRaQnJPOVFJRTJSRWhTVGJ3a0JOZGNIazhERVdwZUZ6?=
+ =?utf-8?B?b3ZKaVVUOFI3RlA1d1Q4VmtZS1dBWGQ2d3kvY0k1OEp4UXdETytEdkxnTWhJ?=
+ =?utf-8?B?czNvVnBWNmp3U1NPdVByMzFTdmFpbUF2b1grS3doSDdsci9sN1NRQldKOElM?=
+ =?utf-8?B?SVF0ODZiTHhIVHVUM09DQkdYVkNkVE5HREhOYmNqMloxR1c3dDhKMTdrdWNT?=
+ =?utf-8?B?bFNqbXZvUklKbzRkSjZUTFlDb2pkUk9pZ2szTmRjbmVkdlQwTVNEVkQ1bW01?=
+ =?utf-8?B?Nkp5U2QzTE9xWlE5eHIvMERKbkNVUWNpdFp1NTd6UEtyVmsyL3pTSEdDK1Nk?=
+ =?utf-8?B?N1dUa3pNdTAvcGVSaTlJa3BTanhMQnA4dkNZSGxsS1BOSU5aaUVrajBxUmhL?=
+ =?utf-8?B?K3NmRXRsUWRyWTFVQy9rQVYvSWo5azZURnArL01LK2NBTFprc01wL2R5dDNY?=
+ =?utf-8?B?QVd2UDNJa21XbTN2OHZmKytFbGFydXY3bFJSMERoVlRCellKSnJYMGxzRTkx?=
+ =?utf-8?B?L0w2UzBKVWQyRjVpcWgvZ2JJaDRUVjJKVDZjb3RzQTdvTzJHbzRJQ1lKb29n?=
+ =?utf-8?B?SWZidjVvcUJhcm9oRm5vZTRwdFlDMXdYMGdzQ3VGYmdNZStianRYMUZqQUc3?=
+ =?utf-8?B?VHlySFRrc3J0dW1STklxZS9ZRkVhMStFWnBqVHE4bEczVkVhOTF6UEdNK2hB?=
+ =?utf-8?B?U0wzbldKOTc0QURweFJVWWszWkJWMVRQQlNTV1Q3dzRadSt3VXpRNDVMM3da?=
+ =?utf-8?B?bkZMR2dndW9paEtjY1Y5QnZxb3AyS1UyZXpoaUFNbm9DOFh1QzY5ZWFIVmdk?=
+ =?utf-8?B?Y1BzWjRuRlNyUnRFYUdpaGQ1cXdkdHRoNy9IZ0YrclFxWVRTeGVLMjJidTF4?=
+ =?utf-8?B?WGVYK1F0WFdSRnlxdzFLNUtGNWNQTHBFRmM5THRRZVF6bEVtZXhwZVBKazV1?=
+ =?utf-8?B?NnBmVHRnaDJzdFExS29iV3g4TEVhRlpLOVFVYXluL0lXazI0cXZYdXh1SldQ?=
+ =?utf-8?B?RVZQazVlc3hSS0lGT3dyZEV2djllWG1GbVVLNGpPVy9UNHpacHVNa2xZT1Vv?=
+ =?utf-8?B?YlhRZDVyamZVZXpRY0R6bU5aMXNSZTBKbEVuQ25VZHpaZ2lkd3ZEWVJWRDJa?=
+ =?utf-8?B?Q0JMZ3JiTFdyQzVtTjRSMjJrMlVvdDRuTVdsRXFacStVZW11Wnl6aDBha1hv?=
+ =?utf-8?B?c1QwVURXYzZSRU84Mi9DRU94bEtnMjRZUUdkbCtnRDdScnc4anpMZmhrZ0Nn?=
+ =?utf-8?B?dWU1L3JSS1F1eUVoMkZOQldxbDFXMEhPRWEwWXhuQU5ZMU40R2puVFpDTEV3?=
+ =?utf-8?B?RHdFQUVieE00SlFUOXVySkk4UkJ1djNVdUFQcnpMK2FFVjBQY0ltdGpocFdM?=
+ =?utf-8?B?YmtsR25MeUtzTGhkVEFlaEJTbTFUdFFmOUNlUFQ1SXZmM3ZQNDlNU0VSWU1T?=
+ =?utf-8?B?UDFxZUIrV3ExZHZrdnZYNEJGOEZXaHhqa2hqVC9EVGFRRUgyZnU1TEVSTHVo?=
+ =?utf-8?B?Vk1DbE9hdm8yMjV2cnRGVnNUQTJFU25kOGFCbWVUc2pWOC9GbnVzQlBJbDha?=
+ =?utf-8?B?a2RXRWNFMkYyZk1la2FLZ1hYSkxYY01ESmR5eE10cFg5S1AyZzg5RnVpMUlO?=
+ =?utf-8?B?VkQ0K3FvZGRsbktYWW1kaTlDMHBmRFB4ajMyYWcxcDRza2RLb1lzOHVhanI1?=
+ =?utf-8?B?YlNOTUduOXhKQWZZc1lUeFlGc29LZldzV3pRdDdwTUw4dHAxQnFmdGhuMnlS?=
+ =?utf-8?B?b3VQNGtCdm5KejZZNjhDcFQxc09MT3JScXdHbEY5Y0JHVlNsUE5QTjJYSXdD?=
+ =?utf-8?B?ZlRPVUFXTy9vcmJObVMrYXRKMjJBQmx6dmszeVdwQU1xU1IxL0hCdVViaEZS?=
+ =?utf-8?B?dUlSMlk0MytkRm5nb08xcEQxRThOZkk5RlhGeU9rY2ZXOU4xL2RGdWJwR0sz?=
+ =?utf-8?B?K09XWDJMZWlRPT0=?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8f0a147-d83b-4f8d-51b1-08da091b7e33
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 20:11:12.1259
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 20:11:31.4436
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BSIUoO58z8KDcYoBbyVIBOzEii7TropNL/1845pD7esbt9/H/SoM5Mu1Yq4Eg0ToQ+z/9F1fHbXKjDAXXQUp5+F4xP1KkB3J7EQ/5k21jms=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2299
+X-MS-Exchange-CrossTenant-UserPrincipalName: RQR+opczXJgxDgobwa15BHBL9SnRBLzJ2xMzLpTJFeS7QqZhAmq+gQv7XWIjiznQwgTRNmRdIFkIjzayu9jgSBuoRVkkGnd06SzQ6W0BWAk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB3985
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shaopeng Tan,
+Hi Shaopeng Tan, 
 
-Thank you for adding this change.
-
-Please note the typo (selftest vs. selftests) and capitalization
-in the subject. It could read:
-selftests/resctrl: Extend CPU vendor detection
+Please use capitalization for CPU (in subject).
 
 On 3/15/2022 10:59 PM, Shaopeng Tan wrote:
-> Currently, the resctrl_tests only has a function to detect amd vendor.
-> Since when the Intel Sub-NUMA Clustering feature is enabled,
-> Intel CMT and MBM counters may not be accurate,
-> the resctrl_tests also need a function to detect intel vendor.
-> And in the future, resctrl_tests will need a function to detect different
-> vendors, such as arm.
-
-Please take care of capitalization for CPU and the vendors (AMD, Arm, Intel).
-
+> According to "Intel Resource Director Technology (Intel RDT) on
+> 2nd Generation Intel Xeon Scalable Processors Reference Manual",
+> When the Intel Sub-NUMA Clustering(SNC) feature is enabled,
+> Intel CMT and MBM counters may not be accurate.
 > 
-> Extend the function to detect intel vendor as well. Also,
-> this function can be easily extended to detect other venders.
-
-intel -> Intel
-venders -> vendors
-
+> However, there does not seem to be an architectural way to detect
+> if SNC is enabled.
+> 
+> If the result of MBM&CMT test fails on Intel CPU,
+> print a message to let users know a possible cause of failure.
 > 
 > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->  tools/testing/selftests/resctrl/cat_test.c    |  2 +-
->  tools/testing/selftests/resctrl/resctrl.h     |  5 ++-
->  .../testing/selftests/resctrl/resctrl_tests.c | 41 ++++++++++++-------
->  tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
->  4 files changed, 33 insertions(+), 17 deletions(-)
+>  tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index cd4f68388e0f..2daa63991628 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -89,7 +89,7 @@ static int check_results(struct resctrl_val_param *param)
->  
->  	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
->  			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
-> -			       !is_amd, false);
-> +			       (get_vendor() != ARCH_AMD), false);
-
-These parenthesis should not be needed.
-
-Now that you add better vendor detection it would be clearer to test
-for Intel and not "is not AMD".
-
->  }
->  
->  void cat_test_cleanup(void)
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index 1ad10c47e31d..f0ded31fb3c7 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -34,6 +34,9 @@
->  #define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
->  #define L3_MON_FEATURES_PATH	"/sys/fs/resctrl/info/L3_MON/mon_features"
->  
-> +#define ARCH_INTEL     1
-> +#define ARCH_AMD       2
-> +
->  #define PARENT_EXIT(err_msg)			\
->  	do {					\
->  		perror(err_msg);		\
-> @@ -75,8 +78,8 @@ struct resctrl_val_param {
->  extern pid_t bm_pid, ppid;
->  
->  extern char llc_occup_path[1024];
-> -extern bool is_amd;
->  
-> +int get_vendor(void);
->  bool check_resctrlfs_support(void);
->  int filter_dmesg(void);
->  int remount_resctrlfs(bool mum_resctrlfs);
 > diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index 973f09a66e1e..dc548d3e2454 100644
+> index dc548d3e2454..97ad6cfee6ee 100644
 > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -13,25 +13,41 @@
->  #define BENCHMARK_ARGS		64
->  #define BENCHMARK_ARG_SIZE	64
->  
-> -bool is_amd;
-> -
-> -void detect_amd(void)
-> +static int detect_vendor(void)
->  {
->  	FILE *inf = fopen("/proc/cpuinfo", "r");
->  	char *res;
-> +	char *s = NULL;
-> +	int vendor_id = 0;
-
-Please order the declarations based on line length from longest
-to shortest (also known as "reverse christmas tree order").
-
->  
->  	if (!inf)
-> -		return;
-> +		return vendor_id;
->  
->  	res = fgrep(inf, "vendor_id");
->  
-> -	if (res) {
-> -		char *s = strchr(res, ':');
-> +	if (res)
-> +		s = strchr(res, ':');
-> +
-> +	if (s && !strcmp(s, ": GenuineIntel\n"))
-> +		vendor_id = ARCH_INTEL;
-> +	else if (s && !strcmp(s, ": AuthenticAMD\n"))
-> +		vendor_id =  ARCH_AMD;
-
-Extra white space here.
-
->  
-> -		is_amd = s && !strcmp(s, ": AuthenticAMD\n");
-> -		free(res);
-> -	}
->  	fclose(inf);
-> +	free(res);
-> +	return vendor_id;
-> +}
-> +
-> +int get_vendor(void)
-> +{
-> +	static int vendor = -1;
-> +
-> +	if (vendor == -1)
-> +		vendor = detect_vendor();
-> +	if (vendor == 0)
-> +		ksft_print_msg("Can not get vendor info...\n");
-> +
-> +	return vendor;
+> @@ -86,6 +86,8 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
+>  		sprintf(benchmark_cmd[5], "%s", MBA_STR);
+>  	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
+>  	ksft_test_result(!res, "MBM: bw change\n");
+> +	if ((get_vendor() == ARCH_INTEL) && res)
+> +		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+>  	mbm_test_cleanup();
 >  }
 >  
->  static void cmd_help(void)
-> @@ -207,9 +223,6 @@ int main(int argc, char **argv)
->  	if (geteuid() != 0)
->  		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
->  
-> -	/* Detect AMD vendor */
-> -	detect_amd();
-> -
->  	if (has_ben) {
->  		/* Extract benchmark command from command line. */
->  		for (i = ben_ind; i < argc; i++) {
-> @@ -241,10 +254,10 @@ int main(int argc, char **argv)
->  
->  	ksft_set_plan(tests ? : 4);
->  
-> -	if (!is_amd && mbm_test)
-> +	if ((get_vendor() != ARCH_AMD) && mbm_test)
->  		run_mbm_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
->  
-> -	if (!is_amd && mba_test)
-> +	if ((get_vendor() != ARCH_AMD) && mba_test)
->  		run_mba_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
+> @@ -122,6 +124,8 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
+>  		sprintf(benchmark_cmd[5], "%s", CMT_STR);
+>  	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
+>  	ksft_test_result(!res, "CMT: test\n");
+> +	if ((get_vendor() == ARCH_INTEL) && res)
+> +		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+>  	cmt_test_cleanup();
+>  }
 >  
 
-This would end up running the test even if vendor detection failed. Instead of
-the negative test with AMD this can be changed to only run the test on
-Intel platforms.
+Thank you very much for adding this.
 
->  	if (cmt_test)
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index 5f5a166ade60..6f543e470ad4 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -106,7 +106,7 @@ int get_resource_id(int cpu_no, int *resource_id)
->  	char phys_pkg_path[1024];
->  	FILE *fp;
->  
-> -	if (is_amd)
-> +	if (get_vendor() == ARCH_AMD)
->  		sprintf(phys_pkg_path, "%s%d/cache/index3/id",
->  			PHYS_ID_PATH, cpu_no);
->  	else
-
+Acked-by: Reinette Chatre <reinette.chatre@intel.com>
 
 Reinette
