@@ -2,63 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD21E4DDD44
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 16:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093234DDE1F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Mar 2022 17:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbiCRPux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Mar 2022 11:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S238186AbiCRQRJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Mar 2022 12:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236491AbiCRPux (ORCPT
+        with ESMTP id S238640AbiCRQRJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:50:53 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F81A2D0241;
-        Fri, 18 Mar 2022 08:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1647618572;
-  x=1679154572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wcKA0KxoiU/AM8nvFRewTqVOc2fCyIBAGriShKCLLSk=;
-  b=dfmcli8lf8C/XrNUNuU0x786nL0kFuaD/1YntgoYgOkvvwBibABvLFqR
-   8YnSP88uLG367QGRmB6CtOph3gD/bKCJsKLqXV51LZxaJ4A3Wb51+XcVv
-   gRLTNBMRpvtE8DYR12nTyt4z17lK/ZTk8odYASip4n5FVK0cgSvQkO6gu
-   iVVn9Ymg/3zeVY154dMkslySSKtEGFqvwOPIRZOJliBSQBAo+F4Nd7zHO
-   j5ZtfM2r5MK/8TkH6j1v9l0lmmoRRM2/sZKjAghrqU05Ko+lztH4yDDx4
-   5tYjz0V8FC5RJNZE2641t2usoyopTo2t2IhXLjTsh+2yfm/56KAYRel2R
-   g==;
-Date:   Fri, 18 Mar 2022 16:49:27 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
-Message-ID: <20220318154927.GA32172@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-8-vincent.whitchurch@axis.com>
- <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+        Fri, 18 Mar 2022 12:17:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62F90E72BE
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 09:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647620149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=g1mbgj0kUt9HOlxHcHj225lXtzgiEcushRQUeJqOcqU=;
+        b=dqHtOtivgRFnTbVhwEhigYCMItD5ko4qIvrTP90eHQJgk8HteRUceTs9Syy2xI4f4lyKz1
+        bM3UfaaVSlx55nZUrUAYr33Ctpx/GInislsFS6uFJwop/cYr6KUb0SfG1uYUGPgbyINQzn
+        bWHjGt3clwjmuz+lKkI8X5DPRluHWA8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-320-650TfjtuPgKGivDJH0xQBg-1; Fri, 18 Mar 2022 12:15:46 -0400
+X-MC-Unique: 650TfjtuPgKGivDJH0xQBg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2712800FFB;
+        Fri, 18 Mar 2022 16:15:44 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.192.159])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A1407AD1;
+        Fri, 18 Mar 2022 16:15:41 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v3 00/17] Introduce eBPF support for HID devices
+Date:   Fri, 18 Mar 2022 17:15:11 +0100
+Message-Id: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,167 +71,167 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 12:11:50AM +0100, Brendan Higgins wrote:
-> On Fri, Mar 11, 2022 at 11:24 AM Vincent Whitchurch
-> <vincent.whitchurch@axis.com> wrote:
-> > +class TestOPT3001(UMLTestCase):
-> 
-> I am partial to starting with UML since there are a lot of nice easy
-> things about starting there; however, I imagine people will eventually
-> want to use this on other architectures (speaking from experience).
-> How difficult do you think it would be to extend this to support
-> manipulating fake devices in say QEMU?
+Hi,
 
-It should be possible, but upstream QEMU doesn't have everything that we
-need so some work is needed there.  Also, of course work is need to
-provide user space for running the tests and communicating between the
-virtual machine and the backend:
+This is a followup of my v1 at [0] and v2 at [1].
 
-- We need user space, so build scripts would need to be provided to
-  cross-compile busybox and Python (and whatever libraries it needs) for
-  the target architecture.
+The short summary of the previous cover letter and discussions is that
+HID could benefit from BPF for the following use cases:
 
-- We also use UML's hostfs feature to make things transparent to the
-  user and to avoid having to set up things like networking for
-  communication between the host and the backend.  I think QEMU's 9pfs
-  support can be used as a rootfs too but it's not something I've
-  personally tested.
+- simple fixup of report descriptor:
+  benefits are faster development time and testing, with the produced
+  bpf program being shipped in the kernel directly (the shipping part
+  is *not* addressed here).
 
-- We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
-  vhost-user API to communicate from UML to the backend.  The latest
-  version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
-  doesn't seem to have been merged yet, so work is needed on the QEMU
-  side.  This will also be true for other buses in the future, if they
-  are implemented with new virtio devices.
+- Universal Stylus Interface:
+  allows a user-space program to define its own kernel interface
 
-- For MMIO, UML has virtio-mmio which allows implementing any PCIe
-  device (and by extension any platform device) outside of UML, but last
-  I checked, upstream QEMU did not have something similar.
+- Surface Dial:
+  somehow similar to the previous one except that userspace can decide
+  to change the shape of the exported device
 
-> I also have some colleagues inside of Google that worked on some
-> projects to simulate simple devices on an FPGA to test software and
-> adjacent devices in a conceptually similar way; one of these teams
-> built a Domain Specific Language kind of like roadtest to implement
-> the tests and the environment for the tests. The main reason I mention
-> this here is I am thinking about maybe one day having an API you can
-> implement so you can run your roadtests on UML, QEMU, or on any
-> emulator or hardware testbed that implements the appropriate API.
-> 
-> I'll try to dig up some people who might be interested and add them here.
-> 
-> > +    dts = DtFragment(
-> > +        src="""
-> > +&i2c {
-> > +    light-sensor@$addr$ {
-> > +        compatible = "ti,opt3001";
-> > +        reg = <0x$addr$>;
-> > +    };
-> > +};
-> > +        """,
-> > +        variables={
-> > +            "addr": DtVar.I2C_ADDR,
-> > +        },
-> > +    )
-> > +
-> > +    @classmethod
-> > +    def setUpClass(cls) -> None:
-> > +        insmod("opt3001")
-> > +
-> > +    @classmethod
-> > +    def tearDownClass(cls) -> None:
-> > +        rmmod("opt3001")
-> > +
-> > +    def setUp(self) -> None:
-> > +        self.driver = I2CDriver("opt3001")
-> > +        self.hw = Hardware("i2c")
-> > +        self.hw.load_model(OPT3001)
-> > +
-> > +    def tearDown(self) -> None:
-> > +        self.hw.close()
-> > +
-> > +    def test_illuminance(self) -> None:
-> > +        data = [
-> > +            # Some values from datasheet, and 0
-> > +            (0b_0000_0000_0000_0000, 0),
-> > +            (0b_0000_0000_0000_0001, 0.01),
-> > +            (0b_0011_0100_0101_0110, 88.80),
-> > +            (0b_0111_1000_1001_1010, 2818.56),
-> > +        ]
-> > +        with self.driver.bind(self.dts["addr"]) as dev:
-> > +            luxfile = dev.path / "iio:device0/in_illuminance_input"
-> > +
-> > +            for regval, lux in data:
-> > +                self.hw.reg_write(REG_RESULT, regval)
-> > +                self.assertEqual(read_float(luxfile), lux)
-> 
-> I love the framework; this looks very easy to use.
-> 
-> One nit about this test; it seems like you cover just one test case
-> here - the happy path. Can you cover some other one? Particularly some
-> error paths?
-> 
-> Sorry, I am not trying to be cheeky here; it looks like this driver
-> actually should probably be fully (or very close to fully) testable
-> via roadtest as I understand it. It only looks like there are a
-> handful of cases to cover for the driver: the device is busy, the
-> device returned something invalid, the user requested something
-> invalid, and several SMBus read/write failures - it really only looks
-> like there are a handful of paths and I think they are all accessible
-> via the I2C interface (except for maybe the user requesting something
-> invalid).
+- firewall:
+  still partly missing there, there is not yet interception of hidraw
+  calls, but it's coming in a followup series, I promise
 
-Yes, there are more things that could be tested in this driver.
-However, as the commit message says, I only indented this particular
-test to serve as a regression test for the specific bug fix, which would
-need an environment where the chip detects 0 lux to be able to test on
-real hardware.  There are a few reasons for this:
+- tracing:
+  well, tracing.
 
- - Unlike the other drivers being tested in this series, I don't have
-   access to boards with this chip so my interest in this particular
-   piece of hardware is limited.
 
- - I actually started writing more tests for this driver earlier on
-   (specifically, testing the configuration which uses interrupts), but
-   I quickly discovered that this driver has race conditions which
-   result in unbalanced mutex locking (in brief: the ok_to_ignore_lock
-   stuff is broken).  This shows the value of the test framework, but I
-   also didn't want to write non-trivial fixes for drivers where I
-   didn't have real hardware to test.
+I think I addressed the comments from the previous version, but there are
+a few things I'd like to note here:
 
- - Also, some paths in this driver needs a modification to be tested
-   under roadtest.  It uses wait_event_timeout() with a fixed value, but
-   we cannot guarantee that this constraint is met in the test
-   environment since it depends on things like CPU load on the host.
+- I did not take the various rev-by and tested-by (thanks a lot for those)
+  because the uapi changed significantly in v3, so I am not very confident
+  in taking those rev-by blindly
 
-   (Also, we use UML's "time travel" feature which essentially
-   fast-forwards through idle time, so the constraint can never be met
-   in practice.)
-   
-   So the timeout parameter would have to be made adjustable via say a
-   module parameter, to be able to make it infinite (to test the normal
-   case) and not (to be able to test timeout handling).  I think this
-   could be done fairly cleanly with a one- or two-liner patch to the
-   driver and by hiding the details in a header file behind a
-   roadtest-specific config option, but I wanted to avoid having to
-   patch the kernel proper for the initial version of the framework.
+- I mentioned in my discussion with Song that I'll put a summary of the uapi
+  in the cover letter, but I ended up adding a (long) file in the Documentation
+  directory. So please maybe start by reading 17/17 to have an overview of
+  what I want to achieve
 
-For vcnl4000, I have actually inherited some out-of-tree patches which
-are in need of mainlining so the tests are a bit more complete since I'm
-hoping to send some patches to that driver soon.  The period mode busy
-handling is not tested there either though, I can try to add that.
+- I added in the libbpf and bpf the new type BPF_HID_DRIVER_EVENT, even though
+  I don't have a user of it right now in the kernel. I wanted to have them in
+  the docs, but we might not want to have them ready here.
+  In terms of code, it just means that we can attach such programs types
+  but that they will never get triggered.
 
-As for I2C API failures, I have not added tests for them in any of the
-drivers.  There's not much the test cases could assert, other than
-perhaps error propagation, so it's unclear if there is enough value
-compared to the effort required to implement test cases to make sure
-that every I2C transaction's failure path is tested.
+Anyway, I have been mulling on this for the past 2 weeks, and I think that
+maybe sharing this now is better than me just starring at the code over and
+over.
 
-But I think that we do want to at least make sure the error paths are
-executed, to check that drivers don't crash or deadlock due to faulty
-cleanups and the like.  A way to solve this could be to implement fault
-injection support in the I2C framework.  The fail-nth feature could be
-used to systemically trigger each and every I2C transaction failure and
-check that the driver doesn't blow up, while using the roadtest as a
-means to hit the various code paths in the driver during each of the
-iterations of fail-nth.  Fault injection support would also be helpful
-when testing on real hardware.
+
+Short summary of changes:
+
+v3:
+===
+
+- squashed back together most of the libbpf and bpf changes into bigger
+  commits that give a better overview of the whole interactions
+
+- reworked the user API to not expose .data as a directly accessible field
+  from the context, but instead forces everyone to use hid_bpf_get_data (or
+  get/set_bits)
+
+- added BPF_HID_DRIVER_EVENT (see note above)
+
+- addressed the various nitpicks from v2
+
+- added a big Documentation file (and so adding now the doc maintainers to the
+  long list of recipients)
+
+v2:
+===
+
+- split the series by subsystem (bpf, HID, libbpf, selftests and
+  samples)
+
+- Added an extra patch at the beginning to not require CAP_NET_ADMIN for
+  BPF_PROG_TYPE_LIRC_MODE2 (please shout if this is wrong)
+
+- made the bpf context attached to HID program of dynamic size:
+  * the first 1 kB will be able to be addressed directly
+  * the rest can be retrieved through bpf_hid_{set|get}_data
+    (note that I am definitivey not happy with that API, because there
+    is part of it in bits and other in bytes. ouch)
+
+- added an extra patch to prevent non GPL HID bpf programs to be loaded
+  of type BPF_PROG_TYPE_HID
+  * same here, not really happy but I don't know where to put that check
+    in verifier.c
+
+- added a new flag BPF_F_INSERT_HEAD for BPF_LINK_CREATE syscall when in
+  used with HID program types.
+  * this flag is used for tracing, to be able to load a program before
+    any others that might already have been inserted and that might
+    change the data stream.
+
+Cheers,
+Benjamin
+
+
+
+[0] https://lore.kernel.org/linux-input/20220224110828.2168231-1-benjamin.tissoires@redhat.com/T/#t
+[1] https://lore.kernel.org/linux-input/20220304172852.274126-1-benjamin.tissoires@redhat.com/T/#t
+
+
+Benjamin Tissoires (17):
+  bpf: add new is_sys_admin_prog_type() helper
+  bpf: introduce hid program type
+  bpf/verifier: prevent non GPL programs to be loaded against HID
+  libbpf: add HID program type and API
+  HID: hook up with bpf
+  HID: allow to change the report descriptor from an eBPF program
+  selftests/bpf: add tests for the HID-bpf initial implementation
+  selftests/bpf: add report descriptor fixup tests
+  selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+  selftests/bpf: add test for user call of HID bpf programs
+  samples/bpf: add new hid_mouse example
+  bpf/hid: add more HID helpers
+  HID: bpf: implement hid_bpf_get|set_bits
+  HID: add implementation of bpf_hid_raw_request
+  selftests/bpf: add tests for hid_{get|set}_bits helpers
+  selftests/bpf: add tests for bpf_hid_hw_request
+  Documentation: add HID-BPF docs
+
+ Documentation/hid/hid-bpf.rst                | 444 +++++++++++
+ Documentation/hid/index.rst                  |   1 +
+ drivers/hid/Makefile                         |   1 +
+ drivers/hid/hid-bpf.c                        | 328 ++++++++
+ drivers/hid/hid-core.c                       |  34 +-
+ include/linux/bpf-hid.h                      | 127 +++
+ include/linux/bpf_types.h                    |   4 +
+ include/linux/hid.h                          |  36 +-
+ include/uapi/linux/bpf.h                     |  67 ++
+ include/uapi/linux/bpf_hid.h                 |  71 ++
+ include/uapi/linux/hid.h                     |  10 +
+ kernel/bpf/Makefile                          |   3 +
+ kernel/bpf/btf.c                             |   1 +
+ kernel/bpf/hid.c                             | 728 +++++++++++++++++
+ kernel/bpf/syscall.c                         |  27 +-
+ kernel/bpf/verifier.c                        |   7 +
+ samples/bpf/.gitignore                       |   1 +
+ samples/bpf/Makefile                         |   4 +
+ samples/bpf/hid_mouse_kern.c                 | 117 +++
+ samples/bpf/hid_mouse_user.c                 | 129 +++
+ tools/include/uapi/linux/bpf.h               |  67 ++
+ tools/lib/bpf/libbpf.c                       |  23 +-
+ tools/lib/bpf/libbpf.h                       |   2 +
+ tools/lib/bpf/libbpf.map                     |   1 +
+ tools/testing/selftests/bpf/config           |   3 +
+ tools/testing/selftests/bpf/prog_tests/hid.c | 788 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/hid.c      | 205 +++++
+ 27 files changed, 3204 insertions(+), 25 deletions(-)
+ create mode 100644 Documentation/hid/hid-bpf.rst
+ create mode 100644 drivers/hid/hid-bpf.c
+ create mode 100644 include/linux/bpf-hid.h
+ create mode 100644 include/uapi/linux/bpf_hid.h
+ create mode 100644 kernel/bpf/hid.c
+ create mode 100644 samples/bpf/hid_mouse_kern.c
+ create mode 100644 samples/bpf/hid_mouse_user.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/hid.c
+
+-- 
+2.35.1
+
