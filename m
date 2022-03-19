@@ -2,406 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F9A4DE65B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Mar 2022 06:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC9B4DE69E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Mar 2022 08:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242243AbiCSF5a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Mar 2022 01:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S242298AbiCSHKe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Mar 2022 03:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiCSF53 (ORCPT
+        with ESMTP id S234579AbiCSHKd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Mar 2022 01:57:29 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5175523D584
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 22:56:08 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id u67-20020a627946000000b004fa6338bd77so3134863pfc.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 22:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=nOSscoLBz+9Ez3L4Uv5wJKlo4Zgucqk65NIslIX0k5k=;
-        b=jnf5Wpt/CuS2xwZqbh1dbM/o6C/et+7Zba5iWmAOmLySKqO03YfW8yNOkSFI88fEyO
-         WF30USIj2Kjpt4rHtEuF2l8MLi/8g5rs35hZTL9TcmlhPI3OGcypqR7I+Ona2BQdLXxq
-         0oNU+IiAEma8mKeo4HyEL1AyMSxzqCNK1Pn3SsT7y5YeR8NMYkK42MCPNcuE9j/zAgpV
-         zkx3PTDz1cdK9ghzz+aZ7+d+RidEAIVwL9XybzbFhV6fkH3P26Jz2t3BpHnHCQdnh+RA
-         v9qLLKTrWMfqsEzQfwE7IzdzS3O2zeo8m2/usibNnz2cusUXr5XUVhJaPpjnZCaLZHWS
-         kmTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=nOSscoLBz+9Ez3L4Uv5wJKlo4Zgucqk65NIslIX0k5k=;
-        b=E291rayZK2JpHbjMcK9c4L52mjA+Vkw9f2ji667F3QsFbDSUhnj/Mm3/2CR7vKQT9s
-         MvfBlRS3mdpqB9S5zRg3ZlTBgUnIbMEgwjS8nZy7XmtKs9SOT+P44PMJGyYUuHZ+nrVL
-         55ckKW3WfnOq9+pGSbgk0uFj8bbvXblhJIYc2uVKIB3i5QuH6BC77Ck7uAY34U4cRYYT
-         RlZ5I3wq3ZdvJSUaGTEk8YdX5DXkUcnnCbj4V+ootrXpOk8DLuMvw2Qosh91f/v6Nv5Q
-         9FEyF1zCKb5FrbzutrMwc/Cngrvwvh/z2bgWJDSEJeUjSXLoWCKDKKLNuiNMUTIvo7A/
-         /I3g==
-X-Gm-Message-State: AOAM532sw4ezKZCzZ/K/85LDHXY2K8VpsLR1+f9JF12Bc5QSq6C34hqu
-        ZsfCExhUGmW71v0lgNNHjSDCdPZwvN5Evw==
-X-Google-Smtp-Source: ABdhPJxqHkAvVA6p1JsGlFu9o1xcfR1E6qQ6OS5h2MpA6WLr5xgXKzCqcI5Qk0OiQC/hlqmlSE9d2ADHMzsY8w==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90b:e81:b0:1c6:5a9c:5afa with SMTP id
- fv1-20020a17090b0e8100b001c65a9c5afamr742984pjb.1.1647669367224; Fri, 18 Mar
- 2022 22:56:07 -0700 (PDT)
-Date:   Sat, 19 Mar 2022 13:56:00 +0800
-Message-Id: <20220319055600.3471875-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH] kunit: Rework kunit_resource allocation policy
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 03:10:33 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2120.outbound.protection.outlook.com [40.107.215.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2AB4CD67;
+        Sat, 19 Mar 2022 00:09:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PaGLPfOo34DkzNziVOMeNY66hNH2Bsyx0Br39lcLnRH5gTykD3700MhULeIIeGGntdjJneLoncS7oLTL/zXCm71MYVlUpwuuMayaLeZfZeNfZTsAUBrCdLby1nRtyWmfhpQNjOQ3Pu5ISoQVy4FGLPKRMjukgrnmMeg7qnt6tE7XqrWvCYbJU3niwBaYvd+jmskzPpaeOZ7i6CjrN4vmSB4sVtmGC1PWjh/EuSn6XewaJzu65DNzXqowWmFf/3nVCzmgofdlDTU/GtusVFI1pJhQcvJxEDucaTUw3v5q/GkE37AoAC/G+xvvNgXy/+ox12JSMvLwjVg4iFf/ZFeFTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CAxoQcoC5fhyXWJybJpr5KtFLmZeimj3BURd34nmioY=;
+ b=WwkNW5qRRSoNiPahmsdofg82+DnxwYZAGinI3NlT91NBkBaMoP82SzVDKqDc3Cp+K1C4BdSv7jzFKnTWrXrtreZLBXvo/y8VSIpp0rVe8F5oExgKFfte62AIsecBklcCKg6dToZsb+tg35AbdfxUXJ+njYNPJn2duVY8kte2Wm7DlKQks7fkDKBMhbj6xFWUlnreaP7fedyyjIWlD2PQ0eo3JAVoZ2Ku7e2KlFdlDH+5XnGaHHP6VHxURnYtGb1xn/2bc/UfnrYMh0lnsJRNxlk2yM3Lm7UVbyvb175VZNVROXdDYS+XS238+QHapCxjgapltRCIJyelvL762Mq2rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CAxoQcoC5fhyXWJybJpr5KtFLmZeimj3BURd34nmioY=;
+ b=Qzmp+yuW8hl3iO2cO4gmkdFU1+ncoSQnedGsblg8T+a58Ouoi6h6V1eg2RNFaDwGaw2RWD4ujBasztl5tW05Xv8iChotGXZZA+pXtOMqhgZpb3QriEYAU5YcZcEmpPdQdv7IQpyEGDGuHQQk5F3PS72IjlPwCSsFPkaNAHV8dqM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by KL1PR0601MB4082.apcprd06.prod.outlook.com (2603:1096:820:2f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Sat, 19 Mar
+ 2022 07:09:06 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5081.018; Sat, 19 Mar 2022
+ 07:09:06 +0000
+Message-ID: <a183d3e8-563e-6e0c-9796-4053e2bad6b7@vivo.com>
+Date:   Sat, 19 Mar 2022 15:09:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH linux-next v2] selftests: net: change fprintf format
+ specifiers
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "zhengkui_guo@outlook.com" <zhengkui_guo@outlook.com>
+References: <1d21ee8a-837d-807d-14a4-4ee1af640089@vivo.com>
+ <20220318075013.48964-1-guozhengkui@vivo.com>
+ <20220318093300.2938e068@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+In-Reply-To: <20220318093300.2938e068@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK0PR01CA0064.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::28) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 808ed59d-b037-42eb-215e-08da09775ac3
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4082:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB408222804CB3D9E33CB3C746C7149@KL1PR0601MB4082.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j8tIeuiYtGRj0GxAAcqE+3j0IRFdBCRr6GIzJnxG4NEk8qpRO/MxH7lmxPnO1kzotPjeYltmY0c8vZVeS4OGq1JbgSx5gdAeYWodXIrngD7hI4IwDSJXaJo2+6cfh4Z4m3FDjwrRX/v4mcOAppemlVwkDPDO/m8TQtAaiI8b4d2E4DNm+bg5IKHNLWQk/3pbRl9xbm/56664jkguW+yyOITTGDODCmExt3VSLtJ6yma09/JzSiDZHiIVOFBMELKci4LMJV1fs9WSwBbAJorjRy1kfeAnAO2EbDkpW9GVHLoAHPY1g4IsBiqrPx7mC/wsSfhhiFzhv7BPNz+FRxd+Za9LGCWMr0ynasAduWLO9Qc5X2wc2wM9yF6JsdQ8tf7Y552fjvk9OJkhEb8qrA6EYqnPK96IAoezF1lXrKLvDHfD6nK5s835CpQmanaMOFVseZMi6mNESyDuKGKjs8CzMdS+HeVxY15qblE1ZuT9q/qucgVvtQTjgGwmBz1zXF0ZooygmI3Mealb1Cn0R2EbGtLBlLvuGiMc8fAIsDNRGhrWDwBCn+z3iuFGBOm/NqBXFjvayDmQUv7Xp3i2ZafIX2XLFpvYLhtASOwgRXpJTcnzWCwYtqP5WX0DZCCrVtjiMpjTDwwtFM2r4RQvFpI8u6RJbILLwMbcx7WhWSUBJsDtASf2HYIr3K2EvtiBTiLPY87Qovxf9pH64Erm9AGdO6X+O5n2BUgAPuphCpHP0XhT9ojkq3yKTXpDNV61yp/9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(38350700002)(4744005)(38100700002)(31696002)(508600001)(8936002)(36756003)(6512007)(6486002)(316002)(66556008)(66946007)(6506007)(66476007)(52116002)(6916009)(186003)(54906003)(4326008)(8676002)(2616005)(2906002)(86362001)(6666004)(5660300002)(53546011)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0kzTER5TDg0eEd1M1NINVdPdmo4RnpjK25QUVhJSXJGLzhlbk9IbjNOSTVl?=
+ =?utf-8?B?THpGenZ2MUpRUTFWTFdEbHVCYUR1bmhPbm13QWxDbUUrcTE2eW1QMWlqVTBR?=
+ =?utf-8?B?TnZHK0lLREJJZVJVeFl0WWp2bDlNYlRCR2NKUm9oZ0x3RDRRT2wwZEU2dlU2?=
+ =?utf-8?B?c0ltOUQ1aEhoY1pLVEh6T1JyVEFScFhuRi9od1QrRFd1YnJnbzJQNUkyb3NH?=
+ =?utf-8?B?ME1ENW43Nmdock0yNXR3SFRQL1p3RWFVQk1hb0Jwam5yWHJlZTk2RlllTGJJ?=
+ =?utf-8?B?SDZHa21sbDNBayt5YldNWTE3VDlqTVVsanVOa0pmUE92Y3llOWQwMTdKREpw?=
+ =?utf-8?B?YzFXTUF5UzRybkhBRUtWeXZpRStFeGV5MDQwdXR5MDl4QjBQUFhBT1ZydXJO?=
+ =?utf-8?B?Y2tybExwOUg2QTRYRmhqUzFFWU9nMGR2c0FjMnRZZEVJWCttRjAyWHkvdG9R?=
+ =?utf-8?B?T3F2YXcvUjFJblQwNzY0dlZURlZacXhQNm5hVThCanNsOWhNUStXcUVWRkZY?=
+ =?utf-8?B?anNsRk9pWWlQZkhEYUFmMzJmdXBOOWRoMUU3NkhFcUlpQ0QvN3ljd1ZKUVpq?=
+ =?utf-8?B?WHo4TGIxQXFPRUx5ckIvUXVtVEY2RWNVekVXK2NLSG5VT3huaU1peXlaM2ZZ?=
+ =?utf-8?B?aUF5MmxvcWdHM0dyKzdlbG16MDIwRmJWRFNXMlVmTm5tanYwWmxaMzJ1eEhx?=
+ =?utf-8?B?UHZpZ2p1bURwUFVyZlprUGc5dGxlM2FnMW5zQVZqTjBVSzYzUTMrQXh6enJz?=
+ =?utf-8?B?WmNySHNISnRXWDNHNm83Sm5sU2VtdjR3VGtURXFoOFhLZ2hLRHA5YnFKK3Iz?=
+ =?utf-8?B?ZG5MamtkT0xLVm9ZVGpPRkY0L2w2UHQrZEJWQUthM1RqV1JyaW1rSDFTVXA4?=
+ =?utf-8?B?QXgvRWllYlVOR3l1VFFhNlhEVVJwVWN4b2o5VzRKaktYdkNpSkRsK2xvSkxj?=
+ =?utf-8?B?b1NSSlo3bHZqczVmcjNtTkd0V3hybitxMjNYV3M0RU83Zk9OT0FVanFtQXdm?=
+ =?utf-8?B?UDcwSHF0VitEemJ3UUZVU1NYOUg4OXgvZG1yemd3aFhHNm1CTE84b0lSVHYr?=
+ =?utf-8?B?dW5ycWFuVVduWXUzb1F1TTZBdXlVL2xjSzFWRjdBVG1SVVcrd2xzRDJHaFY0?=
+ =?utf-8?B?RFlEMERvbTV6N3hvcnJkdUxwYVVVU1NYWEZ5OHFyZU0zZnYyMVNlTGhTcGlJ?=
+ =?utf-8?B?K3Q2b1M3VlhaaFRQOE11cVNmNjlWSDJTWTB0U2lBYWQzWXFFWTduQStxR2pV?=
+ =?utf-8?B?eXFld0dkNGEzUlFBSkFxTFRUSTlSZkJWZjQrV2tGSHhLaXVPNXVqQmhGbW13?=
+ =?utf-8?B?SmQ4aXZMUzN1bHpWZVkyTERjVW9UUmNLL090S0E2blVyclpTTE9ocDROb1hM?=
+ =?utf-8?B?MExWTjJzUFQrc011TlFaTW01dXZYaU16YXRUbk9nZ1U1VlRtdEdRMVA4aUxz?=
+ =?utf-8?B?bXZ4cGlvTkJZaldZNDRYdXQ0TjZOVk4zY2NtY0RLZUY1L3lzWkNiOExocGJF?=
+ =?utf-8?B?Ni9TYlc5TTVOdTFpZnFSVHRPM083Mk9DUXQvcXB4d2FzV0x5UEFTcGZweURV?=
+ =?utf-8?B?d2NEaGNsSGY1RHZWNFhWVkEwbGFHeDVMTG5pd0MxbXdndXl4Q0FuUXRnNUtZ?=
+ =?utf-8?B?YzZoS2tQMnJISUJjUjJSRzIwUVhHYWU2OHdKUVFrcDg4YTlnaURTdzVNVVRW?=
+ =?utf-8?B?eVZya2FjN0dhWC9GTUFPdld4Ky80Q2Z0aUhiUUhmMlB5WjBLRG9iT0NhK3Jl?=
+ =?utf-8?B?SzJETXFWcDR2Q0ZYYytQZld3b2pCS0pWSzdCelh0M2o4QUw5c2UyalV0dkxq?=
+ =?utf-8?B?d0tVeHNsUGRvU0ZRaTloZTNhWnlVSkNKVGRJa0R2SHBvc21ETEhDNVlnOHdx?=
+ =?utf-8?B?M015NkhOVTF6ckViU3RJd3RkWTFEeVdXNGRkRnozOVVubXJRVGFTNzRVSVpq?=
+ =?utf-8?Q?x8x29c9dsgITCTEnlmtX8TLyrYpFKJiI?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 808ed59d-b037-42eb-215e-08da09775ac3
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2022 07:09:05.6873
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CIybM4H7BI/FNadKHfX9HDhwtEwfOsKy4/Qzoc3eM+U7kjfCUmIjp3EXciYE5GGKjQpe5eYlcRZ6rRD598XXgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4082
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit's test-managed resources can be created in two ways:
-- Using the kunit_add_resource() family of functions, which accept a
-  struct kunit_resource pointer, typically allocated statically or on
-  the stack during the test.
-- Using the kunit_alloc_resource() family of functions, which allocate a
-  struct kunit_resource using kzalloc() behind the scenes.
+On 2022/3/19 0:33, Jakub Kicinski wrote:
+> On Fri, 18 Mar 2022 15:50:13 +0800 Guo Zhengkui wrote:
+>> `cur64`, `start64` and `ts_delta` are int64_t. Change
+>> format specifiers in fprintf from '%lu' to '%ld'.
+>>
+>> It has been tested with gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+>> on x86_64.
+> 
+> No, not like that. Please read up on printing int64_t.
 
-Both of these families of functions accept a 'free' function to be
-called when the resource is finally disposed of.
+Sorry for misunderstanding. I wrongly thought that it's just for 64-bit.
 
-At present, KUnit will kfree() the resource if this 'free' function is
-specified, and will not if it is NULL. However, this can lead
-kunit_alloc_resource() to leak memory (if no 'free' function is passed
-in), or kunit_add_resource() to incorrectly kfree() memory which was
-allocated by some other means (on the stack, as part of a larger
-allocation, etc), if a 'free' function is provided.
+So I should use `PRId64`.
 
-Instead, always kfree() if the resource was allocated with
-kunit_alloc_resource(), and never kfree() if it was passed into
-kunit_add_resource() by the user. (If the user of kunit_add_resource()
-wishes the resource be kfree()ed, they can call kfree() on the resource
-from within the 'free' function.
-
-This is implemented by adding a 'should_free' member to
-struct kunit_resource and setting it appropriately. To facilitate this,
-the various resource add/alloc functions have been refactored somewhat,
-making them all call a __kunit_add_resource() helper after setting the
-'should_free' member appropriately. In the process, all other functions
-have been made static inline functions.
-
-Signed-off-by: David Gow <davidgow@google.com>
----
- include/kunit/test.h | 135 +++++++++++++++++++++++++++++++++++--------
- lib/kunit/test.c     |  65 +++------------------
- 2 files changed, 120 insertions(+), 80 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 00b9ff7783ab..5a3aacbadda2 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -36,11 +36,14 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-  * struct kunit_resource - represents a *test managed resource*
-  * @data: for the user to store arbitrary data.
-  * @name: optional name
-- * @free: a user supplied function to free the resource. Populated by
-- * kunit_resource_alloc().
-+ * @free: a user supplied function to free the resource.
-  *
-  * Represents a *test managed resource*, a resource which will automatically be
-- * cleaned up at the end of a test case.
-+ * cleaned up at the end of a test case. This cleanup is performed by the 'free'
-+ * function. The resource itself is allocated with kmalloc() and freed with
-+ * kfree() if created with kunit_alloc_{,and_get_}resource(), otherwise it must
-+ * be freed by the user, typically with the 'free' function, or automatically if
-+ * it's allocated on the stack.
-  *
-  * Resources are reference counted so if a resource is retrieved via
-  * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
-@@ -97,6 +100,7 @@ struct kunit_resource {
- 	/* private: internal use only. */
- 	struct kref refcount;
- 	struct list_head node;
-+	bool should_free;
- };
- 
- struct kunit;
-@@ -385,16 +389,6 @@ static inline int kunit_run_all_tests(void)
- 
- enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite);
- 
--/*
-- * Like kunit_alloc_resource() below, but returns the struct kunit_resource
-- * object that contains the allocation. This is mostly for testing purposes.
-- */
--struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
--						    kunit_resource_init_t init,
--						    kunit_resource_free_t free,
--						    gfp_t internal_gfp,
--						    void *context);
--
- /**
-  * kunit_get_resource() - Hold resource for use.  Should not need to be used
-  *			  by most users as we automatically get resources
-@@ -416,10 +410,14 @@ static inline void kunit_release_resource(struct kref *kref)
- 						  refcount);
- 
- 	/* If free function is defined, resource was dynamically allocated. */
--	if (res->free) {
-+	if (res->free)
- 		res->free(res);
-+
-+	/* 'res' is valid here, as if should_free is set, res->free may not free
-+	 * 'res' itself, just res->data
-+	 */
-+	if (res->should_free)
- 		kfree(res);
--	}
- }
- 
- /**
-@@ -440,7 +438,9 @@ static inline void kunit_put_resource(struct kunit_resource *res)
- }
- 
- /**
-- * kunit_add_resource() - Add a *test managed resource*.
-+ * __kunit_add_resource() - Internal helper to add a resource.
-+ *
-+ * res->should_free is not initialised.
-  * @test: The test context object.
-  * @init: a user-supplied function to initialize the result (if needed).  If
-  *        none is supplied, the resource data value is simply set to @data.
-@@ -449,12 +449,34 @@ static inline void kunit_put_resource(struct kunit_resource *res)
-  * @res: The resource.
-  * @data: value to pass to init function or set in resource data field.
-  */
--int kunit_add_resource(struct kunit *test,
-+int __kunit_add_resource(struct kunit *test,
- 		       kunit_resource_init_t init,
- 		       kunit_resource_free_t free,
- 		       struct kunit_resource *res,
- 		       void *data);
- 
-+/**
-+ * kunit_add_resource() - Add a *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user-supplied function to initialize the result (if needed).  If
-+ *        none is supplied, the resource data value is simply set to @data.
-+ *	  If an init function is supplied, @data is passed to it instead.
-+ * @free: a user-supplied function to free the resource (if needed).
-+ * @res: The resource.
-+ * @data: value to pass to init function or set in resource data field.
-+ */
-+static inline int kunit_add_resource(struct kunit *test,
-+				     kunit_resource_init_t init,
-+				     kunit_resource_free_t free,
-+				     struct kunit_resource *res,
-+				     void *data)
-+{
-+	res->should_free = false;
-+	return __kunit_add_resource(test, init, free, res, data);
-+}
-+
-+static inline struct kunit_resource *
-+kunit_find_named_resource(struct kunit *test, const char *name);
- /**
-  * kunit_add_named_resource() - Add a named *test managed resource*.
-  * @test: The test context object.
-@@ -464,18 +486,84 @@ int kunit_add_resource(struct kunit *test,
-  * @name: name to be set for resource.
-  * @data: value to pass to init function or set in resource data field.
-  */
--int kunit_add_named_resource(struct kunit *test,
-+static inline int kunit_add_named_resource(struct kunit *test,
-+					   kunit_resource_init_t init,
-+					   kunit_resource_free_t free,
-+					   struct kunit_resource *res,
-+					   const char *name,
-+					   void *data)
-+{
-+	struct kunit_resource *existing;
-+
-+	if (!name)
-+		return -EINVAL;
-+
-+	existing = kunit_find_named_resource(test, name);
-+	if (existing) {
-+		kunit_put_resource(existing);
-+		return -EEXIST;
-+	}
-+
-+	res->name = name;
-+	res->should_free = false;
-+
-+	return __kunit_add_resource(test, init, free, res, data);
-+}
-+
-+/**
-+ * kunit_alloc_and_get_resource() - Allocates and returns a *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user supplied function to initialize the resource.
-+ * @free: a user supplied function to free the resource (if needed).
-+ * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
-+ * @context: for the user to pass in arbitrary data to the init function.
-+ *
-+ * Allocates a *test managed resource*, a resource which will automatically be
-+ * cleaned up at the end of a test case. See &struct kunit_resource for an
-+ * example.
-+ *
-+ * This is effectively identical to kunit_alloc_resource, but returns the
-+ * struct kunit_resource pointer, not just the 'data' pointer. It therefore
-+ * also increments the resource's refcount, so kunit_put_resource() should be
-+ * called when you've finished with it.
-+ *
-+ * Note: KUnit needs to allocate memory for a kunit_resource object. You must
-+ * specify an @internal_gfp that is compatible with the use context of your
-+ * resource.
-+ */
-+static inline struct kunit_resource *
-+kunit_alloc_and_get_resource(struct kunit *test,
- 			     kunit_resource_init_t init,
- 			     kunit_resource_free_t free,
--			     struct kunit_resource *res,
--			     const char *name,
--			     void *data);
-+			     gfp_t internal_gfp,
-+			     void *context)
-+{
-+	struct kunit_resource *res;
-+	int ret;
-+
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
-+
-+	res->should_free = true;
-+
-+	ret = __kunit_add_resource(test, init, free, res, context);
-+	if (!ret) {
-+		/*
-+		 * bump refcount for get; kunit_resource_put() should be called
-+		 * when done.
-+		 */
-+		kunit_get_resource(res);
-+		return res;
-+	}
-+	return NULL;
-+}
- 
- /**
-  * kunit_alloc_resource() - Allocates a *test managed resource*.
-  * @test: The test context object.
-  * @init: a user supplied function to initialize the resource.
-- * @free: a user supplied function to free the resource.
-+ * @free: a user supplied function to free the resource (if needed).
-  * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
-  * @context: for the user to pass in arbitrary data to the init function.
-  *
-@@ -499,7 +587,8 @@ static inline void *kunit_alloc_resource(struct kunit *test,
- 	if (!res)
- 		return NULL;
- 
--	if (!kunit_add_resource(test, init, free, res, context))
-+	res->should_free = true;
-+	if (!__kunit_add_resource(test, init, free, res, context))
- 		return res->data;
- 
- 	return NULL;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 3bca3bf5c15b..b4f10329abb8 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -596,18 +596,19 @@ EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
-  * Used for static resources and when a kunit_resource * has been created by
-  * kunit_alloc_resource().  When an init function is supplied, @data is passed
-  * into the init function; otherwise, we simply set the resource data field to
-- * the data value passed in.
-+ * the data value passed in. Doesn't initialize res->should_free.
-  */
--int kunit_add_resource(struct kunit *test,
--		       kunit_resource_init_t init,
--		       kunit_resource_free_t free,
--		       struct kunit_resource *res,
--		       void *data)
-+int __kunit_add_resource(struct kunit *test,
-+			 kunit_resource_init_t init,
-+			 kunit_resource_free_t free,
-+			 struct kunit_resource *res,
-+			 void *data)
- {
- 	int ret = 0;
- 	unsigned long flags;
- 
- 	res->free = free;
-+	res->should_free = false;
- 	kref_init(&res->refcount);
- 
- 	if (init) {
-@@ -625,57 +626,7 @@ int kunit_add_resource(struct kunit *test,
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(kunit_add_resource);
--
--int kunit_add_named_resource(struct kunit *test,
--			     kunit_resource_init_t init,
--			     kunit_resource_free_t free,
--			     struct kunit_resource *res,
--			     const char *name,
--			     void *data)
--{
--	struct kunit_resource *existing;
--
--	if (!name)
--		return -EINVAL;
--
--	existing = kunit_find_named_resource(test, name);
--	if (existing) {
--		kunit_put_resource(existing);
--		return -EEXIST;
--	}
--
--	res->name = name;
--
--	return kunit_add_resource(test, init, free, res, data);
--}
--EXPORT_SYMBOL_GPL(kunit_add_named_resource);
--
--struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
--						    kunit_resource_init_t init,
--						    kunit_resource_free_t free,
--						    gfp_t internal_gfp,
--						    void *data)
--{
--	struct kunit_resource *res;
--	int ret;
--
--	res = kzalloc(sizeof(*res), internal_gfp);
--	if (!res)
--		return NULL;
--
--	ret = kunit_add_resource(test, init, free, res, data);
--	if (!ret) {
--		/*
--		 * bump refcount for get; kunit_resource_put() should be called
--		 * when done.
--		 */
--		kunit_get_resource(res);
--		return res;
--	}
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
-+EXPORT_SYMBOL_GPL(__kunit_add_resource);
- 
- void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
- {
--- 
-2.35.1.894.gb6a874cedc-goog
-
+Zhengkui
