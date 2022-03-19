@@ -2,154 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7973A4DE6C6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Mar 2022 08:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E488E4DE984
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Mar 2022 18:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236871AbiCSHjM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Mar 2022 03:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S237003AbiCSRcD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Mar 2022 13:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234551AbiCSHjL (ORCPT
+        with ESMTP id S231164AbiCSRcD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Mar 2022 03:39:11 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2110.outbound.protection.outlook.com [40.107.255.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D902D1FEB;
-        Sat, 19 Mar 2022 00:37:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7dm2uK016EXYLGc8B46++Qwbr5CyH+423vP/YrNGVmx0O9ZUnRBJ47Eu2omySNRCyjOtnGa/Ub4nctRJE6b4B1Z7RLdiRd1oCVHV+fuv8Gp+s+XQbdCzzs1I1YUjT1JueL6ri1l3CfrnOuk1ifqXbu4VXQbJ9Gv0n3hwjW9QN3iA7kiD6RMvsX622XpFKPIW2MtKofEaUfjdI6UTyzBX5js48xdiTkKHTHZ+ZaTvZM9oSMm9tv8WYOa3AifHObyHOwFCOol9JTZpUPRJr3sxP53gRcSsEuNmQ+gf1kiF/0zeMX5zV6hgfTTzLqDrGiHwWKzMbDWV8qgvos5SDji4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v3m5VZU/3q5Yy/XIHqlCbbESLAaoC3UyoL+79tdJB/c=;
- b=lSY5cL20Lt2Fzc8iMTQRBRT3Kz6GMCQK7Go8InCAjfV+5twdmSSIVB/PNUgGNP7qoabwhDUsdJdJwBd5YnlCN6rSP1O+ubuWd33FqM89Z6OiIqLhpMQzoZRMDR5vOmsnZipSJrfuVuYPMASbdiXut6qTSTRnJmAJuiYYD5mH3pcU0JWMWcZMDpJsZPykmUOYeYNXPBNWyf7DYC3uzC0tl4xRwe1AO3vQfMjHZGP45D238Zd7Ef9xVd4U6e/T6H7y5HEr+8nyPQJfRlw6XVJ+JkD5pshMtKD1t4/Su8+S/pe44kPKUSRHWCrubciznIV+1IZxchaEmOTncNpMKRyk5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v3m5VZU/3q5Yy/XIHqlCbbESLAaoC3UyoL+79tdJB/c=;
- b=R3cJsgwgPGQckq/cPUBAfPgl4W6m0ZdKx6kS1+2LQS4MQT5J4i36RPw9Nkeor5uOXK1ZdQEWX5LMaFbB6TOmTi+WUTiF9XRDc/e5dK+rnLKgMBnBUlbv3ut2M2cLxXFSLFX3IhS9gRAw7ppV93wSHqMWVqkOFOJHRnq2xer600w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
- by SG2PR06MB2966.apcprd06.prod.outlook.com (2603:1096:4:70::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.19; Sat, 19 Mar
- 2022 07:37:44 +0000
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5081.018; Sat, 19 Mar 2022
- 07:37:44 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
-Subject: [PATCH linux-next v3] selftests: net: change fprintf format specifiers
-Date:   Sat, 19 Mar 2022 15:37:30 +0800
-Message-Id: <20220319073730.5235-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220318093300.2938e068@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220318093300.2938e068@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2P15301CA0001.APCP153.PROD.OUTLOOK.COM
- (2603:1096:202:1::11) To HK2PR06MB3492.apcprd06.prod.outlook.com
- (2603:1096:202:2f::10)
+        Sat, 19 Mar 2022 13:32:03 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC9C45505;
+        Sat, 19 Mar 2022 10:30:40 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so4921643pjq.2;
+        Sat, 19 Mar 2022 10:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gkky0ysAeDzdOeO3GqqHPK43boR/dATbOBWfwwR2rWY=;
+        b=Yhfm7Oi6M91zdpAcdJ8Eq8EngtuD9X41Br2UE09MplRd9YCutcxFBtHj7IG2qUlqph
+         NRo1/nZqT4g46zZUs5RsVDKTOSIskmMKXSCdCbSiiYfOTfr45yIIJqaNZzg0xV4ekovg
+         gF3PqvIgRcDkampqEd5v8hxml0oEnHNBekN7uEgxeln7R0xa58HeVxoEoKyew1Hj7Ykx
+         4nhAPcNrzr6YQFdOoFlhYZTwjLmg5W5VhylSjTcXKrerVF/7yW/EPIqAg4W691YA6/pN
+         3wZr9r8OXD4yPM4X6+j4j6FpaAuTb2WlRkEtQB90TcpJorijurpp8SMtD3rDlCBcHh0w
+         qPCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gkky0ysAeDzdOeO3GqqHPK43boR/dATbOBWfwwR2rWY=;
+        b=XvE6nT30y1Ja7uGjmsQbeMGuZJ0XxJndc2q15PV17hcl/QO94JbvVCHvnQmJfZVWRR
+         IEvRFd5NH2sFHu2sgVklw9CG85DVQeDIeJX/882NOFvV03sr2sWGeN7hhW+P7OCh4WjN
+         KZ71MXYrWIz4RFaYJpbYjG55aY6l6cqO04OK0nlRCtd3URn2Buvmz8GDFM5cU81jC2SY
+         qV6MGKeFTmqH5H6TWY5BLenh1MtHaZKRzl7HksyeW0l6e1HWqna7R39sqGzb1uihIabw
+         TNzhbLnLi9z7mWC0Rby1zc4gURuR+UatYmMmZ+HSRMDjWpSnRbut0+uETNfJnAPzYXys
+         18EA==
+X-Gm-Message-State: AOAM533zo8kvoeed9juqSNp6s/2tmMUd8/c/RZ3cHXAz20F2K32PYi8V
+        QuE5E1IEsDoGv0rUS8vnGfI=
+X-Google-Smtp-Source: ABdhPJzPD40IHPfGNI4nK0Kxx/ACz+56A8fvNSZftre0O4FCiw5Zc/71Swb8opmJ6GfCIXIauJ3B2w==
+X-Received: by 2002:a17:902:8ec9:b0:14f:11f7:db77 with SMTP id x9-20020a1709028ec900b0014f11f7db77mr5126357plo.136.1647711040168;
+        Sat, 19 Mar 2022 10:30:40 -0700 (PDT)
+Received: from vultr.guest ([2001:19f0:6001:4ab8:5400:3ff:fee9:a154])
+        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 10:30:39 -0700 (PDT)
+From:   Yafang Shao <laoar.shao@gmail.com>
+To:     roman.gushchin@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH 00/14] bpf: Allow not to charge bpf memory 
+Date:   Sat, 19 Mar 2022 17:30:22 +0000
+Message-Id: <20220319173036.23352-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a6473590-241f-4d4e-ce04-08da097b5b35
-X-MS-TrafficTypeDiagnostic: SG2PR06MB2966:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB2966BCF24CA67E76FD030F11C7149@SG2PR06MB2966.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CiGC3REQeZGCs0Q/PDlyD0wZ9fHLIW2+Dpv+H34Ei2fUl9V6jg4EumAxcP/9zl1Z+/W3bhQruA3Y7aZOfy9av2uStyNompFOxs7c2uqKiaUnvIzbmbf98zf3ZEliM4OJu/DjwdEtLfcmZxRzfCFA8O9rMWeebihExdh9yV/9s4/jqX2NphYYLuysZUTqI6gtYHfrOY+qyqgDzIKuvbypL0Il97VnZF56bLDF9R6Apnu9eK0IWQRzesLpUfRVZl6a24pHCVLbj+QoaKV/m6pcT8nJPZjsXNmTUB5Z+TXMwTUbZI/OLT/01mBpRh/yawisgGQ8L+2b5TM/5KMAuhEZWIAJn0m/7BcETfwupsTQ/xSfSwNAlKWvEt8fBt1V4W6y3greAeefoEv5Andz5yY/szGSBijTQ7/mDzSY8Z6EISiEy2HF0O4zZnNGcDqnIUeOmN/n13A5xr3vSlyvr348xCys1pdjLaKC6UvPMwo+xBmfJkeQT5nkMIJ1BniYotc6SW1RFQeqY+CH28WZvo6Hhiua1GRjp9oHpas2HkPK8bL3WuAU0xqHSxLiNgY59PR8gU8VBNOCH+bA4n927gXBP69YBb6zS/v1AeQVRXqj7YsmrTZig5/tm0DHYTq8eeWLRtgokZ9j24Ls/SLY979GQAnuhIeSsW32Jk9m/kOcrFlUG7xW0b2sHNOqEEFGLer/JOL9rC1dypVSmJsqgT+fGA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(36756003)(316002)(38350700002)(38100700002)(5660300002)(6506007)(52116002)(6512007)(4326008)(8676002)(66556008)(66946007)(8936002)(6486002)(1076003)(107886003)(86362001)(66476007)(26005)(186003)(83380400001)(2616005)(508600001)(6666004)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y36UZxgvDacG/AlYyEpBX/exeU82uCvNtZ/vFcVSy/EABeJ6A8xLjoRTxKMc?=
- =?us-ascii?Q?A0798hChmAa4OpiKBEIcfRbfboBO45gjUDKbexlHOSLe5o1BY+BwxHPZ8gQJ?=
- =?us-ascii?Q?4GD4l0xbYnTdDY1gRaGQ707d1X8feSFOs4G/twSOpmzBF0HWRl/9cwgj8xtB?=
- =?us-ascii?Q?gfBFdt9MNR3rsL6DBoQhDWfnQ2HW7zCg0VtitaS+C9wdHgfTcie4oNUPtQHk?=
- =?us-ascii?Q?QLg29GSE4afsKFQlHpfLcJVEj/zGpvJOgt6CSHLK45OoYKmsB7BrBl03/5EM?=
- =?us-ascii?Q?/GLU15+A22AJNJAjqqTMRSqwk/1tZhbcgmLq88C4Az6o+7as7BHEo9Q+n5Nu?=
- =?us-ascii?Q?bTF5I4I8vcjoiQrkDdMc+ELz4Y/Vvb90zAjuQ50B8t28kz3syVNMAlZQ0Za/?=
- =?us-ascii?Q?GTuyPIA0vLAaVA0aBd9yPDpFjqFxK3hXkVq8W86Exam7GfTnA17B3JBCQYlK?=
- =?us-ascii?Q?edx2t1oXBfyjj6qvk7xm+Zu529vVOxiS302cdYcUabvb0ciLbrQU6OpZVaM9?=
- =?us-ascii?Q?hrFhFTEK+c+kJfiJCzOOmkgpyRWgmnJf5gzFXQxjNLIoZMJMCcgEyVZ7LO92?=
- =?us-ascii?Q?9SK3tqoma0PtgwT7vYyUhagANvr1n8QnHFnD+HYDCFueEPB1QItaqnUc81oE?=
- =?us-ascii?Q?G3I6xYk7avOTNBKyiM5ctFqLtXB6UyPumVRACj4q/TmU+8djuMuTCFwVpZ19?=
- =?us-ascii?Q?1CPO7TSCYaV/LQf1fhU5t1o8S9/UAPkZJMrhCbb0qbEZqjydr1SQ+6lsW2W2?=
- =?us-ascii?Q?vuvR0DNBJRc5wbdLWRdVtyRYTNhtdMm1BmJuT0Xd1zl97Jfk1eH0QDZ2YLSf?=
- =?us-ascii?Q?GnI5S1Adwj87tHwx7pKRgKqomLi9oTQLlcMpPMgMyjRmVHnpy/ZrQ9XSVNWK?=
- =?us-ascii?Q?obQwP1gFQYEl3W/BVhwFGXXKpxrvvzUdQe1COIbvjEK5fSx2ycm3BBW1HyI8?=
- =?us-ascii?Q?/6NJGUwbI6Ycbh8xkFHoQx0nyYUXyLNg/LTNrPAgAVmSNAgXcTAI+GSO+kto?=
- =?us-ascii?Q?mGFvN/fVPfFC3fWe14w0Z0innkp7zzpxGpg5bOHyQaZaW9NKNqXr8Pm8F6ID?=
- =?us-ascii?Q?Vp2bP8hQ1yx5tOlIBWiXY0zrmpGV4X2AEx2JjN33XaUiOv9Mrexbg6uegKg9?=
- =?us-ascii?Q?1hZmBB7IUlWVaeUHAVp0tC6j1Fg67AzpENBGezjaPl+GMoFbNBcQsc+SGTpo?=
- =?us-ascii?Q?Xj03gd5iyYDjeaO5NEisjLxSXeO28TqOMqy9/wIoPXI7MAMff/OtcfcErEKA?=
- =?us-ascii?Q?Wzcc5vTwEX4Xgl2YL8oOQ68uIaxF45ujKZb5TAoE8J/jcYp0g5MN2SyAqnqM?=
- =?us-ascii?Q?0lz5rUQFwPAwrf9LW3e19u/eBapDv+a+PCdBm2okMg2PEkWvly/P8iqhRBa6?=
- =?us-ascii?Q?cK2sxHNWhuXjZ/an6LG32q5CZGy8VjNVih9eMzuVSNzjaa9IDx1zaRIKc9Hs?=
- =?us-ascii?Q?ClwyNvBJfoVyzKtbFlPpjoiMWlLObyfl?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6473590-241f-4d4e-ce04-08da097b5b35
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2022 07:37:44.4414
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IqxG8OlwigYOlvznNNX3DFe99BQtDjPhLUUPNp+2hJUjadRoxNDzNRmZcOW6hlK3VRESZFI/PJaYocIRFyIWHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2966
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-`cur64`, `start64` and `ts_delta` are int64_t. Change format
-specifiers in fprintf from `"%lu"` to `"%" PRId64` to adapt
-to 32-bit and 64-bit systems.
+After switching to memcg-based bpf memory accounting, the bpf memory is
+charged to the loader's memcg by defaut, that causes unexpected issues for
+us. For instance, the container of the loader-which loads the bpf programs
+and pins them on bpffs-may restart after pinning the progs and maps. After
+the restart, the pinned progs and maps won't belong to the new container
+any more, while they actually belong to an offline memcg left by the
+previous generation. That inconsistent behavior will make trouble for the
+memory resource management for this container. 
 
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
----
- tools/testing/selftests/net/txtimestamp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The reason why these progs and maps have to be persistent across multiple
+generations is that these progs and maps are also used by other processes
+which are not in this container. IOW, they can't be removed when this
+container is restarted. Take a specific example, bpf program for clsact
+qdisc is loaded by a agent running in a container, which not only loads
+bpf program but also processes the data generated by this program and do
+some other maintainace things.
 
-diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
-index fabb1d555ee5..10f2fde3686b 100644
---- a/tools/testing/selftests/net/txtimestamp.c
-+++ b/tools/testing/selftests/net/txtimestamp.c
-@@ -161,7 +161,7 @@ static void validate_timestamp(struct timespec *cur, int min_delay)
- 	max_delay = min_delay + cfg_delay_tolerance_usec;
- 
- 	if (cur64 < start64 + min_delay || cur64 > start64 + max_delay) {
--		fprintf(stderr, "ERROR: %lu us expected between %d and %d\n",
-+		fprintf(stderr, "ERROR: %" PRId64 " us expected between %d and %d\n",
- 				cur64 - start64, min_delay, max_delay);
- 		test_failed = true;
- 	}
-@@ -170,9 +170,9 @@ static void validate_timestamp(struct timespec *cur, int min_delay)
- static void __print_ts_delta_formatted(int64_t ts_delta)
- {
- 	if (cfg_print_nsec)
--		fprintf(stderr, "%lu ns", ts_delta);
-+		fprintf(stderr, "%" PRId64 " ns", ts_delta);
- 	else
--		fprintf(stderr, "%lu us", ts_delta / NSEC_PER_USEC);
-+		fprintf(stderr, "%" PRId64 " us", ts_delta / NSEC_PER_USEC);
- }
- 
- static void __print_timestamp(const char *name, struct timespec *cur,
+In order to keep the charging behavior consistent, we used to consider a
+way to recharge these pinned maps and progs again after the container is
+restarted, but after the discussion[1] with Roman, we decided to go
+another direction that don't charge them to the container in the first
+place. TL;DR about the mentioned disccussion: recharging is not a generic
+solution and it may take too much risk.
+
+This patchset is the solution of no charge. Two flags are introduced in
+union bpf_attr, one for bpf map and another for bpf prog. The user who
+doesn't want to charge to current memcg can use these two flags. These two
+flags are only permitted for sys admin as these memory will be accounted to
+the root memcg only.
+
+Patches #1~#8 are for bpf map. Patches #9~#12 are for bpf prog. Patch #13
+and #14 are for selftests and also the examples of how to use them.
+
+[1]. https://lwn.net/Articles/887180/ 
+
+Yafang Shao (14):
+  bpf: Introduce no charge flag for bpf map
+  bpf: Only sys admin can set no charge flag
+  bpf: Enable no charge in map _CREATE_FLAG_MASK
+  bpf: Introduce new parameter bpf_attr in bpf_map_area_alloc
+  bpf: Allow no charge in bpf_map_area_alloc
+  bpf: Allow no charge for allocation not at map creation time
+  bpf: Allow no charge in map specific allocation
+  bpf: Aggregate flags for BPF_PROG_LOAD command
+  bpf: Add no charge flag for bpf prog
+  bpf: Only sys admin can set no charge flag for bpf prog
+  bpf: Set __GFP_ACCOUNT at the callsite of bpf_prog_alloc
+  bpf: Allow no charge for bpf prog
+  bpf: selftests: Add test case for BPF_F_NO_CHARTE
+  bpf: selftests: Add test case for BPF_F_PROG_NO_CHARGE
+
+ include/linux/bpf.h                           | 27 ++++++-
+ include/uapi/linux/bpf.h                      | 21 +++--
+ kernel/bpf/arraymap.c                         |  9 +--
+ kernel/bpf/bloom_filter.c                     |  7 +-
+ kernel/bpf/bpf_local_storage.c                |  8 +-
+ kernel/bpf/bpf_struct_ops.c                   | 13 +--
+ kernel/bpf/core.c                             | 20 +++--
+ kernel/bpf/cpumap.c                           | 10 ++-
+ kernel/bpf/devmap.c                           | 14 ++--
+ kernel/bpf/hashtab.c                          | 14 ++--
+ kernel/bpf/local_storage.c                    |  4 +-
+ kernel/bpf/lpm_trie.c                         |  4 +-
+ kernel/bpf/queue_stack_maps.c                 |  5 +-
+ kernel/bpf/reuseport_array.c                  |  3 +-
+ kernel/bpf/ringbuf.c                          | 19 ++---
+ kernel/bpf/stackmap.c                         | 13 +--
+ kernel/bpf/syscall.c                          | 40 +++++++---
+ kernel/bpf/verifier.c                         |  2 +-
+ net/core/filter.c                             |  6 +-
+ net/core/sock_map.c                           |  8 +-
+ net/xdp/xskmap.c                              |  9 ++-
+ tools/include/uapi/linux/bpf.h                | 21 +++--
+ .../selftests/bpf/map_tests/no_charg.c        | 79 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/no_charge.c      | 49 ++++++++++++
+ 24 files changed, 297 insertions(+), 108 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/no_charg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/no_charge.c
+
 -- 
-2.20.1
+2.17.1
 
