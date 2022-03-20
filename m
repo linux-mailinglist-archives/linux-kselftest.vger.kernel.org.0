@@ -2,170 +2,901 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940974E1AB2
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Mar 2022 08:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 020B84E1CF6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Mar 2022 17:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbiCTHyF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 20 Mar 2022 03:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S245573AbiCTQ5B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 20 Mar 2022 12:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiCTHyE (ORCPT
+        with ESMTP id S232215AbiCTQ47 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 20 Mar 2022 03:54:04 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7929B1F0453;
-        Sun, 20 Mar 2022 00:52:40 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E8DB85C0116;
-        Sun, 20 Mar 2022 03:52:37 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 20 Mar 2022 03:52:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=5S1Qz9qa8y5v6pn+6
-        hPiVyR9fbOW9nCX+ik34wPrsIw=; b=GR4U9PbXRmwKlG+92UM35IdYDLE1UnrK7
-        Ld0eXeTAX/uq+p5Fc/9ZoksjqPgGZiSpV6ROvs5hTVAqwg7Tr2+I9ClVUMIf1gw6
-        Nd4Q5VhefO0IaNXa2OzHrlr4va1hUuM+J6dmJMWx1rQk1pNLLoUPar4yqWHhGchI
-        tDdBttofIPw+uIPGAhN4loJ50CoPyybCcFjoZ5qHUL9iFqXOQ643z7LP889vGkPq
-        v+3Pmq2E7OXWZv0cSKl/f8Ffr1jVvO3a7Y/rbIHN0fDTkP7v58BS07KKMCkskUG7
-        rTPrp+jinp67KmciT0vJHFrcQsbAicJn7KXknDl2WEjI12WPUEW+Q==
-X-ME-Sender: <xms:Rd02YlAJD1ycEJbkLRMM0KRY1lDvwGfvGBClIeKGAwuYgY-HM9HNnQ>
-    <xme:Rd02YjjzevJC-HgUmG0HrhVAfVILN18yq7Bv5tw05ggk4d7STE8NnJpO4lvR_lBim
-    6Hj4eVHk4KKHzk>
-X-ME-Received: <xmr:Rd02Ygk33nNO4FUMv2-vySsaqev1qpuzZW2Jcu9_5dkPG_NIAUjrvAqpmRucXTs56jsnzw_cEy4BVHAsY8Zm4h4Tjbw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegtddgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:Rd02YvzwPsopQaTOv0s9xyRhEaTH9tDkKCEJi5ru5QmnSzqjeBupcw>
-    <xmx:Rd02YqTH4pWwiDel8_YY2xrIDSeh4juCtvRvBHVZb5Tj7qDdvxXDeA>
-    <xmx:Rd02Yib1AlUzy3TCPVkOFvuapZ5IVI5hvwqvgtuVH6Nzs_K2gOkNig>
-    <xmx:Rd02YvhB7qS8uctbcKFyh_JQZBVebQgpvrp2AY-Z7P6OicfFSEMiYQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 20 Mar 2022 03:52:36 -0400 (EDT)
-Date:   Sun, 20 Mar 2022 09:52:33 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 4/4] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-Message-ID: <YjbdQUVYkhkbdp3L@shredder>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-5-schultz.hans+netdev@gmail.com>
- <YjNMS6aFG+93ejj5@shredder>
- <86mthnw9gr.fsf@gmail.com>
+        Sun, 20 Mar 2022 12:56:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094313CFC8;
+        Sun, 20 Mar 2022 09:55:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 37240CE0FE3;
+        Sun, 20 Mar 2022 16:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57670C340E9;
+        Sun, 20 Mar 2022 16:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647795330;
+        bh=Ny9PFVLc0FU/sgAFNChb4pVoMf5Q2Mx8fuaPFHxVxL0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=an5ibGw3n2hG9xjY0RzbR/4BLoR/nqCtG6j0dT+aIjNQI8VpMjAsCzs2QePLAt1za
+         nBK6lm3acFud5POacTJEBBd/ds+OEsYaRDvXL56pcjnyHj9RIHMJ4jg0kLdLNjtiQ4
+         LhOZs/BrQ29lEN+Zf8Gx8Wjq5QDnuACJeaTzbRk2dFn/bamRSoRW0vX1VqKOs+dk/9
+         ofeWOz4acmWVCkSke57Te+MckgfB1EAn6gdsV4Yy2zknKVGZ3QRiaRnq5v6ZOp4k4R
+         q41vAnfMdeP3YSNwHe/V2j/xygV8Q/yeHUKwnwuhBQs1CqkmS/XLawTLzvr1zMmGj7
+         ebREyNzLyQOcQ==
+Date:   Sun, 20 Mar 2022 17:02:53 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <shuah@kernel.org>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+Subject: Re: [RFC v1 08/10] iio: light: vcnl4000: add roadtest
+Message-ID: <20220320170253.5b946c84@jic23-huawei>
+In-Reply-To: <20220311162445.346685-9-vincent.whitchurch@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+        <20220311162445.346685-9-vincent.whitchurch@axis.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86mthnw9gr.fsf@gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 04:45:24PM +0100, Hans Schultz wrote:
-> On tor, mar 17, 2022 at 16:57, Ido Schimmel <idosch@idosch.org> wrote:
-> > On Thu, Mar 17, 2022 at 10:39:02AM +0100, Hans Schultz wrote:
-> >> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-> >> locked flag set. denying access until the FDB entry is replaced with a
-> >> FDB entry without the locked flag set.
-> >> 
-> >> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> >> ---
-> >>  .../net/forwarding/bridge_locked_port.sh      | 29 ++++++++++++++++++-
-> >>  1 file changed, 28 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> >> index 6e98efa6d371..2f9519e814b6 100755
-> >> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> >> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> >> @@ -1,7 +1,7 @@
-> >>  #!/bin/bash
-> >>  # SPDX-License-Identifier: GPL-2.0
-> >>  
-> >> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-> >> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
-> >>  NUM_NETIFS=4
-> >>  CHECK_TC="no"
-> >>  source lib.sh
-> >> @@ -170,6 +170,33 @@ locked_port_ipv6()
-> >>  	log_test "Locked port ipv6"
-> >>  }
-> >>  
-> >> +locked_port_mab()
-> >> +{
-> >> +	RET=0
-> >> +	check_locked_port_support || return 0
-> >> +
-> >> +	ping_do $h1 192.0.2.2
-> >> +	check_err $? "MAB: Ping did not work before locking port"
-> >> +
-> >> +	bridge link set dev $swp1 locked on
-> >> +	bridge link set dev $swp1 learning on
-> >> +
-> >> +	ping_do $h1 192.0.2.2
-> >> +	check_fail $? "MAB: Ping worked on port just locked"
-> >> +
-> >> +	if ! bridge fdb show | grep `mac_get $h1` | grep -q "locked"; then
-> >> +		RET=1
-> >> +		retmsg="MAB: No locked fdb entry after ping on locked port"
-> >> +	fi
-> >
-> > bridge fdb show | grep `mac_get $h1 | grep -q "locked"
-> > check_err $? "MAB: No locked fdb entry after ping on locked port"
-> >
-> >> +
-> >> +	bridge fdb del `mac_get $h1` dev $swp1 master
-> >> +	bridge fdb add `mac_get $h1` dev $swp1 master static
-> >
-> > bridge fdb replace `mac_get $h1` dev $swp1 master static
-> >
-> Unfortunately for some reason 'replace' does not work in several of the
-> tests, while when replaced with 'del+add', they work.
+On Fri, 11 Mar 2022 17:24:43 +0100
+Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
 
-Is it because the 'locked' flag is not removed following the replace? At
-least I don't see where it's handled in fdb_add_entry(). If so, please
-fix it and use "bridge fdb replace" in the test.
-
+> Add roadtests for the vcnl4000 driver, testing several of the driver's
+> features including buffer and event handling.  Since it's the first IIO
+> roadtest testing the non-sysfs parts, some support code for using the
+> IIO ABI is included.
 > 
-> >> +
-> >> +	ping_do $h1 192.0.2.2
-> >> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
-> >> +
-> >> +	log_test "Locked port MAB"
-> >
-> > Clean up after the test to revert to initial state:
-> >
-> > bridge fdb del `mac_get $h1` dev $swp1 master
-> > bridge link set dev $swp1 locked off
-> >
-> >
-> >> +}
-> >>  trap cleanup EXIT
-> >>  
-> >>  setup_prepare
-> >> -- 
-> >> 2.30.2
-> >> 
+> The different variants supported by the driver are in separate tests and
+> models since no two variants have fully identical register interfaces.
+> This duplicates some of the test code, but it:
+> 
+>  - Avoids the tests duplicating the same multi-variant logic as the
+>    driver, reducing the risk for both the test and the driver being
+>    wrong.
+> 
+>  - Allows each variant's test and model to be individually understood
+>    and modified looking at only one specific datasheet, making it easier
+>    to extend tests and implement new features in the driver.
+> 
+> During development of these tests, two oddities were noticed in the
+> driver's handling of VCNL4040, but the tests simply assume that the
+> current driver knows what it's doing (although we may want to fix the
+> first point later):
+> 
+>  - The driver reads an invalid/undefined register on the VCNL4040 when
+>    attempting to distinguish between that one and VCNL4200.
+> 
+>  - The driver uses a lux/step unit which differs from the datasheet (but
+>    which is specified in an application note).
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+
+Hi Vincent,
+
+Very interesting bit of work. My current approach for similar testing
+is to write a qemu model for the hardware, but that currently
+requires carefully crafted tests. Most of the time I'm only doing
+that to verify refactoring of existing drivers. 
+
+One thing that makes me nervous here is the python element though
+as I've not written significant python in about 20 years.
+That is going to be a burden for kernel developers and maintainers...
+Nothing quite like badly written tests to make for a mess in the long run
+and I suspect my python for example would be very very badly written :)
+Cut and paste will of course get us a long way...
+
+I dream of a world where every driver is testable by people with out hardware
+but I fear it may be a while yet.  Hopefully this will get us a little
+closer!
+
+I more or less follow what is going on here (good docs btw in the earlier
+patch definitely helped).
+
+So far I'm thoroughly in favour of road test subject to actually being
+able to review the tests or getting sufficient support to do so.
+It's a 'how to scale it' question really...
+
+Jonathan
+
+> ---
+>  .../roadtest/roadtest/tests/iio/iio.py        | 112 +++++++
+>  .../roadtest/roadtest/tests/iio/light/config  |   1 +
+>  .../roadtest/tests/iio/light/test_vcnl4000.py | 132 ++++++++
+>  .../roadtest/tests/iio/light/test_vcnl4010.py | 282 ++++++++++++++++++
+>  .../roadtest/tests/iio/light/test_vcnl4040.py | 104 +++++++
+>  .../roadtest/tests/iio/light/test_vcnl4200.py |  96 ++++++
+>  6 files changed, 727 insertions(+)
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/iio.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
+> 
+> diff --git a/tools/testing/roadtest/roadtest/tests/iio/iio.py b/tools/testing/roadtest/roadtest/tests/iio/iio.py
+> new file mode 100644
+> index 000000000000..ea57b28ea9d3
+> --- /dev/null
+> +++ b/tools/testing/roadtest/roadtest/tests/iio/iio.py
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright Axis Communications AB
+> +
+> +import contextlib
+> +import enum
+> +import fcntl
+> +import struct
+> +from dataclasses import dataclass, field
+> +from typing import Any
+> +
+> +IIO_GET_EVENT_FD_IOCTL = 0x80046990
+> +IIO_BUFFER_GET_FD_IOCTL = 0xC0046991
+> +
+> +
+> +class IIOChanType(enum.IntEnum):
+> +    IIO_VOLTAGE = 0
+> +    IIO_CURRENT = 1
+> +    IIO_POWER = 2
+> +    IIO_ACCEL = 3
+> +    IIO_ANGL_VEL = 4
+> +    IIO_MAGN = 5
+> +    IIO_LIGHT = 6
+> +    IIO_INTENSITY = 7
+> +    IIO_PROXIMITY = 8
+> +    IIO_TEMP = 9
+> +    IIO_INCLI = 10
+> +    IIO_ROT = 11
+> +    IIO_ANGL = 12
+> +    IIO_TIMESTAMP = 13
+> +    IIO_CAPACITANCE = 14
+> +    IIO_ALTVOLTAGE = 15
+> +    IIO_CCT = 16
+> +    IIO_PRESSURE = 17
+> +    IIO_HUMIDITYRELATIVE = 18
+> +    IIO_ACTIVITY = 19
+> +    IIO_STEPS = 20
+> +    IIO_ENERGY = 21
+> +    IIO_DISTANCE = 22
+> +    IIO_VELOCITY = 23
+> +    IIO_CONCENTRATION = 24
+> +    IIO_RESISTANCE = 25
+> +    IIO_PH = 26
+> +    IIO_UVINDEX = 27
+> +    IIO_ELECTRICALCONDUCTIVITY = 28
+> +    IIO_COUNT = 29
+> +    IIO_INDEX = 30
+> +    IIO_GRAVITY = 31
+> +    IIO_POSITIONRELATIVE = 32
+> +    IIO_PHASE = 33
+> +    IIO_MASSCONCENTRATION = 34
+> +
+> +
+> +@dataclass
+> +class IIOEvent:
+> +    id: int
+> +    timestamp: int
+> +    type: IIOChanType = field(init=False)
+> +
+> +    def __post_init__(self) -> None:
+> +        self.type = IIOChanType((self.id >> 32) & 0xFF)
+> +
+> +
+> +class IIOEventMonitor(contextlib.AbstractContextManager):
+> +    def __init__(self, devname: str) -> None:
+> +        self.devname = devname
+> +
+> +    def __enter__(self) -> "IIOEventMonitor":
+> +        self.file = open(self.devname, "rb")
+> +
+> +        s = struct.Struct("L")
+> +        buf = bytearray(s.size)
+> +        fcntl.ioctl(self.file.fileno(), IIO_GET_EVENT_FD_IOCTL, buf)
+> +        eventfd = s.unpack(buf)[0]
+> +        self.eventf = open(eventfd, "rb")
+> +
+> +        return self
+> +
+> +    def read(self) -> IIOEvent:
+> +        s = struct.Struct("Qq")
+> +        buf = self.eventf.read(s.size)
+> +        return IIOEvent(*s.unpack(buf))
+> +
+> +    def __exit__(self, *_: Any) -> None:
+> +        self.eventf.close()
+> +        self.file.close()
+> +
+> +
+> +class IIOBuffer(contextlib.AbstractContextManager):
+> +    def __init__(self, devname: str, bufidx: int) -> None:
+> +        self.devname = devname
+> +        self.bufidx = bufidx
+> +
+> +    def __enter__(self) -> "IIOBuffer":
+> +        self.file = open(self.devname, "rb")
+> +
+> +        s = struct.Struct("L")
+> +        buf = bytearray(s.size)
+> +        s.pack_into(buf, 0, self.bufidx)
+> +        fcntl.ioctl(self.file.fileno(), IIO_BUFFER_GET_FD_IOCTL, buf)
+> +        eventfd = s.unpack(buf)[0]
+> +        self.eventf = open(eventfd, "rb")
+> +
+> +        return self
+> +
+> +    def read(self, spec: str) -> tuple:
+> +        s = struct.Struct(spec)
+> +        buf = self.eventf.read(s.size)
+> +        return s.unpack(buf)
+> +
+> +    def __exit__(self, *_: Any) -> None:
+> +        self.eventf.close()
+> +        self.file.close()
+> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/config b/tools/testing/roadtest/roadtest/tests/iio/light/config
+> index b9753f2d0728..3bd4125cbb6b 100644
+> --- a/tools/testing/roadtest/roadtest/tests/iio/light/config
+> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/config
+> @@ -1 +1,2 @@
+>  CONFIG_OPT3001=m
+> +CONFIG_VCNL4000=m
+> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
+> new file mode 100644
+> index 000000000000..16a5bed18b7e
+> --- /dev/null
+> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
+> @@ -0,0 +1,132 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright Axis Communications AB
+> +
+> +import errno
+> +import logging
+> +from typing import Any, Final
+> +
+> +from roadtest.backend.i2c import SMBusModel
+> +from roadtest.core.devicetree import DtFragment, DtVar
+> +from roadtest.core.hardware import Hardware
+> +from roadtest.core.modules import insmod, rmmod
+> +from roadtest.core.suite import UMLTestCase
+> +from roadtest.core.sysfs import I2CDriver, read_float, read_int, read_str
+> +
+> +logger = logging.getLogger(__name__)
+> +
+> +REG_COMMAND: Final = 0x80
+> +REG_PRODUCT_ID_REVISION: Final = 0x81
+> +REG_IR_LED_CURRENT: Final = 0x83
+> +REG_ALS_PARAM: Final = 0x84
+> +REG_ALS_RESULT_HIGH: Final = 0x85
+> +REG_ALS_RESULT_LOW: Final = 0x86
+> +REG_PROX_RESULT_HIGH: Final = 0x87
+> +REG_PROX_RESULT_LOW: Final = 0x88
+> +REG_PROX_SIGNAL_FREQ: Final = 0x89
+> +
+> +REG_COMMAND_ALS_DATA_RDY: Final = 1 << 6
+> +REG_COMMAND_PROX_DATA_RDY: Final = 1 << 5
+> +
+> +
+> +class VCNL4000(SMBusModel):
+> +    def __init__(self, **kwargs: Any) -> None:
+> +        super().__init__(regbytes=1, **kwargs)
+> +        self.regs = {
+> +            REG_COMMAND: 0b_1000_0000,
+> +            REG_PRODUCT_ID_REVISION: 0x11,
+> +            # Register "without function in current version"
+> +            0x82: 0x00,
+> +            REG_IR_LED_CURRENT: 0x00,
+> +            REG_ALS_PARAM: 0x00,
+> +            REG_ALS_RESULT_HIGH: 0x00,
+> +            REG_ALS_RESULT_LOW: 0x00,
+> +            REG_PROX_RESULT_HIGH: 0x00,
+> +            REG_PROX_RESULT_LOW: 0x00,
+> +            REG_PROX_RESULT_LOW: 0x00,
+> +        }
+> +
+> +    def reg_read(self, addr: int) -> int:
+> +        val = self.regs[addr]
+> +
+> +        if addr in (REG_ALS_RESULT_HIGH, REG_ALS_RESULT_LOW):
+> +            self.regs[REG_COMMAND] &= ~REG_COMMAND_ALS_DATA_RDY
+> +        if addr in (REG_PROX_RESULT_HIGH, REG_PROX_RESULT_LOW):
+> +            self.regs[REG_COMMAND] &= ~REG_COMMAND_PROX_DATA_RDY
+> +
+> +        return val
+> +
+> +    def reg_write(self, addr: int, val: int) -> None:
+> +        assert addr in self.regs
+> +
+> +        if addr == REG_COMMAND:
+> +            rw = 0b_0001_1000
+> +            val = (self.regs[addr] & ~rw) | (val & rw)
+> +
+> +        self.regs[addr] = val
+> +
+> +    def inject(self, addr: int, val: int, mask: int = ~0) -> None:
+> +        old = self.regs[addr] & ~mask
+> +        new = old | (val & mask)
+> +        self.regs[addr] = new
+> +
+> +
+> +class TestVCNL4000(UMLTestCase):
+> +    dts = DtFragment(
+> +        src="""
+> +&i2c {
+> +    light-sensor@$addr$ {
+> +        compatible = "vishay,vcnl4000";
+> +        reg = <0x$addr$>;
+> +    };
+> +};
+> +        """,
+> +        variables={
+> +            "addr": DtVar.I2C_ADDR,
+> +        },
+> +    )
+> +
+> +    @classmethod
+> +    def setUpClass(cls) -> None:
+> +        insmod("vcnl4000")
+> +
+> +    @classmethod
+> +    def tearDownClass(cls) -> None:
+> +        rmmod("vcnl4000")
+> +
+> +    def setUp(self) -> None:
+> +        self.driver = I2CDriver("vcnl4000")
+> +        self.hw = Hardware("i2c")
+> +        self.hw.load_model(VCNL4000)
+> +
+> +    def tearDown(self) -> None:
+> +        self.hw.close()
+> +
+> +    def test_lux(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            scale = read_float(dev.path / "iio:device0/in_illuminance_scale")
+> +            self.assertEqual(scale, 0.25)
+> +
+> +            data = [
+> +                (0x00, 0x00),
+> +                (0x12, 0x34),
+> +                (0xFF, 0xFF),
+> +            ]
+> +            luxfile = dev.path / "iio:device0/in_illuminance_raw"
+> +            for high, low in data:
+> +                self.hw.inject(REG_ALS_RESULT_HIGH, high)
+> +                self.hw.inject(REG_ALS_RESULT_LOW, low)
+> +                self.hw.inject(
+> +                    REG_COMMAND,
+> +                    val=REG_COMMAND_ALS_DATA_RDY,
+> +                    mask=REG_COMMAND_ALS_DATA_RDY,
+> +                )
+> +
+> +                self.assertEqual(read_int(luxfile), high << 8 | low)
+> +
+> +    def test_lux_timeout(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            # self.hw.set_never_ready(True)
+> +            with self.assertRaises(OSError) as cm:
+> +                luxfile = dev.path / "iio:device0/in_illuminance_raw"
+> +                read_str(luxfile)
+> +            self.assertEqual(cm.exception.errno, errno.EIO)
+> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
+> new file mode 100644
+> index 000000000000..929db970405f
+> --- /dev/null
+> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
+> @@ -0,0 +1,282 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright Axis Communications AB
+> +
+> +import errno
+> +import logging
+> +from pathlib import Path
+> +from typing import Any, Final, Optional
+> +
+> +from roadtest.backend.i2c import SMBusModel
+> +from roadtest.core.devicetree import DtFragment, DtVar
+> +from roadtest.core.hardware import Hardware
+> +from roadtest.core.modules import insmod, rmmod
+> +from roadtest.core.suite import UMLTestCase
+> +from roadtest.core.sysfs import (
+> +    I2CDriver,
+> +    read_float,
+> +    read_int,
+> +    read_str,
+> +    write_int,
+> +    write_str,
+> +)
+> +from roadtest.tests.iio import iio
+> +
+> +logger = logging.getLogger(__name__)
+> +
+> +REG_COMMAND: Final = 0x80
+> +REG_PRODUCT_ID_REVISION: Final = 0x81
+> +REG_PROXIMITY_RATE: Final = 0x82
+> +REG_IR_LED_CURRENT: Final = 0x83
+> +REG_ALS_PARAM: Final = 0x84
+> +REG_ALS_RESULT_HIGH: Final = 0x85
+> +REG_ALS_RESULT_LOW: Final = 0x86
+> +REG_PROX_RESULT_HIGH: Final = 0x87
+> +REG_PROX_RESULT_LOW: Final = 0x88
+> +REG_INTERRUPT_CONTROL: Final = 0x89
+> +REG_LOW_THRESHOLD_HIGH: Final = 0x8A
+> +REG_LOW_THRESHOLD_LOW: Final = 0x8B
+> +REG_HIGH_THRESHOLD_HIGH: Final = 0x8C
+> +REG_HIGH_THRESHOLD_LOW: Final = 0x8D
+> +REG_INTERRUPT_STATUS: Final = 0x8E
+> +
+> +REG_COMMAND_ALS_DATA_RDY: Final = 1 << 6
+> +REG_COMMAND_PROX_DATA_RDY: Final = 1 << 5
+> +
+> +
+> +class VCNL4010(SMBusModel):
+> +    def __init__(self, int: Optional[int] = None, **kwargs: Any) -> None:
+> +        super().__init__(regbytes=1, **kwargs)
+> +        self.int = int
+> +        self._set_int(False)
+> +        self.regs = {
+> +            REG_COMMAND: 0b_1000_0000,
+> +            REG_PRODUCT_ID_REVISION: 0x21,
+> +            REG_PROXIMITY_RATE: 0x00,
+> +            REG_IR_LED_CURRENT: 0x00,
+> +            REG_ALS_PARAM: 0x00,
+> +            REG_ALS_RESULT_HIGH: 0x00,
+> +            REG_ALS_RESULT_LOW: 0x00,
+> +            REG_PROX_RESULT_HIGH: 0x00,
+> +            REG_PROX_RESULT_LOW: 0x00,
+> +            REG_INTERRUPT_CONTROL: 0x00,
+> +            REG_LOW_THRESHOLD_HIGH: 0x00,
+> +            REG_LOW_THRESHOLD_LOW: 0x00,
+> +            REG_HIGH_THRESHOLD_HIGH: 0x00,
+> +            REG_HIGH_THRESHOLD_LOW: 0x00,
+> +            REG_INTERRUPT_STATUS: 0x00,
+> +        }
+> +
+> +    def _set_int(self, active: int) -> None:
+> +        # Active-low
+> +        self.backend.gpio.set(self.int, not active)
+> +
+> +    def _update_irq(self) -> None:
+> +        selftimed_en = self.regs[REG_COMMAND] & (1 << 0)
+> +        prox_en = self.regs[REG_COMMAND] & (1 << 1)
+> +        prox_data_rdy = self.regs[REG_COMMAND] & REG_COMMAND_PROX_DATA_RDY
+> +        int_prox_ready_en = self.regs[REG_INTERRUPT_CONTROL] & (1 << 3)
+> +
+> +        logger.debug(
+> +            f"{selftimed_en=:x} {prox_en=:x} {prox_data_rdy=:x} {int_prox_ready_en=:x}"
+> +        )
+> +
+> +        if selftimed_en and prox_en and prox_data_rdy and int_prox_ready_en:
+> +            self.regs[REG_INTERRUPT_STATUS] |= 1 << 3
+> +
+> +        low_threshold = (
+> +            self.regs[REG_LOW_THRESHOLD_HIGH] << 8 | self.regs[REG_LOW_THRESHOLD_LOW]
+> +        )
+> +        high_threshold = (
+> +            self.regs[REG_HIGH_THRESHOLD_HIGH] << 8 | self.regs[REG_HIGH_THRESHOLD_LOW]
+> +        )
+> +        proximity = (
+> +            self.regs[REG_PROX_RESULT_HIGH] << 8 | self.regs[REG_PROX_RESULT_LOW]
+> +        )
+> +        int_thres_en = self.regs[REG_INTERRUPT_CONTROL] & (1 << 1)
+> +
+> +        logger.debug(
+> +            f"{low_threshold=:x} {high_threshold=:x} {proximity=:x} {int_thres_en=:x}"
+> +        )
+> +
+> +        if int_thres_en:
+> +            if proximity < low_threshold:
+> +                logger.debug("LOW")
+> +                self.regs[REG_INTERRUPT_STATUS] |= 1 << 1
+> +            if proximity > high_threshold:
+> +                logger.debug("HIGH")
+> +                self.regs[REG_INTERRUPT_STATUS] |= 1 << 0
+> +
+> +        self._set_int(self.regs[REG_INTERRUPT_STATUS])
+> +
+> +    def reg_read(self, addr: int) -> int:
+> +        val = self.regs[addr]
+> +
+> +        if addr in (REG_ALS_RESULT_HIGH, REG_ALS_RESULT_LOW):
+> +            self.regs[REG_COMMAND] &= ~REG_COMMAND_ALS_DATA_RDY
+> +        if addr in (REG_PROX_RESULT_HIGH, REG_PROX_RESULT_LOW):
+> +            self.regs[REG_COMMAND] &= ~REG_COMMAND_PROX_DATA_RDY
+> +
+> +        return val
+> +
+> +    def reg_write(self, addr: int, val: int) -> None:
+> +        assert addr in self.regs
+> +
+> +        if addr == REG_COMMAND:
+> +            rw = 0b_0001_1111
+> +            val = (self.regs[addr] & ~rw) | (val & rw)
+> +        elif addr == REG_INTERRUPT_STATUS:
+> +            val = self.regs[addr] & ~(val & 0xF)
+> +
+> +        self.regs[addr] = val
+> +        self._update_irq()
+> +
+> +    def inject(self, addr: int, val: int, mask: int = ~0) -> None:
+> +        old = self.regs[addr] & ~mask
+> +        new = old | (val & mask)
+> +        self.regs[addr] = new
+> +        self._update_irq()
+> +
+> +    def set_bit(self, addr: int, val: int) -> None:
+> +        self.inject(addr, val, val)
+> +
+> +
+> +class TestVCNL4010(UMLTestCase):
+> +    dts = DtFragment(
+> +        src="""
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +&i2c {
+> +    light-sensor@$addr$ {
+> +        compatible = "vishay,vcnl4020";
+> +        reg = <0x$addr$>;
+> +        interrupt-parent = <&gpio>;
+> +        interrupts = <$gpio$ IRQ_TYPE_EDGE_FALLING>;
+> +    };
+> +};
+> +        """,
+> +        variables={
+> +            "addr": DtVar.I2C_ADDR,
+> +            "gpio": DtVar.GPIO_PIN,
+> +        },
+> +    )
+> +
+> +    @classmethod
+> +    def setUpClass(cls) -> None:
+> +        insmod("vcnl4000")
+> +
+> +    @classmethod
+> +    def tearDownClass(cls) -> None:
+> +        rmmod("vcnl4000")
+> +
+> +    def setUp(self) -> None:
+> +        self.driver = I2CDriver("vcnl4000")
+> +        self.hw = Hardware("i2c")
+> +        self.hw.load_model(VCNL4010, int=self.dts["gpio"])
+> +
+> +    def tearDown(self) -> None:
+> +        self.hw.close()
+> +
+> +    def test_lux(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +
+> +            scale = read_float(dev.path / "iio:device0/in_illuminance_scale")
+> +            self.assertEqual(scale, 0.25)
+> +
+> +            data = [
+> +                (0x00, 0x00),
+> +                (0x12, 0x34),
+> +                (0xFF, 0xFF),
+> +            ]
+> +            luxfile = dev.path / "iio:device0/in_illuminance_raw"
+> +            for high, low in data:
+> +                self.hw.inject(REG_ALS_RESULT_HIGH, high)
+> +                self.hw.inject(REG_ALS_RESULT_LOW, low)
+> +                self.hw.set_bit(REG_COMMAND, REG_COMMAND_ALS_DATA_RDY)
+> +
+> +                self.assertEqual(read_int(luxfile), high << 8 | low)
+> +
+> +    def test_lux_timeout(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            with self.assertRaises(OSError) as cm:
+> +                luxfile = dev.path / "iio:device0/in_illuminance_raw"
+> +                read_str(luxfile)
+> +            self.assertEqual(cm.exception.errno, errno.EIO)
+> +
+> +    def test_proximity_thresh_rising(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            high_thresh = (
+> +                dev.path / "iio:device0/events/in_proximity_thresh_rising_value"
+> +            )
+> +            write_int(high_thresh, 0x1234)
+> +
+> +            mock = self.hw.update_mock()
+> +            mock.assert_last_reg_write(self, REG_HIGH_THRESHOLD_HIGH, 0x12)
+> +            mock.assert_last_reg_write(self, REG_HIGH_THRESHOLD_LOW, 0x34)
+> +            mock.reset_mock()
+> +
+> +            self.assertEqual(read_int(high_thresh), 0x1234)
+> +
+> +            with iio.IIOEventMonitor("/dev/iio:device0") as mon:
+> +                en = dev.path / "iio:device0/events/in_proximity_thresh_either_en"
+> +                write_int(en, 1)
+> +
+> +                self.hw.inject(REG_PROX_RESULT_HIGH, 0x12)
+> +                self.hw.inject(REG_PROX_RESULT_LOW, 0x35)
+> +                self.hw.set_bit(REG_COMMAND, REG_COMMAND_PROX_DATA_RDY)
+> +                self.hw.kick()
+> +
+> +                self.assertEqual(read_int(en), 1)
+> +
+> +                event = mon.read()
+> +                self.assertEqual(event.type, iio.IIOChanType.IIO_PROXIMITY)
+> +
+> +    def test_proximity_thresh_falling(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            high_thresh = (
+> +                dev.path / "iio:device0/events/in_proximity_thresh_falling_value"
+> +            )
+> +            write_int(high_thresh, 0x0ABC)
+> +
+> +            mock = self.hw.update_mock()
+> +            mock.assert_last_reg_write(self, REG_LOW_THRESHOLD_HIGH, 0x0A)
+> +            mock.assert_last_reg_write(self, REG_LOW_THRESHOLD_LOW, 0xBC)
+> +            mock.reset_mock()
+> +
+> +            self.assertEqual(read_int(high_thresh), 0x0ABC)
+> +
+> +            with iio.IIOEventMonitor("/dev/iio:device0") as mon:
+> +                write_int(
+> +                    dev.path / "iio:device0/events/in_proximity_thresh_either_en", 1
+> +                )
+> +
+> +                event = mon.read()
+> +                self.assertEqual(event.type, iio.IIOChanType.IIO_PROXIMITY)
+> +
+> +    def test_proximity_triggered(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            data = [
+> +                (0x00, 0x00, 0),
+> +                (0x00, 0x01, 1),
+> +                (0xF0, 0x02, 0xF002),
+> +                (0xFF, 0xFF, 0xFFFF),
+> +            ]
+> +
+> +            trigger = read_str(Path("/sys/bus/iio/devices/trigger0/name"))
+> +
+> +            write_int(dev.path / "iio:device0/buffer0/in_proximity_en", 1)
+> +            write_str(dev.path / "iio:device0/trigger/current_trigger", trigger)
+> +
+> +            with iio.IIOBuffer("/dev/iio:device0", bufidx=0) as buffer:
+> +                write_int(dev.path / "iio:device0/buffer0/length", 128)
+> +                write_int(dev.path / "iio:device0/buffer0/enable", 1)
+> +
+> +                for low, high, expected in data:
+> +                    self.hw.inject(REG_PROX_RESULT_HIGH, low)
+> +                    self.hw.inject(REG_PROX_RESULT_LOW, high)
+> +                    self.hw.set_bit(REG_COMMAND, REG_COMMAND_PROX_DATA_RDY)
+> +                    self.hw.kick()
+> +
+> +                    scanline = buffer.read("H")
+> +
+> +                    val = scanline[0]
+> +                    self.assertEqual(val, expected)
+> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
+> new file mode 100644
+> index 000000000000..f2aa2cb9f3d5
+> --- /dev/null
+> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
+> @@ -0,0 +1,104 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright Axis Communications AB
+> +
+> +import logging
+> +from typing import Any
+> +
+> +from roadtest.backend.i2c import SMBusModel
+> +from roadtest.core.devicetree import DtFragment, DtVar
+> +from roadtest.core.hardware import Hardware
+> +from roadtest.core.modules import insmod, rmmod
+> +from roadtest.core.suite import UMLTestCase
+> +from roadtest.core.sysfs import I2CDriver, read_float, read_int
+> +
+> +logger = logging.getLogger(__name__)
+> +
+> +
+> +class VCNL4040(SMBusModel):
+> +    def __init__(self, **kwargs: Any) -> None:
+> +        super().__init__(regbytes=2, byteorder="little", **kwargs)
+> +        self.regs = {
+> +            0x00: 0x0101,
+> +            0x01: 0x0000,
+> +            0x02: 0x0000,
+> +            0x03: 0x0001,
+> +            0x04: 0x0000,
+> +            0x05: 0x0000,
+> +            0x06: 0x0000,
+> +            0x07: 0x0000,
+> +            0x08: 0x0000,
+> +            0x09: 0x0000,
+> +            0x0A: 0x0000,
+> +            0x0A: 0x0000,
+> +            0x0B: 0x0000,
+> +            0x0C: 0x0186,
+> +            # The driver reads this register which is undefined for
+> +            # VCNL4040.  Perhaps the driver should be fixed instead
+> +            # of having this here?
+> +            0x0E: 0x0000,
+> +        }
+> +
+> +    def reg_read(self, addr: int) -> int:
+> +        return self.regs[addr]
+> +
+> +    def reg_write(self, addr: int, val: int) -> None:
+> +        assert addr in self.regs
+> +        self.regs[addr] = val
+> +
+> +
+> +class TestVCNL4040(UMLTestCase):
+> +    dts = DtFragment(
+> +        src="""
+> +&i2c {
+> +    light-sensor@$addr$ {
+> +        compatible = "vishay,vcnl4040";
+> +        reg = <0x$addr$>;
+> +    };
+> +};
+> +        """,
+> +        variables={
+> +            "addr": DtVar.I2C_ADDR,
+> +        },
+> +    )
+> +
+> +    @classmethod
+> +    def setUpClass(cls) -> None:
+> +        insmod("vcnl4000")
+> +
+> +    @classmethod
+> +    def tearDownClass(cls) -> None:
+> +        rmmod("vcnl4000")
+> +
+> +    def setUp(self) -> None:
+> +        self.driver = I2CDriver("vcnl4000")
+> +        self.hw = Hardware("i2c")
+> +        self.hw.load_model(VCNL4040)
+> +
+> +    def tearDown(self) -> None:
+> +        self.hw.close()
+> +
+> +    def test_illuminance_scale(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            scalefile = dev.path / "iio:device0/in_illuminance_scale"
+> +            # The datasheet says 0.10 lux/step, but the driver follows
+> +            # the application note "Designing the VCNL4040 Into an
+> +            # Application" which claims a different value.
+> +            self.assertEqual(read_float(scalefile), 0.12)
+> +
+> +    def test_illuminance(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            luxfile = dev.path / "iio:device0/in_illuminance_raw"
+> +
+> +            data = [0x0000, 0x1234, 0xFFFF]
+> +            for regval in data:
+> +                self.hw.reg_write(0x09, regval)
+> +                self.assertEqual(read_int(luxfile), regval)
+> +
+> +    def test_proximity(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            rawfile = dev.path / "iio:device0/in_proximity_raw"
+> +
+> +            data = [0x0000, 0x1234, 0xFFFF]
+> +            for regval in data:
+> +                self.hw.reg_write(0x08, regval)
+> +                self.assertEqual(read_int(rawfile), regval)
+> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
+> new file mode 100644
+> index 000000000000..d1cf819e563e
+> --- /dev/null
+> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright Axis Communications AB
+> +
+> +import logging
+> +from typing import Any
+> +
+> +from roadtest.backend.i2c import SMBusModel
+> +from roadtest.core.devicetree import DtFragment, DtVar
+> +from roadtest.core.hardware import Hardware
+> +from roadtest.core.modules import insmod, rmmod
+> +from roadtest.core.suite import UMLTestCase
+> +from roadtest.core.sysfs import I2CDriver, read_float, read_int
+> +
+> +logger = logging.getLogger(__name__)
+> +
+> +
+> +class VCNL4200(SMBusModel):
+> +    def __init__(self, **kwargs: Any) -> None:
+> +        super().__init__(regbytes=2, byteorder="little", **kwargs)
+> +        self.regs = {
+> +            0x00: 0x0101,
+> +            0x01: 0x0000,
+> +            0x02: 0x0000,
+> +            0x03: 0x0001,
+> +            0x04: 0x0000,
+> +            0x05: 0x0000,
+> +            0x06: 0x0000,
+> +            0x07: 0x0000,
+> +            0x08: 0x0000,
+> +            0x09: 0x0000,
+> +            0x0A: 0x0000,
+> +            0x0D: 0x0000,
+> +            0x0E: 0x1058,
+> +        }
+> +
+> +    def reg_read(self, addr: int) -> int:
+> +        return self.regs[addr]
+> +
+> +    def reg_write(self, addr: int, val: int) -> None:
+> +        assert addr in self.regs
+> +        self.regs[addr] = val
+> +
+> +
+> +class TestVCNL4200(UMLTestCase):
+> +    dts = DtFragment(
+> +        src="""
+> +&i2c {
+> +    light-sensor@$addr$ {
+> +        compatible = "vishay,vcnl4200";
+> +        reg = <0x$addr$>;
+> +    };
+> +};
+> +        """,
+> +        variables={
+> +            "addr": DtVar.I2C_ADDR,
+> +        },
+> +    )
+> +
+> +    @classmethod
+> +    def setUpClass(cls) -> None:
+> +        insmod("vcnl4000")
+> +
+> +    @classmethod
+> +    def tearDownClass(cls) -> None:
+> +        rmmod("vcnl4000")
+> +
+> +    def setUp(self) -> None:
+> +        self.driver = I2CDriver("vcnl4000")
+> +        self.hw = Hardware("i2c")
+> +        self.hw.load_model(VCNL4200)
+> +
+> +    def tearDown(self) -> None:
+> +        self.hw.close()
+> +
+> +    def test_illuminance_scale(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            scalefile = dev.path / "iio:device0/in_illuminance_scale"
+> +            self.assertEqual(read_float(scalefile), 0.024)
+> +
+> +    def test_illuminance(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            luxfile = dev.path / "iio:device0/in_illuminance_raw"
+> +
+> +            data = [0x0000, 0x1234, 0xFFFF]
+> +            for regval in data:
+> +                self.hw.reg_write(0x09, regval)
+> +                self.assertEqual(read_int(luxfile), regval)
+> +
+> +    def test_proximity(self) -> None:
+> +        with self.driver.bind(self.dts["addr"]) as dev:
+> +            rawfile = dev.path / "iio:device0/in_proximity_raw"
+> +
+> +            data = [0x0000, 0x1234, 0xFFFF]
+> +            for regval in data:
+> +                self.hw.reg_write(0x08, regval)
+> +                self.assertEqual(read_int(rawfile), regval)
+
