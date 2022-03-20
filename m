@@ -2,113 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E2A4E18FE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Mar 2022 00:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 940974E1AB2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Mar 2022 08:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241757AbiCSXVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Mar 2022 19:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S235541AbiCTHyF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 20 Mar 2022 03:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240402AbiCSXVy (ORCPT
+        with ESMTP id S231180AbiCTHyE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Mar 2022 19:21:54 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A20D45072;
-        Sat, 19 Mar 2022 16:20:28 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id p9so16184738wra.12;
-        Sat, 19 Mar 2022 16:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BNzk/6MtnNLiXGXvVyfwvCWzIwLhP+ShlErnksixr+U=;
-        b=dmjwNLdfWyGLpa2sWEml7Z1tf4clTCmw86dgqS6Jyv6F8s/sBa76xZbWybDeegDi9B
-         3kIa5lk/GoeKK6of4yefI9yGRdGGSwI3CzX9CITLq3pnYdJnFcrfumFT0lz0BDWdD/Z0
-         wpEc5p6JLaAmEghNpbNjZFrv6xb/4fpMQA19sNjoTfOqXsOyvObCr4cwv3myYQ2F0lvH
-         Ml9xVA8oM6TAF7o/vwL4e/Kx3mmDPc/fXdS4sO+Vw4AbcjOLOjNARQoQpZOmTUJ1fjV2
-         /CQGquFI2VAArdSLPdNq4lfLpenb8+/IBPUbIKycJaWwzLj1xSIMMfLizENthvVojd/1
-         vomg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BNzk/6MtnNLiXGXvVyfwvCWzIwLhP+ShlErnksixr+U=;
-        b=768nfk2DqoIdIoj0fuTstP1cMmSaS0MCC/EJNS+8DiZyju5evjp3B5iRkpQc1CtBUL
-         +F/KM+QY8REjODnKUgOMZa0YvCjIjLsa4dokRaHX80W5GSfw4mSStrLQkN6JvBQh6mU9
-         RwDToNe/9ujXt6nmX9WzUCse2WkJl25CJOctgXWzk+tSUWgax9w8+fEsW4VXznBhJ1U1
-         br58ktpK/0n32R9h7zeILVX7hCQCLRGTS4CYMo+pl8m+fmFu9fXBIB6dT8CriIm6231R
-         iQySe38LuSEYJgORFnadBrbIen5ekuGpewHR1pusZyfXR6oTVu+8IXja9dVjX25Bg35B
-         tAMA==
-X-Gm-Message-State: AOAM5322NKf+IoMI8JduBGahZmD6AdQhpZv6Nq6E5iaHWhNAXPFE40uD
-        /BuiJcfT1XT0t4CKdDKV/90=
-X-Google-Smtp-Source: ABdhPJxtvsnHmneE09xrDF3eTfL4lgsytbRDwN+qSw8ui0UxseW78A+LmkoR3hGYVO4Qkwd82jfpZQ==
-X-Received: by 2002:a5d:6f0d:0:b0:203:dc69:2e69 with SMTP id ay13-20020a5d6f0d000000b00203dc692e69mr12471640wrb.533.1647732027022;
-        Sat, 19 Mar 2022 16:20:27 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f22-20020a1cc916000000b00380d3e49e89sm9591581wmb.22.2022.03.19.16.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 16:20:26 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/powerpc/pmu: fix spelling mistake "mis-match" -> "mismatch"
-Date:   Sat, 19 Mar 2022 23:20:25 +0000
-Message-Id: <20220319232025.22067-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 20 Mar 2022 03:54:04 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7929B1F0453;
+        Sun, 20 Mar 2022 00:52:40 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E8DB85C0116;
+        Sun, 20 Mar 2022 03:52:37 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sun, 20 Mar 2022 03:52:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=5S1Qz9qa8y5v6pn+6
+        hPiVyR9fbOW9nCX+ik34wPrsIw=; b=GR4U9PbXRmwKlG+92UM35IdYDLE1UnrK7
+        Ld0eXeTAX/uq+p5Fc/9ZoksjqPgGZiSpV6ROvs5hTVAqwg7Tr2+I9ClVUMIf1gw6
+        Nd4Q5VhefO0IaNXa2OzHrlr4va1hUuM+J6dmJMWx1rQk1pNLLoUPar4yqWHhGchI
+        tDdBttofIPw+uIPGAhN4loJ50CoPyybCcFjoZ5qHUL9iFqXOQ643z7LP889vGkPq
+        v+3Pmq2E7OXWZv0cSKl/f8Ffr1jVvO3a7Y/rbIHN0fDTkP7v58BS07KKMCkskUG7
+        rTPrp+jinp67KmciT0vJHFrcQsbAicJn7KXknDl2WEjI12WPUEW+Q==
+X-ME-Sender: <xms:Rd02YlAJD1ycEJbkLRMM0KRY1lDvwGfvGBClIeKGAwuYgY-HM9HNnQ>
+    <xme:Rd02YjjzevJC-HgUmG0HrhVAfVILN18yq7Bv5tw05ggk4d7STE8NnJpO4lvR_lBim
+    6Hj4eVHk4KKHzk>
+X-ME-Received: <xmr:Rd02Ygk33nNO4FUMv2-vySsaqev1qpuzZW2Jcu9_5dkPG_NIAUjrvAqpmRucXTs56jsnzw_cEy4BVHAsY8Zm4h4Tjbw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegtddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:Rd02YvzwPsopQaTOv0s9xyRhEaTH9tDkKCEJi5ru5QmnSzqjeBupcw>
+    <xmx:Rd02YqTH4pWwiDel8_YY2xrIDSeh4juCtvRvBHVZb5Tj7qDdvxXDeA>
+    <xmx:Rd02Yib1AlUzy3TCPVkOFvuapZ5IVI5hvwqvgtuVH6Nzs_K2gOkNig>
+    <xmx:Rd02YvhB7qS8uctbcKFyh_JQZBVebQgpvrp2AY-Z7P6OicfFSEMiYQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 20 Mar 2022 03:52:36 -0400 (EDT)
+Date:   Sun, 20 Mar 2022 09:52:33 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 4/4] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+Message-ID: <YjbdQUVYkhkbdp3L@shredder>
+References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
+ <20220317093902.1305816-5-schultz.hans+netdev@gmail.com>
+ <YjNMS6aFG+93ejj5@shredder>
+ <86mthnw9gr.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86mthnw9gr.fsf@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are a few spelling mistakes in error messages. Fix them.
+On Fri, Mar 18, 2022 at 04:45:24PM +0100, Hans Schultz wrote:
+> On tor, mar 17, 2022 at 16:57, Ido Schimmel <idosch@idosch.org> wrote:
+> > On Thu, Mar 17, 2022 at 10:39:02AM +0100, Hans Schultz wrote:
+> >> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
+> >> locked flag set. denying access until the FDB entry is replaced with a
+> >> FDB entry without the locked flag set.
+> >> 
+> >> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> >> ---
+> >>  .../net/forwarding/bridge_locked_port.sh      | 29 ++++++++++++++++++-
+> >>  1 file changed, 28 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> >> index 6e98efa6d371..2f9519e814b6 100755
+> >> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> >> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> >> @@ -1,7 +1,7 @@
+> >>  #!/bin/bash
+> >>  # SPDX-License-Identifier: GPL-2.0
+> >>  
+> >> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+> >> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
+> >>  NUM_NETIFS=4
+> >>  CHECK_TC="no"
+> >>  source lib.sh
+> >> @@ -170,6 +170,33 @@ locked_port_ipv6()
+> >>  	log_test "Locked port ipv6"
+> >>  }
+> >>  
+> >> +locked_port_mab()
+> >> +{
+> >> +	RET=0
+> >> +	check_locked_port_support || return 0
+> >> +
+> >> +	ping_do $h1 192.0.2.2
+> >> +	check_err $? "MAB: Ping did not work before locking port"
+> >> +
+> >> +	bridge link set dev $swp1 locked on
+> >> +	bridge link set dev $swp1 learning on
+> >> +
+> >> +	ping_do $h1 192.0.2.2
+> >> +	check_fail $? "MAB: Ping worked on port just locked"
+> >> +
+> >> +	if ! bridge fdb show | grep `mac_get $h1` | grep -q "locked"; then
+> >> +		RET=1
+> >> +		retmsg="MAB: No locked fdb entry after ping on locked port"
+> >> +	fi
+> >
+> > bridge fdb show | grep `mac_get $h1 | grep -q "locked"
+> > check_err $? "MAB: No locked fdb entry after ping on locked port"
+> >
+> >> +
+> >> +	bridge fdb del `mac_get $h1` dev $swp1 master
+> >> +	bridge fdb add `mac_get $h1` dev $swp1 master static
+> >
+> > bridge fdb replace `mac_get $h1` dev $swp1 master static
+> >
+> Unfortunately for some reason 'replace' does not work in several of the
+> tests, while when replaced with 'del+add', they work.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/powerpc/security/spectre_v2.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Is it because the 'locked' flag is not removed following the replace? At
+least I don't see where it's handled in fdb_add_entry(). If so, please
+fix it and use "bridge fdb replace" in the test.
 
-diff --git a/tools/testing/selftests/powerpc/security/spectre_v2.c b/tools/testing/selftests/powerpc/security/spectre_v2.c
-index d42ca8c676c3..e832605442bb 100644
---- a/tools/testing/selftests/powerpc/security/spectre_v2.c
-+++ b/tools/testing/selftests/powerpc/security/spectre_v2.c
-@@ -183,7 +183,7 @@ int spectre_v2_test(void)
- 		// These should all not affect userspace branch prediction
- 		if (miss_percent > 15) {
- 			printf("Branch misses > 15%% unexpected in this configuration!\n");
--			printf("Possible mis-match between reported & actual mitigation\n");
-+			printf("Possible mismatch between reported & actual mitigation\n");
- 			/*
- 			 * Such a mismatch may be caused by a guest system
- 			 * reporting as vulnerable when the host is mitigated.
-@@ -201,14 +201,14 @@ int spectre_v2_test(void)
- 		// This seems to affect userspace branch prediction a bit?
- 		if (miss_percent > 25) {
- 			printf("Branch misses > 25%% unexpected in this configuration!\n");
--			printf("Possible mis-match between reported & actual mitigation\n");
-+			printf("Possible mismatch between reported & actual mitigation\n");
- 			return 1;
- 		}
- 		break;
- 	case COUNT_CACHE_DISABLED:
- 		if (miss_percent < 95) {
- 			printf("Branch misses < 20%% unexpected in this configuration!\n");
--			printf("Possible mis-match between reported & actual mitigation\n");
-+			printf("Possible mismatch between reported & actual mitigation\n");
- 			return 1;
- 		}
- 		break;
--- 
-2.35.1
-
+> 
+> >> +
+> >> +	ping_do $h1 192.0.2.2
+> >> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
+> >> +
+> >> +	log_test "Locked port MAB"
+> >
+> > Clean up after the test to revert to initial state:
+> >
+> > bridge fdb del `mac_get $h1` dev $swp1 master
+> > bridge link set dev $swp1 locked off
+> >
+> >
+> >> +}
+> >>  trap cleanup EXIT
+> >>  
+> >>  setup_prepare
+> >> -- 
+> >> 2.30.2
+> >> 
