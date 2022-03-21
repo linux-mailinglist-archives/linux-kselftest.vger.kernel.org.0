@@ -2,30 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D2C4E330B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 23:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BBE4E32D6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 23:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiCUWrG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Mar 2022 18:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S229773AbiCUWq4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Mar 2022 18:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiCUWqy (ORCPT
+        with ESMTP id S229585AbiCUWqw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:46:54 -0400
-X-Greylist: delayed 12509 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 15:25:49 PDT
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4A73997D2;
-        Mon, 21 Mar 2022 15:25:49 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 15:18:00 -0700
+        Mon, 21 Mar 2022 18:46:52 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C6B32BC1F;
+        Mon, 21 Mar 2022 15:25:21 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:23:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1647901086;
+        t=1647901399;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kU2x6mfxHzd6oubiXMPH3ZgCSjbnudyOXlm9XSlrpLM=;
-        b=q9fAZ1jelJXKmSIUHYreNIYyOIgRUWEHYCOoJks6gKZ/rK6ys/DA1Z3pIsq0JybH2/qWEl
-        Hd+fLeYrj5aD28WaSFkNAKcb/IY1B/KhjN+wK+uOy5DpsJIDyKXyxzX2qmnF92mvp1dUs/
-        5LSgYePfnBr066kks/l/Oimb4uVMhy8=
+        bh=0PoRxyCNZyFj70PP5U+yk5A784SR14yEEvMXF3ao0Hs=;
+        b=k3HjKgHPWmG6ejRHhFTB2rDCs3QJDtzExJJx4o6gDhaPINlM2HuiQqqImId7++FRDOEh+R
+        c8x8yyqNMrEOZkWzSFnLur9bdU3trTN+uBdC9u1P6K1cBWA5/rNavQAQ3vRlRlQJm/I7et
+        74LhXGFharP361v63/BVHyaYt+f6Gk0=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Roman Gushchin <roman.gushchin@linux.dev>
 To:     Zi Yan <ziy@nvidia.com>
@@ -36,342 +35,464 @@ Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 3/5] mm: thp: split huge page to any lower order
- pages.
-Message-ID: <Yjj5mADYABiZSxGB@carbon.dhcp.thefacebook.com>
+Subject: Re: [RFC PATCH 5/5] mm: huge_memory: enable debugfs to split huge
+ pages to any order.
+Message-ID: <Yjj6z3zYFUIKujHR@carbon.dhcp.thefacebook.com>
 References: <20220321142128.2471199-1-zi.yan@sent.com>
- <20220321142128.2471199-4-zi.yan@sent.com>
+ <20220321142128.2471199-6-zi.yan@sent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321142128.2471199-4-zi.yan@sent.com>
+In-Reply-To: <20220321142128.2471199-6-zi.yan@sent.com>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:21:26AM -0400, Zi Yan wrote:
+On Mon, Mar 21, 2022 at 10:21:28AM -0400, Zi Yan wrote:
 > From: Zi Yan <ziy@nvidia.com>
 > 
-> To split a THP to any lower order pages, we need to reform THPs on
-> subpages at given order and add page refcount based on the new page
-> order. Also we need to reinitialize page_deferred_list after removing
-> the page from the split_queue, otherwise a subsequent split will see
-> list corruption when checking the page_deferred_list again.
-> 
-> It has many uses, like minimizing the number of pages after
-> truncating a pagecache THP. For anonymous THPs, we can only split them
-> to order-0 like before until we add support for any size anonymous THPs.
+> It is used to test split_huge_page_to_list_to_order for pagecache THPs.
+> Also add test cases for split_huge_page_to_list_to_order via both
+> debugfs, truncating a file, and punching holes in a file.
 > 
 > Signed-off-by: Zi Yan <ziy@nvidia.com>
 
-Overall the patch looks good to me, please, feel free to add
 Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-to the next version.
-
-Couple of small nits below:
-
-> ---
->  include/linux/huge_mm.h |   8 +++
->  mm/huge_memory.c        | 111 ++++++++++++++++++++++++++++++----------
->  2 files changed, 91 insertions(+), 28 deletions(-)
-> 
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 2999190adc22..c7153cd7e9e4 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -186,6 +186,8 @@ void free_transhuge_page(struct page *page);
->  
->  bool can_split_folio(struct folio *folio, int *pextra_pins);
->  int split_huge_page_to_list(struct page *page, struct list_head *list);
-> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
-> +		unsigned int new_order);
-
-Do we really need both? Maybe add the new_order argument to the existing function?
-It seems like there are not so many call sites.
-
->  static inline int split_huge_page(struct page *page)
->  {
->  	return split_huge_page_to_list(page, NULL);
-> @@ -355,6 +357,12 @@ split_huge_page_to_list(struct page *page, struct list_head *list)
->  {
->  	return 0;
->  }
-> +static inline int
-> +split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
-> +		unsigned int new_order)
-> +{
-> +	return 0;
-> +}
->  static inline int split_huge_page(struct page *page)
->  {
->  	return 0;
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index fcfa46af6c4c..3617aa3ad0b1 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2236,11 +2236,13 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
->  static void unmap_page(struct page *page)
->  {
->  	struct folio *folio = page_folio(page);
-> -	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
-> -		TTU_SYNC;
-> +	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SYNC;
->  
->  	VM_BUG_ON_PAGE(!PageHead(page), page);
->  
-> +	if (folio_order(folio) >= HPAGE_PMD_ORDER)
-> +		ttu_flags |= TTU_SPLIT_HUGE_PMD;
-> +
->  	/*
->  	 * Anon pages need migration entries to preserve them, but file
->  	 * pages can simply be left unmapped, then faulted back on demand.
-> @@ -2254,9 +2256,9 @@ static void unmap_page(struct page *page)
->  	VM_WARN_ON_ONCE_PAGE(page_mapped(page), page);
->  }
->  
-> -static void remap_page(struct folio *folio, unsigned long nr)
-> +static void remap_page(struct folio *folio, unsigned short nr)
->  {
-> -	int i = 0;
-> +	unsigned int i;
->  
->  	/* If unmap_page() uses try_to_migrate() on file, remove this check */
->  	if (!folio_test_anon(folio))
-> @@ -2274,7 +2276,6 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
->  		struct lruvec *lruvec, struct list_head *list)
->  {
->  	VM_BUG_ON_PAGE(!PageHead(head), head);
-> -	VM_BUG_ON_PAGE(PageCompound(tail), head);
->  	VM_BUG_ON_PAGE(PageLRU(tail), head);
->  	lockdep_assert_held(&lruvec->lru_lock);
->  
-> @@ -2295,9 +2296,10 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
->  }
->  
->  static void __split_huge_page_tail(struct page *head, int tail,
-> -		struct lruvec *lruvec, struct list_head *list)
-> +		struct lruvec *lruvec, struct list_head *list, unsigned int new_order)
->  {
->  	struct page *page_tail = head + tail;
-> +	unsigned long compound_head_flag = new_order ? (1L << PG_head) : 0;
->  
->  	VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
->  
-> @@ -2321,6 +2323,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
->  #ifdef CONFIG_64BIT
->  			 (1L << PG_arch_2) |
->  #endif
-> +			 compound_head_flag |
->  			 (1L << PG_dirty)));
->  
->  	/* ->mapping in first tail page is compound_mapcount */
-> @@ -2329,7 +2332,10 @@ static void __split_huge_page_tail(struct page *head, int tail,
->  	page_tail->mapping = head->mapping;
->  	page_tail->index = head->index + tail;
->  
-> -	/* Page flags must be visible before we make the page non-compound. */
-> +	/*
-> +	 * Page flags must be visible before we make the page non-compound or
-> +	 * a compound page in new_order.
-> +	 */
->  	smp_wmb();
->  
->  	/*
-> @@ -2339,10 +2345,15 @@ static void __split_huge_page_tail(struct page *head, int tail,
->  	 * which needs correct compound_head().
->  	 */
->  	clear_compound_head(page_tail);
-> +	if (new_order) {
-> +		prep_compound_page(page_tail, new_order);
-> +		prep_transhuge_page(page_tail);
-> +	}
->  
->  	/* Finally unfreeze refcount. Additional reference from page cache. */
-> -	page_ref_unfreeze(page_tail, 1 + (!PageAnon(head) ||
-> -					  PageSwapCache(head)));
-> +	page_ref_unfreeze(page_tail, 1 + ((!PageAnon(head) ||
-> +					   PageSwapCache(head)) ?
-> +						thp_nr_pages(page_tail) : 0));
->  
->  	if (page_is_young(head))
->  		set_page_young(page_tail);
-> @@ -2360,7 +2371,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
->  }
->  
->  static void __split_huge_page(struct page *page, struct list_head *list,
-> -		pgoff_t end)
-> +		pgoff_t end, unsigned int new_order)
->  {
->  	struct folio *folio = page_folio(page);
->  	struct page *head = &folio->page;
-> @@ -2369,10 +2380,11 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->  	unsigned long offset = 0;
->  	unsigned int order = thp_order(head);
->  	unsigned int nr = thp_nr_pages(head);
-> +	unsigned int new_nr = 1 << new_order;
->  	int i;
->  
->  	/* complete memcg works before add pages to LRU */
-> -	split_page_memcg(head, nr, 0);
-> +	split_page_memcg(head, nr, new_order);
->  
->  	if (PageAnon(head) && PageSwapCache(head)) {
->  		swp_entry_t entry = { .val = page_private(head) };
-> @@ -2387,42 +2399,50 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->  
->  	ClearPageHasHWPoisoned(head);
->  
-> -	for (i = nr - 1; i >= 1; i--) {
-> -		__split_huge_page_tail(head, i, lruvec, list);
-> +	for (i = nr - new_nr; i >= new_nr; i -= new_nr) {
-> +		__split_huge_page_tail(head, i, lruvec, list, new_order);
->  		/* Some pages can be beyond EOF: drop them from page cache */
->  		if (head[i].index >= end) {
->  			ClearPageDirty(head + i);
->  			__delete_from_page_cache(head + i, NULL);
->  			if (shmem_mapping(head->mapping))
-> -				shmem_uncharge(head->mapping->host, 1);
-> +				shmem_uncharge(head->mapping->host, new_nr);
->  			put_page(head + i);
->  		} else if (!PageAnon(page)) {
->  			__xa_store(&head->mapping->i_pages, head[i].index,
->  					head + i, 0);
->  		} else if (swap_cache) {
-> +			/*
-> +			 * split anonymous THPs (including swapped out ones) to
-> +			 * non-zero order not supported
-> +			 */
-> +			VM_BUG_ON(new_order);
->  			__xa_store(&swap_cache->i_pages, offset + i,
->  					head + i, 0);
->  		}
->  	}
->  
-> -	ClearPageCompound(head);
-> +	if (!new_order)
-> +		ClearPageCompound(head);
-> +	else
-> +		set_compound_order(head, new_order);
->  	unlock_page_lruvec(lruvec);
->  	/* Caller disabled irqs, so they are still disabled here */
->  
-> -	split_page_owner(head, order, 0);
-> +	split_page_owner(head, order, new_order);
->  
->  	/* See comment in __split_huge_page_tail() */
->  	if (PageAnon(head)) {
->  		/* Additional pin to swap cache */
->  		if (PageSwapCache(head)) {
-> -			page_ref_add(head, 2);
-> +			page_ref_add(head, 1 + new_nr);
->  			xa_unlock(&swap_cache->i_pages);
->  		} else {
->  			page_ref_inc(head);
->  		}
->  	} else {
->  		/* Additional pin to page cache */
-> -		page_ref_add(head, 2);
-> +		page_ref_add(head, 1 + new_nr);
->  		xa_unlock(&head->mapping->i_pages);
->  	}
->  	local_irq_enable();
-> @@ -2435,7 +2455,14 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->  		split_swap_cluster(entry);
->  	}
->  
-> -	for (i = 0; i < nr; i++) {
-> +	/*
-> +	 * set page to its compound_head when split to THPs, so that GUP pin and
-> +	 * PG_locked are transferred to the right after-split page
-> +	 */
-> +	if (new_order)
-> +		page = compound_head(page);
-> +
-> +	for (i = 0; i < nr; i += new_nr) {
->  		struct page *subpage = head + i;
->  		if (subpage == page)
->  			continue;
-> @@ -2472,36 +2499,60 @@ bool can_split_folio(struct folio *folio, int *pextra_pins)
->   * This function splits huge page into normal pages. @page can point to any
->   * subpage of huge page to split. Split doesn't change the position of @page.
->   *
-> + * See split_huge_page_to_list_to_order() for more details.
-> + *
-> + * Returns 0 if the hugepage is split successfully.
-> + * Returns -EBUSY if the page is pinned or if anon_vma disappeared from under
-> + * us.
-> + */
-> +int split_huge_page_to_list(struct page *page, struct list_head *list)
-> +{
-> +	return split_huge_page_to_list_to_order(page, list, 0);
-> +}
-> +
-> +/*
-> + * This function splits huge page into pages in @new_order. @page can point to
-> + * any subpage of huge page to split. Split doesn't change the position of
-> + * @page.
-> + *
->   * Only caller must hold pin on the @page, otherwise split fails with -EBUSY.
->   * The huge page must be locked.
->   *
->   * If @list is null, tail pages will be added to LRU list, otherwise, to @list.
->   *
-> - * Both head page and tail pages will inherit mapping, flags, and so on from
-> - * the hugepage.
-> + * Pages in new_order will inherit mapping, flags, and so on from the hugepage.
->   *
-> - * GUP pin and PG_locked transferred to @page. Rest subpages can be freed if
-> - * they are not mapped.
-> + * GUP pin and PG_locked transferred to @page or the compound page @page belongs
-> + * to. Rest subpages can be freed if they are not mapped.
->   *
->   * Returns 0 if the hugepage is split successfully.
->   * Returns -EBUSY if the page is pinned or if anon_vma disappeared from under
->   * us.
->   */
-> -int split_huge_page_to_list(struct page *page, struct list_head *list)
-> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
-> +				     unsigned int new_order)
->  {
->  	struct folio *folio = page_folio(page);
->  	struct page *head = &folio->page;
->  	struct deferred_split *ds_queue = get_deferred_split_queue(head);
-> -	XA_STATE(xas, &head->mapping->i_pages, head->index);
-> +	/* reset xarray order to new order after split */
-> +	XA_STATE_ORDER(xas, &head->mapping->i_pages, head->index, new_order);
->  	struct anon_vma *anon_vma = NULL;
->  	struct address_space *mapping = NULL;
->  	int extra_pins, ret;
->  	pgoff_t end;
->  
-> +	VM_BUG_ON(thp_order(head) <= new_order);
->  	VM_BUG_ON_PAGE(is_huge_zero_page(head), head);
->  	VM_BUG_ON_PAGE(!PageLocked(head), head);
->  	VM_BUG_ON_PAGE(!PageCompound(head), head);
->  
-> +	/* Cannot split THP to order-1 (no order-1 THPs) */
-> +	VM_BUG_ON(new_order == 1);
-> +
-> +	/* Split anonymous THP to non-zero order not support */
-> +	VM_BUG_ON(PageAnon(head) && new_order);
-> +
->  	if (PageWriteback(head))
->  		return -EBUSY;
->  
-> @@ -2582,7 +2633,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
->  	if (page_ref_freeze(head, 1 + extra_pins)) {
->  		if (!list_empty(page_deferred_list(head))) {
->  			ds_queue->split_queue_len--;
-> -			list_del(page_deferred_list(head));
-> +			list_del_init(page_deferred_list(head));
-
-Can you, please, add the comment from the changelog here as well?
 
 Thanks!
+
+> ---
+>  mm/huge_memory.c                              |  26 ++-
+>  .../selftests/vm/split_huge_page_test.c       | 219 +++++++++++++++---
+>  2 files changed, 201 insertions(+), 44 deletions(-)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 76db0092a1e2..7645bb12fcbc 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2856,7 +2856,7 @@ static inline bool vma_not_suitable_for_thp_split(struct vm_area_struct *vma)
+>  }
+>  
+>  static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+> -				unsigned long vaddr_end)
+> +				unsigned long vaddr_end, unsigned int new_order)
+>  {
+>  	int ret = 0;
+>  	struct task_struct *task;
+> @@ -2926,7 +2926,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+>  		if (!trylock_page(page))
+>  			goto next;
+>  
+> -		if (!split_huge_page(page))
+> +		if (!split_huge_page_to_list_to_order(page, NULL, new_order))
+>  			split++;
+>  
+>  		unlock_page(page);
+> @@ -2944,7 +2944,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+>  }
+>  
+>  static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
+> -				pgoff_t off_end)
+> +				pgoff_t off_end, unsigned int new_order)
+>  {
+>  	struct filename *file;
+>  	struct file *candidate;
+> @@ -2984,7 +2984,7 @@ static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
+>  		if (!trylock_page(fpage))
+>  			goto next;
+>  
+> -		if (!split_huge_page(fpage))
+> +		if (!split_huge_page_to_list_to_order(fpage, NULL, new_order))
+>  			split++;
+>  
+>  		unlock_page(fpage);
+> @@ -3009,10 +3009,14 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
+>  {
+>  	static DEFINE_MUTEX(split_debug_mutex);
+>  	ssize_t ret;
+> -	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
+> +	/*
+> +	 * hold pid, start_vaddr, end_vaddr, new_order or
+> +	 * file_path, off_start, off_end, new_order
+> +	 */
+>  	char input_buf[MAX_INPUT_BUF_SZ];
+>  	int pid;
+>  	unsigned long vaddr_start, vaddr_end;
+> +	unsigned int new_order = 0;
+>  
+>  	ret = mutex_lock_interruptible(&split_debug_mutex);
+>  	if (ret)
+> @@ -3041,29 +3045,29 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
+>  			goto out;
+>  		}
+>  
+> -		ret = sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
+> -		if (ret != 2) {
+> +		ret = sscanf(buf, "0x%lx,0x%lx,%d", &off_start, &off_end, &new_order);
+> +		if (ret != 2 && ret != 3) {
+>  			ret = -EINVAL;
+>  			goto out;
+>  		}
+> -		ret = split_huge_pages_in_file(file_path, off_start, off_end);
+> +		ret = split_huge_pages_in_file(file_path, off_start, off_end, new_order);
+>  		if (!ret)
+>  			ret = input_len;
+>  
+>  		goto out;
+>  	}
+>  
+> -	ret = sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_end);
+> +	ret = sscanf(input_buf, "%d,0x%lx,0x%lx,%d", &pid, &vaddr_start, &vaddr_end, &new_order);
+>  	if (ret == 1 && pid == 1) {
+>  		split_huge_pages_all();
+>  		ret = strlen(input_buf);
+>  		goto out;
+> -	} else if (ret != 3) {
+> +	} else if (ret != 3 && ret != 4) {
+>  		ret = -EINVAL;
+>  		goto out;
+>  	}
+>  
+> -	ret = split_huge_pages_pid(pid, vaddr_start, vaddr_end);
+> +	ret = split_huge_pages_pid(pid, vaddr_start, vaddr_end, new_order);
+>  	if (!ret)
+>  		ret = strlen(input_buf);
+>  out:
+> diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
+> index 52497b7b9f1d..af01e7dca9c8 100644
+> --- a/tools/testing/selftests/vm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/vm/split_huge_page_test.c
+> @@ -16,6 +16,7 @@
+>  #include <sys/mount.h>
+>  #include <malloc.h>
+>  #include <stdbool.h>
+> +#include <time.h>
+>  
+>  uint64_t pagesize;
+>  unsigned int pageshift;
+> @@ -24,10 +25,11 @@ uint64_t pmd_pagesize;
+>  #define PMD_SIZE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
+>  #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
+>  #define SMAP_PATH "/proc/self/smaps"
+> +#define THP_FS_PATH "/mnt/thp_fs"
+>  #define INPUT_MAX 80
+>  
+> -#define PID_FMT "%d,0x%lx,0x%lx"
+> -#define PATH_FMT "%s,0x%lx,0x%lx"
+> +#define PID_FMT "%d,0x%lx,0x%lx,%d"
+> +#define PATH_FMT "%s,0x%lx,0x%lx,%d"
+>  
+>  #define PFN_MASK     ((1UL<<55)-1)
+>  #define KPF_THP      (1UL<<22)
+> @@ -75,23 +77,6 @@ static uint64_t read_pmd_pagesize(void)
+>  	return strtoul(buf, NULL, 10);
+>  }
+>  
+> -static int write_file(const char *path, const char *buf, size_t buflen)
+> -{
+> -	int fd;
+> -	ssize_t numwritten;
+> -
+> -	fd = open(path, O_WRONLY);
+> -	if (fd == -1)
+> -		return 0;
+> -
+> -	numwritten = write(fd, buf, buflen - 1);
+> -	close(fd);
+> -	if (numwritten < 1)
+> -		return 0;
+> -
+> -	return (unsigned int) numwritten;
+> -}
+> -
+>  static void write_debugfs(const char *fmt, ...)
+>  {
+>  	char input[INPUT_MAX];
+> @@ -106,11 +91,6 @@ static void write_debugfs(const char *fmt, ...)
+>  		printf("%s: Debugfs input is too long\n", __func__);
+>  		exit(EXIT_FAILURE);
+>  	}
+> -
+> -	if (!write_file(SPLIT_DEBUGFS, input, ret + 1)) {
+> -		perror(SPLIT_DEBUGFS);
+> -		exit(EXIT_FAILURE);
+> -	}
+>  }
+>  
+>  #define MAX_LINE_LENGTH 500
+> @@ -124,7 +104,7 @@ static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
+>  	return false;
+>  }
+>  
+> -static uint64_t check_huge(void *addr)
+> +static uint64_t check_huge(void *addr, const char *prefix)
+>  {
+>  	uint64_t thp = 0;
+>  	int ret;
+> @@ -149,13 +129,13 @@ static uint64_t check_huge(void *addr)
+>  		goto err_out;
+>  
+>  	/*
+> -	 * Fetch the AnonHugePages: in the same block and check the number of
+> +	 * Fetch the @prefix in the same block and check the number of
+>  	 * hugepages.
+>  	 */
+> -	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
+> +	if (!check_for_pattern(fp, prefix, buffer))
+>  		goto err_out;
+>  
+> -	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1) {
+> +	if (sscanf(&buffer[strlen(prefix)], "%10ld kB", &thp) != 1) {
+>  		printf("Reading smap error\n");
+>  		exit(EXIT_FAILURE);
+>  	}
+> @@ -184,7 +164,7 @@ void split_pmd_thp(void)
+>  	for (i = 0; i < len; i++)
+>  		one_page[i] = (char)i;
+>  
+> -	thp_size = check_huge(one_page);
+> +	thp_size = check_huge(one_page, "AnonHugePages:");
+>  	if (!thp_size) {
+>  		printf("No THP is allocated\n");
+>  		exit(EXIT_FAILURE);
+> @@ -192,7 +172,7 @@ void split_pmd_thp(void)
+>  
+>  	/* split all THPs */
+>  	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
+> -		(uint64_t)one_page + len);
+> +		(uint64_t)one_page + len, 0);
+>  
+>  	for (i = 0; i < len; i++)
+>  		if (one_page[i] != (char)i) {
+> @@ -201,7 +181,7 @@ void split_pmd_thp(void)
+>  		}
+>  
+>  
+> -	thp_size = check_huge(one_page);
+> +	thp_size = check_huge(one_page, "AnonHugePages:");
+>  	if (thp_size) {
+>  		printf("Still %ld kB AnonHugePages not split\n", thp_size);
+>  		exit(EXIT_FAILURE);
+> @@ -249,7 +229,7 @@ void split_pte_mapped_thp(void)
+>  	for (i = 0; i < len; i++)
+>  		one_page[i] = (char)i;
+>  
+> -	thp_size = check_huge(one_page);
+> +	thp_size = check_huge(one_page, "AnonHugePages:");
+>  	if (!thp_size) {
+>  		printf("No THP is allocated\n");
+>  		exit(EXIT_FAILURE);
+> @@ -284,7 +264,7 @@ void split_pte_mapped_thp(void)
+>  
+>  	/* split all remapped THPs */
+>  	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
+> -		      (uint64_t)pte_mapped + pagesize * 4);
+> +		      (uint64_t)pte_mapped + pagesize * 4, 0);
+>  
+>  	/* smap does not show THPs after mremap, use kpageflags instead */
+>  	thp_size = 0;
+> @@ -371,20 +351,193 @@ void split_file_backed_thp(void)
+>  	printf("file-backed THP split test done, please check dmesg for more information\n");
+>  }
+>  
+> +void create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd, char **addr)
+> +{
+> +	size_t i;
+> +	int dummy;
+> +
+> +	srand(time(NULL));
+> +
+> +	*fd = open(testfile, O_CREAT | O_RDWR, 0664);
+> +	if (*fd == -1) {
+> +		perror("Failed to create a file at "THP_FS_PATH);
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	for (i = 0; i < fd_size; i++) {
+> +		unsigned char byte = (unsigned char)i;
+> +
+> +		write(*fd, &byte, sizeof(byte));
+> +	}
+> +	close(*fd);
+> +	sync();
+> +	*fd = open("/proc/sys/vm/drop_caches", O_WRONLY);
+> +	if (*fd == -1) {
+> +		perror("open drop_caches");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +	if (write(*fd, "3", 1) != 1) {
+> +		perror("write to drop_caches");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +	close(*fd);
+> +
+> +	*fd = open(testfile, O_RDWR);
+> +	if (*fd == -1) {
+> +		perror("Failed to open a file at "THP_FS_PATH);
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	*addr = mmap(NULL, fd_size, PROT_READ|PROT_WRITE, MAP_SHARED, *fd, 0);
+> +	if (*addr == (char *)-1) {
+> +		perror("cannot mmap");
+> +		exit(1);
+> +	}
+> +	madvise(*addr, fd_size, MADV_HUGEPAGE);
+> +
+> +	for (size_t i = 0; i < fd_size; i++)
+> +		dummy += *(*addr + i);
+> +
+> +	if (!check_huge(*addr, "FilePmdMapped:")) {
+> +		printf("No pagecache THP generated, please mount a filesystem "
+> +			"supporting pagecache THP at "THP_FS_PATH"\n");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +}
+> +
+> +void split_thp_in_pagecache_to_order(size_t fd_size, int order)
+> +{
+> +	int fd;
+> +	char *addr;
+> +	size_t i;
+> +	const char testfile[] = THP_FS_PATH "/test";
+> +
+> +	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
+> +
+> +	printf("split %ld kB pagecache page to order %d ... ", fd_size >> 10, order);
+> +	write_debugfs(PID_FMT, getpid(), (uint64_t)addr, (uint64_t)addr + fd_size, order);
+> +
+> +	for (i = 0; i < fd_size; i++)
+> +		if (*(addr + i) != (char)i) {
+> +			printf("%lu byte corrupted in the file\n", i);
+> +			exit(EXIT_FAILURE);
+> +		}
+> +
+> +	close(fd);
+> +	unlink(testfile);
+> +	printf("done\n");
+> +}
+> +
+> +void truncate_thp_in_pagecache_to_order(size_t fd_size, int order)
+> +{
+> +	int fd;
+> +	char *addr;
+> +	size_t i;
+> +	const char testfile[] = THP_FS_PATH "/test";
+> +
+> +	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
+> +
+> +	printf("truncate %ld kB pagecache page to size %lu kB ... ", fd_size >> 10, 4UL << order);
+> +	ftruncate(fd, pagesize << order);
+> +
+> +	for (i = 0; i < (pagesize << order); i++)
+> +		if (*(addr + i) != (char)i) {
+> +			printf("%lu byte corrupted in the file\n", i);
+> +			exit(EXIT_FAILURE);
+> +		}
+> +
+> +	close(fd);
+> +	unlink(testfile);
+> +	printf("done\n");
+> +}
+> +
+> +void punch_hole_in_pagecache_thp(size_t fd_size, off_t offset[], off_t len[], int n)
+> +{
+> +	int fd, j;
+> +	char *addr;
+> +	size_t i;
+> +	const char testfile[] = THP_FS_PATH "/test";
+> +
+> +	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
+> +
+> +	for (j = 0; j < n; j++) {
+> +		printf("addr: %lx, punch a hole at offset %ld kB with len %ld kB ... ",
+> +			(unsigned long)addr, offset[j] >> 10, len[j] >> 10);
+> +		fallocate(fd, FALLOC_FL_PUNCH_HOLE|FALLOC_FL_KEEP_SIZE, offset[j], len[j]);
+> +		printf("done\n");
+> +	}
+> +
+> +	for (i = 0; i < fd_size; i++) {
+> +		int in_hole = 0;
+> +
+> +		for (j = 0; j < n; j++)
+> +			if (i >= offset[j] && i <= (offset[j] + len[j])) {
+> +				in_hole = 1;
+> +				break;
+> +			}
+> +
+> +		if (in_hole) {
+> +			if (*(addr + i)) {
+> +				printf("%lu byte non-zero after punch\n", i);
+> +				exit(EXIT_FAILURE);
+> +			}
+> +			continue;
+> +		}
+> +		if (*(addr + i) != (char)i) {
+> +			printf("%lu byte corrupted in the file\n", i);
+> +			exit(EXIT_FAILURE);
+> +		}
+> +	}
+> +
+> +	close(fd);
+> +	unlink(testfile);
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+> +	int i;
+> +	size_t fd_size;
+> +	off_t offset[2], len[2];
+> +
+>  	if (geteuid() != 0) {
+>  		printf("Please run the benchmark as root\n");
+>  		exit(EXIT_FAILURE);
+>  	}
+>  
+> +	setbuf(stdout, NULL);
+> +
+>  	pagesize = getpagesize();
+>  	pageshift = ffs(pagesize) - 1;
+>  	pmd_pagesize = read_pmd_pagesize();
+> +	fd_size = 2 * pmd_pagesize;
+>  
+>  	split_pmd_thp();
+>  	split_pte_mapped_thp();
+>  	split_file_backed_thp();
+>  
+> +	for (i = 8; i >= 0; i--)
+> +		if (i != 1)
+> +			split_thp_in_pagecache_to_order(fd_size, i);
+> +
+> +	/*
+> +	 * for i is 1, truncate code in the kernel should create order-0 pages
+> +	 * instead of order-1 THPs, since order-1 THP is not supported. No error
+> +	 * is expected.
+> +	 */
+> +	for (i = 8; i >= 0; i--)
+> +		truncate_thp_in_pagecache_to_order(fd_size, i);
+> +
+> +	offset[0] = 123 * pagesize;
+> +	offset[1] = 4 * pagesize;
+> +	len[0] = 200 * pagesize;
+> +	len[1] = 16 * pagesize;
+> +	punch_hole_in_pagecache_thp(fd_size, offset, len, 2);
+> +
+> +	offset[0] = 259 * pagesize + pagesize / 2;
+> +	offset[1] = 33 * pagesize;
+> +	len[0] = 129 * pagesize;
+> +	len[1] = 16 * pagesize;
+> +	punch_hole_in_pagecache_thp(fd_size, offset, len, 2);
+> +
+>  	return 0;
+>  }
+> -- 
+> 2.35.1
+> 
