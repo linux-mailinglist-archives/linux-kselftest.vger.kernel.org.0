@@ -2,84 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8C14E2D71
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 17:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DEF4E2DC3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 17:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350434AbiCUQL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Mar 2022 12:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S1351019AbiCUQWF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Mar 2022 12:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350867AbiCUQLG (ORCPT
+        with ESMTP id S1351010AbiCUQWF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:11:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67C572B1A9
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Mar 2022 09:09:16 -0700 (PDT)
+        Mon, 21 Mar 2022 12:22:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51CADAA02F
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Mar 2022 09:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647878955;
+        s=mimecast20190719; t=1647879638;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sfGTEmUWEu/FuJm8rv4KxXhPR+l0i9Uc8G4IxOhNPME=;
-        b=RFRClreNsSebInBDn4kkb4KKcxyOEZ5S5eFLYOwBfeK1vySIOt97dLYRBB02lFYzOIY+8H
-        WrfjD7IH5jUpt8mq6IZT0i4/JeQa5E67+R/0e50DZxlaAiL0ryA6iAp99e0ALX60eFpfby
-        m1MfEW8OkKsmaxeBz/v4gDo3fK7rULY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=pbOdQocvJIgIYNAU3dOVs2DjR6X7k4MYj/M90iJjWXY=;
+        b=e0cvC7OOLyc+EqZ5WR+TfZTf5ohvRxJkxVCOkAf3d4dxxGlz/ImPdKXiFDU2iFqfYWVhtT
+        UgVhdaVJ62gA/lh5HkqGm8q+iTutX0O5VXrZYmGsHfsJhtVCugBolku+GErZKcZiEhX5dG
+        rBSlcl5oKVsZCeTwkBrCxOwmDzHKul8=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-241-yB6jnd0MOL-GRtfmoIZGTQ-1; Mon, 21 Mar 2022 12:09:13 -0400
-X-MC-Unique: yB6jnd0MOL-GRtfmoIZGTQ-1
-Received: by mail-wm1-f70.google.com with SMTP id m35-20020a05600c3b2300b0038c90ef2dceso4741111wms.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Mar 2022 09:09:12 -0700 (PDT)
+ us-mta-322-HRT0aNnQNHCZt0MfL4pKgg-1; Mon, 21 Mar 2022 12:20:37 -0400
+X-MC-Unique: HRT0aNnQNHCZt0MfL4pKgg-1
+Received: by mail-pg1-f199.google.com with SMTP id r11-20020a63440b000000b0038068f34b0cso7492638pga.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Mar 2022 09:20:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=sfGTEmUWEu/FuJm8rv4KxXhPR+l0i9Uc8G4IxOhNPME=;
-        b=kTQ4sGZCvYuw+c2xhuhYShpMc3UqZQ0rjfO00MX2CPzLR483/9XN40NtyVwaxmNBj5
-         5ny0GaZAeMgUMEo5LvH4JG/8jtPgT/eFUV3TXMNIo7mTnM0EvcAADuiHjnZXUG9jTrNu
-         iPQkHrsAXZ99fj7KbFqo16Q4MfjjQQvw2+CZdVpkfQGqiO2Ch9iMb8WrJl0hb5Zq9kNk
-         U85z4j2WhyJUB6bSJdWacsQkOmFWsBNtq6wBzghSTbg2FjxlK0JQJ1tChmpDkY+9uhJg
-         /rYooKtM/BA0/56seET48T5gFzdaNIqb2kcA5rtIlZ9apkX2Mr9GzlUYnxx64YnJxgtP
-         kFuw==
-X-Gm-Message-State: AOAM530bkl+8kIy4eku2r3jvxH3zBdDCCY8Or+rFI7IJORj/2idLHCI8
-        PW6L22IDDx4CTubCEjLt2liEd4CbY780MwwEPpXWpf2a/HQMThHocTYrGBIvBrxSwfhW4hK4eWQ
-        APX0cXIYhM+IvJkbTmF2rMr7KpZpj
-X-Received: by 2002:adf:a4ce:0:b0:203:fce0:755e with SMTP id h14-20020adfa4ce000000b00203fce0755emr11044484wrb.510.1647878951692;
-        Mon, 21 Mar 2022 09:09:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxP8tnNpWfcqHVPmFM+7jTdPf3u8hsTPKsNtKPW9hZQPytRSq0aasePBoKmg+nUJ/TirjdyGQ==
-X-Received: by 2002:adf:a4ce:0:b0:203:fce0:755e with SMTP id h14-20020adfa4ce000000b00203fce0755emr11044467wrb.510.1647878951397;
-        Mon, 21 Mar 2022 09:09:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:4900:849b:f76e:5e1f:ff95? (p200300cbc7044900849bf76e5e1fff95.dip0.t-ipconnect.de. [2003:cb:c704:4900:849b:f76e:5e1f:ff95])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm14376699wmh.31.2022.03.21.09.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 09:09:10 -0700 (PDT)
-Message-ID: <51635f15-0f43-0f9d-e66f-9cd651431f81@redhat.com>
-Date:   Mon, 21 Mar 2022 17:09:09 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pbOdQocvJIgIYNAU3dOVs2DjR6X7k4MYj/M90iJjWXY=;
+        b=bwfq7Fxr/pftxuFpujaDVNxOc3Bw0J4fj+Zx6wG4tQG2cVUQWTeJgeaaAFEIWHujzx
+         6lwE/83VqXv1yRZ9Ft9M2fAOfg+vWD90VK7WKQXgbcI4b0mvlozPaTNVtgJOiHRXvVbu
+         vss0PUjVktpjRMd18UaCZFYS7s+zMu/LJE1RLWIzevjK6L4dcjAAUTrlsut9e5HrpQaH
+         SDJKupQ8jNBO3h5qEa5VHIbXaNZbjLHpGoHhJ2KI8pSadkp8mJZPbb43xOq+hYWCHqFx
+         eGpXjKZOaNn2NK8sjzwjgwtS/irx0flB7KjNgUWZn2U2qCofbaqPZ/OH0vcuG4j7X53U
+         xecw==
+X-Gm-Message-State: AOAM533VEA3keY7y7WFUVd4Nh3NrMvU+PXVwU9JHSI7XS9kxNLzSgfit
+        aAFhwEmO+QPfqJE2cvELq5doZfVMPUT1+F3dXUC2jcjrtaa/NacCpzs6ieeoLtls7xp1Vairbh6
+        RHypUrsDuZLnibeph/IW4rvr2nbQ5CMdMqvUnEfviHmA+
+X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id h2-20020a056a00218200b004fa6d20d95dmr18135934pfi.83.1647879635825;
+        Mon, 21 Mar 2022 09:20:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjF27dG7tlIwqHRmGo/L1Pqa+cqzwxC/hE5t254t/WUOFy/f2ich/A4jW9Ku25eWsmp14ZXqbMpd+Hu20Rbjo=
+X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id
+ h2-20020a056a00218200b004fa6d20d95dmr18135864pfi.83.1647879635332; Mon, 21
+ Mar 2022 09:20:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH V5 1/2] selftests: vm: bring common functions to a new
- file
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20220317103323.94799-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220317103323.94799-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAPhsuW64x8_m1pNN9gC8LA8ajAmy+5O3y+iOaC7ixSXU=J624Q@mail.gmail.com>
+In-Reply-To: <CAPhsuW64x8_m1pNN9gC8LA8ajAmy+5O3y+iOaC7ixSXU=J624Q@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 21 Mar 2022 17:20:24 +0100
+Message-ID: <CAO-hwJL+A5hqzGBCVCtp4diuM-_Aii+HAKNfz5oMZBTHCQrEkQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
+ descriptor from an eBPF program
+To:     Song Liu <song@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,34 +90,206 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
-> new file mode 100644
-> index 0000000000000..e9f5a0f2be196
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/vm_util.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <stdint.h>
-> +#include <fcntl.h>
-> +#include "../kselftest.h"
+On Fri, Mar 18, 2022 at 10:10 PM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Mar 18, 2022 at 9:17 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > Make use of BPF_HID_ATTACH_RDESC_FIXUP so we can trigger an rdesc fixup
+> > in the bpf world.
+> >
+> > Whenever the program gets attached/detached, the device is reconnected
+> > meaning that userspace will see it disappearing and reappearing with
+> > the new report descriptor.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
+> > ---
+> >
+> > changes in v3:
+> > - ensure the ctx.size is properly bounded by allocated size
+> > - s/link_attached/post_link_attach/
+> > - removed the switch statement with only one case
+> >
+> > changes in v2:
+> > - split the series by bpf/libbpf/hid/selftests and samples
+> > ---
+> >  drivers/hid/hid-bpf.c  | 62 ++++++++++++++++++++++++++++++++++++++++++
+> >  drivers/hid/hid-core.c |  3 +-
+> >  include/linux/hid.h    |  6 ++++
+> >  3 files changed, 70 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
+> > index 5060ebcb9979..45c87ff47324 100644
+> > --- a/drivers/hid/hid-bpf.c
+> > +++ b/drivers/hid/hid-bpf.c
+> > @@ -50,6 +50,14 @@ static struct hid_device *hid_bpf_fd_to_hdev(int fd)
+> >         return hdev;
+> >  }
+> >
+> > +static int hid_reconnect(struct hid_device *hdev)
+> > +{
+> > +       if (!test_and_set_bit(ffs(HID_STAT_REPROBED), &hdev->status))
+> > +               return device_reprobe(&hdev->dev);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static int hid_bpf_pre_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> >  {
+> >         int err = 0;
+> > @@ -92,6 +100,12 @@ static int hid_bpf_pre_link_attach(struct hid_device *hdev, enum bpf_hid_attach_
+> >         return err;
+> >  }
+> >
+> > +static void hid_bpf_post_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> > +{
+> > +       if (type == BPF_HID_ATTACH_RDESC_FIXUP)
+> > +               hid_reconnect(hdev);
+> > +}
+> > +
+> >  static void hid_bpf_array_detach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> >  {
+> >         switch (type) {
+> > @@ -99,6 +113,9 @@ static void hid_bpf_array_detach(struct hid_device *hdev, enum bpf_hid_attach_ty
+> >                 kfree(hdev->bpf.device_data);
+> >                 hdev->bpf.device_data = NULL;
+> >                 break;
+> > +       case BPF_HID_ATTACH_RDESC_FIXUP:
+> > +               hid_reconnect(hdev);
+> > +               break;
+> >         default:
+> >                 /* do nothing */
+> >                 break;
+> > @@ -116,6 +133,9 @@ static int hid_bpf_run_progs(struct hid_device *hdev, struct hid_bpf_ctx_kern *c
+> >         case HID_BPF_DEVICE_EVENT:
+> >                 type = BPF_HID_ATTACH_DEVICE_EVENT;
+> >                 break;
+> > +       case HID_BPF_RDESC_FIXUP:
+> > +               type = BPF_HID_ATTACH_RDESC_FIXUP;
+> > +               break;
+> >         default:
+> >                 return -EINVAL;
+> >         }
+> > @@ -155,11 +175,53 @@ u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *data, int *size)
+> >         return ctx.data;
+> >  }
+> >
+> > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+> > +{
+> > +       int ret;
+> > +       struct hid_bpf_ctx_kern ctx = {
+> > +               .type = HID_BPF_RDESC_FIXUP,
+> > +               .hdev = hdev,
+> > +               .size = *size,
+> > +       };
+> > +
+> > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
+>
+> Do we need to lock bpf_hid_mutex before calling bpf_hid_link_empty()?
+> (or maybe we
+> already did?)
 
-Are that latter two really required in this header? IMHO they should be
-moved to the respective files that need them.
+The mutex is not locked before this call, indeed.
 
-If you return "bool" below, you might want to include <stdbool.h> here
-as well.
+However, bpf_hid_link_empty() is an inlined function that just calls
+in the end list_empty(). Given that all the list heads are created
+just once for the entire life of the HID device, I *think* this is
+thread safe and does not require mutex locking.
 
-> +
-> +uint64_t pagemap_get_entry(int fd, char *start);
-> +bool pagemap_is_softdirty(int fd, char *start);
-> +void clear_softdirty(void);
-> +uint64_t read_pmd_pagesize(void);
-> +uint64_t check_huge(void *addr);
+(I might be wrong)
 
-Apart from that, LGTM.
+So when first plugging in the device, if there is a fighting process
+that attempts to add a program, if the program managed to insert
+itself before we enter this code, then the list won't be empty and we
+will execute BPF_PROG_RUN_ARRAY(), and if not, well, we ignore it and
+wait for reconnect().
 
--- 
-Thanks,
+But now I am starting to wonder if I need to also protect
+BPF_PROG_RUN_ARRAY() under bpf_hid_mutex...
 
-David / dhildenb
+Cheers,
+Benjamin
+
+>
+>
+> > +               goto ignore_bpf;
+> > +
+> > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
+> > +       if (!ctx.data)
+> > +               goto ignore_bpf;
+> > +
+> > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
+> > +
+> > +       ret = hid_bpf_run_progs(hdev, &ctx);
+> > +       if (ret)
+> > +               goto ignore_bpf;
+> > +
+> > +       if (ctx.size > ctx.allocated_size)
+> > +               goto ignore_bpf;
+> > +
+> > +       *size = ctx.size;
+> > +
+> > +       if (*size) {
+> > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
+> > +       } else {
+> > +               rdesc = NULL;
+> > +               kfree(ctx.data);
+> > +       }
+> > +
+> > +       return rdesc;
+> > +
+> > + ignore_bpf:
+> > +       kfree(ctx.data);
+> > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > +}
+> > +
+> >  int __init hid_bpf_module_init(void)
+> >  {
+> >         struct bpf_hid_hooks hooks = {
+> >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
+> >                 .pre_link_attach = hid_bpf_pre_link_attach,
+> > +               .post_link_attach = hid_bpf_post_link_attach,
+> >                 .array_detach = hid_bpf_array_detach,
+> >         };
+> >
+> > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > index 937fab7eb9c6..3182c39db006 100644
+> > --- a/drivers/hid/hid-core.c
+> > +++ b/drivers/hid/hid-core.c
+> > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
+> >                 return -ENODEV;
+> >         size = device->dev_rsize;
+> >
+> > -       buf = kmemdup(start, size, GFP_KERNEL);
+> > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
+> > +       buf = hid_bpf_report_fixup(device, start, &size);
+> >         if (buf == NULL)
+> >                 return -ENOMEM;
+> >
+> > diff --git a/include/linux/hid.h b/include/linux/hid.h
+> > index 8fd79011f461..66d949d10b78 100644
+> > --- a/include/linux/hid.h
+> > +++ b/include/linux/hid.h
+> > @@ -1213,10 +1213,16 @@ do {                                                                    \
+> >
+> >  #ifdef CONFIG_BPF
+> >  u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *rd, int *size);
+> > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size);
+> >  int hid_bpf_module_init(void);
+> >  void hid_bpf_module_exit(void);
+> >  #else
+> >  static inline u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *rd, int *size) { return rd; }
+> > +static inline u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+> > +                                      unsigned int *size)
+> > +{
+> > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > +}
+> >  static inline int hid_bpf_module_init(void) { return 0; }
+> >  static inline void hid_bpf_module_exit(void) {}
+> >  #endif
+> > --
+> > 2.35.1
+> >
+>
 
