@@ -2,87 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4C44E2F53
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 18:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6DF4E304F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 19:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349453AbiCURrB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Mar 2022 13:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S1352348AbiCUS6t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Mar 2022 14:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238056AbiCURrA (ORCPT
+        with ESMTP id S1350600AbiCUS6t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:47:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448CE3B039;
-        Mon, 21 Mar 2022 10:45:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B8B6C1F381;
-        Mon, 21 Mar 2022 17:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647884732; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 21 Mar 2022 14:58:49 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE31018C0D0;
+        Mon, 21 Mar 2022 11:57:22 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 11:57:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1647889038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=peglqrh0TeDc2F8OaZcmUkLDagjJhol7WzzofXyyxO4=;
-        b=PnmDb1Bn2lmsEUIPSG3oXSY46IqI6iAnrhkUOd3imYGHhzUBGrywA4Q9uGXh7c/svUPKw5
-        ngHuZu78cVggAJKMr47ybLtd326kLSE1NoNSHr9Gfg480gkY2G8m9HV1lQGRPPiKOrSgdz
-        U10jIZn2E3ClJ36uP4+4GnMAPYs5WBQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB410139DB;
-        Mon, 21 Mar 2022 17:45:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uViIKLu5OGIeUQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 21 Mar 2022 17:45:31 +0000
-Date:   Mon, 21 Mar 2022 18:45:30 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
-        Kenny.Ho@amd.com, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC v3 5/8] dmabuf: Add gpu cgroup charge transfer function
-Message-ID: <20220321174530.GB9640@blackbody.suse.cz>
-References: <20220309165222.2843651-1-tjmercier@google.com>
- <20220309165222.2843651-6-tjmercier@google.com>
+        bh=/f628apkMpQsjSicVFzN0gWVenPYv3XtQ9ROsVjz1zw=;
+        b=NLKvTkWVtIcr90tfxAO2XU/dNqfJbG6SpakXGsYu4nUm1t+IsyQ57Teq3ybpNZQL1sahsQ
+        CbjbE+jOO3LR4Tu4y76Yxkw+BX+9uIhZFxOV6+BGKrEJiE7ReVDr5g7ZEjQGn7ivkPzlYF
+        G7Y2bm7vKrmhEixspnA5N6snIVmDdDE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: memcg: make memcg huge page split support
+ any order split.
+Message-ID: <YjjKh2NoWGcq28Oo@carbon.dhcp.thefacebook.com>
+References: <20220321142128.2471199-1-zi.yan@sent.com>
+ <20220321142128.2471199-2-zi.yan@sent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220309165222.2843651-6-tjmercier@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220321142128.2471199-2-zi.yan@sent.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,41 +56,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello.
+On Mon, Mar 21, 2022 at 10:21:24AM -0400, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> It sets memcg information for the pages after the split. A new parameter
+> new_order is added to tell the new page order, always 0 for now. It
+> prepares for upcoming changes to support split huge page to any lower
+> order.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  include/linux/memcontrol.h |  2 +-
+>  mm/huge_memory.c           |  2 +-
+>  mm/memcontrol.c            | 10 +++++-----
+>  mm/page_alloc.c            |  2 +-
+>  4 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 89b14729d59f..e71189454bf0 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1116,7 +1116,7 @@ static inline void memcg_memory_event_mm(struct mm_struct *mm,
+>  	rcu_read_unlock();
+>  }
+>  
+> -void split_page_memcg(struct page *head, unsigned int nr);
+> +void split_page_memcg(struct page *head, unsigned int nr, unsigned int new_order);
 
-On Wed, Mar 09, 2022 at 04:52:15PM +0000, "T.J. Mercier" <tjmercier@google.com> wrote:
-> +int dma_buf_charge_transfer(struct dma_buf *dmabuf, struct gpucg *gpucg)
-> +{
-> +#ifdef CONFIG_CGROUP_GPU
-> +	struct gpucg *current_gpucg;
-> +	int ret = 0;
-> +
-> +	/*
-> +	 * Verify that the cgroup of the process requesting the transfer is the
-> +	 * same as the one the buffer is currently charged to.
-> +	 */
-> +	current_gpucg = gpucg_get(current);
-> +	mutex_lock(&dmabuf->lock);
-> +	if (current_gpucg != dmabuf->gpucg) {
-> +		ret = -EPERM;
-> +		goto err;
-> +	}
+It looks a bit inconsistent, can't we switch to use either nr or order for both
+arguments? The latter is preferable.
 
-Add a shortcut for gpucg == current_gpucg?
+Other than that, the patch looks good to me.
 
-> +
-> +	ret = gpucg_try_charge(gpucg, dmabuf->gpucg_dev, dmabuf->size);
-> +	if (ret)
-> +		goto err;
-> +
-> +	dmabuf->gpucg = gpucg;
-> +
-> +	/* uncharge the buffer from the cgroup it's currently charged to. */
-> +	gpucg_uncharge(current_gpucg, dmabuf->gpucg_dev, dmabuf->size);
-
-I think gpucg_* API would need to cater for such transfers too since
-possibly transitional breach of a limit during the transfer may
-unnecessarily fail the operation.
-
-My 0.02€,
-Michal
+Thanks!
