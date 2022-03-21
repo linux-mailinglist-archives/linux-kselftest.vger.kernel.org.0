@@ -2,48 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59574E3372
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 23:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8468B4E33B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 00:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiCUWy2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Mar 2022 18:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S232146AbiCUXGA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Mar 2022 19:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiCUWyT (ORCPT
+        with ESMTP id S232198AbiCUXFn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:54:19 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A137380F70;
-        Mon, 21 Mar 2022 15:33:00 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 15:32:53 -0700
+        Mon, 21 Mar 2022 19:05:43 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B9335501;
+        Mon, 21 Mar 2022 15:53:04 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:52:00 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1647901979;
+        t=1647903126;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4OY/H+zb0RIXu5WxaVqPmTsIU0BzpBHr2Aoo03K23OQ=;
-        b=lWfBFFlwAImoY6uLwKWFs0S0tB3p39fYyxokhIeIaZPj4jja16BD+f2jryUMXCpvSoQH58
-        KeNgR9rDqZZ733hMRZ75cM3upum9/Xboyi1T1hrsp4FdNCyEUqd/OOG+FlIywmGiFjuF4e
-        0dwiI5FqWUCpfqADo77fjlQiIREimSI=
+        bh=5vBCwulztWfYNXCCd5nLd9nkIIOOV0oW+khzPjrbeWg=;
+        b=WhEhuNzza4VU68ud6Ylk9EXGGT/FqYsp8gRvcpumIshsDFuRNUhzze9i/IFBcfpGRGRo4Z
+        8w/aDAuBtP7Szrv0C9eNc9TUxV09+PPP9DVzxK9o/d07lpkTAIpOsgec9nWYxC8JyZxmSU
+        8ylMDSwXN4hmRmJZKfogCkLIuLCH+f8=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 4/5] mm: truncate: split huge page cache page to a
- non-zero order if possible.
-Message-ID: <Yjj9FaoChB3u0Gbh@carbon.dhcp.thefacebook.com>
-References: <20220321142128.2471199-1-zi.yan@sent.com>
- <20220321142128.2471199-5-zi.yan@sent.com>
+Subject: Re: [PATCH 00/14] bpf: Allow not to charge bpf memory
+Message-ID: <YjkBkIHde+fWHw9K@carbon.dhcp.thefacebook.com>
+References: <20220319173036.23352-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321142128.2471199-5-zi.yan@sent.com>
+In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,17 +52,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:21:27AM -0400, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> To minimize the number of pages after a huge page truncation, we do not
-> need to split it all the way down to order-0. The huge page has at most
-> three parts, the part before offset, the part to be truncated, the part
-> remaining at the end. Find the greatest common power of two multiplier of
-> the non-zero values of them as the new order, so we can split the huge
-> page to this order and keep the remaining pages as large and as few as
-> possible.
+Hello, Yafang!
 
-Would you mind please to describe the algorithm in more details?
+Thank you for continuing working on this!
+
+On Sat, Mar 19, 2022 at 05:30:22PM +0000, Yafang Shao wrote:
+> After switching to memcg-based bpf memory accounting, the bpf memory is
+> charged to the loader's memcg by defaut, that causes unexpected issues for
+> us. For instance, the container of the loader-which loads the bpf programs
+> and pins them on bpffs-may restart after pinning the progs and maps. After
+> the restart, the pinned progs and maps won't belong to the new container
+> any more, while they actually belong to an offline memcg left by the
+> previous generation. That inconsistent behavior will make trouble for the
+> memory resource management for this container.
+
+I'm looking at this text and increasingly feeling that it's not a bpf-specific
+problem and it shouldn't be solved as one.
+
+Is there any significant reason why the loader can't temporarily enter the
+root cgroup before creating bpf maps/progs? I know it will require some changes
+in the userspace code, but so do new bpf flags.
+
+> 
+> The reason why these progs and maps have to be persistent across multiple
+> generations is that these progs and maps are also used by other processes
+> which are not in this container. IOW, they can't be removed when this
+> container is restarted. Take a specific example, bpf program for clsact
+> qdisc is loaded by a agent running in a container, which not only loads
+> bpf program but also processes the data generated by this program and do
+> some other maintainace things.
+> 
+> In order to keep the charging behavior consistent, we used to consider a
+> way to recharge these pinned maps and progs again after the container is
+> restarted, but after the discussion[1] with Roman, we decided to go
+> another direction that don't charge them to the container in the first
+> place. TL;DR about the mentioned disccussion: recharging is not a generic
+> solution and it may take too much risk.
+> 
+> This patchset is the solution of no charge. Two flags are introduced in
+> union bpf_attr, one for bpf map and another for bpf prog. The user who
+> doesn't want to charge to current memcg can use these two flags. These two
+> flags are only permitted for sys admin as these memory will be accounted to
+> the root memcg only.
+
+If we're going with bpf-specific flags (which I'd prefer not to), let's
+define them as the way to create system-wide bpf objects which are expected
+to outlive the original cgroup. With expectations that they will be treated
+as belonging to the root cgroup by any sort of existing or future resource
+accounting (e.g. if we'll start accounting CPU used by bpf prgrams).
+
+But then again: why just not create them in the root cgroup?
 
 Thanks!
