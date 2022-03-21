@@ -2,542 +2,498 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44334E2AA0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 15:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56C54E2D21
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 17:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241492AbiCUO3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Mar 2022 10:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S1350664AbiCUQJR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Mar 2022 12:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349287AbiCUO1x (ORCPT
+        with ESMTP id S1350650AbiCUQJL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:27:53 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9412019E;
-        Mon, 21 Mar 2022 07:21:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 90CA35C01C5;
-        Mon, 21 Mar 2022 10:21:39 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 21 Mar 2022 10:21:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=U2V6naZTN2l9Vn
-        KhbqbkZBPTbIZWhGoV3DWXyWLzNW0=; b=x8kPTimY8qfbhFJYezAvUUMDyE2bAs
-        C9SQw8Z/8Mdhv+DkOvE7BJtwcBTUPKk5cXeClx5R2vT2ppyN6+PTA5JZxmvQ+WcI
-        b1bLAw+KQQe1Z9TBH9UIJLCXenuh18K/P/Hx+N6AKs/FobnZAq3fG9fR1Hh9V2ih
-        0o5ERWa9e4qz73VnChACKPUTuOcH27zbx5WYRN3XL7iVUo1rrdEgVW/+Q8BTz7m1
-        Vd7yvqfGFMz9YLz6QnBBqx8faQE4B+F5FQCbsBO/kf0hbpcvm4uknWYava/yKOdr
-        Llo/d856dwWclxQmcDZpUseTA0HX9mzAHIDnhFr5Y/McfOaDa1klByRw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=U2V6naZTN2l9VnKhbqbkZBPTbIZWhGoV3DWXyWLzNW0=; b=dmlyux77
-        IbBQWWQFTzBrZFvHDATunOQU5xyGXGuFKyhU43ssIM9CcL/K9SyRebsKK8kLbN9d
-        Wf4AC5q6AXurzY6OJ7cwpzwpnpzE81p+aTlCGhTzQsu1L/MuXWgdYMx8q41Gct/A
-        lhyRP1uwA53V7hnV8Y+SIbwhdGmEQraicdmUD0U37RXg7EUTaw4ksY5NNmaeUMSm
-        Cpkp93TJcQ2RcZsC7/j7MM4eAexoNcZJVTm7Jje/w/JiT1EqQb06RnNXeUvuVmEO
-        /RmxIQIlHYGNWwr9ossUU9PRExGdJeAxZzp2YfZtTiZQahcOOoHlnT6Oq8BvuFYA
-        IiQ+iYdrLK+eHQ==
-X-ME-Sender: <xms:84k4Yt5AVEoLlvZoP-K_9lIFEKLAGXDrsa3rJTKuBqK4rP_mY8yAdg>
-    <xme:84k4Yq4uxfBdM0HbS9bcpqESCE9aSldJvpBnIB9ItcKW2lJ-i017i8fidYj_6qV3G
-    _-yri2X6NXS-9h7TQ>
-X-ME-Received: <xmr:84k4YkeMrY-XYBfWw9weYgblqMej8RhR39SJbJz35MbDXASKz47b2GDuKoT7fCankLI9c0ARIwTwTEzwZA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecuvehluhhs
-    thgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvg
-    hnthdrtghomh
-X-ME-Proxy: <xmx:84k4YmLwQ0F8yzFPeYEQUAVXQIw1145a0WlApoUUOJQ8uFChrdRhDQ>
-    <xmx:84k4YhIqgaZE2HKHGurGkAJPkl8RLfMIKbiZbpbG-MS7Oeibjl_hNA>
-    <xmx:84k4YvyxSdZjtJXqGjSvwAQzx829Fi0mhstAXvK8ZhZZl60bBJpvaQ>
-    <xmx:84k4YuBkrqkOp-aWOWcl46G17yZNgXWuWEwfa6PtnqYRn805rew0tQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Mar 2022 10:21:38 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: [RFC PATCH 5/5] mm: huge_memory: enable debugfs to split huge pages to any order.
-Date:   Mon, 21 Mar 2022 10:21:28 -0400
-Message-Id: <20220321142128.2471199-6-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321142128.2471199-1-zi.yan@sent.com>
-References: <20220321142128.2471199-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Mon, 21 Mar 2022 12:09:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0BE366FB3
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Mar 2022 09:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647878858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zpcoCC4yHq3ajeXZ8IqHbBVz9eP4OTlopTuEhplFUg4=;
+        b=hXDZ/wZI1XWfCTuVutIF6QWZkXchi31l7ZE9cW7w+VMwmB/e3PlTg5lBQcPutZJ1eQlRLB
+        DEWLi2+OJXs1UXZdgKm05+aZNdg2DZTQ9ONpFmIOkqc4khWxoh9ChbfPPcC5zG8xB1So9Z
+        78Umphv4kiX1VLqBwjUpMj2J/vjlm1A=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-ndgKtBouPzK-1AP7R2bATg-1; Mon, 21 Mar 2022 12:07:37 -0400
+X-MC-Unique: ndgKtBouPzK-1AP7R2bATg-1
+Received: by mail-pg1-f200.google.com with SMTP id v8-20020a637a08000000b00381ef25b6b8so7484448pgc.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Mar 2022 09:07:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zpcoCC4yHq3ajeXZ8IqHbBVz9eP4OTlopTuEhplFUg4=;
+        b=vIhpOPBEEnJDOsLxnDUhFIeiw0JYETpbNIgzuw3c9AvIk8LVu0xIq7yvwuZFJ9CWj4
+         a4yNZeQsx7OAN2cXeoR9JGcmAs/c22PdYkrKGhY9XNfIjH4l9slQsavGmgU1IEVUqgjM
+         Qo3zmXB81NkJgy1lWGbwNDatK55EbGAOcHwLq6PpxqWgHN7+5lBbcRDx73gL04h7yy11
+         Bkx4tUui/hlob0tdLoa2IZ4fTN6WP28cTgZMIKdf7mJcAima4Cg/0z1n9bPlTRQeJ7oC
+         Dle6GePKYbSG1mgY6Rc0wiR33726Mav4Tjnb3nQ3tM8vIWzgGq2i+mKSW6q7Bg4sklOL
+         7Qzw==
+X-Gm-Message-State: AOAM533vL4YdyxrP0OGYNWupgpZaIaQS4fU2/BoE9HGNpDt1m3ILbn5R
+        JBke8Y34wfZu8LnCL5nU60OTyWrJHDcRP9mDKTb0vb1g9t+r7YmlDsKy1aH3FhycTu/KuYwY7VM
+        4Nu4ldIyOwjnSsFMYoww9RxDkuvh7lNpbYFzCbAbwBkuO
+X-Received: by 2002:a17:902:c401:b0:154:1398:a16b with SMTP id k1-20020a170902c40100b001541398a16bmr13429813plk.67.1647878853133;
+        Mon, 21 Mar 2022 09:07:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwfR7xojQGSh+SlE52ZB3p3sYi5T6jUKMUP6HdTYmBdE+aOadzDpu21O7Hr0mDvNquBoaR05abTWhccSffR0dM=
+X-Received: by 2002:a17:902:c401:b0:154:1398:a16b with SMTP id
+ k1-20020a170902c40100b001541398a16bmr13429769plk.67.1647878852756; Mon, 21
+ Mar 2022 09:07:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-3-benjamin.tissoires@redhat.com> <CAPhsuW5qseqVs4=hz3VvSJ2ObqB2kTbKXoaOCh=5vjoU_AXnKQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW5qseqVs4=hz3VvSJ2ObqB2kTbKXoaOCh=5vjoU_AXnKQ@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 21 Mar 2022 17:07:21 +0100
+Message-ID: <CAO-hwJ+WSi645HhNV_BYACoJe2UTc4KZzqH0oHocfnBR8xUYEQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 02/17] bpf: introduce hid program type
+To:     Song Liu <song@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+Hi Song,
 
-It is used to test split_huge_page_to_list_to_order for pagecache THPs.
-Also add test cases for split_huge_page_to_list_to_order via both
-debugfs, truncating a file, and punching holes in a file.
+many thanks for the quick response.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- mm/huge_memory.c                              |  26 ++-
- .../selftests/vm/split_huge_page_test.c       | 219 +++++++++++++++---
- 2 files changed, 201 insertions(+), 44 deletions(-)
+On Fri, Mar 18, 2022 at 9:48 PM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> [...]
+> >
+> > diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
+> > new file mode 100644
+> > index 000000000000..9c8dbd389995
+> > --- /dev/null
+> > +++ b/include/linux/bpf-hid.h
+> >
+> [...]
+> > +
+> > +struct hid_bpf_ctx_kern {
+> > +       enum hid_bpf_event type;        /* read-only */
+> > +       struct hid_device *hdev;        /* read-only */
+> > +
+> > +       u16 size;                       /* used size in data (RW) */
+> > +       u8 *data;                       /* data buffer (RW) */
+> > +       u32 allocated_size;             /* allocated size of data (RO) */
+>
+> Why u16 size vs. u32 allocated_size?
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 76db0092a1e2..7645bb12fcbc 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2856,7 +2856,7 @@ static inline bool vma_not_suitable_for_thp_split(str=
-uct vm_area_struct *vma)
- }
-=20
- static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
--				unsigned long vaddr_end)
-+				unsigned long vaddr_end, unsigned int new_order)
- {
- 	int ret =3D 0;
- 	struct task_struct *task;
-@@ -2926,7 +2926,7 @@ static int split_huge_pages_pid(int pid, unsigned lon=
-g vaddr_start,
- 		if (!trylock_page(page))
- 			goto next;
-=20
--		if (!split_huge_page(page))
-+		if (!split_huge_page_to_list_to_order(page, NULL, new_order))
- 			split++;
-=20
- 		unlock_page(page);
-@@ -2944,7 +2944,7 @@ static int split_huge_pages_pid(int pid, unsigned lon=
-g vaddr_start,
- }
-=20
- static int split_huge_pages_in_file(const char *file_path, pgoff_t off_sta=
-rt,
--				pgoff_t off_end)
-+				pgoff_t off_end, unsigned int new_order)
- {
- 	struct filename *file;
- 	struct file *candidate;
-@@ -2984,7 +2984,7 @@ static int split_huge_pages_in_file(const char *file_=
-path, pgoff_t off_start,
- 		if (!trylock_page(fpage))
- 			goto next;
-=20
--		if (!split_huge_page(fpage))
-+		if (!split_huge_page_to_list_to_order(fpage, NULL, new_order))
- 			split++;
-=20
- 		unlock_page(fpage);
-@@ -3009,10 +3009,14 @@ static ssize_t split_huge_pages_write(struct file *=
-file, const char __user *buf,
- {
- 	static DEFINE_MUTEX(split_debug_mutex);
- 	ssize_t ret;
--	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
-+	/*
-+	 * hold pid, start_vaddr, end_vaddr, new_order or
-+	 * file_path, off_start, off_end, new_order
-+	 */
- 	char input_buf[MAX_INPUT_BUF_SZ];
- 	int pid;
- 	unsigned long vaddr_start, vaddr_end;
-+	unsigned int new_order =3D 0;
-=20
- 	ret =3D mutex_lock_interruptible(&split_debug_mutex);
- 	if (ret)
-@@ -3041,29 +3045,29 @@ static ssize_t split_huge_pages_write(struct file *=
-file, const char __user *buf,
- 			goto out;
- 		}
-=20
--		ret =3D sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
--		if (ret !=3D 2) {
-+		ret =3D sscanf(buf, "0x%lx,0x%lx,%d", &off_start, &off_end, &new_order);
-+		if (ret !=3D 2 && ret !=3D 3) {
- 			ret =3D -EINVAL;
- 			goto out;
- 		}
--		ret =3D split_huge_pages_in_file(file_path, off_start, off_end);
-+		ret =3D split_huge_pages_in_file(file_path, off_start, off_end, new_orde=
-r);
- 		if (!ret)
- 			ret =3D input_len;
-=20
- 		goto out;
- 	}
-=20
--	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
-d);
-+	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx,%d", &pid, &vaddr_start, &vaddr=
-_end, &new_order);
- 	if (ret =3D=3D 1 && pid =3D=3D 1) {
- 		split_huge_pages_all();
- 		ret =3D strlen(input_buf);
- 		goto out;
--	} else if (ret !=3D 3) {
-+	} else if (ret !=3D 3 && ret !=3D 4) {
- 		ret =3D -EINVAL;
- 		goto out;
- 	}
-=20
--	ret =3D split_huge_pages_pid(pid, vaddr_start, vaddr_end);
-+	ret =3D split_huge_pages_pid(pid, vaddr_start, vaddr_end, new_order);
- 	if (!ret)
- 		ret =3D strlen(input_buf);
- out:
-diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
-ing/selftests/vm/split_huge_page_test.c
-index 52497b7b9f1d..af01e7dca9c8 100644
---- a/tools/testing/selftests/vm/split_huge_page_test.c
-+++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -16,6 +16,7 @@
- #include <sys/mount.h>
- #include <malloc.h>
- #include <stdbool.h>
-+#include <time.h>
-=20
- uint64_t pagesize;
- unsigned int pageshift;
-@@ -24,10 +25,11 @@ uint64_t pmd_pagesize;
- #define PMD_SIZE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
- #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
- #define SMAP_PATH "/proc/self/smaps"
-+#define THP_FS_PATH "/mnt/thp_fs"
- #define INPUT_MAX 80
-=20
--#define PID_FMT "%d,0x%lx,0x%lx"
--#define PATH_FMT "%s,0x%lx,0x%lx"
-+#define PID_FMT "%d,0x%lx,0x%lx,%d"
-+#define PATH_FMT "%s,0x%lx,0x%lx,%d"
-=20
- #define PFN_MASK     ((1UL<<55)-1)
- #define KPF_THP      (1UL<<22)
-@@ -75,23 +77,6 @@ static uint64_t read_pmd_pagesize(void)
- 	return strtoul(buf, NULL, 10);
- }
-=20
--static int write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numwritten;
--
--	fd =3D open(path, O_WRONLY);
--	if (fd =3D=3D -1)
--		return 0;
--
--	numwritten =3D write(fd, buf, buflen - 1);
--	close(fd);
--	if (numwritten < 1)
--		return 0;
--
--	return (unsigned int) numwritten;
--}
--
- static void write_debugfs(const char *fmt, ...)
- {
- 	char input[INPUT_MAX];
-@@ -106,11 +91,6 @@ static void write_debugfs(const char *fmt, ...)
- 		printf("%s: Debugfs input is too long\n", __func__);
- 		exit(EXIT_FAILURE);
- 	}
--
--	if (!write_file(SPLIT_DEBUGFS, input, ret + 1)) {
--		perror(SPLIT_DEBUGFS);
--		exit(EXIT_FAILURE);
--	}
- }
-=20
- #define MAX_LINE_LENGTH 500
-@@ -124,7 +104,7 @@ static bool check_for_pattern(FILE *fp, const char *pat=
-tern, char *buf)
- 	return false;
- }
-=20
--static uint64_t check_huge(void *addr)
-+static uint64_t check_huge(void *addr, const char *prefix)
- {
- 	uint64_t thp =3D 0;
- 	int ret;
-@@ -149,13 +129,13 @@ static uint64_t check_huge(void *addr)
- 		goto err_out;
-=20
- 	/*
--	 * Fetch the AnonHugePages: in the same block and check the number of
-+	 * Fetch the @prefix in the same block and check the number of
- 	 * hugepages.
- 	 */
--	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-+	if (!check_for_pattern(fp, prefix, buffer))
- 		goto err_out;
-=20
--	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) !=3D 1) {
-+	if (sscanf(&buffer[strlen(prefix)], "%10ld kB", &thp) !=3D 1) {
- 		printf("Reading smap error\n");
- 		exit(EXIT_FAILURE);
- 	}
-@@ -184,7 +164,7 @@ void split_pmd_thp(void)
- 	for (i =3D 0; i < len; i++)
- 		one_page[i] =3D (char)i;
-=20
--	thp_size =3D check_huge(one_page);
-+	thp_size =3D check_huge(one_page, "AnonHugePages:");
- 	if (!thp_size) {
- 		printf("No THP is allocated\n");
- 		exit(EXIT_FAILURE);
-@@ -192,7 +172,7 @@ void split_pmd_thp(void)
-=20
- 	/* split all THPs */
- 	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
--		(uint64_t)one_page + len);
-+		(uint64_t)one_page + len, 0);
-=20
- 	for (i =3D 0; i < len; i++)
- 		if (one_page[i] !=3D (char)i) {
-@@ -201,7 +181,7 @@ void split_pmd_thp(void)
- 		}
-=20
-=20
--	thp_size =3D check_huge(one_page);
-+	thp_size =3D check_huge(one_page, "AnonHugePages:");
- 	if (thp_size) {
- 		printf("Still %ld kB AnonHugePages not split\n", thp_size);
- 		exit(EXIT_FAILURE);
-@@ -249,7 +229,7 @@ void split_pte_mapped_thp(void)
- 	for (i =3D 0; i < len; i++)
- 		one_page[i] =3D (char)i;
-=20
--	thp_size =3D check_huge(one_page);
-+	thp_size =3D check_huge(one_page, "AnonHugePages:");
- 	if (!thp_size) {
- 		printf("No THP is allocated\n");
- 		exit(EXIT_FAILURE);
-@@ -284,7 +264,7 @@ void split_pte_mapped_thp(void)
-=20
- 	/* split all remapped THPs */
- 	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
--		      (uint64_t)pte_mapped + pagesize * 4);
-+		      (uint64_t)pte_mapped + pagesize * 4, 0);
-=20
- 	/* smap does not show THPs after mremap, use kpageflags instead */
- 	thp_size =3D 0;
-@@ -371,20 +351,193 @@ void split_file_backed_thp(void)
- 	printf("file-backed THP split test done, please check dmesg for more info=
-rmation\n");
- }
-=20
-+void create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int=
- *fd, char **addr)
-+{
-+	size_t i;
-+	int dummy;
-+
-+	srand(time(NULL));
-+
-+	*fd =3D open(testfile, O_CREAT | O_RDWR, 0664);
-+	if (*fd =3D=3D -1) {
-+		perror("Failed to create a file at "THP_FS_PATH);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	for (i =3D 0; i < fd_size; i++) {
-+		unsigned char byte =3D (unsigned char)i;
-+
-+		write(*fd, &byte, sizeof(byte));
-+	}
-+	close(*fd);
-+	sync();
-+	*fd =3D open("/proc/sys/vm/drop_caches", O_WRONLY);
-+	if (*fd =3D=3D -1) {
-+		perror("open drop_caches");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (write(*fd, "3", 1) !=3D 1) {
-+		perror("write to drop_caches");
-+		exit(EXIT_FAILURE);
-+	}
-+	close(*fd);
-+
-+	*fd =3D open(testfile, O_RDWR);
-+	if (*fd =3D=3D -1) {
-+		perror("Failed to open a file at "THP_FS_PATH);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	*addr =3D mmap(NULL, fd_size, PROT_READ|PROT_WRITE, MAP_SHARED, *fd, 0);
-+	if (*addr =3D=3D (char *)-1) {
-+		perror("cannot mmap");
-+		exit(1);
-+	}
-+	madvise(*addr, fd_size, MADV_HUGEPAGE);
-+
-+	for (size_t i =3D 0; i < fd_size; i++)
-+		dummy +=3D *(*addr + i);
-+
-+	if (!check_huge(*addr, "FilePmdMapped:")) {
-+		printf("No pagecache THP generated, please mount a filesystem "
-+			"supporting pagecache THP at "THP_FS_PATH"\n");
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
-+void split_thp_in_pagecache_to_order(size_t fd_size, int order)
-+{
-+	int fd;
-+	char *addr;
-+	size_t i;
-+	const char testfile[] =3D THP_FS_PATH "/test";
-+
-+	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
-+
-+	printf("split %ld kB pagecache page to order %d ... ", fd_size >> 10, ord=
-er);
-+	write_debugfs(PID_FMT, getpid(), (uint64_t)addr, (uint64_t)addr + fd_size=
-, order);
-+
-+	for (i =3D 0; i < fd_size; i++)
-+		if (*(addr + i) !=3D (char)i) {
-+			printf("%lu byte corrupted in the file\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+
-+	close(fd);
-+	unlink(testfile);
-+	printf("done\n");
-+}
-+
-+void truncate_thp_in_pagecache_to_order(size_t fd_size, int order)
-+{
-+	int fd;
-+	char *addr;
-+	size_t i;
-+	const char testfile[] =3D THP_FS_PATH "/test";
-+
-+	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
-+
-+	printf("truncate %ld kB pagecache page to size %lu kB ... ", fd_size >> 1=
-0, 4UL << order);
-+	ftruncate(fd, pagesize << order);
-+
-+	for (i =3D 0; i < (pagesize << order); i++)
-+		if (*(addr + i) !=3D (char)i) {
-+			printf("%lu byte corrupted in the file\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+
-+	close(fd);
-+	unlink(testfile);
-+	printf("done\n");
-+}
-+
-+void punch_hole_in_pagecache_thp(size_t fd_size, off_t offset[], off_t len=
-[], int n)
-+{
-+	int fd, j;
-+	char *addr;
-+	size_t i;
-+	const char testfile[] =3D THP_FS_PATH "/test";
-+
-+	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
-+
-+	for (j =3D 0; j < n; j++) {
-+		printf("addr: %lx, punch a hole at offset %ld kB with len %ld kB ... ",
-+			(unsigned long)addr, offset[j] >> 10, len[j] >> 10);
-+		fallocate(fd, FALLOC_FL_PUNCH_HOLE|FALLOC_FL_KEEP_SIZE, offset[j], len[j=
-]);
-+		printf("done\n");
-+	}
-+
-+	for (i =3D 0; i < fd_size; i++) {
-+		int in_hole =3D 0;
-+
-+		for (j =3D 0; j < n; j++)
-+			if (i >=3D offset[j] && i <=3D (offset[j] + len[j])) {
-+				in_hole =3D 1;
-+				break;
-+			}
-+
-+		if (in_hole) {
-+			if (*(addr + i)) {
-+				printf("%lu byte non-zero after punch\n", i);
-+				exit(EXIT_FAILURE);
-+			}
-+			continue;
-+		}
-+		if (*(addr + i) !=3D (char)i) {
-+			printf("%lu byte corrupted in the file\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+	}
-+
-+	close(fd);
-+	unlink(testfile);
-+}
-+
- int main(int argc, char **argv)
- {
-+	int i;
-+	size_t fd_size;
-+	off_t offset[2], len[2];
-+
- 	if (geteuid() !=3D 0) {
- 		printf("Please run the benchmark as root\n");
- 		exit(EXIT_FAILURE);
- 	}
-=20
-+	setbuf(stdout, NULL);
-+
- 	pagesize =3D getpagesize();
- 	pageshift =3D ffs(pagesize) - 1;
- 	pmd_pagesize =3D read_pmd_pagesize();
-+	fd_size =3D 2 * pmd_pagesize;
-=20
- 	split_pmd_thp();
- 	split_pte_mapped_thp();
- 	split_file_backed_thp();
-=20
-+	for (i =3D 8; i >=3D 0; i--)
-+		if (i !=3D 1)
-+			split_thp_in_pagecache_to_order(fd_size, i);
-+
-+	/*
-+	 * for i is 1, truncate code in the kernel should create order-0 pages
-+	 * instead of order-1 THPs, since order-1 THP is not supported. No error
-+	 * is expected.
-+	 */
-+	for (i =3D 8; i >=3D 0; i--)
-+		truncate_thp_in_pagecache_to_order(fd_size, i);
-+
-+	offset[0] =3D 123 * pagesize;
-+	offset[1] =3D 4 * pagesize;
-+	len[0] =3D 200 * pagesize;
-+	len[1] =3D 16 * pagesize;
-+	punch_hole_in_pagecache_thp(fd_size, offset, len, 2);
-+
-+	offset[0] =3D 259 * pagesize + pagesize / 2;
-+	offset[1] =3D 33 * pagesize;
-+	len[0] =3D 129 * pagesize;
-+	len[1] =3D 16 * pagesize;
-+	punch_hole_in_pagecache_thp(fd_size, offset, len, 2);
-+
- 	return 0;
- }
---=20
-2.35.1
+Probably an oversight because I wrote u32 in the public uapi. Will
+change this into u16 too.
+
+> Also, maybe shuffle the members
+> to remove some holes?
+
+Ack will do in the next version.
+
+>
+> > +
+> > +       s32 retval;                     /* in use when BPF_HID_ATTACH_USER_EVENT (RW) */
+> > +};
+> > +
+> [...]
+>
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>
+> We need to mirror these changes to tools/include/uapi/linux/bpf.h.
+
+OK. I did that in patch 4/17 but I can bring in the changes there too.
+
+>
+> > index 99fab54ae9c0..0e8438e93768 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -952,6 +952,7 @@ enum bpf_prog_type {
+> >         BPF_PROG_TYPE_LSM,
+> >         BPF_PROG_TYPE_SK_LOOKUP,
+> >         BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+> > +       BPF_PROG_TYPE_HID,
+> >  };
+> [...]
+> > +
+> >  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+> >   * the following extensions:
+> >   *
+> > @@ -5129,6 +5145,16 @@ union bpf_attr {
+> >   *             The **hash_algo** is returned on success,
+> >   *             **-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
+> >   *             invalid arguments are passed.
+> > + *
+> > + * void *bpf_hid_get_data(void *ctx, u64 offset, u64 size)
+> > + *     Description
+> > + *             Returns a pointer to the data associated with context at the given
+> > + *             offset and size (in bytes).
+> > + *
+> > + *             Note: the returned pointer is refcounted and must be dereferenced
+> > + *             by a call to bpf_hid_discard;
+> > + *     Return
+> > + *             The pointer to the data. On error, a null value is returned.
+>
+> Please use annotations like *size*, **NULL**.
+
+Ack
+
+>
+> >   */
+> >  #define __BPF_FUNC_MAPPER(FN)          \
+> >         FN(unspec),                     \
+> > @@ -5325,6 +5351,7 @@ union bpf_attr {
+> >         FN(copy_from_user_task),        \
+> >         FN(skb_set_tstamp),             \
+> >         FN(ima_file_hash),              \
+> > +       FN(hid_get_data),               \
+> >         /* */
+> >
+> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > @@ -5925,6 +5952,10 @@ struct bpf_link_info {
+> >                 struct {
+> >                         __u32 ifindex;
+> >                 } xdp;
+> > +               struct  {
+> > +                       __s32 hidraw_number;
+> > +                       __u32 attach_type;
+> > +               } hid;
+> >         };
+> >  } __attribute__((aligned(8)));
+> >
+> > diff --git a/include/uapi/linux/bpf_hid.h b/include/uapi/linux/bpf_hid.h
+> > new file mode 100644
+> > index 000000000000..64a8b9dd8809
+> > --- /dev/null
+> > +++ b/include/uapi/linux/bpf_hid.h
+> > @@ -0,0 +1,31 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> > +
+> > +/*
+> > + *  HID BPF public headers
+> > + *
+> > + *  Copyright (c) 2022 Benjamin Tissoires
+> > + */
+> > +
+> > +#ifndef _UAPI__LINUX_BPF_HID_H__
+> > +#define _UAPI__LINUX_BPF_HID_H__
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +enum hid_bpf_event {
+> > +       HID_BPF_UNDEF = 0,
+> > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
+> > +       HID_BPF_RDESC_FIXUP,            /* ................... BPF_HID_RDESC_FIXUP */
+> > +       HID_BPF_USER_EVENT,             /* ................... BPF_HID_USER_EVENT */
+>
+> Why don't we have a DRIVER_EVENT type here?
+
+For driver event, I want to have a little bit more of information
+which tells which event we have:
+- HID_BPF_DRIVER_PROBE
+- HID_BPF_DRIVER_SUSPEND
+- HID_BPF_DRIVER_RAW_REQUEST
+- HID_BPF_DRIVER_RAW_REQUEST_ANSWER
+- etc...
+
+However, I am not entirely sure on the implementation of all of those,
+so I left them aside for now.
+
+I'll work on that for v4.
+
+>
+> >
+> [...]
+> > +
+> > +BPF_CALL_3(bpf_hid_get_data, struct hid_bpf_ctx_kern*, ctx, u64, offset, u64, size)
+> > +{
+> > +       if (!size)
+> > +               return 0UL;
+> > +
+> > +       if (offset + size > ctx->allocated_size)
+> > +               return 0UL;
+> > +
+> > +       return (unsigned long)(ctx->data + offset);
+> > +}
+> > +
+> > +static const struct bpf_func_proto bpf_hid_get_data_proto = {
+> > +       .func      = bpf_hid_get_data,
+> > +       .gpl_only  = true,
+> > +       .ret_type  = RET_PTR_TO_ALLOC_MEM_OR_NULL,
+> > +       .arg1_type = ARG_PTR_TO_CTX,
+> > +       .arg2_type = ARG_ANYTHING,
+> > +       .arg3_type = ARG_CONST_ALLOC_SIZE_OR_ZERO,
+>
+> I think we should use ARG_CONST_SIZE or ARG_CONST_SIZE_OR_ZERO?
+
+I initially tried this with ARG_CONST_SIZE_OR_ZERO but it doesn't work
+for 2 reasons:
+- we need to pair the argument ARG_CONST_SIZE_* with a pointer to a
+memory just before, which doesn't really make sense here
+- ARG_CONST_SIZE_* isn't handled in the same way
+ARG_CONST_ALLOC_SIZE_OR_ZERO is. The latter tells the verifier that
+the given size is the available size of the returned
+PTR_TO_ALLOC_MEM_OR_NULL, which is exactly what we want.
+
+>
+> > +};
+> > +
+> > +static const struct bpf_func_proto *
+> > +hid_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > +{
+> > +       switch (func_id) {
+> > +       case BPF_FUNC_hid_get_data:
+> > +               return &bpf_hid_get_data_proto;
+> > +       default:
+> > +               return bpf_base_func_proto(func_id);
+> > +       }
+> > +}
+> [...]
+> > +
+> > +static int hid_bpf_prog_test_run(struct bpf_prog *prog,
+> > +                                const union bpf_attr *attr,
+> > +                                union bpf_attr __user *uattr)
+> > +{
+> > +       struct hid_device *hdev = NULL;
+> > +       struct bpf_prog_array *progs;
+> > +       bool valid_prog = false;
+> > +       int i;
+> > +       int target_fd, ret;
+> > +       void __user *data_out = u64_to_user_ptr(attr->test.data_out);
+> > +       void __user *data_in = u64_to_user_ptr(attr->test.data_in);
+> > +       u32 user_size_in = attr->test.data_size_in;
+> > +       u32 user_size_out = attr->test.data_size_out;
+> > +       u32 allocated_size = max(user_size_in, user_size_out);
+> > +       struct hid_bpf_ctx_kern ctx = {
+> > +               .type = HID_BPF_USER_EVENT,
+> > +               .allocated_size = allocated_size,
+> > +       };
+> > +
+> > +       if (!hid_hooks.hdev_from_fd)
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       if (attr->test.ctx_size_in != sizeof(int))
+> > +               return -EINVAL;
+>
+> ctx_size_in is always 4 bytes?
+
+Yes. Basically what I had in mind is that the "ctx" for
+user_prog_test_run is the file descriptor to the sysfs that represent
+the HID device.
+This seemed to me to be the easiest to handle for users.
+
+I'm open to suggestions though.
+
+>
+> > +
+> > +       if (allocated_size > HID_MAX_BUFFER_SIZE)
+> > +               return -E2BIG;
+> > +
+> > +       if (copy_from_user(&target_fd, (void *)attr->test.ctx_in, attr->test.ctx_size_in))
+> > +               return -EFAULT;
+> > +
+> > +       hdev = hid_hooks.hdev_from_fd(target_fd);
+> > +       if (IS_ERR(hdev))
+> > +               return PTR_ERR(hdev);
+> > +
+> > +       if (allocated_size) {
+> > +               ctx.data = kzalloc(allocated_size, GFP_KERNEL);
+> > +               if (!ctx.data)
+> > +                       return -ENOMEM;
+> > +
+> > +               ctx.allocated_size = allocated_size;
+> > +       }
+> > +       ctx.hdev = hdev;
+> > +
+> > +       ret = mutex_lock_interruptible(&bpf_hid_mutex);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /* check if the given program is of correct type and registered */
+> > +       progs = rcu_dereference_protected(hdev->bpf.run_array[BPF_HID_ATTACH_USER_EVENT],
+> > +                                         lockdep_is_held(&bpf_hid_mutex));
+> > +       if (!progs) {
+> > +               ret = -EFAULT;
+> > +               goto unlock;
+> > +       }
+> > +
+> > +       for (i = 0; i < bpf_prog_array_length(progs); i++) {
+> > +               if (progs->items[i].prog == prog) {
+> > +                       valid_prog = true;
+> > +                       break;
+> > +               }
+> > +       }
+> > +
+> > +       if (!valid_prog) {
+> > +               ret = -EINVAL;
+> > +               goto unlock;
+> > +       }
+> > +
+> > +       /* copy data_in from userspace */
+> > +       if (user_size_in) {
+> > +               if (copy_from_user(ctx.data, data_in, user_size_in)) {
+> > +                       ret = -EFAULT;
+> > +                       goto unlock;
+> > +               }
+> > +
+> > +               ctx.size = user_size_in;
+> > +       }
+> > +
+> > +       migrate_disable();
+> > +
+> > +       ret = bpf_prog_run(prog, &ctx);
+> > +
+> > +       migrate_enable();
+> > +
+> > +       if (user_size_out && data_out) {
+> > +               user_size_out = min3(user_size_out, (u32)ctx.size, allocated_size);
+> > +
+> > +               if (copy_to_user(data_out, ctx.data, user_size_out)) {
+> > +                       ret = -EFAULT;
+> > +                       goto unlock;
+> > +               }
+> > +
+> > +               if (copy_to_user(&uattr->test.data_size_out,
+> > +                                &user_size_out,
+> > +                                sizeof(user_size_out))) {
+> > +                       ret = -EFAULT;
+> > +                       goto unlock;
+> > +               }
+> > +       }
+> > +
+> > +       if (copy_to_user(&uattr->test.retval, &ctx.retval, sizeof(ctx.retval)))
+> > +               ret = -EFAULT;
+> > +
+> > +unlock:
+> > +       kfree(ctx.data);
+> > +
+> > +       mutex_unlock(&bpf_hid_mutex);
+> > +       return ret;
+> > +}
+> > +
+> > +const struct bpf_prog_ops hid_prog_ops = {
+> > +       .test_run = hid_bpf_prog_test_run,
+> > +};
+> > +
+> > +int bpf_hid_init(struct hid_device *hdev)
+> > +{
+> > +       int type;
+> > +
+> > +       for (type = 0; type < MAX_BPF_HID_ATTACH_TYPE; type++)
+> > +               INIT_LIST_HEAD(&hdev->bpf.links[type]);
+> > +
+> > +       return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(bpf_hid_init);
+> > +
+> > +void bpf_hid_exit(struct hid_device *hdev)
+> > +{
+> > +       enum bpf_hid_attach_type type;
+> > +       struct bpf_hid_link *hid_link;
+> > +
+> > +       mutex_lock(&bpf_hid_mutex);
+> > +       for (type = 0; type < MAX_BPF_HID_ATTACH_TYPE; type++) {
+> > +               bpf_hid_run_array_detach(hdev, type);
+> > +               list_for_each_entry(hid_link, &hdev->bpf.links[type], node) {
+> > +                       hid_link->hdev = NULL; /* auto-detach link */
+> > +               }
+> > +       }
+> > +       mutex_unlock(&bpf_hid_mutex);
+> > +}
+> > +EXPORT_SYMBOL_GPL(bpf_hid_exit);
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index b88688264ad0..d1c05011e5ab 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3,6 +3,7 @@
+> >   */
+> >  #include <linux/bpf.h>
+> >  #include <linux/bpf-cgroup.h>
+> > +#include <linux/bpf-hid.h>
+> >  #include <linux/bpf_trace.h>
+> >  #include <linux/bpf_lirc.h>
+> >  #include <linux/bpf_verifier.h>
+> > @@ -2205,6 +2206,7 @@ static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
+> >  {
+> >         switch (prog_type) {
+> >         case BPF_PROG_TYPE_LIRC_MODE2:
+> > +       case BPF_PROG_TYPE_HID:
+> >                 return true;
+> >         default:
+> >                 return false;
+> > @@ -3199,6 +3201,11 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+> >                 return BPF_PROG_TYPE_SK_LOOKUP;
+> >         case BPF_XDP:
+> >                 return BPF_PROG_TYPE_XDP;
+> > +       case BPF_HID_DEVICE_EVENT:
+> > +       case BPF_HID_RDESC_FIXUP:
+> > +       case BPF_HID_USER_EVENT:
+> > +       case BPF_HID_DRIVER_EVENT:
+> > +               return BPF_PROG_TYPE_HID;
+> >         default:
+> >                 return BPF_PROG_TYPE_UNSPEC;
+> >         }
+> > @@ -3342,6 +3349,11 @@ static int bpf_prog_query(const union bpf_attr *attr,
+> >         case BPF_SK_MSG_VERDICT:
+> >         case BPF_SK_SKB_VERDICT:
+> >                 return sock_map_bpf_prog_query(attr, uattr);
+> > +       case BPF_HID_DEVICE_EVENT:
+> > +       case BPF_HID_RDESC_FIXUP:
+> > +       case BPF_HID_USER_EVENT:
+> > +       case BPF_HID_DRIVER_EVENT:
+> > +               return bpf_hid_prog_query(attr, uattr);
+> >         default:
+> >                 return -EINVAL;
+> >         }
+> > @@ -4336,6 +4348,8 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+> >                 ret = bpf_perf_link_attach(attr, prog);
+> >                 break;
+> >  #endif
+> > +       case BPF_PROG_TYPE_HID:
+> > +               return bpf_hid_link_create(attr, prog);
+> >         default:
+> >                 ret = -EINVAL;
+> >         }
+> > --
+> > 2.35.1
+> >
+>
+
+Cheers,
+Benjamin
 
