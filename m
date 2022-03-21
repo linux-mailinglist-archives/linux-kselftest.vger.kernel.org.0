@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B9A4E332F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 23:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D024A4E3398
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Mar 2022 23:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiCUW5b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Mar 2022 18:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S231351AbiCUW5k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Mar 2022 18:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiCUW5A (ORCPT
+        with ESMTP id S231575AbiCUW5P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:57:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556113BED34;
-        Mon, 21 Mar 2022 15:37:24 -0700 (PDT)
+        Mon, 21 Mar 2022 18:57:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817B83B2073;
+        Mon, 21 Mar 2022 15:37:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4AEB612B2;
-        Mon, 21 Mar 2022 21:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1386C340EE;
-        Mon, 21 Mar 2022 21:52:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B520BB81A61;
+        Mon, 21 Mar 2022 21:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7E5C340F2;
+        Mon, 21 Mar 2022 21:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647899573;
-        bh=dyOSNsBIOAtZ7vGm89+pK75rTiVRFKBYVcdnYc/Tqyo=;
+        s=k20201202; t=1647899585;
+        bh=qYe/uBk0ndVaKY+4X1OhfMJEXd3Z6e/VbB81NnZOuOc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hKYd4xyiZBkMI4yuRA/8hErx9o+PvXRfji1Z0y9/HDegqUTt0h8M1w9TK2w2QcAqf
-         W5pGZ/+zF1Nv2koHR77xl0r8J1csvPULFTmH48rBnW2vF91kC9jGMGQ/Zybvi+2hea
-         gnIC7rPWHQUIeYFQ6hHy/PGvAVSKsz1TWtDWKzkY+733oSNR6zPzkZUjBKeLie5cpL
-         SRWtfIEnhH/0BOgaa9QE60Gc+VkViKeLMOpXLLPKC72mEQAAQRE98RXlDjp1yXLQ7W
-         e0hbTnI2wOKChBUwlpB/M74HNoIm2C3GWbFh7CQp2XQ01S1Z4LTOqOkR3toxVOv04/
-         I3Af4jN1GFNfQ==
+        b=m7u+vGjuU+kjaU5T6xXNPRR2Kej2ocgXxK1oSfdVwVdJsbbu3/AMHRBC/8YPM13GB
+         tqCxrGaRiXW2Vn2W62qxKUuP4Ufuo6b4bCxQ+6qDygiA/WyJe1f3QDISU5twDsfDYv
+         vzUxy85giTapQamuIi3JFzqzCwIPn8eXzdIe0jmbh70lP41XdurgxMpvlYWYA0FfOP
+         77EnX0SmVAdfeL93YBIvn5/kkMxbdpI+3Bh9tDu8qQ0r4tIlihElaLnEhaAAz4XFJr
+         xMZ4X+qI0j7hYy5nk9Cl+minAbJkjl8cn4IO8/oEBxWVSgbQvVrH1o9bw0IbXc+k0C
+         aM0dlaH+37BKg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yosry Ahmed <yosryahmed@google.com>, Shuah Khan <shuah@kernel.org>,
@@ -41,12 +41,12 @@ Cc:     Yosry Ahmed <yosryahmed@google.com>, Shuah Khan <shuah@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.16 6/6] selftests: vm: fix clang build error multiple output files
-Date:   Mon, 21 Mar 2022 17:52:37 -0400
-Message-Id: <20220321215240.490132-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 5/5] selftests: vm: fix clang build error multiple output files
+Date:   Mon, 21 Mar 2022 17:52:53 -0400
+Message-Id: <20220321215256.490267-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220321215240.490132-1-sashal@kernel.org>
-References: <20220321215240.490132-1-sashal@kernel.org>
+In-Reply-To: <20220321215256.490267-1-sashal@kernel.org>
+References: <20220321215256.490267-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -89,7 +89,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 1607322a112c..a14b5b800897 100644
+index d9605bd10f2d..acf5eaeef9ff 100644
 --- a/tools/testing/selftests/vm/Makefile
 +++ b/tools/testing/selftests/vm/Makefile
 @@ -1,6 +1,8 @@
@@ -101,7 +101,7 @@ index 1607322a112c..a14b5b800897 100644
  include local_config.mk
  
  uname_M := $(shell uname -m 2>/dev/null || echo not)
-@@ -140,10 +142,6 @@ endif
+@@ -139,10 +141,6 @@ endif
  
  $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
  
