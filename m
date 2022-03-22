@@ -2,327 +2,532 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA154E394E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 08:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78394E3983
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 08:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbiCVHIa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Mar 2022 03:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S237365AbiCVHVh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Mar 2022 03:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbiCVHIW (ORCPT
+        with ESMTP id S237385AbiCVHVg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:08:22 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212145748E
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Mar 2022 00:06:55 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x34so19347909ede.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Mar 2022 00:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=74AEUdctc3ZeeBqiC+ypczzjJ82s4XY5TZ4m0+nyhR8=;
-        b=MaSdtgUtMm1stk7+jnTEYcU+1TIquX0e5Ii9hArhNZVJ/Z7qmSa91QZED0TySgz4Ge
-         TH0+EPa9gDmojjJ+ucSsmED9linlopH3/bR7R2yBTdeJHAe1SBuPYXl48y2myXEjCUHD
-         7R70NhaSsp/Rk2j4/1H7Q3GaK3lWnmgSZaVZ6ZUha71D0UeSFuZ+kiimRxMVIf6oAbUb
-         8gCE1D2du7YMeDz93VpxaXOMp2QvBZalmxddHSUiUw8kG+YZ5bsUiUn5+YoJcCcHS8Nu
-         hw/Idoxi9LpaH+HtoPaOIa5TtqI8LPVCtDu2Q4dgdK+mroBDOtnu78Malcqf7AidyvC0
-         4SCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=74AEUdctc3ZeeBqiC+ypczzjJ82s4XY5TZ4m0+nyhR8=;
-        b=rgoMN3qa7lUGxG6VnkQbLaAGqizxs7MR7LJKCWidc68MHlvH3+00BkdSZDj0U09644
-         eTKiZdcdH0jI1G4wKgMsC8meDC5UHLF9cUl3pPsUO4cVK6eBhx3LLoQi7AD1HLDRBgwa
-         maL5S05ZXFe5YlJ1/k23mBkqFVp8FmgvxJtJOGU9CJgnp46TVcej9531DCxhCsrg9WXQ
-         WVeZyovKIqwIG9Qxaok/KXHRWG0qVcmUlqIGSwJ7p7U4qRSMFYJgxyPjksU1QJ39wwTi
-         de0XFIrsungJARkoBl11KftzcF5PNM7wS+Y1M01FOKiyoBcIM9M7IHQgzjmrQ/gy93Yo
-         whdg==
-X-Gm-Message-State: AOAM5311mCqmFYkut9bwtPy5dlw0vfrlU+f2ZLEaX2phlvW+mbwvNof0
-        DA3lLCpFEh0f4JNsEERWsxB1nSpBgeUewxTLAw85Ug==
-X-Google-Smtp-Source: ABdhPJw5t5dAxPGHTaI+GD+LzXDLXi7+MvMqy9BPlDFTQ159KmNOHeVo5nttIyS8szCt9wVbtVW6O5THdVcNT4AjBtM=
-X-Received: by 2002:aa7:d947:0:b0:419:3e8d:3e37 with SMTP id
- l7-20020aa7d947000000b004193e8d3e37mr8909466eds.247.1647932812900; Tue, 22
- Mar 2022 00:06:52 -0700 (PDT)
+        Tue, 22 Mar 2022 03:21:36 -0400
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABF5BC89;
+        Tue, 22 Mar 2022 00:20:07 -0700 (PDT)
+Received: by codeconstruct.com.au (Postfix, from userid 10001)
+        id EC27C2033A; Tue, 22 Mar 2022 15:20:01 +0800 (AWST)
+From:   Matt Johnston <matt@codeconstruct.com.au>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests/net: mctp: Roundtrip tun tests
+Date:   Tue, 22 Mar 2022 15:19:34 +0800
+Message-Id: <20220322071934.2655827-1-matt@codeconstruct.com.au>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220319055600.3471875-1-davidgow@google.com> <CAGS_qxpqcc8O2HpmF3qB-uzXZrDNg9=h3nE_f7si=aOxXkRA+Q@mail.gmail.com>
- <CABVgOS=sKWiDLN=GgyXQGOdmRn6t35mEA_0C7GrZyEApjVg1Pw@mail.gmail.com>
-In-Reply-To: <CABVgOS=sKWiDLN=GgyXQGOdmRn6t35mEA_0C7GrZyEApjVg1Pw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 22 Mar 2022 02:06:41 -0500
-Message-ID: <CAGS_qxobBt2gH3FB79m7sfQZ9thKXQ5exQEa_1GcQOmXFFEv1A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Rework kunit_resource allocation policy
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:10 PM David Gow <davidgow@google.com> wrote:
->
-> On Tue, Mar 22, 2022 at 9:57 AM 'Daniel Latypov' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > On Sat, Mar 19, 2022 at 12:56 AM David Gow <davidgow@google.com> wrote:
-> > >
-> > > KUnit's test-managed resources can be created in two ways:
-> > > - Using the kunit_add_resource() family of functions, which accept a
-> > >   struct kunit_resource pointer, typically allocated statically or on
-> > >   the stack during the test.
-> > > - Using the kunit_alloc_resource() family of functions, which allocate a
-> > >   struct kunit_resource using kzalloc() behind the scenes.
-> > >
-> > > Both of these families of functions accept a 'free' function to be
-> > > called when the resource is finally disposed of.
-> > >
-> > > At present, KUnit will kfree() the resource if this 'free' function is
-> > > specified, and will not if it is NULL. However, this can lead
-> > > kunit_alloc_resource() to leak memory (if no 'free' function is passed
-> > > in), or kunit_add_resource() to incorrectly kfree() memory which was
-> > > allocated by some other means (on the stack, as part of a larger
-> > > allocation, etc), if a 'free' function is provided.
-> >
-> > Trying it with this:
-> >
-> > static void noop_free_resource(struct kunit_resource *) {}
-> >
-> > struct kunit_resource global_res;
-> >
-> > static void example_simple_test(struct kunit *test)
-> > {
-> >         kunit_add_resource(test, NULL, noop_free_resource, &global_res, test);
-> > }
-> >
-> > Running then with
-> > $ run_kunit --kunitconfig=lib/kunit --arch=x86_64
-> > --build_dir=kunit_x86/ --kconfig_add=CONFIG_KASAN=y
-> >
-> > Before:
-> > BUG: KASAN: double-free or invalid-free in kunit_cleanup+0x51/0xb0
-> >
-> > After:
-> > Passes
-> >
->
-> Phew! :-)
-> I'm glad it works.
->
-> > >
-> > > Instead, always kfree() if the resource was allocated with
-> > > kunit_alloc_resource(), and never kfree() if it was passed into
-> > > kunit_add_resource() by the user. (If the user of kunit_add_resource()
-> > > wishes the resource be kfree()ed, they can call kfree() on the resource
-> > > from within the 'free' function.
-> > >
-> > > This is implemented by adding a 'should_free' member to
-> >
-> > nit: would `should_kfree` be a bit better?
-> > `should_free` almost sounds like "should we invoke res->free" (as
-> > nonsensical as that might be)
-> >
->
-> I think I had it as should_kfree at some point. I agree it's a little
-> clearer. I'll rename it back.
->
-> The other option I considered was to have a "flags" member, of which
-> SHOULD_KFREE could be one. Though I eventually decided to leave that
-> until we needed another flag.
->
-> > > struct kunit_resource and setting it appropriately. To facilitate this,
-> > > the various resource add/alloc functions have been refactored somewhat,
-> > > making them all call a __kunit_add_resource() helper after setting the
-> > > 'should_free' member appropriately. In the process, all other functions
-> > > have been made static inline functions.
-> > >
-> > > Signed-off-by: David Gow <davidgow@google.com>
-> >
-> > Tested-by: Daniel Latypov <dlatypov@google.com>
-> >
-> >
-> > > ---
-> > >  include/kunit/test.h | 135 +++++++++++++++++++++++++++++++++++--------
-> > >  lib/kunit/test.c     |  65 +++------------------
-> > >  2 files changed, 120 insertions(+), 80 deletions(-)
-> > >
-> > > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > > index 00b9ff7783ab..5a3aacbadda2 100644
-> > > --- a/include/kunit/test.h
-> > > +++ b/include/kunit/test.h
-> > > @@ -36,11 +36,14 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-> > >   * struct kunit_resource - represents a *test managed resource*
-> > >   * @data: for the user to store arbitrary data.
-> > >   * @name: optional name
-> > > - * @free: a user supplied function to free the resource. Populated by
-> > > - * kunit_resource_alloc().
-> > > + * @free: a user supplied function to free the resource.
-> > >   *
-> > >   * Represents a *test managed resource*, a resource which will automatically be
-> > > - * cleaned up at the end of a test case.
-> > > + * cleaned up at the end of a test case. This cleanup is performed by the 'free'
-> > > + * function. The resource itself is allocated with kmalloc() and freed with
-> > > + * kfree() if created with kunit_alloc_{,and_get_}resource(), otherwise it must
-> > > + * be freed by the user, typically with the 'free' function, or automatically if
-> > > + * it's allocated on the stack.
-> >
-> > I'm not a fan of this complexity, but I'm not sure if we have a way
-> > around it, esp. w/ stack-allocated data.
-> >
-> The other option is to make all resources allocated with
-> kunit_alloc_resource() require a non-NULL 'free' function which calls
-> kfree() itself. This is much simpler on the KUnit side, but does put
-> some of that burden on the user (and may prevent a free() function
-> from being shared between allocated and non-allocated resources).
+Tests MCTP messages between two tun devices forwarding between
+each other.
 
-Overall, I'm ambivalent.
+Tests are:
+- Round trip message and reply
+- MCTP_NET_ANY and MCTP_ADDR_ANY listeners
+- Message fragmentation
+- Message key expiry timeout are dropped
+- Duplicate replies are dropped
 
-To be honest, I'm not sure how real the user burden would be (it's
-basically 0 right now).
+Requires "mctp" userspace utility to configure addresses and routes,
+tests will be skipped if it is not available.
 
-This would only add about 6 more lines to add a kfree version:
-static void free_stack_resource(struct kunit_resource *res) { ... }
+Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
+---
+ tools/testing/selftests/net/mctp/Makefile    |  11 +
+ tools/testing/selftests/net/mctp/config      |   2 +
+ tools/testing/selftests/net/mctp/mctp-defs.h |   5 +
+ tools/testing/selftests/net/mctp/mctp-tun.c  | 422 +++++++++++++++++++
+ 4 files changed, 440 insertions(+)
+ create mode 100644 tools/testing/selftests/net/mctp/Makefile
+ create mode 100644 tools/testing/selftests/net/mctp/config
+ create mode 100644 tools/testing/selftests/net/mctp/mctp-defs.h
+ create mode 100644 tools/testing/selftests/net/mctp/mctp-tun.c
 
-static void free_heap_resource(struct kunit_resource *res)
-{
-   free_stack_resource(res);
-   kfree(res);
-}
+diff --git a/tools/testing/selftests/net/mctp/Makefile b/tools/testing/selftests/net/mctp/Makefile
+new file mode 100644
+index 000000000000..baee43d5b048
+--- /dev/null
++++ b/tools/testing/selftests/net/mctp/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++
++CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
++CFLAGS += -I../../../../../usr/include/
++
++TEST_PROGS := mctp-tun
++include ../../lib.mk
++
++mctp-tun: LDLIBS += -lpthread
++
++all: $(TEST_PROGS)
+diff --git a/tools/testing/selftests/net/mctp/config b/tools/testing/selftests/net/mctp/config
+new file mode 100644
+index 000000000000..92c0b8c79ac7
+--- /dev/null
++++ b/tools/testing/selftests/net/mctp/config
+@@ -0,0 +1,2 @@
++CONFIG_TUN=y
++CONFIG_MCTP=y
+diff --git a/tools/testing/selftests/net/mctp/mctp-defs.h b/tools/testing/selftests/net/mctp/mctp-defs.h
+new file mode 100644
+index 000000000000..fcb1f5250ca9
+--- /dev/null
++++ b/tools/testing/selftests/net/mctp/mctp-defs.h
+@@ -0,0 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Protocol numbers are not exposed through uapi */
++#ifndef AF_MCTP
++#define AF_MCTP 45
++#endif
+diff --git a/tools/testing/selftests/net/mctp/mctp-tun.c b/tools/testing/selftests/net/mctp/mctp-tun.c
+new file mode 100644
+index 000000000000..ce289b10d23f
+--- /dev/null
++++ b/tools/testing/selftests/net/mctp/mctp-tun.c
+@@ -0,0 +1,422 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021,2022 Code Construct
++ */
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <sys/ioctl.h>
++#include <sys/random.h>
++#include <linux/if.h>
++#include <linux/if_tun.h>
++#include <linux/mctp.h>
++#include <pthread.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <assert.h>
++
++#include "mctp-defs.h"
++
++#include "../../kselftest_harness.h"
++
++static const int BUF_SIZE = 70000;
++
++static void *tun_start(void *arg);
++static int create_tun(struct __test_metadata *_metadata,
++	const char *name);
++
++FIXTURE(TUNPAIR) {
++	pthread_t pth;
++	int fd[2];
++	volatile bool running;
++	bool skip;
++};
++
++const size_t default_mtu = 70;
++const size_t default_msglen = 4;
++
++FIXTURE_VARIANT(TUNPAIR) {
++	/* some defaults above */
++	size_t msglen;
++	size_t mtu;
++	bool listen_addr_any;
++	bool listen_net_any;
++	bool expire_key;
++	bool duplicate_reply;
++};
++
++FIXTURE_VARIANT_ADD(TUNPAIR, len4) {
++	.listen_addr_any = true,
++	.listen_net_any = false,
++};
++
++FIXTURE_VARIANT_ADD(TUNPAIR, len300) {
++	.msglen = 300,
++	.mtu = 500,
++	.listen_addr_any = true,
++};
++
++/* With fragmentation */
++FIXTURE_VARIANT_ADD(TUNPAIR, len300frag) {
++	.msglen = 300,
++	.listen_addr_any = true,
++};
++
++FIXTURE_VARIANT_ADD(TUNPAIR, net_any) {
++	.listen_addr_any = true,
++	.listen_net_any = true,
++};
++
++FIXTURE_VARIANT_ADD(TUNPAIR, addr_specific) {
++	.listen_net_any = true,
++};
++
++FIXTURE_VARIANT_ADD(TUNPAIR, expire_key) {
++	.expire_key = true,
++};
++
++FIXTURE_VARIANT_ADD(TUNPAIR, duplicate_reply) {
++	.duplicate_reply = true,
++};
++
++FIXTURE_SETUP(TUNPAIR)
++{
++	int rc;
++	char str[1000];
++	int mtu;
++
++	memset(self, 0, sizeof(*self));
++
++	/* Check requirements first */
++	/* TODO: cap_get() instead? */
++	if (getuid() != 0) {
++		self->skip = 1;
++		TH_LOG("Not root, skipping");
++		return;
++	}
++
++	rc = system("sh -c \"which mctp 2> /dev/null > /dev/null\"");
++	if (rc != 0) {
++		self->skip = 1;
++		TH_LOG("No mctp utility installed, skipping");
++		return;
++	}
++
++	rc = socket(AF_MCTP, SOCK_DGRAM, 0);
++	if (rc == -1 && errno == EAFNOSUPPORT) {
++		self->skip = 1;
++		TH_LOG("No AF_MCTP support, skipping");
++		return;
++	}
++	close(rc);
++
++	/* Pair of netdevs */
++	self->fd[0] = create_tun(_metadata, "mctptun1");
++	self->fd[1] = create_tun(_metadata, "mctptun2");
++
++	mtu = variant->mtu ?: default_mtu;
++
++	/* Forward packets between devices */
++	self->running = true;
++	rc = pthread_create(&self->pth, NULL, tun_start, self);
++	ASSERT_EQ(rc, 0);
++
++	/* Set up devices. All in one command to avoid
++	 * slow shell invocations
++	 */
++	rc = snprintf(str, sizeof(str),
++		/* net needs to be set before routes */
++		"mctp link set mctptun1 up net 31 mtu %d && "
++		"mctp link set mctptun2 up net 32 mtu %d && "
++		"mctp addr add 131 dev mctptun1 && "
++		"mctp addr add 132 dev mctptun2 && "
++		"mctp route add 132 via mctptun1 && "
++		"mctp route add 131 via mctptun2 && "
++		"true",
++		mtu, mtu);
++	ASSERT_LT(rc, sizeof(str));
++	rc = system(str);
++	ASSERT_EQ(rc, 0);
++}
++
++FIXTURE_TEARDOWN(TUNPAIR)
++{
++	int rc;
++
++	if (self->skip)
++		return;
++
++	self->running = false;
++	rc = pthread_join(self->pth, NULL);
++	ASSERT_EQ(rc, 0);
++	ASSERT_EQ(close(self->fd[0]), 0);
++	ASSERT_EQ(close(self->fd[1]), 0);
++
++	/* mctp addr/routes go away with devices */
++}
++
++/* Creates a socket, binds.
++ * Always returns success, asserts on failure
++ */
++static int mctp_bind(struct __test_metadata *_metadata,
++	int net, int eid, int type)
++{
++	struct sockaddr_mctp addr = {0};
++	int sd, rc;
++
++	sd = socket(AF_MCTP, SOCK_DGRAM, 0);
++	ASSERT_GE(sd, 0);
++	addr.smctp_family = AF_MCTP;
++	addr.smctp_network = net;
++	addr.smctp_addr.s_addr = eid;
++	addr.smctp_type = type;
++	addr.smctp_tag = MCTP_TAG_OWNER;
++	rc = bind(sd, (struct sockaddr *)&addr, sizeof(addr));
++	ASSERT_EQ(rc, 0);
++	return sd;
++}
++
++/* Creates a socket, sends on it.
++ * Always returns success, asserts on failure.
++ * Returns the socket sd.
++ */
++static int mctp_send(struct __test_metadata *_metadata,
++	int net, int eid, int type, void *buf, size_t len)
++{
++	struct sockaddr_mctp addr = {0};
++	ssize_t sent;
++	int sd;
++
++	addr.smctp_family = AF_MCTP;
++	addr.smctp_network = net;
++	addr.smctp_addr.s_addr = eid;
++	addr.smctp_type = type;
++	addr.smctp_tag = MCTP_TAG_OWNER;
++	sd = socket(AF_MCTP, SOCK_DGRAM, 0);
++	ASSERT_GE(sd, 0);
++	sent = sendto(sd, buf, len, 0,
++			(struct sockaddr *)&addr, sizeof(addr));
++	ASSERT_EQ(sent, len);
++	return sd;
++}
++
++/* Helper to test key expiry */
++static void test_expire_key(struct __test_metadata *_metadata,
++	int sock_listen, int sd, struct sockaddr_mctp *addr)
++{
++	struct pollfd pf = { .fd = sd, .events = POLLIN };
++	int val1 = 0x11223344;
++	ssize_t len;
++	int rc;
++
++	/* Wait for timeout, > mctp_key_lifetime = 6 secs */
++	TH_LOG("Waiting 7 seconds for key expiry...");
++	sleep(7);
++
++	addr->smctp_tag &= ~MCTP_TAG_OWNER;
++	len = sendto(sock_listen, &val1, sizeof(val1),
++		0, (struct sockaddr *)addr, sizeof(*addr));
++	ASSERT_EQ(len, sizeof(val1));
++
++	/* Wait 100ms */
++	rc = poll(&pf, 1, 100);
++	/* We should time out, packet is never received */
++	ASSERT_EQ(rc, 0);
++}
++
++/* Helper to test duplicate replies */
++static void test_duplicate_reply(struct __test_metadata *_metadata,
++	int sock_listen, int sd, struct sockaddr_mctp *addr)
++{
++	struct pollfd pf = { .fd = sd, .events = POLLIN };
++	int val1 = 0x11223344;
++	ssize_t len;
++	int rc;
++
++	/* Send first reply */
++	addr->smctp_tag &= ~MCTP_TAG_OWNER;
++	len = sendto(sock_listen, &val1, sizeof(val1),
++		0, (struct sockaddr *)addr, sizeof(*addr));
++	ASSERT_EQ(len, sizeof(val1));
++
++	/* Receive reply */
++	len = recvfrom(sd, NULL, 0, MSG_TRUNC, NULL, NULL);
++	EXPECT_EQ(len, sizeof(val1));
++
++	/* Try a second reply */
++	len = sendto(sock_listen, &val1, sizeof(val1),
++		0, (struct sockaddr *)addr, sizeof(*addr));
++	ASSERT_EQ(len, sizeof(val1));
++
++	/* Wait 100ms */
++	rc = poll(&pf, 1, 100);
++	/* We should time out, packet is never received */
++	ASSERT_EQ(rc, 0);
++}
++
++TEST_F(TUNPAIR, roundtrip)
++{
++	const size_t msglen = variant->msglen ?: default_msglen;
++	struct sockaddr_mctp addr = {0};
++	int sock_listen, sd;
++	void *buf1, *buf2;
++	socklen_t addrlen;
++	int net, eid;
++	ssize_t len;
++
++	if (self->skip)
++		SKIP(return, "Skipping");
++
++	buf1 = malloc(msglen);
++	buf2 = malloc(msglen);
++
++	/* Listen on mctptun2 (eid 132 net 32) */
++	if (variant->listen_net_any)
++		net = MCTP_NET_ANY;
++	else
++		net = 32;
++
++	if (variant->listen_addr_any)
++		eid = MCTP_ADDR_ANY;
++	else
++		eid = 132;
++
++	sock_listen = mctp_bind(_metadata, net, eid, 1);
++
++	/* Send mctptun1 -> mctptun2 */
++	getrandom(buf1, msglen, 0);
++	sd = mctp_send(_metadata, 31, 132, 1, buf1, msglen);
++
++	/* Receive it */
++	addrlen = sizeof(addr);
++	len = recvfrom(sock_listen, buf2, msglen, MSG_TRUNC,
++		(struct sockaddr *)&addr, &addrlen);
++	EXPECT_EQ(len, msglen);
++	EXPECT_EQ(memcmp(buf1, buf2, msglen), 0);
++	TH_LOG("addr family %d ", addr.smctp_family);
++
++	if (variant->expire_key) {
++		test_expire_key(_metadata, sock_listen, sd, &addr);
++	} else if (variant->duplicate_reply) {
++		test_duplicate_reply(_metadata, sock_listen, sd, &addr);
++	} else {
++		/* Reply mctptun2 -> mctptun1 */
++		getrandom(buf1, msglen, 0);
++		addr.smctp_tag &= ~MCTP_TAG_OWNER;
++		len = sendto(sock_listen, buf1, msglen,
++			0, (struct sockaddr *)&addr, sizeof(addr));
++		ASSERT_EQ(len, msglen);
++
++		/* Receive reply */
++		addrlen = sizeof(addr);
++		len = recvfrom(sd, buf2, msglen, MSG_TRUNC,
++			(struct sockaddr *)&addr, &addrlen);
++		EXPECT_EQ(len, msglen);
++		EXPECT_EQ(memcmp(buf1, buf2, msglen), 0);
++	}
++
++	close(sd);
++	close(sock_listen);
++	free(buf2);
++	free(buf1);
++}
++
++/* Returns file descriptor.
++ * Asserts on failure
++ */
++static int create_tun(struct __test_metadata *_metadata,
++	const char *name)
++{
++	struct ifreq ifr = {0};
++	int rc;
++	int fd;
++
++	fd = open("/dev/net/tun", O_RDWR);
++	ASSERT_GE(fd, 0);
++
++	assert(strlen(name) < IFNAMSIZ);
++	strcpy(ifr.ifr_name, name);
++	ifr.ifr_flags = IFF_TUN;
++
++	rc = ioctl(fd, TUNSETIFF, &ifr);
++	ASSERT_EQ(rc, 0) TH_LOG("tun ioctl failed: %s",
++		strerror(errno));
++	return fd;
++}
++
++static int atomic_write(int fd, void *buffer, size_t len)
++{
++	while (len) {
++		ssize_t wlen = write(fd, buffer, len);
++
++		if (wlen == -1 && errno == EINTR)
++			continue;
++
++		if (wlen < 0)
++			return wlen;
++
++		len -= wlen;
++		buffer += wlen;
++	}
++	return 0;
++}
++
++
++/* Thread to forward messages between FDs */
++static void *tun_start(void *arg)
++{
++	struct _test_data_TUNPAIR *fix = arg;
++	struct pollfd pf[2] = {
++		{ .fd = fix->fd[0], .events = POLLIN },
++		{ .fd = fix->fd[1], .events = POLLIN },
++	};
++	char *buffer = NULL;
++	ssize_t len;
++	int rc;
++
++	buffer = malloc(BUF_SIZE);
++	if (!buffer) {
++		fprintf(stderr, "malloc failed");
++		goto out;
++	}
++
++	while (fix->running) {
++		rc = poll(pf, 2, 100);
++		if (rc == 0 || (rc == -1 && errno == EINTR)) {
++			continue;
++		}
++		if (rc < 0) {
++			fprintf(stderr, "poll error: %s", strerror(errno));
++			goto out;
++		}
++
++		for (int i = 0; i < 2; i++) {
++			if (pf[i].revents & POLLIN) {
++				len = read(pf[i].fd, buffer, BUF_SIZE);
++				if (len == -1 && errno == EINTR) {
++					continue;
++				}
++				if (len == 0) {
++					fprintf(stderr, "EOF from tun");
++					goto out;
++				}
++				if (len < 0) {
++					fprintf(stderr, "error from tun read: %s",
++						strerror(errno));
++					goto out;
++				}
++
++				rc = atomic_write(pf[(i+1) % 2].fd, buffer, len);
++				if (rc < 0) {
++					fprintf(stderr, "error from tun write: %s",
++						strerror(errno));
++					goto out;
++				}
++			}
++		}
++	}
++out:
++	return NULL;
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.32.0
 
-So far, this function is only ever used w/ non-NULL free functions
-(even in the under-review stubbing patches).
-So now would be the time to make such a change.
-
-But I'm slightly against such a change.
-It slightly complicates the "resources as storage" usecase in favor of
-simplifying the "resources as memory wranglers".
-Maybe it'd be fine if we added a helper they could use, e.g.
-  void kunit_resource_default_free(struct kunit_resource *res) { kfree(res); }
-but it
-
->
-> > Perhaps this would be a bit easier to read if we tweaked it a bit like:
-> > "freed with kfree() if allocated by KUnit (via kunit_alloc..."
-> >
-> > Maybe we can drop the "or automatically, if it's allocated on the
-> > stack" as well.
->
-> Yeah: I'm not 100% happy with that wording. I wanted to make it clear
-> that there are cases where no automatic freeing is needed, but I agree
-> it's really just making things more confusing.
-> >
-> > A bigger way to simplify: perhaps we should get rid of
-> > kunit_alloc_and_get_resource() first?
-> > It's only used in KUnit's tests for itself.
-> > They could instead use kunit_alloc_resource() +
-> > kunit_find_resource(test, kunit_resource_instance_match, data).
-> > We could even define the helper with the same name in kunit-test.c
-> > (the only place it's used).
-> >
-> > Alternatively, we could make it an internal helper and define
-> > kunit_alloc_resource() as
-> >
-> > void *kunit_alloc_resource(...)
-> > {
-> >    struct kunit_resource *res = _kunit_alloc_and_get_resource(...)
-> >    if (res) return res->data;
-> >    return NULL;
-> > }
-> >
-> > ?
-> >
->
-> I was thinking about this a bit this morning, and I think we should do
-> the opposite: get rid of kunit_alloc_resource() and leave only
-> kunit_alloc_and_get_resource().
-> Then, split the resource system basically in two:
-> - The system for managing "findable" resources, whose main purpose is
-> for cases like the KASAN integration and the stub stuff where main
-> goal is tying some named bit of data to a test, and reference counting
-> it so it can safely be retrieved and used throughout the kernel if
-> need be.
-> - The simpler "free this on test exit" system, which could be as
-> simple as a kunit_defer(func, context) function built on top of the
-> former. This wouldn't need detailed tracking of reference counts, etc,
-
-Agree that there's two distinct usecases here.
-One wants a replacement for global variables (which thus need
-"finding") and the other just wants to ensure some function like
-kfree() gets called.
-
-The latter ~never need to get "found" (e.g. kunit_kmalloc() users).
-The one exception: when people use kunit_kfree() to free things early,
-which requires us to "find" these resources we otherwise wouldn't care
-about.
-
-So I don't know how we can split the API unless we get rid of kunit_kfree().
-Its presence means kunit_kmalloc() and friends need refcounting.
-
-Can we drop it? Maybe.
-Looking at the uses of kunit_kfree(), they're all internal to kunit except one.
-
-   111  static void
-ne_misc_dev_test_merge_phys_contig_memory_regions(struct kunit *test)
-   112  {
-...
-   117          phys_contig_mem_regions.regions = kunit_kcalloc(test,
-MAX_PHYS_REGIONS,
-   118
-sizeof(*phys_contig_mem_regions.regions),
-   119                                                          GFP_KERNEL);
-...
-   140
-   141          kunit_kfree(test, phys_contig_mem_regions.regions);
-   142  }
-
-Hmm, that looks redundant since it's right before the end of the test case.
-We can drop that call, I think.
-
-But I think kunit_kfree() can serve a purpose.
-E.g. for short-lived allocations where assertions are used.
-  buf = kunit_kzalloc(test, sizeof(*buf), GFP_KERNEL);
-  KUNIT_ASSERT_EQ(test, do_stuff(buf), 0);
-  KUNIT_EXPECT_EQ(test, <something about buf>);
-  kunit_kfree(buf);
-  // do more stuff
-
-Sure we can drop kunit_kfree() and have `buf` stick around longer than needed.
-Or we could rewrite it like
-  buf = kzalloc(sizeof(*buf), GFP_KERNEL);
-  if (do_stuff(buf)) {
-    KUNIT_FAIL(test, "do_stuff() failed");
-  } else {
-     KUNIT_EXPECT_EQ(test, <something about buf>);
-  }
-  kfree(buf);
- but I think the kunit_kfree() code is cleaner.
-
->
-> (tl;dr: I think that kunit_alloc_resource() is broken, refcount-wise,
-> if we're trying to implement the first kind of system, but useful for
-> the second, and this is quite confusing. So kunit_alloc_resource()
-> probably shouldn't be used alongside kunit_find_resource(), as there
-> could be a potential race condition. Now, this shouldn't happen in
-> practice, as most tests are single threaded and none are doing fancy
-> things with kunit_remove_resource(), but
-> kunit_alloc_and_get_resource() should be safer, as you're not playing
-> with a resource you don't have a reference to according to the
-> refcount.)
->
-> That's a more complicated refactor and redesign of the resources
-> system, though, so I'd rather fix this first.
->
-> Cheers,
-> -- David
