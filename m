@@ -2,115 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB0B4E4131
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 15:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19C54E4153
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 15:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbiCVO1y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Mar 2022 10:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S234910AbiCVObr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Mar 2022 10:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240370AbiCVOZe (ORCPT
+        with ESMTP id S233837AbiCVObq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Mar 2022 10:25:34 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC628BF33;
-        Tue, 22 Mar 2022 07:21:33 -0700 (PDT)
+        Tue, 22 Mar 2022 10:31:46 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C486A033;
+        Tue, 22 Mar 2022 07:30:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f2wtcopW1pBTJTmS30WxCqU9Z9iMic4Ja6qv5RZy+LefSyuR693Mh+23ccxqOhF95QIPbYhhTKYxNnkWE7rR8JdeiFRhxNZtjhccekjQEHaR+JFzFYCwkqRi6cPmQYzABj9btIF5wCnyI8Z9zc5bIoZ6nOkZw3t2Ek58JoD2CSR546BcZzuZ+fhaYSG2TNU+j3XI5hRRd2C8zL5tmOL7OCO+BjFSJ/Im4ObzAwioCIGFWSrhMdRq+8vnXPVIsfqQJr5SIwLBM6mhuat2HY3DMCDtLD4zMBoA1dhGcZjyONdNMM4q6Kc1bUBsXrB3RuprinD/mMV5XrtQajPEx9uLmg==
+ b=AJa+7hYoh9++SOMuwFjX/na+7e/pYKVO6QMiuEm/hfcu3tyFv4LAfg0/U2Ir0E4yRxSxX4IEIHA7R+nzi0SZHqZzBpA4q9fgPw/28H9+UL4tGX4TgvFzCyU6bwvcIMBJvlMs5SWuWdoYfcy+nqyd6ok/SzPeNcP1a/aHKSw99qL9BP4sZWadu0qvFBX7Msxlhz4jnNvh9LTlGnINIunGE34Euo0FtVut9+vFPmSoUs+azwRKaALAmD8nP+Eo3tJzXdD6vS3zN/dPSL0sZeFSaTiSjt0wLpQlMogIp/TnIFAcVyj05yDIgMdoFiEEjp6Os3KowXWN0ln2TH+8r8HODg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=htsRGu1YIXs/kpj29TnjkfGuNHyVYSCDUoY7iqwDUEI=;
- b=LR7qR7ENu7RlxMAh39sWfWHUl1z6ZVncwSC+V/WHqNpJEZGmnvQyyhI7pPzNw3xWOntrBeZ8DS3/rkLIrW7SSy3Gy/i6wRnMLncHKviBmxI7pn8AQwNijpxz6AGHTQzCDlNvhBI8yicBON2brxDHr0mXWGWSgjyCBEMCWCDFYvivXa/8sONtDAxVkoA5Y1tbYd5eYJK+OOUT+iRoK3pTXEMEXo5yP8wNt0BSbpyNGMApQveYGpUyf3lGH//2Lxda/US+qt1/ofuZkTxvs/SXrb+lWxO5U2UwHhF498VRma//I8UImXXlz6dbvDb+4zpAlMSOmQkYiuzsGNRJ/maLeA==
+ bh=AwxShZGCwWXCNPsPx+oqb4+cktxK1cKHRiDUIG3iwd0=;
+ b=XoeC3vt9PAKfvABzLlq90MnFagUOvon1Op7vkI+PXSNcH5R+JKAOmk7xFH8C7B2lkuRz4vLtqqvzeVcP7HSvTJJcwvUzsiY+656jEdfitDuhRRSvCLwITxDf2SRa4374CLGN4CD3Nth+1lK47NqdfcR8Z7iaK+3j4T07b2IUxy/DD87mltsomSrF8zrxsi9/c2x2SMDc+MeZLr2cFJxx8zcpZ1ihDNkhpVON4PWT1o684cLlHT12CEd6s4ONCMVWt7rY9zGJRbfhFTDmROllxWKHExTAYw82U5uZ7r94SwKV4ACHU9t9VyfLfYnOkDqJ3A2WaCC4Puv8DjVcembw7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=htsRGu1YIXs/kpj29TnjkfGuNHyVYSCDUoY7iqwDUEI=;
- b=ltyiFhb0pQ1k9OdpyjU6sXpAiJHRLKQqeyKDjOH21zwgnOMdnbVd6RfA7u7CzVWtLCy3D77JwljTkEYpKUP13yHJ5ijUaaIBQi32JfjE2Ak0/j5K8MAEKfgBiw9yE6mTyw1f2TUVoahV+aL4XgL5UKAZc9Um2dHO3c9Ys9FphwiwKvfK2u024AkJAPjninrz0Jo0VgVErk1QO2XFAZc9UgCt4OVQwW5erHy8H9jM/V+in2T7ofgh9Rq817aiWOOnJhgX5SCEqd+hvxU+R82gdcpJgIkmdcTtL2vMpSzUk8B7pA8nw1a3EhLXjO1d4UViUctonC/dQ5Y+c7tMZP40ug==
+ bh=AwxShZGCwWXCNPsPx+oqb4+cktxK1cKHRiDUIG3iwd0=;
+ b=TSpTOhpHwR3klIXmcbmE4VbXvD4voo+h5tw7SMyVioBMtkmVsLTLF197L3G23lfqUybVbOOYWzwh5HkDpL26HQev8g/Uu4WHwmFns8kZxo8Dbl8NvU+Ule+qvFORW/CNcC78nl342M50B8s/CC/DrMOdqLsKPGKnh2cPwa+qjdazznplxgf5+qs4+fFURYKRxfCOt9i2qOxM76h90WTlT39nLZ9QIlZWq6uAdvTSGQU4bAIGGnTTiIew0kh+lnKDBUec3Iyhd4bai5I4Sv5Z5hoFwUriQ+qddY61kEPCa5qldCWMcHUA/8L7u7Nd2L0wg9+cJkV8U3bZQKwkfvTRZw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by BN6PR12MB1684.namprd12.prod.outlook.com (2603:10b6:405:6::23) with
+ by CH0PR12MB5250.namprd12.prod.outlook.com (2603:10b6:610:d1::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Tue, 22 Mar
- 2022 14:21:30 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Tue, 22 Mar
+ 2022 14:30:16 +0000
 Received: from MN2PR12MB3823.namprd12.prod.outlook.com
  ([fe80::40a6:6e1d:b057:a036]) by MN2PR12MB3823.namprd12.prod.outlook.com
  ([fe80::40a6:6e1d:b057:a036%6]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
- 14:21:30 +0000
+ 14:30:16 +0000
 From:   Zi Yan <ziy@nvidia.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
         Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
         Hugh Dickins <hughd@google.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+        linux-kselftest@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Yu Zhao <yuzhao@google.com>
 Subject: Re: [RFC PATCH 3/5] mm: thp: split huge page to any lower order pages.
-Date:   Tue, 22 Mar 2022 10:21:28 -0400
+Date:   Tue, 22 Mar 2022 10:30:14 -0400
 X-Mailer: MailMate (1.14r5870)
-Message-ID: <7CCF90D5-A132-4CDC-B6E3-DDB151F6E98B@nvidia.com>
-In-Reply-To: <Yjj5mADYABiZSxGB@carbon.dhcp.thefacebook.com>
+Message-ID: <D03D6945-8BFE-4137-BDB6-BD884656B65B@nvidia.com>
+In-Reply-To: <165ec1a8-2b35-f6fb-82d3-b94613dd437a@huawei.com>
 References: <20220321142128.2471199-1-zi.yan@sent.com>
  <20220321142128.2471199-4-zi.yan@sent.com>
- <Yjj5mADYABiZSxGB@carbon.dhcp.thefacebook.com>
+ <165ec1a8-2b35-f6fb-82d3-b94613dd437a@huawei.com>
 Content-Type: multipart/signed;
- boundary="=_MailMate_2D8DEE1C-1018-4BDD-BC22-3843829C0362_=";
+ boundary="=_MailMate_11772522-6D16-4F1C-A239-DD3624EE149B_=";
  micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BLAP220CA0015.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::20) To MN2PR12MB3823.namprd12.prod.outlook.com
+X-ClientProxiedBy: MN2PR12CA0017.namprd12.prod.outlook.com
+ (2603:10b6:208:a8::30) To MN2PR12MB3823.namprd12.prod.outlook.com
  (2603:10b6:208:168::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dfb4cdc8-d5ed-4402-1303-08da0c0f4272
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1684:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB16844931443985A2F8B1CC7EC2179@BN6PR12MB1684.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: b91dedc9-ee45-41ba-0511-08da0c107bb6
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5250:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB5250E7D8306DD71250102593C2179@CH0PR12MB5250.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oadHqjV2Rm19FL2cc/ihGCpMgAn7DCToemS3y3N6LiQdLavkLk4SBM2JdA9/fOhaLff8iRlkdZpgmQ0NOBifRtlDPsTl3Xp1BTjSFurUpbeEZot5KyH9ueLuQZi4cQPWjOoDk9sVfX2izW0zqXuuf7uB6h+qZMj/5HOCFzOkKWnQvyHrJw7MXaPk4TzItKjzjQ7fm8Caw1sIHvIoFMP8Pi0G2HlFB47z4PGLUNtXLdXE63VaTH2CY0T8xSSc9GS4TpaBEV9qcva7aT2eExLqLVX10n6QgsdWj0wWTqsRuoc3NVRKVMCrGNWeVZm9HWMeWjeqtJr/P/VGsZozTy8o7j4tQDNu/VlFcANKEOyfefna8gpC/EsE+OI5ycGAc8yLdOzgOQXIxCUoS8qfU2ktAsvV+xnSlUl6Ot0j9zL82fzoz7MRhoVGz5qoKgwdkZpIST5jvCRQTVXgjU8bs9E1P2BeEn1JN3pwtEsk1QYvU0IhcGlngkd2qFETUGEnafhNwYl/Q37RNo1j8AdoTdSqhrca2WIMBAwKmBfQnpWpB4y5mmBSVy4RQ7AsRhHY+X76gBb+Mi+131/PK0X7nN/UmkU4epkIM5xg0OwSuZC4UWpNo5NX+I9h0K9x9zbQAY5J3lqkVGBdxfss+/cZlE2sz1lQVuOyqsp8tHeW33yGkpzr51m/GKG1igQc3XeycZv4j1HC9vuY9Ig0gWCI5CDPSsWYLdO4SfPY0bdp0jgXSAwPEo/TGrSBzs5tp5EhJtHS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(6506007)(30864003)(8936002)(5660300002)(6512007)(508600001)(7416002)(66946007)(66476007)(66556008)(4326008)(6486002)(316002)(86362001)(2616005)(26005)(33656002)(38100700002)(21480400003)(83380400001)(36756003)(186003)(8676002)(6916009)(54906003)(2906002)(235185007)(14583001)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: FVwjTIcY7cTx97anXQQVbh6YLX6ylwwrID4jqgZBMOewgb+8JmtuVZNj/sfGsL+EuFS+TbrOnliuJao2gyqfyGbQc1qt3fiPNujyiC4SteSLI6DboQ0waaq/F3YGESMKGXW/tIpXyJTvO8xaElOBO9vsP0+IKZ/GPAPikXhOe3KbamwI9xrTMnKC57vsfUPnRH43NDxZ9xetqo3qUM0BGbRhq2P0nTMNRXx4ehbv6XGceSMmIJOHPl31W2UxaJmjYo6HMKi1UkJxkfnhduZ5828Ybr4Nw8Bl8jIlcX+/k+3D359p5D8Letevgmlt1jTaqUaMgPCWqin93b3PwhzIuAApFfcLGFCfqBKlQ5J2wOKaieNzzKFIa3P8KYGZidfKBswqzyLesBHH94NHjbSqRQnbbP6NEGHGsyTYP5xcTGoxd0LsU5JWtK5yepTSbh+szltMRrV5VGsCBGyx6Sz1zSrMxUVWml3pLWUbG5E1sOFW/etmS+DlSFyh9uTgevEgXLa/n/89RLYpS8+sQiDvIJpx/C5F0ZNFU6pNYGhygON8bSJeV9/8B5HSlfld3N2YrP0yMCv3IybT+BIGqGXSB/kjRhfyE1y+Q5qyUGrA7/LE6v+vzJAJqh8OkD4zEjXXr1fO+HAqcT1Cz3TrldcmmYLHcxfk9eJn1GG45BcvwQwY6XmEuHeV+PE7T6YPYlxz1Yw8NwD7NzTdRjNM2klo/hquF6gTtSD5Z8me4J1tISHXEoxSt7LUZVFsgWHyshf9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(30864003)(83380400001)(235185007)(2906002)(21480400003)(86362001)(6486002)(508600001)(8936002)(7416002)(5660300002)(316002)(2616005)(26005)(186003)(4326008)(36756003)(66476007)(66556008)(54906003)(66946007)(6916009)(53546011)(6506007)(6512007)(33656002)(33964004)(8676002)(14583001)(45980500001)(72826004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0zondbmyJhl1Zhn1IqhIfxudngrH8dBWUBqSPaA0hQk1dmq8yf08DR+dXTnC?=
- =?us-ascii?Q?Ui+Y48ByuqNy4Xhz4VYG/lJ431Vd33x6kL1Q6SD+fbysb1u4Caqk10HTLp/M?=
- =?us-ascii?Q?GJcGBbRInDtA3Yfvmi384ycx/QMhEkp2EhsPei4B3j4JjfyC3saQ339ShZqi?=
- =?us-ascii?Q?084EGCxd/gpUFRBDiHkECDODWbYNvRiWu7owxC6O3iLnq5Y0b/1S//hLBs5y?=
- =?us-ascii?Q?Z6qqinl1y7Au5QpbL3GbygPkwyWYl2xZoN65oObqh5tc/Fkd7V2W+/UwBbws?=
- =?us-ascii?Q?rgy0Lk4fjBl1X/8c9up/sryQ3/FmcE/X/jFLQxRT1AcjWRrBrOvDGWTrWhXh?=
- =?us-ascii?Q?3YkU8KXBhzBckZdwGN+HetQgTHaXd1GST0cdgJ1Jx3kEBqMJ6c4cEBh0Ep0w?=
- =?us-ascii?Q?FVmhiKtOL8cK3Qs6tIwIBdzyxSHac8jGFTTftrfnnq6bTwU/O7zFOuYhAcb7?=
- =?us-ascii?Q?wPopA04bqGnOdLHrGaSzvOFc8q8DRD8Pai2QLT0Rx2NHn+/qepl635Hbk0D4?=
- =?us-ascii?Q?zEwW3u0s0ELlsQsW6lM/mmXi6ozXctLW/00v0hCRpXz83gKmjkfzz1N73zeC?=
- =?us-ascii?Q?stAif1gZpJX3WZbC7VwG/aN4gsSTaWs2L4lGqD0EAe1jnsokjQJkEAXbBCAc?=
- =?us-ascii?Q?tra8dxNuuEr2vR3LCLRyOWoktlRugvE+0ABU7xBls8isE2yGE1HhOQP1yxNa?=
- =?us-ascii?Q?BoxBg1Hc91OJQNZH8diXb6o8xab8CIx3ILInPukJTkEryz9KYXwzXpZlSWCS?=
- =?us-ascii?Q?WgeJUbzyFkQ9H1czNiQEAz/0EDbSVX1aM+ZxSXudVtlmSf82K0PgcDu6PHEB?=
- =?us-ascii?Q?W9vnz9NQhvmQi6EMmnRk3TqhQzEtxhzhmUnA/utGgjMFh3nw+xNZXoaJurHp?=
- =?us-ascii?Q?EuBIxK58g8HHYZO4XR6fCux410JAZsnuY3T58xHTXr1lW2XHSWNRe53h+736?=
- =?us-ascii?Q?DQka7+bV07IbAoIhRzC3hIZKsBWcRa+uQQzRdU11up62GsS+hpfRoOzCe9wN?=
- =?us-ascii?Q?C7OCue8rqiGeuG0eu9dhPptbuJ9fKGr0KSuZP2dI0PvG75UMszlQBPStE26d?=
- =?us-ascii?Q?eUfAl/hapukHGGb+i1dYSC+/h2XRKLHsS/A7uSr5oA8GeLph6opBExV1PMz+?=
- =?us-ascii?Q?RV8FTlhrnBkTHvlxuiOzm0vux56GiLlm7AmdfWk8HKwUSnJpBBFTdB2LriO9?=
- =?us-ascii?Q?nmE5hZrF1X4vHUrJG0XscN1w0JiF+mQdLvPfnrfdl0Im4Li/59F/MjXaFMB6?=
- =?us-ascii?Q?JiFojovIa/OHerkypUrPvnWQu08Vz3Byl3mIy0WM1n5rvq9BApm9RC6Gb/B6?=
- =?us-ascii?Q?qc5MSEJ3DL7+a9gczbg6uDNkl7oUZ3xvDaHuQeF0HkOwYC7fX410SRA7lRWT?=
- =?us-ascii?Q?IF5b4yD6S5QCEWGkZHZ7O2zMgaAAmDz6TBkpVdhlDCKzFBAI3wJ4S3qw5j5N?=
- =?us-ascii?Q?/b/ijESukCrSxFzSGHkngInTd9OuDjcX?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SS9BVWEzWi9aZ3prdmtRUG5pUmNhVmU2MTlpZ3BUYzdZOU10MlpoQzg5VHlV?=
+ =?utf-8?B?S2REd0hlcklhbjIvejdMYit1UHRXLzJlNFV0Q3hOVmhBNTg2VnJQTXlhUFIw?=
+ =?utf-8?B?NG92UU1NMnVLM0YvTU5ZNlFyZkpJWndmbHM2MWtqYlA5THVqM3ZPOUEvTzNX?=
+ =?utf-8?B?M3EvaERXQUV4M1VqdW4zU1VpRHJWd3QxQXFBZk9ZMmJES0s5dDFjcE9QcDVF?=
+ =?utf-8?B?WHdyNS9iME91bFVrSDhnMXNNWkVReUlWcVB5MmVvQVIyNmNjM2FKSnNWQUV4?=
+ =?utf-8?B?d2trRktCYUR5Q09yUzQ2Z0c4WlBzY3JJV0R2UmhEU2IydkM5YUU5WWs1R0sr?=
+ =?utf-8?B?dmdrVThDVVJnZkd4OTJQMGovemdCNVpIYzJQRytrUHRRWHlHcW9YRE9wY2Uy?=
+ =?utf-8?B?ZGRtUnUyVEl0QUxqWGJwWDZrUUdqYXBZUjYrTVZvMnJPK3EvampwbFNEdjUw?=
+ =?utf-8?B?cWxnOUFUdFFFT0ZDU0R5YkNZK2xGWG9wSVh3YVJpcC8xQ1JEaFhCRVpwZTlS?=
+ =?utf-8?B?dFhHRFI4U3ViSS83RU1tVmdqWEk3TkNEUERoR1FENVBkWVFyYlpiQlZtTGo2?=
+ =?utf-8?B?Rk5QZ0JscXFreEU2VXlxdmkzR0JiVDFNNk8yMXhtUFVaeTB3ZjZ4M0x5U3k1?=
+ =?utf-8?B?WVV6TTcycldBbDZ2MGp3dGV4aGdVblZEdDAzQU0xSjI5U0ppUGVSYVRUNVpq?=
+ =?utf-8?B?MWw1U01aU21tNHBoUmlaRUcvbkFNVEFsWHkzSEFPY0c4a2t1MEtMSStaZWtk?=
+ =?utf-8?B?OGFTMmlBRlVBRGVaR0d0c0RuTk9BMVhRU1M4RVg4dnV4M0hCUnJEN1U5UU56?=
+ =?utf-8?B?RmI0ckVnSXZ2dlBVTGVTbzc4NDFlM2dwaVJZUzVuaG1yZGtMbFVHUnY3UTJa?=
+ =?utf-8?B?ZG00YUkyUUFNa01qQnlCejcxcHZQSWI2ZzA0TDZWdFJDYm9Jb0VpOFNYMXNX?=
+ =?utf-8?B?dXRBVHpmMkN1SGRVYVlmM0d1ZklGb0tvcXU4cUlxVC83NFFHbTNvbjI1SVhL?=
+ =?utf-8?B?cVk0Yi9wTkxBUGFUVlc1L2l6Uk50TjRWUEx5QTVaVFVoK2psQ1NteFU0QTVm?=
+ =?utf-8?B?elZOREU1dDJObGRFQnBWSklBV09OWEM4d3JVdlZqdmEvOW54WHdCd1lyREpU?=
+ =?utf-8?B?N2c2enVXUEZQQ20vQi8wTndkUE1BdGExRk5wUEZVczRBS2dtUitUOVVpd3l5?=
+ =?utf-8?B?a0RHRFA1VSs0Umt5SHFzV3RkVFZDSHdSQkVrdTA3cGIvSHEvT3hPTmtxb2ts?=
+ =?utf-8?B?bFYrdFdQdnJBSHF2M0ZuWWdCRGVBVnJ3eGJSZFlQS2NsMk1TWDVRbmdyV0pV?=
+ =?utf-8?B?VVpHSVJTaTZEZ29tYTd0VHNjanNLWDhMWm01WlQreHk5RmdEOHBDR0NpSG5k?=
+ =?utf-8?B?NjJ1cS9uT2ZYQVdWTTY3ZndMNllmK3hlaDJOZUxBSzVRSXBRTVFEQ2NXZEdj?=
+ =?utf-8?B?ZXlrcHNqQjk1c3pkNHduZkdwTzdlYTc5V2JFZlkyWWR4bGR2Q0VZenVPclBJ?=
+ =?utf-8?B?eWJmcVFNUER4UmJBWFo3ZWZnY3lCOHRuTGIzMDJkVnNSVlVNMHZpVElFMlRI?=
+ =?utf-8?B?SHlkaXFOLzJ4WlVDQjVBOHBocHc1ZkY3MExzZWVmcHE5MXZQVEhMbFE5S3hC?=
+ =?utf-8?B?REtiKzEzcjhrK2hNMVJGdVVHVEVXbjBpQ09DM1FES29UdUc3dnBOVFpoSlY0?=
+ =?utf-8?B?SkpTYXFReG5zOHlxUXFZUDJDeDRKWjliTUdMUy93a0ROcjBmclg5aDZ6cTY1?=
+ =?utf-8?B?eDNvMVNtSUNVZzRCckd0SW1FOVZsVVZITXB2TjRHTlQ3NE44RFVIbXdWVVpG?=
+ =?utf-8?B?N2tYTWxoT0cyZkRSMTRVQm9pMThYVDRPanhCNWhMdzg2ZVJNR2hVZXdvRjFk?=
+ =?utf-8?B?a01WbndPZzhQVEtVOHBGYmJvczYwUmpTVVNMR1RHMjhzTHVkUlpBTXkxT29E?=
+ =?utf-8?Q?Hix3FEvJj99wKgVciUKg3oG4opNtrp/p?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfb4cdc8-d5ed-4402-1303-08da0c0f4272
+X-MS-Exchange-CrossTenant-Network-Message-Id: b91dedc9-ee45-41ba-0511-08da0c107bb6
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 14:21:30.7348
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 14:30:16.5101
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V3W9F48uQkAlXyfas1F1TezLdUtkof0pgwLi/GDBt3wpgVIz9OhGumezk6Rsxz2+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1684
+X-MS-Exchange-CrossTenant-UserPrincipalName: xnuY1mN1/UfEiPxhyyiCDv3xgsHaP334JRibm5XVf+I2STWF1PjvWqe7BiCdOP5Z
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5250
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -121,13 +130,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=_MailMate_2D8DEE1C-1018-4BDD-BC22-3843829C0362_=
-Content-Type: text/plain
+--=_MailMate_11772522-6D16-4F1C-A239-DD3624EE149B_=
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On 21 Mar 2022, at 18:18, Roman Gushchin wrote:
+On 21 Mar 2022, at 23:21, Miaohe Lin wrote:
 
-> On Mon, Mar 21, 2022 at 10:21:26AM -0400, Zi Yan wrote:
+> On 2022/3/21 22:21, Zi Yan wrote:
 >> From: Zi Yan <ziy@nvidia.com>
 >>
 >> To split a THP to any lower order pages, we need to reform THPs on
@@ -143,13 +152,6 @@ On 21 Mar 2022, at 18:18, Roman Gushchin wrote:
 s.
 >>
 >> Signed-off-by: Zi Yan <ziy@nvidia.com>
->
-> Overall the patch looks good to me, please, feel free to add
-> Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-> to the next version.
->
-> Couple of small nits below:
->
 >> ---
 >>  include/linux/huge_mm.h |   8 +++
 >>  mm/huge_memory.c        | 111 ++++++++++++++++++++++++++++++---------=
@@ -168,14 +170,6 @@ s.
 >> +int split_huge_page_to_list_to_order(struct page *page, struct list_h=
 ead *list,
 >> +		unsigned int new_order);
->
-> Do we really need both? Maybe add the new_order argument to the existin=
-g function?
-> It seems like there are not so many call sites.
-
-Sure. I can do that.
-
->
 >>  static inline int split_huge_page(struct page *page)
 >>  {
 >>  	return split_huge_page_to_list(page, NULL);
@@ -286,6 +280,63 @@ r
 >> +		prep_compound_page(page_tail, new_order);
 >> +		prep_transhuge_page(page_tail);
 >> +	}
+>
+> Many thanks for your series. It looks really good. One question:
+> IIUC, It seems there has assumption that LRU compound_pages should
+> be PageTransHuge. So PageTransHuge just checks PageHead:
+>
+> static inline int PageTransHuge(struct page *page)
+> {
+> 	VM_BUG_ON_PAGE(PageTail(page), page);
+> 	return PageHead(page);
+> }
+>
+> So LRU pages with any order( > 0) will might be wrongly treated as THP =
+which
+> has order =3D HPAGE_PMD_ORDER. We should ensure thp_nr_pages is used in=
+stead of
+> hard coded HPAGE_PMD_ORDER.
+>
+> Looks at the below code snippet:
+> mm/mempolicy.c:
+> static struct page *new_page(struct page *page, unsigned long start)
+> {
+> ...
+> 	} else if (PageTransHuge(page)) {
+> 		struct page *thp;
+>
+> 		thp =3D alloc_hugepage_vma(GFP_TRANSHUGE, vma, address,
+> 					 HPAGE_PMD_ORDER);
+> 					 ^^^^^^^^^^^^^^^^
+> 		if (!thp)
+> 			return NULL;
+> 		prep_transhuge_page(thp);
+> 		return thp;
+> 	}
+> ...
+> }
+>
+> HPAGE_PMD_ORDER is used instead of thp_nr_pages. So the lower order pag=
+es might be
+> used as if its order is HPAGE_PMD_ORDER. All of such usage might need t=
+o be fixed.
+> Or am I miss something ?
+>
+> Thanks again for your work. :)
+
+THP will still only have HPAGE_PMD_ORDER and will not be split into any o=
+rder
+other than 0. This series only allows to split huge page cache folio (add=
+ed by Matthew)
+into any lower order. I have an explicit VM_BUG_ON() to ensure new_order
+is only 0 when non page cache page is the input. Since there is still non=
+-trivial
+amount of work to add any order THP support in the kernel. IIRC, Yu Zhao =
+(cc=E2=80=99d) was
+planning to work on that.
+
+Thanks for checking the patches.
+
 >>
 >>  	/* Finally unfreeze refcount. Additional reference from page cache. =
 */
@@ -490,38 +541,59 @@ truct list_head *list)
 >>  			ds_queue->split_queue_len--;
 >> -			list_del(page_deferred_list(head));
 >> +			list_del_init(page_deferred_list(head));
->
-> Can you, please, add the comment from the changelog here as well?
+>>  		}
+>>  		spin_unlock(&ds_queue->split_queue_lock);
+>>  		if (mapping) {
+>> @@ -2592,14 +2643,18 @@ int split_huge_page_to_list(struct page *page,=
+ struct list_head *list)
+>>  			if (PageSwapBacked(head)) {
+>>  				__mod_lruvec_page_state(head, NR_SHMEM_THPS,
+>>  							-nr);
+>> -			} else {
+>> +			} else if (!new_order) {
+>> +				/*
+>> +				 * Decrease THP stats only if split to normal
+>> +				 * pages
+>> +				 */
+>>  				__mod_lruvec_page_state(head, NR_FILE_THPS,
+>>  							-nr);
+>>  				filemap_nr_thps_dec(mapping);
+>>  			}
+>>  		}
+>>
+>> -		__split_huge_page(page, list, end);
+>> +		__split_huge_page(page, list, end, new_order);
+>>  		ret =3D 0;
+>>  	} else {
+>>  		spin_unlock(&ds_queue->split_queue_lock);
+>>
 
-Make sense. Will do.
-
-Thanks.
 
 --
 Best Regards,
 Yan, Zi
 
---=_MailMate_2D8DEE1C-1018-4BDD-BC22-3843829C0362_=
+--=_MailMate_11772522-6D16-4F1C-A239-DD3624EE149B_=
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmI522kPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUdkUQAIguEYnhRRq2ZwhHFid8XfNO2Mk2C929xnKV
-tx0NNNZB6qToJmi1JAo9OVdTG6iv/tharGjUUkhm7ylC94Sxj0g6kWnWJVryjOjf
-j7GaYp48x3dhBRxXS9VldfJg6V/Z1tul00FjIQ0tqiX3RTBtfPiSGEhCLR6JakVi
-wl5kO2xXxKgQ436caNJbUxnGo+GEfVmueMYMs31pNeHur7DV+Paijngw7lWeoCJh
-gM/kdi9QwjHGUBC4guFxTJlxGvadORxF7nk3Ubwgu87uOpUYdUWLZ7ohCbv1etfX
-a4Hw68M49QuCQl24FRdaaVF3PMmZa8RbFrZrEPZ/qhHkyGxQ6sjcvXJRt0GAnsiz
-2oozHGZ/n4VGjrJWijJxd41D9cmm68EoqHk32YTeUCsK6/4Rf9/+56gvgqFeY+Q5
-YIZlEpYSkIJ//qdjExzbOwaLTJ2kuIswyA4d7SZEQhrXNWaH4zoCOf9B01lRBsYV
-7o0U5ee8cxnHEH4S9GYKEafseDkqpfYFJ012sYdLORhonR7ThNa+qb/JQmaurGxG
-OjpBoLnSFkJidc1qGY7OQUi9pswDmsz5TO2d0VE2MVfFW+lG2CRgC8otz7cHbLwY
-ccm3f/KtgRmTw0XXZO29slrwti/Wwo8aeMapGQtZnL0RBlnHVo3mgFghl667Ku5y
-NGHDyV6m
-=FWVC
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmI53XYPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUni0P/2SYiHXPaGXxEsd8oqhjQk4tzl2euewBSFQn
+9x3un8OgdfMY3NL2LZgadRH5/pApIK12DTZyQiohkUXcMFKxvcP70qpLv3LV9XIA
+wXW665drodL4E28eqMMGBL6+iSz+WIjxYCuR8kdx/Sh6f4/NcV3vzMu3jTawENt7
+RFQy+2tV/kfu8fRboW6YjsP55RoPBy1MoepRg5gXuHokRgxy4jIrbzm3kJkgv9MT
+li3Ky4Gshw57XYeadN0+yoRGqi1QhJ9wScenBEUdg8BZhhtuIywwvSNETHEYdhn5
+8/ni27aE4/5x6pWu/W36H81UAbQWtv5mGhUUF7CjntC190iykapRtO0xjh/t+PuU
+MEf9X0KG+6Eu/ftcxgTlZeodS7/uTPMtpEZVgRH4JX38r8+5ZMEPgNxkcR1Ga5zM
+E7Xy3+iFph4AXIIoRnZeFe5JZzGNu2H1PUJ1U9cTeWjVAtLTFRl+j4D+p7BOMpxm
+W3Wu/UH8ExQY2yfGnc5OYYdeue/X58qio2qKoSOwAzx/vOvQseqfxxAbRXLTfiKq
+njUgoxLWalfrtE/RXorakDY51xxX+7vQ9laMYRoQdHeqJLBp/YKSDstWKgKDzkOa
+ckApR99BQt9VdCjGWWm1wK8Usilv+aWx6J+IAIG6vFuCEyvcbV38qvXnGDGuYFRc
+4a9JJh4L
+=YF9H
 -----END PGP SIGNATURE-----
 
---=_MailMate_2D8DEE1C-1018-4BDD-BC22-3843829C0362_=--
+--=_MailMate_11772522-6D16-4F1C-A239-DD3624EE149B_=--
