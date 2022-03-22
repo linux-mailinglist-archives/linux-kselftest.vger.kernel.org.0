@@ -2,36 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78394E3983
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 08:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0E34E398C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Mar 2022 08:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbiCVHVh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Mar 2022 03:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S237447AbiCVH2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Mar 2022 03:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237385AbiCVHVg (ORCPT
+        with ESMTP id S237439AbiCVH2D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Mar 2022 03:21:36 -0400
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABF5BC89;
-        Tue, 22 Mar 2022 00:20:07 -0700 (PDT)
-Received: by codeconstruct.com.au (Postfix, from userid 10001)
-        id EC27C2033A; Tue, 22 Mar 2022 15:20:01 +0800 (AWST)
-From:   Matt Johnston <matt@codeconstruct.com.au>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests/net: mctp: Roundtrip tun tests
-Date:   Tue, 22 Mar 2022 15:19:34 +0800
-Message-Id: <20220322071934.2655827-1-matt@codeconstruct.com.au>
-X-Mailer: git-send-email 2.32.0
+        Tue, 22 Mar 2022 03:28:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F103AC56;
+        Tue, 22 Mar 2022 00:26:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75F74B81AE4;
+        Tue, 22 Mar 2022 07:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F443C340EC;
+        Tue, 22 Mar 2022 07:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647933993;
+        bh=RzLHsXsPs3Je45PF2I3isW4cEiviXfi7RkKws8ivgew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=moaxBKyw5iVYg+ex1Ck8QRJVfTt/TtFUBj5tNhEZrlI747TvVmK3PM1ww8L/mLRKN
+         lhUw1KCge9LL8Go8wBicDptdN1k3Vc4IxOyQsfwUSjGfaooBxnoyZNxinFnIbbFpY2
+         VwmQ28smNDXwloHZ1W8OzFlPabJind3iC1joIVOYhqyihuKKBug1TM2YzaoOhY3tqb
+         9h+m6ywi+5emwgOuVEhuCk4KLZmriG9i6JpajowTzSUohJQaBrVzTLgV54QF3HrZV3
+         N/fNlTSmlWshuKQcCjK8hHVZSSYlSv4+ST0gTJnWo4YnWrOFx0yf7rF9LuZh7t41He
+         Aus64dTur9yww==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/sgx: Make TCS table relocatable
+Date:   Tue, 22 Mar 2022 09:25:33 +0200
+Message-Id: <20220322072533.342510-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,495 +55,307 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Tests MCTP messages between two tun devices forwarding between
-each other.
+Add a PT_NOTE section with n_namesz containg "TCS" and n_descz
+containing 32-bit offset to the TCS table inside the enclave. This
+allows to place the TCS segment freely, and thereby make the kselftest
+more robust.
 
-Tests are:
-- Round trip message and reply
-- MCTP_NET_ANY and MCTP_ADDR_ANY listeners
-- Message fragmentation
-- Message key expiry timeout are dropped
-- Duplicate replies are dropped
-
-Requires "mctp" userspace utility to configure addresses and routes,
-tests will be skipped if it is not available.
-
-Signed-off-by: Matt Johnston <matt@codeconstruct.com.au>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- tools/testing/selftests/net/mctp/Makefile    |  11 +
- tools/testing/selftests/net/mctp/config      |   2 +
- tools/testing/selftests/net/mctp/mctp-defs.h |   5 +
- tools/testing/selftests/net/mctp/mctp-tun.c  | 422 +++++++++++++++++++
- 4 files changed, 440 insertions(+)
- create mode 100644 tools/testing/selftests/net/mctp/Makefile
- create mode 100644 tools/testing/selftests/net/mctp/config
- create mode 100644 tools/testing/selftests/net/mctp/mctp-defs.h
- create mode 100644 tools/testing/selftests/net/mctp/mctp-tun.c
+ tools/testing/selftests/sgx/load.c            | 56 ++++++++++++++-----
+ tools/testing/selftests/sgx/main.c            | 37 +++---------
+ tools/testing/selftests/sgx/main.h            |  2 +
+ tools/testing/selftests/sgx/test_encl.lds     | 17 ++++--
+ .../selftests/sgx/test_encl_bootstrap.S       |  7 +++
+ 5 files changed, 72 insertions(+), 47 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mctp/Makefile b/tools/testing/selftests/net/mctp/Makefile
-new file mode 100644
-index 000000000000..baee43d5b048
---- /dev/null
-+++ b/tools/testing/selftests/net/mctp/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
-+CFLAGS += -I../../../../../usr/include/
-+
-+TEST_PROGS := mctp-tun
-+include ../../lib.mk
-+
-+mctp-tun: LDLIBS += -lpthread
-+
-+all: $(TEST_PROGS)
-diff --git a/tools/testing/selftests/net/mctp/config b/tools/testing/selftests/net/mctp/config
-new file mode 100644
-index 000000000000..92c0b8c79ac7
---- /dev/null
-+++ b/tools/testing/selftests/net/mctp/config
-@@ -0,0 +1,2 @@
-+CONFIG_TUN=y
-+CONFIG_MCTP=y
-diff --git a/tools/testing/selftests/net/mctp/mctp-defs.h b/tools/testing/selftests/net/mctp/mctp-defs.h
-new file mode 100644
-index 000000000000..fcb1f5250ca9
---- /dev/null
-+++ b/tools/testing/selftests/net/mctp/mctp-defs.h
-@@ -0,0 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Protocol numbers are not exposed through uapi */
-+#ifndef AF_MCTP
-+#define AF_MCTP 45
-+#endif
-diff --git a/tools/testing/selftests/net/mctp/mctp-tun.c b/tools/testing/selftests/net/mctp/mctp-tun.c
-new file mode 100644
-index 000000000000..ce289b10d23f
---- /dev/null
-+++ b/tools/testing/selftests/net/mctp/mctp-tun.c
-@@ -0,0 +1,422 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021,2022 Code Construct
-+ */
-+#include <sys/socket.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/random.h>
-+#include <linux/if.h>
-+#include <linux/if_tun.h>
-+#include <linux/mctp.h>
-+#include <pthread.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <assert.h>
-+
-+#include "mctp-defs.h"
-+
-+#include "../../kselftest_harness.h"
-+
-+static const int BUF_SIZE = 70000;
-+
-+static void *tun_start(void *arg);
-+static int create_tun(struct __test_metadata *_metadata,
-+	const char *name);
-+
-+FIXTURE(TUNPAIR) {
-+	pthread_t pth;
-+	int fd[2];
-+	volatile bool running;
-+	bool skip;
-+};
-+
-+const size_t default_mtu = 70;
-+const size_t default_msglen = 4;
-+
-+FIXTURE_VARIANT(TUNPAIR) {
-+	/* some defaults above */
-+	size_t msglen;
-+	size_t mtu;
-+	bool listen_addr_any;
-+	bool listen_net_any;
-+	bool expire_key;
-+	bool duplicate_reply;
-+};
-+
-+FIXTURE_VARIANT_ADD(TUNPAIR, len4) {
-+	.listen_addr_any = true,
-+	.listen_net_any = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(TUNPAIR, len300) {
-+	.msglen = 300,
-+	.mtu = 500,
-+	.listen_addr_any = true,
-+};
-+
-+/* With fragmentation */
-+FIXTURE_VARIANT_ADD(TUNPAIR, len300frag) {
-+	.msglen = 300,
-+	.listen_addr_any = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(TUNPAIR, net_any) {
-+	.listen_addr_any = true,
-+	.listen_net_any = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(TUNPAIR, addr_specific) {
-+	.listen_net_any = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(TUNPAIR, expire_key) {
-+	.expire_key = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(TUNPAIR, duplicate_reply) {
-+	.duplicate_reply = true,
-+};
-+
-+FIXTURE_SETUP(TUNPAIR)
-+{
-+	int rc;
-+	char str[1000];
-+	int mtu;
-+
-+	memset(self, 0, sizeof(*self));
-+
-+	/* Check requirements first */
-+	/* TODO: cap_get() instead? */
-+	if (getuid() != 0) {
-+		self->skip = 1;
-+		TH_LOG("Not root, skipping");
-+		return;
-+	}
-+
-+	rc = system("sh -c \"which mctp 2> /dev/null > /dev/null\"");
-+	if (rc != 0) {
-+		self->skip = 1;
-+		TH_LOG("No mctp utility installed, skipping");
-+		return;
-+	}
-+
-+	rc = socket(AF_MCTP, SOCK_DGRAM, 0);
-+	if (rc == -1 && errno == EAFNOSUPPORT) {
-+		self->skip = 1;
-+		TH_LOG("No AF_MCTP support, skipping");
-+		return;
-+	}
-+	close(rc);
-+
-+	/* Pair of netdevs */
-+	self->fd[0] = create_tun(_metadata, "mctptun1");
-+	self->fd[1] = create_tun(_metadata, "mctptun2");
-+
-+	mtu = variant->mtu ?: default_mtu;
-+
-+	/* Forward packets between devices */
-+	self->running = true;
-+	rc = pthread_create(&self->pth, NULL, tun_start, self);
-+	ASSERT_EQ(rc, 0);
-+
-+	/* Set up devices. All in one command to avoid
-+	 * slow shell invocations
-+	 */
-+	rc = snprintf(str, sizeof(str),
-+		/* net needs to be set before routes */
-+		"mctp link set mctptun1 up net 31 mtu %d && "
-+		"mctp link set mctptun2 up net 32 mtu %d && "
-+		"mctp addr add 131 dev mctptun1 && "
-+		"mctp addr add 132 dev mctptun2 && "
-+		"mctp route add 132 via mctptun1 && "
-+		"mctp route add 131 via mctptun2 && "
-+		"true",
-+		mtu, mtu);
-+	ASSERT_LT(rc, sizeof(str));
-+	rc = system(str);
-+	ASSERT_EQ(rc, 0);
-+}
-+
-+FIXTURE_TEARDOWN(TUNPAIR)
-+{
-+	int rc;
-+
-+	if (self->skip)
-+		return;
-+
-+	self->running = false;
-+	rc = pthread_join(self->pth, NULL);
-+	ASSERT_EQ(rc, 0);
-+	ASSERT_EQ(close(self->fd[0]), 0);
-+	ASSERT_EQ(close(self->fd[1]), 0);
-+
-+	/* mctp addr/routes go away with devices */
-+}
-+
-+/* Creates a socket, binds.
-+ * Always returns success, asserts on failure
-+ */
-+static int mctp_bind(struct __test_metadata *_metadata,
-+	int net, int eid, int type)
-+{
-+	struct sockaddr_mctp addr = {0};
-+	int sd, rc;
-+
-+	sd = socket(AF_MCTP, SOCK_DGRAM, 0);
-+	ASSERT_GE(sd, 0);
-+	addr.smctp_family = AF_MCTP;
-+	addr.smctp_network = net;
-+	addr.smctp_addr.s_addr = eid;
-+	addr.smctp_type = type;
-+	addr.smctp_tag = MCTP_TAG_OWNER;
-+	rc = bind(sd, (struct sockaddr *)&addr, sizeof(addr));
-+	ASSERT_EQ(rc, 0);
-+	return sd;
-+}
-+
-+/* Creates a socket, sends on it.
-+ * Always returns success, asserts on failure.
-+ * Returns the socket sd.
-+ */
-+static int mctp_send(struct __test_metadata *_metadata,
-+	int net, int eid, int type, void *buf, size_t len)
-+{
-+	struct sockaddr_mctp addr = {0};
-+	ssize_t sent;
-+	int sd;
-+
-+	addr.smctp_family = AF_MCTP;
-+	addr.smctp_network = net;
-+	addr.smctp_addr.s_addr = eid;
-+	addr.smctp_type = type;
-+	addr.smctp_tag = MCTP_TAG_OWNER;
-+	sd = socket(AF_MCTP, SOCK_DGRAM, 0);
-+	ASSERT_GE(sd, 0);
-+	sent = sendto(sd, buf, len, 0,
-+			(struct sockaddr *)&addr, sizeof(addr));
-+	ASSERT_EQ(sent, len);
-+	return sd;
-+}
-+
-+/* Helper to test key expiry */
-+static void test_expire_key(struct __test_metadata *_metadata,
-+	int sock_listen, int sd, struct sockaddr_mctp *addr)
-+{
-+	struct pollfd pf = { .fd = sd, .events = POLLIN };
-+	int val1 = 0x11223344;
-+	ssize_t len;
-+	int rc;
-+
-+	/* Wait for timeout, > mctp_key_lifetime = 6 secs */
-+	TH_LOG("Waiting 7 seconds for key expiry...");
-+	sleep(7);
-+
-+	addr->smctp_tag &= ~MCTP_TAG_OWNER;
-+	len = sendto(sock_listen, &val1, sizeof(val1),
-+		0, (struct sockaddr *)addr, sizeof(*addr));
-+	ASSERT_EQ(len, sizeof(val1));
-+
-+	/* Wait 100ms */
-+	rc = poll(&pf, 1, 100);
-+	/* We should time out, packet is never received */
-+	ASSERT_EQ(rc, 0);
-+}
-+
-+/* Helper to test duplicate replies */
-+static void test_duplicate_reply(struct __test_metadata *_metadata,
-+	int sock_listen, int sd, struct sockaddr_mctp *addr)
-+{
-+	struct pollfd pf = { .fd = sd, .events = POLLIN };
-+	int val1 = 0x11223344;
-+	ssize_t len;
-+	int rc;
-+
-+	/* Send first reply */
-+	addr->smctp_tag &= ~MCTP_TAG_OWNER;
-+	len = sendto(sock_listen, &val1, sizeof(val1),
-+		0, (struct sockaddr *)addr, sizeof(*addr));
-+	ASSERT_EQ(len, sizeof(val1));
-+
-+	/* Receive reply */
-+	len = recvfrom(sd, NULL, 0, MSG_TRUNC, NULL, NULL);
-+	EXPECT_EQ(len, sizeof(val1));
-+
-+	/* Try a second reply */
-+	len = sendto(sock_listen, &val1, sizeof(val1),
-+		0, (struct sockaddr *)addr, sizeof(*addr));
-+	ASSERT_EQ(len, sizeof(val1));
-+
-+	/* Wait 100ms */
-+	rc = poll(&pf, 1, 100);
-+	/* We should time out, packet is never received */
-+	ASSERT_EQ(rc, 0);
-+}
-+
-+TEST_F(TUNPAIR, roundtrip)
-+{
-+	const size_t msglen = variant->msglen ?: default_msglen;
-+	struct sockaddr_mctp addr = {0};
-+	int sock_listen, sd;
-+	void *buf1, *buf2;
-+	socklen_t addrlen;
-+	int net, eid;
-+	ssize_t len;
-+
-+	if (self->skip)
-+		SKIP(return, "Skipping");
-+
-+	buf1 = malloc(msglen);
-+	buf2 = malloc(msglen);
-+
-+	/* Listen on mctptun2 (eid 132 net 32) */
-+	if (variant->listen_net_any)
-+		net = MCTP_NET_ANY;
-+	else
-+		net = 32;
-+
-+	if (variant->listen_addr_any)
-+		eid = MCTP_ADDR_ANY;
-+	else
-+		eid = 132;
-+
-+	sock_listen = mctp_bind(_metadata, net, eid, 1);
-+
-+	/* Send mctptun1 -> mctptun2 */
-+	getrandom(buf1, msglen, 0);
-+	sd = mctp_send(_metadata, 31, 132, 1, buf1, msglen);
-+
-+	/* Receive it */
-+	addrlen = sizeof(addr);
-+	len = recvfrom(sock_listen, buf2, msglen, MSG_TRUNC,
-+		(struct sockaddr *)&addr, &addrlen);
-+	EXPECT_EQ(len, msglen);
-+	EXPECT_EQ(memcmp(buf1, buf2, msglen), 0);
-+	TH_LOG("addr family %d ", addr.smctp_family);
-+
-+	if (variant->expire_key) {
-+		test_expire_key(_metadata, sock_listen, sd, &addr);
-+	} else if (variant->duplicate_reply) {
-+		test_duplicate_reply(_metadata, sock_listen, sd, &addr);
-+	} else {
-+		/* Reply mctptun2 -> mctptun1 */
-+		getrandom(buf1, msglen, 0);
-+		addr.smctp_tag &= ~MCTP_TAG_OWNER;
-+		len = sendto(sock_listen, buf1, msglen,
-+			0, (struct sockaddr *)&addr, sizeof(addr));
-+		ASSERT_EQ(len, msglen);
-+
-+		/* Receive reply */
-+		addrlen = sizeof(addr);
-+		len = recvfrom(sd, buf2, msglen, MSG_TRUNC,
-+			(struct sockaddr *)&addr, &addrlen);
-+		EXPECT_EQ(len, msglen);
-+		EXPECT_EQ(memcmp(buf1, buf2, msglen), 0);
-+	}
-+
-+	close(sd);
-+	close(sock_listen);
-+	free(buf2);
-+	free(buf1);
-+}
-+
-+/* Returns file descriptor.
-+ * Asserts on failure
-+ */
-+static int create_tun(struct __test_metadata *_metadata,
-+	const char *name)
-+{
-+	struct ifreq ifr = {0};
-+	int rc;
-+	int fd;
-+
-+	fd = open("/dev/net/tun", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	assert(strlen(name) < IFNAMSIZ);
-+	strcpy(ifr.ifr_name, name);
-+	ifr.ifr_flags = IFF_TUN;
-+
-+	rc = ioctl(fd, TUNSETIFF, &ifr);
-+	ASSERT_EQ(rc, 0) TH_LOG("tun ioctl failed: %s",
-+		strerror(errno));
-+	return fd;
-+}
-+
-+static int atomic_write(int fd, void *buffer, size_t len)
-+{
-+	while (len) {
-+		ssize_t wlen = write(fd, buffer, len);
-+
-+		if (wlen == -1 && errno == EINTR)
-+			continue;
-+
-+		if (wlen < 0)
-+			return wlen;
-+
-+		len -= wlen;
-+		buffer += wlen;
-+	}
-+	return 0;
-+}
-+
-+
-+/* Thread to forward messages between FDs */
-+static void *tun_start(void *arg)
-+{
-+	struct _test_data_TUNPAIR *fix = arg;
-+	struct pollfd pf[2] = {
-+		{ .fd = fix->fd[0], .events = POLLIN },
-+		{ .fd = fix->fd[1], .events = POLLIN },
-+	};
-+	char *buffer = NULL;
-+	ssize_t len;
-+	int rc;
-+
-+	buffer = malloc(BUF_SIZE);
-+	if (!buffer) {
-+		fprintf(stderr, "malloc failed");
-+		goto out;
-+	}
-+
-+	while (fix->running) {
-+		rc = poll(pf, 2, 100);
-+		if (rc == 0 || (rc == -1 && errno == EINTR)) {
-+			continue;
-+		}
-+		if (rc < 0) {
-+			fprintf(stderr, "poll error: %s", strerror(errno));
-+			goto out;
-+		}
-+
-+		for (int i = 0; i < 2; i++) {
-+			if (pf[i].revents & POLLIN) {
-+				len = read(pf[i].fd, buffer, BUF_SIZE);
-+				if (len == -1 && errno == EINTR) {
-+					continue;
-+				}
-+				if (len == 0) {
-+					fprintf(stderr, "EOF from tun");
-+					goto out;
-+				}
-+				if (len < 0) {
-+					fprintf(stderr, "error from tun read: %s",
-+						strerror(errno));
-+					goto out;
-+				}
-+
-+				rc = atomic_write(pf[(i+1) % 2].fd, buffer, len);
-+				if (rc < 0) {
-+					fprintf(stderr, "error from tun write: %s",
-+						strerror(errno));
-+					goto out;
-+				}
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index 006b464c8fc9..214b9da631bd 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -19,6 +19,9 @@
+ #include "defines.h"
+ #include "main.h"
+ 
++const char *TCS_NOTE_NAME = "TCS";
++const unsigned long TCS_NOTE_LEN = 4;
++
+ void encl_delete(struct encl *encl)
+ {
+ 	struct encl_segment *heap_seg;
+@@ -187,11 +190,31 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+ 
+ 	encl->nr_segments = 1; /* one for the heap */
+ 
++	/* Count the loadable segments and discover the TCS array. */
+ 	for (i = 0; i < ehdr->e_phnum; i++) {
+ 		Elf64_Phdr *phdr = &phdr_tbl[i];
++		Elf64_Nhdr *note;
++		char *note_name;
+ 
+-		if (phdr->p_type == PT_LOAD)
++		switch (phdr->p_type) {
++		case PT_LOAD:
+ 			encl->nr_segments++;
++			break;
++
++		case PT_NOTE:
++			note = encl->bin + (phdr->p_offset & PAGE_MASK);
++			note_name = &((char *)note)[sizeof(*note)];
++
++			if (note->n_namesz == TCS_NOTE_LEN &&
++			    !strncmp(note_name, TCS_NOTE_NAME, TCS_NOTE_LEN)) {
++				/* 32-bit address. */
++				encl->tcs = (struct sgx_tcs *)(unsigned long)(note->n_descsz);
 +			}
-+		}
-+	}
-+out:
-+	return NULL;
-+}
++			break;
 +
-+TEST_HARNESS_MAIN
++		default:
++			break;
++		}
+ 	}
+ 
+ 	encl->segment_tbl = calloc(encl->nr_segments,
+@@ -215,31 +238,36 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+ 			goto err;
+ 		}
+ 
+-		if (j == 0 && flags != (PF_R | PF_W)) {
+-			fprintf(stderr,
+-				"TCS has invalid segment flags 0x%02x.\n",
+-				phdr->p_flags);
+-			goto err;
+-		}
+-
+ 		if (j == 0) {
+ 			src_offset = phdr->p_offset & PAGE_MASK;
+ 			encl->src = encl->bin + src_offset;
++		}
++
++		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
++		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
++		seg->src = encl->src + seg->offset;
++		seg->measure = true;
++
++		if (seg->offset == (unsigned long)encl->tcs) {
++			if (flags != (PF_R | PF_W)) {
++				fprintf(stderr,
++					"TCS has invalid segment flags 0x%02x.\n",
++					phdr->p_flags);
++				goto err;
++			}
+ 
+ 			seg->prot = PROT_READ | PROT_WRITE;
+ 			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+ 		} else  {
++			if ((flags & (PF_R | PF_W | PF_X)) == (PF_R | PF_W))
++				encl->data_offset = seg->offset;
++
+ 			seg->prot = (phdr->p_flags & PF_R) ? PROT_READ : 0;
+ 			seg->prot |= (phdr->p_flags & PF_W) ? PROT_WRITE : 0;
+ 			seg->prot |= (phdr->p_flags & PF_X) ? PROT_EXEC : 0;
+ 			seg->flags = (SGX_PAGE_TYPE_REG << 8) | seg->prot;
+ 		}
+ 
+-		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+-		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
+-		seg->src = encl->src + seg->offset;
+-		seg->measure = true;
+-
+ 		j++;
+ 	}
+ 
+@@ -322,5 +350,7 @@ bool encl_build(struct encl *encl)
+ 		return false;
+ 	}
+ 
++	encl->tcs = (struct sgx_tcs *)((unsigned long)encl->tcs + encl->encl_base);
++
+ 	return true;
+ }
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index dd74fa42302e..929f3a06a66c 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -109,25 +109,6 @@ static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
+ 	return NULL;
+ }
+ 
+-/*
+- * Return the offset in the enclave where the data segment can be found.
+- * The first RW segment loaded is the TCS, skip that to get info on the
+- * data segment.
+- */
+-static off_t encl_get_data_offset(struct encl *encl)
+-{
+-	int i;
+-
+-	for (i = 1; i < encl->nr_segments; i++) {
+-		struct encl_segment *seg = &encl->segment_tbl[i];
+-
+-		if (seg->prot == (PROT_READ | PROT_WRITE))
+-			return seg->offset;
+-	}
+-
+-	return -1;
+-}
+-
+ FIXTURE(enclave) {
+ 	struct encl encl;
+ 	struct sgx_enclave_run run;
+@@ -248,7 +229,7 @@ TEST_F(enclave, unclobbered_vdso)
+ 	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
++	self->run.tcs = (__u64)self->encl.tcs;
+ 
+ 	put_op.header.type = ENCL_OP_PUT_TO_BUFFER;
+ 	put_op.value = MAGIC;
+@@ -321,7 +302,7 @@ TEST_F(enclave, unclobbered_vdso_oversubscribed)
+ 	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
++	self->run.tcs = (__u64)self->encl.tcs;
+ 
+ 	put_op.header.type = ENCL_OP_PUT_TO_BUFFER;
+ 	put_op.value = MAGIC;
+@@ -350,7 +331,7 @@ TEST_F(enclave, clobbered_vdso)
+ 	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
++	self->run.tcs = (__u64)self->encl.tcs;
+ 
+ 	put_op.header.type = ENCL_OP_PUT_TO_BUFFER;
+ 	put_op.value = MAGIC;
+@@ -386,7 +367,7 @@ TEST_F(enclave, clobbered_vdso_and_user_function)
+ 	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
++	self->run.tcs = (__u64)self->encl.tcs;
+ 
+ 	self->run.user_handler = (__u64)test_handler;
+ 	self->run.user_data = 0xdeadbeef;
+@@ -419,7 +400,7 @@ TEST_F(enclave, tcs_entry)
+ 	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
++	self->run.tcs = (__u64)self->encl.tcs;
+ 
+ 	op.type = ENCL_OP_NOP;
+ 
+@@ -431,7 +412,7 @@ TEST_F(enclave, tcs_entry)
+ 	EXPECT_EQ(self->run.exception_addr, 0);
+ 
+ 	/* Move to the next TCS. */
+-	self->run.tcs = self->encl.encl_base + PAGE_SIZE;
++	self->run.tcs = (__u64)self->encl.tcs + PAGE_SIZE;
+ 
+ 	EXPECT_EQ(ENCL_CALL(&op, &self->run, true), 0);
+ 
+@@ -464,11 +445,9 @@ TEST_F(enclave, pte_permissions)
+ 	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+-	self->run.tcs = self->encl.encl_base;
++	self->run.tcs = (__u64)self->encl.tcs;
+ 
+-	data_start = self->encl.encl_base +
+-		     encl_get_data_offset(&self->encl) +
+-		     PAGE_SIZE;
++	data_start = self->encl.encl_base + self->encl.data_offset;
+ 
+ 	/*
+ 	 * Sanity check to ensure it is possible to write to page that will
+diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+index b45c52ec7ab3..bccb263be8d9 100644
+--- a/tools/testing/selftests/sgx/main.h
++++ b/tools/testing/selftests/sgx/main.h
+@@ -29,6 +29,8 @@ struct encl {
+ 	struct encl_segment *segment_tbl;
+ 	struct sgx_secs secs;
+ 	struct sgx_sigstruct sigstruct;
++	struct sgx_tcs *tcs;
++	unsigned long data_offset;
+ };
+ 
+ extern unsigned char sign_key[];
+diff --git a/tools/testing/selftests/sgx/test_encl.lds b/tools/testing/selftests/sgx/test_encl.lds
+index a1ec64f7d91f..6f72d4183292 100644
+--- a/tools/testing/selftests/sgx/test_encl.lds
++++ b/tools/testing/selftests/sgx/test_encl.lds
+@@ -2,17 +2,15 @@ OUTPUT_FORMAT(elf64-x86-64)
+ 
+ PHDRS
+ {
+-	tcs PT_LOAD;
+ 	text PT_LOAD;
++	tcs PT_LOAD;
+ 	data PT_LOAD;
++	note PT_NOTE;
+ }
+ 
+ SECTIONS
+ {
+ 	. = 0;
+-	.tcs : {
+-		*(.tcs*)
+-	} : tcs
+ 
+ 	. = ALIGN(4096);
+ 	.text : {
+@@ -22,13 +20,22 @@ SECTIONS
+ 		. = ALIGN(4096);
+ 	} : text
+ 
++	.tcs : {
++		*(.tcs*)
++	} : tcs
++
+ 	.data : {
+ 		*(.data*)
++		. = ALIGN(4096);
+ 	} : data
+ 
++	.note : {
++		*(.note.tcs*)
++	} : note
++
+ 	/DISCARD/ : {
+ 		*(.comment*)
+-		*(.note*)
++		*(.note.gnu.*)
+ 		*(.debug*)
+ 		*(.eh_frame*)
+ 	}
+diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+index 82fb0dfcbd23..cf821c80f82c 100644
+--- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
++++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+@@ -10,6 +10,7 @@
+ 	.section ".tcs", "aw"
+ 	.balign	4096
+ 
++encl_tcs:
+ 	.fill	1, 8, 0			# STATE (set by CPU)
+ 	.fill	1, 8, 0			# FLAGS
+ 	.quad	encl_ssa_tcs1		# OSSA
+@@ -94,3 +95,9 @@ encl_stack:
+ 	.balign 4096
+ 	# Stack of TCS #2
+ 	.space 4096
++
++	.section ".note.tcs", "", @progbits
++	.long 4
++	.long encl_tcs
++	.long 0
++	.string "TCS"
 -- 
-2.32.0
+2.35.1
 
