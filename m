@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468F64E5A11
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 21:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D14E4E5A35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 21:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240723AbiCWUr7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 16:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S240807AbiCWUxz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 16:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240685AbiCWUr7 (ORCPT
+        with ESMTP id S240731AbiCWUxy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:47:59 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9268CCC3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:46:28 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id t1so3301641edc.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:46:28 -0700 (PDT)
+        Wed, 23 Mar 2022 16:53:54 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F458B6C7
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:52:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so3311694edw.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WH60uTSBbbOblHqK28xy9BTYXyukYPb7J6N0+vdiNIg=;
-        b=V+aiWhUweR0uDl/dkvdsvI2w069p2RxAa2gDCtul9NOQOypsbChwl5HeM48HJoMX/J
-         Y8ffKwIkmFoAIWRdFFKKzjBYZnPA9gvI8+U5SuXTQsPz4rg7Mg1klnAoAjKQaR7hsz7N
-         yq1CPq+Ezu4xRXwn8uMjypx2yGY8iWx0H/MsH3Q6DA0crd9T8RQiX6y1igswnhAOpVOZ
-         4W+q45BkXoNGMrBinkYQY7+Kl4/6/AXy9DRA/iCk3zuqgOqdFlAlCdq6ot5NqyUs97xg
-         XatSI8ykI1t1D/pSf4dAJfCOISyh+Nd5TYlvxr1CtRLDQuyd4REgeOYH+2MjlBNSps3T
-         8Nzw==
+        bh=PBE8yRVXK2Z1d+6Q66nzcvjggIJy0c862g21NoTUHlQ=;
+        b=KAzCUv63az1N4YOSrRi1smJsfOq/r6GI+qprsin5ohyUodV9JV/TMROjwXbDH7mkGp
+         3bvgjbIeySI2A672p0NA+HLUIkm0Rf7b8zb+pg2FzRUxSfUeYC6Xoec0BHG4P++yBz0n
+         4g3uXsasz57ELC1In9T0BY0cbM29MZH+RILFuYz/hKArWanXA7AYhvGj766SYuYkSG7h
+         T5bwBuLwb16uqlg8GJOnqNWrQbjFNG05Z4qffRRUjntRms1zdfy9GP3KrSm+/SwCp2Ht
+         2zEjm8jrdHPttGsLbze53F+xXG3gvxH4xS5ld+z2rS6LogLISLddisxC96YZP3DPvwcx
+         J5Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WH60uTSBbbOblHqK28xy9BTYXyukYPb7J6N0+vdiNIg=;
-        b=T9vmXa1ZFis3c453D1hTWyg66N/eAgkEyjOjPtrYvwQFZ1zR+pO6TzFVipEDkwNR8Z
-         90P7bYWko67LjpurFxk31QGfr5/ZhFUmIzK0FUALtihNyMml9coVl2YvBlHItY3j+w26
-         dU50G/XJ4lWSnY01jUfqjWDSqYA0bM/WEyR3+onbcqIqZSQndN7MUBBLnYbTtWgF58Rf
-         LOjJfGueDl2OJCsSuH6EbP+e8RvapLKroBgg2rDK5dflVWQ5skj6REXDgjtCsL0/fpHw
-         HBqzABtwpduTqaDk+1QdIreb/pW9JxjRDRJFHSMOrv0dPCiFobExoRHruMXtmRz0r4I8
-         tsqA==
-X-Gm-Message-State: AOAM532rG2So3n0TJrS0HvFgXn9gS3m4XLS+tFpaZ/kn0K+ZGxY5SyKs
-        sFdghvyOjPY8VnROgLHrCFwOvbCQkgvVoaVLZQsrej3Ddd5h8Q==
-X-Google-Smtp-Source: ABdhPJy77sNORI3m8k2PJgQY3pDKoHxiiTbX9XZazuPm54n83EGDgu7uSzqSespg9TStnSHPWUj8ALumLBYLVEvv730=
-X-Received: by 2002:a05:6402:4388:b0:419:443d:b4e9 with SMTP id
- o8-20020a056402438800b00419443db4e9mr2571260edc.149.1648068386447; Wed, 23
- Mar 2022 13:46:26 -0700 (PDT)
+        bh=PBE8yRVXK2Z1d+6Q66nzcvjggIJy0c862g21NoTUHlQ=;
+        b=tlAHytL6ZNKAIXLlF6UPzrvnlUd6jQW0jr5ZhGFs8DWndsOAmkqjzSuHc2441IzuLA
+         TRpMcDcR7QYiV1jwxwWin5G5JcrzlE+EdtWZlA0xm3chECaRw8jDIIbwMfzS8ODrBKKo
+         PPFpHQKYa9OjTyDREZwhlPm36kIW22Wn0yKnC6PcwRtzJLNRhv5ydAWDw+vI5N7EWCQv
+         ORFmhe/d7pNjlPePyjR/km1VIHSYcwEJHrCkfkDMbWl4QClCGay0ZRgqNp0rewnqAPxc
+         +Mzsl3LGx+K9BKOjNXx2Rr/tllff3XqcM602HLp9rStAhu25PHiU1GVzoTDTkpi7TiRR
+         k4sQ==
+X-Gm-Message-State: AOAM532cFuDOEWtEyC2dZKfv11iv3gbm608I41yCl/t/geH264yLE8+u
+        i8VpwdQOi1Wzx/YogBXj/69q8YuiiK7H8d63ahseyA==
+X-Google-Smtp-Source: ABdhPJyNe/YgbboX15f5yKbq32JYm2T6eI69MG03cEoDePkZrOlyNnzHwmz9VyU/XeG5wcn9QIWAlNajZh38c8f51EM=
+X-Received: by 2002:a05:6402:1c1e:b0:416:5b93:eacf with SMTP id
+ ck30-20020a0564021c1e00b004165b93eacfmr2586533edb.302.1648068742283; Wed, 23
+ Mar 2022 13:52:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-3-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-3-dlatypov@google.com>
+References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-4-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-4-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 16:46:15 -0400
-Message-ID: <CAFd5g45gOMb4URpgiS4RKmWsoN7auvejM7gfTY2MrpVidKkbyA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] kunit: tool: drop unused KernelDirectoryPath var
+Date:   Wed, 23 Mar 2022 16:52:11 -0400
+Message-ID: <CAFd5g45r9gcYCya0A-sP=MapvbGPSCxX4oFYxDNSPC=_F_bZ7w@mail.gmail.com>
+Subject: Re: [PATCH 4/5] kunit: tool: drop last uses of collections.namedtuple
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
@@ -70,11 +70,19 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Jan 18, 2022 at 2:09 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Commit be886ba90cce ("kunit: run kunit_tool from any directory")
-> introduced this variable, but it was unused even in that commit.
+> Since we formally require python3.7+ since commit df4b0807ca1a
+> ("kunit: tool: Assert the version requirement"), we can just use
+> @dataclasses.dataclass instead.
 >
-> Since it's still unused now and callers can instead use
-> get_kernel_root_path(), delete this var.
+> In kunit_config.py, we used namedtuple to create a hashable type that
+> had `name` and `value` fields and had to subclass it to define a custom
+> `__str__()`.
+> @datalcass lets us just define one type instead.
+>
+> In qemu_config.py, we use namedtuple to allow modules to define various
+> parameters. Using @dataclass, we can add type-annotations for all these
+> fields, making our code more typesafe and making it easier for users to
+> figure out how to define new configs.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
