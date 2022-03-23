@@ -2,80 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102814E5BCA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Mar 2022 00:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041C94E5BD4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Mar 2022 00:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345485AbiCWXbx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 19:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S1345551AbiCWXdh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 19:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345479AbiCWXbw (ORCPT
+        with ESMTP id S1345539AbiCWXdg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 19:31:52 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C83869CCB
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 16:30:21 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id r13so5895555ejd.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 16:30:21 -0700 (PDT)
+        Wed, 23 Mar 2022 19:33:36 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3587C90FFB
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 16:32:01 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id o10so5928245ejd.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 16:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HfS7RNhMsAvhm3dkViHCIr0vMqh85tM7E/+ao0kRKJs=;
-        b=tW2EeH/eBKHhPEoNUW7aeZDdjSo2N3sR5g8/rjFyrWWIfWC9lzpK7okoF/VHQoK3/R
-         nRnXQzDF/+QOzMU5yhwb972fhRH79C3FASiflIzZF8aFHuGLrEbg9V2ojYFvJoHWrXTg
-         Rm9xIyV8e3TrJCUCw+B+7bIVxPbQfaXlyC9ysfKC0uwry4x2DrEiYC++/51pb+RW2DU9
-         WKnqE3tlVdqzQHCILZG7Fp5+Hy0OD3VN+P4mdQ35EngOytiOZ/9St5He9SjbDhSUlCYV
-         rK+T4hZ4nfTY9AnZMav6bqNLsIOBTA+GiUrJF5I4n8B4BsfziS9oabg3fqvrik1d1MWi
-         zURw==
+        bh=87rv/uQgaWVecbXHJd/b7su5U/noF4SgiLK+NkYo0kg=;
+        b=bU2dKvO1iB7Nfmq3t5BeQjg5fs2YxOOugE29s4rUq1zTPjndpx2a7Ys38ZXe7DkULq
+         5pGdoWZgccBVOu0pkNIJrNdfWyLu3eDn+XU9GF2zWXFuPf4b8+oxumNb+3JYFXfQ/xSn
+         uK1oENCWgxYEQ2Dk3u76NHyo2JapuA1o0h2lfOZ1VC1nQaiv1qYziPQOjOIXCU7RdWlE
+         6XVUdO5XDQlEf3U2rgMwsmpTiqakYNPyUIT9Zd5y+pP1SUnw3l0rH/M0YKLK+LFlKeNA
+         U7eVgHSWTnPNURttcNh7cPHlccKi3/zemaikjtX5CZVxzOat3prafRnwwRbHg9qn3VbF
+         U9Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HfS7RNhMsAvhm3dkViHCIr0vMqh85tM7E/+ao0kRKJs=;
-        b=4OBdcDNsBJ1uqx6ojN5RBbkDXoNoqqgpRJLTRm8+HW9GKP9NvMQeBbd1xCsje/4Lxt
-         bMjEYNpwH8EdhxoZvK6YHklkGBfcubmHB4h6Z6BeiJXpIbamWNqN3ejZcYdfrdE5UL7k
-         4k/HD4XD9Jv7mLPPy49vXv3c7uBc70mSUmnj+r8Ja2BhWAd9Azrbwr5WVI6zGKsy0DGe
-         Dsfql7QPbw/egp8BLrxV37G0z5PaCXpux9owld8AkRMetvwUacLOri3YdPigLgAbKqgd
-         gbyjzmQnVye6ChNf3Ii5LMM8DQLBevax0wrVngUb39uj8scuCq3MSSze0Z0FeW+bs0ym
-         /YEg==
-X-Gm-Message-State: AOAM530/LiH7P8RSXRXG+V4bRcriC67jcWztUL4/hq+6cdyFgRuRZsXP
-        uJO+iFnKF9mw7d+GXaiQ+OGhBUMw4a4CxXX55yX3gA==
-X-Google-Smtp-Source: ABdhPJy9tB8cZmFLq7/08WeSSCigTCYfwMBIqUubd0WCU7po5l9Q1JOyl8dsivDi3xN38be3+/LEihyciTgUmeVucoU=
-X-Received: by 2002:a17:906:d54d:b0:6e0:1f9b:5064 with SMTP id
- cr13-20020a170906d54d00b006e01f9b5064mr2733192ejc.59.1648078219829; Wed, 23
- Mar 2022 16:30:19 -0700 (PDT)
+        bh=87rv/uQgaWVecbXHJd/b7su5U/noF4SgiLK+NkYo0kg=;
+        b=TLd5q3I8zAywEBEDQEAnEVv2s70xBWO6d+F6snC23i3bLguiGAUqaWAOESMA7gPHU4
+         2RWrIjU8c+tCL1vYiaFeEgHwsnvs1LxBlXnf8fR21AIlN5sK3W/qvCOyVXg9aHPI/dI3
+         hZIpg6VHbk9zljtOyu/j2T2YY13Nt4w120F42admTaSXlPUaS00WJHxtsGUVmVJea6NF
+         HvYyX9dpJVUFL57M8axT9LoccLzKH5xeC3JKA8m0VP7FDGfqw0mhgC9Hme/UyJTICdzF
+         mvJpDIhd7VkPGsQdpTy9EdCno5kSdJ1T7JML/HSRUmKOJJVfqIfSGzl1/IA9cgMUVA7s
+         I8Fg==
+X-Gm-Message-State: AOAM5334nWAsG23OoIbSaDrdpLz6sbwnkzXSaAPvPDGThwg/GKGhJAev
+        kVecyXMjGM/1u++qwADwfRpjbnYaiqtr5mY2eH3w/w==
+X-Google-Smtp-Source: ABdhPJwUs0aMecxyk7WALt/Mr/ajj8mGFKS5P8r4no322FGnq5kojvSreI1EkBgj/yhMbj3WFKZMtYOMfdll/qXGlWs=
+X-Received: by 2002:a17:906:c14b:b0:6da:b30d:76a0 with SMTP id
+ dp11-20020a170906c14b00b006dab30d76a0mr2711895ejc.279.1648078320023; Wed, 23
+ Mar 2022 16:32:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220224055350.1854078-1-keescook@chromium.org>
-In-Reply-To: <20220224055350.1854078-1-keescook@chromium.org>
+References: <20220226212325.2984807-1-dlatypov@google.com>
+In-Reply-To: <20220226212325.2984807-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 19:30:08 -0400
-Message-ID: <CAFd5g47HMRbKOFbANe_kZ8Td4OHxxwDqpszV515uaMzsz9DoXw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Do not colorize output when redirected
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
+Date:   Wed, 23 Mar 2022 19:31:48 -0400
+Message-ID: <CAFd5g4509cBW2_NMatiptB7VjR-Z9Dn83d2f_tZdix2jTzXonw@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: more descriptive metavars/--help output
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 12:53 AM Kees Cook <keescook@chromium.org> wrote:
+On Sat, Feb 26, 2022 at 4:23 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Filling log files with color codes makes diffs and other comparisons
-> difficult. Only emit vt100 codes when the stdout is a TTY.
+> Before, our help output contained lines like
+>   --kconfig_add KCONFIG_ADD
+>   --qemu_config qemu_config
+>   --jobs jobs
 >
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> They're not very helpful.
+>
+> The former kind come from the automatic 'metavar' we get from argparse,
+> the uppercase version of the flag name.
+> The latter are where we manually specified metavar as the flag name.
+>
+> After:
+>   --build_dir DIR
+>   --make_options X=Y
+>   --kunitconfig PATH
+>   --kconfig_add CONFIG_X=Y
+>   --arch ARCH
+>   --cross_compile PREFIX
+>   --qemu_config FILE
+>   --jobs N
+>   --timeout SECONDS
+>   --raw_output [{all,kunit}]
+>   --json [FILE]
+>
+> This patch tries to make the code more clear by specifying the _type_ of
+> input we expect, e.g. --build_dir is a DIR, --qemu_config is a FILE.
+> I also switched it to uppercase since it looked more clearly like
+> placeholder text that way.
+>
+> This patch also changes --raw_output to specify `choices` to make it
+> more clear what the options are, and this way argparse can validate it
+> for us, as shown by the added test case.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
