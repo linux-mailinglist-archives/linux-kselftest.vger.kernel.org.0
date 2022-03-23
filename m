@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF55E4E527B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 13:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAA14E546B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 15:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242778AbiCWMvI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 08:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S240686AbiCWOn7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 10:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbiCWMvH (ORCPT
+        with ESMTP id S229934AbiCWOn7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 08:51:07 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9002978934;
-        Wed, 23 Mar 2022 05:49:37 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 17so1658222ljw.8;
-        Wed, 23 Mar 2022 05:49:37 -0700 (PDT)
+        Wed, 23 Mar 2022 10:43:59 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0F27E0A2;
+        Wed, 23 Mar 2022 07:42:29 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 17so2153293lji.1;
+        Wed, 23 Mar 2022 07:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=nM4ECUsKD86TuX1aebriaMiAFYf1FOMfworhtEK62yY=;
-        b=q4QXZ6ZYBRVEjNXVeG4HyqNr/xsvJ41Yrfq1g3qXiSTGEX/JyAKhQYXsucxBKhrPoX
-         1zALqoDFrlUEazH4Utx9a5idSyhlM5jEkiIx8KAhoiW4MqmaSiooQIrlBuZHBc29Kp71
-         YdInh1dNzHDr6/a+0Iz5PofA7Zmy3jM0BGyS5+pUq9nEy9jHQDPZGwAhU/R1UBr2fn90
-         s14w5/bTh/a70n/j/2g8ScpAjOCveJ2AEywNjgbUN5mTLEcoOepBH10NACleW3L2Enoz
-         33uT5HmvypS9EpSoHduNTMc9H9g0NHv7dBMJIHiR0Pez0K7Mr+MbmNiSjYZOEoG8j34n
-         kCPw==
+        bh=wWoDyk0souHL0BfO892KrxnvBcHbZCjITuRPNjJCS4Y=;
+        b=Eeb2BjBdh6gZ3pn03ILA5hayAMXT+FBZurX2u1TenrsRs3wU+bTV1J/VdkuK8svT4Y
+         limKSOwJZJ/axP0N+N+H3hQZ7LyolpT4nsTFCStFPOlcrFzhxFdPx7ebfzek/lMo1wTa
+         Ix6g7Hc91E3thdxBPN7BrjeBOYteUA2MHCO49nHjC0Qy5LGJ7cJ0efMAiNoJZUbzDSoT
+         tKPOo3i7ZNU2u3zOIMi5aeQLKMwiiIkgPvj19OKrOwR4turxWsmbKHvj3HAn6iF+w4ss
+         38CdsQJJhkMBJyQFSQ8Ugqjab0l98jReUth1lu9lIDLRIpOgLC3xcnIC7qbU3FCqTJuJ
+         DxyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=nM4ECUsKD86TuX1aebriaMiAFYf1FOMfworhtEK62yY=;
-        b=MIvBJeq6W0zQNXCyzVUWrxzer3Q8jDBSuOzOGorxWNRhZtqySQ/5+r5cCy4WhS5i4A
-         QJsw748PgXauLx/GX51lbNTZzXuW3cOIA/cP4APeeZ8Tv9XYLvhdlWG61nmLdu8L/mDe
-         ZfVSpkZou2rctfJK/tOGMGcE+KfE9u4r+Hl/mPvRDkaQpVR+drdSfOzB27qC46WANFWJ
-         yV3k9+DbUhupqTUjiRLfymMfzwdepErW3duAq8SClM17w6eHqceSen+u0XiAALh7azJf
-         gR0nUdM678UCUkpRFv+ica7aF7+ru0w6lOeDcrsAFzhMHiPkBuY95/eil94OoEWAwWwz
-         OGog==
-X-Gm-Message-State: AOAM5320kNbQajfkwXte8e4IX3g4bk63OaQRbe9jgKQLctLrkkW1rbpX
-        46XvaeGL8ZoIADxOoJK2xoXjQMor7/nKGw==
-X-Google-Smtp-Source: ABdhPJxzVlKNn3Jz26qzmOxkGiYvN7hZ1TF3R5fHeuNMvIa8zgMHBmDQdKGFqBG0N1ilCFcXwDnrzw==
-X-Received: by 2002:a2e:944e:0:b0:246:4a4f:c610 with SMTP id o14-20020a2e944e000000b002464a4fc610mr21656073ljh.458.1648039775924;
-        Wed, 23 Mar 2022 05:49:35 -0700 (PDT)
+        bh=wWoDyk0souHL0BfO892KrxnvBcHbZCjITuRPNjJCS4Y=;
+        b=2HG8ZkBChVO2xwxy3mdDXlp+PHI/NG3DoYxKswnQ/xPgd0fWEmdjtCsx72hw+Q+dgP
+         sF6xxsMf0rxfHvvJ8g/U1TbgQ161XnGgSJNXYZK5M2l5Ta2nQedrDKnj3N/MXUzAioch
+         KDwYRI0RhxqtKJBIFl3VVCarKV5Z70izCq30uOdiLeqPY6XqHzfnxpaLRSL8xrs0ylTw
+         2i3ksCg8GkjdybgHfFlMU9avS+5vdgt/t7NoMJx0QPPSDzBqU9nWtaRXHbDekyfQu5eN
+         R+LSOzaqg8bTU1kKlZ2eaysXYmo53AxUDFrVBL2otDr6/7jAjhK98y2ExIruOfiXoy74
+         ovOw==
+X-Gm-Message-State: AOAM533xyr9R5W96y4A5u/vAer6hUYoupuBpy8iSqN0lmNitNRqyqFVl
+        NW3WvOGmpq6444o/hDH4UPhFU2g09O0QDg==
+X-Google-Smtp-Source: ABdhPJyOZPDzNCLStyFd+3QSpZrdrdoNBlBodGlMGwyBzXRLMDkExYS2/X7ys+YlxkePUPOjYsj0lA==
+X-Received: by 2002:a2e:860a:0:b0:249:93fb:f45f with SMTP id a10-20020a2e860a000000b0024993fbf45fmr243185lji.77.1648046547545;
+        Wed, 23 Mar 2022 07:42:27 -0700 (PDT)
 Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id n2-20020a056512310200b0044a30030d33sm905924lfb.91.2022.03.23.05.49.33
+        by smtp.gmail.com with ESMTPSA id 25-20020a2e0e19000000b002495d863173sm17608ljo.61.2022.03.23.07.42.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 05:49:35 -0700 (PDT)
+        Wed, 23 Mar 2022 07:42:27 -0700 (PDT)
 From:   Hans Schultz <schultz.hans@gmail.com>
 X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
 To:     Vladimir Oltean <olteanv@gmail.com>,
@@ -70,8 +70,8 @@ In-Reply-To: <20220323123534.i2whyau3doq2xdxg@skbuf>
 References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
  <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
  <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
-Date:   Wed, 23 Mar 2022 13:49:32 +0100
-Message-ID: <86wngkbzqb.fsf@gmail.com>
+Date:   Wed, 23 Mar 2022 15:42:24 +0100
+Message-ID: <86h77owx0v.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -148,10 +148,8 @@ On ons, mar 23, 2022 at 14:35, Vladimir Oltean <olteanv@gmail.com> wrote:
 > FDB entries learned externally.
 >
 
-It seems to me that something is missing then?
-My tests using trafgen that I gave a report on to Lunn generated massive
-amounts of fdb entries, but after a while the ATU was clean and the fdb
-was still full of random entries...
+How is the mechanism supposed to work to remove fdb entries when ATU
+entries age out?
 
 >> >  	} else {
 >> >  		spin_lock_bh(&br->hash_lock);
