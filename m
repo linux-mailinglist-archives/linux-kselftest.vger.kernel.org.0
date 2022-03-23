@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6851B4E5A7E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 22:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1FA4E5A84
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 22:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240625AbiCWVNz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 17:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S239268AbiCWVSd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 17:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344864AbiCWVNw (ORCPT
+        with ESMTP id S234237AbiCWVSb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:13:52 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B338CD9C
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:12:22 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g20so3364237edw.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:12:22 -0700 (PDT)
+        Wed, 23 Mar 2022 17:18:31 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E2084EF7
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:17:01 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id u26so3349783eda.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7J+zvKOI6x01hl/yYGK7ZfqaUiakMK1iiu9VlloF/xA=;
-        b=KagHArbQWMnC62J5bHWEZLOiF19D7tr8A2cgwfSkmdtoauix6WdHlIAPYdqgzjDYSk
-         TOStz9GWpPOLbQMii4Q3jTOXhqld+Qc/cvFaqno3dtfQNUB1HY34nM+1JowbNE3Pofex
-         L3ZQmtIXd22iHpRSw6b6L2L2YReWb5ramwnElciUhAieMfk83MNluUSRzaYkrWC7rPoe
-         e6bqB4qyoFDEg4ZMZzK7C6R5RkGacJvpiCYWBkt3db6SfyP7dxVI0zrXSVIBc3NurMGB
-         UuZHesTjgAOzMD8dVzVHOu/g+i4sewCyVIbA8yvOOXMpebUXiXbrKNOFgZ4ja8AVu5B9
-         2CLw==
+        bh=n9Hg8/L/wr7RnygS3OokjP5227FjsrevJV37KK/fvWQ=;
+        b=TH81aSeEBrU5nfaLwaLJQAGX3Z6ZLCWH1wdAWIOuywFPVQ0v9G/npRHhAuHnehjEjy
+         9XNqgZIgF5esR6SQqPO3MCQnYhv6HiRf2Z0xmRlgmINvXUVM78eEfc7+S2gGfUnmzxsw
+         oqf7iAE0/gxyxVnDpnnft0UfRWiZOXlhhh/pfwG3vy6cU5NoafG2lPnn1inxnM4JEfgH
+         Gk7Ryx2JYKJb4ZdN5MKkH/rJvrLezgT9cIIWFgWV+WGgorkvsAPb/z/m3PCDLy0WV+jv
+         fyvYtPtCxjVRW/ImZeYsFqOutCVqofDZCtQAcPnH6hwV0JkjsZsuUgcLq1TxTHCCbVLW
+         P42A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7J+zvKOI6x01hl/yYGK7ZfqaUiakMK1iiu9VlloF/xA=;
-        b=X+lV/I9TDWDg1+xvAjcwytANWLDgV4GUysBGp/fM9FPInXl8y+NRVdcjvX8lOimZTL
-         zdNP3s0ogfZbxJzJasPcuSO9dO6zaeHuDs45fz2f+G9RN6fa/ng5NbNr5JnDWWNEs0Qt
-         rSsw8NQyZXKalkXk35pQhFtbAYtBJqyTw93OxPoe2abrEaswcAajYn6cTV7lutNvxYz+
-         MAo4ppJQjpyXTc0bA0mrCXd7OVGl8WEXGmyTTq4aycwZslkZu94IvpYDJBOaC/M1MMNZ
-         sb0Z5PNTmfmra8aV/vN8oyhjQEaKG1nv1PAVh0uER7xDlpKHS/u4aWfX+HFKqVms3q4z
-         xoPA==
-X-Gm-Message-State: AOAM531yCAyb6snOjRnh/gDi3dKgFPtlw5VY4Vp+rCDNM37MuC+RKuF/
-        0Pjm7tdlDW9jQSfPkONAcHnnYSbi9d3Hy1QwxTYX/w==
-X-Google-Smtp-Source: ABdhPJzClDGT0PomJaUcrNzKQb8hBK8bHF37apCaIpgGtSLAW0/s+R3CPsO0GPmqFDpgLUEOM9ZsBpCvYKeaA3IwT8Q=
-X-Received: by 2002:a50:d949:0:b0:418:ecfe:8c25 with SMTP id
- u9-20020a50d949000000b00418ecfe8c25mr2709073edj.156.1648069941134; Wed, 23
- Mar 2022 14:12:21 -0700 (PDT)
+        bh=n9Hg8/L/wr7RnygS3OokjP5227FjsrevJV37KK/fvWQ=;
+        b=jFaCWsNS3OVebEtagwFp4n4mntZW6kK40tXecjoCjHdhg7O9IypV4nOfueLNPsLIQU
+         2SONtIWjkT/DTm4yVD0X0IupvFpSMRdn9NIsO16xb1VOwRDBu9GPkRQ885w1fP6cu2+v
+         N9E3FXxqtNOswWDAnz4Ukw9baGWWGVF7oC9tkqBqA3ome2FB2Cp40O1GBWYGM8OMz7P4
+         qxHbmjzHiR5mmxeeER9WQAu9xyyn0Sy7dOmlalDX2k4Oz5pVz8GVlm7p1VwemRmgjMdz
+         ShLHku41f2Ps09X7k0CgJmxsNTwGOjJQ9eQSEdl6dA4QvCp8UlbOmTzu2Pjz6mAdLcqh
+         +WeQ==
+X-Gm-Message-State: AOAM5336rZTc6pDdLL6dVtDsJ7y/Tn8Nca0jt+iRfInDK57zSs1aDNFw
+        QgSxfgXLpm/jDOmiw9Il/yQnm1nITed/Ybo1DWilLw==
+X-Google-Smtp-Source: ABdhPJytjdt/Dnc34nGkK+GF4EYRFsgt2UIzCvzSliu9yZHaHhWUZv0wOtzGiwGig0xtblWnqhcajp1UVm2CNnz8vjk=
+X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id
+ ds1-20020a0564021cc100b004132b12fc49mr2750389edb.118.1648070220127; Wed, 23
+ Mar 2022 14:17:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220211164246.410079-1-ribalda@chromium.org> <20220211164246.410079-4-ribalda@chromium.org>
-In-Reply-To: <20220211164246.410079-4-ribalda@chromium.org>
+References: <20220211164246.410079-1-ribalda@chromium.org> <20220211164246.410079-5-ribalda@chromium.org>
+In-Reply-To: <20220211164246.410079-5-ribalda@chromium.org>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 17:12:09 -0400
-Message-ID: <CAFd5g450=jBk51-4wMBxEA+VVQnOyxqtF5WV-J0dCW3j-eAfkg@mail.gmail.com>
-Subject: Re: [PATCH v6 4/6] kasan: test: Use NULL macros
+Date:   Wed, 23 Mar 2022 17:16:49 -0400
+Message-ID: <CAFd5g46fAbfgWdJD5Fcjn2v3nnQ0d_qXqQBZ_Cuk7WqRLnzEpQ@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] mctp: test: Use NULL macros
 To:     Ricardo Ribalda <ribalda@chromium.org>
 Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org,
@@ -71,7 +71,8 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, Feb 11, 2022 at 11:42 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> Replace PTR_EQ checks with the more idiomatic and specific NULL macros.
+> Replace the PTR_EQ NULL checks wit the NULL macros. More idiomatic and
+> specific.
 >
 > Acked-by: Daniel Latypov <dlatypov@google.com>
 > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
