@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292814E5A04
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 21:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468F64E5A11
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 21:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344774AbiCWUqG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 16:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S240723AbiCWUr7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 16:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344699AbiCWUqF (ORCPT
+        with ESMTP id S240685AbiCWUr7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:46:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2952317E39
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:44:35 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bg10so5271416ejb.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:44:35 -0700 (PDT)
+        Wed, 23 Mar 2022 16:47:59 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9268CCC3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:46:28 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id t1so3301641edc.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:46:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fku+6iImykDpE+CdH3YcTn8A/1C3dv28NZDezDdlHeA=;
-        b=rimwbpV92tuw99iYIZcPP347gpbCZyZKY7+HLhuMNjxqBEIUJGedYOaKWL8CI0zcSk
-         vOvurYQQum/fciyrg2WsD7KRdnRN+pzyneThjc5hZ4p9KDQDjUebNPa79cw/O9ozgLDp
-         Xpx0l5+IGUamRixms2I6vIeLiwe2x5bynRPuvNsf0deVj9wqEHDUfNnJZ4XuLEuj4P0a
-         7hZSB07TRVp/DXAvi9PttVy1r+lhb5gU36RkkslV7ZcBHZ3fRi7KfYhodu9VYeqBivYX
-         PcYIHKbjf1soCUSz2Z9y0OcvGrWzlU4lPgxesOi8bu2G6ItZi5AFOCcH+eeSON/HlZK2
-         MmFA==
+        bh=WH60uTSBbbOblHqK28xy9BTYXyukYPb7J6N0+vdiNIg=;
+        b=V+aiWhUweR0uDl/dkvdsvI2w069p2RxAa2gDCtul9NOQOypsbChwl5HeM48HJoMX/J
+         Y8ffKwIkmFoAIWRdFFKKzjBYZnPA9gvI8+U5SuXTQsPz4rg7Mg1klnAoAjKQaR7hsz7N
+         yq1CPq+Ezu4xRXwn8uMjypx2yGY8iWx0H/MsH3Q6DA0crd9T8RQiX6y1igswnhAOpVOZ
+         4W+q45BkXoNGMrBinkYQY7+Kl4/6/AXy9DRA/iCk3zuqgOqdFlAlCdq6ot5NqyUs97xg
+         XatSI8ykI1t1D/pSf4dAJfCOISyh+Nd5TYlvxr1CtRLDQuyd4REgeOYH+2MjlBNSps3T
+         8Nzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fku+6iImykDpE+CdH3YcTn8A/1C3dv28NZDezDdlHeA=;
-        b=1GpxFB2pvmXvME0cAwr7ztLuZK9KmVFFuUDJ9jsDCDz0SKYAmLMLHlmBSbaZBwERjY
-         1kRPg+I2bUIZ9FbQxUlz1+KBMjcVSRpH/yr+i85JdPrMNcXqf85dADUKVsSCYzCySFFe
-         K8iimdlUQlL1uH6ILC32cEqydNzbMxzCp4DoCKr5TiflfZZ86cEeDmjl/DjjvcIBRRi1
-         bAFA1JjvL2FB2nCCMBMsFnbzkqcEbnrBA0qiGKwxOFPGVACRxe04ywJbcu73BBneNkOc
-         aN9VSwL97ZPNT8QkRf6ShzCcPoJOzbbC3fjdrJf4l2vmMnk9/mI4+W6ipqS7cQy195mX
-         hQYg==
-X-Gm-Message-State: AOAM5325TuAgNrfUEjnYglNEcwQNvV911ZcDKCmkWVakZ1WgMBW3mAe7
-        UJxnyRrqSPt25fGEiDwyOdI+JhRLQGU4XByLA0vgtCH/WBsKdw==
-X-Google-Smtp-Source: ABdhPJzbgI6L52aqCemnXWTbsdkQBP6+95otwHdTetv5DDL4bb/WZyoNa0gq2syjMy8NySL4wZvNGMiG7HH+7xh7pL0=
-X-Received: by 2002:a17:907:c018:b0:6df:e31b:d912 with SMTP id
- ss24-20020a170907c01800b006dfe31bd912mr2121035ejc.196.1648068273445; Wed, 23
- Mar 2022 13:44:33 -0700 (PDT)
+        bh=WH60uTSBbbOblHqK28xy9BTYXyukYPb7J6N0+vdiNIg=;
+        b=T9vmXa1ZFis3c453D1hTWyg66N/eAgkEyjOjPtrYvwQFZ1zR+pO6TzFVipEDkwNR8Z
+         90P7bYWko67LjpurFxk31QGfr5/ZhFUmIzK0FUALtihNyMml9coVl2YvBlHItY3j+w26
+         dU50G/XJ4lWSnY01jUfqjWDSqYA0bM/WEyR3+onbcqIqZSQndN7MUBBLnYbTtWgF58Rf
+         LOjJfGueDl2OJCsSuH6EbP+e8RvapLKroBgg2rDK5dflVWQ5skj6REXDgjtCsL0/fpHw
+         HBqzABtwpduTqaDk+1QdIreb/pW9JxjRDRJFHSMOrv0dPCiFobExoRHruMXtmRz0r4I8
+         tsqA==
+X-Gm-Message-State: AOAM532rG2So3n0TJrS0HvFgXn9gS3m4XLS+tFpaZ/kn0K+ZGxY5SyKs
+        sFdghvyOjPY8VnROgLHrCFwOvbCQkgvVoaVLZQsrej3Ddd5h8Q==
+X-Google-Smtp-Source: ABdhPJy77sNORI3m8k2PJgQY3pDKoHxiiTbX9XZazuPm54n83EGDgu7uSzqSespg9TStnSHPWUj8ALumLBYLVEvv730=
+X-Received: by 2002:a05:6402:4388:b0:419:443d:b4e9 with SMTP id
+ o8-20020a056402438800b00419443db4e9mr2571260edc.149.1648068386447; Wed, 23
+ Mar 2022 13:46:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-2-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-2-dlatypov@google.com>
+References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-3-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-3-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 16:44:21 -0400
-Message-ID: <CAFd5g44Er-cy=uRENk3Myc_Hq1H9uxqWOzQ7A+3+F4_rU8DezQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] kunit: tool: make --json handling a bit clearer
+Date:   Wed, 23 Mar 2022 16:46:15 -0400
+Message-ID: <CAFd5g45gOMb4URpgiS4RKmWsoN7auvejM7gfTY2MrpVidKkbyA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] kunit: tool: drop unused KernelDirectoryPath var
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
@@ -61,7 +61,7 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,10 +70,11 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Jan 18, 2022 at 2:09 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Currently kunit_json.get_json_result() will output the JSON-ified test
-> output to json_path, but iff it's not "stdout".
+> Commit be886ba90cce ("kunit: run kunit_tool from any directory")
+> introduced this variable, but it was unused even in that commit.
 >
-> Instead, move the responsibility entirely over to the one caller.
+> Since it's still unused now and callers can instead use
+> get_kernel_root_path(), delete this var.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
