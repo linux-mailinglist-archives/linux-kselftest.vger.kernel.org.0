@@ -2,60 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC584E5A52
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 22:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B421F4E5A78
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 22:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240859AbiCWVFu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 17:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S240886AbiCWVLk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 17:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbiCWVFu (ORCPT
+        with ESMTP id S240625AbiCWVLk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:05:50 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7473D11C1C
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:04:18 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id dr20so5344652ejc.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:04:18 -0700 (PDT)
+        Wed, 23 Mar 2022 17:11:40 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACC466CBB
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:10:09 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id r13so5370262ejd.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 14:10:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=96OPHRtjpLUkzMKOmZHTFwbJz5Jyl9hyIas7RLYSw4Q=;
-        b=Y031F6hf2sWxJzVczsI6DwN15K/fScPKXLhbWHFfYBi5upYSFMRNec8Mbc4WSNARgG
-         4sqVpLnuoG2DGIOHvH8mL3diB5NIeN+mwoDHLMhIHicZa7/WmLnePbKJOMCYQeyBnksJ
-         zXeVrIYCMBR8bHLbJfOgZ3nIXkjF0DkkmiA+K8Lbyw2184VsnpUDPLqIUWX3fJN8OIpw
-         oLIOpj707wDyyb05BnFgblOUt6Qy7S5VXF01Au9UWWc+bnH/xymFEue+2j8Yms2aRMAp
-         gseQ5FsJr12DGqdxxWBNrjOJbAYM+NK4NRYB1e2bbFfxyA0StQlKn9rt7pBAoOqeH4zq
-         nHYg==
+        bh=ZfhZGToUySyQoBAAzoaBItg7GXPjMEwgO7XHu6m15vo=;
+        b=oTaYHuj6z4VlIdVrvz4in+OweaQ1aB5G22a02LB3zbxBxaial1xxJazofKO/pEcfz/
+         +BXQTViVzjYvu51EW1xPKPz2YZnGmaD0Olarex25MrFsS+wxDzXnxsr6UmxDGbz5/41f
+         M0OqCt0v7rWX3E+1irUJqceHYflxTGtVDzOehfjnQOHbNMML0j1bq1AzTTCmnabROg+k
+         koycr/Xiq1lxmYxVmLh3jq0lv8dolD07i4X100kNrUHztguacN0E1uzJOfZNt/dIV4a5
+         8PYxVdJx4ewa9P8Ga2ZTwDw+SB/V/5loxYn48Zr9v50nYGhDHQgI4zoO2bfF6B9BniB0
+         RoQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=96OPHRtjpLUkzMKOmZHTFwbJz5Jyl9hyIas7RLYSw4Q=;
-        b=pvUQm+b6Ac2xZrfRCXdpsTiowRxdcmPF5QeJlsrKNGVJf+bvemja0rU5d1yTphjY7d
-         A+Kq5DU8dhocpWM9SoX3XODddaM+eTsVguTDNarHyv7P2nkUWorUyE5ZBV5hcuSuzLhF
-         CqpuyOapWm4Q9xvXYS5IdYd0tc91hU7f241IWOVfKLF1Kl+lLY4MsnLeBtfGNN2qcj2X
-         uP3BSdWEjlkdXe7YviToG9n856n4xULvu1bDo7ekTjgmXdjP2Pnl6lMsi2sBIuq/lErV
-         IfylijQkrbmPbGc3W6AyyAIUKHfzhtdxWKERIoX0fsInEg26mvhSexJ3KnZUahtel5xS
-         3tZQ==
-X-Gm-Message-State: AOAM5332tm+IsqG3f3Xx3jcttySA+iu2hVW6djvbhdnnuUP9YTQy6I9T
-        ZhTlL+zPm1XVyKM1e6RRs8AN7+YaUH41E9SG+9LaHQ==
-X-Google-Smtp-Source: ABdhPJzdu0So/JbbLp6MeXfrKuRthxofNbACLCTnpUvfS7ucyWSPfllgGv30FdGrNnTR49ZFPKiqvjn2qeHRG4voyBw=
+        bh=ZfhZGToUySyQoBAAzoaBItg7GXPjMEwgO7XHu6m15vo=;
+        b=L3e32hUO8ookzlB+nQjPIfUkJ3RF4YnUkopkHniRJO50aEuVVu30COSiCtZ8+bCV+i
+         RvygCBSITskr7WCs1MBfhWgfMQZKSOMAlrAih+/71Z69nF9uegpW4FuZjV/93L6U3iQQ
+         FUnO+2xtB4PTrex8Qcex49ODIW4DuUT7YxVHyNierLflFL6HnyQRGpEOOw9ujgSzi7eA
+         IghuGONuYhjnFkkCaARpQ/FnDtWIxGtcR0GlTtawDmM0yInvMdWMC/sPZRI0YrJHS3t6
+         giSJI/tN4fpoo7MUQ6cI31xs8AF0gfTtyL5ljVYsxXGYeubM6K0H/b/+0vEXm1JEu+f4
+         N0rw==
+X-Gm-Message-State: AOAM5331qZ0nsAq0BStUb/8r3UKzhCJqJpGCCGdI5QXEADsvVOPfgPBv
+        qyltsk6kN00XHhjtY+kW0MDBTLCe1eakEqbDUgN3SA==
+X-Google-Smtp-Source: ABdhPJyE+u1EafGrU6LOqybdc98qkgtGQW9zc59eSn5dvWoEWW3X3gvp838MWC0NqNsJtL3kM5bm7ai6tTn2yPkVs7o=
 X-Received: by 2002:a17:907:c018:b0:6df:e31b:d912 with SMTP id
- ss24-20020a170907c01800b006dfe31bd912mr2204489ejc.196.1648069456760; Wed, 23
- Mar 2022 14:04:16 -0700 (PDT)
+ ss24-20020a170907c01800b006dfe31bd912mr2229796ejc.196.1648069808337; Wed, 23
+ Mar 2022 14:10:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-5-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-5-dlatypov@google.com>
+References: <20220211164246.410079-1-ribalda@chromium.org> <20220211164246.410079-3-ribalda@chromium.org>
+In-Reply-To: <20220211164246.410079-3-ribalda@chromium.org>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Mar 2022 17:04:05 -0400
-Message-ID: <CAFd5g47vptm6c0x+sbUpYTgNL6viH2Yj8k8GMG=WKN2A6eTA5Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] kunit: tool: simplify code since build_dir can't be None
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+Date:   Wed, 23 Mar 2022 17:09:57 -0400
+Message-ID: <CAFd5g444yDukdiegQW-H1kV1uaRYCzoX55WHoewHx6KTOa5DEw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] thunderbolt: test: use NULL macros
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -68,23 +69,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 2:09 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Feb 11, 2022 at 11:42 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> --build_dir is set to a default of '.kunit' since commit ddbd60c779b4
-> ("kunit: use --build_dir=.kunit as default"), but even before then it
-> was explicitly set to ''.
+> Replace the NULL checks with the more specific and idiomatic NULL macros.
 >
-> So outside of one unit test, there was no way for the build_dir to be
-> ever be None, and we can simplify code by fixing the unit test and
-> enforcing that via updated type annotations.
->
-> E.g. this lets us drop `get_file_path()` since it's now exactly
-> equivalent to os.path.join().
->
-> Note: there's some `if build_dir` checks that also fail if build_dir is
-> explicitly set to '' that just guard against passing "O=" to make.
-> But running `make O=` works just fine, so drop these checks.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
