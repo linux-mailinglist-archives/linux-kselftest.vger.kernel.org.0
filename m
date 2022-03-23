@@ -2,116 +2,275 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A374E54C9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 16:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99DE4E5606
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Mar 2022 17:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245027AbiCWPFV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Mar 2022 11:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S238448AbiCWQKM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Mar 2022 12:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245028AbiCWPFT (ORCPT
+        with ESMTP id S238403AbiCWQKM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 11:05:19 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5F281661;
-        Wed, 23 Mar 2022 08:03:49 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id r22so2241112ljd.4;
-        Wed, 23 Mar 2022 08:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=NLLuXYwkRNkVyFDY51FXyNkaCFkba+6fr2X11U+G9DE=;
-        b=YRs40Gj0HQMshTwfj0Y/+Jq+4v31gsdfBF16Dg9Cp4Tv3TtN42HlSBHk4V2d5f7ldX
-         PvE6gw0UlWv2VEcHw47aT25u7AEt2DyrIO03eKXeJRwRYKF64NSn1qkfPTSKqAz1dVXi
-         Iel+0wgbe3azPvZZXdopxJ72zUdTaMwjTPWAO0of/dKZRmUsdOsWe5RJ2EjGW1LK3kUL
-         Vhgh+0P5ZkdRbngfjnhq7XC9eHMLvo3HUlkWxSEzVVn4O4xSHrDBqDksPFty/DmO+QoO
-         tj+l/aPSWR3VYcluOcmitwH+cC4g0LMfvpX7UO/NJPjlm2HSk/GugBhwZI6e3hyf4zei
-         BMsQ==
+        Wed, 23 Mar 2022 12:10:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 319702D1EA
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 09:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1648051720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jojw5f7wnm9EHe+O1hZXC5y0oSm+5NVhYv4rzpOxMAw=;
+        b=XtvX8PJjdkUpd5aN+xHXH2kxNaBCgb6l1XZfDne31/qfpIhy5Bc19lNqKlJzCvfJOgU5Ul
+        2q6W5kIPGnuBYLEeirAjhjNL8aPWw46vwiiaYd3l9ZsMWIUoUJyzl9WrLPupb1m98Z8Ime
+        rMnyNqzD9mHnl766SH8pKZd0zxrzmq4=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-yOPW0dgvMF6RK2VuynLHkA-1; Wed, 23 Mar 2022 12:08:39 -0400
+X-MC-Unique: yOPW0dgvMF6RK2VuynLHkA-1
+Received: by mail-pj1-f70.google.com with SMTP id w3-20020a17090ac98300b001b8b914e91aso1352880pjt.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 09:08:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=NLLuXYwkRNkVyFDY51FXyNkaCFkba+6fr2X11U+G9DE=;
-        b=3l8WB/d5KGMU7roUfgUwsFcfEu2ScyMVrnmoYmujYw+z4247ZqPxIpBjzYCfF+up0R
-         klFLdwXpn6eMO6bHvmmxY5gbmURV0JjGyDNgverQXxxEYQd3+nIPh6ZKcgm0M7TW/Tdq
-         J95kYU7U889q3KSpzxtN8JoCgva0bhkbR0hV2MMeDqWZx3gVRx3jkUXqlsk/oTws83vf
-         EH3025lpekfOWPaIRcsnZZMNEpdl+wygLPqx8c9ZQxblzNRJmVghFdZnbfDxV6w6WYSE
-         2qad41ysMhm53AhTktmCikhKRkHv5PhqzXULuQ5WyWjSKgglTE5Z7uBgDHSuOPYngxv+
-         v9tA==
-X-Gm-Message-State: AOAM532Vfan+1xcESx5UZZ7PE0ooEtXs8JTvWrrjnR8C0MgNU9n2NLTC
-        Y6Bu2H4uHQ3rDB8MH9cu0LBawvucXoxbqQ==
-X-Google-Smtp-Source: ABdhPJy0XQ28+VtrhdgFCZAFvWjTQlsczCuWe+fu8QEBcCgfGJlmPu4hBcpBggIIQ5nC2+CRlpGAAw==
-X-Received: by 2002:a2e:a7ca:0:b0:249:862b:525 with SMTP id x10-20020a2ea7ca000000b00249862b0525mr301404ljp.491.1648047827365;
-        Wed, 23 Mar 2022 08:03:47 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id p7-20020ac24ec7000000b00443d65ea161sm13170lfr.291.2022.03.23.08.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 08:03:46 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
- offloading of fdb locked flag
-In-Reply-To: <20220323144304.4uqst3hapvzg3ej6@skbuf>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
- <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
- <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
-Date:   Wed, 23 Mar 2022 16:03:43 +0100
-Message-ID: <86ils4vhgw.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jojw5f7wnm9EHe+O1hZXC5y0oSm+5NVhYv4rzpOxMAw=;
+        b=oFN2s2s2dgELg+796B94qONhD1UV4vsDIBoy+1c2PF2bYD//Mdt+ZGxWE/38vqLsyX
+         PYLmHqZ5cB/QclAKevG9OZxEgDyENMKeHiXFV1X0NEUzE9hoJYbUU+j/9nHFbLCbPBQ+
+         1TOSMSEopOmIoOvKlqY6hq0Y6qaGVDp8rND0TUQoko1T28Qotjbg+C/YemwOQTwMPwbv
+         Erkrfv4NhnE1CfOA9BrqpT7PpMN1oPqdSugmvavCk7hQhy0KuhJTQ5sg+3XV08PrmitB
+         uQ46eAGk5kpopSqk3dTsOSMJF7aPgPxwOAR7RZHjl/rGj8EgWn0aI4+w/f3JOyfKAuKq
+         rhqw==
+X-Gm-Message-State: AOAM533kroiEfkezEhL2UE/samjwA0OvFpms7+fY2T086X/IqLKcyHCR
+        WikvGrViow1EmlWCyyJvZGCFF81Z8fzQo63GIXGjjayWeVSG/EE1i3zMZdQ2oWI3jZeR6jbmQed
+        JN01uBa+5eaKStj2OFE0DM4MW5XGOxva8g+YIFYk6wpIW
+X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id h2-20020a056a00218200b004fa6d20d95dmr255503pfi.83.1648051717800;
+        Wed, 23 Mar 2022 09:08:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwXs0W2sqJvvyH5rSFI3YPUX3kkRaojzc998a5Iv1JVOvvGHml++AVdio6zxhwzppY5Sd1fQUrROiDnPqcnr1E=
+X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id
+ h2-20020a056a00218200b004fa6d20d95dmr255474pfi.83.1648051717452; Wed, 23 Mar
+ 2022 09:08:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 23 Mar 2022 17:08:25 +0100
+Message-ID: <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
+ descriptor from an eBPF program
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On ons, mar 23, 2022 at 16:43, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Wed, Mar 23, 2022 at 01:49:32PM +0100, Hans Schultz wrote:
->> >> Does someone have an idea why there at this point is no option to add a
->> >> dynamic fdb entry?
->> >> 
->> >> The fdb added entries here do not age out, while the ATU entries do
->> >> (after 5 min), resulting in unsynced ATU vs fdb.
->> >
->> > I think the expectation is to use br_fdb_external_learn_del() if the
->> > externally learned entry expires. The bridge should not age by itself
->> > FDB entries learned externally.
->> >
->> 
->> It seems to me that something is missing then?
->> My tests using trafgen that I gave a report on to Lunn generated massive
->> amounts of fdb entries, but after a while the ATU was clean and the fdb
->> was still full of random entries...
->
-> I'm no longer sure where you are, sorry..
-> I think we discussed that you need to enable ATU age interrupts in order
-> to keep the ATU in sync with the bridge FDB? Which means either to
-> delete the locked FDB entries from the bridge when they age out in the
-> ATU, or to keep refreshing locked ATU entries.
-> So it seems that you're doing neither of those 2 things if you end up
-> with bridge FDB entries which are no longer in the ATU.
+Hi Alexei,
 
-Right, there was much that needed my attention, so after the other
-issues are taken care of, I can focus on this. So I thought there was
-some general machanism in place already, but I see that Ineed to enable
-the IntOnAgeOut interrupt and handle ATU age out violations.
+On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+> > +{
+> > +       int ret;
+> > +       struct hid_bpf_ctx_kern ctx = {
+> > +               .type = HID_BPF_RDESC_FIXUP,
+> > +               .hdev = hdev,
+> > +               .size = *size,
+> > +       };
+> > +
+> > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
+> > +               goto ignore_bpf;
+> > +
+> > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
+> > +       if (!ctx.data)
+> > +               goto ignore_bpf;
+> > +
+> > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
+> > +
+> > +       ret = hid_bpf_run_progs(hdev, &ctx);
+> > +       if (ret)
+> > +               goto ignore_bpf;
+> > +
+> > +       if (ctx.size > ctx.allocated_size)
+> > +               goto ignore_bpf;
+> > +
+> > +       *size = ctx.size;
+> > +
+> > +       if (*size) {
+> > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
+> > +       } else {
+> > +               rdesc = NULL;
+> > +               kfree(ctx.data);
+> > +       }
+> > +
+> > +       return rdesc;
+> > +
+> > + ignore_bpf:
+> > +       kfree(ctx.data);
+> > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > +}
+> > +
+> >  int __init hid_bpf_module_init(void)
+> >  {
+> >         struct bpf_hid_hooks hooks = {
+> >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
+> >                 .pre_link_attach = hid_bpf_pre_link_attach,
+> > +               .post_link_attach = hid_bpf_post_link_attach,
+> >                 .array_detach = hid_bpf_array_detach,
+> >         };
+> >
+> > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > index 937fab7eb9c6..3182c39db006 100644
+> > --- a/drivers/hid/hid-core.c
+> > +++ b/drivers/hid/hid-core.c
+> > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
+> >                 return -ENODEV;
+> >         size = device->dev_rsize;
+> >
+> > -       buf = kmemdup(start, size, GFP_KERNEL);
+> > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
+> > +       buf = hid_bpf_report_fixup(device, start, &size);
+>
+> Looking at this patch and the majority of other patches...
+> the code is doing a lot of work to connect HID side with bpf.
+> At the same time the evolution of the patch series suggests
+> that these hook points are not quite stable. More hooks and
+> helpers are being added.
+> It tells us that it's way too early to introduce a stable
+> interface between HID and bpf.
+
+I understand that you might be under the impression that the interface
+is changing a lot, but this is mostly due to my poor knowledge of all
+the arcanes of eBPF.
+The overall way HID-BPF works is to work on a single array, and we
+should pretty much be sorted out. There are a couple of helpers to be
+able to communicate with the device, but the API has been stable in
+the kernel for those for quite some time now.
+
+The variations in the hooks is mostly because I don't know what is the
+best representation we can use in eBPF for those, and the review
+process is changing that.
+
+> We suggest to use __weak global functions and unstable kfunc helpers
+> to achieve the same goal.
+> This way HID side and bpf side can evolve without introducing
+> stable uapi burden.
+> For example this particular patch can be compressed to:
+> __weak int hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+> unsigned int *size)
+> {
+>    return 0;
+> }
+> ALLOW_ERROR_INJECTION(ALLOW_ERROR_INJECTION, ERRNO);
+>
+> - buf = kmemdup(start, size, GFP_KERNEL);
+> + if (!hid_bpf_report_fixup(device, start, &size))
+> +   buf = kmemdup(start, size, GFP_KERNEL);
+>
+> Then bpf program can replace hid_bpf_report_fixup function and adjust its
+> return value while reading args.
+
+I appreciate the suggestion and gave it a try, but AFAICT this doesn't
+work for HID (please correct me if I am wrong):
+
+- I tried to use __weak to replace the ugly struct bpf_hid_hooks
+
+This struct is in place simply because the HID module can be compiled
+in as a kernel module and we might not have the symbols available from
+kernel/bpf when it is a separate module.
+Either I did something wrong, but it seems that when we load the
+module in the kernel, there is no magic that overrides the weak
+symbols from the ones from the modules.
+
+- for hid_bpf_report_fixup(), this would mean that a BPF program could
+overwrite the function
+
+This is great, but I need to have one program per device, not one
+globally defined function.
+I can not have a generic report_fixup in the system, simply because
+you might need 2 different functions for 2 different devices.
+
+We could solve that by auto-generating the bpf program based on which
+devices are available, but that would mean that users will see a
+reconnect of all of their input devices when they plug in a new one,
+and will also require them to have LLVM installed, which I do not
+want.
+
+- for stuff like hid_bpf_raw_event(), I want to have multiple programs
+attached to the various devices, and not necessarily the same across
+devices.
+
+This is basically the same as above, except that I need to chain programs.
+
+For instance, we could have a program that "fixes" one device, but I
+also want to attach a tracing program on top of it to monitor what is
+happening.
+
+>
+> Similar approach can be done with all other hooks.
+>
+> Once api between HID and bpf stabilizes we can replace nop functions
+> with writeable tracepoints to make things a bit more stable
+> while still allowing for change of the interface in the future.
+>
+> The amount of bpf specific code in HID core will be close to zero
+> while bpf can be used to flexibly tweak it.
+
+Again, I like the idea, but I clearly don't see where you want to go.
+From what I see, this is incompatible with the use cases I have.
+
+>
+> kfunc is a corresponding mechanism to introduce unstable api
+> from bpf into the kernel instead of stable helpers.
+> Just whitelist some functions as unstable kfunc helpers and call them
+> from bpf progs.
+> See net/bpf/test_run.c and bpf_kfunc_call* for inspiration.
+>
+
+I also like this idea.
+
+However, for hid_hw_raw_request() I can not blindly enable that
+function in all program types. This function makes the kernel sleep,
+and so we can not use it while in IRQ context.
+I think I can detect if we are in IRQ or not, but is it really worth
+enabling it across all BPF program types when we know that only
+SEC("hid/user_event") will use it?
+
+Also, I am not sure how we can make bpf_hid_get_data() work with that.
+We need to teach the verifier how much memory is provided, and I do
+not see how you can do that with kfunc.
+
+Cheers,
+Benjamin
+
