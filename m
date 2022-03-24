@@ -2,128 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0667E4E626C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Mar 2022 12:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246474E6290
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Mar 2022 12:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245354AbiCXLZT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Mar 2022 07:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
+        id S233498AbiCXLkY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Mar 2022 07:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236913AbiCXLZR (ORCPT
+        with ESMTP id S231537AbiCXLkX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Mar 2022 07:25:17 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141173ED1E;
-        Thu, 24 Mar 2022 04:23:45 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h11so5711030ljb.2;
-        Thu, 24 Mar 2022 04:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=zbdwVgmEzDHA4WNpeMf8bwrU5wjzXUixO+mPzgyLSZI=;
-        b=UpFKoE+XZn1XgesQCFLWG+c4rStcpUK9jHmSYwU5uRzUVpZXQnBJDo+rMH+3h7n/12
-         72ptiKgHeuDJZPiu6fwyPB26xc0C2Vs/ZeE3hjWjx4SM3AC7FhLRs2j+5pwfeHhuSiaA
-         KBG2+6ngx4lRKZLxTRkgJG5JrySYO5rMXWM1nCC+hXprBjkk7l144WjsfcQaZ/bwMyPv
-         BDpy0tIM0YCzILV5Nlnces8sVUAIrtdezsexH7cu9PR2YPfcRRdpb3gYTOlzxC7FohSq
-         6dOVBzI0kiyYFTd5biaLHNaRmOLpy1HsIg2L13+u6BaSTot8UcrGL0UCPAbu2iZOn01X
-         Q9SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=zbdwVgmEzDHA4WNpeMf8bwrU5wjzXUixO+mPzgyLSZI=;
-        b=0zNy0KM9qMggpMH1SmCXfAK3mvNw+mF0BP7x0bwYgUWp2YzQXaab5tZfgFHEzZj3lD
-         xoFuUAUugceJ9DdZLOnsIRn8lLbTr+i3bRW+6Km6T6HC5IR3EOdBWUMkDIRQm9I7js3f
-         9dUC4qesLdVkVX9o+29kE/691BjCpw55aUYody6gBPKS9vtbbj028A1JmPM6mmKFWFz1
-         aDPQWyF//EGllCSqNwEZGjByMjxQLk9HCKYZiETSq3i9fLYKHy9D335wyWEQyjXo+2mN
-         R238jnAowPHRYiDJSiPD+nR85fG9D+gXeTb4tmh1+g96Yt1IuKyVGLCPzLEcxO3JJWYE
-         8evw==
-X-Gm-Message-State: AOAM532FSH1qnruBjeLWHt7bUUkWbpDKfiOPoL20LkibB+v4vsaSzV1M
-        +ZzvUzBl8yQ4qY4y4tuaFa6BVSHCHZDIAgET
-X-Google-Smtp-Source: ABdhPJzUbdvFK0PzuPbcYo1YnvFUJKYjAXVakppqx3v8jhG8emZHBuIPJU6uBBIjOEdMZeQZ+8rh0w==
-X-Received: by 2002:a2e:8547:0:b0:248:b0a:bc45 with SMTP id u7-20020a2e8547000000b002480b0abc45mr3774397ljj.271.1648121023224;
-        Thu, 24 Mar 2022 04:23:43 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id i6-20020a2ea366000000b00248073ae9a2sm311183ljn.84.2022.03.24.04.23.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 04:23:42 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/4] net: switchdev: add support for
- offloading of fdb locked flag
-In-Reply-To: <20220324110959.t4hqale35qbrakdu@skbuf>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-3-schultz.hans+netdev@gmail.com>
- <86o81whmwv.fsf@gmail.com> <20220323123534.i2whyau3doq2xdxg@skbuf>
- <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
- <86lewzej4n.fsf@gmail.com> <20220324110959.t4hqale35qbrakdu@skbuf>
-Date:   Thu, 24 Mar 2022 12:23:39 +0100
-Message-ID: <86v8w3vbk4.fsf@gmail.com>
+        Thu, 24 Mar 2022 07:40:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E8950E1B;
+        Thu, 24 Mar 2022 04:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648121931; x=1679657931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3tsCmgC6U00CO6K3RhtJOUWh8jRiqevIzhkyWbUV+Po=;
+  b=Iq4EqoTdcfznxYQziJL9j8T77wZRQyDp295S+4wt4xxPTPY25oOgF5+p
+   c3GPeLryvmpfxULCZfeSRHImz2UZI8U2qq2r80IjeB0suLjBRCFNsmevp
+   Z/tOPZb5v7ed83pjKcSr3iBFB20YFBJ+IYZ2j0jVI2Ky69rr799jkOwKE
+   MHFWyHFy6qlWYARGXXm1cGBtTFald8lh+ZdD3rgsUrx6lwhalcVejLbOl
+   Hhuwq8GqAMHPnJ5pM4udzHHweG93Afgr1WaijGWHsR4w8+txKtWJY9ar+
+   Zfv8oo+87/THZrwcweuufidKL9pXzLcWq9X/mx3VUjeO5rhRBkQLmU3Mm
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="258541675"
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="258541675"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 04:38:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,207,1643702400"; 
+   d="scan'208";a="544607394"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2022 04:38:48 -0700
+Date:   Thu, 24 Mar 2022 19:37:13 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v8 1/1] selftests/x86/xstate: Add xstate test cases for
+ XSAVE feature
+Message-ID: <YjxX6dnTTQD+Rq9C@xpf.sh.intel.com>
+References: <cover.1646999762.git.pengfei.xu@intel.com>
+ <4268a0203fd6e42a31bde3254ee50dd93fd233ea.1646999762.git.pengfei.xu@intel.com>
+ <eb0c4940-569b-656f-424c-4248929cc74c@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eb0c4940-569b-656f-424c-4248929cc74c@intel.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On tor, mar 24, 2022 at 13:09, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Thu, Mar 24, 2022 at 11:32:08AM +0100, Hans Schultz wrote:
->> On ons, mar 23, 2022 at 16:43, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Wed, Mar 23, 2022 at 01:49:32PM +0100, Hans Schultz wrote:
->> >> >> Does someone have an idea why there at this point is no option to add a
->> >> >> dynamic fdb entry?
->> >> >> 
->> >> >> The fdb added entries here do not age out, while the ATU entries do
->> >> >> (after 5 min), resulting in unsynced ATU vs fdb.
->> >> >
->> >> > I think the expectation is to use br_fdb_external_learn_del() if the
->> >> > externally learned entry expires. The bridge should not age by itself
->> >> > FDB entries learned externally.
->> >> >
->> >> 
->> >> It seems to me that something is missing then?
->> >> My tests using trafgen that I gave a report on to Lunn generated massive
->> >> amounts of fdb entries, but after a while the ATU was clean and the fdb
->> >> was still full of random entries...
->> >
->> > I'm no longer sure where you are, sorry..
->> > I think we discussed that you need to enable ATU age interrupts in order
->> > to keep the ATU in sync with the bridge FDB? Which means either to
->> > delete the locked FDB entries from the bridge when they age out in the
->> > ATU, or to keep refreshing locked ATU entries.
->> > So it seems that you're doing neither of those 2 things if you end up
->> > with bridge FDB entries which are no longer in the ATU.
->> 
->> Any idea why G2 offset 5 ATUAgeIntEn (bit 10) is set? There is no define
->> for it, so I assume it is something default?
->
-> No idea, but I can confirm that the out-of-reset value I see for
-> MV88E6XXX_G2_SWITCH_MGMT on 6190 and 6390 is 0x400. It's best not to
-> rely on any reset defaults though.
+On 2022-03-24 at 03:06:50 -0700, Chang S. Bae wrote:
+> On 3/16/2022 5:40 AM, Pengfei Xu wrote:
+> > 
+> > +static inline void check_cpuid_xsave_availability(void)
+> > +{
+> > +	uint32_t eax, ebx, ecx, edx;
+> > +
+> > +	/*
+> > +	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
+> > +	 * support for the XSAVE feature set, including
+> > +	 * XGETBV.
+> > +	 */
+> > +	__cpuid_count(1, 0, eax, ebx, ecx, edx);
+> > +	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+> > +		fatal_error("cpuid: no CPU xsave support");
+> > +	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+> > +		fatal_error("cpuid: no OS xsave support");
+> 
+> We need to skip the test when XSAVE is not available. See the point here:
+> https://lore.kernel.org/lkml/8735j8aa9g.ffs@tglx/
+> 
+  Yes, it's better, will skip and exit if CPU doesn't support XSAVE or OS
+  XSAVE.
+  Thanks for suggestion!
 
-I see no age out interrupts, even though the ports Age Out Int is on
-(PAV bit 14) on the locked port, and the ATU entries do age out (HoldAt1
-is off). Any idea why that can be?
+  BR.
+  -- Pengfei
 
-I combination with this I think it would be nice to have an ability to
-set the AgeOut time even though it is not per port but global.
+> Thanks,
+> Chang
+> 
+> 
