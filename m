@@ -2,53 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E7E4E6AC6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Mar 2022 23:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8124E6AC5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Mar 2022 23:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241538AbiCXWlM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Mar 2022 18:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S244301AbiCXWlL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Mar 2022 18:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiCXWlK (ORCPT
+        with ESMTP id S241538AbiCXWlK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 24 Mar 2022 18:41:10 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690D7BA330
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 15:39:35 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id a12-20020a25938c000000b0063467614126so4662493ybm.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 15:39:35 -0700 (PDT)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763AADD60
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 15:39:37 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e689dfe112so47042497b3.20
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 15:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=2UXOWK4H/ABoSS6KabIKT0cRAkKR0ZUPw5leAS4VA2Y=;
-        b=mFrw/DyLpphzNFV0Nr7i6+kDrT0/C9GU5c4FP6bzXJk/QsrgjgdsN5pw+Twz+s6tGi
-         qy25SacKdr9ipsWUo6trNsVmt+dTa/NxO3N5FT6aeXplL6+ZEw1LMGDWTo0PQCwb+Bvv
-         4GDi1sgE7Jd6QRrZP/c4HReJ6wxGKYe3J8j58vlNKNI0HzHCFnfQgsW07wf12tX5ifUO
-         PkWd0jUpPH/MCtF459clWjsDteS21Ykgbme/qNhmrt1Ttph7wf3EUSy9EX8Ao16PvJnO
-         QLKcOxdXbMcH953M7Bj/sxYtgU4u2dWspJAXKFL7VZLBu7hfRoPYI0AbX+uq/222BMVD
-         SSYw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
+        b=rJBaV6pGwEOAZ5/DKw9WgYD8sOUIGzatpRwyLoMMfvhusF5BeyvsRwUwZWCNGuIDQ1
+         nQB8oCdC9bv1EZ+2GtysbZIqyvqAenpHbQez/WxBwBE3CGVb3xXwPXtQKDi9eaWQ6y7j
+         ZKrHVPDblW1plXoohNvFqYI+YSZ7lUzU+JDZLa+az53ILzpYvrYIYeB4+yyJZ67EEn+X
+         fen1X83tGjPFdNkCIFZgPgVXkkcmBf7dBg8tE2ndTF7IzTTWpZI4Ahz8CtlYV5thWf5L
+         xduypsO2tFYJpKt92zfyi3vjDV+lUkUnpditqzgfS6Zi5K3l63GEjp2/MNklpuAspxgA
+         4uIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=2UXOWK4H/ABoSS6KabIKT0cRAkKR0ZUPw5leAS4VA2Y=;
-        b=cTH9V39iyzC00fqrpqBLXDfL1lVglYzLn94/OHRRHAbR6ktrpUbEkViFMiDHXBmKIP
-         82qs9pX17RI98YqHBI5N6Cq3uVv6yHkJu77eFPtO5hujgeBKxzVFgx8qxn7HCIF1ehvu
-         O0qQm92HmXj6CrfjQdrXSIvplMyvg/43+hgjnaoA5NO02QBqNWHxpVxqWnqEs1mswRTc
-         zrUPOU5LlQi3FBUcSWyrHti8noJanro/2jp8rWEf1FBLcpn7jHbW7aMNWvv+67qB8sBE
-         Tx7XUlui3G/hzqZYu6K3Fr/hqz1jg2lEgTQFjsv/h369N69yXzf3M3KYBp9jfUve/3wu
-         15Bw==
-X-Gm-Message-State: AOAM530BW0y90YEnlgwbHt5a+LNMlpMdxiRWp+omVIZ8ogwwWPyA0R07
-        pScqOx8Re5JlADlouZc+k2CIB1ssXd6/75qytj7C
-X-Google-Smtp-Source: ABdhPJw4BH07SPiQZUc2OcEknGn2R1/wKMDadrW5rM6fMHjf1XTNKTbDi8N9qPU+6gv6J5NGI8IQbzzmpbGwWUQn91RR
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
+        b=uW6q91D3fWCuyhH410ps0DalpPOZbqnhbZoj2qBsZrTzDBa/QGLrM7f7/rMxanWhM2
+         4Y45yHnRlyhdJanS9THULKUCmoYMvDvu5POG7s8N6srK22H99BLjvFO9rizjeRvQXPLT
+         kVvqb8HV8+/+93XW4oy3nO4s3qqXPhKjW7OeDdvZ2fajmaZ74z7L5DLcAic06ur0WWOn
+         jyG2KX1r0CplKYQitoaYfK6FsVLOMZL3GPe/KyEyuZ4hGgQwgrTHdR/2t04+HVuRyuiU
+         eAOI/54HuM65z/afU3cK+uPbXF1D5Ls7XBBdDuX6zIIsR/t8twXWF68HBlGoi6x3tw09
+         QAQQ==
+X-Gm-Message-State: AOAM532x2XKfwlQtHm9c5Y6fDbrHij4ejh+wS00ErFHqb9SoorjTBmxA
+        V+RVkJ6Fnxu6LxhQr5EHmraoX/pFt6/+NkVi+lvF
+X-Google-Smtp-Source: ABdhPJzQniIe8bkEpjEUmGcF7TUYcFhdcZfxtrsrsS9hsTOunibTFJjXrnGim1HZIuwmtVj5ERBh+6ALOnRpNeXOLmhR
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:9892:9f7f:2c27:2968])
- (user=axelrasmussen job=sendgmr) by 2002:a25:5f11:0:b0:633:ee0c:ab79 with
- SMTP id t17-20020a255f11000000b00633ee0cab79mr6599611ybb.491.1648161574585;
- Thu, 24 Mar 2022 15:39:34 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 15:39:28 -0700
-Message-Id: <20220324223929.1893741-1-axelrasmussen@google.com>
+ (user=axelrasmussen job=sendgmr) by 2002:a25:3f87:0:b0:633:bbe5:c9d9 with
+ SMTP id m129-20020a253f87000000b00633bbe5c9d9mr6992182yba.115.1648161576861;
+ Thu, 24 Mar 2022 15:39:36 -0700 (PDT)
+Date:   Thu, 24 Mar 2022 15:39:29 -0700
+In-Reply-To: <20220324223929.1893741-1-axelrasmussen@google.com>
+Message-Id: <20220324223929.1893741-2-axelrasmussen@google.com>
 Mime-Version: 1.0
+References: <20220324223929.1893741-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH 1/2] selftests: fix header dependency for pid_namespace selftests
+Subject: [PATCH 2/2] selftests: fix an unused variable warning in pidfd selftest
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Christian Brauner <brauner@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
@@ -67,47 +71,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The way the test target was defined before, when building with clang we
-get a command line like this:
-
-clang -Wall -Werror -g -I../../../../usr/include/ \
-	regression_enomem.c ../pidfd/pidfd.h  -o regression_enomem
-
-This yields an error, because clang thinks we want to produce both a *.o
-file, as well as a precompiled header:
-
-clang: error: cannot specify -o when generating multiple output files
-
-gcc, for whatever reason, doesn't exhibit the same behavior which I
-suspect is why the problem wasn't noticed before.
-
-This can be fixed simply by using the LOCAL_HDRS infrastructure the
-selftests lib.mk provides. It does the right think and marks the target
-as depending on the header (so if the header changes, we rebuild), but
-it filters the header out of the compiler command line, so we don't get
-the error described above.
+I fixed a few warnings like this in commit e2aa5e650b07
+("selftests: fixup build warnings in pidfd / clone3 tests"), but I
+missed this one by mistake. Since this variable is unused, remove it.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/pid_namespace/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/pidfd/pidfd_wait.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
-index dcaefa224ca0..edafaca1aeb3 100644
---- a/tools/testing/selftests/pid_namespace/Makefile
-+++ b/tools/testing/selftests/pid_namespace/Makefile
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -g -I../../../../usr/include/
- 
--TEST_GEN_PROGS := regression_enomem
-+TEST_GEN_PROGS = regression_enomem
- 
--include ../lib.mk
-+LOCAL_HDRS += $(selfdir)/pidfd/pidfd.h
- 
--$(OUTPUT)/regression_enomem: regression_enomem.c ../pidfd/pidfd.h
-+include ../lib.mk
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index 17999e082aa7..070c1c876df1 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -95,7 +95,6 @@ TEST(wait_states)
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
+-	int ret;
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
 -- 
 2.35.1.1021.g381101b075-goog
 
