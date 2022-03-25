@@ -2,70 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74CA4E7B3A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Mar 2022 01:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E1E4E7D68
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Mar 2022 01:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbiCYWiC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Mar 2022 18:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S234120AbiCYXNm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Mar 2022 19:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiCYWiB (ORCPT
+        with ESMTP id S234029AbiCYXNl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Mar 2022 18:38:01 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791B0527FA
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Mar 2022 15:36:25 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id z128so7535679pgz.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Mar 2022 15:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=66gIpeXcj5574AY6+wxqIKtN1GXT+H4zW/55ds9MTRA=;
-        b=Pehj9tXJ4jzHdSs9n3UJ6sf8byvgBPWfgS568/84c46HBvPWXXsvdd8pAEE2HzzzdY
-         nhBsal9nGQ7ZgSXnQd9IetpG0IdzOgDsbdffL/rqAdzghtq62mKAtGJ4aJMAiJzpd60K
-         sk4O1Q2hg3+cF5cPtgpMcYhNZQgEAlSy77zvA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=66gIpeXcj5574AY6+wxqIKtN1GXT+H4zW/55ds9MTRA=;
-        b=HEaW/j0o8ErfR+c8s3PyxcEnu9zL7rN3W7vSJS8ADuuUwvo1aLEknYCbKTgWtLhUls
-         f6TsM0VCUJivx8v9jIOPf+fO2K2zu5O5lYjm7ENORNO1Y32x+V5Shl5sBmnOMJKHgXPb
-         12P6J8zXMl+YviyrdPDqeDouql44jdL9kRr5yX9tunsCAQjasufFER5NIZKNIlFXkcUT
-         vEEQ7C4lBTaBi6H7LK4bZZLbwzX3MvijE9IuAR66m6mGTzu79acT6avKXuiWFtp43wpL
-         iqIzrzh1rzm7/FyaslaPxNVN/QZdAP17xxumrpAvsOl3gyHJDw9Q0utY4Pe/2npkwMCr
-         og5A==
-X-Gm-Message-State: AOAM531GlSMAfExsKJhj8+fl/9JiUnDwln7UyInV9SM3kTBC9WZ3ct9N
-        h3nxrfMItTLixuLh16IMQcOpg6hJb887mw==
-X-Google-Smtp-Source: ABdhPJwG2BRVqQ2ziox0dNsT7VEIXbPPkmt2DvxPblXiXuRWJAFlpkxVnnE+ApT4WaXP9qsdh951NA==
-X-Received: by 2002:a05:6a00:ad2:b0:4f1:2734:a3d9 with SMTP id c18-20020a056a000ad200b004f12734a3d9mr12393340pfl.61.1648247785019;
-        Fri, 25 Mar 2022 15:36:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id be11-20020a056a001f0b00b004fb29215dd9sm398786pfb.30.2022.03.25.15.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 15:36:24 -0700 (PDT)
-Date:   Fri, 25 Mar 2022 15:36:24 -0700
-From:   Kees Cook <keescook@chromium.org>
+        Fri, 25 Mar 2022 19:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF71522E4;
+        Fri, 25 Mar 2022 16:12:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E7A61744;
+        Fri, 25 Mar 2022 23:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE0AC2BBE4;
+        Fri, 25 Mar 2022 23:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648249925;
+        bh=rca50a/MBSKGcXibi+6OsSu/0GluBeVQE48yXlUn5Wo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ek59Z3uvGRyrKysXMw8xAX+tagCv00LsHDEQHKWoo7rLCFOZbpWGiXxfTCATZzISl
+         d+1ieHRRfPCVS2ImeDrqxvWebuoJdEt1NfC8YJ6VImsZQR+XGgoxNVXvUrFKQJM+KE
+         F0Stp4aK1LSQ4B+7NR5makSJTHf5I0ye4iJ0KZ7UFkuPb3F7JEw6br4fQsLCaPxSuu
+         PWoYUuF4WGN+f4cRC8DSuI21O0x+sObWbilAbqUwz9zM47AhjoxGKdpSVaTCMC+25x
+         MzZe/p6I5zcPh8t/BlxiuHnROYvz67z74cOjlJ+MpucQpk4AN6he4gFT7Q8UAM4imV
+         EagBhg5l+iChg==
+Date:   Fri, 25 Mar 2022 16:12:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/harness: Run TEARDOWN for ASSERT failures
-Message-ID: <202203251535.4B900BC0@keescook>
-References: <20220324231907.1363887-1-keescook@chromium.org>
- <20220324231907.1363887-2-keescook@chromium.org>
- <f705c381-cbe6-0862-e10f-44f2afdef24d@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: kselftest: net: tls: hangs
+Message-ID: <20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
+References: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
+        <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f705c381-cbe6-0862-e10f-44f2afdef24d@linuxfoundation.org>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,39 +62,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 01:37:20PM -0600, Shuah Khan wrote:
-> On 3/24/22 5:19 PM, Kees Cook wrote:
-> > The kselftest test harness has traditionally not run the registered
-> > TEARDOWN handler when a test encountered an ASSERT. This creates
-> > unexpected situations and tests need to be very careful about using
-> > ASSERT, which seems a needless hurdle for test writers.
-> > 
-> > Because of the harness's design for optional failure handlers, the
-> > original implementation of ASSERT used an abort() to immediately
-> > stop execution, but that meant the context for running teardown was
-> > lost. Instead, use setjmp/longjmp so that teardown can be done.
-> > 
+On Fri, 25 Mar 2022 16:13:33 -0600 Shuah Khan wrote:
+> > # #  RUN           tls.13_sm4_gcm.splice_cmsg_to_pipe ...
+> > # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
+> > p[1], NULL, send_len, 0) (10) == -1 (-1)
+> > # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
+> > # # splice_cmsg_to_pipe: Test terminated by timeout
+> > # #          FAIL  tls.13_sm4_gcm.splice_cmsg_to_pipe
+> > # not ok 217 tls.13_sm4_gcm.splice_cmsg_to_pipe
+> > # #  RUN           tls.13_sm4_gcm.splice_dec_cmsg_to_pipe ...
+> > # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
+> > send_len, 0) (10) == -1 (-1)
+> > # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
+> > [  661.901558] kworker/dying (49) used greatest stack depth: 10576 bytes left  
 > 
-> Thanks for the patch. The change look good to me.
-> 
-> > Failed SETUP routines continue to not be followed by TEARDOWN, though.
-> 
-> Does this mean failed setup() routines have to handle TEARDOWN? What
-> are guidelines to follow for setup() failures?
-> 
-> Can you add a bit more detail on what you meant by " Failed SETUP
-> routines continue to not be followed by TEARDOWN, though".
+> This seems to be the problem perhaps.
+>
+> Jakub, any thoughts. The last change to tls.c was a while back.
 
-Sure! It means that any failures in a SETUP need to be cleaned up by the
-SETUP, as TEARDOWN won't be run. (As in, this is unchanged from how
-things behaved prior to this patch.)
+Yes, sorry, kicked off a build and got distracted.
 
-> 
-> With that:
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+I can repro the failures, TLS=n in the config I must have not tested
+that in the new cases.
 
-Thanks!
+But I can't repro the hung, and we have a timer at the hardness level
+IIUC so IDK how this could "hang"?
 
--- 
-Kees Cook
+Naresh, is there any stack trace in the logs? Can you repro on Linus's
+tree?
