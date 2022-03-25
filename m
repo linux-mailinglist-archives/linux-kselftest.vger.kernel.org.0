@@ -2,67 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C26A4E7D57
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Mar 2022 01:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92EC4E7D19
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Mar 2022 01:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiCYUAn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Mar 2022 16:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S231995AbiCYUAz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Mar 2022 16:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiCYUAg (ORCPT
+        with ESMTP id S231750AbiCYUAn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Mar 2022 16:00:36 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580231DE5BE
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Mar 2022 12:50:13 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id k18-20020a9d7012000000b005cdb11186f2so4974300otj.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Mar 2022 12:50:13 -0700 (PDT)
+        Fri, 25 Mar 2022 16:00:43 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4FFF9F89
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Mar 2022 12:50:55 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id z8so9291632oix.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Mar 2022 12:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ofQyyG4WMeOqTiRCxXPOTx0/Wivov5xRx7qheRvM/dU=;
-        b=BTLrQc+pAf4GklQAuYbgpvaE5IYRRYpws9LxKmgbafhhKqWOaBUlZ1kY/PXDiEpsMq
-         IEPQ3wqmWivLAUs2jTzh1qeNenL6XV9D70b0I+pAEtuxNCS/BVaFrYeETTfp1FhkSq/H
-         HZRyRj7J2wnOX45stHVB7hpDU5NLeFcL5MyzE=
+        bh=yhjO44+D0aYcdcE6np5+AvBqPKTyqdOVFrzIZ1noXSA=;
+        b=D1Z0ZOmohogqX9cY1Fn5MmdsU63Ql5MjmB2/cwbcNP79oqgulB9P5vq4095xzwX70F
+         mE8qYfHlBI1vzgfkPA+4TMRn67kB4oLbrgGT44kywmHKUL+nq2hWJCfeiRohpnj7PDhH
+         pAfuMXJuxOWD22YmZir2dZgsEwUI8KdXF3u78=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ofQyyG4WMeOqTiRCxXPOTx0/Wivov5xRx7qheRvM/dU=;
-        b=dRR34b6aUG7Vh4wUj+a17iOOSuFzH1Nt55UqPUCl6OJPXcseHGzBs7Idp5EYEKRC1q
-         02IGboveVSZ8/jq3hQd0d80ZrKDTnogwlAiwnvBtagPWsIDyGF6xnRNrC5TcY07cA/Hl
-         4Xcca26To97GLqDk6xhSHFN8T92dM8DomNRc8/Hv4XM53PnGzOitXxe2E6BnQx/sT480
-         4aWxv7GLXPgrWFWeYXaWCIFjO61gYOywYxB4uI1KSdIt1O10EhJ83iurMY6I3ZKn1cjo
-         sTEa2kULdxMYI2dOfP+B53zeG9W97q9AZTDi57b/V4Tv0BFbBZ0ZB9E89zHmUWDbRXu+
-         N2uw==
-X-Gm-Message-State: AOAM533KqBcreRaBHyBsMXDFtCBajeh9N63Cyqs7pgY50ctYt0/SeZg3
-        SIdPx6awT8hN+YCEwqU39+pNQQ==
-X-Google-Smtp-Source: ABdhPJwP3eYIiKNUU8RG4VjsD8Eaq3hNhzdfy5M2puZwXKfZ42MjKCjobbrF6RFOi5BsoaaUw58PxA==
-X-Received: by 2002:a9d:67d4:0:b0:5b2:2644:7696 with SMTP id c20-20020a9d67d4000000b005b226447696mr5224826otn.322.1648237810859;
-        Fri, 25 Mar 2022 12:50:10 -0700 (PDT)
+        bh=yhjO44+D0aYcdcE6np5+AvBqPKTyqdOVFrzIZ1noXSA=;
+        b=IbxlCOicxIGjXvQ053xspt3iT8fEnMc+o6bT3JQe8hSi5qeA22VBASxI3ICfVD3SdU
+         LFq79Tcqe7ajxknzCVh0aHRYyiSmKzqZ8NGYwzof6Tyld3/5sYV9kjU7j+XUraLFBnFp
+         /Gi2ar33xLjNnWE/t6OQdaKBLD3bvlx3qtUbpY1RGZ8eOnHop6ELYhwk/N2PqT1fPNXG
+         NbK7pe+BCpTKYkUmwE1fmavbJ1f8j8L/nx9Zq8udRhi36tbJIsqqT2WO2RvWG6JyJKor
+         /itLmdfgSfm8fAI7Rq6Se4tO56e2RNF9QOLpN01w1LB2tdeUsL0YwucB9ffLAiFBKkuq
+         dHLg==
+X-Gm-Message-State: AOAM531em5ebRYBaETWDD5sw+Xd6rxTegVEnxW+gF569FLnx6vuPSVMd
+        LJfu/hYGTIeDfdBmMU+i4GtUBA==
+X-Google-Smtp-Source: ABdhPJzl0o/k3dhCX11aBLeVLMykkE17NaTFp2/mx4UDZ4KUorNcH1gIJsPkfFCAaagVqRtdWqBJRQ==
+X-Received: by 2002:a05:6808:d51:b0:2ec:b129:1197 with SMTP id w17-20020a0568080d5100b002ecb1291197mr834192oik.12.1648237848423;
+        Fri, 25 Mar 2022 12:50:48 -0700 (PDT)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id r129-20020acac187000000b002ef358c6e0esm3198399oif.49.2022.03.25.12.50.10
+        by smtp.gmail.com with ESMTPSA id g6-20020a056870a24600b000da0df8b3cesm2950982oai.20.2022.03.25.12.50.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 12:50:10 -0700 (PDT)
-Subject: Re: [PATCH 1/2] selftests: fix header dependency for pid_namespace
- selftests
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Fri, 25 Mar 2022 12:50:48 -0700 (PDT)
+Subject: Re: [PATCH 2/2] selftests: fix an unused variable warning in pidfd
+ selftest
+To:     Christian Brauner <brauner@kernel.org>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
 References: <20220324223929.1893741-1-axelrasmussen@google.com>
+ <20220324223929.1893741-2-axelrasmussen@google.com>
+ <20220325152117.mxp35mdfxcgsow6a@wittgenstein>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8fc440d2-2278-b554-3f56-18daa47aef85@linuxfoundation.org>
-Date:   Fri, 25 Mar 2022 13:50:09 -0600
+Message-ID: <5733cfff-d20e-7792-f809-14cc594a1afe@linuxfoundation.org>
+Date:   Fri, 25 Mar 2022 13:50:47 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220324223929.1893741-1-axelrasmussen@google.com>
+In-Reply-To: <20220325152117.mxp35mdfxcgsow6a@wittgenstein>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,54 +78,20 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/24/22 4:39 PM, Axel Rasmussen wrote:
-> The way the test target was defined before, when building with clang we
-> get a command line like this:
+On 3/25/22 9:21 AM, Christian Brauner wrote:
+> On Thu, Mar 24, 2022 at 03:39:29PM -0700, Axel Rasmussen wrote:
+>> I fixed a few warnings like this in commit e2aa5e650b07
+>> ("selftests: fixup build warnings in pidfd / clone3 tests"), but I
+>> missed this one by mistake. Since this variable is unused, remove it.
+>>
+>> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+>> ---
 > 
-> clang -Wall -Werror -g -I../../../../usr/include/ \
-> 	regression_enomem.c ../pidfd/pidfd.h  -o regression_enomem
-> 
-> This yields an error, because clang thinks we want to produce both a *.o
-> file, as well as a precompiled header:
-> 
-> clang: error: cannot specify -o when generating multiple output files
-> 
-> gcc, for whatever reason, doesn't exhibit the same behavior which I
-> suspect is why the problem wasn't noticed before.
+> Looks good,
+> Reviewed-by: Christian Brauner <brauner@kernel.org>
 > 
 
-Thank you fixing this.
-
-> This can be fixed simply by using the LOCAL_HDRS infrastructure the
-> selftests lib.mk provides. It does the right think and marks the target
-> as depending on the header (so if the header changes, we rebuild), but
-> it filters the header out of the compiler command line, so we don't get
-> the error described above.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->   tools/testing/selftests/pid_namespace/Makefile | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
-> index dcaefa224ca0..edafaca1aeb3 100644
-> --- a/tools/testing/selftests/pid_namespace/Makefile
-> +++ b/tools/testing/selftests/pid_namespace/Makefile
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: GPL-2.0
->   CFLAGS += -g -I../../../../usr/include/
->   
-> -TEST_GEN_PROGS := regression_enomem
-> +TEST_GEN_PROGS = regression_enomem
->   
-> -include ../lib.mk
-> +LOCAL_HDRS += $(selfdir)/pidfd/pidfd.h
->   
-> -$(OUTPUT)/regression_enomem: regression_enomem.c ../pidfd/pidfd.h
-> +include ../lib.mk
-> 
-
-Will apply this for Linux 5.18-rc2
+Thank you both. Will apply it for Linux 5.18-rc2.
 
 thanks,
 -- Shuah
