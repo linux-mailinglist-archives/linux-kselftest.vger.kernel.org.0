@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474C14E6F2F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Mar 2022 08:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95F74E6FF1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Mar 2022 10:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244417AbiCYHwO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Mar 2022 03:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S1345014AbiCYJZ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Mar 2022 05:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbiCYHwN (ORCPT
+        with ESMTP id S243091AbiCYJZ4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Mar 2022 03:52:13 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5999CC558F;
-        Fri, 25 Mar 2022 00:50:40 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id m3so11944894lfj.11;
-        Fri, 25 Mar 2022 00:50:40 -0700 (PDT)
+        Fri, 25 Mar 2022 05:25:56 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB1EC6271;
+        Fri, 25 Mar 2022 02:24:22 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t25so12325932lfg.7;
+        Fri, 25 Mar 2022 02:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=9OJLQ6ye5gJdMBoarB9Cgrd/z/Jtzc4wMw4dqWR4+a8=;
-        b=GRfB+qcnr013dAwD92e8Vdl8fv4LNfc8BUWReBkwaz3gxp2W2yrHCgve3zM7T7x2y2
-         revHYNT+zAwFunniTrPC0VyCf5yC0FO0CccNY6Bms6IZTZA8Eetbb0/IHqcdcX7a5H9Z
-         g1pLpcBb8uWWwNiMB7xzhw9ihiOJr5NOD1HwcmUDC43mPobLg7IENjvFE9S1gCT8TA+T
-         afc0p/tPbaDiLZxVvO94z9uXn666UKjfTbQu8c4nrxipo5XOVG+r03kl6rQ/7mCAIgqm
-         DkclfAZgdm4fCtMzqMjvKBetWMeZn0WDTzvH055FBg0PqcyqcOtihqrsWC7exuCMIn/6
-         cMkw==
+        bh=SSlLErNJDYMhv4sM1Ccd3PQZryIRODWgd2EpDE7WzJU=;
+        b=ImL22cgHLGRLQQxTNXhpXmDpiXyJG03HzVsLsMEkEtHc3oKTUje3duGQDbBq+V+Neh
+         tmPsIpdPpvQtTLdPpg2Lu0lcrXwOQvzbWvadlNb7yw5V4kMhpIY4YXykVkHCOILSnX96
+         JhgL+uZPAevLVwGZE2D782FRMRQoUY0iZ4g3J99icI/q32uPlkNr3WxpnJGOoJsrBua8
+         77kxf2YMTUq4IDc+TzyZHXVTj96S+jNl/uLu6AiRB8fhY3dJjmy2oFPYlEifrLwYbHaS
+         YOBEYOH2Y26DpmbXAB6sFoUw/AxPKgOSQfqvPS5Bx+XZt1SuKWw1jywskDS6lWllOrgj
+         PdRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=9OJLQ6ye5gJdMBoarB9Cgrd/z/Jtzc4wMw4dqWR4+a8=;
-        b=ADwoN7RVVoyz9K+5JYTrFg0WHdwvOfE61QbxWne5C502V19RPReJ83zmX3bDSYU3kl
-         rEXNBj22HK3Fd0qxsUW+o1aImOH2EEKM0Z75UqVMrtU+uJpoW6mhhtIQppchV4kmCE9u
-         rJCr12GNMAwLMIoKGVji1G5uFBHjPABJyf2+ZtDj8CJMdcmuj000M5rd5rm8cMK2OgxE
-         wKu2JpcaSHHhHb6FOAv758a/jipbX/d7ZI1IATyIzRU67Q98F3nSew4RM7IueVNPANJO
-         MNBNT0N1Do7O66nyIAUYInOvbvMBGoWk86VtN4up46qQRu/qBzqtWQEXlCOTltqp8WLP
-         k+6A==
-X-Gm-Message-State: AOAM53166MU9VaoaTMgQwEzfnY3mJ+8JAGRWwrHlESPqKQasfuJIIl8B
-        cr232wSxZUyYGiYLAOnIoqq982HipMmMJw==
-X-Google-Smtp-Source: ABdhPJzc+PQuWazgFCoireB0G4JOgmDiZ574pDqTwHOBKCLLHloHLwZHskjv2ZS8WJoz59mS32/0uw==
-X-Received: by 2002:ac2:5e86:0:b0:436:c46c:bad7 with SMTP id b6-20020ac25e86000000b00436c46cbad7mr6763177lfq.578.1648194638525;
-        Fri, 25 Mar 2022 00:50:38 -0700 (PDT)
+        bh=SSlLErNJDYMhv4sM1Ccd3PQZryIRODWgd2EpDE7WzJU=;
+        b=lUVZpCrsHLjxoFvfJG1fAYXVS0MB6kAI/hjcx5YZ35IgouV5LjpN6xcJY55OlPw7pX
+         LehD+U2UCGc+SOvpkdRiiCdE2/Ur3ymhQ1DRUjL5my3MIySrjnR9JolgRDwVJpzljRJq
+         1pkylPuPQJ1Q6IAqM6w8a1t+KTyg7SXHbgif9wuQ8mcRk/Cljf6kmh8ZaNcQM4wHrsgm
+         0NXBt9fN64hsP5X85HtH+QPbzZxQShM6bB/tQch1Eau5Ia7WMkkJdabHfsuK3D6yicJM
+         sMGU1f5UysfymOeEBAi3RqOc/j7xPTFPvg5HM5s/wL1LAqwV2W6MGW5E4Q8u6KScJVbg
+         mNZQ==
+X-Gm-Message-State: AOAM533Z3CTGko9QJ+dCh0TpbEbf+1GzFicffabjtFJVMPZ3fe5ZtjvE
+        8Ugz38u2hN4Qhn76B21lVQ32xVkP0iv+Ig==
+X-Google-Smtp-Source: ABdhPJxUl03eI7VIoMcm91yImWCR15ZIRnY2kcIx5G8CT1JoWCIArZwUr9kqUwyPTAjkH7G0HgV4pA==
+X-Received: by 2002:ac2:4477:0:b0:44a:55c6:155d with SMTP id y23-20020ac24477000000b0044a55c6155dmr7015681lfl.376.1648200261100;
+        Fri, 25 Mar 2022 02:24:21 -0700 (PDT)
 Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056512138c00b0044833f1cd85sm606729lfa.62.2022.03.25.00.50.36
+        by smtp.gmail.com with ESMTPSA id q20-20020a2e8754000000b002497cfaf36csm614439ljj.42.2022.03.25.02.24.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 00:50:37 -0700 (PDT)
+        Fri, 25 Mar 2022 02:24:20 -0700 (PDT)
 From:   Hans Schultz <schultz.hans@gmail.com>
 X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
 To:     Vladimir Oltean <olteanv@gmail.com>,
@@ -73,8 +73,8 @@ References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
  <86wngkbzqb.fsf@gmail.com> <20220323144304.4uqst3hapvzg3ej6@skbuf>
  <86lewzej4n.fsf@gmail.com> <20220324110959.t4hqale35qbrakdu@skbuf>
  <86v8w3vbk4.fsf@gmail.com> <20220324142749.la5til4ys6zva4uf@skbuf>
-Date:   Fri, 25 Mar 2022 08:50:34 +0100
-Message-ID: <86czia1ned.fsf@gmail.com>
+Date:   Fri, 25 Mar 2022 10:24:17 +0100
+Message-ID: <865yo21j26.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -138,7 +138,7 @@ On tor, mar 24, 2022 at 16:27, Vladimir Oltean <olteanv@gmail.com> wrote:
 > DPV=0, right? So will they never trigger any age out interrupt according
 > to this? I'm not clear.
 
-I think that's absolutely right. That leaves two options. Either "port
-10" if it has IntOnAgeOut setting, or the reason why I wrote my comments
-in this part of the code, that it should be able to add a dynamic entry
-in the bridge module from the driver.
+If it could be possible to add a dynamic entry to the bridge module from
+the driver, that would be a solution, and since in the ATU in this case
+ages out entries learned, I don't see why __br_fdb_add() insists that an
+external learned entry must be permanent?
