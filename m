@@ -2,85 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80134EA2C5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 00:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CE64EA314
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 00:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiC1WN0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Mar 2022 18:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S230117AbiC1Wln (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Mar 2022 18:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiC1WNZ (ORCPT
+        with ESMTP id S230110AbiC1Wlm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Mar 2022 18:13:25 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332B35843;
-        Mon, 28 Mar 2022 15:02:01 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id z7so18864960iom.1;
-        Mon, 28 Mar 2022 15:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zku73QpalQjK7mBNfRnqmkOyZliZDHv6CNwYX93bSZc=;
-        b=W+nx2Rs6t4ExOmIqnQeOQD4iJiAsZfVSjiPnDOEoC/PKN0duaeeK+1RfeOBQOF0bYR
-         zIVxDalhLdptimGuGHIEcTFR8MpB8preZuosCSp+LNTX5eHhwGbdhODb9JTnZcLPuT1I
-         QLOMdrrNMAqatCzNY/tm4cqE5mqSjVp0Q/Tu8PY7CF8uCnSmvjGF1mYwh7HEitLEIxWD
-         sI6mZA/N2BW2IsplbUB42Bz0gdBt4R2fZZP1qMmENIuO5OiIC+b0U4MAt6670q1CDugT
-         6PPJTaNT+2GePra2dTPgvFff94DWcxW3cdhHlYkEX8UXDhvu6QOPGNs/qFv8HpxukLcj
-         /I4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zku73QpalQjK7mBNfRnqmkOyZliZDHv6CNwYX93bSZc=;
-        b=pdqIzV06jo8SuEFXfdXAT24GbBjOdrLTiH9csBtepeqvT1dJFRX/20EhU+1IKOX8AI
-         w3Y1RbVevhUugNZnjbiytYwsbXj31mGKAVIE8EHewFtuAE7xoBFBl2lnmRX3sswsjbM0
-         5FNRlQgQdA/IA3Iu0jkTYwRatCbdVvrPakVJBW9yIk428y6K7VIGckMKxH1Be2bPECyN
-         /F3ZPg1NhW3bqa0Q0SJ+3ct6VRMkBXKdKgaDJiwKisJdm+dsEmD9LWD4xx35y9AZ+uJp
-         HDArddwVU7y8aZ3ymkYnYATSE2DHdpcFQq9kcmp46EngiMjefqTXQWm9/KOsdWKqwYxJ
-         R7ZQ==
-X-Gm-Message-State: AOAM531DMSrArzbqz4JDBhWCNJIm30453f2DY9Tsq73GWJtIpRx/hhxY
-        x61zTWerfb738B/jmIKuDYZNP5iQ6akyk5SH3KXWiT2m
-X-Google-Smtp-Source: ABdhPJyta6fjjW/oHgljQRh12/jOLrq4xulwQgvJrCe6paXK4K0lFuDYs3HHKwvHP2IIgblrMB9kJD1xtRWcuN06kfM=
-X-Received: by 2002:a05:6e02:1562:b0:2c9:cb97:9a4 with SMTP id
- k2-20020a056e02156200b002c9cb9709a4mr1324007ilu.71.1648503345774; Mon, 28 Mar
- 2022 14:35:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
- <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
- <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
- <CAEf4BzYVu9JVJvKZK3S9HGwpyPiWrwKPGsTz3wXC_+vmRYGdNw@mail.gmail.com> <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
-In-Reply-To: <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 28 Mar 2022 14:35:34 -0700
-Message-ID: <CAEf4BzZA7Wmg=N42ib_r9Jm8THXuGGR3CPgTqMyw9n2=gd_+Kg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
- descriptor from an eBPF program
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
+        Mon, 28 Mar 2022 18:41:42 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7A04A934;
+        Mon, 28 Mar 2022 15:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648507200; x=1680043200;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=TCh4WF0ClaF9C3bW6gc5w/c2kolTTL+j4EmKDXxvAbE=;
+  b=hgcGOma+jgL+7+jYeuNo3saAemPPPAwKnIEJFfcrm3hKg0kwRjF2dyC8
+   NSpKaI26K9sMPsk9vJaJbnfB9zcvx84O/vvnTcLn6rpbieuC4dJ47xH5m
+   C1ImrSkzVQciy+wDGItZy9avlXYzktuSwCiZ9wUhgImGNdzqWrRW7G3jw
+   sag+q1Qe7TgdPWmnA3vszwEibxzqMOtKkOthOMaEpYNLGHVLT0Dtfu9cM
+   ML0GguF9XMknLGfbc7I2je0GjkrtxhCM0X/WfizkwcI4yZM4iFPaeGy9H
+   ip0wc4b1OY1cT8XQfhwdYNhT953klgw+Td4rNV+KjdvU61U1tkogqZA+P
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="319808987"
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="319808987"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 14:49:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,218,1643702400"; 
+   d="scan'208";a="554051660"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Mar 2022 14:49:11 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 28 Mar 2022 14:49:11 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 28 Mar 2022 14:49:10 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 28 Mar 2022 14:49:10 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Mon, 28 Mar 2022 14:49:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JvEovJBOaF5em9D/UjUc82wfiztctSwNjZMzt7sTSR4a9URWHGof2u7k9BrxsmkQxyorQ04aIfP1Jo/3tki5g2fzStan97q7JcuQ6SpgdDTZpYQbYoEMDKvDl+FuZ+tEejlSoDWVY8lUbcN6AYp8JWma+RMJFabZgllVardvTCjHoRvpy2eaYEWQSEdC6kA71sJGGpK6O0xGRXG2gjw8z2YeADNigTS11LecoHga6u0J2sYV2PX2t1dDg+Uiew+CqNBvBWr/LscaAYRChYYOZsS31Yg/WMLEPrgIX7A6TxYUuVM9Cl6SFVKn6EMs9BTS1U8Az8EQXupyzf0x0fZEVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=euGoCJXjzipvX2Aw2Tur6cjlYE4/zYzyKYM3hds8BDc=;
+ b=kv0+5e2rnKNv27YFkhvRt4+7MbH4U7mVrpMI3VfFs9K8EoqMFbGsAszzMMOL5FTG05wilt01uukhRtrRipo44rhFkiNGKVsgj2IJg1X2yoLspX9f+HIlJFXc9nBRb3YCtuEJU31Enrrcz2x9LA2geNnPFvDnnnAXUwHsgnzxM5Pjk11kDhHt3XQMYMv4SrykyGnOmMtjJ9yr5F/GrJv715k5FYmcu2XBEuG3XmiVQVXrQIIin+k5ajcswpby7sfGXT2tNBUb5YbwmUXADUUPT3nzS+dU4KFAnnye6CN9q7rRkSZELVVWUWvDrTBkgv9V4jEpmgXicEkSQod5sXC53g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BN6PR11MB1908.namprd11.prod.outlook.com (2603:10b6:404:103::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Mon, 28 Mar
+ 2022 21:49:08 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::ec9a:f02a:6fc1:c6c]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::ec9a:f02a:6fc1:c6c%8]) with mapi id 15.20.5102.023; Mon, 28 Mar 2022
+ 21:49:08 +0000
+Message-ID: <7b7732ec-c7ff-cf92-510f-64c83ed985cd@intel.com>
+Date:   Mon, 28 Mar 2022 14:49:04 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] selftests/sgx: Use rip relative addressing for
+ encl_stack
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+CC:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        open list <linux-kernel@vger.kernel.org>
+References: <20220322074313.7444-1-jarkko@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20220322074313.7444-1-jarkko@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW2PR16CA0050.namprd16.prod.outlook.com
+ (2603:10b6:907:1::27) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 29f392fa-e79e-40e6-e2b7-08da1104c975
+X-MS-TrafficTypeDiagnostic: BN6PR11MB1908:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR11MB1908163EE54F74E645A6711CF81D9@BN6PR11MB1908.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ui/nKDTfW7F1B/OGqkCW2nfKzzEhXE7HekitlPOt+HjMxlxbqBB+n/m+DRZrfr13RLJ8UdDKGmFe0m6IwZdsyRNNOpNFHM+mJpsL7cvk48mnW9SWMi82bq2vgXQahYJ+u/SFiTSUB9+IWTzZGyc3BzBODHlhqWNR1Rye2hFlRfX/2X81TudgZFObIuteessda3GijpxKjFMH5/ErXO+hcRvnajFiEj7+34C20M1rTi7mmQz0vz32B5UQQ6VEV3AtHQQQ+3Byc/vVaCdbj1n4LsnLQGjwLbcD0l5K/P7oZDfZashSkQJgdQZzxQky6Vb7bVI8naTaxMs2lcb0JNbGPjfEc3iQlhHt9HtBNolii066zciIZyoHyguIkcPXB2lEK89VbfgzNDfFfd8w/OG28JentTF1qHXRzVW1KWURJPaPrRS8qpRLBFk0Iu7kXrl9P5K6pXm6NWw7aRIKCzjCAW9HDtlyysCx/WwOrkMh97lrBQAh3y4bbehWmn8TS0l3VIIy6NdlhSjTfZ2fvCqJDBbzcJ/rOgB0YWaLd7QYjDUxHn5qlkIoHNbsLN9MXHf+mgdwwzOKvxOdZ1IfLLVhEQTYrrywYmqQ2FjWcka4OpBb/+cy60TxGxbzGqUEX1fW7v9H3NzoZ0PrIrcM92a3W49U4R1YPUMULaokx1IZp/LjZcf1PrkawAfm3cXIAeUvly7ZB6At/78hS7myuTlyKb6sPGZlAOgbA4mltFdmmtHdHF/sUwuZXvDaErjrtXxBzPQF8cF/MrJG3tTkvM4k7zeyLCpjZrlquJIE5IoobZVK8ubv34dvo+41FU9BuE+1HvoFuJjHxYBZ9C3/sRitaQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31686004)(53546011)(83380400001)(316002)(2616005)(5660300002)(8936002)(36756003)(44832011)(2906002)(31696002)(508600001)(66476007)(6486002)(86362001)(54906003)(66556008)(186003)(26005)(38100700002)(6512007)(110136005)(8676002)(4326008)(6666004)(966005)(66946007)(6506007)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cEhpcTJIQzdEcWZjMzZxYWhjcnowdzNwZHJpdUZiUkVhSG1BSXF0cVIxbytT?=
+ =?utf-8?B?OTJzODJJVi9ZRE1pL2pOU2ppdFBma2FxdWpZRlBhMjVaaUFjbmNaRlZJQ01J?=
+ =?utf-8?B?S0NzUUJYNS9CbFdyem1PeUlwWlBhSzhuRS9Ic0ZyUUd5eWFSWXhqRERGY0N0?=
+ =?utf-8?B?eUpMSkRNbC9xMElWeUp5cit4bGJ4RjVyZko3QzQ0RjJjUDZxV1krN0psaVFG?=
+ =?utf-8?B?TVBRaFJkR24vSlBUM21kdmcvQi94RmtBQmhVNEkwajFJQjhRR0puUlhkRTlF?=
+ =?utf-8?B?OExtVnY0WHQ0VmZqK3N5M05XK0tKS1IxNkVMMFlNQnJxYm53TWdoVkFGN041?=
+ =?utf-8?B?ZXdkL0ZiczZrSFNSaG4zOUNmYzA4K0dsTVMwK2JzSHdhaWVnbWFzOTlJQlR4?=
+ =?utf-8?B?NWthdVBvTDN3SjRTdXVVU2F0Z2NsbUhnRklqRmtBVWhJdXlQUGpXajEwTG1x?=
+ =?utf-8?B?RWs4VHliY0R5UnBRTzE1YSsxcHk5YUU2eFRnMXNjLzU2cWFzYmlnSVF2N0dS?=
+ =?utf-8?B?UEpvR29PWDJxUGd0OHpja1YreXpZdTZyNG9rRzVmV1VFMUc1Y3I2eXAwL0JP?=
+ =?utf-8?B?WXBQR2NOeFNSc0lSVHZGNmc4NGhPeHJPdHhNUkQ5cmpqelY3UWtRMGg4OEQw?=
+ =?utf-8?B?RVcrS0RBTXpMa3VqZ0VvUmZxZHNXVzFpdE9UaGhhUkRhVzRNSU1YOWhkR1Bw?=
+ =?utf-8?B?Y1BVS2IwcW9KWDRQS0VpNjhSUkF4ampYQmNyaHhwS28yU29wcUMvUHE3QnBG?=
+ =?utf-8?B?Y3FCcGRQcEwzSGlUcjllM0dmTi8rbHY0a1dNeWFpYTFWdG5RNWlTMlhjRGpu?=
+ =?utf-8?B?enVzb3Jpa01jbTZnYzhydzBEbkFXRDQ0SlF4VEhQWnpKN3FPY01xQnpKWUor?=
+ =?utf-8?B?RHp4aUJnRjRaZE90NTJSREpKTEh3OGxOc01yaTJMd2V5N0RQODZ0eFlWS3Rk?=
+ =?utf-8?B?dG44NXdKcmZRUG1lOFVSZFp6bWFYd0pWQ2M5NmpNTzl4ZTVpelcwZkJXZ2pS?=
+ =?utf-8?B?S0paMC96Y2tDRlNnTFZSN1dmYzhneC95dFlhVnJTRWJQa1hJV3FGaDVibm1n?=
+ =?utf-8?B?cjFIUzloeU9BUVNxemYxc0p4WlhNRzkvTkg4Uno1NWtqVjFNeVNzYURlSk1y?=
+ =?utf-8?B?d3FrNGpYejRralFUb25WK0JXQi9EUzA2NFJjZHVzY21LNUdrNG55NlNZQUVV?=
+ =?utf-8?B?OWNrcFhpVlRzaWdyVDVtSzNydm5tTVB5aTRka2p1VHFxNjlBTzBDZVZVS2FP?=
+ =?utf-8?B?L2R5ZDd0dnJ0ellvRDZGaTIyMFJueWR3UWtmUzFzS1RjdnRJR0dQM281dzBP?=
+ =?utf-8?B?VWdtUnFSdjBxTTJKYktCeDNCQmMyN1dYOFBJUmpwdUJWVGJicWNaaWRhZmZR?=
+ =?utf-8?B?My9tZ0FoU09PUTBqUGdacnFBWDgvUzdxdkV2Zm11dTAwaWx4ZzMvZ29zcXhK?=
+ =?utf-8?B?MUxsSFlIa2hISGx1U3U1dHVTNnk0cVJDSGlzbDZzLytNNnFKay9aTXZzZUx0?=
+ =?utf-8?B?cm1pT0dMQlZUdW5sdmpLUmxMblB0ekluNlBTRFVHZlJZNEJyQWhrMkw4OU1D?=
+ =?utf-8?B?WERtL01YaGRtRDRmVTI0VWVXOVY3aVJub0dTRTIvRmZHdVdXS2VaWGdpb1VI?=
+ =?utf-8?B?MUFMYkJ1dUJDaDV1YThra282c281d0tuN3FxODdXbVUrYU9TTEhvbG9kVStB?=
+ =?utf-8?B?YmRJNzdEcFk5ZDlsOTFFR29XSmxoMzQ1L0g1cFgyREs4djJ4ZDMrTGRnQjRr?=
+ =?utf-8?B?bVJGUDVka1FRajVKNGxKNlBkemV5Y291NStqNmo0UnFFemZHRnEyZFVaSXlV?=
+ =?utf-8?B?dDltdDREeXBnRzE3anVPSkFnVXE0WW1ZMlVxQnNpM2VlQlRSQ21IZXlKb09B?=
+ =?utf-8?B?VjlXWXo3S1N6ZWwzZktDNVJLYmtEMmlNUkpHaVFtckZCd0ZpMjlLa1VoSzlJ?=
+ =?utf-8?B?SjJtL0JpM3pWdE5UZ0dvQVNjMXJGS1kwV2w4VHBnOHBqanMwYmFjTEIzS0hH?=
+ =?utf-8?B?ZURvb2ZCU3lDT1ZoZ1ZRd3ZmYlcxS24rNXdwL0RNMXNMbjJLR29qaThNRTV4?=
+ =?utf-8?B?ek5RWm1LeFEvSW85cE5zMGlFdTVtc1FzOTVqeTdUM1A0NUtQdDBMU0dNU0Z0?=
+ =?utf-8?B?VnAybE5CbVhzaEZ0aXNRaEdGRkhaQThGQXJpZ3NPbWoxaElZVnVKYUZGelZV?=
+ =?utf-8?B?TW1GS29md2dVUTc4NU5wOVdDVkUrbnhuZ2RGOVN6VUxDanVnVGc5MFpRSmdo?=
+ =?utf-8?B?NDFoNkFRYno3ZFYyN21CbWc0b1Zpa2tHU2JWeTVSNjgxL25TR2U3NzRVMEll?=
+ =?utf-8?B?UG85aWVCaVJuRUYxN2lQZEdXMWtxbnBMOFZiejB3RVFVZllkK2VPVUVycDVW?=
+ =?utf-8?Q?nK2s3gyfR9mMwb4o=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29f392fa-e79e-40e6-e2b7-08da1104c975
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 21:49:08.6333
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W/+l04TmlRKsgw7qK46qYmoYI7QA3MwdZyTyYQ2R6Oyywqm1dkRv+IH7vWxZCYVneReu786l2FXqgDefzckgwLuodWiO7T4lbex0bHvCkDA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1908
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,130 +170,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 27, 2022 at 11:57 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Fri, Mar 25, 2022 at 6:00 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Mar 23, 2022 at 9:08 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > Hi Alexei,
-> > >
-> > > On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
-> > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > >
-> > > > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
-> > > > > +{
-> > > > > +       int ret;
-> > > > > +       struct hid_bpf_ctx_kern ctx = {
-> > > > > +               .type = HID_BPF_RDESC_FIXUP,
-> > > > > +               .hdev = hdev,
-> > > > > +               .size = *size,
-> > > > > +       };
-> > > > > +
-> > > > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
-> > > > > +               goto ignore_bpf;
-> > > > > +
-> > > > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
-> > > > > +       if (!ctx.data)
-> > > > > +               goto ignore_bpf;
-> > > > > +
-> > > > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
-> > > > > +
-> > > > > +       ret = hid_bpf_run_progs(hdev, &ctx);
-> > > > > +       if (ret)
-> > > > > +               goto ignore_bpf;
-> > > > > +
-> > > > > +       if (ctx.size > ctx.allocated_size)
-> > > > > +               goto ignore_bpf;
-> > > > > +
-> > > > > +       *size = ctx.size;
-> > > > > +
-> > > > > +       if (*size) {
-> > > > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
-> > > > > +       } else {
-> > > > > +               rdesc = NULL;
-> > > > > +               kfree(ctx.data);
-> > > > > +       }
-> > > > > +
-> > > > > +       return rdesc;
-> > > > > +
-> > > > > + ignore_bpf:
-> > > > > +       kfree(ctx.data);
-> > > > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
-> > > > > +}
-> > > > > +
-> > > > >  int __init hid_bpf_module_init(void)
-> > > > >  {
-> > > > >         struct bpf_hid_hooks hooks = {
-> > > > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
-> > > > >                 .pre_link_attach = hid_bpf_pre_link_attach,
-> > > > > +               .post_link_attach = hid_bpf_post_link_attach,
-> > > > >                 .array_detach = hid_bpf_array_detach,
-> > > > >         };
-> > > > >
-> > > > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> > > > > index 937fab7eb9c6..3182c39db006 100644
-> > > > > --- a/drivers/hid/hid-core.c
-> > > > > +++ b/drivers/hid/hid-core.c
-> > > > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
-> > > > >                 return -ENODEV;
-> > > > >         size = device->dev_rsize;
-> > > > >
-> > > > > -       buf = kmemdup(start, size, GFP_KERNEL);
-> > > > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
-> > > > > +       buf = hid_bpf_report_fixup(device, start, &size);
-> > > >
-> > > > Looking at this patch and the majority of other patches...
-> > > > the code is doing a lot of work to connect HID side with bpf.
-> > > > At the same time the evolution of the patch series suggests
-> > > > that these hook points are not quite stable. More hooks and
-> > > > helpers are being added.
-> > > > It tells us that it's way too early to introduce a stable
-> > > > interface between HID and bpf.
-> > >
-> > > I understand that you might be under the impression that the interface
-> > > is changing a lot, but this is mostly due to my poor knowledge of all
-> > > the arcanes of eBPF.
-> > > The overall way HID-BPF works is to work on a single array, and we
-> > > should pretty much be sorted out. There are a couple of helpers to be
-> > > able to communicate with the device, but the API has been stable in
-> > > the kernel for those for quite some time now.
-> > >
-> > > The variations in the hooks is mostly because I don't know what is the
-> > > best representation we can use in eBPF for those, and the review
-> > > process is changing that.
-> >
-> > I think such a big feature as this one, especially that most BPF folks
-> > are (probably) not familiar with the HID subsystem in the kernel,
-> > would benefit from a bit of live discussion during BPF office hours.
-> > Do you think you can give a short overview of what you are trying to
-> > achieve with some background context on HID specifics at one of the
-> > next BPF office hours? We have a meeting scheduled every week on
-> > Thursday, 9am Pacific time. But people need to put their topic onto
-> > the agenda, otherwise the meeting is cancelled. See [0] for
-> > spreadsheet and links to Zoom meeting, agenda, etc.
->
-> This sounds like a good idea. I just added my topic on the agenda and
-> will prepare some slides.
->
+Hi Jarkko,
 
-Great! Unfortunately I personally have a conflict this week and won't
-be able to attend, so I'll have to catch up somehow through word of
-mouth :( Next week's BPF office hours would be best, but I don't want
-to delay discussions just because of me.
+On 3/22/2022 12:43 AM, Jarkko Sakkinen wrote:
+> Simplify the test_encl_bootstrap.S flow by using rip-relative addressing.
+> Compiler does the right thing here, and this removes dependency on where
+> TCS entries need to be located in the binary, i.e. allows the binary layout
+> changed freely in the future.
+> 
+> Cc: Reinette Chatre <reinette.chatre@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  tools/testing/selftests/sgx/test_encl_bootstrap.S | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> index 82fb0dfcbd23..1c1b5c6c4ffe 100644
+> --- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> +++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+> @@ -40,11 +40,7 @@
+>  	.text
+>  
+>  encl_entry:
+> -	# RBX contains the base address for TCS, which is the first address
+> -	# inside the enclave for TCS #1 and one page into the enclave for
+> -	# TCS #2. By adding the value of encl_stack to it, we get
+> -	# the absolute address for the stack.
+> -	lea	(encl_stack)(%rbx), %rax
+> +	lea	(encl_stack)(%rip), %rax
+>  	xchg	%rsp, %rax
+>  	push	%rax
+>  
 
-> Cheers,
-> Benjamin
->
-> >
-> >   [0] https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU
-> >
-> > [...]
-> >
->
+The goal of the above snippet is to set RSP to ensure that each thread has its own stack.
+
+Since EENTER computes RIP as EnclaveBase + TCS.OENTRY, by using offset from RIP this
+would result in all TCS with OENTRY of encl_entry to use the same stack, no?
+
+Could you please consider the following as an alternative:
+https://lore.kernel.org/lkml/65c137c875bd4da675eaba35316ff43d7cfd52f8.1644274683.git.reinette.chatre@intel.com/
+
+The idea in that patch is that a new TCS would always need to be accompanied by a
+dedicated stack so, at least for testing purposes, the TCS and stack can be dynamically
+allocated together with the TCS page following its stack.  This seems much simpler
+to me and also makes the following patch unnecessary.
+
+Reinette
