@@ -2,179 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE964E8C73
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Mar 2022 05:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A5F4E8CC1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Mar 2022 06:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237719AbiC1DMS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Mar 2022 23:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S237214AbiC1EBl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Mar 2022 00:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236706AbiC1DMQ (ORCPT
+        with ESMTP id S233550AbiC1EBk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Mar 2022 23:12:16 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45B35A97
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Mar 2022 20:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1648437034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DkU+mU+GhDEs6LM8/HMq+F5uCetXHIy9elX/iw1YwcE=;
-        b=Kr6+OMhjD/ayZMwlb79HOQb1IAA4mRxoBB2MVmtZhamHQMlROvdSJZEAJWHziTfQj5oe7N
-        3ziqEBEvo63bHNlgvb4XzsHIDlpumm8iYFWjCZCwK9HKex4xsPe3bRwdnXsyDgGnJkJa3e
-        OtYYmGXYeglFeIdpVPJeLCY2ZnucUhU=
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur04lp2055.outbound.protection.outlook.com [104.47.14.55]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-16-fpYbqLErNFm_SJjZCH6Y7w-1; Mon, 28 Mar 2022 05:10:30 +0200
-X-MC-Unique: fpYbqLErNFm_SJjZCH6Y7w-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZKhUziCYDeLcFTWePqxxDd6He3Ey9pKioTVtd4aMzZLYg5n2Wjy53j2AdJ2GNFwDb8Mg0qwd6NH4ml7P+uoCbz1mu2aer4EK+y8ngW+g2uVDAYgcgPrALbMFd3t5TkexifubESMaKJ6B0RWJnPk2QLMDxMIVBwyXe+l4S4plGuIwKKUOa+Zos5n0Sdixm9EiHbPYfq5Ltj2OUM9RUa9dXEd7UNSuVfQtFlqHyGDQEd42RnznCk0Z9iXt+Imct9Lx05Jd79tiwUpKqXNWSjzY3LzqE1t0Nbspeh5wwQtBY7XQ4/W/TljqT7lV0wTL2mL4Q6EETpSSeaCXFZbq4SZvRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DkU+mU+GhDEs6LM8/HMq+F5uCetXHIy9elX/iw1YwcE=;
- b=MKrj5yjGUnl+Gcb7XOt32zZoRz7qh2M3ug0yJcjwucR7vXMCjPIUctYeB+Mq4ixcSLjmOT0GRCSyPGvvZYiCPuAlDlWuwm1aRnhFaTq6SS3RRQjfKCzDrlp0LdpajTqvZA7Kgpe+4xSTzeFNmgD9rkYmZgs9+AXBlNYqx3klfVAQvolTPVi5GTKFFCzOmHHTGSKcPwzAyCbbet5C071ai2d80Af/Rvbhfhl047CHFJKuFnT5+wVC4PzpKJsND3HPUC8NlhXumOIenFhkfDH0XjnpiFmAnkndCFQ5taGX8WGnezQ64afcPuNXBiWrStoOsC6w1SmcM+Yuanbr1rwOJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
- by DBBPR04MB7850.eurprd04.prod.outlook.com (2603:10a6:10:1e8::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Mon, 28 Mar
- 2022 03:10:28 +0000
-Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
- ([fe80::b110:cb51:e09f:bb05]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
- ([fe80::b110:cb51:e09f:bb05%6]) with mapi id 15.20.5102.022; Mon, 28 Mar 2022
- 03:10:28 +0000
-Date:   Mon, 28 Mar 2022 11:10:33 +0800
-From:   Geliang Tang <geliang.tang@suse.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: x86: add 32bit build warnings for SUSE
-Message-ID: <20220328031033.GA16727@localhost>
-References: <5f22f4657cd11e541ab6cdbb7782b55891f63241.1648115583.git.geliang.tang@suse.com>
- <9a8bc94f-b087-c803-e8ac-9f2ea1ef9c5e@linuxfoundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a8bc94f-b087-c803-e8ac-9f2ea1ef9c5e@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: HK0PR01CA0066.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::30) To HE1PR0402MB3497.eurprd04.prod.outlook.com
- (2603:10a6:7:83::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b79e1e80-0856-4684-e4be-08da10688287
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7850:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR04MB7850D53EAA6AB09AA63D1297F81D9@DBBPR04MB7850.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: grBcEvR2VnWyIRXsUIcuFpeNBWZhnUf5oVQcr9TQFbnX7oYRq6DKah14XXEzSs3bWPzUMsKu5hISXGURnvYsu8HLf8gU055e7slnuiINbEFMk4wq4NEOxi0hqcRcAgPpGXOF12wGdym4fgJ9t5nfvrrSr0xAntuWBDk3XLM18CxGht746q2NJmeXAC3+hZ3sP5a0LRspgRwwWJxPTyRCkZT60bawLwRftCSLO1YB3DX8Gt/8Cn3zo/MWc6SABBfov7OL13UG05LpOz7XHBIZtH3YLgQgKU2YvtjruBUk38KS192eQXF0O37zb64Z1UG2f/wCoZkdk/n4jVk/8IdQ71WHTYtYwU/B8NrfHqLYml117dBLciXRGaoCuSeYGX4uAYSuYklJPSDCIxWEab3kvcKBComvx3N1wVk0nk/mat+m8cdZAOEv6EjTXBMheTfAIOJ9zPZulbJVKBzNwJgL6B1Md17nffmpH98uS4LlBCGQxLX4QWcy/UXH7fKRJJRVHb26bIQ9xhcmz2OI3LKQwYKwZB6Al3P5ZKkKLoiefP90Fyei6QTwEtb5Z8byXWE0U2mSDS/7GWT9n+GH8844P4LhhIxUrpug7LjEKpCHHBRnPlZz8eO43pksiXMbzZJSAwvqkS4JDAeJ629lx8ThtDduQEeb+t2G/eXTIMtubVMQm48ZB71Gh0aIBWaI3K8r
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(83380400001)(26005)(6486002)(1076003)(6506007)(8936002)(186003)(4326008)(508600001)(6916009)(38100700002)(66946007)(66476007)(8676002)(5660300002)(6666004)(66556008)(33656002)(86362001)(316002)(6512007)(44832011)(9686003)(33716001)(2906002)(53546011)(13296009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Fq+qJF+mR/ziKG7X6h1LL0YzBM8mFK5N3zly9lF9bQXhd+NarxJAH7WmSUwN?=
- =?us-ascii?Q?/Dd6KQ8NsEj3yTU1qY9LZfuuVNE85F37d8CB1YwcHdil9KQiysd2dQoEE/nt?=
- =?us-ascii?Q?B9/ZmGJxPn2AbWEU1kJvgYBy/P+lEj04jq7DtxbUIrGYdTgCKVmygB/6PPWJ?=
- =?us-ascii?Q?IPY0HH9mGs59P35jL8n+K58ipbNgA49BUkVsKF0vCmnwjddf2MwuRdBsvMLI?=
- =?us-ascii?Q?4GhmpTBw7KA3GhLxXEwj7kdhlm62Mv1/e8KkUUWsnCNP+33yYRKghPvNDcuH?=
- =?us-ascii?Q?98hPWjBeMijlnpWwsQnY6sWte2zDG9OYicwbfIVIckGMpLJVJYRlM/7/gW7g?=
- =?us-ascii?Q?Ch6OXpCkouPrdASqdl8Oaipdn2fcznFhE9P+TnxKLYKSjKrLZviFRxa3v8eX?=
- =?us-ascii?Q?11mYTBJEl46Kp/S1agSFvaBRr+j1FtSHf0hWrzzNN1VrlHhr68HRc63xp5mO?=
- =?us-ascii?Q?vgVr8DKsjnj36IbYAHxS9m1qbk6T1sUPnWnqTx+AWXnLzwxaRqxcjnku0suB?=
- =?us-ascii?Q?oe1nsY8cIpajv4FMSYGxTTl37SCtZdlmnt7r53nlaXIJakDdy99et5H+Q95R?=
- =?us-ascii?Q?aQSgdhuyOwkGarsTPh8ekTlxEd43w0TzHp9vi4SpEIMDzYHo5flV1Vr0iC8w?=
- =?us-ascii?Q?6k/EcMu53Yf7GGWqJk3DL0QFOTT+le51nR94kkUGRVDl9mdyMPr2kyd5u9i4?=
- =?us-ascii?Q?Tj//lW9vFTJAorKqYFTB3Xqh+jBKgcO0TURcFEnQ+xBKJIG3Sfrl8EfYQjAB?=
- =?us-ascii?Q?ZCVu7ly3XXQlpVXYXzDEPMf475I5Aeu/Si6DyDkiN592mb5d3212YZ/9roa0?=
- =?us-ascii?Q?Q/51ECb40UKCEsjaaBK6Nf8vX1iy5+3rWWNbnSLS0CN4OJ1KMikPGjrYEZMz?=
- =?us-ascii?Q?xRuURniQDfeS8IpRH5gUnRLRbDGFzUbSZGBfx+DhFUUtrNNk3i+dFz62gQ/B?=
- =?us-ascii?Q?qcVv33G0nA8g/dTNe2cOoyoPoa9whtyCHpeBtAbvy9otmXSepFx3NqSAH+IC?=
- =?us-ascii?Q?GCJNBXdbpaaqqs1PSU/VEGokD/rhmTVW4U6RKTpI2e+YvxynanjDwekd1fNP?=
- =?us-ascii?Q?eUbFzCX82rDRVJI/b3/Lb7pOllaSBMl1+I66PmFCxYDxWp+dkmGKKqRjyuJB?=
- =?us-ascii?Q?iT1ZuasutlSuBB6uvUW/GzXxWqL0fSsw+TId4ObaDWDOgv4Y01r7PI9Bp+zw?=
- =?us-ascii?Q?AfLzwOx06mZXptbAqHqH2LirAPIz2wHh+TIUg1fHJxcdsyUeOmivpGZYQ5pr?=
- =?us-ascii?Q?ENKAxDTz3MiTT0wD2PboaF/xyAT/Sy/bCtJC2sX01qTThlK01Fg2mpu9o+LX?=
- =?us-ascii?Q?OW4T2AmutoxqXU4SHG9jXhuXzLohgSi5RvWNxuXxAOdp57scCv3FifePpqbC?=
- =?us-ascii?Q?gdkDb7ZrnCo6U/BAFa0TOR3xagzpAUzoEr+Fy4q/PvmAuTciB/b8WbtJDWo9?=
- =?us-ascii?Q?afqKgCUlYG0T2SBuIWo/1hB1TExiLcHnt4fhXBTGofSCwTQnlz6hU0r3nuXs?=
- =?us-ascii?Q?egyWu4B8JHiX9yVbjBy3AdnioJZqZ/fIOCnBlmEbrxBRf+xCiC64wcsEUDwW?=
- =?us-ascii?Q?XDNGthWwj7h5tffes4eCI1LJcF9ANULNoikW1Fd+hBRJwVVTshptDkbr+0jn?=
- =?us-ascii?Q?R//du51ygCsYQnsiDebwzhnXHQ9Z7nC/d/di1Rm2moRRdpk0PgOJFFqRpTgx?=
- =?us-ascii?Q?muYCwhUjxw9Ao7cST9QfmTT/0NTmpqqwmqIjIKojn8FC/OLGMUY87FJbFw0l?=
- =?us-ascii?Q?e/zOnQWDjNoROAZjWDjNLK4o0e/kCdY=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b79e1e80-0856-4684-e4be-08da10688287
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Mar 2022 03:10:28.0496
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fXPEzSwufWoGYJmq2koK7eKRy+ReQ5TffVq0IgDS7ctIDndU3ffMELub8QYSyRl/FWY3w0NhXpJQHCGrtLSjnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7850
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 00:01:40 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9804506A
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Mar 2022 20:59:57 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n207-20020a25d6d8000000b0063bd7a74ae4so4353230ybg.21
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Mar 2022 20:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=ZanSM+z+bqiT+dazTvxIhzoTPKfBDbdIJDmpkh0ngiA=;
+        b=dEZSetUwhJ77JER9uOFHsQsp76JzF2DjT1q6+REMveb9Wt4BrGDGIQgD1zzZM9bma+
+         yhEZCho/DguXCN/LWIpS6/sXTLVs/7I8V57LnPEuNyRfMseJ+ScdFrLfEpJoGDWtMIFM
+         t64Dd1vWRIhCANW1YNotTj71VdF86eU/Z1yZ/2P1/oZx3uAbxFDxrqLAVLQm8PT6wR0S
+         qEnNzRfOZYWdnMNSE8GFnj9hFuliT0+m6mkGHNaGsEGbIMS5RBIfRao1fm6MCxklAbdl
+         N8IuezzihPA3MdxNEuigRrXDRU77mTQDN2Wi23Fw13t4QVAYQLDOIAduNv28SyaFtkAo
+         +W/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=ZanSM+z+bqiT+dazTvxIhzoTPKfBDbdIJDmpkh0ngiA=;
+        b=KsJcSXIvT18l2yJpRzLGc2NTq/AjCDfnzKLCUpyQgPyiJWhkOlvI8HGBZtRkPh/gAF
+         nHpSPRihYEnf5qvcX/kljuffy2wIzoQdOya+fq+XPG6JLsfA+2mb/1I0iijy8uoGpnHY
+         YQmoc6A48p5WqlIgPAJkLpXj0b7dXVxOyOZPX5cWRFX12WBs8m3Q4wV8wPwWz8/1M6Io
+         OCoOGYx9qexZFtAaSNRFbU2FT/ySn6l0NXUG5WeV6yvNPyCr0PorcsvlZvtpc/hEASK2
+         jS/vWdk3kHR6XuQ5gy7Xv3XadTKZgoUdu/2XsoVizgIMJ43HVo3tASjWxAhSzzo8lyYD
+         omTw==
+X-Gm-Message-State: AOAM5317ZghE3mn6F1ahxpkUclFcFNPzHPjKW1AmX7dZdkfM7+K0QA77
+        G4SaCb2tMjGNul1s2tEsVvtZwZo8gPGWzt4=
+X-Google-Smtp-Source: ABdhPJxDNziGYjzb/ZRm1pevbyvVdw8eQjc7VwyCozk0n3Hczh8k36e8/hVih9NxH0h+d3gtUEehLBH2IOPtLgg=
+X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
+ (user=tjmercier job=sendgmr) by 2002:a25:25c3:0:b0:633:8079:1768 with SMTP id
+ l186-20020a2525c3000000b0063380791768mr21066931ybl.488.1648439997054; Sun, 27
+ Mar 2022 20:59:57 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 03:59:39 +0000
+Message-Id: <20220328035951.1817417-1-tjmercier@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [RFC v4 0/8] Proposal for a GPU cgroup controller
+From:   "T.J. Mercier" <tjmercier@google.com>
+To:     tjmercier@google.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
+        skhan@linuxfoundation.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 01:45:13PM -0600, Shuah Khan wrote:
-> On 3/24/22 3:55 AM, Geliang Tang wrote:
-> > In order to successfully build all these 32bit tests, these 32bit gcc
-> > and glibc packages, named gcc-32bit and glibc-devel-static-32bit on SUSE,
-> > need to be installed.
-> > 
-> > This patch added this information in warn_32bit_failure.
-> > 
-> 
-> Convention is to use "This patch adds" i.e  imperative, present tense
-> in commit logs.
-> 
-> I will amend the commit log when applying. Please keep that in mind for
-> future patches.
+This patch series revisits the proposal for a GPU cgroup controller to
+track and limit memory allocations by various device/allocator
+subsystems. The patch series also contains a simple prototype to
+illustrate how Android intends to implement DMA-BUF allocator
+attribution using the GPU cgroup controller. The prototype does not
+include resource limit enforcements.
 
-Thank you so much for your reminder. It seems that I have used the wrong
-tense in the commit logs for several years. I will use the present tense
-as you suggest in future patches.
+Changelog:
+v4:
+Skip test if not run as root per Shuah Khan
 
-Thanks,
--Geliang
+Add better test logging for abnormal child termination per Shuah Khan
 
-> 
-> > Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-> > ---
-> >   tools/testing/selftests/x86/Makefile | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> > index 8a1f62ab3c8e..ffd7c1fa2c9e 100644
-> > --- a/tools/testing/selftests/x86/Makefile
-> > +++ b/tools/testing/selftests/x86/Makefile
-> > @@ -92,6 +92,10 @@ warn_32bit_failure:
-> >   	echo "If you are using a Fedora-like distribution, try:";	\
-> >   	echo "";							\
-> >   	echo "  yum install glibc-devel.*i686";				\
-> > +	echo "";							\
-> > +	echo "If you are using a SUSE-like distribution, try:";		\
-> > +	echo "";							\
-> > +	echo "  zypper install gcc-32bit glibc-devel-static-32bit";	\
-> >   	exit 0;
-> >   endif
-> > 
-> 
-> Thank you for the patch. Will apply for Linux 5.18-rc2
-> 
-> thanks,
-> -- Shuah
-> 
+Adjust ordering of charge/uncharge during transfer to avoid potentially
+hitting cgroup limit per Michal Koutn=C3=BD
+
+Adjust gpucg_try_charge critical section for charge transfer functionality
+
+Fix uninitialized return code error for dmabuf_try_charge error case
+
+v3:
+Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz
+
+Use more common dual author commit message format per John Stultz
+
+Remove android from binder changes title per Todd Kjos
+
+Add a kselftest for this new behavior per Greg Kroah-Hartman
+
+Include details on behavior for all combinations of kernel/userspace
+versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
+
+Fix pid and uid types in binder UAPI header
+
+v2:
+See the previous revision of this change submitted by Hridya Valsaraju
+at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.com/
+
+Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+heap to a single dma-buf function for all heaps per Daniel Vetter and
+Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
+tracking the current associations were added to the dma_buf struct to
+achieve this.
+
+Fix incorrect Kconfig help section indentation per Randy Dunlap.
+
+History of the GPU cgroup controller
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+The GPU/DRM cgroup controller came into being when a consensus[1]
+was reached that the resources it tracked were unsuitable to be integrated
+into memcg. Originally, the proposed controller was specific to the DRM
+subsystem and was intended to track GEM buffers and GPU-specific
+resources[2]. In order to help establish a unified memory accounting model
+for all GPU and all related subsystems, Daniel Vetter put forth a
+suggestion to move it out of the DRM subsystem so that it can be used by
+other DMA-BUF exporters as well[3]. This RFC proposes an interface that
+does the same.
+
+[1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.95=
+06-1-brian.welty@intel.com/#22624705
+[2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@int=
+el.com/
+[3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.local/
+
+Hridya Valsaraju (5):
+  gpu: rfc: Proposal for a GPU cgroup controller
+  cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
+    memory
+  dmabuf: heaps: export system_heap buffers with GPU cgroup charging
+  dmabuf: Add gpu cgroup charge transfer function
+  binder: Add a buffer flag to relinquish ownership of fds
+
+T.J. Mercier (3):
+  dmabuf: Use the GPU cgroup charge/uncharge APIs
+  binder: use __kernel_pid_t and __kernel_uid_t for userspace
+  selftests: Add binder cgroup gpu memory transfer test
+
+ Documentation/gpu/rfc/gpu-cgroup.rst          | 183 +++++++
+ Documentation/gpu/rfc/index.rst               |   4 +
+ drivers/android/binder.c                      |  26 +
+ drivers/dma-buf/dma-buf.c                     | 107 ++++
+ drivers/dma-buf/dma-heap.c                    |  27 +
+ drivers/dma-buf/heaps/system_heap.c           |   3 +
+ include/linux/cgroup_gpu.h                    | 139 +++++
+ include/linux/cgroup_subsys.h                 |   4 +
+ include/linux/dma-buf.h                       |  22 +-
+ include/linux/dma-heap.h                      |  11 +
+ include/uapi/linux/android/binder.h           |   5 +-
+ init/Kconfig                                  |   7 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/gpu.c                           | 362 +++++++++++++
+ .../selftests/drivers/android/binder/Makefile |   8 +
+ .../drivers/android/binder/binder_util.c      | 254 +++++++++
+ .../drivers/android/binder/binder_util.h      |  32 ++
+ .../selftests/drivers/android/binder/config   |   4 +
+ .../binder/test_dmabuf_cgroup_transfer.c      | 484 ++++++++++++++++++
+ 19 files changed, 1679 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
+ create mode 100644 include/linux/cgroup_gpu.h
+ create mode 100644 kernel/cgroup/gpu.c
+ create mode 100644 tools/testing/selftests/drivers/android/binder/Makefile
+ create mode 100644 tools/testing/selftests/drivers/android/binder/binder_u=
+til.c
+ create mode 100644 tools/testing/selftests/drivers/android/binder/binder_u=
+til.h
+ create mode 100644 tools/testing/selftests/drivers/android/binder/config
+ create mode 100644 tools/testing/selftests/drivers/android/binder/test_dma=
+buf_cgroup_transfer.c
+
+--=20
+2.35.1.1021.g381101b075-goog
 
