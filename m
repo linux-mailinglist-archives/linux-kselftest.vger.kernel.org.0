@@ -2,374 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F534E9DBE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Mar 2022 19:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7658B4E9E2A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Mar 2022 19:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244675AbiC1Rnf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Mar 2022 13:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S244758AbiC1Rxy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Mar 2022 13:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244668AbiC1Rne (ORCPT
+        with ESMTP id S244764AbiC1Rwx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:43:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F1365153
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Mar 2022 10:41:52 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e5a3c1384cso123675477b3.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Mar 2022 10:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=aVA4LBHoLKMhMeszpuqgZVuKkHU9fUPyLNppRxS+x30=;
-        b=b8YOQWtHZFjqrGpVz0IfM2MOlUS28rXfzIOO4U0z8LH66Q4385DU1RQX9YwULYvE6K
-         0D9F85V9xAkc4+ZqL7fi8NvouSXz/3jlk6WawL9tTugRib2gpu5JOO1xmtTSwioct0FJ
-         qPJYJIitF4x1jyyKzYDcu0SCR6KYF6hum5wMaLQrciia6QJn1uOtFI/eIQ0/IeO8MjS1
-         I38sV1PURryNLMXfXxkY6a/c38NkHdSpYENv/K7Mky3E52xrLTvnKhjOzA2SAFiY9rfh
-         loaQhllfxcn5oRwl55dY95LKWOcQqyU9V8dupc8tZQBaix1ONPZaxAR6kJ+sM7v1yGud
-         Liwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=aVA4LBHoLKMhMeszpuqgZVuKkHU9fUPyLNppRxS+x30=;
-        b=tFtUaewZfyfDGwL73/DrtnN+CiNRlnBcQTwtXAXwVS/GhG6XenKCySAnM+39Dvb+Mr
-         tQ+Wzv9TFD+G4uRR8r5laBFOSvsMZCpZBES8svE3P9S0UB11BOz1ToQhroVDuV71NWqQ
-         FOBD2jasvdpKQYcme7fugDrZOiwkV10ZQS4ZIrpMOQgNtnsoxpn3fEwtfSUxLqQbI1yu
-         PO+qYirHYE+lfMcqxg6QxNyxCdoeQ+HNKKquTtnni03f0QiWzbOgcOcQeYrTwekoOddX
-         xbC15GgfwGhAJ5GsHJzL4Snxm0qrPDZCnPZZUO308O/I2dzYLoe8uqDBj2jE/Zh0CcOj
-         y8BQ==
-X-Gm-Message-State: AOAM5327GdWTsI6x8GBGXkOA0kBgS12Dm/xLeu+itdDUz989ezICxQYl
-        IVWXfF7Y91pr8KEbc8mjJIV7gFL+P3I/2A==
-X-Google-Smtp-Source: ABdhPJwT4e9NZT6ZiqObMlzk2YveWab3+TEkjoa2PYCl3ut5T+4O5QYfGL5wjUYwOtZSqylIRTzMQDjvKoQxvA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:73c:9f0b:d20c:cf44])
- (user=dlatypov job=sendgmr) by 2002:a81:106:0:b0:2d0:e682:8a7a with SMTP id
- 6-20020a810106000000b002d0e6828a7amr27046249ywb.257.1648489312013; Mon, 28
- Mar 2022 10:41:52 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 10:41:43 -0700
-In-Reply-To: <20220328174143.857262-1-dlatypov@google.com>
-Message-Id: <20220328174143.857262-2-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220328174143.857262-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v3 2/2] kunit: split resource API impl from test.c into new resource.c
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 28 Mar 2022 13:52:53 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0113CA56;
+        Mon, 28 Mar 2022 10:51:11 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KS0Zg0mQtz67Mmd;
+        Tue, 29 Mar 2022 01:49:47 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 28 Mar 2022 19:51:08 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <corbet@lwn.net>, <viro@zeniv.linux.org.uk>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
+        <shuah@kernel.org>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <zohar@linux.ibm.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
+Date:   Mon, 28 Mar 2022 19:50:15 +0200
+Message-ID: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We've split out the declarations from include/kunit/test.h into
-resource.h.
-This patch splits out the definitions as well for consistency.
+eBPF already allows programs to be preloaded and kept running without
+intervention from user space. There is a dedicated kernel module called
+bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
+program. If this module is enabled in the kernel configuration, its loading
+will be triggered when the bpf filesystem is mounted (unless the module is
+built-in), and the links of iterators_bpf are pinned in that filesystem
+(they will appear as the progs.debug and maps.debug files).
 
-A side effect of this is git blame won't properly track history by
-default, users need to run
-$ git blame -L ,1 -C13 lib/kunit/resource.c
+However, the current mechanism, if used to preload an LSM, would not offer
+the same security guarantees of LSMs integrated in the security subsystem.
+Also, it is not generic enough to be used for preloading arbitrary eBPF
+programs, unless the bpf_preload code is heavily modified.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-v1 -> v2: add this patch
-v2 -> v3: drop trailing \n at end of resource.c
----
- lib/kunit/Makefile   |   1 +
- lib/kunit/resource.c | 125 +++++++++++++++++++++++++++++++++++++++++++
- lib/kunit/test.c     | 116 +--------------------------------------
- 3 files changed, 127 insertions(+), 115 deletions(-)
- create mode 100644 lib/kunit/resource.c
+More specifically, the security problems are:
+- any program can be pinned to the bpf filesystem without limitations
+  (unless a MAC mechanism enforces some restrictions);
+- programs being executed can be terminated at any time by deleting the
+  pinned objects or unmounting the bpf filesystem.
 
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index c49f4ffb6273..29aff6562b42 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -1,6 +1,7 @@
- obj-$(CONFIG_KUNIT) +=			kunit.o
- 
- kunit-objs +=				test.o \
-+					resource.o \
- 					string-stream.o \
- 					assert.o \
- 					try-catch.o \
-diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
-new file mode 100644
-index 000000000000..8f8057aad78f
---- /dev/null
-+++ b/lib/kunit/resource.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit resource API for test managed resources (allocations, etc.).
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: Daniel Latypov <dlatypov@google.com>
-+ */
-+
-+#include <kunit/resource.h>
-+#include <kunit/test.h>
-+#include <linux/kref.h>
-+
-+/*
-+ * Used for static resources and when a kunit_resource * has been created by
-+ * kunit_alloc_resource().  When an init function is supplied, @data is passed
-+ * into the init function; otherwise, we simply set the resource data field to
-+ * the data value passed in.
-+ */
-+int kunit_add_resource(struct kunit *test,
-+		       kunit_resource_init_t init,
-+		       kunit_resource_free_t free,
-+		       struct kunit_resource *res,
-+		       void *data)
-+{
-+	int ret = 0;
-+	unsigned long flags;
-+
-+	res->free = free;
-+	kref_init(&res->refcount);
-+
-+	if (init) {
-+		ret = init(res, data);
-+		if (ret)
-+			return ret;
-+	} else {
-+		res->data = data;
-+	}
-+
-+	spin_lock_irqsave(&test->lock, flags);
-+	list_add_tail(&res->node, &test->resources);
-+	/* refcount for list is established by kref_init() */
-+	spin_unlock_irqrestore(&test->lock, flags);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(kunit_add_resource);
-+
-+int kunit_add_named_resource(struct kunit *test,
-+			     kunit_resource_init_t init,
-+			     kunit_resource_free_t free,
-+			     struct kunit_resource *res,
-+			     const char *name,
-+			     void *data)
-+{
-+	struct kunit_resource *existing;
-+
-+	if (!name)
-+		return -EINVAL;
-+
-+	existing = kunit_find_named_resource(test, name);
-+	if (existing) {
-+		kunit_put_resource(existing);
-+		return -EEXIST;
-+	}
-+
-+	res->name = name;
-+
-+	return kunit_add_resource(test, init, free, res, data);
-+}
-+EXPORT_SYMBOL_GPL(kunit_add_named_resource);
-+
-+struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-+						    kunit_resource_init_t init,
-+						    kunit_resource_free_t free,
-+						    gfp_t internal_gfp,
-+						    void *data)
-+{
-+	struct kunit_resource *res;
-+	int ret;
-+
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
-+
-+	ret = kunit_add_resource(test, init, free, res, data);
-+	if (!ret) {
-+		/*
-+		 * bump refcount for get; kunit_resource_put() should be called
-+		 * when done.
-+		 */
-+		kunit_get_resource(res);
-+		return res;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
-+
-+void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&test->lock, flags);
-+	list_del(&res->node);
-+	spin_unlock_irqrestore(&test->lock, flags);
-+	kunit_put_resource(res);
-+}
-+EXPORT_SYMBOL_GPL(kunit_remove_resource);
-+
-+int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
-+			   void *match_data)
-+{
-+	struct kunit_resource *res = kunit_find_resource(test, match,
-+							 match_data);
-+
-+	if (!res)
-+		return -ENOENT;
-+
-+	kunit_remove_resource(test, res);
-+
-+	/* We have a reference also via _find(); drop it. */
-+	kunit_put_resource(res);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(kunit_destroy_resource);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 3bca3bf5c15b..0f66c13d126e 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -6,10 +6,10 @@
-  * Author: Brendan Higgins <brendanhiggins@google.com>
-  */
- 
-+#include <kunit/resource.h>
- #include <kunit/test.h>
- #include <kunit/test-bug.h>
- #include <linux/kernel.h>
--#include <linux/kref.h>
- #include <linux/moduleparam.h>
- #include <linux/sched/debug.h>
- #include <linux/sched.h>
-@@ -592,120 +592,6 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
- }
- EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
- 
--/*
-- * Used for static resources and when a kunit_resource * has been created by
-- * kunit_alloc_resource().  When an init function is supplied, @data is passed
-- * into the init function; otherwise, we simply set the resource data field to
-- * the data value passed in.
-- */
--int kunit_add_resource(struct kunit *test,
--		       kunit_resource_init_t init,
--		       kunit_resource_free_t free,
--		       struct kunit_resource *res,
--		       void *data)
--{
--	int ret = 0;
--	unsigned long flags;
--
--	res->free = free;
--	kref_init(&res->refcount);
--
--	if (init) {
--		ret = init(res, data);
--		if (ret)
--			return ret;
--	} else {
--		res->data = data;
--	}
--
--	spin_lock_irqsave(&test->lock, flags);
--	list_add_tail(&res->node, &test->resources);
--	/* refcount for list is established by kref_init() */
--	spin_unlock_irqrestore(&test->lock, flags);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(kunit_add_resource);
--
--int kunit_add_named_resource(struct kunit *test,
--			     kunit_resource_init_t init,
--			     kunit_resource_free_t free,
--			     struct kunit_resource *res,
--			     const char *name,
--			     void *data)
--{
--	struct kunit_resource *existing;
--
--	if (!name)
--		return -EINVAL;
--
--	existing = kunit_find_named_resource(test, name);
--	if (existing) {
--		kunit_put_resource(existing);
--		return -EEXIST;
--	}
--
--	res->name = name;
--
--	return kunit_add_resource(test, init, free, res, data);
--}
--EXPORT_SYMBOL_GPL(kunit_add_named_resource);
--
--struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
--						    kunit_resource_init_t init,
--						    kunit_resource_free_t free,
--						    gfp_t internal_gfp,
--						    void *data)
--{
--	struct kunit_resource *res;
--	int ret;
--
--	res = kzalloc(sizeof(*res), internal_gfp);
--	if (!res)
--		return NULL;
--
--	ret = kunit_add_resource(test, init, free, res, data);
--	if (!ret) {
--		/*
--		 * bump refcount for get; kunit_resource_put() should be called
--		 * when done.
--		 */
--		kunit_get_resource(res);
--		return res;
--	}
--	return NULL;
--}
--EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
--
--void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
--{
--	unsigned long flags;
--
--	spin_lock_irqsave(&test->lock, flags);
--	list_del(&res->node);
--	spin_unlock_irqrestore(&test->lock, flags);
--	kunit_put_resource(res);
--}
--EXPORT_SYMBOL_GPL(kunit_remove_resource);
--
--int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
--			   void *match_data)
--{
--	struct kunit_resource *res = kunit_find_resource(test, match,
--							 match_data);
--
--	if (!res)
--		return -ENOENT;
--
--	kunit_remove_resource(test, res);
--
--	/* We have a reference also via _find(); drop it. */
--	kunit_put_resource(res);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(kunit_destroy_resource);
--
- struct kunit_kmalloc_array_params {
- 	size_t n;
- 	size_t size;
+The usability problems are:
+- only a fixed amount of links can be pinned;
+- only links can be pinned, other object types are not supported;
+- code to pin objects has to be written manually;
+- preloading multiple eBPF programs is not practical, bpf_preload has to be
+  modified to include additional light skeletons.
+
+Solve the security problems by mounting the bpf filesystem from the kernel,
+by preloading authenticated kernel modules (e.g. with module.sig_enforce)
+and by pinning objects to that filesystem. This particular filesystem
+instance guarantees that desired eBPF programs run until the very end of
+the kernel lifecycle, since even root cannot interfere with it.
+
+Solve the usability problems by generalizing the pinning function, to
+handle not only links but also maps and progs. Also increment the object
+reference count and call the pinning function directly from the preload
+method (currently in the bpf_preload kernel module) rather than from the
+bpf filesystem code itself, so that a generic eBPF program can do those
+operations depending on its objects (this also avoids the limitation of the
+fixed-size array for storing the objects to pin).
+
+Then, simplify the process of pinning objects defined by a generic eBPF
+program by automatically generating the required methods in the light
+skeleton. Also, generate a separate kernel module for each eBPF program to
+preload, so that existing ones don't have to be modified. Finally, support
+preloading multiple eBPF programs by allowing users to specify a list from
+the kernel configuration, at build time, or with the new kernel option
+bpf_preload_list=, at run-time.
+
+To summarize, this patch set makes it possible to plug in out-of-tree LSMs
+matching the security guarantees of their counterpart in the security
+subsystem, without having to modify the kernel itself. The same benefits
+are extended to other eBPF program types.
+
+Only one remaining problem is how to support auto-attaching eBPF programs
+with LSM type. It will be solved with a separate patch set.
+
+Patches 1-2 export some definitions, to build out-of-tree kernel modules
+with eBPF programs to preload. Patches 3-4 allow eBPF programs to pin
+objects by themselves. Patches 5-10 automatically generate the methods for
+preloading in the light skeleton. Patches 11-14 make it possible to preload
+multiple eBPF programs. Patch 15 automatically generates the kernel module
+for preloading an eBPF program, patch 16 does a kernel mount of the bpf
+filesystem, and finally patches 17-18 test the functionality introduced.
+
+Roberto Sassu (18):
+  bpf: Export bpf_link_inc()
+  bpf-preload: Move bpf_preload.h to include/linux
+  bpf-preload: Generalize object pinning from the kernel
+  bpf-preload: Export and call bpf_obj_do_pin_kernel()
+  bpf-preload: Generate static variables
+  bpf-preload: Generate free_objs_and_skel()
+  bpf-preload: Generate preload()
+  bpf-preload: Generate load_skel()
+  bpf-preload: Generate code to pin non-internal maps
+  bpf-preload: Generate bpf_preload_ops
+  bpf-preload: Store multiple bpf_preload_ops structures in a linked
+    list
+  bpf-preload: Implement new registration method for preloading eBPF
+    programs
+  bpf-preload: Move pinned links and maps to a dedicated directory in
+    bpffs
+  bpf-preload: Switch to new preload registration method
+  bpf-preload: Generate code of kernel module to preload
+  bpf-preload: Do kernel mount to ensure that pinned objects don't
+    disappear
+  bpf-preload/selftests: Add test for automatic generation of preload
+    methods
+  bpf-preload/selftests: Preload a test eBPF program and check pinned
+    objects
+
+ .../admin-guide/kernel-parameters.txt         |   8 +
+ fs/namespace.c                                |   1 +
+ include/linux/bpf.h                           |   5 +
+ include/linux/bpf_preload.h                   |  37 ++
+ init/main.c                                   |   2 +
+ kernel/bpf/inode.c                            | 295 +++++++++--
+ kernel/bpf/preload/Kconfig                    |  25 +-
+ kernel/bpf/preload/bpf_preload.h              |  16 -
+ kernel/bpf/preload/bpf_preload_kern.c         |  85 +---
+ kernel/bpf/preload/iterators/Makefile         |   9 +-
+ .../bpf/preload/iterators/iterators.lskel.h   | 466 +++++++++++-------
+ kernel/bpf/syscall.c                          |   1 +
+ .../bpf/bpftool/Documentation/bpftool-gen.rst |  13 +
+ tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
+ tools/bpf/bpftool/gen.c                       | 331 +++++++++++++
+ tools/bpf/bpftool/main.c                      |   7 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/testing/selftests/bpf/Makefile          |  32 +-
+ .../bpf/bpf_testmod_preload/.gitignore        |   7 +
+ .../bpf/bpf_testmod_preload/Makefile          |  20 +
+ .../gen_preload_methods.expected.diff         |  97 ++++
+ .../bpf/prog_tests/test_gen_preload_methods.c |  27 +
+ .../bpf/prog_tests/test_preload_methods.c     |  69 +++
+ .../selftests/bpf/progs/gen_preload_methods.c |  23 +
+ 24 files changed, 1246 insertions(+), 337 deletions(-)
+ create mode 100644 include/linux/bpf_preload.h
+ delete mode 100644 kernel/bpf/preload/bpf_preload.h
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/Makefile
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_preload_methods.expected.diff
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_gen_preload_methods.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_preload_methods.c
+ create mode 100644 tools/testing/selftests/bpf/progs/gen_preload_methods.c
+
 -- 
-2.35.1.1021.g381101b075-goog
+2.32.0
 
