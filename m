@@ -2,192 +2,226 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78D34EB63A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Mar 2022 00:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17924EB717
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Mar 2022 01:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238503AbiC2W4H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 18:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S241319AbiC2Xxn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 19:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238547AbiC2W4G (ORCPT
+        with ESMTP id S241256AbiC2Xx0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 18:56:06 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C52BA33B
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 15:54:22 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id j15so37987131eje.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 15:54:22 -0700 (PDT)
+        Tue, 29 Mar 2022 19:53:26 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9A214043;
+        Tue, 29 Mar 2022 16:51:34 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id h63so22937976iof.12;
+        Tue, 29 Mar 2022 16:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zd9bA/vVsUljfZ2zHhaCGxU4BtZMVvpzyOofaCZaWSI=;
-        b=jk/9TmsoatIgO07065kxR/5mB1wQ8q4FUWIvnM39nXT7UfRE+1LkZl/noVHNBe5oT3
-         GH7nAcSb6gtqiNbisLO2gWbXMx8YcXx6uQ2Lyyj+sNMuf1JFkbhUscK/ZZK/njpz1XgI
-         HlWL7fwMMn2nk+x+Rdox8d8O8cyRaBtZFgTT8AOObpFDivUSvnkz++BBkIZWHrJCMdEV
-         LbmUlyzSAzIJrNbAm3a2J7dv/cypv+lwBYSxsEClhOFnBWXtN7J1Zlj11np+Wf7zGT2B
-         vzxftyArV2jMUz4zQrAQ/+lu4yjtPE8xV29c0K6DeI1RQB+t8L20MwR4HS2IpJ7r9IgB
-         bnJQ==
+        bh=74O0cY+bOP3wHBSafmTjrdQXSiGpOdiTWDZVtBoQYXc=;
+        b=WvcbotgBYKiLC714YGuezgXnN5lhQOgSKqIhHWIcs9SJ/TjZ4qDiqztKVhq/c/fbb7
+         CRtEocnpbz+n+n5R4BSUrwuS9w0k9zSF+7f5EXq/mk6amSJaPcWyoRv3RhXelFYfeMxL
+         6E82rTdvv4aC+vwPLUB3zQkanX7p8PkgSR49eK6jlxnnT+JBe4fF1F6F4YILiHIQ1Dfo
+         YThyrVAbT2ezC4Vir9buU/Cc4wEcqylttF1i8ZPdMSV2rVOD8XZluQqt4Tq9JsLSMwr6
+         /TK8qSeBHIm8gGPHU96piNQ1TWROyWk1JGmJNBYf3RhsSgpygDw04QQq8iXLcNuXa1/n
+         SfbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zd9bA/vVsUljfZ2zHhaCGxU4BtZMVvpzyOofaCZaWSI=;
-        b=CMDG6bCG7ID6EaF6rVbYw1T+7LjTRCWS4ocrYvsaKN7/IaDcl6uhSCuOIB+MlkDPxO
-         gvH2wTn4n6WrbWcIprrkV2YdxA5RxaViP87ptW+ix7YCBHq8Kh9Mfa9pEL/DaC62S+la
-         QyKEaCpiJ5s714DYyNvmQogb8ZOAByaWgwBg7Q8ubTISVkvPI2az5TL++FImskdoNZJ1
-         eXxPk2VobXCoMv4hMZTJtEJx3pAj0FsH6Qup26xpOJzdI4URUkNZKwViz5h/L9qskU6Q
-         kggA1OCEyPvshn4mJ5+qzne8/0m0ba+kHxbiTwxcYHbCbWNhOg1H91xEiuAOdF6wrHrJ
-         +1lg==
-X-Gm-Message-State: AOAM533m2yWNrLeHksB8BRl1G70CaEa6WYgYUk1Zv6VzK4V1rloBxaEe
-        9oRvKTWB8735sNW/5nDdyEZ9E3OAAktRh7EmuGwGZg==
-X-Google-Smtp-Source: ABdhPJxwwDVBkhAhwsoFm6aYbSMA/hHzkmazRu/kdl9EQO+9cGUdq6cPt2m4qwpklWi6AbAZ/G+JEZ1xcJeV2qm3IGs=
-X-Received: by 2002:a17:907:1622:b0:6df:d1a2:d4a3 with SMTP id
- hb34-20020a170907162200b006dfd1a2d4a3mr35715153ejc.542.1648594460875; Tue, 29
- Mar 2022 15:54:20 -0700 (PDT)
+        bh=74O0cY+bOP3wHBSafmTjrdQXSiGpOdiTWDZVtBoQYXc=;
+        b=ctgEN0VYGSzWUpZBYk8xpBz6+KGrgfPifmjeplkjaCFzdX2NfL+WOxoyR7DElhQp6t
+         ni3I/f4t9C9ano7pv5ChiXce3E2dWA7CHUfVpGyi7ylC+oIMICN9kgAH9/iqfXCBOOyK
+         Jn2P6XdiCrsRfn9bTZea3nmO0v4skSPvJUfisFJxEnSMYCCAG+atOnYfjUqvLDCXNCS/
+         +/9Axpp4ZfP+nf3rR7ZJ+f/il0BYa42udAvsMWAhApcOTN7+6lPEBtM+kFq1hXa/YKX3
+         o3A0H5peqs7ZL/+pU8WpyfhHoLczTtsM3ZdJBI3Xzf+qv4j/eu8+n+tp6vL8azJZ8Lxx
+         Tz2A==
+X-Gm-Message-State: AOAM530qBxKDak1eHcileEbi12ctd84yA5YCmTNwdiWKhDZk79RN7KrA
+        ghXP3oWGJ9B8GRkZqpaOtozm88jlkya0+paPhVM=
+X-Google-Smtp-Source: ABdhPJwS9Fg+z09Kw/RcFYy3K93hJ67At+Bq0ikjVOdBE5T/1iZTAgYq3sbL/9qW5x19tnSgSohTJSUxFCaVijVlhWg=
+X-Received: by 2002:a05:6638:148e:b0:321:6b54:d966 with SMTP id
+ j14-20020a056638148e00b003216b54d966mr17338496jak.103.1648597893376; Tue, 29
+ Mar 2022 16:51:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329103919.2376818-1-lv.ruyi@zte.com.cn> <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
-In-Reply-To: <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 29 Mar 2022 17:54:09 -0500
-Message-ID: <CAGS_qxr1VZz+Tzxpwzcx_HtPhWxSONPYEshPNyf=diUw2X6VDg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: add null pointer check
-To:     cgel.zte@gmail.com
-Cc:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+In-Reply-To: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 29 Mar 2022 16:51:22 -0700
+Message-ID: <CAEf4BzZNs-DYzQcE5LPxNzXDa+9A7QFszw99fnd2=cq9SuWsLg@mail.gmail.com>
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 2:29 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Mon, Mar 28, 2022 at 10:51 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
 >
-> On Tue, Mar 29, 2022 at 5:39 AM <cgel.zte@gmail.com> wrote:
-> >
-> > From: Lv Ruyi <lv.ruyi@zte.com.cn>
-> >
-> > kmalloc and kcalloc is a memory allocation function which can return NULL
-> > when some internal memory errors happen. Add null pointer check to avoid
-> > dereferencing null pointer.
-> >
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> > ---
-> >  lib/kunit/executor.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > index 22640c9ee819..be21d0451367 100644
-> > --- a/lib/kunit/executor.c
-> > +++ b/lib/kunit/executor.c
-> > @@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
-> >
-> >         /* Use memcpy to workaround copy->name being const. */
-> >         copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-> > +       if (!copy)
-> > +               return NULL;
+> eBPF already allows programs to be preloaded and kept running without
+> intervention from user space. There is a dedicated kernel module called
+> bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
+> program. If this module is enabled in the kernel configuration, its loading
+> will be triggered when the bpf filesystem is mounted (unless the module is
+> built-in), and the links of iterators_bpf are pinned in that filesystem
+> (they will appear as the progs.debug and maps.debug files).
 >
-> While this is technically correct to check, in this context it's less clear.
-> If we can't allocate this memory, we likely can't run any subsequent
-> tests, either because the test cases will want to allocate some memory
-> and/or KUnit will need to allocate some for internal bookkeeping.
+> However, the current mechanism, if used to preload an LSM, would not offer
+> the same security guarantees of LSMs integrated in the security subsystem.
+> Also, it is not generic enough to be used for preloading arbitrary eBPF
+> programs, unless the bpf_preload code is heavily modified.
 >
-> The existing code (and by extension this patch) "handles" OOM
-> situations by silently dropping test suites/cases.
-> So I sort of intentionally figured we should let it crash early in
-> this case since that's probably more debuggable.
+> More specifically, the security problems are:
+> - any program can be pinned to the bpf filesystem without limitations
+>   (unless a MAC mechanism enforces some restrictions);
+> - programs being executed can be terminated at any time by deleting the
+>   pinned objects or unmounting the bpf filesystem.
 >
-> This code does check for NULL returns earlier on in the call chain, i.e.
+> The usability problems are:
+> - only a fixed amount of links can be pinned;
+> - only links can be pinned, other object types are not supported;
+> - code to pin objects has to be written manually;
+> - preloading multiple eBPF programs is not practical, bpf_preload has to be
+>   modified to include additional light skeletons.
 >
-> first in kunit_filter_suites()
->    158          copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
->    159          filtered.start = copy;
->    160          if (!copy) { /* won't be able to run anything, return
-> an empty set */
->    161                  filtered.end = copy;
->    162                  return filtered;
->    163          }
+> Solve the security problems by mounting the bpf filesystem from the kernel,
+> by preloading authenticated kernel modules (e.g. with module.sig_enforce)
+> and by pinning objects to that filesystem. This particular filesystem
+> instance guarantees that desired eBPF programs run until the very end of
+> the kernel lifecycle, since even root cannot interfere with it.
 >
-> and second in kunit_filter_subsuite()
->    107          filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
->    108          if (!filtered)
->    109                  return NULL;
+> Solve the usability problems by generalizing the pinning function, to
+> handle not only links but also maps and progs. Also increment the object
+> reference count and call the pinning function directly from the preload
+> method (currently in the bpf_preload kernel module) rather than from the
+> bpf filesystem code itself, so that a generic eBPF program can do those
+> operations depending on its objects (this also avoids the limitation of the
+> fixed-size array for storing the objects to pin).
 >
-> The first kmalloc_array() is our first allocation in this file.
-> If we can't handle that, then things are really going wrong, and I
-> assumed there'd be plenty of debug messages in dmesg, so silently
-> returning is probably fine.
-> The second one also felt similar.
+> Then, simplify the process of pinning objects defined by a generic eBPF
+> program by automatically generating the required methods in the light
+> skeleton. Also, generate a separate kernel module for each eBPF program to
+> preload, so that existing ones don't have to be modified. Finally, support
+> preloading multiple eBPF programs by allowing users to specify a list from
+> the kernel configuration, at build time, or with the new kernel option
+> bpf_preload_list=, at run-time.
 >
-> So I think that
-> * it's highly unlikely that we pass those checks and fail on these new
-> ones (we're not allocating much)
-> * if we do fail, this is now harder to debug since it's partially
-> running tests, partially not
+> To summarize, this patch set makes it possible to plug in out-of-tree LSMs
+> matching the security guarantees of their counterpart in the security
+> subsystem, without having to modify the kernel itself. The same benefits
+> are extended to other eBPF program types.
 >
-> Should we instead rework the code to more clearly signal allocation
-> errors instead of overloading NULL to mean "no matches or error?"
+> Only one remaining problem is how to support auto-attaching eBPF programs
+> with LSM type. It will be solved with a separate patch set.
+>
+> Patches 1-2 export some definitions, to build out-of-tree kernel modules
+> with eBPF programs to preload. Patches 3-4 allow eBPF programs to pin
+> objects by themselves. Patches 5-10 automatically generate the methods for
+> preloading in the light skeleton. Patches 11-14 make it possible to preload
+> multiple eBPF programs. Patch 15 automatically generates the kernel module
+> for preloading an eBPF program, patch 16 does a kernel mount of the bpf
+> filesystem, and finally patches 17-18 test the functionality introduced.
+>
 
-More concretely, I'm thinking something like this:
+This approach of moving tons of pretty generic code into codegen of
+lskel seems suboptimal. Why so much code has to be codegenerated?
+Especially that tiny module code?
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 22640c9ee819..a5c29a32a33a 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite,
-const char *test_glob)
+Can you please elaborate on why it can't be done in a way that doesn't
+require such extensive light skeleton codegen changes?
 
-        /* Use memcpy to workaround copy->name being const. */
-        copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-+       if (!copy)
-+               return ERR_PTR(-ENOMEM);
-        memcpy(copy, suite, sizeof(*copy));
 
-        filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
-+       if (!filtered)
-+               return ERR_PTR(-ENOMEM);
+> Roberto Sassu (18):
+>   bpf: Export bpf_link_inc()
+>   bpf-preload: Move bpf_preload.h to include/linux
+>   bpf-preload: Generalize object pinning from the kernel
+>   bpf-preload: Export and call bpf_obj_do_pin_kernel()
+>   bpf-preload: Generate static variables
+>   bpf-preload: Generate free_objs_and_skel()
+>   bpf-preload: Generate preload()
+>   bpf-preload: Generate load_skel()
+>   bpf-preload: Generate code to pin non-internal maps
+>   bpf-preload: Generate bpf_preload_ops
+>   bpf-preload: Store multiple bpf_preload_ops structures in a linked
+>     list
+>   bpf-preload: Implement new registration method for preloading eBPF
+>     programs
+>   bpf-preload: Move pinned links and maps to a dedicated directory in
+>     bpffs
+>   bpf-preload: Switch to new preload registration method
+>   bpf-preload: Generate code of kernel module to preload
+>   bpf-preload: Do kernel mount to ensure that pinned objects don't
+>     disappear
+>   bpf-preload/selftests: Add test for automatic generation of preload
+>     methods
+>   bpf-preload/selftests: Preload a test eBPF program and check pinned
+>     objects
 
-        n = 0;
-        kunit_suite_for_each_test_case(suite, test_case) {
-@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const
-* const subsuite,
+please use proper prefixes: bpf (for kernel-side changes), libbpf,
+bpftool, selftests/bpf, etc
 
-        filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
-        if (!filtered)
--               return NULL;
-+               return ERR_PTR(-ENOMEM);
 
-        n = 0;
-        for (i = 0; subsuite[i] != NULL; ++i) {
-                if (!glob_match(filter->suite_glob, subsuite[i]->name))
-                        continue;
-                filtered_suite = kunit_filter_tests(subsuite[i],
-filter->test_glob);
--               if (filtered_suite)
-+               if (IS_ERR(filtered_suite))
-+                       return ERR_CAST(filtered_suite);
-+               else if (filtered_suite)
-                        filtered[n++] = filtered_suite;
-        }
-        filtered[n] = NULL;
-@@ -166,6 +172,8 @@ static struct suite_set kunit_filter_suites(const
-struct suite_set *suite_set,
-
-        for (i = 0; i < max; ++i) {
-                filtered_subsuite =
-kunit_filter_subsuite(suite_set->start[i], &filter);
-+               if (IS_ERR(filtered_subsuite))
-+                       return filtered; // TODO: how do we signal this?
-                if (filtered_subsuite)
-                        *copy++ = filtered_subsuite;
-        }
-
-> Or maybe just adding some pr_err() calls is sufficient.
+>
+>  .../admin-guide/kernel-parameters.txt         |   8 +
+>  fs/namespace.c                                |   1 +
+>  include/linux/bpf.h                           |   5 +
+>  include/linux/bpf_preload.h                   |  37 ++
+>  init/main.c                                   |   2 +
+>  kernel/bpf/inode.c                            | 295 +++++++++--
+>  kernel/bpf/preload/Kconfig                    |  25 +-
+>  kernel/bpf/preload/bpf_preload.h              |  16 -
+>  kernel/bpf/preload/bpf_preload_kern.c         |  85 +---
+>  kernel/bpf/preload/iterators/Makefile         |   9 +-
+>  .../bpf/preload/iterators/iterators.lskel.h   | 466 +++++++++++-------
+>  kernel/bpf/syscall.c                          |   1 +
+>  .../bpf/bpftool/Documentation/bpftool-gen.rst |  13 +
+>  tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
+>  tools/bpf/bpftool/gen.c                       | 331 +++++++++++++
+>  tools/bpf/bpftool/main.c                      |   7 +-
+>  tools/bpf/bpftool/main.h                      |   1 +
+>  tools/testing/selftests/bpf/Makefile          |  32 +-
+>  .../bpf/bpf_testmod_preload/.gitignore        |   7 +
+>  .../bpf/bpf_testmod_preload/Makefile          |  20 +
+>  .../gen_preload_methods.expected.diff         |  97 ++++
+>  .../bpf/prog_tests/test_gen_preload_methods.c |  27 +
+>  .../bpf/prog_tests/test_preload_methods.c     |  69 +++
+>  .../selftests/bpf/progs/gen_preload_methods.c |  23 +
+>  24 files changed, 1246 insertions(+), 337 deletions(-)
+>  create mode 100644 include/linux/bpf_preload.h
+>  delete mode 100644 kernel/bpf/preload/bpf_preload.h
+>  create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/.gitignore
+>  create mode 100644 tools/testing/selftests/bpf/bpf_testmod_preload/Makefile
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/gen_preload_methods.expected.diff
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_gen_preload_methods.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_preload_methods.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/gen_preload_methods.c
+>
+> --
+> 2.32.0
+>
