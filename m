@@ -2,235 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A984EAED9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 15:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB5A4EAF7C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 16:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237556AbiC2Nzm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 09:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S238030AbiC2OpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 10:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiC2Nzl (ORCPT
+        with ESMTP id S233573AbiC2OpJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:55:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 982761C3902
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 06:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648562036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=un9l7/a+uEq1XogerESBiAijCYeuvtYw94AitMUuZ+M=;
-        b=RcWUOvVIUP2cGJWMfV/ZI8xd8zZS36OghrbFN+RUNUTm+26nKcZ7VKCHemoRPpePP9YVWP
-        yZXfoAoT6zHywE/q25Iic/rg5JJslR4t2/xcTM1JuLB5SVGyIMlSNLY5Ka5jkUg4YfHR16
-        QS8wB3QiQz8+tz2s2H05w+NMFiBh6bw=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-r1qvGFohPGKpnNVqsuTm8A-1; Tue, 29 Mar 2022 09:53:54 -0400
-X-MC-Unique: r1qvGFohPGKpnNVqsuTm8A-1
-Received: by mail-pg1-f200.google.com with SMTP id q8-20020a656a88000000b003810f119b61so8581345pgu.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 06:53:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=un9l7/a+uEq1XogerESBiAijCYeuvtYw94AitMUuZ+M=;
-        b=mGdnwiawZ8Tq9XQL3FJ9FLLK7zjDOfmMiXkK+H0B6N9EHDJuaEc9+P7eTJx33wVxlZ
-         il0v0dcUtGyQJRl7HCD/f59PG6kdMZcL0mt9h8Q0M0NZc2ywNBDUJYkxDuuHdvNbrW/x
-         fOrR11UPawPiZrtofiUBDBKir/VRTQ/dQ75b23OpuCJcMQge4TfkfuQSn1XO5xZjaDjd
-         xIPNVtsoClbwbDdmZds10HQZGf5JVKdzU1r6PYBL/u4fFB6axPa+iVJUu34qHcZyf2Lu
-         pmPPVxGQacrQLz4DxOjlBtUoW9vOwfqkyCiN+qJNAuKHifgCofbqNnbar+AJ/Z5a1mzO
-         WQtQ==
-X-Gm-Message-State: AOAM533T4Ra64A60fOSyA3bDYtoal++1tYNxMYzJzy4wf9OzVX4heJqk
-        LVLs7OTnl/vJv4AN/ZzAbVykMTvgPS7uBfUxj2E2WyFppl+B6rvn+Xci0g7n2hMSzl+BKei5jjv
-        pM/HweDRKBrEWGIczdClI2vjuwGv3i8lymWFkRp44RJF0
-X-Received: by 2002:a63:6c0a:0:b0:398:6bd2:a16a with SMTP id h10-20020a636c0a000000b003986bd2a16amr2123295pgc.191.1648562033311;
-        Tue, 29 Mar 2022 06:53:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyGa8CCAa74guVnbIRav3BJCOquPXCu+LU4JQHK3SKWdmRtYE+byETFimsO7Lw1QDDW65u4gI5INxlQXDHGp68=
-X-Received: by 2002:a63:6c0a:0:b0:398:6bd2:a16a with SMTP id
- h10-20020a636c0a000000b003986bd2a16amr2123264pgc.191.1648562032802; Tue, 29
- Mar 2022 06:53:52 -0700 (PDT)
+        Tue, 29 Mar 2022 10:45:09 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E441B18;
+        Tue, 29 Mar 2022 07:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1648565004;
+  x=1680101004;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L47xfLiHlkRBU0nCT6T9a07/4+JwPYPON+iZ1KiPThE=;
+  b=JuTUF3AUQKf3oLdWgwj6vvoaLU7e5aEmOZLSAPqiJScRL+fYtaxvTB4v
+   QpCFG2tYWTmSG23dQqtvhEzD7LmI9AUV0TSphk4c9v0OfvswBlLmRr9+i
+   yQuEzYnlFlJg3wj7PFuIajmuQ9ucA6KWw93aSqs4Rl1fzQQeI9csBWoes
+   VbNdiCLvV4HVMfpbJbNYjSKC804sLELTHBEtLzH4+GC3qwQXOiO7OxND7
+   TVcRNH9A9PSBMzWL3ehjN1MohRMCjIc+X0qzxE4CiEn9UPZ3QsaGDvA99
+   9Qg4CzskUYmwFuesWV0/Zj5FhLTD8CAzkF0SvYxQDqocbFhKIugNnd5dW
+   Q==;
+Date:   Tue, 29 Mar 2022 16:43:19 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Johannes Berg <johannes@sipsolutions.net>
+CC:     Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
+Message-ID: <20220329144319.GA4474@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+ <20220311162445.346685-8-vincent.whitchurch@axis.com>
+ <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+ <20220318154927.GA32172@axis.com>
+ <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
 MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
- <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
- <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
- <CAEf4BzYVu9JVJvKZK3S9HGwpyPiWrwKPGsTz3wXC_+vmRYGdNw@mail.gmail.com>
- <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com> <CAEf4BzZA7Wmg=N42ib_r9Jm8THXuGGR3CPgTqMyw9n2=gd_+Kg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZA7Wmg=N42ib_r9Jm8THXuGGR3CPgTqMyw9n2=gd_+Kg@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 29 Mar 2022 15:53:41 +0200
-Message-ID: <CAO-hwJKnnVkJPG6wtLJ6t7ojv5=vS0NGt14un6+nRmxzj+xifw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
- descriptor from an eBPF program
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:35 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sun, Mar 27, 2022 at 11:57 PM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Fri, Mar 25, 2022 at 6:00 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Mar 23, 2022 at 9:08 AM Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > Hi Alexei,
-> > > >
-> > > > On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
-> > > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > > >
-> > > > > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
-> > > > > > +{
-> > > > > > +       int ret;
-> > > > > > +       struct hid_bpf_ctx_kern ctx = {
-> > > > > > +               .type = HID_BPF_RDESC_FIXUP,
-> > > > > > +               .hdev = hdev,
-> > > > > > +               .size = *size,
-> > > > > > +       };
-> > > > > > +
-> > > > > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
-> > > > > > +               goto ignore_bpf;
-> > > > > > +
-> > > > > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
-> > > > > > +       if (!ctx.data)
-> > > > > > +               goto ignore_bpf;
-> > > > > > +
-> > > > > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
-> > > > > > +
-> > > > > > +       ret = hid_bpf_run_progs(hdev, &ctx);
-> > > > > > +       if (ret)
-> > > > > > +               goto ignore_bpf;
-> > > > > > +
-> > > > > > +       if (ctx.size > ctx.allocated_size)
-> > > > > > +               goto ignore_bpf;
-> > > > > > +
-> > > > > > +       *size = ctx.size;
-> > > > > > +
-> > > > > > +       if (*size) {
-> > > > > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
-> > > > > > +       } else {
-> > > > > > +               rdesc = NULL;
-> > > > > > +               kfree(ctx.data);
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       return rdesc;
-> > > > > > +
-> > > > > > + ignore_bpf:
-> > > > > > +       kfree(ctx.data);
-> > > > > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
-> > > > > > +}
-> > > > > > +
-> > > > > >  int __init hid_bpf_module_init(void)
-> > > > > >  {
-> > > > > >         struct bpf_hid_hooks hooks = {
-> > > > > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
-> > > > > >                 .pre_link_attach = hid_bpf_pre_link_attach,
-> > > > > > +               .post_link_attach = hid_bpf_post_link_attach,
-> > > > > >                 .array_detach = hid_bpf_array_detach,
-> > > > > >         };
-> > > > > >
-> > > > > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> > > > > > index 937fab7eb9c6..3182c39db006 100644
-> > > > > > --- a/drivers/hid/hid-core.c
-> > > > > > +++ b/drivers/hid/hid-core.c
-> > > > > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
-> > > > > >                 return -ENODEV;
-> > > > > >         size = device->dev_rsize;
-> > > > > >
-> > > > > > -       buf = kmemdup(start, size, GFP_KERNEL);
-> > > > > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
-> > > > > > +       buf = hid_bpf_report_fixup(device, start, &size);
-> > > > >
-> > > > > Looking at this patch and the majority of other patches...
-> > > > > the code is doing a lot of work to connect HID side with bpf.
-> > > > > At the same time the evolution of the patch series suggests
-> > > > > that these hook points are not quite stable. More hooks and
-> > > > > helpers are being added.
-> > > > > It tells us that it's way too early to introduce a stable
-> > > > > interface between HID and bpf.
-> > > >
-> > > > I understand that you might be under the impression that the interface
-> > > > is changing a lot, but this is mostly due to my poor knowledge of all
-> > > > the arcanes of eBPF.
-> > > > The overall way HID-BPF works is to work on a single array, and we
-> > > > should pretty much be sorted out. There are a couple of helpers to be
-> > > > able to communicate with the device, but the API has been stable in
-> > > > the kernel for those for quite some time now.
-> > > >
-> > > > The variations in the hooks is mostly because I don't know what is the
-> > > > best representation we can use in eBPF for those, and the review
-> > > > process is changing that.
-> > >
-> > > I think such a big feature as this one, especially that most BPF folks
-> > > are (probably) not familiar with the HID subsystem in the kernel,
-> > > would benefit from a bit of live discussion during BPF office hours.
-> > > Do you think you can give a short overview of what you are trying to
-> > > achieve with some background context on HID specifics at one of the
-> > > next BPF office hours? We have a meeting scheduled every week on
-> > > Thursday, 9am Pacific time. But people need to put their topic onto
-> > > the agenda, otherwise the meeting is cancelled. See [0] for
-> > > spreadsheet and links to Zoom meeting, agenda, etc.
-> >
-> > This sounds like a good idea. I just added my topic on the agenda and
-> > will prepare some slides.
-> >
->
-> Great! Unfortunately I personally have a conflict this week and won't
-> be able to attend, so I'll have to catch up somehow through word of
-> mouth :( Next week's BPF office hours would be best, but I don't want
-> to delay discussions just because of me.
+On Fri, Mar 18, 2022 at 09:09:02PM +0100, Johannes Berg wrote:
+> On Fri, 2022-03-18 at 16:49 +0100, Vincent Whitchurch wrote:
+> > - We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
+> >   vhost-user API to communicate from UML to the backend.  The latest
+> >   version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
+> >   doesn't seem to have been merged yet, so work is needed on the QEMU
+> >   side.  This will also be true for other buses in the future, if they
+> >   are implemented with new virtio devices.
+> > 
+> > - For MMIO, UML has virtio-mmio which allows implementing any PCIe
+> >   device (and by extension any platform device) outside of UML, but last
+> >   I checked, upstream QEMU did not have something similar.
+> 
+> I think you have this a bit fuzzy.
+> 
+> The virtio_uml[.c] you speak of is the "bus" driver for virtio in UML.
+> Obviously, qemu has support for virtio, so you don't need those bits.
+> 
+> Now, virtio_uml is actually the virtio (bus) driver inside the kernel,
+> like you'd have virtio-mmio/virtio-pci in qemu. However, virtio_uml
+> doesn't implement the devices in the hypervisor, where most qemu devices
+> are implemented, but uses vhost-user to run the device implementation in
+> a separate userspace. [1]
+> 
+> Now we're talking about vhost-user to talk to the device, and qemu
+> supports this as well, in fact the vhost-user spec is part of qemu:
+> https://git.qemu.org/?p=qemu.git;a=blob;f=docs/system/devices/vhost-user.rst;h=86128114fa3788a73679f0af38e141021087c828;hb=1d60bb4b14601e38ed17384277aa4c30c57925d3
+> https://www.qemu.org/docs/master/interop/vhost-user.html
+> 
+> The docs on how to use it are here:
+> https://www.qemu.org/docs/master/system/devices/vhost-user.html
+> 
+> So once you have a device implementation (regardless of whether it's for
+> use with any of the virtio-i2c, arch/um/drivers/virt-pci.c, virtio-gpio,
+> virtio-net, ... drivers) you can actually connect it to virtual machines
+> running as UML or in qemu.
 
-OK. FWIW, I'll have slides publicly available once I'll do a final
-roundup on them. Hopefully that will give you enough context on HID to
-understand the problem.
-If there are too many conflicts we can surely delay by a week, but I
-would rather have the discussion happening sooner :/
+I'm aware of vhost-user, but AFAICS QEMU needs glue for each device type
+to be able to actually hook up vhost-user implementations to the devices
+it exposes to the guest via the virtio PCI device.  See e.g.
+hw/virtio/vhost-user-i2c-pci.c and hw/virtio/vhost-user-i2c.c in QEMU.
 
-Cheers,
-Benjamin
+That is what I meant was missing for virtio-gpio, there seems to be an
+in-progress patch set for that here though:
+ https://lore.kernel.org/all/cover.1641987128.git.viresh.kumar@linaro.org/
 
-> >
-> > >
-> > >   [0] https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU
-> > >
-> > > [...]
-> > >
-> >
->
+Similarly, glue for something like arch/um/drivers/virt-pci.c does not
+exist in QEMU.
 
+Or perhaps you are implying that hw/virtio/vhost-user-i2c* in QEMU are
+not strictly needed?
+
+> (Actually, that's not strictly true today since it's
+> arch/um/drivers/virt-pci.c and I didn't get a proper device ID assigned
+> etc since it was for experimentation, I guess if we make this more
+> commonly used then we should move it to drivers/pci/controller/virtio-
+> pci.c and actually specify it in the OASIS virtio spec., at the very
+> least it'd have to be possible to compile this and lib/logic_iomem.c on
+> x86, but that's possible. Anyway I think PCI(e) is probably low on your
+> list of things ...)
+
+PCI is not that interesting, no, but platform devices are.  I did some
+experiments early on with arch/um/drivers/virt-pci.c and a corresponding
+backend along with a simple PCI driver which probes all devicetree nodes
+under it, and I was able to use this to get some platform drivers
+working.
+
+> 
+> >  - Also, some paths in this driver needs a modification to be tested
+> >    under roadtest.  It uses wait_event_timeout() with a fixed value, but
+> >    we cannot guarantee that this constraint is met in the test
+> >    environment since it depends on things like CPU load on the host.
+> > 
+> >    (Also, we use UML's "time travel" feature which essentially
+> >    fast-forwards through idle time, so the constraint can never be met
+> >    in practice.)
+> 
+> Wohoo! This makes me very happy, finally somebody else who uses it :-)
+
+Yes, thanks for that feature, it works well to speed up tests and also
+has a knack for triggering race conditions (the RTC use-after-free for
+example).
+
+Time travel however sometimes triggers some WARN_ONs from the core
+timekeeping code. I haven't seen them when running the test suites, but
+they show up if the system under UML is idle for several (wall time)
+seconds.  I haven't had a chance to investigate it further though, but I
+can dig up the splats if you are interested.
