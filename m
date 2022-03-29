@@ -2,113 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DFF4EB01C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 17:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E154EB056
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 17:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiC2PX3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 11:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S238568AbiC2PaC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 11:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiC2PX3 (ORCPT
+        with ESMTP id S238565AbiC2PaB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 11:23:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CA37CB02;
-        Tue, 29 Mar 2022 08:21:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4FBEE1FD0A;
-        Tue, 29 Mar 2022 15:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648567304; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n/czKHIPapnBxpdu79ODwmVGjcsUIWEmGzncRJ5TN4Q=;
-        b=lbxalIk0hgBTc9ZrvdtVK14x3u1oqMDVbsoiIWRU/HZAKUtFdn9xuq+x4VdQSqRv2NIzra
-        6u7dg24T8Ka4DRgQdxJkMClNHbD8rd8VMmEUcF8AeBfKYtvlHup2tBTYs1n4gYuW4kxpnl
-        lnJuwJXKKePEEilmmgnC19er+O83O34=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 755B913AB1;
-        Tue, 29 Mar 2022 15:21:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hsZZGwckQ2LkcwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 29 Mar 2022 15:21:43 +0000
-Date:   Tue, 29 Mar 2022 17:21:42 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
-        Kenny.Ho@amd.com, skhan@linuxfoundation.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
-Message-ID: <20220329152142.GA15794@blackbody.suse.cz>
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-6-tjmercier@google.com>
+        Tue, 29 Mar 2022 11:30:01 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B7D10B8
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 08:28:16 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id h63so21365551iof.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 08:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rbCfapO4NIDG1N5wWCt2gtNC01xY1MmMW/+32By2iZU=;
+        b=DNeuoXSedKF6JFW4fZEpRDlhg3gtceUEhH8ds5WqdEbOGjU6iS92QdpByiCno6IM9W
+         dLOVRK4SZKLZ2iFy9YJ2C+XrHT3OlyJ0plYeknoDqP/ts6HLxeqGSNxeNveokN07FQ8a
+         A9M6kXDDGxDyriNL7ESSXXB7GR95ePKFf8lwI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rbCfapO4NIDG1N5wWCt2gtNC01xY1MmMW/+32By2iZU=;
+        b=pjm3mAI0guXh4ZIlg2FF2SOiJRfV6xnMpl2hHD3ThNnak3N8dtrLEbVbFMRzZOEzCN
+         FDms0HDvpGDqMBnYQkSpbOmimnjk+bw1Hd4G7cKjqYf9mRQFQtiU/5OfU76t46Hs1OSv
+         b2PqUcGF6tc4CipFjsgEuhx/OPpu7UoM0nmnbOsYl5VutMaNpI0NiNg9fEwxAKlnEHVk
+         n4n3j6aIqC4Xpz/JQXAYRu5OTYOZVPQDFm7NFgSgcsT9VEmdPPIpIxr6E329dgFHLXVr
+         nLDz4SRvybUcCCB35Bv4detUW/iFXhS+5ZCpwAlbkrhiquOJS/MoHIIM02nFAt3jkg9L
+         Sj3g==
+X-Gm-Message-State: AOAM530yfR2txuBE+iPkDsS7foqgOifrw4v1i7lN8/CZcWzLW3PJnFzp
+        TcrGipINJEkV8FDEyujbg/WAWA==
+X-Google-Smtp-Source: ABdhPJxJ/wUDup2pZUomjDEqgyB7uUDbTkUwJSHqKY5Dr3ShJKsEcYKZUTC/YO7+Hn/4PQQNoiMBGg==
+X-Received: by 2002:a6b:d003:0:b0:646:4652:bd57 with SMTP id x3-20020a6bd003000000b006464652bd57mr9186492ioa.51.1648567695820;
+        Tue, 29 Mar 2022 08:28:15 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d85d2000000b00649254a855fsm9095105ios.26.2022.03.29.08.28.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 08:28:15 -0700 (PDT)
+Subject: Re: [PATCH] selftests/seccomp: Add SKIP for failed unshare()
+To:     davidcomponentone@gmail.com, keescook@chromium.org
+Cc:     luto@amacapital.net, wad@chromium.org, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <d623360ac7fdc3d8e1a8bc34e018f1aba6bd7e73.1648516943.git.yang.guang5@zte.com.cn>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <133fac97-f24e-ea4d-6ffb-279581550c51@linuxfoundation.org>
+Date:   Tue, 29 Mar 2022 09:28:14 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328035951.1817417-6-tjmercier@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <d623360ac7fdc3d8e1a8bc34e018f1aba6bd7e73.1648516943.git.yang.guang5@zte.com.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi.
-
-On Mon, Mar 28, 2022 at 03:59:44AM +0000, "T.J. Mercier" <tjmercier@google.com> wrote:
-> From: Hridya Valsaraju <hridya@google.com>
+On 3/29/22 12:03 AM, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
 > 
-> The dma_buf_charge_transfer function provides a way for processes to
+> Running the seccomp tests under the kernel with "defconfig"
+> shouldn't fail. Because the CONFIG_USER_NS is not support
 
-(s/dma_bug_charge_transfer/dma_bug_transfer_charge/)
+Nit - supported
 
-> transfer charge of a buffer to a different process. This is essential
-> for the cases where a central allocator process does allocations for
-> various subsystems, hands over the fd to the client who requested the
-> memory and drops all references to the allocated memory.
+> in "defconfig". So skip this test case is better.
 
-I understood from [1] some buffers are backed by regular RAM. How are
-these charges going to be transferred (if so)?
+Nit: "skipping this case instead if failing it."
+> 
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> Signed-off-by: David Yang <davidcomponentone@gmail.com>
+> ---
+>   tools/testing/selftests/seccomp/seccomp_bpf.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 313bb0cbfb1e..e9a61cb2eb88 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -3742,7 +3742,10 @@ TEST(user_notification_fault_recv)
+>   	struct seccomp_notif req = {};
+>   	struct seccomp_notif_resp resp = {};
+>   
+> -	ASSERT_EQ(unshare(CLONE_NEWUSER), 0);
+> +	ASSERT_EQ(unshare(CLONE_NEWUSER), 0) {
+> +		if (errno == EINVAL)
+> +			SKIP(return, "kernel missing CLONE_NEWUSER support");> +	}
+>   
+>   	listener = user_notif_syscall(__NR_getppid,
+>   				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+> 
+Looks good to me. Looks like this patch is for Linux 5.18 repo.
+With the requested changes to commit log
 
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Thanks,
-Michal
-
-[1]
-https://lore.kernel.org/r/CABdmKX2NSAKMC6rReMYfo2SSVNxEXcS466hk3qF6YFt-j-+_NQ@mail.gmail.com
+thanks,
+-- Shuah
