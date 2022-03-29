@@ -2,129 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9694EA64A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 06:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3EE4EA7A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 08:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbiC2EKq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 00:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S229837AbiC2GF6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 02:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiC2EKn (ORCPT
+        with ESMTP id S231264AbiC2GF5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:10:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825141DA4A;
-        Mon, 28 Mar 2022 21:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648526940; x=1680062940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=II+YlVdtYYb+Q/uCpREGOhsf8Od4153BKeY2Dz+3nsc=;
-  b=MAshLrMYSKt/K6fiqPK3zP/azTgXW9UNShqvleeRW7kb1o6jM5wtgQXS
-   Ch2eqc37Zm8o1y8WWKNKL+udLBPCLsYcCxbKfL/2ZSOkZ1k1UYlqJTHMx
-   oeWdgTJak1cXc5Vs/RyEZcphYPkWR0WS8q0hLRb0iinDNSZV25252KtS9
-   47dakaw/QhSueFdwgrR9vXXY69u8aYwQEjZHSDNrx3QS9zvMbJNKHom+2
-   ksDD+EPSx6L8uJY+fBw0fDkXaGZIXbYHmHifiU0bgy85D/ylH3EV0MBk/
-   QacIY1D/DbGeOwcLYQJpf+J1SiUjBlqf5YvAG0cJsBe8AcGFp49kYVgAE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="284051281"
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="284051281"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2022 21:09:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,219,1643702400"; 
-   d="scan'208";a="585427795"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 28 Mar 2022 21:08:54 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZ3A6-0002d5-7k; Tue, 29 Mar 2022 04:08:54 +0000
-Date:   Tue, 29 Mar 2022 12:08:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, corbet@lwn.net,
-        viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, shuah@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        zohar@linux.ibm.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH 16/18] bpf-preload: Do kernel mount to ensure that pinned
- objects don't disappear
-Message-ID: <202203291256.TUOyKEtD-lkp@intel.com>
-References: <20220328175033.2437312-17-roberto.sassu@huawei.com>
+        Tue, 29 Mar 2022 02:05:57 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E5C340EE;
+        Mon, 28 Mar 2022 23:04:15 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id e5so16706109pls.4;
+        Mon, 28 Mar 2022 23:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cHaiaQIME2TQ3hPRlAjtXhCt8wua+8gQtHxEI6CbZtk=;
+        b=Q4mO8z5cfhWgW9a6f2LL2NdkpUte+YKVoSjBJv9J/xTs8ZRrAm2+i+vRdgJDSh6CJk
+         iWz6YMWkqaQ7cxwhD5VIX8pM7nj0qyhjEEahdWXkZNRIME0Pz85tMF6lst9EcOwebnVe
+         DsmYeshd6Cw6Mg7bH2kki8e+K4gdU7WfMpGzp8Aj22ZHLqIrTMurjN+EhPwylEiD9rFV
+         DqPjW0NYg1YTVJwsZ7BzQZz/PdtlBagrv+38g1V0sC9tclEH2fvmRTqDIYiKct0hhGxe
+         rQnd2HyNjgE/ctnDNurQ4gStlxo3lgKcdA/mXPxfaUQeSYyeGwNovOi1oUJbq26dkBeW
+         TQ1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cHaiaQIME2TQ3hPRlAjtXhCt8wua+8gQtHxEI6CbZtk=;
+        b=bd/xVQ9EcOspEPh/HGG3C7sFqEK16k2vj5zBaatrmU2+egyvsIasX+NAbgdvYR/zf6
+         KAW9i7cRmQRwhNnPdaLaSIR9Wccq3mF6XPcn1+4IMAMDCICOyFMtOhbcv4C6brMCS/Sz
+         SXimrBeyRcSqyQcXBrT+cqIMb/UEsnWFyKwNIMLxgTpMbLKvX535dcw78f9E5QYFo2Yl
+         j2RsOn6x//LnjoT1ccf21TT4dFtCWonwJh/OI7rpkU3dUj+4GxFu2tv4IPjXj8PGzTCs
+         0Nixml3TR+FE0FOmEuLJQDQ3G2ECeC4ngR1wCmdJBXVyPhgQNUVhIU7fVAUh/bPjPYnA
+         u8QA==
+X-Gm-Message-State: AOAM533+V1h0aAGnswIo11Rk/OXSkIpSCeF9Z1YT4m0yvkqmWD+txnvm
+        taqcx0jLxxzNvII6fn6/+5A=
+X-Google-Smtp-Source: ABdhPJwpc1mBqz646V7xYK+gns4cYmtoPl5rD1zPom/CyRatt2rrPPiNVAL9QwwnI20vHF/KYoHbsA==
+X-Received: by 2002:a17:903:249:b0:153:857c:a1fe with SMTP id j9-20020a170903024900b00153857ca1femr29078333plh.44.1648533855368;
+        Mon, 28 Mar 2022 23:04:15 -0700 (PDT)
+Received: from localhost.localdomain (192.243.120.99.16clouds.com. [192.243.120.99])
+        by smtp.gmail.com with ESMTPSA id mi18-20020a17090b4b5200b001c9a9b60489sm1415677pjb.7.2022.03.28.23.04.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 23:04:14 -0700 (PDT)
+From:   davidcomponentone@gmail.com
+To:     keescook@chromium.org
+Cc:     davidcomponentone@gmail.com, luto@amacapital.net, wad@chromium.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>
+Subject: [PATCH] selftests/seccomp: Add SKIP for failed unshare()
+Date:   Tue, 29 Mar 2022 14:03:59 +0800
+Message-Id: <d623360ac7fdc3d8e1a8bc34e018f1aba6bd7e73.1648516943.git.yang.guang5@zte.com.cn>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328175033.2437312-17-roberto.sassu@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Roberto,
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-Thank you for the patch! Yet something to improve:
+Running the seccomp tests under the kernel with "defconfig"
+shouldn't fail. Because the CONFIG_USER_NS is not support
+in "defconfig". So skip this test case is better.
 
-[auto build test ERROR on bpf-next/master]
-[also build test ERROR on linus/master next-20220328]
-[cannot apply to bpf/master v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roberto-Sassu/bpf-Secure-and-authenticated-preloading-of-eBPF-programs/20220329-015829
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: hexagon-randconfig-r041-20220328 (https://download.01.org/0day-ci/archive/20220329/202203291256.TUOyKEtD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0f6d9501cf49ce02937099350d08f20c4af86f3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/eddbb1ec1e92ba00c4acc9f123769265e17e8e40
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roberto-Sassu/bpf-Secure-and-authenticated-preloading-of-eBPF-programs/20220329-015829
-        git checkout eddbb1ec1e92ba00c4acc9f123769265e17e8e40
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/bpf/inode.c:25:37: error: use of undeclared identifier 'CONFIG_BPF_PRELOAD_LIST'
-   static char *bpf_preload_list_str = CONFIG_BPF_PRELOAD_LIST;
-                                       ^
->> kernel/bpf/inode.c:1026:13: error: redefinition of 'mount_bpffs'
-   void __init mount_bpffs(void)
-               ^
-   include/linux/bpf.h:1146:27: note: previous definition is here
-   static inline void __init mount_bpffs(void)
-                             ^
-   2 errors generated.
-
-
-vim +/mount_bpffs +1026 kernel/bpf/inode.c
-
-  1025	
-> 1026	void __init mount_bpffs(void)
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 313bb0cbfb1e..e9a61cb2eb88 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -3742,7 +3742,10 @@ TEST(user_notification_fault_recv)
+ 	struct seccomp_notif req = {};
+ 	struct seccomp_notif_resp resp = {};
+ 
+-	ASSERT_EQ(unshare(CLONE_NEWUSER), 0);
++	ASSERT_EQ(unshare(CLONE_NEWUSER), 0) {
++		if (errno == EINVAL)
++			SKIP(return, "kernel missing CLONE_NEWUSER support");
++	}
+ 
+ 	listener = user_notif_syscall(__NR_getppid,
+ 				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+
