@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309B54EB545
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 23:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69E64EB553
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 23:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbiC2V3T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 17:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S234421AbiC2VeQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 17:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234074AbiC2V3T (ORCPT
+        with ESMTP id S233643AbiC2VeQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 17:29:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BF6239307
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 14:27:35 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id b24so22157683edu.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 14:27:35 -0700 (PDT)
+        Tue, 29 Mar 2022 17:34:16 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B608239334
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 14:32:30 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id r13so37718256ejd.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 14:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=x5Kf4tIOrW+TXVLfToUnNnc77oMmkd7cGdwQs3kzn5E=;
-        b=Q3rNjLjzz3gs978QUv6jP8uCoY3jVNFRY6pnshB6MtmFG7vA2Sit1U7E5MPSfa+Rk0
-         PErHcuDYc+mDXNrdrGyszuN/0nv0rvy09XmBqsXB/DHm2IZuXJ8mPtXBgkBehaqEWEYG
-         v+yBtAMI+fTI1jRF+prEPRxTl0p1KNh94oJR9EV/+L1uYi5tK+3jpNcIIHLzqdgPr7CN
-         74ClmqXbHJ/6wmIWI4aPsMGSc5zEGoyPIMHa1cj9j1r98GjRjR8/x2ol1P3hXRPcrkaL
-         GOvpeCZ42Vvca2n0XnRINkbQSgiJd1Ure4ABlhBUbklR+ZgCr3Om3sP/7mW7UsGZUqWT
-         zs7A==
+        bh=ZNJQ60t9ow46nPLDTL0lGrHwboox4GQw0/vTKn1ZL5A=;
+        b=lnCZC0DpxNBLUffB2oLIpMxBrnBLwD0WpNwv5f4uqc5YgSJI4TrtRUIQf/bb9rxUed
+         AtfCIuaRpS5iFubDPmmKV3V/46+wzs/EDPYr8LSgwndpCVpOsBh6enFI6o6nFZVS5olq
+         qTFPzcWj0F+8AgEs2wEDFQ29eb+bYS+jHElB1GmX5Y/wIvCgxthpJ9u41nbuJBrhXYQx
+         sfkOfFov7NlGx0boBMgMYs5msdyhwv4Z+xIyZFg/hY25oyySfW/0Bb7QLLEaZEVPxMAK
+         //gQhJubH1DN1qykwZxJe9fbnx+4xLuVBh7veoFkeq6OxHhylLUivsrLDF2kk1FD6CoX
+         35FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=x5Kf4tIOrW+TXVLfToUnNnc77oMmkd7cGdwQs3kzn5E=;
-        b=vEE2IBP5yJyq8HgG4L93eeGXBhvZCVWetz7b2FfoHXXZNHytMA9Fc3VxpMksjjU/0u
-         Jp64G79dGvjI1mjc+A3LjL9XnI0gwCS+bM7nZTEfwSXO7E8sDwg9PClW5ZV87SkCMaz8
-         9cTZuEFAXFqh3ItLFoAyAEp/XR1Z7+qbbCNzeeYjD7FQCof5Bcc3/WCl217wB627Oap6
-         VyJcHVDrqxv+UKYJcMXrDLkoXW/hoTAoruyoVZs8N4319k/HwVDmP6MhHXeGWNu1FsMo
-         CXd4BIq1egpnNeNg3S+L+JoBTclsdr+f6hcNPm7rAhzy2U/PtjRaozyh4NRWg5Vr+mn/
-         c9bw==
-X-Gm-Message-State: AOAM531sBITNpJRCnXKA+prs5M850pcEborn3ktzqKJNy2Ie4uYug8kH
-        6FxZrDluhQxTAleUEeqevh4gd12xkWUtoSltkb9/zwqUJx7yBQ==
-X-Google-Smtp-Source: ABdhPJxLl4nDWjhDn9MDxFoq2paLjPe4jmT3iGnfqwDbvQcl0/wz7iO0WhBwZrKB8nf8+weeT8q+yjqELi4kBzuJ8+s=
-X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id
- ds1-20020a0564021cc100b004132b12fc49mr7190427edb.118.1648589253782; Tue, 29
- Mar 2022 14:27:33 -0700 (PDT)
+        bh=ZNJQ60t9ow46nPLDTL0lGrHwboox4GQw0/vTKn1ZL5A=;
+        b=ol6taeXElXaAGKPKDAvJogwcahUyT0hFfE1YKhlUF/ofOHFrjV4JTVW5lzeLG7rMXg
+         14HUxNvZ2Y/lpLfek48YgEmC9reH5OkE8dFX30GebiAsNiCMTEamrC9prgUuC+J9bZ3/
+         8dRvaU+TeVz3he4syUf7rnZ/g6cRt+/D5XtiMmrIcW4IOKOtP9TgDOcIwSRMYDNviqsF
+         b1b2ZllurLrJg61kvgVr0OwT3+JhkpB7STy1vBuoyy53y7aLDnEnUdjz9aY8JY8xz7KP
+         cgvTgBZIHkXzYZvVryuwFdLH6b3zkA882AnDp4SOJi209lYua3QOg8y5lnj1Lyi+ETa0
+         Da/w==
+X-Gm-Message-State: AOAM53096elLuKjThuxS9V03UXezS7ZO999kNpuvZWtABrYVzaw0rl25
+        M8ZcPPsncs3SfwoyTKw1vCF68zVCa8La6pTBLTgTwQ==
+X-Google-Smtp-Source: ABdhPJy4BTMYt2cEtBSbmfC31i1s9R0oGmoVOfOD2HZA+Zfy6cogEZxNy+3Fb9rktahrlflKpbi84cW4L/9tBA7+n80=
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id
+ ho43-20020a1709070eab00b006da8ec5d386mr36400202ejc.668.1648589548764; Tue, 29
+ Mar 2022 14:32:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220131212341.1082577-1-dlatypov@google.com>
-In-Reply-To: <20220131212341.1082577-1-dlatypov@google.com>
+References: <20220329103919.2376818-1-lv.ruyi@zte.com.cn> <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
+In-Reply-To: <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 29 Mar 2022 17:27:22 -0400
-Message-ID: <CAFd5g46z_RBMWRTfJB5h_sdkaEaJCOwnnkUER0fPSPQ6ac5_6A@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: fix path to .kunitconfig in start.rst
+Date:   Tue, 29 Mar 2022 17:32:17 -0400
+Message-ID: <CAFd5g46xma=yCYYNhupXkQmM=u1-ts3L0JhkX-Ueo21QxsMtmA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: add null pointer check
 To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Yifan Yuan <alpc_metic@live.com>
+Cc:     cgel.zte@gmail.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -68,19 +68,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 4:23 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Mar 29, 2022 at 3:29 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Commit ddbd60c779b4 ("kunit: use --build_dir=.kunit as default") changed
-> the default --build_dir, which had the side effect of making
-> `.kunitconfig` move to `.kunit/.kunitconfig`.
+> On Tue, Mar 29, 2022 at 5:39 AM <cgel.zte@gmail.com> wrote:
+> >
+> > From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> >
+> > kmalloc and kcalloc is a memory allocation function which can return NULL
+> > when some internal memory errors happen. Add null pointer check to avoid
+> > dereferencing null pointer.
+> >
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> > ---
+> >  lib/kunit/executor.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 22640c9ee819..be21d0451367 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+> >
+> >         /* Use memcpy to workaround copy->name being const. */
+> >         copy = kmalloc(sizeof(*copy), GFP_KERNEL);
+> > +       if (!copy)
+> > +               return NULL;
 >
-> However, the first few lines of kunit/start.rst never got updated, oops.
+> While this is technically correct to check, in this context it's less clear.
+> If we can't allocate this memory, we likely can't run any subsequent
+> tests, either because the test cases will want to allocate some memory
+> and/or KUnit will need to allocate some for internal bookkeeping.
 >
-> Fix this by telling people to run kunit.py first, which will
-> automatically generate the .kunit directory and .kunitconfig file, and
-> then edit the file manually as desired.
+> The existing code (and by extension this patch) "handles" OOM
+> situations by silently dropping test suites/cases.
+> So I sort of intentionally figured we should let it crash early in
+> this case since that's probably more debuggable.
 >
-> Reported-by: Yifan Yuan <alpc_metic@live.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> This code does check for NULL returns earlier on in the call chain, i.e.
+>
+> first in kunit_filter_suites()
+>    158          copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+>    159          filtered.start = copy;
+>    160          if (!copy) { /* won't be able to run anything, return
+> an empty set */
+>    161                  filtered.end = copy;
+>    162                  return filtered;
+>    163          }
+>
+> and second in kunit_filter_subsuite()
+>    107          filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
+>    108          if (!filtered)
+>    109                  return NULL;
+>
+> The first kmalloc_array() is our first allocation in this file.
+> If we can't handle that, then things are really going wrong, and I
+> assumed there'd be plenty of debug messages in dmesg, so silently
+> returning is probably fine.
+> The second one also felt similar.
+>
+> So I think that
+> * it's highly unlikely that we pass those checks and fail on these new
+> ones (we're not allocating much)
+> * if we do fail, this is now harder to debug since it's partially
+> running tests, partially not
+>
+> Should we instead rework the code to more clearly signal allocation
+> errors instead of overloading NULL to mean "no matches or error?"
+> Or maybe just adding some pr_err() calls is sufficient.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+I think we should either return an err ptr, or log something (maybe both).
+
+But yeah, I agree with you Daniel, I don't like overloading NULL.
+
+> >         memcpy(copy, suite, sizeof(*copy));
+> >
+> >         filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+> > +       if (!filtered)
+> > +               return NULL;
+> >
+> >         n = 0;
+> >         kunit_suite_for_each_test_case(suite, test_case) {
+> > --
+> > 2.25.1
+> >
