@@ -2,280 +2,361 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724FA4EAE17
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 15:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22C14EAE82
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 15:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237101AbiC2NGX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 09:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S237317AbiC2NcO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 09:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbiC2NGV (ORCPT
+        with ESMTP id S233731AbiC2NcN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 09:06:21 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB82340EA;
-        Tue, 29 Mar 2022 06:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648559077; x=1680095077;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9kQjeBJCbRw818KO3/vAUpiMndjw9ObV4lqk2smtPXg=;
-  b=TvVjiGzN0dqRsyjfS0v1rOg8ENVdcfuWk/raaHhIIqijKs2V0Okhtxnb
-   JOt0CakHY+9LaKiPSIOEUdiNWxnkM+v/4cjieVjmIfZuGtsHdQuy1HeMY
-   A71d2om/sXIXy2f69csiz8Tx2YhAKKt+nOLqXz/6eok7KtTVYMpHZVyM4
-   O7Qs4BqVZ0WDD5lY57TmYyZ5n1PDsXSs3/Od7w2VV7iZncbGbFq2OYeaC
-   68jajI9v6c/y3m5QiUdd8XQemcLm8rQFftEvJmJcxqpW+oMvP8EBnZUQg
-   firWHDEA6r2w6Jz23sr3tao5E9B8zP1n0Ejx+DB3KXj5IxMzw9DA1hPHq
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="241399042"
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="241399042"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 06:04:36 -0700
-X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
-   d="scan'208";a="694708112"
-Received: from gboschi-mobl.ger.corp.intel.com (HELO [10.249.42.217]) ([10.249.42.217])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 06:04:30 -0700
-Message-ID: <0a30942b-e6c9-72fb-d012-4b8a6a16ae42@linux.intel.com>
-Date:   Tue, 29 Mar 2022 16:04:28 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH bpf-next v3 00/17] Introduce eBPF support for HID devices
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Tue, 29 Mar 2022 09:32:13 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C952AE15;
+        Tue, 29 Mar 2022 06:30:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oPBJdcTsYz89B9JfTdMxmEmqdgHm41Psy6CO6PMvhzuZAX51382+zIr3axktQv3FugVSkDgTwCBxqhOJKswmP4lFj0Ba5ez/5Pe4eCjI1j4yx8f8Aot+yyY4efLaMOO65xERGf8O+apOoTFX4txsQLAspFmFX0oir/ucL9o5kRRdqbh+W1sXoF/T2ROVme+3qNthNGCvT/6dNL2f7hdV0nWmKeHrmXDasCVOjbuzUurDxscbzUA3tyG1b8zEVTJXLSxv7uRI3tmQSB/F3N6Qi7lTB5jdPgaIWku+sn10eNBoco/TlQPR2YFMfosuioq54jyFqhD6fXG3sq48hMAq4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Woslcw9dpy+GTWhEoQev8SKaJo4gNEvOYk/jAk7bcwQ=;
+ b=F4ar9fv80JbhDF+b2vehB0k0BXigMOXTa4HLPdGKBtKhFn7ooy0GH32fsfvDcTImDOVBjc18SyjqSxdB0krABr0FQIc2URzDG5sNvIlf+R6e9RTjbFS4vN+miRCZa5NdDHqUWwOWs16clL9g0scoqPR/ikHyyApLsnXb/285fZ9bL64WCsaOH9ia0SSFfI8NBtlNiXrhEMkX2P62+chDno7enEG9dcQthxw2Rgz5hm3HZlk51qWJ191oGgLIifYdan4EfX/CWEBJtNpAvEGHJMrUgRMbhJ0uJ18rpzLZzgm/fo5R6PdN+eF9SWOSsE2TJTD7rJpxA+pW29BT0ELtsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Woslcw9dpy+GTWhEoQev8SKaJo4gNEvOYk/jAk7bcwQ=;
+ b=IQr0CO5fiZwr4fu6gaak5sgWMSy/sbjmGF4QC4Ir08XnUEkOCi2n5Y2aKf0TFZmulS5RDG29tUwgSA8dw9jMEVk4MP14lT9WUiHplUIpfJ4xwFNX7vxHBb5t/DkTSdyhJaI9RynZYD1NqGyRaGLxQJZrN8rHrgpgm/ETyyyBR20oHukiY2i/sP875hY5SCs3rupr2pwv8RPu1UIJESZmjVY0tJdntpWpSbswxKMZrykIS6neEOvULGp7HYCyBzIPLv5csBUgVzMMRoHdeYz8xCvRAr2sEwjecVIaHTWlntwWyOkMQGrmOwLXLtdB4f9w7w0BUZgp1BjTv6ZDnbbaaA==
+Received: from DM5PR13CA0044.namprd13.prod.outlook.com (2603:10b6:3:7b::30) by
+ DM6PR12MB4121.namprd12.prod.outlook.com (2603:10b6:5:220::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5102.17; Tue, 29 Mar 2022 13:30:26 +0000
+Received: from DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:7b:cafe::d1) by DM5PR13CA0044.outlook.office365.com
+ (2603:10b6:3:7b::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
+ Transport; Tue, 29 Mar 2022 13:30:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT054.mail.protection.outlook.com (10.13.173.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5102.17 via Frontend Transport; Tue, 29 Mar 2022 13:30:26 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 29 Mar
+ 2022 13:30:25 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 29 Mar
+ 2022 06:30:24 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Tue, 29 Mar
+ 2022 06:30:20 -0700
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Arthur Fabre <afabre@cloudflare.com>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "Maxim Mikityanskiy" <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: [PATCH bpf v4] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
+Date:   Tue, 29 Mar 2022 16:30:01 +0300
+Message-ID: <20220329133001.2283509-1-maximmi@nvidia.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d917046a-1363-4855-95ca-08da118848d5
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4121:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4121EC75E42C7E3FC0E30492DC1E9@DM6PR12MB4121.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Oba3PvGD3Lm1WGvdsKo+FWPNXIyQGYbXvTm9gXHRcFgUk9+PQXTOSIDgK6zlIyM26tLDci33OS0lFcPPXKvbQqS3pyPVTI8u+E0Mb2w30v81qzKTFAHVmCqGv2I40+tye2vEXmIGMDUXJk0zuYjvuX5yQYxsmOoRO5IJepEzq5n2bT+eFTjn7+ZTRgpWY8YZQyau9D/dEKCjtQ18FMmlMvuT4NTQIqIEij8ToEpouJdB9XzSyx9qOjxjXHdCF74ljMrtHsrSHJkY2zix4WdnJcvUa1ri+rDxVPXAbeW+8lHVHcoyzmL3L3gq/fAv7+jqyX5s5cx9Im5qMHiTLIB+eICi23F8qdqUBTD+Xy3EeNdWrbrmqeAdk1drQ0vyH7j/KN/2vJZcle+Mx2K2lmkbMvCLgEEUm7N0yPXtp+QsGIqSAnuSHZsI6KnLJc7vYqWv7EQkL6CSR7R13UGuxlqi68UTkb9jm0on5eQ6gfjfUkOO2udjO8CCSfiXlo3KPE2iLfu8shM+Wm1GxTrEp1h69q9ZKKW1rZ+yFrcNPe1iMqPnMDC78Qz8eOrNRykEKx8eryTVfLlmEiDQ0G/aJcr7LuaIzrypP21hlHtf0ZmgBUsJZh9jtbcjaESklHkeib/R6ijDJ11Msxze9Ek4dZQ/2lKjYmqOz50O4eDwOwVLF5rgVtkaYz2rtvxi8QdKQbbTaf4atJ4rT6McA2Jbq/gNeQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(26005)(1076003)(186003)(7696005)(83380400001)(4326008)(47076005)(426003)(2906002)(316002)(8676002)(36756003)(70206006)(54906003)(110136005)(336012)(7416002)(86362001)(508600001)(356005)(82310400004)(5660300002)(36860700001)(8936002)(107886003)(70586007)(81166007)(40460700003)(6666004)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2022 13:30:26.0434
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d917046a-1363-4855-95ca-08da118848d5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4121
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Benjamin,
+bpf_tcp_gen_syncookie looks at the IP version in the IP header and
+validates the address family of the socket. It supports IPv4 packets in
+AF_INET6 dual-stack sockets.
 
-I tested this iteration of the set, and I faced couple of problems with it.
+On the other hand, bpf_tcp_check_syncookie looks only at the address
+family of the socket, ignoring the real IP version in headers, and
+validates only the packet size. This implementation has some drawbacks:
 
-1) There were some conflicts as I could not figure out the correct 
-kernel commit on which to apply the series on. I applied this on top of 
-last weeks bpf-next (see below) with some local merge fixes.
+1. Packets are not validated properly, allowing a BPF program to trick
+   bpf_tcp_check_syncookie into handling an IPv6 packet on an IPv4
+   socket.
 
-commit 2af7e566a8616c278e1d7287ce86cd3900bed943 (bpf-next/master, 
-bpf-next/for-next)
-Author: Saeed Mahameed <saeedm@nvidia.com>
-Date:   Tue Mar 22 10:22:24 2022 -0700
+2. Dual-stack sockets fail the checks on IPv4 packets. IPv4 clients end
+   up receiving a SYNACK with the cookie, but the following ACK gets
+   dropped.
 
-     net/mlx5e: Fix build warning, detected write beyond size of field
+This patch fixes these issues by changing the checks in
+bpf_tcp_check_syncookie to match the ones in bpf_tcp_gen_syncookie. IP
+version from the header is taken into account, and it is validated
+properly with address family.
 
-2) hid_is_valid_access() causes some trouble and it rejects pretty much 
-every BPF program which tries to use ctx->retval. This appears to be 
-because prog->expected_attach_type is not populated, I had to apply 
-below local tweak to overcome this problem:
+Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+---
+ net/core/filter.c                             | 17 +++-
+ .../bpf/test_tcp_check_syncookie_user.c       | 78 ++++++++++++++-----
+ 2 files changed, 72 insertions(+), 23 deletions(-)
 
-diff --git a/kernel/bpf/hid.c b/kernel/bpf/hid.c
-index 30a62e8e0f0a..bf64411e6e9b 100644
---- a/kernel/bpf/hid.c
-+++ b/kernel/bpf/hid.c
-@@ -180,8 +180,7 @@ static bool hid_is_valid_access(int off, int size,
-         case offsetof(struct hid_bpf_ctx, retval):
-                 if (size != size_default)
-                         return false;
--               return (prog->expected_attach_type == BPF_HID_USER_EVENT ||
--                       prog->expected_attach_type == BPF_HID_DRIVER_EVENT);
-+               return true;
-         default:
-                 if (size != size_default)
-                         return false;
+v2 changes: moved from bpf-next to bpf.
 
-Proper fix would probably be to actually populate the 
-expected_attach_type, but I could not figure out quickly where this 
-should be done, or whether it is actually done on some other base commit.
+v3 changes: added a selftest.
 
-With those, for the whole series:
+v4 changes: none, CCed Jakub and Arthur from Cloudflare.
 
-Tested-by: Tero Kristo <tero.kristo@linux.intel.com>
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a7044e98765e..64470a727ef7 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7016,24 +7016,33 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
+ 	if (!th->ack || th->rst || th->syn)
+ 		return -ENOENT;
+ 
++	if (unlikely(iph_len < sizeof(struct iphdr)))
++		return -EINVAL;
++
+ 	if (tcp_synq_no_recent_overflow(sk))
+ 		return -ENOENT;
+ 
+ 	cookie = ntohl(th->ack_seq) - 1;
+ 
+-	switch (sk->sk_family) {
+-	case AF_INET:
+-		if (unlikely(iph_len < sizeof(struct iphdr)))
++	/* Both struct iphdr and struct ipv6hdr have the version field at the
++	 * same offset so we can cast to the shorter header (struct iphdr).
++	 */
++	switch (((struct iphdr *)iph)->version) {
++	case 4:
++		if (sk->sk_family == AF_INET6 && ipv6_only_sock(sk))
+ 			return -EINVAL;
+ 
+ 		ret = __cookie_v4_check((struct iphdr *)iph, th, cookie);
+ 		break;
+ 
+ #if IS_BUILTIN(CONFIG_IPV6)
+-	case AF_INET6:
++	case 6:
+ 		if (unlikely(iph_len < sizeof(struct ipv6hdr)))
+ 			return -EINVAL;
+ 
++		if (sk->sk_family != AF_INET6)
++			return -EINVAL;
++
+ 		ret = __cookie_v6_check((struct ipv6hdr *)iph, th, cookie);
+ 		break;
+ #endif /* CONFIG_IPV6 */
+diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+index b9e991d43155..e7775d3bbe08 100644
+--- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
++++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+@@ -18,8 +18,9 @@
+ #include "bpf_rlimit.h"
+ #include "cgroup_helpers.h"
+ 
+-static int start_server(const struct sockaddr *addr, socklen_t len)
++static int start_server(const struct sockaddr *addr, socklen_t len, bool dual)
+ {
++	int mode = !dual;
+ 	int fd;
+ 
+ 	fd = socket(addr->sa_family, SOCK_STREAM, 0);
+@@ -28,6 +29,14 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
+ 		goto out;
+ 	}
+ 
++	if (addr->sa_family == AF_INET6) {
++		if (setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&mode,
++			       sizeof(mode)) == -1) {
++			log_err("Failed to set the dual-stack mode");
++			goto close_out;
++		}
++	}
++
+ 	if (bind(fd, addr, len) == -1) {
+ 		log_err("Failed to bind server socket");
+ 		goto close_out;
+@@ -47,24 +56,17 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
+ 	return fd;
+ }
+ 
+-static int connect_to_server(int server_fd)
++static int connect_to_server(const struct sockaddr *addr, socklen_t len)
+ {
+-	struct sockaddr_storage addr;
+-	socklen_t len = sizeof(addr);
+ 	int fd = -1;
+ 
+-	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
+-		log_err("Failed to get server addr");
+-		goto out;
+-	}
+-
+-	fd = socket(addr.ss_family, SOCK_STREAM, 0);
++	fd = socket(addr->sa_family, SOCK_STREAM, 0);
+ 	if (fd == -1) {
+ 		log_err("Failed to create client socket");
+ 		goto out;
+ 	}
+ 
+-	if (connect(fd, (const struct sockaddr *)&addr, len) == -1) {
++	if (connect(fd, (const struct sockaddr *)addr, len) == -1) {
+ 		log_err("Fail to connect to server");
+ 		goto close_out;
+ 	}
+@@ -116,7 +118,8 @@ static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
+ 	return map_fd;
+ }
+ 
+-static int run_test(int server_fd, int results_fd, bool xdp)
++static int run_test(int server_fd, int results_fd, bool xdp,
++		    const struct sockaddr *addr, socklen_t len)
+ {
+ 	int client = -1, srv_client = -1;
+ 	int ret = 0;
+@@ -142,7 +145,7 @@ static int run_test(int server_fd, int results_fd, bool xdp)
+ 		goto err;
+ 	}
+ 
+-	client = connect_to_server(server_fd);
++	client = connect_to_server(addr, len);
+ 	if (client == -1)
+ 		goto err;
+ 
+@@ -199,12 +202,30 @@ static int run_test(int server_fd, int results_fd, bool xdp)
+ 	return ret;
+ }
+ 
++static bool get_port(int server_fd, in_port_t *port)
++{
++	struct sockaddr_in addr;
++	socklen_t len = sizeof(addr);
++
++	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
++		log_err("Failed to get server addr");
++		return false;
++	}
++
++	/* sin_port and sin6_port are located at the same offset. */
++	*port = addr.sin_port;
++	return true;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	struct sockaddr_in addr4;
+ 	struct sockaddr_in6 addr6;
++	struct sockaddr_in addr4dual;
++	struct sockaddr_in6 addr6dual;
+ 	int server = -1;
+ 	int server_v6 = -1;
++	int server_dual = -1;
+ 	int results = -1;
+ 	int err = 0;
+ 	bool xdp;
+@@ -224,25 +245,43 @@ int main(int argc, char **argv)
+ 	addr4.sin_family = AF_INET;
+ 	addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+ 	addr4.sin_port = 0;
++	memcpy(&addr4dual, &addr4, sizeof(addr4dual));
+ 
+ 	memset(&addr6, 0, sizeof(addr6));
+ 	addr6.sin6_family = AF_INET6;
+ 	addr6.sin6_addr = in6addr_loopback;
+ 	addr6.sin6_port = 0;
+ 
+-	server = start_server((const struct sockaddr *)&addr4, sizeof(addr4));
+-	if (server == -1)
++	memset(&addr6dual, 0, sizeof(addr6dual));
++	addr6dual.sin6_family = AF_INET6;
++	addr6dual.sin6_addr = in6addr_any;
++	addr6dual.sin6_port = 0;
++
++	server = start_server((const struct sockaddr *)&addr4, sizeof(addr4),
++			      false);
++	if (server == -1 || !get_port(server, &addr4.sin_port))
+ 		goto err;
+ 
+ 	server_v6 = start_server((const struct sockaddr *)&addr6,
+-				 sizeof(addr6));
+-	if (server_v6 == -1)
++				 sizeof(addr6), false);
++	if (server_v6 == -1 || !get_port(server_v6, &addr6.sin6_port))
++		goto err;
++
++	server_dual = start_server((const struct sockaddr *)&addr6dual,
++				   sizeof(addr6dual), true);
++	if (server_dual == -1 || !get_port(server_dual, &addr4dual.sin_port))
++		goto err;
++
++	if (run_test(server, results, xdp,
++		     (const struct sockaddr *)&addr4, sizeof(addr4)))
+ 		goto err;
+ 
+-	if (run_test(server, results, xdp))
++	if (run_test(server_v6, results, xdp,
++		     (const struct sockaddr *)&addr6, sizeof(addr6)))
+ 		goto err;
+ 
+-	if (run_test(server_v6, results, xdp))
++	if (run_test(server_dual, results, xdp,
++		     (const struct sockaddr *)&addr4dual, sizeof(addr4dual)))
+ 		goto err;
+ 
+ 	printf("ok\n");
+@@ -252,6 +291,7 @@ int main(int argc, char **argv)
+ out:
+ 	close(server);
+ 	close(server_v6);
++	close(server_dual);
+ 	close(results);
+ 	return err;
+ }
+-- 
+2.30.2
 
-On 18/03/2022 18:15, Benjamin Tissoires wrote:
-> Hi,
->
-> This is a followup of my v1 at [0] and v2 at [1].
->
-> The short summary of the previous cover letter and discussions is that
-> HID could benefit from BPF for the following use cases:
->
-> - simple fixup of report descriptor:
->    benefits are faster development time and testing, with the produced
->    bpf program being shipped in the kernel directly (the shipping part
->    is *not* addressed here).
->
-> - Universal Stylus Interface:
->    allows a user-space program to define its own kernel interface
->
-> - Surface Dial:
->    somehow similar to the previous one except that userspace can decide
->    to change the shape of the exported device
->
-> - firewall:
->    still partly missing there, there is not yet interception of hidraw
->    calls, but it's coming in a followup series, I promise
->
-> - tracing:
->    well, tracing.
->
->
-> I think I addressed the comments from the previous version, but there are
-> a few things I'd like to note here:
->
-> - I did not take the various rev-by and tested-by (thanks a lot for those)
->    because the uapi changed significantly in v3, so I am not very confident
->    in taking those rev-by blindly
->
-> - I mentioned in my discussion with Song that I'll put a summary of the uapi
->    in the cover letter, but I ended up adding a (long) file in the Documentation
->    directory. So please maybe start by reading 17/17 to have an overview of
->    what I want to achieve
->
-> - I added in the libbpf and bpf the new type BPF_HID_DRIVER_EVENT, even though
->    I don't have a user of it right now in the kernel. I wanted to have them in
->    the docs, but we might not want to have them ready here.
->    In terms of code, it just means that we can attach such programs types
->    but that they will never get triggered.
->
-> Anyway, I have been mulling on this for the past 2 weeks, and I think that
-> maybe sharing this now is better than me just starring at the code over and
-> over.
->
->
-> Short summary of changes:
->
-> v3:
-> ===
->
-> - squashed back together most of the libbpf and bpf changes into bigger
->    commits that give a better overview of the whole interactions
->
-> - reworked the user API to not expose .data as a directly accessible field
->    from the context, but instead forces everyone to use hid_bpf_get_data (or
->    get/set_bits)
->
-> - added BPF_HID_DRIVER_EVENT (see note above)
->
-> - addressed the various nitpicks from v2
->
-> - added a big Documentation file (and so adding now the doc maintainers to the
->    long list of recipients)
->
-> v2:
-> ===
->
-> - split the series by subsystem (bpf, HID, libbpf, selftests and
->    samples)
->
-> - Added an extra patch at the beginning to not require CAP_NET_ADMIN for
->    BPF_PROG_TYPE_LIRC_MODE2 (please shout if this is wrong)
->
-> - made the bpf context attached to HID program of dynamic size:
->    * the first 1 kB will be able to be addressed directly
->    * the rest can be retrieved through bpf_hid_{set|get}_data
->      (note that I am definitivey not happy with that API, because there
->      is part of it in bits and other in bytes. ouch)
->
-> - added an extra patch to prevent non GPL HID bpf programs to be loaded
->    of type BPF_PROG_TYPE_HID
->    * same here, not really happy but I don't know where to put that check
->      in verifier.c
->
-> - added a new flag BPF_F_INSERT_HEAD for BPF_LINK_CREATE syscall when in
->    used with HID program types.
->    * this flag is used for tracing, to be able to load a program before
->      any others that might already have been inserted and that might
->      change the data stream.
->
-> Cheers,
-> Benjamin
->
->
->
-> [0] https://lore.kernel.org/linux-input/20220224110828.2168231-1-benjamin.tissoires@redhat.com/T/#t
-> [1] https://lore.kernel.org/linux-input/20220304172852.274126-1-benjamin.tissoires@redhat.com/T/#t
->
->
-> Benjamin Tissoires (17):
->    bpf: add new is_sys_admin_prog_type() helper
->    bpf: introduce hid program type
->    bpf/verifier: prevent non GPL programs to be loaded against HID
->    libbpf: add HID program type and API
->    HID: hook up with bpf
->    HID: allow to change the report descriptor from an eBPF program
->    selftests/bpf: add tests for the HID-bpf initial implementation
->    selftests/bpf: add report descriptor fixup tests
->    selftests/bpf: Add a test for BPF_F_INSERT_HEAD
->    selftests/bpf: add test for user call of HID bpf programs
->    samples/bpf: add new hid_mouse example
->    bpf/hid: add more HID helpers
->    HID: bpf: implement hid_bpf_get|set_bits
->    HID: add implementation of bpf_hid_raw_request
->    selftests/bpf: add tests for hid_{get|set}_bits helpers
->    selftests/bpf: add tests for bpf_hid_hw_request
->    Documentation: add HID-BPF docs
->
->   Documentation/hid/hid-bpf.rst                | 444 +++++++++++
->   Documentation/hid/index.rst                  |   1 +
->   drivers/hid/Makefile                         |   1 +
->   drivers/hid/hid-bpf.c                        | 328 ++++++++
->   drivers/hid/hid-core.c                       |  34 +-
->   include/linux/bpf-hid.h                      | 127 +++
->   include/linux/bpf_types.h                    |   4 +
->   include/linux/hid.h                          |  36 +-
->   include/uapi/linux/bpf.h                     |  67 ++
->   include/uapi/linux/bpf_hid.h                 |  71 ++
->   include/uapi/linux/hid.h                     |  10 +
->   kernel/bpf/Makefile                          |   3 +
->   kernel/bpf/btf.c                             |   1 +
->   kernel/bpf/hid.c                             | 728 +++++++++++++++++
->   kernel/bpf/syscall.c                         |  27 +-
->   kernel/bpf/verifier.c                        |   7 +
->   samples/bpf/.gitignore                       |   1 +
->   samples/bpf/Makefile                         |   4 +
->   samples/bpf/hid_mouse_kern.c                 | 117 +++
->   samples/bpf/hid_mouse_user.c                 | 129 +++
->   tools/include/uapi/linux/bpf.h               |  67 ++
->   tools/lib/bpf/libbpf.c                       |  23 +-
->   tools/lib/bpf/libbpf.h                       |   2 +
->   tools/lib/bpf/libbpf.map                     |   1 +
->   tools/testing/selftests/bpf/config           |   3 +
->   tools/testing/selftests/bpf/prog_tests/hid.c | 788 +++++++++++++++++++
->   tools/testing/selftests/bpf/progs/hid.c      | 205 +++++
->   27 files changed, 3204 insertions(+), 25 deletions(-)
->   create mode 100644 Documentation/hid/hid-bpf.rst
->   create mode 100644 drivers/hid/hid-bpf.c
->   create mode 100644 include/linux/bpf-hid.h
->   create mode 100644 include/uapi/linux/bpf_hid.h
->   create mode 100644 kernel/bpf/hid.c
->   create mode 100644 samples/bpf/hid_mouse_kern.c
->   create mode 100644 samples/bpf/hid_mouse_user.c
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
->   create mode 100644 tools/testing/selftests/bpf/progs/hid.c
->
