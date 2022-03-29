@@ -2,137 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AED84EAF95
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 16:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7E84EAF9A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Mar 2022 16:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbiC2OvK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 10:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S236057AbiC2OwR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Mar 2022 10:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238092AbiC2OvJ (ORCPT
+        with ESMTP id S235720AbiC2OwQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 10:51:09 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16877457AA
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 07:49:25 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id f38so31985751ybi.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 07:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2oha13URciMJUMHsLdhAfLwBD02pEz7fymz7j2GuO7o=;
-        b=wBWob6xx+smvegWHYDHGVSH5Rfy37d3hz6zthZZcPFemFXoA+nsASFgP6NQiFKIbE3
-         vWIaox+AyVGgFCHkBQkOiDBOn4JA/4PQ9Srx+8oeWQboWEFG+Oz0XPK/RretvIxeSW2v
-         axIdcy+Z1oXPU8Yf1w1g4a9iSZjUFYlSOEOLV9B4L0YWFMIKobHYcFIt0CnHukEXPskB
-         3cta2MzhxPDYRyaqirp0WllWgLzPr2jsd3uUNvKaeOCN0mvIi8Eu5G/gKdZ9Dx4Izhj5
-         mXptXWPiFDrvKAG0r5K7m/8Nh827vevOIIuMJj3QhQ46ytdI51ANoB/QArDmvQD4qk6+
-         mvNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2oha13URciMJUMHsLdhAfLwBD02pEz7fymz7j2GuO7o=;
-        b=H32g4RBpL47q3K7Ih/6JzN1faytVFrF36fYA15bFnzv7MYJsTMH/632lSC4O9Envz2
-         zOwz7rtb0s4yqWiJ99Jg2UmwnxMKAxSMFozXkrrva8i57smRWGx1pUxQzfsc9jTEwOzJ
-         Tpsots5oXcru8vOjXnm1LJT3+ysN9aeuKO0WnY07w9eTXGmrnOIkOLlkDBtMjYBAmGFS
-         UvVpxSf/vaNmbAgeCMTM3Lvt5Nj1tOFImPl70bzS8wpZFEP7An2NgccU3G9qOKt7yRA7
-         1JgUU/QMs7FK4hFRnK2VtCQ8R4NMsSc5JFiCnk6il8JuoPHPBc6iyKX+QWvMllpMlvPK
-         v8lg==
-X-Gm-Message-State: AOAM5311N9aC+1MqaYMWr2q9Q0g+fX63RNFD4r7xpcNtdlaNu27LGHUK
-        roUgFO+lJor5aY+YAyPOQBzx/QUI8FimuwhmrpCI5g==
-X-Google-Smtp-Source: ABdhPJzNMO0WNloIJZHTbvtLBwdcrxAvJey28Sdrtc06nKCudh6Qlw+sP4mWnWff33jmxA1NY5T8kuC5m/fNpf0cxVg=
-X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
- z9-20020a259909000000b00624057ed919mr29015853ybn.494.1648565364194; Tue, 29
- Mar 2022 07:49:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
- <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
- <20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <08c5c6f3-e340-eaee-b725-9ec1a4988b84@linuxfoundation.org>
-In-Reply-To: <08c5c6f3-e340-eaee-b725-9ec1a4988b84@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 29 Mar 2022 20:19:10 +0530
-Message-ID: <CA+G9fYsjP2+20YLbKTFU-4_v+VLq6MfaagjERL9PWETs+sX8Zg@mail.gmail.com>
-Subject: Re: kselftest: net: tls: hangs
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>
+        Tue, 29 Mar 2022 10:52:16 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CB84DF4F;
+        Tue, 29 Mar 2022 07:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=S+Tu0Dayg2CTLGhBbl0yg+lgxmDq6qIFjiz7b1KSHxM=;
+        t=1648565433; x=1649775033; b=luoiZwb+tWrBpkhXN5hEJMnMh+15TqG7ksUZ7LkStX5WoCY
+        OzpGNC7aRxwKABLZRLR5knBVrisB7NumgCrGs1tpZzvyAYciERjW9oBwNjZXT/pfNEjlkOHtDlzI9
+        5UwGYhOwnQNZSseP0Fl65/swtIn2wrp3s0Ro6KCw1tRXVDTqaob7uT8nrzhuNRffxKUPUhPe/XxMC
+        hRvShE/5O7LXMjBnedWOMZecqsLcN44n8jiLllpNJeMpuDOT97AlXhzPJcOCdQcLHOE/LQoKHzXdu
+        Pqq5j+SJ+9IhRu6D79kUK3Sy86K1OUzRB3tVgBDqPMIkm3oq3IamSf4lpRozjloA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nZDAg-0021FO-OZ;
+        Tue, 29 Mar 2022 16:50:10 +0200
+Message-ID: <5b39d572e619c812109af7a1b8028bfb8353efda.camel@sipsolutions.net>
+Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Date:   Tue, 29 Mar 2022 16:50:09 +0200
+In-Reply-To: <20220329144319.GA4474@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+         <20220311162445.346685-8-vincent.whitchurch@axis.com>
+         <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+         <20220318154927.GA32172@axis.com>
+         <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
+         <20220329144319.GA4474@axis.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jakub,
+On Tue, 2022-03-29 at 16:43 +0200, Vincent Whitchurch wrote:
+> 
+> I'm aware of vhost-user, but AFAICS QEMU needs glue for each device type
+> to be able to actually hook up vhost-user implementations to the devices
+> it exposes to the guest via the virtio PCI device.  See e.g.
+> hw/virtio/vhost-user-i2c-pci.c and hw/virtio/vhost-user-i2c.c in QEMU.
 
-> >> This seems to be the problem perhaps.
-> >>
-> >> Jakub, any thoughts. The last change to tls.c was a while back.
-> >
-> > Yes, sorry, kicked off a build and got distracted.
-> >
-> > I can repro the failures, TLS=n in the config I must have not tested
-> > that in the new cases.
+Oh, I wasn't aware of that.
 
-Thanks for investigation and reproducing the test failures.
+> That is what I meant was missing for virtio-gpio, there seems to be an
+> in-progress patch set for that here though:
+>  https://lore.kernel.org/all/cover.1641987128.git.viresh.kumar@linaro.org/
+> 
+> Similarly, glue for something like arch/um/drivers/virt-pci.c does not
+> exist in QEMU.
+> 
+> Or perhaps you are implying that hw/virtio/vhost-user-i2c* in QEMU are
+> not strictly needed?
 
-> >
-> > But I can't repro the hung, and we have a timer at the hardness level
-> > IIUC so IDK how this could "hang"?
+I _thought_ that was the case, but honestly, that was just from reading
+about it, not looking at the code. Thinking about it though, I don't
+need special glue in UML, just passing the device ID on the command
+line? So not sure what they need the glue for. Looking at the code, it's
+not really much though? Not sure, I guess you need somebody more
+familiar with qemu here, sorry.
 
-Did you get a chance to build and test with the config file that I
-have provided ?
-I am using kselftest-merge configs for my daily CI system [1] on gitlab.
+> > Wohoo! This makes me very happy, finally somebody else who uses it :-)
+> 
+> Yes, thanks for that feature, it works well to speed up tests and also
+> has a knack for triggering race conditions (the RTC use-after-free for
+> example).
+> 
+> Time travel however sometimes triggers some WARN_ONs from the core
+> timekeeping code. I haven't seen them when running the test suites, but
+> they show up if the system under UML is idle for several (wall time)
+> seconds.  I haven't had a chance to investigate it further though, but I
+> can dig up the splats if you are interested.
 
-If you think the Kconfig is a test
+Oh, I haven't seen that, and I'm pretty sure I've had systems idle for
+very long periods of time passing inside (think weeks) ...
 
-> > Naresh, is there any stack trace in the logs? Can you repro on Linus's
-> > tree?
+So yeah, if you have some splats (ideally with corresponding kernel
+configs), I'd be interested.
 
-There is no stack trace print, it was only hung.
-
-> I couldn't reproduce this either - I have TLS=m
-
-If you want to reproduce the same build or re-use the bzImage /
-vmlinux / System.map
-you may check the provided link [1].
-
-Step to reproduce [1]:
-
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11
---kconfig defconfig --kconfig-add
-https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/lkft.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/lkft-crypto.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/distro-overrides.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/systemd.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/sumo/recipes-kernel/linux/files/virtio.config
---kconfig-add CONFIG_IGB=y --kconfig-add
-CONFIG_UNWINDER_FRAME_POINTER=y cpupower headers kernel kselftest
-kselftest-merge modules
-
-
-[1] https://builds.tuxbuild.com/26mKij4yB5Q6WUpOyHHEoHLstVJ/
-
-- Naresh
+johannes
