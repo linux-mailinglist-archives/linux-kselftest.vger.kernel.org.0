@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15394EB8B6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Mar 2022 05:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066704EBAC9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Mar 2022 08:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242257AbiC3DTK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Mar 2022 23:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S237490AbiC3GaT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Mar 2022 02:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234767AbiC3DTJ (ORCPT
+        with ESMTP id S237378AbiC3GaS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 23:19:09 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C72181B35
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 20:17:25 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id p189so11434783wmp.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 20:17:25 -0700 (PDT)
+        Wed, 30 Mar 2022 02:30:18 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497DD55228
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 23:28:25 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so23176995edw.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 23:28:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yahRLlo30jvQAyt3gJXuuY7Z0jTOLOnDhv26QzJEO38=;
-        b=lmqlUOa1qQ6Iw7MVmz+qNL4Fwwl1YfU4ose4HssQjd+ivqnv5MpjHjEUvenu6+HoRD
-         x56O1rmS9kzDqbyZRSxSW7xQuHpv5shI4DvVXOVUJ2diXFZn6xY5f6+HQWAiPJl6gl5A
-         h8K4mbAH8rTxQq/9N8m/bUgWdImBxNttzKzBzGftwCdEUga8PcFfuLDbPBugkCGNBqp1
-         29Jig2Fdxi7+9q4Xilg2IXp+J5pNM3FmF/Fth2itNUwcVuWMaq+iqNNCX3hAWJ7JE/gP
-         0NfQ3RDLoGthZE1gQ2AvrMD3XUsD/xJ41jFbJwtnkwdI/U01VF+Ws3G82+LFAVW1d+2+
-         VhFA==
+        bh=jeyVjUl8UxMsfAwAWYqgKhKVc6qpMwqWakUeuaih7vk=;
+        b=tH4KpeMCj1g/eVF2kz2mtjnwDDoDdq4u6CLDQFszL7FihldHG5vOhIz/a7r/h58KI3
+         /Bo9cKFscNeko7YLiHVLzJiy93kkTYhdaDZKeH/IfW+Q9i4GBBYawph65BrFSzAGyKq2
+         1oxCLCRUfZ4/iVDlb5yTMiVb4XhOT5Q+EAZSNnoQHuQ1Nbw8AApsZJZ9kCTtrA8KFtpp
+         5rJgyk1+LDGOW+dH321nzvD2PZ8CJ9/gK8yk5ST+LZzVKLo5Oga/xzIhnSn/7abEyuMC
+         fQEIqCMIyTOGCF0uoziBAP/g9niKcUJNwFUaZYWzIL8fdtWovxqYDDgrrQh/cDW14eOY
+         8pTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yahRLlo30jvQAyt3gJXuuY7Z0jTOLOnDhv26QzJEO38=;
-        b=U8Z5OaxyK7AWlB9qfkMgiwrvnn4vfy9X5CmDUtBzJBMt8Fgg301AjplsekRPvpg2LA
-         R8RdylTEYuKtn3cTqRiy7vr0BHOcs7hNsRZbUWY6re8XnO21bcDHd7JyPQWIxBd4RAzC
-         AYTMGwzBQ3tP9/4G26b0MaiKP2D/6GSUq/zUiKcegSAiJdZkRwGKVmwMhzih++9idF9E
-         VgPHCMCZ0lN2trY8VbCrpPDMHbFrUYNC3g6L1vO2thHdnQEG66fNiGdvtTzpomtMv0M8
-         SnLhxkUMXDRI/f/W67UbiBOGK958vzc9fMokBv7GdPyrcbZRuyMR9rcWAaO/Rj5Yy6uQ
-         4okw==
-X-Gm-Message-State: AOAM530MfzvJjVIjTBjGw5ktDIff3FWA+cFyHCPqHS43dVC+QOWmoNtF
-        gRQf7doYMWMGHkRfa4wY4NGarzRztS5y6Z0/8Gj2Ig==
-X-Google-Smtp-Source: ABdhPJyly+YpiCi8k9QHEBXuB5JtVfJXgMCrNsYliTo/GtYcp0o/rLEQG6DjYs9Yioh1vqjLMkA9ipVmmqifgFsP3vU=
-X-Received: by 2002:a05:600c:6004:b0:38c:6c00:4316 with SMTP id
- az4-20020a05600c600400b0038c6c004316mr2433107wmb.6.1648610243534; Tue, 29 Mar
- 2022 20:17:23 -0700 (PDT)
+        bh=jeyVjUl8UxMsfAwAWYqgKhKVc6qpMwqWakUeuaih7vk=;
+        b=nvswqr7fjV/N5TZuXDoNOhBis5hDsi/eghacaN+e1AuqZDDikpnjnug8/8NmdfJlQ+
+         fdatAQyt2S/4f3zT3j0R+8c8N/1QzdCactc09EHih5xIryXU4Xg9719qjOVYwh779ENl
+         vddkvDRsKOpk5vfIS5mgzX899jj4/qWp52NAYooRArJRX8VHdAaGsGZRiiLX785p9ypK
+         korqU0SNgmyCDuM7uYxZxXz6cGo5eGnooci2R6g1yZ9bdqHLnusyfjOuHIMeMF8ScsxA
+         jiVxuB+cW1aC7+FL3BTnn4u95w9g/EXBYNOwJ7mzMgvLKs9zax3a/7NHoPRlcgcS0aeS
+         iHTA==
+X-Gm-Message-State: AOAM5333eqisVAgyENebm1p7jEIb9iUIYaUFTBEK06Pd79EacHCA2Uxu
+        I4e87L3iA4O7fqkMMbF28w+s/j3RikOzsV+dFFE8MA==
+X-Google-Smtp-Source: ABdhPJzvYAlNbp3AlnGzDTBeNPyTBGecgDc9rfpmjaE3Gzlb2cCIAIeQJFdlTi48g0Ioj91H5O7A4of4kv2EPxgl2xU=
+X-Received: by 2002:a05:6402:43cc:b0:419:2486:6cd2 with SMTP id
+ p12-20020a05640243cc00b0041924866cd2mr8817467edc.334.1648621703622; Tue, 29
+ Mar 2022 23:28:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329214248.1330868-1-dlatypov@google.com>
-In-Reply-To: <20220329214248.1330868-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 30 Mar 2022 11:17:12 +0800
-Message-ID: <CABVgOS=r1HhBRjKmb6RE9MLbxD3TLfOxvATXH-qLHnr9yjO35g@mail.gmail.com>
+References: <20220329214248.1330868-1-dlatypov@google.com> <CABVgOS=r1HhBRjKmb6RE9MLbxD3TLfOxvATXH-qLHnr9yjO35g@mail.gmail.com>
+In-Reply-To: <CABVgOS=r1HhBRjKmb6RE9MLbxD3TLfOxvATXH-qLHnr9yjO35g@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 30 Mar 2022 01:28:12 -0500
+Message-ID: <CAGS_qxoYJTt-++EGQ23h_FwjrHKfnBbFVivM9gTXZg=0kh57og@mail.gmail.com>
 Subject: Re: [PATCH] kunit: tool: print clearer error message when there's no
  TAP output
-To:     Daniel Latypov <dlatypov@google.com>
+To:     David Gow <davidgow@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
@@ -65,59 +65,48 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 5:43 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Mar 29, 2022 at 10:17 PM David Gow <davidgow@google.com> wrote:
 >
-> Before:
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> ...
-> [ERROR] Test : invalid KTAP input!
+> On Wed, Mar 30, 2022 at 5:43 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > Before:
+> > $ ./tools/testing/kunit/kunit.py parse /dev/null
+> > ...
+> > [ERROR] Test : invalid KTAP input!
+> >
+> > After:
+> > $ ./tools/testing/kunit/kunit.py parse /dev/null
+> > ...
+> > [ERROR] Test <missing>: could not find any KTAP output!
+> >
+> > This error message gets printed out when extract_tap_output() yielded no
+> > lines. So while it could be because of malformed KTAP output from KUnit,
+> > it could also be due to to not having any KTAP output at all.
+> >
+> > Try and make the error message here more clear.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
 >
-> After:
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> ...
-> [ERROR] Test <missing>: could not find any KTAP output!
->
-> This error message gets printed out when extract_tap_output() yielded no
-> lines. So while it could be because of malformed KTAP output from KUnit,
-> it could also be due to to not having any KTAP output at all.
->
-> Try and make the error message here more clear.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+> At first I thought that this was "working as intended", but I agree
+> that it's a bit confusing, so changing it is for the best.
+> (And there's no sense getting too bogged down in the philosophical
+> difference between "invalid TAP" and "not valid TAP" :-))
 
-At first I thought that this was "working as intended", but I agree
-that it's a bit confusing, so changing it is for the best.
-(And there's no sense getting too bogged down in the philosophical
-difference between "invalid TAP" and "not valid TAP" :-))
+extract_tap_output() returning something means it just saw a TAP header.
+So this error realistically only happens when there's no TAP at all :P
 
-This works fine here, and the code looks sensible. I tested it with
-the --json option as well, and the result ("test_cases" being empty)
-makes sense to me:
----
-{
-   "name": "KUnit Test Group",
-   "arch": "UM",
-   "defconfig": "kunit_defconfig",
-   "build_environment": "",
-   "sub_groups": [],
-   "test_cases": [],
-   "lab_name": null,
-   "kernel": null,
-   "job": null,
-   "git_branch": "kselftest"
-}
----
+My allusion to malformed KTAP is in the sense that
+ KTA<random stuff>P ver<more stuff>sion 1
+is malformed.
 
-So, this is:
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
+We could potentially be more completely precise w/ our error message
+and say "no K?TAP header found", but I initially thought this might be
+a bit more user-friendly.
