@@ -2,57 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D024ED11E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Mar 2022 02:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E164ED171
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Mar 2022 03:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiCaA7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Mar 2022 20:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S1345339AbiCaB4n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Mar 2022 21:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiCaA7r (ORCPT
+        with ESMTP id S241393AbiCaB4n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Mar 2022 20:59:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFD76581A;
-        Wed, 30 Mar 2022 17:58:01 -0700 (PDT)
+        Wed, 30 Mar 2022 21:56:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7EC55BD2;
+        Wed, 30 Mar 2022 18:54:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B483618F7;
-        Thu, 31 Mar 2022 00:58:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47D7C340EE;
-        Thu, 31 Mar 2022 00:57:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648688280;
-        bh=GDPcz8x8/JeYV44KtOpqgeuUV+1TQXlw3IB0RHxNf6s=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=kx+hh9z/M2LPMW52A2QClBbNcr7qladS6HnTwvxgAC4ohfp+/8ekTNkIKuTXDqbIz
-         p0+/7i46gVO69lbQkejGaC6jMCAEfPXhEqLJPaYEMZwpjlGhGSbxoBp1NO3hwaM6rj
-         U6VPUyIGYXy9vYpTTQSSE9Qx3re6s0kwfN21juHXWODfs1lmGEwzWOHDKx5P8UTd5K
-         +f906ZA9ONmGZQE4bWfgf6xP6j0YCxn4/oCrbsT0aTb8lcnW4tbNDWeS3g8vGoeEDm
-         dY/kD0QzASuzor6DuWhqxv8UGU6dlt6TAj6ovi1WSyYDCEPIoZo40JknXhnmy50CbZ
-         n6OTqHEv0hv5A==
-Message-ID: <c1ab42d56309bb06c0e64daf204570f06585bddc.camel@kernel.org>
-Subject: Re: [PATCH v2] selftests/sgx: Use rip relative addressing for
- encl_stack
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-sgx@vger.kernel.org, nathaniel@profian.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Thu, 31 Mar 2022 03:59:07 +0300
-In-Reply-To: <3aa93449-6951-8085-f6a1-6739b6d515d9@intel.com>
-References: <20220330222834.139769-1-jarkko@kernel.org>
-         <3aa93449-6951-8085-f6a1-6739b6d515d9@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.42.4 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id F070DB81E45;
+        Thu, 31 Mar 2022 01:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69061C340EC;
+        Thu, 31 Mar 2022 01:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1648691693;
+        bh=EP4YVz+eCDf1UV7+6jf9BNNSvDRpssv+/m6/4AB53MQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a65NfolNsP2fTeM0VZLl4vGDuceNlt5t4+sytWAtGJpU7uo8AV5ReTs/4eDuckfCA
+         nBm9b1hOo5WsrKNFAlVLwkApI2jUqEizWyVDZe0Y9AOTSReuwzf9E4VKLvWFnHCOu9
+         heaj387zzrWLyB23AfPFb8zfxGInG/wBOqG9s9AI=
+Date:   Wed, 30 Mar 2022 18:54:52 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] selftest/vm: clarify error statement in gup_test
+Message-Id: <20220330185452.fe989c38280521356e55d944@linux-foundation.org>
+In-Reply-To: <20220330215257.112029-1-sidhartha.kumar@oracle.com>
+References: <20220330215257.112029-1-sidhartha.kumar@oracle.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,100 +53,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTAzLTMwIGF0IDE3OjEwIC0wNzAwLCBSZWluZXR0ZSBDaGF0cmUgd3JvdGU6
-Cj4gSGkgSmFya2tvLAo+IAo+IE9uIDMvMzAvMjAyMiAzOjI4IFBNLCBKYXJra28gU2Fra2luZW4g
-d3JvdGU6Cj4gPiBTaW1wbGlmeSB0aGUgdGVzdF9lbmNsX2Jvb3RzdHJhcC5TIGZsb3cgYnkgdXNp
-bmcgUklQLXJlbGF0aXZlIGFkZHJlc3NpbmcuCj4gCj4gSXQgaXMgbm90IGNsZWFyIHRvIG1lIGhv
-dyB0aGlzIGlzIHNpbXBsZXIuIEF0IHRoaXMgcG9pbnQgdGhlcmUgaXMgbm8KPiBmdW5jdGlvbmFs
-IGNoYW5nZSAoZXhjZXB0IGZvciB3aGF0IGFwcGVhcnMgdG8gYmUgYW4gdW5pbnRlbmRlZCBidWcg
-LSBtb3JlIGJlbG93KS4KPiBBdCB0aGlzIHRpbWUgdGhlIGNoYW5nZSBzZWVtcyBtb3JlIGNvZGUg
-dXRpbGl6aW5nIHN1YnRsZSBjb21waWxlciBmZWF0dXJlcwo+IHRvIGFjY29tcGxpc2ggdGhlIHNh
-bWUuCj4gCj4gQ291bGQgeW91IHBsZWFzZSBzaGFyZSBtb3JlIGFib3V0IHlvdXIgcGxhbnMgZm9s
-bG93aW5nIHRoaXMgY2hhbmdlPyBJIG5lZWQKPiB0byB1bmRlcnN0YW5kIHRoaXMgYmV0dGVyIHNp
-bmNlIGl0IGlzIGFsc28gYW4gYXJlYSBjaGFuZ2VkIGJ5IHRoZSBTR1gyIHRlc3RpbmcKPiBjb2Rl
-Lgo+IAo+ID4gVGhlIGNvbXBpbGVyIGF1dG9tYXRpY2FsbHkgcHV0cyByZWxhdGl2ZSBhZGRyZXNz
-ZXMgZm9yIFJJUCBpbmRleCBhZGRyZXNzZXMuCj4gCj4gSSB3YXMgbm90IGF3YXJlIG9mIHRoaXMu
-IEEgY29tbWVudCB3b3VsZCBiZSBoZWxwZnVsIHRvIHVuZGVyc3RhbmQgdGhlIGltcGxlbWVudGF0
-aW9uLgo+IAo+ID4gCj4gPiBJbiBvcmRlciB0byBnZXQgYSBjbGVhbiBhbmQgdHdlYWtsZXNzIHNv
-bHV0aW9uLCBkZWZpbmUgc2VwYXJhdGUgZW50cnkgcG9pbnQKPiA+IGZvciBlYWNoIFRDUy4KPiA+
-IAo+ID4gQ2M6IFJlaW5ldHRlIENoYXRyZSA8cmVpbmV0dGUuY2hhdHJlQGludGVsLmNvbT4KPiA+
-IENjOiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tPgo+ID4gU2lnbmVk
-LW9mZi1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4KPiA+IC0tLQo+ID4g
-djI6Cj4gPiAqIEJhc2VkIG9uIFJlaW5ldHRlJ3MgZXhhbXBsZSwgbWFrZSBwcm9wZXIgc3RydWN0
-dXJpbmcgd2l0aCBzZXBhcmF0ZQo+ID4gwqAgZW50cnkgcG9pbnRzIGZvciBlYWNoIFRDUy4KPiA+
-IC0tLQo+ID4gwqAuLi4vc2VsZnRlc3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlPCoMKgwqDC
-oMKgwqAgfCAzMCArKysrKysrKysrKy0tLS0tLS0tCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAxOCBp
-bnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlMgYi90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9zZ3gvdGVzdF9lbmNsX2Jvb3RzdHJhcC5TCj4gPiBpbmRleCA4MmZiMGRm
-Y2JkMjMuLmNjMjM1M2YzOGJjYyAxMDA2NDQKPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
-c3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlMKPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL3NneC90ZXN0X2VuY2xfYm9vdHN0cmFwLlMKPiA+IEBAIC0xMCwxMiArMTAsMTMgQEAK
-PiA+IMKgwqDCoMKgwqDCoMKgwqAuc2VjdGlvbiAiLnRjcyIsICJhdyIKPiA+IMKgwqDCoMKgwqDC
-oMKgwqAuYmFsaWduwqA0MDk2Cj4gPiDCoAo+ID4gK2VuY2xfdGNzMToKPiA+IMKgwqDCoMKgwqDC
-oMKgwqAuZmlsbMKgwqDCoDEsIDgsIDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IyBTVEFURSAoc2V0IGJ5IENQVSkKPiA+IMKgwqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDgs
-IDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBGTEFHUwo+ID4gwqDCoMKgwqDC
-oMKgwqDCoC5xdWFkwqDCoMKgZW5jbF9zc2FfdGNzMcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjIE9T
-U0EKPiA+IMKgwqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDQsIDDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIyBDU1NBIChzZXQgYnkgQ1BVKQo+ID4gwqDCoMKgwqDCoMKgwqDC
-oC5maWxswqDCoMKgMSwgNCwgMcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjIE5T
-U0EKPiA+IC3CoMKgwqDCoMKgwqDCoC5xdWFkwqDCoMKgZW5jbF9lbnRyecKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAjIE9FTlRSWQo+ID4gK8KgwqDCoMKgwqDCoMKgLnF1YWTCoMKgwqBlbmNs
-X2VudHJ5McKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBPRU5UUlkKPiA+IMKgwqDCoMKgwqDC
-oMKgwqAuZmlsbMKgwqDCoDEsIDgsIDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IyBBRVAgKHNldCBieSBFRU5URVIgYW5kIEVSRVNVTUUpCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZp
-bGzCoMKgwqAxLCA4LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgT0ZTQkFT
-RQo+ID4gwqDCoMKgwqDCoMKgwqDCoC5maWxswqDCoMKgMSwgOCwgMMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAjIE9HU0JBU0UKPiA+IEBAIC0yMywxMyArMjQsMTMgQEAKPiA+IMKg
-wqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDQsIDB4RkZGRkZGRkbCoMKgwqDCoMKgwqDCoMKg
-IyBHU0xJTUlUCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqA0MDI0LCAxLCAwwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgUmVzZXJ2ZWQKPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKg
-wqAjIFRDUzIKPiA+ICtlbmNsX3RjczI6Cj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqAx
-LCA4LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgU1RBVEUgKHNldCBieSBD
-UFUpCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqAxLCA4LCAwwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCMgRkxBR1MKPiA+IMKgwqDCoMKgwqDCoMKgwqAucXVhZMKgwqDC
-oGVuY2xfc3NhX3RjczLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBPU1NBCj4gPiDCoMKgwqDCoMKg
-wqDCoMKgLmZpbGzCoMKgwqAxLCA0LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCMgQ1NTQSAoc2V0IGJ5IENQVSkKPiA+IMKgwqDCoMKgwqDCoMKgwqAuZmlsbMKgwqDCoDEsIDQs
-IDHCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBOU1NBCj4gPiAtwqDCoMKgwqDC
-oMKgwqAucXVhZMKgwqDCoGVuY2xfZW50cnnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIyBP
-RU5UUlkKPiA+ICvCoMKgwqDCoMKgwqDCoC5xdWFkwqDCoMKgZW5jbF9lbnRyeTLCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCMgT0VOVFJZCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmZpbGzCoMKgwqAx
-LCA4LCAwwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCMgQUVQIChzZXQgYnkgRUVO
-VEVSIGFuZCBFUkVTVU1FKQo+ID4gwqDCoMKgwqDCoMKgwqDCoC5maWxswqDCoMKgMSwgOCwgMMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjIE9GU0JBU0UKPiA+IMKgwqDCoMKgwqDC
-oMKgwqAuZmlsbMKgwqDCoDEsIDgsIDDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IyBPR1NCQVNFCj4gPiBAQCAtMzksMTUgKzQwLDE5IEBACj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKg
-wqDCoC50ZXh0Cj4gPiDCoAo+ID4gLWVuY2xfZW50cnk6Cj4gPiAtwqDCoMKgwqDCoMKgwqAjIFJC
-WCBjb250YWlucyB0aGUgYmFzZSBhZGRyZXNzIGZvciBUQ1MsIHdoaWNoIGlzIHRoZSBmaXJzdCBh
-ZGRyZXNzCj4gPiAtwqDCoMKgwqDCoMKgwqAjIGluc2lkZSB0aGUgZW5jbGF2ZSBmb3IgVENTICMx
-IGFuZCBvbmUgcGFnZSBpbnRvIHRoZSBlbmNsYXZlIGZvcgo+ID4gLcKgwqDCoMKgwqDCoMKgIyBU
-Q1MgIzIuIEJ5IGFkZGluZyB0aGUgdmFsdWUgb2YgZW5jbF9zdGFjayB0byBpdCwgd2UgZ2V0Cj4g
-PiAtwqDCoMKgwqDCoMKgwqAjIHRoZSBhYnNvbHV0ZSBhZGRyZXNzIGZvciB0aGUgc3RhY2suCj4g
-PiAtwqDCoMKgwqDCoMKgwqBsZWHCoMKgwqDCoMKgKGVuY2xfc3RhY2spKCVyYngpLCAlcmF4Cj4g
-PiArZW5jbF9lbnRyeTE6Cj4gPiArwqDCoMKgwqDCoMKgwqBsZWHCoMKgwqDCoMKgKGVuY2xfc3Rh
-Y2sxKSglcmlwKSwgJXJheAo+ID4gwqDCoMKgwqDCoMKgwqDCoHhjaGfCoMKgwqDCoCVyc3AsICVy
-YXgKPiA+IMKgwqDCoMKgwqDCoMKgwqBwdXNowqDCoMKgwqAlcmF4Cj4gPiArwqDCoMKgwqDCoMKg
-wqBqbXDCoMKgwqDCoMKgZW5jbF9jb250aW51ZQo+ID4gwqAKPiA+ICtlbmNsX2VudHJ5MjoKPiA+
-ICvCoMKgwqDCoMKgwqDCoGxlYcKgwqDCoMKgwqAoZW5jbF9zdGFjazIpKCVyaXApLCAlcmF4Cj4g
-PiArwqDCoMKgwqDCoMKgwqB4Y2hnwqDCoMKgwqAlcnNwLCAlcmF4Cj4gPiArwqDCoMKgwqDCoMKg
-wqBwdXNowqDCoMKgwqAlcmF4Cj4gPiArwqDCoMKgwqDCoMKgwqBqbXDCoMKgwqDCoMKgZW5jbF9j
-b250aW51ZQo+ID4gKwo+IAo+IFRoZSBjb2RlIGR1cGxpY2F0aW9uICh4Y2hnIGFuZCBwdXNoKSBp
-cyBub3QgbmVlZGVkLgo+IAo+ID4gK2VuY2xfY29udGludWU6Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-cHVzaMKgwqDCoMKgJXJjeCAjIHB1c2ggdGhlIGFkZHJlc3MgYWZ0ZXIgRUVOVEVSCj4gPiDCoMKg
-wqDCoMKgwqDCoMKgcHVzaMKgwqDCoMKgJXJieCAjIHB1c2ggdGhlIGVuY2xhdmUgYmFzZSBhZGRy
-ZXNzCj4gPiDCoAo+ID4gQEAgLTg0LDEzICs4OSwxNCBAQCBlbmNsX2VudHJ5Ogo+ID4gwqAKPiA+
-IMKgZW5jbF9zc2FfdGNzMToKPiA+IMKgwqDCoMKgwqDCoMKgwqAuc3BhY2UgNDA5Ngo+ID4gKwo+
-ID4gwqBlbmNsX3NzYV90Y3MyOgo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zcGFjZSA0MDk2Cj4gPiDC
-oAo+ID4gK2VuY2xfc3RhY2sxOgo+IAo+IFN0YWNrIGdyb3dzIHRoZSBvdGhlciB3YXkgc28gYnkg
-cGxhY2luZyB0aGUgZW50cnkgaGVyZSB0aGUgc3RhY2sgb2YKPiBUQ1MgIzEgd2lsbCBjbG9iYmVy
-IHRoZSBTU0Egb2YgVENTICMyLgo+IAo+ID4gwqDCoMKgwqDCoMKgwqDCoC5iYWxpZ24gNDA5Ngo+
-ID4gLcKgwqDCoMKgwqDCoMKgIyBTdGFjayBvZiBUQ1MgIzEKPiA+IMKgwqDCoMKgwqDCoMKgwqAu
-c3BhY2UgNDA5Ngo+ID4gLWVuY2xfc3RhY2s6Cj4gPiArCj4gPiArZW5jbF9zdGFjazI6Cj4gCj4g
-SGVyZSB0aGUgc3RhY2sgb2YgVENTICMyIHdpbGwgYWN0dWFsbHkgdXNlIHRoZSBzdGFjayBvZiBU
-Q1MgIzEuCj4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgLmJhbGlnbiA0MDk2Cj4gPiAtwqDCoMKgwqDC
-oMKgwqAjIFN0YWNrIG9mIFRDUyAjMgo+ID4gwqDCoMKgwqDCoMKgwqDCoC5zcGFjZSA0MDk2Cj4g
-Cj4gTGFzdCBwYWdlIHdpbGwgYmUgdW51c2VkLgo+IAo+IFJlaW5ldHRlCgpUaGFua3MgZm9yIHRo
-ZSByZW1hcmtzLiBJJ2xsIGZpeCB0aGUgaXNzdWVzLgoKQlIsIEphcmtrbwoK
+On Wed, 30 Mar 2022 21:52:57 +0000 Sidhartha Kumar <sidhartha.kumar@oracle.com> wrote:
 
+> Print two possible reasons /sys/kernel/debug/gup_test
+> cannot be opened to help users of this test diagnose
+> failures.
+> 
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> Cc: stable@vger.kernel.org # 5.15+
+>
+> ...
+>
+> --- a/tools/testing/selftests/vm/gup_test.c
+> +++ b/tools/testing/selftests/vm/gup_test.c
+> @@ -205,7 +205,9 @@ int main(int argc, char **argv)
+>  
+>  	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
+>  	if (gup_fd == -1) {
+> -		perror("open");
+> +		perror("failed to open /sys/kernel/debug/gup_test");
+> +		printf("check if CONFIG_GUP_TEST is enabled in kernel config\n");
+> +		printf("check if debugfs is mounted at /sys/kernel/debug\n");
+>  		exit(1);
+>  	}
+
+Thanks.  I don't think this is -stable material...
