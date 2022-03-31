@@ -2,182 +2,313 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2361E4EDE5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Mar 2022 18:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78EC4EE17D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Mar 2022 21:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235149AbiCaQIT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Mar 2022 12:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S239343AbiCaTPJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Mar 2022 15:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239802AbiCaQIO (ORCPT
+        with ESMTP id S240632AbiCaTO7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Mar 2022 12:08:14 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50063.outbound.protection.outlook.com [40.107.5.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA7558384
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Mar 2022 09:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e47JLb4kfultrgpDC/XyWPyxOnLl59POSPiq4zw707Y=;
- b=lLQBeJysn4OAt69NQDqfgxPPBkUhFUX0ncp1NyCXcPN2DYR53CaZzAV7AMBgWePOB0ig38UBJ/+kopHCj2NbPC1mSWLI5phqiMqpEv/lZVmOi8FomHbpTRP03Rk/nFm7DnmW+hv6L8zmedp5i2d6x3C2UPtDC91dQ+iYeQ2yErw=
-Received: from DU2PR04CA0228.eurprd04.prod.outlook.com (2603:10a6:10:2b1::23)
- by PAXPR08MB7365.eurprd08.prod.outlook.com (2603:10a6:102:225::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.20; Thu, 31 Mar
- 2022 16:06:16 +0000
-Received: from DB5EUR03FT045.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:2b1:cafe::3) by DU2PR04CA0228.outlook.office365.com
- (2603:10a6:10:2b1::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.22 via Frontend
- Transport; Thu, 31 Mar 2022 16:06:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DB5EUR03FT045.mail.protection.outlook.com (10.152.21.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5123.19 via Frontend Transport; Thu, 31 Mar 2022 16:06:16 +0000
-Received: ("Tessian outbound facaf1373bbd:v118"); Thu, 31 Mar 2022 16:06:16 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: a3bb062844f73ebf
-X-CR-MTA-TID: 64aa7808
-Received: from 6e11f4d42098.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 7C4BE570-191F-43B1-B37F-463E7A164836.1;
-        Thu, 31 Mar 2022 16:06:10 +0000
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 6e11f4d42098.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 31 Mar 2022 16:06:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gI8uzOSepFiVh8MFjCT0KmAedleOgwI7tdoCnf6ko0rWU0VVuWY8/pStuJSQVgc71R+gWgm2RlKjfIuS3ZOQTRK6Z9dvmShYge87dNlUMXTwxibPuSzrDwg4QM932ZgPFAKC7xhfLBhMv+w02FE9teaPCElQENCtxsGbbEKFKkJ0UKIwJV8ildl9JXxDH1RQXOnBRPr8WsxJnIPqlEl26dkuXCcYDW+sKlyApz+l7U2flU4fIehveSp+Z6AV50ynX/kk4F//CrGv5gzX2W5xjBsn0+3Vp0+q3qSLnQQ9lBd17bdooRKw6ahYUEhI1+c8i9ZYQ/oTb9WXrf6Rhh7+nQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e47JLb4kfultrgpDC/XyWPyxOnLl59POSPiq4zw707Y=;
- b=K7VaasQY5TkBsGt0qO+xr9x49Tn2UkFiDYEhFyZQ6uUrnCz6iUdZXgFlYSdg67ESKxRdH+IbFheP7LsMYybtV+sOoP3iNXG6v5en04q4RxctbjssR6afzJblPL/GhFu/cmkUZcl3jox4J1TekD+6/rOr0kxIzxsFhD2zcWYa8683JDe03sz8k4rcZWwE4P1z8zBFaTT/KdDgqq3jyZu3Ce9mVYGiT4MU1BIBWJwhwDi5HH2Z0plM5MDbjirnVczmhpvvb85M0O9PmFywmLHRNHS+JKZUe6FGJ4JwD96P+hgTFbt6KWBGR+vHjkEbQTOfZHNt7no9Nns6cLOaXadbsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e47JLb4kfultrgpDC/XyWPyxOnLl59POSPiq4zw707Y=;
- b=lLQBeJysn4OAt69NQDqfgxPPBkUhFUX0ncp1NyCXcPN2DYR53CaZzAV7AMBgWePOB0ig38UBJ/+kopHCj2NbPC1mSWLI5phqiMqpEv/lZVmOi8FomHbpTRP03Rk/nFm7DnmW+hv6L8zmedp5i2d6x3C2UPtDC91dQ+iYeQ2yErw=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DB7PR08MB3801.eurprd08.prod.outlook.com (2603:10a6:10:79::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.19; Thu, 31 Mar
- 2022 16:06:01 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::7d6e:f858:129f:f240]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::7d6e:f858:129f:f240%3]) with mapi id 15.20.5123.021; Thu, 31 Mar 2022
- 16:06:01 +0000
-Date:   Thu, 31 Mar 2022 16:05:38 +0000
-From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <Catalin.Marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <Alan.Hayward@arm.com>,
-        Luis Machado <Luis.Machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant KumarDwivedi <Basant.KumarDwivedi@arm.com>,
-        James Morse <James.Morse@arm.com>,
-        Alexandru Elisei <Alexandru.Elisei@arm.com>,
-        Suzuki Poulose <Suzuki.Poulose@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>
-Subject: Re: [PATCH v12 06/40] arm64/sme: Provide ABI documentation for SME
-Message-ID: <YkXRUlaoyDKQqndc@arm.com>
-References: <20220225165923.1474372-1-broonie@kernel.org>
- <20220225165923.1474372-7-broonie@kernel.org>
- <20220311172051.GA257833@arm.com>
- <YiuYMcR8zk73eBLo@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YiuYMcR8zk73eBLo@sirena.org.uk>
-X-ClientProxiedBy: DM6PR13CA0018.namprd13.prod.outlook.com
- (2603:10b6:5:bc::31) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Thu, 31 Mar 2022 15:14:59 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 31 Mar 2022 12:13:10 PDT
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C6E23B3C0
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Mar 2022 12:13:10 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 11034 invoked from network); 31 Mar 2022 21:06:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1648753588; bh=XZTdSmwm9/yO+AUq3L3jtZKpoXcOQ8kc/B2IKK6OQ0g=;
+          h=From:To:Cc:Subject;
+          b=ubO3oVMPOVqjvN6tQ+rX1kOZP3HTKba9P7eqRqlyQ6ZLsKV8E5DsrG6bN/d7QPuYF
+           kg22ppYJXqXEpo9tT65ne7kV4q0iWjUS00rszY5pzz8xAJjHS6u05AMK3wWCxVhmKf
+           K0pHcSmGSM/qYVb/eVoisklFqLQ9K5EGrfar2kDs=
+Received: from aaew62.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.126.62])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 31 Mar 2022 21:06:27 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm time in debugfs
+Date:   Thu, 31 Mar 2022 21:06:11 +0200
+Message-Id: <20220331190612.22162-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Office365-Filtering-Correlation-Id: 6091be44-3432-428e-ce60-08da133062bf
-X-MS-TrafficTypeDiagnostic: DB7PR08MB3801:EE_|DB5EUR03FT045:EE_|PAXPR08MB7365:EE_
-X-Microsoft-Antispam-PRVS: <PAXPR08MB7365123A88E48A69D898035FEDE19@PAXPR08MB7365.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: EIj44gwabxbR5ITA5r8Mrk51k8iMmJfAaaJIrLyDOVDfBMP/srEctfN+xQ9H80PhsIt8wBaDAj6fHykt1ElriIhilI4wWr+8feqNmgaBGLq/kkHqv+3Fyn5babPd8XMb+9ygl+EYN0b30y9+zf9HoAO6XUcgTy82GBCdIpzkfeVrfQn2UZMDi9VYWujV+UTSOd9zRP0N5SQ1YlXr1UwTjCJET6JUcgyPQVYLbfMQZypIxeIKhYx0xcN7MCPwmKYz/9RopIg8b4KjGoxVk53sW0y80YZvhFaBzJr6wjMY7jI7NGqnyz82NtR32Pxd4Deg7y1Iaiv3JYZ+mlHgYl0ayvxrrr8TIGZ4sJpzV1gu6Sg1airzYvJPSOLYv/CDCHKoT8r2MCgklBiw2wLoKaY9Nwt0BAOtKPPUhdNTxU98NmXH6qKhTNUuB5rU1qayWl2l8EPzzevG7NIU9MlkJ6A4KOQ9j0bJvIZe4Q2y/iKmBzAqE3JwDW98/EMONGQ14AgclWfycOxJVOSNA/5Q1+UUk/Sa82eAM/vbkIoch0Ch0qWA6l7tnEHxXPzfqafFibsYXQ7om8Huv1iv9k6wkgexBrw+OMOkatc0i4Pc+vDDy3MW/thxr+8BzWt8lFO0PdCHVJgpbjvG6ylWa6sa4I9jxw==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(66476007)(186003)(6506007)(2616005)(6512007)(66556008)(8676002)(4326008)(26005)(38100700002)(6666004)(66946007)(6916009)(54906003)(5660300002)(316002)(36756003)(8936002)(6486002)(86362001)(508600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR08MB3801
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT045.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 4ecadc2b-5442-4976-05c9-08da13305967
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sX+nA+dMrCpJbLQr2Sc4TrDA3oi5UplNXWZ9U4focHGE35jnHhuzYiKdOop+PWNfQxdw50yIu6MlmHKYFjOCM64TKzyF5i0HJmwCbsWhVaqHHNchQgxFxrVzDv5MOZiWDaGggmtQfPMQyJXoR/S6FRqIjAFiOL9A0vwzPLA93vrCRD2Fr9Ij97xA9swZ9994EClYnZDO5Pu21WB8UASsLssJE+6bba7nNd9SNqbCghILXzMRwXjpUHkD8MTqMQwNwlsBh2yM0XGGCjw90XTJ0XXdlaTuXJI3vw2WSJwa3OtXovlgc5CelOm9T6P/EOd4F718c0H8qi4NrDmo6Pkpvm/7PpH4OM1n7CGjqNC4dfJ1lfNcna07RFMR5yhSmaxuRkmFsoeyrDEzA4rkdBL7cjQKHytPE6Olpf8Ufbiy2FrCCUBjJGSBcW1zoYu0ivjsv6SmuhmptonNtNDy4vD06+6KVEou8vIacBPRw1dbgz4/zriXeMAjZxIVv3wkrerUGvw3IpxpVueaKzbTGZxZE2UUwFb77yvhX9Kd8YZWxConR1n2/CuKAVcWgRMw+7HLYndIa5G1Wy6XiYhIJ2vhShrhXVBjPQmevP6DSWn3MSKM7OCTeSzcidv21VawEcsu/lmVVvUyvr4WJDsv2bdxzo0CCQgZ16eHaRlSZ4ubqiFbym/tapbGsIGkfNTU6k//
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(47076005)(86362001)(81166007)(6862004)(356005)(336012)(40460700003)(508600001)(6506007)(4326008)(8676002)(82310400004)(26005)(36860700001)(6512007)(70586007)(70206006)(54906003)(36756003)(8936002)(186003)(316002)(6666004)(6486002)(107886003)(2616005)(2906002)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 16:06:16.2285
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6091be44-3432-428e-ce60-08da133062bf
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT045.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB7365
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: c9fa4d8a8d8f00513ade2b3eaef03373
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [EcP0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The 03/11/2022 18:42, Mark Brown wrote:
-> On Fri, Mar 11, 2022 at 05:21:21PM +0000, Szabolcs Nagy wrote:
-> > The 02/25/2022 16:58, Mark Brown wrote:
-> > > +* On creation fork() or clone() the newly created process will have PSTATE.SM
-> > > +  and PSTATE.ZA cleared.
-> 
-> > is there a reason why fork() clears ZA?
-> 
-> > i think this is a minor issue, but the usual expectation is that
-> > on thread creation thread local state is reset in the child, but
-> > in a forked child the state is the same as in the parent (where
-> > ZA is preserved according to the first rule).
-> 
-> It was partly consistency with SM and the SVE state (though that is also
-> covered by just being in a system call unlike ZA) and partly concerns
-> about what happens if the fork() happens in library code which isn't SME
-> aware - it would end up carrying around a copy of ZA with associated
-> power and performance impacts if it doesn't exec().  Overall it seemed
-> like there would to be less potential for unpleasant surprises if we
-> consistently discard the data.
-> 
-> That's not a *super* strongly held opinion though, we could switch to
-> preserving whenever we preserve TPIDR2.
+Before Linux 5.17, there was a problem with the CMOS RTC driver:
+cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
+in progress) bit, which could have caused it to sometimes fail silently
+and read bogus values or do not set the alarm correctly.
+Luckily, this issue was masked by cmos_read_time() invocations in core
+RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
 
-i think it's slightly better to treat ZA like TPIDR2,
-so only clear if CLONE_SETTLS is set.
+To avoid such a problem in the future in some other driver, I wrote a
+test unit that reads the alarm time many times in a row. As the alarm
+time is usually read once and cached by the RTC core, this requires a
+way for userspace to trigger direct alarm time read from hardware. I
+think that debugfs is the natural choice for this.
 
-otherwise in principle the child can return to the frame
-where ZA was used and expect it to work (it's hard to
-come up with a reason why would some code do that, but
-this is valid in a single-threaded fork child).
+So, introduce /sys/kernel/debug/rtc/rtcX/wakealarm_raw. This interface
+as implemented here does not seem to be that useful to userspace, so
+there is little risk that it will become kernel ABI.
 
-sorry for not deciding this earlier.
+Is this approach correct and worth it?
+
+TODO:
+- should I add a new Kconfig option (like CONFIG_RTC_INTF_DEBUGFS), or
+  just use CONFIG_DEBUG_FS here? I wouldn't like to create unnecessary
+  config options in the kernel.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Shuah Khan <shuah@kernel.org>
+---
+ drivers/rtc/Makefile    |   1 +
+ drivers/rtc/class.c     |   3 ++
+ drivers/rtc/debugfs.c   | 112 ++++++++++++++++++++++++++++++++++++++++
+ drivers/rtc/interface.c |   3 +-
+ include/linux/rtc.h     |  16 ++++++
+ 5 files changed, 133 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/rtc/debugfs.c
+
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 678a8ef4abae..50e166a97f54 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -14,6 +14,7 @@ rtc-core-$(CONFIG_RTC_NVMEM)		+= nvmem.o
+ rtc-core-$(CONFIG_RTC_INTF_DEV)		+= dev.o
+ rtc-core-$(CONFIG_RTC_INTF_PROC)	+= proc.o
+ rtc-core-$(CONFIG_RTC_INTF_SYSFS)	+= sysfs.o
++rtc-core-$(CONFIG_DEBUG_FS)		+= debugfs.o
+ 
+ obj-$(CONFIG_RTC_LIB_KUNIT_TEST)	+= lib_test.o
+ 
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 4b460c61f1d8..5673b7b26c0d 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -334,6 +334,7 @@ static void devm_rtc_unregister_device(void *data)
+ 	 * Remove innards of this RTC, then disable it, before
+ 	 * letting any rtc_class_open() users access it again
+ 	 */
++	rtc_debugfs_del_device(rtc);
+ 	rtc_proc_del_device(rtc);
+ 	if (!test_bit(RTC_NO_CDEV, &rtc->flags))
+ 		cdev_device_del(&rtc->char_dev, &rtc->dev);
+@@ -417,6 +418,7 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	}
+ 
+ 	rtc_proc_add_device(rtc);
++	rtc_debugfs_add_device(rtc);
+ 
+ 	dev_info(rtc->dev.parent, "registered as %s\n",
+ 		 dev_name(&rtc->dev));
+@@ -476,6 +478,7 @@ static int __init rtc_init(void)
+ 	}
+ 	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
+ 	rtc_dev_init();
++	rtc_debugfs_init();
+ 	return 0;
+ }
+ subsys_initcall(rtc_init);
+diff --git a/drivers/rtc/debugfs.c b/drivers/rtc/debugfs.c
+new file mode 100644
+index 000000000000..5ceed5504033
+--- /dev/null
++++ b/drivers/rtc/debugfs.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/*
++ * Debugfs interface for testing RTC alarms.
++ */
++#include <linux/debugfs.h>
++#include <linux/err.h>
++#include <linux/rtc.h>
++
++static struct dentry *rtc_main_debugfs_dir;
++
++void rtc_debugfs_init(void)
++{
++	struct dentry *ret = debugfs_create_dir("rtc", NULL);
++
++	// No error is critical here
++	if (!IS_ERR(ret))
++		rtc_main_debugfs_dir = ret;
++}
++
++/*
++ * Handler for /sys/kernel/debug/rtc/rtcX/wakealarm_raw .
++ * This function reads the RTC alarm time directly from hardware. If the RTC
++ * alarm is enabled, this function returns the alarm time modulo 24h in seconds
++ * since midnight.
++ *
++ * Should be only used for testing of the RTC alarm read functionality in
++ * drivers - to make sure that the driver returns consistent values.
++ *
++ * Used in tools/testing/selftests/rtc/rtctest.c .
++ */
++static int rtc_debugfs_alarm_read(void *p, u64 *out)
++{
++	int ret;
++	struct rtc_device *rtc = p;
++	struct rtc_wkalrm alm;
++
++	/* Using rtc_read_alarm_internal() instead of __rtc_read_alarm() will
++	 * allow us to avoid any interaction with rtc_read_time() and possibly
++	 * see more issues.
++	 */
++	ret = rtc_read_alarm_internal(rtc, &alm);
++	if (ret != 0)
++		return ret;
++
++	if (!alm.enabled) {
++		*out = -1;
++		return 0;
++	}
++
++	/* It does not matter if the device does not support seconds resolution
++	 * of the RTC alarm.
++	 */
++	if (test_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features))
++		alm.time.tm_sec = 0;
++
++	/* The selftest code works with fully defined alarms only.
++	 */
++	if (alm.time.tm_sec == -1 || alm.time.tm_min == -1 || alm.time.tm_hour == -1) {
++		*out = -2;
++		return 0;
++	}
++
++	/* Check if the alarm time is correct.
++	 * rtc_valid_tm() does not allow fields containing "-1", so put in
++	 * something to satisfy it.
++	 */
++	if (alm.time.tm_year == -1)
++		alm.time.tm_year = 100;
++	if (alm.time.tm_mon == -1)
++		alm.time.tm_mon = 0;
++	if (alm.time.tm_mday == -1)
++		alm.time.tm_mday = 1;
++	if (rtc_valid_tm(&alm.time))
++		return -EINVAL;
++
++	/* We do not duplicate the logic in __rtc_read_alarm() and instead only
++	 * return the alarm time modulo 24h, which all devices should support.
++	 * This should be enough for testing purposes.
++	 */
++	*out = alm.time.tm_hour * 3600 + alm.time.tm_min * 60 + alm.time.tm_sec;
++
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(rtc_alarm_raw, rtc_debugfs_alarm_read, NULL, "%lld\n");
++
++void rtc_debugfs_add_device(struct rtc_device *rtc)
++{
++	struct dentry *dev_dir;
++
++	if (!rtc_main_debugfs_dir)
++		return;
++
++	dev_dir = debugfs_create_dir(dev_name(&rtc->dev), rtc_main_debugfs_dir);
++
++	if (IS_ERR(dev_dir)) {
++		rtc->debugfs_dir = NULL;
++		return;
++	}
++	rtc->debugfs_dir = dev_dir;
++
++	if (test_bit(RTC_FEATURE_ALARM, rtc->features) && rtc->ops->read_alarm) {
++		debugfs_create_file("wakealarm_raw", 0444, dev_dir,
++				    rtc, &rtc_alarm_raw);
++	}
++}
++
++void rtc_debugfs_del_device(struct rtc_device *rtc)
++{
++	debugfs_remove_recursive(rtc->debugfs_dir);
++	rtc->debugfs_dir = NULL;
++}
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index d8e835798153..51c801c82472 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -175,8 +175,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
+ }
+ EXPORT_SYMBOL_GPL(rtc_set_time);
+ 
+-static int rtc_read_alarm_internal(struct rtc_device *rtc,
+-				   struct rtc_wkalrm *alarm)
++int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ {
+ 	int err;
+ 
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 47fd1c2d3a57..4665bc238a94 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -41,6 +41,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+ #include <linux/mutex.h>
+ #include <linux/timerqueue.h>
+ #include <linux/workqueue.h>
++#include <linux/debugfs.h>
+ 
+ extern struct class *rtc_class;
+ 
+@@ -152,6 +153,10 @@ struct rtc_device {
+ 	time64_t offset_secs;
+ 	bool set_start_time;
+ 
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *debugfs_dir;
++#endif
++
+ #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+ 	struct work_struct uie_task;
+ 	struct timer_list uie_timer;
+@@ -190,6 +195,7 @@ extern int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm);
+ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+ extern int rtc_read_alarm(struct rtc_device *rtc,
+ 			struct rtc_wkalrm *alrm);
++int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+ extern int rtc_set_alarm(struct rtc_device *rtc,
+ 				struct rtc_wkalrm *alrm);
+ extern int rtc_initialize_alarm(struct rtc_device *rtc,
+@@ -262,4 +268,14 @@ int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
+ 	return 0;
+ }
+ #endif
++
++#ifdef CONFIG_DEBUG_FS
++void rtc_debugfs_init(void);
++void rtc_debugfs_add_device(struct rtc_device *rtc);
++void rtc_debugfs_del_device(struct rtc_device *rtc);
++#else /* CONFIG_DEBUG_FS */
++static inline void rtc_debugfs_init(void) {}
++static inline void rtc_debugfs_add_device(struct rtc_device *rtc) {}
++static inline void rtc_debugfs_del_device(struct rtc_device *rtc) {}
++#endif /* CONFIG_DEBUG_FS */
+ #endif /* _LINUX_RTC_H_ */
+-- 
+2.25.1
+
