@@ -2,191 +2,338 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061694EE17A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Mar 2022 21:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4394EE192
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Mar 2022 21:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240606AbiCaTPI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Mar 2022 15:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S239996AbiCaTXX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Mar 2022 15:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240596AbiCaTPG (ORCPT
+        with ESMTP id S240744AbiCaTXP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:15:06 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B874D23C0EB
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Mar 2022 12:13:12 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 14437 invoked from network); 31 Mar 2022 21:06:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1648753590; bh=8gd/34zfJ5U82zEaxAl8m9q+P0p7nBbi0dKh2gtx344=;
-          h=From:To:Cc:Subject;
-          b=fXgSZIqaSNsYEzNdIwhYkWtbjnDzH/vS2JWvQoeJ+23gGBc/2ffwo9YdlpU3zXpVB
-           VFLzFDD5+g02xbGlF8+jv/vh/Yb2TnRea30ssykBkKoGsw2JtXkwtOswF9B7uWJT4u
-           EFKmc6I5Q3YDenVuyEoSaHu3WVlvglPMOSJ0V/kk=
-Received: from aaew62.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.126.62])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-kernel@vger.kernel.org>; 31 Mar 2022 21:06:30 +0200
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Thu, 31 Mar 2022 15:23:15 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F35E1D7D92;
+        Thu, 31 Mar 2022 12:21:26 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3D2103200B23;
+        Thu, 31 Mar 2022 15:21:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 31 Mar 2022 15:21:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=b8M9HG7NAuCsg1
+        pgzyQ1/FF9x5QgxMEQaO1UmGNT7/g=; b=F6gy1QL+cMrYlqhuww6haTcWdgsupo
+        PD/MEynWirlsagKooa49yUF5NzzjVP4s4HLeCnu+MgAWSC9kJB7fdmoVYy30jkW9
+        MIsP1WHSTNEq1aNKbkKyfGbtIzo7hJMHSoBuDV2T6kI2H1aeje3rosBwnvUGCJGp
+        xtcMtz/AENQyrfo48PF8JNJ10fUw0pigSNZMb5v27kR5XZuv48AXETfLp0lfdeLP
+        N0D8YzKWFcA87zsFDWj7jLl96r/fARUCRug6NdKuAeRRw40CmAD3bSDMQm/v6OQk
+        z/xZ0rHBerRaJM9RPhOVnS1nRYhVGchk2Uu05r5e2gv1bApkoH0u8qag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=b8M9HG7NAuCsg1pgzyQ1/FF9x5QgxMEQaO1UmGNT7
+        /g=; b=Y4Cr/ankkEVmVWGLE7ygmtcaQLYD9snMTtamTck/NRvqVFKtvEGcgs9LZ
+        bIx5awbqcLHByV/Ii8S+QLiOlfkcnggH9S+Udjp59JYgrmqAE66feS/tdgwTnYVC
+        562RKb6fkcMO9xdgq90i1v2CbsNMdSHwBQmq0F3ikjKnJd/L6rxb6ziudsRm5x9J
+        OzYnDPpmSX+vC4zmrEtdMmrQjRiBpXKEVKNG729iYnN+7QHpEScW7ouB8f9vAeIU
+        NHEVJ6WVeDT/Yd/rlh5vu0NkO9Sio+dMK6okO2mCBbRDu9gEOnIViRIBfqplC/rm
+        WvkZ4f4lNLZnpKyigmWVdkgEj1RSQ==
+X-ME-Sender: <xms:NP9FYmUk3ieyIj_eD3xZWkwxIe-m8k-VTjxv0l-9xeHHmvcIYHs5MQ>
+    <xme:NP9FYilZWvnd7CqyKENVqFqgIm_ashFhOmxMBVYWqwJS3Wr_lziSZu7Aolldl8vJY
+    EvGoSihzBwcMQ>
+X-ME-Received: <xmr:NP9FYqYkvw479bgM94ImzmrX-Jc6D0eWOOIYdJ5oZsVLVpHuqNXMpIvhCRW794xG733KHI7ct9_y9bYICos9yMPElrFbKHFy>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgudefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefhud
+    fggeelgfduteeujeefkedvgeegkeehkedvgeelhefgudehtefftefhheegudenucffohhm
+    rghinhepmhgrrhgtrdhinhhfohdpthhimhgvrdhtmhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:NP9FYtUqOwTQWamVgd4qpFTpljxbLxjwqerKGhrP1BnQNnRd-9MIig>
+    <xmx:NP9FYglfTGTqNZg99YuXhbDBY5luu0qJzaZQwcfV4ZedxeyeeWQQYw>
+    <xmx:NP9FYicpGT3-uDYDbCM_A7vZSP-84w6A8bfgfaYdrcL7aULT4m3zqg>
+    <xmx:NP9FYr-ray9t9PnBHvcXhHKXxDiVn1amuWBxprxKd0KmMVACX8l9VQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 31 Mar 2022 15:21:23 -0400 (EDT)
+Date:   Thu, 31 Mar 2022 21:21:21 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 2/2] [RFC] selftests/rtc: read RTC alarm time many times in a row
-Date:   Thu, 31 Mar 2022 21:06:12 +0200
-Message-Id: <20220331190612.22162-2-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220331190612.22162-1-mat.jonczyk@o2.pl>
+Subject: Re: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm
+ time in debugfs
+Message-ID: <YkX/Mbrt/In1HR32@kroah.com>
 References: <20220331190612.22162-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: f8495556d919ce4d1335d5cdb7666e94
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [QcO0]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220331190612.22162-1-mat.jonczyk@o2.pl>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is the userspace part of the test unit.
+On Thu, Mar 31, 2022 at 09:06:11PM +0200, Mateusz Jończyk wrote:
+> Before Linux 5.17, there was a problem with the CMOS RTC driver:
+> cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
+> in progress) bit, which could have caused it to sometimes fail silently
+> and read bogus values or do not set the alarm correctly.
+> Luckily, this issue was masked by cmos_read_time() invocations in core
+> RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
+> 
+> To avoid such a problem in the future in some other driver, I wrote a
+> test unit that reads the alarm time many times in a row. As the alarm
+> time is usually read once and cached by the RTC core, this requires a
+> way for userspace to trigger direct alarm time read from hardware. I
+> think that debugfs is the natural choice for this.
+> 
+> So, introduce /sys/kernel/debug/rtc/rtcX/wakealarm_raw. This interface
+> as implemented here does not seem to be that useful to userspace, so
+> there is little risk that it will become kernel ABI.
+> 
+> Is this approach correct and worth it?
+> 
+> TODO:
+> - should I add a new Kconfig option (like CONFIG_RTC_INTF_DEBUGFS), or
+>   just use CONFIG_DEBUG_FS here? I wouldn't like to create unnecessary
+>   config options in the kernel.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> ---
+>  drivers/rtc/Makefile    |   1 +
+>  drivers/rtc/class.c     |   3 ++
+>  drivers/rtc/debugfs.c   | 112 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/rtc/interface.c |   3 +-
+>  include/linux/rtc.h     |  16 ++++++
+>  5 files changed, 133 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/rtc/debugfs.c
+> 
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index 678a8ef4abae..50e166a97f54 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -14,6 +14,7 @@ rtc-core-$(CONFIG_RTC_NVMEM)		+= nvmem.o
+>  rtc-core-$(CONFIG_RTC_INTF_DEV)		+= dev.o
+>  rtc-core-$(CONFIG_RTC_INTF_PROC)	+= proc.o
+>  rtc-core-$(CONFIG_RTC_INTF_SYSFS)	+= sysfs.o
+> +rtc-core-$(CONFIG_DEBUG_FS)		+= debugfs.o
+>  
+>  obj-$(CONFIG_RTC_LIB_KUNIT_TEST)	+= lib_test.o
+>  
+> diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+> index 4b460c61f1d8..5673b7b26c0d 100644
+> --- a/drivers/rtc/class.c
+> +++ b/drivers/rtc/class.c
+> @@ -334,6 +334,7 @@ static void devm_rtc_unregister_device(void *data)
+>  	 * Remove innards of this RTC, then disable it, before
+>  	 * letting any rtc_class_open() users access it again
+>  	 */
+> +	rtc_debugfs_del_device(rtc);
+>  	rtc_proc_del_device(rtc);
+>  	if (!test_bit(RTC_NO_CDEV, &rtc->flags))
+>  		cdev_device_del(&rtc->char_dev, &rtc->dev);
+> @@ -417,6 +418,7 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+>  	}
+>  
+>  	rtc_proc_add_device(rtc);
+> +	rtc_debugfs_add_device(rtc);
+>  
+>  	dev_info(rtc->dev.parent, "registered as %s\n",
+>  		 dev_name(&rtc->dev));
+> @@ -476,6 +478,7 @@ static int __init rtc_init(void)
+>  	}
+>  	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
+>  	rtc_dev_init();
+> +	rtc_debugfs_init();
+>  	return 0;
+>  }
+>  subsys_initcall(rtc_init);
+> diff --git a/drivers/rtc/debugfs.c b/drivers/rtc/debugfs.c
+> new file mode 100644
+> index 000000000000..5ceed5504033
+> --- /dev/null
+> +++ b/drivers/rtc/debugfs.c
+> @@ -0,0 +1,112 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +/*
+> + * Debugfs interface for testing RTC alarms.
+> + */
+> +#include <linux/debugfs.h>
+> +#include <linux/err.h>
+> +#include <linux/rtc.h>
+> +
+> +static struct dentry *rtc_main_debugfs_dir;
+> +
+> +void rtc_debugfs_init(void)
+> +{
+> +	struct dentry *ret = debugfs_create_dir("rtc", NULL);
+> +
+> +	// No error is critical here
 
-This patch depends on
-commit 2aaa36e95ea5 ("selftests/rtc: continuously read RTC in a loop for 30s")
+What do you mean by this?
 
-Existing code casts "struct rtc_time *" to "struct tm *", like so:
+> +	if (!IS_ERR(ret))
+> +		rtc_main_debugfs_dir = ret;
 
-	gmtime_r(&secs, (struct tm *)&tm);
+This should not be needed.
 
-This is incorrect, because sizeof(struct tm) > sizeof(struct rtc_time)
-(on Ubuntu 20.04 at least) and gmtime_r overwrites part of the stack.
-I'll submit a fix for this in mainline soon, but for now I'm defining
-timestamp_to_rtc_time() here.
+Just set the directory and away you go.
 
-TODO:
-- some logic improvements, without much impact on the core algorithm.
+But why even save it?  If you need it you can always look it up, right?
 
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Shuah Khan <shuah@kernel.org>
----
- tools/testing/selftests/rtc/rtctest.c | 81 ++++++++++++++++++++++++++-
- tools/testing/selftests/rtc/settings  |  2 +-
- 2 files changed, 81 insertions(+), 2 deletions(-)
+And when are you removing this directory you created?
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 2b9d929a24ed..7e5f2f1c00ef 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -62,7 +62,21 @@ static time_t rtc_time_to_timestamp(struct rtc_time *rtc_time)
- 	       .tm_year = rtc_time->tm_year,
- 	};
- 
--	return mktime(&tm_time);
-+	return timegm(&tm_time);
-+}
-+
-+static void timestamp_to_rtc_time(time_t timestamp, struct rtc_time *rtc_time)
-+{
-+	struct tm tm_time;
-+
-+	gmtime_r(&timestamp, &tm_time);
-+
-+	rtc_time->tm_sec = tm_time.tm_sec;
-+	rtc_time->tm_min = tm_time.tm_min;
-+	rtc_time->tm_hour = tm_time.tm_hour;
-+	rtc_time->tm_mday = tm_time.tm_mday;
-+	rtc_time->tm_mon = tm_time.tm_mon;
-+	rtc_time->tm_year = tm_time.tm_year;
- }
- 
- static void nanosleep_with_retries(long ns)
-@@ -228,6 +242,71 @@ TEST_F(rtc, alarm_alm_set) {
- 	ASSERT_EQ(new, secs);
- }
- 
-+TEST_F_TIMEOUT(rtc, alarm_read_loop, READ_LOOP_DURATION_SEC + 2) {
-+	int rc;
-+	long iter_count = 0;
-+	struct rtc_time tm;
-+	struct timeval start, curr;
-+	time_t secs;
-+
-+	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
-+	ASSERT_NE(-1, rc);
-+
-+	// 60s is for clocks that only support minute resolution of RTC alarm
-+	secs = rtc_time_to_timestamp(&tm) + READ_LOOP_DURATION_SEC + 60 + 2;
-+	timestamp_to_rtc_time(secs, &tm);
-+
-+	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
-+	if (rc == -1) {
-+		ASSERT_EQ(EINVAL, errno);
-+		TH_LOG("skip alarms are not supported.");
-+		return;
-+	}
-+
-+	rc = ioctl(self->fd, RTC_AIE_ON, NULL);
-+	ASSERT_NE(-1, rc);
-+
-+	TH_LOG("Continuously reading RTC alarm time for %ds (with %dms breaks after every read).",
-+	       READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
-+
-+	gettimeofday(&start, NULL);
-+
-+	secs = 0;
-+
-+	do {
-+		// TODO: use appropriate directory
-+		// TODO: fail gracefully if the kernel support does not exist
-+		FILE *wkalarm_file = fopen("/sys/kernel/debug/rtc/rtc0/wakealarm_raw", "r");
-+		long long wkalarm_time;
-+
-+		ASSERT_NE(wkalarm_file, NULL);
-+
-+		rc = fscanf(wkalarm_file, "%lld", &wkalarm_time);
-+		fclose(wkalarm_file);
-+
-+		ASSERT_EQ(rc, 1);
-+		ASSERT_NE(secs, -1);
-+		// TODO: use another value as placeholder,
-+		// TODO: check if wkalarm_time matches alarm time we set
-+		// previously
-+		if (secs == 0)
-+			secs = wkalarm_time;
-+
-+		ASSERT_EQ(wkalarm_time, secs);
-+
-+		// Sleep 11ms to avoid killing / overheating the RTC
-+		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
-+
-+		gettimeofday(&curr, NULL);
-+		iter_count++;
-+	} while (curr.tv_sec <= start.tv_sec + READ_LOOP_DURATION_SEC);
-+
-+	TH_LOG("Performed %ld RTC alarm time reads.", iter_count);
-+
-+	rc = ioctl(self->fd, RTC_AIE_OFF, NULL);
-+	ASSERT_NE(-1, rc);
-+}
-+
- TEST_F(rtc, alarm_wkalm_set) {
- 	struct timeval tv = { .tv_sec = ALARM_DELTA + 2 };
- 	struct rtc_wkalrm alarm = { 0 };
-diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
-index 0c1a2075d5f3..b478e684846a 100644
---- a/tools/testing/selftests/rtc/settings
-+++ b/tools/testing/selftests/rtc/settings
-@@ -1 +1 @@
--timeout=210
-+timeout=240
--- 
-2.25.1
+> +}
+> +
+> +/*
+> + * Handler for /sys/kernel/debug/rtc/rtcX/wakealarm_raw .
+> + * This function reads the RTC alarm time directly from hardware. If the RTC
+> + * alarm is enabled, this function returns the alarm time modulo 24h in seconds
+> + * since midnight.
+> + *
+> + * Should be only used for testing of the RTC alarm read functionality in
+> + * drivers - to make sure that the driver returns consistent values.
+> + *
+> + * Used in tools/testing/selftests/rtc/rtctest.c .
+> + */
+> +static int rtc_debugfs_alarm_read(void *p, u64 *out)
+> +{
+> +	int ret;
+> +	struct rtc_device *rtc = p;
+> +	struct rtc_wkalrm alm;
+> +
+> +	/* Using rtc_read_alarm_internal() instead of __rtc_read_alarm() will
+> +	 * allow us to avoid any interaction with rtc_read_time() and possibly
+> +	 * see more issues.
+> +	 */
+> +	ret = rtc_read_alarm_internal(rtc, &alm);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	if (!alm.enabled) {
+> +		*out = -1;
+> +		return 0;
+> +	}
+> +
+> +	/* It does not matter if the device does not support seconds resolution
+> +	 * of the RTC alarm.
+> +	 */
+> +	if (test_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features))
+> +		alm.time.tm_sec = 0;
+> +
+> +	/* The selftest code works with fully defined alarms only.
+> +	 */
+> +	if (alm.time.tm_sec == -1 || alm.time.tm_min == -1 || alm.time.tm_hour == -1) {
+> +		*out = -2;
+> +		return 0;
+> +	}
+> +
+> +	/* Check if the alarm time is correct.
+> +	 * rtc_valid_tm() does not allow fields containing "-1", so put in
+> +	 * something to satisfy it.
+> +	 */
+> +	if (alm.time.tm_year == -1)
+> +		alm.time.tm_year = 100;
+> +	if (alm.time.tm_mon == -1)
+> +		alm.time.tm_mon = 0;
+> +	if (alm.time.tm_mday == -1)
+> +		alm.time.tm_mday = 1;
+> +	if (rtc_valid_tm(&alm.time))
+> +		return -EINVAL;
+> +
+> +	/* We do not duplicate the logic in __rtc_read_alarm() and instead only
+> +	 * return the alarm time modulo 24h, which all devices should support.
+> +	 * This should be enough for testing purposes.
+> +	 */
+> +	*out = alm.time.tm_hour * 3600 + alm.time.tm_min * 60 + alm.time.tm_sec;
+> +
+> +	return 0;
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(rtc_alarm_raw, rtc_debugfs_alarm_read, NULL, "%lld\n");
+> +
+> +void rtc_debugfs_add_device(struct rtc_device *rtc)
+> +{
+> +	struct dentry *dev_dir;
+> +
+> +	if (!rtc_main_debugfs_dir)
+> +		return;
+> +
+> +	dev_dir = debugfs_create_dir(dev_name(&rtc->dev), rtc_main_debugfs_dir);
+> +
+> +	if (IS_ERR(dev_dir)) {
 
+Again, no need to check this.  You never need to test the return value
+of a call to debugfs_*.
+
+> +		rtc->debugfs_dir = NULL;
+> +		return;
+> +	}
+> +	rtc->debugfs_dir = dev_dir;
+> +
+> +	if (test_bit(RTC_FEATURE_ALARM, rtc->features) && rtc->ops->read_alarm) {
+> +		debugfs_create_file("wakealarm_raw", 0444, dev_dir,
+> +				    rtc, &rtc_alarm_raw);
+> +	}
+> +}
+> +
+> +void rtc_debugfs_del_device(struct rtc_device *rtc)
+> +{
+> +	debugfs_remove_recursive(rtc->debugfs_dir);
+> +	rtc->debugfs_dir = NULL;
+> +}
+> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> index d8e835798153..51c801c82472 100644
+> --- a/drivers/rtc/interface.c
+> +++ b/drivers/rtc/interface.c
+> @@ -175,8 +175,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
+>  }
+>  EXPORT_SYMBOL_GPL(rtc_set_time);
+>  
+> -static int rtc_read_alarm_internal(struct rtc_device *rtc,
+> -				   struct rtc_wkalrm *alarm)
+> +int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+>  {
+>  	int err;
+>  
+> diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+> index 47fd1c2d3a57..4665bc238a94 100644
+> --- a/include/linux/rtc.h
+> +++ b/include/linux/rtc.h
+> @@ -41,6 +41,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+>  #include <linux/mutex.h>
+>  #include <linux/timerqueue.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/debugfs.h>
+>  
+>  extern struct class *rtc_class;
+>  
+> @@ -152,6 +153,10 @@ struct rtc_device {
+>  	time64_t offset_secs;
+>  	bool set_start_time;
+>  
+> +#ifdef CONFIG_DEBUG_FS
+> +	struct dentry *debugfs_dir;
+
+No need to save this.  Just look it up if you need it.
+
+thanks,
+
+greg k-h
