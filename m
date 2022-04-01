@@ -2,51 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EFC4EE5F1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 04:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D8F4EE63B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 04:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239136AbiDACRy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Mar 2022 22:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S242133AbiDACs6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Mar 2022 22:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238832AbiDACRy (ORCPT
+        with ESMTP id S230504AbiDACs6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Mar 2022 22:17:54 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E803422451A;
-        Thu, 31 Mar 2022 19:16:04 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 1 Apr 2022
- 10:15:57 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 1 Apr
- 2022 10:15:56 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-CC:     Haowen Bai <baihaowen@meizu.com>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
-Date:   Fri, 1 Apr 2022 10:15:54 +0800
-Message-ID: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 31 Mar 2022 22:48:58 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B397198EE6;
+        Thu, 31 Mar 2022 19:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=WZYJFNG1vMt9ILegHLIhkuZmBUpDUyiWrIv97AnX75A=; b=XC397vKJudcGNaI6Ezh9RPyGqz
+        ZSxfwBn+W3MaqoHCHqqH8BCAO3TglGIlVPGFv4j3188AZiAYjeLPUXgIqhIsSKQr3x31wYmoYtEE7
+        Al2gXbODEFCnukmrqr/koYfwa7vJfHKix48eXy+OLwxZAQpkycmm8ApYYmvXYW5xfgiBUHi3Q+Ihf
+        QyAaRgODzriIaDSlD73F/MWfkLOWPWZHBQaOdsC7HOsIWgylSWbdo2PPDzX4MHgsgKwg1e6LuwXPU
+        A90tiGRr1Q/0cp0462luzYOb5IvgfEbB5rkrhkiVAZoB3N1+Fdl/3TEFHNP7j6qEJYiB4ZHZFx0za
+        a8OTHL4w==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1na7Jc-004KC3-AA; Fri, 01 Apr 2022 02:47:08 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Harinder Singh <sharinder@google.com>,
+        Tim Bird <tim.bird@sony.com>
+Subject: [PATCH] Documentation: kunit: eliminate code-block warnings
+Date:   Thu, 31 Mar 2022 19:47:07 -0700
+Message-Id: <20220401024707.10550-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-124.meizu.com (172.16.1.124) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,81 +52,165 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.  This fixes the following warnings from coccicheck:
+Fix Sphinx complaints about code-block directive missing an argument.
+For start.rst, add "none" since that is already heavily used in that
+file. For run_wrapper.rst, use the simpler "::" literal block instead.
 
-./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
-return of 0/1 in function 'get_packet_dst' with return type bool
-./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
-return of 0/1 in function 'get_packet_dst' with return type bool
+dev-tools/kunit/start.rst:83: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+dev-tools/kunit/run_wrapper.rst:17: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:23: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:31: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:51: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:57: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:78: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:85: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:109: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:116: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:124: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:139: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+dev-tools/kunit/run_wrapper.rst:162: WARNING: Error in "code-block" directive:
+1 argument(s) required, 0 supplied.
+
+Fixes: c48b9ef1f794 ("Documentation: KUnit: Rewrite getting started")
+Fixes: 46201d47d6c4 ("Documentation: kunit: Reorganize documentation related to running tests")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Brendan Higgins <brendanhiggins@google.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Harinder Singh <sharinder@google.com>
+Cc: Tim Bird <tim.bird@sony.com>
 ---
- tools/testing/selftests/bpf/progs/test_l4lb_noinline.c |  2 +-
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c  | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ Documentation/dev-tools/kunit/run_wrapper.rst |   24 ++++++++--------
+ Documentation/dev-tools/kunit/start.rst       |    2 -
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-index 19e4d20..c8bc0c6 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-@@ -218,7 +218,7 @@ static __noinline bool get_packet_dst(struct real_definition **real,
+--- linux-next-20220331.orig/Documentation/dev-tools/kunit/run_wrapper.rst
++++ linux-next-20220331/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -14,13 +14,13 @@ tests, and formats the test results.
  
- 	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
- 	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
--		return 0;
-+		return false;
+ Run command:
  
- 	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
- 	if (!real_pos)
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index 596c4e7..125d872 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -564,22 +564,22 @@ static bool get_packet_dst(struct real_definition **real,
- 	hash = get_packet_hash(pckt, hash_16bytes);
- 	if (hash != 0x358459b7 /* jhash of ipv4 packet */  &&
- 	    hash != 0x2f4bc6bb /* jhash of ipv6 packet */)
--		return 0;
-+		return false;
- 	key = 2 * vip_info->vip_num + hash % 2;
- 	real_pos = bpf_map_lookup_elem(&ch_rings, &key);
- 	if (!real_pos)
--		return 0;
-+		return false;
- 	key = *real_pos;
- 	*real = bpf_map_lookup_elem(&reals, &key);
- 	if (!(*real))
--		return 0;
-+		return false;
- 	if (!(vip_info->flags & (1 << 1))) {
- 		__u32 conn_rate_key = 512 + 2;
- 		struct lb_stats *conn_rate_stats =
- 		    bpf_map_lookup_elem(&stats, &conn_rate_key);
+-.. code-block::
++::
  
- 		if (!conn_rate_stats)
--			return 1;
-+			return true;
- 		cur_time = bpf_ktime_get_ns();
- 		if ((cur_time - conn_rate_stats->v2) >> 32 > 0xffFFFF) {
- 			conn_rate_stats->v1 = 1;
-@@ -587,14 +587,14 @@ static bool get_packet_dst(struct real_definition **real,
- 		} else {
- 			conn_rate_stats->v1 += 1;
- 			if (conn_rate_stats->v1 >= 1)
--				return 1;
-+				return true;
- 		}
- 		if (pckt->flow.proto == IPPROTO_UDP)
- 			new_dst_lru.atime = cur_time;
- 		new_dst_lru.pos = key;
- 		bpf_map_update_elem(lru_map, &pckt->flow, &new_dst_lru, 0);
- 	}
--	return 1;
-+	return true;
- }
+ 	./tools/testing/kunit/kunit.py run
  
- __attribute__ ((noinline))
--- 
-2.7.4
-
+ We should see the following:
+ 
+-.. code-block::
++::
+ 
+ 	Generating .config...
+ 	Building KUnit kernel...
+@@ -28,7 +28,7 @@ We should see the following:
+ 
+ We may want to use the following options:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all
+ 
+@@ -48,13 +48,13 @@ test configs for certain subsystems.
+ To use a different ``.kunitconfig`` file (such as one
+ provided to test a particular subsystem), pass it as an option:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig
+ 
+ To view kunit_tool flags (optional command-line arguments), run:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py run --help
+ 
+@@ -75,14 +75,14 @@ certain code blocks, arch configs and so
+ 
+ To create a ``.kunitconfig``, using the KUnit ``defconfig``:
+ 
+-.. code-block::
++::
+ 
+ 	cd $PATH_TO_LINUX_REPO
+ 	cp tools/testing/kunit/configs/default.config .kunit/.kunitconfig
+ 
+ We can then add any other Kconfig options. For example:
+ 
+-.. code-block::
++::
+ 
+ 	CONFIG_LIST_KUNIT_TEST=y
+ 
+@@ -106,14 +106,14 @@ can run part of the KUnit build process
+ When running kunit_tool, from a ``.kunitconfig``, we can generate a
+ ``.config`` by using the ``config`` argument:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py config
+ 
+ To build a KUnit kernel from the current ``.config``, we can use the
+ ``build`` argument:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py build
+ 
+@@ -121,7 +121,7 @@ If we already have built UML kernel with
+ can run the kernel, and display the test results with the ``exec``
+ argument:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py exec
+ 
+@@ -136,7 +136,7 @@ format. When running tests, kunit_tool p
+ a summary. To see the raw test results in TAP format, we can pass the
+ ``--raw_output`` argument:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py run --raw_output
+ 
+@@ -159,7 +159,7 @@ By passing a bash style glob filter to t
+ commands, we can run a subset of the tests built into a kernel . For
+ example: if we only want to run KUnit resource tests, use:
+ 
+-.. code-block::
++::
+ 
+ 	./tools/testing/kunit/kunit.py run 'kunit-resource*'
+ 
+--- linux-next-20220331.orig/Documentation/dev-tools/kunit/start.rst
++++ linux-next-20220331/Documentation/dev-tools/kunit/start.rst
+@@ -80,7 +80,7 @@ Running Tests (KUnit Wrapper)
+ 
+ If everything worked correctly, you should see the following:
+ 
+-.. code-block::
++.. code-block:: none
+ 
+ 	Generating .config ...
+ 	Building KUnit Kernel ...
