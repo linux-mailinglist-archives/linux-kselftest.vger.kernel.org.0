@@ -2,103 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0954EF7E9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 18:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028CF4EF88B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 19:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiDAQaB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Apr 2022 12:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S1344628AbiDAREt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Apr 2022 13:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346432AbiDAQ1y (ORCPT
+        with ESMTP id S1346870AbiDAREt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:27:54 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B57EB01
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Apr 2022 08:58:12 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id h63so3619958iof.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Apr 2022 08:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
-        b=ea/IE/fe0VT/Rd2tjIq/T5uvj1KigQvyuF63fwmr58Epj4H7G6yUy7U1w0tkzNRX3d
-         stblNmSfNTlJOAyYOqhZUihlV//5gdYlfbG3FJPVku+U8s+os579AyHpvO9YKhFvdXxe
-         7ns9sglzF7d4QqAVTR+/QJBAyRghLLTY5DvAA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
-        b=vFZDEvsEpHZuPVlCILcJRAIpSFxwC3wA1oCF5g5k2t1KZaq7NWdarnvC7E22n8ZDl4
-         /i4dON0p9O7sJSwAUyNArBIMyaho6lWOmfEN45w9mM99WuCISnvWn06iBPvQJ/Kd8abe
-         h/kkMiInMpIiAtK2Ei0KsFnpbsgd9mod/fqOmO0VGKnvE4PKDCrUj9VN+6wHTAbgIBMK
-         RkHyYPItvg5WCLj5PRCW6va+12Owp8iNgWo9Ug3DGqrZK3UiPPJPpxIrIqklAXZH4ewW
-         dV+m2n0b8MXVbVoXxrdD7iSrKQgNAiab9pUWyDkbPB3VLar1jXpeeeEqTqXXA3bwLmw0
-         uJEQ==
-X-Gm-Message-State: AOAM530c6C31FlA9m2zjqZKZcwVm1qZH3WzMTgQGwHn9F02HGDUgoUmF
-        iIaWkN2J7+Xd8QsjEq3/X++zdg==
-X-Google-Smtp-Source: ABdhPJyVm5eJ6v6Sn0EKwc9zkAf28JqyDggWSu+3Pg9ORPXF0VPnMhMj12LBcd0SANEOxBPO/LSt/Q==
-X-Received: by 2002:a05:6602:3787:b0:649:ec10:183b with SMTP id be7-20020a056602378700b00649ec10183bmr185159iob.117.1648828691712;
-        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c15-20020a92b74f000000b002c9cc44ede9sm1458833ilm.86.2022.04.01.08.58.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
- functions
-To:     Haowen Bai <baihaowen@meizu.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7af611e7-88dd-9525-dccc-92bda4d1fb8d@linuxfoundation.org>
-Date:   Fri, 1 Apr 2022 09:58:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 1 Apr 2022 13:04:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517EA15E8AC;
+        Fri,  1 Apr 2022 10:02:59 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 231Ffs3S002054;
+        Fri, 1 Apr 2022 17:02:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=nfHd4a7XAPp5zaEVmLl89M0fu2s7CMLMernxxZ/Tg1w=;
+ b=maBM0eNuiXyTT6DXq3pucGH9ctcdV6KHvfZhmzJskcFgBDuXXQClJfUeS5df3AljGcVI
+ ZRa0JjN+1puqu/nM2K9X9VmvzXXREbm5kglNPmLvuWTR1g7OV+GiEEdKfR11Lzrx3CFN
+ UtYmOJaiR9mcOMh3lHuJWg0CWRNx9QFuwW5LCs9B1YE5FiqqrdMeB73culO+h7p1mOBw
+ wEKUY2KXvvFamwxr2eUyGynTl5cyGSFN78+AoPF3VW52Q+wsgRsX64Nc3X2jhiesGaYU
+ NzOsSVVJQ/Dwnm9BlTVIW+4L2qvEh7XAApUvQwJnb5Que9khJJtYEr6ZznVNwlqs4xXp Iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f648s1mcf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 17:02:56 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 231GMNgn008245;
+        Fri, 1 Apr 2022 17:02:55 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f648s1mbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 17:02:55 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 231GxVWe003041;
+        Fri, 1 Apr 2022 17:02:53 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3f1t3j3ea2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Apr 2022 17:02:53 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 231H2oeE48562566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Apr 2022 17:02:50 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1600B4204D;
+        Fri,  1 Apr 2022 17:02:50 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A627A42059;
+        Fri,  1 Apr 2022 17:02:49 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  1 Apr 2022 17:02:49 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH 0/2] Dirtying, failing memop: don't indicate suppression
+Date:   Fri,  1 Apr 2022 19:02:45 +0200
+Message-Id: <20220401170247.1287354-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: C9C-BczXw24qCc_h0LswoIqY6_Tmpvs5
+X-Proofpoint-ORIG-GUID: _rvUJXjzm8vbuxpMW8nx0s8W1lgmcnhI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-01_05,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=792
+ bulkscore=0 spamscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204010082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/31/22 8:15 PM, Haowen Bai wrote:
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
-> 
-> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> 
+If a memop fails due to key checked protection, after already having
+written to the guest, don't indicate suppression to the guest, as that
+would imply that memory wasn't modified.
 
-Thank you for including details on how the problem was found.
+This could be considered a fix to the code introducing storage key
+support, however this is a bug in KVM only if we emulate an
+instructions writing to an operand spanning multiple pages, which I
+don't believe we do.
 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
+Janis Schoetterl-Glausch (2):
+  KVM: s390: Don't indicate suppression on dirtying, failing memop
+  KVM: s390: selftest: Test suppression indication on key prot exception
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+ arch/s390/kvm/gaccess.c                   | 47 ++++++++++++++---------
+ tools/testing/selftests/kvm/s390x/memop.c | 43 ++++++++++++++++++++-
+ 2 files changed, 70 insertions(+), 20 deletions(-)
 
-thanks,
--- Shuah
+
+base-commit: 1ebdbeb03efe89f01f15df038a589077df3d21f5
+-- 
+2.32.0
+
