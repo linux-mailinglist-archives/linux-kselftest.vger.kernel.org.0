@@ -2,156 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9C84EFA0E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 20:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32F24EFC99
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Apr 2022 00:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351352AbiDASnp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Apr 2022 14:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S1353200AbiDAWKi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Apr 2022 18:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351345AbiDASno (ORCPT
+        with ESMTP id S1353189AbiDAWKi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Apr 2022 14:43:44 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE80821593D
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Apr 2022 11:41:50 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i16so7553835ejk.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Apr 2022 11:41:50 -0700 (PDT)
+        Fri, 1 Apr 2022 18:10:38 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5729F2613F
+        for <linux-kselftest@vger.kernel.org>; Fri,  1 Apr 2022 15:08:47 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id u22so3817021pfg.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Apr 2022 15:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DLtOWenxXCw5vQfabcGIJp+Je2gVQjc6VzKW0XdhyiQ=;
-        b=h+rLLWbMQ/iHnS5/pj19fhLvsaEM9Wtdy1qxj2U1tvLPMxqJCjQosFe2F24w4FuEik
-         zSrjnDN8RVUqsGTehE0RLFU9iAnAgsZLy6+HaVFpgiQgyaH0bi2nNoUnW/PN++7erDWp
-         RX2laVeByhssITiwvlf5JqxR9o7iIybqO73rq6iDBg0II0FI27oeey/L41eoch8FqdX9
-         HSLjysJJ9QsP1Keic9p/q3hcmxjndegS2Td9/sQ/qsgWCFS7CVf9el3ursRzkfzAihRs
-         Haf70E3SoFpNKPytMrE2H1AsOY13tYTorkjDKu54Gzzinf56UPzglOwHHVZBMjHJCiR4
-         t3yQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hQPlkPcSMk1OtK2B+HGYKgzX/t3c5CVpNSfLCeGwYXI=;
+        b=dG88sPBlup1MSm9nY78qOebtBoPpzhYqUeBvwUkyVK46goi1rVQ9sWZrkkaDk+A81b
+         dA5Stj4uj5WPcOOpA/Dy7qScOVWyEi+K2RqsVeVYZLEDANUtPv8Xwjze5Gydz4ft5fY9
+         1S2VO7V5dKB9bfQrbaCEAjy+U12x8+/SmkNK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DLtOWenxXCw5vQfabcGIJp+Je2gVQjc6VzKW0XdhyiQ=;
-        b=WgMgSXp/wVY5u3JR5fT+6Nzq2X24ql3jrYmW0RMdmDSL0arBeysLQr0Nibmcj5pJW3
-         7JmaAjWz+KWhQomOJwiOjGf5lgy5SH7GMGZXA0RDlaAw8h1DoA6b+C7m4yE+Stz7irFa
-         EWV+cy2f7bHUcnUuPV4lRSt1z7cySUqDdfgwkzI+ebnTUfMlC07eacsZdTIY9Z//WBL1
-         3WCLae6ehYft5bY7XNSCPthMkThgCRvHzPGHHKkkrWeQ4WSR6vJovourBJ2U0gWggY7w
-         eZGPW+gjjYzcFej3JeNMAr2o744P/uaCZwMiqQdSe9UBMEahV0FLkG8PgBU9toZ8jRut
-         fMcQ==
-X-Gm-Message-State: AOAM531NWvoPWaDGDZdrC4SLfYhob5qaPsdqFUYzsTKZaCapo4p3E9Il
-        yHn07wjXM//6HP7eBOZaFu5A6vIcDg8ydU0KYqwLAg==
-X-Google-Smtp-Source: ABdhPJwrYPj1kC3SIVIUHr/U2Akla60gayN+BoFrbJkPw1P4im/SamWlkUSDfJabqc8psCgCaTuKJc519X3Csg6+YUY=
-X-Received: by 2002:a17:907:3eaa:b0:6df:b058:96a with SMTP id
- hs42-20020a1709073eaa00b006dfb058096amr1028056ejc.368.1648838508127; Fri, 01
- Apr 2022 11:41:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hQPlkPcSMk1OtK2B+HGYKgzX/t3c5CVpNSfLCeGwYXI=;
+        b=abema5ALwoAS7oumYTWlSwmRE7+zo6nmYUHBMcRWaVEachkdvaMkJbDuK6RH6giWlW
+         iYkkF9P1K/HWy59X8uJeaBlGS9lTBK6OLmx5YpJ6WQVQUmYMX/8TfjW3ZoI3FnOOgZux
+         8ls06kXf2hNkZSa9WjLWlaTLmcyx6A4ZGgquIfJY3SbfxR2TaeIxOxUN73+1Pnzm+ZKA
+         mBYHEYX9Nv2jXnBj2n+Y8IZ3NX7sv6PNl1FyObiW7+goE2uCGjKIXfni6x6fa5KAzBCj
+         iPVr7uTfFLrPIwcL+349xI1/gYbpMI/H2OSP9C+RXD5jozxgQmgWhMUT8JKpcN5P4mo2
+         DCXg==
+X-Gm-Message-State: AOAM531VAkKgmDdB8kLR2E4yQ3QysoedRmBY54DobHwZt4dMAW0MAZAK
+        pjU31SwRioKi57ytdqA8rnNCPQ==
+X-Google-Smtp-Source: ABdhPJxvgW2qJP/ewXdKfwTHyjObLD8DK6BW6HrEsNMpdZTGoja3sQD+JEnu+gxM4YT3YXp/K661fg==
+X-Received: by 2002:a05:6a00:e0b:b0:4fa:a167:5b35 with SMTP id bq11-20020a056a000e0b00b004faa1675b35mr13034747pfb.69.1648850926838;
+        Fri, 01 Apr 2022 15:08:46 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:72c9:527e:d936:c24b])
+        by smtp.gmail.com with UTF8SMTPSA id f6-20020a056a00238600b004fae79a3cbfsm4382043pfc.100.2022.04.01.15.08.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 15:08:46 -0700 (PDT)
+From:   Daniel Verkamp <dverkamp@chromium.org>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Mattias Nissler <mnissler@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>
+Subject: [PATCH 0/4] mm/memfd: MFD_NOEXEC for memfd_create
+Date:   Fri,  1 Apr 2022 15:08:30 -0700
+Message-Id: <20220401220834.307660-1-dverkamp@chromium.org>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
 MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-6-tjmercier@google.com> <20220329152142.GA15794@blackbody.suse.cz>
-In-Reply-To: <20220329152142.GA15794@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Fri, 1 Apr 2022 11:41:36 -0700
-Message-ID: <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com>
-Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 8:21 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
->
-> Hi.
->
-> On Mon, Mar 28, 2022 at 03:59:44AM +0000, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > From: Hridya Valsaraju <hridya@google.com>
-> >
-> > The dma_buf_charge_transfer function provides a way for processes to
->
-> (s/dma_bug_charge_transfer/dma_bug_transfer_charge/)
->
-Doh! Thanks.
+The default file permissions on a memfd include execute bits, which
+means that such a memfd can be filled with a executable and passed to
+the exec() family of functions. This is undesirable on systems where all
+code is verified and all filesystems are intended to be mounted noexec,
+since an attacker may be able to use a memfd to load unverified code and
+execute it.
 
-> > transfer charge of a buffer to a different process. This is essential
-> > for the cases where a central allocator process does allocations for
-> > various subsystems, hands over the fd to the client who requested the
-> > memory and drops all references to the allocated memory.
->
-> I understood from [1] some buffers are backed by regular RAM. How are
-> these charges going to be transferred (if so)?
->
-This link doesn't work for me, but I think you're referring to the
-discussion about your "RAM_backed_buffers" comment from March 23rd. I
-wanted to do a simple test to confirm my own understanding here, but
-that got delayed due to some problems on my end. Anyway the test I did
-goes like this: enable memcg and gpu cgoups tracking and run a process
-that allocates 100MiB of dmabufs. Observe memcg and gpu accounting
-values before and after the allocation.
+Additionally, execution via memfd is a common way to avoid scrutiny for
+malicious code, since it allows execution of a program without a file
+ever appearing on disk. This attack vector is not totally mitigated with
+this new flag, since the default memfd file permissions must remain
+executable to avoid breaking existing legitimate uses, but it should be
+possible to use other security mechanisms to prevent memfd_create calls
+without MFD_NOEXEC on systems where it is known that executable memfds
+are not necessary.
 
-Before
-# cat memory.current gpu.memory.current
-14909440
-system 0
+This patch series adds a new MFD_NOEXEC flag for memfd_create(), which
+allows creation of non-executable memfds, and as part of the
+implementation of this new flag, it also adds a new F_SEAL_EXEC seal,
+which will prevent modification of any of the execute bits of a sealed
+memfd.
 
-<Test program does the allocation of 100MiB of dmabufs>
+I am not sure if this is the best way to implement the desired behavior
+(for example, the F_SEAL_EXEC seal is really more of an implementation
+detail and feels a bit clunky to expose), so suggestions are welcome
+for alternate approaches.
 
-After
-# cat memory.current gpu.memory.current
-48025600
-system 104857600
+Daniel Verkamp (4):
+  mm/memfd: add F_SEAL_EXEC
+  mm/memfd: add MFD_NOEXEC flag to memfd_create
+  selftests/memfd: add tests for F_SEAL_EXEC
+  selftests/memfd: add tests for MFD_NOEXEC
 
-So the memcg value increases by about 30 MiB while the gpu values
-increases by 100 MiB. This is with kmem enabled, and the /proc/maps
-file for this process indicates that the majority of that 30 MiB is
-kernel memory. I think this result shows that neither the kernel nor
-process memory overlap with the gpu cgroup tracking of these
-allocations. So despite the fact that these buffers are in main
-memory, they are allocated in a way that does not result in memcg
-attribution. (It looks to me like __GFP_ACCOUNT is not set for these.)
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   1 +
+ mm/memfd.c                                 |  12 ++-
+ mm/shmem.c                                 |   6 ++
+ tools/testing/selftests/memfd/memfd_test.c | 114 +++++++++++++++++++++
+ 5 files changed, 133 insertions(+), 1 deletion(-)
 
->
-> Thanks,
-> Michal
->
-> [1]
-> https://lore.kernel.org/r/CABdmKX2NSAKMC6rReMYfo2SSVNxEXcS466hk3qF6YFt-j-=
-+_NQ@mail.gmail.com
+-- 
+2.35.1.1094.g7c7d902a7c-goog
+
