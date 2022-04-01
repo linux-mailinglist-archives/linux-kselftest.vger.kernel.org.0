@@ -2,298 +2,283 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E854EEDFC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 15:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE184EEF9F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Apr 2022 16:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346133AbiDANXq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Apr 2022 09:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S1347127AbiDAO3A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Apr 2022 10:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234977AbiDANXp (ORCPT
+        with ESMTP id S1346969AbiDAO2a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Apr 2022 09:23:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6977626EC9A
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Apr 2022 06:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648819312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvRTn/VN+9CYa+qxYCy3KNgmaSb0Q38arPgawL5F/Fs=;
-        b=ihRPVyH9RwvjQyFMF3w9aB/XILVsjqjVGour5vdM0/aTsawDbsn3CCsYEa2FerdJWprfFQ
-        YLVZPJmLE7jcPcFhZkpfjBfpTrikmfxRVti2ylbUcEHCVU9V9QaQ73TqaOMaQfGzl6jsF7
-        fHT6U2mfPhcVV3HwkBdGDXafeWdBFz4=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-9VgfHYIdNHy310pxS2CTiA-1; Fri, 01 Apr 2022 09:21:51 -0400
-X-MC-Unique: 9VgfHYIdNHy310pxS2CTiA-1
-Received: by mail-pf1-f200.google.com with SMTP id 138-20020a621690000000b004fa807ac59aso1634633pfw.19
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Apr 2022 06:21:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wvRTn/VN+9CYa+qxYCy3KNgmaSb0Q38arPgawL5F/Fs=;
-        b=vXy7N31+PfK8pdgsqGvk+uZewlftMCl9+AKgoDI8Hjj9ar3V0KwVbMnzUnJnyTqRy8
-         zZbHlNnpnsyWWw8B3p7ezF6lL8A0LKkpW8odqmkyFGqd8RECqaCJwMDf5DIdA11b0LDh
-         3ZmtzA07jsxoSeIPspcbB4U8pTEcsBSAQqfpU3QnGMEnJH/csJP/nEogXuL9JjFN+k2Y
-         fMLiNazlLY6JEIspGK5CZAECiPtMZU3yuoqUA3qndjAK8TbyPX8B/mu/HiyAOLH6m6ol
-         oQSL0GJ+tpWjJIfdS0EXV3J0xsMUMTuISyyPCkCsC27pQCsAK/hoKUvPe6PBPuLSL73i
-         t+Cg==
-X-Gm-Message-State: AOAM531RVNckh5rlMywyoBjZn1LRJmewaA5q6Psy4nPufAovAWm1IfCs
-        jYBhSYUaah+Tw0Dwdk6D35m/wlPoqMloaJQ7zrZ9GuINEast3OHtcid2f9ZvujpwxH0RVUwUcV9
-        JJ6pJ7mJi1xiBJsDtojuDO+eQZos7MqEclHD4+9sj3h0H
-X-Received: by 2002:a17:90b:224b:b0:1c6:f027:90b1 with SMTP id hk11-20020a17090b224b00b001c6f02790b1mr11883600pjb.173.1648819310284;
-        Fri, 01 Apr 2022 06:21:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyE4l2nE/NDBvRR2VtZNGdt+TrsCCIiMnKdIPRWwDuOD18HLkmLN1hyHYY6tzbZPXj2h1mCJBeXw+5oi4DPg88=
-X-Received: by 2002:a17:90b:224b:b0:1c6:f027:90b1 with SMTP id
- hk11-20020a17090b224b00b001c6f02790b1mr11883534pjb.173.1648819309710; Fri, 01
- Apr 2022 06:21:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
- <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
- <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
- <CAEf4BzYVu9JVJvKZK3S9HGwpyPiWrwKPGsTz3wXC_+vmRYGdNw@mail.gmail.com>
- <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
- <CAEf4BzZA7Wmg=N42ib_r9Jm8THXuGGR3CPgTqMyw9n2=gd_+Kg@mail.gmail.com> <CAO-hwJKnnVkJPG6wtLJ6t7ojv5=vS0NGt14un6+nRmxzj+xifw@mail.gmail.com>
-In-Reply-To: <CAO-hwJKnnVkJPG6wtLJ6t7ojv5=vS0NGt14un6+nRmxzj+xifw@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 1 Apr 2022 15:21:38 +0200
-Message-ID: <CAO-hwJL2x-xt2Bc6HN7-BYGPOhNCGnFM0mCwSxwk7tBfL7qoEg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
- descriptor from an eBPF program
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Fri, 1 Apr 2022 10:28:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF6E234059;
+        Fri,  1 Apr 2022 07:26:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E7B761C43;
+        Fri,  1 Apr 2022 14:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06816C36AE3;
+        Fri,  1 Apr 2022 14:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648823199;
+        bh=jKNvzhTmBysBgJ4fKzDMdHdD5CLp1/4zLk4B3J4TBes=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SkhxT8YTda8seWpz9X8Ydanup3E/1r2Dyt/ubOJd+p3lFpFoEWCLp0JHwq7fuSTYM
+         OzT8R0ARX4cFEJEWlYmI50BAZYhgQZbjipeIaNsEj5r4knYBu4l6AdUU/ioCOpUlPn
+         YP8had8Gv/ip5Q/8UdAs9A+8sMrX0Uza5Mk6GO1BKpaeRmPz9l5rtAjdgsPYhBUHwT
+         dt+uD6+NLMRQX3OqeTe0YaTl2pKaqaVe483vbRrKBPp7CFU+Nv3e/JeulVKoj0TGQm
+         9FRlrEK0pugrRiGdudLDa30L6QMrzEgEDFG1Uh7s8HF143eDufbI5e4X1XR7lIR7F1
+         cI1Vt+emFuhlg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        shuah@kernel.org, andrii@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 019/149] selftests, xsk: Fix bpf_res cleanup test
+Date:   Fri,  1 Apr 2022 10:23:26 -0400
+Message-Id: <20220401142536.1948161-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220401142536.1948161-1-sashal@kernel.org>
+References: <20220401142536.1948161-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 3:53 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Mon, Mar 28, 2022 at 11:35 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Sun, Mar 27, 2022 at 11:57 PM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > On Fri, Mar 25, 2022 at 6:00 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Wed, Mar 23, 2022 at 9:08 AM Benjamin Tissoires
-> > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > >
-> > > > > Hi Alexei,
-> > > > >
-> > > > > On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > >
-> > > > > > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
-> > > > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > > > >
-> > > > > > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
-> > > > > > > +{
-> > > > > > > +       int ret;
-> > > > > > > +       struct hid_bpf_ctx_kern ctx = {
-> > > > > > > +               .type = HID_BPF_RDESC_FIXUP,
-> > > > > > > +               .hdev = hdev,
-> > > > > > > +               .size = *size,
-> > > > > > > +       };
-> > > > > > > +
-> > > > > > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
-> > > > > > > +               goto ignore_bpf;
-> > > > > > > +
-> > > > > > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
-> > > > > > > +       if (!ctx.data)
-> > > > > > > +               goto ignore_bpf;
-> > > > > > > +
-> > > > > > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
-> > > > > > > +
-> > > > > > > +       ret = hid_bpf_run_progs(hdev, &ctx);
-> > > > > > > +       if (ret)
-> > > > > > > +               goto ignore_bpf;
-> > > > > > > +
-> > > > > > > +       if (ctx.size > ctx.allocated_size)
-> > > > > > > +               goto ignore_bpf;
-> > > > > > > +
-> > > > > > > +       *size = ctx.size;
-> > > > > > > +
-> > > > > > > +       if (*size) {
-> > > > > > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
-> > > > > > > +       } else {
-> > > > > > > +               rdesc = NULL;
-> > > > > > > +               kfree(ctx.data);
-> > > > > > > +       }
-> > > > > > > +
-> > > > > > > +       return rdesc;
-> > > > > > > +
-> > > > > > > + ignore_bpf:
-> > > > > > > +       kfree(ctx.data);
-> > > > > > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  int __init hid_bpf_module_init(void)
-> > > > > > >  {
-> > > > > > >         struct bpf_hid_hooks hooks = {
-> > > > > > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
-> > > > > > >                 .pre_link_attach = hid_bpf_pre_link_attach,
-> > > > > > > +               .post_link_attach = hid_bpf_post_link_attach,
-> > > > > > >                 .array_detach = hid_bpf_array_detach,
-> > > > > > >         };
-> > > > > > >
-> > > > > > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> > > > > > > index 937fab7eb9c6..3182c39db006 100644
-> > > > > > > --- a/drivers/hid/hid-core.c
-> > > > > > > +++ b/drivers/hid/hid-core.c
-> > > > > > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
-> > > > > > >                 return -ENODEV;
-> > > > > > >         size = device->dev_rsize;
-> > > > > > >
-> > > > > > > -       buf = kmemdup(start, size, GFP_KERNEL);
-> > > > > > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
-> > > > > > > +       buf = hid_bpf_report_fixup(device, start, &size);
-> > > > > >
-> > > > > > Looking at this patch and the majority of other patches...
-> > > > > > the code is doing a lot of work to connect HID side with bpf.
-> > > > > > At the same time the evolution of the patch series suggests
-> > > > > > that these hook points are not quite stable. More hooks and
-> > > > > > helpers are being added.
-> > > > > > It tells us that it's way too early to introduce a stable
-> > > > > > interface between HID and bpf.
-> > > > >
-> > > > > I understand that you might be under the impression that the interface
-> > > > > is changing a lot, but this is mostly due to my poor knowledge of all
-> > > > > the arcanes of eBPF.
-> > > > > The overall way HID-BPF works is to work on a single array, and we
-> > > > > should pretty much be sorted out. There are a couple of helpers to be
-> > > > > able to communicate with the device, but the API has been stable in
-> > > > > the kernel for those for quite some time now.
-> > > > >
-> > > > > The variations in the hooks is mostly because I don't know what is the
-> > > > > best representation we can use in eBPF for those, and the review
-> > > > > process is changing that.
-> > > >
-> > > > I think such a big feature as this one, especially that most BPF folks
-> > > > are (probably) not familiar with the HID subsystem in the kernel,
-> > > > would benefit from a bit of live discussion during BPF office hours.
-> > > > Do you think you can give a short overview of what you are trying to
-> > > > achieve with some background context on HID specifics at one of the
-> > > > next BPF office hours? We have a meeting scheduled every week on
-> > > > Thursday, 9am Pacific time. But people need to put their topic onto
-> > > > the agenda, otherwise the meeting is cancelled. See [0] for
-> > > > spreadsheet and links to Zoom meeting, agenda, etc.
-> > >
-> > > This sounds like a good idea. I just added my topic on the agenda and
-> > > will prepare some slides.
-> > >
-> >
-> > Great! Unfortunately I personally have a conflict this week and won't
-> > be able to attend, so I'll have to catch up somehow through word of
-> > mouth :( Next week's BPF office hours would be best, but I don't want
-> > to delay discussions just because of me.
->
-> OK. FWIW, I'll have slides publicly available once I'll do a final
-> roundup on them. Hopefully that will give you enough context on HID to
-> understand the problem.
-> If there are too many conflicts we can surely delay by a week, but I
-> would rather have the discussion happening sooner :/
->
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Follow up on the discussion we had yesterday:
+[ Upstream commit 3b22523bca02b0d5618c08b93d8fd1fb578e1cc3 ]
 
-- this patchset should be dropped in its current form, because it's
-the "old way" of extending BPF:
+After commit 710ad98c363a ("veth: Do not record rx queue hint in veth_xmit"),
+veth no longer receives traffic on the same queue as it was sent on. This
+breaks the bpf_res test for the AF_XDP selftests as the socket tied to
+queue 1 will not receive traffic anymore.
 
-The new goal is to extend the BPF core so we work around the
-limitations we find in HID so other subsystems can use the same
-approach.
-This is what Alexei was explaining in his answer in this thread. We
-need HID to solely declare which functions are replaced (by abusing
-SEC("fentry/function_name") - or fexit, fmod_ret), and also allow HID
-to declare its BPF API without having to change a single bit in the
-BPF core. This approach should allow other subsystems (USB???) to use
-a similar approach without having to mess up with BPF too much.
+Modify the test so that two sockets are tied to queue id 0 using a shared
+umem instead. When killing the first socket enter the second socket into
+the xskmap so that traffic will flow to it. This will still test that the
+resources are not cleaned up until after the second socket dies, without
+having to rely on veth supporting rx_queue hints.
 
-- being able to attach a SEC("fentry/function") to a particular HID
-device requires some changes in the BPF core
+Reported-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20220125082945.26179-1-magnus.karlsson@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/xdpxceiver.c | 80 +++++++++++++++---------
+ tools/testing/selftests/bpf/xdpxceiver.h |  2 +-
+ 2 files changed, 50 insertions(+), 32 deletions(-)
 
-We can live without it, but it would be way cleaner to selectively
-attach those trampolines to only the selected devices without having
-to hand that decision to the BPF programmers
-
-- patch 12 and 13 (the bits access helper) should be dropped
-
-This should be done entirely in BPF, with a BPF helper as a .h that
-users include instead of having to maintain yet another UAPI
-
-- Daniel raised the question of a flag which tells other BPF that a bug is fixed
-
-In the case we drop in the filesystem a BPF program to fix a
-particular device, and then we include that same program in the
-kernel, how can we know that the feature is already fixed?
-It's still an open question.
-
-- including BPF objects in the kernel is definitively doable through lskel
-
-But again, the question is how do we attach those programs to a
-particular device?
-
-- to export a new UAPI BPF helper, we should rely on kfunc as
-explained in Alexei's email
-
-However, the current kfunc and ALLOW_ERROR_INJECTION API doesn't
-clearly allow to define which function is sleepable or not, making it
-currently hard to define that behavior.
-Once the BPF kAPI allows to mark kfunc and ALLOW_ERROR_INJECTION
-(_weak) functions to be sleepable or not, we will be able to define
-the BPF hooks directly in HID without having to touch the BPF core.
-
-- running a SEC("fentry/...") BPF program as a standalone from
-userspace through a syscall is possible
-
-- When defining a SEC("fentry/..."), all parameters are currently read-only
-
-we either need a hid_bpf_get_data() hooks where we can mark the output
-as being read-write, or we need to be able to tag the target function
-as read-write for (part of) its arguments
-
-(I would lean toward the extra helper that might be much easier to declare IMO).
-
-
-I think that's it from yesterday's discussion.
-
-Many thanks for listening to me and proposing a better solution.
-Now I have a lot to work on.
-
-Cheers,
-Benjamin
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 0a5d23da486d..4686897181b6 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -266,22 +266,24 @@ static int xsk_configure_umem(struct xsk_umem_info *umem, void *buffer, u64 size
+ }
+ 
+ static int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_info *umem,
+-				struct ifobject *ifobject, u32 qid)
++				struct ifobject *ifobject, bool shared)
+ {
+-	struct xsk_socket_config cfg;
++	struct xsk_socket_config cfg = {};
+ 	struct xsk_ring_cons *rxr;
+ 	struct xsk_ring_prod *txr;
+ 
+ 	xsk->umem = umem;
+ 	cfg.rx_size = xsk->rxqsize;
+ 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+-	cfg.libbpf_flags = 0;
++	cfg.libbpf_flags = XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD;
+ 	cfg.xdp_flags = ifobject->xdp_flags;
+ 	cfg.bind_flags = ifobject->bind_flags;
++	if (shared)
++		cfg.bind_flags |= XDP_SHARED_UMEM;
+ 
+ 	txr = ifobject->tx_on ? &xsk->tx : NULL;
+ 	rxr = ifobject->rx_on ? &xsk->rx : NULL;
+-	return xsk_socket__create(&xsk->xsk, ifobject->ifname, qid, umem->umem, rxr, txr, &cfg);
++	return xsk_socket__create(&xsk->xsk, ifobject->ifname, 0, umem->umem, rxr, txr, &cfg);
+ }
+ 
+ static struct option long_options[] = {
+@@ -387,7 +389,6 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 	for (i = 0; i < MAX_INTERFACES; i++) {
+ 		struct ifobject *ifobj = i ? ifobj_rx : ifobj_tx;
+ 
+-		ifobj->umem = &ifobj->umem_arr[0];
+ 		ifobj->xsk = &ifobj->xsk_arr[0];
+ 		ifobj->use_poll = false;
+ 		ifobj->pacing_on = true;
+@@ -401,11 +402,12 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 			ifobj->tx_on = false;
+ 		}
+ 
++		memset(ifobj->umem, 0, sizeof(*ifobj->umem));
++		ifobj->umem->num_frames = DEFAULT_UMEM_BUFFERS;
++		ifobj->umem->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
++
+ 		for (j = 0; j < MAX_SOCKETS; j++) {
+-			memset(&ifobj->umem_arr[j], 0, sizeof(ifobj->umem_arr[j]));
+ 			memset(&ifobj->xsk_arr[j], 0, sizeof(ifobj->xsk_arr[j]));
+-			ifobj->umem_arr[j].num_frames = DEFAULT_UMEM_BUFFERS;
+-			ifobj->umem_arr[j].frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ 			ifobj->xsk_arr[j].rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
+ 		}
+ 	}
+@@ -947,7 +949,10 @@ static void tx_stats_validate(struct ifobject *ifobject)
+ 
+ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ {
++	u64 umem_sz = ifobject->umem->num_frames * ifobject->umem->frame_size;
+ 	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
++	int ret, ifindex;
++	void *bufs;
+ 	u32 i;
+ 
+ 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
+@@ -955,23 +960,20 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 	if (ifobject->umem->unaligned_mode)
+ 		mmap_flags |= MAP_HUGETLB;
+ 
+-	for (i = 0; i < test->nb_sockets; i++) {
+-		u64 umem_sz = ifobject->umem->num_frames * ifobject->umem->frame_size;
+-		u32 ctr = 0;
+-		void *bufs;
+-		int ret;
++	bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
++	if (bufs == MAP_FAILED)
++		exit_with_error(errno);
+ 
+-		bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
+-		if (bufs == MAP_FAILED)
+-			exit_with_error(errno);
++	ret = xsk_configure_umem(ifobject->umem, bufs, umem_sz);
++	if (ret)
++		exit_with_error(-ret);
+ 
+-		ret = xsk_configure_umem(&ifobject->umem_arr[i], bufs, umem_sz);
+-		if (ret)
+-			exit_with_error(-ret);
++	for (i = 0; i < test->nb_sockets; i++) {
++		u32 ctr = 0;
+ 
+ 		while (ctr++ < SOCK_RECONF_CTR) {
+-			ret = xsk_configure_socket(&ifobject->xsk_arr[i], &ifobject->umem_arr[i],
+-						   ifobject, i);
++			ret = xsk_configure_socket(&ifobject->xsk_arr[i], ifobject->umem,
++						   ifobject, !!i);
+ 			if (!ret)
+ 				break;
+ 
+@@ -982,8 +984,22 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 		}
+ 	}
+ 
+-	ifobject->umem = &ifobject->umem_arr[0];
+ 	ifobject->xsk = &ifobject->xsk_arr[0];
++
++	if (!ifobject->rx_on)
++		return;
++
++	ifindex = if_nametoindex(ifobject->ifname);
++	if (!ifindex)
++		exit_with_error(errno);
++
++	ret = xsk_setup_xdp_prog(ifindex, &ifobject->xsk_map_fd);
++	if (ret)
++		exit_with_error(-ret);
++
++	ret = xsk_socket__update_xskmap(ifobject->xsk->xsk, ifobject->xsk_map_fd);
++	if (ret)
++		exit_with_error(-ret);
+ }
+ 
+ static void testapp_cleanup_xsk_res(struct ifobject *ifobj)
+@@ -1139,14 +1155,16 @@ static void testapp_bidi(struct test_spec *test)
+ 
+ static void swap_xsk_resources(struct ifobject *ifobj_tx, struct ifobject *ifobj_rx)
+ {
++	int ret;
++
+ 	xsk_socket__delete(ifobj_tx->xsk->xsk);
+-	xsk_umem__delete(ifobj_tx->umem->umem);
+ 	xsk_socket__delete(ifobj_rx->xsk->xsk);
+-	xsk_umem__delete(ifobj_rx->umem->umem);
+-	ifobj_tx->umem = &ifobj_tx->umem_arr[1];
+ 	ifobj_tx->xsk = &ifobj_tx->xsk_arr[1];
+-	ifobj_rx->umem = &ifobj_rx->umem_arr[1];
+ 	ifobj_rx->xsk = &ifobj_rx->xsk_arr[1];
++
++	ret = xsk_socket__update_xskmap(ifobj_rx->xsk->xsk, ifobj_rx->xsk_map_fd);
++	if (ret)
++		exit_with_error(-ret);
+ }
+ 
+ static void testapp_bpf_res(struct test_spec *test)
+@@ -1405,13 +1423,13 @@ static struct ifobject *ifobject_create(void)
+ 	if (!ifobj->xsk_arr)
+ 		goto out_xsk_arr;
+ 
+-	ifobj->umem_arr = calloc(MAX_SOCKETS, sizeof(*ifobj->umem_arr));
+-	if (!ifobj->umem_arr)
+-		goto out_umem_arr;
++	ifobj->umem = calloc(1, sizeof(*ifobj->umem));
++	if (!ifobj->umem)
++		goto out_umem;
+ 
+ 	return ifobj;
+ 
+-out_umem_arr:
++out_umem:
+ 	free(ifobj->xsk_arr);
+ out_xsk_arr:
+ 	free(ifobj);
+@@ -1420,7 +1438,7 @@ static struct ifobject *ifobject_create(void)
+ 
+ static void ifobject_delete(struct ifobject *ifobj)
+ {
+-	free(ifobj->umem_arr);
++	free(ifobj->umem);
+ 	free(ifobj->xsk_arr);
+ 	free(ifobj);
+ }
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 2f705f44b748..62a3e6388632 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -125,10 +125,10 @@ struct ifobject {
+ 	struct xsk_socket_info *xsk;
+ 	struct xsk_socket_info *xsk_arr;
+ 	struct xsk_umem_info *umem;
+-	struct xsk_umem_info *umem_arr;
+ 	thread_func_t func_ptr;
+ 	struct pkt_stream *pkt_stream;
+ 	int ns_fd;
++	int xsk_map_fd;
+ 	u32 dst_ip;
+ 	u32 src_ip;
+ 	u32 xdp_flags;
+-- 
+2.34.1
 
