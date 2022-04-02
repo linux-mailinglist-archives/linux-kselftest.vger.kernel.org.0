@@ -2,242 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D124EFD8C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Apr 2022 03:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912FA4EFEAE
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Apr 2022 06:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347281AbiDBBFQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Apr 2022 21:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S237973AbiDBEhj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Apr 2022 00:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiDBBFO (ORCPT
+        with ESMTP id S237307AbiDBEhi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Apr 2022 21:05:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A66218E
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Apr 2022 18:03:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EAE061C36
-        for <linux-kselftest@vger.kernel.org>; Sat,  2 Apr 2022 01:03:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FCEC3411B
-        for <linux-kselftest@vger.kernel.org>; Sat,  2 Apr 2022 01:03:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648861401;
-        bh=IbghA2dqiYhWXecxL6uJJ7n1Ce58U1f1jXhOOf0w2DA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qPl5O8et+RIxSlDAMF72fgkZo7E89yXN33hp7R1sFEJRZZh6BeuGyYbe31+nsWmEc
-         lychCTK8y19hzo5zGw/lQUyLA5bXYC+qm8B/x1xWmXJghINq1ML6faKem1ZKnr3Fzc
-         E4cQrFis0nHEZi3xseZkYRPa7elL5NcohH7lQQ7r+2iEzl1P0tMRmgHDZHLzsErNtJ
-         KmjV23iGdMxELFec+B39s1RFnuv2CDg0FC9xCqwdGsndiKVJ79eqpVFPnT1bZab+iP
-         ma3WLnbA+HHVnjUB12xWtiKT9qYsEOKIaAyJ9tPqbEp8SekXaLpN+ybqnhsVVVhbE/
-         ro2upEuXCL9lw==
-Received: by mail-ej1-f44.google.com with SMTP id r13so9188085ejd.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Apr 2022 18:03:21 -0700 (PDT)
-X-Gm-Message-State: AOAM5310FT7EIOJVXjo1B4XIV6WrLcn3B50xABIpAErRwSsj/i+kL/av
-        KKeDZScRk4H3hNzmAhRdK9lrDV09uBzT+uvl8qA09A==
-X-Google-Smtp-Source: ABdhPJzC1xfADMf8KlFXGnU+O10yqjuLNdQMD6B8hDbX9K5RYwHPXDVlmYgGwvXzZmJ1+ZDG91LG6SDOelwAvnQH2J4=
-X-Received: by 2002:a17:907:3f9e:b0:6da:842e:873e with SMTP id
- hr30-20020a1709073f9e00b006da842e873emr2038636ejc.383.1648861399066; Fri, 01
- Apr 2022 18:03:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
- <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
-In-Reply-To: <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Sat, 2 Apr 2022 03:03:08 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
-Message-ID: <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
-Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        Sat, 2 Apr 2022 00:37:38 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD4864F8
+        for <linux-kselftest@vger.kernel.org>; Fri,  1 Apr 2022 21:35:46 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id i2-20020a056a00224200b004fa60c248a1so2637987pfu.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Apr 2022 21:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=zyrVWi3eHGXqwO/PAUfW0hT/y7AsGTlfR6Cmc9pUvak=;
+        b=q3Kjbu44DZyXkKCF1mY3KZ2OalLQjz4MK5N6yHZRgSAoh1jUVv6YVTYE1lmVnWpOna
+         IGgwnh6lMzb/l0T5/aVuQcShrGv0h2JQ6wxuSGxp5RAWx0krKRspKjBOowTIG/Sg+jqA
+         BAGh6kFIm9JmcE745XEc5GvIDmonb9rNLjLe1J9pXuu/RmrVhJunSiph7UTSyKOCeTal
+         J1MREfxm4Rzkx63/NEcUgoz4Pw58+2u5HpacnXZVNOUvgYjdCWuMBiSAPq0HIUNPaa51
+         Ciet5yDZm01TWyQQoVRSnGzVmH/Q3i7XLsHcXhMJL9ix7yQ5ukH1v5WvJUS4OC+1Vm35
+         mfVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=zyrVWi3eHGXqwO/PAUfW0hT/y7AsGTlfR6Cmc9pUvak=;
+        b=Jb44psfqLYnnNUFigf40H4TAZgSUmPrXGql3jSRn9DKzmDQQkaan6UccO5TeXZ2W1j
+         DPhUoD7fQkh14lEtE/lQ8rHnF8kOC7tke7oUg2FhW7GabBm8sVzG4LEBYxNv/Koi+pOG
+         pYZ16FbzyEWGB+MqXvkDf0Y5oeIoiF748s/1YFmVXMDvSQWzH/Ij1cX5qTkFNVjEfx1n
+         3K8LPpD05ka9D+ExdeDUjJFVOPSbaxOBr6mGAgJQQaH6SVbpEP8XLwh+KGGtW00nFLW2
+         xbYzg0HkKeC/q2lcAqccQZ861CoEfU8mZ8zLCixDHCa6KL78tPOpENT9Jh6lSxStJEoZ
+         vQZA==
+X-Gm-Message-State: AOAM532iogsHltKzHiIQoBC6ViouZTxtxi2ajRsv8+1mMmayOoWOEfdR
+        LbqwyhY0CPTz8k1GbMEtq/YzeOTtN2Mspg==
+X-Google-Smtp-Source: ABdhPJyvq3IT8PQCrPzDGfmGfW7P0YXSEoo254Y9El8NUclS+I0IGtOVKeJztQKUnFxjvHPAZE2Q2z9SOQG2Rw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90b:3b44:b0:1c7:9ca8:a19e with SMTP
+ id ot4-20020a17090b3b4400b001c79ca8a19emr15183745pjb.245.1648874146285; Fri,
+ 01 Apr 2022 21:35:46 -0700 (PDT)
+Date:   Sat,  2 Apr 2022 12:35:29 +0800
+Message-Id: <20220402043530.923747-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v2 1/2] kunit: Make kunit_remove_resource() idempotent
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Mar 31, 2022 at 08:25:22AM +0000, Roberto Sassu wrote:
-> > > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> > > Sent: Thursday, March 31, 2022 4:27 AM
-> > > On Mon, Mar 28, 2022 at 07:50:15PM +0200, Roberto Sassu wrote:
-> > > > eBPF already allows programs to be preloaded and kept running without
-> > > > intervention from user space. There is a dedicated kernel module called
-> > > > bpf_preload, which contains the light skeleton of the iterators_bpf eBPF
-> > > > program. If this module is enabled in the kernel configuration, its loading
-> > > > will be triggered when the bpf filesystem is mounted (unless the module is
-> > > > built-in), and the links of iterators_bpf are pinned in that filesystem
-> > > > (they will appear as the progs.debug and maps.debug files).
-> > > >
-> > > > However, the current mechanism, if used to preload an LSM, would not
-> > > offer
-> > > > the same security guarantees of LSMs integrated in the security
-> > > subsystem.
-> > > > Also, it is not generic enough to be used for preloading arbitrary eBPF
-> > > > programs, unless the bpf_preload code is heavily modified.
-> > > >
-> > > > More specifically, the security problems are:
-> > > > - any program can be pinned to the bpf filesystem without limitations
-> > > >   (unless a MAC mechanism enforces some restrictions);
-> > > > - programs being executed can be terminated at any time by deleting the
-> > > >   pinned objects or unmounting the bpf filesystem.
-> > >
-> > > So many things to untangle here.
-> >
-> > Hi Alexei
-> >
-> > thanks for taking the time to provide such detailed
-> > explanation.
-> >
-> > > The above paragraphs are misleading and incorrect.
-> > > The commit log sounds like there are security issues that this
-> > > patch set is fixing.
-> > > This is not true.
+The kunit_remove_resource() function is used to unlink a resource from
+the list of resources in the test, making it no longer show up in
+kunit_find_resource().
 
-+1 these are not security issues. They are limitations of your MAC policy.
+However, this could lead to a race condition if two threads called
+kunit_remove_resource() on the same resource at the same time: the
+resource would be removed from the list twice (causing a crash at the
+second list_del()), and the refcount for the resource would be
+decremented twice (instead of once, for the reference held by the
+resource list).
 
-> >
-> > I reiterate the goal: enforce a mandatory policy with
-> > an out-of-tree LSM (a kernel module is fine), with the
-> > same guarantees of LSMs integrated in the security
-> > subsystem.
->
-> To make it 100% clear:
-> Any in-kernel feature that benefits out-of-tree module will be rejected.
->
-> > The root user is not part of the TCB (i.e. is untrusted),
-> > all the changes that user wants to make must be subject
-> > of decision by the LSM enforcing the mandatory policy.
-> >
-> > I thought about adding support for LSMs from kernel
-> > modules via a new built-in LSM (called LoadLSM), but
+Fix both problems, the first by using list_del_init(), and the second by
+checking if the resource has already been removed using list_empty(),
+and only decrementing its refcount if it has not.
 
-Kernel modules cannot implement LSMs, this has already been
-proposed on the lists and has been rejected.
+Also add a KUnit test for the kunit_remove_resource() function which
+tests this behaviour.
 
->
-> Such approach will be rejected. See above.
->
-> > > I suspect there is huge confusion on what these two "progs.debug"
-> > > and "maps.debug" files are in a bpffs instance.
-> > > They are debug files to pretty pring loaded maps and progs for folks who
-> > > like to use 'cat' to examine the state of the system instead of 'bpftool'.
-> > > The root can remove these files from bpffs.
-> > >
-> > > There is no reason for kernel module to pin its bpf progs.
-> > > If you want to develop DIGLIM as a kernel module that uses light skeleton
-> > > just do:
-> > > #include <linux/init.h>
-> > > #include <linux/module.h>
-> > > #include "diglim.lskel.h"
-> > >
-> > > static struct diglim_bpf *skel;
-> > >
-> > > static int __init load(void)
-> > > {
-> > >         skel = diglim_bpf__open_and_load();
-> > >         err = diglim_bpf__attach(skel);
-> > > }
-> > > /* detach skel in __fini */
-> > >
-> > > It's really that short.
-> > >
-> > > Then you will be able to
-> > > - insmod diglim.ko -> will load and attach bpf progs.
-> > > - rmmod diglim -> will detach them.
-> >
-> > root can stop the LSM without consulting the security
-> > policy. The goal of having root untrusted is not achieved.
+Reported-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
 
-Ofcourse, this is an issue, if you are using BPF to define a MAC
-policy, the policy
-needs to be comprehensive to prevent itself from being overridden. This is why
-We have so many LSM hooks. If you think some are missing, let's add them.
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220318064959.3298768-1-davidgow@google.com/
+- Rebased on top of Daniel's split of the resource system into
+  resource.{c,h}
+  - https://lore.kernel.org/linux-kselftest/20220328174143.857262-1-dlatypov@google.com/
+  - https://lore.kernel.org/linux-kselftest/20220328174143.857262-2-dlatypov@google.com/
 
-This is why implementing a policy is not trivial, but we need to allow
-users to build
-such policies with the help from the kernel and not by using
-out-of-tree modules.
+ lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++++++++++++++
+ lib/kunit/resource.c   |  8 ++++++--
+ 2 files changed, 41 insertions(+), 2 deletions(-)
 
-I do think we can add some more helpers (e.g. for modifying xattrs
-from BPF) that
-would help us build complex policies.
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 555601d17f79..9005034558aa 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -190,6 +190,40 @@ static void kunit_resource_test_destroy_resource(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
+ }
+ 
++static void kunit_resource_test_remove_resource(struct kunit *test)
++{
++	struct kunit_test_resource_context *ctx = test->priv;
++	struct kunit_resource *res = kunit_alloc_and_get_resource(
++			&ctx->test,
++			fake_resource_init,
++			fake_resource_free,
++			GFP_KERNEL,
++			ctx);
++
++	/* The resource is in the list */
++	KUNIT_EXPECT_FALSE(test, list_empty(&ctx->test.resources));
++
++	/* Remove the resource. The pointer is still valid, but it can't be
++	 * found.
++	 */
++	kunit_remove_resource(test, res);
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++	/* We haven't been freed yet. */
++	KUNIT_EXPECT_TRUE(test, ctx->is_resource_initialized);
++
++	/* Removing the resource multiple times is valid. */
++	kunit_remove_resource(test, res);
++	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
++	/* Despite having been removed twice (from only one reference), the
++	 * resource still has not been freed.
++	 */
++	KUNIT_EXPECT_TRUE(test, ctx->is_resource_initialized);
++
++	/* Free the resource. */
++	kunit_put_resource(res);
++	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
++}
++
+ static void kunit_resource_test_cleanup_resources(struct kunit *test)
+ {
+ 	int i;
+@@ -387,6 +421,7 @@ static struct kunit_case kunit_resource_test_cases[] = {
+ 	KUNIT_CASE(kunit_resource_test_init_resources),
+ 	KUNIT_CASE(kunit_resource_test_alloc_resource),
+ 	KUNIT_CASE(kunit_resource_test_destroy_resource),
++	KUNIT_CASE(kunit_resource_test_remove_resource),
+ 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
+ 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
+ 	KUNIT_CASE(kunit_resource_test_static),
+diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
+index b8bced246217..09ec392d2323 100644
+--- a/lib/kunit/resource.c
++++ b/lib/kunit/resource.c
+@@ -98,11 +98,15 @@ EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
+ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
+ {
+ 	unsigned long flags;
++	bool was_linked;
+ 
+ 	spin_lock_irqsave(&test->lock, flags);
+-	list_del(&res->node);
++	was_linked = !list_empty(&res->node);
++	list_del_init(&res->node);
+ 	spin_unlock_irqrestore(&test->lock, flags);
+-	kunit_put_resource(res);
++
++	if (was_linked)
++		kunit_put_resource(res);
+ }
+ EXPORT_SYMBOL_GPL(kunit_remove_resource);
+ 
+-- 
+2.35.1.1094.g7c7d902a7c-goog
 
->
-> Out-of-tree module can do any hack.
-> For example:
-> 1. don't do detach skel in __fini
->   rmmod will remove the module, but bpf progs will keep running.
-> 2. do module_get(THIS_MODULE) in __init
->   rmmod will return EBUSY
->   and have some out-of-band way of dropping mod refcnt.
-> 3. hack into sys_delete_module. if module_name==diglem return EBUSY.
-> 4. add proper LSM hook to delete_module
-
-+1 I recommend this (but not from an out of tree module)
-
->
-> > My point was that pinning progs seems to be the
-> > recommended way of keeping them running.
->
-> Not quite. bpf_link refcnt is what keeps progs attached.
-> bpffs is mainly used for:
-> - to pass maps/links from one process to another
-> when passing fd is not possible.
-> - to solve the case of crashing user space.
-> The user space agent will restart and will pick up where
-> it's left by reading map, link, prog FDs from bpffs.
-> - pinning bpf iterators that are later used to 'cat' such files.
-> That is what bpf_preload is doing by creating two debug
-> files "maps.debug" and "progs.debug".
->
-> > Pinning
-> > them to unreachable inodes intuitively looked the
-> > way to go for achieving the stated goal.
->
-> We can consider inodes in bpffs that are not unlinkable by root
-> in the future, but certainly not for this use case.
-
-Can this not be already done by adding a BPF_LSM program to the
-inode_unlink LSM hook?
-
->
-> > Or maybe I
-> > should just increment the reference count of links
-> > and don't decrement during an rmmod?
->
-> I suggest to abandon out-of-tree goal.
-> Only then we can help and continue this discussion.
-
-+1
