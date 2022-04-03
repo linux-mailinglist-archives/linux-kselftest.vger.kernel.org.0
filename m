@@ -2,72 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22CA4F0B3B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Apr 2022 18:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9ED64F0D0C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Apr 2022 01:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbiDCQal (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Apr 2022 12:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S1356808AbiDCXwI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 3 Apr 2022 19:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239588AbiDCQak (ORCPT
+        with ESMTP id S1355215AbiDCXwI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:30:40 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF27A1154
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Apr 2022 09:28:44 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bg10so15385223ejb.4
-        for <linux-kselftest@vger.kernel.org>; Sun, 03 Apr 2022 09:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DtUiWz/udmP+qktO1RORhitFU4p9rJPKhCmdA8YtM/4=;
-        b=p2Y4hBhSp6psMksL4k8ooVelOnmPjbafLHH0j8dvqO293bsqjCBSnHkiblMLUy+eBm
-         ghF0ZWoc8oU28KS/cDmy9rGBScJJ5IqB6N8QYz8mjpUb9cxzTwM9LLpyDChm6KMazb7B
-         Q364cbARDr3z90kFqmk0UhBqZW51Sq0bP2aj0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DtUiWz/udmP+qktO1RORhitFU4p9rJPKhCmdA8YtM/4=;
-        b=syocU32MjM4fVFFIiVKN5JjnC4iQ/ei6DU8qos95iVSEGrFifERnyS8uG4HGV9mtNw
-         1ycM1RyZ0JCuWz21HA+rCJPqlLWj+KruKHH59TTE/NuJZVk8c8RG0L2T/tbqRJWzN5Vf
-         Ouz3I5o7y0Vkr/IGqcbPqgtHCJZyZmVSNkdX/CoSF511mVKlTGIIsQTzFgxdRt6vWKhW
-         woKX6sRJFf1sXYOaccULOkHkqp0LQte8MBJc6pESZp0gYXqfpUxEZDGTtKKpqy1djqbG
-         fst5TnPhrQGNpQrRYyQwvXRdxfiGe9akkZ3brRGlmDZpm0IhtIqGUINzz5dLUyfOMBaT
-         7jog==
-X-Gm-Message-State: AOAM533pEgcsOVBfrikddfrpIVrlHuW2fBxyHVUITBQlZrOh/BJj/Wsf
-        ij0aJUq7ix7VZThfJ1YDgAS9lJlDtk/tj3U9nStwwHXru/g8/V9o
-X-Google-Smtp-Source: ABdhPJwSgOkF9TA5+KrakewnUhwfRl9VZLKb3tJNfkfGixXQ676ITS5hbI7IY23qMj/pwvPnpBhBOnYfHdiAjjxnabw=
-X-Received: by 2002:a17:907:160b:b0:6e1:116e:7a59 with SMTP id
- hb11-20020a170907160b00b006e1116e7a59mr7432985ejc.579.1649003323297; Sun, 03
- Apr 2022 09:28:43 -0700 (PDT)
+        Sun, 3 Apr 2022 19:52:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0046127CD5;
+        Sun,  3 Apr 2022 16:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DF7860FCE;
+        Sun,  3 Apr 2022 23:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E34FAC340F3;
+        Sun,  3 Apr 2022 23:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649029812;
+        bh=qfZV7Dhd5nr5eNuhCIcYPdfMBnCJLTwYyEedtJhWN2o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=L4HBaEIQFfvLJXN/ZxkXK2Rf8zxDebS9RNWIhuN4+HFiag1tO+zWkJKBMPvnhhDCq
+         fCwInqkEyPE9zYkffONY/sQ7GuknNb+VDMHif+DlWn5jbAMZGMoD+fQ4AQpO97k44R
+         voesww62SbeYKArTKvEGf7LfPo1swnvROPsQ4y3c7OfGr3rVA+Z3oyHHGjpUIRL5Uq
+         N2QrtBq5XO6jG4v+JXwGaS8mdgXx7tcotuvwcObPiz/hDVwOs2PaNWHyta9f+BO0oq
+         PEbXDQPUnkWUCxGuoxCsj6HMTz6Prdh0npBP4LWrplrPgUUN+ihfxIQL28eN33dbBq
+         6bL07M+WLKwuw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3DD6E85BCB;
+        Sun,  3 Apr 2022 23:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220329133001.2283509-1-maximmi@nvidia.com>
-In-Reply-To: <20220329133001.2283509-1-maximmi@nvidia.com>
-From:   Arthur Fabre <afabre@cloudflare.com>
-Date:   Sun, 3 Apr 2022 16:28:32 +0000
-Message-ID: <CAOn4ftuxiQZh9RkBsPwUeyt+QdDafrhu_APxgETp7yzSzoukZg@mail.gmail.com>
-Subject: Re: [PATCH bpf v4] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
+ functions
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164902981179.6975.18361732639754204431.git-patchwork-notify@kernel.org>
+Date:   Sun, 03 Apr 2022 23:50:11 +0000
+References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,255 +62,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 1:30 PM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
->
-> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
-> validates the address family of the socket. It supports IPv4 packets in
-> AF_INET6 dual-stack sockets.
->
-> On the other hand, bpf_tcp_check_syncookie looks only at the address
-> family of the socket, ignoring the real IP version in headers, and
-> validates only the packet size. This implementation has some drawbacks:
->
-> 1. Packets are not validated properly, allowing a BPF program to trick
->    bpf_tcp_check_syncookie into handling an IPv6 packet on an IPv4
->    socket.
->
-> 2. Dual-stack sockets fail the checks on IPv4 packets. IPv4 clients end
->    up receiving a SYNACK with the cookie, but the following ACK gets
->    dropped.
->
-> This patch fixes these issues by changing the checks in
-> bpf_tcp_check_syncookie to match the ones in bpf_tcp_gen_syncookie. IP
-> version from the header is taken into account, and it is validated
-> properly with address family.
->
-> Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
-> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  net/core/filter.c                             | 17 +++-
->  .../bpf/test_tcp_check_syncookie_user.c       | 78 ++++++++++++++-----
->  2 files changed, 72 insertions(+), 23 deletions(-)
->
-> v2 changes: moved from bpf-next to bpf.
->
-> v3 changes: added a selftest.
->
-> v4 changes: none, CCed Jakub and Arthur from Cloudflare.
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index a7044e98765e..64470a727ef7 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7016,24 +7016,33 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
->         if (!th->ack || th->rst || th->syn)
->                 return -ENOENT;
->
-> +       if (unlikely(iph_len < sizeof(struct iphdr)))
-> +               return -EINVAL;
-> +
->         if (tcp_synq_no_recent_overflow(sk))
->                 return -ENOENT;
->
->         cookie = ntohl(th->ack_seq) - 1;
->
-> -       switch (sk->sk_family) {
-> -       case AF_INET:
-> -               if (unlikely(iph_len < sizeof(struct iphdr)))
-> +       /* Both struct iphdr and struct ipv6hdr have the version field at the
-> +        * same offset so we can cast to the shorter header (struct iphdr).
-> +        */
-> +       switch (((struct iphdr *)iph)->version) {
-> +       case 4:
-> +               if (sk->sk_family == AF_INET6 && ipv6_only_sock(sk))
->                         return -EINVAL;
->
->                 ret = __cookie_v4_check((struct iphdr *)iph, th, cookie);
->                 break;
->
->  #if IS_BUILTIN(CONFIG_IPV6)
-> -       case AF_INET6:
-> +       case 6:
->                 if (unlikely(iph_len < sizeof(struct ipv6hdr)))
->                         return -EINVAL;
->
-> +               if (sk->sk_family != AF_INET6)
-> +                       return -EINVAL;
-> +
->                 ret = __cookie_v6_check((struct ipv6hdr *)iph, th, cookie);
->                 break;
->  #endif /* CONFIG_IPV6 */
-> diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-> index b9e991d43155..e7775d3bbe08 100644
-> --- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-> +++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-> @@ -18,8 +18,9 @@
->  #include "bpf_rlimit.h"
->  #include "cgroup_helpers.h"
->
-> -static int start_server(const struct sockaddr *addr, socklen_t len)
-> +static int start_server(const struct sockaddr *addr, socklen_t len, bool dual)
->  {
-> +       int mode = !dual;
->         int fd;
->
->         fd = socket(addr->sa_family, SOCK_STREAM, 0);
-> @@ -28,6 +29,14 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
->                 goto out;
->         }
->
-> +       if (addr->sa_family == AF_INET6) {
-> +               if (setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&mode,
-> +                              sizeof(mode)) == -1) {
-> +                       log_err("Failed to set the dual-stack mode");
-> +                       goto close_out;
-> +               }
-> +       }
-> +
->         if (bind(fd, addr, len) == -1) {
->                 log_err("Failed to bind server socket");
->                 goto close_out;
-> @@ -47,24 +56,17 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
->         return fd;
->  }
->
-> -static int connect_to_server(int server_fd)
-> +static int connect_to_server(const struct sockaddr *addr, socklen_t len)
->  {
-> -       struct sockaddr_storage addr;
-> -       socklen_t len = sizeof(addr);
->         int fd = -1;
->
-> -       if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
-> -               log_err("Failed to get server addr");
-> -               goto out;
-> -       }
-> -
-> -       fd = socket(addr.ss_family, SOCK_STREAM, 0);
-> +       fd = socket(addr->sa_family, SOCK_STREAM, 0);
->         if (fd == -1) {
->                 log_err("Failed to create client socket");
->                 goto out;
->         }
->
-> -       if (connect(fd, (const struct sockaddr *)&addr, len) == -1) {
-> +       if (connect(fd, (const struct sockaddr *)addr, len) == -1) {
->                 log_err("Fail to connect to server");
->                 goto close_out;
->         }
-> @@ -116,7 +118,8 @@ static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
->         return map_fd;
->  }
->
-> -static int run_test(int server_fd, int results_fd, bool xdp)
-> +static int run_test(int server_fd, int results_fd, bool xdp,
-> +                   const struct sockaddr *addr, socklen_t len)
->  {
->         int client = -1, srv_client = -1;
->         int ret = 0;
-> @@ -142,7 +145,7 @@ static int run_test(int server_fd, int results_fd, bool xdp)
->                 goto err;
->         }
->
-> -       client = connect_to_server(server_fd);
-> +       client = connect_to_server(addr, len);
->         if (client == -1)
->                 goto err;
->
-> @@ -199,12 +202,30 @@ static int run_test(int server_fd, int results_fd, bool xdp)
->         return ret;
->  }
->
-> +static bool get_port(int server_fd, in_port_t *port)
-> +{
-> +       struct sockaddr_in addr;
-> +       socklen_t len = sizeof(addr);
-> +
-> +       if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
-> +               log_err("Failed to get server addr");
-> +               return false;
-> +       }
-> +
-> +       /* sin_port and sin6_port are located at the same offset. */
-> +       *port = addr.sin_port;
-> +       return true;
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->         struct sockaddr_in addr4;
->         struct sockaddr_in6 addr6;
-> +       struct sockaddr_in addr4dual;
-> +       struct sockaddr_in6 addr6dual;
->         int server = -1;
->         int server_v6 = -1;
-> +       int server_dual = -1;
->         int results = -1;
->         int err = 0;
->         bool xdp;
-> @@ -224,25 +245,43 @@ int main(int argc, char **argv)
->         addr4.sin_family = AF_INET;
->         addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
->         addr4.sin_port = 0;
-> +       memcpy(&addr4dual, &addr4, sizeof(addr4dual));
->
->         memset(&addr6, 0, sizeof(addr6));
->         addr6.sin6_family = AF_INET6;
->         addr6.sin6_addr = in6addr_loopback;
->         addr6.sin6_port = 0;
->
-> -       server = start_server((const struct sockaddr *)&addr4, sizeof(addr4));
-> -       if (server == -1)
-> +       memset(&addr6dual, 0, sizeof(addr6dual));
-> +       addr6dual.sin6_family = AF_INET6;
-> +       addr6dual.sin6_addr = in6addr_any;
-> +       addr6dual.sin6_port = 0;
-> +
-> +       server = start_server((const struct sockaddr *)&addr4, sizeof(addr4),
-> +                             false);
-> +       if (server == -1 || !get_port(server, &addr4.sin_port))
->                 goto err;
->
->         server_v6 = start_server((const struct sockaddr *)&addr6,
-> -                                sizeof(addr6));
-> -       if (server_v6 == -1)
-> +                                sizeof(addr6), false);
-> +       if (server_v6 == -1 || !get_port(server_v6, &addr6.sin6_port))
-> +               goto err;
-> +
-> +       server_dual = start_server((const struct sockaddr *)&addr6dual,
-> +                                  sizeof(addr6dual), true);
-> +       if (server_dual == -1 || !get_port(server_dual, &addr4dual.sin_port))
-> +               goto err;
-> +
-> +       if (run_test(server, results, xdp,
-> +                    (const struct sockaddr *)&addr4, sizeof(addr4)))
->                 goto err;
->
-> -       if (run_test(server, results, xdp))
-> +       if (run_test(server_v6, results, xdp,
-> +                    (const struct sockaddr *)&addr6, sizeof(addr6)))
->                 goto err;
->
-> -       if (run_test(server_v6, results, xdp))
-> +       if (run_test(server_dual, results, xdp,
-> +                    (const struct sockaddr *)&addr4dual, sizeof(addr4dual)))
->                 goto err;
->
->         printf("ok\n");
-> @@ -252,6 +291,7 @@ int main(int argc, char **argv)
->  out:
->         close(server);
->         close(server_v6);
-> +       close(server_dual);
->         close(results);
->         return err;
->  }
-> --
-> 2.30.2
+Hello:
 
-Thanks for the fix and the test! Looks sane to me, and it passes the
-tests we have internally (but we only test IPv4 :/).
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Acked-by: Arthur Fabre <afabre@cloudflare.com>
+On Fri, 1 Apr 2022 10:15:54 +0800 you wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
+> 
+> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
+> return of 0/1 in function 'get_packet_dst' with return type bool
+> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
+> return of 0/1 in function 'get_packet_dst' with return type bool
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests/bpf: Return true/false (not 1/0) from bool functions
+    https://git.kernel.org/bpf/bpf-next/c/f6d60facd9b6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
