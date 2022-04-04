@@ -2,56 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909194F104D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Apr 2022 09:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E044F11A4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Apr 2022 11:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243562AbiDDHwO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Apr 2022 03:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S244932AbiDDJIY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Apr 2022 05:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377823AbiDDHwL (ORCPT
+        with ESMTP id S1353219AbiDDJIP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Apr 2022 03:52:11 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8970D34641;
-        Mon,  4 Apr 2022 00:50:14 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id D826B1F4575C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649058611;
-        bh=wRw+FS/liDk8+4/LHOdlgCTWRsMje4kGNd0ZwHY5Gnk=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=NHqpx3h3QOudoE+UAyxOFAjRtQ7Fele4HRnn0OBhKxSN+omOJGLlH4lcz09TieocE
-         fc50/oAY7+J28KdLLY0ygIOrYwHxQr9HScvmTzxfC7Eaa+GF77Xa2ktfQNXZBDXOcv
-         3Hd+lc539CxodPHwzX+faOrzeY+CbjWWE2Ekg32okJPCU9AmpjNClgrmbZQUetVYmy
-         S6QcqatbmZEVggOZSb0Mtp3C4Tp+RWQy9RypO9CF+6dxUTtlzc784WZH7dHu5FsuUB
-         iZodFN8aklsktKu/UxhsqgXuijImuWa+XBB1W6gBoSYzuBDT3K5NXcapTY5jlHaLJm
-         d3CIZRMXd+Jpw==
-Message-ID: <a9c74cc2-491e-678a-8965-86fa6a6002dc@collabora.com>
-Date:   Mon, 4 Apr 2022 12:50:01 +0500
+        Mon, 4 Apr 2022 05:08:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B853B01F
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Apr 2022 02:06:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E276661449
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Apr 2022 09:06:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9EBC340EE;
+        Mon,  4 Apr 2022 09:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649063179;
+        bh=DzCNCWMTjtSR9Ub+46QJUre47W1a7+dNlL+O4UxR03w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gKx+t0hHHReCZDKdfyTwYQLEzFlkPPMzpj47ESRcLGgosgwypPKbl3RkJFzi55w1y
+         XOke1mhpx793jsU6WsEcZ7ibAOXhs3+We3ifX1SBE0Z6tlvdXBPTb/AXaZ8VI61ivS
+         /TaclNr4Y2+dEE+lVxzfTRCohPgslJeG0MUfZmPpKAKRPR1ZZzFI9YWRzVCj+ckaP+
+         UQR0//3CL2cZc+rIF13OkNMf6by5D5Yd5yxX74Rkv0/PAOcPK6v3aMMBDrBeij4RyN
+         pQjP43rn2TVfWEEfKzBAe8cQJYcilzQpdA3C1AtyaifNCOJ0cNUDDpoKy4trkIw8ct
+         RYWTe3vQNHHGg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/3] kselftest/arm64: Test ptrace writing via FPSIMD and reading via SVE
+Date:   Mon,  4 Apr 2022 10:06:10 +0100
+Message-Id: <20220404090613.181272-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Cc:     usama.anjum@collabora.com, Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, kernelci@groups.io,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/lkdtm: add config
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <20220217205620.2512094-2-usama.anjum@collabora.com>
- <202203091123.33E89F5@keescook>
- <76529762-1a36-142d-0aa9-beb5fa2bb27b@collabora.com>
- <aaeaefb7-3655-2863-46ae-162bf5ab761c@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <aaeaefb7-3655-2863-46ae-162bf5ab761c@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Developer-Signature: v=1; a=openpgp-sha256; l=740; h=from:subject; bh=DzCNCWMTjtSR9Ub+46QJUre47W1a7+dNlL+O4UxR03w=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiSrT/2M8mYc7iCCSobc8xYw3uUXk3y+8vJOev0m4T ivtOwmGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYkq0/wAKCRAk1otyXVSH0EN3B/ 9+lbY9D6q7gWzVaY4sWAn6cBBxAkfM13MlGewbYZ8V2Ga92T6BrClT5zgDe2L1JqFLACzaHUkB+Aeo g0BZ1jaBydua1Ww5YWe/vMPiM1mkm7b71+uhs2XvmEltPP1laATDqrjsGMKebtYLmN1/Kaam3NfJky r09RXTzPD2lCpbF/aEWJzL++mPrEFRdH8jYE5xLbQKBS+Ecqx/HPCo0D/MXzVO2o3fUZCfCRtkpcKb qVnJRk+lmy8tc6PKp2WOh7HhCBPTwB8mc3fq5FDIoTyBqpFi9NUNTO5vNHXiFFgzoQmIOM6+/t7grQ O0hXwYL6TTQ5adFQmAJV5IafbcZsbg
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,30 +56,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Kees,
+This series has a couple of minor fixes and cleanups for sve-ptrace plus
+the addition of a new test which validates that we can write using the
+FPSIMD regset and then read matching data back using the SVE regset -
+previously we only validated writing SVE and reading FPSIMD data.
 
-Any thoughts?
+v2
+ - Rebase onto v5.18-rc1
 
-On 3/15/22 4:55 PM, Muhammad Usama Anjum wrote:
-> On 3/10/22 10:22 PM, Muhammad Usama Anjum wrote:
->> On 3/10/22 12:23 AM, Kees Cook wrote:
->>> On Fri, Feb 18, 2022 at 01:56:20AM +0500, Muhammad Usama Anjum wrote:
->>>> Add config option which is needed for SLAB_LINEAR_OVERFLOW test. It
->>>> needs KASAN enabled.
->>>
->>> I'd prefer this use the SLAB_DEBUG options -- KASAN is very heavy.
->> I'll test it out and update in the next patch version.
->> I've tested by removing KASAN and adding the following config:
-> CONFIG_SLAB=y
-> CONFIG_DEBUG_SLAB=y
-> 
-> The result of SLAB_LINEAR_OVERFLOW test doesn't remain deterministic in
-> this config. The task never crashes and hence stack trace never appears.
-> When executed several times we get "Slab corruption" logs and after some
-> more tries whole kernel crashes. I've not used DEBUG_SLAB before and not
-> sure if this is the expected behavior. If we aren't sure, we can keep
-> KASAN turned on instead.
-> 
+Mark Brown (3):
+  kselftest/arm64: Fix comment for ptrace_sve_get_fpsimd_data()
+  kselftest/arm64: Remove assumption that tasks start FPSIMD only
+  kselftest/arm64: Validate setting via FPSIMD and read via SVE regsets
 
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 164 +++++++++++++++---
+ 1 file changed, 139 insertions(+), 25 deletions(-)
+
+
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
 -- 
-Muhammad Usama Anjum
+2.30.2
+
