@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E63E4F3F62
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 22:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61954F413F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 23:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237347AbiDEOul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 10:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S240348AbiDEOtq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 10:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239002AbiDEOUp (ORCPT
+        with ESMTP id S239158AbiDEOUx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:20:45 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D568583A5;
-        Tue,  5 Apr 2022 06:09:20 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so2457391pjn.3;
-        Tue, 05 Apr 2022 06:09:20 -0700 (PDT)
+        Tue, 5 Apr 2022 10:20:53 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA258E46;
+        Tue,  5 Apr 2022 06:09:22 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so2628464pjm.0;
+        Tue, 05 Apr 2022 06:09:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oJKQa4o5EW97T4GszU9cQl3yQ4+D9/MOy/9Q98ExjgU=;
-        b=CKV/+bz9je/AeRZtW8jTOsniv2lYra59+Xo9XDz0xGbuPb3WJ3gbymqtNp5/1ortGe
-         gDFTw8ejIlNh1wVHlE5zRUP1lxWNwuGPx2x+xU0cjJo801Zmc4yTJr8hljd8N4pJUZ4t
-         83yCEBxjE/vZ4cQBhEt25C9A38+iHKWgEQolPQsMoAXPgi+48q4EJC9/apcJen1iXz4g
-         hhXDWwiwgf5Y8L6ew33KF8g1s5/IXS3gPwTxNVDBmbF91zfHWg5fE5p8r4MulGhkXD4h
-         a3T4mwMlm48XmvbQOW30oMceB/vXR+5lq3ff3S5JEzPRJ3vNAAIa05jLoObNEcF4tJow
-         NTKw==
+        bh=mdYdVPAM9TjLW7Qxa7yxcAiGGUheU0V9dPD7DbrjxTA=;
+        b=ei4Kh822WYlJNzn+z8zEAd5WjpuxNPJi/lb7utgNIyA8xjzaNmTsyh0xa4F2xT9LMa
+         8wC9Pb9+4sx43D57skHv9pMBkT1TG6iTdvkFdc6tZxdwNRKjoQOZUmd9HS7EtMmeUvg7
+         0BTfygINdzNsElCCrs4DsNhSbCLP1yw3RHZOnsLo1zHMKvIMnbzDuGSqz+KeN08YvrbI
+         Izo08xvxJlk/YZvPmV4dAYaX4MiJ+Gtv/MMqZrpdkMnO23GIczdJYty5ZAPhAF/dYfsP
+         tuhfdyUMLq4DBrGepvjXdW+jUEIDlZ25uVsZ1vqiTGzz7usVehML2Uzo/8y8HCK52htX
+         vhRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oJKQa4o5EW97T4GszU9cQl3yQ4+D9/MOy/9Q98ExjgU=;
-        b=SNdZE4dlJ9gpmgIxy7L5yPOCg/zZr01f8BRmmsn4GrgWBbPRWx0tcNqgXpCTpOpuVT
-         264eTxmI9qCXnJ/vJC3CdPaaLW00bgAIDOyZSTuCj+2VhYoQ6gUpKk3ZHBvBZvY1QaUz
-         EeSkHTLncXa9Ke+gvl+TaNAAFsMwJcysmZu5rTLYLGZGgXrABw/dW9YhDvcYofiBXU3b
-         6wRjngsRBSXhyV5Y7yC0KUVRjAUDoGCGvfPqvzCrQOzUprHY+q3TqzqigmT7ampjEvUI
-         LxSMLpzcbb1LHqN3wxebWtSQA2MBT+BvTnbgezD2e0WHJpgnzGNaza3l0TScMjzlUvkL
-         uZ9A==
-X-Gm-Message-State: AOAM533lhJ1uEh2ibJ4w+26sygFwfnOaMe5RbVtoE+YjQ7Y1a2dSbTtv
-        4PpmkCiwiRl7KjnTzFlrSOw=
-X-Google-Smtp-Source: ABdhPJznP7jESnDNdmvBgmtaRzRN16mcRxehZkNCqEVVX2qXZvG9glkmINSFnyu1JOs3HrKdZNAG3Q==
-X-Received: by 2002:a17:90b:4f86:b0:1c9:b52d:9713 with SMTP id qe6-20020a17090b4f8600b001c9b52d9713mr4002616pjb.98.1649164160150;
-        Tue, 05 Apr 2022 06:09:20 -0700 (PDT)
+        bh=mdYdVPAM9TjLW7Qxa7yxcAiGGUheU0V9dPD7DbrjxTA=;
+        b=2eIAIHiKZsvJ6DsOwVAxT5Y3e+8CGgxLPhP3HGn8saR7xupKW3SxulWW1ZVRTnrh+W
+         zlpqmREcyD0JtvLdlvqyNT3KtmAUYBnC3At5Beeu5YCvfXwpkGfe72qBAc9DWvyxyNO5
+         n3VXnaB5tVZ0oC5HYyCTMdb1GLpO2R1g7D3Uya2FaBUwYko0xjJZJesbMl7TYQZq1CB5
+         ug8uM6jQvAgiKmJjrYQKYVKpMjJ8KlUxZ8HpTrkjJUJ43ViW5L6OWWHS+d9QFGTklgZu
+         d4fdKWWTmb6oydK7AUXPjRuqYiBSEYwf0gZN6VHRx6oZ3Ow0PAksxayllmGnojKJVTyk
+         VHhw==
+X-Gm-Message-State: AOAM531J8SXObEuiOcTSwBLGa2QTKH1Y2U7bUzQbtzjYzmWsQGf4rQWg
+        /iKcZ5uAq85o6TX6sBPC2O8=
+X-Google-Smtp-Source: ABdhPJxFOTSUprEHPohGXe61eZTXc4R9Uiz1QOBijsy8FiDFanzFwWP7mqzoFI1NVN1goXLrFKysRw==
+X-Received: by 2002:a17:90a:c70f:b0:1bf:3e2d:6cfa with SMTP id o15-20020a17090ac70f00b001bf3e2d6cfamr4051043pjt.70.1649164161570;
+        Tue, 05 Apr 2022 06:09:21 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.19
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:19 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:20 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 04/27] bpf: selftests: No need to include bpf_rlimit.h in flow_dissector_load
-Date:   Tue,  5 Apr 2022 13:08:35 +0000
-Message-Id: <20220405130858.12165-5-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 05/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in get_cgroup_id_user
+Date:   Tue,  5 Apr 2022 13:08:36 +0000
+Message-Id: <20220405130858.12165-6-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -72,39 +72,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We have set libbpf 1.0 API mode explicitly, so don't need to include the
-header bpf_rlimit.h any more. This patch also removes the check of the
-return value of libbpf_set_strict_mode as it always return 0.
+Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
+included bpf_rlimit.h.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/flow_dissector_load.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/get_cgroup_id_user.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/flow_dissector_load.c b/tools/testing/selftests/bpf/flow_dissector_load.c
-index 87fd1aa323a9..c8be6406777f 100644
---- a/tools/testing/selftests/bpf/flow_dissector_load.c
-+++ b/tools/testing/selftests/bpf/flow_dissector_load.c
-@@ -11,7 +11,6 @@
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+index 3a7b82bd9e94..e021cc67dc02 100644
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+@@ -20,7 +20,6 @@
  
+ #include "cgroup_helpers.h"
+ #include "testing_helpers.h"
 -#include "bpf_rlimit.h"
- #include "flow_dissector_load.h"
  
- const char *cfg_pin_path = "/sys/fs/bpf/flow_dissector";
-@@ -25,9 +24,8 @@ static void load_and_attach_program(void)
- 	int prog_fd, ret;
- 	struct bpf_object *obj;
+ #define CHECK(condition, tag, format...) ({		\
+ 	int __ret = !!(condition);			\
+@@ -67,6 +66,9 @@ int main(int argc, char **argv)
+ 	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
+ 		return 1;
  
--	ret = libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
--	if (ret)
--		error(1, 0, "failed to enable libbpf strict mode: %d", ret);
 +	/* Use libbpf 1.0 API mode */
 +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
- 
- 	ret = bpf_flow_load(&obj, cfg_path_name, cfg_prog_name,
- 			    cfg_map_name, NULL, &prog_fd, NULL);
++
+ 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+ 		goto cleanup_cgroup_env;
 -- 
 2.17.1
 
