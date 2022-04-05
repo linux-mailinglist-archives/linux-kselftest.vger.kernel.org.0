@@ -2,99 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E817A4F54EF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 07:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B6F4F54F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 07:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbiDFFWm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 01:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S235825AbiDFFWw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 01:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1585461AbiDEX74 (ORCPT
+        with ESMTP id S1587547AbiDFAJi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:59:56 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D637037;
-        Tue,  5 Apr 2022 15:18:11 -0700 (PDT)
-Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nbrUx-0007Bs-JV; Wed, 06 Apr 2022 00:18:03 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nbrUx-000Q5a-4g; Wed, 06 Apr 2022 00:18:03 +0200
-Subject: Re: [PATCH bpf v4] bpf: Support dual-stack sockets in
- bpf_tcp_check_syncookie
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Arthur Fabre <afabre@cloudflare.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>
-References: <20220329133001.2283509-1-maximmi@nvidia.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ece21940-90fc-2bf7-19da-770cf0956542@iogearbox.net>
-Date:   Wed, 6 Apr 2022 00:18:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 5 Apr 2022 20:09:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B549DE08E;
+        Tue,  5 Apr 2022 15:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s5Rv2jt7aGLImfLJIiM/5w3K8YUbSOEx+pvCk6I5VMo=; b=rqdoUew930ZZ6zrAnlfvmOF/zf
+        +YntEDiQq+lDqmtSifeD/BGDKf4g7GkHYLxudkmzdyK5cgH/wZucpnSc1cOEeqX5tzdZylyEm9uz5
+        KjdjRJUUJa9gUj9572C6PlpVQLKxTlLKuASQa0lhQMLBp52OQqySbhM/BMq/qghF0J67yro+frIqg
+        XoDZgXOLgGwC3tfbvt999mOTUy6LqjcaDRWq7nkQZS2B3zJXHLy8ItBQFTzk4vxBpz7SFXJ3cmjCe
+        SB/I/ptIkVnavZf3lWoOGDw3MGZDfUUipM9KeUyy8WAfhHKBIIH3x+GfmL+nyBA2iw4nUlGS8cNsW
+        Tu+LgHDw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbrjU-0077Ix-P6; Tue, 05 Apr 2022 22:33:04 +0000
+Date:   Tue, 5 Apr 2022 23:33:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftest/vm clarify error statement in gup_test
+Message-ID: <YkzDoBUAhydtvnR0@casper.infradead.org>
+References: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20220329133001.2283509-1-maximmi@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26503/Tue Apr  5 10:19:26 2022)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hey Maxim,
+On Tue, Apr 05, 2022 at 09:48:09PM +0000, Sidhartha Kumar wrote:
+> -		perror("open");
+> -		exit(1);
+> +		switch (errno) {
+> +		case EACCES:
+> +			if (getuid())
+> +				printf("Please run this test as root\n");
 
-On 3/29/22 3:30 PM, Maxim Mikityanskiy wrote:
-> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
-> validates the address family of the socket. It supports IPv4 packets in
-> AF_INET6 dual-stack sockets.
-> 
-> On the other hand, bpf_tcp_check_syncookie looks only at the address
-> family of the socket, ignoring the real IP version in headers, and
-> validates only the packet size. This implementation has some drawbacks:
-> 
-> 1. Packets are not validated properly, allowing a BPF program to trick
->     bpf_tcp_check_syncookie into handling an IPv6 packet on an IPv4
->     socket.
-> 
-> 2. Dual-stack sockets fail the checks on IPv4 packets. IPv4 clients end
->     up receiving a SYNACK with the cookie, but the following ACK gets
->     dropped.
-> 
-> This patch fixes these issues by changing the checks in
-> bpf_tcp_check_syncookie to match the ones in bpf_tcp_gen_syncookie. IP
-> version from the header is taken into account, and it is validated
-> properly with address family.
-> 
-> Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
-> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Shouldn't all these be fprintf(stderr, ...); ?
 
-Could you do one final spin (while retaining Arthur's Ack) by splitting
-off the selftest into a separate commit? Otherwise stable folks likely
-won't be able to pick the fix up. Otherwise lgtm.
-
-Thanks,
-Daniel
