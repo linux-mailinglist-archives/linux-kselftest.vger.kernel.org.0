@@ -2,167 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702A74F4CF5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 03:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77204F4CFF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 03:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349147AbiDEXgd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 19:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S1354939AbiDEXhG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 19:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573065AbiDERvL (ORCPT
+        with ESMTP id S1573407AbiDETIX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:51:11 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED0AD9EBA
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 10:49:11 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id q26so8185117edc.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 10:49:11 -0700 (PDT)
+        Tue, 5 Apr 2022 15:08:23 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA66DFFAA
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 12:06:24 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e4-20020a056902034400b00633691534d5so48025ybs.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 12:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RXCW1evSnb4oJ88sHTAFEYTq0HTuOW2ocRpwnA3InQ4=;
-        b=DFediYf4lKdcEGd6wHnf3P2A1rH9d97LcubT3QP6yRNY6vUA82uDkOevPceh0sN/Wl
-         AzNDVgFuK6V76WaqpSYAiG2hRF9Re4Ov3xlC/Ms7hpW9uCTQ7y898MEv8Ijbqhc6SxXo
-         QvfpY4jywVuV6j8Ii/P3vkQXreEU44Hlqin6E5RTxZAap0ziUpyUXuD83coag22gB7nJ
-         kP94eXAsBC1cr7hK8pVNGZaStSW21SliZd84A/wTh+8QK9KZdm23HHaRa8zC2IVlp4fq
-         sk905jrtMt/I2FOoTaeCu/ArrkOR8UVb6SsiWhRhquLKZ90pI6vt79FBY7MRBMWLMUZ2
-         L8SQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=tybtDUXPQXhYvxy9gX9DtZoGahyOTlz+nyL3O6sS+eo=;
+        b=h55LQ5UM26LmuR62itH0V3ChlAvpYZ42TMOG+f3rw/mp6yjZnbWVTBqCVC/cYwSpbJ
+         0slhnsMw8p5HDGyheffeBMt9zi/aVwh5t8Gf7LrBGxT0cPJmANCdN7zFwWMilsAMUZa6
+         TzzBiH0fBhF0mSBYx1fyC0NSJlwUVBxpPtE5Ca/Mxtbz6VpeTZv/xwCB7nrQJzv/SJAT
+         ZJuw8JE3e9gE0Z2uRNM9YJ9BYy0WKQ+QJ2f04nE2hqdD8T4vfJg8iP4/CSwBE6xw9t9C
+         DVfEUEfehQdRIJRmTihSNwrCHnUIVOonp5jTmy6cY1aNVMPQQzOdZfVnn0fiJC3lJrLi
+         VunA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RXCW1evSnb4oJ88sHTAFEYTq0HTuOW2ocRpwnA3InQ4=;
-        b=F6cne4fEESYTT9ckWuZ76ffd6pLt3qKtY9X/dCDySLyzBZvX30sZKFuKByhLEi1FFl
-         P4xmFFXkjZq1PcfFjc170Y0/CS92oH3c9oyHw1hC2HDQAd4fjFfcKgvl40Au0ZbaQ45+
-         wyrMyGEVXqLCd3nYXxOxzeDMQgGxomIefYOMchG/LjvoY208cenuSPWiWr3DyQ3Y2caX
-         T2zQglGzAvPoZQdxtaOhXMCcebc7GssvsoUnmAtU5Bmd5O8DdENEjWpiGfsEMkXIIu5N
-         pMuyUUtCePmPC3I4plbp6tRPFfNf34YLNvpHolsLVQ7jpr6zvZhKcjaE0kRbwLuUhvaC
-         tT5Q==
-X-Gm-Message-State: AOAM530jSUKTkKIcrfyVkIYrjcPCU3hqQgUn4L7g1vavjYStXLCVtB1C
-        0Zaxi1oiAcMnqr7lTJpZi7gekNhobyAm18Drc6w5vg==
-X-Google-Smtp-Source: ABdhPJy3kLISS/qYYRzMDmjCuhPu7OU3AJeQfL+t2mEx7NkNwMYgXC85KD1rOoe+vR5iNyCwy95ZqCXnaDcme/ng0CI=
-X-Received: by 2002:aa7:d98f:0:b0:41c:bf0f:4c45 with SMTP id
- u15-20020aa7d98f000000b0041cbf0f4c45mr4818393eds.379.1649180950052; Tue, 05
- Apr 2022 10:49:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-6-tjmercier@google.com> <20220329152142.GA15794@blackbody.suse.cz>
- <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com> <20220405121245.GA30368@blackbody.suse.cz>
-In-Reply-To: <20220405121245.GA30368@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 5 Apr 2022 10:48:58 -0700
-Message-ID: <CABdmKX0aF5zXozbb7npcEq3PgaeDE=gaGLf+jYY4oRKW9N+46g@mail.gmail.com>
-Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=tybtDUXPQXhYvxy9gX9DtZoGahyOTlz+nyL3O6sS+eo=;
+        b=3U+BwRC93EdiIJYwrr69HDWAvMqFm3yN03i8Qn/YyucPqxQ7YiAwN6/L3+TSma9mG4
+         1hrJjt6anZvMhYpT1L0NyavUDY6PR8afKpT1bid8QJDJBHclg5j9KpwxLzSOxOsq2e+s
+         cSrXtwHNmCbWLdtG6NlsPr6xFjzQ4wKbdc6PM+Jbaagurlo3q68V1RhLLjb00A2fDY9c
+         At1C+Vk7xRITCNPAfFftWJyydyOvH4XvfXBMmVN5a8jgYO5l/sP40vGs9yfc6WtdreZl
+         0R0otWR09kWQhO27AP96BOtNZXkWagAkvSS/fkQlnXsrruFbKCAbbLhozehW0uVmq5TJ
+         rpFA==
+X-Gm-Message-State: AOAM533GW8u08zNpP8eJmE6wnGwxQgJOZlE8AR82cotzaksh/3fRtcRC
+        TG3qhiGnIlskgT51OIrxhVx4Ghn6dKfpYQ==
+X-Google-Smtp-Source: ABdhPJyS4HtUjq4SgKDYWs2pqZ3jGC7+tr0ONFznLmh0DXJtM1MTD9FYY9//H3zpss6UMjYo3owbHd6QA24s0Q==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:83dd:c30c:6cd0:4323])
+ (user=dlatypov job=sendgmr) by 2002:a25:5d0d:0:b0:633:25c8:380 with SMTP id
+ r13-20020a255d0d000000b0063325c80380mr3608330ybb.167.1649185583488; Tue, 05
+ Apr 2022 12:06:23 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 12:06:19 -0700
+Message-Id: <20220405190619.540177-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH] lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 5:12 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
->
-> On Fri, Apr 01, 2022 at 11:41:36AM -0700, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > This link doesn't work for me, but I think you're referring to the
-> > discussion about your "RAM_backed_buffers" comment from March 23rd.
->
-> (Oops, it's a non-public message. But yes, you guessed it right ;-))
->
-> > Anyway the test I did goes like this: enable memcg and gpu cgoups
-> > tracking and run a process that allocates 100MiB of dmabufs. Observe
-> > memcg and gpu accounting values before and after the allocation.
->
-> Thanks for this measurement/dem/demoo.
->
-> > Before
-> > # cat memory.current gpu.memory.current
-> > 14909440
-> > system 0
-> >
-> > <Test program does the allocation of 100MiB of dmabufs>
-> >
-> > After
-> > # cat memory.current gpu.memory.current
-> > 48025600
-> > system 104857600
-> >
-> > So the memcg value increases by about 30 MiB while the gpu values
-> > increases by 100 MiB.
->
-> > This is with kmem enabled, and the /proc/maps
-> > file for this process indicates that the majority of that 30 MiB is
-> > kernel memory.
->
-> > I think this result shows that neither the kernel nor process memory
-> > overlap with the gpu cgroup tracking of these allocations.
->
-> It depends how the semantics of the 'system' entry is defined, no?
-> As I grasped from other thread, the 'total' is going to be removed, so
-> 'system' represents exclusively device memory?
->
-That's right. The system charges (soon to be renamed "system-heap")
-result only from an allocator (in this case the system heap) deciding
-to call gpucg_try_charge for the buffer which is entirely device
-memory.
->
-> > So despite the fact that these buffers are in main memory, they are
-> > allocated in a way that does not result in memcg attribution. (It
-> > looks to me like __GFP_ACCOUNT is not set for these.)
->
-> (I thought you knew what dmabufs your program used :-p)
->
-I'm coming up to speed on a lot of new-to-me code here. :)
-Just for completeness, these buffers were allocated with
-libdmabufheap's AllocSystem.
+This is in line with Documentation/dev-tools/kunit/style.rst.
+Some of these tests predate that so they don't follow this convention.
 
-> So, the goal is to do the tracking and migrations only via the gpu cg
-> layer, regardless how memcg charges it (or not).
->
-> (I have no opinion on that, I'm just summing it so that we're on the
-> same page.)
->
-Yes, this reflects my intention and current state of the code in this serie=
-s.
+With this and commit b0841b51cac9 ("kunit: arch/um/configs: Enable
+KUNIT_ALL_TESTS by default"), kunit.py will now run these tests by
+default. This hopefully makes it easier to run and maintain the tests.
+If any of these were to start failing, people would notice much quicker.
 
-> Michal
+Note: this commit doesn't update LINEAR_RANGES_TEST since that would
+select its dependency (LINEAR_RANGES). We don't want KUNIT_ALL_TESTS
+to enable anything other than test kconfigs.
 
-Thanks,
-T.J.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/Kconfig.debug | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 075cd25363ac..36865b37b33b 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2140,10 +2140,11 @@ config TEST_DIV64
+ 	  If unsure, say N.
+ 
+ config KPROBES_SANITY_TEST
+-	tristate "Kprobes sanity tests"
++	tristate "Kprobes sanity tests" if !KUNIT_ALL_TESTS
+ 	depends on DEBUG_KERNEL
+ 	depends on KPROBES
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This option provides for testing basic kprobes functionality on
+ 	  boot. Samples of kprobe and kretprobe are inserted and
+@@ -2417,8 +2418,9 @@ config TEST_SYSCTL
+ 	  If unsure, say N.
+ 
+ config BITFIELD_KUNIT
+-	tristate "KUnit test bitfield functions at runtime"
++	tristate "KUnit test bitfield functions at runtime" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable this option to test the bitfield functions at boot.
+ 
+@@ -2452,8 +2454,9 @@ config HASH_KUNIT_TEST
+ 	  optimized versions. If unsure, say N.
+ 
+ config RESOURCE_KUNIT_TEST
+-	tristate "KUnit test for resource API"
++	tristate "KUnit test for resource API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the resource API unit test.
+ 	  Tests the logic of API provided by resource.c and ioport.h.
+@@ -2506,8 +2509,9 @@ config LINEAR_RANGES_TEST
+ 	  If unsure, say N.
+ 
+ config CMDLINE_KUNIT_TEST
+-	tristate "KUnit test for cmdline API"
++	tristate "KUnit test for cmdline API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the cmdline API unit test.
+ 	  Tests the logic of API provided by cmdline.c.
+@@ -2517,8 +2521,9 @@ config CMDLINE_KUNIT_TEST
+ 	  If unsure, say N.
+ 
+ config BITS_TEST
+-	tristate "KUnit test for bits.h"
++	tristate "KUnit test for bits.h" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the bits unit test.
+ 	  Tests the logic of macros defined in bits.h.
+
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+-- 
+2.35.1.1094.g7c7d902a7c-goog
+
