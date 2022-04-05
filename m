@@ -2,132 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB684F4CE6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 03:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45AE4F4CF7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 03:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243941AbiDEXfz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 19:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S1350728AbiDEXgm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 19:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457678AbiDEQfi (ORCPT
+        with ESMTP id S1457758AbiDEQlL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:35:38 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F93E30F
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 09:33:39 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id z128so11454083pgz.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 09:33:39 -0700 (PDT)
+        Tue, 5 Apr 2022 12:41:11 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F221E43AD6;
+        Tue,  5 Apr 2022 09:39:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id u14so15895pjj.0;
+        Tue, 05 Apr 2022 09:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=zWBBZP2Ge2Nksq3DccogUggooHf9rEbUDXGMPb63QNE=;
-        b=7Vhgm4+k+KifomvXHJFQrKJ6NiBP7XFIG/215kKOSWP3h4NXZ4vBpebQ/XiP2cyikN
-         r1PFAoRePAGNn2UZU2zHwHLm4Q0tpvkabqrtLqNkZTruGTcbG/MharlEycgYEtjPk/4s
-         8ONyF0YfQ/lO7xppxkca3dEWaOyAQOHjt0lLVV+zA9i637XhFtgnnxlmSIZ2LFj2n3Hi
-         W3SahOy/w26+xv9/dG5suAFEMy5bYfdax5l/dBTduk1ng9z6ELJ6gVh3oTSSzTwKdfHC
-         FSdkVxFTeN3QKk3n+9bKHGUOPJ/h8ZS3KzeRPqIoKAQv6Uvs2QJbaE66+9VQ3/HPEjF1
-         +OBw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0Ezkowr2vA+TSkiAQHrFqf3CTenq1qGRwHjwra0sLA=;
+        b=N4YLCezFpaFlp26K2sW2ESPajZSoXYWOnj+h1n8qRp3nR6g6MBUfk1pfub5qP8x+lK
+         rd2p9fxCOawPf2OKJjyz1ET2rwsJmp6GkRVkU6VUmrw6DjqTTNZH4BK3IY/Xs67uAAS/
+         Gx6QlAomXXDTJFKvsk53YrF6klSeprkImsmgPaiXY0iH6tBgVgoK17p9g/2XR7hG2wdm
+         5zr5q91q4xpKpSid2G5/RCt2mKwS0C9LbpovyzkPC7omWhzHMFEyk2cgy1jBj05JPMor
+         yb8AGuP29MFNS5ZE9nTuPfRd+wzl/VXQvszFIfAN4tFXA3sIwqfgASaGq77CGR6tzV+D
+         10gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=zWBBZP2Ge2Nksq3DccogUggooHf9rEbUDXGMPb63QNE=;
-        b=t15b/frU+tssewcJnRfc6hTwfeswA+NRJqpvOy2R2dpIj8wOg/WQsb77UvPO6i97U0
-         6IwjF4pf9EXrDjyCLnhVpUhoOwXPwa1FyNxSATAsmhAP8eaUaXr/eU4/gBWHiENs13c6
-         EtnyNNhwQgqpnu7xspwv5Oz+khtX1Bkk04uczUKLpdhT2kQddzDKJv91WE0JSTq1Bcbr
-         9Vh4q3lBNQ5vTwd/2SGzMKxYI6JAKajAfZWUu/U+j7pBgui3eeN1NFt1W/SChSxhS3OJ
-         ABhGa9++FCe8vlyVcCUyzlu825lp+1LN214qfgEpIqaQwY7hih871mdjP8xIF2ouVa1T
-         9Osg==
-X-Gm-Message-State: AOAM53342R6wv/H3cj4PR4LQbCdLKnSaxS2gSBqr/H3Hdvew16o1LXyM
-        W7TJivokb5iVBrt1KNTuGJIJ1A==
-X-Google-Smtp-Source: ABdhPJwkC4uHyHSFwCAUlucx++zTyXvzOun1ivWW1WONm00c6iD/q2fbKk6Hk+YfFU0kJkumEjuZ6g==
-X-Received: by 2002:a63:981a:0:b0:398:49ba:a65e with SMTP id q26-20020a63981a000000b0039849baa65emr3540948pgd.231.1649176418716;
-        Tue, 05 Apr 2022 09:33:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b00398d8b19bbfsm13896995pge.23.2022.04.05.09.33.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0Ezkowr2vA+TSkiAQHrFqf3CTenq1qGRwHjwra0sLA=;
+        b=lHb+ZHljAjuOCyKniELAiAm+cPIK8v0bVne4XzyBZQxjtSinoesnOi/tut9KtiYBXW
+         DDQINbhYMgZED2rQ5VJrY7wTiDy7l5WTbrsK6ZrODFgK9q4QqWH431qxPL0sGPJrdBP4
+         wlRZFUP3T+KLT+wihA2wETuH4NG0NnBLfsTxTb30ddFckxp1v1ZI2ev5Ty/fBpEC7iEM
+         RBSvKykhlR4nKCuRL/ZSQaEh6prPrfKN9pfi/Z8k6iQpjp7fRRixxF0vpP4GUt4iVczl
+         NqYuHWHHsII5sdHjfL1SxkGPQ9DarEj37rppqSwq10SyG42vMc6a7NxaLqmU+7NJgibq
+         lq9A==
+X-Gm-Message-State: AOAM530R37wQ54MjJxNyyb54Zu/StMOveLmSZE/dwI9rbR8Rns29vDTs
+        qaTBCGFVMlHThEHzU+CoIdc=
+X-Google-Smtp-Source: ABdhPJxnTEGJd3Tj4Dvmdh+v7GzN2T87vgpt31Bse4ScpzbbZRyF/5EVLbAhrn40PriKpj4xSVy/4g==
+X-Received: by 2002:a17:902:728f:b0:156:24d3:ae1a with SMTP id d15-20020a170902728f00b0015624d3ae1amr4336617pll.9.1649176752483;
+        Tue, 05 Apr 2022 09:39:12 -0700 (PDT)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm17079538pfk.88.2022.04.05.09.39.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:33:38 -0700 (PDT)
-Message-ID: <624c6f62.1c69fb81.b133d.4cbf@mx.google.com>
-Date:   Tue, 05 Apr 2022 09:33:38 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 05 Apr 2022 09:39:11 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
+Date:   Wed,  6 Apr 2022 00:37:28 +0800
+Message-Id: <20220405163728.56471-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v5.18-rc1
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-lkdtm: 1 runs, 1 regressions (v5.18-rc1)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-lkdtm: 1 runs, 1 regressions (v5.18-rc1)
+The checks preceding CHECK macro are redundant, remove them.
 
-Regressions Summary
--------------------
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+index 16048978a1ef..5f2ab720dabd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+@@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
+ 			good_user_stack = true;
+ 	}
+ 
+-	if (!good_kern_stack)
+-	    CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
+-	if (!good_user_stack)
+-	    CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
++	CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
++	CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
+ }
+ 
+ void test_get_stack_raw_tp(void)
+-- 
+2.35.1
 
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v5.1=
-8-rc1/plan/kselftest-lkdtm/
-
-  Test:     kselftest-lkdtm
-  Tree:     kselftest
-  Branch:   next
-  Describe: v5.18-rc1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      3123109284176b1532874591f7c81f3837bbdc17 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624c5e5953d4870b59ae0690
-
-  Results:     56 PASS, 8 FAIL, 26 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v5.18-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v5.18-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220401.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.lkdtm_READ_AFTER_FREE_sh: https://kernelci.org/test/cas=
-e/id/624c5e5953d4870b59ae06cc
-        new failure (last pass: v5.17-rc5-22-gf6d344cd5fa6) =
-
- =20
