@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCCF4F3E4A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 22:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8634F4360
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 23:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239217AbiDEOs0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 10:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S239341AbiDEOsj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 10:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350769AbiDEOVe (ORCPT
+        with ESMTP id S1352519AbiDEOVh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:21:34 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E92763BF7;
-        Tue,  5 Apr 2022 06:09:32 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d15so5509096pll.10;
-        Tue, 05 Apr 2022 06:09:32 -0700 (PDT)
+        Tue, 5 Apr 2022 10:21:37 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E7164BD3;
+        Tue,  5 Apr 2022 06:09:33 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id p8so12033952pfh.8;
+        Tue, 05 Apr 2022 06:09:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=h7LdoFvQo1dYowij4laTQ3Abm1VMgnAUFDQSNCGV4+8=;
-        b=MBpcVXiJYabVjr+AB2B6shNFTIv3+T8kBZri1brekPSjtT2uFwwUuu8FRinmlVap+J
-         TAFCwu8eqaR9lriYocP9eg89tPLDZHSgmgvMsDPEIcOob+C0F2WGN7p06qtNQxjOfoOk
-         +Z28c0gZxi8gJIjZX3UqWlBdPtGKfo/r4J4xfM8/hSkyUO7QFGWvsfjzmYhOg6XPgda2
-         AVub9r4rsIw1+Pmjc4GgvcWIjnSILyGZnM4u0wOV0BxT8zGx3POTptUWecey587pTXZQ
-         0lvoGaGkwop/7ANm0/lNcniV1MRTtke5NplxO7YLW1HCddmmbotigKqt+LEdHuUQQoNX
-         QIcA==
+        bh=5ey/uwJZwB1xknO1mgxMdntGJAzx6E5xsfBkexDFEcw=;
+        b=ntkHK93gMagP5V5Rt4K7tOhCNW9b4QvJUOsYMNlw6eNa/z+zbH8VVgfSTL8zqKtV3Z
+         0f8bhVrHvrfyEkOu7pwyV/2ZqC9XT8Y4y/xYGT3VabIhJcToT4E7ouwy9FkKHKA0yB7V
+         udk8QSRPR/i2VkNnFfqk10X3ZUla4TLCjMLzhLRYM9sKv7Hxw86dbPIfpV3DY7PHoIUY
+         IYKHYSGrCPkYJItp66obo1YSNv5I2NjFl0bWtdlh4nLgq3//AKv7Xg7zMlcsnazJYywX
+         znZGYkb+sG9/6ngSEin6MuKI6Xhe662TUuWh0USyZ9p8/8yytoIaqmqrNSyo1ZPwOsod
+         WtQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=h7LdoFvQo1dYowij4laTQ3Abm1VMgnAUFDQSNCGV4+8=;
-        b=CkBVd7jCADVOZngwl7g9rjknarVi4wre4Ub9IYfjlY3IpymXg1mD5gniZS6NZy9+Qq
-         TjybVUyXWWtvrF6VUIExHI8RH3/icMTjwpfl9wPaE3H9d2IW3Kx23HpAYtTR5fl1aQvw
-         PjAbxU1m9x2RKb3p+1s9hGy7KL9y8xnZudYCR9RjerKDXEHHLXF7EhC2z19rMhWZChhf
-         ef0XoDbGQLzwzw2WNLNVO1aOGCcrY3rFy65ZrxQl6Yuc4Arwi18jAKQUSAkEQ2VIsHmn
-         jHxS0J9zy91jZMs21WIO0tAkgMcUeUEtc1PxitcD9tGzLFdIAipoWcp12djrFEhRe1bE
-         ZMdg==
-X-Gm-Message-State: AOAM530fpoZXmKsTlBaaNxv4UvqN0uHSgck5nbarBJJJhOKJcPlvlK42
-        9b7cw/8OCSsAuzqAS0rxhtDizTtPROEaB6zhSuM=
-X-Google-Smtp-Source: ABdhPJymXpm2XVgcNbbwgyfdWolQo0c1Kn1R2p/6WKD2zVPmz7OrkFaHtXtc2cQYbOo6fTe84nbRig==
-X-Received: by 2002:a17:902:c105:b0:154:81e0:529d with SMTP id 5-20020a170902c10500b0015481e0529dmr3470701pli.1.1649164171840;
-        Tue, 05 Apr 2022 06:09:31 -0700 (PDT)
+        bh=5ey/uwJZwB1xknO1mgxMdntGJAzx6E5xsfBkexDFEcw=;
+        b=5XnsZ6JKP3qwkKnZxZXI6EX6BOmoqJn1n18Cr0I8mEoBWdTshP7v2o8zo0h/g1BiVW
+         PiGej84f37AtmDwFuOsayqa8lr6ALUHkDSe2PUMUmh1MPurcBXHX0TSzj8A06bmemj0R
+         +3Rh/bdTFQQC5n9FV+qPCteQHkbm0oNCwZ4g5vvzaeWrms6o16zpslNOaPRUNNIdQNyG
+         Zys/AFgedoB/IWX1uSkec1PGH+SASQGss14KrQevMlsC9jr1ieehRgoUY3yDppc5ofv9
+         Lb0ulzyJw1odSS1qualUxFRmw/Lmc6/AcTMhupaZQL6akBUoKAWXh2sPdKH+FX4QGY1q
+         4iPw==
+X-Gm-Message-State: AOAM5329p8CJ8SymbbEBtOKIypTnd+yexrjpotPjXV0aYxGmF+SDRGyI
+        7JguW+eeH65PuHVJN8jkR3Q=
+X-Google-Smtp-Source: ABdhPJxiF9mY2oftt14b6FZeHkuXyFNjDpsmKcSbeICL6JsuLIebzWPie1ain1RZwj9mwyrVzQ5HAw==
+X-Received: by 2002:a05:6a00:1706:b0:4fd:af77:62a1 with SMTP id h6-20020a056a00170600b004fdaf7762a1mr3519558pfc.16.1649164173063;
+        Tue, 05 Apr 2022 06:09:33 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.30
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:31 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:32 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 13/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sockmap
-Date:   Tue,  5 Apr 2022 13:08:44 +0000
-Message-Id: <20220405130858.12165-14-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 14/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sysctl
+Date:   Tue,  5 Apr 2022 13:08:45 +0000
+Message-Id: <20220405130858.12165-15-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -73,43 +73,35 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-included bpf_rlimit.h. This patch also removes the useless sys/resource.h.
+included bpf_rlimit.h.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_sysctl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index dfb4f5c0fcb9..0fbaccdc8861 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -18,7 +18,6 @@
- #include <sched.h>
- 
- #include <sys/time.h>
--#include <sys/resource.h>
- #include <sys/types.h>
- #include <sys/sendfile.h>
- 
-@@ -37,7 +36,6 @@
+diff --git a/tools/testing/selftests/bpf/test_sysctl.c b/tools/testing/selftests/bpf/test_sysctl.c
+index 4f6cf833b522..5bae25ca19fb 100644
+--- a/tools/testing/selftests/bpf/test_sysctl.c
++++ b/tools/testing/selftests/bpf/test_sysctl.c
+@@ -14,7 +14,6 @@
  #include <bpf/libbpf.h>
  
- #include "bpf_util.h"
+ #include <bpf/bpf_endian.h>
 -#include "bpf_rlimit.h"
+ #include "bpf_util.h"
  #include "cgroup_helpers.h"
- 
- int running;
-@@ -2017,6 +2015,9 @@ int main(int argc, char **argv)
- 		cg_created = 1;
- 	}
+ #include "testing_helpers.h"
+@@ -1618,6 +1617,9 @@ int main(int argc, char **argv)
+ 	if (cgfd < 0)
+ 		goto err;
  
 +	/* Use libbpf 1.0 API mode */
 +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
 +
- 	if (test == SELFTESTS) {
- 		err = test_selftest(cg_fd, &options);
- 		goto out;
+ 	if (run_tests(cgfd))
+ 		goto err;
+ 
 -- 
 2.17.1
 
