@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96F64F432A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 23:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB23B4F4197
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 23:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240308AbiDEOte (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 10:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S235254AbiDEOuI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 10:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239713AbiDEOWz (ORCPT
+        with ESMTP id S239653AbiDEOWz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 5 Apr 2022 10:22:55 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0986A433;
-        Tue,  5 Apr 2022 06:09:46 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id bo5so12048814pfb.4;
-        Tue, 05 Apr 2022 06:09:46 -0700 (PDT)
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7D16C926;
+        Tue,  5 Apr 2022 06:09:45 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d15so5509571pll.10;
+        Tue, 05 Apr 2022 06:09:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6m7ShcbASdrto/3TsaoHbBXRCyYeXuWGLlXaER69zS8=;
-        b=OSQiFVkSzzdo38CkZyMYBw1cWEhozWr71fgIEwkmRokuJmsa6OfIdmGOHPyKVK8vOC
-         z8VvyKZZWxj012CK6f5dln/zgBaYFiUp2cY4uS93vOTwCsx4xrOHY9Zb72xnHhms2Lh8
-         YNVsWSLFmQvKIvNVbFjj5RU9S8W5eYaJbyplCDAwtLy96FrrVLb676yZGyR1cgJcpPDs
-         Z3QJcrXNqFkdN5RxX1BATSptpGSSyEZSrPhAb76i6LcegqpL7iEoB1VkJjFFT4AbwBT8
-         cieKdNo9+bqmPy4GqMdq2CH3l+01Zfp/2juhp6F9834jEnNylc/POBHb/ZyYQ9cUYrPm
-         vBEQ==
+        bh=AoLorMs2QPgOPZx/oN2eqUEASVkggfVUhBUk0oLgaIg=;
+        b=WVhseiONPVkjXGRNnbzJf1cwdGlUzmhqLfwTxM8ffS3nH9X8W+39MZqpIuJgRdVNrd
+         g6qbXWDc/Cm8HMgzHQ5qchrKayqLLWH7J4Ct0P/H1rgjenypPZhz0n/TitSWMGHJ46BH
+         3JnQe2Kof4b4sN+pBGY73x/Pwy+6dN/XF8kewnSb4b00x3MdT8RrRILcqUXZXA10IE2r
+         8MjvaoOR9CG0uiuR82dkHNkJ5bhpKOqGr8OvT8kw0Hi0xPCakbYLSfHtYwnlGJLkwz1W
+         eyjz3vTp6jFxtrESgV2M8TDfMC/QcQSTN7wj/OEyvP/igtgTN4f0WSXKH8Eek5hXLZc1
+         6soQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6m7ShcbASdrto/3TsaoHbBXRCyYeXuWGLlXaER69zS8=;
-        b=49NcARhslURQaEPXuEpQPwUIOZosS5BD+mvVFu2JdzVniA5Q/PSz+GvsAe1MIokFvJ
-         EZip2a4g5FFnUh1hj6C4HvjFKzK6Q28Kaw9XnxC4tYm+JHh/gFy7i2Ow+F7bmuac78hF
-         0bxKZw3Pd7tfdhge0+xE4tErjYjwTUoEcHU7KrP/g8PaZnCmRGF9cVgzrr+JTu1VfxWk
-         xCuTYEyFa/27kdsOQeLdmP7mEqy2DBVDnsEbQDbUG6CkFxYwxzXe4zQWyjNFegXj+H6T
-         JVZzmK7DToaJ7OKS/wEVJ/FLitpyQwkOIOOZwFNoTlceDC1CStbrA0MWvtdeVsccyUqG
-         XPYA==
-X-Gm-Message-State: AOAM532n5O0XuUz+aJDJLPnu+KLF3vK8IAafI7pAap8OxZIU0AgLQqdc
-        uqKI9nm01Boh0MEq53XLLg8=
-X-Google-Smtp-Source: ABdhPJxQqYtQUBceYfwYXVOgG/KTSA2UXDDpRCn8C+rr/K3M+nQqpLD5s8QxDg+zQmz5kDfQqJt5JQ==
-X-Received: by 2002:a05:6a00:1d85:b0:4fa:9dba:f1f2 with SMTP id z5-20020a056a001d8500b004fa9dbaf1f2mr3592645pfw.31.1649164181867;
-        Tue, 05 Apr 2022 06:09:41 -0700 (PDT)
+        bh=AoLorMs2QPgOPZx/oN2eqUEASVkggfVUhBUk0oLgaIg=;
+        b=cI5raQBYw4fZRAIgMSEQBgBG7W98XsGt9eOnuJD2IDMaoxAK3OeWPmq4mn7M1BLzC1
+         bi0hOF/xSJqfUmaPvmUnbquZC8bczM/50QQ0oSyNriEuFH738J1lCFxEmKtzbSUmRKx1
+         eW55S2+CY1xfvxbnn8cuoc66tyk4cdURAYKukPXCiUUM9VWjqh3X+Y3j2gERlcaSB7jQ
+         rM2l/XGzLa8F+uowgOsy53xfYiNKIDCrenUUuYL6E/9e9jmnBLrxasBy0Rb7UCML02kJ
+         uXiYv7PFdyXR/u6GyY1LOEa8rlel5F6yEqWmE45U2axFLZzROtnmyR7rzMMl/8c39oNe
+         /SRg==
+X-Gm-Message-State: AOAM531sOLvEoslWXPDFWWajT6dn9giHi7/6Vem19oN/jTpci7LL/xjH
+        vfii/0baNAqUNm311ZVlGZnw1HgCThXcw5tqH3M=
+X-Google-Smtp-Source: ABdhPJy9Z75yqt2caLKMmfNSTkEFqHRvzIzosB9B7l1484grBYN61cIXBVUYYCR2FLCueukUQCexUA==
+X-Received: by 2002:a17:90b:1d04:b0:1c7:b10f:e33d with SMTP id on4-20020a17090b1d0400b001c7b10fe33dmr4069150pjb.165.1649164184763;
+        Tue, 05 Apr 2022 06:09:44 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.39
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:40 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:44 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 20/27] bpf: selftests: No need to include sys/resource.h in some files
-Date:   Tue,  5 Apr 2022 13:08:51 +0000
-Message-Id: <20220405130858.12165-21-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 21/27] bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in xdpsock_user
+Date:   Tue,  5 Apr 2022 13:08:52 +0000
+Message-Id: <20220405130858.12165-22-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -72,51 +72,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-sys/resource.h is useless in these files.
+Explicitly set libbpf 1.0 API mode, then we can avoid using the deprecated
+RLIMIT_MEMLOCK.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/bench.c              | 1 -
- tools/testing/selftests/bpf/prog_tests/btf.c     | 1 -
- tools/testing/selftests/bpf/xdp_redirect_multi.c | 1 -
- 3 files changed, 3 deletions(-)
+ samples/bpf/xdpsock_user.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index f973320e6dbf..f061cc20e776 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -8,7 +8,6 @@
- #include <fcntl.h>
- #include <pthread.h>
- #include <sys/sysinfo.h>
--#include <sys/resource.h>
- #include <signal.h>
- #include "bench.h"
- #include "testing_helpers.h"
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index ec823561b912..84aae639ddb5 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -8,7 +8,6 @@
- #include <linux/filter.h>
- #include <linux/unistd.h>
- #include <bpf/bpf.h>
--#include <sys/resource.h>
- #include <libelf.h>
- #include <gelf.h>
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 6f3fe30ad283..be7d2572e3e6 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -25,7 +25,6 @@
  #include <string.h>
-diff --git a/tools/testing/selftests/bpf/xdp_redirect_multi.c b/tools/testing/selftests/bpf/xdp_redirect_multi.c
-index aaedbf4955c3..c03b3a75991f 100644
---- a/tools/testing/selftests/bpf/xdp_redirect_multi.c
-+++ b/tools/testing/selftests/bpf/xdp_redirect_multi.c
-@@ -10,7 +10,6 @@
- #include <net/if.h>
- #include <unistd.h>
- #include <libgen.h>
+ #include <sys/capability.h>
+ #include <sys/mman.h>
 -#include <sys/resource.h>
- #include <sys/ioctl.h>
- #include <sys/types.h>
  #include <sys/socket.h>
+ #include <sys/types.h>
+ #include <sys/un.h>
+@@ -1886,7 +1885,6 @@ int main(int argc, char **argv)
+ {
+ 	struct __user_cap_header_struct hdr = { _LINUX_CAPABILITY_VERSION_3, 0 };
+ 	struct __user_cap_data_struct data[2] = { { 0 } };
+-	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
+ 	bool rx = false, tx = false;
+ 	struct sched_param schparam;
+ 	struct xsk_umem_info *umem;
+@@ -1917,11 +1915,8 @@ int main(int argc, char **argv)
+ 				data[1].effective, data[1].inheritable, data[1].permitted);
+ 		}
+ 	} else {
+-		if (setrlimit(RLIMIT_MEMLOCK, &r)) {
+-			fprintf(stderr, "ERROR: setrlimit(RLIMIT_MEMLOCK) \"%s\"\n",
+-				strerror(errno));
+-			exit(EXIT_FAILURE);
+-		}
++		/* Use libbpf 1.0 API mode */
++		libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+ 
+ 		if (opt_num_xsks > 1)
+ 			load_xdp_program(argv, &obj);
 -- 
 2.17.1
 
