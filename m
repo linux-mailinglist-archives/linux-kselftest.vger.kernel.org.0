@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65D84F458F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 00:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C215F4F4578
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 00:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbiDEOsu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 10:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S241212AbiDEOv1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 10:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357132AbiDEOVl (ORCPT
+        with ESMTP id S1357698AbiDEOVl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 5 Apr 2022 10:21:41 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11548633A4;
-        Tue,  5 Apr 2022 06:09:36 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s21so3322273pgs.4;
-        Tue, 05 Apr 2022 06:09:36 -0700 (PDT)
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729B765829;
+        Tue,  5 Apr 2022 06:09:37 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 66so3469197pga.12;
+        Tue, 05 Apr 2022 06:09:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=k28g5EeU/WfIHlZtYq94DWyJZdavi8smqdidXz4XtpQ=;
-        b=PULVsb8kzvv6ObZ0JsyKSvI0U//f9rCwRb1q5Y0ExEUHXWzNDgipzq9CXXk5eXhQ37
-         KXewAPMKAwgjRreqTNAoJ9xLmh67Tar0UPdWH8AMtXAXejyiU03LTWpoqY6iyWhOyugg
-         tsp1DLm+Mk8pQiTbkyrmCgSLwuFSlfRwOdT2NjbZAZAtwt+KO1hhhO7FpCwBDhr3yMj0
-         lRXAWCwG5Yp8RfFAqdE+T0Yh5S3g8slQ7MkgVKE3Nol0BFW35lDVGmWaqkAOacRzy/EA
-         vO6lb7kxLmEIM26Sldl0racbwgfQ4Q4q5wh6pkvBslySdxPDHXwu9jztWucQsF0Gpsnx
-         TLdg==
+        bh=HwfAmtlVeNYd7QbsYC6nROtylv9YSVQYwmwmdUZZ8Rs=;
+        b=j+QytNFqV4vq4d2/XSNBOq/JJuFOSkeK1WQMynhK244DrfgEYwVY+T7oT5sbuFn1hV
+         6vChEcoZJe5Cwc6JgEXIdb48zVLFffU74j6fQmIrE0md9lfk+a8SyYR/YZ371Z58Gtna
+         qanNzYmrFBfPAajSZl4qOB1ds7kPk6JZ/3EXPktTy9/5I1JgFYZLKBRDjTEWteQoTRe6
+         Ddl+CS3/fsA85mFaPqxUSXUj+YPtaAx+Ncs1G2u7x6jYFhQ6GMipr/r4bBzy0d8JJh0/
+         YxrmlIOUwPv5PluU4np4jvWVN4vOtrZT2Yp1/QW0UVh8a2+jbzGYiTXVZqrAR+3N1rfc
+         yrxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=k28g5EeU/WfIHlZtYq94DWyJZdavi8smqdidXz4XtpQ=;
-        b=z6isbDEiSRxMduIubo5BL4Vmpz69XTrR0ZCgXwliT2PH7yS25b9PsXo40Le8lg+Eud
-         4RFyNnjvKImYjO6o+/y7GfKlnkP6cEOOjbqgBoL6Fwo1u0KtQtnYqg5swzymXrdhqr8D
-         hsnyyeP270kiBs/qzngxHzf3+TKGdcVtAlem5Hq3mKATlRAq/OIn1g6bs2BMzjH5HouJ
-         SOdboySC96KefY6h3R5xl9kagj83+QQgSL2EOJZWCO9AnQwExM1p+cExnBfDWdGu0Rj5
-         EpqReEex3Y7vxgiLwcePXpTVeOPJFjzgpaosWltgQ6Yfou5eU40zVXj7gySPgkoT3EML
-         FDyA==
-X-Gm-Message-State: AOAM532ZX1ar0RUZyGObIn2DT+N8JQHeKSx0wStAwIAnPSPVYUAbjSyA
-        VGDEAxbpgULB6zEmFVCjj6s=
-X-Google-Smtp-Source: ABdhPJyRmKtYXl+uldeU2/sau6lg4qGKj7BKnbv7aJgX16+TL/snmpPQ8SuJBxDz548WB6/+7LFYlg==
-X-Received: by 2002:a05:6a02:114:b0:381:4931:1f96 with SMTP id bg20-20020a056a02011400b0038149311f96mr2754232pgb.331.1649164175654;
-        Tue, 05 Apr 2022 06:09:35 -0700 (PDT)
+        bh=HwfAmtlVeNYd7QbsYC6nROtylv9YSVQYwmwmdUZZ8Rs=;
+        b=0dsNkKqdDIJbjkPCam5XEU/WBV20egvbxZhAXhbfr/9ADSaStyA99TvoB5K8WNDLQD
+         lbFg9xihSRmpA840sID/0qlKJOl3g4/oNpw7raMDYANCxEeq8b3jznsfQ6CCKnldtPyd
+         jyfmhn6vwgGdqINiQjAQYxFxdMQXo2q5eY525f2P4DiN4LtwgtHTtPHSaGIm0mmyld7S
+         mNDXivZNSjRj935c3tLyJCcWx11zEyk1GqOGPR/Y17pWEgFXobF3nvlkENC7cMjv0rrC
+         g9deYFbMEX9fxutaDhCZdkhbZO4HEjhCACq90IweA7JBXBSANMqwq2qtCZOu6w3g8m+X
+         UyOw==
+X-Gm-Message-State: AOAM533J5RH9JaICbGlBQDaYvLvxCew5QeVv2zVlpbpNrloG+ee1SB6C
+        ZtQtDiPhOUaR4VLcsZuNxbQ=
+X-Google-Smtp-Source: ABdhPJzuHF4VRlwLbhNo7qxMxYx526dQ8lsh4I6fo9aSsXX0js1F3aQ1wqUu1OcvnCklXWUyY36CrA==
+X-Received: by 2002:a63:4c24:0:b0:382:29dc:3345 with SMTP id z36-20020a634c24000000b0038229dc3345mr2841926pga.296.1649164176935;
+        Tue, 05 Apr 2022 06:09:36 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.34
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:35 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:36 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 16/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tcp_check_syncookie_user
-Date:   Tue,  5 Apr 2022 13:08:47 +0000
-Message-Id: <20220405130858.12165-17-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 17/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_verifier_log
+Date:   Tue,  5 Apr 2022 13:08:48 +0000
+Message-Id: <20220405130858.12165-18-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -77,31 +77,32 @@ included bpf_rlimit.h.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_verifier_log.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-index b9e991d43155..b57f3f0467e5 100644
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-@@ -15,7 +15,6 @@
+diff --git a/tools/testing/selftests/bpf/test_verifier_log.c b/tools/testing/selftests/bpf/test_verifier_log.c
+index 8d6918c3b4a2..70feda97cee5 100644
+--- a/tools/testing/selftests/bpf/test_verifier_log.c
++++ b/tools/testing/selftests/bpf/test_verifier_log.c
+@@ -11,8 +11,6 @@
+ 
  #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
  
 -#include "bpf_rlimit.h"
- #include "cgroup_helpers.h"
+-
+ #define LOG_SIZE (1 << 20)
  
- static int start_server(const struct sockaddr *addr, socklen_t len)
-@@ -214,6 +213,9 @@ int main(int argc, char **argv)
- 		exit(1);
- 	}
+ #define err(str...)	printf("ERROR: " str)
+@@ -141,6 +139,9 @@ int main(int argc, char **argv)
+ 
+ 	memset(log, 1, LOG_SIZE);
  
 +	/* Use libbpf 1.0 API mode */
 +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
 +
- 	results = get_map_fd_by_prog_id(atoi(argv[1]), &xdp);
- 	if (results < 0) {
- 		log_err("Can't get map");
+ 	/* Test incorrect attr */
+ 	printf("Test log_level 0...\n");
+ 	test_log_bad(log, LOG_SIZE, 0);
 -- 
 2.17.1
 
