@@ -2,260 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068EA4F3E81
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Apr 2022 22:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78514F453C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 00:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237868AbiDEOsR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 10:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S239059AbiDEOsF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 10:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387056AbiDEO33 (ORCPT
+        with ESMTP id S237937AbiDEOUq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:29:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599521207D8;
-        Tue,  5 Apr 2022 06:11:32 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXnyW2G6Cz685VR;
-        Tue,  5 Apr 2022 21:08:35 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Apr 2022 15:11:28 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <corbet@lwn.net>, <viro@zeniv.linux.org.uk>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
-        <tixxdz@gmail.com>, <shuah@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <zohar@linux.ibm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [POC][USER SPACE][PATCH] Introduce LSM to protect pinned objects
-Date:   Tue, 5 Apr 2022 15:11:16 +0200
-Message-ID: <20220405131116.3810418-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
-References: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+        Tue, 5 Apr 2022 10:20:46 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719151E6F;
+        Tue,  5 Apr 2022 06:09:15 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso2482461pju.1;
+        Tue, 05 Apr 2022 06:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3FFNV87EXG2IlcFtQbV+gadr6ihjV5o7kcHPrr2ZxtU=;
+        b=FxPklN7jYnofqaoSYi333INbk7S+qlkPuoG3q10/dDTQlILeiP1skMTiNiDboGCM1n
+         A4xDwzz55OV0SIbgYdBp8BPudlw+uNqz6cv5Lp1Si8tEbMihoEWfu6pCAsCR2RhDBV4w
+         XeMFvARIZ2RGOSNx818CBfe9UC7aofw9MQAKc3q9kZP+atdLEe9Ju8PllDEVyrTUu9QB
+         oRkGErEFf02jHiqCGZs1ocM5jyGW0vmah8tMcLqpykUF+Ug4lB7Yaubsa5fDF2Zg7sID
+         f1vFStdOBOTwVraoNYhRRoMgH2a82oe8Aovj/CyNmROkYHdwtuJt9vjhbzutYYM9bfse
+         fCnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3FFNV87EXG2IlcFtQbV+gadr6ihjV5o7kcHPrr2ZxtU=;
+        b=6G/RaupNQ8V8s3zj4dGKvXN2dPACv63H8jLbrvqrsF9rYbk0yS2VaX1lfxS2db6eC6
+         ihf4qhIZuASaFOWmn7iYZUFjiYrgxL6aLFDwtlFofBOL6YOqoA4iws2pEHEl8inB44kA
+         VVdrDe/tXOmMUq5nqCQat7ax1ycK/JvmLINd1yqvKTSIXs0U/aXuNgCdik+lboi2LG11
+         aRt+9SzFXSvBxibZwVOkIwWil9N75CRf9Fz2UePayAC8iozfK39FWe36aEiEwXdO5Gkj
+         8mA/diibjma7nu91/VSXU344+zhixbno96ki50FA2xdzmli5hyzByDwwXQCpzbDtUDhp
+         etyA==
+X-Gm-Message-State: AOAM533Kl/emhvIKxMkaYCPJ6842bdB6B9r73OH8QIwfdfLmqyBOVI42
+        ducwL6dlZSvJIES9T82vG4MixNozG5WTYtkR6/8=
+X-Google-Smtp-Source: ABdhPJxjXPmjPJSkSoXv0dy9HmEmQGpx4g7jQasQCdfUTD1cvhaoUI41tRvAsvCGUmKHXpBwxUUFWg==
+X-Received: by 2002:a17:902:cecb:b0:154:68b6:cf61 with SMTP id d11-20020a170902cecb00b0015468b6cf61mr3333777plg.12.1649164155020;
+        Tue, 05 Apr 2022 06:09:15 -0700 (PDT)
+Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 06:09:14 -0700 (PDT)
+From:   Yafang Shao <laoar.shao@gmail.com>
+To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 00/27] bpf: RLIMIT_MEMLOCK cleanups 
+Date:   Tue,  5 Apr 2022 13:08:31 +0000
+Message-Id: <20220405130858.12165-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a new LSM to protect pinned objects in a bpf filesystem
-instance. This is useful for example to ensure that an LSM will always
-enforce its policy, even despite root tries to unload the corresponding
-eBPF program.
+We have switched to memcg based memory accouting and thus the rlimit is
+not needed any more. LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK was introduced in
+libbpf for backward compatibility, so we can use it instead now.
 
-Achieve the protection by denying inode unlink and unmount of the
-protected bpf filesystem instance. Since protected inodes hold a
-reference of the link of loaded programs (e.g. LSM hooks), denying
-operations on them will prevent the ref count of the links from reaching
-zero, ensuring that the programs remain always active.
+This patchset cleanups the usage of RLIMIT_MEMLOCK in tools/bpf/,
+tools/testing/selftests/bpf and samples/bpf. The file
+tools/testing/selftests/bpf/bpf_rlimit.h is removed. The included header
+sys/resource.h is removed from many files as it is useless in these files.
 
-Enable the protection only for the instance created by the user space
-counterpart of the LSM, and don't interfere with other instances, so
-that their behavior remains unchanged.
+- v3: Get rid of bpf_rlimit.h and fix some typos (Andrii)
+- v2: Use libbpf_set_strict_mode instead. (Andrii)
+- v1: https://lore.kernel.org/bpf/20220320060815.7716-2-laoar.shao@gmail.com/
 
-Suggested-by: Djalal Harouni <tixxdz@gmail.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .gitignore       |  4 +++
- Makefile         | 18 ++++++++++++++
- bpffs_lsm_kern.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
- bpffs_lsm_user.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 145 insertions(+)
- create mode 100644 .gitignore
- create mode 100644 Makefile
- create mode 100644 bpffs_lsm_kern.c
- create mode 100644 bpffs_lsm_user.c
+Yafang Shao (27):
+  bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xdping
+  bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xdpxceiver
+  bpf: selftests: No need to include bpf_rlimit.h in test_tcpnotify_user
+  bpf: selftests: No need to include bpf_rlimit.h in flow_dissector_load
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    get_cgroup_id_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_cgroup_storage
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    get_cgroup_id_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lpm_map
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lru_map
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_skb_cgroup_id_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock_addr
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sockmap
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sysctl
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tag
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_tcp_check_syncookie_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_verifier_log
+  bpf: samples: Set libbpf 1.0 API mode explicitly in hbm
+  bpf: selftests: Get rid of bpf_rlimit.h
+  bpf: selftests: No need to include sys/resource.h in some files
+  bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xdpsock_user
+  bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xsk_fwd
+  bpf: samples: No need to include sys/resource.h in many files
+  bpf: bpftool: Remove useless return value of libbpf_set_strict_mode
+  bpf: bpftool: Set LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK for legacy libbpf
+  bpf: bpftool: remove RLIMIT_MEMLOCK
+  bpf: runqslower: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
 
-diff --git a/.gitignore b/.gitignore
-new file mode 100644
-index 000000000000..7fa02964f1dc
---- /dev/null
-+++ b/.gitignore
-@@ -0,0 +1,4 @@
-+*.o
-+vmlinux.h
-+bpffs_lsm_kern.skel.h
-+bpffs_lsm_user
-diff --git a/Makefile b/Makefile
-new file mode 100644
-index 000000000000..c3d805759db3
---- /dev/null
-+++ b/Makefile
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0
-+all: bpffs_lsm_user
-+
-+clean:
-+	rm -rf bpffs_lsm.skel.h vmlinux.h bpffs_lsm_kern.o bpffs_lsm_user
-+
-+vmlinux.h:
-+	/usr/sbin/bpftool btf dump file /sys/kernel/btf/vmlinux format c > \
-+			  vmlinux.h
-+
-+bpffs_lsm_kern.skel.h: bpffs_lsm_kern.o
-+	bpftool gen skeleton $< > $@
-+
-+bpffs_lsm_kern.o: bpffs_lsm_kern.c vmlinux.h
-+	clang -Wall -Werror -g -O2 -target bpf -c $< -o $@
-+
-+bpffs_lsm_user: bpffs_lsm_user.c bpffs_lsm_kern.skel.h bpffs_lsm_kern.o
-+	cc -Wall -Werror -g -o $@ $< -lbpf
-diff --git a/bpffs_lsm_kern.c b/bpffs_lsm_kern.c
-new file mode 100644
-index 000000000000..b3ccb2a75c95
---- /dev/null
-+++ b/bpffs_lsm_kern.c
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Authors:
-+ * Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement an LSM to protect a bpf filesystem instance.
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+uint32_t monitored_pid = 0;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, sizeof(uint8_t));
-+} inode_storage_map SEC(".maps");
-+
-+SEC("lsm/sb_set_mnt_opts")
-+int BPF_PROG(sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
-+	     unsigned long kern_flags, unsigned long *set_kern_flags)
-+{
-+	u32 pid;
-+
-+	pid = bpf_get_current_pid_tgid() >> 32;
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	if (!bpf_inode_storage_get(&inode_storage_map, sb->s_root->d_inode, 0,
-+				   BPF_LOCAL_STORAGE_GET_F_CREATE))
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+SEC("lsm/inode_unlink")
-+int BPF_PROG(inode_unlink, struct inode *dir, struct dentry *dentry)
-+{
-+	if (bpf_inode_storage_get(&inode_storage_map,
-+				  dir->i_sb->s_root->d_inode, 0, 0))
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+SEC("lsm/sb_umount")
-+int BPF_PROG(sb_umount, struct vfsmount *mnt, int flags)
-+{
-+	if (bpf_inode_storage_get(&inode_storage_map,
-+				  mnt->mnt_sb->s_root->d_inode, 0, 0))
-+		return -EPERM;
-+
-+	return 0;
-+}
-diff --git a/bpffs_lsm_user.c b/bpffs_lsm_user.c
-new file mode 100644
-index 000000000000..e20180cc5db9
---- /dev/null
-+++ b/bpffs_lsm_user.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the user space side of the LSM for bpffs.
-+ */
-+
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <limits.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+
-+#include "bpffs_lsm_kern.skel.h"
-+
-+#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
-+
-+int main(int argc, char *argv[])
-+{
-+	char mntpoint[] = "/tmp/bpf_private_mountXXXXXX";
-+	char path[PATH_MAX];
-+	struct bpffs_lsm_kern *skel;
-+	int ret, i;
-+
-+	skel = bpffs_lsm_kern__open_and_load();
-+	if (!skel)
-+		return -EINVAL;
-+
-+	ret = bpffs_lsm_kern__attach(skel);
-+	if (ret < 0)
-+		goto out_destroy;
-+
-+	mkdtemp(mntpoint);
-+
-+	skel->bss->monitored_pid = getpid();
-+	ret = mount(mntpoint, mntpoint, "bpf", MOUNT_FLAGS, NULL);
-+	skel->bss->monitored_pid = 0;
-+
-+	if (ret < 0)
-+		goto out_destroy;
-+
-+	for (i = 0; i < skel->skeleton->prog_cnt; i++) {
-+		snprintf(path, sizeof(path), "%s/%s", mntpoint,
-+			 skel->skeleton->progs[i].name);
-+		ret = bpf_link__pin(*skel->skeleton->progs[i].link, path);
-+		if (ret < 0)
-+			goto out_destroy;
-+	}
-+
-+	ret = 0;
-+out_destroy:
-+	bpffs_lsm_kern__destroy(skel);
-+	return ret;
-+}
+ samples/bpf/cpustat_user.c                    |  1 -
+ samples/bpf/hbm.c                             |  5 ++--
+ samples/bpf/ibumad_user.c                     |  1 -
+ samples/bpf/map_perf_test_user.c              |  1 -
+ samples/bpf/offwaketime_user.c                |  1 -
+ samples/bpf/sockex2_user.c                    |  1 -
+ samples/bpf/sockex3_user.c                    |  1 -
+ samples/bpf/spintest_user.c                   |  1 -
+ samples/bpf/syscall_tp_user.c                 |  1 -
+ samples/bpf/task_fd_query_user.c              |  1 -
+ samples/bpf/test_lru_dist.c                   |  1 -
+ samples/bpf/test_map_in_map_user.c            |  1 -
+ samples/bpf/test_overhead_user.c              |  1 -
+ samples/bpf/tracex2_user.c                    |  1 -
+ samples/bpf/tracex3_user.c                    |  1 -
+ samples/bpf/tracex4_user.c                    |  1 -
+ samples/bpf/tracex5_user.c                    |  1 -
+ samples/bpf/tracex6_user.c                    |  1 -
+ samples/bpf/xdp1_user.c                       |  1 -
+ samples/bpf/xdp_adjust_tail_user.c            |  1 -
+ samples/bpf/xdp_monitor_user.c                |  1 -
+ samples/bpf/xdp_redirect_cpu_user.c           |  1 -
+ samples/bpf/xdp_redirect_map_multi_user.c     |  1 -
+ samples/bpf/xdp_redirect_user.c               |  1 -
+ samples/bpf/xdp_router_ipv4_user.c            |  1 -
+ samples/bpf/xdp_rxq_info_user.c               |  1 -
+ samples/bpf/xdp_sample_pkts_user.c            |  1 -
+ samples/bpf/xdp_sample_user.c                 |  1 -
+ samples/bpf/xdp_tx_iptunnel_user.c            |  1 -
+ samples/bpf/xdpsock_user.c                    |  9 ++----
+ samples/bpf/xsk_fwd.c                         |  7 ++---
+ tools/bpf/bpftool/common.c                    |  8 ------
+ tools/bpf/bpftool/feature.c                   |  2 --
+ tools/bpf/bpftool/main.c                      |  6 ++--
+ tools/bpf/bpftool/main.h                      |  2 --
+ tools/bpf/bpftool/map.c                       |  2 --
+ tools/bpf/bpftool/pids.c                      |  1 -
+ tools/bpf/bpftool/prog.c                      |  3 --
+ tools/bpf/bpftool/struct_ops.c                |  2 --
+ tools/bpf/runqslower/runqslower.c             | 18 ++----------
+ tools/testing/selftests/bpf/bench.c           |  1 -
+ tools/testing/selftests/bpf/bpf_rlimit.h      | 28 -------------------
+ .../selftests/bpf/flow_dissector_load.c       |  6 ++--
+ .../selftests/bpf/get_cgroup_id_user.c        |  4 ++-
+ tools/testing/selftests/bpf/prog_tests/btf.c  |  1 -
+ .../selftests/bpf/test_cgroup_storage.c       |  4 ++-
+ tools/testing/selftests/bpf/test_dev_cgroup.c |  4 ++-
+ tools/testing/selftests/bpf/test_lpm_map.c    |  4 ++-
+ tools/testing/selftests/bpf/test_lru_map.c    |  4 ++-
+ .../selftests/bpf/test_skb_cgroup_id_user.c   |  4 ++-
+ tools/testing/selftests/bpf/test_sock.c       |  4 ++-
+ tools/testing/selftests/bpf/test_sock_addr.c  |  4 ++-
+ tools/testing/selftests/bpf/test_sockmap.c    |  5 ++--
+ tools/testing/selftests/bpf/test_sysctl.c     |  4 ++-
+ tools/testing/selftests/bpf/test_tag.c        |  4 ++-
+ .../bpf/test_tcp_check_syncookie_user.c       |  4 ++-
+ .../selftests/bpf/test_tcpnotify_user.c       |  1 -
+ .../testing/selftests/bpf/test_verifier_log.c |  5 ++--
+ .../selftests/bpf/xdp_redirect_multi.c        |  1 -
+ tools/testing/selftests/bpf/xdping.c          |  8 ++----
+ tools/testing/selftests/bpf/xdpxceiver.c      |  6 ++--
+ 61 files changed, 57 insertions(+), 142 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/bpf_rlimit.h
+
 -- 
-2.32.0
+2.17.1
 
