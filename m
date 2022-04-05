@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F0C4F4CF8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 03:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CA14F4CEB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 03:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351844AbiDEXgr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Apr 2022 19:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        id S245531AbiDEXgG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Apr 2022 19:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392189AbiDEPft (ORCPT
+        with ESMTP id S1443055AbiDEPix (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:35:49 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518DA12D;
-        Tue,  5 Apr 2022 06:48:07 -0700 (PDT)
+        Tue, 5 Apr 2022 11:38:53 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F8F143C7C;
+        Tue,  5 Apr 2022 06:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649166488;
-  x=1680702488;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649166856;
+  x=1680702856;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=79rrKpJvSV/IyMMLjk1fyhAdjuzODykc4KbTAF2mUFs=;
-  b=FiOVSqtEplqlpGbV24QKDAr+i8WFGbW038mF84zzzjMGLHloCAF5NPgY
-   spNiGw/JW64vBk2PDKMYeRrzNnvvX9UHBY/B/HepKgx6Ad8lZokZPYdBy
-   7OpaZ9BsvHs1aZCwW+kuNlJhW2Z2+5tJgZDQoPpNYBx3HZTZqRoW8yTb2
-   L/kbhgJPZ67FRSZN5VimMCXaFg5e7MBpW2w5kOfvVuD4jRmwgAUY0TEzv
-   O9FAaZn51Fi/MSdDTB4FNunqqBA9Ty8O7mk1/2xsvz1tde3N99GsfhgrV
-   4GYLxtosbMlYV/YxgZvfwIh/MPM7kvdpyaf1CLkQR25ioPVRlRFcC7BrW
+  bh=WhCHZK9GJJLMq21n9Wjs02V4Hy6iol3pV60QmFhYnXI=;
+  b=jOu26AEgH52kLCEHGCDNClrCiuGQsqC0mMbV00LsCQ6D7yvqs5Dp0cZy
+   optIlXUGOYK/V04EhtXgmp6AGk/51aFLQeuyzPywOKdv2JKXA+l+F6zE7
+   jxHOIV1w+04HJPidE7bujX1V1JGCLkwHL1iXL+GF9c51ejPvh7kJHrDJF
+   sWsJXpEG7H3IcBsiHwqDNa1ca2VTQ5eAIIHcwcVTTvxCwHveoCzsrgoBD
+   Qg4rKYHk/O7G0KuyvCJLe6mEPgEtYSv+lMmSdwpvvs1oz0dylwi73F+Ak
+   1fDOQjfbIzc4yDvOAyiXUKMXCl58iv6V6IbDYllLso+PQ6F552TycWKbq
    w==;
-Date:   Tue, 5 Apr 2022 15:48:05 +0200
+Date:   Tue, 5 Apr 2022 15:54:12 +0200
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jonathan Cameron <jic23@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
 CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         kernel <kernel@axis.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -38,6 +38,7 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "shuah@kernel.org" <shuah@kernel.org>,
         "brendanhiggins@google.com" <brendanhiggins@google.com>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
         "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
         "broonie@kernel.org" <broonie@kernel.org>,
@@ -46,15 +47,15 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         "corbet@lwn.net" <corbet@lwn.net>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 08/10] iio: light: vcnl4000: add roadtest
-Message-ID: <20220405134805.GA28574@axis.com>
+Subject: Re: [RFC v1 01/10] roadtest: import libvhost-user from QEMU
+Message-ID: <20220405135412.GB28574@axis.com>
 References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-9-vincent.whitchurch@axis.com>
- <20220320170253.5b946c84@jic23-huawei>
+ <20220311162445.346685-2-vincent.whitchurch@axis.com>
+ <7f405d8d09a83954aa3411eff8b71ee687c7ec33.camel@sipsolutions.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220320170253.5b946c84@jic23-huawei>
+In-Reply-To: <7f405d8d09a83954aa3411eff8b71ee687c7ec33.camel@sipsolutions.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
@@ -66,51 +67,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 06:02:53PM +0100, Jonathan Cameron wrote:
-> Very interesting bit of work. My current approach for similar testing
-> is to write a qemu model for the hardware, but that currently
-> requires carefully crafted tests. Most of the time I'm only doing
-> that to verify refactoring of existing drivers. 
-
-Thank you for taking a look!
-
-> One thing that makes me nervous here is the python element though
-> as I've not written significant python in about 20 years.
-> That is going to be a burden for kernel developers and maintainers...
-> Nothing quite like badly written tests to make for a mess in the long run
-> and I suspect my python for example would be very very badly written :)
-
-There's a bunch of static checkers to ensure that the code follows some
-basic guidelines, and CI can check that the tests work consistently, and
-also calculate metrics such as test execution time and code coverage, so
-even non-idiomatic Python in the tests wouldn't be entirely broken.
-
-And unlike driver code, if the tests for a particular driver later do
-turn out to be bad (in what way?), we could just throw those particular
-tests out without breaking anybody's system.
-
-> Cut and paste will of course get us a long way...
-
-Isn't some amount of copy/paste followed by modification to be expected
-even if the framework is written in say C (just as there's already
-copy/paste + modification involved when writing drivers)?
-
-As for the core logic of individual driver tests excluding the framework
-bits, I have a hard time imagining what Python syntax looks like to
-someone with no knowledge of Python, so yes, I guess it's going to be
-harder to review.
-
-> I dream of a world where every driver is testable by people with out hardware
-> but I fear it may be a while yet.  Hopefully this will get us a little
-> closer!
+On Thu, Mar 24, 2022 at 02:00:10PM +0100, Johannes Berg wrote:
+> On Fri, 2022-03-11 at 17:24 +0100, Vincent Whitchurch wrote:
+> > Import the libvhost-user from QEMU for use in the implementation of the
+> > virtio devices in the roadtest backend.
 > 
-> I more or less follow what is going on here (good docs btw in the earlier
-> patch definitely helped).
+> So hm, I wonder if this is the sensible thing to do?
 > 
-> So far I'm thoroughly in favour of road test subject to actually being
-> able to review the tests or getting sufficient support to do so.
-> It's a 'how to scale it' question really...
+> Not that I mind importing qemu code, but:
+> 
+>  1) the implementation is rather complex in some places, and has support
+>     for a LOT of virtio/vhost-user features that are really not needed
+>     in these cases, for performance etc. It's also close to 4k LOC.
 
-Would rewriting the framework in C and forcing tests to be written in
-that language mean that maintainers would be able to review tests
-without external support?
+Is this really a problem given that the code is imported as-is?  The
+intention is not to have to make a lot of local modifications to it in
+the kernel tree.  The code is stable and presumably well-tested
+upstream, and upstream maintains it as a separate library (in the QEMU
+source tree though) to encourage reuse.
+
+>  2) the implementation doesn't support time-travel mode which might come
+>     in handy
+
+True, but I don't see the external time-travel controller stuff being
+too useful for the kinds of tests this framework is targeting.
