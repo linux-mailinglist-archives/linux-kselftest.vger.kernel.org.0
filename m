@@ -2,114 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099954F6C69
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 23:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717C54F6E7A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 01:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235537AbiDFVSM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 17:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S234316AbiDFXYp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 19:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbiDFVRt (ORCPT
+        with ESMTP id S232191AbiDFXYo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 17:17:49 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE6C2EF86E
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 13:05:47 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id q11so4336475iod.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Apr 2022 13:05:47 -0700 (PDT)
+        Wed, 6 Apr 2022 19:24:44 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151846C1E7
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 16:22:46 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id h16-20020a056902009000b00628a70584b2so2918434ybs.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Apr 2022 16:22:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vCgsdofueDzmclBeFxqo6aKHtjsWdXLi6JiPYoFCmoc=;
-        b=cR+5rsgYLkhZXAAFxLpza6qfB2xOzcJNUAIYelWplokZAKThWScNamgWLpMmkHBhgA
-         R1+F1qKd7EG/GEu8cxmj1P80ibmXO1V5w96lKod+E60ujDAa/xCZ0xLxp4Nsp/y1+zNj
-         pGI4QVenIIYqNlvjtSBl1t5pMtIx0NmwB3jyk=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Kctwd9MuAxKTamshBg/2p/OqY2uBL1ZDHhqIATAaLOY=;
+        b=CdLhv1Eb6cbl0H+k0cOpjJRGzzxVgfYfMQ7obmTApAWuJuzGSvJnTjbu7I/yWRUhMK
+         vcpoygMBuoDvkPsF9tjqRYtpERq0RxRiTvQJK/v8ljp3p+fwBePJGOpz7xYgnkQZUJdv
+         3dQf7sGw7D7M8Dzd96+mvn6Vb0Ze/S+/0GJCLr8TlAD9Pke/9kCAWmnTV83vK/nb0ejZ
+         yq6l5eAGi1vTNjMUxPMVaT2i/lqN/VlHhmL5k57A2J18yTsaMKzSX1kPN5xL6DuS8dW0
+         IGYJvkBe9zv6xrK9Qipea2bZWrCepAb1JE4tqrRnsHgq0RiyWQ/k13v0C2FjT3lp44xG
+         4lSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vCgsdofueDzmclBeFxqo6aKHtjsWdXLi6JiPYoFCmoc=;
-        b=mFznYphaKOdVTUCq7bfmGAtNRJT3Sev0Si3PrlnnKsggwKIULZHiquLf/CHfyNi9RG
-         TZtfXqd8BQ612wRZrYsAiTFDH6juSzbstyUFtpM6HtpmUUfOffFNbX3MJ8QqbFtlNGw4
-         L4b8sD4mobnU28vUI3f/IC++ZrKEXdz2sZkYQ4ofT7QLcpsZleMrULGNX6XQzwxkU0ba
-         u2x++OLEUH+MyULXX9jyePGV5LOdqaJsf8h+1aqoVqX1UbTC7gvuH3GLISjRU69OSqMp
-         n8a/Q3uF4zodsu7md2DZV++a8YXJejHM23PQSWpAbm1TzOuY69k7djZAwAJqj32lJ1n/
-         znMQ==
-X-Gm-Message-State: AOAM532RpVA+rYFpSUCB1kca+76s4VWNiyJkcxL6gIdnSuJVpcA4lXZU
-        UMHpQghlFV6wR3+FanVOu65KQQ==
-X-Google-Smtp-Source: ABdhPJwZyiBF+1MJR1ViEYkDA/OLIZOqcFI6CqmqutLKLEchEzixjki5nX6+7D+OjxHw9lBwnsyheA==
-X-Received: by 2002:a05:6638:41a0:b0:323:d771:8146 with SMTP id az32-20020a05663841a000b00323d7718146mr5494354jab.193.1649275547223;
-        Wed, 06 Apr 2022 13:05:47 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id d14-20020a056602184e00b00649673c175asm11534641ioi.25.2022.04.06.13.05.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 13:05:46 -0700 (PDT)
-Subject: Re: [PATCH] testing/selftests/mqueue: Fix mq_perf_tests to free the
- allocated cpu set
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, disgoel@linux.vnet.ibm.com
-Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ad0648a9-0252-2d1f-cc48-7e14846fc0af@linuxfoundation.org>
-Date:   Wed, 6 Apr 2022 14:05:46 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Kctwd9MuAxKTamshBg/2p/OqY2uBL1ZDHhqIATAaLOY=;
+        b=kWjYQ9BMsGGMkkKjBlRuoFr7pCXqiI2BTy5DQg8TGnxUkTwaG824wkK7zy1ZstIXie
+         sGkBBoUUkOf4uFdl5Rsus3gpr9XyoRInu+4et5io/Vc9WLQnkeSSwqXMz4xOpjFoabwL
+         MyzMbqTBxcb1CUhm3yqFSQvbnj4s8TZOhzPTJpKWd8HcWRek9IcRVLuPkNDTmvM1aOlg
+         d/L07oVUlroo9z8dXrR77+2Y86z2A9G9c0PLUtQuXG1lQzCz0JmwF3Wwdytrr1LQu7JW
+         BaGWeGqvIszj2cGkqoVfYMHr2jQUOh/IfQTwV1rn1uPpGHp/b/CGIFnUrvELDf+te97n
+         akhw==
+X-Gm-Message-State: AOAM532AcRQX0bHPPORnz8+R2e8rt1cskiB4u+zMtATKIo0oUIRUZOWi
+        hxmaY8vL8IRVDW7MYasDO+cZ7j+2588USw==
+X-Google-Smtp-Source: ABdhPJzx+g6rjmKR0nlzc2H/femSZMuJ5VGXLH99Gu7UbibLOjBReX3Q015ws38Ihs6d0NXJPaZDDQjA/GNNEQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:aed6:d51d:dc38:e705])
+ (user=dlatypov job=sendgmr) by 2002:a25:dc93:0:b0:63e:14f0:fce5 with SMTP id
+ y141-20020a25dc93000000b0063e14f0fce5mr8411650ybe.8.1649287365162; Wed, 06
+ Apr 2022 16:22:45 -0700 (PDT)
+Date:   Wed,  6 Apr 2022 16:22:40 -0700
+Message-Id: <20220406232240.1825048-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH] kunit: bail out of test filtering logic quicker if OOM
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/6/22 11:57 AM, Athira Rajeev wrote:
-> The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
-> CPU set. This cpu set is used further in pthread_attr_setaffinity_np
-> and by pthread_create in the code. But in current code, allocated
-> cpu set is not freed. Fix this by adding CPU_FREE after its usage
-> is done.
-> 
+When filtering what tests to run (suites and/or cases) via
+kunit.filter_glob (e.g. kunit.py run <glob>), we allocate copies of
+suites.
 
-Good find.
+These allocations can fail, and we largely don't handle that.
+Note: realistically, this probably doesn't matter much.
+We're not allocating much memory and this happens early in boot, so if
+we can't do that, then there's likely far bigger problems.
 
-> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> ---
->   tools/testing/selftests/mqueue/mq_perf_tests.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-> index b019e0b8221c..17c41f216bef 100644
-> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-> @@ -732,6 +732,7 @@ int main(int argc, char *argv[])
->   		pthread_attr_destroy(&thread_attr);
->   	}
->   
-> +	CPU_FREE(cpu_set);
->   	if (!continuous_mode) {
->   		pthread_join(cpu_threads[0], &retval);
->   		shutdown((long)retval, "perf_test_thread()", __LINE__);
-> 
+This patch makes us immediately bail out from the top-level function
+(kunit_filter_suites) with -ENOMEM if any of the underlying kmalloc()
+calls return NULL.
 
-CPU_ALLOC() is called very early on in main() and there are a
-few error paths that exit without calling CPU_FREE. This change
-doesn't fully fix the problem.
+Implementation note: we used to return NULL pointers from some functions
+to indicate either that all suites/tests were filtered out or there was
+an error allocating the new array.
 
-Review the other exit paths where CPU_FREE is needed.
+We'll log a short error in this case and not run any tests or print a
+TAP header. From a kunit.py user's perspective, they'll get a message
+about missing/invalid TAP output and have to dig into the test.log to
+see it. Since hitting this error seems so unlikely, it's probably fine
+to not invent a way to plumb this error message more visibly.
 
-thanks,
--- Shuah
+See also: https://lore.kernel.org/linux-kselftest/20220329103919.2376818-1-lv.ruyi@zte.com.cn/
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ lib/kunit/executor.c      | 27 ++++++++++++++++++++++-----
+ lib/kunit/executor_test.c |  4 +++-
+ 2 files changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 22640c9ee819..2f73a6a35a7e 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+ 
+ 	/* Use memcpy to workaround copy->name being const. */
+ 	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
++	if (!copy)
++		return ERR_PTR(-ENOMEM);
+ 	memcpy(copy, suite, sizeof(*copy));
+ 
+ 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
++	if (!filtered)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	n = 0;
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
+ 
+ 	filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
+ 	if (!filtered)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	n = 0;
+ 	for (i = 0; subsuite[i] != NULL; ++i) {
+ 		if (!glob_match(filter->suite_glob, subsuite[i]->name))
+ 			continue;
+ 		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
+-		if (filtered_suite)
++		if (IS_ERR(filtered_suite))
++			return ERR_CAST(filtered_suite);
++		else if (filtered_suite)
+ 			filtered[n++] = filtered_suite;
+ 	}
+ 	filtered[n] = NULL;
+@@ -146,7 +152,8 @@ static void kunit_free_suite_set(struct suite_set suite_set)
+ }
+ 
+ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+-					    const char *filter_glob)
++					    const char *filter_glob,
++					    int *err)
+ {
+ 	int i;
+ 	struct kunit_suite * const **copy, * const *filtered_subsuite;
+@@ -166,6 +173,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
+ 
+ 	for (i = 0; i < max; ++i) {
+ 		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
++		if (IS_ERR(filtered_subsuite)) {
++			*err = PTR_ERR(filtered_subsuite);
++			return filtered;
++		}
+ 		if (filtered_subsuite)
+ 			*copy++ = filtered_subsuite;
+ 	}
+@@ -236,9 +247,15 @@ int kunit_run_all_tests(void)
+ 		.start = __kunit_suites_start,
+ 		.end = __kunit_suites_end,
+ 	};
++	int err;
+ 
+-	if (filter_glob_param)
+-		suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
++	if (filter_glob_param) {
++		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
++		if (err) {
++			pr_err("kunit executor: error filtering suites: %d\n", err);
++			return err;
++		}
++	}
+ 
+ 	if (!action_param)
+ 		kunit_exec_run_tests(&suite_set);
+diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+index 4ed57fd94e42..eac6ff480273 100644
+--- a/lib/kunit/executor_test.c
++++ b/lib/kunit/executor_test.c
+@@ -137,14 +137,16 @@ static void filter_suites_test(struct kunit *test)
+ 		.end = suites + 2,
+ 	};
+ 	struct suite_set filtered = {.start = NULL, .end = NULL};
++	int err = 0;
+ 
+ 	/* Emulate two files, each having one suite */
+ 	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
+ 	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
+ 
+ 	/* Filter out suite1 */
+-	filtered = kunit_filter_suites(&suite_set, "suite0");
++	filtered = kunit_filter_suites(&suite_set, "suite0", &err);
+ 	kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs without leaking */
++	KUNIT_EXPECT_EQ(test, err, 0);
+ 	KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t)1);
+ 
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
+
+base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
+-- 
+2.35.1.1094.g7c7d902a7c-goog
+
