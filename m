@@ -2,274 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ACD4F659F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 18:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460F74F65E3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 18:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiDFQbT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 12:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S238299AbiDFQxo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 12:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237706AbiDFQai (ORCPT
+        with ESMTP id S238103AbiDFQx2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:30:38 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F76941FD0A;
-        Tue,  5 Apr 2022 18:48:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V9JJspu_1649209690;
-Received: from 192.168.193.179(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V9JJspu_1649209690)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 06 Apr 2022 09:48:11 +0800
-Message-ID: <2bda020e-cc1b-ecf2-be23-9b7ed5d61945@linux.alibaba.com>
-Date:   Tue, 5 Apr 2022 18:48:09 -0700
+        Wed, 6 Apr 2022 12:53:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3253D2735BF
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 07:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649254648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=l/rlayWAz6LIN8DHFEn/JZ+tDFeU/OUyuaiK0vcp1d4=;
+        b=e6G65m0XPvSRBL/rCF8GqURdpgmBoah63Msx1fVZvv1O5MQG4ooD5MLbiCMsK5SdnCdeEP
+        FRrbZRVF+baX8eepk9x4701YqDGueAni4jLmTbehO9qHvL2Dh9TesO+l0IpU56LZXw6lKb
+        laM8V1i3QzvI9LzgnsItNyDQ9LcdVaM=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-yz8nV7xpORyfp4N2CLimrg-1; Wed, 06 Apr 2022 10:17:27 -0400
+X-MC-Unique: yz8nV7xpORyfp4N2CLimrg-1
+Received: by mail-lf1-f70.google.com with SMTP id x36-20020a056512132400b0044b07b24746so904736lfu.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Apr 2022 07:17:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=l/rlayWAz6LIN8DHFEn/JZ+tDFeU/OUyuaiK0vcp1d4=;
+        b=MwC88A1F3U8ctSJhIEqDXd3N/eH8P4eJnP36n2QMpzmwlrGKGQikl4bHA3RKaGHeco
+         XMjZGka/rY2YtMmKolpux3bnQ5i/swUsLs4H3GQ4LeIblBXbRWcnC/syPdj5d/nvh/qU
+         UaA7RysCTfedvLf6R4scSSPRtpddqBZFtqxZ9xbQc755vrP0woxzEaq8F7CsA+5V0pvr
+         xpRO3lW0LAqTBgd3pAAmsDm6so/+vUF8E8ponUBQ1lwDDXL0zv+TKUv2ELxWh18BGewm
+         lF2QWbkt1aSikaYwP9begXbtP3rMcTGgaGqv2gyOky/DVTCNy4chxnZP639hvCuQvmor
+         pqlg==
+X-Gm-Message-State: AOAM533oYmdZKvIlxkM5l2LB+l1mFNLy2ZK/nQ+BBRhQ4Od3ot2PTH02
+        BZYHcSualzyFS0b0zEQchkuXUQLA79dFNgecBNxJW7TrqOWeMMNIvRhTqrw4lpNiE3tMH3CUUp6
+        qfDxX7Hbcv5qRCMiNMozFbqFmXz153zSTG1aJs/doEKBS
+X-Received: by 2002:a05:6512:b92:b0:44b:36d:27e0 with SMTP id b18-20020a0565120b9200b0044b036d27e0mr6199616lfv.537.1649254645246;
+        Wed, 06 Apr 2022 07:17:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwULjqchBcfxtC/ML8Q9nEv0WuwPD5Jvo5RUPMEfprUIeVSvIf6Th+CwqiwMRk9yvgXvAH43CYwCtwQitBMo/M=
+X-Received: by 2002:a05:6512:b92:b0:44b:36d:27e0 with SMTP id
+ b18-20020a0565120b9200b0044b036d27e0mr6199560lfv.537.1649254644042; Wed, 06
+ Apr 2022 07:17:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-From:   Dan Li <ashimida@linux.alibaba.com>
-Subject: Re: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
-To:     catalin.marinas@arm.com, will@kernel.org, keescook@chromium.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, shuah@kernel.org, mark.rutland@arm.com,
-        ojeda@kernel.org, akpm@linux-foundation.org, elver@google.com,
-        luc.vanoostenryck@gmail.com, samitolvanen@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Dan Li <ashimida@linux.alibaba.com>
-References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <20220314135329.80621-1-ashimida@linux.alibaba.com>
-Content-Language: en-US
-In-Reply-To: <20220314135329.80621-1-ashimida@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Bruno Goncalves <bgoncalv@redhat.com>
+Date:   Wed, 6 Apr 2022 16:17:13 +0200
+Message-ID: <CA+QYu4omi2irqUpDi_3POT8djdgg3q0ZVujdE1jfLPwsTxjB5w@mail.gmail.com>
+Subject: =?UTF-8?Q?special=5Finsns=2Eh=3A36=3A9=3A_error=3A_array_subscript_0_is_ou?=
+        =?UTF-8?Q?tside_array_bounds_of_=E2=80=98unsigned_int=5B0=5D=E2=80=99_=5B=2DWerror=3Darray=2Db?=
+        =?UTF-8?Q?ounds=5D?=
+To:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     CKI Project <cki-project@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Kees,
+Hello,
 
-Gentile ping for this :).
+Trying to build mainline kernel with gcc12 and selftests we get the
+following error:
 
-I also saw the discussion on llvm-project, use address of labels as a
-parameter doesn't seem to be stable.
+00:01:22 In function =E2=80=98native_read_cr2=E2=80=99,
+00:01:22     inlined from =E2=80=98vmx_vcpu_enter_exit=E2=80=99 at
+arch/x86/kvm/vmx/vmx.c:6772:24:
+00:01:22 ./arch/x86/include/asm/special_insns.h:36:9: error: array
+subscript 0 is outside array bounds of =E2=80=98unsigned int[0]=E2=80=99
+[-Werror=3Darray-bounds]
+00:01:22    36 |         asm volatile("mov %%cr2,%0\n\t" : "=3Dr" (val)
+: __FORCE_ORDER);
+00:01:22       |         ^~~
+00:01:22 In function =E2=80=98native_read_cr2=E2=80=99,
+00:01:22     inlined from =E2=80=98vmx_vcpu_enter_exit=E2=80=99 at
+arch/x86/kvm/vmx/vmx.c:6778:19:
+00:01:22 ./arch/x86/include/asm/special_insns.h:36:9: error: array
+subscript 0 is outside array bounds of =E2=80=98unsigned int[0]=E2=80=99
+[-Werror=3Darray-bounds]
+00:01:22    36 |         asm volatile("mov %%cr2,%0\n\t" : "=3Dr" (val)
+: __FORCE_ORDER);
+00:01:22       |         ^~~
+00:01:22 cc1: all warnings being treated as errors
+00:01:22 make[4]: *** [scripts/Makefile.build:288:
+arch/x86/kvm/vmx/vmx.o] Error 1
+00:01:22 make[3]: *** [scripts/Makefile.build:550: arch/x86/kvm] Error 2
 
-Do we need to split it into two cases here?
 
-Link: https://github.com/llvm/llvm-project/issues/54328
+Full build log:
+https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawa=
+rehouse-public/2022/04/05/509694021/build_x86_64_redhat:2295283495/build.lo=
+g
+
+build config: https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse=
+-public/datawarehouse-public/2022/04/05/509694021/build_x86_64_redhat:22952=
+83495/kernel-mainline.kernel.org-x86_64-3e732ebf7316ac83e8562db7e64cc68aec3=
+90a18.config
 
 Thanks,
-Dan
+Bruno Goncalves
 
-
-On 3/14/22 06:53, Dan Li wrote:
-> Add tests for SCS (Shadow Call Stack) based backward CFI.
-> 
-> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
-> ---
->   arch/arm64/include/asm/compiler.h       | 18 ++++++
->   drivers/misc/lkdtm/cfi.c                | 84 +++++++++++++++++++++++++
->   drivers/misc/lkdtm/core.c               |  1 +
->   drivers/misc/lkdtm/lkdtm.h              |  1 +
->   include/linux/compiler-clang.h          |  1 +
->   include/linux/compiler-gcc.h            |  2 +
->   include/linux/compiler_types.h          |  4 ++
->   tools/testing/selftests/lkdtm/tests.txt |  1 +
->   8 files changed, 112 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
-> index dc3ea4080e2e..96590fb4a8de 100644
-> --- a/arch/arm64/include/asm/compiler.h
-> +++ b/arch/arm64/include/asm/compiler.h
-> @@ -8,6 +8,24 @@
->   #define ARM64_ASM_PREAMBLE
->   #endif
->   
-> +#ifndef __ASSEMBLY__
-> +#ifdef __KERNEL__
-> +
-> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-> +
-> +#ifdef CONFIG_ARM64_BTI_KERNEL
-> +# define __no_ptrauth __attribute__((target("branch-protection=bti")))
-> +#elif defined(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET)
-> +# define __no_ptrauth __attribute__((target("branch-protection=none")))
-> +#elif defined(CONFIG_CC_HAS_SIGN_RETURN_ADDRESS)
-> +# define __no_ptrauth __attribute__((target("sign-return-address=none")))
-> +#endif
-> +
-> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
-> +
-> +#endif /* __KERNEL__ */
-> +#endif /* __ASSEMBLY__ */
-> +
->   /*
->    * The EL0/EL1 pointer bits used by a pointer authentication code.
->    * This is dependent on TBI0/TBI1 being enabled, or bits 63:56 would also apply.
-> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-> index c9aeddef1044..468ba2f26f74 100644
-> --- a/drivers/misc/lkdtm/cfi.c
-> +++ b/drivers/misc/lkdtm/cfi.c
-> @@ -41,3 +41,87 @@ void lkdtm_CFI_FORWARD_PROTO(void)
->   	pr_err("FAIL: survived mismatched prototype function call!\n");
->   	pr_expected_config(CONFIG_CFI_CLANG);
->   }
-> +
-> +#ifdef CONFIG_ARM64
-> +/*
-> + * This function is used to modify its return address. The PAC needs to be turned
-> + * off here to ensure that the modification of the return address will not be blocked.
-> + */
-> +static noinline __no_ptrauth
-> +void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +
-> +/* Function with __noscs attribute attempts to modify its return address. */
-> +static noinline __no_ptrauth __noscs
-> +void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +#else
-> +static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +#endif
-> +
-> +static volatile unsigned int force_label;
-> +
-> +/*
-> + * This first checks whether a function with the __noscs attribute under
-> + * the current platform can directly modify its return address, and if so,
-> + * checks whether scs takes effect.
-> + */
-> +void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
-> +{
-> +	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
-> +
-> +	if (force_label && (force_label < sizeof(array))) {
-> +		/*
-> +		 * Call them with "NULL" first to avoid
-> +		 * arguments being treated as constants in -02.
-> +		 */
-> +		lkdtm_noscs_set_lr(NULL, NULL);
-> +		lkdtm_scs_set_lr(NULL, NULL);
-> +		goto *array[force_label];
-> +	}
-> +
-> +	/* Keep labels in scope to avoid compiler warnings. */
-> +	do {
-> +		/* Verify the "normal" condition of LR corruption working. */
-> +		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-> +		lkdtm_noscs_set_lr(&&unexpected, &&expected);
-> +
-> +unexpected:
-> +		/*
-> +		 * If lr cannot be modified, the following check is meaningless,
-> +		 * returns directly.
-> +		 */
-> +		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-> +		break;
-> +
-> +expected:
-> +		pr_info("ok: lr corruption redirected without scs.\n");
-> +
-> +		/* Verify that SCS is in effect. */
-> +		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> +		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
-> +
-> +good_scs:
-> +		pr_info("ok: scs takes effect.\n");
-> +		break;
-> +
-> +bad_scs:
-> +		pr_err("FAIL: return address rewritten!\n");
-> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-> +	} while (0);
-> +}
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index f69b964b9952..7af7268b82e4 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -178,6 +178,7 @@ static const struct crashtype crashtypes[] = {
->   	CRASHTYPE(USERCOPY_KERNEL),
->   	CRASHTYPE(STACKLEAK_ERASING),
->   	CRASHTYPE(CFI_FORWARD_PROTO),
-> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
->   	CRASHTYPE(FORTIFIED_OBJECT),
->   	CRASHTYPE(FORTIFIED_SUBOBJECT),
->   	CRASHTYPE(FORTIFIED_STRSCPY),
-> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> index d6137c70ebbe..a66fba949ab5 100644
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@ -157,6 +157,7 @@ void lkdtm_STACKLEAK_ERASING(void);
->   
->   /* cfi.c */
->   void lkdtm_CFI_FORWARD_PROTO(void);
-> +void lkdtm_CFI_BACKWARD_SHADOW(void);
->   
->   /* fortify.c */
->   void lkdtm_FORTIFIED_OBJECT(void);
-> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-> index 3c4de9b6c6e3..2db37db36651 100644
-> --- a/include/linux/compiler-clang.h
-> +++ b/include/linux/compiler-clang.h
-> @@ -68,3 +68,4 @@
->   
->   #define __nocfi		__attribute__((__no_sanitize__("cfi")))
->   #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
-> +#define __no_optimize	__attribute__((optnone))
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index deff5b308470..28d1b0ec6656 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -162,3 +162,5 @@
->   #if GCC_VERSION < 90100
->   #undef __alloc_size__
->   #endif
-> +
-> +#define __no_optimize	__attribute__((optimize("-O0")))
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 3c1795fdb568..f5ad83f7ea2f 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -257,6 +257,10 @@ struct ftrace_likely_data {
->   # define __nocfi
->   #endif
->   
-> +#ifndef __no_ptrauth
-> +# define __no_ptrauth
-> +#endif
-> +
->   #ifndef __cficanonical
->   # define __cficanonical
->   #endif
-> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-> index 6b36b7f5dcf9..12df67a3b419 100644
-> --- a/tools/testing/selftests/lkdtm/tests.txt
-> +++ b/tools/testing/selftests/lkdtm/tests.txt
-> @@ -73,6 +73,7 @@ USERCOPY_STACK_BEYOND
->   USERCOPY_KERNEL
->   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
->   CFI_FORWARD_PROTO
-> +CFI_BACKWARD_SHADOW ok: scs takes effect
->   FORTIFIED_STRSCPY
->   FORTIFIED_OBJECT
->   FORTIFIED_SUBOBJECT
