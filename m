@@ -2,60 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE2A4F6906
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 20:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224974F69BA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 21:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240611AbiDFSUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 14:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S229484AbiDFTX3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 15:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240430AbiDFSTe (ORCPT
+        with ESMTP id S231267AbiDFTVc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C29FFF4F;
-        Wed,  6 Apr 2022 10:00:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 546B9617DB;
-        Wed,  6 Apr 2022 17:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99845C385A5;
-        Wed,  6 Apr 2022 17:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649264413;
-        bh=Xhk5SOzpGqN61TwyKV3hSuwu45jxXYiMouo5aJDKIAc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=S/o/CNjCvuORSfZUrRC0Nar/WqdJ4ffZKZD/OcNTAosKm7HpRZ0s5QcPByu3LrQP5
-         4LlqujxwzBXT6IxxNwtngEeQwoWvHjBJJDNzMYPRzGslwjvjKa2ctMdWienSpbBEvV
-         U6T+KrL0sBlBLLW3C3w21YrUccyFsKRXoSH7dUbRv2jNnfuTDIf/ep1+Ir6palwizL
-         jGmyjESSLGOeq85VfQySDor4w4y5aHrHV5pfk66vugpV4z0lFC12DMLzgF0z+EKjmS
-         owh9ouX65W2QRX60EK4e2gLPDx6wj/E68MN5HhdeHK4qBSRo46prRerfRJtg0zDYw5
-         7xt7FyO+K82zg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 762ACE85D53;
-        Wed,  6 Apr 2022 17:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 6 Apr 2022 15:21:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DFF27FC8F;
+        Wed,  6 Apr 2022 10:57:37 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236GnQo5000971;
+        Wed, 6 Apr 2022 17:57:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=EIZq0sEIJfeT9I1Gb/BlkG7lb68M6yMU1xY9qv8gko4=;
+ b=HCMx6RCatU8Mp6xEbENFmX+GMruYA+tG6wMu11gINCI2+9YsnTHg/QljyByAHTw3MSJl
+ 9uocU14EVTdeokB6f7IPOkcJZ2E4utRC7Ixh3M+kTFa2DBj2m1FEKe0vTOBuEvBrQkWo
+ 0CMncOqGt4sgUxdoMcrKfV02/h3ik805ihOlKaOg7RB9l8AvAutn49d7+bXF0lqgS5kf
+ xHVbyHi+4siDF2E/qKbogAmaPfk9ZZdeR8eznS2WT2gX1JefPj6PTWJilKH5G7/1JgJz
+ BEzgro8q+G5yCsW+7KULBiogpA4ASCiy50D7jDFoQMKFDXE+hXx6+Mv1UuuYG1hI0MfO jg== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f8ya1btrv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 17:57:27 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236HrDxV027660;
+        Wed, 6 Apr 2022 17:57:25 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3f6e4908sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Apr 2022 17:57:25 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236HvNPf35520920
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Apr 2022 17:57:23 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21BF44C044;
+        Wed,  6 Apr 2022 17:57:23 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0FD14C040;
+        Wed,  6 Apr 2022 17:57:17 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.211.90.125])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Apr 2022 17:57:17 +0000 (GMT)
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        disgoel@linux.vnet.ibm.com
+Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
+        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com
+Subject: [PATCH] testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
+Date:   Wed,  6 Apr 2022 23:27:15 +0530
+Message-Id: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v5 1/2] bpf: Support dual-stack sockets in
- bpf_tcp_check_syncookie
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164926441347.11980.16956318462962965009.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 17:00:13 +0000
-References: <20220406124113.2795730-1-maximmi@nvidia.com>
-In-Reply-To: <20220406124113.2795730-1-maximmi@nvidia.com>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        jakub@cloudflare.com, afabre@cloudflare.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, shuah@kernel.org, hawk@kernel.org,
-        tariqt@nvidia.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SWGsCKz1tXs5MUdS4yLCeeuWiySXqxwh
+X-Proofpoint-ORIG-GUID: SWGsCKz1tXs5MUdS4yLCeeuWiySXqxwh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-06_09,2022-04-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
+ phishscore=0 clxscore=1011 impostorscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204060087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,31 +84,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
+CPU set. This cpu set is used further in pthread_attr_setaffinity_np
+and by pthread_create in the code. But in current code, allocated
+cpu set is not freed. Fix this by adding CPU_FREE after its usage
+is done.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+---
+ tools/testing/selftests/mqueue/mq_perf_tests.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Wed, 6 Apr 2022 15:41:12 +0300 you wrote:
-> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
-> validates the address family of the socket. It supports IPv4 packets in
-> AF_INET6 dual-stack sockets.
-> 
-> On the other hand, bpf_tcp_check_syncookie looks only at the address
-> family of the socket, ignoring the real IP version in headers, and
-> validates only the packet size. This implementation has some drawbacks:
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v5,1/2] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
-    https://git.kernel.org/bpf/bpf/c/2e8702cc0cfa
-  - [bpf,v5,2/2] bpf: Adjust bpf_tcp_check_syncookie selftest to test dual-stack sockets
-    https://git.kernel.org/bpf/bpf/c/53968dafc4a6
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
+index b019e0b8221c..17c41f216bef 100644
+--- a/tools/testing/selftests/mqueue/mq_perf_tests.c
++++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
+@@ -732,6 +732,7 @@ int main(int argc, char *argv[])
+ 		pthread_attr_destroy(&thread_attr);
+ 	}
+ 
++	CPU_FREE(cpu_set);
+ 	if (!continuous_mode) {
+ 		pthread_join(cpu_threads[0], &retval);
+ 		shutdown((long)retval, "perf_test_thread()", __LINE__);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 
