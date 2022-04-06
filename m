@@ -2,169 +2,274 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A28B4F63D2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 17:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16ACD4F659F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 18:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236622AbiDFPt6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 11:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S237515AbiDFQbT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 12:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbiDFPse (ORCPT
+        with ESMTP id S237706AbiDFQai (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 11:48:34 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37754282532;
-        Wed,  6 Apr 2022 06:08:32 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KYPrK32NKz67xGv;
-        Wed,  6 Apr 2022 21:05:21 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 15:08:18 +0200
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
- 2022 14:08:17 +0100
-Date:   Wed, 6 Apr 2022 14:08:16 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 08/10] iio: light: vcnl4000: add roadtest
-Message-ID: <20220406140816.000038ce@Huawei.com>
-In-Reply-To: <20220405134805.GA28574@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
-        <20220311162445.346685-9-vincent.whitchurch@axis.com>
-        <20220320170253.5b946c84@jic23-huawei>
-        <20220405134805.GA28574@axis.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 6 Apr 2022 12:30:38 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F76941FD0A;
+        Tue,  5 Apr 2022 18:48:15 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V9JJspu_1649209690;
+Received: from 192.168.193.179(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V9JJspu_1649209690)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 06 Apr 2022 09:48:11 +0800
+Message-ID: <2bda020e-cc1b-ecf2-be23-9b7ed5d61945@linux.alibaba.com>
+Date:   Tue, 5 Apr 2022 18:48:09 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Dan Li <ashimida@linux.alibaba.com>
+Subject: Re: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
+To:     catalin.marinas@arm.com, will@kernel.org, keescook@chromium.org,
+        arnd@arndb.de, gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, shuah@kernel.org, mark.rutland@arm.com,
+        ojeda@kernel.org, akpm@linux-foundation.org, elver@google.com,
+        luc.vanoostenryck@gmail.com, samitolvanen@google.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Dan Li <ashimida@linux.alibaba.com>
+References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
+ <20220314135329.80621-1-ashimida@linux.alibaba.com>
+Content-Language: en-US
+In-Reply-To: <20220314135329.80621-1-ashimida@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 5 Apr 2022 15:48:05 +0200
-Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
+Hi Kees,
 
-> On Sun, Mar 20, 2022 at 06:02:53PM +0100, Jonathan Cameron wrote:
-> > Very interesting bit of work. My current approach for similar testing
-> > is to write a qemu model for the hardware, but that currently
-> > requires carefully crafted tests. Most of the time I'm only doing
-> > that to verify refactoring of existing drivers.   
-> 
-> Thank you for taking a look!
-> 
-> > One thing that makes me nervous here is the python element though
-> > as I've not written significant python in about 20 years.
-> > That is going to be a burden for kernel developers and maintainers...
-> > Nothing quite like badly written tests to make for a mess in the long run
-> > and I suspect my python for example would be very very badly written :)  
-> 
-> There's a bunch of static checkers to ensure that the code follows some
-> basic guidelines, and CI can check that the tests work consistently, and
-> also calculate metrics such as test execution time and code coverage, so
-> even non-idiomatic Python in the tests wouldn't be entirely broken.
-> 
-> And unlike driver code, if the tests for a particular driver later do
-> turn out to be bad (in what way?), we could just throw those particular
-> tests out without breaking anybody's system.
+Gentile ping for this :).
 
-True.  Though CI test triage folk may disagree ;)
+I also saw the discussion on llvm-project, use address of labels as a
+parameter doesn't seem to be stable.
 
-> 
-> > Cut and paste will of course get us a long way...  
-> 
-> Isn't some amount of copy/paste followed by modification to be expected
-> even if the framework is written in say C (just as there's already
-> copy/paste + modification involved when writing drivers)?
-> 
-> As for the core logic of individual driver tests excluding the framework
-> bits, I have a hard time imagining what Python syntax looks like to
-> someone with no knowledge of Python, so yes, I guess it's going to be
-> harder to review.
+Do we need to split it into two cases here?
 
-I messed around the other day with writing tests for
-drivers/staging/iio/cdc/ad7746.c and wasn't "too bad" and was useful for
-verifying some refactoring (and identified a possible precision problem
-in some integer approximation of floating point calcs)
-I'll try and find time to flesh that test set out more in the near future and
-post it so you can see how bad my python is. It amused my wife if nothing
-else :)
-
-However a future project is to see if I can use this to hook up the SPDM
-attestation stack via mctp over i2c - just because I like to live dangerously :)
-
-For IIO use more generally we need a sensible path to SPI (and also platform
-drivers).  For my day job I'd like to mess around with doing PCI devices
-as well.  The PCI DOE support for example would be nice to run against a
-test set that doesn't involve spinning up QEMU.
-DOE driver support:
-https://lore.kernel.org/all/20220330235920.2800929-1-ira.weiny@intel.com/
-
-Effort wise, it's similar effort to hacking equivalent in QEMU but with the
-obvious advantage of being in tree and simpler for CI systems etc to use.
-
-It would be nice to only have to use QEMU for complex system CI tests
-like the ones we are doing for CXL.
-
-> 
-> > I dream of a world where every driver is testable by people with out hardware
-> > but I fear it may be a while yet.  Hopefully this will get us a little
-> > closer!
-> > 
-> > I more or less follow what is going on here (good docs btw in the earlier
-> > patch definitely helped).
-> > 
-> > So far I'm thoroughly in favour of road test subject to actually being
-> > able to review the tests or getting sufficient support to do so.
-> > It's a 'how to scale it' question really...  
-> 
-> Would rewriting the framework in C and forcing tests to be written in
-> that language mean that maintainers would be able to review tests
-> without external support?
-
-I was wondering that.  If we stayed in python I think we'd definitely want
-someone to be the 'roadtester/tests' maintainer (or group of maintainers) 
-and their Ack to be expected for all tests we upstream.  Idea being they'd
-sanity check correct use of framework and just how bad the python code
-us C developers are writing is ;)
-
-However, we'd still need a good chunk of that 'framework' use review even
-if doing this in C.
-
-Anyhow, very promising bit of work.
+Link: https://github.com/llvm/llvm-project/issues/54328
 
 Thanks,
-
-Jonathan
-
+Dan
 
 
-
+On 3/14/22 06:53, Dan Li wrote:
+> Add tests for SCS (Shadow Call Stack) based backward CFI.
+> 
+> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+> ---
+>   arch/arm64/include/asm/compiler.h       | 18 ++++++
+>   drivers/misc/lkdtm/cfi.c                | 84 +++++++++++++++++++++++++
+>   drivers/misc/lkdtm/core.c               |  1 +
+>   drivers/misc/lkdtm/lkdtm.h              |  1 +
+>   include/linux/compiler-clang.h          |  1 +
+>   include/linux/compiler-gcc.h            |  2 +
+>   include/linux/compiler_types.h          |  4 ++
+>   tools/testing/selftests/lkdtm/tests.txt |  1 +
+>   8 files changed, 112 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
+> index dc3ea4080e2e..96590fb4a8de 100644
+> --- a/arch/arm64/include/asm/compiler.h
+> +++ b/arch/arm64/include/asm/compiler.h
+> @@ -8,6 +8,24 @@
+>   #define ARM64_ASM_PREAMBLE
+>   #endif
+>   
+> +#ifndef __ASSEMBLY__
+> +#ifdef __KERNEL__
+> +
+> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+> +
+> +#ifdef CONFIG_ARM64_BTI_KERNEL
+> +# define __no_ptrauth __attribute__((target("branch-protection=bti")))
+> +#elif defined(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET)
+> +# define __no_ptrauth __attribute__((target("branch-protection=none")))
+> +#elif defined(CONFIG_CC_HAS_SIGN_RETURN_ADDRESS)
+> +# define __no_ptrauth __attribute__((target("sign-return-address=none")))
+> +#endif
+> +
+> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
+> +
+> +#endif /* __KERNEL__ */
+> +#endif /* __ASSEMBLY__ */
+> +
+>   /*
+>    * The EL0/EL1 pointer bits used by a pointer authentication code.
+>    * This is dependent on TBI0/TBI1 being enabled, or bits 63:56 would also apply.
+> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+> index c9aeddef1044..468ba2f26f74 100644
+> --- a/drivers/misc/lkdtm/cfi.c
+> +++ b/drivers/misc/lkdtm/cfi.c
+> @@ -41,3 +41,87 @@ void lkdtm_CFI_FORWARD_PROTO(void)
+>   	pr_err("FAIL: survived mismatched prototype function call!\n");
+>   	pr_expected_config(CONFIG_CFI_CLANG);
+>   }
+> +
+> +#ifdef CONFIG_ARM64
+> +/*
+> + * This function is used to modify its return address. The PAC needs to be turned
+> + * off here to ensure that the modification of the return address will not be blocked.
+> + */
+> +static noinline __no_ptrauth
+> +void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if (*ret_addr == expected)
+> +		*ret_addr = addr;
+> +}
+> +
+> +/* Function with __noscs attribute attempts to modify its return address. */
+> +static noinline __no_ptrauth __noscs
+> +void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if (*ret_addr == expected)
+> +		*ret_addr = addr;
+> +}
+> +#else
+> +static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
+> +static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
+> +#endif
+> +
+> +static volatile unsigned int force_label;
+> +
+> +/*
+> + * This first checks whether a function with the __noscs attribute under
+> + * the current platform can directly modify its return address, and if so,
+> + * checks whether scs takes effect.
+> + */
+> +void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
+> +{
+> +	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
+> +
+> +	if (force_label && (force_label < sizeof(array))) {
+> +		/*
+> +		 * Call them with "NULL" first to avoid
+> +		 * arguments being treated as constants in -02.
+> +		 */
+> +		lkdtm_noscs_set_lr(NULL, NULL);
+> +		lkdtm_scs_set_lr(NULL, NULL);
+> +		goto *array[force_label];
+> +	}
+> +
+> +	/* Keep labels in scope to avoid compiler warnings. */
+> +	do {
+> +		/* Verify the "normal" condition of LR corruption working. */
+> +		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
+> +		lkdtm_noscs_set_lr(&&unexpected, &&expected);
+> +
+> +unexpected:
+> +		/*
+> +		 * If lr cannot be modified, the following check is meaningless,
+> +		 * returns directly.
+> +		 */
+> +		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
+> +		break;
+> +
+> +expected:
+> +		pr_info("ok: lr corruption redirected without scs.\n");
+> +
+> +		/* Verify that SCS is in effect. */
+> +		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
+> +		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
+> +
+> +good_scs:
+> +		pr_info("ok: scs takes effect.\n");
+> +		break;
+> +
+> +bad_scs:
+> +		pr_err("FAIL: return address rewritten!\n");
+> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+> +	} while (0);
+> +}
+> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+> index f69b964b9952..7af7268b82e4 100644
+> --- a/drivers/misc/lkdtm/core.c
+> +++ b/drivers/misc/lkdtm/core.c
+> @@ -178,6 +178,7 @@ static const struct crashtype crashtypes[] = {
+>   	CRASHTYPE(USERCOPY_KERNEL),
+>   	CRASHTYPE(STACKLEAK_ERASING),
+>   	CRASHTYPE(CFI_FORWARD_PROTO),
+> +	CRASHTYPE(CFI_BACKWARD_SHADOW),
+>   	CRASHTYPE(FORTIFIED_OBJECT),
+>   	CRASHTYPE(FORTIFIED_SUBOBJECT),
+>   	CRASHTYPE(FORTIFIED_STRSCPY),
+> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+> index d6137c70ebbe..a66fba949ab5 100644
+> --- a/drivers/misc/lkdtm/lkdtm.h
+> +++ b/drivers/misc/lkdtm/lkdtm.h
+> @@ -157,6 +157,7 @@ void lkdtm_STACKLEAK_ERASING(void);
+>   
+>   /* cfi.c */
+>   void lkdtm_CFI_FORWARD_PROTO(void);
+> +void lkdtm_CFI_BACKWARD_SHADOW(void);
+>   
+>   /* fortify.c */
+>   void lkdtm_FORTIFIED_OBJECT(void);
+> diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+> index 3c4de9b6c6e3..2db37db36651 100644
+> --- a/include/linux/compiler-clang.h
+> +++ b/include/linux/compiler-clang.h
+> @@ -68,3 +68,4 @@
+>   
+>   #define __nocfi		__attribute__((__no_sanitize__("cfi")))
+>   #define __cficanonical	__attribute__((__cfi_canonical_jump_table__))
+> +#define __no_optimize	__attribute__((optnone))
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index deff5b308470..28d1b0ec6656 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -162,3 +162,5 @@
+>   #if GCC_VERSION < 90100
+>   #undef __alloc_size__
+>   #endif
+> +
+> +#define __no_optimize	__attribute__((optimize("-O0")))
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 3c1795fdb568..f5ad83f7ea2f 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -257,6 +257,10 @@ struct ftrace_likely_data {
+>   # define __nocfi
+>   #endif
+>   
+> +#ifndef __no_ptrauth
+> +# define __no_ptrauth
+> +#endif
+> +
+>   #ifndef __cficanonical
+>   # define __cficanonical
+>   #endif
+> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+> index 6b36b7f5dcf9..12df67a3b419 100644
+> --- a/tools/testing/selftests/lkdtm/tests.txt
+> +++ b/tools/testing/selftests/lkdtm/tests.txt
+> @@ -73,6 +73,7 @@ USERCOPY_STACK_BEYOND
+>   USERCOPY_KERNEL
+>   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+>   CFI_FORWARD_PROTO
+> +CFI_BACKWARD_SHADOW ok: scs takes effect
+>   FORTIFIED_STRSCPY
+>   FORTIFIED_OBJECT
+>   FORTIFIED_SUBOBJECT
