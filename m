@@ -2,81 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224974F69BA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 21:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E784F6B67
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 22:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiDFTX3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 15:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S234810AbiDFU3v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 16:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiDFTVc (ORCPT
+        with ESMTP id S232113AbiDFU3a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:21:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DFF27FC8F;
-        Wed,  6 Apr 2022 10:57:37 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 236GnQo5000971;
-        Wed, 6 Apr 2022 17:57:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=EIZq0sEIJfeT9I1Gb/BlkG7lb68M6yMU1xY9qv8gko4=;
- b=HCMx6RCatU8Mp6xEbENFmX+GMruYA+tG6wMu11gINCI2+9YsnTHg/QljyByAHTw3MSJl
- 9uocU14EVTdeokB6f7IPOkcJZ2E4utRC7Ixh3M+kTFa2DBj2m1FEKe0vTOBuEvBrQkWo
- 0CMncOqGt4sgUxdoMcrKfV02/h3ik805ihOlKaOg7RB9l8AvAutn49d7+bXF0lqgS5kf
- xHVbyHi+4siDF2E/qKbogAmaPfk9ZZdeR8eznS2WT2gX1JefPj6PTWJilKH5G7/1JgJz
- BEzgro8q+G5yCsW+7KULBiogpA4ASCiy50D7jDFoQMKFDXE+hXx6+Mv1UuuYG1hI0MfO jg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f8ya1btrv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:57:27 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 236HrDxV027660;
-        Wed, 6 Apr 2022 17:57:25 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3f6e4908sx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Apr 2022 17:57:25 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 236HvNPf35520920
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Apr 2022 17:57:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21BF44C044;
-        Wed,  6 Apr 2022 17:57:23 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0FD14C040;
-        Wed,  6 Apr 2022 17:57:17 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.211.90.125])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  6 Apr 2022 17:57:17 +0000 (GMT)
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        disgoel@linux.vnet.ibm.com
-Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com
-Subject: [PATCH] testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
-Date:   Wed,  6 Apr 2022 23:27:15 +0530
-Message-Id: <20220406175715.87937-1-atrajeev@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 6 Apr 2022 16:29:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FD83588A9
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 11:51:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2012FCE2523
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 18:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDC7C385A3;
+        Wed,  6 Apr 2022 18:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649271065;
+        bh=2fT+20Z739gNXrMUeQltBNML4IctEm0mvhoLD0BqRsY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XSiP2cDt1x0DqNO2Zkcw/tFGQnVFNVwo+wo36rzGp9fKkEZdMtEM25bZcYVWSy6gd
+         MrZlVB+fddCQ/0nqJUZ5jIh/a2eBXR2NeDllcrJanw7oZYg4xl+w9A4729bk/nqjln
+         CMKsgZCcibH2Fnln0QAkjSu8vKyH/Bq0byanmZ6j7TmaZEXlz1IcKel5ZMn55Gnk7K
+         D5y5OwOHdswAQ6VccJLrwsJ4MzmqaEhUhB5jc1gxvXE48C247v8jqCF/gK2DeOeYZh
+         60Wak0CcIlGHFbvU1LVUCYhG7OIuPy5ndy/aY1/GUsbaABdidnwynV+3ZuwZedd3ti
+         FpIpN14uWXe9A==
+Date:   Wed, 6 Apr 2022 19:50:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     Catalin Marinas <Catalin.Marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <Alan.Hayward@arm.com>,
+        Luis Machado <Luis.Machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant KumarDwivedi <Basant.KumarDwivedi@arm.com>,
+        James Morse <James.Morse@arm.com>,
+        Alexandru Elisei <Alexandru.Elisei@arm.com>,
+        Suzuki Poulose <Suzuki.Poulose@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>
+Subject: Re: [PATCH v12 06/40] arm64/sme: Provide ABI documentation for SME
+Message-ID: <Yk3hDLe8Cce8zkvI@sirena.org.uk>
+References: <20220225165923.1474372-1-broonie@kernel.org>
+ <20220225165923.1474372-7-broonie@kernel.org>
+ <20220311172051.GA257833@arm.com>
+ <YiuYMcR8zk73eBLo@sirena.org.uk>
+ <YkXRUlaoyDKQqndc@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SWGsCKz1tXs5MUdS4yLCeeuWiySXqxwh
-X-Proofpoint-ORIG-GUID: SWGsCKz1tXs5MUdS4yLCeeuWiySXqxwh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-06_09,2022-04-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
- phishscore=0 clxscore=1011 impostorscore=0 spamscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204060087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="H1j3yX+RCi/MNkHL"
+Content-Disposition: inline
+In-Reply-To: <YkXRUlaoyDKQqndc@arm.com>
+X-Cookie: Look ere ye leap.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +73,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
-CPU set. This cpu set is used further in pthread_attr_setaffinity_np
-and by pthread_create in the code. But in current code, allocated
-cpu set is not freed. Fix this by adding CPU_FREE after its usage
-is done.
 
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
----
- tools/testing/selftests/mqueue/mq_perf_tests.c | 1 +
- 1 file changed, 1 insertion(+)
+--H1j3yX+RCi/MNkHL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-index b019e0b8221c..17c41f216bef 100644
---- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-+++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-@@ -732,6 +732,7 @@ int main(int argc, char *argv[])
- 		pthread_attr_destroy(&thread_attr);
- 	}
- 
-+	CPU_FREE(cpu_set);
- 	if (!continuous_mode) {
- 		pthread_join(cpu_threads[0], &retval);
- 		shutdown((long)retval, "perf_test_thread()", __LINE__);
--- 
-2.35.1
+On Thu, Mar 31, 2022 at 04:05:38PM +0000, Szabolcs Nagy wrote:
 
+> i think it's slightly better to treat ZA like TPIDR2,
+> so only clear if CLONE_SETTLS is set.
+
+> otherwise in principle the child can return to the frame
+> where ZA was used and expect it to work (it's hard to
+> come up with a reason why would some code do that, but
+> this is valid in a single-threaded fork child).
+
+=46rom an implementation point of view it's a bit clearer if we just
+always preserve PSTATE.ZA and ZA contents on clone() and clear them on
+exec.  Do you see a problem with that?
+
+--H1j3yX+RCi/MNkHL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJN4QsACgkQJNaLcl1U
+h9D/0Af/X1DilGAOK3sriwKJp5fLyyuDLxIFTmLf9TjhEV4uEC9eB8UJsletqocL
++v7AV/5HwBHKEgvMsbfwpGseBv50gcsQDFsqoW7oxanOYYqzM8HRYoLnDWdficvJ
+1wWCX6YKDmMAwk1l0RxACHCWEa2kUP2DBP+R9hM0AQxJJA7TLp3uynOSpiTTFj/G
+XYiKrekc9LKiFYK75M9M0pmdN5yU0vRUVMoM5ktKxoyGwrM6ti6TGHOR4i9MWcMr
+oYZhizp9w4mkngBuOSYyx/hXmrzonZ2czTAoDER0BMjkVyyCD8GiVE/o6zAJnZ5x
+vbmt37o9xQoZ52+YJfzipOm70jAZow==
+=KTCH
+-----END PGP SIGNATURE-----
+
+--H1j3yX+RCi/MNkHL--
