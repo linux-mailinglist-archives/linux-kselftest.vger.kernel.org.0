@@ -2,111 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45204F54F6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 07:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8324F54E7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 07:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiDFFXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 01:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S243605AbiDFFVI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 01:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1850378AbiDFCwO (ORCPT
+        with ESMTP id S1390337AbiDFDEn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:52:14 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66054181149;
-        Tue,  5 Apr 2022 16:52:16 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e22so1074856ioe.11;
-        Tue, 05 Apr 2022 16:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
-        b=qP2Je91cC5X9wuYLjZp8TH9PNetiSDkDUC4K9LVY0XsP70Z0P360X7QBCcp544wpWn
-         uj80MoZx+E/whCCVsJBl7bHFLs4zX9YT1v0DtGIo2TXQVILm6wSdrAYbxEVLaPSpMPRG
-         SIKIBtv9TFPsCcXbNOHKCqINnfCryFkkOuEUG17CZIPI7EC5N++bXiQLtbGUwI3G1ktC
-         B4WGJJrB9L4fEuvWaEKUmpTr1MxaOMVrexGTVXwlaRX188e8xQqjFFpGQ/W7Qw+DtTJ8
-         44qAfRFH+M9VBi0NFgLYpeT8wWfgUW7inCLoeNUEeDAjzmUxiUZdp/P9BBnkLKTi4zUx
-         rLGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
-        b=jdmo3pXGSLArTYozWH56R61Sa9Vm8CKn635zT3jwKfS6G9VwiGq4bMj1JGW9CWrIOC
-         zgZE0A9nu4gni9LSjQ04SWMPAmBsI/0DMPKKQASMPPCisp5MjyHQ3OVKnXvS+lqqBhS+
-         IrIYLQVlyQjkeQ4lU7+8XZ69SKvya7elwuXCydLM6ftV8DChQHldjiNBt0U9hOzzTghu
-         zgzsrQ11B6JFK79XWsA7ObyiiZ9KImBdGY/V8b5H7bePn8uc3LvbObG+OH182xmkd5GF
-         x+uP2goSxS/RGteWy1y61OHLobZTJLr6OzQySzcsXDJkaS7ybD0Hb2RqDeoxLXNZRB9T
-         nwPA==
-X-Gm-Message-State: AOAM533CEvHxR5iN4a6VcaGJ1GLQ7vWPtbG4Rz4rjPUfl+VRlZB4EMAP
-        bG9KOKVZeuBjyzxtK3lQd+zE4KQgH8bLN7SuFRw=
-X-Google-Smtp-Source: ABdhPJw6QDEx6357RD8/tWoPiOfZM+DJ9CdKHEhzqAWEeOUPTScS2FluYFnoR+Xgdc6Cy4lLB2keEra95hY1Z8CnTU4=
-X-Received: by 2002:a05:6638:772:b0:319:e4eb:adb with SMTP id
- y18-20020a056638077200b00319e4eb0adbmr3287706jad.237.1649202733374; Tue, 05
- Apr 2022 16:52:13 -0700 (PDT)
+        Tue, 5 Apr 2022 23:04:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BD33E07;
+        Tue,  5 Apr 2022 17:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCA06153E;
+        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B6B5C385A1;
+        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649203214;
+        bh=KMNIOTy7tQqMiQJt2a1NiAN3Cf5KwEY7COeHi3Y3npQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WY3GCFkU9JF3B4v5HSCFdz0Gj1g3tb96D7PZJkiSm3vvC8jb4MWHldVEgv5bCarKh
+         FWQCvugxZ2/CJSFokNg9fa9+Hgivxt8yKUATeDfmS/qrTyAEFf2bzVv73Qyz8tTQmd
+         wV32dqGQxfQP6I+vUAWitf0/Fu8a5GWZ+W+O3SjU03jfpTzmIPE0DzxD+79U/Mamls
+         smqmtdr/Bvo2LEC6L8pXtT6x62lQUBUDe0+CpAL1stRKfhEU1ZMsz+691auXyuZHM3
+         7TNBTaLkX2QOSi+7vwLyYimeZf/XStjOuJcZHj/p6CRltTsVivnrOoHA/zHGyBJIfx
+         Fk1tgNG+yQunw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5D48E6D402;
+        Wed,  6 Apr 2022 00:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220405163728.56471-1-ytcoode@gmail.com>
-In-Reply-To: <20220405163728.56471-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 16:52:02 -0700
-Message-ID: <CAEf4BzZLw-QeXgb1HRR-b3D5NqQRs_iqOFcZmokvmf6rXTy-iw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix file descriptor leak in
+ load_kallsyms()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164920321379.789.15662598832496347807.git-patchwork-notify@kernel.org>
+Date:   Wed, 06 Apr 2022 00:00:13 +0000
+References: <20220405145711.49543-1-ytcoode@gmail.com>
+In-Reply-To: <20220405145711.49543-1-ytcoode@gmail.com>
 To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 9:39 AM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> The checks preceding CHECK macro are redundant, remove them.
->
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Tue,  5 Apr 2022 22:57:11 +0800 you wrote:
+> Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
+> 
 > Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> index 16048978a1ef..5f2ab720dabd 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> @@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
->                         good_user_stack = true;
->         }
->
-> -       if (!good_kern_stack)
-> -           CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-> -       if (!good_user_stack)
-> -           CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
-> +       CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-> +       CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
+>  tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-I suspect it was to avoid super long verbose logs, as each CHECK()
-emits one line into output and here we might be getting a lot of
-samples. So let's keep it as is. But for the future let's try getting
-rid of CHECK()s as much as possible in favor of ASSERT_xxx(). Thanks.
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Fix file descriptor leak in load_kallsyms()
+    https://git.kernel.org/bpf/bpf-next/c/2d0df01974ce
 
->  }
->
->  void test_get_stack_raw_tp(void)
-> --
-> 2.35.1
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
