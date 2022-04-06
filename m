@@ -2,116 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460F74F65E3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 18:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F914F66BD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Apr 2022 19:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238299AbiDFQxo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 12:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S238419AbiDFRLa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Apr 2022 13:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238103AbiDFQx2 (ORCPT
+        with ESMTP id S238604AbiDFRK4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:53:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3253D2735BF
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 07:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649254648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=l/rlayWAz6LIN8DHFEn/JZ+tDFeU/OUyuaiK0vcp1d4=;
-        b=e6G65m0XPvSRBL/rCF8GqURdpgmBoah63Msx1fVZvv1O5MQG4ooD5MLbiCMsK5SdnCdeEP
-        FRrbZRVF+baX8eepk9x4701YqDGueAni4jLmTbehO9qHvL2Dh9TesO+l0IpU56LZXw6lKb
-        laM8V1i3QzvI9LzgnsItNyDQ9LcdVaM=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-yz8nV7xpORyfp4N2CLimrg-1; Wed, 06 Apr 2022 10:17:27 -0400
-X-MC-Unique: yz8nV7xpORyfp4N2CLimrg-1
-Received: by mail-lf1-f70.google.com with SMTP id x36-20020a056512132400b0044b07b24746so904736lfu.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Apr 2022 07:17:26 -0700 (PDT)
+        Wed, 6 Apr 2022 13:10:56 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE4B6D95A;
+        Wed,  6 Apr 2022 07:32:39 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id v13so1994171ilg.5;
+        Wed, 06 Apr 2022 07:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rtcILSQF44uh8cnztYzUbajRwvfrsHBjFfoA7i11kT0=;
+        b=J/y72/m/tDZLGATSG7PMC/Be5SWiygEyXZi+yFdmV5bf0o1pilW9YReIEjbG889wF1
+         kwUeUSDzal5gGs0spz6FFsi7U5VbCiof7h3Az980jv7no9J1tvpD/uR6rb0vvh9bv97g
+         A8KQXczl/FfbpoEC8t0gp9HAx3+Dg4fAbpEl/m+Nw1BSQ2qFrV/eIpfYyzQbPLOqeZii
+         JrWIn9FdfCl4UPyrylVPZppJvtn8VVsz2dmZMEqICx5ttq7W3adbdvWg1b075aI0qSm6
+         fmQ+ONAVsjknCCfV6itfm2YjnAroHCvJFwn1HpD/mZPzEJduHhh+R8OYJiF1lFm9lLeo
+         zFDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=l/rlayWAz6LIN8DHFEn/JZ+tDFeU/OUyuaiK0vcp1d4=;
-        b=MwC88A1F3U8ctSJhIEqDXd3N/eH8P4eJnP36n2QMpzmwlrGKGQikl4bHA3RKaGHeco
-         XMjZGka/rY2YtMmKolpux3bnQ5i/swUsLs4H3GQ4LeIblBXbRWcnC/syPdj5d/nvh/qU
-         UaA7RysCTfedvLf6R4scSSPRtpddqBZFtqxZ9xbQc755vrP0woxzEaq8F7CsA+5V0pvr
-         xpRO3lW0LAqTBgd3pAAmsDm6so/+vUF8E8ponUBQ1lwDDXL0zv+TKUv2ELxWh18BGewm
-         lF2QWbkt1aSikaYwP9begXbtP3rMcTGgaGqv2gyOky/DVTCNy4chxnZP639hvCuQvmor
-         pqlg==
-X-Gm-Message-State: AOAM533oYmdZKvIlxkM5l2LB+l1mFNLy2ZK/nQ+BBRhQ4Od3ot2PTH02
-        BZYHcSualzyFS0b0zEQchkuXUQLA79dFNgecBNxJW7TrqOWeMMNIvRhTqrw4lpNiE3tMH3CUUp6
-        qfDxX7Hbcv5qRCMiNMozFbqFmXz153zSTG1aJs/doEKBS
-X-Received: by 2002:a05:6512:b92:b0:44b:36d:27e0 with SMTP id b18-20020a0565120b9200b0044b036d27e0mr6199616lfv.537.1649254645246;
-        Wed, 06 Apr 2022 07:17:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwULjqchBcfxtC/ML8Q9nEv0WuwPD5Jvo5RUPMEfprUIeVSvIf6Th+CwqiwMRk9yvgXvAH43CYwCtwQitBMo/M=
-X-Received: by 2002:a05:6512:b92:b0:44b:36d:27e0 with SMTP id
- b18-20020a0565120b9200b0044b036d27e0mr6199560lfv.537.1649254644042; Wed, 06
- Apr 2022 07:17:24 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rtcILSQF44uh8cnztYzUbajRwvfrsHBjFfoA7i11kT0=;
+        b=HTtjJ+UTo0Ptq1OxxeHumnWwOnn4HSBJKycc2QcES/qp9DrqlhCme4JZpcy6dCgCJZ
+         GeWju7bpWSyOd1eUXVrwaHfJ0qUmiWpsAINZLBfdp6+OYgHTT4jBDuJYT1E7VCzJSB+c
+         WPzBRXDfvmb76Nb0GEOzHHlWUKmnsBhU9A3Rbgwmnd/9NO9CcqXXe8V4zZkVFPmBy7ov
+         tmXQ+9Zu4fs9y5wA1Ih+WP9hdbC7YrSC7LBURutEzVBx+vo5+1j/StGlSXHhjGUXoq++
+         x3sLX/WPZ0JLRaahs8/ijUoUbsTGlR/VWuiZSq41tlnKkNyrceSwGwAFksQL3IgxagO0
+         XwxQ==
+X-Gm-Message-State: AOAM532E+uMUxR/9FDXIBXxU4YHs/bxlaRpiFAqaQ7cWgt9wCmCACLGu
+        Qsd3Q0NiG4ieKToYfAdoMgDoSTRinMoPiWN/k4nePa0xd/0zQg==
+X-Google-Smtp-Source: ABdhPJxU/Z0r802Uvc9FLtIdwBiCzCqf+EBVnJnv8KLOSqlgTSGYMkeIMTKLQDx7DX6Ikkf7ArsVmFqWrwPCgm/LoBc=
+X-Received: by 2002:a05:6e02:1889:b0:2ca:2105:78 with SMTP id
+ o9-20020a056e02188900b002ca21050078mr4524239ilu.6.1649255558536; Wed, 06 Apr
+ 2022 07:32:38 -0700 (PDT)
 MIME-Version: 1.0
-From:   Bruno Goncalves <bgoncalv@redhat.com>
-Date:   Wed, 6 Apr 2022 16:17:13 +0200
-Message-ID: <CA+QYu4omi2irqUpDi_3POT8djdgg3q0ZVujdE1jfLPwsTxjB5w@mail.gmail.com>
-Subject: =?UTF-8?Q?special=5Finsns=2Eh=3A36=3A9=3A_error=3A_array_subscript_0_is_ou?=
-        =?UTF-8?Q?tside_array_bounds_of_=E2=80=98unsigned_int=5B0=5D=E2=80=99_=5B=2DWerror=3Darray=2Db?=
-        =?UTF-8?Q?ounds=5D?=
-To:     linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     CKI Project <cki-project@redhat.com>
+References: <20220405130858.12165-1-laoar.shao@gmail.com> <CAEf4BzaEF013kPkV=gkN6fw7e9hO_h0MLWuDbx4Qd68ZCr=5pw@mail.gmail.com>
+In-Reply-To: <CAEf4BzaEF013kPkV=gkN6fw7e9hO_h0MLWuDbx4Qd68ZCr=5pw@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Wed, 6 Apr 2022 22:32:02 +0800
+Message-ID: <CALOAHbB2tsrcx5LZbrxJ8LZQW7dSCrD7ErKx4HRXj2i29Pq9Ew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 00/27] bpf: RLIMIT_MEMLOCK cleanups
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Wed, Apr 6, 2022 at 4:53 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Apr 5, 2022 at 6:09 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> >
+> > We have switched to memcg based memory accouting and thus the rlimit is
+> > not needed any more. LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK was introduced in
+> > libbpf for backward compatibility, so we can use it instead now.
+> >
+> > This patchset cleanups the usage of RLIMIT_MEMLOCK in tools/bpf/,
+> > tools/testing/selftests/bpf and samples/bpf. The file
+> > tools/testing/selftests/bpf/bpf_rlimit.h is removed. The included header
+> > sys/resource.h is removed from many files as it is useless in these files.
+> >
+> > - v3: Get rid of bpf_rlimit.h and fix some typos (Andrii)
+> > - v2: Use libbpf_set_strict_mode instead. (Andrii)
+> > - v1: https://lore.kernel.org/bpf/20220320060815.7716-2-laoar.shao@gmail.com/
+> >
+> > Yafang Shao (27):
+> >   bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+> >     xdping
+> >   bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+> >     xdpxceiver
+> >   bpf: selftests: No need to include bpf_rlimit.h in test_tcpnotify_user
+> >   bpf: selftests: No need to include bpf_rlimit.h in flow_dissector_load
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in
+> >     get_cgroup_id_user
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in
+> >     test_cgroup_storage
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in
+> >     get_cgroup_id_user
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lpm_map
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lru_map
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in
+> >     test_skb_cgroup_id_user
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock_addr
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sockmap
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sysctl
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tag
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in
+> >     test_tcp_check_syncookie_user
+> >   bpf: selftests: Set libbpf 1.0 API mode explicitly in
+> >     test_verifier_log
+> >   bpf: samples: Set libbpf 1.0 API mode explicitly in hbm
+> >   bpf: selftests: Get rid of bpf_rlimit.h
+> >   bpf: selftests: No need to include sys/resource.h in some files
+> >   bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+> >     xdpsock_user
+> >   bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+> >     xsk_fwd
+> >   bpf: samples: No need to include sys/resource.h in many files
+> >   bpf: bpftool: Remove useless return value of libbpf_set_strict_mode
+> >   bpf: bpftool: Set LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK for legacy libbpf
+> >   bpf: bpftool: remove RLIMIT_MEMLOCK
+> >   bpf: runqslower: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
+> >
+>
+> Hey Yafang, thanks for the clean up! It looks good, but please make it
+> a bit more manageable in terms of number of patches. There is no need
+> to have so many tiny patches. Can you squash together all the
+> samples/bpf changes into one patch, all the selftests/bpf changes into
+> another, bpftool ones still can be just one patch. runqslower makes
+> sense to keep separate. Please also use customary subject prefixes for
+> those: "selftests/bpf: ", "bpftool: ", "samples/bpf: ". For runqslower
+> probably "tools/runqslower: " would be ok as well.
+>
 
-Trying to build mainline kernel with gcc12 and selftests we get the
-following error:
+Thanks for your suggestion. I will change it.
 
-00:01:22 In function =E2=80=98native_read_cr2=E2=80=99,
-00:01:22     inlined from =E2=80=98vmx_vcpu_enter_exit=E2=80=99 at
-arch/x86/kvm/vmx/vmx.c:6772:24:
-00:01:22 ./arch/x86/include/asm/special_insns.h:36:9: error: array
-subscript 0 is outside array bounds of =E2=80=98unsigned int[0]=E2=80=99
-[-Werror=3Darray-bounds]
-00:01:22    36 |         asm volatile("mov %%cr2,%0\n\t" : "=3Dr" (val)
-: __FORCE_ORDER);
-00:01:22       |         ^~~
-00:01:22 In function =E2=80=98native_read_cr2=E2=80=99,
-00:01:22     inlined from =E2=80=98vmx_vcpu_enter_exit=E2=80=99 at
-arch/x86/kvm/vmx/vmx.c:6778:19:
-00:01:22 ./arch/x86/include/asm/special_insns.h:36:9: error: array
-subscript 0 is outside array bounds of =E2=80=98unsigned int[0]=E2=80=99
-[-Werror=3Darray-bounds]
-00:01:22    36 |         asm volatile("mov %%cr2,%0\n\t" : "=3Dr" (val)
-: __FORCE_ORDER);
-00:01:22       |         ^~~
-00:01:22 cc1: all warnings being treated as errors
-00:01:22 make[4]: *** [scripts/Makefile.build:288:
-arch/x86/kvm/vmx/vmx.o] Error 1
-00:01:22 make[3]: *** [scripts/Makefile.build:550: arch/x86/kvm] Error 2
-
-
-Full build log:
-https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawa=
-rehouse-public/2022/04/05/509694021/build_x86_64_redhat:2295283495/build.lo=
-g
-
-build config: https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse=
--public/datawarehouse-public/2022/04/05/509694021/build_x86_64_redhat:22952=
-83495/kernel-mainline.kernel.org-x86_64-3e732ebf7316ac83e8562db7e64cc68aec3=
-90a18.config
-
-Thanks,
-Bruno Goncalves
-
+-- 
+Thanks
+Yafang
