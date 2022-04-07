@@ -2,102 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35974F874F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 20:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388574F8799
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 21:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbiDGSsC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Apr 2022 14:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S233437AbiDGTDM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 15:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346961AbiDGSrf (ORCPT
+        with ESMTP id S229561AbiDGTDL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:47:35 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BC31AE
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 11:45:33 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id z6so8005877iot.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 11:45:33 -0700 (PDT)
+        Thu, 7 Apr 2022 15:03:11 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B09322C6E5
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 12:01:06 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id q11so7971531iod.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 12:01:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6Ji4YlYFHVDR0gxdj/6jpb0FghGwzOywEFt8q/52gXM=;
-        b=QqSdyP3Dq30pUUzEmwW5hyQ4pc+G9DSDB01FoJsLcJ8OLSMzmuJX66C7O08kVxI5GR
-         GP47x+r279qwgojRznD4Ox6yInvx/ZYvGYeDOkdgkAcuFWBBJzjGCpxsvSmAO77Mabnv
-         2y/OMqdsdW1fDw1aqPJ9itZ4+RiSioZcqunX8=
+        bh=keVkYj4cWaI4gay87MdL0AahO7PaN4KeF2eJUm3V5FQ=;
+        b=bJx6W9C91GXHZT9WZmR5uDci7uh5rihNKWqmcZX88RTvcFDWcennu7TEZgFHORE0o5
+         Sih/OiecaC+yPBT1oUXlgYv4Thkp3gG2s1+O1pF9KogW+eHi2GYSo6vwUN0wYrwPG3Ls
+         d0JJ9Qy1LuKY4eLK/uh5sCTBRurXSZkClGXzE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6Ji4YlYFHVDR0gxdj/6jpb0FghGwzOywEFt8q/52gXM=;
-        b=6baLxInuKJfXfa4jkEZy4k5a8V2fGKW3HE3ZuyGdYEOXMLgdXvc+/U6AfSKQ5sqp4k
-         VHSWjkw0tb0E3KmaiD1GB37Ixz43YLay7Mnouc7C3FOYtqO4G/+2d7O1vk2Kr0ZFVH0A
-         gwhZUb5F4IK0+CUjwFnaRlKQT0OZrwt+ml/bNhgADjQAVYApM4XDQfFW6WE0YEbfC647
-         vj/KlV1csLRchLfJWTKZ+5nIYSqOu72sRXHKg7q3OVn9TC7onansbrFrYQH4RXZS40yS
-         2+ounhN3KBjvSsYa8h+dLF5jixoLCecga8ONBrxBMdyHmaNTlz/i3CWv8WBFixSinaAA
-         IFjg==
-X-Gm-Message-State: AOAM533aGBHVjz5tHXq9Q7wjTfO3vBEaeYqWYiIBATCKPE1lJtDYNbcp
-        pUDJNmVLHoXF3zBSVWVKYv6rzA==
-X-Google-Smtp-Source: ABdhPJwgU4mSkmGOP4lzd2vZXXDmbmz/CKWESrQlvZqHqyu743d967VGiNZihTjDEIKxeEg/WxKIQw==
-X-Received: by 2002:a05:6602:154d:b0:64c:5fab:4076 with SMTP id h13-20020a056602154d00b0064c5fab4076mr6828405iow.169.1649357133271;
-        Thu, 07 Apr 2022 11:45:33 -0700 (PDT)
+        bh=keVkYj4cWaI4gay87MdL0AahO7PaN4KeF2eJUm3V5FQ=;
+        b=6eFob/vRatKTuk1kYULsLiaAU8Wnl0e08ZJV4gCJ9lJJguzdQlLZYTarR3A4Uz9ovX
+         UQXA2md5xCH9VzGlO+DPsKLt7fJR2K3+J0BkvBi8r5c1IVyx5P/r4AUt1jBXOkX0F2y9
+         UobtHI3ajDB4VcmTeKPfnwGTzmozHgM3Yyf9TBGLsHmrgVnCEJfDwascZzsVqjQb9RP0
+         kxcoEMs4WFB8ZPXvKh8bw6IxOjnroJyXLHT9kS1yNK1l7tn60EXP8MSlcKQBtmKsUemB
+         bohPOMdBZVTVpEBywiTqiuQylt3a9gZYH2Gj5mqwP8JnU40a/caIhEqBwmzLgAEdYYIN
+         SM+Q==
+X-Gm-Message-State: AOAM530+of6nEdCbX0nzorrVd+yrhEIubz6hT+rlhoK/lA1/FebmvFUh
+        CgDR/VnYgQ6/iBqTioZyRKEAn4shK8KFTA==
+X-Google-Smtp-Source: ABdhPJxGOZ2BJ+RHSzRcbdkCNemhvmf9CaBqWrCb2/N1joKqeDq2ON7aDkwhDmdeCC+ElIarNR2UwQ==
+X-Received: by 2002:a05:6638:d87:b0:323:c006:3650 with SMTP id l7-20020a0566380d8700b00323c0063650mr7872341jaj.64.1649358065787;
+        Thu, 07 Apr 2022 12:01:05 -0700 (PDT)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d85d2000000b00649254a855fsm12811819ios.26.2022.04.07.11.45.32
+        by smtp.gmail.com with ESMTPSA id k5-20020a6bf705000000b00649a2634725sm13146036iog.17.2022.04.07.12.01.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:45:32 -0700 (PDT)
-Subject: Re: [PATCH] userfaultfd/selftests: use swap() instead of open coding
- it
-To:     Guo Zhengkui <guozhengkui@vivo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     zhengkui_guo@outlook.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220407123141.4998-1-guozhengkui@vivo.com>
+        Thu, 07 Apr 2022 12:01:05 -0700 (PDT)
+Subject: Re: [PATCH V2] testing/selftests/mqueue: Fix mq_perf_tests to free
+ the allocated cpu set
+To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, disgoel@linux.vnet.ibm.com
+Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
+        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220407184008.93879-1-atrajeev@linux.vnet.ibm.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <059030d7-657a-6403-ae75-3314f790afa3@linuxfoundation.org>
-Date:   Thu, 7 Apr 2022 12:45:31 -0600
+Message-ID: <e9c8a8c7-9a0d-09be-343d-038b7f791b98@linuxfoundation.org>
+Date:   Thu, 7 Apr 2022 13:01:04 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220407123141.4998-1-guozhengkui@vivo.com>
+In-Reply-To: <20220407184008.93879-1-atrajeev@linux.vnet.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/7/22 6:31 AM, Guo Zhengkui wrote:
-> Address the following coccicheck warning:
+On 4/7/22 12:40 PM, Athira Rajeev wrote:
+> The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
+> CPU set. This cpu set is used further in pthread_attr_setaffinity_np
+> and by pthread_create in the code. But in current code, allocated
+> cpu set is not freed.
 > 
-> tools/testing/selftests/vm/userfaultfd.c:1536:21-22: WARNING opportunity
-> for swap().
-> tools/testing/selftests/vm/userfaultfd.c:1540:33-34: WARNING opportunity
-> for swap().
+> Fix this issue by adding CPU_FREE in the "shutdown" function which
+> is called in most of the error/exit path for the cleanup. Also add
+> CPU_FREE in some of the error paths where shutdown is not called.
 > 
-> by using swap() for the swapping of variable values and drop
-> `tmp_area` that is not needed any more.
+> Fixes: 7820b0715b6f ("tools/selftests: add mq_perf_tests")
+> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+> ---
+> Changelog:
+>  From v1 -> v2:
+>   Addressed review comment from Shuah Khan to add
+>   CPU_FREE in other exit paths where it is needed
 > 
-> `swap()` macro in userfaultfd.c is introduced in commit 681696862bc18
-> ("selftests: vm: remove dependecy from internal kernel macros")
-> 
-> It has been tested with gcc (Debian 8.3.0-6) 8.3.0.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-Looks good.
+Thank you. I have a couple of comments on making the error
+paths simpler. Please see below.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>   tools/testing/selftests/mqueue/mq_perf_tests.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
+> index b019e0b8221c..182434c7898d 100644
+> --- a/tools/testing/selftests/mqueue/mq_perf_tests.c
+> +++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
+> @@ -180,6 +180,9 @@ void shutdown(int exit_val, char *err_cause, int line_no)
+>   	if (in_shutdown++)
+>   		return;
+>   
+> +	/* Free the cpu_set allocated using CPU_ALLOC in main function */
+> +	CPU_FREE(cpu_set);
+> +
+>   	for (i = 0; i < num_cpus_to_pin; i++)
+>   		if (cpu_threads[i]) {
+>   			pthread_kill(cpu_threads[i], SIGUSR1);
+> @@ -589,6 +592,7 @@ int main(int argc, char *argv[])
+>   						cpu_set)) {
+>   					fprintf(stderr, "Any given CPU may "
+>   						"only be given once.\n");
+> +					CPU_FREE(cpu_set);
+
+This could be done in a common error path handling.
+
+>   					exit(1);
+>   				} else
+>   					CPU_SET_S(cpus_to_pin[cpu],
+> @@ -607,6 +611,7 @@ int main(int argc, char *argv[])
+>   				queue_path = malloc(strlen(option) + 2);
+>   				if (!queue_path) {
+>   					perror("malloc()");
+> +					CPU_FREE(cpu_set);
+
+This could be done in a common error path handling.
+
+>   					exit(1);
+>   				}
+>   				queue_path[0] = '/';
+> @@ -619,6 +624,7 @@ int main(int argc, char *argv[])
+>   	}
+>   
+>   	if (continuous_mode && num_cpus_to_pin == 0) {
+> +		CPU_FREE(cpu_set);
+
+This could be done in a common error path handling.
+
+>   		fprintf(stderr, "Must pass at least one CPU to continuous "
+>   			"mode.\n");
+>   		poptPrintUsage(popt_context, stderr, 0);
+> @@ -628,10 +634,12 @@ int main(int argc, char *argv[])
+>   		cpus_to_pin[0] = cpus_online - 1;
+>   	}
+>   
+> -	if (getuid() != 0)
+> +	if (getuid() != 0) {
+> +		CPU_FREE(cpu_set);
+>   		ksft_exit_skip("Not running as root, but almost all tests "
+>   			"require root in order to modify\nsystem settings.  "
+>   			"Exiting.\n");
+> +	}
+>   
+
+Why not move this check before CPU_ALLOC and make this the very first
+check in main()?
+
+With this change the other places where CPU_FREE is added right before
+exit(1). Something like this:
+
+err_code:
+	CPU_FREE(cpu_set);
+	exit(code)
+
+>   	max_msgs = fopen(MAX_MSGS, "r+");
+>   	max_msgsize = fopen(MAX_MSGSIZE, "r+");
+> 
 
 thanks,
 -- Shuah
