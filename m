@@ -2,117 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA30B4F8132
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 16:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA3D4F82B4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 17:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbiDGODr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Apr 2022 10:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S235575AbiDGPYi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 11:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiDGODq (ORCPT
+        with ESMTP id S1344591AbiDGPYg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Apr 2022 10:03:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70495B3684
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 07:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649340103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iPVjUD4VGANcIQRfm5QWOv0d3iQPwruTr6X8FPFV1Gg=;
-        b=eMZe9Jeu2JWiugzr+686Syu3U4+J1RTvr1cPNIma0uRrYGxRxCeSIjdbLXQCeuoIpfwJEX
-        tPiVukqv/lKiUHVjLKE0t7F4rKr+M0Q4qn25eXFsB05R0h3oC/CvFFd6Hz8n57xcztWzZi
-        TTL4Xuj8B9y+MNw/mhRq2JRzyhbk5do=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-KcYe9yA4Px600drJqwESbA-1; Thu, 07 Apr 2022 10:01:42 -0400
-X-MC-Unique: KcYe9yA4Px600drJqwESbA-1
-Received: by mail-wm1-f69.google.com with SMTP id a16-20020a05600c349000b0038e6392a346so3014399wmq.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 07:01:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=iPVjUD4VGANcIQRfm5QWOv0d3iQPwruTr6X8FPFV1Gg=;
-        b=EFW3hFTqN4/CdahoGC0G3CGy4KHQbonQ5u2rUxSqmx12VAxPqDPmaZE+qNBzF3ZjeI
-         eyWCww99FGvy3nTXZxktfP/M2wSYWM/XUQ5mS6ZjcGUNjG4YIXOWc3Ydbh/6c95RJ/i3
-         oadZjJgdt0dJI3L+6Mp9UPx0ZWkyCYsoVtrCGyFaJ0Z+IfTAcTyerzepRZmEm0MbkLzS
-         P0LsxTWRJAAuXpALdcKwGPPkbPp+1beOL+dpF+CDb3VOTutAdf6U9V8Ma6vtTa7l27si
-         VgLVrNEXkpBgUKC+S954SU1IUc2ZhIA0eIp00guJGOAIDTuGra+rLsUtDZWvpGXB5Oga
-         pGOg==
-X-Gm-Message-State: AOAM531CMxXZ45wW25o0CyTi454BrbYny7F5bndPg8QDkuK+Q57F5hGQ
-        9Mts0vtPl7FVKlrxktobEl33vk6Q36jE26T2qkuPexXyyyCDuJiP0Po28GoWezIiQ66puGLUVIi
-        8+d3ExKRQlOBASCulaRS7gWxY/Y0a
-X-Received: by 2002:a05:600c:1910:b0:38c:bff7:b9db with SMTP id j16-20020a05600c191000b0038cbff7b9dbmr12633654wmq.182.1649340100901;
-        Thu, 07 Apr 2022 07:01:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxU/dYZtfiATAomIrnRvl8FEyxkNIr3CwJEqCIWLwzLHA8afMCdfS5sdwqZVv6K+GTlXvZw4A==
-X-Received: by 2002:a05:600c:1910:b0:38c:bff7:b9db with SMTP id j16-20020a05600c191000b0038cbff7b9dbmr12633611wmq.182.1649340100678;
-        Thu, 07 Apr 2022 07:01:40 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id v1-20020adf9e41000000b00205c3d212easm17786210wre.51.2022.04.07.07.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 07:01:40 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kvm list <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: WARNING: at arch/x86/kvm/../../../virt/kvm/kvm_main.c:3156
- mark_page_dirty_in_slot
-In-Reply-To: <YkMxGLAG0zqEzt1V@google.com>
-References: <CA+G9fYsd+zXJqsxuYkWLQo0aYwmqLVA_YeBu+sr546bGA+1Nfg@mail.gmail.com>
- <YkMxGLAG0zqEzt1V@google.com>
-Date:   Thu, 07 Apr 2022 16:01:39 +0200
-Message-ID: <87tub56lh8.fsf@redhat.com>
+        Thu, 7 Apr 2022 11:24:36 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB61320D80D;
+        Thu,  7 Apr 2022 08:22:35 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ncTxj-0003Hy-VO; Thu, 07 Apr 2022 17:22:20 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ncTxj-000Hlq-Ix; Thu, 07 Apr 2022 17:22:19 +0200
+Subject: Re: [PATCH v5 1/3] selftests: bpf: add test for bpf_skb_change_proto
+To:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org, Maciej enczykowski <maze@google.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20220407084727.10241-1-lina.wang@mediatek.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <9dc51533-92d2-1c82-2a6e-96e1ac747bb7@iogearbox.net>
+Date:   Thu, 7 Apr 2022 17:22:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220407084727.10241-1-lina.wang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26505/Thu Apr  7 10:25:37 2022)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi Lina,
 
-> On Tue, Mar 29, 2022, Naresh Kamboju wrote:
->> While running kselftest kvm test cases on x86_64 devices the following
->> kernel warning was reported.
->
-> ...
->
->> [   62.510388] ------------[ cut here ]------------
->> [   62.515064] WARNING: CPU: 1 PID: 915 at
->> arch/x86/kvm/../../../virt/kvm/kvm_main.c:3156
->> mark_page_dirty_in_slot+0xba/0xd0
->> [   62.525968] Modules linked in: x86_pkg_temp_thermal fuse
->> [   62.531307] CPU: 1 PID: 915 Comm: hyperv_clock Not tainted 5.17.0 #1
->> [   62.537691] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
->> 2.0b 07/27/2017
->> [   62.545185] RIP: 0010:mark_page_dirty_in_slot+0xba/0xd0
->
-> Long known issue.  I think we're all waiting for someone else to post an actual
-> patch.
->
-> Vitaly, can you formally post the below patch, or do you need feedback first?
->
-> https://lore.kernel.org/all/874k51eddp.fsf@redhat.com/
->
+On 4/7/22 10:47 AM, Lina Wang wrote:
+> The code is copied from the Android Open Source Project and the author(
+> Maciej Żenczykowski) has gave permission to relicense it under GPLv2.
+> 
+> The test is to change input IPv6 packets to IPv4 ones and output IPv4 to
+> IPv6 with bpf_skb_change_proto.
+> 
+> Signed-off-by: Maciej Żenczykowski <maze@google.com>
+> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+> ---
+>   tools/testing/selftests/bpf/progs/nat6to4.c | 293 ++++++++++++++++++++
+>   1 file changed, 293 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/progs/nat6to4.c
 
-Sorry, missed this. Will do.
+Thanks for adding a selftest into your series!
 
--- 
-Vitaly
+Your patch 2/3 is utilizing this program out of selftests/net/udpgro_frglist.sh,
+however, this is a bit problematic given BPF CI which runs on every BPF submitted
+patch. Meaning, udpgro_frglist.sh won't be covered by CI and only needs to be run
+manually. Could you properly include this into test_progs from BPF suite (that way,
+BPF CI will also pick it up)? See also [2] for more complex netns setups.
 
+Thanks again!
+Daniel
+
+Some small comments below.
+
+   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20220407084727.10241-2-lina.wang@mediatek.com/
+   [1] https://github.com/kernel-patches/bpf/actions
+   [2] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+
+> diff --git a/tools/testing/selftests/bpf/progs/nat6to4.c b/tools/testing/selftests/bpf/progs/nat6to4.c
+> new file mode 100644
+> index 000000000000..099950f7a6cc
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/nat6to4.c
+> @@ -0,0 +1,293 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * This code is taken from the Android Open Source Project and the author
+> + * (Maciej Żenczykowski) has gave permission to relicense it under the
+> + * GPLv2. Therefore this program is free software;
+> + * You can redistribute it and/or modify it under the terms of the GNU
+> + * General Public License version 2 as published by the Free Software
+> + * Foundation
+> +
+> + * The original headers, including the original license headers, are
+> + * included below for completeness.
+> + *
+> + * Copyright (C) 2019 The Android Open Source Project
+> + *
+> + * Licensed under the Apache License, Version 2.0 (the "License");
+> + * you may not use this file except in compliance with the License.
+> + * You may obtain a copy of the License at
+> + *
+> + *      http://www.apache.org/licenses/LICENSE-2.0
+> + *
+> + * Unless required by applicable law or agreed to in writing, software
+> + * distributed under the License is distributed on an "AS IS" BASIS,
+> + * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+> + * See the License for the specific language governing permissions and
+> + * limitations under the License.
+> + */
+> +#include <linux/bpf.h>
+> +#include <linux/if.h>
+> +#include <linux/if_ether.h>
+> +#include <linux/if_packet.h>
+> +#include <linux/in.h>
+> +#include <linux/in6.h>
+> +#include <linux/ip.h>
+> +#include <linux/ipv6.h>
+> +#include <linux/pkt_cls.h>
+> +#include <linux/swab.h>
+> +#include <stdbool.h>
+> +#include <stdint.h>
+> +
+> +// bionic kernel uapi linux/udp.h header is munged...
+
+nit: Throughout the file, please use C style comments as per kernel coding convention.
+
+> +#define __kernel_udphdr udphdr
+> +#include <linux/udp.h>
+> +
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#define htons(x) (__builtin_constant_p(x) ? ___constant_swab16(x) : __builtin_bswap16(x))
+> +#define htonl(x) (__builtin_constant_p(x) ? ___constant_swab32(x) : __builtin_bswap32(x))
+> +#define ntohs(x) htons(x)
+> +#define ntohl(x) htonl(x)
+
+nit: Please use libbpf's bpf_htons() and friends helpers [3].
+
+   [3] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/tree/tools/lib/bpf/bpf_endian.h
+
+OT: In Cilium we run similar NAT46/64 translation for XDP and tc/BPF for our LB services [4] (that is,
+v4 VIP with v6 backends, and v6 VIP with v4 backends).
+
+   [4] https://github.com/cilium/cilium/blob/master/bpf/lib/nat_46x64.h
+       https://github.com/cilium/cilium/blob/master/test/nat46x64/test.sh
