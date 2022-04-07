@@ -2,113 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233234F8B31
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 02:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDA04F8B8E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 02:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiDGWc0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Apr 2022 18:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+        id S232256AbiDGWow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 18:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiDGWcZ (ORCPT
+        with ESMTP id S232240AbiDGWov (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Apr 2022 18:32:25 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB07B2AD6
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 15:30:23 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i5-20020a258b05000000b006347131d40bso5225123ybl.17
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 15:30:23 -0700 (PDT)
+        Thu, 7 Apr 2022 18:44:51 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E284C152831
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 15:42:48 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id c32-20020a631c60000000b0039cec64e9f1so685991pgm.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 15:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=cStI4M2iFbz1bpv2djlEn4K9jvZmqzWFBgSYSWYF+x8=;
-        b=bKVsI5vcdZPGsqrru63SQly3CBZ31oVZnBbHYZ87d93RhGVfNL5XB37zyrUDPJT3dS
-         aeqYwWoY4XkBQmdEbTxkcrR7+rk4Pqbg7T9Bn5CSlkmNyGERSCXiypCCtxHmk+o54X3P
-         hftJNXyK///uDkU7hQmRlcJPuikUW4/bzsZtcGVu/X1VWbqWL0Ju9L30N6FQrSoTFJaG
-         niS/nqfCCPKyL1zx2kiBljKQiob7iMFVqr/AyDwbq5CY1/sk71wq+IQc7rPe0YSrVhwu
-         IKngsMf5uNvgBv4E+fXDhWq0cLU58oxZWPCvNn0w7ypxKQqg9IVl37C6F9wVHQ4Wx4jp
-         yGUg==
+        bh=6TC/fcsrdvkufWtZCTMpd2QTNgth1gYBFeUR7KMTO3o=;
+        b=LTNa5mWxit+bHznZj3tr4HARnvMRLGMcNuJSn+VXMiSstVWYzjo8RrN+E1ms6VTeiU
+         nFOM753PV0ux/FjpS7u2I8H53Ls+iBrNQ2VqMkJ4/013wYWzOkTOMvmPlfAViGmsT7JI
+         wz5hfFfmebTV4K8w6FLtQJbWTKHCf1RVY3yK5HCK8UW5AxATe0Hhq4JXxY2zummMacbw
+         7WdJ0FJA8Bcsx0SQlqs5lD1wWFqEVYOi93AQ+e8nhUdpDGM/3Zb7Qs408eH4czs6r98a
+         v6ypkffmKqRINf6d0u5JEFrGrfWgcL+egNOTvvTXneQR/WkDoHb0cWVv6VuyGlMHSD9n
+         t4YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=cStI4M2iFbz1bpv2djlEn4K9jvZmqzWFBgSYSWYF+x8=;
-        b=trfk6ctteETwQFpsQPLWuSMT+JSwoKYcmMl/OXMLuJOc2DpWlSXA7qK7B0Hco7KCUZ
-         E6Hx/494tf6qJ7QFagu5Po2XaIhBE8hUJdJ3Rx4w2SL4bLWKDrI/C+FBQO+pM5kBJpGo
-         8+q/Xar/aYgWYqoBy9aEVK+TLBSyhZVTsK8LfZL2RUVu326D74UURPS55BHaqfxZ+ZHG
-         Z8B3/7UY9sQmhyzGMWtW7AgrO7CEMdBFrU7ceBv4tM2QiTbf2UM41YwU5iYfVYfdTNM9
-         W1nNPaSoKLCgnlTnk3d+cm1iOzKcjDUUsIwApv4Hc0fmDD9OYfypgQNiKfeudBTwNva4
-         IetQ==
-X-Gm-Message-State: AOAM530Q0V5pwGzBTjlw5QuVN7Hr1zuNezVlMvWH+rM+hI2TL1dZ5mll
-        JThZBCSVPM1ezfmG8PJnp3AtfDfus6Jl3Q==
-X-Google-Smtp-Source: ABdhPJz/OADY3enFbHtaaMV3WePYz5NmZ0NdIGrSWIhyWxCQcOBcH1W2Eu7hC5d9P9RZVv7HfnyHYxnhFM7/Ig==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5da8:b87d:4887:c585])
- (user=dlatypov job=sendgmr) by 2002:a25:2d5f:0:b0:63d:b7ea:b14f with SMTP id
- s31-20020a252d5f000000b0063db7eab14fmr12271542ybe.625.1649370623103; Thu, 07
- Apr 2022 15:30:23 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 15:30:19 -0700
-Message-Id: <20220407223019.2066361-1-dlatypov@google.com>
+        bh=6TC/fcsrdvkufWtZCTMpd2QTNgth1gYBFeUR7KMTO3o=;
+        b=bI73I3WsEu/TRVWdgjLm8+HXg5nf2sse7uETIkMNavQ37eo8dcG65c0uZ7kxyCP2Vo
+         YZ0OhgyGtOsgoJYbRa+lAmmfvR9skqceeN8ZcX1nMUn6sM0WBoEv76M6Tm6wzKuYi+8o
+         V8bpQIJUav5pZT9WM73ZqHMwm3E0TNkEknmo0kFqCMTA7ffF4rmWcy9P0fEvbH4C4dW4
+         9Z4r9zNxQug66eHzEN8+yJPmQFskJwTF8wBZmKZYQSxQVfoGVCvYJCdue24jCozcaR+d
+         P583vwb9Zhc4EwL/tWTWas5H7DRsfAhkpJy6tIWbSYR0g1WUhTv5EPXJVpumjkYaATfg
+         0OUQ==
+X-Gm-Message-State: AOAM530S4DzN08XvuuUzkJm3Vmmb9+uI/Y7lsmMVlACQKdKJfy4ydrm5
+        QwHZtv/4sccEd2l9Vq0+2jTF7u5qjHnmXC7u
+X-Google-Smtp-Source: ABdhPJwlNJ+NsHyswmzk8S8aUJPENy0C4JQyTzYFWx7UJ9STkknW1VVVp9zPNMHpVNXpn76wXS46DNMY8mlzVMZv
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a65:4b8f:0:b0:39c:c85d:7e7a with SMTP
+ id t15-20020a654b8f000000b0039cc85d7e7amr4074145pgq.324.1649371368364; Thu,
+ 07 Apr 2022 15:42:48 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 22:42:40 +0000
+Message-Id: <20220407224244.1374102-1-yosryahmed@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH] kunit: tool: don't print out test statuses w/ 0s in summary
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+Subject: [PATCH v2 0/4] memcg: introduce per-memcg proactive reclaim
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>, Huang@google.com,
+        Ying <ying.huang@intel.com>,
+        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Before:
-> Testing complete. Passed: 137, Failed: 0, Crashed: 0, Skipped: 36, Errors: 0
+This patch series adds a memory.reclaim proactive reclaim interface.
+The rationale behind the interface and how it works are in the first
+patch.
 
-After:
-> Testing complete. Passed: 137, Skipped: 36
-
-Even with our current set of statuses, the output is a bit verbose.
-It could get worse in the future if we add more (e.g. timeout, kasan).
-Let's only print the relevant ones.
-
-I had previously been sympathetic to the argument that always
-printing out all the statuses would make it easier to parse results.
-But now we have commit acd8e8407b8f ("kunit: Print test statistics on
-failure"), there are test counts printed out in the raw output.
-We don't currently print out an overall total across all suites, but it
-would be easy to add, if we see a need for that.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/kunit/kunit_parser.py | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 807ed2bd6832..957907105429 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -94,11 +94,10 @@ class TestCounts:
- 	def __str__(self) -> str:
- 		"""Returns the string representation of a TestCounts object.
- 		"""
--		return ('Passed: ' + str(self.passed) +
--			', Failed: ' + str(self.failed) +
--			', Crashed: ' + str(self.crashed) +
--			', Skipped: ' + str(self.skipped) +
--			', Errors: ' + str(self.errors))
-+		statuses = [('Passed', self.passed), ('Failed', self.failed),
-+			('Crashed', self.crashed), ('Skipped', self.skipped),
-+			('Errors', self.errors)]
-+		return ', '.join('{}: {}'.format(s, n) for s, n in statuses if n > 0)
- 
- 	def total(self) -> int:
- 		"""Returns the total number of test cases within a test
+Changes in V2:
+- Add the interface to root as well.
+- Added a selftest.
+- Documented the interface as a nested-keyed interface, which makes
+  adding optional arguments in the future easier (see doc updates in the
+  first patch).
+- Modified the commit message to reflect changes and add a timeout
+  argument as a suggested possible extension
+- Return -EAGAIN if the kernel fails to reclaim the full requested
+  amount.
 
-base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
+---
+
+Shakeel Butt (1):
+  memcg: introduce per-memcg reclaim interface
+
+Yosry Ahmed (3):
+  selftests: cgroup: return the errno of write() in cg_write() on
+    failure
+  selftests: cgroup: fix alloc_anon_noexit() instantly freeing memory
+  selftests: cgroup: add a selftest for memory.reclaim
+
+ Documentation/admin-guide/cgroup-v2.rst       | 21 +++++
+ mm/memcontrol.c                               | 37 ++++++++
+ tools/testing/selftests/cgroup/cgroup_util.c  | 11 ++-
+ .../selftests/cgroup/test_memcontrol.c        | 94 ++++++++++++++++++-
+ 4 files changed, 156 insertions(+), 7 deletions(-)
+
 -- 
 2.35.1.1178.g4f1659d476-goog
 
