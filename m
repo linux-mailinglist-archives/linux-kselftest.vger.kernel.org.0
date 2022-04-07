@@ -2,203 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717C54F6E7A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 01:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C124F747E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 06:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234316AbiDFXYp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Apr 2022 19:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S231472AbiDGEVZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 00:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbiDFXYo (ORCPT
+        with ESMTP id S232256AbiDGEVX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Apr 2022 19:24:44 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151846C1E7
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 16:22:46 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id h16-20020a056902009000b00628a70584b2so2918434ybs.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Apr 2022 16:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Kctwd9MuAxKTamshBg/2p/OqY2uBL1ZDHhqIATAaLOY=;
-        b=CdLhv1Eb6cbl0H+k0cOpjJRGzzxVgfYfMQ7obmTApAWuJuzGSvJnTjbu7I/yWRUhMK
-         vcpoygMBuoDvkPsF9tjqRYtpERq0RxRiTvQJK/v8ljp3p+fwBePJGOpz7xYgnkQZUJdv
-         3dQf7sGw7D7M8Dzd96+mvn6Vb0Ze/S+/0GJCLr8TlAD9Pke/9kCAWmnTV83vK/nb0ejZ
-         yq6l5eAGi1vTNjMUxPMVaT2i/lqN/VlHhmL5k57A2J18yTsaMKzSX1kPN5xL6DuS8dW0
-         IGYJvkBe9zv6xrK9Qipea2bZWrCepAb1JE4tqrRnsHgq0RiyWQ/k13v0C2FjT3lp44xG
-         4lSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Kctwd9MuAxKTamshBg/2p/OqY2uBL1ZDHhqIATAaLOY=;
-        b=kWjYQ9BMsGGMkkKjBlRuoFr7pCXqiI2BTy5DQg8TGnxUkTwaG824wkK7zy1ZstIXie
-         sGkBBoUUkOf4uFdl5Rsus3gpr9XyoRInu+4et5io/Vc9WLQnkeSSwqXMz4xOpjFoabwL
-         MyzMbqTBxcb1CUhm3yqFSQvbnj4s8TZOhzPTJpKWd8HcWRek9IcRVLuPkNDTmvM1aOlg
-         d/L07oVUlroo9z8dXrR77+2Y86z2A9G9c0PLUtQuXG1lQzCz0JmwF3Wwdytrr1LQu7JW
-         BaGWeGqvIszj2cGkqoVfYMHr2jQUOh/IfQTwV1rn1uPpGHp/b/CGIFnUrvELDf+te97n
-         akhw==
-X-Gm-Message-State: AOAM532AcRQX0bHPPORnz8+R2e8rt1cskiB4u+zMtATKIo0oUIRUZOWi
-        hxmaY8vL8IRVDW7MYasDO+cZ7j+2588USw==
-X-Google-Smtp-Source: ABdhPJzx+g6rjmKR0nlzc2H/femSZMuJ5VGXLH99Gu7UbibLOjBReX3Q015ws38Ihs6d0NXJPaZDDQjA/GNNEQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:aed6:d51d:dc38:e705])
- (user=dlatypov job=sendgmr) by 2002:a25:dc93:0:b0:63e:14f0:fce5 with SMTP id
- y141-20020a25dc93000000b0063e14f0fce5mr8411650ybe.8.1649287365162; Wed, 06
- Apr 2022 16:22:45 -0700 (PDT)
-Date:   Wed,  6 Apr 2022 16:22:40 -0700
-Message-Id: <20220406232240.1825048-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH] kunit: bail out of test filtering logic quicker if OOM
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 00:21:23 -0400
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CC81DDFDD
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Apr 2022 21:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1649305163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CuW4ykShVyOXqQXqO2AsPQhWRpdOSrWOfipjx+vPuVg=;
+        b=Fq5WnGREyneint+u2OAHgwBwl8kNFHziJBqklFG5D3T/ipOzRA2m/xkYIpCoR4Cn7l7cd5
+        F0yZ0YKuWfjaLt2BrilRgiqjO2EYoxWmw9lu/HOWCHXshCPkT2p9QUAlxatQf0k9Wdj/kg
+        RpVAh/T7d1Xu35eVMsRgYmHDNbrBpBw=
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com
+ (mail-db3eur04lp2059.outbound.protection.outlook.com [104.47.12.59]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-36-WFJfoaC4NPGQzPDr-svz-g-2; Thu, 07 Apr 2022 06:19:22 +0200
+X-MC-Unique: WFJfoaC4NPGQzPDr-svz-g-2
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LrdaTZNsSRox3fFEhdHkDBmuyZ7sa/+1pZY04Eis8d+LmDIJLVn14R3lu1xwe4TYnI5bUdQBKpqEhBgw4OUFA6nH5cTLozhQl7AodPoJQ8vxfsHNPlBHLIipu8ZnRvA0kDqP5ugLWDYZqD6IEzBuZLAay0Lk5rH3rISqDLJu9P8/7fj2eJ2JgDUKtN5r7+/UmpwY8bmEQW3Qn7YblemrUN33KRRCX48ncunhngWT4M8CvPxhXzVrjx5LH9Tu7RdtaAMEKOf/Lk5n5oYixmzcc4LT++pDRc8S5ovKC050VtcyByQgIUSIWc0gsUMNPa0ingt9TgL2V6ZaQgZKgXYXzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4+GPc50rMzWCV07s8bqd/KUtIUHfdXXtLrr8gAJmzWQ=;
+ b=PbCbofGM/tN6TsZiYXuvr4JqwvJcOe6BLDoWaCdoNks1UsD+REYrzk8zRmEacpKJJJPiB8SbGuMnyzhw8fSuxx3DH5Mif3iraWxoU99pmAlaZSP1BQzp33DaJHIdG7U9TwujZys2S/gkiG37t4FSJr1GivW/luHZZRgDLi8pXZ0JwTiaIR2EoKf/73henJBmyjQYV6u1Q+HkaZzAwiQBQhxbrwmmTOKCy/HilzuB1g/LlQo8niC/ugx7y0oOsN1kb3M+q+d4lu1mGnfI0SjoESQCNcDmyIq7BCSeA1DPb3bR9B7GTzaaRCa5khzX88AxpG2uruHAPFBw2xd0A2D5Vg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
+ by AM0PR04MB4418.eurprd04.prod.outlook.com (2603:10a6:208:6d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Thu, 7 Apr
+ 2022 04:19:19 +0000
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::9974:fd5e:e3c0:14dc]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::9974:fd5e:e3c0:14dc%3]) with mapi id 15.20.5123.031; Thu, 7 Apr 2022
+ 04:19:19 +0000
+From:   Geliang Tang <geliang.tang@suse.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+CC:     Geliang Tang <geliang.tang@suse.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next] selftests: bpf: use MIN for TCP CC tests
+Date:   Thu,  7 Apr 2022 12:19:26 +0800
+Message-ID: <4da5ff038c442d4421b95580558fc981bb674e61.1649304888.git.geliang.tang@suse.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: TYWPR01CA0031.jpnprd01.prod.outlook.com
+ (2603:1096:400:aa::18) To HE1PR0402MB3497.eurprd04.prod.outlook.com
+ (2603:10a6:7:83::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ad72bfe0-1fca-4ce5-b863-08da184dc903
+X-MS-TrafficTypeDiagnostic: AM0PR04MB4418:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR04MB4418CBAA9D8B2D5B947C1C10F8E69@AM0PR04MB4418.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KAqHKFcB6cKoUs0krkGGb7vrXLMORothH0Xr8s4vWO/dxUzvG9iCdDlyG+nsRSSKYxTjCJWkI+Zyx1ChhmV+biqJ7tPzvtRriomeD6A2+XZl0bjFtc1xU0e6KJYcgVUI8g6sSuA9kzZgC7FoU4kmmXPFb1JdKu66RdPBkHw3QTCUcpcIQ9uMeAyDgb8CwIjwV7+DovhJ+Q7jCN/e2yUPTqIDBXQIHn5MSRw2LFdNI1CFQqQWClRzsxBjwI7Cg205TyxLZnCLlQKdblhZObgIAqdXJFoP+9vXAzqkeKla2sg8cCAErWj/dUNu04fwA+QIRMTXZOiF6qLaqQHHWljkxjG5gZ84arX9lGATfY9yE6G6ggn0FDQDJt5ym9IGPwB+w8bJ3UpK/TVFZvOrnPpXfBDT+2TtQfNOpSgW7TbwGxBn+fa4Gqy1/QnaBYUc1cqzagTSi9ZXhbvf/mHjYo7LAJnrQG5cXkG/eol3YFSiT4wYlXumS7j1+chq0oiHLV/xcVcavsuj+m8RauMchYoV9pDLPKtjs+Crmv+0LDui81STb0pQ6nd6v+ToVmDGCVHOU7kpxHK1ydIf0oBhKUR6jiOEPCZhFK8t1X1MEfYVkfLOhLTP9r8ZHRbY/bTlp6OY7aqpdCdfZvKhGptnzaG3B1P01k0ZpEV1OfeiBgLHL+wUX0jXYpsABQPTNWxPVEYs+/P/WRTScABXrB548h4odA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(86362001)(7416002)(44832011)(26005)(316002)(5660300002)(186003)(2906002)(83380400001)(110136005)(36756003)(4326008)(508600001)(8676002)(66556008)(66476007)(38100700002)(66946007)(8936002)(2616005)(6666004)(6506007)(6486002)(13296009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QgtXP//xIA69rQWjxlU6nQfgH0RFOuyay8mhed1+UHYgIVZmTVctvQpfZozO?=
+ =?us-ascii?Q?vrjA//F3NIKu9MaiU2GVw4NJEgr20sL43cOorihl1pNCC76H4qQGuEKL69h5?=
+ =?us-ascii?Q?uKkRWlXoTJuKjmSXjdqObHk2eju4OLoos/HeAt/odCQz6GXDYWv2JbRJYVZ8?=
+ =?us-ascii?Q?F+JII4pP2RwhkSJ0+YVJRcJxAF6fSbPc2EI8GMMpoZrsAtxYEu4ASXL33vTk?=
+ =?us-ascii?Q?g8VP0uAyfXM6P3Mm/e3TNqdRDrhfUxIbFwLusqCfJ/T5puTmqo+hrit65Gk7?=
+ =?us-ascii?Q?Inkr9QWcI+knwz18GP5mu2FAcoOgtveKkVhuto6U1wYajtFUWnGW0VGQKiS0?=
+ =?us-ascii?Q?5rgwC5iBBlwQQY0+7Xw9p28sANchmhSKdkXSGADDkhdLQpxdH7pfrgMFvapz?=
+ =?us-ascii?Q?TfOHYvEzz3BsyQ/RH0gN0CkBJhYPusFrQ0hobPeShNJL3dKsIYhJtC9v/QNB?=
+ =?us-ascii?Q?8ssxzmykVPeQTOjxhJ4BfrtItztD8WekNsEVUqWJBupJYpNVHxr8SlEUXD9r?=
+ =?us-ascii?Q?4tYDiibLOXV1cXY0FlC6v91tgOiBUWQfijezAnRy4OJ3uUvxEHu7g0UYyGAI?=
+ =?us-ascii?Q?AnxhC/i8QWM7GjTc3BEunE5/H4Iow9tF2gAYOp6F03Q1WriPXboiXtyKOjoj?=
+ =?us-ascii?Q?UhPonPCGTZlwUJtNta+LgGfRBrmS6ZKm9nPJ6/oh9nE65b95awCDnRZtKNa2?=
+ =?us-ascii?Q?NYsdqev4i+hXXnEQkXWzRUAklFoQ4WMukPpPigcoyD53dD3roW2du7CYlf/B?=
+ =?us-ascii?Q?C+py4DdERN/jkG0vMiW/O+IhyrdoSOrbmXc2wQkrQzNLGPwYvTDKuzYEQWA9?=
+ =?us-ascii?Q?nfrEol2YzQhbHqZ5TgrL8Ea+PdOCIeFfkh2+zmWTUdAwrNPr40AhAL4O4Z5Z?=
+ =?us-ascii?Q?iF7FKZjfUyfvB0bAxhxvtwpsjaeq9MLKvAw9GEtSB9Wq03uDJc8hsDJq0Iy0?=
+ =?us-ascii?Q?tNoW+7kPDsKTAiVnuXh6LF8aEngMy6xQaCvqdfpVKAs0AnRvSMVVQzWMNs6t?=
+ =?us-ascii?Q?glOYFqrtLCgocOoW4z+xOWouzWns9NXWVeWPO1OKtU/Jb1rYO0e3YaArx1iS?=
+ =?us-ascii?Q?KcOHrtVUNiT/jBs553fIaK3SDXE2NvnoPtmlzjfafaLc+vqX+ITj0gxvQStH?=
+ =?us-ascii?Q?DcfJSu9Tpc40TgU8hRRRtOemAf5xFYn6pyxINDcpgfd2h1WsEI9oVSjsGQZi?=
+ =?us-ascii?Q?RUN/ChDz2GMX0uCLzc3WAsXbBGWe9XqKtVkligOFZmWS80afEQcyxPCKq69C?=
+ =?us-ascii?Q?ch71sK6srRk7OZPeX5swrhd6AJwMw7KSU8kGdQWZYRwF1O5JaHMAXXIcjFIV?=
+ =?us-ascii?Q?1bVvMtoBjuHEbBDzSoF7nchAVY9BacGj8QYuxg9/vLY4muuAy3ucm3QUPJNq?=
+ =?us-ascii?Q?T/g9FMkWDUOtKbIr8F0qayACQ71tBq5wNINMIQVXQDnN1BHEzKnogNwUW5PK?=
+ =?us-ascii?Q?scDwuOMDAIAINwR03lPZD/IqF1SEyT/dCFOqWifgSp6mlfn6/5qB3TWPSut2?=
+ =?us-ascii?Q?oes0pAVsdUSvdUzBSLIg+aLI54ScCKLiHPGRIF3Y9LVDlS3TuMK3MX6V4p5/?=
+ =?us-ascii?Q?z+lK4MbIXc9lQZTIUjOJbBkCjeVWAvGBgYldiKw+c5Vfzi0MDC93GlZ2Rrzd?=
+ =?us-ascii?Q?uEbIEEh1WOb57S0sWv+lkwrRWw/6UwbGiPlRsEfgPB8rdl1J/UjeRwOSJhWc?=
+ =?us-ascii?Q?oK9jiD7emYG31dcJdWqcW2PBWOrH2wgT8F7tHaPzoUS6Oa/JfKjd+6lRB8D8?=
+ =?us-ascii?Q?0ygNqt9eHrH4mjyi7NBVJVItnfL/ra0=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad72bfe0-1fca-4ce5-b863-08da184dc903
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2022 04:19:19.0984
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u6ceSYfNJTDGUAhSvCjJghLhGpISeBwzhXOfoWnkDVGiP/a/t1u0RQLI1n9ohw7YxFUNd/jytdNCvHXKKB6LPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4418
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When filtering what tests to run (suites and/or cases) via
-kunit.filter_glob (e.g. kunit.py run <glob>), we allocate copies of
-suites.
+Use macro MIN() in sys/param.h for TCP CC tests, instead of defining a
+new one.
 
-These allocations can fail, and we largely don't handle that.
-Note: realistically, this probably doesn't matter much.
-We're not allocating much memory and this happens early in boot, so if
-we can't do that, then there's likely far bigger problems.
-
-This patch makes us immediately bail out from the top-level function
-(kunit_filter_suites) with -ENOMEM if any of the underlying kmalloc()
-calls return NULL.
-
-Implementation note: we used to return NULL pointers from some functions
-to indicate either that all suites/tests were filtered out or there was
-an error allocating the new array.
-
-We'll log a short error in this case and not run any tests or print a
-TAP header. From a kunit.py user's perspective, they'll get a message
-about missing/invalid TAP output and have to dig into the test.log to
-see it. Since hitting this error seems so unlikely, it's probably fine
-to not invent a way to plumb this error message more visibly.
-
-See also: https://lore.kernel.org/linux-kselftest/20220329103919.2376818-1-lv.ruyi@zte.com.cn/
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 ---
- lib/kunit/executor.c      | 27 ++++++++++++++++++++++-----
- lib/kunit/executor_test.c |  4 +++-
- 2 files changed, 25 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 22640c9ee819..2f73a6a35a7e 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
- 
- 	/* Use memcpy to workaround copy->name being const. */
- 	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-+	if (!copy)
-+		return ERR_PTR(-ENOMEM);
- 	memcpy(copy, suite, sizeof(*copy));
- 
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
-+	if (!filtered)
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	kunit_suite_for_each_test_case(suite, test_case) {
-@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
- 
- 	filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
- 	if (!filtered)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	for (i = 0; subsuite[i] != NULL; ++i) {
- 		if (!glob_match(filter->suite_glob, subsuite[i]->name))
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index 8f7a1cef7d87..ceed369361fc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -3,6 +3,7 @@
+=20
+ #include <linux/err.h>
+ #include <netinet/tcp.h>
++#include <sys/param.h>
+ #include <test_progs.h>
+ #include "network_helpers.h"
+ #include "bpf_dctcp.skel.h"
+@@ -10,8 +11,6 @@
+ #include "bpf_tcp_nogpl.skel.h"
+ #include "bpf_dctcp_release.skel.h"
+=20
+-#define min(a, b) ((a) < (b) ? (a) : (b))
+-
+ #ifndef ENOTSUPP
+ #define ENOTSUPP 524
+ #endif
+@@ -53,7 +52,7 @@ static void *server(void *arg)
+=20
+ 	while (bytes < total_bytes && !READ_ONCE(stop)) {
+ 		nr_sent =3D send(fd, &batch,
+-			       min(total_bytes - bytes, sizeof(batch)), 0);
++			       MIN(total_bytes - bytes, sizeof(batch)), 0);
+ 		if (nr_sent =3D=3D -1 && errno =3D=3D EINTR)
  			continue;
- 		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
--		if (filtered_suite)
-+		if (IS_ERR(filtered_suite))
-+			return ERR_CAST(filtered_suite);
-+		else if (filtered_suite)
- 			filtered[n++] = filtered_suite;
- 	}
- 	filtered[n] = NULL;
-@@ -146,7 +152,8 @@ static void kunit_free_suite_set(struct suite_set suite_set)
- }
- 
- static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
--					    const char *filter_glob)
-+					    const char *filter_glob,
-+					    int *err)
- {
- 	int i;
- 	struct kunit_suite * const **copy, * const *filtered_subsuite;
-@@ -166,6 +173,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
- 
- 	for (i = 0; i < max; ++i) {
- 		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
-+		if (IS_ERR(filtered_subsuite)) {
-+			*err = PTR_ERR(filtered_subsuite);
-+			return filtered;
-+		}
- 		if (filtered_subsuite)
- 			*copy++ = filtered_subsuite;
- 	}
-@@ -236,9 +247,15 @@ int kunit_run_all_tests(void)
- 		.start = __kunit_suites_start,
- 		.end = __kunit_suites_end,
- 	};
-+	int err;
- 
--	if (filter_glob_param)
--		suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
-+	if (filter_glob_param) {
-+		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-+		if (err) {
-+			pr_err("kunit executor: error filtering suites: %d\n", err);
-+			return err;
-+		}
-+	}
- 
- 	if (!action_param)
- 		kunit_exec_run_tests(&suite_set);
-diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-index 4ed57fd94e42..eac6ff480273 100644
---- a/lib/kunit/executor_test.c
-+++ b/lib/kunit/executor_test.c
-@@ -137,14 +137,16 @@ static void filter_suites_test(struct kunit *test)
- 		.end = suites + 2,
- 	};
- 	struct suite_set filtered = {.start = NULL, .end = NULL};
-+	int err = 0;
- 
- 	/* Emulate two files, each having one suite */
- 	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
- 	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
- 
- 	/* Filter out suite1 */
--	filtered = kunit_filter_suites(&suite_set, "suite0");
-+	filtered = kunit_filter_suites(&suite_set, "suite0", &err);
- 	kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs without leaking */
-+	KUNIT_EXPECT_EQ(test, err, 0);
- 	KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t)1);
- 
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
-
-base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
--- 
-2.35.1.1094.g7c7d902a7c-goog
+ 		if (nr_sent =3D=3D -1) {
+@@ -146,7 +145,7 @@ static void do_test(const char *tcp_ca, const struct bp=
+f_map *sk_stg_map)
+ 	/* recv total_bytes */
+ 	while (bytes < total_bytes && !READ_ONCE(stop)) {
+ 		nr_recv =3D recv(fd, &batch,
+-			       min(total_bytes - bytes, sizeof(batch)), 0);
++			       MIN(total_bytes - bytes, sizeof(batch)), 0);
+ 		if (nr_recv =3D=3D -1 && errno =3D=3D EINTR)
+ 			continue;
+ 		if (nr_recv =3D=3D -1)
+--=20
+2.34.1
 
