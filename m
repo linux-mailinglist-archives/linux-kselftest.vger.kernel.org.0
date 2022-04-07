@@ -2,157 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769B34F8730
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 20:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E35974F874F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 20:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346888AbiDGSmj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Apr 2022 14:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S234189AbiDGSsC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 14:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346907AbiDGSmi (ORCPT
+        with ESMTP id S1346961AbiDGSrf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Apr 2022 14:42:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D200A10FF5;
-        Thu,  7 Apr 2022 11:40:37 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237Hl1Ex021744;
-        Thu, 7 Apr 2022 18:40:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=xfQ3E8yUSemWJMWvuJAnI/1Wu3kezd+qtoiUH5u+qPs=;
- b=pvQJ8vbwFx46sV4Y8xGDSDAY7DW9AZWP2xA+p4RUR01gM+dD4O2u0HGQ4iLEMFe1JCmJ
- XyjeTmU7tUwe0JahGyReGqiapaFCYr6qNnRebrDoidKIh+5yK7ApzszKdPSfMcvmR200
- pTRu4YMZGbNoXqz3bI0ln1QKDw9yfuJ4QPpc6QBJDwNaqE+NrcOnTlXHB5NTDUrCsa6E
- XCRZiOafC0s3gYG5bCiaQpEn7La0bOWB6J0TDfPzienodYcFBLlkQq9hCrFzw/9tJXz0
- aPjFqPnn9j3fh2YqpA2pzqWyrDUkv+/pvnVfIHPqTcstgpLc70qtOuMLDXRMQ6Py2xD9 Cw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa4a5sr9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 18:40:23 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 237INbHK004405;
-        Thu, 7 Apr 2022 18:40:21 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3f6e490j6t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 18:40:20 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 237IeIP535127806
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 Apr 2022 18:40:18 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 773D452051;
-        Thu,  7 Apr 2022 18:40:18 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.211.133.86])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 3B68C5204F;
-        Thu,  7 Apr 2022 18:40:11 +0000 (GMT)
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        disgoel@linux.vnet.ibm.com
-Cc:     acme@kernel.org, jolsa@kernel.org, mpe@ellerman.id.au,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, maddy@linux.vnet.ibm.com,
-        kjain@linux.ibm.com, srikar@linux.vnet.ibm.com
-Subject: [PATCH V2] testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
-Date:   Fri,  8 Apr 2022 00:10:08 +0530
-Message-Id: <20220407184008.93879-1-atrajeev@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 7 Apr 2022 14:47:35 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BC31AE
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 11:45:33 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id z6so8005877iot.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 11:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6Ji4YlYFHVDR0gxdj/6jpb0FghGwzOywEFt8q/52gXM=;
+        b=QqSdyP3Dq30pUUzEmwW5hyQ4pc+G9DSDB01FoJsLcJ8OLSMzmuJX66C7O08kVxI5GR
+         GP47x+r279qwgojRznD4Ox6yInvx/ZYvGYeDOkdgkAcuFWBBJzjGCpxsvSmAO77Mabnv
+         2y/OMqdsdW1fDw1aqPJ9itZ4+RiSioZcqunX8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6Ji4YlYFHVDR0gxdj/6jpb0FghGwzOywEFt8q/52gXM=;
+        b=6baLxInuKJfXfa4jkEZy4k5a8V2fGKW3HE3ZuyGdYEOXMLgdXvc+/U6AfSKQ5sqp4k
+         VHSWjkw0tb0E3KmaiD1GB37Ixz43YLay7Mnouc7C3FOYtqO4G/+2d7O1vk2Kr0ZFVH0A
+         gwhZUb5F4IK0+CUjwFnaRlKQT0OZrwt+ml/bNhgADjQAVYApM4XDQfFW6WE0YEbfC647
+         vj/KlV1csLRchLfJWTKZ+5nIYSqOu72sRXHKg7q3OVn9TC7onansbrFrYQH4RXZS40yS
+         2+ounhN3KBjvSsYa8h+dLF5jixoLCecga8ONBrxBMdyHmaNTlz/i3CWv8WBFixSinaAA
+         IFjg==
+X-Gm-Message-State: AOAM533aGBHVjz5tHXq9Q7wjTfO3vBEaeYqWYiIBATCKPE1lJtDYNbcp
+        pUDJNmVLHoXF3zBSVWVKYv6rzA==
+X-Google-Smtp-Source: ABdhPJwgU4mSkmGOP4lzd2vZXXDmbmz/CKWESrQlvZqHqyu743d967VGiNZihTjDEIKxeEg/WxKIQw==
+X-Received: by 2002:a05:6602:154d:b0:64c:5fab:4076 with SMTP id h13-20020a056602154d00b0064c5fab4076mr6828405iow.169.1649357133271;
+        Thu, 07 Apr 2022 11:45:33 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d85d2000000b00649254a855fsm12811819ios.26.2022.04.07.11.45.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 11:45:32 -0700 (PDT)
+Subject: Re: [PATCH] userfaultfd/selftests: use swap() instead of open coding
+ it
+To:     Guo Zhengkui <guozhengkui@vivo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     zhengkui_guo@outlook.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220407123141.4998-1-guozhengkui@vivo.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <059030d7-657a-6403-ae75-3314f790afa3@linuxfoundation.org>
+Date:   Thu, 7 Apr 2022 12:45:31 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JVkspol0CEqjOAVCtqsO5wNL_61pd4OQ
-X-Proofpoint-GUID: JVkspol0CEqjOAVCtqsO5wNL_61pd4OQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-07_04,2022-04-07_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204070092
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220407123141.4998-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
-CPU set. This cpu set is used further in pthread_attr_setaffinity_np
-and by pthread_create in the code. But in current code, allocated
-cpu set is not freed.
+On 4/7/22 6:31 AM, Guo Zhengkui wrote:
+> Address the following coccicheck warning:
+> 
+> tools/testing/selftests/vm/userfaultfd.c:1536:21-22: WARNING opportunity
+> for swap().
+> tools/testing/selftests/vm/userfaultfd.c:1540:33-34: WARNING opportunity
+> for swap().
+> 
+> by using swap() for the swapping of variable values and drop
+> `tmp_area` that is not needed any more.
+> 
+> `swap()` macro in userfaultfd.c is introduced in commit 681696862bc18
+> ("selftests: vm: remove dependecy from internal kernel macros")
+> 
+> It has been tested with gcc (Debian 8.3.0-6) 8.3.0.
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 
-Fix this issue by adding CPU_FREE in the "shutdown" function which
-is called in most of the error/exit path for the cleanup. Also add
-CPU_FREE in some of the error paths where shutdown is not called.
+Looks good.
 
-Fixes: 7820b0715b6f ("tools/selftests: add mq_perf_tests")
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
----
-Changelog:
-From v1 -> v2:
- Addressed review comment from Shuah Khan to add
- CPU_FREE in other exit paths where it is needed
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
- tools/testing/selftests/mqueue/mq_perf_tests.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-index b019e0b8221c..182434c7898d 100644
---- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-+++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-@@ -180,6 +180,9 @@ void shutdown(int exit_val, char *err_cause, int line_no)
- 	if (in_shutdown++)
- 		return;
- 
-+	/* Free the cpu_set allocated using CPU_ALLOC in main function */
-+	CPU_FREE(cpu_set);
-+
- 	for (i = 0; i < num_cpus_to_pin; i++)
- 		if (cpu_threads[i]) {
- 			pthread_kill(cpu_threads[i], SIGUSR1);
-@@ -589,6 +592,7 @@ int main(int argc, char *argv[])
- 						cpu_set)) {
- 					fprintf(stderr, "Any given CPU may "
- 						"only be given once.\n");
-+					CPU_FREE(cpu_set);
- 					exit(1);
- 				} else
- 					CPU_SET_S(cpus_to_pin[cpu],
-@@ -607,6 +611,7 @@ int main(int argc, char *argv[])
- 				queue_path = malloc(strlen(option) + 2);
- 				if (!queue_path) {
- 					perror("malloc()");
-+					CPU_FREE(cpu_set);
- 					exit(1);
- 				}
- 				queue_path[0] = '/';
-@@ -619,6 +624,7 @@ int main(int argc, char *argv[])
- 	}
- 
- 	if (continuous_mode && num_cpus_to_pin == 0) {
-+		CPU_FREE(cpu_set);
- 		fprintf(stderr, "Must pass at least one CPU to continuous "
- 			"mode.\n");
- 		poptPrintUsage(popt_context, stderr, 0);
-@@ -628,10 +634,12 @@ int main(int argc, char *argv[])
- 		cpus_to_pin[0] = cpus_online - 1;
- 	}
- 
--	if (getuid() != 0)
-+	if (getuid() != 0) {
-+		CPU_FREE(cpu_set);
- 		ksft_exit_skip("Not running as root, but almost all tests "
- 			"require root in order to modify\nsystem settings.  "
- 			"Exiting.\n");
-+	}
- 
- 	max_msgs = fopen(MAX_MSGS, "r+");
- 	max_msgsize = fopen(MAX_MSGSIZE, "r+");
--- 
-2.35.1
-
+thanks,
+-- Shuah
