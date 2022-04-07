@@ -2,121 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 060BA4F883A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 21:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5804F8894
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 22:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiDGTsu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Apr 2022 15:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S229679AbiDGUac (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 16:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiDGTst (ORCPT
+        with ESMTP id S229681AbiDGUa0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:48:49 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB636C0AB
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 12:43:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d2d45c0df7so57251777b3.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 12:43:57 -0700 (PDT)
+        Thu, 7 Apr 2022 16:30:26 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1C7488BFA
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 13:14:26 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id j21so9167702qta.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 13:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=U0Hnhz6FkWikLEjV/D9C4mwc2iqVMG/fIPbXB9OU5q4=;
-        b=o07BrSOg1I3ZAbol7DUdxPNo0X7ueGUKzVERCNpj3MJ9kk3m9o0e4o+g3VVNbQBltr
-         mSnjB2+5TOFiAxJtHx3fk8yKuoRBvS4xMM2u4mkBbY+gLfjKWb7lc/weMn+oEf/+DkfF
-         vBOwhSSJqqOc3Go9LsSl3HtXat6Uhdu4duXjqDqOT1TZj7FDG8h33YsrOen0PGhYwq2l
-         KPlemUBfaSrXkR9gpPeMKQ8avWSdsxoN9XQ2q+Y1alRclcmMOI6W+wrSiwoL4qrj0A0A
-         9fIWcnGYCzRK/CVGFHxBd5Mw7AVqrmXBQl+typj3/l2CIoLQnp/OjaE/QxYX/zMPFhDx
-         OsYQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=i3fjMxeOPzHLoYAHKb6PCBhzmcPMnM/TNC6V6L/f24Q=;
+        b=L9BQgrut1xgORokDDOEvWbzPG40wzWB5zAc2yAy0bfZ57OqWIQpvwPhDv5vFzkJ+XZ
+         nXuvZEZOl1r9c1aYtIiNNAZUI5EDU+My2YHPu3W1Ym3hc7leujWnDF49vAVi4FyAoigt
+         DMshxcOJ+pJ+7DPgn0bI1hYDchvscZuqdpcSU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=U0Hnhz6FkWikLEjV/D9C4mwc2iqVMG/fIPbXB9OU5q4=;
-        b=FQP+Kopf44bro/BC6mPWEZOjz80sUNRqCWFMxpAAx50Fixc6bReIkfBrbqKcAkdEOG
-         kMTh4bgQjvurlCPuV5queFueI3BbLy5C49A9qucLoF9I4LUOODTWTwTk/3KGSjBkMql3
-         ydiLkD80LZ3vGDMnEUYl2gOGcIKmcFyVQ/l+es6LUaX3n3F3akUHRb8VRDnwDJ3iDIrN
-         4Ele/0gdRdXbw6A2q39T8bEIPKdmQgiA5cTBsHrwi6PYuOlWHtQJk0CL6Qt+4eb5PEGJ
-         oqXuqKEQOwVf7QwDGrOcz0JCdEjzXiftAR8uTSEwVYKwbuy3LhG+XErs+ebDdrARdXcy
-         xJgg==
-X-Gm-Message-State: AOAM530b7+Sj0dBW90l7fc0su77OxUaRSrLJNror/HME0wWXxzTYTGBC
-        9dIHKmjxZP+d/PSvLJwkJTtIFERF3Jp2Og==
-X-Google-Smtp-Source: ABdhPJx6leyDfWk1JfaRZZrzTr1Cw4oe0SYHphG+OfJC1fFuk6FyR6wXnM7iI+LbxfBFFuABBeWe5FlM/b9x4A==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:aed6:d51d:dc38:e705])
- (user=dlatypov job=sendgmr) by 2002:a25:ba0c:0:b0:61a:79a6:fd0 with SMTP id
- t12-20020a25ba0c000000b0061a79a60fd0mr11581459ybg.45.1649360345816; Thu, 07
- Apr 2022 12:39:05 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 12:39:02 -0700
-Message-Id: <20220407193902.1981605-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH] kunit: tool: cosmetic: don't specify duplicate kunit_shutdown's
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=i3fjMxeOPzHLoYAHKb6PCBhzmcPMnM/TNC6V6L/f24Q=;
+        b=nMkRWhKk8QQ6YXnz6buQrHISKBkS8ALIVF1cIypOMkmtsKOaZKdt82hAhbPsPzCUHp
+         eAP0Ln3qzv8QiqIJZ220KoZXR6Ws4H8h6PZCgHmxtQbuS+797JOLsgniMPKAtvUM520E
+         9hpgIchmw8SsDtfCVstjZPkwx9wD8rTTf0Y9+ILMAFQ+jSH1avIWR8Hhaiq0OMWqayW1
+         41GpS1WaUp9wRlCfTKWQU45WiXExZ2yh4G6CSJ9u/fPvfO2jA2vY2N0V7GaXZwvNpn7B
+         XnFJDf8uNOAiSMe/znQDyyWV0riw4SXy7BSZXlXWkS+ty/UcKo+j7lLYFnqVjauj9C5I
+         cuRw==
+X-Gm-Message-State: AOAM5323Srv4ht0xVcTGoYVdpiUpoYctMrPptZB1ZV4sHe481ZXwJ0gn
+        fiNH52/3GRP/8AWNe9cMUvfuXNtaOTZ+nA==
+X-Google-Smtp-Source: ABdhPJz5DaqOGFttJNDDRdIHIC2g5QjLHBA0/lVe6+h70wF2TjnZ2c0JyqQ+8l7gPYd9sMtMCz+cew==
+X-Received: by 2002:a02:6a6b:0:b0:323:fcf9:2227 with SMTP id m43-20020a026a6b000000b00323fcf92227mr7585831jaf.137.1649361799653;
+        Thu, 07 Apr 2022 13:03:19 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id m9-20020a0566022ac900b0064cf3d9f35fsm8870151iov.35.2022.04.07.13.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 13:03:19 -0700 (PDT)
+Subject: Re: [PATCH 4/4] selftests/memfd: add tests for MFD_NOEXEC
+To:     Daniel Verkamp <dverkamp@chromium.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Mattias Nissler <mnissler@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220401220834.307660-1-dverkamp@chromium.org>
+ <20220401220834.307660-5-dverkamp@chromium.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c8114977-a757-60d0-d6b7-9d3f91568019@linuxfoundation.org>
+Date:   Thu, 7 Apr 2022 14:03:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220401220834.307660-5-dverkamp@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Context:
-When using a non-UML arch, kunit.py will boot the test kernel with these
-options by default:
-> mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
+On 4/1/22 4:08 PM, Daniel Verkamp wrote:
+> Tests that ensure MFD_NOEXEC memfds have the appropriate mode bits and
+> cannot be chmod-ed into being executable.
+> 
+> Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+> ---
+>   tools/testing/selftests/memfd/memfd_test.c | 34 ++++++++++++++++++++++
+>   1 file changed, 34 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+> index fdb0e46e9df9..a79567161cdf 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -32,6 +32,10 @@
+>   #define F_SEAL_EXEC	0x0020
+>   #endif
+>   
+> +#ifndef MFD_NOEXEC
+> +#define MFD_NOEXEC	0x0008U
+> +#endif
+> +
+>   /*
+>    * Default is not to test hugetlbfs
+>    */
+> @@ -959,6 +963,35 @@ static void test_seal_exec(void)
+>   	close(fd);
+>   }
+>   
+> +/*
+> + * Test memfd_create with MFD_NOEXEC flag
+> + * Test that MFD_NOEXEC applies F_SEAL_EXEC and prevents change of exec bits
+> + */
+> +static void test_noexec(void)
+> +{
+> +	int fd;
+> +
+> +	printf("%s NOEXEC\n", memfd_str);
+> +
+> +	/* Create with NOEXEC and ALLOW_SEALING */
+> +	fd = mfd_assert_new("kern_memfd_noexec",
+> +			    mfd_def_size,
+> +			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_NOEXEC);
 
-For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
-If you switch them, kunit.py will hang until the --timeout expires.
+Don't we need to check fd here?
 
-So the code currently unconditionally adds 'kunit_shutdown=halt' but
-then appends 'reboot' when using QEMU (which overwrites it).
+> +	mfd_assert_mode(fd, 0666);
+> +	mfd_assert_has_seals(fd, F_SEAL_EXEC);
+> +	mfd_fail_chmod(fd, 0777);
+> +	close(fd);
+> +
+> +	/* Create with NOEXEC but without ALLOW_SEALING */
+> +	fd = mfd_assert_new("kern_memfd_noexec",
+> +			    mfd_def_size,
+> +			    MFD_CLOEXEC | MFD_NOEXEC);
 
-This patch:
-Having these duplicate options is a bit noisy.
-Switch so we only add 'halt' for UML.
+What happens when mfd_assert_new() fails - don't we need to check fd?
 
-I.e. we now get
-UML: 'mem=1G console=tty console=ttyS0 kunit_shutdown=halt'
-QEMU: 'mem=1G console=tty console=ttyS0 kunit_shutdown=reboot'
+> +	mfd_assert_mode(fd, 0666);
+> +	mfd_assert_has_seals(fd, F_SEAL_EXEC | F_SEAL_SEAL);
+> +	mfd_fail_chmod(fd, 0777);
+> +	close(fd);
+> +}
+> +
+>   /*
+>    * Test sharing via dup()
+>    * Test that seals are shared between dupped FDs and they're all equal.
+> @@ -1132,6 +1165,7 @@ int main(int argc, char **argv)
+>   
+>   	test_create();
+>   	test_basic();
+> +	test_noexec();
+>   
+>   	test_seal_write();
+>   	test_seal_future_write();
+> 
 
-Side effect: you can't overwrite kunit_shutdown on UML w/ --kernel_arg.
-But you already couldn't for QEMU, and why would you want to?
+fd isn't checked in the other test F_SEAL_EXEC in the 3/4 patch.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 483f78e15ce9..9731ceb7ad92 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -158,7 +158,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
- 	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
- 		"""Runs the Linux UML binary. Must be named 'linux'."""
- 		linux_bin = os.path.join(build_dir, 'linux')
--		return subprocess.Popen([linux_bin] + params,
-+		return subprocess.Popen([linux_bin] + params + ['kunit_shutdown=halt'],
- 					   stdin=subprocess.PIPE,
- 					   stdout=subprocess.PIPE,
- 					   stderr=subprocess.STDOUT,
-@@ -332,7 +332,7 @@ class LinuxSourceTree(object):
- 	def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
- 		if not args:
- 			args = []
--		args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
-+		args.extend(['mem=1G', 'console=tty'])
- 		if filter_glob:
- 			args.append('kunit.filter_glob='+filter_glob)
- 
-
-base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
--- 
-2.35.1.1178.g4f1659d476-goog
-
+thanks,
+-- Shuah
