@@ -2,126 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A6E4F87FC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 21:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 060BA4F883A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Apr 2022 21:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiDGTZR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Apr 2022 15:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S229445AbiDGTsu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Apr 2022 15:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiDGTZQ (ORCPT
+        with ESMTP id S229441AbiDGTst (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Apr 2022 15:25:16 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8196327084E
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 12:23:13 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id x4so8037425iop.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 12:23:13 -0700 (PDT)
+        Thu, 7 Apr 2022 15:48:49 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCB636C0AB
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Apr 2022 12:43:57 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d2d45c0df7so57251777b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Apr 2022 12:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l8OgFspqIU7b4vxeuPh92V4JMHLE7mkjNVSAXOwkoiI=;
-        b=hqEsqkdUEZnH1z3sA9zbHCvR08eMANE+TcmOmjbDqr6CSsj75T6hADaySzUCuq0SeM
-         w8EgXroBrA+8AiQz6o5psyA0BnEiA5dPpuNR5VWR5JMeOkqZYfSeU9xOJDozQ/6B7iTE
-         EQEw0P1idXPRoOOjCOI0PDLVMOiRJSlqTlSm8=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=U0Hnhz6FkWikLEjV/D9C4mwc2iqVMG/fIPbXB9OU5q4=;
+        b=o07BrSOg1I3ZAbol7DUdxPNo0X7ueGUKzVERCNpj3MJ9kk3m9o0e4o+g3VVNbQBltr
+         mSnjB2+5TOFiAxJtHx3fk8yKuoRBvS4xMM2u4mkBbY+gLfjKWb7lc/weMn+oEf/+DkfF
+         vBOwhSSJqqOc3Go9LsSl3HtXat6Uhdu4duXjqDqOT1TZj7FDG8h33YsrOen0PGhYwq2l
+         KPlemUBfaSrXkR9gpPeMKQ8avWSdsxoN9XQ2q+Y1alRclcmMOI6W+wrSiwoL4qrj0A0A
+         9fIWcnGYCzRK/CVGFHxBd5Mw7AVqrmXBQl+typj3/l2CIoLQnp/OjaE/QxYX/zMPFhDx
+         OsYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=l8OgFspqIU7b4vxeuPh92V4JMHLE7mkjNVSAXOwkoiI=;
-        b=H/Bk2kvwjPiOlGvc7YaMaZVYHOlSe5KrF4ZfqbPrTT9Bia9zcM4T38OcxFFnibh8TJ
-         RtmMJispbnQN2RO9DKwMZETO+lz00bSfdEbaCVcETfTfllyrEg2bhIqqW+ys3/qX0JZN
-         zdro9xwZ1VCLVWtjhSo4QzhL/MMLRgNAO7q4Pib18lxtjvFl0RrBBK0VN7u2z3jBY5Kb
-         FGuKA2vkw+wi582iNIDTx60uqsfEK1d/luQ//h9O03LBN43STtKMc9cPWZb72I1/hYT3
-         sTBbLc9ggFNVRHsSWdXwbZVX5TkEQlwSvNCRrKsTPqVjjgcmLBooUuo7JbQSfEiRs4QR
-         U/CA==
-X-Gm-Message-State: AOAM530qxT3GHhAyGAvHA8YNeeat7VmVkSr+bbNbC4ZthrnQsrxeeswQ
-        B6VJYBmdSJ2bPyW3Qdg6tWeeNg==
-X-Google-Smtp-Source: ABdhPJxo55dq2+4K1HsfVCjcmhVHiDxQKD4sjTU1sAei6R98e/vSm8ep5Z2aHOSWZ1QeDYi08Ztk2w==
-X-Received: by 2002:a05:6602:490:b0:638:c8ed:1e38 with SMTP id y16-20020a056602049000b00638c8ed1e38mr6848815iov.202.1649359392707;
-        Thu, 07 Apr 2022 12:23:12 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id i12-20020a056e020ecc00b002ca53aba365sm5885794ilk.64.2022.04.07.12.23.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 12:23:11 -0700 (PDT)
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix return value checks in
- perf_event_stackmap.c
-To:     Yuntao Wang <ytcoode@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Hengqi Chen <hengqi.chen@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220407153814.104914-1-ytcoode@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7ac36fbe-aa44-9311-320b-1e953c29a3c4@linuxfoundation.org>
-Date:   Thu, 7 Apr 2022 13:23:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220407153814.104914-1-ytcoode@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=U0Hnhz6FkWikLEjV/D9C4mwc2iqVMG/fIPbXB9OU5q4=;
+        b=FQP+Kopf44bro/BC6mPWEZOjz80sUNRqCWFMxpAAx50Fixc6bReIkfBrbqKcAkdEOG
+         kMTh4bgQjvurlCPuV5queFueI3BbLy5C49A9qucLoF9I4LUOODTWTwTk/3KGSjBkMql3
+         ydiLkD80LZ3vGDMnEUYl2gOGcIKmcFyVQ/l+es6LUaX3n3F3akUHRb8VRDnwDJ3iDIrN
+         4Ele/0gdRdXbw6A2q39T8bEIPKdmQgiA5cTBsHrwi6PYuOlWHtQJk0CL6Qt+4eb5PEGJ
+         oqXuqKEQOwVf7QwDGrOcz0JCdEjzXiftAR8uTSEwVYKwbuy3LhG+XErs+ebDdrARdXcy
+         xJgg==
+X-Gm-Message-State: AOAM530b7+Sj0dBW90l7fc0su77OxUaRSrLJNror/HME0wWXxzTYTGBC
+        9dIHKmjxZP+d/PSvLJwkJTtIFERF3Jp2Og==
+X-Google-Smtp-Source: ABdhPJx6leyDfWk1JfaRZZrzTr1Cw4oe0SYHphG+OfJC1fFuk6FyR6wXnM7iI+LbxfBFFuABBeWe5FlM/b9x4A==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:aed6:d51d:dc38:e705])
+ (user=dlatypov job=sendgmr) by 2002:a25:ba0c:0:b0:61a:79a6:fd0 with SMTP id
+ t12-20020a25ba0c000000b0061a79a60fd0mr11581459ybg.45.1649360345816; Thu, 07
+ Apr 2022 12:39:05 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 12:39:02 -0700
+Message-Id: <20220407193902.1981605-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH] kunit: tool: cosmetic: don't specify duplicate kunit_shutdown's
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/7/22 9:38 AM, Yuntao Wang wrote:
-> The bpf_get_stackid() function may also return 0 on success.
+Context:
+When using a non-UML arch, kunit.py will boot the test kernel with these
+options by default:
+> mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
 
-Can you add couple of sentences to describe what this patch
-does? bpf_get_stackid() may also return doesn't really say
-anything about why this patch is needed.
+For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
+If you switch them, kunit.py will hang until the --timeout expires.
 
-> 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->   tools/testing/selftests/bpf/progs/perf_event_stackmap.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-> index b3fcb5274ee0..f793280a3238 100644
-> --- a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-> +++ b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
-> @@ -35,10 +35,10 @@ int oncpu(void *ctx)
->   	long val;
->   
->   	val = bpf_get_stackid(ctx, &stackmap, 0);
-> -	if (val > 0)
-> +	if (val >= 0)
->   		stackid_kernel = 2;
->   	val = bpf_get_stackid(ctx, &stackmap, BPF_F_USER_STACK);
-> -	if (val > 0)
-> +	if (val >= 0)
->   		stackid_user = 2;
->   
->   	trace = bpf_map_lookup_elem(&stackdata_map, &key);
-> 
-Linux 5.18-rc1 shows a couple of more bpf_get_stackid() in this function.
-Removed in bpf-next - I assume.
+So the code currently unconditionally adds 'kunit_shutdown=halt' but
+then appends 'reboot' when using QEMU (which overwrites it).
 
-The change is good. I would like to see it explained better in the
-commit log.
+This patch:
+Having these duplicate options is a bit noisy.
+Switch so we only add 'halt' for UML.
 
-With the commit log fixed to explain why this change is needed and
-what happens if val equals to 0 condition isn't checked:
+I.e. we now get
+UML: 'mem=1G console=tty console=ttyS0 kunit_shutdown=halt'
+QEMU: 'mem=1G console=tty console=ttyS0 kunit_shutdown=reboot'
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Side effect: you can't overwrite kunit_shutdown on UML w/ --kernel_arg.
+But you already couldn't for QEMU, and why would you want to?
 
-thanks,
--- Shuah
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_kernel.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 483f78e15ce9..9731ceb7ad92 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -158,7 +158,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = os.path.join(build_dir, 'linux')
+-		return subprocess.Popen([linux_bin] + params,
++		return subprocess.Popen([linux_bin] + params + ['kunit_shutdown=halt'],
+ 					   stdin=subprocess.PIPE,
+ 					   stdout=subprocess.PIPE,
+ 					   stderr=subprocess.STDOUT,
+@@ -332,7 +332,7 @@ class LinuxSourceTree(object):
+ 	def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
+ 		if not args:
+ 			args = []
+-		args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
++		args.extend(['mem=1G', 'console=tty'])
+ 		if filter_glob:
+ 			args.append('kunit.filter_glob='+filter_glob)
+ 
+
+base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
+-- 
+2.35.1.1178.g4f1659d476-goog
+
