@@ -2,66 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01BC4F94F6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 13:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456B54F96CE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235342AbiDHMAB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 08:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
+        id S236311AbiDHNiZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 09:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235344AbiDHMAA (ORCPT
+        with ESMTP id S236304AbiDHNiY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:00:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C998930A
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:57:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73103B82A8B
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:57:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF22C385A1;
-        Fri,  8 Apr 2022 11:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649419073;
-        bh=btI/e7eBvCT+/IcphkBDHYpeKxpTwpCQkqMo25n9Ma8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tb2LwMSeUCkAb/euw3pTplT//ugWPezmVJDkwJU3VJvSGpI1P9zRfH4nsq+FtEht1
-         wDJacqn5P0ROdBmOL9Va5vTlo1j9bjeXN+i4rWlUrfN/rPfBXTzrzsJcj79BfiNaLg
-         /IRiJHAt0lps+dh3oGqkDw/M+1C2/PaNPRrGKd3qS5lLMzS1dhYPHiqK2sVCkcWRRm
-         FMBz4Z51q6Uoh2OGqspLt90UT6ux03BBKCZFOL7BQdUh4W7oibLQOsmlTX4wBhNJaK
-         U2QmytRTqB5egaxurih8hih6KzwfXeFzo/I5yUhtkPdAUE2uxtAEtdlVBA2bl5wxaF
-         n3lVn7/IoxUIg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Luca Salabrino <luca.scalabrino@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v13 39/39] selftests/arm64: Add a testcase for handling of ZA on clone()
-Date:   Fri,  8 Apr 2022 12:43:28 +0100
-Message-Id: <20220408114328.1401034-40-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220408114328.1401034-1-broonie@kernel.org>
-References: <20220408114328.1401034-1-broonie@kernel.org>
+        Fri, 8 Apr 2022 09:38:24 -0400
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DF71CABEE
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 06:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1649424979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/PG4zqCpA/amtV+9YJhw/hETyJ1RbUBArPPMN5WrtBY=;
+        b=JWhch1mrZ7r497Uzd/+5aVkmCwT6ZGoTDhWkpkIss31eqIh1rulXtDGn/sDA/FUM1cfqri
+        NMj8KgPP/Vu6SzqiE9za2BB3+cEC0mfvz22YcJ7XuslKpUu/gNaCv+dTPyedSuFQp/JCLm
+        v2qW3ztbtWgj8F8IsbqkSozzplFKT7I=
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05lp2104.outbound.protection.outlook.com [104.47.18.104]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-7-nUnpeTsyPqO6lV3coIengA-1; Fri, 08 Apr 2022 15:36:16 +0200
+X-MC-Unique: nUnpeTsyPqO6lV3coIengA-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UAjWz8e3MQaqfLXwsVdajnoP9I/0PgyZRaays1cupQ0llo87IGPpFwL6aBomGcwOZvQjsQGtl1RTZMZx8A/BkUfbw1S2tSy7Hh47+pbrko6X4cJMP8BQOFfPLocmjfyVVK2Mauk5zt/E1NsVNAX2+ZHPzv2f/qpuhRmy2nymRA5tr94quwe87MXKNgLfuQvcBji9Kdc62/RjU96zR1jHlkzFagCjdySlpQO8ZnlAbTRy27QNEBEs6a6acTy+N3aNVvPxLRiOkWxUC6Y3wRhuIYZL7FGiXdbCUs219dM4wiwZuFUdytqE926GPaXX8rrZVf5pvyYQyo96on2eO51CDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eCtl6rGmW1R29uDLXW8j9cdCGUHFu78VTUtwoIeahgw=;
+ b=gMSZ+WGYp4caB+P+YWsg1GJFwzBySRXAnWNwTCWWLwDEJqU++9brpKyvEJIb5mu5xiZXlws2Qiotj+tAPiVJDiswhyQ7qBlEkp8VjGYb378YA8uPGLfrLkvJ5PblYkVZpqNmuqAuf5EMvccdeiAzRveHZxuQD4/Dkwk5OCwqyLJ8zrc4BQfB+xSgMukY/1YhOEPV3quFnksLQJaFJm+DXkxgHINCLK8J7c4oMqJimWcY5O3t3GsNJ+Q23T5l1VICrJuysb1d5W8IKgMvwXoU8IfN4Qpxq0J0IKsJ3t0rqVCSeVHYGI4aHDpJkYOQsA3WKx82sH+0cbyj+cr52Sk1Fg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
+ by AS8PR04MB7766.eurprd04.prod.outlook.com (2603:10a6:20b:2aa::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
+ 2022 13:36:15 +0000
+Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::9974:fd5e:e3c0:14dc]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
+ ([fe80::9974:fd5e:e3c0:14dc%3]) with mapi id 15.20.5123.031; Fri, 8 Apr 2022
+ 13:36:15 +0000
+From:   Geliang Tang <geliang.tang@suse.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+CC:     Geliang Tang <geliang.tang@suse.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/2] drop duplicate max/min definitions
+Date:   Fri,  8 Apr 2022 21:36:22 +0800
+Message-ID: <cover.1649424565.git.geliang.tang@suse.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: TYBP286CA0017.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:404:ce::29) To HE1PR0402MB3497.eurprd04.prod.outlook.com
+ (2603:10a6:7:83::14)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7450; h=from:subject; bh=btI/e7eBvCT+/IcphkBDHYpeKxpTwpCQkqMo25n9Ma8=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/dE62ndVOXKtzWfdUc9iFN8nIyp2Ggizqn4A4F tGhah2WJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf3QAKCRAk1otyXVSH0JD1B/ 9eCu9xc12h3P32xNLTgsLYfEqvcj10aF9BNY7sXE8ia4w/l6Qoj9I285dHdGBwnvKtWz77lW795o6B wKIpSqbe1nthNL02tD+Y2INE3DviQdJiE+CLz6xEhT0vqheAusRAJhsw5PAZRgERFXWNipCE0a9Ctw WKFcCj8x0Iy/YnA9GbYuUoWZzBO5fWuOa5DbPjhQxPGabpiGqAU3kvuto38NMDpnLcu/cgkbUt3DbS 3vKyHSlbTtBMIrfLTepi2b9OKgx4Ze4dPRDJyQgrpwFoWRnH+LvUxwmA8OqzJaBUepnoRoVf+zy3nc /lLx+nqIy9XPe2sUZrEEl2Kf74bShQ
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 390ccb32-af61-4b2f-f978-08da1964c0e1
+X-MS-TrafficTypeDiagnostic: AS8PR04MB7766:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR04MB7766F5200291E2A46A7B4901F8E99@AS8PR04MB7766.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yHOki9gZydbIDy9JFqm9JiU6/ozaIsd7l3APRLCweKxbUW+3SCiZMeQ7auTg0Kvl5ztF8cQgScjrNclwkDm751q5Pr7TFJf7MsyW45eZ3M2VYE9nCP0Sjhg2ukGSKidPspNdg+/ozO23LkLdGAzxaCY+kcxn8ov3uryqI7/llIcdk+hgoT/gMzwSYKc0buZVuCPiPkQTdyOev5obJr41zCg+/Vllq+xZRHwfuPio+iqHjhyP3ZxEkH6qDPkEB/JVXABFAXsUwWhX+elw8KqAEZPiCoc3/TpReDAJc7WSm34qq7aogECdPvGfghAYPvcXMWAjOHDVC7TsoQ58u2Gkx/zjoe7Zwp/E/FpIJ1Ge+i1QDIkFU/ivwPlguInxQOFzcAULOTQpFVqssrnqBXwSEE9yIPxCTDv9NMovy7QWCL4psQqN2ECQ2QNXXuVoYZTwYWSfWixOXWXkYo73aD1aenzAfglT59RJqT2trU/z7MnDHg19S4x9p/N+hcWPQMDKDHoN4l0f5rh8x9fXjBZlWMll5c1BJnm4UJhvBaCcT0XJHnXE1hw5wWxkmAPGZm4lxzmemzh7TFhXJuStmMAJvIzLPbMANkkTD0ayo2TuhjJw7uv2/cbODMp2mnKUrwwN3bS04EppO5MEGuGEM0mi+fj5W+yMxflASSmpctPXyntiCYkX5i5EKeJWPsIU1d+t
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(4326008)(8676002)(66946007)(66556008)(66476007)(5660300002)(7416002)(26005)(316002)(110136005)(36756003)(508600001)(186003)(6486002)(2616005)(6666004)(6512007)(6506007)(2906002)(8936002)(86362001)(44832011)(83380400001)(4744005)(13296009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5ubCV/X9lGt0aA0L9UtMTkKcI24/eD6fBO6zmm7kPoBZdLCDdFIDtZW+WX90?=
+ =?us-ascii?Q?4lgpciACFN1NHp6ZM7Vg2vsu2pvbIM6d6byzwygI2H6QauunNI1S9WpCiSO0?=
+ =?us-ascii?Q?1WfgT4vGyv8KYSJm0qibM9xEPXbYjCEwx/U9AXdPhSd26S3JTWt4E0EuqXOV?=
+ =?us-ascii?Q?3b5rnhuFlfhYgCRPHbJ9o2PT6GlB7Pv7wrF54nkfPYyFFY4qdHoH+UTvrfYM?=
+ =?us-ascii?Q?NfnlR5oB5ZTCuVcXc4pMP5FQd5DWUdkwoXfnK4+/+pPgGPC5Kdz3mmeNPLVA?=
+ =?us-ascii?Q?CCG9VI90wEKxgLbTVmtwpUroPudHydIzbiZUsElL0sgcGulrE0g4j2fCLQZz?=
+ =?us-ascii?Q?VmKzwpohRrcVuQHF0RmV44t6NjTzMaY96UEaSyZ7jwpfHALapP5gjdhd7pj4?=
+ =?us-ascii?Q?ThaK2a09uhgpnWxvtgH6peUy1JeFfa2927CH9wRsejDqbRlT1tXyZ00bzC1r?=
+ =?us-ascii?Q?XytUScg5faXXgqyGh13MRPYuiW2B0xt0wFpwDCfVatzQNWXCM0ikT9M8A8tB?=
+ =?us-ascii?Q?7+FVUV5cIo5G2LjCK+Vql25z5bf1r94JGjjZjdZzO0Fk4XkAVNPUq5IBRVnC?=
+ =?us-ascii?Q?C6TWEACBEoz1R6lIj3HWuXylNYZ80MJrGA8AX6x0/l+AUAMOnwKQAORlVJ87?=
+ =?us-ascii?Q?+elTTmVAGL5K2L0vBngACjreRdZVXUNox4akfEZB00Y1QgKzHOz9vGE0VtxU?=
+ =?us-ascii?Q?SBxlhvcHa2TI+J9BSPKooKyO8dFybI3ArCoPLTxFu74k1D2N2qpo5l8+v7b6?=
+ =?us-ascii?Q?28B/EvzxWETJ+oi26d14ipoXhDWWJWljfM2NUFnFVHGD+FoLUtt8xWL4Ujd/?=
+ =?us-ascii?Q?68vKsNRwqdSq46TB5w7O8oUH6vfgWtzeimCFSPFfM5o2pgrgqPWz7ZE+2s5B?=
+ =?us-ascii?Q?279hMFGu3k4FbKDr4/zLLN5KnOpafVEXBmV0unjISBxOki5xwhtGhOqBBSu0?=
+ =?us-ascii?Q?vQX8lOd+VD/P3WJOvgz7serazDND32nMOK5g+gMkGoZxVp9eSdpzKKSnzn5/?=
+ =?us-ascii?Q?w/6gZHni7Y0QmcT3QVVxrQ9Ckmjs75FiFuhMzvHKq4ZQoCRyNdQZ7hN/TRXS?=
+ =?us-ascii?Q?eDEreRoAq0yi9dbRCVxnMifHxZgOAv5Eq2VyLW5no+AK1x+rY1QCW+a9C7cT?=
+ =?us-ascii?Q?0yBxiKaUOvhT9aPO4WYGj56EgRYKVeZrpm8PZcQoPX0cBBhPqgeuZid07Mcv?=
+ =?us-ascii?Q?ItNI+g8qRZ2lKbdRRzVBEhV35W/kGQ3aXn2MEbhvCwYnLkYAKfKnD6p6RiBK?=
+ =?us-ascii?Q?abdzMPurpLpSSg1C3zNZngHnnb9s3YjGCRqkVQzoELgcFF2NGYC5z1hgc99L?=
+ =?us-ascii?Q?RwmNIAPFx1vpR6ZdO09JV8PRysL1YRQVP3+sYji/CvetVHkmeytaPo6UTGeN?=
+ =?us-ascii?Q?qcSZPy16PBV/Sd5G2ax4RHsVI7YL4jNtmwS0BGIM59Q/H+XnmClRQsxzi/9y?=
+ =?us-ascii?Q?mE8BBJyAvaRDYYbHnepSPvs12uuwXClCVd9TXPX8AOzKCWKD8IeuIaQPCvge?=
+ =?us-ascii?Q?kq2HCblXlIsMTcSdI3KUc/iM4C/fOWar3cv+1JWwfuhBHj3mDJiGECs70ARb?=
+ =?us-ascii?Q?MIPwuobwGI9wZmq4brUYdBok3nqncGlE7NRaEayECWQ/dfLQIxP9wj/cvZqh?=
+ =?us-ascii?Q?Rnxe7sNYWv4UjL2avcSAtyO7n8krkJd50dqGWVdwlsqj+4WysiKM0vZqjvzE?=
+ =?us-ascii?Q?J/sPQ5PBGurBLpJlOnosrfzx7XXgtzRVoTo86mHsAjp1Hl5WEEyLpjiii05f?=
+ =?us-ascii?Q?JK1TKua9Uznghm36Houy96lKRZT9bWQ=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 390ccb32-af61-4b2f-f978-08da1964c0e1
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 13:36:15.1211
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RD4Er1B7OP52C49dZIp6sCj6soOZEFduSoAfoe5cRt9UfHETM6iey4GkBw+PBhsse3la+otHpwmKdXTZgkn3yg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7766
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,296 +133,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a small testcase that attempts to do a clone() with ZA enabled and
-verifies that it remains enabled with the same contents. We only check
-one word in one horizontal vector of ZA since there's already other tests
-that check for data corruption more broadly, we're just looking to make
-sure that ZA is still enabled and it looks like the data got copied.
+Two small cleanups for selftests, drop duplicate max/min definitions.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/.gitignore   |   1 +
- tools/testing/selftests/arm64/fp/Makefile     |   9 +-
- .../testing/selftests/arm64/fp/za-fork-asm.S  |  61 +++++++
- tools/testing/selftests/arm64/fp/za-fork.c    | 156 ++++++++++++++++++
- 4 files changed, 226 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/fp/za-fork-asm.S
- create mode 100644 tools/testing/selftests/arm64/fp/za-fork.c
+v2:
+ - do more cleanups as Daniel suggested.
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index d98d3d48b504..ea947af63882 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -8,5 +8,6 @@ sve-test
- ssve-test
- vec-syscfg
- vlset
-+za-fork
- za-ptrace
- za-test
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 807a8faf8d57..95e707e32247 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CFLAGS += -I../../../../../usr/include/
--TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
-+TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-fork za-ptrace
- TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
-@@ -11,6 +11,7 @@ TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
- 
- all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
- 
-+# Build with nolibc to avoid effects due to libc's clone() support
- fp-pidbench: fp-pidbench.S asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
- fpsimd-test: fpsimd-test.o asm-utils.o
-@@ -25,6 +26,12 @@ ssve-test: sve-test.S asm-utils.o
- 	$(CC) -DSSVE -nostdlib $^ -o $@
- vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
-+za-fork: za-fork.o za-fork-asm.o
-+	$(CC) -nostdlib -static $^ -o $@ -lgcc
-+za-fork.o: za-fork.c
-+	$(CC) -c -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
-+		-include ../../../../include/nolibc/nolibc.h \
-+		-ffreestanding -Wall $^ -o $@
- za-test: za-test.o asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
- za-ptrace: za-ptrace.o
-diff --git a/tools/testing/selftests/arm64/fp/za-fork-asm.S b/tools/testing/selftests/arm64/fp/za-fork-asm.S
-new file mode 100644
-index 000000000000..947c0962ee1b
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-fork-asm.S
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2021 ARM Limited.
-+
-+#include "sme-inst.h"
-+
-+.arch_extension sve
-+
-+#define MAGIC     42
-+
-+#define MAXVL     2048
-+#define MAXVL_B   (MAXVL / 8)
-+
-+.pushsection .text
-+.data
-+.align 4
-+scratch:
-+	.space	MAXVL_B
-+.popsection
-+
-+.globl fork_test
-+fork_test:
-+	smstart_za
-+
-+	// For simplicity just set one word in one vector, other tests
-+	// cover general data corruption issues.
-+	ldr	x0, =scratch
-+	mov	x1, #MAGIC
-+	str	x1, [x0]
-+	mov	w12, wzr
-+	_ldr_za 12, 0			// ZA.H[w12] loaded from [x0]
-+
-+	// Tail call into the C portion that does the fork & verify
-+	b	fork_test_c
-+
-+.globl verify_fork
-+verify_fork:
-+	// SVCR should have ZA=1, SM=0
-+	mrs	x0, S3_3_C4_C2_2
-+	and	x1, x0, #3
-+	cmp	x1, #2
-+	beq	1f
-+	mov	x0, xzr
-+	b	100f
-+1:
-+
-+	// ZA should still have the value we loaded
-+	ldr	x0, =scratch
-+	mov	w12, wzr
-+	_str_za 12, 0			// ZA.H[w12] stored to [x0]
-+	ldr	x1, [x0]
-+	cmp	x1, #MAGIC
-+	beq	2f
-+	mov	x0, xzr
-+	b	100f
-+
-+2:
-+	// All tests passed
-+	mov	x0, #1
-+100:
-+	ret
-+
-diff --git a/tools/testing/selftests/arm64/fp/za-fork.c b/tools/testing/selftests/arm64/fp/za-fork.c
-new file mode 100644
-index 000000000000..ff475c649e96
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-fork.c
-@@ -0,0 +1,156 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 ARM Limited.
-+ * Original author: Mark Brown <broonie@kernel.org>
-+ */
-+
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/sched.h>
-+#include <linux/wait.h>
-+
-+#define EXPECTED_TESTS 1
-+
-+static void putstr(const char *str)
-+{
-+	write(1, str, strlen(str));
-+}
-+
-+static void putnum(unsigned int num)
-+{
-+	char c;
-+
-+	if (num / 10)
-+		putnum(num / 10);
-+
-+	c = '0' + (num % 10);
-+	write(1, &c, 1);
-+}
-+
-+static int tests_run;
-+static int tests_passed;
-+static int tests_failed;
-+static int tests_skipped;
-+
-+static void print_summary(void)
-+{
-+	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
-+		putstr("# UNEXPECTED TEST COUNT: ");
-+
-+	putstr("# Totals: pass:");
-+	putnum(tests_passed);
-+	putstr(" fail:");
-+	putnum(tests_failed);
-+	putstr(" xfail:0 xpass:0 skip:");
-+	putnum(tests_skipped);
-+	putstr(" error:0\n");
-+}
-+
-+int fork_test(void);
-+int verify_fork(void);
-+
-+/*
-+ * If we fork the value in the parent should be unchanged and the
-+ * child should start with the same value.  This is called from the
-+ * fork_test() asm function.
-+ */
-+int fork_test_c(void)
-+{
-+	pid_t newpid, waiting;
-+	int child_status, parent_result;
-+
-+	newpid = fork();
-+	if (newpid == 0) {
-+		/* In child */
-+		if (!verify_fork()) {
-+			putstr("# ZA state invalid in child\n");
-+			exit(0);
-+		} else {
-+			exit(1);
-+		}
-+	}
-+	if (newpid < 0) {
-+		putstr("# fork() failed: -");
-+		putnum(-newpid);
-+		putstr("\n");
-+		return 0;
-+	}
-+
-+	parent_result = verify_fork();
-+	if (!parent_result)
-+		putstr("# ZA state invalid in parent\n");
-+
-+	for (;;) {
-+		waiting = waitpid(newpid, &child_status, 0);
-+
-+		if (waiting < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			putstr("# waitpid() failed: ");
-+			putnum(errno);
-+			putstr("\n");
-+			return 0;
-+		}
-+		if (waiting != newpid) {
-+			putstr("# waitpid() returned wrong PID\n");
-+			return 0;
-+		}
-+
-+		if (!WIFEXITED(child_status)) {
-+			putstr("# child did not exit\n");
-+			return 0;
-+		}
-+
-+		return WEXITSTATUS(child_status) && parent_result;
-+	}
-+}
-+
-+#define run_test(name)			     \
-+	if (name()) {			     \
-+		tests_passed++;		     \
-+	} else {			     \
-+		tests_failed++;		     \
-+		putstr("not ");		     \
-+	}				     \
-+	putstr("ok ");			     \
-+	putnum(++tests_run);		     \
-+	putstr(" " #name "\n");
-+
-+int main(int argc, char **argv)
-+{
-+	int ret, i;
-+
-+	putstr("TAP version 13\n");
-+	putstr("1..");
-+	putnum(EXPECTED_TESTS);
-+	putstr("\n");
-+
-+	putstr("# PID: ");
-+	putnum(getpid());
-+	putstr("\n");
-+
-+	/*
-+	 * This test is run with nolibc which doesn't support hwcap and
-+	 * it's probably disproportionate to implement so instead check
-+	 * for the default vector length configuration in /proc.
-+	 */
-+	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
-+	if (ret >= 0) {
-+		run_test(fork_test);
-+
-+	} else {
-+		putstr("# SME support not present\n");
-+
-+		for (i = 0; i < EXPECTED_TESTS; i++) {
-+			putstr("ok ");
-+			putnum(i);
-+			putstr(" skipped\n");
-+		}
-+
-+		tests_skipped += EXPECTED_TESTS;
-+	}
-+
-+	print_summary();
-+
-+	return 0;
-+}
--- 
-2.30.2
+v1:
+ - "selftests: bpf: use MIN for TCP CC tests"
+
+Geliang Tang (2):
+  selftests: bpf: drop duplicate max/min definitions
+  selftests: mqueue: drop duplicate min definition
+
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c    | 5 ++---
+ tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  | 7 +++----
+ tools/testing/selftests/bpf/prog_tests/snprintf.c    | 5 ++---
+ tools/testing/selftests/bpf/prog_tests/tc_redirect.c | 2 +-
+ tools/testing/selftests/mqueue/mq_perf_tests.c       | 4 ++--
+ 5 files changed, 10 insertions(+), 13 deletions(-)
+
+--=20
+2.34.1
 
