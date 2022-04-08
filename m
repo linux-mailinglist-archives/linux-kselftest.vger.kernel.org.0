@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981E24F94DB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 13:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83974F94DE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 13:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235327AbiDHL7D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 07:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S235345AbiDHL7S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 07:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235318AbiDHL7B (ORCPT
+        with ESMTP id S235330AbiDHL7H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:59:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC8A890B0
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:56:57 -0700 (PDT)
+        Fri, 8 Apr 2022 07:59:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663FA8A33D
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:57:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0F08B82A73
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC53BC385AB;
-        Fri,  8 Apr 2022 11:56:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F000F62050
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9C21C385A8;
+        Fri,  8 Apr 2022 11:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649419015;
-        bh=na/JOPmEJjAJYm5oDOo7bh606dwyKvKZQJLvemIUYT0=;
+        s=k20201202; t=1649419019;
+        bh=/S7OrDRtCJk7Cj1NAWEnuqt+8teJf4RrTe+CbmCOR64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IHVmOGV6hLdZwCZsaJvD/LgtGcgzbDzUdRCL6DZzn3MyoSsbofyy69wzqoXskJHIv
-         oNjbPqp/rq3/tXVw9/Gn8DN7nsM9OUYpsWVr33enFYZM7QPdLaSFz4RwiQ/GeagGqv
-         o5yw3fHWMXk478T0BkBbxsNjPpQ4l2wxm580r77uQXKKLPrCczzqqOfwnTBftT12j9
-         3b7VqmuwcTBqGs5uvP1fLgKxLTUplOUGaNsQOV3GcaOKE5nD+TWuUhguCu8sxzA/mi
-         qmk40fLSZHd32CqzOJtX8TQuXIb0F+bs4ZsfnxPduwiI7Ut9hYskUaBtSUpN7xkX8f
-         8nTOFywyKUzrA==
+        b=awayaFyr0lO/6MYW9beHs0+WhywS6sH4GVL88u9s7SRHDMr6OVTcjOEkd2h2dXVp9
+         PyPVsK1p1ohRbuN/BeaeDz6HfPl4U1DOJrxmfaPVCi+UJa+PQn3XvCp4suKGZmLdo4
+         Q5CSbgp7SGSWm55nPP18Jro2/eljZ7gL+qAv73QqMPEik12/PHqitLNF8hw3EwiY/X
+         o6fUiGu/Ot2CugaJx9y7XRSk1ujmDUhrkDaR/l0apOGTBHd4/eTaxPvEYs5Ri4vEJb
+         n2jB2XY4H4vtinYYH24kw3hhpYku8ldPB/QrW4e/G3KxYAaornGoBcTex32+mmIqh+
+         cUJpKFyD4U7Yw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,14 +49,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v13 25/39] KVM: arm64: Trap SME usage in guest
-Date:   Fri,  8 Apr 2022 12:43:14 +0100
-Message-Id: <20220408114328.1401034-26-broonie@kernel.org>
+Subject: [PATCH v13 26/39] KVM: arm64: Handle SME host state when running guests
+Date:   Fri,  8 Apr 2022 12:43:15 +0100
+Message-Id: <20220408114328.1401034-27-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220408114328.1401034-1-broonie@kernel.org>
 References: <20220408114328.1401034-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3948; h=from:subject; bh=na/JOPmEJjAJYm5oDOo7bh606dwyKvKZQJLvemIUYT0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/SHz8ZRiNcxBYEIvwXcJdN+u7/5gtiOWB2AjkN 8clZwbWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf0gAKCRAk1otyXVSH0BE4B/ oDyE4wyU26D0mVMUNpH4Mn3b1LhE8rK5MS0jkxIr5VIDiabxvebhJ8qZU2Jm1eI+FJRo0IkGlGAqYz bNgU+RiOP6EZvm3kd27WcBCtRnB0pDEvBtJL5hc9EwTm6gP8EpMx8yUXrdZMoQLUF27sxdttDtgY8/ SxEDXEyM2RoVs11YjAbLe/YyTQX35eoYJw0jYCmdKCXVxehKsW/qXZYS0MFL0K6glY1WfkvM0PKuv5 U0COdM1cQeXr3qXbStCgKzaG3dhnA7wrme0OoQsAnq+L4Cqlq8lhRkGofkAIsGFXXaPcsauYIQtpiB mjZVNFOdKFyVoJUxDYdPmAxIJyQFN6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4067; h=from:subject; bh=/S7OrDRtCJk7Cj1NAWEnuqt+8teJf4RrTe+CbmCOR64=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/TeSh4ET7lu4HDbYeYp6mP0c5wB8aCWwZomguW qfrq0haJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf0wAKCRAk1otyXVSH0PFiB/ 9tCwUx5rRQFiYgkoeKKPJ0GxdImYfsrxDAMHX4ZfGnZfMBHRK1INjwkOWqy1L3hTnLLx9hKADTnvOG yEImiFHip7vuCVp3h534Xm3yIJPzb61Nl003e1vNBzDIV65qReafGXuLsIpMhmNICrdkzM7/iKumpe +q7o6RxWjKwdyrFWhhaaJiuq5ak7a1jJYJyqPrayKh199ZJPhj9je+I/EtCd5GZ1AOm4gGSk/YHgEd WZFG6xDqL3tOuW506D/zgmk/BcsR7hW+iC1KgDcLtzEHNia71QHolCY6nCPO6oOVPbRwGVz4H5XgOW owQDpqNeHCcvNIe0lCAYDrnscrMgud
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,116 +69,101 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SME defines two new traps which need to be enabled for guests to ensure
-that they can't use SME, one for the main SME operations which mirrors the
-traps for SVE and another for access to TPIDR2 in SCTLR_EL2.
+While we don't currently support SME in guests we do currently support it
+for the host system so we need to take care of SME's impact, including
+the floating point register state, when running guests. Simiarly to SVE
+we need to manage the traps in CPACR_RL1, what is new is the handling of
+streaming mode and ZA.
 
-For VHE manage SMEN along with ZEN in activate_traps() and the FP state
-management callbacks, along with SCTLR_EL2.EnTPIDR2.  There is no
-existing dynamic management of SCTLR_EL2.
+Normally we defer any handling of the floating point register state until
+the guest first uses it however if the system is in streaming mode FPSIMD
+and SVE operations may generate SME traps which we would need to distinguish
+from actual attempts by the guest to use SME. Rather than do this for the
+time being if we are in streaming mode when entering the guest we force
+the floating point state to be saved immediately and exit streaming mode,
+meaning that the guest won't generate SME traps for supported operations.
 
-For nVHE manage TSM in activate_traps() along with the fine grained
-traps for TPIDR2 and SMPRI.  There is no existing dynamic management of
-fine grained traps.
+We could handle ZA in the access trap similarly to the FPSIMD/SVE state
+without the disruption caused by streaming mode but for simplicity
+handle it the same way as streaming mode for now.
+
+This will be revisited when we support SME for guests (hopefully before SME
+hardware becomes available), for now it will only incur additional cost on
+systems with SME and even there only if streaming mode or ZA are enabled.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/kvm/hyp/nvhe/switch.c | 30 ++++++++++++++++++++++++++++++
- arch/arm64/kvm/hyp/vhe/switch.c  | 11 ++++++++++-
- 2 files changed, 40 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/kvm_host.h |  1 +
+ arch/arm64/kvm/fpsimd.c           | 36 +++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 6410d21d8695..caace61ea459 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -47,10 +47,24 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
- 		val |= CPTR_EL2_TFP | CPTR_EL2_TZ;
- 		__activate_traps_fpsimd32(vcpu);
- 	}
-+	if (cpus_have_final_cap(ARM64_SME))
-+		val |= CPTR_EL2_TSM;
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 90e92bcf2352..450cded7d361 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -444,6 +444,7 @@ struct kvm_vcpu_arch {
+ #define KVM_ARM64_DEBUG_STATE_SAVE_TRBE	(1 << 13) /* Save TRBE context if active  */
+ #define KVM_ARM64_FP_FOREIGN_FPSTATE	(1 << 14)
+ #define KVM_ARM64_ON_UNSUPPORTED_CPU	(1 << 15) /* Physical CPU not in supported_cpus */
++#define KVM_ARM64_HOST_SME_ENABLED	(1 << 16) /* SME enabled for EL0 */
  
- 	write_sysreg(val, cptr_el2);
- 	write_sysreg(__this_cpu_read(kvm_hyp_vector), vbar_el2);
+ #define KVM_GUESTDBG_VALID_MASK (KVM_GUESTDBG_ENABLE | \
+ 				 KVM_GUESTDBG_USE_SW_BP | \
+diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+index 57d7ac3cfa0c..441edb9c398c 100644
+--- a/arch/arm64/kvm/fpsimd.c
++++ b/arch/arm64/kvm/fpsimd.c
+@@ -82,6 +82,26 @@ void kvm_arch_vcpu_load_fp(struct kvm_vcpu *vcpu)
  
-+	if (cpus_have_final_cap(ARM64_SME)) {
-+		val = read_sysreg_s(SYS_HFGRTR_EL2);
-+		val &= ~(HFGxTR_EL2_nTPIDR2_EL0_MASK |
-+			 HFGxTR_EL2_nSMPRI_EL1_MASK);
-+		write_sysreg_s(val, SYS_HFGRTR_EL2);
+ 	if (read_sysreg(cpacr_el1) & CPACR_EL1_ZEN_EL0EN)
+ 		vcpu->arch.flags |= KVM_ARM64_HOST_SVE_ENABLED;
 +
-+		val = read_sysreg_s(SYS_HFGWTR_EL2);
-+		val &= ~(HFGxTR_EL2_nTPIDR2_EL0_MASK |
-+			 HFGxTR_EL2_nSMPRI_EL1_MASK);
-+		write_sysreg_s(val, SYS_HFGWTR_EL2);
++	/*
++	 * We don't currently support SME guests but if we leave
++	 * things in streaming mode then when the guest starts running
++	 * FPSIMD or SVE code it may generate SME traps so as a
++	 * special case if we are in streaming mode we force the host
++	 * state to be saved now and exit streaming mode so that we
++	 * don't have to handle any SME traps for valid guest
++	 * operations. Do this for ZA as well for now for simplicity.
++	 */
++	if (system_supports_sme()) {
++		if (read_sysreg(cpacr_el1) & CPACR_EL1_SMEN_EL0EN)
++			vcpu->arch.flags |= KVM_ARM64_HOST_SME_ENABLED;
++
++		if (read_sysreg_s(SYS_SVCR_EL0) &
++		    (SYS_SVCR_EL0_SM_MASK | SYS_SVCR_EL0_ZA_MASK)) {
++			vcpu->arch.flags &= ~KVM_ARM64_FP_HOST;
++			fpsimd_save_and_flush_cpu_state();
++		}
++	}
+ }
+ 
+ /*
+@@ -135,6 +155,22 @@ void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
+ 
+ 	local_irq_save(flags);
+ 
++	/*
++	 * If we have VHE then the Hyp code will reset CPACR_EL1 to
++	 * CPACR_EL1_DEFAULT and we need to reenable SME.
++	 */
++	if (has_vhe() && system_supports_sme()) {
++		/* Also restore EL0 state seen on entry */
++		if (vcpu->arch.flags & KVM_ARM64_HOST_SME_ENABLED)
++			sysreg_clear_set(CPACR_EL1, 0,
++					 CPACR_EL1_SMEN_EL0EN |
++					 CPACR_EL1_SMEN_EL1EN);
++		else
++			sysreg_clear_set(CPACR_EL1,
++					 CPACR_EL1_SMEN_EL0EN,
++					 CPACR_EL1_SMEN_EL1EN);
 +	}
 +
- 	if (cpus_have_final_cap(ARM64_WORKAROUND_SPECULATIVE_AT)) {
- 		struct kvm_cpu_context *ctxt = &vcpu->arch.ctxt;
- 
-@@ -94,9 +108,25 @@ static void __deactivate_traps(struct kvm_vcpu *vcpu)
- 
- 	write_sysreg(this_cpu_ptr(&kvm_init_params)->hcr_el2, hcr_el2);
- 
-+	if (cpus_have_final_cap(ARM64_SME)) {
-+		u64 val;
-+
-+		val = read_sysreg_s(SYS_HFGRTR_EL2);
-+		val |= HFGxTR_EL2_nTPIDR2_EL0_MASK |
-+			HFGxTR_EL2_nSMPRI_EL1_MASK;
-+		write_sysreg_s(val, SYS_HFGRTR_EL2);
-+
-+		val = read_sysreg_s(SYS_HFGWTR_EL2);
-+		val |= HFGxTR_EL2_nTPIDR2_EL0_MASK |
-+			HFGxTR_EL2_nSMPRI_EL1_MASK;
-+		write_sysreg_s(val, SYS_HFGWTR_EL2);
-+	}
-+
- 	cptr = CPTR_EL2_DEFAULT;
- 	if (vcpu_has_sve(vcpu) && (vcpu->arch.flags & KVM_ARM64_FP_ENABLED))
- 		cptr |= CPTR_EL2_TZ;
-+	if (cpus_have_final_cap(ARM64_SME))
-+		cptr &= ~CPTR_EL2_TSM;
- 
- 	write_sysreg(cptr, cptr_el2);
- 	write_sysreg(__kvm_hyp_host_vector, vbar_el2);
-diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
-index 262dfe03134d..969f20daf97a 100644
---- a/arch/arm64/kvm/hyp/vhe/switch.c
-+++ b/arch/arm64/kvm/hyp/vhe/switch.c
-@@ -41,7 +41,8 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
- 
- 	val = read_sysreg(cpacr_el1);
- 	val |= CPACR_EL1_TTA;
--	val &= ~(CPACR_EL1_ZEN_EL0EN | CPACR_EL1_ZEN_EL1EN);
-+	val &= ~(CPACR_EL1_ZEN_EL0EN | CPACR_EL1_ZEN_EL1EN |
-+		 CPACR_EL1_SMEN_EL0EN | CPACR_EL1_SMEN_EL1EN);
- 
- 	/*
- 	 * With VHE (HCR.E2H == 1), accesses to CPACR_EL1 are routed to
-@@ -62,6 +63,10 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
- 		__activate_traps_fpsimd32(vcpu);
- 	}
- 
-+	if (cpus_have_final_cap(ARM64_SME))
-+		write_sysreg(read_sysreg(sctlr_el2) & ~SCTLR_ELx_ENTP2,
-+			     sctlr_el2);
-+
- 	write_sysreg(val, cpacr_el1);
- 
- 	write_sysreg(__this_cpu_read(kvm_hyp_vector), vbar_el1);
-@@ -83,6 +88,10 @@ static void __deactivate_traps(struct kvm_vcpu *vcpu)
- 	 */
- 	asm(ALTERNATIVE("nop", "isb", ARM64_WORKAROUND_SPECULATIVE_AT));
- 
-+	if (cpus_have_final_cap(ARM64_SME))
-+		write_sysreg(read_sysreg(sctlr_el2) | SCTLR_ELx_ENTP2,
-+			     sctlr_el2);
-+
- 	write_sysreg(CPACR_EL1_DEFAULT, cpacr_el1);
- 
- 	if (!arm64_kernel_unmapped_at_el0())
+ 	if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
+ 		if (vcpu_has_sve(vcpu)) {
+ 			__vcpu_sys_reg(vcpu, ZCR_EL1) = read_sysreg_el1(SYS_ZCR);
 -- 
 2.30.2
 
