@@ -2,67 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6974F9D5D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 20:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8FD4F9D6D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 21:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239085AbiDHS6G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 14:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S231553AbiDHTGY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 15:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234340AbiDHS6E (ORCPT
+        with ESMTP id S231254AbiDHTGX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:58:04 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B201E7A74
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:56:00 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id e13so7070080ils.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 11:56:00 -0700 (PDT)
+        Fri, 8 Apr 2022 15:06:23 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A8DF8EEC
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 12:04:18 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bq8so19081201ejb.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 12:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=MtJXp4ifWK+ROOILZQ4cWtnaJgVJwVY9PT7bb9unDw8=;
-        b=Y66OvL6qaiH5FrXOVeKqKjxG/ToD4rFZCGY/x6xYGqneFSiJzIIpNUCPsal26yDIFO
-         Ct3F+no+VMujDfkGDUs/dhO7npqPP6aDt6wrwhBRECM9OBRyjtxUbSkcAsqfiKyuSiLP
-         9ElZogAfwJybCN9v7/eNkRYHtXDWfMXbpe29A=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4rHGD3PoFwL+nB4RQq7j9aGht0hUkl4t6Erm9eBYAxo=;
+        b=YsHLti3LKEtuuI4cKwjbPzSTusGPZZx1XbNGIHygbTntEkwqUL6G+VU4mEaO323Gy2
+         jMp5qBNSl8scs0iftHUH2fWSLiCkT30fxcbsdOnjPyQ2HnRE8DaLMWgZPkK/zPilHRnj
+         W/FwFsNLtS4UKF3Eh9fZiYg4w0ApKjdKCrkiRF8cPHBqOTk/2s4JQ53X0hj68VKRnd3O
+         UmVdSKO0abUUF6C6VR+2DFdkVW/wa5hbTIRs5IUyHciqzh9afQGf3L7Kjw4Ze5MECgY8
+         CiXhioEJn6JSZ6Cbn3uAvBSCE/7fHfeSPAj7MsW4um6Rp4oHilW4FvTFJM+d8JUUkww6
+         I/wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=MtJXp4ifWK+ROOILZQ4cWtnaJgVJwVY9PT7bb9unDw8=;
-        b=qy7rRRwAU64v+NJQWy1rtHGMW5W1ffoWaibcpSybsOfpuynvQeF8tvd1JANPCxj6zu
-         YohYXRljDSqT2PuWbtrv/H/1Vs8BGd/oj4BMMUsvQqqpJ7CPePLnQC561ipxgXuYDa/r
-         ROFku1dnYl9PcUNH7xFURaKz5uDQ/Oztw2DkN3U+Z8u6FVLPHkqhN8Q0B5RjS0jrAqcC
-         uHp5jWdt2SaBF04bTw2neetunCLiwbgPiEAMTO0djZFq3F75sdL0s9G6KKC9RYD58iiv
-         cXjPyRwtanPSFWeAXrmO0f8wCC5vh89wvygDPUtcwgtQFDI4nSxfXeatIEFVCst4PF4s
-         dKbA==
-X-Gm-Message-State: AOAM530E5ggqk5k+JLj4fRQwIhn2pVxKQIWJm1EkJxo4e4xsUCfDO6zR
-        OIWryv8QQ2IeMWWX8VjlTDl+Jg==
-X-Google-Smtp-Source: ABdhPJwmk9A0NNb9BOzV41cZdJOCwaiG/uQdtvC4TrjEXbXQGfb4WWIjHQOAVT/53rQzycPwg8eahQ==
-X-Received: by 2002:a92:1303:0:b0:2c5:f030:3074 with SMTP id 3-20020a921303000000b002c5f0303074mr9514081ilt.134.1649444159561;
-        Fri, 08 Apr 2022 11:55:59 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g14-20020a92c7ce000000b002ca47b75772sm8643336ilk.44.2022.04.08.11.55.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 11:55:59 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit update for Linux 5.18-rc2
-Message-ID: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
-Date:   Fri, 8 Apr 2022 12:55:58 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4rHGD3PoFwL+nB4RQq7j9aGht0hUkl4t6Erm9eBYAxo=;
+        b=3J8HLfGkzCCaM+lzbV/HcKHvvcju4Iak93m55GP9JufNSEa3cfDH/C75MWXEfgDRgl
+         YZzUxRHK8qenfYA6O5mvMnoK3fa3slH22BZi23gkE6zruV925iplZCN4stytWW4RaVV8
+         EgE0FXBAdlPkhjHLqX95n3JRIUGvqiqEgOgxZLWuE3kHZTd4Iyw4+nXmg5BCBpE0Wr9a
+         OUVGWEcem+DxRz2ftg6SDo0GkpqEs9gaeLnXM6CkYbPJYAgpEs4ZMewlzWtFJW+KbHn5
+         5a5n1O1PSIekpepAkUY9q5p5Qxmm3/dXJLY2D4Qujfy95WnzNhi7HpYl2sKNLNsaua3V
+         cdWQ==
+X-Gm-Message-State: AOAM5329E6JAIl+O6YsaK5NLtsQUDrTpE3q8lArACWMflWnpHxOCUWY1
+        dqUD4PovbRhVil2GXHo64UeroUOarQwTRcZJG1fPLVAQTVHBgg==
+X-Google-Smtp-Source: ABdhPJzuTD8lGVC9WsX3DoSaWaE1gcO0BreSCSSb7v406i3EgLAy2ifm0g/gB9FjnVbYnbabeuKq/C7fMy8S3tEq+/8=
+X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id
+ by2-20020a170906a2c200b006e7efc217f2mr18810277ejb.542.1649444657126; Fri, 08
+ Apr 2022 12:04:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------85C0ADF20CB817C0B440F2DF"
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220407223019.2066361-1-dlatypov@google.com> <20220408034848.2081355-1-davidgow@google.com>
+ <CAGS_qxrNOPq+akyt2Ee4NXySP+Zxqis2H5CwKs_kNWNvJ+bo5A@mail.gmail.com> <CABVgOSkKuHCkfpQhzNmzufaVw_6qO-Ve_t5oTub1JeweTiC9RQ@mail.gmail.com>
+In-Reply-To: <CABVgOSkKuHCkfpQhzNmzufaVw_6qO-Ve_t5oTub1JeweTiC9RQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 8 Apr 2022 14:04:06 -0500
+Message-ID: <CAGS_qxqmbgy6KOp1bPF4Pk5SZT+r8L7ASqEyNWF9BtCS2JgXaw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Print a total count of tests.
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,82 +72,132 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------85C0ADF20CB817C0B440F2DF
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+)On Thu, Apr 7, 2022 at 11:18 PM David Gow <davidgow@google.com> wrote:
+>
+> On Fri, Apr 8, 2022 at 11:59 AM 'Daniel Latypov' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > On Thu, Apr 7, 2022 at 10:48 PM 'David Gow' via KUnit Development
+> > <kunit-dev@googlegroups.com> wrote:
+> > >
+> > > Add a count of the total number of tests run (including skipped tests,
+> > > which do run a little bit until they decide to skip themselves) to the
+> > > summary line.
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> > > ---
+> > >
+> > > This patch depends on:
+> > > https://lore.kernel.org/linux-kselftest/20220407223019.2066361-1-dlatypov@google.com/
+> > >
+> > >  tools/testing/kunit/kunit_parser.py | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> > > index 957907105429..da01998d29b1 100644
+> > > --- a/tools/testing/kunit/kunit_parser.py
+> > > +++ b/tools/testing/kunit/kunit_parser.py
+> > > @@ -96,7 +96,7 @@ class TestCounts:
+> > >                 """
+> > >                 statuses = [('Passed', self.passed), ('Failed', self.failed),
+> > >                         ('Crashed', self.crashed), ('Skipped', self.skipped),
+> > > -                       ('Errors', self.errors)]
+> > > +                       ('Errors', self.errors), ('Total', self.total())]
+> >
+> > Hmm, I've never really felt the need for a total to be printed out.
+> > We've had few enough tests and different statuses that the mental
+> > addition is easy enough.
+>
+> It's useful just often enough as a sanity check (were those failures /
+> skipped tests fixed, or did we just stop running them): having one
+> number to check for "did some more tests run at all" is quite
+> convenient. Particularly when dealing with nasty dependency chains and
+> "all tests" builds.
+>
+> This is also particularly useful when running on setups where
+> scrollback is more of a pain, as the summary line is absolutely
+> invaluable there.
 
-Hi Linus,
+Ack. My point was about the summary line.
+We have so few tests that only a handful statuses, that adding up 2-3
+small numbers always felt simple enough.
+Esp. since the previous patch skips printing out the statues with 0s,
+that becomes even easier.
 
-Please pull the following KUnit fixes update for Linux 5.18-rc2.
+But I'm not against having the total.
+I just personally find the current output looks very awkward and would
+prefer the status-quo over that specific output format.
 
-This KUnit update for Linux 5.18-rc2 consists of a single documentation
-fix to incorrect and outdated usage information.
+>
+> >
+> > Bikeshedding:
+> > This current output of
+> >   Passed: 40, Skipped: 2, Total: 42
+> > feels a bit awkward to me.
+> > If we did print one out, I think it should probably go first, e.g.
+> >   Ran 42 tests: 40 passed, 2 skipped.
+> >
+> > Wdyt?
+>
+> I personally don't find having "Total" at the end awkward -- putting
+> the sum at the end has been done on ledgers for years -- but do admit
+> it's even more convenient to have it first (so it's at the same place
+> on the screen every run, regardless of the rest). So "Ran 42 tests: 40
+> passed..." would emphasise the "total" over the "passed" count here.
+> Personally, I think that's probably a good thing: I think what most
+> people really want at a glance is effectively "Failed / Total" (or,
 
-diff is attached.
+I think a reader can already easily note the difference between
+  Ran 42 tests: 40 passed, 2 skipped.
+and
+  Ran 42 tests: 20 passed, 20 failed, 2 skipped.
 
-thanks,
--- Shuah
+I.e. the mere existence of a second or third number in the breakdown
+after "XX passed" feels like enough of an affordance.
+(This is perhaps naively assuming that tests are kept healthy)
 
-----------------------------------------------------------------
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> more realistically a sort-of "Problems / Total", where problems is
+> Failed + Error). But the combination of the colour (did it pass
+> overall) and the total are the things I'd usually want to look for
+> first.
+>
+> So, tl;dr: I'd be all for the "Ran n tests: a passed, b failed, etc" wording.
 
-   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Ack.
+Let's see if Brendan or others on the list have a preference.
 
-are available in the Git repository at:
+If we want to go down that route, it might be easier if I combine this
+in the previous patch
+(https://lore.kernel.org/linux-kselftest/20220407223019.2066361-1-dlatypov@google.com/
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.18-rc2
+E.g. I get this output
+Ran 173 tests: passed: 137, skipped: 36
 
-for you to fetch changes up to 02c7efa43627163e489a8db87882445a0ff381f7:
+with a new combined patch of
 
-   Documentation: kunit: fix path to .kunitconfig in start.rst (2022-04-04 12:02:44 -0600)
+diff --git a/tools/testing/kunit/kunit_parser.py
+b/tools/testing/kunit/kunit_parser.py
+index 807ed2bd6832..de1c0b7e14ed 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -94,11 +94,11 @@ class TestCounts:
+        def __str__(self) -> str:
+                """Returns the string representation of a TestCounts object.
+                """
+-               return ('Passed: ' + str(self.passed) +
+-                       ', Failed: ' + str(self.failed) +
+-                       ', Crashed: ' + str(self.crashed) +
+-                       ', Skipped: ' + str(self.skipped) +
+-                       ', Errors: ' + str(self.errors))
++               statuses = [('passed', self.passed), ('failed', self.failed),
++                       ('crashed', self.crashed), ('skipped', self.skipped),
++                       ('errors', self.errors)]
++               return f'Ran {self.total()} tests: ' + \
++                       ', '.join(f'{s}: {n}' for s, n in statuses if n > 0)
 
-----------------------------------------------------------------
-linux-kselftest-kunit-fixes-5.18-rc2
+        def total(self) -> int:
+                """Returns the total number of test cases within a test
 
-This KUnit update for Linux 5.18-rc2 consists of a single documentation
-fix to incorrect and outdated usage information.
-
-----------------------------------------------------------------
-Daniel Latypov (1):
-       Documentation: kunit: fix path to .kunitconfig in start.rst
-
-  Documentation/dev-tools/kunit/start.rst | 11 ++++++++---
-  1 file changed, 8 insertions(+), 3 deletions(-)
-----------------------------------------------------------------
-
---------------85C0ADF20CB817C0B440F2DF
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-fixes-5.18-rc2.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-fixes-5.18-rc2.diff"
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index ad168d16968f..867a4bba6bf6 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -41,13 +41,18 @@ or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
- 	CONFIG_MSDOS_FS=y
- 	CONFIG_FAT_KUNIT_TEST=y
- 
--1. A good starting point for the ``.kunitconfig``, is the KUnit default
--   config. Run the command:
-+1. A good starting point for the ``.kunitconfig`` is the KUnit default config.
-+   You can generate it by running:
- 
- .. code-block:: bash
- 
- 	cd $PATH_TO_LINUX_REPO
--	cp tools/testing/kunit/configs/default.config .kunitconfig
-+	tools/testing/kunit/kunit.py config
-+	cat .kunit/.kunitconfig
-+
-+.. note ::
-+   ``.kunitconfig`` lives in the ``--build_dir`` used by kunit.py, which is
-+   ``.kunit`` by default.
- 
- .. note ::
-    You may want to remove CONFIG_KUNIT_ALL_TESTS from the ``.kunitconfig`` as
-
---------------85C0ADF20CB817C0B440F2DF--
+>
+> Cheers,
+> -- David
