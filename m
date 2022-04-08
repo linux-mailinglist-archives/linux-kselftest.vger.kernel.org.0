@@ -2,92 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331C04F9D9F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 21:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9DE4F9DF5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 22:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiDHT0D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 15:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S236114AbiDHUHp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 16:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiDHT0C (ORCPT
+        with ESMTP id S239380AbiDHUHh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:26:02 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C01E348B0D
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 12:23:54 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id u30-20020a4a6c5e000000b00320d8dc2438so1634853oof.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 12:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i6PPIy36napfU/u2aY/HoK3sVhuBmHd01Cv34ZWmAUo=;
-        b=M17zIr6OGlaLbdBLFFfL57NpApXft6SDt7tcMN9vfIY3Yl4YX+yPGlwdd0sWOXGUCL
-         DbJDsNM+T3+TCWjAGPMRjWjOI+BWitOTmPWAdEM9H5Wf0fOD/l0/eZqEvJ00HHpmVf5x
-         8KHOcIstIm3k+m1qGvVbUmEnXjlZSSENuvNjM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=i6PPIy36napfU/u2aY/HoK3sVhuBmHd01Cv34ZWmAUo=;
-        b=RLWJ2WmIGVjkSXuG0SKUIdP9WMw0iSHwJvP4/oyU8CSjJWjKT2L4ypbQEy92dGysWJ
-         w4k0YfT9atPRvJ7WFiT8wvrQaJFLfNp+CEmxBVnSGipV8eWXY5zkU/mFBQvzSw6A/eFA
-         cik6/dQy0LgLBKFb/0FDbcNAOtWSeu2rKa2zauwmst8I0DgpfsZuVwqnopLX8q9oBtbV
-         27WrBzT6XN+q8huvA22cvCkHZeuDGEbRV8JSrVCY9piP8CtpNdgfXtkn6DJS5dqofGyz
-         PflxU4+7K+PLEp64+Zg20yvBf9/t29chohUboXHX/x68pJ7jFZeN4enJXwa++k8uwScB
-         R/uQ==
-X-Gm-Message-State: AOAM53312mHiJ9zOL/1fNcnn8iPJb1x13hAiRdujXZLq/cxx5XC2G+MU
-        fTauXDNBgKQtdtWeeld7h/gyyw==
-X-Google-Smtp-Source: ABdhPJwWcIPSf4bMVd1ad/gG9idPpq2ssdWRRIQ22dv8eLNNDKqX0ni/EbE82yE3fpqlJQJfX9wt7A==
-X-Received: by 2002:a4a:2556:0:b0:324:bd36:f020 with SMTP id v22-20020a4a2556000000b00324bd36f020mr6730949ooe.13.1649445833546;
-        Fri, 08 Apr 2022 12:23:53 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id 15-20020aca110f000000b002da58c4ec52sm8888098oir.6.2022.04.08.12.23.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 12:23:53 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] selftests: mqueue: drop duplicate min definition
-To:     Geliang Tang <geliang.tang@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1649424565.git.geliang.tang@suse.com>
- <36201289cc9281ea7653127b0008ba01a1c14290.1649424565.git.geliang.tang@suse.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2d535cf6-d5dc-21fa-4456-d9fe06e9588d@linuxfoundation.org>
-Date:   Fri, 8 Apr 2022 13:23:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 8 Apr 2022 16:07:37 -0400
+Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C126C129868;
+        Fri,  8 Apr 2022 13:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1649448331;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=xkIsAgunhRr0neJeqNDS1WM30Wze5PpisrEkUilccb8=;
+        b=fqWYNFH7D426KXPYP6E6g6b85IxVw3KA7sn0ty0TpXgC9/x6LOKDyKLjaQennZfz
+        qpAA2BnkYMEmt0VGaNaN/WWd7/8Nk6uHKVgBUJAlC/P/5b8Ji/7dRbZKC90o1U+l63E
+        F890yP9yFhh76svKQ9CbO9pmnNjAZrUikkW1TWNg=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1649448331;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=xkIsAgunhRr0neJeqNDS1WM30Wze5PpisrEkUilccb8=;
+        b=AujO4gg0gzN98Q4wNzATEm39RF946/qvrlLVGru97TzQ5YLMaVV4aavUatG3OVmT
+        23MJyfIjwWw882S2Mq5xlzT+3SNKL8Ev9tj8xU33G6u2BW1o7AG/vGg1ah++a+qt5/Z
+        h3HfczWPUiMuj7pZgUG1Ea4qFxCoLwQMKXG/Ydek=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220405
 MIME-Version: 1.0
-In-Reply-To: <36201289cc9281ea7653127b0008ba01a1c14290.1649424565.git.geliang.tang@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <010001800ac828cc-76742421-5661-4146-871f-60ef20034198-000000@email.amazonses.com>
+Date:   Fri, 8 Apr 2022 20:05:31 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.04.08-54.240.48.34
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/8/22 7:36 AM, Geliang Tang wrote:
-> Drop duplicate macro min() definition in mq_perf_tests.c, use MIN() in
-> sys/param.h instead.
-> 
-> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-> ---
+## Build
+* kernel: 5.18.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 3ccc916812598a88b427859679ffd1641e67d4a2
+* git describe: next-20220405
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220405
 
-Thank you. I will apply this for next.
+## Test Regressions (compared to next-20220401)
+No test regressions found.
 
-thanks,
--- Shuah
+## Metric Regressions (compared to next-20220401)
+No metric regressions found.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220401)
+No test fixes found.
+
+## Metric Fixes (compared to next-20220401)
+No metric fixes found.
+
+## Test result summary
+total: 5869, pass: 3195, fail: 542, skip: 2132, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
