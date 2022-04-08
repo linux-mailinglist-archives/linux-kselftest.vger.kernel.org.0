@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB424F94DF
+	by mail.lfdr.de (Postfix) with ESMTP id C60924F94E0
 	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 13:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbiDHL7T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 07:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S235319AbiDHL7U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 07:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbiDHL7L (ORCPT
+        with ESMTP id S235335AbiDHL7O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:59:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A48BF3C
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:57:04 -0700 (PDT)
+        Fri, 8 Apr 2022 07:59:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACFA8930A
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:57:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00CE761FDF
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0364C385AC;
-        Fri,  8 Apr 2022 11:56:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23004B82A88
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE37C385A1;
+        Fri,  8 Apr 2022 11:57:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649419023;
-        bh=bmQq9+Hs9ppK5+d67ccvsBsIxc0wnK8U9AX00pV28UM=;
+        s=k20201202; t=1649419027;
+        bh=gpXYwwHjBWECYd9glOg05wFHftQryu8V/UpzngQGl4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kdT7VrKgERpz6H4g0Eu0VPv3wDk4LaznrjXEOOcUAwPK2+RPH9B9JZjKqYi1Gaq1I
-         /jHUkjwP/weuEYXpOKQMV+87cbmUc/DPOB8k576V+nvFBycvLHUR67bOO5nWnXbltw
-         0xjYjQTQvJclU5dTKAsQ27UVQBHDXMlZ+eZ4/FoM49/KFjHPZlFqpZ/GJa4bq1OqLS
-         YUTghrIvhgPuaWDj1+VgtFCSLsi3VnhvVz4JlR6yZRpDi7fOf2PFZeVg98GZPZUWbD
-         yb316O29amWhCpPI1yl8SkfLRUwRQlfXw7/ycz+F/RzYCR8TLNuoOarsVsraVfexqw
-         qUYhWYCPCyLwA==
+        b=qTIjKnqMpfQxYBRzSXWkSn5ASzsE2m6o2vPofai7dtcuXJ3syAYxkhVffWdutI4cS
+         leqdURAz4aLSlR/2G4vLDC/3+QeRqRVmFu1DasTvxub65KZ/JATJ/jNdkFYU9YGiNn
+         q0at/nPQaX/elLteiMZdDk6tGe05nDFVjYSbiXAcyrO3GUAxwN2JaNjSORGuJhfn8i
+         emv8TxvW1rju/NpDeasNKkPN+B5pNVWfNWHgliao62VSKsb2v7em0kmlVH2XWvQH/W
+         TdVUWvVx7VX/+0OXmgFNgXdPJQ65zczwte3L8B8/uvY1By0xZ1ySN4yis9aCUdhguN
+         DySvSvOZdHVug==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,14 +49,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v13 27/39] arm64/sme: Provide Kconfig for SME
-Date:   Fri,  8 Apr 2022 12:43:16 +0100
-Message-Id: <20220408114328.1401034-28-broonie@kernel.org>
+Subject: [PATCH v13 28/39] kselftest/arm64: Add manual encodings for SME instructions
+Date:   Fri,  8 Apr 2022 12:43:17 +0100
+Message-Id: <20220408114328.1401034-29-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220408114328.1401034-1-broonie@kernel.org>
 References: <20220408114328.1401034-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1406; h=from:subject; bh=bmQq9+Hs9ppK5+d67ccvsBsIxc0wnK8U9AX00pV28UM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/UAxUEsFosscV36+F0kLBR+bmSz16+f2YTgKsR gljSoxOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf1AAKCRAk1otyXVSH0K8cB/ 9M/j4kluR0Nrf2PPhLPCfVpZ34in89IgJVEACGFfEItsnA/C33CFqs2QvlC8zaEqpG88e38zGMLXgU 5kbntrCLMRKEqHBVMyJktNYx85/CGpiI1PLwCHm7cvffPwYOCEEX6rl7igQuDNonrCDiqNBhkkxERm RCsIrSi4i4jk2wLOgCCJoo79snBtSHYoLVdYLAltEY4j/zDWFrfQ1Xyd8+Q618woOEhkkoZHPT7MKZ BVAnDJlPLoLL6O25AnJ1cwjGSKTWc4dBqJUTRvIMOLnfnG897E7dnAOCYLSZBbbTRpHiI8Lq3SjO1y UqE2tnkb0ENKzmXla0EieLy5XQxo1x
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1715; h=from:subject; bh=gpXYwwHjBWECYd9glOg05wFHftQryu8V/UpzngQGl4Q=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/VghFiAICiyGmVpz7+92Crrpgc79fXtr+9TOpN 2gK/qxKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf1QAKCRAk1otyXVSH0P4jB/ 9OcwOzpShaEt1yP+r/4CDqd0n/Ys5lZaNN4Um+/2+TaTYZ4R+P5tKuhs8ZWnB2UipmGToScR2n/Vs3 4GkRKeqiAZjWIdhgZGfRJeRW6zw5voatePmNAzUDUe232e/IQJT/I03T/vVia2/noNMUIjUg94jgaL ina9jzFldZfgiexi+Of8885P/zq81phV8rdmOd4NPzVodreEhrygqm6r+Y6CPwoG4EVNIfLItXKHXa NcuN9lMQYum8Zp4M4+bOeiJ5pRpWyWD9p5l4hUsus8+MmseALdKqbcoDQQ/pMr7ck9UK6RI+d4Yq0n KK18tWpyoG7PFLYi2ao9KdvIOpQzJm
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,40 +69,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that basline support for the Scalable Matrix Extension (SME) is present
-introduce the Kconfig option allowing it to be built. While the feature
-registers don't impose a strong requirement for a system with SME to
-support SVE at runtime the support for streaming mode SVE is mostly
-shared with normal SVE so depend on SVE.
+As for the kernel so that we don't have ambitious toolchain requirements
+to build the tests manually encode some of the SVE instructions.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/Kconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/arm64/fp/sme-inst.h | 51 +++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/fp/sme-inst.h
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 57c4c995965f..0897984918e8 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1939,6 +1939,17 @@ config ARM64_SVE
- 	  booting the kernel.  If unsure and you are not observing these
- 	  symptoms, you should assume that it is safe to say Y.
- 
-+config ARM64_SME
-+	bool "ARM Scalable Matrix Extension support"
-+	default y
-+	depends on ARM64_SVE
-+	help
-+	  The Scalable Matrix Extension (SME) is an extension to the AArch64
-+	  execution state which utilises a substantial subset of the SVE
-+	  instruction set, together with the addition of new architectural
-+	  register state capable of holding two dimensional matrix tiles to
-+	  enable various matrix operations.
+diff --git a/tools/testing/selftests/arm64/fp/sme-inst.h b/tools/testing/selftests/arm64/fp/sme-inst.h
+new file mode 100644
+index 000000000000..7191e53ca1c0
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/sme-inst.h
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021-2 ARM Limited.
++// Original author: Mark Brown <broonie@kernel.org>
 +
- config ARM64_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
++#ifndef SME_INST_H
++#define SME_INST_H
++
++/*
++ * RDSVL X\nx, #\imm
++ */
++.macro rdsvl nx, imm
++	.inst	0x4bf5800			\
++		| (\imm << 5)			\
++		| (\nx)
++.endm
++
++.macro smstop
++	msr	S0_3_C4_C6_3, xzr
++.endm
++
++.macro smstart_za
++	msr	S0_3_C4_C5_3, xzr
++.endm
++
++.macro smstart_sm
++	msr	S0_3_C4_C3_3, xzr
++.endm
++
++/*
++ * LDR (vector to ZA array):
++ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ */
++.macro _ldr_za nw, nxbase, offset=0
++	.inst	0xe1000000			\
++		| (((\nw) & 3) << 13)		\
++		| ((\nxbase) << 5)		\
++		| ((\offset) & 7)
++.endm
++
++/*
++ * STR (vector from ZA array):
++ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ */
++.macro _str_za nw, nxbase, offset=0
++	.inst	0xe1200000			\
++		| (((\nw) & 3) << 13)		\
++		| ((\nxbase) << 5)		\
++		| ((\offset) & 7)
++.endm
++
++#endif
 -- 
 2.30.2
 
