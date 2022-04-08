@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A3F4F94D6
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE404F94D7
 	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 13:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbiDHL6x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 07:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S235306AbiDHL64 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 07:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235321AbiDHL6v (ORCPT
+        with ESMTP id S235325AbiDHL64 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:58:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F4681672
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:56:48 -0700 (PDT)
+        Fri, 8 Apr 2022 07:58:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9117A8A33D
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 04:56:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1476F62068
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2D2C385B5;
-        Fri,  8 Apr 2022 11:56:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02B946206B
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 11:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E463EC385A1;
+        Fri,  8 Apr 2022 11:56:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649419007;
-        bh=QiQWOAG6guUlHh1r4QfEv9Nuphr6daVHep+hct28ThE=;
+        s=k20201202; t=1649419011;
+        bh=mpyVrfoj3Ha303zuZjG3RtyooXrFp3K4QGVZ/xNcyCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dtcxkiny24CAXIlxnVu1PEgFR73050E7vHSrj9GnWXh+1BO8xOr+i8WLmf6Qb4pLc
-         fdWxTRviN9uesbLGyg/P0zoetLB+/TWMujtnf0+qiudtRa6nLxTpFhxkmFEphs60bD
-         dkxNV8F7FekH4eUxrhbDo+s8h9BJ1n2TpXKg9zNQhrAoQb5VzeTv2QJYqnVbf8p2sL
-         JMsODMqazr2mWyoyuh6WQgultyPyI3h4kog5F89Q/AcSl9ZHnksY3Gk1cyBELB5QXJ
-         GGmdAC/kM6xO2Yii0prCsSbjmUh4oV09ywrldAFmnuZLhmd4zvc6O/clNi4658XNpw
-         KCNivSXsZWE5A==
+        b=QB67v2bZQMtGaOcvFxUqMD7uRuMSxCIoZmdfhy8h6jhlUUPa0staCkBssM3cusTP5
+         dywnTl6ColVhxpsgyoMiV4jm3r1LZ4K3t5ubPgw5xo0S/CmfKUIDiYxbvQiK7axaPT
+         pC/OHFVkLIYwzf47hQQZCsRzHtcnrx1A10fHZ4lFMZ+f9eaLlck1HXSa6LEyqdxctr
+         FvkL6MGXOwqYGYeislWxXXt/gwdIWlSW85zySMMKYObxS2YpK9a0kc4MzL0fKJEtDY
+         RLMFC3qe3GKoNY3HFkTIOht1ludAabBw0hTg7WvilY3SDXrc4OOslkVIkncUgfDLqL
+         CGIWI6ej8JBbg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,14 +49,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v13 23/39] arm64/sme: Save and restore streaming mode over EFI runtime calls
-Date:   Fri,  8 Apr 2022 12:43:12 +0100
-Message-Id: <20220408114328.1401034-24-broonie@kernel.org>
+Subject: [PATCH v13 24/39] KVM: arm64: Hide SME system registers from guests
+Date:   Fri,  8 Apr 2022 12:43:13 +0100
+Message-Id: <20220408114328.1401034-25-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220408114328.1401034-1-broonie@kernel.org>
 References: <20220408114328.1401034-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3704; h=from:subject; bh=QiQWOAG6guUlHh1r4QfEv9Nuphr6daVHep+hct28ThE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/Rl8cjgYtFjqQelYlyRJi0i9JCk/9yCt2/7nCb zv7bDUiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf0QAKCRAk1otyXVSH0NLLB/ 9fMYG9bH5XJwoS3zD54pCNRqbtBsGC3qPomGJdFJdqp2WZArH9KMULhep8RvgzP5hSb8slz3eLegoU JxT4jrWL4BC1vOTrrI0rMncuLcRvWhqOvR2aGCKAH8/3t6zGoOgjOJNT1dfjTH/gehsD53ucfs+Yso IP62+xjXmMJnPCdC19nGWSPwk5aqD6ZOuaDoPFM1dD6Qde8Q+ymF+tl8SNyQ3wLNbaoP1t/Od9lSgD S5Jc9hvRCUD/e3YO3ZCVimoIBl9a3hMGZHk1uiNamo1KqjMNrmQ5LM8bJ+DbjWIzX087mGlOihTVcB fn2rev9Bv2nTfboWSiSKKhXCxVH//3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2636; h=from:subject; bh=mpyVrfoj3Ha303zuZjG3RtyooXrFp3K4QGVZ/xNcyCk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiUB/SRWYJuMOUyhoG4RrOSW+FXVga+MXNZsFprhc0 IjsenR2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYlAf0gAKCRAk1otyXVSH0AqTB/ 9b0dzf1mObZw8ZekaWF6v59M4AGsTGiY9r3D/7RJFfGf7+IUzBjO/WM0Xr3Sg0WXQq0+q8HNxC6eVv 072ANolPqSWNOUdlDiIXS4LZYCTuVWy+/P5mkxns0Ah2RjXUZ3Wsd4c5fsgKSp2j/ysMXIUJ4TRlYD js9+vNyw00if0vNqNWAEil/gJO8/wlKmmNCTTYdqkULrGQ71A7F5r3IfIRgPDul1lChsXH+ejXmZY8 GwWVrpGJ+812ySVJxW9Kkhiht2/YUTo5q4ZoGjw+vNSbZcdjIibSSQ0Z6HsbK5FrF9W51IEI/R9E7J jPSs0W7v52VNfUwJqvBT18IOSlH5hC
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,121 +69,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When saving and restoring the floating point state over an EFI runtime
-call ensure that we handle streaming mode, only handling FFR if we are not
-in streaming mode and ensuring that we are in normal mode over the call
-into runtime services.
-
-We currently assume that ZA will not be modified by runtime services, the
-specification is not yet finalised so this may need updating if that
-changes.
+For the time being we do not support use of SME by KVM guests, support for
+this will be enabled in future. In order to prevent any side effects or
+side channels via the new system registers, including the EL0 read/write
+register TPIDR2, explicitly undefine all the system registers added by
+SME and mask out the SME bitfield in SYS_ID_AA64PFR1.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/kernel/fpsimd.c | 48 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 42 insertions(+), 6 deletions(-)
+ arch/arm64/kvm/sys_regs.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 9592cdd7d635..64431bc62472 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -1056,21 +1056,25 @@ int vec_verify_vq_map(enum vec_type type)
- 
- static void __init sve_efi_setup(void)
- {
--	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
-+	int max_vl = 0;
-+	int i;
- 
- 	if (!IS_ENABLED(CONFIG_EFI))
- 		return;
- 
-+	for (i = 0; i < ARRAY_SIZE(vl_info); i++)
-+		max_vl = max(vl_info[i].max_vl, max_vl);
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 7b45c040cc27..689e53dd4cb1 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1132,6 +1132,8 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu,
+ 	case SYS_ID_AA64PFR1_EL1:
+ 		if (!kvm_has_mte(vcpu->kvm))
+ 			val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_MTE);
 +
- 	/*
- 	 * alloc_percpu() warns and prints a backtrace if this goes wrong.
- 	 * This is evidence of a crippled system and we are returning void,
- 	 * so no attempt is made to handle this situation here.
- 	 */
--	if (!sve_vl_valid(info->max_vl))
-+	if (!sve_vl_valid(max_vl))
- 		goto fail;
++		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_SME);
+ 		break;
+ 	case SYS_ID_AA64ISAR1_EL1:
+ 		if (!vcpu_has_ptrauth(vcpu))
+@@ -1553,7 +1555,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 	ID_UNALLOCATED(4,2),
+ 	ID_UNALLOCATED(4,3),
+ 	ID_SANITISED(ID_AA64ZFR0_EL1),
+-	ID_UNALLOCATED(4,5),
++	ID_HIDDEN(ID_AA64SMFR0_EL1),
+ 	ID_UNALLOCATED(4,6),
+ 	ID_UNALLOCATED(4,7),
  
- 	efi_sve_state = __alloc_percpu(
--		SVE_SIG_REGS_SIZE(sve_vq_from_vl(info->max_vl)), SVE_VQ_BYTES);
-+		SVE_SIG_REGS_SIZE(sve_vq_from_vl(max_vl)), SVE_VQ_BYTES);
- 	if (!efi_sve_state)
- 		goto fail;
+@@ -1596,6 +1598,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
  
-@@ -1845,6 +1849,7 @@ EXPORT_SYMBOL(kernel_neon_end);
- static DEFINE_PER_CPU(struct user_fpsimd_state, efi_fpsimd_state);
- static DEFINE_PER_CPU(bool, efi_fpsimd_state_used);
- static DEFINE_PER_CPU(bool, efi_sve_state_used);
-+static DEFINE_PER_CPU(bool, efi_sm_state);
+ 	{ SYS_DESC(SYS_ZCR_EL1), NULL, reset_val, ZCR_EL1, 0, .visibility = sve_visibility },
+ 	{ SYS_DESC(SYS_TRFCR_EL1), undef_access },
++	{ SYS_DESC(SYS_SMPRI_EL1), undef_access },
++	{ SYS_DESC(SYS_SMCR_EL1), undef_access },
+ 	{ SYS_DESC(SYS_TTBR0_EL1), access_vm_reg, reset_unknown, TTBR0_EL1 },
+ 	{ SYS_DESC(SYS_TTBR1_EL1), access_vm_reg, reset_unknown, TTBR1_EL1 },
+ 	{ SYS_DESC(SYS_TCR_EL1), access_vm_reg, reset_val, TCR_EL1, 0 },
+@@ -1678,8 +1682,10 @@ static const struct sys_reg_desc sys_reg_descs[] = {
  
- /*
-  * EFI runtime services support functions
-@@ -1879,12 +1884,28 @@ void __efi_fpsimd_begin(void)
- 		 */
- 		if (system_supports_sve() && likely(efi_sve_state)) {
- 			char *sve_state = this_cpu_ptr(efi_sve_state);
-+			bool ffr = true;
-+			u64 svcr;
+ 	{ SYS_DESC(SYS_CCSIDR_EL1), access_ccsidr },
+ 	{ SYS_DESC(SYS_CLIDR_EL1), access_clidr },
++	{ SYS_DESC(SYS_SMIDR_EL1), undef_access },
+ 	{ SYS_DESC(SYS_CSSELR_EL1), access_csselr, reset_unknown, CSSELR_EL1 },
+ 	{ SYS_DESC(SYS_CTR_EL0), access_ctr },
++	{ SYS_DESC(SYS_SVCR_EL0), undef_access },
  
- 			__this_cpu_write(efi_sve_state_used, true);
+ 	{ PMU_SYS_REG(SYS_PMCR_EL0), .access = access_pmcr,
+ 	  .reset = reset_pmcr, .reg = PMCR_EL0 },
+@@ -1719,6 +1725,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
  
-+			if (system_supports_sme()) {
-+				svcr = read_sysreg_s(SYS_SVCR_EL0);
-+
-+				if (!system_supports_fa64())
-+					ffr = svcr & SYS_SVCR_EL0_SM_MASK;
-+
-+				__this_cpu_write(efi_sm_state, ffr);
-+			}
-+
- 			sve_save_state(sve_state + sve_ffr_offset(sve_max_vl()),
- 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
--				       true);
-+				       ffr);
-+
-+			if (system_supports_sme())
-+				sysreg_clear_set_s(SYS_SVCR_EL0,
-+						   SYS_SVCR_EL0_SM_MASK, 0);
-+
- 		} else {
- 			fpsimd_save_state(this_cpu_ptr(&efi_fpsimd_state));
- 		}
-@@ -1907,11 +1928,26 @@ void __efi_fpsimd_end(void)
- 		if (system_supports_sve() &&
- 		    likely(__this_cpu_read(efi_sve_state_used))) {
- 			char const *sve_state = this_cpu_ptr(efi_sve_state);
-+			bool ffr = true;
-+
-+			/*
-+			 * Restore streaming mode; EFI calls are
-+			 * normal function calls so should not return in
-+			 * streaming mode.
-+			 */
-+			if (system_supports_sme()) {
-+				if (__this_cpu_read(efi_sm_state)) {
-+					sysreg_clear_set_s(SYS_SVCR_EL0,
-+							   0,
-+							   SYS_SVCR_EL0_SM_MASK);
-+					if (!system_supports_fa64())
-+						ffr = efi_sm_state;
-+				}
-+			}
+ 	{ SYS_DESC(SYS_TPIDR_EL0), NULL, reset_unknown, TPIDR_EL0 },
+ 	{ SYS_DESC(SYS_TPIDRRO_EL0), NULL, reset_unknown, TPIDRRO_EL0 },
++	{ SYS_DESC(SYS_TPIDR2_EL0), undef_access },
  
--			sve_set_vq(sve_vq_from_vl(sve_get_vl()) - 1);
- 			sve_load_state(sve_state + sve_ffr_offset(sve_max_vl()),
- 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
--				       true);
-+				       ffr);
+ 	{ SYS_DESC(SYS_SCXTNUM_EL0), undef_access },
  
- 			__this_cpu_write(efi_sve_state_used, false);
- 		} else {
 -- 
 2.30.2
 
