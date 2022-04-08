@@ -2,188 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693FB4F9BC5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 19:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9318A4F9BD1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 19:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238229AbiDHRgk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 13:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S234547AbiDHRkd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 13:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238207AbiDHRgd (ORCPT
+        with ESMTP id S231895AbiDHRkc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:36:33 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44030AACAA
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 10:34:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bq8so18658898ejb.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 10:34:27 -0700 (PDT)
+        Fri, 8 Apr 2022 13:40:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9131C78913
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 10:38:28 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so18705357ejd.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 10:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n5q8/1C+/LCbS5CGbOTUmNklFZ3s8en/gT9RzZm5DDc=;
-        b=RkdT3bAfCsYXfpYn3lLDYi0cSQYw5M7wL2Dtjp+OeAWeABPG+zU7s1FrQqWG3rEgIH
-         2plHifG930QHOJt+6Db04vhR+Be4ww9DOKsmVfxE5mjk86shotqKwsriKGoJvX05nGFP
-         9GywnNWyFrNXlD8QyRq/CdJw0XY7GLSxy2WxbWmZgO3OXS78uDYp+hpTz8E410y2KwRW
-         oMFG/FkNVnvd4nNQeKSf4wQJspfWrRDDQpV9suKKvyOvGDJATYr+vh3NyonqtEl177T9
-         g/wPvaSvxoG6SRXy8AxWT6uM3eJcIA8HAclf+ABYD54bJGBG/acxBZLDcwykZ33OOFsV
-         hSxw==
+        bh=QCtkA6xuwOw9B42llupBXBeDd/2F5GvCTf370rFfnJ8=;
+        b=Hn8ljd+RZWCvBh/7HfacqS5lvXMs6LiLORiHzbMY/iuV/UpxlfczKAmrYr+y3dPPUu
+         LQbko47/j4Hn5/TccEsJfO8Tv3Mu2lz7udhdQIzSwktHItLjmZHd6Qsjq6F53LXfCZMi
+         lmKitSqBd7gwZ4ZtH57Lway661pRrKvYXmxcT69xEkWbR1ZP5TXzkRICgFr/rVHydMun
+         2FkfKStSZQWPr1wabHyj8AS46B762n6c3B7h2NZLoIt9rjioxIvyN+XYSJm5P+1Ct06c
+         RTGRut+OPvwJiLsVa186iOmZEqFqnCSPVJLdO3hzo9LtGAhxjHdxosGsMc4FeHFwuoTx
+         B2Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n5q8/1C+/LCbS5CGbOTUmNklFZ3s8en/gT9RzZm5DDc=;
-        b=qkGpQK0r0HeqyQPa5CCu4D0IR1WulyjsvRyJtSTO8nahb0Xwil2Kc8LrQF45WrPyTX
-         /YOtuHQb5HbhhB1FltW2HjdKfPcOA0LWhQvEwI1ZRL1R7hd/rCV+CgxWrEWNw5g/8/Ef
-         f4Xu/77QzQc2hcPoR5UraQhODJd6jO4eo0oFpDTcVK09SoTKBmeEG2VqJgszD5SlhnTK
-         aJA+n+S9UOY2EEK134E84ViJsU+9aXXoIkn/9Psd5QIznz8vOND/8bSdrp+YGtQjp7n0
-         U0dskSYAs9tg55aOK2yETGMmYvlqJHDbQaiBXXYGlJREyASt5i5+ZcId8h2OM0d+Qq3U
-         p2nA==
-X-Gm-Message-State: AOAM5311Aet2sqn7yUT8V6M+bxbqiQV7HJVA9ze/K4XR3ZdndQtwVIfY
-        lLe99/lr5Itlirs61byA/i8I19mpAgmF/LizTLxrFw==
-X-Google-Smtp-Source: ABdhPJxUdTTfOC8xk8IxPqBula9pbr5FFbrrkvwV/bYi8BkwLA/q8/uH+2yVpXjm2fATL/FjeejHnbxi3qwMFMHID80=
-X-Received: by 2002:a17:907:d06:b0:6e0:e2f5:4f55 with SMTP id
- gn6-20020a1709070d0600b006e0e2f54f55mr20243918ejc.618.1649439265440; Fri, 08
- Apr 2022 10:34:25 -0700 (PDT)
+        bh=QCtkA6xuwOw9B42llupBXBeDd/2F5GvCTf370rFfnJ8=;
+        b=UUqCRUmyV2CHX3exyfivOA58jLipAmvU3fvgC2Zwsmsp+SiAWzgsW6uOKtY/aMtmAx
+         fG8pL+A8jjJ8s+o0V1RRkWdYTrU0V5/CGBvhJOjj2nm5TPcmjTo3kMIat7+X6ZUi2lAb
+         naysQG0piwZ2Gujexgdz2N8im71Hy/dw0SlnRgkT70bkB8h3R4OWaO20CRhzpidBK9I/
+         yf7YCgOsHcGHZA4c0Oa2E8X7fl7pwgnCBigBMd9xNQAZn/j1KyJJY2lc6B2shBZJitCE
+         KEI2sWTkN3zjia0xuKrXbliahMj2i32aEy9bA3wYm3Jn5t9crErHjsNUFCioRO3vr+jW
+         ZdNw==
+X-Gm-Message-State: AOAM533+kzgrxGC9CbAVaI5tVbwhCaEs8KCrbkg3u9iQnfiWT5auNhVZ
+        H1GJAge8vc5K9BTbAfFIypGyp7vZGstqtRNurQf1XA==
+X-Google-Smtp-Source: ABdhPJw+kLuiBENK2YbdVsUNz9zWdoTC7aXSJHJRpOG9+6LSmeVoEF7ZhM1+6H3LzpZoN8c0Ven9XJyRsfLWaFHi/9U=
+X-Received: by 2002:a17:906:6a21:b0:6e8:6cad:23f9 with SMTP id
+ qw33-20020a1709066a2100b006e86cad23f9mr46888ejc.75.1649439506866; Fri, 08 Apr
+ 2022 10:38:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311072859.2174624-1-brendanhiggins@google.com>
- <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
- <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com> <CAKgze5bCf+v4PoS92XCDV2cD7d0iUvCvxHbPqAnLoW8pwoKbtQ@mail.gmail.com>
-In-Reply-To: <CAKgze5bCf+v4PoS92XCDV2cD7d0iUvCvxHbPqAnLoW8pwoKbtQ@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 8 Apr 2022 13:34:12 -0400
-Message-ID: <CAFd5g44nSfp=3A+VDCY6o-WzgDtnCw4NCChoXv_RKvmZc7Seog@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
- init code
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        davidgow@google.com, dlatypov@google.com,
-        daniel.gutson@eclypsium.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, jk@codeconstruct.com.au
+References: <20220407193902.1981605-1-dlatypov@google.com> <CABVgOSm-sDx8G0iphFXEgnsF-c9eu++bxtXjhOM_WHx-mkRiTA@mail.gmail.com>
+In-Reply-To: <CABVgOSm-sDx8G0iphFXEgnsF-c9eu++bxtXjhOM_WHx-mkRiTA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 8 Apr 2022 12:38:15 -0500
+Message-ID: <CAGS_qxoJtGYuFPuOBYfJd-gm0+dpHstMVJDQ7=9xdU8EtW9VFQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: cosmetic: don't specify duplicate kunit_shutdown's
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 5:34 PM Martin Fernandez
-<martin.fernandez@eclypsium.com> wrote:
+On Thu, Apr 7, 2022 at 10:17 PM David Gow <davidgow@google.com> wrote:
 >
-> On 4/4/22, Brendan Higgins <brendanhiggins@google.com> wrote:
-> > On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org>
-> > wrote:
-> >>
-> >> Hi Brendan,
-> >>
-> >> On 3/11/22 12:28 AM, Brendan Higgins wrote:
-> >> > Add support for a new kind of kunit_suite registration macro called
-> >> > kunit_test_init_suite(); this new registration macro allows the
-> >> > registration of kunit_suites that reference functions marked __init and
-> >> > data marked __initdata.
-> >> >
-> >> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> >> > Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-> >> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> >> > Reviewed-by: David Gow <davidgow@google.com>
-> >> > ---
-> >> >
-> >>
-> >> I almost applied it ...
-> >>
-> >> > This is a follow-up to the RFC here[1].
-> >> >
-> >> > This patch is in response to a KUnit user issue[2] in which the user
-> >> > was
-> >> > attempting to test some init functions; although this is a functional
-> >> > solution as long as KUnit tests only run during the init phase, we will
-> >> > need to do more work if we ever allow tests to run after the init phase
-> >> > is over; it is for this reason that this patch adds a new registration
-> >> > macro rather than simply modifying the existing macros.
-> >> >
-> >> > Changes since last version:
-> >> >   - I added more to the kunit_test_init_suites() kernel-doc comment
-> >> >     detailing "how" the modpost warnings are suppressed in addition to
-> >> >     the existing information regarding "why" it is OK for the modpost
-> >> >     warnings to be suppressed.
-> >> >
-> >> > [1]
-> >> > https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
-> >> > [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-> >> >
-> >> > ---
-> >> >   include/kunit/test.h | 26 ++++++++++++++++++++++++++
-> >> >   1 file changed, 26 insertions(+)
-> >> >
-> >> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> >> > index b26400731c02..7f303a06bc97 100644
-> >> > --- a/include/kunit/test.h
-> >> > +++ b/include/kunit/test.h
-> >> > @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
-> >> >
-> >> >   #define kunit_test_suite(suite)     kunit_test_suites(&suite)
-> >> >
-> >> > +/**
-> >> > + * kunit_test_init_suites() - used to register one or more &struct
-> >> > kunit_suite
-> >> > + *                         containing init functions or init data.
-> >> > + *
-> >> > + * @__suites: a statically allocated list of &struct kunit_suite.
-> >> > + *
-> >> > + * This functions identically as &kunit_test_suites() except that it
-> >> > suppresses
-> >> > + * modpost warnings for referencing functions marked __init or data
-> >> > marked
-> >> > + * __initdata; this is OK because currently KUnit only runs tests upon
-> >> > boot
-> >> > + * during the init phase or upon loading a module during the init
-> >> > phase.
-> >> > + *
-> >> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after
-> >> > boot, these
-> >> > + * tests must be excluded.
-> >> > + *
-> >> > + * The only thing this macro does that's different from
-> >> > kunit_test_suites is
-> >> > + * that it suffixes the array and suite declarations it makes with
-> >> > _probe;
-> >> > + * modpost suppresses warnings about referencing init data for symbols
-> >> > named in
-> >> > + * this manner.
-> >> > + */
-> >> > +#define kunit_test_init_suites(__suites...)                          \
-> >> > +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
-> >> > +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
-> >> > +                         ##__suites)
-> >> > +
-> >> > +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
-> >> > +
-> >> >   #define kunit_suite_for_each_test_case(suite, test_case)            \
-> >> >       for (test_case = suite->test_cases; test_case->run_case;
-> >> > test_case++)
-> >> >
-> >> >
-> >>
-> >> The naming of the function and macro are rather confusing and can become
-> >> error prone. Let's find better naming scheme.
+> On Fri, Apr 8, 2022 at 3:39 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > Yeah, I wasn't sure about the name. I didn't have any better ideas
-> > initially though. Any suggestions?
+> > Context:
+> > When using a non-UML arch, kunit.py will boot the test kernel with these
+> > options by default:
+> > > mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
 > >
+> > For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
+> > If you switch them, kunit.py will hang until the --timeout expires.
+> >
+> > So the code currently unconditionally adds 'kunit_shutdown=halt' but
+> > then appends 'reboot' when using QEMU (which overwrites it).
+> >
+> > This patch:
+> > Having these duplicate options is a bit noisy.
+> > Switch so we only add 'halt' for UML.
+> >
+> > I.e. we now get
+> > UML: 'mem=1G console=tty console=ttyS0 kunit_shutdown=halt'
+> > QEMU: 'mem=1G console=tty console=ttyS0 kunit_shutdown=reboot'
+> >
+> > Side effect: you can't overwrite kunit_shutdown on UML w/ --kernel_arg.
+> > But you already couldn't for QEMU, and why would you want to?
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
 >
-> What about kunit_test_init_section_suite?
-
-Sounds fine to me. Shuah, does that sound OK to you?
-
-> >> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> >> >
-> >>
-> >> thanks,
-> >> -- Shuah
+> Thanks so much for fixing this: it had been quietly bugging me for a while.
+>
+> This looks pretty good as is, but I have a few suggestions for
+> extending it which could be nice to have. I've put them inline below.
+>
+> Either way,
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> >  tools/testing/kunit/kunit_kernel.py | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
 > >
+> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > index 483f78e15ce9..9731ceb7ad92 100644
+> > --- a/tools/testing/kunit/kunit_kernel.py
+> > +++ b/tools/testing/kunit/kunit_kernel.py
+> > @@ -158,7 +158,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+> >         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+> >                 """Runs the Linux UML binary. Must be named 'linux'."""
+> >                 linux_bin = os.path.join(build_dir, 'linux')
+> > -               return subprocess.Popen([linux_bin] + params,
+> > +               return subprocess.Popen([linux_bin] + params + ['kunit_shutdown=halt'],
+>
+> I'd slightly prefer it if we assigned these extra parameters to a
+> separate variable, rather than including them directly in the
+> subprocess.Popen call.
+
+I'm not sure I understand the suggestion here.
+But PTAL at the diff down below and see if that looks fine.
+I'll send a v2 that moves all of the default kernel args into UML only
+as they're UML-specific, as you pointed out.
+
+>
+> (One thing I'd like to do is to print out the command we're running,
+> which we do for Qemu, and having it in a variable that's passed in
+> would be convenient. I don't expect this patch to do that, but having
+> these parameters separate would make that future diff a little
+> smaller.)
+>
+> >                                            stdin=subprocess.PIPE,
+> >                                            stdout=subprocess.PIPE,
+> >                                            stderr=subprocess.STDOUT,
+> > @@ -332,7 +332,7 @@ class LinuxSourceTree(object):
+> >         def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
+> >                 if not args:
+> >                         args = []
+> > -               args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+> > +               args.extend(['mem=1G', 'console=tty'])
+>
+> Does it make sense to also make these options UML only.
+
+Yes, I think that's entirely correct.
+
+mem=1G is redundant w/ the hard-coded '-m 1024' we pass to QEMU.
+console=tty is overwritten by every architecture via its qemu_config.
+
+So this patch would be better as
+
+diff --git a/tools/testing/kunit/kunit_kernel.py
+b/tools/testing/kunit/kunit_kernel.py
+index 483f78e15ce9..d497adcd0684 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -158,6 +158,7 @@ class
+LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+        def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+                """Runs the Linux UML binary. Must be named 'linux'."""
+                linux_bin = os.path.join(build_dir, 'linux')
++               params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+                return subprocess.Popen([linux_bin] + params,
+                                           stdin=subprocess.PIPE,
+                                           stdout=subprocess.PIPE,
+@@ -332,7 +333,6 @@ class LinuxSourceTree(object):
+        def run_kernel(self, args=None, build_dir='', filter_glob='',
+timeout=None) -> Iterator[str]:
+                if not args:
+                        args = []
+-               args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+                if filter_glob:
+                        args.append('kunit.filter_glob='+filter_glob)
+
+>
+> Under Qemu, the amount of memory is already passed separately to qemu,
+> so adding another limit here seems counterproductive. If an
+> architecture particularly needs it, we can add it to the
+> per-architecture config.
+>
+
+On that note, sparc has a mem kernel_cmdline option.
+tools/testing/kunit/qemu_configs/alpha.py: kernel_command_line='console=ttyS0',
+tools/testing/kunit/qemu_configs/arm64.py:
+kernel_command_line='console=ttyAMA0',
+tools/testing/kunit/qemu_configs/arm.py: kernel_command_line='console=ttyAMA0',
+tools/testing/kunit/qemu_configs/i386.py: kernel_command_line='console=ttyS0',
+tools/testing/kunit/qemu_configs/powerpc.py:
+kernel_command_line='console=ttyS0',
+tools/testing/kunit/qemu_configs/riscv.py: kernel_command_line='console=ttyS0',
+tools/testing/kunit/qemu_configs/s390.py: kernel_command_line='console=ttyS0',
+tools/testing/kunit/qemu_configs/sparc.py:
+kernel_command_line='console=ttyS0 mem=256M',
+tools/testing/kunit/qemu_configs/x86_64.py: kernel_command_line='console=ttyS0',
+
+Not sure why we'd do that atm.
