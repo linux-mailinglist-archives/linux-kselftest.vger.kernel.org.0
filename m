@@ -2,82 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B784F9E0C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 22:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8AE4F9E37
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Apr 2022 22:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239409AbiDHULR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 16:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S239479AbiDHUd4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 16:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239410AbiDHULP (ORCPT
+        with ESMTP id S233675AbiDHUdz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:11:15 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D865353AB4
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 13:09:03 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id s21so4161372pgv.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 13:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lps+VNBxsxLTQEq6nQohZpJYqrkqH9hvkhZrZvs8ibQ=;
-        b=RCf6vfwHloKvazwXoXjT3SbJbG6javpXCWAOqpmzI5xWQaDqYTQcsOMEQ207Cos5B5
-         qO9ltnjeXz+TlC6P6gS5antoHVMaIZrCQ11eHYBSz4eTQ/R5GGKOKUyFI3+806vxMnK1
-         fbXlyPceUpjETNwwV/acg+2NG+XN7k8bQEJSHpWLS+RnyRLA9cOOAyhj2wlwHqa6fXhX
-         5UzERtidt5e1I1tW46oeIC+BAKtd/hL8cz2X59EFfp/FyB0bvhoBiag+huSUtmzW0EGF
-         ZloCHuXwEcJaDEAdLae+GRpT74s5Z5tB2VxWhFW/wTLF+JzkDyExAWJEJn5dCTzRM2C4
-         T/4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lps+VNBxsxLTQEq6nQohZpJYqrkqH9hvkhZrZvs8ibQ=;
-        b=c6/avU6De89AxbbJWgltflGmnTUAPm0wxIaS93krNSvUv0rZbAffePKJx5kusDWhQL
-         z1UxAbnh+yZbotHroqMXAYUxGOOoQM7fQ46BOA432ItAjFC9D336oj6uWs6bYnBMzcag
-         U8XGFjDT7jBQzQ4dKrNhw308XJaXSDJHCUbo0Spe/nfT8nDZ/4p1BYGnbqWRuTYkojo9
-         5GFJ9VsIfiw48jiwhGlhRw0lzAxy9m4pGvJ25erchHCvHZ8gjTGyCzsfkRtuToYjK1kx
-         O1lQ5dbbbBrtfxMtiJQgXuuWiuRtE4g0tFyGhMEuMk8vU+XzxhkB4KNQt4YzGJWYRIPq
-         17EQ==
-X-Gm-Message-State: AOAM532XB6saPaa4vyjpkdhyTPH7NJhiSNci22qOmxdx3hrvVFL49oMy
-        ZZD1DL1w9CzVxLQtPNVAYnlOCCswQlP8m1UflpijkA==
-X-Google-Smtp-Source: ABdhPJzz7VtU/jWLapetzfgx+tJK9xG2ELYFWCgBlgjsJVs1zlzEQ0TGnJccuDT8XjoFmwm+1J8zGhZZ1ZeuNlXpWT0=
-X-Received: by 2002:a63:ff63:0:b0:386:327:5353 with SMTP id
- s35-20020a63ff63000000b0038603275353mr16630830pgk.401.1649448542724; Fri, 08
- Apr 2022 13:09:02 -0700 (PDT)
+        Fri, 8 Apr 2022 16:33:55 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5771C289B9;
+        Fri,  8 Apr 2022 13:31:50 -0700 (PDT)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ncvGg-000Ak2-Hi; Fri, 08 Apr 2022 22:31:42 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ncvGg-000PVw-8J; Fri, 08 Apr 2022 22:31:42 +0200
+Subject: Re: [PATCH v2 1/2] selftests: bpf: drop duplicate max/min definitions
+To:     Geliang Tang <geliang.tang@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1649424565.git.geliang.tang@suse.com>
+ <0efb81dab7a8de23044302c5c7fa9af308766236.1649424565.git.geliang.tang@suse.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <812d81d8-a011-11a9-f765-d9972afca230@iogearbox.net>
+Date:   Fri, 8 Apr 2022 22:31:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220408045743.1432968-1-yosryahmed@google.com>
- <20220408045743.1432968-2-yosryahmed@google.com> <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
- <YlBCeadBqbeVvALK@dhcp22.suse.cz> <YlBM/HlPyPUZew5N@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
-In-Reply-To: <YlBM/HlPyPUZew5N@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 8 Apr 2022 13:08:26 -0700
-Message-ID: <CAJD7tkbFjbGJ7CnNogpGq5enh_uhP8T5c0U+ku9PfwMoVLf2gg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
-To:     Dan Schatzberg <schatzberg.dan@gmail.com>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <0efb81dab7a8de23044302c5c7fa9af308766236.1649424565.git.geliang.tang@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26506/Fri Apr  8 10:23:48 2022)
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,29 +58,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 7:55 AM Dan Schatzberg <schatzberg.dan@gmail.com> wrote:
->
-> On Fri, Apr 08, 2022 at 04:11:05PM +0200, Michal Hocko wrote:
-> > Regarding "max" as a possible input. I am not really sure to be honest.
-> > I can imagine that it could be legit to simply reclaim all the charges
-> > (e.g. before removing the memcg) which should be achieveable by
-> > reclaiming the reported consumption. Or what exactly should be the
-> > semantic?
->
-> Yeah, it just allows you to avoid reading memory.current to just
-> reclaim everything if you can specify "max" - you're still protected
-> by nretries to eventually bail out. Mostly, though I just feel like
-> supporting "max" makes memory.reclaim semetric with a lot of the
-> cgroup memory control files which tend to support "max".
+On 4/8/22 3:36 PM, Geliang Tang wrote:
+> Drop duplicate macros min() and MAX() definitions in prog_tests, use MIN()
+> or MAX() in sys/param.h instead.
+> 
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+[...]
 
-One possible approach here is to have force_empty behavior when we
-write "max" to memory.reclaim. From Google's perspective we don't have
-a preference, but it seems to me like logical behavior. We can do this
-either by directly calling mem_cgroup_force_empty() or just draining
-stock and lrus in memory_reclaim().
+Thanks Geliang! One small final nit and then it's good to go to bpf-next:
 
-This actually brings up another interesting point. Do you think we
-should drain lrus if try_to_free_mem_cgroup_pages() fails to reclaim
-the request amount? We can do this after the first call or before the
-last one. It could introduce more evictable pages for
-try_to_free_mem_cgroup_pages() to free.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> index 5142a7d130b2..86561c0b0dea 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> @@ -1,5 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   /* Copyright (c) 2020 Facebook */
+> +#include <sys/param.h>
+>   #include <test_progs.h>
+>   #include "bpf_iter_ipv6_route.skel.h"
+>   #include "bpf_iter_netlink.skel.h"
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+> index 8f7a1cef7d87..ceed369361fc 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+> @@ -3,6 +3,7 @@
+>   
+>   #include <linux/err.h>
+>   #include <netinet/tcp.h>
+> +#include <sys/param.h>
+>   #include <test_progs.h>
+>   #include "network_helpers.h"
+>   #include "bpf_dctcp.skel.h"
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+> index 394ebfc3bbf3..5ca70aa15c4a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   /* Copyright (c) 2021 Google LLC. */
+>   
+> +#include <sys/param.h>
+>   #include <test_progs.h>
+>   #include "test_snprintf.skel.h"
+>   #include "test_snprintf_single.skel.h"
+> @@ -83,8 +84,6 @@ static void test_snprintf_positive(void)
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+> index 7ad66a247c02..52f1b9139145 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+> @@ -20,6 +20,7 @@
+>   #include <stdbool.h>
+>   #include <stdio.h>
+>   #include <sys/stat.h>
+> +#include <sys/param.h>
+>   #include <unistd.h>
+>   
+>   #include "test_progs.h"
+
+Just add the sys/param.h to the test_progs.h header in BPF selftests where we also pull
+in other sys headers; then all the duplicate includes above are not needed.
+
+Thanks,
+Daniel
