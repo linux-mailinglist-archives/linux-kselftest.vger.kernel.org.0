@@ -2,177 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F79B4FA0F5
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Apr 2022 03:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA3C4FA100
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Apr 2022 03:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiDIBPs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Apr 2022 21:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S237733AbiDIBYj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Apr 2022 21:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDIBPr (ORCPT
+        with ESMTP id S229609AbiDIBYi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:15:47 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146C5C0B;
-        Fri,  8 Apr 2022 18:13:42 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 18:13:29 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649466820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H//e2ty06NElxV3oXbEOWS2Nb6fAWBDWPPJzb55T3rY=;
-        b=XapiOUYqHdDb2K9tAA0ftrN5h20ybKOWHg0Iy/mqlm/WVinf4DBP7ahmYtxacOGutc2mn+
-        /cfvwtisoA3IBAhwkTQzrE/nnr8q+0Iz01Zfw/1SaelKbAteprCeRQ3avIk7jvNtWWpjCs
-        WFvmxmZYFGMacn8G4oNFAGXKJEkLHa8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Fri, 8 Apr 2022 21:24:38 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3B9B1B
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Apr 2022 18:22:32 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so1110730pjb.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Apr 2022 18:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I0F2P2ML/pBi824KYgTw5KU1Y45bJmTHodkEFj/msPE=;
+        b=rnIIkb90V9I9bcpVMa5/w0cTf4Gar8GVFDke+JSlU2hEHFp3OsRcTAqk7dfPeFG8tF
+         dDExEmFCxiNoVK2EMa1ylHUlmv7DSThq6XmiX4TNJLDsXoKoUElD/mYy3ENP5lUCX6Cm
+         L0cqaNurq1CWtLL/S3jZRhd8I253TJx1CfvGJLV8g4b2GyGGXfVeqwYyZcNtCYqWoaTJ
+         rljgm3m6gGpplEG1geT3BvdWqZgCrGRUG3e99TyERwVqbDQLP1p54prwkHbmcNQHKk4J
+         2yNkYps6CqNhbHgl2xIZXaESlcelXNqaHtoVajN8GB4WEs0RS7UrQYqzpjddvSoSRqdi
+         sZ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I0F2P2ML/pBi824KYgTw5KU1Y45bJmTHodkEFj/msPE=;
+        b=TpRmws9j7o1KWNDVjRDeVCyRFtjpRcYoE65lBcAK+YbPuF/FdmXjCbqGDsRr0Kfu92
+         rIvAtNkkf23OCENKWm48pLP6jfWLiZQo0ZWgOZWEm5EYCrE6C/ovKLnvNfyMu640NWJL
+         XReCtBouR6F4N7dnpb/biEzilDtkSj59btO0wA5S/sVPqexZsZyW64dFKJBsHS/1hyl2
+         gyflxP1CRauOMnipeVDWJcJ/azT6p7MYg/BiQ/jNbwuDpl2xzL8ccVNtJsVFVCcmJv8A
+         Hls5WufN6umr3MUgGloEdfjV2/POYvX2k/yjGqJ4g5LQUhmy/I6xVDF8dlEW5NJQFCEz
+         r53g==
+X-Gm-Message-State: AOAM530G/tJoOJNQWRXF1bo1HMS3aq7oXej6+aQCn6dZuaE1hWqfVtlE
+        KPEUdqthbmE77mCUhQlQf7iJm1o0cY1ZsajahAw5Sw==
+X-Google-Smtp-Source: ABdhPJyJCUjj5J7R135dzSPAdcxIjuPzJmPklzIABqKF59nyK/U0cF2KfJdhnRS2Ev/Kou5gxn1s4+XTYi7R+kW7BNM=
+X-Received: by 2002:a17:90b:3886:b0:1c7:c935:4447 with SMTP id
+ mu6-20020a17090b388600b001c7c9354447mr25107776pjb.196.1649467351747; Fri, 08
+ Apr 2022 18:22:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220408045743.1432968-1-yosryahmed@google.com> <20220408045743.1432968-3-yosryahmed@google.com>
+In-Reply-To: <20220408045743.1432968-3-yosryahmed@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 8 Apr 2022 18:21:55 -0700
+Message-ID: <CAJD7tkb6VJt=pfqnW11r6S7A0r2Vh85a3YZaVso-qyiCM06nDQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] selftests: cgroup: return the errno of write() in
+ cg_write() on failure
+To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
         Shakeel Butt <shakeelb@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
         Chen Wandun <chenwandun@huawei.com>,
         Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
         Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
-Message-ID: <YlDduQ0LMTyfJxIs@carbon.dhcp.thefacebook.com>
-References: <20220408045743.1432968-1-yosryahmed@google.com>
- <20220408045743.1432968-2-yosryahmed@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408045743.1432968-2-yosryahmed@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 04:57:40AM +0000, Yosry Ahmed wrote:
-> From: Shakeel Butt <shakeelb@google.com>
-> 
-> Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
-> 
-> Use case: Proactive Reclaim
-> ---------------------------
-> 
-> A userspace proactive reclaimer can continuously probe the memcg to
-> reclaim a small amount of memory. This gives more accurate and
-> up-to-date workingset estimation as the LRUs are continuously
-> sorted and can potentially provide more deterministic memory
-> overcommit behavior. The memory overcommit controller can provide
-> more proactive response to the changing behavior of the running
-> applications instead of being reactive.
-> 
-> A userspace reclaimer's purpose in this case is not a complete replacement
-> for kswapd or direct reclaim, it is to proactively identify memory savings
-> opportunities and reclaim some amount of cold pages set by the policy
-> to free up the memory for more demanding jobs or scheduling new jobs.
-> 
-> A user space proactive reclaimer is used in Google data centers.
-> Additionally, Meta's TMO paper recently referenced a very similar
-> interface used for user space proactive reclaim:
-> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
-> 
-> Benefits of a user space reclaimer:
-> -----------------------------------
-> 
-> 1) More flexible on who should be charged for the cpu of the memory
-> reclaim. For proactive reclaim, it makes more sense to be centralized.
-> 
-> 2) More flexible on dedicating the resources (like cpu). The memory
-> overcommit controller can balance the cost between the cpu usage and
-> the memory reclaimed.
-> 
-> 3) Provides a way to the applications to keep their LRUs sorted, so,
-> under memory pressure better reclaim candidates are selected. This also
-> gives more accurate and uptodate notion of working set for an
-> application.
-> 
-> Why memory.high is not enough?
-> ------------------------------
-> 
-> - memory.high can be used to trigger reclaim in a memcg and can
->   potentially be used for proactive reclaim.
->   However there is a big downside in using memory.high. It can potentially
->   introduce high reclaim stalls in the target application as the
->   allocations from the processes or the threads of the application can hit
->   the temporary memory.high limit.
-> 
-> - Userspace proactive reclaimers usually use feedback loops to decide
->   how much memory to proactively reclaim from a workload. The metrics
->   used for this are usually either refaults or PSI, and these metrics
->   will become messy if the application gets throttled by hitting the
->   high limit.
-> 
-> - memory.high is a stateful interface, if the userspace proactive
->   reclaimer crashes for any reason while triggering reclaim it can leave
->   the application in a bad state.
-> 
-> - If a workload is rapidly expanding, setting memory.high to proactively
->   reclaim memory can result in actually reclaiming more memory than
->   intended.
-> 
-> The benefits of such interface and shortcomings of existing interface
-> were further discussed in this RFC thread:
-> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
-> 
-> Interface:
-> ----------
-> 
-> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> trigger reclaim in the target memory cgroup.
-> 
-> The interface is introduced as a nested-keyed file to allow for future
-> optional arguments to be easily added to configure the behavior of
-> reclaim.
-> 
-> Possible Extensions:
-> --------------------
-> 
-> - This interface can be extended with an additional parameter or flags
->   to allow specifying one or more types of memory to reclaim from (e.g.
->   file, anon, ..).
-> 
-> - The interface can also be extended with a node mask to reclaim from
->   specific nodes. This has use cases for reclaim-based demotion in memory
->   tiering systens.
-> 
-> - A similar per-node interface can also be added to support proactive
->   reclaim and reclaim-based demotion in systems without memcg.
-> 
-> - Add a timeout parameter to make it easier for user space to call the
->   interface without worrying about being blocked for an undefined amount
->   of time.
-> 
-> For now, let's keep things simple by adding the basic functionality.
-> 
-> [yosryahmed@google.com: refreshed to current master, updated commit
-> message based on recent discussions and use cases]
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+On Thu, Apr 7, 2022 at 9:57 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> Currently, cg_write() returns 0 on success and -1 on failure. Modify it
+> to return the errno of write() syscall when write() fails.
+>
 > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Acked-by: Wei Xu <weixugc@google.com>
+> ---
+>  tools/testing/selftests/cgroup/cgroup_util.c | 32 +++++++++++---------
+>  1 file changed, 17 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+> index dbaa7aabbb4a..3b6bb09985fa 100644
+> --- a/tools/testing/selftests/cgroup/cgroup_util.c
+> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
+> @@ -38,23 +38,23 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+>         return len;
+>  }
+>
+> -static ssize_t write_text(const char *path, char *buf, ssize_t len)
+> +/*
+> + * Returns:
+> + *     success -> 0
+> + *     open() failure -> -1
+> + *     write() failure -> errno
+> + */
+> +static int write_text(const char *path, char *buf, ssize_t len)
+>  {
+> -       int fd;
+> +       int fd, ret;
+>
+>         fd = open(path, O_WRONLY | O_APPEND);
+>         if (fd < 0)
+>                 return fd;
+>
+> -       len = write(fd, buf, len);
+> -       if (len < 0) {
+> -               close(fd);
+> -               return len;
+> -       }
+> -
+> +       ret = write(fd, buf, len) < 0 ? errno : 0;
+>         close(fd);
+> -
+> -       return len;
+> +       return ret;
+>  }
+>
+>  char *cg_name(const char *root, const char *name)
+> @@ -177,17 +177,19 @@ long cg_read_lc(const char *cgroup, const char *control)
+>         return cnt;
+>  }
+>
+> +/*
+> + * Returns:
+> + *     success -> 0
+> + *     open() failure -> -1
+> + *     write() failure -> errno
+> + */
+>  int cg_write(const char *cgroup, const char *control, char *buf)
+>  {
+>         char path[PATH_MAX];
+>         ssize_t len = strlen(buf);
+>
+>         snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+> -
+> -       if (write_text(path, buf, len) == len)
+> -               return 0;
+> -
+> -       return -1;
+> +       return write_text(path, buf, len);
+>  }
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+I have changed this in v4 to a cleaner implementation that either
+returns 0 on success or -errno on failure. I also made sure to check
+that the full buffer was being written, and updated cg_read() as well
+for the interface to be consistent.
 
-Thank you for incorporating all the feedback!
-Nice work!
+Will send out once the discussion on patch 1 in v3 reaches a consensus.
+
+>
+>  int cg_find_unified_root(char *root, size_t len)
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>
