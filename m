@@ -2,54 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5CF4FB25F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Apr 2022 05:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91CC4FB332
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Apr 2022 07:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244557AbiDKDcb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 10 Apr 2022 23:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        id S239848AbiDKF0C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Apr 2022 01:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244580AbiDKDc2 (ORCPT
+        with ESMTP id S230426AbiDKF0C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:32:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0DF36300;
-        Sun, 10 Apr 2022 20:30:15 -0700 (PDT)
+        Mon, 11 Apr 2022 01:26:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6202BEA;
+        Sun, 10 Apr 2022 22:23:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD262B8108E;
-        Mon, 11 Apr 2022 03:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FB1DC385AA;
-        Mon, 11 Apr 2022 03:30:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F2CAB81012;
+        Mon, 11 Apr 2022 05:23:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461A1C385AA;
+        Mon, 11 Apr 2022 05:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649647812;
-        bh=KPWGZxeJcdtMOA9v/bD97Fc8EjRW2dksoSRXlDuEqP8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AI1c1OfJpcZWutVtQ5UP75AA59vqvBY6V4164rR+d8agnl7I1bzwxR4xSgVZp5uut
-         sYy15EbFq8J9afl25fZjx6hXIAEGub7TvOenidrsc7Vo7oDlo830z2MXWsGKOQDLgh
-         /sPCX5U87rf9Sfoj0p6BSXUykPZn6qAyBzCkvrPAATVV2ohjnlsMzXomPVYjMvHPSe
-         xaFa7vpaNBqz+fA1TgWKrBSLjnnqqC++/t5WNA87gGppjqWlMyNugb5W2aR6BJojrz
-         kKPk1rukX9ov9P8Xgb/Op8reFOv4+W2eQVvWYRmcuR0AccmnaeqfusB+0FK6BXOeYv
-         fxBZU4qtwitPA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4EDE5E85D90;
-        Mon, 11 Apr 2022 03:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1649654627;
+        bh=pr8LIFJBfDlqZSzs9FKX/Dtrgbkn8j+k3ZzoXqE0LYw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AKNv/FAZI2pxE8kfTlRdtPCqWq2k6vuOhhuejKmCBjFKRKoVlFHaNq6FtWHAnuCjI
+         SYacYGRf6rq3GUGtNxQWJI7LNoylgDwM7qpMfT2V+fx338GeYY1uMEW5tVNjVFB8QM
+         26WYvsYczABHGlwLzETV+VB+7XR/FeMVzIDhPpPBjXFHc5lkXO62y9slO2pAnNHIY8
+         ouTPeMpqLwEZP2QOSeg5fYpyfw93+oIgVmvYTcoToMkopJgXmiv8Swu4ZwUJZDFD2s
+         uryl4ho4BKuvYmhIfugFZXIRvgxoUInX6rufiK7pxZBFRerdYolJy3mzsFG4xduwkD
+         29Zcl1lpbAsFQ==
+Received: by mail-yb1-f172.google.com with SMTP id x200so1776437ybe.13;
+        Sun, 10 Apr 2022 22:23:47 -0700 (PDT)
+X-Gm-Message-State: AOAM530A8fW6C4lb8mK+VgSuDE7YMuPoDpvo5TEZPAcmLL2lAI7oU5ye
+        pXflNlHnu5FLTFwqNNtAeaJQn5iuBQU+N9/Z/94=
+X-Google-Smtp-Source: ABdhPJw5k4m9H6BUc33aufBVsM8nqwXnL8QCyXdT2rkfjgV68RRIr8Q4GPuAqwH8ZfG5LFo2IjDQoyLAOaaASNob7QE=
+X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
+ j1-20020a258b81000000b0062917d568c1mr19947812ybl.449.1649654626376; Sun, 10
+ Apr 2022 22:23:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/4] bpf: RLIMIT_MEMLOCK cleanups
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164964781231.15976.11920610137850939633.git-patchwork-notify@kernel.org>
-Date:   Mon, 11 Apr 2022 03:30:12 +0000
-References: <20220409125958.92629-1-laoar.shao@gmail.com>
-In-Reply-To: <20220409125958.92629-1-laoar.shao@gmail.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
+References: <cover.1649462033.git.geliang.tang@suse.com> <1ae276da9925c2de59b5bdc93b693b4c243e692e.1649462033.git.geliang.tang@suse.com>
+In-Reply-To: <1ae276da9925c2de59b5bdc93b693b4c243e692e.1649462033.git.geliang.tang@suse.com>
+From:   Song Liu <song@kernel.org>
+Date:   Sun, 10 Apr 2022 22:23:33 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7iQhJUyEUW_OKzo+_-DN=1EbrGawSigbJjGvihP-wX=w@mail.gmail.com>
+Message-ID: <CAPhsuW7iQhJUyEUW_OKzo+_-DN=1EbrGawSigbJjGvihP-wX=w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] selftests: bpf: drop duplicate max/min definitions
+To:     Geliang Tang <geliang.tang@suse.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
         linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,36 +68,11 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Fri, Apr 8, 2022 at 4:58 PM Geliang Tang <geliang.tang@suse.com> wrote:
+>
+> Drop duplicate macros min() and MAX() definitions in prog_tests, use MIN()
+> or MAX() in sys/param.h instead.
+>
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sat,  9 Apr 2022 12:59:54 +0000 you wrote:
-> We have switched to memcg-based memory accouting and thus the rlimit is
-> not needed any more. LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK was introduced in
-> libbpf for backward compatibility, so we can use it instead now.
-> 
-> This patchset cleanups the usage of RLIMIT_MEMLOCK in tools/bpf/,
-> tools/testing/selftests/bpf and samples/bpf. The file
-> tools/testing/selftests/bpf/bpf_rlimit.h is removed. The included header
-> sys/resource.h is removed from many files as it is useless in these files.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v4,1/4] samples/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
-    https://git.kernel.org/bpf/bpf-next/c/b25acdafd373
-  - [bpf-next,v4,2/4] selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
-    https://git.kernel.org/bpf/bpf-next/c/b858ba8c52b6
-  - [bpf-next,v4,3/4] bpftool: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
-    https://git.kernel.org/bpf/bpf-next/c/a777e18f1bcd
-  - [bpf-next,v4,4/4] tools/runqslower: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
-    https://git.kernel.org/bpf/bpf-next/c/451b5fbc2c56
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Song Liu <songliubraving@fb.com>
