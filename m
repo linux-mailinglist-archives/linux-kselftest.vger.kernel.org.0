@@ -2,139 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94054FBB8E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Apr 2022 14:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A764FBF69
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Apr 2022 16:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiDKMEG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Apr 2022 08:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S234947AbiDKOpF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Apr 2022 10:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345722AbiDKMEE (ORCPT
+        with ESMTP id S230368AbiDKOpD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:04:04 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2045.outbound.protection.outlook.com [40.107.95.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F49C37AA3;
-        Mon, 11 Apr 2022 05:01:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nLnzCVET9i/+Q/FV/TaHodH/NA3KdXBxSHPEemRs9RUPWZfUDECegCP905AgSXrZlkq5ANAKmMF7uxuLcdzmaND/pKr8mh22mCqJU3sTzIrvLccwzBbqbg87yqpAkO7p6cgDJBOXS42Q0/ih6I5ueoKpusJd5q7C+8GYFpFLm2CNQS66n3y5vO+UX2nO0QB2OOVi9MFfeE9EdN3/qXVtoN0XCn3V5x0RsyiYSjHfhrN9zGT378HO1TpEAfBlwa2uRzslLcWlUNCYqB+NyaRBtFXz8bElY4Qs1Nm0YbCBnR3pA/5IRbqsvUWYaNMrcBoKotXhsbJ386lK1M1Y9vZVUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0TnPsOE7/1eMle8tq/6yXwbE3koGfFNxfSGwCBdKxRM=;
- b=ZUJBU96Hq2HLA1j7ERtb+YxWqfNrXdDauK/Xn25/kO9nm/77/yS/Jd7MmOxY0WSiHsraGW762QZ0S9XgjiOgCy/tpM2INVQ33v7m0C74yltgnKA3MDL0KKKR7khzh5wzJs04gxsfmCEVv1KvyKZ1dY3eEu5adCAbMNwdN7x79IEIs5y0A/ORaiMp/ICZfX/7/2UvjDSbUa61mn9YJEcDC81BqCwIuLuL1xb02GjpvsaiTs9m1PIqdVYYkBqmkUunOgm+OpS4pZcWFltyUm6AahqJ1RACxbfre4Ott+3bt4u5ClkVZ242RBpOKSarhmOZVbIjopsmzAC3pXhQr0Ft9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0TnPsOE7/1eMle8tq/6yXwbE3koGfFNxfSGwCBdKxRM=;
- b=MsrPoYMTIjBHF6gI2xxwViLGQiE+FeqOOYqMSMBlbrb5NR5i3FjW32/zfPuzAVgoD1DGHCZ4SXGOkdw/7eebFV+bBMZkQ+Fw+sAvE1XxgBFLGA0lW13q6MHonDKnCF+l7QFaTf+cjeTcMbgU5E7ezxelEKHaXCQJNbrG8/byy2c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2470.namprd12.prod.outlook.com (2603:10b6:4:b4::39) by
- BN6PR12MB1844.namprd12.prod.outlook.com (2603:10b6:404:fc::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.29; Mon, 11 Apr 2022 12:01:46 +0000
-Received: from DM5PR12MB2470.namprd12.prod.outlook.com
- ([fe80::61a5:5647:ecef:4bd2]) by DM5PR12MB2470.namprd12.prod.outlook.com
- ([fe80::61a5:5647:ecef:4bd2%5]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 12:01:45 +0000
-Message-ID: <0790131c-95af-676f-c475-addd1191eacd@amd.com>
-Date:   Mon, 11 Apr 2022 17:31:09 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, shauh@kernel.org, yang.zhong@intel.com,
-        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
-        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
-        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
-        bfields@fieldses.org, akpm@linux-foundation.org,
-        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com,
-        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
-        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
-        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
-        pgonda@google.com, seanjc@google.com, diviness@google.com
-Subject: Re: [RFC V1 PATCH 0/5] selftests: KVM: selftests for fd-based
- approach of supporting private memory
-Content-Language: en-US
-To:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20220408210545.3915712-1-vannapurve@google.com>
-From:   "Nikunj A. Dadhania" <nikunj@amd.com>
-In-Reply-To: <20220408210545.3915712-1-vannapurve@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN1PR0101CA0027.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c00:c::13) To DM5PR12MB2470.namprd12.prod.outlook.com
- (2603:10b6:4:b4::39)
+        Mon, 11 Apr 2022 10:45:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6F530E;
+        Mon, 11 Apr 2022 07:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649688168; x=1681224168;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=a78RG2rgetkT6wRkBrpNoC5Ar5aVOhm6MB5hWeXntw4=;
+  b=F+E/K0SCgaMipel4Wm6edfToZg+X8MtaOQB7yhSMnPpsGzq74o1PbVes
+   h3EnCjjwmkJF3WhQ7SRMT0C0SbEb6ieUcgkzwslEFzUU7suXdw0tFycO7
+   aHYoqZWEbrL8sZJGdQhtyKKU/LIQfF+UjT/LcFqq+tQ45HWrdHLQbz690
+   HZ16kteEk4/d69l/6fZdJUAGb/dGroUFUtOqAIu9DszsmaEVOS3udz2hW
+   LWPqrlw4wNi0pg0ZPu5qKOr1IDAdTD2lD01FL4zt9BJvAqJjoUdfobE+h
+   wNiuUI0oCkYuspGZ1cnPZ6v3mftPPSXFskfOU7WTWXGFrJgHL5m3455x4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322575688"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322575688"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 07:42:48 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="525558679"
+Received: from srkondle-mobl.amr.corp.intel.com (HELO [10.212.113.6]) ([10.212.113.6])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 07:42:47 -0700
+Message-ID: <c9f881fb-460e-de44-a6f8-0faf05dda9b7@intel.com>
+Date:   Mon, 11 Apr 2022 07:42:53 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5cb220a0-3729-477e-b6eb-08da1bb30c96
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1844:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1844E3DC362D74632287D37BE2EA9@BN6PR12MB1844.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VXl9VzHJhXEs0020MDOpNhH9V6cT1RwnLljY5dP5H3q7v8612+kswJAN1Cr8J37yLDOxjnv1asPbF0+f+NLB9ERvaIONaT20GAaR6AmTg0dlaxnJnUdCfQT+pESB6ztgB9aQB6TdbkDeKGIialgQBvYpVbSSbieiJPdAUwENe4J0HOtSWUNdYuC5wpdqYms2ihVJCH4h5xGPtgkOuNEH2zetR1XrSpFJ60k1ww29hTqoRgFGv/zmmzfHsAtS9ZvDVyAzZtLXRQt7Ucv36kD+Nqzo+/9qQb34v8WO+wtb+frzKcfB/AgTddbGyTPpf5mVy73U2XTJGrATJAcJbIpXDC+lzo4L3eu//DiOBDhtgjWI1PByt9VckSJicLP8OWtzAOmMGgPrLuolSxUK9EVo0iLhJ/UFW46EnsX/hgbzx0ITGKypOZ6rA9KaVOZkgDBot6eA9rO1S1uf/q3L0MC7MiyZTWjuvqxEtMHaXOyF/NAdsk81oUS5+CFNDifpHYUhL1eTrTe0UJ/xsFpwyEdSo8N5zYLNGViMf2OAhQu9mH7PzYFJAVEDTaHfQ72YPuxUIGW+lqcvi2JoYeqRh6v9F4TAiv7go+2jDgA9VI6B3Tt1LD9U1lsOE0OZYiDTCcOppe/xlp0koVHHASRSpdZnhQa6Gfv6fXOxb2X7fNMANw9AlRARmiLx9jsYNtAHrjD1090/ZUnHHJWqAkKpnP+0Yao8yfM1E94NWWjvxfhSUQYSTH1KvHfQvC2u32rSF3quwmlBRtHUdfqRQtEPPnj/3DzvqGJhvbzmIDXSaDM+2ToxvCxonBbYE4eG3w5wPArJgObVi2io/EWEPoo33ObnELNUzlEWwcHAY9AERNa2NPI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2470.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(966005)(508600001)(36756003)(2906002)(66476007)(316002)(31696002)(4326008)(8676002)(6486002)(66946007)(38100700002)(8936002)(5660300002)(7406005)(7416002)(66556008)(6506007)(186003)(53546011)(26005)(6666004)(2616005)(6512007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWxIa3J0WUtBTzVBZVJoUDJtS25kV1BuMFFLdlhmVGxUOW9oOVo3cWJUYUQ0?=
- =?utf-8?B?NkRLS01Mdm93aXJBSGZOQWpDUXo2L29wc2NjRGRGbmY1NU5OaEdhWkVGUGFi?=
- =?utf-8?B?UFhaa2JaNm9QK1c3djcwS3IwdEFJcmJyWnNOK2NlYm4zQVhiWCthWlo3b3Bm?=
- =?utf-8?B?QXJnTEpNR08rM1BZYkMwMVNXT3JyOEhsQkZvM2p0ZWM0dVlMQ3hpRmp2QUJG?=
- =?utf-8?B?N0lQSUgwTjgzZWFCb1gzeHdiT0xibkNwdDRRRnZuUmdSeW4xSllDN2svUVM1?=
- =?utf-8?B?MEw0MDBVdzI5SUVRQVVsd0x3K3FDT0ZEcy9XeFFUb3pHa1pPejkzbHV3RXpa?=
- =?utf-8?B?NGJmWnd2VmRhTlNacEVMMFB2dW55T1VITjZFbzdOR0ZXTklZeVVqREtvYnQy?=
- =?utf-8?B?dHhkcDFFQURRSCtGTStNVHJ3S3RWbmcvMys2K3lZTTd3VGk3Q3JPcTE0TEFz?=
- =?utf-8?B?ZTh4RlNlQVBFUTYydVRvRlMxODIvR2ovSTRWejJlTld2RFVJbjhZZUlxdEQz?=
- =?utf-8?B?SG8veWt2Y29PdVhNYmc3ejV4RFBQODhUOFVFcEJEb2JISENzZ0c2anQ2MDgw?=
- =?utf-8?B?NGdsdDg4eS80ZHl2dkEyM0p2ZkFSS0NvR1BCc0hIS1N3WXdxdFVNYmxoMlFP?=
- =?utf-8?B?TmN3QUkzSk4zQ2RnTHZDTWZ4bmtVNGR6b1BjOEYwaUVVcjFpaDNvVlYyVVgy?=
- =?utf-8?B?eG5uaExEZzZHWkR5ZndGeGZEV0JVUnBUSmZQT3RkdTF4cHlRSWZNNDNCOUtC?=
- =?utf-8?B?Y0dEMGg3R0Jub3ZKd1BXcndBSFZ0K0VkbEQ0eWFhZzBCT1hpenlKeTlVMlR0?=
- =?utf-8?B?S2FqZ1JQNXpPSDk4cjRKekRqczFYOTdoWWVqNVdYandQZnE1YWRiRUl5UDFR?=
- =?utf-8?B?bFpRdGVOYUpublFabSsxRnF1QlBCQWJ3RzVEYTVpeE5oUjB2ZHJ1SHFCY1dJ?=
- =?utf-8?B?c2NwUFluYU1KMytPY3RSR3NSclhjMTVoMysxbHl2enlPdlZSaVMva0x6c3Jv?=
- =?utf-8?B?MVpXV0F5VFFFTUpBbjRCQXA3Qmc5dklKeEtFTUxzZllQTEs0em9rdkFVVHVJ?=
- =?utf-8?B?UkEvVHdHNVI5VDJQV3VIdWYwSXhEZ1g4TG9lRWZmbTJ1NHVaZWZXaGprR29n?=
- =?utf-8?B?U2lQYlRVMndCMEFqM3cyUUpwNUluYVRla0tkeEc5UFJiYTA2UCtBK2lNU0lR?=
- =?utf-8?B?NG15R0NTVnVGS1pIMzZIOGE5U3ZoMngzbGI1Rlc1WTlwRC9adFJ5NXpIb1Iy?=
- =?utf-8?B?OWpaT0VmeUxCeEtSbnZQRVlZcHI5cGpBWWtDQjNOZ2twTzVDSDdzVGtMWUg5?=
- =?utf-8?B?S29GZlNwa2pROFpTVUJzQjdRUkVpOFFqbW5sMThFNHFtUTFsZFRMZENXWWNN?=
- =?utf-8?B?alVQTWJlRHNTVGdlMW1PR0FFcFBwRUw5Q0dZR2tHMkRjMUdLN3lYdHRxQXBO?=
- =?utf-8?B?MEVCZlVzQjB0Nnc2bHErc0RmYnhDbGJ2NFFRVHJxTkxLWWlRN1FqVFl6S3ND?=
- =?utf-8?B?RTdSKzZLeEpzNGYzYTJPTFRwZ0RmVWROajI0ZTdmREUvRTNqVGh0TzZJUStE?=
- =?utf-8?B?VTJIY3E0WHFPa2M0eEdmUUpsOC85eHNMcHNwaDlLbDd0V1UvWFFydWtUbHZJ?=
- =?utf-8?B?aHVZcGVac25lK3FuQTlFMkpVNXBQY1l2UUhuaFkzK2xFYW9oOEhmUmsxWkl2?=
- =?utf-8?B?Z0NlSEd5bVByek0zc2NoaFhpeFRtNlNsa3JEMGc4NmdoUVhGbmFKalpwQ0xF?=
- =?utf-8?B?Zkx5cDFGajBQNUh6aHRleCtKQVBnZ2tvcko4RkxHaDN1SFExUHFCR1BLUGNU?=
- =?utf-8?B?TU02WkdQNk1NVjhJL0lPSHZFWlUvWEZFS2NrOU9KRjBnQWI5Ri8vZnZuWGhn?=
- =?utf-8?B?Uk1DMzhocUhoeWI3TFNhKytlbmRIS2lEVTNMdlBmNzJoZ2tmR2FCU2c4OWhS?=
- =?utf-8?B?aHRkcDdNZ1lQYUtsUmV0dVdSSTUyUUhrbzV6YXZhN0hGclRZakJzdnU1alJL?=
- =?utf-8?B?ems3bW1xVm1BSEZRWE55UnFQS2kwaVFQcU5rQVMzV2d6ckxtNnN1aVY1NUYv?=
- =?utf-8?B?MHZ1WU5EeGpscWFFYzJpUFBqWHNrRDVZWWRnWktLalcyWS81UjRGR3RPTmsx?=
- =?utf-8?B?eGFxKzM4clNBZ1c4cmVLRFdJNExGMHQ5OXZMeDh3UUFVeDN6UllSbEFCKzJw?=
- =?utf-8?B?MDVSVlBDNjRzakNaM3VRelVZNFBiTHN4bFBXRXlSemNvaEFwQ1hiNnB4SjBu?=
- =?utf-8?B?bFdBYmRtcWhWTVpIS0tzRm5LcW5kaXN5aDlBOFI4Q2xSTElySlo3VXZPOWJD?=
- =?utf-8?B?R2xrZTBwY1VEWnEwQ0tleTFHNENjT1I2QzhObmM4WW5nOTdqU2lQQT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5cb220a0-3729-477e-b6eb-08da1bb30c96
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2470.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 12:01:45.6895
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 30oiMyxoNGXZLxwbGkIpJMpKD3KFhx6rKqyQMJozjz/Da1LppfsDXpHnGG0PfK5xSlyx+92K2LnXPzjsPpOHgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1844
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Heng Su <heng.su@intel.com>, Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bae Chang Seok <chang.seok.bae@intel.com>
+References: <cover.1646999762.git.pengfei.xu@intel.com>
+ <4268a0203fd6e42a31bde3254ee50dd93fd233ea.1646999762.git.pengfei.xu@intel.com>
+ <441dd314-3a82-cf53-8e2c-badedfe22d8c@intel.com>
+ <YlP/gvE4qzPj8sWF@xpf.sh.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v8 1/1] selftests/x86/xstate: Add xstate test cases for
+ XSAVE feature
+In-Reply-To: <YlP/gvE4qzPj8sWF@xpf.sh.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -142,52 +74,194 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/9/2022 2:35 AM, Vishal Annapurve wrote:
-> This series implements selftests targeting the feature floated by Chao
-> via:
-> https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
+On 4/11/22 03:14, Pengfei Xu wrote:
+> On 2022-04-08 at 09:58:50 -0700, Dave Hansen wrote:
+>> On 3/16/22 05:40, Pengfei Xu wrote:
+>>> +#ifndef __cpuid_count
+>>> +#define __cpuid_count(level, count, a, b, c, d) ({	\
+>>> +	__asm__ __volatile__ ("cpuid\n\t"	\
+>>> +			: "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
+>>> +			: "0" (level), "2" (count));	\
+>>> +})
+>>> +#endif
+>>
+>>
+>> By the time you post the next revision, I hope these are merged:
+>>
+>>> https://lore.kernel.org/all/cover.1647360971.git.reinette.chatre@intel.com/
+>>
+>> Could you rebase on top of those to avoid duplication, please?
+>>
+>   Yes, thanks for remind. I would like to use the helper __cpuid_count() based
+>   on above fixed patch.
+>   And I have a concern with stdlib.h with "-mno-sse" issue, it's a GCC bug,
+>   and it will be fixed in GCC11. And I could not use kselftest.h, because
+>   kselftest.h used stdlib.h also...
+
+Ugh.  What a mess.
+
+>   Thanks for the link! From above "id=27600"link, Lu Hongjiu mentioned that:
+>   It's a "GCC bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652"
+>   And id=99652 shows that it's fixed in GCC 11.
+>   I tried "-mgeneral-regs-only"(it includes "-mno-sse"), it also gcc failed
+>   with same error as "-mno-sse":
+>   "
+> /usr/include/bits/stdlib-float.h: In function ‘atof’:
+> /usr/include/bits/stdlib-float.h:26:1: error: SSE register return with SSE disabled
+>   "
+>   And the error shows that: it's related to "stdlib-float.h", seems I didn't
+>   use stdlib-float.h related function.
 > 
-
-Thanks for working on this.
-
-> Below changes aim to test the fd based approach for guest private memory
-> in context of normal (non-confidential) VMs executing on non-confidential
-> platforms.
+>   In order for this test code to support GCC versions before GCC11, such as
+>   GCC8, etc., I used this workaround "avoid stdlib.h" for GCC bug, and add
+>   *aligned_alloc() declaration above.
 > 
-> Confidential platforms along with the confidentiality aware software
-> stack support a notion of private/shared accesses from the confidential
-> VMs.
-> Generally, a bit in the GPA conveys the shared/private-ness of the
-> access. Non-confidential platforms don't have a notion of private or
-> shared accesses from the guest VMs. To support this notion,
-> KVM_HC_MAP_GPA_RANGE
-> is modified to allow marking an access from a VM within a GPA range as
-> always shared or private. Any suggestions regarding implementing this ioctl
-> alternatively/cleanly are appreciated.
+>   Because kselftest.h uses stdlib.h also, so I could not use kselftest.h with
+>   "-mno-see" special GCC requirement, and seems I could not use __cpuid_count()
+>   patch in kselftest.h from Reinette Chatre.
+>   Thanks!
+
+Can you break this test up into two pieces which are spread across two
+.c files?  One that *just* does the sequences that need XSAVE and to
+preserve FPU state with -mno-sse, and then a separate one that uses
+stdlib.h and also the kselftest infrastructure?
+
+For instance, all of the detection and enumeration can be in the nornal
+.c file.
+
+...
+>>> +/* Fill FP/XMM/YMM/OPMASK and PKRU xstates into buffer. */
+>>> +static void fill_xstates_buf(struct xsave_buffer *buf, uint32_t xsave_mask)
+>>> +{
+>>> +	uint32_t i;
+>>> +	/* The data of FP x87 state are as follows. */
+>>
+>> OK, but what *is* this?  Random data?  Or did you put some data in that
+>> means something?
+>>
+> I learned from filling the fp data by follow functions: fill FPU xstate
+> by fldl instructions, push the source operand onto the FPU register stack
+>  and recorded the fp xstate, then used buffer filling way
+> to fill the fpu xstates:
+> Some fp data could be set as random value under the "FP in SDM rules".
+> Shall I add the comment for the fpu data filling like as follow:
+> "
+> /*
+>  * The data of FP x87 state has the same effect as pushing source operand
+>  * 0x1f2f3f4f1f2f3f4f onto the FPU stack ST0-7.
+>  */
+> unsigned char fp_data[160] = {...
+> "
+
+No, that's hideous.  If you generated the fp state with code, let's
+include the *code*.
+
+> As follow is the pushing source operand 0x1f2f3f4f1f2f3f4f onto the FPU stack
+> ST0-7:
+> "
+> static inline void prepare_fp_buf(uint64_t ui64_fp)
+> {
+> 	/* Populate ui64_fp value onto FP registers stack ST0-7. */
+> 	asm volatile("finit");
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> 	asm volatile("fldl %0" : : "m" (ui64_fp));
+> }
+> ...
+> prepare_fp_buf(0x1f2f3f4f);
+> __xsave(buf, xstate_info.mask);
+> "
 > 
-> priv_memfd_test.c file adds a suite of two basic selftests to access private
-> memory from the guest via private/shared access and checking if the contents
-> can be leaked to/accessed by vmm via shared memory view.
+> The code to set fp data and display xstate is as follow:
+> https://github.com/xupengfe/xstate_show/blob/0411_fp/x86/xstate.c
 > 
-> Test results:
-> 1) PMPAT - PrivateMemoryPrivateAccess test passes
-> 2) PMSAT - PrivateMemorySharedAccess test fails currently and needs more
-> analysis to understand the reason of failure.
+> I found there were 2 different:
+>>> +	unsigned char fp_data[160] = {
+>>> +		0x7f, 0x03, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
+>>> +		0xf0, 0x19, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00,
+>             ^Above function shows "0xff, 0x12" not "0xf0, 0x19" in 0x8/0x9
+> offset bytes:
+> Bytes 11:8 are used for bits 31:0 of the x87 FPU Instruction Pointer
+> Offset(FIP). It could be impacted if I added "vzeroall" and so on instructions,
+> in order to match with above fpu function result, will change to "0xff, 0x12".
+> 
+>>> +		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>>> +		0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
+>             ^Above function shows "0x80, 0x1f" not "0x00, 0x00" in offset
+> 0x18/0x19 bytes:
+> Bytes 27:24 are used for the MXCSR register. XRSTOR and XRSTORS generate
+> general-protection faults (#GP) in response to attempts to set any of the
+> reserved bits of the MXCSR register.
+> It could be set as "0x00, 0x00", in order to match with result of above
+> function, will fill as "0x80, 0x1f".
 
-That could be because of the return code (*r = -1) from the KVM_EXIT_MEMORY_ERROR. 
-This gets interpreted as -EPERM in the VMM when the vcpu_run exits.
+I'm totally lost with what you are trying to say here.
 
-	+	vcpu->run->exit_reason = KVM_EXIT_MEMORY_ERROR;
-	+	vcpu->run->memory.flags = flags;
-	+	vcpu->run->memory.padding = 0;
-	+	vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-	+	vcpu->run->memory.size = PAGE_SIZE;
-	+	fault->pfn = -1;
-	+	*r = -1;
-	+	return true;
+...
+>> I have to wonder if we can do this in a bit more structured way:
+>>
+>> struct xstate_test
+>> {
+>> 	bool (*init)(void);
+>> 	bool (*fill_state)(struct xsave_buffer *buf);
+>> 	...
+>> }
+>>
+>> Yes, that means indirect function calls, but that's OK since we know it
+>> will all be compiled with the "no-sse" flag (and friends).
+>>
+>> Then fill_xstates_buf() just becomes a loop over an xstate_tests[] array.
+>>
+>   Yes, it's much better to fill the buf in a loop! Thanks!
+>   Because it's special for pkru filling, so I will improve it like as follow:
+> "
+> 	uint32_t xfeature_num;
+> ...
+> 
+> 	/* Fill test byte value into each tested xstate buffer(offset/size). */
+> 	for (xfeature_num = XFEATURE_YMM; xfeature_num < XFEATURE_MAX;
+> 			xfeature_num++) {
+> 		if (xstate_tested(xfeature_num)) {
+> 			if (xfeature_num == XFEATURE_PKRU) {
+> 				/* Only 0-3 bytes of pkru xstates are allowed to be written. */
+> 				memset((unsigned char *)buf + xstate_info.offset[XFEATURE_PKRU],
+> 					PKRU_TESTBYTE, sizeof(uint32_t));
+> 				continue;
+> 			}
+> 
+> 			memset((unsigned char *)buf + xstate_info.offset[xfeature_num],
+> 				XSTATE_TESTBYTE, xstate_info.size[xfeature_num]);
+> 		}
+> 	}
+> "
 
+I'm not sure that's an improvement.
 
-Regards
-Nikunj
+>>> +/*
+>>> + * Because xstate like XMM, YMM registers are not preserved across function
+>>> + * calls, so use inline function with assembly code only to raise signal.
+>>> + */
+>>> +static inline long long __raise(long long pid_num, long long sig_num)
+>>> +{
+>>> +	long long ret, nr = SYS_kill;
+>>> +
+>>> +	register long long arg1 asm("rdi") = pid_num;
+>>> +	register long long arg2 asm("rsi") = sig_num;
+>>
+>> I really don't like register variables.  They're very fragile.  Imagine
+>> if someone put a printf() right here.  Why don't you just do this with
+>> inline assembly directives?
+>>
+>   It seems that adding printf() to an inline function is not good.
+>   I'm not sure if I understand correctly: should I use inline assembly to
+>   assign variables to rdi, rsi and then syscall?
+>   It it's right, I will think about how to implement it by inline assembly way
+>   and fix it.
 
-[1] https://lore.kernel.org/all/20220310140911.50924-10-chao.p.peng@linux.intel.com/#t
+Yes, do it with inline assembly.
+
