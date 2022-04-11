@@ -2,77 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91CC4FB332
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Apr 2022 07:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8574FB483
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Apr 2022 09:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239848AbiDKF0C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Apr 2022 01:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S245293AbiDKHWz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Apr 2022 03:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiDKF0C (ORCPT
+        with ESMTP id S245325AbiDKHWu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:26:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6202BEA;
-        Sun, 10 Apr 2022 22:23:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 11 Apr 2022 03:22:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B872F3AB;
+        Mon, 11 Apr 2022 00:20:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 239E11F38C;
+        Mon, 11 Apr 2022 07:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649661635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EKQ22xGnCAfhZWYXu0EvGb4wthBpsfoBSJ1Jf+KqZ/U=;
+        b=ZyojcBVo92JmwvoAqRyuWeNWhRdm2bTVzL3tgs8ML4g9f+5OapIHmsoh8iSO3TZbUFORDW
+        l7lVqpJ+JmozjlZtoMfJjR4SyYzHmgOUP3TOxtkw2i10q7qGLIWBSnvnX/BajoavEbPNJp
+        v/KvnynxlBntXBl4aDgMwxDLnE8Fnlg=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F2CAB81012;
-        Mon, 11 Apr 2022 05:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461A1C385AA;
-        Mon, 11 Apr 2022 05:23:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649654627;
-        bh=pr8LIFJBfDlqZSzs9FKX/Dtrgbkn8j+k3ZzoXqE0LYw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AKNv/FAZI2pxE8kfTlRdtPCqWq2k6vuOhhuejKmCBjFKRKoVlFHaNq6FtWHAnuCjI
-         SYacYGRf6rq3GUGtNxQWJI7LNoylgDwM7qpMfT2V+fx338GeYY1uMEW5tVNjVFB8QM
-         26WYvsYczABHGlwLzETV+VB+7XR/FeMVzIDhPpPBjXFHc5lkXO62y9slO2pAnNHIY8
-         ouTPeMpqLwEZP2QOSeg5fYpyfw93+oIgVmvYTcoToMkopJgXmiv8Swu4ZwUJZDFD2s
-         uryl4ho4BKuvYmhIfugFZXIRvgxoUInX6rufiK7pxZBFRerdYolJy3mzsFG4xduwkD
-         29Zcl1lpbAsFQ==
-Received: by mail-yb1-f172.google.com with SMTP id x200so1776437ybe.13;
-        Sun, 10 Apr 2022 22:23:47 -0700 (PDT)
-X-Gm-Message-State: AOAM530A8fW6C4lb8mK+VgSuDE7YMuPoDpvo5TEZPAcmLL2lAI7oU5ye
-        pXflNlHnu5FLTFwqNNtAeaJQn5iuBQU+N9/Z/94=
-X-Google-Smtp-Source: ABdhPJw5k4m9H6BUc33aufBVsM8nqwXnL8QCyXdT2rkfjgV68RRIr8Q4GPuAqwH8ZfG5LFo2IjDQoyLAOaaASNob7QE=
-X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
- j1-20020a258b81000000b0062917d568c1mr19947812ybl.449.1649654626376; Sun, 10
- Apr 2022 22:23:46 -0700 (PDT)
+        by relay2.suse.de (Postfix) with ESMTPS id 68ECBA3B83;
+        Mon, 11 Apr 2022 07:20:34 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 09:20:30 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Dan Schatzberg <schatzberg.dan@gmail.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
+Message-ID: <YlPWvuK5pG/CapKv@dhcp22.suse.cz>
+References: <20220408045743.1432968-1-yosryahmed@google.com>
+ <20220408045743.1432968-2-yosryahmed@google.com>
+ <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+ <YlBCeadBqbeVvALK@dhcp22.suse.cz>
+ <YlBM/HlPyPUZew5N@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
 MIME-Version: 1.0
-References: <cover.1649462033.git.geliang.tang@suse.com> <1ae276da9925c2de59b5bdc93b693b4c243e692e.1649462033.git.geliang.tang@suse.com>
-In-Reply-To: <1ae276da9925c2de59b5bdc93b693b4c243e692e.1649462033.git.geliang.tang@suse.com>
-From:   Song Liu <song@kernel.org>
-Date:   Sun, 10 Apr 2022 22:23:33 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7iQhJUyEUW_OKzo+_-DN=1EbrGawSigbJjGvihP-wX=w@mail.gmail.com>
-Message-ID: <CAPhsuW7iQhJUyEUW_OKzo+_-DN=1EbrGawSigbJjGvihP-wX=w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] selftests: bpf: drop duplicate max/min definitions
-To:     Geliang Tang <geliang.tang@suse.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlBM/HlPyPUZew5N@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 4:58 PM Geliang Tang <geliang.tang@suse.com> wrote:
->
-> Drop duplicate macros min() and MAX() definitions in prog_tests, use MIN()
-> or MAX() in sys/param.h instead.
->
-> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+On Fri 08-04-22 10:55:56, Dan Schatzberg wrote:
+> On Fri, Apr 08, 2022 at 04:11:05PM +0200, Michal Hocko wrote:
+> > Regarding "max" as a possible input. I am not really sure to be honest.
+> > I can imagine that it could be legit to simply reclaim all the charges
+> > (e.g. before removing the memcg) which should be achieveable by
+> > reclaiming the reported consumption. Or what exactly should be the
+> > semantic?
+> 
+> Yeah, it just allows you to avoid reading memory.current to just
+> reclaim everything if you can specify "max"
 
-Acked-by: Song Liu <songliubraving@fb.com>
+The same could be achieved by requesting a really high number (-1Ul)
+
+> - you're still protected
+> by nretries to eventually bail out.
+
+The number of retries is an implementation detail and nobody should
+really rely on that. Bail out on signal can be still used so yeah
+getting a large input or whatever alias of that should be just fine.
+
+> Mostly, though I just feel like
+> supporting "max" makes memory.reclaim semetric with a lot of the
+> cgroup memory control files which tend to support "max".
+
+max is used for limits now and this doesn't have a semantic of one.
+But I have to say I do not really feel strongly about this.
+
+-- 
+Michal Hocko
+SUSE Labs
