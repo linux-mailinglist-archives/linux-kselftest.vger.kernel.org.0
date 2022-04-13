@@ -2,215 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84ED4FF900
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Apr 2022 16:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4694FF988
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Apr 2022 16:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236115AbiDMOfj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Apr 2022 10:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S230400AbiDMPAR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Apr 2022 11:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbiDMOfi (ORCPT
+        with ESMTP id S230071AbiDMPAQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Apr 2022 10:35:38 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF7556C00;
-        Wed, 13 Apr 2022 07:33:16 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KdlMW1PQDzCqwJ;
-        Wed, 13 Apr 2022 22:28:55 +0800 (CST)
-Received: from [10.174.176.117] (10.174.176.117) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 13 Apr 2022 22:33:12 +0800
-Subject: Re: [PATCH] bpf/benchs: fix error check return value of
- bpf_program__attach()
-To:     <cgel.zte@gmail.com>, <shuah@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <joannekoong@fb.com>, <lv.ruyi@zte.com.cn>, <toke@redhat.com>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220413093123.2538001-1-lv.ruyi@zte.com.cn>
-From:   Hou Tao <houtao1@huawei.com>
-Message-ID: <3dab1e4b-2317-4730-f699-627583ff759d@huawei.com>
-Date:   Wed, 13 Apr 2022 22:33:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20220413093123.2538001-1-lv.ruyi@zte.com.cn>
+        Wed, 13 Apr 2022 11:00:16 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20963BD6
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Apr 2022 07:57:54 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id a21so2215230pfv.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Apr 2022 07:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ZNK7KkhZjydv5Ioo19jJx8pucp3jvVpvqCz6MU8nwws=;
+        b=xOXOMxgDFKzElbzTyeibFP2vq8BqpzsSqH8eBfKyuAQXBPXlK75v+RZWWpJLWb7DPL
+         veEAklUWmXDqzPnPP+0GcVWSblvhp4mW3PSqhkHScnLySgH78NzsAx/PYtOHaS4TxPz4
+         0BXt4LdNEe6CVuNu3FM+0Rw4jGZzQUysjJBXzb9aTpO9+ValpTxSReZjsPEI1yw2VxJi
+         AYFoWMd72batmPY9+lo6HX9WwW2rGnrwWbguT4cdtMzJKgcwus1o2WBDQDMWu/WfcEvJ
+         jGcslqLkP0x4jcDJlLz+MYurDIw/nBoPJhbSdTfrnTtYQj4nXqdnstcgzYTwzMDvEfmB
+         p55Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ZNK7KkhZjydv5Ioo19jJx8pucp3jvVpvqCz6MU8nwws=;
+        b=b1O4PfPigWrIakhaCiF90o7oEMbZGScCmo4Q+SPM2+Oz7tyLYOPMm1HmK6TiEPkl/V
+         4MsHEUTD1utcbnnfjPXiSsjHlr3Qklziun0d+/0E39GPC5kNE5XpFDMNH9X2Afvi7g2L
+         UPul4OfQyqCFjLl+zM9Flw7Vp2HCz0kEKShE72TSr3vnLJMZqg2aSIGUJgIGQm2L/IMa
+         Y1yUujBZwYDCtwOIZu9qmuHqeBiGZGhspCQrHM9jHpAxQAr9k5qh0t+CPXWfyMX8NI4M
+         79rgtbS+94KpErjmVNaz0lM/CktT0uxVomofmKNASGzTBxR3Qbh6ebLm15rJfcBkBcU3
+         RP5w==
+X-Gm-Message-State: AOAM5302R3bU211iTLFZ7gHnyVrfIjPFZsswqjFyxBhx5YpJn7YGAI8V
+        KNDoZqPDQmcrtuLGBphfutgPjQ==
+X-Google-Smtp-Source: ABdhPJx7ls9NpaBuw+qMjmFZXDA518UP8khwsxSe+0QkQbgJxtuaUoKhTd1/whHRDiETP3SkkrKT1w==
+X-Received: by 2002:a05:6a00:890:b0:4f6:686e:a8a9 with SMTP id q16-20020a056a00089000b004f6686ea8a9mr43541231pfj.83.1649861874350;
+        Wed, 13 Apr 2022 07:57:54 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm6388668pgc.50.2022.04.13.07.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 07:57:54 -0700 (PDT)
+Message-ID: <6256e4f2.1c69fb81.9392d.071c@mx.google.com>
+Date:   Wed, 13 Apr 2022 07:57:54 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.176.117]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: fixes
+X-Kernelci-Kernel: linux-kselftest-fixes-5.18-rc2-1-gce64763c6385
+X-Kernelci-Report-Type: test
+Subject: kselftest/fixes kselftest-rtc: 4 runs,
+ 1 regressions (linux-kselftest-fixes-5.18-rc2-1-gce64763c6385)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+kselftest/fixes kselftest-rtc: 4 runs, 1 regressions (linux-kselftest-fixes=
+-5.18-rc2-1-gce64763c6385)
 
-On 4/13/2022 5:31 PM, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
->
-> bpf_program__attach() returns error ptr when it fails, so we should use
-> IS_ERR() to check it in error handling path. The patch fix all the same
-> problems in the bpf/benchs/*.
-The fix is unnecessary. Because libbpf has been setup as  LIBBPF_STRICT_ALL mode
-in setup_libbpf() of bench.c, so when bpf_program__attach() fails, it will
-return NULL instead of ERR_PTR(err).
+Regressions Summary
+-------------------
 
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->  .../selftests/bpf/benchs/bench_bloom_filter_map.c      | 10 +++++-----
->  tools/testing/selftests/bpf/benchs/bench_bpf_loop.c    |  2 +-
->  tools/testing/selftests/bpf/benchs/bench_rename.c      |  2 +-
->  tools/testing/selftests/bpf/benchs/bench_ringbufs.c    |  6 +++---
->  tools/testing/selftests/bpf/benchs/bench_strncmp.c     |  2 +-
->  tools/testing/selftests/bpf/benchs/bench_trigger.c     |  2 +-
->  6 files changed, 12 insertions(+), 12 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-> index 5bcb8a8cdeb2..fd1be1042516 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-> @@ -309,7 +309,7 @@ static void bloom_lookup_setup(void)
->  	populate_maps();
->  
->  	link = bpf_program__attach(ctx.skel->progs.bloom_lookup);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> @@ -326,7 +326,7 @@ static void bloom_update_setup(void)
->  	populate_maps();
->  
->  	link = bpf_program__attach(ctx.skel->progs.bloom_update);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> @@ -345,7 +345,7 @@ static void false_positive_setup(void)
->  	populate_maps();
->  
->  	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> @@ -363,7 +363,7 @@ static void hashmap_with_bloom_setup(void)
->  	populate_maps();
->  
->  	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> @@ -380,7 +380,7 @@ static void hashmap_no_bloom_setup(void)
->  	populate_maps();
->  
->  	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c b/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
-> index d0a6572bfab6..8dbdc28d26c8 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
-> @@ -85,7 +85,7 @@ static void setup(void)
->  	}
->  
->  	link = bpf_program__attach(ctx.skel->progs.benchmark);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_rename.c b/tools/testing/selftests/bpf/benchs/bench_rename.c
-> index 3c203b6d6a6e..66d63b92a28a 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_rename.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_rename.c
-> @@ -65,7 +65,7 @@ static void attach_bpf(struct bpf_program *prog)
->  	struct bpf_link *link;
->  
->  	link = bpf_program__attach(prog);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-> index c2554f9695ff..fff24ca82dc0 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-> @@ -181,7 +181,7 @@ static void ringbuf_libbpf_setup(void)
->  	}
->  
->  	link = bpf_program__attach(ctx->skel->progs.bench_ringbuf);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> @@ -271,7 +271,7 @@ static void ringbuf_custom_setup(void)
->  	}
->  
->  	link = bpf_program__attach(ctx->skel->progs.bench_ringbuf);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program\n");
->  		exit(1);
->  	}
-> @@ -426,7 +426,7 @@ static void perfbuf_libbpf_setup(void)
->  	}
->  
->  	link = bpf_program__attach(ctx->skel->progs.bench_perfbuf);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program\n");
->  		exit(1);
->  	}
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_strncmp.c b/tools/testing/selftests/bpf/benchs/bench_strncmp.c
-> index 494b591c0289..dcb9ce5ffcb0 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_strncmp.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_strncmp.c
-> @@ -103,7 +103,7 @@ static void strncmp_attach_prog(struct bpf_program *prog)
->  	struct bpf_link *link;
->  
->  	link = bpf_program__attach(prog);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> index 0c481de2833d..bda930a8153c 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> @@ -61,7 +61,7 @@ static void attach_bpf(struct bpf_program *prog)
->  	struct bpf_link *link;
->  
->  	link = bpf_program__attach(prog);
-> -	if (!link) {
-> +	if (IS_ERR(link)) {
->  		fprintf(stderr, "failed to attach program!\n");
->  		exit(1);
->  	}
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chr=
+omebook | 1          =
 
+
+  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
+ux-kselftest-fixes-5.18-rc2-1-gce64763c6385/plan/kselftest-rtc/
+
+  Test:     kselftest-rtc
+  Tree:     kselftest
+  Branch:   fixes
+  Describe: linux-kselftest-fixes-5.18-rc2-1-gce64763c6385
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      ce64763c63854b4079f2e036638aa881a1fb3fbc =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chr=
+omebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6256d64e93f3050e2cae06a5
+
+  Results:     7 PASS, 3 FAIL, 8 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-5.18-rc2-1-gce64763c6385/arm64/defconfig+kselftest+arm64-chromebook=
+/gcc-10/lab-collabora/kselftest-rtc-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-5.18-rc2-1-gce64763c6385/arm64/defconfig+kselftest+arm64-chromebook=
+/gcc-10/lab-collabora/kselftest-rtc-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20220401.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-rtc.rtc_rtctest_rtc_alarm_alm_set: https://kernelci.org/test/=
+case/id/6256d64e93f3050e2cae06ab
+        new failure (last pass: v5.18-rc1-7-g79ee8aa31d51) =
+
+ =20
