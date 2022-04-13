@@ -2,126 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9164FEA5E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Apr 2022 01:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FEC4FEBDC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Apr 2022 02:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiDLXaZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Apr 2022 19:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S230308AbiDMATI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Apr 2022 20:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiDLX3b (ORCPT
+        with ESMTP id S230292AbiDMATH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:29:31 -0400
-Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E7516809D
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Apr 2022 15:30:44 -0700 (PDT)
-Received: by mail-oi1-x249.google.com with SMTP id k25-20020a544699000000b002fa69ba89b6so84971oic.19
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Apr 2022 15:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=u+9yLdrvqv+15A9PShNP0Bj2lgMYcE44VCQG0+LZtrY=;
-        b=mwfr+1QL20PQIeOZQZw4zuZEGgBuBUOGgqdqpg6THGQZKaFw5Wj8PV8H59rdqaaBLU
-         96DEcj2/yCle2oJspe3XQ+wvE7SynQC2qq8T45bjBHdWr775iHRDb1Awf9JLNlMzGg0Z
-         g9Vavh5XkBcZCDWPUCYqQaA2bJ40hvxQocKz/LgmqNRswWSq0TrGjsidj6Uh160Cxgg9
-         Br/LGeUfE2qBk04WfS9pWdcxkZ6ZfhQUGAQUPaDVZVTwx2AivA1G7qb2eWdfFOoTI0KO
-         79/zwiYoOluzurGB1K8giL4K789L/VwUjzCmIrbzk2s/dgPratqPJ30cmLHHGCauiOdw
-         Ag0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=u+9yLdrvqv+15A9PShNP0Bj2lgMYcE44VCQG0+LZtrY=;
-        b=Z4ZDXVCV4vvbd71yc0gCWstB6gu/k8Da12tAIFirgOVqLFvMRJNuqAWQ6msq3Rn0my
-         62fnIoAp8rMWiBB1ny4HMvUEkMEizy1amPU3i6/J/rPrHtByUDtsfubX37U+pGXgU38o
-         /SsLEGhYacLbotqZUm7mQrD8Muypkb9oVAThgN05PO5qxmPEae9PHb4RN3NAGMgk9bGM
-         ocgmeORTB3yU25tARbYYLHFCBEOjjl5dU2u8zZ+JNC7/mrpmQU10CNum891feCW9EKS0
-         qHXJdxztH9lROO+Y78mPg1NWp97orgJSwKCrOV7lb8C2NUFoikFAOQfOqDudUwB/qWB9
-         OyuQ==
-X-Gm-Message-State: AOAM533jYzQ/31PTrGwP3atdw/iLGxAbnnIS5EfMD59xanjSnhNZm5Zt
-        5wxm7g+Us3ddtwTho9qyNtAQa5LhVoMhNPKv3ILp
-X-Google-Smtp-Source: ABdhPJzT2Zt45zo3Wf9Ef/5d1NiGtDnKycptXlg/R76ipboiOT8KRuG6nigv1WkYm1tB4Mt/wit/6RMj+xbJNsBmESHI
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:8927:f9ed:8b14:ddae])
- (user=axelrasmussen job=sendgmr) by 2002:a17:90b:3c47:b0:1cb:8121:dcc8 with
- SMTP id pm7-20020a17090b3c4700b001cb8121dcc8mr6997487pjb.35.1649795391430;
- Tue, 12 Apr 2022 13:29:51 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 13:29:42 -0700
-In-Reply-To: <20220412202942.386981-1-axelrasmussen@google.com>
-Message-Id: <20220412202942.386981-2-axelrasmussen@google.com>
+        Tue, 12 Apr 2022 20:19:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6BB85B
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Apr 2022 17:16:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F071361828
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Apr 2022 00:16:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F97C385A5;
+        Wed, 13 Apr 2022 00:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649809007;
+        bh=LsvXF38xQCO8La91LyrjAYgL05TyufkNgdo7W09hGzs=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=NdrpcPRgttmDEIiOULxAq9RkR1xc9VEIlHGlU+wlc7m2cIZWGpSsriaVGjiN/vrxA
+         jxPFjXVwxfomL8ApsC9+QOioNWfqU4CpBDdNEy8kQALfrisKfaoOSWQVneXpPzkQU3
+         P4YnOJiio1ZoLzke47TtI1H9aiKeJ5DxhmaqLXkHdrCKYjKdES2dhPiWEsVYOEDKGa
+         pi4rZFPKWZMlBi/bZ4RDIQ8oSGdDikHwhsddFsq7Lt9qLR6A77/q3MVwjjfftPvLeT
+         TdPISKiITkbWEvDH1VXIkrXxb3Om0CO5AfHr9X26OOUAx0OdeYTuBDSKibxWBjcEW3
+         Fs0ApMD6P+k1Q==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id E8E8F27C0054;
+        Tue, 12 Apr 2022 20:16:44 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Tue, 12 Apr 2022 20:16:44 -0400
+X-ME-Sender: <xms:axZWYnj7OqhgrOuOQb_focEAH603gVwsLo_WRAuxfDFax7u1YhbeBQ>
+    <xme:axZWYkD-oMlxF5GxLS44QEvF9BxVwdGeWdpXCPK_waJbhym2JaKHm78DZ1hB5LkEK
+    VFYdEn6ICChCECf7ao>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekledgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpefhlefhudegtedvhfefueevvedtgeeukefhffehtefftdelvedthedt
+    iedvueevudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnugihodhmvghsmhhtphgruhht
+    hhhpvghrshhonhgrlhhithihqdduudeiudekheeifedvqddvieefudeiiedtkedqlhhuth
+    hopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:axZWYnEZWliGFAb1pW0k2PJcDOBmZsYieDxqmtjGypyPm0YlKQ5Jmg>
+    <xmx:axZWYkTHR0jprS1nrl00uoM44v3jI2o3zbBb6K7v9woqiDDNbwrphA>
+    <xmx:axZWYky0iioqaGWKASkdTZwq22cAp01cfHCtUzDIWsFlWwXkAPq3BQ>
+    <xmx:bBZWYsjOXuatluKYk95sJdmdseOl9MtVFotRTKte1juf0_HZpZuLKpSSR28>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 92CEB21E006E; Tue, 12 Apr 2022 20:16:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-386-g4174665229-fm-20220406.001-g41746652
 Mime-Version: 1.0
-References: <20220412202942.386981-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH 2/2] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-Id: <e8a4cac5-bc5a-4483-9443-c0e5b9f707d1@www.fastmail.com>
+In-Reply-To: <20220408210545.3915712-1-vannapurve@google.com>
+References: <20220408210545.3915712-1-vannapurve@google.com>
+Date:   Tue, 12 Apr 2022 17:16:22 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Vishal Annapurve" <vannapurve@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "kvm list" <kvm@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Cc:     "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        "Wanpeng Li" <wanpengli@tencent.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, shauh@kernel.org,
+        yang.zhong@intel.com, drjones@redhat.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Hugh Dickins" <hughd@google.com>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Chao Peng" <chao.p.peng@linux.intel.com>,
+        "Yu Zhang" <yu.c.zhang@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Michael Roth" <michael.roth@amd.com>,
+        "Quentin Perret" <qperret@google.com>,
+        "Steven Price" <steven.price@arm.com>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Marc Orr" <marcorr@google.com>,
+        "Erdem Aktas" <erdemaktas@google.com>,
+        "Peter Gonda" <pgonda@google.com>,
+        "Sean Christopherson" <seanjc@google.com>, diviness@google.com,
+        "Quentin Perret" <qperret@google.com>
+Subject: Re: [RFC V1 PATCH 0/5] selftests: KVM: selftests for fd-based approach of
+ supporting private memory
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Prefer this new interface, but if using it fails for any reason just
-fall back to using userfaultfd(2) as before.
+On Fri, Apr 8, 2022, at 2:05 PM, Vishal Annapurve wrote:
+> This series implements selftests targeting the feature floated by Chao
+> via:
+> https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
+>
+> Below changes aim to test the fd based approach for guest private memory
+> in context of normal (non-confidential) VMs executing on non-confidential
+> platforms.
+>
+> Confidential platforms along with the confidentiality aware software
+> stack support a notion of private/shared accesses from the confidential
+> VMs.
+> Generally, a bit in the GPA conveys the shared/private-ness of the
+> access. Non-confidential platforms don't have a notion of private or
+> shared accesses from the guest VMs. To support this notion,
+> KVM_HC_MAP_GPA_RANGE
+> is modified to allow marking an access from a VM within a GPA range as
+> always shared or private. Any suggestions regarding implementing this ioctl
+> alternatively/cleanly are appreciated.
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+This is fantastic.  I do think we need to decide how this should work in general.  We have a few platforms with somewhat different properties:
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 92a4516f8f0d..a50c430f036c 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -383,13 +383,32 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
- 	}
- }
- 
-+static void __userfaultfd_open_dev(void)
-+{
-+	int fd;
-+
-+	uffd = -1;
-+	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
-+	if (fd < 0)
-+		return;
-+
-+	uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
-+		     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
-+	close(fd);
-+}
-+
- static void userfaultfd_open(uint64_t *features)
- {
- 	struct uffdio_api uffdio_api;
- 
--	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
-+	__userfaultfd_open_dev();
-+	if (uffd < 0) {
-+		printf("/dev/userfaultfd failed, fallback to userfaultfd(2)\n");
-+		uffd = syscall(__NR_userfaultfd,
-+			       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
-+	}
- 	if (uffd < 0)
--		err("userfaultfd syscall not available in this kernel");
-+		err("userfaultfd syscall failed");
- 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
- 
- 	uffdio_api.api = UFFD_API;
--- 
-2.35.1.1178.g4f1659d476-goog
+TDX: The guest decides, per memory access (using a GPA bit), whether an access is private or shared.  In principle, the same address could be *both* and be distinguished by only that bit, and the two addresses would refer to different pages.
 
+SEV: The guest decides, per memory access (using a GPA bit), whether an access is private or shared.  At any given time, a physical address (with that bit masked off) can be private, shared, or invalid, but it can't be valid as private and shared at the same time.
+
+pKVM (currently, as I understand it): the guest decides by hypercall, in advance of an access, which addresses are private and which are shared.
+
+This series, if I understood it correctly, is like TDX except with no hardware security.
+
+Sean or Chao, do you have a clear sense of whether the current fd-based private memory proposal can cleanly support SEV and pKVM?  What, if anything, needs to be done on the API side to get that working well?  I don't think we need to support SEV or pKVM right away to get this merged, but I do think we should understand how the API can map to them.
