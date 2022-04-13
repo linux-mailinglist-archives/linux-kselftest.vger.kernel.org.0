@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D712E5000D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Apr 2022 23:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A625000C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Apr 2022 23:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239087AbiDMVNc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Apr 2022 17:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S237326AbiDMVNp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Apr 2022 17:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239009AbiDMVNG (ORCPT
+        with ESMTP id S239008AbiDMVNG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 13 Apr 2022 17:13:06 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220DD403DD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B59E3AA77;
         Wed, 13 Apr 2022 14:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1649884244; x=1681420244;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OVpW57f0JPSi3l14pKO3uZ+LvPLL5HT/p5s+fNnodKQ=;
-  b=d/klvdb26Bxb7c7NLR59iaXB7OUWZ2r2MwHYS5fjrMy98q8GbXdWdgHY
-   GrmdWlk1nCGibrmTM7AB9r8ouFHbv0twcUgCGmDVsB26ZrIb8eK75e/rQ
-   PEFtVYA5OK/aKVH8kajTOEFCClf/aOyj8AwKT/9GqOLjWOUKQsMkSrzDE
-   TdtgmWl/2qgEB3DTn9fQrvsdPgEJbSMWohXE8l71T0KXxgiHb/FnCDIUF
-   XCb5t9ynAk1sIKMgMSQOWZqpv4qeL2JcekumEMzk5wulDFm39aq8fAnth
-   +pzU5V9PHtVSk2kiEeXaUKj+xAASYWe3cEbEbuseXkU3oOMtdAJcq2cM2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219009"
+  bh=vm/5BkZzLoJzZZYcikqynXdEi6cbf77oNCUexZRAFeY=;
+  b=J9RnOJTNj7kurFy8y9cFmbKh3f3DfdH5je3j79d6jzR5YZFgFzn5IChs
+   99lqNjn9cJFIGMI2MOmvX8wN/g8O7DssbbJ7Uvm0N0lYP5obEUgBhgXk3
+   Kvi7kPgeUjMPvisIsCBhjXcX7PnUq9/ffIu/LoDGLgFbMm7hjvn4AhR/8
+   zHdx8IGmlIhY+paIKoWOTRHtFTdSNi3RPYz9l/6M7veDBU9srbc2HoheQ
+   Uji+DsKz2TN48uWvKzgiyidYTfHkNonAIW/nQ1nilRB0Fpise5XPMZr7q
+   EPa6O8C8Az+Wb6fezegqY1LjTvqMORa6b1jCke0+IOjWvLsBZcqg2KqB0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219012"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323219009"
+   d="scan'208";a="323219012"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:41 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:42 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725054253"
+   d="scan'208";a="725054256"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:41 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -46,9 +46,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V4 06/31] x86/sgx: Export sgx_encl_ewb_cpumask()
-Date:   Wed, 13 Apr 2022 14:10:06 -0700
-Message-Id: <3091b3111f63c7aa5b206edd816d47aa5110dedb.1649878359.git.reinette.chatre@intel.com>
+Subject: [PATCH V4 07/31] x86/sgx: Rename sgx_encl_ewb_cpumask() as sgx_encl_cpumask()
+Date:   Wed, 13 Apr 2022 14:10:07 -0700
+Message-Id: <a12bc3d7b289e9557bd9e23bf878dba187272bfc.1649878359.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1649878359.git.reinette.chatre@intel.com>
 References: <cover.1649878359.git.reinette.chatre@intel.com>
@@ -64,24 +64,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Using sgx_encl_ewb_cpumask() to learn which CPUs might have executed
-an enclave is useful to ensure that TLBs are cleared when changes are
-made to enclave pages.
+sgx_encl_ewb_cpumask() is no longer unique to the reclaimer where it
+is used during the EWB ENCLS leaf function when EPC pages are written
+out to main memory and sgx_encl_ewb_cpumask() is used to learn which
+CPUs might have executed the enclave to ensure that TLBs are cleared.
 
-sgx_encl_ewb_cpumask() is used within the reclaimer when an enclave
-page is evicted. The upcoming SGX2 support enables changes to be
-made to enclave pages and will require TLBs to not refer to the
-changed pages and thus will be needing sgx_encl_ewb_cpumask().
+Upcoming SGX2 enabling will use sgx_encl_ewb_cpumask() during the
+EMODPR and EMODT ENCLS leaf functions that make changes to enclave
+pages. The function is needed for the same reason it is used now: to
+learn which CPUs might have executed the enclave to ensure that TLBs
+no longer point to the changed pages.
 
-Relocate sgx_encl_ewb_cpumask() to be with the rest of the enclave
-code in encl.c now that it is no longer unique to the reclaimer.
-
-Take care to ensure that any future usage maintains the
-current context requirement that ETRACK has been called first.
-Expand the existing comments to highlight this while moving them
-to a more prominent location before the function.
-
-No functional change.
+Rename sgx_encl_ewb_cpumask() to sgx_encl_cpumask() to reflect the
+broader usage.
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
@@ -92,144 +87,69 @@ Changes since V3:
 Changes since V1:
 - New patch split from original "x86/sgx: Use more generic name for
   enclave cpumask function" (Jarkko).
-- Change subject line (Jarkko).
-- Fixup kernel-doc to use brackets in function name.
 
- arch/x86/kernel/cpu/sgx/encl.c | 67 ++++++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/sgx/encl.h |  1 +
- arch/x86/kernel/cpu/sgx/main.c | 29 ---------------
- 3 files changed, 68 insertions(+), 29 deletions(-)
+ arch/x86/kernel/cpu/sgx/encl.c | 6 +++---
+ arch/x86/kernel/cpu/sgx/encl.h | 2 +-
+ arch/x86/kernel/cpu/sgx/main.c | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 05ae1168391c..c6525eba74e8 100644
+index c6525eba74e8..8de9bebc4d81 100644
 --- a/arch/x86/kernel/cpu/sgx/encl.c
 +++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -613,6 +613,73 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
- 	return 0;
+@@ -614,7 +614,7 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
  }
  
-+/**
-+ * sgx_encl_ewb_cpumask() - Query which CPUs might be accessing the enclave
-+ * @encl: the enclave
-+ *
-+ * Some SGX functions require that no cached linear-to-physical address
-+ * mappings are present before they can succeed. For example, ENCLS[EWB]
-+ * copies a page from the enclave page cache to regular main memory but
-+ * it fails if it cannot ensure that there are no cached
-+ * linear-to-physical address mappings referring to the page.
-+ *
-+ * SGX hardware flushes all cached linear-to-physical mappings on a CPU
-+ * when an enclave is exited via ENCLU[EEXIT] or an Asynchronous Enclave
-+ * Exit (AEX). Exiting an enclave will thus ensure cached linear-to-physical
-+ * address mappings are cleared but coordination with the tracking done within
-+ * the SGX hardware is needed to support the SGX functions that depend on this
-+ * cache clearing.
-+ *
-+ * When the ENCLS[ETRACK] function is issued on an enclave the hardware
-+ * tracks threads operating inside the enclave at that time. The SGX
-+ * hardware tracking require that all the identified threads must have
-+ * exited the enclave in order to flush the mappings before a function such
-+ * as ENCLS[EWB] will be permitted
-+ *
-+ * The following flow is used to support SGX functions that require that
-+ * no cached linear-to-physical address mappings are present:
-+ * 1) Execute ENCLS[ETRACK] to initiate hardware tracking.
-+ * 2) Use this function (sgx_encl_ewb_cpumask()) to query which CPUs might be
-+ *    accessing the enclave.
-+ * 3) Send IPI to identified CPUs, kicking them out of the enclave and
-+ *    thus flushing all locally cached linear-to-physical address mappings.
-+ * 4) Execute SGX function.
-+ *
-+ * Context: It is required to call this function after ENCLS[ETRACK].
-+ *          This will ensure that if any new mm appears (racing with
-+ *          sgx_encl_mm_add()) then the new mm will enter into the
-+ *          enclave with fresh linear-to-physical address mappings.
-+ *
-+ *          It is required that all IPIs are completed before a new
-+ *          ENCLS[ETRACK] is issued so be sure to protect steps 1 to 3
-+ *          of the above flow with the enclave's mutex.
-+ *
-+ * Return: cpumask of CPUs that might be accessing @encl
-+ */
-+const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl)
-+{
-+	cpumask_t *cpumask = &encl->cpumask;
-+	struct sgx_encl_mm *encl_mm;
-+	int idx;
-+
-+	cpumask_clear(cpumask);
-+
-+	idx = srcu_read_lock(&encl->srcu);
-+
-+	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
-+		if (!mmget_not_zero(encl_mm->mm))
-+			continue;
-+
-+		cpumask_or(cpumask, cpumask, mm_cpumask(encl_mm->mm));
-+
-+		mmput_async(encl_mm->mm);
-+	}
-+
-+	srcu_read_unlock(&encl->srcu, idx);
-+
-+	return cpumask;
-+}
-+
- static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
- 					      pgoff_t index)
+ /**
+- * sgx_encl_ewb_cpumask() - Query which CPUs might be accessing the enclave
++ * sgx_encl_cpumask() - Query which CPUs might be accessing the enclave
+  * @encl: the enclave
+  *
+  * Some SGX functions require that no cached linear-to-physical address
+@@ -639,7 +639,7 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
+  * The following flow is used to support SGX functions that require that
+  * no cached linear-to-physical address mappings are present:
+  * 1) Execute ENCLS[ETRACK] to initiate hardware tracking.
+- * 2) Use this function (sgx_encl_ewb_cpumask()) to query which CPUs might be
++ * 2) Use this function (sgx_encl_cpumask()) to query which CPUs might be
+  *    accessing the enclave.
+  * 3) Send IPI to identified CPUs, kicking them out of the enclave and
+  *    thus flushing all locally cached linear-to-physical address mappings.
+@@ -656,7 +656,7 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
+  *
+  * Return: cpumask of CPUs that might be accessing @encl
+  */
+-const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl)
++const cpumask_t *sgx_encl_cpumask(struct sgx_encl *encl)
  {
+ 	cpumask_t *cpumask = &encl->cpumask;
+ 	struct sgx_encl_mm *encl_mm;
 diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-index 6b34efba1602..d2acb4debde5 100644
+index d2acb4debde5..e59c2cbf71e2 100644
 --- a/arch/x86/kernel/cpu/sgx/encl.h
 +++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -105,6 +105,7 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+@@ -105,7 +105,7 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
  
  void sgx_encl_release(struct kref *ref);
  int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
-+const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl);
+-const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl);
++const cpumask_t *sgx_encl_cpumask(struct sgx_encl *encl);
  int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
  			 struct sgx_backing *backing);
  void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
 diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 8e4bc6453d26..2de85f459492 100644
+index 2de85f459492..fa33922879bf 100644
 --- a/arch/x86/kernel/cpu/sgx/main.c
 +++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -203,35 +203,6 @@ static void sgx_ipi_cb(void *info)
- {
- }
- 
--static const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl)
--{
--	cpumask_t *cpumask = &encl->cpumask;
--	struct sgx_encl_mm *encl_mm;
--	int idx;
--
--	/*
--	 * Can race with sgx_encl_mm_add(), but ETRACK has already been
--	 * executed, which means that the CPUs running in the new mm will enter
--	 * into the enclave with a fresh epoch.
--	 */
--	cpumask_clear(cpumask);
--
--	idx = srcu_read_lock(&encl->srcu);
--
--	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
--		if (!mmget_not_zero(encl_mm->mm))
--			continue;
--
--		cpumask_or(cpumask, cpumask, mm_cpumask(encl_mm->mm));
--
--		mmput_async(encl_mm->mm);
--	}
--
--	srcu_read_unlock(&encl->srcu, idx);
--
--	return cpumask;
--}
--
- /*
-  * Swap page to the regular memory transformed to the blocked state by using
-  * EBLOCK, which means that it can no longer be referenced (no new TLB entries).
+@@ -249,7 +249,7 @@ static void sgx_encl_ewb(struct sgx_epc_page *epc_page,
+ 			 * miss cpus that entered the enclave between
+ 			 * generating the mask and incrementing epoch.
+ 			 */
+-			on_each_cpu_mask(sgx_encl_ewb_cpumask(encl),
++			on_each_cpu_mask(sgx_encl_cpumask(encl),
+ 					 sgx_ipi_cb, NULL, 1);
+ 			ret = __sgx_encl_ewb(epc_page, va_slot, backing);
+ 		}
 -- 
 2.25.1
 
