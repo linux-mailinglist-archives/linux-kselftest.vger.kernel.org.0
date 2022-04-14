@@ -2,57 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EA3500C35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Apr 2022 13:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D55500C70
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Apr 2022 13:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbiDNLeO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Apr 2022 07:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S242810AbiDNLzC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Apr 2022 07:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbiDNLeN (ORCPT
+        with ESMTP id S242806AbiDNLzC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:34:13 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB5285BE4;
-        Thu, 14 Apr 2022 04:31:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 45C821F4158A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649935908;
-        bh=GPpOOW8Wi1fl7Wg5T7uDGlFz2uhTlfR0tze2KF/L4Lg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=UNTcHiMRdJz5bAEsKI68i50wj9NtfZnA/r0GFYHgPGAzdykI8Cq47yn9uuSLN8P0/
-         Y+GZxS4QY2rf3BFceguyH2Q7YREa74twPjBXhiZRiAoliwknDoeHuOapiLOFPkCzX4
-         fxhgIYrM2NT7va7AGXGb9KRV38vvEQkQJymIu95UzYNy7pFjfu05WlLicOp4Uu8sTG
-         v30hsDPOUT+lRCJHhdo+QwxFU1Xrva8VBi8mMKXMb0rePIvuZIwvgLtIXYceQa7tTU
-         ZtF2sfEbHEt6elpONPggbDbNmwXS4SfyaZqt2xsiPjftonwtq+aDNn7pDmt2ZGXmKm
-         grhM6pIdIWhrA==
-Message-ID: <8049e2a9-a478-4c6a-afcd-3aa4434a0590@collabora.com>
-Date:   Thu, 14 Apr 2022 16:31:42 +0500
+        Thu, 14 Apr 2022 07:55:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC146211D;
+        Thu, 14 Apr 2022 04:52:37 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EA4xRk004370;
+        Thu, 14 Apr 2022 11:52:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qUR3IV9PSWnWVOKAWUBSI2CNWAL8FpOs6KH9wnspHY8=;
+ b=J9+pFw4qMP3OG7Nmu9Wvrl1GqK+hNjkVIvyZQ3DImYJYR1Gkt6AQwFLv0OeF/bDDRQwU
+ qMGcpLMIAth+tChuj6qjKf80E2vdgeiiP3wIs02xicIFz3UEJrvFuGIArCsw0ZOPywkr
+ Fp/KdelMp0sERxn9nUX2PEEEIyxTCUP4nb45sroKXF2/ejFF9DyWvddrFE8yLEESC7z5
+ FJ0OuvfqjXrJ/pHSW8tpoxF8QtHropiyCTG91jBKUT63vOMjU/esR9RJVo7/D8BxwpEl
+ NkKohXYSYJ9ovD9R6Ul6EMPjFQ5PKs2TThUEjH3O0h2TyyUkCdDQEQnrnoC7Em/s+7bI sQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefyd3pxm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:52:35 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23EBmWmY015975;
+        Thu, 14 Apr 2022 11:52:35 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefyd3px1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:52:34 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EBmSob028364;
+        Thu, 14 Apr 2022 11:52:32 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fb1s90d21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:52:32 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23EBqTBX49218000
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 11:52:29 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46BBD11C04A;
+        Thu, 14 Apr 2022 11:52:29 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C393711C052;
+        Thu, 14 Apr 2022 11:52:28 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.1.140])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Apr 2022 11:52:28 +0000 (GMT)
+Date:   Thu, 14 Apr 2022 13:39:50 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Subject: Re: [PATCH 2/4] KVM: s390: selftests: Use TAP interface in the
+ sync_regs test
+Message-ID: <20220414133950.20a84eef@p-imbrenda>
+In-Reply-To: <20220414105322.577439-3-thuth@redhat.com>
+References: <20220414105322.577439-1-thuth@redhat.com>
+        <20220414105322.577439-3-thuth@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernelci@groups.io,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
- CFI_FORWARD_PROTO
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <202203091122.A51B31230A@keescook>
- <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XuDbV3mW9aAJt6LJQwnERny9HmM56akc
+X-Proofpoint-ORIG-GUID: _78alRW08MKT5uz2eKmjU08pfeO5Uo9O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_03,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxscore=0 malwarescore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 mlxlogscore=900 clxscore=1015 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204140063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,35 +101,166 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Any thoughts?
+On Thu, 14 Apr 2022 12:53:20 +0200
+Thomas Huth <thuth@redhat.com> wrote:
 
-On 3/10/22 10:21 PM, Muhammad Usama Anjum wrote:
-> On 3/10/22 12:22 AM, Kees Cook wrote:
->> On Fri, Feb 18, 2022 at 01:56:19AM +0500, Muhammad Usama Anjum wrote:
->>> Add config options which are needed for LKDTM sub-tests.
->>> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
->>> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
->>> INIT_ON_FREE_DEFAULT_ON config.
->>>
->>> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
->>> kind. Turn it off for now by default until proper support.
->>
->> Building under LTO Clang on arm64, this is available. What's the right
->> way to add a CONFIG that isn't always available?
->>
->> -Kees
-> Yeah, as you had mentioned
-> (https://github.com/kernelci/kernelci-project/issues/84#issuecomment-1042015431):
+> The sync_regs test currently does not have any output (unless one
+> of the TEST_ASSERT statement fails), so it's hard to say for a user
+> whether a certain new sub-test has been included in the binary or
+> not. Let's make this a little bit more user-friendly and include
+> some TAP output via the kselftests.h interface.
+> To be able to distinguish the different sub-tests more easily, we
+> also break up the huge main() function here in more fine grained
+> parts.
 > 
-> CFI_FORWARD_PROTO is going to fail unless there is an active CFI system
-> in place of some kind. Right now this depends on arm64+Clang. In the
-> future, this will be arch-agnostic+Clang, but for the moment, it should
-> be safe to exclude this test.
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  .../selftests/kvm/s390x/sync_regs_test.c      | 86 ++++++++++++++-----
+>  1 file changed, 65 insertions(+), 21 deletions(-)
 > 
-> In this patch, I'm turning off CFI_FORWARD_PROTO by default here. We can
-> re-enable it when it becomes arch agnostic. CFI_FORWARD_PROTO cannot be
-> turned off by using a config. Please let me know your thoughts otherwise.
-> 
+> diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+> index caf7b8859a94..d5ddcbb82d12 100644
+> --- a/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+> +++ b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+> @@ -21,6 +21,7 @@
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+>  #include "diag318_test_handler.h"
+> +#include "kselftest.h"
+>  
+>  #define VCPU_ID 5
+>  
+> @@ -74,27 +75,9 @@ static void compare_sregs(struct kvm_sregs *left, struct kvm_sync_regs *right)
+>  #define TEST_SYNC_FIELDS   (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS|KVM_SYNC_DIAG318)
+>  #define INVALID_SYNC_FIELD 0x80000000
+>  
+> -int main(int argc, char *argv[])
+> +void test_read_invalid(struct kvm_vm *vm, struct kvm_run *run)
+>  {
+> -	struct kvm_vm *vm;
+> -	struct kvm_run *run;
+> -	struct kvm_regs regs;
+> -	struct kvm_sregs sregs;
+> -	int rv, cap;
+> -
+> -	/* Tell stdout not to buffer its content */
+> -	setbuf(stdout, NULL);
+> -
+> -	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
+> -	if (!cap) {
+> -		print_skip("CAP_SYNC_REGS not supported");
+> -		exit(KSFT_SKIP);
+> -	}
+> -
+> -	/* Create VM */
+> -	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> -
+> -	run = vcpu_state(vm, VCPU_ID);
+> +	int rv;
+>  
+>  	/* Request reading invalid register set from VCPU. */
+>  	run->kvm_valid_regs = INVALID_SYNC_FIELD;
+> @@ -110,6 +93,11 @@ int main(int argc, char *argv[])
+>  		    "Invalid kvm_valid_regs did not cause expected KVM_RUN error: %d\n",
+>  		    rv);
+>  	vcpu_state(vm, VCPU_ID)->kvm_valid_regs = 0;
+> +}
+> +
+> +void test_set_invalid(struct kvm_vm *vm, struct kvm_run *run)
+> +{
+> +	int rv;
+>  
+>  	/* Request setting invalid register set into VCPU. */
+>  	run->kvm_dirty_regs = INVALID_SYNC_FIELD;
+> @@ -125,6 +113,13 @@ int main(int argc, char *argv[])
+>  		    "Invalid kvm_dirty_regs did not cause expected KVM_RUN error: %d\n",
+>  		    rv);
+>  	vcpu_state(vm, VCPU_ID)->kvm_dirty_regs = 0;
+> +}
+> +
+> +void test_req_and_verify_all_valid_regs(struct kvm_vm *vm, struct kvm_run *run)
+> +{
+> +	struct kvm_sregs sregs;
+> +	struct kvm_regs regs;
+> +	int rv;
+>  
+>  	/* Request and verify all valid register sets. */
+>  	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+> @@ -146,6 +141,13 @@ int main(int argc, char *argv[])
+>  
+>  	vcpu_sregs_get(vm, VCPU_ID, &sregs);
+>  	compare_sregs(&sregs, &run->s.regs);
+> +}
+> +
+> +void test_set_and_verify_various_reg_values(struct kvm_vm *vm, struct kvm_run *run)
+> +{
+> +	struct kvm_sregs sregs;
+> +	struct kvm_regs regs;
+> +	int rv;
+>  
+>  	/* Set and verify various register values */
+>  	run->s.regs.gprs[11] = 0xBAD1DEA;
+> @@ -180,6 +182,11 @@ int main(int argc, char *argv[])
+>  
+>  	vcpu_sregs_get(vm, VCPU_ID, &sregs);
+>  	compare_sregs(&sregs, &run->s.regs);
+> +}
+> +
+> +void test_clear_kvm_dirty_regs_bits(struct kvm_vm *vm, struct kvm_run *run)
+> +{
+> +	int rv;
+>  
+>  	/* Clear kvm_dirty_regs bits, verify new s.regs values are
+>  	 * overwritten with existing guest values.
+> @@ -200,8 +207,45 @@ int main(int argc, char *argv[])
+>  	TEST_ASSERT(run->s.regs.diag318 != 0x4B1D,
+>  		    "diag318 sync regs value incorrect 0x%llx.",
+>  		    run->s.regs.diag318);
+> +}
+> +
+> +struct testdef {
+> +	const char *name;
+> +	void (*test)(struct kvm_vm *vm, struct kvm_run *run);
+> +} testlist[] = {
+> +	{ "read invalid", test_read_invalid },
+> +	{ "set invalid", test_set_invalid },
+> +	{ "request+verify all valid regs", test_req_and_verify_all_valid_regs },
+> +	{ "set+verify various regs", test_set_and_verify_various_reg_values },
+> +	{ "clear kvm_dirty_regs bits", test_clear_kvm_dirty_regs_bits },
+> +};
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	static struct kvm_run *run;
+> +	static struct kvm_vm *vm;
+> +	int idx;
+> +
+> +	/* Tell stdout not to buffer its content */
+> +	setbuf(stdout, NULL);
+> +
+> +	if (!kvm_check_cap(KVM_CAP_SYNC_REGS))
+> +		ksft_exit_skip("CAP_SYNC_REGS not supported");
 
--- 
-Muhammad Usama Anjum
+I'm not an expert on the TAP format, but wouldn't it be more meaningful
+to print the header first? (like you do in the previous patch)
+
+> +
+> +	/* Create VM */
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +
+> +	run = vcpu_state(vm, VCPU_ID);
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(ARRAY_SIZE(testlist));
+> +
+> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
+> +		testlist[idx].test(vm, run);
+> +		ksft_test_result_pass("%s\n", testlist[idx].name);
+> +	}
+>  
+>  	kvm_vm_free(vm);
+>  
+> -	return 0;
+> +	ksft_finished();
+>  }
+
