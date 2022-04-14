@@ -2,58 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFACD500C0D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Apr 2022 13:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D22500C12
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Apr 2022 13:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238229AbiDNLYx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Apr 2022 07:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S239607AbiDNLZQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Apr 2022 07:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbiDNLYw (ORCPT
+        with ESMTP id S242654AbiDNLZP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:24:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1676482316;
-        Thu, 14 Apr 2022 04:22:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A60F36163D;
-        Thu, 14 Apr 2022 11:22:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E79C385A8;
-        Thu, 14 Apr 2022 11:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649935347;
-        bh=CVGUKCib9zFBI0T2prw/tB5KO7x6OuH4EIewfTZP//E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ms+cE6I6w+ny45EasJ6+gOK6UIc2GIsF3BvO1MQrvS5b+tpZaxBmi7YqpGgiO7+rI
-         gNS7AJGJcASUiZnEsr26zxJX31NKhDsIrcI4516QynQdTAAIi1EBisVFb+y8+rWDha
-         C1sy0ETJAUCtFVpRCUWT35TcRtH1iBnaWJlhpEroxVWNxlcx5AGxHACF4myZdfSjxz
-         cisuvfSnGVKYMbFI1QxcVsg0Zds6ta9VDt++dGRth2XaYnJML1SYx4OdVWrrY0kQdY
-         yfuoZo1ev1CDS4suwp/CoN+hp9gJx/yoevo48JRVbQjQh9FJyjbIBylv6oDwYyW8mN
-         KAR568VnxhnIw==
-Message-ID: <c0e3765e0b82beb9b4f1ae1d7ef879abd923e063.camel@kernel.org>
-Subject: Re: [PATCH V4 21/31] Documentation/x86: Introduce enclave runtime
- management section
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 14 Apr 2022 14:21:19 +0300
-In-Reply-To: <21b97a8e9275706f14d6bc652a0f2cfdd5d9648e.1649878359.git.reinette.chatre@intel.com>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
-         <21b97a8e9275706f14d6bc652a0f2cfdd5d9648e.1649878359.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 
+        Thu, 14 Apr 2022 07:25:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025EF8567B;
+        Thu, 14 Apr 2022 04:22:49 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EA50BD020679;
+        Thu, 14 Apr 2022 11:22:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=prRqG1020rYLqhPnoJsW2DYEpB7dbY9CtzYY8sEK/Qo=;
+ b=CGJb1O6WFoF4LkighIc400i915sMwxTG2p0VgEnjtjjCd0V9EG3CuqneOQbpivggL6SN
+ FwO9jzq7gpw6TLPBc+b3zmD43m7TbvIHvZFZ1PtwVWFbkaILLB+GAIXB8Ul3zWhVZpYN
+ pt83/sd+OocnoON3O0ZFZIfb5715vuA3hJAcw3RCexnZ4MhaRqFKiWJukWjJXdxvDHYr
+ TScwSrlFavIVjjBjuUzJTjSH0GcxdYCrivzeAuY73yGQlbqs6bEMu2YDFvbqQg7VFOXj
+ nq9y4xsszg7UxNvHtoGE0QmSJ9jVIw1TRu683XKf5+o0AkwH0P4v6fh5sEHMvVWTdAdO BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fefpgkju2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:22:46 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23EBEs4G013776;
+        Thu, 14 Apr 2022 11:22:46 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fefpgkjtm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:22:46 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EBHw9K024437;
+        Thu, 14 Apr 2022 11:22:44 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3fb1s8xrg3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:22:44 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23EBA7ZN34472422
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 11:10:07 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 92993AE045;
+        Thu, 14 Apr 2022 11:22:41 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 275B4AE04D;
+        Thu, 14 Apr 2022 11:22:41 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.1.140])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Apr 2022 11:22:41 +0000 (GMT)
+Date:   Thu, 14 Apr 2022 13:22:39 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] KVM: selftests: Silence compiler warning in the
+ kvm_page_table_test
+Message-ID: <20220414132239.1653cf9c@p-imbrenda>
+In-Reply-To: <20220414103031.565037-1-thuth@redhat.com>
+References: <20220414103031.565037-1-thuth@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: G-ZJuh96d7s-JRDrfilUkKPQpkL11enV
+X-Proofpoint-ORIG-GUID: _PoZ7T1NFmVVAkUu_nzsq6N8pa1F0UfE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_03,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204140060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,62 +97,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
-> Enclave runtime management is introduced following the pattern
-> of the section describing enclave building. Provide a brief
-> summary of enclave runtime management, pointing to the functions
-> implementing the ioctl()s that will contain details within their
-> kernel-doc.
->=20
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+On Thu, 14 Apr 2022 12:30:31 +0200
+Thomas Huth <thuth@redhat.com> wrote:
+
+> When compiling kvm_page_table_test.c, I get this compiler warning
+> with gcc 11.2:
+> 
+> kvm_page_table_test.c: In function 'pre_init_before_test':
+> ../../../../tools/include/linux/kernel.h:44:24: warning: comparison of
+>  distinct pointer types lacks a cast
+>    44 |         (void) (&_max1 == &_max2);              \
+>       |                        ^~
+> kvm_page_table_test.c:281:21: note: in expansion of macro 'max'
+>   281 |         alignment = max(0x100000, alignment);
+>       |                     ^~~
+> 
+> Fix it by adjusting the type of the absolute value.
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+
 > ---
-> No changes since V3.
->=20
-> Changes since V2:
-> - Remove references to ioctl() to relax permissions and update to reflect
-> =C2=A0 function renaming sgx_ioc_enclave_restrict_perm() ->
-> =C2=A0 sgx_ioc_enclave_restrict_permissions().
-> - Rename sgx_ioc_enclave_modt -> sgx_ioc_enclave_modify_type
->=20
-> Changes since V1:
-> - New patch.
->=20
-> =C2=A0Documentation/x86/sgx.rst | 15 +++++++++++++++
-> =C2=A01 file changed, 15 insertions(+)
->=20
-> diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
-> index 265568a9292c..10287c558485 100644
-> --- a/Documentation/x86/sgx.rst
-> +++ b/Documentation/x86/sgx.rst
-> @@ -100,6 +100,21 @@ pages and establish enclave page permissions.
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 sgx_ioc_enclave_init
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 sgx_ioc_enclave_provision
-> =C2=A0
-> +Enclave runtime management
-> +--------------------------
-> +
-> +Systems supporting SGX2 additionally support changes to initialized
-> +enclaves: modifying enclave page permissions and type, and dynamically
-> +adding and removing of enclave pages. When an enclave accesses an addres=
-s
-> +within its address range that does not have a backing page then a new
-> +regular page will be dynamically added to the enclave. The enclave is
-> +still required to run EACCEPT on the new page before it can be used.
-> +
-> +.. kernel-doc:: arch/x86/kernel/cpu/sgx/ioctl.c
-> +=C2=A0=C2=A0 :functions: sgx_ioc_enclave_restrict_permissions
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 sgx_ioc_enclave_modify_type
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 sgx_ioc_enclave_remove_pages
-> +
-> =C2=A0Enclave vDSO
-> =C2=A0------------
-> =C2=A0
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-BR, Jarkko
+>  tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> index ba1fdc3dcf4a..2c4a7563a4f8 100644
+> --- a/tools/testing/selftests/kvm/kvm_page_table_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> @@ -278,7 +278,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+>  	else
+>  		guest_test_phys_mem = p->phys_offset;
+>  #ifdef __s390x__
+> -	alignment = max(0x100000, alignment);
+> +	alignment = max(0x100000UL, alignment);
+>  #endif
+>  	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
+>  
 
