@@ -2,199 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8AB502DC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Apr 2022 18:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ECB502E47
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Apr 2022 19:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349532AbiDOQeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Apr 2022 12:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S245363AbiDORPM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Apr 2022 13:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243507AbiDOQeX (ORCPT
+        with ESMTP id S235654AbiDORPM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:34:23 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C659FC6272
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Apr 2022 09:31:54 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id e189so8795820oia.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Apr 2022 09:31:54 -0700 (PDT)
+        Fri, 15 Apr 2022 13:15:12 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4519BAC5;
+        Fri, 15 Apr 2022 10:12:43 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id c125so1585518iof.9;
+        Fri, 15 Apr 2022 10:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=pqvzZriBexnb3dTylqBqJsPxraE3tG2um5dSfrVfcK4=;
-        b=iOEz3x8Z5i7XaP5WoupZj+zZM9SAcWo9yiJzKmd9YPjxjtDmBXzsUg1pFIfAS+wvMJ
-         1TBS3NqaJUjDjaSa9g4gMh0/WJQdcci2WgUADRlTrbPTOr70mcNevlfoXpYNENxWfbFG
-         EHiyoYpNIHo2CcZotZsR7y93jEF1LzxASvVTs=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WrjUGuM6rsjd8l4kfiI/+ZvHzPP7KdnaSgcThC3AV8o=;
+        b=kKdXm1SFgaU0iXA2vligFziQ2tI3e4EIcf2e7gI9zKaVVjoJhwqa6nil1gW6QuZQcX
+         yTfkNxFYkQabvpe3wRuWqWHLTF6CpllydvcNWtRCILfdfOR5A63e2ts7V2n6xzxOsJpG
+         Y4aq1E0Z23FtIuzyB8xUYBJg6qyRNu5J43LfRlXIp49m7Rq7gUl0mfxkV0kqxxxk8fly
+         eQRSN0sUhANtHFudZbLuk4Nw/mGjSIBoVboWUuwBJUTqF8wImuscttw8qag/vC/gBaCA
+         v8WKOJzooa3wSHSmQfhzNL7BHJXQum0JWnLtwlIVyivtFiBpBZKILiGPhpyH2fOmH/zr
+         etug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=pqvzZriBexnb3dTylqBqJsPxraE3tG2um5dSfrVfcK4=;
-        b=3SNFeeWWmJODcpj9kXVpEhCN3IdAhYJjMdP1N6zS/ZUaInwG/90GH6+6iCHw2NTf4a
-         W+iyB0yxLOkbvHwg9LKRdncJc/hLozuCO6C82+j1Kod23YEXRvd4Mh8X8rInWtyeztTk
-         wTYlIev30JJKcD2L7xCdlD1bvVkwWCQ6p3mDwR0tYOQq6vcUKxYG8fD8SRnO44/VmnNU
-         kPpGMAQsc0sycOK8IrfeCaghnJMa6BaySZnPfITDQ/FQunWqTKDP5MG0Kv5EXEb5Sk39
-         dArX331eWdOA74qWt94tCB/gmwCVXjag/RxkZCsgUwYDZEqctSytH20ujS60Wmgj77Da
-         H6tg==
-X-Gm-Message-State: AOAM533hFSNt8Rkqe8m0Ir2ENYtG4k8i0uA93C6siq/xQReJvRoZ2oHk
-        0CNRHtu2sSrDpn8FtKDaNgBAhzV8/xgCVA==
-X-Google-Smtp-Source: ABdhPJwe//uT5w4loxD+P4rBi0KJh/lS7dSBtamroE/I+6cJ+VknoekxfBPjg+PyFtXNtmVq80baUQ==
-X-Received: by 2002:a05:6808:1709:b0:2f9:30ec:c95b with SMTP id bc9-20020a056808170900b002f930ecc95bmr1887836oib.240.1650040314065;
-        Fri, 15 Apr 2022 09:31:54 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm1189608otu.30.2022.04.15.09.31.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 09:31:53 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest update for Linux 5.18-rc3
-Message-ID: <c7ff0298-f0d7-2159-2af0-4c94abc5c52d@linuxfoundation.org>
-Date:   Fri, 15 Apr 2022 10:31:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WrjUGuM6rsjd8l4kfiI/+ZvHzPP7KdnaSgcThC3AV8o=;
+        b=NCTZQOpJh6WRWa2wP2fsV+xVT11hFBauk334ATqklZ2TVQz8UyHUEppn1l6HRNW6Ww
+         oD6ddO8AbFu3M8QurbD2nJNGungnK4fcVNCVwBgA9y0OuG0vs+Ql18jRehDmTyVSlxtp
+         o1JtIPphPD/uz6F9lKZYFqsGhD1UOa+8M9+inigJ+WiITc3h7vJi7Oo6j1h5b5FwCX/h
+         RKQDYS1ftaxOrA2qJU7JAXW0V/qKesfB0NJZgJwiHWJg8iyVt92Ya22BnNnCZWB8Xn2B
+         KWekKMnUY+Uh1lT4Vq9yxpAey2nmO6UFnueLDDmAQgPQcdZTDreTvV+zlvzQUzmtiFhl
+         rxbg==
+X-Gm-Message-State: AOAM5321lRDISJNOIL54u5BC9qF63xma6aBQv3t7KGjuALyCFehOqEhu
+        vNqnWtTUWvOjmzV4wk0KDElmhEIie7KEWdYimI8=
+X-Google-Smtp-Source: ABdhPJzxTm55bqpj9D4DAFEW2P37c3B5S+N0gPMJy7zffSpWPkEiz3q0FQyy5x0p9Pr8mdpZ/LMosfy/lWxTiQuG6ZA=
+X-Received: by 2002:a05:6602:185a:b0:645:d914:35e9 with SMTP id
+ d26-20020a056602185a00b00645d91435e9mr3603490ioi.154.1650042762884; Fri, 15
+ Apr 2022 10:12:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------5F0255C4A9D090820370A2E0"
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220414162220.1985095-1-xukuohai@huawei.com> <20220414162220.1985095-6-xukuohai@huawei.com>
+In-Reply-To: <20220414162220.1985095-6-xukuohai@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 15 Apr 2022 10:12:31 -0700
+Message-ID: <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, hpa@zytor.com,
+        Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------5F0255C4A9D090820370A2E0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>
+> Add bpf trampoline support for arm64. Most of the logic is the same as
+> x86.
+>
+> fentry before bpf trampoline hooked:
+>  mov x9, x30
+>  nop
+>
+> fentry after bpf trampoline hooked:
+>  mov x9, x30
+>  bl  <bpf_trampoline>
+>
+> Tested on qemu, result:
+>  #55 fentry_fexit:OK
+>  #56 fentry_test:OK
+>  #58 fexit_sleep:OK
+>  #59 fexit_stress:OK
+>  #60 fexit_test:OK
+>  #67 get_func_args_test:OK
+>  #68 get_func_ip_test:OK
+>  #101 modify_return:OK
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
+> ---
 
-Hi Linus,
+Can you please also take a look at [0], which is an ongoing work to
+add support for BPF cookie to BPF trampoline-based BPF programs. It's
+very close to being done, so it would be good if you can implement
+that at the same time.
 
-Please pull the following Kselftest update for Linux 5.18-rc3.
+  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20220412165555.4146407-4-kuifeng@fb.com/
 
-This Kselftest fixes update consists of a mqueue perf test memory leak
-bug fix. mq_perf_tests fail to call CPU_FREE to free memory allocated
-by CPU_SET.
+>  arch/arm64/net/bpf_jit.h      |  14 +-
+>  arch/arm64/net/bpf_jit_comp.c | 338 +++++++++++++++++++++++++++++++++-
+>  2 files changed, 348 insertions(+), 4 deletions(-)
+>
 
-diff is attached.
-
-thanks,
--- Shuah
-
-
-----------------------------------------------------------------
-The following changes since commit 79ee8aa31d518c1fd5f3b1b1ac39dd1fb4dc7039:
-
-   selftests/harness: Pass variant to teardown (2022-04-04 13:37:48 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.18-rc3
-
-for you to fetch changes up to ce64763c63854b4079f2e036638aa881a1fb3fbc:
-
-   testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set (2022-04-12 13:54:49 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-fixes-5.18-rc3
-
-This Kselftest fixes update consists of a mqueue perf test memory leak
-bug fix. mq_perf_tests fail to call CPU_FREE to free memory allocated
-by CPU_SET.
-
-----------------------------------------------------------------
-Athira Rajeev (1):
-       testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
-
-  tools/testing/selftests/mqueue/mq_perf_tests.c | 25 +++++++++++++++++--------
-  1 file changed, 17 insertions(+), 8 deletions(-)
-----------------------------------------------------------------
-
---------------5F0255C4A9D090820370A2E0
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-5.18-rc3.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-fixes-5.18-rc3.diff"
-
-diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
-index b019e0b8221c..84fda3b49073 100644
---- a/tools/testing/selftests/mqueue/mq_perf_tests.c
-+++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
-@@ -180,6 +180,9 @@ void shutdown(int exit_val, char *err_cause, int line_no)
- 	if (in_shutdown++)
- 		return;
- 
-+	/* Free the cpu_set allocated using CPU_ALLOC in main function */
-+	CPU_FREE(cpu_set);
-+
- 	for (i = 0; i < num_cpus_to_pin; i++)
- 		if (cpu_threads[i]) {
- 			pthread_kill(cpu_threads[i], SIGUSR1);
-@@ -551,6 +554,12 @@ int main(int argc, char *argv[])
- 		perror("sysconf(_SC_NPROCESSORS_ONLN)");
- 		exit(1);
- 	}
-+
-+	if (getuid() != 0)
-+		ksft_exit_skip("Not running as root, but almost all tests "
-+			"require root in order to modify\nsystem settings.  "
-+			"Exiting.\n");
-+
- 	cpus_online = min(MAX_CPUS, sysconf(_SC_NPROCESSORS_ONLN));
- 	cpu_set = CPU_ALLOC(cpus_online);
- 	if (cpu_set == NULL) {
-@@ -589,7 +598,7 @@ int main(int argc, char *argv[])
- 						cpu_set)) {
- 					fprintf(stderr, "Any given CPU may "
- 						"only be given once.\n");
--					exit(1);
-+					goto err_code;
- 				} else
- 					CPU_SET_S(cpus_to_pin[cpu],
- 						  cpu_set_size, cpu_set);
-@@ -607,7 +616,7 @@ int main(int argc, char *argv[])
- 				queue_path = malloc(strlen(option) + 2);
- 				if (!queue_path) {
- 					perror("malloc()");
--					exit(1);
-+					goto err_code;
- 				}
- 				queue_path[0] = '/';
- 				queue_path[1] = 0;
-@@ -622,17 +631,12 @@ int main(int argc, char *argv[])
- 		fprintf(stderr, "Must pass at least one CPU to continuous "
- 			"mode.\n");
- 		poptPrintUsage(popt_context, stderr, 0);
--		exit(1);
-+		goto err_code;
- 	} else if (!continuous_mode) {
- 		num_cpus_to_pin = 1;
- 		cpus_to_pin[0] = cpus_online - 1;
- 	}
- 
--	if (getuid() != 0)
--		ksft_exit_skip("Not running as root, but almost all tests "
--			"require root in order to modify\nsystem settings.  "
--			"Exiting.\n");
--
- 	max_msgs = fopen(MAX_MSGS, "r+");
- 	max_msgsize = fopen(MAX_MSGSIZE, "r+");
- 	if (!max_msgs)
-@@ -740,4 +744,9 @@ int main(int argc, char *argv[])
- 			sleep(1);
- 	}
- 	shutdown(0, "", 0);
-+
-+err_code:
-+	CPU_FREE(cpu_set);
-+	exit(1);
-+
- }
-
---------------5F0255C4A9D090820370A2E0--
+[...]
