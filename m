@@ -2,72 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD945030FE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 01:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321C75030F9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 01:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356155AbiDOVrD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Apr 2022 17:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S1356087AbiDOVrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Apr 2022 17:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356182AbiDOVps (ORCPT
+        with ESMTP id S1356140AbiDOVq7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:45:48 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BC649C8B
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Apr 2022 14:43:18 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso9215550pjf.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Apr 2022 14:43:18 -0700 (PDT)
+        Fri, 15 Apr 2022 17:46:59 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196E3120AA
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Apr 2022 14:44:30 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id c23so8056484plo.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Apr 2022 14:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zQtVzR+qX7thidCkrKxZWal2lu7IMO3a3sTmsXDOSnA=;
-        b=EVnLlP5HvcQ7mfMWcKBySfBzKktk4RuTNYJFYZGC7GP2b6ckxKgNRBH4W6ma4vs/9d
-         5ARTSlkDusrXNDfgVpN9vPEMuSy1WevbRS4d78goN03mGRJ2DvOE+UkehyNBAEsC4qZs
-         m82DsvDgvdTXKFjUNU1v0BWZnpfCZm7ixqKm6+RehaHI3auKeorhGY77XOPvnT8q/1id
-         WbyzxnyImFI+ry+t+EGs9zqk4ZOvldQEqvOF05n0udZ8/TmSYW96FvHzC2Kz5N9vdPeh
-         a8xY42Zdv6fvx1ZIePEdVNUoNRe39dXN60QhRCX/hd7NHgUABc5qJttmp0NiRCYEMnv1
-         N4iQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Gk+7fgGBPOWKPaXdAN9G57GRLaAX6Nk2DK6Zn7gSK5k=;
+        b=tIGkFJJuPZDSGI4it8k7JxuUjCNwZAbl/3s9Hgz3l1DMc0D59fzyeNgGgyKdivVctr
+         M9Hjj+77f01PG5h6DIsywnwVXxQWkjtn0PkLMozT/xR0PZMkdLzFoBMN9TnmMvzVyD4O
+         qBWsk+oYXwhaG7/asWuHpGUBwjrBNNKZoWT+Msxzs7slq8829FUh4FCXZDTG4yx1SZSI
+         6SFhM4pY3ynCQBIwGLR5KSvinvTtvbPKptteJQcYFCX6aITkybSGgOQfAnRuRs5LNVde
+         /e1Gr7+0c5echJqyynG9oifs646cTpxqAXreGSFDVcjwiYdxFrb49wGUjR1OHp4bFY1U
+         F6Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=zQtVzR+qX7thidCkrKxZWal2lu7IMO3a3sTmsXDOSnA=;
-        b=xPaghMWmvU2OKnF9oJ3INRQJyy/y3GsLj3GvR8K1Y3Ptd4n5lck2AAe8fuVQrmpKd/
-         iAaAJrhc8TZ1L5BJ0UERMO+YpqgZDbkcOuyCJFK4EIR+U7+GM5cFqpo5LMKExjgjTz6L
-         AeL2izvdJddej4YwEv+PJWwcaSCFPJbEILz6dG4dvNAl9CK95G19wKybuvjGh7ia22UM
-         p5EsFvW/VB5ZROH1MdcP826681Br/UW7wv7u0FKps82z/wuZbt41XJT5u2t/HpijwhIn
-         MThz8qsAEV8pAEGgeD+mfsFiuAz+GslQZwa8WH5Get3GIPXo2PSn6mQoR8KkftcnaChI
-         kZjg==
-X-Gm-Message-State: AOAM532p5tk3RJaSOMsAeRlA8SgCZERCyCUZID5Nbodi2tXRsktGrX1f
-        b6teMC2uXb2veT4+u9RWt2u3Ag==
-X-Google-Smtp-Source: ABdhPJyypS0vPqvwlpeOutgmScic8LUDanAQL6k5AZV9O6DDA/v4X8rx3sJTxfjHxTTTJ81aWvL7HQ==
-X-Received: by 2002:a17:903:12c1:b0:158:ad00:60e with SMTP id io1-20020a17090312c100b00158ad00060emr940315plb.62.1650058997479;
-        Fri, 15 Apr 2022 14:43:17 -0700 (PDT)
+        bh=Gk+7fgGBPOWKPaXdAN9G57GRLaAX6Nk2DK6Zn7gSK5k=;
+        b=5YdaaqGi7U3vi/hIlR4XUWZZXQfNi6XpvGr1YuQYYEQ74KAwNJ5ZY7cW5jkt7gCbiL
+         /gC++d6mCfLqywAvRLkcLb8aRWl5AfhkSR70egjmMYAK9l2hrAc/2eJ4XmmBtGvgW7Gc
+         O0RZ6JWIggSLyEPHWzs/geC78rv6yNNtZSDYbl58+2zVXIg6rploF2Ehjo9UbNelyw4l
+         cdgqFx2Ym2N5dGjGuqZMX/oMnfSAKg2RF6ld0J5Fc42vYk6Wpnfy0fFCqz1xc/BHS2Oh
+         E77MJRoy3lvovkR8d8DobdIIorspGyVUSfOCYhymBBHoG/lleh2Drbvc3+qyLlykF7DO
+         Dzdg==
+X-Gm-Message-State: AOAM530J2HFF4zU2kqkJS+KCFV2jVatw6yAoPGtLJX1spKKA50gfiPRA
+        CmtV751ePXCmXNm97nCNyJpwfA==
+X-Google-Smtp-Source: ABdhPJyWM5pz48kb/gf6V0OQcpljp6SwfU3pPBli48/v5anhU19PFACJaNco1IfCGjtuixSSvMEtKg==
+X-Received: by 2002:a17:90a:6c64:b0:1cb:93b2:b6a9 with SMTP id x91-20020a17090a6c6400b001cb93b2b6a9mr6322512pjj.144.1650059069323;
+        Fri, 15 Apr 2022 14:44:29 -0700 (PDT)
 Received: from ?IPV6:2620:15c:2d:3:51d5:33b1:431b:be0? ([2620:15c:2d:3:51d5:33b1:431b:be0])
-        by smtp.gmail.com with ESMTPSA id s35-20020a056a001c6300b00505ff320d97sm3980753pfw.91.2022.04.15.14.43.16
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm4003287pfl.15.2022.04.15.14.44.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 14:43:17 -0700 (PDT)
-Message-ID: <f65c2381-1e9c-5945-7672-848d1826532d@google.com>
-Date:   Fri, 15 Apr 2022 14:43:15 -0700
+        Fri, 15 Apr 2022 14:44:28 -0700 (PDT)
+Message-ID: <f496b0c6-ad94-1837-1edd-3f6f9c00b927@google.com>
+Date:   Fri, 15 Apr 2022 14:44:27 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: [RFC PATCH 0/2] kunit: Support redirecting function calls
 Content-Language: en-US
+From:   Steve Muckle <smuckle@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         David Gow <davidgow@google.com>
 Cc:     Daniel Latypov <dlatypov@google.com>,
         Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Joe Fradley <joefradley@google.com>
 References: <20220318021314.3225240-1-davidgow@google.com>
  <20220318092159.6f275782@gandalf.local.home>
  <CAFd5g461Poh37o=3m6EXppdX7oS0D5vZxvFAEtzJMwtBD1VJEw@mail.gmail.com>
-From:   Steve Muckle <smuckle@google.com>
-In-Reply-To: <CAFd5g461Poh37o=3m6EXppdX7oS0D5vZxvFAEtzJMwtBD1VJEw@mail.gmail.com>
+ <f65c2381-1e9c-5945-7672-848d1826532d@google.com>
+In-Reply-To: <f65c2381-1e9c-5945-7672-848d1826532d@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-21.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -81,32 +83,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/4/22 13:13, Brendan Higgins wrote:
-> On Fri, Mar 18, 2022 at 9:22 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->>
->> On Fri, 18 Mar 2022 10:13:12 +0800
->> David Gow <davidgow@google.com> wrote:
->>
->>> Does either (or both) of these features sound useful, and is this
->>> sort-of API the right model? (Personally, I think there's a reasonable
->>> scope for both.) Is anything obviously missing or wrong? Do the names,
->>> descriptions etc. make any sense?
->>
->> Obviously I'm biased toward the ftrace solution ;-)
-> 
-> Personally, I like providing both - as long as we can keep the
-> interface the same.
-> 
-> Ftrace is less visually invasive, but it is also less flexible in
-> capabilities, and requires substantial work to support on new
-> architectures.
++Joe Fradley who is also looking at KUnit with Android.
 
-The general feature looks useful to me. I'm not sure the ftrace based 
-API is worth it given it is only offering a visual improvement and has 
-some drawbacks compared to the other implementation (won't work with 
-inline functions, dependencies on other features). Livepatch is absent 
-on arm64 which mostly rules it out for my purposes (Android Generic 
-Kernel Image testing).
-
-cheers,
-Steve
+On 4/15/22 14:43, Steve Muckle wrote:
+> On 4/4/22 13:13, Brendan Higgins wrote:
+>> On Fri, Mar 18, 2022 at 9:22 AM Steven Rostedt <rostedt@goodmis.org> 
+>> wrote:
+>>>
+>>> On Fri, 18 Mar 2022 10:13:12 +0800
+>>> David Gow <davidgow@google.com> wrote:
+>>>
+>>>> Does either (or both) of these features sound useful, and is this
+>>>> sort-of API the right model? (Personally, I think there's a reasonable
+>>>> scope for both.) Is anything obviously missing or wrong? Do the names,
+>>>> descriptions etc. make any sense?
+>>>
+>>> Obviously I'm biased toward the ftrace solution ;-)
+>>
+>> Personally, I like providing both - as long as we can keep the
+>> interface the same.
+>>
+>> Ftrace is less visually invasive, but it is also less flexible in
+>> capabilities, and requires substantial work to support on new
+>> architectures.
+> 
+> The general feature looks useful to me. I'm not sure the ftrace based 
+> API is worth it given it is only offering a visual improvement and has 
+> some drawbacks compared to the other implementation (won't work with 
+> inline functions, dependencies on other features). Livepatch is absent 
+> on arm64 which mostly rules it out for my purposes (Android Generic 
+> Kernel Image testing).
+> 
+> cheers,
+> Steve
