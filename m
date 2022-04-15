@@ -2,142 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0F9502101
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Apr 2022 05:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D599502B56
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Apr 2022 15:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349169AbiDODu3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Apr 2022 23:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S1354157AbiDON5w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Apr 2022 09:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349171AbiDODu1 (ORCPT
+        with ESMTP id S1354196AbiDON5a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Apr 2022 23:50:27 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3795AA64;
-        Thu, 14 Apr 2022 20:48:00 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kfj0v07tnzgYpt;
-        Fri, 15 Apr 2022 11:46:06 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 15 Apr 2022 11:47:56 +0800
-Message-ID: <b9667d4b-5246-ee49-22af-c05ffeeaa679@huawei.com>
-Date:   Fri, 15 Apr 2022 11:47:56 +0800
+        Fri, 15 Apr 2022 09:57:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256305581;
+        Fri, 15 Apr 2022 06:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650030901; x=1681566901;
+  h=to:cc:subject:references:date:mime-version:
+   content-transfer-encoding:from:message-id:in-reply-to;
+  bh=rnIvYvNkZSMlVf1curZVeeehjye1dFlSwJzy1pjQQ4A=;
+  b=LjIollzPWpojXfctNvSRs6aV5pa/IfK37H8+wQunCeuBb3S3LNhHUNys
+   Vb1V19gjb3qJuhMjht+TvRW1k+1W6ni+ozPPfv7MENW0VDTCzfOLGJ1XN
+   0c33Cgg8mp+a6baHdh+VvH8whbLybODaU0mpFRET/zXMtOks3ARkXKThp
+   ZUbJNH0z92TgI6Hvizf+h7a7DfXht2kD9kcg05bdjZjLb0SwgTR76N8jY
+   yPR8bodq0IqoX7D1dns3jcm+A/St50DMzX600LOyjAEbY5SA8X4A9EBQA
+   aEpmP/GZo2zfhZa4DZw3ZJAMfnYo6i/54KY7Tjaf3iN8PDSVZxnioLsrY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250454121"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="250454121"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 06:55:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="662093589"
+Received: from fkchan-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.212.59.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 15 Apr 2022 06:54:58 -0700
+Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
+To:     "Jarkko Sakkinen" <jarkko@kernel.org>, dave.hansen@linux.intel.com,
+        tglx@linutronix.de, bp@alien8.de, luto@kernel.org,
+        mingo@redhat.com, linux-sgx@vger.kernel.org, x86@kernel.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        "Reinette Chatre" <reinette.chatre@intel.com>
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 14/31] x86/sgx: Support VA page allocation without
+ reclaiming
+References: <cover.1649878359.git.reinette.chatre@intel.com> <0ab32196f5056b25c34fb89fcc4dc28a5d875d2e.1649878359.git.reinette.chatre@intel.com> <bf2fcc93babdbf541fffc6cc5f5756f391773a75.camel@kernel.org> <767b99c5-f28e-4b8f-5147-6e1d290ca5c6@intel.com>
+Date:   Fri, 15 Apr 2022 08:54:53 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH bpf-next v2 0/6] bpf trampoline for arm64
-Content-Language: en-US
-To:     Hou Tao <houtao1@huawei.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
- <b9d38c43-a2a7-ae6d-79e1-51507103ef88@huawei.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <b9d38c43-a2a7-ae6d-79e1-51507103ef88@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   "Haitao Huang" <haitao.huang@linux.intel.com>
+Organization: Intel Corp
+Message-ID: <op.1kn59r1bwjvjmi@hhuan26-mobl1.mshome.net>
+In-Reply-To: <767b99c5-f28e-4b8f-5147-6e1d290ca5c6@intel.com>
+User-Agent: Opera Mail/1.0 (Win32)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/15/2022 10:37 AM, Hou Tao wrote:
-> Hi,
-> 
-> On 4/15/2022 12:22 AM, Xu Kuohai wrote:
->> Add bpf trampoline support for arm64. Most of the logic is the same as
->> x86.
->>
->> Tested on qemu, result:
->>  #55 fentry_fexit:OK
->>  #56 fentry_test:OK
->>  #58 fexit_sleep:OK
->>  #59 fexit_stress:OK
->>  #60 fexit_test:OK
->>  #67 get_func_args_test:OK
->>  #68 get_func_ip_test:OK
->>  #101 modify_return:OK
-> bpf_struct_ops also depends on bpf trampoline, could you please also add the
-> test results for bpf_struct_ops related tests case ?
+On Thu, 14 Apr 2022 11:30:34 -0500, Reinette Chatre  
+<reinette.chatre@intel.com> wrote:
 
-Yes, more tests is needed. I'm curently testing with bpftrace's kfunc
-and bpf selftest, more testing results will be posted.
+> Hi Jarkko,
+>
+> On 4/14/2022 4:18 AM, Jarkko Sakkinen wrote:
+>> On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
+>>> struct sgx_encl should be protected with the mutex
+>>> sgx_encl->lock. One exception is sgx_encl->page_cnt that
+>>> is incremented (in sgx_encl_grow()) when an enclave page
+>>> is added to the enclave. The reason the mutex is not held
+>>> is to allow the reclaimer to be called directly if there are
+>>> no EPC pages (in support of a new VA page) available at the time.
+>>>
+>>> Incrementing sgx_encl->page_cnt without sgc_encl->lock held
+>>> is currently (before SGX2) safe from concurrent updates because
+>>> all paths in which sgx_encl_grow() is called occur before
+>>> enclave initialization and are protected with an atomic
+>>> operation on SGX_ENCL_IOCTL.
+>>>
+>>> SGX2 includes support for dynamically adding pages after
+>>> enclave initialization where the protection of SGX_ENCL_IOCTL
+>>> is not available.
+>>>
+>>> Make direct reclaim of EPC pages optional when new VA pages
+>>> are added to the enclave. Essentially the existing "reclaim"
+>>> flag used when regular EPC pages are added to an enclave
+>>> becomes available to the caller when used to allocate VA pages
+>>> instead of always being "true".
+>>>
+>>> When adding pages without invoking the reclaimer it is possible
+>>> to do so with sgx_encl->lock held, gaining its protection against
+>>> concurrent updates to sgx_encl->page_cnt after enclave
+>>> initialization.
+>>>
+>>> No functional change.
+>>>
+>>> Reported-by: Haitao Huang <haitao.huang@intel.com>
+>>> Tested-by: Haitao Huang <haitao.huang@intel.com>
+>>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+>>
+>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>
+> Thank you.
+>
+>>
+>> Nit: I don't think tested-by is in the right patch here. Maybe
+>> Haitao's tested-by should be moved into patch that actually adds
+>> support for EAUG? Not something I would NAK this patch, just
+>> wondering...
+>
+> Yes, that is a good point. While this is the bulk of the fix where
+> the new API is introduced, the test is only applicable when this API
+> is used and that is in "x86/sgx: Support adding of pages to an
+> initialized enclave". I will move the "Tested-by" to that patch.
+>
 
->>
->> v2:
->> - Add Song's ACK
->> - Change the multi-line comment in is_valid_bpf_tramp_flags() into net
->>   style (patch 3)
->> - Fix a deadloop issue in ftrace selftest (patch 2)
->> - Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
->> - Replace "bpf trampoline" with "custom trampoline" in patch 1, as
->>   ftrace direct call is not only used by bpf trampoline.
->>
->> v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
->>
->> Xu Kuohai (6):
->>   arm64: ftrace: Add ftrace direct call support
->>   ftrace: Fix deadloop caused by direct call in ftrace selftest
->>   bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
->>   bpf, arm64: Impelment bpf_arch_text_poke() for arm64
->>   bpf, arm64: bpf trampoline for arm64
->>   selftests/bpf: Fix trivial typo in fentry_fexit.c
->>
->>  arch/arm64/Kconfig                            |   2 +
->>  arch/arm64/include/asm/ftrace.h               |  10 +
->>  arch/arm64/kernel/asm-offsets.c               |   1 +
->>  arch/arm64/kernel/entry-ftrace.S              |  28 +-
->>  arch/arm64/net/bpf_jit.h                      |  14 +-
->>  arch/arm64/net/bpf_jit_comp.c                 | 390 +++++++++++++++++-
->>  arch/x86/net/bpf_jit_comp.c                   |  20 -
->>  include/linux/bpf.h                           |   5 +
->>  kernel/bpf/bpf_struct_ops.c                   |   4 +-
->>  kernel/bpf/trampoline.c                       |  35 +-
->>  kernel/trace/trace_selftest.c                 |   4 +-
->>  .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
->>  12 files changed, 482 insertions(+), 35 deletions(-)
->>
-> 
-> .
-
+You can also add my Tested-by for patches adding the new IOCTLs.
+Our team and I have tested EAUG on #PF,  modifying types and permissions  
+with Intel SGX SDK/PSW.
+Thanks
+Haitao
