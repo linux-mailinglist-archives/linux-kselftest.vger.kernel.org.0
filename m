@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B3D503668
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 13:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD697503667
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 13:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbiDPLv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Apr 2022 07:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S231799AbiDPLv2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Apr 2022 07:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiDPLv2 (ORCPT
+        with ESMTP id S230449AbiDPLv2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sat, 16 Apr 2022 07:51:28 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E00EE239;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8781118;
         Sat, 16 Apr 2022 04:48:54 -0700 (PDT)
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9cgrVpiHp0lAA--.17905S2;
-        Sat, 16 Apr 2022 19:48:49 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9cgrVpiHp0lAA--.17905S3;
+        Sat, 16 Apr 2022 19:48:50 +0800 (CST)
 From:   Ze Zhang <zhangze@loongson.cn>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>
@@ -25,29 +25,31 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
         Qing Zhang <zhangqing@loongson.cn>,
         Ze Zhang <zhangze@loongson.cn>
-Subject: [PATCH 1/2] selftests/ftrace: add mips support for kprobe args string tests
-Date:   Sat, 16 Apr 2022 19:48:47 +0800
-Message-Id: <20220416114848.25288-1-zhangze@loongson.cn>
+Subject: [PATCH 2/2] selftests/ftrace: add mips support for kprobe args syntax tests
+Date:   Sat, 16 Apr 2022 19:48:48 +0800
+Message-Id: <20220416114848.25288-2-zhangze@loongson.cn>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220416114848.25288-1-zhangze@loongson.cn>
+References: <20220416114848.25288-1-zhangze@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxv9cgrVpiHp0lAA--.17905S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1kJw1UGrykJF43Zr17GFg_yoW3urgEv3
-        9rt3s7CrWUuFyqqr4rtr1rCws5GwsrWr1xtrWjyr95try2qw45tan7CF1xJF4fW393XFy7
-        tFsxZF45Za18XjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
-        Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5s
-        jjDUUUU
+X-CM-TRANSID: AQAAf9Dxv9cgrVpiHp0lAA--.17905S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr1kJw1UGryDKrWktF4xWFg_yoW3KFXE9a
+        4Iy3s7CrWUZFyqqr48tr15Crs5G39rWr1xtrWDXryrtryUXw45tayDCFykGF4fWa93XFy2
+        yanrZr4Svw4jgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb6xFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
+        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j
+        6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
+        vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0x
+        vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUsqXdUUUUU=
 X-CM-SenderInfo: x2kd0wt2h6z05rqj20fqof0/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -63,19 +65,20 @@ Add s390 support for kprobe args tests").
 
 Signed-off-by: Ze Zhang <zhangze@loongson.cn>
 ---
- .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc       | 3 +++
- 1 file changed, 3 insertions(+)
+ .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc      | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-index dc7ade196798..459741565222 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-@@ -25,6 +25,9 @@ ppc*)
- s390*)
-   ARG1=%r2
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+index 47d84b5cb6ca..d4662c8cf407 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+@@ -36,6 +36,10 @@ s390*)
+   GOODREG=%r2
+   BADREG=%s2
  ;;
 +mips*)
-+  ARG1=%r4
++  GOODREG=%r4
++  BADREG=%r12
 +;;
  *)
    echo "Please implement other architecture here"
