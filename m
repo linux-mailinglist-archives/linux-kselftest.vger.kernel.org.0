@@ -2,68 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275B2503848
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 23:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E10C50458E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 23:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiDPVQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Apr 2022 17:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S229460AbiDPVXa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Apr 2022 17:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiDPVQB (ORCPT
+        with ESMTP id S231351AbiDPVX3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Apr 2022 17:16:01 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15E2E6A0
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:13:26 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id md4so10163916pjb.4
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:13:26 -0700 (PDT)
+        Sat, 16 Apr 2022 17:23:29 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED99A24581
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:20:55 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id k14so12323570pga.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:20:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BjuGjhP4kQ32yKxfj1klKnac9K0XU0XMV9i06nB2Ffw=;
-        b=GyVgmPUPKlHwgjgMupQ3m8a1KtAcRlmYQtP+ay8ThpdC8/UZAH9YWi+a1xebtVu3z9
-         3HNwQs3a8FTwoxLtDQPx4+agyG51wueyE8SZx8anisVgHgvTqPEaUV+Qa6rdUVavZg29
-         CTLMxmd6i4Z7MvxuRnYfozyCe+Adzip55g/DU=
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=Dq+xhlV8ArSu2UejpBmVOFKT+aSiPfM12i4eY7jeTgA=;
+        b=d32BG1VG4X9CPx5WhgzJSzeTD2F6LQhNi0rWBOwy7HLoA0+v9S7a2GiQorZiR0Nqup
+         pAPxPDM0YT3XUANBr0jbD5k53O9Iazp7A5/lQQjwv1Qe3uSTX07Ka9C5zbW/kbwut3hG
+         WDXgE8qEP9IbHdQCDGw6yviNyZL1xORCxeWg0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BjuGjhP4kQ32yKxfj1klKnac9K0XU0XMV9i06nB2Ffw=;
-        b=qAXhZ6Z5n/hiPkI+oZb3zMYM0jN6XS3jKSySSAKgyE2RcaVWw7/tc5SQ+5rQnBZRZx
-         H++xgi3iZiG06aR6SUSluF3vXZfvKmrUB18jn1/C7/02aM70Zeb5yL8P3z7aRW5vWALN
-         mQ0JgqNsg485nBGf1cNZu9VbNxIMbvbSDlL7YjYFRa5JjmJEd8tGnRvQPDazIH3GTY//
-         8wj5Wp/IjQYZeMfV8v1HVUjktCLdKERTEYJ/bpz6sWfbBQfiXpBFmaosVOtNcKaiJc3L
-         BFnECtZFOuQzjDw2oR8hW7wCfWFTrXMM5P6xs6TjfGVLit/i1Z5kj5gAZfN+NzQ4V+Dt
-         9kFA==
-X-Gm-Message-State: AOAM530U49Ed/ldzqKFFo8V4lDvwqTTZT9n5lo71Vko3sUBLtA3FqqgP
-        sUbYGHSWyHrFgav6DZpr2IEA1w==
-X-Google-Smtp-Source: ABdhPJw1Iuz9CgyW1LYrs6aaku8ERT5AYV8PDxCcP+HhoQjHs7Ts0OOOvQ9hwQ3C8FVMgtJHM26JRA==
-X-Received: by 2002:a17:902:b582:b0:14c:a63d:3df6 with SMTP id a2-20020a170902b58200b0014ca63d3df6mr4610655pls.51.1650143606310;
-        Sat, 16 Apr 2022 14:13:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=Dq+xhlV8ArSu2UejpBmVOFKT+aSiPfM12i4eY7jeTgA=;
+        b=t+vklYUW5I5cBWwXoB99qtwR24L3fRRRJ/ic2fc+WaStVitLChDNF3kCI0ILgxqsMo
+         bF1NhYh9C+147rfFktOqOvyWOakzu/66Do8k1vuGLOT7qkmC6vxKfm2L0XMsUF5iClyt
+         6iSGUS+gYQfszEYXe6AAyhR368Gu9wrPWS+u8U7C0xRYfgLQREgEYQ3RVAlM3oMQn5/q
+         wGmCRj/UzYNomKgeZYeqSQ6OkE/KTNfTvrEExcf3YeHxYsT/V81gjl7yL2UmVld6udW3
+         PNLJBNSaEDGiQaRvhubYYFFCstOTAog8qHkskhl1Sx/T5XT8d4ZV7tC5a4cJqh2LE0Mx
+         6Q2w==
+X-Gm-Message-State: AOAM531+sq7hNWf8jFyH1wxjc2ff/A8pIx/T5eIz8wYJmgNhXmbDSfF6
+        2zj2wLKbq5THDobqC0A8bp7zQAKCplJUtg==
+X-Google-Smtp-Source: ABdhPJxVJM6WbMiw/foVB0PGcvedJTuFvntFSCxHLudMacOuSNlqmlsbcef9x62hi1J6i53zd7ypeA==
+X-Received: by 2002:a63:7e4b:0:b0:3a5:6636:5b94 with SMTP id o11-20020a637e4b000000b003a566365b94mr3273096pgn.173.1650144055451;
+        Sat, 16 Apr 2022 14:20:55 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f187-20020a6251c4000000b005058e59604csm6758560pfb.217.2022.04.16.14.13.25
+        by smtp.gmail.com with ESMTPSA id ay13-20020a056a00300d00b0050a5af3fbc7sm1731994pfb.220.2022.04.16.14.20.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 14:13:25 -0700 (PDT)
-Date:   Sat, 16 Apr 2022 14:13:25 -0700
+        Sat, 16 Apr 2022 14:20:55 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 14:20:54 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, kernelci@groups.io,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/lkdtm: add config
-Message-ID: <202204161407.D6D3202FD@keescook>
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <20220217205620.2512094-2-usama.anjum@collabora.com>
- <202203091123.33E89F5@keescook>
- <76529762-1a36-142d-0aa9-beb5fa2bb27b@collabora.com>
- <aaeaefb7-3655-2863-46ae-162bf5ab761c@collabora.com>
- <a9c74cc2-491e-678a-8965-86fa6a6002dc@collabora.com>
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kselftest@vger.kernel.org,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [GIT PULL drivers/misc] lkdtm updates for next
+Message-ID: <202204161420.168B8DDBE@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a9c74cc2-491e-678a-8965-86fa6a6002dc@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,41 +72,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 12:50:01PM +0500, Muhammad Usama Anjum wrote:
-> Hi Kees,
-> 
-> Any thoughts?
-> 
-> On 3/15/22 4:55 PM, Muhammad Usama Anjum wrote:
-> > On 3/10/22 10:22 PM, Muhammad Usama Anjum wrote:
-> >> On 3/10/22 12:23 AM, Kees Cook wrote:
-> >>> On Fri, Feb 18, 2022 at 01:56:20AM +0500, Muhammad Usama Anjum wrote:
-> >>>> Add config option which is needed for SLAB_LINEAR_OVERFLOW test. It
-> >>>> needs KASAN enabled.
-> >>>
-> >>> I'd prefer this use the SLAB_DEBUG options -- KASAN is very heavy.
-> >> I'll test it out and update in the next patch version.
-> >> I've tested by removing KASAN and adding the following config:
-> > CONFIG_SLAB=y
-> > CONFIG_DEBUG_SLAB=y
+Hi Greg,
 
-I recommend slub instead:
+Please pull these lkdtm updates for -next.
 
-CONFIG_SLUB=y
-CONFIG_SLUB_DEBUG=y
+Thanks!
 
-and one more, see below...
+-Kees
 
-> > 
-> > The result of SLAB_LINEAR_OVERFLOW test doesn't remain deterministic in
-> > this config. The task never crashes and hence stack trace never appears.
-> > When executed several times we get "Slab corruption" logs and after some
-> > more tries whole kernel crashes. I've not used DEBUG_SLAB before and not
-> > sure if this is the expected behavior. If we aren't sure, we can keep
-> > KASAN turned on instead.
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
-I think you need to enable the actual kmem debugging with a boot param
-("slub_debug=ZF"), or with CONFIG_SLUB_DEBUG_ON=y.
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/lkdtm-next
+
+for you to fetch changes up to 2e53b877dc1258d4ac3de98f496bb88ec3bf5e25:
+
+  lkdtm: Add CFI_BACKWARD to test ROP mitigations (2022-04-16 13:57:23 -0700)
+
+----------------------------------------------------------------
+lkdtm updates for next
+
+Christophe Leroy (1):
+      lkdtm/bugs: Don't expect thread termination without CONFIG_UBSAN_TRAP
+
+Jiasheng Jiang (1):
+      lkdtm/bugs: Check for the NULL pointer after calling kmalloc
+
+Kees Cook (4):
+      lkdtm/heap: Note conditions for SLAB_LINEAR_OVERFLOW
+      lkdtm/usercopy: Expand size of "out of frame" object
+      lkdtm: Move crashtype definitions into each category
+      lkdtm: Add CFI_BACKWARD to test ROP mitigations
+
+----------------------------------------------------------------
+
+ drivers/misc/lkdtm/bugs.c               |  96 +++++++++++++++------
+ drivers/misc/lkdtm/cfi.c                | 145 +++++++++++++++++++++++++++++++-
+ drivers/misc/lkdtm/core.c               | 138 +++++++-----------------------
+ drivers/misc/lkdtm/fortify.c            |  17 +++-
+ drivers/misc/lkdtm/heap.c               |  47 ++++++++---
+ drivers/misc/lkdtm/lkdtm.h              | 142 ++++++++-----------------------
+ drivers/misc/lkdtm/perms.c              |  47 ++++++++---
+ drivers/misc/lkdtm/powerpc.c            |  11 ++-
+ drivers/misc/lkdtm/refcount.c           |  65 +++++++++-----
+ drivers/misc/lkdtm/stackleak.c          |  11 ++-
+ drivers/misc/lkdtm/usercopy.c           |  49 ++++++++---
+ tools/testing/selftests/lkdtm/config    |   2 +
+ tools/testing/selftests/lkdtm/tests.txt |   1 +
+ 13 files changed, 471 insertions(+), 300 deletions(-)
 
 -- 
 Kees Cook
