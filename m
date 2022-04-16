@@ -2,71 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3B0503844
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 23:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275B2503848
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Apr 2022 23:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiDPVJU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Apr 2022 17:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        id S233052AbiDPVQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Apr 2022 17:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiDPVJS (ORCPT
+        with ESMTP id S231150AbiDPVQB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Apr 2022 17:09:18 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4474D36B68
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:06:45 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q12so12229681pgj.13
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:06:45 -0700 (PDT)
+        Sat, 16 Apr 2022 17:16:01 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15E2E6A0
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:13:26 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id md4so10163916pjb.4
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Apr 2022 14:13:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=vqZKrItXzHP6DNEZ2GJ6sfcy+E/UGwHZqT6czMMhn08=;
-        b=T308wQlh2W8cJ7q8iFYWtk9LA8bma9MRVwN5Gp0yl6uuCT3UKR7QHutyFtTIUfNAh0
-         lskaH5k7junJDh+ynDgm8fgQTDpG/ul6vTng7ZkDbe/ovPhsyZw/os208N3bJDVf2F9h
-         oxvr0D7pYHXHDOUxJJyIKPna+NhT8GPDFX/aM=
+        bh=BjuGjhP4kQ32yKxfj1klKnac9K0XU0XMV9i06nB2Ffw=;
+        b=GyVgmPUPKlHwgjgMupQ3m8a1KtAcRlmYQtP+ay8ThpdC8/UZAH9YWi+a1xebtVu3z9
+         3HNwQs3a8FTwoxLtDQPx4+agyG51wueyE8SZx8anisVgHgvTqPEaUV+Qa6rdUVavZg29
+         CTLMxmd6i4Z7MvxuRnYfozyCe+Adzip55g/DU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vqZKrItXzHP6DNEZ2GJ6sfcy+E/UGwHZqT6czMMhn08=;
-        b=Ilx/ecT/fe991d3JXp67v4xNO7lAZpaih14zYBLa/gNucnUmzcZCGs/+Ou5hAhL70+
-         SVEuOX55GqaC1UkKweZG0v7L0ZnhzCTvFXMMY40Oapl2mTukqsr1fjQRgLbP8wk9vAEz
-         86kUnMlvhYgmuIbXn/I3chtBvUnTZjid0cJxvur6jceetv2Od/ubCrb/1cgVaYUElUNS
-         /Q3W6X32RT9zjZOvRIp55agVGLxY+1vhoM8L26AzNcH8278265+TfgTJ/C1tIedCpCtO
-         eotUEr/EPAMHnl+rlgTl26sVHxtoNO915tpQXe/UBH7w6g3zkyFP3RgW+pb2j7KycVQd
-         QVvQ==
-X-Gm-Message-State: AOAM531HSAFSC7Pq4uat+l/nCJgKxlVPO9vSB//Q7N2OK7BFZdnbd7LL
-        lscINcjHEz6GSmYuSGKBlSJkTQ==
-X-Google-Smtp-Source: ABdhPJzd27W8zOB3OUbyC2IR7CphZbre/Scp2n5l2fqsvh4dxA8IJuvn5XuYN9s/78mZq5XUTqhtfw==
-X-Received: by 2002:a63:e146:0:b0:39d:1b00:e475 with SMTP id h6-20020a63e146000000b0039d1b00e475mr4131038pgk.537.1650143204707;
-        Sat, 16 Apr 2022 14:06:44 -0700 (PDT)
+        bh=BjuGjhP4kQ32yKxfj1klKnac9K0XU0XMV9i06nB2Ffw=;
+        b=qAXhZ6Z5n/hiPkI+oZb3zMYM0jN6XS3jKSySSAKgyE2RcaVWw7/tc5SQ+5rQnBZRZx
+         H++xgi3iZiG06aR6SUSluF3vXZfvKmrUB18jn1/C7/02aM70Zeb5yL8P3z7aRW5vWALN
+         mQ0JgqNsg485nBGf1cNZu9VbNxIMbvbSDlL7YjYFRa5JjmJEd8tGnRvQPDazIH3GTY//
+         8wj5Wp/IjQYZeMfV8v1HVUjktCLdKERTEYJ/bpz6sWfbBQfiXpBFmaosVOtNcKaiJc3L
+         BFnECtZFOuQzjDw2oR8hW7wCfWFTrXMM5P6xs6TjfGVLit/i1Z5kj5gAZfN+NzQ4V+Dt
+         9kFA==
+X-Gm-Message-State: AOAM530U49Ed/ldzqKFFo8V4lDvwqTTZT9n5lo71Vko3sUBLtA3FqqgP
+        sUbYGHSWyHrFgav6DZpr2IEA1w==
+X-Google-Smtp-Source: ABdhPJw1Iuz9CgyW1LYrs6aaku8ERT5AYV8PDxCcP+HhoQjHs7Ts0OOOvQ9hwQ3C8FVMgtJHM26JRA==
+X-Received: by 2002:a17:902:b582:b0:14c:a63d:3df6 with SMTP id a2-20020a170902b58200b0014ca63d3df6mr4610655pls.51.1650143606310;
+        Sat, 16 Apr 2022 14:13:26 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u206-20020a6279d7000000b00505fdc42bf9sm6937662pfc.101.2022.04.16.14.06.44
+        by smtp.gmail.com with ESMTPSA id f187-20020a6251c4000000b005058e59604csm6758560pfb.217.2022.04.16.14.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 14:06:44 -0700 (PDT)
-Date:   Sat, 16 Apr 2022 14:06:43 -0700
+        Sat, 16 Apr 2022 14:13:25 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 14:13:25 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com, kernelci@groups.io,
+Cc:     Shuah Khan <shuah@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
- CFI_FORWARD_PROTO
-Message-ID: <202204161400.B2267D6@keescook>
+        kernel@collabora.com, kernelci@groups.io,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/lkdtm: add config
+Message-ID: <202204161407.D6D3202FD@keescook>
 References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <202203091122.A51B31230A@keescook>
- <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
- <8049e2a9-a478-4c6a-afcd-3aa4434a0590@collabora.com>
+ <20220217205620.2512094-2-usama.anjum@collabora.com>
+ <202203091123.33E89F5@keescook>
+ <76529762-1a36-142d-0aa9-beb5fa2bb27b@collabora.com>
+ <aaeaefb7-3655-2863-46ae-162bf5ab761c@collabora.com>
+ <a9c74cc2-491e-678a-8965-86fa6a6002dc@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8049e2a9-a478-4c6a-afcd-3aa4434a0590@collabora.com>
+In-Reply-To: <a9c74cc2-491e-678a-8965-86fa6a6002dc@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,40 +74,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 04:31:42PM +0500, Muhammad Usama Anjum wrote:
+On Mon, Apr 04, 2022 at 12:50:01PM +0500, Muhammad Usama Anjum wrote:
+> Hi Kees,
+> 
 > Any thoughts?
 > 
-> On 3/10/22 10:21 PM, Muhammad Usama Anjum wrote:
-> > On 3/10/22 12:22 AM, Kees Cook wrote:
-> >> On Fri, Feb 18, 2022 at 01:56:19AM +0500, Muhammad Usama Anjum wrote:
-> >>> Add config options which are needed for LKDTM sub-tests.
-> >>> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
-> >>> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
-> >>> INIT_ON_FREE_DEFAULT_ON config.
+> On 3/15/22 4:55 PM, Muhammad Usama Anjum wrote:
+> > On 3/10/22 10:22 PM, Muhammad Usama Anjum wrote:
+> >> On 3/10/22 12:23 AM, Kees Cook wrote:
+> >>> On Fri, Feb 18, 2022 at 01:56:20AM +0500, Muhammad Usama Anjum wrote:
+> >>>> Add config option which is needed for SLAB_LINEAR_OVERFLOW test. It
+> >>>> needs KASAN enabled.
 > >>>
-> >>> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
-> >>> kind. Turn it off for now by default until proper support.
-> >>
-> >> Building under LTO Clang on arm64, this is available. What's the right
-> >> way to add a CONFIG that isn't always available?
-> >>
-> >> -Kees
-> > Yeah, as you had mentioned
-> > (https://github.com/kernelci/kernelci-project/issues/84#issuecomment-1042015431):
-> > 
-> > CFI_FORWARD_PROTO is going to fail unless there is an active CFI system
-> > in place of some kind. Right now this depends on arm64+Clang. In the
-> > future, this will be arch-agnostic+Clang, but for the moment, it should
-> > be safe to exclude this test.
-> > 
-> > In this patch, I'm turning off CFI_FORWARD_PROTO by default here. We can
-> > re-enable it when it becomes arch agnostic. CFI_FORWARD_PROTO cannot be
-> > turned off by using a config. Please let me know your thoughts otherwise.
+> >>> I'd prefer this use the SLAB_DEBUG options -- KASAN is very heavy.
+> >> I'll test it out and update in the next patch version.
+> >> I've tested by removing KASAN and adding the following config:
+> > CONFIG_SLAB=y
+> > CONFIG_DEBUG_SLAB=y
 
-I don't like the idea of disabling the test because this means it won't
-have any output in CI systems to examine at all. I'd much rather have
-tests that are expecting to fail to report XFAIL from the kernel
-instead. (See things like lkdtm_UNSET_SMEP.)
+I recommend slub instead:
+
+CONFIG_SLUB=y
+CONFIG_SLUB_DEBUG=y
+
+and one more, see below...
+
+> > 
+> > The result of SLAB_LINEAR_OVERFLOW test doesn't remain deterministic in
+> > this config. The task never crashes and hence stack trace never appears.
+> > When executed several times we get "Slab corruption" logs and after some
+> > more tries whole kernel crashes. I've not used DEBUG_SLAB before and not
+> > sure if this is the expected behavior. If we aren't sure, we can keep
+> > KASAN turned on instead.
+
+I think you need to enable the actual kmem debugging with a boot param
+("slub_debug=ZF"), or with CONFIG_SLUB_DEBUG_ON=y.
 
 -- 
 Kees Cook
