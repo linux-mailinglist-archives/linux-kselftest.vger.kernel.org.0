@@ -2,92 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31F0505EDD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Apr 2022 22:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECFC505F58
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Apr 2022 23:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238547AbiDRUXT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Apr 2022 16:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S229510AbiDRVcp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Apr 2022 17:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiDRUXS (ORCPT
+        with ESMTP id S229463AbiDRVco (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:23:18 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755D92E6B8
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Apr 2022 13:20:38 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id s13-20020a17090a764d00b001cb896b75ffso9226802pjl.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Apr 2022 13:20:38 -0700 (PDT)
+        Mon, 18 Apr 2022 17:32:44 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF62CCB6
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Apr 2022 14:29:56 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z12so18908875edl.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Apr 2022 14:29:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=qRrjWLMfdu6yIcwripxOfFds2oSTzWm8NOly78GvImA=;
-        b=iGKBSQMhB5Dcpvx90+XkjZsRwajkAuHhifHP93zi8BjBNhyUN6cd6lDfkfvOIzlP7l
-         dZAf5VimM8LMXGHpL11bN/5/HMIk4F+WG/l90ME7Y5gxjEIq3N+Cs2g1gWYXNRpcgr14
-         l4JWFolmT/LUz2cvHBkecDrGenJ/HYRecqWqJovbOF7lAX9gCsYpWvLny+3uegoP+Ye7
-         Oahw6Cocr64RS2PxJte0noEKgVzaUPM9RSAynaBVWSVrKLklHVl3P+RYRn8qiuGtOIy+
-         Ms0IjPqovGZ/n9e4pPRoh/kDxniUmKKBDVI/fJs0//g6zR2Ke5ymUGOO89n2HSNloNT/
-         ZrIw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/7LTWo0OPBrGCZjHYoN1cmnPJEUpa4jNozIjdW1Tjhc=;
+        b=En4TB4U44B8KkvJ/oE6YRz8ktzHBFO2hSHQvrSQgM/I7HmDnWkoLceq8ho8OUiCv3e
+         E5mWA0s4dFFlcwHdf18d6P/398+fXbLU3vorFjZjmSoyICv0siRicj2wlfEcXsi8nUG4
+         u4gsxmjXMnIZAbFF7qKRl5GlhpeDJFS3t/aU6rEG16IG8yrQAJyfN/O33LGJ0qPLd94C
+         UpWhiPZuaHS5uRDRVMLeteofq3HLTT6BrnUzikZt50XLXM3bo5xrBZKWfXGjc/48H6Be
+         do5u0dX1oc4P60EgwzwKUeCUA/BRmcYkAID84Hidmcdxag7E4TNazut9vePsJXPnefVw
+         S6sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=qRrjWLMfdu6yIcwripxOfFds2oSTzWm8NOly78GvImA=;
-        b=NUq5I2wUiNffjGlub8uWOqNDt8aug0/D501fgJn9PaUfd0h4sbwVmmNCT1IICZqO9M
-         hMF4NDBdfugdsoPSJGLMG4m/qMC1RCNRqcGtuQIj+JLOQF9fc3/8eEhjGlceyVPr8q0E
-         7I0Rk5zGYisjYBW5Br8kfk+5kLof4ZJY7yoRL6ENq9aFOnwQRpEVkFSn3PwyRkJOjyty
-         xzWDMr4KZJfk9NOnvvM2gm6TJA2/zDhoOzusLYst/10sNlh6UqaZ2tMA/RBE/UUadrdT
-         IglVLHymz7wu13Vdynnfpd1DerLwEWC8svNiqCHeBvD9M5dqwMKo8w1FwsZ7aWmxbj8c
-         a0ag==
-X-Gm-Message-State: AOAM53219taS/R/dGUf4lXYSUuz36yyj4lihLHkwW3idkJ3DYMAarfkh
-        /2Ginar6cFWC3TA/r5MRPc57u5f6CoHV
-X-Google-Smtp-Source: ABdhPJxiVFcTI4z0xGMr9ZyulQytlCLw/B1VBP49S/XaxYsvHk5VzyCtbJSYi+urWup0bdAjQ4KVIcmi8IVE
-X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
- (user=yuanchu job=sendgmr) by 2002:a17:902:ec8e:b0:158:fefd:a2c2 with SMTP id
- x14-20020a170902ec8e00b00158fefda2c2mr6244114plg.85.1650313237814; Mon, 18
- Apr 2022 13:20:37 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 20:20:17 +0000
-Message-Id: <20220418202017.3583638-1-yuanchu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH RESEND] selftests/damon: add damon to selftests root Makefile
-From:   Yuanchu Xie <yuanchu@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>
-Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/7LTWo0OPBrGCZjHYoN1cmnPJEUpa4jNozIjdW1Tjhc=;
+        b=HRCkGADr8LJ53j5Kq3lu63O80Gnvg0qSI9TftGg7I/R3BZH8wg51yF6NoUPstARg4b
+         yAaf/6iLLfzDbH6o3Up17jhkr8brfSiQR66hYP8LzP7wOLoBBPvNTR5bvLfeEmjPLdFW
+         K4d4fNOWMOad9JVTChgTQZNBR62qeu2Uce6m7EKduhs0BSE3YDptCAAfUq14YPH41Zfb
+         VvMJv/zdkmVdx8ulNamC9W/tVwL3xNOf1+YyxerAqLKu1yKvHl7f7qqYhGLwMIFjW1zd
+         VOHP+GR178h7hb07ry3fadRgRjuvefiwtCSZn3yHOVqGx/SHG/pdb6fKQs8f3OtioAIC
+         HYzw==
+X-Gm-Message-State: AOAM531xP/3h02FN7tTpv5ui18HNrMiGTJnghi5zQBfFFh4rmtwfqUXq
+        ZB+5jk3BWBbENrIGsxMKitdtzE4rAAyztiLAP2nRigWrsVHuZg==
+X-Google-Smtp-Source: ABdhPJyV9fmS+hwdvvRUN2r//PwngZikr7xomDByGbznu+vO3elnnfiwHQRO9t3F2pz2zrmStYKSa7R9cdyG24KOkxQ=
+X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
+ f11-20020a0564021e8b00b0041c59f62c26mr14349493edf.156.1650317394544; Mon, 18
+ Apr 2022 14:29:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220417102807.10b91497ed@19d04f311a0a9de>
+In-Reply-To: <20220417102807.10b91497ed@19d04f311a0a9de>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 18 Apr 2022 17:29:43 -0400
+Message-ID: <CAFd5g46iNr_EnQ1zQGiXk34mND8-Xo3vTykpgKfbr-8_e5OOCw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: change complete_and_exit to kthread_complete_and_exit
+To:     Andreas-Christian Hagau <ach@hagau.se>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the damon selftests are not built with the rest of the
-selftests. We add damon to the list of targets.
+On Sun, Apr 17, 2022 at 4:37 AM Andreas-Christian Hagau <ach@hagau.se> wrote:
+>
+> Commit cead18552660 ("exit: Rename complete_and_exit to
+> kthread_complete_and_exit") renamed complete_and_exit to
+> kthread_complete_and_exit.
+>
+> Signed-off-by: Andreas-Christian Hagau <ach@hagau.se>
 
-Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-Reviewed-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- tools/testing/selftests/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d08fe4cfe811..ffe453760a12 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += clone3
- TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-+TARGETS += damon
- TARGETS += drivers/dma-buf
- TARGETS += efivarfs
- TARGETS += exec
--- 
-2.35.1.265.g69c8d7142f-goog
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
