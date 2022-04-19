@@ -2,180 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A462A5076BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 19:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2957E507728
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 20:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354629AbiDSRsA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 13:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S1356243AbiDSSOY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 14:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344857AbiDSRr6 (ORCPT
+        with ESMTP id S1356255AbiDSSOU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:47:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0B6664D1
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650390311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CIbd+9/ujIgy/587mPK12BUlw+gv3FwEVww95EhOZhc=;
-        b=b04N+a0P2XUSA86Nj7M1RZ0RrZXISXmB7lvwhRaa4G3b0QTlI2jukDU3oqHEmN/gGrvlwW
-        7B9h8sO3ugX62gSI6GXfI5x/8WNQ2FnVUitvBBZhWLdfR3eAJXziKmzQpaNL82Jq1S2HTZ
-        GyPJ4KdcgycvBIbK7R0Ao9McFay6MBc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-3r0PqllnNl6J8-zYXSEmYg-1; Tue, 19 Apr 2022 13:45:09 -0400
-X-MC-Unique: 3r0PqllnNl6J8-zYXSEmYg-1
-Received: by mail-wm1-f69.google.com with SMTP id d13-20020a05600c3acd00b0038ff865c043so1667531wms.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:45:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CIbd+9/ujIgy/587mPK12BUlw+gv3FwEVww95EhOZhc=;
-        b=asm3KHMsre7k3b7rOx3ekScrgfxAEJRefnJHGWPAN9pnW9BuDBdn8ZR7CXhiMiOWUX
-         gQ/iHZyIVox1DxFb3DN74wgsgWseCrKwQ/B2Li+F0PPF9W9NlqqlnCXL6nNyENqtToa4
-         WPiMb9Qpjn855yF4/rL5pmLZ8zanqDtDaUE6h33oSWZdIpymO29JxNzjLAVFIbhkqEVb
-         F0W7LqS6MdWqdAD51EZKN6GfhVhMaCRh+2BsPEEDEgB/rnHhbNPOmFfBYec6FyTzRI0O
-         D3j0tHs/68r5rS77MghQIC+yL80LljMLBOhZMDGTQl0ARoZuHmxL/vXvh5IznKbx3bUn
-         UH6Q==
-X-Gm-Message-State: AOAM530dNWRUMaHXU6i6XoLAxN2ZwTbVI1C0qI96ie6y2SWRm7obmXlQ
-        TKAQJeovKODUivN/LYY1zY/v/C2Z+0TXYB1yb3rfik1Y7fpFwYuhMfh6KjnPSomS/FJjhRSDZcE
-        qEqU5LEIAXyomzIgIYvlFQeqdfcX8
-X-Received: by 2002:a1c:a185:0:b0:392:206d:209d with SMTP id k127-20020a1ca185000000b00392206d209dmr16849532wme.168.1650390308382;
-        Tue, 19 Apr 2022 10:45:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/q6xzI4l79WNqJp4QrxQovesx47Z6kxd94l2NB9OHznkozrBCR/2cZw/3pLy6rdL1bbtQkw==
-X-Received: by 2002:a1c:a185:0:b0:392:206d:209d with SMTP id k127-20020a1ca185000000b00392206d209dmr16849514wme.168.1650390308129;
-        Tue, 19 Apr 2022 10:45:08 -0700 (PDT)
-Received: from [192.168.8.102] (dynamic-046-114-170-162.46.114.pool.telefonica.de. [46.114.170.162])
-        by smtp.gmail.com with ESMTPSA id v188-20020a1cacc5000000b0038e9c60f0e7sm16397144wme.28.2022.04.19.10.45.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 10:45:07 -0700 (PDT)
-Message-ID: <c44de70a-60e3-65b6-14a7-3e4400f3084b@redhat.com>
-Date:   Tue, 19 Apr 2022 19:45:05 +0200
+        Tue, 19 Apr 2022 14:14:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0503D1F6;
+        Tue, 19 Apr 2022 11:11:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 360DBB81846;
+        Tue, 19 Apr 2022 18:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E1DC385AD;
+        Tue, 19 Apr 2022 18:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650391894;
+        bh=zqYE2dBiFpRl4OeuEjvjF+2WlsvVq3M+PLNfL0rUOW0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TorB5OBPUgcOVi3jj4o8HgIaGBnh39cNXDnTNge5Vkj1g9qa8dsZzV9trrSkamsrE
+         rEIrEgESP7WHupC35SfUl1qBCa/94UD9Wslpt94tui8oNVPb0SAaTNHN4jsdjVtDRE
+         d124rg/beZWrQZofKRrh/SDubg4anNOvbSSuE/xJcd+bVt+QumED2X9OKPFRf2Da7H
+         BrQNHo8UxVitBYtbiszxo3gmntzkEphTpklE5w0YlC/4ZF6BlZkDzKargCd8aOOOWm
+         iOJ60cwvXq0P8O8Mym3CF9h2s55Xpz444zABmdvxAPB6DCfiX1sOI9Z0ep0jlDiAnE
+         saGCZ7CWXiM4Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, pbonzini@redhat.com,
+        shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 09/34] selftests: KVM: Free the GIC FD when cleaning up in arch_timer
+Date:   Tue, 19 Apr 2022 14:10:36 -0400
+Message-Id: <20220419181104.484667-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220419181104.484667-1-sashal@kernel.org>
+References: <20220419181104.484667-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 3/4] KVM: s390: selftests: Use TAP interface in the tprot
- test
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220414105322.577439-1-thuth@redhat.com>
- <20220414105322.577439-4-thuth@redhat.com>
- <20220414135110.6b2baead@p-imbrenda>
- <03f62ec7-2f7f-1f90-3029-d93713ab5afc@redhat.com>
- <baa53445-b4de-7a05-24f5-46fa38e61666@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <baa53445-b4de-7a05-24f5-46fa38e61666@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 14/04/2022 14.33, Janis Schoetterl-Glausch wrote:
-> On 4/14/22 14:08, Thomas Huth wrote:
->> On 14/04/2022 13.51, Claudio Imbrenda wrote:
->>> On Thu, 14 Apr 2022 12:53:21 +0200
->>> Thomas Huth <thuth@redhat.com> wrote:
->>>
->>>> The tprot test currently does not have any output (unless one of
->>>> the TEST_ASSERT statement fails), so it's hard to say for a user
->>>> whether a certain new sub-test has been included in the binary or
->>>> not. Let's make this a little bit more user-friendly and include
->>>> some TAP output via the kselftests.h interface.
->>>>
->>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
->>>> ---
->>>>    tools/testing/selftests/kvm/s390x/tprot.c | 12 +++++++++++-
->>>>    1 file changed, 11 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
->>>> index c097b9db495e..a714b4206e95 100644
->>>> --- a/tools/testing/selftests/kvm/s390x/tprot.c
->>>> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
->>>> @@ -8,6 +8,7 @@
->>>>    #include <sys/mman.h>
->>>>    #include "test_util.h"
->>>>    #include "kvm_util.h"
->>>> +#include "kselftest.h"
->>>>      #define PAGE_SHIFT 12
->>>>    #define PAGE_SIZE (1 << PAGE_SHIFT)
->>>> @@ -69,6 +70,7 @@ enum stage {
->>>>        STAGE_INIT_FETCH_PROT_OVERRIDE,
->>>>        TEST_FETCH_PROT_OVERRIDE,
->>>>        TEST_STORAGE_PROT_OVERRIDE,
->>>> +    NUM_STAGES            /* this must be the last entry */
-> 
-> You could move STAGE_END down and use that instead.
-> 
->>>>    };
->>>>      struct test {
->>>> @@ -196,6 +198,7 @@ static void guest_code(void)
->>>>        }                                    \
->>>>        ASSERT_EQ(uc.cmd, UCALL_SYNC);                        \
->>>>        ASSERT_EQ(uc.args[1], __stage);                        \
->>>> +    ksft_test_result_pass("" #stage "\n");                    \
->>>>    })
->>>>      int main(int argc, char *argv[])
->>>> @@ -204,6 +207,9 @@ int main(int argc, char *argv[])
->>>>        struct kvm_run *run;
->>>>        vm_vaddr_t guest_0_page;
->>>>    +    ksft_print_header();
->>>> +    ksft_set_plan(NUM_STAGES - 1);    /* STAGE_END is not counted, thus - 1 */
->>>> +
->>>>        vm = vm_create_default(VCPU_ID, 0, guest_code);
->>>>        run = vcpu_state(vm, VCPU_ID);
->>>>    @@ -213,7 +219,7 @@ int main(int argc, char *argv[])
->>>>          guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
->>>>        if (guest_0_page != 0)
->>>> -        print_skip("Did not allocate page at 0 for fetch protection override tests");
->>>> +        ksft_print_msg("Did not allocate page at 0 for fetch protection override tests\n");
->>>
->>> will this print a skip, though?
->>
->> No, it's now only a message.
->>
->>> or you don't want to print a skip because then the numbering in the
->>> planning doesn't match anymore?
->>
->> Right.
->>
->>> in which case, is there an easy way to fix it?
->>
->> Honestly, this part of the code is a little bit of a riddle to me - I wonder why this was using "print_skip()" at all, since the HOST_SYNC below is executed anyway... so this sounds rather like a warning message to me that says that the following test might not work as expected, instead of a real test-is-skipped message?
->>
->> Janis, could you please clarify the intention here?
-> 
-> Both the host and the guest check the same condition independently, the host just to print the message,
-> then the guest is run and skips those stages.
+From: Oliver Upton <oupton@google.com>
 
-Ok.
+[ Upstream commit 21db83846683d3987666505a3ec38f367708199a ]
 
-However, I'm not sure how to make this use ksft_test_result_skip() in a nice 
-way now, though, without makeing the macro way uglier ...
-I'll have a try, but if that does not work out I'd suggest to simply keep 
-the ksft_print_msg() here instead.
+In order to correctly destroy a VM, all references to the VM must be
+freed. The arch_timer selftest creates a VGIC for the guest, which
+itself holds a reference to the VM.
 
-  Thomas
+Close the GIC FD when cleaning up a VM.
+
+Signed-off-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220406235615.1447180-4-oupton@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kvm/aarch64/arch_timer.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+index b08d30bf71c5..3b940a101bc0 100644
+--- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
++++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+@@ -362,11 +362,12 @@ static void test_init_timer_irq(struct kvm_vm *vm)
+ 	pr_debug("ptimer_irq: %d; vtimer_irq: %d\n", ptimer_irq, vtimer_irq);
+ }
+ 
++static int gic_fd;
++
+ static struct kvm_vm *test_vm_create(void)
+ {
+ 	struct kvm_vm *vm;
+ 	unsigned int i;
+-	int ret;
+ 	int nr_vcpus = test_args.nr_vcpus;
+ 
+ 	vm = vm_create_default_with_vcpus(nr_vcpus, 0, 0, guest_code, NULL);
+@@ -383,8 +384,8 @@ static struct kvm_vm *test_vm_create(void)
+ 
+ 	ucall_init(vm, NULL);
+ 	test_init_timer_irq(vm);
+-	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+-	if (ret < 0) {
++	gic_fd = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
++	if (gic_fd < 0) {
+ 		print_skip("Failed to create vgic-v3");
+ 		exit(KSFT_SKIP);
+ 	}
+@@ -395,6 +396,12 @@ static struct kvm_vm *test_vm_create(void)
+ 	return vm;
+ }
+ 
++static void test_vm_cleanup(struct kvm_vm *vm)
++{
++	close(gic_fd);
++	kvm_vm_free(vm);
++}
++
+ static void test_print_help(char *name)
+ {
+ 	pr_info("Usage: %s [-h] [-n nr_vcpus] [-i iterations] [-p timer_period_ms]\n",
+@@ -478,7 +485,7 @@ int main(int argc, char *argv[])
+ 
+ 	vm = test_vm_create();
+ 	test_run(vm);
+-	kvm_vm_free(vm);
++	test_vm_cleanup(vm);
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
 
