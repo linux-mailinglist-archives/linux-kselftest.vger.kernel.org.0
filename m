@@ -2,51 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7F85068C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 12:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9265068D1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 12:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350738AbiDSKbQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 06:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S241331AbiDSKfb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 06:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350709AbiDSKbK (ORCPT
+        with ESMTP id S232153AbiDSKfb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:31:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F822A72F
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:28:24 -0700 (PDT)
+        Tue, 19 Apr 2022 06:35:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D729CBE
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:32:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C6EE611FC
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2733CC385A9;
-        Tue, 19 Apr 2022 10:28:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D2361236
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10D7C385A7;
+        Tue, 19 Apr 2022 10:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650364102;
-        bh=hMdi/2FK0D/IjT+fUziwBHzOtEJWdD1HREKm5mcfz5U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R8Fjr18WvfAu22ycGqthLM3Fa0MYWLT/jdVfD7kWymfEzhg3fO2ESE9nv9hUC4iVP
-         w4MJGa/tUmoH5s67d1Ij4KhMY/VUGI9C9lZM7bjwuRd/Y+LKb/etQzqlSYLlUNp+Rr
-         aHy7GYdVyGybMjoHzkkANX7uzs62jHM/TRrjE5RKqy+Q+Et6m/e/4Lz99cDkU7Y1Kt
-         z/ktCg1mnK1qz+aZUcW93oKNnsoKky3o3FnItegc2N1BZv1EDeg41ObLfaHLSEFUlB
-         hqOr7Y9qxdEXvF8YM1JwJTLtYMmYKbeCgWmoAIp70kdG0mJPeS+QKejirsj6ewesqX
-         2PU425QBUWQ2w==
+        s=k20201202; t=1650364368;
+        bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mYGFakqveSm6zpPCXpvLb2cZM9slX3UsiH1YS46BsSnZ8T28ujvCiOEQhaoEoCizF
+         ElqvYLQI+ArjEXM68Kip/D3RDynXi3lwEqmkgdKJ5cLhL2gVMkHptQsk/b7Sw/y7Dv
+         R0ZyD+OIi5C5MWXml+CI2UnxTY55Ns+kYZRjXX+wpN0yxHj4E04Gfkdz7Tqw/gnU7D
+         /LWKLRPIMIXduQmBgKo04CyV78/lb7E9+6zg4MSKJLb57PYJAz+8kcELuBwXF6C9V0
+         b1Ua8V+DftPUwUs85LAmy9QGvTWQvB/mqn5OOucd69RCEpZFPDh4AgPKVj8STio9av
+         LQvObFy7Y9C+w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Joey Gouly <joey.gouly@arm.com>,
-        inux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 4/4] kselftest/arm64: Add simple test for MTE prctl
-Date:   Tue, 19 Apr 2022 11:28:08 +0100
-Message-Id: <20220419102808.24522-5-broonie@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/4] kselftest/arm64: Miscelaneous MTE test updates
+Date:   Tue, 19 Apr 2022 11:32:39 +0100
+Message-Id: <20220419103243.24774-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419102808.24522-1-broonie@kernel.org>
-References: <20220419102808.24522-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3986; h=from:subject; bh=hMdi/2FK0D/IjT+fUziwBHzOtEJWdD1HREKm5mcfz5U=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo61uP4PIJEfS/gV2HlOeCPq1merlrlRslXeyqjH kr4QV0SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6OtQAKCRAk1otyXVSH0E3rB/ 9Kg7tReR6Qlj54nXEtgtgTxahH6oC/aREh3mqqKXwbmfD1X+8iSdn3OURu+XUFSzlqRacn/LudoLQF RyNYPVOvja8XLXrEbIZQ4FM30cHVwL+THab6KwODVWlZuVVslhUkNIeEPv+006jbdLe9kr8kbZWdaK xhPsNlnvS9HUq6kUJzsdAGI6yfseXyZb80iCnDGE5PzMO+mvR04lj9eY+QNOGqN/sZuIEGtTdTcmYG TmDBRy9/Z+SvBQqjcclhuRz1dgryoQkL6YcKJ5iXBDsoSXUj41p42pnp02lrjtyNybuQmYacICtKyX xiibZvkUHK3KBaOyXXf5+P5+mHknVf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=995; h=from:subject; bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo/Ghgr6cFblAnK9/EUiZlU+z0dC4fFztExS0t+2 LfeGPNeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6PxgAKCRAk1otyXVSH0FMrB/ 9bqW2u7B1dYSn5wZ+oDxPXjkJrZyVGNXvM6wmruJq6zP1zTU8IgaKwibFz8S/tQTNcqKIdgwHW7g28 T7mIGmEqRAa2A6jEV+ofRnCgjsCogJQSjqnuUM/dwi0JT+fq1dov5dPebVY8ezg3E3xUJ4KUnBPxMQ kRkYMF6dlZ4Pz9UrQ0lJiY4AbjoLyIqVRPYY/huKZ9UmYxfI3H6KITLSkhonG6FmSjuk0cPx/PxQvq OFQniQ9wf+qKGxsbh6xOtr9Ltycn/HWrJy6fyYY8/vfSX8VmFlHwK/lhoPT4CPnlPbyNk2euQjJxgg TqqDn047pX7zbTIn5uZtu5d9o0GIj4
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,157 +56,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current tests use the prctls for various things but there's no
-coverage of the edges of the interface so add some basics. This isn't
-hugely useful as it is (it originally had some coverage for the
-combinations with asymmetric mode but we removed the prctl() for that)
-but it might be a helpful starting point for future work, for example
-covering error handling.
+This series is just a set of minor tweaks and improvements for the MTE
+tests that I did while working on the asymmetric mode support for
+userspace which seemed like they might be worth keeping even though the
+prctl() for asymmetric mode got removed.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
----
+v2:
+ - Rebase onto v5.18-rc3
+
+Mark Brown (4):
+  kselftest/arm64: Handle more kselftest result codes in MTE helpers
+  kselftest/arm64: Log unexpected asynchronous MTE faults
+  kselftest/arm64: Refactor parameter checking in mte_switch_mode()
+  kselftest/arm64: Add simple test for MTE prctl
+
  tools/testing/selftests/arm64/mte/.gitignore  |   1 +
  .../testing/selftests/arm64/mte/check_prctl.c | 119 ++++++++++++++++++
- 2 files changed, 120 insertions(+)
+ .../selftests/arm64/mte/mte_common_util.c     |  19 ++-
+ .../selftests/arm64/mte/mte_common_util.h     |  15 ++-
+ 4 files changed, 149 insertions(+), 5 deletions(-)
  create mode 100644 tools/testing/selftests/arm64/mte/check_prctl.c
 
-diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index d1fe4ddf1669..052d0f9f92b3 100644
---- a/tools/testing/selftests/arm64/mte/.gitignore
-+++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -3,5 +3,6 @@ check_gcr_el1_cswitch
- check_tags_inclusion
- check_child_memory
- check_mmap_options
-+check_prctl
- check_ksm_options
- check_user_mem
-diff --git a/tools/testing/selftests/arm64/mte/check_prctl.c b/tools/testing/selftests/arm64/mte/check_prctl.c
-new file mode 100644
-index 000000000000..f139a33a43ef
---- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/check_prctl.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2022 ARM Limited
-+
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+
-+#include <asm/hwcap.h>
-+
-+#include "kselftest.h"
-+
-+static int set_tagged_addr_ctrl(int val)
-+{
-+	int ret;
-+
-+	ret = prctl(PR_SET_TAGGED_ADDR_CTRL, val, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_print_msg("PR_SET_TAGGED_ADDR_CTRL: failed %d %d (%s)\n",
-+			       ret, errno, strerror(errno));
-+	return ret;
-+}
-+
-+static int get_tagged_addr_ctrl(void)
-+{
-+	int ret;
-+
-+	ret = prctl(PR_GET_TAGGED_ADDR_CTRL, 0, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_print_msg("PR_GET_TAGGED_ADDR_CTRL failed: %d %d (%s)\n",
-+			       ret, errno, strerror(errno));
-+	return ret;
-+}
-+
-+/*
-+ * Read the current mode without having done any configuration, should
-+ * run first.
-+ */
-+void check_basic_read(void)
-+{
-+	int ret;
-+
-+	ret = get_tagged_addr_ctrl();
-+	if (ret < 0) {
-+		ksft_test_result_fail("check_basic_read\n");
-+		return;
-+	}
-+
-+	if (ret & PR_MTE_TCF_SYNC)
-+		ksft_print_msg("SYNC enabled\n");
-+	if (ret & PR_MTE_TCF_ASYNC)
-+		ksft_print_msg("ASYNC enabled\n");
-+
-+	/* Any configuration is valid */
-+	ksft_test_result_pass("check_basic_read\n");
-+}
-+
-+/*
-+ * Attempt to set a specified combination of modes.
-+ */
-+void set_mode_test(const char *name, int hwcap2, int mask)
-+{
-+	int ret;
-+
-+	if ((getauxval(AT_HWCAP2) & hwcap2) != hwcap2) {
-+		ksft_test_result_skip("%s\n", name);
-+		return;
-+	}
-+
-+	ret = set_tagged_addr_ctrl(mask);
-+	if (ret < 0) {
-+		ksft_test_result_fail("%s\n", name);
-+		return;
-+	}
-+
-+	ret = get_tagged_addr_ctrl();
-+	if (ret < 0) {
-+		ksft_test_result_fail("%s\n", name);
-+		return;
-+	}
-+
-+	if ((ret & PR_MTE_TCF_MASK) == mask) {
-+		ksft_test_result_pass("%s\n", name);
-+	} else {
-+		ksft_print_msg("Got %x, expected %x\n",
-+			       (ret & PR_MTE_TCF_MASK), mask);
-+		ksft_test_result_fail("%s\n", name);
-+	}
-+}
-+
-+struct mte_mode {
-+	int mask;
-+	int hwcap2;
-+	const char *name;
-+} mte_modes[] = {
-+	{ PR_MTE_TCF_NONE,  0,          "NONE"  },
-+	{ PR_MTE_TCF_SYNC,  HWCAP2_MTE, "SYNC"  },
-+	{ PR_MTE_TCF_ASYNC, HWCAP2_MTE, "ASYNC" },
-+	{ PR_MTE_TCF_SYNC | PR_MTE_TCF_ASYNC,  HWCAP2_MTE, "SYNC+ASYNC"  },
-+};
-+
-+int main(void)
-+{
-+	int i;
-+
-+	ksft_print_header();
-+	ksft_set_plan(5);
-+
-+	check_basic_read();
-+	for (i = 0; i < ARRAY_SIZE(mte_modes); i++)
-+		set_mode_test(mte_modes[i].name, mte_modes[i].hwcap2,
-+			      mte_modes[i].mask);
-+
-+	ksft_print_cnts();
-+
-+	return 0;
-+}
+
+base-commit: b2d229d4ddb17db541098b83524d901257e93845
 -- 
 2.30.2
 
