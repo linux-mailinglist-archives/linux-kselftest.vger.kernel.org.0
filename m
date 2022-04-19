@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106B3506A33
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 13:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C2F506A53
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 13:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351375AbiDSL2T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 07:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S1351376AbiDSL2U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 07:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351423AbiDSL17 (ORCPT
+        with ESMTP id S1351444AbiDSL2D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:27:59 -0400
+        Tue, 19 Apr 2022 07:28:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D229C24F33
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 04:25:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31E524F33
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 04:25:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8154BB81851
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 11:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E96EC385AA;
-        Tue, 19 Apr 2022 11:25:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91958B8184D
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 11:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB25C385A7;
+        Tue, 19 Apr 2022 11:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650367514;
-        bh=ViGq+zF6izj/CNFirw1Nz+T6V2thMBCW7ReQKJIV4Zc=;
+        s=k20201202; t=1650367518;
+        bh=bmQq9+Hs9ppK5+d67ccvsBsIxc0wnK8U9AX00pV28UM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f/wC3LTBLl7na7R7saDeaqiMUTLLmlytjsT6KnjLcIu7T8n5hECNMlcVplrzya0hR
-         7qWLpGTeW4yTH5oiw18qaJHyHhwS+HlSWRXIXp7ublAjiFn8RkUeWKENKrf7YmDTnO
-         MJLJTqOZfZmJfd17SwqWirKy439yvZrdWm1k1vsLqbbfkS674fu5SlHslT4Gh6OlnZ
-         8DqeDZrRebtVHEcfjVeSda2ISROdX4WJWTfKgxigQPVkUBc9KqKJJZ9IxewTWtKgFe
-         UotNRKGfbOb2SzWj4bRX3Ik+8u78/cagwGlsrh0YaNPGGjXCf3xewrDWViEbkQiIpb
-         5vn6SWSdI0azQ==
+        b=W+zQqKdbQI+mS4HhiGd37IVHn7AQwgY1PLAb6tLN0oMUXC3y/po7Cxzj+1qqWVm9t
+         lmlVYA8FQTMIQYA+ik/HqxoqcqBqHTKfTRfP5AdLKiA3+2Z6fNstTTVn1736RxHc02
+         V3Gtj+mN3rSTx0Hyg4XwGJhTUCb1SlBpHkgJleE9zeSIuQpm5jVgNH0HltxnOFHJAQ
+         a0NjDM4IOc++3SZhB1DtJNCfTGTLyz6NdmYxBU9+C/SaMNoY1wTX5fpiiS4h2Tjx8B
+         7HPrgS/8zlc9sbNpePIdsXnEAiAQxMZ8u9RMqobECS0SRqLXLIrvyyg/dyTxPGrPVq
+         puObr+opK4xQg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,14 +49,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v14 26/39] KVM: arm64: Handle SME host state when running guests
-Date:   Tue, 19 Apr 2022 12:22:34 +0100
-Message-Id: <20220419112247.711548-27-broonie@kernel.org>
+Subject: [PATCH v14 27/39] arm64/sme: Provide Kconfig for SME
+Date:   Tue, 19 Apr 2022 12:22:35 +0100
+Message-Id: <20220419112247.711548-28-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419112247.711548-1-broonie@kernel.org>
 References: <20220419112247.711548-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4067; h=from:subject; bh=ViGq+zF6izj/CNFirw1Nz+T6V2thMBCW7ReQKJIV4Zc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXpt885Enj0B0Fr4fwtQnKM008QGdciEJBgy4YdZq AkRBR+yJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6bfAAKCRAk1otyXVSH0MrgB/ 9layyxgo06k0jUEdp3vgihKnQD4a5vhH62DPhKLkpAv8f2BVVWXJ1ivGjpV/585X64xyS6X9vSLSW0 mioiww209s7UC8SOKoot3e/V6fH12eEqAsi8HQiRgaQ5wzL+EESrBkVqWb6HXz76329w5hQ+GjpcPH kUoAMDzymAJ7I3IezfVris4adMaec91uVJoRT6Ma0WJvD4uXRnNaeXz1+AaDOmCnJPwbIo6JV9SHpG YsHqvJJMkEmkPamLyCEbfX4kdQfB6mAfpSuhZ98xsIc96YbkfrdzksQbm/y+wa8SxXGO0JPS418IQ7 0TWTvVsthkOhm17lPbAmJQW6/UXhpH
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1406; h=from:subject; bh=bmQq9+Hs9ppK5+d67ccvsBsIxc0wnK8U9AX00pV28UM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXpt9AxUEsFosscV36+F0kLBR+bmSz16+f2YTgKsR gljSoxOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6bfQAKCRAk1otyXVSH0K38B/ 9cna5AxLSwfYTwmYxJ0HTPZ58U0vwlssA4S4QMMfIh8sPBUEvF0t1lMm1CTZwpGn2+ZXcXyLjI8r6y ENwF82goVK2d2popKK9p0F4/UiczBMdKIYaWkfcHdyhGWxP+tZUbWB+eS1jcEA2i1hJfkYjBJaGvp4 XpF9pvEKeNHE1mEsDmWZvgqJGehpVGwU28RvuaFe1/EsWmPdikwsvyYQ4hGTXeB3zew/P9WFXPJS92 LSSmSBb9bYuxxcPW8Mxvs4p1PZlqyj/Y7nov6YLyX9Yy0+FNo4VWiQTw9rgNAMTRiA95oqNuZS5Vyt 5CIuVliAk5jrc6Vc3mAp/Fwwy+6Yrw
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,101 +69,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While we don't currently support SME in guests we do currently support it
-for the host system so we need to take care of SME's impact, including
-the floating point register state, when running guests. Simiarly to SVE
-we need to manage the traps in CPACR_RL1, what is new is the handling of
-streaming mode and ZA.
-
-Normally we defer any handling of the floating point register state until
-the guest first uses it however if the system is in streaming mode FPSIMD
-and SVE operations may generate SME traps which we would need to distinguish
-from actual attempts by the guest to use SME. Rather than do this for the
-time being if we are in streaming mode when entering the guest we force
-the floating point state to be saved immediately and exit streaming mode,
-meaning that the guest won't generate SME traps for supported operations.
-
-We could handle ZA in the access trap similarly to the FPSIMD/SVE state
-without the disruption caused by streaming mode but for simplicity
-handle it the same way as streaming mode for now.
-
-This will be revisited when we support SME for guests (hopefully before SME
-hardware becomes available), for now it will only incur additional cost on
-systems with SME and even there only if streaming mode or ZA are enabled.
+Now that basline support for the Scalable Matrix Extension (SME) is present
+introduce the Kconfig option allowing it to be built. While the feature
+registers don't impose a strong requirement for a system with SME to
+support SVE at runtime the support for streaming mode SVE is mostly
+shared with normal SVE so depend on SVE.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/include/asm/kvm_host.h |  1 +
- arch/arm64/kvm/fpsimd.c           | 36 +++++++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ arch/arm64/Kconfig | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 8a7c442d5b57..f8f0d30dd1a2 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -454,6 +454,7 @@ struct kvm_vcpu_arch {
- #define KVM_ARM64_DEBUG_STATE_SAVE_TRBE	(1 << 13) /* Save TRBE context if active  */
- #define KVM_ARM64_FP_FOREIGN_FPSTATE	(1 << 14)
- #define KVM_ARM64_ON_UNSUPPORTED_CPU	(1 << 15) /* Physical CPU not in supported_cpus */
-+#define KVM_ARM64_HOST_SME_ENABLED	(1 << 16) /* SME enabled for EL0 */
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 57c4c995965f..0897984918e8 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1939,6 +1939,17 @@ config ARM64_SVE
+ 	  booting the kernel.  If unsure and you are not observing these
+ 	  symptoms, you should assume that it is safe to say Y.
  
- #define KVM_GUESTDBG_VALID_MASK (KVM_GUESTDBG_ENABLE | \
- 				 KVM_GUESTDBG_USE_SW_BP | \
-diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-index 57d7ac3cfa0c..441edb9c398c 100644
---- a/arch/arm64/kvm/fpsimd.c
-+++ b/arch/arm64/kvm/fpsimd.c
-@@ -82,6 +82,26 @@ void kvm_arch_vcpu_load_fp(struct kvm_vcpu *vcpu)
- 
- 	if (read_sysreg(cpacr_el1) & CPACR_EL1_ZEN_EL0EN)
- 		vcpu->arch.flags |= KVM_ARM64_HOST_SVE_ENABLED;
++config ARM64_SME
++	bool "ARM Scalable Matrix Extension support"
++	default y
++	depends on ARM64_SVE
++	help
++	  The Scalable Matrix Extension (SME) is an extension to the AArch64
++	  execution state which utilises a substantial subset of the SVE
++	  instruction set, together with the addition of new architectural
++	  register state capable of holding two dimensional matrix tiles to
++	  enable various matrix operations.
 +
-+	/*
-+	 * We don't currently support SME guests but if we leave
-+	 * things in streaming mode then when the guest starts running
-+	 * FPSIMD or SVE code it may generate SME traps so as a
-+	 * special case if we are in streaming mode we force the host
-+	 * state to be saved now and exit streaming mode so that we
-+	 * don't have to handle any SME traps for valid guest
-+	 * operations. Do this for ZA as well for now for simplicity.
-+	 */
-+	if (system_supports_sme()) {
-+		if (read_sysreg(cpacr_el1) & CPACR_EL1_SMEN_EL0EN)
-+			vcpu->arch.flags |= KVM_ARM64_HOST_SME_ENABLED;
-+
-+		if (read_sysreg_s(SYS_SVCR_EL0) &
-+		    (SYS_SVCR_EL0_SM_MASK | SYS_SVCR_EL0_ZA_MASK)) {
-+			vcpu->arch.flags &= ~KVM_ARM64_FP_HOST;
-+			fpsimd_save_and_flush_cpu_state();
-+		}
-+	}
- }
- 
- /*
-@@ -135,6 +155,22 @@ void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
- 
- 	local_irq_save(flags);
- 
-+	/*
-+	 * If we have VHE then the Hyp code will reset CPACR_EL1 to
-+	 * CPACR_EL1_DEFAULT and we need to reenable SME.
-+	 */
-+	if (has_vhe() && system_supports_sme()) {
-+		/* Also restore EL0 state seen on entry */
-+		if (vcpu->arch.flags & KVM_ARM64_HOST_SME_ENABLED)
-+			sysreg_clear_set(CPACR_EL1, 0,
-+					 CPACR_EL1_SMEN_EL0EN |
-+					 CPACR_EL1_SMEN_EL1EN);
-+		else
-+			sysreg_clear_set(CPACR_EL1,
-+					 CPACR_EL1_SMEN_EL0EN,
-+					 CPACR_EL1_SMEN_EL1EN);
-+	}
-+
- 	if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
- 		if (vcpu_has_sve(vcpu)) {
- 			__vcpu_sys_reg(vcpu, ZCR_EL1) = read_sysreg_el1(SYS_ZCR);
+ config ARM64_MODULE_PLTS
+ 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
+ 	depends on MODULES
 -- 
 2.30.2
 
