@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1451506197
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 03:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377FF506198
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 03:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242136AbiDSBPR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Apr 2022 21:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
+        id S245019AbiDSBP1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Apr 2022 21:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241673AbiDSBPR (ORCPT
+        with ESMTP id S241673AbiDSBP1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:15:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8292F39A;
-        Mon, 18 Apr 2022 18:12:36 -0700 (PDT)
+        Mon, 18 Apr 2022 21:15:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F592D1EB;
+        Mon, 18 Apr 2022 18:12:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30DC461472;
-        Tue, 19 Apr 2022 01:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3012C385A7;
-        Tue, 19 Apr 2022 01:12:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2CABBCE1122;
+        Tue, 19 Apr 2022 01:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AEAC385A7;
+        Tue, 19 Apr 2022 01:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650330755;
-        bh=eVkItMh+1mLEy7bhaGGLN6BKEd31Om/XHl0TDl+JaQU=;
+        s=k20201202; t=1650330761;
+        bh=dYIITBV7LIZq0x4mnEZZKy+m3/EegS8p0ZFgHqtlhiQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tTEa7fuxI3q8pp2MKNQFuyZWwv/AhsfIFXRyQPDZs+yXCPonynx1pdzTk8jbyijZb
-         kRhfy1SJa61+LMawU5xdzvZLsJdZAV21hULf8LVZncrM2+LX1WPC8w4XSJLXpoRdGN
-         vpaRtlZhdahP9iDs8KtwUv4VPz3heCriSw8g0nVItgP70vy5FOOGdBoYBnaZATkrHA
-         EOStcwmqCcdS3hvBtUQoQC14miN8hkYgaAL9oTxIP7rvhNiuQzB1AMKrsRqswNGaY+
-         9KxKsKqwprVT8uxrx5JlGtIuvJKeugqDtqJhLHnlOru7DWYqR5X2kAwK8Q0t4Cb3w9
-         xyLEt/xXv/nRA==
-Date:   Tue, 19 Apr 2022 10:12:32 +0900
+        b=TZUzIhN7iTFjXSim5uzsBAzmPXRuJ0dbTY3KOmEdKHRAZNxn1LK/sYNC215FmBM/G
+         cemKSbtBPlwhTF1fXnOTUZeDc4bfLtkLA6bt2l5zQmD541qn9Ql8S68RRANiRSgwM6
+         qSxAYzpMzvgJa6QnAkoenJxmhuTRJD1Z0QXOwIGWHJfIL7H+z8oUaRypojftUYwEgc
+         JuKRDv0ZSvby18JmfJ1IMpMiNGgRC+BJ1BC66DnA4qNPmzNifU52g3UVnvXRzbVPf6
+         0ZvBD0wcL6jY4S4AdmH9UuXuccw/dMZBU4iRY8aucg7PWRKDs4p+vz6ssaSwFdScUt
+         KiKx+89hIlV7g==
+Date:   Tue, 19 Apr 2022 10:12:38 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Ze Zhang <zhangze@loongson.cn>, Ingo Molnar <mingo@redhat.com>,
@@ -40,12 +40,13 @@ Cc:     Ze Zhang <zhangze@loongson.cn>, Ingo Molnar <mingo@redhat.com>,
         linux-kernel@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
         Qing Zhang <zhangqing@loongson.cn>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 1/2] selftests/ftrace: add mips support for kprobe args
- string tests
-Message-Id: <20220419101232.3f56542fdf84af846eaf47fd@kernel.org>
-In-Reply-To: <20220418132957.2b7591e9@gandalf.local.home>
+Subject: Re: [PATCH 2/2] selftests/ftrace: add mips support for kprobe args
+ syntax tests
+Message-Id: <20220419101238.affc234023ed6821d8857cfc@kernel.org>
+In-Reply-To: <20220418133045.3ddb0032@gandalf.local.home>
 References: <20220416114848.25288-1-zhangze@loongson.cn>
-        <20220418132957.2b7591e9@gandalf.local.home>
+        <20220416114848.25288-2-zhangze@loongson.cn>
+        <20220418133045.3ddb0032@gandalf.local.home>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -60,44 +61,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 18 Apr 2022 13:29:57 -0400
+On Mon, 18 Apr 2022 13:30:45 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Sat, 16 Apr 2022 19:48:47 +0800
+> On Sat, 16 Apr 2022 19:48:48 +0800
 > Ze Zhang <zhangze@loongson.cn> wrote:
 > 
 > > This is the mips variant of commit <3990b5baf225> ("selftests/ftrace:
 > > Add s390 support for kprobe args tests").
 
-Thanks for adding MIPS support!
+Great! 
 
 Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-Thank you!
+Thanks!
 
 > > 
 > > Signed-off-by: Ze Zhang <zhangze@loongson.cn>
 > > ---
-> >  .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc       | 3 +++
-> >  1 file changed, 3 insertions(+)
+> >  .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc      | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-> > index dc7ade196798..459741565222 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
-> > @@ -25,6 +25,9 @@ ppc*)
-> >  s390*)
-> >    ARG1=%r2
+> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+> > index 47d84b5cb6ca..d4662c8cf407 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+> > @@ -36,6 +36,10 @@ s390*)
+> >    GOODREG=%r2
+> >    BADREG=%s2
 > >  ;;
 > > +mips*)
-> > +  ARG1=%r4
+> > +  GOODREG=%r4
+> > +  BADREG=%r12
 > > +;;
 > >  *)
 > >    echo "Please implement other architecture here"
 > >    exit_untested
 > 
-> 
-> Needs an Ack from Masami, and then Shuah could take it.
+> This needs an Ack from Masami as well.
 > 
 > Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > 
