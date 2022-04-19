@@ -2,66 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C40506346
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 06:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DE15068B8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 12:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240853AbiDSEfe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 00:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S1350664AbiDSKa5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 06:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347682AbiDSEfd (ORCPT
+        with ESMTP id S242226AbiDSKa4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:35:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F7F22B31;
-        Mon, 18 Apr 2022 21:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650342771; x=1681878771;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=K6//9ytp+ShNHarzEHcRH8Qe2JZRTBRZP4+agh9KNdc=;
-  b=hw33mPgl9Wniu/sO23F6jw5reTx9zWXEYQx94Nrpws8da5BXCB5E5rip
-   86jnJj/qntAbuoOUkplsAnpcGtJGG585AawX3SDTorCw9MmvOwGN+n+AR
-   Xw3ThwHF7fVHz/6mecTJ2HgPfxWGKMWo/FNuwAEBFKLfAu3CaPrQKth8T
-   oFkVvgFKkGr1jfwvMCZmJ5UcegxY6+kHyzyMl8hHPNLGwXfpW2bfzXDGV
-   PpzSZuKUqV9+bpJLpE+yHIl9izQIDATGnDuIt/4hRSb4MULCqH20QDtp+
-   oluAMY/luxwPetrNR168m+vOrkJ/oWfAdVPFUyv89QItBg8dihECwsWAG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261275098"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="261275098"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 21:32:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="665771677"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 21:32:45 -0700
-Date:   Tue, 19 Apr 2022 12:31:28 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
-        sandipan@linux.ibm.com, fweimer@redhat.com,
-        desnesn@linux.vnet.ibm.com, mingo@kernel.org,
-        bauerman@linux.ibm.com, mpe@ellerman.id.au, msuchanek@suse.de,
-        linux-mm@kvack.org, chang.seok.bae@intel.com, bp@suse.de,
-        tglx@linutronix.de, hpa@zytor.com, x86@kernel.org, luto@kernel.org,
-        heng.su@intel.com
-Subject: Re: [PATCH V2 1/4] selftests: Provide local define of __cpuid_count()
-Message-ID: <Yl47IGLggYsFYolo@xpf.sh.intel.com>
-References: <cover.1647360971.git.reinette.chatre@intel.com>
- <7c49dbfe5bab04389ed84c516fcbfe31d66df880.1647360971.git.reinette.chatre@intel.com>
- <Ylp1oFenjgxWpM0D@xpf.sh.intel.com>
- <50067c2d-5563-7d8c-f992-5fef787d4d38@intel.com>
+        Tue, 19 Apr 2022 06:30:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB7926562
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:28:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D859611FC
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61719C385A7;
+        Tue, 19 Apr 2022 10:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650364094;
+        bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ci0WZXIdVlEvtwv7DWK3ErtjxTw8du7Jt1HKMQA59mM4qxjgflSdRhCg9Ombz5oLF
+         sRslIHLCrHKPENF78iK9ttr4TsvqhivXeMEokbrPyLe0hPOVJr6W0WX+9MEuGGm1sg
+         MAlsftTy8FnttzItkf740ovWeG1lTy5EQoT7riMznf7om8tv01BWn94fSbsZe5vzIp
+         Qh9QEgk1hUVRy+s0A0wBDTIG8MgzAJ4LXfMdev3sQ6BjTs4pKBR157cNw4XFLFdwcx
+         QioyxCNH25ugl7H+vdTehcYpOxfNSaSgf8PbvPjwLGBZAa0jDJhPoxS+d88U/LcIhU
+         aXs5McUx4Ic2w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Joey Gouly <joey.gouly@arm.com>,
+        inux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/4] kselftest/arm64: Miscelaneous MTE test updates
+Date:   Tue, 19 Apr 2022 11:28:04 +0100
+Message-Id: <20220419102808.24522-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50067c2d-5563-7d8c-f992-5fef787d4d38@intel.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=995; h=from:subject; bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo6xhgr6cFblAnK9/EUiZlU+z0dC4fFztExS0t+2 LfeGPNeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6OsQAKCRAk1otyXVSH0MWbB/ wNhHRQ42BP4FudciC73Ri6FiX0kyL1ekwWHp+QKVOjF30/ImMi1hBF1HlRUcdn2fnoFxG6yCLBvG51 SFi8gsDL5nttdfSWuDVapax6YtFxw6Cur/EhqDoQlVP4UeTvTbBHFgex2/6W20Wa11tGxC7EK1ozcR wfaQF3OuC5EyiAzDDX29w16LGgzG9y3lWTPtYCaQiN8sLXweX5411w95j87ug01tGBsRGlheruN1fL w6G7JnDnXEluvf8uC46Lzqfty93z2I+Bxu8FQwJ+Ln0tK80V0Dx9ThjBe1qa2NhpCHyK6IVEFDDWFF V3z/x0wxqFJ/wvTDdRFtYt2wVVrttb
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,103 +56,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-04-18 at 09:04:33 -0700, Reinette Chatre wrote:
-> Hi Pengfei,
-> 
-> On 4/16/2022 12:52 AM, Pengfei Xu wrote:
-> > On 2022-03-15 at 09:44:25 -0700, Reinette Chatre wrote:
-> >> Some selftests depend on information provided by the CPUID instruction.
-> >> To support this dependency the selftests implement private wrappers for
-> >> CPUID.
-> >>
-> >> Duplication of the CPUID wrappers should be avoided.
-> >>
-> >> Both gcc and clang/LLVM provide __cpuid_count() macros but neither
-> >> the macro nor its header file are available in all the compiler
-> >> versions that need to be supported by the selftests. __cpuid_count()
-> >> as provided by gcc is available starting with gcc v4.4, so it is
-> >> not available if the latest tests need to be run in all the
-> >> environments required to support kernels v4.9 and v4.14 that
-> >> have the minimal required gcc v3.2.
-> >>
-> >> Provide a centrally defined macro for __cpuid_count() to help
-> >> eliminate the duplicate CPUID wrappers while continuing to
-> >> compile in older environments.
-> >>
-> >> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-> >> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> >> ---
-> >> Note to maintainers:
-> >> - Macro is identical to the one provided by gcc, but not liked by
-> >>   checkpatch.pl with message "Macros with complex values should
-> >>   be enclosed in parentheses". Similar style is used in kernel,
-> >>   for example in arch/x86/kernel/fpu/xstate.h.
-> >>
-> >>  tools/testing/selftests/kselftest.h | 15 +++++++++++++++
-> >>  1 file changed, 15 insertions(+)
-> >>
-> >> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-> >> index f1180987492c..898d7b2fac6c 100644
-> >> --- a/tools/testing/selftests/kselftest.h
-> >> +++ b/tools/testing/selftests/kselftest.h
-> >> @@ -52,6 +52,21 @@
-> >> + * have __cpuid_count().
-> >> + */
-> >> +#ifndef __cpuid_count
-> >> +#define __cpuid_count(level, count, a, b, c, d)				\
-> >> +	__asm__ __volatile__ ("cpuid\n\t"				\
-> >> +			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
-> >> +			      : "0" (level), "2" (count))
-> >> +#endif
-> >    Linux C check tool "scripts/checkpatch.pl" shows an error:
-> > "
-> > ERROR: Macros with complex values should be enclosed in parentheses
-> 
-> I encountered this also and that is why this patch contains the "Note to
-> maintainers" above. It is not clear to me whether you considered the note
-> since your response does not acknowledge it.
-> 
-  Sorry, I just made a suggestion to fix this problem mentioned by the script.
-  I didn't notice and reply for the note.
+This series is just a set of minor tweaks and improvements for the MTE
+tests that I did while working on the asymmetric mode support for
+userspace which seemed like they might be worth keeping even though the
+prctl() for asymmetric mode got removed.
 
-> > ...
-> > +#define __cpuid_count(level, count, a, b, c, d)                        \
-> > +       __asm__ __volatile__ ("cpuid\n\t"                               \
-> > +                             : "=a" (a), "=b" (b), "=c" (c), "=d" (d)  \
-> > +                             : "0" (level), "2" (count))
-> > "
-> > Googling:
-> > https://www.google.com/search?q=Macros+with+complex+values+should+be+enclosed+in+parentheses&rlz=1C1GCEB_enUS884US884&oq=Macros+with+complex+values+should+be+enclosed+in+parentheses&aqs=chrome.0.69i59j0i5i30l2.313j0j7&sourceid=chrome&ie=UTF-8
-> > -> https://stackoverflow.com/questions/8142280/why-do-we-need-parentheses-around-block-macro
-> 
-> More information available in
-> https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
-> but from what I understand it does not apply to this macro. Even so, I do
-> not know what checkpatch.pl uses to determine that this is a "Macro with
-> complex values".
-> 
-  Checked checkpatch.pl and it seems to suggest using ({ }) for any asm macro
-  definition.
+v2:
+ - Rebase onto v5.18-rc3
 
-> > 
-> > Could we fix it as follow, shall we?
-> > "
-> > #ifndef __cpuid_count
-> > #define __cpuid_count(level, count, a, b, c, d) ({			\
-> > 	__asm__ __volatile__ ("cpuid\n\t"				\
-> > 			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
-> > 			      : "0" (level), "2" (count))		\
-> > })
-> > #endif
-> > "
-> 
-> Sure, I can do so.
-> 
-  I just made a suggestion to fix the problem reported by the checkpatch.pl.
-  But I didn't think deeply enough before: I'm not sure is there any real
-  improvment or help after the fix.
+Mark Brown (4):
+  kselftest/arm64: Handle more kselftest result codes in MTE helpers
+  kselftest/arm64: Log unexpected asynchronous MTE faults
+  kselftest/arm64: Refactor parameter checking in mte_switch_mode()
+  kselftest/arm64: Add simple test for MTE prctl
 
-  Thanks!
-  --Pengfei
+ tools/testing/selftests/arm64/mte/.gitignore  |   1 +
+ .../testing/selftests/arm64/mte/check_prctl.c | 119 ++++++++++++++++++
+ .../selftests/arm64/mte/mte_common_util.c     |  19 ++-
+ .../selftests/arm64/mte/mte_common_util.h     |  15 ++-
+ 4 files changed, 149 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/mte/check_prctl.c
 
-> Reinette
+
+base-commit: b2d229d4ddb17db541098b83524d901257e93845
+-- 
+2.30.2
+
