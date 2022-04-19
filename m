@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76082506A31
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 13:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD90E506A28
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 13:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238805AbiDSL2W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 07:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S242566AbiDSL2X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 07:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351450AbiDSL2F (ORCPT
+        with ESMTP id S1351486AbiDSL2M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:28:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8CF240BD
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 04:25:23 -0700 (PDT)
+        Tue, 19 Apr 2022 07:28:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BEB240BD
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 04:25:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CED62612D2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 11:25:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FAAC385A5;
-        Tue, 19 Apr 2022 11:25:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1E6CB81851
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 11:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C8AC385AF;
+        Tue, 19 Apr 2022 11:25:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650367522;
-        bh=gpXYwwHjBWECYd9glOg05wFHftQryu8V/UpzngQGl4Q=;
+        s=k20201202; t=1650367526;
+        bh=cjWtOVTxWeUhc8tEXrG+oxZLQRfcD6x2BU4M+8l+kZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qEzzxLjdiOogtWlbfRAL/EU2RwJrbiZZrvq45nNHrRWJ6alH6nJAl4QNYqnuPa/Lc
-         Q4xk6WWtg/BbZx9RhME4hqD6JrHtjQfK3eosQHALGdjwBTIqfEjBG3wVbzAMOpAh86
-         f5sRvOxZUKe31TzPQQw/JDY6YSdaeJvDUTJ1L9q7QgJqtporpvDBFaJ8hkj17fp4uV
-         K+Rej2jJ6DDA1UMoOgST2IYueYV60onN/C+hbqv/QKecSWmRHep8QgDYlptaxE2K2S
-         s80+xzylOp3jXk+JOk6nurFevx3dREzb0MWZErOuAMFQenq8dWerMEeyAnPsSflMiF
-         kJ0f9al1VQDeg==
+        b=WbCHkXPcCl/JTIHv7H6D4t/PKMHDROEm+OSBnLnPCrnLgUF9jV+g2hiKNrWejmAPt
+         Hb3nsrH9suPGGaqP/SEQVygo4u0W9Bci1lxoh/il4QOHGD6azs6YDbuq0Ni4hu6DnH
+         iRFGeuXWyRO7MN2O1l7/uTqb3EtSkvtM9Vlunm4KzI4Hyiy1JhdYZxy810aAV1h9of
+         NX3B6b+60jRN7Tb3f0jRksIPSfGCj7V4uM4gRK/qr0hhhYPDDMDykK7+rEnTlKyxqq
+         2ITkuB316RzCrDZxPci1OHnD9DLFzDcZWY+G0mB/xTz1p+r1hL3b5P/Db6SJEYUeHJ
+         gxAUAFdTiwzlQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,14 +49,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v14 28/39] kselftest/arm64: Add manual encodings for SME instructions
-Date:   Tue, 19 Apr 2022 12:22:36 +0100
-Message-Id: <20220419112247.711548-29-broonie@kernel.org>
+Subject: [PATCH v14 29/39] kselftest/arm64: sme: Add SME support to vlset
+Date:   Tue, 19 Apr 2022 12:22:37 +0100
+Message-Id: <20220419112247.711548-30-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419112247.711548-1-broonie@kernel.org>
 References: <20220419112247.711548-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1715; h=from:subject; bh=gpXYwwHjBWECYd9glOg05wFHftQryu8V/UpzngQGl4Q=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXpt9ghFiAICiyGmVpz7+92Crrpgc79fXtr+9TOpN 2gK/qxKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6bfQAKCRAk1otyXVSH0PHDB/ 4vFkeVNZoQKR+0RdQCX55npyDQalLwxRinrjb+VgVuIvV+MEdSJVPgx9RRwMTwy94DMwPDS9ue2iGe KCaexD0jRGIDxoVGEdmHRYwjmA7FnODZwCCpRUzqQ9xp7pLzP0xzoRCw8KjtMY3eaQXmEOB7D8NSeJ vDUC1P9vhz+fa/bBXbZudALuSqLSQzaonlG4tW8eEOVttQYJkVPHYVcBGHSZ/H76BHWBVKiOYQzyDB Z4PwqCwnbG8fv4x25Yva6md72SUaVOETAsZpWX++am0FusNFgGUG96N/HUagNxsMAcISoFAKThFgF6 EtrgMKepiPPTgjsnhaL3AMRcYLt5w3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2030; h=from:subject; bh=cjWtOVTxWeUhc8tEXrG+oxZLQRfcD6x2BU4M+8l+kZw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXpt+qSqngTRPNR7b870myCkuGHBQcIi35Nqt0awJ vjGk/iaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6bfgAKCRAk1otyXVSH0E1GB/ 4vmgxpORent6+IAR//5AmtR35fHQ+u78tLBXV0HRKy39z92CnCgzxqrUnGfwcTPMwckGpDuvnHm0Jo /4o2AF04H8GhKl781zZuGeriNoxU1VeNhzqoDn2BBEMqGPg+kv2um1Jf8T36XcXIYfyu3xXMrVHkPR x5Vi5H5SZ1t6PkTi1BD5406vUapGh8w6oE+hfry8JEhoqJqqyR3yBvCgDrUeUkU4C/qvkSEf7cCaLp niCwTK63suHwNBXJLQfIwc4zhHk4acd8lulrcZ4ij+CQWbBlJp4b5jtpv38Do+lh9LwTnJNfAytUHd ILrrhWxBpJvXujytOpH2cf1rpDE5HC
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,74 +69,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As for the kernel so that we don't have ambitious toolchain requirements
-to build the tests manually encode some of the SVE instructions.
+The Scalable Matrix Extenions (SME) introduces additional register state
+with configurable vector lengths, similar to SVE but configured separately.
+Extend vlset to support configuring this state with a --sme or -s command
+line option.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- tools/testing/selftests/arm64/fp/sme-inst.h | 51 +++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/sme-inst.h
+ tools/testing/selftests/arm64/fp/vlset.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/sme-inst.h b/tools/testing/selftests/arm64/fp/sme-inst.h
-new file mode 100644
-index 000000000000..7191e53ca1c0
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/sme-inst.h
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2021-2 ARM Limited.
-+// Original author: Mark Brown <broonie@kernel.org>
-+
-+#ifndef SME_INST_H
-+#define SME_INST_H
-+
-+/*
-+ * RDSVL X\nx, #\imm
-+ */
-+.macro rdsvl nx, imm
-+	.inst	0x4bf5800			\
-+		| (\imm << 5)			\
-+		| (\nx)
-+.endm
-+
-+.macro smstop
-+	msr	S0_3_C4_C6_3, xzr
-+.endm
-+
-+.macro smstart_za
-+	msr	S0_3_C4_C5_3, xzr
-+.endm
-+
-+.macro smstart_sm
-+	msr	S0_3_C4_C3_3, xzr
-+.endm
-+
-+/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _ldr_za nw, nxbase, offset=0
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _str_za nw, nxbase, offset=0
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+#endif
+diff --git a/tools/testing/selftests/arm64/fp/vlset.c b/tools/testing/selftests/arm64/fp/vlset.c
+index 308d27a68226..76912a581a95 100644
+--- a/tools/testing/selftests/arm64/fp/vlset.c
++++ b/tools/testing/selftests/arm64/fp/vlset.c
+@@ -22,12 +22,15 @@ static int inherit = 0;
+ static int no_inherit = 0;
+ static int force = 0;
+ static unsigned long vl;
++static int set_ctl = PR_SVE_SET_VL;
++static int get_ctl = PR_SVE_GET_VL;
+ 
+ static const struct option options[] = {
+ 	{ "force",	no_argument, NULL, 'f' },
+ 	{ "inherit",	no_argument, NULL, 'i' },
+ 	{ "max",	no_argument, NULL, 'M' },
+ 	{ "no-inherit",	no_argument, &no_inherit, 1 },
++	{ "sme",	no_argument, NULL, 's' },
+ 	{ "help",	no_argument, NULL, '?' },
+ 	{}
+ };
+@@ -50,6 +53,9 @@ static int parse_options(int argc, char **argv)
+ 		case 'M':	vl = SVE_VL_MAX; break;
+ 		case 'f':	force = 1; break;
+ 		case 'i':	inherit = 1; break;
++		case 's':	set_ctl = PR_SME_SET_VL;
++				get_ctl = PR_SME_GET_VL;
++				break;
+ 		case 0:		break;
+ 		default:	goto error;
+ 		}
+@@ -125,14 +131,14 @@ int main(int argc, char **argv)
+ 	if (inherit)
+ 		flags |= PR_SVE_VL_INHERIT;
+ 
+-	t = prctl(PR_SVE_SET_VL, vl | flags);
++	t = prctl(set_ctl, vl | flags);
+ 	if (t < 0) {
+ 		fprintf(stderr, "%s: PR_SVE_SET_VL: %s\n",
+ 			program_name, strerror(errno));
+ 		goto error;
+ 	}
+ 
+-	t = prctl(PR_SVE_GET_VL);
++	t = prctl(get_ctl);
+ 	if (t == -1) {
+ 		fprintf(stderr, "%s: PR_SVE_GET_VL: %s\n",
+ 			program_name, strerror(errno));
 -- 
 2.30.2
 
