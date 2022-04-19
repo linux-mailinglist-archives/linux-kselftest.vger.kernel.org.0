@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04425068C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 12:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8825068C3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 12:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350714AbiDSKbL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 06:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S1350739AbiDSKbR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 06:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350693AbiDSKbE (ORCPT
+        with ESMTP id S1350712AbiDSKbK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:31:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DAD2898F
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:28:21 -0700 (PDT)
+        Tue, 19 Apr 2022 06:31:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641832CCA4
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:28:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C455CB816A9
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:28:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA753C385AD;
-        Tue, 19 Apr 2022 10:28:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5C91ECE1763
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:28:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F64C385A7;
+        Tue, 19 Apr 2022 10:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650364098;
-        bh=kEQALFvVnF2JUNgXMicTSPE1AfxRggwyPGzRYL7rWak=;
+        s=k20201202; t=1650364100;
+        bh=34rEfnqbjHz3xCdTv2DILwIPZbwZa5CKK5iLFEGhXK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AVUUa4pu9E6mwdXErABgjCbVsHFBIf+lqXnDu8aV3tWuL3+7wt26XyA3o9UjO8o1C
-         G+dpHwoTpJ1CIaqQuma+B6JWqUkEaUMJ5kZCyyBEuMg4gLckXqlbWDLn8pfjvyEB3l
-         IfhKfOuiWsi1YxI6NefzjW/xJMTq2rVvh0ChuL53JooUJ0y7jXOfkCVGE8fFijmvvG
-         K1lM0p9PUW9lO13ekPku2Z/PbsH5Qp+NOqB+nrCEeKc/acLdF/wBYu2jYrbEECGX3g
-         hDHuMR6DIEUf6nnP/IOOE+6kI3R763oFXttSIE6pIxnunxG2w2BKTKx+9mTmupCMkJ
-         zZ9JmBA5Rv8Ug==
+        b=VrjQ4UMyn44dOJoChwWt+queZWuyg4hKc04nI10qVUJ7s2pwwvB4sQbFAj7Vdlno3
+         G6uePOVgPET57kA8gVT/GgMmzo56bfB7EttO9EN4DAAbpADx9U6ZjX/BcCBG9rBU94
+         nGfAhNPYdVW8gAecaEBKqC+eike84408vjQxmmTtRd+L1+BbNRQi2iqsufFaUmSAXD
+         3+QTcx6F06hZipWOSzv1lv0gio0YorGiWboshC/HxSdpH+UV8wg1CrnBQxAWnt4VdN
+         6r+A46xi6VURdD+dfsgPxSnwiB7HhKCPiS3HqH5Ckt/RWSqYPiCJPrK1FKS0cHE4QK
+         JzL/Ya6Ql8Y7w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -39,14 +39,14 @@ Cc:     Joey Gouly <joey.gouly@arm.com>,
         inux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 2/4] kselftest/arm64: Log unexpected asynchronous MTE faults
-Date:   Tue, 19 Apr 2022 11:28:06 +0100
-Message-Id: <20220419102808.24522-3-broonie@kernel.org>
+Subject: [PATCH v2 3/4] kselftest/arm64: Refactor parameter checking in mte_switch_mode()
+Date:   Tue, 19 Apr 2022 11:28:07 +0100
+Message-Id: <20220419102808.24522-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419102808.24522-1-broonie@kernel.org>
 References: <20220419102808.24522-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1041; h=from:subject; bh=kEQALFvVnF2JUNgXMicTSPE1AfxRggwyPGzRYL7rWak=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo6zoXEdRQ7/5KuVtfTwYvHv3UfBHnjTUblpso4O pdkhaOOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6OswAKCRAk1otyXVSH0CYsB/ 4yg3XLQWrKNXRYskaKjqaughEIXjxKjXRlZ3Tbye6UQGVa5W0djBpbJWhNfTfsjHYHPBhxrFAB4NK1 8/xa9Oa6jdRYdLfhYz/aOId99aUfEiPo0bDUHp68MjNJ9jCFDUx2GBp88IuaZs952ezj8u2KuiUtO7 t5iT60TttMnncnIxp5YoYJIr1kY8G21TgEwxSKHd0SE0ESpaYFgteg1onqYVjfoE99TK++DxabiqDr pzaodhf/AwOR6aHb8JZ15BmqsJ3IgoJEoK1B7mWYnb0nPnX+VvPKQ4znu7o+g77Tn3UM2us/wwmrim 7Z2iYj2NHVx59r9Sh5EkKb/tdp4/ca
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1469; h=from:subject; bh=34rEfnqbjHz3xCdTv2DILwIPZbwZa5CKK5iLFEGhXK0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo60sgCHfdzOtIithI78zwesLOJSNsoRWIPM1F1x xF8GIpOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6OtAAKCRAk1otyXVSH0GWeB/ 90cd8aj3BhHopt+I9pf2QwuwwI0Tv6iESeWMq6Qp1vohcv5jovPT2/aOFWm5YghRbw0+jq8RtIs4Rb ZO+SYFOjMEb+zSh1u/bJrRWD+MPzz3xFF9ZS485OX5X53QXSKTQJWzWex8iVmwKNK5kQcSQeyUYt9Y iXhNY/sT0+G+BwZ+BZNmKlDbJwnvdxX3WWVC/9YTbajJMK1XVNeaRRfTbfa4I6pzcCXDOJf1en2Ab3 Nychhdazn8zYwGY5At9femnGXwfu1RUEb5NMVZXJofrG/rHUh/9Wbq+gidEpACMtan7fVkO7Vl2PTU aQVbSCPAbDIYdumIHAfd094z+CHtY8
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,30 +59,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Help people figure out problems by printing a diagnostic when we get an
-unexpected asynchronous fault.
+Currently we just have a big if statement with a non-specific diagnostic
+checking both the mode and the tag. Since we'll need to dynamically check
+for asymmetric mode support in the system and to improve debugability split
+these checks out.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/arm64/mte/mte_common_util.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../testing/selftests/arm64/mte/mte_common_util.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-index 0328a1e08f65..5327aa958171 100644
+index 5327aa958171..260206f4dce0 100644
 --- a/tools/testing/selftests/arm64/mte/mte_common_util.c
 +++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-@@ -37,6 +37,10 @@ void mte_default_handler(int signum, siginfo_t *si, void *uc)
- 		if (si->si_code == SEGV_MTEAERR) {
- 			if (cur_mte_cxt.trig_si_code == si->si_code)
- 				cur_mte_cxt.fault_valid = true;
-+			else
-+				ksft_print_msg("Got unexpected SEGV_MTEAERR at pc=$lx, fault addr=%lx\n",
-+					       ((ucontext_t *)uc)->uc_mcontext.pc,
-+					       addr);
- 			return;
- 		}
- 		/* Compare the context for precise error */
+@@ -273,9 +273,18 @@ int mte_switch_mode(int mte_option, unsigned long incl_mask)
+ {
+ 	unsigned long en = 0;
+ 
+-	if (!(mte_option == MTE_SYNC_ERR || mte_option == MTE_ASYNC_ERR ||
+-	      mte_option == MTE_NONE_ERR || incl_mask <= MTE_ALLOW_NON_ZERO_TAG)) {
+-		ksft_print_msg("FAIL: Invalid mte config option\n");
++	switch (mte_option) {
++	case MTE_NONE_ERR:
++	case MTE_SYNC_ERR:
++	case MTE_ASYNC_ERR:
++		break;
++	default:
++		ksft_print_msg("FAIL: Invalid MTE option %x\n", mte_option);
++		return -EINVAL;
++	}
++
++	if (!(incl_mask <= MTE_ALLOW_NON_ZERO_TAG)) {
++		ksft_print_msg("FAIL: Invalid incl_mask %lx\n", incl_mask);
+ 		return -EINVAL;
+ 	}
+ 	en = PR_TAGGED_ADDR_ENABLE;
 -- 
 2.30.2
 
