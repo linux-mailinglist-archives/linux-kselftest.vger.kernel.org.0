@@ -2,48 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9265068D1
+	by mail.lfdr.de (Postfix) with ESMTP id F131B5068D2
 	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Apr 2022 12:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241331AbiDSKfb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 06:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S241694AbiDSKfg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 06:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiDSKfb (ORCPT
+        with ESMTP id S240529AbiDSKff (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:35:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D729CBE
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:32:49 -0700 (PDT)
+        Tue, 19 Apr 2022 06:35:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA8D29CB2
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:32:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D2361236
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10D7C385A7;
-        Tue, 19 Apr 2022 10:32:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39412CE13C8
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A1BC385AD;
+        Tue, 19 Apr 2022 10:32:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650364368;
-        bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mYGFakqveSm6zpPCXpvLb2cZM9slX3UsiH1YS46BsSnZ8T28ujvCiOEQhaoEoCizF
-         ElqvYLQI+ArjEXM68Kip/D3RDynXi3lwEqmkgdKJ5cLhL2gVMkHptQsk/b7Sw/y7Dv
-         R0ZyD+OIi5C5MWXml+CI2UnxTY55Ns+kYZRjXX+wpN0yxHj4E04Gfkdz7Tqw/gnU7D
-         /LWKLRPIMIXduQmBgKo04CyV78/lb7E9+6zg4MSKJLb57PYJAz+8kcELuBwXF6C9V0
-         b1Ua8V+DftPUwUs85LAmy9QGvTWQvB/mqn5OOucd69RCEpZFPDh4AgPKVj8STio9av
-         LQvObFy7Y9C+w==
+        s=k20201202; t=1650364370;
+        bh=xDJBAJu/5veMEVeVdUV21/gXIWmfA4m9JztlrzCV77E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LS2W9vgCEz9aPE59dH87Nos/FEqoHQcq8SvC/Q/3bIzDYOrHX3bTNtFexsstSfSPv
+         oFAQQKvkBv3SBevxm3lVY122IWMABl6zhWcuBVGz2kJ3miEJP82pcEoYhMlx5Dfkw5
+         usSI0rxAVIxM1ml82ZlCTS6vJu9WU+0cY+7TbliMQe0bkDkaZB2G/Hn3+s8FZHJC25
+         s5up6n4nVLQ6ktrojNwPtYA/X9LBCe5OzTqV2SPybnJ2Li8O3BH/KupVa0CKdOd65y
+         B9/eNIuYT7Tho0r8PkqKhXj91dTEmEfpabQHg9S3AwpZ2LK7RnbvIpLyMCzTYsJn7t
+         MEsjKs9Z0X+Mw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Joey Gouly <joey.gouly@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 0/4] kselftest/arm64: Miscelaneous MTE test updates
-Date:   Tue, 19 Apr 2022 11:32:39 +0100
-Message-Id: <20220419103243.24774-1-broonie@kernel.org>
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v2 1/4] kselftest/arm64: Handle more kselftest result codes in MTE helpers
+Date:   Tue, 19 Apr 2022 11:32:40 +0100
+Message-Id: <20220419103243.24774-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220419103243.24774-1-broonie@kernel.org>
+References: <20220419103243.24774-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=995; h=from:subject; bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo/Ghgr6cFblAnK9/EUiZlU+z0dC4fFztExS0t+2 LfeGPNeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6PxgAKCRAk1otyXVSH0FMrB/ 9bqW2u7B1dYSn5wZ+oDxPXjkJrZyVGNXvM6wmruJq6zP1zTU8IgaKwibFz8S/tQTNcqKIdgwHW7g28 T7mIGmEqRAa2A6jEV+ofRnCgjsCogJQSjqnuUM/dwi0JT+fq1dov5dPebVY8ezg3E3xUJ4KUnBPxMQ kRkYMF6dlZ4Pz9UrQ0lJiY4AbjoLyIqVRPYY/huKZ9UmYxfI3H6KITLSkhonG6FmSjuk0cPx/PxQvq OFQniQ9wf+qKGxsbh6xOtr9Ltycn/HWrJy6fyYY8/vfSX8VmFlHwK/lhoPT4CPnlPbyNk2euQjJxgg TqqDn047pX7zbTIn5uZtu5d9o0GIj4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1496; h=from:subject; bh=xDJBAJu/5veMEVeVdUV21/gXIWmfA4m9JztlrzCV77E=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo/HPQt3fHsS6WLGobnHqIeZInPVzKOE7Uw0KVpH GpocEQKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6PxwAKCRAk1otyXVSH0BhSB/ wNUiToQ30C3tQVHT36DspATIMEE1k2ETTO91U5kv/2VlNNmTvnZgUC+OoSXlJj1fBitLa9GJXUic3Y daVlmldyuPAxfBrFnaCTUNpi1xp23DHnhIxumsJRxvGATFwJXvFZsoyoIGmtvauk/qjzUNO2G4s3HR dE40KGr8D5jlYivJXyd1pJ2ybXnIN4kn5V537p6euRo1pD55AmbMeSZj4R/EQsJ4Sb6QUSSh1JJ4eY wRkgHmAPEfq1vIPDFnudrd28DKHWNNVGEOd+Sb2aTnzwbOASx9A7rxg0MXKcCZmhOiCsxIC0CX0HQT jyXXiFKq6us9QjJaek03tHJc45twCG
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,29 +59,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series is just a set of minor tweaks and improvements for the MTE
-tests that I did while working on the asymmetric mode support for
-userspace which seemed like they might be worth keeping even though the
-prctl() for asymmetric mode got removed.
+The MTE selftests have a helper evaluate_test() which translates a return
+code into a call to ksft_test_result_*(). Currently this only handles pass
+and fail, silently ignoring any other code. Update the helper to support
+skipped tests and log any unknown return codes as an error so we get at
+least some diagnostic if anything goes wrong.
 
-v2:
- - Rebase onto v5.18-rc3
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ .../testing/selftests/arm64/mte/mte_common_util.h | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-Mark Brown (4):
-  kselftest/arm64: Handle more kselftest result codes in MTE helpers
-  kselftest/arm64: Log unexpected asynchronous MTE faults
-  kselftest/arm64: Refactor parameter checking in mte_switch_mode()
-  kselftest/arm64: Add simple test for MTE prctl
-
- tools/testing/selftests/arm64/mte/.gitignore  |   1 +
- .../testing/selftests/arm64/mte/check_prctl.c | 119 ++++++++++++++++++
- .../selftests/arm64/mte/mte_common_util.c     |  19 ++-
- .../selftests/arm64/mte/mte_common_util.h     |  15 ++-
- 4 files changed, 149 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/mte/check_prctl.c
-
-
-base-commit: b2d229d4ddb17db541098b83524d901257e93845
+diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.h b/tools/testing/selftests/arm64/mte/mte_common_util.h
+index 195a7d1879e6..2d3e71724e55 100644
+--- a/tools/testing/selftests/arm64/mte/mte_common_util.h
++++ b/tools/testing/selftests/arm64/mte/mte_common_util.h
+@@ -75,10 +75,21 @@ unsigned int mte_get_pstate_tco(void);
+ /* Test framework static inline functions/macros */
+ static inline void evaluate_test(int err, const char *msg)
+ {
+-	if (err == KSFT_PASS)
++	switch (err) {
++	case KSFT_PASS:
+ 		ksft_test_result_pass(msg);
+-	else if (err == KSFT_FAIL)
++		break;
++	case KSFT_FAIL:
+ 		ksft_test_result_fail(msg);
++		break;
++	case KSFT_SKIP:
++		ksft_test_result_skip(msg);
++		break;
++	default:
++		ksft_test_result_error("Unknown return code %d from %s",
++				       err, msg);
++		break;
++	}
+ }
+ 
+ static inline int check_allocated_memory(void *ptr, size_t size,
 -- 
 2.30.2
 
