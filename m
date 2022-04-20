@@ -2,85 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4614150827B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 09:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D06850835E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 10:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376339AbiDTHq6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Apr 2022 03:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S245432AbiDTI2t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Apr 2022 04:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376348AbiDTHqz (ORCPT
+        with ESMTP id S1376691AbiDTI2s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:46:55 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE483BFA3;
-        Wed, 20 Apr 2022 00:44:03 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kjt2x1R9KzhXY4;
-        Wed, 20 Apr 2022 15:43:53 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Apr 2022 15:43:59 +0800
-Message-ID: <82e7faec-7f0c-573f-4945-de7072744dcb@huawei.com>
-Date:   Wed, 20 Apr 2022 15:43:59 +0800
+        Wed, 20 Apr 2022 04:28:48 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD79535267;
+        Wed, 20 Apr 2022 01:26:02 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 93F3F1F43067
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650443159;
+        bh=MgSbLWfAifI4DFaTIg3jOQ8OVtknhW15URbnIfz+19I=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Xfm58R44mhuC4me/qgex0MH4rrK3lfxKTeqb0UeHrnT1HSbwI2wcEr5rFvjG2r/Jc
+         tg/XPFZw5q+7z3O6gmwtVuflrSK1yDmtnRzZ6eTjA6j1krphZZMkQ8VIJG9MlDJHlq
+         f87PqwpLPGgCMW57dmIbcDZyAoM47dkPXSuuuVz6dbBPb/DdiTvObtrB54cIIdTA8r
+         SEaz+UPbOtITcFeJh+lgw1ot25/an7S6f5nFymxEhQfbDMFcKNSPOx7gydfas5bv2O
+         eaNEIpnKNsam7AhnibAZ9eANbJePzCFUOEGvqhXOZjUZuw23kaQFjHM54zuXhtedxK
+         oMzukw1st5zSA==
+Message-ID: <2d83eab4-3ba9-6947-690e-2b0fd7de0653@collabora.com>
+Date:   Wed, 20 Apr 2022 13:25:53 +0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     usama.anjum@collabora.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        david@redhat.com, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V5 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
 Content-Language: en-US
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
- <20220414162220.1985095-6-xukuohai@huawei.com>
- <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
- <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com>
-In-Reply-To: <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+References: <20220317103323.94799-1-usama.anjum@collabora.com>
+ <20220317103323.94799-2-usama.anjum@collabora.com>
+ <87ilsbyshs.fsf@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <87ilsbyshs.fsf@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,41 +59,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/16/2022 9:57 AM, Xu Kuohai wrote:
-> On 4/16/2022 1:12 AM, Andrii Nakryiko wrote:
->> On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
->>>
->>> Add bpf trampoline support for arm64. Most of the logic is the same as
->>> x86.
->>>
->>> fentry before bpf trampoline hooked:
->>>  mov x9, x30
->>>  nop
->>>
->>> fentry after bpf trampoline hooked:
->>>  mov x9, x30
->>>  bl  <bpf_trampoline>
->>>
->>> Tested on qemu, result:
->>>  #55 fentry_fexit:OK
->>>  #56 fentry_test:OK
->>>  #58 fexit_sleep:OK
->>>  #59 fexit_stress:OK
->>>  #60 fexit_test:OK
->>>  #67 get_func_args_test:OK
->>>  #68 get_func_ip_test:OK
->>>  #101 modify_return:OK
->>>
->>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>> Acked-by: Song Liu <songliubraving@fb.com>
->>> ---
->>
->> Can you please also take a look at [0], which is an ongoing work to
->> add support for BPF cookie to BPF trampoline-based BPF programs. It's
->> very close to being done, so it would be good if you can implement
->> that at the same time.
+On 3/19/22 12:23 AM, Gabriel Krisman Bertazi wrote:
+>> +static void test_vma_reuse(int pagemap_fd, int pagesize)
+>> +{
+>> +	char *map, *map2;
+>> +
+>> +	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
+>> +	if (map == MAP_FAILED)
+>> +		ksft_exit_fail_msg("mmap failed");
+>> +
+>> +	clear_softdirty();
+>> +
+>> +	/* Write to the page before unmapping and map the same size region again to check
+>> +	 * if same memory region is gotten next time and if dirty bit is preserved across
+>> +	 * this type of allocations.
+>> +	 */
+> This reads weird.  It should *not* be preserved across different
+> mappings.  Also, we are not testing if the same region is reused, we are
+> depending on it to test the sd bit.
 > 
-> OK, I'll take a look and try to implemnt it.
+> /* Ensures the soft-dirty bit is reset accross different mappings on the
+> same address.  */
+Soft dirty bit is always set for new regions (reused or not). I'll
+correct the comment and improve this sub test.
 
-already implemented, but there are some conflicts between these two
-series, will send v3 after trampoline cookie are merged.
+-- 
+Muhammad Usama Anjum
