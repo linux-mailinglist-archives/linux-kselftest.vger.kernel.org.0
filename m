@@ -2,154 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E042508065
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 07:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF4A508209
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 09:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359380AbiDTFIb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Apr 2022 01:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
+        id S1359712AbiDTH1Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Apr 2022 03:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359377AbiDTFIa (ORCPT
+        with ESMTP id S1359796AbiDTH1G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Apr 2022 01:08:30 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF6A28E20
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 22:05:41 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d15so757588pll.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 22:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=xOjwgXYF7viEK5nd1+3dTRFVj/Scnz8gP00NEpAwhV0=;
-        b=omZCDk7CAlj4o2vNo4i/LCjGd2B0uu2aW2RSSIWl96JQpU6c1yIEguV8qJfYTRAOoG
-         XXGae9+aRtdi05eW6Pe7RW3KG6QOZQcqBIB4qs8F4CAxRgDeoWfkybNghHOy4usS01yo
-         H36j7uIvw2boSdTpB6uFK1swIsqgme8PdDrwQrdkqOwtT5LmCj5e5/MeVoi0XrnSWlga
-         K97aw6cg4B06qxWSyx526GJcsrJ+BAAZtMrDqsYWIMe3WvZMlluQwpdtrUfXtAUoepdE
-         USJszZ64SFGYbV/Us7e2tftRjT6j9tXB7NnWyTSss3O1+74gxE+DWrrhM3g+AOonY6CK
-         RnnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=xOjwgXYF7viEK5nd1+3dTRFVj/Scnz8gP00NEpAwhV0=;
-        b=8LqejTHFXNZxl5KOICszRQ31bJMC1vj5Eo0TRC99iHDMywKuqlMLAdMY2fmFIYG77I
-         kXOlhcYs0LFua8h/S3pXywXJGiNqln5QAvNuNnsqeFf+7KuXiQJrlw79Lo4HJS2d6YYZ
-         XxQwMOLE3S90/DIJ3cdIWXjbOxOw9stBBZ9XofPH6fpS9LDvA/PvPZbbewibvXEGsaEm
-         UltWrboHN9SUXqvkxfmI0xhyVjBJnjgXeVDKU7wpjj6jzDbuTtfgAH46TSZQPvPIaWrw
-         1jghEIRdECxy+zxcBcT8g85A44XR0kwCyd9qeWRCw8QQPYLgkAgvkJUxaYz4StdOM063
-         EBfw==
-X-Gm-Message-State: AOAM530OW8Zw2nWmZ9nvA9DFdTAKidfMhy5q/QOCfN0ZnpYh253Xy0RG
-        ahGtYbpZmC/yVA+KbSJudpLNrA==
-X-Google-Smtp-Source: ABdhPJxT+qMTqea4P7HOKFa2d6WVSpDAVUmT1//skJhqwBjj+gBpqgAOZZE+/oR5hMGnMk0+u8z8Nw==
-X-Received: by 2002:a17:902:8304:b0:155:d594:5c04 with SMTP id bd4-20020a170902830400b00155d5945c04mr18509891plb.105.1650431140887;
-        Tue, 19 Apr 2022 22:05:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm19536294pfc.98.2022.04.19.22.05.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 22:05:40 -0700 (PDT)
-Message-ID: <625f94a4.1c69fb81.63583.eb7b@mx.google.com>
-Date:   Tue, 19 Apr 2022 22:05:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 20 Apr 2022 03:27:06 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5124E3A733;
+        Wed, 20 Apr 2022 00:23:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650439434; x=1681975434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VZ2QcDDsn09EZJ9ChcAfXKxOwF3NNkLHqhHF7SzxBPU=;
+  b=iHRMumNbF95vnKvrnxk249pTvzggOv+FSA0pWFRYRev1dMzt8/S+MCQd
+   G53B7X9dd/FgZeNbAILZcuEJv4fGXOamL+CYgL6I4hh/N7L0/PZxpgt86
+   cL/Lv48w1jpx/he8gJP+SRQc5qD8gafitwmQwv6Jt2VQke4O27MMxFAs2
+   Dx48uoPGygiznrfl2zub7ayJQQCVS6cw098qNgRya71EH2AbuZbUlLI2/
+   chd+Lgr++YQFAPdZtTdN8NBLhZns7ouSb1XsYNr0SEjIYqXwLvb/ab7Hg
+   PaWhPGnUnvKPgeeI1H/3ObqK4iQvsA0+ZzWMksat8dJA87gJqQHrRkjiM
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350410498"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="350410498"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:23:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="555076861"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 00:23:49 -0700
+Date:   Wed, 20 Apr 2022 15:22:32 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+        sandipan@linux.ibm.com, fweimer@redhat.com,
+        desnesn@linux.vnet.ibm.com, mingo@kernel.org,
+        bauerman@linux.ibm.com, mpe@ellerman.id.au, msuchanek@suse.de,
+        linux-mm@kvack.org, chang.seok.bae@intel.com, bp@suse.de,
+        tglx@linutronix.de, hpa@zytor.com, x86@kernel.org, luto@kernel.org,
+        heng.su@intel.com
+Subject: Re: [PATCH V2 1/4] selftests: Provide local define of __cpuid_count()
+Message-ID: <Yl+0uGJMnJ0+mDhV@xpf.sh.intel.com>
+References: <cover.1647360971.git.reinette.chatre@intel.com>
+ <7c49dbfe5bab04389ed84c516fcbfe31d66df880.1647360971.git.reinette.chatre@intel.com>
+ <Ylp1oFenjgxWpM0D@xpf.sh.intel.com>
+ <50067c2d-5563-7d8c-f992-5fef787d4d38@intel.com>
+ <Yl47IGLggYsFYolo@xpf.sh.intel.com>
+ <a3ceede0-ebab-6586-dfd5-247c37b976ec@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v5.18-rc3-3-gabd26d348b2a3
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-seccomp: 5 runs,
- 4 regressions (v5.18-rc3-3-gabd26d348b2a3)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3ceede0-ebab-6586-dfd5-247c37b976ec@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 5 runs, 4 regressions (v5.18-rc3-3-gabd26=
-d348b2a3)
+On 2022-04-19 at 15:34:11 -0700, Reinette Chatre wrote:
+> Hi Pengfei,
+> 
+> On 4/18/2022 9:31 PM, Pengfei Xu wrote:
+> > On 2022-04-18 at 09:04:33 -0700, Reinette Chatre wrote:
+> >> Hi Pengfei,
+> >>
+> >> On 4/16/2022 12:52 AM, Pengfei Xu wrote:
+> >>> On 2022-03-15 at 09:44:25 -0700, Reinette Chatre wrote:
+> >>>> Some selftests depend on information provided by the CPUID instruction.
+> >>>> To support this dependency the selftests implement private wrappers for
+> >>>> CPUID.
+> >>>>
+> >>>> Duplication of the CPUID wrappers should be avoided.
+> >>>>
+> >>>> Both gcc and clang/LLVM provide __cpuid_count() macros but neither
+> >>>> the macro nor its header file are available in all the compiler
+> >>>> versions that need to be supported by the selftests. __cpuid_count()
+> >>>> as provided by gcc is available starting with gcc v4.4, so it is
+> >>>> not available if the latest tests need to be run in all the
+> >>>> environments required to support kernels v4.9 and v4.14 that
+> >>>> have the minimal required gcc v3.2.
+> >>>>
+> >>>> Provide a centrally defined macro for __cpuid_count() to help
+> >>>> eliminate the duplicate CPUID wrappers while continuing to
+> >>>> compile in older environments.
+> >>>>
+> >>>> Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+> >>>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> >>>> ---
+> >>>> Note to maintainers:
+> >>>> - Macro is identical to the one provided by gcc, but not liked by
+> >>>>   checkpatch.pl with message "Macros with complex values should
+> >>>>   be enclosed in parentheses". Similar style is used in kernel,
+> >>>>   for example in arch/x86/kernel/fpu/xstate.h.
+> >>>>
+> >>>>  tools/testing/selftests/kselftest.h | 15 +++++++++++++++
+> >>>>  1 file changed, 15 insertions(+)
+> >>>>
+> >>>> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> >>>> index f1180987492c..898d7b2fac6c 100644
+> >>>> --- a/tools/testing/selftests/kselftest.h
+> >>>> +++ b/tools/testing/selftests/kselftest.h
+> >>>> @@ -52,6 +52,21 @@
+> >>>> + * have __cpuid_count().
+> >>>> + */
+> >>>> +#ifndef __cpuid_count
+> >>>> +#define __cpuid_count(level, count, a, b, c, d)				\
+> >>>> +	__asm__ __volatile__ ("cpuid\n\t"				\
+> >>>> +			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
+> >>>> +			      : "0" (level), "2" (count))
+> >>>> +#endif
+> >>>    Linux C check tool "scripts/checkpatch.pl" shows an error:
+> >>> "
+> >>> ERROR: Macros with complex values should be enclosed in parentheses
+> >>
+> >> I encountered this also and that is why this patch contains the "Note to
+> >> maintainers" above. It is not clear to me whether you considered the note
+> >> since your response does not acknowledge it.
+> >>
+> >   Sorry, I just made a suggestion to fix this problem mentioned by the script.
+> >   I didn't notice and reply for the note.
+> > 
+> >>> ...
+> >>> +#define __cpuid_count(level, count, a, b, c, d)                        \
+> >>> +       __asm__ __volatile__ ("cpuid\n\t"                               \
+> >>> +                             : "=a" (a), "=b" (b), "=c" (c), "=d" (d)  \
+> >>> +                             : "0" (level), "2" (count))
+> >>> "
+> >>> Googling:
+> >>> https://www.google.com/search?q=Macros+with+complex+values+should+be+enclosed+in+parentheses&rlz=1C1GCEB_enUS884US884&oq=Macros+with+complex+values+should+be+enclosed+in+parentheses&aqs=chrome.0.69i59j0i5i30l2.313j0j7&sourceid=chrome&ie=UTF-8
+> >>> -> https://stackoverflow.com/questions/8142280/why-do-we-need-parentheses-around-block-macro
+> >>
+> >> More information available in
+> >> https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+> >> but from what I understand it does not apply to this macro. Even so, I do
+> >> not know what checkpatch.pl uses to determine that this is a "Macro with
+> >> complex values".
+> >>
+> >   Checked checkpatch.pl and it seems to suggest using ({ }) for any asm macro
+> >   definition.
+> > 
+> >>>
+> >>> Could we fix it as follow, shall we?
+> >>> "
+> >>> #ifndef __cpuid_count
+> >>> #define __cpuid_count(level, count, a, b, c, d) ({			\
+> >>> 	__asm__ __volatile__ ("cpuid\n\t"				\
+> >>> 			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
+> >>> 			      : "0" (level), "2" (count))		\
+> >>> })
+> >>> #endif
+> >>> "
+> >>
+> >> Sure, I can do so.
+> >>
+> >   I just made a suggestion to fix the problem reported by the checkpatch.pl.
+> >   But I didn't think deeply enough before: I'm not sure is there any real
+> >   improvment or help after the fix.
+> 
+> In this case I would prefer to not implicitly follow the checkpatch.pl without
+> understanding what the concern is.
+> 
+> The goal of this change is to make the __cpuid_count() macro available
+> within kselftest and it does so by duplicating gcc's __cpuid_count() macro.
+> 
+> The macro style is not unique and you would, for example, encounter the same
+> checkpatch.pl complaint if you run:
+> ./scripts/checkpatch.pl -f arch/x86/kernel/fpu/xstate.h
+  Ok, no question from my side.
 
-Regressions Summary
--------------------
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 4          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v5.1=
-8-rc3-3-gabd26d348b2a3/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v5.18-rc3-3-gabd26d348b2a3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      abd26d348b2a366f8947e8c3c2ab9bc881ac9415 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 4          =
-
-
-  Details:     https://kernelci.org/test/plan/id/625f86987ef0a55653ae06fe
-
-  Results:     87 PASS, 4 FAIL, 8 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v5.18-rc3-3-gab=
-d26d348b2a3/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v5.18-rc3-3-gab=
-d26d348b2a3/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220411.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.seccomp_seccomp_bpf: https://kernelci.org/test/case/i=
-d/625f86997ef0a55653ae0701
-        failing since 54 days (last pass: v5.17-rc1-2-g6d468898d774, first =
-fail: v5.17-rc5-16-g1900be289b59) =
-
-
-  * kselftest-seccomp.seccomp_seccomp_bpf_TSYNC_two_siblings_with_one_diver=
-gence_no_tid_in_err: https://kernelci.org/test/case/id/625f86997ef0a55653ae=
-0702
-        failing since 54 days (last pass: v5.17-rc1-2-g6d468898d774, first =
-fail: v5.17-rc5-16-g1900be289b59) =
-
-
-  * kselftest-seccomp.seccomp_seccomp_bpf_TSYNC_two_siblings_with_one_diver=
-gence: https://kernelci.org/test/case/id/625f86997ef0a55653ae0703
-        failing since 54 days (last pass: v5.17-rc1-2-g6d468898d774, first =
-fail: v5.17-rc5-16-g1900be289b59) =
-
-
-  * kselftest-seccomp.seccomp_seccomp_bpf_TSYNC_siblings_fail_prctl: https:=
-//kernelci.org/test/case/id/625f86997ef0a55653ae0707
-        failing since 54 days (last pass: v5.17-rc1-2-g6d468898d774, first =
-fail: v5.17-rc5-16-g1900be289b59) =
-
- =20
+  Thanks!
+  --Pengfei
+> 
+> Reinette
