@@ -2,74 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CC550926D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 23:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DCE50926F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 23:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382719AbiDTWAl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Apr 2022 18:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S236516AbiDTWAn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Apr 2022 18:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236516AbiDTWAk (ORCPT
+        with ESMTP id S1382726AbiDTWAm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Apr 2022 18:00:40 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A553DA46;
-        Wed, 20 Apr 2022 14:57:53 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23KInIsI009531;
-        Wed, 20 Apr 2022 21:57:47 GMT
+        Wed, 20 Apr 2022 18:00:42 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E563D489;
+        Wed, 20 Apr 2022 14:57:55 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23KLbMha019753;
+        Wed, 20 Apr 2022 21:57:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2021-07-09;
- bh=tLsqQ6KwnxR8ySvJVD4/a33QtGvbjfVSrXNfY9lKlgw=;
- b=mEN8TsdljbtTz+bp3nabxvSadaZVCdsIJoGBfLlhu9wi1VgysZ4+pYHfDMFry8tnwAc6
- QGb6DJ12lhSvT35qb1W92SZP8eZV2jIevkRTkyQdWxJ2o1rtfVeeqm3mph9Qf3RgM626
- YZKDq6rtH0b0R1IlFLZE5EcC2msLaZ3kVlFOwQSQLQfV7GQf/NXViGugbE9CJPp1ZLKg
- m2AP0CYdx/jc6uReY6rD8KP9ihTugZcYo6nc0SRUJz2FhvCwuhKY8L3nrxNpnSdT7xda
- QmSttnaLt+N2V4d0f6ji/Ceqgwa91suCeSyrW0ir48pNzE/6RJ8DJvsWWkOxnZYDDXgC Yg== 
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version;
+ s=corp-2021-07-09; bh=WycdjKiNqmEMh+xFeVDykSO/BvYKbAnJWJ33/MmaFIU=;
+ b=yuzvpLz5NhWqYPL4Vu7HgPK9aBrQ8YtAIHB8QqHHn1rv3tNHJPtt9HyGPmwp1wVNWQJg
+ xL1xRb8MJCccXav/JeojNYbCaNrRQYn4VWA8x8ADRpzh24S7JQBBIbMlK459V02T52bM
+ Eokh7Moc72CWipeWji2YRzTqSPA+GCL0c1CeaNh5qK7GEmnvpWdduw8mem61XbsROo3m
+ J4dEZOZKK3T9LIQ6NArRwF8ZxIvTRQv4L6H4+n6Fo2cclVH6qfkx2Ou6fbr05s7E4axA
+ W+VOsEfD3XMNolIpVEL4HWgPPVQbc9VhSB9ZCtDy82tMaCHJd7xo4Z9ALgVJJv24a/vB QA== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ffmk2te8b-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ffmd1agv3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 21:57:47 +0000
+        Wed, 20 Apr 2022 21:57:50 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23KLuBj3015959;
-        Wed, 20 Apr 2022 21:57:46 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ffm8823md-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23KLuGQa016193;
+        Wed, 20 Apr 2022 21:57:49 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2175.outbound.protection.outlook.com [104.47.58.175])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ffm8823p6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 21:57:46 +0000
+        Wed, 20 Apr 2022 21:57:49 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jep9vFtZiMKbWXQNwFYqorqNruvFSZC2AP8aSA19t3hNxjbFyosg2YTgNMDLT5TsarzqDKZcmqGdkZ9BzcI9rYxs64ntltg4rPIC8h3WHtMdKq06OvTwR0smcqm1e55Mkn8mXDq2zckhe22vrD/LgWfmf1OACcDVKf1/Esu6OOr4dl4phpDBpKWG0c8UrbrMYWnf5LhqOk1Oe3FblScvPnyeiZC4sU2dVMU7m7fyZz7mIiXV5P6vtsXdGhtiu95b50JFND8Tc3VStQP171oh3NvJpqbpcgMqMoiSI8E/zE0HQP+/vEz1IFFOn7ffVxAouZfkoaN0tM189EqT5NJQSA==
+ b=fupFxWnyxsBFXJlkJgeN0DAnq7SM32ZK45D41w1x0+TaN2J1OImNY5UYP3I+sxySb7i4+UTbszDjVPyHPs0z1Q8IUyS3NN8qSaT1L6MjGgcN6xFVV1YcHts4DBXRrVgTAx3QtCTe1NnQU7G/vnuPUhLT9S9E9etscMWF84Nxx2pugZeWfxcgyQsYnQy/LJB6pHCFC7tM9jO3iP4CfFkKzI72DX2LQIvMemtzH85M5sJ0pgPH2Sh7tJkULLfJhAUnG9lprlnTUz2TQbXQ5o3t7tyWriGj9eGf52aM80JfvuojkE4SmKlEkEATRCj6JRuUn2HDpiKccvFJU2PmLb5zug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tLsqQ6KwnxR8ySvJVD4/a33QtGvbjfVSrXNfY9lKlgw=;
- b=apzfJGnZezbaWvX1C5ORvpWk6/DvhmKY/XNCoTKARSgfbiLLyiAjT7XSKwVCGSjkCskxvId7vPJXszW++WiC/HGVPDZtLhi1Bm1HrGIqPv4Tdp16L0FdV7g9HI1Q0Q1T3pH3cHbldU6Tc/a3h0WnnnA53oMhI4VPJtROwjUfsKLSdtjhy5HjmEdT/hvmZTHo14mZiipjFzSQp4mACv6tOq+czDo5KuxgkJ36bJJMuTh55uXIySHEDn2l/h19nVIQr+0OlBPaoDt84iP2wnBYUqp7P3WaJiaRa9pXDK8v4zol4B20CxY4Bt2Rg/FhwdYXe2+LNdWLLqPZvSOgnQX8Tg==
+ bh=WycdjKiNqmEMh+xFeVDykSO/BvYKbAnJWJ33/MmaFIU=;
+ b=hY0dVnnE/WpW4k1BgX7YwpkvMm3XbwanMV8D3l8oaHh7KZSMaccoLrMkUU2VU9E3mcElzH48JbNM06PgZkN8uXqxq6s4T380c51Q15s1szXlHMtYWcOoTZ41fmz3Whd6tW1FHMhahBZWccHlru2CDKcTqpHTVON+/ao6Oe1D3n0CUdvJ3y5I1RiawBvypN3cOpQ2BMpexgAuQwsOqVLrzhBz2W7cF3DqXUX6RIIFF0V7ufLG5Mx6T/E8Bu6itWXLIpK8SG2xl62ozH+8fLarsENpMPsDP4TMjJnOO1NvmFaKH6i81fomHY+iGJv0opOrmwBcOlKN+Y0jlJ1pbF1wRw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tLsqQ6KwnxR8ySvJVD4/a33QtGvbjfVSrXNfY9lKlgw=;
- b=g1xUbNfSLSMgnmXLk1FZ3vG5AKGgLqzcoK7krsq6IX9VyAWL77kxPBRaIv2cAngciwa395S2ZMgspNL/gw1e/fwKoWfyHY8JtJH6L/AScY5jn7oEdn6jjuT2w/ryOSgYa1WBzSWugJ5oiPM2CoDhotYxa+0EfNwwopsfqTH15PA=
+ bh=WycdjKiNqmEMh+xFeVDykSO/BvYKbAnJWJ33/MmaFIU=;
+ b=tFB7fI6vx9LNrhek+c8ydGVbfkmgf/Jj6i29kDq/nrIkulYRTY91WziuPHqee+hObphaxEtNaHqbztlvnODYFsSGnEuy0FqwcEMWrfzkfckjVJSehhEZ5/c8HbOw1sS7RL5oFaXsXVo7qO1D15xoEc8zpiv6u7hBL8wxVQf6Wn0=
 Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
  by BN0PR10MB5350.namprd10.prod.outlook.com (2603:10b6:408:124::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Wed, 20 Apr
- 2022 21:57:44 +0000
+ 2022 21:57:47 +0000
 Received: from CH0PR10MB5113.namprd10.prod.outlook.com
  ([fe80::a8c2:7a0b:5845:1675]) by CH0PR10MB5113.namprd10.prod.outlook.com
  ([fe80::a8c2:7a0b:5845:1675%8]) with mapi id 15.20.5164.026; Wed, 20 Apr 2022
- 21:57:44 +0000
+ 21:57:47 +0000
 From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
 To:     shuah@kernel.org, akpm@linux-foundation.org
 Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] selftest/vm: verify mmap addr in mremap_test
-Date:   Wed, 20 Apr 2022 21:57:18 +0000
-Message-Id: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
+Subject: [PATCH v2 2/4] selftest/vm: verify remap destination address in mremap_test
+Date:   Wed, 20 Apr 2022 21:57:19 +0000
+Message-Id: <20220420215721.4868-2-sidhartha.kumar@oracle.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
+References: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SN6PR05CA0012.namprd05.prod.outlook.com
@@ -77,55 +79,55 @@ X-ClientProxiedBy: SN6PR05CA0012.namprd05.prod.outlook.com
  (2603:10b6:610:c9::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 98e7221b-23c6-4e97-9d14-08da2318cc66
+X-MS-Office365-Filtering-Correlation-Id: 492aa591-bf3b-4cb4-e758-08da2318ce4a
 X-MS-TrafficTypeDiagnostic: BN0PR10MB5350:EE_
-X-Microsoft-Antispam-PRVS: <BN0PR10MB5350909414B923BF8566B55C95F59@BN0PR10MB5350.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BN0PR10MB5350D6161E0FC15E61F1CFA495F59@BN0PR10MB5350.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jCMo77CcVWNShFSGGsQ5wGEuaowivXtL1eW0eC2hrG1sYOBmJcDwSai/GK7kJF6X+7tmvFr+uuOcypFP5i5aMegxtiWjaYgNzyVUR3EGISrxr+IKkuRT7rU3hflrso1/g98kKMIgfCBII7XOROcd/U2myv2ZhGlO2FI8zYssLVkob/P4PXWsDYU2BgnQ2uawC6kNP1H8m5lB/q4Y4i6DY4beym8JGVBrJnLvk3InW2Bwx7qDGTZfY/viQnlcPIdQfvGluq+79hxAjj37LbhGxiVJqHeoEpmHL+L98zdIySkIvnCuq9wUYqrIKNwZqXDrugDW0DqOXwccVOalEvaRZRne3sULpEZTaYVlxg34BmF/2/qTju3qeEZHGz5dEAginTQuYWh1mCdCWKPHJIBAaLHfX6h44rgKQj7y/+lEyIr6g9oDpXlGPc3oLDxWpyDXHdDuJX57bKy7FWH7WVpDpWraLWTzDTvEegVPmakdgHv1YuVvpTkOZO5fQL5LIIHJs/Bz5sAT6UN6HjdR27G9wt9un7w7XJAa4qGnEdlvY/+q3ErWcTOsngQJUfXsV5f0+wNncStZGkAEcLsmyvhn6C+PYIUVz26uZ4398gzF3gQmMcIsyTzXtvTBIu2KlfRYODhE+flIYkQ80c2Fnp3Z2hJVLIMMyyDYb8V2AGIa8zF8+JxPLZyFgD0d/vojvEj56eJyCxO1yrTpSA8IWdk7qQ==
+X-Microsoft-Antispam-Message-Info: iVA4rj2eoQQ2QXlb4i+5rUDOuWbFr0FY7RoGAQM2eDlCNoAp2d9W5XB7z8+qV4UU+5EyKt8VXKSGkpv2CGZey2NYHHlMS687hhsHSN222zzI98Q+8YaCfZBGs/gAs8IMS0RvZ602PJFGziLrQNexzRrhnCt4y4+OVvd1nh+ptQE3bW96roTdcwEzlB3SjeWZkmOluRucGZtnFWQIDB21fm28eVCXoQczrX/LtqzLm75g/XNBeK1Su7q9tu4TSVphAHnNuZmPOf1gTN159DXpJgnzzCbnvKFVKtU/x0RqdPM/er505VkqlR7o5kfIbPu1RSvMAre27W8U89ip6ii3qGeyFG3i/kvrdYkPheYjYhyT7xjZFMg+9peQU6SYmbBfbuike/UOkPKATV6+BciVxFaUnfXMUlq0X65kuvQb1rc689EBD3iE2Q5qxasQzo/nAQoOGLq8Qraeay5hYu8RCv3oD04+TIuRgn9WUTbtNqQyBThEVTlmQuMTCDXQJEDTh6EnnvEvq3iwZuqAPvP3e1WWYQRe7yrovuCT6ed3B2ezf+J3XWIyt44Uf1yB96V5FkwaekWSJUi1s3DzOyoHl2wkT7dhWeu62iY47gHObfv0XMrkFJwg/J8orfcsVb3VAOQJt/OpIN1rJxrIDLufaGBhISsySURIxrJ3CXnw9COFWL7Yfk/8QS/VlDtH95b0jPzYJ9nilRspt1pXfz8bUw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(38350700002)(38100700002)(8936002)(508600001)(86362001)(316002)(4326008)(186003)(83380400001)(66556008)(36756003)(52116002)(44832011)(26005)(66946007)(2906002)(6506007)(6512007)(1076003)(5660300002)(15650500001)(66476007)(6666004)(2616005)(8676002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vSVXKu9Spc0A7XT6iW/+vnuGeYvmXDyyCbf6jK5LHBYbaGUvNuRiSDJy2dbC?=
- =?us-ascii?Q?f/GfUGSNFymKSFdjrybOhHYsRrErDGG2ESusY0Y8GP4uma+folZW2VQAiwNy?=
- =?us-ascii?Q?5mIRBdepJfPxcZ0x+P7GhUEZrwWGiSAYnkvv8Ue1ey/H+knm68o9x3AreguO?=
- =?us-ascii?Q?CNb/SDuHqox2qW3mPJx+ZXOp0UCrrM+CAB513VBt7usXo8zPWIKrNdc+6KRl?=
- =?us-ascii?Q?y3QRXCvE9NYEeXsIeke7gldAreUWhcQbyC085xolc3Lwfe6l5Bci9U8aPDij?=
- =?us-ascii?Q?OuodaqHmm2ZqroErZg+fyDnojOMlxhDg3vx4MXKQ1Bgm+uMIFqAK83z7nlES?=
- =?us-ascii?Q?hBfRTY9rymuSZUGpVLsByN2t4NLClECDRkhjOUYiiHulWHiictPLuhUzXjaL?=
- =?us-ascii?Q?j3CL3SZuMMKS4b3vVcKWHAK2YLZjU401PiCBftIspjte2JBnAbEF7ufrK+h6?=
- =?us-ascii?Q?5PfuT2c1Xpht3Q+7Q9N4pch1F+Xye4Q9IpN3ixmaxi5OIccBreWeK0vBrcwU?=
- =?us-ascii?Q?mfneXSvE5ptiFz0ydfu8TQkdoY48RSNaW3G3KqKzpdv/kapF27CO3+CIr5eD?=
- =?us-ascii?Q?Pa7jk9Sk55c5zMTGzchEDopQX35cZqEvqS4Fd0jsy025+3rVH4GTwWxzuR2t?=
- =?us-ascii?Q?l8Z29YeEumuiNTkGdAGizKumR5J1gTHKaRy41R38ds5PlkogFmaoKsbEH0io?=
- =?us-ascii?Q?JN2ODpEhk8Qhw6DpGkDn6Nga56ZT7MB8JWVhhSd8VGE93lntQw0/nEDHXYDD?=
- =?us-ascii?Q?ZtBT7WBIacEmH+PVhW1FjyPt3Oa2Q9GZonJfD07RAhU8ZOWeQuRVIK+Y1SDp?=
- =?us-ascii?Q?8EFmASksYjOVAASxB5IU+WIEPaGupcO4jlxveROTN9sQuzhueGJ+gJyRJfIN?=
- =?us-ascii?Q?vkINgspgezdjQQI4E/K8mbvLpvOvZBGCWoi9o2KCypYjVhsVtA5rdcLgjrc6?=
- =?us-ascii?Q?aesuPFbtHucDatOt6XF5TeozxHfl9bgVA+EB+4vVUW1CV4h0MREDN2SuHilt?=
- =?us-ascii?Q?JEekJtYkF8/ZWIrJ1eaF/Hkaob6ix9RgW9om+lrk21jKzE2uUeKGwblN2vN8?=
- =?us-ascii?Q?51Yk1XloehsmvBazIRoe8c+35rMF5hrG3wk1EjphuzGGWrk6vdtyMI9g32lc?=
- =?us-ascii?Q?zqv5pw0l4fxPAHaLkW1vYtF8vD49EBvoupO931x0lRJox9dlZxxDhaUCEawv?=
- =?us-ascii?Q?N6wod3tyoLaR0jOxoJ9xqkB/Jjgpp/Onu3U2ebUVLuJOQWEtK3Z2dg6bY8pl?=
- =?us-ascii?Q?hzwvcgl17KOdfBh4hqfATJGbZWhGIkwWLASXVTMvS/+w8Eih6dGj46bBBj49?=
- =?us-ascii?Q?1gMptwfLxpYOCkdjPOokCqSQfPET3zOG+sb/0cRnu/ie2vq3e+kSmmNepIWL?=
- =?us-ascii?Q?Mc3Ns+afeXefeyzMxkW2nqCUus3zkRwHP3qghIyJjG7snrDNCJYzgsgt/HnO?=
- =?us-ascii?Q?AAmGZssKWt5rdvyakiU45YueI2CN/WtlYkaAH14lsIwQ/bXhujWcqG08p3hn?=
- =?us-ascii?Q?vfb9z5BvNIj6TnRNpS/WckbWPBdFkX01wPwLh1Z2Tu9G7YN7DiwhefmvjHNT?=
- =?us-ascii?Q?67ryvbrhOiky0bzZiETCrUhuOzyEkTkplROg1JN5YJWtjVvj3z31xfE2ssNO?=
- =?us-ascii?Q?k49CqkcCWHJ91Nz5ETABT+OgeaqWsBRmLdIuB+mglTf+dCu/7s8N3HBW3b/R?=
- =?us-ascii?Q?LyLcj8J0YUPgsj3MPPUXbhDwwRhv2VdFwAbuzj/b8nAh7xpE52KmaaJ7/eCl?=
- =?us-ascii?Q?pRAKqkr6Mt00mVj7sWdsb4bWaggR7TY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B3s3ewYO1NmiWCTLee23jO5ORkzr9+TqgqgPaBzIJPXrfy47zYfQvjFJmZ4L?=
+ =?us-ascii?Q?/fV72E989/aJ/bPCxjlxl7pgRoh1NMj2cCgR2eq6ho2dKVzoXZw6+PGHnVXV?=
+ =?us-ascii?Q?x82AwehFfQYZTVzUUNetVb9L9fhFN8mjb2dTqAtawBkab+XeGLSvC95O/WaO?=
+ =?us-ascii?Q?kEXwMNoJy0XX/bNMN9BrN4im/VGvQLE/8yb3kPBLqrciDWddgP+SuAAaDxx4?=
+ =?us-ascii?Q?tsZCKm+ucReGlBX9XMa9TvqHj2TwjlwZTFB3EPQ3bgZOxK39iSq7/KN2eaxk?=
+ =?us-ascii?Q?gTrbd0lIDn1TNTteloXmOK73heNHGLCEgVq1NethYfZq1nz271Wa24luNLgJ?=
+ =?us-ascii?Q?SoQUWVnW5bnUJhC7oDSUMVFtsSyZ2JjKO6L9K+yD/PCdjviTugJus06xTv8I?=
+ =?us-ascii?Q?41jG3E1Xb0zmb0GDNLLBeF8q3r8QSCur1sqmXqYXkTxNKdLOG25w9YWoSNhU?=
+ =?us-ascii?Q?AgvS0EMGZQDXJFGhegeO5G6wSCy/q3ZeyiJlbCXCSu56D/ZQ/+5VcoXV6L5X?=
+ =?us-ascii?Q?qGVtSiAMZR0w5mg2vl7bX6hmbUt/LpvLszbSyg/V4qrCRBxF2u/npCfSV1Eu?=
+ =?us-ascii?Q?ebsMRklU32HkVzUVIqCXSs12+TljZnfLw6MQzG96SGDSuVAz4y2b33rqnSaf?=
+ =?us-ascii?Q?BM97OJhiua5hIKuAGI5DDDoXIJGHsBIYuYfR2+9hyQFvdvSwel9WnFQ4cQEg?=
+ =?us-ascii?Q?A0TEJO+pYjFa4NhCCltELfilUhaON0MalkLgv6c6PxIzzIgjg9v2ICsg9HYy?=
+ =?us-ascii?Q?fn5VrWxx521o2euB/S08T7NUaIy5HuzrTDxW1rBvH1CXa8HqGKWuwHDeTYoA?=
+ =?us-ascii?Q?0OwC0fAgojkpXqIK2OVQVC0vIkA0p19gWiuyioCd/7U6i/35gXZUc0azegoB?=
+ =?us-ascii?Q?etaUXHGlsi5aj7dP+KKQsFj9pUKE2frvvaMFvY+galNyKn7onPgkREF/H0cm?=
+ =?us-ascii?Q?hh3zfVqeUTMr5htvF/GtCt7JIiieToORsQwV5mMaVfSe/Omb8M0xEwfc1tNH?=
+ =?us-ascii?Q?+elRXU4gXxvVSCSi3AOKjv+/QgaP6IyAYIMbnyhp+NuA2jL0tWFib1DVVGhh?=
+ =?us-ascii?Q?m3nn2gjI+/azBx87PQEGFazIfcLLmuP/t7fv4a8xFDPpNy47FEKV8IURQVGp?=
+ =?us-ascii?Q?XHmbvJ0RII+bMbvCxb0z32mxiDWzUg9gAXs+dt3RKRmX3MqWmkydJF0HLyZ+?=
+ =?us-ascii?Q?p+rEELd7TUI28dWWW3BaYn1/mzmA5Wj+b4wZTwrmsHZa4P5BuKBefvMqN2Wu?=
+ =?us-ascii?Q?JixOYBrGEXIGEUHQmgJa8PzASVXP7I6jHuUd5lNGEISZNaCmarGjtbi5ZRLn?=
+ =?us-ascii?Q?FFG4vOnRRLS0D+7yEDH2lX53TE4FcJIJT049LvjXZlkq8LZPMcSRfCx3CrMC?=
+ =?us-ascii?Q?HllDpFDMe7vq9WcBfkWpF59orO9T7uV7qeGDneKGrdqlfbgay4DpTxnjMpl9?=
+ =?us-ascii?Q?9xKDEKAjKS9uYQ5HsWUIddBd2tg/7GcFpyrUrONnBzsbHp4Sj55kb7WfZkTn?=
+ =?us-ascii?Q?Ecf1hUHrkaLBXr8pS4Qi3nnSvxfNFN/PUlmpYnwzoP7Dl+NEkh7n3WtjkyL6?=
+ =?us-ascii?Q?ocnQ27lQ9GZr4wvCFh1wo8QGfLA1OaQaDA9DrWmeDXFxLH5/7b7N8KkTTaru?=
+ =?us-ascii?Q?tk/TySBYeickHA2GnXj2JxW3SWTldwgW6Xo2hgN2xijQ4opCXIoziWQAMKGH?=
+ =?us-ascii?Q?zHfZfe8yNOeyIV8FnefDzkJTDzGnd7gCUoNjAd71Kza3sHtxZ/L2qOgKJ8Ft?=
+ =?us-ascii?Q?nbLsGE+qXLoH3HnlvntChMmxwWZBYQ4=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98e7221b-23c6-4e97-9d14-08da2318cc66
+X-MS-Exchange-CrossTenant-Network-Message-Id: 492aa591-bf3b-4cb4-e758-08da2318ce4a
 X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 21:57:44.3060
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 21:57:47.4955
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1aqZ3aPDEFniKxz8+UiR3r+46C9viMSryrJ4WYDHM/UkltO67aAFgetyrxPwy7mbejPKwV2BeRtgLxr2VXYZTtXiLHjRvr2CNnP8ageKixc=
+X-MS-Exchange-CrossTenant-UserPrincipalName: w6OcFB5CCfNsJNOtJHbcbhqmkGg4nG/DadvBchxNST+s/5qp/cbzt8i3wsFZriL9cm4f2S1mg2e4EoP0tsNtnoHQU6FyUQEZs5DHiE78NQ4=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5350
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
  definitions=2022-04-20_05:2022-04-20,2022-04-20 signatures=0
@@ -133,8 +135,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adul
  malwarescore=0 mlxlogscore=999 suspectscore=0 spamscore=0 bulkscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2204200128
-X-Proofpoint-GUID: aqTgcwaqHSVa7QiZLJPtxpr_Zqqg1JvD
-X-Proofpoint-ORIG-GUID: aqTgcwaqHSVa7QiZLJPtxpr_Zqqg1JvD
+X-Proofpoint-ORIG-GUID: pN0kphForBB1PCry6DTyRKtsSvcvSOqH
+X-Proofpoint-GUID: pN0kphForBB1PCry6DTyRKtsSvcvSOqH
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
@@ -145,100 +147,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Avoid calling mmap with requested addresses that are less than the system's
-mmap_min_addr. When run as root, mmap returns EACCES when trying to map
-addresses < mmap_min_addr. This is not one of the error codes for the
-condition to retry the mmap in the test. Rather than arbitrarily retrying
-on EACCES, don't attempt an mmap until addr > vm.mmap_min_addr. 
+Because mremap does not have a MAP_FIXED_NOREPLACE flag, it can destroy
+existing mappings. This causes a segfault when regions such as text are
+remapped and the permissions are changed.
 
-Add a munmap call after an alignment check as the mappings are retained
-after the retry and can reach the vm.max_map_count sysctl.
+Verify the requested mremap destination address does not overlap any
+existing mappings by using mmap's MAP_FIXED_NOREPLACE flag. Keep 
+incrementing the destination address until a valid mapping is found or
+fail the current test once the max address is reached.
 
 Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
 ---
 v2:
--change comment for description of get_mmap_min_addr()
--fix commit message formatting
+-rename remap_region_valid() to is_remap_region_valid().
+-change return value of is_remap_region_valid() to bool.
+-take out overflow check from is_remap_region_valid() to 
+ inside caller.
+-fail just the current test on overflow rather than existing 
+ the program
+-fix alignment of mmap calls
+-change "can't" to "couldn't" in error message
+-increment mremap destination address by dest_alignment
+ rather than src_alignment
 
- tools/testing/selftests/vm/mremap_test.c | 41 +++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vm/mremap_test.c | 42 ++++++++++++++++++++++--
+ 1 file changed, 39 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index 0624d1bd71b5..2b3b4f15185f 100644
+index 2b3b4f15185f..e3ce33a9954e 100644
 --- a/tools/testing/selftests/vm/mremap_test.c
 +++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -6,6 +6,7 @@
- 
- #include <errno.h>
- #include <stdlib.h>
-+#include <stdio.h>
+@@ -10,6 +10,7 @@
  #include <string.h>
  #include <sys/mman.h>
  #include <time.h>
-@@ -64,6 +65,35 @@ enum {
++#include <stdbool.h>
+ 
+ #include "../kselftest.h"
+ 
+@@ -65,6 +66,30 @@ enum {
  	.expect_failure = should_fail				\
  }
  
-+/* Returns mmap_min_addr sysctl tunable from procfs */
-+static unsigned long long get_mmap_min_addr(void)
++/*
++ * Returns false if the requested remap region overlaps with an
++ * existing mapping (e.g text, stack) else returns true.
++ */
++static bool is_remap_region_valid(void *addr, unsigned long long size)
 +{
-+	FILE *fp;
-+	int n_matched;
-+	static unsigned long long addr;
++	void *remap_addr = NULL;
++	bool ret = true;
 +
-+	if (addr)
-+		return addr;
++	/* Use MAP_FIXED_NOREPLACE flag to ensure region is not mapped */
++	remap_addr = mmap(addr, size, PROT_READ | PROT_WRITE,
++					 MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
++					 -1, 0);
 +
-+	fp = fopen("/proc/sys/vm/mmap_min_addr", "r");
-+	if (fp == NULL) {
-+		ksft_print_msg("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
-+			strerror(errno));
-+		exit(KSFT_SKIP);
++	if (remap_addr == MAP_FAILED) {
++		if (errno == EEXIST)
++			ret = false;
++	} else {
++		munmap(remap_addr, size);
 +	}
 +
-+	n_matched = fscanf(fp, "%llu", &addr);
-+	if (n_matched != 1) {
-+		ksft_print_msg("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
-+			strerror(errno));
-+		fclose(fp);
-+		exit(KSFT_SKIP);
-+	}
-+
-+	fclose(fp);
-+	return addr;
++	return ret;
 +}
 +
- /*
-  * Returns the start address of the mapping on success, else returns
-  * NULL on failure.
-@@ -72,8 +102,15 @@ static void *get_source_mapping(struct config c)
+ /* Returns mmap_min_addr sysctl tunable from procfs */
+ static unsigned long long get_mmap_min_addr(void)
  {
- 	unsigned long long addr = 0ULL;
- 	void *src_addr = NULL;
-+	unsigned long long mmap_min_addr;
-+
-+	mmap_min_addr = get_mmap_min_addr();
-+
- retry:
- 	addr += c.src_alignment;
-+	if (addr < mmap_min_addr)
-+		goto retry;
-+
- 	src_addr = mmap((void *) addr, c.region_size, PROT_READ | PROT_WRITE,
- 			MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
- 			-1, 0);
-@@ -91,8 +128,10 @@ static void *get_source_mapping(struct config c)
- 	 * alignment in the tests.
- 	 */
- 	if (((unsigned long long) src_addr & (c.src_alignment - 1)) ||
--			!((unsigned long long) src_addr & c.src_alignment))
-+			!((unsigned long long) src_addr & c.src_alignment)) {
-+		munmap(src_addr, c.region_size);
+@@ -112,8 +137,8 @@ static void *get_source_mapping(struct config c)
  		goto retry;
-+	}
  
- 	if (!src_addr)
- 		goto error;
+ 	src_addr = mmap((void *) addr, c.region_size, PROT_READ | PROT_WRITE,
+-			MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
+-			-1, 0);
++					MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
++					-1, 0);
+ 	if (src_addr == MAP_FAILED) {
+ 		if (errno == EPERM || errno == EEXIST)
+ 			goto retry;
+@@ -180,9 +205,20 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 	if (!((unsigned long long) addr & c.dest_alignment))
+ 		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
+ 
++	/* Don't destroy existing mappings unless expected to overlap */
++	while (!is_remap_region_valid(addr, c.region_size) && !c.overlapping) {
++		/* Check for unsigned overflow */
++		if (addr + c.dest_alignment < addr) {
++			ksft_print_msg("Couldn't find a valid region to remap to\n");
++			ret = -1;
++			goto out;
++		}
++		addr += c.dest_alignment;
++	}
++
+ 	clock_gettime(CLOCK_MONOTONIC, &t_start);
+ 	dest_addr = mremap(src_addr, c.region_size, c.region_size,
+-			MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
++					  MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
+ 	clock_gettime(CLOCK_MONOTONIC, &t_end);
+ 
+ 	if (dest_addr == MAP_FAILED) {
 -- 
 2.27.0
 
