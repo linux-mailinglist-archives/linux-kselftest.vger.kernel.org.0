@@ -2,149 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4B35087B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 14:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D770508870
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 14:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378406AbiDTMJv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Apr 2022 08:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S1353832AbiDTMuA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Apr 2022 08:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378395AbiDTMJt (ORCPT
+        with ESMTP id S1348748AbiDTMt7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Apr 2022 08:09:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB627FCE;
-        Wed, 20 Apr 2022 05:07:03 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K9cP9c009788;
-        Wed, 20 Apr 2022 12:06:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ArLI73Wo1SazBtj36Saojj2rlHPwZfm3Tsuw4CYSFB0=;
- b=U0a780jVjCalXHtyq1vEF0v6w8KyNzudF/W1ixGEO9dhPEww9p3IMbuSELpb4eHAVBpP
- iPoqZBGPQfpOu53qSvKdR1tTQ5sq2dF70iwQ8fYGb2gSjODtsr+NSRtrlpkI5tuKAuJK
- 29H6rtnRji4UAkBg/ah/QSagc0u+yD6Cm+c7+J6psvKytUKzMuB1rGZcWVXQBB4DnqyG
- cCSbPyHUFlsvHi9iAPVo6NlKRsUHOEtFEaHiRaNmC4BfnqTjq8BweWjeQArcCZseonx9
- jl6BeMO1z18R/BE29DRBTZ5rtKM//JWgWIK4908A87ViVbHwJpYGCZ//LdS4vXI2PKsU rQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fhxh892sy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:06:56 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23KBul0d026896;
-        Wed, 20 Apr 2022 12:06:55 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fhxh892s8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:06:54 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23KC5FGo003092;
-        Wed, 20 Apr 2022 12:06:52 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8p8m4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 12:06:52 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23KC6n7P55574874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Apr 2022 12:06:49 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77BBFA404D;
-        Wed, 20 Apr 2022 12:06:49 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1944A4040;
-        Wed, 20 Apr 2022 12:06:48 +0000 (GMT)
-Received: from [9.171.21.171] (unknown [9.171.21.171])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 20 Apr 2022 12:06:48 +0000 (GMT)
-Message-ID: <1a2eb5a1-dbdb-5767-ff84-aaf1d43b0540@linux.ibm.com>
-Date:   Wed, 20 Apr 2022 14:06:48 +0200
+        Wed, 20 Apr 2022 08:49:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA72B3C73F;
+        Wed, 20 Apr 2022 05:47:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0A1F1210F1;
+        Wed, 20 Apr 2022 12:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650458832; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fE2JVFjVSECX2xSom7dha9uadrw2m4rx6MxVgcht3TU=;
+        b=ls08cpYNS6BsFKbzep+CNbq8sfVdl2ellBWBujxnccydNYGlZusiruxwRBWAGNdG+LbEjN
+        jBIdNmHiFta1RBcAXwfZU0dmIdTZsOgoaKPo4njd2eiadAdPKoabYOFObP16BYeeo/IWJ6
+        6qVYRksrngynbRG+maQ3Tkc4EqFNkn0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 261B62C142;
+        Wed, 20 Apr 2022 12:47:11 +0000 (UTC)
+Date:   Wed, 20 Apr 2022 14:47:10 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
+Message-ID: <YmAAzkwGg6GspCiu@dhcp22.suse.cz>
+References: <20220408045743.1432968-1-yosryahmed@google.com>
+ <20220408045743.1432968-2-yosryahmed@google.com>
+ <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+ <YlBCeadBqbeVvALK@dhcp22.suse.cz>
+ <YlBM/HlPyPUZew5N@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+ <CAJD7tkbFjbGJ7CnNogpGq5enh_uhP8T5c0U+ku9PfwMoVLf2gg@mail.gmail.com>
+ <CAJD7tkYJj2O-zaux9BZxJxG+JBjPrwRYKXPAAAh7i9GVE53VGQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 3/4] KVM: s390: selftests: Use TAP interface in the
- tprot test
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-s390@vger.kernel.org
-References: <20220419185857.128351-1-thuth@redhat.com>
- <20220419185857.128351-4-thuth@redhat.com>
- <267dc999-edc6-c8fc-b177-e06fb2d259b4@linux.ibm.com>
- <f3989523-bed1-d9d4-2007-19de8ba4d403@redhat.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <f3989523-bed1-d9d4-2007-19de8ba4d403@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: PyZiokVk0qOVR0j3OzLlA8MSNrvxnF8R
-X-Proofpoint-GUID: GZ7CVhLQijYEHA1j92pogLWe1X03aQfu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_03,2022-04-20_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
- phishscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200073
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkYJj2O-zaux9BZxJxG+JBjPrwRYKXPAAAh7i9GVE53VGQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/20/22 13:46, Thomas Huth wrote:
-> On 20/04/2022 13.38, Janis Schoetterl-Glausch wrote:
->> On 4/19/22 20:58, Thomas Huth wrote:
->>> The tprot test currently does not have any output (unless one of
->>> the TEST_ASSERT statement fails), so it's hard to say for a user
->>> whether a certain new sub-test has been included in the binary or
->>> not. Let's make this a little bit more user-friendly and include
->>> some TAP output via the kselftests.h interface.
->>>
->>> Signed-off-by: Thomas Huth <thuth@redhat.com>
->>> ---
->>>   tools/testing/selftests/kvm/s390x/tprot.c | 28 +++++++++++++++++++----
->>>   1 file changed, 23 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
->>> index c097b9db495e..baba883d7a6d 100644
->>> --- a/tools/testing/selftests/kvm/s390x/tprot.c
->>> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
->>
->> We're not committing ourselves to any particular test output, are we?
->> Your patch considers the stages used for test setup tests themselves,
->> which I'm fine with, but would not want to commit to keeping that way forever.
+On Thu 14-04-22 10:25:29, Yosry Ahmed wrote:
+> On Fri, Apr 8, 2022 at 1:08 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > On Fri, Apr 8, 2022 at 7:55 AM Dan Schatzberg <schatzberg.dan@gmail.com> wrote:
+> > >
+> > > On Fri, Apr 08, 2022 at 04:11:05PM +0200, Michal Hocko wrote:
+> > > > Regarding "max" as a possible input. I am not really sure to be honest.
+> > > > I can imagine that it could be legit to simply reclaim all the charges
+> > > > (e.g. before removing the memcg) which should be achieveable by
+> > > > reclaiming the reported consumption. Or what exactly should be the
+> > > > semantic?
+> > >
+> > > Yeah, it just allows you to avoid reading memory.current to just
+> > > reclaim everything if you can specify "max" - you're still protected
+> > > by nretries to eventually bail out. Mostly, though I just feel like
+> > > supporting "max" makes memory.reclaim semetric with a lot of the
+> > > cgroup memory control files which tend to support "max".
+> >
+> > One possible approach here is to have force_empty behavior when we
+> > write "max" to memory.reclaim. From Google's perspective we don't have
+> > a preference, but it seems to me like logical behavior. We can do this
+> > either by directly calling mem_cgroup_force_empty() or just draining
+> > stock and lrus in memory_reclaim().
+> >
+> > This actually brings up another interesting point. Do you think we
+> > should drain lrus if try_to_free_mem_cgroup_pages() fails to reclaim
+> > the request amount? We can do this after the first call or before the
+> > last one. It could introduce more evictable pages for
+> > try_to_free_mem_cgroup_pages() to free.
 > 
-> No commitment - just somewhat more verbose output. If you don't like it, we can also drop this patch, or do it in another way, I don't mind too much.
+> Hey Michal, any thoughts on this? I am looking for feedback on this
+> before I send out v4.
 
-I'm fine with it then.
-With the braces changed:
+As I've already said I do not have strong preferences for the "max"
+value to be accepted by the interface. Maybe you can add a support for
+max in a separate patch so the discussion would not delay the rest of
+the work.
 
-Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> 
->>> +#define HOST_SYNC(vmp, stage)            \
->>> +{                        \
->>> +    HOST_SYNC_NO_TAP(vmp, stage);        \
->>> +    ksft_test_result_pass("" #stage "\n");    \
->>> +}
->>> +
->>
->> It should not be a problem, but is there any reason you're not using
->> do { ... } while(0) or ({ ... }) instead of just braces?
-> 
-> Yes, that would be better, indeed.
-> 
->  Thomas
-> 
+For the LRU draining I do not see any problem for that to be added. The
+overhead of the operation would increase, especially on larger machines,
+which could be a concern. So the real question is whether not doing so
+is a big problem. Our force_empty implementation optimistically drains
+pcp caches but please note that this is not really guranteeing anything
+as charges can happen at any time. 
 
+-- 
+Michal Hocko
+SUSE Labs
