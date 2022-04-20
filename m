@@ -2,69 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD59A50874B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 13:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4B35087B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 14:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350988AbiDTLt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Apr 2022 07:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S1378406AbiDTMJv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Apr 2022 08:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240418AbiDTLtZ (ORCPT
+        with ESMTP id S1378395AbiDTMJt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:49:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF83D419B7
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Apr 2022 04:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650455198;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QjJ7W2VWOdduuBY4m9CKgE899vRh3ylPTanzkeBGjMc=;
-        b=jQCgbEQ4frdQI6Q7ctDkKtaLLpAjO+XlSxhD9iCFFStu+Z0Bd8TxvGdLL72Qcc/jIO1e6w
-        xY/bm+sd9bS7/mfgfmDg4l4rL2o88avH8M30dkS+t6IdiQ2Bkc37PMjtUIoPVjaA9Mr6Gf
-        kNi0Lyaesro1yMqjHB53WJawtY/IHBs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-PqYm72btPsaV8TZJU0o8xA-1; Wed, 20 Apr 2022 07:46:37 -0400
-X-MC-Unique: PqYm72btPsaV8TZJU0o8xA-1
-Received: by mail-wr1-f70.google.com with SMTP id s13-20020adfa28d000000b00205e049cff2so322790wra.17
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Apr 2022 04:46:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QjJ7W2VWOdduuBY4m9CKgE899vRh3ylPTanzkeBGjMc=;
-        b=Dq/5CVpA9DDpPhYok+iCoxOfIZk038lCb3pLuLov1bD/OFjNMNbOOEX3VazANLQhfc
-         cew9PJXwQ9kQ33Jp77I5nuB3JDN0FE+EM/IEEsFz7mN7bNtTWN6EFQI5WPZbqKiOpM3Q
-         w23XxflTrR2xdFpD4/ANSjtEA457yPi69l1Zyi/f7gzVt+Yvm8AKcCWsS9Hi/TZGbiW6
-         c5Nui4J3lAIInSdsjBeqmaI66OmmmqExCXh0xT7IpvNRIzgPOmiXtxr0tUIeyvi1Wnzi
-         +WW4Zxni+QboEUWAcXhgLr5JS4BOPkqtyLO3tNDGmgKk5hsYtkQ0ki8NPT3hvSZALQpW
-         agLg==
-X-Gm-Message-State: AOAM530QTq2r27LYxfOZfc6K0CrAkTBl5faOFAopCFb7YWjn5LiHhzIH
-        g4zbkFBuuT5VdErE1KLqdc7+XKcS6z3x21bT84/0uOvtt+nax4iJQxUzsPBzTIwYABjXyZHvQ5M
-        T9dxK45KjTMvcSMHzpK4fJfHtXTOQ
-X-Received: by 2002:a7b:c394:0:b0:38e:b415:96af with SMTP id s20-20020a7bc394000000b0038eb41596afmr3275032wmj.68.1650455196358;
-        Wed, 20 Apr 2022 04:46:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx2+4RvHcOr8kj3JC0i5jL5q7qHBvnI4Ln88+TPK0r7DrGphgB2Y1AKjG+BfGM8t7M0vvURqg==
-X-Received: by 2002:a7b:c394:0:b0:38e:b415:96af with SMTP id s20-20020a7bc394000000b0038eb41596afmr3275004wmj.68.1650455196098;
-        Wed, 20 Apr 2022 04:46:36 -0700 (PDT)
-Received: from [192.168.8.102] (dynamic-046-114-174-058.46.114.pool.telefonica.de. [46.114.174.58])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1c7909000000b0038eb8171fa5sm18216643wme.1.2022.04.20.04.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 04:46:35 -0700 (PDT)
-Message-ID: <f3989523-bed1-d9d4-2007-19de8ba4d403@redhat.com>
-Date:   Wed, 20 Apr 2022 13:46:33 +0200
+        Wed, 20 Apr 2022 08:09:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB627FCE;
+        Wed, 20 Apr 2022 05:07:03 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23K9cP9c009788;
+        Wed, 20 Apr 2022 12:06:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ArLI73Wo1SazBtj36Saojj2rlHPwZfm3Tsuw4CYSFB0=;
+ b=U0a780jVjCalXHtyq1vEF0v6w8KyNzudF/W1ixGEO9dhPEww9p3IMbuSELpb4eHAVBpP
+ iPoqZBGPQfpOu53qSvKdR1tTQ5sq2dF70iwQ8fYGb2gSjODtsr+NSRtrlpkI5tuKAuJK
+ 29H6rtnRji4UAkBg/ah/QSagc0u+yD6Cm+c7+J6psvKytUKzMuB1rGZcWVXQBB4DnqyG
+ cCSbPyHUFlsvHi9iAPVo6NlKRsUHOEtFEaHiRaNmC4BfnqTjq8BweWjeQArcCZseonx9
+ jl6BeMO1z18R/BE29DRBTZ5rtKM//JWgWIK4908A87ViVbHwJpYGCZ//LdS4vXI2PKsU rQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fhxh892sy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 12:06:56 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23KBul0d026896;
+        Wed, 20 Apr 2022 12:06:55 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fhxh892s8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 12:06:54 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23KC5FGo003092;
+        Wed, 20 Apr 2022 12:06:52 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ffne8p8m4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Apr 2022 12:06:52 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23KC6n7P55574874
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Apr 2022 12:06:49 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 77BBFA404D;
+        Wed, 20 Apr 2022 12:06:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1944A4040;
+        Wed, 20 Apr 2022 12:06:48 +0000 (GMT)
+Received: from [9.171.21.171] (unknown [9.171.21.171])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Apr 2022 12:06:48 +0000 (GMT)
+Message-ID: <1a2eb5a1-dbdb-5767-ff84-aaf1d43b0540@linux.ibm.com>
+Date:   Wed, 20 Apr 2022 14:06:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+ Thunderbird/91.7.0
 Subject: Re: [PATCH v2 3/4] KVM: s390: selftests: Use TAP interface in the
  tprot test
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org,
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>
@@ -75,56 +77,74 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 References: <20220419185857.128351-1-thuth@redhat.com>
  <20220419185857.128351-4-thuth@redhat.com>
  <267dc999-edc6-c8fc-b177-e06fb2d259b4@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <267dc999-edc6-c8fc-b177-e06fb2d259b4@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <f3989523-bed1-d9d4-2007-19de8ba4d403@redhat.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <f3989523-bed1-d9d4-2007-19de8ba4d403@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PyZiokVk0qOVR0j3OzLlA8MSNrvxnF8R
+X-Proofpoint-GUID: GZ7CVhLQijYEHA1j92pogLWe1X03aQfu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_03,2022-04-20_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
+ phishscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204200073
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 20/04/2022 13.38, Janis Schoetterl-Glausch wrote:
-> On 4/19/22 20:58, Thomas Huth wrote:
->> The tprot test currently does not have any output (unless one of
->> the TEST_ASSERT statement fails), so it's hard to say for a user
->> whether a certain new sub-test has been included in the binary or
->> not. Let's make this a little bit more user-friendly and include
->> some TAP output via the kselftests.h interface.
+On 4/20/22 13:46, Thomas Huth wrote:
+> On 20/04/2022 13.38, Janis Schoetterl-Glausch wrote:
+>> On 4/19/22 20:58, Thomas Huth wrote:
+>>> The tprot test currently does not have any output (unless one of
+>>> the TEST_ASSERT statement fails), so it's hard to say for a user
+>>> whether a certain new sub-test has been included in the binary or
+>>> not. Let's make this a little bit more user-friendly and include
+>>> some TAP output via the kselftests.h interface.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>>> ---
+>>>   tools/testing/selftests/kvm/s390x/tprot.c | 28 +++++++++++++++++++----
+>>>   1 file changed, 23 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
+>>> index c097b9db495e..baba883d7a6d 100644
+>>> --- a/tools/testing/selftests/kvm/s390x/tprot.c
+>>> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
 >>
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>   tools/testing/selftests/kvm/s390x/tprot.c | 28 +++++++++++++++++++----
->>   1 file changed, 23 insertions(+), 5 deletions(-)
+>> We're not committing ourselves to any particular test output, are we?
+>> Your patch considers the stages used for test setup tests themselves,
+>> which I'm fine with, but would not want to commit to keeping that way forever.
+> 
+> No commitment - just somewhat more verbose output. If you don't like it, we can also drop this patch, or do it in another way, I don't mind too much.
+
+I'm fine with it then.
+With the braces changed:
+
+Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> 
+>>> +#define HOST_SYNC(vmp, stage)            \
+>>> +{                        \
+>>> +    HOST_SYNC_NO_TAP(vmp, stage);        \
+>>> +    ksft_test_result_pass("" #stage "\n");    \
+>>> +}
+>>> +
 >>
->> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
->> index c097b9db495e..baba883d7a6d 100644
->> --- a/tools/testing/selftests/kvm/s390x/tprot.c
->> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
+>> It should not be a problem, but is there any reason you're not using
+>> do { ... } while(0) or ({ ... }) instead of just braces?
 > 
-> We're not committing ourselves to any particular test output, are we?
-> Your patch considers the stages used for test setup tests themselves,
-> which I'm fine with, but would not want to commit to keeping that way forever.
-
-No commitment - just somewhat more verbose output. If you don't like it, we 
-can also drop this patch, or do it in another way, I don't mind too much.
-
->> +#define HOST_SYNC(vmp, stage)			\
->> +{						\
->> +	HOST_SYNC_NO_TAP(vmp, stage);		\
->> +	ksft_test_result_pass("" #stage "\n");	\
->> +}
->> +
+> Yes, that would be better, indeed.
 > 
-> It should not be a problem, but is there any reason you're not using
-> do { ... } while(0) or ({ ... }) instead of just braces?
-
-Yes, that would be better, indeed.
-
-  Thomas
+>  Thomas
+> 
 
