@@ -2,103 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D93507D26
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 01:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DC5507EAD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Apr 2022 04:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244636AbiDSXVU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Apr 2022 19:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S1358739AbiDTCMN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Apr 2022 22:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358459AbiDSXVS (ORCPT
+        with ESMTP id S243081AbiDTCMN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:21:18 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA1D38BC0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 16:18:32 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e194so102188iof.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 16:18:32 -0700 (PDT)
+        Tue, 19 Apr 2022 22:12:13 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3279F22BFC
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 19:09:29 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso572102pjj.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 19:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/E/g0r1l7hhQAfIUhRVbsUEHaUTABUFgpPrJRsq6vrw=;
-        b=c+BBOmZ+D/s45k/qSYD3oA34sarEMQaA8IK58sGH6r8xaEKGK4CsvyiZuqEgaEcUtp
-         drh4cf5hk4AiRe3kPu/SJWrLAdUh9Yt0ELj4OY5cTKsISjwEb0p3wk2WVzbmtwH6+Ynm
-         rWQwCwRygS7kl6hjatbRyXdVYF5pwwdzYyjRY=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=A/0aUaFz3j60cyB2ocp+vXnczoWvi9GyAvYc3Gc+uTo=;
+        b=zq0dLIG0QR+VK/nyKC3wHR1xyfCWyMim2Wrvnw7viwBUdp52bAzH97kTfOQhpASUOP
+         heFmLQmMxF9bj/lZa8KlTY3CcnbCG0Qn613vKb50KsnjpfTMLq2TkDWUg8RbPZaw/gfQ
+         OH20TTUlCtQF2rLgNmtEZid7k4hKmbxDw5OAiAbPGuw6BWyQEsdiNQ1mAmREZSoTcx3k
+         n4CQ1QvE9J9v6d67oEou4LemYkmi7eVO2hkTwQn+nxzNW3cx7uEptpdCXs+vBV/C9gvb
+         EiwrRNeWzgPZD+eBjn4Z0Y3iENJXEo4xYq2wBU5baqTQvgFCL1Z0dEmsdyne5rM+Zxxa
+         tI5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/E/g0r1l7hhQAfIUhRVbsUEHaUTABUFgpPrJRsq6vrw=;
-        b=xhpwymkZJdDkcnNR+67tFeg3M8tjurlQPLnnwqWEKHsee9UouIWpVDrOhnwcHtlaVF
-         CE2KUrb3uIMLcL3E6vOVIhmoSMDOvqqL5OWcpw+xtDZN7P8AGozHPsEQC5mAo1l8hiMY
-         5GoqitjDKQJx/Q5i1hNtzvZf+UgLRTlocLFOCG7TyGfc5r0lO7ecSON5tzpEhHxYHXl0
-         lnB+ixH6Pz1CgZuc6uktDr4pWNf1UM/OmafqTdlaoafhEFd2BqBTADZDbxFNnpB1U4uZ
-         ygzKlVwaMzMo6jTq5dyc/Hdqr5h61w3Li3zj9YnpKGNkEF0g3Q/3qPBcOuWboHoLlKAE
-         wdUg==
-X-Gm-Message-State: AOAM533lenwOoZcqDPwErOFprgWvNt8f/jhVru5ci8jJaOhhgqE8xRPC
-        RbBfK1xBWiagjkRY7XGbQMYd6g==
-X-Google-Smtp-Source: ABdhPJwfigiCpfFTIIdSJJnbOcRHoa3FJBMQkGQcwjRFpBZ9WGHKSiQj7m2lDe8zHo4z2CHhalTrhQ==
-X-Received: by 2002:a6b:3c08:0:b0:64d:1af2:8ebb with SMTP id k8-20020a6b3c08000000b0064d1af28ebbmr7544708iob.95.1650410309644;
-        Tue, 19 Apr 2022 16:18:29 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y13-20020a056e02118d00b002cb2ceb6feasm9269566ili.81.2022.04.19.16.18.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 16:18:29 -0700 (PDT)
-Subject: Re: [PATCH 1/2] selftests/ftrace: add mips support for kprobe args
- string tests
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ze Zhang <zhangze@loongson.cn>, Ingo Molnar <mingo@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220416114848.25288-1-zhangze@loongson.cn>
- <20220418132957.2b7591e9@gandalf.local.home>
- <20220419101232.3f56542fdf84af846eaf47fd@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4e50d556-ff4d-4622-632b-476754561190@linuxfoundation.org>
-Date:   Tue, 19 Apr 2022 17:18:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=A/0aUaFz3j60cyB2ocp+vXnczoWvi9GyAvYc3Gc+uTo=;
+        b=QqFySHrzYsxz50lDLrc0QLF00dU10vZgyIsswTvQ2xm3430KuAy2NKVSdzwI7VQMHQ
+         oBfvBT7RVX/U/1csFZf+V0qUxPKYzRa3UHCxeOtrou7bs7Qf6oixVeUDkteMADPkpamq
+         HvOrC6cAr1Ve2C5c9AyXghsLLJJQjdjB92pLUnhLzNxGrgPYnw5HhTY5sxHlc9PCJGVq
+         fdzRQMB+6tZSDAgKcbwpphpYHcfpZ5RJmFX65Z3reHNDruS+gMG4DNvwJ2sYzPXrbP/8
+         K2bk4fFBvtT9xxT/AbhdBG2OWu7mlwQkrirzlgHfk1h5/1HlLyF9yNFj3HrEK5ddTtXh
+         UBkw==
+X-Gm-Message-State: AOAM5321IsGIQMwArkOPBJTQnxsGGZv5cxcm9E0ttsuB9GQnCU73WJ7O
+        Oxp8uEGVKzFtxbKEbr3SSnwmF7pUk60RdTcf
+X-Google-Smtp-Source: ABdhPJx/qqIG6UAbhC4DxWFtjPTv6ySb+QseusR2DvaENZwjclUjllYm5QrLmCx1zYEx4bErP47SDQ==
+X-Received: by 2002:a17:90a:3ee4:b0:1cb:c1a6:e5c3 with SMTP id k91-20020a17090a3ee400b001cbc1a6e5c3mr1673773pjc.215.1650420568699;
+        Tue, 19 Apr 2022 19:09:28 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id ne24-20020a17090b375800b001cb62235013sm16966001pjb.5.2022.04.19.19.09.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 19:09:28 -0700 (PDT)
+Message-ID: <625f6b58.1c69fb81.b54f5.9796@mx.google.com>
+Date:   Tue, 19 Apr 2022 19:09:28 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220419101232.3f56542fdf84af846eaf47fd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v5.18-rc3
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 8 builds: 0 failed, 8 passed (v5.18-rc3)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/18/22 7:12 PM, Masami Hiramatsu wrote:
-> On Mon, 18 Apr 2022 13:29:57 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
->> On Sat, 16 Apr 2022 19:48:47 +0800
->> Ze Zhang <zhangze@loongson.cn> wrote:
->>
->>> This is the mips variant of commit <3990b5baf225> ("selftests/ftrace:
->>> Add s390 support for kprobe args tests").
-> 
-> Thanks for adding MIPS support!
-> 
-> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> Thank you!
-> 
->>>
->>> Signed-off-by: Ze Zhang <zhangze@loongson.cn>
+kselftest/next build: 8 builds: 0 failed, 8 passed (v5.18-rc3)
 
-Thank you all. I will pick this up for next
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v5.18-rc3/
 
-thanks,
--- Shuah
+Tree: kselftest
+Branch: next
+Git Describe: v5.18-rc3
+Git Commit: b2d229d4ddb17db541098b83524d901257e93845
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
