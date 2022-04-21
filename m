@@ -2,89 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414BC50A724
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 19:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E97250A93C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 21:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390791AbiDURcP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Apr 2022 13:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S1391619AbiDUTeZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Apr 2022 15:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390610AbiDURcP (ORCPT
+        with ESMTP id S231710AbiDUTeZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:32:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0BC0457A5
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 10:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650562164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e9DZ+W1tXa8dFqgf2097OZ0qGTRPNdwwslU5YUVe0Xk=;
-        b=dxWwJxchc47py0hes9iudp8MMP/VN11MnJGIVVcxjlOyFgqdJNJaTK1Rm7Kr9ybDdn8M3J
-        XE15DOL2S9Y6ahT5QCPIXKjH3YwMeQ8935khmjdfWgIpigZiewTSFpL70Vks5oUlQe5aAz
-        ASEeil8GD1nUgxeAUK2B704B6kRoH/I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-tnkI7wWFPTSa6b_M4Jj5jw-1; Thu, 21 Apr 2022 13:29:18 -0400
-X-MC-Unique: tnkI7wWFPTSa6b_M4Jj5jw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1358C800B28;
-        Thu, 21 Apr 2022 17:29:18 +0000 (UTC)
-Received: from sparkplug.usersys.redhat.com (unknown [10.40.192.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FAE29D61;
-        Thu, 21 Apr 2022 17:29:16 +0000 (UTC)
-Date:   Thu, 21 Apr 2022 19:29:13 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix prog_tests/uprobe_autoattach
- compilation error
-Message-ID: <YmGUaXfBywiSQ+Sy@sparkplug.usersys.redhat.com>
-References: <20220421132317.1583867-1-asavkov@redhat.com>
- <e5919342-0697-65f0-063f-4941e74fe1ca@iogearbox.net>
+        Thu, 21 Apr 2022 15:34:25 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C824D632
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 12:31:34 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id h83so6396897iof.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 12:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7HO73uRyd1X43sVJIiW9KkHmXq3f6HmsCw1YIk6coAE=;
+        b=ekMuS1QzTvsonYzLao+l7J0dZQIQsAVZdPTHIQpineOOdoobgztqbHrGOhZoP5gnMG
+         xbM0imCTgCOzDLHsBxp38lXBVmBwac8dHOvMBPSkP3XzbpBEXR/FLgxWg8Axu8NEaw2j
+         NBYfJ0j+vNKusiUfPIbshPoEjqLRbPL8LUlBk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7HO73uRyd1X43sVJIiW9KkHmXq3f6HmsCw1YIk6coAE=;
+        b=XfllGOCuZmhuzIObWy42QzE+HoXEJrBJ5TEHP1tzDyI7uKCatSTihTTerlQ/f+e1p6
+         QXA0ygyyxbA/mzjc6lY8nNSQUJit/t7P1Ud59BT4x0Hn6MCxCMNkEkBl+19UaCCZQlry
+         uR/ehG66xMldRAw3GTd4bvQP5EoVLfAMCcKKo04K/a8G4l9jXIqCuDrhFs4C5Bc000pX
+         VMRVsVZvKwKWKkqP+g5cmDbChTmZ4nGuxPK4PIwSVJx4ONAdyVppRpQzuavX2m20stBQ
+         KzwU3gMEiTXglEsGe1uvBsEQQNqJwLSPINXmi5r3FZy8Nl38P5/dZpwELCyUD+WWUdSM
+         V9sw==
+X-Gm-Message-State: AOAM531QP0u4C6jw1ypom2p8CTsFReSR5fdCyfXUw01ttuur0d19gX41
+        Ui2AbTUpw3YFAXftJlvIwV/F2w==
+X-Google-Smtp-Source: ABdhPJyyLsKZJlRbHN11h9x/HycYVP33FRQi2NRbguiHRjuWWF8Ezo+rPVk/UeaQLntzs1ANS+llIg==
+X-Received: by 2002:a05:6602:27c5:b0:631:a30f:143a with SMTP id l5-20020a05660227c500b00631a30f143amr597205ios.40.1650569494038;
+        Thu, 21 Apr 2022 12:31:34 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id t18-20020a056e02011200b002cbe6ce18e5sm12533395ilm.40.2022.04.21.12.31.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 12:31:33 -0700 (PDT)
+Subject: Re: [PATCH v2 1/4] selftest/vm: verify mmap addr in mremap_test
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ff3db00d-3e18-8168-9f7d-d91a5591c7f2@linuxfoundation.org>
+Date:   Thu, 21 Apr 2022 13:31:32 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e5919342-0697-65f0-063f-4941e74fe1ca@iogearbox.net>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 06:53:22PM +0200, Daniel Borkmann wrote:
-> On 4/21/22 3:23 PM, Artem Savkov wrote:
-> > I am getting the following compilation error for prog_tests/uprobe_autoattach.c
-> > 
-> > tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c: In function ‘test_uprobe_autoattach’:
-> > ./test_progs.h:209:26: error: pointer ‘mem’ may be used after ‘free’ [-Werror=use-after-free]
-> > 
-> > mem variable is now used in one of the asserts so it shouldn't be freed right
-> > away. Move free(mem) after the assert block.
+On 4/20/22 3:57 PM, Sidhartha Kumar wrote:
+> Avoid calling mmap with requested addresses that are less than the system's
+> mmap_min_addr. When run as root, mmap returns EACCES when trying to map
+> addresses < mmap_min_addr. This is not one of the error codes for the
+> condition to retry the mmap in the test. Rather than arbitrarily retrying
+> on EACCES, don't attempt an mmap until addr > vm.mmap_min_addr.
 > 
-> Looks good, but I rephrased this a bit to avoid confusion. It's false positive given we
-> only compare the addresses but don't deref mem, which the compiler might not be able to
-> follow in this case.
+> Add a munmap call after an alignment check as the mappings are retained
+> after the retry and can reach the vm.max_map_count sysctl.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=6a12b8e20d7e72386594a9dbe7bf2d7fae3b3aa6
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> ---
+> v2:
+> -change comment for description of get_mmap_min_addr()
+> -fix commit message formatting
+> 
 
-Right. Thank you for fixing up the commit message.
+Thank you.
 
--- 
- Artem
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
+Andrew, please let me know if you would like me to take this
+through kselftest tree.
+
+thanks,
+-- Shuah
