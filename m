@@ -2,101 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5908509851
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 09:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1CC5099C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 09:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiDUG7O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Apr 2022 02:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S1386288AbiDUHxe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Apr 2022 03:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385443AbiDUG6r (ORCPT
+        with ESMTP id S1386310AbiDUHxc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 02:58:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C5715A3C;
-        Wed, 20 Apr 2022 23:55:56 -0700 (PDT)
-X-UUID: c2c7cc54b950481eb43bf43fecc95331-20220421
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:830c6e4e-ed07-45ec-8f49-f9924753a6c2,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:58
-X-CID-INFO: VERSION:1.1.4,REQID:830c6e4e-ed07-45ec-8f49-f9924753a6c2,OB:0,LOB:
-        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:58
-X-CID-META: VersionHash:faefae9,CLOUDID:e67f73f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:bfaf4f356833,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: c2c7cc54b950481eb43bf43fecc95331-20220421
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1400714960; Thu, 21 Apr 2022 14:55:48 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 21 Apr 2022 14:55:47 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 21 Apr
- 2022 14:55:46 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 21 Apr 2022 14:55:45 +0800
-From:   <Lina.Wang@mediatek.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        <linux-kernel@vger.kernel.org>,
-        Maciej enczykowski <maze@google.com>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-Subject: Re: [PATCH v5 1/3] selftests: bpf: add test for bpf_skb_change_proto
-Date:   Thu, 21 Apr 2022 14:49:24 +0800
-Message-ID: <20220421064924.25706-1-Lina.Wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <9dc51533-92d2-1c82-2a6e-96e1ac747bb7@iogearbox.net>
-References: <9dc51533-92d2-1c82-2a6e-96e1ac747bb7@iogearbox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 21 Apr 2022 03:53:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D2EE0F1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 00:50:34 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7FC721F752;
+        Thu, 21 Apr 2022 07:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650527433; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CA8kHCu+RuJ2Qz5MzQDrr+1TQ2WCXiSuesXVWzAwX6Q=;
+        b=R83R793l5tI1FDIlyDQR37X1D335eNo12t7F4agHHWAO8BbadbWQoHMkVm684HJbf7UtOH
+        e7JBIkzUiY5n4RTBTVHySUR8BuUo1NXd1+a19KLCIs9d8vs4nC7xkgtAaZsclGrsx1UHmD
+        m9x7XIF1uarn3XVC8mfODisowgBu1wQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650527433;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CA8kHCu+RuJ2Qz5MzQDrr+1TQ2WCXiSuesXVWzAwX6Q=;
+        b=uE+LB8CDSh9IYEtB/WpE2lFzFgVxIThKWYKuv1AfqKjsQfGK4y/9BnkgKHTGIC4v/1Nlm4
+        xiQ72q3JPJSHkEAQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 758962C15A;
+        Thu, 21 Apr 2022 07:50:33 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 09:50:33 +0200
+Message-ID: <s5h8rryx4c6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: alsa: Start validating control names
+In-Reply-To: <20220420203320.3035329-1-broonie@kernel.org>
+References: <20220420203320.3035329-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2022-04-07 at 17:22 +0200, Daniel Borkmann wrote:
-> Hi Lina,
+On Wed, 20 Apr 2022 22:33:20 +0200,
+Mark Brown wrote:
 > 
-> On 4/7/22 10:47 AM, Lina Wang wrote:
-> > The code is copied from the Android Open Source Project and the
-> > author(
-> > Maciej Żenczykowski) has gave permission to relicense it under
-> > GPLv2.
-> > 
-> > The test is to change input IPv6 packets to IPv4 ones and output
-> > IPv4 to
-> > IPv6 with bpf_skb_change_proto.
-> > ---
-> 
-> Your patch 2/3 is utilizing this program out of
-> selftests/net/udpgro_frglist.sh,
-> however, this is a bit problematic given BPF CI which runs on every
-> BPF submitted
-> patch. Meaning, udpgro_frglist.sh won't be covered by CI and only
-> needs to be run
-> manually. Could you properly include this into test_progs from BPF
-> suite (that way,
-> BPF CI will also pick it up)? See also [2] for more complex netns
+> +bool strend(const char *haystack, const char *needle)
 
-Please check my previous response, do you agree with me? I can move such nat6to4.c to net/, not bpf/, no need to add bpf test progs
+Missing static?
 
-Thanks!
+> +{
+> +	size_t haystack_len = strlen(haystack);
+> +	size_t needle_len = strlen(needle);
+> +
+> +	if (needle_len > haystack_len)
+> +		return false;
+> +	return strcmp(haystack + haystack_len - needle_len, needle) == 0;
+> +}
+> +
+> +static void test_ctl_name(struct ctl_data *ctl)
+> +{
+> +	bool name_ok = true;
+> +	bool check;
+> +
+> +	/* Only boolean controls should end in Switch */
+> +	if (strend(ctl->name, "Switch")) {
 
+This should be with " Switch" so that it won't check a concatenated
+word.
+
+> +		if (snd_ctl_elem_info_get_type(ctl->info) != SND_CTL_ELEM_TYPE_BOOLEAN) {
+> +			ksft_print_msg("%d.%d %s ends in Switch but is not boolean\n",
+> +				       ctl->card->card, ctl->elem, ctl->name);
+> +			name_ok = false;
+> +		}
+> +	}
+> +
+> +	/* Writeable boolean controls should end in Switch */
+> +	if (snd_ctl_elem_info_get_type(ctl->info) == SND_CTL_ELEM_TYPE_BOOLEAN &&
+> +	    snd_ctl_elem_info_is_writable(ctl->info)) {
+> +		if (!strend(ctl->name, "Switch")) {
+> +			ksft_print_msg("%d.%d %s is a writeable boolean but not a Switch\n",
+> +				       ctl->card->card, ctl->elem, ctl->name);
+> +			name_ok = false;
+
+I'm afraid that this would hit too many when applying to the existing
+code; although the control name should be indeed with Switch suffix,
+we tend to allow without suffix for casual non-standard elements.
+
+But having the check would help for avoiding such a mistake for the
+future code, so it's fine to add this strict check, IMO.
+
+
+thanks,
+
+Takashi
