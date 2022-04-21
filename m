@@ -2,101 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6BE509FC9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 14:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC8250A03C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 15:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352702AbiDUMmw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Apr 2022 08:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S229899AbiDUNEE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Apr 2022 09:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382296AbiDUMmv (ORCPT
+        with ESMTP id S229878AbiDUNEC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 08:42:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469C3BF47
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 05:40:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 21 Apr 2022 09:04:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B746E32ED6
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 06:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650546072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6B8uAfM2zYdOBiNWDA6MHvnN4shneSOBk1++/81VmlE=;
+        b=Q3q4Ydye19TFSHawFUSs6tKwoQetznabz8kRFhgNGLW6/qiHVFVMohGPWuJGt/VLUuF0xh
+        oYKQe0EAUZxm0KsM9679h6zWJX5hIruzHh/xFE2dhISeX+t14cqpZFquojDkaRLnkvGPMQ
+        khutDLi0CXNE9mX4fl4J1p8YVRYBw3w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-jqNO56VnP7ySBIqMALhPAQ-1; Thu, 21 Apr 2022 09:01:07 -0400
+X-MC-Unique: jqNO56VnP7ySBIqMALhPAQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D768661BCE
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 12:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0BAC385A5;
-        Thu, 21 Apr 2022 12:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650544800;
-        bh=o11R5hwjSfUkooG6aTnJOb4+mrujki8srLF/y/Ayj5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYJkQkKwoTyGa0ulPg1rE265+urp7kMJQvj9//k4VdiHqGOUDT83PQM/6vihrqhZf
-         SehnMN18VT2D2JqWpMaenqmwkYqNdJV7DpUFN7RXsgqoNbXi/GL86GN9aQ5DlCBaVu
-         vLW8OKLXmMi8gbbJu1rrtSCiIlRMknpmBSkq5c0qV4SAdHuGeQxmu19REDBUw86l3m
-         Upntzd4ub0sAYiKDn2lKkSReoqY8s0WrG4b71Ptl78lghUphpXFgVJ+5fd7iUOMDLM
-         2zIpVe9u9izJyNDTAIQ7Zy3/1l6fch60A9Yl1ipwTPgZxBgI9bVrTc3jgqyCf3WesD
-         wSz1RQ0xicC2w==
-Date:   Thu, 21 Apr 2022 13:39:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: alsa: Start validating control names
-Message-ID: <YmFQm8xtgjMurBB0@sirena.org.uk>
-References: <20220420203320.3035329-1-broonie@kernel.org>
- <s5h8rryx4c6.wl-tiwai@suse.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D84E51014A69;
+        Thu, 21 Apr 2022 13:01:06 +0000 (UTC)
+Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 97C1D400E86E;
+        Thu, 21 Apr 2022 13:01:06 +0000 (UTC)
+Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
+        id 7F8861C016C; Thu, 21 Apr 2022 15:01:05 +0200 (CEST)
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
+Subject: [PATCH bpf-next] selftests/bpf: fix attach tests retcode checks
+Date:   Thu, 21 Apr 2022 15:01:04 +0200
+Message-Id: <20220421130104.1582053-1-asavkov@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x95ZG5vdA0TpYUkG"
-Content-Disposition: inline
-In-Reply-To: <s5h8rryx4c6.wl-tiwai@suse.de>
-X-Cookie: Two percent of zero is almost nothing.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Switching to libbpf 1.0 API broke test_sock and test_sysctl as they
+check for return of bpf_prog_attach to be exactly -1. Switch the check
+to '< 0' instead.
 
---x95ZG5vdA0TpYUkG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: b858ba8c52b6 ("selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK")
+Signed-off-by: Artem Savkov <asavkov@redhat.com>
+---
+ tools/testing/selftests/bpf/test_sock.c   | 2 +-
+ tools/testing/selftests/bpf/test_sysctl.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, Apr 21, 2022 at 09:50:33AM +0200, Takashi Iwai wrote:
-> Mark Brown wrote:
+diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
+index 6c4494076bbf..810c3740b2cc 100644
+--- a/tools/testing/selftests/bpf/test_sock.c
++++ b/tools/testing/selftests/bpf/test_sock.c
+@@ -492,7 +492,7 @@ static int run_test_case(int cgfd, const struct sock_test *test)
+ 			goto err;
+ 	}
+ 
+-	if (attach_sock_prog(cgfd, progfd, test->attach_type) == -1) {
++	if (attach_sock_prog(cgfd, progfd, test->attach_type) < 0) {
+ 		if (test->result == ATTACH_REJECT)
+ 			goto out;
+ 		else
+diff --git a/tools/testing/selftests/bpf/test_sysctl.c b/tools/testing/selftests/bpf/test_sysctl.c
+index 5bae25ca19fb..57620e7c9048 100644
+--- a/tools/testing/selftests/bpf/test_sysctl.c
++++ b/tools/testing/selftests/bpf/test_sysctl.c
+@@ -1560,7 +1560,7 @@ static int run_test_case(int cgfd, struct sysctl_test *test)
+ 			goto err;
+ 	}
+ 
+-	if (bpf_prog_attach(progfd, cgfd, atype, BPF_F_ALLOW_OVERRIDE) == -1) {
++	if (bpf_prog_attach(progfd, cgfd, atype, BPF_F_ALLOW_OVERRIDE) < 0) {
+ 		if (test->result == ATTACH_REJECT)
+ 			goto out;
+ 		else
+-- 
+2.35.1
 
-> > +		if (!strend(ctl->name, "Switch")) {
-> > +			ksft_print_msg("%d.%d %s is a writeable boolean but not a Switch\n",
-> > +				       ctl->card->card, ctl->elem, ctl->name);
-> > +			name_ok = false;
-
-> I'm afraid that this would hit too many when applying to the existing
-> code; although the control name should be indeed with Switch suffix,
-> we tend to allow without suffix for casual non-standard elements.
-
-It wasn't looking too bad in my survey of cards I had to hand - the
-writable check is there because of jacks, which does make sense since
-you can't actually switch them.  Some of that is due to ASoC handling
-this in the core though.
-
-> But having the check would help for avoiding such a mistake for the
-> future code, so it's fine to add this strict check, IMO.
-
-Yeah, that's more the target here.
-
---x95ZG5vdA0TpYUkG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJhUJoACgkQJNaLcl1U
-h9DhIQf+N389H3wgNXpD0bo1p+p0J6C/m3tiBfLE8K/+AMDSkJPsDEwmPzHlMHeN
-gjCBVTb4m0bm1zikekh4e/zDNApl2zNCxKQGHM4kdRqKLBIkWqcwcnBVTV9Z33H3
-1QDpFA//vZ9F8dQUCaoL/zVnnc+YijWS8bzvYHo4H1uVkBxHGzDPedVDf2NXklsN
-Ga6WA7TxumkWMavyT0o2364P/XBNDq40XQhEn+Wo0UFN4JRpwNjKvPnn3FyqVyNe
-aJ0EKmIL1SE1xesFyaurKJrNRPxl6e4V7ozcPMN//RAl3wMSp498ISf05D6oLk4S
-2iEEiJv8kSpUHdHlOZ2z/3C8LENdlw==
-=/U6j
------END PGP SIGNATURE-----
-
---x95ZG5vdA0TpYUkG--
