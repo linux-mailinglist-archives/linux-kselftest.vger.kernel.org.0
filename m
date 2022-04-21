@@ -2,84 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152D050A678
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 19:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414BC50A724
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 19:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390496AbiDURDH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Apr 2022 13:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S1390791AbiDURcP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Apr 2022 13:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244831AbiDURDG (ORCPT
+        with ESMTP id S1390610AbiDURcP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 13:03:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4B6BF74;
-        Thu, 21 Apr 2022 10:00:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 21 Apr 2022 13:32:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0BC0457A5
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 10:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650562164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e9DZ+W1tXa8dFqgf2097OZ0qGTRPNdwwslU5YUVe0Xk=;
+        b=dxWwJxchc47py0hes9iudp8MMP/VN11MnJGIVVcxjlOyFgqdJNJaTK1Rm7Kr9ybDdn8M3J
+        XE15DOL2S9Y6ahT5QCPIXKjH3YwMeQ8935khmjdfWgIpigZiewTSFpL70Vks5oUlQe5aAz
+        ASEeil8GD1nUgxeAUK2B704B6kRoH/I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-tnkI7wWFPTSa6b_M4Jj5jw-1; Thu, 21 Apr 2022 13:29:18 -0400
+X-MC-Unique: tnkI7wWFPTSa6b_M4Jj5jw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4F10B827BC;
-        Thu, 21 Apr 2022 17:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 928D8C385A9;
-        Thu, 21 Apr 2022 17:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650560413;
-        bh=LqSx1ccCXr4EU6ioPYE8PZl6oVAW/e3S2k2NY6dyj8w=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DsolDC4DsFFO05FD6VwwwvC86RFVT6lSPovK1o2kT4I1qfwn1jIfY2z5GUUmwY/5J
-         s609K619MPjbTvHvFaTIwuZUr2nPofXIH7/HtGLJDN/DEjRLkPUFKdBPJUYCIBHeQ3
-         wGWUM+TVXrRVYqSDfMaidoFq8EJB1YW8KS5ccYPko5EsbnFrrIpnd89eeqG4Xp2RfN
-         MWKBOSaMSvycKcZPV0vyERNO20rCSty2hV4f8fKv8RFp+nIggkHV53ZJXclQdCjT8F
-         rJn+NLBFY2GIRpKCFWMwV+Xw6scuLoXZ4OAXMMvi+qxIBEG27Po0K6RycCm270L/Su
-         zRw3K9ka0Dc/Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 756A9E8DBD4;
-        Thu, 21 Apr 2022 17:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1358C800B28;
+        Thu, 21 Apr 2022 17:29:18 +0000 (UTC)
+Received: from sparkplug.usersys.redhat.com (unknown [10.40.192.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FAE29D61;
+        Thu, 21 Apr 2022 17:29:16 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 19:29:13 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix prog_tests/uprobe_autoattach
+ compilation error
+Message-ID: <YmGUaXfBywiSQ+Sy@sparkplug.usersys.redhat.com>
+References: <20220421132317.1583867-1-asavkov@redhat.com>
+ <e5919342-0697-65f0-063f-4941e74fe1ca@iogearbox.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix map tests errno checks
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165056041347.10585.10754473335372308106.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Apr 2022 17:00:13 +0000
-References: <20220421094320.1563570-1-asavkov@redhat.com>
-In-Reply-To: <20220421094320.1563570-1-asavkov@redhat.com>
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     laoar.shao@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e5919342-0697-65f0-063f-4941e74fe1ca@iogearbox.net>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Thu, 21 Apr 2022 11:43:20 +0200 you wrote:
-> Switching to libbpf 1.0 API broke test_lpm_map and test_lru_map as error
-> reporting changed. Instead of setting errno and returning -1 bpf calls
-> now return -Exxx directly.
-> Drop errno checks and look at return code directly.
+On Thu, Apr 21, 2022 at 06:53:22PM +0200, Daniel Borkmann wrote:
+> On 4/21/22 3:23 PM, Artem Savkov wrote:
+> > I am getting the following compilation error for prog_tests/uprobe_autoattach.c
+> > 
+> > tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c: In function ‘test_uprobe_autoattach’:
+> > ./test_progs.h:209:26: error: pointer ‘mem’ may be used after ‘free’ [-Werror=use-after-free]
+> > 
+> > mem variable is now used in one of the asserts so it shouldn't be freed right
+> > away. Move free(mem) after the assert block.
 > 
-> Fixes: b858ba8c52b6 ("selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK")
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> Looks good, but I rephrased this a bit to avoid confusion. It's false positive given we
+> only compare the addresses but don't deref mem, which the compiler might not be able to
+> follow in this case.
 > 
-> [...]
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=6a12b8e20d7e72386594a9dbe7bf2d7fae3b3aa6
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix map tests errno checks
-    https://git.kernel.org/bpf/bpf-next/c/c14766a8a8f3
+Right. Thank you for fixing up the commit message.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+ Artem
 
