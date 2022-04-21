@@ -2,157 +2,363 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5AF509BB2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 11:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D5E509C96
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 11:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387249AbiDUJJW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Apr 2022 05:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S1387780AbiDUJqS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Apr 2022 05:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387247AbiDUJJU (ORCPT
+        with ESMTP id S1387774AbiDUJqR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 05:09:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23AD922B2B
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 02:06:29 -0700 (PDT)
+        Thu, 21 Apr 2022 05:46:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B09524961
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 02:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650531989;
+        s=mimecast20190719; t=1650534207;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=92MeHe1O2XEwswakE1YC1636cVBjLw+9Sy+IL3NtyVk=;
-        b=OyskmkGBvqm2D1jUs23VQOOBVJhA44Fvr+GPjEDj+S8LBDKwiQIctwUk64ADfbRe9MYlEi
-        U/EqxHVlf93cpSJIN30EBzkKhN8z+/viiUdVqztQ5sEoof7GCu4Kvg0oL0qwJXFAg+xu2g
-        1Q00hrSD63s84l/VLeqPZu8T/TW/jSo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CyDh3hl+YzWggwwXxS6GM8Fx57mAYVs3NhlXvVZSunA=;
+        b=ERG9pJvwWbAYBYjhMFL0pceJj51IDpvY2Bbb9EUn46xaqawym0nL4hvpyx9+O1pM5SrDDB
+        YNEaDQ2WZCUEubQiWEZMrBy/QIIj6ZRMrE7hE7zCVUbwcu3sbZ96yXl5MID6DS29jhE3ob
+        4HFnEcTnWKOeFR+7BcyVtL1ug330pYM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-190-bj5SoH8xP66NqcN7568n9Q-1; Thu, 21 Apr 2022 05:06:27 -0400
-X-MC-Unique: bj5SoH8xP66NqcN7568n9Q-1
-Received: by mail-wr1-f70.google.com with SMTP id i15-20020adfa50f000000b0020ac223744aso210200wrb.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 02:06:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=92MeHe1O2XEwswakE1YC1636cVBjLw+9Sy+IL3NtyVk=;
-        b=SnMGRJ4Oz+0CzhZj+Mt1mI7oIwgWTd9p5NQLWayfEhHz2HtVYJnSFxlEdas4zLCthk
-         tKbkHy/Pchq+9L6lQB7MDBDTO4EJN4FLUR1UB0iN2EmDSp34yI5xz+ykWx30bF33EEqg
-         X9V0eXXYTUrHrxzVLZvAOyjJMuVogXcgE0DpuiumqRfaS7aO9YmFKXhq3vxcwm6xszTZ
-         zu7i5vmwJP+wVAUudAbPCUb44UQEtgvZt73WPBmcKHFXSGSCxFBK2YiwOHZnQGO2cJ8O
-         IR/nL8BBaGAGIP82D5PZXlbvLlk1VQtCXUnZSR/6Omm24gcD9T+mTVRYJ8c1DKrbLmKI
-         NlxA==
-X-Gm-Message-State: AOAM5315HZwz361N0ZR16yDA8nQW6nNvaZiVNPW7Reur/Okc/FDSwj3B
-        3BxClXj3/VAJ7cxEw5fzSII/wjPQ4keOw4eNVuf+I36UOTFxNaGukE8cN3gsQRyX1Oy46t+S01M
-        Vo3C/DrdcdxaN1kwSTDHoM6D2YFHN
-X-Received: by 2002:a7b:c5d0:0:b0:389:fe85:3d79 with SMTP id n16-20020a7bc5d0000000b00389fe853d79mr7663490wmk.77.1650531986442;
-        Thu, 21 Apr 2022 02:06:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzwll6X4aclR/cAp2Q5uSbwuZ7wO3cz51c3cWWvwaJIW1wrvG5E24IeLoGyMjdGjZ/7adpFcg==
-X-Received: by 2002:a7b:c5d0:0:b0:389:fe85:3d79 with SMTP id n16-20020a7bc5d0000000b00389fe853d79mr7663463wmk.77.1650531986214;
-        Thu, 21 Apr 2022 02:06:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:de00:711b:76af:b335:9b70? (p200300cbc702de00711b76afb3359b70.dip0.t-ipconnect.de. [2003:cb:c702:de00:711b:76af:b335:9b70])
-        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b0037c91e085ddsm1798885wmq.40.2022.04.21.02.06.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 02:06:24 -0700 (PDT)
-Message-ID: <707ad285-349c-9788-51dc-12f7caf77f11@redhat.com>
-Date:   Thu, 21 Apr 2022 11:06:23 +0200
+ us-mta-191-dvVnHdHMMfCpxUDiU8dbvA-1; Thu, 21 Apr 2022 05:43:23 -0400
+X-MC-Unique: dvVnHdHMMfCpxUDiU8dbvA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E6DA86B8A3;
+        Thu, 21 Apr 2022 09:43:23 +0000 (UTC)
+Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E8F5C40EC002;
+        Thu, 21 Apr 2022 09:43:22 +0000 (UTC)
+Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
+        id D6EDA1C016C; Thu, 21 Apr 2022 11:43:21 +0200 (CEST)
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
+Subject: [PATCH bpf-next] selftests/bpf: fix map tests errno checks
+Date:   Thu, 21 Apr 2022 11:43:20 +0200
+Message-Id: <20220421094320.1563570-1-asavkov@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 1/2] selftests: vm: bring common functions to a new
- file
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20220420084036.4101604-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220420084036.4101604-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 20.04.22 10:40, Muhammad Usama Anjum wrote:
-> Bring common functions to a new file while keeping code as much same as
-> possible. These functions can be used in the new tests. This helps in
-> avoiding code duplication.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Changes in V6:
-> - Correct header files inclusion
-> 
-> Changes in V5:
-> Keep moved code as same as possible
-> - Updated macros names
-> - Removed macro used to show bit number of dirty bit, added a comment
->   instead
-> - Corrected indentation
-> ---
->  tools/testing/selftests/vm/Makefile           |   7 +-
->  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
->  .../selftests/vm/split_huge_page_test.c       |  79 +------------
->  tools/testing/selftests/vm/vm_util.c          | 108 ++++++++++++++++++
->  tools/testing/selftests/vm/vm_util.h          |   9 ++
->  5 files changed, 124 insertions(+), 113 deletions(-)
->  create mode 100644 tools/testing/selftests/vm/vm_util.c
->  create mode 100644 tools/testing/selftests/vm/vm_util.h
-> 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 5e43f072f5b76..4e68edb26d6b6 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
->  TEST_GEN_FILES += hugepage-shm
->  TEST_GEN_FILES += hugepage-vmemmap
->  TEST_GEN_FILES += khugepaged
-> -TEST_GEN_FILES += madv_populate
-> +TEST_GEN_PROGS = madv_populate
->  TEST_GEN_FILES += map_fixed_noreplace
->  TEST_GEN_FILES += map_hugetlb
->  TEST_GEN_FILES += map_populate
-> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
->  TEST_GEN_FILES += thuge-gen
->  TEST_GEN_FILES += transhuge-stress
->  TEST_GEN_FILES += userfaultfd
-> -TEST_GEN_FILES += split_huge_page_test
-> +TEST_GEN_PROGS += split_huge_page_test
->  TEST_GEN_FILES += ksm_tests
->  
->  ifeq ($(MACHINE),x86_64)
-> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
->  KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
+Switching to libbpf 1.0 API broke test_lpm_map and test_lru_map as error
+reporting changed. Instead of setting errno and returning -1 bpf calls
+now return -Exxx directly.
+Drop errno checks and look at return code directly.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Fixes: b858ba8c52b6 ("selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK")
+Signed-off-by: Artem Savkov <asavkov@redhat.com>
+---
+ tools/testing/selftests/bpf/test_lpm_map.c | 39 +++++--------
+ tools/testing/selftests/bpf/test_lru_map.c | 66 ++++++++--------------
+ 2 files changed, 37 insertions(+), 68 deletions(-)
 
-BTW, I realized that my madv_populate test fails when run without
-softdirty support in the kernel. Eventually we should sense support
-somehow and skip softdirty tests.
-
-Maybe we can sense by writing to some page and then testing if the page
-is reported as softdirty. If it isn't, we know the kernel doesn't
-support it (or is extremely buggy :D ).
-
-Such a sense check would be common functionality in the helper file as well.
-
+diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
+index 789c9748d241..c028d621c744 100644
+--- a/tools/testing/selftests/bpf/test_lpm_map.c
++++ b/tools/testing/selftests/bpf/test_lpm_map.c
+@@ -408,16 +408,13 @@ static void test_lpm_ipaddr(void)
+ 
+ 	/* Test some lookups that should not match any entry */
+ 	inet_pton(AF_INET, "10.0.0.1", key_ipv4->data);
+-	assert(bpf_map_lookup_elem(map_fd_ipv4, key_ipv4, &value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(map_fd_ipv4, key_ipv4, &value) == -ENOENT);
+ 
+ 	inet_pton(AF_INET, "11.11.11.11", key_ipv4->data);
+-	assert(bpf_map_lookup_elem(map_fd_ipv4, key_ipv4, &value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(map_fd_ipv4, key_ipv4, &value) == -ENOENT);
+ 
+ 	inet_pton(AF_INET6, "2a00:ffff::", key_ipv6->data);
+-	assert(bpf_map_lookup_elem(map_fd_ipv6, key_ipv6, &value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(map_fd_ipv6, key_ipv6, &value) == -ENOENT);
+ 
+ 	close(map_fd_ipv4);
+ 	close(map_fd_ipv6);
+@@ -474,18 +471,15 @@ static void test_lpm_delete(void)
+ 	/* remove non-existent node */
+ 	key->prefixlen = 32;
+ 	inet_pton(AF_INET, "10.0.0.1", key->data);
+-	assert(bpf_map_lookup_elem(map_fd, key, &value) == -1 &&
+-		errno == ENOENT);
++	assert(bpf_map_lookup_elem(map_fd, key, &value) == -ENOENT);
+ 
+ 	key->prefixlen = 30; // unused prefix so far
+ 	inet_pton(AF_INET, "192.255.0.0", key->data);
+-	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
+-		errno == ENOENT);
++	assert(bpf_map_delete_elem(map_fd, key) == -ENOENT);
+ 
+ 	key->prefixlen = 16; // same prefix as the root node
+ 	inet_pton(AF_INET, "192.255.0.0", key->data);
+-	assert(bpf_map_delete_elem(map_fd, key) == -1 &&
+-		errno == ENOENT);
++	assert(bpf_map_delete_elem(map_fd, key) == -ENOENT);
+ 
+ 	/* assert initial lookup */
+ 	key->prefixlen = 32;
+@@ -530,8 +524,7 @@ static void test_lpm_delete(void)
+ 
+ 	key->prefixlen = 32;
+ 	inet_pton(AF_INET, "192.168.128.1", key->data);
+-	assert(bpf_map_lookup_elem(map_fd, key, &value) == -1 &&
+-		errno == ENOENT);
++	assert(bpf_map_lookup_elem(map_fd, key, &value) == -ENOENT);
+ 
+ 	close(map_fd);
+ }
+@@ -552,8 +545,7 @@ static void test_lpm_get_next_key(void)
+ 	assert(map_fd >= 0);
+ 
+ 	/* empty tree. get_next_key should return ENOENT */
+-	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == -ENOENT);
+ 
+ 	/* get and verify the first key, get the second one should fail. */
+ 	key_p->prefixlen = 16;
+@@ -565,8 +557,7 @@ static void test_lpm_get_next_key(void)
+ 	assert(key_p->prefixlen == 16 && key_p->data[0] == 192 &&
+ 	       key_p->data[1] == 168);
+ 
+-	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -ENOENT);
+ 
+ 	/* no exact matching key should get the first one in post order. */
+ 	key_p->prefixlen = 8;
+@@ -590,8 +581,7 @@ static void test_lpm_get_next_key(void)
+ 	       next_key_p->data[1] == 168);
+ 
+ 	memcpy(key_p, next_key_p, key_size);
+-	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -ENOENT);
+ 
+ 	/* Add one more element (total three) */
+ 	key_p->prefixlen = 24;
+@@ -614,8 +604,7 @@ static void test_lpm_get_next_key(void)
+ 	       next_key_p->data[1] == 168);
+ 
+ 	memcpy(key_p, next_key_p, key_size);
+-	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -ENOENT);
+ 
+ 	/* Add one more element (total four) */
+ 	key_p->prefixlen = 24;
+@@ -643,8 +632,7 @@ static void test_lpm_get_next_key(void)
+ 	       next_key_p->data[1] == 168);
+ 
+ 	memcpy(key_p, next_key_p, key_size);
+-	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -ENOENT);
+ 
+ 	/* Add one more element (total five) */
+ 	key_p->prefixlen = 28;
+@@ -678,8 +666,7 @@ static void test_lpm_get_next_key(void)
+ 	       next_key_p->data[1] == 168);
+ 
+ 	memcpy(key_p, next_key_p, key_size);
+-	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -ENOENT);
+ 
+ 	/* no exact matching key should return the first one in post order */
+ 	key_p->prefixlen = 22;
+diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
+index a6aa2d121955..4d0650cfb5cd 100644
+--- a/tools/testing/selftests/bpf/test_lru_map.c
++++ b/tools/testing/selftests/bpf/test_lru_map.c
+@@ -175,24 +175,20 @@ static void test_lru_sanity0(int map_type, int map_flags)
+ 				    BPF_NOEXIST));
+ 
+ 	/* BPF_NOEXIST means: add new element if it doesn't exist */
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST) == -1
+-	       /* key=1 already exists */
+-	       && errno == EEXIST);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST) == -EEXIST);
++	/* key=1 already exists */
+ 
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, -1) == -1 &&
+-	       errno == EINVAL);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, -1) == -EINVAL);
+ 
+ 	/* insert key=2 element */
+ 
+ 	/* check that key=2 is not found */
+ 	key = 2;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* BPF_EXIST means: update existing element */
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_EXIST) == -1 &&
+-	       /* key=2 is not there */
+-	       errno == ENOENT);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_EXIST) == -ENOENT);
++	/* key=2 is not there */
+ 
+ 	assert(!bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST));
+ 
+@@ -200,8 +196,7 @@ static void test_lru_sanity0(int map_type, int map_flags)
+ 
+ 	/* check that key=3 is not found */
+ 	key = 3;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* check that key=1 can be found and mark the ref bit to
+ 	 * stop LRU from removing key=1
+@@ -217,8 +212,7 @@ static void test_lru_sanity0(int map_type, int map_flags)
+ 
+ 	/* key=2 has been removed from the LRU */
+ 	key = 2;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* lookup elem key=1 and delete it, then check it doesn't exist */
+ 	key = 1;
+@@ -381,8 +375,7 @@ static void test_lru_sanity2(int map_type, int map_flags, unsigned int tgt_free)
+ 	end_key = 1 + batch_size;
+ 	value[0] = 4321;
+ 	for (key = 1; key < end_key; key++) {
+-		assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-		       errno == ENOENT);
++		assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 		assert(!bpf_map_update_elem(lru_map_fd, &key, value,
+ 					    BPF_NOEXIST));
+ 		assert(!bpf_map_lookup_elem_with_ref_bit(lru_map_fd, key, value));
+@@ -562,8 +555,7 @@ static void do_test_lru_sanity5(unsigned long long last_key, int map_fd)
+ 	assert(!bpf_map_lookup_elem_with_ref_bit(map_fd, key, value));
+ 
+ 	/* Cannot find the last key because it was removed by LRU */
+-	assert(bpf_map_lookup_elem(map_fd, &last_key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(map_fd, &last_key, value) == -ENOENT);
+ }
+ 
+ /* Test map with only one element */
+@@ -711,21 +703,18 @@ static void test_lru_sanity7(int map_type, int map_flags)
+ 				    BPF_NOEXIST));
+ 
+ 	/* BPF_NOEXIST means: add new element if it doesn't exist */
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST) == -1
+-	       /* key=1 already exists */
+-	       && errno == EEXIST);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST) == -EEXIST);
++	/* key=1 already exists */
+ 
+ 	/* insert key=2 element */
+ 
+ 	/* check that key=2 is not found */
+ 	key = 2;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* BPF_EXIST means: update existing element */
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_EXIST) == -1 &&
+-	       /* key=2 is not there */
+-	       errno == ENOENT);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_EXIST) == -ENOENT);
++	/* key=2 is not there */
+ 
+ 	assert(!bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST));
+ 
+@@ -733,8 +722,7 @@ static void test_lru_sanity7(int map_type, int map_flags)
+ 
+ 	/* check that key=3 is not found */
+ 	key = 3;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* check that key=1 can be found and mark the ref bit to
+ 	 * stop LRU from removing key=1
+@@ -757,8 +745,7 @@ static void test_lru_sanity7(int map_type, int map_flags)
+ 
+ 	/* key=2 has been removed from the LRU */
+ 	key = 2;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	assert(map_equal(lru_map_fd, expected_map_fd));
+ 
+@@ -805,21 +792,18 @@ static void test_lru_sanity8(int map_type, int map_flags)
+ 	assert(!bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST));
+ 
+ 	/* BPF_NOEXIST means: add new element if it doesn't exist */
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST) == -1
+-	       /* key=1 already exists */
+-	       && errno == EEXIST);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST) == -EEXIST);
++	/* key=1 already exists */
+ 
+ 	/* insert key=2 element */
+ 
+ 	/* check that key=2 is not found */
+ 	key = 2;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* BPF_EXIST means: update existing element */
+-	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_EXIST) == -1 &&
+-	       /* key=2 is not there */
+-	       errno == ENOENT);
++	assert(bpf_map_update_elem(lru_map_fd, &key, value, BPF_EXIST) == -ENOENT);
++	/* key=2 is not there */
+ 
+ 	assert(!bpf_map_update_elem(lru_map_fd, &key, value, BPF_NOEXIST));
+ 	assert(!bpf_map_update_elem(expected_map_fd, &key, value,
+@@ -829,8 +813,7 @@ static void test_lru_sanity8(int map_type, int map_flags)
+ 
+ 	/* check that key=3 is not found */
+ 	key = 3;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	/* check that key=1 can be found and do _not_ mark ref bit.
+ 	 * this will be evicted on next update.
+@@ -853,8 +836,7 @@ static void test_lru_sanity8(int map_type, int map_flags)
+ 
+ 	/* key=1 has been removed from the LRU */
+ 	key = 1;
+-	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -1 &&
+-	       errno == ENOENT);
++	assert(bpf_map_lookup_elem(lru_map_fd, &key, value) == -ENOENT);
+ 
+ 	assert(map_equal(lru_map_fd, expected_map_fd));
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 
