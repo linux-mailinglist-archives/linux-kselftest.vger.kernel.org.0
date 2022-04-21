@@ -2,83 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8675650A35C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 16:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B90A50A427
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Apr 2022 17:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386977AbiDUOxe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Apr 2022 10:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S1390078AbiDUPcJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Apr 2022 11:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390047AbiDUOxX (ORCPT
+        with ESMTP id S1390072AbiDUPcG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:53:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632181BE94;
-        Thu, 21 Apr 2022 07:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A906E61A90;
-        Thu, 21 Apr 2022 14:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A648C385AA;
-        Thu, 21 Apr 2022 14:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650552612;
-        bh=hi1BHCF9UrqgrKaE8tKFI8d1XD0rxWot5QXbcog6rhU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vAta382Hs2CpbnAFkAMlXdGd/FCND3QVA3inG3bcNJNmV5a66iVYDFJSpS088fxw9
-         SU/R4v8G8qPZ6jDglNeUwKoUQdWRfu9eDyscOs/1dYCAn5hLZ9I6DXRkLJIXiM3S+g
-         p1sO4eF4jvBz0eOxEd/ZP2Quv1g1BpznzJxVJqQu15CBef68Zb6cvVHNSeh8GpD6ey
-         C6/CDitsxKJBeSELkrMoJMnuifX1N4l78EKiTnCU18bh0hEFtj7ZHllHDPLDHneHhA
-         iliHXPvSv/g5KHsrn5M4ao+wT9tIuqMTblK51ELSRg/SUqxg5yXxRZbwtg2Hb1E4D0
-         DppWlxHXPgSYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3D0BE8DD85;
-        Thu, 21 Apr 2022 14:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Apr 2022 11:32:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D494A41F8E;
+        Thu, 21 Apr 2022 08:29:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 846E41F745;
+        Thu, 21 Apr 2022 15:29:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650554954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=g5kABB6jK4cQYfyvSKUjcJZOBX6joCc6lu+f86eo0HU=;
+        b=bZAmTseYZipk0Yr9p8MTOdgS9kNUlbPZu0Ozbex5hRE/kOaiHxrlW1fNaI5vMOe6xOUop8
+        kR4LqRQUfxyAvFbWv/DMTEvrBqqrkmZiCC5TgIX55FX0j8NO3XAiG+k9EcTvx8VG2DF2im
+        Q+y1GktCZ60xklp4DeueoaGIwGBqYKk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650554954;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=g5kABB6jK4cQYfyvSKUjcJZOBX6joCc6lu+f86eo0HU=;
+        b=fXMDEVyVghTGsM4qcVWx0XfDJPmdAKvbrhg+OeY0ksqTA7I8MgYT6ARbfI1tKuZugqc2n6
+        Z3BFNUnlUSZUmTDA==
+Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 6C11D2C141;
+        Thu, 21 Apr 2022 15:29:14 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nick Terrell <terrelln@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] Firmware loader support for ZSTD-compressed files
+Date:   Thu, 21 Apr 2022 17:29:03 +0200
+Message-Id: <20220421152908.4718-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix attach tests retcode checks
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165055261192.3130.12571525492244740722.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Apr 2022 14:50:11 +0000
-References: <20220421130104.1582053-1-asavkov@redhat.com>
-In-Reply-To: <20220421130104.1582053-1-asavkov@redhat.com>
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     laoar.shao@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+this is a revised patch set for RFC I posted some time ago (*).
+Since the ZSTD usage became much more popular now, it makes sense to
+have the consistent (de)compression support in the kernel, also for
+the firmware files.  This patch set adds the support for ZSTD-
+compressed firmware files as well as the extension of selftests, in
+addition to a couple of relevant fixes in selftests.
 
-On Thu, 21 Apr 2022 15:01:04 +0200 you wrote:
-> Switching to libbpf 1.0 API broke test_sock and test_sysctl as they
-> check for return of bpf_prog_attach to be exactly -1. Switch the check
-> to '< 0' instead.
-> 
-> Fixes: b858ba8c52b6 ("selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK")
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> 
-> [...]
+(*) https://lore.kernel.org/r/20210127154939.13288-1-tiwai@suse.de
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix attach tests retcode checks
-    https://git.kernel.org/bpf/bpf-next/c/920fd5e1771d
 
-You are awesome, thank you!
+Takashi
+
+===
+
+Takashi Iwai (5):
+  firmware: Add the support for ZSTD-compressed firmware files
+  selftests: firmware: Use smaller dictionary for XZ compression
+  selftests: firmware: Fix the request_firmware_into_buf() test for XZ
+    format
+  selftests: firmware: Simplify test patterns
+  selftests: firmware: Add ZSTD compressed file tests
+
+ drivers/base/firmware_loader/Kconfig          |  24 ++-
+ drivers/base/firmware_loader/main.c           |  76 +++++++-
+ .../selftests/firmware/fw_filesystem.sh       | 170 +++++++++---------
+ tools/testing/selftests/firmware/fw_lib.sh    |  12 +-
+ 4 files changed, 182 insertions(+), 100 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.31.1
 
