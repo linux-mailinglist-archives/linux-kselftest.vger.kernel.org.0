@@ -2,47 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62D450BFEB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Apr 2022 20:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08AD50BFF2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Apr 2022 20:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiDVSqd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Apr 2022 14:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S229834AbiDVSsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Apr 2022 14:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiDVSq1 (ORCPT
+        with ESMTP id S229787AbiDVSsW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:46:27 -0400
+        Fri, 22 Apr 2022 14:48:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E24127584
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 11:42:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA311E8A0B
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 11:42:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA7D4B82D44
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 18:26:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58777C385A0;
-        Fri, 22 Apr 2022 18:26:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91AFAB8321B
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 18:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB80FC385A4;
+        Fri, 22 Apr 2022 18:27:10 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+To:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kselftest@vger.kernel.org,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luca Salabrino <luca.scalabrino@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>
-Subject: Re: (subset) [PATCH v14 00/39] arm64/sme: Initial support for the Scalable Matrix Extension
-Date:   Fri, 22 Apr 2022 19:26:52 +0100
-Message-Id: <165065199613.1610925.15958452310991530163.b4-ty@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 0/3] kselftest/arm64: Test ptrace writing via FPSIMD and reading via SVE
+Date:   Fri, 22 Apr 2022 19:27:08 +0100
+Message-Id: <165065199612.1610925.5736694366252202348.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419112247.711548-1-broonie@kernel.org>
-References: <20220419112247.711548-1-broonie@kernel.org>
+In-Reply-To: <20220404090613.181272-1-broonie@kernel.org>
+References: <20220404090613.181272-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,44 +46,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 19 Apr 2022 12:22:08 +0100, Mark Brown wrote:
-> This series provides initial support for the ARMv9 Scalable Matrix
-> Extension (SME).  SME takes the approach used for vectors in SVE and
-> extends this to provide architectural support for matrix operations.  A
-> more detailed overview can be found in [1].
+On Mon, 4 Apr 2022 10:06:10 +0100, Mark Brown wrote:
+> This series has a couple of minor fixes and cleanups for sve-ptrace plus
+> the addition of a new test which validates that we can write using the
+> FPSIMD regset and then read matching data back using the SVE regset -
+> previously we only validated writing SVE and reading FPSIMD data.
 > 
-> For the kernel SME can be thought of as a series of features which are
-> intended to be used together by applications but operate mostly
-> orthogonally:
+> v2
+>  - Rebase onto v5.18-rc1
 > 
 > [...]
 
 Applied to arm64 (for-next/kselftest), thanks!
 
-[28/39] kselftest/arm64: Add manual encodings for SME instructions
-        https://git.kernel.org/arm64/c/b5d3f4daf4d3
-[29/39] kselftest/arm64: sme: Add SME support to vlset
-        https://git.kernel.org/arm64/c/0fea47609e48
-[30/39] kselftest/arm64: Add tests for TPIDR2
-        https://git.kernel.org/arm64/c/f442d9edcff0
-[31/39] kselftest/arm64: Extend vector configuration API tests to cover SME
-        https://git.kernel.org/arm64/c/7e387a00d640
-[32/39] kselftest/arm64: sme: Provide streaming mode SVE stress test
-        https://git.kernel.org/arm64/c/aee8a834e3f0
-[33/39] kselftest/arm64: signal: Handle ZA signal context in core code
-        https://git.kernel.org/arm64/c/f2608edbc17b
-[34/39] kselftest/arm64: Add stress test for SME ZA context switching
-        https://git.kernel.org/arm64/c/659689a61912
-[35/39] kselftest/arm64: signal: Add SME signal handling tests
-        https://git.kernel.org/arm64/c/8d41f50ade02
-[36/39] kselftest/arm64: Add streaming SVE to SVE ptrace tests
-        https://git.kernel.org/arm64/c/e4bbc3f2c589
-[37/39] kselftest/arm64: Add coverage for the ZA ptrace interface
-        https://git.kernel.org/arm64/c/8f6bb75334f4
-[38/39] kselftest/arm64: Add SME support to syscall ABI test
-        https://git.kernel.org/arm64/c/5bbfaf598476
-[39/39] selftests/arm64: Add a testcase for handling of ZA on clone()
-        https://git.kernel.org/arm64/c/fb146c8a0ad9
+[1/3] kselftest/arm64: Fix comment for ptrace_sve_get_fpsimd_data()
+      https://git.kernel.org/arm64/c/348b096850d9
+[2/3] kselftest/arm64: Remove assumption that tasks start FPSIMD only
+      https://git.kernel.org/arm64/c/9891f4edc90c
+[3/3] kselftest/arm64: Validate setting via FPSIMD and read via SVE regsets
+      https://git.kernel.org/arm64/c/88560c9c263a
 
 -- 
 Catalin
