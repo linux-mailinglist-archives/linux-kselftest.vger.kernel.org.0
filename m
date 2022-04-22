@@ -2,272 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE46350B638
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Apr 2022 13:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5703050B712
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Apr 2022 14:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349052AbiDVLgw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Apr 2022 07:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S1378106AbiDVMOa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Apr 2022 08:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbiDVLgv (ORCPT
+        with ESMTP id S1447452AbiDVMO0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 07:36:51 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A656234
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 04:33:57 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id m14so10639562wrb.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 04:33:57 -0700 (PDT)
+        Fri, 22 Apr 2022 08:14:26 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A2E56C17
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 05:11:31 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id r83so7203360pgr.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 05:11:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=uz+KcNIj+v9WSFSUjytskdEFRoZIQjG/EVCHIE7PoXA=;
-        b=gzbQuJCj0I2T04uY0UYnVWLijPTDjp9cU8gjljlQbHYCpA8RUc0SI+1iOS8JCVDX30
-         wHYpTjb2TVGttz0rLW8wUREcv0cSVao2eWrMuveVbBcuvb69FNpN1EiELHQyz7N6bS5c
-         3TUxO7P8UkMUTNvh+TLzQ0YBXD9IfwQPSNMvk=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Umzvy4xbpwThi6hgLuBxy80f+xNnEgAAWs96IlRRZuM=;
+        b=x/wPs8s97X5dEIMQc00Yux11O2MvhPzj8ap9Yn6BaDVtLO/IgMCtweD7f93F4gLk9t
+         SzBEF2xLaGsiPeRuyoiCzsjczJRVJ7R+/7cDpW6HiXLB6NENw+JMEHfQt1VRVEuGrmWL
+         GcdlWOOMsa9RlCBDEPHCaOPO/9zFRY7baW+gG3r1VtnuGl6leeNd799/Zm1q3fK4fMYC
+         IZwCbK4d4vUK4NabLdvut0gA0snSZ5P4/u76e7oS+b0/fNB0xGHu+dCWEQzPz45SDUuI
+         /73JPsYH/XZu74m6WpQAP7NyqDYq5YhIWkD5AM/iSzi0qtY+AGTx+mda/K9H9i56R2Yg
+         eUqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=uz+KcNIj+v9WSFSUjytskdEFRoZIQjG/EVCHIE7PoXA=;
-        b=7h8p40QZ9hSaGLH3fkUjucfk5GRzYY/J8tqcfE9y/mLtZ26wWhHuvT5mL09cdZ7Mxl
-         /XnvtfeLfIkst0B3XrrDfGqzc3+ViUCfToGY6iCq6maAKjU32BYoH5TyG5Cp9fRatGmC
-         906KdoW1B6LowpMcx2tE87onCi+B+o28XZjQQL4yPVxvxcFTrURfiKemg0xz/g92/6Si
-         Ak1Jy53JGyRQIgRkdcaCvxKNlvW25kgPH8aoUkTjOP2w7z5DftzAdO1krkWnH0cb7dmd
-         01fGPjmf52isXW+o02q7PJTVr0A4QkdkFw79AaVxZzVsozG/rNMgejm7nwR8N1lpiyLD
-         U/kg==
-X-Gm-Message-State: AOAM533A3VYCP0O7Rt4fmbglMwGiYqFEZm83JyTpbpxE6+Sv1sqjZtZq
-        x+Fxie7u4aOzajoisTZCwLZQTw==
-X-Google-Smtp-Source: ABdhPJytQeZpvy34ZOAAMQB7w6jF7X6Nf/OgCkIilBTulJnvg3gtBspcR68ouVwuJUzFMunZvSQqjw==
-X-Received: by 2002:a5d:4e08:0:b0:20a:8f9e:beef with SMTP id p8-20020a5d4e08000000b0020a8f9ebeefmr3571401wrt.8.1650627235044;
-        Fri, 22 Apr 2022 04:33:55 -0700 (PDT)
-Received: from cloudflare.com (79.184.126.143.ipv4.supernova.orange.pl. [79.184.126.143])
-        by smtp.gmail.com with ESMTPSA id r25-20020adfa159000000b0020ac9758f17sm1338619wrr.23.2022.04.22.04.33.54
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Umzvy4xbpwThi6hgLuBxy80f+xNnEgAAWs96IlRRZuM=;
+        b=ptCwmxJk+uywg6fuZaGbuRgQgsE2zbEkqAQw1BI5vs/22Dsz8gJBM3SCyTD6kN8kzk
+         iXXZOdeQYmhe1YbDkuEJu87vjGqNgCa9yIVXhgXLhpr1CF26cczcHCnAWfI3vxgJvISz
+         7pb5qOFEB+Ce8bvZ5btKG82Pt/iidqSMSsWzlLH6FIZdwBrBPoNbRCQ7tHJkJ8dT9zas
+         TifFj2bHDGR6CCJ6z39taxU+n4wKEvIy5S9l0++xL4dsFbKO+H7E8IxIwesOz8TDXhVm
+         ynn1Zk5TDPoYSs1iTthKDguVegkvN/LaRiAvGczXLWC0JFk2Tpc1jbTUygqVps8ioQLI
+         lLvg==
+X-Gm-Message-State: AOAM5311wcawp+cMpWc2YxRG9FdIAAbWjy7dPmFdEoziO3uOGAZO0DQw
+        dLoY/7UZAhnVFpS5I3YJQZIapK9oPthWEtJU/2M=
+X-Google-Smtp-Source: ABdhPJzqZEbq235s/WyLguMnYATQQf/RcIaldQtSbhy6TW5+3k68Xl3kw5k1afUzIZdjWBEFpv0QmA==
+X-Received: by 2002:a65:6e88:0:b0:382:3851:50c8 with SMTP id bm8-20020a656e88000000b00382385150c8mr3777318pgb.270.1650629490977;
+        Fri, 22 Apr 2022 05:11:30 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id f4-20020a17090ab94400b001cd4989ff5dsm5991919pjw.36.2022.04.22.05.11.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 04:33:54 -0700 (PDT)
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
- <20220414162220.1985095-5-xukuohai@huawei.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>, kernel-team@cloudflare.com
-Subject: Re: [PATCH bpf-next v2 4/6] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Date:   Fri, 22 Apr 2022 12:54:02 +0200
-In-reply-to: <20220414162220.1985095-5-xukuohai@huawei.com>
-Message-ID: <87levxfj32.fsf@cloudflare.com>
+        Fri, 22 Apr 2022 05:11:30 -0700 (PDT)
+Message-ID: <62629b72.1c69fb81.27079.ea83@mx.google.com>
+Date:   Fri, 22 Apr 2022 05:11:30 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: linux-kselftest-fixes-5.18-rc3-4-ge8f0c8965932
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: fixes
+Subject: kselftest/fixes build: 8 builds: 0 failed,
+ 8 passed (linux-kselftest-fixes-5.18-rc3-4-ge8f0c8965932)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Xu,
+kselftest/fixes build: 8 builds: 0 failed, 8 passed (linux-kselftest-fixes-=
+5.18-rc3-4-ge8f0c8965932)
 
-Thanks for working on this.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-5.18-rc3-4-ge8f0c8965932/
 
-We are also looking forward to using fentry hooks on arm64.
-In particular, attaching to entry/exit into/from XDP progs.
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-5.18-rc3-4-ge8f0c8965932
+Git Commit: e8f0c89659323f3ddf60dcedcd56fe3ac36a37bf
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-On Thu, Apr 14, 2022 at 12:22 PM -04, Xu Kuohai wrote:
-> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
-> it to replace nop with jump, or replace jump with nop.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> Acked-by: Song Liu <songliubraving@fb.com>
-> ---
->  arch/arm64/net/bpf_jit_comp.c | 52 +++++++++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 8ab4035dea27..1a1c3ea75ee2 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/bpf.h>
-> +#include <linux/memory.h>
->  #include <linux/filter.h>
->  #include <linux/printk.h>
->  #include <linux/slab.h>
-> @@ -18,6 +19,7 @@
->  #include <asm/cacheflush.h>
->  #include <asm/debug-monitors.h>
->  #include <asm/insn.h>
-> +#include <asm/patching.h>
->  #include <asm/set_memory.h>
->  
->  #include "bpf_jit.h"
-> @@ -1529,3 +1531,53 @@ void bpf_jit_free_exec(void *addr)
->  {
->  	return vfree(addr);
->  }
-> +
-> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
-> +			     void *addr, u32 *insn)
-> +{
-> +	if (!addr)
-> +		*insn = aarch64_insn_gen_nop();
-> +	else
-> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
-> +						    (unsigned long)addr,
-> +						    type);
-> +
-> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
-> +}
-> +
-> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
-> +		       void *old_addr, void *new_addr)
-> +{
-> +	int ret;
-> +	u32 old_insn;
-> +	u32 new_insn;
-> +	u32 replaced;
-> +	enum aarch64_insn_branch_type branch_type;
-> +
-> +	if (poke_type == BPF_MOD_CALL)
-> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-This path, bpf_arch_text_poke(<ip>, BPF_MOD_CALL, ...), is what we hit
-when attaching a BPF program entry. It is exercised by selftest #232
-xdp_bpf2bpf.
+Detailed per-defconfig build reports:
 
-However, with this patchset alone it will not work because we don't
-emit, yet, the ftrace patch (MOV X9, LR; NOP) as a part of BPF prog
-prologue, like ftrace_init_nop() does. So patching attempt will fail.
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
-I think that is what you mentioned to in your reply to Hou [1]
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
 
-So my question is - is support for attaching to BPF progs in scope for
-this patchset?
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
-If no, then perhaps it would be better for now to fail early with
-something like -EOPNOTSUPP when poke_type is BPF_MOD_CALL, rather then
-attempt to patch the code.
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
 
-If you plan to enable it as a part of this patchset, then I've given it
-a quick try, and it seems that not a lot is needed get fentry to BPF
-attachment to work.
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
-I'm including the diff for my quick and dirty attempt below. With that
-patch on top, the xdp_bpf2bpf tests pass:
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
-#232 xdp_bpf2bpf:OK
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
 
-[1] https://lore.kernel.org/bpf/d8c4f1fb-a020-9457-44e2-dc63982a9213@huawei.com/
-
-> +	else
-> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
-> +
-> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
-> +		return -EFAULT;
-> +
-> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
-> +		return -EFAULT;
-> +
-> +	mutex_lock(&text_mutex);
-> +	if (aarch64_insn_read(ip, &replaced)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	if (replaced != old_insn) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	ret =  aarch64_insn_patch_text_nosync((void *)ip, new_insn);
-> +out:
-> +	mutex_unlock(&text_mutex);
-
-The body of this critical section is identical as ftrace_modify_code().
-Perhaps we could export it and reuse?
-
-> +	return ret;
-> +}
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
 
 ---
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 5f6bd755050f..94d8251500ab 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -240,9 +240,9 @@ static bool is_lsi_offset(int offset, int scale)
- /* Tail call offset to jump into */
- #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
- 	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
--#define PROLOGUE_OFFSET 9
-+#define PROLOGUE_OFFSET 11
- #else
--#define PROLOGUE_OFFSET 8
-+#define PROLOGUE_OFFSET 10
- #endif
- 
- static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
-@@ -281,6 +281,10 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	 *
- 	 */
- 
-+	/* Set up ftrace patch (initially in disabled state) */
-+	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
-+	emit(A64_NOP, ctx);
-+
- 	/* Sign lr */
- 	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
- 		emit(A64_PACIASP, ctx);
-@@ -1888,10 +1892,16 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
- 	u32 replaced;
- 	enum aarch64_insn_branch_type branch_type;
- 
--	if (poke_type == BPF_MOD_CALL)
-+	if (poke_type == BPF_MOD_CALL) {
- 		branch_type = AARCH64_INSN_BRANCH_LINK;
--	else
-+		/*
-+		 * Adjust addr to point at the BL in the callsite.
-+		 * See ftrace_init_nop() for the callsite sequence.
-+		 */
-+		ip = (void *)((unsigned long)ip + AARCH64_INSN_SIZE);
-+	} else {
- 		branch_type = AARCH64_INSN_BRANCH_NOLINK;
-+	}
- 
- 	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
- 		return -EFAULT;
+For more info write to <info@kernelci.org>
