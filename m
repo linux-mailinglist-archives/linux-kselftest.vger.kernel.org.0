@@ -2,117 +2,272 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832E250B3E5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Apr 2022 11:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE46350B638
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Apr 2022 13:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388699AbiDVJVY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Apr 2022 05:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        id S1349052AbiDVLgw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Apr 2022 07:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446019AbiDVJUx (ORCPT
+        with ESMTP id S1347063AbiDVLgv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 05:20:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6FB53E2C;
-        Fri, 22 Apr 2022 02:17:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF75460FC1;
-        Fri, 22 Apr 2022 09:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A3C4C385A0;
-        Fri, 22 Apr 2022 09:17:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650619055;
-        bh=iqCW7A6ZXIeIMzwpuEVmkMyobtqwXfhGzomkPzFjfhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oNyJNZZ2f5Ve8HItc27uvfdt3nih+W6bsvDgzMBWo8zE92p1KCOXIFpmCO/yk2svr
-         NeDzJCdc/qS4/GEQCLNaC9yLTLv2myCkq8pA6wY7MRjfLUhE+PZAbAuXFBLSCVxlXm
-         CyRy3JBcN7xJlS+MYxgOyE0/32HEGtb5gyyXHiIPp7zqEmay59irQ+/qwVPebIvhKw
-         wLH5/fYjGIZA4J0flSM8YFy/Ba90ANoJMHpN+m4mE//7t/a8QDB84F8f3IPqJm1SEf
-         e98HDEpi+VxXtnkRYp9kVWhyH7KvTSLoalr8WdYtDVGQ49RXSKdArdPp7mHvir2tjJ
-         RtA1svfSZCzqg==
-Date:   Fri, 22 Apr 2022 12:16:19 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V4 00/31] x86/sgx and selftests/sgx: Support SGX2
-Message-ID: <YmJyYwp9UHRLWaTw@kernel.org>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
- <2f4338f37943c2b067db16ae65c9af665d3b51d9.camel@kernel.org>
- <9fbf26c8-5808-20c5-8653-d4f36bf398a4@intel.com>
- <42a52a6018e8dadb4c3eebefaae4dab31c0d5721.camel@kernel.org>
- <DM8PR11MB5591BBA189BC4EA5CFE2C7EAF6EF9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <54f053d8bb6b72725b2351fc2016d20b65cebbf1.camel@kernel.org>
- <DM8PR11MB559180D1BA05B0E77D354467F6F49@DM8PR11MB5591.namprd11.prod.outlook.com>
- <a94e4098-f5c1-f9ff-fab0-c2e5210cf188@intel.com>
+        Fri, 22 Apr 2022 07:36:51 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A656234
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 04:33:57 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id m14so10639562wrb.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 04:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=uz+KcNIj+v9WSFSUjytskdEFRoZIQjG/EVCHIE7PoXA=;
+        b=gzbQuJCj0I2T04uY0UYnVWLijPTDjp9cU8gjljlQbHYCpA8RUc0SI+1iOS8JCVDX30
+         wHYpTjb2TVGttz0rLW8wUREcv0cSVao2eWrMuveVbBcuvb69FNpN1EiELHQyz7N6bS5c
+         3TUxO7P8UkMUTNvh+TLzQ0YBXD9IfwQPSNMvk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=uz+KcNIj+v9WSFSUjytskdEFRoZIQjG/EVCHIE7PoXA=;
+        b=7h8p40QZ9hSaGLH3fkUjucfk5GRzYY/J8tqcfE9y/mLtZ26wWhHuvT5mL09cdZ7Mxl
+         /XnvtfeLfIkst0B3XrrDfGqzc3+ViUCfToGY6iCq6maAKjU32BYoH5TyG5Cp9fRatGmC
+         906KdoW1B6LowpMcx2tE87onCi+B+o28XZjQQL4yPVxvxcFTrURfiKemg0xz/g92/6Si
+         Ak1Jy53JGyRQIgRkdcaCvxKNlvW25kgPH8aoUkTjOP2w7z5DftzAdO1krkWnH0cb7dmd
+         01fGPjmf52isXW+o02q7PJTVr0A4QkdkFw79AaVxZzVsozG/rNMgejm7nwR8N1lpiyLD
+         U/kg==
+X-Gm-Message-State: AOAM533A3VYCP0O7Rt4fmbglMwGiYqFEZm83JyTpbpxE6+Sv1sqjZtZq
+        x+Fxie7u4aOzajoisTZCwLZQTw==
+X-Google-Smtp-Source: ABdhPJytQeZpvy34ZOAAMQB7w6jF7X6Nf/OgCkIilBTulJnvg3gtBspcR68ouVwuJUzFMunZvSQqjw==
+X-Received: by 2002:a5d:4e08:0:b0:20a:8f9e:beef with SMTP id p8-20020a5d4e08000000b0020a8f9ebeefmr3571401wrt.8.1650627235044;
+        Fri, 22 Apr 2022 04:33:55 -0700 (PDT)
+Received: from cloudflare.com (79.184.126.143.ipv4.supernova.orange.pl. [79.184.126.143])
+        by smtp.gmail.com with ESMTPSA id r25-20020adfa159000000b0020ac9758f17sm1338619wrr.23.2022.04.22.04.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 04:33:54 -0700 (PDT)
+References: <20220414162220.1985095-1-xukuohai@huawei.com>
+ <20220414162220.1985095-5-xukuohai@huawei.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>, kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf-next v2 4/6] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Date:   Fri, 22 Apr 2022 12:54:02 +0200
+In-reply-to: <20220414162220.1985095-5-xukuohai@huawei.com>
+Message-ID: <87levxfj32.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a94e4098-f5c1-f9ff-fab0-c2e5210cf188@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:29:31PM -0700, Reinette Chatre wrote:
-> Hi Vijay and Mark,
-> 
-> On 4/21/2022 4:46 PM, Dhanraj, Vijay wrote:
-> > Hi All,
-> > 
-> > I evaluated V4 patch changes with Gramine and ran into an issue when trying to set EPC page permission to PROT_NONE. It looks like with V3 patch series a change was introduced which requires kernel to have at least R permission when calling RESTRICT IOCTL. This change was done under the assumption that EPCM requires at least R permission for EMODPE/EACCEPT to succeed. But when testing with V2 version, EACCEPT worked fine with page permission set to PROT_NONE. 
-> > 
-> > Thanks to @Shanahan, Mark for confirming that EPCM does not need to have R value to allow EACCEPT or EMODPE. Given this, can we please revert this change?
-> > 
-> 
-> Thank you very much for pointing this out. I can revert the change
-> to what was done in V2 where the only check is to ensure that W requires R.
-> This is a requirement of EMODPR. Could you please check if this snippet
-> results in things working for you again?
-> 
-> ---8<---
-> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> index 83674d054c13..7c7c8a61196e 100644
-> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -855,12 +855,8 @@ static long sgx_ioc_enclave_restrict_permissions(struct sgx_encl *encl,
->  	if (params.permissions & ~SGX_SECINFO_PERMISSION_MASK)
->  		return -EINVAL;
->  
-> -	/*
-> -	 * Read access is required for the enclave to be able to use the page.
-> -	 * SGX instructions like ENCLU[EMODPE] and ENCLU[EACCEPT] require
-> -	 * read access.
-> -	 */
-> -	if (!(params.permissions & SGX_SECINFO_R))
-> +	if ((params.permissions & SGX_SECINFO_W) &&
-> +	    !(params.permissions & SGX_SECINFO_R))
->  		return -EINVAL;
->  
->  	if (params.result || params.count)
+Hi Xu,
 
-Just adding that it's fine for me to revert this.
+Thanks for working on this.
 
-BR, Jarkko
+We are also looking forward to using fentry hooks on arm64.
+In particular, attaching to entry/exit into/from XDP progs.
+
+On Thu, Apr 14, 2022 at 12:22 PM -04, Xu Kuohai wrote:
+> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+> it to replace nop with jump, or replace jump with nop.
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
+> ---
+>  arch/arm64/net/bpf_jit_comp.c | 52 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 8ab4035dea27..1a1c3ea75ee2 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bpf.h>
+> +#include <linux/memory.h>
+>  #include <linux/filter.h>
+>  #include <linux/printk.h>
+>  #include <linux/slab.h>
+> @@ -18,6 +19,7 @@
+>  #include <asm/cacheflush.h>
+>  #include <asm/debug-monitors.h>
+>  #include <asm/insn.h>
+> +#include <asm/patching.h>
+>  #include <asm/set_memory.h>
+>  
+>  #include "bpf_jit.h"
+> @@ -1529,3 +1531,53 @@ void bpf_jit_free_exec(void *addr)
+>  {
+>  	return vfree(addr);
+>  }
+> +
+> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+> +			     void *addr, u32 *insn)
+> +{
+> +	if (!addr)
+> +		*insn = aarch64_insn_gen_nop();
+> +	else
+> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+> +						    (unsigned long)addr,
+> +						    type);
+> +
+> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+> +}
+> +
+> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+> +		       void *old_addr, void *new_addr)
+> +{
+> +	int ret;
+> +	u32 old_insn;
+> +	u32 new_insn;
+> +	u32 replaced;
+> +	enum aarch64_insn_branch_type branch_type;
+> +
+> +	if (poke_type == BPF_MOD_CALL)
+> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+
+This path, bpf_arch_text_poke(<ip>, BPF_MOD_CALL, ...), is what we hit
+when attaching a BPF program entry. It is exercised by selftest #232
+xdp_bpf2bpf.
+
+However, with this patchset alone it will not work because we don't
+emit, yet, the ftrace patch (MOV X9, LR; NOP) as a part of BPF prog
+prologue, like ftrace_init_nop() does. So patching attempt will fail.
+
+I think that is what you mentioned to in your reply to Hou [1]
+
+So my question is - is support for attaching to BPF progs in scope for
+this patchset?
+
+If no, then perhaps it would be better for now to fail early with
+something like -EOPNOTSUPP when poke_type is BPF_MOD_CALL, rather then
+attempt to patch the code.
+
+If you plan to enable it as a part of this patchset, then I've given it
+a quick try, and it seems that not a lot is needed get fentry to BPF
+attachment to work.
+
+I'm including the diff for my quick and dirty attempt below. With that
+patch on top, the xdp_bpf2bpf tests pass:
+
+#232 xdp_bpf2bpf:OK
+
+[1] https://lore.kernel.org/bpf/d8c4f1fb-a020-9457-44e2-dc63982a9213@huawei.com/
+
+> +	else
+> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+> +
+> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+> +		return -EFAULT;
+> +
+> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+> +		return -EFAULT;
+> +
+> +	mutex_lock(&text_mutex);
+> +	if (aarch64_insn_read(ip, &replaced)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	if (replaced != old_insn) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	ret =  aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+> +out:
+> +	mutex_unlock(&text_mutex);
+
+The body of this critical section is identical as ftrace_modify_code().
+Perhaps we could export it and reuse?
+
+> +	return ret;
+> +}
+
+---
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 5f6bd755050f..94d8251500ab 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -240,9 +240,9 @@ static bool is_lsi_offset(int offset, int scale)
+ /* Tail call offset to jump into */
+ #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
+ 	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
+-#define PROLOGUE_OFFSET 9
++#define PROLOGUE_OFFSET 11
+ #else
+-#define PROLOGUE_OFFSET 8
++#define PROLOGUE_OFFSET 10
+ #endif
+ 
+ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+@@ -281,6 +281,10 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+ 	 *
+ 	 */
+ 
++	/* Set up ftrace patch (initially in disabled state) */
++	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
++	emit(A64_NOP, ctx);
++
+ 	/* Sign lr */
+ 	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
+ 		emit(A64_PACIASP, ctx);
+@@ -1888,10 +1892,16 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+ 	u32 replaced;
+ 	enum aarch64_insn_branch_type branch_type;
+ 
+-	if (poke_type == BPF_MOD_CALL)
++	if (poke_type == BPF_MOD_CALL) {
+ 		branch_type = AARCH64_INSN_BRANCH_LINK;
+-	else
++		/*
++		 * Adjust addr to point at the BL in the callsite.
++		 * See ftrace_init_nop() for the callsite sequence.
++		 */
++		ip = (void *)((unsigned long)ip + AARCH64_INSN_SIZE);
++	} else {
+ 		branch_type = AARCH64_INSN_BRANCH_NOLINK;
++	}
+ 
+ 	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+ 		return -EFAULT;
