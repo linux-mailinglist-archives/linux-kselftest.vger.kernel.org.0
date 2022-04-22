@@ -2,118 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A291050C3F4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Apr 2022 01:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8850C372
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Apr 2022 01:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbiDVWi2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Apr 2022 18:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S232856AbiDVWcR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Apr 2022 18:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiDVWh7 (ORCPT
+        with ESMTP id S232944AbiDVWcH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:37:59 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9594A288EC8
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:30:05 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id r5-20020a258285000000b0064577f2c8adso5059283ybk.21
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=SZmluZmQNNsXve64J622YTKh8VersM5cFsD6n/swy/o=;
-        b=CwnEIUaF3mjN6791/zZx82W3m8Exz8sNaQFrvncFQdFNqY6vXWH9txSyPZcUa6s7zU
-         FquAT5n+wNVDvxWTlzo/RUKpWYw1yMbTjAi8NIpj3NafWQdtSPuuty+uwNLUlt3AAtCw
-         jtKplPIzTy3XtR5yJLijXD/YaGEGMs/5YGMxvcQ693F7IcnH/6dvsTUROAOwAkt1zWPU
-         F9o0CFhL2LLdc0Ux7YGm7rSheRQi84Z9fILU+CiARmFTzIMZxSnIL/U4i78zi2Y05eOt
-         a8PrneNMF+e6r6JMUvT7IhY1+7LEt4a/J2MV0mLR6CN+mSjFjG2HxzZKsOT0hNGpM/Iq
-         M/8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=SZmluZmQNNsXve64J622YTKh8VersM5cFsD6n/swy/o=;
-        b=nwDLWp9lLO+QZnVjL/xkw/iaj+UDDBGKhZwdUHHNyLiRndKyjyNdyyaogyAsF41Ijl
-         +FuHTOW7zZygrK/vqtZve9BfsOEE/rksRNuh0ZoUaywX0yMmnWuqyS9gbPGg2cdBoihs
-         oEo/7ymAmlSnJLbmdRzq/CUGKAh4sTr2SnS1NG75/emNATJ9yhcluZOeehkK2KfSI7hH
-         1EHbVDztdPjCkmAp97XsD7VEKfLwxjEzXSq8118ZaOah4Tuf46jaNU4UkKP6daOwQXLn
-         2ghEcpHUMyhRh3iTqRtaWpvC420hTz1SVWNACSUY90QqDuTB5pBZ0Cy5g7Wwhgkp2gcT
-         u0sQ==
-X-Gm-Message-State: AOAM532nUGjUm9a5Ag2718FISi0BBRFIdX2E7/o27L5tAtAc2gaImyQM
-        LKQJLWhFrGRxnrb/zvPRv67LBya2oKT16C+nc8aJ
-X-Google-Smtp-Source: ABdhPJyQekwJggjgopvUAQj4NzrkTcMUe5kxTBnnnRYDiIgpf9GP2ohyRZR4/MzEbrDU4XLJ7n4OkBFO7wDmylaZWt9p
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:7ba6:20ac:a8f7:1dbd])
- (user=axelrasmussen job=sendgmr) by 2002:a05:6902:84:b0:63d:4a3d:eb5 with
- SMTP id h4-20020a056902008400b0063d4a3d0eb5mr6809723ybs.145.1650663004873;
- Fri, 22 Apr 2022 14:30:04 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:29:45 -0700
-In-Reply-To: <20220422212945.2227722-1-axelrasmussen@google.com>
-Message-Id: <20220422212945.2227722-7-axelrasmussen@google.com>
+        Fri, 22 Apr 2022 18:32:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3F0324C79;
+        Fri, 22 Apr 2022 14:54:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FBCFB832C3;
+        Fri, 22 Apr 2022 21:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4A48C385A4;
+        Fri, 22 Apr 2022 21:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650664497;
+        bh=BHXV0YOJHr2WM2YchlEQurnNcQ9G+9t5xI2geAAdRgY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iGGqtTPs/Shjsut4v8AhxTjmcP0yty7k0GpImOSyAPTRxxD261KW9ru192wle1d/g
+         adYtTm/zXG/dElLaOgX66EwhRPAZb0wlWlW9e0weRuVHMTfsNlfjyoW0DybS5Q4tol
+         pXMW/S6T5UanpnUXjYtXemKFzxfpHNEHTX/b0vV4=
+Date:   Fri, 22 Apr 2022 14:54:56 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests: vm: refactor run_vmtests.sh to reduce
+ boilerplate
+Message-Id: <20220422145456.1e9f22220b1ad502aa56628d@linux-foundation.org>
+In-Reply-To: <20220421224928.1848230-1-axelrasmussen@google.com>
+References: <20220421224928.1848230-1-axelrasmussen@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 6/6] selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This new mode was recently added to the userfaultfd selftest. We want to
-exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-test cases to the script.
+On Thu, 21 Apr 2022 15:49:27 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+> Previously, each test printed out its own header, dealt with its own
+> return code, etc. By just putting this standard stuff in a function, we
+> can delete > 300 lines from the script.
+> 
+> This also makes adding future tests easier. And, it gets rid of various
+> inconsistencies that already exist:
+> 
+> - Some tests correctly deal with ksft_skip, but others don't.
+> - Some tests just print the executable name, others print arguments, and
+>   yet others print some comment in the header.
+> - Most tests print out a header with two separator lines, but not the
+>   HMM smoke test or the memfd_secret test, which only print one.
+> - We had a redundant "exit" at the end, with all the boilerplate it's an
+>   easy oversight.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  tools/testing/selftests/vm/run_vmtests.sh | 459 +++-------------------
+>  1 file changed, 64 insertions(+), 395 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index 5065dbd89bdb..57f01505c719 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -121,12 +121,17 @@ run_test ./gup_test -a
- run_test ./gup_test -ct -F 0x1 0 19 0x1000
+Well that's nice.
+
+There were a bunch of changes already pending in this file but I think
+with this patch, they become unneeded.  So I just reverted them all. 
+please double check?
+
+
+--- a/tools/testing/selftests/vm/run_vmtests.sh~revert-1
++++ a/tools/testing/selftests/vm/run_vmtests.sh
+@@ -162,32 +162,22 @@ echo "----------------------------------
+ echo "running: gup_test -u # get_user_pages_fast() benchmark"
+ echo "------------------------------------------------------"
+ ./gup_test -u
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
  
- run_test ./userfaultfd anon 20 16
-+run_test ./userfaultfd anon:dev 20 16
- # Hugetlb tests require source and destination huge pages. Pass in half the
- # size ($half_ufd_size_MB), which is used for *each*.
- run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-+run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
- run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
- rm -f "$mnt"/uffd-test
-+run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-+rm -f "$mnt"/uffd-test
- run_test ./userfaultfd shmem 20 16
-+run_test ./userfaultfd shmem:dev 20 16
+ echo "------------------------------------------------------"
+ echo "running: gup_test -a # pin_user_pages_fast() benchmark"
+ echo "------------------------------------------------------"
+ ./gup_test -a
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
  
- #cleanup
- umount "$mnt"
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+ echo "------------------------------------------------------------"
+@@ -195,16 +185,11 @@ echo "# Dump pages 0, 19, and 4096, usin
+ echo "running: gup_test -ct -F 0x1 0 19 0x1000 # dump_page() test"
+ echo "------------------------------------------------------------"
+ ./gup_test -ct -F 0x1 0 19 0x1000
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
+ 
+ echo "-------------------"
+@@ -306,16 +291,11 @@ echo "-------------------"
+ echo "running mremap_test"
+ echo "-------------------"
+ ./mremap_test
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
+ 
+ echo "-----------------"
+_
 
