@@ -2,57 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EB950CB06
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Apr 2022 16:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ABC50CB2C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Apr 2022 16:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiDWOGY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 23 Apr 2022 10:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
+        id S233378AbiDWObG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Apr 2022 10:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiDWOGN (ORCPT
+        with ESMTP id S230032AbiDWObG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:06:13 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7C692AD
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 Apr 2022 07:03:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f4e17a5809so51974497b3.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 Apr 2022 07:03:15 -0700 (PDT)
+        Sat, 23 Apr 2022 10:31:06 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B71727FF7
+        for <linux-kselftest@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d11b6259adso94075967b3.19
+        for <linux-kselftest@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=fa8nrg7PnSBHWiz/ixAu3+CbgP2gabmfB3kka70Ad0U=;
-        b=RBzRm8aigFAmC2YQq4Au63IrMg4vk5mNEbXU0HTFREh1S8MkXIo2r1//dLE4dyUX/e
-         6NozTIV4b1f9CJCUnvT4w7Sx7ybqXpLGTEuCwKk4b3Cr+DCdjlOpNBVoS7xw+1IljbxX
-         WY9TJe1wbjl3aDMWyDZjVVUsZQ+WpulkaJM5CwkywnoIXR0oQof2FUp7skcLKtWIfukx
-         VknJtnGg5S6NNilEWi8UYh+oR7TXcfJ/JyaSL8lv6ju9ciyY4p8a1ydjQvkXybSBiEhR
-         MVC/MmsNWdd9lqggkQCwKJIffrY3xA8wW9Gow+xt10wW2staPBbArzYc4Kx+820Ntvm+
-         KDpg==
+        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
+        b=tQibwGA8uz8Ue+E3pvs+c8ZLtax4gGb4dFOV3dy8bzYAyRQotxBRYtX3oExAAr/e5W
+         lcJykMgKZDqXuCRcUTWrpgdKqNqa7SDK7R5LQ1iWkeMFOMj4/GvkIliYrru0Fcz3ot5h
+         cvD+hIJBFRnHqnE3eBGsznogk3ef/KiPrus6ZbeRLGrGf+/GlLHeLPEohW773ai5NpM2
+         pXrvOgHb8VQuBDo7BbJ8vcpHd3CLD6msHLW5xjWZJUln3dl7h6R0dYjUMivzqyXucYGI
+         E+67TMHQeiyQW5PXgSo8AKsLGTtBzdyQAAlPZ+C99mPyDJfjZvDTgswF9XlojwtZrxoc
+         qXMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=fa8nrg7PnSBHWiz/ixAu3+CbgP2gabmfB3kka70Ad0U=;
-        b=mPq+xMS9Ux+TYXYf1J5g7A5mMpjxbHh/pSLnpBGsVQRFXYoYrZMSXs3Dek6+LlDmz/
-         0xlgXo5U9ODDcAs6kLI2orHTi6gGVuhPn7e6wi6IYrWCJmYF55sM31zlHMUKNUhVK/6W
-         Dls4dckUju8ftAoFxZS7Vgq/O6gkzIU5qvcwUYI3lBNo/zgacTg+DONT6p+TkD9hyg4B
-         y5sYrRqzJvIgjzEZ+dO8dV9+pLipVmaBy7PgvznscmzupbpI6vw/IsnR5m5laYEtXW41
-         6QrKZhONJbWjlf4noCLBPBratoUBeyYVDENqiQ79Ou+lZMsHZ7XA9PEbJS1izdmH8mvS
-         tWpw==
-X-Gm-Message-State: AOAM5300KIyxJR2gta7cbmzPjOmQfXrWLeT83TuhXrfKNkaH3b+Nd/zO
-        7eFl5jgC3W74sBb39NsoEfzC9DOpaVXIKA==
-X-Google-Smtp-Source: ABdhPJwStmJpcHiA2mFTxcNMhfws2BRPRjdd+RlFHxUK+bhjIRki3ilpkcFSKTXyuoE3Fh60b9kljL0wiOv+vg==
+        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
+        b=XCv9aPJjLYvl0/lLZM49R75KExVBnmS6m746CzawW1ZrXtMRBiCOqHyG12dp0oKhBs
+         sx2BDvh0bJb9VOqoLocYu1Gm7eEQVPwTAjBpVA/yRD9Zzwl9GFxcWd5ZmAVb2Cm2WHGU
+         xE9+JBQkWxRfmCxF4OMvl0T7LMlF5qhtqYRdFLMfRFMm0iEQuxI70wleyxwqRFVNyrKP
+         NUzguXg7vTs0TeelfNhZGnT4Aw+zBZ2T4J3Y00jXqfrXgZ6AFnk2TkZyMHJAIk+IMIP6
+         BYOJUzg/yX3kjxQFlUrk7rX38YF3qDaYV6rkcFVkEI73IBh5eCkOUM2XqSlHBd+w9Vzz
+         fPCA==
+X-Gm-Message-State: AOAM531cI0GYgvcQHZGvJwXqDFjiu+4DTg84Ntx595GUeX80gJhT9MlO
+        ORhPDU/S3aNeF0E1lVTlDt7Q9oNNUHbxGA==
+X-Google-Smtp-Source: ABdhPJymwLMUEIWwXLSUSEFl1hrUHDozuSw0iJLPBiMCTcvECf3BdD1JzQSLUMCkewcVDkKmZFBQ5OvW5vc+iw==
 X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a81:18d7:0:b0:2eb:553e:f3ee with SMTP id
- 206-20020a8118d7000000b002eb553ef3eemr9135814ywy.393.1650722594556; Sat, 23
- Apr 2022 07:03:14 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 14:03:12 +0000
-In-Reply-To: <20220421234426.3494842-4-yosryahmed@google.com>
-Message-Id: <20220423140312.fxsxjwcebvor2x5l@google.com>
+ (user=shakeelb job=sendgmr) by 2002:a05:6902:124b:b0:644:c3bf:fa2d with SMTP
+ id t11-20020a056902124b00b00644c3bffa2dmr9159316ybu.462.1650724084357; Sat,
+ 23 Apr 2022 07:28:04 -0700 (PDT)
+Date:   Sat, 23 Apr 2022 14:28:01 +0000
+In-Reply-To: <20220421234426.3494842-5-yosryahmed@google.com>
+Message-Id: <20220423142801.gnvd42cdcsz4hpon@google.com>
 Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com> <20220421234426.3494842-4-yosryahmed@google.com>
-Subject: Re: [PATCH v4 3/4] selftests: cgroup: fix alloc_anon_noexit()
- instantly freeing memory
+References: <20220421234426.3494842-1-yosryahmed@google.com> <20220421234426.3494842-5-yosryahmed@google.com>
+Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
 From:   Shakeel Butt <shakeelb@google.com>
 To:     Yosry Ahmed <yosryahmed@google.com>
 Cc:     Johannes Weiner <hannes@cmpxchg.org>,
@@ -76,7 +75,7 @@ Cc:     Johannes Weiner <hannes@cmpxchg.org>,
 Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,15 +83,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:44:25PM +0000, Yosry Ahmed wrote:
-> Currently, alloc_anon_noexit() calls alloc_anon() which instantly frees
-> the allocated memory. alloc_anon_noexit() is usually used with
-> cg_run_nowait() to run a process in the background that allocates
-> memory. It makes sense for the background process to keep the memory
-> allocated and not instantly free it (otherwise there is no point of
-> running it in the background).
+On Thu, Apr 21, 2022 at 11:44:26PM +0000, Yosry Ahmed wrote:
+> Add a new test for memory.reclaim that verifies that the interface
+> correctly reclaims memory as intended, from both anon and file pages.
 > 
 > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> ---
+>  .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index f2ffb3a30194..5f7c20de2426 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
+>  	return ret;
+>  }
+>  
+> +/*
+> + * This test checks that memory.reclaim reclaims the given
+> + * amount of memory (from both anon and file).
+> + */
+> +static int test_memcg_reclaim(const char *root)
+> +{
+> +	int ret = KSFT_FAIL, fd, retries;
+> +	char *memcg;
+> +	long current, to_reclaim;
+> +	char buf[64];
+> +
+> +	memcg = cg_name(root, "memcg_test");
+> +	if (!memcg)
+> +		goto cleanup;
+> +
+> +	if (cg_create(memcg))
+> +		goto cleanup;
+> +
+> +	current = cg_read_long(memcg, "memory.current");
+> +	if (current != 0)
+> +		goto cleanup;
+> +
+> +	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+Don't you need is_swap_enabled() check before deciding to do the anon
+allocations?
+
+> +	sleep(1);
+> +
+> +	fd = get_temp_fd();
+> +	if (fd < 0)
+> +		goto cleanup;
+> +
+> +	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
+> +	sleep(1);
+
+These sleep(1)s do not seem robust. Since kernel keeps the page cache
+around, you can convert anon to use tmpfs and use simple cg_run to
+trigger the allocations of anon (tmpfs) and file which will remain in
+memory even after return from cg_run.
