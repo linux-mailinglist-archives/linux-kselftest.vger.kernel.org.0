@@ -2,80 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88ABC50CB2C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Apr 2022 16:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D5550CB36
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Apr 2022 16:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbiDWObG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 23 Apr 2022 10:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S235187AbiDWOdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Apr 2022 10:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiDWObG (ORCPT
+        with ESMTP id S234415AbiDWOds (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:31:06 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B71727FF7
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d11b6259adso94075967b3.19
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 Apr 2022 07:28:05 -0700 (PDT)
+        Sat, 23 Apr 2022 10:33:48 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBE9289B4;
+        Sat, 23 Apr 2022 07:30:50 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 15so1307100pgf.4;
+        Sat, 23 Apr 2022 07:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
-        b=tQibwGA8uz8Ue+E3pvs+c8ZLtax4gGb4dFOV3dy8bzYAyRQotxBRYtX3oExAAr/e5W
-         lcJykMgKZDqXuCRcUTWrpgdKqNqa7SDK7R5LQ1iWkeMFOMj4/GvkIliYrru0Fcz3ot5h
-         cvD+hIJBFRnHqnE3eBGsznogk3ef/KiPrus6ZbeRLGrGf+/GlLHeLPEohW773ai5NpM2
-         pXrvOgHb8VQuBDo7BbJ8vcpHd3CLD6msHLW5xjWZJUln3dl7h6R0dYjUMivzqyXucYGI
-         E+67TMHQeiyQW5PXgSo8AKsLGTtBzdyQAAlPZ+C99mPyDJfjZvDTgswF9XlojwtZrxoc
-         qXMw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IbYzjBMPd51boeHwhH3wuc9Vn0/S8H3iRbP4T06Ug/A=;
+        b=e9kxM39mRig/k57Ub+oGcFMcpzV47OT4eNveol/LKX9UORSpHXh/KjtegfnWHITvlm
+         jJp1c7Aa+U91Dy7KWeYRbNW5QH9l21dc9SkmTW2kR9kBVpP02GiiShVXYuvFGzpYALZj
+         vBFGEmX7C80dxIYPi8X39MEmSiD95SJApig2bubiz3EiInmdAc6wJsm3Wk2eIhkH1K0D
+         pLo1KbIf7XARqxRc/DLTwJuZb2jb6tR07DAiD5AKQbeodRyfTSD8e2ZG66HmJxG5Khy6
+         5d5dEASAAbsHJKu4SCE6hf8c9dcBEF3g6n34w0o7xZIZXAbsxWPHssUjUQHb2Q8+qUnk
+         /oHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=DXAXkVZYPHcetFXE1oISHIeSMz1Xot5LLxB15W3LMjk=;
-        b=XCv9aPJjLYvl0/lLZM49R75KExVBnmS6m746CzawW1ZrXtMRBiCOqHyG12dp0oKhBs
-         sx2BDvh0bJb9VOqoLocYu1Gm7eEQVPwTAjBpVA/yRD9Zzwl9GFxcWd5ZmAVb2Cm2WHGU
-         xE9+JBQkWxRfmCxF4OMvl0T7LMlF5qhtqYRdFLMfRFMm0iEQuxI70wleyxwqRFVNyrKP
-         NUzguXg7vTs0TeelfNhZGnT4Aw+zBZ2T4J3Y00jXqfrXgZ6AFnk2TkZyMHJAIk+IMIP6
-         BYOJUzg/yX3kjxQFlUrk7rX38YF3qDaYV6rkcFVkEI73IBh5eCkOUM2XqSlHBd+w9Vzz
-         fPCA==
-X-Gm-Message-State: AOAM531cI0GYgvcQHZGvJwXqDFjiu+4DTg84Ntx595GUeX80gJhT9MlO
-        ORhPDU/S3aNeF0E1lVTlDt7Q9oNNUHbxGA==
-X-Google-Smtp-Source: ABdhPJymwLMUEIWwXLSUSEFl1hrUHDozuSw0iJLPBiMCTcvECf3BdD1JzQSLUMCkewcVDkKmZFBQ5OvW5vc+iw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a05:6902:124b:b0:644:c3bf:fa2d with SMTP
- id t11-20020a056902124b00b00644c3bffa2dmr9159316ybu.462.1650724084357; Sat,
- 23 Apr 2022 07:28:04 -0700 (PDT)
-Date:   Sat, 23 Apr 2022 14:28:01 +0000
-In-Reply-To: <20220421234426.3494842-5-yosryahmed@google.com>
-Message-Id: <20220423142801.gnvd42cdcsz4hpon@google.com>
-Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com> <20220421234426.3494842-5-yosryahmed@google.com>
-Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Dan Schatzberg <schatzberg.dan@gmail.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IbYzjBMPd51boeHwhH3wuc9Vn0/S8H3iRbP4T06Ug/A=;
+        b=lYEOY3KFolTAVX7rJhkt2hzbEaidFW02DJpjnqTDgp5lBNlh+C4yu1IcV1Necq68zr
+         t0p+Frk4XNArr2EOuH1/+EQXUCZUz5AFaZPsLpn8PorkiG4YGnR0rtDvcJtk0QZMS68w
+         mEe79qT7ackOjEQGr06p5W+vgoIdGy0PlKIuvi4kouIEwTrS5vRjS9fwHtMOO/++dTxZ
+         6ih2inF3lj6DcG3tQX6nKOUVojZjwslCYHXO4Sc6tH1Hjxb/nYNwOXAvA58dUGYQljsO
+         tJ7Sh2bwPaYaxC2HdgA3AzB3KZCcGiCjSh/hMK3OAkTlq2PP/ijdMoeN4/4bfg9jqAhy
+         zuuQ==
+X-Gm-Message-State: AOAM533HLmsKTismb9ljfSh0fbg9Ptp1DfF+G2Ym7oPJPV0zOzrh14jV
+        EXumTgVIXbdUOsK8efbovAk=
+X-Google-Smtp-Source: ABdhPJxhAIxDc9NmJoC5o4P8rTL4BbAzX+TMNG/y7XV9K86jlKj5vfeK3KWWsG1w0N86098N8ariGQ==
+X-Received: by 2002:a63:fd04:0:b0:3aa:6473:1859 with SMTP id d4-20020a63fd04000000b003aa64731859mr8226012pgh.151.1650724249799;
+        Sat, 23 Apr 2022 07:30:49 -0700 (PDT)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id d8-20020aa78688000000b00505793566f7sm5778399pfo.211.2022.04.23.07.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Apr 2022 07:30:49 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Fix incorrect TRUNNER_BINARY name output
+Date:   Sat, 23 Apr 2022 22:30:07 +0800
+Message-Id: <20220423143007.423526-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,61 +75,172 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:44:26PM +0000, Yosry Ahmed wrote:
-> Add a new test for memory.reclaim that verifies that the interface
-> correctly reclaims memory as intended, from both anon and file pages.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
->  1 file changed, 86 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index f2ffb3a30194..5f7c20de2426 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
->  	return ret;
->  }
->  
-> +/*
-> + * This test checks that memory.reclaim reclaims the given
-> + * amount of memory (from both anon and file).
-> + */
-> +static int test_memcg_reclaim(const char *root)
-> +{
-> +	int ret = KSFT_FAIL, fd, retries;
-> +	char *memcg;
-> +	long current, to_reclaim;
-> +	char buf[64];
-> +
-> +	memcg = cg_name(root, "memcg_test");
-> +	if (!memcg)
-> +		goto cleanup;
-> +
-> +	if (cg_create(memcg))
-> +		goto cleanup;
-> +
-> +	current = cg_read_long(memcg, "memory.current");
-> +	if (current != 0)
-> +		goto cleanup;
-> +
-> +	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
+Currently, when we run 'make test_progs', the output is:
 
-Don't you need is_swap_enabled() check before deciding to do the anon
-allocations?
+  CLNG-BPF [test_maps] atomic_bounds.o
+  ...
+  GEN-SKEL [test_progs] atomic_bounds.skel.h
+  ...
+  TEST-OBJ [test_progs] align.test.o
+  ...
+  TEST-HDR [test_progs] tests.h
+  EXT-OBJ  [test_progs] test_progs.o
+  ...
+  BINARY   test_progs
 
-> +	sleep(1);
-> +
-> +	fd = get_temp_fd();
-> +	if (fd < 0)
-> +		goto cleanup;
-> +
-> +	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
-> +	sleep(1);
+As you can see, the TRUNNER_BINARY name in the CLNG-BPF part is test_maps,
+which is incorrect.
 
-These sleep(1)s do not seem robust. Since kernel keeps the page cache
-around, you can convert anon to use tmpfs and use simple cg_run to
-trigger the allocations of anon (tmpfs) and file which will remain in
-memory even after return from cg_run.
+Similarly, when we run 'make test_maps', the output is:
+
+  CLNG-BPF [test_maps] atomic_bounds.o
+  ...
+  GEN-SKEL [test_progs] atomic_bounds.skel.h
+  ...
+  TEST-OBJ [test_maps] array_map_batch_ops.test.o
+  ...
+  TEST-HDR [test_maps] tests.h
+  EXT-OBJ  [test_maps] test_maps.o
+  ...
+  BINARY   test_maps
+
+At this time, the TRUNNER_BINARY name in the GEN-SKEL part is wrong.
+
+Again, if we run 'make /full/path/to/selftests/bpf/test_vmlinux.skel.h',
+the output is:
+
+  CLNG-BPF [test_maps] test_vmlinux.o
+  GEN-SKEL [test_progs] test_vmlinux.skel.h
+
+Here, the TRUNNER_BINARY names are inappropriate and meaningless, they
+should be removed.
+
+This patch fixes these and all other similar issues.
+
+With the patch applied, the output becomes:
+
+  $ make test_progs
+
+  CLNG-BPF [test_progs] atomic_bounds.o
+  ...
+  GEN-SKEL [test_progs] atomic_bounds.skel.h
+  ...
+  TEST-OBJ [test_progs] align.test.o
+  ...
+  TEST-HDR [test_progs] tests.h
+  EXT-OBJ  [test_progs] test_progs.o
+  ...
+  BINARY   test_progs
+
+  $ make test_maps
+
+  CLNG-BPF [test_maps] atomic_bounds.o
+  ...
+  GEN-SKEL [test_maps] atomic_bounds.skel.h
+  ...
+  TEST-OBJ [test_maps] array_map_batch_ops.test.o
+  ...
+  TEST-HDR [test_maps] tests.h
+  EXT-OBJ  [test_maps] test_maps.o
+  ...
+  BINARY   test_maps
+
+  $ make /full/path/to/selftests/bpf/test_vmlinux.skel.h
+
+  CLNG-BPF test_vmlinux.o
+  GEN-SKEL test_vmlinux.skel.h
+
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ tools/testing/selftests/bpf/Makefile | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index bafdc5373a13..3cf444cb20af 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -413,7 +413,7 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
+ 					  $(TRUNNER_BPF_CFLAGS))
+ 
+ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
++	$$(call msg,GEN-SKEL,$$(TRUNNER_BINARY),$$@)
+ 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
+ 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
+ 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
+@@ -422,7 +422,7 @@ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+ 	$(Q)$$(BPFTOOL) gen subskeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=)) > $$(@:.skel.h=.subskel.h)
+ 
+ $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
++	$$(call msg,GEN-SKEL,$$(TRUNNER_BINARY),$$@)
+ 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
+ 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
+ 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
+@@ -430,12 +430,12 @@ $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+ 	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
+ 
+ $(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
++	$$(call msg,LINK-BPF,$$(TRUNNER_BINARY),$$(@:.skel.h=.o))
+ 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked1.o) $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps))
+ 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked1.o)
+ 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked3.o) $$(@:.skel.h=.linked2.o)
+ 	$(Q)diff $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o)
+-	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
++	$$(call msg,GEN-SKEL,$$(TRUNNER_BINARY),$$@)
+ 	$(Q)$$(BPFTOOL) gen skeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$@
+ 	$(Q)$$(BPFTOOL) gen subskeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$(@:.skel.h=.subskel.h)
+ endif
+@@ -444,7 +444,7 @@ endif
+ ifeq ($($(TRUNNER_TESTS_DIR)-tests-hdr),)
+ $(TRUNNER_TESTS_DIR)-tests-hdr := y
+ $(TRUNNER_TESTS_HDR): $(TRUNNER_TESTS_DIR)/*.c
+-	$$(call msg,TEST-HDR,$(TRUNNER_BINARY),$$@)
++	$$(call msg,TEST-HDR,$$(TRUNNER_BINARY),$$@)
+ 	$$(shell (echo '/* Generated header, do not edit */';					\
+ 		  sed -n -E 's/^void (serial_)?test_([a-zA-Z0-9_]+)\((void)?\).*/DEFINE_TEST(\2)/p'	\
+ 			$(TRUNNER_TESTS_DIR)/*.c | sort ;	\
+@@ -461,7 +461,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
+ 		      $(TRUNNER_BPF_LSKELS)				\
+ 		      $(TRUNNER_BPF_SKELS_LINKED)			\
+ 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
+-	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
++	$$(call msg,TEST-OBJ,$$(TRUNNER_BINARY),$$@)
+ 	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
+ 
+ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
+@@ -469,17 +469,19 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
+ 		       $(TRUNNER_EXTRA_HDRS)				\
+ 		       $(TRUNNER_TESTS_HDR)				\
+ 		       $$(BPFOBJ) | $(TRUNNER_OUTPUT)
+-	$$(call msg,EXT-OBJ,$(TRUNNER_BINARY),$$@)
++	$$(call msg,EXT-OBJ,$$(TRUNNER_BINARY),$$@)
+ 	$(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
+ 
+ # non-flavored in-srctree builds receive special treatment, in particular, we
+ # do not need to copy extra resources (see e.g. test_btf_dump_case())
+ $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
+ ifneq ($2:$(OUTPUT),:$(shell pwd))
+-	$$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
++	$$(call msg,EXT-COPY,$$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
+ 	$(Q)rsync -aq $$^ $(TRUNNER_OUTPUT)/
+ endif
+ 
++$(OUTPUT)/$(TRUNNER_BINARY): TRUNNER_BINARY = $(TRUNNER_BINARY)
++
+ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
+ 			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+ 			     $(RESOLVE_BTFIDS)				\
+@@ -489,6 +491,8 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
+ 	$(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.o $$@
+ 	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/bootstrap/bpftool $(if $2,$2/)bpftool
+ 
++TRUNNER_BINARY =
++
+ endef
+ 
+ # Define test_progs test runner.
+-- 
+2.35.3
+
