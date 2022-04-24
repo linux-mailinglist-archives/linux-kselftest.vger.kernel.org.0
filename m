@@ -2,106 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1F950D2DA
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Apr 2022 17:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E2B50D4D9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Apr 2022 21:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbiDXPiM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 24 Apr 2022 11:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S229635AbiDXTiS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 24 Apr 2022 15:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbiDXPb1 (ORCPT
+        with ESMTP id S239125AbiDXTiR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Apr 2022 11:31:27 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770F0171C03;
-        Sun, 24 Apr 2022 08:28:26 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KmX3s4ZJMzCs9k;
-        Sun, 24 Apr 2022 23:23:53 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 24 Apr
- 2022 23:28:22 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 7/7] selftests/bpf: Fix trivial typo in fentry_fexit.c
-Date:   Sun, 24 Apr 2022 11:40:28 -0400
-Message-ID: <20220424154028.1698685-8-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220424154028.1698685-1-xukuohai@huawei.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
+        Sun, 24 Apr 2022 15:38:17 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC0825D5
+        for <linux-kselftest@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id k14so11722950pga.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
+        b=LkVpoRUG75De+9HyDx15Zr4GfiqqMgKd9qwzqES1FhWMMrY8+v5JTEzxsTQCCfk1jL
+         K04ggN0TOWJdxqAzCY1Me9wMzWxsuc9QL7sqhmkoI7zBGn8lIOqHrv+u2X8UTJ1pC8jX
+         tE5hm2Wlj7q5NBIT2o5vny1y8BdpYUBUgcBimpvOD0YtB7e7S2YA2LmSclOIXdUq9/Wa
+         zdqz9bgmcMBM4lB247PUHYAnQYuu18CZ1xTGBnR4y7odqXfhd34vUzc7lXTpACXzaP7u
+         d1Gr6APlLxwJTkAWqCCGLl1csIgXX8n3ATxRvJlNivuYagzEXFQNNpOFPw0QfncBtmdH
+         PSJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
+        b=yzeveM7YQ4igeXe2YmX+FcT3To3cVMLkBsS3AxW7VmvDONPxr8j56A+iQgD0Ie4Gjt
+         uZoQi3x973BBdneIpD8D9fcpjFeI7rBkhcWuzAxsjz36834NhdJX2S17QfZq11IPwOXs
+         m4FqzQZyfak4+K+HGG6eriekgd1Y/6xaSuhx4U/TY9zEg8WZmjyf973NfhRAlHOV0zp1
+         Fl8bH5/dOh2MHt86kFfiwwMN0RtLSDn0aZBu3UDIy0xh0fETJf4Z5cm0UYcySZ0GRyMq
+         wBZc6vyFYoJfPa+dNJw2ktBQJZ2iiO0Bqkwx7ngKCDUEV/ZtdnFwzO3XS89ZpNdqRmmZ
+         0UXA==
+X-Gm-Message-State: AOAM531WnZtdL+qbU/J/4qbyYW+gbvecemMDHLDzWj7QUwNh8BobO8d6
+        zgXvoKiVow1LXsGgnnTM+rLCTg==
+X-Google-Smtp-Source: ABdhPJxAgrjUeROv5fCIkxRGxN9Ux15Tld23PamShec+lf7XaV4NluDJ54VcqeoQLkUeWRbRoE962Q==
+X-Received: by 2002:a05:6a00:1702:b0:50a:8181:fed7 with SMTP id h2-20020a056a00170200b0050a8181fed7mr15459151pfc.56.1650828914988;
+        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
+Received: from [2620:15c:29:204:d4fc:f95c:4d79:861f] ([2620:15c:29:204:d4fc:f95c:4d79:861f])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090a734a00b001bf31f7520csm4222344pjs.1.2022.04.24.12.35.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Yuanchu Xie <yuanchu@google.com>
+cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] selftests/damon: add damon to selftests root
+ Makefile
+In-Reply-To: <20220418202017.3583638-1-yuanchu@google.com>
+Message-ID: <93c3f9b4-7e14-858b-bf6c-23e4f3bec232@google.com>
+References: <20220418202017.3583638-1-yuanchu@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The "ipv6" word in assertion message should be "fentry_fexit".
+On Mon, 18 Apr 2022, Yuanchu Xie wrote:
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Currently the damon selftests are not built with the rest of the
+> selftests. We add damon to the list of targets.
+> 
+> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..e3c139bde46e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
- 
- 	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "ipv6 test_run");
--	ASSERT_OK(topts.retval, "ipv6 test retval");
-+	ASSERT_OK(err, "fentry_fexit test_run");
-+	ASSERT_OK(topts.retval, "fentry_fexit test retval");
- 
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
--- 
-2.30.2
-
+Acked-by: David Rientjes <rientjes@google.com>
