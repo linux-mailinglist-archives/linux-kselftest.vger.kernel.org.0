@@ -2,70 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E2B50D4D9
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Apr 2022 21:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCA950D53D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Apr 2022 23:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiDXTiS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 24 Apr 2022 15:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        id S233980AbiDXVSn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 24 Apr 2022 17:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239125AbiDXTiR (ORCPT
+        with ESMTP id S233662AbiDXVSl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Apr 2022 15:38:17 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC0825D5
-        for <linux-kselftest@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id k14so11722950pga.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 24 Apr 2022 12:35:15 -0700 (PDT)
+        Sun, 24 Apr 2022 17:18:41 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF8213CD2;
+        Sun, 24 Apr 2022 14:15:38 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id w4so18231441wrg.12;
+        Sun, 24 Apr 2022 14:15:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
-        b=LkVpoRUG75De+9HyDx15Zr4GfiqqMgKd9qwzqES1FhWMMrY8+v5JTEzxsTQCCfk1jL
-         K04ggN0TOWJdxqAzCY1Me9wMzWxsuc9QL7sqhmkoI7zBGn8lIOqHrv+u2X8UTJ1pC8jX
-         tE5hm2Wlj7q5NBIT2o5vny1y8BdpYUBUgcBimpvOD0YtB7e7S2YA2LmSclOIXdUq9/Wa
-         zdqz9bgmcMBM4lB247PUHYAnQYuu18CZ1xTGBnR4y7odqXfhd34vUzc7lXTpACXzaP7u
-         d1Gr6APlLxwJTkAWqCCGLl1csIgXX8n3ATxRvJlNivuYagzEXFQNNpOFPw0QfncBtmdH
-         PSJQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QLCz1aEPZpTPZGtnpY3lHtJPFa6xwSRJK3O6rkL3K5c=;
+        b=aCkTg93Kczt9m6C0yGFdto0l0p1yyEUzTPppKeDoSVWvQRERuAsM6KmuUbXV13pnrF
+         Ftxp6eK8GcyYBiLbl79e3Aao75qo+6/wUyemedovZToO9dx4TnDZvHCJdAn4SsMdj+0w
+         43Xy7RxetQ3kuPR0H6+b6N6I+BZy+6oAMaEyQaq8LYkSrZSnz/4A0uk40HrtJi1dBoBV
+         uwjC5VmshX7W0tC9pnXXxII6dXgfSb449cYLqRo8yeZRsfnPheAA0fz4bODERkiWLdyt
+         ZfVirEV/P7A+iSmK46RivLw7mjB2mRseKAOkACDdzq71CY2aM0TgbXnJFauYlZPYbYAZ
+         ufxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=cCbva5d4cTef7JnnRvcj+uHQQXUpXaA+2xK/VFzMO4w=;
-        b=yzeveM7YQ4igeXe2YmX+FcT3To3cVMLkBsS3AxW7VmvDONPxr8j56A+iQgD0Ie4Gjt
-         uZoQi3x973BBdneIpD8D9fcpjFeI7rBkhcWuzAxsjz36834NhdJX2S17QfZq11IPwOXs
-         m4FqzQZyfak4+K+HGG6eriekgd1Y/6xaSuhx4U/TY9zEg8WZmjyf973NfhRAlHOV0zp1
-         Fl8bH5/dOh2MHt86kFfiwwMN0RtLSDn0aZBu3UDIy0xh0fETJf4Z5cm0UYcySZ0GRyMq
-         wBZc6vyFYoJfPa+dNJw2ktBQJZ2iiO0Bqkwx7ngKCDUEV/ZtdnFwzO3XS89ZpNdqRmmZ
-         0UXA==
-X-Gm-Message-State: AOAM531WnZtdL+qbU/J/4qbyYW+gbvecemMDHLDzWj7QUwNh8BobO8d6
-        zgXvoKiVow1LXsGgnnTM+rLCTg==
-X-Google-Smtp-Source: ABdhPJxAgrjUeROv5fCIkxRGxN9Ux15Tld23PamShec+lf7XaV4NluDJ54VcqeoQLkUeWRbRoE962Q==
-X-Received: by 2002:a05:6a00:1702:b0:50a:8181:fed7 with SMTP id h2-20020a056a00170200b0050a8181fed7mr15459151pfc.56.1650828914988;
-        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
-Received: from [2620:15c:29:204:d4fc:f95c:4d79:861f] ([2620:15c:29:204:d4fc:f95c:4d79:861f])
-        by smtp.gmail.com with ESMTPSA id j10-20020a17090a734a00b001bf31f7520csm4222344pjs.1.2022.04.24.12.35.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QLCz1aEPZpTPZGtnpY3lHtJPFa6xwSRJK3O6rkL3K5c=;
+        b=B41/ExnDz+bCJgtnJ286vQHoRTE97YWmsSXeA8REh/SdtOelTQnphyzZwmp0CuxNSK
+         30GJYJ3K8Vw7fBZaUXrioXOe64NxBq6qvFAgfi5vU23OwmPmDHhlCk9skXkG9z9VJfhA
+         5C9DOXOKLPnfzViNqSOLfVLdS6Qm3AUj9aYqZfczhSHGz/IiJGoH4VYcqC5PoEATi4NL
+         vuvH79VLiRuzMIA3nk5gIMrUM6coSv07qtdbOuVaRGv4MDQ5icnX2KuUCb5MPuRtUuY1
+         dBKOjVhCGTisGkCba65cKfSzg/UNAYFxvobgiTjaf4yMBFc8shNQFA73ChMdJADgVEs0
+         N2lg==
+X-Gm-Message-State: AOAM531orNzzFAJOMQva5OHLJNbivpZ8zSRHUCPBEUJmJiIqjOoyLyxj
+        te1x3RoCE+F/hgjnMXJUFPY=
+X-Google-Smtp-Source: ABdhPJz/FOFaeagHS5EO2XRc0+fKcdVmCWhnmahvPolqKQRCXrZWtIDoi0pRkc8kI5dw3Gh1Fp25tg==
+X-Received: by 2002:a5d:6d0d:0:b0:20a:d741:6949 with SMTP id e13-20020a5d6d0d000000b0020ad7416949mr4522984wrq.312.1650834937597;
+        Sun, 24 Apr 2022 14:15:37 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bi7-20020a05600c3d8700b0038eb78569aasm9571468wmb.20.2022.04.24.14.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 12:35:14 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Yuanchu Xie <yuanchu@google.com>
-cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] selftests/damon: add damon to selftests root
- Makefile
-In-Reply-To: <20220418202017.3583638-1-yuanchu@google.com>
-Message-ID: <93c3f9b4-7e14-858b-bf6c-23e4f3bec232@google.com>
-References: <20220418202017.3583638-1-yuanchu@google.com>
+        Sun, 24 Apr 2022 14:15:37 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/resctrl: Fix null pointer dereference on open failed
+Date:   Sun, 24 Apr 2022 22:15:36 +0100
+Message-Id: <20220424211536.1373878-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,13 +72,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 18 Apr 2022, Yuanchu Xie wrote:
+Currently if opening /dev/null fails to open then file pointer fp
+is null and further access to fp via fprintf will cause a null
+pointer dereference. Fix this by returning a negative error value
+when a null fp is detected.
 
-> Currently the damon selftests are not built with the rest of the
-> selftests. We add damon to the list of targets.
-> 
-> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-> Reviewed-by: SeongJae Park <sj@kernel.org>
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Acked-by: David Rientjes <rientjes@google.com>
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index 51e5cf22632f..56ccbeae0638 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
+ 
+ 	/* Consume read result so that reading memory is not optimized out. */
+ 	fp = fopen("/dev/null", "w");
+-	if (!fp)
++	if (!fp) {
+ 		perror("Unable to write to /dev/null");
++		return -1;
++	}
+ 	fprintf(fp, "Sum: %d ", ret);
+ 	fclose(fp);
+ 
+-- 
+2.35.1
+
