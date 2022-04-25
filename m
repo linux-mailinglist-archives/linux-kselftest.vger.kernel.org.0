@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536A550EAEB
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA7250EAEC
 	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 23:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237504AbiDYVE1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Apr 2022 17:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S245344AbiDYVE2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 17:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245344AbiDYVE0 (ORCPT
+        with ESMTP id S245361AbiDYVE1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:04:26 -0400
+        Mon, 25 Apr 2022 17:04:27 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE725167C4
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 14:01:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7474418366
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 14:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650920480; x=1682456480;
+  t=1650920482; x=1682456482;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=amodz0QpZv9gbKyt4lmRvYPhlmutS/vrHNqvwdpUV/U=;
-  b=aG1c5tVmbpdaUEgvKSsi7FrL992DrTvWctK3H7qyLN6ePCn3JBDAAhTF
-   8XRwlIhAyquR6ejxSBSxmTrK3W8dYNxBbjUOkzLEM4+rxbEnN6MhMErDh
-   i4xj35Y3szvEWRw53aKoulpjQ2nMOBr3xzKcFqurVa8358lOZZG5msYTR
-   J0pm9QAEeVI4REJWw7D2A3z/fuh42zqX3kgyl3wlryUeX5MfKuTKRjdXl
-   nYg8j+KTP4wpMTN37NZnlzP4xMun7djX0dtWvVNT/WItVJfUFKEnYL+n/
-   Y7iZagzrlZpqfBSd700isnHg2/+HczloPOVSwGcKUNNkFXew08BJCZiTH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290502304"
+  bh=w7ZUWLKRXUP8kqeBeYtwr3UEk83DO0yta+5VHHRAy2k=;
+  b=UStEipLaCJLiuVRVQtdiLEL9/grsmD1Z21yv+M5HkIQ3p38u8D2JKYsB
+   cPU7sGtIgDr0hwzhYqWdLY5eYd6jfBLOvIPiF9DT2wgexr3rHjA9GbQF7
+   /nX/HrG/g/CjmDL0Jd+PI5fvqE4I8gg2U9F/y9S5UlVHq3FtRtTMZWcje
+   r3rOjL+ae+wxAyGj5Z0dnRC1D+h39ZQDU1F4mKPHPFh5YJfvvHTZqGGQO
+   NsK2BrbgsGwzAiPPrYWr8JkoSdtvaKe58ajCjTBxCEb7hVbSlhmS0RBts
+   1tKoIvJYVwWbxdZAR9hlSbQr4BMbURMEChKnrKBbZU7P5kgUV3KAI7Q6K
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="290502307"
 X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="290502304"
+   d="scan'208";a="290502307"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:01:19 -0700
 X-IronPort-AV: E=Sophos;i="5.90,289,1643702400"; 
-   d="scan'208";a="579499491"
+   d="scan'208";a="579499498"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 14:01:19 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -45,9 +45,9 @@ Cc:     dave.hansen@linux.intel.com, sandipan@linux.ibm.com,
         linux-mm@kvack.org, chang.seok.bae@intel.com, bp@suse.de,
         tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
         luto@kernel.org, x86@kernel.org
-Subject: [PATCH V3 1/4] selftests: Provide local define of __cpuid_count()
-Date:   Mon, 25 Apr 2022 14:01:11 -0700
-Message-Id: <c6c0aaf08f6ef541c33c8b40e422fcd618b4d817.1650918160.git.reinette.chatre@intel.com>
+Subject: [PATCH V3 2/4] selftests/vm/pkeys: Use provided __cpuid_count() macro
+Date:   Mon, 25 Apr 2022 14:01:12 -0700
+Message-Id: <b5b59473fd118e2df6ec973e2d6bb46be9a8640d.1650918160.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1650918160.git.reinette.chatre@intel.com>
 References: <cover.1650918160.git.reinette.chatre@intel.com>
@@ -63,65 +63,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some selftests depend on information provided by the CPUID instruction.
-To support this dependency the selftests implement private wrappers for
-CPUID.
+kselftest.h makes the __cpuid_count() macro available
+to conveniently call the CPUID instruction.
 
-Duplication of the CPUID wrappers should be avoided.
+Remove the local CPUID wrapper and use __cpuid_count()
+from already included kselftest.h instead.
 
-Both gcc and clang/LLVM provide __cpuid_count() macros but neither
-the macro nor its header file are available in all the compiler
-versions that need to be supported by the selftests. __cpuid_count()
-as provided by gcc is available starting with gcc v4.4, so it is
-not available if the latest tests need to be run in all the
-environments required to support kernels v4.9 and v4.14 that
-have the minimal required gcc v3.2.
+__cpuid_count() from kselftest.h is used instead of the
+macro provided by the compiler since gcc v4.4 (via cpuid.h)
+because the selftest needs to be compiled with gcc v3.2,
+the minimal required version for stable kernels.
 
-Duplicate gcc's __cpuid_count() macro to provide a centrally defined
-macro for __cpuid_count() to help eliminate the duplicate CPUID wrappers
-while continuing to compile in older environments.
-
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Sandipan Das <sandipan@linux.ibm.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Suchanek <msuchanek@suse.de>
+Cc: linux-mm@kvack.org
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
-Note to maintainers:
-- Macro is identical to the one provided by gcc, but not liked by
-  checkpatch.pl with message "Macros with complex values should
-  be enclosed in parentheses". Similar style is used in kernel,
-  for example in arch/x86/kernel/fpu/xstate.h.
+No changes since V2.
 
-Changes since V2:
-- Highlight in changelog that macro is copied from gcc.
+Changes since V1:
+- Update changelog
+- Remove Ram Pai from cc list (email address no longer valid)
+- No longer include cpuid.h but obtain __cpuid_count() from
+  kselftest.h.
 
- tools/testing/selftests/kselftest.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/testing/selftests/vm/pkey-x86.h | 21 ++-------------------
+ 1 file changed, 2 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index b8f248018174..33a0dbd26bd3 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -53,6 +53,21 @@
- #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
- #endif
+diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
+index e4a4ce2b826d..b078ce9c6d2a 100644
+--- a/tools/testing/selftests/vm/pkey-x86.h
++++ b/tools/testing/selftests/vm/pkey-x86.h
+@@ -80,19 +80,6 @@ static inline void __write_pkey_reg(u64 pkey_reg)
+ 	assert(pkey_reg == __read_pkey_reg());
+ }
  
-+/*
-+ * gcc cpuid.h provides __cpuid_count() since v4.4.
-+ * Clang/LLVM cpuid.h provides  __cpuid_count() since v3.4.0.
-+ *
-+ * Provide local define for tests needing __cpuid_count() because
-+ * selftests need to work in older environments that do not yet
-+ * have __cpuid_count().
-+ */
-+#ifndef __cpuid_count
-+#define __cpuid_count(level, count, a, b, c, d)				\
-+	__asm__ __volatile__ ("cpuid\n\t"				\
-+			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
-+			      : "0" (level), "2" (count))
-+#endif
-+
- /* define kselftest exit codes */
- #define KSFT_PASS  0
- #define KSFT_FAIL  1
+-static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
+-		unsigned int *ecx, unsigned int *edx)
+-{
+-	/* ecx is often an input as well as an output. */
+-	asm volatile(
+-		"cpuid;"
+-		: "=a" (*eax),
+-		  "=b" (*ebx),
+-		  "=c" (*ecx),
+-		  "=d" (*edx)
+-		: "0" (*eax), "2" (*ecx));
+-}
+-
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (ecx) */
+ #define X86_FEATURE_PKU        (1<<3) /* Protection Keys for Userspace */
+ #define X86_FEATURE_OSPKE      (1<<4) /* OS Protection Keys Enable */
+@@ -104,9 +91,7 @@ static inline int cpu_has_pkeys(void)
+ 	unsigned int ecx;
+ 	unsigned int edx;
+ 
+-	eax = 0x7;
+-	ecx = 0x0;
+-	__cpuid(&eax, &ebx, &ecx, &edx);
++	__cpuid_count(0x7, 0x0, eax, ebx, ecx, edx);
+ 
+ 	if (!(ecx & X86_FEATURE_PKU)) {
+ 		dprintf2("cpu does not have PKU\n");
+@@ -142,9 +127,7 @@ int pkey_reg_xstate_offset(void)
+ 	/* assume that XSTATE_PKEY is set in XCR0 */
+ 	leaf = XSTATE_PKEY_BIT;
+ 	{
+-		eax = XSTATE_CPUID;
+-		ecx = leaf;
+-		__cpuid(&eax, &ebx, &ecx, &edx);
++		__cpuid_count(XSTATE_CPUID, leaf, eax, ebx, ecx, edx);
+ 
+ 		if (leaf == XSTATE_PKEY_BIT) {
+ 			xstate_offset = ebx;
 -- 
 2.25.1
 
