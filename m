@@ -2,69 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CFF50E9C1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 21:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F54F50E9DF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 22:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbiDYTx3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Apr 2022 15:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S245120AbiDYUGT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 16:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243980AbiDYTx1 (ORCPT
+        with ESMTP id S245107AbiDYUGN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:53:27 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE4EAE4F
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 12:50:20 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id c11-20020a9d684b000000b00603307cef05so11551137oto.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 12:50:20 -0700 (PDT)
+        Mon, 25 Apr 2022 16:06:13 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39B2128CCD
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 13:03:07 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id r17so10077910iln.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 13:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=p+Ynvk9k1i6GQRM+MV2+9dS2nsvFZOplFS8XjPwj2JY=;
-        b=GPpJwnCA0IxWGmcqd1hVFKoiy5X3+AVVBOkwbZ/JEOUEubYt1lAPeL97pgFt/nzeFc
-         wxnIjUzDR8+z/RBbbYsj0N5yJMPdrFRt0OqkYA844bieBt10LtJerxKhrvk/YDLbLJ0t
-         s2oyhy/wqR0WZad03VhvPHIhR/GG6TEXSTSi8=
+        bh=6IUFVGvfVxw7l6YMhU424l8XqBpC7fGs6gju1QrjU6I=;
+        b=b3u4xyXqePElE6uzOsARKY8+PI4TX3Kfwz1v+pt+aDBG6YYxf8B4BFF122dVgsWa0G
+         wTroXZKBEgXygfLWgFZ6duEffBwEcqbKlxo2oXvU6f5+c465slS+cKlD6utjJ9VRtGKz
+         E23GQlTrmCfcHJ2Lo22SWt5mHhkrQ8ecf4i5M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=p+Ynvk9k1i6GQRM+MV2+9dS2nsvFZOplFS8XjPwj2JY=;
-        b=PCIQAfLJ/qEGFjt8ApHXLUpaPvuAw4tLssB8sPZVl/Ys8xLOdlFoCOwr9RvFhoAN85
-         cMYnlrcas9agFF05pTqFID9l0dTOF8NwiKLZRAwLSKrDggOqndBPHzK6xSDyAyceXWKr
-         rpVjaKB7WH2MOImRzgkQL3wKI7mhv6EYkSC8OafkCY0hXXDzvm1AdVJsVilPcEnMwvGo
-         NJoQ4wtkrVRh8hXhYm0p5J5lKFIB/kkG45hooRaD/5dVtxmqwz6bDsNAtZHcctKu1C7d
-         FOAi6swf5xRx0wSAktlI1yecxi8lCDmstEwjiiDou1D/9l3IMqk70cPe3xROYk8pLl0a
-         Ri7w==
-X-Gm-Message-State: AOAM533G4fachw7SbzGTT6M6eFQfLOfd0ufi48f8lOj4jThbm86+zX6W
-        V0H6FzojK/plnPGMycpu3kD1ng==
-X-Google-Smtp-Source: ABdhPJzTgZoKtLqoY7J9I5gpYl71byRdQ1d52bOYMiiAaw+SjxaTSA+6aWkNJpJtbdSDGr7PsZYj8w==
-X-Received: by 2002:a9d:6283:0:b0:605:4ee4:6d56 with SMTP id x3-20020a9d6283000000b006054ee46d56mr7042496otk.89.1650916220282;
-        Mon, 25 Apr 2022 12:50:20 -0700 (PDT)
+        bh=6IUFVGvfVxw7l6YMhU424l8XqBpC7fGs6gju1QrjU6I=;
+        b=sLVDM2F1T1wY4Yj8LL7/aJ5+BLYgqFGJQldAEz34QQpq+TNzkVwCbXtHmoMeuSmDRE
+         ZvtITiTgvm8OmfyLzBvufv/VMtWpivjFESDjsU9FrXgJQbGwJifh8tIQa265zpfrX5yz
+         1EJA+x+NdWZgv2IHA8rVZdESJ5Fgm58QLlnam+szw3TfV6UXXD7HW7QJTsvelhNNiZxm
+         oCgJCEb0xjYuQlXdBKx1I56O+m4+HLsdWba0egVogxLsXLUZl8vQvaQXHPO32G9Fd/IB
+         32QnKY2RbBmudOC1sVan4f+ZN1iOPfleIXxOKL4gs3Nd3WUSUPbr0nmNLnthEJn0MnQE
+         FdAg==
+X-Gm-Message-State: AOAM532M01Y44Au49u9G3x9v8wAWwKnHeL/2Ts0Y9l/axXmyFDh6EPh6
+        Us0wD9MkXqqA4pwLglbRmHZ6VA==
+X-Google-Smtp-Source: ABdhPJz7jabMcQMahAgzEB+tpsiYw2q8m1KcTY1nfihf3Zk6kiyb14v45rF0wOE1m6bpHahdMHyESw==
+X-Received: by 2002:a05:6e02:190c:b0:2cd:9331:2750 with SMTP id w12-20020a056e02190c00b002cd93312750mr3026582ilu.214.1650916987125;
+        Mon, 25 Apr 2022 13:03:07 -0700 (PDT)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g11-20020a9d5f8b000000b00605bff9c2dbsm768166oti.42.2022.04.25.12.50.19
+        by smtp.gmail.com with ESMTPSA id s8-20020a056e021a0800b002cd8179e7a0sm5202881ild.16.2022.04.25.13.03.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 12:50:20 -0700 (PDT)
-Subject: Re: [PATCH 5/5] selftests: firmware: Add ZSTD compressed file tests
-To:     Takashi Iwai <tiwai@suse.de>, Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nick Terrell <terrelln@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220421152908.4718-1-tiwai@suse.de>
- <20220421152908.4718-6-tiwai@suse.de>
+        Mon, 25 Apr 2022 13:03:06 -0700 (PDT)
+Subject: Re: [PATCH RESEND] selftests/damon: add damon to selftests root
+ Makefile
+To:     Yuanchu Xie <yuanchu@google.com>, SeongJae Park <sj@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Rientjes <rientjes@google.com>
+References: <20220418202017.3583638-1-yuanchu@google.com>
+ <93c3f9b4-7e14-858b-bf6c-23e4f3bec232@google.com>
+ <31edb348-d802-0ee5-c13d-a9ef17b2ea8a@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e629df2a-93f2-8e82-31c5-ceb5b295f71b@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 13:50:19 -0600
+Message-ID: <f6cc50f0-318f-097f-af13-271a2fb4d645@linuxfoundation.org>
+Date:   Mon, 25 Apr 2022 14:03:05 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220421152908.4718-6-tiwai@suse.de>
+In-Reply-To: <31edb348-d802-0ee5-c13d-a9ef17b2ea8a@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,22 +77,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/21/22 9:29 AM, Takashi Iwai wrote:
-> It's similar like XZ compressed files.  For the simplicity, both XZ
-> and ZSTD tests are done in a single function.  The format is specified
-> via $COMPRESS_FORMAT and the compression function is pre-defined.
+On 4/25/22 1:37 PM, Shuah Khan wrote:
+> On 4/24/22 1:35 PM, David Rientjes wrote:
+>> On Mon, 18 Apr 2022, Yuanchu Xie wrote:
+>>
+>>> Currently the damon selftests are not built with the rest of the
+>>> selftests. We add damon to the list of targets.
+>>>
+>>> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+>>> Reviewed-by: SeongJae Park <sj@kernel.org>
+>>> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+>>
+>> Acked-by: David Rientjes <rientjes@google.com>
+>>
 > 
-> Link: https://lore.kernel.org/r/20210127154939.13288-5-tiwai@suse.de
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->   .../selftests/firmware/fw_filesystem.sh       | 76 ++++++++++++++-----
->   tools/testing/selftests/firmware/fw_lib.sh    | 12 ++-
->   2 files changed, 65 insertions(+), 23 deletions(-)
+> Thank you. Applied to linux-kselftest next for 5.19-rc1.
 > 
 
-Thank you.
+The test builds with warnings. Would you like to fix these as
+well?
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+make
+gcc     huge_count_read_write.c  -o linux_5.18/tools/testing/selftests/damon/huge_count_read_write
+huge_count_read_write.c: In function ‘write_read_with_huge_count’:
+huge_count_read_write.c:23:9: warning: ‘write’ reading 4294967295 bytes from a region of size 1 [-Wstringop-overread]
+    23 |         write(filedesc, "", 0xfffffffful);
+       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from huge_count_read_write.c:8:
+/usr/include/unistd.h:378:16: note: in a call to function ‘write’ declared with attribute ‘access (read_only, 2, 3)’
+   378 | extern ssize_t write (int __fd, const void *__buf, size_t __n) __wur
+       |                ^~~~~
+huge_count_read_write.c:25:15: warning: ‘read’ writing 4294967295 bytes into a region of size 25 overflows the destination [-Wstringop-overflow=]
+    25 |         ret = read(filedesc, buf, 0xfffffffful);
+       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+huge_count_read_write.c:14:14: note: destination object ‘buf’ of size 25
+    14 |         char buf[25];
+       |              ^~~
+In file included from huge_count_read_write.c:8:
+/usr/include/unistd.h:371:16: note: in a call to function ‘read’ declared with attribute ‘access (write_only, 2, 3)’
+   371 | extern ssize_t read (int __fd, void *__buf, size_t __nbytes) __wur
+       |                ^~~~
 
 thanks,
 -- Shuah
