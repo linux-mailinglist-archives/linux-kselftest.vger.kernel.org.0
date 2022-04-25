@@ -2,82 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B821E50E425
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 17:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A17B50E4B4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 17:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242604AbiDYPTW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Apr 2022 11:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S240903AbiDYPuw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 11:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237095AbiDYPTV (ORCPT
+        with ESMTP id S242993AbiDYPuu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:19:21 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B09F392
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:16:16 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso13370680ybs.20
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:16:16 -0700 (PDT)
+        Mon, 25 Apr 2022 11:50:50 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014A9114801
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:47:46 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id y16so9597311ilc.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=VgCwJNrSWLamwr26sf8FxhD/HG4cXOd5kOE1NHtb3Lc=;
-        b=n+3K4I/06qyEIawpbSiGFoxmIG2WckzHJniuNA3IrWYHIDmrQJPps1fZCv8oZNwSmM
-         djRwqb8qKIJdhL5flEOwoWrVf3bgw6r6rtBL6CiLjfJjgVeHt9rbRyZvi2iSQtcSgL0m
-         65ns45Ge3Iq2HNetZYhGnHOJBhbwo86ueRNoo7CPPkWaqJ5XyjXrA6fYqELFFEZSjet5
-         0OWyA1mggzBwOWq2YcP+eq1e9fceZkTFP0kFcxB7g7bqxE3NHOKo/3QkDrmhQK19CILR
-         xTvPRmKD1wfvVAMuwJG6R7P9g1gkSn/gsfhl21Nj9xXHYQ1wxqgQ0MMJhY0uXSFekZE/
-         Z5QQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2QDLnU2Ilzxz2kbgX/PFHgazwfepy2150+tlBgHx4W8=;
+        b=f+WS4AL90Cjdy1Cy9Cdi3ErtgTMmyrBGUuxBeSbTZRpkWufk/Qauo8im0ECSTltzFa
+         rHVn5qtDbj4JnP4DC/Vju8OSS+AzYupebvsndCZy+EUzNFwrTe6UUPjpvG2yO3dnN/Dv
+         5ZFy8iUQ5UDKkwKrgvjwb3x/83XLDvZ+X6HhE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=VgCwJNrSWLamwr26sf8FxhD/HG4cXOd5kOE1NHtb3Lc=;
-        b=BHe4B5h+Edm1ve9X/j+5h9QHmBTWmOQdP4EbFkKYROZzGmGvwAFF2lU6tP86MGelsT
-         x2fNJRWvyhbmfqz2ZEx93Q62lmJ+QItrMvc8qq8Y+paF+RCoOgH3fgTiTdVWpt+0ptLA
-         R8JAKqeLYYbr/pBxm41aG/J40gUY5LxVZd3Q8NgA2mKf8AMGdaiTSUdTveazIpv5cx/v
-         O2AHWq+mF8mBgn8FyItTinxltTea2WtSEwsO1H3f4p7xheDYsVyvPkAvkWUqJcZwRmRz
-         YX2NKJLUXsshIIdD3/WPHYBtoG4OOKQp0mQqfZ0kKTcuD2OZ/lgE/czgeV8AiytSiXEq
-         bScA==
-X-Gm-Message-State: AOAM531wF9EDyga9jWGEYQdqkdrOxZRdfT5AMeKc/iYNDWJvN7z16d6W
-        wHB6W5IjVd0moDuadRbK9jK57mq4Zg2hoQ==
-X-Google-Smtp-Source: ABdhPJwU4K+YuD6yyf2aAdrpYnOWuj48hDCtiv+bO71qwNSDnOZ34f4eBzdf+Yw8LRMOIjCH7Y8ILNnSfkLjmA==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a81:a4e:0:b0:2f7:d86c:e565 with SMTP id
- 75-20020a810a4e000000b002f7d86ce565mr6895908ywk.374.1650899775751; Mon, 25
- Apr 2022 08:16:15 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 15:16:12 +0000
-In-Reply-To: <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
-Message-Id: <20220425151612.izmxhkgugq6isyz3@google.com>
-Mime-Version: 1.0
-References: <20220421234426.3494842-1-yosryahmed@google.com>
- <20220421234426.3494842-5-yosryahmed@google.com> <20220423142801.gnvd42cdcsz4hpon@google.com>
- <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Dan Schatzberg <schatzberg.dan@gmail.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2QDLnU2Ilzxz2kbgX/PFHgazwfepy2150+tlBgHx4W8=;
+        b=Yhjq1MU3PK6RqiwIgGjPQx1vGk5kF0MZzIlZUaFxSemgPn3NOagKRhbeqycB4p4nB5
+         +x4Gq7yEQSGdxJWGbID1d87IfMswOugDq4gBJjNdKe3PYxIlLLhLIx8zTBBkOS4Q/34c
+         JMBcLEebg0+CzIcQse4a8X5SM+wsn27G2YRUdKbmtryeKtWdsFYAQFyzJ4exAzdNrVsl
+         tgyASLTPF91Zhx2MujdPIqafTr3z/tDxafJMSfoh9+sEDsk2+wl7xoaBGAXWEw24UKpw
+         ZRtokRNdEIUDrqQMMh1LVEYJOZEwyWKqM+iBQ2oiJgXmev0M7lkYZ0tFO3Ek5t0vif4N
+         Zv5w==
+X-Gm-Message-State: AOAM532YX4MTDX4rgySul4EXSVFNGchtsulcGAYm6pX7sbkK7e3/3oiw
+        FKfu8Vg6Uo848AnowOJu5kjfhQ==
+X-Google-Smtp-Source: ABdhPJzYkmX0Dcteq1vGmKIRjDgHgXYOInw28+UZtrkqGAryvZMfTYi6ROaaFy8A3X18Q1Tb9GnMXw==
+X-Received: by 2002:a05:6e02:1748:b0:2cd:a0ea:8ff4 with SMTP id y8-20020a056e02174800b002cda0ea8ff4mr1329856ill.269.1650901666376;
+        Mon, 25 Apr 2022 08:47:46 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b21-20020a056602331500b006572790ed8dsm7763453ioz.40.2022.04.25.08.47.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 08:47:46 -0700 (PDT)
+Subject: Re: [PATCH] selftests/binderfs: Improve message to provide more info
+To:     Christian Brauner <brauner@kernel.org>,
+        Karthik Alapati <mail@karthek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <YmOSQv2U8+Hs5WjP@karthik-strix-linux.karthek.com>
+ <20220425094955.ti3hw7asp6h5funn@wittgenstein>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fdf1cb0b-2b9c-0619-09b7-cf51cacdd9ce@linuxfoundation.org>
+Date:   Mon, 25 Apr 2022 09:47:45 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220425094955.ti3hw7asp6h5funn@wittgenstein>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,52 +75,21 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 02:43:13PM -0700, Yosry Ahmed wrote:
-[...]
-> > > +     cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
-> > > +     sleep(1);
-> >
-> > These sleep(1)s do not seem robust. Since kernel keeps the page cache
-> > around, you can convert anon to use tmpfs and use simple cg_run to
-> > trigger the allocations of anon (tmpfs) and file which will remain in
-> > memory even after return from cg_run.
+On 4/25/22 3:49 AM, Christian Brauner wrote:
+> On Sat, Apr 23, 2022 at 11:14:34AM +0530, Karthik Alapati wrote:
+>> Currently the binderfs test says what failure it encountered
+>> without saying why it may occurred when it fails to mount
+>> binderfs. So, Warn about enabling CONFIG_ANDROID_BINDERFS in the
+>> running kernel.
+>>
+>> Signed-off-by: Karthik Alapati <mail@karthek.com>
+>> ---
 > 
-> Other tests in the file are also using sleep approach (see
-> test_memcg_min, although it retries for multiple times until
-> memory.current reaches an expected amount). In my experience it hasn't
-> been flaky running for multiple times on different machines, but I
-> agree it can be flaky (false negative).
+> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 > 
 
-If other tests are doing the same then ignore this comment for now.
-There should be a separate effort to move towards more deterministic
-approach for the tests instead of sleep().
+Thank you both - I will apply this for next to be included in
+Linux 5.19-rc1
 
-> I am not sure about the allocating file pages with cg_run, is it
-> guaranteed that the page cache will remain in memory until the test
-> ends? If it doesn't, it can also flake, but it would produce false
-> positives (the test could pass because the kernel drained page cache
-> for some other reason although the interface is not working
-> correctly).
-> 
-> In my personal opinion, false negative flakes are better than false
-> positives. At least currently the test explicitly and clearly fails if
-> the allocations are not successful. If we rely on the page cache
-> remaining until the test finishes then it could silently pass if the
-> interface is not working correctly.
-> 
-> There are a few ways we can go forward with this:
-> 1) Keep everything as-is, but print a message if the test fails due to
-> memory.current not reaching 100MB to make it clear that it didn't fail
-> due to a problem with the interface.
-> 2) Add a sleep/retry loop similar to test_memcg_min instead of sleeping once.
-> 3) Send a signal from forked children when they are done with the
-> allocation, and wait to receive this signal in the test to make sure
-> the allocation is completed.
-> 
-> In my opinion we should do (1) (and maybe (2)) for now as (3) could be
-> an overkill if the test is normal passing. Maybe add a comment about
-> (3) being an option in the future if the test flakes. Let me know what
-> you think?
-
-I am ok with (1).
+thanks,
+-- Shuah
