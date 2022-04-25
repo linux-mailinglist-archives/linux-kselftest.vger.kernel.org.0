@@ -2,132 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B49A50E3FD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 17:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B821E50E425
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 17:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbiDYPI3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Apr 2022 11:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S242604AbiDYPTW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 11:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242719AbiDYPIZ (ORCPT
+        with ESMTP id S237095AbiDYPTV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:08:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E955F1FCF3;
-        Mon, 25 Apr 2022 08:05:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A19C6B8160D;
-        Mon, 25 Apr 2022 15:05:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65958C385A4;
-        Mon, 25 Apr 2022 15:05:14 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 11:05:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/7] ftrace: Fix deadloop caused by direct
- call in ftrace selftest
-Message-ID: <20220425110512.538ce0bf@gandalf.local.home>
-In-Reply-To: <20220424154028.1698685-3-xukuohai@huawei.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
-        <20220424154028.1698685-3-xukuohai@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 11:19:21 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B09F392
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:16:16 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso13370680ybs.20
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=VgCwJNrSWLamwr26sf8FxhD/HG4cXOd5kOE1NHtb3Lc=;
+        b=n+3K4I/06qyEIawpbSiGFoxmIG2WckzHJniuNA3IrWYHIDmrQJPps1fZCv8oZNwSmM
+         djRwqb8qKIJdhL5flEOwoWrVf3bgw6r6rtBL6CiLjfJjgVeHt9rbRyZvi2iSQtcSgL0m
+         65ns45Ge3Iq2HNetZYhGnHOJBhbwo86ueRNoo7CPPkWaqJ5XyjXrA6fYqELFFEZSjet5
+         0OWyA1mggzBwOWq2YcP+eq1e9fceZkTFP0kFcxB7g7bqxE3NHOKo/3QkDrmhQK19CILR
+         xTvPRmKD1wfvVAMuwJG6R7P9g1gkSn/gsfhl21Nj9xXHYQ1wxqgQ0MMJhY0uXSFekZE/
+         Z5QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=VgCwJNrSWLamwr26sf8FxhD/HG4cXOd5kOE1NHtb3Lc=;
+        b=BHe4B5h+Edm1ve9X/j+5h9QHmBTWmOQdP4EbFkKYROZzGmGvwAFF2lU6tP86MGelsT
+         x2fNJRWvyhbmfqz2ZEx93Q62lmJ+QItrMvc8qq8Y+paF+RCoOgH3fgTiTdVWpt+0ptLA
+         R8JAKqeLYYbr/pBxm41aG/J40gUY5LxVZd3Q8NgA2mKf8AMGdaiTSUdTveazIpv5cx/v
+         O2AHWq+mF8mBgn8FyItTinxltTea2WtSEwsO1H3f4p7xheDYsVyvPkAvkWUqJcZwRmRz
+         YX2NKJLUXsshIIdD3/WPHYBtoG4OOKQp0mQqfZ0kKTcuD2OZ/lgE/czgeV8AiytSiXEq
+         bScA==
+X-Gm-Message-State: AOAM531wF9EDyga9jWGEYQdqkdrOxZRdfT5AMeKc/iYNDWJvN7z16d6W
+        wHB6W5IjVd0moDuadRbK9jK57mq4Zg2hoQ==
+X-Google-Smtp-Source: ABdhPJwU4K+YuD6yyf2aAdrpYnOWuj48hDCtiv+bO71qwNSDnOZ34f4eBzdf+Yw8LRMOIjCH7Y8ILNnSfkLjmA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:a81:a4e:0:b0:2f7:d86c:e565 with SMTP id
+ 75-20020a810a4e000000b002f7d86ce565mr6895908ywk.374.1650899775751; Mon, 25
+ Apr 2022 08:16:15 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 15:16:12 +0000
+In-Reply-To: <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
+Message-Id: <20220425151612.izmxhkgugq6isyz3@google.com>
+Mime-Version: 1.0
+References: <20220421234426.3494842-1-yosryahmed@google.com>
+ <20220421234426.3494842-5-yosryahmed@google.com> <20220423142801.gnvd42cdcsz4hpon@google.com>
+ <CAJD7tkbhjJDNXcAmiAkGT8RCvBSz=SAfh7JR3AJysSz29hcEgw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 24 Apr 2022 11:40:23 -0400
-Xu Kuohai <xukuohai@huawei.com> wrote:
+On Sat, Apr 23, 2022 at 02:43:13PM -0700, Yosry Ahmed wrote:
+[...]
+> > > +     cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
+> > > +     sleep(1);
+> >
+> > These sleep(1)s do not seem robust. Since kernel keeps the page cache
+> > around, you can convert anon to use tmpfs and use simple cg_run to
+> > trigger the allocations of anon (tmpfs) and file which will remain in
+> > memory even after return from cg_run.
+> 
+> Other tests in the file are also using sleep approach (see
+> test_memcg_min, although it retries for multiple times until
+> memory.current reaches an expected amount). In my experience it hasn't
+> been flaky running for multiple times on different machines, but I
+> agree it can be flaky (false negative).
+> 
 
-> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-> index abcadbe933bb..d2eff2b1d743 100644
-> --- a/kernel/trace/trace_selftest.c
-> +++ b/kernel/trace/trace_selftest.c
-> @@ -785,8 +785,24 @@ static struct fgraph_ops fgraph_ops __initdata  = {
->  };
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> +#ifdef CONFIG_ARM64
+If other tests are doing the same then ignore this comment for now.
+There should be a separate effort to move towards more deterministic
+approach for the tests instead of sleep().
 
-Please find a way to add this in arm specific code. Do not add architecture
-defines in generic code.
+> I am not sure about the allocating file pages with cg_run, is it
+> guaranteed that the page cache will remain in memory until the test
+> ends? If it doesn't, it can also flake, but it would produce false
+> positives (the test could pass because the kernel drained page cache
+> for some other reason although the interface is not working
+> correctly).
+> 
+> In my personal opinion, false negative flakes are better than false
+> positives. At least currently the test explicitly and clearly fails if
+> the allocations are not successful. If we rely on the page cache
+> remaining until the test finishes then it could silently pass if the
+> interface is not working correctly.
+> 
+> There are a few ways we can go forward with this:
+> 1) Keep everything as-is, but print a message if the test fails due to
+> memory.current not reaching 100MB to make it clear that it didn't fail
+> due to a problem with the interface.
+> 2) Add a sleep/retry loop similar to test_memcg_min instead of sleeping once.
+> 3) Send a signal from forked children when they are done with the
+> allocation, and wait to receive this signal in the test to make sure
+> the allocation is completed.
+> 
+> In my opinion we should do (1) (and maybe (2)) for now as (3) could be
+> an overkill if the test is normal passing. Maybe add a comment about
+> (3) being an option in the future if the test flakes. Let me know what
+> you think?
 
-You could add:
-
-#ifndef ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
-noinline __noclone static void trace_direct_tramp(void) { }
-#endif
-
-here, and in arch/arm64/include/ftrace.h
-
-#define ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
-
-and define your test function in the arm64 specific code.
-
--- Steve
-
-
-
-
-> +extern void trace_direct_tramp(void);
-> +
-> +asm (
-> +"	.pushsection	.text, \"ax\", @progbits\n"
-> +"	.type		trace_direct_tramp, %function\n"
-> +"	.global		trace_direct_tramp\n"
-> +"trace_direct_tramp:"
-> +"	mov	x10, x30\n"
-> +"	mov	x30, x9\n"
-> +"	ret	x10\n"
-> +"	.size		trace_direct_tramp, .-trace_direct_tramp\n"
-> +"	.popsection\n"
-> +);
-> +#else
->  noinline __noclone static void trace_direct_tramp(void) { }
->  #endif
-> +#endif
->  
->  /*
->   * Pretty much the same than for the function tracer from which the selftest
-
+I am ok with (1).
