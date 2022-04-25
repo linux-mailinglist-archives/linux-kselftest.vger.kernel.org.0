@@ -2,114 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BCA50E4C5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 17:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED68B50E504
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 18:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243007AbiDYPyX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Apr 2022 11:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S243164AbiDYQEX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 12:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiDYPyW (ORCPT
+        with ESMTP id S243154AbiDYQEV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 11:54:22 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B673A5CC
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:51:18 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id e194so16266130iof.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 08:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KRYSOrgaeJ2D4S/Wx7GywXi3KDyCDXqWNNYrYsjMpyU=;
-        b=a6Tudt/FF4aceLEyf67ZDqeMl/oD+rorEIh9wu4NaBa+KN9uq7+ipS69p9kzfR/otj
-         yThrGkkFG+OzNwE6bjcMjkTgPe6X65RjUzbfj5jsh/xq7SprTpJYlyJ/P+eZSSzGlA+R
-         3rEQpLJx9dIrpizhRymVDP1HswnMdVjv8WuJI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KRYSOrgaeJ2D4S/Wx7GywXi3KDyCDXqWNNYrYsjMpyU=;
-        b=pphqEzvH1vI9+ARhFNiSSv1SvY0yx4gzZqvaTsyEspHK4ClCzP0MOh2g46+bbnN0sE
-         wst9xGZK1gLDrPbdZku9h3d9q+okGjfUcrO5l4iSy4A/x9akI7/Oqq34hlSS2Fe9ovJL
-         jHinRXEAm25aBWdVHFf4K3dQezsK3L6vVepkDc2GuAMGQb3UrW6jKRctwlO20BjfdlQ9
-         q+S7o+ftRwEJWG/kP3etW+FM4XpmbomcyR4M20RFnx6GxAzWMqknmJy7SqWMQobcxjXT
-         SOPRRYY0FeNEi7laAEZBr4Vzkl8VQ6cVUH/7xznaqmJy/pWsQUSeTBViiZrOvHQN6qzW
-         QH/w==
-X-Gm-Message-State: AOAM531mWEPKd34WoSAx6/9VkKHVTyS0bPBKHwbPlp5UU2RY50KRVbco
-        pq4s8bjyPmHhXZEVlE0PRv+W6Q==
-X-Google-Smtp-Source: ABdhPJyJq9cXy0E5jrK4OxRObAqzGlCYjTa42Sbs2Sfq9yDNZHOJz2BGh5L/eAtEME6MySvniXiqTw==
-X-Received: by 2002:a5d:9318:0:b0:649:a18:dab8 with SMTP id l24-20020a5d9318000000b006490a18dab8mr7829255ion.96.1650901877580;
-        Mon, 25 Apr 2022 08:51:17 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id j12-20020a6b310c000000b0065744ce0180sm7683070ioa.8.2022.04.25.08.51.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 08:51:17 -0700 (PDT)
-Subject: Re: [PATCH] selftests/resctrl: Fix null pointer dereference on open
- failed
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220424211536.1373878-1-colin.i.king@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <04a35a47-d83a-67a1-5ed4-ba314c6e1ecf@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 09:51:16 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 25 Apr 2022 12:04:21 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4493C04;
+        Mon, 25 Apr 2022 09:01:17 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PEi8YO010487;
+        Mon, 25 Apr 2022 16:01:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=iyWauJF4sU09pTSXE8+mZF3uWlo6ve7aMHz+vKbaUHo=;
+ b=sDA7p/T0W1u3rSpllEdfSmSGIzoi0dMLWiylA4O0iBydpPupCenQRbZtepideKAt1Nv1
+ s6XLiOXIKLXk2Fq511ArRwtlItPPxUTA7yBqM/K5DA4d7/OrtxxOT4dZaegaEWbB7Zek
+ m4/4evTSVvStmqPE0PN0EGSycLUwRx3RgtSIFBN7Utk9S/nVF3U7fBUdxhRlgVMVnHe6
+ qI62Zv8cmd35TkNlijtWBVQmkq0cyDfLdfq+K1qgvozc2Jdye4N4MtJB+3mUMcfGgQzJ
+ gWJV8eP9ZqEbWIWlYuGs7Gs+NJxr7uODJqOMRvw029PfgMGS5M8Z/ZucJbDosnF5c82+ Kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng1wun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 16:01:07 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23PFtr4m004170;
+        Mon, 25 Apr 2022 16:01:06 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fnwng1wt7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 16:01:06 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23PFsolp025774;
+        Mon, 25 Apr 2022 16:01:04 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3fm938t5jx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Apr 2022 16:01:04 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23PG11F446334274
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Apr 2022 16:01:01 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6DF184C04A;
+        Mon, 25 Apr 2022 16:01:01 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1D484C050;
+        Mon, 25 Apr 2022 16:01:00 +0000 (GMT)
+Received: from [9.171.39.215] (unknown [9.171.39.215])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 25 Apr 2022 16:01:00 +0000 (GMT)
+Message-ID: <f54b2c71-dfd9-1f47-d75d-f58bbc6c6764@linux.ibm.com>
+Date:   Mon, 25 Apr 2022 18:01:00 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220424211536.1373878-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] KVM: s390: Don't indicate suppression on dirtying,
+ failing memop
 Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20220425100147.1755340-1-scgl@linux.ibm.com>
+ <20220425100147.1755340-2-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220425100147.1755340-2-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Aoft7KSa4AuBqsnOxP8UMbEBU3zftJhm
+X-Proofpoint-ORIG-GUID: l3VVguq1cWdGVVsC6pM2qzzsAxXxd1mb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_08,2022-04-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=659 suspectscore=0 malwarescore=0
+ spamscore=0 phishscore=0 priorityscore=1501 clxscore=1011 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204250068
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/24/22 3:15 PM, Colin Ian King wrote:
-> Currently if opening /dev/null fails to open then file pointer fp
-> is null and further access to fp via fprintf will cause a null
-> pointer dereference. Fix this by returning a negative error value
-> when a null fp is detected.
+Am 25.04.22 um 12:01 schrieb Janis Schoetterl-Glausch:
+> If user space uses a memop to emulate an instruction and that
+> memop fails, the execution of the instruction ends.
+> Instruction execution can end in different ways, one of which is
+> suppression, which requires that the instruction execute like a no-op.
+> A writing memop that spans multiple pages and fails due to key
+> protection can modified guest memory, as a result, the likely
+> correct ending is termination. Therefore do not indicate a
+> suppressing instruction ending in this case.
 > 
-
-How did you find this problem and how can it be reproduced? Is there
-a case where test fails to open "/dev/null"?
-
-> Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 > ---
->   tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-> index 51e5cf22632f..56ccbeae0638 100644
-> --- a/tools/testing/selftests/resctrl/fill_buf.c
-> +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> @@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
->   
->   	/* Consume read result so that reading memory is not optimized out. */
->   	fp = fopen("/dev/null", "w");
-> -	if (!fp)
-> +	if (!fp) {
->   		perror("Unable to write to /dev/null");
-> +		return -1;
-> +	}
->   	fprintf(fp, "Sum: %d ", ret);
->   	fclose(fp);
->   
-> 
+>   arch/s390/kvm/gaccess.c | 47 ++++++++++++++++++++++++-----------------
+>   1 file changed, 28 insertions(+), 19 deletions(-)
 
-thanks,
--- Shuah
+
+
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+
