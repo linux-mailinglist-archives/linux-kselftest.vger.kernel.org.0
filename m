@@ -2,103 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCA950D53D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Apr 2022 23:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1749150D8F5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Apr 2022 07:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiDXVSn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 24 Apr 2022 17:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S231549AbiDYFzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 01:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbiDXVSl (ORCPT
+        with ESMTP id S229469AbiDYFzV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Apr 2022 17:18:41 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF8213CD2;
-        Sun, 24 Apr 2022 14:15:38 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id w4so18231441wrg.12;
-        Sun, 24 Apr 2022 14:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QLCz1aEPZpTPZGtnpY3lHtJPFa6xwSRJK3O6rkL3K5c=;
-        b=aCkTg93Kczt9m6C0yGFdto0l0p1yyEUzTPppKeDoSVWvQRERuAsM6KmuUbXV13pnrF
-         Ftxp6eK8GcyYBiLbl79e3Aao75qo+6/wUyemedovZToO9dx4TnDZvHCJdAn4SsMdj+0w
-         43Xy7RxetQ3kuPR0H6+b6N6I+BZy+6oAMaEyQaq8LYkSrZSnz/4A0uk40HrtJi1dBoBV
-         uwjC5VmshX7W0tC9pnXXxII6dXgfSb449cYLqRo8yeZRsfnPheAA0fz4bODERkiWLdyt
-         ZfVirEV/P7A+iSmK46RivLw7mjB2mRseKAOkACDdzq71CY2aM0TgbXnJFauYlZPYbYAZ
-         ufxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QLCz1aEPZpTPZGtnpY3lHtJPFa6xwSRJK3O6rkL3K5c=;
-        b=B41/ExnDz+bCJgtnJ286vQHoRTE97YWmsSXeA8REh/SdtOelTQnphyzZwmp0CuxNSK
-         30GJYJ3K8Vw7fBZaUXrioXOe64NxBq6qvFAgfi5vU23OwmPmDHhlCk9skXkG9z9VJfhA
-         5C9DOXOKLPnfzViNqSOLfVLdS6Qm3AUj9aYqZfczhSHGz/IiJGoH4VYcqC5PoEATi4NL
-         vuvH79VLiRuzMIA3nk5gIMrUM6coSv07qtdbOuVaRGv4MDQ5icnX2KuUCb5MPuRtUuY1
-         dBKOjVhCGTisGkCba65cKfSzg/UNAYFxvobgiTjaf4yMBFc8shNQFA73ChMdJADgVEs0
-         N2lg==
-X-Gm-Message-State: AOAM531orNzzFAJOMQva5OHLJNbivpZ8zSRHUCPBEUJmJiIqjOoyLyxj
-        te1x3RoCE+F/hgjnMXJUFPY=
-X-Google-Smtp-Source: ABdhPJz/FOFaeagHS5EO2XRc0+fKcdVmCWhnmahvPolqKQRCXrZWtIDoi0pRkc8kI5dw3Gh1Fp25tg==
-X-Received: by 2002:a5d:6d0d:0:b0:20a:d741:6949 with SMTP id e13-20020a5d6d0d000000b0020ad7416949mr4522984wrq.312.1650834937597;
-        Sun, 24 Apr 2022 14:15:37 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bi7-20020a05600c3d8700b0038eb78569aasm9571468wmb.20.2022.04.24.14.15.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 14:15:37 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, Babu Moger <babu.moger@amd.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        Mon, 25 Apr 2022 01:55:21 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F93631A
+        for <linux-kselftest@vger.kernel.org>; Sun, 24 Apr 2022 22:52:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B71671F381;
+        Mon, 25 Apr 2022 05:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650865936; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fCKAvZZYPWla/BXTPFijV+7frH7DZptJmwOZd6Pgb2E=;
+        b=JjwS9qRs5DUWeTinMIdx0dsNcaX5vJMDTfS0mnH+atWp08vwEoG9XwcDIFlNGGthOPnsdK
+        xWdJ77TPYqixkxah9Upl5Hf7AogiPS6iuUydNWaG4HavNl+YNGn2AiQM2Z3zf/GLU16pES
+        +/vJCU2OmAHTu88pLR0DkNzq0OGJPFE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650865936;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fCKAvZZYPWla/BXTPFijV+7frH7DZptJmwOZd6Pgb2E=;
+        b=jEw0kGpZnfD1bOI7vzyVghubTGgUdLOYrQqMc1FTKV1j/dLPNGHnw5oScWJKBWNNNGh5Gy
+        LPatVgxjlMLoM5CQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id A09262C141;
+        Mon, 25 Apr 2022 05:52:16 +0000 (UTC)
+Date:   Mon, 25 Apr 2022 07:52:16 +0200
+Message-ID: <s5h5ymxsoa7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
         linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/resctrl: Fix null pointer dereference on open failed
-Date:   Sun, 24 Apr 2022 22:15:36 +0100
-Message-Id: <20220424211536.1373878-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] selftests: alsa: Start validating control names
+In-Reply-To: <20220421115020.14118-1-broonie@kernel.org>
+References: <20220421115020.14118-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently if opening /dev/null fails to open then file pointer fp
-is null and further access to fp via fprintf will cause a null
-pointer dereference. Fix this by returning a negative error value
-when a null fp is detected.
+On Thu, 21 Apr 2022 13:50:20 +0200,
+Mark Brown wrote:
+> 
+> Not much of a test but we keep on getting problems with boolean controls
+> not being called Switches so let's add a few basic checks to help people
+> spot problems.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> 
+> v2:
+>  - Make strend() static.
+>  - Check for " Switch" rather than "Switch" at the end of the name.
 
-Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/resctrl/fill_buf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks, applied.
 
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index 51e5cf22632f..56ccbeae0638 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -121,8 +121,10 @@ static int fill_cache_read(unsigned char *start_ptr, unsigned char *end_ptr,
- 
- 	/* Consume read result so that reading memory is not optimized out. */
- 	fp = fopen("/dev/null", "w");
--	if (!fp)
-+	if (!fp) {
- 		perror("Unable to write to /dev/null");
-+		return -1;
-+	}
- 	fprintf(fp, "Sum: %d ", ret);
- 	fclose(fp);
- 
--- 
-2.35.1
 
+Takashi
