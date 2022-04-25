@@ -2,74 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBD150EC5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 01:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FF950EC79
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 01:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbiDYXDk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Apr 2022 19:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S237262AbiDYXQd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Apr 2022 19:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236169AbiDYXDj (ORCPT
+        with ESMTP id S237386AbiDYXQb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 19:03:39 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB13D3D1FA
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 16:00:33 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id i8so10343555ila.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 16:00:33 -0700 (PDT)
+        Mon, 25 Apr 2022 19:16:31 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796419F394
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 16:13:21 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id 125so17565724iov.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 16:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ia87REFG0AYraSTeAkYZRVYwp6MdRMp9URsVCkFU7RU=;
-        b=X62cc21UcM8gAmCg5EiadF8tgHOLnAI+GvexRgJCkpAo88iCOInrAGuRMuA+Dao8WB
-         Wr3NafYftBnEyB/9ia3alKH9XUay7vI4Z2GzlFd6CbufbFamGwKSIhIa7765i+Q1Iv8L
-         raCl2rtZjdtQs/UncUjVlRE/9M82O55aBIbc4=
+        bh=hVW/zCoxHhKAXkYkOGavI6nF6v92eF3OlqPZcVw/Sm0=;
+        b=GzXFoeQdCob2VkAjvbzEz1wYUBU8wwpfUaSeNiMLHxmcXZRMWpnvPV+2+VsqY5AN+i
+         2lS0xX2Dt4X2X+u/FzOdvC2T3LhoNFckp8gVrJ2hCllKoIckFc5mb8eTcUH7oeJPvdC8
+         hUDbjF8pCsOwz2itHQQfzIOpG7ii3MC+O5G9M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ia87REFG0AYraSTeAkYZRVYwp6MdRMp9URsVCkFU7RU=;
-        b=CtRim0rKFP30FgYUh4toW4f7hconX/bR1pLLS7pDILOVLttmsRsJbVvayVgk35jV/u
-         +mt49mHvYgfKeZd/7SrnREx78XbGa8pap7oXOZJfRgY0PGDmJphXkQEyTz1CnRkP75kB
-         FxuUKCaJsIDZaCfavGc6vQUUxJ5g2q5dYFSqu22qAvyoBsGBqgsuYX2Va3tI19FTMCVs
-         vT8yNvKZL2IAcalxLE25LuErB2rePew9Hts6P0FeTf0srcnV+LqhIf+JapF71Rt/4upq
-         KwFFEzlssz8VAcsmCh+6uJrM48jW7bmFdpwGhug0SVCDlso365oaNlrxDULoyS+vNhCQ
-         etEw==
-X-Gm-Message-State: AOAM530gjK8sZz0nAHeEltTUlxL3rEr/uh3I8g7a1jdYthUTRSzP7g73
-        xFKPaUDSp+X+XzchHGB5a1I17g==
-X-Google-Smtp-Source: ABdhPJyH5ffWuC4e3FNfgLxcYhuhqH84NGmqCX23Plb6skBV6q3k5vdx9m+QEzaOQeKJl79MymaLYA==
-X-Received: by 2002:a05:6e02:1e08:b0:2cc:4b66:1984 with SMTP id g8-20020a056e021e0800b002cc4b661984mr7907887ila.266.1650927633083;
-        Mon, 25 Apr 2022 16:00:33 -0700 (PDT)
+        bh=hVW/zCoxHhKAXkYkOGavI6nF6v92eF3OlqPZcVw/Sm0=;
+        b=t451rg17Jj3arlke3b/RM3c9gtw6s0SFSOL2JYCHojgOYW5rxbVaKkyka4FI+JPhWI
+         78BO7c2W2H4eiq4aeVFkDDrS5G9SDb8mNkgCZNXFVcDbgWgxdb32XbCoTDvq4eNyrdwe
+         RofIpY+r2p5ACtg3FtbjPwXWcF4Kc3Td+xE2XVFc+bBGkYRRLURQmxyO+Es/1hImZFNz
+         9pljZuwx4cfjWyyTzkMIjUjcKyS4cGrvx+YWHd+W2N6CM3O+fW77T6h8NZjjwX0xu7rc
+         TxDBNnYhADnxzUbeZkWP3jyJefpXATQbGjVZ4KPfQ8wlgywr8dlk+KkzUr1sdcmhqTMZ
+         M2ww==
+X-Gm-Message-State: AOAM530aJmTmHfVmFCoXWBziHnNhmai4hHz9nWPo8G2S8e9JvNK/hiUj
+        Ae3ut4p1WBx0C5wmNX5WgAA/RQ==
+X-Google-Smtp-Source: ABdhPJyglNKOV4p0zGN3oZDXKFKIGr7ZfRtqFnfzagOQvqvDQgmbkqiMd9UiPc4DuoF4MTx9Ql/8hw==
+X-Received: by 2002:a05:6638:4303:b0:328:95b9:f8b0 with SMTP id bt3-20020a056638430300b0032895b9f8b0mr8822753jab.288.1650928400783;
+        Mon, 25 Apr 2022 16:13:20 -0700 (PDT)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id p184-20020a6b8dc1000000b00650b95043e8sm8351137iod.33.2022.04.25.16.00.32
+        by smtp.gmail.com with ESMTPSA id w2-20020a92c882000000b002c81bffee08sm6919287ilo.55.2022.04.25.16.13.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 16:00:32 -0700 (PDT)
-Subject: Re: [PATCH v5 0/2] selftests/resctrl: Print a message if the result
- of MBM&CMT tests is failed on Intel CPU
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Mon, 25 Apr 2022 16:13:20 -0700 (PDT)
+Subject: Re: [PATCH v7 0/6] selftests/resctrl: Add resctrl_tests into
+ kselftest set
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220323080928.1586408-1-tan.shaopeng@jp.fujitsu.com>
- <1920a6b6-bc1b-31db-4c1b-efccc189daa5@linuxfoundation.org>
- <9a1d0420-d99a-e4a8-c6de-729b56e9c1f0@intel.com>
+References: <20220323081227.1603991-1-tan.shaopeng@jp.fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <488995ee-2a00-321c-126f-8ed7f8b82635@linuxfoundation.org>
-Date:   Mon, 25 Apr 2022 17:00:32 -0600
+Message-ID: <e2f148cc-444c-f171-7364-587db92b60cb@linuxfoundation.org>
+Date:   Mon, 25 Apr 2022 17:13:19 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <9a1d0420-d99a-e4a8-c6de-729b56e9c1f0@intel.com>
+In-Reply-To: <20220323081227.1603991-1-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +75,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/25/22 3:19 PM, Reinette Chatre wrote:
-> Hi Shuah,
+On 3/23/22 2:12 AM, Shaopeng Tan wrote:
+> Hello,
 > 
-> On 3/29/2022 8:37 AM, Shuah Khan wrote:
->> On 3/23/22 2:09 AM, Shaopeng Tan wrote:
->>> Hello,
->>>
->>> The aim of this series is to print a message to let users know a possible
->>> cause of failure, if the result of MBM&CMT tests is failed on Intel CPU.
->>> In order to detect Intel vendor, I extended AMD vendor detect function.
->>>
->>> Difference from v4:
->>> - Fixed the typos.
->>> - Changed "get_vendor() != ARCH_AMD" to "get_vendor() == ARCH_INTEL".
->>> - Reorder the declarations based on line length from longest to shortest.
->>> https://lore.kernel.org/lkml/20220316055940.292550-1-tan.shaopeng@jp.fujitsu.com/ [PATCH v4]
->>>
->>> This patch series is based on v5.17.
->>>
->>> Shaopeng Tan (2):
->>>     selftests/resctrl: Extend CPU vendor detection
->>>     selftests/resctrl: Print a message if the result of MBM&CMT tests is
->>>       failed on Intel CPU
->>>
->>>    tools/testing/selftests/resctrl/cat_test.c    |  2 +-
->>>    tools/testing/selftests/resctrl/resctrl.h     |  5 ++-
->>>    .../testing/selftests/resctrl/resctrl_tests.c | 45 +++++++++++++------
->>>    tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
->>>    4 files changed, 37 insertions(+), 17 deletions(-)
->>>
->>
->> I can queue this up for Linux 5.18-rc2. Thanks for fixing the error
->> path with clear messages for failures.
+> The aim of this series is to make resctrl_tests run by using
+> kselftest framework.
+> - I modify resctrl_test Makefile and kselftest Makefile,
+>    to enable build/run resctrl_tests by using kselftest framework.
+>    Of course, users can also build/run resctrl_tests without
+>    using framework as before.
+> - I change the default limited time for resctrl_tests to 120 seconds, to
+>    ensure the resctrl_tests finish in limited time on different environments.
+> - When resctrl file system is not supported by environment or
+>    resctrl_tests is not run as root, return skip code of kselftest framework.
+> - If resctrl_tests does not finish in limited time, terminate it as
+>    same as executing ctrl+c that kills parent process and child process.
 > 
-> Is this perhaps still in your queue for consideration? I peeked at the
-> branches within the kselftest repo but could not find it merged yet.
-> If things are tightened for fixes it would be welcome as v5.19 material
-> also.
+> Difference from v6:
+> - Fixed the typos.
+> https://lore.kernel.org/lkml/20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com/ [PATCH v6]
 > 
-> Thank you very much
+> This patch series is based on 'next' branch of linux-kselftest.
+> Note that Patch [4/6] uses KHDR_INCLUDES which is introduced by a patch
+> on 'next' branch of linux-kselftest (not merged in mainline yet)
+> linux-kselftest: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+> 
+> Shaopeng Tan (6):
+>    selftests/resctrl: Kill child process before parent process terminates
+>      if SIGTERM is received
+>    selftests/resctrl: Change the default limited time to 120 seconds
+>    selftests/resctrl: Fix resctrl_tests' return code to work with
+>      selftest framework
+>    selftests/resctrl: Make resctrl_tests run using kselftest framework
+>    selftests/resctrl: Update README about using kselftest framework to
+>      build/run resctrl_tests
+>    selftests/resctrl: Add missing SPDX license to Makefile
+> 
+>   tools/testing/selftests/Makefile              |  1 +
+>   tools/testing/selftests/resctrl/Makefile      | 19 +++------
+>   tools/testing/selftests/resctrl/README        | 39 +++++++++++++++----
+>   .../testing/selftests/resctrl/resctrl_tests.c |  4 +-
+>   tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+>   tools/testing/selftests/resctrl/settings      |  3 ++
+>   6 files changed, 45 insertions(+), 22 deletions(-)
+>   create mode 100644 tools/testing/selftests/resctrl/settings
 > 
 
-Thanks for the ping. The changes are a bit more extensive for a fix based
-on my review comments. I queued these two in linux-kselftest next branch
-for 5.19-rc1.
+Applied now to linux-kselftest next for 5.19-rc1
 
 thanks,
 -- Shuah
