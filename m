@@ -2,86 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D47151057F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 19:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABC85106A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 20:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349112AbiDZRha (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 13:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S240536AbiDZSWv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 14:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349193AbiDZRh3 (ORCPT
+        with ESMTP id S229730AbiDZSWu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:37:29 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FB5954A5
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 10:34:20 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e194so20991929iof.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 10:34:20 -0700 (PDT)
+        Tue, 26 Apr 2022 14:22:50 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402A5197F91
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 11:19:42 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id v17-20020a056902029100b006484d85132eso6658556ybh.14
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 11:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7f2dI15a4+fxCm2oUbnayxZipYVTc4CPiFnYf4iZd2U=;
-        b=SREAqgM7dV17pgSKvTHXqGRtHaa149tdP3zeKDxtvrWfF/g9kSkykZn7f2kF/kZLrp
-         4ADMNFdr49SVVqqxE4FHv2OBrlkZEsjAwubpihKozfaxZGLx7hfE7uTEAW3lvU4/70if
-         Lzcv5LPTbN395oaYwmC48671h2iLMAq3lDqPI=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ISf/anLTGG8aDfdYm3HlRvwPzm+lbJ5gZK255uLU0N0=;
+        b=Ur5xXORcPM2CZ439vOEwCulasH931zg9WytiwjntMXBrnbbzDY69LUuWucG4wHMCwE
+         4jr8lL1Bs3Ws8X3XRy8waN0e6K9qT52c02h+Rk2QaKhygzEYSgqzAOh+/CojekNAC+qD
+         dFMSkG+mo3EoNlQ5vB5RGNUw0AdibLl8uXveQ+GKNfxn3tJ0qF6sn+ea+m0WSCIyEWxM
+         ZkG/aK/tiH5824o7GHgYNVyJOhrvDWJ6mA+Z1Us5Nug/Hbcvri0g8eR0a0UQ0hiX8c8F
+         AKeK0n19dC58zNBVaMyNpozByExipLG9wdOnf07v2TaC7wiTiErttyUvdbbz3jpuddED
+         pJXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7f2dI15a4+fxCm2oUbnayxZipYVTc4CPiFnYf4iZd2U=;
-        b=gyyIBBhGIQ/wESzcjncV9WixxWA7b4GHbbuI+kOG7TI4GjuhxtCWNwEYU6y+8GP8gb
-         KdSQ7rmTpsxV9es11QiYNXUQOKCqF93Tdb2jYfgoEQxD358BVTLKLwvJVxe6/b1Jnepb
-         5NyEK0rqxVjhKUtl8RXNcP8eHcrhrZHZXEa+3sC+sRbTjCBGkj1vBoCYs1ExQ7/O6YNY
-         Yp2vNyVaZB1xxAyxG1sA/LmrK3QplGJxx89AQZ8QBNj7LU0nIEzP+spD0S/CsmutPil+
-         DLlS//dVNLkYqmYbAIAX45/22gxjIQcIrzIts7YPkqBpbNi6M+CnxmEeY78GuAUI1K8r
-         kV2g==
-X-Gm-Message-State: AOAM530E0QxwpAHIgT3WEFIZIv1OLGTRSOt2WKUlfLBORu2tgcLcc86W
-        WN69cvQl1IgaqXSTGl7mWEyZag==
-X-Google-Smtp-Source: ABdhPJzQGDlIXE5ent6k2MVRos1IeGAWobjiKgxDUQSt7g0QXIN9BmEROJsT2JY8WurBH/mD6/+5sA==
-X-Received: by 2002:a6b:490f:0:b0:657:5e68:66b8 with SMTP id u15-20020a6b490f000000b006575e6866b8mr7896021iob.102.1650994459551;
-        Tue, 26 Apr 2022 10:34:19 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id t11-20020a922c0b000000b002c85834eb06sm8164495ile.47.2022.04.26.10.34.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 10:34:19 -0700 (PDT)
-Subject: Re: [PATCH v2 6/6] selftests: vm: add /dev/userfaultfd test cases to
- run_vmtests.sh
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-7-axelrasmussen@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f257d358-1ec8-d3f4-d3c2-e61e0063df03@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 11:34:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220422212945.2227722-7-axelrasmussen@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ISf/anLTGG8aDfdYm3HlRvwPzm+lbJ5gZK255uLU0N0=;
+        b=oeJEMyPFytMwtTnbL8YnEOVCMEhX45E382/1wgyJR6EDATIHh1nsvjZpa1E+PQR1SW
+         FB5cLtyY/W7WiRTBNx/ie4JLBGktJHn4RP07kDHZK80zTNB+ywjp04hIEu3fH3VkBWZa
+         L244DlVOVopRYfmTogXzbmjzJfucF09t1uWTsNSAw4bRvIO0cXp6oIFWTmO4dqzvOcAk
+         W79cRl8wiq+r8nP7g8CKPDbnKm+0Yjp/XLB30XwoLOwYesolM/vAiH6auCOZHnTaggY8
+         U1JHk7NfAwlmdqQ/h5sQ0GtvX+IzwVJiAOQRUfMVY3m7DXEJeRi/WUygBUfpT2J4RJKh
+         s9JA==
+X-Gm-Message-State: AOAM532bkqLazasfGUctP0W7MD5k4yfhp4+kDHIfUd+8spemLsF6NDwo
+        uazccLgNXl5tWhYCNmGiAUnYzN53Q5UurA==
+X-Google-Smtp-Source: ABdhPJwPXVW3jrSsfOmBbLULPEFpZ1wlX5n1zj8BpLWvhRxzippBSvFduoToUHwDEkVuZv2mBhYmhuduAUThkA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:b03d:8d64:4a06:2c5f])
+ (user=dlatypov job=sendgmr) by 2002:a25:2487:0:b0:645:7751:ba68 with SMTP id
+ k129-20020a252487000000b006457751ba68mr22631565ybk.333.1650997181489; Tue, 26
+ Apr 2022 11:19:41 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 11:19:22 -0700
+Message-Id: <20220426181925.3940286-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH 1/3] kunit: rename print_subtest_{start,end} for clarity (s/subtest/suite)
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,43 +65,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> This new mode was recently added to the userfaultfd selftest. We want to
-> exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-> test cases to the script.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->   tools/testing/selftests/vm/run_vmtests.sh | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index 5065dbd89bdb..57f01505c719 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -121,12 +121,17 @@ run_test ./gup_test -a
->   run_test ./gup_test -ct -F 0x1 0 19 0x1000
->   
->   run_test ./userfaultfd anon 20 16
-> +run_test ./userfaultfd anon:dev 20 16
->   # Hugetlb tests require source and destination huge pages. Pass in half the
->   # size ($half_ufd_size_MB), which is used for *each*.
->   run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-> +run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
->   run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
->   rm -f "$mnt"/uffd-test
-> +run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> +rm -f "$mnt"/uffd-test
->   run_test ./userfaultfd shmem 20 16
-> +run_test ./userfaultfd shmem:dev 20 16
->   
->   #cleanup
->   umount "$mnt"
-> 
+These names sound more general than they are.
 
-Looks good to me.
+The _end() function increments a `static int kunit_suite_counter`, so it
+can only safely be called on suites, aka top-level subtests.
+It would need to have a separate counter for each level of subtest to be
+generic enough.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+So rename it to make it clear it's only appropriate for suites.
 
-thanks,
--- Shuah
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/kunit/test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 0f66c13d126e..64ee6a9d8003 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -134,7 +134,7 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
+ }
+ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+ 
+-static void kunit_print_subtest_start(struct kunit_suite *suite)
++static void kunit_print_suite_start(struct kunit_suite *suite)
+ {
+ 	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
+ 		  suite->name);
+@@ -192,7 +192,7 @@ EXPORT_SYMBOL_GPL(kunit_suite_has_succeeded);
+ 
+ static size_t kunit_suite_counter = 1;
+ 
+-static void kunit_print_subtest_end(struct kunit_suite *suite)
++static void kunit_print_suite_end(struct kunit_suite *suite)
+ {
+ 	kunit_print_ok_not_ok((void *)suite, false,
+ 			      kunit_suite_has_succeeded(suite),
+@@ -498,7 +498,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	struct kunit_result_stats suite_stats = { 0 };
+ 	struct kunit_result_stats total_stats = { 0 };
+ 
+-	kunit_print_subtest_start(suite);
++	kunit_print_suite_start(suite);
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+ 		struct kunit test = { .param_value = NULL, .param_index = 0 };
+@@ -552,7 +552,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	}
+ 
+ 	kunit_print_suite_stats(suite, suite_stats, total_stats);
+-	kunit_print_subtest_end(suite);
++	kunit_print_suite_end(suite);
+ 
+ 	return 0;
+ }
+
+base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
+
