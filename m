@@ -2,145 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3620950F2A8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 09:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C6250F3A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 10:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238496AbiDZHjg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 03:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S1344603AbiDZI0E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 04:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344221AbiDZHjO (ORCPT
+        with ESMTP id S234242AbiDZI0A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:39:14 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C1CB1D1;
-        Tue, 26 Apr 2022 00:36:06 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KnYTw3jHmzCsQV;
-        Tue, 26 Apr 2022 15:31:32 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 15:36:02 +0800
-Message-ID: <79fe5bb5-c55c-7ddc-640f-50bf8bea7f0b@huawei.com>
-Date:   Tue, 26 Apr 2022 15:36:02 +0800
+        Tue, 26 Apr 2022 04:26:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BB33A5E9;
+        Tue, 26 Apr 2022 01:22:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 357091F380;
+        Tue, 26 Apr 2022 08:22:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650961366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NKbpFjMDPqd7TQ514NLGknGrSkR1xvTuZ+twvGBw1Ds=;
+        b=Ku8RBnA0Rf9zQsz4S8BTrgHF20lahZ8buxMT5bsutog3s+qQEzlQpjXalln29/WK/9rWTe
+        y/9DNr88hxHzQwcPkYA9KVTaL8FZ7DTVb/ZbTuzWAufvvhtv6te6DXO8ZUj85HjsIehW/n
+        qbSDE3xjlsTQgKOtmALRZ+WjV1K1F3E=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2BB612C146;
+        Tue, 26 Apr 2022 08:22:45 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 10:22:42 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     David Rientjes <rientjes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] memcg: introduce per-memcg reclaim interface
+Message-ID: <Ymer0qeaJlRY1Ju6@dhcp22.suse.cz>
+References: <20220425190040.2475377-1-yosryahmed@google.com>
+ <20220425190040.2475377-2-yosryahmed@google.com>
+ <a4c3d067-d08d-409d-e7b-b6e0b1d2dfda@google.com>
+ <CAJD7tka_96du2UUx0xuseR62wu005-KPf7fSyDTAuXOWsgUQDg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH bpf-next v3 2/7] ftrace: Fix deadloop caused by direct
- call in ftrace selftest
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-3-xukuohai@huawei.com>
- <20220425110512.538ce0bf@gandalf.local.home>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <20220425110512.538ce0bf@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tka_96du2UUx0xuseR62wu005-KPf7fSyDTAuXOWsgUQDg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/25/2022 11:05 PM, Steven Rostedt wrote:
-> On Sun, 24 Apr 2022 11:40:23 -0400
-> Xu Kuohai <xukuohai@huawei.com> wrote:
+On Mon 25-04-22 12:31:51, Yosry Ahmed wrote:
+> On Mon, Apr 25, 2022 at 12:15 PM David Rientjes <rientjes@google.com> wrote:
+[...]
+> > "can over or under reclaim from the target cgroup" begs the question of
+> > how much more memory the kernel can decide to reclaim :)  I think it's
+> > assumed that it's minimal and that matches the current implementation that
+> > rounds up to SWAP_CLUSTER_MAX, though, so looks good.
+> >
+> > Thanks Yosry!
 > 
->> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
->> index abcadbe933bb..d2eff2b1d743 100644
->> --- a/kernel/trace/trace_selftest.c
->> +++ b/kernel/trace/trace_selftest.c
->> @@ -785,8 +785,24 @@ static struct fgraph_ops fgraph_ops __initdata  = {
->>  };
->>  
->>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
->> +#ifdef CONFIG_ARM64
-> 
-> Please find a way to add this in arm specific code. Do not add architecture
-> defines in generic code.
-> 
-> You could add:
-> 
-> #ifndef ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
-> noinline __noclone static void trace_direct_tramp(void) { }
-> #endif
-> 
-> here, and in arch/arm64/include/ftrace.h
-> 
-> #define ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
-> 
-> and define your test function in the arm64 specific code.
-> 
-> -- Steve
-> 
-> 
+> I think it could be more complex than this. Some functions that get
+> called during reclaim only use the nr_to_reclaim parameter to check if
+> they need one more iteration, but not to limit the actual reclaimed
+> pages per say. For example, nr_to_reclaim is not even passed to
+> shrink_slab() or mem_cgroup_soft_limit_reclaim(), so they have no way
+> to know that they should stop if nr_to_reclaim was already satisfied.
+> I think the general assumption is that each of these calls normally
+> does not reclaim a huge number of pages, so like you said, the kernel
+> should not over-reclaim too much. However, I don't think there are
+> guarantees about this.
 
-will move this to arch/arm64/ in v4, thanks.
-
-> 
-> 
->> +extern void trace_direct_tramp(void);
->> +
->> +asm (
->> +"	.pushsection	.text, \"ax\", @progbits\n"
->> +"	.type		trace_direct_tramp, %function\n"
->> +"	.global		trace_direct_tramp\n"
->> +"trace_direct_tramp:"
->> +"	mov	x10, x30\n"
->> +"	mov	x30, x9\n"
->> +"	ret	x10\n"
->> +"	.size		trace_direct_tramp, .-trace_direct_tramp\n"
->> +"	.popsection\n"
->> +);
->> +#else
->>  noinline __noclone static void trace_direct_tramp(void) { }
->>  #endif
->> +#endif
->>  
->>  /*
->>   * Pretty much the same than for the function tracer from which the selftest
-> 
-> .
-
+There are no guarantees indeed and it si definitely good to be explicit
+about that so that userspace tools expect that and consider that in
+the imeplementation. Sure we do not want to go overboard and huge excess
+should be considered a bug. I am not sure we do agree on the notion of
+"huge" so let's see.
+-- 
+Michal Hocko
+SUSE Labs
