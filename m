@@ -2,63 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915B3510277
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 18:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF4851028C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 18:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352760AbiDZQEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 12:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S1352814AbiDZQJr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 12:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbiDZQEM (ORCPT
+        with ESMTP id S236812AbiDZQJr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:04:12 -0400
+        Tue, 26 Apr 2022 12:09:47 -0400
 Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13258387A4
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:01:03 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id r12so20558172iod.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:01:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDFE47040
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:06:38 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id 79so20572736iou.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dyCNcdxP+OP+ZEEDkKpS4dIut/dFXRkxuAQItAbC2hk=;
-        b=kkI2HO5/ZEBb6dwCosEFba8Hqs93phXW7y7LQIwDiDweskbxzWfkhJOxUXgbksafGv
-         Cj9I3+VUsMtqzbQ+FRheYG7Jnp0nCQoqCtylg9A9uVvjFZFE+gYUol4vZnJS8L/D7fcH
-         IXLA9h7oaFPNuHm4FrQjgkuQGxMTT+zn4y0Dc3ZUaMQ6grfstTlV1uURhTu7yZhAB2CR
-         S15Az/6PGwq5RzEtyE76iZSrukPtIepHVy15uTIKCKRfoQGMqwl6nQ2Wcrtywgqq4l9K
-         yrTT7rEccOM0wyFm2LgURZQ9atXRmAewK37yNCUoS/4n8PFFGhjVqFY7J9psP2v3Z2G9
-         KjGw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=48HTw/rBGTX9w0BVqolReo8yB9AAi0BaZFQxJTNNLy4=;
+        b=ZD1m7Y4nVS7PfQ4Kjhtcx2pWQRTgJwYNx2+YXbk1O2CUO2UxP5EWmPra4LFir6/Taw
+         RpW0It155qOW40r+x6bxxHSyaWqdAxyZPQbArFGFnVhID+wD8iVD1c4L/8kFEbTKgLUz
+         EJZN4+mqFAvk4fkU1MkgFX4lHN0a0xfTh0KQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dyCNcdxP+OP+ZEEDkKpS4dIut/dFXRkxuAQItAbC2hk=;
-        b=tH/fEDZ/TnkojC1YFEebm8V55Mgd4RhpQlfsFEsif8OWMICCFmk97MLONBKLvZ+cKy
-         /K7yVSUxQXDoQzWutKLKxXi4EkQqAZOgmpnCRIGAbm4Z8R+s26MFtR4ahrnNMDmUQLLU
-         xZui4ymvXY0YvurFxnUuNWygFcTekWc7nrEFgRlcWKqIjwmOqn+FZQlCiu3kIxYgM+oj
-         UbcWhnHWbUExdaJACcLDf9FPKj8u0S6PJMQH5nJa+z09vpCYLFfRhhQ5C2B3I8U9hN6s
-         dLQBMh/J208zbbZMIzDv0jxMLXaV22/KkNOXIw3+MhLT/zyKwLZyJSy1mLs0HNxYo+/a
-         MBaQ==
-X-Gm-Message-State: AOAM5336eLBuqXLo0P6tfMvgIhySQzHbUzh9eGtI/ws57S6f8Z3CQQoo
-        f0BxlsJ/S6jGCD12xP0lmLDxg40vaJ9ukZHe7NSbXg==
-X-Google-Smtp-Source: ABdhPJy2p2YsSAWaLRUyeCx9GIenmVZnYXSr1zBWwbH2S+IZQF4NN6DuvWqwwrbZ5neEqlH8OPqJygq6V4YSc9feqz0=
-X-Received: by 2002:a05:6638:1695:b0:32a:a178:98bc with SMTP id
- f21-20020a056638169500b0032aa17898bcmr10205311jat.167.1650988862310; Tue, 26
- Apr 2022 09:01:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-3-axelrasmussen@google.com> <20220425203249.GA5814@altlinux.org>
-In-Reply-To: <20220425203249.GA5814@altlinux.org>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 26 Apr 2022 09:00:26 -0700
-Message-ID: <CAJHvVchLSpbKXn6u451pjaRpW=SwbOFSdpQpaC47WBFa0660xw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     "Dmitry V. Levin" <ldv@altlinux.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=48HTw/rBGTX9w0BVqolReo8yB9AAi0BaZFQxJTNNLy4=;
+        b=o3b1kvkZfC2MEtIVyuuM6ul1a4RCzOElWDz48oL+u940O6mhitPSR50CY1C+gLhiyn
+         lsSB/gbaLjaXuCS0m1gu/9S1Fwvu9VGAqcXxQnY/ww5+jQkyYjLfwgMDLxI89bPTG7Ha
+         w0u9AzW731MiptlvQoAyxuca5SG17mWIJg9uwwpxkhOH0/CNfHLjeEAD4IoD4Th83vKP
+         FwHi+jFAxVgfn5YqvGCuJnEIsMki+Om+D+ar+DYBPflfzHt60SJ2LW+bpTjU2NYwg+1f
+         EolJcikYgROYgvELFMwSNudRgYoFk5J3aXqRU3jJefaFAL3IZePUjBp3AjWxqqe3eryd
+         2sDA==
+X-Gm-Message-State: AOAM530c1blOk8aHUK8PByHTt1MN4RlEeHJlP7vXgYHQOX88ehy8U5ox
+        OqVENlYgLPlP7aYPHbrgDVJgmQ==
+X-Google-Smtp-Source: ABdhPJxlhTF/uJw3gqLA3Hj0XRaHwykEJis0oX2P2Zrd5M2rhYKz2s635umapHwjfAZEV7w+j3mLVw==
+X-Received: by 2002:a05:6638:1652:b0:328:5357:7acb with SMTP id a18-20020a056638165200b0032853577acbmr11320817jat.71.1650989197839;
+        Tue, 26 Apr 2022 09:06:37 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id s21-20020a6bd315000000b006573987c4fcsm9786770iob.3.2022.04.26.09.06.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 09:06:37 -0700 (PDT)
+Subject: Re: [PATCH v2 1/6] selftests: vm: add hugetlb_shared userfaultfd test
+ to run_vmtests.sh
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Charan Teja Reddy <charante@codeaurora.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
         Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
         Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -67,17 +62,26 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
         Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-2-axelrasmussen@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <037ea7ee-5248-86a5-55a2-f1726567af81@linuxfoundation.org>
+Date:   Tue, 26 Apr 2022 10:06:36 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220422212945.2227722-2-axelrasmussen@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +89,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-You're right, [1] says _IO is appropriate for ioctls which only take
-an integer argument. I'll send a v3 with this fix, although I might
-wait a bit for any other review comments before doing so. Thanks for
-taking a look!
+On 4/22/22 3:29 PM, Axel Rasmussen wrote:
+> This not being included was just a simple oversight. There are certain
+> features (like minor fault support) which are only enabled on shared
+> mappings, so without including hugetlb_shared we actually lose a
+> significant amount of test coverage.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>   tools/testing/selftests/vm/run_vmtests.sh | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index a2302b5faaf2..5065dbd89bdb 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -121,9 +121,11 @@ run_test ./gup_test -a
+>   run_test ./gup_test -ct -F 0x1 0 19 0x1000
+>   
+>   run_test ./userfaultfd anon 20 16
+> -# Test requires source and destination huge pages.  Size of source
+> -# (half_ufd_size_MB) is passed as argument to test.
+> +# Hugetlb tests require source and destination huge pages. Pass in half the
+> +# size ($half_ufd_size_MB), which is used for *each*.
+>   run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+> +run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+> +rm -f "$mnt"/uffd-test
+>   run_test ./userfaultfd shmem 20 16
+>   
+>   #cleanup
+> 
 
-https://www.kernel.org/doc/html/latest/driver-api/ioctl.html
+Looks good to me.
 
-On Mon, Apr 25, 2022 at 1:32 PM Dmitry V. Levin <ldv@altlinux.org> wrote:
->
-> On Fri, Apr 22, 2022 at 02:29:41PM -0700, Axel Rasmussen wrote:
-> [...]
-> > --- a/include/uapi/linux/userfaultfd.h
-> > +++ b/include/uapi/linux/userfaultfd.h
-> > @@ -12,6 +12,10 @@
-> >
-> >  #include <linux/types.h>
-> >
-> > +/* ioctls for /dev/userfaultfd */
-> > +#define USERFAULTFD_IOC 0xAA
-> > +#define USERFAULTFD_IOC_NEW _IOWR(USERFAULTFD_IOC, 0x00, int)
->
-> Why this new ioctl is defined using _IOWR()?  Since it neither reads from
-> user memory nor writes into user memory, it should rather be defined using
-> _IO(), shouldn't it?
->
->
-> --
-> ldv
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
