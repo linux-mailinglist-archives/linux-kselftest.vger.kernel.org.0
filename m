@@ -2,107 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81BA510A90
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 22:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A975F510B64
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 23:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355022AbiDZUgz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 16:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S1355478AbiDZVfY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 17:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355006AbiDZUg2 (ORCPT
+        with ESMTP id S231997AbiDZVfX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:36:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B07041AB8E5
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 13:33:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651005194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Av2XJWYSmxJiVQjp5kZR1hfhT+pdVskMA4VQgdFQOaM=;
-        b=VDjbHVNq0DBR4YUbjdkw3QJstcZDy4ZrK1SN9wei0Ms8iMg0UJQkGN6mDMSky5U3akhRA4
-        dfZhPxSqFGyBW72NSbPUH7MvmLAB9SOPO+lfzJW3KHH+GGs6eeY1mZFc5APkruaAwH8i3B
-        sf7ayuKh/KCosyG5GzviSVphugFzhos=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-ukUKwlcGNeWRiQUYKzmj8Q-1; Tue, 26 Apr 2022 16:33:12 -0400
-X-MC-Unique: ukUKwlcGNeWRiQUYKzmj8Q-1
-Received: by mail-io1-f69.google.com with SMTP id g16-20020a05660226d000b00638d8e1828bso15301395ioo.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 13:33:12 -0700 (PDT)
+        Tue, 26 Apr 2022 17:35:23 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57F42A22
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 14:32:10 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id i19so6962230eja.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 14:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sTyKSDm8OUEDphbP/fy4/ucOerWUVhiZWBgtnRYZdZw=;
+        b=hrSd0P29IeYe6JLT8G7WLSBdSI48pYOP7RhBuJIBtv4ClnQVYjjErhR34j0o200+qB
+         ZmfPY98iMRNovl+NLZxfdhxJ3/MvNXFHB9ii9TPtVwPFc2KOg2+t3+AWecp78bb59SEs
+         k3gJZOBTeyKxuzsujMgaNfukSda0/QDU6ee1ATJySsYy756ykIh1JNgCMhQSoJ7YcWWt
+         HWPhI/N31gng2lgoFCDipErbgkUNhhm/+YP2rVyQEZ2EWRJ4dWojw4VULFeC+PxD9Ea9
+         plVLdr1s5D3D0Lvs+uEbKotSgi+iVq5gk3V/rOO7Ay5N2JH0Bv9lyryuC7Tr0dznWNXf
+         IQOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Av2XJWYSmxJiVQjp5kZR1hfhT+pdVskMA4VQgdFQOaM=;
-        b=Cc9tjagwXmvYvccLKHOk/zKG6Ki/0Bnv+7Y5ZPKS4el9oAsE38in6OXUEgVxrjWJ6w
-         DwH3I2XWJZ/2wHqvqFWaVq9XcpIDqhmTJtkhD73z2GZYss7ohBhMIrGGnvdQSULWoteg
-         /XBC7ZcV0efcC4kBQq8MKj5mkyH+MXXXgsxYV/HnQjZeOEehsUhcUNvjFNS5npI8HDUa
-         tKYN54te5xo6IYDbU7/u/mqAuMtp7poGQOvVjgvKvuOAltz5ZSdg2aPSAywAjRDXJeyE
-         gGNTOSaHnUHjxXnP9gTH1U94gO56SWJzcQbldVi//bD8PF5MK30QqT+QywNrJ+T6iDcM
-         H6aw==
-X-Gm-Message-State: AOAM532AhFGP0yBAilbW6QUgUKLY+09mUP6hTbkkV2ATf7PtTK/QjT0P
-        vV/HWLYIMCM7p9SUtziStzUa7LlzlagH9I8swzbonnA32K5e3BMBZ4TPRPt6/dqwENCNONs0NSm
-        4xJJ4m2aIB6Wp8ycEVaF/5G27GpAR
-X-Received: by 2002:a05:6638:272c:b0:32a:f95b:fc77 with SMTP id m44-20020a056638272c00b0032af95bfc77mr4011888jav.179.1651005191546;
-        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxd4CFNten6nl0jATzOU1yCBTY6Y58j8Espgob7sbvIFYcRfIXeg+IqFoDNsZPO7cKZaJ3nww==
-X-Received: by 2002:a05:6638:272c:b0:32a:f95b:fc77 with SMTP id m44-20020a056638272c00b0032af95bfc77mr4011865jav.179.1651005191365;
-        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id e18-20020a92d752000000b002cd6dae980fsm8497051ilq.13.2022.04.26.13.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 16:33:08 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] selftests: vm: add hugetlb_shared userfaultfd
- test to run_vmtests.sh
-Message-ID: <YmhXBHFrXKT/Jqkd@xz-m1.local>
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-2-axelrasmussen@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sTyKSDm8OUEDphbP/fy4/ucOerWUVhiZWBgtnRYZdZw=;
+        b=1ge1F4Ip0hKod55jVHweJ+fs0N0wnNvKSrwMpl3TeSRImkRCLXWFF4zkdcKIuLpqU/
+         QXbtja+6clCIA4p3MgMqqKw0tU6YyiallaWYFS4JtQrqMZWUr60b2noMjrkeYWZme8Na
+         jU3iwhJouLzN4fwEj3BvNSZqcjXNLTDQlS8UcLOXqz9ym8P8UoLxuNM6xsodrVt2LH9G
+         Gux4ZopR5CmNu8Bj5mAH0aRuKCUF8fiW6y8HUu5ybmEsOmyhDxo0tv0ptKe5/fWi+5Tl
+         BbNZ27TPFjbaITefQl3h2oB/SSEMb8yCOV7bYxBw1PsgAXPN4JWw/Qw/QebJmGiie2JL
+         /AZA==
+X-Gm-Message-State: AOAM530sFIFab8xgk22FwH3dBSB8fJIaZ8Zvf4+tBnKFVAkQdzYhJgXX
+        2qqqhd1o+INVGnepOLyPGQTxrzrq3weW6NR/B9fiXQ==
+X-Google-Smtp-Source: ABdhPJzOjBqpk5z5nirWqeoop1JfQFBvXl7jX0YyAMqDGlb2b78LJN0qWVUBzbGca1ofOWWZotLWJ7fP4Y1aIixJzhE=
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id
+ ho43-20020a1709070eab00b006da8ec5d386mr23479103ejc.668.1651008729111; Tue, 26
+ Apr 2022 14:32:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220422212945.2227722-2-axelrasmussen@google.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220402043530.923747-1-davidgow@google.com> <20220402043530.923747-2-davidgow@google.com>
+In-Reply-To: <20220402043530.923747-2-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 26 Apr 2022 17:31:57 -0400
+Message-ID: <CAFd5g46UfmrE-D9PKfGJsgZBnCUi9-Z82tu1=4ZQzCCj0VcQCw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: Rework kunit_resource allocation policy
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:29:40PM -0700, Axel Rasmussen wrote:
-> This not being included was just a simple oversight. There are certain
-> features (like minor fault support) which are only enabled on shared
-> mappings, so without including hugetlb_shared we actually lose a
-> significant amount of test coverage.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+On Sat, Apr 2, 2022 at 12:35 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> KUnit's test-managed resources can be created in two ways:
+> - Using the kunit_add_resource() family of functions, which accept a
+>   struct kunit_resource pointer, typically allocated statically or on
+>   the stack during the test.
+> - Using the kunit_alloc_resource() family of functions, which allocate a
+>   struct kunit_resource using kzalloc() behind the scenes.
+>
+> Both of these families of functions accept a 'free' function to be
+> called when the resource is finally disposed of.
+>
+> At present, KUnit will kfree() the resource if this 'free' function is
+> specified, and will not if it is NULL. However, this can lead
+> kunit_alloc_resource() to leak memory (if no 'free' function is passed
+> in), or kunit_add_resource() to incorrectly kfree() memory which was
+> allocated by some other means (on the stack, as part of a larger
+> allocation, etc), if a 'free' function is provided.
+>
+> Instead, always kfree() if the resource was allocated with
+> kunit_alloc_resource(), and never kfree() if it was passed into
+> kunit_add_resource() by the user. (If the user of kunit_add_resource()
+> wishes the resource be kfree()ed, they can call kfree() on the resource
+> from within the 'free' function.
+>
+> This is implemented by adding a 'should_free' member to
+> struct kunit_resource and setting it appropriately. To facilitate this,
+> the various resource add/alloc functions have been refactored somewhat,
+> making them all call a __kunit_add_resource() helper after setting the
+> 'should_free' member appropriately. In the process, all other functions
+> have been made static inline functions.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Tested-by: Daniel Latypov <dlatypov@google.com>
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
-
--- 
-Peter Xu
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
