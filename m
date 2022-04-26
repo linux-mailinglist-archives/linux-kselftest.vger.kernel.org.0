@@ -2,162 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71C1510837
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 21:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3D3510A8C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 22:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353751AbiDZTGO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 15:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
+        id S1355058AbiDZUg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 16:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353779AbiDZTFl (ORCPT
+        with ESMTP id S1355017AbiDZUgS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:05:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924691999C6;
-        Tue, 26 Apr 2022 12:02:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42158B8224F;
-        Tue, 26 Apr 2022 19:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94E5C385AA;
-        Tue, 26 Apr 2022 19:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650999750;
-        bh=V4+udKpGUEb7EfiAhVQ52/X71aaDypSDTq4SjL343KA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HcCG59JEncqwTYRMUvNjRne4WENd5Oot9aquwZBg2/Te5urwAqepNbfjqwULBxVJ7
-         p6nWWBMwykloCL9N9XdptXk7438gcHrhm2SRPisNQfy3lYIP3hLJMSqnYf/e8JIHRs
-         hiQArOC85dcL7RTluTe0iNBiVJTdlZqYSFHd6BseKC37d+1pySkA3kBsa2zclTgb6R
-         jaqvKeTXmecfOxRn3RJzXQvEj40TeE1tQNiYBRUs8FDglvgy1zikn6a6Dz6KQXXy6U
-         4vethufERFTrVuSH2X9hf4NHtExOo8YslYLelc7x1P47j6GZi04QUwiaoXlOKkqcny
-         UJhumzFzrm/lw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        Tue, 26 Apr 2022 16:36:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F07E71A863E
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 13:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651005183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qJupZ9EKBhCX8US4p7GIAW6BSuQyT3fJWSWGs492ld4=;
+        b=XRghbmOtv73zpJl3Ez76GQSI3MdzswbE96Ikcw+PZLeJFEW+OTQLjfX+KHoI2rI0Fng60W
+        6LX0D1rVpirqE8mj920zZkkO15/n9kaze6u8pc//D8bKwF1YdyYy8rgyaFbWQWGBhIuy06
+        gKWRYpQ2C1IaZ8YuZfGP1BksunWk314=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-kngpGn7QMfeNfErIagHrWg-1; Tue, 26 Apr 2022 16:33:01 -0400
+X-MC-Unique: kngpGn7QMfeNfErIagHrWg-1
+Received: by mail-io1-f72.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so7572iov.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 13:33:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qJupZ9EKBhCX8US4p7GIAW6BSuQyT3fJWSWGs492ld4=;
+        b=H0rjDpG9abu6PzXoaG+wK1p7Q62uJZnURZwSHvf8v0jxl7kT6C9VCaj+PYUL+sJ1d0
+         Xgyd6W5rCPX4Ba0hUl+jtPIXvuAawggJsWdO/L9WskIuXYbaD7eurs+4+o69d4DOF7Ij
+         E29wgFZ7u8jOsmAM7OBMRGnN4ce0z5yugSNsK4GmMDIRdi5zSn6EnhnxXVM27NPuLxVD
+         PU1pTPsyvZoSGb0UtuEDtjGbO08Ke17aStI5X4yTKDNOTxuzgZl+BN5RKDe12twh4t3b
+         92XOye4t/EB8LcuknogAA4ZkHDqLD0DGbnW0CvfSZ++15qV27QlEecnwER/cK1JYeOay
+         GYWw==
+X-Gm-Message-State: AOAM532WsawQT9ctBWcsYgcKpQfdhRRvJNmNiODNwVl0CXubyT670ab0
+        m7R6sYo/+3dSmVN6WpqUYLo1cD+tTWDCHg4LJbi6WrIWVdhLRsqHKqoLV4m6VsGy4XtCK5t4wHh
+        Q/KaGsU+XFbgtq9t7Rxhy9Oso5MvH
+X-Received: by 2002:a05:6638:1487:b0:328:6e36:39e4 with SMTP id j7-20020a056638148700b003286e3639e4mr10263042jak.202.1651005181067;
+        Tue, 26 Apr 2022 13:33:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxv3DOWZkK6AhpbIXCeFJ2/lY2z7CXm1JNRmILCaRK5MqEyMqTOfcKl6cB6RwB1JoqOHBf6sQ==
+X-Received: by 2002:a05:6638:1487:b0:328:6e36:39e4 with SMTP id j7-20020a056638148700b003286e3639e4mr10263012jak.202.1651005180758;
+        Tue, 26 Apr 2022 13:33:00 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id x186-20020a6bc7c3000000b00648deae6630sm10449855iof.54.2022.04.26.13.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:33:00 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 16:32:58 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 15/15] selftest/vm: verify remap destination address in mremap_test
-Date:   Tue, 26 Apr 2022 15:02:14 -0400
-Message-Id: <20220426190216.2351413-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220426190216.2351413-1-sashal@kernel.org>
-References: <20220426190216.2351413-1-sashal@kernel.org>
+Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine
+ grained access control
+Message-ID: <YmhW+mOuQUWsByj4@xz-m1.local>
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-3-axelrasmussen@google.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220422212945.2227722-3-axelrasmussen@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Axel,
 
-[ Upstream commit 18d609daa546c919fd36b62a7b510c18de4b4af8 ]
+On Fri, Apr 22, 2022 at 02:29:41PM -0700, Axel Rasmussen wrote:
+> @@ -65,6 +66,8 @@ struct userfaultfd_ctx {
+>  	unsigned int flags;
+>  	/* features requested from the userspace */
+>  	unsigned int features;
+> +	/* whether or not to handle kernel faults */
+> +	bool handle_kernel_faults;
 
-Because mremap does not have a MAP_FIXED_NOREPLACE flag, it can destroy
-existing mappings.  This causes a segfault when regions such as text are
-remapped and the permissions are changed.
+Could you help explain why we need this bool?  I failed to figure out
+myself on the difference against "!(ctx->flags & UFFD_USER_MODE_ONLY)".
 
-Verify the requested mremap destination address does not overlap any
-existing mappings by using mmap's MAP_FIXED_NOREPLACE flag.  Keep
-incrementing the destination address until a valid mapping is found or
-fail the current test once the max address is reached.
+Thanks,
 
-Link: https://lkml.kernel.org/r/20220420215721.4868-2-sidhartha.kumar@oracle.com
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/vm/mremap_test.c | 42 ++++++++++++++++++++++--
- 1 file changed, 39 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index 2b3b4f15185f..e3ce33a9954e 100644
---- a/tools/testing/selftests/vm/mremap_test.c
-+++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -10,6 +10,7 @@
- #include <string.h>
- #include <sys/mman.h>
- #include <time.h>
-+#include <stdbool.h>
- 
- #include "../kselftest.h"
- 
-@@ -65,6 +66,30 @@ enum {
- 	.expect_failure = should_fail				\
- }
- 
-+/*
-+ * Returns false if the requested remap region overlaps with an
-+ * existing mapping (e.g text, stack) else returns true.
-+ */
-+static bool is_remap_region_valid(void *addr, unsigned long long size)
-+{
-+	void *remap_addr = NULL;
-+	bool ret = true;
-+
-+	/* Use MAP_FIXED_NOREPLACE flag to ensure region is not mapped */
-+	remap_addr = mmap(addr, size, PROT_READ | PROT_WRITE,
-+					 MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
-+					 -1, 0);
-+
-+	if (remap_addr == MAP_FAILED) {
-+		if (errno == EEXIST)
-+			ret = false;
-+	} else {
-+		munmap(remap_addr, size);
-+	}
-+
-+	return ret;
-+}
-+
- /* Returns mmap_min_addr sysctl tunable from procfs */
- static unsigned long long get_mmap_min_addr(void)
- {
-@@ -112,8 +137,8 @@ static void *get_source_mapping(struct config c)
- 		goto retry;
- 
- 	src_addr = mmap((void *) addr, c.region_size, PROT_READ | PROT_WRITE,
--			MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
--			-1, 0);
-+					MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
-+					-1, 0);
- 	if (src_addr == MAP_FAILED) {
- 		if (errno == EPERM || errno == EEXIST)
- 			goto retry;
-@@ -180,9 +205,20 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 	if (!((unsigned long long) addr & c.dest_alignment))
- 		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
- 
-+	/* Don't destroy existing mappings unless expected to overlap */
-+	while (!is_remap_region_valid(addr, c.region_size) && !c.overlapping) {
-+		/* Check for unsigned overflow */
-+		if (addr + c.dest_alignment < addr) {
-+			ksft_print_msg("Couldn't find a valid region to remap to\n");
-+			ret = -1;
-+			goto out;
-+		}
-+		addr += c.dest_alignment;
-+	}
-+
- 	clock_gettime(CLOCK_MONOTONIC, &t_start);
- 	dest_addr = mremap(src_addr, c.region_size, c.region_size,
--			MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
-+					  MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
- 	clock_gettime(CLOCK_MONOTONIC, &t_end);
- 
- 	if (dest_addr == MAP_FAILED) {
 -- 
-2.35.1
+Peter Xu
 
