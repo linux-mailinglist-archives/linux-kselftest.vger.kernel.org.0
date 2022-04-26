@@ -2,155 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55539510BB4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 00:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C388D510BBE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 00:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243521AbiDZWOp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 18:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S1355668AbiDZWRu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 18:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiDZWOp (ORCPT
+        with ESMTP id S232124AbiDZWRt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 18:14:45 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F68F3B002;
-        Tue, 26 Apr 2022 15:11:36 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id c125so366712iof.9;
-        Tue, 26 Apr 2022 15:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fILbKujbkDe+6LP+BCuA9mzMNH72AUuUy21C/WMJlAo=;
-        b=FfGE58rDfk4rB9Q3BzlWqMhRUEY8Gt+cxWsblJTfWra/7D6XDgXLiYeWFfrP+WSP3E
-         gAEpx1ZDq933dPra7qQd4CSZKKsH23P1YvRoHCxdTxa2l36eZShw6Z84W0Ph+rTEXy0j
-         tql1olLJy6QCw4lke3j3f2jzcNRM702o38oWXrU3OCeI/SSzt0S6FhI1I4eXpkH1QJTZ
-         WY+pwraSGx9ViRimTXV9ueai56cP2Xj868237/IOwmYizo5VRomBgW+FnH7tPkvNKhes
-         iVhOnAp3HNLphl74qgCsbd3GmfqX4JbGEgwraMDylwbRRRRiwD7OgkVGSz0gbXbuQJh3
-         nWjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fILbKujbkDe+6LP+BCuA9mzMNH72AUuUy21C/WMJlAo=;
-        b=yBc/QdHlYacimOe7jstf1cvX+odS/ZTRHS6tR/C/OvOXIHEiM+/CRbARtXoQWWBdBg
-         XOCC0vFXEs8izRk9vdZ4IyDeIrR7EWMvBJuDIMZyDsIjKVUdGExPSrvMsth9+getz1OT
-         31BVWW7SzFMgyH0X65HcEL/JmL2Kux79W3W6LbUGboyaOVE4lvO07Qx+3x0PJBvXjzec
-         UY3G5q+r25efSwM3JbXzmnrm5NDO/7d0T5e/Q+jUA57MSkYjPqb/T8BaqGqleQPP+uLo
-         hNztUqnBqL2f+YyHSCTfNWtUmKyvbj0X872UDw7LowKl5M+ILJ1Ziv4nOaXg8Bwk9R+q
-         43Fw==
-X-Gm-Message-State: AOAM533fH3DQNzynVkPA9wGHIVgggfrXnw4Spxy+aYj6x4jmrqxFETTO
-        ptDzdZvL6lKBq+ooMheJpLoV2Gj2z7bV2v1Sq1M=
-X-Google-Smtp-Source: ABdhPJwSb8LXHzHQ9W8IOU/qiWUFK5ABOYeynw6E1cE7hI8yCMmU6rsNLEL26TYmz5d2mbNaDrfUdHAjMzTAoVzeVLM=
-X-Received: by 2002:a05:6638:2104:b0:326:1e94:efa6 with SMTP id
- n4-20020a056638210400b003261e94efa6mr11337361jaj.234.1651011095978; Tue, 26
- Apr 2022 15:11:35 -0700 (PDT)
+        Tue, 26 Apr 2022 18:17:49 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9529D3CA48
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 15:14:40 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220426221434euoutp01aa4668fbeb1bd289df51907fb9d1e98b~pkgHOisOT2791327913euoutp01D
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 22:14:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220426221434euoutp01aa4668fbeb1bd289df51907fb9d1e98b~pkgHOisOT2791327913euoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651011274;
+        bh=IPQk0Q4k6d8MBvUz+9ejX0OyAjlYSg/gyEoYmMCjOKQ=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=c89szdQsAqye3i3gDVOJO1ceZs0G4Roj86/10zF1ZeHL7T64MwRAteXyxr0pVOFL6
+         5QSguS62LvxvkWerdy40ibDhR8vdLaiUdteN4DzevsNAEd3XbaVRUnE9cP6GzOloHn
+         gWGi1QnvUd466neJs+QeNSvG1TbsuKTxV7Tq1Tnk=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220426221434eucas1p2be4b0c6ae9323a3c69fb142dbe142e50~pkgG1t_-_1767917679eucas1p2q;
+        Tue, 26 Apr 2022 22:14:34 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 46.A7.10009.ACE68626; Tue, 26
+        Apr 2022 23:14:34 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220426221433eucas1p253f6350eacf87d8cac2c05adc903656e~pkgFoSNEn3138331383eucas1p2G;
+        Tue, 26 Apr 2022 22:14:33 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220426221433eusmtrp217fa12bd618a4c127c3632bdcc4c5f61~pkgFm-M8u0332303323eusmtrp2k;
+        Tue, 26 Apr 2022 22:14:33 +0000 (GMT)
+X-AuditID: cbfec7f2-e95ff70000002719-51-62686ecad992
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 06.68.09404.8CE68626; Tue, 26
+        Apr 2022 23:14:33 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220426221432eusmtip2bf09fbbbace97124dcdd7cd3e8aa62f7~pkgEvO3E10048000480eusmtip2h;
+        Tue, 26 Apr 2022 22:14:32 +0000 (GMT)
+Message-ID: <64573cca-4bd6-a65e-0ba2-867c6488e82c@samsung.com>
+Date:   Wed, 27 Apr 2022 00:14:32 +0200
 MIME-Version: 1.0
-References: <20220422172422.4037988-1-maximmi@nvidia.com> <20220422172422.4037988-6-maximmi@nvidia.com>
- <20220426001223.wlnfd2kmmogip5d5@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CAEf4BzaGjxsf46YPs1FRSp4kj+nkKhw7vLKAGwgrdnAuTW5+9Q@mail.gmail.com> <92e9eaf6-4d72-3173-3271-88e3b8637c7a@nvidia.com>
-In-Reply-To: <92e9eaf6-4d72-3173-3271-88e3b8637c7a@nvidia.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 26 Apr 2022 15:11:25 -0700
-Message-ID: <CAEf4BzZhjY+F9JYmT7k+m87UZ1qKuO8_Mjjq4CGgkr=z9BGDCg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 5/6] bpf: Add selftests for raw syncookie helpers
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v14 27/39] arm64/sme: Provide Kconfig for SME
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Luca Salabrino <luca.scalabrino@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220419112247.711548-28-broonie@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMKsWRmVeSWpSXmKPExsWy7djP87qn8jKSDDY3iVhMPGVtMX3lZTaL
+        Nz0mFlMfPmGzeL+sh9Hi/r7lTBYfTx1nt9j0+BqrxfQ779kspjR3MFlMOTaF3WLnnJOsFkfW
+        2ltMebmO3WLv9GWsFjNv32a0WHr8P5NFyx1TByGPNfPWMHpsWtXJ5rF/7hp2j/Ob1jB7bF5S
+        7/F5k1wAWxSXTUpqTmZZapG+XQJXxv6OJ0wF8yUr9ix6ztzAeFGki5GTQ0LAROLHrOksXYxc
+        HEICKxglrp49xAjhfGGUaGl/AuV8ZpQ4e+kOO0zLxz9PoVqWM0rMunuAHcL5CNSy5x0jSBWv
+        gJ3EmU1tYB0sAqoS22afYYKIC0qcnPmEBcQWFUiSmLvvHnMXIweHsICjxNrP1SBhZgFxiVtP
+        5jOBzBQRuMkocabxNzOIwyzwhFmi6+8NsGY2AUOJrrddbCA2p4CVxLclb5gguuUlmrfOBmuQ
+        ENjMKfF8xhJmiLtdJPru9bFA2MISr45vgfpHRuL/TpB1HEB2vsTfGcYQ4QqJa6/XQLVaS9w5
+        94sNpIRZQFNi/S59iGpHifffEiFMPokbbwUhDuCTmLRtOjNEmFeio00IYoaaxKzj6+BWHrxw
+        iXkCo9IspDCZheT5WUhemYWwdgEjyypG8dTS4tz01GLDvNRyveLE3OLSvHS95PzcTYzAdHf6
+        3/FPOxjnvvqod4iRiYPxEKMEB7OSCO89xYwkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rzJmRsS
+        hQTSE0tSs1NTC1KLYLJMHJxSDUx2Jn94ptr13zBOiC/KVSk3avI7vivo+zn25C87qye6VG0s
+        sT33amHpBuuWRX/fW13Zv2HdhNC4vQ6vPV5cUX3yLamAb66N0plD9gxnXer/6fJVFM3h9FwT
+        7GW08+KD2bMWF0RMYGTYxuX3Jaf6s7L+Xc2Az95PP+RE6Kv53mT8Oyn8yr2VPKtn+QRNO3yp
+        0sVemjXqgJz4z4b+LTOX/Nms/txN+83n/I/Pw7hMLqmXhLirvGuy5Ogva3D/776i865s9I1g
+        Jrt/b3SS7CMe2b6ZU3DvWlN1mpjpmfkqly+/XZM9u+zqpPAFlusaw5duuK/QuDrzq+7MANYF
+        ry6czNKasbWwZ29sV0hDQOHCz7uVWIozEg21mIuKEwHziR8a5gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOIsWRmVeSWpSXmKPExsVy+t/xe7on8zKSDH5tYrSYeMraYvrKy2wW
+        b3pMLKY+fMJm8X5ZD6PF/X3LmSw+njrObrHp8TVWi+l33rNZTGnuYLKYcmwKu8XOOSdZLY6s
+        tbeY8nIdu8Xe6ctYLWbevs1osfT4fyaLljumDkIea+atYfTYtKqTzWP/3DXsHuc3rWH22Lyk
+        3uPzJrkAtig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9
+        uwS9jP0dT5gK5ktW7Fn0nLmB8aJIFyMnh4SAicTHP09Zuhi5OIQEljJKXP4wlQkiISNxcloD
+        K4QtLPHnWhcbRNF7RomP7zaxgCR4BewkzmxqYwexWQRUJbbNPsMEEReUODnzCViNqECSxItt
+        zxm7GDk4hAUcJdZ+rgYJMwuIS9x6Mp8JZKaIwE1GiW39FxkhEi+YJXbeB5spJJAhcerLabA4
+        m4ChRNdbkCM4OTgFrCS+LXnDBFFvJtG1tQuqV16ieets5gmMQrOQnDELyb5ZSFpmIWlZwMiy
+        ilEktbQ4Nz232EivODG3uDQvXS85P3cTIzDGtx37uWUH48pXH/UOMTJxMB5ilOBgVhLhvaeY
+        kSTEm5JYWZValB9fVJqTWnyI0RQYFhOZpUST84FJJq8k3tDMwNTQxMzSwNTSzFhJnNezoCNR
+        SCA9sSQ1OzW1ILUIpo+Jg1OqgWn3n7UnzyUV63lOlH72pzL3x+qcqEjOE62tU/+lfJkrvutQ
+        8R2fDM9sF6kPd2/zl++T0zNlU/s1V+FCNJdFWKKJ2K/bM3dcX33svO5/ndLme7zrMnzWGW/s
+        qp3XbSP26lxd/O9JShqTf97q7lfJFJ19KX3J6f3VXjafP18zf/kqufZ80tSkQHf/L6+DZ7O8
+        DMmZ81Kl5VUHY/WpJHEb2euru/c9m5TtcfGWlf4ChoMHlt3/s1kqzvVx35N4C9k3PG7MKrs9
+        hEp+Kmzu2PNm+t4THxY/vSvcYCYya/Gx/RFzeSZw1bDN26mmeL3u8U3v/UdXTT0gPHNLTH8w
+        q/6HeyxctzbPveIu87og8GLOFE4OJZbijERDLeai4kQAQLSW4XoDAAA=
+X-CMS-MailID: 20220426221433eucas1p253f6350eacf87d8cac2c05adc903656e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220426221433eucas1p253f6350eacf87d8cac2c05adc903656e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220426221433eucas1p253f6350eacf87d8cac2c05adc903656e
+References: <20220419112247.711548-1-broonie@kernel.org>
+        <20220419112247.711548-28-broonie@kernel.org>
+        <CGME20220426221433eucas1p253f6350eacf87d8cac2c05adc903656e@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:29 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
->
-> On 2022-04-26 09:26, Andrii Nakryiko wrote:
-> > On Mon, Apr 25, 2022 at 5:12 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Fri, Apr 22, 2022 at 08:24:21PM +0300, Maxim Mikityanskiy wrote:
-> >>> +void test_xdp_synproxy(void)
-> >>> +{
-> >>> +     int server_fd = -1, client_fd = -1, accept_fd = -1;
-> >>> +     struct nstoken *ns = NULL;
-> >>> +     FILE *ctrl_file = NULL;
-> >>> +     char buf[1024];
-> >>> +     size_t size;
-> >>> +
-> >>> +     SYS("ip netns add synproxy");
-> >>> +
-> >>> +     SYS("ip link add tmp0 type veth peer name tmp1");
-> >>> +     SYS("ip link set tmp1 netns synproxy");
-> >>> +     SYS("ip link set tmp0 up");
-> >>> +     SYS("ip addr replace 198.18.0.1/24 dev tmp0");
-> >>> +
-> >>> +     // When checksum offload is enabled, the XDP program sees wrong
-> >>> +     // checksums and drops packets.
-> >>> +     SYS("ethtool -K tmp0 tx off");
-> >>
-> >> BPF CI image doesn't have ethtool installed.
-> >> It will take some time to get it updated. Until then we cannot land the patch set.
-> >> Can you think of a way to run this test without shelling to ethtool?
-> >
-> > Good news: we got updated CI image with ethtool, so that shouldn't be
-> > a problem anymore.
-> >
-> > Bad news: this selftest still fails, but in different place:
-> >
-> > test_synproxy:FAIL:iptables -t raw -I PREROUTING -i tmp1 -p tcp -m tcp
-> > --syn --dport 8080 -j CT --notrack unexpected error: 512 (errno 2)
->
-> That's simply a matter of missing kernel config options:
->
-> CONFIG_NETFILTER_SYNPROXY=y
-> CONFIG_NETFILTER_XT_TARGET_CT=y
-> CONFIG_NETFILTER_XT_MATCH_STATE=y
-> CONFIG_IP_NF_FILTER=y
-> CONFIG_IP_NF_TARGET_SYNPROXY=y
-> CONFIG_IP_NF_RAW=y
->
-> Shall I create a pull request on github to add these options to
-> https://github.com/libbpf/libbpf/tree/master/travis-ci/vmtest/configs?
->
+Hi Mark,
 
-Yes, please. But also for [0], that's the one that tests all the
-not-yet-applied patches
-
-  [0] https://github.com/kernel-patches/vmtest/
-
-> > See [0].
-> >
-> >    [0] https://github.com/kernel-patches/bpf/runs/6169439612?check_suite_focus=true
+On 19.04.2022 13:22, Mark Brown wrote:
+> Now that basline support for the Scalable Matrix Extension (SME) is present
+> introduce the Kconfig option allowing it to be built. While the feature
+> registers don't impose a strong requirement for a system with SME to
+> support SVE at runtime the support for streaming mode SVE is mostly
+> shared with normal SVE so depend on SVE.
 >
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+
+This patchset landed in linux next-20220426. By default SME is enabled 
+and it breaks CPU hot-plug on all my arm64 test systems. Bisect points 
+this patch, because it finally enables this feature. Here is a report 
+from QEMU's arm64 virt machine:
+
+# for i in /sys/devices/system/cpu/cpu[1-9]; do echo 0 >$i/online; done
+psci: CPU1 killed (polled 0 ms)
+# cat /proc/cpuinfo | grep processor | wc -l
+1
+# for i in /sys/devices/system/cpu/cpu[1-9]; do echo 1 >$i/online; done
+------------[ cut here ]------------
+kernel BUG at arch/arm64/kernel/cpufeature.c:1353!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Modules linked in: bluetooth ecdh_generic ecc rfkill ipv6
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.18.0-rc3+ #4891
+Hardware name: linux,dummy-virt (DT)
+pstate: 200001c5 (nzCv dAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __read_sysreg_by_encoding+0x350/0x354
+lr : has_cpuid_feature+0x6c/0xe0
+...
+Call trace:
+  __read_sysreg_by_encoding+0x350/0x354
+  has_cpuid_feature+0x6c/0xe0
+  verify_local_cpu_caps+0x98/0x130
+  check_local_cpu_capabilities+0x2c/0x270
+  secondary_start_kernel+0xc0/0x170
+  __secondary_switched+0xa0/0xa4
+Code: d53802d3 17ffff49 d5380233 17ffff47 (d4210000)
+---[ end trace 0000000000000000 ]---
+Kernel panic - not syncing: Attempted to kill the idle task!
+SMP: stopping secondary CPUs
+Kernel Offset: 0x4e81fb600000 from 0xffff800008000000
+PHYS_OFFSET: 0xffff98f240000000
+CPU features: 0x440,00033c08,00001086
+Memory Limit: none
+---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+
+Disabling SME on top of next-20220426 hides this issue.
+
+> ---
+>   arch/arm64/Kconfig | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+>
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 57c4c995965f..0897984918e8 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1939,6 +1939,17 @@ config ARM64_SVE
+>   	  booting the kernel.  If unsure and you are not observing these
+>   	  symptoms, you should assume that it is safe to say Y.
+>   
+> +config ARM64_SME
+> +	bool "ARM Scalable Matrix Extension support"
+> +	default y
+> +	depends on ARM64_SVE
+> +	help
+> +	  The Scalable Matrix Extension (SME) is an extension to the AArch64
+> +	  execution state which utilises a substantial subset of the SVE
+> +	  instruction set, together with the addition of new architectural
+> +	  register state capable of holding two dimensional matrix tiles to
+> +	  enable various matrix operations.
+> +
+>   config ARM64_MODULE_PLTS
+>   	bool "Use PLTs to allow module memory to spill over into vmalloc area"
+>   	depends on MODULES
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
