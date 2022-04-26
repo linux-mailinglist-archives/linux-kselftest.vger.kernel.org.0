@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF4851028C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 18:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6D0510302
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 18:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352814AbiDZQJr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 12:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S1352874AbiDZQTb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 12:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiDZQJr (ORCPT
+        with ESMTP id S242967AbiDZQT3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:09:47 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDFE47040
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:06:38 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id 79so20572736iou.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:06:38 -0700 (PDT)
+        Tue, 26 Apr 2022 12:19:29 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84401C916
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:16:21 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id 79so20625201iou.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 09:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=48HTw/rBGTX9w0BVqolReo8yB9AAi0BaZFQxJTNNLy4=;
-        b=ZD1m7Y4nVS7PfQ4Kjhtcx2pWQRTgJwYNx2+YXbk1O2CUO2UxP5EWmPra4LFir6/Taw
-         RpW0It155qOW40r+x6bxxHSyaWqdAxyZPQbArFGFnVhID+wD8iVD1c4L/8kFEbTKgLUz
-         EJZN4+mqFAvk4fkU1MkgFX4lHN0a0xfTh0KQ0=
+        bh=HXWdjkfFgqjuuDDxvdwI+4bKI50cYTCo99OhpT4yUUA=;
+        b=asJnWv/5XRA4F4Rt4VsDIaqHUngaJ2jxIJmd6hFDl+QhdPM+ZE2j+UaZ4xSwq8xqdS
+         PBI3/IGHu50VNKpA+cm2y+UyoIyVSrw+ygqofnIyiUhrrC1OOFIjJf3/k77+14GKNefy
+         Ba34H4zkKpDXtSa0ViWgDX0M9ljaWZ4NFhi38=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=48HTw/rBGTX9w0BVqolReo8yB9AAi0BaZFQxJTNNLy4=;
-        b=o3b1kvkZfC2MEtIVyuuM6ul1a4RCzOElWDz48oL+u940O6mhitPSR50CY1C+gLhiyn
-         lsSB/gbaLjaXuCS0m1gu/9S1Fwvu9VGAqcXxQnY/ww5+jQkyYjLfwgMDLxI89bPTG7Ha
-         w0u9AzW731MiptlvQoAyxuca5SG17mWIJg9uwwpxkhOH0/CNfHLjeEAD4IoD4Th83vKP
-         FwHi+jFAxVgfn5YqvGCuJnEIsMki+Om+D+ar+DYBPflfzHt60SJ2LW+bpTjU2NYwg+1f
-         EolJcikYgROYgvELFMwSNudRgYoFk5J3aXqRU3jJefaFAL3IZePUjBp3AjWxqqe3eryd
-         2sDA==
-X-Gm-Message-State: AOAM530c1blOk8aHUK8PByHTt1MN4RlEeHJlP7vXgYHQOX88ehy8U5ox
-        OqVENlYgLPlP7aYPHbrgDVJgmQ==
-X-Google-Smtp-Source: ABdhPJxlhTF/uJw3gqLA3Hj0XRaHwykEJis0oX2P2Zrd5M2rhYKz2s635umapHwjfAZEV7w+j3mLVw==
-X-Received: by 2002:a05:6638:1652:b0:328:5357:7acb with SMTP id a18-20020a056638165200b0032853577acbmr11320817jat.71.1650989197839;
-        Tue, 26 Apr 2022 09:06:37 -0700 (PDT)
+        bh=HXWdjkfFgqjuuDDxvdwI+4bKI50cYTCo99OhpT4yUUA=;
+        b=O7sTWd0sAqWFQ93pAVN8xIyupxqxmbZeQR6sswsYfnPXD25XNzuzPo9aJ10nD3Nq5W
+         CfKKDl5nWbG4bnxJWaEqELg/z0B8rPGLETzHYLuPS3L/HfMR3HHJYfsFHCoN3XXHLqY4
+         oljmb9olaHBjj//E2APb5b+Pfj+hVUNbLAl1RgTpoSoUp6P8Gj+rrto4fDWmRPYyjMuE
+         oUY9G6d4ip4sRu5HBzMmE62C/TicFi0NzfjirG90CELM/Q7U8mIHububjH9sYQfzXI5H
+         Pse5pMdS99hqd8VnmzjjWh7kfDmCjYniNFcz/L0ABhLyPENjMJ7das2J6i4KyAnKXNdE
+         atvQ==
+X-Gm-Message-State: AOAM5303/VuYr6sq9zmonlRScvs8y9UHS9yBfzuKVcabhYL5koA8XZo3
+        P4Sjec77TJs44zQQ+WYzj9buwg==
+X-Google-Smtp-Source: ABdhPJyZ9Q6A3Qye4GAn3uZyc/gODe2JY9K+1Qqgz0ZLuqW7qoimkMFBBI5vTAdI8yWt1KFsJ5dbqg==
+X-Received: by 2002:a6b:fb05:0:b0:657:655e:a287 with SMTP id h5-20020a6bfb05000000b00657655ea287mr7364988iog.211.1650989781126;
+        Tue, 26 Apr 2022 09:16:21 -0700 (PDT)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id s21-20020a6bd315000000b006573987c4fcsm9786770iob.3.2022.04.26.09.06.36
+        by smtp.gmail.com with ESMTPSA id r9-20020a6b6009000000b006412abddbbbsm9458932iog.24.2022.04.26.09.16.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 09:06:37 -0700 (PDT)
-Subject: Re: [PATCH v2 1/6] selftests: vm: add hugetlb_shared userfaultfd test
- to run_vmtests.sh
+        Tue, 26 Apr 2022 09:16:20 -0700 (PDT)
+Subject: Re: [PATCH v2 3/6] userfaultfd: selftests: modify selftest to use
+ /dev/userfaultfd
 To:     Axel Rasmussen <axelrasmussen@google.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -68,20 +68,20 @@ Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-2-axelrasmussen@google.com>
+ <20220422212945.2227722-4-axelrasmussen@google.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <037ea7ee-5248-86a5-55a2-f1726567af81@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 10:06:36 -0600
+Message-ID: <a6f7ff80-ea77-75d0-2454-99d14f164708@linuxfoundation.org>
+Date:   Tue, 26 Apr 2022 10:16:18 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220422212945.2227722-2-axelrasmussen@google.com>
+In-Reply-To: <20220422212945.2227722-4-axelrasmussen@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,39 +90,82 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> This not being included was just a simple oversight. There are certain
-> features (like minor fault support) which are only enabled on shared
-> mappings, so without including hugetlb_shared we actually lose a
-> significant amount of test coverage.
+> We clearly want to ensure both userfaultfd(2) and /dev/userfaultfd keep
+> working into the future, so just run the test twice, using each
+> interface.
 > 
 > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
->   tools/testing/selftests/vm/run_vmtests.sh | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+>   tools/testing/selftests/vm/userfaultfd.c | 31 ++++++++++++++++++++++--
+>   1 file changed, 29 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index a2302b5faaf2..5065dbd89bdb 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -121,9 +121,11 @@ run_test ./gup_test -a
->   run_test ./gup_test -ct -F 0x1 0 19 0x1000
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 92a4516f8f0d..12ae742a9981 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -77,6 +77,9 @@ static int bounces;
+>   #define TEST_SHMEM	3
+>   static int test_type;
 >   
->   run_test ./userfaultfd anon 20 16
-> -# Test requires source and destination huge pages.  Size of source
-> -# (half_ufd_size_MB) is passed as argument to test.
-> +# Hugetlb tests require source and destination huge pages. Pass in half the
-> +# size ($half_ufd_size_MB), which is used for *each*.
->   run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-> +run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> +rm -f "$mnt"/uffd-test
->   run_test ./userfaultfd shmem 20 16
+> +/* test using /dev/userfaultfd, instead of userfaultfd(2) */
+> +static bool test_dev_userfaultfd;
+> +
+>   /* exercise the test_uffdio_*_eexist every ALARM_INTERVAL_SECS */
+>   #define ALARM_INTERVAL_SECS 10
+>   static volatile bool test_uffdio_copy_eexist = true;
+> @@ -383,13 +386,31 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+>   	}
+>   }
 >   
->   #cleanup
+> +static void __userfaultfd_open_dev(void)
+> +{
+> +	int fd;
+> +
+> +	uffd = -1;
+> +	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> +	if (fd < 0)
+> +		return;
+> +
+> +	uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
+> +		     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> +	close(fd);
+> +}
+> +
+>   static void userfaultfd_open(uint64_t *features)
+>   {
+>   	struct uffdio_api uffdio_api;
+>   
+> -	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> +	if (test_dev_userfaultfd)
+> +		__userfaultfd_open_dev();
+> +	else
+> +		uffd = syscall(__NR_userfaultfd,
+> +			       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+>   	if (uffd < 0)
+> -		err("userfaultfd syscall not available in this kernel");
+> +		err("creating userfaultfd failed");
+
+This isn't an error as in test failure. This will be a skip because of
+unmet dependencies. Also if this test requires root access, please check
+for that and make that a skip as well.
+
+>   	uffd_flags = fcntl(uffd, F_GETFD, NULL);
+>   
+>   	uffdio_api.api = UFFD_API;
+> @@ -1698,6 +1719,12 @@ int main(int argc, char **argv)
+>   	}
+>   	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+>   	       nr_pages, nr_pages_per_cpu);
+> +
+> +	test_dev_userfaultfd = false;
+> +	if (userfaultfd_stress())
+> +		return 1;
+> +
+> +	test_dev_userfaultfd = true;
+>   	return userfaultfd_stress();
+>   }
+>   
 > 
-
-Looks good to me.
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
