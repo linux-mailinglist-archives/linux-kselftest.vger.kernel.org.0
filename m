@@ -2,132 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2501550F0EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 08:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D33D50F0FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 08:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245042AbiDZG3d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 02:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S238178AbiDZGeV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 02:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238318AbiDZG3c (ORCPT
+        with ESMTP id S235756AbiDZGeU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:29:32 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612813D55;
-        Mon, 25 Apr 2022 23:26:26 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id m13so4746714iob.4;
-        Mon, 25 Apr 2022 23:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Njvj1KBr5lRxIqTHY3aarGqfWcahQ2OETUvHizWsQ5k=;
-        b=exHBj0ijRuAsQEn18gYi/txSChryubGP03FFjcAGu0vBjhsp6reUD3PgC3VPokTJ4U
-         R/cZLeeF3fMQJR6g139T1SL3AVICLVq/fzyP6z/TwDwIg4ikL6i1Uc9GnQeyZlWeZWwK
-         uB4lEIZ86u8okmoljg9QMda1bAOQlb3GaIjFtztuhzQoGSlbQyN4+aYu0HE9slXbiTok
-         KGi00EB2bMoWVJzDgP7wCFfTxF6nUI9iCHD7/TBXj7/dTfI7jMCxg6r057XN9NRikfRy
-         QxzmBenbkR04HEiJZTBqP5la0ek+Yq2ILKc6RoLV+9bdATMAs0C1wku8bvfqsH9Vji9E
-         irPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Njvj1KBr5lRxIqTHY3aarGqfWcahQ2OETUvHizWsQ5k=;
-        b=p+FfQwfyyfsw9qB7m5UzqhbUsomeaxtuKs+X2Ymn498MTFRO3y1at/GJTl+CQvcVCs
-         j0086EgRIiT5XiUbXkPwMkF/kFxjkLZYnzzhovdxE67iN2ukCT/SC0qcKStqWiX7bwsn
-         vMf+q1MAvEE+WQPHPGIELdZPItva2baQHXVrxkpfnZxd2gBPS+VW+zNOw7wcj5xVR5dU
-         g/tQAA1MUuR2ebrE0TaT19sDzgbrCeRyuc4sfU2aZJtJTHDYZQeH80FAl0sO/PUNpfP3
-         4TojzK3o2hJ/laMT3e7Wdgq2ksKi/4gYiziMy7SATTWjTp1Tl4klCfoH4ZgHmLBKK19R
-         +h1g==
-X-Gm-Message-State: AOAM531jg1OhnBfxHssty4vndqE+MOZLPNMqnIVMFe0DzVq0fevBUvxk
-        iotqBNJY9ZDkxbDnRzr6P/C/2WeaTOUbXygz2DU=
-X-Google-Smtp-Source: ABdhPJz8pv6zY9PCDgvV/0Xllqm+GLTCXxOiJSBKtElyCjnfbyNz4Vnz5EHs5wSG4BXiP+I0hWOTfgqB3/rwFbouzMo=
-X-Received: by 2002:a05:6638:3393:b0:32a:93cd:7e48 with SMTP id
- h19-20020a056638339300b0032a93cd7e48mr9236529jav.93.1650954385989; Mon, 25
- Apr 2022 23:26:25 -0700 (PDT)
+        Tue, 26 Apr 2022 02:34:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10C713F4D;
+        Mon, 25 Apr 2022 23:31:14 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q5isIG020438;
+        Tue, 26 Apr 2022 06:30:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=mAX2bsUVbkv/8cRjWiW2Mu16UsMh5blyASeO+thwKYM=;
+ b=I4lKz3nGlK2D7ASmAWdxQN4I4yXsbC9sYUho9Rvcd3nXhnJIJkPDPDLrncfX4FgD0Qvl
+ M0MlkxQBOb7MjB+5GZMvnWsQqj1z1KeG5cSwC/6WkJU2ilmsqOUe/ZQj2ktJYQI1xdoi
+ KeFQx2Dwls+qXZtUd3V8wX25gX5RvgCoOTZ6E15jh5wW6CUi2Mtou6HVl3z8q3qcd5zG
+ x6cxOx1ivlTdC7M7qZN1inSvv6a1AFXuRzHZZ5ksuZO44nILH4oGACwlJflt5CrhaMdm
+ hnazYPbbxqErMbNwGJCbVD4zeeeO8YRazDVPhEp1laNXu3d5vvfUGbDJRxIGGXhwJvQW Rw== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpav30sh0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 06:30:48 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23Q6SQ2X016524;
+        Tue, 26 Apr 2022 06:30:46 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3fm938tx75-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 06:30:45 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23Q6UhN743975144
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 06:30:43 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 215EF11C066;
+        Tue, 26 Apr 2022 06:30:43 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6024311C052;
+        Tue, 26 Apr 2022 06:30:38 +0000 (GMT)
+Received: from [9.43.83.251] (unknown [9.43.83.251])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Apr 2022 06:30:37 +0000 (GMT)
+Message-ID: <0e4b0f8e-6c45-8d14-303f-2168f5004a12@linux.ibm.com>
+Date:   Tue, 26 Apr 2022 12:00:36 +0530
 MIME-Version: 1.0
-References: <20220422172422.4037988-1-maximmi@nvidia.com> <20220422172422.4037988-6-maximmi@nvidia.com>
- <20220426001223.wlnfd2kmmogip5d5@MBP-98dd607d3435.dhcp.thefacebook.com>
-In-Reply-To: <20220426001223.wlnfd2kmmogip5d5@MBP-98dd607d3435.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 25 Apr 2022 23:26:15 -0700
-Message-ID: <CAEf4BzaGjxsf46YPs1FRSp4kj+nkKhw7vLKAGwgrdnAuTW5+9Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 5/6] bpf: Add selftests for raw syncookie helpers
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Maxim Mikityanskiy <maximmi@nvidia.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] selftests/powerpc/pmu: Fix unsigned function returning
+ negative constant
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1650788802-14402-1-git-send-email-baihaowen@meizu.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <1650788802-14402-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wykWsiy-h7xfZzWLpfSChGTzFHIQ50j8
+X-Proofpoint-GUID: wykWsiy-h7xfZzWLpfSChGTzFHIQ50j8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-26_02,2022-04-25_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ clxscore=1011 adultscore=0 impostorscore=0 mlxlogscore=999 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204260040
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:12 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Apr 22, 2022 at 08:24:21PM +0300, Maxim Mikityanskiy wrote:
-> > +void test_xdp_synproxy(void)
-> > +{
-> > +     int server_fd = -1, client_fd = -1, accept_fd = -1;
-> > +     struct nstoken *ns = NULL;
-> > +     FILE *ctrl_file = NULL;
-> > +     char buf[1024];
-> > +     size_t size;
-> > +
-> > +     SYS("ip netns add synproxy");
-> > +
-> > +     SYS("ip link add tmp0 type veth peer name tmp1");
-> > +     SYS("ip link set tmp1 netns synproxy");
-> > +     SYS("ip link set tmp0 up");
-> > +     SYS("ip addr replace 198.18.0.1/24 dev tmp0");
-> > +
-> > +     // When checksum offload is enabled, the XDP program sees wrong
-> > +     // checksums and drops packets.
-> > +     SYS("ethtool -K tmp0 tx off");
->
-> BPF CI image doesn't have ethtool installed.
-> It will take some time to get it updated. Until then we cannot land the patch set.
-> Can you think of a way to run this test without shelling to ethtool?
 
-Good news: we got updated CI image with ethtool, so that shouldn't be
-a problem anymore.
 
-Bad news: this selftest still fails, but in different place:
+On 4/24/22 13:56, Haowen Bai wrote:
+> The function __perf_reg_mask has an unsigned return type, but returns a
+> negative constant to indicate an error condition. So we change unsigned
+> to int.
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  tools/testing/selftests/powerpc/pmu/sampling_tests/misc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/powerpc/pmu/sampling_tests/misc.c b/tools/testing/selftests/powerpc/pmu/sampling_tests/misc.c
+> index fca054bbc094..c01a31d5f4ee 100644
+> --- a/tools/testing/selftests/powerpc/pmu/sampling_tests/misc.c
+> +++ b/tools/testing/selftests/powerpc/pmu/sampling_tests/misc.c
+> @@ -274,7 +274,7 @@ u64 *get_intr_regs(struct event *event, void *sample_buff)
+>  	return intr_regs;
+>  }
+>  
+> -static const unsigned int __perf_reg_mask(const char *register_name)
+> +static const int __perf_reg_mask(const char *register_name)
+>  {
 
-test_synproxy:FAIL:iptables -t raw -I PREROUTING -i tmp1 -p tcp -m tcp
---syn --dport 8080 -j CT --notrack unexpected error: 512 (errno 2)
+Hi Haowen,
+ Thanks for correcting it. Can you also add fix tag with corresponding
+commit id details.
 
-See [0].
+Other than that patch looks good to me.
 
-  [0] https://github.com/kernel-patches/bpf/runs/6169439612?check_suite_focus=true
+Reviewed-by: Kajol Jain<kjain@linux.ibm.com>
+
+Thanks,
+Kajol Jain
+
+
+>  	if (!strcmp(register_name, "R0"))
+>  		return 0;
