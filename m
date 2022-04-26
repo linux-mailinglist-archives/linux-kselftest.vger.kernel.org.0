@@ -2,172 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DB95106A8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 20:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32B15106EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 20:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351129AbiDZSXB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 14:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S245336AbiDZScW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 14:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351123AbiDZSWz (ORCPT
+        with ESMTP id S234295AbiDZScV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:22:55 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3558197F91
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 11:19:46 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c5767f0fso84244967b3.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 11:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=pmGguFEnVQZXUniO0qK+xxYCdVnApJ0Srb7572vJ7Dg=;
-        b=pybsRBOiqiYAlzMXp0jHWN76469Ajig+vJfI3Nb9HvDU4KSuZlTuibVNq4m+bInuf5
-         txLVT4AZgjzSz9vjzUpguxII80F3NWSy7QmgQmXf2tU2YFxEbHMqkXdopTdqrpgFF4B8
-         xwyroLevaF1PIWB3Vuhst+GL3jimQFLupSWznScgRLW+xrtw/thXLT2AQbB3ydjAwJO6
-         nDELK2r3MqdMQJsACCsM+piK8NmEAMW7vVK0IAnVuS5jH49NMH4UfrG7exmMHFJTPGPQ
-         ge1AciuENN8c+CtIKWruy3VmtqoPTv0C9aWq2+n9qX5W2oQ1iQFU6pXkqlWcnxqvWO3F
-         n00A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=pmGguFEnVQZXUniO0qK+xxYCdVnApJ0Srb7572vJ7Dg=;
-        b=pCVZ2He/ayVb52kvKhBTcIe5hx61TMREvm+a/TqdUVaGsT72IA2aVwUuOjZiLR8FmN
-         0QrFbEzbvmyWwcG4tcIV3+pnrvwgOBeI/yDOg7ohZBxo6k+BiTIJyS0KNRsUlO+W3Me7
-         cy/EbfmIFRk4/LC3awQ2hv+I1C3ElOgWzS+uw7vF+k7kaTI8ZtMZLFntwK7kYwjwdSmI
-         xnWl7comza0Vxp1R500ijvmpBLaLaWzkEeCpYMmLExN+1Pod0TCK3pEUSU0WHEeC/4rm
-         daiAf6v2EAtt3k2b+MdvbscOOUlrdHbPyF1eL/EZe9sEUaAp5ayJMDfwPUrO1B093CxC
-         eV9g==
-X-Gm-Message-State: AOAM533f4G4OPZf4oYv0g5Vv5jWd9OPfgWxQWq1MMcKqkbYY+aPz5B8r
-        OycB3dVoYZwBE0JnhVMEaWyu2voMGdjtLQ==
-X-Google-Smtp-Source: ABdhPJxhzH+TWPuyp7emwm0mw9vgu336o9A1/GlamB9krBA8VwSxwwkINWt6C1gmiXACaCSI1EXwnx475/Kcdg==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:b03d:8d64:4a06:2c5f])
- (user=dlatypov job=sendgmr) by 2002:a5b:38d:0:b0:645:7b27:3b8b with SMTP id
- k13-20020a5b038d000000b006457b273b8bmr21950232ybp.146.1650997186276; Tue, 26
- Apr 2022 11:19:46 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 11:19:24 -0700
-In-Reply-To: <20220426181925.3940286-1-dlatypov@google.com>
-Message-Id: <20220426181925.3940286-3-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220426181925.3940286-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH 3/3] kfence: test: use new suite_{init/exit} support, add .kunitconfig
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 14:32:21 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EE649F32;
+        Tue, 26 Apr 2022 11:29:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IQIBJkGBswtpY4l8YcwvGcr0VjDgrX34BCE6QyVPoo9J4X26PDrVTVXYNASZvolbh5IKRLSDfEkrKnO6IzshEPBLXLphqhd0oyVTEjZ6vQIZhqdgJCRKvtHjkaW0C9RnmtO0PALPmCCifosN426DmfoN1ASsHRWMsK2ByOU+DLkn3Be77jo8JxS0bkcb6tSXI0XvuPta9gY1o18guLeVZ/YpLALDh3mWi68DqeQO0PPgodI6tZDkfgrUR+nkkxdrH88N+4IInnaQCtIHrYPZ1Qtn0JWxPvPw7hLgjpFy6Qr5QKjkvRa24QwqaFIbhmxLYlkyepGOqudDH8Pg2kRnUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B4HBUIHsjpG/A/tFWnAuDqgzTMR24x2t/NWxaU5dOns=;
+ b=cA9QhTagJ4gww8AKtOPGCcds22xZboSnNKcs2EVAPxX5RtXO4wd5bbLgI1Bb6Rb1wyHnE5q64FLRhrblyJ+kYIJheCikN7yYp9uMFsrFipvdFxgSBEGpI/JhXSJ5Tl80arTAz9tbSUG/ivAouMkqz2FIBD2ZWVDJj5G9FWQ2POWJgRbEbIkIi5W8uRLtXCYMwmeS3xX2++kUWa6vCsSSJRCsyn6C1Z0vNMM9vp2IEsN5XBN4de28csxJKpLvTZ0E9sirPKaHVoyssMVGW1Bp1HNQqBQxdkyr8nkwq+tkC9q1HtOO5J5L5/EiLMnCbaMO/kbOZ7xWDgyrBVojG1D64g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B4HBUIHsjpG/A/tFWnAuDqgzTMR24x2t/NWxaU5dOns=;
+ b=i9FvzNocaRWYk8R6fXxAvpF77Nqwno+VGie+nsts71c2B5j7NPVjNj9yyoAZo7qfPwmVKb/RitvyEPE5g45gVMdm4DIdw0eDLwnPzpqjMy3TxpX8Oz/fBPmTN7kFrJtQD0p7v2w++Bq4uF+XKfisp6CBnY5wTMYXGizoLnvwX1twO+8nqLRnw9zozR4ngt4hbhwWaqRcFp/9FA7rPEJXK5RtGU+ZNTcr2np50yiyVLZQLu7OMjAQIn4Qcv0d7rpzDOBasDA/XECRtMKhfJbjRShNIm9neaFko/59v9PPcNKc5kVJdkZu1u19tPwYuUen2oAfsJAi8YaPddxt3zo8oA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM4PR12MB5150.namprd12.prod.outlook.com (2603:10b6:5:391::23)
+ by DM6PR12MB4911.namprd12.prod.outlook.com (2603:10b6:5:20e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
+ 2022 18:29:10 +0000
+Received: from DM4PR12MB5150.namprd12.prod.outlook.com
+ ([fe80::a186:70f2:4280:14df]) by DM4PR12MB5150.namprd12.prod.outlook.com
+ ([fe80::a186:70f2:4280:14df%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 18:29:10 +0000
+Message-ID: <92e9eaf6-4d72-3173-3271-88e3b8637c7a@nvidia.com>
+Date:   Tue, 26 Apr 2022 21:28:55 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v6 5/6] bpf: Add selftests for raw syncookie
+ helpers
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
+References: <20220422172422.4037988-1-maximmi@nvidia.com>
+ <20220422172422.4037988-6-maximmi@nvidia.com>
+ <20220426001223.wlnfd2kmmogip5d5@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CAEf4BzaGjxsf46YPs1FRSp4kj+nkKhw7vLKAGwgrdnAuTW5+9Q@mail.gmail.com>
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+In-Reply-To: <CAEf4BzaGjxsf46YPs1FRSp4kj+nkKhw7vLKAGwgrdnAuTW5+9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0053.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:60::17) To DM4PR12MB5150.namprd12.prod.outlook.com
+ (2603:10b6:5:391::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f0ab164b-165e-4dfc-1168-08da27b2a814
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4911:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4911352EFACBCBAB085CA16EDCFB9@DM6PR12MB4911.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DHlTZ7LXyzpS0DUlhSxFVyHlqXGRStNu/bEL/uUyTYut88KDFXGvjFDUqWYOjC9q22FyyIkXi/7O7gd7TCFfmPbIbSVaUHDfLBkI+Cabfs087lSq0eJAZHN6Fw+X1GwKiHRRPzcFD80nd/p5TvTChNFa+kE98qUCWzmnZTnkwM7FUmnuj4c0qI+eo4VgAHUSelKQmN0zSzai+qLl7jOPxLn4wiYiIv5emxslig8acbhVawEaLL1OmF98WxUQJMLPbgoQlrOU6fh8FqmhCQ4BJk0Iqkr9uaBZXVhgMX4T+qIUOOuG4ZBG4naeYlL20mRgFJ6q8bzDrMAKl9BhxBcceK167BftFWt9UK3pvA0d3bD2rX7zEwSYv0F5lw/ReNXYcDnIqwZxESGbLQcuMVqc4PMmcUgNQUzEUoNuzhCuKauNl/JEXC9fAE/F/hWIbqUnqEckgI00Py1v9SsJ1rVlw0NsECB+eVYIB/rHVfRap8Y0nyFctksP34GTOGvFgs8qHNDXgTkz23mzM5BPHWqmgZ8KFWYih3QoW3ckO/+XhApgPgi9SZq3+N/YvjhjzI9qPPeStEK0lidtBWn1dp1fUkt41PqwzkKvRsP4JO5MNzvdpSfvoSWMWm4ImaPZjSm6o6OxVQoMwaUaHwbicaMn5GjiaKCp6mUBLC9M6Xl5VsYa7UTMqrQEG94n6Cm54R2pTAdH2euUxEPLCPsvgYGYl4Zacm4Iw/QECx8+S8JKeU8lZ8jOXzWxMuJRZcC41L0FSNOcIX2s4MBPgoZRzH2gAP2XYaSDbJz917WtnkHXNRYoYvQTGSLK1qab34DQAhLly1pFiTWCrKyFtPRjLbwBIIetUBTsPlAWAYLZ152+cLM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5150.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(508600001)(83380400001)(66476007)(31696002)(6506007)(54906003)(6666004)(8676002)(4326008)(86362001)(6512007)(316002)(66946007)(66556008)(38100700002)(53546011)(110136005)(6486002)(5660300002)(36756003)(966005)(2616005)(7406005)(186003)(7416002)(2906002)(8936002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dkphb3p4NGNIRGZReFUyem5VRnlWRE1IYkdtUlJHVEpNYkhFelBBQXg0MG5m?=
+ =?utf-8?B?M3dwcEtYdzlMemdiejRqZXRBM0FIS1p5TlRIbEZtZVc0YVErcmpEeHZHRFJV?=
+ =?utf-8?B?UTZOZGlXT0lBM2FDa0ljR2JGcEJ2MUJ5MmtCdkR5cHVQQWtxUFlNVno3ajFl?=
+ =?utf-8?B?Vkx5YmlXRUxaT2xqMnMzQjhhMisvdm41TDdyRkFsTmRXTlc2WW5YNnhheGhK?=
+ =?utf-8?B?akEwVDU2M3ZKRkFWSVBBVUpnSmhyZG03VjVrOGZEdStyZytiYTVnM3ltN2J4?=
+ =?utf-8?B?ZWJmYkJhTStLVFNNWVlOWWRGOTZJVDl6TG9xcXNBUXZCVmRod2J3WGdpanFz?=
+ =?utf-8?B?cXlpNVdHUVNua2RXVDFKVHR0b1UrYjhSMU1WMi8vWElKUkdBM3UvcTlWTDly?=
+ =?utf-8?B?MUhVTU5iRlpESWdkNmZXUDdVTmJBK3BUaVZ6ejkxQStxL2dNZzllcStqV0Rr?=
+ =?utf-8?B?OEtLa0pNTWV5NURuRzZnL2ZlSDR6bjgwUTBIVFphMmxtK3BVbnhYZ3VwMlhv?=
+ =?utf-8?B?NkRxVXJsb20rR0N1ZmZuamRHNG1tU011YmVwcEZZSzR2MFoxQktINSs5Y0NX?=
+ =?utf-8?B?TzdzTmNHQ2tqbjRqNEhCQVFtdUN5OXZQdVJheUl4eVdiUU1aZEQ0T3hiMGNZ?=
+ =?utf-8?B?NnZWMGNjL0FJZTlQSXRBWkxNWmtuSkREaTVTT3ZrKzFGNlR0c2FpM3d0eDRm?=
+ =?utf-8?B?UnZ2MUJSdk96MFFQSTgzWUtyRjhNeU1qMWgrNjYwVkFIcU9lVVV1N0NXVm5p?=
+ =?utf-8?B?a3FpTDB2RkRBbWdzL3h2YUM5VFZMRjkvZnpKM3FnRlUvS1pVTmxkcXliWnIy?=
+ =?utf-8?B?QjZXMExkaUN1SUNoQ0tHYVVQbWxvaTMvNHJtckx4a1p5U0dMK1VsRUpRalpn?=
+ =?utf-8?B?VXpUQzNTZDlmUGtZanFiNFlYd3R2VGpnVUVraHg2dVEzVC85b1pRZkFyajJS?=
+ =?utf-8?B?bmlmbHVKa2JxM21XR2wyeE9aUXl5VWZUTUI5VVRTaFFqZjJtTHYvRHhzU3VM?=
+ =?utf-8?B?QmhRY3pZTWh5OGlPK2QzcmN5NTNhZTkyU002WU5RU2czcEJPa0diYjN1Ky8y?=
+ =?utf-8?B?QTdEbGtncmF6TDNSWUhjQXU4L2RRSDBGeldMYUsvTFlKUkZHT3RuMlA5Z2dP?=
+ =?utf-8?B?ZHJwdWswUTJ3TVVKeStxOHpMOWJmZERreG4ySUtTcWMrZzFmMkFIZjJ1VTdN?=
+ =?utf-8?B?VGpHSENHMWZ2Und3b0hUL3RSN21hcEFFVXNQNEkxaURVWWVnQzRWNUhQdEFo?=
+ =?utf-8?B?a25EYzU4K2Q0S3VHTTY5c0ZPUFgrbUpjOU5VQ3IxcUgyQUd5NllPUEExR0RD?=
+ =?utf-8?B?WHpoUmJRUFg1KzM2Ylk3WGJySnBURitnK3MwYU5YR1hyRWZ0RUdpTUFIU2Fr?=
+ =?utf-8?B?RmM1MHpwUDRWS0lxSGI1dGRFOVFDRm9QWkNnWWErSmlPSlZXK0JBQXNtczhw?=
+ =?utf-8?B?TFdxS2VVdlJiUXgxb1kvU2ZSNW5MMUFxS2ttV0xJMmxwMFpLQnUrL3lFMk03?=
+ =?utf-8?B?Z0ZBNlcreHpDdDFSZXV0cjhPWk1ZSmpKdGR5b1kwcWtnZERha1FySVh1UmNW?=
+ =?utf-8?B?N0JKRzl0VzhxSlpnS0VjNXpRVW14eFk0YjlPOTNYcVpaZ2hZOVdKRjBBVHd1?=
+ =?utf-8?B?K0RTVmdEd25PSnl4OWJvKzJCaHp2WDVUN013RUJNd0ZXUWlORnF2OGRtc1A4?=
+ =?utf-8?B?SE01b2hQdXQ0YUJVSHdjOVRnUDFnMWs0SVBCeWJvc3V0cjhTUFhGSUtia3Uz?=
+ =?utf-8?B?L1lGYmUvdHA1OUlOYlRSRzFMREhIMVhmTTlRZVAzSGM4SXhoS3RpMDdXWEN6?=
+ =?utf-8?B?SzRoVndJbnB4RkNqRld0YW9aUVI3bkFlUm5EZWEycndSQTRsUmYrcUxSUnli?=
+ =?utf-8?B?VFRIVDAzdXFPZnhSTjluYjZXdXJvUzZPT3dCeEsxMjlSWEhBdVgwU3BGT3pa?=
+ =?utf-8?B?S0pKa1A3VE9uSUNvbVo4Z2NLMDFYc2FkNFloblFZeDBucVFTVXphemNKdldw?=
+ =?utf-8?B?OUFlc3RERUlUTU91dEhnbmppdWVJVUduNGhERG51bFYySFBoOE1odG4vbWNh?=
+ =?utf-8?B?Y0thUnU4ZmFlUloxYmdmOWhwdkpYZlBlcWhEOVJyZ3B1eCt3M1RWYS9XNzNE?=
+ =?utf-8?B?WDhpUG5ZblZQVXR1Q1g3cTcvWUFUbFNYZWlxVVI3WFBUQXIrd0ZFS2E5MFBy?=
+ =?utf-8?B?WGxRNDVLSHV1WWFXalpEQmRjSVBLOHFvY0JhQlZGWFljbWxuUEpIQ1Q0dnBs?=
+ =?utf-8?B?a3NORlFTNTJPelF1SGRrNjRBQlcrRWQ3M1JpNlNqUzNGSFlDM3Ava0NWSnNF?=
+ =?utf-8?B?cXliYTBEdVZOdjBWcmhyMG9DU1RETVFqRW1lOENHaUxXa3ZCTTJFZz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0ab164b-165e-4dfc-1168-08da27b2a814
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5150.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 18:29:10.7176
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AWpSlFeitTBGgxLdWRHh1x8rppbI55xFOzd5K7fhstmS1JEdD6b7YNHlICHx11oyhTN6Pa/AHVlAkmHtOWwX6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4911
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, the kfence test suite could not run via "normal" means since
-KUnit didn't support per-suite setup/teardown. So it manually called
-internal kunit functions to run itself.
-This has some downsides, like missing TAP headers => can't use kunit.py
-to run or even parse the test results (w/o tweaks).
+On 2022-04-26 09:26, Andrii Nakryiko wrote:
+> On Mon, Apr 25, 2022 at 5:12 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>>
+>> On Fri, Apr 22, 2022 at 08:24:21PM +0300, Maxim Mikityanskiy wrote:
+>>> +void test_xdp_synproxy(void)
+>>> +{
+>>> +     int server_fd = -1, client_fd = -1, accept_fd = -1;
+>>> +     struct nstoken *ns = NULL;
+>>> +     FILE *ctrl_file = NULL;
+>>> +     char buf[1024];
+>>> +     size_t size;
+>>> +
+>>> +     SYS("ip netns add synproxy");
+>>> +
+>>> +     SYS("ip link add tmp0 type veth peer name tmp1");
+>>> +     SYS("ip link set tmp1 netns synproxy");
+>>> +     SYS("ip link set tmp0 up");
+>>> +     SYS("ip addr replace 198.18.0.1/24 dev tmp0");
+>>> +
+>>> +     // When checksum offload is enabled, the XDP program sees wrong
+>>> +     // checksums and drops packets.
+>>> +     SYS("ethtool -K tmp0 tx off");
+>>
+>> BPF CI image doesn't have ethtool installed.
+>> It will take some time to get it updated. Until then we cannot land the patch set.
+>> Can you think of a way to run this test without shelling to ethtool?
+> 
+> Good news: we got updated CI image with ethtool, so that shouldn't be
+> a problem anymore.
+> 
+> Bad news: this selftest still fails, but in different place:
+> 
+> test_synproxy:FAIL:iptables -t raw -I PREROUTING -i tmp1 -p tcp -m tcp
+> --syn --dport 8080 -j CT --notrack unexpected error: 512 (errno 2)
 
-Use the newly added support and convert it over, adding a .kunitconfig
-so it's even easier to run from kunit.py.
+That's simply a matter of missing kernel config options:
 
-People can now run the test via
-$ ./tools/testing/kunit/kunit.py run --kunitconfig=mm/kfence --arch=x86_64
-...
-[11:02:32] Testing complete. Passed: 23, Failed: 0, Crashed: 0, Skipped: 2, Errors: 0
-[11:02:32] Elapsed time: 43.562s total, 0.003s configuring, 9.268s building, 34.281s running
+CONFIG_NETFILTER_SYNPROXY=y
+CONFIG_NETFILTER_XT_TARGET_CT=y
+CONFIG_NETFILTER_XT_MATCH_STATE=y
+CONFIG_IP_NF_FILTER=y
+CONFIG_IP_NF_TARGET_SYNPROXY=y
+CONFIG_IP_NF_RAW=y
 
-Cc: kasan-dev@googlegroups.com
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- mm/kfence/.kunitconfig  |  6 ++++++
- mm/kfence/kfence_test.c | 31 +++++++++++++------------------
- 2 files changed, 19 insertions(+), 18 deletions(-)
- create mode 100644 mm/kfence/.kunitconfig
+Shall I create a pull request on github to add these options to 
+https://github.com/libbpf/libbpf/tree/master/travis-ci/vmtest/configs?
 
-diff --git a/mm/kfence/.kunitconfig b/mm/kfence/.kunitconfig
-new file mode 100644
-index 000000000000..f3d65e939bfa
---- /dev/null
-+++ b/mm/kfence/.kunitconfig
-@@ -0,0 +1,6 @@
-+CONFIG_KUNIT=y
-+CONFIG_KFENCE=y
-+CONFIG_KFENCE_KUNIT_TEST=y
-+
-+# Additional dependencies.
-+CONFIG_FTRACE=y
-diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-index 1b50f70a4c0f..96206a4ee9ab 100644
---- a/mm/kfence/kfence_test.c
-+++ b/mm/kfence/kfence_test.c
-@@ -826,14 +826,6 @@ static void test_exit(struct kunit *test)
- 	test_cache_destroy();
- }
- 
--static struct kunit_suite kfence_test_suite = {
--	.name = "kfence",
--	.test_cases = kfence_test_cases,
--	.init = test_init,
--	.exit = test_exit,
--};
--static struct kunit_suite *kfence_test_suites[] = { &kfence_test_suite, NULL };
--
- static void register_tracepoints(struct tracepoint *tp, void *ignore)
- {
- 	check_trace_callback_type_console(probe_console);
-@@ -847,11 +839,7 @@ static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
- 		tracepoint_probe_unregister(tp, probe_console, NULL);
- }
- 
--/*
-- * We only want to do tracepoints setup and teardown once, therefore we have to
-- * customize the init and exit functions and cannot rely on kunit_test_suite().
-- */
--static int __init kfence_test_init(void)
-+static int kfence_suite_init(struct kunit_suite *suite)
- {
- 	/*
- 	 * Because we want to be able to build the test as a module, we need to
-@@ -859,18 +847,25 @@ static int __init kfence_test_init(void)
- 	 * won't work here.
- 	 */
- 	for_each_kernel_tracepoint(register_tracepoints, NULL);
--	return __kunit_test_suites_init(kfence_test_suites);
-+	return 0;
- }
- 
--static void kfence_test_exit(void)
-+static void kfence_suite_exit(struct kunit_suite *suite)
- {
--	__kunit_test_suites_exit(kfence_test_suites);
- 	for_each_kernel_tracepoint(unregister_tracepoints, NULL);
- 	tracepoint_synchronize_unregister();
- }
- 
--late_initcall_sync(kfence_test_init);
--module_exit(kfence_test_exit);
-+static struct kunit_suite kfence_test_suite = {
-+	.name = "kfence",
-+	.test_cases = kfence_test_cases,
-+	.init = test_init,
-+	.exit = test_exit,
-+	.suite_init = kfence_suite_init,
-+	.suite_exit = kfence_suite_exit,
-+};
-+
-+kunit_test_suites(&kfence_test_suite);
- 
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>");
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+> See [0].
+> 
+>    [0] https://github.com/kernel-patches/bpf/runs/6169439612?check_suite_focus=true
 
