@@ -2,71 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AA150FEFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 15:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E5A50FF3E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 15:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349764AbiDZN2b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 09:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S231239AbiDZNmc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 09:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347820AbiDZN23 (ORCPT
+        with ESMTP id S237810AbiDZNmc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:28:29 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691AE1EAFF;
-        Tue, 26 Apr 2022 06:25:21 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QCMnQD007300;
-        Tue, 26 Apr 2022 13:25:18 GMT
+        Tue, 26 Apr 2022 09:42:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9484466AC9;
+        Tue, 26 Apr 2022 06:39:24 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QCMcdL030966;
+        Tue, 26 Apr 2022 13:39:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=y/FQiD/GcebPEX7SS1oTYUVL3rQ7Svp69NhiEeikjyw=;
- b=rctrgqZRg/GEN0Hit/eRFScwpAHLllDRKljL/mBrCFyfj+Qr5SZFW7G+nLcOI7q9MxmG
- z3i3HqyiGjd52bg5FExtX1XgpOoC+qOlHhLjebdFYHNdrWIaiaKn2lrIXMQ+k6VZrMkp
- mV5VLigou5B/HGisEZQgdbY41A5Iim6mbhzFsa6iKpij6yJWz/awbMw65zKyRao88GZu
- o1CRk+FP+ZWw+we01MDd2gEqAPCtvw5u35nup30+n9nbOa+6HbH8EEh1bKpxSSntbZIq
- g4MOqZ8fjoGLVJirPla2WrkR1eznSfmq6ZytbWD3cYEI22h3P/YVV448/qntXQjTE48f 4w== 
+ bh=WWCfSPCphi/LFKQMJY9tTiN4E5wQ3OZwvYnxswx/3j4=;
+ b=ONivuCt0qnFCbO7BB/k/ze1W2nLKziMgmbAPNsqQhV5WUptwj2OAIQ46FVJJmFM1Inzj
+ HhhuWjEJI8fpKtQElSB0R9w9Lc5xyzJxfv3uF/bdGfVHnLoIY8t6JKuu1+D3iBOXChco
+ qXlJ/yvOjg5rNyQLcEAAylZMuiLU9v1S9ALBjiyC1tXt3el4XuJWDJRC8tFB4h2cDuos
+ DR/bGMTUV5fY9JppLvKho1qfImb9EYtzd+ct4E8M4MV/4su8L50l0whJZCt2ykV/DIAf
+ +iRcY8WwO4/nllXLCCwYqneXzIGKqBPO6EC+kwVwaEOdKNIen/LadSfil8JttZEMi2XL SQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpbyh7jh7-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpfha3arv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 13:25:18 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QDPHuc013555;
-        Tue, 26 Apr 2022 13:25:17 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpbyh7jgf-1
+        Tue, 26 Apr 2022 13:39:21 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QDTeA1027800;
+        Tue, 26 Apr 2022 13:39:20 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpfha3ar8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 13:25:17 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QDD6kS026252;
-        Tue, 26 Apr 2022 13:25:15 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhkfw3-1
+        Tue, 26 Apr 2022 13:39:20 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QDclIL007035;
+        Tue, 26 Apr 2022 13:39:18 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj4gry-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 13:25:15 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QDPC7n54067668
+        Tue, 26 Apr 2022 13:39:18 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QDdFvx29295042
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 13:25:12 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36F89A405F;
-        Tue, 26 Apr 2022 13:25:12 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 876F7A405C;
-        Tue, 26 Apr 2022 13:25:11 +0000 (GMT)
-Received: from [9.171.92.107] (unknown [9.171.92.107])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 13:25:11 +0000 (GMT)
-Message-ID: <1c2caf30-da84-b4ce-d2ac-4edb5ef60a79@linux.ibm.com>
-Date:   Tue, 26 Apr 2022 15:25:11 +0200
+        Tue, 26 Apr 2022 13:39:15 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 65E404C044;
+        Tue, 26 Apr 2022 13:39:15 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B22ED4C040;
+        Tue, 26 Apr 2022 13:39:14 +0000 (GMT)
+Received: from [9.145.2.160] (unknown [9.145.2.160])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Apr 2022 13:39:14 +0000 (GMT)
+Message-ID: <6aa94072-8bbe-38ae-e9ef-d666f86de217@linux.ibm.com>
+Date:   Tue, 26 Apr 2022 15:39:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: [PATCH v2 1/2] KVM: s390: Don't indicate suppression on dirtying,
  failing memop
 Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>,
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Claudio Imbrenda <imbrenda@linux.ibm.com>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -80,21 +80,22 @@ Cc:     David Hildenbrand <david@redhat.com>,
 References: <20220425100147.1755340-1-scgl@linux.ibm.com>
  <20220425100147.1755340-2-scgl@linux.ibm.com>
  <2be2e47d-c1f5-18ac-264d-a1bde3b03c24@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <2be2e47d-c1f5-18ac-264d-a1bde3b03c24@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <1c2caf30-da84-b4ce-d2ac-4edb5ef60a79@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <1c2caf30-da84-b4ce-d2ac-4edb5ef60a79@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YLjkWhMDasuEcPrrkpUrpC3yWRQPeUfi
-X-Proofpoint-GUID: HNOOXhk0qSQludk9sB3t2M4z0SqA8SZJ
+X-Proofpoint-GUID: QLlBH22e3qvygv1quJbRlCLJuEWoXyei
+X-Proofpoint-ORIG-GUID: XTwbaNcqtfYWxCFkgaqhUt26dIV3mBX5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-26_02,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204260083
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204260085
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -104,116 +105,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/26/22 09:18, Janosch Frank wrote:
-> On 4/25/22 12:01, Janis Schoetterl-Glausch wrote:
->> If user space uses a memop to emulate an instruction and that
->> memop fails, the execution of the instruction ends.
->> Instruction execution can end in different ways, one of which is
->> suppression, which requires that the instruction execute like a no-op.
-> 
-> 
-> 
->> A writing memop that spans multiple pages and fails due to key
->> protection can modified guest memory, as a result, the likely
->> correct ending is termination. Therefore do not indicate a
->> suppressing instruction ending in this case.
-> 
-> Check grammar.
-> 
->>
->> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
->> ---
->>   arch/s390/kvm/gaccess.c | 47 ++++++++++++++++++++++++-----------------
->>   1 file changed, 28 insertions(+), 19 deletions(-)
->>
->> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
->> index d53a183c2005..3b1fbef82288 100644
->> --- a/arch/s390/kvm/gaccess.c
->> +++ b/arch/s390/kvm/gaccess.c
->> @@ -491,8 +491,8 @@ enum prot_type {
->>       PROT_TYPE_IEP  = 4,
->>   };
->>   -static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->> -             u8 ar, enum gacc_mode mode, enum prot_type prot)
->> +static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
->> +                enum gacc_mode mode, enum prot_type prot, bool suppress)
->>   {
->>       struct kvm_s390_pgm_info *pgm = &vcpu->arch.pgm;
->>       struct trans_exc_code_bits *tec;
->> @@ -503,22 +503,24 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->>         switch (code) {
->>       case PGM_PROTECTION:
->> -        switch (prot) {
->> -        case PROT_TYPE_IEP:
->> -            tec->b61 = 1;
->> -            fallthrough;
->> -        case PROT_TYPE_LA:
->> -            tec->b56 = 1;
->> -            break;
->> -        case PROT_TYPE_KEYC:
->> -            tec->b60 = 1;
->> -            break;
->> -        case PROT_TYPE_ALC:
->> -            tec->b60 = 1;
->> -            fallthrough;
->> -        case PROT_TYPE_DAT:
->> -            tec->b61 = 1;
->> -            break;
->> +        if (suppress) {
->> +            switch (prot) {
->> +            case PROT_TYPE_IEP:
->> +                tec->b61 = 1;
->> +                fallthrough;
->> +            case PROT_TYPE_LA:
->> +                tec->b56 = 1;
->> +                break;
->> +            case PROT_TYPE_KEYC:
->> +                tec->b60 = 1;
->> +                break;
->> +            case PROT_TYPE_ALC:
->> +                tec->b60 = 1;
->> +                fallthrough;
->> +            case PROT_TYPE_DAT:
->> +                tec->b61 = 1;
->> +                break;
->> +            }
->>           }
-> 
-> How about switching this around and masking those bits on termination.
-
-I did initially have if (!terminate) { ... }, but it seemed more straight forward
-to me without the negation. Or are you suggesting explicitly resetting the
-bits to zero when terminating?
-> 
->>           fallthrough;
->>       case PGM_ASCE_TYPE:
->> @@ -552,6 +554,12 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->>       return code;
->>   }
->>   +static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
->> +             enum gacc_mode mode, enum prot_type prot)
->> +{
->> +    return trans_exc_ending(vcpu, code, gva, ar, mode, prot, true);
->> +}
->> +
->>   static int get_vcpu_asce(struct kvm_vcpu *vcpu, union asce *asce,
->>                unsigned long ga, u8 ar, enum gacc_mode mode)
->>   {
->> @@ -1110,7 +1118,8 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->>           ga = kvm_s390_logical_to_effective(vcpu, ga + fragment_len);
->>       }
->>       if (rc > 0)
->> -        rc = trans_exc(vcpu, rc, ga, ar, mode, prot);
->> +        rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot,
->> +                      (mode != GACC_STORE) || (idx == 0));
-> 
-> Add a boolean variable named terminating, calculate the value before passing the boolean on.
-
-Ok. I'll scope it to the body of the if.
-> 
->>   out_unlock:
->>       if (need_ipte_lock)
->>           ipte_unlock(vcpu);
-> 
-> 
-
+T24gNC8yNi8yMiAxNToyNSwgSmFuaXMgU2Nob2V0dGVybC1HbGF1c2NoIHdyb3RlOg0KPiBP
+biA0LzI2LzIyIDA5OjE4LCBKYW5vc2NoIEZyYW5rIHdyb3RlOg0KPj4gT24gNC8yNS8yMiAx
+MjowMSwgSmFuaXMgU2Nob2V0dGVybC1HbGF1c2NoIHdyb3RlOg0KPj4+IElmIHVzZXIgc3Bh
+Y2UgdXNlcyBhIG1lbW9wIHRvIGVtdWxhdGUgYW4gaW5zdHJ1Y3Rpb24gYW5kIHRoYXQNCj4+
+PiBtZW1vcCBmYWlscywgdGhlIGV4ZWN1dGlvbiBvZiB0aGUgaW5zdHJ1Y3Rpb24gZW5kcy4N
+Cj4+PiBJbnN0cnVjdGlvbiBleGVjdXRpb24gY2FuIGVuZCBpbiBkaWZmZXJlbnQgd2F5cywg
+b25lIG9mIHdoaWNoIGlzDQo+Pj4gc3VwcHJlc3Npb24sIHdoaWNoIHJlcXVpcmVzIHRoYXQg
+dGhlIGluc3RydWN0aW9uIGV4ZWN1dGUgbGlrZSBhIG5vLW9wLg0KPj4NCj4+DQo+Pg0KPj4+
+IEEgd3JpdGluZyBtZW1vcCB0aGF0IHNwYW5zIG11bHRpcGxlIHBhZ2VzIGFuZCBmYWlscyBk
+dWUgdG8ga2V5DQo+Pj4gcHJvdGVjdGlvbiBjYW4gbW9kaWZpZWQgZ3Vlc3QgbWVtb3J5LCBh
+cyBhIHJlc3VsdCwgdGhlIGxpa2VseQ0KPj4+IGNvcnJlY3QgZW5kaW5nIGlzIHRlcm1pbmF0
+aW9uLiBUaGVyZWZvcmUgZG8gbm90IGluZGljYXRlIGENCj4+PiBzdXBwcmVzc2luZyBpbnN0
+cnVjdGlvbiBlbmRpbmcgaW4gdGhpcyBjYXNlLg0KPj4NCj4+IENoZWNrIGdyYW1tYXIuDQo+
+Pg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogSmFuaXMgU2Nob2V0dGVybC1HbGF1c2NoIDxz
+Y2dsQGxpbnV4LmlibS5jb20+DQo+Pj4gLS0tDQo+Pj4gIMKgIGFyY2gvczM5MC9rdm0vZ2Fj
+Y2Vzcy5jIHwgNDcgKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0N
+Cj4+PiAgwqAgMSBmaWxlIGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKyksIDE5IGRlbGV0aW9u
+cygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL2FyY2gvczM5MC9rdm0vZ2FjY2Vzcy5jIGIv
+YXJjaC9zMzkwL2t2bS9nYWNjZXNzLmMNCj4+PiBpbmRleCBkNTNhMTgzYzIwMDUuLjNiMWZi
+ZWY4MjI4OCAxMDA2NDQNCj4+PiAtLS0gYS9hcmNoL3MzOTAva3ZtL2dhY2Nlc3MuYw0KPj4+
+ICsrKyBiL2FyY2gvczM5MC9rdm0vZ2FjY2Vzcy5jDQo+Pj4gQEAgLTQ5MSw4ICs0OTEsOCBA
+QCBlbnVtIHByb3RfdHlwZSB7DQo+Pj4gIMKgwqDCoMKgwqAgUFJPVF9UWVBFX0lFUMKgID0g
+NCwNCj4+PiAgwqAgfTsNCj4+PiAgwqAgLXN0YXRpYyBpbnQgdHJhbnNfZXhjKHN0cnVjdCBr
+dm1fdmNwdSAqdmNwdSwgaW50IGNvZGUsIHVuc2lnbmVkIGxvbmcgZ3ZhLA0KPj4+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgdTggYXIsIGVudW0gZ2FjY19tb2RlIG1vZGUsIGVudW0g
+cHJvdF90eXBlIHByb3QpDQo+Pj4gK3N0YXRpYyBpbnQgdHJhbnNfZXhjX2VuZGluZyhzdHJ1
+Y3Qga3ZtX3ZjcHUgKnZjcHUsIGludCBjb2RlLCB1bnNpZ25lZCBsb25nIGd2YSwgdTggYXIs
+DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbnVtIGdhY2NfbW9kZSBt
+b2RlLCBlbnVtIHByb3RfdHlwZSBwcm90LCBib29sIHN1cHByZXNzKQ0KPj4+ICDCoCB7DQo+
+Pj4gIMKgwqDCoMKgwqAgc3RydWN0IGt2bV9zMzkwX3BnbV9pbmZvICpwZ20gPSAmdmNwdS0+
+YXJjaC5wZ207DQo+Pj4gIMKgwqDCoMKgwqAgc3RydWN0IHRyYW5zX2V4Y19jb2RlX2JpdHMg
+KnRlYzsNCj4+PiBAQCAtNTAzLDIyICs1MDMsMjQgQEAgc3RhdGljIGludCB0cmFuc19leGMo
+c3RydWN0IGt2bV92Y3B1ICp2Y3B1LCBpbnQgY29kZSwgdW5zaWduZWQgbG9uZyBndmEsDQo+
+Pj4gIMKgIMKgwqDCoMKgwqAgc3dpdGNoIChjb2RlKSB7DQo+Pj4gIMKgwqDCoMKgwqAgY2Fz
+ZSBQR01fUFJPVEVDVElPTjoNCj4+PiAtwqDCoMKgwqDCoMKgwqAgc3dpdGNoIChwcm90KSB7
+DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0lFUDoNCj4+PiAtwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCB0ZWMtPmI2MSA9IDE7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgZmFsbHRocm91Z2g7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBF
+X0xBOg0KPj4+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRlYy0+YjU2ID0gMTsNCj4+PiAt
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+PiAtwqDCoMKgwqDCoMKgwqAgY2Fz
+ZSBQUk9UX1RZUEVfS0VZQzoNCj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ZWMtPmI2
+MCA9IDE7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4gLcKgwqDC
+oMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0FMQzoNCj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCB0ZWMtPmI2MCA9IDE7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZmFsbHRo
+cm91Z2g7DQo+Pj4gLcKgwqDCoMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0RBVDoNCj4+PiAt
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0ZWMtPmI2MSA9IDE7DQo+Pj4gLcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgYnJlYWs7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGlmIChzdXBwcmVzcykg
+ew0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN3aXRjaCAocHJvdCkgew0KPj4+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0lFUDoNCj4+PiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRlYy0+YjYxID0gMTsNCj4+PiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZhbGx0aHJvdWdoOw0KPj4+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0xBOg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgdGVjLT5iNTYgPSAxOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgYnJlYWs7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSBQUk9U
+X1RZUEVfS0VZQzoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRlYy0+
+YjYwID0gMTsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0K
+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0FMQzoNCj4+PiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRlYy0+YjYwID0gMTsNCj4+PiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZhbGx0aHJvdWdoOw0KPj4+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGNhc2UgUFJPVF9UWVBFX0RBVDoNCj4+PiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIHRlYy0+YjYxID0gMTsNCj4+PiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0N
+Cj4+PiAgwqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4+DQo+PiBIb3cgYWJvdXQgc3dpdGNoaW5n
+IHRoaXMgYXJvdW5kIGFuZCBtYXNraW5nIHRob3NlIGJpdHMgb24gdGVybWluYXRpb24uDQo+
+IA0KPiBJIGRpZCBpbml0aWFsbHkgaGF2ZSBpZiAoIXRlcm1pbmF0ZSkgeyAuLi4gfSwgYnV0
+IGl0IHNlZW1lZCBtb3JlIHN0cmFpZ2h0IGZvcndhcmQNCj4gdG8gbWUgd2l0aG91dCB0aGUg
+bmVnYXRpb24uIE9yIGFyZSB5b3Ugc3VnZ2VzdGluZyBleHBsaWNpdGx5IHJlc2V0dGluZyB0
+aGUNCj4gYml0cyB0byB6ZXJvIHdoZW4gdGVybWluYXRpbmc/DQoNClllcw0KDQo+Pg0KPj4+
+ICDCoMKgwqDCoMKgwqDCoMKgwqAgZmFsbHRocm91Z2g7DQo+Pj4gIMKgwqDCoMKgwqAgY2Fz
+ZSBQR01fQVNDRV9UWVBFOg0KPj4+IEBAIC01NTIsNiArNTU0LDEyIEBAIHN0YXRpYyBpbnQg
+dHJhbnNfZXhjKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSwgaW50IGNvZGUsIHVuc2lnbmVkIGxv
+bmcgZ3ZhLA0KPj4+ICDCoMKgwqDCoMKgIHJldHVybiBjb2RlOw0KPj4+ICDCoCB9DQo+Pj4g
+IMKgICtzdGF0aWMgaW50IHRyYW5zX2V4YyhzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUsIGludCBj
+b2RlLCB1bnNpZ25lZCBsb25nIGd2YSwgdTggYXIsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBlbnVtIGdhY2NfbW9kZSBtb2RlLCBlbnVtIHByb3RfdHlwZSBwcm90KQ0KPj4+
+ICt7DQo+Pj4gK8KgwqDCoCByZXR1cm4gdHJhbnNfZXhjX2VuZGluZyh2Y3B1LCBjb2RlLCBn
+dmEsIGFyLCBtb2RlLCBwcm90LCB0cnVlKTsNCj4+PiArfQ0KPj4+ICsNCj4+PiAgwqAgc3Rh
+dGljIGludCBnZXRfdmNwdV9hc2NlKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSwgdW5pb24gYXNj
+ZSAqYXNjZSwNCj4+PiAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1bnNpZ25lZCBs
+b25nIGdhLCB1OCBhciwgZW51bSBnYWNjX21vZGUgbW9kZSkNCj4+PiAgwqAgew0KPj4+IEBA
+IC0xMTEwLDcgKzExMTgsOCBAQCBpbnQgYWNjZXNzX2d1ZXN0X3dpdGhfa2V5KHN0cnVjdCBr
+dm1fdmNwdSAqdmNwdSwgdW5zaWduZWQgbG9uZyBnYSwgdTggYXIsDQo+Pj4gIMKgwqDCoMKg
+wqDCoMKgwqDCoCBnYSA9IGt2bV9zMzkwX2xvZ2ljYWxfdG9fZWZmZWN0aXZlKHZjcHUsIGdh
+ICsgZnJhZ21lbnRfbGVuKTsNCj4+PiAgwqDCoMKgwqDCoCB9DQo+Pj4gIMKgwqDCoMKgwqAg
+aWYgKHJjID4gMCkNCj4+PiAtwqDCoMKgwqDCoMKgwqAgcmMgPSB0cmFuc19leGModmNwdSwg
+cmMsIGdhLCBhciwgbW9kZSwgcHJvdCk7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIHJjID0gdHJh
+bnNfZXhjX2VuZGluZyh2Y3B1LCByYywgZ2EsIGFyLCBtb2RlLCBwcm90LA0KPj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKG1vZGUgIT0gR0FDQ19T
+VE9SRSkgfHwgKGlkeCA9PSAwKSk7DQo+Pg0KPj4gQWRkIGEgYm9vbGVhbiB2YXJpYWJsZSBu
+YW1lZCB0ZXJtaW5hdGluZywgY2FsY3VsYXRlIHRoZSB2YWx1ZSBiZWZvcmUgcGFzc2luZyB0
+aGUgYm9vbGVhbiBvbi4NCj4gDQo+IE9rLiBJJ2xsIHNjb3BlIGl0IHRvIHRoZSBib2R5IG9m
+IHRoZSBpZi4NCj4+DQo+Pj4gIMKgIG91dF91bmxvY2s6DQo+Pj4gIMKgwqDCoMKgwqAgaWYg
+KG5lZWRfaXB0ZV9sb2NrKQ0KPj4+ICDCoMKgwqDCoMKgwqDCoMKgwqAgaXB0ZV91bmxvY2so
+dmNwdSk7DQo+Pg0KPj4NCj4gDQoNCg==
