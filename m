@@ -2,105 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3D250EF7F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 06:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AD650EF96
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 06:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiDZEFD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 00:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S242812AbiDZEMR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 00:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238826AbiDZEFC (ORCPT
+        with ESMTP id S243903AbiDZEMH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 00:05:02 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C9912A8B;
-        Mon, 25 Apr 2022 21:01:54 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KnSn01gVSzGpJf;
-        Tue, 26 Apr 2022 11:59:16 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 12:01:50 +0800
-Message-ID: <b8c5ba79-c6e5-10bd-1963-5a0a94b9fbbc@huawei.com>
-Date:   Tue, 26 Apr 2022 12:01:50 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH bpf-next v2 4/6] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>, <kernel-team@cloudflare.com>
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
- <20220414162220.1985095-5-xukuohai@huawei.com>
- <87levxfj32.fsf@cloudflare.com>
- <13cd161b-43a2-ce66-6a27-6662fc36e063@huawei.com>
- <87pml56xsr.fsf@cloudflare.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <87pml56xsr.fsf@cloudflare.com>
+        Tue, 26 Apr 2022 00:12:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B0F17E13;
+        Mon, 25 Apr 2022 21:09:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F020FB81C0E;
+        Tue, 26 Apr 2022 04:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026BCC385A4;
+        Tue, 26 Apr 2022 04:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650946138;
+        bh=UF2W6wDrcxlNMtRIim34cJfK+miQaqNxs0sRQs93kdc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=oZK/Bkylyrvwtb+97S1FgyI27WMH/0/jf1Ljzxr1W0Esd1vpY82/bUpt3K8vAW0IW
+         +nU/QMWo9MVCzGZZrv4D/s6okRjDpRl3yeNyeHonZKxKkrrDn00D9PgaWnC2KDk7mt
+         WgongvnOf6/tnitnawdiKFslUj8LG4+sg8fqrs5Rqn1/y6CAok5SbNaEniLUvzhrnl
+         RYyBuqdooZ4fb1v8QvlAhVQzTo00S54sGt4afhR3iUgwrpNjLKcTBqYNJrxMB9t77P
+         C0/iW8yA+HcI5CLutsdjR6tVJXqXu/GpmgmqIPuHIA8pmSaS9f/j7Vp02fxU36+84I
+         pcgxnlKSgaWfw==
+Message-ID: <16d4ad77b5f306e14c089d56c60b160d1d23be52.camel@kernel.org>
+Subject: Re: [PATCH V4 00/31] x86/sgx and selftests/sgx: Support SGX2
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>
+Cc:     "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 26 Apr 2022 07:10:26 +0300
+In-Reply-To: <d8aceb1e-c6ef-1ca0-f11e-e7e83e634854@intel.com>
+References: <cover.1649878359.git.reinette.chatre@intel.com>
+         <2f4338f37943c2b067db16ae65c9af665d3b51d9.camel@kernel.org>
+         <9fbf26c8-5808-20c5-8653-d4f36bf398a4@intel.com>
+         <42a52a6018e8dadb4c3eebefaae4dab31c0d5721.camel@kernel.org>
+         <DM8PR11MB5591BBA189BC4EA5CFE2C7EAF6EF9@DM8PR11MB5591.namprd11.prod.outlook.com>
+         <54f053d8bb6b72725b2351fc2016d20b65cebbf1.camel@kernel.org>
+         <DM8PR11MB559180D1BA05B0E77D354467F6F49@DM8PR11MB5591.namprd11.prod.outlook.com>
+         <a94e4098-f5c1-f9ff-fab0-c2e5210cf188@intel.com>
+         <YmJyYwp9UHRLWaTw@kernel.org>
+         <DM8PR11MB5591CACC6757FE71B3E19FC3F6F89@DM8PR11MB5591.namprd11.prod.outlook.com>
+         <d8aceb1e-c6ef-1ca0-f11e-e7e83e634854@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/25/2022 10:26 PM, Jakub Sitnicki wrote:
-> On Sun, Apr 24, 2022 at 01:05 PM +08, Xu Kuohai wrote:
->> Thanks for your testing and suggestion! I added bpf2bpf poking to this
->> series and rebased it to [2] a few days ago, so there are some conflicts
->> with the bpf-next branch. I'll rebase it to bpf-next and send v3.
->>
->> [2] https://lore.kernel.org/bpf/20220416042940.656344-1-kuifeng@fb.com/
-> 
-> Looking forward to it.
-> 
-> I think it would be okay to post v3 saying that it depends on the
-> "Attach a cookie to a tracing program" series and won't apply cleanly to
-> bpf-next with out.
-> 
-> It would give us more time to review.
-> .
+On Mon, 2022-04-25 at 16:56 -0700, Reinette Chatre wrote:
+> > [PATCH V4 16/31] x86/sgx: Support adding of pages to an initialized enc=
+lave
+> > [PATCH V4 15/31] x86/sgx: Support restricting of enclave page permissio=
+ns
+> > [PATCH V4 18/31] x86/sgx: Support modifying SGX page type
+> > [PATCH V4 19/31] x86/sgx: Support complete page removal
 
-Ah, already sent v3 based on bpf-next :(, will send an update after [2]
-is merged.
+You can add my tested-by to all of the four now [*].
+
+[*] https://github.com/enarx/enarx/pull/1776
+
+BR, Jarkko
