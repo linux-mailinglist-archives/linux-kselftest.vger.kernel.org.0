@@ -2,156 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E8350F255
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 09:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3620950F2A8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Apr 2022 09:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237426AbiDZH2g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 03:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S238496AbiDZHjg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 03:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbiDZH2e (ORCPT
+        with ESMTP id S1344221AbiDZHjO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:28:34 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEF41209C;
-        Tue, 26 Apr 2022 00:25:27 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q5xrA7007366;
-        Tue, 26 Apr 2022 07:25:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XmQl9LAmbm1c8pOJVYVX6hnXhI3LhfRUVeI1Xchrqgc=;
- b=INHcratW77FCNB+Iz+PMGV5RgSUAgjdvhvX95NW7u40oRKvJ8nSyoz876CcC5XBtP35c
- +sNZH3pY/bu/dK+7gddRe2SiJQ6vsjzYO3YG3CS7R/+b1BY/4EkpfznXv3/byb0+6hvY
- kqbrrjRJik86Yesbxx74d1zIIPEx1gQuGGOkKQiY8qA/0aGIT4ehoI4yaG5mW5XP0ljM
- QSu+zOpTIkpAUXbhYESKRLmudBbYfu3OFG+dcjv4ZqtUL1zfm2LEKiCbioecW0nZV6qK
- Xo82UJRkViD0Ke1ZZ34ADFbDQc9TZj5rsWhJ3VjkXgtR35j5irPUP8kCjWKUF4hwuGHr 3Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpb351g4p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 07:25:24 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23Q7KCLH015567;
-        Tue, 26 Apr 2022 07:25:23 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpb351g45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 07:25:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23Q78ZA7032705;
-        Tue, 26 Apr 2022 07:25:21 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm938utw8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 07:25:21 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23Q7CHxx25428278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 07:12:17 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B430DAE051;
-        Tue, 26 Apr 2022 07:25:18 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24B72AE04D;
-        Tue, 26 Apr 2022 07:25:18 +0000 (GMT)
-Received: from [9.145.2.160] (unknown [9.145.2.160])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 07:25:18 +0000 (GMT)
-Message-ID: <40038a9a-5647-c355-bad2-297b0a2baf4f@linux.ibm.com>
-Date:   Tue, 26 Apr 2022 09:25:17 +0200
+        Tue, 26 Apr 2022 03:39:14 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C1CB1D1;
+        Tue, 26 Apr 2022 00:36:06 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KnYTw3jHmzCsQV;
+        Tue, 26 Apr 2022 15:31:32 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 15:36:02 +0800
+Message-ID: <79fe5bb5-c55c-7ddc-640f-50bf8bea7f0b@huawei.com>
+Date:   Tue, 26 Apr 2022 15:36:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v3 2/7] ftrace: Fix deadloop caused by direct
+ call in ftrace selftest
 Content-Language: en-US
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20220425100147.1755340-1-scgl@linux.ibm.com>
- <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
- <13d0d706-abc4-3e4d-88c3-6447636fd1fd@linux.ibm.com>
- <1ccb1333-2233-8832-4102-a6c082b29108@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v2 0/2] Dirtying, failing memop: don't indicate
- suppression
-In-Reply-To: <1ccb1333-2233-8832-4102-a6c082b29108@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-3-xukuohai@huawei.com>
+ <20220425110512.538ce0bf@gandalf.local.home>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <20220425110512.538ce0bf@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CxWQHKIXYWFPA3IM7DfOIk0BHZXLyyxe
-X-Proofpoint-ORIG-GUID: IqAI3TjxOm6QkxCIlzkR9-WGMzR_N-46
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_02,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 adultscore=0 mlxlogscore=569 bulkscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204260046
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/26/22 08:19, Christian Borntraeger wrote:
+On 4/25/2022 11:05 PM, Steven Rostedt wrote:
+> On Sun, 24 Apr 2022 11:40:23 -0400
+> Xu Kuohai <xukuohai@huawei.com> wrote:
+> 
+>> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+>> index abcadbe933bb..d2eff2b1d743 100644
+>> --- a/kernel/trace/trace_selftest.c
+>> +++ b/kernel/trace/trace_selftest.c
+>> @@ -785,8 +785,24 @@ static struct fgraph_ops fgraph_ops __initdata  = {
+>>  };
+>>  
+>>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>> +#ifdef CONFIG_ARM64
+> 
+> Please find a way to add this in arm specific code. Do not add architecture
+> defines in generic code.
+> 
+> You could add:
+> 
+> #ifndef ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
+> noinline __noclone static void trace_direct_tramp(void) { }
+> #endif
+> 
+> here, and in arch/arm64/include/ftrace.h
+> 
+> #define ARCH_HAVE_FTRACE_DIRECT_TEST_FUNC
+> 
+> and define your test function in the arm64 specific code.
+> 
+> -- Steve
 > 
 > 
-> Am 25.04.22 um 19:29 schrieb Janis Schoetterl-Glausch:
->> On 4/25/22 18:30, Christian Borntraeger wrote:
->>> Am 25.04.22 um 12:01 schrieb Janis Schoetterl-Glausch:
->>>> If a memop fails due to key checked protection, after already having
->>>> written to the guest, don't indicate suppression to the guest, as that
->>>> would imply that memory wasn't modified.
->>>>
->>>> This could be considered a fix to the code introducing storage key
->>>> support, however this is a bug in KVM only if we emulate an
->>>> instructions writing to an operand spanning multiple pages, which I
->>>> don't believe we do.
->>>>
->>>
->>> Thanks applied. I think it makes sense for 5.18 nevertheless.
->>
->> Janosch had some concerns because the protection code being 000 implies
->> that the effective address in the TEID is unpredictable.
->> Let's see if he chimes in.
-> 
-> z/VM does exactly the same on key protection crossing a page boundary. The
-> architecture was written in a way to allow all zeros exactly for this case.
-> (hypervisor emulation of key protection crossing pages).
-> This is even true for ESOP-2. See Figure 3-5 or figure 3-8 (the first line)
-> which allows to NOT have a valid address in the TEID for key controlled
-> protection.
-> 
-> The only question is, do we need to change the suppression parameter in
-> access_guest_with_key
-> 
->    (mode != GACC_STORE) || (idx == 0)
-> 
-> to also check for prot != PROT_TYPE_KEYC
-> ? I think we do not need this as we have checked other reasons before.
 
-To me this measure looks like a last resort option and the POP doesn't 
-state a 100% what is to be done. Some instructions can mandate 
-suppression instead of termination according to the architects.
+will move this to arch/arm64/ in v4, thanks.
 
-My intuition tells me that if we are in a situation where this would 
-happen then we would be much better off just doing it by hand (i.e. in 
-the instruction emulation code) and not letting this function decide.
+> 
+> 
+>> +extern void trace_direct_tramp(void);
+>> +
+>> +asm (
+>> +"	.pushsection	.text, \"ax\", @progbits\n"
+>> +"	.type		trace_direct_tramp, %function\n"
+>> +"	.global		trace_direct_tramp\n"
+>> +"trace_direct_tramp:"
+>> +"	mov	x10, x30\n"
+>> +"	mov	x30, x9\n"
+>> +"	ret	x10\n"
+>> +"	.size		trace_direct_tramp, .-trace_direct_tramp\n"
+>> +"	.popsection\n"
+>> +);
+>> +#else
+>>  noinline __noclone static void trace_direct_tramp(void) { }
+>>  #endif
+>> +#endif
+>>  
+>>  /*
+>>   * Pretty much the same than for the function tracer from which the selftest
+> 
+> .
 
-So I'm not entirely sure if we're replacing something that is not 
-correct with something that also won't be correct for all cases.
-
-But to summarize this: I'm not entirely sure even after reading the POP 
-for more than an hour and consulting an architect
