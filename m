@@ -2,98 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECCD510F2B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 05:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFC6511105
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 08:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357365AbiD0DKY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 23:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S1358047AbiD0GVT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Apr 2022 02:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357361AbiD0DJ6 (ORCPT
+        with ESMTP id S1358040AbiD0GVS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:09:58 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD7C3585A
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 20:06:48 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id g6so778537ejw.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 20:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5pUdY4DuhndvUjRCdZpuhyNHEEZPCX6wjZH7Y0BBjOs=;
-        b=MMzKYlNTUYW6BDIRK8K13taSCkVye8khVNBJGeE9UsfetHvXRw2ROzem+96mVFCZN7
-         b5LWUcoeCd2yM+yq0dJb7zMfvK/wlsIYSeqnQiW1y15LcVd63/goFL/WOf2OEG5cB+pm
-         86JnyL1PFwTSMhYQb6rr1aM5oR3HtVSNMcCGzwYjMCZco3bBKcdHaF6eQF0tY8s2FUO9
-         epSGkQoT9TnG4+Gf941Qyc30HgUsrhaIc57yj+57cadLLUTIt0lcNubLzaXPzL0/cd9Y
-         bISfSkPCVFFgnYCyTqZgOrgYJUFPkSet1WHiONHpCa8oMzeuV3ey1PWpoU7eLvjkrg6d
-         A1Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5pUdY4DuhndvUjRCdZpuhyNHEEZPCX6wjZH7Y0BBjOs=;
-        b=X73qRudEZOTTTdOWsbFNwJtcEjTBi+QBpuZ79CnrSx7OtNPHgQAGhMWZ9hFJx2BAAL
-         gaXD10G79ZkWAiUUjrOxphNOX5UqqK+Yi9W4RoEDzLwGADriOlJV/4ku21GygZz9BQrr
-         tFqLjjaSt+7sIt7D05Er0/VXG2G6w4fYV26ARaIgsl708/gQ7X5tgrTvQEf9p8t5ow7H
-         6B1Hyl8y2gnsoa7epgLI6oDifmB393NKXsEFrQJrl3wQXrSvwxR3TsZw3dtf63pD5Qqf
-         rQDIcPAPO2WjVw70TSk5DBrUVkHNwGwddGt3iPvm/9i8hp/dIrsMwEg7QeLxUxzeNau7
-         rt2g==
-X-Gm-Message-State: AOAM530D9s59V5rHS1E9Zgd/Qtn55C0vBb60xPybVxpK6UdUlrYS3Zie
-        Au+qbLxln1icxtyT0yx3RqOgdlJos1yH0m42ZU1oMg==
-X-Google-Smtp-Source: ABdhPJyEXCuSN1HclOa7UelXGrhp+PaWiRDicL+m2sYepa12vT+aKEZLSjwZ6Kd/41ciQ06EOuYLgEs6KrVCNPXG9ao=
-X-Received: by 2002:a17:906:314e:b0:6f0:659:963 with SMTP id
- e14-20020a170906314e00b006f006590963mr24850096eje.358.1651028807135; Tue, 26
- Apr 2022 20:06:47 -0700 (PDT)
+        Wed, 27 Apr 2022 02:21:18 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA1481487;
+        Tue, 26 Apr 2022 23:18:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VBR1fxf_1651040277;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VBR1fxf_1651040277)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 27 Apr 2022 14:18:05 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     tj@kernel.org
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org, shuah@kernel.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] selftests: cgroup: Fix unsigned expression compared with zero
+Date:   Wed, 27 Apr 2022 14:17:56 +0800
+Message-Id: <20220427061756.56893-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220426181925.3940286-1-dlatypov@google.com> <20220426181925.3940286-2-dlatypov@google.com>
- <CABVgOSkqymYzwaQ68AdEC5yake9VT8HkQmqbyi+9-bg1Jk1UAQ@mail.gmail.com>
-In-Reply-To: <CABVgOSkqymYzwaQ68AdEC5yake9VT8HkQmqbyi+9-bg1Jk1UAQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 26 Apr 2022 22:06:35 -0500
-Message-ID: <CAGS_qxrowBiRBBhNmo+RyQSR6NQphkzx1k3HZ7KqXUNDZFZDzw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: add ability to specify suite-level init and
- exit functions
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 8:56 PM David Gow <davidgow@google.com> wrote:
-> >
-> >  static size_t kunit_suite_counter = 1;
-> >
-> > -static void kunit_print_suite_end(struct kunit_suite *suite)
-> > +static void kunit_print_suite_end(struct kunit_suite *suite, int init_err)
->
-> A part of me feels that it'd be nicer to have the init_err be part of
-> struct kunit_suite, and have kunit_suite_has_succeeded() take it into
-> account. It could go either way, though -- WDYT?
+Fix the following coccicheck warnings:
 
-Yeah, passing it around as a parameter felt a bit icky.
-But I think adding it in as a field feels worse.
+./tools/testing/selftests/cgroup/cgroup_util.c:566:8-12: WARNING:
+Unsigned expression compared with zero: size < 0.
 
-Another thought: perhaps have this function take a `kunit_status`
-parameter instead?
-Moving the ?: expression below out into the caller isn't that bad, imo.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 2 +-
+ tools/testing/selftests/cgroup/cgroup_util.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->
->
-> >  {
-> > +       enum kunit_status status =
-> > +               init_err ? KUNIT_FAILURE : kunit_suite_has_succeeded(suite);
-> > +
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 4c52cc6f2f9c..661e06b94a43 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -552,7 +552,7 @@ int proc_mount_contains(const char *option)
+ 	return strstr(buf, option) != NULL;
+ }
+ 
+-ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size)
++ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, ssize_t size)
+ {
+ 	char path[PATH_MAX];
+ 
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index c92df4e5d395..7b3865805f50 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -53,7 +53,7 @@ extern int set_oom_adj_score(int pid, int score);
+ extern int cg_wait_for_proc_count(const char *cgroup, int count);
+ extern int cg_killall(const char *cgroup);
+ int proc_mount_contains(const char *option);
+-extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size);
++extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, ssize_t size);
+ extern int proc_read_strstr(int pid, bool thread, const char *item, const char *needle);
+ extern pid_t clone_into_cgroup(int cgroup_fd);
+ extern int clone_reap(pid_t pid, int options);
+-- 
+2.20.1.7.g153144c
+
