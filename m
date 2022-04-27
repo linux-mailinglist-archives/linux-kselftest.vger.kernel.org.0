@@ -2,130 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B08C511D09
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 20:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A89511FA0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 20:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243113AbiD0Qao (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Apr 2022 12:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S240468AbiD0RMR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Apr 2022 13:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244409AbiD0Q3q (ORCPT
+        with ESMTP id S243738AbiD0RMQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:29:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3404941614
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Apr 2022 09:25:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651076736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cpdTKSdO+rieFpHnkUAZpM/6Dw8rA4JkcSTNkjZ8rq0=;
-        b=eBhHC4zoeb5yREbyJZ3KJ6Jn84tSibnSGPJ4bYz2OTmQv1fma/6keWPy5zesBypEKHKlR5
-        B0P3dITKOft112NdcRRXO2ckLTRAxBjneFFx66tPypSkQ6Ih/AXVQbA7eQYfvrJ7g0vZeB
-        P2eUn6eP9VL+/NqQAKm+Rt/ZOAEXvsA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-158-lVM2X5WEPZ2kL7EknadJoQ-1; Wed, 27 Apr 2022 12:19:29 -0400
-X-MC-Unique: lVM2X5WEPZ2kL7EknadJoQ-1
-Received: by mail-ed1-f70.google.com with SMTP id cz24-20020a0564021cb800b00425dfdd7768so1277645edb.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Apr 2022 09:19:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cpdTKSdO+rieFpHnkUAZpM/6Dw8rA4JkcSTNkjZ8rq0=;
-        b=3tJ9mLdT0kw4QX3d897m479TETyDX9z8DyYhXwIJYB0Y5V0GmByTK1Hw7m2Iete5DL
-         LXlxSvaj6ObqXIWglmbKuBY3rH7fnejJBFvedE1XKu3l+n9gAcQ4gYaUwhjMMi6iab1Y
-         gdLjcvfpJ4sPtdbSlEG0WfBawbrE3fWoVWuKH+RApsdc31+8cd0CH6+ZQ8J5JcVW8Opz
-         J2QAvukF7HR/Kc4K88+vh2QqUPBZnmFL7mi57iCPbC4tAn5p5SRlrQSsOFV03QIMF1Vm
-         KkttfwbE/gNUGbmGpn3Nxshzn0YgsbbZFO6KmqFRaVQ/pfT8jmaVon3CK7aspok6h9xi
-         JaIA==
-X-Gm-Message-State: AOAM531haaNiGVZWYxs7rBOBcnl34lj40Pq2fvRyio7zTpX2JqspMn6T
-        xAEeIs1iu1yjgttHdTYXJKS2aHqyv70ZgXV+p4QZSeVqAFvrGw7SnGpZ0Bv1s9qdaN3mH0bZ9A1
-        OnZ0qoVVrUT+j6J2GyZrGXZElmRqR
-X-Received: by 2002:a05:6402:4004:b0:426:1a0a:a2b8 with SMTP id d4-20020a056402400400b004261a0aa2b8mr2943530eda.241.1651076367941;
-        Wed, 27 Apr 2022 09:19:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRi274/0pJFnefUE34/+I0M2mwYpfNL1VVyniwojXwdGQHhToi5cq0Vivpg5gmlGbu04FBdw==
-X-Received: by 2002:a05:6402:4004:b0:426:1a0a:a2b8 with SMTP id d4-20020a056402400400b004261a0aa2b8mr2943517eda.241.1651076367773;
-        Wed, 27 Apr 2022 09:19:27 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id t27-20020a1709063e5b00b006f3a94f5194sm3347586eji.77.2022.04.27.09.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 09:19:27 -0700 (PDT)
-Message-ID: <032e22bd-4faa-7a0c-da78-8bf7ee3df31f@redhat.com>
-Date:   Wed, 27 Apr 2022 18:19:25 +0200
+        Wed, 27 Apr 2022 13:12:16 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E900E31374
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Apr 2022 10:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651079343; x=1682615343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RHO/1hBTnfAY0BC4RIzdnoMBlU4LYr9A30YIcQvuxyg=;
+  b=mkodAch1JX89LGSiL28jwY50EP/iDAMfm4xS5cyulXZ8JwnA9EphHaGV
+   J3czbxpr6TesiH5HFYQ1MjLScRiiohG8vk3AWzyZZEyx7oY1nqHg8u4tY
+   hp8JVIUGxBuNb76oR4klS4WkRqC7ZxdjM5+pAggo5pej/pbp6X+h8zq7K
+   I=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Apr 2022 10:09:03 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 10:09:02 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 10:09:02 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
+ 2022 10:09:00 -0700
+Date:   Wed, 27 Apr 2022 13:08:58 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        <kvmarm@lists.cs.columbia.edu>,
+        "Salil Akerkar" <Salil.Akerkar@arm.com>,
+        Luca Salabrino <luca.scalabrino@arm.com>
+Subject: Re: [PATCH v14 00/39] arm64/sme: Initial support for the Scalable
+ Matrix Extension
+Message-ID: <20220427170858.GA2009@qian>
+References: <20220419112247.711548-1-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH MANUALSEL 5.15 2/7] KVM: selftests: Silence compiler
- warning in the kvm_page_table_test
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Thomas Huth <thuth@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>, shuah@kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220427155431.19458-1-sashal@kernel.org>
- <20220427155431.19458-2-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220427155431.19458-2-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220419112247.711548-1-broonie@kernel.org>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/27/22 17:54, Sasha Levin wrote:
-> From: Thomas Huth <thuth@redhat.com>
+On Tue, Apr 19, 2022 at 12:22:08PM +0100, Mark Brown wrote:
+> This series provides initial support for the ARMv9 Scalable Matrix
+> Extension (SME).  SME takes the approach used for vectors in SVE and
+> extends this to provide architectural support for matrix operations.  A
+> more detailed overview can be found in [1].
 > 
-> [ Upstream commit 266a19a0bc4fbfab4d981a47640ca98972a01865 ]
+> For the kernel SME can be thought of as a series of features which are
+> intended to be used together by applications but operate mostly
+> orthogonally:
 > 
-> When compiling kvm_page_table_test.c, I get this compiler warning
-> with gcc 11.2:
+>  - The ZA matrix register.
+>  - Streaming mode, in which ZA can be accessed and a subset of SVE
+>    features are available.
+>  - A second vector length, used for streaming mode SVE and ZA and
+>    controlled using a similar interface to that for SVE.
+>  - TPIDR2, a new userspace controllable system register intended for use
+>    by the C library for storing context related to the ZA ABI.
 > 
-> kvm_page_table_test.c: In function 'pre_init_before_test':
-> ../../../../tools/include/linux/kernel.h:44:24: warning: comparison of
->   distinct pointer types lacks a cast
->     44 |         (void) (&_max1 == &_max2);              \
->        |                        ^~
-> kvm_page_table_test.c:281:21: note: in expansion of macro 'max'
->    281 |         alignment = max(0x100000, alignment);
->        |                     ^~~
+> A substantial part of the series is dedicated to refactoring the
+> existing SVE support so that we don't need to duplicate code for
+> handling vector lengths and the SVE registers, this involves creating an
+> array of vector types and making the users take the vector type as a
+> parameter.  I'm not 100% happy with this but wasn't able to come up with
+> anything better, duplicating code definitely felt like a bad idea so
+> this felt like the least bad thing.  If this approach makes sense to
+> people it might make sense to split this off into a separate series
+> and/or merge it while the rest is pending review to try to make things a
+> little more digestable, the series is very large so it'd probably make
+> things easier to digest if some of the preparatory refactoring could be
+> merged before the rest is ready.
 > 
-> Fix it by adjusting the type of the absolute value.
+> One feature of the architecture of particular note is that switching
+> to and from streaming mode may change the size of and invalidate the
+> contents of the SVE registers, and when in streaming mode the FFR is not
+> accessible.  This complicates aspects of the ABI like signal handling
+> and ptrace.
 > 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Message-Id: <20220414103031.565037-1-thuth@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> This initial implementation is mainly intended to get the ABI in place,
+> there are several areas which will be worked on going forwards - some of
+> these will be blockers, others could be handled in followup serieses:
 > 
-> diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
-> index 36407cb0ec85..f1ddfe4c4a03 100644
-> --- a/tools/testing/selftests/kvm/kvm_page_table_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
-> @@ -278,7 +278,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
->   	else
->   		guest_test_phys_mem = p->phys_offset;
->   #ifdef __s390x__
-> -	alignment = max(0x100000, alignment);
-> +	alignment = max(0x100000UL, alignment);
->   #endif
->   	guest_test_phys_mem &= ~(alignment - 1);
->   
+>  - SME is currently not supported for KVM guests, this will be done as a
+>    followup series.  A host system can use SME and run KVM guests but
+>    SME is not available in the guests.
+>  - The KVM host support is done in a very simplistic way, were anyone to
+>    attempt to use it in production there would be performance impacts on
+>    hosts with SME support. As part of this we also add enumeration of
+>    fine grained traps.
+>  - There is not currently ptrace or signal support TPIDR2, this will be
+>    done as a followup series.
+>  - No support is currently provided for scheduler control of SME or SME
+>    applications, given the size of the SME register state the context
+>    switch overhead may be noticable so this may be needed especially for
+>    real time applications.  Similar concerns already exist for larger
+>    SVE vector lengths but are amplified for SME, particularly as the
+>    vector length increases.
+>  - There has been no work on optimising the performance of anything the
+>    kernel does.
+> 
+> It is not expected that any systems will be encountered that support SME
+> but not SVE, SME is an ARMv9 feature and SVE is mandatory for ARMv9.
+> The code attempts to handle any such systems that are encountered but
+> this hasn't been tested extensively.
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+Running CPU offline/online on a Neoverse-N1 server will trigger a crash.
+A data point is setting CONFIG_ARM64_SVE=n could avoid it.
 
+ kernel BUG at arch/arm64/kernel/cpufeature.c:1353!
+ Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+ CPU: 88 PID: 0 Comm: swapper/88 Not tainted 5.18.0-rc4-next-20220426-00006-gfea0cdfbc1de #60
+ pstate: 204001c9 (nzCv dAIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : __read_sysreg_by_encoding
+ lr : has_cpuid_feature
+ sp : ffff80000a827d10
+ x29: ffff80000a827d10 x28: 0000000000000000 x27: ffffbb3c708efb8a
+ x26: 1ffff7678e11df71 x25: 0000000000000002 x24: 0000000000000003
+ x23: ffffbb3c75870e80 x22: dfff800000000000 x21: 0000000000000029
+ x20: ffffbb3c708efba0 x19: ffffbb3c708efb80 x18: ffffbb3c73eb7d1c
+ x17: 000000040044ffff x16: 1fffe7fff0e51474 x15: 1fffe806c1d7b54a
+ x14: 1fffe7fff0e5146c x13: 0000000000000004 x12: ffff77678e839850
+ x11: 1ffff7678e83984f x10: ffff77678e83984f x9 : ffffbb3c6d7deef0
+ x8 : ffffbb3c741cc27f x7 : 0000000000000001 x6 : ffff77678e83984f
+ x5 : ffffbb3c741cc278 x4 : 0000000000000000 x3 : 1fffe7fff0e51359
+ x2 : 1ffff7678e11df74 x1 : 0000000000180480 x0 : 00000000001804a0
+ Call trace:
+  __read_sysreg_by_encoding
+  has_cpuid_feature
+  verify_local_cpu_caps
+  verify_local_cpu_capabilities
+  check_local_cpu_capabilities
+  secondary_start_kernel
+  __secondary_switched
+ Code: 17ffff34 d5380234 17ffff32 f90013f5 (d4210000)
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Oops - BUG: Fatal exception
+ SMP: stopping secondary CPUs
+ Kernel Offset: 0x3b3c657a0000 from 0xffff800008000000
+ PHYS_OFFSET: 0x80000000
+ CPU features: 0x000,0021700d,19801c82
+ Memory Limit: none
+ ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
