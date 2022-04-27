@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F103510E76
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 04:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B861510E73
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Apr 2022 04:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348034AbiD0B7Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Apr 2022 21:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S1357014AbiD0B73 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Apr 2022 21:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357006AbiD0B7X (ORCPT
+        with ESMTP id S1357011AbiD0B72 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:59:23 -0400
+        Tue, 26 Apr 2022 21:59:28 -0400
 Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4862980C
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 18:56:13 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id x18so541185wrc.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 18:56:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062722CE21
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 18:56:19 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id q23so506851wra.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Apr 2022 18:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=97pZKrStBXSYBapUJT/M4kuhY4iZtj4bD+Xg9diOwgs=;
-        b=rCuicpl5pQWnWwLTvxtsD72tfAjz5s1VT/3VljAXt10O9IduciTkg6+1cCMhyFv7jt
-         Yi9Btm+rkqM296l4bDr5jpYc4afs47ft46eO8GLYzJvqUhjcmGsnO/dZxo51UiA7Ca5V
-         HDt84mh4vBjSXDDEZ1xoVW6lZHvp9TPF2DH12/Rs9b7bCLhV/lcRf7Elp6lNZAjS8fQ4
-         NLaaGhSkgHfw//oI6UN1wpQEb2QOjdEGFpJWnfH5rIDS/RNgBDZ4ep94+SV/dOYy4dTA
-         d+Xp0+O0bWmwIOac9QHapg4VBzzVUTuxGpGbkRxZv/w4AincxMA4m7vI4j0kvUm0DiTL
-         tlRw==
+        bh=qUpKBzYXpZ2gnHgy+UGTLH537DdS2++Rr916eyA+llI=;
+        b=XVzPzvyVHyCRFKmIQMBBUX2LhGcRsmLm9SnwBjjtNmMdfjl89va24BJOkkQLFrytSR
+         06cWzbjw0JidDIpQDGqwxJwuKQ4SmfaEm/iYGNw75Ltzk0Qkte6bGuTnC6xHn9fRwJVa
+         CuDP10i/rzoxBVJozKfzljK5Pp6WWxNZoOxgKsLN9E4Yf5iln4hlh9agn2BXCS8dSOxA
+         cxviTWKyZx9GvBEUnRF+VNsGd4dNv9ieHRLF+oNq9zmVsC/8Kd2A3Vn6ER3wJKOnrqVw
+         vl3flRFt+nw8lErvTJw8CkVT4vuQAQKls5944SM3dPp9i2lqwKOkmJqQGF2OkfN7yKuj
+         35dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=97pZKrStBXSYBapUJT/M4kuhY4iZtj4bD+Xg9diOwgs=;
-        b=xzAOGGvO9UJ3jNf7RjJf4Tf1Gps6IeIzEiSAwZruiEIomgUflJL8K49QCsyq7iGp/7
-         0SzxRsxbeMPUmn7BAnzjr6gaHqKrmByg5Aso/9K4W1wrIo+r9xOmpLZEQwrSoP9JIsPG
-         GAHZmHTBQrWnxaiwFVpOBF20TfIpwBR9mg0G0Nx3IOQm8is6wUyYFv5+eF08rTqKbTW1
-         TGLMfYVXBoVxNGooAy47MIIlqxG0pzuscVUelIjKfidjVXnUv9ll//EIFno5cEMewREn
-         B6Krb3rLTEu+GDbY48Q7TlgyREe04+5Ola+itIlxldbb9E0ZSk+xUHrAZPKoU5HZJ9a8
-         KuUQ==
-X-Gm-Message-State: AOAM531k1LpRuXg7QVjDLVhXx22QsZd72ciVnG7WOpZzTjgiaVAXdotp
-        vnP44lpp42m4RlAdVUoehGkw6lGaUwAn5CwwdOJajg==
-X-Google-Smtp-Source: ABdhPJy/eDjbifUqUu3Jbut5maFh6DtcySQcPaWR5qT2c1cGFOXTYWilIEfi7FRyEkWBW79wYCLwDJDL/iQIxA/xn9s=
-X-Received: by 2002:a5d:6651:0:b0:20a:df2f:8027 with SMTP id
- f17-20020a5d6651000000b0020adf2f8027mr8326780wrw.269.1651024571464; Tue, 26
- Apr 2022 18:56:11 -0700 (PDT)
+        bh=qUpKBzYXpZ2gnHgy+UGTLH537DdS2++Rr916eyA+llI=;
+        b=Vl+sN2Xnwvp6w/3jHeS2yRLhqn53ZLOE198EU41qNGZux+MVju+m8n9CpK0+bxOpBb
+         Xp/A3Pofz+oj2qVkSipnhnb0dyIuVVWBSb7F6fmd5fXii+2Bd3QpTNHjDdDdPTZR8Iuc
+         zaXe0pkQV9nlpZCI4aWnNCXXc2H8PyBjuL5mTzDqf2T4au3GG1zEJAAM1QCLYUgfYuvt
+         HmIRNTyJKYy4MOqgcR7XycvjyKt64b+92r2mMLRuHCRNI2mxyAJ0T6ERJkY80AIPyF8k
+         wYADEUCpvo2yMr/0Prt+HLaS0CBTMKkt2orfG+wn7UvdqIPa+YCiX5XU8uW4KEJ8Y/MZ
+         7vtQ==
+X-Gm-Message-State: AOAM530dLMJNkJWFPcet4uu0iIJwbDjb46tNdJMLfv4IiCmDFIj4oH0T
+        GvnMHJHL8rvqy1CqRiUdJu2ul+2XmzUryx3OvI+Xyg==
+X-Google-Smtp-Source: ABdhPJyLu8BTghjxcRPnDPeuNu3SNypYEHLZywCXXm2HEK/eQI4lfk2nBKxpfnMseFl3ILlJkfc0jqAUb87g6NMV2Ms=
+X-Received: by 2002:a5d:6b0e:0:b0:20a:dd17:e452 with SMTP id
+ v14-20020a5d6b0e000000b0020add17e452mr9372396wrw.501.1651024577517; Tue, 26
+ Apr 2022 18:56:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426181925.3940286-1-dlatypov@google.com> <20220426181925.3940286-2-dlatypov@google.com>
-In-Reply-To: <20220426181925.3940286-2-dlatypov@google.com>
+References: <20220426181925.3940286-1-dlatypov@google.com> <20220426181925.3940286-3-dlatypov@google.com>
+In-Reply-To: <20220426181925.3940286-3-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 27 Apr 2022 09:55:59 +0800
-Message-ID: <CABVgOSkqymYzwaQ68AdEC5yake9VT8HkQmqbyi+9-bg1Jk1UAQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: add ability to specify suite-level init and
- exit functions
+Date:   Wed, 27 Apr 2022 09:56:06 +0800
+Message-ID: <CABVgOSnU+jQsd_eUvSc1+gpcW3su0W4ZEHUc6kj9zu3nxFVXsQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kfence: test: use new suite_{init/exit} support, add .kunitconfig
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001edeb405dd991d1f"
+        boundary="00000000000079ed7105dd991d45"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,222 +73,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000001edeb405dd991d1f
+--00000000000079ed7105dd991d45
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, Apr 27, 2022 at 2:19 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> KUnit has support for setup/cleanup logic for each test case in a suite.
-> But it lacks the ability to specify setup/cleanup for the entire suite
-> itself.
+> Currently, the kfence test suite could not run via "normal" means since
+> KUnit didn't support per-suite setup/teardown. So it manually called
+> internal kunit functions to run itself.
+> This has some downsides, like missing TAP headers => can't use kunit.py
+> to run or even parse the test results (w/o tweaks).
 >
-> This can be used to do setup that is too expensive or cumbersome to do
-> for each test.
-> Or it can be used to do simpler things like log debug information after
-> the suite completes.
-> It's a fairly common feature, so the lack of it is noticeable.
+> Use the newly added support and convert it over, adding a .kunitconfig
+> so it's even easier to run from kunit.py.
 >
-> Some examples in other frameworks and languages:
-> * https://docs.python.org/3/library/unittest.html#setupclass-and-teardownclass
-> * https://google.github.io/googletest/reference/testing.html#Test::SetUpTestSuite
+> People can now run the test via
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=mm/kfence --arch=x86_64
+> ...
+> [11:02:32] Testing complete. Passed: 23, Failed: 0, Crashed: 0, Skipped: 2, Errors: 0
+> [11:02:32] Elapsed time: 43.562s total, 0.003s configuring, 9.268s building, 34.281s running
 >
-> Meta:
-> This is very similar to this patch here: https://lore.kernel.org/linux-kselftest/20210805043503.20252-3-bvanassche@acm.org/
-> The changes from that patch:
-> * pass in `struct kunit *` so users can do stuff like
->   `kunit_info(suite, "debug message")`
-> * makes sure the init failure is bubbled up as a failure
-> * updates kunit-example-test.c to use a suite init
-> * Updates kunit/usage.rst to mention the new support
-> * some minor cosmetic things
->   * use `suite_{init,exit}` instead of `{init/exit}_suite`
->   * make suite init error message more consistent w/ test init
->   * etc.
->
+> Cc: kasan-dev@googlegroups.com
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-Thanks for picking this up again: it's definitely something which has
-been obviously missing for a while.
+This works for me: I'm very excited to see these tests run more nicely
+with kunit_tool (and not break the TAP headers).
 
-One comment below, but I don't mind if you'd prefer to leave things as-is.
+I guess the next one to tackle will be the Thunderbolt tests, though
+those are more complicated still and need some module changes, IIRC.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Tested-by: David Gow <davidgow@google.com>
 
->  Documentation/dev-tools/kunit/usage.rst | 19 +++++++++++--------
->  include/kunit/test.h                    |  4 ++++
->  lib/kunit/kunit-example-test.c          | 14 ++++++++++++++
->  lib/kunit/test.c                        | 23 ++++++++++++++++++++---
->  4 files changed, 49 insertions(+), 11 deletions(-)
+Cheers,
+-- David
+
+
+>  mm/kfence/.kunitconfig  |  6 ++++++
+>  mm/kfence/kfence_test.c | 31 +++++++++++++------------------
+>  2 files changed, 19 insertions(+), 18 deletions(-)
+>  create mode 100644 mm/kfence/.kunitconfig
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 1c83e7d60a8a..d62a04255c2e 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -125,8 +125,8 @@ We need many test cases covering all the unit's behaviors. It is common to have
->  many similar tests. In order to reduce duplication in these closely related
->  tests, most unit testing frameworks (including KUnit) provide the concept of a
->  *test suite*. A test suite is a collection of test cases for a unit of code
-> -with a setup function that gets invoked before every test case and then a tear
-> -down function that gets invoked after every test case completes. For example:
-> +with optional setup and teardown functions that run before/after the whole
-> +suite and/or every test case. For example:
->
->  .. code-block:: c
->
-> @@ -141,16 +141,19 @@ down function that gets invoked after every test case completes. For example:
->                 .name = "example",
->                 .init = example_test_init,
->                 .exit = example_test_exit,
-> +               .suite_init = example_suite_init,
-> +               .suite_exit = example_suite_exit,
->                 .test_cases = example_test_cases,
->         };
->         kunit_test_suite(example_test_suite);
->
-> -In the above example, the test suite ``example_test_suite`` would run the test
-> -cases ``example_test_foo``, ``example_test_bar``, and ``example_test_baz``. Each
-> -would have ``example_test_init`` called immediately before it and
-> -``example_test_exit`` called immediately after it.
-> -``kunit_test_suite(example_test_suite)`` registers the test suite with the
-> -KUnit test framework.
-> +In the above example, the test suite ``example_test_suite`` would first run
-> +``example_suite_init``, then run the test cases ``example_test_foo``,
-> +``example_test_bar``, and ``example_test_baz``. Each would have
-> +``example_test_init`` called immediately before it and ``example_test_exit``
-> +called immediately after it. Finally, ``example_suite_exit`` would be called
-> +after everything else. ``kunit_test_suite(example_test_suite)`` registers the
-> +test suite with the KUnit test framework.
->
->  .. note::
->     A test case will only run if it is associated with a test suite.
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 97cd76461886..5d288f3d8f68 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -153,6 +153,8 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
->   * struct kunit_suite - describes a related collection of &struct kunit_case
->   *
->   * @name:      the name of the test. Purely informational.
-> + * @suite_init:        called once per test suite before the test cases.
-> + * @suite_exit:        called once per test suite after all test cases.
->   * @init:      called before every test case.
->   * @exit:      called after every test case.
->   * @test_cases:        a null terminated array of test cases.
-> @@ -167,6 +169,8 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
->   */
->  struct kunit_suite {
->         const char name[256];
-> +       int (*suite_init)(struct kunit_suite *suite);
-> +       void (*suite_exit)(struct kunit_suite *suite);
->         int (*init)(struct kunit *test);
->         void (*exit)(struct kunit *test);
->         struct kunit_case *test_cases;
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index 91b1df7f59ed..f8fe582c9e36 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -40,6 +40,17 @@ static int example_test_init(struct kunit *test)
->         return 0;
+> diff --git a/mm/kfence/.kunitconfig b/mm/kfence/.kunitconfig
+> new file mode 100644
+> index 000000000000..f3d65e939bfa
+> --- /dev/null
+> +++ b/mm/kfence/.kunitconfig
+> @@ -0,0 +1,6 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_KFENCE=y
+> +CONFIG_KFENCE_KUNIT_TEST=y
+> +
+> +# Additional dependencies.
+> +CONFIG_FTRACE=y
+> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+> index 1b50f70a4c0f..96206a4ee9ab 100644
+> --- a/mm/kfence/kfence_test.c
+> +++ b/mm/kfence/kfence_test.c
+> @@ -826,14 +826,6 @@ static void test_exit(struct kunit *test)
+>         test_cache_destroy();
 >  }
 >
-> +/*
-> + * This is run once before all test cases in the suite.
-> + * See the comment on example_test_suite for more information.
-> + */
-> +static int example_test_init_suite(struct kunit_suite *suite)
-> +{
-> +       kunit_info(suite, "initializing suite\n");
-> +
-> +       return 0;
-> +}
-> +
->  /*
->   * This test should always be skipped.
->   */
-> @@ -142,17 +153,20 @@ static struct kunit_case example_test_cases[] = {
->   * may be specified which runs after every test case and can be used to for
->   * cleanup. For clarity, running tests in a test suite would behave as follows:
->   *
-> + * suite.suite_init(suite);
->   * suite.init(test);
->   * suite.test_case[0](test);
->   * suite.exit(test);
->   * suite.init(test);
->   * suite.test_case[1](test);
->   * suite.exit(test);
-> + * suite.suite_exit(suite);
->   * ...;
->   */
->  static struct kunit_suite example_test_suite = {
->         .name = "example",
->         .init = example_test_init,
-> +       .suite_init = example_test_init_suite,
->         .test_cases = example_test_cases,
->  };
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 64ee6a9d8003..b66e395c795a 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -192,10 +192,13 @@ EXPORT_SYMBOL_GPL(kunit_suite_has_succeeded);
->
->  static size_t kunit_suite_counter = 1;
->
-> -static void kunit_print_suite_end(struct kunit_suite *suite)
-> +static void kunit_print_suite_end(struct kunit_suite *suite, int init_err)
-
-A part of me feels that it'd be nicer to have the init_err be part of
-struct kunit_suite, and have kunit_suite_has_succeeded() take it into
-account. It could go either way, though -- WDYT?
-
-
+> -static struct kunit_suite kfence_test_suite = {
+> -       .name = "kfence",
+> -       .test_cases = kfence_test_cases,
+> -       .init = test_init,
+> -       .exit = test_exit,
+> -};
+> -static struct kunit_suite *kfence_test_suites[] = { &kfence_test_suite, NULL };
+> -
+>  static void register_tracepoints(struct tracepoint *tp, void *ignore)
 >  {
-> +       enum kunit_status status =
-> +               init_err ? KUNIT_FAILURE : kunit_suite_has_succeeded(suite);
-> +
->         kunit_print_ok_not_ok((void *)suite, false,
-> -                             kunit_suite_has_succeeded(suite),
-> +                             status,
->                               kunit_suite_counter++,
->                               suite->name,
->                               suite->status_comment);
-> @@ -497,6 +500,16 @@ int kunit_run_tests(struct kunit_suite *suite)
->         struct kunit_case *test_case;
->         struct kunit_result_stats suite_stats = { 0 };
->         struct kunit_result_stats total_stats = { 0 };
-> +       int suite_init_err = 0;
-> +
-> +       if (suite->suite_init) {
-> +               suite_init_err = suite->suite_init(suite);
-> +               if (suite_init_err != 0) {
-> +                       kunit_err(suite, KUNIT_SUBTEST_INDENT
-> +                                 "# failed to initialize (%d)", suite_init_err);
-> +                       goto suite_end;
-> +               }
-> +       }
->
->         kunit_print_suite_start(suite);
->
-> @@ -551,8 +564,12 @@ int kunit_run_tests(struct kunit_suite *suite)
->                 kunit_accumulate_stats(&total_stats, param_stats);
->         }
->
-> +       if (suite->suite_exit)
-> +               suite->suite_exit(suite);
-> +
->         kunit_print_suite_stats(suite, suite_stats, total_stats);
-> -       kunit_print_suite_end(suite);
-> +suite_end:
-> +       kunit_print_suite_end(suite, suite_init_err);
->
->         return 0;
+>         check_trace_callback_type_console(probe_console);
+> @@ -847,11 +839,7 @@ static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
+>                 tracepoint_probe_unregister(tp, probe_console, NULL);
 >  }
+>
+> -/*
+> - * We only want to do tracepoints setup and teardown once, therefore we have to
+> - * customize the init and exit functions and cannot rely on kunit_test_suite().
+> - */
+> -static int __init kfence_test_init(void)
+> +static int kfence_suite_init(struct kunit_suite *suite)
+>  {
+>         /*
+>          * Because we want to be able to build the test as a module, we need to
+> @@ -859,18 +847,25 @@ static int __init kfence_test_init(void)
+>          * won't work here.
+>          */
+>         for_each_kernel_tracepoint(register_tracepoints, NULL);
+> -       return __kunit_test_suites_init(kfence_test_suites);
+> +       return 0;
+>  }
+>
+> -static void kfence_test_exit(void)
+> +static void kfence_suite_exit(struct kunit_suite *suite)
+>  {
+> -       __kunit_test_suites_exit(kfence_test_suites);
+>         for_each_kernel_tracepoint(unregister_tracepoints, NULL);
+>         tracepoint_synchronize_unregister();
+>  }
+>
+> -late_initcall_sync(kfence_test_init);
+> -module_exit(kfence_test_exit);
+> +static struct kunit_suite kfence_test_suite = {
+> +       .name = "kfence",
+> +       .test_cases = kfence_test_cases,
+> +       .init = test_init,
+> +       .exit = test_exit,
+> +       .suite_init = kfence_suite_init,
+> +       .suite_exit = kfence_suite_exit,
+> +};
+> +
+> +kunit_test_suites(&kfence_test_suite);
+>
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>");
 > --
 > 2.36.0.rc2.479.g8af0fa9b8e-goog
 >
 
---0000000000001edeb405dd991d1f
+--00000000000079ed7105dd991d45
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -355,14 +260,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCe
-aCx3wigWoxOgqxPAycuMPahwqeDPdAYO/LqQPVl/lzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA0MjcwMTU2MTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDO
+B+2p8LLkQs8XALT+pvPloHN5teI7hKLr37YFvIcy1jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA0MjcwMTU2MTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAg256gYY+1U0ZmQU0hZ/w
-RrQd9xdu2EQJ6MAK6SCu9OWIRu8fKj/bNbncKFdO0Y1KJJzWpFAxrdX0S2y8K3ksVMlRKXkLa6OW
-hofaeJoxZLw+dMbKCrJninjlMErbGbc7AWoN3POdikMNjwsQP9qCeQ38jL8UygO0iV1bJz5pKYXl
-q9pCgOHNDta+rlsoheZYWBH5FzxUXoxUHXNMQfp3WPJ/0aEcomZti7lQIoR2Q14ZsgZZS/lOOFJu
-dCiTkoeiAYf1FufCuSMrQ7UfIsLI5XCfTOtkKvZ3HEnnn9bKxj7fG3V8PUC5cdGjdinehj8omD1u
-Mt3FdPtEMSgvBdAwbA==
---0000000000001edeb405dd991d1f--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQehjir8ainkO9PiRhFTB
+d7pj/NLqEQ+6a5zqBWova8H7VLjB4GAw93OGlMv62Ln6FDiQq/jRu55BpU3f3f4QNmQSvp1x84Cp
+6IUlen8I9e+LyVZZbyG7CILw6vfuWBysR7faMT5Zr1bQQAmPNkYTReNlmWYihoSUh6vn2vgI3eHs
+PrZ7aoUt6chBtqMVJoTF+qTKBJmkT7tuixtIl1c9DQFk+7Sea37L1ZkXufflcVrN7No32ESeMi1C
+Ycz8kWaFFw/xdS/lNa7EDqP1da9CtDKDFJjUBaNpFsTZtc+GXaP7pUihh7nRzdfy0UhfZsBtJwjq
++9tSbAJxuUc+bDHITQ==
+--00000000000079ed7105dd991d45--
