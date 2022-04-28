@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C13512C6B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Apr 2022 09:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA697512C6E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Apr 2022 09:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244875AbiD1HO4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Apr 2022 03:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S244910AbiD1HPD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Apr 2022 03:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238550AbiD1HOz (ORCPT
+        with ESMTP id S244914AbiD1HPA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:14:55 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2888A308
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Apr 2022 00:11:41 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id j15so5468686wrb.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Apr 2022 00:11:41 -0700 (PDT)
+        Thu, 28 Apr 2022 03:15:00 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF688AE61
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Apr 2022 00:11:46 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m62so2360876wme.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Apr 2022 00:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iu3mIIhkdHRhMN6GOW58dhA4eauvdiodsg/LZz7IWg4=;
-        b=d7gJf+zbY9APUXx4ZFXUjnUGdVfMD05P6kW+zUs1+QxzQne1JrH6fDXZ/jVV3RXRuK
-         IDqzuus21BOQYV00QQvSqvZchAKL3jqARfzOzccoHymxcojk1wsE099d1sk0w4qm3ZEU
-         vShqEqCmkbH1SFxENOen045FRw8Ens7Bi87NUqHQ2rfPHrk8P6csvSA7Caz0xQ3OVclY
-         fBLovBNTNQagFG8iN3SGRAhPqgEv1U4jMM9QN3MhIc1MMZIdytKmyaSaHeBg7f690w1t
-         SiK9Ewtgj1l6FlBjSmy3LaWPiN3yL/0KuNDHcFt+uD8akMwUguR9wyxbK/URRjGRlafz
-         6now==
+        bh=s8i59739+6muxbLkcWz22T3FATUP2gXsekD82HLloo4=;
+        b=Iunx1wvzKNLjLa1I1zOtcibkjVM0atfzjVthCpTc4mrrR+xZ1zoKoy4VYbGhinREDS
+         A+tHd5oX/cbOSfvePKpzldlnMAW2z5XVqxw231GvyjVH4KuB5odLs11vjpmT2emK6un3
+         eWZKqsZE/kUR/Ihxf1H6hWcH+iQ0eAeqokuk0Dnv8CVIrLboRoCq8d2oHzX9Jd0swZ/f
+         BX8RMnR1OMB1NlMKvBntNhHJk2UW2s6H02egHZqJdTO7e54mePgC5INgqpWQzP0jbezw
+         g5MIe8zVk/QX+QgHR0kfkfb52V+2nK2Uj5LoxcXc/aKPrr+c8tRaHWPyN3g/YPLaWTp9
+         l0jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iu3mIIhkdHRhMN6GOW58dhA4eauvdiodsg/LZz7IWg4=;
-        b=lLFg22iDrvMYmGBwCAfHOo9TmyPFHkfo/FNnIBv5y8bFwxkzh4C3Nttx666pcjc5i9
-         jpTGgwsN84yn1yX2oZOrJqxkSyPbFP58qsgHVoQF7QtcoZNeQ8+18rn/3Ovhl2eKOFiq
-         4Wyc8NqHU/Sq3e1bU55mKnVEPbBZyRhZ0SWdCH0JUiVBubQDjlzlkUT6cb/0ypd0rDuS
-         9Ezl6BusZl+3X3f5xB3kuqBiYewJQBsFOX0bjcbSnhW668pag+KPMwdN2fIcMlEBdJ9T
-         KNFNBXJLK8dsVzrdWhJnxcGr0CzygTaZnKFNIq7mFlWpbPf7mjXso9xLV//8K9w2os4w
-         1EwA==
-X-Gm-Message-State: AOAM5305eRKjNO0Qw6rGBxyxRyvU9Gc6Ii3e3oTtiq/Gn3sTSPCuIFPz
-        bXe08si+fRX9im0kVdmq68nU1SBlo/10Y8QU2RxE5g==
-X-Google-Smtp-Source: ABdhPJynw129WxSoiRF+0KV01QKi5IdYv9hb7+w2GmS6FYd37WSY/yro399Y+JizHvvtlOizQ4Gai3QSgJtsW3N7THw=
-X-Received: by 2002:a5d:4307:0:b0:207:9f82:e238 with SMTP id
- h7-20020a5d4307000000b002079f82e238mr26530424wrq.430.1651129900141; Thu, 28
- Apr 2022 00:11:40 -0700 (PDT)
+        bh=s8i59739+6muxbLkcWz22T3FATUP2gXsekD82HLloo4=;
+        b=ovMEXbhas1it79qJrNizj5RBCyF9zazpPPxgLRj/rrenBDUe/xlGqIThEXgZIvJ50P
+         kZpHz1fbzDfnuhJvBXlPNHtDKDb4i5rJOy7CaqDrK4cPElG1+mjySa90fI1ca6UDEnU7
+         AIKm2XRNbkFgBGZu+rA7U6JheC+Qzi4tLb7/in3xNwFkkmgTuyzV33uP/UosAU529OoT
+         19bZMzlM7GgKsrCHf6juCC4N5fCUk8MCAV380ZiL9GOK/4k5tsDVx9HtAJmfy008hFw7
+         bJbupgk3HP5nZWq2anFzYNaFQEFPgyOO9/AnevUxQEaHaKmD4RxDlLAH+qdJbdayYu+V
+         MEdA==
+X-Gm-Message-State: AOAM530xVCmeBICdl/mgEmQOmcAuwx8F8hUrf/tb+YHTNtobcd3wzhrF
+        3SNAVpEaQr8hvBWR8pBlJeNTfSoFPfU9lNEKf6JjMQ==
+X-Google-Smtp-Source: ABdhPJxDpztLmixuzm3dnWhMGVY7xXnSwNgZqFXrSY1bWQeQgKapazX6IEbAGxNZfrrnyfCHY2fwG82CX4mYEh60GC4=
+X-Received: by 2002:a7b:c8d5:0:b0:392:b12e:fd11 with SMTP id
+ f21-20020a7bc8d5000000b00392b12efd11mr29551523wml.96.1651129904774; Thu, 28
+ Apr 2022 00:11:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426173334.3871399-1-dlatypov@google.com> <20220426173334.3871399-3-dlatypov@google.com>
-In-Reply-To: <20220426173334.3871399-3-dlatypov@google.com>
+References: <20220426173334.3871399-1-dlatypov@google.com>
+In-Reply-To: <20220426173334.3871399-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 28 Apr 2022 15:11:28 +0800
-Message-ID: <CABVgOS=Tx+d_O9atHoexbCL=H-1LRuVC7OwKKBay0c4jnmBFcg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: tool: minor cosmetic cleanups in kunit_parser.py
+Date:   Thu, 28 Apr 2022 15:11:33 +0800
+Message-ID: <CABVgOSkLQdXL_X2UhhQ6a3=Gexg1Mp7n5mmMVtA_z5w1EnYgCQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kunit: tool: remove dead parse_crash_in_log() logic
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -60,7 +60,7 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         <linux-kselftest@vger.kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000033a6a005ddb1a334"
+        boundary="0000000000007908ec05ddb1a36f"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,192 +72,206 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000033a6a005ddb1a334
+--0000000000007908ec05ddb1a36f
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, Apr 27, 2022 at 1:33 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> There should be no behavioral changes from this patch.
+> This logic depends on the kernel logging a message containing
+> 'kunit test case crashed', but there is no corresponding logic to do so.
 >
-> This patch removes redundant comment text, inlines a function used in
-> only one place, and other such minor tweaks.
+> This is likely a relic of the revision process KUnit initially went
+> through when being upstreamed.
+>
+> Delete it given
+> 1) it's been missing for years and likely won't get implemented
+> 2) the parser has been moving to be a more general KTAP parser,
+>    kunit-only magic like this isn't how we'd want to implement it.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-These all look pretty sensible to me.
+Makes sense, thanks!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 -- David
 
->  tools/testing/kunit/kunit_parser.py | 71 +++++++----------------------
->  1 file changed, 17 insertions(+), 54 deletions(-)
+>  tools/testing/kunit/kunit_parser.py           | 21 ------
+>  tools/testing/kunit/kunit_tool_test.py        | 17 ++---
+>  .../test_data/test_is_test_passed-crash.log   | 70 -------------------
+>  3 files changed, 4 insertions(+), 104 deletions(-)
+>  delete mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
 >
 > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 45c2c5837281..d56d530fab24 100644
+> index 807ed2bd6832..7a0faf527a98 100644
 > --- a/tools/testing/kunit/kunit_parser.py
 > +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -46,10 +46,8 @@ class Test(object):
+> @@ -475,26 +475,6 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+>                 log.append(lines.pop())
+>         return log
 >
->         def __str__(self) -> str:
->                 """Returns string representation of a Test class object."""
-> -               return ('Test(' + str(self.status) + ', ' + self.name +
-> -                       ', ' + str(self.expected_count) + ', ' +
-> -                       str(self.subtests) + ', ' + str(self.log) + ', ' +
-> -                       str(self.counts) + ')')
-> +               return (f'Test({self.status}, {self.name}, {self.expected_count}, '
-> +                       f'{self.subtests}, {self.log}, {self.counts})')
->
->         def __repr__(self) -> str:
->                 """Returns string representation of a Test class object."""
-> @@ -58,7 +56,7 @@ class Test(object):
->         def add_error(self, error_message: str) -> None:
->                 """Records an error that occurred while parsing this test."""
->                 self.counts.errors += 1
-> -               print_error('Test ' + self.name + ': ' + error_message)
-> +               print_with_timestamp(red('[ERROR]') + f' Test: {self.name}: {error_message}')
->
->  class TestStatus(Enum):
->         """An enumeration class to represent the status of a test."""
-> @@ -92,8 +90,7 @@ class TestCounts:
->                 self.errors = 0
->
->         def __str__(self) -> str:
-> -               """Returns the string representation of a TestCounts object.
-> -               """
-> +               """Returns the string representation of a TestCounts object."""
->                 return ('Passed: ' + str(self.passed) +
->                         ', Failed: ' + str(self.failed) +
->                         ', Crashed: ' + str(self.crashed) +
-> @@ -130,30 +127,19 @@ class TestCounts:
->                 if self.total() == 0:
->                         return TestStatus.NO_TESTS
->                 elif self.crashed:
-> -                       # If one of the subtests crash, the expected status
-> -                       # of the Test is crashed.
-> +                       # Crashes should take priority.
->                         return TestStatus.TEST_CRASHED
->                 elif self.failed:
-> -                       # Otherwise if one of the subtests fail, the
-> -                       # expected status of the Test is failed.
->                         return TestStatus.FAILURE
->                 elif self.passed:
-> -                       # Otherwise if one of the subtests pass, the
-> -                       # expected status of the Test is passed.
-> +                       # No failures or crashes, looks good!
->                         return TestStatus.SUCCESS
->                 else:
-> -                       # Finally, if none of the subtests have failed,
-> -                       # crashed, or passed, the expected status of the
-> -                       # Test is skipped.
-> +                       # We have only skipped tests.
->                         return TestStatus.SKIPPED
->
->         def add_status(self, status: TestStatus) -> None:
-> -               """
-> -               Increments count of inputted status.
+> -DIAGNOSTIC_CRASH_MESSAGE = re.compile(r'^# .*?: kunit test case crashed!$')
 > -
-> -               Parameters:
-> -               status - status to be added to the TestCounts object
-> -               """
-> +               """Increments the count for `status`."""
->                 if status == TestStatus.SUCCESS:
->                         self.passed += 1
->                 elif status == TestStatus.FAILURE:
-> @@ -283,11 +269,9 @@ def check_version(version_num: int, accepted_versions: List[int],
+> -def parse_crash_in_log(test: Test) -> bool:
+> -       """
+> -       Iterate through the lines of the log to parse for crash message.
+> -       If crash message found, set status to crashed and return True.
+> -       Otherwise return False.
+> -
+> -       Parameters:
+> -       test - Test object for current test being parsed
+> -
+> -       Return:
+> -       True if crash message found in log
+> -       """
+> -       for line in test.log:
+> -               if DIAGNOSTIC_CRASH_MESSAGE.match(line):
+> -                       test.status = TestStatus.TEST_CRASHED
+> -                       return True
+> -       return False
+> -
+>
+>  # Printing helper methods:
+>
+> @@ -682,7 +662,6 @@ def bubble_up_test_results(test: Test) -> None:
+>         Parameters:
 >         test - Test object for current test being parsed
 >         """
->         if version_num < min(accepted_versions):
-> -               test.add_error(version_type +
-> -                       ' version lower than expected!')
-> +               test.add_error(f'{version_type} version lower than expected!')
->         elif version_num > max(accepted_versions):
-> -               test.add_error(
-> -                       version_type + ' version higher than expected!')
-> +               test.add_error(f'{version_type} version higer than expected!')
+> -       parse_crash_in_log(test)
+>         subtests = test.subtests
+>         counts = test.counts
+>         status = test.status
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 210df0f443e6..1200e451c418 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -230,15 +230,6 @@ class KUnitParserTest(unittest.TestCase):
+>                 print_mock.stop()
+>                 self.assertEqual(0, len(result.subtests))
 >
->  def parse_ktap_header(lines: LineStream, test: Test) -> bool:
->         """
-> @@ -440,8 +424,7 @@ def parse_test_result(lines: LineStream, test: Test,
->         # Check test num
->         num = int(match.group(2))
->         if num != expected_num:
-> -               test.add_error('Expected test number ' +
-> -                       str(expected_num) + ' but found ' + str(num))
-> +               test.add_error(f'Expected test number {expected_num} but found {num}')
->
->         # Set status of test object
->         status = match.group(1)
-> @@ -529,7 +512,7 @@ def format_test_divider(message: str, len_message: int) -> str:
->                 # calculate number of dashes for each side of the divider
->                 len_1 = int(difference / 2)
->                 len_2 = difference - len_1
-> -       return ('=' * len_1) + ' ' + message + ' ' + ('=' * len_2)
-> +       return ('=' * len_1) + f' {message} ' + ('=' * len_2)
->
->  def print_test_header(test: Test) -> None:
->         """
-> @@ -545,20 +528,13 @@ def print_test_header(test: Test) -> None:
->         message = test.name
->         if test.expected_count:
->                 if test.expected_count == 1:
-> -                       message += (' (' + str(test.expected_count) +
-> -                               ' subtest)')
-> +                       message += ' (1 subtest)'
->                 else:
-> -                       message += (' (' + str(test.expected_count) +
-> -                               ' subtests)')
-> +                       message += f' ({test.expected_count} subtests)'
->         print_with_timestamp(format_test_divider(message, len(message)))
->
->  def print_log(log: Iterable[str]) -> None:
-> -       """
-> -       Prints all strings in saved log for test in yellow.
+> -       def test_crashed_test(self):
+> -               crashed_log = test_data_path('test_is_test_passed-crash.log')
+> -               with open(crashed_log) as file:
+> -                       result = kunit_parser.parse_run_tests(
+> -                               file.readlines())
+> -               self.assertEqual(
+> -                       kunit_parser.TestStatus.TEST_CRASHED,
+> -                       result.status)
 > -
-> -       Parameters:
-> -       log - Iterable object with all strings saved in log for test
-> -       """
-> +       """Prints all strings in saved log for test in yellow."""
->         for m in log:
->                 print_with_timestamp(yellow(m))
+>         def test_skipped_test(self):
+>                 skipped_log = test_data_path('test_skip_tests.log')
+>                 with open(skipped_log) as file:
+> @@ -478,10 +469,10 @@ class KUnitJsonTest(unittest.TestCase):
+>                         result["sub_groups"][1]["test_cases"][0])
 >
-> @@ -635,20 +611,7 @@ def print_summary_line(test: Test) -> None:
->                 color = yellow
->         else:
->                 color = red
-> -       counts = test.counts
-> -       print_with_timestamp(color('Testing complete. ' + str(counts)))
+>         def test_crashed_test_json(self):
+> -               result = self._json_for('test_is_test_passed-crash.log')
+> +               result = self._json_for('test_kernel_panic_interrupt.log')
+>                 self.assertEqual(
+> -                       {'name': 'example_simple_test', 'status': 'ERROR'},
+> -                       result["sub_groups"][1]["test_cases"][0])
+> +                       {'name': '', 'status': 'ERROR'},
+> +                       result["sub_groups"][2]["test_cases"][1])
+>
+>         def test_skipped_test_json(self):
+>                 result = self._json_for('test_skip_tests.log')
+> @@ -562,7 +553,7 @@ class KUnitMainTest(unittest.TestCase):
+>         def test_exec_no_tests(self):
+>                 self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+>                 with self.assertRaises(SystemExit) as e:
+> -                  kunit.main(['run'], self.linux_source_mock)
+> +                 kunit.main(['run'], self.linux_source_mock)
+
+Noting that this is just an indentation fix.
+
+
+>                 self.linux_source_mock.run_kernel.assert_called_once_with(
+>                         args=None, build_dir='.kunit', filter_glob='', timeout=300)
+>                 self.print_mock.assert_any_call(StrContains(' 0 tests run!'))
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-crash.log b/tools/testing/kunit/test_data/test_is_test_passed-crash.log
+> deleted file mode 100644
+> index 4d97f6708c4a..000000000000
+> --- a/tools/testing/kunit/test_data/test_is_test_passed-crash.log
+> +++ /dev/null
+> @@ -1,70 +0,0 @@
+> -printk: console [tty0] enabled
+> -printk: console [mc-1] enabled
+> -TAP version 14
+> -1..2
+> -       # Subtest: sysctl_test
+> -       1..8
+> -       # sysctl_test_dointvec_null_tbl_data: sysctl_test_dointvec_null_tbl_data passed
+> -       ok 1 - sysctl_test_dointvec_null_tbl_data
+> -       # sysctl_test_dointvec_table_maxlen_unset: sysctl_test_dointvec_table_maxlen_unset passed
+> -       ok 2 - sysctl_test_dointvec_table_maxlen_unset
+> -       # sysctl_test_dointvec_table_len_is_zero: sysctl_test_dointvec_table_len_is_zero passed
+> -       ok 3 - sysctl_test_dointvec_table_len_is_zero
+> -       # sysctl_test_dointvec_table_read_but_position_set: sysctl_test_dointvec_table_read_but_position_set passed
+> -       ok 4 - sysctl_test_dointvec_table_read_but_position_set
+> -       # sysctl_test_dointvec_happy_single_positive: sysctl_test_dointvec_happy_single_positive passed
+> -       ok 5 - sysctl_test_dointvec_happy_single_positive
+> -       # sysctl_test_dointvec_happy_single_negative: sysctl_test_dointvec_happy_single_negative passed
+> -       ok 6 - sysctl_test_dointvec_happy_single_negative
+> -       # sysctl_test_dointvec_single_less_int_min: sysctl_test_dointvec_single_less_int_min passed
+> -       ok 7 - sysctl_test_dointvec_single_less_int_min
+> -       # sysctl_test_dointvec_single_greater_int_max: sysctl_test_dointvec_single_greater_int_max passed
+> -       ok 8 - sysctl_test_dointvec_single_greater_int_max
+> -kunit sysctl_test: all tests passed
+> -ok 1 - sysctl_test
+> -       # Subtest: example
+> -       1..2
+> -init_suite
+> -       # example_simple_test: initializing
+> -Stack:
+> - 6016f7db 6f81bd30 6f81bdd0 60021450
+> - 6024b0e8 60021440 60018bbe 16f81bdc0
+> - 00000001 6f81bd30 6f81bd20 6f81bdd0
+> -Call Trace:
+> - [<6016f7db>] ? kunit_try_run_case+0xab/0xf0
+> - [<60021450>] ? set_signals+0x0/0x60
+> - [<60021440>] ? get_signals+0x0/0x10
+> - [<60018bbe>] ? kunit_um_run_try_catch+0x5e/0xc0
+> - [<60021450>] ? set_signals+0x0/0x60
+> - [<60021440>] ? get_signals+0x0/0x10
+> - [<60018bb3>] ? kunit_um_run_try_catch+0x53/0xc0
+> - [<6016f321>] ? kunit_run_case_catch_errors+0x121/0x1a0
+> - [<60018b60>] ? kunit_um_run_try_catch+0x0/0xc0
+> - [<600189e0>] ? kunit_um_throw+0x0/0x180
+> - [<6016f730>] ? kunit_try_run_case+0x0/0xf0
+> - [<6016f600>] ? kunit_catch_run_case+0x0/0x130
+> - [<6016edd0>] ? kunit_vprintk+0x0/0x30
+> - [<6016ece0>] ? kunit_fail+0x0/0x40
+> - [<6016eca0>] ? kunit_abort+0x0/0x40
+> - [<6016ed20>] ? kunit_printk_emit+0x0/0xb0
+> - [<6016f200>] ? kunit_run_case_catch_errors+0x0/0x1a0
+> - [<6016f46e>] ? kunit_run_tests+0xce/0x260
+> - [<6005b390>] ? unregister_console+0x0/0x190
+> - [<60175b70>] ? suite_kunit_initexample_test_suite+0x0/0x20
+> - [<60001cbb>] ? do_one_initcall+0x0/0x197
+> - [<60001d47>] ? do_one_initcall+0x8c/0x197
+> - [<6005cd20>] ? irq_to_desc+0x0/0x30
+> - [<60002005>] ? kernel_init_freeable+0x1b3/0x272
+> - [<6005c5ec>] ? printk+0x0/0x9b
+> - [<601c0086>] ? kernel_init+0x26/0x160
+> - [<60014442>] ? new_thread_handler+0x82/0xc0
 > -
-> -def print_error(error_message: str) -> None:
-> -       """
-> -       Prints error message with error format.
-> -
-> -       Example:
-> -       "[ERROR] Test example: missing test plan!"
-> -
-> -       Parameters:
-> -       error_message - message describing error
-> -       """
-> -       print_with_timestamp(red('[ERROR] ') + error_message)
-> +       print_with_timestamp(color(f'Testing complete. {test.counts}'))
+> -       # example_simple_test: kunit test case crashed!
+> -       # example_simple_test: example_simple_test failed
+> -       not ok 1 - example_simple_test
+> -       # example_mock_test: initializing
+> -       # example_mock_test: example_mock_test passed
+> -       ok 2 - example_mock_test
+> -kunit example: one or more tests failed
+> -not ok 2 - example
+> -List of all partitions:
 >
->  # Other methods:
->
-> @@ -794,7 +757,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->  def parse_run_tests(kernel_output: Iterable[str]) -> Test:
->         """
->         Using kernel output, extract KTAP lines, parse the lines for test
-> -       results and print condensed test results and summary line .
-> +       results and print condensed test results and summary line.
->
->         Parameters:
->         kernel_output - Iterable object contains lines of kernel output
+> base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
 > --
 > 2.36.0.rc2.479.g8af0fa9b8e-goog
 >
 
---00000000000033a6a005ddb1a334
+--0000000000007908ec05ddb1a36f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -324,14 +338,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAK
-CnuliaSFic4i0b/Bhvb8byaCWFKYabeYCOW/hFTFUjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA0MjgwNzExNDBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBW
+la67y8SRkofF1O5f+LhWUNxBtVGuJVhvY5E13FTnATAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA0MjgwNzExNDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAj5Bn3Jbh44oEbAPX7VnJ
-iY+re0/XOTvDDC4vkYvvrF3e0cN7mc49sFvny7wCFw4zZXfRtDkIob4MALWF9uamGWV4SC87CdYq
-AELBB5Vxag3gncuTHbIliv15HNCDlOQBolntmCbQjJW3dTzRq8BN7fwnGhAj5DZKlQEfyBeXUR/a
-Qj9Z8MJDcCoPHcAnuWysLTHMS98mP9Coku4CiB8mhH6VIRLTkY3Szs1GI/jbsQ8JeT4ZB1Rc6YaX
-bpBDG8Tpeufmrqca97mq4YSjz2Yr4mMXBLv3H1Lvlc/r0v1YtK9ECjmTOQKos/lX6NI6uFdJAjw1
-pNENb4Qo6e6yKd1q0Q==
---00000000000033a6a005ddb1a334--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAvJZYI135FLkoqH63gfz
+NmmCe14NGH8tjKY7qt2ZMoAsxJNsJGxzJlj4oVaNV/E1zfy0pzMl3kiJTJXr56WvD66c7ZrpOzLG
+VoqyzjYvkZMcRT7un9l79XBDxXo7BjoBJ320nekhC3+rHrZB+3iWsPsDAARKVhzLvcS2/aEqYCrG
++UkqxR7KTx/foCfnriyAgxDbsAIvQqfM11gemDVOdtsxg5uMkm4E1twbOOb5L8nDT9IoQooIdfpc
++6qWIU+eSGoHvDV4hXjZMYfXyVflBo46HKUu/LHCbx18g08i5CCODvLAkhjNg5VXjENgDbNXR13j
+gHW51Lc4ufDfwDEmUw==
+--0000000000007908ec05ddb1a36f--
