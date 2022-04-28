@@ -2,170 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2B8512535
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Apr 2022 00:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2746512925
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Apr 2022 03:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiD0W0T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Apr 2022 18:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S240955AbiD1B7i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Apr 2022 21:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiD0W0S (ORCPT
+        with ESMTP id S229889AbiD1B7g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:26:18 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891A22C656;
-        Wed, 27 Apr 2022 15:23:06 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id f5so863276ilj.13;
-        Wed, 27 Apr 2022 15:23:06 -0700 (PDT)
+        Wed, 27 Apr 2022 21:59:36 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D0946651
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Apr 2022 18:56:22 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d15so3068316pll.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Apr 2022 18:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m2zpAHo4N4DxJCqrpyoM9xFz6wA0o7g6EHge6QxNFRw=;
-        b=M4f0SnMcYdS2+nYxMbjJ3i/Kje+3f0uHeSHyDJjdIt4L25doLpC23IpA0KMbRGvpe/
-         Y5hBa6YaJ7PNTH/sPHBEXY8ZT47X52pvfq/fUHqisUvSmyhJ8M6UEb+7Ky0gogeXlW3D
-         fjHqIhPueXD8lotAnrhhSuCYAvCTC/W+0Kv3UiQCG5Uu0gWV1c5dQnJ6tpT+zxEnbT9h
-         t7fgoJVDENYDX1k7RdGFyv+NeG+Ip7f5AB5R/4Nxc+80Yok1zqSbeXbzvZDqZf1u2U3I
-         8ep1xVDhOA+Clhi/Y68lIl4KfEGQnR3Xh5EJvlfW3QqTXJE0AeQXstMDf60Hb5s8JpHq
-         4EmQ==
+        d=sargun.me; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uEcNSiaDgqCQTOD0WHJ5CmXveRjV7YkdAup8UYWATQA=;
+        b=CQ81ynmmkryn0ZoG2mZWOm/YOBgsz/sPSKCuZXy2qvyQj1AvsNu7edzdJudne1VcOu
+         U5ZvctWsFrJ5LuwflBMasuGCA8ftt8drTqHu0m7BAgMfuAl50CORS2VbQxc+E4nb2izY
+         fJY+n8GhNnbdZyhjA4H64Ir8RqAmYZ+iKgkb0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m2zpAHo4N4DxJCqrpyoM9xFz6wA0o7g6EHge6QxNFRw=;
-        b=fEwdhgkzOdux3crKVYuCsAWVmr0DM6Xxh0jSKXHM6V9KT+bTM09KZkESwRAx78qvV/
-         F4eHHCNl9C82Ci9g+ZrA43RZfj+l7kLlAl7J2yDN7Oo5hkd4vDHia2o8MU/YWoOyJ5qd
-         qjpKmO5Lm3KEiVIGx4FzEnhC+0zOeWwGU/zwkciQDqI0GBgFQOiWJb+42qieh1IlkNVJ
-         kODcaaPFrp9y9i2Jm7ZuDv9vxLgho/S1Wo1V8tifyuHzmCh/K+Poamt7BrIIZyzc8Sqf
-         xHKAoF8nCR3z03lW4es4zzzK+v0JS7ZjXupfH3Ih6cH/B+xyGrpi8nipO/juC44cShM0
-         nDRA==
-X-Gm-Message-State: AOAM532uTtOqMrXQwBO1eM88pGtyIVmJDpEADmOYZuSYpjhfpcAfppEg
-        R7cTul5tnFOAbWtDba8omrugPcb8gDNRUevorCA=
-X-Google-Smtp-Source: ABdhPJxqiR8j8bvemVOUtV1TwL7VR3W7PitBTYk8DangGIPNZSyDjL+UurL8eaT8ITiQYErdSEGqNLyFEWXCZnOoOq4=
-X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
- y6-20020a926406000000b002bbf1dee13emr11721808ilb.305.1651098185982; Wed, 27
- Apr 2022 15:23:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uEcNSiaDgqCQTOD0WHJ5CmXveRjV7YkdAup8UYWATQA=;
+        b=b9s/FWG1W/waOXvhjdeyFnIgih5m4VwWyLFgBOnq54kHmD/4/R3aVoH3VuYsd8nVUm
+         n54VeuuqPEObAAwWF7uApWuOWCcXQ4zSGmEb3qWm79noJJlmknlzI8EchA2DIY6/lXiD
+         gnWLKfR6YznE0So3/oqu9tOabWMjiqRFavR+SmCAAjUXwPSEjX1l1UXPkAW6MKPhvrhi
+         nM1VcH7KM5guofn2//FN+GUbh42xlbxo2AcZiTjDgxT/Ei93pmdXnUu2h82kKfR4TGO2
+         F60uPLHLg6fBAjTlo+wJV/Oo+JAnf2jZDDXzvXrzm37esbV7/b5hKev0d7TqIYH2P6yc
+         FyLA==
+X-Gm-Message-State: AOAM530+ZFo6RslD0PZkVvTsHcGBLD8N/fj174TPV4zHi6oSKm2uqAbh
+        Y5IcZClvXNw5eXrmguqZJWkpc5iPpLbj7Q==
+X-Google-Smtp-Source: ABdhPJzNlSkO0bLLdXqTAvV5hz+K17mPaE7qeYxp98oB1k3Q3mQ9gBDW2JIwev81mmEJuZH8FLShew==
+X-Received: by 2002:a17:903:20f:b0:158:d86a:f473 with SMTP id r15-20020a170903020f00b00158d86af473mr31568087plh.92.1651110981954;
+        Wed, 27 Apr 2022 18:56:21 -0700 (PDT)
+Received: from localhost.localdomain ([69.53.254.5])
+        by smtp.gmail.com with ESMTPSA id y14-20020a63ce0e000000b003c14af505edsm637814pgf.5.2022.04.27.18.56.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 18:56:20 -0700 (PDT)
+From:   Sargun Dhillon <sargun@sargun.me>
+To:     Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/2] selftests/seccomp: Ensure that notifications come in FIFO order
+Date:   Wed, 27 Apr 2022 18:54:47 -0700
+Message-Id: <20220428015447.13661-2-sargun@sargun.me>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220428015447.13661-1-sargun@sargun.me>
+References: <20220428015447.13661-1-sargun@sargun.me>
 MIME-Version: 1.0
-References: <20220422172422.4037988-1-maximmi@nvidia.com> <20220422172422.4037988-6-maximmi@nvidia.com>
- <20220426001223.wlnfd2kmmogip5d5@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CAEf4BzaGjxsf46YPs1FRSp4kj+nkKhw7vLKAGwgrdnAuTW5+9Q@mail.gmail.com>
- <92e9eaf6-4d72-3173-3271-88e3b8637c7a@nvidia.com> <CAEf4BzZhjY+F9JYmT7k+m87UZ1qKuO8_Mjjq4CGgkr=z9BGDCg@mail.gmail.com>
- <946b8928-56b6-b6ca-ec33-6ffe7af6a90c@nvidia.com>
-In-Reply-To: <946b8928-56b6-b6ca-ec33-6ffe7af6a90c@nvidia.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Apr 2022 15:22:55 -0700
-Message-ID: <CAEf4BzZqZkDB8EJh3K3TpT7N556hxCRqMF7x_Y8D05wmBGDdvA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 5/6] bpf: Add selftests for raw syncookie helpers
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 10:19 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
->
-> On 2022-04-27 01:11, Andrii Nakryiko wrote:
-> > On Tue, Apr 26, 2022 at 11:29 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
-> >>
-> >> On 2022-04-26 09:26, Andrii Nakryiko wrote:
-> >>> On Mon, Apr 25, 2022 at 5:12 PM Alexei Starovoitov
-> >>> <alexei.starovoitov@gmail.com> wrote:
-> >>>>
-> >>>> On Fri, Apr 22, 2022 at 08:24:21PM +0300, Maxim Mikityanskiy wrote:
-> >>>>> +void test_xdp_synproxy(void)
-> >>>>> +{
-> >>>>> +     int server_fd = -1, client_fd = -1, accept_fd = -1;
-> >>>>> +     struct nstoken *ns = NULL;
-> >>>>> +     FILE *ctrl_file = NULL;
-> >>>>> +     char buf[1024];
-> >>>>> +     size_t size;
-> >>>>> +
-> >>>>> +     SYS("ip netns add synproxy");
-> >>>>> +
-> >>>>> +     SYS("ip link add tmp0 type veth peer name tmp1");
-> >>>>> +     SYS("ip link set tmp1 netns synproxy");
-> >>>>> +     SYS("ip link set tmp0 up");
-> >>>>> +     SYS("ip addr replace 198.18.0.1/24 dev tmp0");
-> >>>>> +
-> >>>>> +     // When checksum offload is enabled, the XDP program sees wrong
-> >>>>> +     // checksums and drops packets.
-> >>>>> +     SYS("ethtool -K tmp0 tx off");
-> >>>>
-> >>>> BPF CI image doesn't have ethtool installed.
-> >>>> It will take some time to get it updated. Until then we cannot land the patch set.
-> >>>> Can you think of a way to run this test without shelling to ethtool?
-> >>>
-> >>> Good news: we got updated CI image with ethtool, so that shouldn't be
-> >>> a problem anymore.
-> >>>
-> >>> Bad news: this selftest still fails, but in different place:
-> >>>
-> >>> test_synproxy:FAIL:iptables -t raw -I PREROUTING -i tmp1 -p tcp -m tcp
-> >>> --syn --dport 8080 -j CT --notrack unexpected error: 512 (errno 2)
-> >>
-> >> That's simply a matter of missing kernel config options:
-> >>
-> >> CONFIG_NETFILTER_SYNPROXY=y
-> >> CONFIG_NETFILTER_XT_TARGET_CT=y
-> >> CONFIG_NETFILTER_XT_MATCH_STATE=y
-> >> CONFIG_IP_NF_FILTER=y
-> >> CONFIG_IP_NF_TARGET_SYNPROXY=y
-> >> CONFIG_IP_NF_RAW=y
-> >>
-> >> Shall I create a pull request on github to add these options to
-> >> https://github.com/libbpf/libbpf/tree/master/travis-ci/vmtest/configs?
-> >>
-> >
-> > Yes, please. But also for [0], that's the one that tests all the
-> > not-yet-applied patches
-> >
-> >    [0] https://github.com/kernel-patches/vmtest/
->
-> Created pull requests:
->
-> https://github.com/kernel-patches/vmtest/pull/79
-> https://github.com/libbpf/libbpf/pull/490
->
+When multiple notifications are waiting, ensure they show up in order, as
+defined by the (predictable) seccomp notification ID. This ensures FIFO
+ordering of notification delivery as notification ids are monitonic and
+decided when the notification is generated (as opposed to received).
 
-Merged both, thanks.
+Signed-off-by: Sargun Dhillon <sargun@sargun.me>
+Cc: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 109 ++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 9d126d7fabdb..33fb3d0c3347 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4231,6 +4231,115 @@ TEST(user_notification_addfd_rlimit)
+ 	close(memfd);
+ }
+ 
++static char get_proc_stat(int pid)
++{
++	char proc_path[100] = {0};
++	char *line = NULL;
++	size_t len = 0;
++	ssize_t nread;
++	char status;
++	FILE *f;
++	int i;
++
++	snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
++	f = fopen(proc_path, "r");
++	if (f == NULL)
++		ksft_exit_fail_msg("%s - Could not open %s\n",
++				   strerror(errno), proc_path);
++
++	for (i = 0; i < 3; i++) {
++		nread = getdelim(&line, &len, ' ', f);
++		if (nread <= 0)
++			ksft_exit_fail_msg("Failed to read status: %s\n",
++					   strerror(errno));
++	}
++
++	status = *line;
++	free(line);
++	fclose(f);
++
++	return status;
++}
++
++TEST(user_notification_fifo)
++{
++	struct seccomp_notif_resp resp = {};
++	struct seccomp_notif req = {};
++	int i, status, listener;
++	pid_t pid, pids[3];
++	__u64 baseid;
++	long ret;
++	/* 100 ms */
++	struct timespec delay = { .tv_nsec = 100000000 };
++
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
++	}
++
++	/* Setup a listener */
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	ASSERT_GE(listener, 0);
++
++	pid = fork();
++	ASSERT_GE(pid, 0);
++
++	if (pid == 0) {
++		ret = syscall(__NR_getppid);
++		exit(ret != USER_NOTIF_MAGIC);
++	}
++
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++	baseid = req.id + 1;
++
++	resp.id = req.id;
++	resp.error = 0;
++	resp.val = USER_NOTIF_MAGIC;
++
++	/* check that we make sure flags == 0 */
++	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
++
++	EXPECT_EQ(waitpid(pid, &status, 0), pid);
++	EXPECT_EQ(true, WIFEXITED(status));
++	EXPECT_EQ(0, WEXITSTATUS(status));
++
++	/* Start children, and them generate notifications */
++	for (i = 0; i < ARRAY_SIZE(pids); i++) {
++		pid = fork();
++		if (pid == 0) {
++			ret = syscall(__NR_getppid);
++			exit(ret != USER_NOTIF_MAGIC);
++		}
++		pids[i] = pid;
++	}
++
++	/* This spins until all of the children are sleeping */
++restart_wait:
++	for (i = 0; i < ARRAY_SIZE(pids); i++) {
++		if (get_proc_stat(pids[i]) != 'S') {
++			nanosleep(&delay, NULL);
++			goto restart_wait;
++		}
++	}
++
++	/* Read the notifications in order (and respond) */
++	for (i = 0; i < ARRAY_SIZE(pids); i++) {
++		memset(&req, 0, sizeof(req));
++		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++		EXPECT_EQ(req.id, baseid + i);
++		resp.id = req.id;
++		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
++	}
++
++	/* Make sure notifications were received */
++	for (i = 0; i < ARRAY_SIZE(pids); i++) {
++		EXPECT_EQ(waitpid(pids[i], &status, 0), pids[i]);
++		EXPECT_EQ(true, WIFEXITED(status));
++		EXPECT_EQ(0, WEXITSTATUS(status));
++	}
++}
++
+ /*
+  * TODO:
+  * - expand NNP testing
+-- 
+2.25.1
 
-> >>> See [0].
-> >>>
-> >>>     [0] https://github.com/kernel-patches/bpf/runs/6169439612?check_suite_focus=true
-> >>
->
