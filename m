@@ -2,195 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687E05148D5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 14:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BBA515106
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 18:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358853AbiD2MKt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Apr 2022 08:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
+        id S1377522AbiD2QpX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Apr 2022 12:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347487AbiD2MKs (ORCPT
+        with ESMTP id S1376610AbiD2QpW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:10:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037A0A1472;
-        Fri, 29 Apr 2022 05:07:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7BAEB8346E;
-        Fri, 29 Apr 2022 12:07:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCBFC385AD;
-        Fri, 29 Apr 2022 12:07:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651234046;
-        bh=VeZZK3nq0xqQBNb7qp0qAkJQnROZryyX5wpt1xcREVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hvPXKUpqvoPhSromFOwczy83Hk/E46GrEsHnY/pQT/pRRP7M4nu6WiYLiQQuIsClo
-         84qCLfg1PPd6yp5ZFWCzlB6F3B2/9OrCDFLTrqtrPIBG7TKnUxkQL20bTNNA1/IURE
-         7w3eySy9Vn7u5Ub1xUfm9eiUEPcny7kmctL3bf0g=
-Date:   Fri, 29 Apr 2022 14:07:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: Taint kernel if any tests run
-Message-ID: <YmvU+/RUhOcL+B1p@kroah.com>
-References: <20220429043913.626647-1-davidgow@google.com>
- <YmuPFGrkzQYACgK0@kroah.com>
- <87tuacrv7t.fsf@intel.com>
- <YmvO3RoY1JqrR1pu@kroah.com>
- <87o80krtou.fsf@intel.com>
+        Fri, 29 Apr 2022 12:45:22 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD51483BE;
+        Fri, 29 Apr 2022 09:42:03 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id k14so6967225pga.0;
+        Fri, 29 Apr 2022 09:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jwO7JOOVGQF3gVakwvbVNF6yBHkItkffoETKadSEAgY=;
+        b=ZuqGCM5qE1g+EvsPqefJW1c2b2jrR5jkaYwLXqHo8XabNKydys3JonwO/36b85brmK
+         Ca4DwizzJlxQ0JTMAEkdrfdyVHF6C4kkw4HUT5N7C8AOq0kJ6VI++fmW1ve3luwmg198
+         4iWtNbfmAIM6CbQ+6c+S6QY3xKq3jd9VNwsMmP5KurPBoJidMctjuz9ND5DVPmDUl5KF
+         3E7Vi2ZBsUGkJTeef+iL87H0QXmS56IPqJ5CthX9fwlwMlmmcrXuFTgo/PJFE/8ekMjE
+         oMdA4C0hbd8PCgC3J9iMbIkToAndLZE2SKaX0/WlTuzqPO6qzcfv0Y9vbczyEvXswvpL
+         fUEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jwO7JOOVGQF3gVakwvbVNF6yBHkItkffoETKadSEAgY=;
+        b=ioIJTYNHF6BMU0xWWGmFTUDak4PZEtxO6lExBu19lAQd4+vQOo8nwG6rG+JZJAtBvs
+         wWEjg4LHGylU5snvFWc61x57gfhRKGDXPjHI2ujhx7TN2oDLjA2//zyXXjC4wn+4moT3
+         tcHoAfc9VZqCrgZEoToDAZazuH97U5n0Oz2KEc+fY2AC5a5y4JH7YQQvzZxGfzKijujb
+         wI1+BmF5Fi36IvmE9JR9dBuqVYtG3VWqOZbkG2MybMQz0Y5+I1lx4OM2sTa/S3QQNN++
+         d+yj8ZAICXMY4bwnfhHPeefhQKBSTjwnPiTALxkHBM+Uy/weRMBTb6mK8SWF0Yr6Koaw
+         /7Ew==
+X-Gm-Message-State: AOAM533HlYb55GtetLhPh2LctBs03KOSqvZq1IxlMGK6W352c3A76cJw
+        68kfBmqKcDDEopuDAh2SDPsgYOerii1NbWbedd4=
+X-Google-Smtp-Source: ABdhPJx5+3KWS/HTDUik07sDf3LsHVX0y4tEApMpyqIRUSK4SbtkkkRvHu+nXdpPlZkl6nrSZu16JbuG3k8ZGl6+xpE=
+X-Received: by 2002:a63:5163:0:b0:3a9:4e90:6d3d with SMTP id
+ r35-20020a635163000000b003a94e906d3dmr247357pgl.48.1651250522335; Fri, 29 Apr
+ 2022 09:42:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o80krtou.fsf@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429111541.339853-1-maximmi@nvidia.com> <20220429111541.339853-5-maximmi@nvidia.com>
+In-Reply-To: <20220429111541.339853-5-maximmi@nvidia.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 29 Apr 2022 09:41:51 -0700
+Message-ID: <CAADnVQJrRONd+pPpfahyzLG7WCP54y_eoNb_8zCsN_m=S_OSZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 4/5] bpf: Add selftests for raw syncookie helpers
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 02:54:25PM +0300, Jani Nikula wrote:
-> On Fri, 29 Apr 2022, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Fri, Apr 29, 2022 at 02:21:26PM +0300, Jani Nikula wrote:
-> >> On Fri, 29 Apr 2022, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >> > On Fri, Apr 29, 2022 at 12:39:14PM +0800, David Gow wrote:
-> >> >> KUnit tests are not supposed to run on production systems: they may do
-> >> >> deliberately illegal things to trigger errors, and have security
-> >> >> implications (assertions will often deliberately leak kernel addresses).
-> >> >> 
-> >> >> Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-> >> >> run. This will be printed as 'N' (for kuNit, as K, U and T were already
-> >> >> taken).
-> >> >> 
-> >> >> This should discourage people from running KUnit tests on production
-> >> >> systems, and to make it easier to tell if tests have been run
-> >> >> accidentally (by loading the wrong configuration, etc.)
-> >> >> 
-> >> >> Signed-off-by: David Gow <davidgow@google.com>
-> >> >> ---
-> >> >> 
-> >> >> This is something I'd been thinking about for a while, and it came up
-> >> >> again, so I'm finally giving it a go.
-> >> >> 
-> >> >> Two notes:
-> >> >> - I decided to add a new type of taint, as none of the existing ones
-> >> >>   really seemed to fit. We could live with considering KUnit tests as
-> >> >>   TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
-> >> >>   right.
-> >> >> - The taint_flags table gives a couple of checkpatch.pl errors around
-> >> >>   bracket placement. I've kept the new entry consistent with what's
-> >> >>   there rather than reformatting the whole table, but be prepared for
-> >> >>   complaints about spaces.
-> >> >> 
-> >> >> Thoughts?
-> >> >> -- David
-> >> >> 
-> >> >> ---
-> >> >>  Documentation/admin-guide/tainted-kernels.rst | 1 +
-> >> >>  include/linux/panic.h                         | 3 ++-
-> >> >>  kernel/panic.c                                | 1 +
-> >> >>  lib/kunit/test.c                              | 4 ++++
-> >> >>  4 files changed, 8 insertions(+), 1 deletion(-)
-> >> >> 
-> >> >> diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-> >> >> index ceeed7b0798d..8f18fc4659d4 100644
-> >> >> --- a/Documentation/admin-guide/tainted-kernels.rst
-> >> >> +++ b/Documentation/admin-guide/tainted-kernels.rst
-> >> >> @@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
-> >> >>   15  _/K   32768  kernel has been live patched
-> >> >>   16  _/X   65536  auxiliary taint, defined for and used by distros
-> >> >>   17  _/T  131072  kernel was built with the struct randomization plugin
-> >> >> + 18  _/N  262144  a KUnit test has been run
-> >> >>  ===  ===  ======  ========================================================
-> >> >>  
-> >> >>  Note: The character ``_`` is representing a blank in this table to make reading
-> >> >> diff --git a/include/linux/panic.h b/include/linux/panic.h
-> >> >> index f5844908a089..1d316c26bf27 100644
-> >> >> --- a/include/linux/panic.h
-> >> >> +++ b/include/linux/panic.h
-> >> >> @@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
-> >> >>  #define TAINT_LIVEPATCH			15
-> >> >>  #define TAINT_AUX			16
-> >> >>  #define TAINT_RANDSTRUCT		17
-> >> >> -#define TAINT_FLAGS_COUNT		18
-> >> >> +#define TAINT_KUNIT			18
-> >> >> +#define TAINT_FLAGS_COUNT		19
-> >> >>  #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
-> >> >>  
-> >> >>  struct taint_flag {
-> >> >> diff --git a/kernel/panic.c b/kernel/panic.c
-> >> >> index eb4dfb932c85..b24ca63ed738 100644
-> >> >> --- a/kernel/panic.c
-> >> >> +++ b/kernel/panic.c
-> >> >> @@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
-> >> >>  	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
-> >> >>  	[ TAINT_AUX ]			= { 'X', ' ', true },
-> >> >>  	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
-> >> >> +	[ TAINT_KUNIT ]			= { 'N', ' ', false },
-> >> >
-> >> > As kunit tests can be in modules, shouldn't this be "true" here?
-> >> >
-> >> > Overall, I like it, makes sense to me.  The "N" will take some getting
-> >> > used to, and I have no idea why "T" was for "struct randomization", that
-> >> > would have allowed you to use "T" instead.  Oh well.
-> >> 
-> >> Would you consider a patch adding more self-explanatory taint flag
-> >> strings to the output?
-> >
-> > Where would those strings go?  In the oops report?  Or somewhere else?
-> 
-> I was thinking the oops report. Basically most times I look at an oops
-> with taint, I need to double check what the flags mean. There are soon
-> 19 of them, you need to look at a lot of oops to remember them all.
+On Fri, Apr 29, 2022 at 4:16 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+> +       SYS("iptables -t raw -I PREROUTING \
+> +           -i tmp1 -p tcp -m tcp --syn --dport 8080 -j CT --notrack");
+> +       SYS("iptables -t filter -A INPUT \
+> +           -i tmp1 -p tcp -m tcp --dport 8080 -m state --state INVALID,UNTRACKED \
+> +           -j SYNPROXY --sack-perm --timestamp --wscale 7 --mss 1460");
+> +       SYS("iptables -t filter -A INPUT \
+> +           -i tmp1 -m state --state INVALID -j DROP");
+> +
+> +       ctrl_file = SYS_OUT("./xdp_synproxy --iface tmp1 --ports 8080 --single \
+> +                           --mss4 1460 --mss6 1440 --wscale 7 --ttl 64");
 
-I agree, it isn't easy to remember.
+That doesn't work for test_progs-no_alu32.
+sh: line 1: ./xdp_synproxy: No such file or directory
+https://github.com/kernel-patches/bpf/runs/6227226675?check_suite_focus=true#step:6:7380
 
-> Currently we also print ' ' (or 'G' in case of non-properietary module)
-> for every unset taint flag. If we stopped doing that we wouldn't even
-> need that much more horizontal space for the strings, unless several
-> flags were set. (I assume people who do remember all the flags by heart
-> would still want to keep them too.)
-
-I recommend keeping the current layout, but maybe adding a new line that
-gives the "key" for what the current taint flags mean?
-
-For example, the oops report here:
-	https://lore.kernel.org/r/20220413033425.GM16799@magnolia
-Has the lines:
-	kernel BUG at mm/filemap.c:1653!
-	invalid opcode: 0000 [#1] PREEMPT SMP
-	CPU: 0 PID: 1349866 Comm: 0:116 Tainted: G        W         5.18.0-rc2-djwx #rc2 19cc48221d47ada6c8e5859639b6a0946c9a3777
-	Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20171121_152543-x86-ol7-builder-01.us.oracle.com-4.el7.1 04/01/2014
-	Workqueue: xfs-conv/sda4 xfs_end_io [xfs]
-	RIP: 0010:folio_end_writeback+0x79/0x80
-
-Perhaps we add another line right before or after "Hardware name:" that
-lists the flags that are set at the moment and what they mean:
-
-	Taint flags: [G]=PROPRIETARY_MODULE, [W]=WARN
-
-Or something like that (format was a first guess only).
-
-Anyway, might be helpful?
-
-thanks,
-
-greg k-h
+and going to be fragile in general.
+Could you launch it as a kthread or fork it
+like other tests are doing ?
