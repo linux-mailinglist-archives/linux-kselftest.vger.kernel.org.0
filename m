@@ -2,133 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1609513C20
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Apr 2022 21:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0C951417E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 06:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiD1Tig (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Apr 2022 15:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S237491AbiD2EnY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Apr 2022 00:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbiD1TiA (ORCPT
+        with ESMTP id S231148AbiD2EnX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:38:00 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BBB5AECF;
-        Thu, 28 Apr 2022 12:34:33 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 41C745C00BC;
-        Thu, 28 Apr 2022 15:34:30 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 28 Apr 2022 15:34:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651174470; x=1651260870; bh=FZ2ZMuL/Lp
-        bRzXpzd8eL6QW8bLX6uuX0IBW3S/wms2M=; b=jqe3D6dszG+9pWsC+SEYq8CVEQ
-        EvJGYVJMmm/o58el8L7aYmMBI2QUtUHdS5QGXCxZrizvOvTARRBrZkiN2BeqCTov
-        wpJhhOjtniEt0WvceN88+2kIyxln86q1Odu3FmrWNvKqk95NTzCLFoF336WrF10l
-        opZ7vPsD2N91mRzZvr2sVmObZ46OdmmyPofjYRorOYiOO3GnLorP12UZ8sZyXaqX
-        kVUclyH+SgpZf5P8USKv5b1yNziuyjUFP+JiWzxu1W1T610euiFxSczWuNwnXher
-        6lVFHWNDNc9T6opcwnfCyQcbiPQ06H/HKTuGfaEfD/kBtIcB8dkE5kQFF73w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651174470; x=
-        1651260870; bh=FZ2ZMuL/LpbRzXpzd8eL6QW8bLX6uuX0IBW3S/wms2M=; b=q
-        QdEQuyzyn1jVuUGKX5SbRZz/tDb9ry79I1j/VzxrfxtIdeuc0ksgMVpu/ByCSVJP
-        kUE+cCXUuuzB6HmfBJQtgOxYl4kjTw1vD40ZVJY1aA4p0VYtTymFVnmCeBBhtcc7
-        A67PoeeG+ntgVumeLfOEBxARM2/DYAJolKQOME2xgghSqygC5JmRc/Nx7dKEK92k
-        MDf00JDHyqP1tOjUVhqV8iXOJletxQynmKRjepZZu7D6yQ2SRFKOvqhXp/1uflzh
-        gmSLHd1X9qyxJf0z0lRyFB+K+9nXOTxEFptgB4Rd+BRs/+svg9j2h2VqLaI4M0th
-        va6swbQRv+TgpjxKGu9Bw==
-X-ME-Sender: <xms:RexqYtBq6PMfZvY18peTJTWFzgaOj6L3hmeboHxSFAe4VeCJ74JwbA>
-    <xme:RexqYrh2osn09kcC279wbfUjWAwH6fXzc1UDZ8Yp3Tz3ZIhJf38Fts3C2a4Iggy1j
-    ynif_n-0YmXAi3HhBc>
-X-ME-Received: <xmr:RexqYok01slwbmnSGw0XP5-OkUBnEZTHiraTpoR0NdMlMesVybCR0LjM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejgddugedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
-    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epthihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:RexqYnzgluTg-4s794mKFe6IPl_7CkLpiG6qn1e_EEThFDRBTIqMYw>
-    <xmx:RexqYiTBgJiWBqysDJv79T2w5lAzJNZU3xJXXAcT97kuw5IlNqeC-Q>
-    <xmx:RexqYqYwb2LLQp_Q51y-_ECQ5K2KW7T53RJXc9Xk654T41jI5sIWHA>
-    <xmx:RuxqYoPNqfqCOU-GCve-Wy9cS7kDCs0JQSjIoKwVPhkqJAsuinTixA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Apr 2022 15:34:28 -0400 (EDT)
-Date:   Thu, 28 Apr 2022 13:34:25 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Sargun Dhillon <sargun@sargun.me>
-Cc:     Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/seccomp: Ensure that notifications come in
- FIFO order
-Message-ID: <YmrsQZ2lNGHjGK6i@cisco>
-References: <20220428015447.13661-1-sargun@sargun.me>
- <20220428015447.13661-2-sargun@sargun.me>
- <YmqTh68UkjVsTnUX@cisco>
- <CAMp4zn-725wHy2su_Dz8pEdzUv7tG=gQ+9=7hj5PXfZpQeOLjQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMp4zn-725wHy2su_Dz8pEdzUv7tG=gQ+9=7hj5PXfZpQeOLjQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 00:43:23 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A816590
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Apr 2022 21:40:03 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id k5-20020a636f05000000b003aab7e938a5so3363605pgc.21
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Apr 2022 21:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7pAm/LDFHoDLOVuIZx6NOUlnYoOG6z2KtSbentQNohQ=;
+        b=lOJ6ndqujbkQ9y8YtiKLh1NmKtjsaaYLb7DNBKdzwM6kNdDJymwTB229+sHcII9IGm
+         ZgijMD9LB65oEfpnzDUuw7gMa1qtR6k7S2ZlegTaofUACUzwpv8vlppdU55LGRFu3xOo
+         DTTGaB92cV5r20Fkg0e2H9E3kthvAOiLTkz3TfcnrbdLxtSzKUl/QUaAPl9Nlyd9d+NP
+         hlFSo4WvNXsXYW96S52BZhtTswOFsceMy/Pzv0U02tJAyQ7NxtUhQdPT8MVsYrL7qi8C
+         lrvnil194+31LqgOEWw4WdQqbFQ3bkGTAw/oDIyQ1CcH4F+XIZe5J159ZKBObnviPkrs
+         Yh9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7pAm/LDFHoDLOVuIZx6NOUlnYoOG6z2KtSbentQNohQ=;
+        b=6ThWMo2GvjlT9f4pztR1xgp2pQwkNlIJd/AcUtoa2lGaEKoEiygdl5v8vB5gR/Pv/U
+         pyz1dgcRD6UqX+Bq80NQXlWS0mD7N+5Olv5rjueUCwxrmlF4RYD0OwvoEHfYY/kEJkXb
+         vPJWq2fMzJUqae6N5iGOge08ghtkDA+m1zj7fZpgsgHjwjuWORHrR78HI3WUXx5WnbLk
+         t5+UvwULeaOLjiPmxiz8kGSgC7gjW1MJwRKOmMrm1hFYCkW99IjaE4ZhPg1ibkmN6b8P
+         9Iv1EFNaAdr9Pema6W8Uc332eGBy5bAlztYdoEux1SnRLmSslO0IzqJw8PlDyMNnxp4h
+         mujQ==
+X-Gm-Message-State: AOAM531iQ7ZmmFcxiCjWzOoXnvdJPVnMXt40jkeQmNORtlwkGL2uZC/c
+        hv7lfn4uZcJD9OxxsjdfnhsdsFYoJe4ufQ==
+X-Google-Smtp-Source: ABdhPJymcIZSLhtD4Eu7q4Ap5bwpv/nVLCJ/HlABq4/5Ntta3fkMA3IydOm1P3Wx780QZrTfXCSsdCH/PLWsog==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:902:ce02:b0:151:a86d:dc2b with SMTP
+ id k2-20020a170902ce0200b00151a86ddc2bmr37514527plg.57.1651207203378; Thu, 28
+ Apr 2022 21:40:03 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 12:39:14 +0800
+Message-Id: <20220429043913.626647-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH] kunit: Taint kernel if any tests run
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 09:38:10AM -0700, Sargun Dhillon wrote:
-> On Thu, Apr 28, 2022 at 6:15 AM Tycho Andersen <tycho@tycho.pizza> wrote:
-> > > +     for (i = 0; i < ARRAY_SIZE(pids); i++) {
-> > > +             pid = fork();
-> > > +             if (pid == 0) {
-> > > +                     ret = syscall(__NR_getppid);
-> > > +                     exit(ret != USER_NOTIF_MAGIC);
-> > > +             }
-> > > +             pids[i] = pid;
-> > > +     }
-> > > +
-> > > +     /* This spins until all of the children are sleeping */
-> > > +restart_wait:
-> > > +     for (i = 0; i < ARRAY_SIZE(pids); i++) {
-> > > +             if (get_proc_stat(pids[i]) != 'S') {
-> > > +                     nanosleep(&delay, NULL);
-> > > +                     goto restart_wait;
-> > > +             }
-> > > +     }
-> >
-> > I wonder if we should/can combine this loop with the previous one, and
-> > wait for the child to sleep in getppid() before we fork the next one.
-> > Otherwise isn't racy in the case that your loop continues to the next
-> > iteration before the child processes are scheduled, so things might be
-> > out of order? Maybe I'm missing something.
-> >
-> > In any case, this change seems reasonable to me.
-> >
-> > Tycho
-> It's okay if the child processes are started out of order. The test just
-> verifies that the calls are delivered in FIFO order according to when
-> the syscall was called (not when the process was started), and we do
-> this by just looking at the notification ID. It doesn't care about which
-> process generated the notification.
+KUnit tests are not supposed to run on production systems: they may do
+deliberately illegal things to trigger errors, and have security
+implications (assertions will often deliberately leak kernel addresses).
 
-I totally missed that you don't this, I just assumed you did. Thanks.
+Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
+run. This will be printed as 'N' (for kuNit, as K, U and T were already
+taken).
 
-Anyway, you can add:
+This should discourage people from running KUnit tests on production
+systems, and to make it easier to tell if tests have been run
+accidentally (by loading the wrong configuration, etc.)
 
-Acked-by: Tycho Andersen <tycho@tycho.pizza>
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-to both patches.
+This is something I'd been thinking about for a while, and it came up
+again, so I'm finally giving it a go.
 
-Tycho
+Two notes:
+- I decided to add a new type of taint, as none of the existing ones
+  really seemed to fit. We could live with considering KUnit tests as
+  TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
+  right.
+- The taint_flags table gives a couple of checkpatch.pl errors around
+  bracket placement. I've kept the new entry consistent with what's
+  there rather than reformatting the whole table, but be prepared for
+  complaints about spaces.
+
+Thoughts?
+-- David
+
+---
+ Documentation/admin-guide/tainted-kernels.rst | 1 +
+ include/linux/panic.h                         | 3 ++-
+ kernel/panic.c                                | 1 +
+ lib/kunit/test.c                              | 4 ++++
+ 4 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index ceeed7b0798d..8f18fc4659d4 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
+  15  _/K   32768  kernel has been live patched
+  16  _/X   65536  auxiliary taint, defined for and used by distros
+  17  _/T  131072  kernel was built with the struct randomization plugin
++ 18  _/N  262144  a KUnit test has been run
+ ===  ===  ======  ========================================================
+ 
+ Note: The character ``_`` is representing a blank in this table to make reading
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index f5844908a089..1d316c26bf27 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+ #define TAINT_LIVEPATCH			15
+ #define TAINT_AUX			16
+ #define TAINT_RANDSTRUCT		17
+-#define TAINT_FLAGS_COUNT		18
++#define TAINT_KUNIT			18
++#define TAINT_FLAGS_COUNT		19
+ #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+ 
+ struct taint_flag {
+diff --git a/kernel/panic.c b/kernel/panic.c
+index eb4dfb932c85..b24ca63ed738 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+ 	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
+ 	[ TAINT_AUX ]			= { 'X', ' ', true },
+ 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
++	[ TAINT_KUNIT ]			= { 'N', ' ', false },
+ };
+ 
+ /**
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 0f66c13d126e..ea8e9162445d 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -11,6 +11,7 @@
+ #include <kunit/test-bug.h>
+ #include <linux/kernel.h>
+ #include <linux/moduleparam.h>
++#include <linux/panic.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched.h>
+ 
+@@ -498,6 +499,9 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	struct kunit_result_stats suite_stats = { 0 };
+ 	struct kunit_result_stats total_stats = { 0 };
+ 
++	/* Taint the kernel so we know we've run tests. */
++	add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);
++
+ 	kunit_print_subtest_start(suite);
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+-- 
+2.36.0.464.gb9c8b46e94-goog
+
