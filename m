@@ -2,147 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1102C514300
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 09:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28923514307
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 09:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348155AbiD2HMb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Apr 2022 03:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S1354977AbiD2HPS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Apr 2022 03:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiD2HM3 (ORCPT
+        with ESMTP id S1354793AbiD2HPR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Apr 2022 03:12:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54098BF958;
-        Fri, 29 Apr 2022 00:09:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 29 Apr 2022 03:15:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB86F192BE
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 00:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651216319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Eeml1NGAG++uLXs/s/HDZYXT+SQjn5HA3mIKGb81Y4o=;
+        b=HH+L0rznu1/UeXbQOAQ7zo2r1DZX5+gLdj9u43j9oM3KCRMTqxfk/5rdHxCXqHEEogrcnL
+        977b/9+Sb81iB6TcAAzqjBeeVy4EQclYaLVdICtsl8X9AoPvlPjlOtiGfzl6cPnffJJ1+2
+        OIXEpByPxFAKxvUk+jo/BHS4ww5pFoU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-156-dRuKLd0tPkin7KSv8IMuaQ-1; Fri, 29 Apr 2022 03:11:55 -0400
+X-MC-Unique: dRuKLd0tPkin7KSv8IMuaQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E452861FAC;
-        Fri, 29 Apr 2022 07:09:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2F5C385A7;
-        Fri, 29 Apr 2022 07:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651216151;
-        bh=pPnNA7l+RPM/P9eQGjg00BuTyqTQsPsqQezFfVprvwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zV/Ee37rg7nWJC6Gzw0dbhxcCqPFx7CIi0FPv8U8J/QH5RIlLqvhRitsSrxPPxkAt
-         H+xZ8whaRKX/4IaX7ua4ADZQkmlPWxyWMK3cC1JGZZs2wpapFl+TSC+etpK4hapghA
-         HkRQMn42GSiZwHQAWGBqNnhQgZZYCgk7S8gEov4M=
-Date:   Fri, 29 Apr 2022 09:09:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: Taint kernel if any tests run
-Message-ID: <YmuPFGrkzQYACgK0@kroah.com>
-References: <20220429043913.626647-1-davidgow@google.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C4D3C85A5A8;
+        Fri, 29 Apr 2022 07:11:54 +0000 (UTC)
+Received: from thuth.com (unknown [10.39.192.118])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C9E814A5060;
+        Fri, 29 Apr 2022 07:11:52 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Use TAP interface in the kvm_binary_stats_test
+Date:   Fri, 29 Apr 2022 09:11:49 +0200
+Message-Id: <20220429071149.488114-1-thuth@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429043913.626647-1-davidgow@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 12:39:14PM +0800, David Gow wrote:
-> KUnit tests are not supposed to run on production systems: they may do
-> deliberately illegal things to trigger errors, and have security
-> implications (assertions will often deliberately leak kernel addresses).
-> 
-> Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-> run. This will be printed as 'N' (for kuNit, as K, U and T were already
-> taken).
-> 
-> This should discourage people from running KUnit tests on production
-> systems, and to make it easier to tell if tests have been run
-> accidentally (by loading the wrong configuration, etc.)
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
-> 
-> This is something I'd been thinking about for a while, and it came up
-> again, so I'm finally giving it a go.
-> 
-> Two notes:
-> - I decided to add a new type of taint, as none of the existing ones
->   really seemed to fit. We could live with considering KUnit tests as
->   TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
->   right.
-> - The taint_flags table gives a couple of checkpatch.pl errors around
->   bracket placement. I've kept the new entry consistent with what's
->   there rather than reformatting the whole table, but be prepared for
->   complaints about spaces.
-> 
-> Thoughts?
-> -- David
-> 
-> ---
->  Documentation/admin-guide/tainted-kernels.rst | 1 +
->  include/linux/panic.h                         | 3 ++-
->  kernel/panic.c                                | 1 +
->  lib/kunit/test.c                              | 4 ++++
->  4 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-> index ceeed7b0798d..8f18fc4659d4 100644
-> --- a/Documentation/admin-guide/tainted-kernels.rst
-> +++ b/Documentation/admin-guide/tainted-kernels.rst
-> @@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
->   15  _/K   32768  kernel has been live patched
->   16  _/X   65536  auxiliary taint, defined for and used by distros
->   17  _/T  131072  kernel was built with the struct randomization plugin
-> + 18  _/N  262144  a KUnit test has been run
->  ===  ===  ======  ========================================================
->  
->  Note: The character ``_`` is representing a blank in this table to make reading
-> diff --git a/include/linux/panic.h b/include/linux/panic.h
-> index f5844908a089..1d316c26bf27 100644
-> --- a/include/linux/panic.h
-> +++ b/include/linux/panic.h
-> @@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
->  #define TAINT_LIVEPATCH			15
->  #define TAINT_AUX			16
->  #define TAINT_RANDSTRUCT		17
-> -#define TAINT_FLAGS_COUNT		18
-> +#define TAINT_KUNIT			18
-> +#define TAINT_FLAGS_COUNT		19
->  #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
->  
->  struct taint_flag {
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index eb4dfb932c85..b24ca63ed738 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
->  	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
->  	[ TAINT_AUX ]			= { 'X', ' ', true },
->  	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
-> +	[ TAINT_KUNIT ]			= { 'N', ' ', false },
+The kvm_binary_stats_test test currently does not have any output (unless
+one of the TEST_ASSERT statement fails), so it's hard to say for a user
+how far it did proceed already. Thus let's make this a little bit more
+user-friendly and include some TAP output via the kselftest.h interface.
 
-As kunit tests can be in modules, shouldn't this be "true" here?
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ .../testing/selftests/kvm/kvm_binary_stats_test.c  | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Overall, I like it, makes sense to me.  The "N" will take some getting
-used to, and I have no idea why "T" was for "struct randomization", that
-would have allowed you to use "T" instead.  Oh well.
+diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+index 17f65d514915..aa648834e178 100644
+--- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
++++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+@@ -19,6 +19,7 @@
+ #include "kvm_util.h"
+ #include "asm/kvm.h"
+ #include "linux/kvm.h"
++#include "kselftest.h"
+ 
+ static void stats_test(int stats_fd)
+ {
+@@ -52,7 +53,7 @@ static void stats_test(int stats_fd)
+ 
+ 	/* Sanity check for other fields in header */
+ 	if (header->num_desc == 0) {
+-		printf("No KVM stats defined!");
++		ksft_print_msg("No KVM stats defined!\n");
+ 		return;
+ 	}
+ 	/* Check overlap */
+@@ -219,12 +220,15 @@ int main(int argc, char *argv[])
+ 			max_vcpu = DEFAULT_NUM_VCPU;
+ 	}
+ 
++	ksft_print_header();
++
+ 	/* Check the extension for binary stats */
+ 	if (kvm_check_cap(KVM_CAP_BINARY_STATS_FD) <= 0) {
+-		print_skip("Binary form statistics interface is not supported");
+-		exit(KSFT_SKIP);
++		ksft_exit_skip("Binary form statistics interface is not supported\n");
+ 	}
+ 
++	ksft_set_plan(max_vm);
++
+ 	/* Create VMs and VCPUs */
+ 	vms = malloc(sizeof(vms[0]) * max_vm);
+ 	TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
+@@ -240,10 +244,12 @@ int main(int argc, char *argv[])
+ 		vm_stats_test(vms[i]);
+ 		for (j = 0; j < max_vcpu; ++j)
+ 			vcpu_stats_test(vms[i], j);
++		ksft_test_result_pass("vm%i\n", i);
+ 	}
+ 
+ 	for (i = 0; i < max_vm; ++i)
+ 		kvm_vm_free(vms[i]);
+ 	free(vms);
+-	return 0;
++
++	ksft_finished();	/* Print results and exit() accordingly */
+ }
+-- 
+2.27.0
 
-thanks,
-
-greg k-h
