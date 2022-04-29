@@ -2,87 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BBA515106
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 18:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7BC51536A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Apr 2022 20:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377522AbiD2QpX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Apr 2022 12:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S1355638AbiD2SQ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Apr 2022 14:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376610AbiD2QpW (ORCPT
+        with ESMTP id S229935AbiD2SQ0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:45:22 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD51483BE;
-        Fri, 29 Apr 2022 09:42:03 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id k14so6967225pga.0;
-        Fri, 29 Apr 2022 09:42:03 -0700 (PDT)
+        Fri, 29 Apr 2022 14:16:26 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9BEA6E37
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 11:13:07 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f4dee8688cso80455907b3.16
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 11:13:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jwO7JOOVGQF3gVakwvbVNF6yBHkItkffoETKadSEAgY=;
-        b=ZuqGCM5qE1g+EvsPqefJW1c2b2jrR5jkaYwLXqHo8XabNKydys3JonwO/36b85brmK
-         Ca4DwizzJlxQ0JTMAEkdrfdyVHF6C4kkw4HUT5N7C8AOq0kJ6VI++fmW1ve3luwmg198
-         4iWtNbfmAIM6CbQ+6c+S6QY3xKq3jd9VNwsMmP5KurPBoJidMctjuz9ND5DVPmDUl5KF
-         3E7Vi2ZBsUGkJTeef+iL87H0QXmS56IPqJ5CthX9fwlwMlmmcrXuFTgo/PJFE/8ekMjE
-         oMdA4C0hbd8PCgC3J9iMbIkToAndLZE2SKaX0/WlTuzqPO6qzcfv0Y9vbczyEvXswvpL
-         fUEA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=2kiTLLWMzE1fRaVFv2RZTJ9b23xbStkawa5kRyjYyA8=;
+        b=keqK+zylXN4pY8llCOBPg1Er0xKEg1omQb4Cj4I7sP2jLPCAJxPCRtn2RdUNZGfWA2
+         FGOCY8T7aXIKF8uj4+c8dGhHnigGnxQu9g3akFu5WpTlvCwa0owfS9ei/ZrL6lUrF9pJ
+         RLbPdQpht3OpwGjuhaMLs5UkOEAg7ZOnXSE6whUlBoUhl9PKXtjNdBJfDZia/A0YKEt4
+         sruyz8Uv6xOLeo4z/CO+19HT2Ld/0qcE92J+5JwquXW3cXxP7qguCR5+9qM8rO71vw6Q
+         9yGtVMTNpd6Y7h0MlWSEH1mJNIkJNicH2NJRugMUaQv79RX/Dhru8UyxOol5dieNeLd0
+         4XuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jwO7JOOVGQF3gVakwvbVNF6yBHkItkffoETKadSEAgY=;
-        b=ioIJTYNHF6BMU0xWWGmFTUDak4PZEtxO6lExBu19lAQd4+vQOo8nwG6rG+JZJAtBvs
-         wWEjg4LHGylU5snvFWc61x57gfhRKGDXPjHI2ujhx7TN2oDLjA2//zyXXjC4wn+4moT3
-         tcHoAfc9VZqCrgZEoToDAZazuH97U5n0Oz2KEc+fY2AC5a5y4JH7YQQvzZxGfzKijujb
-         wI1+BmF5Fi36IvmE9JR9dBuqVYtG3VWqOZbkG2MybMQz0Y5+I1lx4OM2sTa/S3QQNN++
-         d+yj8ZAICXMY4bwnfhHPeefhQKBSTjwnPiTALxkHBM+Uy/weRMBTb6mK8SWF0Yr6Koaw
-         /7Ew==
-X-Gm-Message-State: AOAM533HlYb55GtetLhPh2LctBs03KOSqvZq1IxlMGK6W352c3A76cJw
-        68kfBmqKcDDEopuDAh2SDPsgYOerii1NbWbedd4=
-X-Google-Smtp-Source: ABdhPJx5+3KWS/HTDUik07sDf3LsHVX0y4tEApMpyqIRUSK4SbtkkkRvHu+nXdpPlZkl6nrSZu16JbuG3k8ZGl6+xpE=
-X-Received: by 2002:a63:5163:0:b0:3a9:4e90:6d3d with SMTP id
- r35-20020a635163000000b003a94e906d3dmr247357pgl.48.1651250522335; Fri, 29 Apr
- 2022 09:42:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429111541.339853-1-maximmi@nvidia.com> <20220429111541.339853-5-maximmi@nvidia.com>
-In-Reply-To: <20220429111541.339853-5-maximmi@nvidia.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 29 Apr 2022 09:41:51 -0700
-Message-ID: <CAADnVQJrRONd+pPpfahyzLG7WCP54y_eoNb_8zCsN_m=S_OSZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 4/5] bpf: Add selftests for raw syncookie helpers
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>,
-        Paolo Abeni <pabeni@redhat.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=2kiTLLWMzE1fRaVFv2RZTJ9b23xbStkawa5kRyjYyA8=;
+        b=lP8R5aBSUEiS+W9lJKM/A+dR2QEktOj3UYs5oUB7WBXmgitwmSnyHPS/H2AOBy88/3
+         VgCaWUNG49VrsCgpx2TLWUYd+bfGEdrYmZiVtfK1e9fvVs/14BtGmz+UJuYHhNDhqTYt
+         mxZGSiGtV26Wbswy/9XbXuPQrVg2fC+MQmiRFz7si+s+c3Oaph6rDvuFtDYcjZy3WJY0
+         0HeEsVG1Ie+4NC99ZJ7XKVQrq0H/jewDTwFtad4UK6BR8TjlRBEBLpQI8x2vzmeskL8G
+         Fh59aA8eOCgZetV1AgTLv02BTtgX+SfW+WTZdrONMIIstyzOSN4JiyNDfukAbulMcNyN
+         S3vg==
+X-Gm-Message-State: AOAM531Ws4sb2bKhKmO9pMYhv7toPDZpD3zkkePVftrJpVHUkCbzyZFr
+        KpssPgrCNv3NGEz7mLBLm1vjzchlXdIWRg==
+X-Google-Smtp-Source: ABdhPJww5bRnHtr8wc3vsPj0eMHvAcjEqA+BTTAGRMBxrErBjDajT2Sbx0bHXuuQSEFvAbFSto7zqzARc3pVjw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:183a:36d7:2dcb:1773])
+ (user=dlatypov job=sendgmr) by 2002:a25:d354:0:b0:645:d617:560a with SMTP id
+ e81-20020a25d354000000b00645d617560amr682256ybf.247.1651255986725; Fri, 29
+ Apr 2022 11:13:06 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 11:12:56 -0700
+Message-Id: <20220429181259.622060-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v2 1/4] kunit: rename print_subtest_{start,end} for clarity (s/subtest/suite)
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,22 +65,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:16 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
-> +       SYS("iptables -t raw -I PREROUTING \
-> +           -i tmp1 -p tcp -m tcp --syn --dport 8080 -j CT --notrack");
-> +       SYS("iptables -t filter -A INPUT \
-> +           -i tmp1 -p tcp -m tcp --dport 8080 -m state --state INVALID,UNTRACKED \
-> +           -j SYNPROXY --sack-perm --timestamp --wscale 7 --mss 1460");
-> +       SYS("iptables -t filter -A INPUT \
-> +           -i tmp1 -m state --state INVALID -j DROP");
-> +
-> +       ctrl_file = SYS_OUT("./xdp_synproxy --iface tmp1 --ports 8080 --single \
-> +                           --mss4 1460 --mss6 1440 --wscale 7 --ttl 64");
+These names sound more general than they are.
 
-That doesn't work for test_progs-no_alu32.
-sh: line 1: ./xdp_synproxy: No such file or directory
-https://github.com/kernel-patches/bpf/runs/6227226675?check_suite_focus=true#step:6:7380
+The _end() function increments a `static int kunit_suite_counter`, so it
+can only safely be called on suites, aka top-level subtests.
+It would need to have a separate counter for each level of subtest to be
+generic enough.
 
-and going to be fragile in general.
-Could you launch it as a kthread or fork it
-like other tests are doing ?
+So rename it to make it clear it's only appropriate for suites.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+v1 -> v2: no change (see patch 2 and 4)
+---
+ lib/kunit/test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 0f66c13d126e..64ee6a9d8003 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -134,7 +134,7 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
+ }
+ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+ 
+-static void kunit_print_subtest_start(struct kunit_suite *suite)
++static void kunit_print_suite_start(struct kunit_suite *suite)
+ {
+ 	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
+ 		  suite->name);
+@@ -192,7 +192,7 @@ EXPORT_SYMBOL_GPL(kunit_suite_has_succeeded);
+ 
+ static size_t kunit_suite_counter = 1;
+ 
+-static void kunit_print_subtest_end(struct kunit_suite *suite)
++static void kunit_print_suite_end(struct kunit_suite *suite)
+ {
+ 	kunit_print_ok_not_ok((void *)suite, false,
+ 			      kunit_suite_has_succeeded(suite),
+@@ -498,7 +498,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	struct kunit_result_stats suite_stats = { 0 };
+ 	struct kunit_result_stats total_stats = { 0 };
+ 
+-	kunit_print_subtest_start(suite);
++	kunit_print_suite_start(suite);
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+ 		struct kunit test = { .param_value = NULL, .param_index = 0 };
+@@ -552,7 +552,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	}
+ 
+ 	kunit_print_suite_stats(suite, suite_stats, total_stats);
+-	kunit_print_subtest_end(suite);
++	kunit_print_suite_end(suite);
+ 
+ 	return 0;
+ }
+
+base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
+-- 
+2.36.0.464.gb9c8b46e94-goog
+
