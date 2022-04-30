@@ -2,89 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07B1515978
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Apr 2022 03:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2B95159ED
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Apr 2022 04:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240051AbiD3BDf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Apr 2022 21:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S237621AbiD3C5g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Apr 2022 22:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238701AbiD3BDe (ORCPT
+        with ESMTP id S234047AbiD3C5f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Apr 2022 21:03:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0E63B5;
-        Fri, 29 Apr 2022 18:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F62A62465;
-        Sat, 30 Apr 2022 01:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4000C385A7;
-        Sat, 30 Apr 2022 01:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651280412;
-        bh=94v0NlAWHiARvSWeYsxU4mSCkycWlemBQQD5ilbrCRY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oNc4ckeNmImkFBExqiSbAV6p9Rv7t/EP41gCq54oyPkgPU/sv6/XJ9M11dfjRaRan
-         z8vOjILahRF1bEVJVGDlspl5lZ4J7hNw/Asmzas2b2ertgk/AqAVBA6kV6lTgyOhSJ
-         4HJ4Rmw83UXuYHN9bkHj10nAa/N5KsBctXQFE6lIL8B1LgHObk28icRhhDHKz0ixvc
-         T1ddnzO/RKP2vj8khnMHstTLpPnAApZEAykts2H4DgjFPPWm+H1HRkMXan62v1uqrp
-         bL1BdUfC9bhtzz+rk7VAct9khoTAC+/E9E1uSrqjd4wC21jo8yAs+yTPauFOIXYHmC
-         MrZPCOuTYGeEA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B29DCF0383D;
-        Sat, 30 Apr 2022 01:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 29 Apr 2022 22:57:35 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767F6B1AAB
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 19:54:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id x18so12960443wrc.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 19:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=At5x0vwx+0kNPvKIIZERfAAx8DzudMw2FI8jUD9f4fw=;
+        b=afOHB8WfTSVmo1t+0T6XP+znSB29GtGLFCnuGs+mt2nkcNlosx4otYCqwoXBLsgDC2
+         QqR4DBAm7zWcL3KiOlME6s9jySPzKxBZOdzkOZv5ZB1kt54x3Wygne733T3cG/uIc2X/
+         YYeIrHFsToqqOnhfkeBxRssS/M6ZozFR+aGfWX3kfemIhEqzagiyEI+LHJsXzI1Ce2vW
+         jQf0zFLVMtB6Igcy9dOTfvhWO16Ohv4qKlxjwG68pvKzoXmG6NZRnK+JRaOnKSMq25Lc
+         xXzSLo52MTmes+WsiPyKggaRRQlO+iRthhScWjWJ0CmSIJwZJe2iQsMhzlrwF9ZTkxt6
+         QxQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=At5x0vwx+0kNPvKIIZERfAAx8DzudMw2FI8jUD9f4fw=;
+        b=T/zSrwZFqpSC65IS1j/e1RqkFQjyNtlXYUghLppQQhxJaKH/Qq+/sD1zO2b2hLCLEU
+         /kivKcEzIuGSSvNDPqCZPX/7kRYSu4gKaibAILqPm6LrFPP/qdA1sGme6E4Ahmxg2e62
+         tHlNVWevqBlzmhxM9lAnq5TWvdeRWYw3IXKgiahnU0afjnhP1wPnOZAcobTILqsuDlgJ
+         YNO8jHsu8E+3s/t6hXsTFgG2+QO4OjcArWVFOwU1o33tSyEYso9vWJuJI4LvYiVgkZDW
+         pPpDzFctuoo7AvsXRq5P+ImFeai9llX7ZIZzf92YN6IpgeM+biYFqTx7D4+Nyz2Ox0UC
+         K03A==
+X-Gm-Message-State: AOAM530OVe59fYMS3Oors4tuVskigjota0hM+6ozv/R0Wx01Gh4sOk/7
+        Q1e7Q85NNoB2bfDor8cODW5zPRhYq+L54yF9zxxxXg==
+X-Google-Smtp-Source: ABdhPJyeIB2RkdixEXoN25B4RRGZcH4tLs0XeX0TGRPl8SUbZAQ5Pg5Ry/w/sOv+m/oNwrr7ExkT0Psenbv3heh6mhA=
+X-Received: by 2002:a5d:4806:0:b0:20a:da03:711b with SMTP id
+ l6-20020a5d4806000000b0020ada03711bmr1387927wrq.395.1651287253894; Fri, 29
+ Apr 2022 19:54:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] selftests: net: add missing tests to Makefile
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165128041272.25380.10755696181043924363.git-patchwork-notify@kernel.org>
-Date:   Sat, 30 Apr 2022 01:00:12 +0000
-References: <20220428044511.227416-1-liuhangbin@gmail.com>
-In-Reply-To: <20220428044511.227416-1-liuhangbin@gmail.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, dsahern@kernel.org,
-        linux-kselftest@vger.kernel.org, roopa@nvidia.com,
-        nikolay@nvidia.com, idosch@nvidia.com, amitc@mellanox.com,
-        petrm@mellanox.com, lkp-owner@lists.01.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429043913.626647-1-davidgow@google.com> <YmuPFGrkzQYACgK0@kroah.com>
+In-Reply-To: <YmuPFGrkzQYACgK0@kroah.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 30 Apr 2022 10:54:02 +0800
+Message-ID: <CABVgOSmn3fTOr0LB3bUMJOzKTjNd6EMtSEKz5ZRfTfeF7DiE2w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Taint kernel if any tests run
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Fri, Apr 29, 2022 at 3:09 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Apr 29, 2022 at 12:39:14PM +0800, David Gow wrote:
+> > KUnit tests are not supposed to run on production systems: they may do
+> > deliberately illegal things to trigger errors, and have security
+> > implications (assertions will often deliberately leak kernel addresses).
+> >
+> > Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
+> > run. This will be printed as 'N' (for kuNit, as K, U and T were already
+> > taken).
+> >
+> > This should discourage people from running KUnit tests on production
+> > systems, and to make it easier to tell if tests have been run
+> > accidentally (by loading the wrong configuration, etc.)
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+< snip >
 
-On Thu, 28 Apr 2022 12:45:09 +0800 you wrote:
-> When generating the selftests to another folder, the fixed tests are
-> missing as they are not in Makefile. The missing tests are generated
-> by command:
-> $ for f in $(ls *.sh); do grep -q $f Makefile || echo $f; done
-> 
-> I think there need a way to notify the developer when they created a new
-> file in selftests folder. Maybe a bot like bluez.test.bot or kernel
-> test robot could help do that?
-> 
-> [...]
+> > +     [ TAINT_KUNIT ]                 = { 'N', ' ', false },
+>
+> As kunit tests can be in modules, shouldn't this be "true" here?
 
-Here is the summary with links:
-  - [net,1/2] selftests/net: add missing tests to Makefile
-    https://git.kernel.org/netdev/net/c/38dcd9570d6f
-  - [net,2/2] selftests/net/forwarding: add missing tests to Makefile
-    https://git.kernel.org/netdev/net/c/f62c5acc800e
+Ah, good catch. While I tend to use either built-in tests (or modules
+which are immediately unloaded), there are definitely some cases where
+the tests are part of long-lasting modules.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'll send out v2 with that changed.
+
+> Overall, I like it, makes sense to me.  The "N" will take some getting
+> used to, and I have no idea why "T" was for "struct randomization", that
+> would have allowed you to use "T" instead.  Oh well.
+
+Yeah, 'T' would've been nice, but I doubt it'd be worth trying to
+change it now. At least we haven't had to resort to emoji...
+
+Adding an actual name as Jani suggested would be a good idea, IMHO,
+though obviously best done in a separate patch.
 
 
+Cheers,
+-- David
