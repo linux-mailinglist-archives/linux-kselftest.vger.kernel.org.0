@@ -2,126 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742DE517353
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 17:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE8C51775B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 21:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239959AbiEBP6P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 May 2022 11:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S233034AbiEBT1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 May 2022 15:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiEBP6O (ORCPT
+        with ESMTP id S232848AbiEBT1O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 May 2022 11:58:14 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70045.outbound.protection.outlook.com [40.107.7.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048C76155;
-        Mon,  2 May 2022 08:54:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fw+Fpvr/lsXZK2OTfxfcPLmbnicou+9SAAg7OYzvhqd1lbiijZz4DD6ALU54mx20r5iXlH9c/VEv4qeDRyiUckVT22KfURsF5eM0BSkcIenXiTwxHbJEQOd7UekQ92l7o+W8CZ3x0Z4rwqmkckyFgF42vFxzua+q+mrH8eph886JPFJ2Psi7hNVEBp41eHNI8JF0JSq/pdBsr7fJ8u3wgA7u1IdFLY1W45lZSfRNoJxnaRv4RKVMlwgnB9/BH1sdxaVHOp7BZkZL9t2MrGVb5KQkm3d+lECmXh7Tz9GXSlT2EiM1bAWw6AKeERwZXds5DGRQuBXbBjRchBlowpISlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cW2i10I0OQkMG+Q+7QLtzppy1vs6dsFtnZfcFhjDZcs=;
- b=G0FVulwyKop6vP2zMHBCohV1HB5f1jbTfXmQtoE1l954hPPS5lA8tZRIWZryFMSThS9JiVv8KkLBiC2fZDpInVwMh6ecN9DR6l2mEJtBvUvqGxIh5c4/KhGp5808pLoxw8+PXTbfiBWCaCGl7KUa97WmrPAewKhXmMG44UFu04MP+keBfCMSb5EFCjPxEuowoymI181qdoc22+PrZ+a24LS5SwsSOLW31wEU9+w/knDzC94Tuta3aMT8XqVcg8VPoIu36cJVyoolhoHsHvwJ81bbubkhjMEbuqCaxPFGRwcQCbMHnUGbeZ4BCP4zLMNsY9a4wDYxTOqVsaE6rStTjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cW2i10I0OQkMG+Q+7QLtzppy1vs6dsFtnZfcFhjDZcs=;
- b=o+lHZdgWuqtYofhDhSwFZVGaxKRVYTr2/AQhF5Djq6T6Y2NDnZD2z9mD5UW/sxVj+lGhjVJ+flv9eGOR6gzwFJx5LCNiYXVO1A++ESLgzpOi5WGpdE/DTmqltvPZahMlRPJ94bIn7fZju615mm7jf4rsNuNXpAIxzij0IEOhS9o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AS8PR04MB7702.eurprd04.prod.outlook.com (2603:10a6:20b:23f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Mon, 2 May
- 2022 15:54:41 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::d94f:b885:c587:5cd4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::d94f:b885:c587:5cd4%6]) with mapi id 15.20.5206.024; Mon, 2 May 2022
- 15:54:41 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, "Y . b . Lu" <yangbo.lu@nxp.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: [PATCH net-next] selftests: forwarding: add basic QoS classification test for Ocelot switches
-Date:   Mon,  2 May 2022 18:54:24 +0300
-Message-Id: <20220502155424.4098917-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0001.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::10) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 72c0eeff-c311-43db-4d9c-08da2c5411a8
-X-MS-TrafficTypeDiagnostic: AS8PR04MB7702:EE_
-X-Microsoft-Antispam-PRVS: <AS8PR04MB77024A025E2193FAD7FAE2D1E0C19@AS8PR04MB7702.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZHvAJfw3E6YTckhEne2SLIQkfRiIvlxxnc2Hi2SxW3cmVgXP2cAmzFXmx+XE0IhWiZ2GlsTQPAVHnbvEqfhjbLeszJpI+CvNTK1pYUnS+agR4iikU8cVnvNWbuQvU0SkA4ENEAyqw42TtTGeQEm0h5xshubWHS0UX9SVlfMwSR/Jcbn63WrJHQCMsRLuftHAIQXIMnce3RO9c5KUOX+JjylbpsLFcAnxgr5UM+ePw/hqsumwkSP39OWpX18W3krnjSNMVqflE4H9DOQNA5xwBfHPRTEfyq2kIlJae6O6hR+WO1JHfDQsSixxzi3sOlfIPU0bs3fumOlDnoJPfWnOFsWaeObnYZ0MQE/XXi4Q5ZYiRnRcfyDYeYhvTM9GXKzwFznQ49FtLxPZDbg4d4lGplKVs8dFnMrTBSAZ8lUTMaWNZAsCyHhxyQs3/Nl5gPhmXnYhmtGWYVjliu/1ipm2h/F7B02WDmKjZbhuawtkCV0Qu0OOjdbk70t8fd+4rbPL4xxcBKzBw9P0md1Lm0Swng1/yxn9bAS88U/f9zP0Lvi+2liF2CLLZogqTc8iGY13AFTc/3271iyTYlJAuwh2Q8UkgH7xVzD6FsZIbsTtdNOU5WuKEMb20GtYEeibIc4atpG/0sKk+y1hcj2TTIohWjlrkwQGp4VX7mlRSIvZ+mLJENUkwU+qWCetY1EGQOOUrOUzoQvq4BA+9/NuYWM5lpX/nREn2isE9lwqAf6Fk0KDwNr85tlqAXXZK9xOMnRSOjJ3qi7mDz2tS0gi2v15oDaPfDnF2UPhrJoAcnLU+k0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(66946007)(4326008)(86362001)(186003)(8936002)(508600001)(966005)(6486002)(7416002)(44832011)(5660300002)(2616005)(6512007)(26005)(38350700002)(8676002)(38100700002)(2906002)(6916009)(6666004)(6506007)(36756003)(1076003)(52116002)(316002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lXmJw4NK6S2kDtGUSJur1GnOy2lEWi3iWaG3bg3vJRap55/Op8v7UZ544IXn?=
- =?us-ascii?Q?FnDdBV6HIlrPUL6iHZCJ4ZjGkRt6NIRL3ntUmLgDjQyces1oeAbDIaQB6AF6?=
- =?us-ascii?Q?Y3bg2kVp3UShXtYNNwLugDY2frHWmxWzxvNLmCgGXrJ2CdctivXaXyz2koA7?=
- =?us-ascii?Q?chp4de6FipKt+uUKqvWIA/4xHqHjqHp81uFYvKFAF+RG2ym4pGkSNB0GgeE1?=
- =?us-ascii?Q?vtGFEos94xbW42+WIqi9/ydJeUkHzy7ZTsV9SjpJv95H+/Pocf8zNoTOfJcU?=
- =?us-ascii?Q?a7UzjSGiiypr8K5MdQDZLbXJvUiaFhEI0KQmvFkqt/CZqN1soB0lcTWqBFMO?=
- =?us-ascii?Q?6i/l0ZQB4PvPtHag+amn8jX8WT4XbIq35rJ0oCg/3vOk3CNcAvXs8ho4RfEB?=
- =?us-ascii?Q?UtbG1rvur6XwxMDZ5xuG1kF0OzKujiQfpZS6Pw03fNnefxl51uCSNHyahlgg?=
- =?us-ascii?Q?p8+n0dXeCZXMSePySEkAQl3+S4JZu/trEb5ZrQ1z3nPAS0K/AEJP5aMTh31H?=
- =?us-ascii?Q?whWizoQ2IyHiApIXSyQyjslcjQjShhT2XuBNkqVSmO12LkmALiPkJwdsb/aV?=
- =?us-ascii?Q?G5p2PNmkTEySaDC4HCmQApXrNTdG8F+BjM/t8hM49FJqdU+ND/vHoltNSQTK?=
- =?us-ascii?Q?Osh7mEm+9Ylj6DE7r6bdtG7Sn4sAZD4iKTHbgRJYnfobnHbawg75kv5XB2yU?=
- =?us-ascii?Q?LGL5bIaAlzb+lj681myQBjLRhXsHRy/mcUbUaEb8PA7qua5aPmaI/0fqw20n?=
- =?us-ascii?Q?auj2BS6byEp69dXEB7/lXViV4uqogzQo3GBI9hYMrkX4v3VKjOoTNy5B3feH?=
- =?us-ascii?Q?U3IMH/787EYBXAiE7DlpeWjfc5MRdPqFBxWg5fiQLHD4gk/CPbjyCPSRKkOe?=
- =?us-ascii?Q?bA35JnsyFv2X0I5spXZQo7AbdJlqYba+DZwCqXhPrqGIJb0mxQgjOFvVxSrh?=
- =?us-ascii?Q?29CjDCktr0tvmC1QNnIOfiEP/F5KTC422BhD9d9HBdbQHet1J6uEQIM+3Kjx?=
- =?us-ascii?Q?DBpBo1GBytWVN5jXa78WHDDcv5VwTAIVHSVegE5e+/ZEVPzvys6EPOdm1Lr7?=
- =?us-ascii?Q?a2+hpn0tF7L4ZyCJLMBfL7rIe8x/gimOTYhzZ9aZGpLDRve17FUvru1CPa3l?=
- =?us-ascii?Q?8PQc+XPxvShewtjCRzxNk5SXzf91D5iSP8ClYVpgd/93KetCFSkLpHi1SdoR?=
- =?us-ascii?Q?uN21poAxOs84daHeJ6lVByaD39xqTGdAWB9Q8L47dpxzaIyjRy1b/fg/Ndq2?=
- =?us-ascii?Q?cjJXMI3ePD2fQbHNcOGMofwNn1VJ0yVx+2se/MQtEze85LxNOgf6xdMVr5MS?=
- =?us-ascii?Q?b4G+d/LEjAmt/MrTJp3UVBy1iteA29ouWQguFKXkrCxcRAXDb0TFMTyfoQ4i?=
- =?us-ascii?Q?eYscw3lO8xaTmfjdgNt0k3Z1I/8XN0IbAV3Yz7Q82PCbWZUxvTNTtup2wsbD?=
- =?us-ascii?Q?6lsFRw2cVzWSVmQfFy9sNb4olhOBBtiD3erBI2iDhCAO+bOk5gzY70qo0Bri?=
- =?us-ascii?Q?dWDL0b8rgmPGtytnWrgufuuOBhpCr8qQGAGCatU06SVCLjXzD3yWKXa0o7Hd?=
- =?us-ascii?Q?bXfI+w38+wgJ4ytgI4TUQw8zMDSfyCWGqJyq2mKdkykJwpr+IJQ2ULOUcShK?=
- =?us-ascii?Q?bQwwCiGWIB/xAv/WeHed5MwtnZ4A8y2kGayLnRE1+kmHaT2HFJdORReGmXZA?=
- =?us-ascii?Q?AInUj53cOfwZLx3oPE4R7Qe3cErmjruNlWBr3RRiJIN8MT9l+3h8ZJbcjEcn?=
- =?us-ascii?Q?739Zzs7P2Nd5gE6HAwZS4+dLaRy9N9s=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72c0eeff-c311-43db-4d9c-08da2c5411a8
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 15:54:41.3182
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hsmU91aLZ+O5q4zPi/6C6P3t2HrrGJd9k/omu8CKI2/7zR5KSJ05jsattOq5khXv32MD4I+OVM7kBNf5LqDeDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7702
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 2 May 2022 15:27:14 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F954FC7
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 May 2022 12:23:45 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d11b6259adso143285407b3.19
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 May 2022 12:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=u6uGuHjDonU8GgKi5o3QqSYBcswbbJsYRfVkbCnaliQ=;
+        b=iNzC0zoQbUjXIUrnjuhHAFXqs+YbWqM7nT1s5vxFwUvhF2evBiuySc5Mu/w9M39xfg
+         tFIKiiKMZOlPL1TvFfScVrPaeAXApNH3unbI0WhLnM6+KMV3CxXEWUDTTiWTI7hUyOue
+         2XcXRwyX7mCE8WpddgEWCEza5ugI1ny6mDlH+rimNWtesU+UgmOUIOL/cJ3LlVCSZ2L9
+         u+vt2yksHd1ECxeGZsTUM+MLXg5/ssjji+Xk++gazq8qtMXk4S4DyS7LOnSh4jwYpe5q
+         Ng1r056NUewG/eZqZRWgDF7qgnIgHNDjmKb4LyVv9SUrWlu02Y3LomLhwIvUwyXiFchp
+         4s7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=u6uGuHjDonU8GgKi5o3QqSYBcswbbJsYRfVkbCnaliQ=;
+        b=dvihf0yjbeT0odYLE4JrQ2Xs6XEmOHjJV1RUh+fOJoLz5TChc/aoolapy09iVdu+Lw
+         5mZVefeApXuid7L59W1o7gs9Q1GKD0+zn/nvIpWw19p0OuP4316JpE3AXm3OmaweXR3m
+         TfvjqSRSwQEWrW0okh3BO33py5c6FKRl4xHZoo6KaU5AJvZSMYhujraAHVjZGfPSxEWd
+         YG3MB548yEvB+iZkeDwEqmgJvbKxlQxLbh6w1Zg7R2tsWln3s8gi9FMqdSdBLLzwQIn2
+         XgmaAdtEV63WVJxSjnl1GGj5+SKEL8nMt41D+PylX6Sqm6BjWq8h6RbH4xqW6psNS2bR
+         0Lgg==
+X-Gm-Message-State: AOAM533yGLHty6qYsPsqneMJ/ARq1itlOC6O1w4ywAs1r7g6IOOBMMxp
+        aT25MvMR2MJF81wz/Z6RCGwAK4zpln5dsA==
+X-Google-Smtp-Source: ABdhPJzr+Qb68nmy/48m+B8I8Rvi4T/TloDTdT8kDtBPCHEXSQ6VRNR7jB4iAi0iqzm4afiOCQL+T98bxKy/2A==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a2d5:5696:644a:499e])
+ (user=dlatypov job=sendgmr) by 2002:a25:ec0d:0:b0:648:480d:7c08 with SMTP id
+ j13-20020a25ec0d000000b00648480d7c08mr11491125ybh.206.1651519424288; Mon, 02
+ May 2022 12:23:44 -0700 (PDT)
+Date:   Mon,  2 May 2022 12:23:27 -0700
+Message-Id: <20220502192327.81153-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH] lib/atomic64_test.c: convert to use KUnit
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        mpe@ellerman.id.au, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,275 +68,315 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test basic (port-default, VLAN PCP and IP DSCP) QoS classification for
-Ocelot switches. Advanced QoS classification using tc filters is covered
-by tc_flower_chains.sh in the same directory.
+The test currently is a bunch of checks (implemented using BUG_ON())
+that can be built into the kernel or as a module.
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Convert it to a KUnit test, which can also run in both modes.
+From a user's perspective, this change adds a CONFIG_KUNIT=3Dy dep and
+changes the output format of the test [1]. The test itself is the same.
+
+This hopefully makes the test easier to run and more consistent with
+similar tests in lib/.
+Since it has no dependencies, it can be run without explicitly setting
+up a .kunitconfig via
+$ ./tools/testing/kunit/kunit.py run atomic
+...
+[13:53:44] Starting KUnit Kernel (1/1)...
+[13:53:44] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[13:53:47] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D atomic=
+ (2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[13:53:47] [PASSED] test_atomic
+[13:53:47] [PASSED] test_atomic64
+[13:53:47] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
+[PASSED] atomic =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+[13:53:47] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[13:53:47] Testing complete. Passed: 2, Failed: 0, Crashed: 0, Skipped: 0, =
+Errors: 0
+[13:53:47] Elapsed time: 13.902s total, 1.629s configuring, 9.331s building=
+, 2.852s running
+
+It can be run on ARCH=3Dx86_64 (and others) via:
+$ ./tools/testing/kunit/kunit.py run --arch=3Dx86_64 atomic
+
+The message about which platform the test ran on won't show up in
+kunit.py, but still gets printed out in dmesg, e.g.
+> TAP version 14
+> 1..1
+>     # Subtest: atomic
+>     1..2
+>     ok 1 - test_atomic
+>     ok 2 - test_atomic64
+>     # atomic: ran on x86-64 platform with CX8 and with SSE
+> # atomic: pass:2 fail:0 skip:0 total:2
+> # Totals: pass:2 fail:0 skip:0 total:2
+> ok 1 - atomic
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+
+[1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
 ---
- .../selftests/drivers/net/ocelot/basic_qos.sh | 253 ++++++++++++++++++
- 1 file changed, 253 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
+Meta:
+1. this patch applies on top of the kunit branch,
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?=
+h=3Dkunit
 
-diff --git a/tools/testing/selftests/drivers/net/ocelot/basic_qos.sh b/tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
-new file mode 100755
-index 000000000000..c51c83421c61
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
-@@ -0,0 +1,253 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright 2022 NXP
+2. checkpatch complains about aligning with parens, but it wants me to
+indent the `#ifdef CONFIG_X86_64` which seems inappropriate in context.
+
+3. this file doesn't seem to have a clear maintainer, so I assume this
+conversion is fine to go through the kunit branch. The only observable
+differences are the new CONFIG_KUNIT=3Dy dep and more standardized (KTAP)
+output format.
+---
+ lib/Kconfig.debug   |   4 +-
+ lib/atomic64_test.c | 107 +++++++++++++++++++++-----------------------
+ 2 files changed, 55 insertions(+), 56 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 075cd25363ac..4cf8d5feda0a 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2223,7 +2223,9 @@ config PERCPU_TEST
+ 	  If unsure, say N.
+=20
+ config ATOMIC64_SELFTEST
+-	tristate "Perform an atomic64_t self-test"
++	tristate "Perform an atomic64_t self-test" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable this option to test the atomic64_t functions at boot or
+ 	  at module load time.
+diff --git a/lib/atomic64_test.c b/lib/atomic64_test.c
+index d9d170238165..46cb0130f8d0 100644
+--- a/lib/atomic64_test.c
++++ b/lib/atomic64_test.c
+@@ -5,13 +5,9 @@
+  * Copyright =C2=A9 2010  Luca Barbieri
+  */
+=20
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++#include <kunit/test.h>
+=20
+-#include <linux/init.h>
+-#include <linux/bug.h>
+-#include <linux/kernel.h>
+ #include <linux/atomic.h>
+-#include <linux/module.h>
+=20
+ #ifdef CONFIG_X86
+ #include <asm/cpufeature.h>	/* for boot_cpu_has below */
+@@ -23,9 +19,7 @@ do {								\
+ 	r =3D v0;							\
+ 	atomic##bit##_##op(val, &v);				\
+ 	r c_op val;						\
+-	WARN(atomic##bit##_read(&v) !=3D r, "%Lx !=3D %Lx\n",	\
+-		(unsigned long long)atomic##bit##_read(&v),	\
+-		(unsigned long long)r);				\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_read(&v), r);	\
+ } while (0)
+=20
+ /*
+@@ -46,8 +40,8 @@ do {								\
+ 	atomic##bit##_set(&v, v0);				\
+ 	r =3D v0;							\
+ 	r c_op val;						\
+-	BUG_ON(atomic##bit##_##op(val, &v) !=3D r);		\
+-	BUG_ON(atomic##bit##_read(&v) !=3D r);			\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_##op(val, &v), r);	\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_read(&v), r);	\
+ } while (0)
+=20
+ #define TEST_FETCH(bit, op, c_op, val)				\
+@@ -55,8 +49,8 @@ do {								\
+ 	atomic##bit##_set(&v, v0);				\
+ 	r =3D v0;							\
+ 	r c_op val;						\
+-	BUG_ON(atomic##bit##_##op(val, &v) !=3D v0);		\
+-	BUG_ON(atomic##bit##_read(&v) !=3D r);			\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_##op(val, &v), v0);	\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_read(&v), r);	\
+ } while (0)
+=20
+ #define RETURN_FAMILY_TEST(bit, op, c_op, val)			\
+@@ -72,8 +66,8 @@ do {								\
+ #define TEST_ARGS(bit, op, init, ret, expect, args...)		\
+ do {								\
+ 	atomic##bit##_set(&v, init);				\
+-	BUG_ON(atomic##bit##_##op(&v, ##args) !=3D ret);		\
+-	BUG_ON(atomic##bit##_read(&v) !=3D expect);		\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_##op(&v, ##args), ret);\
++	KUNIT_ASSERT_EQ(test, atomic##bit##_read(&v), expect);	\
+ } while (0)
+=20
+ #define XCHG_FAMILY_TEST(bit, init, new)				\
+@@ -101,7 +95,7 @@ do {							\
+ 			i, (i) - one, (i) - one);	\
+ } while (0)
+=20
+-static __init void test_atomic(void)
++static void test_atomic(struct kunit *test)
+ {
+ 	int v0 =3D 0xaaa31337;
+ 	int v1 =3D 0xdeadbeef;
+@@ -144,7 +138,7 @@ static __init void test_atomic(void)
+ }
+=20
+ #define INIT(c) do { atomic64_set(&v, c); r =3D c; } while (0)
+-static __init void test_atomic64(void)
++static void test_atomic64(struct kunit *test)
+ {
+ 	long long v0 =3D 0xaaa31337c001d00dLL;
+ 	long long v1 =3D 0xdeadbeefdeafcafeLL;
+@@ -156,12 +150,12 @@ static __init void test_atomic64(void)
+=20
+ 	atomic64_t v =3D ATOMIC64_INIT(v0);
+ 	long long r =3D v0;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	atomic64_set(&v, v1);
+ 	r =3D v1;
+-	BUG_ON(v.counter !=3D r);
+-	BUG_ON(atomic64_read(&v) !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
++	KUNIT_ASSERT_EQ(test, atomic64_read(&v), r);
+=20
+ 	TEST(64, add, +=3D, onestwos);
+ 	TEST(64, add, +=3D, -one);
+@@ -190,12 +184,12 @@ static __init void test_atomic64(void)
+ 	INIT(v0);
+ 	atomic64_inc(&v);
+ 	r +=3D one;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(v0);
+ 	atomic64_dec(&v);
+ 	r -=3D one;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INC_RETURN_FAMILY_TEST(64, v0);
+ 	DEC_RETURN_FAMILY_TEST(64, v0);
+@@ -204,73 +198,76 @@ static __init void test_atomic64(void)
+ 	CMPXCHG_FAMILY_TEST(64, v0, v1, v2);
+=20
+ 	INIT(v0);
+-	BUG_ON(atomic64_add_unless(&v, one, v0));
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_FALSE(test, atomic64_add_unless(&v, one, v0));
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(v0);
+-	BUG_ON(!atomic64_add_unless(&v, one, v1));
++	KUNIT_ASSERT_TRUE(test, atomic64_add_unless(&v, one, v1));
+ 	r +=3D one;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(onestwos);
+-	BUG_ON(atomic64_dec_if_positive(&v) !=3D (onestwos - 1));
++	KUNIT_ASSERT_EQ(test, atomic64_dec_if_positive(&v), (onestwos - 1));
+ 	r -=3D one;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(0);
+-	BUG_ON(atomic64_dec_if_positive(&v) !=3D -one);
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, atomic64_dec_if_positive(&v), -one);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(-one);
+-	BUG_ON(atomic64_dec_if_positive(&v) !=3D (-one - one));
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, atomic64_dec_if_positive(&v), (-one - one));
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(onestwos);
+-	BUG_ON(!atomic64_inc_not_zero(&v));
++	KUNIT_ASSERT_TRUE(test, atomic64_inc_not_zero(&v));
+ 	r +=3D one;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(0);
+-	BUG_ON(atomic64_inc_not_zero(&v));
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_FALSE(test, atomic64_inc_not_zero(&v));
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	INIT(-one);
+-	BUG_ON(!atomic64_inc_not_zero(&v));
++	KUNIT_ASSERT_TRUE(test, atomic64_inc_not_zero(&v));
+ 	r +=3D one;
+-	BUG_ON(v.counter !=3D r);
++	KUNIT_ASSERT_EQ(test, v.counter, r);
+=20
+ 	/* Confirm the return value fits in an int, even if the value doesn't */
+ 	INIT(v3);
 +
-+# The script is mostly generic, with the exception of the
-+# ethtool per-TC counter names ("rx_green_prio_${tc}")
-+
-+WAIT_TIME=1
-+NUM_NETIFS=4
-+STABLE_MAC_ADDRS=yes
-+NETIF_CREATE=no
-+lib_dir=$(dirname $0)/../../../net/forwarding
-+source $lib_dir/tc_common.sh
-+source $lib_dir/lib.sh
-+
-+require_command dcb
-+
-+h1=${NETIFS[p1]}
-+swp1=${NETIFS[p2]}
-+swp2=${NETIFS[p3]}
-+h2=${NETIFS[p4]}
-+
-+H1_IPV4="192.0.2.1"
-+H2_IPV4="192.0.2.2"
-+H1_IPV6="2001:db8:1::1"
-+H2_IPV6="2001:db8:1::2"
-+
-+h1_create()
+ 	r_int =3D atomic64_inc_not_zero(&v);
+-	BUG_ON(!r_int);
++	KUNIT_ASSERT_NE(test, r_int, 0);
+ }
+=20
+-static __init int test_atomics_init(void)
+-{
+-	test_atomic();
+-	test_atomic64();
++static struct kunit_case atomic_test_cases[] =3D {
++	KUNIT_CASE(test_atomic),
++	KUNIT_CASE(test_atomic64),
++	{},
++};
+=20
++static void atomic_suite_exit(struct kunit_suite *suite)
 +{
-+	simple_if_init $h1 $H1_IPV4/24 $H1_IPV6/64
-+}
-+
-+h1_destroy()
-+{
-+	simple_if_fini $h1 $H1_IPV4/24 $H1_IPV6/64
-+}
-+
-+h2_create()
-+{
-+	simple_if_init $h2 $H2_IPV4/24 $H2_IPV6/64
-+}
-+
-+h2_destroy()
-+{
-+	simple_if_fini $h2 $H2_IPV4/24 $H2_IPV6/64
-+}
-+
-+h1_vlan_create()
-+{
-+	local vid=$1
-+
-+	vlan_create $h1 $vid
-+	simple_if_init $h1.$vid $H1_IPV4/24 $H1_IPV6/64
-+	ip link set $h1.$vid type vlan \
-+		egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7 \
-+		ingress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
-+}
-+
-+h1_vlan_destroy()
-+{
-+	local vid=$1
-+
-+	simple_if_fini $h1.$vid $H1_IPV4/24 $H1_IPV6/64
-+	vlan_destroy $h1 $vid
-+}
-+
-+h2_vlan_create()
-+{
-+	local vid=$1
-+
-+	vlan_create $h2 $vid
-+	simple_if_init $h2.$vid $H2_IPV4/24 $H2_IPV6/64
-+	ip link set $h2.$vid type vlan \
-+		egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7 \
-+		ingress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
-+}
-+
-+h2_vlan_destroy()
-+{
-+	local vid=$1
-+
-+	simple_if_fini $h2.$vid $H2_IPV4/24 $H2_IPV6/64
-+	vlan_destroy $h2 $vid
-+}
-+
-+vlans_prepare()
-+{
-+	h1_vlan_create 100
-+	h2_vlan_create 100
-+
-+	tc qdisc add dev ${h1}.100 clsact
-+	tc filter add dev ${h1}.100 egress protocol ipv4 \
-+		flower ip_proto icmp action skbedit priority 3
-+	tc filter add dev ${h1}.100 egress protocol ipv6 \
-+		flower ip_proto icmpv6 action skbedit priority 3
-+}
-+
-+vlans_destroy()
-+{
-+	tc qdisc del dev ${h1}.100 clsact
-+
-+	h1_vlan_destroy 100
-+	h2_vlan_destroy 100
-+}
-+
-+switch_create()
-+{
-+	ip link set ${swp1} up
-+	ip link set ${swp2} up
-+
-+	# Ports should trust VLAN PCP even with vlan_filtering=0
-+	ip link add br0 type bridge
-+	ip link set ${swp1} master br0
-+	ip link set ${swp2} master br0
-+	ip link set br0 up
-+}
-+
-+switch_destroy()
-+{
-+	ip link del br0
-+}
-+
-+setup_prepare()
-+{
-+	vrf_prepare
-+
-+	h1_create
-+	h2_create
-+	switch_create
-+}
-+
-+cleanup()
-+{
-+	pre_cleanup
-+
-+	h2_destroy
-+	h1_destroy
-+	switch_destroy
-+
-+	vrf_cleanup
-+}
-+
-+dscp_cs_to_tos()
-+{
-+	local dscp_cs=$1
-+
-+	# https://datatracker.ietf.org/doc/html/rfc2474
-+	# 4.2.2.1  The Class Selector Codepoints
-+	echo $((${dscp_cs} << 5))
-+}
-+
-+run_test()
-+{
-+	local test_name=$1; shift
-+	local if_name=$1; shift
-+	local tc=$1; shift
-+	local tos=$1; shift
-+	local counter_name="rx_green_prio_${tc}"
-+	local ipv4_before
-+	local ipv4_after
-+	local ipv6_before
-+	local ipv6_after
-+
-+	ipv4_before=$(ethtool_stats_get ${swp1} "${counter_name}")
-+	ping_do ${if_name} $H2_IPV4 "-Q ${tos}"
-+	ipv4_after=$(ethtool_stats_get ${swp1} "${counter_name}")
-+
-+	if [ $((${ipv4_after} - ${ipv4_before})) -lt ${PING_COUNT} ]; then
-+		RET=1
-+	else
-+		RET=0
-+	fi
-+	log_test "IPv4 ${test_name}"
-+
-+	ipv6_before=$(ethtool_stats_get ${swp1} "${counter_name}")
-+	ping_do ${if_name} $H2_IPV6 "-Q ${tos}"
-+	ipv6_after=$(ethtool_stats_get ${swp1} "${counter_name}")
-+
-+	if [ $((${ipv6_after} - ${ipv6_before})) -lt ${PING_COUNT} ]; then
-+		RET=1
-+	else
-+		RET=0
-+	fi
-+	log_test "IPv6 ${test_name}"
-+}
-+
-+port_default_prio_get()
-+{
-+	local if_name=$1
-+	local prio
-+
-+	prio="$(dcb -j app show dev ${if_name} default-prio | \
-+		jq '.default_prio[]')"
-+	if [ -z "${prio}" ]; then
-+		prio=0
-+	fi
-+
-+	echo ${prio}
-+}
-+
-+test_port_default()
-+{
-+	local orig=$(port_default_prio_get ${swp1})
-+	local dmac=$(mac_get ${h2})
-+
-+	dcb app replace dev ${swp1} default-prio 5
-+
-+	run_test "Port-default QoS classification" ${h1} 5 0
-+
-+	dcb app replace dev ${swp1} default-prio ${orig}
-+}
-+
-+test_vlan_pcp()
-+{
-+	vlans_prepare
-+
-+	run_test "Trusted VLAN PCP QoS classification" ${h1}.100 3 0
-+
-+	vlans_destroy
-+}
-+
-+test_ip_dscp()
-+{
-+	local port_default=$(port_default_prio_get ${swp1})
-+	local tos=$(dscp_cs_to_tos 4)
-+
-+	dcb app add dev ${swp1} dscp-prio CS4:4
-+	run_test "Trusted DSCP QoS classification" ${h1} 4 ${tos}
-+	dcb app del dev ${swp1} dscp-prio CS4:4
-+
-+	vlans_prepare
-+	run_test "Untrusted DSCP QoS classification follows VLAN PCP" \
-+		${h1}.100 3 ${tos}
-+	vlans_destroy
-+
-+	run_test "Untrusted DSCP QoS classification follows port default" \
-+		${h1} ${port_default} ${tos}
-+}
-+
-+trap cleanup EXIT
-+
-+ALL_TESTS="
-+	test_port_default
-+	test_vlan_pcp
-+	test_ip_dscp
-+"
-+
-+setup_prepare
-+setup_wait
-+
-+tests_run
-+
-+exit $EXIT_STATUS
--- 
-2.25.1
+ #ifdef CONFIG_X86
+-	pr_info("passed for %s platform %s CX8 and %s SSE\n",
++	kunit_info(suite, "ran on %s platform %s CX8 and %s SSE\n",
+ #ifdef CONFIG_X86_64
+-		"x86-64",
++		   "x86-64",
+ #elif defined(CONFIG_X86_CMPXCHG64)
+-		"i586+",
++		   "i586+",
+ #else
+-		"i386+",
++		   "i386+",
+ #endif
+-	       boot_cpu_has(X86_FEATURE_CX8) ? "with" : "without",
+-	       boot_cpu_has(X86_FEATURE_XMM) ? "with" : "without");
+-#else
+-	pr_info("passed\n");
++		   boot_cpu_has(X86_FEATURE_CX8) ? "with" : "without",
++		   boot_cpu_has(X86_FEATURE_XMM) ? "with" : "without");
+ #endif
+-
+-	return 0;
+ }
+=20
+-static __exit void test_atomics_exit(void) {}
++static struct kunit_suite atomic_test_suite =3D {
++	.name =3D "atomic",
++	.test_cases =3D atomic_test_cases,
++	.suite_exit =3D atomic_suite_exit,
++};
+=20
+-module_init(test_atomics_init);
+-module_exit(test_atomics_exit);
++kunit_test_suites(&atomic_test_suite);
+=20
+ MODULE_LICENSE("GPL");
+
+base-commit: 38289a26e1b8a37755f3e07056ca416c1ee2a2e8
+--=20
+2.36.0.464.gb9c8b46e94-goog
 
