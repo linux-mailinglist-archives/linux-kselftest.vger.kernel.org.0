@@ -2,110 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313BF516704
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 May 2022 20:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF5E516B83
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 09:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350651AbiEAS2A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 1 May 2022 14:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S1383616AbiEBICU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 May 2022 04:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234718AbiEAS16 (ORCPT
+        with ESMTP id S1358979AbiEBICS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 1 May 2022 14:27:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E0B56403;
-        Sun,  1 May 2022 11:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=++0tXB8r6fqAoAWO0zn58LBjR0GxZ8Ui8yI9kV7Ql6c=; b=5Bvm25+pkmeLL5rMNrxHfplM7s
-        uKg935xXJmaVLLztQS7lAaaumcfTsInHq0U3fp0FT/49AU/iugvoMPp7Ea3qOHNOyCfdpoH3vR0EC
-        f2YSrPcQciYHpVw6Ms4xCNFi3SDZg2dGg3No6LR98z+5DajXjeQlFPOpno0chVBe7ChAk0qntgBFB
-        6PpCt0ZbB1//y4zNnHabMq4ZeZnWZv29LszwS5klex7qmCWYQJ/hmQULdZRG30COu18Z4lbWo/WIA
-        73Dfy97TxkjyMZaJeYaYl0NW0lqSv4ZbGKSERZqAsmCARqz+d+ccDFcYoUcux6UOKFd/KOq7BBh+N
-        RJUiABXg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nlEFA-00Gh9I-PL; Sun, 01 May 2022 18:24:28 +0000
-Date:   Sun, 1 May 2022 11:24:28 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-Message-ID: <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
-References: <20220429043913.626647-1-davidgow@google.com>
- <20220430030019.803481-1-davidgow@google.com>
- <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
+        Mon, 2 May 2022 04:02:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F682C649;
+        Mon,  2 May 2022 00:58:50 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2427eQU7013210;
+        Mon, 2 May 2022 07:58:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=R6Znuo0uXIGgRF6ohS4ohIBGd/RGextPHf71KJR13a0=;
+ b=EqFbyO+jnAJweyJE9ZKRHbbHLnAxdVp1uLFxRBn9IbDUUiy2E+dYZGxNVUasmiMIMMlR
+ EnjTqX3I79ZC5NYwa++o1R6yaHpyl55m1MGW/jqryvf1miNNcVk6LI+YyNACN5sRT18u
+ 9QvPFo0nDh6CqxJ4dHhKNZ7SdV+gaSZR2JVfBFDTWBNocF2zKxbBFKg3LVvWcE190nUX
+ IPHZcnstRDs78UkymiVau2+P+kocpZLR/9FF5ise3cAeBOq6saDHsTU5naitij7qULrL
+ 5MqX4dJe7LmyaoZa/W1QrLqrddYaiAcrIkztkKuNxhlBRGnhNltng0rlfL8Dh9edwSuA sQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ftawsgdvm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 07:58:45 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2427wjl1018914;
+        Mon, 2 May 2022 07:58:45 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ftawsgdv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 07:58:44 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2427w9Oh013238;
+        Mon, 2 May 2022 07:58:43 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3frvr8sx55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 07:58:42 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2427wgUo26083626
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 May 2022 07:58:42 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BAF354C04E;
+        Mon,  2 May 2022 07:58:39 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 287264C046;
+        Mon,  2 May 2022 07:58:39 +0000 (GMT)
+Received: from [9.171.12.235] (unknown [9.171.12.235])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  2 May 2022 07:58:39 +0000 (GMT)
+Message-ID: <385126e7-b74b-1826-c134-3efd278e5b79@linux.ibm.com>
+Date:   Mon, 2 May 2022 09:58:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/2] Dirtying, failing memop: don't indicate
+ suppression
+Content-Language: en-US
+To:     Janosch Frank <frankja@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20220425100147.1755340-1-scgl@linux.ibm.com>
+ <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
+ <13d0d706-abc4-3e4d-88c3-6447636fd1fd@linux.ibm.com>
+ <1ccb1333-2233-8832-4102-a6c082b29108@linux.ibm.com>
+ <40038a9a-5647-c355-bad2-297b0a2baf4f@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <40038a9a-5647-c355-bad2-297b0a2baf4f@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5NTPEpSkXRcq0OaGO40nmWBv0goR-Gm9
+X-Proofpoint-ORIG-GUID: Oz37-pxOBfToHskwywnjIPdnyoPIKnaQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 impostorscore=0 mlxscore=0
+ mlxlogscore=788 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205020058
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, May 01, 2022 at 11:22:38AM -0700, Luis Chamberlain wrote:
-> On Sat, Apr 30, 2022 at 11:00:19AM +0800, David Gow wrote:
-> > KUnit tests are not supposed to run on production systems: they may do
-> > deliberately illegal things to trigger errors, and have security
-> > implications (assertions will often deliberately leak kernel addresses).
-> > 
-> > Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-> > run. This will be printed as 'N' (for kuNit, as K, U and T were already
-> > taken).
-> > 
-> > This should discourage people from running KUnit tests on production
-> > systems, and to make it easier to tell if tests have been run
-> > accidentally (by loading the wrong configuration, etc.)
-> > 
-> > Signed-off-by: David Gow <davidgow@google.com>
+Am 26.04.22 um 09:25 schrieb Janosch Frank:
 > 
-> There is no reason to distinguish kunit from selftests if the result is
-> the same: really make the kernel try really insane stupid things which
-> may crash it or put it into a bad state.
+> To me this measure looks like a last resort option and the POP doesn't state a 100% what is to be done. Some instructions can mandate suppression instead of termination according to the architects.
 > 
-> So no, this should be renamed to "TEST_BREAK" as I think outside of
-> selftest and kunit we may grow the kernel to do stupid things outside
-> of that domain and this gives us the flexilibilty to use that in other
-> places as well.
+> My intuition tells me that if we are in a situation where this would happen then we would be much better off just doing it by hand (i.e. in the instruction emulation code) and not letting this function decide.
 > 
-> It begs the question if we *should* allow userspace to volunterally say
-> "hey, we are doing really insane things, brace yourself." Why ? Well
-> because selftest has tons of modules. We either then define a macro
-> that adds the taint for them and wrap the module declaration for it,
-> or we expose a syctl to let userspace volunteer to opt-in to seggest
-> we are about to try something stupid with the kernel including loading
-> some dangeerous modules which may not have macros which taint the kernel.
-> That would let selftest taint on *any* selftest. Because we can run all
-> selftests or run one selftest.
+> So I'm not entirely sure if we're replacing something that is not correct with something that also won't be correct for all cases.
 > 
-> Then, if such sysctl is exposed, maybe we should then also use this for
-> example for blktests, fstests, fio tests, etc.
+> But to summarize this: I'm not entirely sure even after reading the POP for more than an hour and consulting an architect
 
-For got to expand to fsdevel and linux-block.
-
-  Luis
+According to Damian, the definition in the POP is exactly the way it is to cover for z/VMs way of handling key protection for long operatings in a terminating fashion since the 70ies or 80ies.
+As it is fine for z/VM (and then also for z/OS and zVSE under z/VM) I guess we can (and should) mimic that behaviour.
