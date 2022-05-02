@@ -2,74 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044DD51728A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 17:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742DE517353
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 17:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385755AbiEBPdc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 May 2022 11:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S239959AbiEBP6P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 May 2022 11:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357710AbiEBPdb (ORCPT
+        with ESMTP id S229625AbiEBP6O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 May 2022 11:33:31 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CB112AA4
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 May 2022 08:30:01 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id m23so18874649ljc.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 May 2022 08:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KaYC/hR9EweEPxn/lknEuh9lm3r0s8f4P2PPpx7IpG4=;
-        b=RGe8ZuM568I+kn3wyy882sgEM06LruO1ZZ1/9lZ8CSsKHgyyW0WKoZ0ZPPiH7ZFgQx
-         RBkfFRgbkEKCAtnYq/hJzh0hYZRLoSdGhT41ISEmnQT6ieiczXCMLTfMtEXeUVWkhKEj
-         7Q1OtSlUPAtm/LzhbJ5AeXbjlJG/xogLhK895DzbAL8N5pGk2Caxzizx7P+ejwkLEqjd
-         z6xuOr8mp+NeyM2o+DCtaazDd7MJbGn337xm95XRXGGkz0MWoj2QJSW53Cz6+0SSCSL/
-         xEHOY9zIvDQkNZha2GwTqA6I7l76HnH05SDVn++SrrNOq6o2ywUEYDaUVZoYBr/RWdYF
-         eVVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KaYC/hR9EweEPxn/lknEuh9lm3r0s8f4P2PPpx7IpG4=;
-        b=S71I/O0xRgTiQBJ9TpdjD9h+o2cGslmvs7t+mmJWl5tV4Y2Fj1YUNXWN3M1yo7JWkf
-         K1UVkMzlFngcXMLOFc1NHQ5S001Ti8NQGuKw7fvE4rD7bxlcVcFy7IKL6xsQb5t/325x
-         lZOO3nLcbLrp9OScSOoP35LJA21TypXQyqbz9bt4nhULQQwr2rns5reTUxy8QRZBX8qZ
-         gaRdACRD/hH0SjVUEvQ9JSmsyf/NXZJN8SA4LnLahJ2A8VdrmMZLzwEjI2UBe9VcipaR
-         X6DC6dRJP5K5y3oPg0GvO/kr71HNTrsUZqRFAweHAVNh0DKSgyIYfNbemqYzeuZFgWmk
-         heBw==
-X-Gm-Message-State: AOAM532Hjb6muike4AyiStYQ8rfy3k39ymKfWUYh7h/vP/yXTe+b18nM
-        nFT2eCnFaEhTh+v9VLiXk4m7rVNmlF7siMwWlwpz5w==
-X-Google-Smtp-Source: ABdhPJw6cLOyMHiDWJzzKJewLS4CDWvylMuZ9LqJTo3a9aiL0INTT62P7xle1YmsHd7WOc+qms6YBs3/nWHCXNBR2fM=
-X-Received: by 2002:a2e:7c16:0:b0:244:be33:9718 with SMTP id
- x22-20020a2e7c16000000b00244be339718mr7843039ljc.467.1651505399798; Mon, 02
- May 2022 08:29:59 -0700 (PDT)
+        Mon, 2 May 2022 11:58:14 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70045.outbound.protection.outlook.com [40.107.7.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048C76155;
+        Mon,  2 May 2022 08:54:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fw+Fpvr/lsXZK2OTfxfcPLmbnicou+9SAAg7OYzvhqd1lbiijZz4DD6ALU54mx20r5iXlH9c/VEv4qeDRyiUckVT22KfURsF5eM0BSkcIenXiTwxHbJEQOd7UekQ92l7o+W8CZ3x0Z4rwqmkckyFgF42vFxzua+q+mrH8eph886JPFJ2Psi7hNVEBp41eHNI8JF0JSq/pdBsr7fJ8u3wgA7u1IdFLY1W45lZSfRNoJxnaRv4RKVMlwgnB9/BH1sdxaVHOp7BZkZL9t2MrGVb5KQkm3d+lECmXh7Tz9GXSlT2EiM1bAWw6AKeERwZXds5DGRQuBXbBjRchBlowpISlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cW2i10I0OQkMG+Q+7QLtzppy1vs6dsFtnZfcFhjDZcs=;
+ b=G0FVulwyKop6vP2zMHBCohV1HB5f1jbTfXmQtoE1l954hPPS5lA8tZRIWZryFMSThS9JiVv8KkLBiC2fZDpInVwMh6ecN9DR6l2mEJtBvUvqGxIh5c4/KhGp5808pLoxw8+PXTbfiBWCaCGl7KUa97WmrPAewKhXmMG44UFu04MP+keBfCMSb5EFCjPxEuowoymI181qdoc22+PrZ+a24LS5SwsSOLW31wEU9+w/knDzC94Tuta3aMT8XqVcg8VPoIu36cJVyoolhoHsHvwJ81bbubkhjMEbuqCaxPFGRwcQCbMHnUGbeZ4BCP4zLMNsY9a4wDYxTOqVsaE6rStTjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cW2i10I0OQkMG+Q+7QLtzppy1vs6dsFtnZfcFhjDZcs=;
+ b=o+lHZdgWuqtYofhDhSwFZVGaxKRVYTr2/AQhF5Djq6T6Y2NDnZD2z9mD5UW/sxVj+lGhjVJ+flv9eGOR6gzwFJx5LCNiYXVO1A++ESLgzpOi5WGpdE/DTmqltvPZahMlRPJ94bIn7fZju615mm7jf4rsNuNXpAIxzij0IEOhS9o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AS8PR04MB7702.eurprd04.prod.outlook.com (2603:10a6:20b:23f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Mon, 2 May
+ 2022 15:54:41 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::d94f:b885:c587:5cd4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::d94f:b885:c587:5cd4%6]) with mapi id 15.20.5206.024; Mon, 2 May 2022
+ 15:54:41 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, "Y . b . Lu" <yangbo.lu@nxp.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: [PATCH net-next] selftests: forwarding: add basic QoS classification test for Ocelot switches
+Date:   Mon,  2 May 2022 18:54:24 +0300
+Message-Id: <20220502155424.4098917-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR3P281CA0001.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1d::10) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-References: <20220429235644.697372-1-cmllamas@google.com> <20220429235644.697372-6-cmllamas@google.com>
-In-Reply-To: <20220429235644.697372-6-cmllamas@google.com>
-From:   Todd Kjos <tkjos@google.com>
-Date:   Mon, 2 May 2022 08:29:48 -0700
-Message-ID: <CAHRSSEwYQgM5F6akh87y_VVWGKFZ8PPY_6Bt0cP1h2JXWeRn9g@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] binder: additional transaction error logs
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 72c0eeff-c311-43db-4d9c-08da2c5411a8
+X-MS-TrafficTypeDiagnostic: AS8PR04MB7702:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR04MB77024A025E2193FAD7FAE2D1E0C19@AS8PR04MB7702.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZHvAJfw3E6YTckhEne2SLIQkfRiIvlxxnc2Hi2SxW3cmVgXP2cAmzFXmx+XE0IhWiZ2GlsTQPAVHnbvEqfhjbLeszJpI+CvNTK1pYUnS+agR4iikU8cVnvNWbuQvU0SkA4ENEAyqw42TtTGeQEm0h5xshubWHS0UX9SVlfMwSR/Jcbn63WrJHQCMsRLuftHAIQXIMnce3RO9c5KUOX+JjylbpsLFcAnxgr5UM+ePw/hqsumwkSP39OWpX18W3krnjSNMVqflE4H9DOQNA5xwBfHPRTEfyq2kIlJae6O6hR+WO1JHfDQsSixxzi3sOlfIPU0bs3fumOlDnoJPfWnOFsWaeObnYZ0MQE/XXi4Q5ZYiRnRcfyDYeYhvTM9GXKzwFznQ49FtLxPZDbg4d4lGplKVs8dFnMrTBSAZ8lUTMaWNZAsCyHhxyQs3/Nl5gPhmXnYhmtGWYVjliu/1ipm2h/F7B02WDmKjZbhuawtkCV0Qu0OOjdbk70t8fd+4rbPL4xxcBKzBw9P0md1Lm0Swng1/yxn9bAS88U/f9zP0Lvi+2liF2CLLZogqTc8iGY13AFTc/3271iyTYlJAuwh2Q8UkgH7xVzD6FsZIbsTtdNOU5WuKEMb20GtYEeibIc4atpG/0sKk+y1hcj2TTIohWjlrkwQGp4VX7mlRSIvZ+mLJENUkwU+qWCetY1EGQOOUrOUzoQvq4BA+9/NuYWM5lpX/nREn2isE9lwqAf6Fk0KDwNr85tlqAXXZK9xOMnRSOjJ3qi7mDz2tS0gi2v15oDaPfDnF2UPhrJoAcnLU+k0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(66946007)(4326008)(86362001)(186003)(8936002)(508600001)(966005)(6486002)(7416002)(44832011)(5660300002)(2616005)(6512007)(26005)(38350700002)(8676002)(38100700002)(2906002)(6916009)(6666004)(6506007)(36756003)(1076003)(52116002)(316002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lXmJw4NK6S2kDtGUSJur1GnOy2lEWi3iWaG3bg3vJRap55/Op8v7UZ544IXn?=
+ =?us-ascii?Q?FnDdBV6HIlrPUL6iHZCJ4ZjGkRt6NIRL3ntUmLgDjQyces1oeAbDIaQB6AF6?=
+ =?us-ascii?Q?Y3bg2kVp3UShXtYNNwLugDY2frHWmxWzxvNLmCgGXrJ2CdctivXaXyz2koA7?=
+ =?us-ascii?Q?chp4de6FipKt+uUKqvWIA/4xHqHjqHp81uFYvKFAF+RG2ym4pGkSNB0GgeE1?=
+ =?us-ascii?Q?vtGFEos94xbW42+WIqi9/ydJeUkHzy7ZTsV9SjpJv95H+/Pocf8zNoTOfJcU?=
+ =?us-ascii?Q?a7UzjSGiiypr8K5MdQDZLbXJvUiaFhEI0KQmvFkqt/CZqN1soB0lcTWqBFMO?=
+ =?us-ascii?Q?6i/l0ZQB4PvPtHag+amn8jX8WT4XbIq35rJ0oCg/3vOk3CNcAvXs8ho4RfEB?=
+ =?us-ascii?Q?UtbG1rvur6XwxMDZ5xuG1kF0OzKujiQfpZS6Pw03fNnefxl51uCSNHyahlgg?=
+ =?us-ascii?Q?p8+n0dXeCZXMSePySEkAQl3+S4JZu/trEb5ZrQ1z3nPAS0K/AEJP5aMTh31H?=
+ =?us-ascii?Q?whWizoQ2IyHiApIXSyQyjslcjQjShhT2XuBNkqVSmO12LkmALiPkJwdsb/aV?=
+ =?us-ascii?Q?G5p2PNmkTEySaDC4HCmQApXrNTdG8F+BjM/t8hM49FJqdU+ND/vHoltNSQTK?=
+ =?us-ascii?Q?Osh7mEm+9Ylj6DE7r6bdtG7Sn4sAZD4iKTHbgRJYnfobnHbawg75kv5XB2yU?=
+ =?us-ascii?Q?LGL5bIaAlzb+lj681myQBjLRhXsHRy/mcUbUaEb8PA7qua5aPmaI/0fqw20n?=
+ =?us-ascii?Q?auj2BS6byEp69dXEB7/lXViV4uqogzQo3GBI9hYMrkX4v3VKjOoTNy5B3feH?=
+ =?us-ascii?Q?U3IMH/787EYBXAiE7DlpeWjfc5MRdPqFBxWg5fiQLHD4gk/CPbjyCPSRKkOe?=
+ =?us-ascii?Q?bA35JnsyFv2X0I5spXZQo7AbdJlqYba+DZwCqXhPrqGIJb0mxQgjOFvVxSrh?=
+ =?us-ascii?Q?29CjDCktr0tvmC1QNnIOfiEP/F5KTC422BhD9d9HBdbQHet1J6uEQIM+3Kjx?=
+ =?us-ascii?Q?DBpBo1GBytWVN5jXa78WHDDcv5VwTAIVHSVegE5e+/ZEVPzvys6EPOdm1Lr7?=
+ =?us-ascii?Q?a2+hpn0tF7L4ZyCJLMBfL7rIe8x/gimOTYhzZ9aZGpLDRve17FUvru1CPa3l?=
+ =?us-ascii?Q?8PQc+XPxvShewtjCRzxNk5SXzf91D5iSP8ClYVpgd/93KetCFSkLpHi1SdoR?=
+ =?us-ascii?Q?uN21poAxOs84daHeJ6lVByaD39xqTGdAWB9Q8L47dpxzaIyjRy1b/fg/Ndq2?=
+ =?us-ascii?Q?cjJXMI3ePD2fQbHNcOGMofwNn1VJ0yVx+2se/MQtEze85LxNOgf6xdMVr5MS?=
+ =?us-ascii?Q?b4G+d/LEjAmt/MrTJp3UVBy1iteA29ouWQguFKXkrCxcRAXDb0TFMTyfoQ4i?=
+ =?us-ascii?Q?eYscw3lO8xaTmfjdgNt0k3Z1I/8XN0IbAV3Yz7Q82PCbWZUxvTNTtup2wsbD?=
+ =?us-ascii?Q?6lsFRw2cVzWSVmQfFy9sNb4olhOBBtiD3erBI2iDhCAO+bOk5gzY70qo0Bri?=
+ =?us-ascii?Q?dWDL0b8rgmPGtytnWrgufuuOBhpCr8qQGAGCatU06SVCLjXzD3yWKXa0o7Hd?=
+ =?us-ascii?Q?bXfI+w38+wgJ4ytgI4TUQw8zMDSfyCWGqJyq2mKdkykJwpr+IJQ2ULOUcShK?=
+ =?us-ascii?Q?bQwwCiGWIB/xAv/WeHed5MwtnZ4A8y2kGayLnRE1+kmHaT2HFJdORReGmXZA?=
+ =?us-ascii?Q?AInUj53cOfwZLx3oPE4R7Qe3cErmjruNlWBr3RRiJIN8MT9l+3h8ZJbcjEcn?=
+ =?us-ascii?Q?739Zzs7P2Nd5gE6HAwZS4+dLaRy9N9s=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72c0eeff-c311-43db-4d9c-08da2c5411a8
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 15:54:41.3182
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hsmU91aLZ+O5q4zPi/6C6P3t2HrrGJd9k/omu8CKI2/7zR5KSJ05jsattOq5khXv32MD4I+OVM7kBNf5LqDeDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7702
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,202 +129,275 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:57 PM 'Carlos Llamas' via kernel-team
-<kernel-team@android.com> wrote:
->
-> Log readable and specific error messages whenever a transaction failure
-> happens. This will ensure better context is given to regular users about
-> these unique error cases, without having to decode a cryptic log.
->
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+Test basic (port-default, VLAN PCP and IP DSCP) QoS classification for
+Ocelot switches. Advanced QoS classification using tc filters is covered
+by tc_flower_chains.sh in the same directory.
 
-Acked-by: Todd Kjos <tkjos@google.com>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ .../selftests/drivers/net/ocelot/basic_qos.sh | 253 ++++++++++++++++++
+ 1 file changed, 253 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
 
-> ---
->  drivers/android/binder.c | 48 ++++++++++++++++++++++++++++++++++++----
->  1 file changed, 44 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index bfb21e258427..d7c5e2dde270 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -147,6 +147,9 @@ static __printf(2, 3) void binder_debug(int mask, const char *format, ...)
->         }
->  }
->
-> +#define binder_txn_error(x...) \
-> +       binder_debug(BINDER_DEBUG_FAILED_TRANSACTION, x)
-> +
->  static __printf(1, 2) void binder_user_error(const char *format, ...)
->  {
->         struct va_format vaf;
-> @@ -2823,6 +2826,8 @@ static void binder_transaction(struct binder_proc *proc,
->                 if (target_thread == NULL) {
->                         /* annotation for sparse */
->                         __release(&target_thread->proc->inner_lock);
-> +                       binder_txn_error("%d:%d reply target not found\n",
-> +                               thread->pid, proc->pid);
->                         return_error = BR_DEAD_REPLY;
->                         return_error_line = __LINE__;
->                         goto err_dead_binder;
-> @@ -2888,6 +2893,8 @@ static void binder_transaction(struct binder_proc *proc,
->                         }
->                 }
->                 if (!target_node) {
-> +                       binder_txn_error("%d:%d cannot find target node\n",
-> +                               thread->pid, proc->pid);
->                         /*
->                          * return_error is set above
->                          */
-> @@ -2897,6 +2904,8 @@ static void binder_transaction(struct binder_proc *proc,
->                 }
->                 e->to_node = target_node->debug_id;
->                 if (WARN_ON(proc == target_proc)) {
-> +                       binder_txn_error("%d:%d self transactions not allowed\n",
-> +                               thread->pid, proc->pid);
->                         return_error = BR_FAILED_REPLY;
->                         return_error_param = -EINVAL;
->                         return_error_line = __LINE__;
-> @@ -2904,6 +2913,8 @@ static void binder_transaction(struct binder_proc *proc,
->                 }
->                 if (security_binder_transaction(proc->cred,
->                                                 target_proc->cred) < 0) {
-> +                       binder_txn_error("%d:%d transaction credentials failed\n",
-> +                               thread->pid, proc->pid);
->                         return_error = BR_FAILED_REPLY;
->                         return_error_param = -EPERM;
->                         return_error_line = __LINE__;
-> @@ -2975,6 +2986,8 @@ static void binder_transaction(struct binder_proc *proc,
->         /* TODO: reuse incoming transaction for reply */
->         t = kzalloc(sizeof(*t), GFP_KERNEL);
->         if (t == NULL) {
-> +               binder_txn_error("%d:%d cannot allocate transaction\n",
-> +                       thread->pid, proc->pid);
->                 return_error = BR_FAILED_REPLY;
->                 return_error_param = -ENOMEM;
->                 return_error_line = __LINE__;
-> @@ -2986,6 +2999,8 @@ static void binder_transaction(struct binder_proc *proc,
->
->         tcomplete = kzalloc(sizeof(*tcomplete), GFP_KERNEL);
->         if (tcomplete == NULL) {
-> +               binder_txn_error("%d:%d cannot allocate work for transaction\n",
-> +                       thread->pid, proc->pid);
->                 return_error = BR_FAILED_REPLY;
->                 return_error_param = -ENOMEM;
->                 return_error_line = __LINE__;
-> @@ -3032,6 +3047,8 @@ static void binder_transaction(struct binder_proc *proc,
->                 security_cred_getsecid(proc->cred, &secid);
->                 ret = security_secid_to_secctx(secid, &secctx, &secctx_sz);
->                 if (ret) {
-> +                       binder_txn_error("%d:%d failed to get security context\n",
-> +                               thread->pid, proc->pid);
->                         return_error = BR_FAILED_REPLY;
->                         return_error_param = ret;
->                         return_error_line = __LINE__;
-> @@ -3040,7 +3057,8 @@ static void binder_transaction(struct binder_proc *proc,
->                 added_size = ALIGN(secctx_sz, sizeof(u64));
->                 extra_buffers_size += added_size;
->                 if (extra_buffers_size < added_size) {
-> -                       /* integer overflow of extra_buffers_size */
-> +                       binder_txn_error("%d:%d integer overflow of extra_buffers_size\n",
-> +                               thread->pid, proc->pid);
->                         return_error = BR_FAILED_REPLY;
->                         return_error_param = -EINVAL;
->                         return_error_line = __LINE__;
-> @@ -3054,9 +3072,15 @@ static void binder_transaction(struct binder_proc *proc,
->                 tr->offsets_size, extra_buffers_size,
->                 !reply && (t->flags & TF_ONE_WAY), current->tgid);
->         if (IS_ERR(t->buffer)) {
-> -               /*
-> -                * -ESRCH indicates VMA cleared. The target is dying.
-> -                */
-> +               char *s;
-> +
-> +               ret = PTR_ERR(t->buffer);
-> +               s = (ret == -ESRCH) ? ": vma cleared, target dead or dying"
-> +                       : (ret == -ENOSPC) ? ": no space left"
-> +                       : (ret == -ENOMEM) ? ": memory allocation failed"
-> +                       : "";
-> +               binder_txn_error("cannot allocate buffer%s", s);
-> +
->                 return_error_param = PTR_ERR(t->buffer);
->                 return_error = return_error_param == -ESRCH ?
->                         BR_DEAD_REPLY : BR_FAILED_REPLY;
-> @@ -3139,6 +3163,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                                   t->buffer,
->                                                   buffer_offset,
->                                                   sizeof(object_offset))) {
-> +                       binder_txn_error("%d:%d copy offset from buffer failed\n",
-> +                               thread->pid, proc->pid);
->                         return_error = BR_FAILED_REPLY;
->                         return_error_param = -EINVAL;
->                         return_error_line = __LINE__;
-> @@ -3197,6 +3223,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                                         t->buffer,
->                                                         object_offset,
->                                                         fp, sizeof(*fp))) {
-> +                               binder_txn_error("%d:%d translate binder failed\n",
-> +                                       thread->pid, proc->pid);
->                                 return_error = BR_FAILED_REPLY;
->                                 return_error_param = ret;
->                                 return_error_line = __LINE__;
-> @@ -3214,6 +3242,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                                         t->buffer,
->                                                         object_offset,
->                                                         fp, sizeof(*fp))) {
-> +                               binder_txn_error("%d:%d translate handle failed\n",
-> +                                       thread->pid, proc->pid);
->                                 return_error = BR_FAILED_REPLY;
->                                 return_error_param = ret;
->                                 return_error_line = __LINE__;
-> @@ -3234,6 +3264,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                                         t->buffer,
->                                                         object_offset,
->                                                         fp, sizeof(*fp))) {
-> +                               binder_txn_error("%d:%d translate fd failed\n",
-> +                                       thread->pid, proc->pid);
->                                 return_error = BR_FAILED_REPLY;
->                                 return_error_param = ret;
->                                 return_error_line = __LINE__;
-> @@ -3303,6 +3335,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                                                   object_offset,
->                                                                   fda, sizeof(*fda));
->                         if (ret) {
-> +                               binder_txn_error("%d:%d translate fd array failed\n",
-> +                                       thread->pid, proc->pid);
->                                 return_error = BR_FAILED_REPLY;
->                                 return_error_param = ret > 0 ? -EINVAL : ret;
->                                 return_error_line = __LINE__;
-> @@ -3330,6 +3364,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                 (const void __user *)(uintptr_t)bp->buffer,
->                                 bp->length);
->                         if (ret) {
-> +                               binder_txn_error("%d:%d deferred copy failed\n",
-> +                                       thread->pid, proc->pid);
->                                 return_error = BR_FAILED_REPLY;
->                                 return_error_param = ret;
->                                 return_error_line = __LINE__;
-> @@ -3353,6 +3389,8 @@ static void binder_transaction(struct binder_proc *proc,
->                                                         t->buffer,
->                                                         object_offset,
->                                                         bp, sizeof(*bp))) {
-> +                               binder_txn_error("%d:%d failed to fixup parent\n",
-> +                                       thread->pid, proc->pid);
->                                 return_error = BR_FAILED_REPLY;
->                                 return_error_param = ret;
->                                 return_error_line = __LINE__;
-> @@ -3460,6 +3498,8 @@ static void binder_transaction(struct binder_proc *proc,
->         return;
->
->  err_dead_proc_or_thread:
-> +       binder_txn_error("%d:%d dead process or thread\n",
-> +               thread->pid, proc->pid);
->         return_error_line = __LINE__;
->         binder_dequeue_work(proc, tcomplete);
->  err_translate_failed:
-> --
-> 2.36.0.464.gb9c8b46e94-goog
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+diff --git a/tools/testing/selftests/drivers/net/ocelot/basic_qos.sh b/tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
+new file mode 100755
+index 000000000000..c51c83421c61
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
+@@ -0,0 +1,253 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright 2022 NXP
++
++# The script is mostly generic, with the exception of the
++# ethtool per-TC counter names ("rx_green_prio_${tc}")
++
++WAIT_TIME=1
++NUM_NETIFS=4
++STABLE_MAC_ADDRS=yes
++NETIF_CREATE=no
++lib_dir=$(dirname $0)/../../../net/forwarding
++source $lib_dir/tc_common.sh
++source $lib_dir/lib.sh
++
++require_command dcb
++
++h1=${NETIFS[p1]}
++swp1=${NETIFS[p2]}
++swp2=${NETIFS[p3]}
++h2=${NETIFS[p4]}
++
++H1_IPV4="192.0.2.1"
++H2_IPV4="192.0.2.2"
++H1_IPV6="2001:db8:1::1"
++H2_IPV6="2001:db8:1::2"
++
++h1_create()
++{
++	simple_if_init $h1 $H1_IPV4/24 $H1_IPV6/64
++}
++
++h1_destroy()
++{
++	simple_if_fini $h1 $H1_IPV4/24 $H1_IPV6/64
++}
++
++h2_create()
++{
++	simple_if_init $h2 $H2_IPV4/24 $H2_IPV6/64
++}
++
++h2_destroy()
++{
++	simple_if_fini $h2 $H2_IPV4/24 $H2_IPV6/64
++}
++
++h1_vlan_create()
++{
++	local vid=$1
++
++	vlan_create $h1 $vid
++	simple_if_init $h1.$vid $H1_IPV4/24 $H1_IPV6/64
++	ip link set $h1.$vid type vlan \
++		egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7 \
++		ingress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
++}
++
++h1_vlan_destroy()
++{
++	local vid=$1
++
++	simple_if_fini $h1.$vid $H1_IPV4/24 $H1_IPV6/64
++	vlan_destroy $h1 $vid
++}
++
++h2_vlan_create()
++{
++	local vid=$1
++
++	vlan_create $h2 $vid
++	simple_if_init $h2.$vid $H2_IPV4/24 $H2_IPV6/64
++	ip link set $h2.$vid type vlan \
++		egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7 \
++		ingress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
++}
++
++h2_vlan_destroy()
++{
++	local vid=$1
++
++	simple_if_fini $h2.$vid $H2_IPV4/24 $H2_IPV6/64
++	vlan_destroy $h2 $vid
++}
++
++vlans_prepare()
++{
++	h1_vlan_create 100
++	h2_vlan_create 100
++
++	tc qdisc add dev ${h1}.100 clsact
++	tc filter add dev ${h1}.100 egress protocol ipv4 \
++		flower ip_proto icmp action skbedit priority 3
++	tc filter add dev ${h1}.100 egress protocol ipv6 \
++		flower ip_proto icmpv6 action skbedit priority 3
++}
++
++vlans_destroy()
++{
++	tc qdisc del dev ${h1}.100 clsact
++
++	h1_vlan_destroy 100
++	h2_vlan_destroy 100
++}
++
++switch_create()
++{
++	ip link set ${swp1} up
++	ip link set ${swp2} up
++
++	# Ports should trust VLAN PCP even with vlan_filtering=0
++	ip link add br0 type bridge
++	ip link set ${swp1} master br0
++	ip link set ${swp2} master br0
++	ip link set br0 up
++}
++
++switch_destroy()
++{
++	ip link del br0
++}
++
++setup_prepare()
++{
++	vrf_prepare
++
++	h1_create
++	h2_create
++	switch_create
++}
++
++cleanup()
++{
++	pre_cleanup
++
++	h2_destroy
++	h1_destroy
++	switch_destroy
++
++	vrf_cleanup
++}
++
++dscp_cs_to_tos()
++{
++	local dscp_cs=$1
++
++	# https://datatracker.ietf.org/doc/html/rfc2474
++	# 4.2.2.1  The Class Selector Codepoints
++	echo $((${dscp_cs} << 5))
++}
++
++run_test()
++{
++	local test_name=$1; shift
++	local if_name=$1; shift
++	local tc=$1; shift
++	local tos=$1; shift
++	local counter_name="rx_green_prio_${tc}"
++	local ipv4_before
++	local ipv4_after
++	local ipv6_before
++	local ipv6_after
++
++	ipv4_before=$(ethtool_stats_get ${swp1} "${counter_name}")
++	ping_do ${if_name} $H2_IPV4 "-Q ${tos}"
++	ipv4_after=$(ethtool_stats_get ${swp1} "${counter_name}")
++
++	if [ $((${ipv4_after} - ${ipv4_before})) -lt ${PING_COUNT} ]; then
++		RET=1
++	else
++		RET=0
++	fi
++	log_test "IPv4 ${test_name}"
++
++	ipv6_before=$(ethtool_stats_get ${swp1} "${counter_name}")
++	ping_do ${if_name} $H2_IPV6 "-Q ${tos}"
++	ipv6_after=$(ethtool_stats_get ${swp1} "${counter_name}")
++
++	if [ $((${ipv6_after} - ${ipv6_before})) -lt ${PING_COUNT} ]; then
++		RET=1
++	else
++		RET=0
++	fi
++	log_test "IPv6 ${test_name}"
++}
++
++port_default_prio_get()
++{
++	local if_name=$1
++	local prio
++
++	prio="$(dcb -j app show dev ${if_name} default-prio | \
++		jq '.default_prio[]')"
++	if [ -z "${prio}" ]; then
++		prio=0
++	fi
++
++	echo ${prio}
++}
++
++test_port_default()
++{
++	local orig=$(port_default_prio_get ${swp1})
++	local dmac=$(mac_get ${h2})
++
++	dcb app replace dev ${swp1} default-prio 5
++
++	run_test "Port-default QoS classification" ${h1} 5 0
++
++	dcb app replace dev ${swp1} default-prio ${orig}
++}
++
++test_vlan_pcp()
++{
++	vlans_prepare
++
++	run_test "Trusted VLAN PCP QoS classification" ${h1}.100 3 0
++
++	vlans_destroy
++}
++
++test_ip_dscp()
++{
++	local port_default=$(port_default_prio_get ${swp1})
++	local tos=$(dscp_cs_to_tos 4)
++
++	dcb app add dev ${swp1} dscp-prio CS4:4
++	run_test "Trusted DSCP QoS classification" ${h1} 4 ${tos}
++	dcb app del dev ${swp1} dscp-prio CS4:4
++
++	vlans_prepare
++	run_test "Untrusted DSCP QoS classification follows VLAN PCP" \
++		${h1}.100 3 ${tos}
++	vlans_destroy
++
++	run_test "Untrusted DSCP QoS classification follows port default" \
++		${h1} ${port_default} ${tos}
++}
++
++trap cleanup EXIT
++
++ALL_TESTS="
++	test_port_default
++	test_vlan_pcp
++	test_ip_dscp
++"
++
++setup_prepare
++setup_wait
++
++tests_run
++
++exit $EXIT_STATUS
+-- 
+2.25.1
+
