@@ -2,171 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D68516F42
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 14:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8159A51727D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 May 2022 17:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbiEBMJL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 May 2022 08:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S1385722AbiEBP3P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 May 2022 11:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384886AbiEBMIl (ORCPT
+        with ESMTP id S1351340AbiEBP3O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 May 2022 08:08:41 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA53714014
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 May 2022 05:05:09 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2f7ca2ce255so144942167b3.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 May 2022 05:05:09 -0700 (PDT)
+        Mon, 2 May 2022 11:29:14 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2171913DD4
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 May 2022 08:25:42 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id y32so25842952lfa.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 May 2022 08:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=h3tCKH7ebkKPQvrWw7j6hFFjOOim/c0BmjpoSMuBdrQ=;
-        b=CNJZDsF19g7FivqUW2Z1eJq8XN5EV2igI4ab6j9NUAqteLblakIst+IpEeHS/Pv+EL
-         7g40JlM0BF7AEQnCwqm4RUo0/63RBy/xP2b9pKPTF3H8BNB9fJ5h4AADMMjvh0ZrTnV6
-         +7vMPLJTpI6Un9uNKqGUR/G4FhisOA1vCjDw35emsEReezFS5JJAFg0bp+s+XvJaRbUs
-         QHHSfjMW7xNMywwbEgMVEWk24wbe9bYNLsfWcLnDFHHuxR1M2AvZ+C2PvL+Mq5PAhKs9
-         nWZyYPBBLtnJ/R0+l5PNhYKlxdlbC4UqonVhi3/jp2LFYLvbiydBN1ZkYi4KbacB4NFy
-         4YLQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RisVP5Snmr1bt4RiEhBJahRqYpRuwkZWR8WoDtnKv9M=;
+        b=L7jVaaIJvOV3E0GWtj7pjTNHT8WQSTLD+y0xRji2SkRCRDxSR7vpqt5d39WmZ+LrfI
+         lPF9/zx2LKwGrK1nARkrw9xCCu7A7gYPDMuW06qVQTNksE/OZGzf7xe0ghHYhbRQVw9N
+         qtpZ6fSqnET71u8z3uSrFGstT3Vqq4i8gTEScE9XVGIQDQ1ciUiU6cK3Yco+SLsFDeSe
+         sFnSd1hnGWq5epdfWfD1cMjb6+UvisvNvBOrZDzL0NiT27OYYtu60nYFxq2HR2N5NQht
+         kS/nj//XJfM8Gx61cKxbS0oS2JIx62/DgI6Drbx8Ona2kEpVTvpOSkbZ0J4q+r+F0sMu
+         rkyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=h3tCKH7ebkKPQvrWw7j6hFFjOOim/c0BmjpoSMuBdrQ=;
-        b=JIFEosMiaHjzrnjT2spKjOZcHOAru01gJ9WfeBNNB5P1ECc5WHAWIvRBX1zyzt9Q0R
-         y7TnD97M4T3e70EutZ1lGkpgFrPEuk1IqENCybuXRpw3EAiavBWlYFPSPitqJjGd8ng6
-         pPghtGz5jqythH/xZGiVTaoPzGvQmujy8mbkvsaMeCQ+VDbzcZ11o9yZbK76/rYC8PCh
-         V7RxQyzVE5O8bL/PQgbSN5eD9O9GS2MTIWDNIoaOVEv/VcIFSURF05nj5jA354vmwV8S
-         1HbUAS2kDXHlk/GBjdmFC3xJDUwlGFeicM3klqFjkqhUBwq0z40R5XopwDYGz1E7b8ql
-         spsw==
-X-Gm-Message-State: AOAM533T17y2QGnzPoVXotF+hh9T78gxIg4WHFt978gAP8rXTc8ZwWm0
-        SMfMlW75w0cx3lzSK/bUbSNCPKp6Zr1uNbrnhDzzXA==
-X-Google-Smtp-Source: ABdhPJy+md5hEGolmEI3F2msfSAnd2QAPV6G68T06cTpxGxu+bBbbObkukwSus5TTSIkxDs9lTrJPGOrLWkRlCsL6pM=
-X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
- u133-20020a81478b000000b002eada8c5c21mr11112137ywa.189.1651493108690; Mon, 02
- May 2022 05:05:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RisVP5Snmr1bt4RiEhBJahRqYpRuwkZWR8WoDtnKv9M=;
+        b=FjxQeV38f4UWWL7fCAT8pvX+mQf6sBxNmdQYwbN6JXqCebhWefyucO+cJyNuld1gRg
+         g6adKJ0m72eApj7HMpyTNwR6x9gSPZuksMbeAP1Zwnancij70+2bWFeyx6HLa5f8JLn0
+         5+Zd1sOGG0ZPzZasUHjh6hbGHpYetqtYiezZPq8aZrIMeslgPgD0awKNGWEqK0h4dNmP
+         VB3wghJeRePSP7AysskQYSfHHYWNJ648Hu7xN+tJJWxiPWMLeAjD78Yil3lhHWvyPEtc
+         T1bVlLGRJnlrIjVE2D8bSBAAKg7F/c88GMAlIw4P8a/UCnPR4rGFx0K7ZKGR84g/Lzql
+         nIPQ==
+X-Gm-Message-State: AOAM530BWAcUEkUum3zvIm7kSXuG9yxWjYygdp+Oc1eNzp/16gOPYXOU
+        ukbf/NK+EyTBm7dxF76nSOY5tBtB7whOQCB+z4uutQ==
+X-Google-Smtp-Source: ABdhPJw7sZaEWo9C3stiapYw385piuVpyuFJ0aaJ/hfskAhQrpxFB1ysfesjEwbnne/ZYHhDLOf56WWcI0wwkoo7a+c=
+X-Received: by 2002:a05:6512:3f09:b0:45d:e5d6:4f3f with SMTP id
+ y9-20020a0565123f0900b0045de5d64f3fmr8849359lfa.403.1651505140202; Mon, 02
+ May 2022 08:25:40 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 2 May 2022 17:34:56 +0530
-Message-ID: <CA+G9fYs2YeyM-v-zea0D7nDk4m+=iCgYgt4pfMVUL-LmXkdHMA@mail.gmail.com>
-Subject: selftests: net: pmtu.sh: BUG: unable to handle page fault for
- address: 2509c000
-To:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Guillaume Nault <gnault@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Anders Roxell <anders.roxell@linaro.org>
+References: <20220429235644.697372-1-cmllamas@google.com> <20220429235644.697372-2-cmllamas@google.com>
+In-Reply-To: <20220429235644.697372-2-cmllamas@google.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 2 May 2022 08:25:28 -0700
+Message-ID: <CAHRSSEwPsftMOduo7=SaD2Qf4m+9o9v6uQU9Qzun_Gz13Vg=qA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] binder: add failed transaction logging info
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Following kernel BUG noticed on qemu_i386 while testing
-selftests: net: pmtu.sh  with kselftest merge config build image [1] & [2]
-and after this BUG test hung.
+On Fri, Apr 29, 2022 at 4:56 PM Carlos Llamas <cmllamas@google.com> wrote:
+>
+> Make sure we log relevant information about failed transactions such as
+> the target proc/thread, call type and transaction id. These details are
+> particularly important when debugging userspace issues.
+>
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-  git_describe: v5.18-rc5
-  kernel_version: 5.18.0-rc5
-  kernel-config: https://builds.tuxbuild.com/28a2wrzQ62tLypUV7bgCOXEGKig/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/528952197
-  artifact-location: https://builds.tuxbuild.com/28a2wrzQ62tLypUV7bgCOXEGKig
-  toolchain: gcc-11
+Acked-by: Todd Kjos <tkjos@google.com>
 
-
-Test log:
----------
-# selftests: net: pmtu.sh
-[  468.730000] ip (15022) used greatest stack depth: 4232 bytes left
-
-<trim>
-
-# TEST: ipv6: cleanup of cached exceptions                            [ OK ]
-[  587.633640] IPv6: ADDRCONF(NETDEV_CHANGE): veth_A-R1: link becomes ready
-[  587.695867] IPv6: ADDRCONF(NETDEV_CHANGE): veth_A-R2: link becomes ready
-[  587.758384] IPv6: ADDRCONF(NETDEV_CHANGE): veth_B-R1: link becomes ready
-[  587.821528] IPv6: ADDRCONF(NETDEV_CHANGE): veth_B-R2: link becomes ready
-# TEST: ipv6: cleanup of cached exceptions - nexthop objects          [ OK ]
-[  591.442819] BUG: unable to handle page fault for address: 2509c000
-[  591.444468] #PF: supervisor read access in kernel mode
-[  591.445810] #PF: error_code(0x0000) - not-present page
-[  591.447175] *pde = 00000000
-[  591.448121] Oops: 0000 [#1] PREEMPT SMP
-[  591.449350] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.18.0-rc5 #1
-[  591.451373] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[  591.453404] EIP: percpu_counter_add_batch+0x2e/0xe0
-[  591.454134] Code: ec 20 89 5d f4 89 c3 b8 01 00 00 00 89 75 f8 89
-7d fc 89 55 ec 89 4d f0 e8 3f f0 a3 ff b8 5f c4 c7 cf e8 e5 43 bd 00
-8b 4b 34 <64> 8b 39 89 7d e0 89 fe 8b 45 08 c1 ff 1f 03 75 ec 13 7d f0
-89 45
-[  591.456840] EAX: 00000003 EBX: c60fd540 ECX: 00000000 EDX: cfc7c45f
-[  591.457755] ESI: 00000000 EDI: c11a92c0 EBP: c1251f40 ESP: c1251f20
-[  591.458686] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00210202
-[  591.459688] CR0: 80050033 CR2: 2509c000 CR3: 05401000 CR4: 003506d0
-[  591.460628] Call Trace:
-[  591.461009]  <SOFTIRQ>
-[  591.461366]  dst_destroy+0xac/0xe0
-[  591.461879]  dst_destroy_rcu+0x10/0x20
-[  591.462438]  rcu_core+0x354/0xa50
-[  591.462942]  ? rcu_core+0x2fd/0xa50
-[  591.463462]  rcu_core_si+0xd/0x10
-[  591.463962]  __do_softirq+0x14f/0x4ae
-[  591.464509]  ? __entry_text_end+0x8/0x8
-[  591.465108]  call_on_stack+0x4c/0x60
-[  591.465637]  </SOFTIRQ>
-[  591.466010]  ? __irq_exit_rcu+0xca/0x130
-[  591.466588]  ? irq_exit_rcu+0xd/0x20
-[  591.467132]  ? sysvec_apic_timer_interrupt+0x36/0x50
-[  591.467868]  ? handle_exception+0x133/0x133
-[  591.468481]  ? __sched_text_end+0x2/0x2
-[  591.469079]  ? sysvec_call_function_single+0x50/0x50
-[  591.469804]  ? default_idle+0x13/0x20
-[  591.470346]  ? sysvec_call_function_single+0x50/0x50
-[  591.471068]  ? default_idle+0x13/0x20
-[  591.471605]  ? arch_cpu_idle+0x12/0x20
-[  591.472164]  ? default_idle_call+0x52/0xa0
-[  591.472788]  ? do_idle+0x20a/0x270
-[  591.473289]  ? cpu_startup_entry+0x20/0x30
-[  591.473890]  ? cpu_startup_entry+0x25/0x30
-[  591.474489]  ? start_secondary+0x10f/0x140
-[  591.475098]  ? startup_32_smp+0x161/0x164
-[  591.475687] Modules linked in: sit xt_policy iptable_filter
-ip_tables x_tables veth fuse [last unloaded: test_blackhole_dev]
-[  591.477321] CR2: 000000002509c000
-[  591.477818] ---[ end trace 0000000000000000 ]---
-[  591.478500] EIP: percpu_counter_add_batch+0x2e/0xe0
-[  591.479218] Code: ec 20 89 5d f4 89 c3 b8 01 00 00 00 89 75 f8 89
-7d fc 89 55 ec 89 4d f0 e8 3f f0 a3 ff b8 5f c4 c7 cf e8 e5 43 bd 00
-8b 4b 34 <64> 8b 39 89 7d e0 89 fe 8b 45 08 c1 ff 1f 03 75 ec 13 7d f0
-89 45
-[  591.481915] EAX: 00000003 EBX: c60fd540 ECX: 00000000 EDX: cfc7c45f
-[  591.482829] ESI: 00000000 EDI: c11a92c0 EBP: c1251f40 ESP: c1251f20
-[  591.483739] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00210202
-[  591.484744] CR0: 80050033 CR2: 2509c000 CR3: 05401000 CR4: 003506d0
-[  591.485656] Kernel panic - not syncing: Fatal exception in interrupt
-[  591.486680] Kernel Offset: disabled
-[  591.487215] ---[ end Kernel panic - not syncing: Fatal exception in
-interrupt ]---
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://lkft.validation.linaro.org/scheduler/job/4976107#L4726
-[2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.18-rc5/testrun/9320607/suite/linux-log-parser/test/check-kernel-bug-4976107/log
+> ---
+>  drivers/android/binder.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 8351c5638880..f0885baa53a1 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -3459,8 +3459,12 @@ static void binder_transaction(struct binder_proc *proc,
+>         }
+>
+>         binder_debug(BINDER_DEBUG_FAILED_TRANSACTION,
+> -                    "%d:%d transaction failed %d/%d, size %lld-%lld line %d\n",
+> -                    proc->pid, thread->pid, return_error, return_error_param,
+> +                    "%d:%d transaction %s to %d:%d failed %d/%d/%d, size %lld-%lld line %d\n",
+> +                    proc->pid, thread->pid, reply ? "reply" :
+> +                    (tr->flags & TF_ONE_WAY ? "async" : "call"),
+> +                    target_proc ? target_proc->pid : 0,
+> +                    target_thread ? target_thread->pid : 0,
+> +                    t_debug_id, return_error, return_error_param,
+>                      (u64)tr->data_size, (u64)tr->offsets_size,
+>                      return_error_line);
+>
+> --
+> 2.36.0.464.gb9c8b46e94-goog
+>
