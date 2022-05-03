@@ -2,180 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEB1518C91
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 May 2022 20:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DE7519152
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 00:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbiECSwV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 May 2022 14:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S240794AbiECW1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 May 2022 18:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241636AbiECSwS (ORCPT
+        with ESMTP id S229535AbiECW1T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 14:52:18 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44C32F034
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 May 2022 11:48:44 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id n10so17720992ejk.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 May 2022 11:48:44 -0700 (PDT)
+        Tue, 3 May 2022 18:27:19 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBEC427C3
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 May 2022 15:23:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B6iYV5uPdXrRA/+rFiUJ0dX1+T8qkpqbtKApdzTC9jU=;
-        b=fN4aZ5Pkz4/NffcBeusp6ZmX6xWXXm6KVaRLrLOhrVik3VekQpp5XYbUkUXDZmfcOb
-         LpA1MJ5Nr0R9JmutYt0RNhaFmNIisNhoW22tepfDY8yYh2so5MF4Z6gt7hKsMCu9dTco
-         Pmf2nJuaek4ZgeVVDgTitiwbL+s5efgc2qVZdxGifFlANxcwUZ06BgMX7pRPyJFqvnxi
-         i9RYMHR4QIZOSegomOzd2xPQ4vpEsWRjqLyoLYF6rfI58pGIFSZzXTnwRXbCvuMjgrAV
-         ISgU55gNYOKkyHV2XFMITxM3FQ5AHDGaToRNYItvQzy+1XQJSFQLdcxQJD/O/IvYZ/3O
-         +5bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B6iYV5uPdXrRA/+rFiUJ0dX1+T8qkpqbtKApdzTC9jU=;
-        b=0BJ+msjhsqGJ8LEiIzkemiT5JcRwpW7l0jR7HB6YAgS7hDs6U4N561SPqdvLwzLFiv
-         z/yV42U7MeqfW0iB4FFJXLKJ/pWj7rUSZnzOcPAbqF8NyNl4HoCqXmJJC6F4VQmdkuWN
-         xxfSa+rI5ZXQkS/B3Ep0bVZMszTktUKsnpjCV80wqbiSRNWSxZiLubhFJ5uSddO9ujMQ
-         GgyLhn4+N7jIzsbp1Uf9Xj+sAWDtz3eMBFOiBfYY6FYETN9SZ43lKeNUoiMUYLOkHq1Y
-         MK3XPNXlospTodyXU9hdgFUhXU/FVyv88VFI6JG7sg6UHJ19lU92abcPUy5SFU/g/3le
-         3RCQ==
-X-Gm-Message-State: AOAM532FQIV2dfZ6BiGfHziJgIhCeQpBTw1X7zxOfni4IcjqxdKeX/Vo
-        AzkDSoyicAvYhHaaatv8q3TnIeHZBHKDvlL/FZCDWQ==
-X-Google-Smtp-Source: ABdhPJxTs3UtrVmHXECRu6bpJzFvoIrg+BgnljB4OAgBhf3PrID6OZTOQO/sPQIwP5bxJaaMLCVJBrJlPFbkq+RHFnQ=
-X-Received: by 2002:a17:907:72ce:b0:6f4:5a57:320c with SMTP id
- du14-20020a17090772ce00b006f45a57320cmr9404297ejc.75.1651603723165; Tue, 03
- May 2022 11:48:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220430045639.839186-1-davidgow@google.com> <CAGS_qxrVnDnUD=0f8vX5C2SWG2mxxXdAWU9A+P7h-K2Y1nm88A@mail.gmail.com>
- <CABVgOS=W8ub72D2LWwDsbfNBO6mFpceZWm+r+8Ct53pUcFJ_4g@mail.gmail.com>
-In-Reply-To: <CABVgOS=W8ub72D2LWwDsbfNBO6mFpceZWm+r+8Ct53pUcFJ_4g@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 3 May 2022 13:48:31 -0500
-Message-ID: <CAGS_qxpOFQ-ZpV2Jw1VEfggxKDqA57zRTY2LWZiK=iNMMo5QLA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Add list of all valid test configs on UML
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651616625; x=1683152625;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xnDs4fqABVmtbO8EfV302QSHZqoqwEJa0N8z1KcZxsw=;
+  b=k7cPm54cuau9jG5/LUNvTy68mMyl258JJjBKDIBcsLab4CdGE8dxj3QW
+   FgK0LTNWWMINlVJDeXOpjdJ/0FCcbT5EPOp7GyJaklZH6fnYNnV+Mkr4D
+   LmSV76pNHg70xBk+1B+fLEtgvuN2MyYgQ+VUf6p1QzIPVOS/hP54KodGz
+   Q=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 May 2022 15:23:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:23:45 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 15:23:44 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 3 May 2022
+ 15:23:42 -0700
+Date:   Tue, 3 May 2022 18:23:40 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Shuah Khan" <shuah@kernel.org>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        <kvmarm@lists.cs.columbia.edu>,
+        "Salil Akerkar" <Salil.Akerkar@arm.com>,
+        Luca Salabrino <luca.scalabrino@arm.com>
+Subject: Re: [PATCH v14 00/39] arm64/sme: Initial support for the Scalable
+ Matrix Extension
+Message-ID: <YnGrbEt3oBBTly7u@qian>
+References: <20220419112247.711548-1-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220419112247.711548-1-broonie@kernel.org>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 3, 2022 at 1:37 AM David Gow <davidgow@google.com> wrote:
->
-> On Tue, May 3, 2022 at 6:37 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > On Fri, Apr 29, 2022 at 11:56 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > It's often desirable (particularly in test automation) to run as many
-> > > tests as possible. This config enables all the tests which work as
-> > > builtins under UML at present, increasing the total tests run from 156
-> > > to 342 (not counting 36 'skipped' tests).
-> >
-> > Just to clear up potential confusion for others, I'll note that these
-> > aren't counting test cases.
-> > This is from kunit.py's output, so it counts each parameter from
-> > parameterized tests as "subtests."
-> >
-> > Copying my command from
-> > https://kunit-review.googlesource.com/c/linux/+/5249, one can use this
-> > to count the # of test cases.
-> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=...
-> > --raw_output=kunit --kernel_args=kunit.action=list | egrep
-> > '^[a-z0-9_-]+\.[a-z0-9_-]+'
-> >
-> > I see this enabling a total of 260 test _cases_ (including skipped).
-> >
-> > The default (basically just CONFIG_KUNIT_ALL_TESTS=y) gives 192
-> > (including skipped).
-> >
->
-> Yup, that's definitely the case. I guess I still was thinking in KTAP
-> terms, where all subtests are effectively tests.
->
-> That being said, I do think the total (sub)test (including parameters,
-> etc) number is the one that's more visible: not only does kunit_tool
-> print it, but it's also what we've been using as our go to "number of
-> tests" generally.
+On Tue, Apr 19, 2022 at 12:22:08PM +0100, Mark Brown wrote:
+> This series provides initial support for the ARMv9 Scalable Matrix
+> Extension (SME).  SME takes the approach used for vectors in SVE and
+> extends this to provide architectural support for matrix operations.  A
+> more detailed overview can be found in [1].
 
-Yes, I agree it's the number to use here.
-If there's a v2 of this patch, we could also reword the commit message
-a bit to make it more explicit.
-If not, this seems fine as-is. The only issue I saw was a minor typo.
+Set CONFIG_ARM64_SME=n fixed a warning while running libhugetlbfs tests.
 
-Re goto for "number of tests."
-Reminder, we've also been using this to count "# tests" :P
-$ git grep 'KUNIT_CASE' | grep -Ev
-'^Documentation/|get_metrics.sh|include/kunit/test.h' | wc -l
-This avoids us having to figure out how to build all the tests,
-sidesteps the problem that subtests can be dynamically generated via
-parameterized testing, etc.
+        /*
+         * There are several places where we assume that the order value is sane
+         * so bail out early if the request is out of bound.
+         */
+        if (unlikely(order >= MAX_ORDER)) {
+                WARN_ON_ONCE(!(gfp & __GFP_NOWARN));
+                return NULL;
+        }
 
->
-> > >
-> > > They can be run with:
-> > > ./tools/testing/kunit/kunit.py run
-> > > --kunitconfig=./tools/testing/kunit/configs/all_tests_uml.config
-> > >
-> > > This acts as an in-between point between the KUNIT_ALL_TESTS config
-> > > (which enables only tests whose dependencies are already enabled), and
-> > > the kunit_tool --alltests option, which tries to use allyesconfig,
-> > > taking a very long time to build and breaking very often.
-> > >
-> > > Signed-off-by: David Gow <davidgow@google.com>
-> >
-> > Tested-by: Daniel Latypov <dlatypov@google.com>
-> >
-> > Looks good to me, some small comments below.
-> >
-> > > ---
-> > >  .../kunit/configs/all_tests_uml.config        | 37 +++++++++++++++++++
-> > >  1 file changed, 37 insertions(+)
-> > >  create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
-> > >
-> > > diff --git a/tools/testing/kunit/configs/all_tests_uml.config b/tools/testing/kunit/configs/all_tests_uml.config
-> > > new file mode 100644
-> > > index 000000000000..bdee36bef4a3
-> > > --- /dev/null
-> > > +++ b/tools/testing/kunit/configs/all_tests_uml.config
-> > > @@ -0,0 +1,37 @@
-> > > +# This config enables as many tests as possible under UML.
-> > > +# It is intended for use in continuous integration systems and similar for
-> > > +# automated testing of as much as possible.
-> > > +# The config is manually maintained, though it uses KUNIT_ALL_TESTS=y to enable
-> > > +# any tests whose dependencies are already satisfied. Please feel free to add
-> > > +# more options if they any new tests.
-> >
-> > missing: "enable"?
-> > "if they enable any new tests"
-> >
-> Whoops, I was switching from "there are any" to "if they enable any"
-> and clearly got distracted halfway through. :-)
->
-> > Hmm, should we state a preference for how heavy (time or
-> > resource-wise) tests should be?
-> > Because the comment says it's meant for automation, but I can imagine
-> > humans wanting to run it.
-> > (I'm completely fine with us not stating one, just throwing the idea
-> > out there for discussion)
->
-> I think we're probably okay with being a little bit lenient on test
-> times. The time_test_cases.time64_to_tm_test_date_range and similar
-> tests take quite a long time in some situations already (older hw,
-> running under some emulators), but is generally pretty close to
-> instant under most UML setups. Particularly given that not building
-> with allyesconfig already saves us many, many minutes of time.
-
-Agreed on all points.
-I personally think it's reasonable to leave things as-is.
-
-We don't have any problematic tests that work on UML yet.
+ WARNING: CPU: 122 PID: 4025 at mm/page_alloc.c:5383 __alloc_pages
+ CPU: 122 PID: 4025 Comm: brk_near_huge Not tainted 5.18.0-rc5-next-20220503 #79
+ pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : __alloc_pages
+ lr : alloc_pages
+ sp : ffff8000505470f0
+ x29: ffff8000505470f0 x28: ffff40028b3535c0 x27: 0000000000000000
+ x26: 1ffff0000a0a8ea2 x25: ffff800050547510 x24: 0000000000000dc0
+ x23: ffff921ddb818000 x22: 000000000000000e x21: 1ffff0000a0a8e28
+ x20: 0000000000040dc0 x19: ffffae1848c61ae0 x18: ffffae18357e7d24
+ x17: ffffae182fb75778 x16: 1fffe8005166a7d8 x15: 000000000000001a
+ x14: 1fffe8005166a7cb x13: 0000000000000004 x12: ffff70000a0a8e03
+ x11: 1ffff0000a0a8e02 x10: 00000000f204f1f1 x9 : 000000000000f204
+ x8 : dfff800000000000 x7 : 00000000f3000000 x6 : 00000000f3f3f3f3
+ x5 : ffff70000a0a8e28 x4 : ffff40028b3535c0 x3 : 0000000000000000
+ x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000040dc0
+ Call trace:
+  __alloc_pages
+  alloc_pages
+  kmalloc_order
+  kmalloc_order_trace
+  __kmalloc
+  __regset_get
+  regset_get_alloc
+  fill_thread_core_info
+  fill_note_info
+  elf_core_dump
+  do_coredump
+  get_signal
+  do_signal
+  do_notify_resume
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync
+ irq event stamp: 28066
+ hardirqs last  enabled at (28065):  _raw_spin_unlock_irqrestore
+ hardirqs last disabled at (28066):  el1_dbg
+ softirqs last  enabled at (27438):  fpsimd_preserve_current_state
+ softirqs last disabled at (27436):  fpsimd_preserve_current_state
