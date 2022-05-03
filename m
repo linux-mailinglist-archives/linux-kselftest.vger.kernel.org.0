@@ -2,151 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38807517D99
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 May 2022 08:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B62E517F85
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 May 2022 10:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiECGyH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 May 2022 02:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S232736AbiECIO6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 May 2022 04:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiECGxn (ORCPT
+        with ESMTP id S232726AbiECIOp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 02:53:43 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5628337031
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 May 2022 23:50:11 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso766423wma.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 May 2022 23:50:11 -0700 (PDT)
+        Tue, 3 May 2022 04:14:45 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE8EC48
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 May 2022 01:11:14 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id g3so13481681pgg.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 May 2022 01:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UAb5iy0AwDrArAj21nJaNKQ/VTNcfReEnHCBV20biOU=;
-        b=Gqz8TpnJSDUvMME+Q79dUBIaTzigsS2/syq/aVXx8M1gEN+5yB46ELFmE+W3yFhj5v
-         71fYnTZyYuTqd1mCW/X6CoLywXIzT1tIAlwUfjD0InVB6uU11LYL2vuPU6tEPX+UnPRS
-         edcaSHfEBA90vEjhP023tenz8ZOIUXn4oqqrTbzh1T1BCm3bH2KUHBC+giVSW0GWw7ff
-         SFFZu/chd5OUnvMTjcb6RiZE1Uj/zCs9CbWw+XLA1iE9oHyaLApVwtKRI8Fc6xTOveo+
-         rtLf8/js6/i7hhbGqaPrRE0TP5T/GHdo0UIfmcaP+AQ0ZdQvR+TkPwaXERnQJ4WSeZUv
-         bX/Q==
+        d=sargun.me; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Uy1D1ynmt1IvB209RVxSGUYOS4OREreCXZ3NiChVu50=;
+        b=E2y5XQowGGGTd48FMByGXrfc0z/3P9KkfNQyjB15pahPXOI1SrG4scBxsm0bITCKjU
+         SGRDRdUvjyv16VM3dfDCI5156o6d2eQAdn06H7KLaVuaPfHYksWUJpkQG1/Ze2cd9Byr
+         EbkuJky7ixTt25HtQq+L5eax4uYHg/qmF0Z5w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UAb5iy0AwDrArAj21nJaNKQ/VTNcfReEnHCBV20biOU=;
-        b=UyFyvEA7THnld9zkNhdMhKIH6+lOs/TRurY43Xba3rE40SaLoIZZFqREoX5OWS5lay
-         VPiKGoXR1Bza2WljE3oVpf5GZojPcBV7sm3nMuMXAYmtjhwSkuWthRsKygZU3fZooMS9
-         o5y+m7T2TJSsJShXugOx7g/In40Sssw+GXjdsLpGz+fqWh7AG2yaFtF7igKbr/HfHLrr
-         rT5ukuYB/XfDgWR5kMRz1/571y431oEaHRfVn5VdK9EqYRfOXVziU6DWpjKnBeJHbqay
-         E+6qeu7Pnen/ejdtIPMDNo8EKVDrblqpIlETsMfrV8NTBblKVD6+qS5SFI4YVn1PGDFl
-         1j3Q==
-X-Gm-Message-State: AOAM533wGNebAA1XBr93V1g9/48ZHTo/xJBGZFCf9WOYqPHJx2PD2BP5
-        HtzPwYCFNxKSoLeXQ8QhUCniyrLboCp8ixeprJSFpQ==
-X-Google-Smtp-Source: ABdhPJxyhTrysklZawwiuijJbJ/nadJCUIYBK6lGOFsSdyjD6ixTWAlG8EEVXpp8C2uMVfwdN9Dk8PfWDRixhHaC1dQ=
-X-Received: by 2002:a05:600c:600d:b0:394:5353:507a with SMTP id
- az13-20020a05600c600d00b003945353507amr26471wmb.96.1651560609078; Mon, 02 May
- 2022 23:50:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Uy1D1ynmt1IvB209RVxSGUYOS4OREreCXZ3NiChVu50=;
+        b=6TxjyComWXvArK9ez1MkFA+vgrU+weO8wcXtdhFOgjB507EbJDfjqqwT5SQBHFI/Ht
+         lN1SatvAwyBIg/T5J/M3O9EF/8PRM05JUXz6AhhX98bhY0crnuUc5TKO787ISFi+EePY
+         xmQk7fUJBYCBLyIFaeGGOGJbxE1HazV4EVvubI5WRQYnprscBvohVm+Q2QULR0xUe+A0
+         OlQp7dZ4/BObqsYxTaq6z4wl5oZpFXXoEIzHsihbQ1VvaaobkH7HDlAtEEkgG0fxOWOK
+         2ocQoa2TTbViBSq/fGTLnWwBIAZoF72o2MsoEExRBJXkQVmHK7Lxx85yVKHEWlquHBdc
+         1n5g==
+X-Gm-Message-State: AOAM531c0wNkt4PTZ/cL1VVvAERyt671N9T1PsTfR0hwWfR+8xq/qXIm
+        RTaP3RgCo3LSghONSRMXKxYTAw==
+X-Google-Smtp-Source: ABdhPJzOC/8AW6mEMzYOaZsn4tjCI+qEc8+no77r/W35tKH7mGl1EWryWbr6xNiESXlqi83hB4k2/g==
+X-Received: by 2002:a05:6a00:164c:b0:50a:472a:6b0a with SMTP id m12-20020a056a00164c00b0050a472a6b0amr15030982pfc.77.1651565473813;
+        Tue, 03 May 2022 01:11:13 -0700 (PDT)
+Received: from localhost.localdomain (99-0-82-137.lightspeed.sntcca.sbcglobal.net. [99.0.82.137])
+        by smtp.gmail.com with ESMTPSA id h2-20020aa786c2000000b0050dc762815dsm5821069pfo.55.2022.05.03.01.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 01:11:12 -0700 (PDT)
+From:   Sargun Dhillon <sargun@sargun.me>
+To:     Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Cc:     Sargun Dhillon <sargun@sargun.me>,
+        Rodrigo Campos <rodrigo@kinvolk.io>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Will Drewry <wad@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Alban Crequy <alban@kinvolk.io>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 2/3] selftests/seccomp: Refactor get_proc_stat to split out file reading code
+Date:   Tue,  3 May 2022 01:09:57 -0700
+Message-Id: <20220503080958.20220-3-sargun@sargun.me>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220503080958.20220-1-sargun@sargun.me>
+References: <20220503080958.20220-1-sargun@sargun.me>
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220430030019.803481-1-davidgow@google.com>
- <Ym7P7mCoMiQq99EM@bombadil.infradead.org> <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
-In-Reply-To: <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 3 May 2022 14:49:58 +0800
-Message-ID: <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 2, 2022 at 2:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Sun, May 01, 2022 at 11:22:38AM -0700, Luis Chamberlain wrote:
-> > On Sat, Apr 30, 2022 at 11:00:19AM +0800, David Gow wrote:
-> > > KUnit tests are not supposed to run on production systems: they may do
-> > > deliberately illegal things to trigger errors, and have security
-> > > implications (assertions will often deliberately leak kernel addresses).
-> > >
-> > > Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-> > > run. This will be printed as 'N' (for kuNit, as K, U and T were already
-> > > taken).
-> > >
-> > > This should discourage people from running KUnit tests on production
-> > > systems, and to make it easier to tell if tests have been run
-> > > accidentally (by loading the wrong configuration, etc.)
-> > >
-> > > Signed-off-by: David Gow <davidgow@google.com>
-> >
-> > There is no reason to distinguish kunit from selftests if the result is
-> > the same: really make the kernel try really insane stupid things which
-> > may crash it or put it into a bad state.
-> >
-My initial thought is that KUnit is explicitly in-kernel testing,
-whereas kselftest is (at least somewhat) user-space based. My personal
-feeling is that "doing weird stuff from userspace" is fundamentally
-different from "doing weird stuff in the kernel". That being said, in
-practice many kselftest tests load modules which do strange things,
-and those could be in scope for something like that. I'd still err on
-the side of only having those tests (or specifically those modules)
-add the taint, rather than all selftests, but could be conveniced.
+This splits up the get_proc_stat function to make it so we can use it as a
+generic helper to read the nth field from multiple different files, versus
+replicating the logic in multiple places.
 
-The other thing of note is that KUnit tests do often leak pointer
-addresses, which again is something that's a worry in the kernel, and
-harmless in userspace.
+Signed-off-by: Sargun Dhillon <sargun@sargun.me>
+Cc: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 54 +++++++++++++------
+ 1 file changed, 38 insertions(+), 16 deletions(-)
 
-> > So no, this should be renamed to "TEST_BREAK" as I think outside of
-> > selftest and kunit we may grow the kernel to do stupid things outside
-> > of that domain and this gives us the flexilibilty to use that in other
-> > places as well.
-> >
-> > It begs the question if we *should* allow userspace to volunterally say
-> > "hey, we are doing really insane things, brace yourself." Why ? Well
-> > because selftest has tons of modules. We either then define a macro
-> > that adds the taint for them and wrap the module declaration for it,
-> > or we expose a syctl to let userspace volunteer to opt-in to seggest
-> > we are about to try something stupid with the kernel including loading
-> > some dangeerous modules which may not have macros which taint the kernel.
-> > That would let selftest taint on *any* selftest. Because we can run all
-> > selftests or run one selftest.
-> >
-> > Then, if such sysctl is exposed, maybe we should then also use this for
-> > example for blktests, fstests, fio tests, etc.
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index ab340c4759a3..4fb5eda89223 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4231,32 +4231,54 @@ TEST(user_notification_addfd_rlimit)
+ 	close(memfd);
+ }
+ 
+-static char get_proc_stat(int pid)
++/*
++ * gen_nth - Get the nth, space separated entry in a file.
++ *
++ * Returns the length of the read field.
++ * Throws error if field is zero-lengthed.
++ */
++static ssize_t get_nth(struct __test_metadata *_metadata, const char *path,
++		     const unsigned int position, char **entry)
+ {
+-	char proc_path[100] = {0};
+ 	char *line = NULL;
+-	size_t len = 0;
++	unsigned int i;
+ 	ssize_t nread;
+-	char status;
++	size_t len = 0;
+ 	FILE *f;
+-	int i;
+ 
+-	snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
+-	f = fopen(proc_path, "r");
+-	if (f == NULL)
+-		ksft_exit_fail_msg("%s - Could not open %s\n",
+-				   strerror(errno), proc_path);
++	f = fopen(path, "r");
++	ASSERT_NE(f, NULL) {
++		TH_LOG("Coud not open %s: %s", path, strerror(errno));
++	}
+ 
+-	for (i = 0; i < 3; i++) {
++	for (i = 0; i < position; i++) {
+ 		nread = getdelim(&line, &len, ' ', f);
+-		if (nread <= 0)
+-			ksft_exit_fail_msg("Failed to read status: %s\n",
+-					   strerror(errno));
++		ASSERT_GE(nread, 0) {
++			TH_LOG("Failed to read %d entry in file %s", i, path);
++		}
+ 	}
++	fclose(f);
++
++	ASSERT_GT(nread, 0) {
++		TH_LOG("Entry in file %s had zero length", path);
++	}
++
++	*entry = line;
++	return nread - 1;
++}
++
++/* For a given PID, get the task state (D, R, etc...) */
++static char get_proc_stat(struct __test_metadata *_metadata, pid_t pid)
++{
++	char proc_path[100] = {0};
++	char status;
++	char *line;
++
++	snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
++	ASSERT_EQ(get_nth(_metadata, proc_path, 3, &line), 1);
+ 
+ 	status = *line;
+ 	free(line);
+-	fclose(f);
+ 
+ 	return status;
+ }
+@@ -4317,7 +4339,7 @@ TEST(user_notification_fifo)
+ 	/* This spins until all of the children are sleeping */
+ restart_wait:
+ 	for (i = 0; i < ARRAY_SIZE(pids); i++) {
+-		if (get_proc_stat(pids[i]) != 'S') {
++		if (get_proc_stat(_metadata, pids[i]) != 'S') {
+ 			nanosleep(&delay, NULL);
+ 			goto restart_wait;
+ 		}
+-- 
+2.25.1
 
-Is this what TAINT_USER is for?
-
-I think (though haven't actually tried) writing to
-/proc/sys/kernel/tainted will add whatever taint flags are needed from
-userspace.
-
-That being said, I'm not _against_ making this more general, or
-standardising on the existing TAINT_USER, or similar. Personally,
-though, I quite like having KUnit separate (but I am, admittedly,
-biased :-) ).
-
-Cheers,
--- David
