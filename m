@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC0C51B117
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 23:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C75F51B13E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 23:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238371AbiEDVj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 17:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S1357364AbiEDVof (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 17:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379274AbiEDVjO (ORCPT
+        with ESMTP id S1358617AbiEDVoe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 17:39:14 -0400
+        Wed, 4 May 2022 17:44:34 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C6F2389D
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 14:35:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F032A51E5A
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 14:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651700105;
+        s=mimecast20190719; t=1651700456;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3s3JJtjWkXdQIeMB4qwH1W143SmCevkLkyYdal6KkRA=;
-        b=fpOzM+6walVp2TguMKjpq54TZ/1tD/d/rs1f2yWgjoFqR7o+yMleif+84jVRpbZzjmDlV0
-        LT45huHkksjudBoWkGnUEykntp8DzfdYUMvfjzt90XFajX2joYM9CmOUpPmjFOXwNdpCLH
-        31G2R+5OCy4zEAPGOfLYwU/l2mu/wH8=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iMLMeNW+kJ88AcyFjLmDqr2VYEnc9XaJ9YWOPx9/32s=;
+        b=a+hgQ5ZUNRDsfDUzQxoCx8RQN26O0TuBFLElEMwcJr6qtbLhDwN+4QOFnh2yP2IB/cVdvt
+        v2iaB/RuQf9NbnPh5kLft4/7TSwSbsNArRiitlfZ1h3m1m+hExhXbgTYwfTM1pA+UyG5fJ
+        vawL2uupydkCLgksOrtFD2672aca32Y=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-UJvtXuB8OTG_3ShMvXL0sA-1; Wed, 04 May 2022 17:35:00 -0400
-X-MC-Unique: UJvtXuB8OTG_3ShMvXL0sA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-471-0II5ikWTMYaSY17X7b4low-1; Wed, 04 May 2022 17:40:53 -0400
+X-MC-Unique: 0II5ikWTMYaSY17X7b4low-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DABD80418A;
-        Wed,  4 May 2022 21:34:59 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 892D18039D7;
+        Wed,  4 May 2022 21:40:52 +0000 (UTC)
 Received: from jsavitz-csb.redhat.com (unknown [10.22.8.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3452F400F75F;
-        Wed,  4 May 2022 21:34:59 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A34C40D1B9E;
+        Wed,  4 May 2022 21:40:52 +0000 (UTC)
 From:   Joel Savitz <jsavitz@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Joel Savitz <jsavitz@redhat.com>,
@@ -47,14 +48,16 @@ Cc:     Joel Savitz <jsavitz@redhat.com>,
         Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
 Subject: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
-Date:   Wed,  4 May 2022 17:34:54 -0400
-Message-Id: <20220504213454.1282532-1-jsavitz@redhat.com>
+Date:   Wed,  4 May 2022 17:40:32 -0400
+Message-Id: <20220504214032.1283777-1-jsavitz@redhat.com>
+In-Reply-To: <20220504213454.1282532-1-jsavitz@redhat.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,6 +70,8 @@ internally to generate a list of platform-specific binary build targets
 suffixed with _{32,64}. When building the selftests using its own
 Makefile directly, such as via the following command run in a kernel
 tree:
+
+# make -C tools/testing/selftests install TARGETS="vm"
 
 One receives an error such as the following:
 
