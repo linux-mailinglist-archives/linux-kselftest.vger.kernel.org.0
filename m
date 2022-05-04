@@ -2,50 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC8B5192A2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 02:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7A15192D1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 02:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiEDAUC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 May 2022 20:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S244716AbiEDAeB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 May 2022 20:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiEDAUB (ORCPT
+        with ESMTP id S244683AbiEDAdu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 20:20:01 -0400
+        Tue, 3 May 2022 20:33:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233CA42A0F;
-        Tue,  3 May 2022 17:16:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235CC140A6;
+        Tue,  3 May 2022 17:30:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 123AE61831;
-        Wed,  4 May 2022 00:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E05AC385A9;
-        Wed,  4 May 2022 00:16:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5F2661898;
+        Wed,  4 May 2022 00:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3147C385AF;
+        Wed,  4 May 2022 00:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651623386;
-        bh=f0fsh6Uc4bvfHGbrVz3cXfk5QnV5TefLA9ufcSBuzxo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jscYW4T6U4umNohgMaY+Q1fsw/2XLRV9HG6KGqA7hbElV2MUqKTNqWUNrWIzCPO+D
-         DxLer4Vou9TOXU04cV+vjPps/7rBvHKiPvGihZ9HITtGt6tu0ViOxpR+c5EnMuevv3
-         H9cciHi9w6Yamms/5Oxq6isF9k0chkjeMeEnzaVtrVTV7GrDvEm+5p0wJWn1eUYJIe
-         CqiXkYZlgCehLWtI7Ml1KbtHSptjfzGyePKOZmkzfHB4EWKs4WFd0WohQ9PexgVhTc
-         ejw3pgQO3A6oec9GV++fR7Ffj+7H025rTCT82vPLLCQ5miMpoi3TQN3i8jPL3rMsZT
-         5XWJwcpifeyyw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>, rientjes@google.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] selftests/damon: add damon to selftests root Makefile
-Date:   Wed,  4 May 2022 00:16:22 +0000
-Message-Id: <20220504001622.132117-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504000358.1174849-2-yuanchu@google.com>
-References: 
+        s=k20201202; t=1651624212;
+        bh=KglZuKagv0gxyqvRJeEFFLrjR00kKp2Es5+aP8KqLCo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EeyEI1GdWm4F4DokikeqeKYKcGNKhfOlCb/a2TFROJK/ArROTd4C2zVPiEZRIOukD
+         VXOpuFu9R016IP6MFqCTz0ejALYO1ny08t6zlwLmP/WKICBQ0i6dbsaeTUlRixR0iU
+         15AUq/hXHNG+gNyBnBHQusl+Kxh2fSLIxTtdcuf5iZ+sKgJx1OPlFB9sGtDSVaeNBR
+         A4rLY2Gn4IVBCQG+2hHTBx/1lF4+EVij7c9cALTSVWGCzTRhWe2ab+Jt2Y/FA9pvhp
+         wyfFbeU80dd9ZbHnHd0YENhIaaIN7mkurx64BLdSG2G8ZhGqgNcWGLn/oVDKic2Y3Q
+         CLim5x4gvf2Hw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA0A9F03847;
+        Wed,  4 May 2022 00:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: forwarding: add basic QoS classification
+ test for Ocelot switches
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165162421182.21688.5454422128647214455.git-patchwork-notify@kernel.org>
+Date:   Wed, 04 May 2022 00:30:11 +0000
+References: <20220502155424.4098917-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20220502155424.4098917-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        pabeni@redhat.com, edumazet@google.com, f.fainelli@gmail.com,
+        vivien.didelot@gmail.com, andrew@lunn.ch, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        yangbo.lu@nxp.com, xiaoliang.yang_1@nxp.com, idosch@nvidia.com,
+        petrm@nvidia.com, maxime.chevallier@bootlin.com,
+        colin.foster@in-advantage.com, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,35 +64,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 4 May 2022 00:03:58 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+Hello:
 
-> Currently the damon selftests are not built with the rest of the
-> selftests. We add damon to the list of targets.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  2 May 2022 18:54:24 +0300 you wrote:
+> Test basic (port-default, VLAN PCP and IP DSCP) QoS classification for
+> Ocelot switches. Advanced QoS classification using tc filters is covered
+> by tc_flower_chains.sh in the same directory.
 > 
-> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > ---
->  tools/testing/selftests/Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 2319ec87f53d..bd2ac8b3bf1f 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -9,6 +9,7 @@ TARGETS += clone3
->  TARGETS += core
->  TARGETS += cpufreq
->  TARGETS += cpu-hotplug
-> +TARGETS += damon
->  TARGETS += drivers/dma-buf
->  TARGETS += efivarfs
->  TARGETS += exec
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
+>  .../selftests/drivers/net/ocelot/basic_qos.sh | 253 ++++++++++++++++++
+>  1 file changed, 253 insertions(+)
+>  create mode 100755 tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
+
+Here is the summary with links:
+  - [net-next] selftests: forwarding: add basic QoS classification test for Ocelot switches
+    https://git.kernel.org/netdev/net-next/c/7d4e91e06486
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
