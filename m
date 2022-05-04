@@ -2,115 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221C451AD34
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 20:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D29251AD35
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 20:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377251AbiEDStX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 14:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S1377259AbiEDStn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 14:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377254AbiEDStU (ORCPT
+        with ESMTP id S1377241AbiEDStl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 14:49:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952BC101FB;
-        Wed,  4 May 2022 11:45:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D9AD61B56;
-        Wed,  4 May 2022 18:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD338C385AE;
-        Wed,  4 May 2022 18:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651689940;
-        bh=neqWJaNNLruFhLtSzdV4d34b2LqsaISq6IIrNL+8k3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AQQ6pZGbDLYpdM++Rf71SDU2F9ffIOyzhltFZGnaHtHn6t+/IwkrkuwLLICOa36tT
-         491tMoF32XeDQGf7/+v3aSgydhc9Nhhv/SA2bBa8POihmVrHt39ecRR4PWZM74RZqr
-         9+tz/yB16nTSHsMWAlolcomkiHZrzQXqopKKxtDTlsAMFA6C1C1pOyYaPzCP03DOwb
-         zT0euTcOk76xivPnQoku2NolGBi8vhW6BpNagm0e2Se9RC3tj1j2ss0ZP2ZTXQib2n
-         3EaiDhId0AqGqWVRbmvVZLfsA5Ru7si569Hfz+N7/9lLQa04+gqdYeRlor4EatZ4SF
-         PCoNpcDraH14Q==
-From:   SeongJae Park <sj@kernel.org>
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>, rientjes@google.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
-Date:   Wed,  4 May 2022 18:45:37 +0000
-Message-Id: <20220504184537.130085-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504182908.1322874-1-yuanchu@google.com>
-References: 
+        Wed, 4 May 2022 14:49:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3B4101DC;
+        Wed,  4 May 2022 11:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Dn3HTp6KUp78ZFzWlHBYdXj5KOE/G4agBHq21Rs9ZcU=; b=q8P31BgeHM8LksWa1g6pVQGEev
+        8H/7gSHdSIGf4hnUZNG6k+NP/eyDVuhEa+E/bIHsjVXN5T1EKYCJy7/bIZ2gwofMBVL0m04h906iy
+        O3m6WyGqfypCYPOeFlE0zbL6KzH75Dt6yQynZ2YQb+tjQcvc8h0DNJLxPlj13yCZ/0fHhfWFYko29
+        +mbPlaxqsXq8iB7o++eo7wHDCeL+pv7RLP4uld2Owm2FwNjROt2Nbdn7jgEo1D8SAnfFhVijf+4Ah
+        2gPgRMk9OnlAr8zlq0l5QdnCMe8bwU9AhVy3E7SmAac3O5pVOrjuKc62H1lx2a7NKVVOWSVVV3BVX
+        R0OH7blQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nmK0f-00CBsb-2f; Wed, 04 May 2022 18:46:01 +0000
+Date:   Wed, 4 May 2022 11:46:01 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
+Message-ID: <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
+References: <20220429043913.626647-1-davidgow@google.com>
+ <20220430030019.803481-1-davidgow@google.com>
+ <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
+ <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
+ <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
+ <YnKS3MwNxvEi73OP@bombadil.infradead.org>
+ <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Yuanchu,
-
-On Wed, 4 May 2022 18:29:08 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
-
-> The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
-> use '__GFP_NOWARN' for user-specified size buffer allocation")
-> intentionally writes and reads with a large count to cause
-> allocation failure and check for kernel warnings. We suppress
-> the compiler warnings for these calls as they work as intended.
+On Wed, May 04, 2022 at 11:25:14AM -0500, Daniel Latypov wrote:
+> On Wed, May 4, 2022 at 9:51 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > selftests has modules, although I am not sure if there are selftests
+> > which do not load modules. Shuah?
 > 
-> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-> ---
-
-It would be a good practice to mention the changes from the previous version of
-this patch here[1].
-
-[1] https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
-
->  tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
->  1 file changed, 2 insertions(+)
+> I'm not Shuah, but there are indeed selftests that don't load modules.
 > 
-> diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-> index ad7a6b4cf338..91bd80c75cd9 100644
-> --- a/tools/testing/selftests/damon/huge_count_read_write.c
-> +++ b/tools/testing/selftests/damon/huge_count_read_write.c
-> @@ -2,6 +2,8 @@
->  /*
->   * Author: SeongJae Park <sj@kernel.org>
->   */
-> +#pragma GCC diagnostic ignored "-Wstringop-overflow"
-> +#pragma GCC diagnostic ignored "-Wstringop-overread"
+> I went looking for an example and found
+> tools/testing/selftests/bpf/test_doc_build.sh, which runs entirely in
+> userspace (basically just `make docs`).
 
-I agree that this must be the cleaner way than v2.  But, I get below warning
-after applying this:
+OK so, we can just skip tainting considerations for selftests which
+don't use modules for now. There may be selftests which do wonky
+things in userspace but indeed I agree the userspace taint would
+be better for those but I don't think it may be worth bother
+worrying about those at this point in time.
 
-    $ sudo make -C tools/testing/selftests/damon run_tests
-    make: Entering directory '/home/sjpark/linux/tools/testing/selftests/damon'
-    gcc     huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/selftests/damon/huge_count_read_write
-    huge_count_read_write.c:6:32: warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas]
-        6 | #pragma GCC diagnostic ignored "-Wstringop-overread"
-          |                                ^~~~~~~~~~~~~~~~~~~~~
+But my point in that sharing a taint between kunit / selftests modules
+does make sense and is easily possible. The unfortunate aspect is just
+that selftests don't have a centralized runner, because I can just
+run tools/testing/selftests/sysctl/sysctl.sh for example and that's it.
+So I think we have no other option but to just add the module info
+manually for selftests at this time.
 
-My gcc version is:
-
-    $ gcc --version
-    gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-
-
-Thanks,
-SJ
-
->  
->  #include <fcntl.h>
->  #include <stdlib.h>
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
-> 
+  Luis
