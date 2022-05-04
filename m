@@ -2,99 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B90519949
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 10:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BC1519B0D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 11:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346037AbiEDINX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 04:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
+        id S236921AbiEDJFv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 05:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346022AbiEDINV (ORCPT
+        with ESMTP id S232414AbiEDJFt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 04:13:21 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679982250D;
-        Wed,  4 May 2022 01:09:46 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id h85so713628iof.12;
-        Wed, 04 May 2022 01:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Lu0+Qy04jOfWQIM0Gy8rraQtjHpXPEO19LjLG52mw9o=;
-        b=USH7ZZ1LQxTWexyjMl5Br1eNEI8WY2FaP7ZmbZvKUCSYIzweA/CqteP5DPe//EJjN5
-         5Dr+jMlNHozgcGkiYnujYJ4cwtaL0BYYBiAyWJjFHJqE+bk1esuyjR4IEbzz/rSmmPCj
-         OEbjnV18sHMNz4e8fYSmBedf1THpyFIRLbgKpY70Pkl1BzyH7yvYfbxMNep1XMEt1V1x
-         ahxI+FblPLUydAYyUVYDB6rGf3aYgAhQot0cJNDqNprViM+9uLdD1IJVAPa/1tFSyQwr
-         4ykPkTT+a9Wj8LLIOvviFYk+pCNn8fh2TYo2zduaLt5d8pjvIhYrXJ19PIeNGzpDkXZo
-         bbow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Lu0+Qy04jOfWQIM0Gy8rraQtjHpXPEO19LjLG52mw9o=;
-        b=Oz40c/M6+E4DUfBy0P9o5+eSp/TCVcJz538R8MBH296iPElrZY/SC9FO7vava6SLUR
-         FdqdafpWNupiJsBuIQ+d1oN7OFOatYsuFfQmOnOQ3mUXVPZlFPStI1uB4yKUB2rAIaoU
-         GBRvm+jSOAsA6RIMSOEVrqrDAROq2B3Kf9pVyx9VgOEKLUIcXrkFX0AV+BjU/uF9sCtp
-         KG4c/lZoI0cin2L+rkmY+GcdmuXiz5YUwJi78320x0AQpqhL/M1ryxTRXBBzTd8cXyjo
-         6H81yrfWzAiipEOBxxILWE0d+A8qeTueSO8YNuwClbl1QFnPYO2fWOpT0h4cv5mKhG1X
-         ZwmQ==
-X-Gm-Message-State: AOAM532BEmEz1wTwhL7kN7KTnlVx8/kVW+f3UoZc0osUjLvjDDrDym4e
-        SpVja5OT+SpQ6gQMukGtMDg209Xx0k21tXQC9CrFkHZ3T08=
-X-Google-Smtp-Source: ABdhPJzlbXuZcZ7lFZxvsNXNPvutssuzEIO//oGx7vMAwvE2mWagneIY//QqfdB3Ib+6SyZN37tutH53ntzIL2i6qDw=
-X-Received: by 2002:a02:c6af:0:b0:32a:f5f6:34bc with SMTP id
- o15-20020a02c6af000000b0032af5f634bcmr8955794jan.186.1651651785880; Wed, 04
- May 2022 01:09:45 -0700 (PDT)
+        Wed, 4 May 2022 05:05:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7921705B
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 02:02:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 269A86192E
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 09:02:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F9EC385A4;
+        Wed,  4 May 2022 09:02:11 +0000 (UTC)
+Date:   Wed, 4 May 2022 10:02:07 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: Fix ABI header directory location
+Message-ID: <YnJBDyexzm4JWTK7@arm.com>
+References: <20220503231655.211346-1-broonie@kernel.org>
 MIME-Version: 1.0
-References: <20220502093625.GA23225@kernel.org> <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
-In-Reply-To: <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 4 May 2022 10:09:34 +0200
-Message-ID: <CANiq72m70q+zviHVNSV_AEwOByVBiMuSQL5vyo2UMMpD-vd+_Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: take `kunit_assert` as `const`
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503231655.211346-1-broonie@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Daniel,
+On Wed, May 04, 2022 at 12:16:55AM +0100, Mark Brown wrote:
+> Currently the arm64 kselftests attempt to locate the ABI headers using
+> custom logic which doesn't work correctly in the case of out of tree builds
+> if KBUILD_OUTPUT is not specified. Since lib.mk defines KHDR_INCLUDES with
+> the appropriate flags we can simply remove the custom logic and use that
+> instead.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> 
+> This fix is required to get us able to run the arm64 kselftests
+> in KernelCI, it does out of tree kselftest builds triggering the
+> issue especially in conjunction with the addition of the new
+> definitions for SME.
+> 
+>  tools/testing/selftests/arm64/Makefile | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+> index 1e8d9a8f59df..9460cbe81bcc 100644
+> --- a/tools/testing/selftests/arm64/Makefile
+> +++ b/tools/testing/selftests/arm64/Makefile
+> @@ -17,16 +17,7 @@ top_srcdir = $(realpath ../../../../)
+>  # Additional include paths needed by kselftest.h and local headers
+>  CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+>  
+> -# Guessing where the Kernel headers could have been installed
+> -# depending on ENV config
+> -ifeq ($(KBUILD_OUTPUT),)
+> -khdr_dir = $(top_srcdir)/usr/include
+> -else
+> -# the KSFT preferred location when KBUILD_OUTPUT is set
+> -khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
+> -endif
+> -
+> -CFLAGS += -I$(khdr_dir)
+> +CFLAGS += $(KHDR_INCLUDES)
 
-On Mon, May 2, 2022 at 9:44 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
->
-> Thanks for this, the code definitely should have been this way from the start.
->
-> I had wanted to make this change but mistakenly thought the format
-> func took it via non-const for some reason.
-> I must have misread it once and got it into my head that we were
-> leaving the door open for mutable child structs (which sounds like a
-> bad idea).
+Great, thanks. I had exactly the same diff stashed last week when
+testing the kselftest branch, just forgot about posting it. I'll apply
+yours.
 
-Thanks for reviewing it so quickly! Yeah, I was unsure too if there
-was an external reason such as some future plan to use the mutability
-as you mention or maybe some out-of-tree user was relying on it
-already.
-
-But I thought it would be best to make it stricter until it is
-actually needed (if ever); or if there is an actual user for
-mutability, it should be documented/noted in-tree.
-
-It also simplifies a tiny bit a Rust-side call to
-`kunit_do_failed_assertion` that I am using within generated Rust
-documentation tests.
-
-Cheers,
-Miguel
+-- 
+Catalin
