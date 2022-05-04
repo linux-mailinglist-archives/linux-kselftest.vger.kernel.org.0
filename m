@@ -2,96 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0426551A4A5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 17:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ED651A4DD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 18:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352938AbiEDP7T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 11:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S1353047AbiEDQGC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 12:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352921AbiEDP7O (ORCPT
+        with ESMTP id S1353029AbiEDQGB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 11:59:14 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0627CB847;
-        Wed,  4 May 2022 08:55:38 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id v12so2615467wrv.10;
-        Wed, 04 May 2022 08:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wtP9hXDTn2yxCxN0X3of+jxBUyJ3pPE1spLSBo0Vj30=;
-        b=qqXa9svwL8NMhVK1Gy+nfEs6AsyyPj8v3ldoTOGdWz6T7rM9N+70zCY8ogsxibCHLh
-         6awoBFNjZXrfw6ZN4DGr71lSRCULT2WjFh+UcVjUjBZcy2SFdaE+R3K3+8ZJVBYVCV9t
-         ESvoJaKYDq/eeFRdics70hAMrc1ri9IPZu2ioz63ukeJGse/F3+2P3urmhmT707I2h1R
-         Fa1J5WZ/Rw7mi4kntJUDjTQBfj9KL79ANJtIOqollDoch0qutO8iKRcdzWlOcJLeMnVJ
-         jzhQC9Xp5jk5rGTnjYdMTQ2sL28rtULpMZd9YbIf7faFF2taVbzUndHYThXOfj6PdvQR
-         aAcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wtP9hXDTn2yxCxN0X3of+jxBUyJ3pPE1spLSBo0Vj30=;
-        b=JnXf/w9sHgHDUnHMZgA+pvCbLwf7aw0M3pyCjjeAojKG5i/mRisyVwEWmolYPlbQ38
-         q5t2Q4n9bHBrNCwpJyeydVvsxD1MmaiqEnAuP5Kh1Yz7eNsjDt0F2SARmA7+XYWTT6Wy
-         L+MNLgVIdHJc/Lze1JqWrxbGLu7KhBvskdR2YYv5naheLkzPbtWDyAvXSPB4QkdIt60N
-         EYe7TL9ptPTsaWX/ws7U66RUCvQldUUclg4D5clip0tfSmdg/bWFVvivkFPHPSR4O9Lz
-         y7kvxIj+x8jRHrpMeAK8J/ONU/SxBHfLoUhIcK9Fj8BEH9PQtMHc6QnLf8N9fyyhsEMy
-         1Dmg==
-X-Gm-Message-State: AOAM5318eVm7swomehxpuFuq6IZDQgBI0c4uEIHtowwbUVRLdx12xXJy
-        WQerS+X+GjH3mWlfS514C80=
-X-Google-Smtp-Source: ABdhPJyAO2ajDWK9KtBeiYVElkB0jr1JpnrWYOLIIW+ZDM2z1WSjOl3K/EKnkLOcao/sWhat3JyTkA==
-X-Received: by 2002:a5d:6c68:0:b0:20c:7246:a86 with SMTP id r8-20020a5d6c68000000b0020c72460a86mr7360076wrz.283.1651679736508;
-        Wed, 04 May 2022 08:55:36 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bg3-20020a05600c3c8300b003942a244ed2sm5085334wmb.23.2022.05.04.08.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:55:35 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/seccomp: Fix spelling mistake "Coud" -> "Could"
-Date:   Wed,  4 May 2022 16:55:35 +0100
-Message-Id: <20220504155535.239180-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 4 May 2022 12:06:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC9215728
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 09:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651680144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kx7MkkZT+Yq+fM3GfswobHpHpBTfL9nTvycJqnYKSP8=;
+        b=g64HKG3q7K9kl0OdgE3bVx0t56mL25HfPcdeYHdrnZG95Gt95xSWwL3EWg2VMMvjGH/6IU
+        G/YZ2Xg/1Apbh17i2zs+e3ofB+tM9ShMxCQaqEtlrEw5zbFUbGp24Fird2Rk7fP1pdF7sz
+        eelDZJqopjQ7GRxGKAZBsAJ5ITqW7RY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-MzJLmzJiNoatZxsrxTXkGw-1; Wed, 04 May 2022 12:02:23 -0400
+X-MC-Unique: MzJLmzJiNoatZxsrxTXkGw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35937805F46;
+        Wed,  4 May 2022 16:02:22 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 77B9540CF8EF;
+        Wed,  4 May 2022 16:02:20 +0000 (UTC)
+Message-ID: <379138a0-1721-d6fa-4d1d-cb8d79f28474@redhat.com>
+Date:   Wed, 4 May 2022 12:02:19 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v10 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20220503162149.1764245-1-longman@redhat.com>
+ <20220503162149.1764245-8-longman@redhat.com>
+ <20220504112552.GA15266@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220504112552.GA15266@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a spelling mistake in an error message. Fix it.
+On 5/4/22 07:25, Michal Koutný wrote:
+> Hello.
+>
+> On Tue, May 03, 2022 at 12:21:48PM -0400, Waiman Long <longman@redhat.com> wrote:
+>>   Documentation/admin-guide/cgroup-v2.rst | 145 +++++++++++++-----------
+>>   1 file changed, 79 insertions(+), 66 deletions(-)
+> A note across various lines -- it seems your new text accidentally mixes
+> both spaces and tabs for indentation.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You are right. I will fix that.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 29c973f606b2..136df5b76319 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -4320,7 +4320,7 @@ static ssize_t get_nth(struct __test_metadata *_metadata, const char *path,
- 
- 	f = fopen(path, "r");
- 	ASSERT_NE(f, NULL) {
--		TH_LOG("Coud not open %s: %s", path, strerror(errno));
-+		TH_LOG("Could not open %s: %s", path, strerror(errno));
- 	}
- 
- 	for (i = 0; i < position; i++) {
--- 
-2.35.1
+>
+>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+>> index 69d7a6983f78..94e1e3771830 100644
+>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>> [...]
+>> +	The value shown in "cpuset.cpus.effective" of a partition root is
+>> +	the CPUs that the parent partition root can dedicate to the new
+>> +	partition root.  They are subtracted from "cpuset.cpus.effective"
+>> +	of the parent and may be different from "cpuset.cpus"
+> I find this paragraph a bit hard to comprehend (I read it as it talks
+> about three levels of cgroups (parent, child, grandparent). It is
+> correct but I'd suggect following formulation (where I additionally
+> simplifed it by talking about "available" cpus):
+>
+>> The value shown in "cpuset.cpus.effective" of a partition root is
+>> the CPUs that the partition root can dedicate to a potential new child
+>> partition root. The new child subtracts available CPUs from its parent
+>> "cpuset.cpus.effective".
+
+
+Thanks for the suggestion, will modify the text as suggested.
+
+
+>
+>> +	For a partition root to become valid, the following conditions
+>> +	must be met.
+>> +
+>> +	1) The "cpuset.cpus" is exclusive, i.e. they are not shared by
+>> +	   any of its siblings (exclusivity rule).
+>> +	2) The parent cgroup is a valid partition root.
+>> +	3) The "cpuset.cpus" is not empty and must contain at least
+>> +	   one of the CPUs from parent's "cpuset.cpus", i.e. they overlap.
+>> +        4) The "cpuset.cpus.effective" must be a subset of "cpuset.cpus"
+>> +           and cannot be empty unless there is no task associated with
+>> +           this partition.
+> This sounds good to me.
+>
+>> +        Care must be taken to change a valid partition root to "member"
+>> +        as all its child partitions, if present, will become invalid.
+> This does not talk about recovering. Is it intentional? (I.e. to left
+> implementation defined)
+
+This new patch series does have the ability to recover now.  I am just 
+not emphasizing the recovery aspect of it in the doc file. I will add a 
+sentence about it.
+
+>
+> Except the remarks above, I find the concepts described here good. I'll
+> reply to implementation separately & later.
+
+Thanks,
+Longman
 
