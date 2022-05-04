@@ -2,153 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799E8519CC6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 12:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3743519DEC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 13:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348003AbiEDKVI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 06:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S1348730AbiEDL3c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 07:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiEDKVH (ORCPT
+        with ESMTP id S1348719AbiEDL3b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 06:21:07 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE26275EA;
-        Wed,  4 May 2022 03:17:32 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so3399412pjb.1;
-        Wed, 04 May 2022 03:17:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YJYlzjivvg4x0LA1Mys7GMbCV8Bt3juMYK9Cy3MmoLU=;
-        b=hFZ8k3oPcVy36TqGx81qIrDgEfDiMpr/cxI9lzfZB09NvxfRVSjw43tKW3b3athbVd
-         sP9OtyEdQRbV2mBfEb+A2UVxLfZzQf4tQ1mj+SBmCieTLg9zNzkVR5ZfRJf/QYDoHPs2
-         Kvhs98H4C+fZLdZp4nF36HzBqKgzuYMeOb2XfsQaRTm3/83euU6VsWVQ9HnVJ8q2Uy0Z
-         SeTgiFLj6OVrDZ1msYiik4aW3dY4l+c/5QQtiI9kWrwtbtKUE3AsJqte42hc0Ms74sIB
-         UGUY+8wpgRTqvUVskmJ+PFEUaWeegKaAP3XcIrx1mrRHzpyzEynJkqHjo8Tyx3ptsbGC
-         ahQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YJYlzjivvg4x0LA1Mys7GMbCV8Bt3juMYK9Cy3MmoLU=;
-        b=4gpc7se5lsZPC5jfVtE3PLqeR8mOsIUdUZpKxmq6x/+fEsvbfCS4fq4nq3QYPOjDX+
-         SZmjHQTJAAPGjZtuLlbjqo5AWLwcodtrkF6vcOPbgXbbDRLB2mel+anbZpC9K27k1cKt
-         q4u6ejCyO/yAPDrvLQMykzEysHrsGzkDo6IzHc8Ka2Pn2mbPkSi3rTMnfDCnhOKQ2c+g
-         BiCAS72Wr0azWOXswyi3l9ZszBtp1DXrMEGsapOo0i44l3dn8oTY0LhmCiayx6ZhZa/G
-         opLw1IbXz5xb4zw2lnfOnHjeXnvCYnoAdaeB/F4EU1vEFgR/q/O+RGHFMnDAhXb4cPAJ
-         5rNQ==
-X-Gm-Message-State: AOAM5335N4Jlm/Rf07EzdFtemwGziGC0EIo6NQWNZkWZp2mQRlPHhika
-        vdx1ejEIfIAlrpGEkjlkP8w=
-X-Google-Smtp-Source: ABdhPJweibV6qmF85/LZj3tNlIhZzM880Btio6Uw/DjGCsKoGzm0TaZ6wRpGeD+TCxEmeYI2FOFPVQ==
-X-Received: by 2002:a17:902:e811:b0:15e:b27b:92ef with SMTP id u17-20020a170902e81100b0015eb27b92efmr9982070plg.142.1651659452093;
-        Wed, 04 May 2022 03:17:32 -0700 (PDT)
-Received: from localhost.localdomain ([122.169.215.54])
-        by smtp.gmail.com with ESMTPSA id j17-20020aa783d1000000b0050dc7628166sm7864781pfn.64.2022.05.04.03.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 03:17:31 -0700 (PDT)
-From:   Sebin Sebastian <mailmesebin00@gmail.com>
-Cc:     mailmesebin00@gmail.com, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: mqueue: fix all errors
-Date:   Wed,  4 May 2022 15:47:18 +0530
-Message-Id: <20220504101720.5201-1-mailmesebin00@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 4 May 2022 07:29:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3502A71C;
+        Wed,  4 May 2022 04:25:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BE45B210E0;
+        Wed,  4 May 2022 11:25:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651663553; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHotc1tLxNFQnMsMhQ4/PAmmsXVX/ZrmEY2hoLkhoeY=;
+        b=prmLabugZEs93348NyPI+Rk+PvbnW03y6T9MnWqgkElCaLaxD76fSofTgRaeDBgj+VsO+6
+        JJrL0pJY5taH3pcpCX3mOYmFXRH4wLu2FwI9+uFoFQy61iIBDOsN98iOmHbJLnWAaSemYH
+        wBbOqgwKNBoCX7DWQOQHFbvaRdjwiaA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E694132C4;
+        Wed,  4 May 2022 11:25:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GYZmFcFicmKxPgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 04 May 2022 11:25:53 +0000
+Date:   Wed, 4 May 2022 13:25:52 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v10 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <20220504112552.GA15266@blackbody.suse.cz>
+References: <20220503162149.1764245-1-longman@redhat.com>
+ <20220503162149.1764245-8-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503162149.1764245-8-longman@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All errors and styling issues were fixed.
+Hello.
 
-Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
----
- .../testing/selftests/mqueue/mq_open_tests.c  | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+On Tue, May 03, 2022 at 12:21:48PM -0400, Waiman Long <longman@redhat.com> wrote:
+>  Documentation/admin-guide/cgroup-v2.rst | 145 +++++++++++++-----------
+>  1 file changed, 79 insertions(+), 66 deletions(-)
 
-diff --git a/tools/testing/selftests/mqueue/mq_open_tests.c b/tools/testing/selftests/mqueue/mq_open_tests.c
-index 9403ac01ba11..c3cb40eae1e9 100644
---- a/tools/testing/selftests/mqueue/mq_open_tests.c
-+++ b/tools/testing/selftests/mqueue/mq_open_tests.c
-@@ -59,12 +59,12 @@ char *default_queue_path = "/test1";
- mqd_t queue = -1;
- 
- static inline void __set(FILE *stream, int value, char *err_msg);
--void shutdown(int exit_val, char *err_cause, int line_no);
-+ void shutdown(int exit_val, char *err_cause, int line_no);
- static inline int get(FILE *stream);
- static inline void set(FILE *stream, int value);
- static inline void getr(int type, struct rlimit *rlim);
- static inline void setr(int type, struct rlimit *rlim);
--void validate_current_settings();
-+static void validate_current_settings(void);
- static inline void test_queue(struct mq_attr *attr, struct mq_attr *result);
- static inline int test_queue_fail(struct mq_attr *attr, struct mq_attr *result);
- 
-@@ -78,7 +78,7 @@ static inline void __set(FILE *stream, int value, char *err_msg)
- 
- void shutdown(int exit_val, char *err_cause, int line_no)
- {
--	static int in_shutdown = 0;
-+	static int in_shutdown;
- 
- 	/* In case we get called recursively by a set() call below */
- 	if (in_shutdown++)
-@@ -118,6 +118,7 @@ void shutdown(int exit_val, char *err_cause, int line_no)
- static inline int get(FILE *stream)
- {
- 	int value;
-+
- 	rewind(stream);
- 	if (fscanf(stream, "%d", &value) != 1)
- 		shutdown(4, "Error reading /proc entry", __LINE__ - 1);
-@@ -150,7 +151,7 @@ static inline void setr(int type, struct rlimit *rlim)
- 		shutdown(7, "setrlimit()", __LINE__ - 1);
- }
- 
--void validate_current_settings()
-+void validate_current_settings(void)
- {
- 	int rlim_needed;
- 
-@@ -202,7 +203,9 @@ static inline void test_queue(struct mq_attr *attr, struct mq_attr *result)
- 	int flags = O_RDWR | O_EXCL | O_CREAT;
- 	int perms = DEFFILEMODE;
- 
--	if ((queue = mq_open(queue_path, flags, perms, attr)) == -1)
-+	queue = mq_open(queue_path, flags, perms, attr);
-+
-+	if ((queue == -1))
- 		shutdown(1, "mq_open()", __LINE__);
- 	if (mq_getattr(queue, result))
- 		shutdown(1, "mq_getattr()", __LINE__);
-@@ -224,7 +227,9 @@ static inline int test_queue_fail(struct mq_attr *attr, struct mq_attr *result)
- 	int flags = O_RDWR | O_EXCL | O_CREAT;
- 	int perms = DEFFILEMODE;
- 
--	if ((queue = mq_open(queue_path, flags, perms, attr)) == -1)
-+	queue = mq_open(queue_path, flags, perms, attr);
-+
-+	if (queue == -1)
- 		return 0;
- 	if (mq_getattr(queue, result))
- 		shutdown(1, "mq_getattr()", __LINE__);
-@@ -498,5 +503,5 @@ int main(int argc, char *argv[])
- 		printf("Queue open with total size > 2GB when euid = 99 "
- 		       "failed:\t\t\tPASS\n");
- 
--	shutdown(0,"",0);
-+	shutdown(0, "", 0);
- }
--- 
-2.25.1
+A note across various lines -- it seems your new text accidentally mixes
+both spaces and tabs for indentation.
 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 69d7a6983f78..94e1e3771830 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> [...]
+> +	The value shown in "cpuset.cpus.effective" of a partition root is
+> +	the CPUs that the parent partition root can dedicate to the new
+> +	partition root.  They are subtracted from "cpuset.cpus.effective"
+> +	of the parent and may be different from "cpuset.cpus"
+
+I find this paragraph a bit hard to comprehend (I read it as it talks
+about three levels of cgroups (parent, child, grandparent). It is
+correct but I'd suggect following formulation (where I additionally
+simplifed it by talking about "available" cpus):
+
+> The value shown in "cpuset.cpus.effective" of a partition root is
+> the CPUs that the partition root can dedicate to a potential new child
+> partition root. The new child subtracts available CPUs from its parent
+> "cpuset.cpus.effective".
+
+
+> +	For a partition root to become valid, the following conditions
+> +	must be met.
+> +
+> +	1) The "cpuset.cpus" is exclusive, i.e. they are not shared by
+> +	   any of its siblings (exclusivity rule).
+> +	2) The parent cgroup is a valid partition root.
+> +	3) The "cpuset.cpus" is not empty and must contain at least
+> +	   one of the CPUs from parent's "cpuset.cpus", i.e. they overlap.
+> +        4) The "cpuset.cpus.effective" must be a subset of "cpuset.cpus"
+> +           and cannot be empty unless there is no task associated with
+> +           this partition.
+
+This sounds good to me.
+
+> +        Care must be taken to change a valid partition root to "member"
+> +        as all its child partitions, if present, will become invalid.
+
+This does not talk about recovering. Is it intentional? (I.e. to left
+implementation defined)
+
+Except the remarks above, I find the concepts described here good. I'll
+reply to implementation separately & later.
+
+Regards,
+Michal
