@@ -2,84 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DA451ADAB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 21:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03B851ADC0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 21:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377514AbiEDTXz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 15:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S1356267AbiEDTaK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 15:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377522AbiEDTXu (ORCPT
+        with ESMTP id S1357259AbiEDTaH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 15:23:50 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7A149F95
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 12:20:12 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id l18so4738545ejc.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 12:20:12 -0700 (PDT)
+        Wed, 4 May 2022 15:30:07 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE7A4A90C;
+        Wed,  4 May 2022 12:26:30 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id h11so1504054ila.5;
+        Wed, 04 May 2022 12:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LNWEoMjkPejTpMpsYA4Kv3+ZTAHfcsmDjgEj8h7IAfQ=;
-        b=gAr4qcOHo1jMIbfvbkBjcutByH2vQqv5Ne74K/r5ZVwMIxAeTbC5N2aGp35XH4yY1Y
-         FXILSjGE1Q/uakASImJ/pDspnH97vyqdzmuSqElbPcG+90OXyRvOh0GWJralMaFVBpaE
-         +Y04vEMgfmyOtMLeRsXSJ/j0xyX4SzbujXtiZrRdqU8FAzJEZBT9UsHfdv0+CEhCPeeP
-         PHXf+4h+0bfHkBTMZr82qYmXdE2V01wmmpDd8Iz7lnZyz7kfaVun8sin2u9N6VDSAYU3
-         j5Kl6cn/uW+sSGAw14vQNhz0zM1JgvvIKgkIfGhx4a+q0epCX6MYVhKkqI1CxdiQT5rP
-         BrMw==
+        bh=faKNM+qwcArkJmPdQKZUatJOcPW6asWisYRgltgA+bM=;
+        b=VrLn4DXjigrD/Rraqf7CcvlUwmR7BblTWy83YVocIBLYRtnQrXbss03vXrg9mQL2JW
+         JheLYxPbVecLLCpGdrFWJ32cImulwZiUJy/UhNWxROYuDL2Th2jbPXLSVX3EZapQ846X
+         1yoFSHf/bA+P9hUV6to0Q30YZUdUDaLV/iyc7O9JEj3F2xOnh1b1zyV1gQFTAorEuUvj
+         lYS/Y3xdAQh7TtWahQLT5kNe/ISqAEUt5EqSCtmU4MG3cGa5oLweRn5ihIBVeUWcUy5V
+         TVpjBmLGHnx9vXtXGATV6pgXuOfCRGsOJdpYUGEhZ3PoJDO4P4qHU2/80bxp+heODJKA
+         0hsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LNWEoMjkPejTpMpsYA4Kv3+ZTAHfcsmDjgEj8h7IAfQ=;
-        b=V6qwYmJPdw0rK7rDzaWd2xOhju5RHK+o2z/v0pssheJyhnKnKASrE1OfbZNb85IYuv
-         HEJXRF5cR+J7H609bvPIc4S6ftg2z+2SbLuA2NOMqcg39mLC+Ztvu487tcQBRE9tN853
-         z4sbkTAacYSLc4JIFh1lfcLLTMdnyHpzZmwdu8DadMS+OG8OJE2g1ru60JDsdDNVmD/U
-         QK1TD/Ov1lwdZWSXJACQ6+CsKsHXIHtZLBMIsrregXXekqVuWItoOgVoryg11XsfjZvx
-         QfYIeN97oiLF+Ea2KmVsB8Yw7Jc1ETmcEBHvrRoTYApPlnY1uWWuaEwIqN9aND730Jjs
-         GH+A==
-X-Gm-Message-State: AOAM531H0zv4/U6RNRJBnzG0xbbiA6RSzteqROS1rWuf/B8BqBo8QHYA
-        kBQ5wDp500+ZOPaebeS2GKIEk4+8a06FVzjojnXFlA==
-X-Google-Smtp-Source: ABdhPJwwmYcS4qvTuteHjFbxm1sXBovzp3gV0ep4CXwpECRN3ChAjTFeZ0IVVVTTJeE3XZzmiiGL8zY4dLIv7adzGIY=
-X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id
- by2-20020a170906a2c200b006e7efc217f2mr20871323ejb.542.1651692011116; Wed, 04
- May 2022 12:20:11 -0700 (PDT)
+        bh=faKNM+qwcArkJmPdQKZUatJOcPW6asWisYRgltgA+bM=;
+        b=T+CjMSgOsCsvykI4hwQMblazD+ZMcWlXazaOp/Qebnze3LbyeY7Lz0122qgpsXSP0B
+         B/LFjYFoC/g88OT/b1A8JIXwaH9BsS3oQN89hh/2CTQoHhmsQF3BFqc1GuHfL6C3HScO
+         SUlTNT704nqU1oAI5QbscY1yVSEHB+pibes9ueS92Ba8nZZHpIO3sOLhntbnvzLqzC/p
+         SmqLixgD2PTmakG4hdMKZ7st+SonwClmXkcdZcFY1h+ejaz7KDURy6nCFJiTL9U9OXEi
+         GmKWSZ5iJNIZtSiDQP6LgSnb/E/Jx6/ygJXErWMjiKdgv6S5enknUa9gqJBBq6LIEXVy
+         KsVg==
+X-Gm-Message-State: AOAM533zgZG1KsrnC/dp303VGx3aqwjBDEhXLjB+8/6DseNaVYWw0F6+
+        TozY2uL2nO4IN8wz6GfaftSSOIPIPk6Rdj1EXeADrnli
+X-Google-Smtp-Source: ABdhPJxcGyP+rY6OJv8/guQBy29cEHbepRX/c2vT1PL3ijrS75hLlWsBEBXK+gtOF0Y7BZqR/JBiiuSjyM8cN6sKhhU=
+X-Received: by 2002:a92:7309:0:b0:2ca:8c9c:752d with SMTP id
+ o9-20020a927309000000b002ca8c9c752dmr9144096ilc.151.1651692390336; Wed, 04
+ May 2022 12:26:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220430030019.803481-1-davidgow@google.com>
- <Ym7P7mCoMiQq99EM@bombadil.infradead.org> <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
- <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
- <YnKS3MwNxvEi73OP@bombadil.infradead.org> <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
- <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
-In-Reply-To: <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 4 May 2022 14:19:59 -0500
-Message-ID: <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+References: <20220502093625.GA23225@kernel.org> <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
+ <CANiq72m70q+zviHVNSV_AEwOByVBiMuSQL5vyo2UMMpD-vd+_Q@mail.gmail.com> <CABVgOSmkZ9EXijBRx_pvS=Opizb1z2632B5rVsd1WRNOL5o8GA@mail.gmail.com>
+In-Reply-To: <CABVgOSmkZ9EXijBRx_pvS=Opizb1z2632B5rVsd1WRNOL5o8GA@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 4 May 2022 21:26:19 +0200
+Message-ID: <CANiq72kVLzOu_3UjoUiSp5y+H0tA+SQYNQ=fsuhtg=i6MQe=Fg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: take `kunit_assert` as `const`
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,35 +72,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> OK so, we can just skip tainting considerations for selftests which
-> don't use modules for now. There may be selftests which do wonky
-> things in userspace but indeed I agree the userspace taint would
-> be better for those but I don't think it may be worth bother
-> worrying about those at this point in time.
+Hi David,
+
+On Wed, May 4, 2022 at 4:05 PM David Gow <davidgow@google.com> wrote:
 >
-> But my point in that sharing a taint between kunit / selftests modules
-> does make sense and is easily possible. The unfortunate aspect is just
+> I definitely agree here -- I can't recall any particular plan that
+> would require this to be non-const, and we can always change it back
+> if we really need to.
 
-Yes, I 100% agree that we should share a taint for kernelspace testing
-from both kunit/kselftest.
-Someone running the system won't care what framework was used.
+That is good to know, thanks! Out-of-tree users can always be a surprise... :)
 
-> that selftests don't have a centralized runner, because I can just
-> run tools/testing/selftests/sysctl/sysctl.sh for example and that's it.
-> So I think we have no other option but to just add the module info
-> manually for selftests at this time.
+> Very exciting! I assume that's the PR here:
+> https://github.com/Rust-for-Linux/linux/pull/757
 
-Somewhat tangential: there's a number of other test modules that
-aren't explicitly part of kselftest.
-Long-term, I think most of them should be converted to kselftest or
-kunit as appropriate, so they'll get taken care of eventually.
+Indeed! I hope you like it -- we are taking the documentation tests in
+Rust (which are a very lightweight way of writing examples which
+double as tests) and generating KUnit test cases on the fly. For the
+moment it is just for the `kernel` crate, but the idea is to
+generalize it for modules etc.
 
-A number of these modules depend on CONFIG_DEBUG_KERNEL=y, but we
-can't pre-emptively set this new taint flag by checking for it as it's
-too widely used :\
-E.g. the debian-based distro I'm using right now has it set
-$ grep 'CONFIG_DEBUG_KERNEL=y' /boot/config-$(uname -r)
-CONFIG_DEBUG_KERNEL=y
+By the way, since you saw the PR... do you know if KUnit relies (or
+will rely) on "stack-dumping" functions like `longjmp`?
 
--Daniel
+Cheers,
+Miguel
