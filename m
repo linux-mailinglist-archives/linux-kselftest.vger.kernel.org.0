@@ -2,67 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA91651B1A8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 May 2022 00:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287E451B2F5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 May 2022 01:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346332AbiEDWQJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 18:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S1379803AbiEDW6j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 18:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239733AbiEDWQI (ORCPT
+        with ESMTP id S1379754AbiEDW5n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 18:16:08 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338CD50E00
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 15:12:31 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e5e433d66dso2604853fac.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 15:12:31 -0700 (PDT)
+        Wed, 4 May 2022 18:57:43 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF22D53A64;
+        Wed,  4 May 2022 15:52:00 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id c125so3053592iof.9;
+        Wed, 04 May 2022 15:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wquqW3x/NVz0JD2PQXTktSWbyNjB4MSdaRsMfdQ/Zrs=;
-        b=R7BE21HU+q0r9itfOFa4ZZBxOpuGYg5HWV9A9y3ufNAq/107F0JV8+d3Ice3rMW8K1
-         DkezRmzH0i709qnS7rusfIID1r2ORBfFr5m7cqjKp0pL8L1gUWrRUzfd/JpWv7Uxm4Z/
-         EBIg/0IirjaJTzzMUynZevhMPQasV1E7NICalwDQahjVT3zG5VjDEz6ydG+16aRh5y2C
-         yAPkBfTXAAAOZqOZbahYVVljOAEfgi140CMPFx2hYTga+jgnL6Xe/klDsrK2Anq6C5ar
-         Cab/zGVerAuPIHCM9dQtkcdhhNakWsiKz9n7IivyjxjGsf92ElJWWUWmp3+MYRCuPuJg
-         BAZg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/yECAIQpVJu3JU/pGNaIuw7xSCvhNujVf2mLOqXUlas=;
+        b=CGY48g7LDIwrxmADUwlOZtS9Wuf0SYUAqOrZ9BasTt7ZJ9tTTeIkGuUxAO5Sl/sIn1
+         y9Y6irebmgIp4PCpAzz0jinfWLs5g/gj2VoqFRQw4S4nv7LddF4l8pTVg/BQ9cpPfpDd
+         LmjOfVPFvivNNPAwCZdjSqYKZcTorfM9FDpwz5MjLcr3cSWx0l7cRoQnBLZtAMyxAZQA
+         Xk4aWCWPzwNhKnUYPeZ2eAv6Je1OV9XzLhddTQ5nvUA3+qMjHo2B++HZSH7VkU/BZlYb
+         XK9KRk5mRLuex9xxjgpx6OFr8x9SiKEooCF8ARWGi24rvvel+jXdlrnCwIskIu13hAVF
+         Ku6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wquqW3x/NVz0JD2PQXTktSWbyNjB4MSdaRsMfdQ/Zrs=;
-        b=OEJoD9npufFj5+RpwP+KapiuW9h7s3zjLEqyCZbZcVuIvq6CMYn1z7U/ii8pc+DlQe
-         KmkamwsTfLmuY6zcZwxPo5P168WQ1+razvW7jxIESpV/No757oGQRH2BYmrm3xWEDFRE
-         F65kdm1arATB9MoIqbGXwuSugctxUqPVBEhxAG0GkCXl47DZfAerwjkNb6p83cO3I6sP
-         DpILATmrcCnHQA97E+b7DGKQeyyIXHcMlCcNEcec5dfEizatVy9Q6tsHpC8NvtR5Tbjg
-         2gJLJQtjWUssm5aMm0RwkplCTV4DUMIBioysaWCFmNdStE2cDwB8U9eiXUuqKKY2FGiZ
-         VWtQ==
-X-Gm-Message-State: AOAM530pO9tLaepNVkJF0swvNdTKWE5qk6+JJntfglmgjeItiHFRdNut
-        aoI/22AWMr3mKl+Ce9Tjszdm42SNEt+OzYPSE+au6twjZzwoXA==
-X-Google-Smtp-Source: ABdhPJw9RAW6gV3GBRIHhsfV4MFjHHQN6T08u6egeYgBJl4X62rWrpQVpH7Qu7QnuWKAMo+wZ+Ng/P9Q5bRHx76qphc=
-X-Received: by 2002:a05:6870:c683:b0:ed:efb9:ffe9 with SMTP id
- cv3-20020a056870c68300b000edefb9ffe9mr859642oab.241.1651702350192; Wed, 04
- May 2022 15:12:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/yECAIQpVJu3JU/pGNaIuw7xSCvhNujVf2mLOqXUlas=;
+        b=G6cfWq5YXhYQ/MgmYEXD5Yne8wdakgLRzseRR2pYJPaQ4OCwkov26L4QA1A0G1Wptb
+         hsHGiPGXEo+Tl23Q62u9X0LP8M9Xs6aDxHc74tF2S84iri1c2QZev/lgGiPEdx/KEsM7
+         lIc6k2KU3oEDp2YDy82z6xYRge7tvdPzv3ThocqRiQmFGhAVxKHanlOyLo5AjsZAkd0b
+         LkNNkw6Ds+Tf+kB5HckQdKB25tFsB0SkTzSFdgggMDVi3iChCW13rSgeExnKPUGCmLdQ
+         JDSC9Bo0UME3W8/WgQkBXetC5xH74NRiXNaDPv5T9qSWWQUjyGnp2pr41jS9IXtZtRWu
+         RLQA==
+X-Gm-Message-State: AOAM532/8lWmPkvSjz0edacOpgQKiQM1UwontEAe709RCtspyaA1Zx1g
+        zhiWqr0CmUodFiG87E7xqIA=
+X-Google-Smtp-Source: ABdhPJxnAWQpfsmSZqFrknjlSk2A6xtbXqmlrrzpyFWqHtAyHnWVW1cVZBGNUO0IuuNuZ/Wee5QP0Q==
+X-Received: by 2002:a05:6602:2d0d:b0:659:aa9e:95a0 with SMTP id c13-20020a0566022d0d00b00659aa9e95a0mr9104400iow.106.1651704719875;
+        Wed, 04 May 2022 15:51:59 -0700 (PDT)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:94d4:5fe2:e117:e7c3])
+        by smtp.gmail.com with ESMTPSA id i25-20020a02b699000000b0032b608e2926sm66372jam.9.2022.05.04.15.51.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 15:51:59 -0700 (PDT)
+From:   frowand.list@gmail.com
+To:     Frank Rowand <frowand.list@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] begin KTAP spec v2 process
+Date:   Wed,  4 May 2022 17:51:50 -0500
+Message-Id: <20220504225152.1451440-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220504182908.1322874-1-yuanchu@google.com> <20220504184537.130085-1-sj@kernel.org>
-In-Reply-To: <20220504184537.130085-1-sj@kernel.org>
-From:   Yuanchu Xie <yuanchu@google.com>
-Date:   Wed, 4 May 2022 15:12:19 -0700
-Message-ID: <CAJj2-QGQsuAPR0nYaS9+YA=DWXRQD83UZgk3QUjRJA9BTwqp4w@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,75 +75,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi SeongJae,
+From: Frank Rowand <frank.rowand@sony.com>
 
-On Wed, May 4, 2022 at 11:45 AM SeongJae Park <sj@kernel.org> wrote:
->
-> Hi Yuanchu,
->
-> On Wed, 4 May 2022 18:29:08 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
->
-> > The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
-> > use '__GFP_NOWARN' for user-specified size buffer allocation")
-> > intentionally writes and reads with a large count to cause
-> > allocation failure and check for kernel warnings. We suppress
-> > the compiler warnings for these calls as they work as intended.
-> >
-> > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-> > ---
->
-> It would be a good practice to mention the changes from the previous vers=
-ion of
-> this patch here[1].
->
-> [1] https://docs.kernel.org/process/submitting-patches.html#the-canonical=
--patch-format
->
-Thank you, I missed this when trying to figure out how to add
-additional comments for a revision.
+The process to create version 2 of the KTAP Specification is documented
+in email discussions.  I am attempting to capture this information at
 
-> >  tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/to=
-ols/testing/selftests/damon/huge_count_read_write.c
-> > index ad7a6b4cf338..91bd80c75cd9 100644
-> > --- a/tools/testing/selftests/damon/huge_count_read_write.c
-> > +++ b/tools/testing/selftests/damon/huge_count_read_write.c
-> > @@ -2,6 +2,8 @@
-> >  /*
-> >   * Author: SeongJae Park <sj@kernel.org>
-> >   */
-> > +#pragma GCC diagnostic ignored "-Wstringop-overflow"
-> > +#pragma GCC diagnostic ignored "-Wstringop-overread"
->
-> I agree that this must be the cleaner way than v2.  But, I get below warn=
-ing
-> after applying this:
->
->     $ sudo make -C tools/testing/selftests/damon run_tests
->     make: Entering directory '/home/sjpark/linux/tools/testing/selftests/=
-damon'
->     gcc     huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/=
-selftests/damon/huge_count_read_write
->     huge_count_read_write.c:6:32: warning: unknown option after =E2=80=98=
-#pragma GCC diagnostic=E2=80=99 kind [-Wpragmas]
->         6 | #pragma GCC diagnostic ignored "-Wstringop-overread"
->           |                                ^~~~~~~~~~~~~~~~~~~~~
->
-> My gcc version is:
->
->     $ gcc --version
->     gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-I see, I'm running
+   https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
 
-    $ gcc --version
-    gcc (Debian 11.2.0-16+build1) 11.2.0
+I am already not following the suggested process, which says:
+"...please try to follow this principal of one major topic per email
+thread."  I think that is ok in this case because the two patches
+are related and (hopefully) not controversial.
 
-I believe this is a new warning for gcc-11 [1], and somewhat
-unfortunate that it results in a warning for gcc-9.4. I'm not sure
-what the preference is here.
-[1] https://gcc.gnu.org/onlinedocs/gcc-10.3.0/gcc/Warning-Options.html
+Changes since patch version 1:
+   - drop patch 1/2.  Jonathan Corbet has already applied this patch
+     into version 1 of the Specification
+   - rename patch 2/2 to patch 1/2, with updated patch comment
+   - add new patch 2/2
 
-Thanks,
-Yuanchu
+Frank Rowand (2):
+  ktap_v2: change version to 2-rc in KTAP specification
+  ktap_v2: change "version 1" to "version 2" in examples
+
+ Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
+
+-- 
+Frank Rowand <frank.rowand@sony.com>
+
