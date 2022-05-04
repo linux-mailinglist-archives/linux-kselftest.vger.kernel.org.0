@@ -2,166 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A81951B035
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 23:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC0C51B117
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 23:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378518AbiEDVTy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 17:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S238371AbiEDVj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 17:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357155AbiEDVTx (ORCPT
+        with ESMTP id S1379274AbiEDVjO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 17:19:53 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB737220C2
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 14:16:15 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b24so3098979edu.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 14:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6MXhFAWbDglpoBwnCNgPXrGcxMNN6VO/SyKkfNQIIaY=;
-        b=od9l1MKX7VGnlty0UQGANhz5usp8Mso5lcbHl1nFickQHtjswW8vkxoYHz9GUsdtAU
-         f8AMtgLlad2SEhYwyYKIWXo3yBOyjtzO9GEDXVoigHp78Vy7LNTXXcMjmf5Uh+0y9m1K
-         cU09NofM9Tb/cXEvvtGa01f7Ej2pwrj93rcxtfNEn+TB0eBVG6N7nHffonOwEG2IBFR5
-         gxRbHIun3AuGBf38wjv/TAmzk+9U+1SlrJLS/pWnEiwf8vyjPM56HObsANDRQztEnBtN
-         p5tIFznUphSsy1ffWktrtVRSvUjRPWXTZrxiMqKQwDZwpWONN3F+s1PqA3ThuATdZT3q
-         pnrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6MXhFAWbDglpoBwnCNgPXrGcxMNN6VO/SyKkfNQIIaY=;
-        b=EO4lgQ8vF6uC6UUPa+JcBb53jOpYtmlNLPai4y7+raKxrPoT5JQLpaTYE+GRNG3NWy
-         4A8Mm18OuQ+wDZ51cOkQ9nnb9Wck3MknZVAHxJTVgFXKOmLTiQZPaqyEBCqFVCB07xoF
-         sm+x4Q4TGew64sC1lNaQojOXs20wmIkhIzkEvp/yY0Bsocgr8zIWonyIfkPSrYNQddn1
-         c1utOXKTA/xomy5pttutQNG05JPahYbtbz35nsoihMgzTIIpiGYDIvzAyuwTFLPXsY5S
-         G81fkJQKxfktfRXeKOLDUr9nTxOFN3tw8Q6xMJXFyyfD+GULXZubwevwEDBEX0F+Kkzs
-         nDgg==
-X-Gm-Message-State: AOAM533CHTbDsC9RNGhmJayKe2RoSyM3LWhP/nCK/xCBgnafSbxbvkL/
-        XLskpJc4GefimoxSnPiFyZH1CDU98m7crAcPp3UWlQ==
-X-Google-Smtp-Source: ABdhPJwQ1M2NAmIFQZzAS9SZVXA1FRiwJe04VVWotoV0KyWmS6QO9tP0T66QfbBoTx2NAlraFyhy336blz2Fqf5csD4=
-X-Received: by 2002:a05:6402:2995:b0:425:d3a1:28aa with SMTP id
- eq21-20020a056402299500b00425d3a128aamr25411732edb.247.1651698974303; Wed, 04
- May 2022 14:16:14 -0700 (PDT)
+        Wed, 4 May 2022 17:39:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C6F2389D
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 14:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651700105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3s3JJtjWkXdQIeMB4qwH1W143SmCevkLkyYdal6KkRA=;
+        b=fpOzM+6walVp2TguMKjpq54TZ/1tD/d/rs1f2yWgjoFqR7o+yMleif+84jVRpbZzjmDlV0
+        LT45huHkksjudBoWkGnUEykntp8DzfdYUMvfjzt90XFajX2joYM9CmOUpPmjFOXwNdpCLH
+        31G2R+5OCy4zEAPGOfLYwU/l2mu/wH8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-UJvtXuB8OTG_3ShMvXL0sA-1; Wed, 04 May 2022 17:35:00 -0400
+X-MC-Unique: UJvtXuB8OTG_3ShMvXL0sA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DABD80418A;
+        Wed,  4 May 2022 21:34:59 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.8.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3452F400F75F;
+        Wed,  4 May 2022 21:34:59 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
+Date:   Wed,  4 May 2022 17:34:54 -0400
+Message-Id: <20220504213454.1282532-1-jsavitz@redhat.com>
 MIME-Version: 1.0
-References: <20220318021314.3225240-1-davidgow@google.com> <20220318021314.3225240-2-davidgow@google.com>
- <CAGS_qxqm1ys1qUz__4uXWOgs=34M5MB3QMnhg40FHtRhatF3+g@mail.gmail.com> <CAFd5g452ecbNbSyODT3Prraj5cOEugHm=asE_h+ik-yriUvf6w@mail.gmail.com>
-In-Reply-To: <CAFd5g452ecbNbSyODT3Prraj5cOEugHm=asE_h+ik-yriUvf6w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 4 May 2022 16:16:03 -0500
-Message-ID: <CAGS_qxrv_kSR0nnQNTDshUVSz=UT3djzLnHEpNLOV7fMO-fVCg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] kunit: Expose 'static stub' API to redirect functions
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 4, 2022 at 3:42 PM 'Brendan Higgins' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> On Wed, May 4, 2022 at 4:35 PM Daniel Latypov <dlatypov@google.com> wrote=
-:
-> >
-> > On Thu, Mar 17, 2022 at 9:13 PM David Gow <davidgow@google.com> wrote:
-> > > +#define kunit_activate_static_stub(test, real_fn_addr, replacement_a=
-ddr) do {  \
-> > > +       typecheck(typeof(real_fn_addr), replacement_addr);           =
-           \
-> >
-> > We can't call this macro in the same scope for functions w/ different
-> > signatures.
-> >
-> > E.g. if we add this func to the example test
-> >   static void other_func(void) {}
-> > then trying to call kunit_activate_static_stub() on it in the same
-> > test case, we get
-> >
-> > ./include/linux/typecheck.h:10:14: error: conflicting types for
-> > =E2=80=98__dummy=E2=80=99; have =E2=80=98void(void)=E2=80=99
-> >    10 | ({      type __dummy; \
-> >       |              ^~~~~~~
-> > ./include/kunit/static_stub.h:99:9: note: in expansion of macro =E2=80=
-=98typecheck=E2=80=99
-> >    99 |         typecheck(typeof(real_fn_addr), replacement_addr);
-> >                  \
-> >       |         ^~~~~~~~~
-> > lib/kunit/example-test.c:64:9: note: in expansion of macro
-> > =E2=80=98kunit_activate_static_stub=E2=80=99
-> >    64 |         kunit_activate_static_stub(test, other_func, other_func=
-);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/typecheck.h:10:14: note: previous declaration of
-> > =E2=80=98__dummy=E2=80=99 with type =E2=80=98int(int)=E2=80=99
-> >    10 | ({      type __dummy; \
-> >       |              ^~~~~~~
-> > ./include/kunit/static_stub.h:99:9: note: in expansion of macro =E2=80=
-=98typecheck=E2=80=99
-> >    99 |         typecheck(typeof(real_fn_addr), replacement_addr);
-> >                  \
-> >       |         ^~~~~~~~~
-> > lib/kunit/example-test.c:62:9: note: in expansion of macro
-> > =E2=80=98kunit_activate_static_stub=E2=80=99
-> >    62 |         kunit_activate_static_stub(test, add_one, subtract_one)=
-;
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Afaict, the problem is that GCC thinks we're declaring a *function*
-> > called __dummy, not a variable.
-> > So it bleeds across the scope boundary of do-while unlike normal variab=
-les.
->
-> Yeah, I ran into that problem too. I posted a fix to gerrit. I have
-> been meaning to share it here.
+The tools/testing/selftests/vm/Makefile uses the variable TARGETS
+internally to generate a list of platform-specific binary build targets
+suffixed with _{32,64}. When building the selftests using its own
+Makefile directly, such as via the following command run in a kernel
+tree:
 
-For others, gerrit =3D=3D https://kunit-review.googlesource.com/c/linux/+/5=
-129
+One receives an error such as the following:
 
->
-> > There's the typecheck_fn macro, but it doesn't work either.
->
-> That's weird. It worked for me.
+make: Entering directory '/root/linux/tools/testing/selftests'
+make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
+make[1]: Entering directory '/root/linux'
+  INSTALL ./usr/include
+make[1]: Leaving directory '/root/linux'
+make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
+make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
+make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
+make: *** [Makefile:175: all] Error 2
+make: Leaving directory '/root/linux/tools/testing/selftests'
 
-I'm running on top of 5.5.
-I tried reproducing w/ a stripped down version on 5.18 and saw the same iss=
-ues.
+The TARGETS variable passed to tools/testing/selftests/Makefile collides
+with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
+the latter to VMTARGETS, eliminating the collision with no functional
+change.
 
-Huh, I'm trying with
- #define kunit_activate_static_stub(test, real_fn_addr,
-replacement_addr) do {  \
--       typecheck(typeof(real_fn_addr), replacement_addr);
-         \
-+       typecheck_fn(typeof(real_fn_addr), replacement_addr); \
-        __kunit_activate_static_stub(test, real_fn_addr,
-replacement_addr);     \
+Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for
+x86")
 
-This gives me
-lib/kunit/example-test.c:62:9: error: function =E2=80=98__tmp=E2=80=99 is i=
-nitialized
-like a variable
-   62 |         kunit_activate_static_stub(test, add_one, subtract_one);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-lib/kunit/example-test.c:64:9: error: function =E2=80=98__tmp=E2=80=99 is i=
-nitialized
-like a variable
-   64 |         kunit_activate_static_stub(test, other_func, other_func);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+---
+ tools/testing/selftests/vm/Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Perhaps I'm missing something silly.
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 04a49e876a46..5b1ecd00695b 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -57,9 +57,9 @@ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_prog
+ CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
+ CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+ 
+-TARGETS := protection_keys
+-BINARIES_32 := $(TARGETS:%=%_32)
+-BINARIES_64 := $(TARGETS:%=%_64)
++VMTARGETS := protection_keys
++BINARIES_32 := $(VMTARGETS:%=%_32)
++BINARIES_64 := $(VMTARGETS:%=%_64)
+ 
+ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+ CFLAGS += -no-pie
+@@ -112,7 +112,7 @@ $(BINARIES_32): CFLAGS += -m32 -mxsave
+ $(BINARIES_32): LDLIBS += -lrt -ldl -lm
+ $(BINARIES_32): $(OUTPUT)/%_32: %.c
+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+-$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
++$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
+ endif
+ 
+ ifeq ($(CAN_BUILD_X86_64),1)
+@@ -120,7 +120,7 @@ $(BINARIES_64): CFLAGS += -m64 -mxsave
+ $(BINARIES_64): LDLIBS += -lrt -ldl
+ $(BINARIES_64): $(OUTPUT)/%_64: %.c
+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+-$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
++$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
+ endif
+ 
+ # x86_64 users should be encouraged to install 32-bit libraries
+-- 
+2.27.0
 
-Can you post your fix and I can try it out?
