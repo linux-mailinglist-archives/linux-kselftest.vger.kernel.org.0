@@ -2,74 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88ED651A4DD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 18:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAD151A57B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 18:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353047AbiEDQGC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 12:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        id S1353429AbiEDQ3b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 12:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353029AbiEDQGB (ORCPT
+        with ESMTP id S1353531AbiEDQ3D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 12:06:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC9215728
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 09:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651680144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kx7MkkZT+Yq+fM3GfswobHpHpBTfL9nTvycJqnYKSP8=;
-        b=g64HKG3q7K9kl0OdgE3bVx0t56mL25HfPcdeYHdrnZG95Gt95xSWwL3EWg2VMMvjGH/6IU
-        G/YZ2Xg/1Apbh17i2zs+e3ofB+tM9ShMxCQaqEtlrEw5zbFUbGp24Fird2Rk7fP1pdF7sz
-        eelDZJqopjQ7GRxGKAZBsAJ5ITqW7RY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-MzJLmzJiNoatZxsrxTXkGw-1; Wed, 04 May 2022 12:02:23 -0400
-X-MC-Unique: MzJLmzJiNoatZxsrxTXkGw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35937805F46;
-        Wed,  4 May 2022 16:02:22 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 77B9540CF8EF;
-        Wed,  4 May 2022 16:02:20 +0000 (UTC)
-Message-ID: <379138a0-1721-d6fa-4d1d-cb8d79f28474@redhat.com>
-Date:   Wed, 4 May 2022 12:02:19 -0400
+        Wed, 4 May 2022 12:29:03 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F0CBE22
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 09:25:26 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id gh6so3942003ejb.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 09:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yl4WQenCDLJErgHp6t3UJjMlUc388BkN8ozV46DV1Jw=;
+        b=UkruObD31qixCl3tEbnbC6/Szb3fOE20vobsG9EB3D9Txyb4DwrMg1MPuKOiuriQO0
+         bfrFQY2q3GU5cpGZ7NEMVFeHonKS5jshPndb1NXSNCiTBMlfAEkFMO8MhdiXH6ubVy15
+         BzqTQmHqpfWQzsfzfYtrrlft6mJ9zFxFJEfJ4U4Ie+qKpkI5l8BD5+La8b4QxtHnOZHv
+         y9hlgtiUQDYw5ZGnGKioMzZ+lQRrGXXZhBVznZ74FaY+dTBY6b/TGGgYXY5R1PpQQCrK
+         I9YG9e+4QLGYqahZJ2AFhjRAc1yU0adG166I7bIvuvzbKey6OlIqjHgUaeb4A8zObyB3
+         Q+zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yl4WQenCDLJErgHp6t3UJjMlUc388BkN8ozV46DV1Jw=;
+        b=SGsbmOPJDTmstpzz56HbXReOUYoBIEwRUGgzGu/nYuL5lmluKY69fXruSqDslr3sUp
+         ejZOv7JIN+JUmZHy0ewt+DehtZiZg+ZGk0rt4mlUfPkKkh5nQLPky36GQOAoWHlMhd9N
+         nw+d09m+TE4gJaeu9vPAB0a3hms5IWfpVlo8+KP4pt3eikIRlM+ysVV0P6cIf9NG4xiT
+         SJg0RGOu/d+LB3Lzu3lfL25MTay6UFiz74eWdTuKdPWui8+m4yvt802mSzm1lB36exm1
+         Hl8+9Tho3J29cb9TWJyb26p65heEw91djfk9sF+5D8KswwHPBStdVsukjjR1WVvVsj0m
+         1a4Q==
+X-Gm-Message-State: AOAM530LdcR7h20O5SUBnwWkXmbNYlN5kAq/O30xu+N6QXcsh55f/c3U
+        AY/PDwDSaOgcptMcMxvVzLZ6lRZVGOrsjF66gEIcUw==
+X-Google-Smtp-Source: ABdhPJx2xz2gkiQHrChRkpvk1HKnyjR91ITm5VKWQSf9RezsTKQGBIkW/vQqKqLiPCJXMRXYwGVEze3ZiWHXru1KY2Q=
+X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id
+ by2-20020a170906a2c200b006e7efc217f2mr20140929ejb.542.1651681525279; Wed, 04
+ May 2022 09:25:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v10 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
+References: <20220429043913.626647-1-davidgow@google.com> <20220430030019.803481-1-davidgow@google.com>
+ <Ym7P7mCoMiQq99EM@bombadil.infradead.org> <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
+ <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com> <YnKS3MwNxvEi73OP@bombadil.infradead.org>
+In-Reply-To: <YnKS3MwNxvEi73OP@bombadil.infradead.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 4 May 2022 11:25:14 -0500
+Message-ID: <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20220503162149.1764245-1-longman@redhat.com>
- <20220503162149.1764245-8-longman@redhat.com>
- <20220504112552.GA15266@blackbody.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220504112552.GA15266@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Kees Cook <keescook@chromium.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,68 +85,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/4/22 07:25, Michal Koutný wrote:
-> Hello.
->
-> On Tue, May 03, 2022 at 12:21:48PM -0400, Waiman Long <longman@redhat.com> wrote:
->>   Documentation/admin-guide/cgroup-v2.rst | 145 +++++++++++++-----------
->>   1 file changed, 79 insertions(+), 66 deletions(-)
-> A note across various lines -- it seems your new text accidentally mixes
-> both spaces and tabs for indentation.
+On Wed, May 4, 2022 at 9:51 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> selftests has modules, although I am not sure if there are selftests
+> which do not load modules. Shuah?
 
-You are right. I will fix that.
+I'm not Shuah, but there are indeed selftests that don't load modules.
 
->
->> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
->> index 69d7a6983f78..94e1e3771830 100644
->> --- a/Documentation/admin-guide/cgroup-v2.rst
->> +++ b/Documentation/admin-guide/cgroup-v2.rst
->> [...]
->> +	The value shown in "cpuset.cpus.effective" of a partition root is
->> +	the CPUs that the parent partition root can dedicate to the new
->> +	partition root.  They are subtracted from "cpuset.cpus.effective"
->> +	of the parent and may be different from "cpuset.cpus"
-> I find this paragraph a bit hard to comprehend (I read it as it talks
-> about three levels of cgroups (parent, child, grandparent). It is
-> correct but I'd suggect following formulation (where I additionally
-> simplifed it by talking about "available" cpus):
->
->> The value shown in "cpuset.cpus.effective" of a partition root is
->> the CPUs that the partition root can dedicate to a potential new child
->> partition root. The new child subtracts available CPUs from its parent
->> "cpuset.cpus.effective".
-
-
-Thanks for the suggestion, will modify the text as suggested.
-
-
->
->> +	For a partition root to become valid, the following conditions
->> +	must be met.
->> +
->> +	1) The "cpuset.cpus" is exclusive, i.e. they are not shared by
->> +	   any of its siblings (exclusivity rule).
->> +	2) The parent cgroup is a valid partition root.
->> +	3) The "cpuset.cpus" is not empty and must contain at least
->> +	   one of the CPUs from parent's "cpuset.cpus", i.e. they overlap.
->> +        4) The "cpuset.cpus.effective" must be a subset of "cpuset.cpus"
->> +           and cannot be empty unless there is no task associated with
->> +           this partition.
-> This sounds good to me.
->
->> +        Care must be taken to change a valid partition root to "member"
->> +        as all its child partitions, if present, will become invalid.
-> This does not talk about recovering. Is it intentional? (I.e. to left
-> implementation defined)
-
-This new patch series does have the ability to recover now.  I am just 
-not emphasizing the recovery aspect of it in the doc file. I will add a 
-sentence about it.
-
->
-> Except the remarks above, I find the concepts described here good. I'll
-> reply to implementation separately & later.
-
-Thanks,
-Longman
-
+I went looking for an example and found
+tools/testing/selftests/bpf/test_doc_build.sh, which runs entirely in
+userspace (basically just `make docs`).
