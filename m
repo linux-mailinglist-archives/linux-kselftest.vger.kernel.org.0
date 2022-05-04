@@ -2,67 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1178451A291
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 16:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0426551A4A5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 May 2022 17:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351627AbiEDOy5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 10:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S1352938AbiEDP7T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 May 2022 11:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351497AbiEDOyz (ORCPT
+        with ESMTP id S1352921AbiEDP7O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 10:54:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F0A2250C;
-        Wed,  4 May 2022 07:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S2gb7XqGVCua1J4ObYPWqu6oqDz0D+gONZmwmSAT5u0=; b=yohmkVdc1HEiFErskoUX3A88MC
-        imI16VZWdSN1NTiGoZm/E0P67fi6koEUXubQBJY5SMenScgAKEU8IhyJ1qXu7PHbs5zZtofExsIYV
-        wsfQQ38SL//vc+P8mculJsju6c6L2nxtUL8VD+B51YnznAu5BuIDA82AfmAqHmmAb7nqMvC4YwCZv
-        6yGeRvKMURbJ8Sjyr5jiMwPrRxX60f7OUv9gxVdXzm5N6Ee4z6Ip5EhD3bjGdqxz/gujGyNF2cOx+
-        07kbDv6ERZSybEInGCSvByWav8AC60xD5LHHHUrDhVcyTIrGpTJuRu7PISjPO5k5yUvd8gMOyobAw
-        NZKz4eOw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmGLM-00BIQY-Kf; Wed, 04 May 2022 14:51:08 +0000
-Date:   Wed, 4 May 2022 07:51:08 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-Message-ID: <YnKS3MwNxvEi73OP@bombadil.infradead.org>
-References: <20220429043913.626647-1-davidgow@google.com>
- <20220430030019.803481-1-davidgow@google.com>
- <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
- <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
- <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
+        Wed, 4 May 2022 11:59:14 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0627CB847;
+        Wed,  4 May 2022 08:55:38 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id v12so2615467wrv.10;
+        Wed, 04 May 2022 08:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wtP9hXDTn2yxCxN0X3of+jxBUyJ3pPE1spLSBo0Vj30=;
+        b=qqXa9svwL8NMhVK1Gy+nfEs6AsyyPj8v3ldoTOGdWz6T7rM9N+70zCY8ogsxibCHLh
+         6awoBFNjZXrfw6ZN4DGr71lSRCULT2WjFh+UcVjUjBZcy2SFdaE+R3K3+8ZJVBYVCV9t
+         ESvoJaKYDq/eeFRdics70hAMrc1ri9IPZu2ioz63ukeJGse/F3+2P3urmhmT707I2h1R
+         Fa1J5WZ/Rw7mi4kntJUDjTQBfj9KL79ANJtIOqollDoch0qutO8iKRcdzWlOcJLeMnVJ
+         jzhQC9Xp5jk5rGTnjYdMTQ2sL28rtULpMZd9YbIf7faFF2taVbzUndHYThXOfj6PdvQR
+         aAcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wtP9hXDTn2yxCxN0X3of+jxBUyJ3pPE1spLSBo0Vj30=;
+        b=JnXf/w9sHgHDUnHMZgA+pvCbLwf7aw0M3pyCjjeAojKG5i/mRisyVwEWmolYPlbQ38
+         q5t2Q4n9bHBrNCwpJyeydVvsxD1MmaiqEnAuP5Kh1Yz7eNsjDt0F2SARmA7+XYWTT6Wy
+         L+MNLgVIdHJc/Lze1JqWrxbGLu7KhBvskdR2YYv5naheLkzPbtWDyAvXSPB4QkdIt60N
+         EYe7TL9ptPTsaWX/ws7U66RUCvQldUUclg4D5clip0tfSmdg/bWFVvivkFPHPSR4O9Lz
+         y7kvxIj+x8jRHrpMeAK8J/ONU/SxBHfLoUhIcK9Fj8BEH9PQtMHc6QnLf8N9fyyhsEMy
+         1Dmg==
+X-Gm-Message-State: AOAM5318eVm7swomehxpuFuq6IZDQgBI0c4uEIHtowwbUVRLdx12xXJy
+        WQerS+X+GjH3mWlfS514C80=
+X-Google-Smtp-Source: ABdhPJyAO2ajDWK9KtBeiYVElkB0jr1JpnrWYOLIIW+ZDM2z1WSjOl3K/EKnkLOcao/sWhat3JyTkA==
+X-Received: by 2002:a5d:6c68:0:b0:20c:7246:a86 with SMTP id r8-20020a5d6c68000000b0020c72460a86mr7360076wrz.283.1651679736508;
+        Wed, 04 May 2022 08:55:36 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bg3-20020a05600c3c8300b003942a244ed2sm5085334wmb.23.2022.05.04.08.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:55:35 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/seccomp: Fix spelling mistake "Coud" -> "Could"
+Date:   Wed,  4 May 2022 16:55:35 +0100
+Message-Id: <20220504155535.239180-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,53 +72,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 03, 2022 at 02:49:58PM +0800, David Gow wrote:
-> On Mon, May 2, 2022 at 2:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Sun, May 01, 2022 at 11:22:38AM -0700, Luis Chamberlain wrote:
-> > > On Sat, Apr 30, 2022 at 11:00:19AM +0800, David Gow wrote:
-> > > > KUnit tests are not supposed to run on production systems: they may do
-> > > > deliberately illegal things to trigger errors, and have security
-> > > > implications (assertions will often deliberately leak kernel addresses).
-> > > >
-> > > > Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-> > > > run. This will be printed as 'N' (for kuNit, as K, U and T were already
-> > > > taken).
-> > > >
-> > > > This should discourage people from running KUnit tests on production
-> > > > systems, and to make it easier to tell if tests have been run
-> > > > accidentally (by loading the wrong configuration, etc.)
-> > > >
-> > > > Signed-off-by: David Gow <davidgow@google.com>
-> > >
-> > > There is no reason to distinguish kunit from selftests if the result is
-> > > the same: really make the kernel try really insane stupid things which
-> > > may crash it or put it into a bad state.
-> > >
-> My initial thought is that KUnit is explicitly in-kernel testing,
-> whereas kselftest is (at least somewhat) user-space based.
+There is a spelling mistake in an error message. Fix it.
 
-selftests has modules, although I am not sure if there are selftests
-which do not load modules. Shuah?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> My personal
-> feeling is that "doing weird stuff from userspace" is fundamentally
-> different from "doing weird stuff in the kernel".
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 29c973f606b2..136df5b76319 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4320,7 +4320,7 @@ static ssize_t get_nth(struct __test_metadata *_metadata, const char *path,
+ 
+ 	f = fopen(path, "r");
+ 	ASSERT_NE(f, NULL) {
+-		TH_LOG("Coud not open %s: %s", path, strerror(errno));
++		TH_LOG("Could not open %s: %s", path, strerror(errno));
+ 	}
+ 
+ 	for (i = 0; i < position; i++) {
+-- 
+2.35.1
 
-True.
-
-> That being said, in
-> practice many kselftest tests load modules which do strange things,
-> and those could be in scope for something like that. I'd still err on
-> the side of only having those tests (or specifically those modules)
-> add the taint, rather than all selftests, but could be conveniced.
-
-Yeah I think now that this can easily be added by having a special
-new module info, MODULE_TAINTS(taint_flag). Then in check_modinfo()
-you'd get_modinfo(info, "taints") to then add_taint_module() if set.
-
-We can ignore the userspace thing I mentioned earlier as I thought
-at first we could not add the taint to selftest modules easily but
-we can.
-
-  Luis
