@@ -2,122 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E7F51B7A8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 May 2022 07:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E636351BEC8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 May 2022 14:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243992AbiEEGAr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 May 2022 02:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S1356807AbiEEMHy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 May 2022 08:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiEEGAq (ORCPT
+        with ESMTP id S244273AbiEEMHx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 May 2022 02:00:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495F629C86;
-        Wed,  4 May 2022 22:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0RNEm5+NEN7w925eokqd3iQQhIS/p5lgAQiqOzj0AqU=; b=bpPQHauP0GZlNt0nhaYRYMQd3o
-        CKwArj2r5bWsVVV9QTcAiG640anvOGmiyynASSWVxl3B6LE3yjbdxrni2KF08ELfEiIU9p+fd2jhQ
-        1uNxD6vkdcF0lNf9uZnIqkV41MItkS79TmI1DpdTe91eW9whq3bJiO84G7oWQhAaerHBwaouRZ0PW
-        A3N/Ebz6NiCFh77/rTSM+cA1+fXt6IYH7WR2bKL6ingkU6mjQs3ayUmt2/uSOtxjx5GQTLFKr1jIv
-        KJjHmEbxT1y81iSSe7ucdPTSF8sYqHUp4rFia8UxOMbMcSQVx+gFtsN2noS6D3Tw1B6bRT50i3mPS
-        Pnh6VbXA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmUU0-00E7Vg-Tl; Thu, 05 May 2022 05:57:00 +0000
-Date:   Wed, 4 May 2022 22:57:00 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
-Message-ID: <YnNnLIZDxkNwECv+@bombadil.infradead.org>
-References: <20220429043913.626647-1-davidgow@google.com>
- <20220430030019.803481-1-davidgow@google.com>
- <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
- <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
- <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
- <YnKS3MwNxvEi73OP@bombadil.infradead.org>
- <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
- <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
- <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
- <YnLsPgbQ7CHiannN@bombadil.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnLsPgbQ7CHiannN@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 May 2022 08:07:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAC545527;
+        Thu,  5 May 2022 05:04:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE3B6B82C2B;
+        Thu,  5 May 2022 12:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC45C385A4;
+        Thu,  5 May 2022 12:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651752250;
+        bh=bkJvphN7syBYWRsUJY+LC4KlT+zXODM0ziWUwHCjA/0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=td/Txg+E2NK7U7QAjor3Z4L0qanKjWzlFWAGi8ipOLZ3Z10aa883FcQJL0K8w5RtT
+         j90NRbECApWwgMI097QJ5gDdRY5C2N6nOFLOPxbUPd3LXquIa0qM2dLXFkNOo0crAr
+         l08byEWOYbQamUUdh3FBGhHiyO9dNYPlyHlBy2UFhqkYdgVpMkMOoq/rG+fMccrIIa
+         WqM8yxtwsi8y6LfyPsseXcSlHCpHvxhYeIdqFCzXOE1cP2KPXAhbPRVVd7KqSxCjYa
+         J4Xm3pRGWPwW6p9PVmJbmOnqY8Nse8pls6fs0mNCwKhLTWMJF52M8/emhjuiPvN37B
+         z2ATW/zVAf+iw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmaDH-009CAb-M4; Thu, 05 May 2022 13:04:07 +0100
+Date:   Thu, 05 May 2022 13:04:07 +0100
+Message-ID: <87zgjw6v9k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oupton@google.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: KVM: aarch64: Let hypercalls use UAPI *_BIT_COUNT
+In-Reply-To: <YnLa8uH55/epyjlS@google.com>
+References: <20220504184415.1905224-1-rananta@google.com>
+        <YnLa8uH55/epyjlS@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oupton@google.com, rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 04, 2022 at 02:12:30PM -0700, Luis Chamberlain wrote:
-> On Wed, May 04, 2022 at 02:19:59PM -0500, Daniel Latypov wrote:
-> > On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > OK so, we can just skip tainting considerations for selftests which
-> > > don't use modules for now. There may be selftests which do wonky
-> > > things in userspace but indeed I agree the userspace taint would
-> > > be better for those but I don't think it may be worth bother
-> > > worrying about those at this point in time.
-> > >
-> > > But my point in that sharing a taint between kunit / selftests modules
-> > > does make sense and is easily possible. The unfortunate aspect is just
-> > 
-> > Yes, I 100% agree that we should share a taint for kernelspace testing
-> > from both kunit/kselftest.
-> > Someone running the system won't care what framework was used.
+On Wed, 04 May 2022 20:58:42 +0100,
+Oliver Upton <oupton@google.com> wrote:
 > 
-> OK do you mind doing the nasty work of manually adding the new
-> MODULE_TAINT() to the selftests as part of your effort?
+> Hi Raghavendra,
 > 
-> *Alternatively*, if we *moved* all sefltests modules to a new
-> lib/debug/selftests/ directory or something like that then t would
-> seem modpost *could* add the taint flag automagically for us without
-> having to edit or require it on new drivers. We have similar type of
-> taint for staging, see add_staging_flag().
+> On Wed, May 04, 2022 at 06:44:15PM +0000, Raghavendra Rao Ananta wrote:
+> > The hypercalls test currently defines its own *_BMAP_BIT_MAX macros to
+> > define the last valid feature bit for each bitmap firmware register.
+> > However, since these definitions are already present in the uapi header,
+> > kvm.h, as *_BMAP_BIT_COUNT, and would help to keep the test updated as
+> > features grow, use these instead.
 > 
-> I would *highly* prefer this approach, event though it is more work,
-> because I think this is a step we should take anyway.
+> LOL, looks like I lost that one in the end! Still, the fact that you're
+> patching the selftest highlights the fact that there is a nonzero chance
+> of userspace using this value incorrectly expecting it to hold true
+> across all kernels.
 > 
-> However, I just checked modules on lib/ and well, some of them are
-> already in their own directory, like lib/math/test_div64.c. So not
-> sure, maybe just move a few modules which are just in lib/*.c for now
-> and then just sprinkle the MODULE_TAINT() to the others?
+> Since this is the route going forward can we please consider documenting
+> the fact that _BIT_COUNT *will* change and is not stable between kernel
+> versions. Bad UAPI expectations could throw a wrench into this entire
+> plan we've hatched for preserving hypercall ABI.
+> 
+> Just a warning at the end of the register documentation would suffice.
 
-I *think* we could just pull this off with a much easier approach,
-simply looking for the substrings in the module name in modpost.c:
+Maybe something in the kvm.h file as well, as the includes are often
+distributed without the kernel documentation. Something like:
 
-  * "_test." || "-test."
-  * ^"test_" || ^"test-"
+diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+index e523bb6eac67..3cde9f958eee 100644
+--- a/arch/arm64/include/uapi/asm/kvm.h
++++ b/arch/arm64/include/uapi/asm/kvm.h
+@@ -342,6 +342,10 @@ struct kvm_arm_copy_mte_tags {
+ 
+ enum {
+ 	KVM_REG_ARM_STD_BIT_TRNG_V1_0	= 0,
++	/*
++	 * KVM_REG_ARM_STD_BMAP_BIT_COUNT will vary as new services
++	 * are added, and is explicitely not part of the ABI.
++	 */
+ 	KVM_REG_ARM_STD_BMAP_BIT_COUNT,
+ };
+ 
+@@ -349,6 +353,10 @@ enum {
+ 
+ enum {
+ 	KVM_REG_ARM_STD_HYP_BIT_PV_TIME	= 0,
++	/*
++	 * KVM_REG_ARM_STD_HYP_BMAP_BIT_COUNT will vary as new
++	 * services are added, and is explicitely not part of the ABI.
++	 */
+ 	KVM_REG_ARM_STD_HYP_BMAP_BIT_COUNT,
+ };
+ 
+@@ -357,6 +365,10 @@ enum {
+ enum {
+ 	KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT	= 0,
+ 	KVM_REG_ARM_VENDOR_HYP_BIT_PTP		= 1,
++	/*
++	 * KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_COUNT will vary as new
++	 * services are added, and is explicitely not part of the ABI.
++	 */
+ 	KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_COUNT,
+ };
 
-An issue with this of course is a vendor $FOO with an out of tree
-test driver may end up with the taint. Perhaps we don't care.
+Thanks,
 
-That means moving selftests to its own directory is not needed at this
-point in time.
+	M.
 
-  Luis
+-- 
+Without deviation from the norm, progress is not possible.
