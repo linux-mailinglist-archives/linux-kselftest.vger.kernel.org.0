@@ -2,121 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3359A51B4A1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 May 2022 02:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F4B51B79D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 May 2022 07:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiEEAar (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 May 2022 20:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S231840AbiEEF7Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 May 2022 01:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiEEAaq (ORCPT
+        with ESMTP id S231531AbiEEF7O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 20:30:46 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 17:27:04 PDT
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E3FB45060
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 17:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651710423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x+VFB+RbqDxtdPfXH5fs43HvbZapK8JlXZrJfass0jo=;
-        b=iPcBX47jh+qpj+j3L6zJpDUABVmc0DGKs38DLwZZTCppKkBRD2p7OwdK9KfwZNdASWxQhW
-        wsFxvmh2N1CVOQ6iRfSCS57M/BWUikrlyWZ3uLFu8aVR2oym7NhoT8rghivtGSWpraxVtd
-        yGzWHAezDOkbCVCtNeLUEAwjfO5jgA8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-67-fo4V7Ae7OfOGecZyX4ny4Q-1; Wed, 04 May 2022 20:25:58 -0400
-X-MC-Unique: fo4V7Ae7OfOGecZyX4ny4Q-1
-Received: by mail-qv1-f71.google.com with SMTP id kc6-20020a056214410600b0045a97658c7dso2033171qvb.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 17:25:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x+VFB+RbqDxtdPfXH5fs43HvbZapK8JlXZrJfass0jo=;
-        b=eiUKj8CFxr68v3GlS7utF2aasUb8C1wdXI4HVFcRmMa3IpyKXZq7pEzk1Yb0CTFX2Q
-         xqQGkhlpxAF6U0jIAT3NxrVXSS9BmT5lCusiQsxCMgtwWmRLtVk07CT1rsQPRXZMUQ8Q
-         sUG8DlwPAhhHIBmDF0Ndpzcw+lFpONvK27xQpeBPHYKu0THFI0suoEdlNH+PsGynHVEm
-         nwFJBzKea/SETF45aJ61mzZosbNMaogL+ewcy6A5dq7s/SUz3Vrx3++BnVB9XDSLA4rR
-         o+UhD6xQLWYX9Xy+3UTEcyqObt2wofpnT8LY8bynxdo3wDcjx7GTWeFwy1V+gDNV5wdc
-         E0wA==
-X-Gm-Message-State: AOAM531RXD2jc3NUmhJU4kVhKLYfsTirHy/SLvWwTKr71YfFM+ODdUXQ
-        CMVMk78awz29Cdx7tgJGBz29TExV4lWBbDeybHtABseSwfLvfd55YnNcQSVbTNFN+pHQsHfSFWV
-        TQ9GYduDrpt/3cqEFEvVppBZkiwSS
-X-Received: by 2002:a05:620a:45a5:b0:6a0:455:b829 with SMTP id bp37-20020a05620a45a500b006a00455b829mr7166822qkb.450.1651710358147;
-        Wed, 04 May 2022 17:25:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzDVIxSAgnbeoc2yDLtyhSKIPinnZELTTVOPCTW8YB9dKfNNvKXWcHNIVe6LME42AGiK4No6A==
-X-Received: by 2002:a05:620a:45a5:b0:6a0:455:b829 with SMTP id bp37-20020a05620a45a500b006a00455b829mr7166816qkb.450.1651710357920;
-        Wed, 04 May 2022 17:25:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:5610:6e80::41? ([2600:1700:5610:6e80::41])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac81e01000000b002f39b99f679sm18727qtl.19.2022.05.04.17.25.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 17:25:57 -0700 (PDT)
-Message-ID: <9b00397e-f0fd-18c2-8268-c071257443cd@redhat.com>
-Date:   Wed, 4 May 2022 20:25:56 -0400
+        Thu, 5 May 2022 01:59:14 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A748B1AD8E;
+        Wed,  4 May 2022 22:55:34 -0700 (PDT)
+X-UUID: b391feff2acf4deea7391f61bc0538e2-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:3946083e-4c33-41de-bcf0-50e7fa125dcf,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:108
+X-CID-INFO: VERSION:1.1.4,REQID:3946083e-4c33-41de-bcf0-50e7fa125dcf,OB:0,LOB:
+        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:108
+X-CID-META: VersionHash:faefae9,CLOUDID:b2474316-2e53-443e-b81a-655c13977218,C
+        OID:6060dbeaf70c,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: b391feff2acf4deea7391f61bc0538e2-20220505
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <lina.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1907580698; Thu, 05 May 2022 13:55:30 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 5 May 2022 13:55:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 5 May 2022 13:55:29 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 May 2022 13:55:28 +0800
+From:   Lina Wang <lina.wang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Maciej enczykowski <maze@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
+        Lina Wang <lina.wang@mediatek.com>
+Subject: [PATCH v6 1/2] net: fix wrong network header length
+Date:   Thu, 5 May 2022 13:48:49 +0800
+Message-ID: <20220505054850.4878-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
-Content-Language: en-US
-To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20220504214032.1283777-1-jsavitz@redhat.com>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <20220504214032.1283777-1-jsavitz@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+network_header\transport_header\mac_header have been updated as ipv4 acts,
+but other skbs in frag_list didnot update anything, just ipv6 packets.
 
+udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+frag_list and make sure right udp payload is delivered to user space.
+Unfortunately, other skbs in frag_list who are still ipv6 packets are
+updated like the first skb and will have wrong transport header length.
 
-On 5/4/22 17:40, Joel Savitz wrote:
-> The tools/testing/selftests/vm/Makefile uses the variable TARGETS
-> internally to generate a list of platform-specific binary build targets
-> suffixed with _{32,64}. When building the selftests using its own
-> Makefile directly, such as via the following command run in a kernel
-> tree:
-> 
-> # make -C tools/testing/selftests install TARGETS="vm"
-> 
-> One receives an error such as the following:
-> 
-> make: Entering directory '/root/linux/tools/testing/selftests'
-> make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
-> make[1]: Entering directory '/root/linux'
->   INSTALL ./usr/include
-> make[1]: Leaving directory '/root/linux'
-> make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
-> make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
-> make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
-> make: *** [Makefile:175: all] Error 2
-> make: Leaving directory '/root/linux/tools/testing/selftests'
-> 
-> The TARGETS variable passed to tools/testing/selftests/Makefile collides
-> with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
-> the latter to VMTARGETS, eliminating the collision with no functional
-> change.
-> 
-> Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for
-> x86")
-> 
-> Signed-off-by: Joel Savitz <jsavitz@redhat.comTested-by: Nico Pache <npache@redhat.com>
-Acked-by: Nico Pache <npache@redhat.com>
+e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+has the same network_header(24)& transport_header(64), after
+bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+skb's network_header is 44,transport_header is 64, other skbs in frag_list
+didnot change.After skb_segment_list, the other skbs in frag_list has
+different network_header(24) and transport_header(44), so there will be 20
+bytes different from original,that is difference between ipv6 header and
+ipv4 header. Just change transport_header to be the same with original.
+
+Actually, there are two solutions to fix it, one is traversing all skbs
+and changing every skb header in bpf_skb_proto_6_to_4, the other is
+modifying frag_list skb's header in skb_segment_list. Considering
+efficiency, adopt the second one--- when the first skb and other skbs in
+frag_list has different network_header length, restore them to make sure
+right udp payload is delivered to user space.
+
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+---
+ net/core/skbuff.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 10bde7c6db44..e8006e0a1b25 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3897,7 +3897,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 	unsigned int delta_len = 0;
+ 	struct sk_buff *tail = NULL;
+ 	struct sk_buff *nskb, *tmp;
+-	int err;
++	int len_diff, err;
+ 
+ 	skb_push(skb, -skb_network_offset(skb) + offset);
+ 
+@@ -3937,9 +3937,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
+ 
+ 		skb_release_head_state(nskb);
++		len_diff = skb_network_header_len(nskb) - skb_network_header_len(skb);
+ 		__copy_skb_header(nskb, skb);
+ 
+ 		skb_headers_offset_update(nskb, skb_headroom(nskb) - skb_headroom(skb));
++		nskb->transport_header += len_diff;
+ 		skb_copy_from_linear_data_offset(skb, -tnl_hlen,
+ 						 nskb->data - tnl_hlen,
+ 						 offset + tnl_hlen);
+-- 
+2.18.0
 
