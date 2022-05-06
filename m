@@ -2,113 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02FF51CE26
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 May 2022 04:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E7951CF66
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 May 2022 05:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388056AbiEFBuI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 May 2022 21:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S1388530AbiEFD16 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 May 2022 23:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbiEFBuH (ORCPT
+        with ESMTP id S1352476AbiEFD15 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 May 2022 21:50:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857475DE7C;
-        Thu,  5 May 2022 18:46:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22B736202A;
-        Fri,  6 May 2022 01:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCFC385A8;
-        Fri,  6 May 2022 01:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651801585;
-        bh=FJVmyrzscKRwOZCVrazEfpY2ik2lmDilP5a1DeRzKd4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MTsu0K+dGhH0R/zaYitWP9NJrB/Tn1awsvkYSVb0pjvuoST3dVnYyMqJhUb935aRT
-         gSYNaZF2z2ZsNS2fSeQS9Bp11AMtV2kKPbT68ZUBCMJPtA3bvJo1P8mVP+zf5wmNS0
-         79EKid4bED/qX+zXfbxCH4rROqxZxHMKHNPgdELbGNZpxz+u+Hix8Esl3IN9gADavD
-         7DAhJq7La0HCzO8pxAhPDl7iYPDBa6iHIRCYbv4fdACM/mdkwzGVZqCt7bh/21g+ZV
-         6YGlviZsgju3X1v/RripVcFtkS9AK508BdzkWcs3c4o8NuTD0vsXc9TKEVPXmIm64C
-         mqetWcNIGPMzw==
-Date:   Fri, 6 May 2022 10:46:21 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+        Thu, 5 May 2022 23:27:57 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A2AD63BE4;
+        Thu,  5 May 2022 20:24:14 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxENvWlHRiua8LAA--.47364S3;
+        Fri, 06 May 2022 11:24:07 +0800 (CST)
+Subject: Re: [PATCH 2/2] MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes
+ annotation
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+References: <1651753148-1464-1-git-send-email-yangtiezhu@loongson.cn>
+ <1651753148-1464-3-git-send-email-yangtiezhu@loongson.cn>
+ <20220506104504.535c6ab065993b97604178fe@kernel.org>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Steven Rostedt <rostedt@goodmis.org>,
         Shuah Khan <shuah@kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/ftrace: Save kprobe_events to test log
-Message-Id: <20220506104621.bbeba7d977cdb5d95c3e7d87@kernel.org>
-In-Reply-To: <1651753148-1464-2-git-send-email-yangtiezhu@loongson.cn>
-References: <1651753148-1464-1-git-send-email-yangtiezhu@loongson.cn>
-        <1651753148-1464-2-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d4115146-966a-61a5-6bdd-0cd7092fd3b4@loongson.cn>
+Date:   Fri, 6 May 2022 11:24:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <20220506104504.535c6ab065993b97604178fe@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9BxENvWlHRiua8LAA--.47364S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur4UXryUAFyfCF47GrykKrg_yoW8XF4rpa
+        s8Jws5CFs5Jw48KryxAw4ru34SkrsrAay5JrWUJry3Jw4qqr4vyrnIga1UtFyxKr1ftayI
+        v3WqqrWrKa4DAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUYnYwUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu,  5 May 2022 20:19:07 +0800
-Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-
-> It may lead to kernel panic when execute the following testcase on mips:
-> 
->   # ./ftracetest test.d/kprobe/multiple_kprobes.tc
-> 
-> A preliminary analysis shows that the issue is related with
-> 
->   echo 1 > events/kprobes/enable
-> 
-> after add the 256 probe points.
-> 
-> In order to find the root cause, I want to verify which probe point has
-> problem, so it is necessary to save kprobe_events to test log.
-> 
-> With this patch, we can get the 256 probe points in the test log through
-> the following command:
-> 
->   # ./ftracetest test.d/kprobe/multiple_kprobes.tc -vvv -k
-
-This looks good to me. :)
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you,
-
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-> index 312d237..be754f5 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-> @@ -25,6 +25,8 @@ if [ $L -ne 256 ]; then
->    exit_fail
->  fi
->  
-> +cat kprobe_events >> $testlog
-> +
->  echo 1 > events/kprobes/enable
->  echo 0 > events/kprobes/enable
->  echo > kprobe_events
-> -- 
-> 2.1.0
-> 
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+On 05/06/2022 09:45 AM, Masami Hiramatsu wrote:
+> On Thu,  5 May 2022 20:19:08 +0800
+> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+>> If define CONFIG_KPROBES, __kprobes annotation forces the whole function
+>> into the ".kprobes.text" section, NOKPROBE_SYMBOL() just stores the given
+>> function address in the "_kprobe_blacklist" section which is introduced
+>> to maintain kprobes blacklist.
+>>
+>> Modify the related code to use NOKPROBE_SYMBOL() to protect functions from
+>> kprobes instead of __kprobes annotation under arch/mips.
+>
+> So you added some non '__kprobes' annotated functions to NOKPROBE_SYMBOL()
+> in this patch. Those caused the kernel panic, right?
+
+Oh, no, this patch is not related with the kernel panic, what it does
+is just to use NOKPROBE_SYMBOL() instead of __kprobes annotation, and
+also add some non '__kprobes' annotated functions in kprobes.c to
+NOKPROBE_SYMBOL() because they can not be probed too.
+
+> If so, please add such
+> comment on this description too. Or, split this into 2 patches, one fixes
+> the kernel panic by adding those functions to NOKPROBE_SYMBOL() and the
+> other is replacing __kprobes with NOKPROBE_SYMBOL().
+>
+> Also, could you also find the commit which introduces the kernel panic?
+> It is worth to backport such fix to stable trees.
+
+I did some work to find some other functions lead to kernel panic,
+mark them as notrace function can avoid the problems, but I am not
+quite sure the root cause, so I do not submit the changes now.
+
+Thanks,
+Tiezhu
+
