@@ -2,57 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344DB51E143
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 May 2022 23:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1533C51E161
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 May 2022 23:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355104AbiEFVnD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 May 2022 17:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S1359074AbiEFVzN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 May 2022 17:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352550AbiEFVnC (ORCPT
+        with ESMTP id S1355406AbiEFVzJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 May 2022 17:43:02 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AC66FA13;
-        Fri,  6 May 2022 14:39:18 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id m6so9457004iob.4;
-        Fri, 06 May 2022 14:39:18 -0700 (PDT)
+        Fri, 6 May 2022 17:55:09 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1766C6FA13;
+        Fri,  6 May 2022 14:51:24 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id y11so5625004ilp.4;
+        Fri, 06 May 2022 14:51:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OshuYdi3mkXkKwphYHfoNTYLlgVkbS/n5H63gaEbdPA=;
-        b=BnBLKDdkE01B9gzYpT7+xo6GROb0grAE8OQ4omX6+dHMoKyVvW7PXddFZK/pWv1fRH
-         l81dqcMxUa8eaOCF53wRE/GCxN71rSn+Ty8et7r8Z68AgWt4BOLLOs8ubqf3gza5TE2F
-         Lcmrb78xwTR20VL6KbW/wZoT/F0azeeIpDA7P6h6yt3wAnEQOGfDig7++iARuYYCDVHS
-         B6gmvhg51x74JnqQ1LH9RymEO8Rs13oDHUew7mSCsPw9Rfb2qltSveTWJ3luhX7VaAFr
-         DArUO6vZ/m5/1zPU9h9QotL7O2UiA5EY8qe6zczCsPbRpIVJ1pVMrXxdVMgk3xjFtgy4
-         3azw==
+        bh=0H4j188mYRcN8sQWXRd1WWvL0ISYSoT0RTO3h++GtuQ=;
+        b=Vs2xhVj9PYXBDuBS0f/ikVUFzjYnQTstwaezXEJpVlnAHME/7NP/hlzk0r77I20ySs
+         gPppbe8iXsA3fkm6wirqG6/KpEgQMZzEvJRNH1DpJ/fvVGJmXp0bgZW5ZmGEGa4DsRHL
+         PsYWZLEx0I0WMfErH9FKAxr4J2Lxrk4Q6jzUt+iEFjk8swPqcGHFg4Fg2Ly5dUozuudv
+         1jzgFSoJ6B5Oqs0pVGrQN4lTC0Z+fguPgkVqN5C63ymuKD/gZeA6SB9ZzNpmom36nIvE
+         TS/82RFqct3zkg+N2NmmF0Boj11IW2A+wUPy2El35nuI56Zl0GrGD8XeRfM75+LZU3Ji
+         NJkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OshuYdi3mkXkKwphYHfoNTYLlgVkbS/n5H63gaEbdPA=;
-        b=x5cbmbs+62YTGMcZE8pveZfF5XOe9aiaKStRBKZDHtSzOXiiWCNDmK6ZBXBSMZCmcm
-         XJJ9uvzyKsexhBvLJMHJJta5Kb20RBy53yJMHwQEE8xQexTmUDyrlp7RlihF12eMOHR9
-         RByRuRVFzYwIsfFlbauBtwVt4cbDfbKi6a4bq1ew7T0h4NJcJwC0vUhnBSz2ZgCGVAd8
-         lxifWsCOvPG3Lv5RZjVwVOMEKaaII7fd3aycKgnHaagTJBU7Q6A9E2p8JbM4nePtZr0v
-         59egMqmJ7GIuDGVyg7Zp53f+0Bzoe3okKhvFWbecE1doG15/M37tA0V2IDuRByw2dnAh
-         0VGQ==
-X-Gm-Message-State: AOAM530m9eWGA43frfkb40CFuV8r32/oonxp/LiyG4/FJNyD4y8VO/Xo
-        Hqk1AXA0RXlulFXSy2aKTQ8xEJMfJmRiU03tzRw=
-X-Google-Smtp-Source: ABdhPJwFKqekhY9a+lweru+5CWuqFc5GrgqmwTckqf7ouwymeFmW8jRzIamCDCok1zRHz7O73y2QMlywtPqhwS13u3o=
-X-Received: by 2002:a02:5d47:0:b0:32b:4387:51c8 with SMTP id
- w68-20020a025d47000000b0032b438751c8mr2349692jaa.103.1651873157649; Fri, 06
- May 2022 14:39:17 -0700 (PDT)
+        bh=0H4j188mYRcN8sQWXRd1WWvL0ISYSoT0RTO3h++GtuQ=;
+        b=0IcJ1YYDZL3szK7g1AzSJHgZxuQo69kx01PgZdtaKTHja3tyVf7ZgBw6GejEhU7g9F
+         Re6usAmBu7D0HcZmfIeMmfD+J4onMgFsEgf+pSbb4Cf+CYjFGaum40Ij4rZRjGy7qNOm
+         uO1ON7m6Ag8RmrhgRq5ZXw5dciPk5RqMGc7v8Tvcx7icNwQC9EdIxmHuEuJ3QgoAjJRT
+         Yzi53dJhtshBWDNPM4qronUHhjF/ycSOh2NePAnze+7uLnYvWJiaWtSoCKfZcZfp603u
+         d5BV7gkC1NLIJQTQpsvAryErvX00Qj2HHsr0L5/26Rxbb0HULaZ0mtMLf3c/J8LFZfXG
+         1Mrg==
+X-Gm-Message-State: AOAM531sdYaCODW42/sCKOSu6lWrsHKGfit+zcrSuyKcmVKZ70LCEIN4
+        umtkDkKA4ydJhDbOJUHsyuMpFmwsUCPED6J5OpA=
+X-Google-Smtp-Source: ABdhPJy538w8QL1UdWQu61v//rhuRVQiriUv8ahfZNQ3de36b/smTTpb2c3aib/Q6CWeXqjmIThBraihWSea0aQGjDE=
+X-Received: by 2002:a05:6e02:1b82:b0:2cf:199f:3b4b with SMTP id
+ h2-20020a056e021b8200b002cf199f3b4bmr2090170ili.71.1651873883291; Fri, 06 May
+ 2022 14:51:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220503171437.666326-1-maximmi@nvidia.com> <20220503171437.666326-6-maximmi@nvidia.com>
-In-Reply-To: <20220503171437.666326-6-maximmi@nvidia.com>
+References: <20220503171437.666326-1-maximmi@nvidia.com>
+In-Reply-To: <20220503171437.666326-1-maximmi@nvidia.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 6 May 2022 14:39:06 -0700
-Message-ID: <CAEf4BzZRHsW=e40+ZD7GAnUr+03GroouxpF82zO7GoBjrGBB7A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 5/5] bpf: Allow the new syncookie helpers to
- work with SKBs
+Date:   Fri, 6 May 2022 14:51:12 -0700
+Message-ID: <CAEf4BzbSO8oLK3_4Ecrx-c-o+Z6S8HMm3c_XQhZUQgpU8hfHoQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 0/5] New BPF helpers to accelerate synproxy
 To:     Maxim Mikityanskiy <maximmi@nvidia.com>
 Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -90,97 +89,110 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 3, 2022 at 10:15 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+On Tue, May 3, 2022 at 10:14 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
 >
-> This commits allows the new BPF helpers to work in SKB context (in TC
-> BPF programs): bpf_tcp_raw_{gen,check}_syncookie_ipv{4,6}.
+> The first patch of this series is a documentation fix.
 >
-> The sample application and selftest are updated to support the TC mode.
-> It's not the recommended mode of operation, because the SKB is already
-> created at this point, and it's unlikely that the BPF program will
-> provide any substantional speedup compared to regular SYN cookies or
-> synproxy.
+> The second patch allows BPF helpers to accept memory regions of fixed
+> size without doing runtime size checks.
 >
-> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  net/core/filter.c                             |  10 ++
->  .../selftests/bpf/prog_tests/xdp_synproxy.c   |  53 +++++--
->  .../selftests/bpf/progs/xdp_synproxy_kern.c   | 141 +++++++++++++-----
->  tools/testing/selftests/bpf/xdp_synproxy.c    |  94 +++++++++---
-
-please split selftests and kernel code into separate patches (and use
-selftests/bpf: prefix for selftests)
-
->  4 files changed, 230 insertions(+), 68 deletions(-)
+> The two next patches add new functionality that allows XDP to
+> accelerate iptables synproxy.
+>
+> v1 of this series [1] used to include a patch that exposed conntrack
+> lookup to BPF using stable helpers. It was superseded by series [2] by
+> Kumar Kartikeya Dwivedi, which implements this functionality using
+> unstable helpers.
+>
+> The third patch adds new helpers to issue and check SYN cookies without
+> binding to a socket, which is useful in the synproxy scenario.
+>
+> The fourth patch adds a selftest, which includes an XDP program and a
+> userspace control application. The XDP program uses socketless SYN
+> cookie helpers and queries conntrack status instead of socket status.
+> The userspace control application allows to tune parameters of the XDP
+> program. This program also serves as a minimal example of usage of the
+> new functionality.
+>
+> The last patch exposes the new helpers to TC BPF.
+>
+> The draft of the new functionality was presented on Netdev 0x15 [3].
+>
+> v2 changes:
+>
+> Split into two series, submitted bugfixes to bpf, dropped the conntrack
+> patches, implemented the timestamp cookie in BPF using bpf_loop, dropped
+> the timestamp cookie patch.
+>
+> v3 changes:
+>
+> Moved some patches from bpf to bpf-next, dropped the patch that changed
+> error codes, split the new helpers into IPv4/IPv6, added verifier
+> functionality to accept memory regions of fixed size.
+>
+> v4 changes:
+>
+> Converted the selftest to the test_progs runner. Replaced some
+> deprecated functions in xdp_synproxy userspace helper.
+>
+> v5 changes:
+>
+> Fixed a bug in the selftest. Added questionable functionality to support
+> new helpers in TC BPF, added selftests for it.
+>
+> v6 changes:
+>
+> Wrap the new helpers themselves into #ifdef CONFIG_SYN_COOKIES, replaced
+> fclose with pclose and fixed the MSS for IPv6 in the selftest.
+>
+> v7 changes:
+>
+> Fixed the off-by-one error in indices, changed the section name to
+> "xdp", added missing kernel config options to vmtest in CI.
+>
+> v8 changes:
+>
+> Properly rebased, dropped the first patch (the same change was applied
+> by someone else), updated the cover letter.
+>
+> v9 changes:
+>
+> Fixed selftests for no_alu32.
+>
+> [1]: https://lore.kernel.org/bpf/20211020095815.GJ28644@breakpoint.cc/t/
+> [2]: https://lore.kernel.org/bpf/20220114163953.1455836-1-memxor@gmail.com/
+> [3]: https://netdevconf.info/0x15/session.html?Accelerating-synproxy-with-XDP
+>
+> Maxim Mikityanskiy (5):
+>   bpf: Fix documentation of th_len in bpf_tcp_{gen,check}_syncookie
+>   bpf: Allow helpers to accept pointers with a fixed size
+>   bpf: Add helpers to issue and check SYN cookies in XDP
+>   bpf: Add selftests for raw syncookie helpers
+>   bpf: Allow the new syncookie helpers to work with SKBs
 >
 
-[...]
+Is it expected that your selftests will fail on s390x? Please check [0]
 
-> @@ -87,7 +112,11 @@ void test_xdp_synproxy(void)
->         if (!ASSERT_OK_PTR(ns, "setns"))
->                 goto out;
+  [0] https://github.com/kernel-patches/bpf/runs/6277764463?check_suite_focus=true#step:6:6130
+
+>  include/linux/bpf.h                           |  10 +
+>  include/net/tcp.h                             |   1 +
+>  include/uapi/linux/bpf.h                      |  88 +-
+>  kernel/bpf/verifier.c                         |  26 +-
+>  net/core/filter.c                             | 128 +++
+>  net/ipv4/tcp_input.c                          |   3 +-
+>  scripts/bpf_doc.py                            |   4 +
+>  tools/include/uapi/linux/bpf.h                |  88 +-
+>  tools/testing/selftests/bpf/.gitignore        |   1 +
+>  tools/testing/selftests/bpf/Makefile          |   5 +-
+>  .../selftests/bpf/prog_tests/xdp_synproxy.c   | 144 +++
+>  .../selftests/bpf/progs/xdp_synproxy_kern.c   | 819 ++++++++++++++++++
+>  tools/testing/selftests/bpf/xdp_synproxy.c    | 466 ++++++++++
+>  13 files changed, 1761 insertions(+), 22 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
+>  create mode 100644 tools/testing/selftests/bpf/xdp_synproxy.c
 >
-> -       ctrl_file = SYS_OUT("./xdp_synproxy --iface tmp1 --single");
-> +       if (xdp)
-> +               ctrl_file = SYS_OUT("./xdp_synproxy --iface tmp1 --single");
-> +       else
-> +               ctrl_file = SYS_OUT("./xdp_synproxy --prog %s --single",
-> +                                   prog_id);
->         size = fread(buf, 1, sizeof(buf), ctrl_file);
->         pclose(ctrl_file);
->         if (!ASSERT_TRUE(expect_str(buf, size, "Total SYNACKs generated: 1\n"),
-> @@ -107,3 +136,9 @@ void test_xdp_synproxy(void)
->         system("ip link del tmp0");
->         system("ip netns del synproxy");
->  }
-> +
-> +void test_xdp_synproxy(void)
-> +{
-> +       test_synproxy(true);
-> +       test_synproxy(false);
-
-let's model this as subtests instead? See test__start_subtest() use in
-other selftests
-
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-> index 9ae85b189072..f70b5f776dcf 100644
-> --- a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-> @@ -7,6 +7,9 @@
->  #include <bpf/bpf_endian.h>
->  #include <asm/errno.h>
+> --
+> 2.30.2
 >
-
-[...]
-
-> @@ -201,21 +220,50 @@ static int syncookie_attach(const char *argv0, unsigned int ifindex)
->                 fprintf(stderr, "Error: bpf_obj_get_info_by_fd: %s\n", strerror(-err));
->                 goto out;
->         }
-> +       attached_tc = tc;
->         attached_prog_id = info.id;
->         signal(SIGINT, cleanup);
->         signal(SIGTERM, cleanup);
-> -       err = bpf_xdp_attach(ifindex, prog_fd, XDP_FLAGS_UPDATE_IF_NOEXIST, NULL);
-> -       if (err < 0) {
-> -               fprintf(stderr, "Error: bpf_set_link_xdp_fd: %s\n", strerror(-err));
-> -               signal(SIGINT, SIG_DFL);
-> -               signal(SIGTERM, SIG_DFL);
-> -               attached_prog_id = 0;
-> -               goto out;
-> +       if (tc) {
-> +               DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook,
-
-nit: LIBBPF_OPTS is shorter, DECLARE_LIBBPF_OPTS is discouraged
-
-> +                                   .ifindex = ifindex,
-> +                                   .attach_point = BPF_TC_INGRESS);
-> +               DECLARE_LIBBPF_OPTS(bpf_tc_opts, opts,
-> +                                   .handle = 1,
-> +                                   .priority = 1,
-> +                                   .prog_fd = prog_fd);
-> +
-
-[...]
