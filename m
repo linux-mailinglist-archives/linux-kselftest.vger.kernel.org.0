@@ -2,268 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268F51D624
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 May 2022 13:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F5051D737
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 May 2022 14:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391139AbiEFLFz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 May 2022 07:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S1391608AbiEFMFo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 May 2022 08:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391133AbiEFLFx (ORCPT
+        with ESMTP id S1391609AbiEFMFl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 May 2022 07:05:53 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74440674D2;
-        Fri,  6 May 2022 04:02:10 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxMNorAHViuhoMAA--.48869S4;
-        Fri, 06 May 2022 19:02:05 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes annotation
-Date:   Fri,  6 May 2022 19:02:03 +0800
-Message-Id: <1651834923-31573-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1651834923-31573-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1651834923-31573-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9BxMNorAHViuhoMAA--.48869S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxKw1DXFWfZw4fuFyxXFyrWFg_yoWxuF1rpF
-        98Aw1rKr4rXa4kWF97AwsYvr1Syr4rZ3y7CrW7G34Fqa45tr15tF1IgrWjyFy5GrZYv3W3
-        AF4YyryUZFWxA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-        AFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-        0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4kMxAIw28Icx
-        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRRy89JUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 6 May 2022 08:05:41 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60061.outbound.protection.outlook.com [40.107.6.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E241E5BE41;
+        Fri,  6 May 2022 05:01:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KJHZqzVAgQJ3SEY7OcErjfC5AyxQaMvPnhO6/ZPyXe3JCLfi47dyhHr4PDNr+Mw/Hzlmij2ZeG1f45EeGUPiC9tAm56XuNiG/++KskRtbhSzh9TD11iV45df/QviQXKwImAzepuVb1DjmUHhOLH17I+DiLNUvsLi/iGNmRwD9QvmT3Jrz+W6ebkkPBm32scmf+OSk3TyvvBl70ycrw2CPU05rnVn86AJ+cNv2E/mrrMHXl0c2b3klgd7KUU1NaCj4PNXW4T0EcJtmHFSuY/E9hJb5GZu3hlOgtEm9VDGCtsIpcv3cey01Ae9Nc4jC7Z99eO1u+rDQqNTHBYSp7hrWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2u+ldtbJgys/dO7WcKd4CDL88aKTBzhxU/b08vHKM08=;
+ b=L0yq66bFrK7eTwlMeHm8vOt+OKbbKPszq+Ch8K2KHSwx9kRLOjNGFKGOD6p4dK2fX1irdYdUTGatR61ettIM42AxQVcJpu6C95C4fgMgyLUDyfbF92fS7HbwOg6OKWe7MnAaRVNCINb0MPJuMZnbJbCvY0E0MhgBLjQIdWR0yE+fuNpuO0tYDUpnp8XEJWdocXP339iFnbPcgspwlCWqtddDYxFAcalwwN+eKyo8i2KgqbU7hoEvRE3RaeHPD5pdu70jKoobJ/BEFDxRb3C4Sc1+Eu/q96b5VJRWQoGkough8hw/aGAYr8cRbqTrCVEVoyGNQkP8cHgNoiOyAxlJLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2u+ldtbJgys/dO7WcKd4CDL88aKTBzhxU/b08vHKM08=;
+ b=OCR2k0Vx3l7IvYXgPDgNRizCOY80gmK+rDzO4XpMwMpTko/0vj+C/37qxmdX+aZ/9lCQM/+i25JRQoF5BMPk6VMOHcafdnzDP1ntZyUdaSNfxamEDUH58Bn2El6qJAt5uXbLuiQcmcc30m/3MJYIAGLSo1ZWuSzwYfTmaavnVOw=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PA4PR04MB9295.eurprd04.prod.outlook.com (2603:10a6:102:2a6::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Fri, 6 May
+ 2022 12:01:55 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::d94f:b885:c587:5cd4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::d94f:b885:c587:5cd4%6]) with mapi id 15.20.5227.018; Fri, 6 May 2022
+ 12:01:54 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Ferenc Fejes <ferenc.fejes@ericsson.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        "Y.B. Lu" <yangbo.lu@nxp.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Yannick Vignon <yannick.vignon@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>, Jiri Pirko <jiri@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Subject: Re: [PATCH v2 net-next] selftests: forwarding: add Per-Stream
+ Filtering and Policing test for Ocelot
+Thread-Topic: [PATCH v2 net-next] selftests: forwarding: add Per-Stream
+ Filtering and Policing test for Ocelot
+Thread-Index: AQHYXU7ReS+uKz5es0qSAulr7qr8960RgRAAgABGeIA=
+Date:   Fri, 6 May 2022 12:01:54 +0000
+Message-ID: <20220506120153.yfnnnwplumcilvoj@skbuf>
+References: <20220501112953.3298973-1-vladimir.oltean@nxp.com>
+ <302dc1fb-18aa-1640-dfc7-6a3a7bc6d834@ericsson.com>
+In-Reply-To: <302dc1fb-18aa-1640-dfc7-6a3a7bc6d834@ericsson.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0301b95b-9902-44fa-9f46-08da2f5836b8
+x-ms-traffictypediagnostic: PA4PR04MB9295:EE_
+x-microsoft-antispam-prvs: <PA4PR04MB9295FDD927F7ED8454636D90E0C59@PA4PR04MB9295.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ENsiWWQkGTMQtI9DJlJTXfjOV5+h6KDUs53fVoly6vO0BMPgqAcvKAE8+IUZaMsiMuad95I1goV8OvQHuXM0ohgRmENrWSZDJ7fwdMKvxJ3kAJYyj2BjHKhc9b6w4X+NYKQLMl4/0hLKd95Br4as5PjbQQBIszNZ4RHsajv8A+Sx7ZprYkTQharA9I/8ciNwwSOBfZFUQgB70RJipM1pskYsNcJvDrI4tTKCnUm8yT3D4TAzq1fJB2rVKFQE/DZNFgH3fNILdyiEo2ngA3zcvy55tZEcjRTcAZirIpCXCqFYh4QDm1QtQ2cNJJPf5ts5k6OAeBvkxX2zXuHl2B8Pgpfbs2JqayD1NarfSiaslpsuFKtV64z5xoa2UrWph9cvaG4745U91r3lOU5gNeMDqLp2XPq7HKWBSYeIKrMhlNXLrJgwnnzu8TEm5sCwocKdS32l9lNIK996eqngof8r8bLGp9g/MZgXO+RGdzRttWDzKeGAvr/lY/HvZ6KVUE6modvqHQjSb0ZT+HgZW+uE3T+hAr1QEEPFHTB0bNEEYcawVbzaaCAqgNtAjAF5ZxYb08B8+Dax8lpOrxDy5ePOwlH6hQmVw/bBCo6OSvBOMGNNugQPZqz/Nqmi3m+l3ovGpSYfc8f8di7zhcbrJAe6xYIayTWO99edPPEp9a2fkvkXApupXapOz5cFvDiLwem2S4R0w7t+4jh+KJmys/TqwxGBoCj24KURbx+jibmlQ2I5lnr82rmUyroX9JZnROMIBQ3cK9C9IBehNiNAetZAvzKeL06I7DFK7hk52EDseYU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(38100700002)(38070700005)(508600001)(71200400001)(64756008)(66476007)(76116006)(6506007)(8936002)(66446008)(66556008)(8676002)(83380400001)(44832011)(7416002)(86362001)(66946007)(5660300002)(4326008)(3716004)(122000001)(2906002)(6486002)(966005)(1076003)(26005)(33716001)(316002)(6916009)(186003)(54906003)(9686003)(6512007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VMeGY1TCsQWnTrS+OhmBvBLbzz+PZV2+yZgNw/LtefJFpeDDT34aVpvdIX59?=
+ =?us-ascii?Q?EAS8tbyYZ1mSVSjeXxXvjrVImiHbCcVVaw+Z/dbA7CE/AICBQc05nKjoQd1H?=
+ =?us-ascii?Q?Jq7o2zgtFAXP9OfTP8TlBWT2d3/YRDD2dIIbcUAyTYO48Miv2Mz2evy0s6A6?=
+ =?us-ascii?Q?SiXUdB04feWaVafeBbaxqvuUyY1aU2q+B2uGgB2I8bS69dxSQ8dwDZV1zHa6?=
+ =?us-ascii?Q?r3A0wSwEJu4649ELDmypihzqSorB4hj4Wqg3gkTCdiQi+T/hed7zjKGx3D3M?=
+ =?us-ascii?Q?fIu+xG2ilhMuwSWERp0prZ0coHCTIMKzS6JIjlTxpx6RtLjLNHW58SBFeV+j?=
+ =?us-ascii?Q?cspIUoyAm9fqJL3FmnZxhxbjFjjT5kVvGJ5phNEXX8sAlJzHDxED0XAurVeV?=
+ =?us-ascii?Q?Mxd7GRe6fONBp8YfVRTwn5Bw3mxZgeTIZPl9USpFrA6Xt0vJSau8oLv93+2T?=
+ =?us-ascii?Q?df8pxaLXSNT1VR0tERn2UKFUF3qKPBe2M2z96072T9L1ySesT2G3PYnw+iwO?=
+ =?us-ascii?Q?q8gq32xHh5923vzeNfxCDe4g94TOz6+7HvGm3XgihSU4PtUWrUp+xbBEUgAR?=
+ =?us-ascii?Q?EncF4PY87FIeerKhNWPIXulAoTI/zQVRzkQct+qFBVDHfDfZ4TZyvmMAiBeM?=
+ =?us-ascii?Q?sAjttdeK6QdkKQSElc/s1PX34KFUyrHeoqoam71X5UMMc4FKqfGCVFqv2Oh8?=
+ =?us-ascii?Q?4QUz7Rok4pkwLeXQeyt7XfD49rjiTbjt2rrQnhHOgKnWTt+mJn94eoTyuJZ3?=
+ =?us-ascii?Q?SimAjV61ehTFM/mgm1TpkBhnclXH9gsdkELhw02/O8QjdJ1AdSrX0HnlHhop?=
+ =?us-ascii?Q?cwC7/kDu47UTS0hlrIEOcT5Dbxdu5bT7F2Nm1W6IoJ0pb6NUzjf1Tn7D6p3l?=
+ =?us-ascii?Q?S52KBS7PQrnt+FcdbLnHVC2eAeGlrJc51qrEC58obCT9uCui69QQPrxL920z?=
+ =?us-ascii?Q?QNmMvPO47GrTja/Zf+VDvnFd+WmwOKec4HbcP7KUSHjT3cCYS9l+w31n5X9t?=
+ =?us-ascii?Q?hhtqcrYxzMy839/d1EE9wkFejHf7u3KTl/DcZ3qfpHrDgxvh/zEiPrdnCuv6?=
+ =?us-ascii?Q?T+2HGtmSGjciMLsljQCDc6kEQsF/tRjOzPbTMobEebXEBrBGjnfsipWx+WVA?=
+ =?us-ascii?Q?WApE0wlBakqhdB7FOw4uUpbVr7icmHZUus4A0r3dxCgUFeyFJOh+I21aupVm?=
+ =?us-ascii?Q?vQmMOkBkYkq58U/2TNU6nHAQjeT8G1zwWi7bDkrcPkRyQtvfIuOR0BfA/d02?=
+ =?us-ascii?Q?jeSKWzff3lO4J4QfGiaIWRe45yhbgZqMUmd5OF8i3DpwUMcsBG4UI5HJusva?=
+ =?us-ascii?Q?m6h60GKDufSwhZWySC/qziu2R7XqI9R+Wj8812ibQMdoGl2y1/T+qlNkjPPB?=
+ =?us-ascii?Q?O7VksiJSgk+qeYhpiiqfmAR1JLASJMbAUyk1t9FX1hNAp8dO23+g9zsG63yq?=
+ =?us-ascii?Q?g6b+0jCsl4BAsYKuu94qymle74hSNRmyUuIrP6uEZKP61ahikC3Fj/HETrYz?=
+ =?us-ascii?Q?cBEitNuQeKUOHKTsskKfJRj1LzimI+Yl1cMDUgYB/FT/cJCTsViuht+RCdk9?=
+ =?us-ascii?Q?YdLPgV0TbtfOxO3AyjpGmVtm8caU+Gm0v1LR8wEcY68i56XbVo7Dw2njrgZr?=
+ =?us-ascii?Q?dmzN3IKQLzp5YwbEZeRkUiiDpge6bsvLqkpAOxJHG6ZDGTLJOtEmebbv6Qdi?=
+ =?us-ascii?Q?u7jsG40bx7+ecL0UUdpsLlxmXkS3ObMDb9yhm2i91dwJ/ws16TNw9Tcu51DM?=
+ =?us-ascii?Q?0y/HfJneWTbnQdv0HJNq8Xr4lZAqC6U=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7559AD6E279DFF40B1516F57CA29647E@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0301b95b-9902-44fa-9f46-08da2f5836b8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2022 12:01:54.7730
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Q8+dO/6XtRXgSrbQsovdtTcKB8Hpo/ihoogqYrixm6mzhW16n2syHhq4ZkkrDw0L89JArY6zvtut53N+Dr2JVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9295
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If define CONFIG_KPROBES, __kprobes annotation forces the whole function
-into the ".kprobes.text" section, NOKPROBE_SYMBOL() only stores the given
-function address in the "_kprobe_blacklist" section which is introduced
-to maintain kprobes blacklist.
+Hi Ferenc,
 
-Modify the related code to use NOKPROBE_SYMBOL() to protect functions from
-kprobes instead of __kprobes annotation under arch/mips.
+On Fri, May 06, 2022 at 07:49:40AM +0000, Ferenc Fejes wrote:
+> Hi!
+> I know that might be little bit off-topic here, but the current
+> implementation of the act_gate does nothing with the IPV value [0] even
+> if the user set it to non -1.
+> IMO this IPV value should be carried through in the tcf_gate struct [1]
+> as something like a "current_ipv" member or so. Then this value can be
+> applied in the tcf_gate_act function to the skb->priority.
+>
+> Background story: I tried to combine gate and taprio (802.1Qci and Qbv)
+> to achieve 802.1Qch operation (which is really just a coordinated config
+> of those two) but without the IPV (should by set by the ingress port) we
+> have no way to carry the gating info to the taprio, and as a result its
+> just sending every packet with the default priority, no matter how we
+> open/close the gate at the ingress.
+>
+> [0]
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/include/net/tc_act/tc_g=
+ate.h#L21
+> [1]
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/include/net/tc_act/tc_g=
+ate.h#L40
+> [2]
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/net/sched/act_gate.c#L1=
+17
 
-No obvious functional change in this patch, some more work needs to be done
-to fix the kernel panic when execute the following testcase on mips:
-
-  # cd tools/testing/selftests/ftrace
-  # ./ftracetest test.d/kprobe/multiple_kprobes.tc
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/kprobes.c | 36 ++++++++++++++++++++++++------------
- arch/mips/mm/fault.c       |  6 ++++--
- 2 files changed, 28 insertions(+), 14 deletions(-)
-
-diff --git a/arch/mips/kernel/kprobes.c b/arch/mips/kernel/kprobes.c
-index 6c7f3b1..316b27d 100644
---- a/arch/mips/kernel/kprobes.c
-+++ b/arch/mips/kernel/kprobes.c
-@@ -44,10 +44,11 @@ static const union mips_instruction breakpoint2_insn = {
- DEFINE_PER_CPU(struct kprobe *, current_kprobe);
- DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
- 
--static int __kprobes insn_has_delayslot(union mips_instruction insn)
-+static int insn_has_delayslot(union mips_instruction insn)
- {
- 	return __insn_has_delay_slot(insn);
- }
-+NOKPROBE_SYMBOL(insn_has_delayslot);
- 
- /*
-  * insn_has_ll_or_sc function checks whether instruction is ll or sc
-@@ -56,7 +57,7 @@ static int __kprobes insn_has_delayslot(union mips_instruction insn)
-  * instructions; cannot do much about breakpoint in the middle of
-  * ll/sc pair; it is upto user to avoid those places
-  */
--static int __kprobes insn_has_ll_or_sc(union mips_instruction insn)
-+static int insn_has_ll_or_sc(union mips_instruction insn)
- {
- 	int ret = 0;
- 
-@@ -72,8 +73,9 @@ static int __kprobes insn_has_ll_or_sc(union mips_instruction insn)
- 	}
- 	return ret;
- }
-+NOKPROBE_SYMBOL(insn_has_ll_or_sc);
- 
--int __kprobes arch_prepare_kprobe(struct kprobe *p)
-+int arch_prepare_kprobe(struct kprobe *p)
- {
- 	union mips_instruction insn;
- 	union mips_instruction prev_insn;
-@@ -132,26 +134,30 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
- out:
- 	return ret;
- }
-+NOKPROBE_SYMBOL(arch_prepare_kprobe);
- 
--void __kprobes arch_arm_kprobe(struct kprobe *p)
-+void arch_arm_kprobe(struct kprobe *p)
- {
- 	*p->addr = breakpoint_insn;
- 	flush_insn_slot(p);
- }
-+NOKPROBE_SYMBOL(arch_arm_kprobe);
- 
--void __kprobes arch_disarm_kprobe(struct kprobe *p)
-+void arch_disarm_kprobe(struct kprobe *p)
- {
- 	*p->addr = p->opcode;
- 	flush_insn_slot(p);
- }
-+NOKPROBE_SYMBOL(arch_disarm_kprobe);
- 
--void __kprobes arch_remove_kprobe(struct kprobe *p)
-+void arch_remove_kprobe(struct kprobe *p)
- {
- 	if (p->ainsn.insn) {
- 		free_insn_slot(p->ainsn.insn, 0);
- 		p->ainsn.insn = NULL;
- 	}
- }
-+NOKPROBE_SYMBOL(arch_remove_kprobe);
- 
- static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
- {
-@@ -257,7 +263,7 @@ static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
-  * breakpoint trap. In case of branch instructions, the target
-  * epc to be restored.
-  */
--static void __kprobes resume_execution(struct kprobe *p,
-+static void resume_execution(struct kprobe *p,
- 				       struct pt_regs *regs,
- 				       struct kprobe_ctlblk *kcb)
- {
-@@ -268,8 +274,9 @@ static void __kprobes resume_execution(struct kprobe *p,
- 		regs->cp0_epc = orig_epc + 4;
- 	}
- }
-+NOKPROBE_SYMBOL(resume_execution);
- 
--static int __kprobes kprobe_handler(struct pt_regs *regs)
-+static int kprobe_handler(struct pt_regs *regs)
- {
- 	struct kprobe *p;
- 	int ret = 0;
-@@ -367,6 +374,7 @@ static int __kprobes kprobe_handler(struct pt_regs *regs)
- 	return ret;
- 
- }
-+NOKPROBE_SYMBOL(kprobe_handler);
- 
- static inline int post_kprobe_handler(struct pt_regs *regs)
- {
-@@ -415,7 +423,7 @@ int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
- /*
-  * Wrapper routine for handling exceptions.
-  */
--int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
-+int kprobe_exceptions_notify(struct notifier_block *self,
- 				       unsigned long val, void *data)
- {
- 
-@@ -446,6 +454,7 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
- 	}
- 	return ret;
- }
-+NOKPROBE_SYMBOL(kprobe_exceptions_notify);
- 
- /*
-  * Function return probe trampoline:
-@@ -469,7 +478,7 @@ static void __used kretprobe_trampoline_holder(void)
- 
- void __kretprobe_trampoline(void);
- 
--void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
-+void arch_prepare_kretprobe(struct kretprobe_instance *ri,
- 				      struct pt_regs *regs)
- {
- 	ri->ret_addr = (kprobe_opcode_t *) regs->regs[31];
-@@ -478,11 +487,12 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
- 	/* Replace the return addr with trampoline addr */
- 	regs->regs[31] = (unsigned long)__kretprobe_trampoline;
- }
-+NOKPROBE_SYMBOL(arch_prepare_kretprobe);
- 
- /*
-  * Called when the probe at kretprobe trampoline is hit
-  */
--static int __kprobes trampoline_probe_handler(struct kprobe *p,
-+static int trampoline_probe_handler(struct kprobe *p,
- 						struct pt_regs *regs)
- {
- 	instruction_pointer(regs) = __kretprobe_trampoline_handler(regs, NULL);
-@@ -493,14 +503,16 @@ static int __kprobes trampoline_probe_handler(struct kprobe *p,
- 	 */
- 	return 1;
- }
-+NOKPROBE_SYMBOL(trampoline_probe_handler);
- 
--int __kprobes arch_trampoline_kprobe(struct kprobe *p)
-+int arch_trampoline_kprobe(struct kprobe *p)
- {
- 	if (p->addr == (kprobe_opcode_t *)__kretprobe_trampoline)
- 		return 1;
- 
- 	return 0;
- }
-+NOKPROBE_SYMBOL(arch_trampoline_kprobe);
- 
- static struct kprobe trampoline_p = {
- 	.addr = (kprobe_opcode_t *)__kretprobe_trampoline,
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index 44f9810..b08bc55 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -35,7 +35,7 @@ int show_unhandled_signals = 1;
-  * and the problem, and then passes it off to one of the appropriate
-  * routines.
-  */
--static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
-+static void __do_page_fault(struct pt_regs *regs, unsigned long write,
- 	unsigned long address)
- {
- 	struct vm_area_struct * vma = NULL;
-@@ -322,8 +322,9 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 	}
- #endif
- }
-+NOKPROBE_SYMBOL(__do_page_fault);
- 
--asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
-+asmlinkage void do_page_fault(struct pt_regs *regs,
- 	unsigned long write, unsigned long address)
- {
- 	enum ctx_state prev_state;
-@@ -332,3 +333,4 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
- 	__do_page_fault(regs, write, address);
- 	exception_exit(prev_state);
- }
-+NOKPROBE_SYMBOL(do_page_fault);
--- 
-2.1.0
-
+This is correct. I have been testing only with the offloaded tc-gate
+action so I did not notice that the software does not act upon the ipv.
+Your proposal sounds straightforward enough. Care to send a bug fix patch?=
