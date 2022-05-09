@@ -2,150 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E836D520540
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 May 2022 21:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3575352061A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 May 2022 22:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240526AbiEIT1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 May 2022 15:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S229687AbiEIUrm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 May 2022 16:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240570AbiEIT1S (ORCPT
+        with ESMTP id S229567AbiEIUrl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 May 2022 15:27:18 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2068.outbound.protection.outlook.com [40.107.244.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2422D7EF0;
-        Mon,  9 May 2022 12:23:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Iif52KIbc7UtlQosb9JXA6BqqP2uwSur/XlUofmPzfvzRYd6FPD2eBun6YNDUcYxqOqGI/YVOZytmKxnBjQDI/Hi6oRvazsL0vokWjxFRdOK5KaJge5tHEIsK9L8zqa+gHVz2mTByHTWeCpk0tNM8rbrgPdtLZkwL2Nkcta7Vn0Y+20BGSYyK7dzdSPK4R9s5HJGbdT/U6c2rSQBFTTu9jT6564EBg/qzyHi3gU/tLXpfvk6MgvaGg6VFoxZUInlPwR3keRMOCVeJLwNFNnj01JcpZz3N/Sij89nHj1krkjg0keiSXzjZMvaTNZZOwONJjPme20Z0fbtKeXdra0sJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+z3PrZmUdo3glU6VG5FTEyZ9SxHRnhCwi9qdzAJqgfU=;
- b=IqKAT1q2/mALdR79w9vRwEKi3pSYch/Yj1fB99bhYYDVpm+TllTpSQ3PfV2BhiBxnFvGBsbkZiVyc/p4TdqBPaCYYkmNk/NZvCJHwKsg0mcCrQ0RW6taKlfhF0ImIR3dop+WZMhV02M+91p9DrW7Ze2QVSXaYG2o1tLsTGe1dFh3ytXuvvQcq4TxPe4MnVgdoHyZdRS/TfdA50Je+rB7c9keKVV2iq31kYeLhl5bJUTBgVgKzOXZczPhQ6M4nxoRgtXLepaaSs/cqdFr6Dduzmd0S7A3cViigkGxBHATsFf472wOMybMS1vKd/z3ObKuAJiFtRn8MBGmIyQmKX8ECg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+z3PrZmUdo3glU6VG5FTEyZ9SxHRnhCwi9qdzAJqgfU=;
- b=eXEEGpO6J/f5NHhK49R0aVpcsk6LgSVWsTNCnQpeS6r8xJbEAefkwh5boBC3Bl4a2LAhOlU7BWzfEjXi4o3AHt+VWC9EXud0y75/vmSDnaBWibGMXgdwr/KON90mCNybDoHdF2hPHuV4PRV+EZalfP6nheFyq3hWokPOfq3BXHaZS+G55X9ErDIRU1o4JV9bi0eEVNRYjm6zH0yhte1TdLn3zvfro3Opf9QQPN017S0srgMCMvnwgPVFj+yag263vYcYCa+KQs8XjO6aTWELKJn1P8PMgfhGqrG/s4w7rABlx7iBGMyCP/mO/9R84TXxI5ZZtWnzidJKTMKOFlmXiA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ0PR12MB5504.namprd12.prod.outlook.com (2603:10b6:a03:3ad::24)
- by DM6PR12MB4893.namprd12.prod.outlook.com (2603:10b6:5:1bd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
- 2022 19:23:22 +0000
-Received: from SJ0PR12MB5504.namprd12.prod.outlook.com
- ([fe80::3887:c9c8:b2de:fe5f]) by SJ0PR12MB5504.namprd12.prod.outlook.com
- ([fe80::3887:c9c8:b2de:fe5f%6]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 19:23:22 +0000
-Message-ID: <bd1daca9-f628-7b28-a0ca-f34115287552@nvidia.com>
-Date:   Mon, 9 May 2022 12:23:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: using mbuto to run kselftests
-Content-Language: en-US
-To:     Stefano Brivio <sbrivio@redhat.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Sevinj Aghayeva <sevinj.aghayeva@gmail.com>,
-        netdev@vger.kernel.org
-References: <20220509173140.549db406@elisabeth>
-From:   Roopa Prabhu <roopa@nvidia.com>
-In-Reply-To: <20220509173140.549db406@elisabeth>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0188.namprd05.prod.outlook.com
- (2603:10b6:a03:330::13) To SJ0PR12MB5504.namprd12.prod.outlook.com
- (2603:10b6:a03:3ad::24)
+        Mon, 9 May 2022 16:47:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36153B1D3;
+        Mon,  9 May 2022 13:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zxtHEZB7FJXcLD4uWhqlrNQfKLg4uYSZS3iQcpPv3Q8=; b=Um4T745eraA4H0ZgNxS0pk18PZ
+        Xq97mepNxGxMSUjCP+wxeGnaWEH5/cdZnQBcwwp/nYhhVo0LZ0izp4JI5JLx/tuGEZhpgwmnCpwbf
+        2txDSDfzQXZuX51PS3ujK++12T6SuqFqyX9iHBdzrIXBEwXzKGUPjXBHtkEGWls89KE/8klzoNmKc
+        OtRsmT+7lqC9xf9aTPvk9a7bUeFPBORXhMxzsTl8lnLlgwKsSrZfIa7TmD/4zQ2C9RPd7NtoZqmth
+        dF3gybOaVG6RP99mI4FvocGXiSQrwuUY58gBdt2p0lR6Ir2l99ABzRmYO+DKAJ8vfOhqZfu0Trp+2
+        2ega45ZQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1noAEG-00GCg8-KP; Mon, 09 May 2022 20:43:40 +0000
+Date:   Mon, 9 May 2022 13:43:40 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
+Message-ID: <Ynl8/MqmDZzpbh5y@bombadil.infradead.org>
+References: <Ym7P7mCoMiQq99EM@bombadil.infradead.org>
+ <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
+ <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
+ <YnKS3MwNxvEi73OP@bombadil.infradead.org>
+ <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
+ <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org>
+ <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
+ <YnLsPgbQ7CHiannN@bombadil.infradead.org>
+ <YnNnLIZDxkNwECv+@bombadil.infradead.org>
+ <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fd69e67e-e719-4083-3984-08da31f161b8
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4893:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB48935E3A0356986444272D14CBC69@DM6PR12MB4893.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9QwGgfc2R9ycc87FdLnQmgVNxGm3SZ10ZNa3AMKApqdilL7FQ1fWYLGAVOzZeK8/Ea4Lzz5f9zwId6xzxNj27FLetictC+AuFhOI6LBVOntlr2M9ZSonTDefxugMLU0Ex1ORMxbwMUcGY8Bq2DJn7C68LlaaR63v3BiNHmSKi2c/nUCJAicIRK8nUxXIgaKBo84LhcAi+S9bF+nhfkkrZ/ldR6KMFM5PxAqsuTUIgxiZ3mxfAt/yA6MbaH/yYuPldSOrBmCsi4AMba/2uKA6QVd0vHxl2OJi3uToVniD0A1t0SrbxT27z0TXwhMtp8c0v3Ei5YOzrrNB7RqxqlBJ9Tjyfi4B63YwJS40fZUb5joguBtPkl0yKhGsKMVVnC83/4fwz1jiS6WYw+KdWw6XqMiEfGfa1o7c8f7cRk5PDJRTCjKfA/AL7/b7o1o0c28yNE0Yg0I8SYmzbKc84lDo5EmCqqud/oxwPyPA0vyzlIscHP37KU9oLIyoFRKdVe0ATGNZ4mPd96Za/9eVLoq1jFQFR3XCEiWSEGeWN+IbhCCmlOQdBDCrP2VNXB2ffStZ7aiWBkOZRPiUyoPad5rU3T7Pd15Oghx07TLWNxhU9nNRLMkyhtUGWzkKB2eyptoG7+lWCukWP6fQoS0W2oy5F1MmMGAOsu6/Wq6bLUP3r3V7DnRqDYt9iQ0afLpFUxre7rp0NA1T+DnCRIRSCBEyrUlX8rsBFV/pK5ISHVbwn5Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(31686004)(86362001)(6512007)(66946007)(66556008)(66476007)(6506007)(53546011)(4326008)(5660300002)(26005)(6666004)(31696002)(8936002)(36756003)(2906002)(186003)(4744005)(8676002)(508600001)(6486002)(966005)(316002)(54906003)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3RwYnovUXhIZzd6K2lRR09uNDhDNWU3UXcrL0JEYlUwQ3NGTWFFdE1UV05E?=
- =?utf-8?B?aVlrYkxzL2ovdlVhR25DRXpscUgveFZJV1ZsZm93WFpqN1ZCUGZOaUt6L21y?=
- =?utf-8?B?NXFBVUxjQmdIbm5MckxOWnFsdy9ZYUZJaUYrbEJqVXhoQndsdjZpM0F2L3Vh?=
- =?utf-8?B?YnFncEVqdFBJRkxveE9BS3NEVHRUQ0pTRXdEK0t1SDUrQVA3YllWb2xvRXNp?=
- =?utf-8?B?SVZhWVNKdjdwWjVpUUZySGN4bHpxdFZDeXgrT3o0dWk5Z0tqdlRpWmFKNm9G?=
- =?utf-8?B?OTJuazhMSmI2bERrdHBWZWg0bmE2NGNxcVJpZGpTSW12K1JzQzU2cHg4RWJy?=
- =?utf-8?B?MlNyNmNjajFteE8wWmlaZGdsbERYbW9UaS9GTlZUY0ZLNXJzNG14VTJlNWlr?=
- =?utf-8?B?NFBOTng1empkVnFUQ0N6alVFT3NDVEtPV29Ycmt1bFQvTW9wVG1jM1BEdmdo?=
- =?utf-8?B?STJKVERwUG1GV3hyeG1UQUZvZk4wRnQrTkx4dE8xSHVrQmtDd2pvdWZsOURC?=
- =?utf-8?B?b3pDUXNvUFZMS2ZsdjZidlR5YytRRjlIUzBlUTlNcjl1ZDUrNGdIMmpUZnp6?=
- =?utf-8?B?aFRDaHE3WHhXczJYL0VQdlRRVU42MWZoc1Y1eTdmZ1Y2RU1aQ21RY1NQUExO?=
- =?utf-8?B?MEMxRlhuMXFZekhSaFNnekRLNDU2NW1GZ3dpZEhUL3VLd1p1RjE0MG5zSndZ?=
- =?utf-8?B?MmZXc2NMQkM5K01iTWJGbHhmazdpMWZKMGNCR0c1d3ZVNWliQ1V1SUxZWG5r?=
- =?utf-8?B?RjQrc3RCUkMxWThWbnlQVElLRlFKNGppOGlLSDFTVjBwNFBCeGt4SjZJbmp1?=
- =?utf-8?B?Rm9hWHF4RHNDTnIwZGFNbmFaMzhiZ1ZmcU1GMXVTa2UyY3M2VjZEbHhIeCtI?=
- =?utf-8?B?d01ac3FPdkN0QXB3M2tzaW5GbjhOMkVZdkFURGh5bTh4S1F6WW9vT0wrS0NF?=
- =?utf-8?B?ckRra05xK29VQmc3VTBnVXdEMGJBNUhXQVBFU3c3NFNiYmtyY0JOQmJnTU9a?=
- =?utf-8?B?blh0dWlDM3BYMDJtVnU3MnRRQ3lnU2p1SmtYODFYM0tMZ3BBK0xMZ1h6c09l?=
- =?utf-8?B?Q09hQ29JNWNHeTg3Qjl6amlzbEZ3cmFFRVpSUWhJdzNxVnhhMFlLbzZneDBG?=
- =?utf-8?B?SE9BUHFIR3A0NGxLakVrNEt0ZlQyeVkvN3dSQW85SGtiRFB0RnptYUZXSnh6?=
- =?utf-8?B?TUs4ZkV3K0NQMEIxUTNaOThMRXZweG9qZEYxRkFtcXNiaDkwemJ2VmV0Wm9t?=
- =?utf-8?B?UXVseVlJemU2T1pBZEg5WGNpRWo2eU9HWXNTZHR1SUM3UEpadGg3KzBCU3RV?=
- =?utf-8?B?K095ODJHREF4ZUh0YmNPcWE4c2pWVlZPNXA0RkpyVkVlVERhWHFnTEM2RXVG?=
- =?utf-8?B?dzZkcEFNb1VkejEzeFZhdGptRnJENVc4eEtYSVlmY09Ua044cGJ2TXFSTm5F?=
- =?utf-8?B?ZFV2aGRNckZIUFRDSGJNQmQwZnIxSDB1NCsxK3hNYVl3cm01M1FDK1dKZVpL?=
- =?utf-8?B?MS9BRERZWEFzNjAzL09QcVZMWmhLbHQzeTQ4NnJGWFBucFJqL3NqbkJrckdD?=
- =?utf-8?B?V2xXVjZNV3ZyZDhsUmd3bVN4UUV6cVNSNS9qWFlEZnRpMHZlWUdYR0xLR2ZV?=
- =?utf-8?B?Ri8xcVJWazdyUHdKZ0cvd3lDRnV1ZWdPUjNvSTQ4OEdYM0h4Q1NnL0hMam5a?=
- =?utf-8?B?VjRVeXdXRzRScE5YbEVwQ2hJNDk3OUlOZ0NzMlptM25NcjlEeXdSS1dNVXdF?=
- =?utf-8?B?RWZTby9QVEJyNXZwVVk3YXZsdExIMlA2NERtOEFHUlpvVFBQNzJBQ2ZlZHh2?=
- =?utf-8?B?SWNZb2Y1eVZRajZ3ZlQ0UEN6Z1lwVUdxVlhyM3lveEl6K0xuUWF3VnhWYzJE?=
- =?utf-8?B?Zll2dXN3c3NjSnpNN29sMDkzbUFoSjVPcTZZWVF6dXlpdUsvSlgxR3lZVlNM?=
- =?utf-8?B?QkNTRi9oN1p6Q2ViWVZUMnpzVmtzUTVZL0FMUEthMzBiaHlveTFKaUxHT1dP?=
- =?utf-8?B?YUFzcERGdGdtemJ2eVZGR1pYMFd1N2xVRmY3WmlHNUVhRTlEaTdFNHhJck11?=
- =?utf-8?B?WGdwUWFzdjQ1VkI3MU9jOUhuT3pKRXhZR0oyTVNOV01rYWVudDZLU3BzdHAy?=
- =?utf-8?B?ZTBSWkJ4NmJZTWJ2VUtBdTRud0NHR1g4Ukh0bWQzaUJSN3RSR3oxWG9aTzht?=
- =?utf-8?B?bmpUbGZPSUpzdkZ5azF2NWt4emZ0WXpEdy9qVm5CaE5vREJCZnlHZGI5Wkxl?=
- =?utf-8?B?UU9LQkREK1pTMG9OakIvZXhmTWtva1RxSU1FN2lpVk9QbGVhaUt2blkzVTh2?=
- =?utf-8?B?R1FST0YxcHJpM0k3OWdiY3I0eWYyeUhubWxjUDhmS3dMaml5SEN4QT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd69e67e-e719-4083-3984-08da31f161b8
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 19:23:22.4720
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KYjNVZ2CJpM6BW8lEX+sI49hAY4m+jLSPY/7KQZ1dTbF9t7adgk4iK2kcvAmDLgOJrp7OP1TZ8e/PUjbxWUeag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4893
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Also including netdev@vger since it is being used to run/develop net 
-selftests.
+On Fri, May 06, 2022 at 03:01:34PM +0800, David Gow wrote:
+> On Thu, May 5, 2022 at 1:57 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Wed, May 04, 2022 at 02:12:30PM -0700, Luis Chamberlain wrote:
+> > > On Wed, May 04, 2022 at 02:19:59PM -0500, Daniel Latypov wrote:
+> > > > On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > > > OK so, we can just skip tainting considerations for selftests which
+> > > > > don't use modules for now. There may be selftests which do wonky
+> > > > > things in userspace but indeed I agree the userspace taint would
+> > > > > be better for those but I don't think it may be worth bother
+> > > > > worrying about those at this point in time.
+> > > > >
+> > > > > But my point in that sharing a taint between kunit / selftests modules
+> > > > > does make sense and is easily possible. The unfortunate aspect is just
+> > > >
+> > > > Yes, I 100% agree that we should share a taint for kernelspace testing
+> > > > from both kunit/kselftest.
+> > > > Someone running the system won't care what framework was used.
+> > >
+> > > OK do you mind doing the nasty work of manually adding the new
+> > > MODULE_TAINT() to the selftests as part of your effort?
+> > >
+> > > *Alternatively*, if we *moved* all sefltests modules to a new
+> > > lib/debug/selftests/ directory or something like that then t would
+> > > seem modpost *could* add the taint flag automagically for us without
+> > > having to edit or require it on new drivers. We have similar type of
+> > > taint for staging, see add_staging_flag().
+> > >
+> > > I would *highly* prefer this approach, event though it is more work,
+> > > because I think this is a step we should take anyway.
+> > >
+> > > However, I just checked modules on lib/ and well, some of them are
+> > > already in their own directory, like lib/math/test_div64.c. So not
+> > > sure, maybe just move a few modules which are just in lib/*.c for now
+> > > and then just sprinkle the MODULE_TAINT() to the others?
+> >
+> > I *think* we could just pull this off with a much easier approach,
+> > simply looking for the substrings in the module name in modpost.c:
+> >
+> >   * "_test." || "-test."
+> >   * ^"test_" || ^"test-"
+> >
+> > An issue with this of course is a vendor $FOO with an out of tree
+> > test driver may end up with the taint. Perhaps we don't care.
+> >
+> > That means moving selftests to its own directory is not needed at this
+> > point in time.
+> 
+> I can't say I'm thrilled with the idea of just doing name comparisons,
+> particularly since not all of them match this pattern, for example:
+> bpf_testmod.ko. (Though, frankly, more of them do than I'd've
+> guessed.)
+> 
+> Maybe adding a taint call to the selftest helper module framework in
+> kselftest_module.h, though again, there are several tests which don't
+> use it.
 
-On 5/9/22 08:31, Stefano Brivio wrote:
-> Hi,
->
-> Thanks to a substantial contribution by Sevinj Aghayeva during the
-> Outreachy contribution phase, mbuto (a shell script building initramfs
-> images that can be loaded by qemu) can now be used to conveniently run
-> kernel selftests in VMs. The website at:
->
-> 	https://mbuto.sh/
->
-> shows examples with kselftests and a link to the man page.
->
-> Comments, bug reports and patches are all very welcome!
->
+Right, I can't think of a generic way to peg this. I think long term
+we do stand to gain to move all selftests under a lib/debug/selftests/
+or something like that, but for now what I suggested is the only thing
+I can come up with.
+
+> I _suspect_ we'd be able to hit most of them by tainting in frameworks
+> like the above, and patch the remaining modules manually.
+
+Works with me.
+
+> There's also
+> definitely a grey area with things like netdevsim, which are used a
+> lot as helper modules by selftests, but may have other uses as well.
+
+They can peg the module if they want the taint.
+
+> (The advantage of the KUnit tainting is that, due to KUnit's
+> centralised executor, we can be sure all KUnit tests will correctly
+> trigger the taint. But maybe it doesn't matter as much if one or two
+> selftests miss out.)
+
+That is what I was thinking.
+
+I'm convinced we *should* move selftests to a one directory. The
+amount of stuff in lib/ is getting out of hand.
+
+  Luis
