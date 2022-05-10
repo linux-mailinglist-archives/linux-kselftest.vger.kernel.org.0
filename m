@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C905B522138
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 18:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0210F522146
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 18:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347369AbiEJQeB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 12:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S240646AbiEJQgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 12:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347389AbiEJQdz (ORCPT
+        with ESMTP id S1347451AbiEJQgD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 12:33:55 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27895201E8D
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:29:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2f7c424c66cso186332407b3.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:29:57 -0700 (PDT)
+        Tue, 10 May 2022 12:36:03 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED7446659
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:32:02 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ebf4b91212so185926977b3.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aJloidsDMSjNdKsdQ92Ek2s3Nok5OpSiV08K1fKvW/c=;
-        b=dU8YCmE+vqGPx/am1Kbhb9tc3zBmcw0d6Vl3xCJQ6q+au/WHtm2SixK2VdNAhZDCEH
-         /3EaF/lU92QNqIrwbdEOI6NG50SdQzrrY6kY4aSqX+I9/Ndw5WSQSwB2xa2bOSQQbVDC
-         y0R48jDMPXhfouEBqvaAntHHhRrjdm7QBgU4Cu6bhDfJkDcB5yM5OlrDvK4xYA+6Ym6F
-         m/jvJf6l0ThPiDaUQxeHTovxDgTN9RUsYZl51ogcZCtbKDMEQv76UxfSiJw+tSyZEcXg
-         CfnLQXxhv091UsiouGWzA1JQol1NdpmLtNM9cRAI4JZug617Pn7TIlZVdJp0H1DcgLvu
-         mJfQ==
+        bh=kbeafxozpMoUIoZYNiBhClKUTEoirWTIQT5SbIYMvgY=;
+        b=S93KyGQn2wdSML11sOCTMuFkKrJFU5aOaCEo6hMoFsAJapfw/z68o2XJdecid4v+1w
+         5imt+0Tx2VA5Vu0BuP+ng9175P6tfMna5xwMriqyMcXBC32q4QI/s621h3BBgi6KDzQ/
+         /mQP6iTHWSiLU05VebTJQUvcyuU6PXOilhDXPEdxHnmozF0thna7eLKi30v72QlorLwf
+         yPSDt66K84FKyGuXD21ARYWgDIwrbqtGdsAPXhF+f5BYkS98SXfMzv6eHtmi8Ufq/HLP
+         TE++Ad09hh94UwED/ms3PenfmiGwBKBz78O+UiOdC1lROufFPAfZ3ZnlrVlCIlyg5IUl
+         uIXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aJloidsDMSjNdKsdQ92Ek2s3Nok5OpSiV08K1fKvW/c=;
-        b=v1U7YK9pLK0wn5at5OBrCH0Ic6uQGUDdu7WOExNFWjsrQ9TGEQ3MiriU120Uf8U/pe
-         A2a4QvWhqnMAOdmfVes8umLbkRsPyHcaJHHZLrqs6eaTca6aMdhzPScenKlpy+XPitSk
-         uyDnK40pJPrJ9edtZ3+w6V2XcyKYmCU2OvPQqVqj67h4MH72tiCRQBhWQ+x4Fiwfm+1L
-         x+d6fpHfV903g+EMOFcfTcJJBd3NrAqaPRddfdbZx1j/7rfDrN37eY0OMu7qwTsnDkGm
-         mKWMDsjruiegrc/BkgT7mWjUM84NR296rPIhl0nTYB7CA7JIyC/LjopW1xjKMlTHxX7W
-         kHXQ==
-X-Gm-Message-State: AOAM531ZbaitR+toBwl5tYQye3bfoYSBAZ0udoMpajqaRL/kqjEotqr6
-        xykyALyWorpzupHjnWYYrwfOumDgXKeWYttd739QjQ==
-X-Google-Smtp-Source: ABdhPJx5rcdrZIFfWZmVEv8aWH6L4r9FXVQPuw/X4O4oc/sxy7PZ3H8d/XVNdGArXpAoEgYI+ADW7h6XzKubzLkfI7s=
-X-Received: by 2002:a0d:d543:0:b0:2f7:e554:68c with SMTP id
- x64-20020a0dd543000000b002f7e554068cmr21157189ywd.380.1652200195972; Tue, 10
- May 2022 09:29:55 -0700 (PDT)
+        bh=kbeafxozpMoUIoZYNiBhClKUTEoirWTIQT5SbIYMvgY=;
+        b=1RtsNeJwO43lif38NcdqfUZ92RBwb/7PvCWLxi/zqaxK+kae+Up48y7TrFse9zo7Qo
+         bHfEdEtA30gFYzfvchORvMggn+zmxvIuYbY6S1HBsJFkmo5TyqTF/z64wVmOocXLlDuq
+         T4dwz3tB9R3a04LeUGGklakzCsoVC+cQCbqIyviqykC8ZPsmoQZoSc5nEvgPf6wMM0H5
+         AWqzFtSGgk8FXLCDKT+AMw8gGmzWKABYok27Jrlk8LyfLixJG+lSt1b5S46V5IMnOWgB
+         iDzxElifKqNbXZSWzl30FW0ZSCoS5rtjYnkqZnMZOfflYbzR8nMWA9UtYxl+atkMSToU
+         iLNg==
+X-Gm-Message-State: AOAM5304c0FVtkHrRYQGR1OzF6C2a1N+g20kkfk41SyScb/COJ7J7Tcm
+        wZX3NcPDyZ29DNyTAIe+fyX24hTRZjHMxPFg0GPLGw==
+X-Google-Smtp-Source: ABdhPJyXHvPFrLpD9JHZCeHuyGvGIXtbfBGwcobE9WuG1B4tDoKEOWroGcOYYXCzJn0wqwei/jnuhTj3Vn3KvonB3oQ=
+X-Received: by 2002:a81:6cc3:0:b0:2f7:cc1f:b52d with SMTP id
+ h186-20020a816cc3000000b002f7cc1fb52dmr20616990ywc.293.1652200321217; Tue, 10
+ May 2022 09:32:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510030014.3842475-1-surenb@google.com> <04858a5d-98c8-69be-025f-214e4b10d502@linuxfoundation.org>
-In-Reply-To: <04858a5d-98c8-69be-025f-214e4b10d502@linuxfoundation.org>
+References: <20220510030014.3842475-1-surenb@google.com> <20220510030014.3842475-2-surenb@google.com>
+ <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
+In-Reply-To: <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 10 May 2022 09:29:44 -0700
-Message-ID: <CAJuCfpEAqEEf-SCi87-VZrFYcoPff8Gkda5uF8fYRyKQo_vkjw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] selftests: vm: add process_mrelease tests
-To:     Shuah Khan <skhan@linuxfoundation.org>
+Date:   Tue, 10 May 2022 09:31:50 -0700
+Message-ID: <CAJuCfpEt9SSrELZzfmcqJ7JL_nEzWGz-YE9GRUZTjU5unqQjQg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
+To:     Michal Hocko <mhocko@suse.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
         David Rientjes <rientjes@google.com>,
         Matthew Wilcox <willy@infradead.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -77,385 +77,97 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 10, 2022 at 8:43 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Tue, May 10, 2022 at 6:06 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On 5/9/22 9:00 PM, Suren Baghdasaryan wrote:
-> > Introduce process_mrelease syscall sanity tests. They include tests of
-> > invalid pidfd and flags inputs, attempting to call process_mrelease
-> > with a live process and a valid usage of process_mrelease. Because
-> > process_mrelease has to be used against a process with a pending SIGKILL,
-> > it's possible that the process exits before process_mrelease gets called.
-> > In such cases we retry the test with a victim that allocates twice more
-> > memory up to 1GB. This would require the victim process to spend more
-> > time during exit and process_mrelease has a better chance of catching
-> > the process before it exits.
+> On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
+> > With the oom-killer being able to operate on locked pages, exit_mmap
+> > does not need to ensure that oom_reap_task_mm is done before it can
+> > proceed. Instead it can rely on mmap_lock write lock to prevent
+> > oom-killer from operating on the vma tree while it's freeing page
+> > tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
+> > and then take mmap_lock write lock before freeing page tables.
+>
+> The changelog is rather light on nasty details which might be good but
+> for the sake of our future us let's be more verbose so that we do not
+> have to reinvent the prior history each time we are looking into this
+> code. I would go with something like this instead:
+> "
+> The primary reason to invoke the oom reaper from the exit_mmap path used
+> to be a prevention of an excessive oom killing if the oom victim exit
+> races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
+> and exit_mmap run concurrently") for more details. The invocation has
+> moved around since then because of the interaction with the munlock
+> logic but the underlying reason has remained the same (see 27ae357fa82b
+> ("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+>
+> Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
+> delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
+> any blocking operation before the memory is unmapped by exit_mmap so
+> the oom reaper invocation can be dropped. The unmapping part can be done
+> with the non-exclusive mmap_sem and the exclusive one is only required
+> when page tables are freed.
+>
+> Remove the oom_reaper from exit_mmap which will make the code easier to
+> read. This is really unlikely to make any observable difference although
+> some microbenchmarks could benefit from one less branch that needs to be
+> evaluated even though it almost never is true.
+> "
+
+Looks great! Thanks for collecting all the history. Will update the description.
+
+>
+> One minor comment below. Other than that \o/ this is finally going away.
+> I strongly suspect that the history of this code is a nice example about how
+> over optimizing code can cause more harm than good.
+>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+
+Thanks.
+
+>
+> Thanks!
 > >
->
-> +1 on Mike's comments on improving the change log. List what is getting
-> tested as opposed to describing the test code.
-
-I'll try to improve the description but IMHO it does describe what
-it's testing - the process_mrelease syscall with valid and invalid
-inputs. I could omit the implementation details if that helps.
-
->
 > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 > > ---
-> >   tools/testing/selftests/vm/Makefile        |   1 +
-> >   tools/testing/selftests/vm/mrelease_test.c | 176 +++++++++++++++++++++
-> >   tools/testing/selftests/vm/run_vmtests.sh  |  16 ++
-> >   3 files changed, 193 insertions(+)
-> >   create mode 100644 tools/testing/selftests/vm/mrelease_test.c
->
-> Please update .gitignore with the new executable.
-
-Ack.
-
->
+> >  include/linux/oom.h |  2 --
+> >  mm/mmap.c           | 25 ++++++-------------------
+> >  mm/oom_kill.c       |  2 +-
+> >  3 files changed, 7 insertions(+), 22 deletions(-)
 > >
-> > diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> > index 04a49e876a46..733fccbff0ef 100644
-> > --- a/tools/testing/selftests/vm/Makefile
-> > +++ b/tools/testing/selftests/vm/Makefile
-> > @@ -43,6 +43,7 @@ TEST_GEN_FILES += map_populate
-> >   TEST_GEN_FILES += memfd_secret
-> >   TEST_GEN_FILES += mlock-random-test
-> >   TEST_GEN_FILES += mlock2-tests
-> > +TEST_GEN_FILES += mrelease_test
-> >   TEST_GEN_FILES += mremap_dontunmap
-> >   TEST_GEN_FILES += mremap_test
-> >   TEST_GEN_FILES += on-fault-limit
-> > diff --git a/tools/testing/selftests/vm/mrelease_test.c b/tools/testing/selftests/vm/mrelease_test.c
-> > new file mode 100644
-> > index 000000000000..a61061bf8433
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/vm/mrelease_test.c
-> > @@ -0,0 +1,176 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright 2022 Google LLC
-> > + */
-> > +#define _GNU_SOURCE
-> > +#include <errno.h>
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <sys/wait.h>
-> > +#include <unistd.h>
-> > +
-> > +#include "util.h"
-> > +
-> > +static inline int pidfd_open(pid_t pid, unsigned int flags)
-> > +{
-> > +#ifdef __NR_pidfd_open
-> > +     return syscall(__NR_pidfd_open, pid, flags);
-> > +#else
-> > +     errno = ENOSYS;
+> [...]
+> > @@ -3138,6 +3121,10 @@ void exit_mmap(struct mm_struct *mm)
+> >       /* update_hiwater_rss(mm) here? but nobody should be looking */
+> >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
+> >       unmap_vmas(&tlb, vma, 0, -1);
+> > +     mmap_read_unlock(mm);
+> > +     /* Set MMF_OOM_SKIP to disregard this mm from further consideration.*/
+> > +     set_bit(MMF_OOM_SKIP, &mm->flags);
 >
-> This isn't an error - this would be skip because this syscall
-> isn't supported.
+> I think that it would be slightly more readable to add an empty line
+> above and below of this. Also the comment would be more helpful if it
+> explaind what the further consideration actually means. I would go with
+>
+>         /*
+>          * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+>          * because the memory has been already freed. Do not bother
+>          * checking mm_is_oom_victim because setting a bit
+>          * unconditionally is just cheaper.
+>          */
+>
 
 Ack.
 
+> > +     mmap_write_lock(mm);
+> >       free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
+> >       tlb_finish_mmu(&tlb);
 >
-> > +     return -1;
-> > +#endif
->
-> Key off of syscall return instead of these ifdefs - same comment
-> on all of the ifdefs
-
-Ack. I was using some other test as an example but I guess that was
-not a good model.
-
->
-> > +}
-> > +
->
-> I am not seeing any reason for breaking this code up have a separate
-> routine for pidfd_open().
-
-I'm a bit unclear what you mean. Do you mean that userspace headers
-should already define pidfd_open() and I don't need to define it?
-
->
-> > +static inline int process_mrelease(int pidfd, unsigned int flags)
-> > +{
-> > +#ifdef __NR_process_mrelease
-> > +     return syscall(__NR_process_mrelease, pidfd, flags);
-> > +#else
-> > +     errno = ENOSYS;
-> > +     return -1;
-> > +#endif> +}
-> > +
->
-> Same comments on ifdefs and skips here as well.
-
-Ack.
-
->
-> > +static void write_fault_pages(char *addr, unsigned long nr_pages)
-> > +{
-> > +     unsigned long i;
-> > +
-> > +     for (i = 0; i < nr_pages; i++)
-> > +             *((unsigned long *)(addr + (i * PAGE_SIZE))) = i;
-> > +}
-> > +
-> > +static int alloc_noexit(unsigned long nr_pages, int pipefd)
-> > +{
-> > +     int ppid = getppid();
-> > +     void *buf;
-> > +
-> > +     buf = mmap(NULL, nr_pages * PAGE_SIZE, PROT_READ | PROT_WRITE,
-> > +                MAP_PRIVATE | MAP_ANON, 0, 0);
-> > +     if (buf == MAP_FAILED) {
-> > +             perror("mmap");
->
-> A bit more descriptive message what the test would do will be helpful.
-> Also consider if this should be a skip or fail for the test.
-
-I guess the question is whether an OOM condition should be considered
-a test failure? I guess we could skip since the test is specifically
-for process_mrelease.
-
->
-> > +             return 1;
-> > +     }
-> > +
-> > +     write_fault_pages((char *)buf, nr_pages);
-> > +
-> > +     /* Signal the parent that the child is ready */
-> > +     if (write(pipefd, "", 1) < 0) {
-> > +             perror("write");
-> > +             return 1;
-> > +     }
-> > +
-> > +     /* Wait to be killed (when reparenting happens) */
-> > +     while (getppid() == ppid)
-> > +             sleep(1);
-> > +
->
-> What happens if reparenting doesn't happen? Will this loop for ever?
-> This test could hang?
-
-Technically that should not happen because we kill the child and after
-that it has to reparent but to be safe I'll add a timeout to prevent
-an infinite loop.
-
->
-> > +     munmap(buf, nr_pages * PAGE_SIZE);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +
-> > +#define MB(x) (x << 20)
-> > +#define MAX_SIZE_MB 1024
-> > +
-> > +int main(void)
-> > +{
-> > +     int res;
-> > +     int pipefd[2], pidfd;
-> > +     pid_t pid;
-> > +     char byte;
-> > +     size_t size;
-> > +     int negative_tests_done = 0;
-> > +
-> > +     /* Test a wrong pidfd */
-> > +     if (!process_mrelease(-1, 0) || errno != EBADF) {
-> > +             perror("process_mrelease with wring pidfd");
->
-> Incorrect spelling "wring/wrong"
-
-Ack.
-
->
-> > +             exit(1);
-> > +     }
-> > +
-> > +     /*
-> > +      * Start the test with 1MB allocation and double every time
-> > +      * process_mrelease fails
-> > +      */
-> > +     for (size = 1; size <= MAX_SIZE_MB; size *= 2) {
-> > +             /*
-> > +              * Pipe for the child to signal when it's done allocating
-> > +              * memory
-> > +              */
-> > +             if (pipe(pipefd)) {
-> > +                     perror("pipe");
-> > +                     exit(1);
-> > +             }
-> > +             pid = fork();
-> > +             if (pid < 0) {
-> > +                     perror("fork");
->
-> Close the pipe?
-
-Ack.
-Although I though all FDs are closed implicitly when the process exits
-(which is the case in here).
-
->
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             if (pid == 0) {
-> > +                     close(pipefd[0]);
-> > +                     res = alloc_noexit(MB(size) / PAGE_SIZE, pipefd[1]);
-> > +                     close(pipefd[1]);
-> > +                     exit(res);
-> > +             }
-> > +
-> > +             close(pipefd[1]);
-> > +             /* Block until the child is ready */
-> > +             res = read(pipefd[0], &byte, 1);
-> > +             close(pipefd[0]);
-> > +             if (res < 0) {
-> > +                     perror("read");
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             pidfd = pidfd_open(pid, 0);
-> > +             if (pidfd < 0) {
-> > +                     perror("pidfd_open");
-> > +                     exit(1);
-> > +             }
-> > +
->
-> The code is very hard to read. Add comments to indicate parent and child
-> paths clearly so reviewers can follow the logic and be able to do effective
-> review.
-
-Ack.
-
->
-> > +             /* Run negative tests which require a valid child only once */
-> > +             if (!negative_tests_done) {
-> > +                     /* Test invalid flags */
-> > +                     if (!process_mrelease(pidfd, (unsigned int)-1) ||
-> > +                         errno != EINVAL) {
-> > +                             perror("process_mrelease with wrong flags");
-> > +                             exit(1);
->
-> So is this an expected fail or a test fail?
-
-We expect it to fail with EINVAL. We fail the test if the call
-succeeds or fails for any other reason.
-
->
-> > +                     }
-> > +                     /* Test reapling while process is still alive */
-> > +                     if (!process_mrelease(pidfd, 0) ||
-> > +                         errno != EINVAL) {
-> > +                             perror("process_mrelease on a live process");
->
-> So is this an expected fail or a test fail?
-
-Expected to fail with EINVAL.
-
->
-> > +                             exit(1);
-> > +                     }
-> > +                     negative_tests_done = 1;
-> > +             }
->
-> Now the above negative_tests_done block could be in a separate function ---
-> All the others aren't really needed. It will be good for abstraction and
-> readability.
-
-I'll separate them into a stand-alone function.
-
->
-> > +
-> > +             if (kill(pid, SIGKILL)) {
-> > +                     perror("kill");
->
-> Include test results in the change log - so we can see the test report.
-
-Ack. Although the test does not print any results on success, it just
-succeeds or fails with an error description. I'll add outputs for both
-cases.
-
->
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             if (!process_mrelease(pidfd, 0)) {
-> > +                     /* Terminate the test once process_mrelease succeeds */
-> > +                     return 0;
-> > +             }
-> > +
-> > +             /*
-> > +              * Ignore the failure if the child exited before mrelease got
-> > +              * called, increase allocation size and retry the test
-> > +              */
->
-> Add more info. on why allocating more memory helps.
-
-Ack.
-
->
-> > +             if (errno != ESRCH) {
-> > +                     perror("process_mrelease");
-> > +                     exit(1);
-> > +             }
-> > +
-> > +             if (waitpid(pid, NULL, 0) < 0) {
-> > +                     perror("waitpid");
-> > +                     exit(1);
-> > +             }
-> > +             close(pidfd);
-> > +     }
-> > +
-> > +     printf("All process_mrelease attempts failed!\n");
-> > +     exit(1);
-> > +}
-> > diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> > index 352ba00cf26b..1986162fea39 100755
-> > --- a/tools/testing/selftests/vm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> > @@ -287,6 +287,22 @@ else
-> >       echo "[PASS]"
-> >   fi
-> >
-> > +echo "---------------------"
-> > +echo "running mrelease_test"
-> > +echo "---------------------"
-> > +./mrelease_test
-> > +ret_val=$?
-> > +
-> > +if [ $ret_val -eq 0 ]; then
-> > +     echo "[PASS]"
-> > +elif [ $ret_val -eq $ksft_skip ]; then
-> > +      echo "[SKIP]"
-> > +      exitcode=$ksft_skip
-> > +else
-> > +     echo "[FAIL]"
-> > +     exitcode=1
-> > +fi
-> > +
-> >   echo "-------------------"
-> >   echo "running mremap_test"
-> >   echo "-------------------"
-> >
->
-> In general, the code flow is hard to read to make sure resources
-> are released e.g: pipefd in all the error paths. The code is broken
-> up into smaller chunks where it isn't needed in some cases and left
-> as a large block when it could benefit from abstraction e.g: negative
-> test block.
->
-> Please make changes and send v2.
-
-Will try to refactor it for a better readability. Thanks for the review!
-
->
-> thanks,
-> -- Shuah
+> --
+> Michal Hocko
+> SUSE Labs
