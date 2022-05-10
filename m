@@ -2,495 +2,240 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB4C521DC0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 17:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2D4521EFC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 17:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244837AbiEJPOF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 11:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S1345987AbiEJPji (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 11:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345277AbiEJPNl (ORCPT
+        with ESMTP id S1346038AbiEJPjQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 11:13:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0460D606C8;
-        Tue, 10 May 2022 07:47:37 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ADoZia012793;
-        Tue, 10 May 2022 14:47:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=J1YY+eeH/Cn+Un11hD9A+z9P1pkoTiE80D60ILE2xKo=;
- b=S4RbdNWzqrArQMUj+Lmr/bkBtGVoFMyY4xqHlp0Ko5nQkvzUmrX6pWppq8EUqVpogUST
- ie2v52//T9brCE2jUX9pOC8Ta12CzHVk8qtwwq9UJFLBb/aHVKxpIbdDyv8aYZsJT+Qr
- xHhlrHLX969+K1dPssQrYv++y8JmZ6DUGtWlMFYSLHPSiUJkMfAz+PU9Rlat6zj8qHCq
- J8vCkn2Lc6VrE13XBt1C1OX+nDIGZDXK4v38lalEbW5BRGhfB9KeS6PcFEbD3lFb5Pbf
- MZ7r8n0eh5Z0ocZDMoBV3FedEMMRapLVrASIW5pesA7gupjUoEC945aWbF958aLcal6W jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fys9nscac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 14:47:31 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AE6J9Q015665;
-        Tue, 10 May 2022 14:47:31 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fys9nsc9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 14:47:31 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AEdJr9012538;
-        Tue, 10 May 2022 14:47:29 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk0495-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 14:47:29 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AEXqdE47972646
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 May 2022 14:33:52 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D12BA405B;
-        Tue, 10 May 2022 14:47:26 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC32FA405F;
-        Tue, 10 May 2022 14:47:25 +0000 (GMT)
-Received: from t46lp73.. (unknown [9.152.108.100])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 10 May 2022 14:47:25 +0000 (GMT)
-From:   Steffen Eiden <seiden@linux.ibm.com>
-To:     Greg KH <greg@kroah.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH v4 2/2] selftests: drivers/s390x: Add uvdevice tests
-Date:   Tue, 10 May 2022 14:47:24 +0000
-Message-Id: <20220510144724.3321985-3-seiden@linux.ibm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220510144724.3321985-1-seiden@linux.ibm.com>
-References: <20220510144724.3321985-1-seiden@linux.ibm.com>
+        Tue, 10 May 2022 11:39:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37BAF227062
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 08:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652196876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zmp3GU6lr5BXYKTwCgRRnMUeaC9QIFA4NnCFReGa84k=;
+        b=HawWtVUs12UsD/CNIGtzTx4s3LCN06bJnswF/zFoGbztlZ8JTODQf5Q8Q5rk60e6IW+q+E
+        d5S29BV7xW3uoMMP+KMV4WDUvTfheyqhxfaGcnDcFT1g2iglU3EqaAiMbVxGewTYe1g9gD
+        qQny7qnhxKvONE8yNTXc78q/YiwIPAs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-pCQZwa8iM1qov1KCvyOByg-1; Tue, 10 May 2022 11:34:33 -0400
+X-MC-Unique: pCQZwa8iM1qov1KCvyOByg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE44F3C977E6;
+        Tue, 10 May 2022 15:34:32 +0000 (UTC)
+Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D30C403171;
+        Tue, 10 May 2022 15:34:32 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v11 0/8] cgroup/cpuset: cpu partition code enhancements
+Date:   Tue, 10 May 2022 11:34:05 -0400
+Message-Id: <20220510153413.400020-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: q3_6BCBEDX1bwLD2J6sEjOGZM2vOmSPH
-X-Proofpoint-ORIG-GUID: 0_GCxnZvWr6hjanpg_fjO3Pdk17KYLc9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-10_03,2022-05-10_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 adultscore=0 mlxscore=0 phishscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205100067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds some selftests to test ioctl error paths of the uv-uapi.
-The Kconfig S390_UV_UAPI must be selected and the Ultravisor facility
-must be available. The test can be executed by non-root, however, the
-uvdevice special file /dev/uv must be accessible for reading and
-writing which may imply root privileges.
+v11:
+ - Fix incorrect spacing in patch 7 and include documentation suggestions
+   by Michal.
+ - Move partition_is_populated() check to the last one in list of
+   conditions to be checked.
 
-  ./test-uv-device
-  TAP version 13
-  1..6
-  # Starting 6 tests from 3 test cases.
-  #  RUN           uvio_fixture.att.fault_ioctl_arg ...
-  #            OK  uvio_fixture.att.fault_ioctl_arg
-  ok 1 uvio_fixture.att.fault_ioctl_arg
-  #  RUN           uvio_fixture.att.fault_uvio_arg ...
-  #            OK  uvio_fixture.att.fault_uvio_arg
-  ok 2 uvio_fixture.att.fault_uvio_arg
-  #  RUN           uvio_fixture.att.inval_ioctl_cb ...
-  #            OK  uvio_fixture.att.inval_ioctl_cb
-  ok 3 uvio_fixture.att.inval_ioctl_cb
-  #  RUN           uvio_fixture.att.inval_ioctl_cmd ...
-  #            OK  uvio_fixture.att.inval_ioctl_cmd
-  ok 4 uvio_fixture.att.inval_ioctl_cmd
-  #  RUN           attest_fixture.att_inval_request ...
-  #            OK  attest_fixture.att_inval_request
-  ok 5 attest_fixture.att_inval_request
-  #  RUN           attest_fixture.att_inval_addr ...
-  #            OK  attest_fixture.att_inval_addr
-  ok 6 attest_fixture.att_inval_addr
-  # PASSED: 6 / 6 tests passed.
-  # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
+v10:
+ - Relax constraints for changes made to "cpuset.cpus"
+   and "cpuset.cpus.partition" as suggested. Now almost all changes
+   are allowed.
+ - Add patch 1 to signal that we may need to do additional work in
+   the future to relax the constraint that tasks' cpumask may need
+   some adjustment if child partitions are present.
+ - Add patch 2 for miscellaneous cleanups.
 
-Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/drivers/.gitignore    |   1 +
- .../selftests/drivers/s390x/uvdevice/Makefile |  22 ++
- .../selftests/drivers/s390x/uvdevice/config   |   1 +
- .../drivers/s390x/uvdevice/test_uvdevice.c    | 276 ++++++++++++++++++
- 6 files changed, 302 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/Makefile
- create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/config
- create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+This patchset include the following enhancements to the cpuset v2
+partition code.
+ 1) Allow partitions that have no task to have empty effective cpus.
+ 2) Relax the constraints on what changes are allowed in cpuset.cpus
+    and cpuset.cpus.partition. However, the partition remain invalid
+    until the constraints of a valid partition root is satisfied.
+ 3) Add a new "isolated" partition type for partitions with no load
+    balancing which is available in v1 but not yet in v2.
+ 4) Allow the reading of cpuset.cpus.partition to include a reason
+    string as to why the partition remain invalid.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b42ab4a35e18..46a9b1467380 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10786,6 +10786,7 @@ F:	arch/s390/kernel/uv.c
- F:	arch/s390/kvm/
- F:	arch/s390/mm/gmap.c
- F:	drivers/s390/char/uvdevice.c
-+F:	tools/testing/selftests/drivers/s390x/uvdevice/
- F:	tools/testing/selftests/kvm/*/s390x/
- F:	tools/testing/selftests/kvm/s390x/
- 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 2319ec87f53d..d6b307371ef7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -10,6 +10,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-+TARGETS += drivers/s390x/uvdevice
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/.gitignore b/tools/testing/selftests/drivers/.gitignore
-index ca74f2e1c719..09e23b5afa96 100644
---- a/tools/testing/selftests/drivers/.gitignore
-+++ b/tools/testing/selftests/drivers/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- /dma-buf/udmabuf
-+/s390x/uvdevice/test_uvdevice
-diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-new file mode 100644
-index 000000000000..5e701d2708d4
---- /dev/null
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-@@ -0,0 +1,22 @@
-+include ../../../../../build/Build.include
-+
-+UNAME_M := $(shell uname -m)
-+
-+ifneq ($(UNAME_M),s390x)
-+nothing:
-+.PHONY: all clean run_tests install
-+.SILENT:
-+else
-+
-+TEST_GEN_PROGS := test_uvdevice
-+
-+top_srcdir ?= ../../../../../..
-+KSFT_KHDR_INSTALL := 1
-+khdr_dir = $(top_srcdir)/usr/include
-+LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
-+
-+CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
-+
-+include ../../../lib.mk
-+
-+endif
-diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/config b/tools/testing/selftests/drivers/s390x/uvdevice/config
-new file mode 100644
-index 000000000000..f28a04b99eff
---- /dev/null
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/config
-@@ -0,0 +1 @@
-+CONFIG_S390_UV_UAPI=y
-diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-new file mode 100644
-index 000000000000..ea0cdc37b44f
---- /dev/null
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
-@@ -0,0 +1,276 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  selftest for the Ultravisor UAPI device
-+ *
-+ *  Copyright IBM Corp. 2022
-+ *  Author(s): Steffen Eiden <seiden@linux.ibm.com>
-+ */
-+
-+#include <stdint.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+
-+#include <asm/uvdevice.h>
-+
-+#include "../../../kselftest_harness.h"
-+
-+#define UV_PATH  "/dev/uv"
-+#define BUFFER_SIZE 0x200
-+FIXTURE(uvio_fixture) {
-+	int uv_fd;
-+	struct uvio_ioctl_cb uvio_ioctl;
-+	uint8_t buffer[BUFFER_SIZE];
-+	__u64 fault_page;
-+};
-+
-+FIXTURE_VARIANT(uvio_fixture) {
-+	unsigned long ioctl_cmd;
-+	uint32_t arg_size;
-+};
-+
-+FIXTURE_VARIANT_ADD(uvio_fixture, att) {
-+	.ioctl_cmd = UVIO_IOCTL_ATT,
-+	.arg_size = sizeof(struct uvio_attest),
-+};
-+
-+FIXTURE_SETUP(uvio_fixture)
-+{
-+	self->uv_fd = open(UV_PATH, O_ACCMODE);
-+
-+	self->uvio_ioctl.argument_addr = (__u64)self->buffer;
-+	self->uvio_ioctl.argument_len = variant->arg_size;
-+	self->fault_page =
-+		(__u64)mmap(NULL, (size_t)getpagesize(), PROT_NONE, MAP_ANONYMOUS, -1, 0);
-+}
-+
-+FIXTURE_TEARDOWN(uvio_fixture)
-+{
-+	if (self->uv_fd)
-+		close(self->uv_fd);
-+	munmap((void *)self->fault_page, (size_t)getpagesize());
-+}
-+
-+TEST_F(uvio_fixture, fault_ioctl_arg)
-+{
-+	int rc, errno_cache;
-+
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, NULL);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EFAULT);
-+
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, self->fault_page);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EFAULT);
-+}
-+
-+TEST_F(uvio_fixture, fault_uvio_arg)
-+{
-+	int rc, errno_cache;
-+
-+	self->uvio_ioctl.argument_addr = 0;
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EFAULT);
-+
-+	self->uvio_ioctl.argument_addr = self->fault_page;
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EFAULT);
-+}
-+
-+/*
-+ * Test to verify that IOCTLs with invalid values in the ioctl_control block
-+ * are rejected.
-+ */
-+TEST_F(uvio_fixture, inval_ioctl_cb)
-+{
-+	int rc, errno_cache;
-+
-+	self->uvio_ioctl.argument_len = 0;
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EINVAL);
-+
-+	self->uvio_ioctl.argument_len = (uint32_t)-1;
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EINVAL);
-+	self->uvio_ioctl.argument_len = variant->arg_size;
-+
-+	self->uvio_ioctl.flags = (uint32_t)-1;
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EINVAL);
-+	self->uvio_ioctl.flags = 0;
-+
-+	memset(self->uvio_ioctl.reserved14, 0xff, sizeof(self->uvio_ioctl.reserved14));
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EINVAL);
-+
-+	memset(&self->uvio_ioctl, 0x11, sizeof(self->uvio_ioctl));
-+	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
-+	ASSERT_EQ(rc, -1);
-+}
-+
-+TEST_F(uvio_fixture, inval_ioctl_cmd)
-+{
-+	int rc, errno_cache;
-+	uint8_t nr = _IOC_NR(variant->ioctl_cmd);
-+	unsigned long cmds[] = {
-+		_IOWR('a', nr, struct uvio_ioctl_cb),
-+		_IOWR(UVIO_TYPE_UVC, nr, int),
-+		_IO(UVIO_TYPE_UVC, nr),
-+		_IOR(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb),
-+		_IOW(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb),
-+	};
-+
-+	for (size_t i = 0; i < ARRAY_SIZE(cmds); i++) {
-+		rc = ioctl(self->uv_fd, cmds[i], &self->uvio_ioctl);
-+		errno_cache = errno;
-+		ASSERT_EQ(rc, -1);
-+		ASSERT_EQ(errno_cache, ENOTTY);
-+	}
-+}
-+
-+struct test_attest_buffer {
-+	uint8_t arcb[0x180];
-+	uint8_t meas[64];
-+	uint8_t add[32];
-+};
-+
-+FIXTURE(attest_fixture) {
-+	int uv_fd;
-+	struct uvio_ioctl_cb uvio_ioctl;
-+	struct uvio_attest uvio_attest;
-+	struct test_attest_buffer attest_buffer;
-+	__u64 fault_page;
-+};
-+
-+FIXTURE_SETUP(attest_fixture)
-+{
-+	self->uv_fd = open(UV_PATH, O_ACCMODE);
-+
-+	self->uvio_ioctl.argument_addr = (__u64)&self->uvio_attest;
-+	self->uvio_ioctl.argument_len = sizeof(self->uvio_attest);
-+
-+	self->uvio_attest.arcb_addr = (__u64)&self->attest_buffer.arcb;
-+	self->uvio_attest.arcb_len = sizeof(self->attest_buffer.arcb);
-+
-+	self->uvio_attest.meas_addr = (__u64)&self->attest_buffer.meas;
-+	self->uvio_attest.meas_len = sizeof(self->attest_buffer.meas);
-+
-+	self->uvio_attest.add_data_addr = (__u64)&self->attest_buffer.add;
-+	self->uvio_attest.add_data_len = sizeof(self->attest_buffer.add);
-+	self->fault_page =
-+		(__u64)mmap(NULL, (size_t)getpagesize(), PROT_NONE, MAP_ANONYMOUS, -1, 0);
-+}
-+
-+FIXTURE_TEARDOWN(attest_fixture)
-+{
-+	if (self->uv_fd)
-+		close(self->uv_fd);
-+	munmap((void *)self->fault_page, (size_t)getpagesize());
-+}
-+
-+static void att_inval_sizes_test(uint32_t *size, uint32_t max_size, bool test_zero,
-+				 struct __test_metadata *_metadata,
-+				 FIXTURE_DATA(attest_fixture) *self)
-+{
-+	int rc, errno_cache;
-+	uint32_t tmp = *size;
-+
-+	if (test_zero) {
-+		*size = 0;
-+		rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-+		errno_cache = errno;
-+		ASSERT_EQ(rc, -1);
-+		ASSERT_EQ(errno_cache, EINVAL);
-+	}
-+	*size = max_size + 1;
-+	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EINVAL);
-+	*size = tmp;
-+}
-+
-+/*
-+ * Test to verify that attestation IOCTLs with invalid values in the UVIO
-+ * attestation control block are rejected.
-+ */
-+TEST_F(attest_fixture, att_inval_request)
-+{
-+	int rc, errno_cache;
-+
-+	att_inval_sizes_test(&self->uvio_attest.add_data_len, UVIO_ATT_ADDITIONAL_MAX_LEN,
-+			     false, _metadata, self);
-+	att_inval_sizes_test(&self->uvio_attest.meas_len, UVIO_ATT_MEASUREMENT_MAX_LEN,
-+			     true, _metadata, self);
-+	att_inval_sizes_test(&self->uvio_attest.arcb_len, UVIO_ATT_ARCB_MAX_LEN,
-+			     true, _metadata, self);
-+
-+	self->uvio_attest.reserved136 = (uint16_t)-1;
-+	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EINVAL);
-+
-+	memset(&self->uvio_attest, 0x11, sizeof(self->uvio_attest));
-+	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-+	ASSERT_EQ(rc, -1);
-+}
-+
-+static void att_inval_addr_test(__u64 *addr, struct __test_metadata *_metadata,
-+				FIXTURE_DATA(attest_fixture) *self)
-+{
-+	int rc, errno_cache;
-+	__u64 tmp = *addr;
-+
-+	*addr = 0;
-+	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EFAULT);
-+	*addr = self->fault_page;
-+	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
-+	errno_cache = errno;
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_cache, EFAULT);
-+	*addr = tmp;
-+}
-+
-+TEST_F(attest_fixture, att_inval_addr)
-+{
-+	att_inval_addr_test(&self->uvio_attest.arcb_addr, _metadata, self);
-+	att_inval_addr_test(&self->uvio_attest.add_data_addr, _metadata, self);
-+	att_inval_addr_test(&self->uvio_attest.meas_addr, _metadata, self);
-+}
-+
-+static void __attribute__((constructor)) __constructor_order_last(void)
-+{
-+	if (!__constructor_order)
-+		__constructor_order = _CONSTRUCTOR_ORDER_BACKWARD;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int fd = open(UV_PATH, O_ACCMODE);
-+
-+	if (fd < 0)
-+		ksft_exit_skip("No uv-device or cannot access " UV_PATH  "\n"
-+			       "Enable CONFIG_S390_UV_UAPI and check the access rights on "
-+			       UV_PATH ".\n");
-+	close(fd);
-+	return test_harness_run(argc, argv);
-+}
+In addition, the cgroup-v2.rst documentation file is updated and a self
+test is added to verify the correctness the partition code.
+
+The code diff from v10 is listed below.
+
+Waiman Long (8):
+  cgroup/cpuset: Add top_cpuset check in update_tasks_cpumask()
+  cgroup/cpuset: Miscellaneous cleanups & add helper functions
+  cgroup/cpuset: Allow no-task partition to have empty
+    cpuset.cpus.effective
+  cgroup/cpuset: Relax constraints to partition & cpus changes
+  cgroup/cpuset: Add a new isolated cpus.partition type
+  cgroup/cpuset: Show invalid partition reason string
+  cgroup/cpuset: Update description of cpuset.cpus.partition in
+    cgroup-v2.rst
+  kselftest/cgroup: Add cpuset v2 partition root state test
+
+ Documentation/admin-guide/cgroup-v2.rst       | 149 ++--
+ kernel/cgroup/cpuset.c                        | 718 +++++++++++-------
+ tools/testing/selftests/cgroup/Makefile       |   5 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       | 674 ++++++++++++++++
+ tools/testing/selftests/cgroup/wait_inotify.c |  87 +++
+ 5 files changed, 1304 insertions(+), 329 deletions(-)
+ create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+ create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
+
 -- 
-2.30.2
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 94e1e3771830..9184a09e0fc9 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2130,10 +2130,10 @@ Cpuset Interface Files
+ 	CPUs should be carefully distributed and bound to each of the
+ 	individual CPUs for optimal performance.
+
+-	The value shown in "cpuset.cpus.effective" of a partition root is
+-	the CPUs that the parent partition root can dedicate to the new
+-	partition root.  They are subtracted from "cpuset.cpus.effective"
+-	of the parent and may be different from "cpuset.cpus"
++	The value shown in "cpuset.cpus.effective" of a partition root
++	is the CPUs that the partition root can dedicate to a potential
++	new child partition root. The new child subtracts available
++	CPUs from its parent "cpuset.cpus.effective".
+
+ 	A partition root ("root" or "isolated") can be in one of the
+ 	two possible states - valid or invalid.  An invalid partition
+@@ -2165,24 +2165,28 @@ Cpuset Interface Files
+ 	2) The parent cgroup is a valid partition root.
+ 	3) The "cpuset.cpus" is not empty and must contain at least
+ 	   one of the CPUs from parent's "cpuset.cpus", i.e. they overlap.
+-        4) The "cpuset.cpus.effective" must be a subset of "cpuset.cpus"
+-           and cannot be empty unless there is no task associated with
+-           this partition.
++	4) The "cpuset.cpus.effective" must be a subset of "cpuset.cpus"
++	   and cannot be empty unless there is no task associated with
++	   this partition.
+
+ 	External events like hotplug or changes to "cpuset.cpus" can
+ 	cause a valid partition root to become invalid and vice versa.
+ 	Note that a task cannot be moved to a cgroup with empty
+ 	"cpuset.cpus.effective".
+
+-        For a valid partition root or an invalid partition root with
+-        the exclusivity rule enabled, changes made to "cpuset.cpus"
+-        that violate the exclusivity rule will not be allowed.
++	For a valid partition root or an invalid partition root with
++	the exclusivity rule enabled, changes made to "cpuset.cpus"
++	that violate the exclusivity rule will not be allowed.
+
+ 	A valid non-root parent partition may distribute out all its CPUs
+ 	to its child partitions when there is no task associated with it.
+
+-        Care must be taken to change a valid partition root to "member"
+-        as all its child partitions, if present, will become invalid.
++	Care must be taken to change a valid partition root to
++	"member" as all its child partitions, if present, will become
++	invalid causing disruption to tasks running in those child
++	partitions. These inactivated partitions could be recovered if
++	their parent is switched back to a partition root with a proper
++	set of "cpuset.cpus".
+
+ 	Poll and inotify events are triggered whenever the state of
+ 	"cpuset.cpus.partition" changes.  That includes changes caused
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 90ee0e4d8d7e..261974f5bb3c 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1283,9 +1283,12 @@ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
+  * invalid to valid violates the exclusivity rule.
+  *
+  * The partcmd_enable and partcmd_disable commands are used by
+- * update_prstate(). The partcmd_update command is used by
+- * update_cpumasks_hier() with newmask NULL and update_cpumask() with
+- * newmask set.
++ * update_prstate(). An error code may be returned and the caller will check
++ * for error.
++ *
++ * The partcmd_update command is used by update_cpumasks_hier() with newmask
++ * NULL and update_cpumask() with newmask set. The callers won't check for
++ * error and so partition_root_state and prs_error will be updated directly.
+  */
+ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 					  struct cpumask *newmask,
+@@ -1326,8 +1329,8 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		 * A parent can be left with no CPU as long as there is no
+ 		 * task directly associated with the parent partition.
+ 		 */
+-		if (partition_is_populated(parent, cs) &&
+-		   !cpumask_intersects(cs->cpus_allowed, parent->effective_cpus))
++		if (!cpumask_intersects(cs->cpus_allowed, parent->effective_cpus) &&
++		    partition_is_populated(parent, cs))
+ 			return PERR_NOCPUS;
+
+ 		cpumask_copy(tmp->addmask, cs->cpus_allowed);
+@@ -1361,9 +1364,10 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		 * Make partition invalid if parent's effective_cpus could
+ 		 * become empty and there are tasks in the parent.
+ 		 */
+-		if (adding && partition_is_populated(parent, cs) &&
++		if (adding &&
+ 		    cpumask_subset(parent->effective_cpus, tmp->addmask) &&
+-		    !cpumask_intersects(tmp->delmask, cpu_active_mask)) {
++		    !cpumask_intersects(tmp->delmask, cpu_active_mask) &&
++		    partition_is_populated(parent, cs)) {
+ 			part_error = PERR_NOCPUS;
+ 			adding = false;
+ 			deleting = cpumask_and(tmp->delmask, cs->cpus_allowed,
+@@ -1749,13 +1753,13 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+
+ 	/*
+ 	 * Make sure that subparts_cpus, if not empty, is a subset of
+-	 * cpus_allowed. Clear subparts_cpus if there is an error or
++	 * cpus_allowed. Clear subparts_cpus if partition not valid or
+ 	 * empty effective cpus with tasks.
+ 	 */
+ 	if (cs->nr_subparts_cpus) {
+-		if (cs->prs_err ||
+-		   (partition_is_populated(cs, NULL) &&
+-		    cpumask_subset(trialcs->effective_cpus, cs->subparts_cpus))) {
++		if (!is_partition_valid(cs) ||
++		   (cpumask_subset(trialcs->effective_cpus, cs->subparts_cpus) &&
++		    partition_is_populated(cs, NULL))) {
+ 			cs->nr_subparts_cpus = 0;
+ 			cpumask_clear(cs->subparts_cpus);
+ 		} else {
 
