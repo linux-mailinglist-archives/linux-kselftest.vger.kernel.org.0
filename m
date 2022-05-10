@@ -2,205 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257EE521427
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 13:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3217521668
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 15:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238823AbiEJLvO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 07:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        id S233776AbiEJNKE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 09:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241238AbiEJLvC (ORCPT
+        with ESMTP id S237826AbiEJNKD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 07:51:02 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299F0250E8A
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 04:47:05 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ch13so3950462ejb.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 04:47:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=mIOxc2Hr0TwMKC4GyCG7ad4BrNm8On4BnelZfSZoMY8=;
-        b=Cq0YVifZjAg/L4a+qlOkNkDWcHo+balp673bgz2Xzq8NYuyUWd4UIlNecRZHOmOZtL
-         WITd7u5+Q3fwt/lMny//WQLUUvidBhKfkO/Jl2oNOUFBqFEwcFcey9lf7Y1aelLuySDz
-         FKzgrBUKgHOFhkT5RWUHKLhJIy72//L2kETTY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=mIOxc2Hr0TwMKC4GyCG7ad4BrNm8On4BnelZfSZoMY8=;
-        b=0z5TAs4CE3Zi3C8x2Sqg5Y4i8RGw3Xl+mhwZynxdADBTMn4zyiHj7SmOFT5vEMLkYB
-         mSEu7dXtBDqsUWUx88pNsNZOXGDAPCZOEuW3aQW6YB85n/YdOsDaduONNqyA5dAKFaDY
-         ksa5e4W6/XpuxdQY7XnZ4XffX/pPtYch/Kf1CiYhqgIb8sR0pe+yIDu2Ld4WXWo9Nyp/
-         n5mAp53EkPbmyMnDtKl4uVvZ+I7gTPzBoxGR17UOVdKy7o9y48/cBsKBENiFGlqQLeUm
-         dFoTd5o6ohaisdaHnjhVRSIshQqGVye99O3Kmr6hNLO74AXFtbeIXiwE/hntFevo1sRQ
-         +4Yw==
-X-Gm-Message-State: AOAM533XR5VLHps122k+LHmCF4HxYdK0bHFNesi1IQEwe6XhyHL0AooM
-        mX4YJz/EreWwFqARk/LmKuB07A==
-X-Google-Smtp-Source: ABdhPJwH5mhjRvh6ubT75T74jcRYxHqZKy0ovowvflSqOUgy8E1RfmWmmzchzDbkunBXYV3eG+hSPw==
-X-Received: by 2002:a17:906:d554:b0:6f5:2242:a499 with SMTP id cr20-20020a170906d55400b006f52242a499mr18119410ejc.488.1652183223425;
-        Tue, 10 May 2022 04:47:03 -0700 (PDT)
-Received: from cloudflare.com (79.184.139.106.ipv4.supernova.orange.pl. [79.184.139.106])
-        by smtp.gmail.com with ESMTPSA id lr9-20020a170906fb8900b006f3ef214dd9sm5997773ejb.63.2022.05.10.04.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 04:47:02 -0700 (PDT)
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Date:   Tue, 10 May 2022 13:45:38 +0200
-In-reply-to: <20220424154028.1698685-5-xukuohai@huawei.com>
-Message-ID: <87ee11obih.fsf@cloudflare.com>
+        Tue, 10 May 2022 09:10:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9D51FCEC;
+        Tue, 10 May 2022 06:06:04 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 80D4A1F8C5;
+        Tue, 10 May 2022 13:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652187963; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=h/N9r55RmDL/P9k3rTsZHZPvN6mp52YHLJIGiCPRLKk=;
+        b=HFVf+OtUg9TYMgd3f48zTa9GREuZx+/CvV/j811tjcwFhT7hKlvedqhIzE4vCon9BCMCLb
+        vGCdo0xzZU9i6gOEGqX05QMZv6nmFYoJ7qE4LQL54vqsPW73edif4xO7s7P+/YQJJvq6l3
+        3+B2mCNHrrvRCUpgP+rhMkzTiotdB38=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DDF572C141;
+        Tue, 10 May 2022 13:06:02 +0000 (UTC)
+Date:   Tue, 10 May 2022 15:05:59 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        minchan@kernel.org, kirill@shutemov.name, aarcange@redhat.com,
+        brauner@kernel.org, hch@infradead.org, oleg@redhat.com,
+        david@redhat.com, jannh@google.com, shakeelb@google.com,
+        peterx@redhat.com, jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 2/3] mm: drop oom code from exit_mmap
+Message-ID: <YnpjNyrdqT/QxBPI@dhcp22.suse.cz>
+References: <20220510030014.3842475-1-surenb@google.com>
+ <20220510030014.3842475-2-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220510030014.3842475-2-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
-> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
-> it to replace nop with jump, or replace jump with nop.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> Acked-by: Song Liu <songliubraving@fb.com>
+On Mon 09-05-22 20:00:13, Suren Baghdasaryan wrote:
+> With the oom-killer being able to operate on locked pages, exit_mmap
+> does not need to ensure that oom_reap_task_mm is done before it can
+> proceed. Instead it can rely on mmap_lock write lock to prevent
+> oom-killer from operating on the vma tree while it's freeing page
+> tables. exit_mmap can hold mmap_lock read lock when unmapping vmas
+> and then take mmap_lock write lock before freeing page tables.
+
+The changelog is rather light on nasty details which might be good but
+for the sake of our future us let's be more verbose so that we do not
+have to reinvent the prior history each time we are looking into this
+code. I would go with something like this instead:
+"
+The primary reason to invoke the oom reaper from the exit_mmap path used
+to be a prevention of an excessive oom killing if the oom victim exit
+races with the oom reaper (see 212925802454 ("mm: oom: let oom_reap_task
+and exit_mmap run concurrently") for more details. The invocation has
+moved around since then because of the interaction with the munlock
+logic but the underlying reason has remained the same (see 27ae357fa82b
+("mm, oom: fix concurrent munlock and oom reaper unmap, v3").
+
+Munlock code is no longer a problem since a213e5cf71cb ("mm/munlock:
+delete munlock_vma_pages_all(), allow oomreap") and there shouldn't be
+any blocking operation before the memory is unmapped by exit_mmap so
+the oom reaper invocation can be dropped. The unmapping part can be done
+with the non-exclusive mmap_sem and the exclusive one is only required
+when page tables are freed.
+
+Remove the oom_reaper from exit_mmap which will make the code easier to
+read. This is really unlikely to make any observable difference although
+some microbenchmarks could benefit from one less branch that needs to be
+evaluated even though it almost never is true.
+"
+
+One minor comment below. Other than that \o/ this is finally going away.
+I strongly suspect that the history of this code is a nice example about how
+over optimizing code can cause more harm than good.
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+Thanks!
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 > ---
->  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 8ab4035dea27..3f9bdfec54c4 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -9,6 +9,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/bpf.h>
-> +#include <linux/memory.h>
->  #include <linux/filter.h>
->  #include <linux/printk.h>
->  #include <linux/slab.h>
-> @@ -18,6 +19,7 @@
->  #include <asm/cacheflush.h>
->  #include <asm/debug-monitors.h>
->  #include <asm/insn.h>
-> +#include <asm/patching.h>
->  #include <asm/set_memory.h>
->  
->  #include "bpf_jit.h"
-> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->  {
->  	return vfree(addr);
->  }
-> +
-> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
-> +			     void *addr, u32 *insn)
-> +{
-> +	if (!addr)
-> +		*insn = aarch64_insn_gen_nop();
-> +	else
-> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
-> +						    (unsigned long)addr,
-> +						    type);
-> +
-> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
-> +}
-> +
-> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
-> +		       void *old_addr, void *new_addr)
-> +{
-> +	int ret;
-> +	u32 old_insn;
-> +	u32 new_insn;
-> +	u32 replaced;
-> +	enum aarch64_insn_branch_type branch_type;
-> +
-> +	if (!is_bpf_text_address((long)ip))
-> +		/* Only poking bpf text is supported. Since kernel function
-> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
-> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+>  include/linux/oom.h |  2 --
+>  mm/mmap.c           | 25 ++++++-------------------
+>  mm/oom_kill.c       |  2 +-
+>  3 files changed, 7 insertions(+), 22 deletions(-)
+> 
+[...]
+> @@ -3138,6 +3121,10 @@ void exit_mmap(struct mm_struct *mm)
+>  	/* update_hiwater_rss(mm) here? but nobody should be looking */
+>  	/* Use -1 here to ensure all VMAs in the mm are unmapped */
+>  	unmap_vmas(&tlb, vma, 0, -1);
+> +	mmap_read_unlock(mm);
+> +	/* Set MMF_OOM_SKIP to disregard this mm from further consideration.*/
+> +	set_bit(MMF_OOM_SKIP, &mm->flags);
 
-Nit: s/funcitons/functions/
+I think that it would be slightly more readable to add an empty line
+above and below of this. Also the comment would be more helpful if it
+explaind what the further consideration actually means. I would go with
 
-> +		 * called after a failed poke with ftrace. In this case, there
-> +		 * is probably something wrong with fentry, so there is nothing
-> +		 * we can do here. See register_fentry, unregister_fentry and
-> +		 * modify_fentry for details.
-> +		 */
-> +		return -EINVAL;
-> +
-> +	if (poke_type == BPF_MOD_CALL)
-> +		branch_type = AARCH64_INSN_BRANCH_LINK;
-> +	else
-> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
-> +
-> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
-> +		return -EFAULT;
-> +
-> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
-> +		return -EFAULT;
-> +
-> +	mutex_lock(&text_mutex);
-> +	if (aarch64_insn_read(ip, &replaced)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	if (replaced != old_insn) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+	/*
+	 * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+	 * because the memory has been already freed. Do not bother
+	 * checking mm_is_oom_victim because setting a bit
+	 * unconditionally is just cheaper.
+	 */
 
-Nit: No need for the explicit cast to void *. Type already matches.
+> +	mmap_write_lock(mm);
+>  	free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
+>  	tlb_finish_mmu(&tlb);
 
-> +out:
-> +	mutex_unlock(&text_mutex);
-> +	return ret;
-> +}
-
+-- 
+Michal Hocko
+SUSE Labs
