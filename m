@@ -2,119 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F16852219F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 18:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1BC522221
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 19:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236527AbiEJQtw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 12:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S1347872AbiEJRTz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 13:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347637AbiEJQtu (ORCPT
+        with ESMTP id S1347875AbiEJRTx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 12:49:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD624831B
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19E1AB81E21
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 16:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DA0C385CD;
-        Tue, 10 May 2022 16:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652201148;
-        bh=R622QNQB1UYRuVab/g4J3gyNgxnjsl8J4yUUXh33U/4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U7CYpwXS3jfS0d7gemUqeyuF8U3fNPphpvuReMYYWUO0I2sGrq9XbWMV5cQF6Dj1E
-         PN7dU6Er9D4FCN32zqQaMNUEEv33rZ3kLtIHCdy3BMDjBeiOVsXCOx92vARvdreSye
-         JYwRJVy6Tt4gCz8b0InsW7/K17nHsU4D07Xi+1Qi0kGEL0poSh6PbJxHNNxM8pay80
-         3Zo2BylLcmHmtw03FBwMf+wetaO1POs8sfNKzJRQJPmGSWyL6M8LX4FYtIbPRzsvYq
-         vSSdBpjWq4ZDbq4NwM+ifXTF1txUNvfTwz2oIBrUHNTAw2PDV0nf7VwNdqyfjQPsZs
-         WpCbw3MY7iUUw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Tue, 10 May 2022 13:19:53 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17CADEAA
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:15:42 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e194so19197623iof.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Nz2pEIp4h8cJ+3fUaGrr4f9bDrmIrqCco4B5dxN+LMQ=;
+        b=RXZK9JrWJFMdbES+R8ZI1PUkoSfJCGPXf8zlSL6PvM58zUqaBQuh3k5XeJj7hoawbR
+         yP7DTyfdlG/G7eAJDc1TrzwRmdxSqVQVMirk+c5HRq4kU6ZHhQ/tpskF/fSNUZE1smGh
+         9rjxQIYGeB2rO4n1f3qDfxcrwCVNTxJ8IT6yc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Nz2pEIp4h8cJ+3fUaGrr4f9bDrmIrqCco4B5dxN+LMQ=;
+        b=0Y/Vb6+8BTpt3HjmISPbSeq3T55RbcI3O9fAenv7Swvk7rvL/g0sB8gGqIAMJee5VM
+         mFjAmL4uKkpsLWvcGCmImOv1HDG5oA7l2nIFt+2V2jH64wnJWREgDBaxLjFiTiYP6wMQ
+         lE7oqwSepGMrAbH4KpUXYOCUeM7EmDG/Y8vG1weqy4Me4XPENOnKCwQqlHJOzgBjRWg3
+         0OYzjSVU10oCoj8ZAq2I5XTqZAgd9UN0mfnGXVi6XElqtrUIqybLlibtF4veRqUcywVM
+         XuTv0Ef1emthFC49hH+veJNylvk28BGPPnb0HEnX2Ert8qwgJP0GKCjIZ/HAOMvg/Yei
+         8pDQ==
+X-Gm-Message-State: AOAM532O3dnYzH8N2qKhRN+vb444rCGJJSarA1fHBnA86faoh68ix8qd
+        SmKqZA2WGWTMrZpntc+etsUhZw==
+X-Google-Smtp-Source: ABdhPJywkpOBOgFEV80tGD822xrFf6WotOLN36/A0N2Tj06aJZxqhBQeUvyjOwyeEJ6OZ0afH5a7xA==
+X-Received: by 2002:a05:6638:12d3:b0:32b:7235:6a08 with SMTP id v19-20020a05663812d300b0032b72356a08mr10620263jas.27.1652202942204;
+        Tue, 10 May 2022 10:15:42 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t190-20020a0254c7000000b0032b3a7817cfsm4474033jaa.147.2022.05.10.10.15.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 10:15:41 -0700 (PDT)
+Subject: Re: [PATCH v1 1/5] selftests/arm64: Log errors in
+ verify_mte_pointer_validity()
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Joey Gouly <joey.gouly@arm.com>, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 5/5] selftests/arm64: Use switch statements in mte_common_util.c
-Date:   Tue, 10 May 2022 17:45:20 +0100
-Message-Id: <20220510164520.768783-6-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220510164520.768783-1-broonie@kernel.org>
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <20220510164520.768783-1-broonie@kernel.org>
+ <20220510164520.768783-2-broonie@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <dfb1b1d4-e932-733a-2cae-1cf850801625@linuxfoundation.org>
+Date:   Tue, 10 May 2022 11:15:41 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2002; h=from:subject; bh=R622QNQB1UYRuVab/g4J3gyNgxnjsl8J4yUUXh33U/4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiepaflTvsXvbJC2100hDgI34fuA/jH3a/HV8aCd5v odizu02JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYnqWnwAKCRAk1otyXVSH0OIOB/ 4yTHQ+colx7wXK5q6ceUvpKz1T4+RTtShuDdu01immHnc+jgu9pQBPM/QqzvyST4sKQ018VU1xNw3P 8SXJnvS9d7SNz7FQF2MCmE50IGXoQGXY7A4BPp+GjJYnSc1qCzcr9gYif0aUZ88U8G3Uh1MorumUN4 CWupBedZyfC/SpR45J1aCKJJLL2j1D6mrthSMKvjxF11qi7lLoPIaQms13mov2ISXdh1ICJGUAGhrT eZgjlJZ4H/5zjM4nUXaz8/aNjfmityeLBQQoRnG5BLV7UzydElFd/F01V7rHQmVReZMuQ6L1UAhvrC TffbYIzCKF3UjICmBT79IxpFPW3vJg
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220510164520.768783-2-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In the MTE tests there are several places where we use chains of if
-statements to open code what could be written as switch statements, move
-over to switch statements to make the idiom clearer.
+On 5/10/22 10:45 AM, Mark Brown wrote:
+> When we detect a problem in verify_mte_pointer_validity() while checking
+> tags we don't log what the problem was which makes debugging harder. Add
+> some diagnostics.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>   .../selftests/arm64/mte/check_tags_inclusion.c       | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+> index deaef1f61076..b906914997ce 100644
+> --- a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+> +++ b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+> @@ -25,8 +25,11 @@ static int verify_mte_pointer_validity(char *ptr, int mode)
+>   	/* Check the validity of the tagged pointer */
+>   	memset((void *)ptr, '1', BUFFER_SIZE);
+>   	mte_wait_after_trig();
+> -	if (cur_mte_cxt.fault_valid)
+> +	if (cur_mte_cxt.fault_valid) {
+> +		ksft_print_msg("Unexpected fault recorded for %p-%p in mode %x\n",
+> +			       ptr, ptr + BUFFER_SIZE, mode);
+>   		return KSFT_FAIL;
+> +	}
+>   	/* Proceed further for nonzero tags */
+>   	if (!MT_FETCH_TAG((uintptr_t)ptr))
+>   		return KSFT_PASS;
+> @@ -34,10 +37,13 @@ static int verify_mte_pointer_validity(char *ptr, int mode)
+>   	/* Check the validity outside the range */
+>   	ptr[BUFFER_SIZE] = '2';
+>   	mte_wait_after_trig();
+> -	if (!cur_mte_cxt.fault_valid)
+> +	if (!cur_mte_cxt.fault_valid) {
+> +		ksft_print_msg("No valid fault recorded for %p in mode %x\n",
+> +			       ptr, mode);
+>   		return KSFT_FAIL;
+> -	else
+> +	} else {
+>   		return KSFT_PASS;
+> +	}
+>   }
+>   
+>   static int check_single_included_tags(int mem_type, int mode)
+> 
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../selftests/arm64/mte/mte_common_util.c     | 23 +++++++++++++------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+Nice. Thanks for the patch.
 
-diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-index 6ff4c4bcbff1..00ffd34c66d3 100644
---- a/tools/testing/selftests/arm64/mte/mte_common_util.c
-+++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-@@ -128,13 +128,16 @@ static void *__mte_allocate_memory_range(size_t size, int mem_type, int mapping,
- 	int prot_flag, map_flag;
- 	size_t entire_size = size + range_before + range_after;
- 
--	if (mem_type != USE_MALLOC && mem_type != USE_MMAP &&
--	    mem_type != USE_MPROTECT) {
-+	switch (mem_type) {
-+	case USE_MALLOC:
-+		return malloc(entire_size) + range_before;
-+	case USE_MMAP:
-+	case USE_MPROTECT:
-+		break;
-+	default:
- 		ksft_print_msg("FAIL: Invalid allocate request\n");
- 		return NULL;
- 	}
--	if (mem_type == USE_MALLOC)
--		return malloc(entire_size) + range_before;
- 
- 	prot_flag = PROT_READ | PROT_WRITE;
- 	if (mem_type == USE_MMAP)
-@@ -287,13 +290,19 @@ int mte_switch_mode(int mte_option, unsigned long incl_mask)
- 		ksft_print_msg("FAIL: Invalid incl_mask %lx\n", incl_mask);
- 		return -EINVAL;
- 	}
-+
- 	en = PR_TAGGED_ADDR_ENABLE;
--	if (mte_option == MTE_SYNC_ERR)
-+	switch (mte_option) {
-+	case MTE_SYNC_ERR:
- 		en |= PR_MTE_TCF_SYNC;
--	else if (mte_option == MTE_ASYNC_ERR)
-+		break;
-+	case MTE_ASYNC_ERR:
- 		en |= PR_MTE_TCF_ASYNC;
--	else if (mte_option == MTE_NONE_ERR)
-+		break;
-+	case MTE_NONE_ERR:
- 		en |= PR_MTE_TCF_NONE;
-+		break;
-+	}
- 
- 	en |= (incl_mask << PR_MTE_TAG_SHIFT);
- 	/* Enable address tagging ABI, mte error reporting mode and tag inclusion mask. */
--- 
-2.30.2
+It would be a nice addition to print mode names as strings to make
+it easy to understand. Could done in a future patch. e,g: MTE_NONE_ERR etc.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
 
