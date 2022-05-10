@@ -2,95 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E70052225C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 19:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCAC52229B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 19:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348006AbiEJR1t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 13:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
+        id S1348177AbiEJRbn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 13:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244581AbiEJR1q (ORCPT
+        with ESMTP id S1348119AbiEJRb0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 13:27:46 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC51E14E2F9
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:23:48 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id f4so19245610iov.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:23:48 -0700 (PDT)
+        Tue, 10 May 2022 13:31:26 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C9F1EEDE
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:27:24 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id g20so20841778edw.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:27:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6Mxaa9zldI5g5gROrpqfa7o89lmkZmvApfkpzCQDPTU=;
-        b=AqPeMT0SfdkcixR4qTLiKvPqwwAuytjFV8n2Yvx3BSgwqKAJvP5LvLj3rtkIl2es/e
-         64yTs9oQhh5YjDeVal2RN6YJuj6SEtQ9z0SYX9hjU86wc2qrEXbZHC9ItVt1hPNFsZBg
-         gGFspwf3Y85ZxHvo2TWE98JmpBCkvdm568XP8=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HiJXspw+XXqRAk8vbWsIcG6KKaomwpOqMcuau12q5j4=;
+        b=l4OjCZhdF+uEbp7Nc5W8GzH4w1orFwvhDBIJnO+/nYkVEJkhGx11/s5f9/qz/B84+o
+         lxowYN95PdzNUl8RQvisra6uT+XW3IZdhiN+iey4DZgCK7BU+USuwe72eEtbCdIihVkk
+         AvwQWyV/bgFjypdruN3oD4Xi9q8Quwc+3ucw6xXxnXoHt93MdHSZlQWnm0f577YpU50J
+         9GwBTnVC/kPmnSxOTaInURBfI9PRLKPQZrpt7eUQgBZNEXil3ZXaecz2VpIkSR6KrtWE
+         j7szHqt8jianLsWTCWEQKRbfi0RDljYgkqIKVnq9JbBCrskrLJcAJz95KWQkIgpQ53fO
+         9lXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6Mxaa9zldI5g5gROrpqfa7o89lmkZmvApfkpzCQDPTU=;
-        b=J1P2mRJ6VaMy4ayIT3oF0QY068O7+bdhdZk4FLIHcJBSeFNWjnDJh8YmGxc3e1Gise
-         5s7zajv+Wulz54YcyYAW/2zWOP1dfe6KCYJeqf5K7/QMkCVNzbGx1Fa15EZeuBzhLfnZ
-         zzR/pNqmR5WureuaK3eXW2+TLfzL0ox0N4UL0GCoaYpRdFTC4Z945VQ5alidjwXzdCpl
-         AjftDi/CKlihJXiFNvT60v0ffhdHwectwRFILRi2hOnPAQc5AkSSYLgwZZi5Oz0A016/
-         xGhSo39zLcuzA6OWzKgtHl6QqzUQYWzqcAo4IhtHpBBjCQWfLzzTVal82PjcI3DghzbG
-         Rflg==
-X-Gm-Message-State: AOAM530wXsL3eZ9UMeBK6VILb/z8vGVX/q+HPQ0bQmtxIMRajue6RC11
-        BrwjFpBZ5+y5Luy8rCji9nHSiA==
-X-Google-Smtp-Source: ABdhPJzHhtMQmgp8/vmBWxqTfP452Z9e4+tpfHIHJpQACUXUa7/7eBesCYXoQa3kpPxoYc7bPtJx5Q==
-X-Received: by 2002:a05:6638:2182:b0:32b:8ed4:4e26 with SMTP id s2-20020a056638218200b0032b8ed44e26mr10782682jaj.225.1652203427897;
-        Tue, 10 May 2022 10:23:47 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a23-20020a056638059700b0032b3a781769sm4508648jar.45.2022.05.10.10.23.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 10:23:47 -0700 (PDT)
-Subject: Re: [PATCH v1 4/5] selftests/arm64: Remove casts to/from void in
- check_tags_inclusion
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220510164520.768783-1-broonie@kernel.org>
- <20220510164520.768783-5-broonie@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5c990941-d3a9-0add-29bc-f59ec7789d37@linuxfoundation.org>
-Date:   Tue, 10 May 2022 11:23:47 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HiJXspw+XXqRAk8vbWsIcG6KKaomwpOqMcuau12q5j4=;
+        b=TxR++GxLwkT3A5v7ff8tzAuF/BFozeg251/Grz37bXvYgYaJUf9NDaVCxqT5CR9OGM
+         UMsx9qFVgToldKPjTE543ln3Nl2ACBMtcz7Jz1UkMqtItKMYeGNwX90h/JL3aTBmppux
+         9uhT/Y9i1YCSxOC7CBc7MgaA6jS1zlL7qvTP/AF68xf/6mGOXN0rxpM8tpt3Nj8GKR76
+         ygwf0TUwSOA3BFUehTJwo15ugVzhANZ9Qr6NYNnBraEDVfcIaveHqhiVQIgBQD4FDCQL
+         cy3m8snljUmKe+BxwZk4/GeCw+EzSc+sRMjDU1eovF/XYhsiz4v7tVOdkMykzVAby8Bj
+         NB9g==
+X-Gm-Message-State: AOAM531zJBl5R8K1nZ8f3mJnDNuSQoL5782H7cDrd679ticcTgt3eTdK
+        WZYn2854dMw0KMsU8uqOLzbKNH8xHpkuGwpPWywNayovAH4=
+X-Google-Smtp-Source: ABdhPJx2kSgAU2XY/27rj6V2tZzvTpxBTH9s2dEI4WHLt7Xvikp7+Mq8td5ekP+J6cRnKA+sx1pJ5K2Mc8vf9imokWg=
+X-Received: by 2002:a05:6402:3590:b0:427:ba05:6f19 with SMTP id
+ y16-20020a056402359000b00427ba056f19mr24886754edc.334.1652203643134; Tue, 10
+ May 2022 10:27:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220510164520.768783-5-broonie@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220509204909.2464496-1-dlatypov@google.com> <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
+In-Reply-To: <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 10 May 2022 10:27:12 -0700
+Message-ID: <CAGS_qxr+MOnWgz3B7+J12-Tj3VGERVRqrYg4uF0_FkBxa2hRdQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: misc cleanups
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/10/22 10:45 AM, Mark Brown wrote:
-> Void pointers may be freely used with other pointer types in C, any casts
-> between void * and other pointer types serve no purpose other than to
-> mask potential warnings. Drop such casts from check_tags_inclusion to
-> help with future review of the code.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   .../arm64/mte/check_tags_inclusion.c          | 24 +++++++++----------
->   1 file changed, 12 insertions(+), 12 deletions(-)
-> 
+On Mon, May 9, 2022 at 11:22 PM David Gow <davidgow@google.com> wrote:
+>
+> On Tue, May 10, 2022 at 4:49 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > This primarily comes from running pylint over kunit tool code and
+> > ignoring some warnings we don't care about.
+> > If we ever got a fully clean setup, we could add this to run_checks.py,
+> > but we're not there yet.
+> >
+> > Fix things like
+> > * Drop unused imports
+> > * check `is None`, not `== None` (see PEP 8)
+> > * remove redundant parens around returns
+> > * remove redundant `else` / convert `elif` to `if` where appropriate
+>
+> Personally, I find the explicit 'elif' much more readable in most of
+> these cases, but if we're annoying a linter, I guess we should change
+> them...
 
-Looks good to me.
+Same, some of them felt a tad more readable, but using `if` is a bit
+more explicit about the actual control flow.
+For short branches, like most of the ones here, they don't make too
+much of a difference, but for longer blocks of code, this can help.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+E.g. if one sees
+  elif check2():
+     do_thing2()
+one might think they can tack on a
+  do_cleanup()
+and have it run for all branches, if they're not careful.
 
-thanks,
--- Shuah
+>
+> > * rename make_arch_qemuconfig() param to base_kunitconfig (this is the
+> >   name used in the subclass, and it's a better one)
+> > * kunit_tool_test: check the exit code for SystemExit (could be 0)
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> All of these changes seem correct to me, even if I'm not sure I'd
+> bother with most of them if they weren't causing pylint to show
+> errors.
+>
+> Given that apparently it does, though, I'm okay with it going through.
+> (I'll just grumble quietly in my corner. :-))
+
+To be fair, we could ignore more of these warnings.
+If we ever try to get the code clean wrt linter warnings, we'd already
+need to tweak the settings.
+
+But I think I've taken care of most of the reasonable warnings in this patch.
