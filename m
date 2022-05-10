@@ -2,878 +2,388 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BD8521F0A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 17:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE13521F3C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 17:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346065AbiEJPjm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 11:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S1346123AbiEJPrc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 11:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346079AbiEJPjf (ORCPT
+        with ESMTP id S1346108AbiEJPrb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 11:39:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B17D7E44F9
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 08:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652196882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YnwNeI53+luFhZ27pBHLwHfTHIocqJ3v5y0np/qYgCY=;
-        b=HeT26zXiJ/+WcjMg6iacgDl4yi2yxCXLCPJDBnRaVqBKbopkXQFrLNwop8i2PJrLGlxABm
-        EuToRprGYkOnVrj18e+c+gOZDiI7K5sb2EChCgIy8/pf6jjG9kn1TEJyJp+pdIFFbj64FC
-        FUZpeVGDBbx6WbEmzQmVKR81L71crpY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-DQYqf0BrMzCJSwc1HBa2Cg-1; Tue, 10 May 2022 11:34:37 -0400
-X-MC-Unique: DQYqf0BrMzCJSwc1HBa2Cg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9AAB53C977CD;
-        Tue, 10 May 2022 15:34:36 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28A46401E31;
-        Tue, 10 May 2022 15:34:36 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v11 8/8] kselftest/cgroup: Add cpuset v2 partition root state test
-Date:   Tue, 10 May 2022 11:34:13 -0400
-Message-Id: <20220510153413.400020-9-longman@redhat.com>
-In-Reply-To: <20220510153413.400020-1-longman@redhat.com>
-References: <20220510153413.400020-1-longman@redhat.com>
+        Tue, 10 May 2022 11:47:31 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCAD269EF5
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 08:43:32 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id e15so18955469iob.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 08:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=X7HPPummtVT1Cpry90v/glBuyXh4uT47kyH0y1UUgaY=;
+        b=Uc7pkau17EpYJQhbTAIrqfH1vsSsm9BU5xXIoSfOd+odUD5uLfxvMbeckrt1do7sgf
+         hgtf9g0Stj+DxnPYF1j0fTWtnBjXms9b8D2wBzRo68PJUWd8lWEBlfMpcf7z0JKSpTQT
+         sJlr9MvJ+uK8n/qePydSHov2/4p3MDPX8KFfs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=X7HPPummtVT1Cpry90v/glBuyXh4uT47kyH0y1UUgaY=;
+        b=CKLCj1FcTXVupzgrFhm4huck1/sSawRiS6tWfPRFj98U/qQLr4j+WhPGqHAuagF+9y
+         VDodGOh0pzj+iJGy5ojE7QgQjwY9+lpWw055Poc+G/u4gURCW9/8CQ6Hosx9EUaZQPtY
+         N8UFKKYpH6AT1rujXx3HyXnTt/c0Dt4cnnxEkgv5/+5wVzrh8r6IlMKuSNYMdvODtyW7
+         DrWe7ikEYoJ2iugNE8HQVbjYaNEmJL0OVX8FGc8PfHv/2pVF2aylTHyQ3VgvGTJwA0ql
+         suu2rysY1v6McC5L0n8KAKLQv7MHcgXUJX79s3zf/QYHTjsbrxgQg9xDje7dXvJwi/G8
+         BIDQ==
+X-Gm-Message-State: AOAM531DqYA5kuXRGU5kN3eVPpMDURhJXEKy6H2r0f9BNY5pu3rd0Dj+
+        kUP9C7CFJyLgyFuNfff0lzbq7A==
+X-Google-Smtp-Source: ABdhPJylSpHzUSDTC4Rxwdlw3wUpVna0DXNxoiRAgXeke4nsyFa6/Po/Dx3GI9Cfe2SXWYKqXHpHIA==
+X-Received: by 2002:a05:6638:37a8:b0:32b:5d5c:7f9d with SMTP id w40-20020a05663837a800b0032b5d5c7f9dmr10371462jal.3.1652197409849;
+        Tue, 10 May 2022 08:43:29 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id q19-20020a02c8d3000000b0032b3a781744sm4453024jao.8.2022.05.10.08.43.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 08:43:29 -0700 (PDT)
+Subject: Re: [PATCH 1/3] selftests: vm: add process_mrelease tests
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220510030014.3842475-1-surenb@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <04858a5d-98c8-69be-025f-214e4b10d502@linuxfoundation.org>
+Date:   Tue, 10 May 2022 09:43:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220510030014.3842475-1-surenb@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test script test_cpuset_prs.sh with a helper program wait_inotify
-for exercising the cpuset v2 partition root state code.
+On 5/9/22 9:00 PM, Suren Baghdasaryan wrote:
+> Introduce process_mrelease syscall sanity tests. They include tests of
+> invalid pidfd and flags inputs, attempting to call process_mrelease
+> with a live process and a valid usage of process_mrelease. Because
+> process_mrelease has to be used against a process with a pending SIGKILL,
+> it's possible that the process exits before process_mrelease gets called.
+> In such cases we retry the test with a victim that allocates twice more
+> memory up to 1GB. This would require the victim process to spend more
+> time during exit and process_mrelease has a better chance of catching
+> the process before it exits.
+> 
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/Makefile       |   5 +-
- .../selftests/cgroup/test_cpuset_prs.sh       | 674 ++++++++++++++++++
- tools/testing/selftests/cgroup/wait_inotify.c |  87 +++
- 3 files changed, 764 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
- create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
++1 on Mike's comments on improving the change log. List what is getting
+tested as opposed to describing the test code.
 
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 745fe25fa0b9..01687418b92f 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -1,10 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -Wall -pthread
- 
--all:
-+all: ${HELPER_PROGS}
- 
- TEST_FILES     := with_stress.sh
--TEST_PROGS     := test_stress.sh
-+TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
-+TEST_GEN_FILES := wait_inotify
- TEST_GEN_PROGS = test_memcontrol
- TEST_GEN_PROGS += test_kmem
- TEST_GEN_PROGS += test_core
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-new file mode 100755
-index 000000000000..3ee12f8dc752
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -0,0 +1,674 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test for cpuset v2 partition root state (PRS)
-+#
-+# The sched verbose flag is set, if available, so that the console log
-+# can be examined for the correct setting of scheduling domain.
-+#
-+
-+skip_test() {
-+	echo "$1"
-+	echo "Test SKIPPED"
-+	exit 0
-+}
-+
-+[[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
-+
-+# Set sched verbose flag, if available
-+[[ -d /sys/kernel/debug/sched ]] && echo Y > /sys/kernel/debug/sched/verbose
-+
-+# Get wait_inotify location
-+WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
-+
-+# Find cgroup v2 mount point
-+CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
-+[[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
-+
-+CPUS=$(lscpu | grep "^CPU(s)" | sed -e "s/.*:[[:space:]]*//")
-+[[ $CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
-+
-+# Set verbose flag and delay factor
-+PROG=$1
-+VERBOSE=
-+DELAY_FACTOR=1
-+while [[ "$1" = -* ]]
-+do
-+	case "$1" in
-+		-v) VERBOSE=1
-+		    break
-+		    ;;
-+		-d) DELAY_FACTOR=$2
-+		    shift
-+		    break
-+		    ;;
-+		*)  echo "Usage: $PROG [-v] [-d <delay-factor>"
-+		    exit
-+		    ;;
-+	esac
-+	shift
-+done
-+
-+cd $CGROUP2
-+echo +cpuset > cgroup.subtree_control
-+[[ -d test ]] || mkdir test
-+cd test
-+
-+# Pause in ms
-+pause()
-+{
-+	DELAY=$1
-+	LOOP=0
-+	while [[ $LOOP -lt $DELAY_FACTOR ]]
-+	do
-+		sleep $DELAY
-+		((LOOP++))
-+	done
-+	return 0
-+}
-+
-+console_msg()
-+{
-+	MSG=$1
-+	echo "$MSG"
-+	echo "" > /dev/console
-+	echo "$MSG" > /dev/console
-+	pause 0.01
-+}
-+
-+test_partition()
-+{
-+	EXPECTED_VAL=$1
-+	echo $EXPECTED_VAL > cpuset.cpus.partition
-+	[[ $? -eq 0 ]] || exit 1
-+	ACTUAL_VAL=$(cat cpuset.cpus.partition)
-+	[[ $ACTUAL_VAL != $EXPECTED_VAL ]] && {
-+		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $EXPECTED_VAL"
-+		echo "Test FAILED"
-+		exit 1
-+	}
-+}
-+
-+test_effective_cpus()
-+{
-+	EXPECTED_VAL=$1
-+	ACTUAL_VAL=$(cat cpuset.cpus.effective)
-+	[[ "$ACTUAL_VAL" != "$EXPECTED_VAL" ]] && {
-+		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$EXPECTED_VAL'"
-+		echo "Test FAILED"
-+		exit 1
-+	}
-+}
-+
-+# Adding current process to cgroup.procs as a test
-+test_add_proc()
-+{
-+	OUTSTR="$1"
-+	ERRMSG=$((echo $$ > cgroup.procs) |& cat)
-+	echo $ERRMSG | grep -q "$OUTSTR"
-+	[[ $? -ne 0 ]] && {
-+		echo "cgroup.procs: expect '$OUTSTR', got '$ERRMSG'"
-+		echo "Test FAILED"
-+		exit 1
-+	}
-+	echo $$ > $CGROUP2/cgroup.procs	# Move out the task
-+}
-+
-+#
-+# Testing the new "isolated" partition root type
-+#
-+test_isolated()
-+{
-+	echo 2-3 > cpuset.cpus
-+	TYPE=$(cat cpuset.cpus.partition)
-+	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
-+
-+	console_msg "Change from member to root"
-+	test_partition root
-+
-+	console_msg "Change from root to isolated"
-+	test_partition isolated
-+
-+	console_msg "Change from isolated to member"
-+	test_partition member
-+
-+	console_msg "Change from member to isolated"
-+	test_partition isolated
-+
-+	console_msg "Change from isolated to root"
-+	test_partition root
-+
-+	console_msg "Change from root to member"
-+	test_partition member
-+
-+	#
-+	# Testing partition root with no cpu
-+	#
-+	console_msg "Distribute all cpus to child partition"
-+	echo +cpuset > cgroup.subtree_control
-+	test_partition root
-+
-+	mkdir A1
-+	cd A1
-+	echo 2-3 > cpuset.cpus
-+	test_partition root
-+	test_effective_cpus 2-3
-+	cd ..
-+	test_effective_cpus ""
-+
-+	console_msg "Moving task to partition test"
-+	test_add_proc "No space left"
-+	cd A1
-+	test_add_proc ""
-+	cd ..
-+
-+	console_msg "Shrink and expand child partition"
-+	cd A1
-+	echo 2 > cpuset.cpus
-+	cd ..
-+	test_effective_cpus 3
-+	cd A1
-+	echo 2-3 > cpuset.cpus
-+	cd ..
-+	test_effective_cpus ""
-+
-+	# Cleaning up
-+	console_msg "Cleaning up"
-+	echo $$ > $CGROUP2/cgroup.procs
-+	[[ -d A1 ]] && rmdir A1
-+}
-+
-+#
-+# Cpuset controller state transition test matrix.
-+#
-+# Cgroup test hierarchy
-+#
-+# test -- A1 -- A2 -- A3
-+#      \- B1
-+#
-+#  P<v> = set cpus.partition (0:member, 1:root, 2:isolated, -1:root invalid)
-+#  C<l> = add cpu-list
-+#  S<p> = use prefix in subtree_control
-+#  T    = put a task into cgroup
-+#  O<c>-<v> = Write <v> to CPU online file of <c>
-+#
-+SETUP_A123_PARTITIONS="C1-3:P1:S+ C2-3:P1:S+ C3:P1"
-+TEST_MATRIX=(
-+	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
-+	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	"  S+    C0-1     .      .    C2-3    S+    C4-5     .      .     0 A2:0-1"
-+	"  S+    C0-1     .      .    C2-3    P1      .      .      .     0 "
-+	"  S+    C0-1     .      .    C2-3   P1:S+ C0-1:P1   .      .     0 "
-+	"  S+    C0-1     .      .    C2-3   P1:S+  C1:P1    .      .     0 "
-+	"  S+   C0-1:S+   .      .    C2-3     .      .      .     P1     0 "
-+	"  S+   C0-1:P1   .      .    C2-3    S+     C1      .      .     0 "
-+	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .      .     0 "
-+	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .     P1     0 "
-+	"  S+   C0-1:P1   .      .    C2-3   C4-5     .      .      .     0 A1:4-5"
-+	"  S+   C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
-+	"  S+    C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
-+	"  S+    C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
-+	"  S+ C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1,A2:2-3"
-+	"  S+ C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1,A2:2-3"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3,A2:3 A1:P1,A2:P0"
-+	"  S+ C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4,A2:2"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:,B1:0-2 A1:P1,A2:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+
-+	# CPU offlining cases:
-+	"  S+    C0-1     .      .    C2-3    S+    C4-5     .     O2-0   0 A1:0-1,B1:3"
-+	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0    .      .      .     0 A1:0-1,A2:3"
-+	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0   O2-1    .      .     0 A1:0-1,A2:2-3"
-+	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0    .      .      .     0 A1:0,A2:2-3"
-+	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0   O1-1    .      .     0 A1:0-1,A2:2-3"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"  S+ C2-3:P1:S+  C3:P2  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"  S+ C2-3:P1:S+  C3:P2  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0    .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0    .      .      .     0 A1:2,A2: A1:P1,A2:P1"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .    T:O2-0   .      .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
-+	"  S+ C2-3:P1:S+  C3:P1  .      .      .    T:O3-0   .      .     0 A1:2,A2:2 A1:P1,A2:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    .     O1-0    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .     O2-0    .      .      .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .     O3-0    .      .      .     0 A1:1,A2:2,A3: A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0   .      .     0 A1:1,A2:3,A3:3 A1:P1,A2:P1,A3:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0   .     0 A1:1,A2:2,A3:2 A1:P1,A2:P1,A3:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O1-1    .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0  O2-1    .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0  O3-1   0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O1-1    .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
-+	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O2-1    .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+
-+	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
-+	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	#
-+	# Incorrect change to cpuset.cpus invalidates partition root
-+	#
-+	# Adding CPUs to partition root that are not in parent's
-+	# cpuset.cpus is allowed, but those extra CPUs are ignored.
-+	"  S+ C2-3:P1:S+ C3:P1   .      .      .     C2-4    .      .     0 A1:,A2:2-3 A1:P1,A2:P1"
-+
-+	# Taking away all CPUs from parent or itself if there are tasks
-+	# will make the partition invalid.
-+	"  S+ C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+
-+	# Changing a partition root to member makes child partitions invalid
-+	"  S+ C2-3:P1:S+  C3:P1  .      .      P0     .      .      .     0 A1:2-3,A2:3 A1:P0,A2:P-1"
-+	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    P0     .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P0,A3:P-1"
-+
-+	# cpuset.cpus can contains cpus not in parent's cpuset.cpus as long
-+	# as they overlap.
-+	"  S+ C2-3:P1:S+  .      .      .      .   C3-4:P1   .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+
-+	# Deletion of CPUs distributed to child cgroup is allowed.
-+	"  S+ C0-1:P1:S+ C1      .    C2-3   C4-5     .      .      .     0 A1:4-5,A2:4-5"
-+
-+	# To become a valid partition root, cpuset.cpus must overlap parent's
-+	# cpuset.cpus.
-+	"  S+   C0-1:P1   .      .    C2-3    S+   C4-5:P1   .      .     0 A1:0-1,A2:0-1 A1:P1,A2:P-1"
-+
-+	# Enabling partition with child cpusets is allowed
-+	"  S+   C0-1:S+  C1      .    C2-3    P1      .      .      .     0 A1:0-1,A2:1 A1:P1"
-+
-+	# A partition root with non-partition root parent is invalid, but it
-+	# can be made valid if its parent becomes a partition root too.
-+	"  S+   C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1,A2:1 A1:P0,A2:P-2"
-+	"  S+   C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0,A2:1 A1:P1,A2:P2"
-+
-+	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
-+	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	# Failure cases:
-+
-+	# Any change to cpuset.cpus of a partition root must be exclusive.
-+	"  S+   C0-1:P1   .      .    C2-3   C0-2     .      .      .     1 "
-+	"  S+    C0-1     .      .   C2-3:P1   .      .      .     C1     1 "
-+	"  S+ C2-3:P1:S+  C2:P1  .     C1    C1-3     .      .      .     1 "
-+
-+	# A task cannot be added to a partition with no cpu
-+	"  S+ C2-3:P1:S+  C3:P1  .      .    O2-0:T   .      .      .     1 A1:,A2:3 A1:P1,A2:P1"
-+)
-+
-+#
-+# Write to the cpu online file
-+#  $1 - <c>-<v> where <c> = cpu number, <v> value to be written
-+#
-+write_cpu_online()
-+{
-+	CPU=${1%-*}
-+	VAL=${1#*-}
-+	CPUFILE=//sys/devices/system/cpu/cpu${CPU}/online
-+	if [[ $VAL -eq 0 ]]
-+	then
-+		OFFLINE_CPUS="$OFFLINE_CPUS $CPU"
-+	else
-+		[[ -n "$OFFLINE_CPUS" ]] && {
-+			OFFLINE_CPUS=$(echo $CPU $CPU $OFFLINE_CPUS | fmt -1 |\
-+					sort | uniq -u)
-+		}
-+	fi
-+	echo $VAL > $CPUFILE
-+	pause 0.01
-+}
-+
-+#
-+# Set controller state
-+#  $1 - cgroup directory
-+#  $2 - state
-+#  $3 - showerr
-+#
-+# The presence of ":" in state means transition from one to the next.
-+#
-+set_ctrl_state()
-+{
-+	TMPMSG=/tmp/.msg_$$
-+	CGRP=$1
-+	STATE=$2
-+	SHOWERR=${3}${VERBOSE}
-+	CTRL=${CTRL:=$CONTROLLER}
-+	HASERR=0
-+	REDIRECT="2> $TMPMSG"
-+	[[ -z "$STATE" || "$STATE" = '.' ]] && return 0
-+
-+	rm -f $TMPMSG
-+	for CMD in $(echo $STATE | sed -e "s/:/ /g")
-+	do
-+		TFILE=$CGRP/cgroup.procs
-+		SFILE=$CGRP/cgroup.subtree_control
-+		PFILE=$CGRP/cpuset.cpus.partition
-+		CFILE=$CGRP/cpuset.cpus
-+		S=$(expr substr $CMD 1 1)
-+		if [[ $S = S ]]
-+		then
-+			PREFIX=${CMD#?}
-+			COMM="echo ${PREFIX}${CTRL} > $SFILE"
-+			eval $COMM $REDIRECT
-+		elif [[ $S = C ]]
-+		then
-+			CPUS=${CMD#?}
-+			COMM="echo $CPUS > $CFILE"
-+			eval $COMM $REDIRECT
-+		elif [[ $S = P ]]
-+		then
-+			VAL=${CMD#?}
-+			case $VAL in
-+			0)  VAL=member
-+			    ;;
-+			1)  VAL=root
-+			    ;;
-+			2)  VAL=isolated
-+			    ;;
-+			*)
-+			    echo "Invalid partition state - $VAL"
-+			    exit 1
-+			    ;;
-+			esac
-+			COMM="echo $VAL > $PFILE"
-+			eval $COMM $REDIRECT
-+		elif [[ $S = O ]]
-+		then
-+			VAL=${CMD#?}
-+			write_cpu_online $VAL
-+		elif [[ $S = T ]]
-+		then
-+			COMM="echo 0 > $TFILE"
-+			eval $COMM $REDIRECT
-+		fi
-+		RET=$?
-+		[[ $RET -ne 0 ]] && {
-+			[[ -n "$SHOWERR" ]] && {
-+				echo "$COMM"
-+				cat $TMPMSG
-+			}
-+			HASERR=1
-+		}
-+		pause 0.01
-+		rm -f $TMPMSG
-+	done
-+	return $HASERR
-+}
-+
-+set_ctrl_state_noerr()
-+{
-+	CGRP=$1
-+	STATE=$2
-+	[[ -d $CGRP ]] || mkdir $CGRP
-+	set_ctrl_state $CGRP $STATE 1
-+	[[ $? -ne 0 ]] && {
-+		echo "ERROR: Failed to set $2 to cgroup $1!"
-+		exit 1
-+	}
-+}
-+
-+online_cpus()
-+{
-+	[[ -n "OFFLINE_CPUS" ]] && {
-+		for C in $OFFLINE_CPUS
-+		do
-+			write_cpu_online ${C}-1
-+		done
-+	}
-+}
-+
-+#
-+# Return 1 if the list of effective cpus isn't the same as the initial list.
-+#
-+reset_cgroup_states()
-+{
-+	echo 0 > $CGROUP2/cgroup.procs
-+	online_cpus
-+	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
-+	set_ctrl_state . S-
-+	pause 0.01
-+}
-+
-+dump_states()
-+{
-+	for DIR in A1 A1/A2 A1/A2/A3 B1
-+	do
-+		ECPUS=$DIR/cpuset.cpus.effective
-+		PRS=$DIR/cpuset.cpus.partition
-+		[[ -e $ECPUS ]] && echo "$ECPUS: $(cat $ECPUS)"
-+		[[ -e $PRS   ]] && echo "$PRS: $(cat $PRS)"
-+	done
-+}
-+
-+#
-+# Check effective cpus
-+# $1 - check string, format: <cgroup>:<cpu-list>[,<cgroup>:<cpu-list>]*
-+#
-+check_effective_cpus()
-+{
-+	CHK_STR=$1
-+	for CHK in $(echo $CHK_STR | sed -e "s/,/ /g")
-+	do
-+		set -- $(echo $CHK | sed -e "s/:/ /g")
-+		CGRP=$1
-+		CPUS=$2
-+		[[ $CGRP = A2 ]] && CGRP=A1/A2
-+		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
-+		FILE=$CGRP/cpuset.cpus.effective
-+		[[ -e $FILE ]] || return 1
-+		[[ $CPUS = $(cat $FILE) ]] || return 1
-+	done
-+}
-+
-+#
-+# Check cgroup states
-+#  $1 - check string, format: <cgroup>:<state>[,<cgroup>:<state>]*
-+#
-+check_cgroup_states()
-+{
-+	CHK_STR=$1
-+	for CHK in $(echo $CHK_STR | sed -e "s/,/ /g")
-+	do
-+		set -- $(echo $CHK | sed -e "s/:/ /g")
-+		CGRP=$1
-+		STATE=$2
-+		FILE=
-+		EVAL=$(expr substr $STATE 2 2)
-+		[[ $CGRP = A2 ]] && CGRP=A1/A2
-+		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
-+
-+		case $STATE in
-+			P*) FILE=$CGRP/cpuset.cpus.partition
-+			    ;;
-+			*)  echo "Unknown state: $STATE!"
-+			    exit 1
-+			    ;;
-+		esac
-+		VAL=$(cat $FILE)
-+
-+		case "$VAL" in
-+			member) VAL=0
-+				;;
-+			root)	VAL=1
-+				;;
-+			isolated)
-+				VAL=2
-+				;;
-+			"root invalid"*)
-+				VAL=-1
-+				;;
-+			"isolated invalid"*)
-+				VAL=-2
-+				;;
-+		esac
-+		[[ $EVAL != $VAL ]] && return 1
-+	done
-+	return 0
-+}
-+
-+#
-+# Run cpuset state transition test
-+#  $1 - test matrix name
-+#
-+# This test is somewhat fragile as delays (sleep x) are added in various
-+# places to make sure state changes are fully propagated before the next
-+# action. These delays may need to be adjusted if running in a slower machine.
-+#
-+run_state_test()
-+{
-+	TEST=$1
-+	CONTROLLER=cpuset
-+	CPULIST=0-6
-+	I=0
-+	eval CNT="\${#$TEST[@]}"
-+
-+	reset_cgroup_states
-+	echo $CPULIST > cpuset.cpus
-+	echo root > cpuset.cpus.partition
-+	console_msg "Running state transition test ..."
-+
-+	while [[ $I -lt $CNT ]]
-+	do
-+		echo "Running test $I ..." > /dev/console
-+		eval set -- "\${$TEST[$I]}"
-+		ROOT=$1
-+		OLD_A1=$2
-+		OLD_A2=$3
-+		OLD_A3=$4
-+		OLD_B1=$5
-+		NEW_A1=$6
-+		NEW_A2=$7
-+		NEW_A3=$8
-+		NEW_B1=$9
-+		RESULT=${10}
-+		ECPUS=${11}
-+		STATES=${12}
-+
-+		set_ctrl_state_noerr .        $ROOT
-+		set_ctrl_state_noerr A1       $OLD_A1
-+		set_ctrl_state_noerr A1/A2    $OLD_A2
-+		set_ctrl_state_noerr A1/A2/A3 $OLD_A3
-+		set_ctrl_state_noerr B1       $OLD_B1
-+		RETVAL=0
-+		set_ctrl_state A1       $NEW_A1; ((RETVAL += $?))
-+		set_ctrl_state A1/A2    $NEW_A2; ((RETVAL += $?))
-+		set_ctrl_state A1/A2/A3 $NEW_A3; ((RETVAL += $?))
-+		set_ctrl_state B1       $NEW_B1; ((RETVAL += $?))
-+
-+		[[ $RETVAL -ne $RESULT ]] && {
-+			echo "Test $TEST[$I] failed result check!"
-+			eval echo \"\${$TEST[$I]}\"
-+			dump_states
-+			online_cpus
-+			exit 1
-+		}
-+
-+		[[ -n "$ECPUS" && "$ECPUS" != . ]] && {
-+			check_effective_cpus $ECPUS
-+			[[ $? -ne 0 ]] && {
-+				echo "Test $TEST[$I] failed effective CPU check!"
-+				eval echo \"\${$TEST[$I]}\"
-+				echo
-+				dump_states
-+				online_cpus
-+				exit 1
-+			}
-+		}
-+
-+		[[ -n "$STATES" ]] && {
-+			check_cgroup_states $STATES
-+			[[ $? -ne 0 ]] && {
-+				echo "FAILED: Test $TEST[$I] failed states check!"
-+				eval echo \"\${$TEST[$I]}\"
-+				echo
-+				dump_states
-+				online_cpus
-+				exit 1
-+			}
-+		}
-+
-+		reset_cgroup_states
-+		#
-+		# Check to see if effective cpu list changes
-+		#
-+		pause 0.05
-+		NEWLIST=$(cat cpuset.cpus.effective)
-+		[[ $NEWLIST != $CPULIST ]] && {
-+			echo "Effective cpus changed to $NEWLIST after test $I!"
-+			exit 1
-+		}
-+		[[ -n "$VERBOSE" ]] && echo "Test $I done."
-+		((I++))
-+	done
-+	echo "All $I tests of $TEST PASSED."
-+
-+	echo member > cpuset.cpus.partition
-+}
-+
-+#
-+# Wait for inotify event for the given file and read it
-+# $1: cgroup file to wait for
-+# $2: file to store the read result
-+#
-+wait_inotify()
-+{
-+	CGROUP_FILE=$1
-+	OUTPUT_FILE=$2
-+
-+	$WAIT_INOTIFY $CGROUP_FILE
-+	cat $CGROUP_FILE > $OUTPUT_FILE
-+}
-+
-+#
-+# Test if inotify events are properly generated when going into and out of
-+# invalid partition state.
-+#
-+test_inotify()
-+{
-+	ERR=0
-+	PRS=/tmp/.prs_$$
-+	[[ -f $WAIT_INOTIFY ]] || {
-+		echo "wait_inotify not found, inotify test SKIPPED."
-+		return
-+	}
-+
-+	pause 0.01
-+	echo 1 > cpuset.cpus
-+	echo 0 > cgroup.procs
-+	echo root > cpuset.cpus.partition
-+	pause 0.01
-+	rm -f $PRS
-+	wait_inotify $PWD/cpuset.cpus.partition $PRS &
-+	pause 0.01
-+	set_ctrl_state . "O1-0"
-+	pause 0.01
-+	check_cgroup_states ".:P-1"
-+	if [[ $? -ne 0 ]]
-+	then
-+		echo "FAILED: Inotify test - partition not invalid"
-+		ERR=1
-+	elif [[ ! -f $PRS ]]
-+	then
-+		echo "FAILED: Inotify test - event not generated"
-+		ERR=1
-+		kill %1
-+	elif [[ $(cat $PRS) != "root invalid"* ]]
-+	then
-+		echo "FAILED: Inotify test - incorrect state"
-+		cat $PRS
-+		ERR=1
-+	fi
-+	online_cpus
-+	echo member > cpuset.cpus.partition
-+	echo 0 > ../cgroup.procs
-+	if [[ $ERR -ne 0 ]]
-+	then
-+		exit 1
-+	else
-+		echo "Inotify test PASSED"
-+	fi
-+}
-+
-+run_state_test TEST_MATRIX
-+test_isolated
-+test_inotify
-+echo "All tests PASSED."
-+cd ..
-+rmdir test
-diff --git a/tools/testing/selftests/cgroup/wait_inotify.c b/tools/testing/selftests/cgroup/wait_inotify.c
-new file mode 100644
-index 000000000000..e11b431e1b62
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/wait_inotify.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Wait until an inotify event on the given cgroup file.
-+ */
-+#include <linux/limits.h>
-+#include <sys/inotify.h>
-+#include <sys/mman.h>
-+#include <sys/ptrace.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+static const char usage[] = "Usage: %s [-v] <cgroup_file>\n";
-+static char *file;
-+static int verbose;
-+
-+static inline void fail_message(char *msg)
-+{
-+	fprintf(stderr, msg, file);
-+	exit(1);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	char *cmd = argv[0];
-+	int c, fd;
-+	struct pollfd fds = { .events = POLLIN, };
-+
-+	while ((c = getopt(argc, argv, "v")) != -1) {
-+		switch (c) {
-+		case 'v':
-+			verbose++;
-+			break;
-+		}
-+		argv++, argc--;
-+	}
-+
-+	if (argc != 2) {
-+		fprintf(stderr, usage, cmd);
-+		return -1;
-+	}
-+	file = argv[1];
-+	fd = open(file, O_RDONLY);
-+	if (fd < 0)
-+		fail_message("Cgroup file %s not found!\n");
-+	close(fd);
-+
-+	fd = inotify_init();
-+	if (fd < 0)
-+		fail_message("inotify_init() fails on %s!\n");
-+	if (inotify_add_watch(fd, file, IN_MODIFY) < 0)
-+		fail_message("inotify_add_watch() fails on %s!\n");
-+	fds.fd = fd;
-+
-+	/*
-+	 * poll waiting loop
-+	 */
-+	for (;;) {
-+		int ret = poll(&fds, 1, 10000);
-+
-+		if (ret < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			perror("poll");
-+			exit(1);
-+		}
-+		if ((ret > 0) && (fds.revents & POLLIN))
-+			break;
-+	}
-+	if (verbose) {
-+		struct inotify_event events[10];
-+		long len;
-+
-+		usleep(1000);
-+		len = read(fd, events, sizeof(events));
-+		printf("Number of events read = %ld\n",
-+			len/sizeof(struct inotify_event));
-+	}
-+	close(fd);
-+	return 0;
-+}
--- 
-2.27.0
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>   tools/testing/selftests/vm/Makefile        |   1 +
+>   tools/testing/selftests/vm/mrelease_test.c | 176 +++++++++++++++++++++
+>   tools/testing/selftests/vm/run_vmtests.sh  |  16 ++
+>   3 files changed, 193 insertions(+)
+>   create mode 100644 tools/testing/selftests/vm/mrelease_test.c
 
+Please update .gitignore with the new executable.
+
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 04a49e876a46..733fccbff0ef 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -43,6 +43,7 @@ TEST_GEN_FILES += map_populate
+>   TEST_GEN_FILES += memfd_secret
+>   TEST_GEN_FILES += mlock-random-test
+>   TEST_GEN_FILES += mlock2-tests
+> +TEST_GEN_FILES += mrelease_test
+>   TEST_GEN_FILES += mremap_dontunmap
+>   TEST_GEN_FILES += mremap_test
+>   TEST_GEN_FILES += on-fault-limit
+> diff --git a/tools/testing/selftests/vm/mrelease_test.c b/tools/testing/selftests/vm/mrelease_test.c
+> new file mode 100644
+> index 000000000000..a61061bf8433
+> --- /dev/null
+> +++ b/tools/testing/selftests/vm/mrelease_test.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2022 Google LLC
+> + */
+> +#define _GNU_SOURCE
+> +#include <errno.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +
+> +#include "util.h"
+> +
+> +static inline int pidfd_open(pid_t pid, unsigned int flags)
+> +{
+> +#ifdef __NR_pidfd_open
+> +	return syscall(__NR_pidfd_open, pid, flags);
+> +#else
+> +	errno = ENOSYS;
+
+This isn't an error - this would be skip because this syscall
+isn't supported.
+
+> +	return -1;
+> +#endif
+
+Key off of syscall return instead of these ifdefs - same comment
+on all of the ifdefs
+
+> +}
+> +
+
+I am not seeing any reason for breaking this code up have a separate
+routine for pidfd_open().
+
+> +static inline int process_mrelease(int pidfd, unsigned int flags)
+> +{
+> +#ifdef __NR_process_mrelease
+> +	return syscall(__NR_process_mrelease, pidfd, flags);
+> +#else
+> +	errno = ENOSYS;
+> +	return -1;
+> +#endif> +}
+> +
+
+Same comments on ifdefs and skips here as well.
+
+> +static void write_fault_pages(char *addr, unsigned long nr_pages)
+> +{
+> +	unsigned long i;
+> +
+> +	for (i = 0; i < nr_pages; i++)
+> +		*((unsigned long *)(addr + (i * PAGE_SIZE))) = i;
+> +}
+> +
+> +static int alloc_noexit(unsigned long nr_pages, int pipefd)
+> +{
+> +	int ppid = getppid();
+> +	void *buf;
+> +
+> +	buf = mmap(NULL, nr_pages * PAGE_SIZE, PROT_READ | PROT_WRITE,
+> +		   MAP_PRIVATE | MAP_ANON, 0, 0);
+> +	if (buf == MAP_FAILED) {
+> +		perror("mmap");
+
+A bit more descriptive message what the test would do will be helpful.
+Also consider if this should be a skip or fail for the test.
+
+> +		return 1;
+> +	}
+> +
+> +	write_fault_pages((char *)buf, nr_pages);
+> +
+> +	/* Signal the parent that the child is ready */
+> +	if (write(pipefd, "", 1) < 0) {
+> +		perror("write");
+> +		return 1;
+> +	}
+> +
+> +	/* Wait to be killed (when reparenting happens) */
+> +	while (getppid() == ppid)
+> +		sleep(1);
+> +
+
+What happens if reparenting doesn't happen? Will this loop for ever?
+This test could hang?
+
+> +	munmap(buf, nr_pages * PAGE_SIZE);
+> +
+> +	return 0;
+> +}
+> +
+> +
+> +#define MB(x) (x << 20)
+> +#define MAX_SIZE_MB 1024
+> +
+> +int main(void)
+> +{
+> +	int res;
+> +	int pipefd[2], pidfd;
+> +	pid_t pid;
+> +	char byte;
+> +	size_t size;
+> +	int negative_tests_done = 0;
+> +
+> +	/* Test a wrong pidfd */
+> +	if (!process_mrelease(-1, 0) || errno != EBADF) {
+> +		perror("process_mrelease with wring pidfd");
+
+Incorrect spelling "wring/wrong"
+
+> +		exit(1);
+> +	}
+> +
+> +	/*
+> +	 * Start the test with 1MB allocation and double every time
+> +	 * process_mrelease fails
+> +	 */
+> +	for (size = 1; size <= MAX_SIZE_MB; size *= 2) {
+> +		/*
+> +		 * Pipe for the child to signal when it's done allocating
+> +		 * memory
+> +		 */
+> +		if (pipe(pipefd)) {
+> +			perror("pipe");
+> +			exit(1);
+> +		}
+> +		pid = fork();
+> +		if (pid < 0) {
+> +			perror("fork");
+
+Close the pipe?
+
+> +			exit(1);
+> +		}
+> +
+> +		if (pid == 0) {
+> +			close(pipefd[0]);
+> +			res = alloc_noexit(MB(size) / PAGE_SIZE, pipefd[1]);
+> +			close(pipefd[1]);
+> +			exit(res);
+> +		}
+> +
+> +		close(pipefd[1]);
+> +		/* Block until the child is ready */
+> +		res = read(pipefd[0], &byte, 1);
+> +		close(pipefd[0]);
+> +		if (res < 0) {
+> +			perror("read");
+> +			exit(1);
+> +		}
+> +
+> +		pidfd = pidfd_open(pid, 0);
+> +		if (pidfd < 0) {
+> +			perror("pidfd_open");
+> +			exit(1);
+> +		}
+> +
+
+The code is very hard to read. Add comments to indicate parent and child
+paths clearly so reviewers can follow the logic and be able to do effective
+review.
+
+> +		/* Run negative tests which require a valid child only once */
+> +		if (!negative_tests_done) {
+> +			/* Test invalid flags */
+> +			if (!process_mrelease(pidfd, (unsigned int)-1) ||
+> +			    errno != EINVAL) {
+> +				perror("process_mrelease with wrong flags");
+> +				exit(1);
+
+So is this an expected fail or a test fail?
+
+> +			}
+> +			/* Test reapling while process is still alive */
+> +			if (!process_mrelease(pidfd, 0) ||
+> +			    errno != EINVAL) {
+> +				perror("process_mrelease on a live process");
+
+So is this an expected fail or a test fail?
+
+> +				exit(1);
+> +			}
+> +			negative_tests_done = 1;
+> +		}
+
+Now the above negative_tests_done block could be in a separate function ---
+All the others aren't really needed. It will be good for abstraction and
+readability.
+
+> +
+> +		if (kill(pid, SIGKILL)) {
+> +			perror("kill");
+
+Include test results in the change log - so we can see the test report.
+
+> +			exit(1);
+> +		}
+> +
+> +		if (!process_mrelease(pidfd, 0)) {
+> +			/* Terminate the test once process_mrelease succeeds */
+> +			return 0;
+> +		}
+> +
+> +		/*
+> +		 * Ignore the failure if the child exited before mrelease got
+> +		 * called, increase allocation size and retry the test
+> +		 */
+
+Add more info. on why allocating more memory helps.
+
+> +		if (errno != ESRCH) {
+> +			perror("process_mrelease");
+> +			exit(1);
+> +		}
+> +
+> +		if (waitpid(pid, NULL, 0) < 0) {
+> +			perror("waitpid");
+> +			exit(1);
+> +		}
+> +		close(pidfd);
+> +	}
+> +
+> +	printf("All process_mrelease attempts failed!\n");
+> +	exit(1);
+> +}
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index 352ba00cf26b..1986162fea39 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -287,6 +287,22 @@ else
+>   	echo "[PASS]"
+>   fi
+>   
+> +echo "---------------------"
+> +echo "running mrelease_test"
+> +echo "---------------------"
+> +./mrelease_test
+> +ret_val=$?
+> +
+> +if [ $ret_val -eq 0 ]; then
+> +	echo "[PASS]"
+> +elif [ $ret_val -eq $ksft_skip ]; then
+> +	 echo "[SKIP]"
+> +	 exitcode=$ksft_skip
+> +else
+> +	echo "[FAIL]"
+> +	exitcode=1
+> +fi
+> +
+>   echo "-------------------"
+>   echo "running mremap_test"
+>   echo "-------------------"
+> 
+
+In general, the code flow is hard to read to make sure resources
+are released e.g: pipefd in all the error paths. The code is broken
+up into smaller chunks where it isn't needed in some cases and left
+as a large block when it could benefit from abstraction e.g: negative
+test block.
+
+Please make changes and send v2.
+
+thanks,
+-- Shuah
