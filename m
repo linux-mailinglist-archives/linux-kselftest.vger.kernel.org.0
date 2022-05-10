@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FC6521DBD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 17:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB4C521DC0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 17:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244384AbiEJPOE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 11:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
+        id S244837AbiEJPOF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 11:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244599AbiEJPNl (ORCPT
+        with ESMTP id S1345277AbiEJPNl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 10 May 2022 11:13:41 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAA060B83;
-        Tue, 10 May 2022 07:47:38 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ADikcg008644;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0460D606C8;
+        Tue, 10 May 2022 07:47:37 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ADoZia012793;
         Tue, 10 May 2022 14:47:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
  date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=eyt5hiGa7n66kMkEciJfALNttgaB3vIqcwLwpURyBMQ=;
- b=VVckLdvtn+Bsl2H4gp57qgphVVcrgXhwAeZPAYhhDfNH02M7CANIm0FYMeedD6uaGKg0
- wht4ImN29QjMxsOlwWtGsycmoGi05YoCDxeH/rbum2HGy/VOm335QGQN2gn4F0vm3zul
- b1S3mAdDDbAbRFtTuOkrteXip54d72TGKtLyxu5VUgDznDP+yBOTs/KProA+3ySGekfe
- VXGe0Ui+fwpd2RE6zgyuw5HKSt04+g//VwVSfuxIpGlsDw2wGxACuI7sICZRPx0b4GaO
- YIIgKVAtL/sfsoCH69V5STl2srXgMu6XTbnWOuj1q7ngEWW5B4Rth+9igsC3KUB4eOln yQ== 
+ bh=J1YY+eeH/Cn+Un11hD9A+z9P1pkoTiE80D60ILE2xKo=;
+ b=S4RbdNWzqrArQMUj+Lmr/bkBtGVoFMyY4xqHlp0Ko5nQkvzUmrX6pWppq8EUqVpogUST
+ ie2v52//T9brCE2jUX9pOC8Ta12CzHVk8qtwwq9UJFLBb/aHVKxpIbdDyv8aYZsJT+Qr
+ xHhlrHLX969+K1dPssQrYv++y8JmZ6DUGtWlMFYSLHPSiUJkMfAz+PU9Rlat6zj8qHCq
+ J8vCkn2Lc6VrE13XBt1C1OX+nDIGZDXK4v38lalEbW5BRGhfB9KeS6PcFEbD3lFb5Pbf
+ MZ7r8n0eh5Z0ocZDMoBV3FedEMMRapLVrASIW5pesA7gupjUoEC945aWbF958aLcal6W jQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fys3m1wbw-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fys9nscac-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 10 May 2022 14:47:31 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AETKMR014202;
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24AE6J9Q015665;
         Tue, 10 May 2022 14:47:31 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fys3m1wb6-1
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fys9nsc9x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 May 2022 14:47:30 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AEblGB014762;
+        Tue, 10 May 2022 14:47:31 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24AEdJr9012538;
         Tue, 10 May 2022 14:47:29 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3fwgd8u9pm-1
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fyrkk0495-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 10 May 2022 14:47:29 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AEl9Yo32309728
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24AEXqdE47972646
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 May 2022 14:47:09 GMT
+        Tue, 10 May 2022 14:33:52 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E030FA4054;
-        Tue, 10 May 2022 14:47:25 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5D12BA405B;
+        Tue, 10 May 2022 14:47:26 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7215FA405C;
+        by IMSVA (Postfix) with ESMTP id EC32FA405F;
         Tue, 10 May 2022 14:47:25 +0000 (GMT)
 Received: from t46lp73.. (unknown [9.152.108.100])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
@@ -68,490 +68,429 @@ To:     Greg KH <greg@kroah.com>, Heiko Carstens <hca@linux.ibm.com>,
         David Hildenbrand <david@redhat.com>,
         Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
-Date:   Tue, 10 May 2022 14:47:23 +0000
-Message-Id: <20220510144724.3321985-2-seiden@linux.ibm.com>
+Subject: [PATCH v4 2/2] selftests: drivers/s390x: Add uvdevice tests
+Date:   Tue, 10 May 2022 14:47:24 +0000
+Message-Id: <20220510144724.3321985-3-seiden@linux.ibm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220510144724.3321985-1-seiden@linux.ibm.com>
 References: <20220510144724.3321985-1-seiden@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dQuew_eGakYDbJdGSY-qlCB5BVmx48Qw
-X-Proofpoint-ORIG-GUID: 0Hqscpe0pH5kbJUFAbvbE50bbc85gt8N
+X-Proofpoint-GUID: q3_6BCBEDX1bwLD2J6sEjOGZM2vOmSPH
+X-Proofpoint-ORIG-GUID: 0_GCxnZvWr6hjanpg_fjO3Pdk17KYLc9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-10_03,2022-05-10_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 phishscore=0 spamscore=0
- impostorscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2205100067
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds a new miscdevice to expose some Ultravisor functions
-to userspace. Userspace can send IOCTLs to the uvdevice that will then
-emit a corresponding Ultravisor Call and hands the result over to
-userspace. The uvdevice is available if the Ultravisor Call facility is
-present.
-Userspace can call the Retrieve Attestation Measurement
-Ultravisor Call using IOCTLs on the uvdevice.
+Adds some selftests to test ioctl error paths of the uv-uapi.
+The Kconfig S390_UV_UAPI must be selected and the Ultravisor facility
+must be available. The test can be executed by non-root, however, the
+uvdevice special file /dev/uv must be accessible for reading and
+writing which may imply root privileges.
 
-The uvdevice will do some sanity checks first.
-Then, copy the request data to kernel space, build the UVCB,
-perform the UV call, and copy the result back to userspace.
+  ./test-uv-device
+  TAP version 13
+  1..6
+  # Starting 6 tests from 3 test cases.
+  #  RUN           uvio_fixture.att.fault_ioctl_arg ...
+  #            OK  uvio_fixture.att.fault_ioctl_arg
+  ok 1 uvio_fixture.att.fault_ioctl_arg
+  #  RUN           uvio_fixture.att.fault_uvio_arg ...
+  #            OK  uvio_fixture.att.fault_uvio_arg
+  ok 2 uvio_fixture.att.fault_uvio_arg
+  #  RUN           uvio_fixture.att.inval_ioctl_cb ...
+  #            OK  uvio_fixture.att.inval_ioctl_cb
+  ok 3 uvio_fixture.att.inval_ioctl_cb
+  #  RUN           uvio_fixture.att.inval_ioctl_cmd ...
+  #            OK  uvio_fixture.att.inval_ioctl_cmd
+  ok 4 uvio_fixture.att.inval_ioctl_cmd
+  #  RUN           attest_fixture.att_inval_request ...
+  #            OK  attest_fixture.att_inval_request
+  ok 5 attest_fixture.att_inval_request
+  #  RUN           attest_fixture.att_inval_addr ...
+  #            OK  attest_fixture.att_inval_addr
+  ok 6 attest_fixture.att_inval_addr
+  # PASSED: 6 / 6 tests passed.
+  # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
 
 Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Acked-by: Janosch Frank <frankja@linux.ibm.com>
 ---
- MAINTAINERS                           |   2 +
- arch/s390/include/asm/uv.h            |  23 ++-
- arch/s390/include/uapi/asm/uvdevice.h |  51 +++++
- drivers/s390/char/Kconfig             |  10 +
- drivers/s390/char/Makefile            |   1 +
- drivers/s390/char/uvdevice.c          | 264 ++++++++++++++++++++++++++
- 6 files changed, 350 insertions(+), 1 deletion(-)
- create mode 100644 arch/s390/include/uapi/asm/uvdevice.h
- create mode 100644 drivers/s390/char/uvdevice.c
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/drivers/.gitignore    |   1 +
+ .../selftests/drivers/s390x/uvdevice/Makefile |  22 ++
+ .../selftests/drivers/s390x/uvdevice/config   |   1 +
+ .../drivers/s390x/uvdevice/test_uvdevice.c    | 276 ++++++++++++++++++
+ 6 files changed, 302 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/Makefile
+ create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/config
+ create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index e8c52d0192a6..b42ab4a35e18 100644
+index b42ab4a35e18..46a9b1467380 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -10781,9 +10781,11 @@ F:	Documentation/virt/kvm/s390*
- F:	arch/s390/include/asm/gmap.h
- F:	arch/s390/include/asm/kvm*
- F:	arch/s390/include/uapi/asm/kvm*
-+F:	arch/s390/include/uapi/asm/uvdevice.h
- F:	arch/s390/kernel/uv.c
+@@ -10786,6 +10786,7 @@ F:	arch/s390/kernel/uv.c
  F:	arch/s390/kvm/
  F:	arch/s390/mm/gmap.c
-+F:	drivers/s390/char/uvdevice.c
+ F:	drivers/s390/char/uvdevice.c
++F:	tools/testing/selftests/drivers/s390x/uvdevice/
  F:	tools/testing/selftests/kvm/*/s390x/
  F:	tools/testing/selftests/kvm/s390x/
  
-diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-index a2d376b8bce3..cfea7b77a5b8 100644
---- a/arch/s390/include/asm/uv.h
-+++ b/arch/s390/include/asm/uv.h
-@@ -2,7 +2,7 @@
- /*
-  * Ultravisor Interfaces
-  *
-- * Copyright IBM Corp. 2019
-+ * Copyright IBM Corp. 2019, 2022
-  *
-  * Author(s):
-  *	Vasily Gorbik <gor@linux.ibm.com>
-@@ -52,6 +52,7 @@
- #define UVC_CMD_UNPIN_PAGE_SHARED	0x0342
- #define UVC_CMD_SET_SHARED_ACCESS	0x1000
- #define UVC_CMD_REMOVE_SHARED_ACCESS	0x1001
-+#define UVC_CMD_RETR_ATTEST		0x1020
- 
- /* Bits in installed uv calls */
- enum uv_cmds_inst {
-@@ -76,6 +77,7 @@ enum uv_cmds_inst {
- 	BIT_UVC_CMD_UNSHARE_ALL = 20,
- 	BIT_UVC_CMD_PIN_PAGE_SHARED = 21,
- 	BIT_UVC_CMD_UNPIN_PAGE_SHARED = 22,
-+	BIT_UVC_CMD_RETR_ATTEST = 28,
- };
- 
- enum uv_feat_ind {
-@@ -219,6 +221,25 @@ struct uv_cb_share {
- 	u64 reserved28;
- } __packed __aligned(8);
- 
-+/* Retrieve Attestation Measurement */
-+struct uv_cb_attest {
-+	struct uv_cb_header header;	/* 0x0000 */
-+	u64 reserved08[2];		/* 0x0008 */
-+	u64 arcb_addr;			/* 0x0018 */
-+	u64 cont_token;			/* 0x0020 */
-+	u8  reserved28[6];		/* 0x0028 */
-+	u16 user_data_len;		/* 0x002e */
-+	u8  user_data[256];		/* 0x0030 */
-+	u32 reserved130[3];		/* 0x0130 */
-+	u32 meas_len;			/* 0x013c */
-+	u64 meas_addr;			/* 0x0140 */
-+	u8  config_uid[16];		/* 0x0148 */
-+	u32 reserved158;		/* 0x0158 */
-+	u32 add_data_len;		/* 0x015c */
-+	u64 add_data_addr;		/* 0x0160 */
-+	u64 reserved168[4];		/* 0x0168 */
-+} __packed __aligned(8);
-+
- static inline int __uv_call(unsigned long r1, unsigned long r2)
- {
- 	int cc;
-diff --git a/arch/s390/include/uapi/asm/uvdevice.h b/arch/s390/include/uapi/asm/uvdevice.h
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 2319ec87f53d..d6b307371ef7 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -10,6 +10,7 @@ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += drivers/dma-buf
++TARGETS += drivers/s390x/uvdevice
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/.gitignore b/tools/testing/selftests/drivers/.gitignore
+index ca74f2e1c719..09e23b5afa96 100644
+--- a/tools/testing/selftests/drivers/.gitignore
++++ b/tools/testing/selftests/drivers/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ /dma-buf/udmabuf
++/s390x/uvdevice/test_uvdevice
+diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
 new file mode 100644
-index 000000000000..d0bdde4969a1
+index 000000000000..5e701d2708d4
 --- /dev/null
-+++ b/arch/s390/include/uapi/asm/uvdevice.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ *  Copyright IBM Corp. 2022
-+ *  Author(s): Steffen Eiden <seiden@linux.ibm.com>
-+ */
-+#ifndef __S390_ASM_UVDEVICE_H
-+#define __S390_ASM_UVDEVICE_H
++++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
+@@ -0,0 +1,22 @@
++include ../../../../../build/Build.include
 +
-+#include <linux/types.h>
++UNAME_M := $(shell uname -m)
 +
-+struct uvio_ioctl_cb {
-+	__u32 flags;
-+	__u16 uv_rc;			/* UV header rc value */
-+	__u16 uv_rrc;			/* UV header rrc value */
-+	__u64 argument_addr;		/* Userspace address of uvio argument */
-+	__u32 argument_len;
-+	__u8  reserved14[0x40 - 0x14];	/* must be zero */
-+};
++ifneq ($(UNAME_M),s390x)
++nothing:
++.PHONY: all clean run_tests install
++.SILENT:
++else
 +
-+#define UVIO_ATT_USER_DATA_LEN		0x100
-+#define UVIO_ATT_UID_LEN		0x10
-+struct uvio_attest {
-+	__u64 arcb_addr;				/* 0x0000 */
-+	__u64 meas_addr;				/* 0x0008 */
-+	__u64 add_data_addr;				/* 0x0010 */
-+	__u8  user_data[UVIO_ATT_USER_DATA_LEN];	/* 0x0018 */
-+	__u8  config_uid[UVIO_ATT_UID_LEN];		/* 0x0118 */
-+	__u32 arcb_len;					/* 0x0128 */
-+	__u32 meas_len;					/* 0x012c */
-+	__u32 add_data_len;				/* 0x0130 */
-+	__u16 user_data_len;				/* 0x0134 */
-+	__u16 reserved136;				/* 0x0136 */
-+};
++TEST_GEN_PROGS := test_uvdevice
 +
-+/*
-+ * The following max values define an upper length for the IOCTL in/out buffers.
-+ * However, they do not represent the maximum the Ultravisor allows which is
-+ * often way smaller. By allowing larger buffer sizes we hopefully do not need
-+ * to update the code with every machine update. It is therefore possible for
-+ * userspace to request more memory than actually used by kernel/UV.
-+ */
-+#define UVIO_ATT_ARCB_MAX_LEN		0x100000
-+#define UVIO_ATT_MEASUREMENT_MAX_LEN	0x8000
-+#define UVIO_ATT_ADDITIONAL_MAX_LEN	0x8000
++top_srcdir ?= ../../../../../..
++KSFT_KHDR_INSTALL := 1
++khdr_dir = $(top_srcdir)/usr/include
++LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
 +
-+#define UVIO_DEVICE_NAME "uv"
-+#define UVIO_TYPE_UVC 'u'
++CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
 +
-+#define UVIO_IOCTL_ATT _IOWR(UVIO_TYPE_UVC, 0x01, struct uvio_ioctl_cb)
++include ../../../lib.mk
 +
-+#endif  /* __S390_ASM_UVDEVICE_H */
-diff --git a/drivers/s390/char/Kconfig b/drivers/s390/char/Kconfig
-index 6cc4b19acf85..e9b9902abbaf 100644
---- a/drivers/s390/char/Kconfig
-+++ b/drivers/s390/char/Kconfig
-@@ -100,6 +100,16 @@ config SCLP_OFB
- 	  This option enables the Open-for-Business interface to the s390
- 	  Service Element.
- 
-+config S390_UV_UAPI
-+	def_tristate y
-+	prompt "Ultravisor userspace API"
-+	help
-+	  Selecting exposes parts of the UV interface to userspace
-+	  by providing a misc character device at /dev/uv.
-+	  Using IOCTLs one can interact with the UV.
-+	  The device is only available if the Ultravisor
-+	  Facility (158) is present.
-+
- config S390_TAPE
- 	def_tristate m
- 	prompt "S/390 tape device support"
-diff --git a/drivers/s390/char/Makefile b/drivers/s390/char/Makefile
-index c6fdb81a068a..ce32270082f5 100644
---- a/drivers/s390/char/Makefile
-+++ b/drivers/s390/char/Makefile
-@@ -48,6 +48,7 @@ obj-$(CONFIG_MONREADER) += monreader.o
- obj-$(CONFIG_MONWRITER) += monwriter.o
- obj-$(CONFIG_S390_VMUR) += vmur.o
- obj-$(CONFIG_CRASH_DUMP) += sclp_sdias.o zcore.o
-+obj-$(CONFIG_S390_UV_UAPI) += uvdevice.o
- 
- hmcdrv-objs := hmcdrv_mod.o hmcdrv_dev.o hmcdrv_ftp.o hmcdrv_cache.o diag_ftp.o sclp_ftp.o
- obj-$(CONFIG_HMC_DRV) += hmcdrv.o
-diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
++endif
+diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/config b/tools/testing/selftests/drivers/s390x/uvdevice/config
 new file mode 100644
-index 000000000000..bcada86e8fc4
+index 000000000000..f28a04b99eff
 --- /dev/null
-+++ b/drivers/s390/char/uvdevice.c
-@@ -0,0 +1,264 @@
++++ b/tools/testing/selftests/drivers/s390x/uvdevice/config
+@@ -0,0 +1 @@
++CONFIG_S390_UV_UAPI=y
+diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+new file mode 100644
+index 000000000000..ea0cdc37b44f
+--- /dev/null
++++ b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+@@ -0,0 +1,276 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
++ *  selftest for the Ultravisor UAPI device
++ *
 + *  Copyright IBM Corp. 2022
 + *  Author(s): Steffen Eiden <seiden@linux.ibm.com>
-+ *
-+ *  This file provides a Linux misc device to give userspace access to some
-+ *  Ultravisor (UV) functions. The device only accepts IOCTLs and will only
-+ *  be present if the Ultravisor facility (158) is present.
-+ *
-+ *  When userspace sends a valid IOCTL uvdevice will copy the input data to
-+ *  kernel space, do some basic validity checks to avoid kernel/system
-+ *  corruption. Any other check that the Ultravisor does will not be done by
-+ *  the uvdevice to keep changes minimal when adding new functionalities
-+ *  to existing UV-calls.
-+ *  After the checks uvdevice builds a corresponding
-+ *  Ultravisor Call Control Block, and sends the request to the Ultravisor.
-+ *  Then, it copies the response, including the return codes, back to userspace.
-+ *  It is the responsibility of the userspace to check for any error issued
-+ *  by UV and to interpret the UV response. The uvdevice acts as a communication
-+ *  channel for userspace to the Ultravisor.
 + */
 +
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/miscdevice.h>
-+#include <linux/types.h>
-+#include <linux/stddef.h>
-+#include <linux/vmalloc.h>
-+#include <linux/slab.h>
++#include <stdint.h>
++#include <fcntl.h>
++#include <errno.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
 +
 +#include <asm/uvdevice.h>
-+#include <asm/uv.h>
 +
-+static int uvio_build_uvcb_attest(struct uv_cb_attest *uvcb_attest, u8 *arcb,
-+				  u8 *meas, u8 *add_data, struct uvio_attest *uvio_attest)
++#include "../../../kselftest_harness.h"
++
++#define UV_PATH  "/dev/uv"
++#define BUFFER_SIZE 0x200
++FIXTURE(uvio_fixture) {
++	int uv_fd;
++	struct uvio_ioctl_cb uvio_ioctl;
++	uint8_t buffer[BUFFER_SIZE];
++	__u64 fault_page;
++};
++
++FIXTURE_VARIANT(uvio_fixture) {
++	unsigned long ioctl_cmd;
++	uint32_t arg_size;
++};
++
++FIXTURE_VARIANT_ADD(uvio_fixture, att) {
++	.ioctl_cmd = UVIO_IOCTL_ATT,
++	.arg_size = sizeof(struct uvio_attest),
++};
++
++FIXTURE_SETUP(uvio_fixture)
 +{
-+	void __user *user_buf_arcb = (void __user *)uvio_attest->arcb_addr;
++	self->uv_fd = open(UV_PATH, O_ACCMODE);
 +
-+	if (copy_from_user(arcb, user_buf_arcb, uvio_attest->arcb_len))
-+		return -EFAULT;
-+
-+	uvcb_attest->header.len = sizeof(*uvcb_attest);
-+	uvcb_attest->header.cmd = UVC_CMD_RETR_ATTEST;
-+	uvcb_attest->arcb_addr = (u64)arcb;
-+	uvcb_attest->cont_token = 0;
-+	uvcb_attest->user_data_len = uvio_attest->user_data_len;
-+	memcpy(uvcb_attest->user_data, uvio_attest->user_data, sizeof(uvcb_attest->user_data));
-+	uvcb_attest->meas_len = uvio_attest->meas_len;
-+	uvcb_attest->meas_addr = (u64)meas;
-+	uvcb_attest->add_data_len = uvio_attest->add_data_len;
-+	uvcb_attest->add_data_addr = (u64)add_data;
-+
-+	return 0;
++	self->uvio_ioctl.argument_addr = (__u64)self->buffer;
++	self->uvio_ioctl.argument_len = variant->arg_size;
++	self->fault_page =
++		(__u64)mmap(NULL, (size_t)getpagesize(), PROT_NONE, MAP_ANONYMOUS, -1, 0);
 +}
 +
-+static int uvio_copy_attest_result_to_user(struct uv_cb_attest *uvcb_attest,
-+					   struct uvio_ioctl_cb *uv_ioctl,
-+					   u8 *measurement, u8 *add_data,
-+					   struct uvio_attest *uvio_attest)
++FIXTURE_TEARDOWN(uvio_fixture)
 +{
-+	struct uvio_attest __user *user_uvio_attest = (void __user *)uv_ioctl->argument_addr;
-+	void __user *user_buf_add = (void __user *)uvio_attest->add_data_addr;
-+	void __user *user_buf_meas = (void __user *)uvio_attest->meas_addr;
-+	void __user *user_buf_uid = &user_uvio_attest->config_uid;
-+
-+	if (copy_to_user(user_buf_meas, measurement, uvio_attest->meas_len))
-+		return -EFAULT;
-+	if (add_data && copy_to_user(user_buf_add, add_data, uvio_attest->add_data_len))
-+		return -EFAULT;
-+	if (copy_to_user(user_buf_uid, uvcb_attest->config_uid, sizeof(uvcb_attest->config_uid)))
-+		return -EFAULT;
-+	return 0;
++	if (self->uv_fd)
++		close(self->uv_fd);
++	munmap((void *)self->fault_page, (size_t)getpagesize());
 +}
 +
-+static int get_uvio_attest(struct uvio_ioctl_cb *uv_ioctl, struct uvio_attest *uvio_attest)
++TEST_F(uvio_fixture, fault_ioctl_arg)
 +{
-+	u8 __user *user_arg_buf = (u8 __user *)uv_ioctl->argument_addr;
++	int rc, errno_cache;
 +
-+	if (copy_from_user(uvio_attest, user_arg_buf, sizeof(*uvio_attest)))
-+		return -EFAULT;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, NULL);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EFAULT);
 +
-+	if (uvio_attest->arcb_len > UVIO_ATT_ARCB_MAX_LEN)
-+		return -EINVAL;
-+	if (uvio_attest->arcb_len == 0)
-+		return -EINVAL;
-+	if (uvio_attest->meas_len > UVIO_ATT_MEASUREMENT_MAX_LEN)
-+		return -EINVAL;
-+	if (uvio_attest->meas_len == 0)
-+		return -EINVAL;
-+	if (uvio_attest->add_data_len > UVIO_ATT_ADDITIONAL_MAX_LEN)
-+		return -EINVAL;
-+	if (uvio_attest->reserved136)
-+		return -EINVAL;
-+	return 0;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, self->fault_page);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EFAULT);
 +}
 +
-+/**
-+ * uvio_attestation() - Perform a Retrieve Attestation Measurement UVC.
-+ *
-+ * @uv_ioctl: ioctl control block
-+ *
-+ * uvio_attestation() does a  Retrieve Attestation Measurement Ultravisor Call.
-+ * It verifies that the given userspace addresses are valid and request sizes
-+ * are sane. Every other check is made by the Ultravisor (UV) and won't result
-+ * in a negative return value. It copies the input to kernelspace, builds the
-+ * request, sends the UV-call, and copies the result to userspace.
-+ *
-+ * The Attestation Request has two input and two outputs.
-+ * ARCB and User Data are inputs for the UV generated by userspace.
-+ * Measurement and Additional Data are outputs for userspace generated by UV.
-+ *
-+ * The Attestation Request Control Block (ARCB) is a cryptographically verified
-+ * and secured request to UV and User Data is some plaintext data which is
-+ * going to be included in the Attestation Measurement calculation.
-+ *
-+ * Measurement is a cryptographic measurement of the callers properties,
-+ * optional data configured by the ARCB and the user data. If specified by the
-+ * ARCB, UV will add some Additional Data to the measurement calculation.
-+ * This Additional Data is then returned as well.
-+ *
-+ * If the Retrieve Attestation Measurement UV facility is not present,
-+ * UV will return invalid command rc. This won't be fenced in the driver
-+ * and does not result in a negative return value.
-+ *
-+ * Context: might sleep
-+ *
-+ * Return: 0 on success or a negative error code on error.
-+ */
-+static int uvio_attestation(struct uvio_ioctl_cb *uv_ioctl)
++TEST_F(uvio_fixture, fault_uvio_arg)
 +{
-+	struct uv_cb_attest *uvcb_attest = NULL;
-+	struct uvio_attest *uvio_attest = NULL;
-+	u8 *measurement = NULL;
-+	u8 *add_data = NULL;
-+	u8 *arcb = NULL;
-+	int ret;
++	int rc, errno_cache;
 +
-+	ret = -EINVAL;
-+	if (uv_ioctl->argument_len != sizeof(*uvio_attest))
-+		goto out;
++	self->uvio_ioctl.argument_addr = 0;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EFAULT);
 +
-+	ret = -ENOMEM;
-+	uvio_attest = kzalloc(sizeof(*uvio_attest), GFP_KERNEL);
-+	if (!uvio_attest)
-+		goto out;
-+
-+	ret = get_uvio_attest(uv_ioctl, uvio_attest);
-+	if (ret)
-+		goto out;
-+
-+	ret = -ENOMEM;
-+	arcb = kvzalloc(uvio_attest->arcb_len, GFP_KERNEL);
-+	measurement = kvzalloc(uvio_attest->meas_len, GFP_KERNEL);
-+	if (!arcb || !measurement)
-+		goto out;
-+
-+	if (uvio_attest->add_data_len) {
-+		add_data = kvzalloc(uvio_attest->add_data_len, GFP_KERNEL);
-+		if (!add_data)
-+			goto out;
-+	}
-+
-+	uvcb_attest = kzalloc(sizeof(*uvcb_attest), GFP_KERNEL);
-+	if (!uvcb_attest)
-+		goto out;
-+
-+	ret = uvio_build_uvcb_attest(uvcb_attest, arcb,  measurement, add_data, uvio_attest);
-+	if (ret)
-+		goto out;
-+
-+	uv_call_sched(0, (u64)uvcb_attest);
-+
-+	uv_ioctl->uv_rc = uvcb_attest->header.rc;
-+	uv_ioctl->uv_rrc = uvcb_attest->header.rrc;
-+
-+	ret = uvio_copy_attest_result_to_user(uvcb_attest, uv_ioctl, measurement, add_data,
-+					      uvio_attest);
-+out:
-+	kvfree(arcb);
-+	kvfree(measurement);
-+	kvfree(add_data);
-+	kfree(uvio_attest);
-+	kfree(uvcb_attest);
-+	return ret;
-+}
-+
-+static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp)
-+{
-+	if (copy_from_user(ioctl, argp, sizeof(*ioctl)))
-+		return -EFAULT;
-+	if (ioctl->flags != 0)
-+		return -EINVAL;
-+	if (memchr_inv(ioctl->reserved14, 0, sizeof(ioctl->reserved14)))
-+		return -EINVAL;
-+
-+	return 0;
++	self->uvio_ioctl.argument_addr = self->fault_page;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EFAULT);
 +}
 +
 +/*
-+ * IOCTL entry point for the Ultravisor device.
++ * Test to verify that IOCTLs with invalid values in the ioctl_control block
++ * are rejected.
 + */
-+static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++TEST_F(uvio_fixture, inval_ioctl_cb)
 +{
-+	void __user *argp = (void __user *)arg;
-+	struct uvio_ioctl_cb *uv_ioctl;
-+	long ret;
++	int rc, errno_cache;
 +
-+	ret = -ENOMEM;
-+	uv_ioctl = vzalloc(sizeof(*uv_ioctl));
-+	if (!uv_ioctl)
-+		goto out;
++	self->uvio_ioctl.argument_len = 0;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EINVAL);
 +
-+	switch (cmd) {
-+	case UVIO_IOCTL_ATT:
-+		ret = uvio_copy_and_check_ioctl(uv_ioctl, argp);
-+		if (ret)
-+			goto out;
-+		ret = uvio_attestation(uv_ioctl);
-+		break;
-+	default:
-+		ret = -ENOIOCTLCMD;
-+		break;
++	self->uvio_ioctl.argument_len = (uint32_t)-1;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EINVAL);
++	self->uvio_ioctl.argument_len = variant->arg_size;
++
++	self->uvio_ioctl.flags = (uint32_t)-1;
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EINVAL);
++	self->uvio_ioctl.flags = 0;
++
++	memset(self->uvio_ioctl.reserved14, 0xff, sizeof(self->uvio_ioctl.reserved14));
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EINVAL);
++
++	memset(&self->uvio_ioctl, 0x11, sizeof(self->uvio_ioctl));
++	rc = ioctl(self->uv_fd, variant->ioctl_cmd, &self->uvio_ioctl);
++	ASSERT_EQ(rc, -1);
++}
++
++TEST_F(uvio_fixture, inval_ioctl_cmd)
++{
++	int rc, errno_cache;
++	uint8_t nr = _IOC_NR(variant->ioctl_cmd);
++	unsigned long cmds[] = {
++		_IOWR('a', nr, struct uvio_ioctl_cb),
++		_IOWR(UVIO_TYPE_UVC, nr, int),
++		_IO(UVIO_TYPE_UVC, nr),
++		_IOR(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb),
++		_IOW(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb),
++	};
++
++	for (size_t i = 0; i < ARRAY_SIZE(cmds); i++) {
++		rc = ioctl(self->uv_fd, cmds[i], &self->uvio_ioctl);
++		errno_cache = errno;
++		ASSERT_EQ(rc, -1);
++		ASSERT_EQ(errno_cache, ENOTTY);
 +	}
-+	if (ret)
-+		goto out;
-+
-+	if (copy_to_user(argp, uv_ioctl, sizeof(*uv_ioctl)))
-+		ret = -EFAULT;
-+
-+ out:
-+	vfree(uv_ioctl);
-+	return ret;
 +}
 +
-+static const struct file_operations uvio_dev_fops = {
-+	.owner = THIS_MODULE,
-+	.unlocked_ioctl = uvio_ioctl,
-+	.llseek = no_llseek,
++struct test_attest_buffer {
++	uint8_t arcb[0x180];
++	uint8_t meas[64];
++	uint8_t add[32];
 +};
 +
-+static struct miscdevice uvio_dev_miscdev = {
-+	.minor = MISC_DYNAMIC_MINOR,
-+	.name = UVIO_DEVICE_NAME,
-+	.fops = &uvio_dev_fops,
++FIXTURE(attest_fixture) {
++	int uv_fd;
++	struct uvio_ioctl_cb uvio_ioctl;
++	struct uvio_attest uvio_attest;
++	struct test_attest_buffer attest_buffer;
++	__u64 fault_page;
 +};
 +
-+static void __exit uvio_dev_exit(void)
++FIXTURE_SETUP(attest_fixture)
 +{
-+	misc_deregister(&uvio_dev_miscdev);
++	self->uv_fd = open(UV_PATH, O_ACCMODE);
++
++	self->uvio_ioctl.argument_addr = (__u64)&self->uvio_attest;
++	self->uvio_ioctl.argument_len = sizeof(self->uvio_attest);
++
++	self->uvio_attest.arcb_addr = (__u64)&self->attest_buffer.arcb;
++	self->uvio_attest.arcb_len = sizeof(self->attest_buffer.arcb);
++
++	self->uvio_attest.meas_addr = (__u64)&self->attest_buffer.meas;
++	self->uvio_attest.meas_len = sizeof(self->attest_buffer.meas);
++
++	self->uvio_attest.add_data_addr = (__u64)&self->attest_buffer.add;
++	self->uvio_attest.add_data_len = sizeof(self->attest_buffer.add);
++	self->fault_page =
++		(__u64)mmap(NULL, (size_t)getpagesize(), PROT_NONE, MAP_ANONYMOUS, -1, 0);
 +}
 +
-+static int __init uvio_dev_init(void)
++FIXTURE_TEARDOWN(attest_fixture)
 +{
-+	if (!test_facility(158))
-+		return -ENXIO;
-+	return misc_register(&uvio_dev_miscdev);
++	if (self->uv_fd)
++		close(self->uv_fd);
++	munmap((void *)self->fault_page, (size_t)getpagesize());
 +}
 +
-+module_init(uvio_dev_init);
-+module_exit(uvio_dev_exit);
++static void att_inval_sizes_test(uint32_t *size, uint32_t max_size, bool test_zero,
++				 struct __test_metadata *_metadata,
++				 FIXTURE_DATA(attest_fixture) *self)
++{
++	int rc, errno_cache;
++	uint32_t tmp = *size;
 +
-+MODULE_AUTHOR("IBM Corporation");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Ultravisor UAPI driver");
++	if (test_zero) {
++		*size = 0;
++		rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
++		errno_cache = errno;
++		ASSERT_EQ(rc, -1);
++		ASSERT_EQ(errno_cache, EINVAL);
++	}
++	*size = max_size + 1;
++	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EINVAL);
++	*size = tmp;
++}
++
++/*
++ * Test to verify that attestation IOCTLs with invalid values in the UVIO
++ * attestation control block are rejected.
++ */
++TEST_F(attest_fixture, att_inval_request)
++{
++	int rc, errno_cache;
++
++	att_inval_sizes_test(&self->uvio_attest.add_data_len, UVIO_ATT_ADDITIONAL_MAX_LEN,
++			     false, _metadata, self);
++	att_inval_sizes_test(&self->uvio_attest.meas_len, UVIO_ATT_MEASUREMENT_MAX_LEN,
++			     true, _metadata, self);
++	att_inval_sizes_test(&self->uvio_attest.arcb_len, UVIO_ATT_ARCB_MAX_LEN,
++			     true, _metadata, self);
++
++	self->uvio_attest.reserved136 = (uint16_t)-1;
++	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EINVAL);
++
++	memset(&self->uvio_attest, 0x11, sizeof(self->uvio_attest));
++	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
++	ASSERT_EQ(rc, -1);
++}
++
++static void att_inval_addr_test(__u64 *addr, struct __test_metadata *_metadata,
++				FIXTURE_DATA(attest_fixture) *self)
++{
++	int rc, errno_cache;
++	__u64 tmp = *addr;
++
++	*addr = 0;
++	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EFAULT);
++	*addr = self->fault_page;
++	rc = ioctl(self->uv_fd, UVIO_IOCTL_ATT, &self->uvio_ioctl);
++	errno_cache = errno;
++	ASSERT_EQ(rc, -1);
++	ASSERT_EQ(errno_cache, EFAULT);
++	*addr = tmp;
++}
++
++TEST_F(attest_fixture, att_inval_addr)
++{
++	att_inval_addr_test(&self->uvio_attest.arcb_addr, _metadata, self);
++	att_inval_addr_test(&self->uvio_attest.add_data_addr, _metadata, self);
++	att_inval_addr_test(&self->uvio_attest.meas_addr, _metadata, self);
++}
++
++static void __attribute__((constructor)) __constructor_order_last(void)
++{
++	if (!__constructor_order)
++		__constructor_order = _CONSTRUCTOR_ORDER_BACKWARD;
++}
++
++int main(int argc, char **argv)
++{
++	int fd = open(UV_PATH, O_ACCMODE);
++
++	if (fd < 0)
++		ksft_exit_skip("No uv-device or cannot access " UV_PATH  "\n"
++			       "Enable CONFIG_S390_UV_UAPI and check the access rights on "
++			       UV_PATH ".\n");
++	close(fd);
++	return test_harness_run(argc, argv);
++}
 -- 
 2.30.2
 
