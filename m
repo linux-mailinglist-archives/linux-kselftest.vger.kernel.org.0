@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118A852222F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 19:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E70052225C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 May 2022 19:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347888AbiEJRXC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 13:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S1348006AbiEJR1t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 13:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347889AbiEJRXC (ORCPT
+        with ESMTP id S244581AbiEJR1q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 13:23:02 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA6E237BA0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:19:04 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id f5so11779840ilj.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:19:04 -0700 (PDT)
+        Tue, 10 May 2022 13:27:46 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC51E14E2F9
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:23:48 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id f4so19245610iov.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mpw9I89qJYQJF8uFqtgcVw/roX6X9ylD+k7qNFu4ycI=;
-        b=A/v5mGazYqIG/bNX4LVLdz9uKerPRuJU0fbbEL2AZA1tr8bZJGyY2rYYZHGlDiri/y
-         WUfgaj7DCYUbjWUdGJF8SMrTFnQH3rUQEYMC/K7i9rnDQIS2/0brkF0xnt5DVPajZwO4
-         7D0VbyDM59akmHGUzfLATXRWQNsvBIM7RNjf0=
+        bh=6Mxaa9zldI5g5gROrpqfa7o89lmkZmvApfkpzCQDPTU=;
+        b=AqPeMT0SfdkcixR4qTLiKvPqwwAuytjFV8n2Yvx3BSgwqKAJvP5LvLj3rtkIl2es/e
+         64yTs9oQhh5YjDeVal2RN6YJuj6SEtQ9z0SYX9hjU86wc2qrEXbZHC9ItVt1hPNFsZBg
+         gGFspwf3Y85ZxHvo2TWE98JmpBCkvdm568XP8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=mpw9I89qJYQJF8uFqtgcVw/roX6X9ylD+k7qNFu4ycI=;
-        b=f8DclDgBqztiNFfYp6C2QX7zRDOrEyKclOwv+KwDY2+IZlmVG12PjiqNAL3OjsO8F+
-         18ro1/Ix+B1Sw/7RqVZSg4fhDSmW/p25SbuGMFnaZymf0RD3KqT9z70Heoup6lTmIPI6
-         BKBA2fN7TIzTErGfEKqok4ItEo97Xz/L9IdK+Px/ONBpn5ERbeLqvzJ+7I81r8vXjKAV
-         mjWgLxpK5jtbibAM2mi2mYGDaSNETHbfBQfbLpHEBeC4KhhkcmtQbj2Lmq+J0wGElpC7
-         Yta80lEkcXyx+a0Uoztkk6JR9DFAzrRskOaaND1MzQdiPhzkQCML3TgYEeyVwe0TmdLz
-         RKUQ==
-X-Gm-Message-State: AOAM530gmMN7syahMPpkMOPfeYy+lFPNOBX3WGjCIQdAm7hFLX+hy+jV
-        nMvGsSiYxEH7JkI0mdOoO7D7qQ==
-X-Google-Smtp-Source: ABdhPJy0Gxik5ftsiklTUiYF/kDUbHuHTXb+qZYvQFyMx5wUQ3fecORQ1iROQmASxul9z4x/WOXsbw==
-X-Received: by 2002:a92:c8ca:0:b0:2cb:fb69:b0e8 with SMTP id c10-20020a92c8ca000000b002cbfb69b0e8mr9607048ilq.238.1652203143907;
-        Tue, 10 May 2022 10:19:03 -0700 (PDT)
+        bh=6Mxaa9zldI5g5gROrpqfa7o89lmkZmvApfkpzCQDPTU=;
+        b=J1P2mRJ6VaMy4ayIT3oF0QY068O7+bdhdZk4FLIHcJBSeFNWjnDJh8YmGxc3e1Gise
+         5s7zajv+Wulz54YcyYAW/2zWOP1dfe6KCYJeqf5K7/QMkCVNzbGx1Fa15EZeuBzhLfnZ
+         zzR/pNqmR5WureuaK3eXW2+TLfzL0ox0N4UL0GCoaYpRdFTC4Z945VQ5alidjwXzdCpl
+         AjftDi/CKlihJXiFNvT60v0ffhdHwectwRFILRi2hOnPAQc5AkSSYLgwZZi5Oz0A016/
+         xGhSo39zLcuzA6OWzKgtHl6QqzUQYWzqcAo4IhtHpBBjCQWfLzzTVal82PjcI3DghzbG
+         Rflg==
+X-Gm-Message-State: AOAM530wXsL3eZ9UMeBK6VILb/z8vGVX/q+HPQ0bQmtxIMRajue6RC11
+        BrwjFpBZ5+y5Luy8rCji9nHSiA==
+X-Google-Smtp-Source: ABdhPJzHhtMQmgp8/vmBWxqTfP452Z9e4+tpfHIHJpQACUXUa7/7eBesCYXoQa3kpPxoYc7bPtJx5Q==
+X-Received: by 2002:a05:6638:2182:b0:32b:8ed4:4e26 with SMTP id s2-20020a056638218200b0032b8ed44e26mr10782682jaj.225.1652203427897;
+        Tue, 10 May 2022 10:23:47 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c9-20020a056638028900b0032b3a781796sm4525199jaq.90.2022.05.10.10.19.03
+        by smtp.gmail.com with ESMTPSA id a23-20020a056638059700b0032b3a781769sm4508648jar.45.2022.05.10.10.23.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 10:19:03 -0700 (PDT)
-Subject: Re: [PATCH v1 3/5] selftests/arm64: Check failures to set tags in
+        Tue, 10 May 2022 10:23:47 -0700 (PDT)
+Subject: Re: [PATCH v1 4/5] selftests/arm64: Remove casts to/from void in
  check_tags_inclusion
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -55,14 +55,14 @@ Cc:     Joey Gouly <joey.gouly@arm.com>, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220510164520.768783-1-broonie@kernel.org>
- <20220510164520.768783-4-broonie@kernel.org>
+ <20220510164520.768783-5-broonie@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ff5037e9-d24c-e9d4-518e-c80ec3e42116@linuxfoundation.org>
-Date:   Tue, 10 May 2022 11:19:03 -0600
+Message-ID: <5c990941-d3a9-0add-29bc-f59ec7789d37@linuxfoundation.org>
+Date:   Tue, 10 May 2022 11:23:47 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220510164520.768783-4-broonie@kernel.org>
+In-Reply-To: <20220510164520.768783-5-broonie@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,18 +77,18 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 5/10/22 10:45 AM, Mark Brown wrote:
-> The MTE check_tags_inclusion test uses the mte_switch_mode() helper but
-> ignores the return values it generates meaning we might not be testing
-> the things we're trying to test, fail the test if it reports an error.
-> The helper will log any errors it returns.
+> Void pointers may be freely used with other pointer types in C, any casts
+> between void * and other pointer types serve no purpose other than to
+> mask potential warnings. Drop such casts from check_tags_inclusion to
+> help with future review of the code.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   .../selftests/arm64/mte/check_tags_inclusion.c | 18 ++++++++++++------
->   1 file changed, 12 insertions(+), 6 deletions(-)
+>   .../arm64/mte/check_tags_inclusion.c          | 24 +++++++++----------
+>   1 file changed, 12 insertions(+), 12 deletions(-)
 > 
 
-Thank you. Looks good to me.
+Looks good to me.
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
