@@ -2,32 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0D4522A33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 05:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EB0522A45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 05:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237572AbiEKDMe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 23:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S241611AbiEKDSQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 23:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236978AbiEKDMd (ORCPT
+        with ESMTP id S241648AbiEKDSP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 23:12:33 -0400
+        Tue, 10 May 2022 23:18:15 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E9047560;
-        Tue, 10 May 2022 20:12:31 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kyg1L3PrHzhZ1r;
-        Wed, 11 May 2022 11:11:50 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB544B874;
+        Tue, 10 May 2022 20:18:14 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kyg7w6SPZzhZ4Q;
+        Wed, 11 May 2022 11:17:32 +0800 (CST)
 Received: from [10.67.111.192] (10.67.111.192) by
  kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 11:12:27 +0800
-Message-ID: <5fb30cc0-dcf6-75ec-b6fa-38be3e99dca6@huawei.com>
-Date:   Wed, 11 May 2022 11:12:27 +0800
+ 15.1.2375.24; Wed, 11 May 2022 11:18:10 +0800
+Message-ID: <f8c3f048-9d59-7249-a1d7-31616556e931@huawei.com>
+Date:   Wed, 11 May 2022 11:18:09 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 5/7] bpf, arm64: Support to poke bpf prog
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
 Content-Language: en-US
 To:     Jakub Sitnicki <jakub@cloudflare.com>
 CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
@@ -66,200 +67,127 @@ CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         Delyan Kratunov <delyank@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>
 References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-6-xukuohai@huawei.com>
- <87ilqdobl1.fsf@cloudflare.com>
+ <20220424154028.1698685-5-xukuohai@huawei.com>
+ <87ee11obih.fsf@cloudflare.com>
 From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <87ilqdobl1.fsf@cloudflare.com>
+In-Reply-To: <87ee11obih.fsf@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemi500013.china.huawei.com (7.221.188.120)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/10/2022 5:36 PM, Jakub Sitnicki wrote:
-> Thanks for incorporating the attach to BPF progs bits into the series.
-> 
-> I have a couple minor comments. Please see below.
-> 
+On 5/10/2022 7:45 PM, Jakub Sitnicki wrote:
 > On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
->> 1. Set up the bpf prog entry in the same way as fentry to support
->>    trampoline. Now bpf prog entry looks like this:
->>
->>    bti c        // if BTI enabled
->>    mov x9, x30  // save lr
->>    nop          // to be replaced with jump instruction
->>    paciasp      // if PAC enabled
->>
->> 2. Update bpf_arch_text_poke() to poke bpf prog. If the instruction
->>    to be poked is bpf prog's first instruction, skip to the nop
->>    instruction in the prog entry.
+>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+>> it to replace nop with jump, or replace jump with nop.
 >>
 >> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Acked-by: Song Liu <songliubraving@fb.com>
 >> ---
->>  arch/arm64/net/bpf_jit.h      |  1 +
->>  arch/arm64/net/bpf_jit_comp.c | 41 +++++++++++++++++++++++++++--------
->>  2 files changed, 33 insertions(+), 9 deletions(-)
+>>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
+>>  1 file changed, 63 insertions(+)
 >>
->> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
->> index 194c95ccc1cf..1c4b0075a3e2 100644
->> --- a/arch/arm64/net/bpf_jit.h
->> +++ b/arch/arm64/net/bpf_jit.h
->> @@ -270,6 +270,7 @@
->>  #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
->>  #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
->>  #define A64_BTI_JC A64_HINT(AARCH64_INSN_HINT_BTIJC)
->> +#define A64_NOP    A64_HINT(AARCH64_INSN_HINT_NOP)
->>  
->>  /* DMB */
->>  #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
 >> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 3f9bdfec54c4..293bdefc5d0c 100644
+>> index 8ab4035dea27..3f9bdfec54c4 100644
 >> --- a/arch/arm64/net/bpf_jit_comp.c
 >> +++ b/arch/arm64/net/bpf_jit_comp.c
->> @@ -237,14 +237,23 @@ static bool is_lsi_offset(int offset, int scale)
->>  	return true;
->>  }
+>> @@ -9,6 +9,7 @@
 >>  
->> -/* Tail call offset to jump into */
->> -#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
->> -	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
->> -#define PROLOGUE_OFFSET 9
->> +#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
->> +#define BTI_INSNS	1
->> +#else
->> +#define BTI_INSNS	0
->> +#endif
->> +
->> +#if IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
->> +#define PAC_INSNS	1
->>  #else
->> -#define PROLOGUE_OFFSET 8
->> +#define PAC_INSNS	0
->>  #endif
-> 
-> Above can be folded into:
-> 
-> #define BTI_INSNS (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) ? 1 : 0)
-> #define PAC_INSNS (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) ? 1 : 0)
-> 
-
-will fix in v4
-
+>>  #include <linux/bitfield.h>
+>>  #include <linux/bpf.h>
+>> +#include <linux/memory.h>
+>>  #include <linux/filter.h>
+>>  #include <linux/printk.h>
+>>  #include <linux/slab.h>
+>> @@ -18,6 +19,7 @@
+>>  #include <asm/cacheflush.h>
+>>  #include <asm/debug-monitors.h>
+>>  #include <asm/insn.h>
+>> +#include <asm/patching.h>
+>>  #include <asm/set_memory.h>
 >>  
->> +/* Tail call offset to jump into */
->> +#define PROLOGUE_OFFSET	(BTI_INSNS + 2 + PAC_INSNS + 8)
->> +/* Offset of nop instruction in bpf prog entry to be poked */
->> +#define POKE_OFFSET	(BTI_INSNS + 1)
->> +
->>  static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+>>  #include "bpf_jit.h"
+>> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
 >>  {
->>  	const struct bpf_prog *prog = ctx->prog;
->> @@ -281,12 +290,15 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
->>  	 *
->>  	 */
->>  
->> +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
->> +		emit(A64_BTI_C, ctx);
-> 
-> I'm no arm64 expert, but this looks like a fix for BTI.
-> 
-> Currently we never emit BTI because ARM64_BTI_KERNEL depends on
-> ARM64_PTR_AUTH_KERNEL, while BTI must be the first instruction for the
-> jump target [1]. Am I following correctly?
-> 
-> [1] https://lwn.net/Articles/804982/
-> 
-
-Not quite correct. When the jump target is a PACIASP instruction, no
-Branch Target Exception is generated, so there is no need to insert a
-BTI before PACIASP [2].
-
-In order to attach trampoline to bpf prog, a MOV and NOP are inserted
-before the PACIASP, so BTI instruction is required to avoid Branch
-Target Exception.
-
-The reason for inserting NOP before PACIASP instead of after PACIASP is
-that no call frame is built before entering trampoline, so there is no
-return address on the stack and nothing to be protected by PACIASP.
-
-[2]
-https://developer.arm.com/documentation/ddi0596/2021-12/Base-Instructions/BTI--Branch-Target-Identification-?lang=en
-
+>>  	return vfree(addr);
+>>  }
 >> +
->> +	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
->> +	emit(A64_NOP, ctx);
+>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+>> +			     void *addr, u32 *insn)
+>> +{
+>> +	if (!addr)
+>> +		*insn = aarch64_insn_gen_nop();
+>> +	else
+>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+>> +						    (unsigned long)addr,
+>> +						    type);
 >> +
->>  	/* Sign lr */
->>  	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
->>  		emit(A64_PACIASP, ctx);
->> -	/* BTI landing pad */
->> -	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
->> -		emit(A64_BTI_C, ctx);
->>  
->>  	/* Save FP and LR registers to stay align with ARM64 AAPCS */
->>  	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
->> @@ -1552,9 +1564,11 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>  	u32 old_insn;
->>  	u32 new_insn;
->>  	u32 replaced;
->> +	unsigned long offset = ~0UL;
->>  	enum aarch64_insn_branch_type branch_type;
->> +	char namebuf[KSYM_NAME_LEN];
->>  
->> -	if (!is_bpf_text_address((long)ip))
->> +	if (!__bpf_address_lookup((unsigned long)ip, NULL, &offset, namebuf))
->>  		/* Only poking bpf text is supported. Since kernel function
->>  		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->>  		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
->> @@ -1565,6 +1579,15 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>  		 */
->>  		return -EINVAL;
->>  
->> +	/* bpf entry */
->> +	if (offset == 0UL)
->> +		/* skip to the nop instruction in bpf prog entry:
->> +		 * bti c	// if BTI enabled
->> +		 * mov x9, x30
->> +		 * nop
+>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+>> +}
+>> +
+>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>> +		       void *old_addr, void *new_addr)
+>> +{
+>> +	int ret;
+>> +	u32 old_insn;
+>> +	u32 new_insn;
+>> +	u32 replaced;
+>> +	enum aarch64_insn_branch_type branch_type;
+>> +
+>> +	if (!is_bpf_text_address((long)ip))
+>> +		/* Only poking bpf text is supported. Since kernel function
+>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+>> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+> 
+> Nit: s/funcitons/functions/
+> 
+>> +		 * called after a failed poke with ftrace. In this case, there
+>> +		 * is probably something wrong with fentry, so there is nothing
+>> +		 * we can do here. See register_fentry, unregister_fentry and
+>> +		 * modify_fentry for details.
 >> +		 */
->> +		ip = (u32 *)ip + POKE_OFFSET;
-> 
-> This is very much personal preference, however, I find the use pointer
-> arithmetic too clever here. Would go for a more verbose:
-> 
->         offset = POKE_OFFSET * AARCH64_INSN_SIZE;          
->         ip = (void *)((unsigned long)ip + offset);
-> 
-
-will change in v4.
-
+>> +		return -EINVAL;
 >> +
->>  	if (poke_type == BPF_MOD_CALL)
->>  		branch_type = AARCH64_INSN_BRANCH_LINK;
->>  	else
+>> +	if (poke_type == BPF_MOD_CALL)
+>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+>> +	else
+>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	mutex_lock(&text_mutex);
+>> +	if (aarch64_insn_read(ip, &replaced)) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (replaced != old_insn) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
 > 
-> I think it'd make more sense to merge this patch with patch 4 (the
-> preceding one).
+> Nit: No need for the explicit cast to void *. Type already matches.
 > 
-> Initial implementation of of bpf_arch_text_poke() from patch 4 is not
-> fully functional, as it will always fail for bpf_arch_text_poke(ip,
-> BPF_MOD_CALL, ...) calls. At least, I find it a bit confusing.
-
-will merge in v4
-
-> 
-> Otherwise than that:
-> 
-> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+>> +out:
+>> +	mutex_unlock(&text_mutex);
+>> +	return ret;
+>> +}
 > 
 > .
-Thanks for the review!
+will fix in v4, thanks!
