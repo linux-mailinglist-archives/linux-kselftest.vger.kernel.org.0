@@ -2,208 +2,269 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D633523F61
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 23:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E492B5240FC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 01:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348136AbiEKVRR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 May 2022 17:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
+        id S1349281AbiEKXYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 May 2022 19:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348188AbiEKVQi (ORCPT
+        with ESMTP id S1349463AbiEKXYI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 May 2022 17:16:38 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75FD2314D
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 14:16:34 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id m136-20020a25268e000000b0064b233e03d1so2944719ybm.14
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 14:16:33 -0700 (PDT)
+        Wed, 11 May 2022 19:24:08 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492406213F
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 16:22:44 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w24so4289962edx.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 16:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=RmwhTmtOKEfJCDjFlaEgB2jMmIYPJxSkJAhFJBeKz2I=;
-        b=XkKSkM+v9S3PTc6l4ZTy49ewMfC2s4c5zMAg5UodUAo9tE3JjZGsHLiJZuutanSW/t
-         0PB1vzo+tXSImfHZPiGGWNQoWj/OsCpusTgXi9w15rSHH3t3+S2DZesoDXU52lamaqTv
-         6XL0EHRaDO6Ni1QV7CFRJ+DGgn9Mt2C7M4tGXW4u+r1NfQh+8CAeQMDlf18PXGERMkAG
-         Ww/NLII6pTmYG3t6DW3HAaTr3EUgtVWawVHmCI8bfIFXwAU3LqjPLfhojmZ6OE6lLxLQ
-         9telHSSUmU10mBg86HgEinjHRAqd7vyCOxBDQ7uitqe351eEz46zqPyUVZ3DnD+jBMu3
-         hyGQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h+W2uqkvSL6U5jn2MaeFHt2XSCx3i+exVEBv5pf2t0s=;
+        b=p4EkiWxjIQeox8PBlqp+ZcAP4vTVS+9knd4t+eQLjFArs98erdGnkuCkI0BYQr18d4
+         jWmPkNcqgWzRI5FA3YTcNLY36l+6T7Wes6hXHud08yyT2gAUlAhEVd7DAo2tT/PyK7l4
+         aixSO7/N+eLnhVLPC20xZqDXAS3mHKX8lSDWnSM/59ETR7rTULy50JXLwCCOVnB0nniC
+         d6L5cxLOUklG1Nup9A5SQx+C3KrfWWDOIK6eOWOvWXGaM4Qp5mmvM47tA+5wz0tdw4fJ
+         i9y+3kj5Qd0AaHnvOGBtHzHo2bD569jg4Fh+BvbsTBsnIoxdLD89hv+JJlmFF+C7J7mA
+         Sk3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=RmwhTmtOKEfJCDjFlaEgB2jMmIYPJxSkJAhFJBeKz2I=;
-        b=gAz6Nf8sB5E9aQpz6elJ6EbDYLkormcz6jqDEtz4jn+b02qpFXR175IznM6TAiaSGF
-         pkgPwq9aDFycF88qNkM8tPNlxF2lWC2UwYfodJ4TtXoGpjZPTr3wQkZbb9ZjS1GlGdbW
-         Ar01ncWZfnzPSVoz1jDuFfqSsNTZhF0FlsjbQeYcuLPJBDkiLv3FhvpEMi6ysmiFIQxn
-         /A0OIgN5ZFfn5iqR0Xx5fJ1+Ub5BoB8W8gpjqKRjF7iapBIdi9RJqQzkB064VLn8C+jv
-         6IYl2z1XZ6q4nFej+8j+FXj1MmxKmQlJShOJII+9KenP8vJxpI6Z+C8zbVkVp9IgwYaW
-         jZ1Q==
-X-Gm-Message-State: AOAM531nywl+yusQzT2TsJGhYUsJ0i0fI5ofOskR91z2FlPG1Y/eQ0FB
-        g8+ciEd4DahXwLI4i8uvRnJ7ei/0AdFW3w==
-X-Google-Smtp-Source: ABdhPJxJscghYLknils0sPWTYiEWVf78KVRHjcnWmn2vXU7QMv4mIWF7u8hTkTvT9PIbzJ1Ow/LHJH9iF1/OvQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd59:7b9f:6863:5402])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:704:b0:649:cadc:bcf0 with SMTP
- id k4-20020a056902070400b00649cadcbcf0mr25704910ybt.537.1652303793100; Wed,
- 11 May 2022 14:16:33 -0700 (PDT)
-Date:   Wed, 11 May 2022 14:16:26 -0700
-Message-Id: <20220511211626.3345036-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [PATCH v2] kunit: bail out of test filtering logic quicker if OOM
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h+W2uqkvSL6U5jn2MaeFHt2XSCx3i+exVEBv5pf2t0s=;
+        b=VV7k+LSGlPeRmq15vmUqH6b01ooacJd0EJxJJMIpViSmD9F0zW+gqBLNxTwaNZfqHH
+         zYFWRFDSAmcZ3wTtkj8LGdTCalA2KrXxxDbmzaBe6EhSX9W689Y5Ky7zqIThHT/uDmg5
+         dtRIlbZ+b9E2jrah9s38EP0pM8ukHt2ksT68fusc+shpd03J27aTUPnkXfzYqkwdb8/1
+         1Odm0oVzVwcbcIkxxgCjb2ggVxljEYRppUJisiS982SrEhBMg3Hc+fTrK0uT8mNxUBFU
+         9uY1Qp0UTWha3fQNmgwTy4j7k7+ui9RnXQa05zBQ+tTrm/WoqcaH0XY+2WvGUmclsIZt
+         4w2A==
+X-Gm-Message-State: AOAM532q875mrtR7GIh4hY8OnCsCorPGlXLP/UEqOBwRLulHmYUUDJWJ
+        btbnK26EiUusx9uyhCn8mLtwsK9v726UTYV8JLtjyA==
+X-Google-Smtp-Source: ABdhPJxv3RcmiWoN4KAIHvKOv1TuEje4H2x0E+LVOK4OxIM31BAHdXVfcuy8yWPZJVH25UGhnVtvIlUyox6Q0kDGBm4=
+X-Received: by 2002:a05:6402:1148:b0:416:a4fb:3c2e with SMTP id
+ g8-20020a056402114800b00416a4fb3c2emr31968096edw.182.1652311362565; Wed, 11
+ May 2022 16:22:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220420203020.1412886-1-dlatypov@google.com>
+In-Reply-To: <20220420203020.1412886-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 11 May 2022 19:22:31 -0400
+Message-ID: <CAFd5g454KM9-45NEjUN3JWTZmpajHY9to=CW7Ecg6z_5xorU+w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: stop using a shell to run kernel under QEMU
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When filtering what tests to run (suites and/or cases) via
-kunit.filter_glob (e.g. kunit.py run <glob>), we allocate copies of
-suites.
+On Wed, Apr 20, 2022 at 4:30 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Note: this potentially breaks custom qemu_configs if people are using
+> them! But the fix for them is simple, don't specify multiple arguments
+> in one string and don't add on a redundant ''.
+>
+> It feels a bit iffy to be using a shell in the first place.
+>
+> There's the usual shenanigans where people could pass in arbitrary shell
+> commands via --kernel_arg (since we're just adding '' around the
+> kernel_cmdline) or via a custom qemu_config.
+> This isn't too much of a concern given the nature of this script (and
+> the qemu_config file is in python, you can do w/e you want already).
+>
+> But it does have some other drawbacks.
+>
+> One example of a kunit-specific pain point:
+> If the relevant qemu binary is missing, we get output like this:
+> > /bin/sh: line 1: qemu-system-aarch64: command not found
+> This in turn results in our KTAP parser complaining about
+> missing/invalid KTAP, but we don't directly show the error!
+> It's even more annoying to debug when you consider --raw_output only
+> shows KUnit output by default, i.e. you need --raw_output=all to see it.
+>
+> Whereas directly invoking the binary, Python will raise a
+> FileNotFoundError for us, which is a noisier but more clear.
+>
+> Making this change requires
+> * splitting parameters like ['-m 256'] into ['-m', '256'] in
+>   kunit/qemu_configs/*.py
+> * change [''] to [] in kunit/qemu_configs/*.py since otherwise
+>   QEMU fails w/ 'Device needs media, but drive is empty'
+> * dropping explicit quoting of the kernel cmdline
+> * using shlex.quote() when we print what command we're running
+>   so the user can copy-paste and run it
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-These allocations can fail, and we largely don't handle that.
-Note: realistically, this probably doesn't matter much.
-We're not allocating much memory and this happens early in boot, so if
-we can't do that, then there's likely far bigger problems.
+One issue I noticed below, otherwise:
 
-This patch makes us immediately bail out from the top-level function
-(kunit_filter_suites) with -ENOMEM if any of the underlying kmalloc()
-calls return NULL.
-
-Implementation note: we used to return NULL pointers from some functions
-to indicate either that all suites/tests were filtered out or there was
-an error allocating the new array.
-
-We'll log a short error in this case and not run any tests or print a
-TAP header. From a kunit.py user's perspective, they'll get a message
-about missing/invalid TAP output and have to dig into the test.log to
-see it. Since hitting this error seems so unlikely, it's probably fine
-to not invent a way to plumb this error message more visibly.
-
-See also: https://lore.kernel.org/linux-kselftest/20220329103919.2376818-1-lv.ruyi@zte.com.cn/
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-v1 -> v2: no code changes.
-Fix Reported-by tag, add Brendan's Reviewed-by.
----
- lib/kunit/executor.c      | 27 ++++++++++++++++++++++-----
- lib/kunit/executor_test.c |  4 +++-
- 2 files changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 22640c9ee819..2f73a6a35a7e 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
- 
- 	/* Use memcpy to workaround copy->name being const. */
- 	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-+	if (!copy)
-+		return ERR_PTR(-ENOMEM);
- 	memcpy(copy, suite, sizeof(*copy));
- 
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
-+	if (!filtered)
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	kunit_suite_for_each_test_case(suite, test_case) {
-@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
- 
- 	filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
- 	if (!filtered)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	for (i = 0; subsuite[i] != NULL; ++i) {
- 		if (!glob_match(filter->suite_glob, subsuite[i]->name))
- 			continue;
- 		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
--		if (filtered_suite)
-+		if (IS_ERR(filtered_suite))
-+			return ERR_CAST(filtered_suite);
-+		else if (filtered_suite)
- 			filtered[n++] = filtered_suite;
- 	}
- 	filtered[n] = NULL;
-@@ -146,7 +152,8 @@ static void kunit_free_suite_set(struct suite_set suite_set)
- }
- 
- static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
--					    const char *filter_glob)
-+					    const char *filter_glob,
-+					    int *err)
- {
- 	int i;
- 	struct kunit_suite * const **copy, * const *filtered_subsuite;
-@@ -166,6 +173,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
- 
- 	for (i = 0; i < max; ++i) {
- 		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
-+		if (IS_ERR(filtered_subsuite)) {
-+			*err = PTR_ERR(filtered_subsuite);
-+			return filtered;
-+		}
- 		if (filtered_subsuite)
- 			*copy++ = filtered_subsuite;
- 	}
-@@ -236,9 +247,15 @@ int kunit_run_all_tests(void)
- 		.start = __kunit_suites_start,
- 		.end = __kunit_suites_end,
- 	};
-+	int err;
- 
--	if (filter_glob_param)
--		suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
-+	if (filter_glob_param) {
-+		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-+		if (err) {
-+			pr_err("kunit executor: error filtering suites: %d\n", err);
-+			return err;
-+		}
-+	}
- 
- 	if (!action_param)
- 		kunit_exec_run_tests(&suite_set);
-diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-index 4ed57fd94e42..eac6ff480273 100644
---- a/lib/kunit/executor_test.c
-+++ b/lib/kunit/executor_test.c
-@@ -137,14 +137,16 @@ static void filter_suites_test(struct kunit *test)
- 		.end = suites + 2,
- 	};
- 	struct suite_set filtered = {.start = NULL, .end = NULL};
-+	int err = 0;
- 
- 	/* Emulate two files, each having one suite */
- 	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
- 	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
- 
- 	/* Filter out suite1 */
--	filtered = kunit_filter_suites(&suite_set, "suite0");
-+	filtered = kunit_filter_suites(&suite_set, "suite0", &err);
- 	kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs without leaking */
-+	KUNIT_EXPECT_EQ(test, err, 0);
- 	KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t)1);
- 
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
+> ---
+>  tools/testing/kunit/kunit_kernel.py         | 18 ++++++++++--------
+>  tools/testing/kunit/qemu_configs/alpha.py   |  2 +-
+>  tools/testing/kunit/qemu_configs/arm.py     |  2 +-
+>  tools/testing/kunit/qemu_configs/arm64.py   |  2 +-
+>  tools/testing/kunit/qemu_configs/i386.py    |  2 +-
+>  tools/testing/kunit/qemu_configs/powerpc.py |  2 +-
+>  tools/testing/kunit/qemu_configs/riscv.py   |  6 +++---
+>  tools/testing/kunit/qemu_configs/s390.py    |  4 ++--
+>  tools/testing/kunit/qemu_configs/sparc.py   |  2 +-
+>  tools/testing/kunit/qemu_configs/x86_64.py  |  2 +-
+>  10 files changed, 22 insertions(+), 20 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 483f78e15ce9..1b9c4922a675 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -11,6 +11,7 @@ import importlib.util
+>  import logging
+>  import subprocess
+>  import os
+> +import shlex
+>  import shutil
+>  import signal
+>  import threading
+> @@ -118,16 +119,17 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>                                 '-nodefaults',
+>                                 '-m', '1024',
+>                                 '-kernel', kernel_path,
+> -                               '-append', '\'' + ' '.join(params + [self._kernel_command_line]) + '\'',
+> +                               '-append', ' '.join(params + [self._kernel_command_line]),
+>                                 '-no-reboot',
+>                                 '-nographic',
+> -                               '-serial stdio'] + self._extra_qemu_params
+> -               print('Running tests with:\n$', ' '.join(qemu_command))
+> -               return subprocess.Popen(' '.join(qemu_command),
+> -                                          stdin=subprocess.PIPE,
+> -                                          stdout=subprocess.PIPE,
+> -                                          stderr=subprocess.STDOUT,
+> -                                          text=True, shell=True, errors='backslashreplace')
+> +                               '-serial', 'stdio'] + self._extra_qemu_params
+> +               # Note: shlex.join() does what we want, but requires python 3.8+.
+> +               print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
+> +               return subprocess.Popen(qemu_command,
+> +                                       stdin=subprocess.PIPE,
+> +                                       stdout=subprocess.PIPE,
+> +                                       stderr=subprocess.STDOUT,
+> +                                       text=True, errors='backslashreplace')
+>
+>  class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         """An abstraction over command line operations performed on a source tree."""
+> diff --git a/tools/testing/kunit/qemu_configs/alpha.py b/tools/testing/kunit/qemu_configs/alpha.py
+> index 5d0c0cff03bd..3ac846e03a6b 100644
+> --- a/tools/testing/kunit/qemu_configs/alpha.py
+> +++ b/tools/testing/kunit/qemu_configs/alpha.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='alpha',
+>                            kernel_path='arch/alpha/boot/vmlinux',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=[''])
+> +                          extra_qemu_params=[])
+> diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
+> index b9c2a35e0296..db2160200566 100644
+> --- a/tools/testing/kunit/qemu_configs/arm.py
+> +++ b/tools/testing/kunit/qemu_configs/arm.py
+> @@ -10,4 +10,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>                            qemu_arch='arm',
+>                            kernel_path='arch/arm/boot/zImage',
+>                            kernel_command_line='console=ttyAMA0',
+> -                          extra_qemu_params=['-machine virt'])
+> +                          extra_qemu_params=['-machine', 'virt'])
+> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+> index 517c04459f47..67d04064f785 100644
+> --- a/tools/testing/kunit/qemu_configs/arm64.py
+> +++ b/tools/testing/kunit/qemu_configs/arm64.py
+> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>                            qemu_arch='aarch64',
+>                            kernel_path='arch/arm64/boot/Image.gz',
+>                            kernel_command_line='console=ttyAMA0',
+> -                          extra_qemu_params=['-machine virt', '-cpu cortex-a57'])
+> +                          extra_qemu_params=['-machine', 'virt', '-cpu', 'cortex-a57'])
+> diff --git a/tools/testing/kunit/qemu_configs/i386.py b/tools/testing/kunit/qemu_configs/i386.py
+> index aed3ffd3937d..52b80be40e4b 100644
+> --- a/tools/testing/kunit/qemu_configs/i386.py
+> +++ b/tools/testing/kunit/qemu_configs/i386.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='x86_64',
+>                            kernel_path='arch/x86/boot/bzImage',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=[''])
+> +                          extra_qemu_params=[])
+> diff --git a/tools/testing/kunit/qemu_configs/powerpc.py b/tools/testing/kunit/qemu_configs/powerpc.py
+> index 35e9de24f0db..6c901149726b 100644
+> --- a/tools/testing/kunit/qemu_configs/powerpc.py
+> +++ b/tools/testing/kunit/qemu_configs/powerpc.py
+> @@ -9,4 +9,4 @@ CONFIG_HVC_CONSOLE=y''',
+>                            qemu_arch='ppc64',
+>                            kernel_path='vmlinux',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=['-M pseries', '-cpu power8'])
+> +                          extra_qemu_params=['-M', ' pseries', '-cpu', 'power8'])
 
-base-commit: 38289a26e1b8a37755f3e07056ca416c1ee2a2e8
--- 
-2.36.0.512.ge40c2bad7a-goog
+This should be '-M', 'pseries', not '-M', ' pseries', (you left an
+extra space in.
 
+Note this actually breaks QEMU on my machine.
+
+> diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+> index 9e528087cd7c..b882fde39435 100644
+> --- a/tools/testing/kunit/qemu_configs/riscv.py
+> +++ b/tools/testing/kunit/qemu_configs/riscv.py
+> @@ -26,6 +26,6 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+>                            kernel_path='arch/riscv/boot/Image',
+>                            kernel_command_line='console=ttyS0',
+>                            extra_qemu_params=[
+> -                                          '-machine virt',
+> -                                          '-cpu rv64',
+> -                                          '-bios opensbi-riscv64-generic-fw_dynamic.bin'])
+> +                                          '-machine', 'virt',
+> +                                          '-cpu', 'rv64',
+> +                                          '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
+> diff --git a/tools/testing/kunit/qemu_configs/s390.py b/tools/testing/kunit/qemu_configs/s390.py
+> index e310bd521113..98fa4fb60c0a 100644
+> --- a/tools/testing/kunit/qemu_configs/s390.py
+> +++ b/tools/testing/kunit/qemu_configs/s390.py
+> @@ -10,5 +10,5 @@ CONFIG_MODULES=y''',
+>                            kernel_path='arch/s390/boot/bzImage',
+>                            kernel_command_line='console=ttyS0',
+>                            extra_qemu_params=[
+> -                                          '-machine s390-ccw-virtio',
+> -                                          '-cpu qemu',])
+> +                                          '-machine', 's390-ccw-virtio',
+> +                                          '-cpu', 'qemu',])
+> diff --git a/tools/testing/kunit/qemu_configs/sparc.py b/tools/testing/kunit/qemu_configs/sparc.py
+> index 27f474e7ad6e..e975c4331a7c 100644
+> --- a/tools/testing/kunit/qemu_configs/sparc.py
+> +++ b/tools/testing/kunit/qemu_configs/sparc.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='sparc',
+>                            kernel_path='arch/sparc/boot/zImage',
+>                            kernel_command_line='console=ttyS0 mem=256M',
+> -                          extra_qemu_params=['-m 256'])
+> +                          extra_qemu_params=['-m', '256'])
+> diff --git a/tools/testing/kunit/qemu_configs/x86_64.py b/tools/testing/kunit/qemu_configs/x86_64.py
+> index 77ab1aeee8a3..dc7949076863 100644
+> --- a/tools/testing/kunit/qemu_configs/x86_64.py
+> +++ b/tools/testing/kunit/qemu_configs/x86_64.py
+> @@ -7,4 +7,4 @@ CONFIG_SERIAL_8250_CONSOLE=y''',
+>                            qemu_arch='x86_64',
+>                            kernel_path='arch/x86/boot/bzImage',
+>                            kernel_command_line='console=ttyS0',
+> -                          extra_qemu_params=[''])
+> +                          extra_qemu_params=[])
+>
+> base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
+> --
+> 2.36.0.rc0.470.gd361397f0d-goog
+>
