@@ -2,54 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B91E522828
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7C152282A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239214AbiEKAIY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 20:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S239154AbiEKAI0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 20:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiEKAIX (ORCPT
+        with ESMTP id S239225AbiEKAIZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 20:08:23 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89312ED4B
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:21 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id o8-20020a17090a9f8800b001dc9f554c7fso331888pjp.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:21 -0700 (PDT)
+        Tue, 10 May 2022 20:08:25 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23C02ED4B
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:23 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id i6-20020a17090a718600b001dc87aca289so329902pjk.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=dNbuTkyCU7vGFCoTsA664uRiY2J5liUoITH0qkWIFzA=;
-        b=UnseLFLzO9W0l5JlYK+1pZQ6JC+DosIx+0fntsgSeA0m3izeVHHQFC90U1vn8Jk/DQ
-         B1CsUwqVqGZB26akMlbFTPJiv40VFo8/7Yu+nx+k++gC1z/dfsdOWogC/LBsKml0Gs4a
-         eo7bS1PVA3oUB4f8Rg1KR+9xoN/I7+UVhR1chUV765VUhChynWt3VHWlw0r3R1coIf5p
-         mOwQiMF2ZcqdTYvdP/pNU2CKCnCVpiWWfjLucUJwCkAcebr6qKMZ7qnQCdiFfuxWFIMq
-         kZ89TKd8QzQ98UH+HWxLk9p1AiyRJtXF1iS5Yo0Y4GFDIfuPxXDX0ZvEPfoLO6G0dmYd
-         iDvA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=nd70IAruy6YLk7HF+wmxASsgGrGBVsuWU+XIZwvh4Kw=;
+        b=nhFPNERpqCW2rbwKZXsNo79ee146E7oAuRVFLoP1ULP1eLhKBZkBSWGlvsR3Buku1a
+         LrFupfFPfU4SygJO3xlFTVJkZon9R0M3LCnghz0wiLa1uWHVtSlqckrCxf98GzQd1cWH
+         rb0EsdVmyTnTNjTjeCEK4r/KM1nYOFzWN80jJtWwzzs50Q6PHlpuu3moK5L6jyZ5/iCu
+         8wFdv3qhr1iVLv4gmcu+EQscizQT9MMTJBy9j1GHVn14TS8Lpbnc6VK8SpprHPTbpVxN
+         5NHZrJ70cnR7POPlCM7If2iz52B88ke1Eq5dKx+4ngNc47S7T9J1H3M2CF3UmI3TanrW
+         1okg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=dNbuTkyCU7vGFCoTsA664uRiY2J5liUoITH0qkWIFzA=;
-        b=xIludAn8UE7e1PSFPIsnfH5tRAlY9KUSaw3CsHgZGvm1K2liWylVHHWCvdzSO5dFTa
-         ShgdyPilmijTOzzwuxjt9+hPG/O33xpGicKQQMEGE6NybBpUmweeDDFZtgo45tnHNWAJ
-         gbc3W0WiCEg0+N7qZ/dcnuT9BXu0oYAptPwbMwhUXJ7ww8rR59WvGKnJcU+UFIVxVYTF
-         /n3W/4REQ0kyL9LXpLlfobscBPqdyviT9/OXV2yyCvd+y3tCaBmHrV9xzhCK8d3t0dPS
-         KTkKF7iqyOOlbBk91063Mhvip7ZX58ZmQNj9Bkx/Zf9MUptsp/Hm1/Y/JCwc3yWHLGkT
-         oyVw==
-X-Gm-Message-State: AOAM533ZPvHIZSjiMmfA7ybk2vryUUf0W2qZv5fBRiM8wd5H3DwiizKs
-        CQ1wX1x34VSfvzZZCITWs5jlFWxTcSS2ephF
-X-Google-Smtp-Source: ABdhPJw3owLfgfZAtsGQO5jBYr1h8XAIQ4b1CvTrkLICgc6kV0PqhJkSCXusqz878VEn6FCZQ/2+GaJT1BOXVRec
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=nd70IAruy6YLk7HF+wmxASsgGrGBVsuWU+XIZwvh4Kw=;
+        b=uQW7PCd2hZANeU+o6HYaIAuqHoihUnr6F79y/joIXYqEWKuO/ih9HR/WIMJg96Ce+2
+         Ye37Ba2h8CVThmv5Z9nM7du7/HpeAVBsckoZ0fnnS14K4ulb5YhTsl3haW7xgMi1V+g1
+         Z50OdPO9ccVAydBZYsQ91spr5ZaIudNEWe6LJomApoD9sMb/1dRAdEQl7rzNzE5fBmi4
+         TRwwTieuM5rJyLFyxudxgF3//HmxSLwPcvvPyhyCQ23caLpcY7rfm3RhnpEQ6mbLrzDb
+         Jfo+7F494E8lwO5uF6NYw+CCIXKBrhjTZJA8st23a0tMvHCaHE4rvEg/bpasxU1fKtl7
+         RXeg==
+X-Gm-Message-State: AOAM532XpVq1QVztXLsZSmMI4IK4gpxlWxmywSfqwQPvNs+asttomsT9
+        2HVMmMuWF1+i8sERGz54SLxLErak/VR9TGv7
+X-Google-Smtp-Source: ABdhPJz43OpKlmYlcMGSh78/cL9Iy9s6NHLb4cSgmpzz40FSTyAhNdUD62Iydw0OAWV3QlFAIOgqxxRMVhzAdxYm
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
- id t16-20020a17090ae51000b001d9ee239fa1mr55515pjy.0.1652227700562; Tue, 10
- May 2022 17:08:20 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:08:02 +0000
-Message-Id: <20220511000811.384766-1-vannapurve@google.com>
+ (user=vannapurve job=sendgmr) by 2002:a17:90b:3e8b:b0:1dc:e920:e072 with SMTP
+ id rj11-20020a17090b3e8b00b001dce920e072mr2380190pjb.151.1652227703435; Tue,
+ 10 May 2022 17:08:23 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:03 +0000
+In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
+Message-Id: <20220511000811.384766-2-vannapurve@google.com>
 Mime-Version: 1.0
+References: <20220511000811.384766-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC V2 PATCH 0/8] selftests: KVM: selftests for fd-based approach of
- supporting private memory
+Subject: [RFC V2 PATCH 1/8] selftests: kvm: Fix inline assembly for hypercall
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -79,63 +82,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This v2 series implements selftests targeting the feature floated by Chao
-via:
-https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
+Fix inline assembly for hypercall to explicitly set
+eax with hypercall number to allow the implementation
+to work even in cases where compiler would inline the
+function.
 
-Below changes aim to test the fd based approach for guest private memory
-in context of normal (non-confidential) VMs executing on non-confidential
-platforms.
+Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+---
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-priv_memfd_test.c file adds a suite of selftests to access private memory
-from the guest via private/shared accesses and checking if the contents
-can be leaked to/accessed by vmm via shared memory view.
-
-Updates in V2:
-1) Tests are added to exercise implicit/explicit memory conversion paths.
-2) Test is added to exercise UPM feature without double memory allocation.
-
-This series has dependency on following patches:
-1) V5 series patches from Chao mentioned above.
-2) https://github.com/vishals4gh/linux/commit/b9adedf777ad84af39042e9c19899600a4add68a
-  - Fixes host kernel crash with current implementation
-3) https://github.com/vishals4gh/linux/commit/0577e351ee36d52c1f6cdcb1b8de7aa6b5f760fe
-  - Confidential platforms along with the confidentiality aware software stack
-    support a notion of private/shared accesses from the confidential VMs.
-    Generally, a bit in the GPA conveys the shared/private-ness of the access.
-
-    Non-confidential platforms don't have a notion of private or shared accesses
-    from the guest VMs. To support this notion, KVM_HC_MAP_GPA_RANGE is modified
-    to allow marking an access from a VM within a GPA range as always shared or
-    private. There is an ongoing discussion about adding support for
-    software-only confidential VMs, which should replace this patch.
-4) https://github.com/vishals4gh/linux/commit/8d46aea9a7d72e4b1b998066ce0dde085fb963a7
-  - Temporary placeholder to be able to test memory conversion paths
-    till the memory conversion exit error code is finalized.
-5) https://github.com/vishals4gh/linux/commit/4c36706477c62d9416d635fa6ac4ef6484014dfc
-  - Fixes GFN calculation during memory conversion path.
-
-Github link for the patches posted as part of this series:
-https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_rfc_v2
-
-Austin Diviness (1):
-  selftests: kvm: Add hugepage support to priv_memfd_test suite.
-
-Vishal Annapurve (7):
-  selftests: kvm: Fix inline assembly for hypercall
-  selftests: kvm: Add a basic selftest to test private memory
-  selftests: kvm: priv_memfd_test: Add support for memory conversion
-  selftests: kvm: priv_memfd_test: Add shared access test
-  selftests: kvm: Add implicit memory conversion tests
-  selftests: kvm: Add KVM_HC_MAP_GPA_RANGE hypercall test
-  selftests: kvm: priv_memfd: Add test avoiding double allocation
-
- tools/testing/selftests/kvm/Makefile          |    1 +
- .../selftests/kvm/lib/x86_64/processor.c      |    2 +-
- tools/testing/selftests/kvm/priv_memfd_test.c | 1359 +++++++++++++++++
- 3 files changed, 1361 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
-
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 9f000dfb5594..4d88e1a553bf 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -1461,7 +1461,7 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+ 
+ 	asm volatile("vmcall"
+ 		     : "=a"(r)
+-		     : "b"(a0), "c"(a1), "d"(a2), "S"(a3));
++		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+ 	return r;
+ }
+ 
 -- 
-2.36.0.512.ge40c2bad7a-goog
+2.36.0.550.gb090851708-goog
 
