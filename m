@@ -2,228 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2272522812
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B91E522828
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237140AbiEKADX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 20:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S239214AbiEKAIY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 20:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiEKADW (ORCPT
+        with ESMTP id S229484AbiEKAIX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 20:03:22 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5694517D3A0;
-        Tue, 10 May 2022 17:03:21 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id z26so459468iot.8;
-        Tue, 10 May 2022 17:03:21 -0700 (PDT)
+        Tue, 10 May 2022 20:08:23 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89312ED4B
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:21 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id o8-20020a17090a9f8800b001dc9f554c7fso331888pjp.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E9IShPzmirrnxjaf4QbXtujfHtRgLcfxaPODBOBzEOM=;
-        b=YW2+p5g1ZLTIauXt3MvyO7yeNTvxCVRBAQ7S0rZmroSuBeECRUvYckp3MuO4+DAlDk
-         yv2+4e9EMqitLerTuKHukBOtW21KHeg1ErrkD0aKPQzxv6rQ79T0Fq/ukTBD+wYSDqT/
-         StUjKNN4tQDfcGvO9rbWwpqVtchNZs1w3tRzIZUglFE8XD5EtVhE9Iy6+S1A9hUYPJ5n
-         qHHII1YX+HQgNRTO6zb1Xi6gyKrcFECvWAX8Eaqq6Np6sHn3JYeFI9/Vhf+Ft+QiffsV
-         2KPtOe+P80S98LcfU9XgIu8OCPPqeaasZ+ZmY+UHT++EaY6aFJnnx9WJGt1LsU4fYDfW
-         AUQA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dNbuTkyCU7vGFCoTsA664uRiY2J5liUoITH0qkWIFzA=;
+        b=UnseLFLzO9W0l5JlYK+1pZQ6JC+DosIx+0fntsgSeA0m3izeVHHQFC90U1vn8Jk/DQ
+         B1CsUwqVqGZB26akMlbFTPJiv40VFo8/7Yu+nx+k++gC1z/dfsdOWogC/LBsKml0Gs4a
+         eo7bS1PVA3oUB4f8Rg1KR+9xoN/I7+UVhR1chUV765VUhChynWt3VHWlw0r3R1coIf5p
+         mOwQiMF2ZcqdTYvdP/pNU2CKCnCVpiWWfjLucUJwCkAcebr6qKMZ7qnQCdiFfuxWFIMq
+         kZ89TKd8QzQ98UH+HWxLk9p1AiyRJtXF1iS5Yo0Y4GFDIfuPxXDX0ZvEPfoLO6G0dmYd
+         iDvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E9IShPzmirrnxjaf4QbXtujfHtRgLcfxaPODBOBzEOM=;
-        b=aGtmyAngbG+kr+l466u6A2kGgajhyLsqR70SGpc4r8RtKG20bCfn4zHQEOGad2OGkC
-         F6RKmLWXYwb91a88uqVHgbiJ3cJnM+pNQKstcmVufsHDolOmWneDYQ7XSBsj25Jvwyrt
-         K9CFZgklBuFkGPXq1nZOtGoJhtE2henJb6oGtYqVyVaNCXu49lS4VcCSrBdOUMTtUHTc
-         ugQi6oCMpCtJYN68wfcBeDa1okw/dDOjew6L0mtrtM+/uCOM5poRgtLG9FCeQkWQeaeR
-         CNkYSru2EgdgpcwkfCY3Rvbliy5GoezZmpMscKaAIvuM5lAc2vRntlbSYfcKEC1dtPv+
-         PahA==
-X-Gm-Message-State: AOAM532SJdtZBcLeHnApIKr9iR6Z9YQ+9Z9/ItNKGiZkoU+ArRPbjcrD
-        bsOeULka1u9l7w7SY3V/aS0A0+Q3lw0k7tnkkdA=
-X-Google-Smtp-Source: ABdhPJz8wXN2eT/5ZI1rqf3pVWXxV7su1egOJGb8lzC4G5vEMVz1JbF84JjCOxY593xUFZzMAwjlLZhAfV9AW1n+87c=
-X-Received: by 2002:a05:6602:248f:b0:65a:fb17:7a6b with SMTP id
- g15-20020a056602248f00b0065afb177a6bmr5476735ioe.79.1652227400674; Tue, 10
- May 2022 17:03:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220503171437.666326-1-maximmi@nvidia.com> <20220503171437.666326-4-maximmi@nvidia.com>
- <CAEf4BzYDfNuF4QL37ZLjR5--zimpycZsjzXhq6ao79_05+OOiA@mail.gmail.com> <1eaebd1b-6933-20c9-1371-0429703bab2f@nvidia.com>
-In-Reply-To: <1eaebd1b-6933-20c9-1371-0429703bab2f@nvidia.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 10 May 2022 17:03:09 -0700
-Message-ID: <CAEf4Bzag0JBN0bHsPTb-YHZ+sBB3LTSvp8PjtftAvMkdVNWKmA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 3/5] bpf: Add helpers to issue and check SYN
- cookies in XDP
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dNbuTkyCU7vGFCoTsA664uRiY2J5liUoITH0qkWIFzA=;
+        b=xIludAn8UE7e1PSFPIsnfH5tRAlY9KUSaw3CsHgZGvm1K2liWylVHHWCvdzSO5dFTa
+         ShgdyPilmijTOzzwuxjt9+hPG/O33xpGicKQQMEGE6NybBpUmweeDDFZtgo45tnHNWAJ
+         gbc3W0WiCEg0+N7qZ/dcnuT9BXu0oYAptPwbMwhUXJ7ww8rR59WvGKnJcU+UFIVxVYTF
+         /n3W/4REQ0kyL9LXpLlfobscBPqdyviT9/OXV2yyCvd+y3tCaBmHrV9xzhCK8d3t0dPS
+         KTkKF7iqyOOlbBk91063Mhvip7ZX58ZmQNj9Bkx/Zf9MUptsp/Hm1/Y/JCwc3yWHLGkT
+         oyVw==
+X-Gm-Message-State: AOAM533ZPvHIZSjiMmfA7ybk2vryUUf0W2qZv5fBRiM8wd5H3DwiizKs
+        CQ1wX1x34VSfvzZZCITWs5jlFWxTcSS2ephF
+X-Google-Smtp-Source: ABdhPJw3owLfgfZAtsGQO5jBYr1h8XAIQ4b1CvTrkLICgc6kV0PqhJkSCXusqz878VEn6FCZQ/2+GaJT1BOXVRec
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
+ id t16-20020a17090ae51000b001d9ee239fa1mr55515pjy.0.1652227700562; Tue, 10
+ May 2022 17:08:20 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:02 +0000
+Message-Id: <20220511000811.384766-1-vannapurve@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [RFC V2 PATCH 0/8] selftests: KVM: selftests for fd-based approach of
+ supporting private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shauh@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, Vishal Annapurve <vannapurve@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 10, 2022 at 12:20 PM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
->
-> On 2022-05-07 00:19, Andrii Nakryiko wrote:
-> > On Tue, May 3, 2022 at 10:15 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
-> >>
-> >> The new helpers bpf_tcp_raw_{gen,check}_syncookie_ipv{4,6} allow an XDP
-> >> program to generate SYN cookies in response to TCP SYN packets and to
-> >> check those cookies upon receiving the first ACK packet (the final
-> >> packet of the TCP handshake).
-> >>
-> >> Unlike bpf_tcp_{gen,check}_syncookie these new helpers don't need a
-> >> listening socket on the local machine, which allows to use them together
-> >> with synproxy to accelerate SYN cookie generation.
-> >>
-> >> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-> >> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-> >> ---
-> >>   include/net/tcp.h              |   1 +
-> >>   include/uapi/linux/bpf.h       |  78 ++++++++++++++++++++++
-> >>   net/core/filter.c              | 118 +++++++++++++++++++++++++++++++++
-> >>   net/ipv4/tcp_input.c           |   3 +-
-> >>   scripts/bpf_doc.py             |   4 ++
-> >>   tools/include/uapi/linux/bpf.h |  78 ++++++++++++++++++++++
-> >>   6 files changed, 281 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> >> index 94a52ad1101c..45aafc28ce00 100644
-> >> --- a/include/net/tcp.h
-> >> +++ b/include/net/tcp.h
-> >> @@ -432,6 +432,7 @@ u16 tcp_v4_get_syncookie(struct sock *sk, struct iphdr *iph,
-> >>                           struct tcphdr *th, u32 *cookie);
-> >>   u16 tcp_v6_get_syncookie(struct sock *sk, struct ipv6hdr *iph,
-> >>                           struct tcphdr *th, u32 *cookie);
-> >> +u16 tcp_parse_mss_option(const struct tcphdr *th, u16 user_mss);
-> >>   u16 tcp_get_syncookie_mss(struct request_sock_ops *rsk_ops,
-> >>                            const struct tcp_request_sock_ops *af_ops,
-> >>                            struct sock *sk, struct tcphdr *th);
-> >> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> >> index 4dd9e34f2a60..5e611d898302 100644
-> >> --- a/include/uapi/linux/bpf.h
-> >> +++ b/include/uapi/linux/bpf.h
-> >> @@ -5156,6 +5156,80 @@ union bpf_attr {
-> >>    *             if not NULL, is a reference which must be released using its
-> >>    *             corresponding release function, or moved into a BPF map before
-> >>    *             program exit.
-> >> + *
-> >> + * s64 bpf_tcp_raw_gen_syncookie_ipv4(struct iphdr *iph, struct tcphdr *th, u32 th_len)
-> >> + *     Description
-> >> + *             Try to issue a SYN cookie for the packet with corresponding
-> >> + *             IPv4/TCP headers, *iph* and *th*, without depending on a
-> >> + *             listening socket.
-> >> + *
-> >> + *             *iph* points to the IPv4 header.
-> >> + *
-> >> + *             *th* points to the start of the TCP header, while *th_len*
-> >> + *             contains the length of the TCP header (at least
-> >> + *             **sizeof**\ (**struct tcphdr**)).
-> >> + *     Return
-> >> + *             On success, lower 32 bits hold the generated SYN cookie in
-> >> + *             followed by 16 bits which hold the MSS value for that cookie,
-> >> + *             and the top 16 bits are unused.
-> >> + *
-> >> + *             On failure, the returned value is one of the following:
-> >> + *
-> >> + *             **-EINVAL** if *th_len* is invalid.
-> >> + *
-> >> + * s64 bpf_tcp_raw_gen_syncookie_ipv6(struct ipv6hdr *iph, struct tcphdr *th, u32 th_len)
-> >> + *     Description
-> >> + *             Try to issue a SYN cookie for the packet with corresponding
-> >> + *             IPv6/TCP headers, *iph* and *th*, without depending on a
-> >> + *             listening socket.
-> >> + *
-> >> + *             *iph* points to the IPv6 header.
-> >> + *
-> >> + *             *th* points to the start of the TCP header, while *th_len*
-> >> + *             contains the length of the TCP header (at least
-> >> + *             **sizeof**\ (**struct tcphdr**)).
-> >> + *     Return
-> >> + *             On success, lower 32 bits hold the generated SYN cookie in
-> >> + *             followed by 16 bits which hold the MSS value for that cookie,
-> >> + *             and the top 16 bits are unused.
-> >> + *
-> >> + *             On failure, the returned value is one of the following:
-> >> + *
-> >> + *             **-EINVAL** if *th_len* is invalid.
-> >> + *
-> >> + *             **-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-> >> + *
-> >> + * int bpf_tcp_raw_check_syncookie_ipv4(struct iphdr *iph, struct tcphdr *th)
-> >
-> > Note that all existing helpers that just return error or 0 on success
-> > return long. Please use long for consistency.
->
-> OK. There are some existing helpers that return int, though:
-> bpf_inode_storage_delete, bpf_get_retval, bpf_set_retval. They should
-> probably be fixed by someone as well.
->
+This v2 series implements selftests targeting the feature floated by Chao
+via:
+https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
 
-Yep, they probably should, thanks for pointing missed cases out!
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
 
-> >> + *     Description
-> >> + *             Check whether *iph* and *th* contain a valid SYN cookie ACK
-> >> + *             without depending on a listening socket.
-> >> + *
-> >> + *             *iph* points to the IPv4 header.
-> >> + *
-> >> + *             *th* points to the TCP header.
-> >> + *     Return
-> >> + *             0 if *iph* and *th* are a valid SYN cookie ACK.
-> >> + *
-> >> + *             On failure, the returned value is one of the following:
-> >> + *
-> >> + *             **-EACCES** if the SYN cookie is not valid.
-> >> + *
-> >> + * int bpf_tcp_raw_check_syncookie_ipv6(struct ipv6hdr *iph, struct tcphdr *th)
-> >
-> > same
-> >
-> >> + *     Description
-> >> + *             Check whether *iph* and *th* contain a valid SYN cookie ACK
-> >> + *             without depending on a listening socket.
-> >> + *
-> >> + *             *iph* points to the IPv6 header.
-> >> + *
-> >> + *             *th* points to the TCP header.
-> >> + *     Return
-> >> + *             0 if *iph* and *th* are a valid SYN cookie ACK.
-> >> + *
-> >> + *             On failure, the returned value is one of the following:
-> >> + *
-> >> + *             **-EACCES** if the SYN cookie is not valid.
-> >> + *
-> >> + *             **-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-> >
-> > [...]
->
+priv_memfd_test.c file adds a suite of selftests to access private memory
+from the guest via private/shared accesses and checking if the contents
+can be leaked to/accessed by vmm via shared memory view.
+
+Updates in V2:
+1) Tests are added to exercise implicit/explicit memory conversion paths.
+2) Test is added to exercise UPM feature without double memory allocation.
+
+This series has dependency on following patches:
+1) V5 series patches from Chao mentioned above.
+2) https://github.com/vishals4gh/linux/commit/b9adedf777ad84af39042e9c19899600a4add68a
+  - Fixes host kernel crash with current implementation
+3) https://github.com/vishals4gh/linux/commit/0577e351ee36d52c1f6cdcb1b8de7aa6b5f760fe
+  - Confidential platforms along with the confidentiality aware software stack
+    support a notion of private/shared accesses from the confidential VMs.
+    Generally, a bit in the GPA conveys the shared/private-ness of the access.
+
+    Non-confidential platforms don't have a notion of private or shared accesses
+    from the guest VMs. To support this notion, KVM_HC_MAP_GPA_RANGE is modified
+    to allow marking an access from a VM within a GPA range as always shared or
+    private. There is an ongoing discussion about adding support for
+    software-only confidential VMs, which should replace this patch.
+4) https://github.com/vishals4gh/linux/commit/8d46aea9a7d72e4b1b998066ce0dde085fb963a7
+  - Temporary placeholder to be able to test memory conversion paths
+    till the memory conversion exit error code is finalized.
+5) https://github.com/vishals4gh/linux/commit/4c36706477c62d9416d635fa6ac4ef6484014dfc
+  - Fixes GFN calculation during memory conversion path.
+
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_rfc_v2
+
+Austin Diviness (1):
+  selftests: kvm: Add hugepage support to priv_memfd_test suite.
+
+Vishal Annapurve (7):
+  selftests: kvm: Fix inline assembly for hypercall
+  selftests: kvm: Add a basic selftest to test private memory
+  selftests: kvm: priv_memfd_test: Add support for memory conversion
+  selftests: kvm: priv_memfd_test: Add shared access test
+  selftests: kvm: Add implicit memory conversion tests
+  selftests: kvm: Add KVM_HC_MAP_GPA_RANGE hypercall test
+  selftests: kvm: priv_memfd: Add test avoiding double allocation
+
+ tools/testing/selftests/kvm/Makefile          |    1 +
+ .../selftests/kvm/lib/x86_64/processor.c      |    2 +-
+ tools/testing/selftests/kvm/priv_memfd_test.c | 1359 +++++++++++++++++
+ 3 files changed, 1361 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
+
+-- 
+2.36.0.512.ge40c2bad7a-goog
+
