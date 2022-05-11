@@ -2,192 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EB0522A45
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 05:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C07522B4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 06:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241611AbiEKDSQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 23:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S238899AbiEKEkh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 May 2022 00:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241648AbiEKDSP (ORCPT
+        with ESMTP id S239227AbiEKEjv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 23:18:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB544B874;
-        Tue, 10 May 2022 20:18:14 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kyg7w6SPZzhZ4Q;
-        Wed, 11 May 2022 11:17:32 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 11 May 2022 11:18:10 +0800
-Message-ID: <f8c3f048-9d59-7249-a1d7-31616556e931@huawei.com>
-Date:   Wed, 11 May 2022 11:18:09 +0800
+        Wed, 11 May 2022 00:39:51 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C80154015
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-ee1e7362caso1460679fac.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
+         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
+         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
+         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
+         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
+         wrQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=u8RsdkSQAencTLlpz7etvtYTN9ajgkNscz8qEQon53hCLWTdvZfwcetgGYFZZMdUUi
+         ANi3HNUof3+dglMrnTqHyqFpUJ4pOKtpX3Fc3sWeYRus04Y6yIBkZbbld2a/7OiszxAQ
+         LmGQjknSxSQdLh5jdYim+Tzc2urFz0LI0489QwfhsVVd9z39T9PEojwKsWSF+A33vxn2
+         v6G/DSJ8QB14q3d0pL9uZ+9HLB3S6FAArJcu8PsRyvQDA9zdgl2aX4QL/GErNnpAur9M
+         +tvGWa3hqSEMp+yM6dDFpIBocczarSYkAcnU6axWErD70Se2Sd2jaFeRfPjoKWW3cJpl
+         1CsQ==
+X-Gm-Message-State: AOAM530HuHxsE4eegY/FZNrJ9PwgKKqd99anG2dT6mlCtAJ5/0IuEljU
+        4Vn+urHVWdia68id5L+XAk9imos7GeytwP61+bx5HVM+wjL7Qw==
+X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
+X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
+ gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
+ May 2022 21:39:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Jakub Sitnicki <jakub@cloudflare.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com>
- <87ee11obih.fsf@cloudflare.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <87ee11obih.fsf@cloudflare.com>
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:39:10 -0700
+Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/10/2022 7:45 PM, Jakub Sitnicki wrote:
-> On Sun, Apr 24, 2022 at 11:40 AM -04, Xu Kuohai wrote:
->> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->> it to replace nop with jump, or replace jump with nop.
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> Acked-by: Song Liu <songliubraving@fb.com>
->> ---
->>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->>  1 file changed, 63 insertions(+)
->>
->> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 8ab4035dea27..3f9bdfec54c4 100644
->> --- a/arch/arm64/net/bpf_jit_comp.c
->> +++ b/arch/arm64/net/bpf_jit_comp.c
->> @@ -9,6 +9,7 @@
->>  
->>  #include <linux/bitfield.h>
->>  #include <linux/bpf.h>
->> +#include <linux/memory.h>
->>  #include <linux/filter.h>
->>  #include <linux/printk.h>
->>  #include <linux/slab.h>
->> @@ -18,6 +19,7 @@
->>  #include <asm/cacheflush.h>
->>  #include <asm/debug-monitors.h>
->>  #include <asm/insn.h>
->> +#include <asm/patching.h>
->>  #include <asm/set_memory.h>
->>  
->>  #include "bpf_jit.h"
->> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->>  {
->>  	return vfree(addr);
->>  }
->> +
->> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->> +			     void *addr, u32 *insn)
->> +{
->> +	if (!addr)
->> +		*insn = aarch64_insn_gen_nop();
->> +	else
->> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->> +						    (unsigned long)addr,
->> +						    type);
->> +
->> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->> +}
->> +
->> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->> +		       void *old_addr, void *new_addr)
->> +{
->> +	int ret;
->> +	u32 old_insn;
->> +	u32 new_insn;
->> +	u32 replaced;
->> +	enum aarch64_insn_branch_type branch_type;
->> +
->> +	if (!is_bpf_text_address((long)ip))
->> +		/* Only poking bpf text is supported. Since kernel function
->> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
-> 
-> Nit: s/funcitons/functions/
-> 
->> +		 * called after a failed poke with ftrace. In this case, there
->> +		 * is probably something wrong with fentry, so there is nothing
->> +		 * we can do here. See register_fentry, unregister_fentry and
->> +		 * modify_fentry for details.
->> +		 */
->> +		return -EINVAL;
->> +
->> +	if (poke_type == BPF_MOD_CALL)
->> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->> +	else
->> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->> +
->> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->> +		return -EFAULT;
->> +
->> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->> +		return -EFAULT;
->> +
->> +	mutex_lock(&text_mutex);
->> +	if (aarch64_insn_read(ip, &replaced)) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	if (replaced != old_insn) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
-> 
-> Nit: No need for the explicit cast to void *. Type already matches.
-> 
->> +out:
->> +	mutex_unlock(&text_mutex);
->> +	return ret;
->> +}
-> 
-> .
-will fix in v4, thanks!
+Our Ref: BG/WA0151/2022
+
+Dear Beneficiary
+
+Subject: An Estate of US$15.8 Million
+
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
+
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
+
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
+
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
+
+Our service fee of 10% will be paid to us after you have received the estate.
+
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
+
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
+
+With warm regards,
+
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
