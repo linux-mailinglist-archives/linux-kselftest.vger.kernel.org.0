@@ -2,57 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD4C523F27
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 23:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0F5523F32
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 23:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiEKVBU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 May 2022 17:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S1347965AbiEKVF7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 May 2022 17:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347907AbiEKVBT (ORCPT
+        with ESMTP id S229633AbiEKVF6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 May 2022 17:01:19 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2964ECE1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 14:01:18 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dk23so6418695ejb.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 14:01:18 -0700 (PDT)
+        Wed, 11 May 2022 17:05:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F0B36149
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 14:05:56 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id gh6so6543513ejb.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 14:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Z1tl7xXEv44Olrg0x8oVrp2Kssd8uEg1zywWFAnvX38=;
-        b=pvc4prrKU6XYpVg12K45Z7E2sOJoKAGRX2na2HU3OywNrKnH7faNKDEESDjHs7Hlf/
-         PLVlxIB0eZVlZwE63sN+qwm6mJPQKBIjefbBqJsDf45ATJX+0LrqD26TiwiZxME9STRA
-         kfVcKOqr5+c0sXl5Xl7sHhIc6hljvb4RCd0LB8FQLkRkLXNWOYMN/sDYyo5zohhg/MzG
-         sxyfA9ZEzFEQlqXpNdykAd7UrFXNhlMnWqR+zMQmzzVYzYepY0F4Usx/4OROO6TYgp70
-         VulMgiiSLQZUQUXX1/cHfC0NUtSNNAX/ViwOsE5wqYe1Xima8kW4Sg9wll5H0yJvp7Bw
-         XQtQ==
+        bh=ynACITrtZzlKKqGyhSsamC0GjuNyAFQkpCuDbRLZ5eA=;
+        b=L+AOis4yZWcZ1IL0iiPSTBcAUZGQn0SnVYsycwPfW58FE93ROmbF7Bq0hPrNiFRa8g
+         JlrGFDByBnBWX5XKOuqEvyXXxMhG6UQkvV+XCCXX0AasnWtJ7lzwavwMGctz+7PCjPfw
+         P8l9wg9vsu3om2MiVDp2PgbXcXZKSfn3Vc0pLg4NLih5m3Upk9BdZ1VzrwAGvFhmjLjO
+         4M16DpVcSQ27cz+SJMwC/TKKZ3fNClJsGiy7u1rWz/ePh/1VRMnAZNrqe5POmmMFNCtq
+         tGQ79/PFZYBRAUe0jo4rCXfD1S4WxZimlrsSErCx2ZbPncFLyz77tISUtsD8lw3bkz5y
+         O7vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Z1tl7xXEv44Olrg0x8oVrp2Kssd8uEg1zywWFAnvX38=;
-        b=axAanaTdXXVvNqCT1zqsAWwn7xxL1QqT16Tvu1degblcG+T4uUspGnX7TvVndI+eLh
-         3zVq8rpAlC875VZMmfjKkM/DO/UhwTD9zBvg414KqzuDAfSpgOS9zBvu0QjUcFtxXx8R
-         1DwByC6kjRDf0WdwS9801gUkSvdc5cFPUFZDIuoGLsZTP/uRYBOk+Due4K9/tuoQYsVh
-         KpCO5RuovqFZww3gPJ/RPRlP0CowbxDUev27wuJ47PvXLko0XKPl7q38uwtSqmQbPzbM
-         3KTtYh08VX2myAfHOzDpEaLWT6YuVCgUDJ9kOTiqbprm+HQR3DHFOwtUAFG/YgA3LaO3
-         AvaA==
-X-Gm-Message-State: AOAM531yl6kdX9C09ACRAdnTNlhyRprZMHWVJlkTu959H/ZHt9YhhyRq
-        WPtoDltNXfAP9l7SIfNkhxXWSnDMs0YQs4uhOJG8WA==
-X-Google-Smtp-Source: ABdhPJwUSKpTjorzdIPUZWjpRBG2eay5ikujKcbGi97kVFsww2FYroBfaYoh59bIWj6/q4C3u2tbKhV/fDB6bfzdRt0=
-X-Received: by 2002:a17:907:8a14:b0:6f4:4365:dc07 with SMTP id
- sc20-20020a1709078a1400b006f44365dc07mr25673197ejc.693.1652302876658; Wed, 11
- May 2022 14:01:16 -0700 (PDT)
+        bh=ynACITrtZzlKKqGyhSsamC0GjuNyAFQkpCuDbRLZ5eA=;
+        b=Sjj/J2hBGdrBouRqjmC0oblPE68Yf7HDsHoRB4rex9dJtsZq1DLoVgpIf7AqqNR8C3
+         GJwovW+brH3rpU/Q+/eHRZgkKKYpz+bwGg7RqmPxskye3MSkGbB5Gj81IYJ1zj9w7wlg
+         ZQR1nITV4WuWecM7SLhY4uUldDJP721rjUCzOhscuy6o8420pm169sRGu9MAx1g9ZkAl
+         CzY04pIaNM4TlzII32lyxPnWk6LjmIzSbE2CoxXiMysji3pxGJZcqIVMtIl9PMsrq+xT
+         cAUxLvGmYQ5jrTlH+XtviM9KbV+jOnfEs/WoPMKAiPNXNLTXCo5f1M8lTz3EkbACdJY6
+         9L2Q==
+X-Gm-Message-State: AOAM530FStVRYPyVKcTYWCfpNYNlspGZqyhwUSD9R1etVB0EiMZ4grCH
+        XDXjWGs1kxB0Bjdb+l36iTS3Cfi6r8bwEFP6YFdTPQ==
+X-Google-Smtp-Source: ABdhPJw4G75TGPYUDLK0sLGgvp0IXvKBjVwkHssJ3WNT+0ieIBKIsLsCtXbiQIiHz5aaWSrxJ7SnEdCMer/vL8uYcxE=
+X-Received: by 2002:a17:907:968d:b0:6f4:9f9e:3e5f with SMTP id
+ hd13-20020a170907968d00b006f49f9e3e5fmr27155651ejc.540.1652303155279; Wed, 11
+ May 2022 14:05:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329214248.1330868-1-dlatypov@google.com>
-In-Reply-To: <20220329214248.1330868-1-dlatypov@google.com>
+References: <20220405190619.540177-1-dlatypov@google.com>
+In-Reply-To: <20220405190619.540177-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 11 May 2022 17:01:03 -0400
-Message-ID: <CAFd5g46VNn=6t-xuwyBJ0uuzHGY26eoxO-CmKjs3m50yMHwN=g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: print clearer error message when there's no
- TAP output
+Date:   Wed, 11 May 2022 17:05:42 -0400
+Message-ID: <CAFd5g44HjAHkwY9rAe3VCSTpRUNcoR0WU-e1z0BA+MKu_BYXyA@mail.gmail.com>
+Subject: Re: [PATCH] lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
@@ -69,23 +68,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 5:43 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Apr 5, 2022 at 3:06 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Before:
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> ...
-> [ERROR] Test : invalid KTAP input!
+> This is in line with Documentation/dev-tools/kunit/style.rst.
+> Some of these tests predate that so they don't follow this convention.
 >
-> After:
-> $ ./tools/testing/kunit/kunit.py parse /dev/null
-> ...
-> [ERROR] Test <missing>: could not find any KTAP output!
+> With this and commit b0841b51cac9 ("kunit: arch/um/configs: Enable
+> KUNIT_ALL_TESTS by default"), kunit.py will now run these tests by
+> default. This hopefully makes it easier to run and maintain the tests.
+> If any of these were to start failing, people would notice much quicker.
 >
-> This error message gets printed out when extract_tap_output() yielded no
-> lines. So while it could be because of malformed KTAP output from KUnit,
-> it could also be due to to not having any KTAP output at all.
->
-> Try and make the error message here more clear.
+> Note: this commit doesn't update LINEAR_RANGES_TEST since that would
+> select its dependency (LINEAR_RANGES). We don't want KUNIT_ALL_TESTS
+> to enable anything other than test kconfigs.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
