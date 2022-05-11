@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9104152282D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A0252283C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239470AbiEKAIk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 20:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S239337AbiEKAJX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 20:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiEKAIh (ORCPT
+        with ESMTP id S239399AbiEKAIj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 20:08:37 -0400
+        Tue, 10 May 2022 20:08:39 -0400
 Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6F93D497
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:28 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id z19-20020a62d113000000b0050d183adf6fso231111pfg.19
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A826060DA2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:31 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id z34-20020a056a001da200b0050e057fdd7eso241105pfw.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ousdsQMGoWGPLGfdJHRlc9S6OKJxuNlkPfZprs239LE=;
-        b=e3rAodX5f8r102qY1GuiiUNVeM6ToTpHYpSFbU4cVPlW3L9nkcmzWJgDA9lX+agIkr
-         Qd/bEFbE9ZCvcix75fmuOcnctpaM6mvYi4Gfiw+o24cYfyNIq5I0zDiUPvmsBPlXs729
-         HrOSPCyCn7ZI0Qy92j8PyfGtDJrCsCRQIe3RM3/roq6okzGovg5YE6P0S2cyeW0Hsx/E
-         F9uOz81XMpK6On/HDJXdfcGYs6j/Cc75gc8HlGFYSeEq5BQ+kjrRDldiCso5cNyeWzxA
-         S3CFwBiAUqGMPL2ERrhipC20Wzs7FZ6/gI2ZK47SUW/9tm79/wYkxDmNHVIbaaNR43Ym
-         IfBA==
+        bh=wLjvVbIdoRCH49YCihnoSmA9ubv4t2s+xqBSCz7F9jg=;
+        b=Ki3eaTjsQ7M5NE3TLT5tuYldDGfIk2buuSWB26+3w04czbg6Ph679zSyiiZgtT9PQs
+         6chWf7oec2aK+bxvv3wEI653g/J5vu6EkLMuyK1wYj3x1tTeDby0vt6KjCQvEFwUIBH6
+         ut043eELAUSze7vzZH+uxRVRXoRZFSZuFvoMuWscyNgr/3bM6OtHGPWEXelTgJauaNk+
+         nBcCnvg+3SPAcI2O7dVVV3wQPahjvvLidqndO5FdjzqXtuFuRteNvFVbzjClCWZza/us
+         AILv/Sr51khSNwawZts3gpqxwMCWbPAm0liWiAInJ/kTt3VltafGCej6wxxvpmkL1Isn
+         jn2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ousdsQMGoWGPLGfdJHRlc9S6OKJxuNlkPfZprs239LE=;
-        b=OIjQ0bb471p7PIVrgBRe2EQpmQYTHGVL7fAfsv2RT8+azGKOsR+ac7a9fsr9oLsRWe
-         dHc0l2ZPnwa5P93mP731k7XWNKxnGZuTuH4e0jsTDDWrIIrRCm6EKV0YMzpk2FvDmCP6
-         iHA9MGw6qQc5MTVpljm+UdU2OPjaHY37r7Rir1oVw3jTO4E8yn+7ChX/pWBkXZJCiIoE
-         64XzaoUTPBtWzU3YmklldxLfBa0oFy0TdGVqKQxs9zacOsVl+KUwasNW/0CUdYivwbW6
-         Qami1/vYaDKqT0hfwt7tHdvtDz99ZCc685YsGhV4yNV+g3G6cVjQx23cCP0BLch0KFew
-         baUQ==
-X-Gm-Message-State: AOAM5313N2nV+oDTDl1hYMtjfE0LS2ZiLV8g3G6Nr3twkzu7XrVTSwdC
-        Jw3K75ajjtvHrjnY7PtTuqQmzuuFdxOUsA29
-X-Google-Smtp-Source: ABdhPJzTmLb9y8mDaPQrDC9lq/Q88kd08tL6Wmu2p9a7OyjMRa4/Lb3QJlT+4la0xLIeV0XCQla+8xYaGu3VNwyk
+        bh=wLjvVbIdoRCH49YCihnoSmA9ubv4t2s+xqBSCz7F9jg=;
+        b=KDWPBNFGWcAKoAYVJKVOpdMdGOKxUsvwuvx8t6/BJ21PLMOjxTaV9fnbhuXlzBumng
+         LAkNl7GbJ8oObuuO/GBkJ6tsEynNzzEMGvdWmA0krdZN5OoJZPphhuF7B8NxNbksifui
+         GCLm2/bLLXX1rv60WiYWnxFMemWrJmnB8r1rPqGjfVQaTJ3JclSrUlfkhCa0t8AguXWA
+         v92UyUqDGmS4Az5s2lAXS/5mYpjX5ukFlk8spqB9jxwaXAGcSi6ioWyEKXlqzl2cpOcX
+         qKx8H7sJ4itk6ttwKctbDJIeMVr5YyKEfXU0kJq9Qi3edhr/w+nEILnXWx81sXAII7AI
+         ChaQ==
+X-Gm-Message-State: AOAM531Jl2to3v4Y6J/bcNDXdZoETQU0eCiauS2RoNNytWsfBcNA6st9
+        kSu01cdXGu/K0SppPYYJAvFwNp62hHX0g+Ff
+X-Google-Smtp-Source: ABdhPJzVAtm2BkSdXZuq4Ku3XaizDmU0qHSs3QkXhQaKqeH6miipiHUsyaTDTE95H36auWRbhZrpMBywulp15kHC
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:902:e549:b0:15e:aa63:6fd8 with SMTP
- id n9-20020a170902e54900b0015eaa636fd8mr22998658plf.152.1652227707794; Tue,
- 10 May 2022 17:08:27 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:08:05 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
+ id t16-20020a17090ae51000b001d9ee239fa1mr55560pjy.0.1652227710272; Tue, 10
+ May 2022 17:08:30 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:06 +0000
 In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
-Message-Id: <20220511000811.384766-4-vannapurve@google.com>
+Message-Id: <20220511000811.384766-5-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220511000811.384766-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC V2 PATCH 3/8] selftests: kvm: priv_memfd_test: Add support for
- memory conversion
+Subject: [RFC V2 PATCH 4/8] selftests: kvm: priv_memfd_test: Add shared access test
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -75,128 +74,109 @@ Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add handling of explicit private/shared memory conversion using
-KVM_HC_MAP_GPA_RANGE and implicit memory conversion by handling
-KVM_EXIT_MEMORY_ERROR.
+Add a test to access private memory in shared fashion
+which should exercise implicit memory conversion path
+using KVM_EXIT_MEMORY_ERROR.
 
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- tools/testing/selftests/kvm/priv_memfd_test.c | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ tools/testing/selftests/kvm/priv_memfd_test.c | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/priv_memfd_test.c b/tools/testing/selftests/kvm/priv_memfd_test.c
-index bbb58c62e186..55e24c893b07 100644
+index 55e24c893b07..48bc4343e7b5 100644
 --- a/tools/testing/selftests/kvm/priv_memfd_test.c
 +++ b/tools/testing/selftests/kvm/priv_memfd_test.c
-@@ -155,6 +155,83 @@ static struct test_run_helper priv_memfd_testsuite[] = {
+@@ -147,12 +147,81 @@ static void pmpat_guest_code(void)
+ 	GUEST_DONE();
+ }
+ 
++/* Test to verify guest shared accesses on private memory with following steps:
++ * 1) Upon entry, guest signals VMM that it has started.
++ * 2) VMM populates the shared memory with known pattern and continues guest
++ *    execution.
++ * 3) Guest reads private gpa range in a shared fashion and verifies that it
++ *    reads what VMM has written in step2.
++ * 3) Guest writes a different pattern on the shared memory and signals VMM
++ *      that it has updated the shared memory.
++ * 4) VMM verifies shared memory contents to be same as the data populated
++ *      in step 3 and continues guest execution.
++ */
++#define PMSAT_ID				1
++#define PMSAT_DESC				"PrivateMemorySharedAccessTest"
++
++/* Guest code execution stages for private mem access test */
++#define PMSAT_GUEST_STARTED			0ULL
++#define PMSAT_GUEST_TEST_MEM_UPDATED		1ULL
++
++static bool pmsat_handle_vm_stage(struct kvm_vm *vm,
++			void *test_info,
++			uint64_t stage)
++{
++	void *shared_mem = ((struct test_run_helper *)test_info)->shared_mem;
++
++	switch (stage) {
++	case PMSAT_GUEST_STARTED: {
++		/* Initialize the contents of shared memory */
++		TEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
++			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE),
++			"Shared memory update failed");
++		VM_STAGE_PROCESSED(PMSAT_GUEST_STARTED);
++		break;
++	}
++	case PMSAT_GUEST_TEST_MEM_UPDATED: {
++		/* verify data to be same as what guest wrote */
++		TEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
++			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE),
++			"Shared memory view mismatch");
++		VM_STAGE_PROCESSED(PMSAT_GUEST_TEST_MEM_UPDATED);
++		break;
++	}
++	default:
++		printf("Unhandled VM stage %ld\n", stage);
++		return false;
++	}
++
++	return true;
++}
++
++static void pmsat_guest_code(void)
++{
++	void *shared_mem = (void *)TEST_MEM_GPA;
++
++	GUEST_SYNC(PMSAT_GUEST_STARTED);
++	GUEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
++			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE));
++
++	GUEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
++			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE));
++	GUEST_SYNC(PMSAT_GUEST_TEST_MEM_UPDATED);
++
++	GUEST_DONE();
++}
++
+ static struct test_run_helper priv_memfd_testsuite[] = {
+ 	[PMPAT_ID] = {
+ 		.test_desc = PMPAT_DESC,
+ 		.vmst_handler = pmpat_handle_vm_stage,
+ 		.guest_fn = pmpat_guest_code,
  	},
++	[PMSAT_ID] = {
++		.test_desc = PMSAT_DESC,
++		.vmst_handler = pmsat_handle_vm_stage,
++		.guest_fn = pmsat_guest_code,
++	},
  };
  
-+static void handle_vm_exit_hypercall(struct kvm_run *run,
-+	uint32_t test_id)
-+{
-+	uint64_t gpa, npages, attrs;
-+	int priv_memfd =
-+		priv_memfd_testsuite[test_id].priv_memfd;
-+	int ret;
-+	int fallocate_mode;
-+
-+	if (run->hypercall.nr != KVM_HC_MAP_GPA_RANGE) {
-+		TEST_FAIL("Unhandled Hypercall %lld\n",
-+					run->hypercall.nr);
-+	}
-+
-+	gpa = run->hypercall.args[0];
-+	npages = run->hypercall.args[1];
-+	attrs = run->hypercall.args[2];
-+
-+	if ((gpa < TEST_MEM_GPA) || ((gpa +
-+		(npages << MIN_PAGE_SHIFT)) > TEST_MEM_END)) {
-+		TEST_FAIL("Unhandled gpa 0x%lx npages %ld\n",
-+			gpa, npages);
-+	}
-+
-+	if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
-+		fallocate_mode = 0;
-+	else {
-+		fallocate_mode = (FALLOC_FL_PUNCH_HOLE |
-+			FALLOC_FL_KEEP_SIZE);
-+	}
-+	pr_info("Converting off 0x%lx pages 0x%lx to %s\n",
-+		(gpa - TEST_MEM_GPA), npages,
-+		fallocate_mode ?
-+			"shared" : "private");
-+	ret = fallocate(priv_memfd, fallocate_mode,
-+		(gpa - TEST_MEM_GPA),
-+		npages << MIN_PAGE_SHIFT);
-+	TEST_ASSERT(ret != -1,
-+		"fallocate failed in hc handling");
-+	run->hypercall.ret = 0;
-+}
-+
-+static void handle_vm_exit_memory_error(struct kvm_run *run,
-+	uint32_t test_id)
-+{
-+	uint64_t gpa, size, flags;
-+	int ret;
-+	int priv_memfd =
-+		priv_memfd_testsuite[test_id].priv_memfd;
-+	int fallocate_mode;
-+
-+	gpa = run->memory.gpa;
-+	size = run->memory.size;
-+	flags = run->memory.flags;
-+
-+	if ((gpa < TEST_MEM_GPA) || ((gpa + size)
-+					> TEST_MEM_END)) {
-+		TEST_FAIL("Unhandled gpa 0x%lx size 0x%lx\n",
-+			gpa, size);
-+	}
-+
-+	if (flags & KVM_MEMORY_EXIT_FLAG_PRIVATE)
-+		fallocate_mode = 0;
-+	else {
-+		fallocate_mode = (FALLOC_FL_PUNCH_HOLE |
-+				FALLOC_FL_KEEP_SIZE);
-+	}
-+	pr_info("Converting off 0x%lx size 0x%lx to %s\n",
-+		(gpa - TEST_MEM_GPA), size,
-+		fallocate_mode ?
-+			"shared" : "private");
-+	ret = fallocate(priv_memfd, fallocate_mode,
-+		(gpa - TEST_MEM_GPA), size);
-+	TEST_ASSERT(ret != -1,
-+		"fallocate failed in memory error handling");
-+}
-+
- static void vcpu_work(struct kvm_vm *vm, uint32_t test_id)
- {
- 	struct kvm_run *run;
-@@ -181,6 +258,16 @@ static void vcpu_work(struct kvm_vm *vm, uint32_t test_id)
- 			continue;
- 		}
- 
-+		if (run->exit_reason == KVM_EXIT_HYPERCALL) {
-+			handle_vm_exit_hypercall(run, test_id);
-+			continue;
-+		}
-+
-+		if (run->exit_reason == KVM_EXIT_MEMORY_ERROR) {
-+			handle_vm_exit_memory_error(run, test_id);
-+			continue;
-+		}
-+
- 		TEST_FAIL("Unhandled VCPU exit reason %d\n", run->exit_reason);
- 		break;
- 	}
+ static void handle_vm_exit_hypercall(struct kvm_run *run,
 -- 
 2.36.0.550.gb090851708-goog
 
