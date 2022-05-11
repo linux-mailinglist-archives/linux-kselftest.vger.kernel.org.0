@@ -2,182 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145D052351E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 16:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46919523835
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 18:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiEKOMo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 May 2022 10:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S1344372AbiEKQKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 May 2022 12:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244423AbiEKOMl (ORCPT
+        with ESMTP id S1344376AbiEKQKS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 May 2022 10:12:41 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5376B014
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 07:12:40 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so1307275wme.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 07:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RSGHn1F0BncOfTcKYhrKyIk0Nc9jRJLzLB3ecNcIZy4=;
-        b=jW12ZwQnnCztcNwkigLKzLeyKxuLaypSdNh5RLphYPfrxCmn7JNKcAFQyhsDExQ715
-         wJwjtZki4XfUaxqAYliizclV7JqcbjMJZH3O294nmneM4g9jdOzsk+Y7dwWTdMhJNmFr
-         luTgFG70VKGd5rBsQuYZFTUjRfEcJ0/y7nPhAyW1ERcls1P51FqhBYBEYo8vF1V2mXNd
-         8SRsu7Z8MrurgPTYpBt1TQjav+1DEREjLXAbJ0D6pm6Q+pDArYfJ2vpNCWaWnM02wpn/
-         0SNSQoIcK+vj+GrpRIllI9L4jtsan3nrlQwi8mHwvPTLx1sPHdv/4t0fc5sKaLD/XZ2s
-         9LPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RSGHn1F0BncOfTcKYhrKyIk0Nc9jRJLzLB3ecNcIZy4=;
-        b=tIaMnlpeqaMAUhEw4bkT8BN2bKfFfVrpK0bjGMWleEb9UKEu7OL/r6ecjxcLMhlr4E
-         FHgo3HU7Vt+kHBXU2QNS3fpU2ZCYzoVIwKgJv9QmEjiQT1KBBeqYoKkmKCf5OXdrsueW
-         RTysBQ0YaRxp0c6GmICVfVYeD5t/MGmlQTu4NK0LlaGdXeAZztpMDnP0igxVPtBPpom3
-         6GY+I3oMREWficXEdIo/Qr+5Sv3tujR5jqqZ3Xg+MFhE9Rx49Hcm8nIlTRdEiLP+KRgp
-         q+jIx2Pj/BNgu4d2sTgrHkPGVpWE/W5gcMlE+M2jqai2LhnpUQVdrZpit8ba7923d99D
-         nwBA==
-X-Gm-Message-State: AOAM531z+e4GHoG/oHmPNMQksVTjWThjh8QmfpPBTF1bUZ2FKuED+jdL
-        oipad/rMUi6Nt3DjGe+xeGatgHCWDgC30PU32nzYeg==
-X-Google-Smtp-Source: ABdhPJx0EgilpXqO9xhDBZma49ZiZYBQW1CYQalIbu7JvciYQUGx6pSOeqXv1MQtlngcxiEp7hb87+4QPXM1UtmgtzY=
-X-Received: by 2002:a05:600c:1d08:b0:394:54ee:c994 with SMTP id
- l8-20020a05600c1d0800b0039454eec994mr5072481wms.137.1652278359083; Wed, 11
- May 2022 07:12:39 -0700 (PDT)
+        Wed, 11 May 2022 12:10:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB76237B93
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 09:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C0C6B82527
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 16:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF0FC34118;
+        Wed, 11 May 2022 16:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652285413;
+        bh=1uWilRA3UQa3QOcanblr9lbpzGiWsreP8pgcmwWIHEg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OhGJFXULm5fGdI/JEgWiIgOFBuQde0lu7xjejdV2o/vMdBgb13ZJY4uv5SDIC9gSj
+         y9mRjPSUAOfb8i1c9xcS4uvIXPXOOy0un0inx3TboSvmacrHc1XwDSMM+ZhNO0mkwi
+         g9LnRvbjrMHy/qW6URNW5duPKYlKgoy0Nh2FOPLYdQM5pQ1QMLjNQWJMCJaRn5ntUG
+         xVUL3IVSSvYZ0FZ6bPBGcFLOQpn/EJNk+lA575iZHvWFw0uiKFshySE4pk+3rlxiIa
+         anwSP4HTMSq0R2pTelyix9TosHIXLdgXazT1N2PIhDtKIGY1M62wjB870IiDX7SlLU
+         3gtizD58MKZmA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] kselftest/arm64: Explicitly build no BTI tests with BTI disabled
+Date:   Wed, 11 May 2022 17:10:04 +0100
+Message-Id: <20220511161004.189348-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220511120621.36956-1-guozhengkui@vivo.com>
-In-Reply-To: <20220511120621.36956-1-guozhengkui@vivo.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 11 May 2022 19:42:27 +0530
-Message-ID: <CAAhSdy3Ynx-8DgDEE6huye2nA_21CV6cN=keopaCJOK2b00k5g@mail.gmail.com>
-Subject: Re: [PATCH] selftests: kvm: replace ternary operator with min()
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        zhengkui_guo@outlook.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=934; h=from:subject; bh=1uWilRA3UQa3QOcanblr9lbpzGiWsreP8pgcmwWIHEg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBie9oZEgT2bKmvuOaDKjMGisPiS+TgGqJFOyDsk2U3 xMjiP4aJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYnvaGQAKCRAk1otyXVSH0JLVB/ 9rjnwYb7P/DiOwtb1O+q2S3VPimEVBJCeVKKGC89iu8hfwRC3TuochZ6oX56+Poa+iRgHqa2IUuB+J Q2+NNNGqL2jciUXGL8i09HlNzHIXUHhtYVfTl4dsnEFLzNTCLOF33sYFv2Edkf2uSzH2zgIYbJo+tM xmJYX7n6NLRXL9BW6jPglNjfZxDnogHzSvS75QApRMVGDM9YwRQK9iuntMVUCwp/kDF/mnX8PlUqk5 zHUj0kQV5g69gtJ9PhrZ7F1/HqsPyHyHGUYBo6U7wLjBaQl13lyGXy6CBASlqWskQMtmZgmavdFu56 C7s2hETT68o0r2pKx5xFCq6YfcR9Ox
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 11, 2022 at 5:38 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
->
-> Fix the following coccicheck warnings:
->
-> tools/testing/selftests/kvm/lib/s390x/ucall.c:25:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/x86_64/ucall.c:27:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/riscv/ucall.c:56:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/aarch64/ucall.c:82:15-17: WARNING
-> opportunity for min()
-> tools/testing/selftests/kvm/lib/aarch64/ucall.c:55:20-21: WARNING
-> opportunity for min()
->
-> min() is defined in tools/include/linux/kernel.h.
->
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+In case a distribution enables branch protection by default do as we do for
+the main kernel and explicitly disable branch protection when building the
+test case for having BTI disabled to ensure it doesn't get turned on by the
+toolchain defaults.
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/bti/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Anup
+diff --git a/tools/testing/selftests/arm64/bti/Makefile b/tools/testing/selftests/arm64/bti/Makefile
+index 10a12c5e05e6..a3e59d7910b3 100644
+--- a/tools/testing/selftests/arm64/bti/Makefile
++++ b/tools/testing/selftests/arm64/bti/Makefile
+@@ -14,7 +14,7 @@ CFLAGS += -I../../../../../usr/include/
+ 
+ CFLAGS_STATIC = -ffreestanding
+ 
+-CFLAGS_NOBTI = -DBTI=0
++CFLAGS_NOBTI = -mbranch-protection=none -DBTI=0
+ CFLAGS_BTI = -mbranch-protection=standard -DBTI=1
+ 
+ CFLAGS_COMMON = -Wall -Wextra $(CFLAGS)
+-- 
+2.30.2
 
-> ---
->  tools/testing/selftests/kvm/lib/aarch64/ucall.c | 4 ++--
->  tools/testing/selftests/kvm/lib/riscv/ucall.c   | 2 +-
->  tools/testing/selftests/kvm/lib/s390x/ucall.c   | 2 +-
->  tools/testing/selftests/kvm/lib/x86_64/ucall.c  | 2 +-
->  4 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> index e0b0164e9af8..00be3ef195ca 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> @@ -52,7 +52,7 @@ void ucall_init(struct kvm_vm *vm, void *arg)
->          * lower and won't match physical addresses.
->          */
->         bits = vm->va_bits - 1;
-> -       bits = vm->pa_bits < bits ? vm->pa_bits : bits;
-> +       bits = min(vm->pa_bits, bits);
->         end = 1ul << bits;
->         start = end * 5 / 8;
->         step = end / 16;
-> @@ -79,7 +79,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->         va_list va;
->         int i;
->
-> -       nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +       nargs = min(nargs, UCALL_MAX_ARGS);
->
->         va_start(va, nargs);
->         for (i = 0; i < nargs; ++i)
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> index 9e42d8248fa6..34f16fe70ce8 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> @@ -53,7 +53,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->         va_list va;
->         int i;
->
-> -       nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +       nargs = min(nargs, UCALL_MAX_ARGS);
->
->         va_start(va, nargs);
->         for (i = 0; i < nargs; ++i)
-> diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> index 9d3b0f15249a..665267c1135d 100644
-> --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> @@ -22,7 +22,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->         va_list va;
->         int i;
->
-> -       nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +       nargs = min(nargs, UCALL_MAX_ARGS);
->
->         va_start(va, nargs);
->         for (i = 0; i < nargs; ++i)
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> index a3489973e290..2ea31a0ebe30 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> @@ -24,7 +24,7 @@ void ucall(uint64_t cmd, int nargs, ...)
->         va_list va;
->         int i;
->
-> -       nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> +       nargs = min(nargs, UCALL_MAX_ARGS);
->
->         va_start(va, nargs);
->         for (i = 0; i < nargs; ++i)
-> --
-> 2.20.1
->
