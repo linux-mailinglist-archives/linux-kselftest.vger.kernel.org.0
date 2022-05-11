@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F00522833
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2749052283F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 May 2022 02:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239299AbiEKAIt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 May 2022 20:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S231429AbiEKAJg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 May 2022 20:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238766AbiEKAIr (ORCPT
+        with ESMTP id S239496AbiEKAJL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 20:08:47 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCD83153E
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:41 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id b184-20020a62cfc1000000b0050d209cb8dcso254602pfg.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:41 -0700 (PDT)
+        Tue, 10 May 2022 20:09:11 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455AC66C96
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:46 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id j187-20020a638bc4000000b003c1922b0f1bso158970pge.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
         bh=FKYCy8nTeKBSce/4iCSXAO9o2F9LxoRfpI1neokEeTE=;
-        b=ssPbYUDDUR7Lk75ZwCroNZYn4ps9HZK45xYG0ZA/1nAmYyewmiB9+4jTK3lomDzHCU
-         bP1sovRM/YX1uIo2/l1kOLMSeItaVf9KI6OUJN/9MvLBkBOq/hgF8YgLyfK8iCTSWWBA
-         xW54BCXfW5Erd2zyTo259DTs1cZi2LgsB1J0ve5P7UlLI+P9G6L1Uxe3dD2cZ0pRPOHR
-         wFOYkgJh4+qea58ZVGFCdzMK6fAHF+cv4Kp25iMEUIKSqHMNHlBN3z7kZf5Rm53gtQox
-         dtNcYWkO4FsXB5F3Auf7UEIizxCT51k6ldFJPdqdprMxnhah1vRLXSU/pkLoUHW2ePn9
-         isMA==
+        b=WrZJT/TTcn8b/jtcJKP77InSNooQFUCjeau/X0H0SV09QpVull24vp0CmIuLtWLJiw
+         fCJ+/jiOlCMCEbU3fOVbp/r8u6+YhOZRw12u1T65WftzSSwYsOxlhV/4N6Vxnn8BXvxk
+         h4cqcdgskBOOZvtOJozqZCGvUeA+MdartxN0ILu3UuuM2unHTauGZdk2M4Rb7gnSIibv
+         B1cYFhbyq1OZl08wTouqbJBkEaP2r4FvJT3csHtYs4iWzQ9cj/5VRkpm8rV/lRxzWLOL
+         NDufTqaZz+h9de/5ln2+xnQiAXOJmVhaLGTNvTfvTkRmv2Q7B+OKf9sm3qy9zITR9o7f
+         Edmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
         bh=FKYCy8nTeKBSce/4iCSXAO9o2F9LxoRfpI1neokEeTE=;
-        b=fOTD0oEOdyVlswi6uY5H1InxqN+UNOxpzpsoovR/AkKPaZdIW1DBIa2xnHwkUphQar
-         MpF6/1r/rRh+BGY9yCj/5gEjRl4T9x/RBZPWBM41hk+rA6gUsb7jC3XYNWtHryxD+NOF
-         xI9egbVZSva+Bi498wy1Bmbr/+g1a7UvGgZapvSSBMJD9msNnerjGhBxuuhc4v5WUoe0
-         ScIdGA/AcbnN0uYYhxaNr/3k82eMCrmnBtHBd7ebsOTSr2reZyCgrB89oXwsk8c6pW+4
-         nunx+Kls5Z4llA0Tv1Ls1cyCc4DydHb96ODPwGRDotLqtcDTDuIqvr0W3i7Xz40DZRof
-         3niA==
-X-Gm-Message-State: AOAM532rBN6BE3RWwzBj6tqBA6Fhb94QwsCQQtHtu2jx8wnDnGlvckH5
-        vKUx0tA7q0lht5sPeJelcvQVLCAAV/xWyhZk
-X-Google-Smtp-Source: ABdhPJzR473SpZp8Yag+VqE5GdAoG5IupcfbIthbh8IUjySyWZjJRrDwxsWbsBYaG8nQDo2oH5pQpOExjRQNMOsZ
+        b=ZAK7NUfXI5vwrqtr5iHpZKG0+OrYnKdNoNT1dm+lVGVdCWfOQnChMwxwva/EJ1EcVN
+         PVP/zDtFMSzkt7xj8BAWzA4ewd4q3gE4gLsfekzw9v5T0O4uGK9pySRQLaGcu0YR8Q1T
+         jbpiK2vLQU/wnBGHd4QBBjZhthxVLQbHEuELEXPo2T2HvMr2TmdKNqi3h80CwNcQZzfa
+         2/JtjlCgkGXSIipdKZ9QbYQmRs+kXu575A6N1W1meqN87Gow7eoE3cJQ/QGAygnZuPJh
+         xQQrYb+ut86JySAZr4i6s7azl2MpqidJwGO85Yj3diucg5Wp1DhpfiHESGeFeWBsrJNv
+         XSmw==
+X-Gm-Message-State: AOAM532N2lVt8yoYkLGGuZCiT3PSlrNGFRORBttluiAYJjHdy/2TUV3C
+        GklcYJrOE77uyH2N870OOLjbMD/ummDNSk2F
+X-Google-Smtp-Source: ABdhPJwl/lO+0cjrfsYrNaI2y61itV/RzyivjHB/9eGEeXIrW2BIZ4lIStQL7yRe9lkokTR3DMkLl8lXRk6cv9Y3
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a05:6a00:a0e:b0:4fd:fa6e:95fc with SMTP
- id p14-20020a056a000a0e00b004fdfa6e95fcmr22764103pfh.17.1652227720345; Tue,
- 10 May 2022 17:08:40 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:08:10 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
+ id t16-20020a17090ae51000b001d9ee239fa1mr55596pjy.0.1652227725108; Tue, 10
+ May 2022 17:08:45 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:11 +0000
 In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
-Message-Id: <20220511000811.384766-9-vannapurve@google.com>
+Message-Id: <20220511000811.384766-10-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220511000811.384766-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC V2 PATCH 8/8] selftests: kvm: priv_memfd: Add test avoiding
+Subject: [RFC V2 PATCH 8/8] selftests: kvm: priv_memfd: Add test without
  double allocation
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
