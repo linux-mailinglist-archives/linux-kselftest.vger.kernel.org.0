@@ -2,76 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054A7524552
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 08:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942415246B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 09:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350077AbiELGCQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 May 2022 02:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S1350850AbiELHSg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 03:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241825AbiELGCP (ORCPT
+        with ESMTP id S1350867AbiELHSe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 May 2022 02:02:15 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BB566208;
-        Wed, 11 May 2022 23:02:14 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id f4so4282082iov.2;
-        Wed, 11 May 2022 23:02:14 -0700 (PDT)
+        Thu, 12 May 2022 03:18:34 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C3C5E49;
+        Thu, 12 May 2022 00:18:30 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so7024152pjv.4;
+        Thu, 12 May 2022 00:18:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XF/xFPtLmhC4ZgohYR62Nv8OLeVFzEOKNGwxgGsfdL8=;
-        b=YBd3ZIb1+jo23ypuHUppLf4wj5jZxNXzmo93O9MtoVI7vfDLlfJhIh+HGz78IxfHS6
-         YKcD1+1bt7PfBOSIum2q0bGEm0UMULPNdEqkV/4R45z3tGbqzfDCs/4UV9qhQk0AgSdQ
-         hmmgE4cwggI8WBXURuFFTxK+LQrm7kPJFYlvbWXHrIK4ECZ/E3Hp0UkHt98gU9BGC/bd
-         1Lt8qAbhmXY7A72ALbB9SYIo50YU0ahhNr8PCS9p4AsmWWjVoDz8DToNVhIFA0lkQ38c
-         cwuz2NZmjO2bgL5xx4XH1f50L+jSMt9VRA1cnYN3zRM9kGTEbpHWgc84jjj5OJ85U/ZD
-         micQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+YqL59rzxP0fh+c0fKof/dLxLHqK1R9ma1QBj8NcLs8=;
+        b=aM824g1aACZvUDuPjCiOX9ARKher4z+J3jR3RDNtvFOoInrIhv9A81aqJQdyIFExaM
+         s7RdOioEH3CoW/iBMXaP7g4HefFYq3Hsaj6GTMEe3gAqnG6KuwMWAS19lWeGgO7FZRkZ
+         D+H8zVHuJRmJKZKsxElUJ+YqV6/R3LvnFbyCW75KYyjhthA65+ccq4vpy09gWiIero5S
+         JJYZecmsrQWvCzyeu9WBqqalN54j2KEAHWH2FpjVWgQJqVln+FbTT74B+szx2mxOcx3H
+         edPRyO+M29j8J6oVrprE8YzJld9zo7rKXPjIU4LI3C1jevmnxkYs0PLYPStryJEiv54s
+         uXIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XF/xFPtLmhC4ZgohYR62Nv8OLeVFzEOKNGwxgGsfdL8=;
-        b=Kph7Zh6SM/mk4s38ktCa02oFS3IZfRJU8rY02EdJZ5Ko1/XUyyJbf4dW1O7yTmVHU0
-         ntC6jXnBI5pk7IwTPDcnowQ5hMEwA93D/XrHZfgD8Ng54qwS41xx5xv/tlpZ1TBg2TYK
-         AMQPaq1RU/khV+xHCPWB8XWekDqtYq8/Z6BVDZgFXmQcYpUk0ltbfxWaBJKmZwZvZuB0
-         FzKLBvCOxQZAOPU6Hsb62AMwwBXbNaL8C0tKhGqVuXVnuQW/9pG2rOYCEcCywMtfA1oJ
-         kLy2sJeMvwOciXRIZ8mOUpR7XzmabDqOhfznW3CRmH+eV2yVGiWrRjT/dWwDJWSIRHjm
-         JaaQ==
-X-Gm-Message-State: AOAM533irUAd/BUx3TmtbuwG4bemXR3fqV8HKPatQriJYIqU81xBqajv
-        2tR0XT5SnwzY048xN0lBeKw=
-X-Google-Smtp-Source: ABdhPJwYp1zTu4Y0ygbGlCVlf7igw2pMEJCGyZlXuTWZffrmszeMkZlVNgn+J3dXbNh6l5bAlYN+GQ==
-X-Received: by 2002:a05:6638:d4b:b0:32b:ece6:a56f with SMTP id d11-20020a0566380d4b00b0032bece6a56fmr10734448jak.315.1652335334066;
-        Wed, 11 May 2022 23:02:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:fdf4:a10e:cb39:9b64? ([2600:1700:2442:6db0:fdf4:a10e:cb39:9b64])
-        by smtp.gmail.com with ESMTPSA id x11-20020a92dc4b000000b002cde6e352d4sm1175261ilq.30.2022.05.11.23.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 23:02:13 -0700 (PDT)
-Message-ID: <1c89133e-7bd2-862a-bd57-7fefdffb77ae@gmail.com>
-Date:   Thu, 12 May 2022 01:02:11 -0500
+        bh=+YqL59rzxP0fh+c0fKof/dLxLHqK1R9ma1QBj8NcLs8=;
+        b=f1LZ+lzglw6r/Wu4fB8JrEpI/e7wVKQ98DOjrMi/8TXEI+ZWpYNIr+N8KLpYqyl2S8
+         ZxQYiogzNneJfJQgq4z3nytXIZnClsjk+MY5+mJNdp0NhD+LpuOfVT4gMpkcSTSr6/qu
+         4ngKV8kFX4jVQ2yyA3S2ZKvzerFyk1kadc9ApAp1BNqn2S5itEmjgCjogULF+qxcN8Fk
+         fAZXFczThRNijf5Fwvb9yvmR4u7HZ3TpIBFtsKCoKcBp9kUsEi69JshrlEaG552g1lJ3
+         spKKFzpAhxUqgha4c0E+DDwXl96g5i4QldnFdchjmTw+BOpziLhOq2RnM3WYL3hIxb5z
+         Hz+A==
+X-Gm-Message-State: AOAM533C4UMzj1V/lSeZMEgG5zBlrD0CuLmLsbY7KVTQrytW5MI2diUV
+        FRNnJ073DpQCPCMe5EKge/1QJhUWKUHHMA==
+X-Google-Smtp-Source: ABdhPJy0rKSurVB1S2Cr1R94iidYdqK3iUB7yatK+UMZ/amjXXS9MrAzz3XxdqrSeFlUB3KG5b41Xw==
+X-Received: by 2002:a17:90a:170c:b0:1dc:20c4:6354 with SMTP id z12-20020a17090a170c00b001dc20c46354mr9420563pjd.113.1652339910208;
+        Thu, 12 May 2022 00:18:30 -0700 (PDT)
+Received: from Laptop-X1.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id w17-20020a170902e89100b0015e8d4eb2b4sm3244533plg.254.2022.05.12.00.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:18:28 -0700 (PDT)
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net 0/2] selftests/bpf: fix ima_setup.sh missing issue
+Date:   Thu, 12 May 2022 15:18:17 +0800
+Message-Id: <20220512071819.199873-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,156 +76,18 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/12/22 00:59, Frank Rowand wrote:
-> In the middle of the "RFC - kernel test result specification (KTAP)" thread,
-> started in August 2021, Tim Bird made a suggestion to allow a prefix to the
-> KTAP data format:
-> 
->> Just as a side note, in some Fuego tests, it was very useful to include an identifier
->> in thethe prefix nested tests.  The output looked like this:
->>
->> TAP version 13
->> 1..2
->> [batch_id 4] TAP version 13
->> [batch_id 4] 1..2
->> [batch_id 4] ok 1 - cyclictest with 1000 cycles
->> [batch_id 4] # problem setting CLOCK_REALTIME
->> [batch_id 4] not ok 2 - cyclictest with CLOCK_REALTIME
->> not ok 1 - check realtime
->> [batch_id 4] TAP version 13
->> [batch_id 4] 1..1
->> [batch_id 4] ok 1 - IOZone read/write 4k blocks
->> ok 2 - check I/O performance
->>
->> Can I propose that the prefix not be fixed by the spec, but that the spec indicates that
->> whatever the prefix is on the TAP version line, that prefix must be used with the output for
->> all lines from the test (with the exception of unknown lines)?
-> 
-> The thread was discussing many other items, but this is the one that I want
-> to focus on in this new RFC thread.
-> 
-> Tim's original email was:
-> 
->    https://lore.kernel.org/r/BYAPR13MB2503A4B79074D8ED5579345DFDCB9@BYAPR13MB2503.namprd13.prod.outlook.com
-> 
-> There was one reply to this that commented on Tim's suggestion (and also many
-> other items in the thread) at:
-> 
->    https://lore.kernel.org/r/202108301226.800F3D6D4@keescook
-> 
->> Oh, interesting. This would also allow parallel (unique) test execution
->> to be parsable. That sounds workable. (Again, this needs LAVA patching
->> again...)
-> 
-> I found Tim's original suggestion to be useful, so I have come up with
-> two possible ways to modify the KTAP specification to implement what Tim
-> was thinking about.  I would not be surprised if someone else has a better
-> suggestion than mine, but I will reply to this email with my two alternatives
-> to start a discussion.  My alternatives are not in the form of patches, but
-> if discussion leads to a good result then I will create a patch for review.
-> 
-> -Frank
+The ima_setup.sh is needed by test_progs test_ima. But the file is
+missed if we build test_progs separately or installed bpf test to
+another folder. This patch set fixed the issue in 2 different
+scenarios.
 
-================================================================================
-Alternative 2
-   - Add an optional <prefix string> to test output.
-   - Add "Configuration info lines", which are used to provide information
-     about the KTAP format to programs that interpret the KTAP data.  The
-     only type of "Configuration info lines" proposed provides the value
-     of <prefix string> for programs that process the KTAP output.
-   - Further types of "Configuration info lines" could be added.
+Hangbin Liu (2):
+  selftests/bpf: Fix build error with ima_setup.sh
+  selftests/bpf: add missed ima_setup.sh in Makefile
 
-Alternative 2b
-   - Add an optional <prefix string> to test output.
-   - Add a <prefix string> definition line of the form:
-        ok 0 <prefix string>
-     This line is essentially a phony "Test case result lines" for test 0.
+ tools/testing/selftests/bpf/Makefile | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-================================================================================
-## Configuration info lines
-
-Occur in zero or more test case result lines, where <number> is 0 (zero),
-following the "Plan line", before any other "Test case result" line.
-
-   If there is no "Plan line" at the beginning of the test, then the
-   "Configuration info lines" follow the "Version line", before any
-   other "Test case result" line.
-
-format:
-
-   ok 0 <description> # [<directive>] [<diagnostic data>]]
-
-<result> must be "ok".
-
-The type of each "Configuration info line" is defined by the value
-of <description>.
-
-Each value of <description> used for a "Configuration info line" must be
-listed in the specification.
-
-Whether # <directive> is optional or required is defined for each type of
-"Configuration info line".
-
-#### Should '[<diagnostic data>]' be included in the format?
-
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# [output] prefix
-
-ok 0 output_prefix #<prefix string>
-
-   <prefix content is a constant string>
-   Note: there is no space between "#" and "<prefix string>".  If there is one
-   or more spaces after the "#", then there are part of the <prefix string>
-
-   ## <diagnostic data> must not exist unless there is a way to determine the
-   ## end of <prefix string>.
-   ##
-   ## Adding a way to determine the end of <prefix string> adds much complexity
-   ## to the consumers of ktap output.  For example, if the format was:
-   ##
-   ##   ok 0 output_prefix #<prefix string>[#<diagnostic data>]
-   ##
-   ## then it is not possible for <prefix string> to contain '#', unless
-   ## a method to escape '#' is provided.  E.G.:
-   ##
-   ##   ok 0 output_prefix #XXX test result \#\#\##<diagnostic data>
-   ##
-   ## would result in <prefix string> value of 'XXX test result ###'
-   ##
-   ## My recomendation: do not allow <diagnostic data> in output_prefix format.
-
-   All subsequent test lines are prefixed with the <prefix string>.
-
-   Indentation for "Nested tests" follows <prefix string>.  The indentation
-   does NOT precede <prefix string>.
-
-   "Diagnostic lines" are prefixed with the <prefix string>.
-
-   "Unknown lines" may optionally be prefixed with the <prefix string>, but
-   are not required to be prefixed with the <prefix string>.  It is allowed
-   for some "Unknown lines" to not be prefixed with the <prefix string>, even
-   if one or more other "Unknown lines" are prefixed with the <prefix string>.
-
-   #### Does prefixing begin immediately (even for a subsequent "Configuration
-   #### info line" or does it begin with the test 1 "Test case result line"
-   #### line?
-   ####
-   ####    This question might be simplified if the output_prefix line is
-   ####    required to be the last "Configuration info line".  (Or maybe even if
-   ####    required to be the first "Configuration info line".
-
-
-================================================================================
-#### discussion notes:
-
-PRO:
-   Test output processing programs can detect the value of <prefix string>
-   more deterministically than Alternative 1.
-
-CON:
-   More complex than Alternative 1.  (But alternative 2b is less complex than
-   Alternative 2.)
-
-================================================================================
+-- 
+2.35.1
 
