@@ -2,93 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31AE52418A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 02:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DC1524543
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 07:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349674AbiELAal (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 May 2022 20:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S1345070AbiELF7W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 01:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349655AbiELAak (ORCPT
+        with ESMTP id S230164AbiELF7V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 May 2022 20:30:40 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B9A580F7
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 17:30:39 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f16f3a7c34so31757347b3.17
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 May 2022 17:30:39 -0700 (PDT)
+        Thu, 12 May 2022 01:59:21 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A73421AA8F;
+        Wed, 11 May 2022 22:59:20 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id n6so2851745ili.7;
+        Wed, 11 May 2022 22:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=0J8P1K+Pc+pMnOB9fJOxIgGn/5rddsTWXBmrJCDpNWM=;
-        b=VFKsYXv0v7lf3Bb8KTBlngA69IfwQBf46pJBZBZHyFkYBg+y3q9KMyOSSHXd/CbiNd
-         r2f3orVJWoJb72ZMl9iUABXlzMcOGk6Qwx1+QmuEMKHbv5BT/XcyJcsyPjvSUR91cCJP
-         HLh5wA6uTAYDieGWE99apmQW09fkPrUr4qnvOEocpi2MYPfkPgT/0NY4LmOaU4seiU2U
-         69sEvRRuP6TBiXVypVMdj4ISTEB/vuoMKu69EMQdx6lhMf4P93GUSmuwCvYX6cTUCY9b
-         w2b0Ev3hj4hE3Yoqqw6LXnfOcK2IwtsRdxmDk6L0yvYwPbvGDaSphXmEDfaiv3KgxZp7
-         J8MQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=i6sSIotdIWouqlURKWF/odLlAcLzJKzrea0b/RTwDAQ=;
+        b=baKvNss1FgFVPquDs+enoki70l8DphZzft/UeT78trhXzx1hh3DoaeloO6ZK2puzgt
+         Zffybs5INr7xmPldsidZ4DMKUHwfXgSfsM6c2dhE5yrRCHFtlIyPGMnP/p85VosDvhYi
+         H4k/F3BPqZptVb6/pTJe/x9QTie2iL+/arsFJjdORZvKxRPPFiHKxdUEglafIBQy1aN6
+         RnwB509eU8/hEzN9TgBCw3LnvXQKGR6B8uuJUmoLiI13v40XEMrawP7omD5THim1eTTe
+         7+JK6aUDASQmfSa6pG8Qr+bjsOafTBO/aaWR+4BTCUvGFrNQVXJ8Mk9PxcUwXk0FerWL
+         9mig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=0J8P1K+Pc+pMnOB9fJOxIgGn/5rddsTWXBmrJCDpNWM=;
-        b=c5sZ6FahL18GWbe1y5foMIy6jzjUbA/T5eH/n0Se19tahsTGrE0IKREoui6xQXo6vM
-         QlVgYdB6FY/J10ro5xmN0zIW4VIjzOYrLNDQnWQQYgLY7jJBcHRWK1H/3uUpX65w/wrd
-         PJdw7cW0lZj+DAQVSYN57Gbn9SqR3wAln26nGlKFxM+0zeTNEwLts8mLEXIM194gLd8T
-         HcuLtjRC5kxPAAVcJX//xg6rOZ6teHCvDgPwGPy5rk7AloEdNZODpdEsJzikG0VZl8xm
-         Gzv7O8PZKL2KujhHbujKUlHjBasjA5st+p2G5c8hu0u2dF4DkgT3FZDS9Y8aadiu0e78
-         IMNw==
-X-Gm-Message-State: AOAM532bi0PRrszEIIyegnhoL73kN1TsLFl4+yXa4xCycJlUdqD/HE0F
-        P/otj198XyiRoBc7mfYf5c80CtALrS/w7z0LfCkn+g==
-X-Google-Smtp-Source: ABdhPJztheMq4wek6bjRE3pjaXONWrS9xUmr/9I9m7eTyIKBdd/Pf3LX+0fKpge8zSFiJoMiStN2DF6ez48eaGwGgmtFAw==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:2bac:a878:d06e:e354])
- (user=brendanhiggins job=sendgmr) by 2002:a25:2106:0:b0:64b:2295:33a9 with
- SMTP id h6-20020a252106000000b0064b229533a9mr8834429ybh.289.1652315438880;
- Wed, 11 May 2022 17:30:38 -0700 (PDT)
-Date:   Wed, 11 May 2022 17:30:26 -0700
-Message-Id: <20220512003026.3413497-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v1] kunit: tool: update riscv QEMU config with new serial dependency
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=i6sSIotdIWouqlURKWF/odLlAcLzJKzrea0b/RTwDAQ=;
+        b=t3kmjEPTJxAV/6Z4rqi8UJj7WZX72bwRBlN1RX94AHGYj9NrsZYmC++wuRlOo7lBEb
+         2DIWy3PUwEi+PRZ3bJ3Vv9JxM+vVYIPNQcC0i/JP8ad7Rjy3s/n7NiCHM104dkctgK3g
+         ZPY1gE/s6t8h4LcmDvsJOcHC8Kt3F1fyZWv6WXzdlAORXthdxqEt0NFpRMfX/gb5lkwx
+         l+M1xw25pDpuSsny9NNX+eeA7gp7KqCjxwXYbFnKg8M7cdHFbHM24AEXZqki16CM1sMx
+         UDSh51tNCWS2di30mJ+Dy42Hru8gYxWWAOlBoj5o0zwrVgobAy6ttH75e8h+GfTxPEcN
+         smOA==
+X-Gm-Message-State: AOAM531y5IK715Zxosmu7D7vi24lrXYHU2l416lEOak7gcTXae3Tn6mG
+        Dgbu0tCkXnflkXVOLeq6nvs=
+X-Google-Smtp-Source: ABdhPJwJc/133PL3/MkHui2eEbGZKlk1DxaQS1ki/TTpZHhP1e4OCilxlH0XBkf1X1VkMxOaotgzcQ==
+X-Received: by 2002:a05:6e02:f11:b0:2cf:7745:d4a with SMTP id x17-20020a056e020f1100b002cf77450d4amr13517811ilj.313.1652335159828;
+        Wed, 11 May 2022 22:59:19 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:fdf4:a10e:cb39:9b64? ([2600:1700:2442:6db0:fdf4:a10e:cb39:9b64])
+        by smtp.gmail.com with ESMTPSA id m17-20020a927111000000b002cde6e352c6sm1159994ilc.16.2022.05.11.22.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 May 2022 22:59:19 -0700 (PDT)
+Message-ID: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+Date:   Thu, 12 May 2022 00:59:17 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Frank Rowand <frowand.list@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
         Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Frank Rowand <frowand.list@gmail.com>
+Subject: [RFC] KTAP spec v2: prefix to KTAP data
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The config for the serial console for riscv,
-CONFIG_SERIAL_EARLYCON_RISCV_SBI, added a dependency,
-CONFIG_RISCV_SBI_V01, at some point, so add that in to the base arch
-config.
+In the middle of the "RFC - kernel test result specification (KTAP)" thread,
+started in August 2021, Tim Bird made a suggestion to allow a prefix to the
+KTAP data format:
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- tools/testing/kunit/qemu_configs/riscv.py | 1 +
- 1 file changed, 1 insertion(+)
+> Just as a side note, in some Fuego tests, it was very useful to include an identifier
+> in thethe prefix nested tests.  The output looked like this:
+>
+> TAP version 13
+> 1..2
+> [batch_id 4] TAP version 13
+> [batch_id 4] 1..2
+> [batch_id 4] ok 1 - cyclictest with 1000 cycles
+> [batch_id 4] # problem setting CLOCK_REALTIME
+> [batch_id 4] not ok 2 - cyclictest with CLOCK_REALTIME
+> not ok 1 - check realtime
+> [batch_id 4] TAP version 13
+> [batch_id 4] 1..1
+> [batch_id 4] ok 1 - IOZone read/write 4k blocks
+> ok 2 - check I/O performance
+>
+> Can I propose that the prefix not be fixed by the spec, but that the spec indicates that
+> whatever the prefix is on the TAP version line, that prefix must be used with the output for
+> all lines from the test (with the exception of unknown lines)?
 
-diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
-index 9e528087cd7c..a7a4ab8093b1 100644
---- a/tools/testing/kunit/qemu_configs/riscv.py
-+++ b/tools/testing/kunit/qemu_configs/riscv.py
-@@ -21,6 +21,7 @@ CONFIG_SOC_VIRT=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_RISCV_SBI_V01=y
- CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
- 			   qemu_arch='riscv64',
- 			   kernel_path='arch/riscv/boot/Image',
+The thread was discussing many other items, but this is the one that I want
+to focus on in this new RFC thread.
 
-base-commit: feb9c5e19e913b53cb536a7aa7c9f20107bb51ec
--- 
-2.36.0.550.gb090851708-goog
+Tim's original email was:
 
+   https://lore.kernel.org/r/BYAPR13MB2503A4B79074D8ED5579345DFDCB9@BYAPR13MB2503.namprd13.prod.outlook.com
+
+There was one reply to this that commented on Tim's suggestion (and also many
+other items in the thread) at:
+
+   https://lore.kernel.org/r/202108301226.800F3D6D4@keescook
+
+> Oh, interesting. This would also allow parallel (unique) test execution
+> to be parsable. That sounds workable. (Again, this needs LAVA patching
+> again...)
+
+I found Tim's original suggestion to be useful, so I have come up with
+two possible ways to modify the KTAP specification to implement what Tim
+was thinking about.  I would not be surprised if someone else has a better
+suggestion than mine, but I will reply to this email with my two alternatives
+to start a discussion.  My alternatives are not in the form of patches, but
+if discussion leads to a good result then I will create a patch for review.
+
+-Frank
