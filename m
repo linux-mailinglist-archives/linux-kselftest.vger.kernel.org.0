@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01ED5250FA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 17:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EA8525139
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 17:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355770AbiELPMp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 May 2022 11:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S1348090AbiELPZW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 11:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355755AbiELPMg (ORCPT
+        with ESMTP id S1355917AbiELPZS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 May 2022 11:12:36 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7466D262660
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 08:12:35 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id kq17so10888843ejb.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 08:12:35 -0700 (PDT)
+        Thu, 12 May 2022 11:25:18 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B6D2608C9
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 08:25:17 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dk23so10928595ejb.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 08:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=URAyLVGzg8Nt4aDbg3Gbees9letYmMiBHHAQBtnqWOg=;
-        b=Sz0wAf/nuR9sykNUsrdx7wu/2uB9VWEK4Lk+0EPPHIb/+SAcG2B0hOLzt3zkTxVlm2
-         qUeKFfx/kYDQSEfmeSdLV1eAo7/NOUosm/NjXv4hxnf/SMauHIBN0aOaZhYtou/cS+wc
-         yBVTKyOdM7CxbFhx5HcdWWTryb3qhzftC9eygXuJ0vEJ8eemFtvH3cxzxYaj7f6PGOp/
-         fZTfBE9PZeQdZ4SEvQcrDxPi5EUdmJkmmC+TpOzospFaxKT9QYRu1VSEb24jWIdNlwSI
-         8tne8p7REzWgW2s6YRW/c6fWS4jqhxI+SfvxcFOXZsB3nXIr8x4BoVrDVfLOYcwjezDu
-         zwZw==
+        bh=LZMxjSJmldQ3JWCoivCnvn/+FiMrBE9vcPF4uGtQz2A=;
+        b=hhzaIlWaIG4YpufqFFKKB+9c/4n/9E89t2cVHITLb/CTZiRXgM4WOJTmuW5fPTCYtC
+         c/jh9WFhKOMhx5aVbeKji3Tus8LJw4bjHpNOfXm+PqFrROCEA6/i0kitKKu49HOEzdzz
+         4sobYKpWQqGS+YoDGoLZ/xoT2+4FdIAQgU9YbMrz1boNVhux5IHe8ZdQ/dqcwgcNq1Dh
+         N9enZ/zIy58r4SEc42V6EkirsIn9CWFVD82Wfx2nk6whuMj++SmG7uYjm1wvISVRnprR
+         xXLLtQvXbWxruFV4WKCz6UeWZiYrAcJPVsvRxLuxAQvAdy+8T5CjQiLzuSqz6pUBq2wM
+         JX+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=URAyLVGzg8Nt4aDbg3Gbees9letYmMiBHHAQBtnqWOg=;
-        b=HaL6IcQGLCWjgBiBa3CgHw0LdXU1rT8sfwCNBcTJlLfokoZcXMx/t+PhaKItmFudix
-         vWHXUXioR9lkXbWioDlSqA+nB1TJBR+QCayXjhd73dMarcTLVRAQibwQRmjK0CZi45qY
-         Gjofl31DfkrGNs9tOP0xJLNI/DCfRAS/kpzfFlP/T6gcul0tQ9vzD6Wvu4CWaBantssN
-         jGf4Qe77bi8O3cwyKrXow56CbAOK4MWymIlbfuc9Q7dG8ayN3LfQQuIntq6ebwS4Kz2B
-         dRcqluw7pAptmbNX87AQ+Szx0KLJsWUHxTLfAy0lfySCeZ+nCvsNvMwBhQMuLyect5KD
-         8LXA==
-X-Gm-Message-State: AOAM531pOmkcBkRK6mDK5bakawLhuO6q3Zj0WSBYcEiDPKjv1xwQFQ6P
-        C4UvvBZW3wtudB7CKTifT1r7mUS2pRuO2O6+8AhH+A==
-X-Google-Smtp-Source: ABdhPJw39fUr46PtBbB7NV8LWUrpQykG2OQD9q5q4f8PfkT7wPGNBmgyzRQFBWCXyPCYwrmHFTqVFH1kj4wXm8EeaI0=
-X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
- nc6-20020a1709071c0600b006dfb257cbb3mr315311ejc.631.1652368353809; Thu, 12
- May 2022 08:12:33 -0700 (PDT)
+        bh=LZMxjSJmldQ3JWCoivCnvn/+FiMrBE9vcPF4uGtQz2A=;
+        b=ZGsIki0RHWCTnBxM9Jx7iYaMiQLHH6Kwh0qbgAkX98hi0xTlrH/wHGAP8nb68l9prt
+         a/jW4OO3HNdcv5V4Ftbo3rVDqu4fxg3NNi5KJrap3GJi+8bkCJl8kcX2n1bvcs5rPCcm
+         Pbi/Jpar4eVUrUtDxg31gDbKtHGvKX8Oel0AnF3kc7i+s6J9PRKnl3ZUpevExdmEqLcd
+         Iu3HFAOY7Y8m5CHulMKr1Wi2sYvQLof/juCA5hDGZm6r1GWIIN3d25uAt2RxdXzVsg+o
+         6Od1arwF267NJXUyESHe2M0cRlep4guZd4xSsks/wG6mX7/jQG4oYP7SGBQ2At6ktVby
+         L6HQ==
+X-Gm-Message-State: AOAM530Iezr6kKi66Dy9INPqJT801QvDnemVRrRGtMfEV2ordvdU5uf/
+        30KlIDix9GsEQI8bgEo1gpyLobnc4vC6qLXyL2wltw==
+X-Google-Smtp-Source: ABdhPJyw52u6k4SKpOakHeWu7gjr6JuceopSOtVUJ5BHjzjLTgPQPdonUQjHuVeMJTBgwp2cRZ99WzBoL3BHUYZYrEk=
+X-Received: by 2002:a17:907:72ce:b0:6f4:5a57:320c with SMTP id
+ du14-20020a17090772ce00b006f45a57320cmr389491ejc.75.1652369115386; Thu, 12
+ May 2022 08:25:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
-In-Reply-To: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com> <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com>
+In-Reply-To: <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 12 May 2022 08:12:22 -0700
-Message-ID: <CAGS_qxreTLFp1VvMd07AZhE9wbgxR5bXgeJSyW-iWWoA5qs79g@mail.gmail.com>
+Date:   Thu, 12 May 2022 08:25:04 -0700
+Message-ID: <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
 Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
 To:     Frank Rowand <frowand.list@gmail.com>
 Cc:     David Gow <davidgow@google.com>,
@@ -66,61 +66,49 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 11, 2022 at 10:59 PM Frank Rowand <frowand.list@gmail.com> wrote:
+On Wed, May 11, 2022 at 11:01 PM Frank Rowand <frowand.list@gmail.com> wrote:
+> ================================================================================
+> #### discussion notes:
 >
-> In the middle of the "RFC - kernel test result specification (KTAP)" thread,
-> started in August 2021, Tim Bird made a suggestion to allow a prefix to the
-> KTAP data format:
+> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> PRO: minimally invasive to specification.
 >
-> > Just as a side note, in some Fuego tests, it was very useful to include an identifier
-> > in thethe prefix nested tests.  The output looked like this:
-> >
-> > TAP version 13
-> > 1..2
-> > [batch_id 4] TAP version 13
-> > [batch_id 4] 1..2
-> > [batch_id 4] ok 1 - cyclictest with 1000 cycles
-> > [batch_id 4] # problem setting CLOCK_REALTIME
-> > [batch_id 4] not ok 2 - cyclictest with CLOCK_REALTIME
-> > not ok 1 - check realtime
-> > [batch_id 4] TAP version 13
-> > [batch_id 4] 1..1
-> > [batch_id 4] ok 1 - IOZone read/write 4k blocks
-> > ok 2 - check I/O performance
-> >
-> > Can I propose that the prefix not be fixed by the spec, but that the spec indicates that
-> > whatever the prefix is on the TAP version line, that prefix must be used with the output for
-> > all lines from the test (with the exception of unknown lines)?
+> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> CON:
+>
+> KTAP does not include any mechanism to describe the value of <prefix string>
+> to test harnesses and test output processing programs.  The test output
+> processing programs must infer the value of <prefix string> by detecting
+> the <prefix string> in the "Version lines".
+>
+> The detection of a "Version lines" might be a match of the regex:
+>
+>    "^.*KTAP version 2$"
+>
+> This risks falsely detecting a "Version lines", but the risk is small???
 
-Just chiming in since I didn't see it mentioned after a quick skim of
-the original thread:
+Agree this is a risk and also think it's probably small, but it's hard to say.
+I think the $ anchoring the regex is probably safe enough.
 
-This is already basically the behavior of kunit.py's TAP parser since
-commit afc63da64f1e5e41875c98707020e85050f8a0c5
-Author: Heidi Fahim <heidifahim@google.com>
-Date:   Mon Mar 16 13:21:24 2020 -0700
+As noted earlier, this tracks with what kunit.py already does.
+That was necessitated by dynamic prefixes such as timestamps, etc.
+So I think this is probably a fine risk to take.
 
-    kunit: kunit_parser: make parser more robust
+I imagine we could add constraints of prefix string, e.g. must have []
+around it, etc. if we want to try and minimize this risk.
+But I don't know if it's necessarily worth it, given what we know right now.
 
-    Previously, kunit_parser did not properly handle kunit TAP output that
-    - had any prefixes (generated from different configs e.g.
-    CONFIG_PRINTK_TIME)
-...
-
-The notable difference is that only the prefix _length_ is fixed, not
-the contents of the string itself.
-
-So ignoring a dynamic prefix is a practical necessity if we want to
-parse TAP from kernelspace/printk across a range of configs.
-But I don't know if this dynamic version is worth including in the spec.
-The static prefix makes more sense to me to formalize, and if we go
-down that route, at least kunit.py will already be compliant :)
+Along those lines, I think I like this approach (Alternative 1) more
+than Alternative 2/2b.
+I'm not sure we need a structured way to specify metadata in KTAP yet?
+The prefix seems like a reasonable candidate, but do others have ideas
+of other bits of metadata we'd want to be able to declare?
 
 Daniel
