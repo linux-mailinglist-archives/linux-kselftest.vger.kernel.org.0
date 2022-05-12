@@ -2,114 +2,194 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CB252546B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 20:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5468E52547A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 20:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357259AbiELSEZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 May 2022 14:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S1357320AbiELSKD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 14:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357460AbiELSEX (ORCPT
+        with ESMTP id S1354531AbiELSKC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 May 2022 14:04:23 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD1D26865A
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 11:04:22 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so7599822fac.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 11:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RDvciQFODhdDBATVVOib/Gmk+OU/HVoyX0M9V8aGmGU=;
-        b=OhoyWF65mi0OD1ZrwD8K8tghppxQ4nj2MSuR5Is/a/fBxZfTq1JIIHFG0ErtJrVzDY
-         Lfte8BPrMs3i/p5Ri02BkwX7KGT4cInuluoAqkOJoKXCQhGZrs0U05Iaco9ILhvaGzwK
-         a8EKtmSy9vcAVrmbRbkcd+YW3pSO4sJwTbeVQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RDvciQFODhdDBATVVOib/Gmk+OU/HVoyX0M9V8aGmGU=;
-        b=LMgYgA1vP6DZQOBucqWrRsYfejxjjpRZGPY4s2yP02W7JsBQ7Eo7CZBmzRdpf/eORl
-         u9LGNUfiwywv8r0Aig8XsapJR0ClBkFZuCwPapNELWjBA3OFVJqofcUQRoffdLu3NaQS
-         Dhk11xTh/vBXnDOuFWdNb8REEReUBQb6o3PsxYqZllxMRjroOwSdwtwwnSAFoOW0Ir+I
-         vSF0xvYHDBSFX5yQ1DY2cb4fv7bBITtZlIZ8zDfQCrY4L7V8/WULowM2RLk9+VN11Dae
-         aRnfjzfNfvKpN72D958ls5EVUxCfFtFDGiocDQ+hv23dOBpyUJYpyg5fUnsnNbpgE7oG
-         mxjA==
-X-Gm-Message-State: AOAM533MCB3qd37HsBkNntfA1X1ZAl3T/2iM6Q6yOhb//WHaHm/j2cMs
-        OUIXvKXVFt6amDpXzUoETqwVLQ==
-X-Google-Smtp-Source: ABdhPJzIgybtu7P78NikEpr7S0+QoB5xWkWXzrunFCazvRkHmyFG0lM9FsiggE8wyigSv4bUgRm6Lw==
-X-Received: by 2002:a05:6870:1791:b0:e2:f75b:b15f with SMTP id r17-20020a056870179100b000e2f75bb15fmr592903oae.106.1652378661796;
-        Thu, 12 May 2022 11:04:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id l93-20020a9d1b66000000b00606aa21608esm149238otl.17.2022.05.12.11.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 11:04:21 -0700 (PDT)
-Subject: Re: [RFC V2 PATCH 0/8] selftests: KVM: selftests for fd-based
- approach of supporting private memory
-To:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        seanjc@google.com, diviness@google.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        shuah <shuah@kernel.org>
-References: <20220511000811.384766-1-vannapurve@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e4a84dfe-2397-0881-b6bd-1cb2b2d5904e@linuxfoundation.org>
-Date:   Thu, 12 May 2022 12:04:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 12 May 2022 14:10:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691B2689C6;
+        Thu, 12 May 2022 11:10:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D458D61682;
+        Thu, 12 May 2022 18:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72353C385B8;
+        Thu, 12 May 2022 18:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652378999;
+        bh=IPa84a0ExaTFb0Q/aAwP7vM1wEznpiYTW9cY/k40XB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kgzFv+Yzg6w3p9oWbiNYgbRVrFr+a2wBBfrHCpr0gEKWvnEJYY2DbCOyq5MKneTp6
+         /1D5WZQCabvBh2Fl861WE2Pz04CCWmAlyCUZ9hRXFmd+MZ5FKXps08bdljNJ6Y6GsE
+         EAQl1O4Sh2GGRkGSPfDRsstUqaUgtyPCGdl3f+NWmow9OLv+vsVIpxBP4l32xWnClt
+         WQGQou2JxgtiEALq4/iQvfahVR/txrCSxiYOhJsbon2j6A8i+kXlDPfgf8beDZ0D4i
+         uKLT37oHaghKsaa/F+jfPjdBM0FRnLZisTOQ2fuUVpYa8/lx38IhiwASv2go6z44Wt
+         eRL4GYDm0vAFQ==
+Date:   Thu, 12 May 2022 21:11:37 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V5 00/31] x86/sgx and selftests/sgx: Support SGX2
+Message-ID: <Yn1N2chUNs9EcnM3@iki.fi>
+References: <cover.1652137848.git.reinette.chatre@intel.com>
+ <YnrllJ2OqmcqLUuv@kernel.org>
+ <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/10/22 6:08 PM, Vishal Annapurve wrote:
-> This v2 series implements selftests targeting the feature floated by Chao
-> via:
-> https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
+On Wed, May 11, 2022 at 11:47:31AM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
 > 
-> Below changes aim to test the fd based approach for guest private memory
-> in context of normal (non-confidential) VMs executing on non-confidential
-> platforms.
+> On 5/10/2022 3:22 PM, Jarkko Sakkinen wrote:
+> > If there is any patch that does not have my reviewed-by, please put it
+> > there. I was totally happy with v4 already. I went through these, and
+> > did not see anything worth of complaining about.
+> > 
+> > Great job, thank you for doing this.
+> > 
+> > I can also add my tag separely to each patch, which have not have it on
+> > request if that makes things easier in any possible way on request.
 > 
-> priv_memfd_test.c file adds a suite of selftests to access private memory
-> from the guest via private/shared accesses and checking if the contents
-> can be leaked to/accessed by vmm via shared memory view.
+> Thank you very much. I do appreciate all the feedback and testing.
 > 
-> Updates in V2:
-> 1) Tests are added to exercise implicit/explicit memory conversion paths.
-> 2) Test is added to exercise UPM feature without double memory allocation.
+> All patches in this series have some tag from you, a few have "Acked-by"
+> instead of "Reviewed-by".
 > 
+> Patch 20/31 "x86/sgx: Free up EPC pages directly to support large
+> page ranges" is the only x86/sgx patch that has an "Acked-by" from you
+> instead of a "Reviewed-by". All selftests/sgx patches have an "Acked-by"
+> from you.
+> 
+> Here is a summary of your tags if you would like to make changes:
+> 
+> [PATCH V5 01/31] x86/sgx: Add short descriptions to ENCLS wrappers
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 02/31] x86/sgx: Add wrapper for SGX2 EMODPR function
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 03/31] x86/sgx: Add wrapper for SGX2 EMODT function
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 04/31] x86/sgx: Add wrapper for SGX2 EAUG function
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 05/31] x86/sgx: Support loading enclave page without VMA
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 06/31] x86/sgx: Export sgx_encl_ewb_cpumask()
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 07/31] x86/sgx: Rename sgx_encl_ewb_cpumask() as sgx_encl_cpumask()
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 08/31] x86/sgx: Move PTE zap code to new sgx_zap_enclave_ptes()
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 09/31] x86/sgx: Make sgx_ipi_cb() available internally
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 10/31] x86/sgx: Create utility to validate user provided offset and length
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 11/31] x86/sgx: Keep record of SGX page type
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 12/31] x86/sgx: Export sgx_encl_{grow,shrink}()
+> 	Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 13/31] x86/sgx: Export sgx_encl_page_alloc()
+> 	Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 14/31] x86/sgx: Support VA page allocation without reclaiming
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 15/31] x86/sgx: Support restricting of enclave page permissions
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 16/31] x86/sgx: Support adding of pages to an initialized enclave
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 17/31] x86/sgx: Tighten accessible memory range after enclave initialization
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 18/31] x86/sgx: Support modifying SGX page type
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 19/31] x86/sgx: Support complete page removal
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 20/31] x86/sgx: Free up EPC pages directly to support large page ranges
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 21/31] Documentation/x86: Introduce enclave runtime management section
+> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 22/31] selftests/sgx: Add test for EPCM permission changes
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 23/31] selftests/sgx: Add test for TCS page permission changes
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 24/31] selftests/sgx: Test two different SGX2 EAUG flows
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 25/31] selftests/sgx: Introduce dynamic entry point
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 26/31] selftests/sgx: Introduce TCS initialization enclave operation
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 27/31] selftests/sgx: Test complete changing of page type flow
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 28/31] selftests/sgx: Test faulty enclave behavior
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 29/31] selftests/sgx: Test invalid access to removed enclave page
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 30/31] selftests/sgx: Test reclaiming of untouched page
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> [PATCH V5 31/31] selftests/sgx: Page removal stress test
+> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>	
+> 
+> 
+> Reinette
 
-+ shuah <shuah@kernel.org>
+It looks good. And yeah, I've been running different versions of this patch
+set since April with zero issues, about a month, in our platform. No high
+doubts that anything would wrong that could not be later fixed, if problems
+arise.
 
-Adding  my correct kernel.org address. Please make sure to run
-get_maintainers.pl to get the right addresses for miantianers.
-
-thanks,
--- Shuah
+BR, Jarkko
