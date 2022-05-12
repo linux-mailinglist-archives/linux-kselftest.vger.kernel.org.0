@@ -2,194 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5468E52547A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 20:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8F9525492
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 20:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357320AbiELSKD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 May 2022 14:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S1357540AbiELSTG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 14:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354531AbiELSKC (ORCPT
+        with ESMTP id S1357418AbiELSTF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 May 2022 14:10:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691B2689C6;
-        Thu, 12 May 2022 11:10:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D458D61682;
-        Thu, 12 May 2022 18:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72353C385B8;
-        Thu, 12 May 2022 18:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652378999;
-        bh=IPa84a0ExaTFb0Q/aAwP7vM1wEznpiYTW9cY/k40XB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kgzFv+Yzg6w3p9oWbiNYgbRVrFr+a2wBBfrHCpr0gEKWvnEJYY2DbCOyq5MKneTp6
-         /1D5WZQCabvBh2Fl861WE2Pz04CCWmAlyCUZ9hRXFmd+MZ5FKXps08bdljNJ6Y6GsE
-         EAQl1O4Sh2GGRkGSPfDRsstUqaUgtyPCGdl3f+NWmow9OLv+vsVIpxBP4l32xWnClt
-         WQGQou2JxgtiEALq4/iQvfahVR/txrCSxiYOhJsbon2j6A8i+kXlDPfgf8beDZ0D4i
-         uKLT37oHaghKsaa/F+jfPjdBM0FRnLZisTOQ2fuUVpYa8/lx38IhiwASv2go6z44Wt
-         eRL4GYDm0vAFQ==
-Date:   Thu, 12 May 2022 21:11:37 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V5 00/31] x86/sgx and selftests/sgx: Support SGX2
-Message-ID: <Yn1N2chUNs9EcnM3@iki.fi>
-References: <cover.1652137848.git.reinette.chatre@intel.com>
- <YnrllJ2OqmcqLUuv@kernel.org>
- <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
+        Thu, 12 May 2022 14:19:05 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19365131F1D
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 11:19:04 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so6292595pjb.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 11:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dNyZ9T+dUYwRwkaBjj9l280QphHJNrxjD+CcZQQpk3Y=;
+        b=Ar50RdeePk5czVD0jatXgPrjfjIwXy2E3NOcDPgyR/5BrThqn3ki5rO4VktXqGIlv5
+         eJ5Ej6LXK+cnSNR5BtL6fw1+ENEpfLa1UOtGufZevs5gJZvJ4eUIRYW7zrbNy2nbNN2W
+         tnqItekK/Uck6EbhPl6Bl8/VqHHc2YeKFzEOoTW9IAEXNUkBX+OTxUrlti87fm5JzQO0
+         xE0fFilwWayRLWapRpiiMo7PXz4iTpcdccchPnTb01tDEsbflUeP3Lv5CSjT6/6S/HBZ
+         bJmWyIhq5TRGY7tdhtOrNS5i9AxSvcODtGqptHpJ1RALgOhoBNWKiiYMxOFAPIDWelRT
+         OwDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dNyZ9T+dUYwRwkaBjj9l280QphHJNrxjD+CcZQQpk3Y=;
+        b=ikys6Y2hm3vRuwsgl6fP3mQZK8/Y+/LWb+QwuQyvt14Zc+icdNpTzvuyqPVUT/7tiE
+         XaFKPxOfvld+VSI1R54WoWkdEKtksujE+V4a29un0t77YJtZ+TnDvlBO34Jn4i5uuaRt
+         yi1tUnZ+ssjtJB319u0Inxhic7bm9Wh+YQ6wpyVJs9MZnx8mhWQWVG68iIbtsucGk4Nz
+         p0VBYWxAljYO1B1bq3+ZL20VjlSHiPLq7o06Qc9g5sDk9hTX1rIis8L90/RXuuvwRtva
+         NQube9ec2leGVaTIsR09V0zHFG7KoSU2eEG3NBDsumt3TmftTcNEFq7y5IErafvyZ2Sx
+         rNnA==
+X-Gm-Message-State: AOAM531iwp4bqtYZvfw6ZuiuDWoQwPOmjX8D5TZSDaAmY9yigf5V84DH
+        h51+q8MaxgC7Ug3h/rMFnnbZP23kWE+LenUBWeZzzw==
+X-Google-Smtp-Source: ABdhPJwspxnY6WR+5als0TwHPBjHCh/04nW5WS6SVWpGf2Dn5Wh7nyJvLsp3iUNwFbFfnB9AdgZYEPmBILl74wGezlI=
+X-Received: by 2002:a17:902:d552:b0:15e:e759:cd38 with SMTP id
+ z18-20020a170902d55200b0015ee759cd38mr1095745plf.87.1652379543212; Thu, 12
+ May 2022 11:19:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <395657d1-b040-89e7-046f-3cbd358ed7c1@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220511000811.384766-1-vannapurve@google.com> <e4a84dfe-2397-0881-b6bd-1cb2b2d5904e@linuxfoundation.org>
+In-Reply-To: <e4a84dfe-2397-0881-b6bd-1cb2b2d5904e@linuxfoundation.org>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Thu, 12 May 2022 11:18:51 -0700
+Message-ID: <CAGtprH8YoGsG-0jufYAMMm-a2On4hN8==sNm_oOEmv9jqZZdLQ@mail.gmail.com>
+Subject: Re: [RFC V2 PATCH 0/8] selftests: KVM: selftests for fd-based
+ approach of supporting private memory
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        dave.hansen@linux.intel.com, "H . Peter Anvin" <hpa@zytor.com>,
+        yang.zhong@intel.com, drjones@redhat.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com,
+        Steven Price <steven.price@arm.com>, ak@linux.intel.com,
+        david@redhat.com, Andy Lutomirski <luto@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marc Orr <marcorr@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Gonda <pgonda@google.com>, nikunj@amd.com,
+        Sean Christopherson <seanjc@google.com>,
+        Austin Diviness <diviness@google.com>, shuah <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:47:31AM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 5/10/2022 3:22 PM, Jarkko Sakkinen wrote:
-> > If there is any patch that does not have my reviewed-by, please put it
-> > there. I was totally happy with v4 already. I went through these, and
-> > did not see anything worth of complaining about.
-> > 
-> > Great job, thank you for doing this.
-> > 
-> > I can also add my tag separely to each patch, which have not have it on
-> > request if that makes things easier in any possible way on request.
-> 
-> Thank you very much. I do appreciate all the feedback and testing.
-> 
-> All patches in this series have some tag from you, a few have "Acked-by"
-> instead of "Reviewed-by".
-> 
-> Patch 20/31 "x86/sgx: Free up EPC pages directly to support large
-> page ranges" is the only x86/sgx patch that has an "Acked-by" from you
-> instead of a "Reviewed-by". All selftests/sgx patches have an "Acked-by"
-> from you.
-> 
-> Here is a summary of your tags if you would like to make changes:
-> 
-> [PATCH V5 01/31] x86/sgx: Add short descriptions to ENCLS wrappers
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 02/31] x86/sgx: Add wrapper for SGX2 EMODPR function
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 03/31] x86/sgx: Add wrapper for SGX2 EMODT function
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 04/31] x86/sgx: Add wrapper for SGX2 EAUG function
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 05/31] x86/sgx: Support loading enclave page without VMA
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 06/31] x86/sgx: Export sgx_encl_ewb_cpumask()
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 07/31] x86/sgx: Rename sgx_encl_ewb_cpumask() as sgx_encl_cpumask()
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 08/31] x86/sgx: Move PTE zap code to new sgx_zap_enclave_ptes()
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 09/31] x86/sgx: Make sgx_ipi_cb() available internally
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 10/31] x86/sgx: Create utility to validate user provided offset and length
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 11/31] x86/sgx: Keep record of SGX page type
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 12/31] x86/sgx: Export sgx_encl_{grow,shrink}()
-> 	Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 13/31] x86/sgx: Export sgx_encl_page_alloc()
-> 	Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 14/31] x86/sgx: Support VA page allocation without reclaiming
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 15/31] x86/sgx: Support restricting of enclave page permissions
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 16/31] x86/sgx: Support adding of pages to an initialized enclave
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 17/31] x86/sgx: Tighten accessible memory range after enclave initialization
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 18/31] x86/sgx: Support modifying SGX page type
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 19/31] x86/sgx: Support complete page removal
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 	Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 20/31] x86/sgx: Free up EPC pages directly to support large page ranges
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 21/31] Documentation/x86: Introduce enclave runtime management section
-> 	Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 22/31] selftests/sgx: Add test for EPCM permission changes
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 23/31] selftests/sgx: Add test for TCS page permission changes
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 24/31] selftests/sgx: Test two different SGX2 EAUG flows
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 25/31] selftests/sgx: Introduce dynamic entry point
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 26/31] selftests/sgx: Introduce TCS initialization enclave operation
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 27/31] selftests/sgx: Test complete changing of page type flow
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 28/31] selftests/sgx: Test faulty enclave behavior
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 29/31] selftests/sgx: Test invalid access to removed enclave page
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 30/31] selftests/sgx: Test reclaiming of untouched page
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> [PATCH V5 31/31] selftests/sgx: Page removal stress test
-> 	Acked-by: Jarkko Sakkinen <jarkko@kernel.org>	
-> 
-> 
-> Reinette
+On Thu, May 12, 2022 at 11:04 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> + shuah <shuah@kernel.org>
+>
+> Adding  my correct kernel.org address. Please make sure to run
+> get_maintainers.pl to get the right addresses for miantianers.
+>
 
-It looks good. And yeah, I've been running different versions of this patch
-set since April with zero issues, about a month, in our platform. No high
-doubts that anything would wrong that could not be later fixed, if problems
-arise.
+Thanks Shuah for the feedback. Apologies for the typo in the email address.
 
-BR, Jarkko
+I will address the comments in the next version.
+
+Regards,
+Vishal
