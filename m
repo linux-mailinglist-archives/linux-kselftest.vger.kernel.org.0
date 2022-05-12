@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828BE5253E2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 19:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DDE5253FB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 19:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357176AbiELRlM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 May 2022 13:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S1357048AbiELRqH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 13:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357202AbiELRlC (ORCPT
+        with ESMTP id S1357233AbiELRp6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 May 2022 13:41:02 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601A237A83
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:41:00 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id 3so4053289ily.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:41:00 -0700 (PDT)
+        Thu, 12 May 2022 13:45:58 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D3B12613
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:45:56 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso7559782fac.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Ir1zw0OZe5UU2KiBzSYOwuHmCrXrkYEC7RGqZNVaeEM=;
-        b=IvE6/JS9OoyiNcMDOiJ6ONy7E+AnfyES5kY3vljwcFFCH5EJ2w4OWI0JhOekQErXdD
-         jV+1Rw5uvDB61t4c1HIlfmHGaZKUKuG/KQbyC3kVZ3bAjrq/5ZCPz/4kVyLIszDiFvwX
-         7ym2TWAqgaTUCfGwgC/P+uk4t8jRoUwtK3Yfg=
+        bh=pZ9h+s6h2+1qS4V/lr1+HPr3vp4rl9/9pnc5MgAiHb4=;
+        b=VBjXrSrh6RboKZRgN/Ib5xzMxbhAijEoDCAuhLKOpfVPdBGmDAzSmLKv8bSg5QW7y4
+         3mqmcYR5/SWL7pQgkwk8xsZ7UIK+C1Z05ek1YEdkbRueTl4lI/BEA2w6FjZIk28QIxjF
+         FuLHSrKG/4n0a0xsLofGyez4RSh+oHEoAIgfA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Ir1zw0OZe5UU2KiBzSYOwuHmCrXrkYEC7RGqZNVaeEM=;
-        b=g+juG7S3t9d32nySTbEj9D2yLEVJyaARjmfrfwkdhi+5uBvIIajupoDJ4CkZyjZ2f7
-         Y1DPDZYCJQkikvsg+coFJapUizvnmw6HiIW9a3LaOMUO6PqtguPGvJKUyoKH7GrPPPzr
-         de5sTITV1y+GUkKWaQuY0zedC84+ikJdqTPIQdaYHI2AWpA5BxhA63Lq1suBoOLQUd14
-         /ufFTbeoBriagK1BNbQjiI9Z7kQLRONzW7u+Cv21zEzU32R872tM+wnzHsBkfQVeUD+p
-         PJsjzkrgKXCQxaXhQi34jiyzZmZVzKVU+etl4JWJS/N7hPl0gjmcpZZY09+rXU7UsbWn
-         miCA==
-X-Gm-Message-State: AOAM533tlQCAN5ODBZ9C6asCOhIEjD6WUmN8ifI1Cw8u4Ff4zegRgkLL
-        VLXG1AVJSi7bFvewHcdckEI9Gw==
-X-Google-Smtp-Source: ABdhPJyCHrPg6BOwQEl56IJ7j6yjJ11xRJ3CgQk/iWhLk7WlvMrIYE5O/ICKVuQLfymYoHOQW9912Q==
-X-Received: by 2002:a92:6e0b:0:b0:2c9:a276:58cc with SMTP id j11-20020a926e0b000000b002c9a27658ccmr576228ilc.199.1652377259680;
-        Thu, 12 May 2022 10:40:59 -0700 (PDT)
+        bh=pZ9h+s6h2+1qS4V/lr1+HPr3vp4rl9/9pnc5MgAiHb4=;
+        b=2IF1S1IYu86Uk4O8YHwbd7kqYZyr1mxRh7MX8xpUiegtSzXy5ffRjoamfX2AL3yg4Z
+         465WO5SbePWuAVL2JXKpFgfoZfpOz8T2Da8wL3itQXf/m7BrU0VTKkTW/+kZwpoayC1y
+         xQ0pLqYHKDShzoRa8vdRMOsv+qRK0TpAgGg9LeVWdJVas3umwa7VxyyiblpHtkQrh4/N
+         tANipGPPQHbzWZTA7MsEQBmwQv+co3Y8GY3/KPxXTvvQkQnk57c9JR9IhqWS19hVtWmY
+         Ladklv/1Jd9KEuNM+mxzZj0FTiJhWKG9H2JOOX26bC//T/Qa9//gSPTmH2I665BTleB6
+         khzw==
+X-Gm-Message-State: AOAM531c48M36WpFLzGloQLxHnvFmv+n/9BPzcf2E9E2kfzXvbbBTGgo
+        kQ7SCH1Sgd/vOPt2uHeV4+g7hw==
+X-Google-Smtp-Source: ABdhPJydZ/eJU55U4wrTdxdPrOmcr/r8xF7yWuRPmZDzeEMIweJfMbFWjkFuN99HN71Z9pz4nPUVvw==
+X-Received: by 2002:a05:6870:95a4:b0:d7:18b5:f927 with SMTP id k36-20020a05687095a400b000d718b5f927mr527535oao.45.1652377555169;
+        Thu, 12 May 2022 10:45:55 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i3-20020a02ca03000000b0032bf978122asm41450jak.59.2022.05.12.10.40.58
+        by smtp.gmail.com with ESMTPSA id a3-20020a05683012c300b00606387601a2sm126250otq.34.2022.05.12.10.45.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 10:40:59 -0700 (PDT)
-Subject: Re: [RFC V2 PATCH 3/8] selftests: kvm: priv_memfd_test: Add support
- for memory conversion
+        Thu, 12 May 2022 10:45:54 -0700 (PDT)
+Subject: Re: [RFC V2 PATCH 4/8] selftests: kvm: priv_memfd_test: Add shared
+ access test
 To:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -65,23 +65,23 @@ Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
         ak@linux.intel.com, david@redhat.com, luto@kernel.org,
         vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
         pgonda@google.com, nikunj@amd.com, seanjc@google.com,
-        diviness@google.com, Shuah Khan <skhan@linuxfoundation.org>
+        diviness@google.com
 References: <20220511000811.384766-1-vannapurve@google.com>
- <20220511000811.384766-4-vannapurve@google.com>
+ <20220511000811.384766-5-vannapurve@google.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <934a07be-ce72-7916-5614-e78af8293b5c@linuxfoundation.org>
-Date:   Thu, 12 May 2022 11:40:57 -0600
+Message-ID: <d908a526-7367-366d-9f45-f40274c1b27e@linuxfoundation.org>
+Date:   Thu, 12 May 2022 11:45:52 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220511000811.384766-4-vannapurve@google.com>
+In-Reply-To: <20220511000811.384766-5-vannapurve@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,140 +89,114 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 5/10/22 6:08 PM, Vishal Annapurve wrote:
-> Add handling of explicit private/shared memory conversion using
-> KVM_HC_MAP_GPA_RANGE and implicit memory conversion by handling
-> KVM_EXIT_MEMORY_ERROR.
+> Add a test to access private memory in shared fashion
+> which should exercise implicit memory conversion path
+> using KVM_EXIT_MEMORY_ERROR.
 > 
+
+This comment applies all patches in this series. Keep commit log
+line length around 76 for readability in "git log" display.
+
+
+Also same comment about combining lines of code when it isn't
+necessary to split them, align the lines with parenthesis to
+make it easier to read, and run checkpatch.
+
 > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 > ---
->   tools/testing/selftests/kvm/priv_memfd_test.c | 87 +++++++++++++++++++
->   1 file changed, 87 insertions(+)
+>   tools/testing/selftests/kvm/priv_memfd_test.c | 69 +++++++++++++++++++
+>   1 file changed, 69 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/kvm/priv_memfd_test.c b/tools/testing/selftests/kvm/priv_memfd_test.c
-> index bbb58c62e186..55e24c893b07 100644
+> index 55e24c893b07..48bc4343e7b5 100644
 > --- a/tools/testing/selftests/kvm/priv_memfd_test.c
 > +++ b/tools/testing/selftests/kvm/priv_memfd_test.c
-> @@ -155,6 +155,83 @@ static struct test_run_helper priv_memfd_testsuite[] = {
+> @@ -147,12 +147,81 @@ static void pmpat_guest_code(void)
+>   	GUEST_DONE();
+>   }
+>   
+> +/* Test to verify guest shared accesses on private memory with following steps:
+> + * 1) Upon entry, guest signals VMM that it has started.
+> + * 2) VMM populates the shared memory with known pattern and continues guest
+> + *    execution.
+> + * 3) Guest reads private gpa range in a shared fashion and verifies that it
+> + *    reads what VMM has written in step2.
+> + * 3) Guest writes a different pattern on the shared memory and signals VMM
+> + *      that it has updated the shared memory.
+> + * 4) VMM verifies shared memory contents to be same as the data populated
+> + *      in step 3 and continues guest execution.
+> + */
+> +#define PMSAT_ID				1
+> +#define PMSAT_DESC				"PrivateMemorySharedAccessTest"
+> +
+> +/* Guest code execution stages for private mem access test */
+> +#define PMSAT_GUEST_STARTED			0ULL
+> +#define PMSAT_GUEST_TEST_MEM_UPDATED		1ULL
+> +
+> +static bool pmsat_handle_vm_stage(struct kvm_vm *vm,
+> +			void *test_info,
+> +			uint64_t stage)
+> +{
+> +	void *shared_mem = ((struct test_run_helper *)test_info)->shared_mem;
+> +
+> +	switch (stage) {
+> +	case PMSAT_GUEST_STARTED: {
+> +		/* Initialize the contents of shared memory */
+> +		TEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE),
+> +			"Shared memory update failed");
+> +		VM_STAGE_PROCESSED(PMSAT_GUEST_STARTED);
+> +		break;
+> +	}
+> +	case PMSAT_GUEST_TEST_MEM_UPDATED: {
+> +		/* verify data to be same as what guest wrote */
+> +		TEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE),
+> +			"Shared memory view mismatch");
+> +		VM_STAGE_PROCESSED(PMSAT_GUEST_TEST_MEM_UPDATED);
+> +		break;
+> +	}
+> +	default:
+> +		printf("Unhandled VM stage %ld\n", stage);
+
+Is this a test failure? Add more information to use why it isn't handled.
+
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static void pmsat_guest_code(void)
+> +{
+> +	void *shared_mem = (void *)TEST_MEM_GPA;
+> +
+> +	GUEST_SYNC(PMSAT_GUEST_STARTED);
+> +	GUEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE));
+> +
+> +	GUEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE));
+> +	GUEST_SYNC(PMSAT_GUEST_TEST_MEM_UPDATED);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+>   static struct test_run_helper priv_memfd_testsuite[] = {
+>   	[PMPAT_ID] = {
+>   		.test_desc = PMPAT_DESC,
+>   		.vmst_handler = pmpat_handle_vm_stage,
+>   		.guest_fn = pmpat_guest_code,
 >   	},
+> +	[PMSAT_ID] = {
+> +		.test_desc = PMSAT_DESC,
+> +		.vmst_handler = pmsat_handle_vm_stage,
+> +		.guest_fn = pmsat_guest_code,
+> +	},
 >   };
 >   
-> +static void handle_vm_exit_hypercall(struct kvm_run *run,
-> +	uint32_t test_id)
-> +{
-> +	uint64_t gpa, npages, attrs;
-> +	int priv_memfd =
-> +		priv_memfd_testsuite[test_id].priv_memfd;
-
-Do you need this on a separate line? Doesn't looks like it will exceed
-the limit with the tab?
-
-> +	int ret;
-> +	int fallocate_mode;
-> +
-> +	if (run->hypercall.nr != KVM_HC_MAP_GPA_RANGE) {
-> +		TEST_FAIL("Unhandled Hypercall %lld\n",
-> +					run->hypercall.nr);
-
-Is this considered test fail or skip because of unmet dependency?
-Also do you need run->hypercall.nr os a separate line?
-
-> +	}
-> +
-> +	gpa = run->hypercall.args[0];
-> +	npages = run->hypercall.args[1];
-> +	attrs = run->hypercall.args[2];
-> +
-> +	if ((gpa < TEST_MEM_GPA) || ((gpa +
-> +		(npages << MIN_PAGE_SHIFT)) > TEST_MEM_END)) {
-> +		TEST_FAIL("Unhandled gpa 0x%lx npages %ld\n",
-> +			gpa, npages);
-
-Same question here about gpa, npages on a separate line? Also
-align it with the previous line for readability.
-
-TEST_FAIL("Unhandled gpa 0x%lx npages %ld\n",
-	  gpa, npages);
-  
-> +	}
-> +
-> +	if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
-> +		fallocate_mode = 0;
-> +	else {
-> +		fallocate_mode = (FALLOC_FL_PUNCH_HOLE |
-> +			FALLOC_FL_KEEP_SIZE);
-> +	}
-> +	pr_info("Converting off 0x%lx pages 0x%lx to %s\n",
-> +		(gpa - TEST_MEM_GPA), npages,
-> +		fallocate_mode ?
-> +			"shared" : "private");
-> +	ret = fallocate(priv_memfd, fallocate_mode,
-> +		(gpa - TEST_MEM_GPA),
-> +		npages << MIN_PAGE_SHIFT);
-> +	TEST_ASSERT(ret != -1,
-> +		"fallocate failed in hc handling");
-> +	run->hypercall.ret = 0;
-> +}
-> +
-> +static void handle_vm_exit_memory_error(struct kvm_run *run,
-> +	uint32_t test_id)
-> +{
-> +	uint64_t gpa, size, flags;
-> +	int ret;
-> +	int priv_memfd =
-> +		priv_memfd_testsuite[test_id].priv_memfd;
-> +	int fallocate_mode;
-> +
-> +	gpa = run->memory.gpa;
-> +	size = run->memory.size;
-> +	flags = run->memory.flags;
-> +
-> +	if ((gpa < TEST_MEM_GPA) || ((gpa + size)
-> +					> TEST_MEM_END)) {
-> +		TEST_FAIL("Unhandled gpa 0x%lx size 0x%lx\n",
-> +			gpa, size);
-> +	}
-> +
-> +	if (flags & KVM_MEMORY_EXIT_FLAG_PRIVATE)
-> +		fallocate_mode = 0;
-> +	else {
-> +		fallocate_mode = (FALLOC_FL_PUNCH_HOLE |
-> +				FALLOC_FL_KEEP_SIZE);
-> +	}
-> +	pr_info("Converting off 0x%lx size 0x%lx to %s\n",
-> +		(gpa - TEST_MEM_GPA), size,
-> +		fallocate_mode ?
-> +			"shared" : "private");
-> +	ret = fallocate(priv_memfd, fallocate_mode,
-> +		(gpa - TEST_MEM_GPA), size);
-> +	TEST_ASSERT(ret != -1,
-> +		"fallocate failed in memory error handling");
-> +}
-> +
->   static void vcpu_work(struct kvm_vm *vm, uint32_t test_id)
->   {
->   	struct kvm_run *run;
-> @@ -181,6 +258,16 @@ static void vcpu_work(struct kvm_vm *vm, uint32_t test_id)
->   			continue;
->   		}
->   
-> +		if (run->exit_reason == KVM_EXIT_HYPERCALL) {
-> +			handle_vm_exit_hypercall(run, test_id);
-> +			continue;
-> +		}
-> +
-> +		if (run->exit_reason == KVM_EXIT_MEMORY_ERROR) {
-> +			handle_vm_exit_memory_error(run, test_id);
-> +			continue;
-> +		}
-> +
->   		TEST_FAIL("Unhandled VCPU exit reason %d\n", run->exit_reason);
->   		break;
->   	}
+>   static void handle_vm_exit_hypercall(struct kvm_run *run,
 > 
-
-Looks like you can easily combine lines without running into # chars limit
-for several lines of code in this patch. If you haven't already, run
-checkpatch to make sure coding guidelines are honored.
 
 thanks,
 -- Shuah
