@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9165A525391
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 19:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B83E5253B5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 May 2022 19:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355464AbiELR3O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 May 2022 13:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S236997AbiELRbt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 May 2022 13:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356870AbiELR3M (ORCPT
+        with ESMTP id S1357085AbiELRbr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 May 2022 13:29:12 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4227B26BC86
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:29:11 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id f2so6122636ioh.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:29:11 -0700 (PDT)
+        Thu, 12 May 2022 13:31:47 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035B053B57
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:31:46 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id r17so4005033iln.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 May 2022 10:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zDtS3yYiac007Tq16HyIgANNZvP5Mc1ckKft1G2x8rg=;
-        b=EPpUcNHxPhcz5hSlEDa9z2K9TJYgjabImG/SE7YzphxDkTSDjkI1Pf5lkLWuydHVej
-         wsSCiVndDr8Plm/gSezwdepsxOasS14AAI9UWHmmtS5jOLIAloeKoY7kRmZ9xSSbIcpS
-         8JwVd6YQV++q6V1FMWiX/WVZApJueKMCvqceI=
+        bh=Jy6c2iz4pBZ4h+6A8F5x31O1bbz13zfB7+MvdwkltFQ=;
+        b=V5E2LbmUQEz+VqDpvO+TqhyA1VCGZZb3ILk4eW9F+NnQyIENOHalX+haeb7RBvqORn
+         jBh4SYWNLX6kNf7FdM/WCCwrR6Pefkq6GfBB1ON1K7lYr1k0jaN1QnNC4B3I1FZqj1Nz
+         A4Uhq6rzpkVVaHd2yzKh7gJ6MjwdWl3o6sNAk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zDtS3yYiac007Tq16HyIgANNZvP5Mc1ckKft1G2x8rg=;
-        b=G7N1sDmHV4YuxJ/6LEYDKAu10ic3zLq6QkVwZRutM57aVSNhr6/ons6UycUQAdMDqH
-         KLUOz0ZfFfLkcTnJJ2aFhtiK91pW82a9zOGJFbO4aJKe8qLopT5LVJv8yW2+bGiitdGB
-         G82S1SIF91cNOTIJXwSxJfaTbYq+oNlECrn8x4bkEtaS4UvKkrbe0dFQyXQ9bFaJ5nWR
-         pDDI07OlyKGCNXAlCW62QFz2D7koeDqdmEX7mVAlRmXPRTr5bdt+XKy4x4OikoNHnbFe
-         h8ZI2tdTJ6d6knj8VIbuVvfIQXKc/hm3hk0HMh9mI7K9aS0uuydsYdGGwxl8JYuZfrf+
-         iC5A==
-X-Gm-Message-State: AOAM530KruvDexOYcZfiL7pxlAnTk105x2lZo7CoVOnYbEXN5MQCRlWt
-        US0LBM28+SK2zSM1lnG21U/pZg==
-X-Google-Smtp-Source: ABdhPJzNqYZrxIKI/q6d8RU/W/ess9UcRpvgdtRDWknB3E49FiDZ0BiBVcE5y2GGk30KSYjHpi61zw==
-X-Received: by 2002:a05:6638:d01:b0:32b:b9f8:38c4 with SMTP id q1-20020a0566380d0100b0032bb9f838c4mr578797jaj.236.1652376550541;
-        Thu, 12 May 2022 10:29:10 -0700 (PDT)
+        bh=Jy6c2iz4pBZ4h+6A8F5x31O1bbz13zfB7+MvdwkltFQ=;
+        b=hIp7jYnsrWUmsQh3GgOzEjg5d07RxooyInFtjeiyuQwhlxuHMpJs3XMMcNg7b249II
+         FGtkxZ29ULFHUyIgRpcksqBXhXRcTSb91n3xAziWf4Vd+Cxc2XuiucMPuEzsZ0K0deJb
+         FSFvhvWMHtHJAm/bqCBqAEpqxv1RV3KCX3mZqUCkxx+qh5sdWHQpNYZVWokGZ29VXVSl
+         Uwc3FNEyx34mlDk7T8JaPZkPyYtWLd4P9OHCDYLfR/jViZqNeTHXBhbbizMdjoiEGj7g
+         C/99jRchCsP/MxJcVvZExy0bxYuA4u7hFlnqSuYhDNyZUbRCj/stdjeI5gxQJ+mQxIdR
+         Wgyg==
+X-Gm-Message-State: AOAM530f8yU3KGZKg3Duhze4k8Z46RRR9bGmbjNCBH2mEzfUKhyclwdl
+        GIM035BDvk49OGnBdFEQgbPXDg==
+X-Google-Smtp-Source: ABdhPJxagzDS7W1MRsPhk0moVV2S6eg7NnFxnir3mVlj6mKNutZJdJBAswwbztf/bIkYcGF3exjiug==
+X-Received: by 2002:a05:6e02:1a44:b0:2cf:d085:949a with SMTP id u4-20020a056e021a4400b002cfd085949amr571164ilv.131.1652376705348;
+        Thu, 12 May 2022 10:31:45 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p14-20020a056e0206ce00b002cde6e352ebsm7245ils.53.2022.05.12.10.29.09
+        by smtp.gmail.com with ESMTPSA id x8-20020a056638034800b0032bee2b5acasm20650jap.165.2022.05.12.10.31.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 10:29:10 -0700 (PDT)
-Subject: Re: [RFC V2 PATCH 2/8] selftests: kvm: Add a basic selftest to test
- private memory
+        Thu, 12 May 2022 10:31:44 -0700 (PDT)
+Subject: Re: [RFC V2 PATCH 1/8] selftests: kvm: Fix inline assembly for
+ hypercall
 To:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -67,21 +67,21 @@ Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
         pgonda@google.com, nikunj@amd.com, seanjc@google.com,
         diviness@google.com, Shuah Khan <skhan@linuxfoundation.org>
 References: <20220511000811.384766-1-vannapurve@google.com>
- <20220511000811.384766-3-vannapurve@google.com>
+ <20220511000811.384766-2-vannapurve@google.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7245d147-6e0e-8df2-be8e-549b3216e576@linuxfoundation.org>
-Date:   Thu, 12 May 2022 11:29:08 -0600
+Message-ID: <506a2e59-eea5-8c1e-ee1b-fbb7a401bd8d@linuxfoundation.org>
+Date:   Thu, 12 May 2022 11:31:43 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220511000811.384766-3-vannapurve@google.com>
+In-Reply-To: <20220511000811.384766-2-vannapurve@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,32 +89,35 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 5/10/22 6:08 PM, Vishal Annapurve wrote:
-> Add KVM selftest to access private memory privately
-> from the guest to test that memory updates from guest
-> and userspace vmm don't affect each other.
+> Fix inline assembly for hypercall to explicitly set
+> eax with hypercall number to allow the implementation
+> to work even in cases where compiler would inline the
+> function.
 > 
+
+Please explain what happens without this change as well.
+
 > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 > ---
->   tools/testing/selftests/kvm/Makefile          |   1 +
->   tools/testing/selftests/kvm/priv_memfd_test.c | 283 ++++++++++++++++++
->   2 files changed, 284 insertions(+)
->   create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
+>   tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 21c2dbd21a81..f2f9a8546c66 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -97,6 +97,7 @@ TEST_GEN_PROGS_x86_64 += max_guest_memory_test
->   TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
->   TEST_GEN_PROGS_x86_64 += memslot_perf_test
->   TEST_GEN_PROGS_x86_64 += rseq_test
-> +TEST_GEN_PROGS_x86_64 += priv_memfd_test
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 9f000dfb5594..4d88e1a553bf 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1461,7 +1461,7 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+>   
+>   	asm volatile("vmcall"
+>   		     : "=a"(r)
+> -		     : "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+>   	return r;
+>   }
+>   
+> 
 
-Add this new exexcutable to .gitignore - Also make sure if there any
-error paths that should return skip and not fail in case of unmet
-dependencies.
-
-Looks good otherwise.
+With the above change to commit log:
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
