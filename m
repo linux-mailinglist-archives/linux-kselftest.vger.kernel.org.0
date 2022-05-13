@@ -2,117 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4664D5269E5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 May 2022 21:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB345269E8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 May 2022 21:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383546AbiEMTJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 May 2022 15:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S1383579AbiEMTJm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 May 2022 15:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbiEMTJ1 (ORCPT
+        with ESMTP id S1383574AbiEMTJk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 May 2022 15:09:27 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B717F3B553
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 12:09:25 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id i10so16030570lfg.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 12:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rbJzGXtyUp4FkqReU6sYBiDMNKWwFopa4KLMlmGZbuA=;
-        b=GJx1FC6PGj6rP204JhO+MVJD1p9S4B+WG3Wu3TnyVIi0CzstjPqeEwc9SpcYJe1l2R
-         TXfW9mAAliWx/XxYsTGa4JGZi1ldNXUsBVx/1fAKAjk52jHYQR53XvuCTMBvBpn6MgRR
-         nvpW/IRmtZIRvLyMS+gjblxH1h5ebwHsII+gRQJhlnTz2JmCdju6VXzbxiZrzjAU0G8S
-         qEZAkEjFjZm5uCyVG1A9FYdpEJXEIggJw4e8FDvUWWObJAj2ttke1r3VSENsFthwAaHE
-         UD/Jt3UM0xd083pDPRmEB5Y8Wcl8Crk4Yp0PFs+XzKdG15jB7LAq0MZO7OESoHhu2wHG
-         Klkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rbJzGXtyUp4FkqReU6sYBiDMNKWwFopa4KLMlmGZbuA=;
-        b=HGYqvnA+q0on47Ovg3RyRYHGnG44aDr2BWp1iS5bqcvkIXjiW9dG2DF2AW/hIk7qwu
-         DIs0IGCTIdi/USk7mLWVA07fskbtTtGzElz3NDBKwsGzTxPeavmfg35enAJ2cVnRaQdG
-         Ck/LBsjgD9xtJDkCV0q55OeP8yWGquHrcUArB8wobmOCLlSyEie+/CatHzwL2v3296+m
-         qz3X+gJ9rFgbN8HlYMivsPenfsxM4jx83vNTTbKa8nKXeKi/fu8mAdsfM+F/l3o46cEq
-         qEsz0+2aJqIOXGG6RawGsGL9tlHDVz10hUQhMxHAPKs2n1rPL+5NQ6xxoZhMKMgKAwLf
-         7exQ==
-X-Gm-Message-State: AOAM5328Xrke8O2aQZJQxsrxTxxmoeafVZeRKI3oEqkbeqWhweUcGEKe
-        cP2q4FOXDf5i0nHu8aLloLKzHhOXJgwdj7NYJP6ksQ==
-X-Google-Smtp-Source: ABdhPJw2v+78PG9kRlrr2N0DSVUm9/qtjQv8JgVoDVhvaTi3qjv3ZFLpx/pOXFQCTgDrEl1P0PwYOBSHt4h+KgElKzY=
-X-Received: by 2002:a05:6512:104a:b0:473:d38b:cdf with SMTP id
- c10-20020a056512104a00b00473d38b0cdfmr4633370lfb.554.1652468963837; Fri, 13
- May 2022 12:09:23 -0700 (PDT)
+        Fri, 13 May 2022 15:09:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C98363BBF9
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 12:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652468977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=g2ByD6HON5FpzuaYZbt0zPasNhNKA4nJl1y1oOF2k0Q=;
+        b=JtqRStM6zY+pnF9jxhXYemAeimXeuvD7HeDi2t4qiBTZgmd5mjWhxBD1XbbEYuAQXu3OlW
+        YTf4K8PN4aNHynC9qDAQ2yEOztDSEdSvBz7+5NZe9cEghEyMdL/eZE2tBGhwXw2isXjBL0
+        7wO29c7rt6TVvUBBb/PDk7Hej2cfkHo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-360-4FyVxrVrNKuZWrNOyJ2djQ-1; Fri, 13 May 2022 15:09:36 -0400
+X-MC-Unique: 4FyVxrVrNKuZWrNOyJ2djQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0523680B71A;
+        Fri, 13 May 2022 19:09:36 +0000 (UTC)
+Received: from llong.com (unknown [10.22.11.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A28AF407E1C0;
+        Fri, 13 May 2022 19:09:35 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Phil Auld <pauld@redhat.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] kseltest/cgroup: Make test_stress.sh work if run interactively
+Date:   Fri, 13 May 2022 15:09:28 -0400
+Message-Id: <20220513190928.676841-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
-In-Reply-To: <20220513083212.3537869-2-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 13 May 2022 12:08:46 -0700
-Message-ID: <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 13, 2022 at 1:32 AM David Gow <davidgow@google.com> wrote:
->
-> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
-> Due to KUnit tests not being intended to run on production systems, and
-> potentially causing problems (or security issues like leaking kernel
-> addresses), the kernel's state should not be considered safe for
-> production use after KUnit tests are run.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+Commit 54de76c01239 ("kselftest/cgroup: fix test_stress.sh to use OUTPUT
+dir") changes the test_core command path from . to $OUTPUT. However,
+variable OUTPUT may not be defined if the command is run interactively.
+Fix that by using ${OUTPUT:-.} to cover both cases.
 
-Tested-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ tools/testing/selftests/cgroup/test_stress.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looks good to me.
+diff --git a/tools/testing/selftests/cgroup/test_stress.sh b/tools/testing/selftests/cgroup/test_stress.sh
+index 109c044f715f..3c9c4554d5f6 100755
+--- a/tools/testing/selftests/cgroup/test_stress.sh
++++ b/tools/testing/selftests/cgroup/test_stress.sh
+@@ -1,4 +1,4 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-./with_stress.sh -s subsys -s fork ${OUTPUT}/test_core
++./with_stress.sh -s subsys -s fork ${OUTPUT:-.}/test_core
+-- 
+2.27.0
 
-There's an edge case where we might have 0 suites or 0 tests and we
-still taint the kernel, but I don't think we need to deal with that.
-At the start of kunit_run_tests() is the cleanest place to do this.
-
-I wasn't quite sure where this applied, but I manually applied the changes here.
-Without this patch, this command exits fine:
-$ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
-
-With it, I get
-[12:03:31] Kernel panic - not syncing: panic_on_taint set ...
-[12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
-5.17.0-00001-gea9ee5e7aed8-dirty #60
-
-I'm a bit surprised that it prints 'G' and not 'N', but this does seem
-to be the right mask
-$ python3 -c 'print(hex(1<<18))'
-0x40000
-and it only takes effect when this patch is applied.
-I'll chalk that up to my ignorance of how taint works.
