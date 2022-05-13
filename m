@@ -2,148 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EEE5266D1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 May 2022 18:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5CD5266F5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 May 2022 18:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381756AbiEMQO0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 May 2022 12:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        id S1379849AbiEMQZ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 May 2022 12:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381684AbiEMQNg (ORCPT
+        with ESMTP id S1358848AbiEMQZ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 May 2022 12:13:36 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9534552F;
-        Fri, 13 May 2022 09:13:27 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id i17so8371184pla.10;
-        Fri, 13 May 2022 09:13:27 -0700 (PDT)
+        Fri, 13 May 2022 12:25:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612D48E199
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 09:25:26 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id d6so10590649ede.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 09:25:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n4Ua5qSAHgvrptVTXpgV4jY28Fp/1ApPJcGYkkazweE=;
-        b=dh+CcTt4AjCORsqV1ZODlBqFq+OvMka9auOOZykOuG9GwHD05RDvn63lEcsItiN2eH
-         nH+MkFBQ8v1tdeWUMN4BRvaW+7Q1uwmQiOctS5wPsQLKRk5Ykt9si+fUFSf6n/at1dmY
-         4JOHexwRERxmPXQVd5EWv4mWhFA3BXiW4pCX0ZdVzHtYoUWHmurH8uIA0uBpYInyofFZ
-         pNEuW8xEgDqjAmuzWH27jn+y85YMNek74F2xgDatREWDoXEvBkL4SnO/axBiM7vQgUS4
-         gbWP9yrJI2fCACw+ngKTCewWFxR85tswkrdeT3TpOZ3UiGjOL9rgao5yscsrH/9y3/bl
-         VBAw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wYIE3zQpUPgi6v7iFVdQ2/TvPUcauYhfaGvlN50Rhro=;
+        b=iY1k9LtTjSRyhsBlrL/e+liP2aDYDcihjvvw+2UVcBUKOAKoTwNzi39/GXjBIzyfbm
+         6S8rz21bB1xCh/5l10W4z6UeRBLwWakJKIrJ03lk0GtkOzUB4z3uPPp2MOcb83RDD/qE
+         Ilh0kPea9v0B4O5FFuR2RJfdum3iphLZWot1+oBUVpbD4y8ZLpPFYv+ukyRz2dSMnFHn
+         KTfKVA7MLp5K8i2CEYGAmI80pggKs19ZvlcgHZu2+C4I1QtKcPNO/XAyqjFzft3hj0/G
+         AFIXfqilaYIUzXH2z1+p/dm8czDIW5QbTUjjCVwGg0DGp3fyQGtV5HC47X3lpsKW4eZ/
+         pUdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=n4Ua5qSAHgvrptVTXpgV4jY28Fp/1ApPJcGYkkazweE=;
-        b=QcsytHXlMbPTEHIYFvpnQDkGksrZ4wabpvWRsXAT2RgqsbxfmSlmSamGthRC9S/PDz
-         mmgpmAjPFz0JpDvkg9BuABJxKgKuE+l8IRaLRUCj5oFqtZLe9P9za9AJHpAr/V4Oyg3E
-         BAm2ptrGTLLFB+n/+yg4VwWeVYZfh1Uf74vSWF+Z+PW77xIVD75tk2waNk8AzGckea6L
-         hEP3Z7sIw4rRwf5ye22GhKy7ssQsCLvVJwjDZfSIBBx9QjO2pQShpv7pxWsLR9Jwq3fQ
-         gQeD7UFwkGxsGjk4bQtspjwrLp6IxFViZGlY/wNSj/e7qdM0+ssS7W31NHvUrKu+yHRv
-         qSqg==
-X-Gm-Message-State: AOAM531ktAfLKnLfVG9t7Q1On4bEYj0w7wx0itA1fhgeHk86GyWO5S4E
-        3awW5GrZ/SEDAKBVvooj4g8=
-X-Google-Smtp-Source: ABdhPJx/E0j2BSOqlsmETv4JaHt8kQAXKtx8000l3ywPW9tmB75Cv/mYY002CdT2AqHaPSsO5Oy1mQ==
-X-Received: by 2002:a17:90b:17c4:b0:1de:c92c:ad91 with SMTP id me4-20020a17090b17c400b001dec92cad91mr5642606pjb.169.1652458407026;
-        Fri, 13 May 2022 09:13:27 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:5607])
-        by smtp.gmail.com with ESMTPSA id ip14-20020a17090b314e00b001d81a30c437sm1796573pjb.50.2022.05.13.09.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 09:13:26 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 13 May 2022 06:13:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        John Stultz <jstultz@google.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
-Message-ID: <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
-References: <20220510235653.933868-1-tjmercier@google.com>
- <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
- <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
- <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
- <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wYIE3zQpUPgi6v7iFVdQ2/TvPUcauYhfaGvlN50Rhro=;
+        b=ivBnD50jBpKfDXTuHn3n6BfSguNuqNfCIIdfiHIilrwAyxuo6Qdtr3YykdBOHTMPPI
+         WvjDn9EWYhsVYPe/cKJ4quQRBnMOrXOFXN3xpaO6RrfuGTlVstoWDmkbeF4ar+/qdiKL
+         wE8UglkQbSGcrdAy+G7zMKHu9hLRJDfEgVwIYh1PbTX9LcIdsBW6J8OzhnYtr3ydgYUB
+         M1kfa9Zgc6YKldkWai8GClPG1rmESFfyqPvHAWdOi2ClIRmeAolXX7QxeYheXsqhon8X
+         6MoP89JcYAUgO6k1XXc0Wg6534A9wS1F1SvR/+f7uoQdG5kjonVcAGd8X5/G2IghBZhg
+         0NlQ==
+X-Gm-Message-State: AOAM530gfsdwmhxlyRncna1k0GmtpsyMFrlB6jbnUo9Du4+OEIGXE7Ee
+        CRJaA8LghZTmTyHbDXbqgYz7bTkIyuNIbt1uzcTtiw==
+X-Google-Smtp-Source: ABdhPJxcalzPWuWqmf11ZGrcsZTJjFfxrs2j0NUMCf2o8rzmJ3qPfEI4lFkfRh12epJW9zvfRqKiQGKH6kkzvjJydzQ=
+X-Received: by 2002:a05:6402:28b6:b0:425:e137:e31a with SMTP id
+ eg54-20020a05640228b600b00425e137e31amr41336129edb.215.1652459124752; Fri, 13
+ May 2022 09:25:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220502192327.81153-1-dlatypov@google.com> <87ilqa6sjo.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87ilqa6sjo.fsf@mpe.ellerman.id.au>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 13 May 2022 09:25:13 -0700
+Message-ID: <CAGS_qxq=O_npmyKHMSS_erzbh8O9TojCVYxyf7muEJaHOfDBjg@mail.gmail.com>
+Subject: Re: [PATCH] lib/atomic64_test.c: convert to use KUnit
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
-
-On Thu, May 12, 2022 at 08:43:52PM -0700, T.J. Mercier wrote:
-> > I'm actually happy I've asked this question, wasn't silly after all. I think the
-> > problem here is a naming issue. What you really are monitor is "video memory",
-> > which consist of a memory segment allocated to store data used to render images
-> > (its not always images of course, GPU an VPU have specialized buffers for their
-> > purpose).
+On Thu, May 12, 2022 at 8:06 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Daniel Latypov <dlatypov@google.com> writes:
+> > The test currently is a bunch of checks (implemented using BUG_ON())
+> > that can be built into the kernel or as a module.
 > >
-> > Whether this should be split between what is used specifically by the GPU
-> > drivers, the display drivers, the VPU (CODEC and pre/post-processor) or camera
-> > drivers is something that should be discussed. But in the current approach, you
-> > really meant Video memory as a superset of the above. Personally, I think
-> > generically (to de-Andronized your work), en-globing all video memory is
-> > sufficient. What I fail to understand is how you will manage to distinguished
-> > DMABuf Heap allocation (which are used outside of Android btw), from Video
-> > allocation or other type of usage. I'm sure non-video usage will exist in the
-> > future (think of machine learning, compute, other high bandwidth streaming
-> > thingy ...)
+> > Convert it to a KUnit test, which can also run in both modes.
+> > From a user's perspective, this change adds a CONFIG_KUNIT=y dep and
+> > changes the output format of the test [1]. The test itself is the same.
+> ...
+>
+> I don't know why I got Cc'ed on this :), but I gave it a quick test anyway.
+>
+> Seems to work fine on a Power9.
+> I also flipped some of the conditionals to make sure failure is detected
+> correctly.
+>
+> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+Thanks!
+
+You were just the last person to have made a real change to this file [1].
+The people signing off no commits seemed inconsistent and
+get_maintainers didn't give anything back.
+
+commit ffba19ccae8d98beb0a17345a0b1ee9e415b23b8
+Author: Michael Ellerman <mpe@ellerman.id.au>
+Date:   Fri Jul 14 14:49:41 2017 -0700
+
+>
+>
+> > Meta:
+> > 1. this patch applies on top of the kunit branch,
+> > https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
 > >
-> Ok thank you for pointing out the naming issue. The naming is a
-> consequence of the initial use case, but I guess it's too specific.
-> What I want out of this change is that android can track dmabufs that
-> come out of heaps, and drm can track gpu memory. But other drivers
-> could track different resources under different names. Imagine this
-> were called a buffer cgroup controller instead of a GPU cgroup
-> controller. Then the use component ("video memory") isn't tied up with
-> the name of the controller, but it's up to the name of the bucket the
-> resource is tracked under. I think this meets the needs of the two use
-> cases I'm aware of now, while leaving the door open to other future
-> needs. Really the controller is just enabling abstract named buckets
-> for tracking and eventually limiting a type of resource.
+> > 2. checkpatch complains about aligning with parens, but it wants me to
+> > indent the `#ifdef CONFIG_X86_64` which seems inappropriate in context.
+> >
+> > 3. this file doesn't seem to have a clear maintainer, so I assume this
+> > conversion is fine to go through the kunit branch.
+>
+> I think you want to at least Cc the atomic folks:
+>
+> ATOMIC INFRASTRUCTURE
+> M:      Will Deacon <will@kernel.org>
+> M:      Peter Zijlstra <peterz@infradead.org>
+> R:      Boqun Feng <boqun.feng@gmail.com>
+> R:      Mark Rutland <mark.rutland@arm.com>
+> L:      linux-kernel@vger.kernel.org
+> S:      Maintained
 
-So, there hasn't been whole lot of discussion w/ other GPU folks and what
-comes up still seems to indicate that we're still long way away from having
-a meaningful gpu controller. For your use case, would it make sense to just
-add dmabuf as a key to the misc controller? I'm not sure it makes sense to
-push "gpu controller" forward if there's no conceptual consensus around what
-resources are.
+Ah, thanks for the pointer.
 
-Thanks.
+I'll see if I can add
+  F:      lib/atomic64_test.c
+to that entry so this files owners get tracked properly.
 
--- 
-tejun
+Daniel
