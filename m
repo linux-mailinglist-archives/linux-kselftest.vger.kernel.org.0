@@ -2,149 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F96E526EC6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 May 2022 09:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CF1526FFF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 May 2022 10:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiENDEq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 May 2022 23:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S230045AbiENI0e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 14 May 2022 04:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiENDEo (ORCPT
+        with ESMTP id S230042AbiENI03 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 May 2022 23:04:44 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB78EBE92
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 20:04:40 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so5646229wmn.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 May 2022 20:04:40 -0700 (PDT)
+        Sat, 14 May 2022 04:26:29 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F5121A
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 May 2022 01:26:26 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k30so1388255wrd.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 May 2022 01:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UoAT8pjpOFcRyIaX+ZhbsdRFzNEAyY56dcHcgCnxySo=;
-        b=edjiyqrDP2iLrGQci5HqJboHVDFmTJ/F0cVt2hEhqmcmZ1Bk3naqPevsH50aZD4bgL
-         uBgAhlV9Rj0RBJ56NenEvJKuGc6772MbvBrXXNbzVOP+EC1sBTEu+10lN8/8axj7fG1N
-         vk97VTRaDsfr5aMeV0pBT5JNUKtnKH5L6QaFyXYcbvuHq5NHIerSyN4yyEtubLhbHgUj
-         IIBX/JBXVmbeHvA8pLO/5tUmzYZ2pkRoQwfskzITXr4dHOmkfxhcL42inxRIGVbqhEe7
-         iQc1vYNPhvt+x0PWly/ZBGnxlxc2VJ/wpp56ADg9gnyrloSquEsApgEvgYEUFNnORcv/
-         Ll4g==
+        bh=fGSNjX7FWQgS0zAf5uzD98exN773UqLJMyTQST6/uq8=;
+        b=kr+ZoQoZymx9R0c+QUc/iRMK7yM5RJMiYBaDp29vkbzqN7JsQvW7P8dRIHD0OC0Sgb
+         9h/gegiLUJbI2vnd3FLgX/zT8QIDEDZvJUA5QItCnKwonX2DhnCre7aNN6WHzCDzmyt9
+         I43ecBElIP+jlg58xhiDXPtcOBYbhytGBFnZvjsNIMRdASSJKRAZTUQGh0isW83j8WGg
+         Sgo3kHAinNsrc10w18UGp+2+V3MWOlL6bdQIvB21UOUXeuHPZi5B9FJke2Ga09IJAWOf
+         idRiJm/YgtYOTc9+JCdRb0RTl+6EiIAhcysqwgchztbk2NwBxnCWA8lFPS2WLVfqKrqn
+         2JqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UoAT8pjpOFcRyIaX+ZhbsdRFzNEAyY56dcHcgCnxySo=;
-        b=FkenJOZPhYweQUWKESy25Mayhral9zF7NQHJA/G2pG/BgS3k31lpkYguW06YdJ4Dh5
-         LdjXaS7rBfVkWZwBJ3IQlS7dMm5v5MssTITwTMDAEheI/ScNiwUuhfAHuR1PzhBPtLfK
-         P9lkrfzofZtymePkfFQ4i3fOVHtLztMUHoo4pHgVrIfhGPQmjWT5uR5F9gCv9CTenrtX
-         +6Vi+XIZkw+0TIiPNLGd5Z0MQH9eq5UFBsi8X50pdSfiy/QJUXac631PAIBMjzY2gNqj
-         7SaANJ/YcNRRyD8Sf+d0nwgsQs3POJlfv1W/TIbQQHJgmMHXuK/iJjgmUmrrDzy2sSxr
-         P7Kg==
-X-Gm-Message-State: AOAM531TiqA0s/TkInJ4FaVdn2xHJsBO37qSaXt1XbXjeXcbeAaCgzlY
-        POT77G051NheZmmEkMm1jUm+JEtYC629rw16gecLYg==
-X-Google-Smtp-Source: ABdhPJyqMTuCvPq2xupVijryWNy90M9KW5CbLPjYdKU/0lgqe+OXIfvdq3TgEH84h6n59TOZr0qbmIWNpw3XU3CMz+w=
-X-Received: by 2002:a05:600c:264e:b0:394:2c56:eeb5 with SMTP id
- 14-20020a05600c264e00b003942c56eeb5mr7208280wmy.6.1652497479045; Fri, 13 May
- 2022 20:04:39 -0700 (PDT)
+        bh=fGSNjX7FWQgS0zAf5uzD98exN773UqLJMyTQST6/uq8=;
+        b=l1BfNWP8btA1aah/Z2KrgrCfuk6kd/mpMQRu45Fg6o9ltAjU4CP+hkOWBG7ZavCY1Z
+         k09U9T8FVnvKKXL5QmOORxD1KiR3m0Q8tf7ybgNoM8X+y6Z0Tc/uRdZWe60CcyQoVF9A
+         Dng/oStsOE31+j06KK0kfl7BUtUoyAVWtI4+w079ULNtJA6ZJNHgYbZ3mVJVxjU+ECUm
+         /WhMX0+sOG9scre60hTZef8kiGtbi2TYKvTuOiF7PVBbn01pIGKFNfUXK2YgwW5RwlBH
+         sIoeWKIlO46UqTRimWjv9VL2DAAVpPxY6Z3ZDs401TifffqPdBUtMXxYEtsbOs042qZS
+         24Iw==
+X-Gm-Message-State: AOAM531CBDFznS6gl507Nb0mCrIz/nU/FwB6JZc6ag6dbx+OfncgFY3Z
+        c+ggjpgek/SAKWPmqEe/1mtjFvOWEJ+8FZiDypyJtQ==
+X-Google-Smtp-Source: ABdhPJxd2yAOrMDx1kyKIycTBHNDuUPoF3izxQpqfG9Ebu0UFmB15wKbKgzL/O8DbbD6u5O1U1bgna6lzZ1eJnpLVQs=
+X-Received: by 2002:a5d:6651:0:b0:20a:df2f:8027 with SMTP id
+ f17-20020a5d6651000000b0020adf2f8027mr6968835wrw.269.1652516785016; Sat, 14
+ May 2022 01:26:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
- <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
-In-Reply-To: <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
+References: <bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com>
+ <5ca35c47-6145-4ec1-6c05-3c46f436cb4d@gmail.com> <CAGS_qxpE9qGsS1LqaobVGFKFgV6TwvwNLR4e9PG5zsfPACSf_Q@mail.gmail.com>
+ <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
+In-Reply-To: <5b2783a2-76bf-ce6f-89b1-d0fe05b80b82@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 14 May 2022 11:04:27 +0800
-Message-ID: <CABVgOS=gTznLFBTZbmNH7AFDnr7O70mWR9v4q6sDA7q04fKT=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
+Date:   Sat, 14 May 2022 16:26:13 +0800
+Message-ID: <CABVgOS=XcaheGrJ+n2DPUuE=MrJwDn5UWYcdQmfhZfHx2MDazg@mail.gmail.com>
+Subject: Re: [RFC] KTAP spec v2: prefix to KTAP data
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        kernelci@groups.io, KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 14, 2022 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, May 13, 2022 at 1:26 AM Frank Rowand <frowand.list@gmail.com> wrote:
 >
-> On Fri, May 13, 2022 at 1:32 AM David Gow <davidgow@google.com> wrote:
+> On 5/12/22 10:25, Daniel Latypov wrote:
+> > On Wed, May 11, 2022 at 11:01 PM Frank Rowand <frowand.list@gmail.com> wrote:
+> >> ================================================================================
+> >> #### discussion notes:
+> >>
+> >> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> >> PRO: minimally invasive to specification.
+> >>
+> >> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+> >> CON:
+> >>
+> >> KTAP does not include any mechanism to describe the value of <prefix string>
+> >> to test harnesses and test output processing programs.  The test output
+> >> processing programs must infer the value of <prefix string> by detecting
+> >> the <prefix string> in the "Version lines".
+> >>
+> >> The detection of a "Version lines" might be a match of the regex:
+> >>
+> >>    "^.*KTAP version 2$"
+> >>
+> >> This risks falsely detecting a "Version lines", but the risk is small???
 > >
-> > Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
-> > Due to KUnit tests not being intended to run on production systems, and
-> > potentially causing problems (or security issues like leaking kernel
-> > addresses), the kernel's state should not be considered safe for
-> > production use after KUnit tests are run.
+> > Agree this is a risk and also think it's probably small, but it's hard to say.
+> > I think the $ anchoring the regex is probably safe enough.
 > >
-> > Signed-off-by: David Gow <davidgow@google.com>
+> > As noted earlier, this tracks with what kunit.py already does.
+> > That was necessitated by dynamic prefixes such as timestamps, etc.f
 >
-> Tested-by: Daniel Latypov <dlatypov@google.com>
+> That is a good observation.  I nearly always have the prefix timestamp
+> on my console output, and thus remove the timestamp with a regex when
+> processing the data.
 >
-> Looks good to me.
+
+Yeah: the use of a prefix length for timestamps (and similar 'dynamic
+prefixes') works really well as a way to automatically find KTAP
+output in the kernel log.
+It's definitely less useful as a way of disambiguating several
+(potentially interleaved) KTAP streams, though.
+
+Personally, my conception of KTAP is that the prefix is not a part of
+the format, but a way (possibly one we should recommend in the spec)
+to isolate KTAP output from (e.g.) the kernel log.
+So, in theory, the processing pipeline for log -> result is:
+[dmesg] ---<remove prefix>--> [KTAP] ---<parse>---> [results]
+
+I wouldn't object to having the prefix be a part of KTAP if it were
+particularly useful to anyone, though, and definitely agree we should
+note ways to do it.
+
+Either way, we do end up with two (slightly conflicting) uses of prefixes:
+a) To isolate tests from a log.
+b) To allow multiple concurrent tests.
+
+For a), Alternative 1 seems obviously correct to me, since whatever
+module is being used might not know what random prefixes are being
+added to its log lines.
+For b), either would work, but we do potentially get conflicts with a)
+if we're trying to do both. So maybe alternative 2 makes sense for
+that.
+
 >
-> There's an edge case where we might have 0 suites or 0 tests and we
-> still taint the kernel, but I don't think we need to deal with that.
-> At the start of kunit_run_tests() is the cleanest place to do this.
+> > So I think this is probably a fine risk to take.
+> >
+> > I imagine we could add constraints of prefix string, e.g. must have []
+> > around it, etc. if we want to try and minimize this risk.
+> > But I don't know if it's necessarily worth it, given what we know right now.
+> >
+> > Along those lines, I think I like this approach (Alternative 1) more
+> > than Alternative 2/2b.
 
-Hmm... thinking about it, I think it might be worth not tainting if 0
-suites run, but tainting if 0 tests run.
+I agree, though note that we might need both if we want two separate
+types of prefix as mentioned above.
 
-If we taint even if there are no suites present, that'll make things
-awkward for the "build KUnit in, but not any tests" case: the kernel
-would be tainted regardless. Given Android might be having the KUnit
-execution stuff built-in (but using modules for tests), it's probably
-worth not tainting there. (Though I think they have a separate way of
-disabling KUnit as well, so it's probably not a complete
-deal-breaker).
+> > I'm not sure we need a structured way to specify metadata in KTAP yet?
+> > The prefix seems like a reasonable candidate, but do others have ideas
+> > of other bits of metadata we'd want to be able to declare?
+> >
 
-The case of having suites but no tests should still taint the kernel,
-as suite_init functions could still run.
+That's the important takeaway from Alternative 2: some generic way of
+having metadata could be quite handy. (Of them, Alternative 2b feels a
+little more like a hack than I'd prefer, albeit a clever one. I'd
+prefer a cleaner "configuration info line" personally, though if
+reusing the test results for test 0 makes parsing significantly easier
+for others, it may nevertheless be worth doing.)
 
-Assuming that seems sensible, I'll send out a v4 with that changed.
+As for other pieces of metadata, there are all sorts of useful
+information about the test which could be useful to store alongside
+the results (what tool generated it, kernel version, etc), though
+those might be more useful when saving results elsewhere than embedded
+into the kernel output.
 
-> I wasn't quite sure where this applied, but I manually applied the changes here.
-> Without this patch, this command exits fine:
-> $ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
->
-> With it, I get
-> [12:03:31] Kernel panic - not syncing: panic_on_taint set ...
-> [12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
+Equally, if we extended these configuration/info lines to individual
+test/subtests, things like test size, originating module, etc could
+potentially be stored. Suite/test init functions could potentially add
+useful metadata, too (e.g., number of cores/threads for kcsan, etc).
 
-This is showing both 'G' and 'N' ('G' being the character for GPL --
-i.e. the kernel is not tainted by proprietary modules: 'P').
-
-Jani did suggest a better way of printing these in the v1 discussion
-(printing the actual names of taints present), which I might do in a
-follow-up.
-
-> 5.17.0-00001-gea9ee5e7aed8-dirty #60
->
-> I'm a bit surprised that it prints 'G' and not 'N', but this does seem
-> to be the right mask
-> $ python3 -c 'print(hex(1<<18))'
-> 0x40000
-> and it only takes effect when this patch is applied.
-> I'll chalk that up to my ignorance of how taint works.
+None of those are, I think, quite compelling enough individually to
+add a config system, though. If we already had one for the prefix, and
+other things which are necessary for parsing, maybe...
 
 -- David
