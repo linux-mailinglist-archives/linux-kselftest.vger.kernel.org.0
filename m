@@ -2,168 +2,315 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D633A5273B7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 May 2022 21:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3EB527604
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 May 2022 08:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234879AbiENTZl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 14 May 2022 15:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        id S234879AbiEOGbh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 May 2022 02:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbiENTZk (ORCPT
+        with ESMTP id S229901AbiEOGbh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 14 May 2022 15:25:40 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D197D3585D
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 May 2022 12:25:37 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ch13so21822447ejb.12
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 May 2022 12:25:37 -0700 (PDT)
+        Sun, 15 May 2022 02:31:37 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E63B6256;
+        Sat, 14 May 2022 23:31:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 137so11272550pgb.5;
+        Sat, 14 May 2022 23:31:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ODXxWmmCbDSJu9NbGvrzBEWYJrCam31kj3DAUIrULPw=;
-        b=fydf+4K2rqGXwV3YKkzV4MrpkLE5d7dWboE2/FY3razdRSAu9OymabboDHlXrq3En1
-         CKVAYd3Ge1g3CpmRjUTOyPrsGFCnR5uRzZM0s7UxpYrN5r+5syrchhLVkCq7ULNUXiFh
-         +SpuwS9z6aRBLkqL/gh8bEA2aPSuf1GoXtcoezfrIt81w00+SWcuNjSY4wVPLW+aJpI1
-         01/wqHa7zwDei+3LiIfINf7awqSMIFL5rgfkTks2tXIywZeimnBDmXTnh74sonfBcu1O
-         dndLK8JkKX5yjd9ZHhIEpoQLGBlRp/l/raGZ+/ZkizKdTiT1EiMLAJEmxzk338hn/09o
-         MxTg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mq5z7L0nka28G5WQMErNElXNP4BU7U7qW4P3u/glHjA=;
+        b=PyyIXI09nSD7Pe9xseOuYKNsfvFoHBh6zSkdIpTKnquu3/Rm5AG5cOnZae5mwbo3eF
+         +nkEAr/LTXzYGrKDVdVGJxP97uBSVkPeOmA0yktBIr3BLGH1JLgyOATfjegN56g1pvoC
+         0KvB0XHVTM2X5MC17cDsFi0FcyZ++8TtWXfXzygIpvFHybGHrcOYXJWlxJaQKvsal7Ry
+         vAkuOraRsxLMqlUeMs7Qjagg2FIQUCVb8LigE6GA2L0vEaKvIxFHqnCXBS/fTZMMCMDk
+         T6i3QdiCoN4NNaUwjYGelUtKV1rDZGtaQAu8s7GIbx0wItxDf5LtIZG/ls19avmuOKBs
+         Gelw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ODXxWmmCbDSJu9NbGvrzBEWYJrCam31kj3DAUIrULPw=;
-        b=Vy8cVikPzrdm+JfDqLvhXT2xkFDZ3HVDDJPpDRhdHBuIuUgLoVDjI8xH6htfYUuHnC
-         LY+20zHsr8jel1CCUCGnEe/664SMCe+mL2BSgqvY/CwFdAp5IfRgU+e0Q8PadREnSVHv
-         eWsF1lkmeZUIQX0v/OCkwFySEZ7Qme9Huant3+pyzWcW1CW4pgzY0lYfAi2TNb6NB+lu
-         pRcG6eGYWxKOGsZPqX8oOF7s1zzyKDJkh0onqv4e9Ngomh37t0W/NaIr5/PiedYUzWnf
-         gBVqi5ACY9WqlDXB8FVrlCi0rDZxh4IqZyQLfjw8NiaV75HMKxKMCX5CyjUjLqj9fs15
-         jNOA==
-X-Gm-Message-State: AOAM533sWXY1RrEJjkP3s/w7i0PlQTCUn21ht6JePp0X89HMJIgzqrLd
-        whBogH+MAu3gCI+hVM0Fz950kOIbZjJCIrLYSZ22jQ==
-X-Google-Smtp-Source: ABdhPJyDXaJyFKNP0WsvC7wn818jvoG0MDOEUSzLY6ezaPoiApXLhg4SheqGpl5SEXAgmkc3ufxJfZGsLwE8pFf2jn8=
-X-Received: by 2002:a17:907:72ce:b0:6f4:5a57:320c with SMTP id
- du14-20020a17090772ce00b006f45a57320cmr9176463ejc.75.1652556336145; Sat, 14
- May 2022 12:25:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mq5z7L0nka28G5WQMErNElXNP4BU7U7qW4P3u/glHjA=;
+        b=mZmC0IPtOwbzIlKo+PB6LzYZwKvxRIni1gFgBW9uXyTEUWGZYjlRN3i32keHGeFFC4
+         bkXXGiyPPSIcZHrmH4ZSCvz4dy0oR6hRGIZcWnugTCnakK4aVhdCk9y0U9LWPPlpu5bq
+         RPsGuraRirjTwo7OPJEhmS+f3qZ1lng1759BFPe66BJs2C94Fx+3fPZbTm1V+8jh91yx
+         b9mK5qmAGAm9ioOJ4/vyS8pokiMH63VcyrmhZBbpiL3A8sVjlrGdQ9z/4nSDNDOMD4Qy
+         Nzw1BmKw0eLqw9hjXblnhgEb2QkOhk1D6MwCM+NKd6/O5cK7P6KDQ6GMoNmUv7kfcYVD
+         JkbQ==
+X-Gm-Message-State: AOAM5308yJPoxYAtkPSUA5xOWjA9FTKXb7FueXQEp5PkmWciXK6vL4WE
+        Cm5vpD+fZpCQuH6I3mxMuH4=
+X-Google-Smtp-Source: ABdhPJwPwjTWLK5/PHqE98MdF3otwmW4s5Ca+oqHA/ZbeH7+LRKl1YVBh5Cthu/Fla7w6y8sm7+3zQ==
+X-Received: by 2002:a05:6a00:14d4:b0:50e:12c8:4868 with SMTP id w20-20020a056a0014d400b0050e12c84868mr12270705pfu.72.1652596294808;
+        Sat, 14 May 2022 23:31:34 -0700 (PDT)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id d11-20020a62f80b000000b0050dc7628149sm4528368pfh.35.2022.05.14.23.31.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 May 2022 23:31:34 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Kui-Feng Lee <kuifeng@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Add missing trampoline program type to trampoline_count test
+Date:   Sun, 15 May 2022 14:31:20 +0800
+Message-Id: <20220515063120.526063-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
- <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com> <CABVgOS=gTznLFBTZbmNH7AFDnr7O70mWR9v4q6sDA7q04fKT=Q@mail.gmail.com>
-In-Reply-To: <CABVgOS=gTznLFBTZbmNH7AFDnr7O70mWR9v4q6sDA7q04fKT=Q@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Sat, 14 May 2022 12:25:24 -0700
-Message-ID: <CAGS_qxqFEcw=28FxbMMtEcjqcsgFHXV6Td+uTgDj32Z=PiQJkA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 13, 2022 at 8:04 PM David Gow <davidgow@google.com> wrote:
-> Hmm... thinking about it, I think it might be worth not tainting if 0
-> suites run, but tainting if 0 tests run.
->
-> If we taint even if there are no suites present, that'll make things
-> awkward for the "build KUnit in, but not any tests" case: the kernel
-> would be tainted regardless. Given Android might be having the KUnit
+Currently the trampoline_count test doesn't include any fmod_ret bpf
+programs, fix it to make the test cover all possible trampoline program
+types.
 
-Actually, this is what the code does right now. I was wrong.
-If there are 0 suites => not tainted.
-If there are 0 tests in the suites => tainted.
+Since fmod_ret bpf programs can't be attached to __set_task_comm function,
+as it's neither whitelisted for error injection nor a security hook, change
+it to bpf_modify_return_test.
 
-For kunit being built in, it first goes through this func
-   206  static void kunit_exec_run_tests(struct suite_set *suite_set)
-   207  {
-   208          struct kunit_suite * const * const *suites;
-   209
-   210          kunit_print_tap_header(suite_set);
-   211
-   212          for (suites = suite_set->start; suites <
-suite_set->end; suites++)
-   213                  __kunit_test_suites_init(*suites);
-   214  }
+This patch also does some other cleanups such as removing duplicate code,
+dropping inconsistent comments, etc.
 
-So for the "build KUnit in, but not any tests" case, you'll never
-enter that for-loop.
-Thus you'll never call __kunit_test_suites_init() => kunit_run_tests().
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ include/linux/bpf.h                           |   2 +-
+ .../bpf/prog_tests/trampoline_count.c         | 121 ++++++------------
+ .../bpf/progs/test_trampoline_count.c         |  16 ++-
+ 3 files changed, 47 insertions(+), 92 deletions(-)
 
-For module-based tests, we have the same behavior.
-If there's 0 test suites, we never enter the second loop, so we never taint.
-But if there's >0 suites, then we will, regardless of the # of test cases.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c107392b0ba7..cb01f247e05f 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -724,7 +724,7 @@ struct btf_func_model {
+ #define BPF_TRAMP_F_RET_FENTRY_RET	BIT(4)
+ 
+ /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
+- * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
++ * bytes on x86.
+  */
+ #define BPF_MAX_TRAMP_LINKS 38
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 9c795ee52b7b..b1d25998cc48 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -1,126 +1,79 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #define _GNU_SOURCE
+-#include <sched.h>
+-#include <sys/prctl.h>
+ #include <test_progs.h>
+ 
+ #define MAX_TRAMP_PROGS 38
+ 
+ struct inst {
+ 	struct bpf_object *obj;
+-	struct bpf_link   *link_fentry;
+-	struct bpf_link   *link_fexit;
++	struct bpf_link   *link;
+ };
+ 
+-static int test_task_rename(void)
+-{
+-	int fd, duration = 0, err;
+-	char buf[] = "test_overhead";
+-
+-	fd = open("/proc/self/comm", O_WRONLY|O_TRUNC);
+-	if (CHECK(fd < 0, "open /proc", "err %d", errno))
+-		return -1;
+-	err = write(fd, buf, sizeof(buf));
+-	if (err < 0) {
+-		CHECK(err < 0, "task rename", "err %d", errno);
+-		close(fd);
+-		return -1;
+-	}
+-	close(fd);
+-	return 0;
+-}
+-
+-static struct bpf_link *load(struct bpf_object *obj, const char *name)
++static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
+ {
++	struct bpf_object *obj;
+ 	struct bpf_program *prog;
+-	int duration = 0;
++	int err;
++
++	obj = bpf_object__open_file(file, NULL);
++	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
++		return NULL;
++
++	inst->obj = obj;
++
++	err = bpf_object__load(obj);
++	if (!ASSERT_OK(err, "obj_load"))
++		return NULL;
+ 
+ 	prog = bpf_object__find_program_by_name(obj, name);
+-	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", name))
+-		return ERR_PTR(-EINVAL);
+-	return bpf_program__attach_trace(prog);
++	if (!ASSERT_OK_PTR(prog, "obj_find_prog"))
++		return NULL;
++
++	return prog;
+ }
+ 
+ /* TODO: use different target function to run in concurrent mode */
+ void serial_test_trampoline_count(void)
+ {
+-	const char *fentry_name = "prog1";
+-	const char *fexit_name = "prog2";
+-	const char *object = "test_trampoline_count.o";
+-	struct inst inst[MAX_TRAMP_PROGS] = {};
+-	int err, i = 0, duration = 0;
+-	struct bpf_object *obj;
++	char *file = "test_trampoline_count.o";
++	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
++	struct inst inst[MAX_TRAMP_PROGS + 1] = {};
++	struct bpf_program *prog;
+ 	struct bpf_link *link;
+-	char comm[16] = {};
++	int i;
+ 
+ 	/* attach 'allowed' trampoline programs */
+ 	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
+-		obj = bpf_object__open_file(object, NULL);
+-		if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
+-			obj = NULL;
++		prog = load_prog(file, progs[i % ARRAY_SIZE(progs)], &inst[i]);
++		if (!prog)
+ 			goto cleanup;
+-		}
+ 
+-		err = bpf_object__load(obj);
+-		if (CHECK(err, "obj_load", "err %d\n", err))
++		link = bpf_program__attach(prog);
++		if (!ASSERT_OK_PTR(link, "attach_prog"))
+ 			goto cleanup;
+-		inst[i].obj = obj;
+-		obj = NULL;
+-
+-		if (rand() % 2) {
+-			link = load(inst[i].obj, fentry_name);
+-			if (!ASSERT_OK_PTR(link, "attach_prog")) {
+-				link = NULL;
+-				goto cleanup;
+-			}
+-			inst[i].link_fentry = link;
+-		} else {
+-			link = load(inst[i].obj, fexit_name);
+-			if (!ASSERT_OK_PTR(link, "attach_prog")) {
+-				link = NULL;
+-				goto cleanup;
+-			}
+-			inst[i].link_fexit = link;
+-		}
++
++		inst[i].link = link;
+ 	}
+ 
+ 	/* and try 1 extra.. */
+-	obj = bpf_object__open_file(object, NULL);
+-	if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
+-		obj = NULL;
++	prog = load_prog(file, progs[0], &inst[i]);
++	if (!prog)
+ 		goto cleanup;
+-	}
+-
+-	err = bpf_object__load(obj);
+-	if (CHECK(err, "obj_load", "err %d\n", err))
+-		goto cleanup_extra;
+ 
+ 	/* ..that needs to fail */
+-	link = load(obj, fentry_name);
+-	err = libbpf_get_error(link);
+-	if (!ASSERT_ERR_PTR(link, "cannot attach over the limit")) {
+-		bpf_link__destroy(link);
+-		goto cleanup_extra;
++	link = bpf_program__attach(prog);
++	if (!ASSERT_ERR_PTR(link, "attach_prog")) {
++		inst[i].link = link;
++		goto cleanup;
+ 	}
+ 
+ 	/* with E2BIG error */
+-	ASSERT_EQ(err, -E2BIG, "proper error check");
++	ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG");
+ 	ASSERT_EQ(link, NULL, "ptr_is_null");
+ 
+-	/* and finaly execute the probe */
+-	if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
+-		goto cleanup_extra;
+-	CHECK_FAIL(test_task_rename());
+-	CHECK_FAIL(prctl(PR_SET_NAME, comm, 0L, 0L, 0L));
+-
+-cleanup_extra:
+-	bpf_object__close(obj);
+ cleanup:
+-	if (i >= MAX_TRAMP_PROGS)
+-		i = MAX_TRAMP_PROGS - 1;
+ 	for (; i >= 0; i--) {
+-		bpf_link__destroy(inst[i].link_fentry);
+-		bpf_link__destroy(inst[i].link_fexit);
++		bpf_link__destroy(inst[i].link);
+ 		bpf_object__close(inst[i].obj);
+ 	}
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+index f030e469d05b..7765720da7d5 100644
+--- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
++++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+@@ -1,20 +1,22 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <stdbool.h>
+-#include <stddef.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+-struct task_struct;
++SEC("fentry/bpf_modify_return_test")
++int BPF_PROG(fentry_test, int a, int *b)
++{
++	return 0;
++}
+ 
+-SEC("fentry/__set_task_comm")
+-int BPF_PROG(prog1, struct task_struct *tsk, const char *buf, bool exec)
++SEC("fmod_ret/bpf_modify_return_test")
++int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
+ {
+ 	return 0;
+ }
+ 
+-SEC("fexit/__set_task_comm")
+-int BPF_PROG(prog2, struct task_struct *tsk, const char *buf, bool exec)
++SEC("fexit/bpf_modify_return_test")
++int BPF_PROG(fexit_test, int a, int *b, int ret)
+ {
+ 	return 0;
+ }
+-- 
+2.36.1
 
-   570  int __kunit_test_suites_init(struct kunit_suite * const * const suites)
-   571  {
-   572          unsigned int i;
-   573
-   574          for (i = 0; suites[i] != NULL; i++) {
-   575                  kunit_init_suite(suites[i]);
-   576                  kunit_run_tests(suites[i]);
-   577          }
-   578          return 0;
-   579  }
-
-So this change should already work as intended.
-
-> execution stuff built-in (but using modules for tests), it's probably
-> worth not tainting there. (Though I think they have a separate way of
-> disabling KUnit as well, so it's probably not a complete
-> deal-breaker).
->
-> The case of having suites but no tests should still taint the kernel,
-> as suite_init functions could still run.
-
-Yes, suite_init functions are the concern. I agree we should taint if
-there are >0 suites but 0 test cases.
-
-I don't think it's worth trying to be fancy and tainting iff there >0
-test cases or a suite_init/exit function ran.
-
->
-> Assuming that seems sensible, I'll send out a v4 with that changed.
-
-Just to be clear: that shouldn't be necessary.
-
->
-> > I wasn't quite sure where this applied, but I manually applied the changes here.
-> > Without this patch, this command exits fine:
-> > $ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
-> >
-> > With it, I get
-> > [12:03:31] Kernel panic - not syncing: panic_on_taint set ...
-> > [12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
->
-> This is showing both 'G' and 'N' ('G' being the character for GPL --
-
-I just somehow missed the fact there was an 'N' at the end there.
-Thanks, I thought I was going crazy. I guess I was just going blind.
-
-
-Daniel
