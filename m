@@ -2,222 +2,474 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B45C527E6B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 09:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133AB527ECD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 09:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240976AbiEPHTE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 May 2022 03:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S241230AbiEPHtI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 May 2022 03:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240969AbiEPHS7 (ORCPT
+        with ESMTP id S241223AbiEPHtI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 03:18:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64AB813CDD;
-        Mon, 16 May 2022 00:18:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8CF31063;
-        Mon, 16 May 2022 00:18:57 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.2.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 028A63F718;
-        Mon, 16 May 2022 00:18:51 -0700 (PDT)
-Date:   Mon, 16 May 2022 08:18:32 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Message-ID: <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com>
- <Yn5yb9F4uYkio4Xe@lakrids>
- <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 03:49:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08B025E82;
+        Mon, 16 May 2022 00:49:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 843DC1FB1D;
+        Mon, 16 May 2022 07:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652687344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FHfbjQvmgeHMVCppWrjk3qvoQCSGOOt7FMv3LUPp5v0=;
+        b=MVKBLLVJCiC63Oqw+aIw04HPqFriHhogPGQN02LxTvKsLo+RV7rKYkNYR/cEQbBx7mgco+
+        Xed3hNrt+2eZlt4ZJLvNH7YboXFjSpGAg7bixKE4aJvbGr2/1VWVVJ6ipyzN9qu+clazWn
+        +uAxYy/mESrfdJnF3ljv8y8NuSw6Yv8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652687344;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FHfbjQvmgeHMVCppWrjk3qvoQCSGOOt7FMv3LUPp5v0=;
+        b=fZxyJvYSDpa3bvNa/nG5l+Zz8b+36hHsOOf+fNzeIzNiQgoNoK0M+YkFLf9CTJpGvl655y
+        vglPOogyDqFjdQAw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 746822C142;
+        Mon, 16 May 2022 07:49:04 +0000 (UTC)
+Date:   Mon, 16 May 2022 09:49:04 +0200
+Message-ID: <s5h35h9c3yn.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Siddh Raman Pant <siddhpant.gh@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: alsa: Better error messages
+In-Reply-To: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 16, 2022 at 02:55:46PM +0800, Xu Kuohai wrote:
-> On 5/13/2022 10:59 PM, Mark Rutland wrote:
-> > On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
-> >> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
-> >> it to replace nop with jump, or replace jump with nop.
-> >>
-> >> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> >> Acked-by: Song Liu <songliubraving@fb.com>
-> >> ---
-> >>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 63 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> >> index 8ab4035dea27..3f9bdfec54c4 100644
-> >> --- a/arch/arm64/net/bpf_jit_comp.c
-> >> +++ b/arch/arm64/net/bpf_jit_comp.c
-> >> @@ -9,6 +9,7 @@
-> >>  
-> >>  #include <linux/bitfield.h>
-> >>  #include <linux/bpf.h>
-> >> +#include <linux/memory.h>
-> >>  #include <linux/filter.h>
-> >>  #include <linux/printk.h>
-> >>  #include <linux/slab.h>
-> >> @@ -18,6 +19,7 @@
-> >>  #include <asm/cacheflush.h>
-> >>  #include <asm/debug-monitors.h>
-> >>  #include <asm/insn.h>
-> >> +#include <asm/patching.h>
-> >>  #include <asm/set_memory.h>
-> >>  
-> >>  #include "bpf_jit.h"
-> >> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
-> >>  {
-> >>  	return vfree(addr);
-> >>  }
-> >> +
-> >> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
-> >> +			     void *addr, u32 *insn)
-> >> +{
-> >> +	if (!addr)
-> >> +		*insn = aarch64_insn_gen_nop();
-> >> +	else
-> >> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
-> >> +						    (unsigned long)addr,
-> >> +						    type);
-> >> +
-> >> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
-> >> +}
-> >> +
-> >> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
-> >> +		       void *old_addr, void *new_addr)
-> >> +{
-> >> +	int ret;
-> >> +	u32 old_insn;
-> >> +	u32 new_insn;
-> >> +	u32 replaced;
-> >> +	enum aarch64_insn_branch_type branch_type;
-> >> +
-> >> +	if (!is_bpf_text_address((long)ip))
-> >> +		/* Only poking bpf text is supported. Since kernel function
-> >> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
-> >> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
-> >> +		 * called after a failed poke with ftrace. In this case, there
-> >> +		 * is probably something wrong with fentry, so there is nothing
-> >> +		 * we can do here. See register_fentry, unregister_fentry and
-> >> +		 * modify_fentry for details.
-> >> +		 */
-> >> +		return -EINVAL;
-> > 
-> > If you rely on ftrace to poke functions, why do you need to patch text
-> > at all? Why does the rest of this function exist?
-> > 
-> > I really don't like having another piece of code outside of ftrace
-> > patching the ftrace patch-site; this needs a much better explanation.
-> > 
+On Fri, 13 May 2022 15:40:57 +0200,
+Siddh Raman Pant wrote:
 > 
-> Sorry for the incorrect explaination in the comment. I don't think it's
-> reasonable to patch ftrace patch-site without ftrace code either.
+> This allows for potentially better machine-parsing due to an
+> expected / fixed format. Also because of eyecandy reasons.
 > 
-> The patching logic in register_fentry, unregister_fentry and
-> modify_fentry is as follows:
+> Whenever possible, errors will start with the name of the
+> offending card/control, separated by the error with colons.
 > 
-> if (tr->func.ftrace_managed)
->         ret = register_ftrace_direct((long)ip, (long)new_addr);
-> else
->         ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
->                                  true);
+> Whenever there is a description of an error given, the generated
+> error string from snd_strerror will be (mostly) enclosed in
+> parentheses at the end.
 > 
-> ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
-> only used to patch bpf prog and bpf trampoline, which are not managed by
-> ftrace.
+> Clarity of error messages have been (hopefully) improved.
+> 
+> Signed-off-by: Siddh Raman Pant <siddhpant.gh@gmail.com>
 
-Sorry, I had misunderstood. Thanks for the correction!
+Thanks for the patch.
 
-I'll have another look with that in mind.
+But, honestly speaking, I'm not sure whether it worth.
+Although it's possibly a bit more consistent over all texts, I
+don't see significant improvement by this change.
 
-> >> +
-> >> +	if (poke_type == BPF_MOD_CALL)
-> >> +		branch_type = AARCH64_INSN_BRANCH_LINK;
-> >> +	else
-> >> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
-> >> +
-> >> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
-> >> +		return -EFAULT;
-> >> +
-> >> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
-> >> +		return -EFAULT;
-> >> +
-> >> +	mutex_lock(&text_mutex);
-> >> +	if (aarch64_insn_read(ip, &replaced)) {
-> >> +		ret = -EFAULT;
-> >> +		goto out;
-> >> +	}
-> >> +
-> >> +	if (replaced != old_insn) {
-> >> +		ret = -EFAULT;
-> >> +		goto out;
-> >> +	}
-> >> +
-> >> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
-> > 
-> > ... and where does the actual synchronization come from in this case?
+But I'm fine to apply it, so keep this pending and would like to
+hear from others.
+
+
+thanks,
+
+Takashi
+
+> ---
+>  tools/testing/selftests/alsa/mixer-test.c | 94 +++++++++++------------
+>  1 file changed, 47 insertions(+), 47 deletions(-)
 > 
-> aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
-> no other CPUs will fetch a half-new and half-old instruction.
+> diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+> index a38b89c28..4719b12a5 100644
+> --- a/tools/testing/selftests/alsa/mixer-test.c
+> +++ b/tools/testing/selftests/alsa/mixer-test.c
+> @@ -114,7 +114,7 @@ static void find_controls(void)
+>  
+>  	err = snd_config_load_string(&config, alsa_config, strlen(alsa_config));
+>  	if (err < 0) {
+> -		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
+> +		ksft_print_msg("Unable to parse custom alsa-lib configuration (%s)\n",
+>  			       snd_strerror(err));
+>  		ksft_exit_fail();
+>  	}
+> @@ -128,7 +128,7 @@ static void find_controls(void)
+>  
+>  		err = snd_ctl_open_lconf(&card_data->handle, name, 0, config);
+>  		if (err < 0) {
+> -			ksft_print_msg("Failed to get hctl for card %d: %s\n",
+> +			ksft_print_msg("Card %d: Failed to get hctl (%s)\n",
+>  				       card, snd_strerror(err));
+>  			goto next_card;
+>  		}
+> @@ -177,9 +177,8 @@ static void find_controls(void)
+>  			err = snd_ctl_elem_info(card_data->handle,
+>  						ctl_data->info);
+>  			if (err < 0) {
+> -				ksft_print_msg("%s getting info for %d\n",
+> -					       snd_strerror(err),
+> -					       ctl_data->name);
+> +				ksft_print_msg("%s : %s while getting info\n",
+> +					       ctl_data->name, snd_strerror(err));
+>  			}
+>  
+>  			snd_ctl_elem_value_set_id(ctl_data->def_val,
+> @@ -192,20 +191,20 @@ static void find_controls(void)
+>  		/* Set up for events */
+>  		err = snd_ctl_subscribe_events(card_data->handle, true);
+>  		if (err < 0) {
+> -			ksft_exit_fail_msg("snd_ctl_subscribe_events() failed for card %d: %d\n",
+> +			ksft_exit_fail_msg("Card %d : snd_ctl_subscribe_events() failed (%d)\n",
+>  					   card, err);
+>  		}
+>  
+>  		err = snd_ctl_poll_descriptors_count(card_data->handle);
+>  		if (err != 1) {
+> -			ksft_exit_fail_msg("Unexpected descriptor count %d for card %d\n",
+> -					   err, card);
+> +			ksft_exit_fail_msg("Card %d : Unexpected descriptor count %d\n",
+> +					   card, err);
+>  		}
+>  
+>  		err = snd_ctl_poll_descriptors(card_data->handle,
+>  					       &card_data->pollfd, 1);
+>  		if (err != 1) {
+> -			ksft_exit_fail_msg("snd_ctl_poll_descriptors() failed for %d\n",
+> +			ksft_exit_fail_msg("Card %d : snd_ctl_poll_descriptors() failed (%d)\n",
+>  				       card, err);
+>  		}
+>  
+> @@ -236,8 +235,8 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  	do {
+>  		err = poll(&(ctl->card->pollfd), 1, timeout);
+>  		if (err < 0) {
+> -			ksft_print_msg("poll() failed for %s: %s (%d)\n",
+> -				       ctl->name, strerror(errno), errno);
+> +			ksft_print_msg("%s : poll() failed (%d - %s)\n",
+> +				       ctl->name, errno, strerror(errno));
+>  			return -1;
+>  		}
+>  		/* Timeout */
+> @@ -248,12 +247,12 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  						       &(ctl->card->pollfd),
+>  						       1, &revents);
+>  		if (err < 0) {
+> -			ksft_print_msg("snd_ctl_poll_descriptors_revents() failed for %s: %d\n",
+> +			ksft_print_msg("%s : snd_ctl_poll_descriptors_revents() failed (%d)\n",
+>  				       ctl->name, err);
+>  			return err;
+>  		}
+>  		if (revents & POLLERR) {
+> -			ksft_print_msg("snd_ctl_poll_descriptors_revents() reported POLLERR for %s\n",
+> +			ksft_print_msg("%s : snd_ctl_poll_descriptors_revents() reported POLLERR\n",
+>  				       ctl->name);
+>  			return -1;
+>  		}
+> @@ -265,7 +264,7 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  
+>  		err = snd_ctl_read(ctl->card->handle, event);
+>  		if (err < 0) {
+> -			ksft_print_msg("snd_ctl_read() failed for %s: %d\n",
+> +			ksft_print_msg("%s : snd_ctl_read() failed (%d)\n",
+>  			       ctl->name, err);
+>  			return err;
+>  		}
+> @@ -283,7 +282,7 @@ static int wait_for_event(struct ctl_data *ctl, int timeout)
+>  		}
+>  
+>  		if ((mask & SND_CTL_EVENT_MASK_REMOVE) == SND_CTL_EVENT_MASK_REMOVE) {
+> -			ksft_print_msg("Removal event for %s\n",
+> +			ksft_print_msg("%s : Removal event\n",
+>  				       ctl->name);
+>  			return -1;
+>  		}
+> @@ -301,7 +300,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  
+>  	switch (snd_ctl_elem_info_get_type(ctl->info)) {
+>  	case SND_CTL_ELEM_TYPE_NONE:
+> -		ksft_print_msg("%s.%d Invalid control type NONE\n",
+> +		ksft_print_msg("%s.%d : Invalid control type NONE\n",
+>  			       ctl->name, index);
+>  		return false;
+>  
+> @@ -312,7 +311,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		case 1:
+>  			break;
+>  		default:
+> -			ksft_print_msg("%s.%d Invalid boolean value %ld\n",
+> +			ksft_print_msg("%s.%d : Invalid boolean value %ld\n",
+>  				       ctl->name, index, int_val);
+>  			return false;
+>  		}
+> @@ -322,14 +321,14 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		int_val = snd_ctl_elem_value_get_integer(val, index);
+>  
+>  		if (int_val < snd_ctl_elem_info_get_min(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %ld less than minimum %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is less than the minimum (%ld)\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_min(ctl->info));
+>  			return false;
+>  		}
+>  
+>  		if (int_val > snd_ctl_elem_info_get_max(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %ld more than maximum %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is more than the maximum (%ld)\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_max(ctl->info));
+>  			return false;
+> @@ -339,7 +338,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		if (snd_ctl_elem_info_get_step(ctl->info) &&
+>  		    (int_val - snd_ctl_elem_info_get_min(ctl->info) %
+>  		     snd_ctl_elem_info_get_step(ctl->info))) {
+> -			ksft_print_msg("%s.%d value %ld invalid for step %ld minimum %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is invalid for step %ld, minimum %ld\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_step(ctl->info),
+>  				       snd_ctl_elem_info_get_min(ctl->info));
+> @@ -351,14 +350,14 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		int64_val = snd_ctl_elem_value_get_integer64(val, index);
+>  
+>  		if (int64_val < snd_ctl_elem_info_get_min64(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %lld less than minimum %lld\n",
+> +			ksft_print_msg("%s.%d : Value %lld is less than the minimum (%lld)\n",
+>  				       ctl->name, index, int64_val,
+>  				       snd_ctl_elem_info_get_min64(ctl->info));
+>  			return false;
+>  		}
+>  
+>  		if (int64_val > snd_ctl_elem_info_get_max64(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %lld more than maximum %lld\n",
+> +			ksft_print_msg("%s.%d : Value %lld is more than the maximum (%lld)\n",
+>  				       ctl->name, index, int64_val,
+>  				       snd_ctl_elem_info_get_max(ctl->info));
+>  			return false;
+> @@ -368,7 +367,7 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		if (snd_ctl_elem_info_get_step64(ctl->info) &&
+>  		    (int64_val - snd_ctl_elem_info_get_min64(ctl->info)) %
+>  		    snd_ctl_elem_info_get_step64(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %lld invalid for step %lld minimum %lld\n",
+> +			ksft_print_msg("%s.%d : Value %lld is invalid for step %lld, minimum %lld\n",
+>  				       ctl->name, index, int64_val,
+>  				       snd_ctl_elem_info_get_step64(ctl->info),
+>  				       snd_ctl_elem_info_get_min64(ctl->info));
+> @@ -380,13 +379,13 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
+>  		int_val = snd_ctl_elem_value_get_enumerated(val, index);
+>  
+>  		if (int_val < 0) {
+> -			ksft_print_msg("%s.%d negative value %ld for enumeration\n",
+> +			ksft_print_msg("%s.%d : Negative value %ld for enumeration\n",
+>  				       ctl->name, index, int_val);
+>  			return false;
+>  		}
+>  
+>  		if (int_val >= snd_ctl_elem_info_get_items(ctl->info)) {
+> -			ksft_print_msg("%s.%d value %ld more than item count %ld\n",
+> +			ksft_print_msg("%s.%d : Value %ld is more than item count (%ld)\n",
+>  				       ctl->name, index, int_val,
+>  				       snd_ctl_elem_info_get_items(ctl->info));
+>  			return false;
+> @@ -427,7 +426,7 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("get_value.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -435,7 +434,7 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+>  
+>  	/* Can't test reading on an unreadable control */
+>  	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+> -		ksft_print_msg("%s is not readable\n", ctl->name);
+> +		ksft_print_msg("%s : Not readable\n", ctl->name);
+>  		ksft_test_result_skip("get_value.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -443,7 +442,7 @@ static void test_ctl_get_value(struct ctl_data *ctl)
+>  
+>  	err = snd_ctl_elem_read(ctl->card->handle, ctl->def_val);
+>  	if (err < 0) {
+> -		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +		ksft_print_msg("snd_ctl_elem_read() failed (%s)\n",
+>  			       snd_strerror(err));
+>  		goto out;
+>  	}
+> @@ -474,7 +473,7 @@ static void test_ctl_name(struct ctl_data *ctl)
+>  	/* Only boolean controls should end in Switch */
+>  	if (strend(ctl->name, " Switch")) {
+>  		if (snd_ctl_elem_info_get_type(ctl->info) != SND_CTL_ELEM_TYPE_BOOLEAN) {
+> -			ksft_print_msg("%d.%d %s ends in Switch but is not boolean\n",
+> +			ksft_print_msg("%d.%d %s : Not a boolean, but name ends in Switch\n",
+>  				       ctl->card->card, ctl->elem, ctl->name);
+>  			name_ok = false;
+>  		}
+> @@ -484,7 +483,7 @@ static void test_ctl_name(struct ctl_data *ctl)
+>  	if (snd_ctl_elem_info_get_type(ctl->info) == SND_CTL_ELEM_TYPE_BOOLEAN &&
+>  	    snd_ctl_elem_info_is_writable(ctl->info)) {
+>  		if (!strend(ctl->name, " Switch")) {
+> -			ksft_print_msg("%d.%d %s is a writeable boolean but not a Switch\n",
+> +			ksft_print_msg("%d.%d %s : Not a Switch despite being a writeable boolean\n",
+>  				       ctl->card->card, ctl->elem, ctl->name);
+>  			name_ok = false;
+>  		}
+> @@ -542,11 +541,12 @@ static bool show_mismatch(struct ctl_data *ctl, int index,
+>  		/*
+>  		 * NOTE: The volatile attribute means that the hardware
+>  		 * can voluntarily change the state of control element
+> -		 * independent of any operation by software.  
+> +		 * independent of any operation by software.
+>  		 */
+>  		bool is_volatile = snd_ctl_elem_info_is_volatile(ctl->info);
+> -		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
+> -			       ctl->name, index, expected_int, read_int, is_volatile);
+> +		ksft_print_msg("%s.%d : Expected %lld, but read %lld (%s)\n",
+> +			       ctl->name, index, expected_int, read_int,
+> +			       (is_volatile ? "Volatile" : "Non-volatile"));
+>  		return !is_volatile;
+>  	} else {
+>  		return false;
+> @@ -590,7 +590,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  
+>  		err = snd_ctl_elem_read(ctl->card->handle, initial_val);
+>  		if (err < 0) {
+> -			ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +			ksft_print_msg("snd_ctl_elem_read() failed (%s)\n",
+>  				       snd_strerror(err));
+>  			return err;
+>  		}
+> @@ -602,7 +602,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  	 */
+>  	err = snd_ctl_elem_write(ctl->card->handle, w_val);
+>  	if (err < 0 && !error_expected) {
+> -		ksft_print_msg("snd_ctl_elem_write() failed: %s\n",
+> +		ksft_print_msg("snd_ctl_elem_write() failed (%s)\n",
+>  			       snd_strerror(err));
+>  		return err;
+>  	}
+> @@ -615,7 +615,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  
+>  	err = snd_ctl_elem_read(ctl->card->handle, read_val);
+>  	if (err < 0) {
+> -		ksft_print_msg("snd_ctl_elem_read() failed: %s\n",
+> +		ksft_print_msg("snd_ctl_elem_read() failed (%s)\n",
+>  			       snd_strerror(err));
+>  		return err;
+>  	}
+> @@ -631,13 +631,13 @@ static int write_and_verify(struct ctl_data *ctl,
+>  		err = wait_for_event(ctl, 0);
+>  		if (snd_ctl_elem_value_compare(initial_val, read_val)) {
+>  			if (err < 1) {
+> -				ksft_print_msg("No event generated for %s\n",
+> +				ksft_print_msg("%s : No event generated\n",
+>  					       ctl->name);
+>  				ctl->event_missing++;
+>  			}
+>  		} else {
+>  			if (err != 0) {
+> -				ksft_print_msg("Spurious event generated for %s\n",
+> +				ksft_print_msg("%s : Spurious event generated\n",
+>  					       ctl->name);
+>  				ctl->event_spurious++;
+>  			}
+> @@ -658,7 +658,7 @@ static int write_and_verify(struct ctl_data *ctl,
+>  			mismatch_shown = true;
+>  
+>  	if (!mismatch_shown)
+> -		ksft_print_msg("%s read and written values differ\n",
+> +		ksft_print_msg("%s : Read and written values differ\n",
+>  			       ctl->name);
+>  
+>  	return -1;
+> @@ -674,14 +674,14 @@ static void test_ctl_write_default(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("write_default.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+>  	}
+>  
+>  	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> -		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_print_msg("%s : Not writeable\n", ctl->name);
+>  		ksft_test_result_skip("write_default.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -689,7 +689,7 @@ static void test_ctl_write_default(struct ctl_data *ctl)
+>  
+>  	/* No idea what the default was for unreadable controls */
+>  	if (!snd_ctl_elem_info_is_readable(ctl->info)) {
+> -		ksft_print_msg("%s couldn't read default\n", ctl->name);
+> +		ksft_print_msg("%s : Couldn't read default\n", ctl->name);
+>  		ksft_test_result_skip("write_default.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -808,14 +808,14 @@ static void test_ctl_write_valid(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("write_valid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+>  	}
+>  
+>  	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> -		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_print_msg("%s : Not writeable\n", ctl->name);
+>  		ksft_test_result_skip("write_valid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> @@ -868,7 +868,7 @@ static bool test_ctl_write_invalid_value(struct ctl_data *ctl,
+>  	/* ...but some devices will clamp to an in range value */
+>  	err = snd_ctl_elem_read(ctl->card->handle, val);
+>  	if (err < 0) {
+> -		ksft_print_msg("%s failed to read: %s\n",
+> +		ksft_print_msg("%s : Failed to read (%s)\n",
+>  			       ctl->name, snd_strerror(err));
+>  		return true;
+>  	}
+> @@ -1026,14 +1026,14 @@ static void test_ctl_write_invalid(struct ctl_data *ctl)
+>  
+>  	/* If the control is turned off let's be polite */
+>  	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
+> -		ksft_print_msg("%s is inactive\n", ctl->name);
+> +		ksft_print_msg("%s : Inactive\n", ctl->name);
+>  		ksft_test_result_skip("write_invalid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+>  	}
+>  
+>  	if (!snd_ctl_elem_info_is_writable(ctl->info)) {
+> -		ksft_print_msg("%s is not writeable\n", ctl->name);
+> +		ksft_print_msg("%s : Not writeable\n", ctl->name);
+>  		ksft_test_result_skip("write_invalid.%d.%d\n",
+>  				      ctl->card->card, ctl->elem);
+>  		return;
+> -- 
+> 2.35.1
 > 
-> The scenario here is that there is a chance that another CPU fetches the
-> old instruction after bpf_arch_text_poke() finishes, that is, different
-> CPUs may execute different versions of instructions at the same time.
-> 
-> 1. When a new trampoline is attached, it doesn't seem to be an issue for
-> different CPUs to jump to different trampolines temporarily.
->
-> 2. When an old trampoline is freed, we should wait for all other CPUs to
-> exit the trampoline and make sure the trampoline is no longer reachable,
-> IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
-> tasks to do this.
-
-It would be good to have a comment for these points.
-
-Thanks,
-Mark.
