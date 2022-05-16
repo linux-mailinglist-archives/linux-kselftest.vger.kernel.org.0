@@ -2,122 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B426528D6C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 20:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B6D528DB0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 21:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345125AbiEPSuO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 May 2022 14:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S1345276AbiEPTG1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 May 2022 15:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345066AbiEPSuI (ORCPT
+        with ESMTP id S1345325AbiEPTGK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 14:50:08 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3193EB81;
-        Mon, 16 May 2022 11:50:07 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id z7-20020a17090abd8700b001df78c7c209so186527pjr.1;
-        Mon, 16 May 2022 11:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ogFgPpVvtLABZGqhLzO7aVIGrK84/NfIlVnDOzWwbx8=;
-        b=Hd0Yorn0RW/CYIBNSer8vE7Dkgu4vN8r5CmeQz/yRlhWDVzomT7yKboUIDrEYN8r6H
-         fuPXEADzXBCgJBnKMFjASpP31MlP4WKde1RvxkWhfeiwZwed/VkEkOSpUY78oPDAx5nH
-         vnXswqBP3oQ4laULsL4AVvrMiF3woZrNQwOx+zT0oiiwiKi4t0Uzv7sKv6Qy0AoSTLOz
-         j2BtRCNMtIEmnpzHMK8SHi8OLI10I9r0kB9r9g5yrrgNoLUhbZbrQ5WI5GAkpI7ePLtv
-         ZEL7VVNDuTcYRffrLhc/kRD+xGfSvzZi5PMixafVOTRpY2A1sBZEKfnYkZHyLf5QqNuG
-         loPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ogFgPpVvtLABZGqhLzO7aVIGrK84/NfIlVnDOzWwbx8=;
-        b=e+t/+JGNpPnBccKOeR1Pj+L+y6xVADtY9QVkt+4NGgMW13/6Dgm+l1J0gO2z7BqM8c
-         XrGbVX/Z8EbxvoYpioWHOTmVzvCEENBIVFjUPEFyyWJHbvLkzRQyuage34ZITc3Z/OSU
-         Dv631edAtJrz3AjAE0g+ctqiTu1zG9D6f+2vxW+RORoEfrefPA73M+3qe/B9DlRP2maz
-         BSsMRF1Ey25hcnksWRGsXNy6ByhsdW1uBAcm9z6G4rIIAC/a0o9KoskFiUjGoQoe1Flp
-         a3c24NmGeIsnqYkGnJK1eCJ/sm3cMKZ1rbhSL8rgTNuT35hDnaTloEJJvnHgjdYg8L7A
-         oE5A==
-X-Gm-Message-State: AOAM533XlEC+AMlo3iUC6umB0nkrZIpkdFYWzlutl2SZYmjmo24aWxUW
-        jKEjtzvTnD0snkcRUJSjp04=
-X-Google-Smtp-Source: ABdhPJwJWStGtq2F73tDt655k7SukiNeC417jxnY4Q7eSvMJW6/+8fSvzNv6EKJ51TvR0GUJcSrMHw==
-X-Received: by 2002:a17:90b:4f91:b0:1cd:3a73:3a5d with SMTP id qe17-20020a17090b4f9100b001cd3a733a5dmr20801877pjb.98.1652727007097;
-        Mon, 16 May 2022 11:50:07 -0700 (PDT)
-Received: from [192.168.0.107] ([103.86.19.192])
-        by smtp.gmail.com with ESMTPSA id h20-20020aa786d4000000b0050dc76281a5sm7289062pfo.127.2022.05.16.11.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 11:50:06 -0700 (PDT)
-Message-ID: <3f2e9cb6-9b3a-5054-34a8-7c7e1c77a15a@gmail.com>
-Date:   Tue, 17 May 2022 00:20:01 +0530
+        Mon, 16 May 2022 15:06:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F31920BD8;
+        Mon, 16 May 2022 12:06:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBB50614CB;
+        Mon, 16 May 2022 19:06:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83024C385AA;
+        Mon, 16 May 2022 19:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652727967;
+        bh=2Resw6p+2SXUmxtcyRn6SOdYMRyAbxOVblDDKJZfhuk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BSfKI3ipMdkFD4rYZrdaySQegpDAWsCAylzId9ynBGOuOqecfeWt14fH5AoEc7BHS
+         V8gAZ8FUYAWZ7+5K/4PIDrD6pGIIdrV0O2Jn6D6ulUbwttrVFEhG/G9b0Md4pdqADY
+         53Xfp2wtiTvaziCmhPIFbYVTjPjsMkMemaBd4jPHGp7NQtU+tEhOGlW+KsaU0+Uy//
+         GqydFI+z4tPURPZqkSW3aoa95B2I32CoYGYQEgbbShn5S4SKud+VDFCFP1PSKk/hrU
+         wBLkQLJ+Vw6ANisqhMcgiJZpjptSCT72a9hpW4OU0IhEEp1d+2ZA0FAxOElhbv5Pqe
+         BtFm85iRWxmGA==
+Date:   Mon, 16 May 2022 12:06:05 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, netdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-sh@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        kunit-dev@googlegroups.com, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 1e1b28b936aed946122b4e0991e7144fdbbfd77e
+Message-ID: <20220516120605.7a6bb562@kernel.org>
+In-Reply-To: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
+References: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] selftests: alsa: Better error messages
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <8598037d-0e24-9bc1-3f2c-a2751ec8e871@gmail.com>
- <YoJnhulbKk49rZsw@sirena.org.uk>
-From:   Siddh Raman Pant <siddhpant.gh@gmail.com>
-In-Reply-To: <YoJnhulbKk49rZsw@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thank you very much, Takashi, and Mark, for reviewing the patch. Helps me getting
-the hang of kernel development coding styles and conventions while starting out.
-
-The particular motivation for this was that this test tends to potentially
-generate a very long list of warnings/errors.
-
-On Mon, May 16, 2022 At 20:32:30 +0530, Mark Brown wrote:
->>  	if (err < 0) {
->> -		ksft_print_msg("Unable to parse custom alsa-lib configuration: %s\n",
->> +		ksft_print_msg("Unable to parse custom alsa-lib configuration (%s)\n",
->>  			       snd_strerror(err));
+On Sun, 15 May 2022 21:00:21 +0800 kernel test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> branch HEAD: 1e1b28b936aed946122b4e0991e7144fdbbfd77e  Add linux-next specific files for 20220513
 > 
-> I'm really unconvinced that replacing : with () is helping either people
-> or machines - the form we have at the minute is probably more common for
-> command line tools?
-
-The intent was to separate card and error with the colon. While it may not affect
-parsing, you are right, the colon separator is seemingly the standard. Apologies.
-
-> Why add the space before the : here?  That really is not idiomatic for
-> Unix stuff, or just natural language.
-> ...
-> This should definitely be a separate commit.
-
-You are right. Again, apologies for this.
-
->>  		bool is_volatile = snd_ctl_elem_info_is_volatile(ctl->info);
->> -		ksft_print_msg("%s.%d expected %lld but read %lld, is_volatile %d\n",
->> -			       ctl->name, index, expected_int, read_int, is_volatile);
->> +		ksft_print_msg("%s.%d : Expected %lld, but read %lld (%s)\n",
->> +			       ctl->name, index, expected_int, read_int,
->> +			       (is_volatile ? "Volatile" : "Non-volatile"));
+> Error/Warning reports:
 > 
-> I don't understand the comma here?
+> https://lore.kernel.org/linux-mm/202204181931.klAC6fWo-lkp@intel.com
+> https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
+> https://lore.kernel.org/linux-mm/202205031017.4TwMan3l-lkp@intel.com
+> https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
+> https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
+> https://lore.kernel.org/linux-mm/202205150051.3RzuooAG-lkp@intel.com
+> https://lore.kernel.org/linux-mm/202205150117.sd6HzBVm-lkp@intel.com
+> https://lore.kernel.org/lkml/202205100617.5UUm3Uet-lkp@intel.com
+> https://lore.kernel.org/llvm/202204210555.DNvfHvIb-lkp@intel.com
+> https://lore.kernel.org/llvm/202205060132.uhqyUx1l-lkp@intel.com
+> https://lore.kernel.org/llvm/202205120010.zWBednzM-lkp@intel.com
+> https://lore.kernel.org/llvm/202205141122.qihFGUem-lkp@intel.com
+> 
+> Error/Warning: (recently discovered and may have been fixed)
+> 
+> <command-line>: fatal error: ./include/generated/utsrelease.h: No such file or directory
+> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
+> arch/x86/kvm/pmu.h:20:32: warning: 'vmx_icl_pebs_cpu' defined but not used [-Wunused-const-variable=]
+> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5102:7: warning: variable 'allow_lttpr_non_transparent_mode' set but not used [-Wunused-but-set-variable]
+> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5147:6: warning: no previous prototype for function 'dp_parse_lttpr_mode' [-Wmissing-prototypes]
+> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1364:5: warning: no previous prototype for 'amdgpu_discovery_get_mall_info' [-Wmissing-prototypes]
+> drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1983:6: warning: no previous prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes]
+> drivers/gpu/drm/amd/amdgpu/soc21.c:171:6: warning: no previous prototype for 'soc21_grbm_select' [-Wmissing-prototypes]
+> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: 'ssd130x_spi_table' defined but not used [-Wunused-const-variable=]
+> drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
+> drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
+> drivers/video/fbdev/omap/hwa742.c:492:5: warning: no previous prototype for 'hwa742_update_window_async' [-Wmissing-prototypes]
+> fs/buffer.c:2254:5: warning: stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
+> fs/ntfs/aops.c:378:12: warning: stack frame size (2224) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+> kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
+> kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
 
-Those are independent clauses, hence used a comma. Looking back, the "but" can probably
-be removed here for brevity.
-
-
-Please let me know if there are any other things which bugs you, and whether or not
-should I send a v2 with the issues addressed.
-
-Thanks for the reviews,
-Siddh
+Is this report CCed everywhere or there's a reason why netdev@ is CCed?
+I'm trying to figure out we need to care and it's not obvious..
