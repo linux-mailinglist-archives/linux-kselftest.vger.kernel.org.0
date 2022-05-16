@@ -2,234 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C16527EFC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 09:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5C55280DD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 11:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241388AbiEPH6u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 May 2022 03:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S230483AbiEPJ3m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 May 2022 05:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiEPH6o (ORCPT
+        with ESMTP id S229751AbiEPJ3m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 03:58:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653D22AC4F;
-        Mon, 16 May 2022 00:58:41 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L1s2L3zc3zCskB;
-        Mon, 16 May 2022 15:53:46 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 15:58:38 +0800
-Message-ID: <06b33393-8af5-9faa-6faa-acb5111865f6@huawei.com>
-Date:   Mon, 16 May 2022 15:58:37 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
+        Mon, 16 May 2022 05:29:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC4BB2AE07;
+        Mon, 16 May 2022 02:29:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7EBA11063;
+        Mon, 16 May 2022 02:29:40 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E7863F66F;
+        Mon, 16 May 2022 02:29:39 -0700 (PDT)
+Date:   Mon, 16 May 2022 10:29:35 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com> <Yn5yb9F4uYkio4Xe@lakrids>
- <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
- <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: bti: force static linking
+Message-ID: <20220516102935.67505a91@donnerap.cambridge.arm.com>
+In-Reply-To: <YoDQY/0i9BrEIEO8@arm.com>
+References: <20220511172129.2078337-1-andre.przywara@arm.com>
+        <YoDQY/0i9BrEIEO8@arm.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/16/2022 3:18 PM, Mark Rutland wrote:
-> On Mon, May 16, 2022 at 02:55:46PM +0800, Xu Kuohai wrote:
->> On 5/13/2022 10:59 PM, Mark Rutland wrote:
->>> On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
->>>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->>>> it to replace nop with jump, or replace jump with nop.
->>>>
->>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>>> Acked-by: Song Liu <songliubraving@fb.com>
->>>> ---
->>>>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->>>>  1 file changed, 63 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->>>> index 8ab4035dea27..3f9bdfec54c4 100644
->>>> --- a/arch/arm64/net/bpf_jit_comp.c
->>>> +++ b/arch/arm64/net/bpf_jit_comp.c
->>>> @@ -9,6 +9,7 @@
->>>>  
->>>>  #include <linux/bitfield.h>
->>>>  #include <linux/bpf.h>
->>>> +#include <linux/memory.h>
->>>>  #include <linux/filter.h>
->>>>  #include <linux/printk.h>
->>>>  #include <linux/slab.h>
->>>> @@ -18,6 +19,7 @@
->>>>  #include <asm/cacheflush.h>
->>>>  #include <asm/debug-monitors.h>
->>>>  #include <asm/insn.h>
->>>> +#include <asm/patching.h>
->>>>  #include <asm/set_memory.h>
->>>>  
->>>>  #include "bpf_jit.h"
->>>> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->>>>  {
->>>>  	return vfree(addr);
->>>>  }
->>>> +
->>>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->>>> +			     void *addr, u32 *insn)
->>>> +{
->>>> +	if (!addr)
->>>> +		*insn = aarch64_insn_gen_nop();
->>>> +	else
->>>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->>>> +						    (unsigned long)addr,
->>>> +						    type);
->>>> +
->>>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->>>> +}
->>>> +
->>>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>>> +		       void *old_addr, void *new_addr)
->>>> +{
->>>> +	int ret;
->>>> +	u32 old_insn;
->>>> +	u32 new_insn;
->>>> +	u32 replaced;
->>>> +	enum aarch64_insn_branch_type branch_type;
->>>> +
->>>> +	if (!is_bpf_text_address((long)ip))
->>>> +		/* Only poking bpf text is supported. Since kernel function
->>>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->>>> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
->>>> +		 * called after a failed poke with ftrace. In this case, there
->>>> +		 * is probably something wrong with fentry, so there is nothing
->>>> +		 * we can do here. See register_fentry, unregister_fentry and
->>>> +		 * modify_fentry for details.
->>>> +		 */
->>>> +		return -EINVAL;
->>>
->>> If you rely on ftrace to poke functions, why do you need to patch text
->>> at all? Why does the rest of this function exist?
->>>
->>> I really don't like having another piece of code outside of ftrace
->>> patching the ftrace patch-site; this needs a much better explanation.
->>>
->>
->> Sorry for the incorrect explaination in the comment. I don't think it's
->> reasonable to patch ftrace patch-site without ftrace code either.
->>
->> The patching logic in register_fentry, unregister_fentry and
->> modify_fentry is as follows:
->>
->> if (tr->func.ftrace_managed)
->>         ret = register_ftrace_direct((long)ip, (long)new_addr);
->> else
->>         ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
->>                                  true);
->>
->> ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
->> only used to patch bpf prog and bpf trampoline, which are not managed by
->> ftrace.
-> 
-> Sorry, I had misunderstood. Thanks for the correction!
-> 
-> I'll have another look with that in mind.
->>>>> +
->>>> +	if (poke_type == BPF_MOD_CALL)
->>>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->>>> +	else
->>>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	mutex_lock(&text_mutex);
->>>> +	if (aarch64_insn_read(ip, &replaced)) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	if (replaced != old_insn) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
->>>
->>> ... and where does the actual synchronization come from in this case?
->>
->> aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
->> no other CPUs will fetch a half-new and half-old instruction.
->>
->> The scenario here is that there is a chance that another CPU fetches the
->> old instruction after bpf_arch_text_poke() finishes, that is, different
->> CPUs may execute different versions of instructions at the same time.
->>
->> 1. When a new trampoline is attached, it doesn't seem to be an issue for
->> different CPUs to jump to different trampolines temporarily.
->>
->> 2. When an old trampoline is freed, we should wait for all other CPUs to
->> exit the trampoline and make sure the trampoline is no longer reachable,
->> IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
->> tasks to do this.
-> 
-> It would be good to have a comment for these points>
+On Sun, 15 May 2022 11:05:23 +0100
+Catalin Marinas <catalin.marinas@arm.com> wrote:
 
-will add a comment for this in v4, thanks!
+Hi,
 
-> Thanks,
-> Mark.
-> .
+> On Wed, May 11, 2022 at 06:21:29PM +0100, Andre Przywara wrote:
+> > The "bti" selftests are built with -nostdlib, which apparently
+> > automatically creates a statically linked binary, which is what we want
+> > and need for BTI (to avoid interactions with the dynamic linker).
+> > 
+> > However this is not true when building a PIE binary, which some
+> > toolchains (Ubuntu) configure as the default.
+> > When compiling btitest with such a toolchain, it will create a
+> > dynamically linked binary, which will probably fail some tests, as the
+> > dynamic linker might not support BTI:
+> > ===================
+> > TAP version 13
+> > 1..18
+> > not ok 1 nohint_func/call_using_br_x0
+> > not ok 2 nohint_func/call_using_br_x16
+> > not ok 3 nohint_func/call_using_blr
+> > ....
+> > ===================
+> > 
+> > To make sure we create static binaries, add an explicit -static on the
+> > linker command line. This forces static linking even if the toolchain
+> > defaults to PIE builds, and fixes btitest runs on BTI enabled machines.
+> > 
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>  
+> 
+> Does this need to go in as a fix (cc stable, fixes tag)?
 
+I dimly remember some discussion about stable fixes not being a real thing
+for the selftests? In any case:
+
+Fixes: 314bcbf09f14 ("kselftest: arm64: Add BTI tests")
+
+Cheers,
+Andre
