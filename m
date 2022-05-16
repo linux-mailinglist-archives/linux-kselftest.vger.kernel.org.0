@@ -2,122 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B35A527C21
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 04:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE21527C91
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 05:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiEPCqh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 May 2022 22:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
+        id S239823AbiEPDxv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 May 2022 23:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239461AbiEPCqg (ORCPT
+        with ESMTP id S239393AbiEPDxs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 May 2022 22:46:36 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6623B14029
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 May 2022 19:46:35 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id f16so757697ybk.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 May 2022 19:46:35 -0700 (PDT)
+        Sun, 15 May 2022 23:53:48 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9940FD17;
+        Sun, 15 May 2022 20:53:47 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id q4so13264925plr.11;
+        Sun, 15 May 2022 20:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qs6KzmNvqi948FGwp/fLhqN7zczHoIBbeoB+SvqJ72Y=;
-        b=BCnP2xhE6Ob/d+gt4ZTBLwa0Dtcr/c2wsmjwxm8K77+x6RvJkK0jJAT/5eUnmAAQT/
-         qJAd1Vy7qGoEizlwBmUqFDispatPNG9bMJqKp0AsYWSCLBiqJxA4jyuPz5z4IjxlMCCu
-         DfLpoMaTJe+AwZvcPAMOEVO7r0++WXpzd9hDTQjdQ1BRVnFJsz+ZzJoTJrt4atjSn4Hc
-         O6YOAj3+BfEstQEo3vF/2NcL6Vp+JA4gz0ih6VlvyZ2yK8p/jW+xxEsJlhkvQ25FORLt
-         /nJhTCB5M80sZVl4y1VmSZIE+iM115E5AvyleTP0kkNsZhAy9jR/AUTnrCMdjvb25BDY
-         fDSw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6UBHO1EGmJn+4vtFUEVZC6X5sivEbREsXHE7onCtc80=;
+        b=gH9jilkJ2sX6gauODJgmNbh3oQO9EsapYqYQE59IEET48ygXfvNalBkpfkWiy35Mrk
+         SF2ZI/1bKa8dOdDGc4h4oT+92196qDNcw9PpGRgNZdO9kIrooUd+cV/jy+l2IeVYO4Sb
+         Fo0Q7Msi+XjGGkzhLtGpKb2kZb1RDXDAPUbpCKs4+1BY3WWJ/lzvYsTFA8FZ5bOBt+T+
+         hns56m8O15cs1C0viCr8+wRBYWkzsAjF1GEGB8zgjGGZmPL2HD0jCZSzPdmilaLqCMZe
+         9T0vQloBXv80E5nsL8kE+osa5pZF1OFSc5LLpsCuoAhBXv7H+SX4+9jWUMhFrt/CkYAM
+         CXcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qs6KzmNvqi948FGwp/fLhqN7zczHoIBbeoB+SvqJ72Y=;
-        b=Pa/MJiKm2KkBriGWmOW7vgjsHIf444kauhpnspGelKjAgKprwFEZt5HwtY7F5/pbjt
-         W/cxpNjthChk9UVGM0Sz26ZDN+VH1dF0Q4jv+/9YlzZLNGMoZoTbARouhiWpIyj7+Pfa
-         BoO+KXbkmig/uBBrbFd3QvRbMOuX9sS+xfHYVo+/qf4eG0yS765nc9MivhbZEku4e1xY
-         M9JQGLtcMyYvklXF+RtzSdHVyRx22JURh51aFbwV6UO6jnqmhBvs7co2yxgiX8FoYlIn
-         R0e09JABZFVLVuA2ZizFiCU4PDEymSMamNhc5VvRszvwPb8JykqophQE3YNKwAD6kQMj
-         ovqA==
-X-Gm-Message-State: AOAM5322VMNjw419ogRDCR17OsWEpUhdcPMjnQOV9AMsfFRPjZhooU0L
-        YRiXr9XLktOFpQt+yLyZokOfkcLI2JJiSD3dzA60Zg==
-X-Google-Smtp-Source: ABdhPJwb9h9mJYmHGsuwFhWI1uHb0LK9seKGiF0DwaqJTNtk5nU+naQY4h5vM98rjRAljFgSPt7qzYWx3iBQVaTT1Wg=
-X-Received: by 2002:a5b:30d:0:b0:64b:4193:7911 with SMTP id
- j13-20020a5b030d000000b0064b41937911mr14912687ybp.509.1652669194393; Sun, 15
- May 2022 19:46:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6UBHO1EGmJn+4vtFUEVZC6X5sivEbREsXHE7onCtc80=;
+        b=sX94srpxJQxy/7PO6jJ/GcCNxhxnpzrnNvFRQ+jqApmPmJNGZZU5GiF0NrpbOsxtNy
+         GFJgtM957CHx8ZeiecoR2iDSItvIYe1Yq+yDgaX1xoZICLVARIGx+jNFCaPTRLOKjEY2
+         hQeR8x5Zj0suONBBycvDv3Ml7Kn6Lth2wpYdromXQp/uctfy2jt4B0VIajiAIvQ630l/
+         9wrzcVXBj3xCAF48dBhZVNg7Pw6dFvcDfE74q8twMBQR2+QPty+6OI9q+fp0+hbm+r5T
+         pi5TzQB7TVAUAw7ajSDGQ1ZvBEnpt5K7BJbP0HRt3Kp5DBvMqRk1zZAyOgF2SpDi8wRs
+         W2+w==
+X-Gm-Message-State: AOAM533+coix8CZLatIxhllcvOm9ZxFN3YMMKVwHCoA1XZp+5B8Veii1
+        kKJL41UoKSe6IQ1p56/fawA=
+X-Google-Smtp-Source: ABdhPJwUnnkcxhdn/ys0LTUsohC/zRgCScfwcmMv+PATWs6ztosqvOf+Y+4a9LnE7xIiGoSjGckq3w==
+X-Received: by 2002:a17:90b:1c0e:b0:1dc:45b6:6392 with SMTP id oc14-20020a17090b1c0e00b001dc45b66392mr17068153pjb.236.1652673227262;
+        Sun, 15 May 2022 20:53:47 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h14-20020a170902680e00b0015e8d4eb2afsm3023159plk.249.2022.05.15.20.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 May 2022 20:53:46 -0700 (PDT)
+Date:   Mon, 16 May 2022 11:53:39 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH net 1/2] selftests/bpf: Fix build error with ima_setup.sh
+Message-ID: <YoHKw/at89Wp19F/@Laptop-X1>
+References: <20220512071819.199873-1-liuhangbin@gmail.com>
+ <20220512071819.199873-2-liuhangbin@gmail.com>
+ <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220510030014.3842475-1-surenb@google.com> <20220510030014.3842475-3-surenb@google.com>
- <Ynpj3TsPcWVL7K7F@dhcp22.suse.cz>
-In-Reply-To: <Ynpj3TsPcWVL7K7F@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sun, 15 May 2022 19:46:23 -0700
-Message-ID: <CAJuCfpGO0E82uY7vfhqeFNKeyxmrFa6PnbmwN6qgf68oAdzD_Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] mm: delete unused MMF_OOM_VICTIM flag
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 10, 2022 at 6:08 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 09-05-22 20:00:14, Suren Baghdasaryan wrote:
-> > With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
-> > now unused and can be removed.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->
-> LGTM
-> Acked-by: Michal Hocko <mhocko@suse.com>
->
-> One question below
-> [...]
-> > diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
-> > index 4d9e3a656875..746f6cb07a20 100644
-> > --- a/include/linux/sched/coredump.h
-> > +++ b/include/linux/sched/coredump.h
-> > @@ -70,7 +70,6 @@ static inline int get_dumpable(struct mm_struct *mm)
-> >  #define MMF_UNSTABLE         22      /* mm is unstable for copy_from_user */
-> >  #define MMF_HUGE_ZERO_PAGE   23      /* mm has ever used the global huge zero page */
-> >  #define MMF_DISABLE_THP              24      /* disable THP for all VMAs */
-> > -#define MMF_OOM_VICTIM               25      /* mm is the oom victim */
-> >  #define MMF_OOM_REAP_QUEUED  26      /* mm was queued for oom_reaper */
-> >  #define MMF_MULTIPROCESS     27      /* mm is shared between processes */
->
-> Have you consider renumbering the follow up flags so that we do not have
-> holes in there. Nothing really important but it can confuse somebody in
-> the future.
+On Fri, May 13, 2022 at 02:58:05PM -0700, Andrii Nakryiko wrote:
+> > -TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko \
+> > -                      ima_setup.sh                                     \
+> > +TRUNNER_EXTRA_BUILD := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko \
+> >                        $(wildcard progs/btf_dump_test_case_*.c)
+> 
+> 
+> note that progs/btf_dump_test_case_*.c are not built, they are just
+> copied over (C source files), so I don't think this fix is necessary.
+> 
+> btw, I tried running `OUTPUT="/tmp/bpf" make test_progs` and it didn't
+> error out. But tbh, I'd recommend building everything instead of
+> building individual targets.
 
-Missed this note until now. I will renumber the constants to avoid confusion.
-Thanks,
-Suren.
+After update the code to latest bpf-next. It works this time, the ima_setup.sh
+was copied to target folder correctly. 
 
->
-> --
-> Michal Hocko
-> SUSE Labs
+  EXT-COPY [test_progs] urandom_read bpf_testmod.ko liburandom_read.so ima_setup.sh btf_dump_test_case_bitfields.c btf_dump_test_case_multidim.c btf_dump_test_case_namespacing.c btf_dump_test_case_ordering.c btf_dump_test_case_packing.c btf_dump_test_case_padding.c btf_dump_test_case_syntax.c
+  BINARY   test_progs
+
+Not sure why the previous kernel doesn't work. But anyway I will drop this patch.
+
+On the other hand, when I build with latest bpf-next. I got error like:
+
+"""
+# OUTPUT="/tmp/bpf" make test_progs
+  BINARY   urandom_read                                                                                                                                                       gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR  -I/home/net/tools/testing/selftests/bpf -I/tmp/bpf/tools/include -I/home/net/include/generated -I/home/net/tools/lib -I/home/net/tools/include -I/home/net/tools/include/uapi -I/tmp/bpf  urandom_read.c urandom_read_aux.c  \
+          liburandom_read.so -lelf -lz -lrt -lpthread   \
+          -Wl,-rpath=. -Wl,--build-id=sha1 -o /tmp/bpf/urandom_read
+/usr/bin/ld: cannot find liburandom_read.so: No such file or directory                                                                                                        collect2: error: ld returned 1 exit status
+make: *** [Makefile:177: /tmp/bpf/urandom_read] Error 1
+
+# ls /tmp/bpf/liburandom_read.so
+/tmp/bpf/liburandom_read.so
+"""
+
+after I copy to liburandom_read.so back to tools/testing/selftests/bpf the build
+success.
+
+"""
+# cp /tmp/bpf/liburandom_read.so /home/net/tools/testing/selftests/bpf/
+# gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR -I/home/net/tools/testing/selftests/bpf -I/tmp/bpf/tools/include -I/home/net/include/generated -I/home/net/tools/lib -I/home/net/tools/include -I/home/net/tools/include/uapi -I/tmp/bpf  urandom_read.c urandom_read_aux.c liburandom_read.so -lelf -lz -lrt -lpthread -Wl,-rpath=. -Wl,--build-id=sha1 -o /tmp/bpf/urandom_read
+# echo $?
+0
+"""
+
+Do you know why this happens?
+
+Thanks
+Hangbin
