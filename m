@@ -2,110 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA55528B57
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 18:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272C6528B74
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 19:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiEPQ4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 May 2022 12:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
+        id S1344012AbiEPQ7m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 May 2022 12:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344012AbiEPQzq (ORCPT
+        with ESMTP id S1344028AbiEPQ7J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 12:55:46 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD83D1C0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 09:54:53 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id g3-20020a17090a128300b001df6b8706e3so1122331pja.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 09:54:53 -0700 (PDT)
+        Mon, 16 May 2022 12:59:09 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F902BE
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 09:59:08 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id p12-20020a9d4e0c000000b00606b40860a3so10466312otf.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 09:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=+MVCGYE2y7IQ9KF1Y9iPDzkw2D8l040rm/mqMkZxYig=;
-        b=mKJClu0HKRrNlZ2zYdbz8BaxR/mQoLSvaIPcE0MAaAFkDXsZJUEsrZkRdFkDIbC3lL
-         mkzKuu/R2DnLlfdZlZHmDKIn/s1moeWstlVxLAmdNCuuFVsefAwG1a989jtBH6TZ+yMD
-         /jbl9kTzcW4pFeEqD/TaWw+J5LEeHZqUCpdl+By9KDLTfOy5/lIkagLjt2Dk3eoFSNNm
-         nDhXtanRGpHVaLEiDUKN7WW2OnIFJIZgIR9jqaijELDG5HKNaYUpvn0PgV6Er8+00SXl
-         0aa8579UTVd6+AhYzHfaHejdE2JADWEnC3xubiS2PMQTVtHs16SNcCVHmJ/7fAvVZ01x
-         yLGQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SVSiugKnf8wJOdqfsw/q25vFSKAj+trMZCib/b4SHsE=;
+        b=xNCEcWiOUolnZIhOk9qAhe8FtKNTtG4QDT4fXmc/QcMlaIRHGYz4A8S+a4ZjvML9/U
+         hN5zefWJ7NGp/7Xp7QcDmQBoh8TdCJy/JaCya1YhOyC80YJ6/MAahbaiUScy5TEqisNF
+         Sr2iVxyK2WaSKhjWP24w4DlZ/KBux/9tlZrYQFQTET5qgcfs1PKjhP5F9HNb/WbVebre
+         vyxNKYUcDEUCYbHj0MxbqZoLtGEeJYK0kZhcbFaJG2N8zCDXo790bDns7NNe3bJ25vgJ
+         ZM26/1iZSZP39BGtEA4JZM44t8/QvfyOyAOng2wGnv2z1DNsb3TTcMoz0JWFNV1tCwA0
+         Vy5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=+MVCGYE2y7IQ9KF1Y9iPDzkw2D8l040rm/mqMkZxYig=;
-        b=OlZ/9BmGwCxVlznT7jwRBYGloRpM1drw9gNpLMQpwp6JZWyc9IwrMfoyU66DUeC2Om
-         Sr1viRCmwDdHzQu4Kx+yQz/9uSrY8puCgZyhNARbB1qrd9HyDZI0DObIEtonU+Jl+CXL
-         1nAYHy7A1TAx4H/el/sMwuog5FuJVwr6zQgRJmhMgQ8EbTvixefn910gwqwqoF4+UvoL
-         Ex86Orhm+II4gLlNO9QXAXA+dRnPwpxFV8H7e8agSMBY+mlRzQ6JbYXO4F2NZAVhRWYm
-         SMM+oGIN9SgozMUDqHhaHlj3juaVFXLtPFjqvpDC5UNfaVZN4NuWfPAqMDijfN/Se+57
-         7zCA==
-X-Gm-Message-State: AOAM532YFqEwLNaABWzrBxExNjuy5/eAI1EpDDUjLC5QEUjsQ0t1gxgX
-        IZSzAdF+AYsTzo0QlxStAwKL/3FqPojrkA==
-X-Google-Smtp-Source: ABdhPJzSxByWvyU4YOLXwLwK1gB4iz+w8j9tTU5kfvCa7KBpjRzaXJVqkxo0fscScun+wy2cd6dqfeR7dWkSRA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8f91:3848:5672:cb59])
- (user=dlatypov job=sendgmr) by 2002:a17:90a:9282:b0:1dc:4a1b:ea55 with SMTP
- id n2-20020a17090a928200b001dc4a1bea55mr20307630pjo.24.1652720093182; Mon, 16
- May 2022 09:54:53 -0700 (PDT)
-Date:   Mon, 16 May 2022 09:54:46 -0700
-Message-Id: <20220516165446.1246262-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH] kunit: use kmemdup in kunit_filter_tests(), take suite as const
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SVSiugKnf8wJOdqfsw/q25vFSKAj+trMZCib/b4SHsE=;
+        b=MMrf5bQZKfdnr4+en7ZBJlNYGBKOFqZwb8YBs3GRNeQWCFvohRYJq8m1mHQM14LTAl
+         x/6lAhB3omIM6H9bnYG4jdiS3H2KSQgd/tQcc2+Yml83y5fyRJ9HSZ74Zv2ipisXBYD6
+         QsrrNjUvW8hDbi7UjsGslJ9BCSOSV0GyfMIqLtX5TW1uNQKLn3BgWKuDVu4/R1AHCm68
+         6nR/zxQ6/vNSDIGdtKsgSP41ploFHBN1KijgF/pj5JXy5OznXaYWNEotUL2LrKdz31KY
+         Wm6zETCxTpFZLkmZrPDt0sFzx0D6dfoYuDyYb1oWxfwIHBHFRuyw7n77I/Xmb4jHmzA2
+         taHg==
+X-Gm-Message-State: AOAM532vEzFaZ4ZZpHKEwpMsBEiaND6unQ6gk6LN5z41HNaAx0/dfFv+
+        J76DnQh7feLT7Bbawqny9OR80hUDP2y2qMUcjKw=
+X-Google-Smtp-Source: ABdhPJzQ7BmCCqxGUIZGnvyc1mw1E81cQoTtZL9xm0IeZZSKzJzyHwgpPQy3DEs0+x5z6lGJSN1KAw==
+X-Received: by 2002:a9d:24e7:0:b0:606:56ad:91bb with SMTP id z94-20020a9d24e7000000b0060656ad91bbmr6614249ota.40.1652720348007;
+        Mon, 16 May 2022 09:59:08 -0700 (PDT)
+Received: from winterfell.papolivre.org (winterfell.papolivre.org. [198.58.116.17])
+        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000e686d1387bsm5966536oab.21.2022.05.16.09.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 09:59:07 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2804:14d:7224:81d8:1a5f:b39d:3db4:59e8])
+        by winterfell.papolivre.org (Postfix) with ESMTPSA id C9C911F296;
+        Mon, 16 May 2022 13:59:06 -0300 (-03)
+From:   Antonio Terceiro <antonio.terceiro@linaro.org>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest: alsa: handle cross compilation
+Date:   Mon, 16 May 2022 13:58:56 -0300
+Message-Id: <20220516165856.401452-1-antonio.terceiro@linaro.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kmemdup() is easier than kmalloc() + memcpy(), per lkp bot.
+Calling just `pkg-config` is adequate for native builds, but finding the
+foreign libraries with pkg-config needs pkg-config to be called via its
+architecture-specific wrapper. This works in Debian, where there is a
+corresponding *-pkg-config wrapper script for each enabled foreign
+architecture, just like there are *-gcc, *-ld.
 
-Also make the input `suite` as const since we're now always making
-copies after commit a127b154a8f2 ("kunit: tool: allow filtering test
-cases via glob").
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
 ---
- lib/kunit/executor.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/alsa/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 2f73a6a35a7e..43e15112460a 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -55,7 +55,7 @@ static void kunit_parse_filter_glob(struct kunit_test_filter *parsed,
+diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
+index f64d9090426d..f5675b3c929d 100644
+--- a/tools/testing/selftests/alsa/Makefile
++++ b/tools/testing/selftests/alsa/Makefile
+@@ -1,8 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
  
- /* Create a copy of suite with only tests that match test_glob. */
- static struct kunit_suite *
--kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
-+kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
- {
- 	int n = 0;
- 	struct kunit_case *filtered, *test_case;
-@@ -69,11 +69,9 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
- 	if (n == 0)
- 		return NULL;
+-CFLAGS += $(shell pkg-config --cflags alsa)
+-LDLIBS += $(shell pkg-config --libs alsa)
++PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
++
++CFLAGS += $(shell $(PKG_CONFIG) --cflags alsa)
++LDLIBS += $(shell $(PKG_CONFIG) --libs alsa)
  
--	/* Use memcpy to workaround copy->name being const. */
--	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-+	copy = kmemdup(suite, sizeof(*copy), GFP_KERNEL);
- 	if (!copy)
- 		return ERR_PTR(-ENOMEM);
--	memcpy(copy, suite, sizeof(*copy));
+ TEST_GEN_PROGS := mixer-test
  
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
- 	if (!filtered)
-
-base-commit: 9660209d9418f2295d31fea0d32e313e9b2c1200
 -- 
-2.36.0.550.gb090851708-goog
+2.35.1
 
