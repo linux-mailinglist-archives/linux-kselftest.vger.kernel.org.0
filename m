@@ -2,78 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE21527C91
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 05:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF8D527DEE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 May 2022 08:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239823AbiEPDxv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 May 2022 23:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S240535AbiEPG4m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 May 2022 02:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239393AbiEPDxs (ORCPT
+        with ESMTP id S240595AbiEPGzw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 May 2022 23:53:48 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9940FD17;
-        Sun, 15 May 2022 20:53:47 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id q4so13264925plr.11;
-        Sun, 15 May 2022 20:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6UBHO1EGmJn+4vtFUEVZC6X5sivEbREsXHE7onCtc80=;
-        b=gH9jilkJ2sX6gauODJgmNbh3oQO9EsapYqYQE59IEET48ygXfvNalBkpfkWiy35Mrk
-         SF2ZI/1bKa8dOdDGc4h4oT+92196qDNcw9PpGRgNZdO9kIrooUd+cV/jy+l2IeVYO4Sb
-         Fo0Q7Msi+XjGGkzhLtGpKb2kZb1RDXDAPUbpCKs4+1BY3WWJ/lzvYsTFA8FZ5bOBt+T+
-         hns56m8O15cs1C0viCr8+wRBYWkzsAjF1GEGB8zgjGGZmPL2HD0jCZSzPdmilaLqCMZe
-         9T0vQloBXv80E5nsL8kE+osa5pZF1OFSc5LLpsCuoAhBXv7H+SX4+9jWUMhFrt/CkYAM
-         CXcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6UBHO1EGmJn+4vtFUEVZC6X5sivEbREsXHE7onCtc80=;
-        b=sX94srpxJQxy/7PO6jJ/GcCNxhxnpzrnNvFRQ+jqApmPmJNGZZU5GiF0NrpbOsxtNy
-         GFJgtM957CHx8ZeiecoR2iDSItvIYe1Yq+yDgaX1xoZICLVARIGx+jNFCaPTRLOKjEY2
-         hQeR8x5Zj0suONBBycvDv3Ml7Kn6Lth2wpYdromXQp/uctfy2jt4B0VIajiAIvQ630l/
-         9wrzcVXBj3xCAF48dBhZVNg7Pw6dFvcDfE74q8twMBQR2+QPty+6OI9q+fp0+hbm+r5T
-         pi5TzQB7TVAUAw7ajSDGQ1ZvBEnpt5K7BJbP0HRt3Kp5DBvMqRk1zZAyOgF2SpDi8wRs
-         W2+w==
-X-Gm-Message-State: AOAM533+coix8CZLatIxhllcvOm9ZxFN3YMMKVwHCoA1XZp+5B8Veii1
-        kKJL41UoKSe6IQ1p56/fawA=
-X-Google-Smtp-Source: ABdhPJwUnnkcxhdn/ys0LTUsohC/zRgCScfwcmMv+PATWs6ztosqvOf+Y+4a9LnE7xIiGoSjGckq3w==
-X-Received: by 2002:a17:90b:1c0e:b0:1dc:45b6:6392 with SMTP id oc14-20020a17090b1c0e00b001dc45b66392mr17068153pjb.236.1652673227262;
-        Sun, 15 May 2022 20:53:47 -0700 (PDT)
-Received: from Laptop-X1 ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id h14-20020a170902680e00b0015e8d4eb2afsm3023159plk.249.2022.05.15.20.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 May 2022 20:53:46 -0700 (PDT)
-Date:   Mon, 16 May 2022 11:53:39 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Mon, 16 May 2022 02:55:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C5B1D;
+        Sun, 15 May 2022 23:55:50 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L1qjw6brpzgYLZ;
+        Mon, 16 May 2022 14:54:28 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 16 May 2022 14:55:46 +0800
+Message-ID: <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
+Date:   Mon, 16 May 2022 14:55:46 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH net 1/2] selftests/bpf: Fix build error with ima_setup.sh
-Message-ID: <YoHKw/at89Wp19F/@Laptop-X1>
-References: <20220512071819.199873-1-liuhangbin@gmail.com>
- <20220512071819.199873-2-liuhangbin@gmail.com>
- <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-5-xukuohai@huawei.com> <Yn5yb9F4uYkio4Xe@lakrids>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <Yn5yb9F4uYkio4Xe@lakrids>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +84,150 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 13, 2022 at 02:58:05PM -0700, Andrii Nakryiko wrote:
-> > -TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko \
-> > -                      ima_setup.sh                                     \
-> > +TRUNNER_EXTRA_BUILD := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko \
-> >                        $(wildcard progs/btf_dump_test_case_*.c)
+On 5/13/2022 10:59 PM, Mark Rutland wrote:
+> On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
+>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+>> it to replace nop with jump, or replace jump with nop.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Acked-by: Song Liu <songliubraving@fb.com>
+>> ---
+>>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
+>>  1 file changed, 63 insertions(+)
+>>
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 8ab4035dea27..3f9bdfec54c4 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -9,6 +9,7 @@
+>>  
+>>  #include <linux/bitfield.h>
+>>  #include <linux/bpf.h>
+>> +#include <linux/memory.h>
+>>  #include <linux/filter.h>
+>>  #include <linux/printk.h>
+>>  #include <linux/slab.h>
+>> @@ -18,6 +19,7 @@
+>>  #include <asm/cacheflush.h>
+>>  #include <asm/debug-monitors.h>
+>>  #include <asm/insn.h>
+>> +#include <asm/patching.h>
+>>  #include <asm/set_memory.h>
+>>  
+>>  #include "bpf_jit.h"
+>> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
+>>  {
+>>  	return vfree(addr);
+>>  }
+>> +
+>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+>> +			     void *addr, u32 *insn)
+>> +{
+>> +	if (!addr)
+>> +		*insn = aarch64_insn_gen_nop();
+>> +	else
+>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+>> +						    (unsigned long)addr,
+>> +						    type);
+>> +
+>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+>> +}
+>> +
+>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>> +		       void *old_addr, void *new_addr)
+>> +{
+>> +	int ret;
+>> +	u32 old_insn;
+>> +	u32 new_insn;
+>> +	u32 replaced;
+>> +	enum aarch64_insn_branch_type branch_type;
+>> +
+>> +	if (!is_bpf_text_address((long)ip))
+>> +		/* Only poking bpf text is supported. Since kernel function
+>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+>> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+>> +		 * called after a failed poke with ftrace. In this case, there
+>> +		 * is probably something wrong with fentry, so there is nothing
+>> +		 * we can do here. See register_fentry, unregister_fentry and
+>> +		 * modify_fentry for details.
+>> +		 */
+>> +		return -EINVAL;
 > 
+> If you rely on ftrace to poke functions, why do you need to patch text
+> at all? Why does the rest of this function exist?
 > 
-> note that progs/btf_dump_test_case_*.c are not built, they are just
-> copied over (C source files), so I don't think this fix is necessary.
+> I really don't like having another piece of code outside of ftrace
+> patching the ftrace patch-site; this needs a much better explanation.
 > 
-> btw, I tried running `OUTPUT="/tmp/bpf" make test_progs` and it didn't
-> error out. But tbh, I'd recommend building everything instead of
-> building individual targets.
 
-After update the code to latest bpf-next. It works this time, the ima_setup.sh
-was copied to target folder correctly. 
+Sorry for the incorrect explaination in the comment. I don't think it's
+reasonable to patch ftrace patch-site without ftrace code either.
 
-  EXT-COPY [test_progs] urandom_read bpf_testmod.ko liburandom_read.so ima_setup.sh btf_dump_test_case_bitfields.c btf_dump_test_case_multidim.c btf_dump_test_case_namespacing.c btf_dump_test_case_ordering.c btf_dump_test_case_packing.c btf_dump_test_case_padding.c btf_dump_test_case_syntax.c
-  BINARY   test_progs
+The patching logic in register_fentry, unregister_fentry and
+modify_fentry is as follows:
 
-Not sure why the previous kernel doesn't work. But anyway I will drop this patch.
+if (tr->func.ftrace_managed)
+        ret = register_ftrace_direct((long)ip, (long)new_addr);
+else
+        ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
+                                 true);
 
-On the other hand, when I build with latest bpf-next. I got error like:
+ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
+only used to patch bpf prog and bpf trampoline, which are not managed by
+ftrace.
 
-"""
-# OUTPUT="/tmp/bpf" make test_progs
-  BINARY   urandom_read                                                                                                                                                       gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR  -I/home/net/tools/testing/selftests/bpf -I/tmp/bpf/tools/include -I/home/net/include/generated -I/home/net/tools/lib -I/home/net/tools/include -I/home/net/tools/include/uapi -I/tmp/bpf  urandom_read.c urandom_read_aux.c  \
-          liburandom_read.so -lelf -lz -lrt -lpthread   \
-          -Wl,-rpath=. -Wl,--build-id=sha1 -o /tmp/bpf/urandom_read
-/usr/bin/ld: cannot find liburandom_read.so: No such file or directory                                                                                                        collect2: error: ld returned 1 exit status
-make: *** [Makefile:177: /tmp/bpf/urandom_read] Error 1
+>> +
+>> +	if (poke_type == BPF_MOD_CALL)
+>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+>> +	else
+>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	mutex_lock(&text_mutex);
+>> +	if (aarch64_insn_read(ip, &replaced)) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (replaced != old_insn) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+> 
+> ... and where does the actual synchronization come from in this case?
+> 
 
-# ls /tmp/bpf/liburandom_read.so
-/tmp/bpf/liburandom_read.so
-"""
+aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
+no other CPUs will fetch a half-new and half-old instruction.
 
-after I copy to liburandom_read.so back to tools/testing/selftests/bpf the build
-success.
+The scenario here is that there is a chance that another CPU fetches the
+old instruction after bpf_arch_text_poke() finishes, that is, different
+CPUs may execute different versions of instructions at the same time.
 
-"""
-# cp /tmp/bpf/liburandom_read.so /home/net/tools/testing/selftests/bpf/
-# gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR -I/home/net/tools/testing/selftests/bpf -I/tmp/bpf/tools/include -I/home/net/include/generated -I/home/net/tools/lib -I/home/net/tools/include -I/home/net/tools/include/uapi -I/tmp/bpf  urandom_read.c urandom_read_aux.c liburandom_read.so -lelf -lz -lrt -lpthread -Wl,-rpath=. -Wl,--build-id=sha1 -o /tmp/bpf/urandom_read
-# echo $?
-0
-"""
+1. When a new trampoline is attached, it doesn't seem to be an issue for
+different CPUs to jump to different trampolines temporarily.
 
-Do you know why this happens?
+2. When an old trampoline is freed, we should wait for all other CPUs to
+exit the trampoline and make sure the trampoline is no longer reachable,
+IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
+tasks to do this.
 
-Thanks
-Hangbin
+> Thanks,
+> Mark.
+> 
+>> +out:
+>> +	mutex_unlock(&text_mutex);
+>> +	return ret;
+>> +}
+>> -- 
+>> 2.30.2
+>>
+> .
+
