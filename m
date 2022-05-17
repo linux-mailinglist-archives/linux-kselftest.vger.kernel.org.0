@@ -2,68 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EE7529686
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 May 2022 03:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA70529697
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 May 2022 03:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbiEQBHk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 May 2022 21:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S238157AbiEQBO3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 May 2022 21:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiEQBHi (ORCPT
+        with ESMTP id S236359AbiEQBOP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 21:07:38 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2283C403C1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 18:07:38 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-f165bc447fso12571308fac.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 18:07:38 -0700 (PDT)
+        Mon, 16 May 2022 21:14:15 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB741984;
+        Mon, 16 May 2022 18:14:14 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 202so15624060pgc.9;
+        Mon, 16 May 2022 18:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4loixfGJBX/b2d0tY/k6yxdSnhFDGM7TlcCGNU7ptp0=;
-        b=Xhr/SVElLugHHcTTc96KL4WT+84spwWYl4MIWiOZB2LmEggYCObeYkSv2Vg+L1CTSB
-         DR53XbWR28V3a6LJUV9yl1eOKX4IQ87ZrX+m6oUttMfndOlWMtNfts951EwQpTo8nSrF
-         0LnBftUYOfaIkgf7pei/zgMcoL9LB4GSjk4MAj2DaO3FEcUmbJSqypPyHKA1a6VFTba+
-         hB9gFztylyA1rkCoOTn5KgMrvPHqFi6fcI+G7Y6MtHg5/OzOIsMXNaDg3D/l0vxe/42Y
-         m8yEbuFCL6dHwWkWgjijXPc1kPSHbdNMl9B6LiT1PYk7s9lwqEGLn3iBYJ1FUPlCRBQ0
-         oetg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yvfLNgzj0LlML7YO1Uk64PllzBEDEnVgEw1ErIJEf1c=;
+        b=fNItWEesTtzgODmxS5UzL83e0LdGMRcZUHKoHxfdsqWlRDPMw4VjeO7/83Q6yA+AjJ
+         xfogqJxIzSLw/84O91UkEZGLrMFafY6nqi31d+06pn8t367x1pg4yt9jWbutGlUrk8s5
+         UvjE/W0kEXSZsKM4KW07CPKGjPu1cZA02MJ12uMppQKHNF7DCAPtXBss2Y+OzaoLVPHE
+         uwvr/6+FHE2ttqKrv7PhiirbSCKa8HaVPqbDbWFQzssUbW3juphOV71pChMR4JGxxKQf
+         xWvy5SBA3Jvt6LR/tQ2cFvWjS9blMa97lAB5Zs8Z/apyTbzb0s8sVYV7HWN+WYj5ix13
+         WdpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4loixfGJBX/b2d0tY/k6yxdSnhFDGM7TlcCGNU7ptp0=;
-        b=V7xkjlBVQrl3UQ6O4kNcc7YbukCOeUtCVQ7oPJlh3he51DgQnuWnkw3MUax6nh7ygw
-         5bTxUbjBKnrHd4aAmwUpwC7s5L4a54Xijb50/NQCd8uJ+xwNhRW9huTg71lQF16xwbXq
-         wq6N8j0G8wBIhflWlH/VQDVveHtmzw63WV62sc79a9DbWdKFnJas3NWfxmvGs/k1wRrr
-         1AcaFP8A5Dl6CZOXLrTi53+CPToFIXpWgflwOynia0nqUXcgTgXHIi7cpHkZO5UE2Cg0
-         WPMsn0u1ut6UDu797zNr9bMf8ziNOnPpWCOfYkn0eCJSQFpONZy9SxerYqa6ibHZILBv
-         ZFyw==
-X-Gm-Message-State: AOAM532ZGN/nhSbGuyX53kHrYrWDTTJReT9UM5WD4RYw2IlAd/u0Ir8w
-        F/QB33LaEgV8LCxxMiOr/29teGXHkqTlPo4ClO2Rg6AGQZc=
-X-Google-Smtp-Source: ABdhPJyvVQl4zKW3GeSWaLTFgBdMEFgS+d4GbYEezcLSzKpZbs//QU5ZPYddnmkfzPV8jiXng/KxB7xutWQBkrMQQbQ=
-X-Received: by 2002:a05:6871:438b:b0:ee:326d:b3f9 with SMTP id
- lv11-20020a056871438b00b000ee326db3f9mr17111321oab.126.1652749657202; Mon, 16
- May 2022 18:07:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yvfLNgzj0LlML7YO1Uk64PllzBEDEnVgEw1ErIJEf1c=;
+        b=JOd3uMUxKoB8qOWj0Jm/eYx/1nG6egLKZZz0myVNWk4W6wSN+KTmCNvURZj6I8JLg5
+         ppozharNJ6xXetks+A19hbV+XPRXM76cQXFK0NGemJNYrVoZBlDhGGeQLGYPJ6YqZDJy
+         NtWjskK/WOVp/3/jGojB+JVN9kSxi4Ewetra0XNCjMCUWqrfqAeb0He7pXVZrHnR+23p
+         K8u0hp/CG6K+3j+H4yw7OOXlF3AKs8MACjWPpxFKBFaRB2BgUWWaF2bqtNWu1Lkxqdm9
+         Dib0Hpi2L21v2ryr5COCXgGLcdP+kwJ/zGw7S5EdI/uSgD/21m1cgaGtjVbVAREgKOBu
+         FiYQ==
+X-Gm-Message-State: AOAM530cjjg9pQQ35C6yLpSTqCFCcYoEhZQAdSPR5utqBkYI3lHAvsek
+        2z9M0Ja4+BCmyVd1Dd1lkiA=
+X-Google-Smtp-Source: ABdhPJz4auVTYWheSOfsiZtbJjA5qb3+6f/OJK+ZHip29RXltDL0KkzN5+jbnVcLSWEttXrtzZ1Y6w==
+X-Received: by 2002:a63:9553:0:b0:3c6:25b2:9525 with SMTP id t19-20020a639553000000b003c625b29525mr17669892pgn.294.1652750053728;
+        Mon, 16 May 2022 18:14:13 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:3651])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b0016144a84c31sm5556207pla.119.2022.05.16.18.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 18:14:13 -0700 (PDT)
+Date:   Mon, 16 May 2022 18:14:09 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 1/4] bpf_trace: check size for overflow in
+ bpf_kprobe_multi_link_attach
+Message-ID: <20220517011409.qexxrowf6b2ticid@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220516182708.GA29437@asgard.redhat.com>
+ <YoLDdaObEQePcIN+@krava>
+ <20220516224934.GA5013@asgard.redhat.com>
 MIME-Version: 1.0
-References: <20220504182908.1322874-1-yuanchu@google.com> <20220504184537.130085-1-sj@kernel.org>
- <CAJj2-QGQsuAPR0nYaS9+YA=DWXRQD83UZgk3QUjRJA9BTwqp4w@mail.gmail.com>
-In-Reply-To: <CAJj2-QGQsuAPR0nYaS9+YA=DWXRQD83UZgk3QUjRJA9BTwqp4w@mail.gmail.com>
-From:   Yuanchu Xie <yuanchu@google.com>
-Date:   Mon, 16 May 2022 21:07:25 -0400
-Message-ID: <CAJj2-QGk9DmGhjPsjHwL5uj+cQs6=12iKEffpq+Vxv3=CrMPBA@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516224934.GA5013@asgard.redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,85 +84,20 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SeongJae,
+On Tue, May 17, 2022 at 12:49:34AM +0200, Eugene Syromiatnikov wrote:
+> On Mon, May 16, 2022 at 11:34:45PM +0200, Jiri Olsa wrote:
+> > On Mon, May 16, 2022 at 08:27:08PM +0200, Eugene Syromiatnikov wrote:
+> > > +	if (check_mul_overflow(cnt, sizeof(*syms), &size))
+> > > +		return -EOVERFLOW;
+> > 
+> > there was an update already:
+> > 
+> >   0236fec57a15 bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
+> > 
+> > so this won't apply anymore, could you please rebase on top of the latest bpf-next/master?
+> 
+> The issue that this specific check has to go in 4.18, as it covers
+> possible out-of-bounds write, I'm not sure how to handle it, have
+> a branch where it is merged manually?
 
-Do you have a preference on how this should be handled?
-
-Thanks,
-Yuanchu
-
-On Wed, May 4, 2022 at 6:12 PM Yuanchu Xie <yuanchu@google.com> wrote:
->
-> Hi SeongJae,
->
-> On Wed, May 4, 2022 at 11:45 AM SeongJae Park <sj@kernel.org> wrote:
-> >
-> > Hi Yuanchu,
-> >
-> > On Wed, 4 May 2022 18:29:08 +0000 Yuanchu Xie <yuanchu@google.com> wrot=
-e:
-> >
-> > > The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
-> > > use '__GFP_NOWARN' for user-specified size buffer allocation")
-> > > intentionally writes and reads with a large count to cause
-> > > allocation failure and check for kernel warnings. We suppress
-> > > the compiler warnings for these calls as they work as intended.
-> > >
-> > > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-> > > ---
-> >
-> > It would be a good practice to mention the changes from the previous ve=
-rsion of
-> > this patch here[1].
-> >
-> > [1] https://docs.kernel.org/process/submitting-patches.html#the-canonic=
-al-patch-format
-> >
-> Thank you, I missed this when trying to figure out how to add
-> additional comments for a revision.
->
-> > >  tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/=
-tools/testing/selftests/damon/huge_count_read_write.c
-> > > index ad7a6b4cf338..91bd80c75cd9 100644
-> > > --- a/tools/testing/selftests/damon/huge_count_read_write.c
-> > > +++ b/tools/testing/selftests/damon/huge_count_read_write.c
-> > > @@ -2,6 +2,8 @@
-> > >  /*
-> > >   * Author: SeongJae Park <sj@kernel.org>
-> > >   */
-> > > +#pragma GCC diagnostic ignored "-Wstringop-overflow"
-> > > +#pragma GCC diagnostic ignored "-Wstringop-overread"
-> >
-> > I agree that this must be the cleaner way than v2.  But, I get below wa=
-rning
-> > after applying this:
-> >
-> >     $ sudo make -C tools/testing/selftests/damon run_tests
-> >     make: Entering directory '/home/sjpark/linux/tools/testing/selftest=
-s/damon'
-> >     gcc     huge_count_read_write.c  -o /home/sjpark/linux/tools/testin=
-g/selftests/damon/huge_count_read_write
-> >     huge_count_read_write.c:6:32: warning: unknown option after =E2=80=
-=98#pragma GCC diagnostic=E2=80=99 kind [-Wpragmas]
-> >         6 | #pragma GCC diagnostic ignored "-Wstringop-overread"
-> >           |                                ^~~~~~~~~~~~~~~~~~~~~
-> >
-> > My gcc version is:
-> >
-> >     $ gcc --version
-> >     gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-> I see, I'm running
->
->     $ gcc --version
->     gcc (Debian 11.2.0-16+build1) 11.2.0
->
-> I believe this is a new warning for gcc-11 [1], and somewhat
-> unfortunate that it results in a warning for gcc-9.4. I'm not sure
-> what the preference is here.
-> [1] https://gcc.gnu.org/onlinedocs/gcc-10.3.0/gcc/Warning-Options.html
->
-> Thanks,
-> Yuanchu
+As Jiri said, please use bpf-next.
