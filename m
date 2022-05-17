@@ -2,144 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29ED752A76B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 May 2022 17:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D8E52A8EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 May 2022 19:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiEQPyI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 May 2022 11:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S245072AbiEQRIf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 May 2022 13:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350662AbiEQPyC (ORCPT
+        with ESMTP id S1351359AbiEQRId (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 11:54:02 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D950B26;
-        Tue, 17 May 2022 08:53:54 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 137so17293266pgb.5;
-        Tue, 17 May 2022 08:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rmBZXjHGe6pjrZrcbSckkH/iPjlINFANkKf9gszWPYU=;
-        b=mCL2WZQfUMWu4xy6yy7X1+ebSif5rAu/jKymgNsJYYzZFnA9ugCrwiihsPYjvzThIU
-         DFn5Lk91C0tZGoeUNkgplThRXBMayt2xcmaeF/kI+0KvGVR+kIISN5RmRdDJqe7Oadm+
-         ApJfECbPyywghswoV+jBSpOdkrBps9EXktTRVf3Url5a8fO/0L7wfegdHmd2rnO/VKqr
-         5aIFJRbhhBTCl8CG9Fz4O9HHJKwwrK9Rxg2vuvpaHSd9SFQ95LPDBKs/Xs2D02Uy/oXT
-         ZFn7YQQsYYxadnuLDDRi0dvdKAfQu/UzUbSJrsKeXA9Nrm8fbp9Bp3m1fdX1C87JU/JQ
-         FXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rmBZXjHGe6pjrZrcbSckkH/iPjlINFANkKf9gszWPYU=;
-        b=Ib3dDUlTM04ry+BsbBJCGicKyfD0/9WIB+k0j8S6lgvmCrayRA2OM/3KYcnpChQHEa
-         YHGfzKJpQtQXXyWQlFXSCjnZOUVRV5qVeVqfERpxWHgm+3PqUfnhgt1SwnfYLoZKPh0Z
-         RSQOSYxo2Q5qO7xOHRKvsdOD/HjG46gWHysagO571KmfEWVkVA6zBf+TgVSw6CX0YF+L
-         QztLEkEaBOsZGsi5N7WMW7ixsMCoWMeyK1E4RrbNXpi+Ucb9F3Wqfqpq3dTdHhMfdnOw
-         LFC/Auv2sMTNW8+jV0Hrid8yRvHxMqj1/1oPNo5pNyk52iMC611MEgxS5TjxT+H32dht
-         iTsQ==
-X-Gm-Message-State: AOAM530j5FON1Djz9qZ5xcdpYGD1PkNHYtIYQpBTuyFwixC/CdWCkh77
-        HQ83wXMvDO4/v0SbDbDPquk=
-X-Google-Smtp-Source: ABdhPJxrXCSmhatJuzbkg3Oy+emIhom0t5nAYkNpvRG00a6Wimvdurd952Xq+8TaFxwV35QJJRu07A==
-X-Received: by 2002:a63:8442:0:b0:3c6:4271:cad with SMTP id k63-20020a638442000000b003c642710cadmr20242021pgd.275.1652802834212;
-        Tue, 17 May 2022 08:53:54 -0700 (PDT)
-Received: from MacBook-Pro.local ([2620:10d:c090:500::2:c22a])
-        by smtp.gmail.com with ESMTPSA id d14-20020a62f80e000000b0050dc76281fdsm6932pfh.215.2022.05.17.08.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 08:53:53 -0700 (PDT)
-Date:   Tue, 17 May 2022 08:53:49 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/6] bpf: Move is_valid_bpf_tramp_flags() to
- the public trampoline code
-Message-ID: <20220517155349.4jk5oymnjvrasw2p@MacBook-Pro.local>
-References: <20220517071838.3366093-1-xukuohai@huawei.com>
- <20220517071838.3366093-4-xukuohai@huawei.com>
+        Tue, 17 May 2022 13:08:33 -0400
+X-Greylist: delayed 2400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 May 2022 10:08:31 PDT
+Received: from mail.neweas.com (mail.neweas.com [162.19.155.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B8F41F8F
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 10:08:31 -0700 (PDT)
+Received: by mail.neweas.com (Postfix, from userid 1002)
+        id AB88022D2A; Tue, 17 May 2022 15:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=neweas.com; s=mail;
+        t=1652802663; bh=qQhd+6rcOH+OhrNQ6A9OWLCE/79cwvyTtb6LUe1aYuU=;
+        h=Date:From:To:Subject:From;
+        b=jlGidj5PPGCBxwQqpOV5YgPpiELaz/PPVwFo6PRLkrq9zALtPZqBO76BnMaVlfm/2
+         HjjTsv7e/RvUqYUyehXQmBUyEyDKvPTf5Y69nunbCOwU+zKZAba9syPALnwpLLlTVI
+         RK8XH8Xx9MI6bM64t2oDxcaZl787zjAsp82gnRfcyG7PoqHjIAD6xUN9tZTVmVbeDR
+         C93pv1DZRcNQk344tE45NmYsfMoANcjFppHnbXB8GL03r0VkFFSnVokIAPQZVYufn/
+         fnR2Udr+4KFyKWY0DCM8qEEvs5MG8S8+fFaDJnTEnsBVIVmoS0OIDIEVIB9khnQSuB
+         vDZ6AFEOweyXA==
+Received: by mail.neweas.com for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 15:50:50 GMT
+Message-ID: <20220517141500-0.1.f.10gh.0.59637n1gml@neweas.com>
+Date:   Tue, 17 May 2022 15:50:50 GMT
+From:   "Luca Gauthier" <luca.gauthier@neweas.com>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: New collaboration
+X-Mailer: mail.neweas.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517071838.3366093-4-xukuohai@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 17, 2022 at 03:18:35AM -0400, Xu Kuohai wrote:
->  
-> +static bool is_valid_bpf_tramp_flags(unsigned int flags)
-> +{
-> +	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
-> +	    (flags & BPF_TRAMP_F_SKIP_FRAME))
-> +		return false;
-> +
-> +	/* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
-> +	 * and it must be used alone.
-> +	 */
-> +	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
-> +	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +int bpf_prepare_trampoline(struct bpf_tramp_image *tr, void *image,
-> +			   void *image_end, const struct btf_func_model *m,
-> +			   u32 flags, struct bpf_tramp_links *tlinks,
-> +			   void *orig_call)
-> +{
-> +	if (!is_valid_bpf_tramp_flags(flags))
-> +		return -EINVAL;
-> +
-> +	return arch_prepare_bpf_trampoline(tr, image, image_end, m, flags,
-> +					   tlinks, orig_call);
-> +}
+Hello,
 
-It's an overkill to introduce a new helper function just to validate
-flags that almost compile time constants.
-The flags are not user supplied.
-Please move /* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops ... */
-comment to bpf_struct_ops.c right before it calls arch_prepare_bpf_trampoline()
-And add a comment to trampoline.c saying that BPF_TRAMP_F_RESTORE_REGS
-and BPF_TRAMP_F_SKIP_FRAME should not be set together.
-We could add a warn_on there or in arch code, but feels like overkill.
+are you looking for more business clients?
+
+We would like to start working with you as a partner in acquiring or exch=
+anging leads, which directly translates into mutual benefits in the form =
+of an increased client portfolio.
+
+We work in the sector of internet marketing and as one of the first in Eu=
+rope SEO Agencies we=E2=80=99ve introduced the SEO 360 service which allo=
+ws your clients to gain the access to original SEO consultations.
+
+By choosing to work with us you receive support in achieving your busines=
+s goals, and help in handling Digital Marketing for your clients.
+
+We support over 237 partner companies. We have one of the biggest executi=
+ve departments in Europe at our disposal, we=E2=80=99ve prepared over 200=
+0 campaigns in Europe and 200 in the USA and Canada.
+
+Are you interested in the details of our partnership programme?
+
+Yours sincerely,
+Luca Gauthier
