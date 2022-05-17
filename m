@@ -2,78 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89CE52A363
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 May 2022 15:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ED752A76B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 May 2022 17:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244034AbiEQN35 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 May 2022 09:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S232370AbiEQPyI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 May 2022 11:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242454AbiEQN35 (ORCPT
+        with ESMTP id S1350662AbiEQPyC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 09:29:57 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D23445AD2;
-        Tue, 17 May 2022 06:29:56 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 218DF1F438C9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652794195;
-        bh=OghcwFPcTRCWDvI8lZs817I+c7kVykTUcG5aBRYeFFY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Fm9QH7etdUsRLDpUGIU2xnpjwvCd0C7sz2oKyCxYIaCPCLlYh+93bO7l+H411mZLc
-         9sA+woYLxJkXboDBTL66WQeX+htRQ8r5LuBIfra231dLCWTVRPb/11ZmfMVTfmgN5c
-         jfTtF1kT5nViIT60YFelklGRvyPCkr/cEh5u3E076xXul/6Fcn+VuuESkIrmZClg5R
-         ypyBOt483f4/jG7JvvXTmDouUwVl7po9cBwHyAR71uBxvJRmPy1t5RlZRi2FjUnKKw
-         xnQGsWwHvbBxxoR3+ZUeZDVDYOaFyjL+CIyUmdPaILjJjRUrc4wxmhvp87bSNaGryW
-         +iTwztr3q6sYg==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/lkdtm: add config
-Date:   Tue, 17 May 2022 18:29:31 +0500
-Message-Id: <20220517132932.1484719-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 17 May 2022 11:54:02 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D950B26;
+        Tue, 17 May 2022 08:53:54 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 137so17293266pgb.5;
+        Tue, 17 May 2022 08:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rmBZXjHGe6pjrZrcbSckkH/iPjlINFANkKf9gszWPYU=;
+        b=mCL2WZQfUMWu4xy6yy7X1+ebSif5rAu/jKymgNsJYYzZFnA9ugCrwiihsPYjvzThIU
+         DFn5Lk91C0tZGoeUNkgplThRXBMayt2xcmaeF/kI+0KvGVR+kIISN5RmRdDJqe7Oadm+
+         ApJfECbPyywghswoV+jBSpOdkrBps9EXktTRVf3Url5a8fO/0L7wfegdHmd2rnO/VKqr
+         5aIFJRbhhBTCl8CG9Fz4O9HHJKwwrK9Rxg2vuvpaHSd9SFQ95LPDBKs/Xs2D02Uy/oXT
+         ZFn7YQQsYYxadnuLDDRi0dvdKAfQu/UzUbSJrsKeXA9Nrm8fbp9Bp3m1fdX1C87JU/JQ
+         FXxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rmBZXjHGe6pjrZrcbSckkH/iPjlINFANkKf9gszWPYU=;
+        b=Ib3dDUlTM04ry+BsbBJCGicKyfD0/9WIB+k0j8S6lgvmCrayRA2OM/3KYcnpChQHEa
+         YHGfzKJpQtQXXyWQlFXSCjnZOUVRV5qVeVqfERpxWHgm+3PqUfnhgt1SwnfYLoZKPh0Z
+         RSQOSYxo2Q5qO7xOHRKvsdOD/HjG46gWHysagO571KmfEWVkVA6zBf+TgVSw6CX0YF+L
+         QztLEkEaBOsZGsi5N7WMW7ixsMCoWMeyK1E4RrbNXpi+Ucb9F3Wqfqpq3dTdHhMfdnOw
+         LFC/Auv2sMTNW8+jV0Hrid8yRvHxMqj1/1oPNo5pNyk52iMC611MEgxS5TjxT+H32dht
+         iTsQ==
+X-Gm-Message-State: AOAM530j5FON1Djz9qZ5xcdpYGD1PkNHYtIYQpBTuyFwixC/CdWCkh77
+        HQ83wXMvDO4/v0SbDbDPquk=
+X-Google-Smtp-Source: ABdhPJxrXCSmhatJuzbkg3Oy+emIhom0t5nAYkNpvRG00a6Wimvdurd952Xq+8TaFxwV35QJJRu07A==
+X-Received: by 2002:a63:8442:0:b0:3c6:4271:cad with SMTP id k63-20020a638442000000b003c642710cadmr20242021pgd.275.1652802834212;
+        Tue, 17 May 2022 08:53:54 -0700 (PDT)
+Received: from MacBook-Pro.local ([2620:10d:c090:500::2:c22a])
+        by smtp.gmail.com with ESMTPSA id d14-20020a62f80e000000b0050dc76281fdsm6932pfh.215.2022.05.17.08.53.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 08:53:53 -0700 (PDT)
+Date:   Tue, 17 May 2022 08:53:49 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/6] bpf: Move is_valid_bpf_tramp_flags() to
+ the public trampoline code
+Message-ID: <20220517155349.4jk5oymnjvrasw2p@MacBook-Pro.local>
+References: <20220517071838.3366093-1-xukuohai@huawei.com>
+ <20220517071838.3366093-4-xukuohai@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517071838.3366093-4-xukuohai@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add config options which are needed for LKDTM sub-tests.
-STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
-READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
-INIT_ON_FREE_DEFAULT_ON config.
+On Tue, May 17, 2022 at 03:18:35AM -0400, Xu Kuohai wrote:
+>  
+> +static bool is_valid_bpf_tramp_flags(unsigned int flags)
+> +{
+> +	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
+> +	    (flags & BPF_TRAMP_F_SKIP_FRAME))
+> +		return false;
+> +
+> +	/* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
+> +	 * and it must be used alone.
+> +	 */
+> +	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
+> +	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +int bpf_prepare_trampoline(struct bpf_tramp_image *tr, void *image,
+> +			   void *image_end, const struct btf_func_model *m,
+> +			   u32 flags, struct bpf_tramp_links *tlinks,
+> +			   void *orig_call)
+> +{
+> +	if (!is_valid_bpf_tramp_flags(flags))
+> +		return -EINVAL;
+> +
+> +	return arch_prepare_bpf_trampoline(tr, image, image_end, m, flags,
+> +					   tlinks, orig_call);
+> +}
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/lkdtm/config | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index 3041236887394..5d52f64dfb430 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -2,8 +2,10 @@ CONFIG_LKDTM=y
- CONFIG_DEBUG_LIST=y
- CONFIG_SLAB_FREELIST_HARDENED=y
- CONFIG_FORTIFY_SOURCE=y
-+CONFIG_GCC_PLUGIN_STACKLEAK=y
- CONFIG_HARDENED_USERCOPY=y
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
-+CONFIG_INIT_ON_FREE_DEFAULT_ON=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
- CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
--- 
-2.30.2
-
+It's an overkill to introduce a new helper function just to validate
+flags that almost compile time constants.
+The flags are not user supplied.
+Please move /* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops ... */
+comment to bpf_struct_ops.c right before it calls arch_prepare_bpf_trampoline()
+And add a comment to trampoline.c saying that BPF_TRAMP_F_RESTORE_REGS
+and BPF_TRAMP_F_SKIP_FRAME should not be set together.
+We could add a warn_on there or in arch code, but feels like overkill.
