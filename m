@@ -2,151 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6ED152B8DC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 13:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEB652B939
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 13:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235568AbiERLZM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 07:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S235730AbiERLrd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 07:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbiERLZH (ORCPT
+        with ESMTP id S232124AbiERLrc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 07:25:07 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D4517568B;
-        Wed, 18 May 2022 04:25:01 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id h11so1410866eda.8;
-        Wed, 18 May 2022 04:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d5+0ld6vIvXb4AXUGD3+swLgU10VfBo9gjxiU0sZkxo=;
-        b=p/1CquKZ2KpM2HaO8peNflZCDXRy0gj1cVIe/nKuz2bP3fYtq/w6wqKzwsLpsT9sMD
-         eOIxisTYSYNgbg4yismK+RPzGoMDjuIUDdrodj8vre7ZvWH+kOtmRAk8nwls1ZzxfOfR
-         DAvb98vky1RH0iPEq1fpikV2GkjxIT2l41TIRP8VJtrvBnZrZ7nVKMiQmOBcVo3ZeQFh
-         TG/yXdcL9O9dAom4vJfalvK9zJF9cFVCUObOLVqWNWDrwLe6rt5qsVdkdIR2lUtKALoi
-         netJXodpCUQx+tB+tBGEOFoXZXTCuHTxi/S4eaMvX5cud32/jbiR3qYO+cccCDDnlO1E
-         aRHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d5+0ld6vIvXb4AXUGD3+swLgU10VfBo9gjxiU0sZkxo=;
-        b=D5aWc2fTkCLfMpw4uGyCGWLCshsT3iOwqh5FrTTNBZaOOQjN7Kfnj8Iwwg8ykhGuY8
-         GBloRv3upSeQ7rYTY6PN72NLViUtcNIpR2eRmTNSuco/QTRzVs7trwMertsFu9k8IP6M
-         rOp8nuAkTLB9aMG8bWih2eBZBbgOExr3jI3PQb3vXvROmxOCO59kMj5ZLJVFp2uDhhJL
-         hrlvgao72rKpPSG2n5G9Kwa3VpCUCIcIBAm3y/a0BbugazhaYMujJQMYmYcVEUHQqiym
-         2NFdwJokKzW4yf6TX+dnX8G9mcV56Yk7N7iQNuc4mRLlhMNRsPyrSUHaks+J6UqzGmrI
-         sMmQ==
-X-Gm-Message-State: AOAM532twxSjR5hsM4wMLrFnCq5w3P/2WoYpSxivyFXz7/vlhCEnuMHO
-        GqKbcTJZne2O1N/0AKwIVak=
-X-Google-Smtp-Source: ABdhPJylrzPWq2+Iu6K8RtJKvVvAeFK+PtDcRB6PF2VntSYs+asqFf8NFwR+hkN84tlTP1E/GxaatA==
-X-Received: by 2002:a05:6402:1cc1:b0:428:a06e:a30f with SMTP id ds1-20020a0564021cc100b00428a06ea30fmr23710681edb.377.1652873099648;
-        Wed, 18 May 2022 04:24:59 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id n24-20020a056402515800b0042ad0358c8bsm1188980edd.38.2022.05.18.04.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 04:24:59 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 18 May 2022 13:24:56 +0200
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in
- kprobe_multi.addrs
-Message-ID: <YoTXiAk1EpZ0rLKE@krava>
-References: <cover.1652772731.git.esyr@redhat.com>
- <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
- <YoNnAgDsIWef82is@krava>
- <20220517123050.GA25149@asgard.redhat.com>
- <YoP/eEMqAn3sVFXf@krava>
- <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
+        Wed, 18 May 2022 07:47:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F761169E28;
+        Wed, 18 May 2022 04:47:31 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IAvhEQ020241;
+        Wed, 18 May 2022 11:47:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=+nKPEVL8prVFTEnvtOi0sxLtE2RHvbWJm1XphVS7dGQ=;
+ b=LQWw2yLiLlVRd6+/IOveV5GxBcCA9k7BZnfJDL47ao2NuNkpVTVdXEh+BVelhf99QEmu
+ WSiFpCwotuHwiHQKmtjYZN05VUKcJdBJ3NEKgBmwR3MvJ/7n+L2u9zmWUjKqOG5lWSYL
+ rffEzxP32HeljHN3LqmrDXncIPm2im98ffsCE5vpW/8OAQI37FYxb2Oz6q8w+L78uGRe
+ Lw9CVPoqya8UT/GE4WQZcVmSFW6oYcGBYsZNN126pcypmj19ubHut258tqwsn/N0ljni
+ 0WMdOATQWRjz2TXAx/oeQyL5azCRjsPOEg4nWyO69gpK8xzAMBoRBymyM/qM9zQ5BByw 0Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4ygr14x1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:47:26 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IB2CYs019307;
+        Wed, 18 May 2022 11:47:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4ygr14w7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:47:26 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IBg1Pr028421;
+        Wed, 18 May 2022 11:47:23 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjdn4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:47:23 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IBlK8G58130702
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 11:47:20 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B17742042;
+        Wed, 18 May 2022 11:47:20 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E997242041;
+        Wed, 18 May 2022 11:47:19 +0000 (GMT)
+Received: from osiris (unknown [9.145.54.247])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 18 May 2022 11:47:19 +0000 (GMT)
+Date:   Wed, 18 May 2022 13:47:18 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Steffen Eiden <seiden@linux.ibm.com>
+Cc:     Greg KH <greg@kroah.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
+Message-ID: <YoTcxhulemnqiUbC@osiris>
+References: <20220510144724.3321985-1-seiden@linux.ibm.com>
+ <20220510144724.3321985-2-seiden@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220510144724.3321985-2-seiden@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3drxn84-cVvXdIpMwW-724Y69aCBEo3a
+X-Proofpoint-GUID: HYccexZNg8GE4fFYEkJgiomCoVDPSJsk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 lowpriorityscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 clxscore=1011 malwarescore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205180065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 17, 2022 at 02:34:55PM -0700, Yonghong Song wrote:
-> 
-> 
-> On 5/17/22 1:03 PM, Jiri Olsa wrote:
-> > On Tue, May 17, 2022 at 02:30:50PM +0200, Eugene Syromiatnikov wrote:
-> > > On Tue, May 17, 2022 at 11:12:34AM +0200, Jiri Olsa wrote:
-> > > > On Tue, May 17, 2022 at 09:36:47AM +0200, Eugene Syromiatnikov wrote:
-> > > > > With the interface as defined, it is impossible to pass 64-bit kernel
-> > > > > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
-> > > > > which severly limits the useability of the interface, change the ABI
-> > > > > to accept an array of u64 values instead of (kernel? user?) longs.
-> > > > > Interestingly, the rest of the libbpf infrastructure uses 64-bit values
-> > > > > for kallsyms addresses already, so this patch also eliminates
-> > > > > the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
-> > > > 
-> > > > so the problem is when we have 32bit user sace on 64bit kernel right?
-> > > > 
-> > > > I think we should keep addrs as longs in uapi and have kernel to figure out
-> > > > if it needs to read u32 or u64, like you did for symbols in previous patch
-> > > 
-> > > No, it's not possible here, as addrs are kernel addrs and not user space
-> > > addrs, so user space has to explicitly pass 64-bit addresses on 64-bit
-> > > kernels (or have a notion whether it is running on a 64-bit
-> > > or 32-bit kernel, and form the passed array accordingly, which is against
-> > > the idea of compat layer that tries to abstract it out).
-> > 
-> > hum :-\ I'll need to check on compat layer.. there must
-> > be some other code doing this already somewhere, right?
+On Tue, May 10, 2022 at 02:47:23PM +0000, Steffen Eiden wrote:
+> diff --git a/drivers/s390/char/Kconfig b/drivers/s390/char/Kconfig
+> index 6cc4b19acf85..e9b9902abbaf 100644
+> --- a/drivers/s390/char/Kconfig
+> +++ b/drivers/s390/char/Kconfig
+> @@ -100,6 +100,16 @@ config SCLP_OFB
+>  	  This option enables the Open-for-Business interface to the s390
+>  	  Service Element.
+>  
+> +config S390_UV_UAPI
+> +	def_tristate y
+> +	prompt "Ultravisor userspace API"
+> +	help
+> +	  Selecting exposes parts of the UV interface to userspace
+> +	  by providing a misc character device at /dev/uv.
+> +	  Using IOCTLs one can interact with the UV.
+> +	  The device is only available if the Ultravisor
+> +	  Facility (158) is present.
 
-so the 32bit application running on 64bit kernel using libbpf won't
-work at the moment, right? because it sees:
-
-  bpf_kprobe_multi_opts::addrs as its 'unsigned long'
-
-which is 4 bytes and it needs to put there 64bits kernel addresses
-
-if we force the libbpf interface to use u64, then we should be fine
-
-> 
-> I am not familiar with all these compatibility thing. But if we
-> have 64-bit pointer for **syms, maybe we could also have
-> 64-bit pointer for *syms for consistency?
-
-right, perhaps we could have one function to read both syms and addrs arrays
-
-> 
-> > jirka
-> > 
-> > > 
-> > > > we'll need to fix also bpf_kprobe_multi_cookie_swap because it assumes
-> > > > 64bit user space pointers
-
-if we have both addresses and cookies 64 then this should be ok
-
-> > > > 
-> > > > would be gret if we could have selftest for this
-
-let's add selftest for this
-
-thanks,
-jirka
+Is there a reason why this is default "y"? If you think this should be
+compiled into the kernel if used, then why allow to make it a module
+at all?
+Instead you could get rid of a couple if lines of code.
