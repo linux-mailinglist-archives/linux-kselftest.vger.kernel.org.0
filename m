@@ -2,74 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE0C52C634
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 00:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6919852C65E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 00:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiERWXu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 18:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S230055AbiERWhH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 18:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiERWXt (ORCPT
+        with ESMTP id S230056AbiERWhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 18:23:49 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2D61F7E1A
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 15:23:48 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id i15so2482726ilk.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 15:23:48 -0700 (PDT)
+        Wed, 18 May 2022 18:37:06 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FA56D1BE;
+        Wed, 18 May 2022 15:37:05 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id a10so3938881ioe.9;
+        Wed, 18 May 2022 15:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=w5RfX8/Rv7yQPUAnH5qBKrcDO1Mm9mdpkNqUpF+8goU=;
-        b=Vp6aagYWx+xbz9SJTBgZR0G9TrlTmXBPwdVDNVlS/jP6tMxTDONTEtXxFFMACKHQ92
-         e4DhrJbFSk/A8EVBl+jyJZHPz88EhUnxgn4YhPZ/R8KR3kwLnl9YHshvCJfNKCuBW6YA
-         vVVxZNiKJrNAjD7ii58tkXT+SNlhWxQMXwKtM=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0UsOrN8L2jk9f8YbUqb1h5IfPLIvfbGbF/K8sUgKLa8=;
+        b=pfQVWJSaI650YZeOaa35tgCa5V78lxkK9XS2gIkwjXKHVtvZ425s0Y1UzT4Kg9zhQU
+         ki5XTi7DxF06BVh+i3mn+ChDmsAzAG80tP47vzheLmohV7k22GhmgOzR4qZTl5MrEwsT
+         lsjqDC0SOna7dZX3qdL6euvQOOCGNeRytsprrHOngAdN1jLqx3AY+M3wFKZXigQxERcD
+         bVV7qUGrLZtzdMTfjq1SBUNZsChlitJdbgPWmhwvQw024OzPCIevC+Sci5VrYY0mvEcf
+         wCf55pTaiE4cHk/bixrljcgx7fAVp7ORcRA0chPK6Vx2CDwUoqxEl1wGzJy3+BqZoA79
+         17mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=w5RfX8/Rv7yQPUAnH5qBKrcDO1Mm9mdpkNqUpF+8goU=;
-        b=iLL102ALwV7W7sGEAHHXnQNC9292j6DgoNi7+GJRKIeV7wJBIdY7TS+4Svubn4WJIN
-         Bkf4u5DX6NFaOXnnN1xp6o2E9aKBmSqu5QUJaZsZmE6I1Q2RShUoClvL4J0CeDnWmcPI
-         50rJ6KMabzxxPlEidZeGFKC7S4jZLN8OlmJnWmZHDsNgMMxUjdxQL0uz5XITm2yWjwsS
-         WanAdpgLNFHyqL+LGnbuZryv7jRSN4oNu+qfu1PX7/ocF4cp+9MgNotwYG6x+EiIss7Q
-         rNXdYtyc8M7nblQ9zL9diDaBgkSkIyF9gwfstdc9SaiUhs53yV+puT/xXKmqLgm0bWgZ
-         VJcg==
-X-Gm-Message-State: AOAM532Fo6xpKqd4lkno7PqY1kJq+BulBfCDu16cWMxhBDtpWgb8fJ5Z
-        hQnX7WQLIpTfQyZ0btJ6vS1/iw==
-X-Google-Smtp-Source: ABdhPJzKCuF7JRxOdyp5CvlBmcPHkPFHNXjwd+grkUrJqygaKaMSoob85tO7D69QkE403CTm54Cqqg==
-X-Received: by 2002:a05:6e02:1c4e:b0:2d1:a8d:e94d with SMTP id d14-20020a056e021c4e00b002d10a8de94dmr1020917ilg.194.1652912627881;
-        Wed, 18 May 2022 15:23:47 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id d5-20020a05663802a500b0032e15dfbf13sm201221jaq.113.2022.05.18.15.23.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 15:23:47 -0700 (PDT)
-Subject: Re: [PATCH v3 1/1] selftests: vm: add process_mrelease tests
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
-        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
-        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com, david@redhat.com,
-        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
-        jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220518204316.13131-1-surenb@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4b05f63a-c1b7-1b36-4305-8ee9e34f0e04@linuxfoundation.org>
-Date:   Wed, 18 May 2022 16:23:46 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0UsOrN8L2jk9f8YbUqb1h5IfPLIvfbGbF/K8sUgKLa8=;
+        b=o0EG/Dn0L80UZkjRhQXbRVPhWUMpLsuj7OQdgDVoxUtGiKz60ZXhDBJPXPdO2lJyjP
+         6GWJe4I82ZhG2rzwuhfxFz85dxnUj0V9BbwqKtcwctOqcaYWy+KrUoQ5z6fVPyJkuoma
+         lZDNwFD40kgwvmkzhSMlMYG8NHiNuJFaYboe2mO4JYWal0L1J/p8vquKBV7c9B3PL2LR
+         ngXRcfmDjRreM+jWB6e2FqJV/ngp7V5kIuwqIkKihFdMa2Rk2q4yuI2qdSKfzMdHT8ST
+         UEYLCwYStwiHQR5G8nLgKP9fYkUitb8ypEOV20EwYlIIpYpKaElL0S1GZzKkPMX+6b3K
+         9Z+A==
+X-Gm-Message-State: AOAM531qECYA9ViU1c2eKtxU+UbOccRuxybk4yDQ4LTCWPXhnfNh26AX
+        ft7UEQ8bBoj2dFO3T2GhuokfcBrRf7F74ETGS40=
+X-Google-Smtp-Source: ABdhPJxoC2STA3TBSyALtE6G83AWgatXTc29FjZdK2oqtrZtEGtnxLST3voiVz6FPJJI267q/Z0++69FQ1rcgr1tb60=
+X-Received: by 2002:a05:6638:468e:b0:32b:fe5f:d73f with SMTP id
+ bq14-20020a056638468e00b0032bfe5fd73fmr1037971jab.234.1652913424002; Wed, 18
+ May 2022 15:37:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220518204316.13131-1-surenb@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20220512071819.199873-1-liuhangbin@gmail.com> <20220512071819.199873-2-liuhangbin@gmail.com>
+ <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com> <YoHKw/at89Wp19F/@Laptop-X1>
+In-Reply-To: <YoHKw/at89Wp19F/@Laptop-X1>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 18 May 2022 15:36:53 -0700
+Message-ID: <CAEf4BzZhKpikBQFCEyRMmUHdTEt6xi+0ntfPswHA5WWK39cFjQ@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] selftests/bpf: Fix build error with ima_setup.sh
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,49 +77,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/18/22 2:43 PM, Suren Baghdasaryan wrote:
-> Introduce process_mrelease syscall sanity tests which include tests
-> which expect to fail:
-> - process_mrelease with invalid pidfd and flags inputs
-> - process_mrelease on a live process with no pending signals
-> and valid process_mrelease usage which is expected to succeed.
-> Because process_mrelease has to be used against a process with a pending
-> SIGKILL, it's possible that the process exits before process_mrelease
-> gets called. In such cases we retry the test with a victim that allocates
-> twice more memory up to 1GB. This would require the victim process to
-> spend more time during exit and process_mrelease has a better chance of
-> catching the process before it exits and succeeding.
-> 
-> On success the test reports the amount of memory the child had to
-> allocate for reaping to succeed. Sample output:
-> 
-> $ mrelease_test
-> Success reaping a child with 1MB of memory allocations
-> 
-> On failure the test reports the failure. Sample outputs:
-> 
-> $ mrelease_test
-> All process_mrelease attempts failed!
-> 
-> $ mrelease_test
-> process_mrelease: Invalid argument
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
-> Changes in v3:
-> - Applied on git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm mm-stable,
-> per Andrew
-> - Fixed formatting for sample outputs in the description, per Shuah
-> - Removed pidfd_open, process_mrelease, write_fault_pages functions, per Shuah
-> - Moved child main routine into its own function, per Shuah
-> - Followed tools/testing/selftests/pidfd/pidfd.h as a model to deal with
-> undefined syscall numbers, per Shuah
-> 
+On Sun, May 15, 2022 at 8:53 PM Hangbin Liu <liuhangbin@gmail.com> wrote:
+>
+> On Fri, May 13, 2022 at 02:58:05PM -0700, Andrii Nakryiko wrote:
+> > > -TRUNNER_EXTRA_FILES :=3D $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmo=
+d.ko \
+> > > -                      ima_setup.sh                                  =
+   \
+> > > +TRUNNER_EXTRA_BUILD :=3D $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmo=
+d.ko \
+> > >                        $(wildcard progs/btf_dump_test_case_*.c)
+> >
+> >
+> > note that progs/btf_dump_test_case_*.c are not built, they are just
+> > copied over (C source files), so I don't think this fix is necessary.
+> >
+> > btw, I tried running `OUTPUT=3D"/tmp/bpf" make test_progs` and it didn'=
+t
+> > error out. But tbh, I'd recommend building everything instead of
+> > building individual targets.
+>
+> After update the code to latest bpf-next. It works this time, the ima_set=
+up.sh
+> was copied to target folder correctly.
+>
+>   EXT-COPY [test_progs] urandom_read bpf_testmod.ko liburandom_read.so im=
+a_setup.sh btf_dump_test_case_bitfields.c btf_dump_test_case_multidim.c btf=
+_dump_test_case_namespacing.c btf_dump_test_case_ordering.c btf_dump_test_c=
+ase_packing.c btf_dump_test_case_padding.c btf_dump_test_case_syntax.c
+>   BINARY   test_progs
+>
+> Not sure why the previous kernel doesn't work. But anyway I will drop thi=
+s patch.
+>
+> On the other hand, when I build with latest bpf-next. I got error like:
+>
+> """
+> # OUTPUT=3D"/tmp/bpf" make test_progs
+>   BINARY   urandom_read                                                  =
+                                                                           =
+                          gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR =
+ -I/home/net/tools/testing/selftests/bpf -I/tmp/bpf/tools/include -I/home/n=
+et/include/generated -I/home/net/tools/lib -I/home/net/tools/include -I/hom=
+e/net/tools/include/uapi -I/tmp/bpf  urandom_read.c urandom_read_aux.c  \
+>           liburandom_read.so -lelf -lz -lrt -lpthread   \
+>           -Wl,-rpath=3D. -Wl,--build-id=3Dsha1 -o /tmp/bpf/urandom_read
 
-Looks good to me Suren. Thank you.
+we assume liburandom_read.so is going to be under selftests/bpf here,
+but it's actually under $(OUTPUT)/
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Can you try $(OUTPUT)/liburandom_read.so? I suspect this might break
+-rpath=3D., though, but let's try this first?
 
-thanks,
--- Shuah
 
+> /usr/bin/ld: cannot find liburandom_read.so: No such file or directory   =
+                                                                           =
+                          collect2: error: ld returned 1 exit status
+> make: *** [Makefile:177: /tmp/bpf/urandom_read] Error 1
+>
+> # ls /tmp/bpf/liburandom_read.so
+> /tmp/bpf/liburandom_read.so
+> """
+>
+> after I copy to liburandom_read.so back to tools/testing/selftests/bpf th=
+e build
+> success.
+>
+> """
+> # cp /tmp/bpf/liburandom_read.so /home/net/tools/testing/selftests/bpf/
+> # gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR -I/home/net/tools/test=
+ing/selftests/bpf -I/tmp/bpf/tools/include -I/home/net/include/generated -I=
+/home/net/tools/lib -I/home/net/tools/include -I/home/net/tools/include/uap=
+i -I/tmp/bpf  urandom_read.c urandom_read_aux.c liburandom_read.so -lelf -l=
+z -lrt -lpthread -Wl,-rpath=3D. -Wl,--build-id=3Dsha1 -o /tmp/bpf/urandom_r=
+ead
+> # echo $?
+> 0
+> """
+>
+> Do you know why this happens?
+>
+> Thanks
+> Hangbin
