@@ -2,65 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9DB52B3E8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 09:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6207F52B42B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 10:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbiERHst (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 03:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S232896AbiERH7p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 03:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiERHsr (ORCPT
+        with ESMTP id S232893AbiERH7o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 03:48:47 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B4A101C9
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 00:48:45 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r30so1390570wra.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 00:48:45 -0700 (PDT)
+        Wed, 18 May 2022 03:59:44 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451181271A7
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 00:59:43 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so2679334wmj.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 00:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YYkjxn2cJ8PUflgpavVBQJlzogSe94I6eGTKkYiFpu0=;
-        b=qtdcIhwmx6hgfCDFUX7uD3d3krmnGGVfcJl00pEHZ5PasiN9rHd6FHK1CEn6RGyge3
-         b+xv4RrpHvuiltrsKpgZ54Spqv3SIO8jsES8lticVCqKGe+xkbfUfJVaR92UDeKuvrGM
-         DjAm09cXwRjVQCjlH14cJb+U7e2vEiXiPc3gnEC5Ehj1Xvi/vG6CVgM8HYHCQF7LhoCm
-         S2wJAdJHXB1kjcUemL7+A+ETztorzwZ0NMgWVGoMOvbSlCogtcyz38Bb4TpDaGpdMYAM
-         RrRAhifxMEwiX/r5LXAdKPuZ/P8YcA/LDeH5jxOYgvUw9wwVxL+0R4eorIbCXSH5KOhQ
-         +ccw==
+        bh=1xrKfHXzENUKfZfrSxeeJkFUdKwqShdFovzR9IeZc3E=;
+        b=fvNoVrbs7WYvuyl2fQzeDKxfeUY58UIlDGrfek9qyRO+2CEeAmVWusKwf9ZG0XPS7p
+         Uez/o2H7O79CL9jspYhwMffiwk/HJteVL/2uK5x9x1RGf2AlPqRRViWZbjSA1sNkv9p/
+         EJfM0W/xNmv26SLLAQ/76Fgyuio5kz0mamK5FpJV+KTg8q3iSqbCaGKyPEtQ/6sfbRAu
+         ETJxtPFfWUPXCXAxpx6Xifvz9WUu4rTlyiFFS0akE9TKadz51omSu1zzbwih9/Pv1INW
+         uaN4K5SXsomxRS8A4/es26zHi88YRtrKVa60pmmwtRnUGDtQ4vfcI9wSJmY8aRSa2Uma
+         eT8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YYkjxn2cJ8PUflgpavVBQJlzogSe94I6eGTKkYiFpu0=;
-        b=QqknjHXWQoEgizwNym6Io/moegA7/APdAkFLlo2QucHuLGqe2KqHjjobV7/9c2QyUo
-         UYXfD/K3fh7QLBBGqcBx3FdTI+Gy1outQzo63N8yeZGoKFuMoeMvX9mVsAMJuwhugCBg
-         dIoj76XC0MXCDBt2Y64SxL8IGo6Y59HVis1JfYRbguuQ4lT+J9IUDnSoEqPHqR8Hp9fz
-         AzGoIGM7qDI4xx5peapoJUn/co8jd/uVKoah3zjUH52sRTvCSyb1RY+zkixmBfS7gDR5
-         SIvPuIKnTpOO8p52YHr7cD5bh9kreJdEuKFpPOeJ4+kC/yaF23u8pwG2hKgVJXMtqvSm
-         DmqQ==
-X-Gm-Message-State: AOAM532P7rB5IrKFxBKjYtUZgySNaU5e9sktbGHz1wpFFy5f0gccOYwt
-        45/UNtH9ZQfih01Mk/8HE4bNCo+CGOzVCWp1/nvmXw==
-X-Google-Smtp-Source: ABdhPJyFe8NgoaFEBciePpf1Q2kFCgzNM88Uf7tWM3M+dPuHUGQ0QpgeCRLJbD2wlGA8cgwhM/JqUEPDkgnoau6PrQg=
-X-Received: by 2002:a5d:6041:0:b0:20d:8e4:7bb8 with SMTP id
- j1-20020a5d6041000000b0020d08e47bb8mr11488390wrt.652.1652860123517; Wed, 18
- May 2022 00:48:43 -0700 (PDT)
+        bh=1xrKfHXzENUKfZfrSxeeJkFUdKwqShdFovzR9IeZc3E=;
+        b=wa61Rxbm4WHXQwBtOL7MUA3818US1rUybwg7PhPf7++3XjffYCkyrYk5CHXCFG9g5l
+         0S/LYKYmkL93Llz4o73t/1O9yxCjNDOm4ctbfluriK2ZVyfT0dta3oHwSGDGZXlqCH2r
+         MpMFdiCulYScY8toVrdk7JcX2OiGuQ5jlgE4RuK3r6TUJBlMhQ/Psx/xZTOLop2E4Fpn
+         iWoxPgtfAj2YAKhdgOxtFw9Mw6OnhTj5rdbYxyte2T8WmJQCqvfC+/T9ShWJGWqz8YFv
+         Sao9r/P+0mpV740Zm0TBOh0rwsp8hkgmYTpC3aCRhz+Ieu1JIf3r8qjKxFC+ouQ7g/ke
+         kyzg==
+X-Gm-Message-State: AOAM532q6EThftVpBapIzdc0ygwr70LP/Squckp8t8dT1cWezwneclue
+        t+iyefDiaeyLG3MxA7jV+ck08xERsDPQrVn30ROUPQ==
+X-Google-Smtp-Source: ABdhPJwegnkje+Jgg7NNxzXZ4UchLta3+c/kfL5JdSjYS7XpBINQ/6CEF8S+8QuMw0CBjf6wCkeIgrhkH6c2eZnLHpY=
+X-Received: by 2002:a05:600c:6021:b0:394:56be:18e with SMTP id
+ az33-20020a05600c602100b0039456be018emr24290795wmb.86.1652860782644; Wed, 18
+ May 2022 00:59:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516194730.1546328-1-dlatypov@google.com> <20220516194730.1546328-3-dlatypov@google.com>
-In-Reply-To: <20220516194730.1546328-3-dlatypov@google.com>
+References: <20220516165446.1246262-1-dlatypov@google.com>
+In-Reply-To: <20220516165446.1246262-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 18 May 2022 15:48:32 +0800
-Message-ID: <CABVgOSn1Hq6AX-+=+m_uLwKne3wuUadrsE=uPRsgYH3+TFBEuA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: tool: refactoring printing logic into kunit_printer.py
+Date:   Wed, 18 May 2022 15:59:31 +0800
+Message-ID: <CABVgOS=rs97gnSJ+_uJwnNXRHkxvQXJxUS2s0vvNw+Vaoi8JYA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: use kmemdup in kunit_filter_tests(), take suite as const
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008d784105df447cc1"
+        boundary="000000000000d63f6505df44a345"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,408 +73,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000008d784105df447cc1
+--000000000000d63f6505df44a345
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, May 17, 2022 at 3:48 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, May 17, 2022 at 12:54 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Context:
-> * kunit_kernel.py is importing kunit_parser.py just to use the
->   print_with_timestamp() function
-> * the parser is directly printing to stdout, which will become an issue
->   if we ever try to run multiple kernels in parallel
+> kmemdup() is easier than kmalloc() + memcpy(), per lkp bot.
 >
-> This patch introduces a kunit_printer.py file and migrates callers of
-> kunit_parser.print_with_timestamp() to call
-> kunit_printer.stdout.print_with_timestamp() instead.
+> Also make the input `suite` as const since we're now always making
+> copies after commit a127b154a8f2 ("kunit: tool: allow filtering test
+> cases via glob").
 >
-> Future changes:
-> If we want to support showing results for parallel runs, we could then
-> create new Printer's that don't directly write to stdout and refactor
-> the code to pass around these Printer objects.
->
+> Reported-by: kernel test robot <lkp@intel.com>
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-I agree that this will be useful down the line, as running multiple
-kernels in parallel is definitely something which could be useful. I
-know the original idea for that was to have multiple parsers, and just
-to combine the results they gave after the fact, but given that
-incremental output is so useful, I agree that this is the better path.
+Ah, this is definitely better. Thanks. I ran it under KASAN to double
+check, and no issues there, either.
 
-My only super-minor gripe (which I can live with) is that importing
-'stdout' and using it as 'stdout.print_with_timestamp()' is a little
-confusing: I'd've assumed an stdout variable imported into the global
-namespace was sys.stdout, not a wrapper. Explicitly using
-kunit_printer.stdout would be a little clearer, IMO. Up to you,
-though.
-
-Regardless,
 Reviewed-by: David Gow <davidgow@google.com>
 
+Cheers,
 -- David
 
->  tools/testing/kunit/kunit.py           | 17 +++----
->  tools/testing/kunit/kunit_kernel.py    |  8 ++--
->  tools/testing/kunit/kunit_parser.py    | 63 ++++++++------------------
->  tools/testing/kunit/kunit_printer.py   | 48 ++++++++++++++++++++
->  tools/testing/kunit/kunit_tool_test.py |  4 +-
->  5 files changed, 82 insertions(+), 58 deletions(-)
->  create mode 100644 tools/testing/kunit/kunit_printer.py
+>  lib/kunit/executor.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 >
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 8a90d80ee66e..114e548e4f04 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -22,6 +22,7 @@ from typing import Iterable, List, Optional, Sequence, Tuple
->  import kunit_json
->  import kunit_kernel
->  import kunit_parser
-> +from kunit_printer import stdout
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 2f73a6a35a7e..43e15112460a 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -55,7 +55,7 @@ static void kunit_parse_filter_glob(struct kunit_test_filter *parsed,
 >
->  class KunitStatus(Enum):
->         SUCCESS = auto()
-> @@ -72,7 +73,7 @@ def get_kernel_root_path() -> str:
+>  /* Create a copy of suite with only tests that match test_glob. */
+>  static struct kunit_suite *
+> -kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+> +kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
+>  {
+>         int n = 0;
+>         struct kunit_case *filtered, *test_case;
+> @@ -69,11 +69,9 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+>         if (n == 0)
+>                 return NULL;
 >
->  def config_tests(linux: kunit_kernel.LinuxSourceTree,
->                  request: KunitConfigRequest) -> KunitResult:
-> -       kunit_parser.print_with_timestamp('Configuring KUnit Kernel ...')
-> +       stdout.print_with_timestamp('Configuring KUnit Kernel ...')
+> -       /* Use memcpy to workaround copy->name being const. */
+> -       copy = kmalloc(sizeof(*copy), GFP_KERNEL);
+> +       copy = kmemdup(suite, sizeof(*copy), GFP_KERNEL);
+>         if (!copy)
+>                 return ERR_PTR(-ENOMEM);
+> -       memcpy(copy, suite, sizeof(*copy));
 >
->         config_start = time.time()
->         success = linux.build_reconfig(request.build_dir, request.make_options)
-> @@ -85,7 +86,7 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+>         filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
+>         if (!filtered)
 >
->  def build_tests(linux: kunit_kernel.LinuxSourceTree,
->                 request: KunitBuildRequest) -> KunitResult:
-> -       kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
-> +       stdout.print_with_timestamp('Building KUnit Kernel ...')
->
->         build_start = time.time()
->         success = linux.build_kernel(request.alltests,
-> @@ -158,7 +159,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
->         test_counts = kunit_parser.TestCounts()
->         exec_time = 0.0
->         for i, filter_glob in enumerate(filter_globs):
-> -               kunit_parser.print_with_timestamp('Starting KUnit Kernel ({}/{})...'.format(i+1, len(filter_globs)))
-> +               stdout.print_with_timestamp('Starting KUnit Kernel ({}/{})...'.format(i+1, len(filter_globs)))
->
->                 test_start = time.time()
->                 run_result = linux.run_kernel(
-> @@ -221,7 +222,7 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
->                 else:
->                         with open(request.json, 'w') as f:
->                                 f.write(json_str)
-> -                       kunit_parser.print_with_timestamp("Test results stored in %s" %
-> +                       stdout.print_with_timestamp("Test results stored in %s" %
->                                 os.path.abspath(request.json))
->
->         if test_result.status != kunit_parser.TestStatus.SUCCESS:
-> @@ -245,7 +246,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
->
->         run_end = time.time()
->
-> -       kunit_parser.print_with_timestamp((
-> +       stdout.print_with_timestamp((
->                 'Elapsed time: %.3fs total, %.3fs configuring, %.3fs ' +
->                 'building, %.3fs running\n') % (
->                                 run_end - run_start,
-> @@ -446,7 +447,7 @@ def main(argv):
->                 request = KunitConfigRequest(build_dir=cli_args.build_dir,
->                                              make_options=cli_args.make_options)
->                 result = config_tests(linux, request)
-> -               kunit_parser.print_with_timestamp((
-> +               stdout.print_with_timestamp((
->                         'Elapsed time: %.3fs\n') % (
->                                 result.elapsed_time))
->                 if result.status != KunitStatus.SUCCESS:
-> @@ -458,7 +459,7 @@ def main(argv):
->                                             jobs=cli_args.jobs,
->                                             alltests=cli_args.alltests)
->                 result = config_and_build_tests(linux, request)
-> -               kunit_parser.print_with_timestamp((
-> +               stdout.print_with_timestamp((
->                         'Elapsed time: %.3fs\n') % (
->                                 result.elapsed_time))
->                 if result.status != KunitStatus.SUCCESS:
-> @@ -474,7 +475,7 @@ def main(argv):
->                                                 kernel_args=cli_args.kernel_args,
->                                                 run_isolated=cli_args.run_isolated)
->                 result = exec_tests(linux, exec_request)
-> -               kunit_parser.print_with_timestamp((
-> +               stdout.print_with_timestamp((
->                         'Elapsed time: %.3fs\n') % (result.elapsed_time))
->                 if result.status != KunitStatus.SUCCESS:
->                         sys.exit(1)
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 8bc8305ba817..b51ce102d82e 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -18,7 +18,7 @@ import threading
->  from typing import Iterator, List, Optional, Tuple
->
->  import kunit_config
-> -import kunit_parser
-> +from kunit_printer import stdout
->  import qemu_config
->
->  KCONFIG_PATH = '.config'
-> @@ -138,7 +138,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->                 super().__init__(linux_arch='um', cross_compile=cross_compile)
->
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
-> -               kunit_parser.print_with_timestamp(
-> +               stdout.print_with_timestamp(
->                         'Enabling all CONFIGs for UML...')
->                 command = ['make', 'ARCH=um', 'O=' + build_dir, 'allyesconfig']
->                 if make_options:
-> @@ -148,13 +148,13 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->                         stdout=subprocess.DEVNULL,
->                         stderr=subprocess.STDOUT)
->                 process.wait()
-> -               kunit_parser.print_with_timestamp(
-> +               stdout.print_with_timestamp(
->                         'Disabling broken configs to run KUnit tests...')
->
->                 with open(get_kconfig_path(build_dir), 'a') as config:
->                         with open(BROKEN_ALLCONFIG_PATH, 'r') as disable:
->                                 config.write(disable.read())
-> -               kunit_parser.print_with_timestamp(
-> +               stdout.print_with_timestamp(
->                         'Starting Kernel with all configs takes a few minutes...')
->
->         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index c5569b367c69..12d3ec77f427 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -13,10 +13,11 @@ from __future__ import annotations
->  import re
->  import sys
->
-> -import datetime
->  from enum import Enum, auto
->  from typing import Iterable, Iterator, List, Optional, Tuple
->
-> +from kunit_printer import stdout
-> +
->  class Test:
->         """
->         A class to represent a test parsed from KTAP results. All KTAP
-> @@ -55,7 +56,7 @@ class Test:
->         def add_error(self, error_message: str) -> None:
->                 """Records an error that occurred while parsing this test."""
->                 self.counts.errors += 1
-> -               print_with_timestamp(red('[ERROR]') + f' Test: {self.name}: {error_message}')
-> +               stdout.print_with_timestamp(stdout.red('[ERROR]') + f' Test: {self.name}: {error_message}')
->
->  class TestStatus(Enum):
->         """An enumeration class to represent the status of a test."""
-> @@ -461,32 +462,6 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
->
->  DIVIDER = '=' * 60
->
-> -RESET = '\033[0;0m'
-> -
-> -def red(text: str) -> str:
-> -       """Returns inputted string with red color code."""
-> -       if not sys.stdout.isatty():
-> -               return text
-> -       return '\033[1;31m' + text + RESET
-> -
-> -def yellow(text: str) -> str:
-> -       """Returns inputted string with yellow color code."""
-> -       if not sys.stdout.isatty():
-> -               return text
-> -       return '\033[1;33m' + text + RESET
-> -
-> -def green(text: str) -> str:
-> -       """Returns inputted string with green color code."""
-> -       if not sys.stdout.isatty():
-> -               return text
-> -       return '\033[1;32m' + text + RESET
-> -
-> -ANSI_LEN = len(red(''))
-> -
-> -def print_with_timestamp(message: str) -> None:
-> -       """Prints message with timestamp at beginning."""
-> -       print('[%s] %s' % (datetime.datetime.now().strftime('%H:%M:%S'), message))
-> -
->  def format_test_divider(message: str, len_message: int) -> str:
->         """
->         Returns string with message centered in fixed width divider.
-> @@ -529,12 +504,12 @@ def print_test_header(test: Test) -> None:
->                         message += ' (1 subtest)'
->                 else:
->                         message += f' ({test.expected_count} subtests)'
-> -       print_with_timestamp(format_test_divider(message, len(message)))
-> +       stdout.print_with_timestamp(format_test_divider(message, len(message)))
->
->  def print_log(log: Iterable[str]) -> None:
->         """Prints all strings in saved log for test in yellow."""
->         for m in log:
-> -               print_with_timestamp(yellow(m))
-> +               stdout.print_with_timestamp(stdout.yellow(m))
->
->  def format_test_result(test: Test) -> str:
->         """
-> @@ -551,16 +526,16 @@ def format_test_result(test: Test) -> str:
->         String containing formatted test result
->         """
->         if test.status == TestStatus.SUCCESS:
-> -               return green('[PASSED] ') + test.name
-> +               return stdout.green('[PASSED] ') + test.name
->         if test.status == TestStatus.SKIPPED:
-> -               return yellow('[SKIPPED] ') + test.name
-> +               return stdout.yellow('[SKIPPED] ') + test.name
->         if test.status == TestStatus.NO_TESTS:
-> -               return yellow('[NO TESTS RUN] ') + test.name
-> +               return stdout.yellow('[NO TESTS RUN] ') + test.name
->         if test.status == TestStatus.TEST_CRASHED:
->                 print_log(test.log)
-> -               return red('[CRASHED] ') + test.name
-> +               return stdout.red('[CRASHED] ') + test.name
->         print_log(test.log)
-> -       return red('[FAILED] ') + test.name
-> +       return stdout.red('[FAILED] ') + test.name
->
->  def print_test_result(test: Test) -> None:
->         """
-> @@ -572,7 +547,7 @@ def print_test_result(test: Test) -> None:
->         Parameters:
->         test - Test object representing current test being printed
->         """
-> -       print_with_timestamp(format_test_result(test))
-> +       stdout.print_with_timestamp(format_test_result(test))
->
->  def print_test_footer(test: Test) -> None:
->         """
-> @@ -585,8 +560,8 @@ def print_test_footer(test: Test) -> None:
->         test - Test object representing current test being printed
->         """
->         message = format_test_result(test)
-> -       print_with_timestamp(format_test_divider(message,
-> -               len(message) - ANSI_LEN))
-> +       stdout.print_with_timestamp(format_test_divider(message,
-> +               len(message) - stdout.color_len()))
->
->  def print_summary_line(test: Test) -> None:
->         """
-> @@ -603,12 +578,12 @@ def print_summary_line(test: Test) -> None:
->         test - Test object representing current test being printed
->         """
->         if test.status == TestStatus.SUCCESS:
-> -               color = green
-> +               color = stdout.green
->         elif test.status in (TestStatus.SKIPPED, TestStatus.NO_TESTS):
-> -               color = yellow
-> +               color = stdout.yellow
->         else:
-> -               color = red
-> -       print_with_timestamp(color(f'Testing complete. {test.counts}'))
-> +               color = stdout.red
-> +       stdout.print_with_timestamp(color(f'Testing complete. {test.counts}'))
->
->  # Other methods:
->
-> @@ -762,7 +737,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
->         Return:
->         Test - the main test object with all subtests.
->         """
-> -       print_with_timestamp(DIVIDER)
-> +       stdout.print_with_timestamp(DIVIDER)
->         lines = extract_tap_lines(kernel_output)
->         test = Test()
->         if not lines:
-> @@ -773,6 +748,6 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
->                 test = parse_test(lines, 0, [])
->                 if test.status != TestStatus.NO_TESTS:
->                         test.status = test.counts.get_status()
-> -       print_with_timestamp(DIVIDER)
-> +       stdout.print_with_timestamp(DIVIDER)
->         print_summary_line(test)
->         return test
-> diff --git a/tools/testing/kunit/kunit_printer.py b/tools/testing/kunit/kunit_printer.py
-> new file mode 100644
-> index 000000000000..5f1cc55ecdf5
-> --- /dev/null
-> +++ b/tools/testing/kunit/kunit_printer.py
-> @@ -0,0 +1,48 @@
-> +#!/usr/bin/env python3
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Utilities for printing and coloring output.
-> +#
-> +# Copyright (C) 2022, Google LLC.
-> +# Author: Daniel Latypov <dlatypov@google.com>
-> +
-> +import datetime
-> +import sys
-> +import typing
-> +
-> +_RESET = '\033[0;0m'
-> +
-> +class Printer:
-> +       """Wraps a file object, providing utilities for coloring output, etc."""
-> +
-> +       def __init__(self, output: typing.IO):
-> +               self._output = output
-> +               self._use_color = output.isatty()
-> +
-> +       def print(self, message: str) -> None:
-> +               print(message, file=self._output)
-> +
-> +       def print_with_timestamp(self, message: str) -> None:
-> +               ts = datetime.datetime.now().strftime('%H:%M:%S')
-> +               self.print(f'[{ts}] {message}')
-> +
-> +       def _color(self, code: str, text: str) -> str:
-> +               if not self._use_color:
-> +                       return text
-> +               return code + text + _RESET
-> +
-> +       def red(self, text: str) -> str:
-> +               return self._color('\033[1;31m', text)
-> +
-> +       def yellow(self, text: str) -> str:
-> +               return self._color('\033[1;33m', text)
-> +
-> +       def green(self, text: str) -> str:
-> +               return self._color('\033[1;32m', text)
-> +
-> +       def color_len(self) -> int:
-> +               """Returns the length of the color escape codes."""
-> +               return len(self.red(''))
-> +
-> +# Provides a default instance that prints to stdout
-> +stdout = Printer(sys.stdout)
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index baee11d96474..2973402c5053 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -222,7 +222,7 @@ class KUnitParserTest(unittest.TestCase):
->
->         def test_no_kunit_output(self):
->                 crash_log = test_data_path('test_insufficient_memory.log')
-> -               print_mock = mock.patch('builtins.print').start()
-> +               print_mock = mock.patch('kunit_printer.Printer.print').start()
->                 with open(crash_log) as file:
->                         result = kunit_parser.parse_run_tests(
->                                 kunit_parser.extract_tap_lines(file.readlines()))
-> @@ -500,7 +500,7 @@ class KUnitMainTest(unittest.TestCase):
->                 with open(path) as file:
->                         all_passed_log = file.readlines()
->
-> -               self.print_mock = mock.patch('builtins.print').start()
-> +               self.print_mock = mock.patch('kunit_printer.Printer.print').start()
->                 self.addCleanup(mock.patch.stopall)
->
->                 self.mock_linux_init = mock.patch.object(kunit_kernel, 'LinuxSourceTree').start()
+> base-commit: 9660209d9418f2295d31fea0d32e313e9b2c1200
 > --
-> 2.36.1.124.g0e6072fb45-goog
+> 2.36.0.550.gb090851708-goog
 >
 
---0000000000008d784105df447cc1
+--000000000000d63f6505df44a345
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -540,14 +198,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAi
-I4u3nsxKb+8A7pR+l+DPUy0MHDHfKFyxX7hPrSWwCDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA1MTgwNzQ4NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDw
+o01xzHM5aJUZJoDoBqnyp6fghiaAaqC31a4o2sqGhzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA1MTgwNzU5NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAguVdHEau73+5TjbxrmdM
-QAwN8nqDFENu4gfWbfrvhNG79tmKdcNPpOdb1GHSsOg8HXH/zamX20QhbceThUeV3mjLaO3EY/2N
-/2dwy7wsrbbqleS1WJTabrhXeRXmmVBQIjoEDUE9MFb4czefYrrwFKQTpplu9/GFUHmcZH0K3Hf+
-bcL1XW2r+G92ZYAywlTgIN04z+7qh06YsfhkZl0hrKDrgP/Jlbo8R3IQR1B15VWhTeGEAJEy8PGo
-df0n+b5F+++Lz3QWNPbemLOM8a6ATeUMy95bW1By+hPoRuIarq7o01viQm6KtoJx080lWw2syOe+
-RJdoD9/ytBHc9zEqHw==
---0000000000008d784105df447cc1--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZZC9pKsR/iC4Q+GB04Dc
+L0j+MLqBaoS+atiUEnP1Rzk1KBu5rTieFb3hMNtcmkx8EH+h4zkvbPkSq8duuw+ttRLw+LIyDTtC
+RN4T5o1GYAfXZ0BDLOTZG9QAKGDU6fMtWE1Un5bmpWlShvOQeLYOSCb2vK4o/CBTsLACeRgMmvOT
+42EInL3jJ3NohpXYCdjx17LASqRb2ltOcM3HvWgS/PscetvMOOx44mJgfrEroz9ArCuHhkxgOJCS
+i7NFBdAijH87Nrpo8WOJ52rRRUKdgTL/cjI+X0MLBGeTRusma6zgkd7fdVPIVWY8XUPjP1iTB9os
+Ge4jdRocfOuKIBV9YQ==
+--000000000000d63f6505df44a345--
