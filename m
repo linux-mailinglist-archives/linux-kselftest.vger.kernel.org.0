@@ -2,160 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6919852C65E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 00:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D984F52C6FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 00:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiERWhH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 18:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S231359AbiERW5W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 18:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiERWhG (ORCPT
+        with ESMTP id S231297AbiERW5U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 18:37:06 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FA56D1BE;
-        Wed, 18 May 2022 15:37:05 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id a10so3938881ioe.9;
-        Wed, 18 May 2022 15:37:05 -0700 (PDT)
+        Wed, 18 May 2022 18:57:20 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1830BF07
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 15:57:05 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id o80so6185429ybg.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 15:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0UsOrN8L2jk9f8YbUqb1h5IfPLIvfbGbF/K8sUgKLa8=;
-        b=pfQVWJSaI650YZeOaa35tgCa5V78lxkK9XS2gIkwjXKHVtvZ425s0Y1UzT4Kg9zhQU
-         ki5XTi7DxF06BVh+i3mn+ChDmsAzAG80tP47vzheLmohV7k22GhmgOzR4qZTl5MrEwsT
-         lsjqDC0SOna7dZX3qdL6euvQOOCGNeRytsprrHOngAdN1jLqx3AY+M3wFKZXigQxERcD
-         bVV7qUGrLZtzdMTfjq1SBUNZsChlitJdbgPWmhwvQw024OzPCIevC+Sci5VrYY0mvEcf
-         wCf55pTaiE4cHk/bixrljcgx7fAVp7ORcRA0chPK6Vx2CDwUoqxEl1wGzJy3+BqZoA79
-         17mw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
+         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
+         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
+         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
+         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
+         q7TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0UsOrN8L2jk9f8YbUqb1h5IfPLIvfbGbF/K8sUgKLa8=;
-        b=o0EG/Dn0L80UZkjRhQXbRVPhWUMpLsuj7OQdgDVoxUtGiKz60ZXhDBJPXPdO2lJyjP
-         6GWJe4I82ZhG2rzwuhfxFz85dxnUj0V9BbwqKtcwctOqcaYWy+KrUoQ5z6fVPyJkuoma
-         lZDNwFD40kgwvmkzhSMlMYG8NHiNuJFaYboe2mO4JYWal0L1J/p8vquKBV7c9B3PL2LR
-         ngXRcfmDjRreM+jWB6e2FqJV/ngp7V5kIuwqIkKihFdMa2Rk2q4yuI2qdSKfzMdHT8ST
-         UEYLCwYStwiHQR5G8nLgKP9fYkUitb8ypEOV20EwYlIIpYpKaElL0S1GZzKkPMX+6b3K
-         9Z+A==
-X-Gm-Message-State: AOAM531qECYA9ViU1c2eKtxU+UbOccRuxybk4yDQ4LTCWPXhnfNh26AX
-        ft7UEQ8bBoj2dFO3T2GhuokfcBrRf7F74ETGS40=
-X-Google-Smtp-Source: ABdhPJxoC2STA3TBSyALtE6G83AWgatXTc29FjZdK2oqtrZtEGtnxLST3voiVz6FPJJI267q/Z0++69FQ1rcgr1tb60=
-X-Received: by 2002:a05:6638:468e:b0:32b:fe5f:d73f with SMTP id
- bq14-20020a056638468e00b0032bfe5fd73fmr1037971jab.234.1652913424002; Wed, 18
- May 2022 15:37:04 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=TcU4RbK1g1rUEu/dqIKSqxXyI+7VUYqJK8CFiXMFIBjspE/un9A/TsgqY3u0vc5ATG
+         sOg/iswHPgMRubvitJ1Psg7yapbWDO9flhCYoZEnRBMp7WvDRLiUpve0R29Q2vOKALRp
+         dM5RuMPGiNYTA9NDc4DF7pxEKIzTmRDhQ/StT6C1b/PSBnlRdi6ZJnLuYdKqW5aoBqIY
+         XEcbfjw8jRAulmHs5+VPpT7ESjWy76i1JLM5hyj8f1GP3bakP9oytlPxY/z2SGCb0g/e
+         Ws4oaxgiSnOpBZTMCiadhf4aJSr8I0xJ+CaOSOLW3L5B3r02OTEvNmSExWm//gci7Ilf
+         JNKw==
+X-Gm-Message-State: AOAM530R7b0duQcahG4yt9G3JYt94o0pJ2A2dbNbPuPB3aJUhzWavHU3
+        HlVSxli11h3ZTBnWlF8HQkTkmO2RvZgxJywUNmUfWyOxIY6Agd0pP9VqHOV5
+X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
+X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
+ q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
+ May 2022 15:56:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512071819.199873-1-liuhangbin@gmail.com> <20220512071819.199873-2-liuhangbin@gmail.com>
- <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com> <YoHKw/at89Wp19F/@Laptop-X1>
-In-Reply-To: <YoHKw/at89Wp19F/@Laptop-X1>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 May 2022 15:36:53 -0700
-Message-ID: <CAEf4BzZhKpikBQFCEyRMmUHdTEt6xi+0ntfPswHA5WWK39cFjQ@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] selftests/bpf: Fix build error with ima_setup.sh
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
+ -0700 (PDT)
+Reply-To: tonywenn@asia.com
+From:   Tony Wen <weboutloock4@gmail.com>
+Date:   Thu, 19 May 2022 06:56:53 +0800
+Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
+Subject: engage
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4870]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [weboutloock4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [weboutloock4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, May 15, 2022 at 8:53 PM Hangbin Liu <liuhangbin@gmail.com> wrote:
->
-> On Fri, May 13, 2022 at 02:58:05PM -0700, Andrii Nakryiko wrote:
-> > > -TRUNNER_EXTRA_FILES :=3D $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmo=
-d.ko \
-> > > -                      ima_setup.sh                                  =
-   \
-> > > +TRUNNER_EXTRA_BUILD :=3D $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmo=
-d.ko \
-> > >                        $(wildcard progs/btf_dump_test_case_*.c)
-> >
-> >
-> > note that progs/btf_dump_test_case_*.c are not built, they are just
-> > copied over (C source files), so I don't think this fix is necessary.
-> >
-> > btw, I tried running `OUTPUT=3D"/tmp/bpf" make test_progs` and it didn'=
-t
-> > error out. But tbh, I'd recommend building everything instead of
-> > building individual targets.
->
-> After update the code to latest bpf-next. It works this time, the ima_set=
-up.sh
-> was copied to target folder correctly.
->
->   EXT-COPY [test_progs] urandom_read bpf_testmod.ko liburandom_read.so im=
-a_setup.sh btf_dump_test_case_bitfields.c btf_dump_test_case_multidim.c btf=
-_dump_test_case_namespacing.c btf_dump_test_case_ordering.c btf_dump_test_c=
-ase_packing.c btf_dump_test_case_padding.c btf_dump_test_case_syntax.c
->   BINARY   test_progs
->
-> Not sure why the previous kernel doesn't work. But anyway I will drop thi=
-s patch.
->
-> On the other hand, when I build with latest bpf-next. I got error like:
->
-> """
-> # OUTPUT=3D"/tmp/bpf" make test_progs
->   BINARY   urandom_read                                                  =
-                                                                           =
-                          gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR =
- -I/home/net/tools/testing/selftests/bpf -I/tmp/bpf/tools/include -I/home/n=
-et/include/generated -I/home/net/tools/lib -I/home/net/tools/include -I/hom=
-e/net/tools/include/uapi -I/tmp/bpf  urandom_read.c urandom_read_aux.c  \
->           liburandom_read.so -lelf -lz -lrt -lpthread   \
->           -Wl,-rpath=3D. -Wl,--build-id=3Dsha1 -o /tmp/bpf/urandom_read
-
-we assume liburandom_read.so is going to be under selftests/bpf here,
-but it's actually under $(OUTPUT)/
-
-Can you try $(OUTPUT)/liburandom_read.so? I suspect this might break
--rpath=3D., though, but let's try this first?
-
-
-> /usr/bin/ld: cannot find liburandom_read.so: No such file or directory   =
-                                                                           =
-                          collect2: error: ld returned 1 exit status
-> make: *** [Makefile:177: /tmp/bpf/urandom_read] Error 1
->
-> # ls /tmp/bpf/liburandom_read.so
-> /tmp/bpf/liburandom_read.so
-> """
->
-> after I copy to liburandom_read.so back to tools/testing/selftests/bpf th=
-e build
-> success.
->
-> """
-> # cp /tmp/bpf/liburandom_read.so /home/net/tools/testing/selftests/bpf/
-> # gcc -g -O0 -rdynamic -Wall -Werror -DHAVE_GENHDR -I/home/net/tools/test=
-ing/selftests/bpf -I/tmp/bpf/tools/include -I/home/net/include/generated -I=
-/home/net/tools/lib -I/home/net/tools/include -I/home/net/tools/include/uap=
-i -I/tmp/bpf  urandom_read.c urandom_read_aux.c liburandom_read.so -lelf -l=
-z -lrt -lpthread -Wl,-rpath=3D. -Wl,--build-id=3Dsha1 -o /tmp/bpf/urandom_r=
-ead
-> # echo $?
-> 0
-> """
->
-> Do you know why this happens?
->
-> Thanks
-> Hangbin
+Can I engage your services?
