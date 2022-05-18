@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFBC52BA6B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 14:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4E752B9FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 14:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236446AbiERM1E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 08:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S236595AbiERMb1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 08:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236416AbiERM04 (ORCPT
+        with ESMTP id S236779AbiERM36 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 08:26:56 -0400
+        Wed, 18 May 2022 08:29:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D2D6D4DE;
-        Wed, 18 May 2022 05:26:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71CC1994A1;
+        Wed, 18 May 2022 05:28:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8FF861290;
-        Wed, 18 May 2022 12:26:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE083C34100;
-        Wed, 18 May 2022 12:26:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F0ED61654;
+        Wed, 18 May 2022 12:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F20CC34118;
+        Wed, 18 May 2022 12:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652876814;
-        bh=4dfSF32OTFY2vE6VRjsBQCAJkn1HMbzv2NuefqMHs+4=;
+        s=k20201202; t=1652876883;
+        bh=k8uQgKRYzDv5bvtHUWgEwNihhvA8//WvV+HXDM4GpjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aCPaOhj9Qli9/1Ypq6H3rmFdDkSjJjuAnpudYxlk2T5bP2Hpg6HLnkp6h5MiOutMO
-         f8O5Ij4FNj6UzjDcDr/6CyYKMZ5nESY7wKRyoyEjKxJ+TjVxerAp0Tqa5xhbJxM5Jc
-         o7cYD3EYQ3+4cQrl3NREWw1+Y2eNc69yfzsgfBb85lBPgBJh+zkcxMGW1hx/T7Q0qn
-         8kgUYP8bO+KbZ64NEivh9H8FRpMWcgDuMbILG0ADtmVol7zfLMzVaXodc1qAqT7Fph
-         ZH7ebV3Cpd0JR6L5zS72pAXvVB1atpztDkOEwgFsY5rCvlk5hC7i3lkzjp+AsjC7Z/
-         mIUNQSabaCwPA==
+        b=elrkOzLnZn/ST9IpidumJTF8BFCgnEtnIe8tSfXesplViD2rvjeS2TgsmrAL8zBmw
+         /M7bVxe/+tMJ3WBHbdT/Coc8ZwVf2/zXzMW9A57w1iZuK3uKUYYU1VOnUAj0kEN2Dy
+         JdUwcMQlCGeZOTHqO49sudI37pFMOA3gcUCjyYoCR02W3nEIjUowyYizt2aIhzPJGC
+         BGMhL3dSOp4l1mjVnb/fkzO8OQ7klMfB114yf0gKlGp49YBq2Q/xu4hAyz+XmadNOg
+         Hr/2I+ZQoNL71KmOHrzRFRP0jjNnRMYLTTwJcX1pfWsW3PJA9KSo4pZMdCBKZrNWw/
+         YeL8lAFZKl7rg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nicolas Dichtel <nicolas.dichtel@6wind.com>,
@@ -40,12 +40,12 @@ Cc:     Nicolas Dichtel <nicolas.dichtel@6wind.com>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         edumazet@google.com, pabeni@redhat.com, shuah@kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 06/23] selftests: add ping test with ping_group_range tuned
-Date:   Wed, 18 May 2022 08:26:19 -0400
-Message-Id: <20220518122641.342120-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 05/17] selftests: add ping test with ping_group_range tuned
+Date:   Wed, 18 May 2022 08:27:39 -0400
+Message-Id: <20220518122753.342758-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
-References: <20220518122641.342120-1-sashal@kernel.org>
+In-Reply-To: <20220518122753.342758-1-sashal@kernel.org>
+References: <20220518122753.342758-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+)
 
 diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 3f4c8cfe7aca..7cd9b31d0307 100755
+index aec9e784d0b4..91f54112167f 100755
 --- a/tools/testing/selftests/net/fcnal-test.sh
 +++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -810,10 +810,16 @@ ipv4_ping()
+@@ -803,10 +803,16 @@ ipv4_ping()
  	setup
  	set_sysctl net.ipv4.raw_l3mdev_accept=1 2>/dev/null
  	ipv4_ping_novrf
@@ -102,7 +102,7 @@ index 3f4c8cfe7aca..7cd9b31d0307 100755
  }
  
  ################################################################################
-@@ -2348,10 +2354,16 @@ ipv6_ping()
+@@ -2324,10 +2330,16 @@ ipv6_ping()
  	log_subsection "No VRF"
  	setup
  	ipv6_ping_novrf
