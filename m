@@ -2,277 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3FE52B08E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 04:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE25E52B0AE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 05:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbiERCvK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 May 2022 22:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S229551AbiERDSK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 May 2022 23:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234379AbiERCvJ (ORCPT
+        with ESMTP id S229379AbiERDSI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 22:51:09 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A2E140FC
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 19:51:07 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so695655pjf.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 19:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Muu06nupwh+dYqU+u10ilHsVeZYqZAWfb+sLHhJaZYQ=;
-        b=ljs3G+HiMoygvaVR8Rt7yJ2Nd2WzhNi6OfQtUHYlF+8Pgs/b2GvbZnI7x+Dq+QGqBt
-         Kzb+XR5XQpjqvT76n7BLmu7joPqIHyAgx8e6EtRtvq5ldgL7hlkWuZJbKoYkDIF97rk9
-         0qhlXzFcES2PbUrlPoflHkEPbrEDy5+i6ITDkCtJOxgNOGWSQ3i9HQ07vJB4NgRoTfUu
-         4qRr0rBE3lT/S54N1vqnnI4TmDJ8z9p/Vnrq0P04HB/PqiiHNtD6vwEaB8WXmvJgvu9d
-         2IVXrQgdaMpiLL3vwCsY61R13y6WjVXffD6cQ9uaFhnQAl//Z3joXktTuakmw2pvZlCD
-         rOOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Muu06nupwh+dYqU+u10ilHsVeZYqZAWfb+sLHhJaZYQ=;
-        b=SkDh27r/dSh5ZbNwU9bSrz1Vc3WReJAaNdg3EJAOAzjowJxesk5sg9m+72RQkCbBjO
-         RFVd+vB1Vn5I30w3k7xYRdR1r6u8eZUluVTUd5TsztoJ8SrgBX8+o/KtonEtUCZP7gtP
-         soYW3lTGq6PzQ4GYv/cyzcJHBz/1rtUsSKm9OF62tBawB+UCDxn1HN2tvrLfqxdgT54z
-         MFSNM60KYClxYpYCzfBwNc0m4GPkvn8RXdFGxF5lk8r+ZDrE8jV4ug91LsnqL9xAhiyA
-         T8aNtcePh0F6OiXwlIntyvWRUvwhdPNyyTsMlEUqlJ6fmRmECNmlSE9ZKxaQXvSDQMGy
-         3aRA==
-X-Gm-Message-State: AOAM533kkVzJrJVHYnjgiVCyRQUToDiN/DBgE9vzh1hxnrx0fEP9MRoG
-        6t+l4fSfjCBb2qmyLU0hsgvJwg==
-X-Google-Smtp-Source: ABdhPJzRum1Bupggi4Of/+lsrd4ap5QtiRlPTR/TLJWmPoJF7yht4wCozlydHu58gRr18QghdxKAKw==
-X-Received: by 2002:a17:90b:1b0d:b0:1dc:672e:c8c2 with SMTP id nu13-20020a17090b1b0d00b001dc672ec8c2mr28480250pjb.96.1652842266979;
-        Tue, 17 May 2022 19:51:06 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id h67-20020a62de46000000b0050dc7628191sm468755pfg.107.2022.05.17.19.50.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 May 2022 19:51:06 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
-        joannekoong@fb.com, geliang.tang@suse.com
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        wangdongdong.6@bytedance.com, cong.wang@bytedance.com,
-        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com,
-        yosryahmed@google.com
-Subject: [PATCH bpf-next v2] selftests/bpf: fix some bugs in map_lookup_percpu_elem testcase
-Date:   Wed, 18 May 2022 10:50:53 +0800
-Message-Id: <20220518025053.20492-1-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Tue, 17 May 2022 23:18:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C7961286;
+        Tue, 17 May 2022 20:18:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EC78B81E5A;
+        Wed, 18 May 2022 03:18:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC47C385AA;
+        Wed, 18 May 2022 03:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652843878;
+        bh=gRuTuRdI7OLIZp+f42a0XTQ5exBH9nOXmC6bIp3yNV0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HlGpi0/Cg0JdE2lY0HpdF1AlVnf/p+ozQgTyorU165UOEJa0dYP9pHtf7Tf+jxHHP
+         ChVI4bUn/exGNh73MDbfZjgFABoxSyEmI/vfkDNmMAxFYCLG8H7+H8MqiyYxHMV3rB
+         YOi+z+t4rkiDi+cAy/ac2IhgiCx04gZX+yH5+2WLdW4oouKLlwwcmebpvWRKX1g3Cn
+         z6qBZCYhEA9rEDFRPZy+OO5HTE2XPH7/fiMbkwcINk+s3/qqkzaTTHVdZ8gyvxOilr
+         GF9M2ULTe6gj4lbgMQSX0MMuR1Vv1F3+XUt88iNPWKSdvKVYGHsYkS88sW1azY0FoL
+         xOt3WqQ4Z9DEg==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] selftests/sgx: add test_encl.elf to TEST_GEN_FILES
+Date:   Wed, 18 May 2022 06:16:19 +0300
+Message-Id: <20220518031619.1179862-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+TEST_GEN_FILES contains files that are generated during compilation and are
+required to be included together with the test binaries, e.g. when
+performing:
 
-comments from Andrii Nakryiko, details in here:
-https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
+make -C tools/testing/selftests install INSTALL_PATH=/some/other/path [*]
 
-use /* */ instead of //
-use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
-use 8 bytes for value size
-fix memory leak
-use ASSERT_EQ instead of ASSERT_OK
-add bpf_loop to fetch values on each possible CPU
+Add test_encl.elf to TEST_GEN_FILES because otherwise the installed test
+binary will fail to run.
 
-Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+[*] https://docs.kernel.org/dev-tools/kselftest.html
+
+Cc: stable@vger.kernel.org
+Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-v1->v2: Addressed comments from Yonghong Song.
-- Adjust the code format
-more details can be seen from here:
-https://lore.kernel.org/lkml/80ab09cf-6072-a75a-082d-2721f6f907ef@fb.com/T/
+ tools/testing/selftests/sgx/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bpf/prog_tests/map_lookup_percpu_elem.c   | 50 +++++++++------
- .../bpf/progs/test_map_lookup_percpu_elem.c   | 62 ++++++++++++-------
- 2 files changed, 71 insertions(+), 41 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-index 58b24c2112b0..f987c9278912 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-@@ -1,30 +1,38 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2022 Bytedance
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2022 Bytedance */
+diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
+index 75af864e07b6..f3f312904bcc 100644
+--- a/tools/testing/selftests/sgx/Makefile
++++ b/tools/testing/selftests/sgx/Makefile
+@@ -17,6 +17,7 @@ ENCL_CFLAGS := -Wall -Werror -static -nostdlib -nostartfiles -fPIC \
+ 	       -fno-stack-protector -mrdrnd $(INCLUDES)
  
- #include <test_progs.h>
--
- #include "test_map_lookup_percpu_elem.skel.h"
+ TEST_CUSTOM_PROGS := $(OUTPUT)/test_sgx
++TEST_GEN_FILES := $(OUTPUT)/test_encl.elf
  
--#define TEST_VALUE  1
--
- void test_map_lookup_percpu_elem(void)
- {
- 	struct test_map_lookup_percpu_elem *skel;
--	int key = 0, ret;
--	int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
--	int *buf;
-+	__u64 key = 0, sum;
-+	int ret, i;
-+	int nr_cpus = libbpf_num_possible_cpus();
-+	__u64 *buf;
- 
--	buf = (int *)malloc(nr_cpus*sizeof(int));
-+	buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
- 	if (!ASSERT_OK_PTR(buf, "malloc"))
- 		return;
--	memset(buf, 0, nr_cpus*sizeof(int));
--	buf[0] = TEST_VALUE;
- 
--	skel = test_map_lookup_percpu_elem__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
--		return;
-+	for (i = 0; i < nr_cpus; i++)
-+		buf[i] = i;
-+	sum = (nr_cpus-1)*nr_cpus/2;
-+
-+	skel = test_map_lookup_percpu_elem__open();
-+	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
-+		goto exit;
-+
-+	skel->rodata->nr_cpus = nr_cpus;
-+
-+	ret = test_map_lookup_percpu_elem__load(skel);
-+	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
-+		goto cleanup;
-+
- 	ret = test_map_lookup_percpu_elem__attach(skel);
--	ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
-+	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
-+		goto cleanup;
- 
- 	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
- 	ASSERT_OK(ret, "percpu_array_map update");
-@@ -37,10 +45,14 @@ void test_map_lookup_percpu_elem(void)
- 
- 	syscall(__NR_getuid);
- 
--	ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
--	      skel->bss->percpu_hash_elem_val == TEST_VALUE &&
--	      skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
--	ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
-+	test_map_lookup_percpu_elem__detach(skel);
-+
-+	ASSERT_EQ(skel->bss->percpu_array_elem_sum, sum, "percpu_array lookup percpu elem");
-+	ASSERT_EQ(skel->bss->percpu_hash_elem_sum, sum, "percpu_hash lookup percpu elem");
-+	ASSERT_EQ(skel->bss->percpu_lru_hash_elem_sum, sum, "percpu_lru_hash lookup percpu elem");
- 
-+cleanup:
- 	test_map_lookup_percpu_elem__destroy(skel);
-+exit:
-+	free(buf);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-index 5d4ef86cbf48..57e875d6e6e0 100644
---- a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
-@@ -1,52 +1,70 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2022 Bytedance
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2022 Bytedance */
- 
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- 
--int percpu_array_elem_val = 0;
--int percpu_hash_elem_val = 0;
--int percpu_lru_hash_elem_val = 0;
-+__u64 percpu_array_elem_sum = 0;
-+__u64 percpu_hash_elem_sum = 0;
-+__u64 percpu_lru_hash_elem_sum = 0;
-+const volatile int nr_cpus;
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
- 	__type(key, __u32);
--	__type(value, __u32);
-+	__type(value, __u64);
- } percpu_array_map SEC(".maps");
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_HASH);
- 	__uint(max_entries, 1);
--	__type(key, __u32);
--	__type(value, __u32);
-+	__type(key, __u64);
-+	__type(value, __u64);
- } percpu_hash_map SEC(".maps");
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
- 	__uint(max_entries, 1);
--	__type(key, __u32);
--	__type(value, __u32);
-+	__type(key, __u64);
-+	__type(value, __u64);
- } percpu_lru_hash_map SEC(".maps");
- 
-+struct read_percpu_elem_ctx {
-+	void *map;
-+	__u64 sum;
-+};
-+
-+static int read_percpu_elem_callback(__u32 index, struct read_percpu_elem_ctx *ctx)
-+{
-+	__u64 key = 0;
-+	__u64 *value;
-+
-+	value = bpf_map_lookup_percpu_elem(ctx->map, &key, index);
-+	if (value)
-+		ctx->sum += *value;
-+	return 0;
-+}
-+
- SEC("tp/syscalls/sys_enter_getuid")
- int sysenter_getuid(const void *ctx)
- {
--	__u32 key = 0;
--	__u32 cpu = 0;
--	__u32 *value;
-+	struct read_percpu_elem_ctx map_ctx;
- 
--	value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
--	if (value)
--		percpu_array_elem_val = *value;
-+	map_ctx.map = &percpu_array_map;
-+	map_ctx.sum = 0;
-+	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
-+	percpu_array_elem_sum = map_ctx.sum;
- 
--	value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
--	if (value)
--		percpu_hash_elem_val = *value;
-+	map_ctx.map = &percpu_hash_map;
-+	map_ctx.sum = 0;
-+	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
-+	percpu_hash_elem_sum = map_ctx.sum;
- 
--	value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
--	if (value)
--		percpu_lru_hash_elem_val = *value;
-+	map_ctx.map = &percpu_lru_hash_map;
-+	map_ctx.sum = 0;
-+	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
-+	percpu_lru_hash_elem_sum = map_ctx.sum;
- 
- 	return 0;
- }
+ ifeq ($(CAN_BUILD_X86_64), 1)
+ all: $(TEST_CUSTOM_PROGS) $(OUTPUT)/test_encl.elf
 -- 
-2.20.1
+2.36.1
 
