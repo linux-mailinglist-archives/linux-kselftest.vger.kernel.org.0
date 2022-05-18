@@ -2,128 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A2152B5E6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 11:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ED152B8DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 May 2022 13:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbiERJWj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 05:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S235568AbiERLZM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 07:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234117AbiERJWf (ORCPT
+        with ESMTP id S235629AbiERLZH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 05:22:35 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192B31F607
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 02:22:33 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u3so1808623wrg.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 02:22:32 -0700 (PDT)
+        Wed, 18 May 2022 07:25:07 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D4517568B;
+        Wed, 18 May 2022 04:25:01 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id h11so1410866eda.8;
+        Wed, 18 May 2022 04:25:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aYv9sRLI7bJwp+N2At4wjffC8t0qCPCqKx/aIfhkVRc=;
-        b=Bx791FgAcxOvK9T5I5mW1O2stza4Yq+SU8uF6QI50wTsBwxFr/t4D7Q9mXtDAJcLUx
-         p17zMxSvZtETdUdAJpTjH9AtE+TLl6z/dhu2T3Y2J8xzacp47cmvbbiEqJFaIgh0IVs+
-         evA0Vuw76mWBxQqeK83sAVqV3e9Jx/OVK9zsje6a8b/oDQTv2CraAJohRuyLm7K5SUKg
-         hS1imuK7ZMnh7acWOtZQj7kkhlHLdOvJrN9EUyMVE7rhnxqQYxcoa6orvYhbuuYXAJX8
-         thlIQDe8Ytn2pdOsUxfo+9Nkg2QcGQ3TMA8wSblFyUZO5/pjDhmq+QoUfHy3JuG81Xh8
-         YMbQ==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d5+0ld6vIvXb4AXUGD3+swLgU10VfBo9gjxiU0sZkxo=;
+        b=p/1CquKZ2KpM2HaO8peNflZCDXRy0gj1cVIe/nKuz2bP3fYtq/w6wqKzwsLpsT9sMD
+         eOIxisTYSYNgbg4yismK+RPzGoMDjuIUDdrodj8vre7ZvWH+kOtmRAk8nwls1ZzxfOfR
+         DAvb98vky1RH0iPEq1fpikV2GkjxIT2l41TIRP8VJtrvBnZrZ7nVKMiQmOBcVo3ZeQFh
+         TG/yXdcL9O9dAom4vJfalvK9zJF9cFVCUObOLVqWNWDrwLe6rt5qsVdkdIR2lUtKALoi
+         netJXodpCUQx+tB+tBGEOFoXZXTCuHTxi/S4eaMvX5cud32/jbiR3qYO+cccCDDnlO1E
+         aRHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aYv9sRLI7bJwp+N2At4wjffC8t0qCPCqKx/aIfhkVRc=;
-        b=w953JQHeT2VHit7jKwcjkQV/jc27FvMVfnSl/Oi1ZjXXlfMDB/6/d6uMapNOSO/gZj
-         zX0M3MaakQKDPmE+RnyhVPLXkeifX76OaV0DoEbrrg1/48OJJ7YzbdJ1eLTAn6Au+9th
-         AoJ6D7ribscO0vtMXs5cM9/F5tZ5c4rpA+xjrT5L/oiEbh6LFRdOGeMFo+9R8aDu2Rm1
-         h6Nsck/2jQlL2OfErxGml2oioEtTDwJLcQU3HYWMRQIuXbgrnRb+jeRNyOu81mr0s0zx
-         iJmlEvouQgglj6E7jXsDx7qre9e1VshEQX5VgTZUTMm1Bu+OFlXQ35G7lXadjvfXq1a9
-         65Hg==
-X-Gm-Message-State: AOAM531Bymw1Vcu26y1BdIk/Xo4TScYXACmQ1X6QDIV81+LUkh4xoiOG
-        R95JJGIpigXLGkiGFYWKplrTmg==
-X-Google-Smtp-Source: ABdhPJyaIg8Bgl1cARcw5hIG7Q+j6EXk2MNoBQ/8SilKrhqYa6wciJBokhSQg3QGCOpvb/fnUuhhIA==
-X-Received: by 2002:a5d:55cd:0:b0:20d:743:6078 with SMTP id i13-20020a5d55cd000000b0020d07436078mr12731983wrw.240.1652865751403;
-        Wed, 18 May 2022 02:22:31 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:450f:9c92:a170:5581])
-        by smtp.gmail.com with ESMTPSA id z22-20020a05600c0a1600b003942a244f38sm3873757wmp.17.2022.05.18.02.22.30
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d5+0ld6vIvXb4AXUGD3+swLgU10VfBo9gjxiU0sZkxo=;
+        b=D5aWc2fTkCLfMpw4uGyCGWLCshsT3iOwqh5FrTTNBZaOOQjN7Kfnj8Iwwg8ykhGuY8
+         GBloRv3upSeQ7rYTY6PN72NLViUtcNIpR2eRmTNSuco/QTRzVs7trwMertsFu9k8IP6M
+         rOp8nuAkTLB9aMG8bWih2eBZBbgOExr3jI3PQb3vXvROmxOCO59kMj5ZLJVFp2uDhhJL
+         hrlvgao72rKpPSG2n5G9Kwa3VpCUCIcIBAm3y/a0BbugazhaYMujJQMYmYcVEUHQqiym
+         2NFdwJokKzW4yf6TX+dnX8G9mcV56Yk7N7iQNuc4mRLlhMNRsPyrSUHaks+J6UqzGmrI
+         sMmQ==
+X-Gm-Message-State: AOAM532twxSjR5hsM4wMLrFnCq5w3P/2WoYpSxivyFXz7/vlhCEnuMHO
+        GqKbcTJZne2O1N/0AKwIVak=
+X-Google-Smtp-Source: ABdhPJylrzPWq2+Iu6K8RtJKvVvAeFK+PtDcRB6PF2VntSYs+asqFf8NFwR+hkN84tlTP1E/GxaatA==
+X-Received: by 2002:a05:6402:1cc1:b0:428:a06e:a30f with SMTP id ds1-20020a0564021cc100b00428a06ea30fmr23710681edb.377.1652873099648;
+        Wed, 18 May 2022 04:24:59 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id n24-20020a056402515800b0042ad0358c8bsm1188980edd.38.2022.05.18.04.24.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 02:22:30 -0700 (PDT)
-Date:   Wed, 18 May 2022 11:22:25 +0200
-From:   Marco Elver <elver@google.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP
- testing
-Message-ID: <YoS60c/CIK3mHWyq@elver.google.com>
-References: <20220518073232.526443-1-davidgow@google.com>
+        Wed, 18 May 2022 04:24:59 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 18 May 2022 13:24:56 +0200
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in
+ kprobe_multi.addrs
+Message-ID: <YoTXiAk1EpZ0rLKE@krava>
+References: <cover.1652772731.git.esyr@redhat.com>
+ <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+ <YoNnAgDsIWef82is@krava>
+ <20220517123050.GA25149@asgard.redhat.com>
+ <YoP/eEMqAn3sVFXf@krava>
+ <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518073232.526443-1-davidgow@google.com>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 03:32PM +0800, 'David Gow' via KUnit Development wrote:
-> Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
-> 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
-> setup, so this is the best bet for testing things like KCSAN, which
-> require a multicore/multi-cpu system.
+On Tue, May 17, 2022 at 02:34:55PM -0700, Yonghong Song wrote:
 > 
-> The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
-> KCSAN to run with a nontrivial number of worker threads, while still
-> working relatively quickly on older machines.
 > 
-> Signed-off-by: David Gow <davidgow@google.com>
+> On 5/17/22 1:03 PM, Jiri Olsa wrote:
+> > On Tue, May 17, 2022 at 02:30:50PM +0200, Eugene Syromiatnikov wrote:
+> > > On Tue, May 17, 2022 at 11:12:34AM +0200, Jiri Olsa wrote:
+> > > > On Tue, May 17, 2022 at 09:36:47AM +0200, Eugene Syromiatnikov wrote:
+> > > > > With the interface as defined, it is impossible to pass 64-bit kernel
+> > > > > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
+> > > > > which severly limits the useability of the interface, change the ABI
+> > > > > to accept an array of u64 values instead of (kernel? user?) longs.
+> > > > > Interestingly, the rest of the libbpf infrastructure uses 64-bit values
+> > > > > for kallsyms addresses already, so this patch also eliminates
+> > > > > the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
+> > > > 
+> > > > so the problem is when we have 32bit user sace on 64bit kernel right?
+> > > > 
+> > > > I think we should keep addrs as longs in uapi and have kernel to figure out
+> > > > if it needs to read u32 or u64, like you did for symbols in previous patch
+> > > 
+> > > No, it's not possible here, as addrs are kernel addrs and not user space
+> > > addrs, so user space has to explicitly pass 64-bit addresses on 64-bit
+> > > kernels (or have a notion whether it is running on a 64-bit
+> > > or 32-bit kernel, and form the passed array accordingly, which is against
+> > > the idea of compat layer that tries to abstract it out).
+> > 
+> > hum :-\ I'll need to check on compat layer.. there must
+> > be some other code doing this already somewhere, right?
 
-Acked-by: Marco Elver <elver@google.com>
+so the 32bit application running on 64bit kernel using libbpf won't
+work at the moment, right? because it sees:
 
-> ---
+  bpf_kprobe_multi_opts::addrs as its 'unsigned long'
+
+which is 4 bytes and it needs to put there 64bits kernel addresses
+
+if we force the libbpf interface to use u64, then we should be fine
+
 > 
-> This is based off the discussion in:
-> https://groups.google.com/g/kasan-dev/c/A7XzC2pXRC8
+> I am not familiar with all these compatibility thing. But if we
+> have 64-bit pointer for **syms, maybe we could also have
+> 64-bit pointer for *syms for consistency?
+
+right, perhaps we could have one function to read both syms and addrs arrays
+
 > 
-> ---
->  tools/testing/kunit/qemu_configs/x86_64-smp.py | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 tools/testing/kunit/qemu_configs/x86_64-smp.py
-> 
-> diff --git a/tools/testing/kunit/qemu_configs/x86_64-smp.py b/tools/testing/kunit/qemu_configs/x86_64-smp.py
-> new file mode 100644
-> index 000000000000..a95623f5f8b7
-> --- /dev/null
-> +++ b/tools/testing/kunit/qemu_configs/x86_64-smp.py
-> @@ -0,0 +1,13 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +from ..qemu_config import QemuArchParams
-> +
-> +QEMU_ARCH = QemuArchParams(linux_arch='x86_64',
-> +			   kconfig='''
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SMP=y
-> +			   ''',
-> +			   qemu_arch='x86_64',
-> +			   kernel_path='arch/x86/boot/bzImage',
-> +			   kernel_command_line='console=ttyS0',
-> +			   extra_qemu_params=['-smp', '8'])
-> -- 
-> 2.36.0.550.gb090851708-goog
-> 
-> -- 
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220518073232.526443-1-davidgow%40google.com.
+> > jirka
+> > 
+> > > 
+> > > > we'll need to fix also bpf_kprobe_multi_cookie_swap because it assumes
+> > > > 64bit user space pointers
+
+if we have both addresses and cookies 64 then this should be ok
+
+> > > > 
+> > > > would be gret if we could have selftest for this
+
+let's add selftest for this
+
+thanks,
+jirka
