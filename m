@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9536D52D63A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 16:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E3752D659
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 16:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239865AbiESOhQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 10:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S231368AbiESOn1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 10:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239858AbiESOhP (ORCPT
+        with ESMTP id S239911AbiESOnZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 10:37:15 -0400
+        Thu, 19 May 2022 10:43:25 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EDCE98099
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 07:37:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3535D0295
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 07:43:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652971033;
+        s=mimecast20190719; t=1652971403;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=nuigQAW97z185pYVkfJOlg+wlqI3p7gPUl8yWY860tc=;
-        b=FWeWC6dXfoAM0Kb1zQf2ifuNz3IstonhRSVQlf+HM5MRmu+3/vuVCEN14Efsun7U/OkDLa
-        jFcuFeCE1CO3ETUAmJCfEBew/S71T5n7bwvVt1GluIu/MnRIyMiwAwE48eoOlRz9kSqvAG
-        oXs/jCO60eWBZ5HFluAKNItojjn9XrI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=50jb+lr+8bzs9LBIgH+1tS3BRiRPfRl1oUUzkOAyhsQ=;
+        b=S49a0cbE6GQo7g+gj4ZjYy2/uqYCghpmWo8ln2Q+UhdrOIzIhe+OxdbpEueTgJG04utVma
+        O6ISlgBQusEuQatbzQNW9JeT4UI/1WN0sLNvXSNlKB4zQU1d69dWQIcX7YXBcFS+yZLgK+
+        FAT27UpFUB5u7MqNSIPW+wPE8dt/n5U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-aO_ejIWoMNWNrp0QQQ9UdQ-1; Thu, 19 May 2022 10:37:10 -0400
-X-MC-Unique: aO_ejIWoMNWNrp0QQQ9UdQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-445-R9QJfxKaOXWEcSiAtGftmA-1; Thu, 19 May 2022 10:43:17 -0400
+X-MC-Unique: R9QJfxKaOXWEcSiAtGftmA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1E8D53833295;
-        Thu, 19 May 2022 14:37:09 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C3F080A0AD;
+        Thu, 19 May 2022 14:43:16 +0000 (UTC)
 Received: from asgard.redhat.com (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 337F67774;
-        Thu, 19 May 2022 14:37:05 +0000 (UTC)
-Date:   Thu, 19 May 2022 16:37:02 +0200
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 437942166B25;
+        Thu, 19 May 2022 14:43:12 +0000 (UTC)
+Date:   Thu, 19 May 2022 16:43:09 +0200
 From:   Eugene Syromiatnikov <esyr@redhat.com>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>,
@@ -56,18 +56,18 @@ Cc:     Jiri Olsa <jolsa@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 1/4] bpf_trace: check size for overflow in
- bpf_kprobe_multi_link_attach
-Message-ID: <20220519143702.GA22773@asgard.redhat.com>
+Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in
+ kprobe_multi.addrs
+Message-ID: <20220519144309.GB22773@asgard.redhat.com>
 References: <cover.1652772731.git.esyr@redhat.com>
- <9e4171972a3d75e656073e0c25cd4071a6f652e4.1652772731.git.esyr@redhat.com>
- <CAEf4BzYpNZSY+D6_QP4NE2dN25g4wD43UmJyzmqXCL=HOE9HFA@mail.gmail.com>
+ <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+ <CAEf4BzYNa0F21ydMLvmeGZWzvO_o5Fh0Af0zwWGNxMh6emQTSg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYpNZSY+D6_QP4NE2dN25g4wD43UmJyzmqXCL=HOE9HFA@mail.gmail.com>
+In-Reply-To: <CAEf4BzYNa0F21ydMLvmeGZWzvO_o5Fh0Af0zwWGNxMh6emQTSg@mail.gmail.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -78,65 +78,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 04:30:14PM -0700, Andrii Nakryiko wrote:
-> On Tue, May 17, 2022 at 12:36 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
+On Wed, May 18, 2022 at 04:50:58PM -0700, Andrii Nakryiko wrote:
+> On Tue, May 17, 2022 at 12:37 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
 > >
-> > Check that size would not overflow before calculation (and return
-> > -EOVERFLOW if it will), to prevent potential out-of-bounds write
-> > with the following copy_from_user.  Use kvmalloc_array
-> > in copy_user_syms to prevent out-of-bounds write into syms
-> > (and especially buf) as well.
+> > With the interface as defined, it is impossible to pass 64-bit kernel
+> > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
+> > which severly limits the useability of the interface, change the ABI
+> > to accept an array of u64 values instead of (kernel? user?) longs.
+> > Interestingly, the rest of the libbpf infrastructure uses 64-bit values
+> > for kallsyms addresses already, so this patch also eliminates
+> > the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
 > >
 > > Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> > Cc: <stable@vger.kernel.org> # 5.18
+> > Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
+> > Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
+> > Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
+> > Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
+> > Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
 > > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
 > > ---
-> >  kernel/trace/bpf_trace.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 7141ca8..9c041be 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2261,11 +2261,11 @@ static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32
-> >         int err = -ENOMEM;
-> >         unsigned int i;
-> >
-> > -       syms = kvmalloc(cnt * sizeof(*syms), GFP_KERNEL);
-> > +       syms = kvmalloc_array(cnt, sizeof(*syms), GFP_KERNEL);
-> >         if (!syms)
-> >                 goto error;
-> >
-> > -       buf = kvmalloc(cnt * KSYM_NAME_LEN, GFP_KERNEL);
-> > +       buf = kvmalloc_array(cnt, KSYM_NAME_LEN, GFP_KERNEL);
-> >         if (!buf)
-> >                 goto error;
-> >
-> > @@ -2461,7 +2461,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >         if (!cnt)
-> >                 return -EINVAL;
-> >
-> > -       size = cnt * sizeof(*addrs);
-> > +       if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
-> > +               return -EOVERFLOW;
-> >         addrs = kvmalloc(size, GFP_KERNEL);
+> >  kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
 > 
-> any good reason not to use kvmalloc_array() here as well and delegate
-> overflow to it. And then use long size (as expected by copy_from_user
-> anyway) everywhere?
+> kernel changes should go into a separate patch
 
-Just to avoid double calculation of size, otherwise I don't have
-any significant prefernce, other than -EOVERFLOW would not be reported
-separately (not sure if this a good or a bad thing), and that
-it would be a bit more cumbersome to incorporate the Yonghong's
-suggestion[1] about the INT_MAX check.
+Sure, they can be split, the only reason they are this way is to keep
+API/ABI in sync between the kernel code and the user space one.
 
-[1] https://lore.kernel.org/lkml/412bf136-6a5b-f442-1e84-778697e2b694@fb.com/
+> (and seems like they
+> logically fit together with patch #3, no?)
 
-> >         if (!addrs)
-> >                 return -ENOMEM;
-> > --
-> > 2.1.4
+Patch #3 doesn't change the API/ABI, it only fixes the implementation
+in terms of compat handling (and it is more straightforward),
+that is why I decided to have it separately. The compat handling
+of addrs, on the other hand, can't be fixed without the ABI change.
+
+> >  tools/lib/bpf/bpf.h                                |  2 +-
+> >  tools/lib/bpf/libbpf.c                             |  8 +++----
+> >  tools/lib/bpf/libbpf.h                             |  2 +-
+> >  .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
+> >  .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +++----
+> >  6 files changed, 32 insertions(+), 15 deletions(-)
 > >
+> 
+> [...]
 > 
 
