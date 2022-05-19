@@ -2,328 +2,574 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4635B52D6ED
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 17:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C198052D92B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 17:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbiESPGu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 11:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S241757AbiESPuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 11:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbiESPGo (ORCPT
+        with ESMTP id S241531AbiESPuM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 11:06:44 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1482C13F;
-        Thu, 19 May 2022 08:06:42 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id v10so5307799pgl.11;
-        Thu, 19 May 2022 08:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EucD8D1Hopx9myMTmlYjgrvRoh4xz50vqffBCpTlf4s=;
-        b=HLb2/gkOCAtGsnmd/tHYpzeQNKrQwcnhkUrQOoA3qLFXMnX9uHH0Xwbjsv0OqX0TuS
-         8VWMsmu2QrlHt9/aMusoRbhlCGPlVY62+AQ28zFaOyNMT77Ysiwmkyi3cz60AmUiKmQr
-         MK6BY3YhY51Yuv/uTFrnB5APmzMseJUq/2WG2B7h4ebbRkad2HSLU4gBnoGXvCXZxw5E
-         vvE+SA6997pIrJOBrHo+kBK6jglT7GpBZIKibhl08djLAEIE1/J73/CGo1v47Me8R9ti
-         v0uCTY0JEtRPciErtZ5EzY2tLjpRzX8PSpo64/eOKih5zgPtSXuwYRTv0WeucnkpOEGW
-         FAxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EucD8D1Hopx9myMTmlYjgrvRoh4xz50vqffBCpTlf4s=;
-        b=DzsNVwgvlmAH2J0RPaNPchrsNIewb1ApVvJYJNTu7sItfj+7/Q4/LXUhmEXoiZ7rZ+
-         Hd+alrwloag7eblWOs86whPGz7y2t/7PQePFH+QUx5CHa3SDHVAhjlykp8t7B7LlIDVw
-         MSI+DnBfv/GWA9olUiP9rpAyGRzybozRHWCLoT7qOGTPI2U6Y2/6kgpSDJzd9MHFg8/g
-         /+NP4JSKnJumPgjgHCM67J2qJqXLacUug+Wne8LA6aOgDWB4wVj/w7V3HrGRbANDEHe+
-         1YRiVckN/xZfuox09MYush9rlZRdM7ieyK00f+rQysdVqK3ttsjgl6hr2CaoomNKVdpN
-         ZEeg==
-X-Gm-Message-State: AOAM5303ut4jQURr4R6CnpSTTte9VNG2vANAZFBkhPnU9ZCoVh7MCEQd
-        9BXQCzG6A6l56r2LsZCFXSc=
-X-Google-Smtp-Source: ABdhPJwS7q92N95rTBohYsdxSKlwUJWCJnPq9iyzHkSKMq4zkvXpHiLIZMhK9oAL2vGPJpFOZnfAFQ==
-X-Received: by 2002:a63:6bc2:0:b0:3c2:13cc:1dec with SMTP id g185-20020a636bc2000000b003c213cc1decmr4316155pgc.263.1652972802133;
-        Thu, 19 May 2022 08:06:42 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id n22-20020a056a0007d600b0050dc7628139sm4536687pfu.19.2022.05.19.08.06.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 08:06:41 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     andrii.nakryiko@gmail.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, jolsa@kernel.org,
-        kafai@fb.com, kpsingh@kernel.org, kuifeng@fb.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, shuah@kernel.org, songliubraving@fb.com,
-        sunyucong@gmail.com, toke@redhat.com, yhs@fb.com, ytcoode@gmail.com
-Subject: [PATCH bpf-next v2] selftests/bpf: Add missing trampoline program type to trampoline_count test
-Date:   Thu, 19 May 2022 23:06:10 +0800
-Message-Id: <20220519150610.601313-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CAEf4BzYr+RZ8A00Yn=Pamt6bk-AmoMyjUHxosgJmrTjkYMhShQ@mail.gmail.com>
-References: <CAEf4BzYr+RZ8A00Yn=Pamt6bk-AmoMyjUHxosgJmrTjkYMhShQ@mail.gmail.com>
+        Thu, 19 May 2022 11:50:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5918C9859E
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 08:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652975283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJJnss2EjmhKAZqfc8ROgpLfRq3oHX7787vufsfVPK0=;
+        b=QCCSA1LbpxfyZ/NqJNUPcZdz9R6rFUV35YWbi+Q9zZMjqcWRLbtmXzzT9KSQa6dhYlBxlh
+        8JkHSiObp0/7EtFHE4m6hIO9Z4BxulPaJ4wC+/hMmmSpvbn2OoK8FN4fC67QEYsdiQkzK8
+        ziLBLVdk5CNjkguI4zW8zS1iRJdIHso=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-n-DOGQZuME26e5OuKTno8A-1; Thu, 19 May 2022 11:47:58 -0400
+X-MC-Unique: n-DOGQZuME26e5OuKTno8A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 98652802803;
+        Thu, 19 May 2022 15:47:56 +0000 (UTC)
+Received: from [10.39.193.17] (unknown [10.39.193.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2EC4240CF8ED;
+        Thu, 19 May 2022 15:47:53 +0000 (UTC)
+Message-ID: <9b03abc3-f6dc-209e-d31b-b171c5350359@redhat.com>
+Date:   Thu, 19 May 2022 17:47:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v5 12/17] selftests/bpf: add tests for
+ bpf_hid_hw_request
+Content-Language: en-US
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+ <20220518205924.399291-13-benjamin.tissoires@redhat.com>
+ <20220518222055.zh7hvexbqlctvotw@apollo.legion>
+ <CAO-hwJLxqYC9AUrfjMX1sPdSrt7EguWt9diwadJ9UZe-XGKFJw@mail.gmail.com>
+ <20220519125132.lm4ztduemzyvystf@apollo.legion>
+ <1c2eb260-1437-5aa3-95af-e336019f3c49@redhat.com>
+ <20220519134453.uxobs62inwoaucnk@apollo.legion>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+In-Reply-To: <20220519134453.uxobs62inwoaucnk@apollo.legion>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the trampoline_count test doesn't include any fmod_ret bpf
-programs, fix it to make the test cover all possible trampoline program
-types.
+On 5/19/22 15:44, Kumar Kartikeya Dwivedi wrote:
+> On Thu, May 19, 2022 at 06:43:41PM IST, Benjamin Tissoires wrote:
+>> On 5/19/22 14:51, Kumar Kartikeya Dwivedi wrote:
+>>> On Thu, May 19, 2022 at 05:42:40PM IST, Benjamin Tissoires wrote:
+>>>> On Thu, May 19, 2022 at 12:20 AM Kumar Kartikeya Dwivedi
+>>>> <memxor@gmail.com> wrote:
+>>>>>
+>>>>> On Thu, May 19, 2022 at 02:29:19AM IST, Benjamin Tissoires wrote:
+>>>>>> Add tests for the newly implemented function.
+>>>>>> We test here only the GET_REPORT part because the other calls are pure
+>>>>>> HID protocol and won't infer the result of the test of the bpf hook.
+>>>>>>
+>>>>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>>>>>>
+>>>>>> ---
+>>>>>>
+>>>>>> changes in v5:
+>>>>>> - use the new hid_bpf_allocate_context() API
+>>>>>> - remove the need for ctx_in for syscall TEST_RUN
+>>>>>>
+>>>>>> changes in v3:
+>>>>>> - use the new hid_get_data API
+>>>>>> - directly use HID_FEATURE_REPORT and HID_REQ_GET_REPORT from uapi
+>>>>>>
+>>>>>> changes in v2:
+>>>>>> - split the series by bpf/libbpf/hid/selftests and samples
+>>>>>> ---
+>>>>>>    tools/testing/selftests/bpf/prog_tests/hid.c | 114 ++++++++++++++++---
+>>>>>>    tools/testing/selftests/bpf/progs/hid.c      |  59 ++++++++++
+>>>>>>    2 files changed, 155 insertions(+), 18 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
+>>>>>> index 47bc0a30c275..54c0a0fcd54d 100644
+>>>>>> --- a/tools/testing/selftests/bpf/prog_tests/hid.c
+>>>>>> +++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+>>>>>> @@ -77,12 +77,23 @@ static unsigned char rdesc[] = {
+>>>>>>         0xc0,                   /* END_COLLECTION */
+>>>>>>    };
+>>>>>>
+>>>>>> +static u8 feature_data[] = { 1, 2 };
+>>>>>> +
+>>>>>>    struct attach_prog_args {
+>>>>>>         int prog_fd;
+>>>>>>         unsigned int hid;
+>>>>>>         int retval;
+>>>>>>    };
+>>>>>>
+>>>>>> +struct hid_hw_request_syscall_args {
+>>>>>> +     __u8 data[10];
+>>>>>> +     unsigned int hid;
+>>>>>> +     int retval;
+>>>>>> +     size_t size;
+>>>>>> +     enum hid_report_type type;
+>>>>>> +     __u8 request_type;
+>>>>>> +};
+>>>>>> +
+>>>>>>    static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
+>>>>>>    static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
+>>>>>>
+>>>>>> @@ -142,7 +153,7 @@ static void destroy(int fd)
+>>>>>>
+>>>>>>    static int uhid_event(int fd)
+>>>>>>    {
+>>>>>> -     struct uhid_event ev;
+>>>>>> +     struct uhid_event ev, answer;
+>>>>>>         ssize_t ret;
+>>>>>>
+>>>>>>         memset(&ev, 0, sizeof(ev));
+>>>>>> @@ -183,6 +194,15 @@ static int uhid_event(int fd)
+>>>>>>                 break;
+>>>>>>         case UHID_GET_REPORT:
+>>>>>>                 fprintf(stderr, "UHID_GET_REPORT from uhid-dev\n");
+>>>>>> +
+>>>>>> +             answer.type = UHID_GET_REPORT_REPLY;
+>>>>>> +             answer.u.get_report_reply.id = ev.u.get_report.id;
+>>>>>> +             answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
+>>>>>> +             answer.u.get_report_reply.size = sizeof(feature_data);
+>>>>>> +             memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
+>>>>>> +
+>>>>>> +             uhid_write(fd, &answer);
+>>>>>> +
+>>>>>>                 break;
+>>>>>>         case UHID_SET_REPORT:
+>>>>>>                 fprintf(stderr, "UHID_SET_REPORT from uhid-dev\n");
+>>>>>> @@ -391,6 +411,7 @@ static int open_hidraw(int dev_id)
+>>>>>>    struct test_params {
+>>>>>>         struct hid *skel;
+>>>>>>         int hidraw_fd;
+>>>>>> +     int hid_id;
+>>>>>>    };
+>>>>>>
+>>>>>>    static int prep_test(int dev_id, const char *prog_name, struct test_params *test_data)
+>>>>>> @@ -419,27 +440,33 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
+>>>>>>         if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
+>>>>>>                 goto cleanup;
+>>>>>>
+>>>>>> -     prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
+>>>>>> -     if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
+>>>>>> -             goto cleanup;
+>>>>>> +     if (prog_name) {
+>>>>>> +             prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
+>>>>>> +             if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
+>>>>>> +                     goto cleanup;
+>>>>>>
+>>>>>> -     bpf_program__set_autoload(prog, true);
+>>>>>> +             bpf_program__set_autoload(prog, true);
+>>>>>>
+>>>>>> -     err = hid__load(hid_skel);
+>>>>>> -     if (!ASSERT_OK(err, "hid_skel_load"))
+>>>>>> -             goto cleanup;
+>>>>>> +             err = hid__load(hid_skel);
+>>>>>> +             if (!ASSERT_OK(err, "hid_skel_load"))
+>>>>>> +                     goto cleanup;
+>>>>>>
+>>>>>> -     attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
+>>>>>> -     if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
+>>>>>> -             err = attach_fd;
+>>>>>> -             goto cleanup;
+>>>>>> -     }
+>>>>>> +             attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
+>>>>>> +             if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
+>>>>>> +                     err = attach_fd;
+>>>>>> +                     goto cleanup;
+>>>>>> +             }
+>>>>>>
+>>>>>> -     args.prog_fd = bpf_program__fd(prog);
+>>>>>> -     err = bpf_prog_test_run_opts(attach_fd, &tattr);
+>>>>>> -     snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
+>>>>>> -     if (!ASSERT_EQ(args.retval, 0, buf))
+>>>>>> -             goto cleanup;
+>>>>>> +             args.prog_fd = bpf_program__fd(prog);
+>>>>>> +             err = bpf_prog_test_run_opts(attach_fd, &tattr);
+>>>>>> +             snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
+>>>>>> +             if (!ASSERT_EQ(args.retval, 0, buf))
+>>>>>> +                     goto cleanup;
+>>>>>> +     } else {
+>>>>>> +             err = hid__load(hid_skel);
+>>>>>> +             if (!ASSERT_OK(err, "hid_skel_load"))
+>>>>>> +                     goto cleanup;
+>>>>>> +     }
+>>>>>>
+>>>>>>         hidraw_fd = open_hidraw(dev_id);
+>>>>>>         if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
+>>>>>> @@ -447,6 +474,7 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
+>>>>>>
+>>>>>>         test_data->skel = hid_skel;
+>>>>>>         test_data->hidraw_fd = hidraw_fd;
+>>>>>> +     test_data->hid_id = hid_id;
+>>>>>>
+>>>>>>         return 0;
+>>>>>>
+>>>>>> @@ -693,6 +721,54 @@ static int test_hid_change_report(int uhid_fd, int dev_id)
+>>>>>>         return ret;
+>>>>>>    }
+>>>>>>
+>>>>>> +/*
+>>>>>> + * Attach hid_user_raw_request to the given uhid device,
+>>>>>> + * call the bpf program from userspace
+>>>>>> + * check that the program is called and does the expected.
+>>>>>> + */
+>>>>>> +static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
+>>>>>> +{
+>>>>>> +     struct test_params params;
+>>>>>> +     int err, prog_fd;
+>>>>>> +     int ret = -1;
+>>>>>> +     struct hid_hw_request_syscall_args args = {
+>>>>>> +             .retval = -1,
+>>>>>> +             .type = HID_FEATURE_REPORT,
+>>>>>> +             .request_type = HID_REQ_GET_REPORT,
+>>>>>> +             .size = 10,
+>>>>>> +     };
+>>>>>> +     DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
+>>>>>> +                         .ctx_in = &args,
+>>>>>> +                         .ctx_size_in = sizeof(args),
+>>>>>> +     );
+>>>>>> +
+>>>>>> +     err = prep_test(dev_id, NULL, &params);
+>>>>>> +     if (!ASSERT_EQ(err, 0, "prep_test()"))
+>>>>>> +             goto cleanup;
+>>>>>> +
+>>>>>> +     args.hid = params.hid_id;
+>>>>>> +     args.data[0] = 1; /* report ID */
+>>>>>> +
+>>>>>> +     prog_fd = bpf_program__fd(params.skel->progs.hid_user_raw_request);
+>>>>>> +
+>>>>>> +     err = bpf_prog_test_run_opts(prog_fd, &tattrs);
+>>>>>> +     if (!ASSERT_EQ(err, 0, "bpf_prog_test_run_opts"))
+>>>>>> +             goto cleanup;
+>>>>>> +
+>>>>>> +     if (!ASSERT_EQ(args.retval, 2, "bpf_prog_test_run_opts_retval"))
+>>>>>> +             goto cleanup;
+>>>>>> +
+>>>>>> +     if (!ASSERT_EQ(args.data[1], 2, "hid_user_raw_request_check_in"))
+>>>>>> +             goto cleanup;
+>>>>>> +
+>>>>>> +     ret = 0;
+>>>>>> +
+>>>>>> +cleanup:
+>>>>>> +     cleanup_test(&params);
+>>>>>> +
+>>>>>> +     return ret;
+>>>>>> +}
+>>>>>> +
+>>>>>>    void serial_test_hid_bpf(void)
+>>>>>>    {
+>>>>>>         int err, uhid_fd;
+>>>>>> @@ -720,6 +796,8 @@ void serial_test_hid_bpf(void)
+>>>>>>         ASSERT_OK(err, "hid_attach_detach");
+>>>>>>         err = test_hid_change_report(uhid_fd, dev_id);
+>>>>>>         ASSERT_OK(err, "hid_change_report");
+>>>>>> +     err = test_hid_user_raw_request_call(uhid_fd, dev_id);
+>>>>>> +     ASSERT_OK(err, "hid_change_report");
+>>>>>>
+>>>>>>         destroy(uhid_fd);
+>>>>>>
+>>>>>> diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+>>>>>> index ee7529c47ad8..e3444d444303 100644
+>>>>>> --- a/tools/testing/selftests/bpf/progs/hid.c
+>>>>>> +++ b/tools/testing/selftests/bpf/progs/hid.c
+>>>>>> @@ -10,6 +10,13 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+>>>>>>                               unsigned int offset,
+>>>>>>                               const size_t __sz) __ksym;
+>>>>>>    extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
+>>>>>> +extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
+>>>>>> +extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
+>>>>>> +extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+>>>>>> +                           __u8 *data,
+>>>>>> +                           size_t len,
+>>>>>> +                           enum hid_report_type type,
+>>>>>> +                           int reqtype) __ksym;
+>>>>>>
+>>>>>>    struct attach_prog_args {
+>>>>>>         int prog_fd;
+>>>>>> @@ -56,3 +63,55 @@ int attach_prog(struct attach_prog_args *ctx)
+>>>>>>                                           0);
+>>>>>>         return 0;
+>>>>>>    }
+>>>>>> +
+>>>>>> +struct hid_hw_request_syscall_args {
+>>>>>> +     /* data needs to come at offset 0 so we can do a memcpy into it */
+>>>>>> +     __u8 data[10];
+>>>>>> +     unsigned int hid;
+>>>>>> +     int retval;
+>>>>>> +     size_t size;
+>>>>>> +     enum hid_report_type type;
+>>>>>> +     __u8 request_type;
+>>>>>> +};
+>>>>>> +
+>>>>>> +SEC("syscall")
+>>>>>> +int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+>>>>>> +{
+>>>>>> +     struct hid_bpf_ctx *ctx;
+>>>>>> +     int i, ret = 0;
+>>>>>> +     __u8 *data;
+>>>>>> +
+>>>>>> +     ctx = hid_bpf_allocate_context(args->hid);
+>>>>>> +     if (!ctx)
+>>>>>> +             return 0; /* EPERM check */
+>>>>>> +
+>>>>>> +     /* We can not use the context data memory directly in the hid_bpf call,
+>>>>>> +      * so we rely on the PTR_TO_MEM allocated in the hid_bpf_context
+>>>>>> +      */
+>>>>>> +     data = hid_bpf_get_data(ctx, 0 /* offset */, 10 /* size */);
+>>>>>> +     if (!data)
+>>>>>> +             goto out; /* EPERM check */
+>>>>>> +
+>>>>>
+>>>>> If I'm reading this right, you need more than just returning PTR_TO_MEM. Since
+>>>>> this points into allocated ctx, nothing prevents user from accessing data after
+>>>>> we do hid_bpf_release_context.
+>>>>
+>>>> oops. I missed that point.
+>>>>
+>>>> TBH, ideally I wanted to directly pass args->data into
+>>>> hid_bpf_hw_request(). But because args is seen as the context of the
+>>>> program, I can not pass it to the kfunc arguments.
+>>>> I would happily prevent getting a data pointer for a manually
+>>>> allocated context if I could solve that issue. This would save me from
+>>>> calling twice  __builtin_memcpy.
+>>>
+>>> Oh, is that why you need to do this? So if you were able to pass args->data, you
+>>> wouldn't need this hid_bpf_get_data? kfunc does support taking PTR_TO_CTX (i.e.
+>>> args in your case), I am not sure why you're not passing it in directly then.
+>>> Did you encounter any errors when trying to do so? The only requirement is that
+>>> args offset must be 0 (i.e. passed as is without increment).
+>>
+>> With the following patch applied, the tests are failing:
+>> ---
+>> diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+>> index 43724fd26fb9..976fc8b83934 100644
+>> --- a/tools/testing/selftests/bpf/progs/hid.c
+>> +++ b/tools/testing/selftests/bpf/progs/hid.c
+>> @@ -80,24 +80,14 @@ int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+>>   {
+>>          struct hid_bpf_ctx *ctx;
+>>          int i, ret = 0;
+>> -       __u8 *data;
+>>          ctx = hid_bpf_allocate_context(args->hid);
+>>          if (!ctx)
+>>                  return 0; /* EPERM check */
+>> -       /* We can not use the context data memory directly in the hid_bpf call,
+>> -        * so we rely on the PTR_TO_MEM allocated in the hid_bpf_context
+>> -        */
+>> -       data = hid_bpf_get_data(ctx, 0 /* offset */, 10 /* size */);
+>> -       if (!data)
+>> -               goto out; /* EPERM check */
+>> -
+>> -       __builtin_memcpy(data, args->data, sizeof(args->data));
+>> -
+>>          if (args->size <= sizeof(args->data)) {
+>>                  ret = hid_bpf_hw_request(ctx,
+>> -                                        data,
+>> +                                        args->data,
+>>                                           args->size,
+>>                                           args->type,
+>>                                           args->request_type);
+>> @@ -109,8 +99,6 @@ int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+>>                  goto out;
+>>          }
+>> -       __builtin_memcpy(args->data, data, sizeof(args->data));
+>> -
+>>    out:
+>>          hid_bpf_release_context(ctx);
+>> ---
+>>
+>> Output of the verifier:
+>>
+>> libbpf: prog 'hid_user_raw_request': BPF program load failed: Invalid argument
+>> libbpf: prog 'hid_user_raw_request': -- BEGIN PROG LOAD LOG --
+>> R1 type=ctx expected=fp
+>> 0: R1=ctx(off=0,imm=0) R10=fp0
+>> ; int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+>> 0: (bf) r7 = r1                       ; R1=ctx(off=0,imm=0) R7_w=ctx(off=0,imm=0)
+>> ; ctx = hid_bpf_allocate_context(args->hid);
+>> 1: (61) r1 = *(u32 *)(r7 +12)         ; R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R7_w=ctx(off=0,imm=0)
+>> ; ctx = hid_bpf_allocate_context(args->hid);
+>> 2: (85) call hid_bpf_allocate_context#66484
+>> 3: (bf) r6 = r0                       ; R0_w=ptr_or_null_hid_bpf_ctx(id=2,ref_obj_id=2,off=0,imm=0) R6_w=ptr_or_null_hid_bpf_ctx(id=2,ref_obj_id=2,off=0,imm=0) refs=2
+>> 4: (b4) w8 = 0                        ; R8_w=0 refs=2
+>> ; if (!ctx)
+>> 5: (15) if r6 == 0x0 goto pc+12       ; R6_w=ptr_hid_bpf_ctx(ref_obj_id=2,off=0,imm=0) refs=2
+>> 6: (b4) w8 = -7                       ; R8_w=4294967289 refs=2
+>> ; if (args->size <= sizeof(args->data)) {
+>> 7: (79) r3 = *(u64 *)(r7 +24)         ; R3=scalar() R7=ctx(off=0,imm=0) refs=2
+>> ; if (args->size <= sizeof(args->data)) {
+>> 8: (25) if r3 > 0xa goto pc+7         ; R3=scalar(umax=10,var_off=(0x0; 0xf)) refs=2
+>> ; args->request_type);
+>> 9: (71) r5 = *(u8 *)(r7 +36)          ; R5_w=scalar(umax=255,var_off=(0x0; 0xff)) R7=ctx(off=0,imm=0) refs=2
+>> ; args->type,
+>> 10: (61) r4 = *(u32 *)(r7 +32)        ; R4_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R7=ctx(off=0,imm=0) refs=2
+>> ; ret = hid_bpf_hw_request(ctx,
+>> 11: (bf) r1 = r6                      ; R1_w=ptr_hid_bpf_ctx(ref_obj_id=2,off=0,imm=0) R6=ptr_hid_bpf_ctx(ref_obj_id=2,off=0,imm=0) refs=2
+>> 12: (bf) r2 = r7                      ; R2_w=ctx(off=0,imm=0) R7=ctx(off=0,imm=0) refs=2
+>> 13: (85) call hid_bpf_hw_request#66480
+>> R2 type=ctx expected=fp
+>> processed 14 insns (limit 1000000) max_states_per_insn 0 total_states 1 peak_states 1 mark_read 1
+>> -- END PROG LOAD LOG --
+>>
+>> Maybe I am wrongly declaring hid_bpf_hw_request()?
+>>
+> 
+> Ah, I see. This is because current code does not handle syscall prog. We need to
+> teach bpf_get_prog_ctx_type to handle this case for BPF_PROG_TYPE_SYSCALL. We
+> can use the ctx size at verification time, we will have to ensure the size is
+> greater than or equal to the size of struct expected by hid_bpf_hw_request for
+> that arg. Currently the type of ctx is void * for syscall progs, which obviously
+> is indicating lack of known size of ctx at compile time.
+> 
+> In your case, you have a pair of args that pass a certain size while expecting
+> ctx as data of some len. For these variable sized ctx, we should probably just
+> make kfunc define void *, len__ctx_sz (__ctx_sz suffix) pair of args. If it sees
+> void * as arg type and as ctx as pointer type, it tries to check if arguments
+> are set up like this. Probably only makes sense doing for syscall progs since
+> ctx is user supplied. You can look at existing handling for __sz suffix for
+> inspiration.
+> 
 
-Since fmod_ret bpf programs can't be attached to __set_task_comm function,
-as it's neither whitelisted for error injection nor a security hook, change
-it to bpf_modify_return_test.
+OK, so I think I understand now why it fails. Thanks.
 
-This patch also does some other cleanups such as removing duplicate code,
-dropping inconsistent comments, etc.
+However, I'd like to not restrict the void * argument to a context, as
+users might want to simply statically allocate a buffer and use that.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+What if I do the following? (by changing return 0 to something
+meaningfull):
+
 ---
-v1->v2: call bpf_prog_test_run() to trigger bpf_modify_return_test in kernel
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 084319073064..8d5b47af0da5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5020,6 +5020,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+                                    struct bpf_call_arg_meta *meta)
+  {
+         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
++       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+         u32 *max_access;
+  
+         switch (base_type(reg->type)) {
+@@ -5073,6 +5074,14 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+                                 env,
+                                 regno, reg->off, access_size,
+                                 zero_size_allowed, ACCESS_HELPER, meta);
++       case PTR_TO_CTX:
++               /* in case of type SYSCALL, the context is user supplied so
++                * not computed statically.
++                * Dynamically check it now
++                */
++               if (prog_type == BPF_PROG_TYPE_SYSCALL)
++                       return 0 /* some magic call to compare the access_size against the ctx size */;
++               fallthrough;
+         default: /* scalar_value or invalid ptr */
+                 /* Allow zero-byte read from NULL, regardless of pointer type */
+                 if (zero_size_allowed && access_size == 0 &&
+---
 
- include/linux/bpf.h                           |   2 +-
- .../bpf/prog_tests/trampoline_count.c         | 134 +++++++-----------
- .../bpf/progs/test_trampoline_count.c         |  16 ++-
- 3 files changed, 61 insertions(+), 91 deletions(-)
+Would I be able to get access to the real CTX size there, and would that be acceptable?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c107392b0ba7..cb01f247e05f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -724,7 +724,7 @@ struct btf_func_model {
- #define BPF_TRAMP_F_RET_FENTRY_RET	BIT(4)
- 
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-- * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
-+ * bytes on x86.
-  */
- #define BPF_MAX_TRAMP_LINKS 38
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-index 9c795ee52b7b..b0acbda6dbf5 100644
---- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-@@ -1,126 +1,94 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #define _GNU_SOURCE
--#include <sched.h>
--#include <sys/prctl.h>
- #include <test_progs.h>
- 
- #define MAX_TRAMP_PROGS 38
- 
- struct inst {
- 	struct bpf_object *obj;
--	struct bpf_link   *link_fentry;
--	struct bpf_link   *link_fexit;
-+	struct bpf_link   *link;
- };
- 
--static int test_task_rename(void)
--{
--	int fd, duration = 0, err;
--	char buf[] = "test_overhead";
--
--	fd = open("/proc/self/comm", O_WRONLY|O_TRUNC);
--	if (CHECK(fd < 0, "open /proc", "err %d", errno))
--		return -1;
--	err = write(fd, buf, sizeof(buf));
--	if (err < 0) {
--		CHECK(err < 0, "task rename", "err %d", errno);
--		close(fd);
--		return -1;
--	}
--	close(fd);
--	return 0;
--}
--
--static struct bpf_link *load(struct bpf_object *obj, const char *name)
-+static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
- {
-+	struct bpf_object *obj;
- 	struct bpf_program *prog;
--	int duration = 0;
-+	int err;
-+
-+	obj = bpf_object__open_file(file, NULL);
-+	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
-+		return NULL;
-+
-+	inst->obj = obj;
-+
-+	err = bpf_object__load(obj);
-+	if (!ASSERT_OK(err, "obj_load"))
-+		return NULL;
- 
- 	prog = bpf_object__find_program_by_name(obj, name);
--	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", name))
--		return ERR_PTR(-EINVAL);
--	return bpf_program__attach_trace(prog);
-+	if (!ASSERT_OK_PTR(prog, "obj_find_prog"))
-+		return NULL;
-+
-+	return prog;
- }
- 
- /* TODO: use different target function to run in concurrent mode */
- void serial_test_trampoline_count(void)
- {
--	const char *fentry_name = "prog1";
--	const char *fexit_name = "prog2";
--	const char *object = "test_trampoline_count.o";
--	struct inst inst[MAX_TRAMP_PROGS] = {};
--	int err, i = 0, duration = 0;
--	struct bpf_object *obj;
-+	char *file = "test_trampoline_count.o";
-+	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-+	struct inst inst[MAX_TRAMP_PROGS + 1] = {};
-+	struct bpf_program *prog;
- 	struct bpf_link *link;
--	char comm[16] = {};
-+	int prog_fd, err, i;
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
- 
- 	/* attach 'allowed' trampoline programs */
- 	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
--		obj = bpf_object__open_file(object, NULL);
--		if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
--			obj = NULL;
-+		prog = load_prog(file, progs[i % ARRAY_SIZE(progs)], &inst[i]);
-+		if (!prog)
- 			goto cleanup;
--		}
- 
--		err = bpf_object__load(obj);
--		if (CHECK(err, "obj_load", "err %d\n", err))
-+		link = bpf_program__attach(prog);
-+		if (!ASSERT_OK_PTR(link, "attach_prog"))
- 			goto cleanup;
--		inst[i].obj = obj;
--		obj = NULL;
--
--		if (rand() % 2) {
--			link = load(inst[i].obj, fentry_name);
--			if (!ASSERT_OK_PTR(link, "attach_prog")) {
--				link = NULL;
--				goto cleanup;
--			}
--			inst[i].link_fentry = link;
--		} else {
--			link = load(inst[i].obj, fexit_name);
--			if (!ASSERT_OK_PTR(link, "attach_prog")) {
--				link = NULL;
--				goto cleanup;
--			}
--			inst[i].link_fexit = link;
--		}
-+
-+		inst[i].link = link;
- 	}
- 
- 	/* and try 1 extra.. */
--	obj = bpf_object__open_file(object, NULL);
--	if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
--		obj = NULL;
-+	prog = load_prog(file, "fmod_ret_test", &inst[i]);
-+	if (!prog)
- 		goto cleanup;
--	}
--
--	err = bpf_object__load(obj);
--	if (CHECK(err, "obj_load", "err %d\n", err))
--		goto cleanup_extra;
- 
- 	/* ..that needs to fail */
--	link = load(obj, fentry_name);
--	err = libbpf_get_error(link);
--	if (!ASSERT_ERR_PTR(link, "cannot attach over the limit")) {
--		bpf_link__destroy(link);
--		goto cleanup_extra;
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_ERR_PTR(link, "attach_prog")) {
-+		inst[i].link = link;
-+		goto cleanup;
- 	}
- 
- 	/* with E2BIG error */
--	ASSERT_EQ(err, -E2BIG, "proper error check");
--	ASSERT_EQ(link, NULL, "ptr_is_null");
-+	if (!ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
-+		goto cleanup;
- 
- 	/* and finaly execute the probe */
--	if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
--		goto cleanup_extra;
--	CHECK_FAIL(test_task_rename());
--	CHECK_FAIL(prctl(PR_SET_NAME, comm, 0L, 0L, 0L));
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &opts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(opts.retval & 0xffff, 4, "bpf_modify_return_test.result");
-+	ASSERT_EQ(opts.retval >> 16, 1, "bpf_modify_return_test.side_effect");
- 
--cleanup_extra:
--	bpf_object__close(obj);
- cleanup:
--	if (i >= MAX_TRAMP_PROGS)
--		i = MAX_TRAMP_PROGS - 1;
- 	for (; i >= 0; i--) {
--		bpf_link__destroy(inst[i].link_fentry);
--		bpf_link__destroy(inst[i].link_fexit);
-+		bpf_link__destroy(inst[i].link);
- 		bpf_object__close(inst[i].obj);
- 	}
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-index f030e469d05b..7765720da7d5 100644
---- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-+++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-@@ -1,20 +1,22 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <stdbool.h>
--#include <stddef.h>
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
--struct task_struct;
-+SEC("fentry/bpf_modify_return_test")
-+int BPF_PROG(fentry_test, int a, int *b)
-+{
-+	return 0;
-+}
- 
--SEC("fentry/__set_task_comm")
--int BPF_PROG(prog1, struct task_struct *tsk, const char *buf, bool exec)
-+SEC("fmod_ret/bpf_modify_return_test")
-+int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
- {
- 	return 0;
- }
- 
--SEC("fexit/__set_task_comm")
--int BPF_PROG(prog2, struct task_struct *tsk, const char *buf, bool exec)
-+SEC("fexit/bpf_modify_return_test")
-+int BPF_PROG(fexit_test, int a, int *b, int ret)
- {
- 	return 0;
- }
--- 
-2.36.1
+Cheers,
+Benjamin
+
+PS: I'll be out tomorrow and it's the end of the work day here, so I might not answer before next Monday
+
+>> Cheers,
+>> Benjamin
+>>
+>>>
+>>>>
+>>>> That doesn't change the fact that you are correct and the PTR_TO_MEM
+>>>> in kfunc code should be fixed.
+>>>> But right now, I am not sure what you mean below and I'll need a
+>>>> little bit more time to process it.
+>>>>
+>>>> Cheers,
+>>>> Benjamin
+>>>>
+>>>>>
+>>>>> The ref_obj_id of ctx needs to be transferred to R0.ref_obj_id, and R0.id needs
+>>>>> to be assigned another id distinct from the ref_obj_id.
+>>>>>
+>>>>> My idea would be to give this type of function a new set, and handle this case
+>>>>> of transferring ref_obj_id into R0. See is_ptr_cast_function in verifier.c.
+>>>>> Shouldn't be too much code. You could even use the bpf_kfunc_arg_meta to store
+>>>>> the ref_obj_id (and ensure only one referenced register exists among the 5
+>>>>> arguments).
+>>>>>
+>>>>>> +     __builtin_memcpy(data, args->data, sizeof(args->data));
+>>>>>> +
+>>>>>> +     if (args->size <= sizeof(args->data)) {
+>>>>>> +             ret = hid_bpf_hw_request(ctx,
+>>>>>> +                                      data,
+>>>>>> +                                      args->size,
+>>>>>> +                                      args->type,
+>>>>>> +                                      args->request_type);
+>>>>>> +             args->retval = ret;
+>>>>>> +             if (ret < 0)
+>>>>>> +                     goto out;
+>>>>>> +     } else {
+>>>>>> +             ret = -7; /* -E2BIG */
+>>>>>> +             goto out;
+>>>>>> +     }
+>>>>>> +
+>>>>>> +     __builtin_memcpy(args->data, data, sizeof(args->data));
+>>>>>> +
+>>>>>> + out:
+>>>>>> +     hid_bpf_release_context(ctx);
+>>>>>> +
+>>>>>> +     return ret;
+>>>>>> +}
+>>>>>> --
+>>>>>> 2.36.1
+>>>>>>
+>>>>>
+>>>>> --
+>>>>> Kartikeya
+>>>>>
+>>>>
+>>>
+>>> --
+>>> Kartikeya
+>>>
+>>
+> 
+> --
+> Kartikeya
+> 
 
