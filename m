@@ -2,69 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A0A52D3B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 15:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7880652D3C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 15:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbiESNPc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 09:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S238679AbiESNUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 09:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiESNP2 (ORCPT
+        with ESMTP id S238676AbiESNUT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 09:15:28 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC067C8BE6
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:15:27 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id r6-20020a1c2b06000000b00396fee5ebc9so2694047wmr.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:15:27 -0700 (PDT)
+        Thu, 19 May 2022 09:20:19 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1483C8BEC
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:20:16 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t6so7154364wra.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VSYJPFMDXlYKMEva978rt3WrVJMGeeNjbMrdMQJN/S8=;
-        b=LkGUrYm1sC8bHWxe8UYcaCM3NKt12z1kZqHSrpy0e2a1iN6ptZYj8NyBqlfmxzL3dN
-         iSZSe80R6mcE9LJpUr1qvmv5WrcGqbG/AdkdZT54ekQnd5JigB7G4k5NpcMUKuKzsWSd
-         tID9Ep743sG4ilh1Ur7s7KLcPZ8eH5mjlDl6FVIE2V4M+pyIFE8GNPmn/zuH9HkH1Y3R
-         H4raQDoKnOVCTsL7SnvwkHIIjwjljx9gPILUKfDmRhil5cWWSBXTLg0WM4yjPwd6lPC3
-         o/5bz+K5KUCKBvKOqXraM3QuSTeXsIDqEB4wpF+KZFSzBhm648SijlElQ+Qdvl6pCLrP
-         WL2g==
+        bh=I5ITOyjBIEMJ8Aio/pMKh87JHm/41u/5hAQH7+UUyTc=;
+        b=BvN2jYVMmrze/Qc3r3DoR9r6Jh+3dOsjrXIjYUlIMb2TlpfMnkrbI/bA1pbr7Rcsyl
+         kXugp/JpSC36pU793POJKx/Hq6/z00NRSfZBvFQENX+VbFAw7GHmjhmtssn7IUpGhByn
+         SJ8KJj7HHVLorkB69+CRa7p2Jb9oY4hQUU7nWgmmPR4QPGVFS3xC7DBhzF7cdMseMqdc
+         qY+FxI6MjiBhQAR0RPJjPNptQLKiSelT3lupHa/fZ7M2F+OzadoHcABAfRB32HOwLjeX
+         tb8WmH3/i8UpDVT5x2YGFuESVhA24wkC/yB7+2FXM/8wrGuSYrbzBMnPvR/TxHry3QUd
+         0lgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VSYJPFMDXlYKMEva978rt3WrVJMGeeNjbMrdMQJN/S8=;
-        b=ljbWCMnlNubeaoPLhB00bQqyEemS7AZL+h/+tJBfBuerVWNtEwqMpQSGl2U5M1Xv1+
-         Sjz4BRitI4fAx2Cw8uo6i/Lx1ynC63ElJJV79FEr6g8QE8jUJeemdf26IEEuVd1jF0f2
-         2Gmd+3L3hAtp7AFa+IfV6QJjMgQ4DNsH8D1+CoWQK2MSvRLalZFjjKKyVo9/yDBcLjgq
-         f4xegezNxMPsRsxv6YKWik6Vl7NAVr3S9NUPnD37aDunb585akZwHIEdIx7Sn/6vK1k8
-         t2mTZofKCvLPMRwTR5W5DpHPEkHo0ViYMtlO6RqWewA5TceOj6lnMLk2Qb4/PnHea0TE
-         ESeQ==
-X-Gm-Message-State: AOAM530PLowPnSkvj1dp5Lkkz6qTctugnJ/Dc/YShnLB9xwYQJU2i2Rj
-        guKTD+oSEXTAeXX/puw0Xs1ZvRDsl1y/HNU+G92Rlg==
-X-Google-Smtp-Source: ABdhPJzKJa6cOZ+M+VvUHsXHXRXrzHUeP74KjKDH7iFmXhvitun4Zxy8sr8fnNIWNTtVMEIyL58LPwmM3EHEZ725Iyg=
-X-Received: by 2002:a05:600c:ad3:b0:394:46ae:549b with SMTP id
- c19-20020a05600c0ad300b0039446ae549bmr4242568wmr.113.1652966125877; Thu, 19
- May 2022 06:15:25 -0700 (PDT)
+        bh=I5ITOyjBIEMJ8Aio/pMKh87JHm/41u/5hAQH7+UUyTc=;
+        b=zHhBrrZ76eu/axC8AgszraFXLJzz6PCUoSMawFmDvoqzZ49jHBmTSb2RvnK+KhsjLU
+         dmFiVZWElqQYZk2iohDJipLdPIVysoRDvEVfheiQ/R7q2Be3GgH2BaE2C0U4ZUW0KAl1
+         U5XfoBAFdfh3HYw+Mbh723l9RquZ2ngUIr3ggsZglIbMHgj/BCx48igJLqi5cV6wLmRV
+         /2z9Zo3xgubxD85nt8sGiILVijGUpwVLPkBFnKYYoOKNrgWmwEAKRtRpVc676zcbQHmB
+         +lewx6cjCcRirAPTTTxyASiADKftaRhibSn080MWph2jmL16DcfjxcheautfhVBFB0Ty
+         pUXg==
+X-Gm-Message-State: AOAM531gLOZrGaaicQi3ukXihHzCq1lYieK3HC0pUkou62oOjtn+gI9u
+        C/+jCrrdjhGKcSjl9wv6nv/X6HEE6Au71SXvMbWS5g==
+X-Google-Smtp-Source: ABdhPJwgYdo9soolmR05//WUSqz+7EwpizHv32SmyzeElCwXErH1dWMs7F0Na4b/EF6rCsU8NzZ95GZNA/7AcP0HsQ8=
+X-Received: by 2002:a05:6000:1549:b0:20c:7183:439 with SMTP id
+ 9-20020a056000154900b0020c71830439mr4086990wry.104.1652966415239; Thu, 19 May
+ 2022 06:20:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
- <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
-In-Reply-To: <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
+References: <20220518170124.2849497-1-dlatypov@google.com> <20220518170124.2849497-2-dlatypov@google.com>
+In-Reply-To: <20220518170124.2849497-2-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 19 May 2022 21:15:14 +0800
-Message-ID: <CABVgOS=X51T_=hwTumnzL2yECgcshWBp1RT0F3GiT3+Fe_vang@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     Marco Elver <elver@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+Date:   Thu, 19 May 2022 21:20:03 +0800
+Message-ID: <CABVgOSnsZU1jnVbPuredPkDcxbJnq+1ojDU300yXV7jApj0=XQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Documentation: kunit: fix example run_kunit func to
+ allow spaces in args
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Marco Elver <elver@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         kasan-dev <kasan-dev@googlegroups.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cc113905df5d2acc"
+        boundary="0000000000000944e905df5d3c38"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -76,57 +75,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000cc113905df5d2acc
+--0000000000000944e905df5d3c38
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 18, 2022 at 11:36 PM Marco Elver <elver@google.com> wrote:
+On Thu, May 19, 2022 at 1:01 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Wed, 18 May 2022 at 17:31, Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > On Wed, May 18, 2022 at 12:32 AM 'David Gow' via KUnit Development
-> > <kunit-dev@googlegroups.com> wrote:
-> > >
-> > > Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
-> > > 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
-> > > setup, so this is the best bet for testing things like KCSAN, which
-> > > require a multicore/multi-cpu system.
-> > >
-> > > The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
-> > > KCSAN to run with a nontrivial number of worker threads, while still
-> > > working relatively quickly on older machines.
-> > >
-> >
-> > Since it's arbitrary, I somewhat prefer the idea of leaving up
-> > entirely to the caller
-> > i.e.
-> > $ kunit.py run --kconfig_add=CONFIG_SMP=y --qemu_args '-smp 8'
-> >
-> > We could add CONFIG_SMP=y to the default qemu_configs/*.py and do
-> > $ kunit.py run --qemu_args '-smp 8'
-> > but I'd prefer the first, even if it is more verbose.
-> >
-> > Marco, does this seem reasonable from your perspective?
+> Without the quoting, the example will mess up invocations like
+> $ run_kunit "Something with spaces"
 >
-> Either way works. But I wouldn't mind a sane default though, where
-> that default can be overridden with custom number of CPUs.
+> Note: this example isn't valid, but if ever a usecase arises where a
+> flag argument might have spaces in it, it'll break.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+
+Looks correct to me, though I'm not a bash _expert_.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+
+-- David
+
+>  Documentation/dev-tools/kunit/running_tips.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+> index c36f6760087d..da8677c32aee 100644
+> --- a/Documentation/dev-tools/kunit/running_tips.rst
+> +++ b/Documentation/dev-tools/kunit/running_tips.rst
+> @@ -15,7 +15,7 @@ It can be handy to create a bash function like:
+>  .. code-block:: bash
+>
+>         function run_kunit() {
+> -         ( cd "$(git rev-parse --show-toplevel)" && ./tools/testing/kunit/kunit.py run $@ )
+> +         ( cd "$(git rev-parse --show-toplevel)" && ./tools/testing/kunit/kunit.py run "$@" )
+>         }
+>
+>  .. note::
+> --
+> 2.36.1.124.g0e6072fb45-goog
 >
 
-I tend to agree that having both would be nice: I think there are
-enough useful "machine configs" that trying to maintain, e.g, a 1:1
-mapping with kernel architectures is going to leave a bunch of things
-on the table, particularly as we add more tests for, e.g., drivers and
-specific CPU models.
-
-The problem, of course, is that the --kconfig_add flags don't allow us
-to override anything explicitly stated in either the kunitconfig or
-qemu_config (and I imagine there could be problems with --qemu_config,
-too).
-
-> > I think that a new --qemu_args would be generically useful for adhoc
-> > use and light enough that people won't need to add qemu_configs much.
-> > E.g. I can see people wanting multiple NUMA nodes, a specific -cpu, and so on.
-
---000000000000cc113905df5d2acc
+--0000000000000944e905df5d3c38
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -193,14 +183,14 @@ jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
 ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
 QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAI
-zxDdM63ohRMg2/Q6u8VwGIk6kXGZ1ugrQbXDgkLydzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA1MTkxMzE1MjZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDk
+5uI6beIgArWk6wkAKW7hyYSzj6AiewLNB4QlrmrnODAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA1MTkxMzIwMTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAr4OItgdvBbQnw+RRHfUR
-S9sHUm/Rt/zyk55i9l/tKDXEI/xy+M1KoiwUcOYpqY8OTT28778qhiPd/9HLHNVc+TdvyGY1HS8/
-TNNtAaELz2LcE8+d3RBM8Qy8LGivgow3+zGiBUcZ80kQsgPLYx5+fE29FY0sA6R5sWRkf9X4gMm6
-8gs7+letJXuZiVEzs6e/OS7SDyiKH/zElmAMBOf4A8YOxDfDpR4hLsvD42/9P/4jYLf2rZYZV0PD
-V78D6ttmM5owOqPnVm1JJ8emCmXbz/J7zxd7egOwjgyybFNH+5UY98HUzwIbkk0tiqdpqDFUHxpG
-Kk3zhwrEclaNFo6UVg==
---000000000000cc113905df5d2acc--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAnioYNKDDIjk1oTk2pDX7
+3DxVzPNutS0xlaB4q6ONc1OdsgioN5ZeCftDuDJ02htT9xdQyT9xcrlavyR4CoQAeu+HxzXJF6NG
+BqX72wrTPnHWwWbL1NJSp1gXsfDjiPiTiUbVIhv72jX6EdhuQvQ+XNsjk249WvzZEbwDsoCBCigI
+f379X3aEHxhikmV+ToSi1d2Ob3L64lhPezH47/zcHNpF/72ub8Ppn9uJKorWjz78CA7LRH5CZJ8o
+8ztaQjpdeRbwFlQzswmBMSC+bLnyrEYtZW5bUR1XE/NTcSyTu1k4ulyLLollOYmT5HWCUkqbFqYe
+whEmN/WkT1oVi6a82Q==
+--0000000000000944e905df5d3c38--
