@@ -2,83 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380AD52CE75
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 10:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AD952CED5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 11:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbiESIjI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 04:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        id S233452AbiESJAm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 05:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234771AbiESIjH (ORCPT
+        with ESMTP id S233283AbiESJAm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 04:39:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F34577F12;
-        Thu, 19 May 2022 01:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g/oPe5bXk7tsbULLyYHhkrNj6UcyM44d11Xk1/aVMmY=; b=q6yzGmnt5k0dWGLzN+N/7kJIII
-        I5rTrvru7kLRG3wr+UYoaPMbB1e2Qri5xfzHb5GHqQAVfJc0R0WXnphvur5nbLmog9nSj7S5VODIC
-        sO5QfAA8o9UkWgXl/5J/j2kNOzfqSIgmy7QCmFnSb9oSdFELbAe3z+Sacpp58JSL8HkDNcuE3+ulW
-        AZ/s/TuiUpNOlmr0HsAa2zOCXXQ+HBa6jpT1U1KxML/b5CvAsaaNFikomYd91zIfALWMsNiPMk2tD
-        Vo4f9CAN3kDjtwf32oJIsYG/G8fwB8d1m7JQ93m85cJJGH0PE94C6Xn6GuF2bkhuINisDCuFcZG3l
-        dB4HBWPA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrbgQ-005uXP-BN; Thu, 19 May 2022 08:38:58 +0000
-Date:   Thu, 19 May 2022 01:38:58 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 00/17] Introduce eBPF support for HID devices
-Message-ID: <YoYCIhYhzLmhIGxe@infradead.org>
-References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
- <YoX7iHddAd4FkQRQ@infradead.org>
- <YoX904CAFOAfWeJN@kroah.com>
+        Thu, 19 May 2022 05:00:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F15A5022;
+        Thu, 19 May 2022 02:00:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2A93617C7;
+        Thu, 19 May 2022 09:00:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 835FCC385AA;
+        Thu, 19 May 2022 09:00:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652950840;
+        bh=dF0FH60gJWkqlbjGCCXS67g6UQvlG7opUBzrK6LwxmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZFmw0KIAaHHW7y+NPVu8+lfaadngQyO8TShE1cUfLmct+dUcAVYWBXpvyGIks4Z/F
+         Umx5mDrQ8z6pdpxCdvS+yMjWq5xSfhcHEKk6FBsXNh5Sk9H0DtWjzR5cyftlDr5jvs
+         UL4uUlVHJm/V7Oa8K3qLTWApAQ1mw34IG/T8V1eH369NzoxbJPhdELVrTTlJ/9tSEh
+         R/2Jr6HhZ1ss0mWcsBl8m2TA9EaMP1R/8u9G+nWP22GxGTJI8v0fo4fz6e06M142Xa
+         lTL2pt9Q2zPWvNveSoknOasWl/NsNGcJg4s8ExmHGML20mbL1Lps6RpXtaRTDPchw3
+         b9iqhvfElEWJQ==
+Date:   Thu, 19 May 2022 11:00:32 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, mhocko@suse.com, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        minchan@kernel.org, kirill@shutemov.name, aarcange@redhat.com,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 1/1] selftests: vm: add process_mrelease tests
+Message-ID: <20220519090032.4wyjggifnfisgjbr@wittgenstein>
+References: <20220518204316.13131-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YoX904CAFOAfWeJN@kroah.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220518204316.13131-1-surenb@google.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 19, 2022 at 10:20:35AM +0200, Greg KH wrote:
-> > are written using a hip new VM?
+On Wed, May 18, 2022 at 01:43:16PM -0700, Suren Baghdasaryan wrote:
+> Introduce process_mrelease syscall sanity tests which include tests
+> which expect to fail:
+> - process_mrelease with invalid pidfd and flags inputs
+> - process_mrelease on a live process with no pending signals
+> and valid process_mrelease usage which is expected to succeed.
+> Because process_mrelease has to be used against a process with a pending
+> SIGKILL, it's possible that the process exits before process_mrelease
+> gets called. In such cases we retry the test with a victim that allocates
+> twice more memory up to 1GB. This would require the victim process to
+> spend more time during exit and process_mrelease has a better chance of
+> catching the process before it exits and succeeding.
 > 
-> Ugh, don't mention UDI, that's a bad flashback...
-
-But that is very much what we are doing here.
-
-> I thought the goal here was to move a lot of the quirk handling and
-> "fixup the broken HID decriptors in this device" out of kernel .c code
-> and into BPF code instead, which this patchset would allow.
+> On success the test reports the amount of memory the child had to
+> allocate for reaping to succeed. Sample output:
 > 
-> So that would just be exception handling.  I don't think you can write a
-> real HID driver here at all, but I could be wrong as I have not read the
-> new patchset (older versions of this series could not do that.)
+> $ mrelease_test
+> Success reaping a child with 1MB of memory allocations
+> 
+> On failure the test reports the failure. Sample outputs:
+> 
+> $ mrelease_test
+> All process_mrelease attempts failed!
+> 
+> $ mrelease_test
+> process_mrelease: Invalid argument
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
 
-And that "exception handling" is most of the driver.
+Thanks your adding selftests, Suren!
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
