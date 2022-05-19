@@ -2,71 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0A552C7EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 01:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA51B52C84D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 02:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiERXvM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 May 2022 19:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S231543AbiESAEe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 May 2022 20:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiERXvK (ORCPT
+        with ESMTP id S231428AbiESAEa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 19:51:10 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C4443C3;
-        Wed, 18 May 2022 16:51:10 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id h85so4085910iof.12;
-        Wed, 18 May 2022 16:51:10 -0700 (PDT)
+        Wed, 18 May 2022 20:04:30 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1972569CF7;
+        Wed, 18 May 2022 17:04:29 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id p74so520025iod.8;
+        Wed, 18 May 2022 17:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eZMy8FDicN73C5tBewEMmRPhbsoqs/BvzITBNIcg4lI=;
-        b=bV2eHwNLaIIZcJFPpOhwoDKvUVHSKNvsV3qUcXiyyqVoT8vgw1YA11pOl7Bef67Id9
-         8IO6ageKx63UxY6rCNMgWsGjAznrDkga9bVN/S8kwLW996syy6yrDkcE0kQeacQxi/kO
-         4cGJ92W2Rj5SiytU3ldGj84lom/BNkwQNvAjR2WoFYz43iD+icaNfwoFdBwNjEuw+fBA
-         zRsz9UN0GGB0Ha4Mve0m1k6fyEZBA9G1L4TH3XZkQVcMaYEpTapirL4uHeBj2EnESxAM
-         Rjpj1dX0ucmssHN5zAkytrdqtkN6GYmfjZHvfYJmbjtG1iDlkjZI764iUeEYarO5a9Mf
-         lTTQ==
+        bh=jyWLC75GTM+OTHBExj7bBZUgP6zoR7HVZUA3rF/6LlI=;
+        b=ppAayLSgcNevwTq4JdA4LlNNtyQpBQ0oT0MQUE7It1ss0AUS9RKTpPTQOa7CF4rSjd
+         Ejuf3FywE0soKmdyplCOwow6Mu9fakjkhDX/VlY/hpCxMNp5XnSVUoLUIpMIpvaAej1N
+         hHt6cmBDsRe2qUZO/d1wmEXqtliGj8n1XfY1PXSTF5sG+dUl2EXLel1S/scILOEVu4m+
+         sGkGRtwMJdSe8X3ZtJK4JPNmqorzkc3cIsqQQrgUFd6rN65m0svo64FjUZQeShMdO36R
+         pZI9MPxL4fqpd2P9rnSq81iX5X1dSl6kUhOPTQDE6eDkAQKf0lFTIpeQO+s8Z/YCFEMn
+         eGvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eZMy8FDicN73C5tBewEMmRPhbsoqs/BvzITBNIcg4lI=;
-        b=nyudBD4Q+FeYV30HNveB0aVwDOdUPZN0EckwfwNA7C5+XQsfNeBzXI38QaghFxozVh
-         lyNKlfGyTu6NI79jqkSj9zV+kEVjAfq0+IseYSM6uE+oVrtfitS1eryA2Ydvx3H+XqJd
-         PcOYAUXzzOwFrB7GbScGWvFTrdiJi+6AsMX4a3O9KhxUEDg1nliK8MnETuMfvFimVql8
-         zWCqp9qsg6BXILfrSQvRCZzlX+dJ9FQ6IGkifEcS/PhP2ndojw5wyn3PfNvjeRaSCcnT
-         KlxmBP/Wer1QUMuoYwco63qczWPfO7V4UadErkY/NEUPQf7DGs+Pdp3SOYeHaBUp9smv
-         KSHg==
-X-Gm-Message-State: AOAM532shANTwKZuFAlng0h7F76i/PMpNUKcOmqjKz3bUjKy7hlvx3OB
-        QkQnSt8IlInP2XO0spAD0k8EBZ94JyNJ/zIksbTKUvUE
-X-Google-Smtp-Source: ABdhPJz7ng3xuusKTxdtSpX9mM929lMyQ9CPvg13/lfQd4CkqrUJZ2b2BA5I+eMO0wcjxqx/5T37CPMTNoDE+0KAbX0=
-X-Received: by 2002:a05:6638:450a:b0:32e:1bd1:735f with SMTP id
- bs10-20020a056638450a00b0032e1bd1735fmr1129586jab.145.1652917869480; Wed, 18
- May 2022 16:51:09 -0700 (PDT)
+        bh=jyWLC75GTM+OTHBExj7bBZUgP6zoR7HVZUA3rF/6LlI=;
+        b=VI/hFrbFyGxt4IrLM6bUxnkfjQxzQ4XnEXtHglgXKf94GS+cKwgAOZ1DLIPu9ZxRdw
+         LofAfkmlXFyCv+JGhUSahLikn2PjviWgcqYIZqwaFLaV+BAUYTM5+LxTuvqcZOaByDcN
+         tiIfJiISePpZlDqIdm77x5kzx/rLvB0zBogzkiCuKD7xTBvbkx3Zv2rtP6oQo0qNT4Kh
+         chm95ixEgMMownZB5VfZ/RaB49DnjtijCqWvLBPlHu6F1Sfni4hiu+Miq7iK5bU1yw1O
+         yMuNN59MShnGOAsn8EiiW81WfSWR/cBcSa6DK1fHVOCvRgTQFTkamwJF6U0Ea1MweiLa
+         RUBA==
+X-Gm-Message-State: AOAM532RbdVoHhxh5fO7xsT24A8uO6Ls3F3SKHlOYdevHSGkFb9TRPmp
+        FGKw+k0vUxf5PW2CZrg1H672Stcv8KaGjPd/o8u0j3BlDEw=
+X-Google-Smtp-Source: ABdhPJxuxwX+Xic8wOUNmzSxm9GLSXsVqqKfAcXWhsKGK/I6cqAIOtENm9E/PsbarQNFvm0zvAgR99uHvCvTmfkJGgk=
+X-Received: by 2002:a05:6638:468e:b0:32b:fe5f:d73f with SMTP id
+ bq14-20020a056638468e00b0032bfe5fd73fmr1209492jab.234.1652918668509; Wed, 18
+ May 2022 17:04:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1652772731.git.esyr@redhat.com> <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
-In-Reply-To: <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+References: <20220515063120.526063-1-ytcoode@gmail.com>
+In-Reply-To: <20220515063120.526063-1-ytcoode@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 May 2022 16:50:58 -0700
-Message-ID: <CAEf4BzYNa0F21ydMLvmeGZWzvO_o5Fh0Af0zwWGNxMh6emQTSg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in kprobe_multi.addrs
-To:     Eugene Syromiatnikov <esyr@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Date:   Wed, 18 May 2022 17:04:16 -0700
+Message-ID: <CAEf4BzYr+RZ8A00Yn=Pamt6bk-AmoMyjUHxosgJmrTjkYMhShQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add missing trampoline program
+ type to trampoline_count test
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Yucong Sun <sunyucong@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Kui-Feng Lee <kuifeng@fb.com>, Jiri Olsa <jolsa@kernel.org>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -80,35 +79,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:37 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
+On Sat, May 14, 2022 at 11:31 PM Yuntao Wang <ytcoode@gmail.com> wrote:
 >
-> With the interface as defined, it is impossible to pass 64-bit kernel
-> addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
-> which severly limits the useability of the interface, change the ABI
-> to accept an array of u64 values instead of (kernel? user?) longs.
-> Interestingly, the rest of the libbpf infrastructure uses 64-bit values
-> for kallsyms addresses already, so this patch also eliminates
-> the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
+> Currently the trampoline_count test doesn't include any fmod_ret bpf
+> programs, fix it to make the test cover all possible trampoline program
+> types.
 >
-> Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
-> Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
-> Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
-> Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
-> Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
-> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> Since fmod_ret bpf programs can't be attached to __set_task_comm function,
+> as it's neither whitelisted for error injection nor a security hook, change
+> it to bpf_modify_return_test.
+>
+> This patch also does some other cleanups such as removing duplicate code,
+> dropping inconsistent comments, etc.
+>
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 > ---
->  kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
-
-kernel changes should go into a separate patch (and seems like they
-logically fit together with patch #3, no?)
-
->  tools/lib/bpf/bpf.h                                |  2 +-
->  tools/lib/bpf/libbpf.c                             |  8 +++----
->  tools/lib/bpf/libbpf.h                             |  2 +-
->  .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
->  .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +++----
->  6 files changed, 32 insertions(+), 15 deletions(-)
+>  include/linux/bpf.h                           |   2 +-
+>  .../bpf/prog_tests/trampoline_count.c         | 121 ++++++------------
+>  .../bpf/progs/test_trampoline_count.c         |  16 ++-
+>  3 files changed, 47 insertions(+), 92 deletions(-)
 >
+
+[...]
+
+>
+>         /* with E2BIG error */
+> -       ASSERT_EQ(err, -E2BIG, "proper error check");
+> +       ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG");
+>         ASSERT_EQ(link, NULL, "ptr_is_null");
+>
+> -       /* and finaly execute the probe */
+> -       if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
+> -               goto cleanup_extra;
+> -       CHECK_FAIL(test_task_rename());
+
+we stopped testing that kernel function actually can be called
+properly, why don't you do bpf_prog_test_run() here to trigger
+bpf_modify_return_test in kernel?
+
+> -       CHECK_FAIL(prctl(PR_SET_NAME, comm, 0L, 0L, 0L));
+> -
+> -cleanup_extra:
+> -       bpf_object__close(obj);
+>  cleanup:
+> -       if (i >= MAX_TRAMP_PROGS)
+> -               i = MAX_TRAMP_PROGS - 1;
+>         for (; i >= 0; i--) {
+> -               bpf_link__destroy(inst[i].link_fentry);
+> -               bpf_link__destroy(inst[i].link_fexit);
+> +               bpf_link__destroy(inst[i].link);
+>                 bpf_object__close(inst[i].obj);
+>         }
+>  }
 
 [...]
