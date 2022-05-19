@@ -2,236 +2,507 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98BD52D39A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 15:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FA652D3AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 15:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237829AbiESNIs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 09:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
+        id S238652AbiESNN7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 09:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbiESNIq (ORCPT
+        with ESMTP id S238552AbiESNN5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 09:08:46 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9994DBDA20
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:08:44 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id r9-20020a1c4409000000b00397345f2c6fso264155wma.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L5JbYtq4yhCasQlqmdpC0D/BGyzCKs/i7QzQjlYtYHo=;
-        b=AwFuDbp7qBiunKO6Bj3f7eJLJbhBcTofDf7IFDBiJkNpF/Uf0z2ZvE2xuATFe9kNoF
-         Dfk0ZSaRLp2/ppaSwHAF/KnzH7o2sD6A7JrRjxKOBxr1O30fHHOmh9UnpEa/Qc3F6+fe
-         1+sz8nxS7PCSAiryPk+MpLaWQ/eQ3KhyQ2FC3iJ3Ntj7TjP+U7zsIcOWEEIFqrUrE9tU
-         wg6+oo3vDemayTYiRfcIWOUH8LEnmAVhugNlsdDPNMJK3lJQxcWGujBwxMaqY1IxNpPP
-         0wpTfmNmTItuvmqbl2kl6dyNI04tQqUMwyUbwdel8UWS0k0v+LHw/TJFj7i4NljwjyBI
-         DSbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L5JbYtq4yhCasQlqmdpC0D/BGyzCKs/i7QzQjlYtYHo=;
-        b=2wgB6f0aGV7Puv19/8Ja1bghy6Ioc9aNunRAL6MLJB8bAqfa0xD4bDX3YRJqa5vxmP
-         3XV3Db2nUihSsK12+B1MqMs8ePrUtfafvQM4rPa4bxUU589524yvJ3s582l+QVEfCOTo
-         fVClx1jGTEym0V/K3JkNUv4fFHRDQaB1M9CmVVhlfZEs7LC4OzdQMKjcpVEc+uJpQomf
-         vVI/ChgHKN+ejVRqgvmDoDK27trgb0LIgrCSlpzNrHMbH36TEW/FuIDNnYTfQNCG0Bnl
-         pMNR2BX33M97WfGHXZlfrxCg6QDtmkMBWGyRBiVb+fh2t1QG0nn8U7tQUjrpEjFbsB82
-         t17A==
-X-Gm-Message-State: AOAM533JmtkYe8RbvW525CihXJQjnSB5bEEQm4MXTzSVr6qDBTf3PYuR
-        acGuw+ClFOaYlgtH3dIgcKJfricXfBp5AEr8nnHDnQ==
-X-Google-Smtp-Source: ABdhPJzQpY+yMjZVmgtaOFUvmT8ZEJ3HHMAQXO1OUYKovuWCaNYpGtUEB6f6TAYmh8qO1k1RyYjaAXhumAR5PPHoWzc=
-X-Received: by 2002:a05:600c:3512:b0:394:7c3b:53d1 with SMTP id
- h18-20020a05600c351200b003947c3b53d1mr4253775wmq.197.1652965722897; Thu, 19
- May 2022 06:08:42 -0700 (PDT)
+        Thu, 19 May 2022 09:13:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD815C3D3A
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 06:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652966031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yzDpbry46NymxB7eqMNOlV3g4t5Yua7WLVHlQsMcesg=;
+        b=JlSEJ6dekH1+8oSQeScfumRGwvrhKEj1nfKQzS+m2sb8B/4RneziL1jBZiZRLzzXv5NuA7
+        I3f7Uk/7wkqxFFt509yJxGHXce0Ovnd/redYv39l51xziTCgWlaQuUVwb+zyVNZtTuu3yX
+        cupYw2zNYlA1uHMDvrd19Ri5efcYgq0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-536-WvERKhSdN_2tm-h7YXja3w-1; Thu, 19 May 2022 09:13:48 -0400
+X-MC-Unique: WvERKhSdN_2tm-h7YXja3w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BBEAF811E75;
+        Thu, 19 May 2022 13:13:45 +0000 (UTC)
+Received: from [10.39.193.17] (unknown [10.39.193.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73DEE400E114;
+        Thu, 19 May 2022 13:13:42 +0000 (UTC)
+Message-ID: <1c2eb260-1437-5aa3-95af-e336019f3c49@redhat.com>
+Date:   Thu, 19 May 2022 15:13:41 +0200
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
- <YoS6rthXi9VRXpkg@elver.google.com>
-In-Reply-To: <YoS6rthXi9VRXpkg@elver.google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 19 May 2022 21:08:31 +0800
-Message-ID: <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
-To:     Marco Elver <elver@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v5 12/17] selftests/bpf: add tests for
+ bpf_hid_hw_request
+Content-Language: en-US
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c4608d05df5d1251"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+ <20220518205924.399291-13-benjamin.tissoires@redhat.com>
+ <20220518222055.zh7hvexbqlctvotw@apollo.legion>
+ <CAO-hwJLxqYC9AUrfjMX1sPdSrt7EguWt9diwadJ9UZe-XGKFJw@mail.gmail.com>
+ <20220519125132.lm4ztduemzyvystf@apollo.legion>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+In-Reply-To: <20220519125132.lm4ztduemzyvystf@apollo.legion>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000c4608d05df5d1251
-Content-Type: text/plain; charset="UTF-8"
+On 5/19/22 14:51, Kumar Kartikeya Dwivedi wrote:
+> On Thu, May 19, 2022 at 05:42:40PM IST, Benjamin Tissoires wrote:
+>> On Thu, May 19, 2022 at 12:20 AM Kumar Kartikeya Dwivedi
+>> <memxor@gmail.com> wrote:
+>>>
+>>> On Thu, May 19, 2022 at 02:29:19AM IST, Benjamin Tissoires wrote:
+>>>> Add tests for the newly implemented function.
+>>>> We test here only the GET_REPORT part because the other calls are pure
+>>>> HID protocol and won't infer the result of the test of the bpf hook.
+>>>>
+>>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>>>>
+>>>> ---
+>>>>
+>>>> changes in v5:
+>>>> - use the new hid_bpf_allocate_context() API
+>>>> - remove the need for ctx_in for syscall TEST_RUN
+>>>>
+>>>> changes in v3:
+>>>> - use the new hid_get_data API
+>>>> - directly use HID_FEATURE_REPORT and HID_REQ_GET_REPORT from uapi
+>>>>
+>>>> changes in v2:
+>>>> - split the series by bpf/libbpf/hid/selftests and samples
+>>>> ---
+>>>>   tools/testing/selftests/bpf/prog_tests/hid.c | 114 ++++++++++++++++---
+>>>>   tools/testing/selftests/bpf/progs/hid.c      |  59 ++++++++++
+>>>>   2 files changed, 155 insertions(+), 18 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
+>>>> index 47bc0a30c275..54c0a0fcd54d 100644
+>>>> --- a/tools/testing/selftests/bpf/prog_tests/hid.c
+>>>> +++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+>>>> @@ -77,12 +77,23 @@ static unsigned char rdesc[] = {
+>>>>        0xc0,                   /* END_COLLECTION */
+>>>>   };
+>>>>
+>>>> +static u8 feature_data[] = { 1, 2 };
+>>>> +
+>>>>   struct attach_prog_args {
+>>>>        int prog_fd;
+>>>>        unsigned int hid;
+>>>>        int retval;
+>>>>   };
+>>>>
+>>>> +struct hid_hw_request_syscall_args {
+>>>> +     __u8 data[10];
+>>>> +     unsigned int hid;
+>>>> +     int retval;
+>>>> +     size_t size;
+>>>> +     enum hid_report_type type;
+>>>> +     __u8 request_type;
+>>>> +};
+>>>> +
+>>>>   static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
+>>>>   static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
+>>>>
+>>>> @@ -142,7 +153,7 @@ static void destroy(int fd)
+>>>>
+>>>>   static int uhid_event(int fd)
+>>>>   {
+>>>> -     struct uhid_event ev;
+>>>> +     struct uhid_event ev, answer;
+>>>>        ssize_t ret;
+>>>>
+>>>>        memset(&ev, 0, sizeof(ev));
+>>>> @@ -183,6 +194,15 @@ static int uhid_event(int fd)
+>>>>                break;
+>>>>        case UHID_GET_REPORT:
+>>>>                fprintf(stderr, "UHID_GET_REPORT from uhid-dev\n");
+>>>> +
+>>>> +             answer.type = UHID_GET_REPORT_REPLY;
+>>>> +             answer.u.get_report_reply.id = ev.u.get_report.id;
+>>>> +             answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
+>>>> +             answer.u.get_report_reply.size = sizeof(feature_data);
+>>>> +             memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
+>>>> +
+>>>> +             uhid_write(fd, &answer);
+>>>> +
+>>>>                break;
+>>>>        case UHID_SET_REPORT:
+>>>>                fprintf(stderr, "UHID_SET_REPORT from uhid-dev\n");
+>>>> @@ -391,6 +411,7 @@ static int open_hidraw(int dev_id)
+>>>>   struct test_params {
+>>>>        struct hid *skel;
+>>>>        int hidraw_fd;
+>>>> +     int hid_id;
+>>>>   };
+>>>>
+>>>>   static int prep_test(int dev_id, const char *prog_name, struct test_params *test_data)
+>>>> @@ -419,27 +440,33 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
+>>>>        if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
+>>>>                goto cleanup;
+>>>>
+>>>> -     prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
+>>>> -     if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
+>>>> -             goto cleanup;
+>>>> +     if (prog_name) {
+>>>> +             prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
+>>>> +             if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
+>>>> +                     goto cleanup;
+>>>>
+>>>> -     bpf_program__set_autoload(prog, true);
+>>>> +             bpf_program__set_autoload(prog, true);
+>>>>
+>>>> -     err = hid__load(hid_skel);
+>>>> -     if (!ASSERT_OK(err, "hid_skel_load"))
+>>>> -             goto cleanup;
+>>>> +             err = hid__load(hid_skel);
+>>>> +             if (!ASSERT_OK(err, "hid_skel_load"))
+>>>> +                     goto cleanup;
+>>>>
+>>>> -     attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
+>>>> -     if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
+>>>> -             err = attach_fd;
+>>>> -             goto cleanup;
+>>>> -     }
+>>>> +             attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
+>>>> +             if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
+>>>> +                     err = attach_fd;
+>>>> +                     goto cleanup;
+>>>> +             }
+>>>>
+>>>> -     args.prog_fd = bpf_program__fd(prog);
+>>>> -     err = bpf_prog_test_run_opts(attach_fd, &tattr);
+>>>> -     snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
+>>>> -     if (!ASSERT_EQ(args.retval, 0, buf))
+>>>> -             goto cleanup;
+>>>> +             args.prog_fd = bpf_program__fd(prog);
+>>>> +             err = bpf_prog_test_run_opts(attach_fd, &tattr);
+>>>> +             snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
+>>>> +             if (!ASSERT_EQ(args.retval, 0, buf))
+>>>> +                     goto cleanup;
+>>>> +     } else {
+>>>> +             err = hid__load(hid_skel);
+>>>> +             if (!ASSERT_OK(err, "hid_skel_load"))
+>>>> +                     goto cleanup;
+>>>> +     }
+>>>>
+>>>>        hidraw_fd = open_hidraw(dev_id);
+>>>>        if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
+>>>> @@ -447,6 +474,7 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
+>>>>
+>>>>        test_data->skel = hid_skel;
+>>>>        test_data->hidraw_fd = hidraw_fd;
+>>>> +     test_data->hid_id = hid_id;
+>>>>
+>>>>        return 0;
+>>>>
+>>>> @@ -693,6 +721,54 @@ static int test_hid_change_report(int uhid_fd, int dev_id)
+>>>>        return ret;
+>>>>   }
+>>>>
+>>>> +/*
+>>>> + * Attach hid_user_raw_request to the given uhid device,
+>>>> + * call the bpf program from userspace
+>>>> + * check that the program is called and does the expected.
+>>>> + */
+>>>> +static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
+>>>> +{
+>>>> +     struct test_params params;
+>>>> +     int err, prog_fd;
+>>>> +     int ret = -1;
+>>>> +     struct hid_hw_request_syscall_args args = {
+>>>> +             .retval = -1,
+>>>> +             .type = HID_FEATURE_REPORT,
+>>>> +             .request_type = HID_REQ_GET_REPORT,
+>>>> +             .size = 10,
+>>>> +     };
+>>>> +     DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
+>>>> +                         .ctx_in = &args,
+>>>> +                         .ctx_size_in = sizeof(args),
+>>>> +     );
+>>>> +
+>>>> +     err = prep_test(dev_id, NULL, &params);
+>>>> +     if (!ASSERT_EQ(err, 0, "prep_test()"))
+>>>> +             goto cleanup;
+>>>> +
+>>>> +     args.hid = params.hid_id;
+>>>> +     args.data[0] = 1; /* report ID */
+>>>> +
+>>>> +     prog_fd = bpf_program__fd(params.skel->progs.hid_user_raw_request);
+>>>> +
+>>>> +     err = bpf_prog_test_run_opts(prog_fd, &tattrs);
+>>>> +     if (!ASSERT_EQ(err, 0, "bpf_prog_test_run_opts"))
+>>>> +             goto cleanup;
+>>>> +
+>>>> +     if (!ASSERT_EQ(args.retval, 2, "bpf_prog_test_run_opts_retval"))
+>>>> +             goto cleanup;
+>>>> +
+>>>> +     if (!ASSERT_EQ(args.data[1], 2, "hid_user_raw_request_check_in"))
+>>>> +             goto cleanup;
+>>>> +
+>>>> +     ret = 0;
+>>>> +
+>>>> +cleanup:
+>>>> +     cleanup_test(&params);
+>>>> +
+>>>> +     return ret;
+>>>> +}
+>>>> +
+>>>>   void serial_test_hid_bpf(void)
+>>>>   {
+>>>>        int err, uhid_fd;
+>>>> @@ -720,6 +796,8 @@ void serial_test_hid_bpf(void)
+>>>>        ASSERT_OK(err, "hid_attach_detach");
+>>>>        err = test_hid_change_report(uhid_fd, dev_id);
+>>>>        ASSERT_OK(err, "hid_change_report");
+>>>> +     err = test_hid_user_raw_request_call(uhid_fd, dev_id);
+>>>> +     ASSERT_OK(err, "hid_change_report");
+>>>>
+>>>>        destroy(uhid_fd);
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+>>>> index ee7529c47ad8..e3444d444303 100644
+>>>> --- a/tools/testing/selftests/bpf/progs/hid.c
+>>>> +++ b/tools/testing/selftests/bpf/progs/hid.c
+>>>> @@ -10,6 +10,13 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+>>>>                              unsigned int offset,
+>>>>                              const size_t __sz) __ksym;
+>>>>   extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
+>>>> +extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
+>>>> +extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
+>>>> +extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+>>>> +                           __u8 *data,
+>>>> +                           size_t len,
+>>>> +                           enum hid_report_type type,
+>>>> +                           int reqtype) __ksym;
+>>>>
+>>>>   struct attach_prog_args {
+>>>>        int prog_fd;
+>>>> @@ -56,3 +63,55 @@ int attach_prog(struct attach_prog_args *ctx)
+>>>>                                          0);
+>>>>        return 0;
+>>>>   }
+>>>> +
+>>>> +struct hid_hw_request_syscall_args {
+>>>> +     /* data needs to come at offset 0 so we can do a memcpy into it */
+>>>> +     __u8 data[10];
+>>>> +     unsigned int hid;
+>>>> +     int retval;
+>>>> +     size_t size;
+>>>> +     enum hid_report_type type;
+>>>> +     __u8 request_type;
+>>>> +};
+>>>> +
+>>>> +SEC("syscall")
+>>>> +int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+>>>> +{
+>>>> +     struct hid_bpf_ctx *ctx;
+>>>> +     int i, ret = 0;
+>>>> +     __u8 *data;
+>>>> +
+>>>> +     ctx = hid_bpf_allocate_context(args->hid);
+>>>> +     if (!ctx)
+>>>> +             return 0; /* EPERM check */
+>>>> +
+>>>> +     /* We can not use the context data memory directly in the hid_bpf call,
+>>>> +      * so we rely on the PTR_TO_MEM allocated in the hid_bpf_context
+>>>> +      */
+>>>> +     data = hid_bpf_get_data(ctx, 0 /* offset */, 10 /* size */);
+>>>> +     if (!data)
+>>>> +             goto out; /* EPERM check */
+>>>> +
+>>>
+>>> If I'm reading this right, you need more than just returning PTR_TO_MEM. Since
+>>> this points into allocated ctx, nothing prevents user from accessing data after
+>>> we do hid_bpf_release_context.
+>>
+>> oops. I missed that point.
+>>
+>> TBH, ideally I wanted to directly pass args->data into
+>> hid_bpf_hw_request(). But because args is seen as the context of the
+>> program, I can not pass it to the kfunc arguments.
+>> I would happily prevent getting a data pointer for a manually
+>> allocated context if I could solve that issue. This would save me from
+>> calling twice  __builtin_memcpy.
+> 
+> Oh, is that why you need to do this? So if you were able to pass args->data, you
+> wouldn't need this hid_bpf_get_data? kfunc does support taking PTR_TO_CTX (i.e.
+> args in your case), I am not sure why you're not passing it in directly then.
+> Did you encounter any errors when trying to do so? The only requirement is that
+> args offset must be 0 (i.e. passed as is without increment).
 
-On Wed, May 18, 2022 at 5:21 PM Marco Elver <elver@google.com> wrote:
->
-> On Wed, May 18, 2022 at 03:32PM +0800, David Gow wrote:
-> > Add a .kunitconfig file, which provides a default, working config for
-> > running the KCSAN tests. Note that it needs to run on an SMP machine, so
-> > to run under kunit_tool, the x86_64-smp qemu-based setup should be used:
-> > ./tools/testing/kunit/kunit.py run --arch=x86_64-smp --kunitconfig=kernel/kcsan
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Reviewed-by: Marco Elver <elver@google.com>
->
-> Thanks for adding this.
->
-> > ---
-> >  kernel/kcsan/.kunitconfig | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> >  create mode 100644 kernel/kcsan/.kunitconfig
-> >
-> > diff --git a/kernel/kcsan/.kunitconfig b/kernel/kcsan/.kunitconfig
-> > new file mode 100644
-> > index 000000000000..a8a815b1eb73
-> > --- /dev/null
-> > +++ b/kernel/kcsan/.kunitconfig
-> > @@ -0,0 +1,20 @@
-> > +# Note that the KCSAN tests need to run on an SMP setup.
-> > +# Under kunit_tool, this can be done by using the x86_64-smp
-> > +# qemu-based architecture:
-> > +# ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan --arch=x86_64-smp
-> > +
-> > +CONFIG_KUNIT=y
-> > +
-> > +CONFIG_DEBUG_KERNEL=y
-> > +
-> > +CONFIG_KCSAN=y
-> > +CONFIG_KCSAN_KUNIT_TEST=y
-> > +
-> > +# Needed for test_barrier_nothreads
-> > +CONFIG_KCSAN_STRICT=y
-> > +CONFIG_KCSAN_WEAK_MEMORY=y
->
-> Note, KCSAN_STRICT implies KCSAN_WEAK_MEMORY.
->
-> Also, a bunch of the test cases' outcomes depend on KCSAN's
-> "strictness". I think to cover the various combinations would be too
-> complex, but we can just settle on testing KCSAN_STRICT=y.
+With the following patch applied, the tests are failing:
+---
+diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+index 43724fd26fb9..976fc8b83934 100644
+--- a/tools/testing/selftests/bpf/progs/hid.c
++++ b/tools/testing/selftests/bpf/progs/hid.c
+@@ -80,24 +80,14 @@ int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+  {
+         struct hid_bpf_ctx *ctx;
+         int i, ret = 0;
+-       __u8 *data;
+  
+         ctx = hid_bpf_allocate_context(args->hid);
+         if (!ctx)
+                 return 0; /* EPERM check */
+  
+-       /* We can not use the context data memory directly in the hid_bpf call,
+-        * so we rely on the PTR_TO_MEM allocated in the hid_bpf_context
+-        */
+-       data = hid_bpf_get_data(ctx, 0 /* offset */, 10 /* size */);
+-       if (!data)
+-               goto out; /* EPERM check */
+-
+-       __builtin_memcpy(data, args->data, sizeof(args->data));
+-
+         if (args->size <= sizeof(args->data)) {
+                 ret = hid_bpf_hw_request(ctx,
+-                                        data,
++                                        args->data,
+                                          args->size,
+                                          args->type,
+                                          args->request_type);
+@@ -109,8 +99,6 @@ int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+                 goto out;
+         }
+  
+-       __builtin_memcpy(args->data, data, sizeof(args->data));
+-
+   out:
+         hid_bpf_release_context(ctx);
+  
+---
 
-It's definitely possible to either have multiple .kunitconfigs, each
-of which could have slightly different setups, e.g.:
-- kernel/kcsan/.kunitconfig (defualt)
-- kernel/kcsan/strict.kunitconfig (passed explicitly when desired)
+Output of the verifier:
 
-Equally, if we got rid of KCSAN_STRICT in the .kunitconfig, you could
-override it with --kconfig_add, e.g.
--  ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
---arch=x86_64-smp
-- ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
---arch=x86_64-smp --kconfig_add CONFIG_KSCAN_STRICT=y
+libbpf: prog 'hid_user_raw_request': BPF program load failed: Invalid argument
+libbpf: prog 'hid_user_raw_request': -- BEGIN PROG LOAD LOG --
+R1 type=ctx expected=fp
+0: R1=ctx(off=0,imm=0) R10=fp0
+; int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
+0: (bf) r7 = r1                       ; R1=ctx(off=0,imm=0) R7_w=ctx(off=0,imm=0)
+; ctx = hid_bpf_allocate_context(args->hid);
+1: (61) r1 = *(u32 *)(r7 +12)         ; R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R7_w=ctx(off=0,imm=0)
+; ctx = hid_bpf_allocate_context(args->hid);
+2: (85) call hid_bpf_allocate_context#66484
+3: (bf) r6 = r0                       ; R0_w=ptr_or_null_hid_bpf_ctx(id=2,ref_obj_id=2,off=0,imm=0) R6_w=ptr_or_null_hid_bpf_ctx(id=2,ref_obj_id=2,off=0,imm=0) refs=2
+4: (b4) w8 = 0                        ; R8_w=0 refs=2
+; if (!ctx)
+5: (15) if r6 == 0x0 goto pc+12       ; R6_w=ptr_hid_bpf_ctx(ref_obj_id=2,off=0,imm=0) refs=2
+6: (b4) w8 = -7                       ; R8_w=4294967289 refs=2
+; if (args->size <= sizeof(args->data)) {
+7: (79) r3 = *(u64 *)(r7 +24)         ; R3=scalar() R7=ctx(off=0,imm=0) refs=2
+; if (args->size <= sizeof(args->data)) {
+8: (25) if r3 > 0xa goto pc+7         ; R3=scalar(umax=10,var_off=(0x0; 0xf)) refs=2
+; args->request_type);
+9: (71) r5 = *(u8 *)(r7 +36)          ; R5_w=scalar(umax=255,var_off=(0x0; 0xff)) R7=ctx(off=0,imm=0) refs=2
+; args->type,
+10: (61) r4 = *(u32 *)(r7 +32)        ; R4_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R7=ctx(off=0,imm=0) refs=2
+; ret = hid_bpf_hw_request(ctx,
+11: (bf) r1 = r6                      ; R1_w=ptr_hid_bpf_ctx(ref_obj_id=2,off=0,imm=0) R6=ptr_hid_bpf_ctx(ref_obj_id=2,off=0,imm=0) refs=2
+12: (bf) r2 = r7                      ; R2_w=ctx(off=0,imm=0) R7=ctx(off=0,imm=0) refs=2
+13: (85) call hid_bpf_hw_request#66480
+R2 type=ctx expected=fp
+processed 14 insns (limit 1000000) max_states_per_insn 0 total_states 1 peak_states 1 mark_read 1
+-- END PROG LOAD LOG --
 
-> The end result is the same, but you could drop the
-> CONFIG_KCSAN_WEAK_MEMORY=y line, and let the latest KCSAN_STRICT
-> defaults decide (I don't expect them to change any time soon).
->
-> If you want it to be more explicit, it's also fine leaving the
-> CONFIG_KCSAN_WEAK_MEMORY=y line in.
+Maybe I am wrongly declaring hid_bpf_hw_request()?
 
-Do you have a preference here? Or to get rid of both and default to
-the non-strict version mentioned above?
+Cheers,
+Benjamin
 
->
-> > +# This prevents the test from timing out on many setups. Feel free to remove
-> > +# (or alter) this, in conjunction with setting a different test timeout with,
-> > +# for example, the --timeout kunit_tool option.
-> > +CONFIG_KCSAN_REPORT_ONCE_IN_MS=100
-> > --
-> > 2.36.0.550.gb090851708-goog
-> >
+> 
+>>
+>> That doesn't change the fact that you are correct and the PTR_TO_MEM
+>> in kfunc code should be fixed.
+>> But right now, I am not sure what you mean below and I'll need a
+>> little bit more time to process it.
+>>
+>> Cheers,
+>> Benjamin
+>>
+>>>
+>>> The ref_obj_id of ctx needs to be transferred to R0.ref_obj_id, and R0.id needs
+>>> to be assigned another id distinct from the ref_obj_id.
+>>>
+>>> My idea would be to give this type of function a new set, and handle this case
+>>> of transferring ref_obj_id into R0. See is_ptr_cast_function in verifier.c.
+>>> Shouldn't be too much code. You could even use the bpf_kfunc_arg_meta to store
+>>> the ref_obj_id (and ensure only one referenced register exists among the 5
+>>> arguments).
+>>>
+>>>> +     __builtin_memcpy(data, args->data, sizeof(args->data));
+>>>> +
+>>>> +     if (args->size <= sizeof(args->data)) {
+>>>> +             ret = hid_bpf_hw_request(ctx,
+>>>> +                                      data,
+>>>> +                                      args->size,
+>>>> +                                      args->type,
+>>>> +                                      args->request_type);
+>>>> +             args->retval = ret;
+>>>> +             if (ret < 0)
+>>>> +                     goto out;
+>>>> +     } else {
+>>>> +             ret = -7; /* -E2BIG */
+>>>> +             goto out;
+>>>> +     }
+>>>> +
+>>>> +     __builtin_memcpy(args->data, data, sizeof(args->data));
+>>>> +
+>>>> + out:
+>>>> +     hid_bpf_release_context(ctx);
+>>>> +
+>>>> +     return ret;
+>>>> +}
+>>>> --
+>>>> 2.36.1
+>>>>
+>>>
+>>> --
+>>> Kartikeya
+>>>
+>>
+> 
+> --
+> Kartikeya
+> 
 
---000000000000c4608d05df5d1251
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBg
-3kxCA+bJ6Pr4EBE/BjEv2DIDDLIxlJZejM8ULg1uHjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA1MTkxMzA4NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAOcrOtFS8EmyO69KlOQpt
-k5aC+qmT0fDIITppu2U+rbI3kDeLODV6pF1NossdT5AWE0cDI+F9vcog6dhUSGfLGYhydyk47q5x
-nS4t4r/49lv3eTp2hQbGW1p8WiqALEteCTrGV61BZXkCF/Pc3U6aslyGmUVIHNWSqsX8tT4LohCO
-9FHFyUVsoHdUuQ4JHD0sSqCbrhrQJDIlWwAL+AtNgtNJal0NJdMZSap7dmYwNhm3SJSQh3TcHPO9
-eff8cNgbWO3zB5kLz9dk58r0G1evCmFl8bfEMcpQqZnD+6z4zDrCUDDdfItb/ZkKEKXvPxod2HdZ
-l2y22awXtQfHaW9imA==
---000000000000c4608d05df5d1251--
