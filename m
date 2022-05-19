@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AACB52DDBA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 21:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681A552DDE5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 21:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244453AbiESTXJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 15:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S241780AbiESTno (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 15:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241726AbiESTXG (ORCPT
+        with ESMTP id S240779AbiESTnn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 15:23:06 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DA354F99;
-        Thu, 19 May 2022 12:23:05 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JFGAMU007916;
-        Thu, 19 May 2022 12:22:47 -0700
+        Thu, 19 May 2022 15:43:43 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769145A2D4;
+        Thu, 19 May 2022 12:43:39 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24JFG7gf013202;
+        Thu, 19 May 2022 12:43:23 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=facebook;
- bh=OCuP9AJFWibYyS4g5LXxl9JwFI24fVP4FXZew0h1idk=;
- b=i78oqq9BbfxCc52syQ8EsMOL0p+EIXXqPKLkk7jrFdIW88iBS7lrL24yroHKTbsgXew2
- 39Iyh6kfH922LTnCSA63O7bqvWlRC1VhPhJtVh4F7SvBbxrczqwfplwblMg0F/PRwPwX
- pA6djil6+Iahb76yNDOA93pjhAFY/HQWAhY= 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2046.outbound.protection.outlook.com [104.47.74.46])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g5pj4tsg9-1
+ bh=Bi6MbZ/fwh8kTuD0vWFbDJdahDqE5GQ/BMC+HnTYdeg=;
+ b=kPB9IUNuaUvw2Nm+m6++XbrkctVQs5KBAiasd855rALmcFL8L9IH54T6D8aVPjcXe3yR
+ 77mGReZnZZ8fmsBgI/HEC5rvhJHTYwooBM3VR6xvIWxuI1dRqZuybkaZTJutTiMkHYsf
+ p1gLeQTwhNtQ4l961mKlqNB6eiR6THGV8z0= 
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2043.outbound.protection.outlook.com [104.47.74.43])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3g4myhxefa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 12:22:47 -0700
+        Thu, 19 May 2022 12:43:22 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vw9Fsz93dbnDd5sQamBh90XjYzmWuk0XVhL1jEKtmaZnmR7oixQTv8LPRSf0c3pgzRjA4ybTQAjyNoCIG9njLgzXlxoyt2tGk8R7vajTcrD1z2IRn+XPO0ZD2mHDTfPeQBogoc3ynVI8uqXecQ20xrJL7HMN6y68IgaIvnQfOdPbn1ZkN3wlEm12LtaQTLdYKVegAPeNCF3kQ3usLj5oINDmKEzICoQX1sGvbD8Ysw5g/N0XNOc5if5SNhwVbxVn72YwG/Vm1sMjP1fUyY7nFaZLSLXYsoDTtxhwx1u46fWhWmFZEe1pWFQv7iYK1BhhARW7ZSYXkovRYy16pHEaLw==
+ b=OxMupC87hWtLZ7VRSuq+lRWXjfWjuLO1e6xkiPJrqKI4afMTEwBBGFAprks9HrPv+gKi/vTBdsKZvNWZ8ahU2v/S/8HDwbFx8GYTLXXzPMUuiBwP5dpiT7mPax9En9FUdnKXMCYNY2Hs9wUx9nmZ+8lRXfHCNXcp7tPXoKKsvNZOXlC1Nal8b3joefujw0UnZYnNOMzAMX1dACjAe+gQik5ForUShR1udTWKL7PdH6LErTEJs6CFIj+JbKHZtyVpUFtfCYK0H1eFiBQNzkVhZP/2ts/MGL/PWFWrvWo5s631TPPiU5npUk7YWT/+IYN8yVo0dUOJ+vlziIAbHta40w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OCuP9AJFWibYyS4g5LXxl9JwFI24fVP4FXZew0h1idk=;
- b=Jf8AAVFPqD0A65Y2RkRPHXY2P1V30nOA6Z8bZQjaORvbeGkBN6ectgVF33RlLnxZFcsnHSxaNmwKuv1tUBmcqmen7CGCpf6ilVwsiWfJyScAy80Xp65YRA5hLCGvJ4zpe2wI+y+rpfCYCSLznbqz4XiEMP76Mq3ekVKftcSNk0g7icLKkInS7TFGchCFNDY6UGEzIbQKGMrgUV1Op1oMyi1KZXGypGB+jqCtUzSRVbUTkrJ/AOQiz9tZiLXPOSYo0yyTrjmtMYlY+NCcc4y3F0wV01oUErSwwKscrLf8rwfQ++gIJ6i6aG949a4UxILWMuWoDJeez2qjm0GogSCmEw==
+ bh=Bi6MbZ/fwh8kTuD0vWFbDJdahDqE5GQ/BMC+HnTYdeg=;
+ b=TZnuXOtN/hzr/cUnapq1CjNMhEDPVi0WravplpWay5DNnBYDkbB83YHb/z+821lF9Nqve5or1WzBd3Hh9DS3QH4jGqZQxeAnnSoPAcnd+vFg0sFdyfpU9LNF2R8ewCoFvW6lSOvv1RR/yIYAz56jsTcnkKKgGcK7jIO3Uez6mu6PV1QheOOsFhazHuf4EbmDGV0N74ovbjz7xHv49hEgTShaU5wnxzM59CV6gVv6qh2WchBV2sa0YorlMuaCFHeUdF2RI6H49+2bQdxdKCwn1er6h4T1IXddMHRIL03AzZr1gLUP7qW41/2LCuzIMBDmWFDTm3bwX3E7hbYUBe6oLA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BL1PR15MB5338.namprd15.prod.outlook.com (2603:10b6:208:385::17) with
+ by BYAPR15MB2197.namprd15.prod.outlook.com (2603:10b6:a02:8e::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Thu, 19 May
- 2022 19:22:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Thu, 19 May
+ 2022 19:43:20 +0000
 Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::5811:4996:bbfd:3c53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
  ([fe80::5811:4996:bbfd:3c53%7]) with mapi id 15.20.5273.015; Thu, 19 May 2022
- 19:22:45 +0000
-Message-ID: <333c515e-8b52-0e50-c5d2-529f5fcf0553@fb.com>
-Date:   Thu, 19 May 2022 12:22:42 -0700
+ 19:43:20 +0000
+Message-ID: <0468355f-1d95-d5df-4560-f9220c7a0d05@fb.com>
+Date:   Thu, 19 May 2022 12:43:18 -0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH bpf v4 1/3] bpf_trace: check size for overflow in
- bpf_kprobe_multi_link_attach
+Subject: Re: [PATCH bpf v4 3/3] libbpf, selftests/bpf: pass array of u64
+ values in kprobe_multi.addrs
 Content-Language: en-US
 To:     Eugene Syromiatnikov <esyr@redhat.com>,
         Jiri Olsa <jolsa@kernel.org>,
@@ -70,80 +70,79 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 References: <cover.1652982525.git.esyr@redhat.com>
- <399e634781822329e856103cddba975f58f0498c.1652982525.git.esyr@redhat.com>
+ <0f500d9a17dcc1270c581f0b722be8f9d7ce781d.1652982525.git.esyr@redhat.com>
 From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <399e634781822329e856103cddba975f58f0498c.1652982525.git.esyr@redhat.com>
+In-Reply-To: <0f500d9a17dcc1270c581f0b722be8f9d7ce781d.1652982525.git.esyr@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ClientProxiedBy: SJ0PR03CA0091.namprd03.prod.outlook.com
- (2603:10b6:a03:333::6) To SN6PR1501MB2064.namprd15.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR03CA0026.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::31) To SN6PR1501MB2064.namprd15.prod.outlook.com
  (2603:10b6:805:d::27)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0bf9b879-2448-4bd1-05f7-08da39ccf3d4
-X-MS-TrafficTypeDiagnostic: BL1PR15MB5338:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR15MB533860BF579EF400B10A8ACBD3D09@BL1PR15MB5338.namprd15.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9391951e-c526-479e-7d56-08da39cfd415
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2197:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR15MB21978D5A9060BA198835247DD3D09@BYAPR15MB2197.namprd15.prod.outlook.com>
 X-FB-Source: Internal
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +uFQ/ZutKvljpDV7f2V1C0Bv4/J9qg4GIaIdFelW9nIKwGZcOMOnHW6bMAOzN9dLi1sZRi/kq+O7byrIoHn5MSkUZWarWP+uUPFlJXfs232AZxeEBoFtwTWKrWztMzduUF4y4apjxu0aQCdTgnWM6CQQppRdiSS+W9tc4F15T79IH2c6YWiBU0/RlyNbZCGFUKjMMXoen/XVV853ItmgSqKkFKF5Uz7UNbyvd84lfCFbCdUoO1rOdBconJPME0VJ6CzjQHYocsKbJp0s0IFHrh84uJnYm84YsZ85Mkh+i4MP4EQkbZUftCKckOYE3CdRGowF2Y08A71fZ4G6MLN0lk6+GEX5866adzZf5LbBucomxlX+USYR16yYB78qhTkFUXIFUGUdPTNCoq/baAuDM3/lyj4JmsTXD/3f8OsJm2Vc4RepEkNkDGQcx541/5ezzJ1pi9VZ//7IeXBPeU7yP8iVcb+PVyZt8wdjGSHJeDiekvkL7PB6bTWo8+1OXkXHwrQUUPaov24MxRrlcgCJt+SNpyZfJL0DNdiYE1HFBQLffbORjzfL8gQ9mJW5iMFxEAUfO9WMVcK6+XY7g2yCOR0a5cFVTPtMUjyBhfHpWw/QeSUX99/rhJC97C4/jm6cGZv+raHTcAi856kmYDuAlc21FDwtK15jimuvTThageJOxcAKPdvtUL6mmyrCxLgHMeNlKpae5VRWtsWqOHYR9sh4gwjU1ukRPlymYs+mKxICdTVQdRrbBE7V7Y69WSrsQfvSTZlbl2Zc8gJvnCOQPTpXtvS+v8vT3Y962kCkeqz9NuXoJmp1pkRTYkGPalnw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(2906002)(38100700002)(31696002)(86362001)(966005)(6486002)(54906003)(110136005)(5660300002)(4744005)(7416002)(316002)(8936002)(83380400001)(6512007)(36756003)(66476007)(66556008)(31686004)(6506007)(8676002)(2616005)(53546011)(52116002)(186003)(6666004)(4326008)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: evz96ElPFBFloRP8DAEO5sVfGkiljSLYu4fGXPX8jgcHT9QbTyO4xMH7LLCA7mtxc7O9CZ2IK+n2TbaZBo0hehbhgx1BRt/Ue+g4NBB6HROyaTXBeF3/j4Gowqir03j26eyuS2RA9wd3STCn/DhWLy0MMHMgnjPUSNE7BSXTywV1miasLGUC8U6BFNNndjmT2AD0zsyk1TEa75dxgsDgOC8HAne4s2WBWWe7lmYp4IQnwZcJyo0w5oftMtgP1I/0ODXix7G3YW7s3be97NGEJeAVeQ6d7GvUFXIkje4B93ynky2xuitH1WCwyZG5PLHX83UHxwlQaIPDbU6YzvFFpWOVp0EKY9vwI2AEVsb0MUe2x+dWuaAr2BtVVXON4r17YkyHan7XdgYKuvSt4xj8LpPbUcPKZbahvyXIIMJPt0F2V0tzSO6MnEIb/tEdordD3kh8bC6DEfPQ5HtMSahlJRteujmUu7Vv0Z19ZjyhT3X7e534j21XUdgbEZSc7Mc4UfbT/klBPKVe8NjBmWWBeRjEe7to3KuKggmsAA0S658hw40/iMUjQ48M+PWxl/ooHtj4Kg9ybyeRyM2G3A6fILVSu+RbVwN5vtTXtHZQQKqBVSolt4rt2UnfwkobBGeiuTMn/vi8tf/R1X+i5VhtOwxIgaNwEho6ibJ/8TeijpiMGq3njjOoh2Cl0Het3y+7lELDf99OGQ4HRQMfdj9+xaDR70GiC5paTla8waG9gffNwB8kcxhq+8yixgcvsEJK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(110136005)(83380400001)(508600001)(8936002)(54906003)(316002)(186003)(38100700002)(2616005)(53546011)(66476007)(8676002)(66556008)(7416002)(31696002)(66946007)(2906002)(6506007)(5660300002)(52116002)(86362001)(4326008)(6512007)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bko4QUZzVVlOb3Bpb2hVRUlCalJncnlrR1dBUFF5RHVOT1BNSHY5STlxL2lq?=
- =?utf-8?B?dUJzeHJKRWNxUGtkZURnTDJLVUZDTm1oWkZsV2g3d3Y2UXNVWk9UZ0pzbFNt?=
- =?utf-8?B?WmMvb29TcDl3dGVkZnRieTlFeCs3bUE2WnphNFNpVnZyY01BTWJueUtPUjBp?=
- =?utf-8?B?WHF4SEZNRWNwK1FIblBGWDBGUnNRL1ZoUkIzdVpmQ2dNRXk1VmUwU2cxZ1hv?=
- =?utf-8?B?TjBQZU9Fc3lndjhhMVIydk1QYnp1SHZ6VGY2NXB6M3FSRVU2b2lXb3dJcW4y?=
- =?utf-8?B?bXA1T1NzMUsvNW4xd3NKeitFdEIyLzZPaENLWUN0SlovenZYUVN3aVZZbTV5?=
- =?utf-8?B?cEdUSU02LzdJL2w0UkxDMnZONmVQcTVSMmhVM2lyRVpBZnh1eVd4bUxlajBz?=
- =?utf-8?B?c3haSUY0bXl5Y3hReSs5eDBXZzVGK01tNXZzTlA2Vkl0dnJTcTZRTHF5VXVn?=
- =?utf-8?B?VWhnV3psTlhJRlFFalNwWUpaUDRxeXphY0VuS1lsQStyT2ducTQ3VEVFeHVC?=
- =?utf-8?B?SXpWYUhRT0lTRzJhaml1UTBwWWYybUpHY3F1ZVd4V1hwM3NUSEEyT0JrYis1?=
- =?utf-8?B?Y2JBUzFobFFHQ0xJeHg2bTY5Qzc1eFZPWldaU0lwYnNtNmtlVEt2aGhZNEZS?=
- =?utf-8?B?dEV5Ym5VSS9tc1YxZG1Vc2x3ZVRNbitkZHIvTmFnTU93ZzV3NmJ6YzA3N3lL?=
- =?utf-8?B?aTMyYmo4ZTBLUFpjcWJhZkpsZmd1ZWNKTTBUTSs2OXdHRktuS2I5dHJZd2Fx?=
- =?utf-8?B?ckNpdDUwaGY2K0lMOXNQMDBtaXdDTkZsRDhLNHRuUVJxeGdwYW9jSXQralhL?=
- =?utf-8?B?RERkeW84S203Sm1hb2t4WTlOSU5EdXJhVy9xVUpmMERwNUpWRWZreUJGS2VI?=
- =?utf-8?B?WVdiWVYwQjB0V1ViYVJDN3BOU29YZzZEQXJMUzZDbG00NkZnWGQwRTJLVzBR?=
- =?utf-8?B?Zm4yWjZxbmI5TVJLUGw3bXRSc1JUUTJsWWpLR0NMclRuNXBpeWNXOHA0YTZa?=
- =?utf-8?B?dGNncTRCNmN4THBZRXNOc2srZVNmTW9CL3ByNmpTMmFyL0paaFVkZHl3dlYx?=
- =?utf-8?B?VkdqbUYxQlF2QTkrZzBQMy9mQm1hc1FmZ2ZBMGVDMmFmTUVlaERDb1RYMEkx?=
- =?utf-8?B?MEJzSU1WeWpMWmpmbFJlalRxK1dOUlRlb05aVHFta2ZQOHgxKzVwRGdiWFV6?=
- =?utf-8?B?K0o1cXp4YTlpNHM2V2tpY1hkSWhTb2t0SnUvZzlObnZXdll4TmdFcThHZit6?=
- =?utf-8?B?M2JuOTBpR2hid0U0V0JKOXBSOGZPM2UrUGlCWU9ZM1RoWGRqTDAxVzhtMEFu?=
- =?utf-8?B?aEt4d0V5d1dGenZtNjJ1L2F4WHBaRFBFZGFySVYvOUREV1FvTHNOVzg3eXhp?=
- =?utf-8?B?Y0FHUDlYUWVyUTVPWXkrWmpMelpiRWlHYVpNdk5OUWdqWVA1Yjd3SDRBZEc3?=
- =?utf-8?B?aC9sODNyV21IUEdvTzhBYUxNZVN0NVZ2SGNEL0NaemUrdUJvRGdYTUZqQkR2?=
- =?utf-8?B?RG5uT1kyOVBya0Z3N1VLWlNHZnBjNEFyb0hzUEtqV1dZOTlBN1FrZGRXWG1j?=
- =?utf-8?B?bHR3M0QzdHhDSkNGaU83VDRqd05XZ0VURXdKcGk3T20rUTNJT3JiUG5vVEhY?=
- =?utf-8?B?aWhQZk9zL0lEb2J6SXNUTFNJMVVldW15VTBFbVFWRFJjR1NaL1JVT3Bmb0tJ?=
- =?utf-8?B?cVZwMWZKZzN0TzQ0ZjRRN3IvWktuSTlMUW9aOXpJenpSZmFObllZcFpXS2lJ?=
- =?utf-8?B?VGFzamZ4ODdIay9GMXE2QjdaelNpUUtDeHZENHJzd2dsYjcxa2FtVTN4R2NQ?=
- =?utf-8?B?WW92ek5YUzY2T0YzR1RCeWErQWN1eXU1Ym1RYjgvWnZieGJtKzM0R3hmMGRo?=
- =?utf-8?B?Mm1NVmZIS0ZNYy96QTZTdGVrNEc2dkxicEtERHNPMkNGTzQ0bnlPWHlPQ1lO?=
- =?utf-8?B?LzdTb1V3dmJ6Yk9NMmUyUTV4LzdSKzR0U0lzdlRUT1BlMkR1dFZJV3VWS0c0?=
- =?utf-8?B?ek81UnpnMWtmemtPYXlJbWN5NmNBc0ZOdzVUeGZOeEdlL015OGh6eHNPeFBH?=
- =?utf-8?B?eDRBbXRPNVJnVFFISjBGNTdPV0VMZitDSGFFU1lrY0Vmc0RNbHN4aHlCalpQ?=
- =?utf-8?B?d3phTDhIUGo5cjRia2dJYUdSVXBVS3E5ZW1MQzdUd2RWSTRFVWhLMWZrV2Uz?=
- =?utf-8?B?ajQwQUNHZysveDFzWHg2dDZQc3p3Y3FHK0N1M2l6RkxjaFRucXlrRWZOK20w?=
- =?utf-8?B?ckE5Q2tFTUd6NDJLVXczby9Lb2ptcFNTditsRkxFNzlOemVBYWF1U282ZzRG?=
- =?utf-8?B?U2dZV2xrbnZZdHp4UnBicHhvNmxYdU9veXBvM3d3b0hhMUpKMFRwV1hZYXRw?=
- =?utf-8?Q?y6uKRZuzdNYLiI/0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHl4QzZTdVFuTmx2V3M0bnl4bVBhVmFqNmJFMDFZQnBsMnV0VjRzUzBHOE5r?=
+ =?utf-8?B?YlBWWEliWWdPMGxkaHhQOHdWYlloalFQUjc3Lzc5VjVLMHRHcUNvQmhpVitL?=
+ =?utf-8?B?QmRqZVNmTFVia241Y2lnVE5yY2YrMTBNY1R4ZEtHUkZmM0ROcFdQcWs4K0gx?=
+ =?utf-8?B?TGViK28vOG45T0JvdUhvRTdlc1RQdjhCNnF1bXZ3MjFpSCtiUkVvdnM3L3RN?=
+ =?utf-8?B?MURXZTlIVi8wYkJFb1U0K0hmWjJ2cGNPeFZEd2dXODdiYjBLSGZ3dW5jQXp3?=
+ =?utf-8?B?eHkrU1pIeVpMZldVYkdpb3E4OXp2UXpOdmhZQnRMV0ZneC95dFNvQUk0QnFt?=
+ =?utf-8?B?TGMxWGxNRExGcDJmK3NQaWZwRm5BUTlDcnFKYThDa2RsYnZzVlRGT3RFc0k2?=
+ =?utf-8?B?V3BLaG1yNVJ2eU1wck5sZm5sNkhuUDhJbGNCYXZaVXQxR2d1bmZUSk01WTFZ?=
+ =?utf-8?B?R0xMdm1CQk9RTW9DT2NmSGRDd1FYY0s5ZG9TQ3h2bU1MZzRNQ05ua052cURZ?=
+ =?utf-8?B?djJWSHVuZDFpQXZ4R2Ewb05UUVIvRFkyZkRrUnUwS0I2Z0FGbWMySlQ3bWp4?=
+ =?utf-8?B?MHNzTDh5S2E5R3lLckUza2J0OXdhMVRpVTMxODFCUUhyR1dDWjVQNUN4cFlO?=
+ =?utf-8?B?NGNacjB2bHpDc09VWWlRdC9RTFB2cWtTNUpNalgzYzJUZG4vaTNuZjFrbHZT?=
+ =?utf-8?B?RHRkRHdxMi9naW8xajQxWkZCUEdoWXJtUHArWlBPRzY4cWJNcVg3cHp2ZG1Y?=
+ =?utf-8?B?T0ExTDJaeTh4ZTdyUWtIVTAydk13bWtGOUZsMEdtaWVRSDZ4VGhNcDN1VW90?=
+ =?utf-8?B?Sk10enRnUENmVzZVc3pzdzgxQXdKeWFzMElYU2VrM05OdE9yWGFFSDBvVExi?=
+ =?utf-8?B?STh2NUxwcmptQjcwTEpRVUYvTXpEa29DRjVuY29FOHNjTXNQM0J1Zk1tWEF5?=
+ =?utf-8?B?QkxkcERBMXJNVzhkaURENFVEc3Y4Y0x5eUNWZ0FHRlNhT2V6TXJ3WDMrRW5r?=
+ =?utf-8?B?ckFSTjBiRmpaTFJJcVl1WUVZbFVnR1dOek8xQ213S0thVEdRVGlBcVhUbWd1?=
+ =?utf-8?B?dmczSWhkTGdnRDNWWURBMkI1RURlekNqUndEMzVUNVNFSy9WcTBJeDJ1a0Ni?=
+ =?utf-8?B?TlVCREEvWERMR29ySzk4N1FNbVBrOGFGTUttVTl4WWNRRVVaWS8rYWZTd3Fa?=
+ =?utf-8?B?TDFPNWFmZGJIYmJ4TjBRakY4SytKWGxmMGx2RDIrNVpyRmRvQTI5eTVHVWZH?=
+ =?utf-8?B?VGNlcmUreGU0M09wS0hGRmFndWFkeHF6amxGOUlwQTFiWXhjTTR3QUVGS3dE?=
+ =?utf-8?B?Nkl0a2pIV1JGYkVxT0JRNXVGK0FGdGVKR05NS1N4ZWZQVm5Mb0s0TXU3aEpI?=
+ =?utf-8?B?ZmRNSXZ1RHJibTlLSDlrSk9sdFNoL3RoMUpFcnR5c09DTXQzYmIvN1ZKNkRv?=
+ =?utf-8?B?RTlmTFhmVU9uZmFZQVRlL3ZZQnRGZ242cUM0c3I0N3ZpNk9YRmgrQWtGMlR5?=
+ =?utf-8?B?WEl1SXdGbUxvY0VtdGh0ajdCOFFmRUc0K2Z5cTJXc2FmemxRQ0JqNnV4WXFG?=
+ =?utf-8?B?SjgrOGVpb1pybUxvWWd1YUZHT29kY2Yvc1VNdkZldERSY1hZSUtxcVhaUlBr?=
+ =?utf-8?B?eUNROGl2ZElzOE84T25kcjVPYmZYNC81N3htZzlpemFrd0d0b04yZ2ZpTUI0?=
+ =?utf-8?B?ZXBmTmt6dTFXbHBzQ2xOS1BINnZLK2plSXhtSHEvRzRBYmtuaWFlZi9MWWJw?=
+ =?utf-8?B?T0FOYzFqeVlzTzdlbTloQlZtYm9ZTTlyaFB1TWg3dWwwem9CT1pwT2JYaGZR?=
+ =?utf-8?B?UmhNZElsbmZGVFp4VjkzSWhreEhFbkhqUk5ZRTJ6OG50Ylo2WWczSmxBblBO?=
+ =?utf-8?B?MHE2eDArSU1QWVJXMGhReEpLNkQvV1J1UmRmNkk0Y05IenF0SXRiNDU2R3Ra?=
+ =?utf-8?B?bWEwam1vN1BKZ2JQMktJajRuU3lXb3RXS1pSRVpvbXBodlFHWGs5a0tIWTJx?=
+ =?utf-8?B?b203cnhuTUsrUDd4UnM0bHM1d05mRnd0VWQrV0EvMGFmSFQ0d2E3a09KeWxv?=
+ =?utf-8?B?V00zVVBzS0dCSXhiVkFjTm1aRHhlQ0JCRmIwT1haR3Z5RXRjVXpod1dwczAz?=
+ =?utf-8?B?M2oreFVCbnBaRlR5eHVZSHM1cVBjdU8xc3l1UVYvSUhsbnN1K3VLd1JrM3hv?=
+ =?utf-8?B?WDAwc3RBRk81b09ObGJCM095U0F5UFFUa1E3VHcyaFlrVTZEamFKNmQzNWlm?=
+ =?utf-8?B?ZFp4NmdRSE5qbzgxVmZLUW9mVWpLUkFoTE5pUzQwbWk3NW0zWjZpaVNPbXNj?=
+ =?utf-8?B?WklMS3ArZU41SEtMVHRhWHJ4TGdSR21UMXRBM1RwUWNGWUw4bWtpQ2c0eUJX?=
+ =?utf-8?Q?oHDutlBJcXdQZ0aw=3D?=
 X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bf9b879-2448-4bd1-05f7-08da39ccf3d4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9391951e-c526-479e-7d56-08da39cfd415
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 19:22:45.4935
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 19:43:20.7100
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hRHCABzrC8SruhGtj9aybYf58S0Gc13gkGRf7Z54cesJLrEIC6JwEFRpiCh6OMUJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR15MB5338
-X-Proofpoint-GUID: q4FCuXNh0vHxMHVF7w7BN5704gQguKjc
-X-Proofpoint-ORIG-GUID: q4FCuXNh0vHxMHVF7w7BN5704gQguKjc
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-UserPrincipalName: l0pqb5AuEy7/xPXW8YO2r3kB0n14kTGTC+ZITn6c3TSZ8wb0L05xQnFPXmxjYxAo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2197
+X-Proofpoint-ORIG-GUID: cGMtXOmTlGyBiiwfQxkjK2mvpffdWWbn
+X-Proofpoint-GUID: cGMtXOmTlGyBiiwfQxkjK2mvpffdWWbn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
@@ -161,16 +160,150 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 On 5/19/22 11:14 AM, Eugene Syromiatnikov wrote:
-> Check that size would not overflow before calculation (and return
-> -EOVERFLOW if it will), to prevent potential out-of-bounds write
-> with the following copy_from_user.  Add the same check
-> to kprobe_multi_resolve_syms in case it will be called from elsewhere
-> in the future.  The INT_MAX checks are performed in order to avoid
-> triggering kvmalloc_node warning [1].
+> With the interface as defined, it is impossible to pass 64-bit kernel
+> addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
+> which severly limits the useability of the interface, change the API
+> to accept an array of u64 values instead of (kernel? user?) longs.
+> This patch implements the user space part of the change (without
+> the relevant kernel changes, since, as of now, an attempt to add
+> kprobe_multi link will fail with -EOPNOTSUPP), to avoid changing
+> the interface after a release.
 > 
-> [1] https://lore.kernel.org/lkml/cfe6abea-8d00-8f8c-f84c-e6f27753b5d1@fb.com/
-> 
-> Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
+> Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
+> Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
+> Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
+> Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
+> Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
 > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> ---
+>   tools/lib/bpf/bpf.h                                        | 2 +-
+>   tools/lib/bpf/libbpf.c                                     | 8 ++++----
+>   tools/lib/bpf/libbpf.h                                     | 2 +-
+>   tools/testing/selftests/bpf/prog_tests/bpf_cookie.c        | 2 +-
+>   tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 8 ++++----
+>   5 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index f4b4afb..f677602 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -417,7 +417,7 @@ struct bpf_link_create_opts {
+>   			__u32 flags;
+>   			__u32 cnt;
+>   			const char **syms;
+> -			const unsigned long *addrs;
+> +			const __u64 *addrs;
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Patch 2 and 3 will prevent supporting 64-bit kernel, 32-bit userspace 
+for kprobe_multi. So effectively, kprobe_multi only supports
+64-bit kernel and 64-bit user space.
+This is definitely an option, but it would be great
+if other people can chime in as well for whether this choice
+is best or not.
+
+>   			const __u64 *cookies;
+>   		} kprobe_multi;
+>   	};
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 809fe20..03a14a6 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -10279,7 +10279,7 @@ static bool glob_match(const char *str, const char *pat)
+>   
+>   struct kprobe_multi_resolve {
+>   	const char *pattern;
+> -	unsigned long *addrs;
+> +	__u64 *addrs;
+>   	size_t cap;
+>   	size_t cnt;
+>   };
+> @@ -10294,12 +10294,12 @@ resolve_kprobe_multi_cb(unsigned long long sym_addr, char sym_type,
+>   	if (!glob_match(sym_name, res->pattern))
+>   		return 0;
+>   
+> -	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(unsigned long),
+> +	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(__u64),
+>   				res->cnt + 1);
+>   	if (err)
+>   		return err;
+>   
+> -	res->addrs[res->cnt++] = (unsigned long) sym_addr;
+> +	res->addrs[res->cnt++] = sym_addr;
+>   	return 0;
+>   }
+>   
+> @@ -10314,7 +10314,7 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+>   	};
+>   	struct bpf_link *link = NULL;
+>   	char errmsg[STRERR_BUFSIZE];
+> -	const unsigned long *addrs;
+> +	const __u64 *addrs;
+>   	int err, link_fd, prog_fd;
+>   	const __u64 *cookies;
+>   	const char **syms;
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 05dde85..ec1cb61 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -431,7 +431,7 @@ struct bpf_kprobe_multi_opts {
+>   	/* array of function symbols to attach */
+>   	const char **syms;
+>   	/* array of function addresses to attach */
+> -	const unsigned long *addrs;
+> +	const __u64 *addrs;
+>   	/* array of user-provided values fetchable through bpf_get_attach_cookie */
+>   	const __u64 *cookies;
+>   	/* number of elements in syms/addrs/cookies arrays */
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> index 923a613..5aa482a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> @@ -137,7 +137,7 @@ static void kprobe_multi_link_api_subtest(void)
+>   	cookies[6] = 7;
+>   	cookies[7] = 8;
+>   
+> -	opts.kprobe_multi.addrs = (const unsigned long *) &addrs;
+> +	opts.kprobe_multi.addrs = (const __u64 *) &addrs;
+>   	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
+>   	opts.kprobe_multi.cookies = (const __u64 *) &cookies;
+>   	prog_fd = bpf_program__fd(skel->progs.test_kprobe);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> index b9876b5..fbf4cf2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> @@ -105,7 +105,7 @@ static void test_link_api_addrs(void)
+>   	GET_ADDR("bpf_fentry_test7", addrs[6]);
+>   	GET_ADDR("bpf_fentry_test8", addrs[7]);
+>   
+> -	opts.kprobe_multi.addrs = (const unsigned long*) addrs;
+> +	opts.kprobe_multi.addrs = (const __u64 *) addrs;
+>   	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
+>   	test_link_api(&opts);
+>   }
+> @@ -183,7 +183,7 @@ static void test_attach_api_addrs(void)
+>   	GET_ADDR("bpf_fentry_test7", addrs[6]);
+>   	GET_ADDR("bpf_fentry_test8", addrs[7]);
+>   
+> -	opts.addrs = (const unsigned long *) addrs;
+> +	opts.addrs = (const __u64 *) addrs;
+>   	opts.cnt = ARRAY_SIZE(addrs);
+>   	test_attach_api(NULL, &opts);
+>   }
+> @@ -241,7 +241,7 @@ static void test_attach_api_fails(void)
+>   		goto cleanup;
+>   
+>   	/* fail_2 - both addrs and syms set */
+> -	opts.addrs = (const unsigned long *) addrs;
+> +	opts.addrs = (const __u64 *) addrs;
+>   	opts.syms = syms;
+>   	opts.cnt = ARRAY_SIZE(syms);
+>   	opts.cookies = NULL;
+> @@ -255,7 +255,7 @@ static void test_attach_api_fails(void)
+>   		goto cleanup;
+>   
+>   	/* fail_3 - pattern and addrs set */
+> -	opts.addrs = (const unsigned long *) addrs;
+> +	opts.addrs = (const __u64 *) addrs;
+>   	opts.syms = NULL;
+>   	opts.cnt = ARRAY_SIZE(syms);
+>   	opts.cookies = NULL;
