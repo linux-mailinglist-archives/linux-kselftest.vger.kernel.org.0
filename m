@@ -2,163 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE8052CB3C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 06:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0374352CB82
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 07:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiESEm1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 00:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
+        id S234011AbiESFha (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 01:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbiESEmZ (ORCPT
+        with ESMTP id S232611AbiESFh3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 00:42:25 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115776005E;
-        Wed, 18 May 2022 21:42:24 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id o190so4588030iof.10;
-        Wed, 18 May 2022 21:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3p2RmX54Nl+qu0eLlsWLYFrSbWckEmVL0yWxFMlgwAA=;
-        b=Ohmbav6isHcmvaBs0lKmpTanHP10xbh/uPwF9AWkcAMlnEiRUp1upwyCGCufmfGy/8
-         5db2cyJyJMTObsO/D41xiGiu7fbHqI01IYdfZeqyc7PmoplvtlGFZhLHpZvNj8vVR8Py
-         leCDf/HfYu4J0sgJw5wt0f0g9vBl7e/kdver89gBRFrUlT9YV+YAAvOBpfBMw3jjqyby
-         EY8+uoEjlGCdMAP8opZ3+XciFZJMFJ5Eo6FbQx+4v9V6XfanPSmpUyEtlQn3bWG4Exxt
-         c9ulomqH+h4NKCSRlm789FzZ8t1Zxq4MpElHrAwY8Fy5SbbiOAu/5e6H99BNpMxsY/18
-         cEbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3p2RmX54Nl+qu0eLlsWLYFrSbWckEmVL0yWxFMlgwAA=;
-        b=qJUqF72t6cKEfM58tfu8/9ZI2DOIix8mk6gFgXaI9aCzhcODz1EFRW1OVeb8rPmKvy
-         rLn0bdUL3YCQiaPeOkqyiMPXYLLpGLI1Rwp4lgG0ah4cK9Id79pdkH2tjzwbfUDSlDKr
-         Rk51x2aLEYbrhIubYH1+gmNs/FuEogn7L/evBnULC0aKXFlX4sln+ZbAoZXjwdbbLaBr
-         mUgA0jj590SG2mTtxrZ8N7bAB/BxsIT6ixMjaxZS64MpFu2krAa/1YNvphmGQCLyvyCZ
-         BUESUKBHIWcEgkXhwBm5Y90NgJV3r6MH0Jv3A9974jotXHjsyoGtuGuSg0BQtqPsgmZL
-         TNgA==
-X-Gm-Message-State: AOAM532XKrim+4LCvaOFC0RzdPgwRVZ2h3RPr3YvOxG8G8g2Sm4MxxZy
-        AyHSEHFmJfj5XqPlcmPobjlIcX3Rtee4iLVudXE=
-X-Google-Smtp-Source: ABdhPJxyfAkP3RamK35fbam2DglCrWDBTRYIhHWBrCHtJFJtFRXSXHaIfrTBTl6mBKsGOsTtHsxIvp8iJsUdhdeVPxo=
-X-Received: by 2002:a02:9f87:0:b0:32e:69ae:23df with SMTP id
- a7-20020a029f87000000b0032e69ae23dfmr1620828jam.237.1652935343429; Wed, 18
- May 2022 21:42:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220503171437.666326-1-maximmi@nvidia.com> <CAEf4BzbSO8oLK3_4Ecrx-c-o+Z6S8HMm3c_XQhZUQgpU8hfHoQ@mail.gmail.com>
- <a330e7d6-e064-5734-4430-9d7a3d141c04@nvidia.com> <CAEf4BzYnVK_1J_m-W8UxfFZNhZ1BpbRs=zQWwN3eejvSBJRrXw@mail.gmail.com>
- <13051d07-babc-1991-104b-f4969ac24b9b@nvidia.com> <48df5a60-f6e2-de05-1413-4511825511a5@nvidia.com>
- <ab156744-21fe-61dd-8471-8626c88e6218@nvidia.com>
-In-Reply-To: <ab156744-21fe-61dd-8471-8626c88e6218@nvidia.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 May 2022 21:42:12 -0700
-Message-ID: <CAEf4BzbQ853vZyq1aYS8NQz_sAO0EVBUgOnHg8-ivS19nc1eFA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 0/5] New BPF helpers to accelerate synproxy
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
+        Thu, 19 May 2022 01:37:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB69443CC;
+        Wed, 18 May 2022 22:37:28 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J52hSX008300;
+        Thu, 19 May 2022 05:37:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=b7OUvxCUC9WkFNOey00ZUwXXOtm4+PqdIf3emIXegRM=;
+ b=De/LdRfKSpuWjAXOfxe5a4TbKVq97s5yvKAzP+t4U8NrKaSc09rxfEUp4++Qx7UOKqW1
+ W6qjzoOyM6lZF78wnTMRRgCBUZO1+zZ5EzcVrOFq8LX65aWR8gy/IIdnGtRCk6JNsgTi
+ 4MuYaQ3SKnjGVsy00STWP9UeCoesrhqxKpHicHGHa6XGW5F0+jetlYARVh/RrzZU0rJV
+ l7M0eL3QlK8Z0CVbhDydJ0O21uHpEiQ/+vFw2YGZmIIp+AO8JPgkEKlHhm/otybMw7sS
+ hZJB9+WVjIiIXuLDF7slIZccoNRkFdQBHk3YCFNX0d+bv+HPFiZTiE7z4uHvK+ikqsoT ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5fdbrnf0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 05:37:23 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J5ZAce004235;
+        Thu, 19 May 2022 05:37:23 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5fdbrne0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 05:37:23 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J5SZwX017614;
+        Thu, 19 May 2022 05:37:21 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429enea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 05:37:21 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J5bHFO49938908
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 05:37:17 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D06574C044;
+        Thu, 19 May 2022 05:37:17 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 779CE4C040;
+        Thu, 19 May 2022 05:37:17 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.254])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 19 May 2022 05:37:17 +0000 (GMT)
+Date:   Thu, 19 May 2022 07:37:16 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>
+Cc:     Steffen Eiden <seiden@linux.ibm.com>, Greg KH <greg@kroah.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
+Message-ID: <YoXXjC49xKY/TJ+2@osiris>
+References: <20220510144724.3321985-1-seiden@linux.ibm.com>
+ <20220510144724.3321985-2-seiden@linux.ibm.com>
+ <YoTcxhulemnqiUbC@osiris>
+ <48550162-0f8c-4b23-dea4-b9060b24eed9@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48550162-0f8c-4b23-dea4-b9060b24eed9@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Jz7JwA5jEv1zW0wMfUTaz4Qn1Uqr9hro
+X-Proofpoint-GUID: gbwGk3IpH3xv2KCTdaCyddvt_gpmPnYY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_09,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 spamscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ adultscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205190035
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 6:43 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
->
-> On 2022-05-16 20:17, Maxim Mikityanskiy wrote:
-> > On 2022-05-11 14:48, Maxim Mikityanskiy wrote:
-> >> On 2022-05-11 02:59, Andrii Nakryiko wrote:
-> >>> On Tue, May 10, 2022 at 12:21 PM Maxim Mikityanskiy
-> >>> <maximmi@nvidia.com> wrote:
-> >>>>
-> >>>> On 2022-05-07 00:51, Andrii Nakryiko wrote:
-> >>>>>
-> >>>>> Is it expected that your selftests will fail on s390x? Please check
-> >>>>> [0]
-> >>>>
-> >>>> I see it fails with:
-> >>>>
-> >>>> test_synproxy:FAIL:ethtool -K tmp0 tx off unexpected error: 32512
-> >>>> (errno 2)
-> >>>>
-> >>>> errno 2 is ENOENT, probably the ethtool binary is missing from the
-> >>>> s390x
-> >>>> image? When reviewing v6, you said you added ethtool to the CI image.
-> >>>> Maybe it was added to x86_64 only? Could you add it to s390x?
-> >>>>
-> >>>
-> >>> Could be that it was outdated in s390x, but with [0] just merged in it
-> >>> should have pretty recent one.
-> >>
-> >> Do you mean the image was outdated and didn't contain ethtool? Or
-> >> ethtool was in the image, but was outdated? If the latter, I would
-> >> expect it to work, this specific ethtool command has worked for ages.
-> >
-> > Hi Andrii,
-> >
-> > Could you reply this question? I need to understand whether I need to
-> > make any changes to the CI before resubmitting.
->
-> I brought up a s390x VM to run the test locally, and there are two
-> issues with the latest (2022-05-09) s390x image:
->
-> 1. It lacks stdbuf. stdbuf is used by
-> tools/testing/selftests/bpf/vmtest.sh to run any test, and this is
-> clearly broken. Hence two questions:
->
-> 1.1. How does CI work without stdbuf in the image? I thought it used the
-> same vmtest.sh script, is that right?
+On Wed, May 18, 2022 at 03:45:27PM +0200, Janosch Frank wrote:
+> > > +	  The device is only available if the Ultravisor
+> > > +	  Facility (158) is present.
+> > 
+> > Is there a reason why this is default "y"? If you think this should be
+> > compiled into the kernel if used, then why allow to make it a module
+> > at all?
+> > Instead you could get rid of a couple if lines of code.
+> 
+> There was a lot of discussion around this already and the "Y" was chosen as
+> auto-loading this is a pain and therefore the SCLP and CHSC-Misc set it to Y
+> and we took that as an example (Steffen spoke to Peter to get guidance).
+> 
+> I'm sure that we want the possibility to have this as a module. Personally
+> I'd choose "m" over "y" since the module is only useful for a very small
+> amount of users.
 
-no, CI doesn't use vmtest.sh. vmtest.sh is an approximation of what CI
-is doing, but it doesn't share the code/scripts (it does use the same
-kernel config and VM image, though)
+Why not simply use module_cpu_feature_match() to implement auto module
+loading like we do it for the crypto modules? That would require that
+either the uv facility is represented within elf hwcaps, or
+alternatively the s390 implementation of cpu_feature() needs to be
+changed to work with cpu facilities instead of hwcap bits.
+(see arch/s390/include/asm/cpufeature.h)
 
->
-> 1.2. Who can add stdbuf to the image (to fix local runs)?
->
-
-For s390x things I usually ping Ilya. Ilya, can you help here please?
-
-> 2. It lacks iptables needed by my test, so if I resubmit my series, it
-> will fail on the CI again. Who can add iptables to the image?
-
-Ditto, I'll defer to Ilya for this.
-
->
-> I also compared the old (2021-03-24) and the new (2022-05-09) s390x
-> images, and ethtool was indeed added only after my submission, so that
-> explains the current CI error.
->
-> > Thanks,
-> > Max
->
+This doesn't look too difficult. Or was there a reason not to go this route?
