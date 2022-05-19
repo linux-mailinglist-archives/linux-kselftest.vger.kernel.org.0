@@ -2,92 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590E652DB62
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 19:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBDC52DC1D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 May 2022 19:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242352AbiESRec (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 13:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S243354AbiESR5O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 13:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241413AbiESReP (ORCPT
+        with ESMTP id S241499AbiESR5L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 13:34:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2F5A10B2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 10:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652981654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=10sfS9a5N8Q2t4x19dXmDFP5qz/jBxO35dvovp46vwg=;
-        b=Jsxxs0jysKbAbxJn3sAMhzRe5YWzkTD8ZKlGsKVDduZYanmfxxw77/5v00icLCzPdIXDO1
-        KWGoXf0gErKYdeXJ7PMV7XUZ7iK73o/W4YnmQRODKMa5G5b+L0JD0a9DjL+kFbDcNI8tc8
-        S5vURLLmc8KSrSbZGynr95JbD9WS6Kc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-6rvxpv91MzuRNPuLk_dXSA-1; Thu, 19 May 2022 13:34:07 -0400
-X-MC-Unique: 6rvxpv91MzuRNPuLk_dXSA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FE68395AFED;
-        Thu, 19 May 2022 17:34:06 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3B5C9C27E8E;
-        Thu, 19 May 2022 17:34:02 +0000 (UTC)
-Date:   Thu, 19 May 2022 19:33:59 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Yonghong Song <yhs@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in
- kprobe_multi.addrs
-Message-ID: <20220519173359.GA7786@asgard.redhat.com>
-References: <cover.1652772731.git.esyr@redhat.com>
- <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
- <YoNnAgDsIWef82is@krava>
- <20220517123050.GA25149@asgard.redhat.com>
- <YoP/eEMqAn3sVFXf@krava>
- <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
- <YoTXiAk1EpZ0rLKE@krava>
- <20220518123022.GA5425@asgard.redhat.com>
- <CAEf4BzbRYT4ykpxzXKGQ03REoVRKm_q8=oVEVCXfE+4zVDb=8A@mail.gmail.com>
+        Thu, 19 May 2022 13:57:11 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86247CEBAA
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 10:57:09 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id m6so6568904iob.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 May 2022 10:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nTvwJwfDzauPQ+of5JXtLLkQatXip/21hHhzryuEKQA=;
+        b=j3LimxuhjsDMbf3h7pgM2pWwYSD4AVDqwr9ip1QCctj49RKDncQaqTHeIyXLl50zzU
+         4LG3je7shHcDY1r8jzTsxpcHjD9pp0lfGzlQqhuk55gzgWRRU5pqfxpRJbcJFKW03pa3
+         LLtD7ehpQwpgyXa+eY0hUTZk4ioiKf7glMqpvtARWpYoJpPWD8StCBp85+mKbJnmGOEO
+         TBKLipGuUQdEgRWPXm1GzIGIFeMe5N0+DDsTrPgxpZj900S2UeEVlLAND2cbavGFIQGt
+         CTjt5zWmLaAZRopYq3odW6ZOoq4jz7+VypCEx0y6zLBALPoGbIsN3k2WOTSsu3sefi7x
+         DLGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nTvwJwfDzauPQ+of5JXtLLkQatXip/21hHhzryuEKQA=;
+        b=rfxVx8SwZeIh3birmxQHdOU/XLqc3k5f6p5TWrCWZoxrqjWI5cglFeil0GHuP2b5KD
+         dtp/T33iLL2slO6lQivaCXY6aUyIq84Hl6ArLxnR2z6ovlY3Z8oeTPKhbcmAUfkACjY9
+         PXkrR8lkDaZ3NPiLsSx0uTpwBgWjeEot4gsVD+1nz+KRcNb1+JY2ZzQYR4fyP8/Xv2bZ
+         w51pxD1olIiOoTUVmmLLecGzCMfN4tHWaM5dBzBS8ufoKmUaD6yLPTMAyZmCNXCxV2Rg
+         ow13A0pI/eeYHzhqD754FhbdvD7f/jFVczUDxTcKBs5awjDPqkphsR30Txvh2aAWUTx3
+         Bsqg==
+X-Gm-Message-State: AOAM5303OCTUBm7OkH0Abu8AwNKCpAAlDjZr+Bi1QKqbcHUX34nQH1ha
+        rI7EseNNtQmg/pjrmnsKCaaQv3YBsm596GTyGAIb2w==
+X-Google-Smtp-Source: ABdhPJxLnLPad++snwSrGlFPy2lO2WAmvA7axVeAQ6DyfojYPDblWdyjk16yhcxDogtbfCy3V2mwhAIveq3XhTsBM0Y=
+X-Received: by 2002:a5d:94c2:0:b0:60b:bd34:bb6f with SMTP id
+ y2-20020a5d94c2000000b0060bbd34bb6fmr3044953ior.32.1652983028426; Thu, 19 May
+ 2022 10:57:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbRYT4ykpxzXKGQ03REoVRKm_q8=oVEVCXfE+4zVDb=8A@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-4-axelrasmussen@google.com> <a6f7ff80-ea77-75d0-2454-99d14f164708@linuxfoundation.org>
+In-Reply-To: <a6f7ff80-ea77-75d0-2454-99d14f164708@linuxfoundation.org>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 19 May 2022 10:56:32 -0700
+Message-ID: <CAJHvVciqx17ERazHNLyyFDGV6Fh0K=SyZ78DTO62xL4rqOTdgw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 04:48:59PM -0700, Andrii Nakryiko wrote:
-> Not sure how you can do that without having extra test_progs variant
-> that's running in compat mode?
+On Tue, Apr 26, 2022 at 9:16 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 4/22/22 3:29 PM, Axel Rasmussen wrote:
+> > We clearly want to ensure both userfaultfd(2) and /dev/userfaultfd keep
+> > working into the future, so just run the test twice, using each
+> > interface.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >   tools/testing/selftests/vm/userfaultfd.c | 31 ++++++++++++++++++++++--
+> >   1 file changed, 29 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> > index 92a4516f8f0d..12ae742a9981 100644
+> > --- a/tools/testing/selftests/vm/userfaultfd.c
+> > +++ b/tools/testing/selftests/vm/userfaultfd.c
+> > @@ -77,6 +77,9 @@ static int bounces;
+> >   #define TEST_SHMEM  3
+> >   static int test_type;
+> >
+> > +/* test using /dev/userfaultfd, instead of userfaultfd(2) */
+> > +static bool test_dev_userfaultfd;
+> > +
+> >   /* exercise the test_uffdio_*_eexist every ALARM_INTERVAL_SECS */
+> >   #define ALARM_INTERVAL_SECS 10
+> >   static volatile bool test_uffdio_copy_eexist = true;
+> > @@ -383,13 +386,31 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+> >       }
+> >   }
+> >
+> > +static void __userfaultfd_open_dev(void)
+> > +{
+> > +     int fd;
+> > +
+> > +     uffd = -1;
+> > +     fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> > +     if (fd < 0)
+> > +             return;
+> > +
+> > +     uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
+> > +                  O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> > +     close(fd);
+> > +}
+> > +
+> >   static void userfaultfd_open(uint64_t *features)
+> >   {
+> >       struct uffdio_api uffdio_api;
+> >
+> > -     uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> > +     if (test_dev_userfaultfd)
+> > +             __userfaultfd_open_dev();
+> > +     else
+> > +             uffd = syscall(__NR_userfaultfd,
+> > +                            O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> >       if (uffd < 0)
+> > -             err("userfaultfd syscall not available in this kernel");
+> > +             err("creating userfaultfd failed");
+>
+> This isn't an error as in test failure. This will be a skip because of
+> unmet dependencies. Also if this test requires root access, please check
+> for that and make that a skip as well.
 
-I think, all bpf selftests are to be run in compat mode as well,
-now is a good time to enable this as any.
+Testing with the userfaultfd syscall doesn't require any special
+permissions (root or otherwise).
 
+But testing with /dev/userfaultfd will require access to that device
+node, which is root:root by default, but the system administrator may
+have changed this. In general I think this will only fail due to a)
+lack of kernel support or b) lack of permissions though, so always
+exiting with KSFT_SKIP here seems reasonable. I'll make that change in
+v3.
+
+>
+> >       uffd_flags = fcntl(uffd, F_GETFD, NULL);
+> >
+> >       uffdio_api.api = UFFD_API;
+> > @@ -1698,6 +1719,12 @@ int main(int argc, char **argv)
+> >       }
+> >       printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+> >              nr_pages, nr_pages_per_cpu);
+> > +
+> > +     test_dev_userfaultfd = false;
+> > +     if (userfaultfd_stress())
+> > +             return 1;
+> > +
+> > +     test_dev_userfaultfd = true;
+> >       return userfaultfd_stress();
+> >   }
+> >
+> >
+>
+> thanks,
+> -- Shuah
