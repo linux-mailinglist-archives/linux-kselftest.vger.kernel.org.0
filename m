@@ -2,103 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1637652ED8E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 May 2022 15:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7322A52EFDB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 May 2022 18:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349988AbiETNxS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 May 2022 09:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S1351183AbiETQAZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 May 2022 12:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350015AbiETNxI (ORCPT
+        with ESMTP id S237681AbiETQAY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 May 2022 09:53:08 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE14061623
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 06:53:05 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id g207so4100712qke.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 06:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dGR+whjNeV5lQ5mL6l6NHxm6IVCDzbcrLX3tF9OMg2c=;
-        b=EFAnWlMX37CEmbheKts/opui51h5JGB/7WRVQhN8F4ijCxcNhN3QRk2Gfp+dxEgRrl
-         4ywhthyY+2++sRfgeFpUZFHz5Pv6JNExpFNSFNGnc0VmKF988VcBk7Cy14k/4f0Wne6e
-         V7Ysg5bGno23v9mWaLmD6dwGpQS6mRTrCeXJxhGagrFGhT2ywdv94PA6XtXZs9poeqNd
-         jSe8/9fsM7X05zsiS5PzQqO8fY+0cG5H4ouFWqtqroPHpMJR9kURigUyU1eFG3ZItQxH
-         OF0f/OCaTEPPdFDFndIODFPtTnvhl45mQgcZyg8YmdSQVl78Mdscso1KBiCHPjaWodhi
-         1BqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dGR+whjNeV5lQ5mL6l6NHxm6IVCDzbcrLX3tF9OMg2c=;
-        b=QMXAc5L2z++xSWcCr07rerZXvopUpLWuALMBdr3IHcDgPPqR6a5TCOnlcxd8idMGiN
-         ul8s08kPK75sxIJdySa3IjUSedXJNUB69ZSS18wG9ryZ8e0K9LHgs7owRHTFAA2bGEHv
-         Npd8I6ZN4+CjbZsGLMeB/b5QWgm8gW3JOb1AB/QkGfOzi3oMkAaipPrdoapdquu2zRFn
-         OOQc/NhIR2+/6fYPzJ5d7CgS9nd3XZB2v0rPBhOPMdY9ExpsTpT8op1dExaAvq569r9e
-         HWim9UyYUSgaqF/8upqd5BnMmdhDY+bcpJas2WLPzX7YZxzbsI3twEQSc3/LNPyW4Gjb
-         0DmQ==
-X-Gm-Message-State: AOAM533J4kTlT77wsHZVZhk0SOqdYFbM59/e0KTY31Sen51F7Cb04oj/
-        IP8TlULhaJLJ8dqTZ9B3+7nx6rDHlx8=
-X-Google-Smtp-Source: ABdhPJw2vYl/MbxU6VJ2DKfsjAP7X6ORyALsE94WC2xdSmRShAQQhkz7MmnTEXQPXWxJVWbbIkEk9w==
-X-Received: by 2002:a05:620a:28d4:b0:6a0:9a5f:3d8b with SMTP id l20-20020a05620a28d400b006a09a5f3d8bmr6390788qkp.622.1653054784740;
-        Fri, 20 May 2022 06:53:04 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id z3-20020a376503000000b0069fe1dfbeffsm2118732qkb.92.2022.05.20.06.53.04
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 06:53:04 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id i187so12068694ybg.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 06:53:04 -0700 (PDT)
-X-Received: by 2002:a25:e012:0:b0:64f:7141:abac with SMTP id
- x18-20020a25e012000000b0064f7141abacmr1449347ybg.378.1653054783771; Fri, 20
- May 2022 06:53:03 -0700 (PDT)
+        Fri, 20 May 2022 12:00:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A15C1737C5;
+        Fri, 20 May 2022 09:00:23 -0700 (PDT)
+Date:   Fri, 20 May 2022 18:00:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653062422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnj4dzgEf3cd0cUpRb4wWF+QnX5ehgnowPWFeUo5Y30=;
+        b=Ra3XXBiASrR10Ub71lzV9nlJu0F8um3RH3J8in7Y5LS0d/jE7qREr9dqxxRSOY9TNovqLc
+        XkE3+aifCs1zi93TJCiHojm4aml8uKnMBoyACDljhGuMPzDrSbEgFNZEgxOftfCa/IVIUn
+        sxGgIO6O8QblEbwt8afnoDZpOGoHlVUn7a349OYjmM7hsXtekfGV3TRCztLhVxdgRrVH21
+        Kj21RBHRBcG35GttKuy18nJ3Rcuc5hXME+OCtyd5x8dX2yMezAsAbfNL2/pjyonSfUGGam
+        X/a49Re1oO5bHf5YSxq92bpnR9eaJxE7hAleI92KFqMsVntCtAChf7Kq5vrO9A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653062422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnj4dzgEf3cd0cUpRb4wWF+QnX5ehgnowPWFeUo5Y30=;
+        b=QDJEvVCEWunHzQI08pOSsVL88R4XX2kv96ohHXzjnjq7VKbDiG+klRveqr+8XPXu5qzicb
+        YZfGzniaXjMpTkDQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v11 0/8] cgroup/cpuset: cpu partition code enhancements
+Message-ID: <Yoe7FOkZpUwwTTQW@linutronix.de>
+References: <20220510153413.400020-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20220520063835.866445-1-luyun_611@163.com>
-In-Reply-To: <20220520063835.866445-1-luyun_611@163.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 20 May 2022 09:52:27 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSdoZeAncRVAYrb66Kp6bEueWrgyy7A8qP0kmr9pxfHMoA@mail.gmail.com>
-Message-ID: <CA+FuTSdoZeAncRVAYrb66Kp6bEueWrgyy7A8qP0kmr9pxfHMoA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/net: enable lo.accept_local in psock_snd test
-To:     Yun Lu <luyun_611@163.com>
-Cc:     davem@davemloft.net, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220510153413.400020-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 20, 2022 at 2:40 AM Yun Lu <luyun_611@163.com> wrote:
->
-> From: luyun <luyun@kylinos.cn>
->
-> The psock_snd test sends and recievs packets over loopback, but the
-> parameter lo.accept_local is disabled by default, this test will
-> fail with Resource temporarily unavailable:
-> sudo ./psock_snd.sh
-> dgram
-> tx: 128
-> rx: 142
-> ./psock_snd: recv: Resource temporarily unavailable
+On 2022-05-10 11:34:05 [-0400], Waiman Long wrote:
+> v11:
+>  - Fix incorrect spacing in patch 7 and include documentation suggestions
+>    by Michal.
+>  - Move partition_is_populated() check to the last one in list of
+>    conditions to be checked.
 
-I cannot reproduce this failure.
+If I follow this correctly, then this is the latest version of the
+isolcpus= replacement with cgroup's cpusets, correct?
 
-Passes on a machine with accept_local 0.
-
-accept_local is defined as
-
-"
-accept_local - BOOLEAN
-    Accept packets with local source addresses. In combination
-    with suitable routing, this can be used to direct packets
-    between two local interfaces over the wire and have them
-    accepted properly.
-"
+Sebastian
